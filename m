@@ -1,61 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3F82459D7;
-	Thu, 24 Jul 2025 11:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C6D24FBFF;
+	Thu, 24 Jul 2025 12:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753356410; cv=none; b=Y5hoxhtViBBk7F3zYKvnQG7GljXnNuvV5ExjNXq2ryOYXO76QmEKn3pPTQ80KyKFnDbrHMZyHZRV1CQikifIsZg5tj9qvBjQcNeZqM4AC9SDP9cAsMhmTRXt4QQLCeTmCDZwkD9AKGINhvhPHQuD4Fuk0wSysqByeQmVCbJGMv0=
+	t=1753358425; cv=none; b=ga0iCt9VWRB1Dy8N64WIO4p43nfMun1FIvEsXDiklcBvYhVXLtQYtZWLeXMJ7TMfIsgIyUVPSvc0Dm7VdWLdSIC1QgUNf/9ol8OQnHYYRVYFjVpqQKhVvXRHja3ptXKZpla83dz5LwYAgKHtxL9RIPNyYBOPB6+ozkdH/5eTXOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753356410; c=relaxed/simple;
-	bh=kG7LDs5bk1m54HXdMCSGeTVy8L86DTIx637Yz5C2kLg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XAvPqbfYpQ4XRMPwcZO/9ucIA2IkFN+cqoPYluawp/9e8P66ADinqUY30kwhLZn7gsLrW8O5Legw1647nqVsalkM0R4+46M7bKKE/dIf98SCjIc8Xl0TIvNhuYB69mnO05o1MI3Py5b4ABUa/eOWo1dKNjoO+RodzZE8MnqvnfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d+MmLIvg; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1753358425; c=relaxed/simple;
+	bh=neWN+RsKK5xahj60EuUIzVaJh8Zt6T4jsM98KeOqU5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnsgfGxcL4BqoKmiltSnt/EQvLUGvR64SWWRhcXfAOFmgunYAQW1uR7jalbpcBy1Q8P2LeNikOMf+p6/g1rlMLAzEI4oSuNpJdZxYvxSeebfWTUx+Oys0PnMtyoXTnoy+2Lx/T1ta4jDEwSP5Obtaj0zSVVtsRYZ2C1QDqQG9+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWf7D9Kl; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d+MmLIvg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWf7D9Kl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753356409; x=1784892409;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kG7LDs5bk1m54HXdMCSGeTVy8L86DTIx637Yz5C2kLg=;
-  b=d+MmLIvgwV7iEmnKwEJtW1QX4diadTMTdh2S2qlhGXkgGnP9odSUByQ7
-   esRoqF3ZTOF28s/D9RAwR93S8JreHzw1M9QWqC3SZBNgc/Qe2bXztIcJY
-   MM4zaR0a9FPK68jglWt5KFuKrJ+pgqyl3A1laT4gWoXQeZxfl57y6kagC
-   pvvlM0C8PEjERX5qpAQDBUvZMfZIDnz2+yCIk1tJYpfD7Iein7d6Pif7A
-   +XnTfY1dlgh3HzCcgRYs7ovN9ns4itLIaIY07e/JEuClYs0iQlQY53N3L
-   xq/YA2Ku4FtAnoDW20w6nefzdVJ4ouooUQ/pqMAy80UHueaRA9gQexDtj
-   g==;
-X-CSE-ConnectionGUID: am2z0fA8Qe+yHTDBOEmSIA==
-X-CSE-MsgGUID: F5Jpj5oaSxO1S2v//jSIfA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="55369861"
-X-IronPort-AV: E=Sophos;i="6.16,336,1744095600"; 
-   d="scan'208";a="55369861"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 04:26:48 -0700
-X-CSE-ConnectionGUID: JhkC6knvROapG6djLESaAQ==
-X-CSE-MsgGUID: 9RtVb1s4QDGP9U4GS6GplA==
+  t=1753358421; x=1784894421;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=neWN+RsKK5xahj60EuUIzVaJh8Zt6T4jsM98KeOqU5g=;
+  b=RWf7D9KllCv6d3ZQ4GPAIcx2BIpjcPwReHgSix6/keY39Cw0UbsZf6ec
+   5cryeAz1T5se9d8TSXs9TE7bRz8GA+JputPFyQUOUjNbgiynMFGNub88i
+   dWCf70Y8wx7B1dE5x4FErUR4xe7sMRmYZsIsyozRNo8icxr4p6oyd8Juh
+   x2TJG8A6Jdx7xl57s8YPssBMjM5lTqqvC34PqdWSyfFViOSw93e1IB5gD
+   8M6dEKJ2DpaGOBdJYmLdTuDSEHxEarn5UmQiqtwcoi7NWsTYVWKRsrHgI
+   L7jCLqjRZZecpAVUCOJqOATRZcI86prB/6LNkLdWIpdlv0jALspP1G4Js
+   w==;
+X-CSE-ConnectionGUID: o9hiDXqsRj+LKE1ykQ+QzA==
+X-CSE-MsgGUID: Z+D3IhZFRCWGTKGTYFhkHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="55635935"
+X-IronPort-AV: E=Sophos;i="6.16,337,1744095600"; 
+   d="scan'208";a="55635935"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 05:00:21 -0700
+X-CSE-ConnectionGUID: vOmJbI0aThK7xtPKnB5sYw==
+X-CSE-MsgGUID: jDlK+BZLQmiVJlB7l67yww==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,336,1744095600"; 
-   d="scan'208";a="159774345"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa007.fm.intel.com with ESMTP; 24 Jul 2025 04:26:45 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+X-IronPort-AV: E=Sophos;i="6.16,337,1744095600"; 
+   d="scan'208";a="165734121"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 24 Jul 2025 05:00:19 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ueu5y-000039-1L;
-	Thu, 24 Jul 2025 11:26:42 +0000
-Date: Thu, 24 Jul 2025 13:26:25 +0200
+	id 1ueucR-000KP5-3A;
+	Thu, 24 Jul 2025 12:00:15 +0000
+Date: Thu, 24 Jul 2025 20:00:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
+To: Kees Cook <kees@kernel.org>, Jakub Kicinski <kuba@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org
-Subject: [agd5f:kq_resets 16/41]
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:742: warning: This comment starts
- with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202507241307.3zdfZT68-lkp@intel.com>
+	Kees Cook <kees@kernel.org>, Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH 4/6 net-next] net: Convert proto_ops connect() callbacks
+ to use sockaddr_unspec
+Message-ID: <202507241955.kFMs4J5b-lkp@intel.com>
+References: <20250723231921.2293685-4-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,45 +67,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250723231921.2293685-4-kees@kernel.org>
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git kq_resets
-head:   524eebfdd4b30fd63ca774d7ea346bcf0e8e76b1
-commit: 2ed8b69e9971cd99c0fed42c9e0ecf24d3d2b481 [16/41] drm/amdgpu: track ring state associated with a fence
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250724/202507241307.3zdfZT68-lkp@intel.com/config)
+Hi Kees,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20250723]
+[cannot apply to net-next/main bluetooth-next/master bluetooth/master brauner-vfs/vfs.all mkl-can-next/testing mptcp/export mptcp/export-net trondmy-nfs/linux-next linus/master v6.16-rc7 v6.16-rc6 v6.16-rc5 v6.16-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kees-Cook/net-uapi-Add-__kernel_sockaddr_unspec-for-sockaddr-of-unknown-length/20250724-072218
+base:   next-20250723
+patch link:    https://lore.kernel.org/r/20250723231921.2293685-4-kees%40kernel.org
+patch subject: [PATCH 4/6 net-next] net: Convert proto_ops connect() callbacks to use sockaddr_unspec
+config: x86_64-buildonly-randconfig-005-20250724 (https://download.01.org/0day-ci/archive/20250724/202507241955.kFMs4J5b-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250724/202507241307.3zdfZT68-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250724/202507241955.kFMs4J5b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507241307.3zdfZT68-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507241955.kFMs4J5b-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:742: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Kernel queue reset handling
+>> net/mctp/af_mctp.c:632:13: error: incompatible function pointer types initializing 'int (*)(struct socket *, struct __kernel_sockaddr_unspec *, int, int)' with an expression of type 'int (struct socket *, struct sockaddr *, int, int)' [-Wincompatible-function-pointer-types]
+     632 |         .connect        = mctp_connect,
+         |                           ^~~~~~~~~~~~
+   1 error generated.
 
 
-vim +742 drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
+vim +632 net/mctp/af_mctp.c
 
-   739	
-   740	
-   741	/**
- > 742	 * Kernel queue reset handling
-   743	 *
-   744	 * The driver can reset individual queues for most engines, but those queues
-   745	 * may contain work from multiple contexts.  Resetting the queue will reset
-   746	 * lose all of that state.  In order to minimize the collateral damage, the
-   747	 * driver will save the ring contents which are not associated with the guilty
-   748	 * context prior to resetting the queue.  After resetting the queue the queue
-   749	 * contents from the other contexts is re-emitted to the rings so that it can
-   750	 * be processed by the engine.  To handle this, we save the queue's write
-   751	 * pointer (wptr) in the fences associated with each context.  If we get a
-   752	 * queue timeout, we can then use the wptrs from the fences to determine
-   753	 * which data needs to be saved out of the queue's ring buffer.
-   754	 */
-   755	
+63ed1aab3d40aa Matt Johnston 2022-02-09  627  
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  628  static const struct proto_ops mctp_dgram_ops = {
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  629  	.family		= PF_MCTP,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  630  	.release	= mctp_release,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  631  	.bind		= mctp_bind,
+3549eb08e55058 Matt Johnston 2025-07-10 @632  	.connect	= mctp_connect,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  633  	.socketpair	= sock_no_socketpair,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  634  	.accept		= sock_no_accept,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  635  	.getname	= sock_no_getname,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  636  	.poll		= datagram_poll,
+63ed1aab3d40aa Matt Johnston 2022-02-09  637  	.ioctl		= mctp_ioctl,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  638  	.gettstamp	= sock_gettstamp,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  639  	.listen		= sock_no_listen,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  640  	.shutdown	= sock_no_shutdown,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  641  	.setsockopt	= mctp_setsockopt,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  642  	.getsockopt	= mctp_getsockopt,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  643  	.sendmsg	= mctp_sendmsg,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  644  	.recvmsg	= mctp_recvmsg,
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  645  	.mmap		= sock_no_mmap,
+63ed1aab3d40aa Matt Johnston 2022-02-09  646  #ifdef CONFIG_COMPAT
+63ed1aab3d40aa Matt Johnston 2022-02-09  647  	.compat_ioctl	= mctp_compat_ioctl,
+63ed1aab3d40aa Matt Johnston 2022-02-09  648  #endif
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  649  };
+8f601a1e4f8c84 Jeremy Kerr   2021-07-29  650  
 
 -- 
 0-DAY CI Kernel Test Service
