@@ -1,86 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1664E1FDA;
-	Thu, 24 Jul 2025 19:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272125D8F0;
+	Thu, 24 Jul 2025 23:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753386424; cv=none; b=VLeOnogMY+TWu6kXoPhE4TR4mSiCDxURaAwHFUfPsxc9OoBrtuibOyosjgdo5pFwPtolkRxdjCTSQDLpqHFQhtJ/7NEgJ4ZPkZXs/YXvKhCuCUhK9fctQGVABc+KU/Ifxl15H1l7i+JtNtFZ7/HbGrgQJEOMs+2D06ALVTkpYEg=
+	t=1753398631; cv=none; b=hfp9Dxcj1EQuER3FBza6li/I2Yd53BA7wcme/uNI0mzSMLLJV9GbK/MmBlYP0Fc4CCZUJDq9fLAUFXb7b1E0taLspeH0ln+1AhGELQxD4HXDuNXERilEn8ivHyEiamq8+B9A5136N3TWwMH7OMCAwto+n/itQItnHfEm4+84v0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753386424; c=relaxed/simple;
-	bh=X5YZZYWkrUkeug80FDmjSYQGAehLlVZ/kJaqUuQ495s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gswIbWreHdwAkk6Zuq0ruUjGsWvzmZX6hufeuAX6LdtHah/DommjLWBVWuT8f5928RkBomFQV7PgFi/c4zr2C+nBw+Qwpu0yzkw45V2G/EiBMH7pupzlaau/TnnWReHAmMKKaeatF42fcLYWXSdcFOFKNWmQJNRmuekpK5k4X9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nUqsn3vS; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753398631; c=relaxed/simple;
+	bh=5QF7XQ0L8h22/WiqgEsgKHIytbIiPXuvxgRIQrTSArM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QgvLSboEM8ak2lVB/LIUauSWqOyKnJJHt33yhAVhZGhtRyxPmuOMRPCe2x0cNaO57GGYb8cHU4xTdZ/sUxkPHw5ZZ7b132gfV0Ol58UTOjBUXWfXzj9LsNideXWFui9BP5WfEQD4Nroprf5fYD+jOCScXS212me845R8utFSVx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LK/VBakt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nUqsn3vS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753386423; x=1784922423;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=X5YZZYWkrUkeug80FDmjSYQGAehLlVZ/kJaqUuQ495s=;
-  b=nUqsn3vS4HxEmNMUgCdcCoJo1lluhKjuwnAzJYLLF5MjK869BW7Tf/Y3
-   slY1oznPbEyuhzhDBmh3hbqaIaxn87czsqiJz38TMPxdocXYTBAMGETuA
-   EY7qo3tX1f8O7ImfmsZZiqmelYucKeQ0oZd2HpTe+Ps0uGN/IP2hOjqLy
-   RYMR3cTNmOF6U6Nyf5lM+ySGnB2kspcgRlZDJMiY0UHFnBEjo2FQCvYMi
-   qoU3A3QxhugWFT80dvjfU74Bq3jnxKKdU53Wq5lbV9MJnuwuLa41ZZrMK
-   +3Kf0u/mg1gKh4j7VW/UcIoOYV45hIgypyPCkblHB0IoRxISa8icBTnHT
-   g==;
-X-CSE-ConnectionGUID: VlOaIf16SCmHcWdEcev1/w==
-X-CSE-MsgGUID: BCAux4hVS0etWF/mDJKznQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="66418677"
-X-IronPort-AV: E=Sophos;i="6.16,337,1744095600"; 
-   d="scan'208";a="66418677"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 12:47:02 -0700
-X-CSE-ConnectionGUID: zeJaujFRTnSGMgRiThOPKA==
-X-CSE-MsgGUID: y4y4SCgVTT+4SIDA3ZB89A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,337,1744095600"; 
-   d="scan'208";a="164473464"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 24 Jul 2025 12:47:02 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uf1u7-000KmF-22;
-	Thu, 24 Jul 2025 19:46:59 +0000
-Date: Fri, 25 Jul 2025 03:46:29 +0800
-From: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LK/VBakt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87631C4CEED;
+	Thu, 24 Jul 2025 23:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753398630;
+	bh=5QF7XQ0L8h22/WiqgEsgKHIytbIiPXuvxgRIQrTSArM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LK/VBakt4CDvhVmLLvojGsNOL+rvUZvu7vmOS71UHTrg6RLTfuq3eoE+DmUu+mppT
+	 ljynWt3/pEdxU+fy0TqaXGhh6gD2EOVHe/LNPiPxvoMpeJhIjZcZAzORwQV2mJcBaI
+	 0fy5AruUoV6y9JG1ratXLpoGU/eBr8b70flZwLMbgLEqWRGm4mH2M/DJo9x/P6EsNb
+	 9iJ5sZZV69dJ3u4yAUPZgLvB1ASdeTGYxgA6g/J9u17mqkZM4FubXhEzTALN060KfX
+	 KefdTkW2o8wBQaCs25pfZNq0Svh6DWlMyg6HuWKqrxdEBez5jH0C7OOTPW1pmsgcDO
+	 JoO2O+yeh3wsw==
+Date: Thu, 24 Jul 2025 16:10:25 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/vdso-sparc64-generic-2 17/17] ld.lld: error:
- arch/sparc/vdso/vclock_gettime.o:(function __vdso_clock_getres:
- .text+0x350): unknown relocation (46) against symbol vdso_u_time_data
-Message-ID: <202507250306.4oVYM3YZ-lkp@intel.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: userprogs: use correct linker when mixing clang
+ and GNU ld
+Message-ID: <20250724231025.GA3620641@ax162>
+References: <20250724-userprogs-clang-gnu-ld-v1-1-3d3d071e53a7@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250724-userprogs-clang-gnu-ld-v1-1-3d3d071e53a7@linutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/vdso-sparc64-generic-2
-head:   208f0c23b4f7408dd631508946283c66a08d7f81
-commit: 208f0c23b4f7408dd631508946283c66a08d7f81 [17/17] sparc/vdso: Implement clock_getres()
-config: sparc64-randconfig-002-20250724 (https://download.01.org/0day-ci/archive/20250725/202507250306.4oVYM3YZ-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250725/202507250306.4oVYM3YZ-lkp@intel.com/reproduce)
+On Thu, Jul 24, 2025 at 10:32:45AM +0200, Thomas Weiﬂschuh wrote:
+> The userprogs infrastructure does not expect clang being used with GNU ld
+> and in that case uses /usr/bin/ld for linking, not the configured $(LD).
+> This fallback is problematic as it will break when cross-compiling.
+> Mixing clang and GNU ld is used for example when building for SPARC64,
+> as ld.lld is not sufficient; see Documentation/kbuild/llvm.rst.
+> 
+> Relax the check around --ld-path so it gets used for all linkers.
+> 
+> Fixes: dfc1b168a8c4 ("kbuild: userprogs: use correct lld when linking through clang")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Nathan, you originally proposed the check for $(CONFIG_LD_IS_LLD) [0],
+> could you take a look at this?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507250306.4oVYM3YZ-lkp@intel.com/
+I would expect this to be okay but I have not explicitly tested it. I
+had not considered the case of GNU ld being used since aside from
+sparc64, there is not another architecture that supports clang but not
+ld.lld.
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-   ld.lld: error: arch/sparc/vdso/vclock_gettime.o:(function __vdso_gettimeofday: .text+0x10): unknown relocation (46) against symbol vdso_u_time_data
-   ld.lld: error: arch/sparc/vdso/vclock_gettime.o:(function __vdso_clock_gettime: .text+0x170): unknown relocation (46) against symbol vdso_u_time_data
->> ld.lld: error: arch/sparc/vdso/vclock_gettime.o:(function __vdso_clock_getres: .text+0x350): unknown relocation (46) against symbol vdso_u_time_data
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index c09766beb7eff4780574682b8ea44475fc0a5188..e300c6546c845c300edb5f0033719963c7da8f9b 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1134,7 +1134,7 @@ KBUILD_USERCFLAGS  += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD
+>  KBUILD_USERLDFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Does KBUILD_USERCFLAGS respect LLVM_IAS? sparc64 does not use the
+integrated assembler yet (as far as I am aware) so I think we probably
+need to filter '--prefix=' and '-fno-integrated-as' to avoid further
+issues with assembling?
+
+>  # userspace programs are linked via the compiler, use the correct linker
+> -ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_LD_IS_LLD),yy)
+> +ifneq ($(CONFIG_CC_IS_CLANG),)
+
+At this point, I think this can just become
+
+  ifdef CONFIG_CC_IS_CLANG
+
+>  KBUILD_USERLDFLAGS += --ld-path=$(LD)
+>  endif
+>  
+> 
+> ---
+> base-commit: 6832a9317eee280117cd695fa885b2b7a7a38daf
+> change-id: 20250723-userprogs-clang-gnu-ld-7a1c16fc852d
+> 
+> Best regards,
+> -- 
+> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> 
