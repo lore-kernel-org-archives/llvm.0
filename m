@@ -1,73 +1,73 @@
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5698634A
-	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 06:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0702877F9
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 06:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753424427; cv=none; b=nhd3PihAz5W0Ie0utIM/weX6fofHRpHK3bL1f0kThYD1Ic847pxEpXnR9x3mj+nJE/KJRnv5koNP10azICMtKOBTT86iLT6k11rZV0ExoZqMUTaNHygNjA1IBVrakPtMTZkGkSNpsmBVCcr8rtz1KV0pPkMqX213hVli1ELh8i8=
+	t=1753424632; cv=none; b=dJxSGP5AqJXG5IPvb2RhgQy8Cs83ykFJXDLnPDtljkNGHqkWPtmX6fCxLe41u/5OLfqj8Cl3ZhgOGxurugpkLKYzHGEGOl5WWqS/dB9nnSBXe29ocuik3gLfrvcqN7Xmg6lx53kbOrE9rJXh4pfcx1VQOi0u55QsNl+CvEyAKRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753424427; c=relaxed/simple;
-	bh=CzNkY+VnDu3peRwB9s6DITK/IEoW+u7ophXXib+eXGM=;
+	s=arc-20240116; t=1753424632; c=relaxed/simple;
+	bh=wKx1blxbu5QSpaikoCUeh78SpjOHM3ezwW4MOGKYpB0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GHn+LaiUG5UG+39ZDJB78GP3NrsH/c3YgWAc8GQLcYKu27ROtc1evlol4piILIkv3z7q1K8U2QCayAtVru/zpvZ7+4uyXWdj3fdBRuOUlR0uANK195e7WFoDAlwHPlIdM8akttT58DZNxl5CboytvtWlFBH8Q6LilQsZypXqwtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=udnJZhBp; arc=none smtp.client-ip=185.125.188.123
+	 In-Reply-To:Content-Type; b=jSjpX0kbwRfwl+wEwybm6rzKqXIh5whzXkyLQmPVldORzx1UFTYqyp5nsbpLQw74aujaMxa/IcUaqrzE3D0pArWtdnsPDQ3LR9bmUa9N4//ej1aLZLu8YslAox3iBrHYMFNkK34tBlBTREL0iPBo0PbgsxXtnxqjORvdx0q4M9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=KJBxipd7; arc=none smtp.client-ip=185.125.188.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="udnJZhBp"
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="KJBxipd7"
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A77043F6FD
-	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 06:13:33 +0000 (UTC)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5B2463F67E
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 06:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1753424013;
-	bh=TzyPAUEa1ra9f+Fo595oVFYE4lltInSXTAdJNreFcWM=;
+	s=20210705; t=1753424628;
+	bh=yY/SYQrNWX8OlVsdlpiMi286zoK+AXS6J+gjgGy9bGo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=udnJZhBpxpDYrlvsjoKrIlUlnlOSrYLmKnyfTuRYEjeGcdE8l8H+LsRPXEj8czvm/
-	 170y6V27Umlvfy+2O2fnOGGXW+AIYVlR3xVR7I5+yu8xVceauTgXOCaHEVZvEyXH2R
-	 RX00dXdxYHqrz4bLOa/yLEWgI2jnJX0zi37mWU2F1vHmBIB5VEeCLERFWIaAYujofy
-	 Kom+bdiGREwvMXBbgYQk7e5LbWc2x0xeyjNM9hFu/Wb5ae5FN/lZM8amAPRZ5CgFwf
-	 5S1GiI3e00RO/rtKj+H/4EmkfDyLkuaLhnwhq8BAZ1pP16BA8rzNbHMqxLA/zDV4HO
-	 XkFX8W3sD246w==
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-451d7de4ae3so10621325e9.2
-        for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 23:13:33 -0700 (PDT)
+	b=KJBxipd7Ok3pTZP515xFxl1IqDlys0htEUqIsYbdSRS39m/Px3R63Thm0IeUdcNpR
+	 0E8gtwpkwkmt9k0euiG1LyN5hMr0I7kXFJhvV3Fj8rAMZLROVHa2s865pE/fjUY5GB
+	 IMhHCKGciGqs8XqaJrQXmO1T/l5xeNV0JZbuOfmyBaUooHmmuC5HvavdvsmnR71TW/
+	 LbL8VGh/xmt80fQIPxEoOyqDNQU2WxLa8NanJfQHOu+BW8t7ksBUR8LKOesxIXvqY0
+	 dCLYOlsw31pOHlfRTqUUqh2YTelgitVdpLUb3hx8V0tA6wD5Sjm0cy/n4LbanhY3fr
+	 Un7nyrDE5yjdg==
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a4edf5bb4dso1079423f8f.0
+        for <llvm@lists.linux.dev>; Thu, 24 Jul 2025 23:23:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753424013; x=1754028813;
+        d=1e100.net; s=20230601; t=1753424628; x=1754029428;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TzyPAUEa1ra9f+Fo595oVFYE4lltInSXTAdJNreFcWM=;
-        b=R+nEDn+OPIrhZgM2QAlP0b7XEnXajB8rrBOBKdD9fh2HcApN2M950HM8mvxBX46/Fg
-         03LzjbmjYHwwWAKXXDrfuhwi4wXNNzTI6w1evzkL1eZdvIVwEftaoKQVOkik1HKXB2Io
-         DDwAJDOuCfXwRjSvYNBp+PbcICo3QSbZcQdWH82QUZZP6joXGAJRW4frj5+ACzy29agI
-         wO9sFtH7B7CY+tLBdKzyPBOsBqegQeseJ2zdHuThMppJZk6I8L2yHuPYIryUYCz6Gcr1
-         InJ0F4j0sHf9WUspMzVelOuIAwugMNPTPnDte+VbSiMorz6KjE3PM3T2AHq20BsysyRn
-         0nHw==
-X-Forwarded-Encrypted: i=1; AJvYcCWcuitBeXFib3X7D+ishSSufHYnrptJyLbx73A5pZboh4gzl6jZlT+tWOMdoC3ZQi9Y/+qi@lists.linux.dev
-X-Gm-Message-State: AOJu0YwjY40vJptQ1TUu/oIIvGphKhB5dnaIN47OmSAnXbZHrZn4FpSU
-	0Oz+uH5OhdO0Xk8+zog0vvYQSsQjtENXsEn6EsUBfgbwIZTrnrCIRLcx4So8GFoUryuEIgPhpg9
-	WUTh7nkQL2oZL5Ra5t49fTDRQv9YoCWwiFW4KNQM6K9jZva3ypIwcFUZ69nUhhBLsSF9OpRs=
-X-Gm-Gg: ASbGncva9P0a5gp/qT74oYwDKFBHqRHHLaHCULAEY76aKYM2aLiKtk4d/pN+nFrIsyu
-	epiIBiwR8ruQfSUvp6DQNGiPdU+nrn65Lwv+qAK0ItZV7TezHmxt0NfGkrIIpb8JBC4bBB829RP
-	59lXi2SokAY/I64QOzXe7+jsP59wzcS4UwzZFk/Hs8d+7F2Y8TwDuPP68a3aVkw20VRCHBodZuR
-	B/ckoiitOoM/ucAhMEQ5vIsxqQgEiSNBhejilIwVvqv1/TJVt3PztS4GjNrc+/DyxFCxaCoM9p1
-	HR47R6qle34K9bTmVybN/Pd6NLasAsxTFVwPVJ/MLaEL2jtFvbsRqELHjx1DiTAS0eq+vtxd/av
-	ZVTxRL052E6detfkXtMuxEawBVMsaddfhmfuZ
-X-Received: by 2002:a05:600c:861a:b0:456:1bae:5470 with SMTP id 5b1f17b1804b1-45876b12ab6mr2570265e9.8.1753424013118;
-        Thu, 24 Jul 2025 23:13:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFnuDATio1q8lhm2BzVtYuo6oTtxWHR46flKXtmOHWUTwYg4EBDhbjT8wj0HyskkwGEINn1ow==
-X-Received: by 2002:a05:600c:861a:b0:456:1bae:5470 with SMTP id 5b1f17b1804b1-45876b12ab6mr2569725e9.8.1753424012699;
-        Thu, 24 Jul 2025 23:13:32 -0700 (PDT)
+        bh=yY/SYQrNWX8OlVsdlpiMi286zoK+AXS6J+gjgGy9bGo=;
+        b=IrFsDn8c1G6kihNvoxHIM7fFCcBiKJe6alfVA2TevKwi+qsEMSw1kuisU2uQZvYQBi
+         in2DPrsrYts2TFELs1YJqkVu3LdIL41hcCm3WKcXyyyONQ49mu4WtXAwav2Bi8uki6u4
+         UtM+oAW7i7/pGWS2iK76kzpy60eeJl56FpgKPNAoHV+ADdY6GSHdiHLw6F22MsrNU2bA
+         9FmKyIfwJDWPUI8VKu5be4tfHSYy6iHEcC0gRlCLOcmIwZwbYozmn8qsEHq4odr2JMiX
+         /3OrVerPKFkvGSDP6q6igFyy4bWPJNOBk7lP8xe7W+04tzbdSlPPTTiA0i9396ZgprDY
+         6Mjw==
+X-Forwarded-Encrypted: i=1; AJvYcCUD3NMN8SyctLjSreW0vvZVn4ZyodER38sIz5/DmeDzWrumUiBLxIXWTsaRXpCX2PGdS1sT@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4bZCtb+PRrhLQau2tV5r+9RAyaP1r8E2nt8J1Njm7nO1coeY9
+	bF6k0rTn4ctvx6pX9PiOwR6qtCK/eZZ08r5ZypXX+iGyl4an7EZAow82jS3E+I0e8TFRWgAbtdu
+	ZKUmATCSEoSA7sml0iR/2o69g/DJNjgUqi1OFeI6xUVsmH2D9DDHohY1YRH/efN4oZRVyylc=
+X-Gm-Gg: ASbGncvqa/Qwp2tHsu5+tAjBzPAgp3y/dg8ygpXOFd99kw3s1lRWw9LoPmedMpbqz9i
+	+YlZi5iyRLOWjoFSHCw+neBdJLAmnrZLLB6251YOmDx4yahvmWli46ndTgkPx34yLDKLNBR6UI5
+	Odo0DJt3N6f52vjWfpyQjRnynHMQX6C7BhtwkMJCA8TvV8qPK+RgULCYP8XmWqOyXtoIuYv7Fz8
+	RSJ/+Jhuh7WHWB/4oIbAlSrQZDt6r4yKUat8S70YPyNWxp1tqq2ggjfVROzv4Tng5CpnaZF/sA3
+	Mp+kRxejPW3NZYEbJ55pfk4xzqrWMxPXDQYKmi9dUHbyvXgR+xXuk4jvybXxaQ3s/Wy/HDwueHh
+	GMNfmFqhLUXW+6nY/pTICUpfQ6rxgmATeMbNT
+X-Received: by 2002:a05:6000:2306:b0:3a5:527b:64c6 with SMTP id ffacd0b85a97d-3b7765e57c8mr626004f8f.1.1753424627746;
+        Thu, 24 Jul 2025 23:23:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH1tfqV/uoCrIpUQ7zCYW6YsO9mWdhr+kRfUXgDIjxIPForORsIR9T6UJpoi3QB0+gQ5qNtNA==
+X-Received: by 2002:a05:6000:2306:b0:3a5:527b:64c6 with SMTP id ffacd0b85a97d-3b7765e57c8mr625975f8f.1.1753424627337;
+        Thu, 24 Jul 2025 23:23:47 -0700 (PDT)
 Received: from [192.168.123.154] (ip-005-147-080-091.um06.pools.vodafone-ip.de. [5.147.80.91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458705bcb61sm41269355e9.20.2025.07.24.23.13.30
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b76fcace8csm4135036f8f.54.2025.07.24.23.23.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jul 2025 23:13:31 -0700 (PDT)
-Message-ID: <2ba0c09d-2783-4dce-a889-06e16abbde61@canonical.com>
-Date: Fri, 25 Jul 2025 08:13:29 +0200
+        Thu, 24 Jul 2025 23:23:46 -0700 (PDT)
+Message-ID: <4ad699fc-a89d-4740-bdec-ecb9a2134c90@canonical.com>
+Date: Fri, 25 Jul 2025 08:23:44 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,7 +75,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/11] riscv: add landing pad for asm routines.
+Subject: Re: [PATCH 02/11] riscv: update asm call site in `call_on_irq_stack`
+ to setup correct label
 To: Deepak Gupta <debug@rivosinc.com>
 Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
@@ -98,91 +99,53 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Bill Wendling <morbo@google.com>, Monk Chiang <monk.chiang@sifive.com>,
  Kito Cheng <kito.cheng@sifive.com>, Justin Stitt <justinstitt@google.com>
 References: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
- <20250724-riscv_kcfi-v1-1-04b8fa44c98c@rivosinc.com>
+ <20250724-riscv_kcfi-v1-2-04b8fa44c98c@rivosinc.com>
 Content-Language: en-US
 From: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <20250724-riscv_kcfi-v1-1-04b8fa44c98c@rivosinc.com>
+In-Reply-To: <20250724-riscv_kcfi-v1-2-04b8fa44c98c@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 25.07.25 01:36, Deepak Gupta wrote:
-> SYM_* macros are used to define assembly routines. In this patch series,
-> re-define those macros in risc-v arch specific include file to include
-> a landing pad instruction at the beginning. This is done only when the
-> compiler flag for landing pad is enabled (i.e. __riscv_zicfilp).
+> Call sites written in asm performing indirect call, they need to setup
+> label register (t2/x7) with correct label.
 > 
-> TODO: Update `lpad 0` with `lpad %lpad_hash(name)` after toolchain
-> support.
+> Currently first kernel was compiled with `-save-temps` option and
+> normalized function signature string is captured and then placed at the
+> asm callsite.
+> 
+> TODO: to write a macro wrapper with toolchain support.
 > 
 > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->   arch/riscv/include/asm/linkage.h | 42 ++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 42 insertions(+)
+>   arch/riscv/kernel/entry.S | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/riscv/include/asm/linkage.h b/arch/riscv/include/asm/linkage.h
-> index 9e88ba23cd2b..162774b81158 100644
-> --- a/arch/riscv/include/asm/linkage.h
-> +++ b/arch/riscv/include/asm/linkage.h
-> @@ -6,7 +6,49 @@
->   #ifndef _ASM_RISCV_LINKAGE_H
->   #define _ASM_RISCV_LINKAGE_H
->   
-> +#ifdef __ASSEMBLY__
-> +#include <asm/assembler.h>
-> +#endif
-> +
->   #define __ALIGN		.balign 4
->   #define __ALIGN_STR	".balign 4"
->   
-> +#ifdef __riscv_zicfilp
-> +/*
-> + * A landing pad instruction is needed at start of asm routines
-> + * re-define macros for asm routines to have a landing pad at
-> + * the beginning of function. Currently use label value of 0x1.
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 2660faf52232..598e17e800ae 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -389,6 +389,7 @@ SYM_FUNC_START(call_on_irq_stack)
+>   	load_per_cpu t0, irq_stack_ptr, t1
+>   	li	t1, IRQ_STACK_SIZE
+>   	add	sp, t0, t1
+> +	lui t2, %lpad_hash("FvP7pt_regsE")
 
-Your code below uses label value 0 which disables tag checking. As long 
-as we don't have tool support for calculating function hashes that is an 
-appropriate approach.
+In patch 1 you use lpad 0 due to missing tool support for signature hashing.
 
-%s/Currently use label value of 0x1./Label value 0x0 disables tag checking./
+Wouldn't it be preferable to have a first patch series introducing 
+landing pad support with lpad 0 and once tool support for signature 
+hashing has landed create a second patch series using tags?
+
+Such a first patch series would not have to be an RFC but might be 
+merged soon.
 
 Best regards
 
 Heinrich
 
-> + * Eventually, label should be calculated as a hash over function
-> + * signature.
-> + */
-> +#define SYM_FUNC_START(name)				\
-> +	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
-> +	lpad 0;
-> +
-> +#define SYM_FUNC_START_NOALIGN(name)			\
-> +	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)	\
-> +	lpad 0;
-> +
-> +#define SYM_FUNC_START_LOCAL(name)			\
-> +	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)	\
-> +	lpad 0;
-> +
-> +#define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
-> +	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)	\
-> +	lpad 0;
-> +
-> +#define SYM_FUNC_START_WEAK(name)			\
-> +	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)	\
-> +	lpad 0;
-> +
-> +#define SYM_FUNC_START_WEAK_NOALIGN(name)		\
-> +	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
-> +	lpad 0;
-> +
-> +#define SYM_TYPED_FUNC_START(name)				\
-> +	SYM_TYPED_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
-> +	lpad 0;
-> +
-> +#endif
-> +
->   #endif /* _ASM_RISCV_LINKAGE_H */
+>   	jalr	a1
+>   
+>   	/* Switch back to the thread shadow call stack */
 > 
 
