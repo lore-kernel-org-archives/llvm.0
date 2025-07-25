@@ -1,42 +1,42 @@
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03D91A705C
-	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 13:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC74B1DF258
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 13:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753450883; cv=none; b=apDjkVpBq90zIQU3VMce+stZgGLQliLHu0fHuk+e72WdNlxiDkksuFzHFoy5qczOqi5XJobfJPfGkaPH11Vrixh2FT+/fvGnm5cU3OEhRLFh6WrwWV1GEuN9xbjp8WcVZ73AQ2mwLaTgvI4ndPAmkkrsQ5Y9yEC16f950ebOPME=
+	t=1753451389; cv=none; b=n0F4+lLy0AcrpwJbi8WfJIbSfxhafKTl8ZkM8qwr7VPr3k28RqA9rRma9JLm6lZqSNdqFbjMIzLX3eTH4Q9zsc7NC/FvQseCn1m4VGHzzuVpWUCax6JKhje7Qv18uDevgggI5DKhQ1OiNozHAAdTrdZlyPIp3+iYt2Uh4E/wrIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753450883; c=relaxed/simple;
-	bh=kfH6fjRAy1g7mtemSw3tL6L5tX3YC+GPOTlyThw9MDo=;
+	s=arc-20240116; t=1753451389; c=relaxed/simple;
+	bh=qZs/QkvbrP1sqGRKRNmDs6ZTVRRgIumdd3Isd2KU+OM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rTFgmu0H524niTVRHlMqj919qiK1g3tKJxNHtOwnYFE+/TUsbdixXR0P1XtijxgqHQJWuzmZvRUDi6RWeFnPCUhZAlUy6zVBQCMuHY8tIO+L3p6A35xWojaDKqc4Rsuvwk5PS6NVpycrCZIySRF11WSQUA/2l61yPoWgra497cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+	 MIME-Version:Content-Type; b=t9KrBBJpnXrmCz7aQe22ZMyZcOOHT6cjKVV4/zsN66gz+ApqmzyhqpXK3Y+7WtmaqPPLvzk+hX0ErQAb/+dNWktc17qxDFVegrIxGKdA4Ie8LHvaW+MbWYYAsV8I4CAa1A1w1UKkX5NgGTdCkWtlSTM314QLTdDv5J/qW0ZdAE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 9C0BDC0782;
-	Fri, 25 Jul 2025 13:41:19 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id 6A72B2E;
-	Fri, 25 Jul 2025 13:41:16 +0000 (UTC)
-Date: Fri, 25 Jul 2025 09:41:21 -0400
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 124DD80741;
+	Fri, 25 Jul 2025 13:49:39 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id B19D53F;
+	Fri, 25 Jul 2025 13:49:35 +0000 (UTC)
+Date: Fri, 25 Jul 2025 09:49:40 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Steven Rostedt <rostedt@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Andrew Morton <akpm@linux-foundation.org>, Arnd
- Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas.schier@linux.dev>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
  <catalin.marinas@arm.com>, Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: [PATCH v5 2/3] tracing: Add a tracepoint verification check at
  build time
-Message-ID: <20250725094121.1521e14d@gandalf.local.home>
-In-Reply-To: <a1f2f201-61f9-4564-b0c8-45c4d912bd00@efficios.com>
+Message-ID: <20250725094940.4d976695@gandalf.local.home>
+In-Reply-To: <20250725025213.342188378@kernel.org>
 References: <20250725025149.726267838@kernel.org>
 	<20250725025213.342188378@kernel.org>
-	<a1f2f201-61f9-4564-b0c8-45c4d912bd00@efficios.com>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -46,49 +46,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 6A72B2E
-X-Stat-Signature: ure1t647ois4fo38k6rhy4c9uqmurmty
+X-Rspamd-Queue-Id: B19D53F
+X-Stat-Signature: e484x68g97bgb1kac91t7xnkayw7indm
 X-Rspamd-Server: rspamout02
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19uRVuGWgLultwAjkuw7HeTwr3zo7f/01w=
-X-HE-Tag: 1753450876-168812
-X-HE-Meta: U2FsdGVkX18cFM1KCns0Zb/ASBckcdVX8VeKxGTJURpIdH9biMAT2L48LOIYy3OHLgMzYAOj26l337EeYDIo/Fb0BOaGFvutCbaYbyhLGzPrp10ktyWyk8lSHxUI7TRN6se+ynPIAG+bnp83UIIlqIgE4Cri8jxn4lJmBU0z+p/oodJqYlbUNfHhzAjSrjh/XkfW+9dIY5fYVoHlUZx/clKQkOdJuoI9JSwk1BeZdP5P0W97zprRznFrGQqYXqDQ3TNbbrRXvrSdtnPxsec417ZSlBQyhYQR5LJrdMb9+X+b0e2KhB2ni0jR27L9I247e1JteGZD/NWMEHPIiDmsK/7UHzdgcwfCg26lWe6+HX7Ca0EOWm5uPaNGZ4pPAkMb
+X-Session-ID: U2FsdGVkX1+txAjRhzIoMjhYtd+blQDfOaaNLxm8xrg=
+X-HE-Tag: 1753451375-528559
+X-HE-Meta: U2FsdGVkX1+JHt8b0P4TJ/s7aJL6nhLJC2sibAEpOKppgGjLWCBYNXdv28QWkn/TMtekYwwWzDD3t8Hkx8npueqnyNyKS9wjswI5r1VJ15Sh/OCAXJyA9hFP7rvDOf9dis02SUVHx0IwhHfosBn1ZwTKoO9SjUUnCb4Nc/b9eY0yLj0bE1uWql9KbzJ1gqNhCzaRfdd1C5S6pEkOLAa904qGk3/OYNN2ZifcPvct1js1penxiJp+jNjZIsseBZATD+BULLBaEpDXAI5b3PXxiipr1bNneoMyayYlpVZyhBFs3Hi9SRMVczfqjBD/71px4am7uju1LROUQ7fnk10ZOqEhFWKl7Rtr
 
-On Fri, 25 Jul 2025 09:15:34 -0400
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+On Thu, 24 Jul 2025 22:51:51 -0400
+Steven Rostedt <rostedt@kernel.org> wrote:
 
+> +#define for_each_shdr_str(len, ehdr, sec)	\
+> +	for (const char *str = (void *)(ehdr) + shdr_offset(sec),	\
+> +	                *end = (str) + shdr_size(sec);			\
+> +	     len = strlen(str), (str) < end;				\
+> +	     str += (len) + 1, len = strlen(str))
 
-> > Add a verifier that injects a string of the name of the tracepoint it
-> > calls that is added to the discarded section "__tracepoint_check".
-> > For every builtin tracepoint, it's   
-> 
-> its
+The second "len = strlen(str)" can be removed as the len = strlen(str) in
+the conditional will work for every iteration too.
 
-Weird Al would be ashamed of me!
+To keep the "end" from being declared before the loop, I had to have both
+str and end declared in the loop as "const char *", but that meant I
+couldn't initialize "len" in the start portion of the for loop. I then
+moved it to the conditional portion, but forgot to remove it from the
+increment portion.
 
-Although, you shouldn't delete the word that comes next in your reply, as
-I can't tell if you were correct or not from the context you kept.
+The above should look like:
 
-> 
-> [...]
-> 
-> > +	/*
-> > +	 * The __tracepoint_check section is filled with strings of the
-> > +	 * names of tracepoints (in tracepoint_strings). Create an array
-> > +	 * that points to each string and then sort the array.
-> > +	 */
-> > +	for_each_shdr_str(len, ehdr, check_data_sec) {
-> > +		if (!len)
-> > +			continue;  
-> 
-> The len==0 case would be when this skips section alignment padding when
-> the linker decides to align the beginning of each .o sections, which
-> ends up appearing as zeroed padding within the resulting vmlinux.o
-> section after the individual sections have been stitched together, am I
-> correct ?
-
-I'm guessing. But when I walked through it in the debugger, there was more
-zero length strings than strings with content. But it had all the strings I
-was looking for.
+	for (const char *str = (void *)(ehdr) + shdr_offset(sec),
+			*end = str + shdr_size(sec);
+	     len = strlen(str), str < end;
+	     str += (len) + 1)
 
 -- Steve
