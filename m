@@ -1,153 +1,142 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC41E275AE6
-	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 10:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853822DCC17
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 10:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753438851; cv=none; b=XecddankJJfqKlNzJnE+UuF4t2tAkAn6pDBLPhciw1LGh8kNikZBWFLh364tz4NrM9hUzWhX7gcapgfi+iADar0ILa8R7vMaB3eCYpUDHRn3qcKZu1mvlWsMVKLsuyb+wZ+icHNOwUykF9Urn5gIwYsKn2SmG+B2h6qRRUF7zWg=
+	t=1753439800; cv=none; b=IRsajDV3xCX32x8g53M07L5jTsUNDYD+02U8/Crx7VsHvGHfxRCIH/50WvFM2s0FYqNRlymrrt2ygbdqypdjt6cumc2gnP9fl77JRPkSPu8eHW6h5AewnFfIk7IDAtuCToPUEv5aGfgjLwKXkHajQD6jSuMieJpg/KXU8AtmH8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753438851; c=relaxed/simple;
-	bh=I4R5djMgHXCDLNxSr5Fpt6AzfxEGk1akVjsAzxKqDJo=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=jbsmi0gzDLp2i8YLCxtSVPcWOXBUkUeNWUepYxWfbOqgusUEBmSgm6MWJlf4HwF7Zlr9HLy1R8aiibYF8yBC80S7kdz6jPYcYzi2mElALCxHZXYcpbEOlD+MA8TZcdmG4QgipUnep+sC3FDT/gVvKyKKsgv7S5PNfTBphSQad0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WIi886BC; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1753439800; c=relaxed/simple;
+	bh=/Jd08J9EVwiLu3246KvZ8LuOKEUNrkCntG+atu5i7Kg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tJLGQ+sMoDGbIwwa7jwxu51WrcH8PmaxBEIDL0uTF2WaDaYlUTf2yf5XXObrl1SB0n3AHCzQdvHwDY4vCfSSUinAIxwHh4veojFxqObvaetbfMvmIkn92T2yqSQQF5YD15JIM9xZVaPTc1wUMH3n7R3ZxPyaQldEqiQ5O2wJH78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nhwhZOAc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Azssg3zo; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WIi886BC"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aec5a714ae9so265070666b.3
-        for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 03:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753438848; x=1754043648; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sHAf8qKEO666L85E429TRVuJY0X72RF+/KbwOv9/42k=;
-        b=WIi886BCJRRvA3uli69Su/uQu+cFZd/23MGPcvirwcZNqu9oClHJJt59DxIAVaBJ1N
-         R1Q1pz+ZjvlqkvMBbagLDRalXdvfyVg5Gc6PmjT0YMRKsbE2/NSy156omy9GRLxQOj3k
-         J4aSWizMibZ/7vIWoJAxCXplPAofipJdGPLfqAAJK7RAMsiL5u1EkjR7pguidDuOFrcd
-         N+gv5MLG/eexZdnv/ph3K30pK0TpFRPZFSsBahHDxKLOjhZBn5HmN3Rk0YZH74mHP+1e
-         ppEHaDV2m7L5V+6fu+Mbs5uonrgqoqZuCIritwzMRUMxFsiVGbfFxrGnsf0x4D/3NsKm
-         OufQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753438848; x=1754043648;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sHAf8qKEO666L85E429TRVuJY0X72RF+/KbwOv9/42k=;
-        b=CZvOf+zHFt2JnhtIyZRaRS3eKFX+HfZadaaWMV9X6nFozBrMREc1EY5ZZmTuWJqAem
-         pQitPeMt3UnVNBRx69kZPNthttLrHLahFhbpOu0mkqtx035Z3mHD8/JOK9SEYtEFur0B
-         qqUEeLjSEq2LD6eZnryTUxkMQnchHGozT3yr/8NZwkA0/L7gSpuYERj7BciRZg7am10k
-         l4pm76LQsMRPlquE6aEEfg90UUbjUTGPV8JxutZqC6XG5nxXdHJFD9hv3UyfsuGorQ2r
-         X0h733qNyQs+OXH88ZClOn96glc2dOqCQ8d1PHH/4KOUZAQfCs2pTG6Q5f//8q27G1JW
-         S7AA==
-X-Gm-Message-State: AOJu0YyuCenB3bDhd5JdA2vHL0rw9+0k/FqHhz6949Kt9M7LcFY+3gl8
-	e8www3HSJMvd28K71GgrIDtBfwA/ZcSi5drgF3EH1Bz5ZbfKTAj1cZdN52vemnHGMJLpyMqgmgc
-	HNHts
-X-Gm-Gg: ASbGncucookixZevP9oAhowuX2V9ZNXKTd79fipsaZl/HjRfQyJaGWBLSogYeLApak2
-	+2QyjOK2647F6TA2PV//02/UGo8bl8e4BWv2NXrzqk+sVumXfzUQ0ipcpDFzbTgKrK55zHt05sF
-	GHeusyFA2IwKgL7h8DA/G3HafLaXhJnMXBFZuTNaEygpMIdKQpYe3/x7MKXvUUJMQ5AyLpG1H8Z
-	37PArUH/53W6/6288lotRBBcBk8e0LWelODTkO2qvYlnIq0nkolYDoQPA/55z4kbtFjyxyvykhx
-	zNzfO4M3LjzN1JPm6DvlUwIO9fJsSFJ4qGNsJl3XosjNde+2txjJ31NXT3ogWpxbL2qgCPtWBn7
-	g7QZLjTvSmi5sPnhJ7VMZHqdD+gJmKW7Dh9dVSIw7i3k8o26T7z+zeSJwayNBbDcluF4tdA==
-X-Google-Smtp-Source: AGHT+IFtgslxjiLC6HprhbsQLlVuqhTw7Y+8L8nshboSx3Jltidxw1NEFMA/G3Fj5Yzls9aDSJJPNw==
-X-Received: by 2002:a17:906:fd86:b0:ad8:85df:865b with SMTP id a640c23a62f3a-af61e14609cmr145791566b.33.1753438843481;
-        Fri, 25 Jul 2025 03:20:43 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-614cd319575sm1932160a12.51.2025.07.25.03.20.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Jul 2025 03:20:43 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Fri, 25 Jul 2025 10:20:42 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <511735629.4138.1753438843098@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.16-rc4-7-gb3a88225519cf: Failure on arm
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nhwhZOAc";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Azssg3zo"
+Date: Fri, 25 Jul 2025 12:36:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1753439796;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GWa6XDwZlrI75pGJEl2FOxaQVgtHaB/1blTqyZ0nVRI=;
+	b=nhwhZOAcJ+ZDcPLBedCjJyyS3BB4JP1IdK5mFlQWiOV46SuSAF7yeSKh9ldvnw46kIQ8ND
+	CTlKX2Xoq/VGfLdq07OAPvWIc9j649yJ8VSSkt2x9R/AO/rCOPo3MYi/AYw3b4duYU91RU
+	rzmhuJdlbvJyAGuvzCs/X6fqVCf6e5qcM2247hQj+sukc7Sj36pCt1bMA6UbXlqrHLsOti
+	FbpuO6GkJS6QmzGQV+9ZeV4CmgYclTY2Wd59eTg846NSgdR+n6P3mE7b24w+doctP6PmG5
+	yicel8XdJVnCbYsAukxuQKOVdyiO0+5GxW3J01a7SmjqLdgp/lesZAP0UrdXGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1753439796;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GWa6XDwZlrI75pGJEl2FOxaQVgtHaB/1blTqyZ0nVRI=;
+	b=Azssg3zoBERw+p0wPFhhTIjUk5B3/RwZjzSp3dyxeJSednSA8IzlQG3PZRk3OGazInQ4wH
+	b0F3v6qFcQm4UyDw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: userprogs: use correct linker when mixing clang
+ and GNU ld
+Message-ID: <20250725122604-44874f95-859c-4c0a-b3b0-14b30e00b796@linutronix.de>
+References: <20250724-userprogs-clang-gnu-ld-v1-1-3d3d071e53a7@linutronix.de>
+ <20250724231025.GA3620641@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_4137_1525108411.1753438842452"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allyesconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250724231025.GA3620641@ax162>
 
-------=_Part_4137_1525108411.1753438842452
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Thu, Jul 24, 2025 at 04:10:25PM -0700, Nathan Chancellor wrote:
+> On Thu, Jul 24, 2025 at 10:32:45AM +0200, Thomas Weiﬂschuh wrote:
+> > The userprogs infrastructure does not expect clang being used with GNU ld
+> > and in that case uses /usr/bin/ld for linking, not the configured $(LD).
+> > This fallback is problematic as it will break when cross-compiling.
+> > Mixing clang and GNU ld is used for example when building for SPARC64,
+> > as ld.lld is not sufficient; see Documentation/kbuild/llvm.rst.
+> > 
+> > Relax the check around --ld-path so it gets used for all linkers.
+> > 
+> > Fixes: dfc1b168a8c4 ("kbuild: userprogs: use correct lld when linking through clang")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > ---
+> > Nathan, you originally proposed the check for $(CONFIG_LD_IS_LLD) [0],
+> > could you take a look at this?
+> 
+> I would expect this to be okay but I have not explicitly tested it. I
+> had not considered the case of GNU ld being used since aside from
+> sparc64, there is not another architecture that supports clang but not
+> ld.lld.
 
-Dear contributor,
+FWIW some architectures use GNU ld implicitly with clang because they also link
+through $(CC) but do not use --ld-path. One example is UML, where the vDSO and
+vmlinux are linked this way. But linking vmlinux of UML with ld.lld will
+require changes to at least the linker script. Something for the ClangBuiltLinux
+TODO? There were more examples, but I don't remember them right now.
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+Longterm --ld-path should probably be added to the global KBUILD_CFLAGS, too.
 
-In tcwg_kernel/llvm-master-arm-next-allyesconfig, after:
-  | commit v6.16-rc4-7-gb3a88225519cf
-  | Author: Dan Williams <dan.j.williams@intel.com>
-  | Date:   Fri Jul 11 16:49:31 2025 -0700
-  | 
-  |     cxl/region: Consolidate cxl_decoder_kill_region() and cxl_region_detach()
-  |     
-  |     Both detach_target() and cxld_unregister() want to tear down a cxl_region
-  |     when an endpoint decoder is either detached or destroyed.
-  |     
-  | ... 28 lines of the commit log omitted.
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23092
-  | # First few build errors in logs:
-  | # 00:46:24 drivers/cxl/core/core.h:64:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-  | # 00:46:25 make[5]: *** [scripts/Makefile.build:287: drivers/cxl/core/port.o] Error 1
-  | # 00:46:28 drivers/cxl/core/core.h:64:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-  | # 00:46:28 make[5]: *** [scripts/Makefile.build:287: drivers/cxl/core/pmem.o] Error 1
-  | # 00:46:32 drivers/cxl/core/core.h:64:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-  | # 00:46:32 make[5]: *** [scripts/Makefile.build:287: drivers/cxl/core/regs.o] Error 1
-  | # 00:46:35 drivers/cxl/core/core.h:64:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-  | # 00:46:35 make[5]: *** [scripts/Makefile.build:287: drivers/cxl/core/memdev.o] Error 1
-  | # 00:46:36 drivers/cxl/core/core.h:64:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-  | # 00:46:37 drivers/cxl/core/core.h:64:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23186
-  | # linux build successful:
-  | all
+Thanks!
 
-Used configuration :
- tcwg_kernel/llvm-master-arm-next-allyesconfig
+> > ---
+> >  Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index c09766beb7eff4780574682b8ea44475fc0a5188..e300c6546c845c300edb5f0033719963c7da8f9b 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1134,7 +1134,7 @@ KBUILD_USERCFLAGS  += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD
+> >  KBUILD_USERLDFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
+> 
+> Does KBUILD_USERCFLAGS respect LLVM_IAS? sparc64 does not use the
+> integrated assembler yet (as far as I am aware) so I think we probably
+> need to filter '--prefix=' and '-fno-integrated-as' to avoid further
+> issues with assembling?
 
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1733. Please let us know if you have a fix.
+No, it isn't respected. On the other hand I didn't yet run into any issues.
+Do we want to fix it proactively?
 
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+> >  # userspace programs are linked via the compiler, use the correct linker
+> > -ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_LD_IS_LLD),yy)
+> > +ifneq ($(CONFIG_CC_IS_CLANG),)
+> 
+> At this point, I think this can just become
+> 
+>   ifdef CONFIG_CC_IS_CLANG
 
------------------8<--------------------------8<--------------------------8<--------------------------
+Absolutetly. The existing conditional above this hunk uses the ifneq
+pattern, so I tried to keep it consistent.
+But the one above uses plain ifdef again...
+Personally I don't care one way or another.
 
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
-
-
-
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allyesconfig-build/335/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-next-allyesconfig-build/334/artifact/artifacts
-
-Instruction to reproduce the build : https://gitlab.com/Linaro/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/b3a88225519cfd05d71b99946d37476c941145b8/tcwg_kernel/llvm-master-arm-next-allyesconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/b3a88225519cfd05d71b99946d37476c941145b8
-------=_Part_4137_1525108411.1753438842452--
+> >  KBUILD_USERLDFLAGS += --ld-path=$(LD)
+> >  endif
+> >  
+> > 
+> > ---
+> > base-commit: 6832a9317eee280117cd695fa885b2b7a7a38daf
+> > change-id: 20250723-userprogs-clang-gnu-ld-7a1c16fc852d
+> > 
+> > Best regards,
+> > -- 
+> > Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > 
