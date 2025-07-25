@@ -1,59 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB07223DFB;
-	Fri, 25 Jul 2025 02:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EA718027;
+	Fri, 25 Jul 2025 02:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753410160; cv=none; b=P5WbUNG1oY/wD0zheY/fjeexZKsE8LZUr+ViAiVb53IlUAyXCVkQx8t8G2Thc3KiAiDWU77d24kJDrdzbvM0Qi89SemoPy3rOI1Y0NdOBnZN+BDXYGhbBlbFrM/M7y6DzFOfkayaIQw7May2wc4G7DIXS/9z1G+23HuRaQ8geOU=
+	t=1753410460; cv=none; b=lpn8UjYT1SaGeFn6Vfhvpb/+rQ2/DqVX//nSxrfeh8kHEA2BWakofMllK96VxWfRrux0Rg/x45aI2aEFrciHlXDtYsQiHFV3RCI83GaHleFAHh365GfPmmeGOeBaDx4inPeOg86GYxY2+8hnWpKHwFmiXRM2qDQctxVzEiQEj6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753410160; c=relaxed/simple;
-	bh=psH3SNcYx4sNWsvciYOU+gOveBWb4N1s/HEOPTUMr+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=J0Txnu+shTmsU60rSbL5OMbrZZRnR3mHTjJ5ReBTbrg31zC7T1/RqkyHBdMSVzkSP3f5eaYshlXxwIWiQbv6zvoDHJyoyy/5WGGzgJwFwzqO9YHzfeWV3zVVwXScBsOVMib2rnFxa4+7Wmwbn+1gAULfKZ/bDHgnIbwE2aZJEg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B0rdrUJI; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1753410460; c=relaxed/simple;
+	bh=Khfr6GJFMEPyxoF5TtbNyRQfS0y6Twazz2yM+2molDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TUkIZ0rS/vGLpZA4OViWBHv9PrpgGNONFA++6ETk8IrYsydPgByu+7V91X9JDPMWMbLinJ6qwUEVKNm0yGlrIMbPPq7WHGp5OYlhoYkDo+tv52S+tZhXU16YaIdsccJ/05Iu347GeiTFjQ5DfqdGxRF1zwi5b7feBMUHmO739Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lh9r7jr/; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B0rdrUJI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lh9r7jr/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753410158; x=1784946158;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=psH3SNcYx4sNWsvciYOU+gOveBWb4N1s/HEOPTUMr+g=;
-  b=B0rdrUJIBYLj9ocXBBTlgVAm1pb8iiYpsFZjmbqazHD6GvdSUgQBgmYt
-   dmnXU1kO+jZ5BLCIfeLQFzZDSibDXxM1evt6jFA1LZk0Og6YXtgVSFi53
-   ZV4r6pyldlpXVOXbT+l/xkun+qldt3lV62dFoujVuxosEUTQiWHpQWXgt
-   sliWSndlkAkVSL5wyMB9TsuOookfSLXzZ7CEOVw+eLuGvZWqqkdkCSkZX
-   uT4/BoR3X2yDJoZh+Q5XpvPcUppsiRJJGnlvKxzVauOwVi0BVcbZBDmtO
-   X7r2K8Rk/6p6P7AJPoHdWCUpDAbidaRXwXiChrDQPQ9wtzysXbe/VoLJL
+  t=1753410459; x=1784946459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Khfr6GJFMEPyxoF5TtbNyRQfS0y6Twazz2yM+2molDY=;
+  b=Lh9r7jr/DubdmVjebTXg4vwbPAXesuoFlT9XsSkWk6ETSY/rBSfMpw3v
+   Pt9OyY1vmpe4KWS8c2KezZDvlhyUAvsnMVfnEsuZyFTZDlQPKjUUcXz2K
+   wq+bI9EzoU8OuLPpk5e1aP+PVQ40/1/GZqrueoI0xVEG8WzxBr6W3xns9
+   exFfA3XzqwuCP94KCQoMc4XBzG52WOqFLBayHbTJrKtwYgC9P8KN1brAX
+   6vrGXmCjwPVhYiEFKcwEmyDvdYlFjPBcoZIgDpaFDX/Pg6G9G+iqhggFY
+   5Be0ZSYUl5DH+FG2lPP9/cj4NchcYD7orlzmDjaj4+m+BsjzgBsg6tZfu
    w==;
-X-CSE-ConnectionGUID: PLIWlEFFRFeNv3sOkKrF5Q==
-X-CSE-MsgGUID: V1cPvH+cTruHZhVtQfbFyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="55679663"
+X-CSE-ConnectionGUID: ARhBREpcS6yBvr7SFoxgxA==
+X-CSE-MsgGUID: 4EabJzqlT4a5afCWO4bkvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="43352929"
 X-IronPort-AV: E=Sophos;i="6.16,338,1744095600"; 
-   d="scan'208";a="55679663"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 19:22:38 -0700
-X-CSE-ConnectionGUID: HM+J0VdrRa2bnW03OFb5tA==
-X-CSE-MsgGUID: TOWVWvUeRIuCcOaL9UJIrQ==
+   d="scan'208";a="43352929"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 19:27:39 -0700
+X-CSE-ConnectionGUID: bLSRn50RQC6VQhsJrY0bkA==
+X-CSE-MsgGUID: qPdZrQ5FRW2cHtvxPARCvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,338,1744095600"; 
-   d="scan'208";a="184252446"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Jul 2025 19:22:36 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+   d="scan'208";a="164883627"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 24 Jul 2025 19:27:33 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uf84w-00007H-0Y;
-	Fri, 25 Jul 2025 02:22:34 +0000
-Date: Fri, 25 Jul 2025 04:22:29 +0200
+	id 1uf89i-000KzD-0K;
+	Fri, 25 Jul 2025 02:27:30 +0000
+Date: Fri, 25 Jul 2025 10:26:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <lumag@kernel.org>
+To: Damon Ding <damon.ding@rock-chips.com>, andrzej.hajda@intel.com,
+	neil.armstrong@linaro.org, rfoss@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rob Clark <robin.clark@oss.qualcomm.com>
-Subject: [linux-next:master 6314/12139] drivers/gpu/drm/msm/msm_gem.c:107:47:
- error: incomplete definition of type 'struct msm_kms'
-Message-ID: <202507250408.fzggiElx-lkp@intel.com>
+	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+	jernej.skrabec@gmail.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+	simona@ffwll.ch, jingoohan1@gmail.com, inki.dae@samsung.com,
+	sw0312.kim@samsung.com, kyungmin.park@samsung.com, krzk@kernel.org,
+	alim.akhtar@samsung.com, hjc@rock-chips.com, heiko@sntech.de,
+	andy.yan@rock-chips.com, dmitry.baryshkov@oss.qualcomm.com,
+	l.stach@pengutronix.de, dianders@chromium.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Damon Ding <damon.ding@rock-chips.com>
+Subject: Re: [PATCH v3 08/14] drm/bridge: analogix_dp: Apply
+ drm_bridge_connector helper
+Message-ID: <202507251021.A6WmQ4di-lkp@intel.com>
+References: <20250724080304.3572457-9-damon.ding@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,67 +77,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250724080304.3572457-9-damon.ding@rock-chips.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   9ee814bd78e315e4551223ca7548dd3f6bdcf1ae
-commit: 98290b0a7d605431480e63ccdb6a118a21a0866c [6314/12139] drm/msm: make it possible to disable KMS-related code.
-config: arm-randconfig-2002-20250725 (https://download.01.org/0day-ci/archive/20250725/202507250408.fzggiElx-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b4edd827e4f71c2a0fcb13f79de7eae4545f0aea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250725/202507250408.fzggiElx-lkp@intel.com/reproduce)
+Hi Damon,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on next-20250724]
+[cannot apply to drm-exynos/exynos-drm-next rockchip/for-next linus/master v6.16-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Damon-Ding/drm-bridge-analogix_dp-Formalize-the-struct-analogix_dp_device/20250724-160804
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20250724080304.3572457-9-damon.ding%40rock-chips.com
+patch subject: [PATCH v3 08/14] drm/bridge: analogix_dp: Apply drm_bridge_connector helper
+config: x86_64-buildonly-randconfig-003-20250725 (https://download.01.org/0day-ci/archive/20250725/202507251021.A6WmQ4di-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250725/202507251021.A6WmQ4di-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507250408.fzggiElx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507251021.A6WmQ4di-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/msm_gem.c:107:47: error: incomplete definition of type 'struct msm_kms'
-     107 |         msm_gem_lock_vm_and_obj(&exec, obj, priv->kms->vm);
-         |                                             ~~~~~~~~~^
-   drivers/gpu/drm/msm/msm_drv.h:43:8: note: forward declaration of 'struct msm_kms'
-      43 | struct msm_kms;
-         |        ^
-   drivers/gpu/drm/msm/msm_gem.c:108:32: error: incomplete definition of type 'struct msm_kms'
-     108 |         put_iova_spaces(obj, priv->kms->vm, true, "vma_put");
-         |                              ~~~~~~~~~^
-   drivers/gpu/drm/msm/msm_drv.h:43:8: note: forward declaration of 'struct msm_kms'
-      43 | struct msm_kms;
-         |        ^
-   drivers/gpu/drm/msm/msm_gem.c:669:32: error: incomplete definition of type 'struct msm_kms'
-     669 |         return priv->kms && (priv->kms->vm == vm);
-         |                              ~~~~~~~~~^
-   drivers/gpu/drm/msm/msm_drv.h:43:8: note: forward declaration of 'struct msm_kms'
-      43 | struct msm_kms;
-         |        ^
-   3 errors generated.
+>> drivers/gpu/drm/bridge/analogix/analogix_dp_core.c:1346:12: error: incompatible function pointer types initializing 'enum drm_connector_status (*)(struct drm_bridge *, struct drm_connector *)' with an expression of type 'enum drm_connector_status (struct drm_bridge *)' [-Wincompatible-function-pointer-types]
+    1346 |         .detect = analogix_dp_bridge_detect,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +107 drivers/gpu/drm/msm/msm_gem.c
+vim +1346 drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
 
-3bebfd53af0f7c Rob Clark 2025-06-29   95  
-3bebfd53af0f7c Rob Clark 2025-06-29   96  void msm_gem_vma_put(struct drm_gem_object *obj)
-3bebfd53af0f7c Rob Clark 2025-06-29   97  {
-3bebfd53af0f7c Rob Clark 2025-06-29   98  	struct msm_drm_private *priv = obj->dev->dev_private;
-3bebfd53af0f7c Rob Clark 2025-06-29   99  	struct drm_exec exec;
-3bebfd53af0f7c Rob Clark 2025-06-29  100  
-3bebfd53af0f7c Rob Clark 2025-06-29  101  	if (atomic_dec_return(&to_msm_bo(obj)->vma_ref))
-3bebfd53af0f7c Rob Clark 2025-06-29  102  		return;
-3bebfd53af0f7c Rob Clark 2025-06-29  103  
-3bebfd53af0f7c Rob Clark 2025-06-29  104  	if (!priv->kms)
-3bebfd53af0f7c Rob Clark 2025-06-29  105  		return;
-3bebfd53af0f7c Rob Clark 2025-06-29  106  
-3bebfd53af0f7c Rob Clark 2025-06-29 @107  	msm_gem_lock_vm_and_obj(&exec, obj, priv->kms->vm);
-3bebfd53af0f7c Rob Clark 2025-06-29  108  	put_iova_spaces(obj, priv->kms->vm, true, "vma_put");
-fe4952b5f27cca Rob Clark 2025-06-29  109  	drm_exec_fini(&exec);     /* drop locks */
-204226de27c3a6 Rob Clark 2024-03-01  110  }
-204226de27c3a6 Rob Clark 2024-03-01  111  
-
-:::::: The code at line 107 was first introduced by commit
-:::::: 3bebfd53af0f7c8ea55094ba7b8b8b907024bb7b drm/msm: Defer VMA unmap for fb unpins
-
-:::::: TO: Rob Clark <robin.clark@oss.qualcomm.com>
-:::::: CC: Rob Clark <robin.clark@oss.qualcomm.com>
+  1333	
+  1334	static const struct drm_bridge_funcs analogix_dp_bridge_funcs = {
+  1335		.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+  1336		.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+  1337		.atomic_reset = drm_atomic_helper_bridge_reset,
+  1338		.atomic_pre_enable = analogix_dp_bridge_atomic_pre_enable,
+  1339		.atomic_enable = analogix_dp_bridge_atomic_enable,
+  1340		.atomic_disable = analogix_dp_bridge_atomic_disable,
+  1341		.atomic_post_disable = analogix_dp_bridge_atomic_post_disable,
+  1342		.atomic_check = analogix_dp_bridge_atomic_check,
+  1343		.attach = analogix_dp_bridge_attach,
+  1344		.get_modes = analogix_dp_bridge_get_modes,
+  1345		.edid_read = analogix_dp_bridge_edid_read,
+> 1346		.detect = analogix_dp_bridge_detect,
+  1347	};
+  1348	
 
 -- 
 0-DAY CI Kernel Test Service
