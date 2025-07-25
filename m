@@ -1,257 +1,227 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com (mail-yqbcan01on2105.outbound.protection.outlook.com [40.107.116.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025C12459F8
-	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 11:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753442815; cv=none; b=RbS32sCMoJP70pu8M9jwTDqXQ68I6viz/S741EnT01ODoSzdxeNN0r6boFQy+gDI54JJnYtpH+0CMkk3W2o8d3keWvzZn7E6DC/x4YuxNgzD/CRSRZygpUyiCL+ILGxel91h7mi4jrxPZq46Sl0uuxiORhzi7OVDVxlNFdJMC/c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753442815; c=relaxed/simple;
-	bh=0ZJExULLVmMGi4y+Mqs82rijJnvXJ2O+mBZMRl15Ovs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CrrlVZ952oUG7qSEeP+8445w/zyxYTWKvcGWn5CzSZ4UR6kvnceIf5FkYWzwsvaKrSdtjqCi7e2wIu8a+GDc2MCygnk2WgiTN6IALs2o1/YV4bAEuUpR/S28tasW5kBjLYzC0pJOZJaxm/fq53MZmOwvvw9sH6kDjoCnq3vRApw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=nAk8evin; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F06246789
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 13:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.116.105
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753449342; cv=fail; b=qJnyN12MfRXZekxDN6h9zxx/RVws9S+TNri98nnNOYjV+z9xhfEJwOpqJBgLcYbi34Vbc5R7dLvc/bfHguT9uFj60Jc8Jw9DNryCekqCs2mtfBStNPAiqWshoiszgk8QDs4yLRDMhSnozfNC+k3PzT6P3TzSOEPXdlUhNIPTu0o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753449342; c=relaxed/simple;
+	bh=7uyTfhqAYDF4ObjF75+sUIE3RSPXMsUZx+iSRRqB2K0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=I8EmmHG7xBLHw8Ha7u+znzz8Msxm8T5oVsQy2AnV1Rcg4VFwNXtAZ0eoAueaCdpx3MtZzFAfi6YTqr3jMCzxBn2DKLM1xEb1WReb04kFHbFxeLwNd5aPkyWYrzGbEJZChR6UUbjWcFq6rCkS3FQJ65D0d0zss+Xv72QfYbjWhgQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=VhnbYj2a; arc=fail smtp.client-ip=40.107.116.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="nAk8evin"
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A556D3F733
-	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 11:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1753442809;
-	bh=/9lBchv8Xl3/zU+kUSWuOOJSWBoJGBapA/sirJQnK+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=nAk8evinAH0Sdcbx8SXv7tQry6qarcisyKFC4WD9n0NEImZwXRI8HGHy2cYk/l8Bm
-	 VlVwY5c/J8KdTuh9zNzOvnZ4nSbAQ3kKnruz92HBdubV6abq7SVcBmFghQxlyZ2R99
-	 KBDdiGbSgGwDccF8wdAJkWpReSVTGwKcTigexs+1gDymZg0AgqbEIgz1uyvpxYjsQk
-	 8JccYpideRhFu4mzDV0RDjmAwkbdYwgDd/9Q2iR7JuXbTKqr/dd1wLBTbcJdgb+/t2
-	 fZFchEvtAdATxv+nb6Z6Ay7nACZVSaKz+rUujG6orQH3WqwoL02wHhVD6PQu5gRtaN
-	 HAHH/5TDr/7fw==
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ae3c5ca46f2so159138866b.2
-        for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 04:26:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753442809; x=1754047609;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9lBchv8Xl3/zU+kUSWuOOJSWBoJGBapA/sirJQnK+E=;
-        b=UMefSINYjZDh5Uhv80PqN6OcDJ/1xghf30DxjrdMbtsNRQ8HF8GSXjnNQqAgTdNSGt
-         p0R5QI+I2AYgarjpz0sgERe1sYrgpZS3qQOjly8gnT0Vy44AvePZm+VYBuz4+tG3CJ0W
-         luuTtZ68oTIRSKlVufOnM6nqlHpAeibh1BPWxLBsD0Hweqk+B0z7EV+HTyIit/yM+RSe
-         ZVeF7yblgN90lmtF9iar6uGgdmpyDFVM93NveqnncFiunmi70QU+EQzZagkWhiDNjiSN
-         L6jYvChZmeuV4TkWGiOIHYfdacGQ4LGBiD1J9RKcsMjggDsi7Q9eh508kbEd0/qwalvc
-         SHIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMjT5lyw+VfxSQHtqlEbgzjbmdilc5scT3AGI4APldYtKqxoRjGje4lxsMGGHX/ELOTs2D@lists.linux.dev
-X-Gm-Message-State: AOJu0YxqQoOGPTdVjvyz+57iZNBvT2fsnzqF1OS+oQFCvAOxOpAZ77rW
-	L2DEsDGpyvCAaJnhuJR2sdte7Qio1gFRJUKGfEmxSKioslHLVvhQQAlgHQlAYQ5aqhrhOPuMMnM
-	1txvydJpsRT0b5RncNyzgBKjaF0FG3b6Ptfp/yVGR0+g4aYE56gho865+cCN8dKzzXOrTnGk=
-X-Gm-Gg: ASbGnctl3Q+/aJQj6eZMBwXKC1XQCR07Q9UPWJ4Yu508jg5TIgzJXDjvA/mTa6ixwX2
-	QCI4RPA2DRDUmk7VfQs/l4EOP9b64pFADKn9aw6jXsWF/1HIanpblN92oH5zn1QyfgPL15dPor5
-	F4PKnVOZjGDqSeE18Y/t5idm6DtXbTP1bJY49XaUMakbRYxI8v1xjn1w5Id4D7KFPOUKhj+BSQm
-	LICyDexEqABZfLBMZWyLec5zRFR/IBa40ct/s5tFwzortissi8l2HuJaLYI0clt85CXTuASe2zq
-	HIXRoIpljSvoGxikDj6mHwatEKwjKFUnUoy9OU4tppUYqkfVeASNB8XnmHvc20onM6CI4zph3MK
-	VwU80ye0QwPOa+rpUn5DVp5vFeTqTJFDGQoJR
-X-Received: by 2002:a17:907:868b:b0:ae0:dd95:1991 with SMTP id a640c23a62f3a-af619efda7fmr218777566b.51.1753442808307;
-        Fri, 25 Jul 2025 04:26:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF62wP3IqAMJ1/E1mQqpiMFCO0fY8T1aVjgbgNEGN4i3p5BpL7PdyFIzDt2eRf4SEXlVdUVvQ==
-X-Received: by 2002:a17:907:868b:b0:ae0:dd95:1991 with SMTP id a640c23a62f3a-af619efda7fmr218773366b.51.1753442807745;
-        Fri, 25 Jul 2025 04:26:47 -0700 (PDT)
-Received: from [192.168.103.102] (ip-005-147-080-091.um06.pools.vodafone-ip.de. [5.147.80.91])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-614cd31ac41sm1898416a12.54.2025.07.25.04.26.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jul 2025 04:26:47 -0700 (PDT)
-Message-ID: <b50da4ef-53ca-4edf-bd74-f5e037a14f99@canonical.com>
-Date: Fri, 25 Jul 2025 13:26:44 +0200
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="VhnbYj2a"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oJjbsktf00Mr3RbKjZbldNRUnp6P74MLbblkd/QPaHhAYBZluLJTDkQreMa1HB12zrDpG4Lahijh45LfU8U+gPlSt2RGmYnv2xiZ03kQ64XRT9srSsc3F0QzYhZWVl/rQzf/8pxhZ17G5RbXSWgY01doV2Ui6xZpPUjf73ZCiJz6z/BuI6ShQoGgWTPHjby5nx0AlSjtSQFHyHpT1ybXgKuGToArkfXFg/92B9bdoqLltceU/6EaRqZSi7Km43jxCNVl6xt9qwptS85/RzPxmBGf3FwYdVmgwE240JvjteRr3EPRT/m0EPguFvm73UJYK969i6w1ngwrxMzHLWXDvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MWwkZnZ3bfDYstg2FqYAk6KkxLAjiYrBRKjU0dEAyG8=;
+ b=OJcSDIEhKx+uaLGUWaxLLG3hA5dNsxRkH/vUlN9xxgPUqkYry4dcp6GZKIHnfpZqVX4khFANTD8Nud30vWlVIIm8qZelSZGvzv96rM+KK53ls9nqWhInPqtoL10kYfMcaM+bRcWK3mt8322I5r9Ri0y4yPqrfj6skFXT8SwiMqNyU7TSJingbe/O/NL2JEikaSkaWEJkT4M+cPmFAFGndp52HR01zKOgHyiMHQUizmJ3+CkwIarawj3Eh0qtcLw/Y6kuaZC3Z614QQb/VrgCLSPWEACU6xM9ySIHmlrEwS2jfKieuVKPU54hOk714sCO3qPiGhwyn3bSw4cIYsmWXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MWwkZnZ3bfDYstg2FqYAk6KkxLAjiYrBRKjU0dEAyG8=;
+ b=VhnbYj2aCb862xjg9YfceOz2Af/P5Rb6gCOl2PUlfxHJkKf0mhkX0Shv2/RtEyf81X8SyOSqEMuzVNsW/Sid/kVNbgQol0dNZL086yDxvypU+FXDUBqOlfWO3gHh4USSFesolk7QOgM+vzjst8hdlsKDVm/J/4jDt9AydU9cwYa7OkwGWz6JE9gYNRReGX4OMdrWcRYyfgbWBh659gsnwh0sfj9fW7W/CYS+JF6XNX8lWGiV3YlxLFNL6gMp9SM7myEvGIlSikVTyu9BMGK/qa93XpbZmA892XAv3sac/q0vYjn/ii+5DYsp7vNwELFvfGCVGDmhmIeTiUBl0XexMQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT2PPF12FF28F4C.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b08::411) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.23; Fri, 25 Jul
+ 2025 13:15:35 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4%3]) with mapi id 15.20.8964.023; Fri, 25 Jul 2025
+ 13:15:35 +0000
+Message-ID: <a1f2f201-61f9-4564-b0c8-45c4d912bd00@efficios.com>
+Date: Fri, 25 Jul 2025 09:15:34 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/3] tracing: Add a tracepoint verification check at
+ build time
+To: Steven Rostedt <rostedt@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+References: <20250725025149.726267838@kernel.org>
+ <20250725025213.342188378@kernel.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20250725025213.342188378@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: QB1P288CA0031.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:c00:2d::44) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/11] riscv: Kconfig & Makefile for riscv kernel control
- flow integrity
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- rick.p.edgecombe@intel.com, broonie@kernel.org, cleger@rivosinc.com,
- samitolvanen@google.com, apatel@ventanamicro.com, ajones@ventanamicro.com,
- conor.dooley@microchip.com, charlie@rivosinc.com, samuel.holland@sifive.com,
- bjorn@rivosinc.com, fweimer@redhat.com, jeffreyalaw@gmail.com,
- andrew@sifive.com, ved@rivosinc.com, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Monk Chiang <monk.chiang@sifive.com>,
- Kito Cheng <kito.cheng@sifive.com>, Justin Stitt <justinstitt@google.com>
-References: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
- <20250724-riscv_kcfi-v1-11-04b8fa44c98c@rivosinc.com>
-Content-Language: en-US
-From: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <20250724-riscv_kcfi-v1-11-04b8fa44c98c@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT2PPF12FF28F4C:EE_
+X-MS-Office365-Filtering-Correlation-Id: ea2e8a80-ba85-443f-a0d6-08ddcb7d5761
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|10070799003|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OVRNRWpzbUtBM2ZNU05TSlpLdTYxaFgxc1JoK3NaQ1lOci8zaHNGZ2RUbW1z?=
+ =?utf-8?B?MEExVG1WT2F3SnovRWVHV0NpanR3c05tVnludDIyOUZubEU3eEllbjNWQTkv?=
+ =?utf-8?B?WFN4Nzl2NmF3R21DS3d6RlhPWVBtdktRSnJGM2wxZUdIbHZNNk5LMzA2cnJ1?=
+ =?utf-8?B?N3BhSnJPd2ZrRTkyTnNpSGdSVEVUV2d2OFIxQkovVkZJMWVaM29PSlB0L1N2?=
+ =?utf-8?B?ZEQ2T1FNL0RCWkNaUXczTTFFeHBVcWNrcFhFUnAyMXE4N3ptMjZFaEt5Y2VH?=
+ =?utf-8?B?bVJhTUQ3OGRZby9VOGs0eXlrOVk1YmFvOWFUMFFOQnJlTWRuamZ4VE5WL0Ri?=
+ =?utf-8?B?aGhEV2tFMml0Tk92RERHV1l3bG1XTThkQ1B0NjBiWEp1bGh5Y3k0dWIwanEy?=
+ =?utf-8?B?czV5QkczNUFhai9GWGQrQ2pqSkMvQ0lyclJOem1FRkYyQ0tUc1dqQkJzZmJt?=
+ =?utf-8?B?NWlhaEh6R3VDa2Qzalo0RG4vVm0vM2ZUYXdiL044Uk54Z0RvSjZKeitySWdy?=
+ =?utf-8?B?WFI1aUxVdjNnV3A4T0l2SEtXaXRoVTFRVlNOcUt6TG51QkUyNWRmbndxVG9r?=
+ =?utf-8?B?WXVNK2VnbEJ0MlE0MkJyNU9JcUhzdUhTeEJwUkxBQ1ZsT2kxaDFsUHRWUWpk?=
+ =?utf-8?B?dS9ET3VjOGtQZmxsais2ZGJLQUcvTXRJeG5pWVowVTB5RFlYY2czSmk4RXdB?=
+ =?utf-8?B?UnpVTFRPVUtHc3JlVnFhZzMwamdBZmJvRGVTSEJVaks5YWxzdWpqekhrTTBS?=
+ =?utf-8?B?RjJ6WXIwWUdGYy85TU05eHRkelljUCs0OS8xaTR6WDQ3UUdJbnFxR2JRaVdG?=
+ =?utf-8?B?NElVY3l2aDlTRVF0a0xDY0wxZFBocUZKY3lxU3NBYUhvUE9GWm9BbDBsL0Y1?=
+ =?utf-8?B?UUxyRytHdUg5c0RxU1BMT05pZEhxdWJWdlE2eEhleGw4S3F5VGVwenJiV1Rv?=
+ =?utf-8?B?QlRFYlA2ZWszYlBwOFZpWndOdkVYU0wvVTRLY0x5eEptL1U1QnRhZGtvbE1X?=
+ =?utf-8?B?NjNqVWNmTGk3VVdIb2pCUGY2YmtRcDZTN1NuME9IWkl4WlhSemlMQlFCV2Vr?=
+ =?utf-8?B?eDNhSEkxaUovOE9rVHlUWXJSNEhaUWFVWTBJekJBeHIwZ1ljUk5udWlVaUpw?=
+ =?utf-8?B?S3JickRXUzhzQ2lNL1gySXowV3ZHQm9zL1dVQ2UyR0FRSmxnTHdveVpWc1BK?=
+ =?utf-8?B?Y2Zhb2pUMkR3S056MGlmMWpoVnA2Ui9VVDBCSUdJalJLdXRlWTBXUytOSzB1?=
+ =?utf-8?B?a283dkM1cnlGTnROV0J5VXEvR2oreko1djYvaWhFSk9wT0VCRGJNM3NWN2xC?=
+ =?utf-8?B?UWRqOFgyb09GQTBCMUFmRFMyL281SHNUa0thOEd0UW51TyswOTcvNlNxNTg3?=
+ =?utf-8?B?S3U5c0Vhd1lTR0JPMlgzTVdPbnpNcjFyNFd3eE5sRHJQQ1VlWm1kdDE0dmZN?=
+ =?utf-8?B?bmtWYlRKN1A0S1FBNW5Na0NORFB0c2lOVmpqODhXWFJBT240bTZDdS8xVXVz?=
+ =?utf-8?B?KzVHanpIOEJJUzZrT1dlaEVybk1oQ2dNK1Zwa1cvUXlaRVRPNWZTV0lyNjlK?=
+ =?utf-8?B?dHczMXptcHdMYmFpeklocXB3cFhZOUJTT2UzVWtmT2FrMnR4OHdOVkt5eXc3?=
+ =?utf-8?B?dzNTMkRTZ1dCSURrd29vampVZmlBbFJNMmpoSEhSZ1d3UFBldnQrcTNLeHRl?=
+ =?utf-8?B?YmtwRExhUXV2dTlva0hqSm5JOHBWWHdSUENxc2dDMWNWbGxoZk1ZUDBXZmpX?=
+ =?utf-8?B?U2tQSEtJVkJCOVdvT3JJQWNZU3F4bi9ubDZtTXovSG1VNU52R096S2lWd3B4?=
+ =?utf-8?Q?bcd+vr5FGkeZbB25iCr74Fua54FocdRQ7Db+w=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UDhMTG80ZDBINXMzcFZaUVp1Z3lBQVU3dHFuZDJzbTl0akpNS1Z0aStGd0FU?=
+ =?utf-8?B?Y2oxS04zTXFET0lPd21nOEpHbXl0MTJyM3I5YVJzc0FzMEx1VDAySnI5dU53?=
+ =?utf-8?B?SWIvODRKZ2ZFSjNXQ29kRFpIMGxpTit5ZXc4blNSODltNGdPL1lnRlZuRkZP?=
+ =?utf-8?B?eUcvRUJOMENFWGM0U2pHTi8wTjdSYmh6bDg4T0NFNXdGeTZsbm1qd1ZFdDdp?=
+ =?utf-8?B?QWRXZVJ1b3duN2ZHOGtZbU5id1hNU2JkT2hYVHpoRVNVWTJyV1NXY0ZqTjdF?=
+ =?utf-8?B?TDRqamxoU1NkWmk1SXZmazE4cWxUUUlKUzBJKzJHMTI3cHJpWWF1TzQ5YmhE?=
+ =?utf-8?B?b1pQY3JKK1R4OWNsa3lQdVRmR2tyaVlJVFV6NnJIYVpxc3dUN2xwNWFBMVln?=
+ =?utf-8?B?K0JpSitMU0xSSzZqNDFHM1YwWXlxV3dCTy9yR0xYeENnUmRwcUpBSFFZS2lH?=
+ =?utf-8?B?WGRWajJSemtVa2tBenRWMitQSEdSdGprRlNwbEE2YUszTXY1Wm5aRWtjbFFR?=
+ =?utf-8?B?Z1FITVRubnBMb3lBWGd4Y1JvUitPYjFhMmk2dE5pbmRlSTNrcGo5WExjc2hl?=
+ =?utf-8?B?cVl0QUZUZGMxTnhkWXRyalcwWEJNSnoyMG1weC9xRi9meVpiK0hjdmZ6MWJk?=
+ =?utf-8?B?L09QemtYNW5FaWZHV0crM1VOTnpKK00yTzRCT1p4TXY5M3ptdjY3eVVJUkQ2?=
+ =?utf-8?B?RHBITzdPdDFydWpqR2dqYmlrWW5NRk9tRE84UlNKZURYbEcveGozdzhqUnQ5?=
+ =?utf-8?B?NURNbG1wcU5jYTZlbW5LVGJwQ3lBbHY1YWtQRmNmZ1l2K01nbTdxczE1Qk0v?=
+ =?utf-8?B?S29KS2wwQmREeUlFU1IrK3NOaVp0ZVorbnphWTRmQ0FPQ3MyN09xL1pJRnhU?=
+ =?utf-8?B?bDhhclphRStBbHlUNithVUx3NXExNWRzT1RQVHA2YURpbHFaQkpaOEIyQTJU?=
+ =?utf-8?B?eVJ0dXg3L3ZPYkRyUTNXTW5SRzdZYlk0L3BQcnVBSE44SHJBYXhUZlA0RjZO?=
+ =?utf-8?B?RDg5T1pCbmxSaGh4WERubFh4eHBwTGRpN05yQld0di9pVys4T2NqUjJURG9Q?=
+ =?utf-8?B?amtlRW9WOFFlQ2VrUzg3aWFYYnJqcDZidUFEamJLMHhRUFRVczA2YkNpeGRZ?=
+ =?utf-8?B?OXFXQThxTDNDNEJtLzFkSDZGdzN0NnlvcGNrN1h1Y1lFWDV1M0NWQWd1Qjlx?=
+ =?utf-8?B?VklCdTBPd2ZEZXlSZHNsMzgzRmpBQXJ5QzJhakdtR2lkSTcwZUt3TnhTWTBJ?=
+ =?utf-8?B?bjlzQVNUY1pBd2pWd1BpbWtROWNyVXhDczlUMmNLazk4eFBHUUZXdnJxSGhG?=
+ =?utf-8?B?UkVqSWxhTG1pKzVxdnZtdTQ0OTFhTEN2cTJWbHkvNlZzRXZUWFJ3ZlNMeGpP?=
+ =?utf-8?B?V2J5VTZnZ3VTWTFrSVMrbE5HVnpLNGZ5TGt4ZnhFenI0WnpUdUVFblNNbUxN?=
+ =?utf-8?B?ZW9yYVEzQnI3dVk4QTlIb0s0cXJDc0xHWVNRTmJ0VXZ2Ky9wQUpkV3BscmhB?=
+ =?utf-8?B?WStUaW1oS1c1SjZESy9mb3hIcWJ1YVJwano4N1FBRm5xSEJkeFdOM25vLzBu?=
+ =?utf-8?B?YzQyOVM4eDk2NGJ3ZmE3NThML3lvVk9pcnFUb0ZlNGRkenZYM2VEWmZhOTRo?=
+ =?utf-8?B?emU2cmNIOHhML01TemRpekFCdnFtTXZ3UWFreWJURThheEVBOEUzM0d4b2RC?=
+ =?utf-8?B?cmRBeDJWQUJzc1I2ZlVpZkpVSi9uMkFGVzdmd0dtN3FhclZRTUtwZUlGbllp?=
+ =?utf-8?B?Z2V0empGbjNlWEs4aFdBSVhQVFJrMGR5a05WSEdhZ1o4SExJNWQ2NmUrVmpT?=
+ =?utf-8?B?NWhFYWNDODdWakRiZGU0QmQ1eUc5UW8yMFNJSHovOVZVUnVkT0pKMDdqeGFU?=
+ =?utf-8?B?R1YyNW1lVkhxMTEzNDB2YmxaNkJOWXpQdTlMQ1NLOGV5ZWdMa3VkQzlYNUZO?=
+ =?utf-8?B?YmMxSUl4YzNhY0tkVUkwWi9TSzhmWndUTjVURExmSEFwM0NiMzlBVEljaEI0?=
+ =?utf-8?B?M2YzQUJFODVpTFA5L1Bza2xrb0E4dmRPdHZoWFhTZG43V2FyRTRma0xwZ1Nu?=
+ =?utf-8?B?SXpMMFVGTEV0bERyalQ4a3Fhd2E1R044amkyS0NnWW11Mm5Gd05EZndOVlhi?=
+ =?utf-8?B?N2x4U3dMVUpUMzh5RENUTU43TjY1ekkySmVyQUl2U2M1b2JtcXdoWGhadEtV?=
+ =?utf-8?B?VTdYRHFlRlljbExSTWJ6ZWErRVkvaTRCZkFGbEtEZUw2UWkyaWQzYWM3YUky?=
+ =?utf-8?Q?wemP4zF8ydXQKbZUOt27Psin7R3/R1ehDoWmaBNijc=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea2e8a80-ba85-443f-a0d6-08ddcb7d5761
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 13:15:35.5446
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8bJJ6Jp/cSlDCamK7CDmVSpEg0zZzVCt49L2oIvamchHKg2rzV405VQQnRNnGjKog0aFZ+2ovD1dYyV81vhgcu/Myd2lcqQG107+e828sh8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PPF12FF28F4C
 
-On 25.07.25 01:37, Deepak Gupta wrote:
-> Defines `CONFIG_RISCV_KERNEL_CFI` and selects SHADOW_CALL_STACK
-> and ARCH_HAS_KERNEL_SHADOW_STACK both so that zicfiss can be wired up.
+On 2025-07-24 22:51, Steven Rostedt wrote:
+> From: Steven Rostedt <rostedt@goodmis.org>
 > 
-> Makefile checks if CONFIG_RISCV_KERNEL_CFI is enabled, then light
-> up zicfiss and zicfilp compiler flags. CONFIG_RISCV_KERNEL_CFI is
-> dependent on CONFIG_RISCV_USER_CFI. There is no reason for user to
-> not select support for user cfi while enabling for kernel.
+> If a tracepoint is defined via DECLARE_TRACE() or TRACE_EVENT() but never
+> called (via the trace_<tracepoint>() function), its metadata is still
+> around in memory and not discarded.
 > 
-> compat vdso don't need fcf-protection (toolchain lacks support).
+> When created via TRACE_EVENT() the situation is worse because the
+> TRACE_EVENT() creates metadata that can be around 5k per trace event.
+> Having unused trace events causes several thousand of wasted bytes.
 > 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->   arch/riscv/Kconfig                     | 37 +++++++++++++++++++++++++++++++++-
->   arch/riscv/Makefile                    |  8 ++++++++
->   arch/riscv/kernel/compat_vdso/Makefile |  2 +-
->   arch/riscv/kernel/vdso/Makefile        |  2 +-
->   4 files changed, 46 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 385c3d93e378..305ba5787f74 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -245,7 +245,7 @@ config GCC_SUPPORTS_DYNAMIC_FTRACE
->   	depends on CC_HAS_MIN_FUNCTION_ALIGNMENT || !RISCV_ISA_C
->   
->   config HAVE_SHADOW_CALL_STACK
-> -	def_bool $(cc-option,-fsanitize=shadow-call-stack)
-> +	def_bool $(cc-option,-fsanitize=shadow-call-stack) || $(cc-option,-mabi=lp64 -march=rv64ima_zicfilp_zicfiss)
->   	# https://github.com/riscv-non-isa/riscv-elf-psabi-doc/commit/a484e843e6eeb51f0cb7b8819e50da6d2444d769
->   	depends on $(ld-option,--no-relax-gp)
->   
-> @@ -864,6 +864,16 @@ config RISCV_ISA_ZICBOP
->   
->   	  If you don't know what to do here, say Y.
->   
-> +config TOOLCHAIN_HAS_ZICFILP
-> +	bool
-> +	default y
-> +	depends on 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicfilp)
-> +
-> +config TOOLCHAIN_HAS_ZICFISS
-> +	bool
-> +	default y
-> +	depends on 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicfiss)
-> +
->   config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
->   	def_bool y
->   	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
-> @@ -1182,6 +1192,31 @@ config RISCV_USER_CFI
->   	  space does not get protection "for free".
->   	  default n.
->   
-> +config RISCV_KERNEL_CFI
-> +	def_bool n
-> +	bool "hw assisted riscv kernel control flow integrity (kcfi)"
-> +	depends on 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicfilp_zicfiss)
-> +	depends on RISCV_USER_CFI
-> +	select ARCH_SUPPORTS_SHADOW_CALL_STACK
-> +	select SHADOW_CALL_STACK
-> +	select ARCH_HAS_KERNEL_SHADOW_STACK
-> +	help
-> +	  Provides CPU assisted control flow integrity to for riscv kernel.
-> +	  Control flow integrity is provided by implementing shadow stack for
-> +	  backward edge and indirect branch tracking for forward edge. Shadow
-> +	  stack protection is a hardware feature that detects function return
-> +	  address corruption. This helps mitigate ROP attacks. RISCV_KERNEL_CFI
-> +	  selects CONFIG_SHADOW_CALL_STACK which uses software based shadow
-> +	  stack but is unprotected against stray writes. Selecting RISCV_KERNEL_CFI
-> +	  will select CONFIG_DYNAMIC_SCS and will enable hardware assisted shadow
-> +	  stack protection against stray writes.
+> Add a verifier that injects a string of the name of the tracepoint it
+> calls that is added to the discarded section "__tracepoint_check".
+> For every builtin tracepoint, it's 
 
-Please, consider adding a blank line for better readability.
+its
 
-> +	  Indirect branch tracking enforces that all indirect branches must land
-> +	  on a landing pad instruction else CPU will fault. This enables forward
-> +	  control flow (call/jmp) protection in kernel and restricts all indirect
-> +	  call or jump in kernel to a landing pad instruction which mostly likely
-> +	  will be start of the function.
-> +	  default n
-
-For Linux distributions it is important that the same kernel can run 
-both on hardware both with and without CFI support. The description 
-provided does not help to understand if RISCV_KERNEL_CFI=y will result 
-in such a kernel. Please, enumerate the minimum set of extensions needed 
-for supporting a kernel built with RISCV_KERNEL_CFI=y. I guess this will 
-at least include Zimop.
-
-Best regards
-
-Heinrich
+[...]
 
 > +
->   endmenu # "Kernel features"
->   
->   menu "Boot options"
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 7128df832b28..6ef30a3d2bc4 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -61,8 +61,10 @@ else ifeq ($(CONFIG_LTO_CLANG),y)
->   endif
->   
->   ifeq ($(CONFIG_SHADOW_CALL_STACK),y)
-> +ifndef CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK
->   	KBUILD_LDFLAGS += --no-relax-gp
->   endif
-> +endif
->   
->   # ISA string setting
->   riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
-> @@ -91,6 +93,12 @@ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZABHA) := $(riscv-march-y)_zabha
->   KBUILD_BASE_ISA = -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
->   export KBUILD_BASE_ISA
->   
-> +ifeq ($(CONFIG_RISCV_KERNEL_CFI),y)
-> +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICFILP) := $(riscv-march-y)_zicfilp
-> +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICFISS) := $(riscv-march-y)_zicfiss
-> +KBUILD_CFLAGS += -fcf-protection=full
-> +KBUILD_AFLAGS += -fcf-protection=full
-> +endif
->   # Remove F,D,V from isa string for all. Keep extensions between "fd" and "v" by
->   # matching non-v and non-multi-letter extensions out with the filter ([^v_]*)
->   KBUILD_CFLAGS += $(KBUILD_BASE_ISA)
-> diff --git a/arch/riscv/kernel/compat_vdso/Makefile b/arch/riscv/kernel/compat_vdso/Makefile
-> index 24e37d1ef7ec..552131bc34d7 100644
-> --- a/arch/riscv/kernel/compat_vdso/Makefile
-> +++ b/arch/riscv/kernel/compat_vdso/Makefile
-> @@ -69,4 +69,4 @@ quiet_cmd_compat_vdsold = VDSOLD  $@
->   
->   # actual build commands
->   quiet_cmd_compat_vdsoas = VDSOAS  $@
-> -      cmd_compat_vdsoas = $(COMPAT_CC) $(a_flags) $(COMPAT_CC_FLAGS) -c -o $@ $<
-> +      cmd_compat_vdsoas = $(COMPAT_CC) $(filter-out -fcf-protection=full, $(a_flags)) $(COMPAT_CC_FLAGS) -c -o $@ $<
-> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-> index 2b528d82fa7d..7b1446b63ebc 100644
-> --- a/arch/riscv/kernel/vdso/Makefile
-> +++ b/arch/riscv/kernel/vdso/Makefile
-> @@ -17,7 +17,7 @@ ifdef CONFIG_VDSO_GETRANDOM
->   vdso-syms += getrandom
->   endif
->   
-> -ifdef CONFIG_RISCV_USER_CFI
-> +ifneq ($(CONFIG_RISCV_USER_CFI), $(CONFIG_RISCV_KERNEL_CFI))
->   CFI_MARCH = _zicfilp_zicfiss
->   CFI_FULL = -fcf-protection=full
->   endif
-> 
+> +#define for_each_shdr_str(len, ehdr, sec)	\
+> +	for (const char *str = (void *)(ehdr) + shdr_offset(sec),	\
+> +	                *end = (str) + shdr_size(sec);			\
+> +	     len = strlen(str), (str) < end;				\
+> +	     str += (len) + 1, len = strlen(str))
+> +
+> +static void make_trace_array(struct elf_tracepoint *etrace)
+> +{
+> +	Elf_Ehdr *ehdr = etrace->ehdr;
+> +	const char **vals = NULL;
+> +	int count = 0;
+> +	int len;
+> +
+> +	etrace->array = NULL;
+> +
+> +	/*
+> +	 * The __tracepoint_check section is filled with strings of the
+> +	 * names of tracepoints (in tracepoint_strings). Create an array
+> +	 * that points to each string and then sort the array.
+> +	 */
+> +	for_each_shdr_str(len, ehdr, check_data_sec) {
+> +		if (!len)
+> +			continue;
 
+The len==0 case would be when this skips section alignment padding when
+the linker decides to align the beginning of each .o sections, which
+ends up appearing as zeroed padding within the resulting vmlinux.o
+section after the individual sections have been stitched together, am I
+correct ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
