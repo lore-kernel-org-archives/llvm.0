@@ -1,135 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EA718027;
-	Fri, 25 Jul 2025 02:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621BF2E371C;
+	Fri, 25 Jul 2025 02:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753410460; cv=none; b=lpn8UjYT1SaGeFn6Vfhvpb/+rQ2/DqVX//nSxrfeh8kHEA2BWakofMllK96VxWfRrux0Rg/x45aI2aEFrciHlXDtYsQiHFV3RCI83GaHleFAHh365GfPmmeGOeBaDx4inPeOg86GYxY2+8hnWpKHwFmiXRM2qDQctxVzEiQEj6I=
+	t=1753411929; cv=none; b=Ks8XdSYEhMnhylrSvUttYwS/8qNXfxwDgzZW8+bTCzMS48lBxxJBQQxHghEF0/KAlgh3Tz0FsAJ9zxhZINsCNgNlvAQUWikzXFa/p+N2JMJSjeQGYuu6dpnOUrYjaT/uU9NT6q0bOSRIPba3sDuk81Ktc9qFgHxdyAevbQpm6+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753410460; c=relaxed/simple;
-	bh=Khfr6GJFMEPyxoF5TtbNyRQfS0y6Twazz2yM+2molDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUkIZ0rS/vGLpZA4OViWBHv9PrpgGNONFA++6ETk8IrYsydPgByu+7V91X9JDPMWMbLinJ6qwUEVKNm0yGlrIMbPPq7WHGp5OYlhoYkDo+tv52S+tZhXU16YaIdsccJ/05Iu347GeiTFjQ5DfqdGxRF1zwi5b7feBMUHmO739Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lh9r7jr/; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753411929; c=relaxed/simple;
+	bh=R0Vf0/62xTyA9egbPRVH/2L8oOUFCF5pph8LJHWXu9o=;
+	h=Message-ID:Date:From:To:Cc:Subject; b=WOGQmLWnaS89K0Zi3ZEDPJ+4L4LMEp26GLC7WyGcQyKRJUgZNC668npO9JMnalzfNbGI2TM7mAQYAjFO356eHD/J4ri/PXUIQX6O13cc0e+iGTi/7/u7VN1p6keFiyD6z2ly6m50DX0PlR63jPwajiQ9xrA8VNmqkG3/QsmJ9NA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axrZpQ0u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lh9r7jr/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753410459; x=1784946459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Khfr6GJFMEPyxoF5TtbNyRQfS0y6Twazz2yM+2molDY=;
-  b=Lh9r7jr/DubdmVjebTXg4vwbPAXesuoFlT9XsSkWk6ETSY/rBSfMpw3v
-   Pt9OyY1vmpe4KWS8c2KezZDvlhyUAvsnMVfnEsuZyFTZDlQPKjUUcXz2K
-   wq+bI9EzoU8OuLPpk5e1aP+PVQ40/1/GZqrueoI0xVEG8WzxBr6W3xns9
-   exFfA3XzqwuCP94KCQoMc4XBzG52WOqFLBayHbTJrKtwYgC9P8KN1brAX
-   6vrGXmCjwPVhYiEFKcwEmyDvdYlFjPBcoZIgDpaFDX/Pg6G9G+iqhggFY
-   5Be0ZSYUl5DH+FG2lPP9/cj4NchcYD7orlzmDjaj4+m+BsjzgBsg6tZfu
-   w==;
-X-CSE-ConnectionGUID: ARhBREpcS6yBvr7SFoxgxA==
-X-CSE-MsgGUID: 4EabJzqlT4a5afCWO4bkvw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11501"; a="43352929"
-X-IronPort-AV: E=Sophos;i="6.16,338,1744095600"; 
-   d="scan'208";a="43352929"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2025 19:27:39 -0700
-X-CSE-ConnectionGUID: bLSRn50RQC6VQhsJrY0bkA==
-X-CSE-MsgGUID: qPdZrQ5FRW2cHtvxPARCvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,338,1744095600"; 
-   d="scan'208";a="164883627"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 24 Jul 2025 19:27:33 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uf89i-000KzD-0K;
-	Fri, 25 Jul 2025 02:27:30 +0000
-Date: Fri, 25 Jul 2025 10:26:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Damon Ding <damon.ding@rock-chips.com>, andrzej.hajda@intel.com,
-	neil.armstrong@linaro.org, rfoss@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-	jernej.skrabec@gmail.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	simona@ffwll.ch, jingoohan1@gmail.com, inki.dae@samsung.com,
-	sw0312.kim@samsung.com, kyungmin.park@samsung.com, krzk@kernel.org,
-	alim.akhtar@samsung.com, hjc@rock-chips.com, heiko@sntech.de,
-	andy.yan@rock-chips.com, dmitry.baryshkov@oss.qualcomm.com,
-	l.stach@pengutronix.de, dianders@chromium.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	Damon Ding <damon.ding@rock-chips.com>
-Subject: Re: [PATCH v3 08/14] drm/bridge: analogix_dp: Apply
- drm_bridge_connector helper
-Message-ID: <202507251021.A6WmQ4di-lkp@intel.com>
-References: <20250724080304.3572457-9-damon.ding@rock-chips.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axrZpQ0u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95C9C4CEED;
+	Fri, 25 Jul 2025 02:52:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753411928;
+	bh=R0Vf0/62xTyA9egbPRVH/2L8oOUFCF5pph8LJHWXu9o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=axrZpQ0uHLxDpAF+6IhpbsFBvd3QuDlDOtFwZuEjMv5jCzX0Trt2NJ7nqY+fe47Aq
+	 GLfuDb7k3MRWK6sIptP2u7HFCQUTgB1S6Byi0A9DIA6I6XL8y0qMvYdXVn5IgRpeRi
+	 rF8+oN2OIY5oFdrSCToJD/Uvnyo3ZLCu212bpuLfb0zypU9ueLe1qYhNUAqUl4YDve
+	 JMfp1+peOkHvJONGKx1v9WoS3eBSUKd0TAXolMoPoexPEjetMhRaLSe5pA8KSjRzy4
+	 DpIuFnVJJefEg9k3lQeCZp2myZXifFsXfnb0TENC/bqeXbZC+VooYJOMK3Sfike2k3
+	 MpHUAteCREb1g==
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@kernel.org>)
+	id 1uf8Xd-000000010nu-0auA;
+	Thu, 24 Jul 2025 22:52:13 -0400
+Message-ID: <20250725025149.726267838@kernel.org>
+User-Agent: quilt/0.68
+Date: Thu, 24 Jul 2025 22:51:49 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v5 0/3] tracepoints: Add warnings for unused tracepoints and trace events
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250724080304.3572457-9-damon.ding@rock-chips.com>
 
-Hi Damon,
+Every trace event can take up to 5K of memory in text and metadata regardless
+if they are used or not. Trace events should not be created if they are not
+used.  Currently there's over a hundred events in the kernel that are defined
+but unused, either because their callers were removed without removing the
+trace event with it, or a config hides the trace event caller but not the
+trace event itself. And in some cases, trace events were simply added but were
+never called for whatever reason. The number of unused trace events continues
+to grow.
 
-kernel test robot noticed the following build errors:
+This patch series aims to fix this.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on next-20250724]
-[cannot apply to drm-exynos/exynos-drm-next rockchip/for-next linus/master v6.16-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The first patch moves the elf parsing out of sorttable.c so that it can be
+used by other tooling.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Damon-Ding/drm-bridge-analogix_dp-Formalize-the-struct-analogix_dp_device/20250724-160804
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20250724080304.3572457-9-damon.ding%40rock-chips.com
-patch subject: [PATCH v3 08/14] drm/bridge: analogix_dp: Apply drm_bridge_connector helper
-config: x86_64-buildonly-randconfig-003-20250725 (https://download.01.org/0day-ci/archive/20250725/202507251021.A6WmQ4di-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250725/202507251021.A6WmQ4di-lkp@intel.com/reproduce)
+The second patch creates a new program to run during build called
+tracepoint-update (note this may be extended to do other tracepoint
+modifications in the future). It also creates a new section called
+__tracepoint_check, where all callers of a tracepoint creates a variable
+that is placed in this section with the name of the tracepoint they use.
+The scripts/tracepoint-update.c is used to find tracepoints that are defined
+but not used which would mean they would not be in the __tracepoint_check
+section. It sorts it, and then reads the __tracepoint_strings section that
+has all compiled in tracepoint names. It makes sure that every tracepoint is
+found in the check section and if not, it prints a warning message about it.
+This lists the missing tracepoints at build time.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507251021.A6WmQ4di-lkp@intel.com/
+The third patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as
+well. There was several locations that adds tracepoints in the kernel proper
+that are only used in modules. It was getting quite complex trying to move
+things around that I just decided to make any tracepoint in a
+EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
+functions. An unused static function gets a warning but an unused global one
+does not.
 
-All errors (new ones prefixed by >>):
+Changes since v4: https://lore.kernel.org/linux-trace-kernel/20250723194141.617125835@kernel.org/
 
->> drivers/gpu/drm/bridge/analogix/analogix_dp_core.c:1346:12: error: incompatible function pointer types initializing 'enum drm_connector_status (*)(struct drm_bridge *, struct drm_connector *)' with an expression of type 'enum drm_connector_status (struct drm_bridge *)' [-Wincompatible-function-pointer-types]
-    1346 |         .detect = analogix_dp_bridge_detect,
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+- Took out the last patch that updated trace_ftrace_test_filter boot up self
+  test as it was agnostic to the rest of the patches. I just queued it up by
+  itself.
+
+- Added elf-parse.c that takes the elf parsing code out of sorttable.c so
+  that it can be used with tracepoint-update.c.
+
+- Use the tracepoint name instead of the pointer to map the checks to the
+  tracepoints (Mathieu Desnoyers)
+
+- Create a new tool "tracepoint-update" instead of hacking sorttable
+
+- Move the __tracepoint_check into the discard section so it is never
+  loaded into memory. (Linus Torvalds)
+
+- Parse the vmlinux.o instead of vmlinux as the discard section is removed
+  between those two steps.
 
 
-vim +1346 drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+Steven Rostedt (3):
+      sorttable: Move ELF parsing into scripts/elf-parse.[ch]
+      tracing: Add a tracepoint verification check at build time
+      tracepoint: Do not warn for unused event that is exported
 
-  1333	
-  1334	static const struct drm_bridge_funcs analogix_dp_bridge_funcs = {
-  1335		.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-  1336		.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-  1337		.atomic_reset = drm_atomic_helper_bridge_reset,
-  1338		.atomic_pre_enable = analogix_dp_bridge_atomic_pre_enable,
-  1339		.atomic_enable = analogix_dp_bridge_atomic_enable,
-  1340		.atomic_disable = analogix_dp_bridge_atomic_disable,
-  1341		.atomic_post_disable = analogix_dp_bridge_atomic_post_disable,
-  1342		.atomic_check = analogix_dp_bridge_atomic_check,
-  1343		.attach = analogix_dp_bridge_attach,
-  1344		.get_modes = analogix_dp_bridge_get_modes,
-  1345		.edid_read = analogix_dp_bridge_edid_read,
-> 1346		.detect = analogix_dp_bridge_detect,
-  1347	};
-  1348	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+----
+ include/asm-generic/vmlinux.lds.h |   1 +
+ include/linux/tracepoint.h        |  12 +
+ kernel/trace/Kconfig              |  10 +
+ scripts/Makefile                  |   6 +
+ scripts/elf-parse.c               | 198 ++++++++++++++++
+ scripts/elf-parse.h               | 306 ++++++++++++++++++++++++
+ scripts/link-vmlinux.sh           |   4 +
+ scripts/sorttable.c               | 477 +++-----------------------------------
+ scripts/tracepoint-update.c       | 217 +++++++++++++++++
+ 9 files changed, 788 insertions(+), 443 deletions(-)
+ create mode 100644 scripts/elf-parse.c
+ create mode 100644 scripts/elf-parse.h
+ create mode 100644 scripts/tracepoint-update.c
