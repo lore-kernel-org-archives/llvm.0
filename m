@@ -1,128 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EFE2EAD06;
-	Fri, 25 Jul 2025 14:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379BFAD2C
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 14:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753454499; cv=none; b=Ar1EwX4zgCa7/SyqN4jCMsK82lgWWNwkTKImnoiasE8z2MVVj5QmZMPWzARdOuvmTZtUnOgp0m8v9bGDM1NaqXvUOTDCiHMpuwpJGRimvAkoJvgvNkiA6O2ux+ZXE2akQtXz8Qqonfi1q3ES1uRwWXw/oHuI6k+KfmP0sFAIG4M=
+	t=1753454608; cv=none; b=tGqzwd2TXLCPWueShyDyVFeUwSUklzt2nSWGXAdyjRxVjmZo9UiGg59eK0xJH530on8/TMaPxttGZBf0o0VQC27EaPjCPpm7fGUXq+6ubxrYdB/p7v1y1tlJL5t+xEcG5KtrrgsT/8mrEuamQiHB5KtbuxWal03YoTZhm4rOVG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753454499; c=relaxed/simple;
-	bh=zxqNZoD65D5FEUVj5H8lz7BfvSm4D0uBgGBLul7vaFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZfaMNNfAvPejHwaY+w9qMqkoNhNvk5/TYUEZY+3vZB4TBSCf2S7CuaRDOTAMTWVzHJAcVGVs14OvHC7qcG10tSmygkQnAoZu9jm6/z5N7USPTuokmOsDRZmUEPEVbLkwxUeB7kK6nuEdRqTjWpLpC3NOBoKh41JWuwh7lX8Mle8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jBfF2gG0; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753454608; c=relaxed/simple;
+	bh=ysgHg5Dj/aps0NLD2cY4ifNfa0Mk7jUSH1XfLsrAuuc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pJHzBrkTkqCF04z0fzrL6uwy6w+3X3wcelgAVEkKlXBEFN83EFETFeEooo2zws3A7OntCV4QFcO60p2mx79g5uv9zc08gr4Uh8ryona95/LfiuIUS7t7PMI2/s7StNBeotf82aIaZE8j8P5/ujrtFr4jBXnkDTcKSPdIAuPXlys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=QqmmkhH+; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jBfF2gG0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753454498; x=1784990498;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zxqNZoD65D5FEUVj5H8lz7BfvSm4D0uBgGBLul7vaFk=;
-  b=jBfF2gG07oJY/8UDSTv22b+mMy54zyoJCguauzA+fV9W0QM9UPgLplFW
-   8FynVTPJiZwG8PZ1yRUNkf0Uj9zFQoNatm9HALzyYhMjo2jV1m/nOuRjP
-   hSQeDVy/NvUrCIRVaqQFQCuIdTBetUZcob7zk7a/mGWJNjGEmjtNIXRnW
-   zm6YAvjn/pkVvCSixWS7HZc7ypO3oD9PyKlFPkgo4W7gWFuwXalh8ILG+
-   q44lk3p7j4rMrykEMC7yeAlZ/RYYDYQaD4znTniCO+Vygny0FAWK2fBaF
-   grPYeErob6/GCsa06KDjyG3xwM6nwQD1XAkTA9pOuRzIsT/fnkIWn1ggT
-   Q==;
-X-CSE-ConnectionGUID: VZxfAxwIS12N+RmslhULEA==
-X-CSE-MsgGUID: TaPKhi1eRzGV049JXHxb3Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="66359943"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="66359943"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2025 07:41:36 -0700
-X-CSE-ConnectionGUID: SJZaR0dzTV2tZ3SXfg4DJg==
-X-CSE-MsgGUID: 4MBOpP4jS4ClwiIMbA6gEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="161288071"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 25 Jul 2025 07:41:35 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ufJc4-000LMx-1w;
-	Fri, 25 Jul 2025 14:41:32 +0000
-Date: Fri, 25 Jul 2025 22:40:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:ethos-v2 5/6] drivers/accel/ethos/ethos_job.c:274:12: error:
- call to undeclared function 'FIELD_GET'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202507252225.ncNAG0Oa-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="QqmmkhH+"
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 116F03F2CA
+	for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 14:43:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1753454604;
+	bh=0k2OjtFlklZYYSusmSIAAvwXtZV4jXB/0YYQlrt+7FM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=QqmmkhH+oeELz8SrXkqfveadWYD6f+xVH8sjn1VhlFAIFGN9jd9SfzZ4isziFZ78s
+	 dB7LDJAuuc+11oFlJQAdJNCuEbygP8Q9209uinnVNzt3HNgfubaRW2qQ8nJD0qNBnN
+	 1w8ze0+3jfL+r1n6Crwzst3r7i5eioJ54AH70pS7jkNBLcXVLE3Owtt8oPKJRKj+zf
+	 etpbzFIJxvKm3Ud2vjvllm/Nt6m70SUJajYZf9ECDci+3uYtyOaEaNQL6Ep/xXchrx
+	 iVTYOo6pKgbXGmFq+0Yxm0I1NkLwpoWeNVshj0Znpk/2PIzwLyz1uG8a5XWxiPekaj
+	 7PO6641c4vGUQ==
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-606c46b8b9cso3584485a12.1
+        for <llvm@lists.linux.dev>; Fri, 25 Jul 2025 07:43:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753454603; x=1754059403;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0k2OjtFlklZYYSusmSIAAvwXtZV4jXB/0YYQlrt+7FM=;
+        b=Pwunq0yKzS2rAJ877TLwKmiKgikCT87JTIYOhTEcjgURVCCAlzDNqmnIp0TzyNjb2D
+         cZ/fco5q6MH7Kf+3Gomq4CLnEvDSSdapgc2rKvI8MaXrsaTyWRTcXWrXaerRikoiUBAx
+         mG4E2EI0peIcTPSpvVdRnpJ+tJsooFUC3ljdDSILtrg4Z37YJy+GHjKnR2CUu3bbSHYW
+         0cdX54N8uDRUCQs1rC9VrHIT++llFOq7pokfPlxXl/eJf8h20mt7M3h7mRAUPNhf6UAv
+         7a3v7xUgUd4H1z6V5O1m2rWzG/UkRvfva2euJdrS/yEZOsRwNJi4klnl1hkQmtT3MoU+
+         0prw==
+X-Forwarded-Encrypted: i=1; AJvYcCUW2vFvz5yMxQuRAFrbWWF3yVdEOgeOPQIMRPfVrylU0FHelDV777pjeQjBGUNp1SaDNHBO@lists.linux.dev
+X-Gm-Message-State: AOJu0YyHSyZiXlimgDyk4E4ERnK7FjS6MU06qQfca5e0UY03dHHYYZYl
+	4p8PwgbArKjwTQcaIjo5RlwrxQf1KZKqHtlrENQQaIXr1UGFq/p+E8ktkfBdMvdDRSHfNVTdFB8
+	qPRUnU2Dkio8ds3D1QiPMft6mblIMMhdS+KeInSQLBR7IQ665WZGSpHLDh9fI6+xkgaZwOAQ=
+X-Gm-Gg: ASbGncvyyBToqsAe+Z9/YSB9z9C6WjMZAbkeMSzpIMg6czTo1jzQ6d0VvEUcxlPGxAa
+	6M1M2jVw66kWrrLUFhmv4ov8f5BhIqHk1+Ueb4fbdidDZcN4syZtQ4F3hAEGxhSy9gyHGrIzWgG
+	FjiHnysEN3Qdwg+1SXBJ5nsfwThB/BhTNLljoaxLBFP5u3zNSVsj/A8beGKeRWw9Btj16Iqacgo
+	4XrcTwfldf2fcTlVXlvD5ZTbgLQfYX917R2Gf2wj1KBdSpjS/qxGQPjAnq7NsunFEc+HOi1oUnO
+	4qfc8mg6DhxwgN8pJB5Kz30zcqAap4gu5RLH1tsxOySs+gBnVQ0NMvpytwKh1RxZRDQhIXIKYiC
+	faA1bK6ZfCgRv1HKJQWTTJRQrQa6QEnky080L
+X-Received: by 2002:a17:907:2d8f:b0:ae9:cd0a:5827 with SMTP id a640c23a62f3a-af61e533d42mr227200266b.20.1753454603619;
+        Fri, 25 Jul 2025 07:43:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHLGJ6zB3+OfdWnXfUelODaXvg8HjyVSfwaUZrmP6gSKNspnUl1zTG7y8LUoP5t34erFR1Evg==
+X-Received: by 2002:a17:907:2d8f:b0:ae9:cd0a:5827 with SMTP id a640c23a62f3a-af61e533d42mr227194666b.20.1753454603155;
+        Fri, 25 Jul 2025 07:43:23 -0700 (PDT)
+Received: from [192.168.103.102] (ip-005-147-080-091.um06.pools.vodafone-ip.de. [5.147.80.91])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af635af9967sm1931166b.131.2025.07.25.07.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Jul 2025 07:43:22 -0700 (PDT)
+Message-ID: <d6643810-094b-46d8-b223-b987783d23db@canonical.com>
+Date: Fri, 25 Jul 2025 16:43:20 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 05/11] riscv: enable landing pad enforcement
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ rick.p.edgecombe@intel.com, broonie@kernel.org, cleger@rivosinc.com,
+ samitolvanen@google.com, apatel@ventanamicro.com, ajones@ventanamicro.com,
+ conor.dooley@microchip.com, charlie@rivosinc.com, samuel.holland@sifive.com,
+ bjorn@rivosinc.com, fweimer@redhat.com, jeffreyalaw@gmail.com,
+ andrew@sifive.com, ved@rivosinc.com, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Monk Chiang <monk.chiang@sifive.com>,
+ Kito Cheng <kito.cheng@sifive.com>, Justin Stitt <justinstitt@google.com>
+References: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
+ <20250724-riscv_kcfi-v1-5-04b8fa44c98c@rivosinc.com>
+ <1149732f-bc8d-4339-90c3-e34aeac9f1be@canonical.com>
+ <aIOSqskb_hBAqjIt@debug.ba.rivosinc.com>
+Content-Language: en-US
+From: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <aIOSqskb_hBAqjIt@debug.ba.rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git ethos-v2
-head:   266bf4a44880c642834f9845da0f333518302046
-commit: 2c820216b368dd70d8d895d15626d90653232e79 [5/6] ethos: Increase the job timeout and don't reset if still running
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250725/202507252225.ncNAG0Oa-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250725/202507252225.ncNAG0Oa-lkp@intel.com/reproduce)
+On 25.07.25 16:20, Deepak Gupta wrote:
+> On Fri, Jul 25, 2025 at 08:33:46AM +0200, Heinrich Schuchardt wrote:
+>> On 25.07.25 01:36, Deepak Gupta wrote:
+>>> Enables landing pad enforcement by invoking a SBI FWFT call.
+>>>
+>>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>>> ---
+>>>  arch/riscv/kernel/asm-offsets.c |  1 +
+>>>  arch/riscv/kernel/head.S        | 19 +++++++++++++++++++
+>>>  2 files changed, 20 insertions(+)
+>>>
+>>> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm- 
+>>> offsets.c
+>>> index e4d55126dc3e..e6a9fad86fae 100644
+>>> --- a/arch/riscv/kernel/asm-offsets.c
+>>> +++ b/arch/riscv/kernel/asm-offsets.c
+>>> @@ -536,6 +536,7 @@ void asm_offsets(void)
+>>>      DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
+>>>      DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
+>>>      DEFINE(SBI_FWFT_SHADOW_STACK, SBI_FWFT_SHADOW_STACK);
+>>> +    DEFINE(SBI_FWFT_LANDING_PAD, SBI_FWFT_LANDING_PAD);
+>>>      DEFINE(SBI_FWFT_SET_FLAG_LOCK, SBI_FWFT_SET_FLAG_LOCK);
+>>>  #endif
+>>>  }
+>>> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+>>> index 9c99c5ad6fe8..59af044bf85c 100644
+>>> --- a/arch/riscv/kernel/head.S
+>>> +++ b/arch/riscv/kernel/head.S
+>>> @@ -185,6 +185,16 @@ secondary_start_sbi:
+>>>  1:
+>>>  #endif
+>>>      scs_load_current
+>>> +
+>>> +#if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_KERNEL_CFI)
+>>> +    li a7, SBI_EXT_FWFT
+>>> +    li a6, SBI_EXT_FWFT_SET
+>>> +    li a0, SBI_FWFT_LANDING_PAD
+>>> +    li a1, 1 /* enable landing pad for supervisor */
+>>> +    li a2, SBI_FWFT_SET_FLAG_LOCK
+>>> +    ecall    /* check for error condition and take appropriate 
+>>> action */
+>>> +#endif
+>>> +
+>>>      call smp_callin
+>>>  #endif /* CONFIG_SMP */
+>>> @@ -359,6 +369,15 @@ SYM_CODE_START(_start_kernel)
+>>>  #endif
+>>>      scs_load_current
+>>> +#if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_KERNEL_CFI)
+>>> +    li a7, SBI_EXT_FWFT
+>>> +    li a6, SBI_EXT_FWFT_SET
+>>> +    li a0, SBI_FWFT_LANDING_PAD
+>>> +    li a1, 1 /* enable landing pad for supervisor */
+>>
+>> The SBI specification calls BIT(0) "LOCK".
+>> Shouldn't we define a constant for the lock bit instead of using a 
+>> magic value?
+> 
+> See below `li a2, SBI_FWFT_SET_FLAG_LOCK`.
+> 
+> "li a1, 1 /* enable landing pad for supervisor */>" --> this is enabling.
+> Had we done "li a1, 0 /* enable landing pad for supervisor */" --> this is
+> asking firmware to disable the feature (turn off the bit in menvcfg CSR)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507252225.ncNAG0Oa-lkp@intel.com/
+So we lack constants for
 
-All errors (new ones prefixed by >>):
+"Enable landing pad for supervisor-mode"
+"Disable landing pad for supervisor-mode"
 
->> drivers/accel/ethos/ethos_job.c:274:12: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     274 |         running = FIELD_GET(STATUS_STATE_RUNNING, readl_relaxed(dev->regs + NPU_REG_STATUS));
-         |                   ^
-   1 error generated.
+Best regards
 
+Heinrich
 
-vim +/FIELD_GET +274 drivers/accel/ethos/ethos_job.c
+>>
+>>> +    li a2, SBI_FWFT_SET_FLAG_LOCK
+>>> +    ecall    /* check for error condition and take appropriate 
+>>> action */
+>>> +#endif
+>>> +
+>>>  #ifdef CONFIG_KASAN
+>>>      call kasan_early_init
+>>>  #endif
+>>>
+>>
 
-   268	
-   269	static enum drm_gpu_sched_stat ethos_job_timedout(struct drm_sched_job *bad)
-   270	{
-   271		struct ethos_device *dev = to_ethos_job(bad)->dev;
-   272		u32 running;
-   273	
- > 274		running = FIELD_GET(STATUS_STATE_RUNNING, readl_relaxed(dev->regs + NPU_REG_STATUS));
-   275		if (running)
-   276			return DRM_GPU_SCHED_STAT_NOMINAL;
-   277	
-   278		drm_sched_stop(&dev->sched, bad);
-   279	
-   280		dev_err(dev->base.dev, "NPU sched timed out - cmdstream offset: 0x%x\n",
-   281			readl_relaxed(dev->regs + NPU_REG_QREAD));
-   282	
-   283		/*
-   284		 * Remaining interrupts have been handled, but we might still have
-   285		 * stuck jobs. Let's make sure the PM counters stay balanced by
-   286		 * manually calling pm_runtime_put_noidle().
-   287		 */
-   288		scoped_guard(mutex, &dev->job_lock) {
-   289			if (dev->in_flight_job)
-   290				pm_runtime_put_noidle(dev->base.dev);
-   291	
-   292			dev->in_flight_job = NULL;
-   293		}
-   294	
-   295		/* Proceed with reset now. */
-   296		pm_runtime_force_suspend(dev->base.dev);
-   297		pm_runtime_force_resume(dev->base.dev);
-   298	
-   299		/* Restart the scheduler */
-   300		drm_sched_start(&dev->sched, 0);
-   301	
-   302		return DRM_GPU_SCHED_STAT_NOMINAL;
-   303	}
-   304	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
