@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41AD6A93D;
-	Sat, 26 Jul 2025 22:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E91226D1B;
+	Sat, 26 Jul 2025 23:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753569696; cv=none; b=ENAygWzfFmlaY8+uij1JDZuFnryz2lP7OFYbinrhtnKTHjtoO7xyHnc9zndjNt0LOxbR7ez1Za7pSaKWdSClTJ8/Z+M7ABwfHglagiLvls0MEheGTLU43eWsilEs0rjnilcB4leRWZp3NVFxfVXxFEUaknIzy70VbjvTu1HEcdY=
+	t=1753572918; cv=none; b=d3Z899+CLKFLIJ8jbPEGclkjwmulhdRQWvzcvmewhtTpJMoxMPzQxnEPf0JWUVRCSyIBxPJvc8n1NtGD5fY3NhaSAjvnNrW/I8lQNgOe17vbAIReGG9bwK9Yuh4W/EqkifJWxJDhwn/gjSOG8FDXBMB/RncZIJHnoT2seHUkmZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753569696; c=relaxed/simple;
-	bh=q2XdIWOte2Yuu7wVkJSMzXfZJX2opq6lkisZsgBpRkU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7vgh555l8RGNCwfBR6X6VhfPK1FWlfo0PiT0PmJHgaxCUb2Nb0Dm5Y+4NWSyqY9tB+poDOk++Z203wV3IGrBnyNqnk5f/OUOZhnrr3LlKC2ENxd4W8rIJ1038TaXowBnNDZmdRELRzokWfXvavlyaNBb8WA02ldDYRWDqvcl+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1OZuzfE; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1753572918; c=relaxed/simple;
+	bh=7Bvz/Fkx6aurAI0aXJve54uxK34nZw5V7KMI+Xs3iIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KOPl0j2PGierXPa5O0bGswmzFB3Qo+IEE19Xj4C8Hv8td8R0PSjYc+5s1SLZgEzHDSWd0pV55zOpZYOydxoHrOhMsyhrURkdkev4XEdbEYckJ08XNE20qeos5huJu56IivA/LEgpvSnA8vvKzHLipjizx2cKocdrE+yh9zZM1L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m4zui9sZ; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1OZuzfE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m4zui9sZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753569693; x=1785105693;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q2XdIWOte2Yuu7wVkJSMzXfZJX2opq6lkisZsgBpRkU=;
-  b=a1OZuzfE2078PBzZo6kBJ8NIruVEJGhst3AQ03dEzXGRF1tEtraIqeuP
-   bYAbLb09FzTablTq1wjFTbjfjp4T3GQT65BYM4Flqzc/zvlJzZf9R4iJs
-   ZNC4vcQGCXO0vixtL2IG/IF1Jjoo7hgRYWjzGIdKrEQHSGzDde13A6W5R
-   0N9Q8GKSyjIQglT7yOnsaiBf6erlmk+K2Lj7ijEIqe0EZWpRsXX3jscqh
-   ZFPGCcrPQD7cmm2332kWafxBYCsq4ttHsSeJZixPOhCM1YOi1ymCvZK5x
-   6jS4mD0xxJvGRafOnXpHs/n5Iq+50OZ+NqTTXGA6T/SV9RMaszeGJezQE
-   Q==;
-X-CSE-ConnectionGUID: 981XWpE9S1azK9+AEemgqg==
-X-CSE-MsgGUID: ALvxxup5Q8imK9BoM7OA2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="66565735"
+  t=1753572916; x=1785108916;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7Bvz/Fkx6aurAI0aXJve54uxK34nZw5V7KMI+Xs3iIY=;
+  b=m4zui9sZHEw+aG3KFj+H00mucs4RjqPXahddfkPXUxRh5P+lgqfx6Tru
+   fyh2yRAP6Bu5nu549j91xQpqlOkCpR0JqjVk+Os1I0vR/SAvDDGC0NoOH
+   9r9skvGDf9uHgBzKwp4P3pVfuDyje0t0RoxukJvH0Uj/tC/TaFbwJRsB6
+   alVcu0hNs4DwxwkckHzFyNphx3hqLXvlL0jypo8nvcAK2jJup2rJdW1mi
+   m8OwkuFCj2+5y/ScHq90bhdQGUaKksyK6F4ElwsVd3bARg3Vno9cgEpwn
+   MEJtKJI7AZ63moWUA8eHgCXO5haaAO0aej7DXRuD9cpQmqTleM+RMo1kC
+   g==;
+X-CSE-ConnectionGUID: AxAmaz9bSRal+Prv19sflQ==
+X-CSE-MsgGUID: muV/Cy6LQequI4FX7ymJ6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="58487177"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="66565735"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 15:41:33 -0700
-X-CSE-ConnectionGUID: PJJco16NR4Wk8fSAXDZdTA==
-X-CSE-MsgGUID: 3vMdi+PgQ6CwsVJKCLVbXg==
+   d="scan'208";a="58487177"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 16:34:37 -0700
+X-CSE-ConnectionGUID: a5pnr+mWQu+3PvlbGuxJyg==
+X-CSE-MsgGUID: VuVOT6cISZuFaIqyNsHtFA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="162087174"
+   d="scan'208";a="162321448"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 26 Jul 2025 15:41:31 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 26 Jul 2025 16:34:36 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufna5-000MK3-2U;
-	Sat, 26 Jul 2025 22:41:29 +0000
-Date: Sun, 27 Jul 2025 06:41:06 +0800
+	id 1ufoPS-000MLj-1O;
+	Sat, 26 Jul 2025 23:34:34 +0000
+Date: Sun, 27 Jul 2025 07:34:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Ousterhout <ouster@cs.stanford.edu>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-	edumazet@google.com, horms@kernel.org, kuba@kernel.org,
-	John Ousterhout <ouster@cs.stanford.edu>
-Subject: Re: [PATCH net-next v12 15/15] net: homa: create Makefile and Kconfig
-Message-ID: <202507270639.OBQsePz1-lkp@intel.com>
-References: <20250724184050.3130-16-ouster@cs.stanford.edu>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org
+Subject: [brgl:gpio/devel 2/2] arch/mips/alchemy/common/gpiolib.c:100:12:
+ error: incompatible function pointer types initializing 'int (*)(struct
+ gpio_chip *, unsigned int, int)' with an expression of type 'void (struct
+ gpio_chip *, unsigned int, int)'
+Message-ID: <202507270738.rj7En3F7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,73 +64,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250724184050.3130-16-ouster@cs.stanford.edu>
 
-Hi John,
+Hi Bartosz,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test ERROR on net/main]
-[also build test ERROR on linus/master v6.16-rc7 next-20250725]
-[cannot apply to net-next/main horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Ousterhout/net-homa-define-user-visible-API-for-Homa/20250725-024511
-base:   net/main
-patch link:    https://lore.kernel.org/r/20250724184050.3130-16-ouster%40cs.stanford.edu
-patch subject: [PATCH net-next v12 15/15] net: homa: create Makefile and Kconfig
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250727/202507270639.OBQsePz1-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250727/202507270639.OBQsePz1-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/devel
+head:   2c924414c5d54d7ffc883039176b66efbb735b72
+commit: 2c924414c5d54d7ffc883039176b66efbb735b72 [2/2] treewide: rename GPIO set callbacks back to their original names
+config: mips-db1xxx_defconfig (https://download.01.org/0day-ci/archive/20250727/202507270738.rj7En3F7-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250727/202507270738.rj7En3F7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507270639.OBQsePz1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507270738.rj7En3F7-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/homa/homa_incoming.c:5:
-   In file included from net/homa/homa_impl.h:13:
-   In file included from include/linux/icmp.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from net/homa/homa_incoming.c:5:
->> net/homa/homa_impl.h:557:9: error: use of undeclared identifier 'tsc_khz'
-     557 |         return tsc_khz;
-         |                ^
-   1 warning and 1 error generated.
+>> arch/mips/alchemy/common/gpiolib.c:100:12: error: incompatible function pointer types initializing 'int (*)(struct gpio_chip *, unsigned int, int)' with an expression of type 'void (struct gpio_chip *, unsigned int, int)' [-Wincompatible-function-pointer-types]
+     100 |                 .set                    = gpio1_set,
+         |                                           ^~~~~~~~~
+   arch/mips/alchemy/common/gpiolib.c:110:12: error: incompatible function pointer types initializing 'int (*)(struct gpio_chip *, unsigned int, int)' with an expression of type 'void (struct gpio_chip *, unsigned int, int)' [-Wincompatible-function-pointer-types]
+     110 |                 .set                    = gpio2_set,
+         |                                           ^~~~~~~~~
+   2 errors generated.
 
 
-vim +/tsc_khz +557 net/homa/homa_impl.h
+vim +100 arch/mips/alchemy/common/gpiolib.c
 
-4d2ad8007f1c33 John Ousterhout 2025-07-24  548  
-4d2ad8007f1c33 John Ousterhout 2025-07-24  549  /**
-4d2ad8007f1c33 John Ousterhout 2025-07-24  550   * homa_clock_khz() - Return the frequency of the values returned by
-4d2ad8007f1c33 John Ousterhout 2025-07-24  551   * homa_clock, in units of KHz.
-4d2ad8007f1c33 John Ousterhout 2025-07-24  552   * Return: see above.
-4d2ad8007f1c33 John Ousterhout 2025-07-24  553   */
-4d2ad8007f1c33 John Ousterhout 2025-07-24  554  static inline u64 homa_clock_khz(void)
-4d2ad8007f1c33 John Ousterhout 2025-07-24  555  {
-4d2ad8007f1c33 John Ousterhout 2025-07-24  556  #ifdef CONFIG_X86_TSC
-4d2ad8007f1c33 John Ousterhout 2025-07-24 @557  	return tsc_khz;
-4d2ad8007f1c33 John Ousterhout 2025-07-24  558  #else
-4d2ad8007f1c33 John Ousterhout 2025-07-24  559  	return 1000000;
-4d2ad8007f1c33 John Ousterhout 2025-07-24  560  #endif /* CONFIG_X86_TSC */
-4d2ad8007f1c33 John Ousterhout 2025-07-24  561  }
-4d2ad8007f1c33 John Ousterhout 2025-07-24  562  
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   93  
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   94  struct gpio_chip alchemy_gpio_chip[] = {
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   95  	[0] = {
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   96  		.label			= "alchemy-gpio1",
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   97  		.direction_input	= gpio1_direction_input,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   98  		.direction_output	= gpio1_direction_output,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06   99  		.get			= gpio1_get,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06 @100  		.set			= gpio1_set,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  101  		.to_irq			= gpio1_to_irq,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  102  		.base			= ALCHEMY_GPIO1_BASE,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  103  		.ngpio			= ALCHEMY_GPIO1_NUM,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  104  	},
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  105  	[1] = {
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  106  		.label			= "alchemy-gpio2",
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  107  		.direction_input	= gpio2_direction_input,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  108  		.direction_output	= gpio2_direction_output,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  109  		.get			= gpio2_get,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  110  		.set			= gpio2_set,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  111  		.to_irq			= gpio2_to_irq,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  112  		.base			= ALCHEMY_GPIO2_BASE,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  113  		.ngpio			= ALCHEMY_GPIO2_NUM,
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  114  	},
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  115  };
+51e02b02e65018 arch/mips/alchemy/common/gpiolib-au1000.c Manuel Lauss 2009-06-06  116  
+
+:::::: The code at line 100 was first introduced by commit
+:::::: 51e02b02e650183ff1277bcbad6a01d6ea0e9edb MIPS: Alchemy: Rewrite GPIO support.
+
+:::::: TO: Manuel Lauss <manuel.lauss@googlemail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
 0-DAY CI Kernel Test Service
