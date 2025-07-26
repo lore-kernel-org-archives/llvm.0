@@ -1,74 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68809220F22;
-	Sat, 26 Jul 2025 21:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41AD6A93D;
+	Sat, 26 Jul 2025 22:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753566635; cv=none; b=s1qjNOmGyKHLXjW0JxcMnrkYKpowodJR0i/wvVEiTSR+3/hI5uCw9Tvw3gM6SG+uadLGnFjEcgy2G2U7Nve/g4tsRvpZophnqtxO/KHcP/KHmutiSjDeZP8xh7QZxSWkgUWQYFXK1NbnJryweDIxpqk5dKtBUe/BB60inyP5f2Q=
+	t=1753569696; cv=none; b=ENAygWzfFmlaY8+uij1JDZuFnryz2lP7OFYbinrhtnKTHjtoO7xyHnc9zndjNt0LOxbR7ez1Za7pSaKWdSClTJ8/Z+M7ABwfHglagiLvls0MEheGTLU43eWsilEs0rjnilcB4leRWZp3NVFxfVXxFEUaknIzy70VbjvTu1HEcdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753566635; c=relaxed/simple;
-	bh=hSbqujNyJtfgoVzH7Vax+KT9pmAhM1E22Hv7yYf+bQ0=;
+	s=arc-20240116; t=1753569696; c=relaxed/simple;
+	bh=q2XdIWOte2Yuu7wVkJSMzXfZJX2opq6lkisZsgBpRkU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OB3z7H0kKX0IardTUCFOqZZkMeyoWdYmbUaOUvacnikxaiPvy6hg5DoZgofsTmgG/78mUMTx6zjylmG6ZFjZNu/7cQun7GXUms40qZwt5mJZ26Maps0LZqR80MLqrNOn5zlqPklcLIaQDqxaXOQMjSlk0B4k2wyjRDtSz0XqdFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kRu/PbZN; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=O7vgh555l8RGNCwfBR6X6VhfPK1FWlfo0PiT0PmJHgaxCUb2Nb0Dm5Y+4NWSyqY9tB+poDOk++Z203wV3IGrBnyNqnk5f/OUOZhnrr3LlKC2ENxd4W8rIJ1038TaXowBnNDZmdRELRzokWfXvavlyaNBb8WA02ldDYRWDqvcl+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1OZuzfE; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kRu/PbZN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1OZuzfE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753566635; x=1785102635;
+  t=1753569693; x=1785105693;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hSbqujNyJtfgoVzH7Vax+KT9pmAhM1E22Hv7yYf+bQ0=;
-  b=kRu/PbZN9ATlJCM6RgFcm1KZXVu8/K1qDjSdStQA+7hQFj2vX853tDwQ
-   b1Inm0JXVsImfUPmiYHU3wxJsYAC0JOst1ZcD0CVvTWPX9d6LLXoZVgET
-   GShMDfaz9J75+4gtWoWs9qckDXsO0Sq152BE8NcklaOfy3M0kc21wTOYe
-   O+iuDAlX+585YuLoL39yo65ynCI8q16Mz3st1sar76A/R0rd4WtbWBQLq
-   ML2udDvaUKmbt8p15XHzBuyCpWYdjtWRfOnM4J1J94k+kXFUDkDo40Em0
-   j/BZ7D9dhVm5r2+sfCjnU4SRiOHmvtX2HnU3kB5hZe3fZtAI7igWvzBh3
-   w==;
-X-CSE-ConnectionGUID: BXP0/iBkSHWU6wnsP0OCWQ==
-X-CSE-MsgGUID: o3mEF4HfQOW4gSBlVYwzBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="55721668"
+  bh=q2XdIWOte2Yuu7wVkJSMzXfZJX2opq6lkisZsgBpRkU=;
+  b=a1OZuzfE2078PBzZo6kBJ8NIruVEJGhst3AQ03dEzXGRF1tEtraIqeuP
+   bYAbLb09FzTablTq1wjFTbjfjp4T3GQT65BYM4Flqzc/zvlJzZf9R4iJs
+   ZNC4vcQGCXO0vixtL2IG/IF1Jjoo7hgRYWjzGIdKrEQHSGzDde13A6W5R
+   0N9Q8GKSyjIQglT7yOnsaiBf6erlmk+K2Lj7ijEIqe0EZWpRsXX3jscqh
+   ZFPGCcrPQD7cmm2332kWafxBYCsq4ttHsSeJZixPOhCM1YOi1ymCvZK5x
+   6jS4mD0xxJvGRafOnXpHs/n5Iq+50OZ+NqTTXGA6T/SV9RMaszeGJezQE
+   Q==;
+X-CSE-ConnectionGUID: 981XWpE9S1azK9+AEemgqg==
+X-CSE-MsgGUID: ALvxxup5Q8imK9BoM7OA2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="66565735"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55721668"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 14:50:34 -0700
-X-CSE-ConnectionGUID: YUbCUJRlSDSYtBKh9alZxQ==
-X-CSE-MsgGUID: msO8MjvYQuO0CppyXIzicw==
+   d="scan'208";a="66565735"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 15:41:33 -0700
+X-CSE-ConnectionGUID: PJJco16NR4Wk8fSAXDZdTA==
+X-CSE-MsgGUID: 3vMdi+PgQ6CwsVJKCLVbXg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="192644434"
+   d="scan'208";a="162087174"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 26 Jul 2025 14:50:29 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 26 Jul 2025 15:41:31 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufmmg-000MJH-2B;
-	Sat, 26 Jul 2025 21:50:26 +0000
-Date: Sun, 27 Jul 2025 05:50:14 +0800
+	id 1ufna5-000MK3-2U;
+	Sat, 26 Jul 2025 22:41:29 +0000
+Date: Sun, 27 Jul 2025 06:41:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maud Spierings via B4 Relay <devnull+maudspierings.gocontroll.com@kernel.org>,
-	Lee Jones <lee@kernel.org>, Daniel Thompson <danielt@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Helge Deller <deller@gmx.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Maud Spierings <maudspierings@gocontroll.com>,
-	MaudSpieringsmaudspierings@gocontroll.com
-Subject: Re: [PATCH 2/4] backlight: add max25014atg backlight
-Message-ID: <202507270543.G0TT6f25-lkp@intel.com>
-References: <20250725-max25014-v1-2-0e8cce92078e@gocontroll.com>
+To: John Ousterhout <ouster@cs.stanford.edu>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
+	edumazet@google.com, horms@kernel.org, kuba@kernel.org,
+	John Ousterhout <ouster@cs.stanford.edu>
+Subject: Re: [PATCH net-next v12 15/15] net: homa: create Makefile and Kconfig
+Message-ID: <202507270639.OBQsePz1-lkp@intel.com>
+References: <20250724184050.3130-16-ouster@cs.stanford.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,59 +64,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250725-max25014-v1-2-0e8cce92078e@gocontroll.com>
+In-Reply-To: <20250724184050.3130-16-ouster@cs.stanford.edu>
 
-Hi Maud,
+Hi John,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on d7af19298454ed155f5cf67201a70f5cf836c842]
+[auto build test ERROR on net/main]
+[also build test ERROR on linus/master v6.16-rc7 next-20250725]
+[cannot apply to net-next/main horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maud-Spierings-via-B4-Relay/dt-bindings-backlight-Add-max25014-bindings/20250725-191221
-base:   d7af19298454ed155f5cf67201a70f5cf836c842
-patch link:    https://lore.kernel.org/r/20250725-max25014-v1-2-0e8cce92078e%40gocontroll.com
-patch subject: [PATCH 2/4] backlight: add max25014atg backlight
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250727/202507270543.G0TT6f25-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250727/202507270543.G0TT6f25-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Ousterhout/net-homa-define-user-visible-API-for-Homa/20250725-024511
+base:   net/main
+patch link:    https://lore.kernel.org/r/20250724184050.3130-16-ouster%40cs.stanford.edu
+patch subject: [PATCH net-next v12 15/15] net: homa: create Makefile and Kconfig
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250727/202507270639.OBQsePz1-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250727/202507270639.OBQsePz1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507270543.G0TT6f25-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507270639.OBQsePz1-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/video/backlight/max25014.c:86:4: warning: variable 'res' is uninitialized when used here [-Wuninitialized]
-      86 |                         res |= 1 << i;
-         |                         ^~~
-   drivers/video/backlight/max25014.c:82:13: note: initialize the variable 'res' to silence this warning
-      82 |         uint8_t res, i;
-         |                    ^
-         |                     = '\0'
-   1 warning generated.
+   In file included from net/homa/homa_incoming.c:5:
+   In file included from net/homa/homa_impl.h:13:
+   In file included from include/linux/icmp.h:16:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from net/homa/homa_incoming.c:5:
+>> net/homa/homa_impl.h:557:9: error: use of undeclared identifier 'tsc_khz'
+     557 |         return tsc_khz;
+         |                ^
+   1 warning and 1 error generated.
 
 
-vim +/res +86 drivers/video/backlight/max25014.c
+vim +/tsc_khz +557 net/homa/homa_impl.h
 
-    73	
-    74	/**
-    75	 * @brief get the bit mask for the DISABLE register.
-    76	 *
-    77	 * @param strings the led string configuration array.
-    78	 * @return uint8_t bits to set in the register.
-    79	 */
-    80	static uint8_t strings_mask(struct max25014 *maxim)
-    81	{
-    82		uint8_t res, i;
-    83	
-    84		for (i = 0; i < 4; i++) {
-    85			if (maxim->pdata->strings[i] == 0)
-  > 86				res |= 1 << i;
-    87		}
-    88		return res;
-    89	}
-    90	
+4d2ad8007f1c33 John Ousterhout 2025-07-24  548  
+4d2ad8007f1c33 John Ousterhout 2025-07-24  549  /**
+4d2ad8007f1c33 John Ousterhout 2025-07-24  550   * homa_clock_khz() - Return the frequency of the values returned by
+4d2ad8007f1c33 John Ousterhout 2025-07-24  551   * homa_clock, in units of KHz.
+4d2ad8007f1c33 John Ousterhout 2025-07-24  552   * Return: see above.
+4d2ad8007f1c33 John Ousterhout 2025-07-24  553   */
+4d2ad8007f1c33 John Ousterhout 2025-07-24  554  static inline u64 homa_clock_khz(void)
+4d2ad8007f1c33 John Ousterhout 2025-07-24  555  {
+4d2ad8007f1c33 John Ousterhout 2025-07-24  556  #ifdef CONFIG_X86_TSC
+4d2ad8007f1c33 John Ousterhout 2025-07-24 @557  	return tsc_khz;
+4d2ad8007f1c33 John Ousterhout 2025-07-24  558  #else
+4d2ad8007f1c33 John Ousterhout 2025-07-24  559  	return 1000000;
+4d2ad8007f1c33 John Ousterhout 2025-07-24  560  #endif /* CONFIG_X86_TSC */
+4d2ad8007f1c33 John Ousterhout 2025-07-24  561  }
+4d2ad8007f1c33 John Ousterhout 2025-07-24  562  
 
 -- 
 0-DAY CI Kernel Test Service
