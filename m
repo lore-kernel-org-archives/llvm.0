@@ -1,218 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DB323F26A;
-	Sat, 26 Jul 2025 10:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EA82153ED
+	for <llvm@lists.linux.dev>; Sat, 26 Jul 2025 10:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753525591; cv=none; b=rUjaX1EPJ2NqK54tP0tR7IWD6lyg7TjU7qSA2uiJdBxhvl4byLIV+RZnm6qoLg5vYsEJU4e+dFoTezNkjX9YIOwLE+HvUCIle1W+ZKXMsBPAaegabCYfGUS2GTtYRYsXTpiACjsMJ2UaFrnEMK+AqrcR0Pv6XaO6f4RhgpjttPU=
+	t=1753526099; cv=none; b=dMVdc+Wv67Z8GbXoou4NzBXzOWhQiwQbygkRw7k/ZepYTFce1c04J/VJWvG9SaB7MCXLNOnEGGUFtU6tyZCjSu8YyMlham40YVUGs99YmJAOb48WvYhKtMwgCbZohcaKCo8Evv1D/KcfauArLIM3Erm31IvttY6UgIzOhPKjyXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753525591; c=relaxed/simple;
-	bh=iE8cIDfFLQ8B5WGZtqZKWPN4Ek+qnInv2VJkerYcv0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TihFBHFKoYWPuBIRQJ8IX3eMg4orDABkWp98Nh7Dmp5sRByXwf5b8hpd1DxTa6LRmm1dL1hGwh0Jtn/ad7rymofgNyKdTfZkAtMSx8nEvJfuRzIDClIOrzHKNydPPMyxPS7w1hxJSlJimwG9RVsk6a8XNdHpEmJ4CYl9cBochEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kyZKaqLR; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753526099; c=relaxed/simple;
+	bh=xNGjY7zU23UbtC8TnC551ilI9jqtO3VI+NHk902JKk8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ls2MOforLvESRY9CfhKN+TuFzFPZIQY6t9Ym5Zq1NpnYq4cpinLvihfZ3cK0v0rAZT7ixQ9oJwxQsx87Y5Wb2dw17dCZhE1VvuI4eQQUkIvuXLDaVZLOuaODlVbEWOD8ss6iDkRyZLsgSaCw/bhsbv1/gxsXhO2/WDAHFYIZ/dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Or2hqRl9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kyZKaqLR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753525590; x=1785061590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iE8cIDfFLQ8B5WGZtqZKWPN4Ek+qnInv2VJkerYcv0E=;
-  b=kyZKaqLRxvC2WkhrDmGHErsG0lLABaYfhmE+26ith5w1aUR9CUP0QojC
-   fX5411FHMIN2KUh4EzPb6qrWQpgZCaIIr7V6VCwBBapuvaTIvstlNESgb
-   Oq3VB9guGWB+BLvISoT7u6JUHg89sZS182aPYMXtnGjw1mW8aJmS3WYSr
-   xDzAQ1HFoV4VZB4KQk6MkrGsfDgTsizw1cTZjj3YFau1C+FA5KvkijflA
-   g7je2rbEoj4XY6dL8JcwajCxkGNbVyinLRVhOr9JDGYKxlvh4prZfU15V
-   IUYmMdv+z5K2FHQJDlPWvh4ID5RODGbAyWUyuUNKWb+BFbA7ix0jFoJeE
-   A==;
-X-CSE-ConnectionGUID: qUAZ4l5jQrWMecer2D4t5w==
-X-CSE-MsgGUID: CgxtYkQeRPSyhMa6ZYp+2g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="55996067"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55996067"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 03:26:30 -0700
-X-CSE-ConnectionGUID: W+MjwdixSHuhX3TInEHXeg==
-X-CSE-MsgGUID: +c3Ix+1iSi691V+f/dZLvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="192406716"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 26 Jul 2025 03:26:26 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ufc6h-000LsC-2j;
-	Sat, 26 Jul 2025 10:26:23 +0000
-Date: Sat, 26 Jul 2025 18:26:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konradybcio@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] clk: qcom: Add a driver for SM8750 GPU clocks
-Message-ID: <202507261830.IirBJ9dS-lkp@intel.com>
-References: <20250723-topic-8750_gpucc-v2-2-56c93b84c390@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Or2hqRl9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89986C4AF09
+	for <llvm@lists.linux.dev>; Sat, 26 Jul 2025 10:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753526098;
+	bh=xNGjY7zU23UbtC8TnC551ilI9jqtO3VI+NHk902JKk8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Or2hqRl9yZcKsa1GSuKwG7BerSt7Rd4Zf8Tp/qLlf+KGedU8GL2+ntNaIp+RMsSCA
+	 FQ50f6SJZKSdjgfhWMBDHSedu1JTXEdopqu5L16Tmv/KBQ+QROsvQkaHDpCl/RxbaJ
+	 naGAlzDzZxcEMKMjZDr5+41aVASnG2bV868r9efecPaLyAePSmmAaejMqmfDe/Aquo
+	 q2RQWQJ7QE5gpPBwKTifxDf/rm78SfTojgRdh1ZqGzYGBWCBrFCTXTH6ExnCS1Lvtr
+	 OFth5edf4xvZhtoW+aBDTgC8uep2a8mIgi0/tJtqMFsWZjV8cgTpPLb9YlBwSTtT5h
+	 EPKVTLCKceAlQ==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-555163cd09aso2522353e87.3
+        for <llvm@lists.linux.dev>; Sat, 26 Jul 2025 03:34:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXImcNHTE9B22rWLfIBQw1aFbrPNK2oY9g3s9N8n7iFcNRA+Mb5JiUbkv61k7lldVKuTpt0@lists.linux.dev
+X-Gm-Message-State: AOJu0YxKayoWNgl84OfkC4aZNnnX5DhVXSf706Wd5wBkoEztOzjomB2j
+	m6SCtxPGoD6XWka5DkYWDkZNQHfXrr5A1uzfJPivJ9edR+SbAF/zF74xMRWzViCBFb3OYyqaG+X
+	OcWGDitYGG89J0fJF/vMCpw1afYcPvtw=
+X-Google-Smtp-Source: AGHT+IF1qeYoFT4OjYGATbmZIjWNXodWICSJVv+du8pwTXC6Gp5H8S9vF4KVq2EeZo0NuT5CuJeu/dQr1g5dUXrLrOw=
+X-Received: by 2002:a05:6512:3d15:b0:553:ad9b:cfb1 with SMTP id
+ 2adb3069b0e04-55b5f3d1378mr1321534e87.9.1753526097121; Sat, 26 Jul 2025
+ 03:34:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250723-topic-8750_gpucc-v2-2-56c93b84c390@oss.qualcomm.com>
+References: <20250724-userprogs-clang-gnu-ld-v1-1-3d3d071e53a7@linutronix.de>
+ <20250724231025.GA3620641@ax162> <20250725122604-44874f95-859c-4c0a-b3b0-14b30e00b796@linutronix.de>
+In-Reply-To: <20250725122604-44874f95-859c-4c0a-b3b0-14b30e00b796@linutronix.de>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 26 Jul 2025 19:34:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARp77d+rti7j=1ABbreTxYbVsEOHqQCurkt0t+JzKUKvg@mail.gmail.com>
+X-Gm-Features: Ac12FXyIJ1uldhwd9j611VlxM1KojWYI0LWyidbubjvuMvwAijjyoU2rtNbzTEA
+Message-ID: <CAK7LNARp77d+rti7j=1ABbreTxYbVsEOHqQCurkt0t+JzKUKvg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: userprogs: use correct linker when mixing clang
+ and GNU ld
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Konrad,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 0be23810e32e6d0a17df7c0ebad895ba2c210fc4]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/dt-bindings-clock-qcom-Add-SM8750-GPU-clocks/20250724-044303
-base:   0be23810e32e6d0a17df7c0ebad895ba2c210fc4
-patch link:    https://lore.kernel.org/r/20250723-topic-8750_gpucc-v2-2-56c93b84c390%40oss.qualcomm.com
-patch subject: [PATCH v2 2/3] clk: qcom: Add a driver for SM8750 GPU clocks
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250726/202507261830.IirBJ9dS-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261830.IirBJ9dS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507261830.IirBJ9dS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of '__inittest'
-     521 | module_platform_driver(gx_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:132:42: note: expanded from macro '\
-   module_init'
-     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
-         |                                                 ^
-   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
-     469 | module_platform_driver(gpu_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:132:42: note: expanded from macro '\
-   module_init'
-     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
-         |                                                 ^
->> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of 'init_module'
-     521 | module_platform_driver(gx_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:134:6: note: expanded from macro '\
-   module_init'
-     134 |         int init_module(void) __copy(initfn)                    \
-         |             ^
-   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
-     469 | module_platform_driver(gpu_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:134:6: note: expanded from macro '\
-   module_init'
-     134 |         int init_module(void) __copy(initfn)                    \
-         |             ^
->> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of '__exittest'
-     521 | module_platform_driver(gx_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:140:42: note: expanded from macro '\
-   module_exit'
-     140 |         static inline exitcall_t __maybe_unused __exittest(void)                \
-         |                                                 ^
-   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
-     469 | module_platform_driver(gpu_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:140:42: note: expanded from macro '\
-   module_exit'
-     140 |         static inline exitcall_t __maybe_unused __exittest(void)                \
-         |                                                 ^
->> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of 'cleanup_module'
-     521 | module_platform_driver(gx_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:142:7: note: expanded from macro '\
-   module_exit'
-     142 |         void cleanup_module(void) __copy(exitfn)                \
-         |              ^
-   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
-     469 | module_platform_driver(gpu_cc_sm8750_driver);
-         | ^
-   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
-     292 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:142:7: note: expanded from macro '\
-   module_exit'
-     142 |         void cleanup_module(void) __copy(exitfn)                \
-         |              ^
-   4 errors generated.
+On Fri, Jul 25, 2025 at 7:36=E2=80=AFPM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> On Thu, Jul 24, 2025 at 04:10:25PM -0700, Nathan Chancellor wrote:
+> > On Thu, Jul 24, 2025 at 10:32:45AM +0200, Thomas Wei=C3=9Fschuh wrote:
+> > > The userprogs infrastructure does not expect clang being used with GN=
+U ld
+> > > and in that case uses /usr/bin/ld for linking, not the configured $(L=
+D).
+> > > This fallback is problematic as it will break when cross-compiling.
+> > > Mixing clang and GNU ld is used for example when building for SPARC64=
+,
+> > > as ld.lld is not sufficient; see Documentation/kbuild/llvm.rst.
+> > >
+> > > Relax the check around --ld-path so it gets used for all linkers.
+> > >
+> > > Fixes: dfc1b168a8c4 ("kbuild: userprogs: use correct lld when linking=
+ through clang")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de=
+>
+> > > ---
+> > > Nathan, you originally proposed the check for $(CONFIG_LD_IS_LLD) [0]=
+,
+> > > could you take a look at this?
+> >
+> > I would expect this to be okay but I have not explicitly tested it. I
+> > had not considered the case of GNU ld being used since aside from
+> > sparc64, there is not another architecture that supports clang but not
+> > ld.lld.
+>
+> FWIW some architectures use GNU ld implicitly with clang because they als=
+o link
+> through $(CC) but do not use --ld-path. One example is UML, where the vDS=
+O and
+> vmlinux are linked this way. But linking vmlinux of UML with ld.lld will
+> require changes to at least the linker script. Something for the ClangBui=
+ltLinux
+> TODO? There were more examples, but I don't remember them right now.
+>
+> Longterm --ld-path should probably be added to the global KBUILD_CFLAGS, =
+too.
+>
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Thanks!
+>
+> > > ---
+> > >  Makefile | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/Makefile b/Makefile
+> > > index c09766beb7eff4780574682b8ea44475fc0a5188..e300c6546c845c300edb5=
+f0033719963c7da8f9b 100644
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -1134,7 +1134,7 @@ KBUILD_USERCFLAGS  +=3D $(filter -m32 -m64 --ta=
+rget=3D%, $(KBUILD_CPPFLAGS) $(KBUILD
+> > >  KBUILD_USERLDFLAGS +=3D $(filter -m32 -m64 --target=3D%, $(KBUILD_CP=
+PFLAGS) $(KBUILD_CFLAGS))
+> >
+> > Does KBUILD_USERCFLAGS respect LLVM_IAS? sparc64 does not use the
+> > integrated assembler yet (as far as I am aware) so I think we probably
+> > need to filter '--prefix=3D' and '-fno-integrated-as' to avoid further
+> > issues with assembling?
+>
+> No, it isn't respected. On the other hand I didn't yet run into any issue=
+s.
+> Do we want to fix it proactively?
+>
+> > >  # userspace programs are linked via the compiler, use the correct li=
+nker
+> > > -ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_LD_IS_LLD),yy)
+> > > +ifneq ($(CONFIG_CC_IS_CLANG),)
+> >
+> > At this point, I think this can just become
+> >
+> >   ifdef CONFIG_CC_IS_CLANG
+>
+> Absolutetly. The existing conditional above this hunk uses the ifneq
+> pattern, so I tried to keep it consistent.
+> But the one above uses plain ifdef again...
+> Personally I don't care one way or another.
 
 
-vim +/__inittest +521 drivers/clk/qcom/gpucc-sm8750.c
+Could you use "ifdef CONFIG_CC_IS_CLANG" please?
 
-   513	
-   514	static struct platform_driver gx_cc_sm8750_driver = {
-   515		.probe = gx_cc_sm8750_probe,
-   516		.driver = {
-   517			.name = "gx_cc-sm8750",
-   518			.of_match_table = gx_cc_sm8750_match_table,
-   519		},
-   520	};
- > 521	module_platform_driver(gx_cc_sm8750_driver);
-   522	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+--=20
+Best Regards
+Masahiro Yamada
