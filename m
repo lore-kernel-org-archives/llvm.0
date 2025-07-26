@@ -1,142 +1,91 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4B128935E;
-	Sat, 26 Jul 2025 19:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B164D1EA7DD;
+	Sat, 26 Jul 2025 21:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753558164; cv=none; b=k/ixxEhUL1Ud9w40CPrRZW5IXRSYlwrCJ5c/lZcfM3LkG+8/w2Esa/Hm1uK20kgqmvBLeP20OllcDbjYXi0gEUYgVfoSQlfUb5EbCI1U+OlIrFm24MIAxG8OgwdJWOdQeU2ii2W0bALH6v/PLPVCFF3yN3k7Bjf/3GxWFswpPBQ=
+	t=1753565181; cv=none; b=MACTXu6vb2E6cZOMThYUdc3pALCNKCRwAHIXDlFTL7EG5dV6cju3b7ytTg3HkNIUtFSAfFnnf4Eau6gRL+T+acXWRW+ED5RHtkLur6evHGFzp5gd5Yz6qaNsX7P80spGzYhjpnTGHSzzSUtU6mg4XTNErE05wzwDWNSgVFfcLNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753558164; c=relaxed/simple;
-	bh=p6vlzBxPmTlXQOH312nXUMfon36HwQd45uPGmrT2Fl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=caOVGv+tGik9na7ke1ujS6Txef+b5j0EWQYfvfPIbQ6xbC1r7rOB37G2BZqao5rC1y7DLJne4FltvA2wD3mdaz4S2LLHJU+nxPYvx/iF4iK7ILmEw8lAQe3Mky0XHvf/n3Yit/1uQxZdWEdFIULE9tLQxoH7vv3ogHFxzs+/sUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ldE/ZkUY; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753565181; c=relaxed/simple;
+	bh=HRz6MADk8kXtX6zMCSuX7+PnJXnqXQTbzRUgSFNYQvw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Wx5zr7ekG6VMVL5kPLgvJRG+v0QkrKleqHYzRHP6vqO1P6cp6rSxdICm8K5kK0F0YuzWPoVXTvp98Rtj01RRI3KONNjJYnPE5txzUTVxn/ATcVooQdAZvd1Hmwr1325xGZQLfw8KuE3sQQGwWAmz6sujtGh0m46r3FQWsC/JUpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iG9z91ie; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ldE/ZkUY"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-af0dc229478so451167166b.1;
-        Sat, 26 Jul 2025 12:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753558162; x=1754162962; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8vvSfKTsgW67UgHTjYSpiHoW4cS1GZJhJf8MDOP7W80=;
-        b=ldE/ZkUYgB8VgxYvTmzwGPH9ExVpyj0YY0v3QNtsl9bxf1OQwWmvSWhwK/AC5yawqk
-         8ZyRpwgRPcAtbgF0rKN6sPuTuhdQvrD5F+LnwMJegY4ny+gi8HIP95tNDDZ+rUAZP6b8
-         d8ZVVPDbRJcFarBtCE92ceBcxBEEw5pYq+4X7oDmlYl/jLg0dxdGj5a8YR+qwgyBOVOZ
-         LP9wTdQeXa5orj9qhI1raEnrRJsAPxP67/qkiFuB/bkcrvJgZih3PWEdDUSim5NNqRCj
-         uM2AaoTCYxjXmV5XIHgjv3wrbQHtkC31oJUXrCjoPZMyM9i1KRR/aR9/j6KJJfH1a5N0
-         QzoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753558162; x=1754162962;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8vvSfKTsgW67UgHTjYSpiHoW4cS1GZJhJf8MDOP7W80=;
-        b=lFqbzUqoqJC4bcRzhoVqAYvVVJLWocFyQagys7no2gaQ3KCvfKcLfT5/wv58W8tHB5
-         1DzeP+oRBTJuNWoi5a5vgmIIqbZcTfG2irwNkbEJcnkMvAsh/PlXouYLTadMp6xEjUus
-         gp6NHSAkI6qA1MoqSnGesOFfFcfJUObrgzt2ZsDwyy1HzWYZSvSl8tGZkapBx4cKCjPR
-         Vo3hmoR+VMyoqjlm7SyyuRDIdlvMw7lkugs80mSknNfjpA8i/c+uYspEdrLNRBOQMyTW
-         iRYdd4kFv9b9oDwaspRtjUTFDQ8LDOuFsBvGcffzb/bNrsWbkJnrDYl3vYUJ0hwJjnIc
-         lWiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUrZSwmp6+CkhtVyDlaGfUlDZCL2QYCCldeG3Oy3KLxnxqbyoRz01AokWo5K52W2g0ot3rS@lists.linux.dev, AJvYcCWXDPzPenNSejT3CDwSA8PvfnC07Z/qTw8RdL4KJwOBI/lbqO5aWTx5xz8jREbJr2ma3LCpgma9Z8u4mMmOog==@lists.linux.dev
-X-Gm-Message-State: AOJu0YwYJRpmjMnxVHYagwrgl+HCJgq8c6TnswRf/zTo5Z8ThvALzkkq
-	C7FA7dEYkz6p4Y3ZsP1DOOY3mRDUhLhwiK4f/2hLR883cFFJg5YgpycCAe+9bAV5E4pnC2Wi/vA
-	r6Vxb3EmEIkYQBwqQj6NURN7AAvV1aNw=
-X-Gm-Gg: ASbGncv7s/elw4Txb6PaS/tjnglrBMLQ02RDgJlCM8r5s/9jlFaxcWzz4NAFONCIe/Y
-	iowdXPfpXd6ACb9nlnQZQX41cnMEjmqNWiFQa/oDM+SdfLeX/k9oenNdcUlGKeo9wvMkNqDxfpd
-	IM7bwRgM5ctKg7Ga96rBQyhX41/j0GzJCwqo+QvOp7uzt4gmT/Zc8+AKQp8YXNFUJ+bGilmi+RI
-	f75bEV2rg==
-X-Google-Smtp-Source: AGHT+IEX2WYBlju4aPOw0uNBG3Cx6m8n5OfxEhWAzTw7+nGHo7bYaFwlNoIWJ6wm4TCiyIXLTDzfL3Tt7hprvcOBWB0=
-X-Received: by 2002:a17:907:2dac:b0:ae3:c968:370 with SMTP id
- a640c23a62f3a-af61e9224d7mr644269966b.59.1753558161391; Sat, 26 Jul 2025
- 12:29:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iG9z91ie"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C35FC4CEED;
+	Sat, 26 Jul 2025 21:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753565181;
+	bh=HRz6MADk8kXtX6zMCSuX7+PnJXnqXQTbzRUgSFNYQvw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iG9z91ie9sWabPgWYlrkqgHmJAQSuqsfVUhuHsS24znfhvkKHOm7qG+XXyZn5vDMF
+	 bXAn+YPOQSBraGWhMoe+lguIqQ5aXIVK8pgqHR4YASUkpITN/o2Vg3Z5uPjZUgg+W/
+	 1mjuqKwSyvS6ziu9Hi9yCGZWCh4QCiQc13PYF5WU1J1hE21HWqeX3NMbp4BLjxpgEg
+	 qQqrcTKBqfny+9Mk4I0bb9vJx5bbBNPVKYeYQEQMGT0jB6LKg3y9xnlYfw0LBW0uUc
+	 UwQbtuiuEN29uZE9pT3FSt/pU3ZHnj1aKO09WS9Iv/v4mGL3UEoE28PU7bkNMH57JS
+	 YqhwmT/2I58Eg==
+From: Kees Cook <kees@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Pratyush Yadav <ptyadav@amazon.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Coiby Xu <coxu@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Alexander Graf <graf@amazon.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] kstack_erase: Add -mgeneral-regs-only to silence Clang warnings
+Date: Sat, 26 Jul 2025 14:26:19 -0700
+Message-Id: <20250726212615.work.800-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4@linaro.org> <202507261937.Txq9shpv-lkp@intel.com>
-In-Reply-To: <202507261937.Txq9shpv-lkp@intel.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sat, 26 Jul 2025 21:28:42 +0200
-X-Gm-Features: Ac12FXymY6tdOYJ4GtKwZ6wBh8I0rBJpt99EqCkKrn08JeG_YAOQylRsmRomyC4
-Message-ID: <CAHp75VcrL56_8uKNrmLj9sk+t7qZfKNi6-W-yAKNZ+mSCXU8zw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/15] pinctrl: make struct pinfunction a pointer in
- struct function_desc
-To: kernel test robot <lkp@intel.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
-	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1334; i=kees@kernel.org; h=from:subject:message-id; bh=HRz6MADk8kXtX6zMCSuX7+PnJXnqXQTbzRUgSFNYQvw=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmt7r/jV86NNzhpZHvJVklCdorujTmbP27n4tCpefQmT HuTuShbRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwESENBj+Wf1i3XXoJveJbXeV HFgbov7HHL3qG/Xi2TITPzG3Ip2jzIwMS5oM1t06NiP73WYxo85jn0J5A1hrn8n8NblewZ6l/Ua ZGwA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jul 26, 2025 at 1:31=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Bartosz,
->
-> kernel test robot noticed the following build warnings:
->
+Once CONFIG_KSTACK_ERASE is enabled with Clang on i386, the build warns:
 
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/pinctrl/pinmux.c:917:7: warning: cast from 'void (*)(const voi=
-d *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-=
-function-type-strict]
->      917 |                                          (void (*)(void *))kfr=
-ee_const,
->          |                                          ^~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~
->    include/linux/device/devres.h:166:34: note: expanded from macro 'devm_=
-add_action_or_reset'
->      166 |         __devm_add_action_or_reset(dev, action, data, #action)
->          |                                         ^~~~~~
->    1 warning generated.
+  kernel/kstack_erase.c:168:2: warning: function with attribute 'no_caller_saved_registers' should only call a function with attribute 'no_caller_saved_registers' or be compiled with '-mgeneral-regs-only' [-Wexcessive-regsave]
 
-Good catch, LKP!
+Add -mgeneral-regs-only for the kstack_erase handler, to make Clang feel
+better (it is effectively a no-op flag for the kernel). No binary
+changes encountered.
 
-...
+Build & boot tested with Clang 21 on x86_64, and i386.
+Build tested with GCC 14.2.0 on x86_64, i386, arm64, and arm.
 
->    910          /*
->    911           * FIXME: It's generally a bad idea to use devres in subs=
-ystem core
->    912           * code - managed interfaces are aimed at drivers - but p=
-inctrl already
->    913           * uses it all over the place so it's a larger piece of t=
-echnical debt
->    914           * to fix.
->    915           */
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://lore.kernel.org/all/20250726004313.GA3650901@ax162
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ kernel/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-Indeed, this has to be addressed first, and IIRC I also got something
-like this in the past.
+diff --git a/kernel/Makefile b/kernel/Makefile
+index e4f01f1d4d0c..0ee9afd8b7cf 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -140,6 +140,7 @@ obj-$(CONFIG_RESOURCE_KUNIT_TEST) += resource_kunit.o
+ obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+ 
+ CFLAGS_kstack_erase.o += $(DISABLE_KSTACK_ERASE)
++CFLAGS_kstack_erase.o += $(call cc-option,-mgeneral-regs-only)
+ obj-$(CONFIG_KSTACK_ERASE) += kstack_erase.o
+ KASAN_SANITIZE_kstack_erase.o := n
+ KCSAN_SANITIZE_kstack_erase.o := n
+-- 
+2.34.1
 
->    916          error =3D devm_add_action_or_reset(pctldev->dev,
->  > 917                                           (void (*)(void *))kfree_=
-const,
->    918                                           (void *)function->func);
->    919          if (error)
->    920                  return error;
-
-
---=20
-With Best Regards,
-Andy Shevchenko
