@@ -1,60 +1,63 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A864517D2;
-	Sat, 26 Jul 2025 11:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4597A23313F;
+	Sat, 26 Jul 2025 11:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753530941; cv=none; b=PgxzwIrI3lvjbeZFIe18DSvvILGU09Fmj5g0nIxB7KaVhVbbL6g7f0aKiGyCyDA7z3qP0ImZ2XsaUI+RBwu/2jCZ1vzxgmb0KYUfB5CbHx75DyMF5A+5rQeX5gmc475976lIodh06Lc8XW3H1xYnmHbGfiAdKlpw0iDZS9JFpl4=
+	t=1753530943; cv=none; b=mhuJjnniwp5PXeE6qMAWqBDB5U9SIYrAMJE03bnUuDUbOak03nJpEQMxcR+9pxRxfJU1TSkhTZz/4AXH9EAv5+RmP15HX4eIwZSXQHnzPWd2b7nswEfKG8NB1T44uUEesonBm1DKGbKes2win/bfLeQsJEkJSEGz8cLRaS3+/ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753530941; c=relaxed/simple;
-	bh=jIVT9BQ8l1fo6QyWxs6hAG3xyOWIDtywAEqV21DFqEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SZxAyJNuKHF9/N0MnTTdNNICoVN0TcMSanenGebY8dn7n4apc0E5HJh5bR26svwKb8W63Ee3zV9guqN/fBc4vW7zamo+L/pWbUKAMTf4bo3u5qKvLVgznfh5T1KTpCmtu0/s3EDugYaB+hWqtdvjaShx9aeLBNV7Yl6MdMZRqxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KmxqrXI9; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1753530943; c=relaxed/simple;
+	bh=5pqxTuYPmLKOmSbqWUEYtK79OJqpSrniCDOEY+BTw4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i2HLHnct35rW1lrC4sDNVDadDD1Ax6LKoyI9gi0ROwln+Fnmc6ejtnoCw12cL6yReaar7Y+ioYUsEzPEGZwKb8yVpljIih6P7NnGGQP8Uy9gw+lZiCVm/XUV+Dn99oZTX5aaBaekF3RXGv2I/sggup6+jZg2HE1dJZ7ozaS4vic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MdW8m3Zc; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KmxqrXI9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MdW8m3Zc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753530940; x=1785066940;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jIVT9BQ8l1fo6QyWxs6hAG3xyOWIDtywAEqV21DFqEY=;
-  b=KmxqrXI9qCmxqswMw8dBasI41Tl9cVev6iBjfJ3UhP102AMjHtB5HwPv
-   3Sbeo9L+4Q+WJiaEwcZblqSSrmZFEdk3fqXennkKILxdl6LEBwR2fWDDI
-   6nqIrIV4cJCxc0u8VUe1/dFqH3ksr+oXqOWx08vIzptnj0QKz0vI8kkxg
-   mkzuAiIT+0p/HAWPi8X5FEaRVDyTvErXkSbsRZLWdSRroSFPqgQcuoHzz
-   0PYnil8htJT3+zYdOrw5qOtF0qcDJOPT5eWT2LPDAWtxDF5HDF+AYvnEF
-   zKvv+rWMzCyIkJosz0NNDtHITvmsRvWHn5fzEhjOI5bqQy8b/2EyqjhRP
-   Q==;
-X-CSE-ConnectionGUID: iqO/9wBtSbimCa9hKN5E2g==
-X-CSE-MsgGUID: EGWpvERGQc2xPg28p/mz5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="81292955"
+  t=1753530941; x=1785066941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5pqxTuYPmLKOmSbqWUEYtK79OJqpSrniCDOEY+BTw4c=;
+  b=MdW8m3Zc9lD/tLP815g7QW7yJTPY82AlegPv/Jes3k9K8f1H+e5hnj2O
+   hDuY/shhqWJ2HhvSFSiJos/kzQNlFHpu2elf2ndeowd4mH+RjyswO2hHP
+   YrjM+bJ6YdgbrcVK/zcAawuVngKQ9Ky8hEXkG0qs0pgRM0v5u3ShIjSU7
+   s+eCTxIhTHN5tyeGTavgDb023O+jt8r/SLYMmYiXHaWaiiTd0iSWRDF8q
+   T+6X7O5/jGJMlaJO0Yj091Pd9dNkDhKjYIyt62wCzfiyxcVPtbFL5o7q1
+   xZmHpBhMzVzQ+qKNzJuQHZd8pQV9cl3t+Piaw2+H3SBoKunHD2MfGuT1K
+   A==;
+X-CSE-ConnectionGUID: fECw8R6RTFya4CyuTz0vMg==
+X-CSE-MsgGUID: of+1jUIpQlmA0mwKC12Tzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="81292957"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="81292955"
+   d="scan'208";a="81292957"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 04:55:37 -0700
-X-CSE-ConnectionGUID: wpmpsSXYSym1Z+waWjjQ3g==
-X-CSE-MsgGUID: zhBdmgnGQbedOd0lloeYuA==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 04:55:38 -0700
+X-CSE-ConnectionGUID: KetqQ/i4RCu45sKY4PD9rQ==
+X-CSE-MsgGUID: u5s0UBS8SWKZsYbSlxLcFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="165679467"
+   d="scan'208";a="165679470"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 26 Jul 2025 04:55:35 -0700
+  by orviesa003.jf.intel.com with ESMTP; 26 Jul 2025 04:55:36 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufdUz-000LxH-2g;
+	id 1ufdUz-000LxD-2D;
 	Sat, 26 Jul 2025 11:55:33 +0000
-Date: Sat, 26 Jul 2025 19:55:26 +0800
+Date: Sat, 26 Jul 2025 19:55:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kundan Kumar <kundan.kumar@samsung.com>
+To: Suraj Kandpal <suraj.kandpal@intel.com>,
+	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Anuj Gupta <anuj20.g@samsung.com>
-Subject: [mcgrof:20250723-migrate-folio-stats 5/16] ERROR: modpost:
- "__umoddi3" [fs/xfs/xfs.ko] undefined!
-Message-ID: <202507261901.Zqx9c7K1-lkp@intel.com>
+	ankit.k.nautiyal@intel.com, arun.r.murthy@intel.com,
+	uma.shankar@intel.com, Suraj Kandpal <suraj.kandpal@intel.com>
+Subject: Re: [PATCH 11/28] drm/i915/writeback: Define encoder->get_hw_state
+Message-ID: <202507261936.cnkpq7bw-lkp@intel.com>
+References: <20250725050409.2687242-12-suraj.kandpal@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,22 +66,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250725050409.2687242-12-suraj.kandpal@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20250723-migrate-folio-stats
-head:   e857aaf49afadc31be5f460664cd176bfd972ffe
-commit: 4217f7b0545434b707e7fc908fb1b64fb709d797 [5/16] writeback: affine inode to a writeback ctx within a bdi
-config: powerpc-randconfig-001-20250726 (https://download.01.org/0day-ci/archive/20250726/202507261901.Zqx9c7K1-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261901.Zqx9c7K1-lkp@intel.com/reproduce)
+Hi Suraj,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on v6.16-rc7 next-20250725]
+[cannot apply to linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Kandpal/drm-writeback-Add-function-that-takes-preallocated-connector/20250725-133017
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20250725050409.2687242-12-suraj.kandpal%40intel.com
+patch subject: [PATCH 11/28] drm/i915/writeback: Define encoder->get_hw_state
+config: i386-buildonly-randconfig-006-20250725 (https://download.01.org/0day-ci/archive/20250726/202507261936.cnkpq7bw-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261936.cnkpq7bw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507261901.Zqx9c7K1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507261936.cnkpq7bw-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "__umoddi3" [fs/xfs/xfs.ko] undefined!
+>> drivers/gpu/drm/i915/display/intel_writeback.c:177:3: error: fallthrough annotation does not directly precede switch label
+     177 |                 fallthrough;
+         |                 ^
+   include/linux/compiler_attributes.h:214:41: note: expanded from macro 'fallthrough'
+     214 | # define fallthrough                    __attribute__((__fallthrough__))
+         |                                         ^
+   1 error generated.
+
+
+vim +177 drivers/gpu/drm/i915/display/intel_writeback.c
+
+   141	
+   142	static bool
+   143	intel_writeback_get_hw_state(struct intel_encoder *encoder,
+   144				     enum pipe *pipe)
+   145	{
+   146		struct intel_display *display = to_intel_display(encoder);
+   147		u8 pipe_mask = 0;
+   148		u32 tmp;
+   149	
+   150		/* TODO need to be done for both the wd transcoder */
+   151		tmp = intel_de_read(display,
+   152				    TRANSCONF_WD(TRANSCODER_WD_0));
+   153		if (!(tmp & WD_TRANS_ENABLE))
+   154			return false;
+   155	
+   156		tmp = intel_de_read(display,
+   157				    WD_TRANS_FUNC_CTL(TRANSCODER_WD_0));
+   158	
+   159		if (!(tmp & TRANS_WD_FUNC_ENABLE))
+   160			return false;
+   161	
+   162		switch (tmp & WD_INPUT_SELECT_MASK) {
+   163		case WD_INPUT_PIPE_A:
+   164			pipe_mask |= BIT(PIPE_A);
+   165			break;
+   166		case WD_INPUT_PIPE_B:
+   167			pipe_mask |= BIT(PIPE_B);
+   168			break;
+   169		case WD_INPUT_PIPE_C:
+   170			pipe_mask |= BIT(PIPE_C);
+   171			break;
+   172		case WD_INPUT_PIPE_D:
+   173			pipe_mask |= BIT(PIPE_D);
+   174			break;
+   175		default:
+   176			MISSING_CASE(tmp & WD_INPUT_SELECT_MASK);
+ > 177			fallthrough;
+   178		}
+   179	
+   180		if (pipe_mask == 0)
+   181			return false;
+   182	
+   183		*pipe = ffs(pipe_mask) - 1;
+   184	
+   185		return true;
+   186	}
+   187	
 
 -- 
 0-DAY CI Kernel Test Service
