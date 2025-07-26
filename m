@@ -1,72 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C149123CEE5;
-	Sat, 26 Jul 2025 10:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E171D88A4;
+	Sat, 26 Jul 2025 10:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753526253; cv=none; b=Z76Kxw8HgItnNv31gW6FrSDjzs8AZZcpNeSO+qDdJAGTkDo6hQwk3k3HDP46h6cv3AOFXPyPFsUI1D9wSZEB7l58ExUvbzwNe/HjrbMfSHZxgh8Gk9gt6FgjLf3tcE7+2CQurkutW2UCQYAWOsBODf7/tUcmTOGnABQ6NaqF5Q0=
+	t=1753526851; cv=none; b=jvpT/QYp/JpxWA28Diksl5hcuSaL1rE4TXTT1yX6IzLGo1aqZh5dxaGITjTB4UtzKV1/BtIvTde1QJyt7dynwyq9YD3c+77CHe1wlNbk10PInfo0mnXT7/4S+rlI5A6BbYEUisjRbvujXEIG3If1DANKX8b/ZViM6aqDaau2oDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753526253; c=relaxed/simple;
-	bh=vo5MJkjAfYI/OCY1QVvQzWRjvyqTgOOz6i7fhoJvwB8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kXOFaonIWe43DsO7nQlkXQfZsFgvcbUT55vfoHZVs7waGbNtkZozNr/BLcXdBWeYkpSs1fezm5jZ71rc4lUh0efygXGtsQkNNb7+UiQxXr+9pBPNVK86iHyGJ5j5DEdKLl63G9LnudQgTpGcnBatTRd7yBKccp0x3XUI1/9jD14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apYSxZPP; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1753526851; c=relaxed/simple;
+	bh=d3wh+auK8JS9nDbMkZkWzVfSW4/1Q4l7HgCkEroUO0E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FPblcsQT1zMMvRVprR8AccisorHkl22ML3MwMIDUfuxG0dj1DAins04Sz48a5H8DqhJuusZ+dZLYHN587whJ0OeJCrQY496GOMNyWOdW3fxR5ZO7odeP9w0ETUY9QBWmY5FFIAY8sjF00vmo76N/OIzuQUfrviTmdeCpz1wHKJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KQXZLywz; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apYSxZPP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KQXZLywz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753526252; x=1785062252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vo5MJkjAfYI/OCY1QVvQzWRjvyqTgOOz6i7fhoJvwB8=;
-  b=apYSxZPPs8zsXtoej6Zn668M56Zy/K/J+mmjS3/gnUxIs/vUXzNpfxYS
-   qwKcvk8Glu6EOuNwI/fxaTgxL+L5qQFpDE3419L3qEFqLX08d214I79YN
-   fQdEk/9BTXSXX3l8UXPdzRahqWgC6CUihcTNJx7SGTzyu8vz6m9WG1fee
-   23qd2zMIxtkDtvf2KpeTyTfzlEKOiL3m2ZCpdUWBErSTl8N1pSBuRzaUv
-   Lb6aDosPxcjDjI6q4/+tkxKZoerZoWshmcRTzvo0c9Mao9Yv4FQTr2NQM
-   Hnh8SstkaypeeMXBhCBbONu8uAKFQiyjW/RjP79aKaWPoHvPuhM0t3fw3
-   Q==;
-X-CSE-ConnectionGUID: n7689YOpSRqYZ4WLzXKp7g==
-X-CSE-MsgGUID: /VFEaxzXQYGWgcVMbs76qg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="55704399"
+  t=1753526850; x=1785062850;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d3wh+auK8JS9nDbMkZkWzVfSW4/1Q4l7HgCkEroUO0E=;
+  b=KQXZLywz97LwUmNTVw8tYE7ZqvH+i5GyJ+9jIU+3s3ln3MMZq25U+wDs
+   vInVHOyr6X5sAAy0tivEOQ5uVDjfh3Z0k3jhwFeKU95aBPEDo5yzTVXU2
+   J0S3WA+GV+T4na0tQFiQHWMglyypSdWThpmIAWeFkIRTPEGgl7LbPWJfa
+   PKIdMijjBvg0Pb27hNQeF9/Fc37e+DEKXz8AXf25tnLkGBkkI3kofR8we
+   N79LxVMe/J41BgOIcXVb5MRbmPFJc1nNo5cklFFE4Zq9O5AhASirdew/h
+   Ts50riDdQYvRMPZ5vt4Kvw3gWczh68Vhp3wNspUdAqHQ6Ccu7iOu7sOTu
+   g==;
+X-CSE-ConnectionGUID: diHMwJ+XR/eenfT9OpyA6A==
+X-CSE-MsgGUID: pY462f+ZTcCElcjHrI4qPQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="73429556"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55704399"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 03:37:31 -0700
-X-CSE-ConnectionGUID: ncmExNasR5e06hxL51eTVw==
-X-CSE-MsgGUID: qct0OuocQruFVFyGmStVVw==
+   d="scan'208";a="73429556"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 03:47:30 -0700
+X-CSE-ConnectionGUID: HSXs1TRtTPqXRbhcLQk4wQ==
+X-CSE-MsgGUID: iOExHqwjRbaU899QNZ6l6w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="161413943"
+   d="scan'208";a="161204019"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 26 Jul 2025 03:37:27 -0700
+  by orviesa009.jf.intel.com with ESMTP; 26 Jul 2025 03:47:28 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufcHM-000Lsr-31;
-	Sat, 26 Jul 2025 10:37:24 +0000
-Date: Sat, 26 Jul 2025 18:36:58 +0800
+	id 1ufcR3-000LtH-2D;
+	Sat, 26 Jul 2025 10:47:25 +0000
+Date: Sat, 26 Jul 2025 18:47:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH v5 2/3] tracing: Add a tracepoint verification check at
- build time
-Message-ID: <202507261823.mtwUpXNM-lkp@intel.com>
-References: <20250725025213.342188378@kernel.org>
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org
+Subject: [brgl:gpio/devel 2/2] drivers/gpio/gpio-tps65219.c:206:3: error:
+ field designator 'set_rv' does not refer to any field in type 'const struct
+ gpio_chip'
+Message-ID: <202507261836.9dWs6Hqk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,68 +63,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250725025213.342188378@kernel.org>
 
-Hi Steven,
+Hi Bartosz,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test WARNING on masahiroy-kbuild/for-next]
-[also build test WARNING on masahiroy-kbuild/fixes trace/for-next arnd-asm-generic/master linus/master v6.16-rc7 next-20250725]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/sorttable-Move-ELF-parsing-into-scripts-elf-parse-ch/20250725-105526
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20250725025213.342188378%40kernel.org
-patch subject: [PATCH v5 2/3] tracing: Add a tracepoint verification check at build time
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250726/202507261823.mtwUpXNM-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261823.mtwUpXNM-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/devel
+head:   e27a47cfa1fdbfa754664ae3dbac450008831fa0
+commit: e27a47cfa1fdbfa754664ae3dbac450008831fa0 [2/2] treewide: rename GPIO set callbacks back to their original names
+config: riscv-randconfig-002-20250725 (https://download.01.org/0day-ci/archive/20250726/202507261836.9dWs6Hqk-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261836.9dWs6Hqk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507261823.mtwUpXNM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507261836.9dWs6Hqk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> scripts/tracepoint-update.c:106:6: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     106 |         int count = 0;
-         |             ^
-   1 warning generated.
---
->> scripts/tracepoint-update.c:106:6: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     106 |         int count = 0;
-         |             ^
-   1 warning generated.
+>> drivers/gpio/gpio-tps65219.c:206:3: error: field designator 'set_rv' does not refer to any field in type 'const struct gpio_chip'
+     206 |         .set_rv                 = tps65219_gpio_set,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/count +106 scripts/tracepoint-update.c
+vim +206 drivers/gpio/gpio-tps65219.c
 
-   102	
-   103	static void check_tracepoints(struct elf_tracepoint *etrace)
-   104	{
-   105		Elf_Ehdr *ehdr = etrace->ehdr;
- > 106		int count = 0;
-   107		int len;
-   108	
-   109		if (!etrace->array)
-   110			return;
-   111	
-   112		for_each_shdr_str(len, ehdr, tracepoint_data_sec) {
-   113			if (!len)
-   114				continue;
-   115			if (!find_event(str, etrace->array, etrace->count)) {
-   116				fprintf(stderr, "warning: tracepoint '%s' is unused.\n", str);
-   117			}
-   118			count++;
-   119		}
-   120	
-   121		free(etrace->array);
-   122	}
-   123	
+57e30e00bd5baa Jerome Neanne     2023-06-07  198  
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  199  static const struct gpio_chip tps65214_template_chip = {
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  200  	.label			= "tps65214-gpio",
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  201  	.owner			= THIS_MODULE,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  202  	.get_direction		= tps65214_gpio_get_direction,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  203  	.direction_input	= tps65219_gpio_direction_input,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  204  	.direction_output	= tps65219_gpio_direction_output,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  205  	.get			= tps65219_gpio_get,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22 @206  	.set_rv			= tps65219_gpio_set,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  207  	.base			= -1,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  208  	.ngpio			= 2,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  209  	.can_sleep		= true,
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  210  };
+1b6ab07c0c800e Shree Ramamoorthy 2025-07-22  211  
+
+:::::: The code at line 206 was first introduced by commit
+:::::: 1b6ab07c0c800ed32ce417b71b32bb1baa91b493 gpio: tps65219: Add support for TI TPS65214 PMIC
+
+:::::: TO: Shree Ramamoorthy <s-ramamoorthy@ti.com>
+:::::: CC: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
