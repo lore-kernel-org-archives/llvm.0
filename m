@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0732D052;
-	Sat, 26 Jul 2025 13:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9549021348;
+	Sat, 26 Jul 2025 16:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753537370; cv=none; b=lyvEDJToIobnvaY/8HLP0iii/O9x6AAJeKCU/erLaOuDHNL4rVMZlvsBDyPrT7bwMa8/pKqlIOw+jN5eiPQQ4PkKH8HUCP7U9lzpLR5GXkOdjlhlvG+fVe6daLKnJlTGT2REmLoAPamh+tqjhQv/+Svjf5VwkBwEO/rQJuJxfAg=
+	t=1753546021; cv=none; b=hjCC8kxc/veyMUa53l57eZeKVp4GDpxCeXo88yRz1C/o7KhC8Brl3KFXs3W+sldb7/4pXuVDnwGV6I6K9dB8jUdOXHyo1oAo5Ld14Xd7Hd0XtYMr1S8fTIlcZqlxsYwUG0rviHISGJwXYQw0Um/1QK5yqEU6PonEpc2VWnmc2Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753537370; c=relaxed/simple;
-	bh=zAaAstL0To9KWT9Rj9lxk81BjFGPdkdW1scybp7HolQ=;
+	s=arc-20240116; t=1753546021; c=relaxed/simple;
+	bh=97n7TGLjg/+mTPjK/3JeoW9Y0kyNUgwCatu2/1JDmYM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d7vHIMfUWtOlNh0x1s/TyTK+m4DWRXv4U5wMGkwqP9ru9gI5c4LR2aGzuSrrn8kIT90m93YUbRb2MiI517Ec2ejgvMf+pBIlnYorlU6V1zIYmoSa1JyNmBCBi+YzxjeTYO/fHHbDmQBa9sGOH+cl8gzUBY+jXKS66yP98ANyv3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LTbwpSAr; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vp3Q2QPE/WWM81SwonA7DYfj3zkL2gu3MzTGkVc5mDoknBMbLAoOxLSXqeLigFw+is+IagNFF5Q/xfPvB8VHx5t3PFELkD8eAC/247Izr9ACRFJQCKagSN+1Vv3aaQBRCCSyLiEM+kMBE4PHiM9cLQQauVCheLdMvLyCMfw5wRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzJbThb+; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LTbwpSAr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzJbThb+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753537369; x=1785073369;
+  t=1753546020; x=1785082020;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zAaAstL0To9KWT9Rj9lxk81BjFGPdkdW1scybp7HolQ=;
-  b=LTbwpSAr3Ufz1w6U4qjDeoFjAORsF5rGw4rSiRfnLzFD8e+MEbpDHTOn
-   IEwcVz08pivCkYcsrM3Cn6ZBb7+oz/WUb76IoFOy6Y/q1fn86ROfoVi+R
-   CVz3lHBuGK+r+LUeofZ4LBkgVYIv54c6YzSu2D5jMXQMRSk50ERQSMA9G
-   8RbH6sZEQ2FjKtCP7/xBYVEA161ri2LeJy3h+SBiPsbfZeTeul9ZKqr8I
-   QV42iTDiiilgULhhr/rfUxur6vh55T9sa8P2Lzg2PS5MyXF+c9+tLfi1m
-   eekbZyJ7zIqariVHOnZWBioCwmpLN0US3IIbYSiWAvW4jLXbwy5gB6Brv
-   Q==;
-X-CSE-ConnectionGUID: piFU3RALSb6u/LuGq1n0qg==
-X-CSE-MsgGUID: n38sofO7TPGtPNtZTdXbsA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="55550005"
+  bh=97n7TGLjg/+mTPjK/3JeoW9Y0kyNUgwCatu2/1JDmYM=;
+  b=IzJbThb+MGOWXWfu5seeRjUDDmc5j5UHXqsUYHatI9mKbgkb++E2GU8V
+   b7Zp5QzxZvptA2/d+8oyLgzvdFoa1Ptwgz9TRjLfn/5XaK8QFVTdblDO0
+   nMfSz6ftMiR9rgmQpcpjjxEXAwYNlZq3NrFqIrQYPD5ZR4uV9UVUx8o4b
+   Lj2t8RnzDmithp/kOMageLkBAQn4W2K9IsuH41fuMK1v3tx7uPKQVQxC2
+   OiDOe3NAGua60S2MpOrijAxl2Vg7KiRvzUSk8ndVTYNzpVMq7n7LPvQfu
+   nKgBD0SyODy9pk20OYdsBIk7aqIL1zhc0gnZbqX2/uxua4q0rYdiSZcYs
+   g==;
+X-CSE-ConnectionGUID: Sdsh7KR8T96yQ2MLrzQe6A==
+X-CSE-MsgGUID: Hl8OIn3SRM26iWw0jUbRFA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="55938556"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55550005"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 06:42:48 -0700
-X-CSE-ConnectionGUID: ibJek+eJQeatvVV0vhWRRg==
-X-CSE-MsgGUID: fJ5WMpIfSiil0VrgFAIf9w==
+   d="scan'208";a="55938556"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 09:06:59 -0700
+X-CSE-ConnectionGUID: 9he2HELvTgKI8xLuQ6s9cQ==
+X-CSE-MsgGUID: IohRdLb2STuEB34Px0zTTw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="192477743"
+   d="scan'208";a="198783985"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 26 Jul 2025 06:42:44 -0700
+  by orviesa001.jf.intel.com with ESMTP; 26 Jul 2025 09:06:57 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uffAg-000M0V-1W;
-	Sat, 26 Jul 2025 13:42:42 +0000
-Date: Sat, 26 Jul 2025 21:42:18 +0800
+	id 1ufhQE-000M5D-0l;
+	Sat, 26 Jul 2025 16:06:54 +0000
+Date: Sun, 27 Jul 2025 00:06:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: Suraj Kandpal <suraj.kandpal@intel.com>,
 	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
@@ -55,10 +55,10 @@ To: Suraj Kandpal <suraj.kandpal@intel.com>,
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	ankit.k.nautiyal@intel.com, arun.r.murthy@intel.com,
 	uma.shankar@intel.com, Suraj Kandpal <suraj.kandpal@intel.com>
-Subject: Re: [PATCH 14/28] drm/i915/writeback: Define function for prepare
- and cleanup hooks
-Message-ID: <202507262142.wObleFKc-lkp@intel.com>
-References: <20250725050409.2687242-15-suraj.kandpal@intel.com>
+Subject: Re: [PATCH 27/28] drm/i915/writeback: Make exception for writeback
+ connector
+Message-ID: <202507262326.1J1VnzbD-lkp@intel.com>
+References: <20250725050409.2687242-28-suraj.kandpal@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,109 +67,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250725050409.2687242-15-suraj.kandpal@intel.com>
+In-Reply-To: <20250725050409.2687242-28-suraj.kandpal@intel.com>
 
 Hi Suraj,
 
 kernel test robot noticed the following build warnings:
 
 [auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on v6.16-rc7 next-20250725]
-[cannot apply to linus/master]
+[also build test WARNING on next-20250725]
+[cannot apply to linus/master v6.16-rc7]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Kandpal/drm-writeback-Add-function-that-takes-preallocated-connector/20250725-133017
 base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20250725050409.2687242-15-suraj.kandpal%40intel.com
-patch subject: [PATCH 14/28] drm/i915/writeback: Define function for prepare and cleanup hooks
-config: i386-buildonly-randconfig-006-20250725 (https://download.01.org/0day-ci/archive/20250726/202507262142.wObleFKc-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20250725050409.2687242-28-suraj.kandpal%40intel.com
+patch subject: [PATCH 27/28] drm/i915/writeback: Make exception for writeback connector
+config: i386-buildonly-randconfig-006-20250725 (https://download.01.org/0day-ci/archive/20250726/202507262326.1J1VnzbD-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507262142.wObleFKc-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507262326.1J1VnzbD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507262142.wObleFKc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507262326.1J1VnzbD-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_writeback.c:139:60: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     139 |                 drm_err(job->fb->dev, "Failed to map framebuffer: %d\n", ret);
-         |                                                                          ^~~
-   include/drm/drm_print.h:628:46: note: expanded from macro 'drm_err'
-     628 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-         |                                                     ^~~~~~~~~~~
-   include/drm/drm_print.h:615:55: note: expanded from macro '__drm_printk'
-     615 |         dev_##level##type(__drm_to_dev(drm), "[drm] " fmt, ##__VA_ARGS__)
-         |                                                              ^~~~~~~~~~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_writeback.c:125:9: note: initialize the variable 'ret' to silence this warning
-     125 |         int ret;
-         |                ^
-         |                 = 0
-   drivers/gpu/drm/i915/display/intel_writeback.c:260:3: error: fallthrough annotation does not directly precede switch label
-     260 |                 fallthrough;
+>> drivers/gpu/drm/i915/display/intel_display.c:3785:4: warning: variable 'trans_pipe' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+    3785 |                         default:
+         |                         ^~~~~~~
+   drivers/gpu/drm/i915/display/intel_display.c:3819:7: note: uninitialized use occurs here
+    3819 |                 if (trans_pipe == crtc->pipe)
+         |                     ^~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_display.c:3760:3: note: variable 'trans_pipe' is declared here
+    3760 |                 enum pipe trans_pipe;
          |                 ^
-   include/linux/compiler_attributes.h:214:41: note: expanded from macro 'fallthrough'
-     214 | # define fallthrough                    __attribute__((__fallthrough__))
-         |                                         ^
-   1 warning and 1 error generated.
+   1 warning generated.
 
 
-vim +/ret +139 drivers/gpu/drm/i915/display/intel_writeback.c
+vim +/trans_pipe +3785 drivers/gpu/drm/i915/display/intel_display.c
 
-   113	
-   114	static int intel_writeback_prepare_job(struct drm_writeback_connector *wb_connector,
-   115					       struct drm_writeback_job *job)
-   116	{
-   117		struct intel_writeback_connector *wb_conn =
-   118			to_intel_writeback_connector(wb_connector);
-   119		struct i915_vma *vma;
-   120		struct intel_writeback_job *wb_job;
-   121		unsigned long out_flags = 0;
-   122		const struct i915_gtt_view view = {
-   123			.type = I915_GTT_VIEW_NORMAL,
-   124		};
-   125		int ret;
-   126	
-   127		if (!job->fb)
-   128			return 0;
-   129	
-   130		if (job->fb->modifier != DRM_FORMAT_MOD_LINEAR)
-   131			return -EINVAL;
-   132	
-   133		wb_job = kzalloc(sizeof(*wb_job), GFP_KERNEL);
-   134		if (!wb_job)
-   135			return -ENOMEM;
-   136	
-   137		vma = intel_fb_pin_to_ggtt(job->fb, &view, 4 * 1024, 0, 0, true, &out_flags);
-   138		if (IS_ERR(vma)) {
- > 139			drm_err(job->fb->dev, "Failed to map framebuffer: %d\n", ret);
-   140			ret = PTR_ERR(vma);
-   141			goto err;
-   142		}
-   143	
-   144		wb_job->fb = job->fb;
-   145		wb_job->vma = vma;
-   146		wb_job->wb_connector = wb_connector;
-   147		drm_framebuffer_get(wb_job->fb);
-   148		job->priv = wb_job;
-   149		wb_conn->job = wb_job;
-   150	
-   151		return 0;
-   152	
-   153	err:
-   154		kfree(wb_job);
-   155		return ret;
-   156	}
-   157	
+  3743	
+  3744	static u8 hsw_enabled_transcoders(struct intel_crtc *crtc)
+  3745	{
+  3746		struct intel_display *display = to_intel_display(crtc);
+  3747		u8 panel_transcoder_mask = hsw_panel_transcoders(display);
+  3748		enum transcoder cpu_transcoder;
+  3749		u8 primary_pipe, secondary_pipes;
+  3750		u8 enabled_transcoders = 0;
+  3751	
+  3752		/*
+  3753		 * XXX: Do intel_display_power_get_if_enabled before reading this (for
+  3754		 * consistency and less surprising code; it's in always on power).
+  3755		 */
+  3756		for_each_cpu_transcoder_masked(display, cpu_transcoder,
+  3757					       panel_transcoder_mask) {
+  3758			enum intel_display_power_domain power_domain;
+  3759			intel_wakeref_t wakeref;
+  3760			enum pipe trans_pipe;
+  3761			u32 tmp = 0;
+  3762	
+  3763			power_domain = POWER_DOMAIN_TRANSCODER(cpu_transcoder);
+  3764			if (cpu_transcoder == TRANSCODER_WD_0 ||
+  3765			    cpu_transcoder == TRANSCODER_WD_1) {
+  3766				with_intel_display_power_if_enabled(display, power_domain, wakeref)
+  3767					tmp = intel_de_read(display,
+  3768							    WD_TRANS_FUNC_CTL(cpu_transcoder));
+  3769				if (!(tmp & TRANS_WD_FUNC_ENABLE))
+  3770					continue;
+  3771	
+  3772				switch (tmp & WD_INPUT_SELECT_MASK) {
+  3773				case WD_INPUT_PIPE_A:
+  3774					trans_pipe = PIPE_A;
+  3775					break;
+  3776				case WD_INPUT_PIPE_B:
+  3777					trans_pipe = PIPE_B;
+  3778					break;
+  3779				case WD_INPUT_PIPE_C:
+  3780					trans_pipe = PIPE_C;
+  3781					break;
+  3782				case WD_INPUT_PIPE_D:
+  3783					trans_pipe = PIPE_D;
+  3784					break;
+> 3785				default:
+  3786					MISSING_CASE(tmp & WD_INPUT_SELECT_MASK);
+  3787					break;
+  3788				}
+  3789			} else {
+  3790				with_intel_display_power_if_enabled(display, power_domain, wakeref)
+  3791					tmp = intel_de_read(display,
+  3792							    TRANS_DDI_FUNC_CTL(display, cpu_transcoder));
+  3793	
+  3794				if (!(tmp & TRANS_DDI_FUNC_ENABLE))
+  3795					continue;
+  3796	
+  3797				switch (tmp & TRANS_DDI_EDP_INPUT_MASK) {
+  3798				default:
+  3799					drm_WARN(display->drm, 1,
+  3800						 "unknown pipe linked to transcoder %s\n",
+  3801						 transcoder_name(cpu_transcoder));
+  3802					fallthrough;
+  3803				case TRANS_DDI_EDP_INPUT_A_ONOFF:
+  3804				case TRANS_DDI_EDP_INPUT_A_ON:
+  3805					trans_pipe = PIPE_A;
+  3806					break;
+  3807				case TRANS_DDI_EDP_INPUT_B_ONOFF:
+  3808					trans_pipe = PIPE_B;
+  3809					break;
+  3810				case TRANS_DDI_EDP_INPUT_C_ONOFF:
+  3811					trans_pipe = PIPE_C;
+  3812					break;
+  3813				case TRANS_DDI_EDP_INPUT_D_ONOFF:
+  3814					trans_pipe = PIPE_D;
+  3815					break;
+  3816				}
+  3817			}
+  3818	
+  3819			if (trans_pipe == crtc->pipe)
+  3820				enabled_transcoders |= BIT(cpu_transcoder);
+  3821		}
+  3822	
+  3823		/* single pipe or joiner primary */
+  3824		cpu_transcoder = (enum transcoder) crtc->pipe;
+  3825		if (transcoder_ddi_func_is_enabled(display, cpu_transcoder))
+  3826			enabled_transcoders |= BIT(cpu_transcoder);
+  3827	
+  3828		/* joiner secondary -> consider the primary pipe's transcoder as well */
+  3829		enabled_joiner_pipes(display, crtc->pipe, &primary_pipe, &secondary_pipes);
+  3830		if (secondary_pipes & BIT(crtc->pipe)) {
+  3831			cpu_transcoder = (enum transcoder)ffs(primary_pipe) - 1;
+  3832			if (transcoder_ddi_func_is_enabled(display, cpu_transcoder))
+  3833				enabled_transcoders |= BIT(cpu_transcoder);
+  3834		}
+  3835	
+  3836		return enabled_transcoders;
+  3837	}
+  3838	
 
 -- 
 0-DAY CI Kernel Test Service
