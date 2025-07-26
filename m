@@ -1,67 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6511096F;
-	Sat, 26 Jul 2025 10:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7DB323F26A;
+	Sat, 26 Jul 2025 10:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753524989; cv=none; b=BfhSjyNH9o5SC9JxNvdVM2xc0k6skonv/qQjXpLWLdFWlQOjmZiL5P0bHpn5PfGZNbZuFsE2AdLOXVXe0sN4L5Q/NfJt47GmVGrRf622BElLvo2pkPl234vagjTS8mI0PuWsMHwTbGYZ+R7h67EZJrXqssXPrhsodyDHlbaW7Lg=
+	t=1753525591; cv=none; b=rUjaX1EPJ2NqK54tP0tR7IWD6lyg7TjU7qSA2uiJdBxhvl4byLIV+RZnm6qoLg5vYsEJU4e+dFoTezNkjX9YIOwLE+HvUCIle1W+ZKXMsBPAaegabCYfGUS2GTtYRYsXTpiACjsMJ2UaFrnEMK+AqrcR0Pv6XaO6f4RhgpjttPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753524989; c=relaxed/simple;
-	bh=W1nUY5JRvORjm+vb1XNGGtov6ZtefmvCdZ1mHgN2mlk=;
+	s=arc-20240116; t=1753525591; c=relaxed/simple;
+	bh=iE8cIDfFLQ8B5WGZtqZKWPN4Ek+qnInv2VJkerYcv0E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dyBFaKy0yan8Aoo6IuVN9MLp0tnFIXuFLIOGFoDuuaOt+4KoUjlbhzVOp/lmzcLhQ6VVrk23JVH8VAHprV7kQV3Bu2zOugIBz98ein6mKIyR8kXO44JQNIXzrADM/CNix9+RWbzkZf0lICh6vai2D5hIaZ9JJalWXs8+UG4rm7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ffhD4u/C; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=TihFBHFKoYWPuBIRQJ8IX3eMg4orDABkWp98Nh7Dmp5sRByXwf5b8hpd1DxTa6LRmm1dL1hGwh0Jtn/ad7rymofgNyKdTfZkAtMSx8nEvJfuRzIDClIOrzHKNydPPMyxPS7w1hxJSlJimwG9RVsk6a8XNdHpEmJ4CYl9cBochEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kyZKaqLR; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ffhD4u/C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kyZKaqLR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753524989; x=1785060989;
+  t=1753525590; x=1785061590;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=W1nUY5JRvORjm+vb1XNGGtov6ZtefmvCdZ1mHgN2mlk=;
-  b=ffhD4u/CZfRDQng4+gtNNMh+BZULo4d6xtJrvgsa6vwh75+5rxpfYWHK
-   ynnMUvw4JDQ6yAlVOZZ4gxbDN7bmqqEeqo9qhOuggxXnulSGL/2zf77wq
-   YUxdcniB/hvOxOH1WFMFwWAM0RWGTFkvGR6Q9ST7Z2/3SxkFo1xvGDizg
-   hyKDvEBt05oFq7Wkxf299FSim8wuDAJxgoEFKlkTblvzUl3iPRLEoOZyU
-   10iCIkSlzvf2VQ+ju67pCbUlqMmOtFd9HD1l4w9Vul9Y3d0jZ8jB3T1sc
-   izsOaHA5+7OqKtbWh+6VhuYQt0c/QU6Y7GMjToHA7auvcbztxj+JX1nyT
-   w==;
-X-CSE-ConnectionGUID: JsBjwlLiTgOwOL9WUIBYEw==
-X-CSE-MsgGUID: pAFhBt+aSBOXak7+STn4eQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="59646442"
+  bh=iE8cIDfFLQ8B5WGZtqZKWPN4Ek+qnInv2VJkerYcv0E=;
+  b=kyZKaqLRxvC2WkhrDmGHErsG0lLABaYfhmE+26ith5w1aUR9CUP0QojC
+   fX5411FHMIN2KUh4EzPb6qrWQpgZCaIIr7V6VCwBBapuvaTIvstlNESgb
+   Oq3VB9guGWB+BLvISoT7u6JUHg89sZS182aPYMXtnGjw1mW8aJmS3WYSr
+   xDzAQ1HFoV4VZB4KQk6MkrGsfDgTsizw1cTZjj3YFau1C+FA5KvkijflA
+   g7je2rbEoj4XY6dL8JcwajCxkGNbVyinLRVhOr9JDGYKxlvh4prZfU15V
+   IUYmMdv+z5K2FHQJDlPWvh4ID5RODGbAyWUyuUNKWb+BFbA7ix0jFoJeE
+   A==;
+X-CSE-ConnectionGUID: qUAZ4l5jQrWMecer2D4t5w==
+X-CSE-MsgGUID: CgxtYkQeRPSyhMa6ZYp+2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="55996067"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="59646442"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 03:16:28 -0700
-X-CSE-ConnectionGUID: qT0WqMIBTVuDvvUSqVicjQ==
-X-CSE-MsgGUID: A02kl49eTdGcIXBoeLSxSA==
+   d="scan'208";a="55996067"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 03:26:30 -0700
+X-CSE-ConnectionGUID: W+MjwdixSHuhX3TInEHXeg==
+X-CSE-MsgGUID: +c3Ix+1iSi691V+f/dZLvg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="161180536"
+   d="scan'208";a="192406716"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 26 Jul 2025 03:16:24 -0700
+  by orviesa002.jf.intel.com with ESMTP; 26 Jul 2025 03:26:26 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufbwz-000Lrb-2T;
-	Sat, 26 Jul 2025 10:16:21 +0000
-Date: Sat, 26 Jul 2025 18:15:44 +0800
+	id 1ufc6h-000LsC-2j;
+	Sat, 26 Jul 2025 10:26:23 +0000
+Date: Sat, 26 Jul 2025 18:26:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
+To: Konrad Dybcio <konradybcio@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove io-mapping
-Message-ID: <202507261811.4FJjX1bu-lkp@intel.com>
-References: <20250724145313.65920-1-lorenzo.stoakes@oracle.com>
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] clk: qcom: Add a driver for SM8750 GPU clocks
+Message-ID: <202507261830.IirBJ9dS-lkp@intel.com>
+References: <20250723-topic-8750_gpucc-v2-2-56c93b84c390@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,47 +70,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250724145313.65920-1-lorenzo.stoakes@oracle.com>
+In-Reply-To: <20250723-topic-8750_gpucc-v2-2-56c93b84c390@oss.qualcomm.com>
 
-Hi Lorenzo,
+Hi Konrad,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test ERROR on 0be23810e32e6d0a17df7c0ebad895ba2c210fc4]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-remove-io-mapping/20250724-225556
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250724145313.65920-1-lorenzo.stoakes%40oracle.com
-patch subject: [PATCH] mm: remove io-mapping
-config: x86_64-buildonly-randconfig-003-20250725 (https://download.01.org/0day-ci/archive/20250726/202507261811.4FJjX1bu-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261811.4FJjX1bu-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/dt-bindings-clock-qcom-Add-SM8750-GPU-clocks/20250724-044303
+base:   0be23810e32e6d0a17df7c0ebad895ba2c210fc4
+patch link:    https://lore.kernel.org/r/20250723-topic-8750_gpucc-v2-2-56c93b84c390%40oss.qualcomm.com
+patch subject: [PATCH v2 2/3] clk: qcom: Add a driver for SM8750 GPU clocks
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250726/202507261830.IirBJ9dS-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261830.IirBJ9dS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507261811.4FJjX1bu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507261830.IirBJ9dS-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/mellanox/mlx4/main.c:43:10: fatal error: 'linux/io-mapping.h' file not found
-      43 | #include <linux/io-mapping.h>
-         |          ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/net/ethernet/mellanox/mlx4/pd.c:36:10: fatal error: 'linux/io-mapping.h' file not found
-      36 | #include <linux/io-mapping.h>
-         |          ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of '__inittest'
+     521 | module_platform_driver(gx_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:132:42: note: expanded from macro '\
+   module_init'
+     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
+     469 | module_platform_driver(gpu_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:132:42: note: expanded from macro '\
+   module_init'
+     132 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+>> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of 'init_module'
+     521 | module_platform_driver(gx_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:134:6: note: expanded from macro '\
+   module_init'
+     134 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
+     469 | module_platform_driver(gpu_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:134:6: note: expanded from macro '\
+   module_init'
+     134 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+>> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of '__exittest'
+     521 | module_platform_driver(gx_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:140:42: note: expanded from macro '\
+   module_exit'
+     140 |         static inline exitcall_t __maybe_unused __exittest(void)                \
+         |                                                 ^
+   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
+     469 | module_platform_driver(gpu_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:140:42: note: expanded from macro '\
+   module_exit'
+     140 |         static inline exitcall_t __maybe_unused __exittest(void)                \
+         |                                                 ^
+>> drivers/clk/qcom/gpucc-sm8750.c:521:1: error: redefinition of 'cleanup_module'
+     521 | module_platform_driver(gx_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:142:7: note: expanded from macro '\
+   module_exit'
+     142 |         void cleanup_module(void) __copy(exitfn)                \
+         |              ^
+   drivers/clk/qcom/gpucc-sm8750.c:469:1: note: previous definition is here
+     469 | module_platform_driver(gpu_cc_sm8750_driver);
+         | ^
+   include/linux/platform_device.h:292:2: note: expanded from macro 'module_platform_driver'
+     292 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:142:7: note: expanded from macro '\
+   module_exit'
+     142 |         void cleanup_module(void) __copy(exitfn)                \
+         |              ^
+   4 errors generated.
 
 
-vim +43 drivers/net/ethernet/mellanox/mlx4/main.c
+vim +/__inittest +521 drivers/clk/qcom/gpucc-sm8750.c
 
-c1b43dca137f21 drivers/net/mlx4/main.c                   Eli Cohen        2011-03-22 @43  #include <linux/io-mapping.h>
-ab9c17a009ee8e drivers/net/ethernet/mellanox/mlx4/main.c Jack Morgenstein 2011-12-13  44  #include <linux/delay.h>
-10b1c04e92229e drivers/net/ethernet/mellanox/mlx4/main.c Jack Morgenstein 2016-12-29  45  #include <linux/etherdevice.h>
-09d4d087cd4869 drivers/net/ethernet/mellanox/mlx4/main.c Jiri Pirko       2016-02-26  46  #include <net/devlink.h>
-225c7b1feef1b4 drivers/net/mlx4/main.c                   Roland Dreier    2007-05-08  47  
+   513	
+   514	static struct platform_driver gx_cc_sm8750_driver = {
+   515		.probe = gx_cc_sm8750_probe,
+   516		.driver = {
+   517			.name = "gx_cc-sm8750",
+   518			.of_match_table = gx_cc_sm8750_match_table,
+   519		},
+   520	};
+ > 521	module_platform_driver(gx_cc_sm8750_driver);
+   522	
 
 -- 
 0-DAY CI Kernel Test Service
