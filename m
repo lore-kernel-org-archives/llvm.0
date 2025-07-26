@@ -1,62 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76971096F;
-	Sat, 26 Jul 2025 11:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009EE2E3700;
+	Sat, 26 Jul 2025 11:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753528898; cv=none; b=oL6+wod0kwg84IvM/L7XqxUE7hEQ84Lp2rfSSLl0Cz10aS35RLetSyJx3s85SOfknx/P43BzXdjY/MMqDdWjVZqT93nq3W84BuH4Rl84Wj5KFI4DM8/zNZuGza1b3US43y2BxAMVdu1Gn8xt6vK7UsqPumTk2x1ydiukQrNZp0A=
+	t=1753529503; cv=none; b=qBipHPGDvj6ITzPvBLotoqNfl/s1etMy6VoUT3/7pvCJx4cXZjE0muozsolMue81EK4wxkWiOLdY0PJ0156aOY4rj8eXxos8Uo8QeeAv4/ge1G9YG0en6Y+mIVucgr/lCGR+qfk5Xjut5WF+oxPX0OMmhu6UlQXEeow0p6inRHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753528898; c=relaxed/simple;
-	bh=LUZE3bBwLHBN+StURfn0O/MoSYAuV5/vlhxfqbWfR9k=;
+	s=arc-20240116; t=1753529503; c=relaxed/simple;
+	bh=x5ftixc4aZ/+5TD+y+Aes85jYKYNSbOyuX7QDNVsBd8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iAPn0PktKNYLdiW4duAGejdKZgYJFiarGLZFkj7voppVztbzPfknNJpRG4zrttErk8LVVDxgMTJ5s0OuIm1VS4IRd0egLr5N9dm67S7Vdkw7aXu5oLsKS23Vw4HlSFjMOBvTrIVnex76pANq9qVc7NJLFrqkL+3EHCN2TMjv5v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tb/NR2qk; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=jURSeRZTljRU20VRLAP83+it8HZI3wda+fEcxDH0TeKCT8N2eFg26V51GeBCRNtZHsM4dfig1hncVCQRLRaQWYr0t1XgnPrnkP8O6tIzqncnof1HslziW58fXRS3dLH8iAaSxv4BtqoawYP24zGtCWBkP2ddkxVDXYmqMmkS3rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=euKqhM5E; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tb/NR2qk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="euKqhM5E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753528897; x=1785064897;
+  t=1753529502; x=1785065502;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LUZE3bBwLHBN+StURfn0O/MoSYAuV5/vlhxfqbWfR9k=;
-  b=Tb/NR2qkfpLhYpuANB53wuqV2tlHfOcxkK57i+l3fSPqLfEizfbF9hhR
-   9TqX6TUTTOu8ckhtIExUvLhb7kQXun9tQpflr4gQAtkm2kTC451fWT8YB
-   V+RML26b78djkC6yPzouWXCYuDDMJx7o2JAcNCmmqQy6HUbXnDdRu5eDC
-   HKx0B8+Zyk7LwqmXRkq+rECRwnUtCat8yZMpB3N9xOV/pG47stOC9VsrO
-   GQtSFrugtjwf1vhK0G8KN1aQ/69yZ4oS6crKu5AacGiXXWUyD2h5iRaVy
-   p8rBso8lFMAXoPVLclIySuCs2k+yK51vH5SdYzPmHsZB2VLrhPf9nvXZU
-   g==;
-X-CSE-ConnectionGUID: TTsmhldFQ9eveybLPhyWcg==
-X-CSE-MsgGUID: 7iT8Drl1Rgew8ZcE29CA+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="55997842"
+  bh=x5ftixc4aZ/+5TD+y+Aes85jYKYNSbOyuX7QDNVsBd8=;
+  b=euKqhM5E+xtaaQVoUcg6cCD0emA61HaRWv04yn5N1Mg+moYcUw9bg6Lz
+   q4mQi/Ow4HABTCroPRdNqE3zF+JydpGaCdDjj20k4NiCwXNgqc0W8p7Ly
+   9cSMb8/FA/hI1aabE8PfyzkL4otkxNzEQeNHp3N16IH/KBaka6PFOmMAr
+   Y5o42FrHJoUfRtaZsEM/8dKApuB6Gb8gsugmbE+t5vNDbULuUunegTbKF
+   aAYdtIX/xZDBVCgW9U3I+trKE/jTmQtj+U7kvu326cLapn5Mz0A4hp2YY
+   D9P8kKyhz5Wed6Ty1FniPJYsa7klHC+18t/Abl4KjGYHRCKGZgpFch4t0
+   A==;
+X-CSE-ConnectionGUID: ZKYBXvmWRhip4QaPlYuKjw==
+X-CSE-MsgGUID: ISi+doS/Rv2U4p4DX9UjkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="55705713"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="55997842"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 04:21:34 -0700
-X-CSE-ConnectionGUID: Kr+G0yAFSdmC09F+O6NTDw==
-X-CSE-MsgGUID: XP1aSgD7SaC1xNtFJbmcNg==
+   d="scan'208";a="55705713"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 04:31:41 -0700
+X-CSE-ConnectionGUID: pR4kffSwRjy1c2IEc26nyw==
+X-CSE-MsgGUID: cFu3aEPNSiGqjJr475Nxqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="192449999"
+   d="scan'208";a="160800593"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 26 Jul 2025 04:21:33 -0700
+  by orviesa010.jf.intel.com with ESMTP; 26 Jul 2025 04:31:34 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufcy2-000Lvb-0O;
-	Sat, 26 Jul 2025 11:21:30 +0000
-Date: Sat, 26 Jul 2025 19:20:40 +0800
+	id 1ufd7j-000Lvz-1t;
+	Sat, 26 Jul 2025 11:31:31 +0000
+Date: Sat, 26 Jul 2025 19:30:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Suraj Kandpal <suraj.kandpal@intel.com>, intel-xe@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org
+To: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Alexey Klimov <alexey.klimov@linaro.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Sean Wang <sean.wang@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Tony Lindgren <tony@atomide.com>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ankit.k.nautiyal@intel.com, Suraj Kandpal <suraj.kandpal@intel.com>
-Subject: Re: [PATCH 2/3] drm/i915/bios: Add function to check if edp data
- override is needed
-Message-ID: <202507261913.LoCL2yuM-lkp@intel.com>
-References: <20250725061548.2704697-3-suraj.kandpal@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v3 10/15] pinctrl: make struct pinfunction a pointer in
+ struct function_desc
+Message-ID: <202507261937.Txq9shpv-lkp@intel.com>
+References: <20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,97 +89,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250725061548.2704697-3-suraj.kandpal@intel.com>
+In-Reply-To: <20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4@linaro.org>
 
-Hi Suraj,
+Hi Bartosz,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on linus/master v6.16-rc7 next-20250725]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 05adbee3ad528100ab0285c15c91100e19e10138]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Kandpal/drm-i915-vbt-Add-eDP-Data-Overrride-field-in-VBT/20250725-141824
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20250725061548.2704697-3-suraj.kandpal%40intel.com
-patch subject: [PATCH 2/3] drm/i915/bios: Add function to check if edp data override is needed
-config: i386-buildonly-randconfig-006-20250725 (https://download.01.org/0day-ci/archive/20250726/202507261913.LoCL2yuM-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/lib-provide-kmemdup_const/20250724-172620
+base:   05adbee3ad528100ab0285c15c91100e19e10138
+patch link:    https://lore.kernel.org/r/20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4%40linaro.org
+patch subject: [PATCH v3 10/15] pinctrl: make struct pinfunction a pointer in struct function_desc
+config: x86_64-buildonly-randconfig-002-20250725 (https://download.01.org/0day-ci/archive/20250726/202507261937.Txq9shpv-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261913.LoCL2yuM-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261937.Txq9shpv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507261913.LoCL2yuM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507261937.Txq9shpv-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_bios.c:2524:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-    2524 |         default:
-         |         ^~~~~~~
-   drivers/gpu/drm/i915/display/intel_bios.c:2528:34: note: uninitialized use occurs here
-    2528 |         return edp_data_override_mask & val;
-         |                                         ^~~
-   drivers/gpu/drm/i915/display/intel_bios.c:2485:9: note: initialize the variable 'val' to silence this warning
-    2485 |         u32 val;
-         |                ^
-         |                 = 0
+>> drivers/pinctrl/pinmux.c:917:7: warning: cast from 'void (*)(const void *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+     917 |                                          (void (*)(void *))kfree_const,
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/devres.h:166:34: note: expanded from macro 'devm_add_action_or_reset'
+     166 |         __devm_add_action_or_reset(dev, action, data, #action)
+         |                                         ^~~~~~
    1 warning generated.
 
 
-vim +/val +2524 drivers/gpu/drm/i915/display/intel_bios.c
+vim +917 drivers/pinctrl/pinmux.c
 
-  2482	
-  2483	static bool parse_bdb_263_edp_data_override(const u32 edp_data_override_mask, int rate)
-  2484	{
-  2485		u32 val;
-  2486	
-  2487		switch (rate) {
-  2488		case 2000000:
-  2489			val = BDB_263_VBT_EDP_LINK_RATE_20;
-  2490			break;
-  2491		case 1350000:
-  2492			val = BDB_263_VBT_EDP_LINK_RATE_13_5;
-  2493			break;
-  2494		case 1000000:
-  2495			val = BDB_263_VBT_EDP_LINK_RATE_10;
-  2496			break;
-  2497		case 810000:
-  2498			val = BDB_263_VBT_EDP_LINK_RATE_8_1;
-  2499			break;
-  2500		case 675000:
-  2501			val = BDB_263_VBT_EDP_LINK_RATE_6_75;
-  2502			break;
-  2503		case 540000:
-  2504			val = BDB_263_VBT_EDP_LINK_RATE_5_4;
-  2505			break;
-  2506		case 432000:
-  2507			val = BDB_263_VBT_EDP_LINK_RATE_4_32;
-  2508			break;
-  2509		case 324000:
-  2510			val = BDB_263_VBT_EDP_LINK_RATE_3_24;
-  2511			break;
-  2512		case 270000:
-  2513			val = BDB_263_VBT_EDP_LINK_RATE_2_7;
-  2514			break;
-  2515		case 243000:
-  2516			val = BDB_263_VBT_EDP_LINK_RATE_2_43;
-  2517			break;
-  2518		case 216000:
-  2519			val = BDB_263_VBT_EDP_LINK_RATE_2_16;
-  2520			break;
-  2521		case 162000:
-  2522			val = BDB_263_VBT_EDP_LINK_RATE_1_62;
-  2523			break;
-> 2524		default:
-  2525			break;
-  2526		}
-  2527	
-  2528		return edp_data_override_mask & val;
-  2529	}
-  2530	
+   883	
+   884	/**
+   885	 * pinmux_generic_add_pinfunction() - adds a function group
+   886	 * @pctldev: pin controller device
+   887	 * @func: pinfunction structure describing the function group
+   888	 * @data: pin controller driver specific data
+   889	 */
+   890	int pinmux_generic_add_pinfunction(struct pinctrl_dev *pctldev,
+   891					   const struct pinfunction *func, void *data)
+   892	{
+   893		struct function_desc *function;
+   894		int selector, error;
+   895	
+   896		selector = pinmux_func_name_to_selector(pctldev, func->name);
+   897		if (selector >= 0)
+   898			return selector;
+   899	
+   900		selector = pctldev->num_functions;
+   901	
+   902		function = devm_kzalloc(pctldev->dev, sizeof(*function), GFP_KERNEL);
+   903		if (!function)
+   904			return -ENOMEM;
+   905	
+   906		function->func = kmemdup_const(func, sizeof(*func), GFP_KERNEL);
+   907		if (!function->func)
+   908			return -ENOMEM;
+   909	
+   910		/*
+   911		 * FIXME: It's generally a bad idea to use devres in subsystem core
+   912		 * code - managed interfaces are aimed at drivers - but pinctrl already
+   913		 * uses it all over the place so it's a larger piece of technical debt
+   914		 * to fix.
+   915		 */
+   916		error = devm_add_action_or_reset(pctldev->dev,
+ > 917						 (void (*)(void *))kfree_const,
+   918						 (void *)function->func);
+   919		if (error)
+   920			return error;
+   921	
+   922		function->data = data;
+   923	
+   924		error = radix_tree_insert(&pctldev->pin_function_tree, selector, function);
+   925		if (error)
+   926			return error;
+   927	
+   928		pctldev->num_functions++;
+   929	
+   930		return selector;
+   931	}
+   932	EXPORT_SYMBOL_GPL(pinmux_generic_add_pinfunction);
+   933	
 
 -- 
 0-DAY CI Kernel Test Service
