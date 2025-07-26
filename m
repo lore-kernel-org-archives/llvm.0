@@ -1,59 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED73463CF;
-	Sat, 26 Jul 2025 04:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419F528682;
+	Sat, 26 Jul 2025 06:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753502588; cv=none; b=kR2U5SLS+o85f3Z9HFEGOAE8h5y3K1p4Y7pdU3rNsmuh3x+wF3ZViMFBUgxnVNUmesKTvUY+EkRXxTfbMdG4QTXmTPZBmDnPRf73w/ApNPVKafb0wBz5jIpLlHgjIXTn0vacFJCEW40ZgibRC0FghvkeNRevcKSXXiFXW5o+zhc=
+	t=1753511239; cv=none; b=kFDc9yHOe/aM7eBxKJbp2vvZQR1q705ii/YQ4LHSVGmZ9u7lBPNCrv9y9RtR5dedGS22osOdJpmeEZ+NvIwkwd53AeZr5vt2Tv3+qDQdAlEaLXOivh7XCroS3F1T+k/2T5RYsQJMv03BBEeciVQhOFvF4xdTFTGTJK8Cd1QYaD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753502588; c=relaxed/simple;
-	bh=8g9wBziPTXpobyegEW+LeGkkwHu3p3rZSG4ABGAja8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RZ1MOwCtzSytB5+6JYzywwTcAGtegb5LxuhAal1h2JdxDPQh1NuNQKa2DpsGdq4Ih0c2LFj6PG0/yU/bXkaUPEv8/NCurtNJ37NBgN1qZET+DL2HoceFjSa2Wmo6z0KsL1VwzZgG5iNgBXuIrHI8zpIXi1WpeRt+jFZoMXIZ9ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A+CyyZTE; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753511239; c=relaxed/simple;
+	bh=LlIMTFVzXwdSlzjowza5NRuahl7DloIjtQs9FFDcY/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=foF31d4U2s2dtFf3urbsX1QONkjfhjzpLBwitga6igL8LZPHuRw+bPgr3m8T2sTMJH5c19H71m86Vqii0YoHd8k6oF3fZTk+bqBF42nEb0im9wz3FC9B78xY9nyFkrVPFrrPFpEA2zVzqZ1HJX2sggVpqA++f9IZXB+ez/ILHBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fq2xnjNp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A+CyyZTE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753502587; x=1785038587;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8g9wBziPTXpobyegEW+LeGkkwHu3p3rZSG4ABGAja8w=;
-  b=A+CyyZTEosnEUBC3Vn1ouFoU9L6PttYg9L2D0NizVflTBegXYANCECM8
-   nMv3So5rM2fUVaClQ8F6ngGgXmJGq3Ji2IJhLnGh7jnRwvULtkzazX2u5
-   QuQiVTz54+A5zroD0dY3KBg8glcS8xvxShJVK+RmJRWyAyIkZ+1v8Cjms
-   vIOEj71Sy16KhhME3tCGjYqEA2Y+zd7RxMc3injIfZgr613A/ienCWflU
-   NEWHdbDPiB5t8GxhymG1osTebSbqZcoYOGCmlCknetBwVCpKkZXPbd1fB
-   ezlEAoTQ0HwsoS+GarW+TRnfrJIcChIqk8+/AvO1kgVTKCWQ7PyAoEuBa
-   g==;
-X-CSE-ConnectionGUID: U3g9sWfFRBK9XoDVcxa9UQ==
-X-CSE-MsgGUID: d7qvEVMHSK+iluvBPUbNqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="54918187"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="54918187"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2025 21:03:06 -0700
-X-CSE-ConnectionGUID: o8nxA3hnTdKFvNJ/4V72eg==
-X-CSE-MsgGUID: ZQtdXkKgTPO1oOlQBNUPJw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="192281319"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa001.fm.intel.com with ESMTP; 25 Jul 2025 21:03:05 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ufW7i-0000Dr-1i;
-	Sat, 26 Jul 2025 04:03:02 +0000
-Date: Sat, 26 Jul 2025 06:02:04 +0200
-From: kernel test robot <lkp@intel.com>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: lib/bch.o: warning: objtool: find_poly_roots+0x5ac: sibling call
- from callable instruction with modified stack frame
-Message-ID: <202507260646.q8oawNxL-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fq2xnjNp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7054C4CEED;
+	Sat, 26 Jul 2025 06:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753511238;
+	bh=LlIMTFVzXwdSlzjowza5NRuahl7DloIjtQs9FFDcY/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fq2xnjNp2Rnf6iAlZuKY1DeL5Taz3Wd30zVOYss8rTdrQFYNsNc7QchDwyboJt8MO
+	 GyBnduAMMlNsE8pFM+5ks4z6k6V1Q2RKNUvUebb8ez9Dk91IZbgcxkBTqATFe8mruT
+	 F99Rn3HFLCaODcvN0/FwBjHEpq31Kn5eyDzW/dj5r5P0sUBxDUJYgOFUF2H+2OXMD+
+	 b0uHv/EensaRP3baa7pQtYIuc8JXI/UQX+u/sHXMOJv7/rcSM6jN0iAiHQTQj5ULlP
+	 XjDMcwoXUT3oMirM6oHEboAxIgl2XJlfJ7zAX534y/jxfcJsjtNnBZ1ScfFvhmh9Hi
+	 n1Xg4NOsRzPeQ==
+Date: Fri, 25 Jul 2025 23:27:18 -0700
+From: Kees Cook <kees@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Gavin Shan <gshan@redhat.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	James Morse <james.morse@arm.com>,
+	Oza Pawandeep <quic_poza@quicinc.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Michal Wilczynski <michal.wilczynski@intel.com>,
+	Juergen Gross <jgross@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Kirill A. Shutemov" <kas@kernel.org>,
+	Roger Pau Monne <roger.pau@citrix.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Usama Arif <usama.arif@bytedance.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+	Alexander Graf <graf@amazon.com>,
+	Changyuan Lyu <changyuanl@google.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jan Beulich <jbeulich@suse.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Bibo Mao <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-mm@kvack.org, kasan-dev@googlegroups.com,
+	linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
+	kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 0/4] stackleak: Support Clang stack depth tracking
+Message-ID: <202507252322.8774CA6FCF@keescook>
+References: <20250724054419.it.405-kees@kernel.org>
+ <20250726004313.GA3650901@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,59 +103,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250726004313.GA3650901@ax162>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f33ebd2018ced2600b3fad2f8e2052498eb4072
-commit: e20ab7d454ee8d1e0e8b9ff73a7c87e84c666b2f LoongArch: Enable jump table for objtool
-date:   5 months ago
-config: loongarch-randconfig-2004-20250726 (https://download.01.org/0day-ci/archive/20250726/202507260646.q8oawNxL-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b4edd827e4f71c2a0fcb13f79de7eae4545f0aea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507260646.q8oawNxL-lkp@intel.com/reproduce)
+On Fri, Jul 25, 2025 at 05:43:13PM -0700, Nathan Chancellor wrote:
+> A few build issues that I see when building next-20250725, which seem
+> related to this series.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507260646.q8oawNxL-lkp@intel.com/
+AH! Thank you for letting me know!
 
-All warnings (new ones prefixed by >>):
+> 1. I see
+> 
+>   ld.lld: error: undefined symbol: __sanitizer_cov_stack_depth
+>   >>> referenced by atags_to_fdt.c
+>   >>>               arch/arm/boot/compressed/atags_to_fdt.o:(atags_to_fdt)
+>   make[5]: *** [arch/arm/boot/compressed/Makefile:152: arch/arm/boot/compressed/vmlinux] Error 1
+> 
+> when building ARCH=arm allmodconfig on next-20250725. The following diff appears to cure that one.
 
->> lib/bch.o: warning: objtool: find_poly_roots+0x5ac: sibling call from callable instruction with modified stack frame
---
-   drivers/input/touchscreen/mms114.c:507:15: warning: cast to smaller integer type 'enum mms_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     507 |         data->type = (enum mms_type)match_data;
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
->> drivers/input/touchscreen/mms114.o: warning: objtool: mms114_start+0xb4: sibling call from callable instruction with modified stack frame
---
-   drivers/char/applicom.c:130:25: warning: variable 'byte_reset_it' set but not used [-Wunused-but-set-variable]
-     130 |         volatile unsigned char byte_reset_it;
-         |                                ^
-   drivers/char/applicom.c:542:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     542 |         int ret = 0;
-         |             ^
-   drivers/char/applicom.c:705:25: warning: variable 'byte_reset_it' set but not used [-Wunused-but-set-variable]
-     705 |         volatile unsigned char byte_reset_it;
-         |                                ^
-   3 warnings generated.
->> drivers/char/applicom.o: warning: objtool: ac_ioctl+0x104: sibling call from callable instruction with modified stack frame
---
-   drivers/video/fbdev/matrox/g450_pll.c:410:18: warning: variable 'mnp' set but not used [-Wunused-but-set-variable]
-     410 |                                 unsigned int mnp;
-         |                                              ^
-   1 warning generated.
->> drivers/video/fbdev/matrox/g450_pll.o: warning: objtool: matroxfb_g450_setpll_cond+0x58: sibling call from callable instruction with modified stack frame
->> drivers/video/fbdev/matrox/g450_pll.o: warning: objtool: matroxfb_g450_setclk+0x98: sibling call from callable instruction with modified stack frame
->> drivers/video/fbdev/matrox/g450_pll.o: warning: objtool: g450_testpll+0x48: sibling call from callable instruction with modified stack frame
---
-   drivers/media/i2c/adv7604.c:432:19: warning: unused function 'cec_write_clr_set' [-Wunused-function]
-     432 | static inline int cec_write_clr_set(struct v4l2_subdev *sd, u8 reg, u8 mask,
-         |                   ^~~~~~~~~~~~~~~~~
-   1 warning generated.
->> drivers/media/i2c/adv7604.o: warning: objtool: read_stdi+0x3e4: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7604.o: warning: objtool: adv76xx_set_edid+0x260: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7604.o: warning: objtool: adv76xx_debugfs_if_read+0xc0: sibling call from callable instruction with modified stack frame
->> drivers/media/i2c/adv7604.o: warning: objtool: adv76xx_s_ctrl+0x64: sibling call from callable instruction with modified stack frame
+Ah-ha perfect. Yes, that matches what I was expecting to fix it, I was
+just about to start working on it, but you beat me to it. :) The same
+was reported here:
+https://lore.kernel.org/all/CA+G9fYtBk8qnpWvoaFwymCx5s5i-5KXtPGpmf=_+UKJddCOnLA@mail.gmail.com
+
+> 2. I see
+> 
+>   kernel/kstack_erase.c:168:2: warning: function with attribute 'no_caller_saved_registers' should only call a function with attribute 'no_caller_saved_registers' or be compiled with '-mgeneral-regs-only' [-Wexcessive-regsave]
+> [...]
+> when building ARCH=i386 allmodconfig.
+
+Oh, hm, I will figure that out.
+
+> 3. I see
+> 
+>   In file included from kernel/fork.c:96:
+>   include/linux/kstack_erase.h:29:37: error: passing 'const struct task_struct *' to parameter of type 'struct task_struct *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>      29 |         return (unsigned long)end_of_stack(tsk) + sizeof(unsigned long);
+>         |                                            ^~~
+>   include/linux/sched/task_stack.h:56:63: note: passing argument to parameter 'p' here
+>      56 | static inline unsigned long *end_of_stack(struct task_struct *p)
+>         |                                                               ^
+> 
+> when building ARCH=loongarch allmodconfig, which does not support
+> CONFIG_THREAD_INFO_IN_TASK it seems.
+
+Oh, eek. Yeah, I'll need to make an explicit dependency I guess? ("How
+did this ever work?")
+
+Thanks again!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
