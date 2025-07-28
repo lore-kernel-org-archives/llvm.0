@@ -1,240 +1,138 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB6F21E0BE
-	for <llvm@lists.linux.dev>; Mon, 28 Jul 2025 21:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EB58488;
+	Mon, 28 Jul 2025 22:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753737591; cv=none; b=djYB7v1B6im0XhpIGhuVRjL8ad4CQ4vwcmi1AOjn3hREKTH3dnFXFP3iLONDdePZA5MPWqNoWv585+FB5/gVD4JESnsXLhq4RhoZZry14Cj7didHIttpSnPlobiVNxxnLXKBfVFmwbOXfZON0pluNnrNp+YGgyZLESuGcxUZ4go=
+	t=1753740349; cv=none; b=k+WwbrEqo9cLbAsVjz5f02qBC66IXeJdLYxIeqfeemVRnV8vyucHEV3HWL17TSHf51ypErlhcU4r0L5V8rlJBdzkqNME0zA85/djayA2kHfVv1SO3MbE/D56kXhqZkqAP2R8+oMvY8vZKWtxYkLZ+IT0aRwEHfjKerMGTyM4FzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753737591; c=relaxed/simple;
-	bh=dy758V6JISbk0OyvLkOFxA2WH0nPLorgxe+HKMTULx0=;
+	s=arc-20240116; t=1753740349; c=relaxed/simple;
+	bh=kJsi3IgGKmtRibPIrWNWaBJJCyE8e9J8FoD/26+TC1w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TQHH/T36AEVqA4A1amh5F5ZEhVR2CR1Tqpe9dZxkZMeH62A+cKydnjuhqr+7W1hXULCdrXA8NG41oAhHyqPAWr7dq+NMv3OHIZzYEiY8HbqfiFzMeRl3C5hk1GQ2SQzI3sVwpxNioTvTJUF1Gv7w6Yxpi8+/sLWfrYagDmcBiF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=tfE1DtGS; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MJVWAiJ25z70INE8LAricB61CI8hjE2EskATfdP8gzP0lgzaSWJHwVAHkzCT1rtQi4V98Mnum0M7GmmZjSnxCkYU/hvyyro4VuIi9an7HfO4UAGXypVuyGM29fQLhJqTlgjgJlqGeaTKY8rvJLAopzouLn0NqppD/4nGCXyI52w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MaeEw8qt; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="tfE1DtGS"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-748e81d37a7so3265894b3a.1
-        for <llvm@lists.linux.dev>; Mon, 28 Jul 2025 14:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753737589; x=1754342389; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fk12aZ1hILTEk1VujnCvLZyceUntOHKQSLYJRpJHq1U=;
-        b=tfE1DtGS7++rwUoeXswyRrlaxr0MQ6ydMUuwkdNt4lBcx8x/r0XWLlhBjdMD+a3JuV
-         8GNpNrAQzCKbyfHbxMbYlt1Jx3laUTattFV9dOyL2wxVuCrXo9Bvn3UlVLeZuDMuXiPd
-         AM2vxIXeN0d0ONwrCWb+ncNeAL62ma9yy722Gn9ePy8jXkgHCZBNSDu0HNFyO78qz+jk
-         VdDWXF1QSAC4JuKQYhAwDV4QCvudmbcWL+XW05LamrAVxdsCz+vBW9mG5rLLqRc4Xnt7
-         539t6MCrg+0RW+FkPTqJDN/wTmawjMIF/wQXkrSOiQN3LKuYnX+WK/3d3V4J6Cr3jar8
-         vPZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753737589; x=1754342389;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fk12aZ1hILTEk1VujnCvLZyceUntOHKQSLYJRpJHq1U=;
-        b=IUVS2QVPuRtpyGKxUfFEOedwVocf8VJU3bePu9TxCLdiAA9JnJWD1vlhTy8SqHaTlv
-         uRjrDZ5jdd+7utH3QAfwgkPv5VCIozW6rCawHqqts9Z5MStx3cw2xW44iTDjBqiBU6ea
-         26iurGxG7Qbs2NV+nc3JZB8WwilCMPWzKhcg6pIXbb0XeFWjeDVOkD0nWCgQgBeORiT5
-         8BiDHBp/G/8ip65oMC+M3ye3ZI8uCMrZQFo2fx90YL8R63IFelT4EuafHFRRFSS9Z93P
-         R0NWs+YuelQYtVDsPM/bxQSHXVelyuEfSUGW/0EMqnEPNZp5dZxVIp3r2KtyCyHYKX94
-         7Lrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXISX35TvwXVIcVLWjDizJvGNx2SxPeHJrFPgoUplI1fNVyh1QkjD0IYx6R6fp/aQyf7Zxw@lists.linux.dev
-X-Gm-Message-State: AOJu0YyjPl31K5mmVNaVFzhYUD7WbvmS71kogE3KJaAtzn+75XprK4iO
-	mz9EGfUP1N73KXPfw2ojLVIMTaMkK0AR6k8zJOb7GbddTq6e4PfvrhNZYmPQKtU0Hvc=
-X-Gm-Gg: ASbGncuIUrom2RdN0FY849uB3satNOVWnpAVbakdXvvmjvOVKyQYNLBaZSfppy6m4cN
-	4Q0ptwUxpqqpAKMbs6ZCgHSqZtcCCC0pd56pX7P2QRcuGusfvfKvB/RMp409sUfStWvCoH40SjZ
-	3hk2cEWNZrQ4VvpTZiwTXSOez+iaGAsZYhL3alP0mDBw5iY3IlSfoKoy0GB57gsjEGn50dADw5Z
-	xcLIrrBtHWoEzr6OiqX48g5BNpsdLRvpMa6d71dx8KoPIj37tXYJaCyCozZZ0prkzuJkjnQ9R0H
-	3BRa6Evu1c/yOL3DrTt9KSGTORhi0BcohxZNg5B8Pv9HOQ8f0tN6M2rQ4qEdf+2t96SQIZHli80
-	7Y3drAqQ1Ys9cpg5nPD5c1ACzHISNSFiL
-X-Google-Smtp-Source: AGHT+IEnErxkfYjX+YJp8zR8qc4hw1otEJKlPu8QNYCPVpJ95RsieRy81jtW+UwHk4fD0hbvpRX7Lg==
-X-Received: by 2002:a05:6a00:c89:b0:748:fcfa:8bd5 with SMTP id d2e1a72fcca58-7633636aefemr19113589b3a.3.1753737588883;
-        Mon, 28 Jul 2025 14:19:48 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76408cf7759sm6272300b3a.31.2025.07.28.14.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 14:19:48 -0700 (PDT)
-Date: Mon, 28 Jul 2025 14:19:45 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "nathan@kernel.org" <nathan@kernel.org>,
-	"kito.cheng@sifive.com" <kito.cheng@sifive.com>,
-	"jeffreyalaw@gmail.com" <jeffreyalaw@gmail.com>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"mhocko@suse.com" <mhocko@suse.com>,
-	"charlie@rivosinc.com" <charlie@rivosinc.com>,
-	"david@redhat.com" <david@redhat.com>,
-	"masahiroy@kernel.org" <masahiroy@kernel.org>,
-	"samitolvanen@google.com" <samitolvanen@google.com>,
-	"conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-	"bjorn@rivosinc.com" <bjorn@rivosinc.com>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"nicolas.schier@linux.dev" <nicolas.schier@linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"andrew@sifive.com" <andrew@sifive.com>,
-	"monk.chiang@sifive.com" <monk.chiang@sifive.com>,
-	"justinstitt@google.com" <justinstitt@google.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"morbo@google.com" <morbo@google.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>,
-	"rppt@kernel.org" <rppt@kernel.org>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"ved@rivosinc.com" <ved@rivosinc.com>,
-	"heinrich.schuchardt@canonical.com" <heinrich.schuchardt@canonical.com>,
-	"vbabka@suse.cz" <vbabka@suse.cz>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"alex@ghiti.fr" <alex@ghiti.fr>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"surenb@google.com" <surenb@google.com>,
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-	"cleger@rivosinc.com" <cleger@rivosinc.com>,
-	"samuel.holland@sifive.com" <samuel.holland@sifive.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"ajones@ventanamicro.com" <ajones@ventanamicro.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"apatel@ventanamicro.com" <apatel@ventanamicro.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH 10/11] scs: generic scs code updated to leverage hw
- assisted shadow stack
-Message-ID: <aIfpcUmNtLFPd2cO@debug.ba.rivosinc.com>
-References: <20250724-riscv_kcfi-v1-0-04b8fa44c98c@rivosinc.com>
- <20250724-riscv_kcfi-v1-10-04b8fa44c98c@rivosinc.com>
- <3d579a8c2558391ff6e33e7b45527a83aa67c7f5.camel@intel.com>
- <aIO8uSqiplnyyNOd@debug.ba.rivosinc.com>
- <a19c1338f2fa4cb19a4f8b7552ff54ded20b403a.camel@intel.com>
- <aIfOTC6CfyCsaEpv@debug.ba.rivosinc.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MaeEw8qt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753740348; x=1785276348;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kJsi3IgGKmtRibPIrWNWaBJJCyE8e9J8FoD/26+TC1w=;
+  b=MaeEw8qtmZY1BjUA/CZhgBtpp1yL+lADIPiF8VGIbNYf3cKSgssicrOi
+   Q+ZcIkQTK+2w69y4/jOT/hS54tHpXACkp4mbYzhAKZusLclMF7JbereRO
+   JqoOEGSUWb8BJte2QYW0IJyIjMcJ07I09Iy8VrCh76h9ACnrAqNIhxOp8
+   rCUrqC8vPjTGf/0LCMyQM6rWY1i/icxqYRAAaas5+zIkLT/xJiAVnWc4v
+   7VJ4luXmsQLbtlocmsZCR+7LUZg6cTkGT0cgd9Upum5wYAw7191wsh5Re
+   DbH8z82eEsi/y2JSkjW8nudPijwrGZYssO3ELaMvguAcqqjv7Ydh0CTRY
+   w==;
+X-CSE-ConnectionGUID: CcSwAas6T4awPbaowXoDVg==
+X-CSE-MsgGUID: 5mHr/HXBR7O+QU4gKpgyTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="67083341"
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="67083341"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 15:05:47 -0700
+X-CSE-ConnectionGUID: eLd5rzdARqS1sDBQP5aHgQ==
+X-CSE-MsgGUID: pPEcEzuGT+eVmeOMHzKIyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="166778407"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 Jul 2025 15:05:44 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ugVyY-0000nF-0q;
+	Mon, 28 Jul 2025 22:05:42 +0000
+Date: Tue, 29 Jul 2025 06:04:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nikolay Borisov <nik.borisov@suse.com>,
+	linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, paul@paul-moore.com, serge@hallyn.com,
+	jmorris@namei.org, dan.j.williams@intel.com,
+	Nikolay Borisov <nik.borisov@suse.com>
+Subject: Re: [PATCH v2 2/3] lockdown/kunit: Introduce kunit tests
+Message-ID: <202507290540.9IANrMED-lkp@intel.com>
+References: <20250728111517.134116-3-nik.borisov@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aIfOTC6CfyCsaEpv@debug.ba.rivosinc.com>
+In-Reply-To: <20250728111517.134116-3-nik.borisov@suse.com>
 
-On Mon, Jul 28, 2025 at 12:23:56PM -0700, Deepak Gupta wrote:
->On Fri, Jul 25, 2025 at 06:05:22PM +0000, Edgecombe, Rick P wrote:
->>On Fri, 2025-07-25 at 10:19 -0700, Deepak Gupta wrote:
->>>> This doesn't update the direct map alias I think. Do you want to protect it?
->>>
->>>Yes any alternate address mapping which is writeable is a problem and dilutes
->>>the mechanism. How do I go about updating direct map ? (I pretty new to linux
->>>kernel and have limited understanding on which kernel api's to use here to
->>>unmap
->>>direct map)
->>
->>Here is some info on how it works:
->>
->>set_memory_foo() variants should (I didn't check riscv implementation, but on
->>x86) update the target addresses passed in *and* the direct map alias. And flush
->>the TLB.
->>
->>vmalloc_node_range() will just set the permission on the vmalloc alias and not
->>touch the direct map alias.
->>
->>vfree() works by trying to batch the flushing for unmap operations to avoid
->>flushing the TLB too much. When memory is unmapped in userspace, it will only
->>flush on the CPU's with that MM (process address space). But for kernel memory
->>the mappings are shared between all CPUs. So, like on a big server or something,
->>it requires way more work and distance IPIs, etc. So vmalloc will try to be
->>efficient and keep zapped mappings unflushed until it has enough to clean them
->>up in bulk. In the meantime it won't reuse that vmalloc address space.
->>
->>But this means there can also be other vmalloc aliases still in the TLB for any
->>page that gets allocated from the page allocator. If you want to be fully sure
->>there are no writable aliases, you need to call vm_unmap_aliases() each time you
->>change kernel permissions, which will do the vmalloc TLB flush immediately. Many
->>set_memory() implementations call this automatically, but it looks like not
->>riscv.
->>
->>
->>So doing something like vmalloc(), set_memory_shadow_stack() on alloc and
->>set_memory_rw(), vfree() on free is doing the expensive flush (depends on the
->>device how expensive) in a previously fast path. Ignoring the direct map alias
->>is faster. A middle ground would be to do the allocation/conversion and freeing
->>of a bunch of stacks at once, and recycle them.
->>
->>
->>You could make it tidy first and then optimize it later, or make it faster first
->>and maximally secure later. Or try to do it all at once. But there have long
->>been discussions on batching type kernel memory permission solutions. So it
->>would could be a whole project itself.
->
->Thanks Rick. Another approach I am thinking could be making vmalloc
->intrinsically aware of certain range to be security sensitive. Meaning during
->vmalloc initialization itself, it could reserve a range which is ensured to be
->not direct mapped. Whenever `PAGE_SHADOWSTACK` is requested, it always comes
->from this range (which is guaranteed to be never direct mapped).
->
->I do not expect hardware assisted shadow stack to be more than 4K in size
->(should support should 512 call-depth). A system with 30,000 active threads
->(taking a swag number here), will need 30,000 * 2 (one for guard) = 60000 pages.
->That's like ~245 MB address range. We can be conservative and have 1GB range in
->vmalloc larger range reserved for shadow stack. vmalloc ensures that this
->range's direct mappping always have read-only encoding in ptes. Sure this number
->(shadow stack range in larget vmalloc range) could be configured so that user
->can do their own trade off.
->
->Does this approach look okay?
+Hi Nikolay,
 
-Never mind, maintaining free/allocated list by vmalloc would be problematic
-In that case this has to be something like a consumer of vmalloc, reserve a
-range and do free/alloc out of that. And then it starts looking like a cache
-of shadow stacks without direct mapping (as you suggested)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.16 next-20250728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikolay-Borisov/lockdown-Switch-implementation-to-using-bitmap/20250728-191807
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250728111517.134116-3-nik.borisov%40suse.com
+patch subject: [PATCH v2 2/3] lockdown/kunit: Introduce kunit tests
+config: arm-randconfig-004-20250729 (https://download.01.org/0day-ci/archive/20250729/202507290540.9IANrMED-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 1b4db78d2eaa070b3f364a2d2b2b826a5439b892)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507290540.9IANrMED-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507290540.9IANrMED-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> security/lockdown/lockdown.c:31:5: warning: no previous prototype for function 'lock_kernel_down' [-Wmissing-prototypes]
+      31 | int lock_kernel_down(const char *where, enum lockdown_reason level)
+         |     ^
+   security/lockdown/lockdown.c:31:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      31 | int lock_kernel_down(const char *where, enum lockdown_reason level)
+         | ^
+         | static 
+   1 warning generated.
 
 
->
->>
->>>
->>>>
->>>> >
->>>> >   out:
->>>> > @@ -59,7 +72,7 @@ void *scs_alloc(int node)
->>>> >   	if (!s)
->>>> >   		return NULL;
->>>> >
->>>> > -	*__scs_magic(s) = SCS_END_MAGIC;
->>>> > +	__scs_store_magic(__scs_magic(s), SCS_END_MAGIC);
->>>> >
->>>> >   	/*
->>>> >   	 * Poison the allocation to catch unintentional accesses to
->>>> > @@ -87,6 +100,16 @@ void scs_free(void *s)
->>>> >   			return;
->>>> >
->>>> >   	kasan_unpoison_vmalloc(s, SCS_SIZE, KASAN_VMALLOC_PROT_NORMAL);
->>>> > +	/*
->>>> > +	 * Hardware protected shadow stack is not writeable by regular
->>>> > stores
->>>> > +	 * Thus adding this back to free list will raise faults by
->>>> > vmalloc
->>>> > +	 * It needs to be writeable again. It's good sanity as well
->>>> > because
->>>> > +	 * then it can't be inadvertently accesses and if done, it will
->>>> > fault.
->>>> > +	 */
->>>> > +#ifdef CONFIG_ARCH_HAS_KERNEL_SHADOW_STACK
->>>> > +	set_memory_rw((unsigned long)s, (SCS_SIZE/PAGE_SIZE));
->>>>
->>>> Above you don't update the direct map permissions. So I don't think you need
->>>> this. vmalloc should flush the permissioned mapping before re-using it with
->>>> the
->>>> lazy cleanup scheme.
->>>
->>>If I didn't do this, I was getting a page fault on this vmalloc address. It
->>>directly
->>>uses first 8 bytes to add it into some list and that was the location of
->>>fault.
->>
->>Ah right! Because it is using the vfree atomic variant.
->>
->>You could create your own WQ in SCS and call vfree() in non-atomic context. If
->>you want to avoid thr set_memory_rw() on free, in the ignoring the direct map
->>case.
+vim +/lock_kernel_down +31 security/lockdown/lockdown.c
+
+    20	
+    21	static const enum lockdown_reason lockdown_levels[] = {LOCKDOWN_NONE,
+    22							 LOCKDOWN_INTEGRITY_MAX,
+    23							 LOCKDOWN_CONFIDENTIALITY_MAX};
+    24	
+    25	/*
+    26	 * Put the kernel into lock-down mode.
+    27	 */
+    28	#if !IS_ENABLED(CONFIG_KUNIT)
+    29	static
+    30	#endif
+  > 31	int lock_kernel_down(const char *where, enum lockdown_reason level)
+    32	{
+    33	
+    34		if (level > LOCKDOWN_CONFIDENTIALITY_MAX)
+    35			return -EINVAL;
+    36	
+    37		if (level == LOCKDOWN_INTEGRITY_MAX || level == LOCKDOWN_CONFIDENTIALITY_MAX)
+    38			bitmap_set(kernel_locked_down, 1, level);
+    39		else
+    40			bitmap_set(kernel_locked_down, level, 1);
+    41	
+    42		pr_notice("Kernel is locked down from %s; see man kernel_lockdown.7\n",
+    43			  where);
+    44		return 0;
+    45	}
+    46	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
