@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5CC635;
-	Mon, 28 Jul 2025 01:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2721E1E492;
+	Mon, 28 Jul 2025 03:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753666325; cv=none; b=EW4OWHwzJ033L8AJss1tyvdgSkbc/1Mvd5Q7NayiRr64yaWY5AChjYQfqrS1HY9q+1V9/Gd7N7UjaoRe1ap3mj6SQvFxgTYLK+zVhQ/dTKn1T43W/n9kQ33ClqL+UX+zV40zFM5vmTrkAcnUCpaLlqbu/pxnpe3xipJT8Lia5Zw=
+	t=1753673150; cv=none; b=bCgr9T2yAZm52cYmHV+u8UYkk00FX5I/zgB+qbSxMQp9YfpbKHQRgeqUKNc64Ayxxk0QXctwfXvwaVlAUzcFHIMVp7toCG8jODcavW2I4A66phn/E5+2jw7UDPj+l5OWc7J8Fq8q8NWs1od9rqie1ZMz4AwBLnUCrhOfE2/BaSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753666325; c=relaxed/simple;
-	bh=1+JKE2iPg0Q81HZUjpfT6uxTsIImsKvoEz92D3a/8L4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jbFOlJ3JQ1/f0CAI050aqtBm/XBSRQp+OXaG8pmw+l7NKJEXFq94aSnwbSgqFPh9d4WxGdBYoXCFFKrqfm04iO+f5zbb0GOorZGCP/D2WSBZiEayR5t9FwuRpoCdhsb7pwzr9sMW/1Tf0veq2iGXaJgaE8LL3A21xTxACblIfWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mwEBu+cy; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1753673150; c=relaxed/simple;
+	bh=LzgrEov8CSNa3SuW5cKo1jXscg8fIHoPiTUNmncJ84k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UMqc5dcR5El9dUPxqNvBeqyNbZ/nVaItJGcs7oS0SS2RCZWRmsIi1iqGeYII4Y93lwGtOWFOEs9KGPVCoWnDLp680Wfz+di+dEsTKwT225pdcqpSEVYTUS6wOyfJFQJM0/tzpLAN5ZG271WbKPxAXGlbfVBlH96YOsdrH57eNVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qz9r6TmJ; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mwEBu+cy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qz9r6TmJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753666322; x=1785202322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1+JKE2iPg0Q81HZUjpfT6uxTsIImsKvoEz92D3a/8L4=;
-  b=mwEBu+cyOEEcraxCJ/YApN8fqEeUAL83dmLkAOQ9Rp7rLsLIdx6CAT/m
-   BQYYkV7wmR5OO2pkO1loJNgDa0sncx21e/X2hxG58xy7qUi2YPknYmbAn
-   Sl3mblHkD6YpxdsN2TJL+fDxV5Hxbeegmn5WUI4y+gpq4zd+yFK1fpcm3
-   8I/upm+RNzY2XKoZBdMcDETdRUAvqXo+lghB1IxxiBwUYeuFiroMD7pA6
-   PJ0bAp6q6Co7DjpMMCszKd/VY4TBjl4Uf/NLojCbe2XPg0fKwDbll0K46
-   hlaUxtL0xx0/daOaPNM2h7A1prrl/hsAVcW2zmti/ivW3RmV2IoItXbYj
-   A==;
-X-CSE-ConnectionGUID: n5xsc0SzR/K6UL92bj4XPg==
-X-CSE-MsgGUID: tGwUYdZYSiKSSbql+0SrlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="66176908"
+  t=1753673149; x=1785209149;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LzgrEov8CSNa3SuW5cKo1jXscg8fIHoPiTUNmncJ84k=;
+  b=Qz9r6TmJ/yhgDb9b6r3zsCnxPTrtO3eKtBGU2i36bXzs4KtjFPQ8/cCH
+   zhi9Uwg+GlkS69yH7nJwjG7wxGRg9NDnkPSTYZmj7vuKpckFOZTPI13Hm
+   EyP5Ycg9LYQAvDUJqOTYA0WGIUOEgoczfxSXKYVUsdo8ZCN7Yv+yKkOLW
+   0kFCsL2xh3ifaErXk3tcypQS6+2qFocXrNEcYsvvWcynAnHKrBtrrFqA0
+   kokvlcPqh0xLdDW7weVPIzZHQX5DMcXFYX6Y6rf2lA6SaHuOCHMf2xZ6M
+   n/dOA8iewl8VmmCNOKLIPzKlbybxDv6oqkGyPp3rLHk/rm8y+l7IWN/Sk
+   g==;
+X-CSE-ConnectionGUID: efiLPdRVT4aa2bssIY7ejg==
+X-CSE-MsgGUID: POaDW8wFQXy/GHmtq8tLyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="67264694"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="66176908"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2025 18:32:01 -0700
-X-CSE-ConnectionGUID: n0RcUT1rQb6jF1SEzpIjnQ==
-X-CSE-MsgGUID: RilZvfzJTxix+hnUEmtrTA==
+   d="scan'208";a="67264694"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2025 20:25:48 -0700
+X-CSE-ConnectionGUID: JW92bUTmQECAg1iapQ7bQg==
+X-CSE-MsgGUID: mHq75zdqTRGHr5mToXtQEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="162344083"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 27 Jul 2025 18:32:00 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+   d="scan'208";a="162177815"
+Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
+  by fmviesa006.fm.intel.com with ESMTP; 27 Jul 2025 20:25:47 -0700
+Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ugCib-000075-2Z;
-	Mon, 28 Jul 2025 01:31:57 +0000
-Date: Mon, 28 Jul 2025 09:31:32 +0800
+	id 1ugEUi-0000U7-2K;
+	Mon, 28 Jul 2025 03:25:44 +0000
+Date: Mon, 28 Jul 2025 05:25:27 +0200
 From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 3/4] bpf: Move cgroup iterator helpers to bpf.h
-Message-ID: <202507280945.m9sXKC5J-lkp@intel.com>
-References: <20250727223223.510058-3-daniel@iogearbox.net>
+To: David Lechner <dlechner@baylibre.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: [linux-next:master 8316/12319] ld.lld: error: undefined symbol:
+ devm_iio_dmaengine_buffer_setup_with_handle
+Message-ID: <202507280508.NTndvTIT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,76 +64,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250727223223.510058-3-daniel@iogearbox.net>
 
-Hi Daniel,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Borkmann/bpf-Move-bpf-map-owner-out-of-common-struct/20250728-063408
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250727223223.510058-3-daniel%40iogearbox.net
-patch subject: [PATCH bpf-next 3/4] bpf: Move cgroup iterator helpers to bpf.h
-config: hexagon-randconfig-001-20250728 (https://download.01.org/0day-ci/archive/20250728/202507280945.m9sXKC5J-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 853c343b45b3e83cc5eeef5a52fc8cc9d8a09252)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250728/202507280945.m9sXKC5J-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d7af19298454ed155f5cf67201a70f5cf836c842
+commit: 219da3ea842a156e5808176e11db256db9798f6c [8316/12319] iio: adc: ad_sigma_delta: add SPI offload support
+config: i386-buildonly-randconfig-2001-20250728 (https://download.01.org/0day-ci/archive/20250728/202507280508.NTndvTIT-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250728/202507280508.NTndvTIT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507280945.m9sXKC5J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507280508.NTndvTIT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the linux-next/master HEAD d7af19298454ed155f5cf67201a70f5cf836c842 builds fine.
+      It may have been fixed somewhere.
 
-   In file included from net/socket.c:55:
->> include/linux/bpf-cgroup.h:510:9: warning: 'for_each_cgroup_storage_type' macro redefined [-Wmacro-redefined]
-     510 | #define for_each_cgroup_storage_type(stype) for (; false; )
-         |         ^
-   include/linux/bpf.h:218:9: note: previous definition is here
-     218 | #define for_each_cgroup_storage_type(stype) \
-         |         ^
-   1 warning generated.
+All errors (new ones prefixed by >>):
 
-
-vim +/for_each_cgroup_storage_type +510 include/linux/bpf-cgroup.h
-
-de9cbbaadba5ad Roman Gushchin     2018-08-02  477  
-6fc88c354f3af8 Dave Marchevsky    2021-08-19  478  #define cgroup_bpf_enabled(atype) (0)
-fefba7d1ae198d Daan De Meyer      2023-10-11  479  #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, atype, t_ctx) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  480  #define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, atype) ({ 0; })
-d74bad4e74ee37 Andrey Ignatov     2018-03-30  481  #define BPF_CGROUP_PRE_CONNECT_ENABLED(sk) (0)
-3007098494bec6 Daniel Mack        2016-11-23  482  #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk,skb) ({ 0; })
-3007098494bec6 Daniel Mack        2016-11-23  483  #define BPF_CGROUP_RUN_PROG_INET_EGRESS(sk,skb) ({ 0; })
-61023658760032 David Ahern        2016-12-01  484  #define BPF_CGROUP_RUN_PROG_INET_SOCK(sk) ({ 0; })
-f5836749c9c04a Stanislav Fomichev 2020-07-06  485  #define BPF_CGROUP_RUN_PROG_INET_SOCK_RELEASE(sk) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  486  #define BPF_CGROUP_RUN_PROG_INET_BIND_LOCK(sk, uaddr, uaddrlen, atype, flags) ({ 0; })
-aac3fc320d9404 Andrey Ignatov     2018-03-30  487  #define BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk) ({ 0; })
-aac3fc320d9404 Andrey Ignatov     2018-03-30  488  #define BPF_CGROUP_RUN_PROG_INET6_POST_BIND(sk) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  489  #define BPF_CGROUP_RUN_PROG_INET4_CONNECT(sk, uaddr, uaddrlen) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  490  #define BPF_CGROUP_RUN_PROG_INET4_CONNECT_LOCK(sk, uaddr, uaddrlen) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  491  #define BPF_CGROUP_RUN_PROG_INET6_CONNECT(sk, uaddr, uaddrlen) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  492  #define BPF_CGROUP_RUN_PROG_INET6_CONNECT_LOCK(sk, uaddr, uaddrlen) ({ 0; })
-859051dd165ec6 Daan De Meyer      2023-10-11  493  #define BPF_CGROUP_RUN_PROG_UNIX_CONNECT_LOCK(sk, uaddr, uaddrlen) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  494  #define BPF_CGROUP_RUN_PROG_UDP4_SENDMSG_LOCK(sk, uaddr, uaddrlen, t_ctx) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  495  #define BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk, uaddr, uaddrlen, t_ctx) ({ 0; })
-859051dd165ec6 Daan De Meyer      2023-10-11  496  #define BPF_CGROUP_RUN_PROG_UNIX_SENDMSG_LOCK(sk, uaddr, uaddrlen, t_ctx) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  497  #define BPF_CGROUP_RUN_PROG_UDP4_RECVMSG_LOCK(sk, uaddr, uaddrlen) ({ 0; })
-fefba7d1ae198d Daan De Meyer      2023-10-11  498  #define BPF_CGROUP_RUN_PROG_UDP6_RECVMSG_LOCK(sk, uaddr, uaddrlen) ({ 0; })
-859051dd165ec6 Daan De Meyer      2023-10-11  499  #define BPF_CGROUP_RUN_PROG_UNIX_RECVMSG_LOCK(sk, uaddr, uaddrlen) ({ 0; })
-40304b2a1567fe Lawrence Brakmo    2017-06-30  500  #define BPF_CGROUP_RUN_PROG_SOCK_OPS(sock_ops) ({ 0; })
-6fc88c354f3af8 Dave Marchevsky    2021-08-19  501  #define BPF_CGROUP_RUN_PROG_DEVICE_CGROUP(atype, major, minor, access) ({ 0; })
-32927393dc1ccd Christoph Hellwig  2020-04-24  502  #define BPF_CGROUP_RUN_PROG_SYSCTL(head,table,write,buf,count,pos) ({ 0; })
-0d01da6afc5402 Stanislav Fomichev 2019-06-27  503  #define BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock, level, optname, optval, \
-0d01da6afc5402 Stanislav Fomichev 2019-06-27  504  				       optlen, max_optlen, retval) ({ retval; })
-9cacf81f816111 Stanislav Fomichev 2021-01-15  505  #define BPF_CGROUP_RUN_PROG_GETSOCKOPT_KERN(sock, level, optname, optval, \
-9cacf81f816111 Stanislav Fomichev 2021-01-15  506  					    optlen, retval) ({ retval; })
-0d01da6afc5402 Stanislav Fomichev 2019-06-27  507  #define BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock, level, optname, optval, optlen, \
-0d01da6afc5402 Stanislav Fomichev 2019-06-27  508  				       kernel_optval) ({ 0; })
-3007098494bec6 Daniel Mack        2016-11-23  509  
-8bad74f9840f87 Roman Gushchin     2018-09-28 @510  #define for_each_cgroup_storage_type(stype) for (; false; )
-8bad74f9840f87 Roman Gushchin     2018-09-28  511  
+>> ld.lld: error: undefined symbol: devm_iio_dmaengine_buffer_setup_with_handle
+   >>> referenced by ad_sigma_delta.c:820 (drivers/iio/adc/ad_sigma_delta.c:820)
+   >>>               drivers/iio/adc/ad_sigma_delta.o:(devm_ad_sd_setup_buffer_and_trigger) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
