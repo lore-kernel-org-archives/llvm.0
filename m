@@ -1,258 +1,149 @@
-Received: from flow-b5-smtp.messagingengine.com (flow-b5-smtp.messagingengine.com [202.12.124.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E26A288514
-	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 09:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8163521D001;
+	Tue, 29 Jul 2025 10:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753781753; cv=none; b=SWjYoZBEfL7To6ceQp+4DTHjbMsQ6VbRZw7lUe44mZkUTY9hwuDa1M5SbLBANy3Qwb23Hcryycxtb8k5iIkulsfZonEaVva2rBZ6XWVblRltcJrIzBc2Gi54Ba+TZoAyQkUBR5WnmXqtMCk7JowV/hk4+IhPPwfRzMHvRQdY4lU=
+	t=1753785151; cv=none; b=f8z7VILWtuf2HBCe4caYVNKBJo+Y8r1/1EOsb9lKBJkoXIOPmcDzs1QuOTOfHvyjb0WHpnwXI8KF247YWTq61NAFePi8aYa4t2EwAKzBHmYKo8C0bsvN8Kd2HY4JU+PlL5O2DXaddE+VIDGYzD2lhteQAlgh+OjFiCY172jFYwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753781753; c=relaxed/simple;
-	bh=g+vpis/SpU05sbo8Vmp+65jPjCMeiygq63OVHIYclpc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=lJXESmaHDeCVpTFr7eHRw4j4Puf2Uk6UYIl6gbmxnQ89CUdd12x+dIVs1P5KfjJ29ragOw2jA/cP5mOeG7B+4BTeushqiXv+EeIGDK8pxyZsTwEO9nZqHNS/774Chg9H6yGSxAzIkBTSEYyDB2zjs4vjWhJDWaq1XHNHECdCx2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=T0M0CDw9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=buJJFSqR; arc=none smtp.client-ip=202.12.124.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1753785151; c=relaxed/simple;
+	bh=Egd7MCY7LVDLj3MpL4PWCOaHU+rY1sVQYcW0almTjaI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L3AJkoHeuEYcWsAWumKmpPcQFfDbmQVXefw4s95Uqds8up+CAPrJuskyy4HscVqwzyHamBqmWzkydtxIGoz/AAfp17UazqJC/Yafowf6tvLVewPjVeIZKcZrIYfankwRWjnZVAGAphs7WhP4IceyOS5TuFTJ2V3VkoW7LQ3s4tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTR3bFKh; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="T0M0CDw9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="buJJFSqR"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 83C331302001;
-	Tue, 29 Jul 2025 05:35:49 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Tue, 29 Jul 2025 05:35:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1753781749;
-	 x=1753788949; bh=//ORI/NIeaAxh1YrBcckAswwPCVYsSmGgDQbyUkZAq8=; b=
-	T0M0CDw90VbSLjna7vCcfe6mTMKCQ5endMYTmbm5F+kZuNuH4nc4BQuqm9/kFxYO
-	cQELYjIMlvNKw4lJ6TCvYDOi6/GwbiFcq8V1FL9vON4SMrAYZBHEMyr3TapvJ32Q
-	EuCcZwakLVvoMKIuhtNhw9MpoU1pIRLsrJBuKfw0mFvSH27q/GYmQZrzLEpJzswO
-	GdKXjvNgbHsWZp/zE+Lg+mEXxE3fEhCRBZiE76eszktahyeCSVZQu6/kPCC3i4ZU
-	uXu4AJQyuOJ4LmQeRHhGFlF5/SpiTMdgAiOzotcaAGdLwfh/H5w+q56btZTRpbJ7
-	8OFkhBqJ4bK5fdS1U8Lbrg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1753781749; x=
-	1753788949; bh=//ORI/NIeaAxh1YrBcckAswwPCVYsSmGgDQbyUkZAq8=; b=b
-	uJJFSqRDP45vHQljpA7Vz5hxUd4Ye4pvXCFm5P+xUL3+GeSv2Jf9TQHBok2h5/y2
-	8/PZ9GxYgAgtcQpNwox5EnnRktB7wG3sB0/j0KvR/u0lZ+CnNXcE0cmlrZO+y5ZV
-	9yem6aXNjbvR7nkneYRaElOeon59Ocxqje2qLUNlkME5Sa7zPk4kjPv9pZqHNKNh
-	lJV3swLKBE9qqltK0HfW4aTL83MPWE1v/JKK8VeT/xPzY6Nnm7iNFa/W7BubAO9J
-	3ffb5NBK06Z9dokUuQl2fLD6FS2cFL30C4YYZiw2Iduv5cvgWcUOa8OL1iybrgXJ
-	mUVNSzzn8C2I/WoIb3d+g==
-X-ME-Sender: <xms:85WIaMyhieSSZlSTT0yHTn72mdFb2rWSE8kDBFOTHT75_XQsqr_aHQ>
-    <xme:85WIaARI_U36niK6nz84PWzTnfAtsvJXL8KAZzHI9PFLHL4DmUN20-ne2_bXTcjrC
-    kpOt2tuPjxukqMBaus>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelgeejudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeftddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepuggrvhgvrdhhrghnshgvnheslhhinhhugidrihhnthgvlhdrtghomh
-    dprhgtphhtthhopehilhhpohdrjhgrrhhvihhnvghnsehlihhnuhigrdhinhhtvghlrdgt
-    ohhmpdhrtghpthhtohepkhhirhhilhhlrdhshhhuthgvmhhovheslhhinhhugidrihhnth
-    gvlhdrtghomhdprhgtphhtthhopehkvgigvggtsehlihhsthhsrdhinhhfrhgruggvrggu
-    rdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrd
-    hinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhn
-    uhigrdguvghvpdhrtghpthhtohepihgsmhdqrggtphhiqdguvghvvghlsehlihhsthhsrd
-    hsohhurhgtvghfohhrghgvrdhnvghtpdhrtghpthhtohepmhgrohgsihgsoheslhhoohhn
-    ghhsohhnrdgtnhdprhgtphhtthhopehjmhhorhhrihhssehnrghmvghirdhorhhg
-X-ME-Proxy: <xmx:85WIaPnIcgaIATKBhxVWwK2-m2EfS8PuHbx7ehTzbZYYwEyhpGDr_A>
-    <xmx:85WIaBEA4xy-CXl_decDoAPBk3bbcRqPT4EvT8P_Ytm06SHygu9mPg>
-    <xmx:85WIaCzO8e92MmMJKlNqjd5utHh39rP5DKbEOnMvLMHZjHXDsuvHGQ>
-    <xmx:85WIaKabnqwzN2tmkaM4lt9r0XopNiElVkycoMHYr9aBhvYdocxU-w>
-    <xmx:9ZWIaNYEQ0icn8P3P-aCu5BQdrX6XDYXkrqNxknDiXSDJWuFBQyFgcIe>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 9F298700065; Tue, 29 Jul 2025 05:35:47 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTR3bFKh"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ae0bc7aa21bso1097190666b.2;
+        Tue, 29 Jul 2025 03:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753785148; x=1754389948; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KUlNfqlQv51czIMEh6zHw/PUQr/dXVTYzNTmvEdWeJQ=;
+        b=NTR3bFKhthSM8PeAaXsXcAgj4k/r0AY3YqhGyZW1nIps8nbkjOZJ7rIEteX/1AiFb6
+         6lJprCrigpOo4MohKA/Q32GNlDM6jQ9yNpLN9uNfdbouP/XPpSmtnYTNbaa8O3MUjz+1
+         zvuRpZA+brhOze8MLc/u7dDpfVBS3GY5ogfr/DlIO9SgjPAmBnxJiGCIGSB7Cia75K3W
+         iWquJpaavztWHNUdjRf1Y7nF6R5rqtpwKNbhmJqL9Skr8i9EJz3OhX1LfTVdbNyI0Yw5
+         KSvJqLZchtwZtFhceB0CJxbEsJtylcm/aiRRP1eTcEyXn9OVPppENJkcjsNjJnwveE2K
+         sNDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753785148; x=1754389948;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KUlNfqlQv51czIMEh6zHw/PUQr/dXVTYzNTmvEdWeJQ=;
+        b=ALEzIFIBvuoN4BDTC4044S8gx82DLhPP/EFIHPnwGeOUoX4z9p6dhpqLTWRYY0LqfU
+         3QssZURlfQH+BAjpA+0Dgt4RwQ8EA+0vPREl4Ff7YLGEDCYO5mnFRFhBnp7ouZ0mEEKt
+         kbbw0EIwCQ8M7P6W5ICS8vqqWMDYRMruErKAU3iUVw83OrEH3mKnCPM7g46/u9aXde0j
+         maDnAXxACsEsPuWJ83hkfixGMGZvolKzKWYOIARlmtXvYqD+IG/q6DZXafAfCBsUck2T
+         XOtsEBWglxuvxkd8Jc5/gRW8Bqjss8Qv9mWlw9+FLPwQi9wqNy0ncMSKBrOjuHdL12OE
+         HNmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUW8U+nBRmkp5M+LRcnetDXf+KcrwCRa6oJSlXAbfjihtf2SkYorZMaAFnpld2zHKgXMYRs@lists.linux.dev, AJvYcCUx66o7goaxgGnUl3mDlYpUprTRx1NBXR/czruCTEzs74C6LIcaJ9HGx/T3A36L+CH1h2l9LcOHS7WRYS3VVA==@lists.linux.dev
+X-Gm-Message-State: AOJu0YwZ1Fn2gSDcpIlTJgicGRao0lcUQXZn1Eypk0XWBx4zH/i9+ViR
+	TCGmFQK3sX+hXx8mhv5mBz6C/zEB2waqhDJ2EYkElvabZh1lUJIZZx5+TR79/dyosCuN5404iHE
+	sPQEE7NvErO2vf8rx94PAjdfFX8t/oOs=
+X-Gm-Gg: ASbGncvmm1edeZhuf9TUm9BUaj2nfs29Mu6KtkEsmxJ9VsilxUX+x2spsU0Gy5QesVf
+	DPbRH5Hf1oEHlNkLrdMtZkLqD85SZwmqKnS2/KaMRUa6UF9M4yrHZKTOVJqj/pPVrZiQkTVZlWl
+	f7rbcaLvit+RiarezAVsKS7rFR5MQKnmShN2bbSBjzvE0DtdKG9Cpj9X1uecHuWuarwPpV03QBI
+	jkCA8JOLyUn+Wo0wcBzePd386VIwWw8dBZh4FFvIg==
+X-Google-Smtp-Source: AGHT+IFxXAHjt8+mCk+a7x/xU7iaEiDEIirgDpLkHyDsxKg57EPvq9+iw9tF06YJDhuR9Pkw7TMPw9RYYKU1vYDLXKk=
+X-Received: by 2002:a17:907:c1f:b0:af2:b9b5:1c06 with SMTP id
+ a640c23a62f3a-af61c8aa24fmr1664968966b.14.1753785147471; Tue, 29 Jul 2025
+ 03:32:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: Tf1c1d2456aa020de
-Date: Tue, 29 Jul 2025 11:34:57 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kees Cook" <kees@kernel.org>
-Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Paolo Bonzini" <pbonzini@redhat.com>,
- "Mike Rapoport" <rppt@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Vitaly Kuznetsov" <vkuznets@redhat.com>,
- "Henrique de Moraes Holschuh" <hmh@hmh.eng.br>,
- "Hans de Goede" <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, "Len Brown" <lenb@kernel.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Michal Wilczynski" <michal.wilczynski@intel.com>,
- "Juergen Gross" <jgross@suse.com>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- "Roger Pau Monne" <roger.pau@citrix.com>,
- "David Woodhouse" <dwmw@amazon.co.uk>,
- "Usama Arif" <usama.arif@bytedance.com>,
- "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
- "Thomas Huth" <thuth@redhat.com>, "Brian Gerst" <brgerst@gmail.com>,
- kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
- platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
- linux-mm@kvack.org, "Will Deacon" <will@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
- "Gavin Shan" <gshan@redhat.com>,
- "Russell King" <rmk+kernel@armlinux.org.uk>,
- "James Morse" <james.morse@arm.com>,
- "Oza Pawandeep" <quic_poza@quicinc.com>,
- "Anshuman Khandual" <anshuman.khandual@arm.com>,
- "Hans de Goede" <hansg@kernel.org>,
- "Kirill A. Shutemov" <kas@kernel.org>, "Marco Elver" <elver@google.com>,
- "Andrey Konovalov" <andreyknvl@gmail.com>,
- "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nicolas.schier@linux.dev>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Andy Lutomirski" <luto@kernel.org>, "Baoquan He" <bhe@redhat.com>,
- "Alexander Graf" <graf@amazon.com>,
- "Changyuan Lyu" <changyuanl@google.com>,
- "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>,
- "Jan Beulich" <jbeulich@suse.com>, "Boqun Feng" <boqun.feng@gmail.com>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- "Bibo Mao" <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
- linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
- kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <f8bcf5ce-8b8b-4555-a210-14e1974eac92@app.fastmail.com>
-In-Reply-To: <20250724055029.3623499-2-kees@kernel.org>
-References: <20250724054419.it.405-kees@kernel.org>
- <20250724055029.3623499-2-kees@kernel.org>
-Subject: Re: [PATCH v4 2/4] x86: Handle KCOV __init vs inline mismatches
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4@linaro.org>
+ <202507261937.Txq9shpv-lkp@intel.com> <CAHp75VcrL56_8uKNrmLj9sk+t7qZfKNi6-W-yAKNZ+mSCXU8zw@mail.gmail.com>
+ <CAMRc=MdfMEAjgkTNENZejzRPN4svCiy4VZS9Y5HG7Ht5XwqUgA@mail.gmail.com>
+In-Reply-To: <CAMRc=MdfMEAjgkTNENZejzRPN4svCiy4VZS9Y5HG7Ht5XwqUgA@mail.gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 29 Jul 2025 12:31:51 +0200
+X-Gm-Features: Ac12FXyzhjLDpJil0UBomtlZ5A8XPq4-tiZzez2Wp0eBW04tx8ikqHk1kggUetA
+Message-ID: <CAHp75Vd6Vwk8pLarDk+hDQ2S_ufZ6wNw9xffMUJfQ5M8bPJubw@mail.gmail.com>
+Subject: Re: [PATCH v3 10/15] pinctrl: make struct pinfunction a pointer in
+ struct function_desc
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: kernel test robot <lkp@intel.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
+	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025, at 07:50, Kees Cook wrote:
-> GCC appears to have kind of fragile inlining heuristics, in the
-> sense that it can change whether or not it inlines something based on
-> optimizations. It looks like the kcov instrumentation being added (or in
-> this case, removed) from a function changes the optimization results,
-> and some functions marked "inline" are _not_ inlined. In that case,
-> we end up with __init code calling a function not marked __init, and we
-> get the build warnings I'm trying to eliminate in the coming patch that
-> adds __no_sanitize_coverage to __init functions:
+On Tue, Jul 29, 2025 at 11:27=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+> On Sat, Jul 26, 2025 at 9:29=E2=80=AFPM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Sat, Jul 26, 2025 at 1:31=E2=80=AFPM kernel test robot <lkp@intel.co=
+m> wrote:
+
+...
+
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> drivers/pinctrl/pinmux.c:917:7: warning: cast from 'void (*)(const=
+ void *)' to 'void (*)(void *)' converts to incompatible function type [-Wc=
+ast-function-type-strict]
+> > >      917 |                                          (void (*)(void *)=
+)kfree_const,
+> > >          |                                          ^~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~
+> > >    include/linux/device/devres.h:166:34: note: expanded from macro 'd=
+evm_add_action_or_reset'
+> > >      166 |         __devm_add_action_or_reset(dev, action, data, #act=
+ion)
+> > >          |                                         ^~~~~~
+> > >    1 warning generated.
+> >
+> > Good catch, LKP!
 >
-> WARNING: modpost: vmlinux: section mismatch in reference: xbc_exit+0x8 
-> (section: .text.unlikely) -> _xbc_exit (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: 
-> real_mode_size_needed+0x15 (section: .text.unlikely) -> 
-> real_mode_blob_end (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: 
-> __set_percpu_decrypted+0x16 (section: .text.unlikely) -> 
-> early_set_memory_decrypted (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: 
-> memblock_alloc_from+0x26 (section: .text.unlikely) -> 
-> memblock_alloc_try_nid (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: 
-> acpi_arch_set_root_pointer+0xc (section: .text.unlikely) -> x86_init 
-> (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: 
-> acpi_arch_get_root_pointer+0x8 (section: .text.unlikely) -> x86_init 
-> (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: 
-> efi_config_table_is_usable+0x16 (section: .text.unlikely) -> 
-> xen_efi_config_table_is_usable (section: .init.text)
+> Ah, strict function type cast...
+
+...
+
+> > >    910          /*
+> > >    911           * FIXME: It's generally a bad idea to use devres in =
+subsystem core
+> > >    912           * code - managed interfaces are aimed at drivers - b=
+ut pinctrl already
+> > >    913           * uses it all over the place so it's a larger piece =
+of technical debt
+> > >    914           * to fix.
+> > >    915           */
+> >
+> > Indeed, this has to be addressed first, and IIRC I also got something
+> > like this in the past.
 >
-> This problem is somewhat fragile (though using either __always_inline
-> or __init will deterministically solve it), but we've tripped over
-> this before with GCC and the solution has usually been to just use
-> __always_inline and move on.
->
-> For x86 this means forcing several functions to be inline with
-> __always_inline.
->
-> Signed-off-by: Kees Cook <kees@kernel.org>
+> I mean, it doesn't have to be addressed first really, it's another big
+> chunk of technical debt but we can live with it for now and address it
+> in parallel.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+I don't know how you can solve this issue without addressing that
+first. I do not consider "fixing" by casting out const specifier (the
+whole point of which is to be not mangled).
 
-In my randconfig tests, I got these ones as well:
 
-WARNING: modpost: vmlinux: section mismatch in reference: early_page_ext_enabled+0x14 (section: .text.unlikely) -> early_
-page_ext (section: .init.data)
-x86_64-linux-ld: lm75.c:(.text+0xd25): undefined reference to `i3c_device_do_priv_xfers'
-
-And one more with a private patch of mine.
-
-These are the fixups that make it build for arm/arm64/x86
-randconfigs for me, so you could fold them as well in
-as well. I have already sent the i3c patch for upstream
-but not the page_ext.h patch.
-
---- a/include/linux/page_ext.h
-+++ b/include/linux/page_ext.h
-@@ -57,7 +57,7 @@ extern bool early_page_ext;
- extern unsigned long page_ext_size;
- extern void pgdat_page_ext_init(struct pglist_data *pgdat);
- 
--static inline bool early_page_ext_enabled(void)
-+static __always_inline bool early_page_ext_enabled(void)
- {
-        return early_page_ext;
- }
-@@ -189,7 +189,7 @@ static inline struct page_ext *page_ext_iter_get(const struct page_ext_iter *ite
- #else /* !CONFIG_PAGE_EXTENSION */
- struct page_ext;
- 
--static inline bool early_page_ext_enabled(void)
-+static __always_inline bool early_page_ext_enabled(void)
- {
-        return false;
- }
---- a/include/linux/i3c/device.h
-+++ b/include/linux/i3c/device.h
-@@ -245,7 +245,7 @@ void i3c_driver_unregister(struct i3c_driver *drv);
-  *
-  * Return: 0 if both registrations succeeds, a negative error code otherwise.
-  */
--static inline int i3c_i2c_driver_register(struct i3c_driver *i3cdrv,
-+static __always_inline int i3c_i2c_driver_register(struct i3c_driver *i3cdrv,
-                                          struct i2c_driver *i2cdrv)
- {
-        int ret;
-@@ -270,7 +270,7 @@ static inline int i3c_i2c_driver_register(struct i3c_driver *i3cdrv,
-  * Note that when CONFIG_I3C is not enabled, this function only unregisters the
-  * @i2cdrv.
-  */
--static inline void i3c_i2c_driver_unregister(struct i3c_driver *i3cdrv,
-+static __always_inline void i3c_i2c_driver_unregister(struct i3c_driver *i3cdrv,
-                                             struct i2c_driver *i2cdrv)
- {
-        if (IS_ENABLED(CONFIG_I3C))
-
-As I understand, the underlying problem is less gcc inlining
-being fragile, but more that gcc does not inline functions
-when they have different __no_sanitize_coverage attributes.
-
-      Arnd
+--=20
+With Best Regards,
+Andy Shevchenko
