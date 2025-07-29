@@ -1,106 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947E9270EA1;
-	Tue, 29 Jul 2025 09:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9435A285C86
+	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 09:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753780084; cv=none; b=lIESNbALcINStzr/qCsyGFjGIx9lCF36isot3s3DbqoMag2HszE8OO585FX6P/xceuGLAeiVxtu2SEMpbMVHkMMgXZg59Pg694Xg1/tO5tJaO9C5n/46Pw3OY5RXXnf6iL7AvAtOtR3YcTawNztuXLlIyay8HUWC4wLVyZDHd9Q=
+	t=1753781278; cv=none; b=HRpGvxWMae27H2mNFh9OvdTiGC0zQmAjIITZEANRaERhuDHAYO258xos//lkWMyrk3XjNBjXo3dMhaXmMFzHCjL+b+k2mmgRl9T9XNrmq42uf0cSHXfPNuV/96KmjVLbDxY5yimG6wqG3Zv4ogqRgp5dym9Ywm13A1ShmMh0V1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753780084; c=relaxed/simple;
-	bh=u5UpzlLxjeFXPtPFg0oC+Cw7TMJczCQeJysGpqVrRZ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AHtQz2t8f7Rh7D0aWmbNDh7JzwbAt/JaH3NEi/Jl9254z3NueYveeDejeiBwl8m7aZDkHAxX9T0zgcsrA6USa9MvrD9BgShhlV+agw9/oLbiymIcVdk+mRpoV+3wJitKEUlIsIX/w9XxF82/8Ryo2EgTyluDRKPJMwcd3bzTQ7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEu1qoJZ; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753781278; c=relaxed/simple;
+	bh=UVxbONYMenZ2G62xj1Ajze9L88dIaFIhF2FAPvq5IM8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oki7dtA/QNT5DMwk8iBOObRYa/vLaGz9H8jtgzR9GZIaENVgXAKwJ/sf07/Vy+4Z/ovcE14x9jqVLzpADbBy4Q0H109TfOpxePjMl+rRInirU3r8G2SFoDNavYFadKiSL0HSEfcMS3p3zNzjWEIJGCp3URQFmFF9ThkaNy6kh4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=SlyZNI9v; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEu1qoJZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753780082; x=1785316082;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u5UpzlLxjeFXPtPFg0oC+Cw7TMJczCQeJysGpqVrRZ0=;
-  b=JEu1qoJZojJkYKR8CJtzAYw0qOtPV24t5sFc9Wz3Fc/GOkGJdwSXvYP2
-   j07WWp6398J48UAItDCYuWlQ+2dlsfuAmsPqK/jnoVWF4WXlZb6qdOxHK
-   6+3EMDQ5oC1QsFbMrX5uuaj/c6S8V4teFUMQJG635Sgr+OrLseGI7g/6n
-   LS6h7o26bxViYJ+YTwK1fdsdwcSwJWpOO52X+48JKe2B21AZV1J1ZNDzt
-   GMUjgVdhb5Vfnx2gQLEsLTzoh1RF9pNfRNmk5QkeltBDDcSkCp7Edd08y
-   UpYj7fqqWFPsB6y+rR9a4KlHDMYnTVQEoHTLk4Ng0CWczqjwhdDDqFeSp
-   A==;
-X-CSE-ConnectionGUID: Dw5ZPUiyT/Om1WAxY0VGew==
-X-CSE-MsgGUID: +mktTs0tRsig0kui840Kqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="55980635"
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="55980635"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 02:08:01 -0700
-X-CSE-ConnectionGUID: UaZkfoxbTzCUs4LYJLaVgw==
-X-CSE-MsgGUID: fbz7WF3LRPeOZWk5gKRMuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="162360902"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 29 Jul 2025 02:07:59 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uggJP-00018v-1v;
-	Tue, 29 Jul 2025 09:07:55 +0000
-Date: Tue, 29 Jul 2025 17:07:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Anderson <sean.anderson@linux.dev>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Michal Simek <monstr@monstr.eu>,
-	linux-arm-kernel@lists.infradead.org,
-	Leon Romanovsky <leon@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>
-Subject: Re: [PATCH net-next v3 3/7] net: axienet: Use MDIO bus device in
- prints
-Message-ID: <202507291640.Zr1m8oli-lkp@intel.com>
-References: <20250728221823.11968-4-sean.anderson@linux.dev>
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="SlyZNI9v"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5551a770828so5494270e87.1
+        for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 02:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753781275; x=1754386075; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QuYSK4gM34dvKj46U2AHyFVlRRjXrZ8f8iJud63I7rk=;
+        b=SlyZNI9vH4T5zKnXU+4wuzr1U579ZfhFikxCyXwXh0krPRR6UADCcWMTKWKbO1XX/f
+         9M6CqLLxbpY0FB+oHA+DU0FTGJwf4n6cunXn6E6x7wUMzINAFxYD8G5DqXhJCmuKeHUE
+         YZch5laxk6ZbhXypE9ewR5zeRZGNwLv9D1Lpz3x+aoiwwjsRf8JJoW/EJQkiS1P9dKmM
+         HveG5AvD2tR16mZeBWBVg9gLgvwQFgFX3nqXamjVrxmhxOraPS8EjqwxHF7ld3MQKuKj
+         RFcHzdrRKWsoRby+PfbSOCOOkXeyDl1yJQABpEsSQll141oq+YU8qzsX/aSJCjM6G/iG
+         cFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753781275; x=1754386075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QuYSK4gM34dvKj46U2AHyFVlRRjXrZ8f8iJud63I7rk=;
+        b=CtyFQRb7XYt6c5nfv60vD+wZQIxY8QdAXD1tZUlKCB5pJRksoK7+xohaJ+24hGMoJi
+         x5r/6dVUaRUUh20M5yHVBpvp/zpOHTdbUvY8O7ZfoQHo7uePr8FhBzbKNDKzKATCIUe3
+         LkUNF8lj4UwxTih0JBshd5nZAn/2yD04HWZaiXW2QUFBVvXQoBNURX2uCN0rdxlEi+DO
+         dr97St4ABffjIe5RvuismZaAtqnMf3y4sKiej97s8WyuzQWWukUOAZyuSi4T8sevXFVg
+         I6gwEXnbJF+oxO2moAP4zJLt5OwOuCX8lxicbME1Nv/HgiS5PgI78jSMqzZrGeHrBSpb
+         5vuw==
+X-Forwarded-Encrypted: i=1; AJvYcCVbRhnaP3Wvja6qRnVWawu1Ohq/kZxL++wmUkFUcD3WpooolbgGkE5zPnvz8C1fWfc7RijD@lists.linux.dev
+X-Gm-Message-State: AOJu0YxEFCVKPV7WSKc5KogkwVlpQsBf2Bqur4n75J+BEnHJW+iSx/jQ
+	tgVuV2+MvjRlqwrR6QG9VO4xlq8uocc9mUq2Iw1XR7REwEIT1iF7kvlzHQghtEoDZjCyZ30xGLY
+	3BhjboC3aus7AJrmoV5aw/t0v4tgzV5X62gRH5ywYzQ==
+X-Gm-Gg: ASbGnctlWrJteJeM4cQZMVPaMjZXpkGoT87nhNO2NQwl/WAaWEwNAj5V8YqZDw4wHLe
+	Qt4n+BJGW3xyp+TAQV97isXOW1n1+O7jVYBAbaNGU3v51DwOyF5XlvcuhyHQUXQYYfS/BjC7eCj
+	AWrS3nhykpx7vImW/jqFXYsESF3gYk4eHGY3w3veDCv3+J1H6EwdiSb06QI/vYPQ21wSWxVwLAx
+	eGTWo6Vgn8tc32K2+DSdncdJcWNDH9eEAph5to=
+X-Google-Smtp-Source: AGHT+IH1xjV/IusjYm7wD8jJwivk100eFvhpmAtG34em5DQvAFyq0WxlVADr0UXhPPNReVxqcy9+hVN8vSu0g22pdSc=
+X-Received: by 2002:a05:6512:1245:b0:55a:26ae:56e1 with SMTP id
+ 2adb3069b0e04-55b5f480918mr3865559e87.27.1753781274688; Tue, 29 Jul 2025
+ 02:27:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250728221823.11968-4-sean.anderson@linux.dev>
+References: <20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4@linaro.org>
+ <202507261937.Txq9shpv-lkp@intel.com> <CAHp75VcrL56_8uKNrmLj9sk+t7qZfKNi6-W-yAKNZ+mSCXU8zw@mail.gmail.com>
+In-Reply-To: <CAHp75VcrL56_8uKNrmLj9sk+t7qZfKNi6-W-yAKNZ+mSCXU8zw@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 29 Jul 2025 11:27:43 +0200
+X-Gm-Features: Ac12FXzctTCjvP8s5v8QO4Q26z9E9jC3m2QKR1Qn8JCLGwl_tkRpE49-qECZAkg
+Message-ID: <CAMRc=MdfMEAjgkTNENZejzRPN4svCiy4VZS9Y5HG7Ht5XwqUgA@mail.gmail.com>
+Subject: Re: [PATCH v3 10/15] pinctrl: make struct pinfunction a pointer in
+ struct function_desc
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
+	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sean,
+On Sat, Jul 26, 2025 at 9:29=E2=80=AFPM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Sat, Jul 26, 2025 at 1:31=E2=80=AFPM kernel test robot <lkp@intel.com>=
+ wrote:
+> >
+> > Hi Bartosz,
+> >
+> > kernel test robot noticed the following build warnings:
+> >
+>
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> drivers/pinctrl/pinmux.c:917:7: warning: cast from 'void (*)(const v=
+oid *)' to 'void (*)(void *)' converts to incompatible function type [-Wcas=
+t-function-type-strict]
+> >      917 |                                          (void (*)(void *))k=
+free_const,
+> >          |                                          ^~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~
+> >    include/linux/device/devres.h:166:34: note: expanded from macro 'dev=
+m_add_action_or_reset'
+> >      166 |         __devm_add_action_or_reset(dev, action, data, #actio=
+n)
+> >          |                                         ^~~~~~
+> >    1 warning generated.
+>
+> Good catch, LKP!
+>
 
-kernel test robot noticed the following build warnings:
+Ah, strict function type cast...
 
-[auto build test WARNING on net-next/main]
+> ...
+>
+> >    910          /*
+> >    911           * FIXME: It's generally a bad idea to use devres in su=
+bsystem core
+> >    912           * code - managed interfaces are aimed at drivers - but=
+ pinctrl already
+> >    913           * uses it all over the place so it's a larger piece of=
+ technical debt
+> >    914           * to fix.
+> >    915           */
+>
+> Indeed, this has to be addressed first, and IIRC I also got something
+> like this in the past.
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-axienet-Fix-resource-release-ordering/20250729-062108
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250728221823.11968-4-sean.anderson%40linux.dev
-patch subject: [PATCH net-next v3 3/7] net: axienet: Use MDIO bus device in prints
-config: arm-randconfig-002-20250729 (https://download.01.org/0day-ci/archive/20250729/202507291640.Zr1m8oli-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507291640.Zr1m8oli-lkp@intel.com/reproduce)
+I mean, it doesn't have to be addressed first really, it's another big
+chunk of technical debt but we can live with it for now and address it
+in parallel.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507291640.Zr1m8oli-lkp@intel.com/
+Bart
 
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/net/ethernet/xilinx/xilinx_axienet_mdio.c:172 function parameter 'bus' not described in 'axienet_mdio_enable'
->> Warning: drivers/net/ethernet/xilinx/xilinx_axienet_mdio.c:172 Excess function parameter 'lp' description in 'axienet_mdio_enable'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >    916          error =3D devm_add_action_or_reset(pctldev->dev,
+> >  > 917                                           (void (*)(void *))kfre=
+e_const,
+> >    918                                           (void *)function->func=
+);
+> >    919          if (error)
+> >    920                  return error;
+>
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
