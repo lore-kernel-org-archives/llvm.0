@@ -1,101 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EE9230BCE;
-	Tue, 29 Jul 2025 08:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947E9270EA1;
+	Tue, 29 Jul 2025 09:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753777721; cv=none; b=V/oXYeX+UODDBjg0hWGXk4WbyBx0QO8I560iQZbTV+YJNSidaMEhnnGbQZ3nR6ks6ebRaqq1oHwRV1h8FxwiXdKi7qWgJhxOGiw513BIQ+uifXK63WY/rsj4VRDw42boqdLvpRXy461GssVtrFnqiCZ2o/RkFm6xS1FTre5YBg8=
+	t=1753780084; cv=none; b=lIESNbALcINStzr/qCsyGFjGIx9lCF36isot3s3DbqoMag2HszE8OO585FX6P/xceuGLAeiVxtu2SEMpbMVHkMMgXZg59Pg694Xg1/tO5tJaO9C5n/46Pw3OY5RXXnf6iL7AvAtOtR3YcTawNztuXLlIyay8HUWC4wLVyZDHd9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753777721; c=relaxed/simple;
-	bh=P+RKJolWrlScvE03/wuLDUcQEOrpyiH5p1dHdVtXVqk=;
+	s=arc-20240116; t=1753780084; c=relaxed/simple;
+	bh=u5UpzlLxjeFXPtPFg0oC+Cw7TMJczCQeJysGpqVrRZ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fnH78eB4TNnOJDUOwHBJvj/AS9LeB0mL9WzSW+3Mjcr4TiSFPmrLiifipz7mpgsGkkwmCOM5Hdl9ZYS7h7dxluPVqcZubrZ8OyjC4F8AAvBnL6VIlPdD/3Cwyow5wZK3H1aucGqonsUSjv4JOTKBF9O9ETpoGjgkkzMGpCnnObQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKsDX+KR; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=AHtQz2t8f7Rh7D0aWmbNDh7JzwbAt/JaH3NEi/Jl9254z3NueYveeDejeiBwl8m7aZDkHAxX9T0zgcsrA6USa9MvrD9BgShhlV+agw9/oLbiymIcVdk+mRpoV+3wJitKEUlIsIX/w9XxF82/8Ryo2EgTyluDRKPJMwcd3bzTQ7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEu1qoJZ; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKsDX+KR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D23CC4CEEF;
-	Tue, 29 Jul 2025 08:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753777721;
-	bh=P+RKJolWrlScvE03/wuLDUcQEOrpyiH5p1dHdVtXVqk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XKsDX+KRLzAFuf1kLKdAmDj9dggFsRzjLIQ05RDsi+xPOxdHLALkhNkurvUosgFfb
-	 ftJlhmN/pjoAT4/au8qTUftIBkqDaJhrJ9SmRZi3Ve7JVy7Eg31DCCYSekcyfaaJNQ
-	 JbMb4DIBM9PPiwPI8OZcRcytRu3/nqoGHVDzvP77YimImLNlQUbkZujH5O0JN2T+nM
-	 BtsmRo4XDjlCw0KnWSDM6rk+MZk6QP0uSqf7QW3w7lmJVVGYAkgz4EWZXggXy7tATT
-	 HSfQX1ig9jgw3cwDIYjp+vOlzwygxMw47ojEswZF9ZVaUkapQqAqU4ht2sNRBTvD+l
-	 uIGHhOPpyE+nA==
-Date: Tue, 29 Jul 2025 11:28:14 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Michal Wilczynski <michal.wilczynski@intel.com>,
-	Juergen Gross <jgross@suse.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Roger Pau Monne <roger.pau@citrix.com>,
-	David Woodhouse <dwmw@amazon.co.uk>,
-	Usama Arif <usama.arif@bytedance.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
-	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
-	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-mm@kvack.org, Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Gavin Shan <gshan@redhat.com>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	James Morse <james.morse@arm.com>,
-	Oza Pawandeep <quic_poza@quicinc.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Hans de Goede <hansg@kernel.org>,
-	"Kirill A. Shutemov" <kas@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
-	Alexander Graf <graf@amazon.com>,
-	Changyuan Lyu <changyuanl@google.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jan Beulich <jbeulich@suse.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Bibo Mao <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
-	linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
-	kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/4] x86: Handle KCOV __init vs inline mismatches
-Message-ID: <aIiGHmw8IJb9vsM5@kernel.org>
-References: <20250724054419.it.405-kees@kernel.org>
- <20250724055029.3623499-2-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEu1qoJZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753780082; x=1785316082;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u5UpzlLxjeFXPtPFg0oC+Cw7TMJczCQeJysGpqVrRZ0=;
+  b=JEu1qoJZojJkYKR8CJtzAYw0qOtPV24t5sFc9Wz3Fc/GOkGJdwSXvYP2
+   j07WWp6398J48UAItDCYuWlQ+2dlsfuAmsPqK/jnoVWF4WXlZb6qdOxHK
+   6+3EMDQ5oC1QsFbMrX5uuaj/c6S8V4teFUMQJG635Sgr+OrLseGI7g/6n
+   LS6h7o26bxViYJ+YTwK1fdsdwcSwJWpOO52X+48JKe2B21AZV1J1ZNDzt
+   GMUjgVdhb5Vfnx2gQLEsLTzoh1RF9pNfRNmk5QkeltBDDcSkCp7Edd08y
+   UpYj7fqqWFPsB6y+rR9a4KlHDMYnTVQEoHTLk4Ng0CWczqjwhdDDqFeSp
+   A==;
+X-CSE-ConnectionGUID: Dw5ZPUiyT/Om1WAxY0VGew==
+X-CSE-MsgGUID: +mktTs0tRsig0kui840Kqg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="55980635"
+X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
+   d="scan'208";a="55980635"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 02:08:01 -0700
+X-CSE-ConnectionGUID: UaZkfoxbTzCUs4LYJLaVgw==
+X-CSE-MsgGUID: fbz7WF3LRPeOZWk5gKRMuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
+   d="scan'208";a="162360902"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 29 Jul 2025 02:07:59 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uggJP-00018v-1v;
+	Tue, 29 Jul 2025 09:07:55 +0000
+Date: Tue, 29 Jul 2025 17:07:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Anderson <sean.anderson@linux.dev>,
+	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michal Simek <monstr@monstr.eu>,
+	linux-arm-kernel@lists.infradead.org,
+	Leon Romanovsky <leon@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>
+Subject: Re: [PATCH net-next v3 3/7] net: axienet: Use MDIO bus device in
+ prints
+Message-ID: <202507291640.Zr1m8oli-lkp@intel.com>
+References: <20250728221823.11968-4-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -104,40 +75,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250724055029.3623499-2-kees@kernel.org>
+In-Reply-To: <20250728221823.11968-4-sean.anderson@linux.dev>
 
-On Wed, Jul 23, 2025 at 10:50:26PM -0700, Kees Cook wrote:
-> GCC appears to have kind of fragile inlining heuristics, in the
-> sense that it can change whether or not it inlines something based on
-> optimizations. It looks like the kcov instrumentation being added (or in
-> this case, removed) from a function changes the optimization results,
-> and some functions marked "inline" are _not_ inlined. In that case,
-> we end up with __init code calling a function not marked __init, and we
-> get the build warnings I'm trying to eliminate in the coming patch that
-> adds __no_sanitize_coverage to __init functions:
-> 
-> WARNING: modpost: vmlinux: section mismatch in reference: xbc_exit+0x8 (section: .text.unlikely) -> _xbc_exit (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: real_mode_size_needed+0x15 (section: .text.unlikely) -> real_mode_blob_end (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: __set_percpu_decrypted+0x16 (section: .text.unlikely) -> early_set_memory_decrypted (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: memblock_alloc_from+0x26 (section: .text.unlikely) -> memblock_alloc_try_nid (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: acpi_arch_set_root_pointer+0xc (section: .text.unlikely) -> x86_init (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: acpi_arch_get_root_pointer+0x8 (section: .text.unlikely) -> x86_init (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: efi_config_table_is_usable+0x16 (section: .text.unlikely) -> xen_efi_config_table_is_usable (section: .init.text)
-> 
-> This problem is somewhat fragile (though using either __always_inline
-> or __init will deterministically solve it), but we've tripped over
-> this before with GCC and the solution has usually been to just use
-> __always_inline and move on.
-> 
-> For x86 this means forcing several functions to be inline with
-> __always_inline.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
+Hi Sean,
 
-For memblock bit:
+kernel test robot noticed the following build warnings:
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-axienet-Fix-resource-release-ordering/20250729-062108
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250728221823.11968-4-sean.anderson%40linux.dev
+patch subject: [PATCH net-next v3 3/7] net: axienet: Use MDIO bus device in prints
+config: arm-randconfig-002-20250729 (https://download.01.org/0day-ci/archive/20250729/202507291640.Zr1m8oli-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507291640.Zr1m8oli-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507291640.Zr1m8oli-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/net/ethernet/xilinx/xilinx_axienet_mdio.c:172 function parameter 'bus' not described in 'axienet_mdio_enable'
+>> Warning: drivers/net/ethernet/xilinx/xilinx_axienet_mdio.c:172 Excess function parameter 'lp' description in 'axienet_mdio_enable'
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
