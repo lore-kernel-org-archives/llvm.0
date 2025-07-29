@@ -1,137 +1,198 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA29225397
-	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 03:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9DD265CCF
+	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 07:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753761371; cv=none; b=HAYf5nDLXBEXleyY0f8cJ3oGNjtCTJBlg+7/wrMYaIG+Fi5dT7QkX6Qpgui6xEmzXG3b66mCWIthiIO4cavc1tKGK9NhHT3Da4WjVBLhCUolwtqhpqgebQr997HhdoHOZ1MII/YD0N6RbO+2CPd7bkY3/4L8p+tPp3PDmzpBTdY=
+	t=1753775215; cv=none; b=MeQfaThuJn7Mr94lqpY0Yzwrmy1DS9vLh4WtoCaKsDjuDkEAHZ35QzOFvtISXspGzZkpxZDixfVhAU4WLRXBVYLsqaaMsl4SBhouj6iJcooj07zS/iyd2jCM5UqDhx9nWL6bKQ89dLyyN/A7ks/7h5oxz+7kyNWBCVwttrB/rpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753761371; c=relaxed/simple;
-	bh=85nfbXH4q7adtdcxw9gzdiLUUggxa/SPdpP9fi8iwuA=;
+	s=arc-20240116; t=1753775215; c=relaxed/simple;
+	bh=Oww8ViXRQ636yvHdcqFWK/5H+wDq2ImqznhVbDNXEXo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rBa4uBU1tlzEPXnQTLzJ3Iv+yn8TU0affSD4U+IU9jvrJBoPPYtJRixxN3/fmqU/XvT1dVAXFGIyu2aoN2/oMDSooIw+Xh/8g3IiXcIle9JOaaERQIIzgzHEzDrWJBQrk8ob0IqC/kQT+QLMjVlTKdJ4ti2ceASXTjIs0xAitio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ULQlcpYP; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=RTlQCQAbv5u2qHTqAban6HMiPm+oEm2SdfXkevYLTuHyFWC1CcE0f7kvgqHV0g/LlR0b6vH89QkhZdm3sl7lOXuMIevjX7kSaJl27nsU8E514KPj7elsGtVT6qGoAwNhBRdACGZkQLdQoNRr4K7FKHALwYw+mCltbu+ybS/BQuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=e5XpYY8G; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ULQlcpYP"
-Message-ID: <ce0c8f01-3b95-44ff-a490-8a91510884c0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753761356;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/Gnkhd136gazu5+3YgFAjNkCNeFHWLrxJvrNzYEKASg=;
-	b=ULQlcpYPcWU0FIW1Bu87CwpBbX8jsi0EebrmuNeiwBWkgUnT2+I1nVs6kksVneeWKRaKee
-	TzemFeRRIaOlL61od1WtslRfiLSxS9/mY2lsAY8vDSyb5yc1+EdkP0tNmqdEq5OKVUeMqZ
-	XPUJ2ZovUfVQm3FjEzg/DHt5OsKQXYc=
-Date: Tue, 29 Jul 2025 11:55:44 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="e5XpYY8G"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ae9c2754a00so1096837966b.2
+        for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 00:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1753775211; x=1754380011; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+fS6oEzgF13BnkxuzsJYDS2RLzpOsZm7wAMzXRWyMbw=;
+        b=e5XpYY8G7Xy1A/kFHTbE2C4k5pbJFw74Api6LZ7oYtBCLG0Ehiah4NlpunI/JNnXuK
+         M4u0s3CWgH3tSZOc2WsaeZN9XQTMgwSbVU+yuBo1jWKPlWnqWQRz6JOVvD63/cqGLBIk
+         O5TSJbHyrm+ZV3IAHpc+n1PVTYDdURlOrfeA/+zGV+0WBDzvxtD1QBcuhbrhauZbOPup
+         SZkAVdB6D+RCnTN2MWd4N4VQzRmFAWNqE2l5kdm5UTzO1+EkLzCrK0kOv/IFfrgqOdLm
+         v05VQmnXUeNtP3VBSpXL7KLicP9LlwjnvqsUskhPTYnBeTufjbg/rmjaAWaDb/FSPeLG
+         fodQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753775211; x=1754380011;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+fS6oEzgF13BnkxuzsJYDS2RLzpOsZm7wAMzXRWyMbw=;
+        b=qKSNOBTUO9CcLWcNcBN+XEZVAd3e14PNRe4JXjcOWo0bu/34VkcspLnzYm5ux9RZTb
+         i9Wlr2Kw7H1s76GODlFYfCNJixvkMSHrW0Y27PQsNEMaajJvkRo1Q1DzDADDmKd/KMTO
+         o9ryi32fm73d/WamhjDaUPIVmYbwh02+OvWK08RI9EaXN5iF52yfchH8ajcIbNLbnQjt
+         EVDT/GNpOOxHixeqV5UPiaYKB3ENBZMQfjwBTgxIx01u9Ce2+kqew4M+nPr03uDq7OPr
+         qAcb+CfsTrM/YLsThLMnir+WQUmA5lzoUW00SzS3THe2mfdhZ/BS//OBYumvCw3ntqNp
+         Zlmw==
+X-Gm-Message-State: AOJu0YzFEP3FXpdZI/9IyctO1KgwKaThlxNJAmUebK67J2izpO0vP6WG
+	Ee7AeAGOA6lkK5XWpXad5nHhdvHwJNeL3mB9X+9GtmRvtEWN9+eSlsONXFNn8VOGZlvEJofVaCy
+	ZnWhM
+X-Gm-Gg: ASbGnct4Yab7zl6pNDKn3a2yE/wi8lAyWhn4ss4Hk/mZDnnkZT0btimLGDV5d7TJPy9
+	EtUod+3lcxgsweSdTtn0sWRP7vMKJ36DkQ6A0zOmRqkYDpBRZGHnkN4L0hkQuqAl/hQ7j9GhVGr
+	tA6CYbWvlW7v67W7BKAr+bF9x10e1hSo+Si6l6i0ku8ky8e3AvWC4YtUWlFZMEIO4wAnrGiYkwz
+	rMU3yo0LHaO9smSQ9qEPx4dfk/J14WYZI6/kPFwwPvfpWSLFSOOlqVwJ3FunGm4vcDV9hvxWQrB
+	Qy5CI+Os+vD6HgMuos+vmG/ic8j8FRZ5B/uKZRi+cdQ0kO6+yoHioJ8KeBWYXKJ3MUIwc7mXBfJ
+	IscFnFG0BKobD5+Oz+Qs0EEmavA==
+X-Google-Smtp-Source: AGHT+IH6jfjNc8UNw32/lozuCfWnAMkVoj//1p/pBWOd6QeQxm4eBhWeUohg5sRFiRJWz3K/TFNAHA==
+X-Received: by 2002:a17:907:2da3:b0:ae9:c47f:1bda with SMTP id a640c23a62f3a-af619c0ca6cmr1436573566b.59.1753775211380;
+        Tue, 29 Jul 2025 00:46:51 -0700 (PDT)
+Received: from [10.20.4.146] ([149.62.209.144])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61558c0779fsm1398957a12.27.2025.07.29.00.46.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jul 2025 00:46:51 -0700 (PDT)
+Message-ID: <c2754ac3-28d0-4c6c-bd2d-0dcc9ca66b77@suse.com>
+Date: Tue, 29 Jul 2025 10:46:48 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 1/5] bpf: Extend bpf syscall with common
- attributes support
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <20250728142346.95681-2-leon.hwang@linux.dev>
- <202507291146.0df0CQq9-lkp@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] lockdown/kunit: Introduce kunit tests
+To: kernel test robot <lkp@intel.com>, linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, paul@paul-moore.com, serge@hallyn.com,
+ jmorris@namei.org, dan.j.williams@intel.com
+References: <20250728111517.134116-3-nik.borisov@suse.com>
+ <202507290540.9IANrMED-lkp@intel.com>
+From: Nikolay Borisov <nik.borisov@suse.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <202507291146.0df0CQq9-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Autocrypt: addr=nik.borisov@suse.com; keydata=
+ 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
+In-Reply-To: <202507290540.9IANrMED-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
 
-On 29/7/25 11:43, kernel test robot wrote:
-> Hi Leon,
+On 29.07.25 г. 1:04 ч., kernel test robot wrote:
+> Hi Nikolay,
 > 
-> [This is a private test report for your RFC patch.]
-> kernel test robot noticed the following build errors:
+> kernel test robot noticed the following build warnings:
 > 
-> [auto build test ERROR on bpf-next/master]
+> [auto build test WARNING on linus/master]
+> [also build test WARNING on v6.16 next-20250728]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Extend-bpf-syscall-with-common-attributes-support/20250728-222848
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20250728142346.95681-2-leon.hwang%40linux.dev
-> patch subject: [RFC PATCH bpf-next 1/5] bpf: Extend bpf syscall with common attributes support
-> config: arm-randconfig-002-20250729 (https://download.01.org/0day-ci/archive/20250729/202507291146.0df0CQq9-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507291146.0df0CQq9-lkp@intel.com/reproduce)
+> url:    https://github.com/intel-lab-lkp/linux/commits/Nikolay-Borisov/lockdown-Switch-implementation-to-using-bitmap/20250728-191807
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20250728111517.134116-3-nik.borisov%40suse.com
+> patch subject: [PATCH v2 2/3] lockdown/kunit: Introduce kunit tests
+> config: arm-randconfig-004-20250729 (https://download.01.org/0day-ci/archive/20250729/202507290540.9IANrMED-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 1b4db78d2eaa070b3f364a2d2b2b826a5439b892)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507290540.9IANrMED-lkp@intel.com/reproduce)
 > 
 > If you fix the issue in a separate patch/commit (i.e. not just a new version of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202507291146.0df0CQq9-lkp@intel.com/
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507290540.9IANrMED-lkp@intel.com/
 > 
-> All errors (new ones prefixed by >>):
+> All warnings (new ones prefixed by >>):
 > 
->>> kernel/bpf/syscall.c:6140:1: error: conflicting types for 'sys_bpf'
->     6140 | SYSCALL_DEFINE5(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size,
->          | ^
->    include/linux/syscalls.h:228:36: note: expanded from macro 'SYSCALL_DEFINE5'
->      228 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
->          |                                    ^
->    include/linux/syscalls.h:235:2: note: expanded from macro 'SYSCALL_DEFINEx'
->      235 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
->          |         ^
->    include/linux/syscalls.h:249:18: note: expanded from macro '__SYSCALL_DEFINEx'
->      249 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
->          |                         ^
->    <scratch space>:50:1: note: expanded from here
->       50 | sys_bpf
->          | ^
->    include/linux/syscalls.h:929:17: note: previous declaration is here
->      929 | asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size);
->          |                 ^
->    1 error generated.
+>>> security/lockdown/lockdown.c:31:5: warning: no previous prototype for function 'lock_kernel_down' [-Wmissing-prototypes]
+>        31 | int lock_kernel_down(const char *where, enum lockdown_reason level)
+>           |     ^
+>     security/lockdown/lockdown.c:31:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>        31 | int lock_kernel_down(const char *where, enum lockdown_reason level)
+>           | ^
+>           | static
+>     1 warning generated.
+
+
+That's a false positive, since the function is exported only for KUNIT 
+case, what's the correct way to make testbot ignore it ?
 > 
-
-Thanks.
-
-It will be fixed by
-
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-
-
-index e5603cc91..3d84faa04 100644
-
-
---- a/include/linux/syscalls.h
-
-
-+++ b/include/linux/syscalls.h
-
-
-@@ -926,7 +926,8 @@ asmlinkage long sys_seccomp(unsigned int op,
-unsigned int flags,
-
- asmlinkage long sys_getrandom(char __user *buf, size_t count,
-                              unsigned int flags);
- asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned
-int flags);
--asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned
-int size);
-
-+asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned
-int size,
-
-+                       struct bpf_common_attr __user *attr_common,
-unsigned int size_common);
-
- asmlinkage long sys_execveat(int dfd, const char __user *filename,
-                        const char __user *const __user *argv,
-                        const char __user *const __user *envp, int flags);
-
-Thanks,
-Leon
-
-[...]
-
+> 
+> vim +/lock_kernel_down +31 security/lockdown/lockdown.c
+> 
+>      20	
+>      21	static const enum lockdown_reason lockdown_levels[] = {LOCKDOWN_NONE,
+>      22							 LOCKDOWN_INTEGRITY_MAX,
+>      23							 LOCKDOWN_CONFIDENTIALITY_MAX};
+>      24	
+>      25	/*
+>      26	 * Put the kernel into lock-down mode.
+>      27	 */
+>      28	#if !IS_ENABLED(CONFIG_KUNIT)
+>      29	static
+>      30	#endif
+>    > 31	int lock_kernel_down(const char *where, enum lockdown_reason level)
+>      32	{
+>      33	
+>      34		if (level > LOCKDOWN_CONFIDENTIALITY_MAX)
+>      35			return -EINVAL;
+>      36	
+>      37		if (level == LOCKDOWN_INTEGRITY_MAX || level == LOCKDOWN_CONFIDENTIALITY_MAX)
+>      38			bitmap_set(kernel_locked_down, 1, level);
+>      39		else
+>      40			bitmap_set(kernel_locked_down, level, 1);
+>      41	
+>      42		pr_notice("Kernel is locked down from %s; see man kernel_lockdown.7\n",
+>      43			  where);
+>      44		return 0;
+>      45	}
+>      46	
+> 
