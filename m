@@ -1,60 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFD527F00F;
-	Tue, 29 Jul 2025 08:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EE9230BCE;
+	Tue, 29 Jul 2025 08:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753777561; cv=none; b=hzIFHaHupuJoY7bStiMDm2PVbVATHbwc8ZcmMoJ2/dirvuRTHawR+4hPe7tPojYkOdGs5gBKso5cOWxMLG/Nd8DKQ8W4m0Q8lG/AomRAbUtjDtjJmxO/uK0sAldcMThvDfllhE7SeSSDwyj+8iNaf5i+k7LM40cHvmJ3pn668Kw=
+	t=1753777721; cv=none; b=V/oXYeX+UODDBjg0hWGXk4WbyBx0QO8I560iQZbTV+YJNSidaMEhnnGbQZ3nR6ks6ebRaqq1oHwRV1h8FxwiXdKi7qWgJhxOGiw513BIQ+uifXK63WY/rsj4VRDw42boqdLvpRXy461GssVtrFnqiCZ2o/RkFm6xS1FTre5YBg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753777561; c=relaxed/simple;
-	bh=9m8Ap2l1w0cOWaDHEP8oGWuLE3we6/wdOD2nYafm0lw=;
+	s=arc-20240116; t=1753777721; c=relaxed/simple;
+	bh=P+RKJolWrlScvE03/wuLDUcQEOrpyiH5p1dHdVtXVqk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ek5PlZHCom9z9sVbkYWpZvxWaKnbMJT4n3m/0vUo91UaGgbUMWHoFpFK+WQXwQHAjkXzxCh+LRxFTNASwbamdN/kdqLpWir7bk9CfSHoHexLxVB6hJfVrMVm3Yrb0EIW//6NxExMCSsXbgOp9QmZIZXhVcHZ2ZzQdRyoH9goyJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZDGfwLa7; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fnH78eB4TNnOJDUOwHBJvj/AS9LeB0mL9WzSW+3Mjcr4TiSFPmrLiifipz7mpgsGkkwmCOM5Hdl9ZYS7h7dxluPVqcZubrZ8OyjC4F8AAvBnL6VIlPdD/3Cwyow5wZK3H1aucGqonsUSjv4JOTKBF9O9ETpoGjgkkzMGpCnnObQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKsDX+KR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZDGfwLa7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753777560; x=1785313560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9m8Ap2l1w0cOWaDHEP8oGWuLE3we6/wdOD2nYafm0lw=;
-  b=ZDGfwLa7T/Q1BdJosT/pJ4owmkZj3nWa3bLyzJYqTL7JJEpQxzZQ7fKV
-   7KlCbbXig1wp3PUkG20+W2eXeOdNmcifWAoDnvGuBEKS4fHcAR8RULORJ
-   pXEXSRnJ/VX+VTrqBaC/j25Tc8LeC1mB7ClmTQKzAWhwB4lwUG51fScye
-   +/l6jD4KLcuGYH2nIiVQAfuSD2GfX/LFvbi/3ctJtBTakuJGTUBXaoays
-   fNRPa8UjflwkOcrLDdwDfM9yZu1r6R52Th1wi1EU5Hu96zYZXegp2W4or
-   n+Qfp7bls1zVkLKIYa+2TZd6PrSkIciRA6i5qEYdWZtCaPw2WG/dS4ICq
-   A==;
-X-CSE-ConnectionGUID: /0C+JSt5RPe5UG+h3q7vaQ==
-X-CSE-MsgGUID: L5/1roH9R/Wa1dHpiwtXuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="55738912"
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="55738912"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 01:25:56 -0700
-X-CSE-ConnectionGUID: fNkDENy6Rneg5T1/VrpHMw==
-X-CSE-MsgGUID: 3/GRPDWNSI+nRmJUf2/ExQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="162212250"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Jul 2025 01:25:55 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ugfei-00017j-1s;
-	Tue, 29 Jul 2025 08:25:52 +0000
-Date: Tue, 29 Jul 2025 16:25:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC bpf-next v2 1/4] fprobe: use rhltable for
- fprobe_ip_table
-Message-ID: <202507291603.zTR0kmTf-lkp@intel.com>
-References: <20250728072637.1035818-2-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKsDX+KR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D23CC4CEEF;
+	Tue, 29 Jul 2025 08:28:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753777721;
+	bh=P+RKJolWrlScvE03/wuLDUcQEOrpyiH5p1dHdVtXVqk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XKsDX+KRLzAFuf1kLKdAmDj9dggFsRzjLIQ05RDsi+xPOxdHLALkhNkurvUosgFfb
+	 ftJlhmN/pjoAT4/au8qTUftIBkqDaJhrJ9SmRZi3Ve7JVy7Eg31DCCYSekcyfaaJNQ
+	 JbMb4DIBM9PPiwPI8OZcRcytRu3/nqoGHVDzvP77YimImLNlQUbkZujH5O0JN2T+nM
+	 BtsmRo4XDjlCw0KnWSDM6rk+MZk6QP0uSqf7QW3w7lmJVVGYAkgz4EWZXggXy7tATT
+	 HSfQX1ig9jgw3cwDIYjp+vOlzwygxMw47ojEswZF9ZVaUkapQqAqU4ht2sNRBTvD+l
+	 uIGHhOPpyE+nA==
+Date: Tue, 29 Jul 2025 11:28:14 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Michal Wilczynski <michal.wilczynski@intel.com>,
+	Juergen Gross <jgross@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Roger Pau Monne <roger.pau@citrix.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Usama Arif <usama.arif@bytedance.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Thomas Huth <thuth@redhat.com>, Brian Gerst <brgerst@gmail.com>,
+	kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+	platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-mm@kvack.org, Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Gavin Shan <gshan@redhat.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	James Morse <james.morse@arm.com>,
+	Oza Pawandeep <quic_poza@quicinc.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Hans de Goede <hansg@kernel.org>,
+	"Kirill A. Shutemov" <kas@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+	Alexander Graf <graf@amazon.com>,
+	Changyuan Lyu <changyuanl@google.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jan Beulich <jbeulich@suse.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Bibo Mao <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
+	linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
+	kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 2/4] x86: Handle KCOV __init vs inline mismatches
+Message-ID: <aIiGHmw8IJb9vsM5@kernel.org>
+References: <20250724054419.it.405-kees@kernel.org>
+ <20250724055029.3623499-2-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,81 +104,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250728072637.1035818-2-dongml2@chinatelecom.cn>
+In-Reply-To: <20250724055029.3623499-2-kees@kernel.org>
 
-Hi Menglong,
+On Wed, Jul 23, 2025 at 10:50:26PM -0700, Kees Cook wrote:
+> GCC appears to have kind of fragile inlining heuristics, in the
+> sense that it can change whether or not it inlines something based on
+> optimizations. It looks like the kcov instrumentation being added (or in
+> this case, removed) from a function changes the optimization results,
+> and some functions marked "inline" are _not_ inlined. In that case,
+> we end up with __init code calling a function not marked __init, and we
+> get the build warnings I'm trying to eliminate in the coming patch that
+> adds __no_sanitize_coverage to __init functions:
+> 
+> WARNING: modpost: vmlinux: section mismatch in reference: xbc_exit+0x8 (section: .text.unlikely) -> _xbc_exit (section: .init.text)
+> WARNING: modpost: vmlinux: section mismatch in reference: real_mode_size_needed+0x15 (section: .text.unlikely) -> real_mode_blob_end (section: .init.data)
+> WARNING: modpost: vmlinux: section mismatch in reference: __set_percpu_decrypted+0x16 (section: .text.unlikely) -> early_set_memory_decrypted (section: .init.text)
+> WARNING: modpost: vmlinux: section mismatch in reference: memblock_alloc_from+0x26 (section: .text.unlikely) -> memblock_alloc_try_nid (section: .init.text)
+> WARNING: modpost: vmlinux: section mismatch in reference: acpi_arch_set_root_pointer+0xc (section: .text.unlikely) -> x86_init (section: .init.data)
+> WARNING: modpost: vmlinux: section mismatch in reference: acpi_arch_get_root_pointer+0x8 (section: .text.unlikely) -> x86_init (section: .init.data)
+> WARNING: modpost: vmlinux: section mismatch in reference: efi_config_table_is_usable+0x16 (section: .text.unlikely) -> xen_efi_config_table_is_usable (section: .init.text)
+> 
+> This problem is somewhat fragile (though using either __always_inline
+> or __init will deterministically solve it), but we've tripped over
+> this before with GCC and the solution has usually been to just use
+> __always_inline and move on.
+> 
+> For x86 this means forcing several functions to be inline with
+> __always_inline.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+For memblock bit:
 
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/fprobe-use-rhltable-for-fprobe_ip_table/20250728-152930
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250728072637.1035818-2-dongml2%40chinatelecom.cn
-patch subject: [PATCH RFC bpf-next v2 1/4] fprobe: use rhltable for fprobe_ip_table
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250729/202507291603.zTR0kmTf-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507291603.zTR0kmTf-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507291603.zTR0kmTf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/trace/fprobe.c:8:
->> include/linux/fprobe.h:29:21: error: field has incomplete type 'struct rhlist_head'
-      29 |         struct rhlist_head      hlist;
-         |                                 ^
-   include/linux/fprobe.h:29:9: note: forward declaration of 'struct rhlist_head'
-      29 |         struct rhlist_head      hlist;
-         |                ^
-   kernel/trace/fprobe.c:71:17: error: initializer element is not a compile-time constant
-      71 |         .key_offset             = offsetof(struct fprobe_hlist_node, addr),
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
-   In file included from kernel/trace/trace_fprobe.c:9:
->> include/linux/fprobe.h:29:21: error: field has incomplete type 'struct rhlist_head'
-      29 |         struct rhlist_head      hlist;
-         |                                 ^
-   include/linux/fprobe.h:29:9: note: forward declaration of 'struct rhlist_head'
-      29 |         struct rhlist_head      hlist;
-         |                ^
-   1 error generated.
-
-
-vim +29 include/linux/fprobe.h
-
-    11	
-    12	struct fprobe;
-    13	typedef int (*fprobe_entry_cb)(struct fprobe *fp, unsigned long entry_ip,
-    14				       unsigned long ret_ip, struct ftrace_regs *regs,
-    15				       void *entry_data);
-    16	
-    17	typedef void (*fprobe_exit_cb)(struct fprobe *fp, unsigned long entry_ip,
-    18				       unsigned long ret_ip, struct ftrace_regs *regs,
-    19				       void *entry_data);
-    20	
-    21	/**
-    22	 * struct fprobe_hlist_node - address based hash list node for fprobe.
-    23	 *
-    24	 * @hlist: The hlist node for address search hash table.
-    25	 * @addr: One of the probing address of @fp.
-    26	 * @fp: The fprobe which owns this.
-    27	 */
-    28	struct fprobe_hlist_node {
-  > 29		struct rhlist_head	hlist;
-    30		unsigned long		addr;
-    31		struct fprobe		*fp;
-    32	};
-    33	
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
