@@ -1,288 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A21C2737E2;
-	Tue, 29 Jul 2025 21:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBC01AA1D9;
+	Tue, 29 Jul 2025 22:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753826057; cv=none; b=HAJtzKywhodm1eOd58CEJiL2u9zphtVGyM2dcyEEC3XUE9huhF4qQHqbS3dZwhnza4u/jYpHGptKsG2mKQPl8bnpX2kBYiqKqRuXzYSRrWId1NKivaRLLvTpqoZQtieXJ3wTrzzsiBCKWSNqrcb3JgqROrFmxJxS3W83T+QStsE=
+	t=1753829015; cv=none; b=skVZV6toGXRAgAttRcJqTrYeI90s12dP7NUZf1FRuZRQxh3bDYVbO4A5Ufs0tSQfE39+QaBZa3MJJMu81oYVc5VeGrjvkBo/5Ung0CMRTMetDqW1p28YeZxekhHlJr/QIAuC0cdF4o/8vTWMtDuROCuPk2dsJ+8JgHM4iDxMDCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753826057; c=relaxed/simple;
-	bh=evS40yylMk96Q2EfrX13gozbYMbsq+8jb5WxuwkNloo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fRdtKhAM2DZtsgUgjKubml0AgOg7IpFPjxtKvJ3yM/xYh1M3Eaye3bwet+H0ZtHhSQ6c09w5v8SwE7RXkNy0xPEq7pmkszm+7Am3KghtU1HJezxCedTJyFBeNF32dyO9ZQchiVTfMqWkHuNhuzcuoxq8PKWM042lJ695XIuxctM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GgZKISEq; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753829015; c=relaxed/simple;
+	bh=oTdYiE23IWd2hrwmuA8C9kEdsJ1UHqb9arQdLsQ2bvc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=puwZHSGTqUVkE1Emk2CwXoszvOCFqCqnCh4WhDMCcToL4NGFscaw4g8bmHjrKHrLdWEVtmHbzRbKNR9usshdCNi0vogXnvJP5rziTsM9i5snTU/qKbOefxFeiieIjyEEXBmRLwPm2bUJ8uxI7CF/9TRRKI9oZZA3oDbySL+WiIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rbz5frpJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GgZKISEq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753826055; x=1785362055;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=evS40yylMk96Q2EfrX13gozbYMbsq+8jb5WxuwkNloo=;
-  b=GgZKISEqK9JNpPhLoFX711f787n5SJ+Re0hKwKaIdsE7ahgQQuLG5Wth
-   gGW6L38klgbEhuOiPrVxai5EMcZWhfJlCa13JDR22AoBQuOPfL2BlmcBe
-   MO+TIaDw20BhPZYTb2XIF+SoB11+544VHg/euqBR/1kcy0w86i8OinCOs
-   vZ6w88b7w6h6+pu3LIPeL9pjUM6j8yfXl3zzvL/X22J5vzoPPkTuCyQSQ
-   Sn4SeJo2lDAYKrSIK5W83vZr8PMOvyiw6TFIxccn3au4fsZCOoyjYh9PT
-   C+DMkZSJ7ZyDU9pfJ7ufqxXRWXpETp9S/I5PANzCf+/4EkRXNA0GtdYPG
-   w==;
-X-CSE-ConnectionGUID: WTzrdb9zRritEvYkD4Sbyw==
-X-CSE-MsgGUID: gbK4uXEiSvClNq8ZMOs8+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="66682764"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="66682764"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 14:54:14 -0700
-X-CSE-ConnectionGUID: ilGF+0OoTfaWUwofWho3/g==
-X-CSE-MsgGUID: fcwKNlUERkSw7vihcvlC0w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163270886"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 29 Jul 2025 14:54:12 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ugsGw-0001j3-07;
-	Tue, 29 Jul 2025 21:54:10 +0000
-Date: Wed, 30 Jul 2025 05:53:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anuj Gupta <anuj20.g@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rbz5frpJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE56C4CEEF;
+	Tue, 29 Jul 2025 22:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753829015;
+	bh=oTdYiE23IWd2hrwmuA8C9kEdsJ1UHqb9arQdLsQ2bvc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Rbz5frpJLBa6F6s41xo03v2BD1kk9wTm6eVzw6fQOUDUT5+zfo113PlWw5rTJ7l1o
+	 8K8n1yy4UCXM3LlrsZa0BxRHa/20YXcE+TI/vCyMUqdEJPEHCyPrjomoyaCFJG6A4x
+	 j1EM6/KNMIJxCXXCBVDryo8pU6znwJKwlq9n7FhaJo5n2GCDeroqzzeYEQEtLHguAX
+	 5WxNeMgEd5Ige0hU4WomyM7Z6Sr+J+owN7hxkzWj9xbNRURyP9VRcw424ERLZdZkV6
+	 yc5JTkZM4TinMDx/qiGwZiB8Gw7CavhsDsB1KepWVGhwcRG3R8pPioluEwVXBprPuh
+	 GW28p4zV8CY8w==
+From: Kees Cook <kees@kernel.org>
+To: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	syzbot+5245cb609175fb6e8122@syzkaller.appspotmail.com,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	"Kirill A . Shutemov" <kas@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Michael Kelley <mhklinux@outlook.com>,
+	Marc Herbert <Marc.Herbert@linux.intel.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
 	linux-kernel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Subject: vmlinux.o: warning: objtool: blk_get_meta_cap+0x1a8: sibling call
- from callable instruction with modified stack frame
-Message-ID: <202507300521.IZ4mbJwu-lkp@intel.com>
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] compiler_types: Provide __no_kstack_erase to disable coverage only on Clang
+Date: Tue, 29 Jul 2025 15:43:33 -0700
+Message-Id: <20250729224325.work.019-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3887; i=kees@kernel.org; h=from:subject:message-id; bh=oTdYiE23IWd2hrwmuA8C9kEdsJ1UHqb9arQdLsQ2bvc=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmdflPCszbbFi44W9iQ8q2gw/i09Nzfa4Tbf+yQm+p+o 91pw+e+jlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIlY5jAyXKh/vjRxp6Sb7Qd3 zzrb27l/vv3+zL8u+czsYw8CHz8qrGT4H/Cto7I35pXRwyshkX3LBZnljLpZXflSuq59Zr6atc6 VHwA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0db240bc077fd16cc16bcecfd7f4645bc474aa7e
-commit: bc5b0c8febccbeabfefc9b59083b223ec7c7b53a block: fix lbmd_guard_tag_type assignment in FS_IOC_GETLBMD_CAP
-date:   6 days ago
-config: loongarch-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507300521.IZ4mbJwu-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507300521.IZ4mbJwu-lkp@intel.com/reproduce)
+In order to support Clang's stack depth tracking (for Linux's kstack_erase
+feature), the coverage sanitizer needed to be disabled for __init (and
+__head) section code. Doing this universally (i.e. for GCC too), created
+a number of unexpected problems, ranging from changes to inlining logic
+to failures to DCE code on earlier GCC versions.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507300521.IZ4mbJwu-lkp@intel.com/
+Since this change is only needed for Clang, specialize it so that GCC
+doesn't see the change as it isn't needed there (the GCC implementation
+of kstack_erase uses a GCC plugin that removes stack depth tracking
+instrumentation from __init sections during a late pass in the IR).
 
-All warnings (new ones prefixed by >>):
+Successful build and boot tested with GCC 12 and Clang 22.
 
-   vmlinux.o: warning: objtool: btrfs_encoded_io_compression_from_extent+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_encoded_read_inline+0x1e4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_do_encoded_write+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_sysfs_add_space_info_type+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_ioctl+0x9c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_ioctl_subvol_sync+0x138: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: alloc_workspace+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: free_workspace+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_workspace+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: put_workspace+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: find_parent_nodes+0xe9c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: tree_backref_for_extent+0x1c0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_backref_iter_next+0xe4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: send_create_inode+0xfc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: inconsistent_snapshot_error+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_init_dev_replace+0x214: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_dev_replace_cancel+0xac: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_resume_dev_replace_async+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __btrfs_check_leaf+0x37c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: check_leaf_item+0x1af0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __reserve_bytes+0x438: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: flush_space+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_init_root_block_rsv+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: tree_mod_log_rewind+0x154: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: btrfs_build_ref_tree+0x4f4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ea_list_i+0xd0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gfs2_dump_glock+0x144: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: finish_xmote+0x3d8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gfs2_llseek.llvm.1880751065968454877+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gfs2_parse_param+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gfs2_fill_super+0xa68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gfs2_quota_get_state.llvm.1910101736943174531+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gfs2_show_options.llvm.7655142120699730860+0x24c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: status_show+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_do_shutdown+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __f2fs_ioctl+0x100: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_llseek.llvm.4505012802978155059+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_iget+0x2f8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: parse_options+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_show_options+0x6e0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __f2fs_is_valid_blkaddr.llvm.12814712387801535868+0x6c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_ra_meta_pages+0x174: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_get_victim+0x2e0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_map_blocks+0x604: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_available_free_memory+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_truncate_inode_blocks+0x36c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: new_curseg+0x1d0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_get_segment_temp+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __get_segment_type+0x638: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: f2fs_sbi_store+0xcb0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __struct_ptr+0x54: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ramoops_pstore_erase+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: erofs_fc_parse_param+0x94: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: erofs_iget+0x470: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: keyring_get_key_chunk+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: keyctl_reject_key+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: keyctl_set_reqkey_keyring+0x7c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: sys_keyctl+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: key_task_permission+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: lookup_user_key+0xe8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: request_key_and_link+0x32c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: keyctl_pkey_params_get_2+0x1b8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: datablob_parse+0xc8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: cap_task_fix_setuid+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: cap_task_prctl+0x7c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: rsa_set_pub_key+0xdc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: rsa_set_priv_key+0x158: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: generate_random_testvec_config+0xb4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: generate_random_length+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: crypto_gcm_setauthsize+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: michael_final+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ecc_get_curve+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ecc_is_key_valid+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ecc_gen_privkey+0x54: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ecc_make_pub_key+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: crypto_ecdh_shared_secret+0x74: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: vli_mmod_fast+0x268: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ecrdsa_param_curve+0x64: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: async_raid6_2data_recov+0x248: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: x509_note_sig_algo+0x88: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: x509_process_extension+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pkcs7_sig_note_digest_algo+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pkcs7_sig_note_pkey_algo+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pkcs7_sig_note_authenticated_attr+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pkcs7_verify+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: biovec_slab+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: submit_bio_noacct+0x320: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: blk_flush_complete_seq+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: blk_validate_limits+0x86c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: bio_split_to_limits+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: blk_attempt_bio_merge+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: blk_mq_submit_bio+0x278: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: blkdev_ioctl+0x69c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ioprio_check_cap+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: sys_ioprio_set+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: msdos_partition+0x3dc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: bsg_ioctl+0x90: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: bfq_bfqq_expire+0x518: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: bfq_set_next_ioprio_data+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: bfq_get_queue+0xb4: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: blk_get_meta_cap+0x1a8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: sed_ioctl+0x134: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: start_generic_opal_session+0x148: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: response_get_string+0xc0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: kiocb_done+0x108: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: io_timeout_remove+0x20c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __io_timeout_prep+0x334: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: sys_io_uring_register+0x280: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: io_parse_restrictions+0xd8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: do_swap+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: match_token+0x18c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: extract_iter_to_sg+0x98: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: _copy_to_iter+0x1e8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: _copy_from_iter+0x1e4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: _copy_from_iter_nocache+0x168: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: copy_page_to_iter_nofault+0x390: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_zero+0x1c4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: copy_folio_from_iter_atomic+0x3e8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_advance+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_revert+0xd4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_single_seg_count+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_is_aligned+0xe0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_alignment+0xa8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_npages+0xd8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: iov_iter_extract_pages+0x1dc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: rhashtable_jhash2+0x128: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: refcount_warn_saturate+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: string_unescape+0x2ac: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: string_escape_mem+0x3d4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: kstrtobool+0xa0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: vvar_fault.llvm.6795815868049752848+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __devm_ioremap.llvm.14098161117420859606+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: zlib_inflate+0x174: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: find_poly_roots+0x5cc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_compress1X_usingCTable_internal.llvm.16785660852261606571+0x118: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_cParam_getBounds+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_CCtx_setParameter+0x144: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_CCtxParams_setParameter+0xb0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_CCtxParams_getParameter+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_CCtx_setCParams+0x184: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_buildEntropyStatisticsAndEstimateSubBlockSize+0x150: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_loadDictionaryContent+0x45c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_buildCTable+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_compressSuperBlock+0x180: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_fillDoubleHashTable+0x428: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_compressBlock_doubleFast_extDict+0x2a0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_fillHashTable+0x484: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_compressBlock_fast_extDict+0x2f4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_dedicatedDictSearch_lazy_loadDictionary+0x680: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_insertAndFindFirstIndex+0x240: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_insertBt1+0x88: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_readDTableX1_wksp+0x4d4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_decompress1X2_usingDTable_internal+0x118: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_decompress1X1_usingDTable_internal+0x128: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_decompress4X2_usingDTable_internal+0x1014: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_decompress4X1_usingDTable_internal+0xeac: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: HUF_fillDTableX2ForWeight+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: BIT_initDStream+0x104: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: BIT_initDStream+0x104: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_getFrameHeader_advanced+0x30c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_nextInputType+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_decompressContinue+0x12c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_dParam_getBounds+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_DCtx_setParameter+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_DCtx_getParameter+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_decompressStream+0x33c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_decodeLiteralsBlock+0x108: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_buildSeqTable+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_decompressSequencesLong+0x208: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_decompressSequencesSplitLitBuffer+0x1e4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ZSTD_decompressSequences+0x20c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ERR_getErrorString+0xb0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: FSE_decompress_wksp_bmi2+0x3bc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xz_dec_run+0x100: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xz_dec_lzma2_run+0xec: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: bcj_apply+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xz_dec_bcj_reset+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ei_seq_show+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: stack_depot_save_flags+0x128: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: asn1_ber_decoder+0x1a4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: msi_lib_init_dev_msi_info+0x90: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: rza1_irqc_set_type+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: rzv2h_icu_set_type+0xe4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: lpic_get_gsi_domain_id+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: complete_irq_moving+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: liointc_set_type+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pch_pic_set_type+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mchp_eic_domain_alloc+0xc4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mchp_eic_irq_set_type+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mhi_intvec_threaded_handler+0x130: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mhi_process_ctrl_ev_ring+0x270: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: parse_xfer_event+0xf0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mhi_pm_st_worker+0x154: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mhi_async_power_up+0x14c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: phy_g12a_mipi_dphy_analog_power_on+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: brcm_sata_phy_init+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: brcm_pm_notifier+0x48: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: brcm_usb_phy_xlate+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: usb_init_xhci+0x1c0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: cdns_torrent_phy_probe+0x824: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: cdns_torrent_phy_configure_multilink+0x8d4: sibling call from callable instruction with modified stack frame
+Fixes: 381a38ea53d2 ("init.h: Disable sanitizer coverage for __init and __head")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202507270258.neWuiXLd-lkp@intel.com/
+Reported-by: syzbot+5245cb609175fb6e8122@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/6888d004.a00a0220.26d0e1.0004.GAE@google.com/
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: <x86@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc: Kirill A. Shutemov <kas@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Wei Yang <richard.weiyang@gmail.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/x86/include/asm/init.h    | 2 +-
+ include/linux/compiler_types.h | 7 +++++++
+ include/linux/init.h           | 2 +-
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+index 6bfdaeddbae8..5a68e9db6518 100644
+--- a/arch/x86/include/asm/init.h
++++ b/arch/x86/include/asm/init.h
+@@ -5,7 +5,7 @@
+ #if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
+ #define __head	__section(".head.text") __no_sanitize_undefined __no_stack_protector
+ #else
+-#define __head	__section(".head.text") __no_sanitize_undefined __no_sanitize_coverage
++#define __head	__section(".head.text") __no_sanitize_undefined __no_kstack_erase
+ #endif
+ 
+ struct x86_mapping_info {
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 2b77d12e07b2..89e2c01fc8b1 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -378,6 +378,13 @@ struct ftrace_likely_data {
+ # define __signed_wrap
+ #endif
+ 
++/* GCC does not like splitting sanitizer coverage across section inlines */
++#ifdef CC_IS_CLANG
++#define __no_kstack_erase	__no_sanitize_coverage
++#else
++#define __no_kstack_erase
++#endif
++
+ /* Section for code which can't be instrumented at all */
+ #define __noinstr_section(section)					\
+ 	noinline notrace __attribute((__section__(section)))		\
+diff --git a/include/linux/init.h b/include/linux/init.h
+index c65a050d52a7..a60d32d227ee 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -51,7 +51,7 @@
+    discard it in modules) */
+ #define __init		__section(".init.text") __cold __latent_entropy	\
+ 						__noinitretpoline	\
+-						__no_sanitize_coverage
++						__no_kstack_erase
+ #define __initdata	__section(".init.data")
+ #define __initconst	__section(".init.rodata")
+ #define __exitdata	__section(".exit.data")
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
