@@ -1,146 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E071221737;
-	Tue, 29 Jul 2025 03:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA29225397
+	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 03:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753760606; cv=none; b=q4BO6E8+MFUk2+5Nk3k3sDWf2e4iJWVoqr6NpNY9XaonfjMAo/ZRnyUeKJLcxAA+9VXYPC3fw9r5muoBVybmMPDnzBRM44SYltllisADW8zM0KXB9nmzEebtbuZbqfrb8zju8AkhPA1oVn6/sxccdgyqIMP8bAV24KgwfyCgUBw=
+	t=1753761371; cv=none; b=HAYf5nDLXBEXleyY0f8cJ3oGNjtCTJBlg+7/wrMYaIG+Fi5dT7QkX6Qpgui6xEmzXG3b66mCWIthiIO4cavc1tKGK9NhHT3Da4WjVBLhCUolwtqhpqgebQr997HhdoHOZ1MII/YD0N6RbO+2CPd7bkY3/4L8p+tPp3PDmzpBTdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753760606; c=relaxed/simple;
-	bh=MSHUoTMwY9oyY7Q1By+Pt8D/32X7z1oJYuHmG752vAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EXsrigztrgx2qryTOMxOutyyioZQakzKPuMNM4GDHJqS4MjKj8oYcB78vOTjeetha08hT77+pF5n+0RjVP0XHzZaMQkrpXH+CPMD2Vx95jSSMpQKgJ6dUvXSdUvK/1y/jolkqkxZCtrtwUsRLa83mjRknn3TCEu8RlgY0wWzhqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KXnVZKJd; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753761371; c=relaxed/simple;
+	bh=85nfbXH4q7adtdcxw9gzdiLUUggxa/SPdpP9fi8iwuA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rBa4uBU1tlzEPXnQTLzJ3Iv+yn8TU0affSD4U+IU9jvrJBoPPYtJRixxN3/fmqU/XvT1dVAXFGIyu2aoN2/oMDSooIw+Xh/8g3IiXcIle9JOaaERQIIzgzHEzDrWJBQrk8ob0IqC/kQT+QLMjVlTKdJ4ti2ceASXTjIs0xAitio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ULQlcpYP; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KXnVZKJd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753760605; x=1785296605;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MSHUoTMwY9oyY7Q1By+Pt8D/32X7z1oJYuHmG752vAk=;
-  b=KXnVZKJduo1izaWZ6KJGoChfgyx7AL7YF+5a7lRCvS7q5Tl8Fi8Y0ZRF
-   XkA8swUlpSZR3L4BQ9mWo6JQUpYl4xQiuJKrfGxxxet9WGIA3kuyuVaZ1
-   Ax3AAdi5YnwfygZn0hRAHaNC3v1lPdcXJjAcTyqTKTL4dpIadjU9jLyMm
-   aJtoMc4DNL0losDTW6b8IGqqHpd8OjHgP1EC8C7rNv0DdwDxKuQIHWxjB
-   omkT/snzPxpo3rX88eiJgFcH8ukGhHAp7T4yEfGKTgD7qwawKxizNaKSQ
-   tfNItF4CWrmEBX3iAlB4gp6QKuGVucAZ0QhjJttiOqGONFKc5EJyT9/Dv
-   g==;
-X-CSE-ConnectionGUID: R7ygtCGxS4KX83XGu+vLXg==
-X-CSE-MsgGUID: g+3zxfeUTme9K0dmyBSMnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="56169092"
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="56169092"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 20:43:24 -0700
-X-CSE-ConnectionGUID: SXW922UHQ2KYmkp/06qCFA==
-X-CSE-MsgGUID: ObdttVA4S2SxFdfQh85pxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="186235766"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Jul 2025 20:43:21 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ugbFH-0000xL-2p;
-	Tue, 29 Jul 2025 03:43:19 +0000
-Date: Tue, 29 Jul 2025 11:43:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Menglong Dong <menglong8.dong@gmail.com>, alexei.starovoitov@gmail.com,
-	mhiramat@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
-	hca@linux.ibm.com, revest@chromium.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/4] fprobe: use rhashtable
-Message-ID: <202507291147.Fov8pl4N-lkp@intel.com>
-References: <20250728041252.441040-2-dongml2@chinatelecom.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ULQlcpYP"
+Message-ID: <ce0c8f01-3b95-44ff-a490-8a91510884c0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753761356;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/Gnkhd136gazu5+3YgFAjNkCNeFHWLrxJvrNzYEKASg=;
+	b=ULQlcpYPcWU0FIW1Bu87CwpBbX8jsi0EebrmuNeiwBWkgUnT2+I1nVs6kksVneeWKRaKee
+	TzemFeRRIaOlL61od1WtslRfiLSxS9/mY2lsAY8vDSyb5yc1+EdkP0tNmqdEq5OKVUeMqZ
+	XPUJ2ZovUfVQm3FjEzg/DHt5OsKQXYc=
+Date: Tue, 29 Jul 2025 11:55:44 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250728041252.441040-2-dongml2@chinatelecom.cn>
-
-Hi Menglong,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/fprobe-use-rhashtable/20250728-121631
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250728041252.441040-2-dongml2%40chinatelecom.cn
-patch subject: [PATCH bpf-next 1/4] fprobe: use rhashtable
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250729/202507291147.Fov8pl4N-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507291147.Fov8pl4N-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507291147.Fov8pl4N-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/trace/fprobe.c:8:
->> include/linux/fprobe.h:29:20: error: field has incomplete type 'struct rhash_head'
-      29 |         struct rhash_head       hlist;
-         |                                 ^
-   include/linux/fprobe.h:29:9: note: forward declaration of 'struct rhash_head'
-      29 |         struct rhash_head       hlist;
-         |                ^
->> kernel/trace/fprobe.c:71:17: error: initializer element is not a compile-time constant
-      71 |         .key_offset             = offsetof(struct fprobe_hlist_node, addr),
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
-   In file included from kernel/trace/trace_fprobe.c:9:
->> include/linux/fprobe.h:29:20: error: field has incomplete type 'struct rhash_head'
-      29 |         struct rhash_head       hlist;
-         |                                 ^
-   include/linux/fprobe.h:29:9: note: forward declaration of 'struct rhash_head'
-      29 |         struct rhash_head       hlist;
-         |                ^
-   1 error generated.
+Subject: Re: [RFC PATCH bpf-next 1/5] bpf: Extend bpf syscall with common
+ attributes support
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <20250728142346.95681-2-leon.hwang@linux.dev>
+ <202507291146.0df0CQq9-lkp@intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <202507291146.0df0CQq9-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +29 include/linux/fprobe.h
 
-    11	
-    12	struct fprobe;
-    13	typedef int (*fprobe_entry_cb)(struct fprobe *fp, unsigned long entry_ip,
-    14				       unsigned long ret_ip, struct ftrace_regs *regs,
-    15				       void *entry_data);
-    16	
-    17	typedef void (*fprobe_exit_cb)(struct fprobe *fp, unsigned long entry_ip,
-    18				       unsigned long ret_ip, struct ftrace_regs *regs,
-    19				       void *entry_data);
-    20	
-    21	/**
-    22	 * struct fprobe_hlist_node - address based hash list node for fprobe.
-    23	 *
-    24	 * @hlist: The hlist node for address search hash table.
-    25	 * @addr: One of the probing address of @fp.
-    26	 * @fp: The fprobe which owns this.
-    27	 */
-    28	struct fprobe_hlist_node {
-  > 29		struct rhash_head	hlist;
-    30		unsigned long		addr;
-    31		struct fprobe		*fp;
-    32	};
-    33	
+On 29/7/25 11:43, kernel test robot wrote:
+> Hi Leon,
+> 
+> [This is a private test report for your RFC patch.]
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on bpf-next/master]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Extend-bpf-syscall-with-common-attributes-support/20250728-222848
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20250728142346.95681-2-leon.hwang%40linux.dev
+> patch subject: [RFC PATCH bpf-next 1/5] bpf: Extend bpf syscall with common attributes support
+> config: arm-randconfig-002-20250729 (https://download.01.org/0day-ci/archive/20250729/202507291146.0df0CQq9-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507291146.0df0CQq9-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202507291146.0df0CQq9-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> kernel/bpf/syscall.c:6140:1: error: conflicting types for 'sys_bpf'
+>     6140 | SYSCALL_DEFINE5(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size,
+>          | ^
+>    include/linux/syscalls.h:228:36: note: expanded from macro 'SYSCALL_DEFINE5'
+>      228 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
+>          |                                    ^
+>    include/linux/syscalls.h:235:2: note: expanded from macro 'SYSCALL_DEFINEx'
+>      235 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+>          |         ^
+>    include/linux/syscalls.h:249:18: note: expanded from macro '__SYSCALL_DEFINEx'
+>      249 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+>          |                         ^
+>    <scratch space>:50:1: note: expanded from here
+>       50 | sys_bpf
+>          | ^
+>    include/linux/syscalls.h:929:17: note: previous declaration is here
+>      929 | asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size);
+>          |                 ^
+>    1 error generated.
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks.
+
+It will be fixed by
+
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+
+
+index e5603cc91..3d84faa04 100644
+
+
+--- a/include/linux/syscalls.h
+
+
++++ b/include/linux/syscalls.h
+
+
+@@ -926,7 +926,8 @@ asmlinkage long sys_seccomp(unsigned int op,
+unsigned int flags,
+
+ asmlinkage long sys_getrandom(char __user *buf, size_t count,
+                              unsigned int flags);
+ asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned
+int flags);
+-asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned
+int size);
+
++asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned
+int size,
+
++                       struct bpf_common_attr __user *attr_common,
+unsigned int size_common);
+
+ asmlinkage long sys_execveat(int dfd, const char __user *filename,
+                        const char __user *const __user *argv,
+                        const char __user *const __user *envp, int flags);
+
+Thanks,
+Leon
+
+[...]
+
