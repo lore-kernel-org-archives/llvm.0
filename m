@@ -1,158 +1,258 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b5-smtp.messagingengine.com (flow-b5-smtp.messagingengine.com [202.12.124.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9435A285C86
-	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 09:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E26A288514
+	for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 09:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753781278; cv=none; b=HRpGvxWMae27H2mNFh9OvdTiGC0zQmAjIITZEANRaERhuDHAYO258xos//lkWMyrk3XjNBjXo3dMhaXmMFzHCjL+b+k2mmgRl9T9XNrmq42uf0cSHXfPNuV/96KmjVLbDxY5yimG6wqG3Zv4ogqRgp5dym9Ywm13A1ShmMh0V1c=
+	t=1753781753; cv=none; b=SWjYoZBEfL7To6ceQp+4DTHjbMsQ6VbRZw7lUe44mZkUTY9hwuDa1M5SbLBANy3Qwb23Hcryycxtb8k5iIkulsfZonEaVva2rBZ6XWVblRltcJrIzBc2Gi54Ba+TZoAyQkUBR5WnmXqtMCk7JowV/hk4+IhPPwfRzMHvRQdY4lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753781278; c=relaxed/simple;
-	bh=UVxbONYMenZ2G62xj1Ajze9L88dIaFIhF2FAPvq5IM8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oki7dtA/QNT5DMwk8iBOObRYa/vLaGz9H8jtgzR9GZIaENVgXAKwJ/sf07/Vy+4Z/ovcE14x9jqVLzpADbBy4Q0H109TfOpxePjMl+rRInirU3r8G2SFoDNavYFadKiSL0HSEfcMS3p3zNzjWEIJGCp3URQFmFF9ThkaNy6kh4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=SlyZNI9v; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+	s=arc-20240116; t=1753781753; c=relaxed/simple;
+	bh=g+vpis/SpU05sbo8Vmp+65jPjCMeiygq63OVHIYclpc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=lJXESmaHDeCVpTFr7eHRw4j4Puf2Uk6UYIl6gbmxnQ89CUdd12x+dIVs1P5KfjJ29ragOw2jA/cP5mOeG7B+4BTeushqiXv+EeIGDK8pxyZsTwEO9nZqHNS/774Chg9H6yGSxAzIkBTSEYyDB2zjs4vjWhJDWaq1XHNHECdCx2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=T0M0CDw9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=buJJFSqR; arc=none smtp.client-ip=202.12.124.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="SlyZNI9v"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5551a770828so5494270e87.1
-        for <llvm@lists.linux.dev>; Tue, 29 Jul 2025 02:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753781275; x=1754386075; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QuYSK4gM34dvKj46U2AHyFVlRRjXrZ8f8iJud63I7rk=;
-        b=SlyZNI9vH4T5zKnXU+4wuzr1U579ZfhFikxCyXwXh0krPRR6UADCcWMTKWKbO1XX/f
-         9M6CqLLxbpY0FB+oHA+DU0FTGJwf4n6cunXn6E6x7wUMzINAFxYD8G5DqXhJCmuKeHUE
-         YZch5laxk6ZbhXypE9ewR5zeRZGNwLv9D1Lpz3x+aoiwwjsRf8JJoW/EJQkiS1P9dKmM
-         HveG5AvD2tR16mZeBWBVg9gLgvwQFgFX3nqXamjVrxmhxOraPS8EjqwxHF7ld3MQKuKj
-         RFcHzdrRKWsoRby+PfbSOCOOkXeyDl1yJQABpEsSQll141oq+YU8qzsX/aSJCjM6G/iG
-         cFyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753781275; x=1754386075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QuYSK4gM34dvKj46U2AHyFVlRRjXrZ8f8iJud63I7rk=;
-        b=CtyFQRb7XYt6c5nfv60vD+wZQIxY8QdAXD1tZUlKCB5pJRksoK7+xohaJ+24hGMoJi
-         x5r/6dVUaRUUh20M5yHVBpvp/zpOHTdbUvY8O7ZfoQHo7uePr8FhBzbKNDKzKATCIUe3
-         LkUNF8lj4UwxTih0JBshd5nZAn/2yD04HWZaiXW2QUFBVvXQoBNURX2uCN0rdxlEi+DO
-         dr97St4ABffjIe5RvuismZaAtqnMf3y4sKiej97s8WyuzQWWukUOAZyuSi4T8sevXFVg
-         I6gwEXnbJF+oxO2moAP4zJLt5OwOuCX8lxicbME1Nv/HgiS5PgI78jSMqzZrGeHrBSpb
-         5vuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbRhnaP3Wvja6qRnVWawu1Ohq/kZxL++wmUkFUcD3WpooolbgGkE5zPnvz8C1fWfc7RijD@lists.linux.dev
-X-Gm-Message-State: AOJu0YxEFCVKPV7WSKc5KogkwVlpQsBf2Bqur4n75J+BEnHJW+iSx/jQ
-	tgVuV2+MvjRlqwrR6QG9VO4xlq8uocc9mUq2Iw1XR7REwEIT1iF7kvlzHQghtEoDZjCyZ30xGLY
-	3BhjboC3aus7AJrmoV5aw/t0v4tgzV5X62gRH5ywYzQ==
-X-Gm-Gg: ASbGnctlWrJteJeM4cQZMVPaMjZXpkGoT87nhNO2NQwl/WAaWEwNAj5V8YqZDw4wHLe
-	Qt4n+BJGW3xyp+TAQV97isXOW1n1+O7jVYBAbaNGU3v51DwOyF5XlvcuhyHQUXQYYfS/BjC7eCj
-	AWrS3nhykpx7vImW/jqFXYsESF3gYk4eHGY3w3veDCv3+J1H6EwdiSb06QI/vYPQ21wSWxVwLAx
-	eGTWo6Vgn8tc32K2+DSdncdJcWNDH9eEAph5to=
-X-Google-Smtp-Source: AGHT+IH1xjV/IusjYm7wD8jJwivk100eFvhpmAtG34em5DQvAFyq0WxlVADr0UXhPPNReVxqcy9+hVN8vSu0g22pdSc=
-X-Received: by 2002:a05:6512:1245:b0:55a:26ae:56e1 with SMTP id
- 2adb3069b0e04-55b5f480918mr3865559e87.27.1753781274688; Tue, 29 Jul 2025
- 02:27:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="T0M0CDw9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="buJJFSqR"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id 83C331302001;
+	Tue, 29 Jul 2025 05:35:49 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 29 Jul 2025 05:35:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1753781749;
+	 x=1753788949; bh=//ORI/NIeaAxh1YrBcckAswwPCVYsSmGgDQbyUkZAq8=; b=
+	T0M0CDw90VbSLjna7vCcfe6mTMKCQ5endMYTmbm5F+kZuNuH4nc4BQuqm9/kFxYO
+	cQELYjIMlvNKw4lJ6TCvYDOi6/GwbiFcq8V1FL9vON4SMrAYZBHEMyr3TapvJ32Q
+	EuCcZwakLVvoMKIuhtNhw9MpoU1pIRLsrJBuKfw0mFvSH27q/GYmQZrzLEpJzswO
+	GdKXjvNgbHsWZp/zE+Lg+mEXxE3fEhCRBZiE76eszktahyeCSVZQu6/kPCC3i4ZU
+	uXu4AJQyuOJ4LmQeRHhGFlF5/SpiTMdgAiOzotcaAGdLwfh/H5w+q56btZTRpbJ7
+	8OFkhBqJ4bK5fdS1U8Lbrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1753781749; x=
+	1753788949; bh=//ORI/NIeaAxh1YrBcckAswwPCVYsSmGgDQbyUkZAq8=; b=b
+	uJJFSqRDP45vHQljpA7Vz5hxUd4Ye4pvXCFm5P+xUL3+GeSv2Jf9TQHBok2h5/y2
+	8/PZ9GxYgAgtcQpNwox5EnnRktB7wG3sB0/j0KvR/u0lZ+CnNXcE0cmlrZO+y5ZV
+	9yem6aXNjbvR7nkneYRaElOeon59Ocxqje2qLUNlkME5Sa7zPk4kjPv9pZqHNKNh
+	lJV3swLKBE9qqltK0HfW4aTL83MPWE1v/JKK8VeT/xPzY6Nnm7iNFa/W7BubAO9J
+	3ffb5NBK06Z9dokUuQl2fLD6FS2cFL30C4YYZiw2Iduv5cvgWcUOa8OL1iybrgXJ
+	mUVNSzzn8C2I/WoIb3d+g==
+X-ME-Sender: <xms:85WIaMyhieSSZlSTT0yHTn72mdFb2rWSE8kDBFOTHT75_XQsqr_aHQ>
+    <xme:85WIaARI_U36niK6nz84PWzTnfAtsvJXL8KAZzHI9PFLHL4DmUN20-ne2_bXTcjrC
+    kpOt2tuPjxukqMBaus>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelgeejudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeftddpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepuggrvhgvrdhhrghnshgvnheslhhinhhugidrihhnthgvlhdrtghomh
+    dprhgtphhtthhopehilhhpohdrjhgrrhhvihhnvghnsehlihhnuhigrdhinhhtvghlrdgt
+    ohhmpdhrtghpthhtohepkhhirhhilhhlrdhshhhuthgvmhhovheslhhinhhugidrihhnth
+    gvlhdrtghomhdprhgtphhtthhopehkvgigvggtsehlihhsthhsrdhinhhfrhgruggvrggu
+    rdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrd
+    hinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhn
+    uhigrdguvghvpdhrtghpthhtohepihgsmhdqrggtphhiqdguvghvvghlsehlihhsthhsrd
+    hsohhurhgtvghfohhrghgvrdhnvghtpdhrtghpthhtohepmhgrohgsihgsoheslhhoohhn
+    ghhsohhnrdgtnhdprhgtphhtthhopehjmhhorhhrihhssehnrghmvghirdhorhhg
+X-ME-Proxy: <xmx:85WIaPnIcgaIATKBhxVWwK2-m2EfS8PuHbx7ehTzbZYYwEyhpGDr_A>
+    <xmx:85WIaBEA4xy-CXl_decDoAPBk3bbcRqPT4EvT8P_Ytm06SHygu9mPg>
+    <xmx:85WIaCzO8e92MmMJKlNqjd5utHh39rP5DKbEOnMvLMHZjHXDsuvHGQ>
+    <xmx:85WIaKabnqwzN2tmkaM4lt9r0XopNiElVkycoMHYr9aBhvYdocxU-w>
+    <xmx:9ZWIaNYEQ0icn8P3P-aCu5BQdrX6XDYXkrqNxknDiXSDJWuFBQyFgcIe>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9F298700065; Tue, 29 Jul 2025 05:35:47 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250724-pinctrl-gpio-pinfuncs-v3-10-af4db9302de4@linaro.org>
- <202507261937.Txq9shpv-lkp@intel.com> <CAHp75VcrL56_8uKNrmLj9sk+t7qZfKNi6-W-yAKNZ+mSCXU8zw@mail.gmail.com>
-In-Reply-To: <CAHp75VcrL56_8uKNrmLj9sk+t7qZfKNi6-W-yAKNZ+mSCXU8zw@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 29 Jul 2025 11:27:43 +0200
-X-Gm-Features: Ac12FXzctTCjvP8s5v8QO4Q26z9E9jC3m2QKR1Qn8JCLGwl_tkRpE49-qECZAkg
-Message-ID: <CAMRc=MdfMEAjgkTNENZejzRPN4svCiy4VZS9Y5HG7Ht5XwqUgA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/15] pinctrl: make struct pinfunction a pointer in
- struct function_desc
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
-	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: Tf1c1d2456aa020de
+Date: Tue, 29 Jul 2025 11:34:57 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Kees Cook" <kees@kernel.org>
+Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Paolo Bonzini" <pbonzini@redhat.com>,
+ "Mike Rapoport" <rppt@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>,
+ "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+ "Henrique de Moraes Holschuh" <hmh@hmh.eng.br>,
+ "Hans de Goede" <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, "Len Brown" <lenb@kernel.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Michal Wilczynski" <michal.wilczynski@intel.com>,
+ "Juergen Gross" <jgross@suse.com>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ "Roger Pau Monne" <roger.pau@citrix.com>,
+ "David Woodhouse" <dwmw@amazon.co.uk>,
+ "Usama Arif" <usama.arif@bytedance.com>,
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+ "Thomas Huth" <thuth@redhat.com>, "Brian Gerst" <brgerst@gmail.com>,
+ kvm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+ platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-mm@kvack.org, "Will Deacon" <will@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+ "Gavin Shan" <gshan@redhat.com>,
+ "Russell King" <rmk+kernel@armlinux.org.uk>,
+ "James Morse" <james.morse@arm.com>,
+ "Oza Pawandeep" <quic_poza@quicinc.com>,
+ "Anshuman Khandual" <anshuman.khandual@arm.com>,
+ "Hans de Goede" <hansg@kernel.org>,
+ "Kirill A. Shutemov" <kas@kernel.org>, "Marco Elver" <elver@google.com>,
+ "Andrey Konovalov" <andreyknvl@gmail.com>,
+ "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Sami Tolvanen" <samitolvanen@google.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nicolas.schier@linux.dev>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ "Andy Lutomirski" <luto@kernel.org>, "Baoquan He" <bhe@redhat.com>,
+ "Alexander Graf" <graf@amazon.com>,
+ "Changyuan Lyu" <changyuanl@google.com>,
+ "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Jan Beulich" <jbeulich@suse.com>, "Boqun Feng" <boqun.feng@gmail.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ "Bibo Mao" <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
+ linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
+ kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <f8bcf5ce-8b8b-4555-a210-14e1974eac92@app.fastmail.com>
+In-Reply-To: <20250724055029.3623499-2-kees@kernel.org>
+References: <20250724054419.it.405-kees@kernel.org>
+ <20250724055029.3623499-2-kees@kernel.org>
+Subject: Re: [PATCH v4 2/4] x86: Handle KCOV __init vs inline mismatches
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Sat, Jul 26, 2025 at 9:29=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Thu, Jul 24, 2025, at 07:50, Kees Cook wrote:
+> GCC appears to have kind of fragile inlining heuristics, in the
+> sense that it can change whether or not it inlines something based on
+> optimizations. It looks like the kcov instrumentation being added (or in
+> this case, removed) from a function changes the optimization results,
+> and some functions marked "inline" are _not_ inlined. In that case,
+> we end up with __init code calling a function not marked __init, and we
+> get the build warnings I'm trying to eliminate in the coming patch that
+> adds __no_sanitize_coverage to __init functions:
 >
-> On Sat, Jul 26, 2025 at 1:31=E2=80=AFPM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > Hi Bartosz,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
+> WARNING: modpost: vmlinux: section mismatch in reference: xbc_exit+0x8 
+> (section: .text.unlikely) -> _xbc_exit (section: .init.text)
+> WARNING: modpost: vmlinux: section mismatch in reference: 
+> real_mode_size_needed+0x15 (section: .text.unlikely) -> 
+> real_mode_blob_end (section: .init.data)
+> WARNING: modpost: vmlinux: section mismatch in reference: 
+> __set_percpu_decrypted+0x16 (section: .text.unlikely) -> 
+> early_set_memory_decrypted (section: .init.text)
+> WARNING: modpost: vmlinux: section mismatch in reference: 
+> memblock_alloc_from+0x26 (section: .text.unlikely) -> 
+> memblock_alloc_try_nid (section: .init.text)
+> WARNING: modpost: vmlinux: section mismatch in reference: 
+> acpi_arch_set_root_pointer+0xc (section: .text.unlikely) -> x86_init 
+> (section: .init.data)
+> WARNING: modpost: vmlinux: section mismatch in reference: 
+> acpi_arch_get_root_pointer+0x8 (section: .text.unlikely) -> x86_init 
+> (section: .init.data)
+> WARNING: modpost: vmlinux: section mismatch in reference: 
+> efi_config_table_is_usable+0x16 (section: .text.unlikely) -> 
+> xen_efi_config_table_is_usable (section: .init.text)
 >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/pinctrl/pinmux.c:917:7: warning: cast from 'void (*)(const v=
-oid *)' to 'void (*)(void *)' converts to incompatible function type [-Wcas=
-t-function-type-strict]
-> >      917 |                                          (void (*)(void *))k=
-free_const,
-> >          |                                          ^~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~
-> >    include/linux/device/devres.h:166:34: note: expanded from macro 'dev=
-m_add_action_or_reset'
-> >      166 |         __devm_add_action_or_reset(dev, action, data, #actio=
-n)
-> >          |                                         ^~~~~~
-> >    1 warning generated.
+> This problem is somewhat fragile (though using either __always_inline
+> or __init will deterministically solve it), but we've tripped over
+> this before with GCC and the solution has usually been to just use
+> __always_inline and move on.
 >
-> Good catch, LKP!
+> For x86 this means forcing several functions to be inline with
+> __always_inline.
 >
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-Ah, strict function type cast...
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-> ...
->
-> >    910          /*
-> >    911           * FIXME: It's generally a bad idea to use devres in su=
-bsystem core
-> >    912           * code - managed interfaces are aimed at drivers - but=
- pinctrl already
-> >    913           * uses it all over the place so it's a larger piece of=
- technical debt
-> >    914           * to fix.
-> >    915           */
->
-> Indeed, this has to be addressed first, and IIRC I also got something
-> like this in the past.
->
+In my randconfig tests, I got these ones as well:
 
-I mean, it doesn't have to be addressed first really, it's another big
-chunk of technical debt but we can live with it for now and address it
-in parallel.
+WARNING: modpost: vmlinux: section mismatch in reference: early_page_ext_enabled+0x14 (section: .text.unlikely) -> early_
+page_ext (section: .init.data)
+x86_64-linux-ld: lm75.c:(.text+0xd25): undefined reference to `i3c_device_do_priv_xfers'
 
-Bart
+And one more with a private patch of mine.
 
-> >    916          error =3D devm_add_action_or_reset(pctldev->dev,
-> >  > 917                                           (void (*)(void *))kfre=
-e_const,
-> >    918                                           (void *)function->func=
-);
-> >    919          if (error)
-> >    920                  return error;
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+These are the fixups that make it build for arm/arm64/x86
+randconfigs for me, so you could fold them as well in
+as well. I have already sent the i3c patch for upstream
+but not the page_ext.h patch.
+
+--- a/include/linux/page_ext.h
++++ b/include/linux/page_ext.h
+@@ -57,7 +57,7 @@ extern bool early_page_ext;
+ extern unsigned long page_ext_size;
+ extern void pgdat_page_ext_init(struct pglist_data *pgdat);
+ 
+-static inline bool early_page_ext_enabled(void)
++static __always_inline bool early_page_ext_enabled(void)
+ {
+        return early_page_ext;
+ }
+@@ -189,7 +189,7 @@ static inline struct page_ext *page_ext_iter_get(const struct page_ext_iter *ite
+ #else /* !CONFIG_PAGE_EXTENSION */
+ struct page_ext;
+ 
+-static inline bool early_page_ext_enabled(void)
++static __always_inline bool early_page_ext_enabled(void)
+ {
+        return false;
+ }
+--- a/include/linux/i3c/device.h
++++ b/include/linux/i3c/device.h
+@@ -245,7 +245,7 @@ void i3c_driver_unregister(struct i3c_driver *drv);
+  *
+  * Return: 0 if both registrations succeeds, a negative error code otherwise.
+  */
+-static inline int i3c_i2c_driver_register(struct i3c_driver *i3cdrv,
++static __always_inline int i3c_i2c_driver_register(struct i3c_driver *i3cdrv,
+                                          struct i2c_driver *i2cdrv)
+ {
+        int ret;
+@@ -270,7 +270,7 @@ static inline int i3c_i2c_driver_register(struct i3c_driver *i3cdrv,
+  * Note that when CONFIG_I3C is not enabled, this function only unregisters the
+  * @i2cdrv.
+  */
+-static inline void i3c_i2c_driver_unregister(struct i3c_driver *i3cdrv,
++static __always_inline void i3c_i2c_driver_unregister(struct i3c_driver *i3cdrv,
+                                             struct i2c_driver *i2cdrv)
+ {
+        if (IS_ENABLED(CONFIG_I3C))
+
+As I understand, the underlying problem is less gcc inlining
+being fragile, but more that gcc does not inline functions
+when they have different __no_sanitize_coverage attributes.
+
+      Arnd
