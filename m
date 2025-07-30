@@ -1,206 +1,247 @@
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011064.outbound.protection.outlook.com [40.107.74.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A27E2DAFDF;
-	Wed, 30 Jul 2025 14:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753887181; cv=fail; b=Bq7IMot37FyPXQi/x75kBwylLG74XsYfbjTIUtEr3LNAOC+EtglK35F3ntzJxvsH/xyK+oFuX9E3SSO8gBxHqE/NNSc0tu55SMECddLL5t/+qJLdCosTCq4oleWr5KgzRp0xeaL+wQh6YvmrZrpGiwy6a4WFks/Y7PB6m9F+nKk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753887181; c=relaxed/simple;
-	bh=jLRPXFO20TBXB+oBWUf9wlagRLdbwxDSLZ1x5PViJsg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=M1eGHohqTVV5aeEzuBd9v5DLEWCrMAZeEEyJnU45CDzCrTF71tMnnDkUHjpd0Pv7PzAmiKo/vauUTWCUu9r4wy+X8I8SFqc5Fy1v3IIFlI/is4LMqti9qsIFDARxtw0QHe904aqnedqm8ZxId5a7cjukkVxwTrwp702YA5nWk1k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=ujTHFjBk; arc=fail smtp.client-ip=40.107.74.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D801AA786;
+	Wed, 30 Jul 2025 15:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753889746; cv=none; b=rrRPSR5kR+JCfQVomF2IZnDcOeRSDP6PMYum7V8NjeMaMKzQKBYN/zkEezzzl0TY8e5f6r0WG0VDiMW3QPapGCFiDzi7Nqvlca0SdvsMDvHv/ie98cTvFKrBp8uzgQyYa35w/j8Sp0qEWGkx9e8ZxKOEhhTF6yQfn07v3w5pzgU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753889746; c=relaxed/simple;
+	bh=kCyztr77u4EEyOxkCXt5j2Yt4z3W0IFI7x3HI5IuhQs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W/uZncVftbiQuOLcrmJPxz6BqKSxRuhXUjIkUyYGQ9knlNhxizRCx2E9jgVfNU/mYLDb4V2o8R+STPofWpExKHW/yZnMAvBG1j0f+mM+uMI0RVGkf8D0XVPrdTl4SujrC3pdhUBW1rbfphpVjPvPRjVI7Pj+Dw/nBvWV5CZD9Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mg7rbI5X; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="ujTHFjBk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xVapSetnDtoshsUv0RqQi5BOWZfnxKyfAQCIHxjQJmGHXRPe+FOgLkf3SAi4oIYapUG8/vlTL/dTCgsQmfuYIZrG22G4PrJstIgsDLlnmyz1x78zRrVu27I4qFu2PjflfFDLwHbcCMj/Xv/nPe16k51e9s1omh7Mpcu2Yzd8ndpRwPTMWdpSSGk1+TKTOcm2Nlp/OAwhhmJTAFjP/xk3pWXM98UjPeAwm8qoXYa9TQQTGTBX5r2U10pRtDDJTJQc3sX8oUcvtylsEDfveblC4BEZXbj5P6/Xaz3CZALC5WIuF+gtDUnj+iJBmEbOXZgCM71lgWxa3qi1HoLazN+ztw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jLRPXFO20TBXB+oBWUf9wlagRLdbwxDSLZ1x5PViJsg=;
- b=pK/63WpIcR6AdBCbf3pmZ8gRQ/QBWUsrYqEocVPKl9BMq+d3uxaMV96sBcDY3BZtjk0bYpK94VKb4WoHRzcIneMQiMhWjMGAaj+lYX3R09NjM7Dtg82TAUZsGnjrkuDMHFnPTd8SiBDtc9NpcVL1OSf2J9dfSESZhAeL7w21iZ/LM0Ah5FiJvThR7D6GqiY65wUj4wWDpKHBjTfokBdMsBDtw67vNOEWSuDYkga639Eh/H2l+Kdv+PVhKBN2k/d+y7RlsmalOQEUrQvYPr70Bz++7j4gnsLdrsPgqidm69XLkqNXB6ZbuabhYNpHixKH7U3TM9d4uLZOfLNCv2TC4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jLRPXFO20TBXB+oBWUf9wlagRLdbwxDSLZ1x5PViJsg=;
- b=ujTHFjBkFZXmd2jnhqxigedVLJsvmPJ5qiqWb1N8C5DizK5YkqEBdljAycrVWN2GqMa3C4Jw5J6YgY6s3ITeGY6yrX0uYP1dZOGQaJTTn3uDNij8ajrQMGLl0ASsWxtlc9ZZp36IS5OpbHrtfNEb5Tw50YlzGGO0m1RVuDRv94w=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYCPR01MB11639.jpnprd01.prod.outlook.com (2603:1096:400:37f::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.26; Wed, 30 Jul
- 2025 14:52:55 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%7]) with mapi id 15.20.8989.010; Wed, 30 Jul 2025
- 14:52:54 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: geert <geert@linux-m68k.org>, Wolfram Sang <wsa-dev@sang-engineering.com>
-CC: kernel test robot <lkp@intel.com>, biju.das.au <biju.das.au@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "oe-kbuild-all@lists.linux.dev"
-	<oe-kbuild-all@lists.linux.dev>, "linux-mmc@vger.kernel.org"
-	<linux-mmc@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: RE: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
- SD_BUF0 in polling mode
-Thread-Topic: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
- SD_BUF0 in polling mode
-Thread-Index: AQHb/xCTiDIH7i0tZU6d0LnXFP+CfbRKN9KAgAAvfYCAAE4sAIAAA/GwgAAK3jA=
-Date: Wed, 30 Jul 2025 14:52:54 +0000
-Message-ID:
- <TY3PR01MB11346BCAE63F4E78CD614E02F8624A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
- <202507301421.AmWhOZBk-lkp@intel.com> <aInjE-sduVbBRmJx@shikoro>
- <CAMuHMdUHog6rehPFu9t99N0F-69sr1fQGWmX1sBR40=kDvD=Bg@mail.gmail.com>
- <TY3PR01MB11346C0622E61F19C38B2AB238624A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-In-Reply-To:
- <TY3PR01MB11346C0622E61F19C38B2AB238624A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYCPR01MB11639:EE_
-x-ms-office365-filtering-correlation-id: 452dd4cb-2ff6-4e2c-2d78-08ddcf78c408
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?Sng3THBNbUhtWTd5Z1hLV1Nvc2ZUUXhwOVFlNGUzVXFGaXA3WHpLdkVpLytS?=
- =?utf-8?B?Y1pnQ3h2R1FyVHNISjJReHZkdjZlWWtsaGY4ays1NmdLTUwxUlVqc0RFelZh?=
- =?utf-8?B?bzdlcDVuYm8zZVQ2c2FTc21wMFVvdnpHWGdlOE1YWmhtWmo2Z004Zzl3eEJG?=
- =?utf-8?B?Nm5ESlJycUloRUxLc1BBc3lTYlA2SVJ4M2ZLbndzQm1PV21ZeGVYZSsrbzdJ?=
- =?utf-8?B?WWc4b2orZ0RJdFRLaU5nblZtZnViTVJidmxhZmNEYTIyeFF3MUQ4MURpTXFk?=
- =?utf-8?B?T01maTBKRGVkT1ZPMGJ5UDFqZy9BMEdFWFlMYlhtbzlsR2krZVIyTVNEVXhi?=
- =?utf-8?B?OXprUjNPOEdaOWdXRmtwanVTUHZOYXc3TDhlckIwaHo5Rk5OS0NmRlRESUlZ?=
- =?utf-8?B?aXI0YVJXSmx4bElIcjk4NGt0RG5LT0JmVkhjYzVpNnZGeDVsTWoxR1V5UGtY?=
- =?utf-8?B?VlBvbnU4Ni9XcDQzbmdwSysyOWkyWGQrckJnNTRmcDk2NVZYd3E3RlpML3pF?=
- =?utf-8?B?UFdNYlhXWW9lNWpWOFdvWEFlZ1lWUTVVbWtSSUk3RjRNUXhYZVVsZnNuUnNu?=
- =?utf-8?B?RGd1aGFQa2tiZGlKOVZsYzRlbE8yUGRUNnZSenFyYXcyUHBVc0FZOU9teTFC?=
- =?utf-8?B?cG1NQm8rWTJJTTJwVFJUaHFzNXlZN0NPNUs0Q2VFWWJZVDkvbWNYOHdjODRj?=
- =?utf-8?B?Y09yRkZ3ZW9oak93bnhucEtRdXFGVWdzVDdYOGM0VThiRDVDeTJLMHBWajBE?=
- =?utf-8?B?N0JRMWxwWFRmZkJ5Um1PN2JUOXE5a2NrOE9GTGNmZXRYendkVWNQMU02RFE3?=
- =?utf-8?B?Z0g4R1J5aVpqZXFsUDBvVDdIaTdUMUtqVlI3VkdBcHZNa0NQWjk3K0FIZVlG?=
- =?utf-8?B?dE5mQW9YWm1TVHQvN0lGWm54T2ZKamVJbDNFaDhwcUZMVXlXVWtUKzFBQzUr?=
- =?utf-8?B?TjNoR3ZQa1IyaW10aDZXZER0NGRGbDNJNlBoY1dZREVMQkcwV3VEK0E4SXpB?=
- =?utf-8?B?UGtwVkc0SjdkRUJZZHRQcEtiZ0pGOW9CTnNwS29OOHlpZUh2RTZOSVZkMjFn?=
- =?utf-8?B?U1BFS3lMbno1cFRLM3B2aHZKNVZGOTNLa2piYlUwKzFhd3BEZXE5QVZ0bnF3?=
- =?utf-8?B?UkZyaHpTQWR4WWx4WjMrRnBJRDM5ZG9kNDUvN0x3Zm9PdVBJK05WWGhZendP?=
- =?utf-8?B?QkE3RStob05qSCt0M1kzSXNIR0Z3R2RlZUgzdDVFQnRvT0NHUmdxQXIxNDFx?=
- =?utf-8?B?MVRsbktQKyt2NjZVbDU1R2grZEhoMEdzY3c0SVJkQmVWdk5PalVuSWc4azFB?=
- =?utf-8?B?ZEtFV1BjMFZZYm1PZi9UMkx4WWpTaGE4REoxcDdMYm4vK0VHWGtUVjZVcjBu?=
- =?utf-8?B?VnRwdDFQRW96OUFoS3VMMEZNTUIwRFA5SEJhdXRWaFgvUmFiRGl6UFpidW43?=
- =?utf-8?B?SnpFNDFtTG5oWitrNi9HWWZwaitPNVhTR05McUMwRElhTHlLYTd2ZXJqTGdE?=
- =?utf-8?B?Sy9zSU5SQWx3M0lxYTNrcWVOSGtVZVhGVEpXTmhPWDJLSE5nWE5ld0FTQlND?=
- =?utf-8?B?R1JxZko0azRMajdvY0pRRU5SanYrUW1VUlZvRSthYkhsRTFXTDMvbjBLdS83?=
- =?utf-8?B?SndVTTRqOFBtYm52MmdSelpKd2V0a0d1emplUkZZbkRLQWxOYS9HWk94SFR4?=
- =?utf-8?B?QXY2QVVHM1l0cWhmOEhieDh4VStKRXN4WFNsNXd5NDZnUzBmMFVVdXA5bzVX?=
- =?utf-8?B?UkU4bjFyRVp3eHhKd2JIR3NWQVVPdjJLSU1aLytaR3MvSkp5Y1c5ZHVTaFM2?=
- =?utf-8?B?dHR6UnFwbGVqNUtYOSs0WnJ0aDNUajRGaDlQYS9HWjlkR283akRLRWhFTDE4?=
- =?utf-8?B?Z0doRTZvcGhvTC81OTNuNGh3VXlRRUtSQmNxN0d0MUhGRTFWL2hnQTNCRjVV?=
- =?utf-8?B?WWxWRkt6RThIenBRbXAvL2w0Q2ptaXIxNFN1L1c3SXhVbWZzcWNhSlNQdFBm?=
- =?utf-8?Q?0nGz/zkvV/s/jOkFp24IwRKLHX0vqg=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?VEJyMTJGM2RFRFN2RjQweXlQNTIyZm1RZkF2S29JYUdIRzNYOUxOVS9mVjk3?=
- =?utf-8?B?d1hxZnhVNkJXWnZHdHRBL09pdC9wUEZYQUNZL1dTTTNxUkNCY2c5YTdiY1RC?=
- =?utf-8?B?djZYN24ydXp3VWdEVExwdFg1K0ZvdzBFZ01oRURKejc5b1l3YnZaTXl4b3BP?=
- =?utf-8?B?aUNVaU5wblN5bHJtL0d6RTg3UjZkRjVUMkZRQmZnWG41ZjhadEVmY2RqU2ph?=
- =?utf-8?B?T21GclE2L1pSa1Rrd1BJRFZzU2tFYW9HckZGUy83QWdSNFczbUo4QndXU3JQ?=
- =?utf-8?B?YkNyaHNSZDlOdXlZd21zbCswV2tYUEo1N2svU0tLTXNYaGlXR3lkVnV2K0NI?=
- =?utf-8?B?b01aL3AzdlkxZzF2bGh4UlBaNnpsQmxHeTBKM1RTL0c1RXNHWkI0T1luSVp1?=
- =?utf-8?B?MHlPS0UxYWF6L2g4UWRldTlOcGZJaVBjd2xpWHNVTlhUaDNDdmIwNEp5QzlN?=
- =?utf-8?B?cC9KUTRlalJpaWkzQVpQOVBWL3FGd0dSeHBoTTEyQ0xhSXA4YkNrNUVZMDRn?=
- =?utf-8?B?UlU3bjBOYlFqOUdOSmhENFdtaDIxRVgyVEx1NDQyTnNwTUFYTTI2YlNrTHBh?=
- =?utf-8?B?empHWEJMalRoTUtSQnlDNG1FeTYvSUlyWlRNWk1lQzNhZUR0ck5xTnk0QTlL?=
- =?utf-8?B?bzdvTEwxQ3hVSzc2VE4ydng4R2NxWld5b0dOSlNsbjlaMTVXVnRpd1pldU5q?=
- =?utf-8?B?NjZZQzVOdEc2WFNwZ3lDTDNncUZTR3lXcXp4UjFZeDhDMVk1U1lwZmFJbjgr?=
- =?utf-8?B?OC85am1xYUtaWXJwdkNvOWplS1AwbVlYOElKUEIxa1g3bjFMSk42SEFJNlBp?=
- =?utf-8?B?MTZMcXM4emxqQmZFSlhxTUZWTHN3RkdialkwdnBWWkxQWTBOTTlvWGtiMS9q?=
- =?utf-8?B?amYyQW00MFpZRHFiZ3VjbWJHMVBBMzBMOUlIWlhmZWlwRE9JekxBK1kveEpS?=
- =?utf-8?B?WUxmVkljc2I3QXpFVXNsZDV3UjZsVzlSL29oYTNnWUs3L3J6SEdHaGxRbWow?=
- =?utf-8?B?Wi9iOWlCUlBhaGRvcW9GZndmQjBOVElKVDhETENoY3hpREorZWxTOWJFZ3hI?=
- =?utf-8?B?eHlHNi9UMVh6NzlTMUZWL3B0enN2Z1lZUTBMck9YWTgxb3dBOTBma1pPbkRV?=
- =?utf-8?B?Z2I2L0pJRDMrdm9BOGhXWHo3a0V6OFp6a2NKMFZ1Vm9kYU1kNXV2a2hRSG9N?=
- =?utf-8?B?cHhGMHVraDljQTdRaEowaTB4ckNuUENDYmZzaWdNenhSQTJ6SGtYVWE1czVS?=
- =?utf-8?B?dC9JRVVTZzZNczJIWGVEQWRkRFJCc2NZcldhVlEydVhxVCtWb051V2gxQVd5?=
- =?utf-8?B?elc4d2tQNUpEVlJXS3dEeGNoRnoyWFBrejM4K2RwSXkxbFlFdkkyOE4yMUp3?=
- =?utf-8?B?Z3FMZ3lkRzJsNFN5QzUwOU0xOG1YdHZSS2hWcE1pYW1aaXRyWG9Ma1NzdCtW?=
- =?utf-8?B?ZEdHVHpXcXdENnBKbUlJVHIveWxmVktYVGhKYzFaSERyRDdDb3I4UDkvZWpr?=
- =?utf-8?B?RFV1dzFJUGxtaCt0L2ZWNkxsRkFQKzNiUTA0cWlIalRFU2RIc1ZhQ00xK2RJ?=
- =?utf-8?B?WEc3dU1IbXBtMXdiUzVpanRBMkEwbHhlUHNyeERiTXNtWnMzc0RkU3JpeU1l?=
- =?utf-8?B?dTlFRTY3cEdTRkJoYUNDUkF1c0ZpMFpCUkxFcjFzN2R4dEVDdEtpRm5jOW9N?=
- =?utf-8?B?ZnI1U3VOeU1sdklPU28yOG9BemxEQzJjbE0xZkk4WjdFSTVTSzJ4UXZ5bDZP?=
- =?utf-8?B?ditpY25rWk00OUJZdUVNOFI3dWdUaTBxaExreGxmUkhsVlp0OGpNNlNBTGFa?=
- =?utf-8?B?OGVaVitndTNZLzZqSmNCVlJJSUVlNUNQRFY2aVNQdnI3NG9BMHAvMXg1Z0wv?=
- =?utf-8?B?dnR2MGh6WmlLbHFKQkxSclNVMENPL0p1Q0VlTXNiVkU3R0FDR3lrZFFWTlFz?=
- =?utf-8?B?eUFEaVRxRTlScUwxREpHODFkMTdvTUhENnlQNFZTS2xqT3hmVkduQkxXNk1h?=
- =?utf-8?B?RHp0K0h5TFdRd28ySkZsdmNCZVNaajY0VFh1bkNRNVNkZXZPTlgzbW4wbHZt?=
- =?utf-8?B?OGJwQ2grQkhVSm9EK3E3UE9uSW9VQnpzZVY1UW1lcTNlZHdsRUxnM0FjYWVY?=
- =?utf-8?B?OGYwUW4yb2RDRVRiVERyOTdOMWRrZkljdGlaOGhESTZ3N21WbWkwVjZDK1V6?=
- =?utf-8?B?QXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mg7rbI5X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753889744; x=1785425744;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kCyztr77u4EEyOxkCXt5j2Yt4z3W0IFI7x3HI5IuhQs=;
+  b=Mg7rbI5XQshdvZkwhBZiVT+bxHqQdf5wkG0akaGaK94ndEzGMZ+KbP2I
+   8VPt4NO3B1038kMEzvWwevozH8+M1ciDR1MDpAEs1+pJeRrR7l8PSfPuw
+   cKUZBkI6dLNaVEvstETSOXtVrUkzND7SRD61kfou7bjn40rosoFcch+Ve
+   ytrdX4VDYNYJ4t0I9HldhQuqiBCJHHfVKNBc5cCyWwcDfXmza6UdPGncn
+   wy3wFlRVgug2hDX0kiAAYNbN33po09pxb0hLULBMHTCpJtpIj9LONMCV7
+   pQfsktSqzLEs+IpRAzZcKEdMNXcbYQXHVfafM0yLUbOCMqg2GnI4cfK5I
+   Q==;
+X-CSE-ConnectionGUID: oENUi19XQMu3U9yhAWgLBw==
+X-CSE-MsgGUID: yp8TTkxfQ8epwCFVfeI3HA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="66893166"
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="66893166"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 08:35:43 -0700
+X-CSE-ConnectionGUID: fD5ms+nfRemb1yEBTKKsNA==
+X-CSE-MsgGUID: tvp5Dn4uTfCYWOuhLIDf3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="163467311"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 30 Jul 2025 08:35:41 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uh8qA-0002sy-1S;
+	Wed, 30 Jul 2025 15:35:38 +0000
+Date: Wed, 30 Jul 2025 23:34:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] media: i2c: Add OmniVision OV6211 image sensor
+ driver
+Message-ID: <202507302325.nnfzHwrF-lkp@intel.com>
+References: <20250729231454.242748-3-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 452dd4cb-2ff6-4e2c-2d78-08ddcf78c408
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2025 14:52:54.7743
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UUWRe2rh0vI/PADbRi3qsIgo/UQuxVn9VGHRYeEyWZ1sp92+HZrQzVO6nDkKudHF/2up/1eXxkJpHW2Fz2JHxY9ZSpoUm32uVBi1kzG8yr8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB11639
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250729231454.242748-3-vladimir.zapolskiy@linaro.org>
 
-SGkgR2VlcnQsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQmlqdSBE
-YXMNCj4gU2VudDogMzAgSnVseSAyMDI1IDE1OjEyDQo+IFN1YmplY3Q6IFJFOiBbUEFUQ0ggdjIg
-MS8yXSBtbWM6IHRtaW86IEFkZCA2NC1iaXQgcmVhZC93cml0ZSBzdXBwb3J0IGZvciBTRF9CVUYw
-IGluIHBvbGxpbmcgbW9kZQ0KPiANCj4gSGkgR2VlcnQvV29sZnJhbSwNCj4gDQo+ID4gLS0tLS1P
-cmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiBGcm9tOiBHZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0
-QGxpbnV4LW02OGsub3JnPg0KPiA+IFNlbnQ6IDMwIEp1bHkgMjAyNSAxNDo1Nw0KPiA+IFN1Ympl
-Y3Q6IFJlOiBbUEFUQ0ggdjIgMS8yXSBtbWM6IHRtaW86IEFkZCA2NC1iaXQgcmVhZC93cml0ZSBz
-dXBwb3J0DQo+ID4gZm9yIFNEX0JVRjAgaW4gcG9sbGluZyBtb2RlDQo+ID4NCj4gPiBIaSBXb2xm
-cmFtLA0KPiA+DQo+ID4gT24gV2VkLCAzMCBKdWwgMjAyNSBhdCAxMToxNywgV29sZnJhbSBTYW5n
-IDx3c2EtZGV2QHNhbmctZW5naW5lZXJpbmcuY29tPiB3cm90ZToNCj4gPiA+ID4gICAgSW4gZmls
-ZSBpbmNsdWRlZCBmcm9tIGRyaXZlcnMvbW1jL2hvc3QvdW5pcGhpZXItc2QuYzoyMToNCj4gPiA+
-ID4gPj4gZHJpdmVycy9tbWMvaG9zdC90bWlvX21tYy5oOjI0OToyOiBlcnJvcjogY2FsbCB0byB1
-bmRlY2xhcmVkDQo+ID4gPiA+ID4+IGZ1bmN0aW9uICdpb3JlYWQ2NF9yZXAnOyBJU08gQzk5IGFu
-ZCBsYXRlciBkbyBub3Qgc3VwcG9ydA0KPiA+ID4gPiA+PiBpbXBsaWNpdCBmdW5jdGlvbiBkZWNs
-YXJhdGlvbnMNCj4gPiA+ID4gPj4gWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dDQo+
-ID4gPiA+ICAgICAgMjQ5IHwgICAgICAgICBpb3JlYWQ2NF9yZXAoaG9zdC0+Y3RsICsgKGFkZHIg
-PDwgaG9zdC0+YnVzX3NoaWZ0KSwgYnVmLCBjb3VudCk7DQo+ID4gPiA+ICAgICAgICAgIHwgICAg
-ICAgICBeDQo+ID4gPiA+ID4+IGRyaXZlcnMvbW1jL2hvc3QvdG1pb19tbWMuaDoyNTU6MjogZXJy
-b3I6IGNhbGwgdG8gdW5kZWNsYXJlZA0KPiA+ID4gPiA+PiBmdW5jdGlvbiAnaW93cml0ZTY0X3Jl
-cCc7IElTTyBDOTkgYW5kIGxhdGVyIGRvIG5vdCBzdXBwb3J0DQo+ID4gPiA+ID4+IGltcGxpY2l0
-IGZ1bmN0aW9uIGRlY2xhcmF0aW9ucw0KPiA+ID4gPiA+PiBbLVdpbXBsaWNpdC1mdW5jdGlvbi1k
-ZWNsYXJhdGlvbl0NCj4gPiA+ID4gICAgICAyNTUgfCAgICAgICAgIGlvd3JpdGU2NF9yZXAoaG9z
-dC0+Y3RsICsgKGFkZHIgPDwgaG9zdC0+YnVzX3NoaWZ0KSwgYnVmLCBjb3VudCk7DQo+ID4gPiA+
-ICAgICAgICAgIHwgICAgICAgICBeDQo+ID4gPg0KPiA+ID4gU2lnaCwgdGhlbiB0aGUgZ3VhcmQg
-c2VlbXMgdG8gYmUgQVJNNjQgYWZ0ZXIgYWxsIDooDQo+ID4NCj4gPiBpb3JlYWQ2NF9yZXAoKSBp
-cyBkZWZpbmVkIGluIGluY2x1ZGUvYXNtLWdlbmVyaWMvaW8uaCwgYW5kIHBvd2VycGMgZG9lcyBp
-bmNsdWRlIHRoYXQuDQo+ID4NCj4gPiBQZXJoYXBzIGRyaXZlcnMvbW1jL2hvc3QvdG1pb19tbWMu
-aCBzaG91bGQganVzdCBpbmNsdWRlIDxsaW51eC9pby5oPj8NCj4gDQo+IFRoaXMgZG9lcyBub3Qg
-Zml4IHRoZSBpc3N1ZS4NCg0KUmVhc29uIGlzIENPTkZJR19HRU5FUklDX0lPTUFQPXkNCg0KU28s
-IGlvcmVhZDY0X3JlcCgpIGlzIGV4Y2x1ZGVkLg0KDQpDaGVlcnMsDQpCaWp1DQo=
+Hi Vladimir,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linuxtv-media-pending/master linus/master v6.16 next-20250730]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Zapolskiy/dt-bindings-media-i2c-Add-OmniVision-OV6211-image-sensor/20250730-071618
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250729231454.242748-3-vladimir.zapolskiy%40linaro.org
+patch subject: [PATCH v2 2/2] media: i2c: Add OmniVision OV6211 image sensor driver
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250730/202507302325.nnfzHwrF-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302325.nnfzHwrF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507302325.nnfzHwrF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov6211.c:672:18: error: call to undeclared function 'devm_v4l2_sensor_clk_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     672 |         ov6211->xvclk = devm_v4l2_sensor_clk_get(&client->dev, NULL);
+         |                         ^
+>> drivers/media/i2c/ov6211.c:672:16: error: incompatible integer to pointer conversion assigning to 'struct clk *' from 'int' [-Wint-conversion]
+     672 |         ov6211->xvclk = devm_v4l2_sensor_clk_get(&client->dev, NULL);
+         |                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/devm_v4l2_sensor_clk_get +672 drivers/media/i2c/ov6211.c
+
+   654	
+   655	static int ov6211_probe(struct i2c_client *client)
+   656	{
+   657		struct ov6211 *ov6211;
+   658		unsigned long freq;
+   659		int ret;
+   660	
+   661		ov6211 = devm_kzalloc(&client->dev, sizeof(*ov6211), GFP_KERNEL);
+   662		if (!ov6211)
+   663			return -ENOMEM;
+   664	
+   665		ov6211->regmap = devm_cci_regmap_init_i2c(client, 16);
+   666		if (IS_ERR(ov6211->regmap))
+   667			return dev_err_probe(&client->dev, PTR_ERR(ov6211->regmap),
+   668					     "failed to init CCI\n");
+   669	
+   670		v4l2_i2c_subdev_init(&ov6211->sd, client, &ov6211_subdev_ops);
+   671	
+ > 672		ov6211->xvclk = devm_v4l2_sensor_clk_get(&client->dev, NULL);
+   673		if (IS_ERR(ov6211->xvclk))
+   674			return dev_err_probe(&client->dev, PTR_ERR(ov6211->xvclk),
+   675					     "failed to get XVCLK clock\n");
+   676	
+   677		freq = clk_get_rate(ov6211->xvclk);
+   678		if (freq && freq != OV6211_MCLK_FREQ_24MHZ)
+   679			return dev_err_probe(&client->dev, -EINVAL,
+   680					"XVCLK clock frequency %lu is not supported\n",
+   681					freq);
+   682	
+   683		ret = ov6211_check_hwcfg(ov6211);
+   684		if (ret)
+   685			return dev_err_probe(&client->dev, ret,
+   686					     "failed to check HW configuration\n");
+   687	
+   688		ov6211->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
+   689							     GPIOD_OUT_HIGH);
+   690		if (IS_ERR(ov6211->reset_gpio))
+   691			return dev_err_probe(&client->dev, PTR_ERR(ov6211->reset_gpio),
+   692					     "cannot get reset GPIO\n");
+   693	
+   694		ov6211->avdd = devm_regulator_get_optional(&client->dev, "avdd");
+   695		if (IS_ERR(ov6211->avdd)) {
+   696			ret = PTR_ERR(ov6211->avdd);
+   697			if (ret != -ENODEV)
+   698				return dev_err_probe(&client->dev, ret,
+   699						     "Failed to get avdd regulator\n");
+   700	
+   701			ov6211->avdd = NULL;
+   702		}
+   703	
+   704		ov6211->dovdd = devm_regulator_get_optional(&client->dev, "dovdd");
+   705		if (IS_ERR(ov6211->dovdd)) {
+   706			ret = PTR_ERR(ov6211->dovdd);
+   707			if (ret != -ENODEV)
+   708				return dev_err_probe(&client->dev, ret,
+   709						     "Failed to get dovdd regulator\n");
+   710	
+   711			ov6211->dovdd = NULL;
+   712		}
+   713	
+   714		ov6211->dvdd = devm_regulator_get_optional(&client->dev, "dvdd");
+   715		if (IS_ERR(ov6211->dvdd)) {
+   716			ret = PTR_ERR(ov6211->dvdd);
+   717			if (ret != -ENODEV)
+   718				return dev_err_probe(&client->dev, ret,
+   719						     "Failed to get dvdd regulator\n");
+   720	
+   721			ov6211->dvdd = NULL;
+   722		}
+   723	
+   724		/* The sensor must be powered on to read the CHIP_ID register */
+   725		ret = ov6211_power_on(&client->dev);
+   726		if (ret)
+   727			return ret;
+   728	
+   729		ret = ov6211_identify_module(ov6211);
+   730		if (ret) {
+   731			dev_err_probe(&client->dev, ret, "failed to find sensor\n");
+   732			goto power_off;
+   733		}
+   734	
+   735		mutex_init(&ov6211->mutex);
+   736		ov6211->cur_mode = &supported_modes[0];
+   737	
+   738		ret = ov6211_init_controls(ov6211);
+   739		if (ret) {
+   740			dev_err_probe(&client->dev, ret, "failed to init controls\n");
+   741			goto mutex_destroy;
+   742		}
+   743	
+   744		ov6211->sd.internal_ops = &ov6211_internal_ops;
+   745		ov6211->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+   746		ov6211->sd.entity.ops = &ov6211_subdev_entity_ops;
+   747		ov6211->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+   748		ov6211->pad.flags = MEDIA_PAD_FL_SOURCE;
+   749		ret = media_entity_pads_init(&ov6211->sd.entity, 1, &ov6211->pad);
+   750		if (ret) {
+   751			dev_err_probe(&client->dev, ret,
+   752				      "failed to init media entity pads\n");
+   753			goto v4l2_ctrl_handler_free;
+   754		}
+   755	
+   756		ret = v4l2_async_register_subdev_sensor(&ov6211->sd);
+   757		if (ret < 0) {
+   758			dev_err_probe(&client->dev, ret,
+   759				      "failed to register V4L2 subdev\n");
+   760			goto media_entity_cleanup;
+   761		}
+   762	
+   763		/* Enable runtime PM and turn off the device */
+   764		pm_runtime_set_active(&client->dev);
+   765		pm_runtime_enable(&client->dev);
+   766		pm_runtime_idle(&client->dev);
+   767	
+   768		return 0;
+   769	
+   770	media_entity_cleanup:
+   771		media_entity_cleanup(&ov6211->sd.entity);
+   772	
+   773	v4l2_ctrl_handler_free:
+   774		v4l2_ctrl_handler_free(ov6211->sd.ctrl_handler);
+   775	
+   776	mutex_destroy:
+   777		mutex_destroy(&ov6211->mutex);
+   778	
+   779	power_off:
+   780		ov6211_power_off(&client->dev);
+   781	
+   782		return ret;
+   783	}
+   784	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
