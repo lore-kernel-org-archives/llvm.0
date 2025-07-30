@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B256B4A32;
-	Wed, 30 Jul 2025 04:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B627B1C861F;
+	Wed, 30 Jul 2025 04:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753850412; cv=none; b=SMbWBC7L29Ag+T4DGMhQtsrAUHCSN0SOj1IRqSxlLZMTOTO4HPM0Q68ihOHbrushRJJxN37EOOFRyIrTDw33NwcXCpkQVQkhrR6XlSdoQgn1UkrnpUh/cw0Zwx46SSi2U8/NpUSHP8oTMcJt07YHw6blnNYXoLU8ov7/yrh7BCk=
+	t=1753851015; cv=none; b=IYppcxllradDMaJ96f7B6FlMMFOZjYhxwY6UhfinEE81jZrAxeJIuodcxZpbB7auBPQT9S+VCbhDjkp1WjAS/Zjl6ESyZMlT8Qq5qFEjHruaaKl8JCfxhzv0k6iIMOBIvupajMGPg+KWsB8DmVkCPKA39sbJGpmOBFFXDmFRiH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753850412; c=relaxed/simple;
-	bh=hkMWIKMTPKKRQ6pNfnK9C0upvC4hCgTq62S8A7hC+ok=;
+	s=arc-20240116; t=1753851015; c=relaxed/simple;
+	bh=3qY2GXDtkUgoiX5+Yv3yizbtbvmmq1XZY6QhR449yRI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kD+x0YieBTvMBLy06ahR/UB/QNQE4COrG2NO5tqfc1ZO4gOe74nye5VaIzUu62CZrU+gaLrIcyhXJefhhHNntFGvl3d9WQqaB59ZR6QUvEpte5Rx79bsvcL59ih6oBI5iI7P/fdlGegOZHdDHX6L2EKmh/lTfmy1Rz5+EvfVyNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dp28NGZW; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=DzyakDc1AwhIv8ZrDTHyTj+zpX4NBZA47g15UaOHmeT5xZrXaW5lwqJYGRkk3MRDepY7gx7lsmVS8gMPirHg52O3M5dKMaPFNSQbRNovx3pnDqVKkTj3LA6bpb45PdpaidGv3p1gD1oBbwI+EEg3XPQKdyujkZ6B8qgsAlt3EBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZTe+FqaD; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dp28NGZW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZTe+FqaD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753850411; x=1785386411;
+  t=1753851013; x=1785387013;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hkMWIKMTPKKRQ6pNfnK9C0upvC4hCgTq62S8A7hC+ok=;
-  b=dp28NGZWjH+Bmz+B0N+Q9wgje7eFlcDzr1gtXR8NQeODZw/XTrSRVjY4
-   +cpGt+cUA7iQhlxzqEClpv3O7eVCjn9H4jdyVVZCdBqn54IHOoRei5O9Z
-   cjvmo1FZRLsN6gVn8PQE5hygTith/gnUrRDibeHL7PiyB52sj2zj52gB1
-   bOwysi5P/c9627aqUxRdnamprFgIsBycvgBfaMM3lSM6TdfBJiCT2PE3l
-   xAqcioG1ead68stc758+KfokUIssv6+kciTOEdIiILx3eYosALPzco75o
-   WirM6xwjzYfkvhz81EVx80MNioavqD89nDw78TFNW3MGhQauhe6GtBkLo
-   Q==;
-X-CSE-ConnectionGUID: M8TmkauxSY6HTG8Nzpjyog==
-X-CSE-MsgGUID: AF06BZK0SUuZyltKEcrxoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="56227111"
+  bh=3qY2GXDtkUgoiX5+Yv3yizbtbvmmq1XZY6QhR449yRI=;
+  b=ZTe+FqaDh6hKwqhpx8EowZ91Ho6JKFMveTA+68BeQqfVlyvXR9EfXP/W
+   52Yh9501CQXo3r/MqAMOmNnnm9PF8qJjZFlccLcmKOVVhF7dOR0Wm3zqw
+   CsT+4e+0i6wrdwD0TC5CFPLbxOmYBYY/vHxxP9In8LcM7v/IpfV13yje7
+   TwIoS9zb3zwEOF6IRyLxX/hOdAjFVKgDT68aB55uBywTyZlTcSSUFU5cr
+   3ILmwVv1RvlNuSjLGMcBw28cTefNo9fIEN2e5Nzgr4X9A1Gg8B1JUHArj
+   c2j5gL6EmBjqAXRsBHmHZ9Z4nl58ogeZSRNQd6wdqyZfoIAggZU3ri3JD
+   g==;
+X-CSE-ConnectionGUID: MOwMDM48R9elT0qD8QzOIQ==
+X-CSE-MsgGUID: eJRkX639QhufI7KlQ4OGoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="73729400"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="56227111"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 21:40:10 -0700
-X-CSE-ConnectionGUID: x/fCiR0uQOK97PWWFrfugg==
-X-CSE-MsgGUID: mthQqjgMRamxiNGMd7+YKg==
+   d="scan'208";a="73729400"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 21:50:11 -0700
+X-CSE-ConnectionGUID: SKNTQbR/Ra+F0cp8kTEaWA==
+X-CSE-MsgGUID: RRZ2W68FTMyaZ6WpZzE51A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163227890"
+   d="scan'208";a="200063786"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 29 Jul 2025 21:40:07 -0700
+  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2025 21:50:09 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ugybl-000222-12;
-	Wed, 30 Jul 2025 04:40:05 +0000
-Date: Wed, 30 Jul 2025 12:39:12 +0800
+	id 1ugylS-00022k-23;
+	Wed, 30 Jul 2025 04:50:06 +0000
+Date: Wed, 30 Jul 2025 12:50:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>
+To: Lance Yang <lance.yang@linux.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-	Kiran K <kiran.k@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: [linux-next:master 12104/12680]
- drivers/bluetooth/btintel_pcie.c:2674:29: error: use of undeclared
- identifier 'btintel_pcie_pm_ops'; did you mean 'btintel_pcie_in_op'?
-Message-ID: <202507301232.1I9zKeml-lkp@intel.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: [linux-next:master 10063/12827] vmlinux.o: warning: objtool:
+ watchdog+0x418: sibling call from callable instruction with modified stack
+ frame
+Message-ID: <202507301256.cZlxQ10s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,57 +68,190 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
 head:   54efec8782214652b331c50646013f8526570e8d
-commit: d1b3de23042b0aac0145fdf071d6ac81ec3727b4 [12104/12680] Bluetooth: btintel_pcie: Add support for _suspend() / _resume()
-config: loongarch-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301232.1I9zKeml-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project bcd0d972247154336dd1321f1fded818e46671d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301232.1I9zKeml-lkp@intel.com/reproduce)
+commit: 77da18de55ac6417e48905bec8b3c66f023b15a9 [10063/12827] hung_task: extend hung task blocker tracking to rwsems
+config: loongarch-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301256.cZlxQ10s-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301256.cZlxQ10s-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507301232.1I9zKeml-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507301256.cZlxQ10s-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/bluetooth/btintel_pcie.c:2674:29: error: use of undeclared identifier 'btintel_pcie_pm_ops'; did you mean 'btintel_pcie_in_op'?
-    2674 |         .driver.pm = pm_sleep_ptr(&btintel_pcie_pm_ops),
-         |                                    ^~~~~~~~~~~~~~~~~~~
-         |                                    btintel_pcie_in_op
-   include/linux/pm.h:472:65: note: expanded from macro 'pm_sleep_ptr'
-     472 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
-         |                                                                 ^~~~
-   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
-     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-         |                                            ^~~
-   drivers/bluetooth/btintel_pcie.c:864:20: note: 'btintel_pcie_in_op' declared here
-     864 | static inline bool btintel_pcie_in_op(struct btintel_pcie_data *data)
-         |                    ^
->> drivers/bluetooth/btintel_pcie.c:2674:15: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'bool (*)(struct btintel_pcie_data *)' (aka '_Bool (*)(struct btintel_pcie_data *)') [-Werror,-Wincompatible-pointer-types]
-    2674 |         .driver.pm = pm_sleep_ptr(&btintel_pcie_pm_ops),
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pm.h:472:28: note: expanded from macro 'pm_sleep_ptr'
-     472 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
-     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +2674 drivers/bluetooth/btintel_pcie.c
-
-  2668	
-  2669	static struct pci_driver btintel_pcie_driver = {
-  2670		.name = KBUILD_MODNAME,
-  2671		.id_table = btintel_pcie_table,
-  2672		.probe = btintel_pcie_probe,
-  2673		.remove = btintel_pcie_remove,
-> 2674		.driver.pm = pm_sleep_ptr(&btintel_pcie_pm_ops),
-  2675	#ifdef CONFIG_DEV_COREDUMP
-  2676		.driver.coredump = btintel_pcie_coredump
-  2677	#endif
-  2678	};
-  2679	
+   vmlinux.o: warning: objtool: do_bp+0x94: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: do_name+0x150: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: memblock_init+0xb8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: recompute_jump+0x11c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: init_node_memblock+0x78: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: reboot_setup+0xf4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rcu_torture_init+0x1a0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: acpi_parse_entries_array+0xdc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: control_setup+0x190: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pnpacpi_add_device+0x43c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pnpacpi_option_resource+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: isapnp_create_device+0x1c4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: create_one_pll+0x180: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: clk_starfive_jh7100_probe+0x290: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: jh7110_syscrg_probe+0x350: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: parse_options+0x9c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ips_module_init+0x108: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: qla1280_setup+0x194: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: scsi_debug_init+0xd8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: it87_find+0x88c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ibft_check_initiator_for+0x48: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ibft_check_tgt_for+0x48: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sysfb_init+0xb4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: efi_esrt_init+0x168: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: of_unittest_parse_phandle_with_args+0x13c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: of_unittest_parse_phandle_with_args_map+0x268: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: of_unittest_parse_interrupts+0x198: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: of_unittest_parse_interrupts_extended+0xc8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: unxz+0x398: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cpu_probe+0xf0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: arch_do_signal_or_restart+0x134: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: simu_pc+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: simu_branch+0x120: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: arch_ptrace+0xb0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tso_write+0x7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bt_address+0xc0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: reenter_kprobe+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: flush_cache_leaf+0x10c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cpu_hotplug_pm_callback+0x40: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: kernel_waitid_prepare+0xa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ptrace_request+0xe8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sys_prctl+0xb4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: prctl_set_mm+0x358: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: jhash+0x134: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: jhash+0x134: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: jhash+0x134: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: jhash+0x134: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: task_work_add+0xe0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: register_sys_off_handler+0x138: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sched_balance_rq+0xe3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sched_balance_find_dst_cpu+0x6a4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: kcpustat_field+0x1b8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: stress+0xf4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __msi_domain_alloc_irqs+0x4cc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rcu_torture_writer+0x45c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rcu_torture_fakewriter+0x124: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rcu_pm_notify+0x24: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sys_kcmp+0x1d0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: second_overflow+0x60: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: do_timer_create+0x248: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: clockevents_switch_state+0xac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: time64_to_tm_test_date_range+0x19c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cgroup2_parse_param+0x7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __cgroup_account_cputime_field+0x60: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cgroup1_parse_param+0x14c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cpuset_common_seq_show+0x7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: update_parent_effective_cpumask+0xd30: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cpuset_partition_show+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cpuset_read_u64+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cpuset_write_u64+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: hungtask_pm_notify+0x40: sibling call from callable instruction with modified stack frame
+>> vmlinux.o: warning: objtool: watchdog+0x418: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_record_free+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_record_dup+0x110: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_obj_free_fields+0xd0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_map_value_size+0x48: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_map_update_value+0x128: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_map_copy_value+0x88: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_sys_bpf+0x78: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: kern_sys_bpf+0x74: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_and_init_map_value+0x108: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __sys_bpf+0x1e8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: map_create+0x4e4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_prog_load+0x268: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_prog_attach+0x1d0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_prog_detach+0x1ac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_prog_query+0xa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: map_lookup_and_delete_elem+0x364: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: link_create+0x144: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: link_create+0x3a0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: map_check_btf+0x2e4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_prog_load_check_attach+0x11c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: attach_type_to_prog_type+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_prog_attach_check_attach_type+0xac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_raw_tp_link_attach+0x60: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_check_attach_target+0x210: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_check+0x2e04: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: resolve_pseudo_ldimm64+0x220: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_attach_btf_id+0x14c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: compute_live_registers+0x580: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __add_used_map+0x228: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: add_kfunc_call+0x444: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: do_check_common+0x1cb8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_mem_access+0xb8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: save_aux_ptr_type+0xf4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_kfunc_call+0x7c8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_helper_call+0x23dc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_return_code+0x300: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_ld_imm+0x290: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: states_equal+0x83c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: regsafe+0x128: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: adjust_reg_min_max_vals+0x490: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: adjust_ptr_min_max_vals+0x1c0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sanitize_err+0x98: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_field_type_name+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __check_mem_access+0xfc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atomic_ptr_type_ok+0xc4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_ptr_alignment+0x74: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_map_direct_read+0x98: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_stack_read+0x5fc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_stack_write+0xa7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_func_arg_reg_off+0x8c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_helper_mem_access+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: is_ptr_cast_function+0x4c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: check_map_func_compatibility+0x6b4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: may_update_sockmap+0xf8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: is_branch_taken+0x464: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: reg_set_min_max+0xa8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: try_match_pkt_pointers+0xac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: regs_refine_cond_op+0x68: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: insn_def_regno+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_any_put+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_parse_param+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __bpf_dynptr_write+0xc0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_dynptr_data+0xb8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_base_func_proto+0x5cc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_obj_new_impl+0x124: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_dynptr_slice+0xa8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __bpf_dynptr_read+0xc0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __bpf_strtoull+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: dynptr_type_str+0x40: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_iter_attach_map+0xa8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: htab_map_alloc+0x4dc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: htab_map_free+0x9c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: htab_map_free_timers_and_wq+0xa8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: htab_map_mem_usage+0xe8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_percpu_hash_copy+0x210: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: prealloc_init+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: htab_map_hash+0x144: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __htab_map_lookup_and_delete_batch+0xaa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __htab_map_lookup_and_delete_elem+0x574: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __bpf_hash_map_seq_show+0x244: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_percpu_array_copy+0x200: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __bpf_array_map_seq_show+0x224: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: hash+0x158: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cgroup_storage_update_elem+0x1dc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_cgroup_storage_alloc+0x20c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bpf_ringbuf_query+0x48: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: print_bpf_insn+0x8c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_type_skip_modifiers+0xf4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_type_id_size+0x3a0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __btf_resolve_size.llvm.8933087693230904082+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_parse_fields+0x4c0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_is_prog_ctx_type+0x2e8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_ctx_access+0xc34: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_struct_access+0x1c0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_struct_walk+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __get_type_size+0x178: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_check_type_match+0x514: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_prepare_func_args+0x998: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_validate_prog_ctx_type+0x4c8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: btf_is_dynptr_ptr+0xf4: sibling call from callable instruction with modified stack frame
 
 -- 
 0-DAY CI Kernel Test Service
