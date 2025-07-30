@@ -1,115 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAF32C324A;
-	Wed, 30 Jul 2025 13:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D4729A9D3;
+	Wed, 30 Jul 2025 13:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753883438; cv=none; b=uRP77pYTWARf4xEWmcXMFzkzj3Fxa3Qvr80ctkbWQCGE+oTA2343QmG2RWYzGE9MzkRUIt9AbjZLOgsxO+uaoVxUSM4Z+qcmfWFdVkRNHpsr7YBsbRe+3hLy8VtPzGh2rAvmK+VbZsVyxtAD9ChOFGpHbIaNncfVwzOHxKGX2yM=
+	t=1753883830; cv=none; b=HdNxJMz1gYemtLA13+RxfPiFzynTLSkob8WhQANMFCB6lHi0jsjcXInHSbBtxEWVIRU5xA0gOokCI4Po7h3UlKGGLHJyJyh/MCcTZYDMneQkzOrSjL++vci7LYxaeSuUT/vA4ugt3fgBtwVnFOePQhug7H6QdZMWVuY6Z7H4QEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753883438; c=relaxed/simple;
-	bh=ifIMrBtF5ufMRPUqGdpwMP/SvTYeKCCpB+qZwdbtgxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qXRljrYLdY11YCAG+Ht1DgI2e2ZjOwxkzCn/jTlELJ+pLm74i4lSnJyeFI1s63Fs2/7bapsxYDPXKVS1q4oaNpCQyRvCI2DfcvF5CUQitO78Eba/kkKYWpZ1fbvy406J2a5NqNEp/VUxmZbWhbQxsJ0JCVGsEJo4Wxb1OJgwqmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dojVBOLN; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dojVBOLN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753883437; x=1785419437;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ifIMrBtF5ufMRPUqGdpwMP/SvTYeKCCpB+qZwdbtgxQ=;
-  b=dojVBOLN5/xnGiB2oZ83vHjPna6fuWkhVI2hu0wbbeqSbVM8mBD1iME5
-   2IvaUiWv0a1XMsY/R0NfSD6YyeJRgSgudhrulHsUAmSwuaunfCEru0Bny
-   5HEzu5efzveewbaFZmNZ8YtA6QvpXo3YjNap4ex57gil97d7o96JgZBA1
-   e4gwl9alze4RECRqJc1ytiNnkW7tK4DzJdM7fx+AyGsnWr/c6V6pe8+Nu
-   gzYtLo3Zu2pSQLxd5JtvA/XK/+kUcaGBvBvze2cOh9VNjuxNETAAOyQqj
-   Ou4fyiRPQzZlNwJPfXXFfw+8OyJPWUIWttu1Mnj2d8KpjvzQ2uyqFJz3K
-   w==;
-X-CSE-ConnectionGUID: sKxgI4GETs2HOAcSHIsc6w==
-X-CSE-MsgGUID: 8wTmCcVjRqWytYxeXA1xrA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56331427"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="56331427"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 06:50:32 -0700
-X-CSE-ConnectionGUID: 43tHoqJqSGyDw3huzPrupQ==
-X-CSE-MsgGUID: 4qJf4K0QTxGvRBFc0JAQkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="193978560"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 30 Jul 2025 06:50:28 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uh7CL-0002nY-2G;
-	Wed, 30 Jul 2025 13:50:25 +0000
-Date: Wed, 30 Jul 2025 21:50:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marie Zhussupova <marievic@google.com>, rmoar@google.com,
-	davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, elver@google.com,
-	dvyukov@google.com, lucas.demarchi@intel.com,
-	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Marie Zhussupova <marievic@google.com>
-Subject: Re: [PATCH 2/9] kunit: Introduce param_init/exit for parameterized
- test shared context management
-Message-ID: <202507302114.xQU4zmX5-lkp@intel.com>
-References: <20250729193647.3410634-3-marievic@google.com>
+	s=arc-20240116; t=1753883830; c=relaxed/simple;
+	bh=pnXS+ZeQrAV806NHxF70MyvcJe+ytbXZbl1EeUCQArQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GNnS4Ua0hbPYXsoUZ7LAKHGiinyccPi8toJi+6oFNbbofcqGHzrYFzBfet+RwdJp7Wva4aVj0/Ri1tgo3xFy3JcF29gtHqfdzPL9J0roWHsGtrLOjkL10EHKYSWbi0YN6/EG8jN//0mW8AASd/7L8HhXTa9/dQLp+rHKyqSeRIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4f2f2f22c1aso606817137.0;
+        Wed, 30 Jul 2025 06:57:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753883827; x=1754488627;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8tXb90Hs6p9aqwd3uCfNog+BrrHi7uqFWUQ414hzBWg=;
+        b=lbQsjnJaoBdX0CMBOx7aLlKx+R5/Zt34OGolrlKvMSWQO1ipLdtwrx/Q7kT0fROOUl
+         Ng5nBf2SbN1xYHncLLoVfUsPi5rzu5tZShWcoIuJPKgGohMWk2g0Vat35uAFZ6qboQF/
+         FqatL9+RuWRVDDd04IBjzQkYEfqYBX0GhWYIILniek9yXhxrxCbj8FvC0KKaGzB8lMNh
+         0JnvdHZhfBMHP18C4GvD4iI79Qoi2i2hl+6PqqmXhm5Lx91taf1okjWRuRShB1juDlMV
+         PcRpUBXa4ISeztuTUxE5b1cBMaV1L+Ys5nFOMgri2npi+bAy525/PwU6sctbGYYBAAIS
+         WMlg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9tBOaWm5CVHwQscEivjk/aS/rM+0p2OHpkvsxN++PZjWl5qmdgJtaGGD/JOLlRMyCJByi@lists.linux.dev, AJvYcCUDNTKAFPgqpcmNgMf4SGq/8Pkn1BABJ/30GEtggxH08R0qJUXZ63OGsQ+0iBNjHyGYPkjt7CeirRCBOPyAZw==@lists.linux.dev
+X-Gm-Message-State: AOJu0YzqNXzYivJ1NX7/d9MHqU9ElWrVKa7eci8mplpx6XG/W4ptIruA
+	rZwQOvxmvzZKYrKMXV75+DrAEbpiMisvDHT6Ha/bS+abZ8ZM6ZlEDtg0HdUot9nd
+X-Gm-Gg: ASbGncv6VQyGRCqC5jxeg5WOKckBFJKD+yv29L5O8DrDhLXAiMNaQPjWsHb19OfKIbW
+	iK7/glCu+7JaR9oWS2JmJF/3PfTHvMoNfRAtca/1NI9hCIt8JUoWn2+eWf7vig563q5VDN0x7ff
+	bJpA8tLHd4IZdxpJZFzPSug7v0dqfiCkoEnz7JcP7eU0NmY/Ix7ZAGE3zJhhnStwY8Eu0Ymnfl3
+	D9v9wKavvnN37YGRi/dFxPVymqQf1auH+0lz3b51wLrdVrOId+DAB683U7173Y3MjD8FWnx4i2J
+	nPZa+HoLWhcUkBZrTxdK/vJ3ndbl21fA9+6uJBHRszbSiVjgtByzTNR1qY2Bjhncl0NoCvPKESf
+	w9m01n0Zd1Oy5LDE00DhB7WobNp5oenx07irKv8DtDco8MrXyn3BVTyczl/Xa
+X-Google-Smtp-Source: AGHT+IEmCP8vfe8FzieXSeKuESymPwSblDYK/CTnBeA3W9/qgFEfJoOQ1F3KhGst4+oMNOGEu3C6lg==
+X-Received: by 2002:a05:6102:83c3:20b0:4fb:f559:116a with SMTP id ada2fe7eead31-4fbf5591345mr526396137.7.1753883826553;
+        Wed, 30 Jul 2025 06:57:06 -0700 (PDT)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88b8d8c5696sm2337780241.5.2025.07.30.06.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Jul 2025 06:57:05 -0700 (PDT)
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-88ba493e984so431920241.1;
+        Wed, 30 Jul 2025 06:57:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUgS2y98PY0S5aMUjKX7VQ3wkg11tDSmo6uQQrGrGVjNU3WyZftb+uhKquoTaKHcLFOrTon@lists.linux.dev, AJvYcCUmhk8WFlO+EnOHRYYu9f5Nf8WosLHnCdVDt0ZVw0+xXXX9D61WXV7O+VD3fF/PIqPtZVDyQezOLV2XydKXkw==@lists.linux.dev
+X-Received: by 2002:a05:6102:30dc:10b0:4ef:a46d:dcaa with SMTP id
+ ada2fe7eead31-4fa77918e19mr2727446137.6.1753883825406; Wed, 30 Jul 2025
+ 06:57:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250729193647.3410634-3-marievic@google.com>
+References: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
+ <202507301421.AmWhOZBk-lkp@intel.com> <aInjE-sduVbBRmJx@shikoro>
+In-Reply-To: <aInjE-sduVbBRmJx@shikoro>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 30 Jul 2025 15:56:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUHog6rehPFu9t99N0F-69sr1fQGWmX1sBR40=kDvD=Bg@mail.gmail.com>
+X-Gm-Features: Ac12FXxXrlohX7L8lLksOtpqFo1L0Wc-yLeqGDDQ2dNNpRDdPIsNf4pmzEDKaN4
+Message-ID: <CAMuHMdUHog6rehPFu9t99N0F-69sr1fQGWmX1sBR40=kDvD=Bg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
+ SD_BUF0 in polling mode
+To: Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc: kernel test robot <lkp@intel.com>, Biju <biju.das.au@gmail.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Biju Das <biju.das.jz@bp.renesas.com>, 
+	linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Marie,
+Hi Wolfram,
 
-kernel test robot noticed the following build errors:
+On Wed, 30 Jul 2025 at 11:17, Wolfram Sang <wsa-dev@sang-engineering.com> wrote:
+> >    In file included from drivers/mmc/host/uniphier-sd.c:21:
+> > >> drivers/mmc/host/tmio_mmc.h:249:2: error: call to undeclared function 'ioread64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >      249 |         ioread64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+> >          |         ^
+> > >> drivers/mmc/host/tmio_mmc.h:255:2: error: call to undeclared function 'iowrite64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >      255 |         iowrite64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+> >          |         ^
+>
+> Sigh, then the guard seems to be ARM64 after all :(
 
-[auto build test ERROR on shuah-kselftest/kunit]
-[also build test ERROR on shuah-kselftest/kunit-fixes drm-xe/drm-xe-next linus/master v6.16 next-20250730]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ioread64_rep() is defined in include/asm-generic/io.h, and powerpc does
+include that.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marie-Zhussupova/kunit-Add-parent-kunit-for-parameterized-test-context/20250730-033818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20250729193647.3410634-3-marievic%40google.com
-patch subject: [PATCH 2/9] kunit: Introduce param_init/exit for parameterized test shared context management
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250730/202507302114.xQU4zmX5-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302114.xQU4zmX5-lkp@intel.com/reproduce)
+Perhaps drivers/mmc/host/tmio_mmc.h should just include <linux/io.h>?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507302114.xQU4zmX5-lkp@intel.com/
+Gr{oetje,eeting}s,
 
-All errors (new ones prefixed by >>):
-
->> error[E0063]: missing fields `param_exit` and `param_init` in initializer of `kunit_case`
-   --> rust/kernel/kunit.rs:200:5
-   |
-   200 |     kernel::bindings::kunit_case {
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `param_exit` and `param_init`
---
->> error[E0063]: missing fields `param_exit` and `param_init` in initializer of `kunit_case`
-   --> rust/kernel/kunit.rs:219:5
-   |
-   219 |     kernel::bindings::kunit_case {
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ missing `param_exit` and `param_init`
+                        Geert
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
