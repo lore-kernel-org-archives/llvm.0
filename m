@@ -1,101 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE99A3594F;
-	Wed, 30 Jul 2025 00:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3DD290F;
+	Wed, 30 Jul 2025 00:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753835976; cv=none; b=MaWFSDYBUNP6B/RRKN27lW36KUBi9sfiLxFrIVFCpJ9gPuPYHplK6bvUInuyOkdKcBuu6u3ZAkcUx4b2XobrqpO8H3UMrv8PeRXLknTot/Ms3Ye9k9gIjqpJenuBHogfdo0xA7+S5XusD7npA5w5ITFBguTj9pStbXo4xxZIHZ8=
+	t=1753836442; cv=none; b=dIJvl29izWi6mSydoZzg03m68Yxz4TsMB9/EB6VJ3yJ7VYhX0pZ0Z3wwHI2NvGJrM1mWccSjQ5xNk+9q8tL5I9MoCF0UHy8nRvCkRrah99t3cuVYDNGZnDNkeiG+6G6Dh3ZE+w4PatcV8l8Z6idKxawSRJ9LLLgJrGYcfsQjOck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753835976; c=relaxed/simple;
-	bh=WnOG4V+bPLI97m9dWmTwO5wl8jjkLQXzMfj40MYmTCk=;
+	s=arc-20240116; t=1753836442; c=relaxed/simple;
+	bh=u67O+gLwEAa/gq2wCXXMjm9mL65NJXOFP1Zua84rpjY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=htMlWRvF96HEOOofYZzjTZrIBdn998zscaLjkf13URkmB4/N+B/U/nNuudA7y7e0bIlcRXabCb6aVGpGvrvJcC+AvS5RYd3NsvO3y5Wc7zvnTq83hYkoH971u4abl9t5U/s5HOV17+06GEe+PpxHiYZKOzrHzWuOcanUkccDH+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxOrnxBQ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kf1Ul/AMvRnlumskDvrMFOME8A6c+DaePpS6jb2gml+XVdquqGHY3L8oN10Zin1QhwYQ7Ddxu8yevx067xwbQSCrwj742SzpOrZKm/XyTcjhYDvhqepQwsJ1d4wR0x4YnVmGCL6nc7tAAPq/ZZNSWgow5KWE8iXAbFnTJvVoI7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V09TStsM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxOrnxBQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359D7C4CEF5;
-	Wed, 30 Jul 2025 00:39:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V09TStsM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6984C4CEEF;
+	Wed, 30 Jul 2025 00:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753835976;
-	bh=WnOG4V+bPLI97m9dWmTwO5wl8jjkLQXzMfj40MYmTCk=;
+	s=k20201202; t=1753836441;
+	bh=u67O+gLwEAa/gq2wCXXMjm9mL65NJXOFP1Zua84rpjY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qxOrnxBQ5LgP2+fdyeglquYIz3PhpmHfQcFH/uN5dnvOBkG07d2J8y2FT817qbzLn
-	 dZwjdL/XnoUWVw5Yd6SKlXtuptPUIbiZO+YUkzeiBXhmCLL1ZbUazeJ/c18AYlr+k1
-	 Y0GlxDDV2tzOxAkhnUSCCbPlk8ze9rXmRpyZX8Px1Vy1MvxBIv1XwLbzvYHQ4Ifv1t
-	 oaBYzQMRo0d8PQIOpLIe57MbWWbs2LCljfoffKIAuryJpUooclqx8Guz/dHuo95bay
-	 X0klPqJBo+lJi+Z4UanHhCkLzQ0OrVaGZs0UPgXJA60bZm2BtrJJ1AADy4S1csXq4H
-	 qsS2kByItAcJA==
-Date: Tue, 29 Jul 2025 17:39:35 -0700
-From: Kees Cook <kees@kernel.org>
-To: Linus Torvalds <torvalds@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>,
-	syzbot+5245cb609175fb6e8122@syzkaller.appspotmail.com,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Hou Wenlong <houwenlong.hwl@antgroup.com>,
-	"Kirill A . Shutemov" <kas@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	b=V09TStsMMDLa5jAhxxeLT3ZKdaWehBrRFfiSOAVtWEKPXui6OtjjJJRqOHMPuV2gM
+	 8G6ixJKohDk53Qb2cjMoEypV04EXGzbRk98MhSHJdlvQ8wQ/FL1GrHFhqaogJvQe8S
+	 rqXj0DAPB7SyaZkO9ChUua9kQVPI7421aNBmyIREhMEOFX4wnNZMl7mc1ic94Eqhaz
+	 LNUIOccM8TWjNzT/pXJrSAj678ZXb02pYjb4RzwmAk7Bpou8wKznkR1vxTuKLHQaaD
+	 sU4ZFBKtl8B/OjFq60hBXJUnq4+Sgzi88rJOb//YRRgwvRcOcEFm+BIsugZ6sj0Kqs
+	 MrdoaQKBDOlyQ==
+Date: Tue, 29 Jul 2025 17:47:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>, Uros Bizjak <ubizjak@gmail.com>,
-	Marc Herbert <Marc.Herbert@linux.intel.com>,
-	Yafang Shao <laoar.shao@gmail.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] compiler_types: Provide __no_kstack_erase to disable
- coverage only on Clang
-Message-ID: <202507291738.262CEF2095@keescook>
-References: <20250729234055.it.233-kees@kernel.org>
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] kbuild: userprogs: use correct linker when mixing clang
+ and GNU ld
+Message-ID: <20250730004717.GA2984390@ax162>
+References: <20250724-userprogs-clang-gnu-ld-v1-1-3d3d071e53a7@linutronix.de>
+ <20250724231025.GA3620641@ax162>
+ <20250725122604-44874f95-859c-4c0a-b3b0-14b30e00b796@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250729234055.it.233-kees@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250725122604-44874f95-859c-4c0a-b3b0-14b30e00b796@linutronix.de>
 
-On Tue, Jul 29, 2025 at 04:41:00PM -0700, Kees Cook wrote:
-> In order to support Clang's stack depth tracking (for Linux's kstack_erase
-> feature), the coverage sanitizer needed to be disabled for __init (and
-> __head) section code. Doing this universally (i.e. for GCC too) created
-> a number of unexpected problems, ranging from changes to inlining logic
-> to failures to DCE code on earlier GCC versions.
-> 
-> Since this change is only needed for Clang, specialize it so that GCC
-> doesn't see the change as it isn't needed there (the GCC implementation
-> of kstack_erase uses a GCC plugin that removes stack depth tracking
-> instrumentation from __init sections during a late pass in the IR).
-> 
-> Successfully build and boot tested with GCC 12 and Clang 22.
-> 
-> Fixes: 381a38ea53d2 ("init.h: Disable sanitizer coverage for __init and __head")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202507270258.neWuiXLd-lkp@intel.com/
-> Reported-by: syzbot+5245cb609175fb6e8122@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/6888d004.a00a0220.26d0e1.0004.GAE@google.com/
-> Signed-off-by: Kees Cook <kees@kernel.org>
+On Fri, Jul 25, 2025 at 12:36:34PM +0200, Thomas Weißschuh wrote:
+> FWIW some architectures use GNU ld implicitly with clang because they also link
+> through $(CC) but do not use --ld-path. One example is UML, where the vDSO and
+> vmlinux are linked this way. But linking vmlinux of UML with ld.lld will
+> require changes to at least the linker script. Something for the ClangBuiltLinux
+> TODO? There were more examples, but I don't remember them right now.
 
-I've now sent the PR that includes this fix:
-https://lore.kernel.org/lkml/202507291728.51BAA26@keescook/
+Yes, I believe this is the issue we had for tracking using ld.lld with
+UML: https://github.com/ClangBuiltLinux/linux/issues/1715
 
-Thank you everyone for suffering through the mess I made! :P
+I had not considered that it could be a linker script handling
+difference. I will have to look into that soon.
 
--Kees
+> Longterm --ld-path should probably be added to the global KBUILD_CFLAGS, too.
 
--- 
-Kees Cook
+'--ld-path' is only relevant when the linking phase is run by the
+compiler, which is not really normal for the primary kernel build, as
+calling the linker directly with $(LD) is preferred. Doing that would
+break the build because of -Werror=unused-command-line-argument, which
+is needed to make cc-option work correctly.
+
+  $ echo 'int main(void) { return 0; }' | /usr/bin/clang --ld-path=/usr/bin/ld.lld -c -o /dev/null -x c -
+  clang: warning: argument unused during compilation: '--ld-path=/usr/bin/ld.lld' [-Wunused-command-line-argument]
+
+  $ echo 'int main(void) { return 0; }' | /usr/bin/clang --ld-path=/usr/bin/ld.lld -o /dev/null -x c -
+
+> No, it isn't respected. On the other hand I didn't yet run into any issues.
+> Do we want to fix it proactively?
+
+No, I think it is fine to just leave it as is and fix it if it comes up
+in the future, as I believe getting LLVM_IAS=1 working for sparc64 is
+the next major focus of the whole LLVM sparc endeavour.
+
+Cheers,
+Nathan
