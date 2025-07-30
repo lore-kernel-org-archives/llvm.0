@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807831E7C19;
-	Wed, 30 Jul 2025 19:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5890E1EF38F;
+	Wed, 30 Jul 2025 19:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753904651; cv=none; b=Eh8waczJruukkuUs4YqMDi2zEwH439xPUjRgVu1kTYave6C2dpEoatf+EYoncGG5QSS/2pzL0aVAXqEvV8RuQxLvstQnAYUCRHTfRwOCCteGfY/S8G9CcG2mXdij0i6Qrh6TW7FSQgYf4vow/65iiQuvhxqkw9YlJ4J1480QkYk=
+	t=1753905573; cv=none; b=Dg5dWpcJjXTYFwActDhdKEO9Cr5mnMPrugKTFF4vLlqmzsaASmKQoKHgt0v6NM/s//F2KV/8jGDpEHXaPr6WbEhsL36z5FPmHGLTLF22Lkdr+LHN0BcprqRdAZiNwG6rqLXxU1BZwG4VGlLHw4Rr4zxiSSnfYS9ItAkL+adItp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753904651; c=relaxed/simple;
-	bh=ASw2LEonGX9FVWSZ4sCVDAIlxaxsqwTPpVp0huFlEIg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LCPxAbxBtKvJ04L9VUg9Intdzn130Kyyof8Zs9k5DexfyjoUR3ZcHhS/D+2yF/a5NsApyFaRPcDw9LVWWPV1AO/CtTp/BpI0CmPASDxplMUrkTrFaw7YbQSgjgZ98L1N0J690Fkbnx+twjPGlDnNFAbcDGzTUs+1fiXys3Kr2SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eXNJmJ1g; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1753905573; c=relaxed/simple;
+	bh=sD/hsQ2u8gcJom9CdtBwB4tQQXbxcnOU3ESvneUrVfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bvf8LOf0omC4rltWMgNZ6tpTPuhvTfq28jx9K1Ag850ysRkBR1vRTpHvN9E6OZG2kKmwBUsAM5e2T47QZDaYx+ZNmLuNgdGd9EGLFp0fg1o3GRFnQzMw1CpBAxALppZZw1UzS6YN1DZTJU5HRo6zUljklx95VHObgjERfHCVeR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E0vDjaKs; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eXNJmJ1g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E0vDjaKs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753904649; x=1785440649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ASw2LEonGX9FVWSZ4sCVDAIlxaxsqwTPpVp0huFlEIg=;
-  b=eXNJmJ1gqwAeeQEb0LNJCHUxmplUXUj6VAGHvv/45i1+SLUx5FiDSq9y
-   X4DGcLHJZZW2rSU/r73cmzqh3ZvSVhI7GENdTMhcdsoUzjU6hLbF4OmFP
-   yrvRKs9LCwLuRswNC4G8Y7YH3AF79Tzo4V50RkP1PyKNPuyhqmR3M4k1M
-   4zd48ZPHqnKx3pShA2stKxDU2sJvXIA0dnAydosEhf6tvdJwYhmjYXVqW
-   QJ8nz6VfcHf4pVxwE4TufdFt6v4BGVjBJFe0LegVqV5LZfxka4dJHTy9M
-   H5ZD6C3dNMS4aj78DDQzHvbppWnzUsm7koDNKqZpP45zSU8+PyVdQYfrU
-   Q==;
-X-CSE-ConnectionGUID: RS+yNi8FTJGigyKWYQzZGQ==
-X-CSE-MsgGUID: XEuFS8ssQsS1Mwre/8jPHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56308268"
+  t=1753905571; x=1785441571;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sD/hsQ2u8gcJom9CdtBwB4tQQXbxcnOU3ESvneUrVfU=;
+  b=E0vDjaKs374fw3srJNt3cczGIyimR/rt/QF2x9tpVC/B86Kd5JXK6ia9
+   /chPYcSAfgD1+uLg/3zT3eeaj04YBCR6MzSGf2appyant8KvR5i31M/T8
+   ck5iBUyRcuBhN9Klcd+h/tO3Z57W+3K1qgW3oqUOJVHg2T+dfgwZRc5jy
+   KE7oJxlFqOQ6gFHO4/mv2zC/W5BxO2ZwYsu2PvukJ7Z5C0lcNtBniYxtl
+   ICvoTuNRfnOxePkESvG4BUrTmYKRSCuqN9OoP1hZR9qxodW1paVqDviGV
+   WFinPsLmEWl8K4eKDsz8QkLzMCPFFkQmyT+wU51p8Nx+PHqKT5tGgfFYt
+   w==;
+X-CSE-ConnectionGUID: lLjqDsCkQnilkfPDrn8EMA==
+X-CSE-MsgGUID: I7ZuM2yYR/68v1A6iEcM9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56184818"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="56308268"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 12:44:08 -0700
-X-CSE-ConnectionGUID: 9L8abYuzSCCzI4mhmeYXjg==
-X-CSE-MsgGUID: A8+2pdSEQfCc2zhSz5ZSJg==
+   d="scan'208";a="56184818"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 12:59:31 -0700
+X-CSE-ConnectionGUID: k5HuFm5fQha+G7Yfb/If+g==
+X-CSE-MsgGUID: e83cW6SbRPeKU76B/sZouQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163861146"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Jul 2025 12:44:07 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+   d="scan'208";a="200242442"
+Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
+  by orviesa001.jf.intel.com with ESMTP; 30 Jul 2025 12:59:30 -0700
+Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uhCiZ-00035k-24;
-	Wed, 30 Jul 2025 19:44:03 +0000
-Date: Thu, 31 Jul 2025 03:43:38 +0800
+	id 1uhCxT-0000qh-1q;
+	Wed, 30 Jul 2025 19:59:27 +0000
+Date: Wed, 30 Jul 2025 21:59:03 +0200
 From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konradybcio@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel
- pass a cookie to of_xlate
-Message-ID: <202507310336.MGXNWyoj-lkp@intel.com>
-References: <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
+Subject: [thomas-weissschuh:b4/umh-h 6/6] net/bridge/br_stp_if.c:135:7:
+ error: call to undeclared function 'call_usermodehelper'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202507302142.GBJ0vrZI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,86 +62,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
 
-Hi Konrad,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 79fb37f39b77bbf9a56304e9af843cd93a7a1916]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/dt-bindings-dma-qcom-gpi-Retire-passing-the-protocol-ID/20250730-173806
-base:   79fb37f39b77bbf9a56304e9af843cd93a7a1916
-patch link:    https://lore.kernel.org/r/20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f%40oss.qualcomm.com
-patch subject: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel pass a cookie to of_xlate
-config: i386-buildonly-randconfig-003-20250731 (https://download.01.org/0day-ci/archive/20250731/202507310336.MGXNWyoj-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/umh-h
+head:   15d07db86bdfa4c328a18630d82990d592395d4d
+commit: 15d07db86bdfa4c328a18630d82990d592395d4d [6/6] modules/kmod: remove transitive of umh.h
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250730/202507302142.GBJ0vrZI-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507310336.MGXNWyoj-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302142.GBJ0vrZI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507310336.MGXNWyoj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507302142.GBJ0vrZI-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/i2c/busses/i2c-mxs.c:26:
->> include/linux/dmaengine.h:1555:18: warning: no previous prototype for function 'dma_request_chan_w_data' [-Wmissing-prototypes]
-    1555 | struct dma_chan *dma_request_chan_w_data(struct device *dev,
-         |                  ^
-   include/linux/dmaengine.h:1555:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1555 | struct dma_chan *dma_request_chan_w_data(struct device *dev,
-         | ^
-         | static 
-   1 warning generated.
+>> net/bridge/br_stp_if.c:135:7: error: call to undeclared function 'call_usermodehelper'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     135 |         rc = call_usermodehelper(BR_STP_PROG, argv, envp, UMH_WAIT_PROC);
+         |              ^
+>> net/bridge/br_stp_if.c:135:52: error: use of undeclared identifier 'UMH_WAIT_PROC'
+     135 |         rc = call_usermodehelper(BR_STP_PROG, argv, envp, UMH_WAIT_PROC);
+         |                                                           ^
+   2 errors generated.
+--
+>> fs/ocfs2/stackglue.c:432:8: error: call to undeclared function 'call_usermodehelper'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     432 |         ret = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_PROC);
+         |               ^
+>> fs/ocfs2/stackglue.c:432:49: error: use of undeclared identifier 'UMH_WAIT_PROC'
+     432 |         ret = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_PROC);
+         |                                                        ^
+   2 errors generated.
 
 
-vim +/dma_request_chan_w_data +1555 include/linux/dmaengine.h
+vim +/call_usermodehelper +135 net/bridge/br_stp_if.c
 
-  1529	
-  1530	void dma_release_channel(struct dma_chan *chan);
-  1531	int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps);
-  1532	#else
-  1533	static inline struct dma_chan *dma_find_channel(enum dma_transaction_type tx_type)
-  1534	{
-  1535		return NULL;
-  1536	}
-  1537	static inline enum dma_status dma_sync_wait(struct dma_chan *chan, dma_cookie_t cookie)
-  1538	{
-  1539		return DMA_COMPLETE;
-  1540	}
-  1541	static inline enum dma_status dma_wait_for_async_tx(struct dma_async_tx_descriptor *tx)
-  1542	{
-  1543		return DMA_COMPLETE;
-  1544	}
-  1545	static inline void dma_issue_pending_all(void)
-  1546	{
-  1547	}
-  1548	static inline struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
-  1549							     dma_filter_fn fn,
-  1550							     void *fn_param,
-  1551							     struct device_node *np)
-  1552	{
-  1553		return NULL;
-  1554	}
-> 1555	struct dma_chan *dma_request_chan_w_data(struct device *dev,
-  1556						 const char *name,
-  1557						 void *data)
-  1558	{
-  1559		return ERR_PTR(-ENODEV);
-  1560	}
-  1561	static inline struct dma_chan *dma_request_chan(struct device *dev,
-  1562							const char *name)
-  1563	{
-  1564		return ERR_PTR(-ENODEV);
-  1565	}
-  1566	static inline struct dma_chan *dma_request_chan_by_mask(
-  1567							const dma_cap_mask_t *mask)
-  1568	{
-  1569		return ERR_PTR(-ENODEV);
-  1570	}
-  1571	
+^1da177e4c3f41 Linus Torvalds    2005-04-16  127  
+308433155a67cb Vivien Didelot    2016-09-08  128  static int br_stp_call_user(struct net_bridge *br, char *arg)
+9cde070874b822 Stephen Hemminger 2007-03-21  129  {
+308433155a67cb Vivien Didelot    2016-09-08  130  	char *argv[] = { BR_STP_PROG, br->dev->name, arg, NULL };
+9cde070874b822 Stephen Hemminger 2007-03-21  131  	char *envp[] = { NULL };
+308433155a67cb Vivien Didelot    2016-09-08  132  	int rc;
+308433155a67cb Vivien Didelot    2016-09-08  133  
+308433155a67cb Vivien Didelot    2016-09-08  134  	/* call userspace STP and report program errors */
+308433155a67cb Vivien Didelot    2016-09-08 @135  	rc = call_usermodehelper(BR_STP_PROG, argv, envp, UMH_WAIT_PROC);
+308433155a67cb Vivien Didelot    2016-09-08  136  	if (rc > 0) {
+308433155a67cb Vivien Didelot    2016-09-08  137  		if (rc & 0xff)
+308433155a67cb Vivien Didelot    2016-09-08  138  			br_debug(br, BR_STP_PROG " received signal %d\n",
+308433155a67cb Vivien Didelot    2016-09-08  139  				 rc & 0x7f);
+308433155a67cb Vivien Didelot    2016-09-08  140  		else
+308433155a67cb Vivien Didelot    2016-09-08  141  			br_debug(br, BR_STP_PROG " exited with code %d\n",
+308433155a67cb Vivien Didelot    2016-09-08  142  				 (rc >> 8) & 0xff);
+308433155a67cb Vivien Didelot    2016-09-08  143  	}
+308433155a67cb Vivien Didelot    2016-09-08  144  
+308433155a67cb Vivien Didelot    2016-09-08  145  	return rc;
+308433155a67cb Vivien Didelot    2016-09-08  146  }
+308433155a67cb Vivien Didelot    2016-09-08  147  
+
+:::::: The code at line 135 was first introduced by commit
+:::::: 308433155a67cb097142292c8943e0aa8d1a1c79 net: bridge: add helper to call /sbin/bridge-stp
+
+:::::: TO: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
