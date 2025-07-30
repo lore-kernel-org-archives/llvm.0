@@ -1,66 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9BF1E5B7C;
-	Wed, 30 Jul 2025 06:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89F1199BC;
+	Wed, 30 Jul 2025 06:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753856843; cv=none; b=oj0aLZKwPv9FvwN4mMxtelqqWoiMpNcBZ2KjcuZRmWArZcrotyh+/UTuevNBQxKIcLDuupX1/y2mbozUBQyT3JYDYxSlDA75B1EYBGPXJT7yFBrWJ3WEqxboFFxTh9D0pgUQ2obGzLycgthJd+X1KTUgxMMCqXdPWHw7ULj4Y1s=
+	t=1753857563; cv=none; b=IiYdnjn0otq2lwqwq1Onkja+B72zNOnwaCU7OQ9Dqs2Yp9EBCTRsFQya3wyYj1Z+hakK52EqKd9abPv3FUww71DkJwU1sPX8kF3dbld+Pll8fK4YVQhzBLDaQwj89I3bGoU+LXGiJUmB/fXCNPlcLpzJahM7l/qBRcJlXVvMbWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753856843; c=relaxed/simple;
-	bh=fmG8on2z6yzv097Owu47Z8r1fW9cEKDPaju+MlSxgZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dX37MKJ3SeSVUDgw1wftT1diyoTWDj4y2ujUkcUaFLaqjGye8QXbLrLZtByhVcrHI1yYyPE8HXqbneyyDi2Xh/IzHN5IGEN+2JiostE4McihDwDLTEEmeqInM2J2krYfecAaq3e8kACO253Mlb67/9ezk6iQzWos2hA/mWMjGRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tjgbyh/M; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1753857563; c=relaxed/simple;
+	bh=DeNfYpXay6VjnqrhIGbam1Yw5A/Qy+vtg2AJeQozh2w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=A8I7/Ss/ZNMGZ/n/TCgeFCwgdd+sqsls5bg9i9I/iklX00nHMDqqCr9C0ZGvZ/KW8FeFrKvcwjZWvV/8ch2WVHLSVUMhldjbHSHK+fxW7StRcGTObqKcL10/wsojVU6M6QLp408VLh6WOEn2N29xnu9a4KEzo4B72OQiDb7nIXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jCyGaUzH; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tjgbyh/M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jCyGaUzH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753856842; x=1785392842;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fmG8on2z6yzv097Owu47Z8r1fW9cEKDPaju+MlSxgZg=;
-  b=Tjgbyh/ML0WCfchnJ5RgN6mn6IP0f28Gi6z10WSM0oUN+f3g3WVXSbBm
-   gFF0djQFajOgPYd7vozVno3GgdoM8377KSU9fWfGiSo22tPpu6FW8O9YL
-   cTei8jl+3ruqfWTq/Jt/0oVQCEGPL8CwBNGFj1XhOQv5WIan35N1dmE/5
-   WnMouFAOAFZiAm1Rl7j2p329VatJ00I0G31StfSrWp61/Ixtn6qKE6PVp
-   locCqoGo6mfZamWjx+78KhtxTNLGkFkGaW7ipIXayfkggUfp1g9pf6vsj
-   bQwtxt/WcJChFha+x7xUtHeLCfpBL8qVUF+rhJtL+oTD/6B9ZHtnbY/NP
+  t=1753857561; x=1785393561;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DeNfYpXay6VjnqrhIGbam1Yw5A/Qy+vtg2AJeQozh2w=;
+  b=jCyGaUzHWSohmhILO5+JBrU9a3YIaGHFonpC2W10+mLvI50KJAmpjKYC
+   30UY/90TAhMAZ+HA0P638uIfReFaK46Ah1hfgZ+sxpu4WQA5kBJVygSxZ
+   fg4hSV5WapAYVy9lU3PV/3FYFgiRE3GiPmatpTRnWMAt0iY/5sPUvZgwm
+   rOJ62rj2XfqAxg8BmKjWLComNFoQ6sicA0wGJQ0/7zstiG1gyfejB2dHY
+   IzksEE8l3BE6ePIR91Pi+nmsl8sCFLXqIZ1k96Y8GwyZ/8DzSCcSeWwTx
+   vTddq7jqGiXQ09Gay0L9U32mjsELT9VRnos9rOrSrwMRL9T4MIfQKGO7A
    A==;
-X-CSE-ConnectionGUID: nD7yaFBuQCaBdMiKtzfiGA==
-X-CSE-MsgGUID: s4ICJP1qShyldDvXarO79Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="59790313"
+X-CSE-ConnectionGUID: YKa+gkQ+Q2+qCNol7yYcCA==
+X-CSE-MsgGUID: PoPp+iwpR9uJolxSrofBxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="56295596"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="59790313"
+   d="scan'208";a="56295596"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 23:27:21 -0700
-X-CSE-ConnectionGUID: jOBEbNJVTGO3S51PEZVkfg==
-X-CSE-MsgGUID: 4QSs1WsVS6SrH2nUopNmEQ==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 23:39:20 -0700
+X-CSE-ConnectionGUID: +FfgERvXQM6661R7xZqANQ==
+X-CSE-MsgGUID: EF47TEmcQEmaoU29rYmZdg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163685308"
+   d="scan'208";a="163687338"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 29 Jul 2025 23:27:18 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 29 Jul 2025 23:39:19 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uh0HT-00026q-2N;
-	Wed, 30 Jul 2025 06:27:15 +0000
-Date: Wed, 30 Jul 2025 14:27:09 +0800
+	id 1uh0T7-00027u-0d;
+	Wed, 30 Jul 2025 06:39:17 +0000
+Date: Wed, 30 Jul 2025 14:38:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Biju <biju.das.au@gmail.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Biju Das <biju.das.jz@bp.renesas.com>, linux-mmc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
- SD_BUF0 in polling mode
-Message-ID: <202507301421.AmWhOZBk-lkp@intel.com>
-References: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
+	dri-devel@lists.freedesktop.org, Inki Dae <inki.dae@samsung.com>
+Subject: [drm-exynos:exynos-drm-next 3/3]
+ drivers/gpu/drm/exynos/exynos_drm_dsi.c:158:13: error: use of undeclared
+ identifier 'DSIM_TYPE_EXYNOS7870'
+Message-ID: <202507301448.RRNuQS1g-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,60 +63,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
 
-Hi Biju,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on ulf-hansson-mmc-mirror/next v6.16 next-20250729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Biju/mmc-tmio-Add-64-bit-read-write-support-for-SD_BUF0-in-polling-mode/20250728-001022
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250727160731.106312-2-biju.das.jz%40bp.renesas.com
-patch subject: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for SD_BUF0 in polling mode
-config: powerpc64-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301421.AmWhOZBk-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 78c460bbe8f1fc17e2e66b37edf419ccecbfecba)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301421.AmWhOZBk-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+head:   3b57713ed0626c2277b871f11de467fdf8d154ef
+commit: 3b57713ed0626c2277b871f11de467fdf8d154ef [3/3] drm/exynos: dsi: add support for exynos7870
+config: arm64-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301448.RRNuQS1g-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301448.RRNuQS1g-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507301421.AmWhOZBk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507301448.RRNuQS1g-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/mmc/host/uniphier-sd.c:21:
->> drivers/mmc/host/tmio_mmc.h:249:2: error: call to undeclared function 'ioread64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     249 |         ioread64_rep(host->ctl + (addr << host->bus_shift), buf, count);
-         |         ^
->> drivers/mmc/host/tmio_mmc.h:255:2: error: call to undeclared function 'iowrite64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     255 |         iowrite64_rep(host->ctl + (addr << host->bus_shift), buf, count);
-         |         ^
-   2 errors generated.
+>> drivers/gpu/drm/exynos/exynos_drm_dsi.c:158:13: error: use of undeclared identifier 'DSIM_TYPE_EXYNOS7870'
+     158 |         .hw_type = DSIM_TYPE_EXYNOS7870,
+         |                    ^
+   1 error generated.
 
 
-vim +/ioread64_rep +249 drivers/mmc/host/tmio_mmc.h
+vim +/DSIM_TYPE_EXYNOS7870 +158 drivers/gpu/drm/exynos/exynos_drm_dsi.c
 
-   244	
-   245	#ifdef CONFIG_64BIT
-   246	static inline void sd_ctrl_read64_rep(struct tmio_mmc_host *host, int addr,
-   247					      u64 *buf, int count)
-   248	{
- > 249		ioread64_rep(host->ctl + (addr << host->bus_shift), buf, count);
-   250	}
-   251	
-   252	static inline void sd_ctrl_write64_rep(struct tmio_mmc_host *host, int addr,
-   253					       const u64 *buf, int count)
-   254	{
- > 255		iowrite64_rep(host->ctl + (addr << host->bus_shift), buf, count);
-   256	}
-   257	#endif
-   258	
+   156	
+   157	static const struct samsung_dsim_plat_data exynos7870_dsi_pdata = {
+ > 158		.hw_type = DSIM_TYPE_EXYNOS7870,
+   159		.host_ops = &exynos_dsi_exynos_host_ops,
+   160	};
+   161	
 
 -- 
 0-DAY CI Kernel Test Service
