@@ -1,74 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C388E1D54EE;
-	Wed, 30 Jul 2025 03:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B256B4A32;
+	Wed, 30 Jul 2025 04:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753846649; cv=none; b=B30bv5H7QRbik0+2Givx1XhG7WPN6fcAeliAS+DDC9is9TDrNnPekYXbUziaFHllT7IQ9dg0wXTSBZvy+Nrg0V440N7IYl9cF7skZx4MohsG70rWiHzkf7vZWd+33yzzLM/Zyq3+hC3WCp16t8PADikX2oA9g+dXDxZnMYHF7Hs=
+	t=1753850412; cv=none; b=SMbWBC7L29Ag+T4DGMhQtsrAUHCSN0SOj1IRqSxlLZMTOTO4HPM0Q68ihOHbrushRJJxN37EOOFRyIrTDw33NwcXCpkQVQkhrR6XlSdoQgn1UkrnpUh/cw0Zwx46SSi2U8/NpUSHP8oTMcJt07YHw6blnNYXoLU8ov7/yrh7BCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753846649; c=relaxed/simple;
-	bh=Ymk96y7FUWnE0zbfR0VLJRsckN/JMqE00GtgLPj0qRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eE14/9kXRUX99MsqyE21459okavuuooUydvONzv5JAnNuzHCqHrFvgqR3uwqYJTSa6HSypVDwjBwc/6rQmwq+NYYEKpC15TUrS27PRPIQqjAj2YHJGHDj8tHDKfktjFQcoYBMcb7K46srSx9qDIWCVJbfPj/nugPByY6QE0IAHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GPBIW0Jo; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1753850412; c=relaxed/simple;
+	bh=hkMWIKMTPKKRQ6pNfnK9C0upvC4hCgTq62S8A7hC+ok=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kD+x0YieBTvMBLy06ahR/UB/QNQE4COrG2NO5tqfc1ZO4gOe74nye5VaIzUu62CZrU+gaLrIcyhXJefhhHNntFGvl3d9WQqaB59ZR6QUvEpte5Rx79bsvcL59ih6oBI5iI7P/fdlGegOZHdDHX6L2EKmh/lTfmy1Rz5+EvfVyNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dp28NGZW; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GPBIW0Jo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dp28NGZW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753846646; x=1785382646;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ymk96y7FUWnE0zbfR0VLJRsckN/JMqE00GtgLPj0qRo=;
-  b=GPBIW0JoswrYZqLOFl7JfU/8JWFEUAfQdQwlfNEopqH/geapbwQuk5NU
-   qRiLceCkZ/ygzPiuB3jxFHvcpK9smITH4ymYNSedD1Cdf4kT5iPkmLXIl
-   FvQT5bGHgb5gyU8V8PZFFFk8ZvfRN+LUtWXiun1t/cZt+8WAj/+nXV8po
-   Ho4f8I0A7+lIvhOKAdPjT4MrqjqLQSLo4lq7TeH8VMR3NolNKqJZ8xMLR
-   /DpVZvgqIwKtrakvlyxocODfa7Rx+orqk7AA0JpWxE6cpKyfe/ctWZC0p
-   c6dox8TWVPN+XDpuYDZlIGmXDVjbN9Qt6OAq/5v61K7l4nPuAs/CvC25Y
-   A==;
-X-CSE-ConnectionGUID: 3NLlNPy+TB+8rxhhMdpQvQ==
-X-CSE-MsgGUID: JsGtYbmzS4WMn29qsXlBqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="81578759"
+  t=1753850411; x=1785386411;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hkMWIKMTPKKRQ6pNfnK9C0upvC4hCgTq62S8A7hC+ok=;
+  b=dp28NGZWjH+Bmz+B0N+Q9wgje7eFlcDzr1gtXR8NQeODZw/XTrSRVjY4
+   +cpGt+cUA7iQhlxzqEClpv3O7eVCjn9H4jdyVVZCdBqn54IHOoRei5O9Z
+   cjvmo1FZRLsN6gVn8PQE5hygTith/gnUrRDibeHL7PiyB52sj2zj52gB1
+   bOwysi5P/c9627aqUxRdnamprFgIsBycvgBfaMM3lSM6TdfBJiCT2PE3l
+   xAqcioG1ead68stc758+KfokUIssv6+kciTOEdIiILx3eYosALPzco75o
+   WirM6xwjzYfkvhz81EVx80MNioavqD89nDw78TFNW3MGhQauhe6GtBkLo
+   Q==;
+X-CSE-ConnectionGUID: M8TmkauxSY6HTG8Nzpjyog==
+X-CSE-MsgGUID: AF06BZK0SUuZyltKEcrxoQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="56227111"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="81578759"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 20:37:26 -0700
-X-CSE-ConnectionGUID: ar/G3DOGS8uedznncdnXVw==
-X-CSE-MsgGUID: H23rFKPZQJqYSvne5Xy7JA==
+   d="scan'208";a="56227111"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 21:40:10 -0700
+X-CSE-ConnectionGUID: x/fCiR0uQOK97PWWFrfugg==
+X-CSE-MsgGUID: mthQqjgMRamxiNGMd7+YKg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="167077052"
+   d="scan'208";a="163227890"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 29 Jul 2025 20:37:22 -0700
+  by orviesa008.jf.intel.com with ESMTP; 29 Jul 2025 21:40:07 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ugxd1-0001y2-21;
-	Wed, 30 Jul 2025 03:37:19 +0000
-Date: Wed, 30 Jul 2025 11:36:21 +0800
+	id 1ugybl-000222-12;
+	Wed, 30 Jul 2025 04:40:05 +0000
+Date: Wed, 30 Jul 2025 12:39:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gatien Chevallier <gatien.chevallier@foss.st.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: Re: [PATCH net-next v2 1/2] drivers: net: stmmac: handle start time
- set in the past for flexible PPS
-Message-ID: <202507301148.TVzOecMo-lkp@intel.com>
-References: <20250729-relative_flex_pps-v2-1-3e5f03525c45@foss.st.com>
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+	Kiran K <kiran.k@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+	Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: [linux-next:master 12104/12680]
+ drivers/bluetooth/btintel_pcie.c:2674:29: error: use of undeclared
+ identifier 'btintel_pcie_pm_ops'; did you mean 'btintel_pcie_in_op'?
+Message-ID: <202507301232.1I9zKeml-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,141 +65,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250729-relative_flex_pps-v2-1-3e5f03525c45@foss.st.com>
 
-Hi Gatien,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on fa582ca7e187a15e772e6a72fe035f649b387a60]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gatien-Chevallier/drivers-net-stmmac-handle-start-time-set-in-the-past-for-flexible-PPS/20250729-225635
-base:   fa582ca7e187a15e772e6a72fe035f649b387a60
-patch link:    https://lore.kernel.org/r/20250729-relative_flex_pps-v2-1-3e5f03525c45%40foss.st.com
-patch subject: [PATCH net-next v2 1/2] drivers: net: stmmac: handle start time set in the past for flexible PPS
-config: x86_64-buildonly-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301148.TVzOecMo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301148.TVzOecMo-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   54efec8782214652b331c50646013f8526570e8d
+commit: d1b3de23042b0aac0145fdf071d6ac81ec3727b4 [12104/12680] Bluetooth: btintel_pcie: Add support for _suspend() / _resume()
+config: loongarch-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301232.1I9zKeml-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project bcd0d972247154336dd1321f1fded818e46671d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301232.1I9zKeml-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507301148.TVzOecMo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507301232.1I9zKeml-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c:177:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     177 |                 struct timespec64 curr_time;
-         |                 ^
-   1 warning generated.
+>> drivers/bluetooth/btintel_pcie.c:2674:29: error: use of undeclared identifier 'btintel_pcie_pm_ops'; did you mean 'btintel_pcie_in_op'?
+    2674 |         .driver.pm = pm_sleep_ptr(&btintel_pcie_pm_ops),
+         |                                    ^~~~~~~~~~~~~~~~~~~
+         |                                    btintel_pcie_in_op
+   include/linux/pm.h:472:65: note: expanded from macro 'pm_sleep_ptr'
+     472 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   drivers/bluetooth/btintel_pcie.c:864:20: note: 'btintel_pcie_in_op' declared here
+     864 | static inline bool btintel_pcie_in_op(struct btintel_pcie_data *data)
+         |                    ^
+>> drivers/bluetooth/btintel_pcie.c:2674:15: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'bool (*)(struct btintel_pcie_data *)' (aka '_Bool (*)(struct btintel_pcie_data *)') [-Werror,-Wincompatible-pointer-types]
+    2674 |         .driver.pm = pm_sleep_ptr(&btintel_pcie_pm_ops),
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:472:28: note: expanded from macro 'pm_sleep_ptr'
+     472 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +177 drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.c
+vim +2674 drivers/bluetooth/btintel_pcie.c
 
-   163	
-   164	static int stmmac_enable(struct ptp_clock_info *ptp,
-   165				 struct ptp_clock_request *rq, int on)
-   166	{
-   167		struct stmmac_priv *priv =
-   168		    container_of(ptp, struct stmmac_priv, ptp_clock_ops);
-   169		void __iomem *ptpaddr = priv->ptpaddr;
-   170		struct stmmac_pps_cfg *cfg;
-   171		int ret = -EOPNOTSUPP;
-   172		unsigned long flags;
-   173		u32 acr_value;
-   174	
-   175		switch (rq->type) {
-   176		case PTP_CLK_REQ_PEROUT:
- > 177			struct timespec64 curr_time;
-   178			u64 target_ns = 0;
-   179			u64 ns = 0;
-   180	
-   181			/* Reject requests with unsupported flags */
-   182			if (rq->perout.flags)
-   183				return -EOPNOTSUPP;
-   184	
-   185			cfg = &priv->pps[rq->perout.index];
-   186	
-   187			cfg->start.tv_sec = rq->perout.start.sec;
-   188			cfg->start.tv_nsec = rq->perout.start.nsec;
-   189	
-   190			/* A time set in the past won't trigger the start of the flexible PPS generation for
-   191			 * the GMAC5. For some reason it does for the GMAC4 but setting a time in the past
-   192			 * should be addressed anyway. Therefore, any value set it the past is considered as
-   193			 * an offset compared to the current MAC system time.
-   194			 * Be aware that an offset too low may not trigger flexible PPS generation
-   195			 * if time spent in this configuration makes the targeted time already outdated.
-   196			 * To address this, add a safe time offset.
-   197			 */
-   198			if (!cfg->start.tv_sec && cfg->start.tv_nsec < PTP_SAFE_TIME_OFFSET_NS)
-   199				cfg->start.tv_nsec += PTP_SAFE_TIME_OFFSET_NS;
-   200	
-   201			target_ns = cfg->start.tv_nsec + ((u64)cfg->start.tv_sec * NSEC_PER_SEC);
-   202	
-   203			stmmac_get_systime(priv, priv->ptpaddr, &ns);
-   204			if (ns > TIME64_MAX - PTP_SAFE_TIME_OFFSET_NS)
-   205				return -EINVAL;
-   206	
-   207			curr_time = ns_to_timespec64(ns);
-   208			if (target_ns < ns + PTP_SAFE_TIME_OFFSET_NS) {
-   209				cfg->start = timespec64_add_safe(cfg->start, curr_time);
-   210				if (cfg->start.tv_sec == TIME64_MAX)
-   211					return -EINVAL;
-   212			}
-   213	
-   214			cfg->period.tv_sec = rq->perout.period.sec;
-   215			cfg->period.tv_nsec = rq->perout.period.nsec;
-   216	
-   217			write_lock_irqsave(&priv->ptp_lock, flags);
-   218			ret = stmmac_flex_pps_config(priv, priv->ioaddr,
-   219						     rq->perout.index, cfg, on,
-   220						     priv->sub_second_inc,
-   221						     priv->systime_flags);
-   222			write_unlock_irqrestore(&priv->ptp_lock, flags);
-   223			break;
-   224		case PTP_CLK_REQ_EXTTS: {
-   225			u8 channel;
-   226	
-   227			mutex_lock(&priv->aux_ts_lock);
-   228			acr_value = readl(ptpaddr + PTP_ACR);
-   229			channel = ilog2(FIELD_GET(PTP_ACR_MASK, acr_value));
-   230			acr_value &= ~PTP_ACR_MASK;
-   231	
-   232			if (on) {
-   233				if (FIELD_GET(PTP_ACR_MASK, acr_value)) {
-   234					netdev_err(priv->dev,
-   235						   "Cannot enable auxiliary snapshot %d as auxiliary snapshot %d is already enabled",
-   236						rq->extts.index, channel);
-   237					mutex_unlock(&priv->aux_ts_lock);
-   238					return -EBUSY;
-   239				}
-   240	
-   241				priv->plat->flags |= STMMAC_FLAG_EXT_SNAPSHOT_EN;
-   242	
-   243				/* Enable External snapshot trigger */
-   244				acr_value |= PTP_ACR_ATSEN(rq->extts.index);
-   245				acr_value |= PTP_ACR_ATSFC;
-   246			} else {
-   247				priv->plat->flags &= ~STMMAC_FLAG_EXT_SNAPSHOT_EN;
-   248			}
-   249			netdev_dbg(priv->dev, "Auxiliary Snapshot %d %s.\n",
-   250				   rq->extts.index, on ? "enabled" : "disabled");
-   251			writel(acr_value, ptpaddr + PTP_ACR);
-   252			mutex_unlock(&priv->aux_ts_lock);
-   253			/* wait for auxts fifo clear to finish */
-   254			ret = readl_poll_timeout(ptpaddr + PTP_ACR, acr_value,
-   255						 !(acr_value & PTP_ACR_ATSFC),
-   256						 10, 10000);
-   257			break;
-   258		}
-   259	
-   260		default:
-   261			break;
-   262		}
-   263	
-   264		return ret;
-   265	}
-   266	
+  2668	
+  2669	static struct pci_driver btintel_pcie_driver = {
+  2670		.name = KBUILD_MODNAME,
+  2671		.id_table = btintel_pcie_table,
+  2672		.probe = btintel_pcie_probe,
+  2673		.remove = btintel_pcie_remove,
+> 2674		.driver.pm = pm_sleep_ptr(&btintel_pcie_pm_ops),
+  2675	#ifdef CONFIG_DEV_COREDUMP
+  2676		.driver.coredump = btintel_pcie_coredump
+  2677	#endif
+  2678	};
+  2679	
 
 -- 
 0-DAY CI Kernel Test Service
