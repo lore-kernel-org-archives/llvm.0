@@ -1,285 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371F01CDA3F;
-	Wed, 30 Jul 2025 01:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753840590; cv=none; b=Sgrhmu/craJOuFm9+C1afv1VcgSfYh6N32qipv/FZAS/8g8UWd4uel7pKa60J7zXKD7oHIjTfsZrE9Wd7qYnMjDlG56bvrMZM1t5/YEeqCfrdvRhWq+z4LBAKxAsOWDidBslPjTJ8tdqcfVfcS0oGp10PhG2RwlS6qmkPPuz7aY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753840590; c=relaxed/simple;
-	bh=TPdH2OFjavmD8HZiabkL9jfybjdro/SgRX5HRyZNi20=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=D7ojKNwNmycA49Fw/tdBhi2L1tnWNUanN85eDwD4ytzjEcKQBJqq+jQzqVI47x3+GwLX65I4Ghqqqhyj0oi9RQf0prR+VcnvsdrtBGUjOMyPDpG8S6wC9Q67hzsSOxsX2YahCaMaxRbIy8ULGKCZJZSrJ1/Sv0/WuKAW2YOW3BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q8uO6Cy8; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAB329D0D;
+	Wed, 30 Jul 2025 02:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753842030; cv=fail; b=htsLS8i6IogB7IElqx2ZVYABmMenyK63ttO98UIks4l5mQHwSsIml+Wwc850QU3ePeyptaCEZowJMSMs+7/YF0I9WL7eVKPcyIgJE4IGW8qI7TBgE1knhJ1VAWZ7I0DO9k2Q6azc5ZoxdQhBfr7WLx2EwOw6QZygfipAZv72/hI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753842030; c=relaxed/simple;
+	bh=7SkmnxE4exAfjbzJuVzklWS3fWx865ToXACzHzx62Ck=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=u0/g9Tk9fNK5EziBPJoytmf+cTE3+6GhWrj1wv9/M88GhS92NaiE5kRWUtrHY+Q17joroPmidqkrMt5kSVgQsF+p8naPSFa111elb3SWrBJMjL3SjNXB79h6wqE4nbHmCwqRIzDIgd0pg5hUW8/bneDYrnd8/BiVRjAPpcudCUk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c2/gZacP; arc=fail smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q8uO6Cy8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c2/gZacP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753840588; x=1785376588;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TPdH2OFjavmD8HZiabkL9jfybjdro/SgRX5HRyZNi20=;
-  b=Q8uO6Cy8rqolmIoQxxwG3AXvPS2XUKFYmhTueC01a94/hCX2TeKAK6LC
-   p1Rsq8K3zCtPcYQtd6N1tp7GHilVRrtffyCmUkQVpUhHNdfi+RqWKRoz8
-   uvY/MdFV0nUI/+e7iTDWj60nt7IU4ykTtfuKb30imQxk564zlK32V3/GH
-   VVJgL3Mo4we8f8rqMsxs5K5jM1ZlJzX9ELC7atTWHcOXkKAz4QmxNmaXd
-   Y6npTMomlNcPZ7PJrpoJ2pSMj9xR35gZK/n6P642mrRAa19+AK7uNf8jb
-   27LAYgH3hYPhSK2Kd/OVviZwMRrGLrGpO08U94DOoEHKVwKJWfN6uRfwn
-   w==;
-X-CSE-ConnectionGUID: ihmY8z8hQaGIEHrrGTWDwQ==
-X-CSE-MsgGUID: W0Pl4rkKSo64eIHGlF+TvA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="59955040"
+  t=1753842029; x=1785378029;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=7SkmnxE4exAfjbzJuVzklWS3fWx865ToXACzHzx62Ck=;
+  b=c2/gZacPIP9b/iCqahrSG2jd2alS6dTBb1dORcuS3QWDSECmbFuZvHqx
+   bsIeSILd4tmBbXgEP/zVqXYe9PwIBpYGehN2bvt/nzjcmzkDEEkmaJMY/
+   3VF9twIYyJ7ZVMFBFVIjA9CcEVQPn5vGKv0zwwINlrw2qnI+gB3BRVVc/
+   3VaaOLoXTcc3gM/B65xJuTzK1JnRiZTzI+FeYcC5fuiAjfkdJ192r1xIG
+   CJUfitRe3ueBz7emRcHA8WUc0+1hl5SyVR9uBmvUeeMftFLVo0RFAf2Xs
+   7AuwdjAUEQLgm99D90d3qL6fUTqVW1LBYE3NOX6HuYiDZd7fhS6NoL0+Y
+   Q==;
+X-CSE-ConnectionGUID: 1rAmwLE9Time3VurrAAVoQ==
+X-CSE-MsgGUID: 4UPvyM3nTw6EiPmocicZwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="78682697"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="59955040"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 18:56:26 -0700
-X-CSE-ConnectionGUID: lFSpbaXwRDG4nWIYqOirZA==
-X-CSE-MsgGUID: BRBtpFHgS1+3h0FgtFa8ag==
+   d="scan'208";a="78682697"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 19:20:28 -0700
+X-CSE-ConnectionGUID: VfnZOw6jRnykGvwootLx5w==
+X-CSE-MsgGUID: lU/lHFXLQH6jmDHXjV1cZg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="168147822"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 29 Jul 2025 18:51:46 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ugvyp-0001rb-2d;
-	Wed, 30 Jul 2025 01:51:43 +0000
-Date: Wed, 30 Jul 2025 09:51:39 +0800
+   d="scan'208";a="162122401"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 19:20:26 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 29 Jul 2025 19:20:25 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26 via Frontend Transport; Tue, 29 Jul 2025 19:20:25 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (40.107.94.41) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 29 Jul 2025 19:20:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=L1/94sch/8JU+sIIYV51XSOPlzpxCeeYQykNJrAbNlyRar0QS3T8fG5uymusYrxJ4YMtb5AtC5Pyx4NyqZXQSwb+Y6j3HORemdQh3uG+TTX+DwHka591jIdNbUaa/621XmgrwbA7URJvCkY5W+TcF/VBgWDf/Fi1F67nd3SkKrGwq+9tYUrxUa2Myn3AGRsONd0y3KuX1EmdZiCqjwPiamxq4XqHCyAK79yieCADiBXtKmxSo+gFd6cvIcd9vPH8XboW7/fn5yi/cMOzkXEXOZ5Vrz6fYJ1AbM692OSAd/89NEK2VunhX4mNCw9hn9/khG1DNsTDBZckPOb9muFbxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2l/wBHbJjEeOOpECJ56CjGpSBvxfZbMALlPhqM5N6zo=;
+ b=QuO433Qfvof26RsCxtoEiROZ9cE3gdFKO3Tq4IEatLZgZj9muj1WAJYrccOOBBzZPDupViPUk07E2lQBOpWe8BbQjUqnZ7MlpgkMcnw2u1pXj3NqK216t1tt9qykYemCdOSDDZRO7q4Bt34iCxw4Dg73Cf1T87iYuYwhLH6ksNQMryUzCFvgNwraxBKZkB0RN1xWmiJBsErnlkF2GX9HtQK61dhsiQjmSPgYNmkuAaCLw/DuPxKqyrBLky871WtjTKvOrnSarBqGXDpyf6z3ogiTn/Sm9ob9zEO8sX+4i2EIOe6Pb57rm1H1zG3hqhaY4R2epE+0y1Gy9OoqgKfHSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB5674.namprd11.prod.outlook.com (2603:10b6:510:ec::10)
+ by PH0PR11MB5077.namprd11.prod.outlook.com (2603:10b6:510:3b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Wed, 30 Jul
+ 2025 02:19:41 +0000
+Received: from PH0PR11MB5674.namprd11.prod.outlook.com
+ ([fe80::77d3:dfb2:3bd:e02a]) by PH0PR11MB5674.namprd11.prod.outlook.com
+ ([fe80::77d3:dfb2:3bd:e02a%3]) with mapi id 15.20.8989.010; Wed, 30 Jul 2025
+ 02:19:35 +0000
+Date: Wed, 30 Jul 2025 10:19:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Satyanarayana K V P <satyanarayana.k.v.p@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Matthew Brost <matthew.brost@intel.com>
-Subject: [linux-next:master 11095/12827] vmlinux.o: warning: objtool:
- register_exec_queue.llvm.7904150307710208986+0x84: sibling call from
- callable instruction with modified stack frame
-Message-ID: <202507300932.cMHKVE2Y-lkp@intel.com>
+To: chuguangqing <chuguangqing@inspur.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+	chuguangqing <chuguangqing@inspur.com>
+Subject: Re: [PATCH 1/1] gpu: drm: fix compilation errors in drm_vram_helper
+Message-ID: <aImBLR7RBsWEFWNd@rli9-mobl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250729060728.82402-1-chuguangqing@inspur.com>
+X-ClientProxiedBy: SG2PR04CA0162.apcprd04.prod.outlook.com (2603:1096:4::24)
+ To PH0PR11MB5674.namprd11.prod.outlook.com (2603:10b6:510:ec::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB5674:EE_|PH0PR11MB5077:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3124698e-6596-4333-1817-08ddcf0f86a6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?vz7DPSQ2eqRvwMcRQS/mac70G5744utaax15JPgHdJwhhaqeh7dt9d0gyy9V?=
+ =?us-ascii?Q?lOHL4hL+4h1dZVyag7PElf5a6/UGHdfB2Z2SssUtLSJFKrEx2N3VzaMnnXSm?=
+ =?us-ascii?Q?04H95K1RDknt8xUQ+hrvtHQuj4Npvb9jcRbLA7VQv3qbOlioQHQ5qcLCsKp8?=
+ =?us-ascii?Q?UPcjFWeNCSc1W/g5GXptHUFHjovCJyTomEep4ViJCpKGuLBPRNtG0p8vHyCg?=
+ =?us-ascii?Q?Uv6eFJ2DMDrNXa5AbDrIrQDCGSmif3nvskesKI5hKjEKE7FNjLNggtFWrZLI?=
+ =?us-ascii?Q?n2Fx5G38m8wK50JzP3PgmKhUsFDh3KjxwuDIpJQCFbHH21dtH5qwX4TQt4M8?=
+ =?us-ascii?Q?UJNlaeyEir9LkBfK9pAv0iKVgRGL+m8mscCilHcx9aCtLmgiCkf4Mln2WTl3?=
+ =?us-ascii?Q?6Rn80y55AEH0In1xfmQOePHLM0WWXIO5/RE919Dx4Ot90/Yof8TpqrZHSE/S?=
+ =?us-ascii?Q?EqpulZre1ojMZBdXsYcQQRVifuEWwEhzmS5HCdIsfZptttThEDvBfez9eJQm?=
+ =?us-ascii?Q?/IUzuQCu/vSrh3QH97KXTD0LR6nDArZ8ToJfRD5SjaEXm0sVZjGmpLSbqJ/w?=
+ =?us-ascii?Q?PjswffZRtteTqzvSWVbM0vQWApaPX9gPOCY1tUzvu15KYk8cf5EGUjsopfnS?=
+ =?us-ascii?Q?QbFm6wZ26VDaYXF+REeuR4N4/ndqicbCzPTlY/EtrJ2xzcHVe8OfIOWQqdTq?=
+ =?us-ascii?Q?YJDhJIjtOyvBtVSp33mYePSF19AsPG9tgztsZARr1GnUYxTgejCGZEC81AhV?=
+ =?us-ascii?Q?tMUpZ7LvJYQ2eyPnBgdP0sYE+hZ3lZRKnjak8y/dewPsrpNS8C7VIZOv8hRL?=
+ =?us-ascii?Q?dTDwHgIkRbmtLAdGeEBi6TXiiK9TGKI3s372XTZRZ3tVx16QlNFvNOaspGiv?=
+ =?us-ascii?Q?os1KKTUi78kJoFGQFuBKWH9luxIfJmoar79rAyHhP8bkmTXLdz2CV+D4nwSp?=
+ =?us-ascii?Q?DyMutEe/v08yKA33mch5nJ6MA+nNyGBILE/JmF4Uz4t+zOBFV2h6fG/N3/El?=
+ =?us-ascii?Q?RtKIIKTPFFVtzw06VEk9pJvo/pjAiqnQA81wuifauJLjeZco2K5AYJy3hxFD?=
+ =?us-ascii?Q?ywd8adBGW4SSYBcw3Z2PIgWhtB+fatBfwhSzqhD1hz7CMgQgfEPwhtio2cne?=
+ =?us-ascii?Q?LT0bwiDPXwClZ6CQzOsy9OZV3x3z0Bl5XgKwNTZAcIexMzfDCYTl5mbte2z7?=
+ =?us-ascii?Q?NjX+NxYKjCU1lbhqex358gf/1tvCc5vROSCHWydllsNhhSAlv0GXr7igXpLF?=
+ =?us-ascii?Q?c0aoNswZX0AFhVhDnB8nUjZu6NsuXwDXbfBAWsWLHPEazXl78+7vd2dFyLi1?=
+ =?us-ascii?Q?Ll8ccHamhU33zIQLwNS6kgXdiHBdluEcUUuyYqE1LCiFYApxxxf2g/o3NeDe?=
+ =?us-ascii?Q?B/gos2OQtL4JWrM3TmQo6kGlqwJo?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5674.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bMRzDrk8g7oVNMm8OKfbRffhTbfVCRhoRMCoxBY4FJ9ErVC8Wv/WC1DPtGMW?=
+ =?us-ascii?Q?lwgifO61JxIF8kfvHa2dh4202KpBaC6bWSh6UfBqZcmc19y6xZKrUXu/lgpT?=
+ =?us-ascii?Q?mX2ONtzBzk1R4JtKYT224d+snJDv2cK1nNzK/G4LwWmdyWSqVbrCgLxZtWgd?=
+ =?us-ascii?Q?3f7u2S1vtacSORirsaxQQcjbqzCYKHpxR4gyhy3Nq3DRT63J6UVaJjcxTM+g?=
+ =?us-ascii?Q?hmbh/RtSHpfC2Pr6iTIYQBfJRivYArqDGrghYqq8WVahUIwefg57Lan5jW7y?=
+ =?us-ascii?Q?eVDl6RtMMEXnQ9B77J8u6Y89HjHBhAJfeCdXQ8ayh8NwIlOGfzeY+1HjDYbC?=
+ =?us-ascii?Q?hgYCcswa85FhArTXXH/ks/I17dcz5QHy2o+DOtNaN9cLba6PrnblTdh2Cn91?=
+ =?us-ascii?Q?4l/CwY2jDJMXdVI52fyVi/QGKxulZwlrLFBCifz8ElaIYSENyAXQHvgfkBgc?=
+ =?us-ascii?Q?nZnlPmkCzWmsjZ66TpFUHxj4MyLhqn7/q3yCaid97EAXZKn+hbSHRd1MhUFj?=
+ =?us-ascii?Q?Nhew8aj8EPjdEBsSZ0/Z++s//xLSu3Mxk04WDVER6Ut7kKreZ4kae9+Rklo+?=
+ =?us-ascii?Q?Pu1iygNbYr71Bez1nbUthmq19wXoS6h5aIiO1uSAAJbL24y53hpnu7djDF9E?=
+ =?us-ascii?Q?UPxEp4cuHwD5cAojbUJQVCijm6C7aK2IbFZnPKa1Ngj8WUhfSnSO9wuVEhsA?=
+ =?us-ascii?Q?gIWoIJGK7H3Z26MHhKYm+Hg7gsrhldtGkry4HYPNtJvhdHwL+Cxdf2vcUgW/?=
+ =?us-ascii?Q?C04qgVKqEFJIh/7x95cRdw7qg8cVRjrdIUJudEIYnhRQ52T16UQ2qTVmJ+cI?=
+ =?us-ascii?Q?9j7S2wvznkRe4Gjc6MQYwg287BlaB8x0Mfz2QrGTCPBWKEiltjCFwvNZV88U?=
+ =?us-ascii?Q?wCf3cW3YqjQnBVaFcFRseS3YajKm2dPhAa8GPcD31yxuQ2XjY/4YAibmZN0F?=
+ =?us-ascii?Q?bc0TSFhvRX8yBVjfaJaT0out7eg86C88lAk9vqIfbc2fxNTp9NYAOyjQ4k/T?=
+ =?us-ascii?Q?IjQOWAkmHeOihKuEVZjV92Q8OPEcEss6XyzVJUThYM7cGMdHZDVyLzYqdiGz?=
+ =?us-ascii?Q?d1xl2+nzVeBv6QVXOPyY+KmbQ34ih/IEaMEo2qO2uzF414VNsKKlJgDG99wM?=
+ =?us-ascii?Q?OEVMs6iqZhg7HZjM3YO03+ldQqjoo/+Fjim4BGLNESb165Y9k1TmilCuICov?=
+ =?us-ascii?Q?wIA48kw55exIijdZOsoB6XT8IpBjFWoAjOlXN3Nz0M20cmOMPFjv64fctnR5?=
+ =?us-ascii?Q?MuAh5OsGcHydpj5bM5Sz/8J+gjzBVQZ8qyY2WfKvin2Q9aMx+Bu8DXWTZzq/?=
+ =?us-ascii?Q?HDZsUQ3IN4s0lc2ZW8izMfXdOXfaNVlluiHlE/zyVkUXkT2TgJFfYRWXpyYR?=
+ =?us-ascii?Q?80XLLU26OQKJiNUQKUbhhh5kCiu0Kz7A3WFnAha9V3CcRCTlF5948DCJn8TP?=
+ =?us-ascii?Q?2gfylTyZyd9wqPFdNYVCYzoHn+A2ziERP6VdL5DQDEmobxZ/fo62PLbX5Vet?=
+ =?us-ascii?Q?Kw8SEBpCPx+68OzwpMGz4WdweO9cMYCc2zzAj6Vso1nbHiT3eBLyGn9SlZ4o?=
+ =?us-ascii?Q?FajTbKJUIOkKEsm/oEdZ8ZFKl8A2Fe6Bvqz3RQk7?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3124698e-6596-4333-1817-08ddcf0f86a6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5674.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2025 02:19:35.0625
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RwFJAwNHVG8OnoJxbwUeLTIsAVSa88BAB3zPRyPUGDf2YfK6HLp9IcGI6Td8kepxk6OwWriIKq8oCDLSjYZy1w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5077
+X-OriginatorOrg: intel.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   54efec8782214652b331c50646013f8526570e8d
-commit: 916ee4704a8653910f10c65c2b5d6699dfac5df8 [11095/12827] drm/xe/vf: Register CCS read/write contexts with Guc
-config: loongarch-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507300932.cMHKVE2Y-lkp@intel.com/config)
+Hi chuguangqing,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on drm-misc/drm-misc-next v6.16 next-20250729]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/chuguangqing/gpu-drm-fix-compilation-errors-in-drm_vram_helper/20250729-141222
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250729060728.82402-1-chuguangqing%40inspur.com
+patch subject: [PATCH 1/1] gpu: drm: fix compilation errors in drm_vram_helper
+:::::: branch date: 16 hours ago
+:::::: commit date: 16 hours ago
+config: s390-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507300646.kTchyjvh-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507300932.cMHKVE2Y-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507300646.kTchyjvh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507300932.cMHKVE2Y-lkp@intel.com/
+| Closes: https://lore.kernel.org/r/202507300646.kTchyjvh-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   vmlinux.o: warning: objtool: set_crtc_test_pattern+0x8c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_hpd_line+0x64: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: link_get_fixed_vs_pe_retimer_write_address+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_log_training_result+0x118: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_initialize_scrambling_data_symbols+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_training_pattern_to_dpcd_training_pattern+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_translate_training_aux_read_interval+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_get_eq_aux_rd_interval+0x110: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dpcd_set_training_pattern+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dpcd_set_lt_pattern_and_lane_settings+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_set_hw_training_pattern+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: decide_8b_10b_training_settings+0x14c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dpia_perform_link_training+0xaa8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dp_parse_lttpr_repeater_count+0x48: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: link_bw_kbps_from_raw_frl_link_rate_data+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: decide_fallback_link_setting+0x13c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: reduce_link_rate+0x54: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_active_converter_info+0x14c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: edp_setup_psr+0x2c0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: link_dpia_enable_usb4_dp_bw_alloc_mode+0xdc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_bandwidth_in_kbps_from_timing+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_dsc_parse_dsc_dpcd+0xb8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dsc_throughput_from_dpcd+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: setup_dsc_config+0x1a4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_dsc_get_policy_for_timing+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce60_link_encoder_create+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce80_link_encoder_create+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce100_link_encoder_create+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce110_link_encoder_create+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_map_phy_clock_resources+0xe4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce112_link_encoder_create+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce120_link_encoder_create+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce120_timing_generator_disable_vga+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce120_timing_generator_set_test_pattern+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce112_compressor_program_lpt_control+0x218: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce110_timing_generator_set_test_pattern+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce110_timing_generator_disable_vga+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce110_opp_v_set_csc_default+0x37c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce_mem_input_v_program_pte_vm.llvm.13880970803235655497+0x74: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce_mem_input_v_program_surface_config.llvm.13880970803235655497+0x39c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce110_xfmv_set_pixel_storage_depth+0x48: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_dmub_srv_notify_idle+0x154: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_dmub_srv_ips_query_residency_info+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dce_version_to_string+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_update_visual_confirm_color+0x264: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_status_to_str+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_pixel_encoding_to_str+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_color_depth_to_str+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: find_color_matrix+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: color_space_to_black_color+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_surface_visual_confirm_color+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_mclk_switch_visual_confirm_color+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: hwss_execute_sequence+0xa4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_parse_asic_id+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dc_create_resource_pool+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_build_test_pattern_params+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_build_scaling_params+0x118: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_is_pipe_type+0x44: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: calculate_phy_pix_clks+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_build_info_frame+0x588: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_build_bit_depth_reduction_params+0x314: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_pixel_format_to_bpp+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: resource_transmitter_to_phy_idx+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_color_calculate_degamma_params+0x24c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: build_coefficients+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_build_vsc_infopacket+0x450: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_build_hf_vsif_infopacket+0x140: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dmub_srv_create+0xc0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dmub_srv_stat_get_notification+0x110: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dmub_dcn401_send_reg_inbox0_cmd_msg+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_status_to_str+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_state_id_to_str+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp2_create_session+0x10c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp1_execution+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp1_dp_execution+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp1_transition+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp1_dp_transition+0x6c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp2_execution+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp2_dp_execution+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp2_transition+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mod_hdcp_hdcp2_dp_transition+0x68: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_ttm_io_mem_reserve.llvm.7554943727570445750+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_exec_queue_assign_name+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gsc_load_start+0x98: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gsc_stop_prepare+0x90: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gt_clock_init+0xa4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: acc_queue_work_func+0x158: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: __xe_guc_upload.llvm.11532270743475513411+0x438: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: guc_golden_lrc_init+0x134: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_guc_ads_populate+0xda0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_guc_ads_populate_post_load+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_engine_manual_capture+0x318: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_engine_snapshot_print+0x88: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_guc_capture_get_matching_and_lock+0x1c0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_guc_capture_steered_list_init+0x190: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dequeue_one_g2h+0x16c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: hw_engine_to_engine_activity+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: engine_activity_map+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_guc_klv_key_to_string+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_guc_pc_print+0xc8: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: register_exec_queue.llvm.7904150307710208986+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: guc_exec_queue_process_msg+0x88: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_heci_gsc_init+0xa0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_hw_engine_class_to_str+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_hw_engine_setup_groups+0x13c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gt_lrc_size+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_mocs_settings+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_nvm_init+0x140: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_oa_stream_open_ioctl+0x408: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_oa_init+0x2f0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_oa_ioctl+0x7c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_pm_notifier_callback+0x54: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_pt_update_ops_prepare+0x1e8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: op_commit+0xc0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_pxp_get_readiness_status+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_pxp_exec_queue_add+0x158: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_pxp_pm_suspend+0xdc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pxp_info+0xec: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: query_engine_cycles+0x1a0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_reg_whitelist_print_entry+0x5c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_ring_ops_get+0x3c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: rule_matches+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_step_pre_gmdid_get+0x368: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_step_name+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_ttm_stolen_mgr_init+0x294: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_wopcm_size+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_uc_fw_print+0xe4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: vm_bind_ioctl_ops_create+0xc0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: vm_bind_ioctl_ops_execute+0x11c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: vm_bind_ioctl_ops_parse+0x9f0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_pmt_telem_read+0xf8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: do_compare+0x138: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_hwmon_is_visible+0x78: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_hwmon_read+0x84: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_hwmon_read_label+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: relay_send_to.llvm.11323946379893786058+0x178: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: relay_process_msg+0xdc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: relay_send_transaction+0xcc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: relay_process_incoming_action+0x29c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gt_sriov_pf_config_set_threshold+0x58: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pf_provision_threshold+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gt_sriov_pf_config_restore+0x208: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gt_sriov_pf_control_process_guc2pf+0x13c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: pf_send_vf_control_cmd+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: xe_gt_sriov_pf_monitor_process_guc2pf+0xe8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: kmb_plane_atomic_update+0xa1c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: kmb_dsi_mode_set+0x334: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mgag200_init_pci_options+0xfc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mgag200_pci_probe+0xa0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mgag200_g200_device_create+0x64c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mgag200_g200se_device_create+0xc4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mgag200_set_format_regs+0xdc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: v3d_show_fdinfo+0xf0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: v3d_get_param_ioctl+0xbc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: v3d_fence_get_timeline_name+0x40: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: v3d_get_extensions+0x1c4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_conversion_matrix_to_argb_u16+0xa8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_block_step_bytes+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_subsampling+0x48: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: get_subsampling_offset+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvif_conn_ctor+0x118: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvif_outp_ctor+0x160: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvkm_boolopt+0x74: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: dcb_i2c_parse+0x1b8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: init_generic_condition+0x94: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mxm_sor_map+0x15c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvbios_perfEp+0x3d8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvbios_timingEp+0x3f0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvbios_therm_sensor_parse+0xdc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvbios_therm_fan_parse+0xe0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv04_clk_pll_prog+0xb0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: read_clk+0xfc: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv50_clk_read+0x2b0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: read_div+0x54: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: read_div+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: read_div+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: read_pll_ref+0x200: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: read_vco+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gt215_clk_read+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: mcp77_clk_read+0x6c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gf100_clk_read+0x4c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gk104_clk_read+0x48: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: powerctrl_1_shift+0xd4: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: setPLL_double_highregs+0x3f8: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv04_devinit_pll_set+0x16c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvkm_fb_bios_memtype+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv04_ram_new+0x70: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv20_ram_new+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv40_ram_new+0x80: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv40_ram_prog+0x464: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv49_ram_new+0x7c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nv50_ram_ctor+0x94: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gk104_ram_init+0x358: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gk104_ram_calc_sddr3+0xec0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: gk104_ram_calc_gddr5+0xe54: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvkm_rm_engine_obj_new+0xe0: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: nvkm_rm_engine_new+0x60: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: r535_gsp_msg_run_cpu_sequencer+0x258: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: r535_gsp_xlat_mc_engine_idx+0x50: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: r535_dp_get_caps+0x12c: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: r535_outp_new+0x170: sibling call from callable instruction with modified stack frame
+>> ERROR: modpost: drivers/gpu/drm/drm_gem_ttm_helper: 'drm_gem_ttm_print_info' exported twice. Previous export was in vmlinux
+>> ERROR: modpost: drivers/gpu/drm/drm_gem_ttm_helper: 'drm_gem_ttm_vmap' exported twice. Previous export was in vmlinux
+>> ERROR: modpost: drivers/gpu/drm/drm_gem_ttm_helper: 'drm_gem_ttm_vunmap' exported twice. Previous export was in vmlinux
+>> ERROR: modpost: drivers/gpu/drm/drm_gem_ttm_helper: 'drm_gem_ttm_mmap' exported twice. Previous export was in vmlinux
+>> ERROR: modpost: drivers/gpu/drm/drm_gem_ttm_helper: 'drm_gem_ttm_dumb_map_offset' exported twice. Previous export was in vmlinux
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
+
