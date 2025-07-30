@@ -1,89 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A49A2698AF;
-	Wed, 30 Jul 2025 09:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE59267F61
+	for <llvm@lists.linux.dev>; Wed, 30 Jul 2025 09:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753866639; cv=none; b=AWnyy04ZErd/PQf8E9Fk8fsEb/04ORaPKQn/QQsSjG/PRnf6RQxGt3yJdAFUtZE7W6YGmVrGB+1lu4bF2NJEQ3y0OmIPnleSubzcS7+Pk79itSWyc3pRdnBA5cwkDyXgEszaqYVJdVn3AweXZJ+/Luej1Cdy2U20Fcwu+/csNm0=
+	t=1753867037; cv=none; b=chdwbd5ToayZLjndnMMgTinm8qYuF4JuXozNaYc2sF7vCIgQwYuWDqUYtV/WRBulw17gOevxO8oVEb79y9Y0i5RkzKYzTIXJ7Brza4RhZsRLv3iyine0TZt6DWZEKE4hMDAcTlCjCK2o5M6zIGCGqcEZjgYza15tt1aZriUp7ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753866639; c=relaxed/simple;
-	bh=a5b4UoGNmRJtxisAJWViJD2hZAnjeHieNa8gZwcxDB0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oKVArlFnPZU5Q5nRV96eXrygqMMNmNpDRnqwMyL0M6H1nvuNgaLWSb9k0yxN9qqHwuoKiKFFg+rk4Xi6Svtpd74QQavoh5pHz+jTtYZr5to8R9k/AFH0nwlqFgNkoLhKgZMtrdIAzLJqNAyVUxYDiVWNnc+AUgj5Ij0xV/kZfYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fCxQFPLC; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753867037; c=relaxed/simple;
+	bh=Dpcd7l4PVdBUAu3dLde4TLawjV16LdfHLmoToUBiLfw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lUHpauVfGrx320jNMZ6ZZGz0iykDSo/oh1cOM2I7OBDypcM2uGa0qCYga1mbpUQJsD78Dchz93/p1WIYT4WPmIwaErVL18lz4ySgbw7GfUq3EfxGomz5uu2b/l9TQMWIGJuRKupyneXL+gM0QUYRFxRCPMQaYV74qwmrqQEPW3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Nkx9WmDw; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fCxQFPLC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753866637; x=1785402637;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a5b4UoGNmRJtxisAJWViJD2hZAnjeHieNa8gZwcxDB0=;
-  b=fCxQFPLC5l8SpVz2deOMOaZj4m/lJYs4zXFekaTvz4U33fjeprwyzcB3
-   E+1IlGWEioJOzfPmQUgqGcsAioEE3itpKEjKWwwKaZ2w/R4zTSMeuPrj2
-   drcbQ/FZruo/b63yfytaWHd+BDglpy17wFDVc3gpzT+Zx/25DFnyph2Da
-   lA+DjBqUnOrC8YiOXU+sEsU+Se2BJwbHF7f6zMjGeRGsoDrASsl0uEGC9
-   UoIMmW6j6+47anCYCZF2GBil6dFl10GeGJPrMZ+NAOvhMl9mmzWOonCoU
-   RWDVrAt4/yel5Y8F6yaEKb9jqf2ufjyOxeV11uWI59epemmTrr4H4R4vL
-   A==;
-X-CSE-ConnectionGUID: fPy748mRQom84D317+JKlg==
-X-CSE-MsgGUID: LYxXGUNrRLqSUSDuYceIDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="43764818"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="43764818"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 02:10:36 -0700
-X-CSE-ConnectionGUID: JWWdBUwRTQGFSEFvDiMMow==
-X-CSE-MsgGUID: W4yfoq5MSuOXxwYDy2hnVw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163717254"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Jul 2025 02:10:34 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uh2pU-0002F6-2U;
-	Wed, 30 Jul 2025 09:10:32 +0000
-Date: Wed, 30 Jul 2025 17:09:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>, linux-cxl@vger.kernel.org
-Subject: [cxl:for-6.18/cxl-probe-order 1/4] ld.lld: error: undefined symbol:
- devm_cxl_add_memdev
-Message-ID: <202507301656.6Y5x3Dqd-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Nkx9WmDw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=z9s8
+	RUZxXi4y+NdXdO9wZSa3qlMNEu3jZh6gP4YDP0k=; b=Nkx9WmDwDDT8RiY/j4X/
+	gWHBfnqhxiHT79d6s8ImeSbvS5yTL8ft7G2Bpi7n2nkxDhfaI/LD/bsmp8d2Y2CG
+	nzYXb2I496R2NEnmmfOddZOkUzPWSQnH2DgsMZJ4EwdAqz3CuWVi/IURIpEU/6kg
+	/sv54CbFugA0B6Ccm/7XdiL2dGqfQhvUR2qcFKOEdNJ4UvbtkOhLLAyHrFWcBV1L
+	3el553WbzhOztVcPwRP8Ot+DRZ5Pj55H+qKchD2/XhdYgT1x48KMh9SGr62+uSWG
+	pjeltvdDAQvyWylRE9AQs5SOm0jYzawu0+dxNL0YdlpSgbzGtQgph+MZ/Bl92SzO
+	JA==
+Received: (qmail 4115907 invoked from network); 30 Jul 2025 11:17:08 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Jul 2025 11:17:08 +0200
+X-UD-Smtp-Session: l3s3148p1@vNAs/SE7cocgAwDPXyC3AG0QzsW8mHdp
+Date: Wed, 30 Jul 2025 11:17:07 +0200
+From: Wolfram Sang <wsa-dev@sang-engineering.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Biju <biju.das.au@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Biju Das <biju.das.jz@bp.renesas.com>, linux-mmc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
+ SD_BUF0 in polling mode
+Message-ID: <aInjE-sduVbBRmJx@shikoro>
+References: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
+ <202507301421.AmWhOZBk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kmR0COAf0tpqolK7"
+Content-Disposition: inline
+In-Reply-To: <202507301421.AmWhOZBk-lkp@intel.com>
+
+
+--kmR0COAf0tpqolK7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git for-6.18/cxl-probe-order
-head:   5e29cbd1077b79468339aca04b16e401252b5a24
-commit: 158247aaf6d927da3628d27a6799a89c43db1aca [1/4] cxl/mem: Arrange for always-synchronous memdev attach
-config: i386-buildonly-randconfig-005-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301656.6Y5x3Dqd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301656.6Y5x3Dqd-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507301656.6Y5x3Dqd-lkp@intel.com/
+>    In file included from drivers/mmc/host/uniphier-sd.c:21:
+> >> drivers/mmc/host/tmio_mmc.h:249:2: error: call to undeclared function 'ioread64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      249 |         ioread64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+>          |         ^
+> >> drivers/mmc/host/tmio_mmc.h:255:2: error: call to undeclared function 'iowrite64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      255 |         iowrite64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+>          |         ^
 
-All errors (new ones prefixed by >>):
+Sigh, then the guard seems to be ARM64 after all :(
 
->> ld.lld: error: undefined symbol: devm_cxl_add_memdev
-   >>> referenced by pci.c
-   >>>               drivers/cxl/pci.o:(cxl_pci_probe) in archive vmlinux.a
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--kmR0COAf0tpqolK7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiJ4xAACgkQFA3kzBSg
+KbaeJA//X+uqDvUdKGGo3FOKu+/F1eXweWNZxFEmeubtke3lHodepW1cA105X33H
+oHHK/iVapFK9wT4K3aGqHQGAYhoRtv/pWurW7AZCbZuHiIEvSGr6C5f2yohTYhix
++2+sy6DD1W05jLljxT95UIe2cGe4gq/dBxjuMPY7hBdZWz+JkHGFYpLeAwMwdOVA
+SmSrrneaFJG6oA27RNSUO1sB7eGuTIqtLQhTDWEz105GBYsW41qW6QMHDMedejBo
+qhTQ0wAgzMzxsGKCraM//3iFdcAbn2mVvMpjMqI9YnlpF/+FxCr9ljzZAlKi1P7x
+GQF0IIdofihdw9MXtFH8bStWlNb9nlGqE6ujMSFLViUWqQrBnOZPXHFS19QF9Rsl
+FfmMOT0oOTTFd4510V2/TK+q5csNM1rFEx6dTyZi3qu4xiCocZ3kdZ4jRO/qJSlQ
+PhYy9s9wOrPvJLUX7avcnBZ7vZodmo/IR7TuN8t38mBQzUGF3oPJhX7wKEC+yA09
+iWwj86WvdsaV8tif3CuDU1KlkFYDTtUX4PEG3hLFRuxQeesi9b9AKOtuuHd/8R+h
+EPPyK/LyJ/ZMKEvMNAkNWadZjGjne/IvoivkoneCQUTVhZFhIeNGQYZT2MJUDXE4
+OYIiKUik0iEhiN7ofwWgRiAJvZqlAswXNxVQKDQFNjRPBZ3Oq/c=
+=Wjuh
+-----END PGP SIGNATURE-----
+
+--kmR0COAf0tpqolK7--
