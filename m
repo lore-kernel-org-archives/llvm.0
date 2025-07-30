@@ -1,176 +1,208 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973842D9792;
-	Wed, 30 Jul 2025 14:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F342DAFA2;
+	Wed, 30 Jul 2025 14:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753886019; cv=none; b=PJDu94IvIXtPVkyH37kUKp0BHI7c29acWHVTPoTCqwn9O+XWsRjAexTxpDab1odLKkMlP/VI6TjjJgW2q10Lz48unb8KpECtXMvr8PoyFhlsTWLOSmoYIkc2Sif1D6D762KkJwOTZ+HyuACdfrJrfNND8vexU+DiQ2fL5ltw5/I=
+	t=1753886623; cv=none; b=swlXeDtsHcoGmLVEruzPd8BPCGMDq5lUbAUgL75A8M3+QhOhSHXGXF78Dw8zTFACqrcbnqdpjEhjmNQl/umnpUj+rwdao78HXB3rYQ6oL6mqwz6oFzeeRSbUcULC32yWhp+homta/XsQdVWEVPqpOCdkJld1FPBZXKBYkqC4Yfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753886019; c=relaxed/simple;
-	bh=pmEi+E7y8N1fUJ2Skd77GVL6bd2TokFUGYI1O6z8kE8=;
+	s=arc-20240116; t=1753886623; c=relaxed/simple;
+	bh=idRnj5P4PrYGxexiNDf1IWPLr0mVthPDzs6oUfOLhrM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hZc2xhKxXUqR6vZ9ZpKRjicYCaNFprm1a+PyvDHZ6v1nNZwyfRkEoxyZ4RxoTFSbfdKHVg4RmfQih5TmoTQmjHknIXdBTIKFIDrX6y8I1wyIKf4o2nhZkh5cq6k+jZQmNFpjz1uUC87QMeKD3bEWN6U0cuhKRGEwVjCNjiKFIUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bz4SgOuh; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=LN66Xhb1cISnSWTZ1PueI3rYnHLDfeZ4PdzfvNAIiXrKrpRGiMrNJg47j0Bhch1jGXoTmvTeTlskhHoqBS/vFvTBl4LXlceT3PgVBKBHXeS2ZOPgmd51KDHKhWlS5EJ09STletuASHnj/I9K9WKNzs3koutxvvk47H/bdS+YevE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bz2oH02/; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bz4SgOuh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bz2oH02/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753886017; x=1785422017;
+  t=1753886621; x=1785422621;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pmEi+E7y8N1fUJ2Skd77GVL6bd2TokFUGYI1O6z8kE8=;
-  b=bz4SgOuhTjzo4tbiBXg9uUkDQlvXLWX9kmP7mUaQYk0Kk/ywMx2wZxgA
-   rA2UV9FgN7CnvQgnp++gqklDemIpnb1HvaKQlHT7lUtZgCZ/xrx9wzOog
-   uWrdeIzH1/kALWNp8DzkQiF2ygBE9ac6guFH9/9DdSPeSiNJ2egaw+64u
-   NZ5dYQYWrZDBEMitfc4THthKkyBuVw5Kc04kLOfkE0lh7zL/RcDnk47jN
-   OoTyH1PYs8tSNEfMb/WwWkZeCLveT4jL5IL9jR/BMV/unnekACg+pGqSq
-   trPrIafJ4GTbNE5WJbd9T0h1u/banmFhq+BG17Mv2VZDCOkl5Z9NPyyxW
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=idRnj5P4PrYGxexiNDf1IWPLr0mVthPDzs6oUfOLhrM=;
+  b=Bz2oH02/Z58mRocLaBzsJfjnRHGs7UiK3Lvfxuh1uZ5cfGpoJpEYshoX
+   y2A2HGum6UCiwkJch6i88gAraOMQybQJ4ORJZKp4OxR1hEryBet0pGIZU
+   dAik0eRhLAetr+Ime8fnvEtn8Xl6tJS/dY6s8xvcUs1oDhIuk+Y1/VvU1
+   jn6S3riB2Kc+h/ph/WxzwbiVRAmQvSfs8p5Z+0Tt7K/S4lEgHJ6IkAlnb
+   rnXOkvB2lBXDaBD1ZGnSpYQesiOrHnW7oNJQLNqRLjdvs6GYAPXCTSwyd
+   CkoPzXDmuKEkRySt9zMBU/I8AJmgHqKq8J3hstElDTvlfoxE6gX/CZrP4
    g==;
-X-CSE-ConnectionGUID: yHRnQhouTyy8LPRRC32I8Q==
-X-CSE-MsgGUID: ZEq3NyvbSXakjl1Dpb5YBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="60013803"
+X-CSE-ConnectionGUID: eQnhZ0VBS9ijmMSic/TLKQ==
+X-CSE-MsgGUID: rkwNAhYTSSiHJ0GMYF1AIA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="55890917"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="60013803"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 07:33:37 -0700
-X-CSE-ConnectionGUID: hkTixScCTg6cwK/DCkLisA==
-X-CSE-MsgGUID: zW5cvb46RTmWg/nwgXfSFQ==
+   d="scan'208";a="55890917"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 07:43:40 -0700
+X-CSE-ConnectionGUID: oTzVPsG9QR+19wHO6VXhaA==
+X-CSE-MsgGUID: 8uYbk/j7SeWAaepWravi+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="167492737"
+   d="scan'208";a="193987297"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 30 Jul 2025 07:33:33 -0700
+  by orviesa002.jf.intel.com with ESMTP; 30 Jul 2025 07:43:34 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uh7s2-0002pg-1A;
-	Wed, 30 Jul 2025 14:33:30 +0000
-Date: Wed, 30 Jul 2025 22:32:46 +0800
+	id 1uh81k-0002qG-0g;
+	Wed, 30 Jul 2025 14:43:32 +0000
+Date: Wed, 30 Jul 2025 22:43:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marie Zhussupova <marievic@google.com>, rmoar@google.com,
-	davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, elver@google.com,
-	dvyukov@google.com, lucas.demarchi@intel.com,
-	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Marie Zhussupova <marievic@google.com>
-Subject: Re: [PATCH 3/9] kunit: Pass additional context to generate_params
- for parameterized testing
-Message-ID: <202507302223.BTl33Nvo-lkp@intel.com>
-References: <20250729193647.3410634-4-marievic@google.com>
+To: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Gatien Chevallier <gatien.chevallier@foss.st.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+	Le Goffic <legoffic.clement@gmail.com>,
+	Julius Werner <jwerner@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	=?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
+Subject: Re: [PATCH v5 13/20] perf: stm32: introduce DDRPERFM driver
+Message-ID: <202507302237.gyVCBmXs-lkp@intel.com>
+References: <20250728-ddrperfm-upstream-v5-13-03f1be8ad396@foss.st.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250729193647.3410634-4-marievic@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250728-ddrperfm-upstream-v5-13-03f1be8ad396@foss.st.com>
 
-Hi Marie,
+Hi Clément,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on shuah-kselftest/kunit]
-[also build test ERROR on shuah-kselftest/kunit-fixes drm-xe/drm-xe-next linus/master v6.16 next-20250730]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 89be9a83ccf1f88522317ce02f854f30d6115c41]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marie-Zhussupova/kunit-Add-parent-kunit-for-parameterized-test-context/20250730-033818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20250729193647.3410634-4-marievic%40google.com
-patch subject: [PATCH 3/9] kunit: Pass additional context to generate_params for parameterized testing
-config: arm64-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507302223.BTl33Nvo-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Cl-ment-Le-Goffic/bus-firewall-move-stm32_firewall-header-file-in-include-folder/20250728-234144
+base:   89be9a83ccf1f88522317ce02f854f30d6115c41
+patch link:    https://lore.kernel.org/r/20250728-ddrperfm-upstream-v5-13-03f1be8ad396%40foss.st.com
+patch subject: [PATCH v5 13/20] perf: stm32: introduce DDRPERFM driver
+config: s390-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507302237.gyVCBmXs-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302223.BTl33Nvo-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302237.gyVCBmXs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507302223.BTl33Nvo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507302237.gyVCBmXs-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/xe/xe_migrate.c:1917:
->> drivers/gpu/drm/xe/tests/xe_migrate.c:772:44: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     772 |         KUNIT_CASE_PARAM(xe_migrate_sanity_kunit, xe_pci_live_device_gen_param),
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_migrate.c:1917:
-   drivers/gpu/drm/xe/tests/xe_migrate.c:773:42: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     773 |         KUNIT_CASE_PARAM(xe_validate_ccs_kunit, xe_pci_live_device_gen_param),
-         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   2 errors generated.
---
-   In file included from drivers/gpu/drm/xe/xe_dma_buf.c:319:
->> drivers/gpu/drm/xe/tests/xe_dma_buf.c:285:37: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     285 |         KUNIT_CASE_PARAM(xe_dma_buf_kunit, xe_pci_live_device_gen_param),
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   1 error generated.
---
-   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
->> drivers/gpu/drm/xe/tests/xe_bo.c:610:41: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_device_gen_param),
-         |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
-   drivers/gpu/drm/xe/tests/xe_bo.c:611:38: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_device_gen_param),
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
-   drivers/gpu/drm/xe/tests/xe_bo.c:624:44: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_live_device_gen_param,
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:228:24: note: expanded from macro 'KUNIT_CASE_PARAM_ATTR'
-     228 |                   .generate_params = gen_params,                                \
-         |                                      ^~~~~~~~~~
-   3 errors generated.
---
-   In file included from drivers/gpu/drm/xe/xe_mocs.c:799:
->> drivers/gpu/drm/xe/tests/xe_mocs.c:193:46: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     193 |         KUNIT_CASE_PARAM(xe_live_mocs_kernel_kunit, xe_pci_live_device_gen_param),
-         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   In file included from drivers/gpu/drm/xe/xe_mocs.c:799:
-   drivers/gpu/drm/xe/tests/xe_mocs.c:194:45: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
-     194 |         KUNIT_CASE_PARAM(xe_live_mocs_reset_kunit, xe_pci_live_device_gen_param),
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
-     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-         |                                      ^~~~~~~~~~
-   2 errors generated.
+>> drivers/perf/stm32_ddr_pmu.c:213:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     213 |         writel_relaxed(r->start.mask, pmu->membase + r->start.reg);
+         |         ^
+   drivers/perf/stm32_ddr_pmu.c:220:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     220 |         writel_relaxed(r->stop.mask, pmu->membase + r->stop.reg);
+         |         ^
+   drivers/perf/stm32_ddr_pmu.c:227:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     227 |         writel_relaxed(r->clear_time.mask, pmu->membase + r->clear_time.reg);
+         |         ^
+   drivers/perf/stm32_ddr_pmu.c:234:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     234 |         writel_relaxed(r->clear_cnt.mask & BIT(counter->idx), pmu->membase + r->clear_cnt.reg);
+         |         ^
+>> drivers/perf/stm32_ddr_pmu.c:240:15: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     240 |         u32 status = readl_relaxed(pmu->membase + r->status.reg);
+         |                      ^
+   drivers/perf/stm32_ddr_pmu.c:255:12: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     255 |         u32 val = readl_relaxed(pmu->membase + r->enable.reg);
+         |                   ^
+   drivers/perf/stm32_ddr_pmu.c:258:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     258 |         writel_relaxed(val, pmu->membase + r->enable.reg);
+         |         ^
+   drivers/perf/stm32_ddr_pmu.c:264:12: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     264 |         u32 val = readl_relaxed(pmu->membase + r->enable.reg);
+         |                   ^
+   drivers/perf/stm32_ddr_pmu.c:267:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     267 |         writel_relaxed(val, pmu->membase + r->enable.reg);
+         |         ^
+   drivers/perf/stm32_ddr_pmu.c:285:17: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     285 |                 cnt_sel_val = readl_relaxed(pmu->membase + r->cfg.reg);
+         |                               ^
+   drivers/perf/stm32_ddr_pmu.c:288:3: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     288 |                 writel_relaxed(cnt_sel_val, pmu->membase + r->cfg.reg);
+         |                 ^
+   drivers/perf/stm32_ddr_pmu.c:302:16: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     302 |         cnt_sel_val = readl_relaxed(pmu->membase + cnt_sel_evt_reg);
+         |                       ^
+   drivers/perf/stm32_ddr_pmu.c:306:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     306 |         writel_relaxed(cnt_sel_val, pmu->membase + cnt_sel_evt_reg);
+         |         ^
+   drivers/perf/stm32_ddr_pmu.c:428:9: error: call to undeclared function 'readl_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     428 |                 val = readl_relaxed(pmu->membase + r->counter_evt[counter->idx].reg);
+         |                       ^
+   drivers/perf/stm32_ddr_pmu.c:778:3: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     778 |                 writel_relaxed(pmu->dram_type, pmu->membase + pmu->cfg->regs->dram_inf.reg);
+         |                 ^
+   drivers/perf/stm32_ddr_pmu.c:803:2: error: call to undeclared function 'writel_relaxed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     803 |         writel_relaxed(pmu->dram_type, pmu->membase + pmu->cfg->regs->dram_inf.reg);
+         |         ^
+   16 errors generated.
 
 
-vim +772 drivers/gpu/drm/xe/tests/xe_migrate.c
+vim +/writel_relaxed +213 drivers/perf/stm32_ddr_pmu.c
 
-54f07cfc016226 Akshata Jahagirdar 2024-07-17  770  
-0237368193e897 Michal Wajdeczko   2024-07-08  771  static struct kunit_case xe_migrate_tests[] = {
-37db1e77628551 Michal Wajdeczko   2024-07-20 @772  	KUNIT_CASE_PARAM(xe_migrate_sanity_kunit, xe_pci_live_device_gen_param),
-37db1e77628551 Michal Wajdeczko   2024-07-20  773  	KUNIT_CASE_PARAM(xe_validate_ccs_kunit, xe_pci_live_device_gen_param),
-0237368193e897 Michal Wajdeczko   2024-07-08  774  	{}
-0237368193e897 Michal Wajdeczko   2024-07-08  775  };
-0237368193e897 Michal Wajdeczko   2024-07-08  776  
+   208	
+   209	static void stm32_ddr_start_counters(struct stm32_ddr_pmu *pmu)
+   210	{
+   211		const struct stm32_ddr_pmu_regspec *r = pmu->cfg->regs;
+   212	
+ > 213		writel_relaxed(r->start.mask, pmu->membase + r->start.reg);
+   214	}
+   215	
+   216	static void stm32_ddr_stop_counters(struct stm32_ddr_pmu *pmu)
+   217	{
+   218		const struct stm32_ddr_pmu_regspec *r = pmu->cfg->regs;
+   219	
+   220		writel_relaxed(r->stop.mask, pmu->membase + r->stop.reg);
+   221	}
+   222	
+   223	static void stm32_ddr_clear_time_counter(struct stm32_ddr_pmu *pmu)
+   224	{
+   225		const struct stm32_ddr_pmu_regspec *r = pmu->cfg->regs;
+   226	
+   227		writel_relaxed(r->clear_time.mask, pmu->membase + r->clear_time.reg);
+   228	}
+   229	
+   230	static void stm32_ddr_clear_event_counter(struct stm32_ddr_pmu *pmu, struct stm32_ddr_cnt *counter)
+   231	{
+   232		const struct stm32_ddr_pmu_regspec *r = pmu->cfg->regs;
+   233	
+   234		writel_relaxed(r->clear_cnt.mask & BIT(counter->idx), pmu->membase + r->clear_cnt.reg);
+   235	}
+   236	
+   237	static void stm32_ddr_clear_counter(struct stm32_ddr_pmu *pmu, struct stm32_ddr_cnt *counter)
+   238	{
+   239		const struct stm32_ddr_pmu_regspec *r = pmu->cfg->regs;
+ > 240		u32 status = readl_relaxed(pmu->membase + r->status.reg);
+   241	
+   242		if (counter->idx == pmu->cfg->time_cnt_idx)
+   243			stm32_ddr_clear_time_counter(pmu);
+   244		else
+   245			stm32_ddr_clear_event_counter(pmu, counter);
+   246	
+   247		if (status & r->status.mask)
+   248			dev_err(pmu->dev, "Failed to clear counter %i because the PMU is busy\n",
+   249				counter->idx);
+   250	}
+   251	
 
 -- 
 0-DAY CI Kernel Test Service
