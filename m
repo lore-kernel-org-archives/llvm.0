@@ -1,37 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB2A17BED0;
-	Wed, 30 Jul 2025 04:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9BF1E5B7C;
+	Wed, 30 Jul 2025 06:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753851062; cv=none; b=pR9/ehqsVPWyS7PaFZlV3CW32/LWbTlh/oMXJjm1kF529HjjFZ+ouCrRCFiYVA6wdLuxsvtHrpzMjMsXCPnVDAQqweBR1atACkGqjUUQr8v/n1c40CmZNtYY+iWGD+97P1y4Ee/ze1rBEtoufP+x7l5QJcWoxxkqUY2XNAc/KoQ=
+	t=1753856843; cv=none; b=oj0aLZKwPv9FvwN4mMxtelqqWoiMpNcBZ2KjcuZRmWArZcrotyh+/UTuevNBQxKIcLDuupX1/y2mbozUBQyT3JYDYxSlDA75B1EYBGPXJT7yFBrWJ3WEqxboFFxTh9D0pgUQ2obGzLycgthJd+X1KTUgxMMCqXdPWHw7ULj4Y1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753851062; c=relaxed/simple;
-	bh=RxGMRxGRju4HWBIkrWOoTZkXaFWFHu//cpnBUbRIYWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EWDLPtZNsKl+ae445Av4Oyc6vasPetf9xHtbPdOrIcazyEnU8hH+hWmtIRCkxLTiUrKvdWoYmF9S+NWl1ysg56GYIlWKPGiwKkq01RVwo1S+vucetz63oinKnMSBJesbX3IsGnfnI5nLv28Pkb5/pV3KrHUksKhjwzXOk5uN9/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QH4gwDcD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753856843; c=relaxed/simple;
+	bh=fmG8on2z6yzv097Owu47Z8r1fW9cEKDPaju+MlSxgZg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dX37MKJ3SeSVUDgw1wftT1diyoTWDj4y2ujUkcUaFLaqjGye8QXbLrLZtByhVcrHI1yYyPE8HXqbneyyDi2Xh/IzHN5IGEN+2JiostE4McihDwDLTEEmeqInM2J2krYfecAaq3e8kACO253Mlb67/9ezk6iQzWos2hA/mWMjGRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tjgbyh/M; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QH4gwDcD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5C2C4CEE7;
-	Wed, 30 Jul 2025 04:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753851061;
-	bh=RxGMRxGRju4HWBIkrWOoTZkXaFWFHu//cpnBUbRIYWk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=QH4gwDcDfNcIMC+P8p56iBvP4bDtQTENerDvx2IuPNUU1wHLlNPZ7Cnb4cuL9Ty9m
-	 XZEVVckHmzbL9IH5zLaFR6/wxeGzDMpEE0/7q2QWWf5oYxmCjpyaY0Sv9EK9auyKF3
-	 iLDm8Hdu3CaV4eLNZXu2nB3+0TqJ6Oxm2bCeyI5Mvnv0uxi8i57BLDdqioiNYGslm6
-	 CzCOI9Xj+vqaGFDYz5zvcjEy/SUGyF77Y5v7cxYJvshduX7BO1rXxCZ8Qw3EOW4xoy
-	 wkGp2tLnnSWTVgunM4Jszj0wD+7+A6SYWIVBJmhBy7p62BxH19zbaLvqX3mDU0JZ3x
-	 Fql/TwUnJjA/w==
-Date: Tue, 29 Jul 2025 21:50:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: ojeda@kernel.org
-Subject: Prebuilt LLVM 21.1.0-rc2 uploaded
-Message-ID: <20250730045057.GA3686463@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tjgbyh/M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753856842; x=1785392842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fmG8on2z6yzv097Owu47Z8r1fW9cEKDPaju+MlSxgZg=;
+  b=Tjgbyh/ML0WCfchnJ5RgN6mn6IP0f28Gi6z10WSM0oUN+f3g3WVXSbBm
+   gFF0djQFajOgPYd7vozVno3GgdoM8377KSU9fWfGiSo22tPpu6FW8O9YL
+   cTei8jl+3ruqfWTq/Jt/0oVQCEGPL8CwBNGFj1XhOQv5WIan35N1dmE/5
+   WnMouFAOAFZiAm1Rl7j2p329VatJ00I0G31StfSrWp61/Ixtn6qKE6PVp
+   locCqoGo6mfZamWjx+78KhtxTNLGkFkGaW7ipIXayfkggUfp1g9pf6vsj
+   bQwtxt/WcJChFha+x7xUtHeLCfpBL8qVUF+rhJtL+oTD/6B9ZHtnbY/NP
+   A==;
+X-CSE-ConnectionGUID: nD7yaFBuQCaBdMiKtzfiGA==
+X-CSE-MsgGUID: s4ICJP1qShyldDvXarO79Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="59790313"
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="59790313"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 23:27:21 -0700
+X-CSE-ConnectionGUID: jOBEbNJVTGO3S51PEZVkfg==
+X-CSE-MsgGUID: 4QSs1WsVS6SrH2nUopNmEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="163685308"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 29 Jul 2025 23:27:18 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uh0HT-00026q-2N;
+	Wed, 30 Jul 2025 06:27:15 +0000
+Date: Wed, 30 Jul 2025 14:27:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Biju <biju.das.au@gmail.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Biju Das <biju.das.jz@bp.renesas.com>, linux-mmc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
+ SD_BUF0 in polling mode
+Message-ID: <202507301421.AmWhOZBk-lkp@intel.com>
+References: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,17 +69,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
 
-Hi all,
+Hi Biju,
 
-I have built and uploaded LLVM 21.1.0-rc2 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+kernel test robot noticed the following build errors:
 
-This is a prerelease version of LLVM, similar to how the Linux kernel
-release candidates work. If there are any issues found, please let us
-know via email or https://github.com/ClangBuiltLinux/linux/issues/new,
-so that we have an opportunity to get them fixed in main and backported
-to the 21.x branch before 21.1.0 is officially released.
+[auto build test ERROR on linus/master]
+[also build test ERROR on ulf-hansson-mmc-mirror/next v6.16 next-20250729]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Biju/mmc-tmio-Add-64-bit-read-write-support-for-SD_BUF0-in-polling-mode/20250728-001022
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250727160731.106312-2-biju.das.jz%40bp.renesas.com
+patch subject: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for SD_BUF0 in polling mode
+config: powerpc64-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301421.AmWhOZBk-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 78c460bbe8f1fc17e2e66b37edf419ccecbfecba)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301421.AmWhOZBk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507301421.AmWhOZBk-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/mmc/host/uniphier-sd.c:21:
+>> drivers/mmc/host/tmio_mmc.h:249:2: error: call to undeclared function 'ioread64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     249 |         ioread64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+         |         ^
+>> drivers/mmc/host/tmio_mmc.h:255:2: error: call to undeclared function 'iowrite64_rep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     255 |         iowrite64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+         |         ^
+   2 errors generated.
+
+
+vim +/ioread64_rep +249 drivers/mmc/host/tmio_mmc.h
+
+   244	
+   245	#ifdef CONFIG_64BIT
+   246	static inline void sd_ctrl_read64_rep(struct tmio_mmc_host *host, int addr,
+   247					      u64 *buf, int count)
+   248	{
+ > 249		ioread64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+   250	}
+   251	
+   252	static inline void sd_ctrl_write64_rep(struct tmio_mmc_host *host, int addr,
+   253					       const u64 *buf, int count)
+   254	{
+ > 255		iowrite64_rep(host->ctl + (addr << host->bus_shift), buf, count);
+   256	}
+   257	#endif
+   258	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
