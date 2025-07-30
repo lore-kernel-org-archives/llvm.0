@@ -1,220 +1,177 @@
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011059.outbound.protection.outlook.com [40.107.74.59])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31762D978C;
-	Wed, 30 Jul 2025 14:12:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753884762; cv=fail; b=LjauPFCHQ0i/cKKsnqI8HVjtau4+GQa9tJSOS0hkJzJ8Sv66RgnDlt6MsMcA1uP52VXcjj5cRfo1vEQahybYQ/1w3+6WdDWf4enXDvFLtGoCytLo0OLCBh/Q32h2abm833BIq1vL2+k5g5flw/6BxEJHSBFyYtuxdPRBm5Qg5RM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753884762; c=relaxed/simple;
-	bh=g75FyPhLxFIgYX25u9sSlFT9NTUzAgn+M8LZTR2CWNQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iIEmL83k08dDuDiZILn8zGENDFsWvhYYLRdRFxh44ucgk2tz3AkGGCdN9Agk4TWB/T+OD1TM/hG+IyAOj7VBynptXkzqWHovT8VSv3r4Sr/k5Fg/OWLdwR2s5/0S0T8DXgFgLTq5gWfLQyZRor7LUj6b3/YYXoiSzg+gcWRj5mo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=QDQ4gArj; arc=fail smtp.client-ip=40.107.74.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973842D9792;
+	Wed, 30 Jul 2025 14:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753886019; cv=none; b=PJDu94IvIXtPVkyH37kUKp0BHI7c29acWHVTPoTCqwn9O+XWsRjAexTxpDab1odLKkMlP/VI6TjjJgW2q10Lz48unb8KpECtXMvr8PoyFhlsTWLOSmoYIkc2Sif1D6D762KkJwOTZ+HyuACdfrJrfNND8vexU+DiQ2fL5ltw5/I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753886019; c=relaxed/simple;
+	bh=pmEi+E7y8N1fUJ2Skd77GVL6bd2TokFUGYI1O6z8kE8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hZc2xhKxXUqR6vZ9ZpKRjicYCaNFprm1a+PyvDHZ6v1nNZwyfRkEoxyZ4RxoTFSbfdKHVg4RmfQih5TmoTQmjHknIXdBTIKFIDrX6y8I1wyIKf4o2nhZkh5cq6k+jZQmNFpjz1uUC87QMeKD3bEWN6U0cuhKRGEwVjCNjiKFIUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bz4SgOuh; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="QDQ4gArj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NNoebKusFkI74blGYwlAeyldbUf7rrQ5FLeWeandXNdPyVoXc+PjbLlV7XN344CFgWNRFl5MeK8opw7tqvoMLbJnPtgjH7nLFz9iS0AMOIjdSYoLf0wAGQKC0XlaTUMOj59j4rFR45glXEbNtTwd+M7VszAgTVnM+fqetZieO9jn9cJUuh3tXZcpJNxb0qEIRgCzzymKlEiC4Y0trdFoTTWoYUfe/V5z633/Sa+uo4lScYB+3Z0zwofqhiXzbFS1rh1J8rDZXCcgesMqVtOWCnGJu0sg2nQUzcs3TbeQqeH4R/YeZkjGvlHIkvSy8Z4JvqcHHCdESzZ9yl+Bb209vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g75FyPhLxFIgYX25u9sSlFT9NTUzAgn+M8LZTR2CWNQ=;
- b=vCsd729ecpSQNTid229HWvjokO42OtscogHPn23BQZfgz1Ct1pp22KLTCFEXxHbhbo2v3pA32ahLzu8+vkWl4HTH1zKK21VcjTAoPt4K0Cn38jjpylq8YsRweLJOB5AyhLCoiBBT3YkTf2ekpEsm6HoherjpH3tuE5btQwDNdEOX+6xFuGZqmpq/sc7N2E07tzWEKEzgFpF7dmaBXYdlniddjrmudFePsxoFCgwNyN7MOvriceXcH1XqJpIuvlzWMmvwA9eFuOqlAvEGtsjW5H1sOiwm9MqeL0172Zte2sSK3K/zAr0MhS0Da9UBifW0NHKg9VvS0+cF+eThL2Vqnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g75FyPhLxFIgYX25u9sSlFT9NTUzAgn+M8LZTR2CWNQ=;
- b=QDQ4gArjX6oBb+GXo3R1SA+DcZ0QEajNIM4ukJbE3qBqYDJ5D7BcMDUpZ9PwZfLVF/vtuUcNESzU3TAt76cqZJvJIn6DEnHyP7nam7/TgwxbUkMdVagqVVHnDrp/vJpVpv5VIOC/tHlnT9MVng+pGZR27Xhg8eUkrwfOpYvoGpI=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by OS3PR01MB7359.jpnprd01.prod.outlook.com (2603:1096:604:149::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.11; Wed, 30 Jul
- 2025 14:12:33 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%7]) with mapi id 15.20.8989.010; Wed, 30 Jul 2025
- 14:12:27 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: geert <geert@linux-m68k.org>, Wolfram Sang <wsa-dev@sang-engineering.com>
-CC: kernel test robot <lkp@intel.com>, biju.das.au <biju.das.au@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "oe-kbuild-all@lists.linux.dev"
-	<oe-kbuild-all@lists.linux.dev>, "linux-mmc@vger.kernel.org"
-	<linux-mmc@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: RE: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
- SD_BUF0 in polling mode
-Thread-Topic: [PATCH v2 1/2] mmc: tmio: Add 64-bit read/write support for
- SD_BUF0 in polling mode
-Thread-Index: AQHb/xCTiDIH7i0tZU6d0LnXFP+CfbRKN9KAgAAvfYCAAE4sAIAAA/Gw
-Date: Wed, 30 Jul 2025 14:12:27 +0000
-Message-ID:
- <TY3PR01MB11346C0622E61F19C38B2AB238624A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20250727160731.106312-2-biju.das.jz@bp.renesas.com>
- <202507301421.AmWhOZBk-lkp@intel.com> <aInjE-sduVbBRmJx@shikoro>
- <CAMuHMdUHog6rehPFu9t99N0F-69sr1fQGWmX1sBR40=kDvD=Bg@mail.gmail.com>
-In-Reply-To:
- <CAMuHMdUHog6rehPFu9t99N0F-69sr1fQGWmX1sBR40=kDvD=Bg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|OS3PR01MB7359:EE_
-x-ms-office365-filtering-correlation-id: 668434dc-1ddc-49f2-cc0b-08ddcf731d42
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?dEMrZ2x0bEsvdGJ2UnJmczBDSFk2Y1RoOVBwb2NjN2w4b2l5cHRnWXN1aEFS?=
- =?utf-8?B?SXZURnBCam1JZnd4ZmdnOU8wNFdYNnl1RjRVaFRUZm5RMVJTRktqV1J1d21i?=
- =?utf-8?B?Qk45bXI0d2p2c2tZbDU1WGJYZ2E4c0ZqbWErOVJkOEt0Vlp0VnpTeVdxQXFU?=
- =?utf-8?B?Y2NTQnYwcDhmOElIL1g0Y0pWbmhGYTdwR212VHh1bUUxVkZoMEtBRWdaK3ND?=
- =?utf-8?B?TzIreXdkS2IzcnFyUWhvTEwwdjBKU0RQUkdScVZxM05xS0dvTXB4NDlTRElr?=
- =?utf-8?B?d3RwL3hONUNOcXVFVWs3ZnlaajYyZkg3Z0F0a2lyYmpiam16dlpQYmZ6Z3Y5?=
- =?utf-8?B?dm5xSGRxNHVaRXBvN25vUkVHQnBlVk0yV3dDRzJ4TGlya0IwYXRCOW1NMDRz?=
- =?utf-8?B?c0huZUJhcUhpV2RaRmlkd3Vac0xOOEpQSitEcGZLbElNdEQzZGE1WFhHWkE4?=
- =?utf-8?B?TCtjaTRiOVVKRTZZSDUvZGxmUkNmR3JaTFM5Sm5KSlpNSWFFbit5WjVpdU5a?=
- =?utf-8?B?aTVORmJ5QXVYeEkvNTQrMXlDVHd6bGNCQURFWEVrNG1LSVl2N1hQVFRXWjVy?=
- =?utf-8?B?VE11anFma1p1TXorc1ZuNU9SdVVabDRlMHV0djhnL2VoN1RkUFdIMFcvNHYw?=
- =?utf-8?B?M2piUHgxcUhBUStaaWdKbEQybnRHUWdISENGN1NReFVxRHJhNHRqMmR0NHUr?=
- =?utf-8?B?dGxobW1TeXNjcUM4aDFCeWU1RHFrL0FqZ00rS1d0dGYzVzRrOVlYMGg3YVhN?=
- =?utf-8?B?TTlCMjhXMlhzWmxXZ2l1YWNLUVFRMVZwdU5wWEtGblh2REJLWm9CSmdmOEhW?=
- =?utf-8?B?eUkrWlBRckt2UjExUVFKd3BiakNiZUxucjdhSVZmMTVxK25SVC9kbE9JdVVo?=
- =?utf-8?B?YXZMdlVGQmYzL0RNcTdmOGplUW9nazAzTGd0eEZXUlVKRjQ3WWZTVXppQnVH?=
- =?utf-8?B?SXhZbmtuQzFvSXBWTzRqYUNqU0tkd1RFNzNJaVVOWG8rWDhBVDYyRXZZY0NG?=
- =?utf-8?B?S1grcSsxNEtuTWdBMlp3bDczbnVxemdadmZnSjdIV2RtNENHUFNqSVNrWUhC?=
- =?utf-8?B?N1ZlQnMwNW9kc0g5U1dxdzdsODl1YmVTNEpxRG5saGFYZlVPVThSSGc5T0py?=
- =?utf-8?B?Qjd1SllzWnhxR1lqN1cxbUlMRjJSUHpCRm5VWXpNRS9oYjIzSTVQWFlac2Jz?=
- =?utf-8?B?cEV4ajJodURwUWc2WUZLTGlXeTkrNTJPQUhYVlRnNXJBVU9TaEMyRDZ1b3FC?=
- =?utf-8?B?R3ZEVlp1OWpINEg4b1lESnIySmZSQ05qOGF1WWdBVFk2Qmx3ZHd3cXhJNUF6?=
- =?utf-8?B?cjhYZm5hVElBL2Q3L2tkOHpHL0F3cnowY1p5YmtubE1TOWdLd1dUNlJhSnR5?=
- =?utf-8?B?WmtiUkMyUFU1U3JzMENtSFNYV3RCRkg3djNxeENiL3dVeEJ6OEtPYkxRRTZT?=
- =?utf-8?B?UGpDejBCbCs4ckJvL2NsWFNKa0lJckZsNWJ6bG5QZVdTWlEzQ2tQWDdlVzdj?=
- =?utf-8?B?eXBKOXNPOFpGNlhqQ2NPV0RQSjJhQnUxaVEySE1veWcyb3lycEQxZUtHNE5M?=
- =?utf-8?B?QTNSeHljaUtYOGxaL1JSb3A0RS91dW5keW9xSVpqazl3SnFGbTBLREt2eisy?=
- =?utf-8?B?V0Fzb3pSa3QweElvV1lLcUc3Qjd6RmJSVWhacnc5UzlzbnA5b2NETjlPK1kv?=
- =?utf-8?B?YkR0UDBZMTVvRG9XQ3lRUHZHUTBYM1oyRDFDbk9kZVRIQ2RMbmVkbWU4R3ZK?=
- =?utf-8?B?cWF3Zy9mZ2tsbHhZcTdYeU51M2M5b3YvSForNEhmb2NVOGk1ZHpGQzVCbXBR?=
- =?utf-8?B?TlUwVDRRQVFzUGZtT2hnY0srQzhHQWw3YlQ3T1hMeVd5WHBjdHlDU05pZzJ0?=
- =?utf-8?B?WWZmdVZwSWFCaXY2L3crSVkzaUZxTUZlMnZRTEl6TmZJY2c5Q2lma2VwaHp3?=
- =?utf-8?B?b2Y2TW8zcEJRazBRWFJKQmlvU3AxVnorWGFrbGwybW42d1B0N0ZXUzBCOWJ4?=
- =?utf-8?B?U2dQZ0xYbzRnPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?RHRnTnV0dkdjK3lHSWs5S3JvM0pFRk9YcTlXL24zS2dmbHM3a3NqQVhNOVlR?=
- =?utf-8?B?V3M3MEp6V1VOMHAyM3RHVDVwSktLQ0plK1VtN211TjErV3dRZ3NWNXk3OG9y?=
- =?utf-8?B?REt4ajVFdEtxTTJyRnVwTkhVbzB3Qk9IOE81MC9RVWpBM0JtTzVkb0ZuWTRV?=
- =?utf-8?B?RHU3UFFYRHBOeExjMkVsbHBpc3U5RlViaDJNKzVLTXZtTFZHSWdIWjF0MDV4?=
- =?utf-8?B?ZjdIOEVjdVpyaUZpaFYyVFEwOTJIZ0FiQitXS1ZTb1cxbWRHR2I4c0p5VkpY?=
- =?utf-8?B?WkFmWjY0SFJ6MFE3aHJoZGhIR1dFZXNRWVlnVk9ETEtGd3JWcTZzWnAvenc4?=
- =?utf-8?B?bjJDUlQyekhTT1orZnU1eTM5UW1ncGpleFM1WXdkWmlKNncwNkdub0pNQlhm?=
- =?utf-8?B?M1lhQU1qdEV4VDVYRWZlM2RTUjJVWWo3eFZ3RGtBaUFzdytSZVg0cjU5Sjkv?=
- =?utf-8?B?Z2ZXeUtYWjRKQUZ1bUxZZy9Zc2JkTlV2STQvTlZIVFkrSnhWWk9kcjNaUVQv?=
- =?utf-8?B?L3ovYnFXaUdlbC9LanduRyt5TjJaSFhHNndGS0hnNW9NZkkxUElwMVJVdGk5?=
- =?utf-8?B?WmVweTE5a2JHUFVVS2tYbU85TmdXWFdKN2wxMDlOc2dzR2l4VGxud1QzMFIr?=
- =?utf-8?B?NEFqRVplRFFvTG1VYThVSjVSSnBjZk8waDRqMmlzcnNwdEZkZUxjYk9QU2xq?=
- =?utf-8?B?U3BCYW41YkY3WWRMR1FqeHJGc0VCeTJTV1J1TjladU5lTXlsUkJjTFZHdHVV?=
- =?utf-8?B?QUVOVVc0TXRTd2pJTEFqbjhJejlpZm1EeGtZWDZaOWZHWkJGVWc4L0VyVWNU?=
- =?utf-8?B?blgyZi96NWliQ29XTkQ1TytpeGd6OEtPcWEvaDBZU2pQc3BqMWVXaWRRVndr?=
- =?utf-8?B?OFhUSVpPSFNrRVBSSTJYbXY5TEFlQzFiUW4xM1JSU1c3WHZWMmh6VTdZTmk1?=
- =?utf-8?B?UzZ5NmtoUTdPWTBtdnR3aEM4TG5sWklJeHB0TW92UjRTb1JlOXg1aUZFNjlI?=
- =?utf-8?B?M2N2YWhYT2k5alRCWnc5VnNTRnV6NjlKd0xkMlE1QmRkVnVNVVhkRVV2b0hS?=
- =?utf-8?B?R0R0TVZVa1FQZHJ3MldGVGZzZisvMWVCeXU5Z1F0WDh6L3F5SmFYOHhkWXVD?=
- =?utf-8?B?VHM1QzlVd2l4Rlg3L3grUmRNdVV5a21nSE54SGtjUHNBQi9wVjF5aTlLZXdl?=
- =?utf-8?B?TUl6K1JMejRtNVV0OEhHSDFMc0NJby9XWWI1UEl0L2IweFUwWndBaHUxeXcz?=
- =?utf-8?B?V0RuM2lzTU5mR3lncFhGUzdSUmxKUTI0aEJkbkRLYldFNmtXQjRTQnVXQktU?=
- =?utf-8?B?eGs1TC9ZRnVjWjFHRUtNOVRxSkNITVptVWkrWG8zUlMrMDhXVlV1aXZ1Tnhm?=
- =?utf-8?B?TVJtemtOQmFxRENkYnhleUY4SVAxb0hycXRHTkt0UzB1dEZEYlBHL1ZmOXBE?=
- =?utf-8?B?bVFSdTV5cXpkYnhOM3QxNDJKUkRSSk1xVWJBWHBOeFBMK014V2NnTksxMmVt?=
- =?utf-8?B?YVQxTy9hNzNWZFJheVBuMmtPamRmWXFJRzh6L3BPOHdnTE1sQkRWWG4rSE9q?=
- =?utf-8?B?TGxhM1BnK2ZEdndScnZoSzJyMUY4RUI3c2FqNFFTMFEyaURnMk4vemtHazFC?=
- =?utf-8?B?ZTZrcE5Ca2w5bEFWTDdsNG4zQ0JrZVNOSVplZW03YlFYV1NiaDZZSTEwZFg5?=
- =?utf-8?B?NjdBb1p1QzhLdVdsOE1RanNBVWJxeEpsWXd5SzFabkJlMS81NTkzdG5iTEZM?=
- =?utf-8?B?U3NPNU5kYU9pcURQLzJKckNRUzdselJzMGYvbjZQSDZFYk5LTmhiYXNEYnVE?=
- =?utf-8?B?aG5pTkZEMmZKYVlpMkx1L0tLRlVISEo3bm9pdTJLYlRaZHIxOUhySjg0bUR5?=
- =?utf-8?B?UjNNMVpsWmc3aFhoUFYzQllNNjdRY21xU0x6dGJMRVlaVFBlWGNXYnpDRGQr?=
- =?utf-8?B?MkJDUDB0YmlXeHA5eGxnSFhDbHJJRFkwalFUd0tzY0sxTDBxcnZmckl5NXR6?=
- =?utf-8?B?Y0ZjYVYySjh5djU4SDNJalY3V1FVazVtSEhMWnRmUmwwYWFWN3c5WjlmVTdI?=
- =?utf-8?B?OTBjbHJjVlR5dTFKemo2MWt0WFVvbGVnallscEJ3WVk4ODF0TnJEYUYzcmRP?=
- =?utf-8?B?YWdDQlhQcGlnNU5rL3FmdXBpeDhsOVltcDEyYkxoZTc3cnhxWS9LRW52UHc4?=
- =?utf-8?B?NUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bz4SgOuh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753886017; x=1785422017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pmEi+E7y8N1fUJ2Skd77GVL6bd2TokFUGYI1O6z8kE8=;
+  b=bz4SgOuhTjzo4tbiBXg9uUkDQlvXLWX9kmP7mUaQYk0Kk/ywMx2wZxgA
+   rA2UV9FgN7CnvQgnp++gqklDemIpnb1HvaKQlHT7lUtZgCZ/xrx9wzOog
+   uWrdeIzH1/kALWNp8DzkQiF2ygBE9ac6guFH9/9DdSPeSiNJ2egaw+64u
+   NZ5dYQYWrZDBEMitfc4THthKkyBuVw5Kc04kLOfkE0lh7zL/RcDnk47jN
+   OoTyH1PYs8tSNEfMb/WwWkZeCLveT4jL5IL9jR/BMV/unnekACg+pGqSq
+   trPrIafJ4GTbNE5WJbd9T0h1u/banmFhq+BG17Mv2VZDCOkl5Z9NPyyxW
+   g==;
+X-CSE-ConnectionGUID: yHRnQhouTyy8LPRRC32I8Q==
+X-CSE-MsgGUID: ZEq3NyvbSXakjl1Dpb5YBg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="60013803"
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="60013803"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 07:33:37 -0700
+X-CSE-ConnectionGUID: hkTixScCTg6cwK/DCkLisA==
+X-CSE-MsgGUID: zW5cvb46RTmWg/nwgXfSFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="167492737"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 30 Jul 2025 07:33:33 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uh7s2-0002pg-1A;
+	Wed, 30 Jul 2025 14:33:30 +0000
+Date: Wed, 30 Jul 2025 22:32:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marie Zhussupova <marievic@google.com>, rmoar@google.com,
+	davidgow@google.com, shuah@kernel.org, brendan.higgins@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, elver@google.com,
+	dvyukov@google.com, lucas.demarchi@intel.com,
+	thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	kasan-dev@googlegroups.com, intel-xe@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Marie Zhussupova <marievic@google.com>
+Subject: Re: [PATCH 3/9] kunit: Pass additional context to generate_params
+ for parameterized testing
+Message-ID: <202507302223.BTl33Nvo-lkp@intel.com>
+References: <20250729193647.3410634-4-marievic@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 668434dc-1ddc-49f2-cc0b-08ddcf731d42
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2025 14:12:27.5028
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: C+sq1SzroAGPcs0fikSdYR1sCE2mjmzt6naB+FWxbyZeOJRqG78CU1D8wGZyFuXXAqNTbHeFZLF/yuRl4mLK9bviNo7BYHiCoet5JcL40OQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB7359
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250729193647.3410634-4-marievic@google.com>
 
-SGkgR2VlcnQvV29sZnJhbSwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9t
-OiBHZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4LW02OGsub3JnPg0KPiBTZW50OiAzMCBK
-dWx5IDIwMjUgMTQ6NTcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MiAxLzJdIG1tYzogdG1pbzog
-QWRkIDY0LWJpdCByZWFkL3dyaXRlIHN1cHBvcnQgZm9yIFNEX0JVRjAgaW4gcG9sbGluZyBtb2Rl
-DQo+IA0KPiBIaSBXb2xmcmFtLA0KPiANCj4gT24gV2VkLCAzMCBKdWwgMjAyNSBhdCAxMToxNywg
-V29sZnJhbSBTYW5nIDx3c2EtZGV2QHNhbmctZW5naW5lZXJpbmcuY29tPiB3cm90ZToNCj4gPiA+
-ICAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkcml2ZXJzL21tYy9ob3N0L3VuaXBoaWVyLXNkLmM6
-MjE6DQo+ID4gPiA+PiBkcml2ZXJzL21tYy9ob3N0L3RtaW9fbW1jLmg6MjQ5OjI6IGVycm9yOiBj
-YWxsIHRvIHVuZGVjbGFyZWQNCj4gPiA+ID4+IGZ1bmN0aW9uICdpb3JlYWQ2NF9yZXAnOyBJU08g
-Qzk5IGFuZCBsYXRlciBkbyBub3Qgc3VwcG9ydA0KPiA+ID4gPj4gaW1wbGljaXQgZnVuY3Rpb24g
-ZGVjbGFyYXRpb25zIFstV2ltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQ0KPiA+ID4gICAg
-ICAyNDkgfCAgICAgICAgIGlvcmVhZDY0X3JlcChob3N0LT5jdGwgKyAoYWRkciA8PCBob3N0LT5i
-dXNfc2hpZnQpLCBidWYsIGNvdW50KTsNCj4gPiA+ICAgICAgICAgIHwgICAgICAgICBeDQo+ID4g
-PiA+PiBkcml2ZXJzL21tYy9ob3N0L3RtaW9fbW1jLmg6MjU1OjI6IGVycm9yOiBjYWxsIHRvIHVu
-ZGVjbGFyZWQNCj4gPiA+ID4+IGZ1bmN0aW9uICdpb3dyaXRlNjRfcmVwJzsgSVNPIEM5OSBhbmQg
-bGF0ZXIgZG8gbm90IHN1cHBvcnQNCj4gPiA+ID4+IGltcGxpY2l0IGZ1bmN0aW9uIGRlY2xhcmF0
-aW9ucyBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0NCj4gPiA+ICAgICAgMjU1IHwg
-ICAgICAgICBpb3dyaXRlNjRfcmVwKGhvc3QtPmN0bCArIChhZGRyIDw8IGhvc3QtPmJ1c19zaGlm
-dCksIGJ1ZiwgY291bnQpOw0KPiA+ID4gICAgICAgICAgfCAgICAgICAgIF4NCj4gPg0KPiA+IFNp
-Z2gsIHRoZW4gdGhlIGd1YXJkIHNlZW1zIHRvIGJlIEFSTTY0IGFmdGVyIGFsbCA6KA0KPiANCj4g
-aW9yZWFkNjRfcmVwKCkgaXMgZGVmaW5lZCBpbiBpbmNsdWRlL2FzbS1nZW5lcmljL2lvLmgsIGFu
-ZCBwb3dlcnBjIGRvZXMgaW5jbHVkZSB0aGF0Lg0KPiANCj4gUGVyaGFwcyBkcml2ZXJzL21tYy9o
-b3N0L3RtaW9fbW1jLmggc2hvdWxkIGp1c3QgaW5jbHVkZSA8bGludXgvaW8uaD4/DQoNClRoaXMg
-ZG9lcyBub3QgZml4IHRoZSBpc3N1ZS4NCg0KDQpiaWp1QGJpanU6fi9sa3AtdGVzdHMkIENPTVBJ
-TEVSX0lOU1RBTExfUEFUSD0kSE9NRS8wZGF5IENPTVBJTEVSPWNsYW5nLTIxIH4vbGtwLXRlc3Rz
-L2tidWlsZC9tYWtlLmNyb3NzIFc9MSBPPWJ1aWxkX2RpciBBUkNIPXBvd2VycGMgU0hFTEw9L2Jp
-bi9iYXNoIGRyaXZlcnMvbW1jLw0KQ29tcGlsZXIgd2lsbCBiZSBpbnN0YWxsZWQgaW4gL2hvbWUv
-YmlqdS8wZGF5DQpQQVRIPS9ob21lL2JpanUvMGRheS9sbHZtLTIxLjEuMC1yYzIteDg2XzY0L2Jp
-bjovaG9tZS9iaWp1Ly5sb2NhbC9iaW46L3Vzci9sb2NhbC9zYmluOi91c3IvbG9jYWwvYmluOi91
-c3Ivc2JpbjovdXNyL2Jpbjovc2JpbjovYmluOi91c3IvZ2FtZXM6L3Vzci9sb2NhbC9nYW1lczov
-c25hcC9iaW4NCm1ha2UgLS1rZWVwLWdvaW5nIENPTkZJR19PRl9BTExfRFRCUz15IENPTkZJR19E
-VEM9eSBMTFZNPTEgQ1JPU1NfQ09NUElMRT1wb3dlcnBjNjQtbGludXgtIC0tam9icz02NCBLQ0ZM
-QUdTPSAtV25vLWVycm9yPXJldHVybi10eXBlIC1XcmV0dXJuLXR5cGUgLWZ1bnNpZ25lZC1jaGFy
-IC1XdW5kZWYgVz0xIE89YnVpbGRfZGlyIEFSQ0g9cG93ZXJwYyBTSEVMTD0vYmluL2Jhc2ggZHJp
-dmVycy9tbWMvDQptYWtlWzFdOiBFbnRlcmluZyBkaXJlY3RvcnkgJy9ob21lL2JpanUvbGtwLXRl
-c3RzL2J1aWxkX2RpcicNCiAgR0VOICAgICBNYWtlZmlsZQ0KICBDQUxMICAgIC4uL3NjcmlwdHMv
-Y2hlY2tzeXNjYWxscy5zaA0KICBDQyBbTV0gIGRyaXZlcnMvbW1jL2hvc3QvdG1pb19tbWNfY29y
-ZS5vDQogIENDIFtNXSAgZHJpdmVycy9tbWMvaG9zdC91bmlwaGllci1zZC5vDQpJbiBmaWxlIGlu
-Y2x1ZGVkIGZyb20gLi4vZHJpdmVycy9tbWMvaG9zdC91bmlwaGllci1zZC5jOjIxOg0KLi4vZHJp
-dmVycy9tbWMvaG9zdC90bWlvX21tYy5oOjI1MDoyOiBlcnJvcjogY2FsbCB0byB1bmRlY2xhcmVk
-IGZ1bmN0aW9uICdpb3JlYWQ2NF9yZXAnOyBJU08gQzk5IGFuZCBsYXRlciBkbyBub3Qgc3VwcG9y
-dCBpbXBsaWNpdCBmdW5jdGlvbiBkZWNsYXJhdGlvbnMNCiAgICAgIFstV2ltcGxpY2l0LWZ1bmN0
-aW9uLWRlY2xhcmF0aW9uXQ0KICAyNTAgfCAgICAgICAgIGlvcmVhZDY0X3JlcChob3N0LT5jdGwg
-KyAoYWRkciA8PCBob3N0LT5idXNfc2hpZnQpLCBidWYsIGNvdW50KTsNCg0KQ2hlZXJzLA0KQmlq
-dQ0K
+Hi Marie,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on shuah-kselftest/kunit]
+[also build test ERROR on shuah-kselftest/kunit-fixes drm-xe/drm-xe-next linus/master v6.16 next-20250730]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Marie-Zhussupova/kunit-Add-parent-kunit-for-parameterized-test-context/20250730-033818
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
+patch link:    https://lore.kernel.org/r/20250729193647.3410634-4-marievic%40google.com
+patch subject: [PATCH 3/9] kunit: Pass additional context to generate_params for parameterized testing
+config: arm64-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250730/202507302223.BTl33Nvo-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302223.BTl33Nvo-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507302223.BTl33Nvo-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/xe/xe_migrate.c:1917:
+>> drivers/gpu/drm/xe/tests/xe_migrate.c:772:44: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     772 |         KUNIT_CASE_PARAM(xe_migrate_sanity_kunit, xe_pci_live_device_gen_param),
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   In file included from drivers/gpu/drm/xe/xe_migrate.c:1917:
+   drivers/gpu/drm/xe/tests/xe_migrate.c:773:42: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     773 |         KUNIT_CASE_PARAM(xe_validate_ccs_kunit, xe_pci_live_device_gen_param),
+         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   2 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_dma_buf.c:319:
+>> drivers/gpu/drm/xe/tests/xe_dma_buf.c:285:37: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     285 |         KUNIT_CASE_PARAM(xe_dma_buf_kunit, xe_pci_live_device_gen_param),
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   1 error generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
+>> drivers/gpu/drm/xe/tests/xe_bo.c:610:41: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_device_gen_param),
+         |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
+   drivers/gpu/drm/xe/tests/xe_bo.c:611:38: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_device_gen_param),
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   In file included from drivers/gpu/drm/xe/xe_bo.c:3128:
+   drivers/gpu/drm/xe/tests/xe_bo.c:624:44: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_live_device_gen_param,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:228:24: note: expanded from macro 'KUNIT_CASE_PARAM_ATTR'
+     228 |                   .generate_params = gen_params,                                \
+         |                                      ^~~~~~~~~~
+   3 errors generated.
+--
+   In file included from drivers/gpu/drm/xe/xe_mocs.c:799:
+>> drivers/gpu/drm/xe/tests/xe_mocs.c:193:46: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     193 |         KUNIT_CASE_PARAM(xe_live_mocs_kernel_kunit, xe_pci_live_device_gen_param),
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   In file included from drivers/gpu/drm/xe/xe_mocs.c:799:
+   drivers/gpu/drm/xe/tests/xe_mocs.c:194:45: error: incompatible function pointer types initializing 'const void *(*)(struct kunit *, const void *, char *)' with an expression of type 'const void *(const void *, char *)' [-Wincompatible-function-pointer-types]
+     194 |         KUNIT_CASE_PARAM(xe_live_mocs_reset_kunit, xe_pci_live_device_gen_param),
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:215:24: note: expanded from macro 'KUNIT_CASE_PARAM'
+     215 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+         |                                      ^~~~~~~~~~
+   2 errors generated.
+
+
+vim +772 drivers/gpu/drm/xe/tests/xe_migrate.c
+
+54f07cfc016226 Akshata Jahagirdar 2024-07-17  770  
+0237368193e897 Michal Wajdeczko   2024-07-08  771  static struct kunit_case xe_migrate_tests[] = {
+37db1e77628551 Michal Wajdeczko   2024-07-20 @772  	KUNIT_CASE_PARAM(xe_migrate_sanity_kunit, xe_pci_live_device_gen_param),
+37db1e77628551 Michal Wajdeczko   2024-07-20  773  	KUNIT_CASE_PARAM(xe_validate_ccs_kunit, xe_pci_live_device_gen_param),
+0237368193e897 Michal Wajdeczko   2024-07-08  774  	{}
+0237368193e897 Michal Wajdeczko   2024-07-08  775  };
+0237368193e897 Michal Wajdeczko   2024-07-08  776  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
