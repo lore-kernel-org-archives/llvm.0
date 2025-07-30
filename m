@@ -1,87 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D761F12F4;
-	Wed, 30 Jul 2025 06:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593C01EB5F8
+	for <llvm@lists.linux.dev>; Wed, 30 Jul 2025 07:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753857564; cv=none; b=s0u5gHf5laKgEJ/BVuPy7acbmuCH1Ybgal3AjW+fifr0hGEWz4Yq6WOw8RDczWTMAfQBeBbajT00w5pEXpesSvnROa9joVQqTkhc4kPXWVe39A9BkGaHXxVcHR9Id99DBJujT4fd8QRJOzeZDbgh+veqiwz7IURbYSiopUMnYmU=
+	t=1753859068; cv=none; b=UUj3JGGQOPROUboOOC/8d3ZaRWJf16lDfVwky7t3v1rtRcw2NwVDV44lrXb200PaVXhyVJbSdWcB4wwbnQCqyeBI9DkouSekRCjwaDjZ6icGpl2CVh+BbKCNw6phR0UC3f3dA1M/ZLRQihc+MWy6KJ2aI3tSitR/gwDRHZjppmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753857564; c=relaxed/simple;
-	bh=/vMYwosxw2p+VDuGMGH3yHgF4fv2n5majXfQqdomUKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XQ/HoJHu3FPSXUdBdilxu8uKTiMmDMCDZlPDi5uL7n/tUiNuU/ASnyIlWSoj8mwM8p+FISzUAceHujjPdlv69NUYhvQVdNrXC0iLJFGNLCqlLOBkFU7KmoX3JnawiF8hv9oxwoIXOCByJXIju/uWNb/mlfNh+O65LOM+s8iLRnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ApgJu/Rb; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753859068; c=relaxed/simple;
+	bh=acmYQHveT6enlvSsW1OaTBIwoUn6l4DQhiFxH9WVVN8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=ofi5WN1DgVy0YaEoXQ2EJSG0q9R3HjZRSiQm8hfrj0ZGhv1Xc3I02MRld415us2psk0tnxf9SjSUo08wERltno+liUd5Fim0Josl70+mYfyV0Cj3Vj2lr8pfvquLmLmq8dxnC0owV1QzGH4Fra8pZxsmc75eoR4hVNjzFti35v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=l2A9Wd3J; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ApgJu/Rb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753857563; x=1785393563;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/vMYwosxw2p+VDuGMGH3yHgF4fv2n5majXfQqdomUKk=;
-  b=ApgJu/Rb41PGltkywzZSY6sWBirmCft9avU0EXwU9Yp6wl7fY6RrirsF
-   DPuTLQlmbj0NfdC9tPQiYRt9RuD/cwKrSCmBLIINZmMxTjrPq6in1kHDy
-   vsyEdI7msCVkQ84DWfT2Fya8w43YhW8lCJKUVti+oEi+34DZysHAvzN/B
-   /d1bTJUG5L+4jISfWRMPrpKDYdH0MivBA7otkojskd4cyjprH5kpANFJw
-   CaRpEDbLG2/TphDO89RPYg9iXdF1lXPU56rUFCyCUsq6mRtdTcjg23YOS
-   GtJLXTpShQN22CC6xLAj07GrDZkffizlFOBAjoFJjZAoiEP9tfGSpYz3N
-   A==;
-X-CSE-ConnectionGUID: ORh3LwIHR6ajGbrKbi8ryg==
-X-CSE-MsgGUID: Ks3PmVFkRFmwSAIj9D2R/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="56295598"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="56295598"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 23:39:21 -0700
-X-CSE-ConnectionGUID: nJVsi4XhR26bJ7ZHR/zATw==
-X-CSE-MsgGUID: xa0CPNEbR7a2mkcduEITkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163687342"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 29 Jul 2025 23:39:19 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uh0T7-00027s-0a;
-	Wed, 30 Jul 2025 06:39:17 +0000
-Date: Wed, 30 Jul 2025 14:38:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>, linux-cxl@vger.kernel.org
-Subject: [cxl:for-6.18/cxl-probe-order 4/4] Warning: kernel/resource.c:342
- function parameter 'parent' not described in 'find_next_res'
-Message-ID: <202507301452.Dmrkcrcr-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="l2A9Wd3J"
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250730070417euoutp010fd77ce03a7c8f02adc460e847619d05~W9YVVGIKn1816618166euoutp01P
+	for <llvm@lists.linux.dev>; Wed, 30 Jul 2025 07:04:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250730070417euoutp010fd77ce03a7c8f02adc460e847619d05~W9YVVGIKn1816618166euoutp01P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1753859057;
+	bh=s9RRy3R2yj+oaDdoueZGj4W8D+VQRo8mLrErLkrXN0Q=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=l2A9Wd3JFOIU7/v/VQ/3ZHRa7ExkpwOzQvaxRfB4pYqBRvC0KYU4n0nJpBCyRS39M
+	 0fS54Gb06hVVOr7dzZSV86xZWz0O8Cm3CPHqXIMG/ciLZHwr9YHWVY6Td3vf0hAU6R
+	 4/a2gxCxgu9mSR788YbhQBq1UNzL6adJp2d+tbMY=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250730070417eucas1p2f8c3a230581c16a0552c4f9f6231456a~W9YVMkP7Y0123601236eucas1p2L;
+	Wed, 30 Jul 2025 07:04:17 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250730070417eusmtip166d12f714da9471398e06bfe6c5012b4~W9YUpSzBS0768707687eusmtip1e;
+	Wed, 30 Jul 2025 07:04:17 +0000 (GMT)
+Message-ID: <205d3356-5ebe-4e73-b888-6765e5a673ea@samsung.com>
+Date: Wed, 30 Jul 2025 09:04:16 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: s5p-mfc: Always pass NULL to
+ s5p_mfc_cmd_host2risc_v6()
+To: Nathan Chancellor <nathan@kernel.org>, Andrzej Hajda
+	<andrzej.hajda@intel.com>, Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20250715-media-s5p-mfc-fix-uninit-const-pointer-v1-1-4d52b58cafe9@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20250730070417eucas1p2f8c3a230581c16a0552c4f9f6231456a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250730070417eucas1p2f8c3a230581c16a0552c4f9f6231456a
+X-EPHeader: CA
+X-CMS-RootMailID: 20250730070417eucas1p2f8c3a230581c16a0552c4f9f6231456a
+References: <20250715-media-s5p-mfc-fix-uninit-const-pointer-v1-1-4d52b58cafe9@kernel.org>
+	<CGME20250730070417eucas1p2f8c3a230581c16a0552c4f9f6231456a@eucas1p2.samsung.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git for-6.18/cxl-probe-order
-head:   5e29cbd1077b79468339aca04b16e401252b5a24
-commit: 5e29cbd1077b79468339aca04b16e401252b5a24 [4/4] dax/cxl: Defer Soft Reserved registration
-config: arm-randconfig-001-20250730 (https://download.01.org/0day-ci/archive/20250730/202507301452.Dmrkcrcr-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 8f09b03aebb71c154f3bbe725c29e3f47d37c26e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507301452.Dmrkcrcr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507301452.Dmrkcrcr-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: kernel/resource.c:342 function parameter 'parent' not described in 'find_next_res'
-
+On 16.07.2025 00:13, Nathan Chancellor wrote:
+> A new warning in clang [1] points out a few places in s5p_mfc_cmd_v6.c
+> where an uninitialized variable is passed as a const pointer:
+>
+>    drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:45:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+>       45 |                                         &h2r_args);
+>          |                                          ^~~~~~~~
+>    drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:133:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+>      133 |                                         &h2r_args);
+>          |                                          ^~~~~~~~
+>    drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:148:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
+>      148 |                                         &h2r_args);
+>          |                                          ^~~~~~~~
+>
+> The args parameter in s5p_mfc_cmd_host2risc_v6() is never actually used,
+> so just pass NULL to it in the places where h2r_args is currently
+> passed, clearing up the warning and not changing the functionality of
+> the code.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: f96f3cfa0bb8 ("[media] s5p-mfc: Update MFC v4l2 driver to support MFC6.x")
+> Link: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e [1]
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2103
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  From what I can tell, it seems like ->cmd_host2risc() is only ever
+> called from v6 code, which always passes NULL? It seems like it should
+> be possible to just drop .cmd_host2risc on the v5 side, then update
+> .cmd_host2risc to only take two parameters? If so, I can send a follow
+> up as a clean up, so that this can go back relatively conflict free.
+> ---
+>   .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c      | 22 +++++-----------------
+>   1 file changed, 5 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
+> index 47bc3014b5d8..735471c50dbb 100644
+> --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
+> +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
+> @@ -31,7 +31,6 @@ static int s5p_mfc_cmd_host2risc_v6(struct s5p_mfc_dev *dev, int cmd,
+>   
+>   static int s5p_mfc_sys_init_cmd_v6(struct s5p_mfc_dev *dev)
+>   {
+> -	struct s5p_mfc_cmd_args h2r_args;
+>   	const struct s5p_mfc_buf_size_v6 *buf_size = dev->variant->buf_size->priv;
+>   	int ret;
+>   
+> @@ -41,33 +40,23 @@ static int s5p_mfc_sys_init_cmd_v6(struct s5p_mfc_dev *dev)
+>   
+>   	mfc_write(dev, dev->ctx_buf.dma, S5P_FIMV_CONTEXT_MEM_ADDR_V6);
+>   	mfc_write(dev, buf_size->dev_ctx, S5P_FIMV_CONTEXT_MEM_SIZE_V6);
+> -	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SYS_INIT_V6,
+> -					&h2r_args);
+> +	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SYS_INIT_V6, NULL);
+>   }
+>   
+>   static int s5p_mfc_sleep_cmd_v6(struct s5p_mfc_dev *dev)
+>   {
+> -	struct s5p_mfc_cmd_args h2r_args;
+> -
+> -	memset(&h2r_args, 0, sizeof(struct s5p_mfc_cmd_args));
+> -	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SLEEP_V6,
+> -			&h2r_args);
+> +	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SLEEP_V6, NULL);
+>   }
+>   
+>   static int s5p_mfc_wakeup_cmd_v6(struct s5p_mfc_dev *dev)
+>   {
+> -	struct s5p_mfc_cmd_args h2r_args;
+> -
+> -	memset(&h2r_args, 0, sizeof(struct s5p_mfc_cmd_args));
+> -	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_WAKEUP_V6,
+> -					&h2r_args);
+> +	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_WAKEUP_V6, NULL);
+>   }
+>   
+>   /* Open a new instance and get its number */
+>   static int s5p_mfc_open_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
+>   {
+>   	struct s5p_mfc_dev *dev = ctx->dev;
+> -	struct s5p_mfc_cmd_args h2r_args;
+>   	int codec_type;
+>   
+>   	mfc_debug(2, "Requested codec mode: %d\n", ctx->codec_mode);
+> @@ -130,14 +119,13 @@ static int s5p_mfc_open_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
+>   	mfc_write(dev, 0, S5P_FIMV_D_CRC_CTRL_V6); /* no crc */
+>   
+>   	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_OPEN_INSTANCE_V6,
+> -					&h2r_args);
+> +					NULL);
+>   }
+>   
+>   /* Close instance */
+>   static int s5p_mfc_close_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
+>   {
+>   	struct s5p_mfc_dev *dev = ctx->dev;
+> -	struct s5p_mfc_cmd_args h2r_args;
+>   	int ret = 0;
+>   
+>   	dev->curr_ctx = ctx->num;
+> @@ -145,7 +133,7 @@ static int s5p_mfc_close_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
+>   		mfc_write(dev, ctx->inst_no, S5P_FIMV_INSTANCE_ID_V6);
+>   		ret = s5p_mfc_cmd_host2risc_v6(dev,
+>   					S5P_FIMV_H2R_CMD_CLOSE_INSTANCE_V6,
+> -					&h2r_args);
+> +					NULL);
+>   	} else {
+>   		ret = -EINVAL;
+>   	}
+>
+> ---
+> base-commit: 347e9f5043c89695b01e66b3ed111755afcf1911
+> change-id: 20250715-media-s5p-mfc-fix-uninit-const-pointer-cbf944ae4b4b
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+>
+Best regards
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
