@@ -1,69 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D801AA786;
-	Wed, 30 Jul 2025 15:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807831E7C19;
+	Wed, 30 Jul 2025 19:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753889746; cv=none; b=rrRPSR5kR+JCfQVomF2IZnDcOeRSDP6PMYum7V8NjeMaMKzQKBYN/zkEezzzl0TY8e5f6r0WG0VDiMW3QPapGCFiDzi7Nqvlca0SdvsMDvHv/ie98cTvFKrBp8uzgQyYa35w/j8Sp0qEWGkx9e8ZxKOEhhTF6yQfn07v3w5pzgU=
+	t=1753904651; cv=none; b=Eh8waczJruukkuUs4YqMDi2zEwH439xPUjRgVu1kTYave6C2dpEoatf+EYoncGG5QSS/2pzL0aVAXqEvV8RuQxLvstQnAYUCRHTfRwOCCteGfY/S8G9CcG2mXdij0i6Qrh6TW7FSQgYf4vow/65iiQuvhxqkw9YlJ4J1480QkYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753889746; c=relaxed/simple;
-	bh=kCyztr77u4EEyOxkCXt5j2Yt4z3W0IFI7x3HI5IuhQs=;
+	s=arc-20240116; t=1753904651; c=relaxed/simple;
+	bh=ASw2LEonGX9FVWSZ4sCVDAIlxaxsqwTPpVp0huFlEIg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W/uZncVftbiQuOLcrmJPxz6BqKSxRuhXUjIkUyYGQ9knlNhxizRCx2E9jgVfNU/mYLDb4V2o8R+STPofWpExKHW/yZnMAvBG1j0f+mM+uMI0RVGkf8D0XVPrdTl4SujrC3pdhUBW1rbfphpVjPvPRjVI7Pj+Dw/nBvWV5CZD9Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mg7rbI5X; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=LCPxAbxBtKvJ04L9VUg9Intdzn130Kyyof8Zs9k5DexfyjoUR3ZcHhS/D+2yF/a5NsApyFaRPcDw9LVWWPV1AO/CtTp/BpI0CmPASDxplMUrkTrFaw7YbQSgjgZ98L1N0J690Fkbnx+twjPGlDnNFAbcDGzTUs+1fiXys3Kr2SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eXNJmJ1g; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mg7rbI5X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eXNJmJ1g"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753889744; x=1785425744;
+  t=1753904649; x=1785440649;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kCyztr77u4EEyOxkCXt5j2Yt4z3W0IFI7x3HI5IuhQs=;
-  b=Mg7rbI5XQshdvZkwhBZiVT+bxHqQdf5wkG0akaGaK94ndEzGMZ+KbP2I
-   8VPt4NO3B1038kMEzvWwevozH8+M1ciDR1MDpAEs1+pJeRrR7l8PSfPuw
-   cKUZBkI6dLNaVEvstETSOXtVrUkzND7SRD61kfou7bjn40rosoFcch+Ve
-   ytrdX4VDYNYJ4t0I9HldhQuqiBCJHHfVKNBc5cCyWwcDfXmza6UdPGncn
-   wy3wFlRVgug2hDX0kiAAYNbN33po09pxb0hLULBMHTCpJtpIj9LONMCV7
-   pQfsktSqzLEs+IpRAzZcKEdMNXcbYQXHVfafM0yLUbOCMqg2GnI4cfK5I
+  bh=ASw2LEonGX9FVWSZ4sCVDAIlxaxsqwTPpVp0huFlEIg=;
+  b=eXNJmJ1gqwAeeQEb0LNJCHUxmplUXUj6VAGHvv/45i1+SLUx5FiDSq9y
+   X4DGcLHJZZW2rSU/r73cmzqh3ZvSVhI7GENdTMhcdsoUzjU6hLbF4OmFP
+   yrvRKs9LCwLuRswNC4G8Y7YH3AF79Tzo4V50RkP1PyKNPuyhqmR3M4k1M
+   4zd48ZPHqnKx3pShA2stKxDU2sJvXIA0dnAydosEhf6tvdJwYhmjYXVqW
+   QJ8nz6VfcHf4pVxwE4TufdFt6v4BGVjBJFe0LegVqV5LZfxka4dJHTy9M
+   H5ZD6C3dNMS4aj78DDQzHvbppWnzUsm7koDNKqZpP45zSU8+PyVdQYfrU
    Q==;
-X-CSE-ConnectionGUID: oENUi19XQMu3U9yhAWgLBw==
-X-CSE-MsgGUID: yp8TTkxfQ8epwCFVfeI3HA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="66893166"
+X-CSE-ConnectionGUID: RS+yNi8FTJGigyKWYQzZGQ==
+X-CSE-MsgGUID: XEuFS8ssQsS1Mwre/8jPHg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56308268"
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="66893166"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 08:35:43 -0700
-X-CSE-ConnectionGUID: fD5ms+nfRemb1yEBTKKsNA==
-X-CSE-MsgGUID: tvp5Dn4uTfCYWOuhLIDf3g==
+   d="scan'208";a="56308268"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 12:44:08 -0700
+X-CSE-ConnectionGUID: 9L8abYuzSCCzI4mhmeYXjg==
+X-CSE-MsgGUID: A8+2pdSEQfCc2zhSz5ZSJg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="163467311"
+   d="scan'208";a="163861146"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 30 Jul 2025 08:35:41 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 30 Jul 2025 12:44:07 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uh8qA-0002sy-1S;
-	Wed, 30 Jul 2025 15:35:38 +0000
-Date: Wed, 30 Jul 2025 23:34:55 +0800
+	id 1uhCiZ-00035k-24;
+	Wed, 30 Jul 2025 19:44:03 +0000
+Date: Thu, 31 Jul 2025 03:43:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Mehdi Djait <mehdi.djait@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] media: i2c: Add OmniVision OV6211 image sensor
- driver
-Message-ID: <202507302325.nnfzHwrF-lkp@intel.com>
-References: <20250729231454.242748-3-vladimir.zapolskiy@linaro.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel
+ pass a cookie to of_xlate
+Message-ID: <202507310336.MGXNWyoj-lkp@intel.com>
+References: <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,175 +63,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250729231454.242748-3-vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
 
-Hi Vladimir,
+Hi Konrad,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linuxtv-media-pending/master linus/master v6.16 next-20250730]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 79fb37f39b77bbf9a56304e9af843cd93a7a1916]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Zapolskiy/dt-bindings-media-i2c-Add-OmniVision-OV6211-image-sensor/20250730-071618
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250729231454.242748-3-vladimir.zapolskiy%40linaro.org
-patch subject: [PATCH v2 2/2] media: i2c: Add OmniVision OV6211 image sensor driver
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250730/202507302325.nnfzHwrF-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507302325.nnfzHwrF-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/dt-bindings-dma-qcom-gpi-Retire-passing-the-protocol-ID/20250730-173806
+base:   79fb37f39b77bbf9a56304e9af843cd93a7a1916
+patch link:    https://lore.kernel.org/r/20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f%40oss.qualcomm.com
+patch subject: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel pass a cookie to of_xlate
+config: i386-buildonly-randconfig-003-20250731 (https://download.01.org/0day-ci/archive/20250731/202507310336.MGXNWyoj-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507310336.MGXNWyoj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507302325.nnfzHwrF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507310336.MGXNWyoj-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/media/i2c/ov6211.c:672:18: error: call to undeclared function 'devm_v4l2_sensor_clk_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     672 |         ov6211->xvclk = devm_v4l2_sensor_clk_get(&client->dev, NULL);
-         |                         ^
->> drivers/media/i2c/ov6211.c:672:16: error: incompatible integer to pointer conversion assigning to 'struct clk *' from 'int' [-Wint-conversion]
-     672 |         ov6211->xvclk = devm_v4l2_sensor_clk_get(&client->dev, NULL);
-         |                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   In file included from drivers/i2c/busses/i2c-mxs.c:26:
+>> include/linux/dmaengine.h:1555:18: warning: no previous prototype for function 'dma_request_chan_w_data' [-Wmissing-prototypes]
+    1555 | struct dma_chan *dma_request_chan_w_data(struct device *dev,
+         |                  ^
+   include/linux/dmaengine.h:1555:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1555 | struct dma_chan *dma_request_chan_w_data(struct device *dev,
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +/devm_v4l2_sensor_clk_get +672 drivers/media/i2c/ov6211.c
+vim +/dma_request_chan_w_data +1555 include/linux/dmaengine.h
 
-   654	
-   655	static int ov6211_probe(struct i2c_client *client)
-   656	{
-   657		struct ov6211 *ov6211;
-   658		unsigned long freq;
-   659		int ret;
-   660	
-   661		ov6211 = devm_kzalloc(&client->dev, sizeof(*ov6211), GFP_KERNEL);
-   662		if (!ov6211)
-   663			return -ENOMEM;
-   664	
-   665		ov6211->regmap = devm_cci_regmap_init_i2c(client, 16);
-   666		if (IS_ERR(ov6211->regmap))
-   667			return dev_err_probe(&client->dev, PTR_ERR(ov6211->regmap),
-   668					     "failed to init CCI\n");
-   669	
-   670		v4l2_i2c_subdev_init(&ov6211->sd, client, &ov6211_subdev_ops);
-   671	
- > 672		ov6211->xvclk = devm_v4l2_sensor_clk_get(&client->dev, NULL);
-   673		if (IS_ERR(ov6211->xvclk))
-   674			return dev_err_probe(&client->dev, PTR_ERR(ov6211->xvclk),
-   675					     "failed to get XVCLK clock\n");
-   676	
-   677		freq = clk_get_rate(ov6211->xvclk);
-   678		if (freq && freq != OV6211_MCLK_FREQ_24MHZ)
-   679			return dev_err_probe(&client->dev, -EINVAL,
-   680					"XVCLK clock frequency %lu is not supported\n",
-   681					freq);
-   682	
-   683		ret = ov6211_check_hwcfg(ov6211);
-   684		if (ret)
-   685			return dev_err_probe(&client->dev, ret,
-   686					     "failed to check HW configuration\n");
-   687	
-   688		ov6211->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
-   689							     GPIOD_OUT_HIGH);
-   690		if (IS_ERR(ov6211->reset_gpio))
-   691			return dev_err_probe(&client->dev, PTR_ERR(ov6211->reset_gpio),
-   692					     "cannot get reset GPIO\n");
-   693	
-   694		ov6211->avdd = devm_regulator_get_optional(&client->dev, "avdd");
-   695		if (IS_ERR(ov6211->avdd)) {
-   696			ret = PTR_ERR(ov6211->avdd);
-   697			if (ret != -ENODEV)
-   698				return dev_err_probe(&client->dev, ret,
-   699						     "Failed to get avdd regulator\n");
-   700	
-   701			ov6211->avdd = NULL;
-   702		}
-   703	
-   704		ov6211->dovdd = devm_regulator_get_optional(&client->dev, "dovdd");
-   705		if (IS_ERR(ov6211->dovdd)) {
-   706			ret = PTR_ERR(ov6211->dovdd);
-   707			if (ret != -ENODEV)
-   708				return dev_err_probe(&client->dev, ret,
-   709						     "Failed to get dovdd regulator\n");
-   710	
-   711			ov6211->dovdd = NULL;
-   712		}
-   713	
-   714		ov6211->dvdd = devm_regulator_get_optional(&client->dev, "dvdd");
-   715		if (IS_ERR(ov6211->dvdd)) {
-   716			ret = PTR_ERR(ov6211->dvdd);
-   717			if (ret != -ENODEV)
-   718				return dev_err_probe(&client->dev, ret,
-   719						     "Failed to get dvdd regulator\n");
-   720	
-   721			ov6211->dvdd = NULL;
-   722		}
-   723	
-   724		/* The sensor must be powered on to read the CHIP_ID register */
-   725		ret = ov6211_power_on(&client->dev);
-   726		if (ret)
-   727			return ret;
-   728	
-   729		ret = ov6211_identify_module(ov6211);
-   730		if (ret) {
-   731			dev_err_probe(&client->dev, ret, "failed to find sensor\n");
-   732			goto power_off;
-   733		}
-   734	
-   735		mutex_init(&ov6211->mutex);
-   736		ov6211->cur_mode = &supported_modes[0];
-   737	
-   738		ret = ov6211_init_controls(ov6211);
-   739		if (ret) {
-   740			dev_err_probe(&client->dev, ret, "failed to init controls\n");
-   741			goto mutex_destroy;
-   742		}
-   743	
-   744		ov6211->sd.internal_ops = &ov6211_internal_ops;
-   745		ov6211->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-   746		ov6211->sd.entity.ops = &ov6211_subdev_entity_ops;
-   747		ov6211->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-   748		ov6211->pad.flags = MEDIA_PAD_FL_SOURCE;
-   749		ret = media_entity_pads_init(&ov6211->sd.entity, 1, &ov6211->pad);
-   750		if (ret) {
-   751			dev_err_probe(&client->dev, ret,
-   752				      "failed to init media entity pads\n");
-   753			goto v4l2_ctrl_handler_free;
-   754		}
-   755	
-   756		ret = v4l2_async_register_subdev_sensor(&ov6211->sd);
-   757		if (ret < 0) {
-   758			dev_err_probe(&client->dev, ret,
-   759				      "failed to register V4L2 subdev\n");
-   760			goto media_entity_cleanup;
-   761		}
-   762	
-   763		/* Enable runtime PM and turn off the device */
-   764		pm_runtime_set_active(&client->dev);
-   765		pm_runtime_enable(&client->dev);
-   766		pm_runtime_idle(&client->dev);
-   767	
-   768		return 0;
-   769	
-   770	media_entity_cleanup:
-   771		media_entity_cleanup(&ov6211->sd.entity);
-   772	
-   773	v4l2_ctrl_handler_free:
-   774		v4l2_ctrl_handler_free(ov6211->sd.ctrl_handler);
-   775	
-   776	mutex_destroy:
-   777		mutex_destroy(&ov6211->mutex);
-   778	
-   779	power_off:
-   780		ov6211_power_off(&client->dev);
-   781	
-   782		return ret;
-   783	}
-   784	
+  1529	
+  1530	void dma_release_channel(struct dma_chan *chan);
+  1531	int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps);
+  1532	#else
+  1533	static inline struct dma_chan *dma_find_channel(enum dma_transaction_type tx_type)
+  1534	{
+  1535		return NULL;
+  1536	}
+  1537	static inline enum dma_status dma_sync_wait(struct dma_chan *chan, dma_cookie_t cookie)
+  1538	{
+  1539		return DMA_COMPLETE;
+  1540	}
+  1541	static inline enum dma_status dma_wait_for_async_tx(struct dma_async_tx_descriptor *tx)
+  1542	{
+  1543		return DMA_COMPLETE;
+  1544	}
+  1545	static inline void dma_issue_pending_all(void)
+  1546	{
+  1547	}
+  1548	static inline struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
+  1549							     dma_filter_fn fn,
+  1550							     void *fn_param,
+  1551							     struct device_node *np)
+  1552	{
+  1553		return NULL;
+  1554	}
+> 1555	struct dma_chan *dma_request_chan_w_data(struct device *dev,
+  1556						 const char *name,
+  1557						 void *data)
+  1558	{
+  1559		return ERR_PTR(-ENODEV);
+  1560	}
+  1561	static inline struct dma_chan *dma_request_chan(struct device *dev,
+  1562							const char *name)
+  1563	{
+  1564		return ERR_PTR(-ENODEV);
+  1565	}
+  1566	static inline struct dma_chan *dma_request_chan_by_mask(
+  1567							const dma_cap_mask_t *mask)
+  1568	{
+  1569		return ERR_PTR(-ENODEV);
+  1570	}
+  1571	
 
 -- 
 0-DAY CI Kernel Test Service
