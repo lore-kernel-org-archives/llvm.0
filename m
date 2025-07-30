@@ -1,79 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B649876034;
-	Wed, 30 Jul 2025 00:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712E234CF5;
+	Wed, 30 Jul 2025 01:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753836739; cv=none; b=NKamdRXUBwc4Xljq9OPXtOXdSnF97757WHQq1mDsiFnmHpje5sNC2tJUcTAwln8Y8jCnu6+4gztpFZWnt38MGngkHEol+vwdvDo6vf/PZ3Ymm6JV5opnf/CUl1VcsB8EnQiPUDEIcYYCBAiM8gLDU8fwpSnTbzsR4hZRkBen9/c=
+	t=1753839710; cv=none; b=ajta0LV9ct3q6jFgfAt0JSQIcyHiIkd7OsC7vO7jW6AK3Po9FqZ+AXZnAS72ay6fJxD9anfFSItDzzCfD45R9BLnFwGq0vqcakHHUry+s8cxWslHE6LKl9lvoNrXbQIQYwCYvGpk70Hj3e+6aTim3O/yS9p0NZLRg4R6y6Rhh0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753836739; c=relaxed/simple;
-	bh=jkBmzSmPV94LC+ja+IPJ0d+EvqCY2J5S5RouHbBqu1Q=;
+	s=arc-20240116; t=1753839710; c=relaxed/simple;
+	bh=C0YOX8tRP08SwcKwTKh5XuGxjapurQZ0E3BcTYfv7TQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fRqYgxySNZ0wedfBBsEPjr7A8pO2fPy7jxojPccz2V6mP0wmgnTpYao1ZceJZBi3MvCBk2f4zSngytUjaOjaEKSyhLkDHoWMuuKXpAXoQhMm0giQZom4BwaFc8oqvI1+43qF19WAX3k1uWLQH1QF2MZqmJ52+OYf1WBAaQWvrqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NqLZvq7H; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=XnX4kityzaKmBc6tAMLt94hKQfOK5SN69CsX9KWrAzx9epM9J2nX2yZU83GBp1C3DPsGePUvfnawIyU6G3PdJ6/vR8k7xJdZB48nZPVveG5XNo3SDMd9HrzasR9fWEiB78fZKO1d/KInOGoY4rXcqXgN7sfzmPHv27ubOmOJHms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FOfDJzow; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NqLZvq7H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A10EC4CEEF;
-	Wed, 30 Jul 2025 00:52:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753836737;
-	bh=jkBmzSmPV94LC+ja+IPJ0d+EvqCY2J5S5RouHbBqu1Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NqLZvq7HqI12euM24CWcJEa6U0shJVZ6f5b+ORyJJpHm1fCWcisczNXjbJENKaSWj
-	 AB7pp9gokr7/t8B9spmlxd3OTFtJSMPuhqmymFZqv0vWTNdEsjpg+ZXIeFYc3zcuLT
-	 dYIAAAc9tngW9W9XTxXxWYjlF65vsCgqIEU5n6Lgspyr9hBcePqGLKXd3uIzSSApRo
-	 Z0AfVfx5ZLtruj2j8QvtnZ4/UGNGE9oLwJpB+CivuHAWLbuLqWHVOdZlsJITEunG1J
-	 2teScO4Cg6B20BOAazfK/7yHp+Lp/SM7neazBwUjveV82Ihc5TLKRe8rDpeZRxQkCk
-	 3eZ5WbOKyVRYA==
-Date: Tue, 29 Jul 2025 17:52:12 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] media: s5p-mfc: Always pass NULL to
- s5p_mfc_cmd_host2risc_v6()
-Message-ID: <20250730005212.GB2984390@ax162>
-References: <20250715-media-s5p-mfc-fix-uninit-const-pointer-v1-1-4d52b58cafe9@kernel.org>
- <9650d2e240a9170175069e3a4f6d6d9512d62aa3.camel@ndufresne.ca>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FOfDJzow"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753839707; x=1785375707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C0YOX8tRP08SwcKwTKh5XuGxjapurQZ0E3BcTYfv7TQ=;
+  b=FOfDJzowAYMQjBHdVDsykO+EDxpcymJ1WRSGUUki/1NJ/VXLRcBb4klW
+   cA9M1sc7cErboTjlJyBNgdyWEcLvBIi6WCe2ONfbPf87peNrzGFRo/eJ2
+   ky+EutWTYdiPqZ3sQLwPw8fPcefInLv16RTOOzoFE4FG42SBh9fF+J6mE
+   KZ+IBE3eMTSljIGmxoX6bG8eHI1DL9eW4JnSA/dXyE57kjo0PrzQcksC7
+   fxBeLb7NW01is+HTuwxuRGb9rJbm8jAt8HlcpIoKhHdncAkxY6Aq8AltE
+   boTfrsRwtC/4mPKyRd+N09kstfDJWL9sFhMQRYFwNKaMtB9uN4l+nJguu
+   w==;
+X-CSE-ConnectionGUID: 9DM/bcKIQMqxIiuw8aRfYw==
+X-CSE-MsgGUID: iKlLJrlJQJmdqR4Fz5X8jw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="59953741"
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="59953741"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 18:41:46 -0700
+X-CSE-ConnectionGUID: wXoZuoSiRveJZ3vH4iMSTQ==
+X-CSE-MsgGUID: rOisV2MqRfGKlDY24ABawQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
+   d="scan'208";a="200033573"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2025 18:41:45 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ugvp9-0001rL-0C;
+	Wed, 30 Jul 2025 01:41:43 +0000
+Date: Wed, 30 Jul 2025 09:41:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 04/10] ftrace: Add modify_ftrace_direct_hash function
+Message-ID: <202507300954.QwO5Jhbb-lkp@intel.com>
+References: <20250729102813.1531457-5-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9650d2e240a9170175069e3a4f6d6d9512d62aa3.camel@ndufresne.ca>
+In-Reply-To: <20250729102813.1531457-5-jolsa@kernel.org>
 
-Hi Nicolas,
+Hi Jiri,
 
-On Tue, Jul 29, 2025 at 10:24:22AM -0400, Nicolas Dufresne wrote:
-> Le mardi 15 juillet 2025 à 15:13 -0700, Nathan Chancellor a écrit :
-> > From what I can tell, it seems like ->cmd_host2risc() is only ever
-> > called from v6 code, which always passes NULL? It seems like it should
-> > be possible to just drop .cmd_host2risc on the v5 side, then update
-> > .cmd_host2risc to only take two parameters? If so, I can send a follow
-> > up as a clean up, so that this can go back relatively conflict free.
-> 
-> It seems so yes. For this specific patch, I would probably rename "args" to
-> "__unused" to make the reading faster. But does not matter so much if you later
-> remove it.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Yes, after this change is picked up in a maintainer's tree, I do plan to
-send a patch to remove the "args" parameter altogether. If you really
-care, I can certainly rename the parameter in this change to "__unused"
-as suggested but if you don't, I will just leave it as is to make
-backporting this a little easier.
+[auto build test WARNING on trace/for-next]
+[also build test WARNING on bpf-next/net bpf-next/master bpf/master linus/master v6.16 next-20250729]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-Make-alloc_and_copy_ftrace_hash-direct-friendly/20250729-183143
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250729102813.1531457-5-jolsa%40kernel.org
+patch subject: [RFC 04/10] ftrace: Add modify_ftrace_direct_hash function
+config: x86_64-buildonly-randconfig-003-20250730 (https://download.01.org/0day-ci/archive/20250730/202507300954.QwO5Jhbb-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507300954.QwO5Jhbb-lkp@intel.com/reproduce)
 
-Thanks a lot for taking a look!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507300954.QwO5Jhbb-lkp@intel.com/
 
-Cheers,
-Nathan
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/events/callchain.c:11:
+   In file included from include/linux/perf_event.h:43:
+   include/linux/ftrace.h:559:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
+     559 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:559:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     559 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+   include/linux/ftrace.h:564:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
+     564 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:564:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     564 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+>> include/linux/ftrace.h:569:5: warning: no previous prototype for function 'modify_ftrace_direct_hash' [-Wmissing-prototypes]
+     569 | int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+         |     ^
+   include/linux/ftrace.h:569:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     569 | int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+         | ^
+         | static 
+   3 warnings generated.
+--
+   In file included from kernel/events/core.c:34:
+   In file included from include/linux/syscalls.h:94:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:43:
+   include/linux/ftrace.h:559:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
+     559 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:559:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     559 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+   include/linux/ftrace.h:564:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
+     564 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         |     ^
+   include/linux/ftrace.h:564:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     564 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+         | ^
+         | static 
+>> include/linux/ftrace.h:569:5: warning: no previous prototype for function 'modify_ftrace_direct_hash' [-Wmissing-prototypes]
+     569 | int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+         |     ^
+   include/linux/ftrace.h:569:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     569 | int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+         | ^
+         | static 
+   kernel/events/core.c:215:20: warning: unused function 'class_perf_ctx_lock_destructor' [-Wunused-function]
+     215 | static inline void class_perf_ctx_lock_destructor(class_perf_ctx_lock_t *_T)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/events/core.c:219:1: warning: unused function 'class_perf_ctx_lock_constructor' [-Wunused-function]
+     219 | class_perf_ctx_lock_constructor(struct perf_cpu_context *cpuctx,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
+
+
+vim +/modify_ftrace_direct_hash +569 include/linux/ftrace.h
+
+   563	
+ > 564	int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+   565	{
+   566		return -ENODEV;
+   567	}
+   568	
+ > 569	int modify_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash, bool do_direct_lock)
+   570	{
+   571		return -ENODEV;
+   572	}
+   573	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
