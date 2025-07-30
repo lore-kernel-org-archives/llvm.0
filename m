@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF29A92E;
-	Wed, 30 Jul 2025 00:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE99A3594F;
+	Wed, 30 Jul 2025 00:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753835436; cv=none; b=bbSrp+6zuWDcyy4+idRdYqLXYzk9oy0gmZRzDowyUFwd7MIiDnaX8BXVPCkTG+t0ZceLCZd5nxSAMTH2+yKTQ/nUXJZ3pUbHa1RTbbcj1ex7cEUE6X06MBjmdG5iaX4oPltTXU/a03F2xPZqVwrDRvZC61yudxwJyr9v0zEK/Hc=
+	t=1753835976; cv=none; b=MaWFSDYBUNP6B/RRKN27lW36KUBi9sfiLxFrIVFCpJ9gPuPYHplK6bvUInuyOkdKcBuu6u3ZAkcUx4b2XobrqpO8H3UMrv8PeRXLknTot/Ms3Ye9k9gIjqpJenuBHogfdo0xA7+S5XusD7npA5w5ITFBguTj9pStbXo4xxZIHZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753835436; c=relaxed/simple;
-	bh=JUpM6k3V3ApluVvc1ONxMzfk4GZiTa5iBdmLsA/JRyM=;
+	s=arc-20240116; t=1753835976; c=relaxed/simple;
+	bh=WnOG4V+bPLI97m9dWmTwO5wl8jjkLQXzMfj40MYmTCk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WEgr60b7VOpu5jILiJwSPHEwDeY/J7lF6KBOUK42Agz7xCTtemu9Og77sy9pbdqnrOVk/E7OpFVti5ir+P2RKJcAbYTfRHp3RqF1yMz2+RUKFiXwcRT3Di7KndsMZWR3Fvdgn9HKXyJ5Sm2SPH5nGNZaU0csKnMM3NgmnbE/R6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SklNPCn+; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=htMlWRvF96HEOOofYZzjTZrIBdn998zscaLjkf13URkmB4/N+B/U/nNuudA7y7e0bIlcRXabCb6aVGpGvrvJcC+AvS5RYd3NsvO3y5Wc7zvnTq83hYkoH971u4abl9t5U/s5HOV17+06GEe+PpxHiYZKOzrHzWuOcanUkccDH+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxOrnxBQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SklNPCn+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753835434; x=1785371434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JUpM6k3V3ApluVvc1ONxMzfk4GZiTa5iBdmLsA/JRyM=;
-  b=SklNPCn+E/JTL+Ok+QF4+LM7NUhUDOwJns2ZFqNBoPGNEUT6qDVroyPj
-   oYNcGbO78kKLAd4Yen6Pgiez7Msg7cZPXGKY5pT8dpq2dmKUKYo/a19M3
-   sxJB4B4NewA++1GOJ1YqNVG6Z7uekzj8CGoR/uJT8WaCnASioXtfvul1p
-   zoyZiS92q2oLbYU8nEBRuV2rs6j74oG1rSuJPYFTUBkQQ+unMWq7HGc4Q
-   G5MgaI8VbJ2O5iso5JmGYpX6uBif4AA1sAmCBNQJb/1CFzWJOZ6gKgmh/
-   mhyrfOBRYPneBUvr5Lsa9jS7wfjGo07JPSKgW1dVBa05fT+Mr7vZy+B9r
-   g==;
-X-CSE-ConnectionGUID: 9fkfmqS5QHieiF0+1zNngA==
-X-CSE-MsgGUID: 3R0ecQ5bRnyxVOeQ1juNAQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11506"; a="56061015"
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="56061015"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2025 17:30:33 -0700
-X-CSE-ConnectionGUID: 5d3X3a88ROqORfSDMrBHOw==
-X-CSE-MsgGUID: Y1Gj32wiR26yrWXbwbwRew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="200022132"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2025 17:30:33 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uguiD-0001nv-2o;
-	Wed, 30 Jul 2025 00:30:29 +0000
-Date: Wed, 30 Jul 2025 08:30:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 03/10] ftrace: Add unregister_ftrace_direct_hash function
-Message-ID: <202507300838.AgG0zE7b-lkp@intel.com>
-References: <20250729102813.1531457-4-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxOrnxBQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359D7C4CEF5;
+	Wed, 30 Jul 2025 00:39:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753835976;
+	bh=WnOG4V+bPLI97m9dWmTwO5wl8jjkLQXzMfj40MYmTCk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qxOrnxBQ5LgP2+fdyeglquYIz3PhpmHfQcFH/uN5dnvOBkG07d2J8y2FT817qbzLn
+	 dZwjdL/XnoUWVw5Yd6SKlXtuptPUIbiZO+YUkzeiBXhmCLL1ZbUazeJ/c18AYlr+k1
+	 Y0GlxDDV2tzOxAkhnUSCCbPlk8ze9rXmRpyZX8Px1Vy1MvxBIv1XwLbzvYHQ4Ifv1t
+	 oaBYzQMRo0d8PQIOpLIe57MbWWbs2LCljfoffKIAuryJpUooclqx8Guz/dHuo95bay
+	 X0klPqJBo+lJi+Z4UanHhCkLzQ0OrVaGZs0UPgXJA60bZm2BtrJJ1AADy4S1csXq4H
+	 qsS2kByItAcJA==
+Date: Tue, 29 Jul 2025 17:39:35 -0700
+From: Kees Cook <kees@kernel.org>
+To: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: kernel test robot <lkp@intel.com>,
+	syzbot+5245cb609175fb6e8122@syzkaller.appspotmail.com,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Hou Wenlong <houwenlong.hwl@antgroup.com>,
+	"Kirill A . Shutemov" <kas@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>, Uros Bizjak <ubizjak@gmail.com>,
+	Marc Herbert <Marc.Herbert@linux.intel.com>,
+	Yafang Shao <laoar.shao@gmail.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] compiler_types: Provide __no_kstack_erase to disable
+ coverage only on Clang
+Message-ID: <202507291738.262CEF2095@keescook>
+References: <20250729234055.it.233-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,94 +67,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250729102813.1531457-4-jolsa@kernel.org>
+In-Reply-To: <20250729234055.it.233-kees@kernel.org>
 
-Hi Jiri,
+On Tue, Jul 29, 2025 at 04:41:00PM -0700, Kees Cook wrote:
+> In order to support Clang's stack depth tracking (for Linux's kstack_erase
+> feature), the coverage sanitizer needed to be disabled for __init (and
+> __head) section code. Doing this universally (i.e. for GCC too) created
+> a number of unexpected problems, ranging from changes to inlining logic
+> to failures to DCE code on earlier GCC versions.
+> 
+> Since this change is only needed for Clang, specialize it so that GCC
+> doesn't see the change as it isn't needed there (the GCC implementation
+> of kstack_erase uses a GCC plugin that removes stack depth tracking
+> instrumentation from __init sections during a late pass in the IR).
+> 
+> Successfully build and boot tested with GCC 12 and Clang 22.
+> 
+> Fixes: 381a38ea53d2 ("init.h: Disable sanitizer coverage for __init and __head")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202507270258.neWuiXLd-lkp@intel.com/
+> Reported-by: syzbot+5245cb609175fb6e8122@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/6888d004.a00a0220.26d0e1.0004.GAE@google.com/
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+I've now sent the PR that includes this fix:
+https://lore.kernel.org/lkml/202507291728.51BAA26@keescook/
 
-[auto build test WARNING on trace/for-next]
-[also build test WARNING on bpf-next/net bpf-next/master bpf/master linus/master v6.16 next-20250729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you everyone for suffering through the mess I made! :P
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-Make-alloc_and_copy_ftrace_hash-direct-friendly/20250729-183143
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20250729102813.1531457-4-jolsa%40kernel.org
-patch subject: [RFC 03/10] ftrace: Add unregister_ftrace_direct_hash function
-config: x86_64-buildonly-randconfig-003-20250730 (https://download.01.org/0day-ci/archive/20250730/202507300838.AgG0zE7b-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250730/202507300838.AgG0zE7b-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507300838.AgG0zE7b-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/events/callchain.c:11:
-   In file included from include/linux/perf_event.h:43:
-   include/linux/ftrace.h:558:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
->> include/linux/ftrace.h:563:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:563:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
-   2 warnings generated.
---
-   In file included from kernel/events/core.c:34:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:43:
-   include/linux/ftrace.h:558:5: warning: no previous prototype for function 'register_ftrace_direct_hash' [-Wmissing-prototypes]
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:558:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     558 | int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
->> include/linux/ftrace.h:563:5: warning: no previous prototype for function 'unregister_ftrace_direct_hash' [-Wmissing-prototypes]
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         |     ^
-   include/linux/ftrace.h:563:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     563 | int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-         | ^
-         | static 
-   kernel/events/core.c:215:20: warning: unused function 'class_perf_ctx_lock_destructor' [-Wunused-function]
-     215 | static inline void class_perf_ctx_lock_destructor(class_perf_ctx_lock_t *_T)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:219:1: warning: unused function 'class_perf_ctx_lock_constructor' [-Wunused-function]
-     219 | class_perf_ctx_lock_constructor(struct perf_cpu_context *cpuctx,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
-
-
-vim +/unregister_ftrace_direct_hash +563 include/linux/ftrace.h
-
-   557	
- > 558	int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-   559	{
-   560		return -ENODEV;
-   561	}
-   562	
- > 563	int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
-   564	{
-   565		return -ENODEV;
-   566	}
-   567	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
