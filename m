@@ -1,59 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1C42C9A;
-	Thu, 31 Jul 2025 11:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D229D1A3150;
+	Thu, 31 Jul 2025 11:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753961924; cv=none; b=eYoK3F1ygYzPoUOYGgxBhjWbJSHmN3nhzTgDXSf+eR7NL/wL5VAXHmtJcSUF/7jcCsaAR0RXHAw+Qvac8Dj2kmUeupPFY2hQB27mYFKZ1Bdwrwgp28DQWWOBI7PKZmhV1NyZJWUnpJKrQzBtu3Q7q3fqdlKvOPFU6S5pS/DALeo=
+	t=1753963127; cv=none; b=mpeRS/PZYZLD8ZiKjCb8d+Mxx6bEHhc4wsBi9LipSoD/Kuj7CXj+MVIVP8mtYyaDcVp3ru6mrab0PObe2GiAQyeDra/pf6K103kCXFdfDylCe+xZOxXMCKcybr8JohMOZictXuR/jNclTs3lKIhgpozOw1uP/oQSySmtQWaEJTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753961924; c=relaxed/simple;
-	bh=3YxRjAWvCDe5LEm7FQxIMMGsIS8/ufZmz7MavGY9RYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kVdcUdd6lsgBy47qaVm3N98FZjpdXJFEbHSROzSCxZVjj8DOvJpiOHRk+ID88BG8OeSwNpFAvzvw8XdmDnFJmzQ8C7vHZpjGFjdHO6i9DE3jG2Ec1FfLsno74ZAQeP4Dvg6X0Na4bn/LXqoJr8naiM+0Nh5CLeMYuv1misdV9U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E/MEw/C9; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1753963127; c=relaxed/simple;
+	bh=tNoXWwvWQbqlFtYXzrT1UZX3GrjrrW8QenY36N0vl90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lIhCO+uTXYmARDgr/CFxZSRbwOOqPiXxH1PLQksZGJUl5QxpxAPOy1l/ImhcMoaZ3nTUpR4Ip9ZpAeorPJcXEib+CSGe0cdsC5BPBb+0fO9rn31z8yCQIK1xsO97zqwROw+JgxOxVNdmz++0nRJ4yXmm67xfH7Znw6+Ljw/Uyl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lLh+VkKC; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E/MEw/C9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lLh+VkKC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753961923; x=1785497923;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3YxRjAWvCDe5LEm7FQxIMMGsIS8/ufZmz7MavGY9RYc=;
-  b=E/MEw/C9fAnla1Z4WZ3MYybmBfVAQ2RdsPGfoJwIptL1W1WOcKZ62809
-   Jfo8SJTpmu0WeQLFoiy4hWwPeXCT2Z9GBUpMtryYPZbGKpWQlUgoaeanX
-   RCsZxdrlr1XZNPQlY2WNJn0rvW8lPGgVb5HOSoZ/1FyLvTRp/oVhO1Aur
-   0oPt2FD8s8u4hAj1vEh12EZFl+ay6PWwJ4/sUjWZT2Xax+1+AwBeATiX3
-   XJ6vAjv+xHa18DWZC2uFou3DsjXhAEPc6cIQZzqZ+lepBtqb9BZQQfaHb
-   MUc0WiNzm8XcffMuF1C1ekinp6ix71ySqcyvrlD8ZGt0xhohjlD2cPCXh
-   A==;
-X-CSE-ConnectionGUID: raNu6J92Sx+G4Nqn6pE/HA==
-X-CSE-MsgGUID: yZhMomWQSBil5jaDDynTdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56148417"
+  t=1753963126; x=1785499126;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tNoXWwvWQbqlFtYXzrT1UZX3GrjrrW8QenY36N0vl90=;
+  b=lLh+VkKCXAAId5YUJBGk1BOpFobdLmr/hweT83IhrsRijNWjjTtWBJBh
+   ysXpi0M+Qoy6QZLPyvuuD+eLsVAAd/1Srl9Eqq7GbA89JLtCL1NjM7X+5
+   5ZyM47dZTNpC4IqIbHFZarIzh7A9Ips+fZ556U7cdb4DDrd7rg5Xg+85o
+   XUm5g6RJ+pZ4ohj6KX6DxOfLkeRhGB5XuZMTnRoh8UvWmozj+Kud7pIfq
+   TtfSfPO0MTu+3xUOtaAkZAga7TmzNe+AfhMcefbp/wwweJ1rWkIA8vwXV
+   B1i5eb5JHvQ6X7HLfq4OctQ41RepMTG7WDel6o7MKgDOOePgbTgJVCQvW
+   w==;
+X-CSE-ConnectionGUID: e6J6DSFCSICnLcDQEkTA6g==
+X-CSE-MsgGUID: cf+iuyUhTKGIfdYt9HQcRA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="56149538"
 X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
-   d="scan'208";a="56148417"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 04:38:42 -0700
-X-CSE-ConnectionGUID: BDEYSKczS22H1iG4TI7SqA==
-X-CSE-MsgGUID: C2rFzRaISWqK6MQnKo23HQ==
+   d="scan'208";a="56149538"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 04:58:45 -0700
+X-CSE-ConnectionGUID: h8B0eOTjSPiYILRaospTeQ==
+X-CSE-MsgGUID: u1o93U89S3mUPnFxhiwPyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,353,1747724400"; 
-   d="scan'208";a="194081527"
+   d="scan'208";a="167492742"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 31 Jul 2025 04:38:41 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 31 Jul 2025 04:58:43 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uhRcM-0003j4-1H;
-	Thu, 31 Jul 2025 11:38:38 +0000
-Date: Thu, 31 Jul 2025 19:38:04 +0800
+	id 1uhRvk-0003k4-12;
+	Thu, 31 Jul 2025 11:58:40 +0000
+Date: Thu, 31 Jul 2025 19:58:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
+To: Li Jun <lijun01@kylinos.cn>, gregkh@linuxfoundation.org,
+	mingo@kernel.org, tglx@linutronix.de, nathan@kernel.org,
+	n.zhandarovich@fintech.ru, linux-usb@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:vm_normal_page_pud 6/10]
- arch/powerpc/mm/ptdump/ptdump.h:14:1: error: use of 'pgtable_level' with tag
- type that does not match previous declaration
-Message-ID: <202507311905.pXY6ZhA9-lkp@intel.com>
+Subject: Re: [PATCH] usb: atm: Fix kernel coding style
+Message-ID: <202507311928.0ny4leMQ-lkp@intel.com>
+References: <20250731014134.535119-1-lijun01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,75 +64,442 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250731014134.535119-1-lijun01@kylinos.cn>
 
-tree:   https://github.com/davidhildenbrand/linux vm_normal_page_pud
-head:   ee313117a86878c228f0f2e08821cc5f9d6c6b3a
-commit: 14d707b0ff670015a8d5bcb669f5ee83706c5332 [6/10] mm/rmap: convert "enum rmap_level" to "enum pgtable_level"
-config: powerpc64-randconfig-003-20250731 (https://download.01.org/0day-ci/archive/20250731/202507311905.pXY6ZhA9-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 8f09b03aebb71c154f3bbe725c29e3f47d37c26e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507311905.pXY6ZhA9-lkp@intel.com/reproduce)
+Hi Li,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.16 next-20250731]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jun/usb-atm-Fix-kernel-coding-style/20250731-094241
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250731014134.535119-1-lijun01%40kylinos.cn
+patch subject: [PATCH] usb: atm: Fix kernel coding style
+config: i386-buildonly-randconfig-003-20250731 (https://download.01.org/0day-ci/archive/20250731/202507311928.0ny4leMQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507311928.0ny4leMQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507311905.pXY6ZhA9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507311928.0ny4leMQ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/powerpc/mm/ptdump/book3s64.c:10:
->> arch/powerpc/mm/ptdump/ptdump.h:14:1: error: use of 'pgtable_level' with tag type that does not match previous declaration
-      14 | struct pgtable_level {
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
          | ^
-   include/linux/pgtable.h:1977:6: note: previous use is here
-    1977 | enum pgtable_level {
-         |      ^
-   In file included from arch/powerpc/mm/ptdump/book3s64.c:10:
-   arch/powerpc/mm/ptdump/ptdump.h:20:8: error: use of 'pgtable_level' with tag type that does not match previous declaration
-      20 | extern struct pgtable_level pg_level[5];
-         |        ^
-   include/linux/pgtable.h:1977:6: note: previous use is here
-    1977 | enum pgtable_level {
-         |      ^
->> arch/powerpc/mm/ptdump/book3s64.c:105:1: error: use of 'pgtable_level' with tag type that does not match previous declaration
-     105 | struct pgtable_level pg_level[5] = {
+   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
+     511 | #define CXACRU_ALL_FILES(_action) \
+         |                                   ^
+   <scratch space>:27:1: note: expanded from here
+      27 | CXACRU_ATTR_INIT
          | ^
-   include/linux/pgtable.h:1977:6: note: previous use is here
-    1977 | enum pgtable_level {
-         |      ^
-   3 errors generated.
---
-   In file included from arch/powerpc/mm/ptdump/ptdump.c:30:
->> arch/powerpc/mm/ptdump/ptdump.h:14:1: error: use of 'pgtable_level' with tag type that does not match previous declaration
-      14 | struct pgtable_level {
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
+     511 | #define CXACRU_ALL_FILES(_action) \
+         |                                   ^
+   <scratch space>:27:1: note: expanded from here
+      27 | CXACRU_ATTR_INIT
          | ^
-   include/linux/pgtable.h:1977:6: note: previous use is here
-    1977 | enum pgtable_level {
-         |      ^
-   In file included from arch/powerpc/mm/ptdump/ptdump.c:30:
-   arch/powerpc/mm/ptdump/ptdump.h:20:8: error: use of 'pgtable_level' with tag type that does not match previous declaration
-      20 | extern struct pgtable_level pg_level[5];
-         |        ^
-   include/linux/pgtable.h:1977:6: note: previous use is here
-    1977 | enum pgtable_level {
-         |      ^
-   2 errors generated.
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:511:35: note: expanded from macro 'CXACRU_ALL_FILES'
+     511 | #define CXACRU_ALL_FILES(_action) \
+         |                                   ^
+   <scratch space>:27:1: note: expanded from here
+      27 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
+     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
+         |                                                                                ^
+   <scratch space>:37:1: note: expanded from here
+      37 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
+     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
+         |                                                                                ^
+   <scratch space>:37:1: note: expanded from here
+      37 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:512:80: note: expanded from macro 'CXACRU_ALL_FILES'
+     512 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_RATE,           u32,  downstream_rate); \
+         |                                                                                ^
+   <scratch space>:37:1: note: expanded from here
+      37 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
+     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
+         |                                                                              ^
+   <scratch space>:47:1: note: expanded from here
+      47 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
+     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
+         |                                                                              ^
+   <scratch space>:47:1: note: expanded from here
+      47 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:513:78: note: expanded from macro 'CXACRU_ALL_FILES'
+     513 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_RATE,             u32,  upstream_rate); \
+         |                                                                              ^
+   <scratch space>:47:1: note: expanded from here
+      47 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
+         |                                                                            ^
+   <scratch space>:57:1: note: expanded from here
+      57 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
+         |                                                                            ^
+   <scratch space>:57:1: note: expanded from here
+      57 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:514:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     514 | CXACRU_ATTR_##_action(CXINF_LINK_STATUS,               LINK, link_status); \
+         |                                                                            ^
+   <scratch space>:57:1: note: expanded from here
+      57 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
+         |                                                                            ^
+   <scratch space>:67:1: note: expanded from here
+      67 | CXACRU__ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro 'CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
+         |                                                                            ^
+   <scratch space>:67:1: note: expanded from here
+      67 | CXACRU__ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro 'CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:515:76: note: expanded from macro 'CXACRU_ALL_FILES'
+     515 | CXACRU_ATTR_##_action(CXINF_LINE_STATUS,               LINE, line_status); \
+         |                                                                            ^
+   <scratch space>:67:1: note: expanded from here
+      67 | CXACRU__ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro 'CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
+     516 | CXACRU__ATTR_##_action(mac_address); \
+         |                                      ^
+   <scratch space>:71:1: note: expanded from here
+      71 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
+     516 | CXACRU__ATTR_##_action(mac_address); \
+         |                                      ^
+   <scratch space>:71:1: note: expanded from here
+      71 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:516:38: note: expanded from macro 'CXACRU_ALL_FILES'
+     516 | CXACRU__ATTR_##_action(mac_address); \
+         |                                      ^
+   <scratch space>:71:1: note: expanded from here
+      71 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
+     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
+         |                                                                                    ^
+   <scratch space>:81:1: note: expanded from here
+      81 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
+     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
+         |                                                                                    ^
+   <scratch space>:81:1: note: expanded from here
+      81 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:517:84: note: expanded from macro 'CXACRU_ALL_FILES'
+     517 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_SNR_MARGIN,       dB,   upstream_snr_margin); \
+         |                                                                                    ^
+   <scratch space>:81:1: note: expanded from here
+      81 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
+     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
+         |                                                                                      ^
+   <scratch space>:91:1: note: expanded from here
+      91 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
+     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
+         |                                                                                      ^
+   <scratch space>:91:1: note: expanded from here
+      91 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:518:86: note: expanded from macro 'CXACRU_ALL_FILES'
+     518 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_SNR_MARGIN,     dB,   downstream_snr_margin); \
+         |                                                                                      ^
+   <scratch space>:91:1: note: expanded from here
+      91 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
+     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
+         |                                                                                     ^
+   <scratch space>:101:1: note: expanded from here
+     101 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected ')'
+   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
+     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
+         |                                                                                     ^
+   <scratch space>:101:1: note: expanded from here
+     101 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   drivers/usb/atm/cxacru.c:539:1: note: to match this '('
+   drivers/usb/atm/cxacru.c:519:85: note: expanded from macro 'CXACRU_ALL_FILES'
+     519 | CXACRU_ATTR_##_action(CXINF_UPSTREAM_ATTENUATION,      dB,   upstream_attenuation); \
+         |                                                                                     ^
+   <scratch space>:101:1: note: expanded from here
+     101 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:198:34: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     198 | #define CXACRU__ATTR_INIT(_name) \
+         |                                  ^
+>> drivers/usb/atm/cxacru.c:539:1: error: expected identifier or '('
+     539 | CXACRU_ALL_FILES(INIT);
+         | ^
+   drivers/usb/atm/cxacru.c:520:87: note: expanded from macro 'CXACRU_ALL_FILES'
+     520 | CXACRU_ATTR_##_action(CXINF_DOWNSTREAM_ATTENUATION,    dB,   downstream_attenuation); \
+         |                                                                                       ^
+   <scratch space>:111:1: note: expanded from here
+     111 | CXACRU_ATTR_INIT
+         | ^
+   drivers/usb/atm/cxacru.c:218:3: note: expanded from macro 'CXACRU_ATTR_INIT'
+     218 | } \
+         |   ^
+   drivers/usb/atm/cxacru.c:199:2: note: expanded from macro '\
+   CXACRU__ATTR_INIT'
+     199 | (static DEVICE_ATTR_RO(_name))
+         |  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/pgtable_level +14 arch/powerpc/mm/ptdump/ptdump.h
+vim +539 drivers/usb/atm/cxacru.c
 
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09  13  
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09 @14  struct pgtable_level {
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09  15  	const struct flag_info *flag;
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09  16  	size_t num;
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09  17  	u64 mask;
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09  18  };
-97026b5a5ac2654 arch/powerpc/mm/dump_linuxpagetables.h Christophe Leroy 2018-10-09  19  
-
-:::::: The code at line 14 was first introduced by commit
-:::::: 97026b5a5ac26541b3d294146f5c941491a9e609 powerpc/mm: Split dump_pagelinuxtables flag_array table
-
-:::::: TO: Christophe Leroy <christophe.leroy@c-s.fr>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+fa70fe44aba95c Simon Arlott 2007-03-06  538  
+fa70fe44aba95c Simon Arlott 2007-03-06 @539  CXACRU_ALL_FILES(INIT);
+fa70fe44aba95c Simon Arlott 2007-03-06  540  
 
 -- 
 0-DAY CI Kernel Test Service
