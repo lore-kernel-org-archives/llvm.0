@@ -1,850 +1,285 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33FBA47
-	for <llvm@lists.linux.dev>; Thu, 31 Jul 2025 00:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A44A2D;
+	Thu, 31 Jul 2025 01:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753920899; cv=none; b=jZmaqHgZpOzYHDU8KkN0z8rEC1L4mjnljmH/ag4GD1kwNqD6sUeWrH2kDP/0TK2bp881Blo0cYajy3FaLrFZn3r38/Pxh+WP+GaUotKNZhhLoJ3cvL/JZ8SX2Y7dZUURWCTuN72Kloda2vrzXD5WqjZvuwTTx0XciLA0l/gSCds=
+	t=1753925863; cv=none; b=Ncb/Hd9sDhKmhOjjAt/p+d3ExdO/8+YRaAbSi9F0xA8/1bLe0eBAjqGoPbUX7ni/3T6re8+8effy5fOlmtTYYURKsHaH0j/VM2CTmSx8r/yAmt2DERQDW/w5N7ZqmzYQp+4+cf6e3FeMcoCT3wroYyaI32FcqWvR4A3VfRLrhnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753920899; c=relaxed/simple;
-	bh=VlRrNG7JeSrQnVVaNysYnVwEXZ5+JhjyihYHwXHl990=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Cqc5QCgR06zxF10n89lwaAP0m4adKdGhdcfxD5oKb0AtWZ7jCWRRqTHIX0mz92QH3EHkaQrmUha73UIrPplWsCd9MseisICodJ+ibwsLCCvDEJjD+tr57qY/KUCiZM9daaGStL3VVZaApzk9SntTlW/cil1Z0ojk9+9HU4XP4ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzeR2kR2; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753925863; c=relaxed/simple;
+	bh=wIerfZZuc5NuQNtEvce37Ns64kpQ/dwVqbjbKTdo8IQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aB7OVR3SBCdZTCCdWwxrcyY3JX+yT2giF08tAB3v1tav7WbXpfWckPBfpUT+uuwfJJzetfMgqnB4dlxnaI/J6IVa5LZjQ4gYsCNC9bor07nrBp8Ge8nQvtMiCXhbQj1PQKV9lkrT7lKyLO/biBdkAn67y1KdJbJNa9lpLEyGG+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bwSsVIQW; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzeR2kR2"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-23aeac7d77aso3839115ad.3
-        for <llvm@lists.linux.dev>; Wed, 30 Jul 2025 17:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753920896; x=1754525696; darn=lists.linux.dev;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gath6oWsKA+RqQ9IiFhnn5HHOotElDVzgzomkwYkk0=;
-        b=KzeR2kR2DJdvA7Zk/N4tzUpNVEwQ3ecAw5pe5X4BAMsnuc9QZPPPDMuk8h3BcxxXmK
-         GcJFSdgdlgumVcO9pXuac17e7Mj5EDVeA0AyaGlDQjiFYTdwgBlBgQZgO3otDKwSeJjt
-         tp3iLcqIv9+fm/RzBlKRViKLAPMP9u2kYUpRV3j/y65sJVwiZW3mfERsnf9Jc/2Ufcfi
-         mrYg8+IJa9mne5iWU5pr0fxVC+wg0QNVIv8nl+y7b74slBffJl3nSiTl0lx5mSt8Z9v/
-         JQBzt9AcsvzhbWXlRv03YKsYBV3eNkmYbokarYfyhjp8pUgNsiD0wbj30YZsDYnA8i0X
-         I4yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753920896; x=1754525696;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+gath6oWsKA+RqQ9IiFhnn5HHOotElDVzgzomkwYkk0=;
-        b=if8bPFYhq0QTUKfVVdKnSRhhOv/msUbC71gfHpi03BygEFBEKEVuUX6PEVGOuHBiLz
-         S0+6i01VRkPALratoX6nf0PjHxwJhaUJ96xZzYo5fG+chYqhWxbFmNFrGorSGBAIHkLQ
-         V/pMW50WyjoxEUBS8ItsY66MWU7M9LwePm4oCDsmirU2OtvNwbDu0oHPMsJ4HA6RItzy
-         JwzI8VrvD8MECcVbXakZ0FJC/bbi+SIQQctOtGREh4T36RjItRdk0D5dyrYhU6t0Me1u
-         CR4Fkhp7NLq38I3iljBhgbE3ZMD5kTllenHxbPbICaV4rwwGXzZiTxyP0+72kzos85WK
-         8U/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXdsSRgnXfthCLyVJitHNgZ/UrvOddCNVAI/NXxY77sdDKSBrh+Nue0UIU2ho3qvoUS85EX@lists.linux.dev
-X-Gm-Message-State: AOJu0Yye1I7CMtfN1c8PNDqLfBLHK1X9ewgVn3w1kbqDF+Kk+aGh5xo1
-	IUA1vnTVKkILbvOUQjn49SLBdTd00FAP0ciZphZF/RhAC6uNcGm/vNtr
-X-Gm-Gg: ASbGncsoyK78oSUeiP8e///9NoAZhu+mlQNVRvffl+PT7U1NdFHtol7C0zYKoSJvokE
-	tUafqr2GMcovYBy97lhEh7Wy/838S+88AZmGhAXRjpKa6R/TJeKFb/Kjq9uuVBBlt1xFz/3mx8L
-	ZfFGN5XKDCyE6yMmw+rUoYLc1JsfQ9kO3NqCMl9I8FTcJCoFfwKLI9GKhU/074Ig54Rz66Z3VUQ
-	O0111faN9YLA+wO/E+GXg7ENY396w6e9Ko/UK+DGuDbuaF2QezaQa1MsuWHuU0uKDQqJFw08HoT
-	va0Y4cc/tbn4zuPFqlBdzp+0AAiClKyR6VJEQMxpfFFxlaowHE+oUK0yXsB1x/mW50NyYsZBypr
-	nJav5T8roWPmEFOM+CxNQ
-X-Google-Smtp-Source: AGHT+IHr2yj0cMS5E1aU34vqgm0L0Xtl8deq0dsKeWbfU0Ej6to5aOA2315/SbNKiD26QHc7SF15NQ==
-X-Received: by 2002:a17:903:11d0:b0:234:8ef1:aa7b with SMTP id d9443c01a7336-24096a6fefdmr60963385ad.20.1753920895601;
-        Wed, 30 Jul 2025 17:14:55 -0700 (PDT)
-Received: from [0.0.5.57] ([136.159.213.152])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1f0e812sm2519125ad.52.2025.07.30.17.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jul 2025 17:14:54 -0700 (PDT)
-From: Abhinav Saxena <xandfury@gmail.com>
-Date: Wed, 30 Jul 2025 18:14:43 -0600
-Subject: [PATCH v3] selftests/tty: add TIOCSTI test suite
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bwSsVIQW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753925861; x=1785461861;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wIerfZZuc5NuQNtEvce37Ns64kpQ/dwVqbjbKTdo8IQ=;
+  b=bwSsVIQW6DVqYyaO8pbeQqtyh1i6ezjmY5+llvww8uHOMsH0vhnWASFJ
+   S9rlHJHWKPO6Iv/pm5IOnxfxnSiwUB+OcX2VVW6SDjOIYQ118CYIBUoNL
+   ii8oES6QYytUTWn29QGB8U1Ozzi1gILEUfPJkIuQDQxFbc5tvWiFUdRgJ
+   cajUm6svOYqtZ9PZLDh7topzL8qWX45n4xBNkDlj2t01zZC3FAOfZhFw2
+   PTQcWIJXAQl4ejVXby7pam5CLT89Atpz6gqe30T5t2p57avXakFUbHv/9
+   prsppn3edaUCST+myC8xD28ALb8+3IgpVEHzcy7qvgiWAnn7PtOasfGby
+   Q==;
+X-CSE-ConnectionGUID: pdE4JB34Tyq5PN7YBYhE1A==
+X-CSE-MsgGUID: SJZsPKC/SdqwgQrJRBZA0g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11507"; a="55445090"
+X-IronPort-AV: E=Sophos;i="6.16,353,1744095600"; 
+   d="scan'208";a="55445090"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2025 18:37:41 -0700
+X-CSE-ConnectionGUID: FljI8Tu/Q6iyPI7csp2N2w==
+X-CSE-MsgGUID: wV+bxjLmQWi9WHYw9V99sg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,353,1744095600"; 
+   d="scan'208";a="162398544"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 30 Jul 2025 18:37:39 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uhIEi-0003JC-2F;
+	Thu, 31 Jul 2025 01:37:36 +0000
+Date: Thu, 31 Jul 2025 09:36:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leon Romanovsky <leon@kernel.org>
+Subject: [leon-rdma:rdma-next 102/139] vmlinux.o: warning: objtool:
+ pci_device_group+0x130: sibling call from callable instruction with modified
+ stack frame
+Message-ID: <202507310923.GsVV4jxF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250730-toicsti-bug-v3-1-dd2dac97f27a@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAHK1imgC/2WNwQ6CMBAFf4X0bE27BVs8+R/GQ1sW2ESooUg0h
- H8XMEaJx3nJzBtZxI4wsmMysg4HihTaGdQuYb62bYWcipkZCMjEQRreB/KxJ+7uFdcGwBnMU6u
- Azcatw5Iea+18mbmm2IfuucYHuayfTr7pDJILjgK8VjbLnC9OVWPpuvehWbJvB+DfKZVOlVZOp
- A5+nOV7gO+flmrrApfcSaO00YgW8l93mqYXfxOccxYBAAA=
-To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Paul Moore <paul@paul-moore.com>, Kees Cook <kees@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, Abhinav Saxena <xandfury@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753920894; l=23342;
- i=xandfury@gmail.com; s=20250614; h=from:subject:message-id;
- bh=VlRrNG7JeSrQnVVaNysYnVwEXZ5+JhjyihYHwXHl990=;
- b=ApjpfA3zbXrGutnh1jGyk8RkPuXghWtsqc8VaaA56TZdlTZsP9YRFJ/Z4rliJSV+8QBRgMF60
- Pm586HDe8vQDViNn6gijy0L9I5g67jVqJ7lXXQZfHY1fSXQ95bPTyzm
-X-Developer-Key: i=xandfury@gmail.com; a=ed25519;
- pk=YN6w7WNet8skqvMWxhG5BlAmtd1SQmo8If6Mofh4k44=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-TIOCSTI is a TTY ioctl command that allows inserting characters into
-the terminal input queue, making it appear as if the user typed those
-characters. This functionality has behavior that varies based on system
-configuration and process credentials.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
+head:   e02ad15f3e318839e0c9ac700006054613386bea
+commit: 9481fbd9e24f70e33d1a612d2329e3d4fb626e79 [102/139] iommu: Compute iommu_groups properly for PCIe switches
+config: loongarch-randconfig-002-20250730 (https://download.01.org/0day-ci/archive/20250731/202507310923.GsVV4jxF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250731/202507310923.GsVV4jxF-lkp@intel.com/reproduce)
 
-The dev.tty.legacy_tiocsti sysctl introduced in commit 83efeeeb3d04
-("tty: Allow TIOCSTI to be disabled") controls TIOCSTI usage. When
-disabled, TIOCSTI requires CAP_SYS_ADMIN capability.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507310923.GsVV4jxF-lkp@intel.com/
 
-The current implementation checks the current process's credentials via
-capable(CAP_SYS_ADMIN), but does not validate against the file opener's
-credentials stored in file->f_cred. This creates different behavior when
-file descriptors are passed between processes via SCM_RIGHTS.
+All warnings (new ones prefixed by >>):
 
-Add a test suite with 16 test variants using fixture variants to verify
-TIOCSTI behavior when dev.tty.legacy_tiocsti is enabled/disabled:
+   vmlinux.o: warning: objtool: max77650_regulator_probe+0x114: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: max8660_probe+0x344: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: max8998_get_voltage_register+0x70: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: max8998_get_enable_register+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: max8998_set_voltage_buck_sel+0xf4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: mcp16502_set_voltage_time_sel+0xc0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: mp8859_readable+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rpmh_regulator_pmic4_smps_of_map_mode+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: spmi_regulator_of_parse+0x320: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pca9450_i2c_probe+0xa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pf9453_pmic_write+0x114: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pv88060_buck_get_mode+0x6c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pv88090_buck_get_mode+0x6c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: is_write_reg+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rohm_regulator_set_dvs_levels+0x138: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rt5120_regulator_probe+0x274: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rt6190_is_volatile_reg+0x40: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: rtmv20_is_accessible_reg+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: slg51000_i2c_probe+0x1f0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps62360_probe+0x1ec: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps6507x_pmic_set_voltage_sel+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps6507x_pmic_get_voltage_sel+0x54: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65086_of_parse_cb+0x8c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps6586x_regulator_probe+0xe8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65910_get_ctrl_register+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65911_get_ctrl_register+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65910_set_voltage_sel+0x98: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65910_get_voltage_sel+0xb8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65911_list_voltage+0x60: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65911_set_voltage_sel+0x98: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps65911_get_voltage_sel+0xa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tps6594_regulator_probe+0x254: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm831x_dcdc_get_mode+0x6c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm831x_dcdc_set_mode_int+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_set_slot+0x7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_ldo_set_slot+0x78: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_regulator_probe+0x80: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_set_mode+0xd0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_get_mode+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_get_optimum_mode+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_set_suspend_voltage+0x60: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_set_suspend_enable+0x54: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_set_suspend_disable+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_dcdc_set_suspend_mode+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: force_continuous_enable+0x4c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_ldo_set_suspend_voltage+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_ldo_set_suspend_enable+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_ldo_set_suspend_disable+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: wm8350_isink_enable_time+0xec: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: a10sr_reset_status+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: a10sr_reset_update+0x4c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: eqr_assert+0xfc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: eqr_deassert+0xfc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: eqr_status+0xa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: eqr_busy_wait_locked+0x100: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pistachio_reset_assert+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pistachio_reset_deassert+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tty_ioctl+0xf4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: n_tty_write+0x300: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: do_output_char+0x7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: n_tty_receive_char_flagged+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tty_get_char_size+0x38: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tty_get_frame_size+0x40: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: tty_mode_ioctl+0x10c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: n_tty_ioctl_helper+0xf0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: uart_match_port+0x74: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial_core_register_port+0x420: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: univ8250_console_match+0x164: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_handle_irq+0x20c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_do_startup+0xac0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: set_io_from_upio+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_config_port+0x494: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_release_std_resource+0x88: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_request_std_resource+0x88: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_early_in+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: serial8250_early_out+0x60: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cti_port_setup_xr17c15x+0x19c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cti_get_port_type_xr17c15x_xr17v25x+0xec: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cti_port_setup_xr17v25x+0x174: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cti_port_setup_xr17v35x+0xfc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: cti_port_setup_fpga+0x274: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: pci_fastcom335_setup+0xe8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ni16550_probe+0x42c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atmel_set_termios+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: bcm_uart_set_termios+0x1b8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: uart_clps711x_set_termios+0xc0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: esp32_uart_set_termios+0x128: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: icom_set_termios+0xf0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: jsm_probe_one+0x4b0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: neo_intr+0x100: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: msm_set_termios+0x608: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: owl_uart_set_termios+0x100: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sccnxp_set_termios+0xdc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sci_set_termios+0xb08: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ulite_probe+0x26c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: interrupt_handler+0x6e8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: control_work_handler+0x104: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: ac_ioctl+0x13c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: xillybus_isr+0x1d8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: iommufd_vfio_ioctl+0x78: sibling call from callable instruction with modified stack frame
+>> vmlinux.o: warning: objtool: pci_device_group+0x130: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: arm_64_lpae_alloc_pgtable_s1+0x208: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: arm_64_lpae_alloc_pgtable_s2+0x2e4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: host1x_job_pin+0x9e8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_gather+0x28c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_gather+0x28c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_channel_command+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_channel_command+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_channel_command+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_channel_command+0x50: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: show_channel_command+0x54: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_get_connector_force_name+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_mode_create_dumb+0x9c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_match_cea_mode+0x208: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: update_display_info+0x19f0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_hdmi_vendor_infoframe_from_display_mode+0x118: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: do_detailed_mode+0x8c4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: do_cvt_mode+0x1f4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_mode_legacy_fb_format+0x54: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_getcap+0x148: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_setclientcap+0x98: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_analog_tv_mode+0x78: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_mode_parse_cmdline_extra+0xa0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_mode_convert_to_umode+0xcc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_mode_convert_umode+0x1c0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: mipi_dsi_packet_format_is_short+0x40: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: mipi_dsi_packet_format_is_long+0x48: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: mipi_dsi_create_packet+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_mipi_dsi_get_input_bus_fmt+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: malidp550_query_hw+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: malidp650_query_hw+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: malidp_se_irq+0x138: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: komeda_pipeline_get_component_pos+0x54: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: d71_change_opmode+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: d71_probe_block+0x6c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_get_dual_mode_type_name+0x3c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_downstream_max_bpc+0xb4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_downstream_mode+0xb4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_downstream_debug+0x100: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_subconnector_type+0xc0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_dsc_sink_bpp_incr+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_dsc_sink_line_buf_depth+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_vsc_sdp_log+0x158: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_vsc_sdp_pack+0x110: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_get_pcon_max_frl_bw+0x48: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_pcon_dsc_bpp_incr+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: __128b132b_channel_eq_delay_us+0x44: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_i2c_do_msg+0x154: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_encode_sideband_req+0x78: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_decode_sideband_req+0x74: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_dump_sideband_msg_req_body+0x128: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_mst_hpd_irq_handle_event+0x4bc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dp_mst_dump_mstb+0x174: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dsc_dp_rc_buffer_size+0x4c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: drm_dsc_setup_rc_params+0x84: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_device_init+0x478: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_asic_init+0x2b8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_info_ioctl+0x80: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atombios_get_lvds_info+0x360: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atombios_get_tv_info+0x74: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atombios_get_power_modes+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atom_get_clock_dividers+0xb8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atombios_add_pplib_thermal_controller+0x114: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atombios_parse_pplib_non_clock_info+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atombios_crtc_dpms+0x5c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: dce4_crtc_do_set_base+0x718: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atombios_crtc_mode_set+0x7b0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_atombios_init_crtc+0x7c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atombios_crtc_program_pll+0xe4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atombios_crtc_mode_fixup+0x190: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atombios_crtc_disable+0x390: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: combios_get_table_offset+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_combios_i2c_init+0xe8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: combios_setup_i2c_bus+0x3d0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_combios_get_tv_info+0x184: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_get_legacy_connector_info_from_table+0x78: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_get_legacy_connector_info_from_bios+0x2e0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_combios_get_power_modes+0x86c: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_combios_external_tmds_setup+0x1a4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: combios_parse_mmio_table+0xac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: combios_parse_pll_table+0xb0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_op_move+0xc8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_op_move+0xc8: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_op_jump+0x84: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_op_jump+0x84: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_op_mask+0xac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_op_mask+0xac: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_put_dst+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_put_dst+0xbc: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_get_src_int+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_get_src_int+0x64: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_iio_execute+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: atom_iio_execute+0x88: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_fence_get_timeline_name.llvm.12523456394296244300+0x58: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_bo_set_tiling_flags+0x88: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_crtc_do_set_base+0xc4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_crtc_dpms+0xa4: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_crtc_mode_set+0xe38: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_legacy_lvds_update+0xf0: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_legacy_backlight_init+0x284: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: radeon_add_legacy_encoder+0x13c: sibling call from callable instruction with modified stack frame
 
-- Basic TIOCSTI tests (8 variants): Direct testing with different
-  capability and controlling terminal combinations
-- FD passing tests (8 variants): Test behavior when file descriptors
-  are passed between processes with different capabilities
-
-The FD passing tests document this behavior - some tests show different
-results than expected based on file opener credentials, demonstrating
-that TIOCSTI uses current process credentials rather than file opener
-credentials.
-
-The tests validate proper enforcement of the legacy_tiocsti sysctl. Test
-implementation uses openpty(3) with TIOCSCTTY for isolated PTY
-environments. See tty_ioctl(4) for details on TIOCSTI behavior and
-security requirements.
-
-Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
----
-To run all tests:
-$ sudo ./tools/testing/selftests/tty/tty_tiocsti_test
-
-Test Results:
-- PASSED: 13/16 tests
-- Different behavior: 3/16 tests (documenting credential checking behavior)
-
-All tests validated using:
-- scripts/checkpatch.pl --strict (clean output)
-- Functional testing on kernel v6.16-rc2
-
-Changes in v3:
-- Replaced all printf() calls with TH_LOG() for proper test logging (Kees Cook)
-- Added struct __test_metadata parameter to helper functions
-- Moved common legacy_tiocsti availability check to FIXTURE_SETUP()
-- Implemented sysctl modification/restoration in FIXTURE_SETUP/TEARDOWN
-- Used openpty() with TIOCSCTTY for reliable PTY testing environment
-- Fixed child/parent synchronization in FD passing tests
-- Replaced manual _exit(1) handling with proper ASSERT statements
-- Switched // comments to /* */ format throughout
-- Expanded to 16 test variants using fixture variants
-- Enhanced error handling and test reliability
-- Link to v2: https://lore.kernel.org/r/20250713-toicsti-bug-v2-1-b183787eea29@gmail.com
-- Link to v1: https://lore.kernel.org/r/20250622-toicsti-bug-v1-0-f374373b04b2@gmail.com
-
-References:
-- tty_ioctl(4) - documents TIOCSTI ioctl and capability requirements
-- openpty(3) - pseudo-terminal creation and management
-- commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
-- Documentation/security/credentials.rst
-- https://github.com/KSPP/linux/issues/156
-- https://lore.kernel.org/linux-hardening/Y0m9l52AKmw6Yxi1@hostpad/
-- drivers/tty/Kconfig
-- Documentation/driver-api/tty/
----
- tools/testing/selftests/tty/Makefile           |   6 +-
- tools/testing/selftests/tty/config             |   1 +
- tools/testing/selftests/tty/tty_tiocsti_test.c | 650 +++++++++++++++++++++++++
- 3 files changed, 656 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-index 50d7027b2ae3..7f6fbe5a0cd5 100644
---- a/tools/testing/selftests/tty/Makefile
-+++ b/tools/testing/selftests/tty/Makefile
-@@ -1,5 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS = -O2 -Wall
--TEST_GEN_PROGS := tty_tstamp_update
-+TEST_GEN_PROGS := tty_tstamp_update tty_tiocsti_test
-+LDLIBS += -lcap
- 
- include ../lib.mk
-+
-+# Add libcap for TIOCSTI test
-+$(OUTPUT)/tty_tiocsti_test: LDLIBS += -lcap
-diff --git a/tools/testing/selftests/tty/config b/tools/testing/selftests/tty/config
-new file mode 100644
-index 000000000000..c6373aba6636
---- /dev/null
-+++ b/tools/testing/selftests/tty/config
-@@ -0,0 +1 @@
-+CONFIG_LEGACY_TIOCSTI=y
-diff --git a/tools/testing/selftests/tty/tty_tiocsti_test.c b/tools/testing/selftests/tty/tty_tiocsti_test.c
-new file mode 100644
-index 000000000000..1eafef6e36fa
---- /dev/null
-+++ b/tools/testing/selftests/tty/tty_tiocsti_test.c
-@@ -0,0 +1,650 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TTY Tests - TIOCSTI
-+ *
-+ * Copyright © 2025 Abhinav Saxena <xandfury@gmail.com>
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <sys/ioctl.h>
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <sys/socket.h>
-+#include <sys/wait.h>
-+#include <pwd.h>
-+#include <termios.h>
-+#include <grp.h>
-+#include <sys/capability.h>
-+#include <sys/prctl.h>
-+#include <pty.h>
-+#include <utmp.h>
-+
-+#include "../kselftest_harness.h"
-+
-+enum test_type {
-+	TEST_PTY_TIOCSTI_BASIC,
-+	TEST_PTY_TIOCSTI_FD_PASSING,
-+	/* other tests cases such as serial may be added. */
-+};
-+
-+/*
-+ * Test Strategy:
-+ * - Basic tests: Use PTY with/without TIOCSCTTY (controlling terminal for
-+ *   current process)
-+ * - FD passing tests: Child creates PTY, parent receives FD (demonstrates
-+ *   security issue)
-+ *
-+ * SECURITY VULNERABILITY DEMONSTRATION:
-+ * FD passing tests show that TIOCSTI uses CURRENT process credentials, not
-+ * opener credentials. This means privileged processes can be given FDs from
-+ * unprivileged processes and successfully perform TIOCSTI operations that the
-+ * unprivileged process couldn't do directly.
-+ *
-+ * Attack scenario:
-+ * 1. Unprivileged process opens TTY (direct TIOCSTI fails due to lack of
-+ *    privileges)
-+ * 2. Unprivileged process passes FD to privileged process via SCM_RIGHTS
-+ * 3. Privileged process can use TIOCSTI on the FD (succeeds due to its
-+ *    privileges)
-+ * 4. Result: Effective privilege escalation via file descriptor passing
-+ *
-+ * This matches the kernel logic in tiocsti():
-+ * 1. if (!tty_legacy_tiocsti && !capable(CAP_SYS_ADMIN)) return -EIO;
-+ * 2. if ((current->signal->tty != tty) && !capable(CAP_SYS_ADMIN))
-+ *        return -EPERM;
-+ * Note: Both checks use capable() on CURRENT process, not FD opener!
-+ *
-+ * If the file credentials were also checked along with the capable() checks
-+ * then the results for FD pass tests would be consistent with the basic tests.
-+ */
-+
-+FIXTURE(tiocsti)
-+{
-+	int pty_master_fd; /* PTY - for basic tests */
-+	int pty_slave_fd;
-+	bool has_pty;
-+	bool initial_cap_sys_admin;
-+	int original_legacy_tiocsti_setting;
-+	bool can_modify_sysctl;
-+};
-+
-+FIXTURE_VARIANT(tiocsti)
-+{
-+	const enum test_type test_type;
-+	const bool controlling_tty; /* true=current->signal->tty == tty */
-+	const int legacy_tiocsti; /* 0=restricted, 1=permissive */
-+	const bool requires_cap; /* true=with CAP_SYS_ADMIN, false=without */
-+	const int expected_success; /* 0=success, -EIO/-EPERM=specific error */
-+};
-+
-+/*
-+ * Tests Controlling Terminal Variants (current->signal->tty == tty)
-+ *
-+ * TIOCSTI Test Matrix:
-+ *
-+ * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
-+ * |----------------|---------------|-----------------|-------|
-+ * | 1 (permissive) | true          | SUCCESS         | -     |
-+ * | 1 (permissive) | false         | SUCCESS         | -     |
-+ * | 0 (restricted) | true          | SUCCESS         | -     |
-+ * | 0 (restricted) | false         | FAILURE         | -EIO  |
-+ */
-+
-+/* clang-format off */
-+FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, basic_pty_permissive_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = false,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, basic_pty_restricted_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = false,
-+	.expected_success = -EIO, /* FAILURE: legacy restriction */
-+}; /* clang-format on */
-+
-+/*
-+ * Note for FD Passing Test Variants
-+ * Since we're testing the scenario where an unprivileged process pass an FD
-+ * to a privileged one, .requires_cap here means the caps of the child process.
-+ * Not the parent; parent would always be privileged.
-+ */
-+
-+/* clang-format off */
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_permissive_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = false,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_pty_restricted_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = true,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = false,
-+	.expected_success = -EIO,
-+}; /* clang-format on */
-+
-+/*
-+ * Non-Controlling Terminal Variants (current->signal->tty != tty)
-+ *
-+ * TIOCSTI Test Matrix:
-+ *
-+ * | legacy_tiocsti | CAP_SYS_ADMIN | Expected Result | Error |
-+ * |----------------|---------------|-----------------|-------|
-+ * | 1 (permissive) | true          | SUCCESS         | -     |
-+ * | 1 (permissive) | false         | FAILURE         | -EPERM|
-+ * | 0 (restricted) | true          | SUCCESS         | -     |
-+ * | 0 (restricted) | false         | FAILURE         | -EIO  |
-+ */
-+
-+/* clang-format off */
-+FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_permissive_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = false,
-+	.expected_success = -EPERM,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, basic_nopty_restricted_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_BASIC,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = false,
-+	.expected_success = -EIO,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_permissive_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 1,
-+	.requires_cap = false,
-+	.expected_success = -EPERM,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_withcap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = true,
-+	.expected_success = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(tiocsti, fdpass_nopty_restricted_nocap) {
-+	.test_type = TEST_PTY_TIOCSTI_FD_PASSING,
-+	.controlling_tty = false,
-+	.legacy_tiocsti = 0,
-+	.requires_cap = false,
-+	.expected_success = -EIO,
-+}; /* clang-format on */
-+
-+/* Helper function to send FD via SCM_RIGHTS */
-+static int send_fd_via_socket(int socket_fd, int fd_to_send)
-+{
-+	struct msghdr msg = { 0 };
-+	struct cmsghdr *cmsg;
-+	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-+	char dummy_data = 'F';
-+	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
-+
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+
-+	cmsg = CMSG_FIRSTHDR(&msg);
-+	cmsg->cmsg_level = SOL_SOCKET;
-+	cmsg->cmsg_type = SCM_RIGHTS;
-+	cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-+
-+	memcpy(CMSG_DATA(cmsg), &fd_to_send, sizeof(int));
-+
-+	return sendmsg(socket_fd, &msg, 0) < 0 ? -1 : 0;
-+}
-+
-+/* Helper function to receive FD via SCM_RIGHTS */
-+static int recv_fd_via_socket(int socket_fd)
-+{
-+	struct msghdr msg = { 0 };
-+	struct cmsghdr *cmsg;
-+	char cmsg_buf[CMSG_SPACE(sizeof(int))];
-+	char dummy_data;
-+	struct iovec iov = { .iov_base = &dummy_data, .iov_len = 1 };
-+	int received_fd = -1;
-+
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+
-+	if (recvmsg(socket_fd, &msg, 0) < 0)
-+		return -1;
-+
-+	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_RIGHTS) {
-+			memcpy(&received_fd, CMSG_DATA(cmsg), sizeof(int));
-+			break;
-+		}
-+	}
-+
-+	return received_fd;
-+}
-+
-+static inline bool has_cap_sys_admin(void)
-+{
-+	cap_t caps = cap_get_proc();
-+
-+	if (!caps)
-+		return false;
-+
-+	cap_flag_value_t cap_val;
-+	bool has_cap = (cap_get_flag(caps, CAP_SYS_ADMIN, CAP_EFFECTIVE,
-+				     &cap_val) == 0) &&
-+		       (cap_val == CAP_SET);
-+
-+	cap_free(caps);
-+	return has_cap;
-+}
-+
-+/*
-+ * Drop to nobody user (uid/gid 65534) to lose all capabilities
-+ */
-+static inline bool drop_to_nobody(struct __test_metadata *_metadata)
-+{
-+	ASSERT_EQ(setgroups(0, NULL), 0);
-+	ASSERT_EQ(setgid(65534), 0);
-+	ASSERT_EQ(setuid(65534), 0);
-+
-+	ASSERT_FALSE(has_cap_sys_admin());
-+	return true;
-+}
-+
-+static inline int get_legacy_tiocsti_setting(struct __test_metadata *_metadata)
-+{
-+	FILE *fp;
-+	int value = -1;
-+
-+	fp = fopen("/proc/sys/dev/tty/legacy_tiocsti", "r");
-+	if (!fp) {
-+		/* legacy_tiocsti sysctl not available (kernel < 6.2) */
-+		return -1;
-+	}
-+
-+	if (fscanf(fp, "%d", &value) == 1) {
-+		if (value < 0 || value > 1)
-+			value = -1; /* Invalid value */
-+	} else {
-+		value = -1; /* Failed to parse */
-+	}
-+
-+	fclose(fp);
-+	return value;
-+}
-+
-+static inline bool set_legacy_tiocsti_setting(struct __test_metadata *_metadata,
-+					      int value)
-+{
-+	FILE *fp;
-+	bool success = false;
-+
-+	/* Sanity-check the value */
-+	ASSERT_GE(value, 0);
-+	ASSERT_LE(value, 1);
-+
-+	/*
-+	 * Try to open for writing; if we lack permission, return false so
-+	 * the test harness will skip variants that need to change it
-+	 */
-+	fp = fopen("/proc/sys/dev/tty/legacy_tiocsti", "w");
-+	if (!fp)
-+		return false;
-+
-+	/* Write the new setting */
-+	if (fprintf(fp, "%d\n", value) > 0)
-+		success = true;
-+	else
-+		TH_LOG("Failed to write legacy_tiocsti: %s", strerror(errno));
-+
-+	fclose(fp);
-+	return success;
-+}
-+
-+/*
-+ * TIOCSTI injection test function
-+ * @tty_fd: TTY slave file descriptor to test TIOCSTI on
-+ * Returns: 0 on success, -errno on failure
-+ */
-+static inline int test_tiocsti_injection(struct __test_metadata *_metadata,
-+					 int tty_fd)
-+{
-+	int ret;
-+	char inject_char = 'V';
-+
-+	errno = 0;
-+	ret = ioctl(tty_fd, TIOCSTI, &inject_char);
-+	return ret == 0 ? 0 : -errno;
-+}
-+
-+FIXTURE_SETUP(tiocsti)
-+{
-+	/* Create PTY pair for basic tests */
-+	self->has_pty = (openpty(&self->pty_master_fd, &self->pty_slave_fd,
-+				 NULL, NULL, NULL) == 0);
-+	if (!self->has_pty) {
-+		self->pty_master_fd = -1;
-+		self->pty_slave_fd = -1;
-+	}
-+
-+	self->initial_cap_sys_admin = has_cap_sys_admin();
-+	self->original_legacy_tiocsti_setting =
-+		get_legacy_tiocsti_setting(_metadata);
-+
-+	if (self->original_legacy_tiocsti_setting < 0)
-+		SKIP(return, "legacy_tiocsti sysctl not available (kernel < 6.2)");
-+
-+	/* Test if we can modify the sysctl (requires appropriate privileges) */
-+	self->can_modify_sysctl = set_legacy_tiocsti_setting(_metadata,
-+							     self->original_legacy_tiocsti_setting);
-+	if (!self->can_modify_sysctl)
-+		TH_LOG("Warning: Cannot modify legacy_tiocsti sysctl - will skip mismatched variants");
-+}
-+
-+FIXTURE_TEARDOWN(tiocsti)
-+{
-+	/*
-+	 * Backup restoration -
-+	 * each test should restore its own sysctl changes
-+	 */
-+	if (self->can_modify_sysctl &&
-+	    self->original_legacy_tiocsti_setting >= 0) {
-+		int current_value = get_legacy_tiocsti_setting(_metadata);
-+
-+		if (current_value != self->original_legacy_tiocsti_setting) {
-+			TH_LOG("Backup: Restoring legacy_tiocsti from %d to %d",
-+			       current_value,
-+			       self->original_legacy_tiocsti_setting);
-+			set_legacy_tiocsti_setting(_metadata,
-+				self->original_legacy_tiocsti_setting);
-+		}
-+	}
-+
-+	if (self->has_pty) {
-+		if (self->pty_master_fd >= 0)
-+			close(self->pty_master_fd);
-+		if (self->pty_slave_fd >= 0)
-+			close(self->pty_slave_fd);
-+	}
-+}
-+
-+TEST_F(tiocsti, test)
-+{
-+	int saved_legacy_tiocsti = get_legacy_tiocsti_setting(_metadata);
-+	bool need_restore = false;
-+	int status;
-+	pid_t child_pid;
-+
-+	/* Set legacy_tiocsti sysctl to match variant requirement */
-+	if (self->can_modify_sysctl) {
-+		if (saved_legacy_tiocsti != variant->legacy_tiocsti) {
-+			if (!set_legacy_tiocsti_setting(_metadata,
-+					variant->legacy_tiocsti)) {
-+				SKIP(return,
-+				     "Failed to set legacy_tiocsti sysctl");
-+			}
-+			need_restore = true;
-+		}
-+	} else {
-+		/*
-+		 * Can't modify sysctl
-+		 * - check if current value matches variant
-+		 */
-+		if (self->original_legacy_tiocsti_setting !=
-+		    variant->legacy_tiocsti) {
-+			SKIP(return,
-+			    "legacy_tiocsti setting mismatch and cannot modify sysctl");
-+		}
-+	}
-+
-+	/* Common skip conditions */
-+	if (variant->test_type == TEST_PTY_TIOCSTI_BASIC && !self->has_pty) {
-+		SKIP(goto restore_sysctl,
-+		     "PTY not available for controlling terminal test");
-+	}
-+
-+	if (variant->test_type == TEST_PTY_TIOCSTI_FD_PASSING &&
-+	    !self->initial_cap_sys_admin) {
-+		SKIP(goto restore_sysctl,
-+		     "FD Pass tests require CAP_SYS_ADMIN");
-+	}
-+
-+	if (variant->requires_cap && !self->initial_cap_sys_admin) {
-+		SKIP(goto restore_sysctl,
-+		     "Test requires initial CAP_SYS_ADMIN");
-+	}
-+
-+	if (variant->test_type == TEST_PTY_TIOCSTI_BASIC) {
-+		/* ===== BASIC TIOCSTI TEST ===== */
-+		child_pid = fork();
-+		ASSERT_GE(child_pid, 0);
-+
-+		if (child_pid == 0) {
-+			/* Child process - perform the actual test */
-+
-+			/* Handle capability requirements */
-+			if (self->initial_cap_sys_admin &&
-+			    !variant->requires_cap)
-+				ASSERT_TRUE(drop_to_nobody(_metadata));
-+
-+			if (variant->controlling_tty) {
-+				/*
-+				 * Create new session and set PTY as
-+				 * controlling terminal
-+				 */
-+				pid_t sid = setsid();
-+
-+				ASSERT_GE(sid, 0);
-+				ASSERT_EQ(ioctl(self->pty_slave_fd, TIOCSCTTY,
-+						0),
-+					  0);
-+			}
-+
-+			/*
-+			 * Validate test environment setup and verify final
-+			 * capability state matches expectation
-+			 * after potential drop.
-+			 *
-+			 */
-+			ASSERT_TRUE(self->has_pty);
-+			ASSERT_EQ(has_cap_sys_admin(), variant->requires_cap);
-+
-+			/* Test TIOCSTI and validate result */
-+			int result = test_tiocsti_injection(_metadata,
-+							    self->pty_slave_fd);
-+
-+			/* Check against expected result from variant */
-+			EXPECT_EQ(result, variant->expected_success);
-+			_exit(0);
-+		}
-+
-+	} else {
-+		/* ===== FD PASSING SECURITY TEST ===== */
-+		int sockpair[2];
-+
-+		ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM, 0, sockpair), 0);
-+
-+		child_pid = fork();
-+		ASSERT_GE(child_pid, 0);
-+
-+		if (child_pid == 0) {
-+			/* Child process - create PTY and send FD */
-+			close(sockpair[0]);
-+			signal(SIGHUP, SIG_IGN);
-+
-+			/* Handle privilege dropping */
-+			if (!variant->requires_cap && has_cap_sys_admin())
-+				ASSERT_TRUE(drop_to_nobody(_metadata));
-+
-+			/* Create child's PTY */
-+			int child_master_fd, child_slave_fd;
-+
-+			ASSERT_EQ(openpty(&child_master_fd, &child_slave_fd,
-+					  NULL, NULL, NULL),
-+				  0);
-+
-+			if (variant->controlling_tty) {
-+				pid_t sid = setsid();
-+
-+				ASSERT_GE(sid, 0);
-+				ASSERT_EQ(ioctl(child_slave_fd, TIOCSCTTY, 0),
-+					  0);
-+			}
-+
-+			/* Test child's direct TIOCSTI for reference */
-+			int direct_result = test_tiocsti_injection(_metadata,
-+								   child_slave_fd);
-+			EXPECT_EQ(direct_result, variant->expected_success);
-+
-+			/* Send FD to parent */
-+			ASSERT_EQ(send_fd_via_socket(sockpair[1],
-+						     child_slave_fd),
-+				  0);
-+
-+			/* Wait for parent completion signal */
-+			char sync_byte;
-+			ssize_t bytes_read = read(sockpair[1], &sync_byte, 1);
-+
-+			ASSERT_EQ(bytes_read, 1);
-+
-+			close(child_master_fd);
-+			close(child_slave_fd);
-+			close(sockpair[1]);
-+			_exit(0);
-+		}
-+
-+		/* Parent process - receive FD and test TIOCSTI */
-+		close(sockpair[1]);
-+
-+		int received_fd = recv_fd_via_socket(sockpair[0]);
-+
-+		ASSERT_GE(received_fd, 0);
-+
-+		bool parent_has_cap = self->initial_cap_sys_admin;
-+
-+		TH_LOG("=== TIOCSTI FD Passing Test Context ===");
-+		TH_LOG("legacy_tiocsti: %d, Parent CAP_SYS_ADMIN: %s, Child: %s",
-+		       variant->legacy_tiocsti, parent_has_cap ? "yes" : "no",
-+		       variant->requires_cap ? "kept" : "dropped");
-+
-+		/* SECURITY TEST: Try TIOCSTI with FD opened by child */
-+		int result = test_tiocsti_injection(_metadata, received_fd);
-+
-+		/* Log security concern if demonstrated */
-+		if (result == 0 && !variant->requires_cap) {
-+			TH_LOG("*** SECURITY CONCERN DEMONSTRATED ***");
-+			TH_LOG("Privileged parent can use TIOCSTI on FD from unprivileged child");
-+			TH_LOG("This shows current process credentials are used, not opener credentials");
-+		}
-+
-+		EXPECT_EQ(result, variant->expected_success)
-+		{
-+			TH_LOG("FD passing: expected error %d, got %d",
-+			       variant->expected_success, result);
-+		}
-+
-+		/* Signal child completion */
-+		char sync_byte = 'D';
-+		ssize_t bytes_written = write(sockpair[0], &sync_byte, 1);
-+
-+		ASSERT_EQ(bytes_written, 1);
-+
-+		close(received_fd);
-+		close(sockpair[0]);
-+	}
-+
-+	/* Common child process cleanup for both test types */
-+	ASSERT_EQ(waitpid(child_pid, &status, 0), child_pid);
-+
-+	if (WIFSIGNALED(status)) {
-+		TH_LOG("Child terminated by signal %d", WTERMSIG(status));
-+		ASSERT_FALSE(WIFSIGNALED(status))
-+		{
-+			TH_LOG("Child process failed assertion");
-+		}
-+	} else {
-+		EXPECT_EQ(WEXITSTATUS(status), 0);
-+	}
-+
-+restore_sysctl:
-+	if (need_restore)
-+		set_legacy_tiocsti_setting(_metadata, saved_legacy_tiocsti);
-+}
-+
-+TEST_HARNESS_MAIN
-
----
-base-commit: 283564a43383d6f26a55546fe9ae345b5fa95e66
-change-id: 20250618-toicsti-bug-7822b8e94a32
-
-Best regards,
 -- 
-Abhinav Saxena <xandfury@gmail.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
