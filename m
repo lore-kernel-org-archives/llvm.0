@@ -1,74 +1,59 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9576413A3ED
-	for <llvm@lists.linux.dev>; Fri,  1 Aug 2025 02:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A524C26ACB;
+	Fri,  1 Aug 2025 04:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754016192; cv=none; b=BJnbIHfeAlaC6476XYdETWOBNqwYOAq7i8fZTgCcnyLUII9ddBg6tGTvOFcJmwkvJjfOxws8VW4izWWgiJYCyF7o52KXEjGGUd3+kjAYbHsVFwH2zbGzkpIMDnu9R6bpB2hj4qupXF2wy/X8C/i7TSQjuITkngOGiF/gBLn6Seo=
+	t=1754022926; cv=none; b=L10WQnY8gG/dRJpe2ESD7QkXVugKjflRUJHJfCo+uHmcyCPFDt6GemULea6EhhZUFh0OGbCmq/A9TXFi/wf1StcgbARapiDfBL/zBUypXg+fKTDF04Kx7l1Z2xyPpE7YMuu0uanbAiCYWYnyzjRLyI42mCH6JsFei5zjg0TT2io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754016192; c=relaxed/simple;
-	bh=nzD6WB5RkC6BGze6HMUMTiSxxJJtsLrFFAQICpP6Gnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cpahp3QDAZk3yimvUo0g1UiZL7yFmGkY28yMYuk6kru8s8l2WJ13QOAIuDlw+AXkCv/AVWDwJOyuR+vo6hTF7sueJAPuWTk70ANVRbYknf/FzIZ9a1lG8dOfY8ch4x9v2bmZKP4/DgY+TIses8fG/QfbC0uwSxrVkDMvYpKFyo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=hDQ9Z/ff; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1754022926; c=relaxed/simple;
+	bh=xTLT1dq7i2qzp0hHgS3vNWQnXKcncg8giv7jdsQgm8I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sC26ZSQ4p9KqIoMdO+NvABC7xFwiwr2KUMxVUOuzme7o1Za+84HOEEHV6FQyWQ0qx13o6vbURYm+a+r3FCyb4WK2oqI3X1266rJ54brp3gOZNLSx0h4TCnP4mgsk5zVHiB/fAZz3wS+vdRqrI1UaffNFJJb5bdshlWxydecy3TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ILb/YtsZ; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="hDQ9Z/ff"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7426c44e014so1621797b3a.3
-        for <llvm@lists.linux.dev>; Thu, 31 Jul 2025 19:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1754016190; x=1754620990; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CzF4jXxLSwk12tntJ9tivy32DZakdcy3HZY4JGEQh/8=;
-        b=hDQ9Z/ffkpq8Ky35ceRvQ5IUldS6rD/bKxg54NThiGTUuw1SOYLZ7gV2ttYHJyCEt6
-         NIa/4rL5wS7ovnPikdp9EoPFSJeqTEfyjE7+g/+V8FGr/0piSnOsqMsCYHYSJO4hzG7D
-         lf7wxMPPYqpU8D38FcNXiW637cfl6pDykWky/fzxcshor5yZmedZNSTJPckyfxUQWyjT
-         NXGis4PEGRAZa2Nq138Bs+jnPFDyPuqaat6CmtrNa2q2fz2vCaHC/MsepaRbw87Bd7R0
-         ak7P6C0XlV0QNhADpdRT7/k0bVsGaVVvUBOyQjfbqELVgqlKiuHqhlpQwTvbwc7sZHW5
-         ZuOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754016190; x=1754620990;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CzF4jXxLSwk12tntJ9tivy32DZakdcy3HZY4JGEQh/8=;
-        b=rggsd2ubqSCRGqYtIfUZqF/AI6UdNsRb1zp4kqHY8IfLfT131iDhhHNbUZOC319t7O
-         7obkJ45uyaMbkveLtdP8Gekbw1VyOs1cio1HB07VuV3dit3X7WR9FHB6VIAyCDtvo823
-         BPQGAzEQl7MKDdE9kpankONjQaGqcUWvt3PrD0J7n6CO4/iS7ZuT6U0iv40jNTe0fbhH
-         g40bt5fA6CY1IcZrCCo4dq9lJrfP20Fvr5EnUY8EofiFpPVzEvam4bdSW734+GiEAeTs
-         soHASsJOID1DtC9/ziB8ZUWjj+3ZmrCmU+YQB5Ku2IZLSjlZ/JpcPfanIEp4y7htp6yi
-         zmsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW85saPTnIBt1jd3LI4vnJb03BCO3U8MJ0SN0XPWQXUD896sNGs5m8mwZtFXkCmXPTfBCXO@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz4G81rPMZ1zkYkR8BQSsOEfX5zS5YrqHnNdQf1QT/Qi5rIxwhj
-	264B6ucAUoQXW5lBeFEcZSzIFBHQvDqru0GtbUiEzvbODxehGrjx9m4+bRaqvLfHkQ==
-X-Gm-Gg: ASbGnctLl3c4UBD0ky8sTBYkl4TdA0WNqQuQZMkrHmWR3SC/MjzCrBc5Lu6LwWfW85w
-	mm90Kv+abR6kXASRo879bFrB92Ju2lrsnH2YUdtmposX99rJAOjZI9dmJXrCkh1rw5ymTkxydvQ
-	N51gyvbKKjT186fAe/7i1Hj65HN/VkdDff37SqpL09E08xjTzJMD4wXKyLtTjYbREg6TlZQozQo
-	sQZjmfDcCKvcoK7uxqgiZ36jfVyEW2GLuHKfLunh70uyIa2MU048/PrX0NuYs1NnSEUgIXnVLnE
-	tgyDUebRVjc2/yUP9iCx21unvgDhy82sAWT32dbT3/oayKU7dzNCo+UKWtEqlu/oxT9Rwxdzo03
-	Y6pwBvUA9XpuaG0IRna1qS0SEmsdr4Fb13YcJkIBIZfBY0Wtc/Fr/IA==
-X-Google-Smtp-Source: AGHT+IH+UDQ7iOpF4B7kF0iLPjzpWWshotanqhyLxmLjhjWrs9mQTlq560Ea7kIcPBTsIu2VocDCVA==
-X-Received: by 2002:a05:6a20:914c:b0:21f:4ecc:11ab with SMTP id adf61e73a8af0-23dc0cf63e6mr14331609637.9.1754016189706;
-        Thu, 31 Jul 2025 19:43:09 -0700 (PDT)
-Received: from bytedance ([61.213.176.55])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b422bb19069sm2363362a12.65.2025.07.31.19.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 19:43:09 -0700 (PDT)
-Date: Fri, 1 Aug 2025 10:42:53 +0800
-From: Aaron Lu <ziqianlu@bytedance.com>
-To: kernel test robot <lkp@intel.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, John Stultz <jstultz@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clocksource: Use correct limit for wd-cs-wd read back
- delay in printing
-Message-ID: <20250801024253.GA360@bytedance>
-References: <20250731120454.GA309@bytedance>
- <202508010911.AmkxEw1p-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ILb/YtsZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754022924; x=1785558924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xTLT1dq7i2qzp0hHgS3vNWQnXKcncg8giv7jdsQgm8I=;
+  b=ILb/YtsZhxmrpTkbsnfME+S3XnDDG9LECZKr+aRBElATuZZ/AxNQm7ii
+   nGxsl6X+LXU6Rt4iTrmbDFAFrXa+AePJVJaqGiPcBZpo2ukiKekMcFMxe
+   U1pBTbDELEuhmTdkbwped+hO8qK7qWtJcKagoFRCLTvV7cEIiSCfSPvVQ
+   osn2ZQnCcqijUOATMoePiDyWbSi5sMgR5von1j0bHVDUykPAI+ZwRPiQn
+   Xu9mWk10m2xUUfiiGJ1ppVb/qqP3vJ4QTn62Gm01aW5w5JdXxivusbQYM
+   Vn5PqUxtEKYbNKLLkjrqs54IdqC5/Z9w3kp3PRkIbxuxtfvDHpFHRzaoE
+   A==;
+X-CSE-ConnectionGUID: Q/4GVRF5SQiFXshXay6iMg==
+X-CSE-MsgGUID: IEd3vkPJRYe6M1/jIWOdsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="66930943"
+X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
+   d="scan'208";a="66930943"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 21:35:24 -0700
+X-CSE-ConnectionGUID: 1VncATKzQOquOek9KfYVww==
+X-CSE-MsgGUID: 4GwLvG45RfyrhOp2lOwc/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
+   d="scan'208";a="163373909"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 31 Jul 2025 21:35:23 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uhhUG-0004M8-2O;
+	Fri, 01 Aug 2025 04:35:20 +0000
+Date: Fri, 1 Aug 2025 12:34:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [arm-platforms:hack/ppi 25/25] kernel/irq/manage.c:2453:5: warning:
+ no previous prototype for function 'add_percpu_irq_target'
+Message-ID: <202508011211.XM88eJmr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,40 +62,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202508010911.AmkxEw1p-lkp@intel.com>
 
-On Fri, Aug 01, 2025 at 09:48:40AM +0800, kernel test robot wrote:
-> Hi Aaron,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on tip/timers/core]
-> [also build test WARNING on linus/master v6.16 next-20250731]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Lu/clocksource-Use-correct-limit-for-wd-cs-wd-read-back-delay-in-printing/20250731-200709
-> base:   tip/timers/core
-> patch link:    https://lore.kernel.org/r/20250731120454.GA309%40bytedance
-> patch subject: [PATCH] clocksource: Use correct limit for wd-cs-wd read back delay in printing
-> config: i386-buildonly-randconfig-001-20250801 (https://download.01.org/0day-ci/archive/20250801/202508010911.AmkxEw1p-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508010911.AmkxEw1p-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508010911.AmkxEw1p-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> kernel/time/clocksource.c:293:43: warning: format specifies type 'long' but the argument has type 'int64_t' (aka 'long long') [-Wformat]
->      292 |         pr_warn("timekeeping watchdog on CPU%d: wd-%s-wd excessive read-back delay of %lldns vs. limit of %ldns, wd-wd read-back delay only %lldns, attempt %d, marking %s unstable\n",
->          |                                                                                                           ~~~
->          |                                                                                                           %lld
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git hack/ppi
+head:   8a3b504aca25e8c9a274cb563d63a6b9454b2780
+commit: 8a3b504aca25e8c9a274cb563d63a6b9454b2780 [25/25] WIP
+config: i386-buildonly-randconfig-001-20250801 (https://download.01.org/0day-ci/archive/20250801/202508011211.XM88eJmr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508011211.XM88eJmr-lkp@intel.com/reproduce)
 
-Thanks for catching this, will fix it in next version.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508011211.XM88eJmr-lkp@intel.com/
 
->      293 |                 smp_processor_id(), cs->name, wd_delay, md + cs->uncertainty_margin, wd_seq_delay, nretries, cs->name);
->          |                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+All warnings (new ones prefixed by >>):
+
+   kernel/irq/manage.c:2466:27: error: incompatible pointer types initializing 'struct irq_action *' with an expression of type 'struct irqaction **' [-Werror,-Wincompatible-pointer-types]
+    2466 |                 for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next) {
+         |                                         ^     ~~~~~~~~~~~~~
+   kernel/irq/manage.c:2466:62: error: incomplete definition of type 'struct irq_action'
+    2466 |                 for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next) {
+         |                                                                         ~~~^
+   kernel/irq/manage.c:2461:10: note: forward declaration of 'struct irq_action'
+    2461 |                 struct irq_action *action = NULL;
+         |                        ^
+   kernel/irq/manage.c:2467:48: error: incomplete definition of type 'struct irq_action'
+    2467 |                         if (cpumask_test_cpu(smp_processor_id(), tmp->affinity))
+         |                                                                  ~~~^
+   kernel/irq/manage.c:2461:10: note: forward declaration of 'struct irq_action'
+    2461 |                 struct irq_action *action = NULL;
+         |                        ^
+   kernel/irq/manage.c:2470:11: error: incomplete definition of type 'struct irq_action'
+    2470 |                         if (tmp->percpu_dev_id == dev_id)
+         |                             ~~~^
+   kernel/irq/manage.c:2461:10: note: forward declaration of 'struct irq_action'
+    2461 |                 struct irq_action *action = NULL;
+         |                        ^
+   kernel/irq/manage.c:2474:45: error: incomplete definition of type 'struct irq_action'
+    2474 |                 cpumask_set_cpu(smp_processor_id(), action->affinity);
+         |                                                     ~~~~~~^
+   kernel/irq/manage.c:2461:10: note: forward declaration of 'struct irq_action'
+    2461 |                 struct irq_action *action = NULL;
+         |                        ^
+   kernel/irq/manage.c:2477:28: error: incomplete definition of type 'struct irq_action'
+    2477 |                 if (cpumask_weight(action->affinity) == nr_possible_cpus())
+         |                                    ~~~~~~^
+   kernel/irq/manage.c:2461:10: note: forward declaration of 'struct irq_action'
+    2461 |                 struct irq_action *action = NULL;
+         |                        ^
+   kernel/irq/manage.c:2477:43: error: call to undeclared function 'nr_possible_cpus'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2477 |                 if (cpumask_weight(action->affinity) == nr_possible_cpus())
+         |                                                         ^
+   kernel/irq/manage.c:2478:10: error: incomplete definition of type 'struct irq_action'
+    2478 |                         action->flags &= ~IRQF_SHARED;
+         |                         ~~~~~~^
+   kernel/irq/manage.c:2461:10: note: forward declaration of 'struct irq_action'
+    2461 |                 struct irq_action *action = NULL;
+         |                        ^
+>> kernel/irq/manage.c:2453:5: warning: no previous prototype for function 'add_percpu_irq_target' [-Wmissing-prototypes]
+    2453 | int add_percpu_irq_target(unsigned int irq, void __percpu *dev_id)
+         |     ^
+   kernel/irq/manage.c:2453:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2453 | int add_percpu_irq_target(unsigned int irq, void __percpu *dev_id)
+         | ^
+         | static 
+   kernel/irq/manage.c:2495:27: error: incompatible pointer types initializing 'struct irq_action *' with an expression of type 'struct irqaction **' [-Werror,-Wincompatible-pointer-types]
+    2495 |                 for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next)
+         |                                         ^     ~~~~~~~~~~~~~
+   kernel/irq/manage.c:2495:62: error: incomplete definition of type 'struct irq_action'
+    2495 |                 for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next)
+         |                                                                         ~~~^
+   kernel/irq/manage.c:2495:15: note: forward declaration of 'struct irq_action'
+    2495 |                 for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next)
+         |                             ^
+   kernel/irq/manage.c:2496:58: error: incomplete definition of type 'struct irq_action'
+    2496 |                         if (cpumask_test_and_clear_cpu(smp_processor_id(), tmp->affinity)) {
+         |                                                                            ~~~^
+   kernel/irq/manage.c:2495:15: note: forward declaration of 'struct irq_action'
+    2495 |                 for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next)
+         |                             ^
+   kernel/irq/manage.c:2497:44: error: call to undeclared function 'nr_possible_cpus'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2497 |                                 if (cpumask_weight(action->affinity) < nr_possible_cpus())
+         |                                                                        ^
+   kernel/irq/manage.c:2497:24: error: use of undeclared identifier 'action'
+    2497 |                                 if (cpumask_weight(action->affinity) < nr_possible_cpus())
+         |                                                    ^
+   kernel/irq/manage.c:2498:6: error: use of undeclared identifier 'action'
+    2498 |                                         action->flags |= IRQF_SHARED;
+         |                                         ^
+>> kernel/irq/manage.c:2484:5: warning: no previous prototype for function 'remove_percpu_irq_target' [-Wmissing-prototypes]
+    2484 | int remove_percpu_irq_target(unsigned int irq)
+         |     ^
+   kernel/irq/manage.c:2484:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2484 | int remove_percpu_irq_target(unsigned int irq)
+         | ^
+         | static 
+   2 warnings and 14 errors generated.
+
+
+vim +/add_percpu_irq_target +2453 kernel/irq/manage.c
+
+  2452	
+> 2453	int add_percpu_irq_target(unsigned int irq, void __percpu *dev_id)
+  2454	{
+  2455		struct irq_desc *desc = irq_to_desc(irq);
+  2456	
+  2457		if (!desc || !irq_settings_is_per_cpu_devid(desc))
+  2458			return -EINVAL;
+  2459	
+  2460		scoped_guard(raw_spinlock_irqsave, &desc->lock) {
+  2461			struct irq_action *action = NULL;
+  2462	
+  2463			if (cpumask_test_cpu(smp_processor_id(), desc->percpu_enabled))
+  2464				return -EINVAL;
+  2465	
+  2466			for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next) {
+  2467				if (cpumask_test_cpu(smp_processor_id(), tmp->affinity))
+  2468					return -EINVAL;
+  2469	
+  2470				if (tmp->percpu_dev_id == dev_id)
+  2471					action = tmp;
+  2472			}
+  2473	
+  2474			cpumask_set_cpu(smp_processor_id(), action->affinity);
+  2475	
+  2476			/* If we have a full house, indicate we can't share anymore */
+> 2477			if (cpumask_weight(action->affinity) == nr_possible_cpus())
+  2478				action->flags &= ~IRQF_SHARED;
+  2479		}
+  2480	
+  2481		return 0;
+  2482	}
+  2483	
+> 2484	int remove_percpu_irq_target(unsigned int irq)
+  2485	{
+  2486		struct irq_desc *desc = irq_to_desc(irq);
+  2487	
+  2488		if (!desc || !irq_settings_is_per_cpu_devid(desc))
+  2489			return -EINVAL;
+  2490	
+  2491		scoped_guard(raw_spinlock_irqsave, &desc->lock) {
+  2492			if (cpumask_test_cpu(smp_processor_id(), desc->percpu_enabled))
+  2493				return -EINVAL;
+  2494	
+  2495			for (struct irq_action *tmp = &desc->action; tmp; tmp = tmp->next)
+  2496				if (cpumask_test_and_clear_cpu(smp_processor_id(), tmp->affinity)) {
+> 2497					if (cpumask_weight(action->affinity) < nr_possible_cpus())
+  2498						action->flags |= IRQF_SHARED;
+  2499	
+  2500					return 0;
+  2501				}
+  2502		}
+  2503	
+  2504		return -ENOENT;
+  2505	}
+  2506	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
