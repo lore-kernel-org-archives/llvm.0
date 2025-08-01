@@ -1,64 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E05921D3F6;
-	Fri,  1 Aug 2025 09:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43A924676C;
+	Fri,  1 Aug 2025 12:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754040713; cv=none; b=UJ9Lcgi+Qmeyq32mG8jnaNDVlSE2y+kANkit56rekSj8C9OgVsXY1g4DCP7bM+bF64uqPCT1nX5UqeQUAqjpOuHZJOb0f2AW4hPTqesMNJBaInm95iwM0rFf/+PYXkAyxTDNljTGWRR19mkjWJ26PDckMH864p2rw+yzpFEiGHs=
+	t=1754052976; cv=none; b=Q5YTnqk/LWPQmDg7kp+FRvR9q6a30Idu8s8rV7ocLSMBm7Dv0OHJZBldtdQetKtmIX2V7Pfl5UwrNog0tDVFIUEZkBmAEwPOrW8E3Gji27A0KGeB2d6oD9P1yxhnrf/H3unLHboA1yMyuk+bKd/BYjqbsMWOmkFaZX57/0UUPhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754040713; c=relaxed/simple;
-	bh=1Iro+YdK5Txdv943h5gMTFUwluk76Rpp3LTw6wMf19A=;
+	s=arc-20240116; t=1754052976; c=relaxed/simple;
+	bh=Rtzfcvwkul30C1tQ3bVX6Wtto5iApIgC11igXrCtIyY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jPJ404iRtSdFlk9TgdBN2w3EciNqfYDCokf/TYeRHVyeW+g09Llf6jcQX3FT1Gs9C7+mcdiHjRojMVu/Y5oFtzK++J95mVBnWzJxYYfheNbYQPSDL2+1imgP0JX6q1q7/CBnnOhdcQFG3GafAj7ygTvL4Ht+bYFuYpj2q+sbH74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FAUcvvZ9; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=N/d0kChSNv0v46B937OzGkt4xw6lmJdUMLj+GBVayT0a8wWz4LCfXHe2ZXgU1Y/qRHcfQ5yBJD7RrIt/Us0x6rCZJq2ChuQtn+FLz7R2s9UugHPF99MvTeD0mOhUIdJzYpXFBqPX0g7i3UZ55tJl9L+VZOLLKJr8It+YzIMchQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHE97O80; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FAUcvvZ9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHE97O80"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754040712; x=1785576712;
+  t=1754052974; x=1785588974;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1Iro+YdK5Txdv943h5gMTFUwluk76Rpp3LTw6wMf19A=;
-  b=FAUcvvZ9ekBYe0yPaNDZiZisPe8TbVP3Yk/91DMrUcW9kIyMpnh/S2Gg
-   FTeBwDU6L2qlTf4wF/r6iOpAUctfcwT49ZN/3XfiMH140VnLVtA6g3cn1
-   is9yjtOMDAxuoOtzLgQ5ZbU/vsYM+gz9sNiqrnhVMHDucuGqYXVEeYoy6
-   AluQzCWIJ+6jTENFha/Cwu91EJecViSlBFQTBamcSLw//MQ5bU+zXSioQ
-   qRsB1iVgwGPTKLDtWZl3jhpKQ2fBt8HL9OMUgXgqJn+IcVnYxLQvzUEma
-   56oj1kSYbOU9yX6pSKCulXJHkaw6XFrtLFQUXZ3zfxsRTYTq9xWy7wGRH
-   A==;
-X-CSE-ConnectionGUID: +6EWKNzRSE677cih7amPQw==
-X-CSE-MsgGUID: Fx6VNRIXQguZ7CkPPZXmTw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56528428"
+  bh=Rtzfcvwkul30C1tQ3bVX6Wtto5iApIgC11igXrCtIyY=;
+  b=SHE97O80f0KOsTklh14ECZD0S8NxW2WzWVhnPfMfX6bmBSvnehURjw+D
+   GcghGjdNOgUNeqpMz05L6X7S5EBdz7PaMKjFiX0b+6EgnmcBBOXdeYQHM
+   aoO4//iI6fIV0xQNIKsMrXlc2YIAKY52WLqd6dyLCscVsAmc65fqcec1C
+   Vtp9oAKp0Ip1V7byepRbOPvr/TKDuRCmWYc/QGr1+NhhFaJHn56HYIaas
+   NLjj/a30lUfMBWZ4K2IDFb3eldUIhZbD+ptUhdMsgEveToQbjNcYbnzaj
+   kAUvmPmCVi7vsjubAyp3Wem/G94oSE7jo1BZb9Z2105CuVivVz4kCyPnB
+   w==;
+X-CSE-ConnectionGUID: u68jI9/yS2eiw54fcHYpDw==
+X-CSE-MsgGUID: xPuF0O0bQCWYLtLoXDsIrw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56478309"
 X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="56528428"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 02:31:51 -0700
-X-CSE-ConnectionGUID: pL6i1BpQRoiy7QRK1+yaHA==
-X-CSE-MsgGUID: oail3CG7TkmfKAShLEI/qg==
+   d="scan'208";a="56478309"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 05:56:13 -0700
+X-CSE-ConnectionGUID: BGb912eYQgiEW6HwicwKVQ==
+X-CSE-MsgGUID: WW8OaP5zRP2oOXCNEXCcJw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="167732428"
+   d="scan'208";a="167820732"
 Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 01 Aug 2025 02:31:47 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 01 Aug 2025 05:56:06 -0700
 Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uhm76-0004Um-2x;
-	Fri, 01 Aug 2025 09:31:44 +0000
-Date: Fri, 1 Aug 2025 17:31:18 +0800
+	id 1uhpIq-0004dA-0y;
+	Fri, 01 Aug 2025 12:56:04 +0000
+Date: Fri, 1 Aug 2025 20:56:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
-	andrii@kernel.org, daniel@iogearbox.net, tj@kernel.org,
-	memxor@gmail.com, martin.lau@kernel.org, ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v1 1/3] bpf: Allow getting bpf_map from
- struct_ops kdata
-Message-ID: <202508011701.e7Owy62s-lkp@intel.com>
-References: <20250731210950.3927649-2-ameryhung@gmail.com>
+	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com,
+	david@redhat.com, vbabka@suse.cz, peterx@redhat.com,
+	jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
+	paulmck@kernel.org, shuah@kernel.org, adobriyan@gmail.com,
+	brauner@kernel.org, josef@toxicpanda.com, yebin10@huawei.com,
+	linux@weissschuh.net, willy@infradead.org, osalvador@suse.de,
+	andrii@kernel.org, ryan.roberts@arm.com,
+	christophe.leroy@csgroup.eu, tjmercier@google.com,
+	kaleshsingh@google.com, aha310510@gmail.com,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	surenb@google.com
+Subject: Re: [PATCH 2/3] fs/proc/task_mmu: factor out proc_maps_private
+ fields used by PROCMAP_QUERY
+Message-ID: <202508012010.9IA7JflG-lkp@intel.com>
+References: <20250731220024.702621-3-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,54 +75,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250731210950.3927649-2-ameryhung@gmail.com>
+In-Reply-To: <20250731220024.702621-3-surenb@google.com>
 
-Hi Amery,
+Hi Suren,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on 01da54f10fddf3b01c5a3b80f6b16bbad390c302]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Allow-getting-bpf_map-from-struct_ops-kdata/20250801-051108
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250731210950.3927649-2-ameryhung%40gmail.com
-patch subject: [PATCH bpf-next v1 1/3] bpf: Allow getting bpf_map from struct_ops kdata
-config: arm-randconfig-001-20250801 (https://download.01.org/0day-ci/archive/20250801/202508011701.e7Owy62s-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 8f09b03aebb71c154f3bbe725c29e3f47d37c26e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508011701.e7Owy62s-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/selftests-proc-test-PROCMAP_QUERY-ioctl-while-vma-is-concurrently-modified/20250801-060200
+base:   01da54f10fddf3b01c5a3b80f6b16bbad390c302
+patch link:    https://lore.kernel.org/r/20250731220024.702621-3-surenb%40google.com
+patch subject: [PATCH 2/3] fs/proc/task_mmu: factor out proc_maps_private fields used by PROCMAP_QUERY
+config: riscv-randconfig-002-20250801 (https://download.01.org/0day-ci/archive/20250801/202508012010.9IA7JflG-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508012010.9IA7JflG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508011701.e7Owy62s-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508012010.9IA7JflG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/bpf_struct_ops.c:1157:18: warning: unused variable 'map' [-Wunused-variable]
-    1157 |         struct bpf_map *map;
-         |                         ^~~
-   1 warning generated.
+>> fs/proc/task_nommu.c:207:13: error: no member named 'mm' in 'struct proc_maps_private'
+     207 |         mm = priv->mm;
+         |              ~~~~  ^
+   fs/proc/task_nommu.c:229:31: error: no member named 'mm' in 'struct proc_maps_private'
+     229 |         struct mm_struct *mm = priv->mm;
+         |                                ~~~~  ^
+   fs/proc/task_nommu.c:262:8: error: no member named 'mm' in 'struct proc_maps_private'
+     262 |         priv->mm = proc_mem_open(inode, PTRACE_MODE_READ);
+         |         ~~~~  ^
+   fs/proc/task_nommu.c:263:27: error: no member named 'mm' in 'struct proc_maps_private'
+     263 |         if (IS_ERR_OR_NULL(priv->mm)) {
+         |                            ~~~~  ^
+   fs/proc/task_nommu.c:264:19: error: no member named 'mm' in 'struct proc_maps_private'
+     264 |                 int err = priv->mm ? PTR_ERR(priv->mm) : -ESRCH;
+         |                           ~~~~  ^
+   fs/proc/task_nommu.c:264:38: error: no member named 'mm' in 'struct proc_maps_private'
+     264 |                 int err = priv->mm ? PTR_ERR(priv->mm) : -ESRCH;
+         |                                              ~~~~  ^
+   fs/proc/task_nommu.c:279:12: error: no member named 'mm' in 'struct proc_maps_private'
+     279 |         if (priv->mm)
+         |             ~~~~  ^
+   fs/proc/task_nommu.c:280:16: error: no member named 'mm' in 'struct proc_maps_private'
+     280 |                 mmdrop(priv->mm);
+         |                        ~~~~  ^
+   8 errors generated.
 
 
-vim +/map +1157 kernel/bpf/bpf_struct_ops.c
+vim +207 fs/proc/task_nommu.c
 
-85d33df357b634 Martin KaFai Lau 2020-01-08  1149  
-85d33df357b634 Martin KaFai Lau 2020-01-08  1150  /* "const void *" because some subsystem is
-85d33df357b634 Martin KaFai Lau 2020-01-08  1151   * passing a const (e.g. const struct tcp_congestion_ops *)
-85d33df357b634 Martin KaFai Lau 2020-01-08  1152   */
-eab8366be0bf63 Amery Hung       2025-07-31  1153  struct bpf_map *bpf_struct_ops_get(const void *kdata)
-85d33df357b634 Martin KaFai Lau 2020-01-08  1154  {
-85d33df357b634 Martin KaFai Lau 2020-01-08  1155  	struct bpf_struct_ops_value *kvalue;
-b671c2067a04c0 Kui-Feng Lee     2023-03-22  1156  	struct bpf_struct_ops_map *st_map;
-b671c2067a04c0 Kui-Feng Lee     2023-03-22 @1157  	struct bpf_map *map;
-85d33df357b634 Martin KaFai Lau 2020-01-08  1158  
-85d33df357b634 Martin KaFai Lau 2020-01-08  1159  	kvalue = container_of(kdata, struct bpf_struct_ops_value, data);
-b671c2067a04c0 Kui-Feng Lee     2023-03-22  1160  	st_map = container_of(kvalue, struct bpf_struct_ops_map, kvalue);
-85d33df357b634 Martin KaFai Lau 2020-01-08  1161  
-eab8366be0bf63 Amery Hung       2025-07-31  1162  	return __bpf_map_inc_not_zero(&st_map->map, false);
-eb18b49ea758ec Martin KaFai Lau 2021-08-24  1163  }
-eab8366be0bf63 Amery Hung       2025-07-31  1164  EXPORT_SYMBOL_GPL(bpf_struct_ops_get);
-eb18b49ea758ec Martin KaFai Lau 2021-08-24  1165  
+fe441980161751 Ben Wolsieffer          2023-09-15  191  
+fe441980161751 Ben Wolsieffer          2023-09-15  192  static void *m_start(struct seq_file *m, loff_t *ppos)
+^1da177e4c3f41 Linus Torvalds          2005-04-16  193  {
+dbf8685c8e2140 David Howells           2006-09-27  194  	struct proc_maps_private *priv = m->private;
+fe441980161751 Ben Wolsieffer          2023-09-15  195  	unsigned long last_addr = *ppos;
+dbf8685c8e2140 David Howells           2006-09-27  196  	struct mm_struct *mm;
+0c563f14804356 Matthew Wilcox (Oracle  2022-09-06  197) 
+fe441980161751 Ben Wolsieffer          2023-09-15  198  	/* See proc_get_vma(). Zero at the start or after lseek. */
+fe441980161751 Ben Wolsieffer          2023-09-15  199  	if (last_addr == -1UL)
+0c563f14804356 Matthew Wilcox (Oracle  2022-09-06  200) 		return NULL;
+dbf8685c8e2140 David Howells           2006-09-27  201  
+dbf8685c8e2140 David Howells           2006-09-27  202  	/* pin the task and mm whilst we play with them */
+2c03376d2db005 Oleg Nesterov           2014-10-09  203  	priv->task = get_proc_task(priv->inode);
+dbf8685c8e2140 David Howells           2006-09-27  204  	if (!priv->task)
+ec6fd8a4355cda Al Viro                 2011-02-15  205  		return ERR_PTR(-ESRCH);
+dbf8685c8e2140 David Howells           2006-09-27  206  
+27692cd56e2aa6 Oleg Nesterov           2014-10-09 @207  	mm = priv->mm;
+578d7699e5c2ad Ben Wolsieffer          2023-09-14  208  	if (!mm || !mmget_not_zero(mm)) {
+578d7699e5c2ad Ben Wolsieffer          2023-09-14  209  		put_task_struct(priv->task);
+578d7699e5c2ad Ben Wolsieffer          2023-09-14  210  		priv->task = NULL;
+27692cd56e2aa6 Oleg Nesterov           2014-10-09  211  		return NULL;
+578d7699e5c2ad Ben Wolsieffer          2023-09-14  212  	}
+dbf8685c8e2140 David Howells           2006-09-27  213  
+d8ed45c5dcd455 Michel Lespinasse       2020-06-08  214  	if (mmap_read_lock_killable(mm)) {
+8a713e7df3352b Konstantin Khlebnikov   2019-07-11  215  		mmput(mm);
+578d7699e5c2ad Ben Wolsieffer          2023-09-14  216  		put_task_struct(priv->task);
+578d7699e5c2ad Ben Wolsieffer          2023-09-14  217  		priv->task = NULL;
+8a713e7df3352b Konstantin Khlebnikov   2019-07-11  218  		return ERR_PTR(-EINTR);
+8a713e7df3352b Konstantin Khlebnikov   2019-07-11  219  	}
+8a713e7df3352b Konstantin Khlebnikov   2019-07-11  220  
+fe441980161751 Ben Wolsieffer          2023-09-15  221  	vma_iter_init(&priv->iter, mm, last_addr);
+47fecca15c0944 Oleg Nesterov           2014-10-09  222  
+fe441980161751 Ben Wolsieffer          2023-09-15  223  	return proc_get_vma(priv, ppos);
+dbf8685c8e2140 David Howells           2006-09-27  224  }
+dbf8685c8e2140 David Howells           2006-09-27  225  
 
 -- 
 0-DAY CI Kernel Test Service
