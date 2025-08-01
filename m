@@ -1,208 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5042475F7;
-	Fri,  1 Aug 2025 14:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B261DDC33
+	for <llvm@lists.linux.dev>; Fri,  1 Aug 2025 17:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754059099; cv=none; b=jPJ6ibkSJREe+cL1OE0cOOH2QYr/cgn1eMv4uS13r4LQnpPfikHDMT4Z8LyrbtLZ102WBZbMg9VAAKFUB66Q03vonMKBT5cNGH/SvkicSlEI4d3gi1DF7SMrcxGDT2inDKGaUyaBwrcJgIlK84j+VvTjj05jvDpH9fUb2YEwAjs=
+	t=1754067938; cv=none; b=MZmybK3XfI0J+3V7Guv+FV0X07XHzO7iAmjBw7BvfMuLnyacqoESXOM/y15gjDsQLlGvBl7j8sYumCTlHFPa+MaTGicgXSWfVNjOvAEzORV/LKbGALUTtE+B+uUTn3wVrhRC2jl7fpKpuzh7d2XjXDMuUf9AqQPavlE2+ZXIU7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754059099; c=relaxed/simple;
-	bh=yC3o7mfJF/JuMsU86RTs6XLiknd4Zjp6y5xwn/cC2AI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=td2vN/3fZYW7vUb6QDU+cVqUeUdBOZwcl1A93ZXjmk53TD8EAi+cLDBBq+I3BnJ9XWh+aUPCai9bLc6iUmmZ0Ny7Q849qMceQaIqkmIdV3F+MrKbSfQFN/dXkSVVRx0VpnUjnyCZIDpS/wBbxve/6dTEgvWLqaPaV62xo7dveIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JGe1XvV1; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JGe1XvV1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754059097; x=1785595097;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yC3o7mfJF/JuMsU86RTs6XLiknd4Zjp6y5xwn/cC2AI=;
-  b=JGe1XvV1LPeaRDKengqyrKgXOHhSNRdsXchBxsPOaUNqVPx47Q0B/pOl
-   xldGbto3DFHebaKQt6xquTpF1TPnx3wFugxcftwrvOYy2Ue/tLhLHRLR0
-   IaqPGjPNFPR5eP/oFahmAC3CUjy04OcPptSldhV6KSeKkxKGvTBJahmq7
-   d5dl6YnvpZRFjuDhG9qX4JBLOEh+AMqOhwVnsXM/7BmpxHD8wTmQpexsk
-   eDZFfag9cn6szSzRU8K61A+aPlBo89h+3MXttWQ8pVyzs78nDiqRlFF8v
-   0qzD6LthC4848DuTf0rXiASLqspHt7GGzVObPZUmwfz+gstmgMQuFG4BN
-   A==;
-X-CSE-ConnectionGUID: er0lVJqtRf+mfRiMCE9gTw==
-X-CSE-MsgGUID: 6Q5OVrVnT2aGlIiCVvjxKQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56552062"
-X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="56552062"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 07:38:16 -0700
-X-CSE-ConnectionGUID: pmmsNqJ0SNib5PWPUDn9XQ==
-X-CSE-MsgGUID: 4k+SltTUTUesB6JITHFMWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="163142329"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 01 Aug 2025 07:38:14 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uhqtg-0004h6-16;
-	Fri, 01 Aug 2025 14:38:12 +0000
-Date: Fri, 1 Aug 2025 22:38:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:ethos-v2 3/11] drivers/accel/ethos/ethos_drv.c:239:9: error:
- call to undeclared function 'FIELD_GET'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202508012221.5omgydR4-lkp@intel.com>
+	s=arc-20240116; t=1754067938; c=relaxed/simple;
+	bh=P/EWMU55Bbw22j9djSvCpDxyIpppaJ8q75soyuqUxP0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=HoLQ/EJLAyQTY9VGPPXth0Dwr2pkTm9+qJMq/toroMDPSlWWIBR7uL8okKa07vV2a6xeMFBmLRdT0txiUsHoN8oWbbu+4GjOLLPfo9f93pn/tMRZYaqwebnp/Z9paYDmxkE57eRQFrj+CAM2zvmu/ZG/3RSdO9iU+0xRBWIIjuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-8760733a107so175229239f.3
+        for <llvm@lists.linux.dev>; Fri, 01 Aug 2025 10:05:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754067936; x=1754672736;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XKh/YQKlGzOI37lKmU7d8abAM5JFeACMI2cvGMEujOM=;
+        b=KRD4khGr3VHZNrcv0vikJRE8qF967BDxjdt4Zf1LrP7NPEGftitdjKLqFkAlLgrQt0
+         3fQub0Va5bdpZrz3u4uSU0Z7utZRJuhPULE0wMkj6cuP+2R8o5e4nwKxmE8S8/GGzCHJ
+         8iLsLsJJQ+KB7cdafFhOCsA+r8uQIH+DruztXgSq5xtNZiIdrU2u1q1xj29XlypxGMxw
+         MTHtHvHkYN8a71LNVXSmuifDypqps+/Jd/4KyXxd0RcKzTygEWaRFZfbHbPAFrGKOmxm
+         1l4NuiQkdV7RnSoECIdGSprTwLPFP+UsrtNdPkyU3BR0zM/oTPAP2aAbRZo+or8vgQia
+         /NVg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtGxSA71bn+dH/JT4NHMeMAzP1hK3PV7z/zylCq1hzNgtiCamxo7oQdA91eUNDPGFrT8wo@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywb2bPY1z9n32nDmpAMUlZ8TaemTwa8dKPaT7u/j+abbOu05CTi
+	G55NZEl89wswQfMMqs2pY9x8X9e03dYt8ddnQuhd5tK+0tyX049CBm36DzR7eyRyJ5gt70LtrAx
+	GRBqf2G+CRb+TQElclD0LvsbhhKLwsxeTvxwuKCCqseUUkrD5amuDpodJeCU=
+X-Google-Smtp-Source: AGHT+IGFxU2go7qrm/g+T40B6IlNKxMC8MHoIdK5CXWem1W0UsFB6XeS8sCDoJsztarB2VEgrjLYn/T/zW4Os8ztImRXKZuZufWc
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a05:6602:1:b0:876:19b9:1aaa with SMTP id
+ ca18e2360f4ac-881683c9f9dmr29312639f.9.1754067936350; Fri, 01 Aug 2025
+ 10:05:36 -0700 (PDT)
+Date: Fri, 01 Aug 2025 10:05:36 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <688cf3e0.a00a0220.26d0e1.0074.GAE@google.com>
+Subject: [syzbot] [usb?] upstream test error: BUG: sleeping function called
+ from invalid context in kcov_remote_start
+From: syzbot <syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, llvm@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git ethos-v2
-head:   e0ae8051a79d08497d42bebe772596a353ba477e
-commit: 6f107ed06ad239d382531b1710da4dd354dcb7c3 [3/11] accel: Add Arm Ethos-U NPU driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250801/202508012221.5omgydR4-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508012221.5omgydR4-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508012221.5omgydR4-lkp@intel.com/
+syzbot found the following issue on:
 
-All errors (new ones prefixed by >>):
+HEAD commit:    89748acdf226 Merge tag 'drm-next-2025-08-01' of https://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=164a9cf0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=caba3b7d5edc3bd1
+dashboard link: https://syzkaller.appspot.com/bug?extid=95069c82577357ff89d8
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
 
->> drivers/accel/ethos/ethos_drv.c:239:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     239 |         return FIELD_GET(ID_ARCH_MAJOR_MASK, ethosdev->npu_info.id) == 1;
-         |                ^
-   drivers/accel/ethos/ethos_drv.c:251:7: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     251 |                                  !FIELD_GET(STATUS_RESET_STATUS, reg),
-         |                                   ^
-   drivers/accel/ethos/ethos_drv.c:251:7: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   drivers/accel/ethos/ethos_drv.c:256:7: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     256 |         if (!FIELD_GET(PROT_ACTIVE_CSL, readl_relaxed(ethosdev->regs + NPU_REG_PROT))) {
-         |              ^
-   drivers/accel/ethos/ethos_drv.c:327:3: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-         |                 ^
-   drivers/accel/ethos/ethos_drv.c:327:3: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-     326 |                 "Ethos NPU, arch v%ld.%ld.%ld, rev r%ldp%ld, cmd stream ver%ld, %d MACs, %dKB SRAM\n",
-         |                                   ~~~
-         |                                   %d
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/accel/ethos/ethos_drv.c:328:3: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-     326 |                 "Ethos NPU, arch v%ld.%ld.%ld, rev r%ldp%ld, cmd stream ver%ld, %d MACs, %dKB SRAM\n",
-         |                                       ~~~
-         |                                       %d
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-     328 |                 FIELD_GET(ID_ARCH_MINOR_MASK, id),
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/accel/ethos/ethos_drv.c:329:3: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-     326 |                 "Ethos NPU, arch v%ld.%ld.%ld, rev r%ldp%ld, cmd stream ver%ld, %d MACs, %dKB SRAM\n",
-         |                                           ~~~
-         |                                           %d
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-     328 |                 FIELD_GET(ID_ARCH_MINOR_MASK, id),
-     329 |                 FIELD_GET(ID_ARCH_PATCH_MASK, id),
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/accel/ethos/ethos_drv.c:330:3: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-     326 |                 "Ethos NPU, arch v%ld.%ld.%ld, rev r%ldp%ld, cmd stream ver%ld, %d MACs, %dKB SRAM\n",
-         |                                                     ~~~
-         |                                                     %d
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-     328 |                 FIELD_GET(ID_ARCH_MINOR_MASK, id),
-     329 |                 FIELD_GET(ID_ARCH_PATCH_MASK, id),
-     330 |                 FIELD_GET(ID_VER_MAJOR_MASK, id),
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/accel/ethos/ethos_drv.c:331:3: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-     326 |                 "Ethos NPU, arch v%ld.%ld.%ld, rev r%ldp%ld, cmd stream ver%ld, %d MACs, %dKB SRAM\n",
-         |                                                         ~~~
-         |                                                         %d
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-     328 |                 FIELD_GET(ID_ARCH_MINOR_MASK, id),
-     329 |                 FIELD_GET(ID_ARCH_PATCH_MASK, id),
-     330 |                 FIELD_GET(ID_VER_MAJOR_MASK, id),
-     331 |                 FIELD_GET(ID_VER_MINOR_MASK, id),
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/accel/ethos/ethos_drv.c:332:3: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-     326 |                 "Ethos NPU, arch v%ld.%ld.%ld, rev r%ldp%ld, cmd stream ver%ld, %d MACs, %dKB SRAM\n",
-         |                                                                            ~~~
-         |                                                                            %d
-     327 |                 FIELD_GET(ID_ARCH_MAJOR_MASK, id),
-     328 |                 FIELD_GET(ID_ARCH_MINOR_MASK, id),
-     329 |                 FIELD_GET(ID_ARCH_PATCH_MASK, id),
-     330 |                 FIELD_GET(ID_VER_MAJOR_MASK, id),
-     331 |                 FIELD_GET(ID_VER_MINOR_MASK, id),
-     332 |                 FIELD_GET(CONFIG_CMD_STREAM_VER_MASK, config),
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   6 warnings and 5 errors generated.
---
->> drivers/accel/ethos/ethos_gem.c:222:3: error: expected expression
-     222 |                 u32 element_size = BIT((fm->precision >> 1) & 0x3);
-         |                 ^
->> drivers/accel/ethos/ethos_gem.c:224:60: error: use of undeclared identifier 'element_size'
-     224 |                 addr += (c / 16) * fm->stride_c + (16 * x + (c & 0xf)) * element_size;
-         |                                                                          ^
-   drivers/accel/ethos/ethos_gem.c:393:4: error: expected expression
-     393 |                         u64 srclen = dma_length(info, &st.dma, &st.dma.src);
-         |                         ^
->> drivers/accel/ethos/ethos_gem.c:399:44: error: use of undeclared identifier 'srclen'
-     399 |                                  st.dma.src.region, st.dma.src.offset, srclen,
-         |                                                                        ^
-   4 errors generated.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7d6418d10fb8/disk-89748acd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4608f748b818/vmlinux-89748acd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/92e2adcd74de/bzImage-89748acd.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
+preempt_count: 0, expected: 0
+RCU nest depth: 2, expected: 2
+7 locks held by ksoftirqd/1/30:
+ #0: ffffffff8d64a6a0 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
+ #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
+ #3: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
+ #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3211 [inline]
+ #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3319
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3212 [inline]
+ #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3319
+ #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
+ #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+irq event stamp: 58091
+hardirqs last  enabled at (58090): [<ffffffff8af459c5>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (58090): [<ffffffff8af459c5>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
+hardirqs last disabled at (58091): [<ffffffff86a72b95>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
+hardirqs last disabled at (58091): [<ffffffff86a72b95>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
+softirqs last  enabled at (58074): [<ffffffff8184ff9e>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
+softirqs last  enabled at (58074): [<ffffffff8184ff9e>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
+softirqs last disabled at (58082): [<ffffffff818e7aff>] smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
+CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-10499-g89748acdf226 #0 PREEMPT_{RT,(full)} 
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ __might_resched+0x44b/0x5d0 kernel/sched/core.c:8957
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:44 [inline]
+ kcov_remote_start+0x92/0x460 kernel/kcov.c:865
+ kcov_remote_start_usb include/linux/kcov.h:55 [inline]
+ kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
+ __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
+ usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
+ process_one_work kernel/workqueue.c:3236 [inline]
+ process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3319
+ bh_worker+0x2b1/0x600 kernel/workqueue.c:3579
+ tasklet_action+0xc/0x70 kernel/softirq.c:854
+ handle_softirqs+0x22f/0x710 kernel/softirq.c:579
+ run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
+ smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
+ kthread+0x70e/0x8a0 kernel/kthread.c:464
+ ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
 
 
-vim +/FIELD_GET +239 drivers/accel/ethos/ethos_drv.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   236	
-   237	static bool ethos_is_u65(const struct ethos_device *ethosdev)
-   238	{
- > 239		return FIELD_GET(ID_ARCH_MAJOR_MASK, ethosdev->npu_info.id) == 1;
-   240	}
-   241	
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
