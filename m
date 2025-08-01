@@ -1,85 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CDE289379;
-	Thu, 31 Jul 2025 23:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F101367
+	for <llvm@lists.linux.dev>; Fri,  1 Aug 2025 01:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754005428; cv=none; b=AZKILGjfeNjeFI7m46gbnUEt4x+7BIrkYZYxFWcLRN7h8o1xQ+jczyEu5aQ5uX5yI4V0SEX1sipsYE9tno/n17CeSqDEIkyP5rkaHZmCuQdOqIH0XyUE/7nD9TDeMF5Tj46pbjlqUhth098NgD4wtcRrTwcXsAzc4UzbdotBqRQ=
+	t=1754011768; cv=none; b=fhAePenin2PWOpqsS/GpcZjCzuDDG/ArkXFB0UXvPX6o8luzmwsTxG+vB9rlCpIP6a2q0IJfyAty2tVD4Ib1yGFJ7aA5zrwCFZY3TX0/lWmFaHqrX0XjMil0IKWpb8Fdjrw7bbz+9WFoazlAorfHAdIgOhx9va+Ag00FT8quzMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754005428; c=relaxed/simple;
-	bh=Xv1KFdQFCO2JRvkiFVq3Wh7f6y9Lms7vpIKcr4PRD2M=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jtMbymvKTZ80PRyZHxjzmgWBvAeCHevv2UoE8b0gUWOo6hCXQmZYQVB83Hv4xkgoykzAGZzBOUpY0VgnRlX16yOKOPvSIbC8z6uuA5dfurV1sOL1betnOrfrlX2PXrKwb9eaRxpq3fwg4iVsQJk6LhIPymaoSs3AreQpf3oTvHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SsRZGnZX; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754011768; c=relaxed/simple;
+	bh=bgtmNrmGz0CNFTquJDzruC0P+qlOrhrEaOzu3SVJCeU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kykQ2tySrvf95iKdfTHUf/Po6sUxHDyh5mK5H/v4npqJjI8dDUNJUAt6kikAz/RDSDMWrZiKK0lTqWaIO5U2+pmJ/i9bOehkKtMV+dVZcIbpU1Ots7TZYbF3UfXWMIwT99MTGJYGiZRytrTIU5r5AGLMVruqG6kKqwjpxDYcCDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tsTglBGz; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SsRZGnZX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754005427; x=1785541427;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Xv1KFdQFCO2JRvkiFVq3Wh7f6y9Lms7vpIKcr4PRD2M=;
-  b=SsRZGnZXvgqwdyPeSm0eS9SiOWfuKbSdjxWJM2soN1B207ZKO9F4qhbA
-   sTjYqzsxZP28ymUsoAMzIR/gxVYgw+iVrmpDu3BVQ1S/eh/lVyV1fU6+3
-   yRa9AaDPOv4gBkoBEfI9okC0SkQrySCKWWLrWBlQfF313xeuistCQVXpC
-   m4WX6m7KVGw999MTRFpV4OG/CPi/3wSptlkKFAT+caEeQEsQuNic8JvC7
-   jyu9biJVV6i5S3iydZf49/XQ1dVwYVJVAmxsDVxfTwwh3vzAQNwT0xHSu
-   eLtaXAx2Pgs15ac9s0OiBBQaldQerNahN5l1PKLaHJ6HOUZKt6oxOVL5P
-   g==;
-X-CSE-ConnectionGUID: Teoy+WaIT7iuiNXs0LVotQ==
-X-CSE-MsgGUID: FllO4icLTtysUTeuvuqnPw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="56425923"
-X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="56425923"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2025 16:43:46 -0700
-X-CSE-ConnectionGUID: 6NyZrWJRTumZAJdEj3r27g==
-X-CSE-MsgGUID: qts96TBuS4CUT8swHozwGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,255,1747724400"; 
-   d="scan'208";a="194375274"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 31 Jul 2025 16:43:46 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uhcw3-0004DI-1u;
-	Thu, 31 Jul 2025 23:43:43 +0000
-Date: Fri, 1 Aug 2025 07:42:53 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [android-common:android15-6.6-2025-03 3/3] clang: error: unknown
- argument: '-enable-fs-discriminator=true'
-Message-ID: <202508010749.CE1NTjTR-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tsTglBGz"
+Message-ID: <4c39dd4f-0aab-47b5-8424-4e0f23221623@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1754011763;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hlBrEOWBwp2LaUvEWBoldwdP4AZNXcY/+WkMid7j1KI=;
+	b=tsTglBGz5o1X0rBNSU6dWl3EvM3PT7AtBJtkzraPB4HJaEi3NCMasCYUphTl49DWAVssva
+	sK9wLscetmsNQFadxJkoOCYHNizcBLi1SfdbdXK8chsexT6VfaiFax07wsk0G7rEZUjjdQ
+	3LuYGS7Lu85SBdkkRC2RPxKqSaB8ExQ=
+Date: Fri, 1 Aug 2025 09:29:17 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: [PATCH 1/1] hung_task: fix objtool sibling call warning in
+ watchdog()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: lkp@intel.com, akpm@linux-foundation.org, zi.li@linux.dev,
+ llvm@lists.linux.dev, mhiramat@kernel.org, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20250731023934.48840-1-lance.yang@linux.dev>
+ <20250731175951.GC1455142@ax162>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <20250731175951.GC1455142@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-TO: cros-kernel-buildreports@googlegroups.com
 
-tree:   https://android.googlesource.com/kernel/common android15-6.6-2025-03
-head:   bab34747f124e034c713a1627b6edfa834f0a7f7
-commit: a9ca1e90a4c53304bcc02a4969f353b17f365b31 [3/3] ANDROID: Fix adding cflags for CONFIG_AUTOFDO_CLANG
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250801/202508010749.CE1NTjTR-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250801/202508010749.CE1NTjTR-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508010749.CE1NTjTR-lkp@intel.com/
+On 2025/8/1 01:59, Nathan Chancellor wrote:
+> On Thu, Jul 31, 2025 at 10:39:34AM +0800, Lance Yang wrote:
+>> From: Lance Yang <lance.yang@linux.dev>
+>>
+>> The kernel test robot reported an objtool warning on the loongarch
+>> architecture with clang:
+>>
+>>          vmlinux.o: warning: objtool: watchdog+0x418: sibling call from
+>> callable instruction with modified stack frame
+>>
+>> To resolve this, explicitly prevent the compiler from inlining or
+>> performing a tail call on check_hung_uninterruptible_tasks() by marking
+>> it with the noinline attribute. This ensures a standard function call
+>> with a proper stack frame, satisfying objtool's validation requirements.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202507301256.cZlxQ10s-lkp@intel.com/
+>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
+> 
+> While this may solve that particular instance of the warning, the fact
+> there are many, many more with that configuration indicates that there
+> will need to be a more generalized fix. I have started a separate thread
+> with some LoongArch folks around this issue:
 
-All errors (new ones prefixed by >>):
+Thanks for the heads-up!
 
->> clang: error: unknown argument: '-enable-fs-discriminator=true'
->> clang: error: unknown argument: '-improved-fs-discriminator=true'
+Yes, you're right, a more general fix is definitely the way to go.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'll keep an eye on that thread and see how I can help ;)
+
+Thanks,
+Lance
+
+> 
+> https://lore.kernel.org/20250731175655.GA1455142@ax162/
+> 
+> Cheers,
+> Nathan
+> 
+>> ---
+>>   kernel/hung_task.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+>> index 8708a1205f82..a5b5a0a2c262 100644
+>> --- a/kernel/hung_task.c
+>> +++ b/kernel/hung_task.c
+>> @@ -283,7 +283,7 @@ static bool rcu_lock_break(struct task_struct *g, struct task_struct *t)
+>>    * a really long time (120 seconds). If that happens, print out
+>>    * a warning.
+>>    */
+>> -static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>> +static noinline void check_hung_uninterruptible_tasks(unsigned long timeout)
+>>   {
+>>   	int max_count = sysctl_hung_task_check_count;
+>>   	unsigned long last_break = jiffies;
+>> -- 
+>> 2.49.0
+>>
+>>
+
