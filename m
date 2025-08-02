@@ -1,59 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3016F158535;
-	Sat,  2 Aug 2025 04:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3001CD1F;
+	Sat,  2 Aug 2025 05:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754107911; cv=none; b=QjqxZosaOtkuuTF8DFUcRfjxlvQ+2Zl6fbO8jENML9STDSlIPiZ3BgdS0924C2rhxTF9DwE0QEIqpBseAbVx6pKlpxl57af0+ZoNaXvll2Vd1++VQOfyVnIrOcCxkcyUuY0KvLf50MlhsQTtMsbxmUBoOWwHqt9DPecFmaX+gl0=
+	t=1754112699; cv=none; b=C7oWightZfJ9keLSRvLz0l0ynGc89atgujaCFb1LExrZKCONhcRyK+O6ps9xjOcOlr8Xn0pdfX4Gfh4GBSDDt879NsDEWX0eqsigzVJFwQa+48w4Hev69tvFkXxBtTUSIN0kBWDiePWJDLSLPG64nHVcgYSvlbY97RMO2uN4+hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754107911; c=relaxed/simple;
-	bh=cB3q1ywX9Ag/0m/MSf31ZV74YjB8RNCbCwHE78ewP8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Eyn9kmI22qA0iTIox95lCuP4lPVYNSvzaYT50dk/N4HEX3+EMtWp7xilGDEq89NGo1nZvFRzlCK6uvJ9s3IYJil8+QoFgLHpf+9iJlraUhKRnhRUeVoCg4k37Sa18sFg6mvKJmR/yejgB2q4pz2slOI0TFXOf8SkjwiNVV4I9BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jy2RAhQQ; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1754112699; c=relaxed/simple;
+	bh=ZRLdGwSqLnclEoXX/4J/rmkHU+mE/M/nSHHqiMZELEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFTeWi0z2WBuc77kOGNXlGMoW+l8Tdr99xlC0Kss4Am0JV8c4xT5IWTRHJ6nXX1JIdDp4F/TqRiHQ1QoTD2AoxGU/dMoF1VhH1nW9td/YA5Cy59ExW0xRH2lD4RLmMMj5AiHFS4n66X3/KHOaTqM6Gaxpd5b3gDId1un8IY7/r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zl2DMW9D; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jy2RAhQQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zl2DMW9D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754107910; x=1785643910;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cB3q1ywX9Ag/0m/MSf31ZV74YjB8RNCbCwHE78ewP8o=;
-  b=jy2RAhQQUTsYDIcNHK5YqCFlHIp/tOY4QacsGVd6jrA9Ik/nHy2I4jNY
-   dBUIjGhhcExlAKeWY1o7+zJPTYqKofSkEeLUUqup7UQnd98/IlbzymSsR
-   cjR1PfjEx0uLSz2BpOKMjSbRQvTvAUz68iKAXg3t7IVzzaUs9pB6cXnfC
-   3JclM+1wogRjh92lOvDYrjzGFuT6WgLJej0mEEAbDlCPphmXwIIS+aeuh
-   y7LhhFZngQqqF2Ad2a+RwbGS7crW349uKVs9Dgdrkofmrv6q89x73dKX4
-   MtkiJxByhyRHD7D87VHHvdRQmsXEtI6EONSULiYSCVCkwhP69g2jYy/Xv
+  t=1754112697; x=1785648697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZRLdGwSqLnclEoXX/4J/rmkHU+mE/M/nSHHqiMZELEk=;
+  b=Zl2DMW9DjQ5JJehFSx3fv7ypqkKVirCjz3caxU2fuif5HUOJnvPmfBnx
+   kcT9NP91mXn1KSGh/wtGgIW1yldbCfACt2+gHw/FUIb9cIfR+Lz/ZDCLp
+   +hICCFlYzSkN5S6TvmvkoibuSKAh7ZDI9tEkjSp9yvsxqZNbQUzP5VWH0
+   SoQOWeFrxkOm3bmF6rbqkOJNJcY7Y8yk6/IW6DENRVzzun03JP85tseA1
+   oaz6sKDq0er2aaS0HSXZ8LT48+jGVbY/4Un0LiRcp8X17gTOWIPQMhnL8
+   sTyU64yNHJ0YM1hV75awY2cTjN9I7QHxgy6oz3chbRtgUYH3ggaTM/z32
    g==;
-X-CSE-ConnectionGUID: Ge+xcXQ1QRCp51bcJi5dOA==
-X-CSE-MsgGUID: vAw9qeQYSTynKQF2keJ7Bg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="81905094"
+X-CSE-ConnectionGUID: bd2LEiVyTZavEiYy/h80hg==
+X-CSE-MsgGUID: 581wbcuiRmW217fp1dbOjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="59077184"
 X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
-   d="scan'208";a="81905094"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 21:11:50 -0700
-X-CSE-ConnectionGUID: 29K8AqZMRu+nCZxjk8xXXw==
-X-CSE-MsgGUID: 8MHGYAviSIO4aME8xT7VPg==
+   d="scan'208";a="59077184"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 22:31:36 -0700
+X-CSE-ConnectionGUID: 9lV5Yxb2S8+W5MRccSjssQ==
+X-CSE-MsgGUID: j4cU7ZYqSbShgDAsFQAmQg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
-   d="scan'208";a="164180781"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa008.fm.intel.com with ESMTP; 01 Aug 2025 21:11:49 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+   d="scan'208";a="169106513"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 01 Aug 2025 22:31:31 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ui3b0-0001Lv-1K;
-	Sat, 02 Aug 2025 04:11:46 +0000
-Date: Sat, 2 Aug 2025 06:11:23 +0200
+	id 1ui4q9-0005C8-0k;
+	Sat, 02 Aug 2025 05:31:29 +0000
+Date: Sat, 2 Aug 2025 13:30:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:vmx/tdx_post_populate 2/2]
- arch/x86/kvm/../../../virt/kvm/guest_memfd.c:672:53: error: too few
- arguments to function call, expected 6, have 5
-Message-ID: <202508020606.1JpNEvUC-lkp@intel.com>
+To: Haotien Hsu <haotienh@nvidia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Brad Griffis <bgriffis@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
+	Vedant Deshpande <vedantd@nvidia.com>,
+	Akhil R <akhilrajeev@nvidia.com>,
+	Jinjie Ruan <ruanjinjie@huawei.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Haotien Hsu <haotienh@nvidia.com>, Henry Lin <henryl@nvidia.com>,
+	Jui Chang Kuo <jckuo@nvidia.com>, Wayne Chang <waynec@nvidia.com>,
+	WK Tsai <wtsai@nvidia.com>
+Subject: Re: [PATCH 4/4] usb: xhci: tegra: Support USB wakeup function for
+ Tegra234
+Message-ID: <202508021305.3ENY5oQC-lkp@intel.com>
+References: <20250801095748.385437-5-haotienh@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,87 +79,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250801095748.385437-5-haotienh@nvidia.com>
 
-tree:   https://github.com/sean-jc/linux vmx/tdx_post_populate
-head:   6ae5e841f16df438a7723a1def7656c100700a8e
-commit: 6ae5e841f16df438a7723a1def7656c100700a8e [2/2] tmp
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250802/202508020606.1JpNEvUC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250802/202508020606.1JpNEvUC-lkp@intel.com/reproduce)
+Hi Haotien,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on usb/usb-testing usb/usb-next usb/usb-linus tegra/for-next linus/master v6.16 next-20250801]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Haotien-Hsu/dt-bindings-usb-Add-wake-up-support-for-Tegra234-XUSB-host-controller/20250801-180040
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250801095748.385437-5-haotienh%40nvidia.com
+patch subject: [PATCH 4/4] usb: xhci: tegra: Support USB wakeup function for Tegra234
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20250802/202508021305.3ENY5oQC-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 8f09b03aebb71c154f3bbe725c29e3f47d37c26e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250802/202508021305.3ENY5oQC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508020606.1JpNEvUC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508021305.3ENY5oQC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:672:53: error: too few arguments to function call, expected 6, have 5
-     672 |         ret = post_populate(kvm, gfn, pfn, src_page, opaque);
-         |               ~~~~~~~~~~~~~                                ^
-   1 error generated.
+>> drivers/usb/host/xhci-tegra.c:1997:15: warning: unused variable 'i' [-Wunused-variable]
+    1997 |         unsigned int i;
+         |                      ^
+   1 warning generated.
 
 
-vim +672 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
+vim +/i +1997 drivers/usb/host/xhci-tegra.c
 
-   629	
-   630	#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
-   631	static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
-   632					struct file *file, gfn_t gfn, void __user *src,
-   633					kvm_gmem_populate_cb post_populate, void *opaque)
-   634	{
-   635		pgoff_t index = kvm_gmem_get_index(slot, gfn);
-   636		struct page *src_page = NULL;
-   637		bool is_prepared = false;
-   638		struct folio *folio;
-   639		int ret, max_order;
-   640		kvm_pfn_t pfn;
-   641	
-   642		if (src) {
-   643			ret = get_user_pages((unsigned long)src, 1, 0, &src_page);
-   644			if (ret < 0)
-   645				return ret;
-   646			if (ret != 1)
-   647				return -ENOMEM;
-   648		}
-   649	
-   650		filemap_invalidate_lock(file->f_mapping);
-   651	
-   652		if (!kvm_range_has_memory_attributes(kvm, gfn, gfn + 1,
-   653						     KVM_MEMORY_ATTRIBUTE_PRIVATE,
-   654						     KVM_MEMORY_ATTRIBUTE_PRIVATE)) {
-   655			ret = -EINVAL;
-   656			goto out_unlock;
-   657		}
-   658	
-   659		folio = __kvm_gmem_get_pfn(file, slot, index, &pfn, &is_prepared, &max_order);
-   660		if (IS_ERR(folio)) {
-   661			ret = PTR_ERR(folio);
-   662			goto out_unlock;
-   663		}
-   664	
-   665		folio_unlock(folio);
-   666	
-   667		if (is_prepared) {
-   668			ret = -EEXIST;
-   669			goto out_put_folio;
-   670		}
-   671	
- > 672		ret = post_populate(kvm, gfn, pfn, src_page, opaque);
-   673		if (!ret)
-   674			kvm_gmem_mark_prepared(folio);
-   675	
-   676	out_put_folio:
-   677		folio_put(folio);
-   678	out_unlock:
-   679		filemap_invalidate_unlock(file->f_mapping);
-   680	
-   681		if (src_page)
-   682			put_page(src_page);
-   683		return ret;
-   684	}
-   685	
+  1992	
+  1993	static void tegra_xusb_remove(struct platform_device *pdev)
+  1994	{
+  1995		struct tegra_xusb *tegra = platform_get_drvdata(pdev);
+  1996		struct xhci_hcd *xhci = hcd_to_xhci(tegra->hcd);
+> 1997		unsigned int i;
+  1998	
+  1999		tegra_xusb_deinit_usb_phy(tegra);
+  2000	
+  2001		pm_runtime_get_sync(&pdev->dev);
+  2002		usb_remove_hcd(xhci->shared_hcd);
+  2003		usb_put_hcd(xhci->shared_hcd);
+  2004		xhci->shared_hcd = NULL;
+  2005		usb_remove_hcd(tegra->hcd);
+  2006		usb_put_hcd(tegra->hcd);
+  2007	
+  2008		dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
+  2009				  tegra->fw.phys);
+  2010	
+  2011		if (tegra->padctl_irq)
+  2012			pm_runtime_disable(&pdev->dev);
+  2013	
+  2014		tegra_xusb_dispose_wake(tegra);
+  2015	
+  2016		pm_runtime_put(&pdev->dev);
+  2017	
+  2018		tegra_xusb_disable(tegra);
+  2019		tegra_xusb_padctl_put(tegra->padctl);
+  2020	}
+  2021	
 
 -- 
 0-DAY CI Kernel Test Service
