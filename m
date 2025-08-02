@@ -1,148 +1,85 @@
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B261DDC33
-	for <llvm@lists.linux.dev>; Fri,  1 Aug 2025 17:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1F13207;
+	Sat,  2 Aug 2025 00:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754067938; cv=none; b=MZmybK3XfI0J+3V7Guv+FV0X07XHzO7iAmjBw7BvfMuLnyacqoESXOM/y15gjDsQLlGvBl7j8sYumCTlHFPa+MaTGicgXSWfVNjOvAEzORV/LKbGALUTtE+B+uUTn3wVrhRC2jl7fpKpuzh7d2XjXDMuUf9AqQPavlE2+ZXIU7I=
+	t=1754094462; cv=none; b=CnwoMgp9VReXj2ZaBSr/Un8xFZb4vYusKEm5CuU6ghLlScKB9fD6FU5UX9wacSrnZYA+2Hd01t0ftfuiK8vUuFsvcdi0PJPzHBAPQZr+WQATSZBCf73Kq5FSYy04P852E9dAa7W9Wv0qYHgDNhG7u11aQ2ZBdDbhYZvqN3wWIZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754067938; c=relaxed/simple;
-	bh=P/EWMU55Bbw22j9djSvCpDxyIpppaJ8q75soyuqUxP0=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=HoLQ/EJLAyQTY9VGPPXth0Dwr2pkTm9+qJMq/toroMDPSlWWIBR7uL8okKa07vV2a6xeMFBmLRdT0txiUsHoN8oWbbu+4GjOLLPfo9f93pn/tMRZYaqwebnp/Z9paYDmxkE57eRQFrj+CAM2zvmu/ZG/3RSdO9iU+0xRBWIIjuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-8760733a107so175229239f.3
-        for <llvm@lists.linux.dev>; Fri, 01 Aug 2025 10:05:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754067936; x=1754672736;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XKh/YQKlGzOI37lKmU7d8abAM5JFeACMI2cvGMEujOM=;
-        b=KRD4khGr3VHZNrcv0vikJRE8qF967BDxjdt4Zf1LrP7NPEGftitdjKLqFkAlLgrQt0
-         3fQub0Va5bdpZrz3u4uSU0Z7utZRJuhPULE0wMkj6cuP+2R8o5e4nwKxmE8S8/GGzCHJ
-         8iLsLsJJQ+KB7cdafFhOCsA+r8uQIH+DruztXgSq5xtNZiIdrU2u1q1xj29XlypxGMxw
-         MTHtHvHkYN8a71LNVXSmuifDypqps+/Jd/4KyXxd0RcKzTygEWaRFZfbHbPAFrGKOmxm
-         1l4NuiQkdV7RnSoECIdGSprTwLPFP+UsrtNdPkyU3BR0zM/oTPAP2aAbRZo+or8vgQia
-         /NVg==
-X-Forwarded-Encrypted: i=1; AJvYcCXtGxSA71bn+dH/JT4NHMeMAzP1hK3PV7z/zylCq1hzNgtiCamxo7oQdA91eUNDPGFrT8wo@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywb2bPY1z9n32nDmpAMUlZ8TaemTwa8dKPaT7u/j+abbOu05CTi
-	G55NZEl89wswQfMMqs2pY9x8X9e03dYt8ddnQuhd5tK+0tyX049CBm36DzR7eyRyJ5gt70LtrAx
-	GRBqf2G+CRb+TQElclD0LvsbhhKLwsxeTvxwuKCCqseUUkrD5amuDpodJeCU=
-X-Google-Smtp-Source: AGHT+IGFxU2go7qrm/g+T40B6IlNKxMC8MHoIdK5CXWem1W0UsFB6XeS8sCDoJsztarB2VEgrjLYn/T/zW4Os8ztImRXKZuZufWc
+	s=arc-20240116; t=1754094462; c=relaxed/simple;
+	bh=oQM6ezRz2buuwS+Ypcv6PUWbsI0rlUmpS3mnFU7pAJw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dmnPYlN7vSQHTMX/spzoY3QG4NPWuFtMKefpIR20I+aDvyeQcA10skNdn39K7YDGENPU9FyzcalbMJO51zOFDuP3lRvBrzzGSbVQNny7bHf4mS9dmHrBO5eDsEVCQ9lOMx6chRlYDX/zso2DtqW12IYndi6w6fP2eMO30MpvF1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ma1nRjr/; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ma1nRjr/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A435C4CEE7;
+	Sat,  2 Aug 2025 00:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754094462;
+	bh=oQM6ezRz2buuwS+Ypcv6PUWbsI0rlUmpS3mnFU7pAJw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ma1nRjr/uqDVSJ5lVdyMEAvgoEUuI0AwQhWzzPdDjf8iAjawkN8eLzAI+rq+1S1ct
+	 3kyVWBTR/32gmMY2lf++bbZXNGVYiDic1qtwmkv7e3QJS/nKT2llsHc746lNH65N+n
+	 nXIYndaGII/DKmUc6gKcTC7jEjiIGj/GIdlHyN2tzsBtXPAYh/HxdtdlS34f18H7qA
+	 etQ1cI83DX0ZFOppn31acFDW5a8EXormhSu5wYYAvv5XrKlwZ1Ers1C/NCMG5KfoyJ
+	 YraxGzTpwXcFvXlA8KyIpdH1TlABtu0nMpl/KRqDeDc42agjpLBN9UVcF4KfIyAQQK
+	 mtAQmvRK0LW1Q==
+From: Kees Cook <kees@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kbuild@vger.kernel.org,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] kbuild: Re-enable -Wunterminated-string-initialization
+Date: Fri,  1 Aug 2025 17:27:40 -0700
+Message-Id: <20250802002733.work.941-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1:b0:876:19b9:1aaa with SMTP id
- ca18e2360f4ac-881683c9f9dmr29312639f.9.1754067936350; Fri, 01 Aug 2025
- 10:05:36 -0700 (PDT)
-Date: Fri, 01 Aug 2025 10:05:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <688cf3e0.a00a0220.26d0e1.0074.GAE@google.com>
-Subject: [syzbot] [usb?] upstream test error: BUG: sleeping function called
- from invalid context in kcov_remote_start
-From: syzbot <syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, llvm@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1265; i=kees@kernel.org; h=from:subject:message-id; bh=oQM6ezRz2buuwS+Ypcv6PUWbsI0rlUmpS3mnFU7pAJw=; b=owGbwMvMwCVmps19z/KJym7G02pJDBm90TV3FJ5tc1u4f0dqkejubEdm4feHXoZsrknq4rwTw Fob1HO5o5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCI9lQz/DHbKs1bHTD/MKHjH 1H7ZqzUsCYV5c2o+sZz1PNrVvftsBiND97qlq53fvHni7Jfy5I9s76S2j1V3mvPnsK/niTnu830 HKwA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hello,
+With the few remaining fixes now landed, we can re-enable the option
+-Wunterminated-string-initialization for GCC. (Clang does not yet fully
+understand the "nonstring" attribute.)
 
-syzbot found the following issue on:
-
-HEAD commit:    89748acdf226 Merge tag 'drm-next-2025-08-01' of https://gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=164a9cf0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=caba3b7d5edc3bd1
-dashboard link: https://syzkaller.appspot.com/bug?extid=95069c82577357ff89d8
-compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7d6418d10fb8/disk-89748acd.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4608f748b818/vmlinux-89748acd.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/92e2adcd74de/bzImage-89748acd.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
-in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
-preempt_count: 0, expected: 0
-RCU nest depth: 2, expected: 2
-7 locks held by ksoftirqd/1/30:
- #0: ffffffff8d64a6a0 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
- #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
- #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
- #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
- #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
- #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
- #3: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
- #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3211 [inline]
- #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3319
- #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3212 [inline]
- #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3319
- #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
- #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
-irq event stamp: 58091
-hardirqs last  enabled at (58090): [<ffffffff8af459c5>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (58090): [<ffffffff8af459c5>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
-hardirqs last disabled at (58091): [<ffffffff86a72b95>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
-hardirqs last disabled at (58091): [<ffffffff86a72b95>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
-softirqs last  enabled at (58074): [<ffffffff8184ff9e>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
-softirqs last  enabled at (58074): [<ffffffff8184ff9e>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
-softirqs last disabled at (58082): [<ffffffff818e7aff>] smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
-CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-10499-g89748acdf226 #0 PREEMPT_{RT,(full)} 
-Tainted: [W]=WARN
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-Call Trace:
- <TASK>
- dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
- __might_resched+0x44b/0x5d0 kernel/sched/core.c:8957
- __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
- rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
- spin_lock include/linux/spinlock_rt.h:44 [inline]
- kcov_remote_start+0x92/0x460 kernel/kcov.c:865
- kcov_remote_start_usb include/linux/kcov.h:55 [inline]
- kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
- __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
- usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
- process_one_work kernel/workqueue.c:3236 [inline]
- process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3319
- bh_worker+0x2b1/0x600 kernel/workqueue.c:3579
- tasklet_action+0xc/0x70 kernel/softirq.c:854
- handle_softirqs+0x22f/0x710 kernel/softirq.c:579
- run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
- smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
- kthread+0x70e/0x8a0 kernel/kthread.c:464
- ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
-
+Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>
+Cc: <linux-kbuild@vger.kernel.org>
+---
+ scripts/Makefile.extrawarn | 2 ++
+ 1 file changed, 2 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index dca175fffcab..7ab8549485a4 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -78,8 +78,10 @@ KBUILD_CFLAGS += $(call cc-option, -Wcast-function-type)
+ KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-option, -Wno-stringop-overflow)
+ KBUILD_CFLAGS-$(CONFIG_CC_STRINGOP_OVERFLOW) += $(call cc-option, -Wstringop-overflow)
+ 
++ifdef CONFIG_CC_IS_CLANG
+ # Currently, disable -Wunterminated-string-initialization as broken
+ KBUILD_CFLAGS += $(call cc-option, -Wno-unterminated-string-initialization)
++endif
+ 
+ # The allocators already balk at large sizes, so silence the compiler
+ # warnings for bounds checks involving those possible values. While
+-- 
+2.34.1
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
