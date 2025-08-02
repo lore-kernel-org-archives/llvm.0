@@ -1,133 +1,149 @@
-Received: from mail3-166.sinamail.sina.com.cn (mail3-166.sinamail.sina.com.cn [202.108.3.166])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982EE185B67
-	for <llvm@lists.linux.dev>; Sat,  2 Aug 2025 02:59:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.108.3.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3016F158535;
+	Sat,  2 Aug 2025 04:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754103566; cv=none; b=i5tvRnbgvwujgfCm5dzpsH1i0aBiDof4iHlTaMd6nF0mbcB/VAWgRTxFYBDsyar1soAk2HwKCNGG3bEkuhRxcGYfbTiwhFLyPKFeRQLmenXjeXTXxSkLm+1NzMhk40MAxRLqUVAKi1dLFK4H/ARseIK5XQ5tBgOZm9WABOgHgvQ=
+	t=1754107911; cv=none; b=QjqxZosaOtkuuTF8DFUcRfjxlvQ+2Zl6fbO8jENML9STDSlIPiZ3BgdS0924C2rhxTF9DwE0QEIqpBseAbVx6pKlpxl57af0+ZoNaXvll2Vd1++VQOfyVnIrOcCxkcyUuY0KvLf50MlhsQTtMsbxmUBoOWwHqt9DPecFmaX+gl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754103566; c=relaxed/simple;
-	bh=hQFSNUG7Mlc1PyowN/WACGYbNwCnZJ8ZppesueYXL7Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XjxcHqb9ld+9mRrmeUSGfZJq8NLvxOfvnJqtlOzmmpHH006P+aeVVlN4Kjn0fBoTLxzny4OZMdbsIdBKor3WOyXl805WtkBSBy22O2+2eSQAyV2snZTeOEPlilaadnBrjp0wHwLG2V/vTjfSAbErLkuxPqyzRw8lhP8AB7e70U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b=two9d7HC; arc=none smtp.client-ip=202.108.3.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
+	s=arc-20240116; t=1754107911; c=relaxed/simple;
+	bh=cB3q1ywX9Ag/0m/MSf31ZV74YjB8RNCbCwHE78ewP8o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Eyn9kmI22qA0iTIox95lCuP4lPVYNSvzaYT50dk/N4HEX3+EMtWp7xilGDEq89NGo1nZvFRzlCK6uvJ9s3IYJil8+QoFgLHpf+9iJlraUhKRnhRUeVoCg4k37Sa18sFg6mvKJmR/yejgB2q4pz2slOI0TFXOf8SkjwiNVV4I9BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jy2RAhQQ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b="two9d7HC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sina.com; s=201208; t=1754103561;
-	bh=UBbbSHDxSNopaB6c8TsMYzhCmRPCZHeIoj2AWcaNomM=;
-	h=From:Subject:Date:Message-ID;
-	b=two9d7HCE2tDdo2Re1s60iW5QFYJ6cbM2Jqv4IzisDr7iRCEVZi39yjowUrYxC3Au
-	 pyqdc2YTJjdLbV8VgrREXPwCUrgysnd0cI6edPdxg6oUrK+4A4BdmTqTJY9nvuoelS
-	 2WWLGYsX2Xgcu35Zrbkk1fu8zLYnrBMdhYeu+huo=
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([114.249.58.236])
-	by sina.com (10.54.253.31) with ESMTP
-	id 688D7EE1000007BD; Sat, 2 Aug 2025 10:58:43 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 4157166816222
-X-SMAIL-UIID: D5674290A3F741FB8B2C2F109FB90ECC-20250802-105843-1
-From: Hillf Danton <hdanton@sina.com>
-To: syzbot <syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com>
-Cc: Aleksandr Nogikh <nogikh@google.com>,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] upstream test error: BUG: sleeping function called from invalid context in kcov_remote_start
-Date: Sat,  2 Aug 2025 10:58:30 +0800
-Message-ID: <20250802025832.3683-1-hdanton@sina.com>
-In-Reply-To: <688cf3e0.a00a0220.26d0e1.0074.GAE@google.com>
-References: 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jy2RAhQQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754107910; x=1785643910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cB3q1ywX9Ag/0m/MSf31ZV74YjB8RNCbCwHE78ewP8o=;
+  b=jy2RAhQQUTsYDIcNHK5YqCFlHIp/tOY4QacsGVd6jrA9Ik/nHy2I4jNY
+   dBUIjGhhcExlAKeWY1o7+zJPTYqKofSkEeLUUqup7UQnd98/IlbzymSsR
+   cjR1PfjEx0uLSz2BpOKMjSbRQvTvAUz68iKAXg3t7IVzzaUs9pB6cXnfC
+   3JclM+1wogRjh92lOvDYrjzGFuT6WgLJej0mEEAbDlCPphmXwIIS+aeuh
+   y7LhhFZngQqqF2Ad2a+RwbGS7crW349uKVs9Dgdrkofmrv6q89x73dKX4
+   MtkiJxByhyRHD7D87VHHvdRQmsXEtI6EONSULiYSCVCkwhP69g2jYy/Xv
+   g==;
+X-CSE-ConnectionGUID: Ge+xcXQ1QRCp51bcJi5dOA==
+X-CSE-MsgGUID: vAw9qeQYSTynKQF2keJ7Bg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11508"; a="81905094"
+X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
+   d="scan'208";a="81905094"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2025 21:11:50 -0700
+X-CSE-ConnectionGUID: 29K8AqZMRu+nCZxjk8xXXw==
+X-CSE-MsgGUID: 8MHGYAviSIO4aME8xT7VPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
+   d="scan'208";a="164180781"
+Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
+  by fmviesa008.fm.intel.com with ESMTP; 01 Aug 2025 21:11:49 -0700
+Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ui3b0-0001Lv-1K;
+	Sat, 02 Aug 2025 04:11:46 +0000
+Date: Sat, 2 Aug 2025 06:11:23 +0200
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:vmx/tdx_post_populate 2/2]
+ arch/x86/kvm/../../../virt/kvm/guest_memfd.c:672:53: error: too few
+ arguments to function call, expected 6, have 5
+Message-ID: <202508020606.1JpNEvUC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Date: Fri, 01 Aug 2025 10:05:36 -0700	[thread overview]
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    89748acdf226 Merge tag 'drm-next-2025-08-01' of https://gi..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=164a9cf0580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=caba3b7d5edc3bd1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=95069c82577357ff89d8
-> compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/7d6418d10fb8/disk-89748acd.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/4608f748b818/vmlinux-89748acd.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/92e2adcd74de/bzImage-89748acd.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+95069c82577357ff89d8@syzkaller.appspotmail.com
-> 
-> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
-> in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 30, name: ksoftirqd/1
-> preempt_count: 0, expected: 0
-> RCU nest depth: 2, expected: 2
-> 7 locks held by ksoftirqd/1/30:
->  #0: ffffffff8d64a6a0 (local_bh){.+.+}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
->  #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
->  #1: ffff8880b8923d90 ((softirq_ctrl.lock)){+.+.}-{3:3}, at: __local_bh_disable_ip+0x264/0x400 kernel/softirq.c:168
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __rt_spin_lock kernel/locking/spinlock_rt.c:50 [inline]
->  #2: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: rt_spin_lock+0x1bb/0x2c0 kernel/locking/spinlock_rt.c:57
->  #3: ffffffff8d7a8b00 (rcu_read_lock){....}-{1:3}, at: __local_bh_disable_ip+0xa1/0x400 kernel/softirq.c:163
->  #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3211 [inline]
->  #4: ffff88801989a138 ((wq_completion)events_bh){+...}-{0:0}, at: process_scheduled_works+0x9b4/0x17b0 kernel/workqueue.c:3319
->  #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_one_work kernel/workqueue.c:3212 [inline]
->  #5: ffffc90000a4fa00 ((work_completion)(&bh->bh)){+...}-{0:0}, at: process_scheduled_works+0x9ef/0x17b0 kernel/workqueue.c:3319
->  #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:44 [inline]
->  #6: ffff8880b8928b50 ((lock)#3){+.+.}-{3:3}, at: kcov_remote_start+0x92/0x460 kernel/kcov.c:865
-> irq event stamp: 58091
-> hardirqs last  enabled at (58090): [<ffffffff8af459c5>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-> hardirqs last  enabled at (58090): [<ffffffff8af459c5>] _raw_spin_unlock_irqrestore+0x85/0x110 kernel/locking/spinlock.c:194
-> hardirqs last disabled at (58091): [<ffffffff86a72b95>] kcov_remote_start_usb_softirq include/linux/kcov.h:88 [inline]
-> hardirqs last disabled at (58091): [<ffffffff86a72b95>] __usb_hcd_giveback_urb+0x3f5/0x710 drivers/usb/core/hcd.c:1662
-> softirqs last  enabled at (58074): [<ffffffff8184ff9e>] ksoftirqd_run_end kernel/softirq.c:282 [inline]
-> softirqs last  enabled at (58074): [<ffffffff8184ff9e>] run_ksoftirqd+0xce/0x210 kernel/softirq.c:969
-> softirqs last disabled at (58082): [<ffffffff818e7aff>] smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
-> CPU: 1 UID: 0 PID: 30 Comm: ksoftirqd/1 Tainted: G        W           6.16.0-syzkaller-10499-g89748acdf226 #0 PREEMPT_{RT,(full)} 
+tree:   https://github.com/sean-jc/linux vmx/tdx_post_populate
+head:   6ae5e841f16df438a7723a1def7656c100700a8e
+commit: 6ae5e841f16df438a7723a1def7656c100700a8e [2/2] tmp
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250802/202508020606.1JpNEvUC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250802/202508020606.1JpNEvUC-lkp@intel.com/reproduce)
 
-When was RT turned on in syzbot tests, and for what?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508020606.1JpNEvUC-lkp@intel.com/
 
-> Tainted: [W]=WARN
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
->  __might_resched+0x44b/0x5d0 kernel/sched/core.c:8957
->  __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
->  rt_spin_lock+0xc7/0x2c0 kernel/locking/spinlock_rt.c:57
->  spin_lock include/linux/spinlock_rt.h:44 [inline]
->  kcov_remote_start+0x92/0x460 kernel/kcov.c:865
->  kcov_remote_start_usb include/linux/kcov.h:55 [inline]
->  kcov_remote_start_usb_softirq include/linux/kcov.h:89 [inline]
->  __usb_hcd_giveback_urb+0x427/0x710 drivers/usb/core/hcd.c:1662
->  usb_giveback_urb_bh+0x296/0x420 drivers/usb/core/hcd.c:1697
->  process_one_work kernel/workqueue.c:3236 [inline]
->  process_scheduled_works+0xade/0x17b0 kernel/workqueue.c:3319
->  bh_worker+0x2b1/0x600 kernel/workqueue.c:3579
->  tasklet_action+0xc/0x70 kernel/softirq.c:854
->  handle_softirqs+0x22f/0x710 kernel/softirq.c:579
->  run_ksoftirqd+0xac/0x210 kernel/softirq.c:968
->  smpboot_thread_fn+0x53f/0xa60 kernel/smpboot.c:160
->  kthread+0x70e/0x8a0 kernel/kthread.c:464
->  ret_from_fork+0x3f9/0x770 arch/x86/kernel/process.c:148
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
->  </TASK>
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:672:53: error: too few arguments to function call, expected 6, have 5
+     672 |         ret = post_populate(kvm, gfn, pfn, src_page, opaque);
+         |               ~~~~~~~~~~~~~                                ^
+   1 error generated.
+
+
+vim +672 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
+
+   629	
+   630	#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+   631	static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+   632					struct file *file, gfn_t gfn, void __user *src,
+   633					kvm_gmem_populate_cb post_populate, void *opaque)
+   634	{
+   635		pgoff_t index = kvm_gmem_get_index(slot, gfn);
+   636		struct page *src_page = NULL;
+   637		bool is_prepared = false;
+   638		struct folio *folio;
+   639		int ret, max_order;
+   640		kvm_pfn_t pfn;
+   641	
+   642		if (src) {
+   643			ret = get_user_pages((unsigned long)src, 1, 0, &src_page);
+   644			if (ret < 0)
+   645				return ret;
+   646			if (ret != 1)
+   647				return -ENOMEM;
+   648		}
+   649	
+   650		filemap_invalidate_lock(file->f_mapping);
+   651	
+   652		if (!kvm_range_has_memory_attributes(kvm, gfn, gfn + 1,
+   653						     KVM_MEMORY_ATTRIBUTE_PRIVATE,
+   654						     KVM_MEMORY_ATTRIBUTE_PRIVATE)) {
+   655			ret = -EINVAL;
+   656			goto out_unlock;
+   657		}
+   658	
+   659		folio = __kvm_gmem_get_pfn(file, slot, index, &pfn, &is_prepared, &max_order);
+   660		if (IS_ERR(folio)) {
+   661			ret = PTR_ERR(folio);
+   662			goto out_unlock;
+   663		}
+   664	
+   665		folio_unlock(folio);
+   666	
+   667		if (is_prepared) {
+   668			ret = -EEXIST;
+   669			goto out_put_folio;
+   670		}
+   671	
+ > 672		ret = post_populate(kvm, gfn, pfn, src_page, opaque);
+   673		if (!ret)
+   674			kvm_gmem_mark_prepared(folio);
+   675	
+   676	out_put_folio:
+   677		folio_put(folio);
+   678	out_unlock:
+   679		filemap_invalidate_unlock(file->f_mapping);
+   680	
+   681		if (src_page)
+   682			put_page(src_page);
+   683		return ret;
+   684	}
+   685	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
