@@ -1,130 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mail-24429.protonmail.ch (mail-24429.protonmail.ch [109.224.244.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD05207E03;
-	Sat,  2 Aug 2025 23:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82B14C83
+	for <llvm@lists.linux.dev>; Sun,  3 Aug 2025 01:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754176317; cv=none; b=IsPyKf/uC+gY7H++7AK7F1WhuQsQg5NGfYuRfMfWAca+jtayDEn0v96s3417WyaRa2g8tXu2LcCEdlvO1pn/ObJDAQod5+uA+BqkJctmzdwShe0ylWBzEF93nxiP2L9m4HMpa2uaiU49z/+C2l8yoRnP3hxNj/0aabBrBqgpvTc=
+	t=1754183717; cv=none; b=Isaq7wHCNL06g7IuNcVS5pyiOkU+Qt4//clrO/G6zTe2Wx/jbFBO++816Ij0cl/tfS0hgqVwg6MgaaHrUUWvtkb686mNNlw2Q42cejL/HK0g5RXa/HYZbnMNTWiiJkq8pPNzNwnBcac9TFsczEYfmWfWIUmyfoAIffTdc6Mv8Ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754176317; c=relaxed/simple;
-	bh=J8kmkc6Y6J6DlHjbF2pMDHETrUO3O1dG6KMFJF1BrhI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iqWtpnKyqoDFcUt25+Q73M8/c4UNqQUvxRkLphIfO5BI0uOeNZrHTTWk86P0tujsI7MSBePZIcQgQ5uvzF0oa6rxJryqNgaG1v0poFzReEp/B803C8vvxWU925eZ/sR3tXAQHdT2NLKwU4O8kTyJ5dBPYZl7CQJ77YOq/J3lVh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNndWx7C; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754183717; c=relaxed/simple;
+	bh=AbaIU6fIUSKXfj+PX0L2qquN4QciTQ3wh05NpGZMtDg=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tfGUywGUsxenIZ5rT5py6meT57fPg50WC6AWx8yGkszXIHSNTpCk2A3Hqx5J8SNiUjcZr8k6eVMiBOw3lzk/l0K/rdPX/IdG5GVIEd+i2QBvoFxt7t8kxu4H6U/g0TAyQ/cWaUgXOZt+hGFFccphE3yJ0UtragQ7tW9BlRh6OPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=T97XPUI4; arc=none smtp.client-ip=109.224.244.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNndWx7C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754176316; x=1785712316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J8kmkc6Y6J6DlHjbF2pMDHETrUO3O1dG6KMFJF1BrhI=;
-  b=mNndWx7CQ1ZYW5HOLArP27Ico7wHv8LL13YHI9YyyxWYfZRqjSUQPfKL
-   1cHu4zDU49hRKEx3ppUyJ1bKib/PAVs8hTu0cytS6e/aY/9Y9ePfSKwSC
-   IpAVtNbimxydbr4k/Q8uf0UYGf0TMxQDxFySyU8YmLI+tC+XZtDQhxeFh
-   jlbWiBDGsU/I3zQvcGAldj9NHJ/RPgxFiI4vFyozv/yUEciP8vOsK38rZ
-   rxXE3w1ZsPE4E+e9I/9vmkjACLiCqRIqjffYnuFd2J1DS0NgKDqRCLKgy
-   fDUzHZf4yBl/cdoPTWJ5qE/BFBpei7Tle0xETETZiVRGpMkaul9R9Bbd6
-   Q==;
-X-CSE-ConnectionGUID: /F6+wJ6vQXmMNzSHP/gcgQ==
-X-CSE-MsgGUID: /q6ZXvVtR/GzSMAKj9KARg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11510"; a="67933630"
-X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
-   d="scan'208";a="67933630"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2025 16:11:56 -0700
-X-CSE-ConnectionGUID: wFtY3sCrS1SgLDt3sFAuXg==
-X-CSE-MsgGUID: 9e9MmVThTU+KGBsCfkksVw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,258,1747724400"; 
-   d="scan'208";a="169155890"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 02 Aug 2025 16:11:52 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uiLOI-0005eG-1c;
-	Sat, 02 Aug 2025 23:11:50 +0000
-Date: Sun, 3 Aug 2025 07:11:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>, linux-block@vger.kernel.org,
-	linux-nvme@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, hch@lst.de,
-	axboe@kernel.dk, joshi.k@samsung.com,
-	Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv4 6/8] blk-mq-dma: add support for mapping integrity
- metadata
-Message-ID: <202508030710.X3P9snty-lkp@intel.com>
-References: <20250731150513.220395-7-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="T97XPUI4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1754183706; x=1754442906;
+	bh=AbaIU6fIUSKXfj+PX0L2qquN4QciTQ3wh05NpGZMtDg=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=T97XPUI4tSewliMskEEfdhM9+rL4wQR5XTgDapne6TbIss9LIky4jV4ZyRS3+5+JF
+	 fpi/RTwE7ql0HxcwhfjkZbjImlu2Q7tmFJ/xClJ3+WskhwQrivDObMu5ynWTfvFzT4
+	 aMMvFS9asFo5YMj9xYiXkABchmrwWHic28SnmnsrbChrHBBbNXm0SUhTEhcT7teS93
+	 s0XagZEbf+7sQRqVDzNkaymm6JjRYsUNdVZm6DCDskZY8DhAQFWrqMnptUcyjg+LB+
+	 Tevpf+RfsAR1mG5PYDfzPMhKKeOwwbMx0MflpSc9XSDJ8RnVzi14su5nT2N2hSX2WQ
+	 2XWWUtmkYEBpQ==
+Date: Sun, 03 Aug 2025 01:15:02 +0000
+To: koachan@protonmail.com
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] sparc/module: Add R_SPARC_UA64 relocation handling
+Message-ID: <L-bOu33R0ouNodufTRVlvyqOoz0SGuskQ_bqQ4X_xBkw91w4XmezvmkG0p6Ith-rsFIKYSkQWHUdMJ_G0lyYJhtg18c-mfWWjPKiI_Or6cE=@protonmail.com>
+In-Reply-To: <20250609-b4-sparc-relocs-v1-1-aa52631735af@protonmail.com>
+References: <20250609-b4-sparc-relocs-v1-0-aa52631735af@protonmail.com> <20250609-b4-sparc-relocs-v1-1-aa52631735af@protonmail.com>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 1586a313d1b715ac35a542be2107c9680efdcc4c
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250731150513.220395-7-kbusch@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Keith,
+Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> From: Koakuma koachan@protonmail.com
+>=20
+>=20
+> This is needed so that the kernel can handle R_SPARC_UA64 relocations,
+> which is emitted by LLVM's IAS.
+>=20
+> Signed-off-by: Koakuma koachan@protonmail.com
+>=20
+> ---
+> arch/sparc/include/asm/elf_64.h | 1 +
+> arch/sparc/kernel/module.c | 1 +
+> 2 files changed, 2 insertions(+)
+>=20
+> diff --git a/arch/sparc/include/asm/elf_64.h b/arch/sparc/include/asm/elf=
+_64.h
+> index 8fb09eec8c3e796a9a79aa0a7877842ceb7ea6d3..694ed081cf8d99adf70be25e5=
+dc0e30a45f70398 100644
+> --- a/arch/sparc/include/asm/elf_64.h
+> +++ b/arch/sparc/include/asm/elf_64.h
+> @@ -58,6 +58,7 @@
+> #define R_SPARC_7 43
+> #define R_SPARC_5 44
+> #define R_SPARC_6 45
+> +#define R_SPARC_UA64 54
+>=20
+> /* Bits present in AT_HWCAP, primarily for Sparc32. */
+> #define HWCAP_SPARC_FLUSH 0x00000001
+> diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
+> index b8c51cc23d96944037494f13d2d65a43bb187729..6e3d4dde4f9ab33040b300c40=
+d5fd5d0584e166d 100644
+> --- a/arch/sparc/kernel/module.c
+> +++ b/arch/sparc/kernel/module.c
+> @@ -87,6 +87,7 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
+> break;
+> #ifdef CONFIG_SPARC64
+> case R_SPARC_64:
+> + case R_SPARC_UA64:
+> location[0] =3D v >> 56;
+>=20
+> location[1] =3D v >> 48;
+>=20
+> location[2] =3D v >> 40;
+>=20
+>=20
+> --
+> 2.49.0
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on linus/master next-20250801]
-[cannot apply to linux-nvme/for-next hch-configfs/for-next v6.16]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/blk-mq-dma-introduce-blk_map_iter/20250731-230719
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20250731150513.220395-7-kbusch%40meta.com
-patch subject: [PATCHv4 6/8] blk-mq-dma: add support for mapping integrity metadata
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250803/202508030710.X3P9snty-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250803/202508030710.X3P9snty-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508030710.X3P9snty-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> block/blk-mq-dma.c:18:27: error: no member named 'bi_integrity' in 'struct bio'
-      18 |                 iter->iter = iter->bio->bi_integrity->bip_iter;
-         |                              ~~~~~~~~~  ^
-   block/blk-mq-dma.c:19:27: error: no member named 'bi_integrity' in 'struct bio'
-      19 |                 iter->bvec = iter->bio->bi_integrity->bip_vec;
-         |                              ~~~~~~~~~  ^
-   2 errors generated.
-
-
-vim +18 block/blk-mq-dma.c
-
-     8	
-     9	static bool __blk_map_iter_next(struct blk_map_iter *iter)
-    10	{
-    11		if (iter->iter.bi_size)
-    12			return true;
-    13		if (!iter->bio || !iter->bio->bi_next)
-    14			return false;
-    15	
-    16		iter->bio = iter->bio->bi_next;
-    17		if (iter->is_integrity) {
-  > 18			iter->iter = iter->bio->bi_integrity->bip_iter;
-    19			iter->bvec = iter->bio->bi_integrity->bip_vec;
-    20		} else {
-    21			iter->iter = iter->bio->bi_iter;
-    22			iter->bvec = iter->bio->bi_io_vec;
-    23		}
-    24		return true;
-    25	}
-    26	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ping. Is there anything else I should do for this?
