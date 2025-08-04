@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE6819E81F;
-	Mon,  4 Aug 2025 00:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3AC1FDD;
+	Mon,  4 Aug 2025 00:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267360; cv=none; b=S5/WlNO3jNoeevMtCI9rjUyZpVRnrALIK+MXDQfoae42sDOpnSWTXG7kOfBFMBZxTK2LKvN4TvrC9MSqNtNzIs8eGmpZBad6E29AAjVo2E8JMJ66iDimu918rea2Xp6YnpGEKRA85mZUapA2YtMKOJGlGP62IMsDFnC4vBN/MJI=
+	t=1754267552; cv=none; b=NtLfhkwM0zuxkyXDOimcBCutQs5A4yHtomsZaXdxoQq/ckFBJN7ky+U2TbKecvI9UxfFk41CXJ7s9SOYFdbeXv0bSDjTwuQ8sMziUgo5a9EMATc4csAgTE4bABjBTftzeimpt6bAFD3ZZNjlelCOfAyx/nCdgdxQqbWrYo1kSDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267360; c=relaxed/simple;
-	bh=9UMiUf1MBn+wDvZ8oHtCiFOAIjMQ1Ucmj6kDwvuEGVg=;
+	s=arc-20240116; t=1754267552; c=relaxed/simple;
+	bh=QJZO0CEIYTdkJkWFdzA7cDa3Xg1LuYhXNu8s3HabCYc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qKpCNSW2hQJh88QMWGsN2KhHAKaSFT5fFOpyWvpbIpxpSHk3jjAibVmIuHFtzPk0t1WYgt8fVIJ4V5ZBar6Efb+IHy1a4d8S9xxzK9YDUxc8Zy9v6O2NtDXgonq9GB+yH31WtHbxUZvFpx7r+R5mLxKlXNnIsNVbGZcs/eTYvZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tL+yWW5l; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=t+8i595zy+jDQSF5Q/4caMoPdGA4zCf9fsi84zZ1PMFDcGjHSLYEjE//KSnvGfIkIKckyMgNxKETjsP4Df8XWesKysPvl9Kh2QNWprnA8NUbNW6W8golVdgBXbLSr1NyiZRx+K5O8ZSJigNf0rS9v69+h7bG0/auJj9gZbIhJjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLHBsedN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tL+yWW5l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727DBC4CEEB;
-	Mon,  4 Aug 2025 00:29:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLHBsedN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CC2C4CEF0;
+	Mon,  4 Aug 2025 00:32:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267360;
-	bh=9UMiUf1MBn+wDvZ8oHtCiFOAIjMQ1Ucmj6kDwvuEGVg=;
+	s=k20201202; t=1754267551;
+	bh=QJZO0CEIYTdkJkWFdzA7cDa3Xg1LuYhXNu8s3HabCYc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tL+yWW5lKlEJq5LLOn+OWGwcfUooPIMlfDwe2+xX8nn3aGEVS3FFTAtWsyQCJWco8
-	 3NiMynYQWSPMXcJFzykwqoihCIH3CDkNIdVA76+UpynGY8EecULqAnz4LGl5VVqHaq
-	 bD0IoW6RJ3C0hAYN5cjl2TfP5behLLKmgZmeClpXgcAjjSebo1f3QfoE0rsM3UMu+6
-	 PF2BxejXuIuvL2PThXk+VzoIyG5dgRg1apwW5xlO95L/zcFYzWktZn0A4AvSGIUozx
-	 HImikGq/XZwEaKLyKvxb8JtgxtQzjAVJVXOdvsMwJLJsMsWLOzlQCKgKzSXFtL4XVh
-	 +w4iTW+BZbtvw==
+	b=SLHBsedNMybiOxcR4sznE/0zdKdhKaKW8UcYZ9WJIVwJckBAWU8SC9TwPAjKc9rA8
+	 4+Ez12rJDYa1pxESg+QvAe5twrnwL4SYW1V1LHhb21UMg3tILYYYofoXXGnOSFZgU3
+	 wZhACU0/78vpAMhMh661TUumGJ/bKVJ4ofFv2q1s83OY5WtaSviqqef0PU0wma3NH0
+	 EjlZ95U5lGl5/DYucxiZsyo3UPpCuZ5NA7ctKRkm9N5qAo9fZJMsV+Tl/KILLGB/HO
+	 a9mseBL5wBLppQnuk906lNv1scYkGVyYG6oP+jyLGwFAMFNASp7RgOmmqUbr9uCUef
+	 zwmoqgQE0po/Q==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -35,15 +35,15 @@ Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	nathan@kernel.org,
 	tglozar@redhat.com,
 	rostedt@goodmis.org,
-	jolsa@kernel.org,
 	charlie@rivosinc.com,
+	acme@redhat.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.15 35/80] tools/build: Fix s390(x) cross-compilation with clang
-Date: Sun,  3 Aug 2025 20:27:02 -0400
-Message-Id: <20250804002747.3617039-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 29/69] tools/build: Fix s390(x) cross-compilation with clang
+Date: Sun,  3 Aug 2025 20:30:39 -0400
+Message-Id: <20250804003119.3620476-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804002747.3617039-1-sashal@kernel.org>
-References: <20250804002747.3617039-1-sashal@kernel.org>
+In-Reply-To: <20250804003119.3620476-1-sashal@kernel.org>
+References: <20250804003119.3620476-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +53,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15.9
+X-stable-base: Linux 6.12.41
 Content-Transfer-Encoding: 8bit
 
 From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
@@ -138,10 +138,10 @@ build failure with minimal risk.
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 5158250988ce..ded48263dd5e 100644
+index 0aa4005017c7..5f2afd95de43 100644
 --- a/tools/scripts/Makefile.include
 +++ b/tools/scripts/Makefile.include
-@@ -101,7 +101,9 @@ else ifneq ($(CROSS_COMPILE),)
+@@ -98,7 +98,9 @@ else ifneq ($(CROSS_COMPILE),)
  # Allow userspace to override CLANG_CROSS_FLAGS to specify their own
  # sysroots and flags or to avoid the GCC call in pure Clang builds.
  ifeq ($(CLANG_CROSS_FLAGS),)
