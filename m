@@ -1,155 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3000A288523;
-	Mon,  4 Aug 2025 16:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFDB28B7C6
+	for <llvm@lists.linux.dev>; Mon,  4 Aug 2025 17:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754325860; cv=none; b=u8F9ZA383w5jWTeaHw2V6N8hxnOwBbenk6LqnF784CeCbrYf+tjA1z6Dl9dkRlW1kwmNkABS3ZcP2BiQmFZmJEjDv8U7JRnqguK1GqiqOMO8AXqheuNjwP6+PP4fXMB8exK8ntkrLHn6O25z7JbLmiHyhBT8g3j7TLm4XMZUssI=
+	t=1754327715; cv=none; b=Lm/OsGrM69M1q8E9TQojdUVB6U2V5KnUD+BZ1SMuwS08h6IjzZrsgesE1A5jn0QqHn0lg8B/R0avTvpcRRJVO01/nE98PRPb0OW1ci/CFzBMLJuOh/VyMlT0GQX0GlXM8eonxbWoq+lxZuNkZTw66GEcTmYJvNff9KZ9GYsQ9hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754325860; c=relaxed/simple;
-	bh=HdxC+YrG0RYotBTATCCMvdXpeJF/VSAnm1GW7teMP8Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=say5jevvhtfS/PHaf396trgil0kicMj9ELicGq4KH5KGOYIQ83nnBaA7wLDB8Up4Hl5DUYw1rfaX7avB45/4qQHl5yoCEXZrbXmm5v/8d8NLfZpRAwe//Ts53syDOUytU5uXj0b2J5sc7P/Q8DPIwMfFDQxQrJ8VvJuwQPNJSGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eht0h6wa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754327715; c=relaxed/simple;
+	bh=BSv3IA5IuUJhTBGL3xkgYTrQYKCsOpXUGxp4B+QDShQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TQdRRK1UoSILbxPQ3z1SCZhxkGwbg9VJqTtkNR0iATQLD6vAfvDwhVkfV+RnTeeFP3vazQsmi/KVJvP9iE+khTHNka+FNrHb6gz+Yn5NSmidc23qEvWu34VMpzP4hdfOwLTJNxccY2rmAXA/9XX0xWfyUdb+i4Q5Do/SW9k8sNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZhFd1XHD; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eht0h6wa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4D0C19425;
-	Mon,  4 Aug 2025 16:44:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754325858;
-	bh=HdxC+YrG0RYotBTATCCMvdXpeJF/VSAnm1GW7teMP8Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eht0h6wavbG5fQnbmTMV1LmgGtMtTND4AiQx88qlrbrKMG7q+I2KV9TG5su1TUwJl
-	 9JdYbIVDZVFNRpe+KxrQj3yYkr4jIKgX9AM48OY/X2HUTDt/yQMqghpZgo8dI+lUiY
-	 sPFgdBPotx0O5vmB6rNUrXXCO7pIkGlxNLrZo/VrhZoavzwFsJfvHQQ5GRxGNORwYq
-	 ll8Z8hIgRcmL2pG5t8gqltpIuUcpQJARO85MAZKd2YSKMLDdNiWDCDoVxzSQxjvD/J
-	 I98kgiMNwgfmoVibR8Ga7ysDFMZhTXmoCPMBAlSUtMbpOVSZMmG3i0SdT9ZJxpw6vZ
-	 nJ6HuuSPbsIvw==
-From: Kees Cook <kees@kernel.org>
-To: linux-arch@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZhFd1XHD"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3b7825e2775so3867580f8f.2
+        for <llvm@lists.linux.dev>; Mon, 04 Aug 2025 10:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754327709; x=1754932509; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ES2rPSb96ZRcMua/upicMCXBbX2m2hK2sP3TCwY9yY=;
+        b=ZhFd1XHDkVA4DluUley4tvybBl+H/+RIJ/Oywoy9UFCULAxK8isIlIYH98bDuxeI/z
+         dHT1x4WJ+UgtKorZkA0wwmPhfiy1k99YmBoofFMGp/KcvMOUSucMkWfyHldSVUMspQ3G
+         IpN+Mrcy3pGN/cPdo4YMDE6WwnZS68RieJEj1PGqRNzD3e4jfnmHdzhXHEi4V8T6fWmy
+         /9B5BxcKjhIN5MYoaq20dXkyL7f2UgDtJI+d+4oNewY5RoVhUw5HZp3CWLRZWHSCxo+a
+         tUCcgY1tOacJKqKfS0mkpHNGGYp93MDGwWJNE47l2BJN+BYmVTWgKiO34fZSRToEJGGz
+         zctA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754327709; x=1754932509;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ES2rPSb96ZRcMua/upicMCXBbX2m2hK2sP3TCwY9yY=;
+        b=NEIueaukCqH7o1mfxF9Unk+43UXLzwT4S8IZZjHndSkorGlTNInsDbkwDau3fOy4x/
+         ELKuIrli42Iz4XkXytqm5aLf38VB9u3qKMt1LptIcdRITdCcJbPY6NatHh3Yl0YcWztj
+         AVp8bb9mVWlF+6GaGhwpgK41aodg80ujrMlEIemlplPXjPXay3UzV4zLB2GflnO6h/nF
+         23LDT6k2n2E3dfmC1FPt6Rjvtsyjm2up6mHSgeExgRaStQw/b6ZLMYF+BT7xGmh3OxOc
+         OpX/zn/ex57+IxDMVpAUWz1M0VVnue2h+DeDRVTrUVSVxZgZBZ5D/hTB1OuICEICoJEB
+         T/Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCWg5KhOV1sLgjO92LK7uamYwEmQk2tFhLSvtsF9EfCNreh8dG/N+QJyaGzkfAMOHJCX8NTj@lists.linux.dev
+X-Gm-Message-State: AOJu0YzlzaBfXhD2UdTq2fRwT3OhNN6DCbeklHXf/d1n4L3fp3B5cpkY
+	58eFUgoO2/+MhVbzzBW2xAPzppcFPKYvyNF3zWF+STrH+E3bCUeiPKpd
+X-Gm-Gg: ASbGncsg9dIqmka6sviG33/IsNvuzAsPYjKsBpT4d91Prby9y2v2tFJR2aKrCTFmceN
+	LSAc7ezjGP42yCuHCRg0t669Cn6ZTJcV6DsorOFeH9XaiSQ4K5rvexefUc2XgFibsOEibsqjSdV
+	hdjdkidko1pWhhQgfvpssIAviFrAT6RPhJISSaJNiRVEWo6vnDbjlHHNl+N+uWTaw9OSTrhMmKk
+	fR8YbqtXS7S6e5G1K07O2DO8mybRkIg1C8q9tyhYGhyPh+vp3KeYaKNg0W76YesqL/zBUl42YDK
+	FiZLF5m5D/BMv2+Dgq+to26XxzKlmSpaW1bsGnYCzcbgGkRk4gR645CCH+uSIUBFXLrq+VFLcMD
+	u99kDNZPwCflo4HQw3yCGnFimN10both5ZXmfYPbw9V27C0McLrpDSVsrVCpzyA==
+X-Google-Smtp-Source: AGHT+IEpNawQWUPhZIXoNWLCtN2+qaXCsKArzNXCXzW1yE3i7/WUxeM9GsxIUXvlWMi666W2l82q6Q==
+X-Received: by 2002:a05:6000:40c9:b0:3b8:893f:a185 with SMTP id ffacd0b85a97d-3b8d94cf20dmr7323692f8f.53.1754327708754;
+        Mon, 04 Aug 2025 10:15:08 -0700 (PDT)
+Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c47ae8esm16051546f8f.61.2025.08.04.10.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Aug 2025 10:15:07 -0700 (PDT)
+Date: Mon, 4 Aug 2025 18:15:06 +0100
+From: Stafford Horne <shorne@gmail.com>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	x86@kernel.org, linux-alpha@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 17/17] KUnit: ffs: Validate all the __attribute_const__ annotations
-Date: Mon,  4 Aug 2025 09:44:13 -0700
-Message-Id: <20250804164417.1612371-17-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250804163910.work.929-kees@kernel.org>
+Subject: Re: [PATCH 10/17] openrisc: Add __attribute_const__ to ffs()-family
+ implementations
+Message-ID: <aJDqmoUNhwWeAlpa@antec>
 References: <20250804163910.work.929-kees@kernel.org>
+ <20250804164417.1612371-10-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3872; i=kees@kernel.org; h=from:subject; bh=HdxC+YrG0RYotBTATCCMvdXpeJF/VSAnm1GW7teMP8Q=; b=owGbwMvMwCVmps19z/KJym7G02pJDBkTHsc45wRtnf/oYkjVF1ejQumtl0UPxWm1daQdPSSrw bs5K8W2o5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCKRWxgZOjz/P/l/pMCzl0Hu 27r4n4VL9jtHtEl/uSCclF54euLlvwz/qxb+jO8s3m0ks3bJu3DRTzNP+l7bENDeHCloJ86woVy TAwA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250804164417.1612371-10-kees@kernel.org>
 
-While tracking down a problem where constant expressions used by
-BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-initializer was convincing the compiler that it couldn't track the state
-of the prior statically initialized value. Tracing this down found that
-ffs() was used in the initializer macro, but since it wasn't marked with
-__attribute_const__, the compiler had to assume the function might
-change variable states as a side-effect (which is not true for ffs(),
-which provides deterministic math results).
+On Mon, Aug 04, 2025 at 09:44:06AM -0700, Kees Cook wrote:
+> While tracking down a problem where constant expressions used by
+> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
+> initializer was convincing the compiler that it couldn't track the state
+> of the prior statically initialized value. Tracing this down found that
+> ffs() was used in the initializer macro, but since it wasn't marked with
+> __attribute__const__, the compiler had to assume the function might
+> change variable states as a side-effect (which is not true for ffs(),
+> which provides deterministic math results).
+> 
+> Add missing __attribute_const__ annotations to OpenRISC's implementations of
+> ffs(), __ffs(), fls(), and __fls() functions. These are pure mathematical
+> functions that always return the same result for the same input with no
+> side effects, making them eligible for compiler optimization.
+> 
+> Build tested ARCH=openrisc defconfig with GCC or1k-linux 15.1.0.
 
-Validate all the __attibute_const__ annotations were found for all
-architectures by reproducing the specific problem encountered in the
-original bug report.
+THis looks ok to me.
 
-Build and run tested with everything I could reach with KUnit:
+> Link: https://github.com/KSPP/linux/issues/364 [1]
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-$ ./tools/testing/kunit/kunit.py run --arch=x86_64 ffs
-$ ./tools/testing/kunit/kunit.py run --arch=i386 ffs
-$ ./tools/testing/kunit/kunit.py run --arch=arm64 --make_options "CROSS_COMPILE=aarch64-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=arm --make_options "CROSS_COMPILE=arm-linux-gnueabi-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=powerpc ffs
-$ ./tools/testing/kunit/kunit.py run --arch=powerpc32 ffs
-$ ./tools/testing/kunit/kunit.py run --arch=powerpcle ffs
-$ ./tools/testing/kunit/kunit.py run --arch=m68k ffs
-$ ./tools/testing/kunit/kunit.py run --arch=loongarch ffs
-$ ./tools/testing/kunit/kunit.py run --arch=s390 --make_options "CROSS_COMPILE=s390x-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=riscv --make_options "CROSS_COMPILE=riscv64-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=riscv32 --make_options "CROSS_COMPILE=riscv64-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=sparc --make_options "CROSS_COMPILE=sparc64-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=sparc64 --make_options "CROSS_COMPILE=sparc64-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=alpha --make_options "CROSS_COMPILE=alpha-linux-gnu-" ffs
-$ ./tools/testing/kunit/kunit.py run --arch=sh --make_options "CROSS_COMPILE=sh4-linux-gnu-" ffs
+Acked-by: Stafford Horne <shorne@gmail.com>
 
-Closes: https://github.com/KSPP/linux/issues/364
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- lib/tests/ffs_kunit.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/lib/tests/ffs_kunit.c b/lib/tests/ffs_kunit.c
-index ed11456b116e..9a329cdc09c2 100644
---- a/lib/tests/ffs_kunit.c
-+++ b/lib/tests/ffs_kunit.c
-@@ -496,6 +496,46 @@ static void ffz_edge_cases_test(struct kunit *test)
- 	}
- }
- 
-+/*
-+ * To have useful build error output, split the tests into separate
-+ * functions so it's clear which are missing __attribute_const__.
-+ */
-+#define CREATE_WRAPPER(func)						\
-+static noinline bool build_test_##func(void)				\
-+{									\
-+	int init_##func = 32;						\
-+	int result_##func = func(6);					\
-+									\
-+	/* Does the static initializer vanish after calling func? */	\
-+	BUILD_BUG_ON(init_##func < 32);					\
-+									\
-+	/* "Consume" the results so optimizer doesn't drop them. */	\
-+	barrier_data(&init_##func);					\
-+	barrier_data(&result_##func);					\
-+									\
-+	return true;							\
-+}
-+CREATE_WRAPPER(ffs)
-+CREATE_WRAPPER(fls)
-+CREATE_WRAPPER(__ffs)
-+CREATE_WRAPPER(__fls)
-+CREATE_WRAPPER(ffz)
-+#undef CREATE_WRAPPER
-+
-+/*
-+ * Make sure that __attribute_const__ has be applied to all the
-+ * functions. This is a regression test for:
-+ * https://github.com/KSPP/linux/issues/364
-+ */
-+static void ffs_attribute_const_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_TRUE(test, build_test_ffs());
-+	KUNIT_EXPECT_TRUE(test, build_test_fls());
-+	KUNIT_EXPECT_TRUE(test, build_test___ffs());
-+	KUNIT_EXPECT_TRUE(test, build_test___fls());
-+	KUNIT_EXPECT_TRUE(test, build_test_ffz());
-+}
-+
- /*
-  * KUnit test case definitions
-  */
--- 
-2.34.1
-
+> ---
+>  arch/openrisc/include/asm/bitops/__ffs.h | 2 +-
+>  arch/openrisc/include/asm/bitops/__fls.h | 2 +-
+>  arch/openrisc/include/asm/bitops/ffs.h   | 2 +-
+>  arch/openrisc/include/asm/bitops/fls.h   | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/openrisc/include/asm/bitops/__ffs.h b/arch/openrisc/include/asm/bitops/__ffs.h
+> index 1e224b616fdf..4827b66530b2 100644
+> --- a/arch/openrisc/include/asm/bitops/__ffs.h
+> +++ b/arch/openrisc/include/asm/bitops/__ffs.h
+> @@ -11,7 +11,7 @@
+>  
+>  #ifdef CONFIG_OPENRISC_HAVE_INST_FF1
+>  
+> -static inline unsigned long __ffs(unsigned long x)
+> +static inline __attribute_const__ unsigned long __ffs(unsigned long x)
+>  {
+>  	int ret;
+>  
+> diff --git a/arch/openrisc/include/asm/bitops/__fls.h b/arch/openrisc/include/asm/bitops/__fls.h
+> index 9658446ad141..637cc76fe4b7 100644
+> --- a/arch/openrisc/include/asm/bitops/__fls.h
+> +++ b/arch/openrisc/include/asm/bitops/__fls.h
+> @@ -11,7 +11,7 @@
+>  
+>  #ifdef CONFIG_OPENRISC_HAVE_INST_FL1
+>  
+> -static inline unsigned long __fls(unsigned long x)
+> +static inline __attribute_const__ unsigned long __fls(unsigned long x)
+>  {
+>  	int ret;
+>  
+> diff --git a/arch/openrisc/include/asm/bitops/ffs.h b/arch/openrisc/include/asm/bitops/ffs.h
+> index b4c835d6bc84..536a60ab9cc3 100644
+> --- a/arch/openrisc/include/asm/bitops/ffs.h
+> +++ b/arch/openrisc/include/asm/bitops/ffs.h
+> @@ -10,7 +10,7 @@
+>  
+>  #ifdef CONFIG_OPENRISC_HAVE_INST_FF1
+>  
+> -static inline int ffs(int x)
+> +static inline __attribute_const__ int ffs(int x)
+>  {
+>  	int ret;
+>  
+> diff --git a/arch/openrisc/include/asm/bitops/fls.h b/arch/openrisc/include/asm/bitops/fls.h
+> index 6b77f6556fb9..77da7639bb3e 100644
+> --- a/arch/openrisc/include/asm/bitops/fls.h
+> +++ b/arch/openrisc/include/asm/bitops/fls.h
+> @@ -11,7 +11,7 @@
+>  
+>  #ifdef CONFIG_OPENRISC_HAVE_INST_FL1
+>  
+> -static inline int fls(unsigned int x)
+> +static inline __attribute_const__ int fls(unsigned int x)
+>  {
+>  	int ret;
+>  
+> -- 
+> 2.34.1
+> 
+> 
