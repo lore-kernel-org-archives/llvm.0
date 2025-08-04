@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29F329A2;
-	Mon,  4 Aug 2025 00:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE6819E81F;
+	Mon,  4 Aug 2025 00:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267125; cv=none; b=axghzG2o+i9Aczmd2ung2oqOKywoO2GhqirCD0Zb1qI5qGHqWjZSeaHADXCr6KnCmd0PCmXiG6s+lgwYzqilsArqTSJJFpMzj9C9bDOAXutL9ZPMmX1a4I/yK2BxoRFMuyqC1AGCe0UAEXRMb6izv8mC0SnUEaAaT22rqv5YiUM=
+	t=1754267360; cv=none; b=S5/WlNO3jNoeevMtCI9rjUyZpVRnrALIK+MXDQfoae42sDOpnSWTXG7kOfBFMBZxTK2LKvN4TvrC9MSqNtNzIs8eGmpZBad6E29AAjVo2E8JMJ66iDimu918rea2Xp6YnpGEKRA85mZUapA2YtMKOJGlGP62IMsDFnC4vBN/MJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267125; c=relaxed/simple;
+	s=arc-20240116; t=1754267360; c=relaxed/simple;
 	bh=9UMiUf1MBn+wDvZ8oHtCiFOAIjMQ1Ucmj6kDwvuEGVg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XB11zd7UtvdplKbwwNQEnebU5kQDLh6e978z4NjbK11h5594zdf+IfIYplcgn06ASJVwhI5VQxg5Vcf0jHNw0zN5HqLgfS3nzHwuACFFXp3c18ajsifJrLrLibdAJKpFmm2HxT76ZxVuZ9BXIzHGo893comv1RDDFeiNT8SB6Ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJpbDRMc; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=qKpCNSW2hQJh88QMWGsN2KhHAKaSFT5fFOpyWvpbIpxpSHk3jjAibVmIuHFtzPk0t1WYgt8fVIJ4V5ZBar6Efb+IHy1a4d8S9xxzK9YDUxc8Zy9v6O2NtDXgonq9GB+yH31WtHbxUZvFpx7r+R5mLxKlXNnIsNVbGZcs/eTYvZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tL+yWW5l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJpbDRMc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0A9AC4CEF0;
-	Mon,  4 Aug 2025 00:25:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tL+yWW5l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727DBC4CEEB;
+	Mon,  4 Aug 2025 00:29:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267124;
+	s=k20201202; t=1754267360;
 	bh=9UMiUf1MBn+wDvZ8oHtCiFOAIjMQ1Ucmj6kDwvuEGVg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WJpbDRMcL/0oIVhc4JSE0d8Sa5JLad+tEm2jvvc1okwVf+hW7t2ChYWqIlZbKh+f4
-	 Oe5/siaZ/+BbrPzbO5qTd5uKrrkgai5L+LNLLO4a+E52DoaB6pB7+al83wHtjkU7rG
-	 xhH2zTubtBj8A4nNadeg3rxut5WHUefNQXtSf55oeiLG0jF0dAoxq17IQWsZpVIJye
-	 eC0hMcMXmflbhQwSQ9fsRbcugGACh2oQZug3L/B2BCuqJM7sNvVLUAblzYilOODF9D
-	 fsqd+NYcLNsyxSTMYWuW2A6p0mmJwTI9YJIKJ1+pWijz3YcHBBOTZaETOBmrOT9Z50
-	 Lq+DMIbgjBOaQ==
+	b=tL+yWW5lKlEJq5LLOn+OWGwcfUooPIMlfDwe2+xX8nn3aGEVS3FFTAtWsyQCJWco8
+	 3NiMynYQWSPMXcJFzykwqoihCIH3CDkNIdVA76+UpynGY8EecULqAnz4LGl5VVqHaq
+	 bD0IoW6RJ3C0hAYN5cjl2TfP5behLLKmgZmeClpXgcAjjSebo1f3QfoE0rsM3UMu+6
+	 PF2BxejXuIuvL2PThXk+VzoIyG5dgRg1apwW5xlO95L/zcFYzWktZn0A4AvSGIUozx
+	 HImikGq/XZwEaKLyKvxb8JtgxtQzjAVJVXOdvsMwJLJsMsWLOzlQCKgKzSXFtL4XVh
+	 +w4iTW+BZbtvw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -35,15 +35,15 @@ Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	nathan@kernel.org,
 	tglozar@redhat.com,
 	rostedt@goodmis.org,
+	jolsa@kernel.org,
 	charlie@rivosinc.com,
-	andrii@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.16 36/85] tools/build: Fix s390(x) cross-compilation with clang
-Date: Sun,  3 Aug 2025 20:22:45 -0400
-Message-Id: <20250804002335.3613254-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.15 35/80] tools/build: Fix s390(x) cross-compilation with clang
+Date: Sun,  3 Aug 2025 20:27:02 -0400
+Message-Id: <20250804002747.3617039-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804002335.3613254-1-sashal@kernel.org>
-References: <20250804002335.3613254-1-sashal@kernel.org>
+In-Reply-To: <20250804002747.3617039-1-sashal@kernel.org>
+References: <20250804002747.3617039-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +53,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.16
+X-stable-base: Linux 6.15.9
 Content-Transfer-Encoding: 8bit
 
 From: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
