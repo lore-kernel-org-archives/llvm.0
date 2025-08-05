@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A422E36F6;
-	Tue,  5 Aug 2025 18:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A741523D280;
+	Tue,  5 Aug 2025 19:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754420158; cv=none; b=fjESGYMqO/Wb+CecOXDYobFWN8L6Lox4wgZMva+dpeWIpsJvtS5rYBw1N9K8uYZkEEPZQ3KlhUpTTf9Gn2vJ0tGDK2opHXscJmBwZUDwjpKOMJwsKKbYy1Kg+Hv1uMqJ6e0lB1uWVg0kiETC50oEjAU6CRVISX4zrQI0vjTocWs=
+	t=1754423422; cv=none; b=bi9YArAy6RT2oCLddfgF/Cfy9qlwSol1w4HeSyssi8XtBVc55/TuGSOuq+g7tUfViLXoebODlKytHXrLAt68eOEz8GEs2p7s09Tre7Bh+KTu232wcyz9DMJAPYY61m4GrPi6Nv0UQZ8Qg7z35yGAWFoM1Pq5Os7Mo/Bf8up06BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754420158; c=relaxed/simple;
-	bh=KFwarEgTIgd3P2HiXSkhm+b4Pa1sd+1sLQw0H4V1E6g=;
+	s=arc-20240116; t=1754423422; c=relaxed/simple;
+	bh=sq+TsBlokvj2nW5GBy+xlnJIXewATZWVZsqJKTacnf8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Lqso8DKuvKtDIkYU85luaydZa2yq6Jmjp6zvczgPDuoGsbgViZOAbsBt5XbRYeL0sDn6uIn7LEEZS1tFL+M0gPjYSqqpZ+3hAVpvp5JlxgFOfvP422uGSXdnD5IAsneZ5BzYBhBzNcpr24MYClK6T0B+KTZGF6qeyHue9B4aJFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G6Aau0ak; arc=none smtp.client-ip=198.175.65.16
+	 Content-Disposition; b=Eq8lqS2eqaQg3QVir35K9ZukE/b40+j2qnShI+TR6qgl92oDbsnrk5LMKi5xy/segkhPDUSuJ+xDbGh3KDY+FE0LdA4nSAjjH6gzvwazr1m6ku+d7LySMoDLibDQKJWiQnPliVoGexHu0K4vBy0NLeo2gbXgAVs8czrkGRMVBg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I0Walifb; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G6Aau0ak"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I0Walifb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754420156; x=1785956156;
+  t=1754423421; x=1785959421;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KFwarEgTIgd3P2HiXSkhm+b4Pa1sd+1sLQw0H4V1E6g=;
-  b=G6Aau0akEmVFAS+bJtH5ct5HTXkJN+r2Zai3MYpVPsD2RPb+NeKZmzv5
-   G0f2y7hbFC9DRITa4GzGY19+EjQe41466sOjJxvOIbO4oagUiqDKLYpP6
-   /YkyDYjFutcikQW0NpEvWE4kpGj53EWzJojtQv+MdvRAnv9fPVZJHwdwA
-   bpnnyaabWMKODRWadD/6e7pj3Os0F64iTeEvQ5MStEYEuZ/P5vkqZlw+8
-   bIxrhK6GgrlULM31gbzjcqjn9n1sup9hAnWWAqcj0u3Ceyxnx6/AIzwyU
-   Fc+StfXfQ5XmxzRkzxITSObsopINWS5nJURa342XS/FVD0udU2kBi/SZa
-   g==;
-X-CSE-ConnectionGUID: rQfrRlUiRemRpdofFqmFAg==
-X-CSE-MsgGUID: tZhVEXfiTh2KOk/T5PS2jw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56872341"
+  bh=sq+TsBlokvj2nW5GBy+xlnJIXewATZWVZsqJKTacnf8=;
+  b=I0Walifb0rrPE1xAD3dv6fDwwdNP4wDxitLewfEo4oxDMv0DFmU+5qHi
+   jsWIxyRr8oLa1aE45Ue7vzWZCuqeV/jjmiHzoF3CxCltZum0EVdecyxSo
+   6Jw2J7wfsojXjkauUprDX3oNM9pmSEar/4niqvicJq2Qic93tFBunOe/u
+   dgWBxCqS86DbuMBo+ygkETmpkeJQps+lHV6g0wtAX11/Zku5GcrAkAYeG
+   Tezs6qFQRu/lXPCy4GW810Pt6oCSzW22zTWDbGUVTTPmiGPvl4JssHKU5
+   Z1WT2fbnz30CPe/X2B8hcL1YtyzVV7dF7QTZl6VZEGJisjmlzZC7qkzyD
+   w==;
+X-CSE-ConnectionGUID: m8DpIrPVQBmjg/LRGwcgrA==
+X-CSE-MsgGUID: gUMd3rjIRaia6EaNzUcowA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56625717"
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="56872341"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 11:55:56 -0700
-X-CSE-ConnectionGUID: ISu1QqVOTqSW3Qdytqg2yA==
-X-CSE-MsgGUID: BY0crQMNSPyXEcULm35l9A==
+   d="scan'208";a="56625717"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 12:50:21 -0700
+X-CSE-ConnectionGUID: drbTNnOZRwGL08M5Q8H75g==
+X-CSE-MsgGUID: nkPVE99SQ0KhNGkj3pzpzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="168718125"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa003.fm.intel.com with ESMTP; 05 Aug 2025 11:55:54 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+   d="scan'208";a="169848691"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 05 Aug 2025 12:50:19 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ujMpE-00022t-1C;
-	Tue, 05 Aug 2025 18:55:52 +0000
-Date: Tue, 5 Aug 2025 20:55:19 +0200
+	id 1ujNfs-0000ly-31;
+	Tue, 05 Aug 2025 19:50:16 +0000
+Date: Wed, 6 Aug 2025 03:49:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nemesa Garg <nemesa.garg@intel.com>
+To: Kees Cook <kees@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Suraj Kandpal <suraj.kandpal@intel.com>,
-	Animesh Manna <animesh.manna@intel.com>
-Subject: [drm-i915:drm-intel-next 1/1]
- drivers/gpu/drm/i915/display/skl_scaler.c:967:57: warning: variable 'id' is
- uninitialized when used here
-Message-ID: <202508052002.gCODptW2-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from'
+ declared with 'error' attribute: copy source size is too small
+Message-ID: <202508060351.OMeX2wGa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,64 +63,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://gitlab.freedesktop.org/drm/i915/kernel drm-intel-next
-head:   73309ed9d598d35576431c4691813e080980df68
-commit: 73309ed9d598d35576431c4691813e080980df68 [1/1] drm/i915/display: WA_14011503117
-config: x86_64-buildonly-randconfig-2004-20250805 (https://download.01.org/0day-ci/archive/20250805/202508052002.gCODptW2-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250805/202508052002.gCODptW2-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
+commit: 808aac63e2bdf9bae08485e072bf3d317a18acbf uaccess: Introduce ucopysize.h
+date:   5 months ago
+config: um-randconfig-001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508052002.gCODptW2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508060351.OMeX2wGa-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/skl_scaler.c:967:57: warning: variable 'id' is uninitialized when used here [-Wuninitialized]
-     967 |         intel_de_write_fw(display, SKL_PS_ECC_STAT(crtc->pipe, id), 1);
-         |                                                                ^~
-   drivers/gpu/drm/i915/display/intel_display_regs.h:1193:8: note: expanded from macro 'SKL_PS_ECC_STAT'
-    1193 |                         _ID(id, _PS_ECC_STAT_1A, _PS_ECC_STAT_2A),   \
-         |                             ^~
-   drivers/gpu/drm/i915/display/intel_display_regs.h:1043:34: note: expanded from macro '_ID'
-    1043 | #define _ID(id, a, b) _PICK_EVEN(id, a, b)
-         |                                  ^~
-   drivers/gpu/drm/i915/i915_reg_defs.h:127:49: note: expanded from macro '_PICK_EVEN'
-     127 | #define _PICK_EVEN(__index, __a, __b) ((__a) + (__index) * ((__b) - (__a)))
-         |                                                 ^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/gpu/drm/i915/display/intel_display_reg_defs.h:18:45: note: expanded from macro '_PIPE'
-      18 | #define _PIPE(pipe, a, b)               _PICK_EVEN(pipe, a, b)
-         |                                                          ^
-   drivers/gpu/drm/i915/i915_reg_defs.h:127:41: note: expanded from macro '_PICK_EVEN'
-     127 | #define _PICK_EVEN(__index, __a, __b) ((__a) + (__index) * ((__b) - (__a)))
-         |                                         ^~~
-   drivers/gpu/drm/i915/i915_reg_defs.h:181:47: note: expanded from macro '_MMIO'
-     181 | #define _MMIO(r) ((const i915_reg_t){ .reg = (r) })
-         |                                               ^
-   drivers/gpu/drm/i915/display/skl_scaler.c:962:8: note: initialize the variable 'id' to silence this warning
-     962 |         int id;
-         |               ^
-         |                = 0
-   1 warning generated.
+   In file included from net/sctp/socket.c:45:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:10:
+>> include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
+                           __bad_copy_from();
+                           ^
+   1 error generated.
 
 
-vim +/id +967 drivers/gpu/drm/i915/display/skl_scaler.c
+vim +45 include/linux/ucopysize.h
 
-   955	
-   956	void adl_scaler_ecc_unmask(const struct intel_crtc_state *crtc_state)
-   957	{
-   958		struct intel_display *display = to_intel_display(crtc_state);
-   959		struct intel_crtc *crtc = to_intel_crtc(crtc_state->uapi.crtc);
-   960		const struct intel_crtc_scaler_state *scaler_state =
-   961			&crtc_state->scaler_state;
-   962		int id;
-   963	
-   964		if (!scaler_state && scaler_state->scaler_id == -1)
-   965			return;
-   966	
- > 967		intel_de_write_fw(display, SKL_PS_ECC_STAT(crtc->pipe, id), 1);
+    36	
+    37	static __always_inline __must_check bool
+    38	check_copy_size(const void *addr, size_t bytes, bool is_source)
+    39	{
+    40		int sz = __builtin_object_size(addr, 0);
+    41		if (unlikely(sz >= 0 && sz < bytes)) {
+    42			if (!__builtin_constant_p(bytes))
+    43				copy_overflow(sz, bytes);
+    44			else if (is_source)
+  > 45				__bad_copy_from();
+    46			else
+    47				__bad_copy_to();
+    48			return false;
+    49		}
+    50		if (WARN_ON_ONCE(bytes > INT_MAX))
+    51			return false;
+    52		check_object_size(addr, bytes, is_source);
+    53		return true;
+    54	}
+    55	
 
 -- 
 0-DAY CI Kernel Test Service
