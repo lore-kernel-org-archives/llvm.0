@@ -1,59 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A741523D280;
-	Tue,  5 Aug 2025 19:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EF521D5B6;
+	Tue,  5 Aug 2025 21:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754423422; cv=none; b=bi9YArAy6RT2oCLddfgF/Cfy9qlwSol1w4HeSyssi8XtBVc55/TuGSOuq+g7tUfViLXoebODlKytHXrLAt68eOEz8GEs2p7s09Tre7Bh+KTu232wcyz9DMJAPYY61m4GrPi6Nv0UQZ8Qg7z35yGAWFoM1Pq5Os7Mo/Bf8up06BA=
+	t=1754429907; cv=none; b=EWJRCoC3Pdzfto/fWtFaC0SWaPymiy8HHxFQceHlsJY9HRJV7fl8D6W0LscBs5HALX9kcv1luRm5I6KGn0dnahJ50nzju8n92zqLXIA5Ckns0ko20Ha2FReBSJtXBE0J2OCb/cyLq70v45RxUXlAwpJFfE3Sd4lVkvadoFNzUmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754423422; c=relaxed/simple;
-	bh=sq+TsBlokvj2nW5GBy+xlnJIXewATZWVZsqJKTacnf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Eq8lqS2eqaQg3QVir35K9ZukE/b40+j2qnShI+TR6qgl92oDbsnrk5LMKi5xy/segkhPDUSuJ+xDbGh3KDY+FE0LdA4nSAjjH6gzvwazr1m6ku+d7LySMoDLibDQKJWiQnPliVoGexHu0K4vBy0NLeo2gbXgAVs8czrkGRMVBg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I0Walifb; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754429907; c=relaxed/simple;
+	bh=O7QEgj3AC1Za8HKKsiIH4fTV8OJN8Z6NVdCKquxoXzA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VhSpAGyJMzYSHv8v+2MVV4pm9y2YLdoukvTawzreNfhHyRW6+1M9rijp4BZpX2TbG6MW6hCzOQsnfqWyBZaAlqFrCfx34KAx/6+GHLCEBfA+d15AJsYVmOQLtdaCoUmzCeGd8Lj9wzQYB+lgMfgfVUrR/5sDMwAehsOqszgsXVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MKspjJAP; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I0Walifb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MKspjJAP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754423421; x=1785959421;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sq+TsBlokvj2nW5GBy+xlnJIXewATZWVZsqJKTacnf8=;
-  b=I0Walifb0rrPE1xAD3dv6fDwwdNP4wDxitLewfEo4oxDMv0DFmU+5qHi
-   jsWIxyRr8oLa1aE45Ue7vzWZCuqeV/jjmiHzoF3CxCltZum0EVdecyxSo
-   6Jw2J7wfsojXjkauUprDX3oNM9pmSEar/4niqvicJq2Qic93tFBunOe/u
-   dgWBxCqS86DbuMBo+ygkETmpkeJQps+lHV6g0wtAX11/Zku5GcrAkAYeG
-   Tezs6qFQRu/lXPCy4GW810Pt6oCSzW22zTWDbGUVTTPmiGPvl4JssHKU5
-   Z1WT2fbnz30CPe/X2B8hcL1YtyzVV7dF7QTZl6VZEGJisjmlzZC7qkzyD
-   w==;
-X-CSE-ConnectionGUID: m8DpIrPVQBmjg/LRGwcgrA==
-X-CSE-MsgGUID: gUMd3rjIRaia6EaNzUcowA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56625717"
+  t=1754429907; x=1785965907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O7QEgj3AC1Za8HKKsiIH4fTV8OJN8Z6NVdCKquxoXzA=;
+  b=MKspjJAPmOwD57f+Jn/oB0M4ZlS2Jh5eFp7iwv2cyGVfr4Nl7rLvQDH5
+   I98aa3w7ek3xqW+iXQq9y8Azu8YCFz2C6fhChDAi4OqyaLfI0txRA0XMv
+   nndL0G8oqemh0qij8PuDAr9NVGlER2KeiDlBN3cmXpc/VjW+gf6Jdurd+
+   SJjBbOyWyftqQY+51/t2lA2qX7l/ph8zDSdnYRkkRn2MVaPbykxCb27mJ
+   SEZFlWfF8OS/9yL1tJHP01QYn0lmgHPqEBz3dg//5cYZiKLBk3E2npUHO
+   tjNqO30UkqfGmfZ4B/Bq+QsyPoVnpOTG2Ye9KDgmIxm44Ow5QbhnznLhN
+   Q==;
+X-CSE-ConnectionGUID: gDkk5AjMRFeB+kZvVgfCBQ==
+X-CSE-MsgGUID: U3q3n3HWRtKAHBc9jAC6cA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56452879"
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="56625717"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 12:50:21 -0700
-X-CSE-ConnectionGUID: drbTNnOZRwGL08M5Q8H75g==
-X-CSE-MsgGUID: nkPVE99SQ0KhNGkj3pzpzw==
+   d="scan'208";a="56452879"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 14:38:26 -0700
+X-CSE-ConnectionGUID: aUkXqemnQmu846ufHv9L/Q==
+X-CSE-MsgGUID: cEhQfpz0SPekjpI0Nzu6Kg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="169848691"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 05 Aug 2025 12:50:19 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ujNfs-0000ly-31;
-	Tue, 05 Aug 2025 19:50:16 +0000
-Date: Wed, 6 Aug 2025 03:49:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from'
- declared with 'error' attribute: copy source size is too small
-Message-ID: <202508060351.OMeX2wGa-lkp@intel.com>
+   d="scan'208";a="164963402"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 14:38:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1ujPMR-00000003rM2-3Ayl;
+	Wed, 06 Aug 2025 00:38:19 +0300
+Date: Wed, 6 Aug 2025 00:38:19 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: LiangCheng Wang <zaq14760@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>, Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v11 0/4] staging: media: atomisp: indentation cleanup per
+ directory
+Message-ID: <aJJ5y4-nWWS2gISP@smile.fi.intel.com>
+References: <20250726-new_atomisp-v11-0-46eba1953fba@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,55 +72,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250726-new_atomisp-v11-0-46eba1953fba@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
-commit: 808aac63e2bdf9bae08485e072bf3d317a18acbf uaccess: Introduce ucopysize.h
-date:   5 months ago
-config: um-randconfig-001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/reproduce)
+On Sat, Jul 26, 2025 at 03:53:10PM +0800, LiangCheng Wang wrote:
+> This patch focuses on cleaning up indentation (spaces, tabs) in the
+> AtomISP driver under drivers/staging/media/atomisp/pci/isp/kernels/.
+> 
+> There are no functional changes.
+> 
+> This version splits the original cleanup patch into four smaller patches,
+> following review feedback from Dan Carpenter to keep changes focused and easier to review.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508060351.OMeX2wGa-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/sctp/socket.c:45:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:10:
->> include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
-                           __bad_copy_from();
-                           ^
-   1 error generated.
-
-
-vim +45 include/linux/ucopysize.h
-
-    36	
-    37	static __always_inline __must_check bool
-    38	check_copy_size(const void *addr, size_t bytes, bool is_source)
-    39	{
-    40		int sz = __builtin_object_size(addr, 0);
-    41		if (unlikely(sz >= 0 && sz < bytes)) {
-    42			if (!__builtin_constant_p(bytes))
-    43				copy_overflow(sz, bytes);
-    44			else if (is_source)
-  > 45				__bad_copy_from();
-    46			else
-    47				__bad_copy_to();
-    48			return false;
-    49		}
-    50		if (WARN_ON_ONCE(bytes > INT_MAX))
-    51			return false;
-    52		check_object_size(addr, bytes, is_source);
-    53		return true;
-    54	}
-    55	
+This version LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
