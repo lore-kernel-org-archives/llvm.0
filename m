@@ -1,114 +1,165 @@
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32512245012
-	for <llvm@lists.linux.dev>; Tue,  5 Aug 2025 08:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA94259C84;
+	Tue,  5 Aug 2025 09:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754381592; cv=none; b=BugIAbE2EtAtqEpv9z6d0ngKypXc+NZNyu5z7nEzhNbwy00PeYxsgSVejdg7uAJ2ycwFqet7Ksd6wPv/4TOlJMZ8tjFJxo7FcQbHgjE3K9Avv6pcC72+Gv6yCH/SNGy7hgW8XJGNtK9fS1AH1Okyt3EZAlK/H0krm3fbPNGukBg=
+	t=1754384509; cv=none; b=KPhoiV9S/oU2q0G65nmNJnj96ePQcLLRN/pPBkntTK0Y9PNrKhM9pqYlli/C/iP0cQmszuLIZOPFbidnIy2QKMtTVZr9YFQ3WnJj0WR7s8RPzlA7X0cNMTRDsiLu8PYeWfAtfMcqMdDpdpS6TJ3DHETriOk9Q2HGDaIYeNoNfHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754381592; c=relaxed/simple;
-	bh=XY5X8rTqj6KCB7z+WOowtTK7MrFk016Y1kqMLEFIi1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W6TYyb/RAPe6Xpt/mLNhEKMOSOWb6HY8GtS8UOTmQea6+PTuQ+/cutLwAT76VvC+S+uG2IfkOwlZqM8Y6CbvdwVAXYZDF+W5sftg0xg0/fY4/Pt3MAvgq2SCEFne970xE4yMQApNYpA9XnCB1k1C22PkmxH2Tj4uMH1E/0biR7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-88bbfe763ecso1192592241.3
-        for <llvm@lists.linux.dev>; Tue, 05 Aug 2025 01:13:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754381589; x=1754986389;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FYbREyEF6GDi+6BqzkUaervyY8mSRtfMj7JERduR6Tc=;
-        b=JM/sncUQ38h6op8Q+kBZgBlQ6eqfn4FmfENN9CKdeCLpdC2KXZWESVdTAUSX7HfP4y
-         foqQwt4hsxegCLiP2imwvEhETsD0sI2Ct70QnwOk4vbqT+aW4OuRaLiJSlhtASO47exu
-         ZUc1MJvbAzR6taowVDtQAq49T6ZZf8qWOwnE60d8JUW7SrtY3kGtEOY+QwD1o7rqB5Pw
-         IK9Mn/3pgyu1izkOYKEPMqXI9pPXLCp1ejHTV6xb5S7gn81wOSTnPuobYUhDhBbQ9ldg
-         kc8cPL4Bdoot90owdmrP70qbq29tDikYg3tdw6hcKG2rht+hmOlNJGlX3FhdRM42+z3l
-         lIdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSYiYatdf0BDamIWudgY2hKTi+BKd5H0kE4gc34tV3ikcExCZieY8cRqoaOn8uvPXlKAwu@lists.linux.dev
-X-Gm-Message-State: AOJu0YxXNfUCFgr4dvAJ0Vaf1h4brKE03Gj0UG4Mxjzvz/qcXrKvwkjk
-	49xl/pinPOh27W9kP0hRJvc93PQNUY//qGPmDsMKRPBkoNlNL09rKXKp+DoZGozf
-X-Gm-Gg: ASbGncvqEZgfTxx4kaEi5MBU8M8s5WuN8mypR4ifzmEJSjb6ij06OoM0P/YDYT8/aqN
-	950lFKTyxKKWmxEVsJ02yf25RCTM2F7GST2J+dtlxQwbaezZ7FAcOP4bWQD+nyk74/RVRvWiBN4
-	tnKk0FL2OtGpOJB39YQRbotZhxXhif4z2DTo8P+Tj9+jI8rykE9k6etAx785zYGEwbeWXxyaV3n
-	gCX3DkSBDO99POu+mrUULKyBLYUddoD06x4ZGs4RHA1MPrLLDGIp/bZga9DZ761LgFQgejUdoFV
-	UY5Wia5gjNxdtHoX82Ounzdr39B8vLA9EF2zP3G7YyQkXD1oZKpHB7V1QC+PkL5uWzXMhU9kTcU
-	hykPwNrhAfMO3iaIvIrCuQGulz+Af9zXew7tWf0lBOekkFC6wghAEWSDFpfw3
-X-Google-Smtp-Source: AGHT+IHu1B5tHV3AGeZiM5RAj6PNLOfo2hohPzWmA3T05nOBf3cHIYpOvOMGgxvmRLmn1I5NaC94Jw==
-X-Received: by 2002:a05:6102:80a2:b0:4e9:b0ec:9682 with SMTP id ada2fe7eead31-4fdc480e68fmr5459319137.24.1754381588757;
-        Tue, 05 Aug 2025 01:13:08 -0700 (PDT)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88d8f3f016dsm2687417241.15.2025.08.05.01.13.07
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Aug 2025 01:13:08 -0700 (PDT)
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-88bc6ab70dfso1180945241.2
-        for <llvm@lists.linux.dev>; Tue, 05 Aug 2025 01:13:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWL0N8nUL7t6l6ArgRQuEnBsoD+HOPHuLrR9nENJF9HiTiTqFdrcrUcVDL2epuq8VhpcenM@lists.linux.dev
-X-Received: by 2002:a05:6102:3a0b:b0:4d7:11d1:c24e with SMTP id
- ada2fe7eead31-4fdc480dc77mr4806207137.21.1754381587163; Tue, 05 Aug 2025
- 01:13:07 -0700 (PDT)
+	s=arc-20240116; t=1754384509; c=relaxed/simple;
+	bh=RDyUgR2PQ1GVGOThtsglLFcL8GrDSPC0hME5I1Gf3Ss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VKfpq3sOhiqksOgs46BmRFtm9bu46XEI+NSPWNhaHM43xGbMIzSCfzgcOG4zMDoktY72PUAZ1q7RVsLAc0DhGHFY1bwLTGcZjEtfr1T8j+9oH1SaJU+ZoWOGdmRwxusfp3mrtq36PcQezk1fq7GMZ+nxsSbNS+fDLCliV1U0pL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f6MjZj1K; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f6MjZj1K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754384508; x=1785920508;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RDyUgR2PQ1GVGOThtsglLFcL8GrDSPC0hME5I1Gf3Ss=;
+  b=f6MjZj1KG+k3EmVo598Ad3IBMbW2TaRczWfySFGeQ3Yah/KLPUFCIgpk
+   QBswtZwFOnF6vwEHZOuNVKTJuI3bjrgxfzpTTvqvQmWkmgAGRKREO38eo
+   ot7bIdGBt/bEexpzO9BzwZ+ohUCFeTTvUv7ZEjMIQIjPOsIWGu5F7YZ+N
+   PVt0sY1lHqrB17hDNvnK9Aqt2GYo5xxxRK/6mf+FvzBF1tSEDGSVxF0qK
+   buzUbrBJedEi5JgRLBhyjsApgZEQubXP3qw8XiM6js74j82QvGKu6lw0q
+   um7Wm6AXiQI78F1ka/Kr5xQdJz2tqxNaconDF1rrjYVTtT4qODeT2Ds/c
+   w==;
+X-CSE-ConnectionGUID: 1rqrcCWuRZuNhOgk9okV4w==
+X-CSE-MsgGUID: vUU3Xt21QlCO+W6SY4ZVcw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11512"; a="68120310"
+X-IronPort-AV: E=Sophos;i="6.17,265,1747724400"; 
+   d="scan'208";a="68120310"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 02:01:43 -0700
+X-CSE-ConnectionGUID: HPiZt80WRHmf5Ze8zQ44Jw==
+X-CSE-MsgGUID: Gzy1SfDaRceL5UHtY83ftA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,265,1747724400"; 
+   d="scan'208";a="168862744"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 05 Aug 2025 02:01:39 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ujDY8-0000Ue-2g;
+	Tue, 05 Aug 2025 09:01:36 +0000
+Date: Tue, 5 Aug 2025 17:01:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pranav Tyagi <pranav.tyagi03@gmail.com>, tglx@linutronix.de,
+	mingo@redhat.com, peterz@infradead.org, dvhart@infradead.org,
+	dave@stgolabs.net, andrealmeid@igalia.com,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jann@thejh.net,
+	keescook@chromium.org, skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	Pranav Tyagi <pranav.tyagi03@gmail.com>
+Subject: Re: [PATCH v2] futex: don't leak robust_list pointer on exec race
+Message-ID: <202508051607.VJkmdtGV-lkp@intel.com>
+References: <20250804115533.14186-1-pranav.tyagi03@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250804163910.work.929-kees@kernel.org> <20250804164417.1612371-11-kees@kernel.org>
-In-Reply-To: <20250804164417.1612371-11-kees@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 5 Aug 2025 10:12:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWRAxGqLxPY0eZkrg4zMr4qY5KUcTqPjNXEKOTeNYGc8A@mail.gmail.com>
-X-Gm-Features: Ac12FXxoASDmKZziFEtov1BZOWBk9xds-hH6z1CBqhINtQO4YVRNUk0c1YQzJUM
-Message-ID: <CAMuHMdWRAxGqLxPY0eZkrg4zMr4qY5KUcTqPjNXEKOTeNYGc8A@mail.gmail.com>
-Subject: Re: [PATCH 11/17] m68k: Add __attribute_const__ to ffs()-family implementations
-To: Kees Cook <kees@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250804115533.14186-1-pranav.tyagi03@gmail.com>
 
-On Mon, 4 Aug 2025 at 18:44, Kees Cook <kees@kernel.org> wrote:
-> While tracking down a problem where constant expressions used by
-> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-> initializer was convincing the compiler that it couldn't track the state
-> of the prior statically initialized value. Tracing this down found that
-> ffs() was used in the initializer macro, but since it wasn't marked with
-> __attribute__const__, the compiler had to assume the function might
-> change variable states as a side-effect (which is not true for ffs(),
-> which provides deterministic math results).
->
-> Add missing __attribute_const__ annotations to M68K's implementations
-> of ffs(), __ffs(), fls(), __fls(), and ffz() functions. These are
-> pure mathematical functions that always return the same result for
-> the same input with no side effects, making them eligible for compiler
-> optimization.
->
-> Build tested ARCH=m68k defconfig with GCC m68k-linux-gnu 14.2.0.
->
-> Link: https://github.com/KSPP/linux/issues/364 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
+Hi Pranav,
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+kernel test robot noticed the following build errors:
 
-# ffs: pass:9 fail:0 skip:0 total:9
+[auto build test ERROR on tip/locking/core]
+[also build test ERROR on linus/master v6.16 next-20250805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Gr{oetje,eeting}s,
+url:    https://github.com/intel-lab-lkp/linux/commits/Pranav-Tyagi/futex-don-t-leak-robust_list-pointer-on-exec-race/20250804-195739
+base:   tip/locking/core
+patch link:    https://lore.kernel.org/r/20250804115533.14186-1-pranav.tyagi03%40gmail.com
+patch subject: [PATCH v2] futex: don't leak robust_list pointer on exec race
+config: riscv-randconfig-001-20250805 (https://download.01.org/0day-ci/archive/20250805/202508051607.VJkmdtGV-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250805/202508051607.VJkmdtGV-lkp@intel.com/reproduce)
 
-                        Geert
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508051607.VJkmdtGV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/futex/syscalls.c:81:13: error: no member named 'compat_robust_list' in 'struct task_struct'
+      81 |                 head = p->compat_robust_list;
+         |                        ~  ^
+   1 error generated.
+
+
+vim +81 kernel/futex/syscalls.c
+
+    41	
+    42	static void __user *get_robust_list_common(int pid,
+    43			bool compat)
+    44	{
+    45		void __user *head;
+    46		unsigned long ret;
+    47	
+    48		struct task_struct *p;
+    49	
+    50		if (!pid) {
+    51			p = current;
+    52			get_task_struct(p);
+    53		} else {
+    54			rcu_read_lock();
+    55			p = find_task_by_vpid(pid);
+    56			/*
+    57			 * pin the task to permit dropping the RCU read lock before
+    58			 * acquiring the semaphore
+    59			 */
+    60			if (p)
+    61				get_task_struct(p);
+    62			rcu_read_unlock();
+    63			if (!p)
+    64				return ERR_PTR(-ESRCH);
+    65		}
+    66	
+    67		/*
+    68		 * Hold exec_update_lock to serialize with concurrent exec()
+    69		 * so ptrace_may_access() is checked against stable credentials
+    70		 */
+    71	
+    72		ret = down_read_killable(&p->signal->exec_update_lock);
+    73		if (ret)
+    74			goto err_put;
+    75	
+    76		ret = -EPERM;
+    77		if (!ptrace_may_access(p, PTRACE_MODE_READ_REALCREDS))
+    78			goto err_unlock;
+    79	
+    80		if (compat)
+  > 81			head = p->compat_robust_list;
+    82		else
+    83			head = p->robust_list;
+    84	
+    85		up_read(&p->signal->exec_update_lock);
+    86		put_task_struct(p);
+    87	
+    88		return head;
+    89	
+    90	err_unlock:
+    91		up_read(&p->signal->exec_update_lock);
+    92	err_put:
+    93		put_task_struct(p);
+    94		return ERR_PTR(ret);
+    95	}
+    96	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
