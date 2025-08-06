@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474DC1FB3;
-	Wed,  6 Aug 2025 08:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC3289340;
+	Wed,  6 Aug 2025 08:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754468966; cv=none; b=cHqG3qQrTfpMy0dEiwVbgWINU0rbRlbEcJuhX954BAY32Mzak4IdwFpbQBbCJy34EFn5S5Uh8cbuAck17QgsoPLaxGtHVf9Ltbphr3h5cdBacx7EW8VaOLPNtDWo0QKvASGr9IHzyRkmFDxMom1+Fd2Tn1A1KgfE1WAO1Wu8veg=
+	t=1754470774; cv=none; b=hU7/zB2ti0NgU1dPd47JZ0AV/j5OPUE307e5tKTc2Wot3i77g9UB6TXHJfvrwMaz7qj2iK9dit4dThJNzfHXGaNEYMaw4YdyMlpQej3AptwijGwd/Xt+P7rp3Fz+QTAS7T2bflJnPxrs2r1Zt5zKa/pxEQglqivdn/4S4x4zmUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754468966; c=relaxed/simple;
-	bh=3MkaBlYl7bbIXtBAkjgxrrPhozfRCcl/Q0O7Zrxyj1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ScAWRJQqHk264V9parRzsHNUhgXiXM0AmgN4ebzUUyS20kLPOYrI6adX78pQ4TlxD8r8hH/medMcXbx+RIPm/fxDIenpDAigk3t/4HMrAEQMP2MFq+FUz7494zCXHB+Ewr2jPEMxmpnBVDEHEJAZsxHK/JU+rUBJHfBBbrFpz0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kl8qWr91; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1754470774; c=relaxed/simple;
+	bh=DDngxPPQ0mU3LdYk7yMRu+shf3e3cpuCjWrR61HrCj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KrlCLm2ke8pgm6Ib1T/WjmchIH6DJj/88S8S+Eog0kdwiKy0v4VdQfaHmO73VbB4CqpxT/UYXq6x5UdrT0O5scoONWLZnia/zWPtWbhRKNctRGZH/wHid/5LlVhTxhKfWvXrTS6hPjGuoazgI5Z8c38WrfZvnsgZyNzi1ZDhgpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B1qkdT+G; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kl8qWr91"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B1qkdT+G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754468965; x=1786004965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3MkaBlYl7bbIXtBAkjgxrrPhozfRCcl/Q0O7Zrxyj1k=;
-  b=Kl8qWr91ws6p9XxzF0+UTHc8gDFjI4O18pEGoBSI2BY0VNt9rKH4YqIu
-   J9Mwwv0xAwJ4PRokRvtraWxtFM0G5q4OK+0IOKiqgPfra+y0lPVLX7zLm
-   9SROwj1PZrmNqc7XgE2z/b2xrGG8uhnbmdqHwR/d0SZGBKs/6hMGX2BGC
-   J1feEJ3UFE4wyytB+z0G869OFPJsRhGE8VxyasxFj6/ycgyBlCveaZ3Cr
-   GmxHoW51o68AMSc0nLEpUcCQ6DBvIcnMBZYd/sTTs9L11bx2k/6igHr7o
-   zjMvPc5Um/y2kdCd8egqrYIWDh8Y1MHCzjh9NcXKqxX/Fl40fkHuwb+ip
+  t=1754470773; x=1786006773;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DDngxPPQ0mU3LdYk7yMRu+shf3e3cpuCjWrR61HrCj0=;
+  b=B1qkdT+G7WOP40L1YPPTvsKEyP3aewCZol8GnR0Z7TkOztGyIW+1pxRY
+   vwqM9Vcm8TiSbVgS3vGjQS7cCDdKqjFwEGogYnooBMrTlRnU9a3Sa2Fig
+   xWk3yHYTJu/OIWAk+IOCT5Lb5gQ4/zO+DapBOi4JmalDm0QxI+9g0U/M2
+   N3Q48A5MKezLAGBl8wMzXjw6hsW66QzxNvur8Vm5yeI/mjHX1gPFOkYma
+   jF8sEIrxWS0Znzy5dZOyp+lmV1B5XBHcAt8LmDpQPcVsmFb6zAVJakvFc
+   c8GBWpRTbNYawXHPdrOenUycYEXb4U958mrf/x+fX0swIr3YbXDKr6cAU
    g==;
-X-CSE-ConnectionGUID: hDthVb9qRpGybmEfwzP6HQ==
-X-CSE-MsgGUID: /Kr3YYo4Tl6Ms3Pe8Nwn2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56646082"
+X-CSE-ConnectionGUID: a5XaChzVTEqYDtQgcEnBuw==
+X-CSE-MsgGUID: Zp+PSs2gRX+5zBxUcQ+jbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="82230013"
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="56646082"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 01:29:24 -0700
-X-CSE-ConnectionGUID: B3tt9/kfQXiu955zNIwD9g==
-X-CSE-MsgGUID: a1yu/jtsS4eyXQXK8kXSjA==
+   d="scan'208";a="82230013"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 01:59:33 -0700
+X-CSE-ConnectionGUID: m+zsZQRSTK2iF24dWEZ6ew==
+X-CSE-MsgGUID: IGaoh4j3S1m0tUsm+D/RMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="195682167"
+   d="scan'208";a="164253948"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 06 Aug 2025 01:29:23 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 06 Aug 2025 01:59:31 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ujZVs-0001PC-2Z;
-	Wed, 06 Aug 2025 08:28:47 +0000
-Date: Wed, 6 Aug 2025 16:28:28 +0800
+	id 1ujZzd-0001Qs-2F;
+	Wed, 06 Aug 2025 08:59:29 +0000
+Date: Wed, 6 Aug 2025 16:59:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Baoquan He <bhe@redhat.com>
+To: Keith Busch <kbusch@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 4/4] mm/kasan: make kasan=on|off take effect for all
- three modes
-Message-ID: <202508061626.RDgkUhgE-lkp@intel.com>
-References: <20250805062333.121553-5-bhe@redhat.com>
+Subject: [kbusch:kbusch/nvme-virt-boundaries 13/17] block/blk-mq-dma.c:18:27:
+ error: no member named 'bi_integrity' in 'struct bio'
+Message-ID: <202508061614.ReRfMzE6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,32 +61,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250805062333.121553-5-bhe@redhat.com>
 
-Hi Baoquan,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-kasan-add-conditional-checks-in-functions-to-return-directly-if-kasan-is-disabled/20250806-104340
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250805062333.121553-5-bhe%40redhat.com
-patch subject: [PATCH 4/4] mm/kasan: make kasan=on|off take effect for all three modes
-config: i386-buildonly-randconfig-003-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061626.RDgkUhgE-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git kbusch/nvme-virt-boundaries
+head:   6586a1a5cd6772594c5afbc077979c8e370ae265
+commit: 20aeb67ff13e29203779874125598410a09baf56 [13/17] blk-mq-dma: add support for mapping integrity metadata
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250806/202508061614.ReRfMzE6-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508061626.RDgkUhgE-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508061614.ReRfMzE6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508061626.RDgkUhgE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508061614.ReRfMzE6-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: kasan_flag_enabled
-   >>> referenced by stackdepot.c
-   >>>               lib/stackdepot.o:(__jump_table+0x8) in archive vmlinux.a
+>> block/blk-mq-dma.c:18:27: error: no member named 'bi_integrity' in 'struct bio'
+      18 |                 iter->iter = iter->bio->bi_integrity->bip_iter;
+         |                              ~~~~~~~~~  ^
+   block/blk-mq-dma.c:19:27: error: no member named 'bi_integrity' in 'struct bio'
+      19 |                 iter->bvec = iter->bio->bi_integrity->bip_vec;
+         |                              ~~~~~~~~~  ^
+   2 errors generated.
+
+
+vim +18 block/blk-mq-dma.c
+
+     8	
+     9	static bool __blk_map_iter_next(struct blk_map_iter *iter)
+    10	{
+    11		if (iter->iter.bi_size)
+    12			return true;
+    13		if (!iter->bio || !iter->bio->bi_next)
+    14			return false;
+    15	
+    16		iter->bio = iter->bio->bi_next;
+    17		if (iter->is_integrity) {
+  > 18			iter->iter = iter->bio->bi_integrity->bip_iter;
+    19			iter->bvec = iter->bio->bi_integrity->bip_vec;
+    20		} else {
+    21			iter->iter = iter->bio->bi_iter;
+    22			iter->bvec = iter->bio->bi_io_vec;
+    23		}
+    24		return true;
+    25	}
+    26	
 
 -- 
 0-DAY CI Kernel Test Service
