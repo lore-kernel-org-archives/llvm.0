@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C653595C;
-	Wed,  6 Aug 2025 09:09:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361DE23FC4C;
+	Wed,  6 Aug 2025 10:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754471388; cv=none; b=o7L7aPy12RTYUyvVA+fKpxqvQzpecCl84fYEHlrCJuNntPfUVo5wu5zVZ8SYMw+yatwv4MubJs5Lz510i4GRihcbDKikyxeJVCEBSVMyhFHeqlCv8UWrn8K4UOQ+yjBrqcpuKF+2gO4MvqL3pAezHoY2LIVO+4DAZGbh96conk4=
+	t=1754475923; cv=none; b=qNOtNDBL5xGARTQCZF5EdEySCWE7wz6GgmKo1WNKlO4hIwfC9FG8otm5CkogpSDiO2QrjHeO3qdpga64XFS6v+7REBbl7YoBiU9lONt1afIvqMHiLZD+odaCCKUBLy9BxqtqYNaphC8KkTcDRrjkhvOuSle4WGJmz7JFsNQe0Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754471388; c=relaxed/simple;
-	bh=YF27rcW+wXqHCUE2fpYGKsNDE9fs1ZMhw3o5hYnT3I8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TscOxie8XUFUh2BMbImHH2qsUFAUUfXlWuiUHYqHL455rhg0ta4e5upkAP2/90PTL9tt6Ofdxhf72qvHPTl58bJX28WlskHnNpZF8n+iNpm1nPA8fc8fCRZn+KXHwdwBNETq/7i4MDq/x9SXTOl0zaaVgUfomq4N6B2J/Qrz/KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fp3SOBw7; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1754475923; c=relaxed/simple;
+	bh=lQuKRNOdyBLCKnmOXaLObB146vsfWcL0sWyfJEa5yo8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dfGgu6CTzL26tTHaq4lAaatpM93I0Oha1E8fZBtcrKN5Ce5TA0OpotWMbaWR4Z0Thk6BpfG0wcc7QaFzkbn+ZwGtCK78eIffUladTReA+on1v36OFVABugA5KTLO+TL8V15LUQHZhgaSP2EtER4F+yEM5luZ2FXEzOC3/XSSBFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AEYm2b/x; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fp3SOBw7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AEYm2b/x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754471387; x=1786007387;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YF27rcW+wXqHCUE2fpYGKsNDE9fs1ZMhw3o5hYnT3I8=;
-  b=fp3SOBw7tnaIlCPVJJpQhCAPNcSMnUGrB3X8TsTJpJdHUTJszZX1fFMe
-   /ltTKmzzhXTQXsjoJc8yXBAE7H+Yhp8z+esYr4WTg53ey4ZNhDOmmergp
-   jpIg3LmcROLNpAUJJyKJXR44Uwifss2hQ6X9fsHTWFlbaHX8rLKEQGJrQ
-   FsxMX2hTyeWt1BS6lC5C3YrM4luT7aMIOtKGfUTLTPrI9xdq9pd7lb5wV
-   qbCdix3wj/VDhnAbjKpDeBVab5mwJv1sAkobe8vy3il3oWmfjy/5E18wk
-   Pi1nvE3/VxQzO+jQGB1ppZvuOKC42X2xP+LWyHAECFGBZFMbsh207mTsl
-   Q==;
-X-CSE-ConnectionGUID: iKahxLA9TVuOpKLhNgBMGA==
-X-CSE-MsgGUID: nPweoGN4QpunG7Mf2WZCNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="82230888"
+  t=1754475921; x=1786011921;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lQuKRNOdyBLCKnmOXaLObB146vsfWcL0sWyfJEa5yo8=;
+  b=AEYm2b/xTxyQu/CUGCjKkZnakRNsgBDSZ2sHCszulmZJExwXAj4fiSH5
+   gPf4Cqp54CoRGSiqpH9mIGJIczDmkJhWBG40IQhVD06HpdQvBi6/7sUFL
+   UY/qfneE66c14CpU+TjjkxoDQBERWnw5gOi7y/JzAtATan7Yzm+M5wfRk
+   sNtIqMo0nntviY/9sC2G1vRKS1k4oeCAqY3ldsXTdg0pYmHvugv4l1L0Y
+   +4mT9QhHudD4fsM6oNN9E37HyJy6B6d9NDHmEm5iz8oLsjxwrgY9xWldp
+   fTucpi02PczgiZEEhplpSUtHNmij6QwFqixp0l7w19VPW1vBO7/ntBv34
+   w==;
+X-CSE-ConnectionGUID: RSZA2vqRQSm/nq042sCjEQ==
+X-CSE-MsgGUID: WqDa/3F9T9+2g0qO57X3Kg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="79337038"
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="82230888"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 02:09:46 -0700
-X-CSE-ConnectionGUID: 5JOug7IMTa+s4grjhXJaGA==
-X-CSE-MsgGUID: pRHtou3TTB6mOFwsfAKzwQ==
+   d="scan'208";a="79337038"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 03:25:21 -0700
+X-CSE-ConnectionGUID: Z6/6PeVJTYOIZNPtcxitnA==
+X-CSE-MsgGUID: HS2lCiJCTYaqt9oompwpvQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="164255586"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa007.fm.intel.com with ESMTP; 06 Aug 2025 02:09:44 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+   d="scan'208";a="195579330"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 06 Aug 2025 03:25:18 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uja9W-0002Ad-0f;
-	Wed, 06 Aug 2025 09:09:42 +0000
-Date: Wed, 6 Aug 2025 11:09:05 +0200
+	id 1ujbKW-0001Xe-0I;
+	Wed, 06 Aug 2025 10:25:11 +0000
+Date: Wed, 6 Aug 2025 18:24:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: ld.lld: error: undefined symbol: xt_recseq
-Message-ID: <202508061149.iM5f5qtm-lkp@intel.com>
+To: Ricky Wu <ricky_wu@realtek.com>, linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, chenhuacai@kernel.org,
+	ulf.hansson@linaro.org, maximlevitsky@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] misc: rtsx: usb card reader: add OCP support
+Message-ID: <202508061704.hwI8epAJ-lkp@intel.com>
+References: <20250805032220.2355160-1-ricky_wu@realtek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,84 +65,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250805032220.2355160-1-ricky_wu@realtek.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   479058002c32b77acac43e883b92174e22c4be2d
-commit: 9fce66583f06c212e95e4b76dd61d8432ffa56b6 netfilter: Exclude LEGACY TABLES on PREEMPT_RT.
-date:   12 days ago
-config: i386-buildonly-randconfig-2001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061149.iM5f5qtm-lkp@intel.com/config)
+Hi Ricky,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master next-20250806]
+[cannot apply to soc/for-next ulf-hansson-mmc-mirror/next v6.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricky-Wu/misc-rtsx-usb-card-reader-add-OCP-support/20250806-101802
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20250805032220.2355160-1-ricky_wu%40realtek.com
+patch subject: [PATCH] misc: rtsx: usb card reader: add OCP support
+config: i386-buildonly-randconfig-001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061704.hwI8epAJ-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508061149.iM5f5qtm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508061704.hwI8epAJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508061149.iM5f5qtm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508061704.hwI8epAJ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: xt_recseq
-   >>> referenced by x_tables.h:362 (include/linux/netfilter/x_tables.h:362)
-   >>>               net/ipv4/netfilter/ip_tables.o:(ipt_do_table) in archive vmlinux.a
-   >>> referenced by x_tables.h:369 (include/linux/netfilter/x_tables.h:369)
-   >>>               net/ipv4/netfilter/ip_tables.o:(ipt_do_table) in archive vmlinux.a
-   >>> referenced by x_tables.h:387 (include/linux/netfilter/x_tables.h:387)
-   >>>               net/ipv4/netfilter/ip_tables.o:(ipt_do_table) in archive vmlinux.a
-   >>> referenced 4 more times
---
->> ld.lld: error: undefined symbol: xt_alloc_table_info
-   >>> referenced by ip_tables.c:1735 (net/ipv4/netfilter/ip_tables.c:1735)
-   >>>               net/ipv4/netfilter/ip_tables.o:(ipt_register_table) in archive vmlinux.a
-   >>> referenced by ip_tables.c:1126 (net/ipv4/netfilter/ip_tables.c:1126)
-   >>>               net/ipv4/netfilter/ip_tables.o:(do_ipt_set_ctl) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_check_match
-   >>> referenced by ip_tables.c:471 (net/ipv4/netfilter/ip_tables.c:471)
-   >>>               net/ipv4/netfilter/ip_tables.o:(translate_table) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_request_find_target
-   >>> referenced by ip_tables.c:544 (net/ipv4/netfilter/ip_tables.c:544)
-   >>>               net/ipv4/netfilter/ip_tables.o:(translate_table) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_check_target
-   >>> referenced by ip_tables.c:510 (net/ipv4/netfilter/ip_tables.c:510)
-   >>>               net/ipv4/netfilter/ip_tables.o:(translate_table) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_percpu_counter_free
-   >>> referenced by ip_tables.c:566 (net/ipv4/netfilter/ip_tables.c:566)
-   >>>               net/ipv4/netfilter/ip_tables.o:(translate_table) in archive vmlinux.a
-   >>> referenced by ip_tables.c:654 (net/ipv4/netfilter/ip_tables.c:654)
-   >>>               net/ipv4/netfilter/ip_tables.o:(cleanup_entry) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_unregister_table
-   >>> referenced by ip_tables.c:1712 (net/ipv4/netfilter/ip_tables.c:1712)
-   >>>               net/ipv4/netfilter/ip_tables.o:(__ipt_unregister_table) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_find_table
-   >>> referenced by ip_tables.c:1794 (net/ipv4/netfilter/ip_tables.c:1794)
-   >>>               net/ipv4/netfilter/ip_tables.o:(ipt_unregister_table_pre_exit) in archive vmlinux.a
-   >>> referenced by ip_tables.c:1802 (net/ipv4/netfilter/ip_tables.c:1802)
-   >>>               net/ipv4/netfilter/ip_tables.o:(ipt_unregister_table_exit) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_copy_counters
-   >>> referenced by ip_tables.c:1167 (net/ipv4/netfilter/ip_tables.c:1167)
-   >>>               net/ipv4/netfilter/ip_tables.o:(do_ipt_set_ctl) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_find_table_lock
-   >>> referenced by ip_tables.c:1171 (net/ipv4/netfilter/ip_tables.c:1171)
-   >>>               net/ipv4/netfilter/ip_tables.o:(do_ipt_set_ctl) in archive vmlinux.a
-   >>> referenced by ip_tables.c:1018 (net/ipv4/netfilter/ip_tables.c:1018)
-   >>>               net/ipv4/netfilter/ip_tables.o:(do_ipt_get_ctl) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: xt_table_unlock
-   >>> referenced by ip_tables.c:1196 (net/ipv4/netfilter/ip_tables.c:1196)
-   >>>               net/ipv4/netfilter/ip_tables.o:(do_ipt_set_ctl) in archive vmlinux.a
-   >>> referenced by ip_tables.c:0 (net/ipv4/netfilter/ip_tables.c:0)
-   >>>               net/ipv4/netfilter/ip_tables.o:(do_ipt_get_ctl) in archive vmlinux.a
-   >>> referenced by ip_tables.c:1076 (net/ipv4/netfilter/ip_tables.c:1076)
-   >>>               net/ipv4/netfilter/ip_tables.o:(__do_replace) in archive vmlinux.a
-   >>> referenced 1 more times
-..
+>> drivers/mmc/host/rtsx_usb_sdmmc.c:1054:7: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1054 |                 if (!(host->ocp_stat & (MS_OCP_NOW | MS_OCP_EVER)))
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/rtsx_usb_sdmmc.c:1056:7: note: uninitialized use occurs here
+    1056 |                 if (err)
+         |                     ^~~
+   drivers/mmc/host/rtsx_usb_sdmmc.c:1054:3: note: remove the 'if' if its condition is always true
+    1054 |                 if (!(host->ocp_stat & (MS_OCP_NOW | MS_OCP_EVER)))
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1055 |                         err = sd_power_on(host);
+   drivers/mmc/host/rtsx_usb_sdmmc.c:1038:9: note: initialize the variable 'err' to silence this warning
+    1038 |         int err;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +1054 drivers/mmc/host/rtsx_usb_sdmmc.c
+
+  1034	
+  1035	static void sd_set_power_mode(struct rtsx_usb_sdmmc *host,
+  1036			unsigned char power_mode)
+  1037	{
+  1038		int err;
+  1039		struct rtsx_ucr *ucr = host->ucr;
+  1040	
+  1041		if (power_mode == host->power_mode)
+  1042			return;
+  1043	
+  1044		switch (power_mode) {
+  1045		case MMC_POWER_OFF:
+  1046			err = sd_power_off(host);
+  1047			if (err)
+  1048				dev_dbg(sdmmc_dev(host), "power-off (err = %d)\n", err);
+  1049			pm_runtime_put_noidle(sdmmc_dev(host));
+  1050			break;
+  1051	
+  1052		case MMC_POWER_UP:
+  1053			pm_runtime_get_noresume(sdmmc_dev(host));
+> 1054			if (!(host->ocp_stat & (MS_OCP_NOW | MS_OCP_EVER)))
+  1055				err = sd_power_on(host);
+  1056			if (err)
+  1057				dev_dbg(sdmmc_dev(host), "power-on (err = %d)\n", err);
+  1058			/* issue the clock signals to card at least 74 clocks */
+  1059			rtsx_usb_write_register(ucr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, SD_CLK_TOGGLE_EN);
+  1060			break;
+  1061	
+  1062		case MMC_POWER_ON:
+  1063			/* stop to send the clock signals */
+  1064			rtsx_usb_write_register(ucr, SD_BUS_STAT, SD_CLK_TOGGLE_EN, 0x00);
+  1065			break;
+  1066	
+  1067		case MMC_POWER_UNDEFINED:
+  1068			break;
+  1069	
+  1070		default:
+  1071			break;
+  1072		}
+  1073	
+  1074		host->power_mode = power_mode;
+  1075	}
+  1076	
 
 -- 
 0-DAY CI Kernel Test Service
