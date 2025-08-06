@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD620171C9;
-	Wed,  6 Aug 2025 07:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474DC1FB3;
+	Wed,  6 Aug 2025 08:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754464723; cv=none; b=GE+LlOya36BU1keW7zqkZRX1VXoCKhhLwvzGL9VQLYhrPB3EKI/Gy1hgQCytcwKZq5nWBaEDItZIfmHMeNimCplGnjhua5RRf9ApRzD2Rf7blE8jUHzpg9na0cBWD2eznxXmKEUgCWWch/6e4gVYiVlo+pdm6qK9ee2XJhksclY=
+	t=1754468966; cv=none; b=cHqG3qQrTfpMy0dEiwVbgWINU0rbRlbEcJuhX954BAY32Mzak4IdwFpbQBbCJy34EFn5S5Uh8cbuAck17QgsoPLaxGtHVf9Ltbphr3h5cdBacx7EW8VaOLPNtDWo0QKvASGr9IHzyRkmFDxMom1+Fd2Tn1A1KgfE1WAO1Wu8veg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754464723; c=relaxed/simple;
-	bh=nNxhoKULW/u7Nvh1p4ZhOqCELveHSO6eUylzpEfTeqE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=T8JHSz3d6WHDuR8M4PJ3J6RUHKVvm913KuGH54n/XJzENEpqxgJ/9xI4Azcbc6suGpRKjvZtuhgaqDavJtqMMyiEFDlHrlN3DypoHbYiVDjqT1dujVIgqyM8La80nrMhZ9RJVPUCV3VMkxxkBXyjpwuuV3u6jlqT7tWW/z1/Rlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uh88DQL+; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1754468966; c=relaxed/simple;
+	bh=3MkaBlYl7bbIXtBAkjgxrrPhozfRCcl/Q0O7Zrxyj1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ScAWRJQqHk264V9parRzsHNUhgXiXM0AmgN4ebzUUyS20kLPOYrI6adX78pQ4TlxD8r8hH/medMcXbx+RIPm/fxDIenpDAigk3t/4HMrAEQMP2MFq+FUz7494zCXHB+Ewr2jPEMxmpnBVDEHEJAZsxHK/JU+rUBJHfBBbrFpz0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kl8qWr91; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uh88DQL+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kl8qWr91"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754464722; x=1786000722;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nNxhoKULW/u7Nvh1p4ZhOqCELveHSO6eUylzpEfTeqE=;
-  b=Uh88DQL+b1jBCpc8VmN7AffcryBteb0nU1dPwVMIGk9MikCqZJlT9uYp
-   UggS+NybswtPxzSFrx/oF+hFpNJJQ6jEjASIFve+su1Cl057vhy+pKQbO
-   OgMEkZvKznJmUGZPP/JnhamiyAwUMVPcSwtfkN6vGbiLufQjKs47hbMZc
-   nL6hXMK2Pz22AlVobwnRhNqoHKwbxK/gCM1sijbHSa/Bn/MO6o0QTnEPJ
-   svw2bhHdk+OZ2RQz7I36+3/aUBvKF4Tl7MNaVVMx1FlJ/MGyksewB1z1U
-   8/LMs/0UQ+I7nrz8TbsYJEILlaahiGyh+45Pi5O9x1ptVtJzjc6Lm5uIK
-   w==;
-X-CSE-ConnectionGUID: QFYAduCDR72TvEIjgJCHHA==
-X-CSE-MsgGUID: t4hr/Yf7TX24NjI47xKKIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="68147900"
+  t=1754468965; x=1786004965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3MkaBlYl7bbIXtBAkjgxrrPhozfRCcl/Q0O7Zrxyj1k=;
+  b=Kl8qWr91ws6p9XxzF0+UTHc8gDFjI4O18pEGoBSI2BY0VNt9rKH4YqIu
+   J9Mwwv0xAwJ4PRokRvtraWxtFM0G5q4OK+0IOKiqgPfra+y0lPVLX7zLm
+   9SROwj1PZrmNqc7XgE2z/b2xrGG8uhnbmdqHwR/d0SZGBKs/6hMGX2BGC
+   J1feEJ3UFE4wyytB+z0G869OFPJsRhGE8VxyasxFj6/ycgyBlCveaZ3Cr
+   GmxHoW51o68AMSc0nLEpUcCQ6DBvIcnMBZYd/sTTs9L11bx2k/6igHr7o
+   zjMvPc5Um/y2kdCd8egqrYIWDh8Y1MHCzjh9NcXKqxX/Fl40fkHuwb+ip
+   g==;
+X-CSE-ConnectionGUID: hDthVb9qRpGybmEfwzP6HQ==
+X-CSE-MsgGUID: /Kr3YYo4Tl6Ms3Pe8Nwn2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="56646082"
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="68147900"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 00:18:40 -0700
-X-CSE-ConnectionGUID: CqvA096ZSvWDZuOfLE9yzg==
-X-CSE-MsgGUID: 8AqaE68FQEWjiOwfSZkBHg==
+   d="scan'208";a="56646082"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 01:29:24 -0700
+X-CSE-ConnectionGUID: B3tt9/kfQXiu955zNIwD9g==
+X-CSE-MsgGUID: a1yu/jtsS4eyXQXK8kXSjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="201879694"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by orviesa001.jf.intel.com with ESMTP; 06 Aug 2025 00:18:38 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+   d="scan'208";a="195682167"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 06 Aug 2025 01:29:23 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ujYPz-00029j-2C;
-	Wed, 06 Aug 2025 07:18:35 +0000
-Date: Wed, 6 Aug 2025 09:18:07 +0200
+	id 1ujZVs-0001PC-2Z;
+	Wed, 06 Aug 2025 08:28:47 +0000
+Date: Wed, 6 Aug 2025 16:28:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>
-Subject: lib/maple_tree.c:4206:20: warning: stack frame size (1064) exceeds
- limit (1024) in 'mas_wr_store_entry'
-Message-ID: <202508060948.H36grbYA-lkp@intel.com>
+To: Baoquan He <bhe@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 4/4] mm/kasan: make kasan=on|off take effect for all
+ three modes
+Message-ID: <202508061626.RDgkUhgE-lkp@intel.com>
+References: <20250805062333.121553-5-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,100 +63,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250805062333.121553-5-bhe@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   479058002c32b77acac43e883b92174e22c4be2d
-commit: 1fd7c4f3228e9775c97b25a6e5e2420df8cf0e76 maple_tree: convert mas_insert() to preallocate nodes
-date:   11 months ago
-config: um-alldefconfig (https://download.01.org/0day-ci/archive/20250806/202508060948.H36grbYA-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project faa4c4c2dc804c31845d8f036345fac00e016f2d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508060948.H36grbYA-lkp@intel.com/reproduce)
+Hi Baoquan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-kasan-add-conditional-checks-in-functions-to-return-directly-if-kasan-is-disabled/20250806-104340
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250805062333.121553-5-bhe%40redhat.com
+patch subject: [PATCH 4/4] mm/kasan: make kasan=on|off take effect for all three modes
+config: i386-buildonly-randconfig-003-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061626.RDgkUhgE-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508061626.RDgkUhgE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508060948.H36grbYA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508061626.RDgkUhgE-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   lib/maple_tree.c:351:21: warning: unused function 'mte_set_full' [-Wunused-function]
-     351 | static inline void *mte_set_full(const struct maple_enode *node)
-         |                     ^~~~~~~~~~~~
-   lib/maple_tree.c:356:21: warning: unused function 'mte_clear_full' [-Wunused-function]
-     356 | static inline void *mte_clear_full(const struct maple_enode *node)
-         |                     ^~~~~~~~~~~~~~
-   lib/maple_tree.c:361:20: warning: unused function 'mte_has_null' [-Wunused-function]
-     361 | static inline bool mte_has_null(const struct maple_enode *node)
-         |                    ^~~~~~~~~~~~
-   lib/maple_tree.c:4161:20: warning: unused function 'mas_wr_modify' [-Wunused-function]
-    4161 | static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-         |                    ^~~~~~~~~~~~~
->> lib/maple_tree.c:4206:20: warning: stack frame size (1064) exceeds limit (1024) in 'mas_wr_store_entry' [-Wframe-larger-than]
-    4206 | static inline void mas_wr_store_entry(struct ma_wr_state *wr_mas)
-         |                    ^
-   lib/maple_tree.c:3783:21: warning: stack frame size (1032) exceeds limit (1024) in 'mas_wr_spanning_store' [-Wframe-larger-than]
-    3783 | static noinline int mas_wr_spanning_store(struct ma_wr_state *wr_mas)
-         |                     ^
-   6 warnings generated.
-
-
-vim +/mas_wr_store_entry +4206 lib/maple_tree.c
-
-54a611b605901c Liam R. Howlett 2022-09-06  4198  
-54a611b605901c Liam R. Howlett 2022-09-06  4199  /*
-54a611b605901c Liam R. Howlett 2022-09-06  4200   * mas_wr_store_entry() - Internal call to store a value
-54a611b605901c Liam R. Howlett 2022-09-06  4201   * @mas: The maple state
-54a611b605901c Liam R. Howlett 2022-09-06  4202   * @entry: The entry to store.
-54a611b605901c Liam R. Howlett 2022-09-06  4203   *
-54a611b605901c Liam R. Howlett 2022-09-06  4204   * Return: The contents that was stored at the index.
-54a611b605901c Liam R. Howlett 2022-09-06  4205   */
-739820a6178b03 JaeJoon Jung    2024-06-14 @4206  static inline void mas_wr_store_entry(struct ma_wr_state *wr_mas)
-54a611b605901c Liam R. Howlett 2022-09-06  4207  {
-54a611b605901c Liam R. Howlett 2022-09-06  4208  	struct ma_state *mas = wr_mas->mas;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4209  	unsigned char new_end = mas_wr_new_end(wr_mas);
-54a611b605901c Liam R. Howlett 2022-09-06  4210  
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4211  	switch (mas->store_type) {
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4212  	case wr_invalid:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4213  		MT_BUG_ON(mas->tree, 1);
-739820a6178b03 JaeJoon Jung    2024-06-14  4214  		return;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4215  	case wr_new_root:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4216  		mas_new_root(mas, wr_mas->entry);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4217  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4218  	case wr_store_root:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4219  		mas_store_root(mas, wr_mas->entry);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4220  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4221  	case wr_exact_fit:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4222  		rcu_assign_pointer(wr_mas->slots[mas->offset], wr_mas->entry);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4223  		if (!!wr_mas->entry ^ !!wr_mas->content)
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4224  			mas_update_gap(mas);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4225  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4226  	case wr_append:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4227  		mas_wr_append(wr_mas, new_end);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4228  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4229  	case wr_slot_store:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4230  		mas_wr_slot_store(wr_mas);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4231  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4232  	case wr_node_store:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4233  		mas_wr_node_store(wr_mas, new_end);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4234  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4235  	case wr_spanning_store:
-54a611b605901c Liam R. Howlett 2022-09-06  4236  		mas_wr_spanning_store(wr_mas);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4237  		break;
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4238  	case wr_split_store:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4239  	case wr_rebalance:
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4240  		mas_wr_bnode(wr_mas);
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4241  		break;
-54a611b605901c Liam R. Howlett 2022-09-06  4242  	}
-54a611b605901c Liam R. Howlett 2022-09-06  4243  
-580fcbd67ce2cd Sidhartha Kumar 2024-08-14  4244  	return;
-54a611b605901c Liam R. Howlett 2022-09-06  4245  }
-54a611b605901c Liam R. Howlett 2022-09-06  4246  
-
-:::::: The code at line 4206 was first introduced by commit
-:::::: 739820a6178b03b1b6b99a467c85e9e7146d51c1 maple_tree: modified return type of mas_wr_store_entry()
-
-:::::: TO: JaeJoon Jung <rgbi3307@gmail.com>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+>> ld.lld: error: undefined symbol: kasan_flag_enabled
+   >>> referenced by stackdepot.c
+   >>>               lib/stackdepot.o:(__jump_table+0x8) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
