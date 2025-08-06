@@ -1,49 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC761A76B1;
-	Wed,  6 Aug 2025 19:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EED219A79;
+	Wed,  6 Aug 2025 19:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754507133; cv=none; b=C2hhpPqr+uzkcch/rf6DA8VLYNdtYxuLhMvKLvq2R0M2v1h4qRUIFQb16sNszctxQg1MVNof+coPuHRUQmUkotJJVkw/QKk9HYbC1q/6s1EBoP8lBl8/PaobPQxX9+/TZoo+s3RLftmhuAypK/TG9oE1puJaqXu0EWznpqPeu/A=
+	t=1754509531; cv=none; b=ARfdGs3qx7jFJGiruNBDj9mvRloW1BVYK/eGzWkXY7yS9PNZDlGwk7XYWTx3lWyM7C7I0DLRB4COhTks6I4AOasA9avMb6PELT6gA9sBLqxljtuaKALgjkTozhNoKA3k1Ici0IHORX1a15Bx3E2Ci6DW2c7TgeOZZ/5XlUQZrCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754507133; c=relaxed/simple;
-	bh=F/oYw1LzqhlgKXSO+DPY4BkW2P7FM7aPglYNuefA9II=;
+	s=arc-20240116; t=1754509531; c=relaxed/simple;
+	bh=PHSbwYIQhxWlqkYmx2TlmpPz5Tj+JhG6IBOTdEluDig=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MEpIs172Nnkw0KZaWla49C0VtWfjhcWlfxK/JWJc86I9Ct4fA2D+rqEOPECjkBkHiENw8qXOgh4UvQEOl/WAcfA6zpdq+A/z3ER5TsXCQEdEo4Zy1mZKsWqtAeuut9K/U7CCJi8796oSGorPgIIhWnIEDuKFAEn510moJWK6A0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tLd3kwWm; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQ78HDjWyjsFR01IgZsHdgu4og8pq4LCATrjkogjnIqHIz7IPMI5PoP3Sw69/8KoFOoExolGCWg5BZj3FgFTLzvoa6iJr+Qd9I2OhusNRiR6TV8NIfXdCpTgWeNbMiVKYbJZMTCCjMovW/OQIob5R6/TFi8StBSyO5j0WytZhEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fxpc8lVI; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tLd3kwWm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C82C4CEE7;
-	Wed,  6 Aug 2025 19:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754507132;
-	bh=F/oYw1LzqhlgKXSO+DPY4BkW2P7FM7aPglYNuefA9II=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tLd3kwWmlJ0WrvYyw/X3XEbltBnk584slRuhOAd6SmgVhC++Mecc7jJo3LsSPBO4d
-	 4KCB1/nDs80DSEP/IAX6vWGUwYCSl0IKGiWcVphn1SmKhggUyGkup8KmPuwNOQHTJP
-	 glC4WF5EUGXIm+pBWJLydCLtkaDKdmi6lOn9wjuce5GhwYEUcIRB0+wd4qqbwmQtu5
-	 lJ68s4Raweh+V/s803rvf/c5/C/LoueDxpidKue4mrdWD+MJD21kJCRiSQczpkDCnc
-	 sxxCKVTVZTKazPZU6rWGLEv967spIHT+HDeauZovDScaoWFZGy/sMILfFdqYE2yNdl
-	 B70Y3dO9ERdGw==
-Date: Wed, 6 Aug 2025 12:05:32 -0700
-From: Kees Cook <kees@kernel.org>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	linux-kbuild@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: Re-enable -Wunterminated-string-initialization
-Message-ID: <202508061158.49E749B46@keescook>
-References: <20250802184328.it.438-kees@kernel.org>
- <20250803173235.GA716998@ax162>
- <e4d801e3-3004-484b-897d-ed43c25e1576@intel.com>
- <20250805214823.GB200407@ax162>
- <546c9819-20e7-4474-9281-5d1567263637@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fxpc8lVI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754509530; x=1786045530;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PHSbwYIQhxWlqkYmx2TlmpPz5Tj+JhG6IBOTdEluDig=;
+  b=Fxpc8lVIVSrUBSZ1l0wqpBheNjfwlJJv44MsgsEZDLRFnjTtfv4xEYEH
+   qQng932gsJmipRh+calfwp4fczlPdOiVTwnRg8UMAKFwAb0OZIj6R0zva
+   7uNO0PYB7UN7qVbeBdgYqFUVhzhaBXgPoGItAamIhlCEP/AkJAzV07HMl
+   JtS8DPFr5na9rQhAaPDCl5nM+Xv1RBb+4QABal33hhkZfW6/GmWIETu5F
+   dIVO9lej734P5ezxvfEgUVyaCSO9JJ4m8YDkzaxFx5wgdV6B+5iSMGDyh
+   +UAFFdjjqBR7yXglp+qU3p7rxxG4FFS+dp85dWTYPY/MKbQYoI1YzQ4VO
+   g==;
+X-CSE-ConnectionGUID: wHDZtSkjQYeL3z0wrRSdxw==
+X-CSE-MsgGUID: i9GgFOcqTUClC7SyPIOeaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="56971852"
+X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
+   d="scan'208";a="56971852"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 12:45:26 -0700
+X-CSE-ConnectionGUID: s6re+NOZT8OyWcgCf5S0Ig==
+X-CSE-MsgGUID: 6joJOnm1QkiEJH4+/9hQuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
+   d="scan'208";a="164379697"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Aug 2025 12:45:22 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ujk4e-000226-1a;
+	Wed, 06 Aug 2025 19:45:20 +0000
+Date: Thu, 7 Aug 2025 03:44:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@kernel.org>, Nipun Gupta <nipun.gupta@amd.com>,
+	Nikhil Agarwal <nikhil.agarwal@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuu?= <linux@weissschuh.net>,
+	Qiu-ji Chen <chenqiuji666@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Abhijit Gangurde <abhijit.gangurde@amd.com>,
+	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cdx: don't select CONFIG_GENERIC_MSI_IRQ
+Message-ID: <202508070308.opy5dIFX-lkp@intel.com>
+References: <20250805161059.4006484-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,53 +74,171 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <546c9819-20e7-4474-9281-5d1567263637@intel.com>
+In-Reply-To: <20250805161059.4006484-1-arnd@kernel.org>
 
-On Wed, Aug 06, 2025 at 05:29:55PM +0200, Alexander Lobakin wrote:
-> From: Nathan Chancellor <nathan@kernel.org>
+Hi Arnd,
 
-Thank you for the fixes Nathan! I'll dig through these and get them sent
-out before I try to land this patch again -- "But COMPILE_TEST is never
-wrong!" ;)
+kernel test robot noticed the following build errors:
 
-> > [...]
-> > descriptions expected to be stable once they are released or are we able
-> 
-> Ethtool private stats are not "ABI" at all. Moreover, if they result in
-> incorrect code, this needs to be fixed no matter if someone already
-> wrote scripts dependent on these names or not.
+[auto build test ERROR on linus/master]
+[also build test ERROR on next-20250806]
+[cannot apply to soc/for-next v6.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Internally there isn't an ABI, but the userspace interface effectively has
-an ABI: the strings are fixed-size and NUL-padded but not NUL-terminated.
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/cdx-don-t-select-CONFIG_GENERIC_MSI_IRQ/20250806-121343
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250805161059.4006484-1-arnd%40kernel.org
+patch subject: [PATCH] cdx: don't select CONFIG_GENERIC_MSI_IRQ
+config: hexagon-randconfig-002-20250807 (https://download.01.org/0day-ci/archive/20250807/202508070308.opy5dIFX-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7b8dea265e72c3037b6b1e54d5ab51b7e14f328b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250807/202508070308.opy5dIFX-lkp@intel.com/reproduce)
 
-> > to adjust them? We could maybe shave an 'o' from 'unknown' to easily
-> > resolve this without losing much in the way of quick visual processing.
-> 
-> I've no idea why it's popular to define Ethtool stats names in drivers
-> using a fixed array of ETH_GSTRING_LEN and then do memcpy().
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508070308.opy5dIFX-lkp@intel.com/
 
-The above is why: they are fixed-size, non-NUL-terminated strings, so
-many drivers use this memcpy pattern. But not all.
+All errors (new ones prefixed by >>):
 
-> I've been always using just `const char * const[]` + strscpy() (then
-> switched the latter to ethtool_puts()/ethtool_sprintf() -- we even have
-> special helpers for that). In case some name goes past ETH_GSTRING_LEN,
-> it would just be truncated, but always have \0 at the end.
+>> drivers/vfio/cdx/intr.c:41:8: error: call to undeclared function 'msi_domain_alloc_irqs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      41 |         ret = msi_domain_alloc_irqs(dev, MSI_DEFAULT_DOMAIN, nvec);
+         |               ^
+   drivers/vfio/cdx/intr.c:41:8: note: did you mean 'msi_domain_get_virq'?
+   include/linux/msi_api.h:58:14: note: 'msi_domain_get_virq' declared here
+      58 | unsigned int msi_domain_get_virq(struct device *dev, unsigned int domid, unsigned int index);
+         |              ^
+>> drivers/vfio/cdx/intr.c:135:2: error: call to undeclared function 'msi_domain_free_irqs_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     135 |         msi_domain_free_irqs_all(dev, MSI_DEFAULT_DOMAIN);
+         |         ^
+   2 errors generated.
 
-Unfortunately this is not true: not all sources are NUL terminated.
 
-> Plus most of the names are shorter than 32, so defining such arrays of
-> 32 just wastes space in .rodata.
+vim +/msi_domain_alloc_irqs +41 drivers/vfio/cdx/intr.c
 
-That IS true, but many drivers just keep giant blocks of data they can
-memcpy. :(
-
-Regardless, I will double-check this and see what needs to happen here.
-I've fixed a lot of these already[1].
-
--Kees
-
-[1] https://lore.kernel.org/lkml/20250416010210.work.904-kees@kernel.org/
+848e447e000c418 Nipun Gupta 2024-04-23   23  
+848e447e000c418 Nipun Gupta 2024-04-23   24  static int vfio_cdx_msi_enable(struct vfio_cdx_device *vdev, int nvec)
+848e447e000c418 Nipun Gupta 2024-04-23   25  {
+848e447e000c418 Nipun Gupta 2024-04-23   26  	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
+848e447e000c418 Nipun Gupta 2024-04-23   27  	struct device *dev = vdev->vdev.dev;
+848e447e000c418 Nipun Gupta 2024-04-23   28  	int msi_idx, ret;
+848e447e000c418 Nipun Gupta 2024-04-23   29  
+848e447e000c418 Nipun Gupta 2024-04-23   30  	vdev->cdx_irqs = kcalloc(nvec, sizeof(struct vfio_cdx_irq), GFP_KERNEL);
+848e447e000c418 Nipun Gupta 2024-04-23   31  	if (!vdev->cdx_irqs)
+848e447e000c418 Nipun Gupta 2024-04-23   32  		return -ENOMEM;
+848e447e000c418 Nipun Gupta 2024-04-23   33  
+848e447e000c418 Nipun Gupta 2024-04-23   34  	ret = cdx_enable_msi(cdx_dev);
+848e447e000c418 Nipun Gupta 2024-04-23   35  	if (ret) {
+848e447e000c418 Nipun Gupta 2024-04-23   36  		kfree(vdev->cdx_irqs);
+848e447e000c418 Nipun Gupta 2024-04-23   37  		return ret;
+848e447e000c418 Nipun Gupta 2024-04-23   38  	}
+848e447e000c418 Nipun Gupta 2024-04-23   39  
+848e447e000c418 Nipun Gupta 2024-04-23   40  	/* Allocate cdx MSIs */
+848e447e000c418 Nipun Gupta 2024-04-23  @41  	ret = msi_domain_alloc_irqs(dev, MSI_DEFAULT_DOMAIN, nvec);
+848e447e000c418 Nipun Gupta 2024-04-23   42  	if (ret) {
+848e447e000c418 Nipun Gupta 2024-04-23   43  		cdx_disable_msi(cdx_dev);
+848e447e000c418 Nipun Gupta 2024-04-23   44  		kfree(vdev->cdx_irqs);
+848e447e000c418 Nipun Gupta 2024-04-23   45  		return ret;
+848e447e000c418 Nipun Gupta 2024-04-23   46  	}
+848e447e000c418 Nipun Gupta 2024-04-23   47  
+848e447e000c418 Nipun Gupta 2024-04-23   48  	for (msi_idx = 0; msi_idx < nvec; msi_idx++)
+848e447e000c418 Nipun Gupta 2024-04-23   49  		vdev->cdx_irqs[msi_idx].irq_no = msi_get_virq(dev, msi_idx);
+848e447e000c418 Nipun Gupta 2024-04-23   50  
+848e447e000c418 Nipun Gupta 2024-04-23   51  	vdev->msi_count = nvec;
+848e447e000c418 Nipun Gupta 2024-04-23   52  	vdev->config_msi = 1;
+848e447e000c418 Nipun Gupta 2024-04-23   53  
+848e447e000c418 Nipun Gupta 2024-04-23   54  	return 0;
+848e447e000c418 Nipun Gupta 2024-04-23   55  }
+848e447e000c418 Nipun Gupta 2024-04-23   56  
+848e447e000c418 Nipun Gupta 2024-04-23   57  static int vfio_cdx_msi_set_vector_signal(struct vfio_cdx_device *vdev,
+848e447e000c418 Nipun Gupta 2024-04-23   58  					  int vector, int fd)
+848e447e000c418 Nipun Gupta 2024-04-23   59  {
+848e447e000c418 Nipun Gupta 2024-04-23   60  	struct eventfd_ctx *trigger;
+848e447e000c418 Nipun Gupta 2024-04-23   61  	int irq_no, ret;
+848e447e000c418 Nipun Gupta 2024-04-23   62  
+848e447e000c418 Nipun Gupta 2024-04-23   63  	if (vector < 0 || vector >= vdev->msi_count)
+848e447e000c418 Nipun Gupta 2024-04-23   64  		return -EINVAL;
+848e447e000c418 Nipun Gupta 2024-04-23   65  
+848e447e000c418 Nipun Gupta 2024-04-23   66  	irq_no = vdev->cdx_irqs[vector].irq_no;
+848e447e000c418 Nipun Gupta 2024-04-23   67  
+848e447e000c418 Nipun Gupta 2024-04-23   68  	if (vdev->cdx_irqs[vector].trigger) {
+848e447e000c418 Nipun Gupta 2024-04-23   69  		free_irq(irq_no, vdev->cdx_irqs[vector].trigger);
+848e447e000c418 Nipun Gupta 2024-04-23   70  		kfree(vdev->cdx_irqs[vector].name);
+848e447e000c418 Nipun Gupta 2024-04-23   71  		eventfd_ctx_put(vdev->cdx_irqs[vector].trigger);
+848e447e000c418 Nipun Gupta 2024-04-23   72  		vdev->cdx_irqs[vector].trigger = NULL;
+848e447e000c418 Nipun Gupta 2024-04-23   73  	}
+848e447e000c418 Nipun Gupta 2024-04-23   74  
+848e447e000c418 Nipun Gupta 2024-04-23   75  	if (fd < 0)
+848e447e000c418 Nipun Gupta 2024-04-23   76  		return 0;
+848e447e000c418 Nipun Gupta 2024-04-23   77  
+848e447e000c418 Nipun Gupta 2024-04-23   78  	vdev->cdx_irqs[vector].name = kasprintf(GFP_KERNEL, "vfio-msi[%d](%s)",
+848e447e000c418 Nipun Gupta 2024-04-23   79  						vector, dev_name(vdev->vdev.dev));
+848e447e000c418 Nipun Gupta 2024-04-23   80  	if (!vdev->cdx_irqs[vector].name)
+848e447e000c418 Nipun Gupta 2024-04-23   81  		return -ENOMEM;
+848e447e000c418 Nipun Gupta 2024-04-23   82  
+848e447e000c418 Nipun Gupta 2024-04-23   83  	trigger = eventfd_ctx_fdget(fd);
+848e447e000c418 Nipun Gupta 2024-04-23   84  	if (IS_ERR(trigger)) {
+848e447e000c418 Nipun Gupta 2024-04-23   85  		kfree(vdev->cdx_irqs[vector].name);
+848e447e000c418 Nipun Gupta 2024-04-23   86  		return PTR_ERR(trigger);
+848e447e000c418 Nipun Gupta 2024-04-23   87  	}
+848e447e000c418 Nipun Gupta 2024-04-23   88  
+848e447e000c418 Nipun Gupta 2024-04-23   89  	ret = request_irq(irq_no, vfio_cdx_msihandler, 0,
+848e447e000c418 Nipun Gupta 2024-04-23   90  			  vdev->cdx_irqs[vector].name, trigger);
+848e447e000c418 Nipun Gupta 2024-04-23   91  	if (ret) {
+848e447e000c418 Nipun Gupta 2024-04-23   92  		kfree(vdev->cdx_irqs[vector].name);
+848e447e000c418 Nipun Gupta 2024-04-23   93  		eventfd_ctx_put(trigger);
+848e447e000c418 Nipun Gupta 2024-04-23   94  		return ret;
+848e447e000c418 Nipun Gupta 2024-04-23   95  	}
+848e447e000c418 Nipun Gupta 2024-04-23   96  
+848e447e000c418 Nipun Gupta 2024-04-23   97  	vdev->cdx_irqs[vector].trigger = trigger;
+848e447e000c418 Nipun Gupta 2024-04-23   98  
+848e447e000c418 Nipun Gupta 2024-04-23   99  	return 0;
+848e447e000c418 Nipun Gupta 2024-04-23  100  }
+848e447e000c418 Nipun Gupta 2024-04-23  101  
+848e447e000c418 Nipun Gupta 2024-04-23  102  static int vfio_cdx_msi_set_block(struct vfio_cdx_device *vdev,
+848e447e000c418 Nipun Gupta 2024-04-23  103  				  unsigned int start, unsigned int count,
+848e447e000c418 Nipun Gupta 2024-04-23  104  				  int32_t *fds)
+848e447e000c418 Nipun Gupta 2024-04-23  105  {
+848e447e000c418 Nipun Gupta 2024-04-23  106  	int i, j, ret = 0;
+848e447e000c418 Nipun Gupta 2024-04-23  107  
+848e447e000c418 Nipun Gupta 2024-04-23  108  	if (start >= vdev->msi_count || start + count > vdev->msi_count)
+848e447e000c418 Nipun Gupta 2024-04-23  109  		return -EINVAL;
+848e447e000c418 Nipun Gupta 2024-04-23  110  
+848e447e000c418 Nipun Gupta 2024-04-23  111  	for (i = 0, j = start; i < count && !ret; i++, j++) {
+848e447e000c418 Nipun Gupta 2024-04-23  112  		int fd = fds ? fds[i] : -1;
+848e447e000c418 Nipun Gupta 2024-04-23  113  
+848e447e000c418 Nipun Gupta 2024-04-23  114  		ret = vfio_cdx_msi_set_vector_signal(vdev, j, fd);
+848e447e000c418 Nipun Gupta 2024-04-23  115  	}
+848e447e000c418 Nipun Gupta 2024-04-23  116  
+848e447e000c418 Nipun Gupta 2024-04-23  117  	if (ret) {
+848e447e000c418 Nipun Gupta 2024-04-23  118  		for (--j; j >= (int)start; j--)
+848e447e000c418 Nipun Gupta 2024-04-23  119  			vfio_cdx_msi_set_vector_signal(vdev, j, -1);
+848e447e000c418 Nipun Gupta 2024-04-23  120  	}
+848e447e000c418 Nipun Gupta 2024-04-23  121  
+848e447e000c418 Nipun Gupta 2024-04-23  122  	return ret;
+848e447e000c418 Nipun Gupta 2024-04-23  123  }
+848e447e000c418 Nipun Gupta 2024-04-23  124  
+848e447e000c418 Nipun Gupta 2024-04-23  125  static void vfio_cdx_msi_disable(struct vfio_cdx_device *vdev)
+848e447e000c418 Nipun Gupta 2024-04-23  126  {
+848e447e000c418 Nipun Gupta 2024-04-23  127  	struct cdx_device *cdx_dev = to_cdx_device(vdev->vdev.dev);
+848e447e000c418 Nipun Gupta 2024-04-23  128  	struct device *dev = vdev->vdev.dev;
+848e447e000c418 Nipun Gupta 2024-04-23  129  
+848e447e000c418 Nipun Gupta 2024-04-23  130  	vfio_cdx_msi_set_block(vdev, 0, vdev->msi_count, NULL);
+848e447e000c418 Nipun Gupta 2024-04-23  131  
+848e447e000c418 Nipun Gupta 2024-04-23  132  	if (!vdev->config_msi)
+848e447e000c418 Nipun Gupta 2024-04-23  133  		return;
+848e447e000c418 Nipun Gupta 2024-04-23  134  
+848e447e000c418 Nipun Gupta 2024-04-23 @135  	msi_domain_free_irqs_all(dev, MSI_DEFAULT_DOMAIN);
+848e447e000c418 Nipun Gupta 2024-04-23  136  	cdx_disable_msi(cdx_dev);
+848e447e000c418 Nipun Gupta 2024-04-23  137  	kfree(vdev->cdx_irqs);
+848e447e000c418 Nipun Gupta 2024-04-23  138  
+848e447e000c418 Nipun Gupta 2024-04-23  139  	vdev->cdx_irqs = NULL;
+848e447e000c418 Nipun Gupta 2024-04-23  140  	vdev->msi_count = 0;
+848e447e000c418 Nipun Gupta 2024-04-23  141  	vdev->config_msi = 0;
+848e447e000c418 Nipun Gupta 2024-04-23  142  }
+848e447e000c418 Nipun Gupta 2024-04-23  143  
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
