@@ -1,43 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A515927470;
-	Wed,  6 Aug 2025 22:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D8835898;
+	Wed,  6 Aug 2025 22:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754518780; cv=none; b=ANphS2D9sLgyrD7W+y/DHDwEAPoGtnyyiOPpAxm4l5txTXhG0kXuYLi+MT+UuKeF2Km4J5ugNcp2CW3FjwRQLA4dweEXse7yPkPV88rO5qey02k1J1vdIwXg8Y/kZVUEvRGVXuejvB8MLy2RgVVnLPSZg2mCj5mPsojKdpoFR9Y=
+	t=1754519163; cv=none; b=OQ8HwK9JdAADoV69Nje8XTJacFXpclfAEaMj8Ct19OcGTZiFD+NPznK4xqV4GrhldKjMh7AsX8uzkdlZN+osgpNPNakgYDUHzjem96MqLKDXSPreFDo6NmIYInvKQgWtCNM4K55pmqtuadEwa5DdITO1yRM4p/rgbGIJX0VmY8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754518780; c=relaxed/simple;
-	bh=yEqWEe7fKZL9wI174QfVtk/Gwqa6G81uHG2fSIPPD/0=;
+	s=arc-20240116; t=1754519163; c=relaxed/simple;
+	bh=wSP/FnjATYBkD9tjSijm87GKcLGQ9Dv8hJCzfo90h/s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p11uMfj8e0lL2ZJV6ywKfZklRAW9YMG8TsWwA/GKfeSMEcnUFpXiieIYpBxkcQqWalVimmzwJUBidDAn/fXjYT8LwC5ZTTWEgFLyp9SKKd5j/XvmiHTHI/MtbHX5zY/vC9Y70Y942nUiYd9UsYfg6eGrbO57j3xUFU3acqXvFHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KHLLHCvB; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=BbbPQJwcc2cAWRYMqvaOFjhP1PlLsQCwMv2f7xABJE/7t4C4cIOF4dU/Y2p8nje5lXcz0oFSafZZLBEngAix3h1QeX7ljfkucagZ5SFkhmpOulxjM4LrSS2BMTevY4ZqOK/Y1oGz265ljcdwzqyGtNUBozayk6JqENMTq3BgRJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iZVZtpHc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KHLLHCvB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A78FBC4CEE7;
-	Wed,  6 Aug 2025 22:19:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iZVZtpHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487F9C4CEE7;
+	Wed,  6 Aug 2025 22:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754518780;
-	bh=yEqWEe7fKZL9wI174QfVtk/Gwqa6G81uHG2fSIPPD/0=;
+	s=k20201202; t=1754519163;
+	bh=wSP/FnjATYBkD9tjSijm87GKcLGQ9Dv8hJCzfo90h/s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KHLLHCvBe3OZo40BHCtVxsxT6dMCdX9rQWVIa/9UupLGzqjW4cLDrJYw5khQHSSGH
-	 Wpwfi2JGvb95/9dooHH4zcCWdySLAMEM4LNAz5UOY7ozKmkq7dsm5XNHbtBtG8bYYn
-	 frMm5q39mo6fjQ+iahDkrH9N8L4QCJpJEUGvus39+5AHA0P79KVK+BWOPxv2U8XoeY
-	 2W8fS34SmgC5bWT4WKfaUa96L90bt7V4jpnSC15J1A32eXIA5ch8nYzwLkXcw2+55M
-	 EoJz9oKFDa3WjepsWjrZuBhdMbMcgc5Y3R4LL6TGALIcRbQcXKnZmY7zI1ZUOWAmJa
-	 rXqXwlQN7Ca0w==
-Date: Wed, 6 Aug 2025 15:19:35 -0700
+	b=iZVZtpHcJ84kPEusQRbGh0yw0RjPpg0xx99EEBSWIBT7fatVExcSR13RCFr0P/Am9
+	 f2rvIpIy9szjA5QOgilFY47ledEhI6DZBUnBeVsHIa6foNSKny7oPvL/byTHW/fhTr
+	 UnwXixzezWxz5XRhtEWzuk1Ypp9tdH5bYTc9opJToSJ/fx2bbRqIebIzkKbNENvG1W
+	 NJsvHnXcqdajLfRfpjWXrBzmSSTm5hIwNg4NCzwwUmkZyCA8zHEis15KZ4E///gMeC
+	 XEO+0WBvsRRHw7PazG7Z22ryiE+ERSdb085I8LV78NiNdQmClZ/9uAxCOAHac92DHo
+	 97Th+tup2Yegw==
+Date: Wed, 6 Aug 2025 15:25:57 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Samuel Holland <samuel.holland@sifive.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Jesse Taube <mr.bossman075@gmail.com>
-Subject: Re: ld.lld: error: Function Import: link error: linking module flags
- 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at
- 861458), and 'i32 1' from vmlinux.a(net-traces.o at 1004198)
-Message-ID: <20250806221935.GA1397381@ax162>
-References: <202508061842.68gt097v-lkp@intel.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Tom Rix <trix@redhat.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 6.1.y] KVM: arm64: sys_regs: disable
+ -Wuninitialized-const-pointer warning
+Message-ID: <20250806222557.GA1654483@ax162>
+References: <20250728-stable-disable-unit-ptr-warn-v1-1-958be9b66520@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,20 +50,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202508061842.68gt097v-lkp@intel.com>
+In-Reply-To: <20250728-stable-disable-unit-ptr-warn-v1-1-958be9b66520@google.com>
 
-On Wed, Aug 06, 2025 at 07:06:34PM +0800, kernel test robot wrote:
-...
-> config: riscv-randconfig-002-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061842.68gt097v-lkp@intel.com/config)
-...
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(trace.o at 871118)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(memcontrol.o at 876278)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(mballoc.o at 886958)
-> >> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(net-traces.o at 1004198)
+On Mon, Jul 28, 2025 at 02:07:36PM -0700, Justin Stitt wrote:
+> A new warning in Clang 22 [1] complains that @clidr passed to
+> get_clidr_el1() is an uninitialized const pointer. get_clidr_el1()
+> doesn't really care since it casts away the const-ness anyways -- it is
+> a false positive.
+> 
+> |  ../arch/arm64/kvm/sys_regs.c:2978:23: warning: variable 'clidr' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
+> |   2978 |         get_clidr_el1(NULL, &clidr); /* Ugly... */
+> |        |                              ^~~~~
+> 
+> Disable this warning for sys_regs.o with an iron fist as it doesn't make
+> sense to waste maintainer's time or potentially break builds by
+> backporting large changelists from 6.2+.
+> 
+> This patch isn't needed for anything past 6.1 as this code section was
+> reworked in Commit 7af0c2534f4c ("KVM: arm64: Normalize cache
+> configuration").
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7c8c5e6a9101e ("arm64: KVM: system register handling")
+> Link: https://github.com/llvm/llvm-project/commit/00dacf8c22f065cb52efb14cd091d441f19b319e [1]
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> ---
 
-As this configuration has CONFIG_CMODEL_MEDLOW, I expect
-https://lore.kernel.org/20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org/
-to avoid this.
+Yes, I think this is an appropriate way to address this for stable.
 
-Cheers,
-Nathan
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  arch/arm64/kvm/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+> index 5e33c2d4645a..5fdb5331bfad 100644
+> --- a/arch/arm64/kvm/Makefile
+> +++ b/arch/arm64/kvm/Makefile
+> @@ -24,6 +24,9 @@ kvm-y += arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+>  
+>  kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o pmu.o
+>  
+> +# Work around a false positive Clang 22 -Wuninitialized-const-pointer warning
+> +CFLAGS_sys_regs.o := $(call cc-disable-warning, uninitialized-const-pointer)
+> +
+>  always-y := hyp_constants.h hyp-constants.s
+>  
+>  define rule_gen_hyp_constants
+> 
+> ---
+> base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+> change-id: 20250728-stable-disable-unit-ptr-warn-281fee82539c
+> 
+> Best regards,
+> --
+> Justin Stitt <justinstitt@google.com>
+> 
