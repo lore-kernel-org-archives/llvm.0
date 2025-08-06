@@ -1,62 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEC97D098;
-	Wed,  6 Aug 2025 20:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A515927470;
+	Wed,  6 Aug 2025 22:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754513551; cv=none; b=dsv50fqwcUgYYtbVs7PolRTPRix6GMZbNO9hFix0GgSG/gyD3OLdPuYlvNjkwl5LMQXkBTh+9RbMJWzMfphJ1/OZpGzJOentaBeTIaKHtMa7c2DBHDgFw0UltjfW9yySh6K2UiQD2unM5HRvjhbuq0eUleBcGijXR//Ja2rkcA4=
+	t=1754518780; cv=none; b=ANphS2D9sLgyrD7W+y/DHDwEAPoGtnyyiOPpAxm4l5txTXhG0kXuYLi+MT+UuKeF2Km4J5ugNcp2CW3FjwRQLA4dweEXse7yPkPV88rO5qey02k1J1vdIwXg8Y/kZVUEvRGVXuejvB8MLy2RgVVnLPSZg2mCj5mPsojKdpoFR9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754513551; c=relaxed/simple;
-	bh=QmvpDt2PS2p7demErPhAY+ZhnKGpcjx2LhJW1JzrWGc=;
+	s=arc-20240116; t=1754518780; c=relaxed/simple;
+	bh=yEqWEe7fKZL9wI174QfVtk/Gwqa6G81uHG2fSIPPD/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IYvZ5zUcWCWkc3yXaVSqOypRq0vwIZciwbecp0WGNifdtYJ4bphx1CYtQBfSEreR5oMhMhH1q4qPfuFz9XV78c/0fqksz1QHKs8lUxPdtpliOQTKvJwcRmydj6ug863BsNx4HE1CEG9bDvNmG9/FQrgvj4jrsnuFwi8CMEjs4tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f6aV9vB3; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=p11uMfj8e0lL2ZJV6ywKfZklRAW9YMG8TsWwA/GKfeSMEcnUFpXiieIYpBxkcQqWalVimmzwJUBidDAn/fXjYT8LwC5ZTTWEgFLyp9SKKd5j/XvmiHTHI/MtbHX5zY/vC9Y70Y942nUiYd9UsYfg6eGrbO57j3xUFU3acqXvFHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KHLLHCvB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f6aV9vB3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754513549; x=1786049549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QmvpDt2PS2p7demErPhAY+ZhnKGpcjx2LhJW1JzrWGc=;
-  b=f6aV9vB3qcBP/5VGhEMQ7De83VFkvOQUSAujO8UMatcpEjSmDGeF6tOp
-   /Ip3mwgbtWtImShzt501HqZclrzOUQ+oP9yGAiAzrqUFmBJDhwwMeGPHl
-   48KZaLRhqDdeLorpoN9fe5eIDYfJJ3VvbY69+k9Zq74BfXoLxRvsdeNpg
-   vj3zdC+TitOE89hq6ydfhI8wAo9G3Ohvl1K+5DLOY+fX4Rg9GHZuuBDv+
-   zyz5gGdi49XHC4BLazdKROuqvKEsD+jnT76KQ7ogigDnHsL+A3aiGAaG0
-   vWREW3mk8IT10gYQ7RQpjH2MDeVqGP9/JghwIP+fprwZWE/nZEYeqDCmk
-   A==;
-X-CSE-ConnectionGUID: 242ssjJUT56zJrteRl2NBw==
-X-CSE-MsgGUID: h0LxYxMdTeejyH05znlmZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="67108558"
-X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
-   d="scan'208";a="67108558"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 13:52:28 -0700
-X-CSE-ConnectionGUID: +2xhNmFsRnGZfDnhagyifw==
-X-CSE-MsgGUID: ITvLCpOyQFqptZuo1Oorhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
-   d="scan'208";a="169045376"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 06 Aug 2025 13:52:26 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ujl7T-00025u-22;
-	Wed, 06 Aug 2025 20:52:20 +0000
-Date: Thu, 7 Aug 2025 04:51:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Boris Burkov <boris@bur.io>, linux-btrfs@vger.kernel.org,
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-	kernel-team@fb.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	shakeel.butt@linux.dev, hch@infradead.org, wqu@suse.com
-Subject: Re: [PATCH 3/3] mm: add vmstat for cgroup uncharged pages
-Message-ID: <202508070450.bjCshoYI-lkp@intel.com>
-References: <eae30d630ba07de8966d09a3e1700f53715980c2.1754438418.git.boris@bur.io>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KHLLHCvB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A78FBC4CEE7;
+	Wed,  6 Aug 2025 22:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754518780;
+	bh=yEqWEe7fKZL9wI174QfVtk/Gwqa6G81uHG2fSIPPD/0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KHLLHCvBe3OZo40BHCtVxsxT6dMCdX9rQWVIa/9UupLGzqjW4cLDrJYw5khQHSSGH
+	 Wpwfi2JGvb95/9dooHH4zcCWdySLAMEM4LNAz5UOY7ozKmkq7dsm5XNHbtBtG8bYYn
+	 frMm5q39mo6fjQ+iahDkrH9N8L4QCJpJEUGvus39+5AHA0P79KVK+BWOPxv2U8XoeY
+	 2W8fS34SmgC5bWT4WKfaUa96L90bt7V4jpnSC15J1A32eXIA5ch8nYzwLkXcw2+55M
+	 EoJz9oKFDa3WjepsWjrZuBhdMbMcgc5Y3R4LL6TGALIcRbQcXKnZmY7zI1ZUOWAmJa
+	 rXqXwlQN7Ca0w==
+Date: Wed, 6 Aug 2025 15:19:35 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Samuel Holland <samuel.holland@sifive.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Jesse Taube <mr.bossman075@gmail.com>
+Subject: Re: ld.lld: error: Function Import: link error: linking module flags
+ 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at
+ 861458), and 'i32 1' from vmlinux.a(net-traces.o at 1004198)
+Message-ID: <20250806221935.GA1397381@ax162>
+References: <202508061842.68gt097v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,117 +46,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eae30d630ba07de8966d09a3e1700f53715980c2.1754438418.git.boris@bur.io>
+In-Reply-To: <202508061842.68gt097v-lkp@intel.com>
 
-Hi Boris,
+On Wed, Aug 06, 2025 at 07:06:34PM +0800, kernel test robot wrote:
+...
+> config: riscv-randconfig-002-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061842.68gt097v-lkp@intel.com/config)
+...
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(trace.o at 871118)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(memcontrol.o at 876278)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(mballoc.o at 886958)
+> >> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 861458), and 'i32 1' from vmlinux.a(net-traces.o at 1004198)
 
-kernel test robot noticed the following build errors:
+As this configuration has CONFIG_CMODEL_MEDLOW, I expect
+https://lore.kernel.org/20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org/
+to avoid this.
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on v6.16]
-[cannot apply to akpm-mm/mm-everything linus/master next-20250806]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Boris-Burkov/mm-filemap-add-filemap_add_folio_nocharge/20250806-130147
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/eae30d630ba07de8966d09a3e1700f53715980c2.1754438418.git.boris%40bur.io
-patch subject: [PATCH 3/3] mm: add vmstat for cgroup uncharged pages
-config: i386-buildonly-randconfig-002-20250807 (https://download.01.org/0day-ci/archive/20250807/202508070450.bjCshoYI-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250807/202508070450.bjCshoYI-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508070450.bjCshoYI-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/filemap.c:209:2: error: call to undeclared function 'filemap_mod_uncharged_vmstat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     209 |         filemap_mod_uncharged_vmstat(folio, -1);
-         |         ^
-   mm/filemap.c:209:2: note: did you mean 'filemap_mod_uncharged_cgroup_vmstat'?
-   mm/filemap.c:158:13: note: 'filemap_mod_uncharged_cgroup_vmstat' declared here
-     158 | static void filemap_mod_uncharged_cgroup_vmstat(struct folio *folio, int sign)
-         |             ^
-   mm/filemap.c:998:3: error: call to undeclared function 'filemap_mod_uncharged_vmstat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     998 |                 filemap_mod_uncharged_vmstat(folio, 1);
-         |                 ^
-   2 errors generated.
-
-
-vim +/filemap_mod_uncharged_vmstat +209 mm/filemap.c
-
-   163	
-   164	
-   165	static void filemap_unaccount_folio(struct address_space *mapping,
-   166			struct folio *folio)
-   167	{
-   168		long nr;
-   169	
-   170		VM_BUG_ON_FOLIO(folio_mapped(folio), folio);
-   171		if (!IS_ENABLED(CONFIG_DEBUG_VM) && unlikely(folio_mapped(folio))) {
-   172			pr_alert("BUG: Bad page cache in process %s  pfn:%05lx\n",
-   173				 current->comm, folio_pfn(folio));
-   174			dump_page(&folio->page, "still mapped when deleted");
-   175			dump_stack();
-   176			add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
-   177	
-   178			if (mapping_exiting(mapping) && !folio_test_large(folio)) {
-   179				int mapcount = folio_mapcount(folio);
-   180	
-   181				if (folio_ref_count(folio) >= mapcount + 2) {
-   182					/*
-   183					 * All vmas have already been torn down, so it's
-   184					 * a good bet that actually the page is unmapped
-   185					 * and we'd rather not leak it: if we're wrong,
-   186					 * another bad page check should catch it later.
-   187					 */
-   188					atomic_set(&folio->_mapcount, -1);
-   189					folio_ref_sub(folio, mapcount);
-   190				}
-   191			}
-   192		}
-   193	
-   194		/* hugetlb folios do not participate in page cache accounting. */
-   195		if (folio_test_hugetlb(folio))
-   196			return;
-   197	
-   198		nr = folio_nr_pages(folio);
-   199	
-   200		__lruvec_stat_mod_folio(folio, NR_FILE_PAGES, -nr);
-   201		if (folio_test_swapbacked(folio)) {
-   202			__lruvec_stat_mod_folio(folio, NR_SHMEM, -nr);
-   203			if (folio_test_pmd_mappable(folio))
-   204				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS, -nr);
-   205		} else if (folio_test_pmd_mappable(folio)) {
-   206			__lruvec_stat_mod_folio(folio, NR_FILE_THPS, -nr);
-   207			filemap_nr_thps_dec(mapping);
-   208		}
- > 209		filemap_mod_uncharged_vmstat(folio, -1);
-   210	
-   211		/*
-   212		 * At this point folio must be either written or cleaned by
-   213		 * truncate.  Dirty folio here signals a bug and loss of
-   214		 * unwritten data - on ordinary filesystems.
-   215		 *
-   216		 * But it's harmless on in-memory filesystems like tmpfs; and can
-   217		 * occur when a driver which did get_user_pages() sets page dirty
-   218		 * before putting it, while the inode is being finally evicted.
-   219		 *
-   220		 * Below fixes dirty accounting after removing the folio entirely
-   221		 * but leaves the dirty flag set: it has no effect for truncated
-   222		 * folio and anyway will be cleared before returning folio to
-   223		 * buddy allocator.
-   224		 */
-   225		if (WARN_ON_ONCE(folio_test_dirty(folio) &&
-   226				 mapping_can_writeback(mapping)))
-   227			folio_account_cleaned(folio, inode_to_wb(mapping->host));
-   228	}
-   229	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
