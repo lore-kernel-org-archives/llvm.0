@@ -1,164 +1,284 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C06F1DB125;
-	Wed,  6 Aug 2025 14:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754491866; cv=none; b=GkzSHsK2MADtUx2XDrdOJzb9Ckkfg8dFVwc2oHUAE2LMFdAJpiE+VunNmjWQD0C49e8cLEBrUFSadME6cmVemj6lCTBvMXboZRfXpVQCD+HpFD0m57ROaN9SWaTTNiCdeG8yIdTZVNNBafxI6p3alvjKvWHJtOLG+TfBk2je8Fs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754491866; c=relaxed/simple;
-	bh=jYOf2US5bWDo7NlujX8N73KHv16qVgm8SXDzuRBuNuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OpZkWHdgX6nFINlp53j2+eHoAV6VT6sS2JXiONMOTi57Auyy/LrwG+E7quqo6oacXOsWafQBJYvgpxNVy2MpP1Q5tDMmgd0hFnmeSm0QsagBNxen4K2+EdbXb5vk2Sy/5MMEJTyXvsO7SXxQ7tJhpG416N1y5U37CdJixT4vmho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CX4FIaSV; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CF98F48
+	for <llvm@lists.linux.dev>; Wed,  6 Aug 2025 15:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1754494266; cv=fail; b=EqciQ/9PCcJ9GAkVSUDof+66VZOFOFLZpYDiiVicEWBqclA1+eZcgm6cQ04WFLwoOLg6+EN8ARQkGvhmhBjr/DJGge1SKsY7J3057xvfZClGCvsSIZ0oyw9LcQXy4OK+x51v2yAd/4TrS2vO+N/s0x9v6lZCFXMKUpPrkC/utXk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1754494266; c=relaxed/simple;
+	bh=fct6Gxm8MLlLKmaWleSTK4ceXpHScTv+aWYPS5lC51E=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=rlZP2DEkCQ/Fu7f+LYtxj/TLzbbisNDgqvkJ6p/x+rlhxXK32FJxXkKptZvAkASxORkqlCKwyYeJ49n2nTbPOA8yXXc03NwA/DdincvxDa9CV2Eyh5OQ4CUZXLyJA6UBjmc4zcvDIlG90FkRH61rf8pZav/7+4zc0cRhqh50c18=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EUgGx26U; arc=fail smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CX4FIaSV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EUgGx26U"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754491865; x=1786027865;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jYOf2US5bWDo7NlujX8N73KHv16qVgm8SXDzuRBuNuI=;
-  b=CX4FIaSVLPIO6cG+jigimb5Bxwu+KVcm3Sgojm730E18YlYxEM4sakgO
-   xIZJvq7u9q1cYO6BWvQGSBAKbl6MdQzM9CW9jjy0/QiqbeUz59b3hLFXX
-   h9fn4yG3vZAhwhB2R0Zcf7GmDXeuA3szQxAhkLMHCUlZOS9cO6xA04Lcb
-   7hm9ysbTd02GUHtKOHksA2FL9hUwLxxzTdgmk5HHQtbqMMxY4YnwdcsaL
-   Nqr/33CrbObU2dHyqtK5j/0FqQUlpPzFaKIN/SOiROUD946gtsb1BB+Ed
-   osM0MTcR6WdvTCFx6hzSMn55mD16+t++mrY0whYCGmIFrmsqfcWxv+iQt
-   Q==;
-X-CSE-ConnectionGUID: l+PpNv+zRBqueNiynX2zsA==
-X-CSE-MsgGUID: CFt/VIJgQquC8Wz3kYuCZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="67078659"
+  t=1754494265; x=1786030265;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=fct6Gxm8MLlLKmaWleSTK4ceXpHScTv+aWYPS5lC51E=;
+  b=EUgGx26UJVW49m3ON/mfKZnMIulEFLcmrBdWP73XdpIHCv8pn4h6c/or
+   RP2yiD+Sxz0KCWZg9sSHMTX9uzX9VDOn2qU+ZyOsTuTWgDSK17foQpiX3
+   Ug7UWzaUVlz+FlyScOfqow9sjQgVOLlCQxuo3dciUkc2xr+kW9aJr1GV/
+   XvvpOPTRm7t7Z54N7/HNyqQrKdEfQsmLu052Wwl4r8JpwaFCkqGhY2ex0
+   DtLSEpxaqz9zGZ/4oNmRVzgnOQTikc2qYqmb+Y3M14/UcYmd7VWqaUfGM
+   jKzlWRPaX1zEkcyrSOoUDUF4SGf6Yabi/3jTTLcfArZN5ZoA0WIvzPMic
+   g==;
+X-CSE-ConnectionGUID: HVNRRpx1T6S470xJA5v6+A==
+X-CSE-MsgGUID: /Orr1AvfQba09pyg3rf5wA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="74396801"
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="67078659"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 07:51:05 -0700
-X-CSE-ConnectionGUID: XH6+x08qTfGWxhF0zUB9XA==
-X-CSE-MsgGUID: acmb15dRTzSsSmXqlb9RyQ==
+   d="scan'208";a="74396801"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 08:31:04 -0700
+X-CSE-ConnectionGUID: XfqOhUkMRrabs4qSgbGCzA==
+X-CSE-MsgGUID: 2ALcnMSPTzSA3qORjvT+iw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="165567416"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Aug 2025 07:51:01 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ujfTn-0001n8-00;
-	Wed, 06 Aug 2025 14:50:59 +0000
-Date: Wed, 6 Aug 2025 22:50:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Takaya Saeki <takayas@google.com>, Tom Zanussi <zanussi@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ian Rogers <irogers@google.com>, aahringo@redhat.com,
-	Douglas Raillard <douglas.raillard@arm.com>
-Subject: Re: [PATCH 7/7] tracing: Add syscall_user_buf_size to limit amount
- written
-Message-ID: <202508062211.cwYqtLu0-lkp@intel.com>
-References: <20250805193235.747004484@kernel.org>
+   d="scan'208";a="168926006"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 08:31:04 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Wed, 6 Aug 2025 08:31:03 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26 via Frontend Transport; Wed, 6 Aug 2025 08:31:03 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (40.107.212.48)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Wed, 6 Aug 2025 08:31:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=exjEkw+oM+DbQjou+ZzZlcgh6/4sYoISe58izN8BFbuzZtajrp1tUMu3zD611HDj7pSSeWJ+3L6+o8fsSogWIw+7FxOuGHE84POhUYUkIkFRZPAwGU+Qt/QOboWm+X2uKj8/MJMKKBOtxwQuP82FoPwiggClUbiXprPuA2rmgQmhZBRLLFtjt42vQMEEH8PRJKbDrXb4ZRolU2l/dfqwJJoTjcb7TQkga3arbwPP8tUpOe+fHAtwpd4t/PbchhGj76Mt+GYRVsTZWZPTkM/bWfVE5cXAvYNnxJu9mYm3SM/B1L1h0zL89XsoTVHULoO4H8AgzmICSS+aklp7q6X3tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pUNzJtPogor4/NqaswbS0PRwr6dhLSvxQ7cOsHXlTYE=;
+ b=o/0Y2Rr63YL63IEmmZfS9f7o2CeczE1jsM7dsRGpzn+j8ukRvW3q7ihHDKBlOP5baLs5Ie+nsUJjHOO624tPDUPKNfNSxxeWqDZoJOAtDSSSZFMFv1//YqyapVMBAJeiXg8X3p1I+tfFM8qunwP/XXvBIIOd3c/k7Y34ALV9ndk32soi08vY7sfkB+Ue1QN1tWU8wvUU1U17t28kMseu2egNm8YjBg6u87trUYo83sk8eEOrBXiiyh+jq6Tb/o9ituaYMZhJFfr+uXngOR3ilfK/3Xjbjuxu47exeDWGEVBaTgaVRpCOMoHhfKREc1npFBwbbgZBGhZStgNbiN3Ffg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by IA1PR11MB7317.namprd11.prod.outlook.com (2603:10b6:208:427::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.13; Wed, 6 Aug
+ 2025 15:30:59 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808%6]) with mapi id 15.20.8989.018; Wed, 6 Aug 2025
+ 15:30:59 +0000
+Message-ID: <546c9819-20e7-4474-9281-5d1567263637@intel.com>
+Date: Wed, 6 Aug 2025 17:29:55 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kbuild: Re-enable -Wunterminated-string-initialization
+To: Nathan Chancellor <nathan@kernel.org>
+CC: Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>, <linux-kbuild@vger.kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	<morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<linux-hardening@vger.kernel.org>
+References: <20250802184328.it.438-kees@kernel.org>
+ <20250803173235.GA716998@ax162>
+ <e4d801e3-3004-484b-897d-ed43c25e1576@intel.com>
+ <20250805214823.GB200407@ax162>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20250805214823.GB200407@ax162>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: WA2P291CA0027.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1f::18) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250805193235.747004484@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|IA1PR11MB7317:EE_
+X-MS-Office365-Filtering-Correlation-Id: d70ef8a2-2766-4217-5557-08ddd4fe3e63
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?VzZ1dkM0c2ROZ2lqbnByNjlVLy9rQ0ROWEFBbXdtMm02NmhtY0pDSTJQN2Nx?=
+ =?utf-8?B?SXZnUGEvMDZtSmorUnpETmt2ZVNrNm9tdHA0bVBzTWEwalBsRDJLdHhoaHU5?=
+ =?utf-8?B?SHBiMjlpWjNpU3E3Y0NmaHFYTHUreDh5aHNWYXFuMGtKMHJKTWgwT0dBYW8z?=
+ =?utf-8?B?RjVPTFM3M2toUTEzS0RBVUZCZXpjTUx3b21ZQUY4cUY0LytoS2QwUVkySGxa?=
+ =?utf-8?B?MGJ0d0d4Mys4Sk13T0VBU1laREZPYTdWbmVoQmZKZjF1MmU4VEw0L3NqY2JW?=
+ =?utf-8?B?NmNpQi90UjNhbVVFWEdjeGNTUDcvcHZQSjB4aXdnTHZBTVI4cDhEd0JKbkhY?=
+ =?utf-8?B?RjhqRWc5SzFqb1NLcFA4azRBdUdqYjJrRkhuNDc2c0xWTm5yM3ZyZVpJdFNF?=
+ =?utf-8?B?cmJCWHpzRUdqR0J1M2phS1NNcE8wVG5jZVRMdHFMSnRydEFLNmJIMU9GMDJN?=
+ =?utf-8?B?RGVqOVJLRnV5T2xIY1M5TTQwUi9NVm1nTEQzVGlMTUczdTlnbXh3eTBwN1o1?=
+ =?utf-8?B?MWY3TmN2TWs1WkVYd0EwZUtaM3hmSHNNZVhKMTRnbEY3Zm5Hb0U4UkVaaWJ2?=
+ =?utf-8?B?RUhMVHc0SUNtTFkrdW9kc1pjalJna1F2NzNlVG9USnh4NDNsZW5kekNtN1Rw?=
+ =?utf-8?B?RDlZVml5dGIxOVVkd0NiM1krZmpZbTNjQ2FyaThJMHhFdkhYOG0xU2xrZ2Rs?=
+ =?utf-8?B?MVltNXJmRUZUZit6amdSNitQckVPK3IwMFhxM3hja2ZCNW1JdW02amRzYzZi?=
+ =?utf-8?B?T1NlUE5wN3hQMWhVSW1sOUo1N3d4L0tOUzYrQ3hzM0RJcEJ6V1lvcCtvM2xx?=
+ =?utf-8?B?c3Z6MEthRzJ4eHorQTJyNWF2QXR1NjZTQ1E3akZwOVRVTGVpRHFPb2NxWUVu?=
+ =?utf-8?B?UW9LMlpBd1d3MFVHemJDTFdUMVgrcEpZaFlEeGlFODBQenN5VmMyMnIxbWti?=
+ =?utf-8?B?c0UzT1B6R2lnV0NDY3hmY1RQVGdHYndUM3VOQUZFZGVMSDdGcGEyRTZpWXMr?=
+ =?utf-8?B?MFZ3L2Q3V1U2cDVZd3lnejFWVWJkbzBsdmZMeDl3SFJxRnpuTGtSdjJaOE5W?=
+ =?utf-8?B?c1ZzcWY2UHlQSDN2VXZqeEVEbEdCd016OEh3YzlGODlyWWFmMUxXclhsWmh5?=
+ =?utf-8?B?aGNpM0FFQzVNVUFVcmVIMm1kdGtsSEJqUTFsa1RCZCtzVHF4cVV6eExXTDdm?=
+ =?utf-8?B?aVM0dTFSTnZEK2RHN2FRdUFlaVJKNmZBcWIyLzEzOUtvR3FaT0Uzc0NLeFhp?=
+ =?utf-8?B?T0pqaFBkQVY5MkFOVGRCbzJDNEtrSC8ybHFRdEV3OXZkR0RYYzRPQlNKT1RY?=
+ =?utf-8?B?MzB6RGw1T29mb2RUby82NC9UbkI3ODFrQzduNTdOQk9jOEg0SzdhNEpiSkRz?=
+ =?utf-8?B?SjNueHZQbUtPdDdrMkNKOWhoRzF6N0cvRmJYSGtNVjE4cFYwZVZiSnJqL3No?=
+ =?utf-8?B?RkYwMmUrNzFXaGxzMnkyOEgxZ3lUZVVBQXNNNjdYalFkMFhvdE9wTjR3Tm5E?=
+ =?utf-8?B?L3ZzMWlTVWRTQWg3cloxa1NjNW5lQ1NRb25zaEt2SG1mbHdRRG9JU2JNQ1Bm?=
+ =?utf-8?B?SVM3NW1LTGJhZ2NQMC8zNEVreGRsWS9udHZlZGVlL2M3UnVCZG4wcXdFalRU?=
+ =?utf-8?B?R0h6bVRrVUZoMzdjeXBlVVY1VzI5b01oNVVCSWs4K0RpQWJBeTZpNVBxdTJZ?=
+ =?utf-8?B?REpVaysyZU9DZFBvL3AvYm8zVnFSdG03RDhRNndWSXpvbE5obG10Q0htdUh2?=
+ =?utf-8?B?NEYvMmVsMzc1Q1RYaVRmVXMwK3hEZWp2dUN5bG9xRWZPR1NBQWVPM2RkRUp3?=
+ =?utf-8?B?djMvNnhEVkxOaUV6WVBIc2YzVERlbWdsV0xXL0M0UkIvQ2d0S2VwUVRqOERh?=
+ =?utf-8?B?bHpINW9CVm1FRnJtcXJhNE9CWkcrc25XbHlldDIzRTV4cUhpTExHYnlNU0NR?=
+ =?utf-8?Q?gp3fdqV9LfM=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ODREYUhBZ0lJdXdhb2diMmJvQkxTYjJMcS9CdXRNYkhJYmI3OW1QR05pV1Vv?=
+ =?utf-8?B?NmdGcEU5Z0o3dkg1c1k1OTJYN1FEVFR0aW9abjNJNjgrZm9tR005UW92YUhi?=
+ =?utf-8?B?dU43S29jOHhxN1JMeEVHaE9od0lwWmZHSGhxWTRYRTlXcnpCNGw5dWpxOFpt?=
+ =?utf-8?B?K3phM1drUkhINjhyMVFpdk8xYlJydEovcWpKeFNrRndhTWdSVWM2U2F3QWdD?=
+ =?utf-8?B?NkhPOWF4U0MvZ01pckQ0VjFiSVZGeTQ0Ti9KRE5Vd09SenJldFVuY0lLSUtB?=
+ =?utf-8?B?VWt2b291QmdrMEdhMEI2b21WcmRkZmdyT3dnamFBdHR5QSt2eThDUXg2UnFG?=
+ =?utf-8?B?MGFqa01jUmhkR0hIbVBmWk1uMm5pNDlBbGtlL09qYlVNNjhweml5QXJMeUNr?=
+ =?utf-8?B?V3V3U3NmQ0JtUUNXbEh2Z3VCeXlabmpIYUNYUVE0allIUThIZTlYNkcrb2Zq?=
+ =?utf-8?B?TzRvbEpWSzNNZkRCNEtWUEdDTGJtZmgyWjdmb3ZIYVMveWc0Tyt0WXpBdnZy?=
+ =?utf-8?B?NjZIVFEyTmlwYzBjOUppckNCdURuTk5FMi9DL1IweU50RkVwQ0s1VmpqWW1C?=
+ =?utf-8?B?NkMwUWhCU2JaZXJWUGN6cjlDSklwQ0s3b2Y0M0J0UEFxUlgxbkFQcnRBS1ho?=
+ =?utf-8?B?blRUYVk5cGsxaS8rajlVZUMxclBQNzVuMXFEbXQzQUVZU3NPT0t6Y2tWY2hD?=
+ =?utf-8?B?dS9NY01TYXhyQ000RDJ0cUcxWlA1WHFUREwxcVFZNE9PMzBwUXI3Uk5PMWFa?=
+ =?utf-8?B?YmJNSzhhSm1WQUpNQVpodGw5OWJEMFlzSTl3RmF6ZGxUNjU1S254Uk9FMndm?=
+ =?utf-8?B?elU0MlJ3Qm91bENWQmNrc1k5eDhsd0NKV2ZaNTZJQXpyVVI5OUpzTkh3Y01p?=
+ =?utf-8?B?UGNGRUQwdW5lSW1icE9VYTZ3U1ptMW9ZM1hCUWgybTEyc0lPSG9sQmMxdis3?=
+ =?utf-8?B?L1lCVGVsTmlFSjFNcll4TEFMUWtYcmI0MHNBZnVHSmpSSzV6Z0orZUcyeUMy?=
+ =?utf-8?B?aHRMdFk2eVBZc0gwWmxxZFpyRWM5OElkekFLRWhtZXEzYXduZWlYSVBMNTBC?=
+ =?utf-8?B?TlhkS1FLeVhBWlF1ZnJ3NmU3aXY3aFUvbFRzSXN6cUszOHBPdFFUZ3dNVUYx?=
+ =?utf-8?B?eWN0Yzdlb29KYU42TFFGbzV5Nm5LTzZONXZSV2g1MzhiMmpKakdRM1loRi9i?=
+ =?utf-8?B?NUpFeVNad2JrdVFkQ21pSmpiNDcyWkp6QUYxelpST2MvSSs4cWx1SUJxeU10?=
+ =?utf-8?B?Q2wyL0U0YzVBdk91Z096Q2JzTXovQWFJR1A1cG9PY1pLSXFLQnVCRGJtTWd6?=
+ =?utf-8?B?Tkc0ZmFrUnBIUEVQQW0xK2lpbFhyTHc3VE5GOFRLYitSdDdNUWR4d24rWnB2?=
+ =?utf-8?B?NmlLQlFrTGpTUzBta1BsWDlUOFE5VW1wR0dZSFJtSUFSdGNUWnpIUWdFY1BY?=
+ =?utf-8?B?em8yZUJCd04xamhoMk5paVhGbkd4Qy9TVmhBbmlUMTNSWndjZCtwQTJpYWs5?=
+ =?utf-8?B?dnNuQlpOeXliZVVnSUgwOTl2SHFLMzBoMlQvUnhwd2Q1VHg5SUtWQld0dWJa?=
+ =?utf-8?B?bEtsdlUzQlZBRWkzM0UxYVQ4VTc5R1lVMmxuSFlNejFpM2FMa0lMa0pzMksy?=
+ =?utf-8?B?ckF0c3V0eU43THdaVVZGcklMMWlQWWQzN1c0QVM5bWZGYUU0dEVHY0Ztb0hK?=
+ =?utf-8?B?M00wU3pFVFV1OHJuMTVZVmlaNE1DOVdvZ2lJTXJIT3BkMnNOMENacVdiVjBK?=
+ =?utf-8?B?MWRITFpzT1lYZFJNU2IzZ1B1QjkxYUsxczMvVURpRkRvN0Y5WUlWMnJLQVR6?=
+ =?utf-8?B?cGZ0eEoyb3V2VEMxWHhWenZlMCtnS2JOMkJtZnc5RG1PVHNqM25MRW5KMkxu?=
+ =?utf-8?B?MkhYYm9YVWhOZnNaVXc1UE5iMU9ab0tsc0dWZjJZNUhRMWNqbEhZVEJUR3Q5?=
+ =?utf-8?B?SWttQkc1Z3FnZTNOSVprN1RNeXE5MmlJY0xHNHdFR3VWTFA1R2VaVi93WkhT?=
+ =?utf-8?B?VVRBL1NJSGhHUzFoL0E2UU9ObE9sQTR2di9JMWo3b3YzRXBsVWFqUEdkbi9E?=
+ =?utf-8?B?MGl4ZkVQSUtid3lxeVBjREhmazZBTm9VOTJ2OHVQM1ZTL1ErclNvY1ZJZWdy?=
+ =?utf-8?B?ZmtiZ1J1R2xOUjM1bEJwMnBLZlVlRjdxcGdjNm1IL0NMOUY5bDA5K3I2MUts?=
+ =?utf-8?B?T1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d70ef8a2-2766-4217-5557-08ddd4fe3e63
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2025 15:30:59.2731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VN1jU/GaVzIaHhoc5qOi+1xN0NuFOvb/QV+kkTznMg+47DqSFESouZO3+rhM9w9pNNoeB8vvw1s0aPE4XjEiu3MzxbCh9yUYPIamMg8pdEM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7317
+X-OriginatorOrg: intel.com
 
-Hi Steven,
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 5 Aug 2025 14:48:23 -0700
 
-kernel test robot noticed the following build errors:
+> On Tue, Aug 05, 2025 at 04:50:28PM +0200, Alexander Lobakin wrote:
+>> From: Nathan Chancellor <nathan@kernel.org>
+>> Date: Sun, 3 Aug 2025 10:32:35 -0700
+>>
+>>> On Sat, Aug 02, 2025 at 11:43:32AM -0700, Kees Cook wrote:
+>>>> With the few remaining fixes now landed, we can re-enable the option
+>>>> -Wunterminated-string-initialization (via -Wextra). Both GCC and Clang
+>>>> have the required multi-dimensional nonstring attribute support.
+>>
+>> [...]
+>>
+>>> diff --git a/drivers/net/ethernet/ti/netcp_ethss.c b/drivers/net/ethernet/ti/netcp_ethss.c
+>>> index 55a1a96cd834..05d4323c6a13 100644
+>>> --- a/drivers/net/ethernet/ti/netcp_ethss.c
+>>> +++ b/drivers/net/ethernet/ti/netcp_ethss.c
+>>> @@ -771,7 +771,7 @@ static struct netcp_module xgbe_module;
+>>>  
+>>>  /* Statistic management */
+>>>  struct netcp_ethtool_stat {
+>>> -	char desc[ETH_GSTRING_LEN];
+>>> +	char desc[ETH_GSTRING_LEN] __nonstring;
+>>
+>>
+>> Hmmm, ETH_GSTRING_LEN is the maximum length of the driver's statistics
+>> name to be reported to Ethtool and this *includes* \0 at the end.
+>> If this compilation flag triggers a warning here, the driver devs need
+>> to fix their code. There should always be \0 at the end, `desc` is a
+>> "proper" C 0-terminated string.
+> 
+> Ack, I had misunderstood a previous fix that Kees did for a similar but
+> different instance of the warning in another Ethernet driver and I
+> did not look much further than the driver copying these values around
+> with memcpy(). This does trigger a warning, from the original message:
+> 
+>   drivers/net/ethernet/ti/netcp_ethss.c:1049:2: error: initializer-string for character array is too long, array size is 32 but initializer has size 33 (including the null terminating character); did you mean to use the 'nonstring' attribute? [-Werror,-Wunterminated-string-initialization]
+>    1049 |         GBENU_STATS_HOST(ale_unknown_ucast_bytes),
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/ti/netcp_ethss.c:956:2: note: expanded from macro 'GBENU_STATS_HOST'
+>     956 |         "GBE_HOST:"#field, GBENU_STATS0_MODULE,                 \
+>         |         ^~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/ti/netcp_ethss.c:1051:2: error: initializer-string for character array is too long, array size is 32 but initializer has size 33 (including the null terminating character); did you mean to use the 'nonstring' attribute? [-Werror,-Wunterminated-string-initialization]
+>    1051 |         GBENU_STATS_HOST(ale_unknown_mcast_bytes),
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/ti/netcp_ethss.c:956:2: note: expanded from macro 'GBENU_STATS_HOST'
+>     956 |         "GBE_HOST:"#field, GBENU_STATS0_MODULE,                 \
+>         |         ^~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/ti/netcp_ethss.c:1053:2: error: initializer-string for character array is too long, array size is 32 but initializer has size 33 (including the null terminating character); did you mean to use the 'nonstring' attribute? [-Werror,-Wunterminated-string-initialization]
+>    1053 |         GBENU_STATS_HOST(ale_unknown_bcast_bytes),
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/ti/netcp_ethss.c:956:2: note: expanded from macro 'GBENU_STATS_HOST'
+>     956 |         "GBE_HOST:"#field, GBENU_STATS0_MODULE,                 \
+>         |         ^~~~~~~~~~~~~~~~~
+> 
+> So it seems to me like this is a legitimate problem? Are these
 
-[auto build test ERROR on trace/for-next]
-[also build test ERROR on linus/master v6.16 next-20250806]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yes, it's not a false-positive. I don't know how it worked at the end of
+the day, may either the kernel Ethtool core or the userspace Ethtool put
+\0 at the end (or maybe it was just luck or nobody tested Ethtool stats
+on this driver).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Replace-syscall-RCU-pointer-assignment-with-READ-WRITE_ONCE/20250806-122312
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20250805193235.747004484%40kernel.org
-patch subject: [PATCH 7/7] tracing: Add syscall_user_buf_size to limit amount written
-config: hexagon-randconfig-002-20250806 (https://download.01.org/0day-ci/archive/20250806/202508062211.cwYqtLu0-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7b8dea265e72c3037b6b1e54d5ab51b7e14f328b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508062211.cwYqtLu0-lkp@intel.com/reproduce)
+> descriptions expected to be stable once they are released or are we able
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508062211.cwYqtLu0-lkp@intel.com/
+Ethtool private stats are not "ABI" at all. Moreover, if they result in
+incorrect code, this needs to be fixed no matter if someone already
+wrote scripts dependent on these names or not.
 
-All errors (new ones prefixed by >>):
+> to adjust them? We could maybe shave an 'o' from 'unknown' to easily
+> resolve this without losing much in the way of quick visual processing.
 
->> kernel/trace/trace.c:11128:32: error: use of undeclared identifier 'CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT'
-    11128 |         global_trace.syscall_buf_sz = CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT;
-          |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+I've no idea why it's popular to define Ethtool stats names in drivers
+using a fixed array of ETH_GSTRING_LEN and then do memcpy().
+I've been always using just `const char * const[]` + strscpy() (then
+switched the latter to ethtool_puts()/ethtool_sprintf() -- we even have
+special helpers for that). In case some name goes past ETH_GSTRING_LEN,
+it would just be truncated, but always have \0 at the end.
+Plus most of the names are shorter than 32, so defining such arrays of
+32 just wastes space in .rodata.
 
+> 
+> Cheers,
+> Nathan
 
-vim +/CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT +11128 kernel/trace/trace.c
-
- 11110	
- 11111		init_trace_flags_index(&global_trace);
- 11112	
- 11113		register_tracer(&nop_trace);
- 11114	
- 11115		/* Function tracing may start here (via kernel command line) */
- 11116		init_function_trace();
- 11117	
- 11118		/* All seems OK, enable tracing */
- 11119		tracing_disabled = 0;
- 11120	
- 11121		atomic_notifier_chain_register(&panic_notifier_list,
- 11122					       &trace_panic_notifier);
- 11123	
- 11124		register_die_notifier(&trace_die_notifier);
- 11125	
- 11126		global_trace.flags = TRACE_ARRAY_FL_GLOBAL;
- 11127	
- 11128		global_trace.syscall_buf_sz = CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT;
- 11129	
- 11130		INIT_LIST_HEAD(&global_trace.systems);
- 11131		INIT_LIST_HEAD(&global_trace.events);
- 11132		INIT_LIST_HEAD(&global_trace.hist_vars);
- 11133		INIT_LIST_HEAD(&global_trace.err_log);
- 11134		list_add(&global_trace.marker_list, &marker_copies);
- 11135		list_add(&global_trace.list, &ftrace_trace_arrays);
- 11136	
- 11137		apply_trace_boot_options();
- 11138	
- 11139		register_snapshot_cmd();
- 11140	
- 11141		return 0;
- 11142	
- 11143	out_free_pipe_cpumask:
- 11144		free_cpumask_var(global_trace.pipe_cpumask);
- 11145	out_free_savedcmd:
- 11146		trace_free_saved_cmdlines_buffer();
- 11147	out_free_temp_buffer:
- 11148		ring_buffer_free(temp_buffer);
- 11149	out_rm_hp_state:
- 11150		cpuhp_remove_multi_state(CPUHP_TRACE_RB_PREPARE);
- 11151	out_free_cpumask:
- 11152		free_cpumask_var(global_trace.tracing_cpumask);
- 11153	out_free_buffer_mask:
- 11154		free_cpumask_var(tracing_buffer_mask);
- 11155		return ret;
- 11156	}
- 11157	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Olek
