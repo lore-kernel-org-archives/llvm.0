@@ -1,75 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14350262FE4;
-	Thu,  7 Aug 2025 14:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD52263C90
+	for <llvm@lists.linux.dev>; Thu,  7 Aug 2025 14:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754577292; cv=none; b=Vt2WH75Nk5bpqu/bjnn0dwZhb3SYoe/7WZQx2opO4gT0ahBkZrnif9h2BEVS1w3zQZCWuPXWtO3wYPutdU9xnVRmHrDtEs7zeuBtM5JyfroArUTrip43SM3MxY/UWZubipYRB03UzAnBMv7uDCn8/+MIk3ZvNx9lWFIXhuZiwJQ=
+	t=1754577802; cv=none; b=N3KbbvbJ0mvWBivfKNA7Q2+sJbyhzyj09308reR3bLBHAJdqD2a4oHCcgVZkypLc15qQ8hz4NoF7nfI2YmuTc5GL7hnVeiTC9UnJHBt86bXieUfsrwWckV2ArVkSJfr+LuYWh+xZktPe95+gLVB8dVDEHHn5zOUyzAexVXquAWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754577292; c=relaxed/simple;
-	bh=oIv1AhxQFm1DY8j3ea6WxxB3ZICPAWl1Q01D/LXQQNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e+qdMTc5wVdAe32ECidtcHqzkgo43fGU3qQMfoEPYs2SF2hNut8snpfucRWl/79vfcg30vTW8nciz+bgdsEUQ5XEiBSmdObnqSHga5vKsZnknQPAB1zjcm5Peuo3g7KZxARObpCVBnowXgmSgv6yCPW0IFSJI8jb3TtpJaug7ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tb+oAIJG; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tb+oAIJG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3437BC4CEEB;
-	Thu,  7 Aug 2025 14:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754577291;
-	bh=oIv1AhxQFm1DY8j3ea6WxxB3ZICPAWl1Q01D/LXQQNk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tb+oAIJG1EQrqKdSa/yHJeVXXPszvhr/D0rOkd5DHzQNl9eFcZLP24GH4cqJZBDvV
-	 mdXyk4pdXIuts6n3HcV2hMhmnSGA/u+ZeHLvIarn/6C3ALmRfWFfphgcklcN5VDf57
-	 nOkuNpW+YGjEmmuWP7W/1C6EedU6jX0NzGYcHGtc2yzEzxLuklZAayWZASyORozzg4
-	 Osfb25rQf8BE6CzLRRxyTuOckLEJC2at53+sTM/OBdxk6j1nVFi9oh6wwXV+Hbb0To
-	 Rx1qNo2d4ujXXovSx1xDwsMuJEfC/kPJ6pbnSs1v3199nvePPhlWd5xRy5pIgEcmYv
-	 jzFDysiwIhDQQ==
-Date: Thu, 7 Aug 2025 07:34:44 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Antonino Maniscalco <antomani103@gmail.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Jun Nie <jun.nie@linaro.org>, linux-arm-msm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/msm/dpu: avoid uninitialized variable use
-Message-ID: <20250807143444.GA1009053@ax162>
-References: <20250807072016.4109051-1-arnd@kernel.org>
- <ouan6tfmoefwuvs7wmhpzjdwmxfhqh3ad26j5tmwdugnq7ieda@ddw6dfqtq27g>
+	s=arc-20240116; t=1754577802; c=relaxed/simple;
+	bh=y//IMsBANN67YjgRvFs1TqJNvAqanY/RR7wYOqvwarQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ii9t8Mbu12qPyFQ2OwYiBbj5HAMHkgCb5ijlPrgddODxbOBv79MwVQf1lkswApgUpY6LzsiZQqPIkD7ZLocpsZHF/8mkzqLGmkBEQFZyKxrCOB81i0YHzcHT0M7CHykHHOcWey4E8LoSr9+J1MR+FTaVRVxVp4VWKSMIpzTxREU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D90BA4432A;
+	Thu,  7 Aug 2025 14:43:12 +0000 (UTC)
+Message-ID: <53b98e1e-4f7e-4320-8d04-d84dd2c4092d@ghiti.fr>
+Date: Thu, 7 Aug 2025 16:43:09 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ouan6tfmoefwuvs7wmhpzjdwmxfhqh3ad26j5tmwdugnq7ieda@ddw6dfqtq27g>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 09/17] riscv: Add __attribute_const__ to ffs()-family
+ implementations
+To: Kees Cook <kees@kernel.org>, linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+References: <20250804163910.work.929-kees@kernel.org>
+ <20250804164417.1612371-9-kees@kernel.org>
+Content-Language: en-US
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20250804164417.1612371-9-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeehiefhuddtuddukeetkeehhedtffduhfevfeeftdefveffgfeuffejjeejfeekueenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvtddtudemkeeiudemfeefkedvmegvfheltdemlehftghfmeeksghfleemleeludgumeekrggrfhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemfeefkedvmegvfheltdemlehftghfmeeksghfleemleeludgumeekrggrfhdphhgvlhhopeglkffrggeimedvtddtudemkeeiudemfeefkedvmegvfheltdemlehftghfmeeksghfleemleeludgumeekrggrfhgnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepudekpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehli
+ hhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrlhhphhgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqtghskhihsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmieekkheslhhishhtshdrlhhinhhugidqmheikehkrdhorhhg
+X-GND-Sasl: alex@ghiti.fr
 
-On Thu, Aug 07, 2025 at 11:09:38AM +0300, Dmitry Baryshkov wrote:
-> Having no plane->crtc is a valid setting and it is handled inside
-> drm_atomic_helper_check_plane_state() by setting plane_state->visible =
-> false and returning early. Setting crtc_state to NULL is a correct fix.
-> Could you please send it?
+Hi Kees,
 
-I sent this fix three weeks ago, could this be applied?
+On 8/4/25 18:44, Kees Cook wrote:
+> While tracking down a problem where constant expressions used by
+> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
+> initializer was convincing the compiler that it couldn't track the state
+> of the prior statically initialized value. Tracing this down found that
+> ffs() was used in the initializer macro, but since it wasn't marked with
+> __attribute__const__, the compiler had to assume the function might
+> change variable states as a side-effect (which is not true for ffs(),
+> which provides deterministic math results).
+>
+> Add missing __attribute_const__ annotations to RISC-V's implementations of
+> variable__ffs(), variable__fls(), and variable_ffs() functions. These are pure
+> mathematical functions that always return the same result for the same
+> input with no side effects, making them eligible for compiler optimization.
+>
+> Build tested ARCH=riscv defconfig with GCC riscv64-linux-gnu 14.2.0.
+>
+> Link: https://github.com/KSPP/linux/issues/364 [1]
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>   arch/riscv/include/asm/bitops.h | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/bitops.h b/arch/riscv/include/asm/bitops.h
+> index d59310f74c2b..77880677b06e 100644
+> --- a/arch/riscv/include/asm/bitops.h
+> +++ b/arch/riscv/include/asm/bitops.h
+> @@ -45,7 +45,7 @@
+>   #error "Unexpected BITS_PER_LONG"
+>   #endif
+>   
+> -static __always_inline unsigned long variable__ffs(unsigned long word)
+> +static __always_inline __attribute_const__ unsigned long variable__ffs(unsigned long word)
+>   {
+>   	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+>   				      RISCV_ISA_EXT_ZBB, 1)
+> @@ -74,7 +74,7 @@ static __always_inline unsigned long variable__ffs(unsigned long word)
+>   	 (unsigned long)__builtin_ctzl(word) :	\
+>   	 variable__ffs(word))
+>   
+> -static __always_inline unsigned long variable__fls(unsigned long word)
+> +static __always_inline __attribute_const__ unsigned long variable__fls(unsigned long word)
+>   {
+>   	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+>   				      RISCV_ISA_EXT_ZBB, 1)
+> @@ -103,7 +103,7 @@ static __always_inline unsigned long variable__fls(unsigned long word)
+>   	 (unsigned long)(BITS_PER_LONG - 1 - __builtin_clzl(word)) :	\
+>   	 variable__fls(word))
+>   
+> -static __always_inline int variable_ffs(int x)
+> +static __always_inline __attribute_const__ int variable_ffs(int x)
+>   {
+>   	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+>   				      RISCV_ISA_EXT_ZBB, 1)
 
-https://lore.kernel.org/20250715-drm-msm-fix-const-uninit-warning-v1-1-d6a366fd9a32@kernel.org/
 
-Cheers,
-Nathan
+Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Acked-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Thanks,
+
+Alex
+
+
