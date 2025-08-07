@@ -1,46 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DE5235041;
-	Thu,  7 Aug 2025 07:20:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7229A23C38C;
+	Thu,  7 Aug 2025 07:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754551251; cv=none; b=UDOduO2bgcr9UHhab3iYEkBr5byChVVV3Dk8rRgG92/hxyevV4h6UjE2jx2yAOxieIM6ZAL64D9lFi1mzLEyacnVTJdj57ut30g3bUVLzf/6j0lvdnYm/LNdEVf2RXnHUCN+YKsMWw2852tKoPus3w18YDjNGiR9N3gg/avy6kQ=
+	t=1754551299; cv=none; b=iRHVY9AEaM54Uxm0NIzCp2rn9d1XQKSS3v0Dsu4g7uwWe3c8tTIuT6LSyVTp4ptWAG012eHF9Idonbtvzffiu3T9VNHnTJ1o1SFUwvRmf16k3Si/e5mk5UwHgvQpkxwe7qjcnlghakdasAJI/r46EEUIjUA1vY+FpkwBVRZzsrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754551251; c=relaxed/simple;
-	bh=dxJGE+mEq+3AgUMzvKMTimiXNGP1oHgsGV9MNV/DwJ0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dL5Eei4+2XPam/w+75Zq2fwiadPyOHmGIz10GO+kQblG0YeswF+OIqmTxGx1dWxWQSglM1u1mHdyLUB1/y485oDFzNr+YVfIwvLy02oMgrZS/sdzEhzg9DojoBOLc2Hcv9ZRRQaPH7N8pzz7tz58D+XfTTr5XvKl8JV9E9rbdIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKGmN0p6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754551299; c=relaxed/simple;
+	bh=l67ps6XMJsj22L/0eqwK6V7mVq3B1+8/YAu/wUCLpl8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B9o7ze/w0ZUmogKm5p6nh6TEglfifpfnucYOoHkrUj6dtURi55vFEsM2LsgXdMWuOOgV1YGKJB4umiWoO2B2mcmMosyeap/g2zTAaKJ1ITt40aS2AJuYdHLrKx0x9sTPbQSaJzhCCXbEKgYkPocfVWeXS5g9K6aEXJVSVxXZ5Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyopB+dE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKGmN0p6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009ECC4CEEB;
-	Thu,  7 Aug 2025 07:20:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyopB+dE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D83C4CEEB;
+	Thu,  7 Aug 2025 07:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754551251;
-	bh=dxJGE+mEq+3AgUMzvKMTimiXNGP1oHgsGV9MNV/DwJ0=;
+	s=k20201202; t=1754551299;
+	bh=l67ps6XMJsj22L/0eqwK6V7mVq3B1+8/YAu/wUCLpl8=;
 	h=From:To:Cc:Subject:Date:From;
-	b=BKGmN0p6MMXGOxCLX3XcXUShkZnLdIqI0ySdOp0gNrTrAPU3vYU1cEB2GY56Dal0t
-	 0GNayzcyqU/0zDh93YZkiSKy6b4uiX/F5/T8VueVSkjlDhOwc1zuD0o9++h615TruI
-	 3dbgRD74Dmu0zdAM07IreOBP+DAXntnJ54JYijv1OzsiaL4EqTYuknnRo34+CAip2f
-	 GYO5DGAPYN54Akd6iua85zS0PN1kuoiwKf6qN6ToETXX7x2/1quroovME6Fs+VSkRw
-	 Nv3Kqh+dPx1Itzg79aC0QStCkgO2Ue8D2PWyo9RzaLM57b8mhl8CpeIlCbvuNDyBpB
-	 eqE54Z5R5vClQ==
+	b=XyopB+dEl+ZVYHiIdZKgbDzNPDA3ozqq6SkvPzFse7qJJIPKPKUzrzXkMMJlH9TxI
+	 ZbBsdW7Yseu6vrN7K4xh+fj1ixWfbRqwsqtXB1luq9TZbkA+i2KhhLpLEPAjfICb4p
+	 o08jNdQbo3FHPHTdPHHYw7wtwiW12pEepdEJXCTGgwrZuQdBzbtJgl2711aMe7LRT8
+	 4UfzTBSEwvEmZ11AQ/ZSQrqft2xR0Mc2uZiRMebWtCpy/GWMfcPcmCQ5uVVrgH527U
+	 chlAcQqbBEaZAzpUOOJ68Gb2+lcYMEyX2iwAT4ihfSsaxYGjwUDNeruzWK7K4xezjo
+	 kAl/pUy6krLSw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	David Woodhouse <dwmw2@infradead.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-mtd@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] mtd: dc21285: fix bytewise memcpy()
-Date: Thu,  7 Aug 2025 09:20:34 +0200
-Message-Id: <20250807072044.4146480-1-arnd@kernel.org>
+Subject: [PATCH] kvm: arm64: use BUG() instead of BUG_ON(1)
+Date: Thu,  7 Aug 2025 09:21:28 +0200
+Message-Id: <20250807072132.4170088-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,46 +56,48 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The commit that split up the 8/16/32-bit operations in 2004 seems to have
-broken the 8-bit case, as clang-21 now points out:
+The BUG_ON() macro adds a little bit of complexity over BUG(), and in
+some cases this ends up confusing the compiler's control flow analysis
+in a way that results in a warning. This one now shows up with clang-21:
 
-drivers/mtd/maps/dc21285.c:129:97: error: parameter 'len' set but not used [-Werror,-Wunused-but-set-parameter]
-  129 | static void dc21285_copy_to_8(struct map_info *map, unsigned long to, const void *from, ssize_t len)
+arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: error: variable 'len' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+ 1094 |                 BUG_ON(1);
 
-Put back the loop that was in linux-2.6.8 and earlier for this case.
+Change both instances of BUG_ON(1) to a plain BUG() in the arm64 kvm
+code, to avoid the false-positive warning.
 
-Fixes: 67d4878e4e61 ("NOR flash drivers update")
-Cc: David Woodhouse <dwmw2@infradead.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/mtd/maps/dc21285.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ arch/arm64/kvm/hyp/nvhe/list_debug.c | 2 +-
+ arch/arm64/kvm/vgic/vgic-mmio.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/maps/dc21285.c b/drivers/mtd/maps/dc21285.c
-index 70a3db3ab856..1d70bf62e91f 100644
---- a/drivers/mtd/maps/dc21285.c
-+++ b/drivers/mtd/maps/dc21285.c
-@@ -128,12 +128,14 @@ static void dc21285_copy_to_16(struct map_info *map, unsigned long to, const voi
+diff --git a/arch/arm64/kvm/hyp/nvhe/list_debug.c b/arch/arm64/kvm/hyp/nvhe/list_debug.c
+index 46a2d4f2b3c6..baa6260f88dc 100644
+--- a/arch/arm64/kvm/hyp/nvhe/list_debug.c
++++ b/arch/arm64/kvm/hyp/nvhe/list_debug.c
+@@ -17,7 +17,7 @@ static inline __must_check bool nvhe_check_data_corruption(bool v)
+ 		bool corruption = unlikely(condition);			 \
+ 		if (corruption) {					 \
+ 			if (IS_ENABLED(CONFIG_BUG_ON_DATA_CORRUPTION)) { \
+-				BUG_ON(1);				 \
++				BUG();				 	 \
+ 			} else						 \
+ 				WARN_ON(1);				 \
+ 		}							 \
+diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
+index e416e433baff..a573b1f0c6cb 100644
+--- a/arch/arm64/kvm/vgic/vgic-mmio.c
++++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+@@ -1091,7 +1091,7 @@ int vgic_register_dist_iodev(struct kvm *kvm, gpa_t dist_base_address,
+ 		len = vgic_v3_init_dist_iodev(io_device);
+ 		break;
+ 	default:
+-		BUG_ON(1);
++		BUG();
+ 	}
  
- static void dc21285_copy_to_8(struct map_info *map, unsigned long to, const void *from, ssize_t len)
- {
--	map_word d;
--	d.x[0] = *((uint8_t*)from);
--	dc21285_write8(map, d, to);
--	from++;
--	to++;
--	len--;
-+	while (len > 0) {
-+		map_word d;
-+		d.x[0] = *((uint8_t*)from);
-+		dc21285_write8(map, d, to);
-+		from++;
-+		to++;
-+		len--;
-+	}
- }
- 
- static struct map_info dc21285_map = {
+ 	io_device->base_addr = dist_base_address;
 -- 
 2.39.5
 
