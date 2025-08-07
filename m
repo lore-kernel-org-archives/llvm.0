@@ -1,168 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDF61E1A3F;
-	Thu,  7 Aug 2025 22:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09051FC0E2
+	for <llvm@lists.linux.dev>; Thu,  7 Aug 2025 22:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754604601; cv=none; b=T2AG1pK1I5Zeomt2Xmf8eTUpBmpetHP9e3ZqSDMZKVA17qx/eXzur3gUUVEoRA0GkskvNrkrmJYjswOIs/Ip7KmdLkSIA8rgl0N2m4Ce1ZBG/bMy4BsQ23YF0O0Ph7bpqUBLCp2Cki/0lVgsZpSBDqWN1Siy9rpE6QiKouGxKqw=
+	t=1754604740; cv=none; b=AaU1hQRrT3ce/ukrwjBGAeY1NevrYnE2WXx+Xb95vpDgSHNqNqewSjr98v7TMKmb1vaLXMLILryzJCStQ91WW/zwnC3QM3x7YTqUMeBu68kXxEQRW/qVV5188EjzSFa0ta2Vlrk8qBpte9None2Kz5+WLqrBVqHeu243AuRAauw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754604601; c=relaxed/simple;
-	bh=xXrfZGazxAM855ubj0eUvD1vkiP8TzfU8oT4oa4W1rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=d3BUCrqjZUoiCjYRXh9V8T13nBJHb5Qi3KNlP/2bHGPJtXd+Wc3JOTTRsc/g32yLSljZGvAHmLIG7s+tlTZ7s1IanZ0Ccir5eFmzY/aJN/5T8o3YqreDB0wI7ngrjzHUcSHh69ItJnhCeyhbFs/JJRabtzIpBfye43pvgB9h3Gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wu+6Tcff; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754604740; c=relaxed/simple;
+	bh=qlVM8CkTZMg669S/Ns0vKD+hb/qHNknFkrDMmeEEhEY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p2L++5Oa81DlRPpn8vwOkyI25WL7Nj2RikdQNX+/OxcucE0wD9SrIuWwZztos3AtO/8lI2tkGO6LGupEqJR8K44X7RzNCZEWGwUosM6yy4a034qWohaZq830TupwXCHQ+Vg2lwN0qM9oNKnbiacLcmJqUw+oygv18DPCnrWeUso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ksneTJKr; arc=none smtp.client-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wu+6Tcff"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754604600; x=1786140600;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xXrfZGazxAM855ubj0eUvD1vkiP8TzfU8oT4oa4W1rw=;
-  b=Wu+6TcffmxC3bRYV6J1wEyjg0OFwZI4adnnffF4UweMC7toDZHR2eO3+
-   BMVfHmA3cmCPdgl1zdEa5QbVYvAYEam7ZXU+D9DI4tfD+GKP78OTYOzv5
-   5g4pHujbiEOVyTUdxd89/3MRkZfIIRWHSU5wNimqlI/CRxQHHv/6Abdgu
-   JmyQVsWnOEW7W3PDhVoA8b5wsMqpIsTx+w+XZ/kk65YK045tqR1HL5CNp
-   NMZUJi0WSNoiVFsvgrHjVM4rtjra/2Xt6+0+4l5skRzOcKfuvDPia5LwY
-   nQ8zr1gv6a+vtB4TRo1r2Yg88LYWzHRJX8pLXebIEqv7qQELYQIVfTfTA
-   w==;
-X-CSE-ConnectionGUID: HRe3o3pPQ16TTRdPFL1d+A==
-X-CSE-MsgGUID: wB+CkU38R6WJltOLsawnqA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="74529150"
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="74529150"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2025 15:09:59 -0700
-X-CSE-ConnectionGUID: 3rhhNP+4TWemcEEHQtlnYw==
-X-CSE-MsgGUID: Iugv/aIERyu00FeHHzC8yg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="169385876"
-Received: from unknown (HELO b3b7d4258b7c) ([10.91.175.65])
-  by orviesa003.jf.intel.com with ESMTP; 07 Aug 2025 15:09:58 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uk8o7-0002XP-22;
-	Thu, 07 Aug 2025 22:09:55 +0000
-Date: Fri, 8 Aug 2025 00:09:27 +0200
-From: kernel test robot <lkp@intel.com>
-To: Alex Markuze <amarkuze@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ceph-devel@vger.kernel.org
-Subject: [ceph-client:tls-tracing-only 10/14] fs/ceph/debugfs.c:420:3: error:
- call to undeclared function 'rtlog_log_iter_init'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202508080007.MgUCTMaC-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ksneTJKr"
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4fec0d6fd90so582897137.3
+        for <llvm@lists.linux.dev>; Thu, 07 Aug 2025 15:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1754604738; x=1755209538; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTjFQN82cwVeM4ZQvGBqCFZVTMn8cacbLuxP2Do1hio=;
+        b=ksneTJKrRnVnQBYdyTENCEVUq1KKBe+y9P40mkGpBuEINcaFg8OEoCLv3yOJPw/tid
+         xw9N1zgmO0Cr5ruUjNibkfWi15G+TwPkysoDg+FgZKRKZ7x5ienC2eG4dmT/suUMYMCS
+         /s7w4zzKXYTBNWy6Qf/N3E7a1WwRHT4CU7h4ma0EqB7qI93TwnxAJ3S5BBwDGw8dMnd5
+         8ndp8TB5F9l1wpqpgY9Zhr3jZsHiOsTQ2FzZORBledC/Q3kkSnKsXJdzWOCvpOZGv2WN
+         Fjm12uuV1SlRNOF2fgkwjDd48Az9NnqiIgdx98ZQWi6TsrObxsSYFhknnv7RWn2TtueD
+         jY5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754604738; x=1755209538;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hTjFQN82cwVeM4ZQvGBqCFZVTMn8cacbLuxP2Do1hio=;
+        b=KOJi3nL63x5kHDgsheoUOFtNe3FQWVH5KmNypO9vXIWoZtIHjO8z8jD1UW8UDb1SsA
+         3xpqKu44VnMa8h+3gCofmGlmnj3oTW95X6jmqN+g/VBK5DklSszm823rYquveIyCoxsB
+         edGP9fU+QD9Vou1BBX9fHYvnS9W5v9kruZoCCbndOzX9TbtmEN4bS8GrdwJqdzDEFMBC
+         x358rHVJMtV3R6XmcUlwlcvMhstjAIUQQhNYKGBe1hq2u400P6iThBRVq4LZ28nppt7b
+         u7oQngXqEV2HZj/2qFKXRYeOsMtWJth3ibKinK2mK8gBDXnS627Wx2Exht35grByLCV7
+         HF+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX19xddykWWkNHTtGLMJ+heO41S9hmQEsQkMRlnxv0Caj748tGT7xSDDLs6GvcfcHjjxlON@lists.linux.dev
+X-Gm-Message-State: AOJu0YwNp39SsX2S2Iq9w7U3GkilD2CggkP2P8yJvG2RbrqL2MfuQFF/
+	8A/wUpYVHX+kAEBDjYEH8OtBJVz27xbW4wo3BKgLTBxt0d9/p+T0MNipisBtr+UHGTJ91qPEUYM
+	Wc0o0SL/78UJ2VYMTkHEbU4GXdX2Yh8/9yI6pM/EB
+X-Gm-Gg: ASbGncsCP4E/faPFeicIfAQkcxasnQh9jF/UTz1NbFotultu+Oy4GmozvgBh4lwU0HM
+	rrvJO6nM6CB+nIL/iitdWm/zLJvqPPi9QQLxe2kXJc6yBVbLGM6od7peIlrr/f32c02++t2hgmj
+	5Vu4lytKwTfHQYQQy8Z8VhuUA9p+YotqQ7gSbu+RuxunAKTjR4r7vEG5uN+2tsdE2RdpQOvS2er
+	SnE8zFwCFKjeefPpBPwnEmu/p2053nvXeo=
+X-Google-Smtp-Source: AGHT+IEYFGr//L1F66PSo/HzzBCZ90AvQWOXuRI6gktcJUFA02QiCFgkPiLDUKRHn6BALGhSzkBYiT/d+GRH+TAj6a8=
+X-Received: by 2002:a67:e710:0:b0:4f9:d929:8558 with SMTP id
+ ada2fe7eead31-5060d7b0262mr340444137.10.1754604737443; Thu, 07 Aug 2025
+ 15:12:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
+In-Reply-To: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
+From: Justin Stitt <justinstitt@google.com>
+Date: Thu, 7 Aug 2025 15:12:06 -0700
+X-Gm-Features: Ac12FXyAGlTv67GNm7hvR62c2Q7kwHSr8jwLhWy08UJpC4Mp2yOrNOga1MEvl64
+Message-ID: <CAFhGd8pkSP9JTVnBzn7-Cm6JMtj-qBAgLMBP1JhLtt4unkruZQ@mail.gmail.com>
+Subject: Re: [PATCH] hardening: Require clang 20.1.0 for __counted_by
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Bill Wendling <morbo@google.com>, linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ceph/ceph-client.git tls-tracing-only
-head:   ffad14ce035a047cbfda2d38f7ae37b0767de136
-commit: 310aa14b5bf4d5ecd1abf6a00782e044f7d76940 [10/14] ceph integration
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250808/202508080007.MgUCTMaC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250808/202508080007.MgUCTMaC-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508080007.MgUCTMaC-lkp@intel.com/
+On Thu, Aug 7, 2025 at 2:36=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> After an innocuous change in -next that modified a structure that
+> contains __counted_by, clang-19 start crashing when building certain
+> files in drivers/gpu/drm/xe. When assertions are enabled, the more
+> descriptive failure is:
 
-All errors (new ones prefixed by >>):
+Since this is just now breaking builds, it is OK to bump up the
+minimum compiler version just in time.
 
-   fs/ceph/debugfs.c:367:19: warning: variable 'seconds' set but not used [-Wunused-but-set-variable]
-     367 |     unsigned long seconds;
-         |                   ^
-   fs/ceph/debugfs.c:416:13: error: use of undeclared identifier 'g_rtlog_logger'
-     416 |         spin_lock(&g_rtlog_logger.lock);
-         |                    ^
-   fs/ceph/debugfs.c:418:28: error: use of undeclared identifier 'g_rtlog_logger'
-     418 |         list_for_each_entry(ctx, &g_rtlog_logger.contexts, list) {
-         |                                   ^
-   fs/ceph/debugfs.c:418:28: error: use of undeclared identifier 'g_rtlog_logger'
-   fs/ceph/debugfs.c:418:28: error: use of undeclared identifier 'g_rtlog_logger'
-   fs/ceph/debugfs.c:418:28: error: use of undeclared identifier 'g_rtlog_logger'
->> fs/ceph/debugfs.c:420:3: error: call to undeclared function 'rtlog_log_iter_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     420 |                 rtlog_log_iter_init(&iter, &ctx->pf);
-         |                 ^
->> fs/ceph/debugfs.c:431:19: error: call to undeclared function 'rtlog_log_iter_next'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     431 |                 while ((entry = rtlog_log_iter_next(&iter)) != NULL) {
-         |                                 ^
-   fs/ceph/debugfs.c:431:17: error: incompatible integer to pointer conversion assigning to 'struct rtlog_log_entry *' from 'int' [-Wint-conversion]
-     431 |                 while ((entry = rtlog_log_iter_next(&iter)) != NULL) {
-         |                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/ceph/debugfs.c:436:19: error: call to undeclared function 'rtlog_is_valid_kernel_addr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     436 |                         if (!entry || !rtlog_is_valid_kernel_addr(entry)) {
-         |                                        ^
-   fs/ceph/debugfs.c:423:7: warning: variable 'ctx_entries' set but not used [-Wunused-but-set-variable]
-     423 |                 int ctx_entries = 0;
-         |                     ^
-   fs/ceph/debugfs.c:481:15: error: use of undeclared identifier 'g_rtlog_logger'
-     481 |         spin_unlock(&g_rtlog_logger.lock);
-         |                      ^
-   fs/ceph/debugfs.c:502:24: error: use of undeclared identifier 'g_rtlog_logger'
-     502 |     spin_lock_irqsave(&g_rtlog_logger.lock, flags);
-         |                        ^
-   fs/ceph/debugfs.c:506:31: error: use of undeclared identifier 'g_rtlog_logger'
-     506 |     list_for_each_entry(ctx, &g_rtlog_logger.contexts, list) {
-         |                               ^
-   fs/ceph/debugfs.c:506:31: error: use of undeclared identifier 'g_rtlog_logger'
-   fs/ceph/debugfs.c:506:31: error: use of undeclared identifier 'g_rtlog_logger'
-   fs/ceph/debugfs.c:506:31: error: use of undeclared identifier 'g_rtlog_logger'
-   fs/ceph/debugfs.c:516:29: error: use of undeclared identifier 'g_rtlog_logger'
-     516 |     spin_unlock_irqrestore(&g_rtlog_logger.lock, flags);
-         |                             ^
-   2 warnings and 16 errors generated.
+For future travelers, the "innocuous change" popped up in -next as
+Commit 535c445eb94c ("drm/xe: Add dependency scheduler for GT TLB
+invalidations to bind queues"). I am not sure why the additional
+struct member caused this crash but it seems like Bill's clang patch
+solved it -- so I won't look into it any further.
 
+>
+>   clang: clang/lib/AST/RecordLayoutBuilder.cpp:3335: const ASTRecordLayou=
+t &clang::ASTContext::getASTRecordLayout(const RecordDecl *) const: Asserti=
+on `D && "Cannot get layout of forward declarations!"' failed.
+>
+> According to a reverse bisect, a tangential change to the LLVM IR
+> generation phase of clang during the LLVM 20 development cycle [1]
+> resolves this problem. Bump the version of clang that enables
+> CONFIG_CC_HAS_COUNTED_BY to 20.1.0 to ensure that this issue cannot be
+> hit.
+>
+> Link: https://github.com/llvm/llvm-project/commit/160fb1121cdf703c3ef5e61=
+fb26c5659eb581489 [1]
 
-vim +/rtlog_log_iter_init +420 fs/ceph/debugfs.c
+Reviewed-by: Justin Stitt <justinstitt@google.com>
 
-   405	
-   406	static int rtlog_tls_show_internal(struct seq_file *s, void *p)
-   407	{
-   408		struct rtlog_tls_ctx *ctx;
-   409		struct rtlog_log_iter iter;
-   410		struct rtlog_log_entry *entry;
-   411		const struct rtlog_source_info *source;
-   412		int total_entries = 0;
-   413		int total_contexts = 0;
-   414	
-   415		/* Lock the logger to safely traverse the contexts list */
- > 416		spin_lock(&g_rtlog_logger.lock);
-   417	
- > 418		list_for_each_entry(ctx, &g_rtlog_logger.contexts, list) {
-   419			/* Initialize iterator for this context's pagefrag */
- > 420			rtlog_log_iter_init(&iter, &ctx->pf);
-   421			int pid = ctx->pid;
-   422			char *comm = ctx->comm;
-   423			int ctx_entries = 0;
-   424	
-   425			total_contexts++;
-   426	
-   427			/* Lock the pagefrag before accessing entries */
-   428			spin_lock_bh(&ctx->pf.lock);
-   429	
-   430			/* Iterate through log entries in this context */
- > 431			while ((entry = rtlog_log_iter_next(&iter)) != NULL) {
-   432				char datetime_str[32];
-   433				char reconstructed_msg[256];
-   434	
-   435				/* Validate entry before processing */
- > 436				if (!entry || !rtlog_is_valid_kernel_addr(entry)) {
-   437					seq_printf(s, "[%d][%s]: Invalid entry pointer %p\n", pid, comm, entry);
-   438					break;
-   439				}
-   440	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Should this be marked for stable? If this makes 6.17 final, I think we
+> are fine for mainline and newer but I wonder if a patch that adds
+> __counted_by to a structure would ever be backported and expose this
+> problem there.
+> ---
+>  init/Kconfig | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/init/Kconfig b/init/Kconfig
+> index af4c2f085455..a2675ee1ef8c 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -117,10 +117,11 @@ config CC_HAS_NO_PROFILE_FN_ATTR
+>
+>  config CC_HAS_COUNTED_BY
+>         bool
+> -       # clang needs to be at least 19.1.3 to avoid __bdos miscalculatio=
+ns
+> -       # https://github.com/llvm/llvm-project/pull/110497
+> -       # https://github.com/llvm/llvm-project/pull/112636
+> -       default y if CC_IS_CLANG && CLANG_VERSION >=3D 190103
+> +       # clang needs to be at least 20.1.0 to avoid potential crashes
+> +       # when building structures that contain __counted_by
+> +       # https://github.com/ClangBuiltLinux/linux/issues/2114
+> +       # https://github.com/llvm/llvm-project/commit/160fb1121cdf703c3ef=
+5e61fb26c5659eb581489
+> +       default y if CC_IS_CLANG && CLANG_VERSION >=3D 200100
+>         # supported since gcc 15.1.0
+>         # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
+>         default y if CC_IS_GCC && GCC_VERSION >=3D 150100
+>
+> ---
+> base-commit: f627b51aaa041cba715b59026cf2d9cb1476c7ed
+> change-id: 20250807-fix-counted_by-clang-19-470d53f93aa0
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
