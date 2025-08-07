@@ -1,61 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7327A21E08B;
-	Thu,  7 Aug 2025 21:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D2A233D7C;
+	Thu,  7 Aug 2025 22:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754602859; cv=none; b=AD/FZ2KMrTAzv6FCVWNHfQyT+918m84Tf1QWMPhRfNijI+nKeFyYpPaFo1k+3eOh1sbKbDn05C0VCHi9b7q06Ta59P8V/cuFP+Vcr1/6T/hUEgK6lKHq/IrTgAU00c8hwBJRlCrQ22X2/NdiZNbnwcKlQZLv3BUtu1WmSVYMa30=
+	t=1754604025; cv=none; b=G8XAvg5iFNRhKwWVAydVOpMjasiL3JT3elSLTB5lqvuxJf1X/LOZ9op7DfLuHp9lDPYVWlybQpo1BcRfvQyFoCdbXu4FIKVS91mGb5JV/w6AorI3SUbtna51h2uvfAKeQyru8ks3kyVD+6wEH9kpu2PR0eHpIVH/DAHRrN9gMGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754602859; c=relaxed/simple;
-	bh=3IQZp8dNIPZYW5biGgOsfY/hhjaXTR2L3INDHWS+epI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=L55hvssEXqn1CYvINIgEuXF0AXE+AX5viM33kd/vByPmjNvLhNvEbTLYRHCIWzUMCKxLXEmfNviFGlijZvzJpkvzSYCmzBLcFoYE6VfMCgDYLPRQMhY5alPkDDOst8z02GqfwKZUKuhY0MRdaK8YWvei1vBp3B7DESoLbOX0PBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QRN9LKVR; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754604025; c=relaxed/simple;
+	bh=Ut11L6heyBfAU0NJL1jWvWVqaogbRscBzHfDu0x35y4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XfzZairwd+UBIQk7sQlEGlnGWusp/Tuq6FR0yGgleKAocorKVNcWo9ofucCuQEN9AFDY1/Any/opcmOo4iFiXcwhdC9n59V6WVCErpTYdijMmUXHGorHjuapIGw2d6BG7r+6Bo+nveah26rCNaFIRkGdcHI0Ur2u0oQl7PLjpYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o4CjexnF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QRN9LKVR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754602858; x=1786138858;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3IQZp8dNIPZYW5biGgOsfY/hhjaXTR2L3INDHWS+epI=;
-  b=QRN9LKVREGIIIybymUn6mG6sIxpSH2JiCC724lK6DaFXRqbC77mtRcQA
-   7d3grE5gAvAQso7b7P6MgiJNTwucgv8U842AcL74A67d8PKGOlKqnR84+
-   s4XL+TjSLrc/ZmqUZ+q5ww5mKvPbsZD0UBN6gP8bSkSTWgzPDi7RFMcGD
-   v0NCsZaXwaycWzu6SgZRpLawPnhgpzOy08HP1TjxpU8FawsiY1trIKycA
-   72RHx5WwbKP7xmHw062wJWlwUYFBqtGe4N1TqhNIn9WtSgNvIPkhJ4Cl5
-   NRvqL4baOmaCPZe3k4qWEmZvdChxYwQrsOssK8lAolS4BrbClL1ABNaYQ
-   Q==;
-X-CSE-ConnectionGUID: 75QAgQpcSoq5kkCNoeAkaw==
-X-CSE-MsgGUID: KYuJYkIOS1+RPz381htarw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="79505447"
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="79505447"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2025 14:40:57 -0700
-X-CSE-ConnectionGUID: mk2QXNi9RJqchyR7igMW7Q==
-X-CSE-MsgGUID: mPANNZifR96FZAeCjp4K4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="165587941"
-Received: from unknown (HELO b3b7d4258b7c) ([10.91.175.65])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Aug 2025 14:40:55 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uk8M1-0002Wd-1S;
-	Thu, 07 Aug 2025 21:40:53 +0000
-Date: Thu, 7 Aug 2025 23:40:13 +0200
-From: kernel test robot <lkp@intel.com>
-To: Kundan Kumar <kundan.kumar@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Anuj Gupta <anuj20.g@samsung.com>
-Subject: [mcgrof:20250807-migrate-folios-stats-pw 2/16] Warning:
- fs/fs-writeback.c:1008 function parameter 'bdi_wb_ctx' not described in
- 'bdi_split_work_to_wbs'
-Message-ID: <202508072355.WudSLBwt-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o4CjexnF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC090C4CEEB;
+	Thu,  7 Aug 2025 22:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754604024;
+	bh=Ut11L6heyBfAU0NJL1jWvWVqaogbRscBzHfDu0x35y4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o4CjexnFfl1SKDaqHcwlLYBiqOoF17E7SVN4eKLjILTgky9RlB5zEGjCp+IWZD81D
+	 U4QvhOAH8B16tSXTN8JidSqr+wvTT9hoCJc7xiI7YL3xV5o6VsVhTAI7EF+bM3Qo+Q
+	 Rd38rgumucKitr6yqc2iGrkalY3CRDukDRamIQF2aSwcwv0IgSpLSBzrIp9HiVmdwy
+	 2wbpG0XymeEydaH7YLrkGEEViAt0tbIn+6nCQJoM3iA7bCQ2HgZUshDeor2Dj27RAa
+	 rGm+zvg1WzUolMZtVkquu6uF2VnVnZxUnTT8j2X5bTMnZh4nAtzqtSRvc7RRiMuTTO
+	 Hehc1Jk7yOlrQ==
+Date: Thu, 7 Aug 2025 15:00:24 -0700
+From: Kees Cook <kees@kernel.org>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kbuild@vger.kernel.org,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: Re-enable -Wunterminated-string-initialization
+Message-ID: <202508071458.A97B471@keescook>
+References: <20250802184328.it.438-kees@kernel.org>
+ <20250803173235.GA716998@ax162>
+ <e4d801e3-3004-484b-897d-ed43c25e1576@intel.com>
+ <20250805214823.GB200407@ax162>
+ <546c9819-20e7-4474-9281-5d1567263637@intel.com>
+ <202508061158.49E749B46@keescook>
+ <a01cb1af-8f17-42c0-815c-f9c44a399cbf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,32 +54,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <a01cb1af-8f17-42c0-815c-f9c44a399cbf@intel.com>
 
-Hi Kundan,
+On Thu, Aug 07, 2025 at 03:31:05PM +0200, Alexander Lobakin wrote:
+> Sure, lots of drivers uses normal string copy functions etc.
+> But Ethtool strings *must* be NUL-terminated, so this fixed-size +
+> memcpy() only hurts.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+This is the misunderstanding: they're only NUL padded, but not strictly
+NUL terminated. You can see ethtool itself has to be careful with the
+strings, limiting the fprintf to their sizeof():
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20250807-migrate-folios-stats-pw
-head:   9e85a0c893452d1be01703635526b5ce793760f3
-commit: bff8f032a029ab66ff54c19048c9f45489da6a8e [2/16] writeback: add infra for parallel writeback
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250807/202508072355.WudSLBwt-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250807/202508072355.WudSLBwt-lkp@intel.com/reproduce)
+https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/ethtool.c#n1013
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508072355.WudSLBwt-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: fs/fs-writeback.c:1008 function parameter 'bdi_wb_ctx' not described in 'bdi_split_work_to_wbs'
---
->> Warning: mm/backing-dev.c:788 function parameter 'bdi_wb_ctx' not described in 'wb_get_lookup'
->> Warning: mm/backing-dev.c:788 Excess function parameter 'bdi' description in 'wb_get_lookup'
->> Warning: mm/backing-dev.c:823 function parameter 'bdi_wb_ctx' not described in 'wb_get_create'
+or using strncmp everywhere.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
