@@ -1,184 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B03221269;
-	Thu,  7 Aug 2025 20:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF482E370A;
+	Thu,  7 Aug 2025 21:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754600066; cv=none; b=NG4hlw90o1BWgAITtT2VJ7xCbsdKOcrjP6Vv8HkTOz7SPPyOoMRxd6FAQhdH3FoXZZ5cwlxl1Ngi+hXdlAsUkjgW2l94wGhHy+GrKdE23ufrQ1C8YCUkJvrFQ9wdqwDK3GmwXTAkBj5nwGn69ChFa7uuzY95DUPu0x+zssDJLSQ=
+	t=1754602597; cv=none; b=m/2ojEI3zlx311y9dHra8QUnQ0uq62iOlsTlB+dFjRyTpO+7DKRz7jjTDO36hItdTOimxmJyJBocmREMaLGPRHJDEpxf4QxHuPgQZh4J0LqubWjHlIz5AbDKfu2I6dbLoNSwkkhArO6cRxH8lIUkpfIiNCe99uRBaucBte3k2uE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754600066; c=relaxed/simple;
-	bh=bvW6h/SDGKuox4lFV0iT3YHecRUJJV15jJEMcASTIfc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tfGa4r3dHyxwir9qP9A1cft07EnrDbxCc8ixvmY3IwFWY776P8CqKh2mJaVtkGJ9s3pKTyj/HZE0tqvT3l3E3GDWkA+REq+dhXnWmX53D7WCnIL/Tv8j92KpO1+iZGDe0318RxWdl9BJHIGI5BEb3S2FhaVr2nxDuoA89pMYmqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=if3H0ODi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754602597; c=relaxed/simple;
+	bh=tUwmAkc0BRax/F/1mqhQobRKhACAzjEdHbZ1NnCs6/U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=e3e9Ocgp19WH+5t6UBLmrFea6AtVZ0t4HXcbyxMupczv3K/TWzXPHlV7D7KnYMcnM6lsMMs3TZoEYFlfwj7AbJodvyoII0gv/HIpoEcTwWssVWg+UdFfldMp33DjmKv/k3ymEg0QuMEOqxvGH5RMFk45ga6mxT+myH5jKcEg15A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2tGZJeY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="if3H0ODi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27EF2C4CEEB;
-	Thu,  7 Aug 2025 20:54:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2tGZJeY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4E6C4CEEB;
+	Thu,  7 Aug 2025 21:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754600065;
-	bh=bvW6h/SDGKuox4lFV0iT3YHecRUJJV15jJEMcASTIfc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=if3H0ODixS0AdSgQu8GFrZZN8B9N9zIGpjhyQr7atLmwR6ITZqHwj+aumiUEmAf/q
-	 FKaAYa7IAkRYKhhGPfMXQ92MAe7eOM6twQRb7iTESYAgDz8ZsAV6esBLuX4eYFhe7F
-	 A6N/0t4riMMQ0l0sCGgCY4ffhYmBtohmttCTOtBIg0ZwGOg3R73fRrcnvW/mR5jgqY
-	 OKdGZKOTTf8eu/NMKejlQWBupbmV3/kbKpYsFSBGLzGY6JsZyIc9CtPIoNbMteuHlF
-	 YAt3WCX2bXbPGJYJiGGVh9ZpefaZlyFUU6AV0pgXNe/lyPZGZvUFssf/dPT627EpXH
-	 YpLIbW6ic/UIw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jaeryul Oh <jaeryul.oh@samsung.com>,
-	Arun Kumar K <arun.kk@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Janghyuck Kim <janghyuck.kim@samsung.com>,
-	Jeongtae Park <jtp.park@samsung.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Naveen Krishna Chatradhi <ch.naveen@samsung.com>,
-	Kamil Debski <k.debski@samsung.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] media: s5p-mfc: remove an unused/unitialized variable
-Date: Thu,  7 Aug 2025 22:54:15 +0200
-Message-Id: <20250807205419.143208-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=k20201202; t=1754602596;
+	bh=tUwmAkc0BRax/F/1mqhQobRKhACAzjEdHbZ1NnCs6/U=;
+	h=From:Date:Subject:To:Cc:From;
+	b=X2tGZJeYhMMsvygEOa69O8xBM9b1+OCVmtFGwOqaqJYuHj8CL12krOGTltv82cjyw
+	 DCEt9FV3xE1WuGRd+/NhFwUdaSHRJDR6W9WL10Ex6Aya3QICPpJt1yoRQEnCOgKfwb
+	 XliWF0pAW1BrcjspziGyHUlMDkGEtitNfIXkIWYc+TrQn/THF2Ryep9XTGYaStjVnh
+	 udp8M5ATamGEpT7u7pISjCqR1geLrwLX3MZq9YWQziOyvqB0BUtJHEIIk7lXP1mu+V
+	 b5VhCL8M0Chs6pv3glF6TO88GV2s8vTJsRb13LhN5vx8wUz0gQk75Uiv6mqlzQPGSp
+	 FlL5aNDti4Zsw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 07 Aug 2025 14:36:28 -0700
+Subject: [PATCH] hardening: Require clang 20.1.0 for __counted_by
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFsclWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDCwNz3bTMCt3k/NK8ktSU+KRK3eQcoCJdQ0tdE3ODFFPjNEvjxEQDJaD
+ ugqJUoFKwydGxtbUAMY4gcmkAAAA=
+X-Change-ID: 20250807-fix-counted_by-clang-19-470d53f93aa0
+To: Kees Cook <kees@kernel.org>, 
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2288; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=tUwmAkc0BRax/F/1mqhQobRKhACAzjEdHbZ1NnCs6/U=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBlTZZIyZjzPKm5Zf+nC/7+nA5Qrss4VfS3I9pi+N96BS
+ +3vwq8iHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiZ1oY/ork1xgrmhTtFAne
+ PdNu45nyTTMExNSLJewfTjg7J/j1k2OMDDvaqrfEbrtq/a33YlSwb07JbK3S+61qpXfOrj5YzPs
+ 7kR0A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Arnd Bergmann <arnd@arndb.de>
+After an innocuous change in -next that modified a structure that
+contains __counted_by, clang-19 start crashing when building certain
+files in drivers/gpu/drm/xe. When assertions are enabled, the more
+descriptive failure is:
 
-The s5p_mfc_cmd_args structure in the v6 driver is never used, not
-initialized to anything other than zero, but as of clang-21 this
-causes a warning:
+  clang: clang/lib/AST/RecordLayoutBuilder.cpp:3335: const ASTRecordLayout &clang::ASTContext::getASTRecordLayout(const RecordDecl *) const: Assertion `D && "Cannot get layout of forward declarations!"' failed.
 
-/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c:45:7: error: variable 'h2r_args' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
-   45 |                                         &h2r_args);
-      |                                          ^~~~~~~~
+According to a reverse bisect, a tangential change to the LLVM IR
+generation phase of clang during the LLVM 20 development cycle [1]
+resolves this problem. Bump the version of clang that enables
+CONFIG_CC_HAS_COUNTED_BY to 20.1.0 to ensure that this issue cannot be
+hit.
 
-Just remove this for simplicity. Since the function is also called
-through a callback, this does require adding a trivial wrapper with
-the correct prototype.
-
-Fixes: f96f3cfa0bb8 ("[media] s5p-mfc: Update MFC v4l2 driver to support MFC6.x")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://github.com/llvm/llvm-project/commit/160fb1121cdf703c3ef5e61fb26c5659eb581489 [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c | 35 +++++++------------
- 1 file changed, 13 insertions(+), 22 deletions(-)
+Should this be marked for stable? If this makes 6.17 final, I think we
+are fine for mainline and newer but I wonder if a patch that adds
+__counted_by to a structure would ever be backported and expose this
+problem there.
+---
+ init/Kconfig | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-index 47bc3014b5d8..f7c682fca645 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-@@ -14,8 +14,7 @@
- #include "s5p_mfc_opr.h"
- #include "s5p_mfc_cmd_v6.h"
+diff --git a/init/Kconfig b/init/Kconfig
+index af4c2f085455..a2675ee1ef8c 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -117,10 +117,11 @@ config CC_HAS_NO_PROFILE_FN_ATTR
  
--static int s5p_mfc_cmd_host2risc_v6(struct s5p_mfc_dev *dev, int cmd,
--				    const struct s5p_mfc_cmd_args *args)
-+static int s5p_mfc_cmd_host2risc_v6(struct s5p_mfc_dev *dev, int cmd)
- {
- 	mfc_debug(2, "Issue the command: %d\n", cmd);
- 
-@@ -31,7 +30,6 @@ static int s5p_mfc_cmd_host2risc_v6(struct s5p_mfc_dev *dev, int cmd,
- 
- static int s5p_mfc_sys_init_cmd_v6(struct s5p_mfc_dev *dev)
- {
--	struct s5p_mfc_cmd_args h2r_args;
- 	const struct s5p_mfc_buf_size_v6 *buf_size = dev->variant->buf_size->priv;
- 	int ret;
- 
-@@ -41,33 +39,23 @@ static int s5p_mfc_sys_init_cmd_v6(struct s5p_mfc_dev *dev)
- 
- 	mfc_write(dev, dev->ctx_buf.dma, S5P_FIMV_CONTEXT_MEM_ADDR_V6);
- 	mfc_write(dev, buf_size->dev_ctx, S5P_FIMV_CONTEXT_MEM_SIZE_V6);
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SYS_INIT_V6,
--					&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SYS_INIT_V6);
- }
- 
- static int s5p_mfc_sleep_cmd_v6(struct s5p_mfc_dev *dev)
- {
--	struct s5p_mfc_cmd_args h2r_args;
--
--	memset(&h2r_args, 0, sizeof(struct s5p_mfc_cmd_args));
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SLEEP_V6,
--			&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_SLEEP_V6);
- }
- 
- static int s5p_mfc_wakeup_cmd_v6(struct s5p_mfc_dev *dev)
- {
--	struct s5p_mfc_cmd_args h2r_args;
--
--	memset(&h2r_args, 0, sizeof(struct s5p_mfc_cmd_args));
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_WAKEUP_V6,
--					&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_WAKEUP_V6);
- }
- 
- /* Open a new instance and get its number */
- static int s5p_mfc_open_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- {
- 	struct s5p_mfc_dev *dev = ctx->dev;
--	struct s5p_mfc_cmd_args h2r_args;
- 	int codec_type;
- 
- 	mfc_debug(2, "Requested codec mode: %d\n", ctx->codec_mode);
-@@ -129,23 +117,20 @@ static int s5p_mfc_open_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- 	mfc_write(dev, ctx->ctx.size, S5P_FIMV_CONTEXT_MEM_SIZE_V6);
- 	mfc_write(dev, 0, S5P_FIMV_D_CRC_CTRL_V6); /* no crc */
- 
--	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_OPEN_INSTANCE_V6,
--					&h2r_args);
-+	return s5p_mfc_cmd_host2risc_v6(dev, S5P_FIMV_H2R_CMD_OPEN_INSTANCE_V6);
- }
- 
- /* Close instance */
- static int s5p_mfc_close_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- {
- 	struct s5p_mfc_dev *dev = ctx->dev;
--	struct s5p_mfc_cmd_args h2r_args;
- 	int ret = 0;
- 
- 	dev->curr_ctx = ctx->num;
- 	if (ctx->state != MFCINST_FREE) {
- 		mfc_write(dev, ctx->inst_no, S5P_FIMV_INSTANCE_ID_V6);
- 		ret = s5p_mfc_cmd_host2risc_v6(dev,
--					S5P_FIMV_H2R_CMD_CLOSE_INSTANCE_V6,
--					&h2r_args);
-+					S5P_FIMV_H2R_CMD_CLOSE_INSTANCE_V6);
- 	} else {
- 		ret = -EINVAL;
- 	}
-@@ -153,9 +138,15 @@ static int s5p_mfc_close_inst_cmd_v6(struct s5p_mfc_ctx *ctx)
- 	return ret;
- }
- 
-+static int s5p_mfc_cmd_host2risc_v6_args(struct s5p_mfc_dev *dev, int cmd,
-+				    const struct s5p_mfc_cmd_args *ignored)
-+{
-+	return s5p_mfc_cmd_host2risc_v6(dev, cmd);
-+}
-+
- /* Initialize cmd function pointers for MFC v6 */
- static const struct s5p_mfc_hw_cmds s5p_mfc_cmds_v6 = {
--	.cmd_host2risc = s5p_mfc_cmd_host2risc_v6,
-+	.cmd_host2risc = s5p_mfc_cmd_host2risc_v6_args,
- 	.sys_init_cmd = s5p_mfc_sys_init_cmd_v6,
- 	.sleep_cmd = s5p_mfc_sleep_cmd_v6,
- 	.wakeup_cmd = s5p_mfc_wakeup_cmd_v6,
--- 
-2.39.5
+ config CC_HAS_COUNTED_BY
+ 	bool
+-	# clang needs to be at least 19.1.3 to avoid __bdos miscalculations
+-	# https://github.com/llvm/llvm-project/pull/110497
+-	# https://github.com/llvm/llvm-project/pull/112636
+-	default y if CC_IS_CLANG && CLANG_VERSION >= 190103
++	# clang needs to be at least 20.1.0 to avoid potential crashes
++	# when building structures that contain __counted_by
++	# https://github.com/ClangBuiltLinux/linux/issues/2114
++	# https://github.com/llvm/llvm-project/commit/160fb1121cdf703c3ef5e61fb26c5659eb581489
++	default y if CC_IS_CLANG && CLANG_VERSION >= 200100
+ 	# supported since gcc 15.1.0
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+ 	default y if CC_IS_GCC && GCC_VERSION >= 150100
+
+---
+base-commit: f627b51aaa041cba715b59026cf2d9cb1476c7ed
+change-id: 20250807-fix-counted_by-clang-19-470d53f93aa0
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
