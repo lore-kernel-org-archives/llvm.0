@@ -1,117 +1,132 @@
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD52263C90
-	for <llvm@lists.linux.dev>; Thu,  7 Aug 2025 14:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A5823E350
+	for <llvm@lists.linux.dev>; Thu,  7 Aug 2025 15:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754577802; cv=none; b=N3KbbvbJ0mvWBivfKNA7Q2+sJbyhzyj09308reR3bLBHAJdqD2a4oHCcgVZkypLc15qQ8hz4NoF7nfI2YmuTc5GL7hnVeiTC9UnJHBt86bXieUfsrwWckV2ArVkSJfr+LuYWh+xZktPe95+gLVB8dVDEHHn5zOUyzAexVXquAWE=
+	t=1754579340; cv=none; b=jLEpQJYUQk6/GpL9/m+vmJPhPDfyFRsbQrxv0L6BXV9Te3YbZuYspYEGfK4DQ5ru3nm/qVhtvuOoGcqhvvv1Tbpg/jAnNk42D+1h4pph0QbbyMVzMfiuveZnARx2NaEMLrWDgfS7rv6Pog8qbKqkiyaX4Rj3bu7bFEgWb3cMDb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754577802; c=relaxed/simple;
-	bh=y//IMsBANN67YjgRvFs1TqJNvAqanY/RR7wYOqvwarQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ii9t8Mbu12qPyFQ2OwYiBbj5HAMHkgCb5ijlPrgddODxbOBv79MwVQf1lkswApgUpY6LzsiZQqPIkD7ZLocpsZHF/8mkzqLGmkBEQFZyKxrCOB81i0YHzcHT0M7CHykHHOcWey4E8LoSr9+J1MR+FTaVRVxVp4VWKSMIpzTxREU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D90BA4432A;
-	Thu,  7 Aug 2025 14:43:12 +0000 (UTC)
-Message-ID: <53b98e1e-4f7e-4320-8d04-d84dd2c4092d@ghiti.fr>
-Date: Thu, 7 Aug 2025 16:43:09 +0200
+	s=arc-20240116; t=1754579340; c=relaxed/simple;
+	bh=vzgA3qTYjPJp9hY7fpnHpt8kRGeoF4FUlNSoyFDZvN8=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=m7W53vZ+MwMFtLBMgrwcu4BuYKdaRmodyOTwgO/eMxFCWza8DL1A1trgugKyrMD0TBsBPXhWQE2cvW0w6SwFpC2rgkoCYFI0ZG9O/NSbsHkadpNFFiMiUHj4GqK4QxtXxYeRmV3wHvKYGVFIPRNNLPfI3PcBmV5QkL6/Dw7hWXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=AcHYZ2Ai; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZGJFbCj7; arc=none smtp.client-ip=202.12.124.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="AcHYZ2Ai";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZGJFbCj7"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id 419E7130012C;
+	Thu,  7 Aug 2025 11:08:54 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 07 Aug 2025 11:08:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1754579334;
+	 x=1754586534; bh=ETDvl7tWBdMBZS3hOrCBLHn2gtJQObg0cR5a3IFLvN8=; b=
+	AcHYZ2AimpXOypR+CMXz74Cb5D24y7NeF43aDen3XqMAkfYBUD4Vkz9HaE3t+ytR
+	wab5R1W+sBps+ARXpLVBeS7jyoqObFwzHPm1nIWZXtOMj1EgKnUEtaAYbyr+jmhr
+	zBCM28Vn2COi2NPxNyJFi3hdTGT7cl10aJ+aIObAb4UjS1uI6NI9J3F3TcAYAbDT
+	d6Tfq+JXZpCXEtcU/7d/X7QjcsLQiuHFOnVQLp3n6CWHlUEIwV/AhSED5Q80kJWk
+	yQyBBi7DUFemSc8BPrGDSz5APlrMs6RBn5ch7yyca3DeMV1A9wGkZtsBsRRtX9lJ
+	B77r7IlM8y0mVtxRE8Ah7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1754579334; x=
+	1754586534; bh=ETDvl7tWBdMBZS3hOrCBLHn2gtJQObg0cR5a3IFLvN8=; b=Z
+	GJFbCj7XGa06pNKD10MoPduaUgi3R/dwvhtvip4Fnwqy/5se3B3hR0/S/jA8z6ob
+	lU+EWsQi3HkhA0mtRb6CdwFN1A7bU4dEjEjKwD9hqD7pyd/0daEYYzDtYiLEjebW
+	nLiKI7aI1WZfCVRt7V9yOAc05E9YXTnvoSlEyvG9f4rN8XYkX6k5vW5waLbfmU+R
+	sO0ftGuR2Rmdu595o4N5uSBUjc3HyCh2iWk9Sn+plOR9UyWsSSrpTOljMBiNJznr
+	7zH3XRI6g7+w1usbXcNdeK5+otUCkNRtN9mju3M0iBsNGuWZwJj1Gm86nIwvRpdN
+	wnJhNS6vFgjTUAzkRFVew==
+X-ME-Sender: <xms:hcGUaNQB-_yfhZyudCUCxDyF7kNJcw9QVFPRsG2yhXheXIzek1Qx2Q>
+    <xme:hcGUaGxb6glOGrkBWTz4o7VoVUWXLCM81yQ4UXTOxKpd0i1J_doKrvRHf8kv-8niJ
+    nhltPMwpIPr2v2r4uc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdduvdehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdefpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtghhpdhrtghpthhtoheprghirh
+    hlihgvugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhhtohhmrghnihdutdefsehg
+    mhgrihhlrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkh
+    hmlhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohho
+    ghhlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtph
+    htthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhumhgrgheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:hcGUaN81N-1JIrR-P6_tJ8-TTlYLB7E29acrP-Zf6E_LSW1hV9gq2w>
+    <xmx:hcGUaEeWxs6NgN6PyglirqkqvhNrLA7m4uMKYsKQaMWGXorTOMKk6g>
+    <xmx:hcGUaH5hYiTCabNaAVO6RIBDDjbnrQeXBPekvkePxVrSol5dwDvhJQ>
+    <xmx:hcGUaI9noQJCO6uDDu3zVQ5tWa9qmePtZPhQd_FEKlR8yVsu6BfRtw>
+    <xmx:hsGUaERVOFIkKDFFc39kCkP1jZSms9Xz2e4ri8G44fvuGI8682QUGw3N>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 43083700065; Thu,  7 Aug 2025 11:08:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/17] riscv: Add __attribute_const__ to ffs()-family
- implementations
-To: Kees Cook <kees@kernel.org>, linux-arch@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20250804163910.work.929-kees@kernel.org>
- <20250804164417.1612371-9-kees@kernel.org>
-Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250804164417.1612371-9-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ThreadId: T654cc969b17eaba3
+Date: Thu, 07 Aug 2025 17:08:31 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Dmitry Baryshkov" <dmitry.baryshkov@oss.qualcomm.com>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Rob Clark" <robin.clark@oss.qualcomm.com>,
+ "Dmitry Baryshkov" <lumag@kernel.org>, "Dave Airlie" <airlied@gmail.com>,
+ "Simona Vetter" <simona@ffwll.ch>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+ "Abhinav Kumar" <abhinav.kumar@linux.dev>,
+ "Jessica Zhang" <jessica.zhang@oss.qualcomm.com>,
+ "Sean Paul" <sean@poorly.run>,
+ "Marijn Suijten" <marijn.suijten@somainline.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Antonino Maniscalco" <antomani103@gmail.com>,
+ "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>,
+ "Jun Nie" <jun.nie@linaro.org>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <76680ece-f88c-4960-a263-b96f64c35bbf@app.fastmail.com>
+In-Reply-To: 
+ <ouan6tfmoefwuvs7wmhpzjdwmxfhqh3ad26j5tmwdugnq7ieda@ddw6dfqtq27g>
+References: <20250807072016.4109051-1-arnd@kernel.org>
+ <ouan6tfmoefwuvs7wmhpzjdwmxfhqh3ad26j5tmwdugnq7ieda@ddw6dfqtq27g>
+Subject: Re: [PATCH] drm/msm/dpu: avoid uninitialized variable use
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeehiefhuddtuddukeetkeehhedtffduhfevfeeftdefveffgfeuffejjeejfeekueenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedvtddtudemkeeiudemfeefkedvmegvfheltdemlehftghfmeeksghfleemleeludgumeekrggrfhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemfeefkedvmegvfheltdemlehftghfmeeksghfleemleeludgumeekrggrfhdphhgvlhhopeglkffrggeimedvtddtudemkeeiudemfeefkedvmegvfheltdemlehftghfmeeksghfleemleeludgumeekrggrfhgnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepudekpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehli
- hhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrlhhphhgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqtghskhihsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmieekkheslhhishhtshdrlhhinhhugidqmheikehkrdhorhhg
-X-GND-Sasl: alex@ghiti.fr
 
-Hi Kees,
-
-On 8/4/25 18:44, Kees Cook wrote:
-> While tracking down a problem where constant expressions used by
-> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-> initializer was convincing the compiler that it couldn't track the state
-> of the prior statically initialized value. Tracing this down found that
-> ffs() was used in the initializer macro, but since it wasn't marked with
-> __attribute__const__, the compiler had to assume the function might
-> change variable states as a side-effect (which is not true for ffs(),
-> which provides deterministic math results).
+On Thu, Aug 7, 2025, at 10:09, Dmitry Baryshkov wrote:
+> On Thu, Aug 07, 2025 at 09:19:48AM +0200, Arnd Bergmann wrote:
+>>
+>> The bug is real, but the suggestion from clang to set it to NULL is
+>> unfortunately just as harmful as dereferencing a NULL pointer is little
+>> better than uninitialized data.
 >
-> Add missing __attribute_const__ annotations to RISC-V's implementations of
-> variable__ffs(), variable__fls(), and variable_ffs() functions. These are pure
-> mathematical functions that always return the same result for the same
-> input with no side effects, making them eligible for compiler optimization.
 >
-> Build tested ARCH=riscv defconfig with GCC riscv64-linux-gnu 14.2.0.
->
-> Link: https://github.com/KSPP/linux/issues/364 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->   arch/riscv/include/asm/bitops.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/bitops.h b/arch/riscv/include/asm/bitops.h
-> index d59310f74c2b..77880677b06e 100644
-> --- a/arch/riscv/include/asm/bitops.h
-> +++ b/arch/riscv/include/asm/bitops.h
-> @@ -45,7 +45,7 @@
->   #error "Unexpected BITS_PER_LONG"
->   #endif
->   
-> -static __always_inline unsigned long variable__ffs(unsigned long word)
-> +static __always_inline __attribute_const__ unsigned long variable__ffs(unsigned long word)
->   {
->   	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
->   				      RISCV_ISA_EXT_ZBB, 1)
-> @@ -74,7 +74,7 @@ static __always_inline unsigned long variable__ffs(unsigned long word)
->   	 (unsigned long)__builtin_ctzl(word) :	\
->   	 variable__ffs(word))
->   
-> -static __always_inline unsigned long variable__fls(unsigned long word)
-> +static __always_inline __attribute_const__ unsigned long variable__fls(unsigned long word)
->   {
->   	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
->   				      RISCV_ISA_EXT_ZBB, 1)
-> @@ -103,7 +103,7 @@ static __always_inline unsigned long variable__fls(unsigned long word)
->   	 (unsigned long)(BITS_PER_LONG - 1 - __builtin_clzl(word)) :	\
->   	 variable__fls(word))
->   
-> -static __always_inline int variable_ffs(int x)
-> +static __always_inline __attribute_const__ int variable_ffs(int x)
->   {
->   	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
->   				      RISCV_ISA_EXT_ZBB, 1)
+> Having no plane->crtc is a valid setting and it is handled inside
+> drm_atomic_helper_check_plane_state() by setting plane_state->visible =
+> false and returning early. Setting crtc_state to NULL is a correct fix.
+> Could you please send it?
 
+Ah, I see. I saw the crtc_state dereference in
 
-Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Acked-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+  WARN_ON(plane_state->crtc && plane_state->crtc != crtc_state->crtc);
 
-Thanks,
+but that is indeed guarded by the plane_state->crtc check.
 
-Alex
+Nathan's patch is sufficient then.
 
-
+    Arnd
