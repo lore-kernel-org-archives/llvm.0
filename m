@@ -1,77 +1,80 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D47283121;
-	Fri,  8 Aug 2025 15:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E64199385;
+	Fri,  8 Aug 2025 17:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754667016; cv=none; b=m04LG4Oexz7MCdRgwNo5FKxwKD5s2Ra2ZeO/rgoNPu5bCDm8rtHHcs5El0MKBnReWjJZiMTwyVHnku9yWrQW/gEvQjGu+t+TW0P5oyvuaD1tEBVLs+UWsPSLfNCsSxTEV+vSivmfDKNowpEFi3ysm032OwTBLX5i5VO8B2lnhYs=
+	t=1754675516; cv=none; b=ZF4oaWPVj/D2qhDgb6fztAkAapEnsU3VK/q1CSTEknBKx37OZIikTZiS/5RHuNBMrRkzPx3MjD6ZEFTY+Pv5L+s/O9JC6HpBi569AiTT1kf0cLZG5ogAV48TWxa3mp34Sl1fLzytTIb8+soZqIW7FGdOn4VGBc2nSiZG4RDAoYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754667016; c=relaxed/simple;
-	bh=gRPaYihZ0/f4wMLIvQdpsT3JMMaFk6hSHvqp1FDlbgA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MozVpADIXuayBrfGfkoqR24QpfVNDKoSAUp1vxeHGcJMvPEBt6cj18HknajthBPnyDrXhpJ6TL3KhIfLbPyllvOh6XiujyTKCzsR5woIOH6O1yZ00SaJR1drcNCy6y1jqxdJiqs6dmdm6Y7zf7f+5zDRTzLIuhsLrbsfiRGQSBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vfYcsUMx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=D+UQHaC2; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1754675516; c=relaxed/simple;
+	bh=WOFVCvGAkEVEUCqKYOpl/dRyeNlS5UqIk3RBdYGqXz4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pEhKgri/QGllqHaeesY4foCQkdu4v68QtdjTLsDkqT1gzw8ylWwRjMzIRSKoR1C7quUDT+6iEuRdF88uIW4e0WyACoQ2vvb9l8BrhKdFlxUT6H+FW/7qm3X1IB28U6aOS+A9rLFa4tnyotswUMgjeNiQzgW+CmQb8TcIVfpAg6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mAxBhCKD; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vfYcsUMx";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="D+UQHaC2"
-Date: Fri, 8 Aug 2025 17:30:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754667011;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mAxBhCKD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1754675511;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cMXIxvxE5BQvdmzpDVy/7yXWORR6dKljoelXvDwT6tc=;
-	b=vfYcsUMxmXaZFvOsAIuK13TynKNADLT+k9WS6UFIVj1riI0sxbXwA9UYHAVVkgvL+5ULq9
-	3LBXv6GEsFex+rOpZGzTo5FaJO8Dxfnps8g5cqS9BXbXEL4mhe6AS9YNKNJSHc/1wZ4h/O
-	5yJP271WnHZvH4L8shBYY0F5L/nMxTMW3C6PLLOa4tgKch0ebvZPV5+nnRnNa43KN58zv/
-	VJhjMF+nnhspsmbCWA1njm/fL1vPj+uZHpPTaTAD2AEyKvJaMunrvsfrtEEYo7rtA7bYhq
-	GGYez4gFAzd7cy8JJBxYZwwGWrFlVTFlldS2R0AW8MGKDUgfCwaxFNTjVHygbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754667011;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cMXIxvxE5BQvdmzpDVy/7yXWORR6dKljoelXvDwT6tc=;
-	b=D+UQHaC29ml9YHi2VtO86C2YQKZjsK8ZxHXCq5M+8Y8U3C7IrecN4LE6aRhnaBsKH0ygsM
-	+ciYPPkj2C2U1wCg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: ld.lld: error: undefined symbol: xt_recseq
-Message-ID: <20250808153010.09myPtN7@linutronix.de>
-References: <202508061149.iM5f5qtm-lkp@intel.com>
+	bh=W5zH1D2kwmr8dCpgiqzWF8oQlWdm8uTmQJ1ar/ni0uw=;
+	b=mAxBhCKD4LlUW0eBh/lYzJwUYhgNl3NagukLegOF6BYXBQtSdnjbLzFbp6ITTxiq+WbUtC
+	pyCXzfyapFoD8+jgxbvb7FCWav6HpBU5WkpYT61y0s6TaM8KixWl7TxUCpftElM5l0QzIZ
+	wfFopWdSOyLpS840FuoMTP+dmyKJ6Fo=
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Marc Zyngier <maz@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kvm: arm64: use BUG() instead of BUG_ON(1)
+Date: Fri,  8 Aug 2025 10:51:32 -0700
+Message-Id: <175467548061.670500.14517325210508247749.b4-ty@linux.dev>
+In-Reply-To: <20250807072132.4170088-1-arnd@kernel.org>
+References: <20250807072132.4170088-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202508061149.iM5f5qtm-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2025-08-06 11:09:05 [+0200], kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   479058002c32b77acac43e883b92174e22c4be2d
-> commit: 9fce66583f06c212e95e4b76dd61d8432ffa56b6 netfilter: Exclude LEGACY TABLES on PREEMPT_RT.
-> date:   12 days ago
-> config: i386-buildonly-randconfig-2001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508061149.iM5f5qtm-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508061149.iM5f5qtm-lkp@intel.com/reproduce)
+On Thu, 07 Aug 2025 09:21:28 +0200, Arnd Bergmann wrote:
+> The BUG_ON() macro adds a little bit of complexity over BUG(), and in
+> some cases this ends up confusing the compiler's control flow analysis
+> in a way that results in a warning. This one now shows up with clang-21:
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508061149.iM5f5qtm-lkp@intel.com/
+> arch/arm64/kvm/vgic/vgic-mmio.c:1094:3: error: variable 'len' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>  1094 |                 BUG_ON(1);
 > 
-> All errors (new ones prefixed by >>):
+> [...]
 
-As far as I can tell, this is fixed by
-	25a8b88f000c3 ("netfilter: add back NETFILTER_XTABLES dependencies")
-	https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git/commit/?h=for-netdev-nf-25-08-07&id=25a8b88f000c33a1d580c317e93e40b953dc2fa5
+Applied to fixes, thanks!
 
-Sebastian
+[1/1] kvm: arm64: use BUG() instead of BUG_ON(1)
+      https://git.kernel.org/kvmarm/kvmarm/c/700d6868fee2
+
+--
+Best,
+Oliver
