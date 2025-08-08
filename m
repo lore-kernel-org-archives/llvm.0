@@ -1,39 +1,39 @@
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85F628135D
-	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C9E2820B1
+	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754664583; cv=none; b=sVPbb18xLJZZntuZOZPGlkUO6vTmmLqYLjiTpkurXvCrEHj9R3Jk7voI71ycrVfg4Zj5kM9GKT91KS4tQfGT4u1Ey0NGkf4eYjrRgtSD21yDhq9k1//XbpTyGa3WXINQs01i//AoT+aLQTqzBpwKrQM57bJSB46MBv+EWrNHi7w=
+	t=1754664585; cv=none; b=hKOYmEMWv2rW/JvARPp7jOq69moo+l3tuXZ7AH4HlCtLj4nvLqWf/ymG8PzgzEev9SZtGKxSFTVXFSPcda9iBl1UR3kiv7GioL7b1X3qa7TFFvedz5kNsmhFv0zbYq8mqOatRoX/D4u7yuf9qnk+OvIt61AoXGs61dow2IdnKbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754664583; c=relaxed/simple;
-	bh=QrKmFwnxZUfgVW3kf0DiW1oEWtF8/1WgSf5c7JcutRU=;
+	s=arc-20240116; t=1754664585; c=relaxed/simple;
+	bh=H5Xb1Om8mdF5RIZgOAHxxetoF+yntH0NeJzyLF1TBI0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nKRAlP9gnxojc40ZZtzgbC6CGmfw9vF34xPEcV6MLD41Y8+xZSz529yEQkDtT2jaXYdt8RpHD82VQa9ZL5cOxp2Wb1ATzc1H7BHiMD4CpcUYB0tk6H18Caet9uRJKGEnjbTzyQ2+nU2ufyWkUcppwhXALKw+E8ueJOFAG6u9ynQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U61D1jws; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=KLHT8Y70FXj6vjw5j+QEWNcMMVaiT8BDj/4oj8/nXmtureuOOqv+V9swtEh3mmmeq6lgGfocdMXvn0nBrHN7xtTV6VDbgS1FkMk/UKC/b/F+YP0ProWdjpYIaPI0HcUZYD6HIqvEOzU1fwv5+6HhFLcz9e2rxj0Nf3vZv0q/X9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XRpNEbZe; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U61D1jws"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2F2CB4396F;
-	Fri,  8 Aug 2025 14:49:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XRpNEbZe"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A19454398A;
+	Fri,  8 Aug 2025 14:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1754664574;
+	t=1754664581;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FkqNLf+MZPnU+iEy6rEgnrZLpt29tm167Wloxfy3lcw=;
-	b=U61D1jwsV9rP4ZnscFlvLQ4CyFqoeTM3M0f20GgjRDu8OUI5X60WE8sMHCFo1HUtqjdGht
-	ldSpMPYkz6dx6PlKOV32HXTSMEB73Wx9P0vlI6DZdu3KpYdanbkA32JKE8g5yHPiIWOndk
-	71VNFfH/0TEG8fd2v0bsCvSUbr6ER6BaGUev0dLIkSTP7MwUfHrTV2I5s3BkqvDN5ZwVeg
-	EyR7/P3TQH0bfcGCYojqB59W+t3xCmSmAECfVrLUoL7Pi1ls2HmhT4gVFJod2zUQTy0dM1
-	uXpQCC7/7fj2KB4qHaB6oLp4NZPdhBXlJ/hHVD+KEbjffeAp0YN5SPo+jt95qA==
+	bh=x5FboEgCdGJLmxZMiB0i2htDNO12smggut39uay0DPM=;
+	b=XRpNEbZeUx1iZaVTHx5I6X072fTr2282hm75h3TH0KH/sCa4iyc3hZ4RjB6ZEdmNIGgY1w
+	wNMzTHumwjPDDV5B5fxBTAg6plO3A5Y8DmERubd44e32eGxz5st0WmXoUFlK7N8r0bhy7b
+	wmuUBXSag2sGh0gswudnvb+bp4Kko0UcuXLQ3a9Ps0MtERGFGTkrs7qR9bpu744z2sI3Au
+	e38LGKXZE28NpWEwADmF7dmU2Su5duxb+ddtOyTAzcehijOosKOC1kjWw+egxuPcHJM9bJ
+	epxmiEETLt/v6KFJE+dxuglHEL506ZXwPvGOoHI5GUM9+RgknB+QUbj24cDwfA==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Fri, 08 Aug 2025 16:49:09 +0200
-Subject: [PATCH v2 2/9] drm/display: bridge-connector: remove unused
- variable assignment
+Date: Fri, 08 Aug 2025 16:49:12 +0200
+Subject: [PATCH v2 5/9] drm/atomic: use
+ drm_for_each_bridge_in_chain_scoped()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-2-edb6ee81edf1@bootlin.com>
+Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-5-edb6ee81edf1@bootlin.com>
 References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
 In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
 To: Andrzej Hajda <andrzej.hajda@intel.com>, 
@@ -64,36 +64,40 @@ Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeiieeuvdfftefgueduleehueetgffgjeeitedtteetkeeuueeuueekveevvdeuveenucfkphepjeekrddvuddvrddvjedrudduheenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeejkedrvdduvddrvdejrdduudehpdhhvghloheplgdujedvrdduiedrtddrudgnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdehpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtghhpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghin
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeiieeuvdfftefgueduleehueetgffgjeeitedtteetkeeuueeuueekveevvdeuveenucfkphepjeekrddvuddvrddvjedrudduheenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpeejkedrvdduvddrvdejrdduudehpdhhvghloheplgdujedvrdduiedrtddrudgnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdehpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtghhpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghin
  hgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepjhhonhgrsheskhifihgsohhordhsvgdprhgtphhtthhopehrfhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: luca.ceresoli@bootlin.com
 
-The 'bridge' pointer started being assigned and used within this 'if' scope
-in commit 0beba3f9d366 ("drm/bridge: connector: add support for HDMI codec
-framework").
-
-After that, commit 5d04b4188959 ("drm/bridge: split HDMI Audio from
-DRM_BRIDGE_OP_HDMI") removed the code dereferencing it from the same 'if'
-scope, but did not remove the assignment.
+Use drm_for_each_bridge_in_chain_scoped() instead of
+drm_for_each_bridge_in_chain() to ensure the bridge being looped on is
+refcounted.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/gpu/drm/display/drm_bridge_connector.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/gpu/drm/drm_atomic.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
-index 3ddde53b28131c3ce026413eb5518e9c8ed08b4d..65d54019e5eab323ecd3dc568541ed1e1793a683 100644
---- a/drivers/gpu/drm/display/drm_bridge_connector.c
-+++ b/drivers/gpu/drm/display/drm_bridge_connector.c
-@@ -772,8 +772,6 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
- 		if (!connector->ycbcr_420_allowed)
- 			supported_formats &= ~BIT(HDMI_COLORSPACE_YUV420);
+diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+index cd15cf52f0c9144711da5879da57884674aea9e4..ed5359a71f7e2cd8fa52b993e62ee65f8fed4537 100644
+--- a/drivers/gpu/drm/drm_atomic.c
++++ b/drivers/gpu/drm/drm_atomic.c
+@@ -1308,7 +1308,6 @@ drm_atomic_add_encoder_bridges(struct drm_atomic_state *state,
+ 			       struct drm_encoder *encoder)
+ {
+ 	struct drm_bridge_state *bridge_state;
+-	struct drm_bridge *bridge;
  
--		bridge = bridge_connector->bridge_hdmi;
--
- 		ret = drmm_connector_hdmi_init(drm, connector,
- 					       bridge_connector->bridge_hdmi->vendor,
- 					       bridge_connector->bridge_hdmi->product,
+ 	if (!encoder)
+ 		return 0;
+@@ -1317,7 +1316,7 @@ drm_atomic_add_encoder_bridges(struct drm_atomic_state *state,
+ 		       "Adding all bridges for [encoder:%d:%s] to %p\n",
+ 		       encoder->base.id, encoder->name, state);
+ 
+-	drm_for_each_bridge_in_chain(encoder, bridge) {
++	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
+ 		/* Skip bridges that don't implement the atomic state hooks. */
+ 		if (!bridge->funcs->atomic_duplicate_state)
+ 			continue;
 
 -- 
 2.50.1
