@@ -1,67 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EDA288C13;
-	Fri,  8 Aug 2025 19:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5DC221FB1
+	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 21:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754683089; cv=none; b=ow4YJIiCt6oix75zTdo3f0M5tFXysexgMgkgisRJ/kbHLsOFdmJOrosMialhcUObgK/ptSQXXoRZr2dtaMqpgRVk/s61mny4m9XxsjNYi/5IBIpjdXUQ821/bcXqdTypc9amjje4pbWy2R53UhKEht3z3/JZe0+Ec/CPLAiG9X4=
+	t=1754688723; cv=none; b=ASz7B/Bw/99RU1ZHp4XFi6zzTO8tmtY04fLQcKpziwQlQhbpeKrwS25XANo4H9ESVd6kx+ci0tYRpao7+Dyc3ZmZaFZFQ2/KmWd6Kfdizf1K7eWTr9NUcIjNHwsLgxG4U6ZOkjDLEMun3+7vliRIOL/eF9+5VXC4OeLcyIFs7Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754683089; c=relaxed/simple;
-	bh=CIQSbhlMKR1WIuZq4/Rkx2YJl5pIr3xxYoTEGe7WjpA=;
+	s=arc-20240116; t=1754688723; c=relaxed/simple;
+	bh=KD6MyFkEfBenKf/K2EH/YSf7Qowxg5WV6+qQzc7Km0E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EsSymz2b5ca9xkDHV/sViQ47njjmTgi8xK8EdLeC+WZqQ2xxr1jrwykK93HIuhyxjqAt3V3049so5SyZwErEmMg5onnEr1blhISouvCawRgOjV2omqenink5DvhBfCJlarPsW33XmLZ4jxCRj9aX2Scae8CMqoRmrPnXvq5lDpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KiklqoVI; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qy2eThuqBZOgrtWy+OOSEvIJ/hFCjUJ+iuU80KvZJwpVECInuwpmWZeADUaN4B0Gwn0/iRmzR4E6k5YcJ8koLoKXiOTuBeQzvphaIzHrbCnjRRN8HthNXryD6TJk4qxvBsJCLdo+Qyu/4GyK6tKu/T7kj/cZMTLVqXELbHPDFP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WvkJF2MV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1/9xl/VC; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VlFEcN1+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=V21WGjzr; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KiklqoVI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754683087; x=1786219087;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CIQSbhlMKR1WIuZq4/Rkx2YJl5pIr3xxYoTEGe7WjpA=;
-  b=KiklqoVIFvZhTj+CXQObu4qvzrbOoDBDjOHUmdhyggm5sBNjm5zVcl/n
-   zy+lUUvbNeYiYNa/g9xaEfeHiIfVU1sPot5w8tUNRCiRCzVhmSFHn+mqa
-   rztSgtykWuIGt7dSq9N14CTi9IBERtJzehXw8CA5UiLA1xFgYGqgn7ONb
-   VkWLXzY7dZdVTz1NmrhNcX27w4PnH8sfDUey6TY/+sHLZ0ovyRAX/otoW
-   RLYXFkt1FLjKDL+mEVEIxsX/YKwS9fmz7AdSSDSzlkwPtmejf9rpv66kC
-   xJll+Q+i6lAp7fffK3u9JwYCIXIqvkw/sp1d4s3U9WoUkUJoQD5ka2z1t
-   w==;
-X-CSE-ConnectionGUID: fKeAw5hCTImlbck5AIBHnQ==
-X-CSE-MsgGUID: tTi7S+kiSnOD78rAOoXWJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11515"; a="56750880"
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="56750880"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2025 12:58:07 -0700
-X-CSE-ConnectionGUID: nxAfNcsPTwSLKLoISiPpHw==
-X-CSE-MsgGUID: OefX2H0oReqbAhGTkJXdzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="164629461"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 08 Aug 2025 12:58:03 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ukTE0-0004G2-2h;
-	Fri, 08 Aug 2025 19:58:00 +0000
-Date: Sat, 9 Aug 2025 03:57:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: hans.zhang@cixtech.com, bhelgaas@google.com, lpieralisi@kernel.org,
-	kw@linux.com, mani@kernel.org, robh@kernel.org,
-	kwilczynski@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	mpillai@cadence.com, fugang.duan@cixtech.com,
-	guoyin.chen@cixtech.com, peter.chen@cixtech.com,
-	cix-kernel-upstream@cixtech.com, linux-pci@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Hans Zhang <hans.zhang@cixtech.com>
-Subject: Re: [PATCH v6 06/12] PCI: cadence: Add support for High Performance
- Arch(HPA) controller
-Message-ID: <202508090343.TWUqM8E7-lkp@intel.com>
-References: <20250808072929.4090694-7-hans.zhang@cixtech.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WvkJF2MV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1/9xl/VC";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VlFEcN1+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="V21WGjzr"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EEDDE5BE9D;
+	Fri,  8 Aug 2025 21:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1754688720; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
+	b=WvkJF2MV28XaR7NjO9JlgURbxOnMk04dnMp3rU4DB+pvF138qC1HM2dOGur2+tvInHtwhn
+	jfNI+6dwVILpfddZ5FmtdADWInRef0Aa4aDmpkDE8OeG6hXziJoFvpb5otsMlx91lJkn9p
+	2m/F5CAyCG+GyMGd/F8hyoXHpYBBgLk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1754688720;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
+	b=1/9xl/VCICqUNFJtiSIuAX5jSdnseyst7G72Zy0fJ2FKOjxsvcQ5ttp93n869MszjrK2oR
+	zLat/mG/+eJP8NBg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1754688719; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
+	b=VlFEcN1+KLihWbtuyRDQBtfXWzk0WoralxzzPCXwgLkywvuLnKCdmwApiPQcdkM4PbR3GB
+	DzsEFBuBRWQ/HbMHepl0O+uKty1mFsgMInZlfJW4cQ21pnxwft9x75plbp0d6nKcdj42kS
+	7U5Fal2G9obLQfUOO5e1J4/vZjHztUY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1754688719;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
+	b=V21WGjzrpRzk35KZ/w/wPCKv/uza/4Jmfd/mwutbrrQnlrPEXgiG0XLJYDwrNWrx1hWeLe
+	AJjdavret2ktQQAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2A2261392A;
+	Fri,  8 Aug 2025 21:31:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ZjKwBs9slmgRHgAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Fri, 08 Aug 2025 21:31:59 +0000
+Date: Fri, 8 Aug 2025 22:32:01 +0100
+From: Pedro Falcato <pfalcato@suse.de>
+To: kernel test robot <lkp@intel.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Linux Memory Management List <linux-mm@kvack.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: ld.lld: error: Function Import: link error: linking module flags
+ 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at
+ 1229286), and 'i32 1' from vmlinux.a(vma_exec.o at 1246866)
+Message-ID: <j6pxm4n2n3tnan22x73ff3ku6dwr6e65mi4tafjmlyoicbpygi@vbjbioh7p5fx>
+References: <202508082339.sjRnzZrX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,102 +91,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250808072929.4090694-7-hans.zhang@cixtech.com>
+In-Reply-To: <202508082339.sjRnzZrX-lkp@intel.com>
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_DN_SOME(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -3.80
 
-Hi,
+This doesn't look particularly mm related, CC'd riscv and kernel llvm lists.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 37816488247ddddbc3de113c78c83572274b1e2e]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/hans-zhang-cixtech-com/PCI-cadence-Split-PCIe-controller-header-file/20250808-154018
-base:   37816488247ddddbc3de113c78c83572274b1e2e
-patch link:    https://lore.kernel.org/r/20250808072929.4090694-7-hans.zhang%40cixtech.com
-patch subject: [PATCH v6 06/12] PCI: cadence: Add support for High Performance Arch(HPA) controller
-config: arm64-randconfig-002-20250809 (https://download.01.org/0day-ci/archive/20250809/202508090343.TWUqM8E7-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 3769ce013be2879bf0b329c14a16f5cb766f26ce)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250809/202508090343.TWUqM8E7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508090343.TWUqM8E7-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pci/controller/cadence/pcie-cadence-host-hpa.c:66:3: warning: variable 'desc0' is uninitialized when used here [-Wuninitialized]
-      66 |                 desc0 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC0_TYPE_CONF_TYPE0;
-         |                 ^~~~~
-   drivers/pci/controller/cadence/pcie-cadence-host-hpa.c:28:18: note: initialize the variable 'desc0' to silence this warning
-      28 |         u32 addr0, desc0, desc1, ctrl0;
-         |                         ^
-         |                          = 0
-   1 warning generated.
-
-
-vim +/desc0 +66 drivers/pci/controller/cadence/pcie-cadence-host-hpa.c
-
-    20	
-    21	void __iomem *cdns_pci_hpa_map_bus(struct pci_bus *bus, unsigned int devfn,
-    22					   int where)
-    23	{
-    24		struct pci_host_bridge *bridge = pci_find_host_bridge(bus);
-    25		struct cdns_pcie_rc *rc = pci_host_bridge_priv(bridge);
-    26		struct cdns_pcie *pcie = &rc->pcie;
-    27		unsigned int busn = bus->number;
-    28		u32 addr0, desc0, desc1, ctrl0;
-    29		u32 regval;
-    30	
-    31		if (pci_is_root_bus(bus)) {
-    32			/*
-    33			 * Only the root port (devfn == 0) is connected to this bus.
-    34			 * All other PCI devices are behind some bridge hence on another
-    35			 * bus.
-    36			 */
-    37			if (devfn)
-    38				return NULL;
-    39	
-    40			return pcie->reg_base + (where & 0xfff);
-    41		}
-    42	
-    43		/* Clear AXI link-down status */
-    44		regval = cdns_pcie_hpa_readl(pcie, REG_BANK_AXI_SLAVE, CDNS_PCIE_HPA_AT_LINKDOWN);
-    45		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE, CDNS_PCIE_HPA_AT_LINKDOWN,
-    46				     (regval & ~GENMASK(0, 0)));
-    47	
-    48		desc1 = 0;
-    49		ctrl0 = 0;
-    50	
-    51		/* Update Output registers for AXI region 0. */
-    52		addr0 = CDNS_PCIE_HPA_AT_OB_REGION_PCI_ADDR0_NBITS(12) |
-    53			CDNS_PCIE_HPA_AT_OB_REGION_PCI_ADDR0_DEVFN(devfn) |
-    54			CDNS_PCIE_HPA_AT_OB_REGION_PCI_ADDR0_BUS(busn);
-    55		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
-    56				     CDNS_PCIE_HPA_AT_OB_REGION_PCI_ADDR0(0), addr0);
-    57	
-    58		desc1 = cdns_pcie_hpa_readl(pcie, REG_BANK_AXI_SLAVE,
-    59					    CDNS_PCIE_HPA_AT_OB_REGION_DESC1(0));
-    60		desc1 &= ~CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN_MASK;
-    61		desc1 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC1_DEVFN(0);
-    62		ctrl0 = CDNS_PCIE_HPA_AT_OB_REGION_CTRL0_SUPPLY_BUS |
-    63			CDNS_PCIE_HPA_AT_OB_REGION_CTRL0_SUPPLY_DEV_FN;
-    64	
-    65		if (busn == bridge->busnr + 1)
-  > 66			desc0 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC0_TYPE_CONF_TYPE0;
-    67		else
-    68			desc0 |= CDNS_PCIE_HPA_AT_OB_REGION_DESC0_TYPE_CONF_TYPE1;
-    69	
-    70		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
-    71				     CDNS_PCIE_HPA_AT_OB_REGION_DESC0(0), desc0);
-    72		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
-    73				     CDNS_PCIE_HPA_AT_OB_REGION_DESC1(0), desc1);
-    74		cdns_pcie_hpa_writel(pcie, REG_BANK_AXI_SLAVE,
-    75				     CDNS_PCIE_HPA_AT_OB_REGION_CTRL0(0), ctrl0);
-    76	
-    77		return rc->cfg_base + (where & 0xfff);
-    78	}
-    79	
+On Sat, Aug 09, 2025 at 12:09:05AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   37816488247ddddbc3de113c78c83572274b1e2e
+> commit: dd7a6246f4fd6e8a6dcb08f1f51c899f3e0d3b83 mm: abstract initial stack setup to mm subsystem
+> date:   3 months ago
+> config: riscv-randconfig-r071-20250729 (https://download.01.org/0day-ci/archive/20250808/202508082339.sjRnzZrX-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 1b4db78d2eaa070b3f364a2d2b2b826a5439b892)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250808/202508082339.sjRnzZrX-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202508082339.sjRnzZrX-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(core.o at 1243626)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(ring_buffer.o at 1239546)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(vmalloc.o at 1246746)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(memory.o at 1246026)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(main.o at 1225686)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(output.o at 1404306)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(mmap.o at 1246206)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(vma.o at 1246806)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(drm_gem.o at 1315866)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(drm_gem_shmem_helper.o at 1317846)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(virtgpu_vram.o at 1327806)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 1' from vmlinux.a(alternative.o at 1226286), and 'i32 3' from vmlinux.a(init.o at 1229286)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(direct-io.o at 1251666)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(debug_vm_pgtable.o at 1247886)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(drm_gem_dma_helper.o at 1317726)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(blk-lib.o at 1282566)
+> >> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(vma_exec.o at 1246866)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(context.o at 1229706)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(setup.o at 1226826)
+>    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(physaddr.o at 1229886)
+>    ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Pedro
