@@ -1,38 +1,39 @@
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D172719007D
-	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C5327F012
+	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754664579; cv=none; b=ZuJM6bqJfSBMWk7bnvo4ApAq8mnjpyZx3MRAIA3vyCVsOdrRFdKO0lz+U0gttxwcWk9p+f2MZfH6khOlCq2q0HpJKYqtf44A7guH/URY7FcjNJCO9wevlKIpSD8bDZQmCdNwrtMryGvEgHTBDX5FEKZLDDLletRVSMCq6ksgMQY=
+	t=1754664580; cv=none; b=SXfl7OIS/MibFJ4QoW/Yw6tex9exqODgwQTFHotKGB61ZryHsxP5u3CJODjFgFVljNGEqsE00df82xR0HMxAmv8gI1CSZ+Apb1cKv6jcLTcQsWo1aGznd5quI+eRzdc7yT5N4/iBeRxwuKDMi0n+9UW2PysA32RsYrBLuWTKjf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754664579; c=relaxed/simple;
-	bh=fQrkvta09sPrtjxxDO32mEFlkrQnedz1eUHNNkgQqBk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KnWVWdPAxUUpQIK2qlvcwIcyc9QsKijdgNrn/uv+VbKvFq3ytlsJy618/pApxBuT7Sb2PmFfVTQ1Z5kDja3vEDlxrMim0XUxhBizhy77iHOmEbErBRy/5XdtLnlkbLFXmFw2lZcCVJkNy4x7LdeA2wF/WVwJyXsppeRNSyg++Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=e07+lHfe; arc=none smtp.client-ip=217.70.183.200
+	s=arc-20240116; t=1754664580; c=relaxed/simple;
+	bh=Xw7sWYWXoTQY+Q25UDP+cL1PHF1a6wb/vR2cpP9s1is=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kcm5lQqmH7VA5UDAUZUonbd0A0xIK8j1Fes7T3q9yrOTs6+XQUfUsQfYObCI1oRbqed8RTUSMY8nrPnoh0MRzYWwAXTX5icquUDVmHAFEl4o6VeZUx42pOc20/Qcsu0YT50V9EEa12fSEZ6VccyNZZXRhLrLCEVb/rJ4hMY49n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZXyx1wel; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e07+lHfe"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E8AE4397C;
-	Fri,  8 Aug 2025 14:49:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZXyx1wel"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A7EE143989;
+	Fri,  8 Aug 2025 14:49:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1754664569;
+	t=1754664577;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YuF4nnvi3fV43zgWxp+tW6JoStyuwuQCwhjAMoEMygw=;
-	b=e07+lHfe25z6EU4RbT2WyUVdiZane0nD01Q4wJLAx9JlqBRpSAKJEW2itqfpya2L9bRCts
-	hhhzK8bjqR/KHEkPfw2zaJz074hSaWMdP6A4xzg+4MjQfL4jAh9pZl7HUQ0iHLg2wc6OVm
-	mDSmY45HdYThz8gIs0SV4M/bkRgKWPOwZRdgTuqw9IMFiqp/Ow5dsUou147Us6vtUdIL4G
-	dQ2UtLveUwKvUgJ9GQdj4ap3rY4ql0boysIbh9zUVlSnjfhADJ1OCJWpuiT0WhocONNs60
-	0Dk0mr4HFHzEH5rdrk1ZmudGfUlqfr6slyMcIBeiac4EigxFUIgHsPQ9ORYHcQ==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vKWKLjPvrLn+3l2rPdp1dYCYLrCa8Kpq+XSvfS93uLo=;
+	b=ZXyx1welBEtu3ZlHt29TlZlp52sSUtKcrV2tyKfwvspWnTMUK3K7RlTPNpKAXfcrPBbLar
+	89Qm5zqh6d8qrdGpRF81mx5YNC9hb16GKdji3uKyhyi6yPj5vZrkhweGX2DfZNukB4fn1j
+	c+IwNpJy7qYSDJbmFSkCS50JGHe30LqznI3JmrJ3HrWyFnDcnPWq0CWw/0tEf0soosM+3r
+	YD5GuTHr/Jb/6EHu2kaEINVjOyhnkvEPpt1ewyvtGsvkm6z5rEfi9ejBuhzkuxaa9UFiWH
+	i8WFIo0iS3oeI3ykD8wF7l6794MlbJlyBTYByVTOJP2YiIHRawLAsU3+ZXshQQ==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: [PATCH v2 0/9] drm/bridge: get/put the bridge when looping over
- the encoder chain
-Date: Fri, 08 Aug 2025 16:49:07 +0200
-Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
+Date: Fri, 08 Aug 2025 16:49:10 +0200
+Subject: [PATCH v2 3/9] drm/bridge: add
+ drm_for_each_bridge_in_chain_scoped()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,13 +41,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAGMOlmgC/42P7Y6DIBBFX8Xwe2kAFT/SbPoeTdMMOFRSlS5Q0
- 6bx3Rd1H2B/3pnknnM/JKC3GEibfYjH2QbrphTEV0Z0D9MNqe1SJoKJklW8pp0fqfK2Sx8YBqf
- pDePjGalx/oqg++vf0/CCA/JKyRJIant4NPa1kc6XPXv8eSZg3I9EQUCq3Tja2GadUEVthMqZE
- WXTVLCWQcc0GtCy1qI0tc5ztlaPGAJspm123ESlYIxzyeWBJ2VO7+gnHE5g/f1tD4nxTVaH3ob
- o/HsbP/NNYt8p8n/vnDllVGFtCkDGJDYn5Vwc7LRiyGVZll80rISvZAEAAA==
-X-Change-ID: 20250718-drm-bridge-alloc-getput-for_each_bridge-f141ae17b65a
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-3-edb6ee81edf1@bootlin.com>
+References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
+In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
 To: Andrzej Hajda <andrzej.hajda@intel.com>, 
  Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
  Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
@@ -66,100 +64,123 @@ Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthekredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejjefhgfffleevhefhfeduhedtfedttedtkefgkeeuieehtdeifeduveejffevgeenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghdpkhgvrhhnvghlrdhorhhgnecukfhppeejkedrvdduvddrvdejrdduudehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepjeekrddvuddvrddvjedrudduhedphhgvlhhopegludejvddrudeirddtrddungdpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvhedprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhmpdhrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthhdprhgtphhtthhopefnrghurhgvnhhtrdhpihhntghhrghrthesihguv
- ggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepthhomhhirdhvrghlkhgvihhnvghnsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehjohhnrghssehkfihisghoohdrshgvpdhrtghpthhtoheprhhfohhssheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhg
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeiieeuvdfftefgueduleehueetgffgjeeitedtteetkeeuueeuueekveevvdeuveenucfkphepjeekrddvuddvrddvjedrudduheenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeejkedrvdduvddrvdejrdduudehpdhhvghloheplgdujedvrdduiedrtddrudgnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdehpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtghhpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghin
+ hgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepjhhonhgrsheskhifihgsohhordhsvgdprhgtphhtthhopehrfhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: luca.ceresoli@bootlin.com
 
-This series adds drm_bridge_get/put() calls for DRM bridges used when
-looping over bridges in an encoder chain.
+drm_for_each_bridge_in_chain() iterates ofer the bridges in an encoder
+chain without protecting the lifetime of the bridges using
+drm_bridge_get/put(). This creates a risk window where the bridge could be
+freed while iterating on it. Users of drm_for_each_bridge_in_chain() cannot
+solve this reliably.
 
-This is part of the work towards removal of bridges from a still existing
-DRM pipeline without use-after-free. The grand plan was discussed in [1].
-Here's the work breakdown (➜ marks the current series):
+Add variant of drm_for_each_bridge_in_chain() that gets/puts the bridge
+reference at the beginning/end of each iteration, and puts it if breaking
+ot of the loop.
 
- 1. ➜ add refcounting to DRM bridges (struct drm_bridge)
-    (based on devm_drm_bridge_alloc() [0])
-    A. ✔ add new alloc API and refcounting (in v6.16-rc1)
-    B. ✔ convert all bridge drivers to new API (now in drm-misc-next)
-    C. ✔ kunit tests (now in drm-misc-next)
-    D. ✔ add get/put to drm_bridge_add/remove() + attach/detach()
-         and warn on old allocation pattern (now in drm-misc-next)
-    E. ➜ add get/put on drm_bridge accessors
-       1. ✔ drm_bridge_chain_get_first_bridge() + add a cleanup action
-       2. … drm_bridge_get_prev_bridge()
-       3. … drm_bridge_get_next_bridge()
-       4. ➜ drm_for_each_bridge_in_chain()
-       5. drm_bridge_connector_init
-       6. of_drm_find_bridge
-       7. drm_of_find_panel_or_bridge, *_of_get_bridge
-    F. debugfs improvements
- 2. handle gracefully atomic updates during bridge removal
- 3. … avoid DSI host drivers to have dangling pointers to DSI devices
- 4. finish the hotplug bridge work, removing the "always-disconnected"
-    connector, moving code to the core and potentially removing the
-    hotplug-bridge itself (this needs to be clarified as points 1-3 are
-    developed)
+Note that this requires adding a new drm_bridge_get_next_bridge_and_put()
+function because, unlike similar functions as __of_get_next_child(),
+drm_bridge_get_next_bridge() gets the "next" pointer but does not put the
+"prev" pointer. Unfortunately drm_bridge_get_next_bridge() cannot be
+modified to put the "prev" pointer because some of its users rely on
+this, such as drm_atomic_bridge_propagate_bus_flags().
 
-Most loops on the encoder bridge chain are based on
-drm_for_each_bridge_in_chain(), which does not get/put the bridge pointed
-to by the loop iterator.
-
-Add a scoped variant that ensures ta reference to the bridge pointed to by
-the iterator is taken/released before/after every iteration (and when
-breaking out of the loop). Using the scoped version, the bridge being
-iterated on will always have a reference taken during the shole
-iteration. This is similar to what for_each_child_of_node() and similar
-for_each_* macros do.
-
-All conversions are trivial except for drm_bridge_connector_init() which
-needs some preliminary cleanups (patches 1-2).
-
-omapdrm/omap_encoder.c is the only driver iterating over the encoder bridge
-chain starting from a specific bridge, instead of iterating over the whole
-list. For this use case, add a drm_for_each_bridge_in_chain_from() variant.
-
-This series depends on:
-
- * commit 103578241512 ("drm/bridge-connector: Fix bridge in
-   drm_connector_hdmi_audio_init()"), currently in drm-misc-fixes, not yet
-   on drm-misc-next
-
-[0] https://gitlab.freedesktop.org/drm/misc/kernel/-/commit/0cc6aadd7fc1e629b715ea3d1ba537ef2da95eec
-[1] https://lore.kernel.org/lkml/20250206-hotplug-drm-bridge-v6-0-9d6f2c9c3058@bootlin.com/t/#u
+Also deprecate drm_for_each_bridge_in_chain(), in preparation for removing
+it after converting all users to the scoped version.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
 ---
+
 Changes in v2:
-- Prune series dependency list
-- Clarify wording in cover letter and patch 3
-- Link to v1: https://lore.kernel.org/r/20250723-drm-bridge-alloc-getput-for_each_bridge-v1-0-be8f4ae006e9@bootlin.com
+- clarified commit message and mention an example where the current
+  behaviour of drm_bridge_get_next_bridge() is wanted
 
+Note 1: drm_for_each_bridge_in_chain_scoped() could be renamed removing the
+        _scoped suffix after removing all the users of the current macro
+        and eventually the current macro itself. Even though this series is
+        converting all users, I'd at least wait one kernel release before
+        renaming, to minimize issues with existing patches which would fail
+        building.
+
+Note 2: Yes, the drm_bridge_get_next_bridge_and_put() name is ugly, but we
+        do need a "next_bridge" function that does not put the "prev"
+        bridge and one that does. Any proposal for a better name or a
+        different implementation is welcome.
 ---
-Luca Ceresoli (9):
-      drm/display: bridge-connector: use scope-specific variable for the bridge pointer
-      drm/display: bridge-connector: remove unused variable assignment
-      drm/bridge: add drm_for_each_bridge_in_chain_scoped()
-      drm/display: bridge-connector: use drm_for_each_bridge_in_chain_scoped()
-      drm/atomic: use drm_for_each_bridge_in_chain_scoped()
-      drm/bridge: use drm_for_each_bridge_in_chain_scoped()
-      drm/bridge: remove drm_for_each_bridge_in_chain()
-      drm/bridge: add drm_for_each_bridge_in_chain_from()
-      drm/omap: use drm_for_each_bridge_in_chain_from()
+ .clang-format            |  1 +
+ include/drm/drm_bridge.h | 41 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
- .clang-format                                  |  2 +-
- drivers/gpu/drm/display/drm_bridge_connector.c | 13 +++----
- drivers/gpu/drm/drm_atomic.c                   |  3 +-
- drivers/gpu/drm/drm_bridge.c                   |  3 +-
- drivers/gpu/drm/omapdrm/omap_encoder.c         |  4 +-
- include/drm/drm_bridge.h                       | 52 ++++++++++++++++++++++++--
- 6 files changed, 58 insertions(+), 19 deletions(-)
----
-base-commit: d2b48f2b30f25997a1ae1ad0cefac68c25f8c330
-change-id: 20250718-drm-bridge-alloc-getput-for_each_bridge-f141ae17b65a
-prerequisite-message-id: <20250620011616.118-1-kernel@airkyi.com>
-prerequisite-patch-id: ba5a6a15ea02bcee387db0e92ffb4cd0e1fbf816
+diff --git a/.clang-format b/.clang-format
+index 48405c54ef271e9546da08893d200a4cf48f3a55..1cac7d4976644c8f083f801e98f619782c2e23cc 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -168,6 +168,7 @@ ForEachMacros:
+   - 'drm_exec_for_each_locked_object'
+   - 'drm_exec_for_each_locked_object_reverse'
+   - 'drm_for_each_bridge_in_chain'
++  - 'drm_for_each_bridge_in_chain_scoped'
+   - 'drm_for_each_connector_iter'
+   - 'drm_for_each_crtc'
+   - 'drm_for_each_crtc_reverse'
+diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+index 620e119cc24c3491c2be5f08efaf51dfa8f708b3..a8e2f599aea764c705da3582df0ca428bb32f19c 100644
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -1365,10 +1365,51 @@ drm_bridge_chain_get_first_bridge(struct drm_encoder *encoder)
+  *	    iteration
+  *
+  * Iterate over all bridges present in the bridge chain attached to @encoder.
++ *
++ * This is deprecated, do not use!
++ * New drivers shall use drm_for_each_bridge_in_chain_scoped().
+  */
+ #define drm_for_each_bridge_in_chain(encoder, bridge)			\
+ 	list_for_each_entry(bridge, &(encoder)->bridge_chain, chain_node)
+ 
++/**
++ * drm_bridge_get_next_bridge_and_put - Get the next bridge in the chain
++ *                                      and put the previous
++ * @bridge: bridge object
++ *
++ * Same as drm_bridge_get_next_bridge() but additionally puts the @bridge.
++ *
++ * RETURNS:
++ * the next bridge in the chain after @bridge, or NULL if @bridge is the last.
++ */
++static inline struct drm_bridge *
++drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
++{
++	struct drm_bridge *next = drm_bridge_get_next_bridge(bridge);
++
++	drm_bridge_put(bridge);
++
++	return next;
++}
++
++/**
++ * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
++ *                                       to an encoder
++ * @encoder: the encoder to iterate bridges on
++ * @bridge: a bridge pointer updated to point to the current bridge at each
++ *	    iteration
++ *
++ * Iterate over all bridges present in the bridge chain attached to @encoder.
++ *
++ * Automatically gets/puts the bridge reference while iterating, and puts
++ * the reference even if returning or breaking in the middle of the loop.
++ */
++#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
++	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
++	     drm_bridge_chain_get_first_bridge(encoder);		\
++	     bridge;							\
++	     bridge = drm_bridge_get_next_bridge_and_put(bridge))
++
+ enum drm_mode_status
+ drm_bridge_chain_mode_valid(struct drm_bridge *bridge,
+ 			    const struct drm_display_info *info,
 
-Best regards,
 -- 
-Luca Ceresoli <luca.ceresoli@bootlin.com>
+2.50.1
 
