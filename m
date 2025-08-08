@@ -1,38 +1,38 @@
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD05E283FDF
-	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1C4283FFA
+	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754664592; cv=none; b=POYuzYSYGy7KT3M1D7kGp9HNS8xHumgtLWwaQO4WmsHCqXFOiX4cUSsYz0kaPrEv72B6xofM1t+J+/921xqcpdsFbDGv7jd+h2iStkCqJs9BEhU5yd87m85msvk6nasbHrBhtp0COB918iON+M4opYFsRxJvLI844WsOvBCVVds=
+	t=1754664594; cv=none; b=VvqvsSdQQusnoBj5l8QaP5moZE9O0Fpt15YhcJOoWfP5LoWx8eyWNdSfAtSMkcqVhB58/Yl8msia0n4tlNyQ7E75dNsrt5Pqfx+/29Uv/1ZBouKvgN9OUqaRsYY1/T98G/kBV7Nx638KdTJC6UswcoY4JLmsSPhmAswazxwxJ6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754664592; c=relaxed/simple;
-	bh=yehcEDEmUW4yLjbK5IRC+dYmbna0EzoYrEVkGZiPWus=;
+	s=arc-20240116; t=1754664594; c=relaxed/simple;
+	bh=vzTXPFiaCfHK9nSqz15wssha4YOhs9UOcmrHp2JSAW4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o9v1At5K0a29B4jiW8ycs6qwb/EbcIWBuuEw8D4xy9M6owUCRi2neOzgDuGUzkphBYJwz2bHu/uuQ4tejtxHCKoqNX14yiEQzlFpWcW8u7u5JEo1Ftsps2NGcZEfFVKrxJWD0Qk2QcQc6rmTgxOjcHXXiBKAy6IXbtujHCRUUDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GBJyfvRB; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=ZK5jjJs4sjbWNhiy+gty8NjQ29vq0KiqE24dD1WqYmpAa/i86SiGDD8IPu8G2OTF2r+nSt+38i1m75oCe5yA13knz1bCPnnjfJ9hcM4B+K7RoCmup6nud2tpgeFqfCUn6XtjcGdntEFwKehtVtuwZ7yA5eTWR45sUk/0+kaqwo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=STKNxnj8; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GBJyfvRB"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2733B43987;
-	Fri,  8 Aug 2025 14:49:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="STKNxnj8"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9BD3443986;
+	Fri,  8 Aug 2025 14:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1754664589;
+	t=1754664591;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=U/2wX00WAoUxU/CboHSklDrYBEFuvVE2Nu58abNNKUU=;
-	b=GBJyfvRBnK3I5H1JUEykygQSRAOi+dzlPpCvBwbu3OgCNjyHqVh9MoPnBmlj0A0Rxmn672
-	/lLktv9+F3lhNO62WvAQmjemanHGv9OtGvnPfSR8EStUa4iJZyJsdqS+sW89ynXdsjZaox
-	UDG+jDivYIwj8W+xcnSsC88pis9yDOlzSdVXXEPAXHcVAe/VXtcAGVB6Sf7A+hS2fUIgjY
-	b7eogYCCSMjmXyVEGlAjcND/Hh+VlUxY1bCg60IH49uKaB1QdVKa/Ld71psxTdzDNFOx00
-	Pz5JMxbsvS7VSWU/Wajbajl5EkdcVlAKFzJpGkQ0wEZF4g7PLWkRZMHV8g0Xnw==
+	bh=gYn1Rc8HkKQf4J/p8AgwWmzwMMTkHWwwAtY/ky/WmUs=;
+	b=STKNxnj8O3ZJTnpI/tmsjJQ2RmUajd8YJoLSUKm4L8GwzTGWQo60YtjGyws2ORzOF6n8Gh
+	ikTG2wm+8rud/5F5oTilBUXrlbDwo7xHE8ZW/osFQhkBGQr0PkgIlOXvvsws8xpthGYlQH
+	Z0zQrYKiRV6cpzNgBX7wYG0Jo20YqnowoniVi2o2GVVla79SXF0rXLL6DIQyslRsvhOqCG
+	AVtf3ZOyk+O2YgB5nGEdyUrhLdKCw2TvnAQqiTQ0b0IqM+RXgP0oVEjfXf4XMG/1k/8/ib
+	yPG1g8kBCESxSStJWIeOTmo3tDQE77M74OoPxsgRk8GtNb34A4CyfOpirIYHmQ==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Fri, 08 Aug 2025 16:49:15 +0200
-Subject: [PATCH v2 8/9] drm/bridge: add drm_for_each_bridge_in_chain_from()
+Date: Fri, 08 Aug 2025 16:49:16 +0200
+Subject: [PATCH v2 9/9] drm/omap: use drm_for_each_bridge_in_chain_from()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-8-edb6ee81edf1@bootlin.com>
+Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-9-edb6ee81edf1@bootlin.com>
 References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
 In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
 To: Andrzej Hajda <andrzej.hajda@intel.com>, 
@@ -63,48 +63,41 @@ Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeiieeuvdfftefgueduleehueetgffgjeeitedtteetkeeuueeuueekveevvdeuveenucfkphepjeekrddvuddvrddvjedrudduheenucevlhhushhtvghrufhiiigvpeeinecurfgrrhgrmhepihhnvghtpeejkedrvdduvddrvdejrdduudehpdhhvghloheplgdujedvrdduiedrtddrudgnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdehpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtghhpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghin
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeiieeuvdfftefgueduleehueetgffgjeeitedtteetkeeuueeuueekveevvdeuveenucfkphepjeekrddvuddvrddvjedrudduheenucevlhhushhtvghrufhiiigvpeeknecurfgrrhgrmhepihhnvghtpeejkedrvdduvddrvdejrdduudehpdhhvghloheplgdujedvrdduiedrtddrudgnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdehpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtghhpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghin
  hgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepjhhonhgrsheskhifihgsohhordhsvgdprhgtphhtthhopehrfhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Add variant of drm_for_each_bridge_in_chain_scoped() that iterates on the
-encoder bridge from a given bridge until the end of the chain.
+Use drm_for_each_bridge_in_chain_from _scoped() instead of an open-coded
+loop based on drm_bridge_get_next_bridge() to ensure the bridge being
+looped on is refcounted and simplify the driver code.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- include/drm/drm_bridge.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/gpu/drm/omapdrm/omap_encoder.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-index 6adf9221c2d462ec8e0e4e281c97b39081b3da24..6a79edcb4a8476a8eefa6ff00771b0f919de0f6b 100644
---- a/include/drm/drm_bridge.h
-+++ b/include/drm/drm_bridge.h
-@@ -1396,6 +1396,25 @@ drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
- 	     bridge;							\
- 	     bridge = drm_bridge_get_next_bridge_and_put(bridge))
+diff --git a/drivers/gpu/drm/omapdrm/omap_encoder.c b/drivers/gpu/drm/omapdrm/omap_encoder.c
+index 4dd05bc732daebcedbfcbbc9ba7dffee7415bdfc..195715b162e38ea0cd0870f3dd79342a8cbf218b 100644
+--- a/drivers/gpu/drm/omapdrm/omap_encoder.c
++++ b/drivers/gpu/drm/omapdrm/omap_encoder.c
+@@ -77,7 +77,6 @@ static void omap_encoder_mode_set(struct drm_encoder *encoder,
+ 	struct omap_dss_device *output = omap_encoder->output;
+ 	struct drm_device *dev = encoder->dev;
+ 	struct drm_connector *connector;
+-	struct drm_bridge *bridge;
+ 	struct videomode vm = { 0 };
+ 	u32 bus_flags;
  
-+/**
-+ * drm_for_each_bridge_in_chain_from - iterate over all bridges starting
-+ *                                     from the given bridge
-+ * @first_bridge: the bridge to start from
-+ * @bridge: a bridge pointer updated to point to the current bridge at each
-+ *	    iteration
-+ *
-+ * Iterate over all bridges in the encoder chain starting from
-+ * @first_bridge, included.
-+ *
-+ * Automatically gets/puts the bridge reference while iterating, and puts
-+ * the reference even if returning or breaking in the middle of the loop.
-+ */
-+#define drm_for_each_bridge_in_chain_from(first_bridge, bridge)		\
-+	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
-+		     drm_bridge_get(first_bridge);			\
-+	     bridge;							\
-+	     bridge = drm_bridge_get_next_bridge_and_put(bridge))
-+
- enum drm_mode_status
- drm_bridge_chain_mode_valid(struct drm_bridge *bridge,
- 			    const struct drm_display_info *info,
+@@ -97,8 +96,7 @@ static void omap_encoder_mode_set(struct drm_encoder *encoder,
+ 	 *
+ 	 * A better solution is to use DRM's bus-flags through the whole driver.
+ 	 */
+-	for (bridge = output->bridge; bridge;
+-	     bridge = drm_bridge_get_next_bridge(bridge)) {
++	drm_for_each_bridge_in_chain_from(output->bridge, bridge) {
+ 		if (!bridge->timings)
+ 			continue;
+ 
 
 -- 
 2.50.1
