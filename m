@@ -1,88 +1,40 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5DC221FB1
-	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 21:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C8528A1D3;
+	Fri,  8 Aug 2025 21:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754688723; cv=none; b=ASz7B/Bw/99RU1ZHp4XFi6zzTO8tmtY04fLQcKpziwQlQhbpeKrwS25XANo4H9ESVd6kx+ci0tYRpao7+Dyc3ZmZaFZFQ2/KmWd6Kfdizf1K7eWTr9NUcIjNHwsLgxG4U6ZOkjDLEMun3+7vliRIOL/eF9+5VXC4OeLcyIFs7Ec=
+	t=1754689988; cv=none; b=SjdwNvVNZCg1/PApRAR+56LCi9iXqcquExSlBj3tZiXXdmb8Vza0cEkL40AZ9e9hzX57zGftczkIenaQoEHTb1FwEPIYTqwrgfZ6WmUGPGbTSQPPeTRLX5qJvemzUwHIicJPhiBKtqUylwMRwVIi6k+f46yy82qzIT9juI0WlR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754688723; c=relaxed/simple;
-	bh=KD6MyFkEfBenKf/K2EH/YSf7Qowxg5WV6+qQzc7Km0E=;
+	s=arc-20240116; t=1754689988; c=relaxed/simple;
+	bh=ATwyecHxTopAmdm8049OI8LQGrc6qa1zmAS8EZn7Zt8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qy2eThuqBZOgrtWy+OOSEvIJ/hFCjUJ+iuU80KvZJwpVECInuwpmWZeADUaN4B0Gwn0/iRmzR4E6k5YcJ8koLoKXiOTuBeQzvphaIzHrbCnjRRN8HthNXryD6TJk4qxvBsJCLdo+Qyu/4GyK6tKu/T7kj/cZMTLVqXELbHPDFP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WvkJF2MV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1/9xl/VC; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=VlFEcN1+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=V21WGjzr; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=BrOpntumMWguKXg/aGTaj6wybJq93IWrLKYoz2Gnpqhi4V9R7oQtbrshGFqVOxITYQsn2ugPDiGqrQz3BVPEGKlJHqzcnFZ5S4n84EQtI1hP4yzsgCNYGkVqnqd+7Ex0DvT22UmIROHllc5qNxNvdTgZR6nVd4SIm1Y90ChTrBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GKeUBHur; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WvkJF2MV";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1/9xl/VC";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="VlFEcN1+";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="V21WGjzr"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id EEDDE5BE9D;
-	Fri,  8 Aug 2025 21:31:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1754688720; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
-	b=WvkJF2MV28XaR7NjO9JlgURbxOnMk04dnMp3rU4DB+pvF138qC1HM2dOGur2+tvInHtwhn
-	jfNI+6dwVILpfddZ5FmtdADWInRef0Aa4aDmpkDE8OeG6hXziJoFvpb5otsMlx91lJkn9p
-	2m/F5CAyCG+GyMGd/F8hyoXHpYBBgLk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1754688720;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
-	b=1/9xl/VCICqUNFJtiSIuAX5jSdnseyst7G72Zy0fJ2FKOjxsvcQ5ttp93n869MszjrK2oR
-	zLat/mG/+eJP8NBg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1754688719; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
-	b=VlFEcN1+KLihWbtuyRDQBtfXWzk0WoralxzzPCXwgLkywvuLnKCdmwApiPQcdkM4PbR3GB
-	DzsEFBuBRWQ/HbMHepl0O+uKty1mFsgMInZlfJW4cQ21pnxwft9x75plbp0d6nKcdj42kS
-	7U5Fal2G9obLQfUOO5e1J4/vZjHztUY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1754688719;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ozpPeuGz/5jR8RvrsN+ym3S5Zd0rR0WHaXf/FgJQh6A=;
-	b=V21WGjzrpRzk35KZ/w/wPCKv/uza/4Jmfd/mwutbrrQnlrPEXgiG0XLJYDwrNWrx1hWeLe
-	AJjdavret2ktQQAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2A2261392A;
-	Fri,  8 Aug 2025 21:31:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ZjKwBs9slmgRHgAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Fri, 08 Aug 2025 21:31:59 +0000
-Date: Fri, 8 Aug 2025 22:32:01 +0100
-From: Pedro Falcato <pfalcato@suse.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Linux Memory Management List <linux-mm@kvack.org>, 
-	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: ld.lld: error: Function Import: link error: linking module flags
- 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at
- 1229286), and 'i32 1' from vmlinux.a(vma_exec.o at 1246866)
-Message-ID: <j6pxm4n2n3tnan22x73ff3ku6dwr6e65mi4tafjmlyoicbpygi@vbjbioh7p5fx>
-References: <202508082339.sjRnzZrX-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GKeUBHur"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BBF9C4CEF7;
+	Fri,  8 Aug 2025 21:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754689988;
+	bh=ATwyecHxTopAmdm8049OI8LQGrc6qa1zmAS8EZn7Zt8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GKeUBHurZI5lwaUwpKrVDYzX+jl120VmMnO8rd1hLSEncWyHHLlvSQUQ0V6RrAGvh
+	 k8PX1UOMHjoewQLicxQpKX0t/aTlT7BsLimcG8SiAsT8mxzmVXhAwmMl2OO3OFXTg7
+	 r5bfqx8yWCP4X7gJPUhnOLaegu0pWWFsNxjyv4Ila6q+KCVAY+hg+7x/fbq7mM9Kqm
+	 Dfif4kc4qvab5OIFditOH5flk6ovpuod7PMkVMGLBfQcmS9EpjNdJ/2NJ9hvZoJfpC
+	 6jwDq7oiF9stAZmPTDQZFX2a5KZPhOFidvwgKfP5JjhcaYJQc5MsobHP8yE6kMQLLP
+	 Fki4vJFUinaEA==
+Date: Fri, 8 Aug 2025 14:53:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] riscv: Only allow LTO with CMODEL_MEDANY
+Message-ID: <20250808215303.GA3695089@ax162>
+References: <20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -91,73 +43,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202508082339.sjRnzZrX-lkp@intel.com>
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -3.80
+In-Reply-To: <20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org>
 
-This doesn't look particularly mm related, CC'd riscv and kernel llvm lists.
+Ping? This is still getting hit.
 
-On Sat, Aug 09, 2025 at 12:09:05AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   37816488247ddddbc3de113c78c83572274b1e2e
-> commit: dd7a6246f4fd6e8a6dcb08f1f51c899f3e0d3b83 mm: abstract initial stack setup to mm subsystem
-> date:   3 months ago
-> config: riscv-randconfig-r071-20250729 (https://download.01.org/0day-ci/archive/20250808/202508082339.sjRnzZrX-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 1b4db78d2eaa070b3f364a2d2b2b826a5439b892)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250808/202508082339.sjRnzZrX-lkp@intel.com/reproduce)
+On Thu, Jul 10, 2025 at 01:25:26PM -0700, Nathan Chancellor wrote:
+> When building with CONFIG_CMODEL_MEDLOW and CONFIG_LTO_CLANG, there is a
+> series of errors due to some files being unconditionally compiled with
+> '-mcmodel=medany', mismatching with the rest of the kernel built with
+> '-mcmodel=medlow':
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508082339.sjRnzZrX-lkp@intel.com/
+>   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 899908), and 'i32 1' from vmlinux.a(net-traces.o at 1014628)
 > 
-> All errors (new ones prefixed by >>):
+> Only allow LTO to be performed when CONFIG_CMODEL_MEDANY is enabled to
+> ensure there will be no code model mismatch errors. An alternative
+> solution would be disabling LTO for the files with a different code
+> model than the main kernel like some specialized areas of the kernel do
+> but doing that for individual files is not as sustainable than
+> forbidding the combination altogether.
 > 
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(core.o at 1243626)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(ring_buffer.o at 1239546)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(vmalloc.o at 1246746)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(memory.o at 1246026)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(main.o at 1225686)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(output.o at 1404306)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(mmap.o at 1246206)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(vma.o at 1246806)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(drm_gem.o at 1315866)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(drm_gem_shmem_helper.o at 1317846)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(virtgpu_vram.o at 1327806)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 1' from vmlinux.a(alternative.o at 1226286), and 'i32 3' from vmlinux.a(init.o at 1229286)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(direct-io.o at 1251666)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(debug_vm_pgtable.o at 1247886)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(drm_gem_dma_helper.o at 1317726)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(blk-lib.o at 1282566)
-> >> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(vma_exec.o at 1246866)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(context.o at 1229706)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(setup.o at 1226826)
->    ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values: 'i32 3' from vmlinux.a(init.o at 1229286), and 'i32 1' from vmlinux.a(physaddr.o at 1229886)
->    ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
+> Cc: stable@vger.kernel.org
+> Fixes: 021d23428bdb ("RISC-V: build: Allow LTO to be selected")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202506290255.KBVM83vZ-lkp@intel.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/riscv/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-
--- 
-Pedro
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 36061f4732b7..4eee737a050f 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -68,7 +68,7 @@ config RISCV
+>  	select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
+>  	select ARCH_SUPPORTS_HUGETLBFS if MMU
+>  	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
+> -	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
+> +	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000 && CMODEL_MEDANY
+>  	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+>  	select ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS if 64BIT && MMU
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+> 
+> ---
+> base-commit: fda589c286040d9ba2d72a0eaf0a13945fc48026
+> change-id: 20250710-riscv-restrict-lto-to-medany-f1b7dd5c9bba
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
