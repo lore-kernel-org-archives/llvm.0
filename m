@@ -1,151 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB8C21D00D;
-	Fri,  8 Aug 2025 06:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D172719007D
+	for <llvm@lists.linux.dev>; Fri,  8 Aug 2025 14:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754634127; cv=none; b=g0ggGu6BMo+MiCtS6OP2zryh8OFhtlDflsICFUcCOBILVVSCMv4NOtYODwvMQwfuvUrE4TH4YMTB/XyX3IVS5B3DthtvPudQv++RcBSUQoRjCs7ps60Mn0g/z9UltDZXP1j+GCUMJQAWzoFkr5dDKNjcFvtYsxNXWtYzhnbQFdc=
+	t=1754664579; cv=none; b=ZuJM6bqJfSBMWk7bnvo4ApAq8mnjpyZx3MRAIA3vyCVsOdrRFdKO0lz+U0gttxwcWk9p+f2MZfH6khOlCq2q0HpJKYqtf44A7guH/URY7FcjNJCO9wevlKIpSD8bDZQmCdNwrtMryGvEgHTBDX5FEKZLDDLletRVSMCq6ksgMQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754634127; c=relaxed/simple;
-	bh=wyCinmD6gBK2b3vCbcjV/7csg0R5EgDjr5P8FZB/7jU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uv+6o9dKpTIHUDliSPJF3zqJoFHF5GUAyqQavicONrZ5DPG0SouOKoabVEKPLcbQFIQv3cizBFNWivLmVNVK5KEvhzsXPW6lXeMl+XkfI/mt9CllPNZ59sil92mSlxfZ0SEwUoZty6DTKqrbhVZIdeCp1ldRqdTb/VQMaF3s0x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EpfVd62F; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754664579; c=relaxed/simple;
+	bh=fQrkvta09sPrtjxxDO32mEFlkrQnedz1eUHNNkgQqBk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KnWVWdPAxUUpQIK2qlvcwIcyc9QsKijdgNrn/uv+VbKvFq3ytlsJy618/pApxBuT7Sb2PmFfVTQ1Z5kDja3vEDlxrMim0XUxhBizhy77iHOmEbErBRy/5XdtLnlkbLFXmFw2lZcCVJkNy4x7LdeA2wF/WVwJyXsppeRNSyg++Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=e07+lHfe; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EpfVd62F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754634123; x=1786170123;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wyCinmD6gBK2b3vCbcjV/7csg0R5EgDjr5P8FZB/7jU=;
-  b=EpfVd62FtOrvghPqBPZ+J297YF7hhBMy8Gq//fo8HgtlLRdcLud6aG0H
-   5JfFfTzj7a34vTn9OCx6z9+fd5CV/YfH88DWtPhrtmqyJZlB6idpT+ET+
-   wlVs/M+0J4wWKBPYOl3o0KfeLoiqIyrSYxNyiuWWC1e72JBIEeOnW0JdX
-   bLRPFZaV1jQK4QbOeLFfry5F+f8X9hGaDQG7TW3TdrJbYfZo1FLn+qtv0
-   JPol/bqm0YTgZU36TgVZ94ElmVofyO7gMqSSXecYrvtF5Mt5EyEyV31ZU
-   b8toRIeIYjWQdHqipkBJRJnybl4/IBnTExPKgMxjJo11nX2RoP874iY1L
-   w==;
-X-CSE-ConnectionGUID: ZsPe1zCtSs6VrffXcNKhFw==
-X-CSE-MsgGUID: SZE2m4b/RVGx/xuPdG8A8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="79535377"
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="79535377"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2025 23:22:02 -0700
-X-CSE-ConnectionGUID: ghM0aSbeS52TOVHv6a2FcA==
-X-CSE-MsgGUID: aK21ZVGVTbui++mwbwwAjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
-   d="scan'208";a="169380430"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Aug 2025 23:21:58 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ukGTn-0003b0-1b;
-	Fri, 08 Aug 2025 06:21:36 +0000
-Date: Fri, 8 Aug 2025 14:21:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dimitri Sivanich <sivanich@hpe.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jiri Wiesner <jwiesner@suse.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jonathan Corbet <corbet@lwn.net>, Steve Wahl <steve.wahl@hpe.com>,
-	Justin Ernst <justin.ernst@hpe.com>,
-	Kyle Meyer <kyle.meyer@hpe.com>,
-	Russ Anderson <russ.anderson@hpe.com>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2] x86/tsc: Disable clocksource watchdog for TSC on
- recent UV
-Message-ID: <202508081446.3ZnRCG1T-lkp@intel.com>
-References: <aJH9ke0k0HnL8g6h@hpe.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e07+lHfe"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E8AE4397C;
+	Fri,  8 Aug 2025 14:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1754664569;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YuF4nnvi3fV43zgWxp+tW6JoStyuwuQCwhjAMoEMygw=;
+	b=e07+lHfe25z6EU4RbT2WyUVdiZane0nD01Q4wJLAx9JlqBRpSAKJEW2itqfpya2L9bRCts
+	hhhzK8bjqR/KHEkPfw2zaJz074hSaWMdP6A4xzg+4MjQfL4jAh9pZl7HUQ0iHLg2wc6OVm
+	mDSmY45HdYThz8gIs0SV4M/bkRgKWPOwZRdgTuqw9IMFiqp/Ow5dsUou147Us6vtUdIL4G
+	dQ2UtLveUwKvUgJ9GQdj4ap3rY4ql0boysIbh9zUVlSnjfhADJ1OCJWpuiT0WhocONNs60
+	0Dk0mr4HFHzEH5rdrk1ZmudGfUlqfr6slyMcIBeiac4EigxFUIgHsPQ9ORYHcQ==
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Subject: [PATCH v2 0/9] drm/bridge: get/put the bridge when looping over
+ the encoder chain
+Date: Fri, 08 Aug 2025 16:49:07 +0200
+Message-Id: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aJH9ke0k0HnL8g6h@hpe.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGMOlmgC/42P7Y6DIBBFX8Xwe2kAFT/SbPoeTdMMOFRSlS5Q0
+ 6bx3Rd1H2B/3pnknnM/JKC3GEibfYjH2QbrphTEV0Z0D9MNqe1SJoKJklW8pp0fqfK2Sx8YBqf
+ pDePjGalx/oqg++vf0/CCA/JKyRJIant4NPa1kc6XPXv8eSZg3I9EQUCq3Tja2GadUEVthMqZE
+ WXTVLCWQcc0GtCy1qI0tc5ztlaPGAJspm123ESlYIxzyeWBJ2VO7+gnHE5g/f1tD4nxTVaH3ob
+ o/HsbP/NNYt8p8n/vnDllVGFtCkDGJDYn5Vwc7LRiyGVZll80rISvZAEAAA==
+X-Change-ID: 20250718-drm-bridge-alloc-getput-for_each_bridge-f141ae17b65a
+To: Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdegtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthekredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejjefhgfffleevhefhfeduhedtfedttedtkefgkeeuieehtdeifeduveejffevgeenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghdpkhgvrhhnvghlrdhorhhgnecukfhppeejkedrvdduvddrvdejrdduudehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepjeekrddvuddvrddvjedrudduhedphhgvlhhopegludejvddrudeirddtrddungdpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvhedprhgtphhtthhopehnihgtkhdruggvshgruhhlnhhivghrshdolhhkmhhlsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgtohhmpdhrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthhdprhgtphhtthhopefnrghurhgvnhhtrdhpihhntghhrghrthesihguv
+ ggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepthhomhhirdhvrghlkhgvihhnvghnsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehjohhnrghssehkfihisghoohdrshgvpdhrtghpthhtoheprhhfohhssheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhg
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hi Dimitri,
+This series adds drm_bridge_get/put() calls for DRM bridges used when
+looping over bridges in an encoder chain.
 
-kernel test robot noticed the following build errors:
+This is part of the work towards removal of bridges from a still existing
+DRM pipeline without use-after-free. The grand plan was discussed in [1].
+Here's the work breakdown (➜ marks the current series):
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/master linus/master v6.16 next-20250807]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ 1. ➜ add refcounting to DRM bridges (struct drm_bridge)
+    (based on devm_drm_bridge_alloc() [0])
+    A. ✔ add new alloc API and refcounting (in v6.16-rc1)
+    B. ✔ convert all bridge drivers to new API (now in drm-misc-next)
+    C. ✔ kunit tests (now in drm-misc-next)
+    D. ✔ add get/put to drm_bridge_add/remove() + attach/detach()
+         and warn on old allocation pattern (now in drm-misc-next)
+    E. ➜ add get/put on drm_bridge accessors
+       1. ✔ drm_bridge_chain_get_first_bridge() + add a cleanup action
+       2. … drm_bridge_get_prev_bridge()
+       3. … drm_bridge_get_next_bridge()
+       4. ➜ drm_for_each_bridge_in_chain()
+       5. drm_bridge_connector_init
+       6. of_drm_find_bridge
+       7. drm_of_find_panel_or_bridge, *_of_get_bridge
+    F. debugfs improvements
+ 2. handle gracefully atomic updates during bridge removal
+ 3. … avoid DSI host drivers to have dangling pointers to DSI devices
+ 4. finish the hotplug bridge work, removing the "always-disconnected"
+    connector, moving code to the core and potentially removing the
+    hotplug-bridge itself (this needs to be clarified as points 1-3 are
+    developed)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dimitri-Sivanich/x86-tsc-Disable-clocksource-watchdog-for-TSC-on-recent-UV/20250806-120227
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/aJH9ke0k0HnL8g6h%40hpe.com
-patch subject: [PATCH v2] x86/tsc: Disable clocksource watchdog for TSC on recent UV
-config: i386-randconfig-011-20250808 (https://download.01.org/0day-ci/archive/20250808/202508081446.3ZnRCG1T-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250808/202508081446.3ZnRCG1T-lkp@intel.com/reproduce)
+Most loops on the encoder bridge chain are based on
+drm_for_each_bridge_in_chain(), which does not get/put the bridge pointed
+to by the loop iterator.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508081446.3ZnRCG1T-lkp@intel.com/
+Add a scoped variant that ensures ta reference to the bridge pointed to by
+the iterator is taken/released before/after every iteration (and when
+breaking out of the loop). Using the scoped version, the bridge being
+iterated on will always have a reference taken during the shole
+iteration. This is similar to what for_each_child_of_node() and similar
+for_each_* macros do.
 
-All errors (new ones prefixed by >>):
+All conversions are trivial except for drm_bridge_connector_init() which
+needs some preliminary cleanups (patches 1-2).
 
->> arch/x86/kernel/tsc.c:1264:39: error: call to undeclared function 'is_uvy_hub'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1264 |             (topology_max_packages() <= 4 || is_uvy_hub()))
-         |                                              ^
-   arch/x86/kernel/tsc.c:1517:6: error: call to undeclared function 'is_early_uv_system'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1517 |         if (is_early_uv_system())
-         |             ^
-   2 errors generated.
+omapdrm/omap_encoder.c is the only driver iterating over the encoder bridge
+chain starting from a specific bridge, instead of iterating over the whole
+list. For this use case, add a drm_for_each_bridge_in_chain_from() variant.
 
+This series depends on:
 
-vim +/is_uvy_hub +1264 arch/x86/kernel/tsc.c
+ * commit 103578241512 ("drm/bridge-connector: Fix bridge in
+   drm_connector_hdmi_audio_init()"), currently in drm-misc-fixes, not yet
+   on drm-misc-next
 
-  1235	
-  1236	static void __init check_system_tsc_reliable(void)
-  1237	{
-  1238	#if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
-  1239		if (is_geode_lx()) {
-  1240			/* RTSC counts during suspend */
-  1241	#define RTSC_SUSP 0x100
-  1242			unsigned long res_low, res_high;
-  1243	
-  1244			rdmsr_safe(MSR_GEODE_BUSCONT_CONF0, &res_low, &res_high);
-  1245			/* Geode_LX - the OLPC CPU has a very reliable TSC */
-  1246			if (res_low & RTSC_SUSP)
-  1247				tsc_clocksource_reliable = 1;
-  1248		}
-  1249	#endif
-  1250		if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
-  1251			tsc_clocksource_reliable = 1;
-  1252	
-  1253		/*
-  1254		 * Disable the clocksource watchdog when the system has:
-  1255		 *  - TSC running at constant frequency
-  1256		 *  - TSC which does not stop in C-States
-  1257		 *  - the TSC_ADJUST register which allows to detect even minimal
-  1258		 *    modifications
-  1259		 *  - not more than four packages
-  1260		 */
-  1261		if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
-  1262		    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
-  1263		    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
-> 1264		    (topology_max_packages() <= 4 || is_uvy_hub()))
-  1265			tsc_disable_clocksource_watchdog();
-  1266	}
-  1267	
+[0] https://gitlab.freedesktop.org/drm/misc/kernel/-/commit/0cc6aadd7fc1e629b715ea3d1ba537ef2da95eec
+[1] https://lore.kernel.org/lkml/20250206-hotplug-drm-bridge-v6-0-9d6f2c9c3058@bootlin.com/t/#u
 
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+Changes in v2:
+- Prune series dependency list
+- Clarify wording in cover letter and patch 3
+- Link to v1: https://lore.kernel.org/r/20250723-drm-bridge-alloc-getput-for_each_bridge-v1-0-be8f4ae006e9@bootlin.com
+
+---
+Luca Ceresoli (9):
+      drm/display: bridge-connector: use scope-specific variable for the bridge pointer
+      drm/display: bridge-connector: remove unused variable assignment
+      drm/bridge: add drm_for_each_bridge_in_chain_scoped()
+      drm/display: bridge-connector: use drm_for_each_bridge_in_chain_scoped()
+      drm/atomic: use drm_for_each_bridge_in_chain_scoped()
+      drm/bridge: use drm_for_each_bridge_in_chain_scoped()
+      drm/bridge: remove drm_for_each_bridge_in_chain()
+      drm/bridge: add drm_for_each_bridge_in_chain_from()
+      drm/omap: use drm_for_each_bridge_in_chain_from()
+
+ .clang-format                                  |  2 +-
+ drivers/gpu/drm/display/drm_bridge_connector.c | 13 +++----
+ drivers/gpu/drm/drm_atomic.c                   |  3 +-
+ drivers/gpu/drm/drm_bridge.c                   |  3 +-
+ drivers/gpu/drm/omapdrm/omap_encoder.c         |  4 +-
+ include/drm/drm_bridge.h                       | 52 ++++++++++++++++++++++++--
+ 6 files changed, 58 insertions(+), 19 deletions(-)
+---
+base-commit: d2b48f2b30f25997a1ae1ad0cefac68c25f8c330
+change-id: 20250718-drm-bridge-alloc-getput-for_each_bridge-f141ae17b65a
+prerequisite-message-id: <20250620011616.118-1-kernel@airkyi.com>
+prerequisite-patch-id: ba5a6a15ea02bcee387db0e92ffb4cd0e1fbf816
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Luca Ceresoli <luca.ceresoli@bootlin.com>
+
