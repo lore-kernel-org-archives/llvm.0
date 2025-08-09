@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433FD2BE03B;
-	Sat,  9 Aug 2025 16:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF2327605A;
+	Sat,  9 Aug 2025 19:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754758464; cv=none; b=icc5M9K0psnKf/bNoxKfiu49ISmOFWJlj04WPGBEDY6IZchA3twcR1A7l/2xNIoCKV0Iq74YNwJHdvOggz3bP9zJ+YtXJhK79hV/PM2cwE2ffCDclbJw6WLGb/CrPaWxdX0H6i4QDnUrVf4JY7Sa0Qyukmnc37DPnW3TYxgiiOo=
+	t=1754768517; cv=none; b=fGN/NCelJZltwJWid43B/yKeI1ToBmy/6m/PHt7F+7KfGPui6hnjGfcXVKSp0L0FkYiEj/SCVbGfWzdzd8pB1fuavom9rGSiPDxmO+Cz03d2YqOp2ld3tf/tMAtyjE2sweCgHRHh46RxttiFQ4D/6KZXYXvCahHK2gddmBtOmcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754758464; c=relaxed/simple;
-	bh=1RsuJTMoFXnfPBziGUUj5wDoFHK6icPOtl/VMggGH1E=;
+	s=arc-20240116; t=1754768517; c=relaxed/simple;
+	bh=06Kjz4k4lavK7HKHl+Pl1kS3zK+LVKSZHsr67K/P29g=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AjfRW6TmviDjlM1iVYK0uo7oSjvniREWdVrUlLnArejZ2mznxsGNuVrN7fbXCn2Dfah4HQI45UKwXyn03a0zPfoeWrTNsA22CVuZNzMe6QXTyB2cfglX8WFJhp0Wwcw1c1Rd7O2pMHWqAL3Oo3oTxl2FeEHxeNHBWsdLV2/hBfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K4PUKx6X; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=u2jOD05idWxbAL/sELGFlVUYaF4M1azQ9CzJrd5Mz8n1iYih143oppSEfwmm/IWhf92kGXliPw1SDTKE53FyUxJA21JE9Kp3tVQePXMLFMl5MZAhjaQz61IAzbDkHcqrjAYwoEVMaJETwPIVKLbcaag366erZTtJYGyMkkih1BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lrmTWifE; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K4PUKx6X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lrmTWifE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754758462; x=1786294462;
+  t=1754768516; x=1786304516;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1RsuJTMoFXnfPBziGUUj5wDoFHK6icPOtl/VMggGH1E=;
-  b=K4PUKx6XwlxF/gMzQmc0S6XTOYNYDvyCtjGDeBWrqGVbwgUQu0pB9Z4/
-   /XtFYfQviXPlghr8IfSgtKPBHwXG3FBEhnRcDYvKMEKjtFi/PXS99Cfbx
-   7ytvQQSgmHMYXQsvRaDS1HRyNOpsqBIV3fBeC0PzIekctF4V7zPQIyOXT
-   4C18D/wChBEMqpEiHYA7g2KMfO1nU45BvqYBSqeEMG7fIRLmyjrB/xV5n
-   JSxt8jcFt8UkqxsT6BKdOPXNFYdiQ73w6QfSjSAd5k1MrUVS9yD0mQWcV
-   jAB7X6T9cCGjmcKd09FnyH6mDRZmNMLGUdAS0/W2Xe+1JufMXyM8r9JUR
-   g==;
-X-CSE-ConnectionGUID: 9tn8f0LcR+aXWMl2erxYYg==
-X-CSE-MsgGUID: fsFRzVauRm69MXYkobahaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11516"; a="68158205"
+  bh=06Kjz4k4lavK7HKHl+Pl1kS3zK+LVKSZHsr67K/P29g=;
+  b=lrmTWifEDlGh72mv+TcT1z8dga2tiwqNQ1M17Ofb+R5+GdZYbx/FFuOu
+   mOAXPiwCv+Ee3u7/OHuOqMVOgrNzDnH7hPw+RFCcJGcUucZM9TzaXDjsf
+   hcwH3du9pC/0xyCW/NeQeH+N4tUAihZXL60zGW/Uh5imLMQHRnx5tL9le
+   A+V3YB11gM6uRBtFGDzTAdreR4Vx5s8RshREFdZeigRvezkynDkeT5P9s
+   XBX0Kk4IRwVS6Vn6rBGjS9QGkbkEWjQQZ/jo23YQBIsp66b8LrR+jTUdM
+   wiJHKCdWZqnHMdonzjpx9xkaAts3MsruI3tqL2gprOY4u3zymahRIHeuk
+   A==;
+X-CSE-ConnectionGUID: 9ITbp5BDSfm0Y8GYaCdltw==
+X-CSE-MsgGUID: RgXuoaBLRTOurV3or7DdFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11516"; a="57003106"
 X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="68158205"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 09:54:21 -0700
-X-CSE-ConnectionGUID: p+nN522HQN2/jgwZFdTozA==
-X-CSE-MsgGUID: afexTkLKTjyPqv6mWWLScg==
+   d="scan'208";a="57003106"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 12:41:55 -0700
+X-CSE-ConnectionGUID: iO5wYnCDQYu33ub9GsimoQ==
+X-CSE-MsgGUID: /OKTt80pTkKEbSvIQti18w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="165209539"
+   d="scan'208";a="202765763"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 09 Aug 2025 09:54:20 -0700
+  by orviesa001.jf.intel.com with ESMTP; 09 Aug 2025 12:41:53 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ukmpl-0004wO-0R;
-	Sat, 09 Aug 2025 16:54:17 +0000
-Date: Sun, 10 Aug 2025 00:53:06 +0800
+	id 1ukpQu-00051g-0M;
+	Sat, 09 Aug 2025 19:41:01 +0000
+Date: Sun, 10 Aug 2025 03:40:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:kdevops 43/47] net/sunrpc/svcsock.c:1294:11: warning:
- format specifies type 'int' but the argument has type 'unsigned long'
-Message-ID: <202508100051.Rvyh7vD8-lkp@intel.com>
+To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-new 72/77] arch/um/include/asm/kasan.h:29:2: error: UML
+ does not work in KASAN_INLINE mode with STATIC_LINK enabled!
+Message-ID: <202508100304.92cGHfSj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,87 +64,138 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
-head:   78cea35b7fffda7d71482e5881bcd3e4a30b0acb
-commit: 562305ff2066e7dd88d087577f23fab6b6a76b2d [43/47] sunrpc: fix pr_notice in svc_tcp_sendto() to show correct length
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250810/202508100051.Rvyh7vD8-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250810/202508100051.Rvyh7vD8-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+head:   53c448023185717d0ed56b5546dc2be405da92ff
+commit: 5594d8bbb347972a06d703063bb65cccc8820c84 [72/77] kasan: introduce ARCH_DEFER_KASAN and unify static key across modes
+config: um-randconfig-002-20250810 (https://download.01.org/0day-ci/archive/20250810/202508100304.92cGHfSj-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 3769ce013be2879bf0b329c14a16f5cb766f26ce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250810/202508100304.92cGHfSj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508100051.Rvyh7vD8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508100304.92cGHfSj-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/sunrpc/svcsock.c:1294:11: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-    1291 |         pr_notice("rpc-srv/tcp: %s: %s %d when sending %d bytes - shutting down socket\n",
-         |                                                        ~~
-         |                                                        %lu
-    1292 |                   xprt->xpt_server->sv_name,
-    1293 |                   (sent < 0) ? "got error" : "sent",
-    1294 |                   sent, xdr->len + sizeof(marker));
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:577:36: note: expanded from macro 'pr_notice'
-     577 |         printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-         |                                   ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:514:60: note: expanded from macro 'printk'
-     514 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:486:19: note: expanded from macro 'printk_index_wrap'
-     486 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:5:
+   In file included from include/linux/crypto.h:18:
+   In file included from include/linux/slab.h:260:
+   In file included from include/linux/kasan.h:21:
+>> arch/um/include/asm/kasan.h:29:2: error: UML does not work in KASAN_INLINE mode with STATIC_LINK enabled!
+      29 | #error UML does not work in KASAN_INLINE mode with STATIC_LINK enabled!
+         |  ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:7:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:116:5: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     116 |                         (set1->sig[1] == set2->sig[1]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
 
 
-vim +1294 net/sunrpc/svcsock.c
+vim +29 arch/um/include/asm/kasan.h
 
-  1255	
-  1256	/**
-  1257	 * svc_tcp_sendto - Send out a reply on a TCP socket
-  1258	 * @rqstp: completed svc_rqst
-  1259	 *
-  1260	 * xpt_mutex ensures @rqstp's whole message is written to the socket
-  1261	 * without interruption.
-  1262	 *
-  1263	 * Returns the number of bytes sent, or a negative errno.
-  1264	 */
-  1265	static int svc_tcp_sendto(struct svc_rqst *rqstp)
-  1266	{
-  1267		struct svc_xprt *xprt = rqstp->rq_xprt;
-  1268		struct svc_sock	*svsk = container_of(xprt, struct svc_sock, sk_xprt);
-  1269		struct xdr_buf *xdr = &rqstp->rq_res;
-  1270		rpc_fraghdr marker = cpu_to_be32(RPC_LAST_STREAM_FRAGMENT |
-  1271						 (u32)xdr->len);
-  1272		int sent;
-  1273	
-  1274		svc_tcp_release_ctxt(xprt, rqstp->rq_xprt_ctxt);
-  1275		rqstp->rq_xprt_ctxt = NULL;
-  1276	
-  1277		mutex_lock(&xprt->xpt_mutex);
-  1278		if (svc_xprt_is_dead(xprt))
-  1279			goto out_notconn;
-  1280		sent = svc_tcp_sendmsg(svsk, rqstp, marker);
-  1281		trace_svcsock_tcp_send(xprt, sent);
-  1282		if (sent < 0 || sent != (xdr->len + sizeof(marker)))
-  1283			goto out_close;
-  1284		mutex_unlock(&xprt->xpt_mutex);
-  1285		return sent;
-  1286	
-  1287	out_notconn:
-  1288		mutex_unlock(&xprt->xpt_mutex);
-  1289		return -ENOTCONN;
-  1290	out_close:
-  1291		pr_notice("rpc-srv/tcp: %s: %s %d when sending %d bytes - shutting down socket\n",
-  1292			  xprt->xpt_server->sv_name,
-  1293			  (sent < 0) ? "got error" : "sent",
-> 1294			  sent, xdr->len + sizeof(marker));
-  1295		svc_xprt_deferred_close(xprt);
-  1296		mutex_unlock(&xprt->xpt_mutex);
-  1297		return -EAGAIN;
-  1298	}
-  1299	
+    27	
+    28	#if defined(CONFIG_STATIC_LINK) && defined(CONFIG_KASAN_INLINE)
+  > 29	#error UML does not work in KASAN_INLINE mode with STATIC_LINK enabled!
+    30	#endif
+    31	#else
+    32	static inline void kasan_init(void) { }
+    33	#endif /* CONFIG_KASAN */
+    34	
 
 -- 
 0-DAY CI Kernel Test Service
