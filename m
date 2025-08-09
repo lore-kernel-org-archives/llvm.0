@@ -1,64 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9BA146A72;
-	Sat,  9 Aug 2025 08:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F111376F1
+	for <llvm@lists.linux.dev>; Sat,  9 Aug 2025 08:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754727441; cv=none; b=VgDeREJb58+KLmg+v++ZSNg9xyPabXLRFKkWllJ0oH5fDzQ3zyWnhK5R9TI2bouIAL9FLVww+pHwhvHRVpRgZWxzeMNvgAPsIFRC2oS2E1FxLoak3YdaitrbkvHYUO22j72Wt79+xQmtgsxIL7WcCpultGJp3roNsb1wmKyJ+lc=
+	t=1754727642; cv=none; b=AeQ8CI3bO10jZJFuBA/MUMnRxZooLXuxRWMWa1Ibh3q8KFZSYXBwkcF3Ah8PDf+K/7vF+I8/1Jtj+O8jFp6FPd4ZdN0OPJd4YbwRObvMPTH2vqWNcA9IW4F+AbhbH+7bdrlLskl3FsOiQAzx9+VSztxLz+Lk/qv/V7dpNVPqEDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754727441; c=relaxed/simple;
-	bh=2YSZy7Wa2RklNltVg30MuT+diQJQvzunPDVhj+9/SR0=;
+	s=arc-20240116; t=1754727642; c=relaxed/simple;
+	bh=SGjFGOE4lQDZczOSBQm6XCZj/aKwb7yDyErC94c8G/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qckTwOibGnEWcLSi7Ppn6uSGiBxuSCal7NIc5xynOSnFTW1Verze25SoHOJEOSr3mVibHR0a0y7UTjp6DF3DvEqPkbeIfQaaLpZNkvxr+ijG+orENYDMJvgzh/jmD3CMXuc/AQhMf+3Vvg6bUmWSi22fpvGz/sVs3pJlm3QBZDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ievb2aAE; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ueu691e+3x13S6Skkm7sTt9e18Y/O7+ZPWB2rcHuO3B+NEsQxW1ECkoyWd7aLA5raUdqKLAvcUEdBKaXBr92TBxvJIHcZ45ynAfyrniyWrpErRr7lduahhWNJi0kEURYmcv41cv/ekklJbBaDyAhWV1Nk/P1t2g++Ykv0sObu00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MAGfaBA8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ievb2aAE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754727439; x=1786263439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2YSZy7Wa2RklNltVg30MuT+diQJQvzunPDVhj+9/SR0=;
-  b=ievb2aAEsLJVJ3AaOpwTeddO4F/Eh3HqZiId5BGuuRBGhzMWiydFWR61
-   2euJGDZXlrZoQeFqUPWKYExn+xWGW7IblYns94Bcm5sE07Tz7urDzoz7a
-   50gXj66qnMjeEVmWOBllIqVgh2LBAddsFredGulM7EDuOEnS3t4FUZEjM
-   Kz//Hds28/Puj99ESXUaTaW/NdZh++l3BTxnHvYQWO8ZjehBfioSCoERN
-   pP+KcL9LqU8tFQZwjWVpuSI8/cM5V6PgZ3Wmae7plGnp/8vkBy8mLNR85
-   NCicxJnhGHA9itm85FVmz8lGvNUicDodIWv0XoT9+IbODp7ENEZo7hB/J
-   Q==;
-X-CSE-ConnectionGUID: +fDFbnNVSvGKhoqcSbG/Eg==
-X-CSE-MsgGUID: KPWwVr6rQTKiCjA4F3kSgQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11515"; a="60864069"
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="60864069"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 01:17:18 -0700
-X-CSE-ConnectionGUID: LZnx3N6iS1u8B8S2+Ekigw==
-X-CSE-MsgGUID: H05uyA1fQV6ht5YdS4wrqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="165816372"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 09 Aug 2025 01:17:16 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ukelN-0004gc-1G;
-	Sat, 09 Aug 2025 08:17:13 +0000
-Date: Sat, 9 Aug 2025 16:17:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abinash Singh <abinashsinghlalotra@gmail.com>, bvanassche@acm.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	James.Bottomley@hansenpartnership.com,
-	abinashsinghlalotra@gmail.com, dlemoal@kernel.org,
-	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-	martin.petersen@oracle.com
-Subject: Re: [PATCH v5 2/2] scsi: sd: Fix build warning in
- sd_revalidate_disk()
-Message-ID: <202508091640.gvFPjI6O-lkp@intel.com>
-References: <20250808205819.29517-3-abinashsinghlalotra@gmail.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MAGfaBA8"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5793ZCJN013377
+	for <llvm@lists.linux.dev>; Sat, 9 Aug 2025 08:20:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=2H9KRizh8IleLkCoQjNl9JsL
+	yZ+FWKuglV3/DdZPO8Q=; b=MAGfaBA8T+Ra1m1wA7iBsHcVPnWichOrkJ6Hwa2P
+	MDJWxFoJIyAChoNv7Whs+9DgoVdmCqEWVu91q0gSjXWHwtBMxxa7RuLZiUtG8Fag
+	QMcPIvqAgLjCrqE+tFwUV9trMjCN/M9RtQpFw/Z9rPC9azPkItP4yxOT2P00z3dO
+	+CHGX8SCr3dCjUy7dEKxEjs01qM7fNulbQI6Js+koHbfqr0p4BNRbI0ecCQoCLI1
+	1GsUbAyQKCLD1ohKLTUErVQCdGt89ERmq7byNZcOKB6YrpPAFQHOFn8Zqzkt/SJk
+	EVpAvcE8TihcMBj3HLOMv+ayG5eEIRvv2Pku9ZniMjOZKA==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48dxj40an4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Sat, 09 Aug 2025 08:20:40 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4aedd0b5af9so58304231cf.0
+        for <llvm@lists.linux.dev>; Sat, 09 Aug 2025 01:20:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754727639; x=1755332439;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2H9KRizh8IleLkCoQjNl9JsLyZ+FWKuglV3/DdZPO8Q=;
+        b=HxFB+ewKMaHK2bSTO1UobLQMY13HoM7N+66mzdY4rxROZ6XABXC7WHm7KH3jLu8Sf3
+         Ek59F5pUyN1fIMG8yLzdFJ0YqmY4xgxovPG6Uaj1Y+pR9/vwP37PiPDpMp0FkNt6zDMY
+         LKqc6g8qZGzPDo4HdDYXiuWdx3xtb2+Ciohll6bBXr3O3sbaHRTi2spgm40u7Vn1kSXK
+         gR7pkY0PdDewPjp+f2B0AEgzD9KHTzr0czzPapq5TZnReAJZdFRttORsegD5oGYF4nf7
+         4lW3kNh5qAaMmQ0BGpaSDup64dhOV81q8GUsEkvs6zmr1DwH58in1wC2atWNvxJpS2jy
+         xc1g==
+X-Forwarded-Encrypted: i=1; AJvYcCVZT8XzmXbihmMUO6mFgCk2qj0zVVsgQ9P9iB5sDvAAR7WpJAU+zxve6VF0fmlvUkhd43bM@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywuiutzwow7SCyEWo0vp6ssRyCsXMvQpDEuaVdyC0rS1kylAI2E
+	gVLtX/JqQkmNlrRwEXuZN0ohRmmcSWOfSoq9fC3ObW3iG664OZ/JwPWsdPQ+ZLktkqDjvautFK3
+	ctSzl2ENxWkSI64HD0hzHsMLxNhRMaSXhAHVzsSgo5rjsod3ohAfOjJqL
+X-Gm-Gg: ASbGncuQd/BLxUpydzJpRQuyIdEZ+kGlrVyv96pUkU2Pkj9ivY5OKbn1KHqL1DP3Xzu
+	PU2D1LBMvhxuaZQtV3DujCmhRShgGwxG2wJ6IMhASlGKZ++Ll3YTR9cASKs6hGuCrKiRBWijJlZ
+	j7bCAYBTlm7LStKITp613zsy1MU81QU6c5RRyBKoAfq0zBaTUp0yGsFwZD1QznFcf2+pwShlfN9
+	yYK81k1tXgxpzk10ilbgMPaMnlgwPUvBAWv+OkRJ7+s31q6cHaCoc7LmxQVpzk/V5fa1QwWCqqm
+	8EBXO781diszAhAkiIpbmdLgJ1TZMPgw+d+eBMFqF6oCrYSv3neEG0eh3j/1hvng+Bbpuh9Owct
+	0UM5QyphxYjllpNDE9wTtKAM6RF9nRCpvfrPNpQ+8n7h013NJ4d8k
+X-Received: by 2002:a05:622a:20c:b0:4b0:6d53:a0fc with SMTP id d75a77b69052e-4b0af4deaafmr103917481cf.7.1754727639481;
+        Sat, 09 Aug 2025 01:20:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGaybZqS8e1II26PBLtR2MEev8RqN/YcLWWOjMTMd4jMxYQpAM2kTd+wUuQlaFFQ87m9qtgiQ==
+X-Received: by 2002:a05:622a:20c:b0:4b0:6d53:a0fc with SMTP id d75a77b69052e-4b0af4deaafmr103917111cf.7.1754727638990;
+        Sat, 09 Aug 2025 01:20:38 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cc8d64512sm146866e87.11.2025.08.09.01.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Aug 2025 01:20:36 -0700 (PDT)
+Date: Sat, 9 Aug 2025 11:20:34 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robin.clark@oss.qualcomm.com>,
+        Dmitry Baryshkov <lumag@kernel.org>, David Airlie <airlied@gmail.com>,
+        Simona Vetter <simona@ffwll.ch>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Antonino Maniscalco <antomani103@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Jun Nie <jun.nie@linaro.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/msm/dpu: avoid uninitialized variable use
+Message-ID: <fcgmsw66wi6eqtcwhcz5yc6migoauygaztqumztseo7uu4a62g@bg5xnnd4eosw>
+References: <20250807072016.4109051-1-arnd@kernel.org>
+ <ouan6tfmoefwuvs7wmhpzjdwmxfhqh3ad26j5tmwdugnq7ieda@ddw6dfqtq27g>
+ <20250807143444.GA1009053@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,190 +97,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250808205819.29517-3-abinashsinghlalotra@gmail.com>
+In-Reply-To: <20250807143444.GA1009053@ax162>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA5MDAyNyBTYWx0ZWRfXyZaXLjtz+qOi
+ enKa1A3Q+YS6TvLWiUVrNJKiUH7HyNmTofrMJbn7KLpY+yu/mxN8xXkxiHYZ+6MyD7nvv11oPDG
+ j38+f3bqtuCR8P2VfgsF/hONzOAXNFGIJFvUpsVWT9LGkh1Mlj/9VMMH78dccRMCafd2idiDoob
+ Z+qWsoMky3bOzgL28JG8vYxUxOUgbESoRQPm0r90yEhPHrqn50gtC9wBjY97rmsr7+wMR+fRpur
+ VEvL4s3c/JqS7ux/u1CCjoq7jBevxnc5hNUj+nSFQF46+E3Qv7eMMCc44hLQXlserNMmc+E/a1c
+ v32tPNnaOxF2mqqk9tw5Hk/1c3yyPYPNQPqi5tK0eP504GcgBL0zEIvNLpT56iyu/j+wkrLG5B0
+ GaopfIZO
+X-Authority-Analysis: v=2.4 cv=fvDcZE4f c=1 sm=1 tr=0 ts=689704d8 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=yl-pN8RVu-4QMKwhACwA:9 a=CjuIK1q_8ugA:10
+ a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-ORIG-GUID: C1bmSy3b8QnXTm2xf_O5NLjC75Uczras
+X-Proofpoint-GUID: C1bmSy3b8QnXTm2xf_O5NLjC75Uczras
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-09_02,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 impostorscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508090027
 
-Hi Abinash,
+On Thu, Aug 07, 2025 at 07:34:44AM -0700, Nathan Chancellor wrote:
+> On Thu, Aug 07, 2025 at 11:09:38AM +0300, Dmitry Baryshkov wrote:
+> > Having no plane->crtc is a valid setting and it is handled inside
+> > drm_atomic_helper_check_plane_state() by setting plane_state->visible =
+> > false and returning early. Setting crtc_state to NULL is a correct fix.
+> > Could you please send it?
+> 
+> I sent this fix three weeks ago, could this be applied?
 
-kernel test robot noticed the following build errors:
+It will be picked up for -rc2 (hopefully)
 
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next linus/master v6.16 next-20250808]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Abinash-Singh/scsi-sd-make-sd_revalidate_disk-return-void/20250809-045941
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20250808205819.29517-3-abinashsinghlalotra%40gmail.com
-patch subject: [PATCH v5 2/2] scsi: sd: Fix build warning in sd_revalidate_disk()
-config: x86_64-buildonly-randconfig-002-20250809 (https://download.01.org/0day-ci/archive/20250809/202508091640.gvFPjI6O-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250809/202508091640.gvFPjI6O-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508091640.gvFPjI6O-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/scsi/sd.c:3709:16: error: call to undeclared function 'size'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3709 |         lim = kmalloc(size(*lim), GFP_KERNEL);
-         |                       ^
-   drivers/scsi/sd.c:3709:16: note: did you mean 'ksize'?
-   include/linux/slab.h:491:8: note: 'ksize' declared here
-     491 | size_t ksize(const void *objp);
-         |        ^
-   1 error generated.
-
-
-vim +/size +3709 drivers/scsi/sd.c
-
-  3683	
-  3684	/**
-  3685	 *	sd_revalidate_disk - called the first time a new disk is seen,
-  3686	 *	performs disk spin up, read_capacity, etc.
-  3687	 *	@disk: struct gendisk we care about
-  3688	 **/
-  3689	static void sd_revalidate_disk(struct gendisk *disk)
-  3690	{
-  3691		struct scsi_disk *sdkp = scsi_disk(disk);
-  3692		struct scsi_device *sdp = sdkp->device;
-  3693		sector_t old_capacity = sdkp->capacity;
-  3694		struct queue_limits *lim = NULL;
-  3695		unsigned char *buffer = NULL;
-  3696		unsigned int dev_max;
-  3697		int err;
-  3698	
-  3699		SCSI_LOG_HLQUEUE(3, sd_printk(KERN_INFO, sdkp,
-  3700					      "sd_revalidate_disk\n"));
-  3701	
-  3702		/*
-  3703		 * If the device is offline, don't try and read capacity or any
-  3704		 * of the other niceties.
-  3705		 */
-  3706		if (!scsi_device_online(sdp))
-  3707			goto out;
-  3708	
-> 3709		lim = kmalloc(size(*lim), GFP_KERNEL);
-  3710		if (!lim) {
-  3711			sd_printk(KERN_WARNING, sdkp,
-  3712				"sd_revalidate_disk: Disk limit allocation failure.\n");
-  3713			goto out;
-  3714		}
-  3715	
-  3716		buffer = kmalloc(SD_BUF_SIZE, GFP_KERNEL);
-  3717		if (!buffer) {
-  3718			sd_printk(KERN_WARNING, sdkp, "sd_revalidate_disk: Memory "
-  3719				  "allocation failure.\n");
-  3720			goto out;
-  3721		}
-  3722	
-  3723		sd_spinup_disk(sdkp);
-  3724	
-  3725		*lim = queue_limits_start_update(sdkp->disk->queue);
-  3726	
-  3727		/*
-  3728		 * Without media there is no reason to ask; moreover, some devices
-  3729		 * react badly if we do.
-  3730		 */
-  3731		if (sdkp->media_present) {
-  3732			sd_read_capacity(sdkp, lim, buffer);
-  3733			/*
-  3734			 * Some USB/UAS devices return generic values for mode pages
-  3735			 * until the media has been accessed. Trigger a READ operation
-  3736			 * to force the device to populate mode pages.
-  3737			 */
-  3738			if (sdp->read_before_ms)
-  3739				sd_read_block_zero(sdkp);
-  3740			/*
-  3741			 * set the default to rotational.  All non-rotational devices
-  3742			 * support the block characteristics VPD page, which will
-  3743			 * cause this to be updated correctly and any device which
-  3744			 * doesn't support it should be treated as rotational.
-  3745			 */
-  3746			lim->features |= (BLK_FEAT_ROTATIONAL | BLK_FEAT_ADD_RANDOM);
-  3747	
-  3748			if (scsi_device_supports_vpd(sdp)) {
-  3749				sd_read_block_provisioning(sdkp);
-  3750				sd_read_block_limits(sdkp, lim);
-  3751				sd_read_block_limits_ext(sdkp);
-  3752				sd_read_block_characteristics(sdkp, lim);
-  3753				sd_zbc_read_zones(sdkp, lim, buffer);
-  3754			}
-  3755	
-  3756			sd_config_discard(sdkp, lim, sd_discard_mode(sdkp));
-  3757	
-  3758			sd_print_capacity(sdkp, old_capacity);
-  3759	
-  3760			sd_read_write_protect_flag(sdkp, buffer);
-  3761			sd_read_cache_type(sdkp, buffer);
-  3762			sd_read_io_hints(sdkp, buffer);
-  3763			sd_read_app_tag_own(sdkp, buffer);
-  3764			sd_read_write_same(sdkp, buffer);
-  3765			sd_read_security(sdkp, buffer);
-  3766			sd_config_protection(sdkp, lim);
-  3767		}
-  3768	
-  3769		/*
-  3770		 * We now have all cache related info, determine how we deal
-  3771		 * with flush requests.
-  3772		 */
-  3773		sd_set_flush_flag(sdkp, lim);
-  3774	
-  3775		/* Initial block count limit based on CDB TRANSFER LENGTH field size. */
-  3776		dev_max = sdp->use_16_for_rw ? SD_MAX_XFER_BLOCKS : SD_DEF_XFER_BLOCKS;
-  3777	
-  3778		/* Some devices report a maximum block count for READ/WRITE requests. */
-  3779		dev_max = min_not_zero(dev_max, sdkp->max_xfer_blocks);
-  3780		lim->max_dev_sectors = logical_to_sectors(sdp, dev_max);
-  3781	
-  3782		if (sd_validate_min_xfer_size(sdkp))
-  3783			lim->io_min = logical_to_bytes(sdp, sdkp->min_xfer_blocks);
-  3784		else
-  3785			lim->io_min = 0;
-  3786	
-  3787		/*
-  3788		 * Limit default to SCSI host optimal sector limit if set. There may be
-  3789		 * an impact on performance for when the size of a request exceeds this
-  3790		 * host limit.
-  3791		 */
-  3792		lim->io_opt = sdp->host->opt_sectors << SECTOR_SHIFT;
-  3793		if (sd_validate_opt_xfer_size(sdkp, dev_max)) {
-  3794			lim->io_opt = min_not_zero(lim->io_opt,
-  3795					logical_to_bytes(sdp, sdkp->opt_xfer_blocks));
-  3796		}
-  3797	
-  3798		sdkp->first_scan = 0;
-  3799	
-  3800		set_capacity_and_notify(disk, logical_to_sectors(sdp, sdkp->capacity));
-  3801		sd_config_write_same(sdkp, lim);
-  3802	
-  3803		err = queue_limits_commit_update_frozen(sdkp->disk->queue, lim);
-  3804		if (err)
-  3805			goto out;
-  3806	
-  3807		/*
-  3808		 * Query concurrent positioning ranges after
-  3809		 * queue_limits_commit_update() unlocked q->limits_lock to avoid
-  3810		 * deadlock with q->sysfs_dir_lock and q->sysfs_lock.
-  3811		 */
-  3812		if (sdkp->media_present && scsi_device_supports_vpd(sdp))
-  3813			sd_read_cpr(sdkp);
-  3814	
-  3815		/*
-  3816		 * For a zoned drive, revalidating the zones can be done only once
-  3817		 * the gendisk capacity is set. So if this fails, set back the gendisk
-  3818		 * capacity to 0.
-  3819		 */
-  3820		if (sd_zbc_revalidate_zones(sdkp))
-  3821			set_capacity_and_notify(disk, 0);
-  3822	
-  3823	 out:
-  3824		kfree(lim);
-  3825		kfree(buffer);
-  3826	
+> 
+> https://lore.kernel.org/20250715-drm-msm-fix-const-uninit-warning-v1-1-d6a366fd9a32@kernel.org/
+> 
+> Cheers,
+> Nathan
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
