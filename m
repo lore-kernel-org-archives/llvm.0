@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F6E185E7F;
-	Sat,  9 Aug 2025 15:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433FD2BE03B;
+	Sat,  9 Aug 2025 16:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754755109; cv=none; b=W+Mp+TqGd2w7loBdLkBRSSjKwYiJfpg1dLYYaxukZecGvV/jdBNOiXHdk6JWHWS3isfJ24A/9j9AM73hKABUC4BUJMLa/ST5BNKS2N0iue3atkprYAwknHkIDf6t/3CDVXHuV3Ia0iQsVrq4DQoCZE4yD04BAWRmflRXMm2KqUM=
+	t=1754758464; cv=none; b=icc5M9K0psnKf/bNoxKfiu49ISmOFWJlj04WPGBEDY6IZchA3twcR1A7l/2xNIoCKV0Iq74YNwJHdvOggz3bP9zJ+YtXJhK79hV/PM2cwE2ffCDclbJw6WLGb/CrPaWxdX0H6i4QDnUrVf4JY7Sa0Qyukmnc37DPnW3TYxgiiOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754755109; c=relaxed/simple;
-	bh=8oMqUQcCj7807xg8q4FugL5aneXJXllnEIM5FfRg0kA=;
+	s=arc-20240116; t=1754758464; c=relaxed/simple;
+	bh=1RsuJTMoFXnfPBziGUUj5wDoFHK6icPOtl/VMggGH1E=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iNeFgNVrFP18i+eWRMSeVAAD1uDDYZL8BSt4qiDRJXIcEuNRb65tDQJjAIC7/k+8C4bhOcnvNuGV3DZRqbRc1rObTPwyexiQayuDFCamF/Uny2ve0hyFNQEU9c5hyEWPFkY84bOXssRUAoNKv56PMPrHKvyVep1ISmJM5nLejkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=co06f0tl; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=AjfRW6TmviDjlM1iVYK0uo7oSjvniREWdVrUlLnArejZ2mznxsGNuVrN7fbXCn2Dfah4HQI45UKwXyn03a0zPfoeWrTNsA22CVuZNzMe6QXTyB2cfglX8WFJhp0Wwcw1c1Rd7O2pMHWqAL3Oo3oTxl2FeEHxeNHBWsdLV2/hBfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K4PUKx6X; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="co06f0tl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K4PUKx6X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754755108; x=1786291108;
+  t=1754758462; x=1786294462;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8oMqUQcCj7807xg8q4FugL5aneXJXllnEIM5FfRg0kA=;
-  b=co06f0tlZn8l2hbaWjCA3Mh9A5iO0FQqhd6pMy4TydP2BLWR/bXYTJYS
-   kEm4JkUJzew0MXY6PKQoMRrORfMa1nWSPTFqRZBS0zHrRJlwYZ3PGtZlg
-   2H30x+kwnNB0bmUKXLxdIKtTjYrZGdNOz1+3mQgGFMZOWXaNUExU+nldd
-   QIbFLsLrm6BhLTSxZOfeUhEqapuxuIeFlhLsOO9LsiBsadyTjf3Ms+Nwo
-   5KWqu0TQzPOoYFCaFWJQCwK536JPp5zwpZCO4KQSiUNL213NxxeJdnswM
-   ULR01lOaPsU9AAp5yrMg7NiRhojwPgrsE3tS/0TJyDsqD5YhopfSVLf9P
-   Q==;
-X-CSE-ConnectionGUID: 6RR24PiLSlyGvqZ/wpwIOQ==
-X-CSE-MsgGUID: gsndcvgNTz2z8m1fUGNpOg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11516"; a="60876413"
+  bh=1RsuJTMoFXnfPBziGUUj5wDoFHK6icPOtl/VMggGH1E=;
+  b=K4PUKx6XwlxF/gMzQmc0S6XTOYNYDvyCtjGDeBWrqGVbwgUQu0pB9Z4/
+   /XtFYfQviXPlghr8IfSgtKPBHwXG3FBEhnRcDYvKMEKjtFi/PXS99Cfbx
+   7ytvQQSgmHMYXQsvRaDS1HRyNOpsqBIV3fBeC0PzIekctF4V7zPQIyOXT
+   4C18D/wChBEMqpEiHYA7g2KMfO1nU45BvqYBSqeEMG7fIRLmyjrB/xV5n
+   JSxt8jcFt8UkqxsT6BKdOPXNFYdiQ73w6QfSjSAd5k1MrUVS9yD0mQWcV
+   jAB7X6T9cCGjmcKd09FnyH6mDRZmNMLGUdAS0/W2Xe+1JufMXyM8r9JUR
+   g==;
+X-CSE-ConnectionGUID: 9tn8f0LcR+aXWMl2erxYYg==
+X-CSE-MsgGUID: fsFRzVauRm69MXYkobahaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11516"; a="68158205"
 X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="60876413"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 08:58:27 -0700
-X-CSE-ConnectionGUID: cXeVYyzCStqPMSUY3n7Xag==
-X-CSE-MsgGUID: A5IBsZwxTgmXkbVaIOoWlQ==
+   d="scan'208";a="68158205"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2025 09:54:21 -0700
+X-CSE-ConnectionGUID: p+nN522HQN2/jgwZFdTozA==
+X-CSE-MsgGUID: afexTkLKTjyPqv6mWWLScg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="170913817"
-Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
-  by orviesa005.jf.intel.com with ESMTP; 09 Aug 2025 08:58:26 -0700
-Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+   d="scan'208";a="165209539"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 09 Aug 2025 09:54:20 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uklxf-0002pb-1S;
-	Sat, 09 Aug 2025 15:58:23 +0000
-Date: Sat, 9 Aug 2025 17:57:32 +0200
+	id 1ukmpl-0004wO-0R;
+	Sat, 09 Aug 2025 16:54:17 +0000
+Date: Sun, 10 Aug 2025 00:53:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arnd-playground:to_build 21/21] drivers/mfd/ezx-pcap.c:197:11:
- error: call to undeclared function 'gpio_get_value'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202508091701.AhFNLKOZ-lkp@intel.com>
+Subject: [jlayton:kdevops 43/47] net/sunrpc/svcsock.c:1294:11: warning:
+ format specifies type 'int' but the argument has type 'unsigned long'
+Message-ID: <202508100051.Rvyh7vD8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,68 +62,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git to_build
-head:   c0a2b3cd5b78ddb721e53baf675d7164a118bc2d
-commit: c0a2b3cd5b78ddb721e53baf675d7164a118bc2d [21/21] gpiolib: turn off legacy interface by default
-config: sparc64-randconfig-2005-20250809 (https://download.01.org/0day-ci/archive/20250809/202508091701.AhFNLKOZ-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7d886fab74d4037d654d02bed24dd97c0ba863d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250809/202508091701.AhFNLKOZ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   78cea35b7fffda7d71482e5881bcd3e4a30b0acb
+commit: 562305ff2066e7dd88d087577f23fab6b6a76b2d [43/47] sunrpc: fix pr_notice in svc_tcp_sendto() to show correct length
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250810/202508100051.Rvyh7vD8-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250810/202508100051.Rvyh7vD8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508091701.AhFNLKOZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508100051.Rvyh7vD8-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/mfd/ezx-pcap.c:197:11: error: call to undeclared function 'gpio_get_value'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     197 |         } while (gpio_get_value(pdata->gpio));
-         |                  ^
-   drivers/mfd/ezx-pcap.c:197:11: note: did you mean 'gpiod_get_value'?
-   include/linux/gpio/consumer.h:117:5: note: 'gpiod_get_value' declared here
-     117 | int gpiod_get_value(const struct gpio_desc *desc);
-         |     ^
-   1 error generated.
+>> net/sunrpc/svcsock.c:1294:11: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+    1291 |         pr_notice("rpc-srv/tcp: %s: %s %d when sending %d bytes - shutting down socket\n",
+         |                                                        ~~
+         |                                                        %lu
+    1292 |                   xprt->xpt_server->sv_name,
+    1293 |                   (sent < 0) ? "got error" : "sent",
+    1294 |                   sent, xdr->len + sizeof(marker));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:577:36: note: expanded from macro 'pr_notice'
+     577 |         printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
+         |                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:514:60: note: expanded from macro 'printk'
+     514 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:486:19: note: expanded from macro 'printk_index_wrap'
+     486 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/gpio_get_value +197 drivers/mfd/ezx-pcap.c
+vim +1294 net/sunrpc/svcsock.c
 
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  170  
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  171  static void pcap_isr_work(struct work_struct *work)
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  172  {
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  173  	struct pcap_chip *pcap = container_of(work, struct pcap_chip, isr_work);
-334a41ce9b753e Jingoo Han                2013-07-30  174  	struct pcap_platform_data *pdata = dev_get_platdata(&pcap->spi->dev);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  175  	u32 msr, isr, int_sel, service;
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  176  	int irq;
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  177  
-b1148fd46c248c Daniel Ribeiro            2009-06-23  178  	do {
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  179  		ezx_pcap_read(pcap, PCAP_REG_MSR, &msr);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  180  		ezx_pcap_read(pcap, PCAP_REG_ISR, &isr);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  181  
-25985edcedea63 Lucas De Marchi           2011-03-30  182  		/* We can't service/ack irqs that are assigned to port 2 */
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  183  		if (!(pdata->config & PCAP_SECOND_PORT)) {
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  184  			ezx_pcap_read(pcap, PCAP_REG_INT_SEL, &int_sel);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  185  			isr &= ~int_sel;
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  186  		}
-b1148fd46c248c Daniel Ribeiro            2009-06-23  187  
-b1148fd46c248c Daniel Ribeiro            2009-06-23  188  		ezx_pcap_write(pcap, PCAP_REG_MSR, isr | msr);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  189  		ezx_pcap_write(pcap, PCAP_REG_ISR, isr);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  190  
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  191  		service = isr & ~msr;
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  192  		for (irq = pcap->irq_base; service; service >>= 1, irq++) {
-73a6839fdb7f3f Thomas Gleixner           2011-03-25  193  			if (service & 1)
-83d9b7e3955d32 Sebastian Andrzej Siewior 2022-02-11  194  				generic_handle_irq_safe(irq);
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  195  		}
-b1148fd46c248c Daniel Ribeiro            2009-06-23  196  		ezx_pcap_write(pcap, PCAP_REG_MSR, pcap->msr);
-59ee93a528b94e Arnd Bergmann             2012-08-05 @197  	} while (gpio_get_value(pdata->gpio));
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  198  }
-13a09f93d2bf3a Daniel Ribeiro            2009-05-28  199  
-
-:::::: The code at line 197 was first introduced by commit
-:::::: 59ee93a528b94ef4e81a08db252b0326feff171f ARM: pxa: remove irq_to_gpio from ezx-pcap driver
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+  1255	
+  1256	/**
+  1257	 * svc_tcp_sendto - Send out a reply on a TCP socket
+  1258	 * @rqstp: completed svc_rqst
+  1259	 *
+  1260	 * xpt_mutex ensures @rqstp's whole message is written to the socket
+  1261	 * without interruption.
+  1262	 *
+  1263	 * Returns the number of bytes sent, or a negative errno.
+  1264	 */
+  1265	static int svc_tcp_sendto(struct svc_rqst *rqstp)
+  1266	{
+  1267		struct svc_xprt *xprt = rqstp->rq_xprt;
+  1268		struct svc_sock	*svsk = container_of(xprt, struct svc_sock, sk_xprt);
+  1269		struct xdr_buf *xdr = &rqstp->rq_res;
+  1270		rpc_fraghdr marker = cpu_to_be32(RPC_LAST_STREAM_FRAGMENT |
+  1271						 (u32)xdr->len);
+  1272		int sent;
+  1273	
+  1274		svc_tcp_release_ctxt(xprt, rqstp->rq_xprt_ctxt);
+  1275		rqstp->rq_xprt_ctxt = NULL;
+  1276	
+  1277		mutex_lock(&xprt->xpt_mutex);
+  1278		if (svc_xprt_is_dead(xprt))
+  1279			goto out_notconn;
+  1280		sent = svc_tcp_sendmsg(svsk, rqstp, marker);
+  1281		trace_svcsock_tcp_send(xprt, sent);
+  1282		if (sent < 0 || sent != (xdr->len + sizeof(marker)))
+  1283			goto out_close;
+  1284		mutex_unlock(&xprt->xpt_mutex);
+  1285		return sent;
+  1286	
+  1287	out_notconn:
+  1288		mutex_unlock(&xprt->xpt_mutex);
+  1289		return -ENOTCONN;
+  1290	out_close:
+  1291		pr_notice("rpc-srv/tcp: %s: %s %d when sending %d bytes - shutting down socket\n",
+  1292			  xprt->xpt_server->sv_name,
+  1293			  (sent < 0) ? "got error" : "sent",
+> 1294			  sent, xdr->len + sizeof(marker));
+  1295		svc_xprt_deferred_close(xprt);
+  1296		mutex_unlock(&xprt->xpt_mutex);
+  1297		return -EAGAIN;
+  1298	}
+  1299	
 
 -- 
 0-DAY CI Kernel Test Service
