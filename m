@@ -1,75 +1,35 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6881635280
-	for <llvm@lists.linux.dev>; Sun, 10 Aug 2025 16:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E0F22A4DA;
+	Sun, 10 Aug 2025 21:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754842659; cv=none; b=VUTffmT43mB6KQDR3pr0s9RLCcyODbeJDVxn2sw9PweTa2yrpAsA+SLuh0c/VRfQNISXwX88MZCp1PPM49hhsph+UPJp562o0dOEv4Tdy+Qa48yjJlR/MIG6djqaYYpn7J5qGLAy9Q22zRNfuVeFxdxRWbuwJZSdNaqMLO2C9r8=
+	t=1754860330; cv=none; b=uW36EKXhKW9z07HIja324++MX0a7yHazWhVColsBFwdTIbTJR/2yheTxB2yYUlV2HjT877jxU8aNTLUZM1O3cvkNKsQVdL5+RFqaiRn+yhsfgDSa2ZAlVQo+Q9+NzRrAkL31+Xyp6s3zO/nXoQwF/yWUeZOJ9ukhdh05iVyxoFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754842659; c=relaxed/simple;
-	bh=r+/tz4wOk7S63KAYEOx9vULkKR8ZDVGPGskKkBYlZWI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hqy/g8sZYInMlhm+VxA+hRAAMuoLY70NeqD7KcpSaUB0JbnS91UGsuZEMor5WAeP4d9HRuv98z1fCBggxtIWV1xxCW3f2eCdePOEev2eMiMacZweGtrS8PxL/FKAPA22QB+aZ28H6WO+CY2h/qZoQNIEgZbGv5rqM5Lp4vmWKJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P9A2PRmO; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754860330; c=relaxed/simple;
+	bh=PTB+y1bea+X0pwle+Qsb0krCZI4wJwkr28qnyuTl7j4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hczlwUowThmGaIIQa6Vt6qpx34/PL/cHbhQOygSaAvDu48nmIPqFqH/fQ9n9EX+P9Lg6RTtBynxT4wDoLLugNrRYJiUm9pUQG0CpDHNA4z1vIkmv6ZXtNfhE22Ao9C/6kDeQV4y7/fk5j8LkrYpBexGx8B5TCG+0YwYWAl4HaLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HCOBV3tU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P9A2PRmO"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-76bd041c431so3134112b3a.2
-        for <llvm@lists.linux.dev>; Sun, 10 Aug 2025 09:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754842656; x=1755447456; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dEAJER69/NfwAiGupTfaKK2jAZ45McqgSZlh8HSXymw=;
-        b=P9A2PRmOaIzHzIzbKOoKgmwA4Ay6NLdhB3yGjMURopuPlJxYZjwmC1mCupOEHWew2v
-         1pj1hgAQtxYO57SQgh3+WjiW8adrp0rFmnK3HD2L1cgTw4BDcHW2jaykPdjDgv2JsvLz
-         ysNDqJG/HoLHfMhm/T60EX4I342mkD6pQrp3nyWdNEQGJnK8Ost4ujK3SVeBE284vTFZ
-         69pDE+uRX4m6zWXYw8qNYzI7CVeqjYlCIw63zHp9kv6YETDFJ6QdcvMeXnNV5j761e5X
-         tzqpoNbwokALKxEZnJWBNOeeLAA3UvYyGDZG9b51B+plhTofpYWDNBFPGfwK0gwHWUa2
-         N9gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754842656; x=1755447456;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dEAJER69/NfwAiGupTfaKK2jAZ45McqgSZlh8HSXymw=;
-        b=pMzQjdM0vvQ5MI+CuR2EOvy6/NRahzUBZmP2t4r21WYseWXmUMqwo4UQAXQJ5nIks+
-         9bZnyDv3WNs+dDWnTLt4rHod3w/AQiECggiWr4o1nX1daktObkSnh2cEP20jDjZIPoMb
-         JBUTe9icmqlrv1OnxrvOjoaCd/bPDfvjwZ/YjWZ2df8Yzdq1Fo2+U9JuhmF+FN2lImm5
-         RvxRN0kFLP3T9idhoo2logMjofOsd50iqZcsFBqu41y18qdT0C6l30egi5FEuZ6dQyhV
-         MMQQpjgk1TBd3EO7v7yFhijYe3KD65btwsRP3vjtc/2sS8qpYyqH7YTCVuvvDGdXhRT+
-         g76w==
-X-Forwarded-Encrypted: i=1; AJvYcCWv9Z3c4WEc45DB4ineNrxR/PjB/Kww01+OBOY2kAraxqUGEPX41m5wW+0vOSKoEfArFcWs@lists.linux.dev
-X-Gm-Message-State: AOJu0YzdNRWTUk6iZ61rPLCGKwwHp4EKlqUlkHVzkQlj6w0yDxwn75Il
-	e2zNDvqiERgDOLjsqEx5+KkQFHYpVMxnVfL9J+JcxYaKzPFvgJKv6VvK
-X-Gm-Gg: ASbGnctSDkdetXQqjjVYlbIk8ybJIlLM0u43A4sApRz90dhTxZMj9ZRBb3zUcFWwf5D
-	d7HPsQ/U82FWq2aAB9zlv98Z4rCbl4qwj2IiuR3J+HeIn9JyJEqYljAMqUpe7ObsZ9Q3KhrzWhz
-	kS2vh5OzoElTLgoogyHWgViIuAom4/J5k2GYZ96RxiR7h3CVWpuGfRFDN05aQA5ZWQiiOQBprKd
-	VHiwXmWpGEGKm2d4OrIWbAX+0s9uIfaBuwWTKLE/MTXgYHpRtc0eytX8bpWr+zxR4Owt0aQEyqF
-	soSiogYOPCHa2wZRsl28XnKkTxgvqtK08R8Ghr0CYzWBC09wU6rb1OpgbrqsPMAoHJrIVpx9hr3
-	Kk/UHM8O6s5wl5/DVV7ECRC05n5TU7FrNRC8WAlwu/4v/b47lYAWQEgnQQwjGyCKtdgT8OVnoUf
-	Ti
-X-Google-Smtp-Source: AGHT+IGaneADRRWLQHrxVro1KG5pLemoUIgsHzCDalyypmDxM0LYn3Wt757/XYCwlglY3qEq1dRvcQ==
-X-Received: by 2002:a05:6a00:b44:b0:746:2ae9:fc42 with SMTP id d2e1a72fcca58-76c461784fcmr14689584b3a.19.1754842656447;
-        Sun, 10 Aug 2025 09:17:36 -0700 (PDT)
-Received: from localhost.localdomain (wf122-104.ust.hk. [175.159.122.104])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bdd2725c9sm22495944b3a.6.2025.08.10.09.17.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 10 Aug 2025 09:17:36 -0700 (PDT)
-From: Haoyang LIU <tttturtleruss@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	Haoyang LIU <tttturtleruss@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] scripts/checktransupdate.py: add support for scanning directory
-Date: Mon, 11 Aug 2025 00:17:30 +0800
-Message-ID: <20250810161730.6530-1-tttturtleruss@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HCOBV3tU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF676C4CEEB;
+	Sun, 10 Aug 2025 21:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754860329;
+	bh=PTB+y1bea+X0pwle+Qsb0krCZI4wJwkr28qnyuTl7j4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=HCOBV3tU+ctjdX3pY3Zg/0pvMsfqNnXGmHLBwd4NcMVjVEH7cvRnVceivTVzUTBgz
+	 iBywCPbd901UmslM78Hnuk/eTpHS6/f3sLyf9xPRghxH/2C+4EPHmKaK3TU1y8G/SD
+	 2LZGbg4pzBNtyw7wRgsvYlW0+yX8/zcykqfhKvNIWp878PjsojxBNWCh5PKt5A4KoZ
+	 LQ8F53gT97pNeIvGJtMveQduZsLP39bJ9M6pBSMzg1LErA9A75yivHXsm8MZHlMgbc
+	 tG9XSvaRQ5XBE9KczEQP5WOF5MlpsjN04vNY4GNEFA7Y6xVuMV9vlzvKe/2lUu0GBk
+	 cXiQT6eCpZTTg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD1539D0C2B;
+	Sun, 10 Aug 2025 21:12:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,76 +37,73 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 00/13] stackleak: Support Clang stack depth tracking
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <175486034248.1221929.3658503475425874388.git-patchwork-notify@kernel.org>
+Date: Sun, 10 Aug 2025 21:12:22 +0000
+References: <20250717231756.make.423-kees@kernel.org>
+In-Reply-To: <20250717231756.make.423-kees@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-riscv@lists.infradead.org, arnd@arndb.de, mingo@kernel.org,
+ gustavoars@kernel.org, hch@lst.de, andreyknvl@gmail.com,
+ ryabinin.a.a@gmail.com, ardb@kernel.org, masahiroy@kernel.org,
+ nathan@kernel.org, nicolas.schier@linux.dev, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, linux-kernel@vger.kernel.org,
+ x86@kernel.org, kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ sparclinux@vger.kernel.org, llvm@lists.linux.dev
 
-Origin script can only accept a file as parameter, this commit enables
-it to scan a directory.
+Hello:
 
-Usage example:
-./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
+This series was applied to riscv/linux.git (fixes)
+by Kees Cook <kees@kernel.org>:
 
-Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
----
- scripts/checktransupdate.py | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+On Thu, 17 Jul 2025 16:25:05 -0700 you wrote:
+> v3:
+>   - split up and drop __init vs inline patches that went via arch trees
+>   - apply feedback about preferring __init to __always_inline
+>   - incorporate Ritesh Harjani's patch for __init cleanups in powerpc
+>   - wider build testing on older compilers
+>  v2: https://lore.kernel.org/lkml/20250523043251.it.550-kees@kernel.org/
+>  v1: https://lore.kernel.org/lkml/20250507180852.work.231-kees@kernel.org/
+> 
+> [...]
 
-diff --git a/scripts/checktransupdate.py b/scripts/checktransupdate.py
-index e39529e46c3d..0d197d036650 100755
---- a/scripts/checktransupdate.py
-+++ b/scripts/checktransupdate.py
-@@ -13,6 +13,8 @@ The usage is as follows:
- This will print all the files that need to be updated or translated in the zh_CN locale.
- - ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools/testing-overview.rst
- This will only print the status of the specified file.
-+- ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
-+This will print all the files in the specified folder and its subfolders.
- 
- The output is something like:
- Documentation/dev-tools/kfence.rst
-@@ -21,6 +23,17 @@ No translation in the locale of zh_CN
- Documentation/translations/zh_CN/dev-tools/testing-overview.rst
- commit 42fb9cfd5b18 ("Documentation: dev-tools: Add link to RV docs")
- 1 commits needs resolving in total
-+
-+Documentation/translations/zh_CN/dev-tools/index.rst
-+commit d5af79c05e93 ("Documentation: move dev-tools debugging files to process/debugging/")
-+commit d5dc95836147 ("kbuild: Add Propeller configuration for kernel build")
-+commit 315ad8780a12 ("kbuild: Add AutoFDO support for Clang build")
-+3 commits needs resolving in total
-+
-+Documentation/translations/zh_CN/dev-tools/kcsan.rst
-+commit b37221cc861d ("Documentation: kcsan: fix "Plain Accesses and Data Races" URL in kcsan.rst")
-+commit 72ffee678f6f ("docs: update dev-tools/kcsan.rst url about KTSAN")
-+2 commits needs resolving in total
- """
- 
- import os
-@@ -131,7 +144,7 @@ def check_per_file(file_path):
-     opath = get_origin_path(file_path)
- 
-     if not os.path.isfile(opath):
--        logging.error("Cannot find the origin path for {file_path}")
-+        logging.error(f"Cannot find the origin path for {file_path}")
-         return
- 
-     o_from_head = get_latest_commit_from(opath, "HEAD")
-@@ -293,6 +306,17 @@ def main():
-                 if args.print_missing_translations:
-                     logging.info(os.path.relpath(os.path.abspath(file), linux_path))
-                     logging.info("No translation in the locale of %s\n", args.locale)
-+    else:
-+        # check if the files are directories or files
-+        new_files = []
-+        for file in files:
-+            if os.path.isfile(file):
-+                new_files.append(file)
-+            elif os.path.isdir(file):
-+                # for directories, list all files in the directory and its subfolders
-+                new_files.extend(list_files_with_excluding_folders(
-+                    file, [], "rst"))
-+        files = new_files
- 
-     files = list(map(lambda x: os.path.relpath(os.path.abspath(x), linux_path), files))
- 
+Here is the summary with links:
+  - [v3,01/13] stackleak: Rename STACKLEAK to KSTACK_ERASE
+    (no matching commit)
+  - [v3,02/13] stackleak: Rename stackleak_track_stack to __sanitizer_cov_stack_depth
+    (no matching commit)
+  - [v3,03/13] stackleak: Split KSTACK_ERASE_CFLAGS from GCC_PLUGINS_CFLAGS
+    (no matching commit)
+  - [v3,04/13] x86: Handle KCOV __init vs inline mismatches
+    (no matching commit)
+  - [v3,05/13] arm: Handle KCOV __init vs inline mismatches
+    (no matching commit)
+  - [v3,06/13] arm64: Handle KCOV __init vs inline mismatches
+    https://git.kernel.org/riscv/c/65c430906eff
+  - [v3,07/13] s390: Handle KCOV __init vs inline mismatches
+    https://git.kernel.org/riscv/c/c64d6be1a6f8
+  - [v3,08/13] powerpc/mm/book3s64: Move kfence and debug_pagealloc related calls to __init section
+    https://git.kernel.org/riscv/c/645d1b666498
+  - [v3,09/13] mips: Handle KCOV __init vs inline mismatch
+    https://git.kernel.org/riscv/c/d01daf9d95c9
+  - [v3,10/13] init.h: Disable sanitizer coverage for __init and __head
+    https://git.kernel.org/riscv/c/381a38ea53d2
+  - [v3,11/13] kstack_erase: Support Clang stack depth tracking
+    (no matching commit)
+  - [v3,12/13] configs/hardening: Enable CONFIG_KSTACK_ERASE
+    https://git.kernel.org/riscv/c/4c56d9f7e75e
+  - [v3,13/13] configs/hardening: Enable CONFIG_INIT_ON_FREE_DEFAULT_ON
+    https://git.kernel.org/riscv/c/437641a72d0a
+
+You are awesome, thank you!
 -- 
-2.50.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
