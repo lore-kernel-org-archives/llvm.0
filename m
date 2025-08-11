@@ -1,205 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C2A311C02;
-	Mon, 11 Aug 2025 21:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF282D9EC4;
+	Mon, 11 Aug 2025 21:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754946839; cv=none; b=bv4ixqa71TtIDwGFfsPcxlPE4tIvYSusaOtV8VZvtbDoAghqQqpSNe8s/vl4DYCqMVpExHeqESNRJ2+pF/7YI3OpYp+WN7d8VbCWY6Y0uxsu52hT+wwb8tkRBLMxauT/m4Bk/nn8fJpOvV2IawHckr3OI9vxQ/ManFP7+8srxWw=
+	t=1754947492; cv=none; b=i4S4MBwfd4pSUGMI+O+rpRC6CxqMipLw/REbpN+6Ic/ps+gNUqvb/jBYEWlxIPkXvWgPyQ/ksEASaVHyJIB9LfR/UP+oSi7EIYaG1AbtjdGEHP4yjIP6yIzUVObvM8woYVatvG7VoA4iSFREsfut2tn7ElcH8pwido1rIPNA+kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754946839; c=relaxed/simple;
-	bh=VS6xHxNc3HWQYy6rypl2JQMZrwhMLCRiASppXYsbYbM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ttF/vAaL6ir2LalRZw7AmMhR+5B9E/kXkRNS4PyZJsFCdx8DqDhfPSCeIjtWzzPjetTVlGluJNJ1uldzUsYYiAqhNjpvjFUzcIQRC9vPKq8/BOXgS7iogfBJDvd9WX3Xtu2zwN7DKQ08OeM3EkBV8W9iFYQUtZdU2zxjgzR8DsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V19pzcg4; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754947492; c=relaxed/simple;
+	bh=FBfrc5n//xqcxAB6OfOVXo9cs54q9iIJHxD49Lk0gow=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pMMpO/KP7C64chtOOBh0Si5h/gW2GXO6GMMfc8B5XAaF3lDgjNnMcCCKQiViQeXX3woMmhdlQ9BlqT+B8K6M6TAKh3XT4jWMmdU0Dp3c/UN8uOfTIQ/Zt0BqLk89SslBoedHtI+65UyGfGEbhkBLf48LyF+b6YsOEq3LyrXLeD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kpt3/kPZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V19pzcg4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754946837; x=1786482837;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VS6xHxNc3HWQYy6rypl2JQMZrwhMLCRiASppXYsbYbM=;
-  b=V19pzcg4sPZsRF2tI4JJt4/5Tx843mHDjI7KxWSSokxaPj+SUsrlkeM0
-   FpLhxLs9kiJg8D+0q752v/o4JrvSp3CY6d3UyATYB3r/v0wRRTgMw3BnE
-   TaW+ARL5ebA60BPe215uDJU0fQjrdUmiek9h8/SozAO1rl2U7/9yR0/xM
-   fVEJVNAhLDA0fabGISLf1p5nO1F9mHxl3mnE+Ey0M8+FB2Hb/n9CevIbC
-   Rm3sK3zjYauQc1zBnKuL++m4pM3NAmAIX4M//wpN5pe2QlIxiPhiczq5K
-   t54Jg6ov8jignBUsM5heXIXz8VcAN1lajZ+HYfWRVh/TajdKaD29aeMuO
-   Q==;
-X-CSE-ConnectionGUID: ks2UnadJRneEYy7/1eIGYg==
-X-CSE-MsgGUID: 9h0YhaJHRVO+XDlG0ycgpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="74795232"
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="74795232"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 14:13:52 -0700
-X-CSE-ConnectionGUID: bzGRv+DSRk2YYE9YPKcbgw==
-X-CSE-MsgGUID: IaVc299XQ1OMCTzt9/Oz2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="170155557"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 11 Aug 2025 14:13:50 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ulZpq-0006E8-0y;
-	Mon, 11 Aug 2025 21:13:45 +0000
-Date: Tue, 12 Aug 2025 05:13:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matthew Auld <matthew.auld@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 13648/13681]
- drivers/gpu/drm/drm_pagemap.c:459:21: warning: parameter 'addr' set but not
- used
-Message-ID: <202508120531.qiLqyPU6-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kpt3/kPZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2688AC4CEED;
+	Mon, 11 Aug 2025 21:24:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754947491;
+	bh=FBfrc5n//xqcxAB6OfOVXo9cs54q9iIJHxD49Lk0gow=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kpt3/kPZ3wtE9utUf5yDhesS31wBtYRqoy2I2PK+8MdO5TFYKaiG5TMU1TgnqkP8a
+	 pZVE5tmEX8mvj35LERznfQ3r4s76nQT08FHfnU0+GdeEM1WY3u+jyugyFyf5NyP9Cc
+	 qM7p+oticH8DfYkAL4EE8R2iBdc9F+LOOXxGvr72lpa6vpPebC5q52s3GMnd62eM4S
+	 4MZgbfS38q58hO0lOA3jdde1Z/glDUgtznGFYd4PAzEFNRlNzyDg/Ekis9EDbyDl8G
+	 dcSrjQ4vpPgmGSQMBQhwPrDNvZYIXUUCS3cxeNDiLWX7okTXjaXYZ8qpfrY7WY4Sj1
+	 gBWEZa7REnd3w==
+Date: Mon, 11 Aug 2025 14:24:46 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Haoyang LIU <tttturtleruss@gmail.com>, Dongliang Mu <dzm91@hust.edu.cn>,
+	Yanteng Si <si.yanteng@linux.dev>, Alex Shi <alexs@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	hust-os-kernel-patches@googlegroups.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH V2] scripts/checktransupdate.py: add support for scanning
+ directory
+Message-ID: <20250811212446.GA924610@ax162>
+References: <20250811170050.94997-1-tttturtleruss@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250811170050.94997-1-tttturtleruss@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   b1549501188cc9eba732c25b033df7a53ccc341f
-commit: cdb12c5b846ce02f20313b1b0f863ca9de9803cf [13648/13681] Merge branch 'drm-xe-next' of https://gitlab.freedesktop.org/drm/xe/kernel
-config: s390-randconfig-002-20250812 (https://download.01.org/0day-ci/archive/20250812/202508120531.qiLqyPU6-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 3769ce013be2879bf0b329c14a16f5cb766f26ce)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250812/202508120531.qiLqyPU6-lkp@intel.com/reproduce)
+Hi Haoyang,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508120531.qiLqyPU6-lkp@intel.com/
+On Tue, Aug 12, 2025 at 01:00:50AM +0800, Haoyang LIU wrote:
+> Origin script can only accept a file as parameter, this commit enables
+> it to scan a directory.
+> 
+> Usage example:
+> ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
+> 
+> Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
+> ---
+> 
+> V1 -> V2: remove the fix of missing "f" in f-string and make it a new patch
+> 
+>  scripts/checktransupdate.py | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 
-All warnings (new ones prefixed by >>):
+Thanks for the update. While this seems reasonable to me from a purely
+surface level glance over the actual Python, I have added the
+Documentation folks that Dongliang added from the previous thread, who
+really own and maintain this file (the original patch is at [1]). Please
+include them in future revisions should they be necessary. It would
+probably be good for something like this to be applied?
 
->> drivers/gpu/drm/drm_pagemap.c:459:21: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
-     459 |                                                 unsigned long addr)
-         |                                                               ^
-   1 warning generated.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe168477caa4..b7e3a8c8832e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7302,6 +7302,7 @@ P:	Documentation/doc-guide/maintainer-profile.rst
+ T:	git git://git.lwn.net/linux.git docs-next
+ F:	Documentation/
+ F:	scripts/check-variable-fonts.sh
++F:	scripts/checktransupdate.py
+ F:	scripts/documentation-file-ref-check
+ F:	scripts/get_abi.py
+ F:	scripts/kernel-doc*
 
+[1]: https://lore.kernel.org/20250811170050.94997-1-tttturtleruss@gmail.com/
 
-vim +/addr +459 drivers/gpu/drm/drm_pagemap.c
-
-f86ad0ed620cb3 Matthew Brost   2025-06-19  435  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  436  /**
-f86ad0ed620cb3 Matthew Brost   2025-06-19  437   * drm_pagemap_migrate_populate_ram_pfn() - Populate RAM PFNs for a VM area
-f86ad0ed620cb3 Matthew Brost   2025-06-19  438   * @vas: Pointer to the VM area structure, can be NULL
-f86ad0ed620cb3 Matthew Brost   2025-06-19  439   * @fault_page: Fault page
-f86ad0ed620cb3 Matthew Brost   2025-06-19  440   * @npages: Number of pages to populate
-f86ad0ed620cb3 Matthew Brost   2025-06-19  441   * @mpages: Number of pages to migrate
-f86ad0ed620cb3 Matthew Brost   2025-06-19  442   * @src_mpfn: Source array of migrate PFNs
-f86ad0ed620cb3 Matthew Brost   2025-06-19  443   * @mpfn: Array of migrate PFNs to populate
-f86ad0ed620cb3 Matthew Brost   2025-06-19  444   * @addr: Start address for PFN allocation
-f86ad0ed620cb3 Matthew Brost   2025-06-19  445   *
-f86ad0ed620cb3 Matthew Brost   2025-06-19  446   * This function populates the RAM migrate page frame numbers (PFNs) for the
-f86ad0ed620cb3 Matthew Brost   2025-06-19  447   * specified VM area structure. It allocates and locks pages in the VM area for
-f86ad0ed620cb3 Matthew Brost   2025-06-19  448   * RAM usage. If vas is non-NULL use alloc_page_vma for allocation, if NULL use
-f86ad0ed620cb3 Matthew Brost   2025-06-19  449   * alloc_page for allocation.
-f86ad0ed620cb3 Matthew Brost   2025-06-19  450   *
-f86ad0ed620cb3 Matthew Brost   2025-06-19  451   * Return: 0 on success, negative error code on failure.
-f86ad0ed620cb3 Matthew Brost   2025-06-19  452   */
-f86ad0ed620cb3 Matthew Brost   2025-06-19  453  static int drm_pagemap_migrate_populate_ram_pfn(struct vm_area_struct *vas,
-f86ad0ed620cb3 Matthew Brost   2025-06-19  454  						struct page *fault_page,
-f86ad0ed620cb3 Matthew Brost   2025-06-19  455  						unsigned long npages,
-f86ad0ed620cb3 Matthew Brost   2025-06-19  456  						unsigned long *mpages,
-f86ad0ed620cb3 Matthew Brost   2025-06-19  457  						unsigned long *src_mpfn,
-f86ad0ed620cb3 Matthew Brost   2025-06-19  458  						unsigned long *mpfn,
-f86ad0ed620cb3 Matthew Brost   2025-06-19 @459  						unsigned long addr)
-f86ad0ed620cb3 Matthew Brost   2025-06-19  460  {
-f86ad0ed620cb3 Matthew Brost   2025-06-19  461  	unsigned long i;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  462  
-ddeda6136038b4 Francois Dugast 2025-08-05  463  	for (i = 0; i < npages;) {
-ddeda6136038b4 Francois Dugast 2025-08-05  464  		struct page *page = NULL, *src_page;
-ddeda6136038b4 Francois Dugast 2025-08-05  465  		struct folio *folio;
-ddeda6136038b4 Francois Dugast 2025-08-05  466  		unsigned int order = 0;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  467  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  468  		if (!(src_mpfn[i] & MIGRATE_PFN_MIGRATE))
-ddeda6136038b4 Francois Dugast 2025-08-05  469  			goto next;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  470  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  471  		src_page = migrate_pfn_to_page(src_mpfn[i]);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  472  		if (!src_page)
-ddeda6136038b4 Francois Dugast 2025-08-05  473  			goto next;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  474  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  475  		if (fault_page) {
-f86ad0ed620cb3 Matthew Brost   2025-06-19  476  			if (src_page->zone_device_data !=
-f86ad0ed620cb3 Matthew Brost   2025-06-19  477  			    fault_page->zone_device_data)
-ddeda6136038b4 Francois Dugast 2025-08-05  478  				goto next;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  479  		}
-f86ad0ed620cb3 Matthew Brost   2025-06-19  480  
-ddeda6136038b4 Francois Dugast 2025-08-05  481  		order = folio_order(page_folio(src_page));
-ddeda6136038b4 Francois Dugast 2025-08-05  482  
-ddeda6136038b4 Francois Dugast 2025-08-05  483  		/* TODO: Support fallback to single pages if THP allocation fails */
-f86ad0ed620cb3 Matthew Brost   2025-06-19  484  		if (vas)
-ddeda6136038b4 Francois Dugast 2025-08-05  485  			folio = vma_alloc_folio(GFP_HIGHUSER, order, vas, addr);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  486  		else
-ddeda6136038b4 Francois Dugast 2025-08-05  487  			folio = folio_alloc(GFP_HIGHUSER, order);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  488  
-ddeda6136038b4 Francois Dugast 2025-08-05  489  		if (!folio)
-f86ad0ed620cb3 Matthew Brost   2025-06-19  490  			goto free_pages;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  491  
-ddeda6136038b4 Francois Dugast 2025-08-05  492  		page = folio_page(folio, 0);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  493  		mpfn[i] = migrate_pfn(page_to_pfn(page));
-ddeda6136038b4 Francois Dugast 2025-08-05  494  
-ddeda6136038b4 Francois Dugast 2025-08-05  495  next:
-ddeda6136038b4 Francois Dugast 2025-08-05  496  		if (page)
-ddeda6136038b4 Francois Dugast 2025-08-05  497  			addr += page_size(page);
-ddeda6136038b4 Francois Dugast 2025-08-05  498  		else
-ddeda6136038b4 Francois Dugast 2025-08-05  499  			addr += PAGE_SIZE;
-ddeda6136038b4 Francois Dugast 2025-08-05  500  
-ddeda6136038b4 Francois Dugast 2025-08-05  501  		i += NR_PAGES(order);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  502  	}
-f86ad0ed620cb3 Matthew Brost   2025-06-19  503  
-ddeda6136038b4 Francois Dugast 2025-08-05  504  	for (i = 0; i < npages;) {
-f86ad0ed620cb3 Matthew Brost   2025-06-19  505  		struct page *page = migrate_pfn_to_page(mpfn[i]);
-ddeda6136038b4 Francois Dugast 2025-08-05  506  		unsigned int order = 0;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  507  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  508  		if (!page)
-ddeda6136038b4 Francois Dugast 2025-08-05  509  			goto next_lock;
-ddeda6136038b4 Francois Dugast 2025-08-05  510  
-ddeda6136038b4 Francois Dugast 2025-08-05  511  		WARN_ON_ONCE(!folio_trylock(page_folio(page)));
-f86ad0ed620cb3 Matthew Brost   2025-06-19  512  
-ddeda6136038b4 Francois Dugast 2025-08-05  513  		order = folio_order(page_folio(page));
-ddeda6136038b4 Francois Dugast 2025-08-05  514  		*mpages += NR_PAGES(order);
-ddeda6136038b4 Francois Dugast 2025-08-05  515  
-ddeda6136038b4 Francois Dugast 2025-08-05  516  next_lock:
-ddeda6136038b4 Francois Dugast 2025-08-05  517  		i += NR_PAGES(order);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  518  	}
-f86ad0ed620cb3 Matthew Brost   2025-06-19  519  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  520  	return 0;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  521  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  522  free_pages:
-ddeda6136038b4 Francois Dugast 2025-08-05  523  	for (i = 0; i < npages;) {
-f86ad0ed620cb3 Matthew Brost   2025-06-19  524  		struct page *page = migrate_pfn_to_page(mpfn[i]);
-ddeda6136038b4 Francois Dugast 2025-08-05  525  		unsigned int order = 0;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  526  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  527  		if (!page)
-ddeda6136038b4 Francois Dugast 2025-08-05  528  			goto next_put;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  529  
-f86ad0ed620cb3 Matthew Brost   2025-06-19  530  		put_page(page);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  531  		mpfn[i] = 0;
-ddeda6136038b4 Francois Dugast 2025-08-05  532  
-ddeda6136038b4 Francois Dugast 2025-08-05  533  		order = folio_order(page_folio(page));
-ddeda6136038b4 Francois Dugast 2025-08-05  534  
-ddeda6136038b4 Francois Dugast 2025-08-05  535  next_put:
-ddeda6136038b4 Francois Dugast 2025-08-05  536  		i += NR_PAGES(order);
-f86ad0ed620cb3 Matthew Brost   2025-06-19  537  	}
-f86ad0ed620cb3 Matthew Brost   2025-06-19  538  	return -ENOMEM;
-f86ad0ed620cb3 Matthew Brost   2025-06-19  539  }
-f86ad0ed620cb3 Matthew Brost   2025-06-19  540  
-
-:::::: The code at line 459 was first introduced by commit
-:::::: f86ad0ed620cb3c91ec7d5468e93ac68d727539d drm/gpusvm, drm/pagemap: Move migration functionality to drm_pagemap
-
-:::::: TO: Matthew Brost <matthew.brost@intel.com>
-:::::: CC: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
