@@ -1,144 +1,182 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E82E1A9FB1
-	for <llvm@lists.linux.dev>; Mon, 11 Aug 2025 17:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFF62E2DCB;
+	Mon, 11 Aug 2025 18:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754931660; cv=none; b=kxtpn+IzFxitrpt2Lwl6lkFGQN6X1lBnH+T0g6B2tW1KVp20SP2hqXP+mfsEHpK3aCumCGfSkBTeyhOTmqcv6j3jzedCLe0WCqilOy6YQ0wsFTbh31bib4RWdKJ8yKw6thW3Ko2/tmKAe/ORcAoYWN/ZaoM6sLB7N73szujGi5I=
+	t=1754938620; cv=none; b=kDN58pbFM48wD6WFVXCb9dGfyYX5GTAGWLOGFuO3nBpRPTq5O3hjSgpV8w4VAtKVsEVXGqlzeYHOiI93Ty6gkFtiG67TEcZn8YhAUw68Cylck/weQPS965r17aHVz5Rpx7iMyWrQK35WoKV0O6dEfKGi59xjKB67lh4AORrrrPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754931660; c=relaxed/simple;
-	bh=YYBsOSZTzGmwlXVdHceQeByVSwLLZRBjF7Okwkt++fc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FORTpqCSIA/jer419+pRO416P103ywsLsbQsOjO+m0MfWetXyym5FJ8m/luL3jun6qkmIA/ruqMBiKzdtoeWBtIIUK2u4y6kLcM1bpilXLw+5PDpLjJWg/ZXn5ebU0bkv5qyuYsqaFq+gCGxprWrXDm8b4JhS5XP233fr2NR3PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDRfRWyO; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754938620; c=relaxed/simple;
+	bh=/1h1FXQ8wlbSgFHXbQzagekP6WBsykBAbMExF88232A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M8kdyZtotZhaNpaVc6UvjFN2dqzgn0PXkO2Z3BOAOSbpE4nXrgGOG3GozpvkaTpV+cXh5FJuVLtbLAAE/zov2I52N4fZ9Rs87HgArJYwCg1/dxgTvpXgTab31W5f7XeywycUWqTzqZN2JmUGkmIABFu7PKpnjQSyRtOnnFdW9/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pnnj7TI2; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDRfRWyO"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-31ece02ad92so3517795a91.2
-        for <llvm@lists.linux.dev>; Mon, 11 Aug 2025 10:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754931658; x=1755536458; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QPhhmdVj2zt9+8pHoVZ1ejD+Bo3wE8/FwKPpnpZx/DE=;
-        b=cDRfRWyOBYIJBkKtfr7BiB263Sm6m6ZUocKJL+GIjz8cae7JWYVmukmKjbD2xUy2pN
-         cBWrwQO3/KbiIRF+keuZ4Nls1hjcP0mLDv7FJMNpphHT1AwOd1ti+/oCwqyM4mjoBO1u
-         Wm9sWOUb4gEz8TLkSNDz3BosHBPWqMgwnzPrChkzrNXuPakgscJ8G4gH75nebo0wfh/L
-         m1rn8pZmEeV+mwd6L3My4jZC8B8C6Z3UBMI8X5LF3CuHqdLlv4EVYpbQ25qKaBfk3Iwt
-         1PmTYTI9tC66ytMrlz6MykUUPjT5fBKTj5++VQ9nk/NMzxs38/H7Hd3VNEn7CfAsAt/W
-         hP/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754931658; x=1755536458;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QPhhmdVj2zt9+8pHoVZ1ejD+Bo3wE8/FwKPpnpZx/DE=;
-        b=YnlIskoDnJ4F+MGX/h1rGdIp4+5Q251bcc+GlyJHtlSzsrET5080iUibPBdDsRCtvr
-         YbYStpFPx0dIRQ3Fa2cNXVyWvNWNdJpgrdEJg9qkPbpZ1UUbDVBx28lWqvZYpSnf5kWA
-         D09mJVe0Q+ibGDjuros66g8fgIWuIwvL5tR6bk/ThThiQH5WTXEAmOCCUFm7zGb59Hhj
-         JqoiRrb2rfyn7Gzp7ruJfGBdURr+uWXfn2XUqFrHz0/v00Ofv34LNHlabZQ0YDRIwMQQ
-         FWJTYKTyGFDRzR2zoMb15GATedlR0lSBOte0Xeck4Au1AkvoUPB6vzRo7446sYMLb1Qw
-         PYaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSWLs9xAOMetx0HSF6t4oy+x/faDNtA7UoF36k3Ix66onZkQ1sfWrM1YfwtxDWvEO2Qi4w@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw48i3PrddEmtyaH3KBWCVTnR3rC5StusqlnK6BfmTjOzvXihRf
-	/v/lgsttYHWfT1zlTKBFqNyZIimj8fy/pK7spDTvXrshvmKemYy9iBFw
-X-Gm-Gg: ASbGncvH5D0g69GqttOfB4GLD4vFIm3SqvutsJlLhQUk8yhzKfqaMRA1I5/uSgHth2f
-	dD3KFCLfQ7BavBAiHdZR9AD6A6lYCDsoWLgpHT6tRUZiJ6cJf5Xcgm8hGvKn3B0jZ/kBFn+fSp2
-	6oRPa1Zs/54dx87qapN3JSVmNO0ixTMzaWEbr0a44nvLtsrhEMexXagn1dry6dEV81yLHGQ1sAf
-	8gCKQDOxNvlee0ttoMSAGubVBi4qVu7/b9VrljNMhP8VD7bOzzHoHHh6svWYS0/hmRVeQxZSwh4
-	RwsQfmWick89IfySeE1plQ3myqKBM5cQCWbR4awylauHyk+xhLDhqYqSf1ccjYFbZW7nDTvUH+N
-	WmJf7MJaV82QbEdMZfdiNOZTBw75OFWI/Y78K5rnuhTUyqSd6v8Yn4neFAkcswU7y1w==
-X-Google-Smtp-Source: AGHT+IFlUtkPL3MkM6BSJoR+uUdCcN1ck0aR8fv6x5sWJaoPa/EPzL9HUlQRBpUgrYZzO2RxqQELng==
-X-Received: by 2002:a17:90b:3a91:b0:31c:15d9:8ae with SMTP id 98e67ed59e1d1-321c0b7e35cmr428564a91.33.1754931657951;
-        Mon, 11 Aug 2025 10:00:57 -0700 (PDT)
-Received: from localhost.localdomain (wf122-104.ust.hk. [175.159.122.104])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-321612815b9sm15502255a91.24.2025.08.11.10.00.54
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 11 Aug 2025 10:00:56 -0700 (PDT)
-From: Haoyang LIU <tttturtleruss@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	Haoyang LIU <tttturtleruss@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH V2] scripts/checktransupdate.py: add support for scanning directory
-Date: Tue, 12 Aug 2025 01:00:50 +0800
-Message-ID: <20250811170050.94997-1-tttturtleruss@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pnnj7TI2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754938619; x=1786474619;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/1h1FXQ8wlbSgFHXbQzagekP6WBsykBAbMExF88232A=;
+  b=Pnnj7TI22M/wvUQDA78sBsJeug6tdbnzc6tMcoEMXCDeXuZ+/1PX66TL
+   nt95+jNkA1Cpq9bO3VPBo8c6nSHglAJfv9ynUxQ2x0SL+lGfZeH1+ClFZ
+   WH1Y+mJEuF+AVYPA94khQZJSKKDHdj42M+3Z+gHdhHFBYQTLfNYzch+zA
+   lL7GsI2mjIHmk3Gk8ItKBa1ZGF48M5dQt3sNCryzJebeaEC10dYrs9ld9
+   CQNDL6WG0bIY4JQ0pEk+tv69Xwwr4CytfMXEE0gDjbE0KgPAI7fW0WFUU
+   gMSKZ6INDw43vm6bl8Hy8G6GX2Ljik8ejShDnWjNaHGD9yJJPbLzyhhAF
+   Q==;
+X-CSE-ConnectionGUID: ETPgZq3BQdKtmtWyIFOISA==
+X-CSE-MsgGUID: kI8y4SAKRjGLhzSz6JJ0/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57344998"
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="57344998"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 11:56:58 -0700
+X-CSE-ConnectionGUID: vpWZx5ZjTIuthikuHuwiLg==
+X-CSE-MsgGUID: gJZTJWVSR5qvoV1h6E7NgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="165192786"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 11 Aug 2025 11:56:53 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ulXhL-00069Y-0y;
+	Mon, 11 Aug 2025 18:56:44 +0000
+Date: Tue, 12 Aug 2025 02:55:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dominique Martinet via B4 Relay <devnull+asmadeus.codewreck.org@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Maximilian Bosch <maximilian@mbosch.me>,
+	Ryan Lahfa <ryan@lahfa.xyz>, Christian Theune <ct@flyingcircus.io>,
+	Arnout Engelen <arnout@bzzt.net>, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	Dominique Martinet <asmadeus@codewreck.org>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] iov_iter: iterate_folioq: fix handling of offset >=
+ folio size
+Message-ID: <202508120250.Eooq2ydr-lkp@intel.com>
+References: <20250811-iot_iter_folio-v1-1-d9c223adf93c@codewreck.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811-iot_iter_folio-v1-1-d9c223adf93c@codewreck.org>
 
-Origin script can only accept a file as parameter, this commit enables
-it to scan a directory.
+Hi Dominique,
 
-Usage example:
-./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
----
-V1 -> V2: remove the fix of missing "f" in f-string and make it a new patch
+[auto build test WARNING on 8f5ae30d69d7543eee0d70083daf4de8fe15d585]
 
- scripts/checktransupdate.py | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dominique-Martinet-via-B4-Relay/iov_iter-iterate_folioq-fix-handling-of-offset-folio-size/20250811-154319
+base:   8f5ae30d69d7543eee0d70083daf4de8fe15d585
+patch link:    https://lore.kernel.org/r/20250811-iot_iter_folio-v1-1-d9c223adf93c%40codewreck.org
+patch subject: [PATCH 1/2] iov_iter: iterate_folioq: fix handling of offset >= folio size
+config: i386-buildonly-randconfig-002-20250811 (https://download.01.org/0day-ci/archive/20250812/202508120250.Eooq2ydr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250812/202508120250.Eooq2ydr-lkp@intel.com/reproduce)
 
-diff --git a/scripts/checktransupdate.py b/scripts/checktransupdate.py
-index e39529e46c3d..01271fb30cbe 100755
---- a/scripts/checktransupdate.py
-+++ b/scripts/checktransupdate.py
-@@ -13,6 +13,8 @@ The usage is as follows:
- This will print all the files that need to be updated or translated in the zh_CN locale.
- - ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools/testing-overview.rst
- This will only print the status of the specified file.
-+- ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
-+This will print all the files in the specified folder and its subfolders.
- 
- The output is something like:
- Documentation/dev-tools/kfence.rst
-@@ -21,6 +23,17 @@ No translation in the locale of zh_CN
- Documentation/translations/zh_CN/dev-tools/testing-overview.rst
- commit 42fb9cfd5b18 ("Documentation: dev-tools: Add link to RV docs")
- 1 commits needs resolving in total
-+
-+Documentation/translations/zh_CN/dev-tools/index.rst
-+commit d5af79c05e93 ("Documentation: move dev-tools debugging files to process/debugging/")
-+commit d5dc95836147 ("kbuild: Add Propeller configuration for kernel build")
-+commit 315ad8780a12 ("kbuild: Add AutoFDO support for Clang build")
-+3 commits needs resolving in total
-+
-+Documentation/translations/zh_CN/dev-tools/kcsan.rst
-+commit b37221cc861d ("Documentation: kcsan: fix "Plain Accesses and Data Races" URL in kcsan.rst")
-+commit 72ffee678f6f ("docs: update dev-tools/kcsan.rst url about KTSAN")
-+2 commits needs resolving in total
- """
- 
- import os
-@@ -293,6 +306,17 @@ def main():
-                 if args.print_missing_translations:
-                     logging.info(os.path.relpath(os.path.abspath(file), linux_path))
-                     logging.info("No translation in the locale of %s\n", args.locale)
-+    else:
-+        # check if the files are directories or files
-+        new_files = []
-+        for file in files:
-+            if os.path.isfile(file):
-+                new_files.append(file)
-+            elif os.path.isdir(file):
-+                # for directories, list all files in the directory and its subfolders
-+                new_files.extend(list_files_with_excluding_folders(
-+                    file, [], "rst"))
-+        files = new_files
- 
-     files = list(map(lambda x: os.path.relpath(os.path.abspath(x), linux_path), files))
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508120250.Eooq2ydr-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from lib/iov_iter.c:14:
+>> include/linux/iov_iter.h:171:7: warning: variable 'remain' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     171 |                 if (skip >= fsize)
+         |                     ^~~~~~~~~~~~~
+   include/linux/iov_iter.h:190:7: note: uninitialized use occurs here
+     190 |                 if (remain)
+         |                     ^~~~~~
+   include/linux/iov_iter.h:171:3: note: remove the 'if' if its condition is always false
+     171 |                 if (skip >= fsize)
+         |                 ^~~~~~~~~~~~~~~~~~
+     172 |                         goto next;
+         |                         ~~~~~~~~~
+   include/linux/iov_iter.h:163:22: note: initialize the variable 'remain' to silence this warning
+     163 |                 size_t part, remain, consumed;
+         |                                    ^
+         |                                     = 0
+   1 warning generated.
+
+
+vim +171 include/linux/iov_iter.h
+
+   143	
+   144	/*
+   145	 * Handle ITER_FOLIOQ.
+   146	 */
+   147	static __always_inline
+   148	size_t iterate_folioq(struct iov_iter *iter, size_t len, void *priv, void *priv2,
+   149			      iov_step_f step)
+   150	{
+   151		const struct folio_queue *folioq = iter->folioq;
+   152		unsigned int slot = iter->folioq_slot;
+   153		size_t progress = 0, skip = iter->iov_offset;
+   154	
+   155		if (slot == folioq_nr_slots(folioq)) {
+   156			/* The iterator may have been extended. */
+   157			folioq = folioq->next;
+   158			slot = 0;
+   159		}
+   160	
+   161		do {
+   162			struct folio *folio = folioq_folio(folioq, slot);
+   163			size_t part, remain, consumed;
+   164			size_t fsize;
+   165			void *base;
+   166	
+   167			if (!folio)
+   168				break;
+   169	
+   170			fsize = folioq_folio_size(folioq, slot);
+ > 171			if (skip >= fsize)
+   172				goto next;
+   173			base = kmap_local_folio(folio, skip);
+   174			part = umin(len, PAGE_SIZE - skip % PAGE_SIZE);
+   175			remain = step(base, progress, part, priv, priv2);
+   176			kunmap_local(base);
+   177			consumed = part - remain;
+   178			len -= consumed;
+   179			progress += consumed;
+   180			skip += consumed;
+   181			if (skip >= fsize) {
+   182	next:
+   183				skip = 0;
+   184				slot++;
+   185				if (slot == folioq_nr_slots(folioq) && folioq->next) {
+   186					folioq = folioq->next;
+   187					slot = 0;
+   188				}
+   189			}
+   190			if (remain)
+   191				break;
+   192		} while (len);
+   193	
+   194		iter->folioq_slot = slot;
+   195		iter->folioq = folioq;
+   196		iter->iov_offset = skip;
+   197		iter->count -= progress;
+   198		return progress;
+   199	}
+   200	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
