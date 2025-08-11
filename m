@@ -1,206 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E6B29BDB5;
-	Mon, 11 Aug 2025 16:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E82E1A9FB1
+	for <llvm@lists.linux.dev>; Mon, 11 Aug 2025 17:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754931113; cv=none; b=VvwcdnPMskvZbw5taavn2e8P6FkEZjm+iqrhslnnMuu4xIa7V56ZbBkP99dLD7K2iVPaiEmE3u/V2dgD6olpqYx54Fd/8aC4NhKa4iZts3HXFSxaY0ibs3rAkVXchukq25SpDW6H5/+5bvL+JTzHVqgydkTDa72XwT1naXLNHlU=
+	t=1754931660; cv=none; b=kxtpn+IzFxitrpt2Lwl6lkFGQN6X1lBnH+T0g6B2tW1KVp20SP2hqXP+mfsEHpK3aCumCGfSkBTeyhOTmqcv6j3jzedCLe0WCqilOy6YQ0wsFTbh31bib4RWdKJ8yKw6thW3Ko2/tmKAe/ORcAoYWN/ZaoM6sLB7N73szujGi5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754931113; c=relaxed/simple;
-	bh=eg8EC2t80Vxh41ZznLIFBbpFrj8TuAVb4hd/s6oFWEM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WW4ZWt5AseoZ3NpHse8T3k/OOnXWFHZtN3G1y8fW/j/WHrVgjTs84Pn/eziP6NNP9Ez4j7Vs9Z7DR5Wve+18sa+vD40/2HPw4kVgqYQpI87yGZb9JcMiImfwr/73JDvdP52nA0D+5faIx47Qw0dMr6EsyHVuRoO6udw2Mh/MBZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e1EcaQf4; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1754931660; c=relaxed/simple;
+	bh=YYBsOSZTzGmwlXVdHceQeByVSwLLZRBjF7Okwkt++fc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FORTpqCSIA/jer419+pRO416P103ywsLsbQsOjO+m0MfWetXyym5FJ8m/luL3jun6qkmIA/ruqMBiKzdtoeWBtIIUK2u4y6kLcM1bpilXLw+5PDpLjJWg/ZXn5ebU0bkv5qyuYsqaFq+gCGxprWrXDm8b4JhS5XP233fr2NR3PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDRfRWyO; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e1EcaQf4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754931111; x=1786467111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eg8EC2t80Vxh41ZznLIFBbpFrj8TuAVb4hd/s6oFWEM=;
-  b=e1EcaQf49nZCZRGxClkrvpLOil1VfppRqIPT7gVa2ZyF6AnZbUR1cnC/
-   gVgKQFcIOBxJKtDYA4iTmPfnPTwR2j30wW54cCPTcLFNlx7P9pasdlRJJ
-   kTkZIDkF0iH+f7MaNeOoNyxoxZQKJpqtE5CwN+mW1j7lUC/xwT+QLHY+8
-   nrS4CD58JfxxzhUVR0SDyYSvwXLCLnJfC8IGNAEq3hVQJ4TQM6nrNayli
-   cq7/uSELk8EqBoNM5KqPOHjHmyjhpcoJAIYeDVDM+9q9PC6zvs07TV2R6
-   kwKuIfpDF23m10OY21Lwxl7XFPGQqa+u9x1ZuwWCyHLLjXkW9ZHPBMtp6
-   g==;
-X-CSE-ConnectionGUID: 1ekR4gx9RWS/Z5xievJIuA==
-X-CSE-MsgGUID: piG/RRV3SCCQ3CzeAPfg5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="44773571"
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="44773571"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 09:51:49 -0700
-X-CSE-ConnectionGUID: HF8GKpY2TmeakFs8SR7YQg==
-X-CSE-MsgGUID: jdIeMNWLR6uQEgdH/cB2QQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="171209283"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 11 Aug 2025 09:51:48 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ulVjS-00063L-2W;
-	Mon, 11 Aug 2025 16:51:02 +0000
-Date: Tue, 12 Aug 2025 00:50:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:perf/core 10/15] kernel/events/core.c:7018:6: warning:
- variable 'user_extra' is used uninitialized whenever 'if' condition is true
-Message-ID: <202508120028.0P5MnCYq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDRfRWyO"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-31ece02ad92so3517795a91.2
+        for <llvm@lists.linux.dev>; Mon, 11 Aug 2025 10:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754931658; x=1755536458; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QPhhmdVj2zt9+8pHoVZ1ejD+Bo3wE8/FwKPpnpZx/DE=;
+        b=cDRfRWyOBYIJBkKtfr7BiB263Sm6m6ZUocKJL+GIjz8cae7JWYVmukmKjbD2xUy2pN
+         cBWrwQO3/KbiIRF+keuZ4Nls1hjcP0mLDv7FJMNpphHT1AwOd1ti+/oCwqyM4mjoBO1u
+         Wm9sWOUb4gEz8TLkSNDz3BosHBPWqMgwnzPrChkzrNXuPakgscJ8G4gH75nebo0wfh/L
+         m1rn8pZmEeV+mwd6L3My4jZC8B8C6Z3UBMI8X5LF3CuHqdLlv4EVYpbQ25qKaBfk3Iwt
+         1PmTYTI9tC66ytMrlz6MykUUPjT5fBKTj5++VQ9nk/NMzxs38/H7Hd3VNEn7CfAsAt/W
+         hP/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754931658; x=1755536458;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QPhhmdVj2zt9+8pHoVZ1ejD+Bo3wE8/FwKPpnpZx/DE=;
+        b=YnlIskoDnJ4F+MGX/h1rGdIp4+5Q251bcc+GlyJHtlSzsrET5080iUibPBdDsRCtvr
+         YbYStpFPx0dIRQ3Fa2cNXVyWvNWNdJpgrdEJg9qkPbpZ1UUbDVBx28lWqvZYpSnf5kWA
+         D09mJVe0Q+ibGDjuros66g8fgIWuIwvL5tR6bk/ThThiQH5WTXEAmOCCUFm7zGb59Hhj
+         JqoiRrb2rfyn7Gzp7ruJfGBdURr+uWXfn2XUqFrHz0/v00Ofv34LNHlabZQ0YDRIwMQQ
+         FWJTYKTyGFDRzR2zoMb15GATedlR0lSBOte0Xeck4Au1AkvoUPB6vzRo7446sYMLb1Qw
+         PYaA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSWLs9xAOMetx0HSF6t4oy+x/faDNtA7UoF36k3Ix66onZkQ1sfWrM1YfwtxDWvEO2Qi4w@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw48i3PrddEmtyaH3KBWCVTnR3rC5StusqlnK6BfmTjOzvXihRf
+	/v/lgsttYHWfT1zlTKBFqNyZIimj8fy/pK7spDTvXrshvmKemYy9iBFw
+X-Gm-Gg: ASbGncvH5D0g69GqttOfB4GLD4vFIm3SqvutsJlLhQUk8yhzKfqaMRA1I5/uSgHth2f
+	dD3KFCLfQ7BavBAiHdZR9AD6A6lYCDsoWLgpHT6tRUZiJ6cJf5Xcgm8hGvKn3B0jZ/kBFn+fSp2
+	6oRPa1Zs/54dx87qapN3JSVmNO0ixTMzaWEbr0a44nvLtsrhEMexXagn1dry6dEV81yLHGQ1sAf
+	8gCKQDOxNvlee0ttoMSAGubVBi4qVu7/b9VrljNMhP8VD7bOzzHoHHh6svWYS0/hmRVeQxZSwh4
+	RwsQfmWick89IfySeE1plQ3myqKBM5cQCWbR4awylauHyk+xhLDhqYqSf1ccjYFbZW7nDTvUH+N
+	WmJf7MJaV82QbEdMZfdiNOZTBw75OFWI/Y78K5rnuhTUyqSd6v8Yn4neFAkcswU7y1w==
+X-Google-Smtp-Source: AGHT+IFlUtkPL3MkM6BSJoR+uUdCcN1ck0aR8fv6x5sWJaoPa/EPzL9HUlQRBpUgrYZzO2RxqQELng==
+X-Received: by 2002:a17:90b:3a91:b0:31c:15d9:8ae with SMTP id 98e67ed59e1d1-321c0b7e35cmr428564a91.33.1754931657951;
+        Mon, 11 Aug 2025 10:00:57 -0700 (PDT)
+Received: from localhost.localdomain (wf122-104.ust.hk. [175.159.122.104])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-321612815b9sm15502255a91.24.2025.08.11.10.00.54
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 11 Aug 2025 10:00:56 -0700 (PDT)
+From: Haoyang LIU <tttturtleruss@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com,
+	Haoyang LIU <tttturtleruss@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH V2] scripts/checktransupdate.py: add support for scanning directory
+Date: Tue, 12 Aug 2025 01:00:50 +0800
+Message-ID: <20250811170050.94997-1-tttturtleruss@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
-head:   965dafe6500a2b46311c810c9360c29c15e45677
-commit: 189c97b1b2ab5bf33bdf635a70631526f1cd1bfd [10/15] perf: Split out the AUX buffer allocation
-config: x86_64-buildonly-randconfig-003-20250811 (https://download.01.org/0day-ci/archive/20250812/202508120028.0P5MnCYq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250812/202508120028.0P5MnCYq-lkp@intel.com/reproduce)
+Origin script can only accept a file as parameter, this commit enables
+it to scan a directory.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508120028.0P5MnCYq-lkp@intel.com/
+Usage example:
+./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
+---
+V1 -> V2: remove the fix of missing "f" in f-string and make it a new patch
 
->> kernel/events/core.c:7018:6: warning: variable 'user_extra' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    7018 |         if (rb_has_aux(rb)) {
-         |             ^~~~~~~~~~~~~~
-   kernel/events/core.c:7043:25: note: uninitialized use occurs here
-    7043 |         perf_mmap_account(vma, user_extra, extra);
-         |                                ^~~~~~~~~~
-   kernel/events/core.c:7018:2: note: remove the 'if' if its condition is always false
-    7018 |         if (rb_has_aux(rb)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~
-    7019 |                 atomic_inc(&rb->aux_mmap_count);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    7020 | 
-    7021 |         } else {
-         |         ~~~~~~
-   kernel/events/core.c:6978:17: note: initialize the variable 'user_extra' to silence this warning
-    6978 |         long user_extra, extra;
-         |                        ^
-         |                         = 0
->> kernel/events/core.c:7018:6: warning: variable 'extra' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    7018 |         if (rb_has_aux(rb)) {
-         |             ^~~~~~~~~~~~~~
-   kernel/events/core.c:7043:37: note: uninitialized use occurs here
-    7043 |         perf_mmap_account(vma, user_extra, extra);
-         |                                            ^~~~~
-   kernel/events/core.c:7018:2: note: remove the 'if' if its condition is always false
-    7018 |         if (rb_has_aux(rb)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~
-    7019 |                 atomic_inc(&rb->aux_mmap_count);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    7020 | 
-    7021 |         } else {
-         |         ~~~~~~
-   kernel/events/core.c:6978:24: note: initialize the variable 'extra' to silence this warning
-    6978 |         long user_extra, extra;
-         |                               ^
-         |                                = 0
-   kernel/events/core.c:215:20: warning: unused function 'class_perf_ctx_lock_destructor' [-Wunused-function]
-     215 | static inline void class_perf_ctx_lock_destructor(class_perf_ctx_lock_t *_T)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:219:1: warning: unused function 'class_perf_ctx_lock_constructor' [-Wunused-function]
-     219 | class_perf_ctx_lock_constructor(struct perf_cpu_context *cpuctx,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+ scripts/checktransupdate.py | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-
-vim +7018 kernel/events/core.c
-
-  6972	
-  6973	static int perf_mmap_aux(struct vm_area_struct *vma, struct perf_event *event,
-  6974				 unsigned long nr_pages)
-  6975	{
-  6976		u64 aux_offset, aux_size;
-  6977		struct perf_buffer *rb;
-  6978		long user_extra, extra;
-  6979		int ret, rb_flags = 0;
-  6980	
-  6981		rb = event->rb;
-  6982		if (!rb)
-  6983			return -EINVAL;
-  6984	
-  6985		guard(mutex)(&rb->aux_mutex);
-  6986	
-  6987		/*
-  6988		 * AUX area mapping: if rb->aux_nr_pages != 0, it's already
-  6989		 * mapped, all subsequent mappings should have the same size
-  6990		 * and offset. Must be above the normal perf buffer.
-  6991		 */
-  6992		aux_offset = READ_ONCE(rb->user_page->aux_offset);
-  6993		aux_size = READ_ONCE(rb->user_page->aux_size);
-  6994	
-  6995		if (aux_offset < perf_data_size(rb) + PAGE_SIZE)
-  6996			return -EINVAL;
-  6997	
-  6998		if (aux_offset != vma->vm_pgoff << PAGE_SHIFT)
-  6999			return -EINVAL;
-  7000	
-  7001		/* already mapped with a different offset */
-  7002		if (rb_has_aux(rb) && rb->aux_pgoff != vma->vm_pgoff)
-  7003			return -EINVAL;
-  7004	
-  7005		if (aux_size != nr_pages * PAGE_SIZE)
-  7006			return -EINVAL;
-  7007	
-  7008		/* already mapped with a different size */
-  7009		if (rb_has_aux(rb) && rb->aux_nr_pages != nr_pages)
-  7010			return -EINVAL;
-  7011	
-  7012		if (!is_power_of_2(nr_pages))
-  7013			return -EINVAL;
-  7014	
-  7015		if (!atomic_inc_not_zero(&rb->mmap_count))
-  7016			return -EINVAL;
-  7017	
-> 7018		if (rb_has_aux(rb)) {
-  7019			atomic_inc(&rb->aux_mmap_count);
-  7020	
-  7021		} else {
-  7022			if (!perf_mmap_calc_limits(vma, &user_extra, &extra)) {
-  7023				atomic_dec(&rb->mmap_count);
-  7024				return -EPERM;
-  7025			}
-  7026	
-  7027			WARN_ON(!rb && event->rb);
-  7028	
-  7029			if (vma->vm_flags & VM_WRITE)
-  7030				rb_flags |= RING_BUFFER_WRITABLE;
-  7031	
-  7032			ret = rb_alloc_aux(rb, event, vma->vm_pgoff, nr_pages,
-  7033					   event->attr.aux_watermark, rb_flags);
-  7034			if (ret) {
-  7035				atomic_dec(&rb->mmap_count);
-  7036				return ret;
-  7037			}
-  7038	
-  7039			atomic_set(&rb->aux_mmap_count, 1);
-  7040			rb->aux_mmap_locked = extra;
-  7041		}
-  7042	
-  7043		perf_mmap_account(vma, user_extra, extra);
-  7044		atomic_inc(&event->mmap_count);
-  7045	
-  7046		return 0;
-  7047	}
-  7048	
-
+diff --git a/scripts/checktransupdate.py b/scripts/checktransupdate.py
+index e39529e46c3d..01271fb30cbe 100755
+--- a/scripts/checktransupdate.py
++++ b/scripts/checktransupdate.py
+@@ -13,6 +13,8 @@ The usage is as follows:
+ This will print all the files that need to be updated or translated in the zh_CN locale.
+ - ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+ This will only print the status of the specified file.
++- ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
++This will print all the files in the specified folder and its subfolders.
+ 
+ The output is something like:
+ Documentation/dev-tools/kfence.rst
+@@ -21,6 +23,17 @@ No translation in the locale of zh_CN
+ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+ commit 42fb9cfd5b18 ("Documentation: dev-tools: Add link to RV docs")
+ 1 commits needs resolving in total
++
++Documentation/translations/zh_CN/dev-tools/index.rst
++commit d5af79c05e93 ("Documentation: move dev-tools debugging files to process/debugging/")
++commit d5dc95836147 ("kbuild: Add Propeller configuration for kernel build")
++commit 315ad8780a12 ("kbuild: Add AutoFDO support for Clang build")
++3 commits needs resolving in total
++
++Documentation/translations/zh_CN/dev-tools/kcsan.rst
++commit b37221cc861d ("Documentation: kcsan: fix "Plain Accesses and Data Races" URL in kcsan.rst")
++commit 72ffee678f6f ("docs: update dev-tools/kcsan.rst url about KTSAN")
++2 commits needs resolving in total
+ """
+ 
+ import os
+@@ -293,6 +306,17 @@ def main():
+                 if args.print_missing_translations:
+                     logging.info(os.path.relpath(os.path.abspath(file), linux_path))
+                     logging.info("No translation in the locale of %s\n", args.locale)
++    else:
++        # check if the files are directories or files
++        new_files = []
++        for file in files:
++            if os.path.isfile(file):
++                new_files.append(file)
++            elif os.path.isdir(file):
++                # for directories, list all files in the directory and its subfolders
++                new_files.extend(list_files_with_excluding_folders(
++                    file, [], "rst"))
++        files = new_files
+ 
+     files = list(map(lambda x: os.path.relpath(os.path.abspath(x), linux_path), files))
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
