@@ -1,140 +1,117 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88CA2AEE4
-	for <llvm@lists.linux.dev>; Mon, 11 Aug 2025 06:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E672D94A8;
+	Mon, 11 Aug 2025 07:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754892973; cv=none; b=uYUjGkv/CiejAa4yOcN+RWJ06VTWa6epg3obAsAnjuPgIXzYvNUB8gPJbUKpusnI2SUD6hY71maJos4JbsL/prkp0b79cyRpataKf0rB3XCDSfHFUwbgMC1GHfV2/RUsgkJurfSo22uG0W8mHcX98E+Nt8ylxC57oTWdGW0TTwU=
+	t=1754896427; cv=none; b=L8vRb5zCmnZ7KZsl15giBIefO3zjjmKvjweOTx+1tKQCg1bbfK2CEZ0PWL5OUx630ibP+RkDXRrtiZKWno4vcgABgJ817ikQu5t+8v82v8ItAzYq5m5YxCpNl9HPYRfWbid6ejtwMeyTic23zDoEZ9JZf/5jZp/yOhNw5l14JiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754892973; c=relaxed/simple;
-	bh=8yBfRNNj88KYOLzIVbc8KOtL/WKAmqp/cxB42b4ZV6I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KY7QILWZQaSgZY87NNxzAF7vylj4RPMt90jIq2VB0j4oiN7InKYNYEJuTofAer949sY9H24ytcZoqm6ZPxaNRZYkDdEAgv9Ci0pMis3xR5Izh+9EBGO2fX2oieZpbHh4CV+pWXkSFrDQOYdDm7u8Hz/MMSFMgS7K9BEYcvTwf2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app2 (Coremail) with SMTP id HwEQrACnD2dqiploUpgkAA--.35047S2;
-	Mon, 11 Aug 2025 14:15:06 +0800 (CST)
-Received: from [192.168.101.253] (unknown [183.94.132.22])
-	by gateway (Coremail) with SMTP id _____wC3T1Nliplop6jPAQ--.37082S2;
-	Mon, 11 Aug 2025 14:15:03 +0800 (CST)
-Message-ID: <226d6f90-f80b-430d-a30c-db5a2a652e3b@hust.edu.cn>
-Date: Mon, 11 Aug 2025 14:15:01 +0800
+	s=arc-20240116; t=1754896427; c=relaxed/simple;
+	bh=Lzffy5fcjgivNaI8RFUP+WunBH8zFgU8+d56e/JoCnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QFgGTh+ctjdN/NPagHP7TydtuW1JnKH/hN2Ec2AMgzrkHZopo7wZXBlDnZItXtzQHJnWw3pve/rYGTYUiHubVgLllQUfv7Wi1T/qI4jABuUcVAVcm1axomr+SiuLU6AeVOx1j1r9bliaNjmZ3wnqAS9iaU7Gw3QCfjkTVTXfcSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ek+DU1Tb; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ek+DU1Tb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754896425; x=1786432425;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Lzffy5fcjgivNaI8RFUP+WunBH8zFgU8+d56e/JoCnE=;
+  b=ek+DU1TbXV3/LxRgwuS0XuFSg8D/mbl9yjOUnT+6qU+I/QWOUMSxdLZZ
+   wIuksrlzb0aK8TEX7sf4dWPg6t2cu5s1BactvGvS+d5LATva4S/HGjsmE
+   sEqEq0LJYCXjXurkCfHfD7Cf5EqHDDGvceFVuV4wLp9iv+9ipe5cotfUo
+   JnsUXST1aHRU9r7q62/6xgNn98ofsSLzTTOhddUnE4Bx/7Pc7nDfd23Hm
+   Pjndx7V1Qejwytu7bCUIKWzHy7ftH0BM/SPNu/qN2hryxOltB3TZjpmZS
+   Jd1fSANlNeNrLUzVEEPICTusTl3iHsRokwrgayVUVg8jyL7HWhkm05u97
+   A==;
+X-CSE-ConnectionGUID: lz4avyq+R1eTucEU5vq8DA==
+X-CSE-MsgGUID: 0fCeeOFbS3qVzGdohBqkyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57014957"
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="57014957"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 00:13:44 -0700
+X-CSE-ConnectionGUID: WanqVVYPTOSx2UK3kUMksg==
+X-CSE-MsgGUID: yvIRKw+gQ5mgQtoAK2gHng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="165835337"
+Received: from igk-lkp-server01.igk.intel.com (HELO b3b7d4258b7c) ([10.91.175.65])
+  by orviesa007.jf.intel.com with ESMTP; 11 Aug 2025 00:13:44 -0700
+Received: from kbuild by b3b7d4258b7c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ulMiz-00031f-02;
+	Mon, 11 Aug 2025 07:13:41 +0000
+Date: Mon, 11 Aug 2025 09:13:40 +0200
+From: kernel test robot <lkp@intel.com>
+To: Nick Li <nick.li@foursemi.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:v5_20250723_nick_li_asoc_codecs_add_support_for_foursemi_fs2104_5s
+ 4/4] sound/soc/codecs/fs210x.c:1563:34: warning: unused variable
+ 'fs210x_of_match'
+Message-ID: <202508110904.wMJ08z7r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scripts/checktransupdate.py: add support for scanning
- directory
-To: Haoyang LIU <tttturtleruss@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- dzm91@hust.edu.cn, Yanteng Si <si.yanteng@linux.dev>,
- Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20250810161730.6530-1-tttturtleruss@gmail.com>
-From: Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <20250810161730.6530-1-tttturtleruss@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:HwEQrACnD2dqiploUpgkAA--.35047S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw4rJrWDGr1rAFWDZFW3Awb_yoW5ZrWrpa
-	y5K3WfJa47Jw13Gw1fGr48urWfGF97J3yYqr1Iqwn5tr4DKw4SgF43tFyY9FWxJryfXFWU
-	XF4FkryjkryDua7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQYb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_JF
-	0_Jw1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
-	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
-	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
-	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r126r1DMxAIw2
-	8IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUnb4S5UUUUU==
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-+to Yanteng, Dongliang, Alex and Jon
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v5_20250723_nick_li_asoc_codecs_add_support_for_foursemi_fs2104_5s
+head:   928092383393eb9b0c55f40f036158aa3b4ca74a
+commit: 928092383393eb9b0c55f40f036158aa3b4ca74a [4/4] ASoC: codecs: Add FourSemi FS2104/5S audio amplifier driver
+config: um-randconfig-2002-20250811 (https://download.01.org/0day-ci/archive/20250811/202508110904.wMJ08z7r-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7d886fab74d4037d654d02bed24dd97c0ba863d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250811/202508110904.wMJ08z7r-lkp@intel.com/reproduce)
 
-+cc linux-doc mailing list
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508110904.wMJ08z7r-lkp@intel.com/
 
-On 8/11/25 12:17 AM, Haoyang LIU wrote:
-> Origin script can only accept a file as parameter, this commit enables
-> it to scan a directory.
->
-> Usage example:
-> ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
->
-> Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
-> ---
->   scripts/checktransupdate.py | 26 +++++++++++++++++++++++++-
->   1 file changed, 25 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/checktransupdate.py b/scripts/checktransupdate.py
-> index e39529e46c3d..0d197d036650 100755
-> --- a/scripts/checktransupdate.py
-> +++ b/scripts/checktransupdate.py
-> @@ -13,6 +13,8 @@ The usage is as follows:
->   This will print all the files that need to be updated or translated in the zh_CN locale.
->   - ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->   This will only print the status of the specified file.
-> +- ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
-> +This will print all the files in the specified folder and its subfolders.
->   
->   The output is something like:
->   Documentation/dev-tools/kfence.rst
-> @@ -21,6 +23,17 @@ No translation in the locale of zh_CN
->   Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->   commit 42fb9cfd5b18 ("Documentation: dev-tools: Add link to RV docs")
->   1 commits needs resolving in total
-> +
-> +Documentation/translations/zh_CN/dev-tools/index.rst
-> +commit d5af79c05e93 ("Documentation: move dev-tools debugging files to process/debugging/")
-> +commit d5dc95836147 ("kbuild: Add Propeller configuration for kernel build")
-> +commit 315ad8780a12 ("kbuild: Add AutoFDO support for Clang build")
-> +3 commits needs resolving in total
-> +
-> +Documentation/translations/zh_CN/dev-tools/kcsan.rst
-> +commit b37221cc861d ("Documentation: kcsan: fix "Plain Accesses and Data Races" URL in kcsan.rst")
-> +commit 72ffee678f6f ("docs: update dev-tools/kcsan.rst url about KTSAN")
-> +2 commits needs resolving in total
->   """
->   
->   import os
-> @@ -131,7 +144,7 @@ def check_per_file(file_path):
->       opath = get_origin_path(file_path)
->   
->       if not os.path.isfile(opath):
-> -        logging.error("Cannot find the origin path for {file_path}")
-> +        logging.error(f"Cannot find the origin path for {file_path}")
->           return
->   
->       o_from_head = get_latest_commit_from(opath, "HEAD")
-> @@ -293,6 +306,17 @@ def main():
->                   if args.print_missing_translations:
->                       logging.info(os.path.relpath(os.path.abspath(file), linux_path))
->                       logging.info("No translation in the locale of %s\n", args.locale)
-> +    else:
-> +        # check if the files are directories or files
-> +        new_files = []
-> +        for file in files:
-> +            if os.path.isfile(file):
-> +                new_files.append(file)
-> +            elif os.path.isdir(file):
-> +                # for directories, list all files in the directory and its subfolders
-> +                new_files.extend(list_files_with_excluding_folders(
-> +                    file, [], "rst"))
-> +        files = new_files
->   
->       files = list(map(lambda x: os.path.relpath(os.path.abspath(x), linux_path), files))
->   
+All warnings (new ones prefixed by >>):
 
+   In file included from sound/soc/codecs/fs210x.c:9:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> sound/soc/codecs/fs210x.c:1563:34: warning: unused variable 'fs210x_of_match' [-Wunused-const-variable]
+    1563 | static const struct of_device_id fs210x_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/fs210x_of_match +1563 sound/soc/codecs/fs210x.c
+
+  1562	
+> 1563	static const struct of_device_id fs210x_of_match[] = {
+  1564		{ .compatible = "foursemi,fs2105s", },
+  1565		{},
+  1566	};
+  1567	MODULE_DEVICE_TABLE(of, fs210x_of_match);
+  1568	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
