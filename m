@@ -1,122 +1,376 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118BA2ED145;
-	Tue, 12 Aug 2025 11:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A560C27BF95
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754996869; cv=none; b=O7mI/dMe7vZiiqWRmYDabkkscnBdGoDkziEE0wMwcSlIQwc5LT8qpLjPsFdeGP3UBHH7KSX5Kyw0J83lXoSd8RE75LC2v9Ir3Ntt5HacqBgCTnWCndxmqRk+0aoOF53vK6NJorNMbaQeejGZ79Otiyde2mzHDsGaX9r+tUiF6tU=
+	t=1755005209; cv=none; b=IHtbFogAiWfxBYfPgl4eQlZkCBqkZp8JjuALH004sKje4Fq79lzA/v2AhaA2y9h98cSe+MipToaBVH82+1xExP8gfMBiz9WJVqFdji0vLDr7+KKxkQOwwv7BEDWdCiq+udkm+fUnssecz6B6AbZH6cGdUDGk4rt2RNoX+NllYL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754996869; c=relaxed/simple;
-	bh=mM1oIijYsTieBVXwDdbk88e2RvtyWnf8BqoF2nILFwk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MXt6qnyaqM9oTWgDY7v3lowa9uqIxKYzDTiOooTT/gBfW65Y2gC0DAjruZppDAHuZNtfZ/fMzxwqiridGaawPw2HZRDQPHP9wVYVHUyK/B6qsqNGM8Rm6LmjzGczHh1OB2r6zGNvRDYbJcbfBSZn5kEFQosLNkDrMSJaxd7kp7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHNg7rhT; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755005209; c=relaxed/simple;
+	bh=3vjNsBiRH4qTtxkXlQjP9ZJdLJ+PMfRGcHXqnMgrRUE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CRTunZQ85gkh3HFHcb7xR42UxI4ipJvrm5OvsJ9H6hBLbAdb7JacoYVcJjvpsXXQP2AeqGqXp5wKBAvdVeB+otnbgiLBzCLPC6n4YQ8YIVaVYE4s1ZvHkmeuFW0GoK4cu/7zvrtMpsvT7DXVFTyuRyQUE9z4Tu+QCHNzzK1RUu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IebEVZ4V; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHNg7rhT"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-242fdfec998so1097695ad.1;
-        Tue, 12 Aug 2025 04:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754996867; x=1755601667; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mM1oIijYsTieBVXwDdbk88e2RvtyWnf8BqoF2nILFwk=;
-        b=YHNg7rhTvWwmwBQxbBrlSmpapElbHqaODmGdhJ0HL0Sq7Bhun/zu5G6spfNu/N3v03
-         mx9eGYTFSZhEO0Y3IQMbkpy9xQSR+/yYBXZox7HOlQcldkEZEak2VTQ7g4exgS20jZfC
-         4IQjusyjgyuKCbN52wEZxUZGYush4IZ7Hbw6YBKq/VwSHJhGcWgd63DW2QhTtWeGk7uq
-         wc5QpAFnDCFCQon/GJ00h8p7rBhjcP/BCFpEZ5Lcu0TxMrGobCwnp3uE6HEpTf9e3Rb/
-         hZIIruiDZDyxQXPgcl3BFXAAnqQbiIHwU/ToB/e1ebdC8mg6/ENO4v0tWbGnGPtGhq3J
-         FlkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754996867; x=1755601667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mM1oIijYsTieBVXwDdbk88e2RvtyWnf8BqoF2nILFwk=;
-        b=a+l7bl5i9mtuUsPO8YGWzrSH1b1TwFgwebEkU5LXyYKNJitCjqMuBkw+Exvoes1A4S
-         Y2in6yGds+dFsh46lJG3g2Wlceq5t9iYz7Er18iwBPbZoWXoHCLbd23izBaSaIEw9kvd
-         76wFCeBktCmCs4uCgO4+0YbsRGlRv9ICyUxiSyt4/jsCwQu8to6olWUEYC5JG5oH0zU+
-         HKit2aafB+bB70DD4Ea/K9CvaLCqrdSBIci0tMwNK0c3QIBfxY5geCk5vvf2Bq5EOn9H
-         5vNNj8GuaiqDrjuaNh2FNlgnDR+FregvQbBBJdWvL9d9duxZpHg6R+qTcoMVmQQZve9U
-         7wJA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/iO67iRFBcHD+sg99xkRGuBx0nRgBpeIK6J+4pHENJCWAm/Vxj9Hkxm8Dd63y6LKReCwX@lists.linux.dev, AJvYcCVzg124B/3jIYmiVmBU1xoXEr/p50nsUunbe7E270bTEQNbV7G82iMVtrsG1Y3tS5JxsyCG+bJlwYr4@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz4+TUbmjaBxdDt0O1Z2ou79UVfcKdL911bDAPUN1B98rM757LH
-	5VV0a3812bgWcajEAMrpyyppSNzNHWjVrZtZVbFg3utR3GL0Hpu0oYpH7hxOxerFNMCUt3xMVfI
-	/lbO2nse41Uwby8IRK7m5xqt0xmfgOHY=
-X-Gm-Gg: ASbGncsyGZ8n+S/qL+eSzENu5JP1Ug2yEP+eTDBFEO+sgCwp2zRPr3QUr2s7Vw/t/Q/
-	3o7o9mHXNO5Iw2a5mz4PzozSz+a7iSg8p9Mfw74Bw0tRW44/QlEYx9vLvH87aULz6I/aA2pR8mk
-	rNfcg3X5FHZYI1Z5QXpDSviYISwnJ4/IN9ExyCFsgOz0RPrX1qIRbpXjI1SbH4AQO3Ko9vzsIWG
-	cehSj6LnXtpAK30NOM=
-X-Google-Smtp-Source: AGHT+IGLTgav5Ly0pJQ7DxONlyuqSGpB75/R07ZLvB4KvAdVZt2KEevtP/u+Z9PPdrxzblYTwfgzUXYmCR2PQbfj+a0=
-X-Received: by 2002:a17:903:1a70:b0:240:5c13:979a with SMTP id
- d9443c01a7336-24306da5537mr4831165ad.9.1754996867136; Tue, 12 Aug 2025
- 04:07:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IebEVZ4V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755005207; x=1786541207;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3vjNsBiRH4qTtxkXlQjP9ZJdLJ+PMfRGcHXqnMgrRUE=;
+  b=IebEVZ4V3TUVcAR4hVpZUO17shodBeY4nZmmYBEKuUHCHYuAgF94Z5UH
+   zTFbUIB1yyXaM0VXQ8RNYHrUt7AqHD/Jbw18ArA0er7CgxlemIimQnbaC
+   WlSvz6lMrSOs6w2jLhh4cDHTYqW7ZfzcXi/zDyrgJmrcUj/t4BlITUtE9
+   OOHGNRmxwZjifyTMnlff5RuQcbgZwnFHe20XGP2Bo5mwi04JP9Ua+8q+K
+   ALup0LknkskL9A65TWkKSdYwEgHZPvMnivO2FvINfBwjeMXzUsLErsP/E
+   /MfiAy/SOr3VC3LBJqk2c6JyWktDem8VAlDzbj81tyK8BVAByDWq7XmAL
+   A==;
+X-CSE-ConnectionGUID: LymaZj2bSKi3ul6pSCcf1A==
+X-CSE-MsgGUID: CfHs/du3QbW9mtVvv0G+mg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903104"
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="60903104"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:24:59 -0700
+X-CSE-ConnectionGUID: kayhpomIS0akEcqtG//q8Q==
+X-CSE-MsgGUID: VWXG4HKqROyugDxAls9HoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="165831255"
+Received: from vpanait-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.54])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:24:35 -0700
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: nathan@kernel.org,
+	arnd@arndb.de,
+	broonie@kernel.org,
+	Liam.Howlett@oracle.com,
+	urezki@gmail.com,
+	will@kernel.org,
+	kaleshsingh@google.com,
+	rppt@kernel.org,
+	leitao@debian.org,
+	coxu@redhat.com,
+	surenb@google.com,
+	akpm@linux-foundation.org,
+	luto@kernel.org,
+	jpoimboe@kernel.org,
+	changyuanl@google.com,
+	hpa@zytor.com,
+	dvyukov@google.com,
+	kas@kernel.org,
+	corbet@lwn.net,
+	vincenzo.frascino@arm.com,
+	smostafa@google.com,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	andreyknvl@gmail.com,
+	alexander.shishkin@linux.intel.com,
+	thiago.bauermann@linaro.org,
+	catalin.marinas@arm.com,
+	ryabinin.a.a@gmail.com,
+	jan.kiszka@siemens.com,
+	jbohac@suse.cz,
+	dan.j.williams@intel.com,
+	joel.granados@kernel.org,
+	baohua@kernel.org,
+	kevin.brodsky@arm.com,
+	nicolas.schier@linux.dev,
+	pcc@google.com,
+	andriy.shevchenko@linux.intel.com,
+	wei.liu@kernel.org,
+	bp@alien8.de,
+	ada.coupriediaz@arm.com,
+	xin@zytor.com,
+	pankaj.gupta@amd.com,
+	vbabka@suse.cz,
+	glider@google.com,
+	jgross@suse.com,
+	kees@kernel.org,
+	jhubbard@nvidia.com,
+	joey.gouly@arm.com,
+	ardb@kernel.org,
+	thuth@redhat.com,
+	pasha.tatashin@soleen.com,
+	kristina.martsenko@arm.com,
+	bigeasy@linutronix.de,
+	maciej.wieczor-retman@intel.com,
+	lorenzo.stoakes@oracle.com,
+	jason.andryuk@amd.com,
+	david@redhat.com,
+	graf@amazon.com,
+	wangkefeng.wang@huawei.com,
+	ziy@nvidia.com,
+	mark.rutland@arm.com,
+	dave.hansen@linux.intel.com,
+	samuel.holland@sifive.com,
+	kbingham@kernel.org,
+	trintaeoitogc@gmail.com,
+	scott@os.amperecomputing.com,
+	justinstitt@google.com,
+	kuan-ying.lee@canonical.com,
+	maz@kernel.org,
+	tglx@linutronix.de,
+	samitolvanen@google.com,
+	mhocko@suse.com,
+	nunodasneves@linux.microsoft.com,
+	brgerst@gmail.com,
+	willy@infradead.org,
+	ubizjak@gmail.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	sohil.mehta@intel.com
+Cc: linux-mm@kvack.org,
+	linux-kbuild@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	x86@kernel.org,
+	llvm@lists.linux.dev,
+	kasan-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/18] kasan: x86: arm64: KASAN tag-based mode for x86
+Date: Tue, 12 Aug 2025 15:23:36 +0200
+Message-ID: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 12 Aug 2025 13:07:34 +0200
-X-Gm-Features: Ac12FXz75fv-5GwEH7lTNJ0yhooMj6nwQ9IaaKPBS7pSI2ZcZDdB8Ex-5Z7LxRg
-Message-ID: <CANiq72nV62c8cVBzke73OH-sfLdgerDBGrLKTmT83+OQtK6PjA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/24] vdso: Reject absolute relocations during build
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
-	linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Alexandre Ghiti <alexghiti@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 12, 2025 at 7:44=E2=80=AFAM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> Kbuild and Rust folks: This contains custom definitions of hostprog
-> bindgen and rust library commands.
-> These are currently only defined inside the subsystem directory.
-> Let me know if they should go into scripts/Makefile.host.
+======= Introduction
+The patchset aims to add a KASAN tag-based mode for the x86 architecture
+with the help of the new CPU feature called Linear Address Masking
+(LAM). Main improvement introduced by the series is 2x lower memory
+usage compared to KASAN's generic mode, the only currently available
+mode on x86. The tag based mode may also find errors that the generic
+mode couldn't because of differences in how these modes operate.
 
-Glad to see more Rust host progs :)
+======= How does KASAN' tag-based mode work?
+When enabled, memory accesses and allocations are augmented by the
+compiler during kernel compilation. Instrumentation functions are added
+to each memory allocation and each pointer dereference.
 
-Keeping them local may be a bit easier initially to land, I guess
-(e.g. no docs), and then we can generalize when needed later.
+The allocation related functions generate a random tag and save it in
+two places: in shadow memory that maps to the allocated memory, and in
+the top bits of the pointer that points to the allocated memory. Storing
+the tag in the top of the pointer is possible because of Top-Byte Ignore
+(TBI) on arm64 architecture and LAM on x86.
 
-By the way, for consistency with elsewhere, probably we want
-`HOSTRUSTLIB` -> `HOSTRUSTC L`. Though I am thinking to remove the `L`
-anyway since eventually a lot of code will be "lib".
+The access related functions are performing a comparison between the tag
+stored in the pointer and the one stored in shadow memory. If the tags
+don't match an out of bounds error must have occurred and so an error
+report is generated.
 
-Cheers,
-Miguel
+The general idea for the tag-based mode is very well explained in the
+series with the original implementation [1].
+
+[1] https://lore.kernel.org/all/cover.1544099024.git.andreyknvl@google.com/
+
+======= Differences summary compared to the arm64 tag-based mode
+- Tag width:
+	- Tag width influences the chance of a tag mismatch due to two
+	  tags from different allocations having the same value. The
+	  bigger the possible range of tag values the lower the chance
+	  of that happening.
+	- Shortening the tag width from 8 bits to 4, while it can help
+	  with memory usage, it also increases the chance of not
+	  reporting an error. 4 bit tags have a ~7% chance of a tag
+	  mismatch.
+
+- Address masking mechanism
+	- TBI in arm64 allows for storing metadata in the top 8 bits of
+	  the virtual address.
+	- LAM in x86 allows storing tags in bits [62:57] of the pointer.
+	  To maximize memory savings the tag width is reduced to bits
+	  [60:57].
+
+- Inline mode mismatch reporting
+	- Arm64 inserts a BRK instruction to pass metadata about a tag
+	  mismatch to the KASAN report.
+	- On x86 the INT3 instruction is used for the same purpose.
+
+======= Testing
+Checked all the kunits for both software tags and generic KASAN after
+making changes.
+
+In generic mode the results were:
+
+kasan: pass:59 fail:0 skip:13 total:72
+Totals: pass:59 fail:0 skip:13 total:72
+ok 1 kasan
+
+and for software tags:
+
+kasan: pass:63 fail:0 skip:9 total:72
+Totals: pass:63 fail:0 skip:9 total:72
+ok 1 kasan
+
+======= Benchmarks [1]
+All tests were ran on a Sierra Forest server platform. The only
+differences between the tests were kernel options:
+	- CONFIG_KASAN
+	- CONFIG_KASAN_GENERIC
+	- CONFIG_KASAN_SW_TAGS
+	- CONFIG_KASAN_INLINE [1]
+	- CONFIG_KASAN_OUTLINE
+
+Boot time (until login prompt):
+* 02:55 for clean kernel
+* 05:42 / 06:32 for generic KASAN (inline/outline)
+* 05:58 for tag-based KASAN (outline) [2]
+
+Total memory usage (512GB present on the system - MemAvailable just
+after boot):
+* 12.56 GB for clean kernel
+* 81.74 GB for generic KASAN
+* 44.39 GB for tag-based KASAN
+
+Kernel size:
+* 14 MB for clean kernel
+* 24.7 MB / 19.5 MB for generic KASAN (inline/outline)
+* 27.1 MB / 18.1 MB for tag-based KASAN (inline/outline)
+
+Compilation time comparison (10 cores):
+* 7:27 for clean kernel
+* 8:21/7:44 for generic KASAN (inline/outline)
+* 8:20/7:41 for tag-based KASAN (inline/outline)
+
+[1] Currently inline mode doesn't work on x86 due to things missing in
+the compiler. I have written a patch for clang that seems to fix the
+inline mode and I was able to boot and check that all patches regarding
+the inline mode work as expected. My hope is to post the patch to LLVM
+once this series is completed, and then make inline mode available in
+the kernel config.
+
+[2] While I was able to boot the inline tag-based kernel with my
+compiler changes in a simulated environment, due to toolchain
+difficulties I couldn't get it to boot on the machine I had access to.
+Also boot time results from the simulation seem too good to be true, and
+they're much too worse for the generic case to be believable. Therefore
+I'm posting only results from the physical server platform.
+
+======= Compilation
+Clang was used to compile the series (make LLVM=1) since gcc doesn't
+seem to have support for KASAN tag-based compiler instrumentation on
+x86.
+
+======= Dependencies
+The base branch for the series is the mainline kernel, tag 6.17-rc1.
+
+======= Enabling LAM for testing
+Since LASS is needed for LAM and it can't be compiled without it I
+applied the LASS series [1] first, then applied my patches.
+
+[1] https://lore.kernel.org/all/20250707080317.3791624-1-kirill.shutemov@linux.intel.com/
+
+Changes v4:
+- Revert x86 kasan_mem_to_shadow() scheme to the same on used in generic
+  KASAN. Keep the arithmetic shift idea for the KASAN in general since
+  it makes more sense for arm64 and in risc-v.
+- Fix inline mode but leave it unavailable until a complementary
+  compiler patch can be merged.
+- Apply Dave Hansen's comments on series formatting, patch style and
+  code simplifications.
+
+Changes v3:
+- Remove the runtime_const patch and setup a unified offset for both 5
+  and 4 paging levels.
+- Add a fix for inline mode on x86 tag-based KASAN. Add a handler for
+  int3 that is generated on inline tag mismatches.
+- Fix scripts/gdb/linux/kasan.py so the new signed mem_to_shadow() is
+  reflected there.
+- Fix Documentation/arch/arm64/kasan-offsets.sh to take new offsets into
+  account.
+- Made changes to the kasan_non_canonical_hook() according to upstream
+  discussion.
+- Remove patches 2 and 3 since they related to risc-v and this series
+  adds only x86 related things.
+- Reorder __tag_*() functions so they're before arch_kasan_*(). Remove
+  CONFIG_KASAN condition from __tag_set().
+
+Changes v2:
+- Split the series into one adding KASAN tag-based mode (this one) and
+  another one that adds the dense mode to KASAN (will post later).
+- Removed exporting kasan_poison() and used a wrapper instead in
+  kasan_init_64.c
+- Prepended series with 4 patches from the risc-v series and applied
+  review comments to the first patch as the rest already are reviewed.
+
+Maciej Wieczor-Retman (16):
+  kasan: Fix inline mode for x86 tag-based mode
+  x86: Add arch specific kasan functions
+  kasan: arm64: x86: Make special tags arch specific
+  x86: Reset tag for virtual to physical address conversions
+  mm: x86: Untag addresses in EXECMEM_ROX related pointer arithmetic
+  x86: Physical address comparisons in fill_p*d/pte
+  x86: KASAN raw shadow memory PTE init
+  x86: LAM compatible non-canonical definition
+  x86: LAM initialization
+  x86: Minimal SLAB alignment
+  kasan: arm64: x86: Handle int3 for inline KASAN reports
+  kasan: x86: Apply multishot to the inline report handler
+  kasan: x86: Logical bit shift for kasan_mem_to_shadow
+  mm: Unpoison pcpu chunks with base address tag
+  mm: Unpoison vms[area] addresses with a common tag
+  x86: Make software tag-based kasan available
+
+Samuel Holland (2):
+  kasan: sw_tags: Use arithmetic shift for shadow computation
+  kasan: sw_tags: Support tag widths less than 8 bits
+
+ Documentation/arch/arm64/kasan-offsets.sh |  8 ++-
+ Documentation/arch/x86/x86_64/mm.rst      |  6 +-
+ MAINTAINERS                               |  4 +-
+ arch/arm64/Kconfig                        | 10 ++--
+ arch/arm64/include/asm/kasan-tags.h       |  9 +++
+ arch/arm64/include/asm/kasan.h            |  6 +-
+ arch/arm64/include/asm/memory.h           | 14 ++++-
+ arch/arm64/include/asm/uaccess.h          |  1 +
+ arch/arm64/kernel/traps.c                 | 17 +-----
+ arch/arm64/mm/kasan_init.c                |  7 ++-
+ arch/x86/Kconfig                          |  4 +-
+ arch/x86/boot/compressed/misc.h           |  1 +
+ arch/x86/include/asm/cache.h              |  4 ++
+ arch/x86/include/asm/kasan-tags.h         |  9 +++
+ arch/x86/include/asm/kasan.h              | 71 ++++++++++++++++++++++-
+ arch/x86/include/asm/page.h               | 24 +++++++-
+ arch/x86/include/asm/page_64.h            |  2 +-
+ arch/x86/kernel/alternative.c             |  4 +-
+ arch/x86/kernel/head_64.S                 |  3 +
+ arch/x86/kernel/setup.c                   |  2 +
+ arch/x86/kernel/traps.c                   |  4 ++
+ arch/x86/mm/Makefile                      |  2 +
+ arch/x86/mm/init.c                        |  3 +
+ arch/x86/mm/init_64.c                     | 11 ++--
+ arch/x86/mm/kasan_init_64.c               | 19 +++++-
+ arch/x86/mm/kasan_inline.c                | 26 +++++++++
+ arch/x86/mm/pat/set_memory.c              |  1 +
+ arch/x86/mm/physaddr.c                    |  1 +
+ include/linux/kasan-tags.h                | 21 +++++--
+ include/linux/kasan.h                     | 51 +++++++++++++++-
+ include/linux/mm.h                        |  6 +-
+ include/linux/mmzone.h                    |  1 -
+ include/linux/page-flags-layout.h         |  9 +--
+ lib/Kconfig.kasan                         |  3 +-
+ mm/execmem.c                              |  4 +-
+ mm/kasan/hw_tags.c                        | 11 ++++
+ mm/kasan/report.c                         | 45 ++++++++++++--
+ mm/kasan/shadow.c                         | 18 ++++++
+ mm/vmalloc.c                              |  8 +--
+ scripts/Makefile.kasan                    |  3 +
+ scripts/gdb/linux/kasan.py                |  5 +-
+ scripts/gdb/linux/mm.py                   |  5 +-
+ 42 files changed, 381 insertions(+), 82 deletions(-)
+ mode change 100644 => 100755 Documentation/arch/arm64/kasan-offsets.sh
+ create mode 100644 arch/arm64/include/asm/kasan-tags.h
+ create mode 100644 arch/x86/include/asm/kasan-tags.h
+ create mode 100644 arch/x86/mm/kasan_inline.c
+
+-- 
+2.50.1
+
