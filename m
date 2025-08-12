@@ -1,65 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B703620C001;
-	Tue, 12 Aug 2025 22:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861D74C92;
+	Tue, 12 Aug 2025 23:48:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755036212; cv=none; b=KZ1nLalgfUIAKqSA4d+TW6kW1Dd1yUlKv2ktdhiN+9xN8JL6eyT0nG01BuYLq99lXTxNMf2iAEC/VEgVZtxDh4hD/yzfPsUQ9qF6Z5RUufbyMH/18uXdDAS0bSUtkcqfxiKVYQNSy//X+a2oqLktOHZze1rF2SJfsW41PRZ0+UU=
+	t=1755042531; cv=none; b=chY7e4KXBvlUs9q+usoUcnml3lAGfb0ms5zQ1cU8jCzumrwZC0lVv8+fWi60KWqdzHQhmLk4NStBAcMrKNPjDvPtrr+V33zc9I+5Cp7oXvTx1jm2KmeJWwGmzjfB9bJuiejv+PeOmUAblTqm9mvMXeWcUjYP8PD51uFiRmnMt5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755036212; c=relaxed/simple;
-	bh=exvvZP2rP+R5jI+G7rsqT5N9VfuXc9aPekZm6d12tNY=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=PEf1Eg/SoZWv4e5kKVHptLjdDOc8hd+O7de5Isq/duc+AxVQnZx/JkV42FVNJ9QQ1oIzae3/zh8pj+01V/3CKrF8hAci3iZ1zHGhZcc3qdUzI51R1ib3F5AyveLaYPlCNqC8OlHTs9aoMwAzuO/cm/dIA8Co0XAVw7wHbjgScnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lsQi2ZUe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755042531; c=relaxed/simple;
+	bh=f0lHBr8L+ho9/cldE+Khu8S3l/gYqbz0T0YotDhevTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KQ7L1mnJWcbvldBxolLC1fEMn0A68Ld9+Q0TB0M9FUjhijSO40pO4fDOu9SUse77JITsNwVVhijDgBob4lwgQgkuAaHene0sOxup5Eh6MjRsJAY1x9gfnBJcCpM+HmLIpkzQRO3aZJ8WJZJMJp/S50MJITe8Resq8XoRGbJ1eww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OXzFmHOV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lsQi2ZUe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136E6C4CEF0;
-	Tue, 12 Aug 2025 22:03:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1755036212;
-	bh=exvvZP2rP+R5jI+G7rsqT5N9VfuXc9aPekZm6d12tNY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lsQi2ZUegaHNI4h3O3XuHaqI2JTiMeCPKyOIncLGwlszYvrcTn363rIxyKcGmPW+8
-	 zTD2ur8XXDWwW8ZSJoK0s9GSaKciMzayx8DWNBa2Ed3tpWlaCTWvVzc/gHT/FNAfVM
-	 9ZhgKdef8c0piqe25zuYDgg0sRyGLrkP0DW4Tc1k=
-Date: Tue, 12 Aug 2025 15:03:31 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>
-Subject: Re: [akpm-mm:mm-new 101/118] arch/powerpc/mm/ptdump/shared.c:70:1:
- error: use of 'pgtable_level' with tag type that does not match previous
- declaration
-Message-Id: <20250812150331.cfe4090372c3864aa768fa7f@linux-foundation.org>
-In-Reply-To: <522f31cc-f250-4883-8832-0d26ebf5210b@redhat.com>
-References: <202508130304.5FJqRz2c-lkp@intel.com>
-	<0c96fa0e-6f7e-4cca-8d57-f3e3786d44fa@redhat.com>
-	<522f31cc-f250-4883-8832-0d26ebf5210b@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OXzFmHOV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F9DC4CEF0;
+	Tue, 12 Aug 2025 23:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755042531;
+	bh=f0lHBr8L+ho9/cldE+Khu8S3l/gYqbz0T0YotDhevTM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OXzFmHOVPgPdaZxOWJcEF4MnSdj1uuc7qHSWWn6MbjVNbn7WsxRS7Wl3tVfx4xyJO
+	 B1lCAlSp9MTdsMU/yMLEB6c4TKNXDgQQ+Ia44fP+utdFn+B14zaeC51+VJmtOSHUPP
+	 ZXeAcj2kNGF3rp92H/EiwOQDIysfcPATlrdlLAkzyg/yOjbtWF77TopLKrWT1NCMJt
+	 XtZEg+xjjW7uOw/d8BXrHX4pJy2p5AGTuOPQ/hNrFUeiG6Lt5FDX3UjIUTOt1SerPF
+	 LYy1U6uWOpdAp8yiqMm7kuVjPz0Iuu11LvUQzGyMucA7/VKQXGFXIlXzpuF82FjYUY
+	 quh6CCxchKELA==
+Date: Tue, 12 Aug 2025 16:48:47 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 21.1.0-rc3 uploaded
+Message-ID: <20250812234847.GA265853@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 12 Aug 2025 22:57:18 +0200 David Hildenbrand <david@redhat.com> wrote:
+Hi all,
 
-> >>      3 errors generated.
-> > 
-> > Huh, I cross compiled this on a bunch of ppc configs, but maybe not emough.
-> > 
-> > No, on the branch I submitted that did not exist.
-> > 
-> > Probably due to the rebase.
-> 
-> Ehm, no, Andrew, could it be that you accidentally dropped the ppc patch 
-> from mm-new. I can spot all but that patch in there:
-> 
-> https://lkml.kernel.org/r/20250811112631.759341-7-david@redhat.com
+I have built and uploaded LLVM 21.1.0-rc3 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-yup, I totally missed that one, sorry.  Added now.
+This is a prerelease version of LLVM, similar to how the Linux kernel
+release candidates work. This is expected to be the final -rc before
+21.1.0 final, so if there are any issues found, please let us know via
+email or https://github.com/ClangBuiltLinux/linux/issues/new, so that
+we have an opportunity to get them fixed in main and backported.
+
+Cheers,
+Nathan
