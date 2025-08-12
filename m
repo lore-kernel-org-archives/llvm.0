@@ -1,149 +1,122 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275B82EAD06
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 10:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118BA2ED145;
+	Tue, 12 Aug 2025 11:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754993395; cv=none; b=XXOlywVxjD5Qjlp/MYOC3GQ5Yxmh3cWM0MJH1rc28vVCciSPIY0eVQ3xOrBf0SesvkgquI2PyhTph+LJ+pUwo1HL9nwMt7IZvRR0AcN0orfsnJLrNvdxzTzhTUW8bBonUcKoCLp+H0qJp24EyNEMV8Ba+uxuFyeBUIfLfRkt79k=
+	t=1754996869; cv=none; b=O7mI/dMe7vZiiqWRmYDabkkscnBdGoDkziEE0wMwcSlIQwc5LT8qpLjPsFdeGP3UBHH7KSX5Kyw0J83lXoSd8RE75LC2v9Ir3Ntt5HacqBgCTnWCndxmqRk+0aoOF53vK6NJorNMbaQeejGZ79Otiyde2mzHDsGaX9r+tUiF6tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754993395; c=relaxed/simple;
-	bh=6P/aKqG7fY1LNdU4jwyXEd4Urbpceh+qKNGedxVIFJc=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=WnCFeESetBYKrXWZVS4EXusCvyiMsY/a8+7DCIGpCc3NsRHiQYaKIdJqQxfE97Ssh46uoHXOiLwyiTWwHdJx/S27tB3HrT45YfVQh1WCxwV170QzgH4B1S5H7pcP5rB+dYvkXql1yuRcX0Ch9E2QhjwnhD1+augwtTGbzLqh0FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IuXSUUWl; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1754996869; c=relaxed/simple;
+	bh=mM1oIijYsTieBVXwDdbk88e2RvtyWnf8BqoF2nILFwk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MXt6qnyaqM9oTWgDY7v3lowa9uqIxKYzDTiOooTT/gBfW65Y2gC0DAjruZppDAHuZNtfZ/fMzxwqiridGaawPw2HZRDQPHP9wVYVHUyK/B6qsqNGM8Rm6LmjzGczHh1OB2r6zGNvRDYbJcbfBSZn5kEFQosLNkDrMSJaxd7kp7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHNg7rhT; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IuXSUUWl"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2401b855635so39872655ad.2
-        for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 03:09:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHNg7rhT"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-242fdfec998so1097695ad.1;
+        Tue, 12 Aug 2025 04:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754993393; x=1755598193; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1754996867; x=1755601667; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6P/aKqG7fY1LNdU4jwyXEd4Urbpceh+qKNGedxVIFJc=;
-        b=IuXSUUWl7qbntTN9Ws6o3qg1xSZ7BEv0rsgpjMwZGApfJ+KkuVIC8cCE2QvtXVyaE+
-         8n97asXwTaDLQkY0SnHfBOR3hPp8lAY9hauVvJz2BMrKMBvHpUd5okCjf8dYLkVuP6jf
-         fS/YZUl6vuJT4SDjkXtde47fvzyX2TKz3ExM7mtZ4RXeUKjiWc9CmnwfpargIiw935nh
-         1+mPuBDvnliSCCY76r+7cqvhoNq40tVySQq6vvB4UXdx1/AsvWbgaECxAnWlCUTnwBvr
-         qhSedJUc3kgUgDahfKUMuzm1TyWjjLgG651z40FMv63DdDJbpp4uQ0goqpHYVF/xglth
-         YyrQ==
+        bh=mM1oIijYsTieBVXwDdbk88e2RvtyWnf8BqoF2nILFwk=;
+        b=YHNg7rhTvWwmwBQxbBrlSmpapElbHqaODmGdhJ0HL0Sq7Bhun/zu5G6spfNu/N3v03
+         mx9eGYTFSZhEO0Y3IQMbkpy9xQSR+/yYBXZox7HOlQcldkEZEak2VTQ7g4exgS20jZfC
+         4IQjusyjgyuKCbN52wEZxUZGYush4IZ7Hbw6YBKq/VwSHJhGcWgd63DW2QhTtWeGk7uq
+         wc5QpAFnDCFCQon/GJ00h8p7rBhjcP/BCFpEZ5Lcu0TxMrGobCwnp3uE6HEpTf9e3Rb/
+         hZIIruiDZDyxQXPgcl3BFXAAnqQbiIHwU/ToB/e1ebdC8mg6/ENO4v0tWbGnGPtGhq3J
+         FlkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754993393; x=1755598193;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1754996867; x=1755601667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6P/aKqG7fY1LNdU4jwyXEd4Urbpceh+qKNGedxVIFJc=;
-        b=Oxh+Btti1/iAWAYhB/Gg7leGvZrd7beSt+YMu2bn/dUOQBg3LcfXioFBFkJNrVcI21
-         cc029N5iCqbinL4/Zyi/7L4v8XCzhlXmKOJOyUyCcZvR8lJSj6fSZJ8RCbGwyxXV7QxN
-         BEcEiovPqg6QKXznE8xQlnZ5PIVcW+GSHvYkXpa9mTKUI1ZYdH/fkgSA0eGdcg8HWS0G
-         bd+DQ1Lh2YI3sTJ740bN13V3m74OuqIw+tra50GcNi/6nAoDVVcbIE5S+/I6MysUww9w
-         3vXhVwteMee4B5/W7EEY5jDBr5wBKX9tKgnbXM75muOnHivWbUPADwtHwK6Q7+VydEZV
-         bmRA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/yqVb+DuU/LNV69hQpzj2stwBAMilZ5MdAsB0wLlEBz4W6zumjqRGyEGHTmeKIoLxlVoY@lists.linux.dev
-X-Gm-Message-State: AOJu0YxLzqp8ZeT6YdlJ88ITZfss5qwitsoWYqMBOVeBkf4Q25t2T5SJ
-	1DwdRMrJCpncuM/bRTqPjTqoTuZY6xW5EJdYkKzq9zmF97om1WoeGpmK
-X-Gm-Gg: ASbGnctHLsGozsC/GKz/OTCWPeO0mIhE9OJMB7PhXgKhWdozr+AV+nMLwg82Vw1lBiN
-	k5A+x+kBl3gSYKGSInr4YHFg1Z8VsY1Vve9nzCuziKecIYX9PaS4SF5jIUgTbpbl43Q2CqEvAQe
-	3SQMZkkCsfCEdi97yJoXNdA/qB/qAMEWkQQqWKEx+4T6GZPnuDFRneUSntv8yByI21OteG8sObd
-	1o8n0rNq5LBju4551PidGcI2AUwYp/Xar3/ouWspMsWHVXmiwcJiIgJeZRI0caSM79yfe8DZAdV
-	0H3QXWQwT/5TU3ro/JiW+n+EToDAaBMVSipTaVi5T2AHE/NvzEjRnvJ8erLa01VzH5ehmReKHnS
-	hETRLJiDRDsvTY16dTzcXcjUPa9DNztE74mJ0dN+E5hqYMX05CfyFg2AJ8v4=
-X-Google-Smtp-Source: AGHT+IGhpjBlFVCtqKifefIW582qoUXW/+MuMV6QaAxlQhCOTK745+twCA/BAAXtV9H+RzFvQWkZMg==
-X-Received: by 2002:a17:902:e547:b0:242:9bc5:31a1 with SMTP id d9443c01a7336-242fc3d395emr36043155ad.57.1754993393248;
-        Tue, 12 Aug 2025 03:09:53 -0700 (PDT)
-Received: from smtpclient.apple (wf122-104.ust.hk. [175.159.122.104])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3216128ce35sm16962338a91.29.2025.08.12.03.09.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Aug 2025 03:09:52 -0700 (PDT)
-Content-Type: text/plain;
-	charset=us-ascii
+        bh=mM1oIijYsTieBVXwDdbk88e2RvtyWnf8BqoF2nILFwk=;
+        b=a+l7bl5i9mtuUsPO8YGWzrSH1b1TwFgwebEkU5LXyYKNJitCjqMuBkw+Exvoes1A4S
+         Y2in6yGds+dFsh46lJG3g2Wlceq5t9iYz7Er18iwBPbZoWXoHCLbd23izBaSaIEw9kvd
+         76wFCeBktCmCs4uCgO4+0YbsRGlRv9ICyUxiSyt4/jsCwQu8to6olWUEYC5JG5oH0zU+
+         HKit2aafB+bB70DD4Ea/K9CvaLCqrdSBIci0tMwNK0c3QIBfxY5geCk5vvf2Bq5EOn9H
+         5vNNj8GuaiqDrjuaNh2FNlgnDR+FregvQbBBJdWvL9d9duxZpHg6R+qTcoMVmQQZve9U
+         7wJA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/iO67iRFBcHD+sg99xkRGuBx0nRgBpeIK6J+4pHENJCWAm/Vxj9Hkxm8Dd63y6LKReCwX@lists.linux.dev, AJvYcCVzg124B/3jIYmiVmBU1xoXEr/p50nsUunbe7E270bTEQNbV7G82iMVtrsG1Y3tS5JxsyCG+bJlwYr4@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz4+TUbmjaBxdDt0O1Z2ou79UVfcKdL911bDAPUN1B98rM757LH
+	5VV0a3812bgWcajEAMrpyyppSNzNHWjVrZtZVbFg3utR3GL0Hpu0oYpH7hxOxerFNMCUt3xMVfI
+	/lbO2nse41Uwby8IRK7m5xqt0xmfgOHY=
+X-Gm-Gg: ASbGncsyGZ8n+S/qL+eSzENu5JP1Ug2yEP+eTDBFEO+sgCwp2zRPr3QUr2s7Vw/t/Q/
+	3o7o9mHXNO5Iw2a5mz4PzozSz+a7iSg8p9Mfw74Bw0tRW44/QlEYx9vLvH87aULz6I/aA2pR8mk
+	rNfcg3X5FHZYI1Z5QXpDSviYISwnJ4/IN9ExyCFsgOz0RPrX1qIRbpXjI1SbH4AQO3Ko9vzsIWG
+	cehSj6LnXtpAK30NOM=
+X-Google-Smtp-Source: AGHT+IGLTgav5Ly0pJQ7DxONlyuqSGpB75/R07ZLvB4KvAdVZt2KEevtP/u+Z9PPdrxzblYTwfgzUXYmCR2PQbfj+a0=
+X-Received: by 2002:a17:903:1a70:b0:240:5c13:979a with SMTP id
+ d9443c01a7336-24306da5537mr4831165ad.9.1754996867136; Tue, 12 Aug 2025
+ 04:07:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH V2] scripts/checktransupdate.py: add support for scanning
- directory
-From: Haoyang LIU <tttturtleruss@gmail.com>
-In-Reply-To: <20250811212446.GA924610@ax162>
-Date: Tue, 12 Aug 2025 18:09:38 +0800
-Cc: Dongliang Mu <dzm91@hust.edu.cn>,
- Yanteng Si <si.yanteng@linux.dev>,
- Alex Shi <alexs@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- hust-os-kernel-patches@googlegroups.com,
- linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev,
- linux-doc@vger.kernel.org
+MIME-Version: 1.0
+References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
+In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 12 Aug 2025 13:07:34 +0200
+X-Gm-Features: Ac12FXz75fv-5GwEH7lTNJ0yhooMj6nwQ9IaaKPBS7pSI2ZcZDdB8Ex-5Z7LxRg
+Message-ID: <CANiq72nV62c8cVBzke73OH-sfLdgerDBGrLKTmT83+OQtK6PjA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/24] vdso: Reject absolute relocations during build
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>, 
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+	linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Alexandre Ghiti <alexghiti@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <31217D41-748F-4528-B3C0-60CC5EB6833F@gmail.com>
-References: <20250811170050.94997-1-tttturtleruss@gmail.com>
- <20250811212446.GA924610@ax162>
-To: Nathan Chancellor <nathan@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
 
+On Tue, Aug 12, 2025 at 7:44=E2=80=AFAM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> Kbuild and Rust folks: This contains custom definitions of hostprog
+> bindgen and rust library commands.
+> These are currently only defined inside the subsystem directory.
+> Let me know if they should go into scripts/Makefile.host.
 
+Glad to see more Rust host progs :)
 
-> On 12 Aug 2025, at 05:24, Nathan Chancellor <nathan@kernel.org> wrote:
->=20
-> Hi Haoyang,
->=20
-> On Tue, Aug 12, 2025 at 01:00:50AM +0800, Haoyang LIU wrote:
->> Origin script can only accept a file as parameter, this commit =
-enables
->> it to scan a directory.
->>=20
->> Usage example:
->> ./scripts/checktransupdate.py =
-Documentation/translations/zh_CN/dev-tools
->>=20
->> Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
->> ---
->>=20
->> V1 -> V2: remove the fix of missing "f" in f-string and make it a new =
-patch
->>=20
->> scripts/checktransupdate.py | 24 ++++++++++++++++++++++++
->> 1 file changed, 24 insertions(+)
->=20
-> Thanks for the update. While this seems reasonable to me from a purely
-> surface level glance over the actual Python, I have added the
-> Documentation folks that Dongliang added from the previous thread, who
-> really own and maintain this file (the original patch is at [1]). =
-Please
-> include them in future revisions should they be necessary. It would
-> probably be good for something like this to be applied?
-Hi Nathan
-That makes sense. My V1 patch also missed Dongliang Mu and the other =
-maintainers. Thanks for pointing it out.
+Keeping them local may be a bit easier initially to land, I guess
+(e.g. no docs), and then we can generalize when needed later.
 
-Sincerely,
-Haoyang
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fe168477caa4..b7e3a8c8832e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7302,6 +7302,7 @@ P: =
-Documentation/doc-guide/maintainer-profile.rst
-> T: git git://git.lwn.net/linux.git docs-next
-> F: Documentation/
-> F: scripts/check-variable-fonts.sh
-> +F: scripts/checktransupdate.py
-> F: scripts/documentation-file-ref-check
-> F: scripts/get_abi.py
-> F: scripts/kernel-doc*
->=20
-> [1]: =
-https://lore.kernel.org/20250811170050.94997-1-tttturtleruss@gmail.com/
->=20
-> Cheers,
-> Nathan
+By the way, for consistency with elsewhere, probably we want
+`HOSTRUSTLIB` -> `HOSTRUSTC L`. Though I am thinking to remove the `L`
+anyway since eventually a lot of code will be "lib".
 
+Cheers,
+Miguel
