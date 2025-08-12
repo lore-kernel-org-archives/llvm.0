@@ -1,121 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D34169AE6;
-	Tue, 12 Aug 2025 04:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB71E1FF7C5
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 04:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754971841; cv=none; b=bQPc6cKRJk0cMUro/QTP9v9kFHiOf2N6Z4c8MyulgmUJh7V2vhoy2YEUREyMaGXuC2zLgV21EBJ6bzxb3ppA4yYBTxeS1tKYTzarXn/9TuH5s8Pejq17WcXgrVQWuO5COc1iGzPtA1L3WlSbsfWLvv2WSk0u4nqml1CJ8oh08SE=
+	t=1754973352; cv=none; b=D3uok8GPWJ8P0sXH57VictTnToxcYPA8IwB4pYvrlhTolUaxIzTCzVdamvhhSspa/8Sb8mdUNPy7womyvwB3lgwJs3kTkE0/Zimjhh+VU9ICzVGgwzE7Gd7cpTBjJ+1TQ0rRyTpN9goM1kjwzv/MlZxOjwQojFdLSA+siEKRNNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754971841; c=relaxed/simple;
-	bh=A1IDknI2wBVOF1lDrVTLS/8ROE/k11Q3XCJ/bLtA1Qk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r/YeJLgigygSofgwXXdsDUscxaX7gy0WaLChLWQVEHJ8ynrxp9b4qyskuAPesB2HoBOj1/JjwHqpjKcJ9AtIEhEhRpx53RctmHekJbIgiQuYWkmGeu9A1z3I9GbHSD73Ch5uyHM+uIbH08sqFl9qF+0lR2564IA4+wDPjTgNuaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMPKyrPX; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMPKyrPX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0E6C4CEF0;
-	Tue, 12 Aug 2025 04:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754971840;
-	bh=A1IDknI2wBVOF1lDrVTLS/8ROE/k11Q3XCJ/bLtA1Qk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=tMPKyrPX7lo45EbxFVokOQCV7amf4PfNmPA+d8EqFKOZ7mq6bO73wUaWvP7MO3jPa
-	 x2QLuPdJvru8sVfRRndqXv9SLq8UL/BRs+KfSVqpzOXH5u8ZACsmXSw4CIs3QogrwE
-	 a4i9XTRhwvDiyZAZIOB6gaFJqBAdJS5uyKhEIQgJTKJArOIsihkmLm7Fn0eQqRbn4H
-	 oFR4MN3FIPX10lbxO07nIAAVOFC0mw6ZqvCCBhgR5NFfx4cLZ1tPL/mgz0iEH7M1pg
-	 pCt4uuXQO5jniQp2dYuexo25QpiZrRJsqnrz7ut4QO69TmnPiuyEJYUFa8luUha2cA
-	 84MuwP1LVk6TQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 11 Aug 2025 21:10:01 -0700
-Subject: [PATCH RFC] riscv: Use 64-bit variable for output in
- __get_user_asm
+	s=arc-20240116; t=1754973352; c=relaxed/simple;
+	bh=3RX/FsuzoD2yb8xKJwiO3S1whcb419rTpx5L0brj2Z4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ERyRNDv2Bh01iDzNwlOPhDKzCo8YcaViLY2urrWMEFtbxN2iF7/Xus4vVgdaTuUBMuAVSL2iz/2nGS6ECYyN7q7wpp0ensNojSqL3BmfJEbyUqZB2kpWTJGqzDdxVd8t4oq43NiQizzTmk1Ddt2KxKK/ABdb+g9sPndxTKVFDQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app1 (Coremail) with SMTP id HgEQrABnSXp7xJpo1MsHAQ--.47324S2;
+	Tue, 12 Aug 2025 12:35:07 +0800 (CST)
+Received: from [192.168.43.195] (unknown [10.200.80.159])
+	by gateway (Coremail) with SMTP id _____wAXuix2xJpoRy1XAQ--.64379S2;
+	Tue, 12 Aug 2025 12:35:06 +0800 (CST)
+Message-ID: <cbd31e8c-4e73-42f6-bb16-ed44091a353c@hust.edu.cn>
+Date: Tue, 12 Aug 2025 12:35:02 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scripts/checktransupdate.py: add support for scanning
+ directory
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+ Haoyang LIU <tttturtleruss@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ hust-os-kernel-patches@googlegroups.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20250810161730.6530-1-tttturtleruss@gmail.com>
+ <aJmZUJeKJ6hd_pmx@stanley.mountain>
+From: Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <aJmZUJeKJ6hd_pmx@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-riscv-wa-llvm-asm-goto-outputs-assertion-failure-v1-1-7bb8c9cbb92b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAJi+mmgC/x3NywrCMBCF4Vcps3agSbEUt4IP4FZcDHFSB9Km5
- KZQ+u4OLv+z+M4OmZNwhku3Q+ImWeKqYU4duDetM6O8tMH29txPxmCS7Bp+CENoC1JecI4lYqx
- lqyXroGBRBD1JqIlxJPZkx2GYnANlt8Revv/LB9xvV3gexw/QjY3WhwAAAA==
-X-Change-ID: 20250811-riscv-wa-llvm-asm-goto-outputs-assertion-failure-6aefa26338cc
-To: Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, 
- Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Craig Topper <craig.topper@sifive.com>, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2547; i=nathan@kernel.org;
- h=from:subject:message-id; bh=A1IDknI2wBVOF1lDrVTLS/8ROE/k11Q3XCJ/bLtA1Qk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBmz9u3bu+uaZ6lnc862mOrn133Ys/dd/3fH+YnE1hdRc
- y/lJNzk6ChlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATMX7JyHDe9KGdeaNbuKXH
- l/DAxCAb4a+J21+Ul92Kl05/7JhnpMXIsLmZ0U0t6PDh/XeutvcsczGcuKHPsEa67Lyh28p7y+W
- zWAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-CM-TRANSID:HgEQrABnSXp7xJpo1MsHAQ--.47324S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvdXoWrtrykJr1kXw48tw17tFW3trb_yoWktrgE9r
+	y8tw1kW3yUWry7AFWkJwsYgrZ8Ww4UZFyqyrWrJanxCFn0va98CFs7Gr9Yvw4xtay5uF13
+	Ar9aqrs2v3ZI9jkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbPkYjsxI4VW3JwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+	s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
+	8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2
+	z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXV
+	WUAwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AI
+	YIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_Gr
+	1j6F4UJwAv7VCjz48v1sIEY20_GFW3Jr1UJwAv7VCY1x0262k0Y48FwI0_Gr1j6F4UJwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
+	IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU3ZjjDUUUU
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-After commit f6bff7827a48 ("riscv: uaccess: use 'asm_goto_output' for
-get_user()"), which was the first commit that started using asm goto
-with outputs on RISC-V, builds of clang built with assertions enabled
-start crashing in certain files that use get_user() with:
 
-  clang: llvm/lib/CodeGen/SelectionDAG/SelectionDAGBuilder.cpp:12743: Register FollowCopyChain(MachineRegisterInfo &, Register): Assertion `MI->getOpcode() == TargetOpcode::COPY && "start of copy chain MUST be COPY"' failed.
+On 8/11/25 3:18 PM, Dan Carpenter wrote:
+> On Mon, Aug 11, 2025 at 12:17:30AM +0800, Haoyang LIU wrote:
+>>   
+>>   import os
+>> @@ -131,7 +144,7 @@ def check_per_file(file_path):
+>>       opath = get_origin_path(file_path)
+>>   
+>>       if not os.path.isfile(opath):
+>> -        logging.error("Cannot find the origin path for {file_path}")
+>> +        logging.error(f"Cannot find the origin path for {file_path}")
+> Send this as a separate patch with a Fixes tag.
+> Fixes: 63e96ce050e5 ("scripts: fix all issues reported by pylint")
+>
+> Ideally, pylint should be modified to complain about this or something...
+> I have a script for kernel patches which checks these kinds of mechanical
+> changes and someone could make a similar script which checks pylint
+> changes.  https://github.com/error27/rename_rev
 
-Internally, LLVM generates an addiw instruction when the output of the
-inline asm (which may be any scalar type) needs to be sign extended for
-ABI reasons, such as a later function call, so that basic block does not
-have to do it.
+Yes, this seems really wired. We have a project - Linux Kernel Patch 
+Statistic among Universities[1]. In one PR[2], Haoyang also found a 
+quote string issue.
 
-Use a temporary 64-bit variable as the output of the inline assembly in
-__get_user_asm() and explicitly cast it to truncate it if necessary,
-avoiding the addiw that triggers the assertion.
+Interestingly, this PR is trying to fix issues raised by pylint.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/2092
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I did this unconditionally but I did not do much investigation into how
-the code generation changes, as I never have good luck with figuring out
-what is real vs. noise. If this is a worry, I can just duplicate this
-under a CONFIG_CC_IS_CLANG block. Alternatively, we could mark
-CONFIG_CC_HAS_ASM_GOTO_OUTPUT as broken with clang when targeting
-RISC-V.
----
- arch/riscv/include/asm/uaccess.h | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
-index b88a6218b7f2..ff162db20521 100644
---- a/arch/riscv/include/asm/uaccess.h
-+++ b/arch/riscv/include/asm/uaccess.h
-@@ -98,12 +98,16 @@ static inline unsigned long __untagged_addr_remote(struct mm_struct *mm, unsigne
- 
- #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
- #define __get_user_asm(insn, x, ptr, label)			\
-+do {								\
-+	u64 __tmp;						\
- 	asm_goto_output(					\
- 		"1:\n"						\
- 		"	" insn " %0, %1\n"			\
- 		_ASM_EXTABLE_UACCESS_ERR(1b, %l2, %0)		\
--		: "=&r" (x)					\
--		: "m" (*(ptr)) : : label)
-+		: "=&r" (__tmp)					\
-+		: "m" (*(ptr)) : : label);			\
-+	(x) = (__typeof__(x))__tmp;				\
-+} while (0)
- #else /* !CONFIG_CC_HAS_ASM_GOTO_OUTPUT */
- #define __get_user_asm(insn, x, ptr, label)			\
- do {								\
+[1] https://github.com/hust-open-atom-club/linux-edu-rank
 
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250811-riscv-wa-llvm-asm-goto-outputs-assertion-failure-6aefa26338cc
+[2] https://github.com/hust-open-atom-club/linux-edu-rank/pull/45
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+
+>
+> regards,
+> dan carpenter
+>
 
