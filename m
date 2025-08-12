@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9901EA6F;
-	Tue, 12 Aug 2025 07:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C85446B5;
+	Tue, 12 Aug 2025 07:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754983678; cv=none; b=SlR6vQrvpcS3OGPEwp5j+XrhsdGl7DI8SEG7iWuwIqy+sFTzFFAuun2icrkm79e6zKH2rNB6f7/VXtna0BndvZ/CEHCWm95x23IvFmPT9YSkWk/zjDgXzQYEODIzSZC/ouectP7t90qcw0tgbmOnGb8SHwAxHJw3G25iZ014q3Q=
+	t=1754985041; cv=none; b=Yhsi22BA9iZoUOgSLGU/rMezIlMAjmt5ku2JW+n+AjxM7RRs3WvMDWl9+RpwYHNtyMrAxWZ/ZmXfHXjmJycmr9SaT+agehUqgVO9fGr5IPHyhi6R7NgHL6wueYJJ36zN7u/5t5NLRSyCRT9objOXR9BCUPs27AeqXefBLXcyr1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754983678; c=relaxed/simple;
-	bh=3e0EXaa+An4prh17FZN5+ByIUcZFPT//X78WqBkRjrY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=qBrnSd7u4ORnj93QHCk6RejjDudb0+ae2agRxy6iyvSbC1x/wF72ho03XjfzA5vMFccKCrARPp/TFHbxIRYEyj/5iydhFrtGU+dwfFp9bPYd64GAwQI24NxJSgCc6nH0SaEpZIfXoDZ52L+JkKXCuSVN8EVh4R3I6pt2Z0B4Nvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADi5A/zb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754985041; c=relaxed/simple;
+	bh=jL7TweB+A4An+odth608kJuC46f36dxg8uTFgXc0lrc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=aNHv+vM4157JJOhbh9qNOUYUZQ8LSgPWw6JwSsIhxid0yZEOtBnhUdFNTfzHrxeM9Yp/ELqKnCgbzLQsav1FAj3slR7if2nlQlOs5I42h7qShryd2qi0Vhm+DCBIiFkG+ujCKRoP+2QhELjy6QTO2yv44p//Xels8GMi8R6uF8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eAgXF5eH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADi5A/zb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438C0C4CEF0;
-	Tue, 12 Aug 2025 07:27:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eAgXF5eH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104CEC4CEF0;
+	Tue, 12 Aug 2025 07:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754983677;
-	bh=3e0EXaa+An4prh17FZN5+ByIUcZFPT//X78WqBkRjrY=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=ADi5A/zbstIaLYuBH0MTxYxne9ur5CQ2iequZ+CAXyFnCcb/2ic9J6DnI1XC4vWex
-	 v/gv+N/UdkEmGTu9fCmOkmkb/XUifU4YWi+MT/Bwf3N66P3h6WAGzFkUHKyvuOGbh3
-	 Logyl9qcydOUXpnql7kE7GlSIeUNP3CI9XPm961PipTEGXQeNZep5CaQmn4QY9kiYZ
-	 eNLBA+WqrKvr1kh/mKjosvOESVoHAOc30J66z9Nwq9UEJgO5YERbKUH6RkxalZY5SU
-	 Sp4W/qU24KkmNvm8arjN3ntDqtXkR6kTWxPSTWJqTeVssecbs8K30accLFTZBS2cfX
-	 F5NglqnIC/yeg==
+	s=k20201202; t=1754985040;
+	bh=jL7TweB+A4An+odth608kJuC46f36dxg8uTFgXc0lrc=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=eAgXF5eH5tfElQstMZbtQiDrsJ5qbBJbUyxY+YavkBq0wmG6FX7xG0FtnKyN2VHRI
+	 M7waiV76/ajkKwWjwRMSH2Ka+HcdlcivP4ODi7gkJcsidA2cpkw8W2eSx9+L+HtQuo
+	 847jno7mxblqEbTqcXXxJmsmCdo8vJxOYTs06+vnUM4stRxIi9zemZ7ql5X9SfmHOF
+	 39btW+uoklQvyhTmMrQsPdxnYIBPjsKM5DSt9I9gb1Qkmr/e1CToejAhmbcbBbHrbi
+	 +RtcmVAknbelYgA0NNztsznPWqLBATkhyP/6yDbK0X1GjfakS3katd6XRu642hwzoP
+	 jbDf3KigjDuEA==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,12 +34,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 12 Aug 2025 09:27:50 +0200
-Message-Id: <DC09SG6IXEOG.3Q8DMJF5E7QBO@kernel.org>
-Cc: <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <llvm@lists.linux.dev>
-Subject: Re: [PATCH v14 2/3] rust: support formatting of foreign types
-From: "Benno Lossin" <lossin@kernel.org>
+Date: Tue, 12 Aug 2025 09:50:34 +0200
+Message-Id: <DC0A9UKTPH05.2O2V0B2KHMIW8@kernel.org>
 To: "Tamir Duberstein" <tamird@gmail.com>, "Miguel Ojeda"
  <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
  <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
@@ -54,40 +50,60 @@ To: "Tamir Duberstein" <tamird@gmail.com>, "Miguel Ojeda"
  Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
  <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>, "Christian
  Brauner" <brauner@kernel.org>
+Cc: <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH v14 3/3] rust: replace `CStr` with `core::ffi::CStr`
+From: "Benno Lossin" <lossin@kernel.org>
 X-Mailer: aerc 0.20.1
 References: <20250710-cstr-core-v14-0-ca7e0ca82c82@gmail.com>
- <20250710-cstr-core-v14-2-ca7e0ca82c82@gmail.com>
-In-Reply-To: <20250710-cstr-core-v14-2-ca7e0ca82c82@gmail.com>
+ <20250710-cstr-core-v14-3-ca7e0ca82c82@gmail.com>
+In-Reply-To: <20250710-cstr-core-v14-3-ca7e0ca82c82@gmail.com>
 
 On Thu Jul 10, 2025 at 4:53 PM CEST, Tamir Duberstein wrote:
-> Introduce a `fmt!` macro which wraps all arguments in
-> `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
-> formatting of foreign types (like `core::ffi::CStr`) that do not
-> implement `core::fmt::Display` due to concerns around lossy conversions
-> which do not apply in the kernel.
+> `kernel::ffi::CStr` was introduced in commit d126d2380131 ("rust: str:
+> add `CStr` type") in November 2022 as an upstreaming of earlier work
+> that was done in May 2021[0]. That earlier work, having predated the
+> inclusion of `CStr` in `core`, largely duplicated the implementation of
+> `std::ffi::CStr`.
 >
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General=
-/topic/Custom.20formatting/with/516476467
+> `std::ffi::CStr` was moved to `core::ffi::CStr` in Rust 1.64 in
+> September 2022. Hence replace `kernel::str::CStr` with `core::ffi::CStr`
+> to reduce our custom code footprint, and retain needed custom
+> functionality through an extension trait.
+>
+> Add `CStr` to `ffi` and the kernel prelude.
+>
+> Link: https://github.com/Rust-for-Linux/linux/commit/faa3cbcca03d0dec8f8e=
+43f1d8d5c0860d98a23f [0]
 > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-I'm not 100% sure we need to always use `first_span`, but it's probably
-fine.
-
 Reviewed-by: Benno Lossin <lossin@kernel.org>
+
+> ---
+>  rust/ffi.rs                     |   2 +
+>  rust/kernel/device.rs           |   1 +
+>  rust/kernel/error.rs            |   2 +
+>  rust/kernel/firmware.rs         |   9 +-
+>  rust/kernel/prelude.rs          |   4 +-
+>  rust/kernel/seq_file.rs         |   2 +-
+>  rust/kernel/str.rs              | 395 +++++++++-------------------------=
+------
+>  rust/kernel/sync/condvar.rs     |   2 +-
+>  rust/kernel/sync/lock.rs        |   2 +-
+>  rust/kernel/sync/lock/global.rs |   2 +-
+>  10 files changed, 106 insertions(+), 315 deletions(-)
+
+> +/// Extensions to [`CStr`].
+> +pub trait CStrExt {
+
+Should we make this trait sealed?
 
 ---
 Cheers,
 Benno
 
-> ---
->  rust/kernel/fmt.rs     | 87 ++++++++++++++++++++++++++++++++++++++++++++=
-+-
->  rust/kernel/prelude.rs |  3 +-
->  rust/macros/fmt.rs     | 94 ++++++++++++++++++++++++++++++++++++++++++++=
-++++++
->  rust/macros/lib.rs     | 19 ++++++++++
->  rust/macros/quote.rs   |  7 ++++
->  5 files changed, 207 insertions(+), 3 deletions(-)
+>      /// Wraps a raw C string pointer.
+>      ///
+>      /// # Safety
