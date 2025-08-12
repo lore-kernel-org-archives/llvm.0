@@ -1,123 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C0E2F658F;
-	Tue, 12 Aug 2025 15:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B2F2F83C0;
+	Tue, 12 Aug 2025 15:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755013984; cv=none; b=YJbBgRirfJ4EetgwePnXo8hAuVVKMX7gMU3Pe1ek0aL/FQ9AAu61cDT59iXH4k1s382a/bXiWQ2yPdsuopIn/6j21ZgV/iSRi10h7l81dVr3mKv07XoUzo0TKam9WVzC5AxqyDDgmsYWKNDI44Pa7Jy7AyI/mNscwyhR+osmsAM=
+	t=1755013985; cv=none; b=JnoncdWbqggsJ87t2c9Leez5x7LWAyK8uVekH7OHhHFNBEBlILSzGgBNV2FMpARbC3kgiY2po322zPVsDH2u8ZfSHNFtVNUMU5OWphX0VIHyhV38FgVxk7eRDckrgq5HgIfNIFLrNi5Xh+wzjB74KJdhrdDAZEHW8YjRYsuQqWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755013984; c=relaxed/simple;
-	bh=xGqRUdnbzPC+ihtI7x1CKaRb+bb/xRHekZu9g4Xe/HU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/9+APCLQovdUZsnp1TKoN6T2vLzuqNBTsqfTXm+jJdf/xIoYS33SZHMU/tNXokHGJ0QkXNV1S2hiXRlD2+nDlSAwX8CO/oC+qUs4OgqEMzrrwnoNyWx5ku+o9AbxpNfjTjTvNpVlhpRc+KwdkdjaXuOhXPkc17tgUUZwJdJFiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l+DFmsxl; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755013985; c=relaxed/simple;
+	bh=WebWcu8z+YevfzDBChtXNRkHwfTSu+wYncOqqxbNMio=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Tz8WbdB0YQbXhTWTtIIscJHzI//kAl5HYujlfZGuqSaxtk3X3YkPYqGKYGpr4i2ybD+tYyTxmhtIWL4L7uEfycn6lEzM03gJqraa26xEVcN//h8oGMpQq5SXPFy9jp7x1z7cUYhLBjgww+URAwCzobJvMPVM6vN9md+VObvZdfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSFA8CqG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l+DFmsxl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755013983; x=1786549983;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xGqRUdnbzPC+ihtI7x1CKaRb+bb/xRHekZu9g4Xe/HU=;
-  b=l+DFmsxlm2qGuRebkASNvHxkHW+e9/BEzUAvgjdzohXZ/lQwykP9yFEj
-   /VQu7RJNCi2zcvKXQoIWRzfwaBd3UgXnfDIQ/FUVHntc0QSiaHB6C2128
-   Qw6gkLoTbm6UOhSmHCL/LNmh052E9SCwY14nQvbCDQ2lua6bWOq+8IVZ1
-   Kb+RlYDcl24U+VbMre7Pn/lNWXO78E3eLXWG3rxZegqqnLrDuBgrTDQE9
-   o2FJ8PeKZTvjOR+OLD1rVeiydg0GNrGSBi+tlu8duxjlp34+YYFWHBH5Z
-   cNvad8+4KAh8OKFtbhaj+qMIG8hhqW7XHRu8yyI9WVSy5B6DLSEf+6oHk
-   A==;
-X-CSE-ConnectionGUID: Z38+DWx/Qr6gtzd1m3aWPA==
-X-CSE-MsgGUID: IliqBXHJT3KecpNwoaHX0g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57214434"
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="57214434"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 08:52:49 -0700
-X-CSE-ConnectionGUID: 0bsw4FC6RT6UhF2rBBn1Xw==
-X-CSE-MsgGUID: V+pW2tW4R/SxfVbWnVAIWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="165862736"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 12 Aug 2025 08:52:46 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ulrIp-0006wd-2S;
-	Tue, 12 Aug 2025 15:52:43 +0000
-Date: Tue, 12 Aug 2025 23:52:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ritvik Gupta <ritvikfoss@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v4] rust: kernel: introduce `unsafe_precondition_assert!`
- macro
-Message-ID: <202508122341.rb7U1Q2P-lkp@intel.com>
-References: <20250808192005.209188-1-ritvikfoss@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSFA8CqG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F90CC2BCF6;
+	Tue, 12 Aug 2025 15:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755013985;
+	bh=WebWcu8z+YevfzDBChtXNRkHwfTSu+wYncOqqxbNMio=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=aSFA8CqGgrFaRwZ/HyAv4vh89GoILlu7blWgntOq7dPUcRmI6zeZQwsOt35132bGx
+	 4527Jh27mYQG18NI7HtoFkQ+TM8fFUbsXlO9Xr7ae+Uyobf9+ef3AN8kHiIzuVpKJW
+	 /KtNN3SbPOUBiKg27LnbTMXmxNNkh6U1VY9lhMh6O2G1ToXP5ulXvVWbnGp4EuPVGO
+	 t8mtIoA17sI+6cK8rpAkeTTrGdihYvtkxFMOgss8VqNUvONP89DTl+51CXZGkDY256
+	 aDPGd+P98uJgt8UrBwB98dW+IIjVpcVPOpGZqZ1F02VFR3jX2ECUfA3fHhEugb/5P3
+	 OeXsltw0frcaw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1ulrJ9-00000006kXX-0Sbg;
+	Tue, 12 Aug 2025 17:53:03 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	"Jonathan Corbet" <corbet@lwn.net>,
+	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <mchehab+huawei@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 36/39] scripts: sphinx-pre-install: update mandatory system deps
+Date: Tue, 12 Aug 2025 17:52:53 +0200
+Message-ID: <4ec979e4692c9e4acd6c31424c0e2f4bf5b80e71.1754992972.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <cover.1754992972.git.mchehab+huawei@kernel.org>
+References: <cover.1754992972.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250808192005.209188-1-ritvikfoss@gmail.com>
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Hi Ritvik,
+To build docs, gcc is not needed. Also, Kernel can be built
+nowadays with clang. So, drop it.
 
-kernel test robot noticed the following build errors:
+On the other hand, which is needed. Add a system dependency
+for it.
 
-[auto build test ERROR on 37816488247ddddbc3de113c78c83572274b1e2e]
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ scripts/sphinx-pre-install | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ritvik-Gupta/rust-kernel-introduce-unsafe_precondition_assert-macro/20250809-032122
-base:   37816488247ddddbc3de113c78c83572274b1e2e
-patch link:    https://lore.kernel.org/r/20250808192005.209188-1-ritvikfoss%40gmail.com
-patch subject: [PATCH v4] rust: kernel: introduce `unsafe_precondition_assert!` macro
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250812/202508122341.rb7U1Q2P-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250812/202508122341.rb7U1Q2P-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508122341.rb7U1Q2P-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> error[E0423]: cannot initialize a tuple struct which contains private fields
-   --> rust/doctests_kernel_generated.rs:8841:5
-   |
-   8841 |     CpuId(id)
-   |     ^^^^^
-   |
-   note: constructor is not visible here due to private fields
-   --> rust/kernel/cpu.rs:47:18
-   |
-   47   | pub struct CpuId(u32);
-   |                  ^^^ private field
-   help: you might have meant to use an associated function to build this type
-   |
-   8841 -     CpuId(id)
-   8841 +     CpuId::from_i32_unchecked(_)
-   |
-   8841 -     CpuId(id)
-   8841 +     CpuId::from_u32_unchecked(_)
-   |
-   8841 -     CpuId(id)
-   8841 +     CpuId::current()
-   |
-
+diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
+index 7dfe5c2a6cc2..fc9dc45054d7 100755
+--- a/scripts/sphinx-pre-install
++++ b/scripts/sphinx-pre-install
+@@ -1476,7 +1476,7 @@ class SphinxDependencyChecker(MissingCheckers):
+         self.check_perl_module("Pod::Usage", DepManager.SYSTEM_MANDATORY)
+ 
+         self.check_program("make", DepManager.SYSTEM_MANDATORY)
+-        self.check_program("gcc", DepManager.SYSTEM_MANDATORY)
++        self.check_program("which", DepManager.SYSTEM_MANDATORY)
+ 
+         self.check_program("dot", DepManager.SYSTEM_OPTIONAL)
+         self.check_program("convert", DepManager.SYSTEM_OPTIONAL)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
