@@ -1,46 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97BE729BD9C
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 05:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435872882D3
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 05:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977159; cv=none; b=dVOcey6g82Kc2xZi37nZSkP55f5jm6WVr5/Kns1M8rYBotukjf9vLJ2xXzJ/ZbdsGoF98VO36gcjtbeLoI5j4KwXnkyTrp9ItguqLYmRbAYQhw5gE8/H8eJq+P1ofxSgQjo5DxasbOPf1fXOvi/9uYZeyAskRcPlDs4qImKI+9c=
+	t=1754977159; cv=none; b=pAr/2sSr7sr71qALwI6208OvQKueG3dQlSAfvU5wnID/fjTIVJ36UNQWVlWq+nOCi5kxsJ7Ccw+me24CjZ24iizQ5youLuyNbW4k5fMAI4M5QEuMp6yFvoYwIMBFUs150GAAgY57RBggjUKANONspxa4f6nPNNnJjkWMZzyI9U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754977159; c=relaxed/simple;
-	bh=lMvy9mMPLigV58NneqZctebN68FvSQ2op4StQi+D6+E=;
+	bh=QrlHtet0JRu7nFXpAhs1+5+M+BKn0zdv3choxoyODIc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iwqxKON/pnY4TCFWKkZzQ5g1+l/DlJiYONECFfYUHdt5glBiqpNA3j5VWUkPVuHcfaf1CuzTxjWFiBA33o5WkZ64t9Ql2rUMwpLoAIZV9rokkAoLPX+2qxQ1wPOMdcwmsceQOIKzKo3lzgswDS+nt+fx0DiNi61Ykac0sKCrT08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4kmQJnX4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3q2OxSex; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=MMbLC8BziA2LW6hszon5EYGys/y1pa7HFIKYleJFfEFFqIcQy4HkQRv6+462c8jYwht9JvEqzqhzMvrhEIRQVG0PX6aqhOyeJWJlfj/qk3wqJ/nv6HmJS2S5U02gE9IIirtlEP27tHWlE+cjmGV2i8VN4XakCcaw/letvJ2fZaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZD7hDHnj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=D7IdwDVL; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4kmQJnX4";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3q2OxSex"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZD7hDHnj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="D7IdwDVL"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754977156;
+	s=2020; t=1754977154;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xp075UorUyCKambMQFG4NnP9kfsQ1yKOIo2P32aHiEE=;
-	b=4kmQJnX4iqNnAk3etQNIjKPcZLG+lYQD5nwEnmMYeHCMTCensgl/YOrd6CqQGTTy5KZBnj
-	E9R3dKxPQcU4zUQ2prbQFwI1GAI6ebXHE/k6v2w/AoO2MvXinaOcfVm00WZDi20jLYNULi
-	YG5xlCdLdEu61WormRTZhklYw6qAdn51zEs1EpCRVmauVsjwf+MbDnjRrJ99kgvRPKPEog
-	r7S2w0MwmKngIkGy5Xdur4hbgKh30YJOoisSn9Srn8GSwTzNG9NhP4khsUsrSBew2tlzwG
-	wanl2iVjTRys1HXflbcjUZCu6a+g41dLWtA78SEVn0hTV0uCiyC7zVRN1/DsQA==
+	bh=5qZ9MFGSNnbL4P8AdyY5Ik7ybFfv9o7yHGW2eLboNJw=;
+	b=ZD7hDHnjZMOIm00yOQfqgAKDUFMXLm6dY4+MWqvhp/2hNjYIzyK7fKxF+OxB8Dhw7T+aWd
+	sxcq9P6OmcppL1kytpTFX8p29fPjYUMj+Lf2xu0ttZcYv9ia5MdpmLVuY0Zo4uPzw2U2G6
+	6u5L5VpivGWY5Yyr8omImqpWUYjun4IrWpVXWZe1nrThnHELX2n+Af78cquNexuKF/rn6J
+	PVY2oDfnqN+7CIDy4yWEty3GMN6Y89fZ7+LhZDSkOW1lnOeoJ+Qyx+on2aLzfGsoFhgDQr
+	l5wtNRvr/vchHE17EbQYDKvp7Wt4cxC2U2QyjKq+4mYHA6DNKur3lMqbrhidbQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754977156;
+	s=2020e; t=1754977154;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xp075UorUyCKambMQFG4NnP9kfsQ1yKOIo2P32aHiEE=;
-	b=3q2OxSexCawFa7Rw+Zhbi7N0KnXGrG1uMWRJLNAGpOdnvX6V1Z2pq/MbgiOM1L3CPNPKo3
-	6s43HKNMLxaMvZCQ==
-Date: Tue, 12 Aug 2025 07:39:04 +0200
-Subject: [PATCH v2 3/8] selftests: vDSO: vdso_test_abi: Use ksft_finished()
+	bh=5qZ9MFGSNnbL4P8AdyY5Ik7ybFfv9o7yHGW2eLboNJw=;
+	b=D7IdwDVLJ17shv1oM3ZQyiBryy/29fwOEhXTO4TMsQCbLH1N0Z/pHpCXmrVj2DgJFIueB5
+	Jj9EQie0gcl2nRBg==
+Date: Tue, 12 Aug 2025 07:39:02 +0200
+Subject: [PATCH v2 1/8] selftests: vDSO: fix -Wunitialized in powerpc
+ VDSO_CALL() wrapper
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +50,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-tests-fixes-v2-3-90f499dd35f8@linutronix.de>
+Message-Id: <20250812-vdso-tests-fixes-v2-1-90f499dd35f8@linutronix.de>
 References: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
 In-Reply-To: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -61,35 +62,76 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
  "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977153; l=781;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ kernel test robot <lkp@intel.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977153; l=2819;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=lMvy9mMPLigV58NneqZctebN68FvSQ2op4StQi+D6+E=;
- b=cJTN0KcIPZ1MTyBCAO2az+bCeFUJejhDBlgM8cdz8Z7SLpkhqL+8E5kIR58vJieGjEaHgUZW7
- uCvEtrIVk5FDKyReBy+j1OisgxfQZ6Pg47LpE2feS/4Aro2K1sSbXIg
+ bh=QrlHtet0JRu7nFXpAhs1+5+M+BKn0zdv3choxoyODIc=;
+ b=6hS7C4wxnaTrYBbWrmH3kvLNURxJ61FT51N/WVlBUbAkXjn8DXQmvf14RLKWmDPOOESNP0F4r
+ zMDuFxVVOMBBAGkYIHfd5zgNmpbj7A+W0fOcH68u2NC+Sgzex8STTf4
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The existing logic is just an open-coded ksft_finished().
-Replace it with the real thing.
+The _rval register variable is meant to be an output operand of the asm
+statement but is instead used as input operand.
+clang 20.1 notices this and triggers -Wuninitialized warnings:
 
+tools/testing/selftests/timers/auxclock.c:154:10: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
+  154 |                 return VDSO_CALL(self->vdso_clock_gettime64, 2, clockid, ts);
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/testing/selftests/timers/../vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
+   59 |                 : "r" (_rval)                                           \
+      |                        ^~~~~
+tools/testing/selftests/timers/auxclock.c:154:10: note: variable '_rval' is declared here
+tools/testing/selftests/timers/../vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
+   47 |         register long _rval asm ("r3");                                 \
+      |         ^
+
+It seems the list of input and output operands have been switched around.
+However as the argument registers are not always initialized they can not
+be marked as pure inputs as that would trigger -Wuninitialized warnings.
+Adding _rval as another input and output operand does also not work as it
+would collide with the existing _r3 variable.
+
+Instead reuse _r3 for both the argument and the return value.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202506180223.BOOk5jDK-lkp@intel.com/
+Fixes: 6eda706a535c ("selftests: vDSO: fix the way vDSO functions are called for powerpc")
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/vDSO/vdso_test_abi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/selftests/vDSO/vdso_call.h | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-index 67cbfc56e4e1b0edce50d37ae145a054e304892a..b989167ec2472d1f8369e61f13e535b15545a6bb 100644
---- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-@@ -231,6 +231,5 @@ int main(int argc, char **argv)
+diff --git a/tools/testing/selftests/vDSO/vdso_call.h b/tools/testing/selftests/vDSO/vdso_call.h
+index bb237d771051bd4103367fc60b54b505b7586965..e7205584cbdca5e10c13c1e9425d2023b02cda7f 100644
+--- a/tools/testing/selftests/vDSO/vdso_call.h
++++ b/tools/testing/selftests/vDSO/vdso_call.h
+@@ -44,7 +44,6 @@
+ 	register long _r6 asm ("r6");					\
+ 	register long _r7 asm ("r7");					\
+ 	register long _r8 asm ("r8");					\
+-	register long _rval asm ("r3");					\
+ 									\
+ 	LOADARGS_##nr(fn, args);					\
+ 									\
+@@ -54,13 +53,13 @@
+ 		"	bns+	1f\n"					\
+ 		"	neg	3, 3\n"					\
+ 		"1:"							\
+-		: "+r" (_r0), "=r" (_r3), "+r" (_r4), "+r" (_r5),	\
++		: "+r" (_r0), "+r" (_r3), "+r" (_r4), "+r" (_r5),	\
+ 		  "+r" (_r6), "+r" (_r7), "+r" (_r8)			\
+-		: "r" (_rval)						\
++		:							\
+ 		: "r9", "r10", "r11", "r12", "cr0", "cr1", "cr5",	\
+ 		  "cr6", "cr7", "xer", "lr", "ctr", "memory"		\
+ 	);								\
+-	_rval;								\
++	_r3;								\
+ })
  
- 	vdso_test_time();
- 
--	ksft_print_cnts();
--	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
-+	ksft_finished();
- }
+ #else
 
 -- 
 2.50.1
