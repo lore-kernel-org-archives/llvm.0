@@ -1,151 +1,131 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5F029BDA4;
-	Tue, 12 Aug 2025 05:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 093C120C004
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 06:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977501; cv=none; b=h5JI7Lfs4eVYtEm3u720YUfMvfbQokbvVQcgxyu18q1AGplhz5Tp9iS2yQ1/qi8VL98+T12BuWcgkIaml41AB2h7ya9x0I6SISA4Q9AYoA/EU5PnBm9R0w7Fxdi/iZKa7mSWGRGVpYKC9Fh3nZGqFgM1U2CBN8OXEWvBL6fUo1I=
+	t=1754979636; cv=none; b=ra3wfbEXW0EJ8o62YHiaG8jl7DuKINo1yOPWIwn9Q0dixzUuap+/MuuYgxel6/BnnesbIZJNJUjVcmDRCpRljKt+ATZ5VkVEjuzRNA7QF6GVxGaFQmG1yXMBn2sA0nBECq7qkYcIHQZybL4ua3wk72JdEh0FRIHUZb2rlgJPrIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754977501; c=relaxed/simple;
-	bh=XgLT+HRfIExEaxGQakA0kG9YYMgwqfszT+N1NJLYmAY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g+q/0HveeKCwqoHRg/MVC04BlskXanrt6kRU8uVYrGqwo9GnoNW+4wJloBWWFq8lYpcyz9z/6YxvyT/buBxdz26TnyQik0jmlKTMWlbyRu565lTNnIR8D6V67cibxSAFzeV2hWENQsERpSH2gKdVRE8B/i+5/ccdYApNGAowRRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gVUd2BKN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=E3zfUlZM; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gVUd2BKN";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E3zfUlZM"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754977483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Ohsn0uRwU+hqw8smnbWosllb5/RpGYnB9VEAvO1A/o=;
-	b=gVUd2BKNRu49lqg4NSeZ4pKy2oD1HLdzTFOjP5wa3OkUArCPejQi3q6nUUr2hwWVlPH2Kd
-	CpxufrleSj5IZe8RVpKM1ltFMzRJO9obwhqsMGuapaXgAqGhXqHAW1SITBjzjuIFxYogme
-	VHW9rhxA7fc8nsd57iZTz0NzWxS4qCvj0HR7XdalckB95CeAtDcPREEN4EOpD8wSUEK1Fj
-	JpEDuofzGC0RATmSZcEZf8c/4R+6SxzYN4hGrvSuM267wDyFyN3n0HVqzoxPKY02BuyYgJ
-	Z9VulQJw/Kd9S+FCzxMpZgWlnADluI2ZtXqh+SyfPfSKvhoitMn+YWd5L9OT6A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754977483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Ohsn0uRwU+hqw8smnbWosllb5/RpGYnB9VEAvO1A/o=;
-	b=E3zfUlZMz5EWlnuWD04WRwJZzaIYqsb9Hq174OOh7rbwH0by1UeqdRfVLVDKyXeX8pZQ9r
-	AHYbNMgU+lq97wCQ==
-Date: Tue, 12 Aug 2025 07:44:37 +0200
-Subject: [PATCH v4 24/24] vdso/vdsocheck: Drop the transitional kconfig
- option
+	s=arc-20240116; t=1754979636; c=relaxed/simple;
+	bh=Y7VqHf4C+JSQxOFwIP6hzbmo5lu9mZzg++Z+7+9xQJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gxGiAbNNkZjss+5+aR4xaZP3uzkouaL3VjAP0WYNCenM80GnI8FLy1tpAA1p9jWt1ppWBcmzD7nC9ytLoBHYlcu+XUdMfb5wtKNHczMFMIFnkiU/kU+ixs7CS/iK4kMuXNAMsR6tRrk3TYniYP96UM58+MpXDG+9HqLmtBKOUzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4c1LbP1ZCQz9sSH;
+	Tue, 12 Aug 2025 08:05:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3WR0gSTJzGY1; Tue, 12 Aug 2025 08:05:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4c1LbP0Kj8z9sSC;
+	Tue, 12 Aug 2025 08:05:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id DE8C38B764;
+	Tue, 12 Aug 2025 08:05:52 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id VXWlAoGWUx8D; Tue, 12 Aug 2025 08:05:52 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1C6768B763;
+	Tue, 12 Aug 2025 08:05:52 +0200 (CEST)
+Message-ID: <d72bb0f7-8dc3-42ca-84d9-c74b4db02445@csgroup.eu>
+Date: Tue, 12 Aug 2025 08:05:51 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/8] selftests: vDSO: fix -Wunitialized in powerpc
+ VDSO_CALL() wrapper
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
+ <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
+ kernel test robot <lkp@intel.com>
+References: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
+ <20250812-vdso-tests-fixes-v2-1-90f499dd35f8@linutronix.de>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <20250812-vdso-tests-fixes-v2-1-90f499dd35f8@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-absolute-reloc-v4-24-61a8b615e5ec@linutronix.de>
-References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-To: Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>, 
- Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
- Johannes Berg <johannes@sipsolutions.net>, 
- Russell King <linux@armlinux.org.uk>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
- linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@redhat.com>, 
- Alexandre Ghiti <alexghiti@rivosinc.com>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=1638;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=XgLT+HRfIExEaxGQakA0kG9YYMgwqfszT+N1NJLYmAY=;
- b=1I1jQfDAIUdxhhr5poZTNsBtXG7kI9OeSFZyV1uG5GiskTP3f4x0XtJf5y22KDovg2SDqYoC/
- 1/LS9SuRW0lC44pibDwoRDG1rIxAT00dk7cwwtQfK+pJ8Esyu7dhqf4
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-All users of the generic vDSO are now using the vdsocheck tool.
 
-Remove the now unnecessary kconfig option.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- lib/vdso/Kconfig          | 14 --------------
- lib/vdso/Makefile.include |  2 +-
- 2 files changed, 1 insertion(+), 15 deletions(-)
+Le 12/08/2025 à 07:39, Thomas Weißschuh a écrit :
+> The _rval register variable is meant to be an output operand of the asm
+> statement but is instead used as input operand.
+> clang 20.1 notices this and triggers -Wuninitialized warnings:
+> 
+> tools/testing/selftests/timers/auxclock.c:154:10: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
+>    154 |                 return VDSO_CALL(self->vdso_clock_gettime64, 2, clockid, ts);
+>        |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/testing/selftests/timers/../vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
+>     59 |                 : "r" (_rval)                                           \
+>        |                        ^~~~~
+> tools/testing/selftests/timers/auxclock.c:154:10: note: variable '_rval' is declared here
+> tools/testing/selftests/timers/../vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
+>     47 |         register long _rval asm ("r3");                                 \
+>        |         ^
+> 
+> It seems the list of input and output operands have been switched around.
+> However as the argument registers are not always initialized they can not
+> be marked as pure inputs as that would trigger -Wuninitialized warnings.
+> Adding _rval as another input and output operand does also not work as it
+> would collide with the existing _r3 variable.
+> 
+> Instead reuse _r3 for both the argument and the return value.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Foe-kbuild-all%2F202506180223.BOOk5jDK-lkp%40intel.com%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C611dd96dfdad4dcd55d708ddd9629305%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905739611064850%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=QcOje8P4T0%2BsqgkSaP%2BkT3fS875kqCZhxChDmvWVY%2Fg%3D&reserved=0
+> Fixes: 6eda706a535c ("selftests: vDSO: fix the way vDSO functions are called for powerpc")
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index 567ac937a9c3084fd5669e1b890b667af8a2f12d..45df764b49ad62479e6456e00c053e46131936a3 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -48,17 +48,3 @@ config GENERIC_VDSO_DATA_STORE
- 	bool
- 	help
- 	  Selected by architectures that use the generic vDSO data store.
--
--config HAVE_VDSOCHECK
--	bool
--	default y if X86
--	default y if ARM
--	default y if ARM64
--	default y if PPC
--	default y if RISCV
--	default y if LOONGARCH
--	default y if S390
--	default y if MIPS
--	help
--	  Selected for architectures that are supported by the 'vdsocheck' progam.
--	  Only transitional.
-diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
-index 759fe41b48f658c399f54aa7d54a3dfeb07e5c9c..a5621b1d6ab51fde3fdab6e72309d51943939860 100644
---- a/lib/vdso/Makefile.include
-+++ b/lib/vdso/Makefile.include
-@@ -6,7 +6,7 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
- c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix $(GENERIC_VDSO_DIR), gettimeofday.c)
- c-getrandom-$(CONFIG_VDSO_GETRANDOM) := $(addprefix $(GENERIC_VDSO_DIR), getrandom.c)
- 
--ifeq ($(CONFIG_RUST_IS_AVAILABLE)$(CONFIG_HAVE_VDSOCHECK),yy)
-+ifdef CONFIG_RUST_IS_AVAILABLE
- vdsocheck := lib/vdso/check/vdsocheck
- 
- $(vdsocheck): FORCE
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
--- 
-2.50.1
+> ---
+>   tools/testing/selftests/vDSO/vdso_call.h | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/vdso_call.h b/tools/testing/selftests/vDSO/vdso_call.h
+> index bb237d771051bd4103367fc60b54b505b7586965..e7205584cbdca5e10c13c1e9425d2023b02cda7f 100644
+> --- a/tools/testing/selftests/vDSO/vdso_call.h
+> +++ b/tools/testing/selftests/vDSO/vdso_call.h
+> @@ -44,7 +44,6 @@
+>   	register long _r6 asm ("r6");					\
+>   	register long _r7 asm ("r7");					\
+>   	register long _r8 asm ("r8");					\
+> -	register long _rval asm ("r3");					\
+>   									\
+>   	LOADARGS_##nr(fn, args);					\
+>   									\
+> @@ -54,13 +53,13 @@
+>   		"	bns+	1f\n"					\
+>   		"	neg	3, 3\n"					\
+>   		"1:"							\
+> -		: "+r" (_r0), "=r" (_r3), "+r" (_r4), "+r" (_r5),	\
+> +		: "+r" (_r0), "+r" (_r3), "+r" (_r4), "+r" (_r5),	\
+>   		  "+r" (_r6), "+r" (_r7), "+r" (_r8)			\
+> -		: "r" (_rval)						\
+> +		:							\
+>   		: "r9", "r10", "r11", "r12", "cr0", "cr1", "cr5",	\
+>   		  "cr6", "cr7", "xer", "lr", "ctr", "memory"		\
+>   	);								\
+> -	_rval;								\
+> +	_r3;								\
+>   })
+>   
+>   #else
+> 
 
