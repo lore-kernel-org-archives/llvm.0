@@ -1,46 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA232E4277;
-	Tue, 12 Aug 2025 05:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B369A2E54C4;
+	Tue, 12 Aug 2025 05:44:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977485; cv=none; b=UtehYQQB+0kIw8Ub6sH2F4MFRqwR4HHuxc7zZz/mkdJOVgzCKZuM8Zwbq3jy63cCSGpAxCfzGpfZwx4hi5+OQbzyCJR/Uj/bzkn2bEhkFhdveMRZlh2GDUEP6uwtu6kyCwZTynZAO5iQe6Fq8IzuTJ7TfT69C48oHKH/7k0VYs4=
+	t=1754977487; cv=none; b=qobYjblsr05fAzOjWqWjQVxsSezFZgXdY68yWayZNiMQXfwxTxc/Sub0O2kS4f6OPfy9n7gMDB/m52ApIpdYnhAadpz1sDop8DWuZGBCPv3Njg81tp7TvWkaUAmHmSIq3pWvzHRUkNvlUUz3b2j5RWocuOFBXNVdMTc/CKMRUL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754977485; c=relaxed/simple;
-	bh=ZVAGLGCFxsrer4ZyNLb2NhW6qORCMiIw2HqWP+N4aV4=;
+	s=arc-20240116; t=1754977487; c=relaxed/simple;
+	bh=y8zJkYgbdBbZEV0tFUnY1VVHpY6kpQMx7JNEIl5bx6U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hbw/DlcBNZqVyLHvlVLS35KLdftDZ4yQfTkQoBOCnqEdsh4aooutFKUbhpPbsFL0qijeAyBnBF8HHnwSxOdcmyw+UIWzAPXUAhvpgzeylmbHBp9BpI9cW5Ca1UDCjiGzdBQI+SAlqadCJOYKn75UtLemfLhWo9SWsgkBOhBEGBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ag9FAR4S; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=u1ensITg; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=KSRr5q+EOtQBpKf3VzgGFtr7J/CJOmFumHt9ij3h30Jtg421YH3u8RzwNUrSvV3R4Z3PC0lrma1Hd1diPUd8JNEUJDq+3Qr044h+AYe/Hri+KWClW14kEWiWA4/tWGiLevhZJuiSPTDvtOVC5a1xYLfXuHkVkDoJ7ZdW1Hy7pwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zocDmbkM; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d4tRasLS; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ag9FAR4S";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="u1ensITg"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zocDmbkM";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d4tRasLS"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754977474;
+	s=2020; t=1754977476;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Fu8g+Fl052E34f4ajc7aTfb2t7+sWP8BOva3sbFf3lI=;
-	b=ag9FAR4SoucTPGK9KbbFPSxHt3EGXWPDHgV/1vttnN8ZMg/XUycb91t+tFbpufLilWVZJc
-	iv7mLDRjfB/vUT6zU4juqwzTsGL37zfulfZnVoEffSqPyWLXRWe6mZoYNxwxgi2JsgZeOj
-	vaTIFKA8ZLwhTPnCXn8AcYRo2vbX4t0UfG3o8JCPvRgDywKfdUm4EIBExPwiXhJe6WRElC
-	XH/kqQovrfbFLDCwvKDA3Wr4Qs/rzupFlRIuuOsCstYKLVhwrpBvxiT2E23d3igcm2Nzad
-	+z+dNwP5ZwaDpNvYg/bP+/pZl5Qc6dW3Y1/iAuiY+hy3M+SDK4mp9VECVhhnng==
+	bh=HfCt5JZT5TLY1vTOkO3zmfWoCgmYOOlaa/RcOHdKaps=;
+	b=zocDmbkM7SrtEfoMUMLk7syduA2FoS07iTJjRQxpoxVtJk6FCTcA63FHi4HDZhjOydKkAT
+	DrrV0zBYz8rfc084esfgs4uuXAkhxzoVwcqdSmF7BEFWQKKsdlPKcE3LkSmnxFYonNODFZ
+	2sN1ZNTgiR2KEOVXZQEVEMIVuHADKnDkoOaaebcfpKh5m4MlO1i3mxd6K0dfDn4f2gzo2k
+	hM+ll5vK+/7O/uRdgK7BcmGop+bMKCmttdkUi9IyiFrD6fxo3aGU/1dH+Y4ccEvyjf/xRm
+	ukysMSWz8XN0tHKKSQ2jKT60/8Q/5ewwHZkK0m/GvkKLUmwKhqnNwsd4lL/hmw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754977474;
+	s=2020e; t=1754977476;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Fu8g+Fl052E34f4ajc7aTfb2t7+sWP8BOva3sbFf3lI=;
-	b=u1ensITgZsRSuAKcfQs1pdhqsC2IlINyzHYx57P8Q57sYhYZ5ukMwC9TLF12sumTqJCETa
-	fnc0xR546UaaGWDA==
-Date: Tue, 12 Aug 2025 07:44:20 +0200
-Subject: [PATCH v4 07/24] LoongArch: Move relocation constants to UAPI
+	bh=HfCt5JZT5TLY1vTOkO3zmfWoCgmYOOlaa/RcOHdKaps=;
+	b=d4tRasLSDVTIK2B95jsGzJ+ah9uconnEpGunOzkAkX0RhJ6u8QF5Rm6WA7PtZmvXd7GJ+4
+	tmhczEYwE7G4MtAQ==
+Date: Tue, 12 Aug 2025 07:44:25 +0200
+Subject: [PATCH v4 12/24] x86/vdso: Enable the vdsocheck tool
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-absolute-reloc-v4-7-61a8b615e5ec@linutronix.de>
+Message-Id: <20250812-vdso-absolute-reloc-v4-12-61a8b615e5ec@linutronix.de>
 References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -91,245 +91,93 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arnaldo Carvalho de Melo <acme@redhat.com>, 
  Alexandre Ghiti <alexghiti@rivosinc.com>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=8191;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=3221;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=ZVAGLGCFxsrer4ZyNLb2NhW6qORCMiIw2HqWP+N4aV4=;
- b=VNc1TNZKDL/LVFRVz5BOq//QDqCWfYoW6xL5masgZ6JYWblQeOQ1NV9Vtszx6Gx5w6k8t92RO
- XtANlYV7IFzCsW7AORv1Q1VBm7p4qIgmE7oOIsux5VBBNXD24DMBz6d
+ bh=y8zJkYgbdBbZEV0tFUnY1VVHpY6kpQMx7JNEIl5bx6U=;
+ b=fENeUAc8ExvUZD2cHV52CW4BlgBth0NPCMcPLk1EKHf1hnG4lTQ/vRhPMnJvsZZXuIYsNnulZ
+ VQ7lpvqs+SzB4XtQHOZ7OgLms0zrQWlEQppNKDCg82HN7J6F262h/0M
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-These constants are useful for cross-platform userspace, for example to
-process ELF files during kernel cross-compilation.
+The vdsocheck tool validates the object files and final .so library.
+It can detect if the compiler created relocations which are incompatible
+with the vDSO which need to be worked around.
 
-Move them from the kernel-private architecture-specific header to the UAPI.
+Wire it up for the architecture.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/loongarch/include/asm/elf.h | 100 ---------------------------------------
- include/uapi/linux/elf-r.h       | 100 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 100 insertions(+), 100 deletions(-)
+ arch/x86/entry/vdso/Makefile |  6 +++---
+ lib/vdso/Kconfig             |  1 +
+ lib/vdso/check/vdsocheck.rs  | 12 ++++++++++++
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
-index f16bd42456e4ccf3ad6c8917165176b8ef5d8f05..5e4bcba21da2fe1b95045821156764a8f2c61fca 100644
---- a/arch/loongarch/include/asm/elf.h
-+++ b/arch/loongarch/include/asm/elf.h
-@@ -21,106 +21,6 @@
- #define EF_LOONGARCH_ABI_ILP32_SINGLE_FLOAT	0x6
- #define EF_LOONGARCH_ABI_ILP32_DOUBLE_FLOAT	0x7
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index f247f5f5cb44dad706701dd5344c9a8031deffc1..9da9cdf8c976ccebac1429afd244d4c9ea6ef5fa 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -35,7 +35,7 @@ CPPFLAGS_vdso.lds += -P -C
+ VDSO_LDFLAGS_vdso.lds = -m elf_x86_64 -soname linux-vdso.so.1 \
+ 			-z max-page-size=4096
  
--/* LoongArch relocation types used by the dynamic linker */
--#define R_LARCH_NONE				0
--#define R_LARCH_32				1
--#define R_LARCH_64				2
--#define R_LARCH_RELATIVE			3
--#define R_LARCH_COPY				4
--#define R_LARCH_JUMP_SLOT			5
--#define R_LARCH_TLS_DTPMOD32			6
--#define R_LARCH_TLS_DTPMOD64			7
--#define R_LARCH_TLS_DTPREL32			8
--#define R_LARCH_TLS_DTPREL64			9
--#define R_LARCH_TLS_TPREL32			10
--#define R_LARCH_TLS_TPREL64			11
--#define R_LARCH_IRELATIVE			12
--#define R_LARCH_MARK_LA				20
--#define R_LARCH_MARK_PCREL			21
--#define R_LARCH_SOP_PUSH_PCREL			22
--#define R_LARCH_SOP_PUSH_ABSOLUTE		23
--#define R_LARCH_SOP_PUSH_DUP			24
--#define R_LARCH_SOP_PUSH_GPREL			25
--#define R_LARCH_SOP_PUSH_TLS_TPREL		26
--#define R_LARCH_SOP_PUSH_TLS_GOT		27
--#define R_LARCH_SOP_PUSH_TLS_GD			28
--#define R_LARCH_SOP_PUSH_PLT_PCREL		29
--#define R_LARCH_SOP_ASSERT			30
--#define R_LARCH_SOP_NOT				31
--#define R_LARCH_SOP_SUB				32
--#define R_LARCH_SOP_SL				33
--#define R_LARCH_SOP_SR				34
--#define R_LARCH_SOP_ADD				35
--#define R_LARCH_SOP_AND				36
--#define R_LARCH_SOP_IF_ELSE			37
--#define R_LARCH_SOP_POP_32_S_10_5		38
--#define R_LARCH_SOP_POP_32_U_10_12		39
--#define R_LARCH_SOP_POP_32_S_10_12		40
--#define R_LARCH_SOP_POP_32_S_10_16		41
--#define R_LARCH_SOP_POP_32_S_10_16_S2		42
--#define R_LARCH_SOP_POP_32_S_5_20		43
--#define R_LARCH_SOP_POP_32_S_0_5_10_16_S2	44
--#define R_LARCH_SOP_POP_32_S_0_10_10_16_S2	45
--#define R_LARCH_SOP_POP_32_U			46
--#define R_LARCH_ADD8				47
--#define R_LARCH_ADD16				48
--#define R_LARCH_ADD24				49
--#define R_LARCH_ADD32				50
--#define R_LARCH_ADD64				51
--#define R_LARCH_SUB8				52
--#define R_LARCH_SUB16				53
--#define R_LARCH_SUB24				54
--#define R_LARCH_SUB32				55
--#define R_LARCH_SUB64				56
--#define R_LARCH_GNU_VTINHERIT			57
--#define R_LARCH_GNU_VTENTRY			58
--#define R_LARCH_B16				64
--#define R_LARCH_B21				65
--#define R_LARCH_B26				66
--#define R_LARCH_ABS_HI20			67
--#define R_LARCH_ABS_LO12			68
--#define R_LARCH_ABS64_LO20			69
--#define R_LARCH_ABS64_HI12			70
--#define R_LARCH_PCALA_HI20			71
--#define R_LARCH_PCALA_LO12			72
--#define R_LARCH_PCALA64_LO20			73
--#define R_LARCH_PCALA64_HI12			74
--#define R_LARCH_GOT_PC_HI20			75
--#define R_LARCH_GOT_PC_LO12			76
--#define R_LARCH_GOT64_PC_LO20			77
--#define R_LARCH_GOT64_PC_HI12			78
--#define R_LARCH_GOT_HI20			79
--#define R_LARCH_GOT_LO12			80
--#define R_LARCH_GOT64_LO20			81
--#define R_LARCH_GOT64_HI12			82
--#define R_LARCH_TLS_LE_HI20			83
--#define R_LARCH_TLS_LE_LO12			84
--#define R_LARCH_TLS_LE64_LO20			85
--#define R_LARCH_TLS_LE64_HI12			86
--#define R_LARCH_TLS_IE_PC_HI20			87
--#define R_LARCH_TLS_IE_PC_LO12			88
--#define R_LARCH_TLS_IE64_PC_LO20		89
--#define R_LARCH_TLS_IE64_PC_HI12		90
--#define R_LARCH_TLS_IE_HI20			91
--#define R_LARCH_TLS_IE_LO12			92
--#define R_LARCH_TLS_IE64_LO20			93
--#define R_LARCH_TLS_IE64_HI12			94
--#define R_LARCH_TLS_LD_PC_HI20			95
--#define R_LARCH_TLS_LD_HI20			96
--#define R_LARCH_TLS_GD_PC_HI20			97
--#define R_LARCH_TLS_GD_HI20			98
--#define R_LARCH_32_PCREL			99
--#define R_LARCH_RELAX				100
--#define R_LARCH_DELETE				101
--#define R_LARCH_ALIGN				102
--#define R_LARCH_PCREL20_S2			103
--#define R_LARCH_CFA				104
--#define R_LARCH_ADD6				105
--#define R_LARCH_SUB6				106
--#define R_LARCH_ADD_ULEB128			107
--#define R_LARCH_SUB_ULEB128			108
--#define R_LARCH_64_PCREL			109
--
- #ifndef ELF_ARCH
+-$(obj)/vdso64.so.dbg: $(obj)/vdso.lds $(vobjs) FORCE
++$(obj)/vdso64.so.dbg: $(obj)/vdso.lds $(vobjs) $(vdsocheck) FORCE
+ 	$(call if_changed,vdso_and_check)
  
- /* ELF register definitions */
-diff --git a/include/uapi/linux/elf-r.h b/include/uapi/linux/elf-r.h
-index 02e420c255df67f8f7e4bc3165f808b9935f5b1c..576d974db6e31f8a9cd995f7428c85bd41102415 100644
---- a/include/uapi/linux/elf-r.h
-+++ b/include/uapi/linux/elf-r.h
-@@ -380,4 +380,104 @@
- #define R_RISCV_SET_ULEB128	60
- #define R_RISCV_SUB_ULEB128	61
+ HOST_EXTRACFLAGS += -I$(srctree)/tools/include -I$(srctree)/include/uapi -I$(srctree)/arch/$(SUBARCH)/include/uapi
+@@ -108,7 +108,7 @@ $(obj)/%.so: OBJCOPYFLAGS := -S --remove-section __ex_table
+ $(obj)/%.so: $(obj)/%.so.dbg FORCE
+ 	$(call if_changed,objcopy)
  
-+/* LoongArch relocation types used by the dynamic linker */
-+#define R_LARCH_NONE				0
-+#define R_LARCH_32				1
-+#define R_LARCH_64				2
-+#define R_LARCH_RELATIVE			3
-+#define R_LARCH_COPY				4
-+#define R_LARCH_JUMP_SLOT			5
-+#define R_LARCH_TLS_DTPMOD32			6
-+#define R_LARCH_TLS_DTPMOD64			7
-+#define R_LARCH_TLS_DTPREL32			8
-+#define R_LARCH_TLS_DTPREL64			9
-+#define R_LARCH_TLS_TPREL32			10
-+#define R_LARCH_TLS_TPREL64			11
-+#define R_LARCH_IRELATIVE			12
-+#define R_LARCH_MARK_LA				20
-+#define R_LARCH_MARK_PCREL			21
-+#define R_LARCH_SOP_PUSH_PCREL			22
-+#define R_LARCH_SOP_PUSH_ABSOLUTE		23
-+#define R_LARCH_SOP_PUSH_DUP			24
-+#define R_LARCH_SOP_PUSH_GPREL			25
-+#define R_LARCH_SOP_PUSH_TLS_TPREL		26
-+#define R_LARCH_SOP_PUSH_TLS_GOT		27
-+#define R_LARCH_SOP_PUSH_TLS_GD			28
-+#define R_LARCH_SOP_PUSH_PLT_PCREL		29
-+#define R_LARCH_SOP_ASSERT			30
-+#define R_LARCH_SOP_NOT				31
-+#define R_LARCH_SOP_SUB				32
-+#define R_LARCH_SOP_SL				33
-+#define R_LARCH_SOP_SR				34
-+#define R_LARCH_SOP_ADD				35
-+#define R_LARCH_SOP_AND				36
-+#define R_LARCH_SOP_IF_ELSE			37
-+#define R_LARCH_SOP_POP_32_S_10_5		38
-+#define R_LARCH_SOP_POP_32_U_10_12		39
-+#define R_LARCH_SOP_POP_32_S_10_12		40
-+#define R_LARCH_SOP_POP_32_S_10_16		41
-+#define R_LARCH_SOP_POP_32_S_10_16_S2		42
-+#define R_LARCH_SOP_POP_32_S_5_20		43
-+#define R_LARCH_SOP_POP_32_S_0_5_10_16_S2	44
-+#define R_LARCH_SOP_POP_32_S_0_10_10_16_S2	45
-+#define R_LARCH_SOP_POP_32_U			46
-+#define R_LARCH_ADD8				47
-+#define R_LARCH_ADD16				48
-+#define R_LARCH_ADD24				49
-+#define R_LARCH_ADD32				50
-+#define R_LARCH_ADD64				51
-+#define R_LARCH_SUB8				52
-+#define R_LARCH_SUB16				53
-+#define R_LARCH_SUB24				54
-+#define R_LARCH_SUB32				55
-+#define R_LARCH_SUB64				56
-+#define R_LARCH_GNU_VTINHERIT			57
-+#define R_LARCH_GNU_VTENTRY			58
-+#define R_LARCH_B16				64
-+#define R_LARCH_B21				65
-+#define R_LARCH_B26				66
-+#define R_LARCH_ABS_HI20			67
-+#define R_LARCH_ABS_LO12			68
-+#define R_LARCH_ABS64_LO20			69
-+#define R_LARCH_ABS64_HI12			70
-+#define R_LARCH_PCALA_HI20			71
-+#define R_LARCH_PCALA_LO12			72
-+#define R_LARCH_PCALA64_LO20			73
-+#define R_LARCH_PCALA64_HI12			74
-+#define R_LARCH_GOT_PC_HI20			75
-+#define R_LARCH_GOT_PC_LO12			76
-+#define R_LARCH_GOT64_PC_LO20			77
-+#define R_LARCH_GOT64_PC_HI12			78
-+#define R_LARCH_GOT_HI20			79
-+#define R_LARCH_GOT_LO12			80
-+#define R_LARCH_GOT64_LO20			81
-+#define R_LARCH_GOT64_HI12			82
-+#define R_LARCH_TLS_LE_HI20			83
-+#define R_LARCH_TLS_LE_LO12			84
-+#define R_LARCH_TLS_LE64_LO20			85
-+#define R_LARCH_TLS_LE64_HI12			86
-+#define R_LARCH_TLS_IE_PC_HI20			87
-+#define R_LARCH_TLS_IE_PC_LO12			88
-+#define R_LARCH_TLS_IE64_PC_LO20		89
-+#define R_LARCH_TLS_IE64_PC_HI12		90
-+#define R_LARCH_TLS_IE_HI20			91
-+#define R_LARCH_TLS_IE_LO12			92
-+#define R_LARCH_TLS_IE64_LO20			93
-+#define R_LARCH_TLS_IE64_HI12			94
-+#define R_LARCH_TLS_LD_PC_HI20			95
-+#define R_LARCH_TLS_LD_HI20			96
-+#define R_LARCH_TLS_GD_PC_HI20			97
-+#define R_LARCH_TLS_GD_HI20			98
-+#define R_LARCH_32_PCREL			99
-+#define R_LARCH_RELAX				100
-+#define R_LARCH_DELETE				101
-+#define R_LARCH_ALIGN				102
-+#define R_LARCH_PCREL20_S2			103
-+#define R_LARCH_CFA				104
-+#define R_LARCH_ADD6				105
-+#define R_LARCH_SUB6				106
-+#define R_LARCH_ADD_ULEB128			107
-+#define R_LARCH_SUB_ULEB128			108
-+#define R_LARCH_64_PCREL			109
-+
- #endif /* _UAPI_LINUX_ELF_R_H */
+-$(obj)/vdsox32.so.dbg: $(obj)/vdsox32.lds $(vobjx32s) FORCE
++$(obj)/vdsox32.so.dbg: $(obj)/vdsox32.lds $(vobjx32s) $(vdsocheck) FORCE
+ 	$(call if_changed,vdso_and_check)
+ 
+ CPPFLAGS_vdso32/vdso32.lds = $(CPPFLAGS_vdso.lds)
+@@ -144,7 +144,7 @@ endif
+ 
+ $(obj)/vdso32.so.dbg: KBUILD_CFLAGS = $(KBUILD_CFLAGS_32)
+ 
+-$(obj)/vdso32.so.dbg: $(obj)/vdso32/vdso32.lds $(vobjs32) FORCE
++$(obj)/vdso32.so.dbg: $(obj)/vdso32/vdso32.lds $(vobjs32) $(vdsocheck) FORCE
+ 	$(call if_changed,vdso_and_check)
+ 
+ #
+diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
+index b461e2be6db80eae957c8e0a1ab573a85d78fd15..e9215084462dfb33a5cd55a57171d2ec4295a270 100644
+--- a/lib/vdso/Kconfig
++++ b/lib/vdso/Kconfig
+@@ -51,6 +51,7 @@ config GENERIC_VDSO_DATA_STORE
+ 
+ config HAVE_VDSOCHECK
+ 	bool
++	default y if X86
+ 	help
+ 	  Selected for architectures that are supported by the 'vdsocheck' progam.
+ 	  Only transitional.
+diff --git a/lib/vdso/check/vdsocheck.rs b/lib/vdso/check/vdsocheck.rs
+index 3c421100a91740ce3735edfbc9837ef49f55d8f8..c4feb75f93ec0a6a153a758ee7a51cc6f2f58bf1 100644
+--- a/lib/vdso/check/vdsocheck.rs
++++ b/lib/vdso/check/vdsocheck.rs
+@@ -34,6 +34,18 @@ fn is_ignored_section(&self, section: &elf::Section<'_>) -> bool {
+ 
+ fn allowed_relocations_for_machine(machine: u16) -> Option<AllowedRelocations<'static>> {
+     match machine as u32 {
++        bindings::EM_386 => Some(AllowedRelocations {
++            ignored_object_file_sections: None,
++            in_object_file: &[
++                bindings::R_386_PC32,
++                bindings::R_386_GOTOFF,
++                bindings::R_386_GOTPC,
++            ],
++        }),
++        bindings::EM_X86_64 => Some(AllowedRelocations {
++            ignored_object_file_sections: None,
++            in_object_file: &[bindings::R_X86_64_PC32, bindings::R_X86_64_PLT32],
++        }),
+         _ => None,
+     }
+ }
 
 -- 
 2.50.1
