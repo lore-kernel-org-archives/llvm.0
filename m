@@ -1,116 +1,109 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE6D1A23A0
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 05:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8272475C2
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 05:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754975517; cv=none; b=W3aRHBJDu4FgyCNHQFnQ/2oY5+Evi456XnZnkhWQvfiEcwoI/TDyzCNtV+oHrxYQd7ahE00gn3TIq6v9QG+KyVhJTXo7yWZ4ju2vb93ox3uge6JDLc/MCMsw0rd6N9f3Yw2V+vXo/xO6ss8n/pkHf/AEUMQJ7BPh0/8L/sxP0Ek=
+	t=1754977157; cv=none; b=tEPAOAHhw/Jvz27DjRYNL6yNK4YUvBG7vb8PN7VHd4895Gq2c0A75yjNk7GrCUv9VanwBzRw3eZeRPxveqOjhPBEygWEm0zXUGvYVzWZA46KtVuSWMm3AkcwXKErOco47qGrcj87uyHCBWjb5sDSF/MREv5UHfVqOiBnhC75Onk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754975517; c=relaxed/simple;
-	bh=+e4aQ4erJHP8iI85HC9zaagNuxNBEEFdnp0sUhqAedE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fngu2qfPmvRlVIW+VmCrinez7eGI5hkZBwa9XwnrFOWiM2HlyOeyBYgaAzqjU/HWVVrnj82UYs6gc9ce8KNuUDeooHodfkWVJ565KXcVAVtkToGsLi0GA2/cumJtdTCP3W1UofTBjBnx4llXk10v70PsRQk1wgO3R5DX6FtSrkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app1 (Coremail) with SMTP id HgEQrADHSMnlzJpo7iwIAQ--.1732S2;
-	Tue, 12 Aug 2025 13:11:01 +0800 (CST)
-Received: from [192.168.43.195] (unknown [10.200.80.159])
-	by gateway (Coremail) with SMTP id _____wCXkFPkzJpo_rrVAQ--.47500S2;
-	Tue, 12 Aug 2025 13:11:01 +0800 (CST)
-Message-ID: <c8a9e908-5231-4856-a722-ddc211154924@hust.edu.cn>
-Date: Tue, 12 Aug 2025 13:11:00 +0800
+	s=arc-20240116; t=1754977157; c=relaxed/simple;
+	bh=5YF8tU5jhoTmSCHca7iKbZ9R4dj3qes+SM80WlvKHW8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PURibP1LfROJf6CKRkMja+3oZo68icFT3i7dTZiSYoWJjbbxjj7V9b4bobcT6B2q08lDSzcq7w8u3H6MkSJZ7cxx/n/tX/dpGmgswy79LFtTFT52fLoFRy+MxicqjYUsBNWrGHBbXgFkxO0yn16EmBxD1i8qPaJ+LomyxFV3tGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zK0jbmF4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rRE1txom; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zK0jbmF4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rRE1txom"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1754977154;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iB6yQVDpZT+VKxszrEf7M8yrM56s7lC6qeXM7Pu7PZM=;
+	b=zK0jbmF4XvO6ByZA1u8n5vxq8j4C7DdUJdDLISKvSS52x/szyYObZyZuDexC62CBPQqdJT
+	2VGwmm5Kufsg1TazeZRIM6ULNsgDaSMqgm27ZBdXSBhz7tNlOWxEGA+XU/bn2k5/lAaVVp
+	jEPfakHxtx0w/4Gi5ozk1QDUKNdcAuC7dxAeMoH7A4Mz+JILjsvBy8i6705wEqIQiVrUbJ
+	HVRvDCm06y5/CQ54BpidSPks3m5e4dQ6TcwwLOsmBxIkks7lZtr3/RqhbayJuPGVcsvoJX
+	UKft/U6kFz6FwVJAXqV/CmBtLsH3TR8g+qFl5zjF8ZJMRR7/MBFaJEDzx0Wynw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1754977154;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iB6yQVDpZT+VKxszrEf7M8yrM56s7lC6qeXM7Pu7PZM=;
+	b=rRE1txomhWNCjZr49ksPxZRHPwxyIdnG4W37TILRIjxSbAyDErayH4KYKW23/8VVG2I9TM
+	jReNLiD8B7F6paCA==
+Subject: [PATCH v2 0/8] selftests: vDSO: Clean up vdso_test_abi and drop
+ vdso_test_clock_getres
+Date: Tue, 12 Aug 2025 07:39:01 +0200
+Message-Id: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] scripts/checktransupdate.py: add support for scanning
- directory
-To: Nathan Chancellor <nathan@kernel.org>,
- Haoyang LIU <tttturtleruss@gmail.com>, Yanteng Si <si.yanteng@linux.dev>,
- Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- hust-os-kernel-patches@googlegroups.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-doc@vger.kernel.org
-References: <20250811170050.94997-1-tttturtleruss@gmail.com>
- <20250811212446.GA924610@ax162>
-From: Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <20250811212446.GA924610@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:HgEQrADHSMnlzJpo7iwIAQ--.1732S2
-Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4DGFWfWFyfuw1DJF1fWFg_yoW8AF45pa
-	18Kw1aka43Kr47Cwn3Kw4YyF1rAa18GFy5Grn2qwn2vFn8tr40gr4I9wn0vF4kZFWrCFW5
-	XF4a9ry5KF4UZFDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQFb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
-	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
-	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
-	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
-	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r126r1DMxAIw2
-	8IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jy38nUUUUU=
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHXTmmgC/32NQQrCMBBFr1Jm7UgaGqKuvId0YZuJHZBEMjFUS
+ u5u7AFcvv95/28glJgELt0GiQoLx9BAHzqYl3t4ELJrDFppo6yyWJxEzCRZ0PNKgpYG57x31ms
+ LTXsl2otm3cbGC0uO6bM/lP6X/hkrPSo0g5nobE/9pObrk8M7pxh4PTqCsdb6BZZUFiW0AAAA
+X-Change-ID: 20250707-vdso-tests-fixes-7e4ddffd7f27
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ kernel test robot <lkp@intel.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977153; l=1569;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=5YF8tU5jhoTmSCHca7iKbZ9R4dj3qes+SM80WlvKHW8=;
+ b=LceymYLXe3xEn9DJBwP3degyfpLOoWD2ATr62EbWg/Hl/wM9cpNdkMSxkfjXLwb67TArI1Xgj
+ fb2D57IX9L/AdHa/MSqRL1g5YDe3geh3QOG2nR2wyRdGMM/1d5kspHh
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
+Some cleanups for the vDSO selftests.
 
-On 8/12/25 5:24 AM, 'Nathan Chancellor' via HUST OS Kernel Contribution 
-wrote:
-> Hi Haoyang,
->
-> On Tue, Aug 12, 2025 at 01:00:50AM +0800, Haoyang LIU wrote:
->> Origin script can only accept a file as parameter, this commit enables
->> it to scan a directory.
->>
->> Usage example:
->> ./scripts/checktransupdate.py Documentation/translations/zh_CN/dev-tools
->>
->> Signed-off-by: Haoyang LIU <tttturtleruss@gmail.com>
->> ---
->>
->> V1 -> V2: remove the fix of missing "f" in f-string and make it a new patch
->>
->>   scripts/checktransupdate.py | 24 ++++++++++++++++++++++++
->>   1 file changed, 24 insertions(+)
-> Thanks for the update. While this seems reasonable to me from a purely
-> surface level glance over the actual Python, I have added the
-> Documentation folks that Dongliang added from the previous thread, who
-> really own and maintain this file (the original patch is at [1]). Please
-> include them in future revisions should they be necessary. It would
-> probably be good for something like this to be applied?
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Also drop vdso_test_clock_getres from .gitignore
+- Move patch to fix -Wunitialized in powerpc VDSO_CALL() into this series
+- Rebase on v6.17-rc1
+- Add test for clock_gettime64()
+- Link to v1: https://lore.kernel.org/r/20250707-vdso-tests-fixes-v1-0-545be9781b0c@linutronix.de
 
-Thanks for the suggestion. I've submitted a patch[1].
+---
+Thomas Weißschuh (8):
+      selftests: vDSO: fix -Wunitialized in powerpc VDSO_CALL() wrapper
+      selftests: vDSO: vdso_test_abi: Correctly skip whole test with missing vDSO
+      selftests: vDSO: vdso_test_abi: Use ksft_finished()
+      selftests: vDSO: vdso_test_abi: Drop clock availability tests
+      selftests: vDSO: vdso_test_abi: Use explicit indices for name array
+      selftests: vDSO: vdso_test_abi: Test CPUTIME clocks
+      selftests: vDSO: vdso_test_abi: Add tests for clock_gettime64()
+      selftests: vDSO: Drop vdso_test_clock_getres
 
-[1] 
-https://lore.kernel.org/linux-doc/20250812050711.2515173-1-dzm91@hust.edu.cn/
+ tools/testing/selftests/vDSO/.gitignore            |   1 -
+ tools/testing/selftests/vDSO/Makefile              |   2 -
+ tools/testing/selftests/vDSO/vdso_call.h           |   7 +-
+ tools/testing/selftests/vDSO/vdso_test_abi.c       | 101 +++++++++--------
+ .../selftests/vDSO/vdso_test_clock_getres.c        | 123 ---------------------
+ 5 files changed, 59 insertions(+), 175 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250707-vdso-tests-fixes-7e4ddffd7f27
 
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fe168477caa4..b7e3a8c8832e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7302,6 +7302,7 @@ P:	Documentation/doc-guide/maintainer-profile.rst
->   T:	git git://git.lwn.net/linux.git docs-next
->   F:	Documentation/
->   F:	scripts/check-variable-fonts.sh
-> +F:	scripts/checktransupdate.py
->   F:	scripts/documentation-file-ref-check
->   F:	scripts/get_abi.py
->   F:	scripts/kernel-doc*
->
-> [1]: https://lore.kernel.org/20250811170050.94997-1-tttturtleruss@gmail.com/
->
-> Cheers,
-> Nathan
->
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
