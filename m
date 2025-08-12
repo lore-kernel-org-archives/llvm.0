@@ -1,46 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED782E2DD2
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 05:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421CF2D3ED6;
+	Tue, 12 Aug 2025 05:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977162; cv=none; b=UH1ddt3Mhqthm298CV3dFbIcP+he2dls91gNke5v6Zr1i9QSVj2J2lPZ+HUSYpDe4xKYmqHXJdG0kF3CT45T8gc9nJhrCSnpHhyUVrfIEY3sxK+OdTYv9TRZZjtuJcdsWLD2ousCw0SanpDI6+iZOoA79OQEHOXLTl4K8VZXjwk=
+	t=1754977480; cv=none; b=XMXYXW6/8kZkH9nBHtoXt3v6LUDts5Stgc2np2E+JBoEY9+A2gB7OIlPeypnZVRfwAT4F8khfyRVd0CXPMSknOkpfdl+LDD+byeqZmrSpJWtPKioIVNYtaPKe+1LCm+uHVwJmecVTdYd+pkf8FoHDomeE2hTj7RUcnuuW5kyUSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754977162; c=relaxed/simple;
-	bh=02daXCIbkRjNKoy/vay068lu47laZjYbudY0loa/xcc=;
+	s=arc-20240116; t=1754977480; c=relaxed/simple;
+	bh=1uMAsIGnLSAarJHPAhyn1ZCQ7+laGQoWKQA2Xxq0mGY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Uud8h5tXazocJXjMgrS9xpxwoze6vTZd+mrTpSfPin7Qbge1+Pr5FptjqEzSAS9G6SyPxLaih8cxmzZ64WES5VDJxQztTq+C6RiWX89yV2hAMPAkX2/NORW1uc/oEOV0Cxk1IdwaICySI0emeT53tHaDaS3F6hJlaA3sKQfcm0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=19LHLuI6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bzX/yQmT; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=q4OjySxJh+8+grWbOZyPH29d7eOZvySW7igzlp5r3cr2VxJSZar1XC3uyX1bLoa0FcuZJWK4a6QwLhicvY5hoxXN5zKSggIGAcY5ZZpVFvn5IBjCkA5NRnCNfmHclis6HD/I7u4ODpZCJUh+PAukz0zOm2GPlxUPkH/kGDhAiOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wFb0RLzj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qsESN/r8; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="19LHLuI6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bzX/yQmT"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wFb0RLzj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qsESN/r8"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754977158;
+	s=2020; t=1754977471;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UoV3x/XJg/ANc0lHinJVW2aC441y0iz7f+A5Ef+AT6Q=;
-	b=19LHLuI6tVonRzXepH1HJoekuFoQ2pUv7xdk+UeMQ+IUWxe0Q1RHQiPZPnPxh7RekdxT6L
-	7xChZISs5PoaJfDrUXX/xyGi4LUS7IW4giJ6gozkJXZsImFU67C57ycgTn8broAia8wA3r
-	SjBWRvOC6d8YDG/KlGaPeLgQM0z4u8EWomg4xoJAqrH0ku6dLd6fCF7RjtrVkMktWsjiZs
-	XsDXCwQCWweq/yTjNTdqqASgJLwA2mQbbRX0UT/+1vt8ZJ2sHpAq5saLCwz0AACm6HwiVR
-	fmu/FwwbSPB8hZZfCNeTd8Mo/WESjwSUqDrvqZCKXB2Dxm8gGps2QOezEwzmCQ==
+	bh=1fbs+jreI++pzzR3zWEjWTxnX9u6RnqE0RQf6GOU1NY=;
+	b=wFb0RLzjRR+m6XuM7TOWlo2yvCJnPhA+25xIrhYVyQU7vW3qK3ogLB5/FoNBtbGXFhaQKY
+	pr4aI4RliMtnnHAuihu1YwOpPa1YAFE6NNdNYTDGqtqXIgkvCGwOYClR54N7bodbqmR8ib
+	3FR59W6tTyZySeu5nec68ShzfSWdVtepYdrHKuUMyY5PDvLGMSfolpeOUlC1s249oPH+6P
+	/nNoPZTWkgEcLEgiFvoUsib1/knAtoR53VJtqoUm2UIq7TEvFyRcp1/WlztCfeuCCPyn1R
+	c9ok2s6GcRDtHFeAJPnrNr3pTIJwl25pnQginm0asRgcm/Y3wFJdfZ+h1y1MIA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754977158;
+	s=2020e; t=1754977471;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UoV3x/XJg/ANc0lHinJVW2aC441y0iz7f+A5Ef+AT6Q=;
-	b=bzX/yQmTGgcj7BYfGJJqCJo1Xh2OAJVyxJ5gjsJ6m4kUa7fXmrbzkadySm8CniqOBtZp9a
-	EnLmUhD++kdHDkBQ==
-Date: Tue, 12 Aug 2025 07:39:09 +0200
-Subject: [PATCH v2 8/8] selftests: vDSO: Drop vdso_test_clock_getres
+	bh=1fbs+jreI++pzzR3zWEjWTxnX9u6RnqE0RQf6GOU1NY=;
+	b=qsESN/r84WX54Bw78PaDXL3DZH9tinqCzw/9z447eYrhrk5rauDW2NqzQLxz4cWxfapa1Y
+	nlSHAbkBNOdd0fAw==
+Date: Tue, 12 Aug 2025 07:44:15 +0200
+Subject: [PATCH v4 02/24] x86/elf, um/x86/elf: Move relocation constants to
+ UAPI
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,200 +50,214 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-tests-fixes-v2-8-90f499dd35f8@linutronix.de>
-References: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
-In-Reply-To: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+Message-Id: <20250812-vdso-absolute-reloc-v4-2-61a8b615e5ec@linutronix.de>
+References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
+In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
+To: Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>, 
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+ Johannes Berg <johannes@sipsolutions.net>, 
+ Russell King <linux@armlinux.org.uk>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
  Christophe Leroy <christophe.leroy@csgroup.eu>, 
- "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+ loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+ linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@redhat.com>, 
+ Alexandre Ghiti <alexghiti@rivosinc.com>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977153; l=5188;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=6035;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=02daXCIbkRjNKoy/vay068lu47laZjYbudY0loa/xcc=;
- b=r7ieb+PVA8N9MszaJgXwJQj2Si1r3jimKm+R3hw8TlT82AZpsq/nx10e6uUqW3++1ihCS8/oy
- NS+KZ7MKu/9A3DIdaeuv2bJ4K/maWONWHEqj2S5rc/V4asG2vnBfLR3
+ bh=1uMAsIGnLSAarJHPAhyn1ZCQ7+laGQoWKQA2Xxq0mGY=;
+ b=LSso+CtnXCvSqq7w3arcGFjj/9JO1wvGscYCVoeDZOhj/IpFN3GTrmCLD7/dVw71XSDOqEtKb
+ ryK7StfnfXPByrB7+MMfsCwMUX3kib3KkE19P5uuPZjIm2SN2cxtCaS
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-vdso_test_abi provides the exact same functionality, properly uses
-kselftest.h and explicitly calls into the vDSO without relying on the libc.
+These constants are useful for cross-platform userspace, for example to
+process ELF files during kernel cross-compilation.
 
-Drop the pointless testcase.
+Move them from the kernel-private architecture-specific header to the UAPI.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/vDSO/.gitignore            |   1 -
- tools/testing/selftests/vDSO/Makefile              |   2 -
- .../selftests/vDSO/vdso_test_clock_getres.c        | 123 ---------------------
- 3 files changed, 126 deletions(-)
+ arch/x86/include/asm/elf.h | 34 ----------------------------------
+ arch/x86/um/asm/elf.h      | 33 ---------------------------------
+ include/uapi/linux/elf-r.h | 34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 67 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
-index 30d5c8f0e5c7dfe9a330e440801aeac7e19faea9..ba322a353aff14eb3e951294e3604378eec2b14c 100644
---- a/tools/testing/selftests/vDSO/.gitignore
-+++ b/tools/testing/selftests/vDSO/.gitignore
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- vdso_test
- vdso_test_abi
--vdso_test_clock_getres
- vdso_test_correctness
- vdso_test_gettimeofday
- vdso_test_getcpu
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 918a2caa070ebc681a9525f0518afffcf10f5ae3..e361aca22a74dc5c279ab1aa16f308b7e6e85bf1 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -4,7 +4,6 @@ include ../../../scripts/Makefile.arch
- TEST_GEN_PROGS := vdso_test_gettimeofday
- TEST_GEN_PROGS += vdso_test_getcpu
- TEST_GEN_PROGS += vdso_test_abi
--TEST_GEN_PROGS += vdso_test_clock_getres
- ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
- TEST_GEN_PROGS += vdso_standalone_test_x86
- endif
-@@ -29,7 +28,6 @@ CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tab
- $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
- $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
--$(OUTPUT)/vdso_test_clock_getres: vdso_test_clock_getres.c
+diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
+index 6c8fdc96be7e8bd33919d9b56ae8a8a68f4b0c3f..a2538561a84b8dae0479c43238f6f297fe88924b 100644
+--- a/arch/x86/include/asm/elf.h
++++ b/arch/x86/include/asm/elf.h
+@@ -22,19 +22,6 @@ typedef struct user_i387_struct elf_fpregset_t;
  
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c | headers
- $(OUTPUT)/vdso_standalone_test_x86: CFLAGS:=$(CFLAGS_NOLIBC) $(CFLAGS)
-diff --git a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
-deleted file mode 100644
-index b5d5f59f725a703c357dfca91bfe170aaaeb42fa..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
-+++ /dev/null
-@@ -1,123 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
--/*
-- * vdso_clock_getres.c: Sample code to test clock_getres.
-- * Copyright (c) 2019 Arm Ltd.
-- *
-- * Compile with:
-- * gcc -std=gnu99 vdso_clock_getres.c
-- *
-- * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
-- * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
-- * Might work on other architectures.
-- */
+ #ifdef __i386__
+ 
+-#define R_386_NONE	0
+-#define R_386_32	1
+-#define R_386_PC32	2
+-#define R_386_GOT32	3
+-#define R_386_PLT32	4
+-#define R_386_COPY	5
+-#define R_386_GLOB_DAT	6
+-#define R_386_JMP_SLOT	7
+-#define R_386_RELATIVE	8
+-#define R_386_GOTOFF	9
+-#define R_386_GOTPC	10
+-#define R_386_NUM	11
 -
--#define _GNU_SOURCE
--#include <elf.h>
--#include <fcntl.h>
--#include <stdint.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <time.h>
--#include <sys/auxv.h>
--#include <sys/mman.h>
--#include <sys/time.h>
--#include <unistd.h>
--#include <sys/syscall.h>
+ /*
+  * These are used to set parameters in the core dumps.
+  */
+@@ -44,27 +31,6 @@ typedef struct user_i387_struct elf_fpregset_t;
+ 
+ #else
+ 
+-/* x86-64 relocation types */
+-#define R_X86_64_NONE		0	/* No reloc */
+-#define R_X86_64_64		1	/* Direct 64 bit  */
+-#define R_X86_64_PC32		2	/* PC relative 32 bit signed */
+-#define R_X86_64_GOT32		3	/* 32 bit GOT entry */
+-#define R_X86_64_PLT32		4	/* 32 bit PLT address */
+-#define R_X86_64_COPY		5	/* Copy symbol at runtime */
+-#define R_X86_64_GLOB_DAT	6	/* Create GOT entry */
+-#define R_X86_64_JUMP_SLOT	7	/* Create PLT entry */
+-#define R_X86_64_RELATIVE	8	/* Adjust by program base */
+-#define R_X86_64_GOTPCREL	9	/* 32 bit signed pc relative offset to GOT */
+-#define R_X86_64_GOTPCRELX	41
+-#define R_X86_64_REX_GOTPCRELX	42
+-#define R_X86_64_32		10	/* Direct 32 bit zero extended */
+-#define R_X86_64_32S		11	/* Direct 32 bit sign extended */
+-#define R_X86_64_16		12	/* Direct 16 bit zero extended */
+-#define R_X86_64_PC16		13	/* 16 bit sign extended pc relative */
+-#define R_X86_64_8		14	/* Direct 8 bit sign extended  */
+-#define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
+-#define R_X86_64_PC64		24	/* Place relative 64-bit signed */
 -
--#include "../kselftest.h"
+ /*
+  * These are used to set parameters in the core dumps.
+  */
+diff --git a/arch/x86/um/asm/elf.h b/arch/x86/um/asm/elf.h
+index 62ed5d68a9788ffbf9dd0b4ebbe2caad4ac7a7c6..2e79193f396cda854ab4f17af2cd5b15c1e078cd 100644
+--- a/arch/x86/um/asm/elf.h
++++ b/arch/x86/um/asm/elf.h
+@@ -12,19 +12,6 @@
+ 
+ #ifdef CONFIG_X86_32
+ 
+-#define R_386_NONE	0
+-#define R_386_32	1
+-#define R_386_PC32	2
+-#define R_386_GOT32	3
+-#define R_386_PLT32	4
+-#define R_386_COPY	5
+-#define R_386_GLOB_DAT	6
+-#define R_386_JMP_SLOT	7
+-#define R_386_RELATIVE	8
+-#define R_386_GOTOFF	9
+-#define R_386_GOTPC	10
+-#define R_386_NUM	11
 -
--static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
--{
--	long ret;
+ /*
+  * This is used to ensure we don't load something for the wrong architecture.
+  */
+@@ -100,26 +87,6 @@ do {								\
+ 
+ #else
+ 
+-/* x86-64 relocation types, taken from asm-x86_64/elf.h */
+-#define R_X86_64_NONE		0	/* No reloc */
+-#define R_X86_64_64		1	/* Direct 64 bit  */
+-#define R_X86_64_PC32		2	/* PC relative 32 bit signed */
+-#define R_X86_64_GOT32		3	/* 32 bit GOT entry */
+-#define R_X86_64_PLT32		4	/* 32 bit PLT address */
+-#define R_X86_64_COPY		5	/* Copy symbol at runtime */
+-#define R_X86_64_GLOB_DAT	6	/* Create GOT entry */
+-#define R_X86_64_JUMP_SLOT	7	/* Create PLT entry */
+-#define R_X86_64_RELATIVE	8	/* Adjust by program base */
+-#define R_X86_64_GOTPCREL	9	/* 32 bit signed pc relative
+-					   offset to GOT */
+-#define R_X86_64_32		10	/* Direct 32 bit zero extended */
+-#define R_X86_64_32S		11	/* Direct 32 bit sign extended */
+-#define R_X86_64_16		12	/* Direct 16 bit zero extended */
+-#define R_X86_64_PC16		13	/* 16 bit sign extended pc relative */
+-#define R_X86_64_8		14	/* Direct 8 bit sign extended  */
+-#define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
+-#define R_X86_64_PC64		24	/* Place relative 64-bit signed */
 -
--	ret = syscall(SYS_clock_getres, _clkid, _ts);
--
--	return ret;
--}
--
--const char *vdso_clock_name[12] = {
--	"CLOCK_REALTIME",
--	"CLOCK_MONOTONIC",
--	"CLOCK_PROCESS_CPUTIME_ID",
--	"CLOCK_THREAD_CPUTIME_ID",
--	"CLOCK_MONOTONIC_RAW",
--	"CLOCK_REALTIME_COARSE",
--	"CLOCK_MONOTONIC_COARSE",
--	"CLOCK_BOOTTIME",
--	"CLOCK_REALTIME_ALARM",
--	"CLOCK_BOOTTIME_ALARM",
--	"CLOCK_SGI_CYCLE",
--	"CLOCK_TAI",
--};
--
--/*
-- * This function calls clock_getres in vdso and by system call
-- * with different values for clock_id.
-- *
-- * Example of output:
-- *
-- * clock_id: CLOCK_REALTIME [PASS]
-- * clock_id: CLOCK_BOOTTIME [PASS]
-- * clock_id: CLOCK_TAI [PASS]
-- * clock_id: CLOCK_REALTIME_COARSE [PASS]
-- * clock_id: CLOCK_MONOTONIC [PASS]
-- * clock_id: CLOCK_MONOTONIC_RAW [PASS]
-- * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-- */
--static inline int vdso_test_clock(unsigned int clock_id)
--{
--	struct timespec x, y;
--
--	printf("clock_id: %s", vdso_clock_name[clock_id]);
--	clock_getres(clock_id, &x);
--	syscall_clock_getres(clock_id, &y);
--
--	if ((x.tv_sec != y.tv_sec) || (x.tv_nsec != y.tv_nsec)) {
--		printf(" [FAIL]\n");
--		return KSFT_FAIL;
--	}
--
--	printf(" [PASS]\n");
--	return KSFT_PASS;
--}
--
--int main(int argc, char **argv)
--{
--	int ret = 0;
--
--#if _POSIX_TIMERS > 0
--
--#ifdef CLOCK_REALTIME
--	ret += vdso_test_clock(CLOCK_REALTIME);
--#endif
--
--#ifdef CLOCK_BOOTTIME
--	ret += vdso_test_clock(CLOCK_BOOTTIME);
--#endif
--
--#ifdef CLOCK_TAI
--	ret += vdso_test_clock(CLOCK_TAI);
--#endif
--
--#ifdef CLOCK_REALTIME_COARSE
--	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
--#endif
--
--#ifdef CLOCK_MONOTONIC
--	ret += vdso_test_clock(CLOCK_MONOTONIC);
--#endif
--
--#ifdef CLOCK_MONOTONIC_RAW
--	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
--#endif
--
--#ifdef CLOCK_MONOTONIC_COARSE
--	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
--#endif
--
--#endif
--	if (ret > 0)
--		return KSFT_FAIL;
--
--	return KSFT_PASS;
--}
+ /*
+  * This is used to ensure we don't load something for the wrong architecture.
+  */
+diff --git a/include/uapi/linux/elf-r.h b/include/uapi/linux/elf-r.h
+index 2c382c8a4807f394a3ccabf39a81e9e9b6f7ea45..45a160ecf40570f3ac916344be363d7e74908ea6 100644
+--- a/include/uapi/linux/elf-r.h
++++ b/include/uapi/linux/elf-r.h
+@@ -2,4 +2,38 @@
+ #ifndef _UAPI_LINUX_ELF_R_H
+ #define _UAPI_LINUX_ELF_R_H
+ 
++/* i386 relocation types */
++#define R_386_NONE	0
++#define R_386_32	1
++#define R_386_PC32	2
++#define R_386_GOT32	3
++#define R_386_PLT32	4
++#define R_386_COPY	5
++#define R_386_GLOB_DAT	6
++#define R_386_JMP_SLOT	7
++#define R_386_RELATIVE	8
++#define R_386_GOTOFF	9
++#define R_386_GOTPC	10
++#define R_386_NUM	11
++
++/* x86-64 relocation types */
++#define R_X86_64_NONE		0	/* No reloc */
++#define R_X86_64_64		1	/* Direct 64 bit  */
++#define R_X86_64_PC32		2	/* PC relative 32 bit signed */
++#define R_X86_64_GOT32		3	/* 32 bit GOT entry */
++#define R_X86_64_PLT32		4	/* 32 bit PLT address */
++#define R_X86_64_COPY		5	/* Copy symbol at runtime */
++#define R_X86_64_GLOB_DAT	6	/* Create GOT entry */
++#define R_X86_64_JUMP_SLOT	7	/* Create PLT entry */
++#define R_X86_64_RELATIVE	8	/* Adjust by program base */
++#define R_X86_64_GOTPCREL	9	/* 32 bit signed pc relative
++					   offset to GOT */
++#define R_X86_64_32		10	/* Direct 32 bit zero extended */
++#define R_X86_64_32S		11	/* Direct 32 bit sign extended */
++#define R_X86_64_16		12	/* Direct 16 bit zero extended */
++#define R_X86_64_PC16		13	/* 16 bit sign extended pc relative */
++#define R_X86_64_8		14	/* Direct 8 bit sign extended  */
++#define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
++#define R_X86_64_PC64		24	/* Place relative 64-bit signed */
++
+ #endif /* _UAPI_LINUX_ELF_R_H */
 
 -- 
 2.50.1
