@@ -1,67 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192F13D987;
-	Tue, 12 Aug 2025 21:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B703620C001;
+	Tue, 12 Aug 2025 22:03:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755033803; cv=none; b=F3ng/YjkHWXs8aiU68kt5X6v35OyUzmP6HFtINE4c387P3zSRLVOJXSmkPW8lBwo+jsBhyAk/nzHM5xFwsbRE3fQPJWpSfcEuDB78yfThdeHlQ+jcN75i5gstRoJ6wNOUFo5IG2wxrGQQg7vAC6JkT/P9k1mTLUgku/suHcHu58=
+	t=1755036212; cv=none; b=KZ1nLalgfUIAKqSA4d+TW6kW1Dd1yUlKv2ktdhiN+9xN8JL6eyT0nG01BuYLq99lXTxNMf2iAEC/VEgVZtxDh4hD/yzfPsUQ9qF6Z5RUufbyMH/18uXdDAS0bSUtkcqfxiKVYQNSy//X+a2oqLktOHZze1rF2SJfsW41PRZ0+UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755033803; c=relaxed/simple;
-	bh=LPtqBbPzWjgmOf3CGPgRdpHTJUzsIJM11FkblEDdPSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EvleljaF7vGKItlkfdLxd+iQYLOTUKo9Pm/vBSautdyvx84fxMlu9YVy2UzYnRB8B5uZmzE9Tp+94wwXZgW3sLte1G5O3J9cVvMWCFLHIDODrR8fhQE7fpF4fdh0hi8O0eNi2481cJoL1n3dfxnb7HXCwkDKbp/y4UGR9Bp90Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C1FOaepc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755036212; c=relaxed/simple;
+	bh=exvvZP2rP+R5jI+G7rsqT5N9VfuXc9aPekZm6d12tNY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=PEf1Eg/SoZWv4e5kKVHptLjdDOc8hd+O7de5Isq/duc+AxVQnZx/JkV42FVNJ9QQ1oIzae3/zh8pj+01V/3CKrF8hAci3iZ1zHGhZcc3qdUzI51R1ib3F5AyveLaYPlCNqC8OlHTs9aoMwAzuO/cm/dIA8Co0XAVw7wHbjgScnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lsQi2ZUe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C1FOaepc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5C4C4CEF0;
-	Tue, 12 Aug 2025 21:23:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755033802;
-	bh=LPtqBbPzWjgmOf3CGPgRdpHTJUzsIJM11FkblEDdPSg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C1FOaepcrShGvDBkDI/S7FsUqavgjO0e/GasdRkXF78Yrze8J+5CbMd2e0PG1SzNh
-	 qSHsK6JJY+nyA5bXH0IRVoZdTz6dN+KeHol+nol71nozH4VCbGgLeMQyzwjLSCTNt4
-	 Vsivx0pt+DLFlroDsZwtpSxCRA35cICCigpfMOejF57osddiLCGGI0Ow9mu93OFtGl
-	 QOwc/cuqoVSljFoAVscnx698j3eS/KjRw0UE7jdbsS6oAOGWhDmDRbMGtnbGjJZzcV
-	 WDgxy/TT7O9D6DjiwnezAagikpjchwRcPDWwhY8S+AweVjIYHS14oXEziqPP6J8Cb9
-	 1C8yt//0HMArw==
-Date: Tue, 12 Aug 2025 14:23:18 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] hardening: Require clang 20.1.0 for __counted_by
-Message-ID: <20250812212318.GD532342@ax162>
-References: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
- <a9c64598-41e9-4ec8-8ec1-add5a5f903b4@intel.com>
- <20250811210906.GA924329@ax162>
- <adb1b558-124c-4f7f-b193-bf44a6132fa2@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lsQi2ZUe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136E6C4CEF0;
+	Tue, 12 Aug 2025 22:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1755036212;
+	bh=exvvZP2rP+R5jI+G7rsqT5N9VfuXc9aPekZm6d12tNY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lsQi2ZUegaHNI4h3O3XuHaqI2JTiMeCPKyOIncLGwlszYvrcTn363rIxyKcGmPW+8
+	 zTD2ur8XXDWwW8ZSJoK0s9GSaKciMzayx8DWNBa2Ed3tpWlaCTWvVzc/gHT/FNAfVM
+	 9ZhgKdef8c0piqe25zuYDgg0sRyGLrkP0DW4Tc1k=
+Date: Tue, 12 Aug 2025 15:03:31 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Linux Memory Management List
+ <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-new 101/118] arch/powerpc/mm/ptdump/shared.c:70:1:
+ error: use of 'pgtable_level' with tag type that does not match previous
+ declaration
+Message-Id: <20250812150331.cfe4090372c3864aa768fa7f@linux-foundation.org>
+In-Reply-To: <522f31cc-f250-4883-8832-0d26ebf5210b@redhat.com>
+References: <202508130304.5FJqRz2c-lkp@intel.com>
+	<0c96fa0e-6f7e-4cca-8d57-f3e3786d44fa@redhat.com>
+	<522f31cc-f250-4883-8832-0d26ebf5210b@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adb1b558-124c-4f7f-b193-bf44a6132fa2@intel.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 12, 2025 at 06:28:29PM +0200, Alexander Lobakin wrote:
-> Aaah okay, I didn't know that, thanks!
+On Tue, 12 Aug 2025 22:57:18 +0200 David Hildenbrand <david@redhat.com> wrote:
 
-https://discourse.llvm.org/t/rfc-llvm-releases-every-two-weeks/84245 has
-some more information about that recent change if you or anyone else is
-interested.
+> >>      3 errors generated.
+> > 
+> > Huh, I cross compiled this on a bunch of ppc configs, but maybe not emough.
+> > 
+> > No, on the branch I submitted that did not exist.
+> > 
+> > Probably due to the rebase.
+> 
+> Ehm, no, Andrew, could it be that you accidentally dropped the ppc patch 
+> from mm-new. I can spot all but that patch in there:
+> 
+> https://lkml.kernel.org/r/20250811112631.759341-7-david@redhat.com
 
-> BTW 21-rc1 was released roughly a month ago, does this mean that 20.x is
-> already unsupported?
-
-Correct, LLVM 20.1.8 was the last release for release/20.x.
-
-Cheers,
-Nathan
+yup, I totally missed that one, sorry.  Added now.
