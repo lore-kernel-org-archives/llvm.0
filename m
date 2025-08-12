@@ -1,491 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BAA2F83C5;
-	Tue, 12 Aug 2025 15:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755013985; cv=none; b=ruJXncmPJO0Dqq9nQYK3SNuzLA7eCozGkaYKwLwrnTnHtirJaxXy07K+wrl3P6nJhbRAFnQ45o0fGMbfknANahGD0XvBmk7KtUpsRXFYGRNwOSeuV/EM4K6v26UgxMh6Hn+YUrfSE6f8IsI2NQmVPSsUTgUpqZltGdmS6XMGNOU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755013985; c=relaxed/simple;
-	bh=at2mdtprGw43Jj2RV+t0cp9yhUlxFfCUk1YC8d9y9g8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eoBfn7mOYTyqPsXZ6zbHzlpq6k5zawTj5N6vvJcXD4nGnaP7MGbR91B/A/hxNaCUaAz+3KB9ircoOVkHYUWk7gwbFSazzbRCNYBGPrSv1eMAdmeLi3DpBw1zaI7+POv6Z9E4B9+fy1f8iXGv8PUQLCamSK/f+iUcInZycqbkz7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HYSn9tzS; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DCF2F90FB;
+	Tue, 12 Aug 2025 16:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755016226; cv=fail; b=smzpZOCqLm1fXndEh6JX3Q5D1TnHp0nZnhlf6JXAu9Ow7622Ljn7krkQ92rwKYieNLh1syq6cXV0sLLyhFtR7ZArHrpeQDOCFdsODh7uo6cv989RiRgaxWadbzc2ASpCJtcsya7pqg5wsKIEGgBn9BWrP0K3LG0pV3lcGh+jvtU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755016226; c=relaxed/simple;
+	bh=zkD0uhIsdtbNwQuoBx0Ytzf87Y77B71LGBqxHLIdegE=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=I8IcBqgqTPk8YpnzXp6Bzi6hSpShfa6cRSGIza8Z2E9hSJO2OC1EQgniMcq5HbdskGTo9ue3xBw5UikufY2EOiO1v72NhIKSIuQZNPP4DSr33B35FGz9x99ybHzRue3V0MZh5SNR2/6MnQTyawi+o4Jk9jvzNFZBVRABVw3HbUE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C6NtQh7s; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYSn9tzS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB951C4AF0E;
-	Tue, 12 Aug 2025 15:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755013985;
-	bh=at2mdtprGw43Jj2RV+t0cp9yhUlxFfCUk1YC8d9y9g8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HYSn9tzSd9SOwYzwZWJ6Cezfojdu9/xSFsqaN/R5TGai/3kr1y3uCpn+MDaX1S4GV
-	 9ZwBwduJYlNsVCoq2Rm/IJaASnmQ/Q3mduiCKro7pA3FH1q4aBw8/olopEJQ50EyBf
-	 vjxXy5Reu1L3qYyHQzny2mrkPoQ/TNxR756kGQ5PfBKZzSn8VKaiPOxDFesG8JDhGA
-	 fWOsoiaC2cXmGHxaQ4smvkVFDYTfbnk4E9IGxzhImvJz3OJqUtjI9XbZ23ICXs0dTf
-	 8mLsN3DY08XT774Y8ddT76WooTDtKlrRlugZP9XRSvNVY+iaqH+NE0A28bpyt41W3F
-	 pCXzzlVgTW4uA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1ulrJ8-00000006kVD-0CwU;
-	Tue, 12 Aug 2025 17:53:02 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <mchehab+huawei@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 00/39] Translate sphinx-pre-install to Python
-Date: Tue, 12 Aug 2025 17:52:17 +0200
-Message-ID: <cover.1754992972.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C6NtQh7s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755016226; x=1786552226;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zkD0uhIsdtbNwQuoBx0Ytzf87Y77B71LGBqxHLIdegE=;
+  b=C6NtQh7sy4HcOIB/yAvS/DFnoMVug8uBWnOP1ITKG6GmU76tp6ccUYQq
+   0NQDEZ4Go/iinX3uKL0D9Yu9E06AQ82jMEvTyuzz4PEVbclOESr0AiFw/
+   O9CQ2XWfdn0/+eR0PG9WtL7Y4RTwhkmABjTEd6zFdLgVQoyGOxynzS9vS
+   Ve6HGw/M1mXL6HO+KRPk4S20l7XTg6ID2o4HoMYteJIRl80Ii/Edul8Tm
+   geYjm4Z+OCefDHb1jDj4IP1nB3gu8zbXMcrxnid3Tb3WovfwoVTnuj9ek
+   qAM28f/iViYOWvd+6dkNSMBcg2lQQrxjBAUKw838FiMwR2SgdJsE2m8gB
+   g==;
+X-CSE-ConnectionGUID: CbyI6C1lSaGW7dQCPy2KqA==
+X-CSE-MsgGUID: ezYkOHI7Q9qINQB9Bime+A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57011768"
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="57011768"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 09:30:25 -0700
+X-CSE-ConnectionGUID: TElDqL4eTuqPUTeRH8p9nA==
+X-CSE-MsgGUID: zMbKu3kyQmemj2kslqkpZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
+   d="scan'208";a="170441464"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 09:30:25 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 12 Aug 2025 09:30:24 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Tue, 12 Aug 2025 09:30:24 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (40.107.93.88) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 12 Aug 2025 09:30:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gwdliEiv6PE7hRb/A9bG0I+TAgPSNB4xvVm0hJNG1ffBU7lU7YQw6Xswg5QUv/vyRp8SYrzChLW0ev1BUJGaTN+ALrMl6e+i3lAbYhVcHyhZgDc/Q6M8RPYVBrl7BgR4GBt/CkeaY1wrjbUKrIK/1I18YjV5PUTPzhXP9p7Dpat7/afF4qHCh4KIrSOPRsn7zAcAT18L5/BroM/DNErIgRcwRKrerRbsY9wdqW33pGD9+HuoIN3JoyKpZhLWyJUEQhwEq2zTS9RqA51wR7i+RgfQtpTyILgCQmORjE15zVd/q8ttmOuksZ/D9/0fsHND9oHjPed/0XiLtCtlWW815Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=83D3D4h5kvDbOWoQrnOIG78ZX5P99SRbOvopQREJxhc=;
+ b=Uzf43ArUOIX0+slDTCN1xIyz8ZR9f+YAGKSa3bE8Pb6vjZgse4b+1OmRSO0+eTXkTXd+Ec7TIyD61YXJ51Qiu790UnjZZB63I8xG6pZdRJC6bZWe3wGvkhShi9T/sruVDNUTwlERKDV12nvRDcvLusrQvIbxYiKujBc64TumQ53qcs9o5Zh8GPXiwaEEN/noTB32nyYR3i7uK5oo2dGbYSLi3AFt4JQmNG5f4fLRVTXeruqUu9+RAEhGEHyLsmNdGJ3ofpz/QZ2fGrTOZs72p7rP0LJIOeLp9zGMcwiQQ+LElz6hKG4mctSG34TAOYcq7JIrOJD+Ktn4l1Nqbc65Kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by MW4PR11MB5822.namprd11.prod.outlook.com (2603:10b6:303:185::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.18; Tue, 12 Aug
+ 2025 16:30:22 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808%6]) with mapi id 15.20.9031.012; Tue, 12 Aug 2025
+ 16:30:22 +0000
+Message-ID: <adb1b558-124c-4f7f-b193-bf44a6132fa2@intel.com>
+Date: Tue, 12 Aug 2025 18:28:29 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hardening: Require clang 20.1.0 for __counted_by
+To: Nathan Chancellor <nathan@kernel.org>
+CC: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva"
+	<gustavoars@kernel.org>, Bill Wendling <morbo@google.com>, Justin Stitt
+	<justinstitt@google.com>, <linux-hardening@vger.kernel.org>,
+	<llvm@lists.linux.dev>, <patches@lists.linux.dev>
+References: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
+ <a9c64598-41e9-4ec8-8ec1-add5a5f903b4@intel.com>
+ <20250811210906.GA924329@ax162>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20250811210906.GA924329@ax162>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DB6PR0301CA0074.eurprd03.prod.outlook.com
+ (2603:10a6:6:30::21) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|MW4PR11MB5822:EE_
+X-MS-Office365-Filtering-Correlation-Id: d890b08a-3790-436c-b21a-08ddd9bd889d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?WHl3Z1RHU3hxTCtYQVo2WkJQcERmeURZVUZBVFh1ZFVtYzZUOUVWbkx2NHd0?=
+ =?utf-8?B?VEtvWHZCdkNGWVVpalBGVkdmSmpPK1lmb0ZDSlp4cWNSRS9ZZW9vK05aaWxq?=
+ =?utf-8?B?NjE5K2FySFdDaGhINU0vUktWQlhOUUk5K29BbVJyV0tZZFpCanZxRGk1dTJi?=
+ =?utf-8?B?VCtCVlE0WUdmQVo0MjBabUR1OUkzVkR5N0NnQWxvNTIzbTJLUmhxaWpjZmR1?=
+ =?utf-8?B?T1R1SmZWOUVKQVBxSUR2aEpVRkNZYm84M3IxQTlqaUVraDFrRUFlUkczcUJJ?=
+ =?utf-8?B?VDZVUHQ5ZHM0b0FDU1FCUDh5U1dHNU93S2ZISWZqWHhIY0Rxb01uMVB1RkVK?=
+ =?utf-8?B?Y1JMYzdoUGpUQVNWWGY3YVV5TmlITlRmYnU1b1diYzFFdUl3Z1FoZ25rdFB3?=
+ =?utf-8?B?QUZiV0FuSGVpbzdqY3dzRzdLMTl3YWxuRU50eXQyR0ZtM2tqZHY4TGZmMnhq?=
+ =?utf-8?B?MFh0WTc0QVFOV0QrdXZlMFN4cGlURG5ySE1pc2FlaU9CQm9ZcGVSUERjb0Rv?=
+ =?utf-8?B?QUR1akliV09icUJTVWU5V3E5QVVCTkNwaVQ5UnFLY0t3Y0dZTHN4WE9OOVhm?=
+ =?utf-8?B?UjNqVm5ackZySlQ5bkFSaDRYYmwzai9pY0JpL2Y2dFV4Y2o1a1QralJhNjhW?=
+ =?utf-8?B?L1ZQYU94b1I5M0FjcFlTYklTeUJOVGluUVdCNmNLUGpjT3FtUk5iSXRsaXpp?=
+ =?utf-8?B?VkZwNDVWd1EzUXNvSXlsdkJBeWNYcHlPK291REJ3Vzg1S2JyRm9URTc3VzVG?=
+ =?utf-8?B?cFJ2S3BwSHlVOU9IOVFBSWF1OFVpY1dYL3o4Vjc5Uk1CZy9pOHdhcGFqQkFn?=
+ =?utf-8?B?TDJBUnNpWkFaa3g5dUdxRHdIT3QvYm5abCtxVmo1TEFyMkJoK2xuRzE3ZWdy?=
+ =?utf-8?B?UXJLaHgvaDcycklVYjJlS1JMbUVGdG12S2FONjFHQkhrM1gzTHVqU2NNcUxO?=
+ =?utf-8?B?RlNkK3ZINUs0Wm8vS0FUZWN6MlF2Sm8zc3ZrWFRpczh5YzZRNUNIQXV2d2RZ?=
+ =?utf-8?B?YkRaTDFxK041cHdJL3MxOEJsaFlIS2wyQ094cWRpSnNTbmU2RkM4NFFuTGVj?=
+ =?utf-8?B?Mll6U3dqZ3MyUUUyRW5QZ1hTS3Q1c1dFUk5xQ0ovb3JEbEJwS2ZyZm5kMklK?=
+ =?utf-8?B?cVNHQjNYSTBLUVFJejVpQ0loWjJuSS9KYTJuenFzbGtpaTFBUGxhb0M4RDlm?=
+ =?utf-8?B?QjFhVDl5Y0tCL0N3M1lIR3VDdmd3MlZRVWRGNjZ2eEtYa0pBODZEVHhMNXdK?=
+ =?utf-8?B?SkZOTStISS9xaVdGMFp5MnNqaHUyWTl3Rm5PTFNVRXB6M3NNd1d1MlAvZVc5?=
+ =?utf-8?B?S3JBQzdlV1BhVUJXMFFGVkhXVXlDOVRTcUpvYU9zUWx2bjg4Y3FLaFJ2VTVq?=
+ =?utf-8?B?NXFYODJYaFYzUHJ6MUN4T2J3UCs5TkJCeVY0aDNFU0RmZEw3MjB3TWVudzk2?=
+ =?utf-8?B?RlFLb3dPY1l0SWVvaWo5V0dqTmp2aDlZUmRBMVlCbzkzb2hXR2hHeWJMOVhz?=
+ =?utf-8?B?UlNnb3QySkV2M3dJZnR6NnQzUnNkQzdSTURRZnRjWjlaNVdZcUdmK2RJaVQy?=
+ =?utf-8?B?ajdYZGEzSHAvcVZiNENDWXdJS1JZMGlJa1hhSUVCbzlMU3VzTTNUNERsSGNZ?=
+ =?utf-8?B?d0Vzcm12bnpkTXRtdTNIK3NQTmhrWUtZeTIzaDd5eGoyOFdUVDNyeVU4Wkdq?=
+ =?utf-8?B?eU1jYXIyS0ZucVd0WVZMVlR2VHpDdVRlWEZjMDlLWlZwMUY4dU8yVXVwWXFt?=
+ =?utf-8?B?SHZaenhzSzR1V1I3NFJEdm1xbWNqS1BIdGNJb3AybmQ3Sk9LS2thZGl1dTNY?=
+ =?utf-8?B?WlBiQ1Ixc1BwcTlDZWRvY0lCTU9ZWGVtUU11MFppMzFMUG5nK2lyNmM2TkFG?=
+ =?utf-8?B?OUJMYXlOb2ZzVXcwZllHMTd5bzVWMG5CMk1DdDFxN2VSd0FVaHdHSHhMS1VQ?=
+ =?utf-8?Q?GWR28KCV61A=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlJPNjI3QUVvWUZVMDN1cGo2K0xlL2xiVUxPSU8vbmV0QnlPN0ROVnBTZnRO?=
+ =?utf-8?B?bG9NbW8zZEpPeXpHcm5VZ2xrV2UzSEhCdDZ4RjA3Y1pNQjdxbTVEVzNOMFZ2?=
+ =?utf-8?B?UGhQekZ6eEkyV1duVDVEakF2aEJoUGtSVlBEaVFTQ3gweVZpYWJ4WDlRWU9q?=
+ =?utf-8?B?NGl5bjQvTERXRGY3N0EvWFh3eHFIQmkzZnR3a1RlK2ZiSmZPSUY0Nm5QeXQx?=
+ =?utf-8?B?ZEtlRnlqVTBabGNZNVBhTWxqb0lQeDdVNXU5QXpsa3YxR0tlTGlDajJUdkpR?=
+ =?utf-8?B?T3FDSnlicVljZmNrZDAvUjYrU2VIcThGTHVLamVxZFQrZXE3WSsrT3kyb3VI?=
+ =?utf-8?B?M0pqQVBPNjA5VnF3NUhab2pKdFBWZ0puSHpWYldPMWo4UmdrbUxKckljdnhM?=
+ =?utf-8?B?ZnpiaU5PZGx3ajZoQW5PRVdmZEdORUZPMFExZS82c3ZYNXBycXRvYzZiaFpG?=
+ =?utf-8?B?UW9WTEVhM1hNUHZBNHBsRGl3ejVsUS9seSs0dkxwRzZlcjJGckNmZ1cwM2tB?=
+ =?utf-8?B?YnpBVEYvZHhBbVdSK3QxeHJmWGxiSDhBQzM1T2lZOE13NXZhakp3RFV0alVE?=
+ =?utf-8?B?cEZsMFBqWFAwZGEyaVNnblFlWldqanBCRE03RUhlY3Bybjh0WkRoYUwyTC9H?=
+ =?utf-8?B?VjJxMDhuRkE3dmp6NHRETEV5ckpyTGFSSWxMNE1pQ2ZVR1VFaFppNzU2cWJL?=
+ =?utf-8?B?SU1leG1UZVdJd3E5Vkg0d0xVeUtxWmkrdTJmSTgvMGhuelBlbHB6cmxhc0Fj?=
+ =?utf-8?B?NEV5aG9XMnk0aDFadlprcnJNamJKbVRIRURDb0VwaGhLNFpoaUpMNTFOZkpp?=
+ =?utf-8?B?UHhIODZzRHJRTm1SSHBabmRoRENnK0pnelRhUDcvbkxwWWt2MXBnUmUxNGRs?=
+ =?utf-8?B?NElPRHQwQ2lBYm15K2NoR2grZEdMVXA2SVNWUFRYcStPaWJYdkdVa3hxM3la?=
+ =?utf-8?B?OFNnelp6SmpGRmNDSFhSZDBqanVLNnI4WTVrdXNvQTdrenF5R2EyL0l6NWFs?=
+ =?utf-8?B?eTcyRVNYV1oybWdpWDF3aW1LcGdrNkNiNWs3ZEZtZWpRd3B4amRsVTZwMXh3?=
+ =?utf-8?B?ZGlBU3FuLy9PNFlZWklMc2tzVkF0R0JqTkNwMitmbzJJU0dEM2JMdE1hVDY4?=
+ =?utf-8?B?Y2VnajJxVkNWMGxGU2RCbkpMYktBdkNDbUwvaW51cXR5MkRPU3dZcDBMNFo2?=
+ =?utf-8?B?clY0T045aTVVR2IxbVA0RzRac2M3Y09TZnpXdnhYMFhtdVZlK2Q4dEtTQnp4?=
+ =?utf-8?B?dXYrak9uZ1gyLzRlaXBlSVVzcjVJWXk5T0JEOVdKNm4rMCtZWnMrb3V2eVRU?=
+ =?utf-8?B?SlFMa1NsN1NNMGJscVBzbE54bHd1OW1UWDFDM2xTTXZWNE9YRnV0bVptdXNY?=
+ =?utf-8?B?cHdlN3VxbTR4dnhPY25MVmVmU3ZZSG4zL0NMdk9QUU8yVWV4bkN4Y0FieVp6?=
+ =?utf-8?B?VkgzWklQSGJsaTFkSVpHa0c0RjRQRnFpQitzd29XTzF5cm5sL0NHczh4UDZh?=
+ =?utf-8?B?MDcwSG4vR3NzeWsxU3NBa3B0OGtoWUx6aHp2NTNRcURsMlJpNERBT1RxTjhh?=
+ =?utf-8?B?dndGMWJjM0ltZmk0ZkppT2FaNTU3WTVIdVloWDlXR3I2TXZ4SDg1YmtYYkl6?=
+ =?utf-8?B?bnk5WHB0OXlWakN3T2JScXBmb3duTU5xQk1Pcmp1bUhycTVTTE42dlk5SStP?=
+ =?utf-8?B?enljbm16WnRNYlhnYjlQQW5CdFlaSU41YzlPMEpPNmEvQTRud3FtMVpmd2FC?=
+ =?utf-8?B?TUlFRzFpZmVwYTB5b0YyeGVsZUxqZ1hRbWpVM2JLMDRpd3drc0dxb0xlcGRY?=
+ =?utf-8?B?ODhDMTdBdnNpNWhEM2p6OEFSR0VtdDdJbEhCcGs4eW5xVHVFVzUvNVJUVzgr?=
+ =?utf-8?B?Tnl2MVVSK1pIanBBYStKMmNBSkt6YkNUdGIwelpHcG82WXhCNENNMUFKM1Ny?=
+ =?utf-8?B?ZHdVZmgxSERLdnFhR3ZvZm9YeGxiOS9kM2RWY1pYdmRoUFhSaFhqVzZJWURz?=
+ =?utf-8?B?M3RWQlI4dzFudFg5c1NJYkRpbnRkZHplNkM5OUJZS2FUN1JLbkZaUzhzMFdQ?=
+ =?utf-8?B?N3BYZ0lqTDZlNnJ4VzA1SjNhSFNmdlB1bUUwSHNtRWIzWDRLSTg1ZFNEMHVh?=
+ =?utf-8?B?WXpCTE9IbXZOcS9MTFZNNURBTkxnMmk4RHYwVm45SzdQQ0cvUER4VnlrWEtC?=
+ =?utf-8?B?Z1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d890b08a-3790-436c-b21a-08ddd9bd889d
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2025 16:30:22.2510
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: as1GhABTrB8kEkWL9AKR+K+T4CEcyQo68wTk6YrPnAr5jC1Th0qY4lyMB4EAowp3YwIEk3c/USz2dNkI5DB+s6oQHK4qQioMLBbtl3z+gqw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5822
+X-OriginatorOrg: intel.com
 
-Hi Jon,
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 11 Aug 2025 14:09:06 -0700
 
-that's the second version of the patch series which converts
-sphinx-pre-install to Python.
+> On Mon, Aug 11, 2025 at 04:21:32PM +0200, Alexander Lobakin wrote:
+>> From: Nathan Chancellor <nathan@kernel.org>
+>> Date: Thu, 07 Aug 2025 14:36:28 -0700
+>>
+>>> After an innocuous change in -next that modified a structure that
+>>> contains __counted_by, clang-19 start crashing when building certain
+>>> files in drivers/gpu/drm/xe. When assertions are enabled, the more
+>>> descriptive failure is:
+>>>
+>>>   clang: clang/lib/AST/RecordLayoutBuilder.cpp:3335: const ASTRecordLayout &clang::ASTContext::getASTRecordLayout(const RecordDecl *) const: Assertion `D && "Cannot get layout of forward declarations!"' failed.
+>>>
+>>> According to a reverse bisect, a tangential change to the LLVM IR
+>>> generation phase of clang during the LLVM 20 development cycle [1]
+>>> resolves this problem. Bump the version of clang that enables
+>>> CONFIG_CC_HAS_COUNTED_BY to 20.1.0 to ensure that this issue cannot be
+>>> hit.
+>>
+>> Any chance for this to go to the next 19.x (if it's planned at all)?
+>> I always use the latest HEAD from llvm-project, but 19 is still widely
+>> used across distros etc =\
+> 
+> Unfortunately not, LLVM does not maintain more than one branch at a
+> time, so LLVM 19 has been unsupported since LLVM 20.1.0-rc1 was
+> released back in February :/
 
-The core patches are basically the same as on v1, but it has lots of
-fixes over the original script after testing sphinx-install on 22
-distros.
+Aaah okay, I didn't know that, thanks!
 
-Please notice that I have a separate patch series addressing issues
-that are specific to PDF generation.
+BTW 21-rc1 was released roughly a month ago, does this mean that 20.x is
+already unsupported?
 
-Test Results Summary:
-====================
+> Cheers,
+> Nathan
 
-  PASSED - AlmaLinux release 9.6 (Sage Margay) (4 tests)
-  PASSED - Amazon Linux release 2023 (Amazon Linux) (4 tests)
-  PASSED - Arch Linux (4 tests)
-  PASSED - CentOS Stream release 9 (4 tests)
-  PASSED - Debian GNU/Linux 12 (4 tests)
-  PASSED - Devuan GNU/Linux 5 (4 tests)
-  PASSED - Fedora release 42 (Adams) (4 tests)
-  PASSED - Gentoo Base System release 2.17 (4 tests)
-  PASSED - Kali GNU/Linux 2025.2 (4 tests)
-  PASSED - Mageia 9 (4 tests)
-  PASSED - Linux Mint 22 (4 tests)
-  PASSED - openEuler release 25.03 (4 tests)
-  PARTIAL - OpenMandriva Lx 4.3 (4 tests)
-	ensurepip package doesn't exist there. So, venv install failed.
-	Installed via package worked
-  PASSED - openSUSE Leap 15.6 (4 tests)
-  PASSED - openSUSE Tumbleweed (4 tests)
-  PASSED - Oracle Linux Server release 9.6 (4 tests)
-  FAILED - Red Hat Enterprise Linux release 8.10 (Ootpa) (4 tests)
-	I couldn't test properly, as it requires a repository under
-	paywall. I suspect It should work fine
-  PARTIAL - Rocky Linux release 8.9 (Green Obsidian) (4 tests)
-	Install via package didn't work. Instaling via venv works.
-  PASSED - Rocky Linux release 9.6 (Blue Onyx) (4 tests)
-  PARTIAL - Springdale Open Enterprise Linux release 9.2 (Parma) (4 tests)
-	Failed to install ImageMagick (affects pdf only)
-  PASSED - Ubuntu 24.04.2 LTS (4 tests)
-  PASSED - Ubuntu 25.04 (4 tests)
-
-In short, I expect that, for all the above, the script will properly
-recommend the right packages to have sphinx-build working.
-
-A more detailed list of tests that passed/failed and detected Sphinx
-versions can be seeing below:
-
-AlmaLinux release 9.6 (Sage Margay):
-------------------------------------
-    PASSED: OS detection: AlmaLinux release 9.6 (Sage Margay)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Amazon Linux release 2023 (Amazon Linux):
------------------------------------------
-    PASSED: OS detection: Amazon Linux release 2023 (Amazon Linux)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Arch Linux:
------------
-    PASSED: OS detection: Arch Linux
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.2.3
-
-CentOS Stream release 9:
-------------------------
-    PASSED: OS detection: CentOS Stream release 9
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Debian GNU/Linux 12:
---------------------
-    PASSED: OS detection: Debian GNU/Linux 12
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 5.3.0
-
-Devuan GNU/Linux 5:
--------------------
-    PASSED: OS detection: Devuan GNU/Linux 5
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 5.3.0
-
-Fedora release 42 (Adams):
---------------------------
-    PASSED: OS detection: Fedora release 42 (Adams)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-Gentoo Base System release 2.17:
---------------------------------
-    PASSED: OS detection: Gentoo Base System release 2.17
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.2.3
-
-Kali GNU/Linux 2025.2:
-----------------------
-    PASSED: OS detection: Kali GNU/Linux 2025.2
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-Mageia 9:
----------
-    PASSED: OS detection: Mageia 9
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 6.1.3
-    PASSED: Sphinx package: Sphinx 6.1.3
-
-Linux Mint 22:
---------------
-    PASSED: OS detection: Linux Mint 22
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.1.3
-    PASSED: Sphinx package: Sphinx 4.3.2
-
-openEuler release 25.03:
-------------------------
-    PASSED: OS detection: openEuler release 25.03
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-OpenMandriva Lx 4.3:
---------------------
-    PASSED: OS detection: OpenMandriva Lx 4.3
-    FAILED: System packages:  Error: Unable to find a match: ensurepip
-    FAILED: Sphinx on venv: Installation failed
-    PASSED: Sphinx package: Sphinx 4.3.2
-
-openSUSE Leap 15.6:
--------------------
-    PASSED: OS detection: openSUSE Leap 15.6
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 7.2.6
-
-openSUSE Tumbleweed:
---------------------
-    PASSED: OS detection: openSUSE Tumbleweed
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.2.3
-
-Oracle Linux Server release 9.6:
---------------------------------
-    PASSED: OS detection: Oracle Linux Server release 9.6
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Red Hat Enterprise Linux release 8.10 (Ootpa):
-----------------------------------------------
-    PASSED: OS detection: Red Hat Enterprise Linux release 8.10 (Ootpa)
-    FAILED: System packages:  Error: Unable to find a match: google-noto-sans-cjk-ttc-fonts librsvg2-tools texlive-amscls texlive-amsfonts texlive-amsmath texlive-anyfontsize texlive-capt-of texlive-cmap texlive-collection-fontsrecommended texlive-collection-latex texlive-ec texlive-eqparbox texlive-euenc texlive-fancybox texlive-fancyvrb texlive-float texlive-fncychap texlive-framed texlive-luatex85 texlive-mdwtools texlive-multirow texlive-needspace texlive-oberdiek texlive-parskip texlive-polyglossia texlive-psnfss texlive-tabulary texlive-threeparttable texlive-titlesec texlive-tools texlive-ucs texlive-upquote texlive-wrapfig texlive-xecjk texlive-xetex-bin
-    FAILED: Sphinx on venv: No Sphinx version detected
-    FAILED: Sphinx package: No Sphinx version detected
-
-Rocky Linux release 8.9 (Green Obsidian):
------------------------------------------
-    PASSED: OS detection: Rocky Linux release 8.9 (Green Obsidian)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    FAILED: Sphinx package: No Sphinx version detected
-
-Rocky Linux release 9.6 (Blue Onyx):
-------------------------------------
-    PASSED: OS detection: Rocky Linux release 9.6 (Blue Onyx)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Springdale Open Enterprise Linux release 9.2 (Parma):
------------------------------------------------------
-    PASSED: OS detection: Springdale Open Enterprise Linux release 9.2 (Parma)
-    FAILED: System packages:  Error:   Problem: package ImageMagick-6.9.13.25-1.el9.x86_64 requires libMagickCore-6.Q16.so.7()(64bit), but none of the providers can be installed   - package ImageMagick-6.9.13.25-1.el9.x86_64 requires libMagickWand-6.Q16.so.7()(64bit), but none of the providers can be installed   - package ImageMagick-6.9.13.25-1.el9.x86_64 requires ImageMagick-libs(x86-64) = 6.9.13.25-1.el9, but none of the providers can be installed   - conflicting requests   - nothing provides libraw_r.so.23()(64bit) needed by ImageMagick-libs-6.9.13.25-1.el9.x86_64
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Ubuntu 24.04.2 LTS:
--------------------
-    PASSED: OS detection: Ubuntu 24.04.2 LTS
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 7.2.6
-
-Ubuntu 25.04:
--------------
-    PASSED: OS detection: Ubuntu 25.04
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-Summary
-=======
-  PASSED - AlmaLinux release 9.6 (Sage Margay) (4 tests)
-  PASSED - Amazon Linux release 2023 (Amazon Linux) (4 tests)
-  PASSED - Arch Linux (4 tests)
-  PASSED - CentOS Stream release 9 (4 tests)
-  PASSED - Debian GNU/Linux 12 (4 tests)
-  PASSED - Devuan GNU/Linux 5 (4 tests)
-  PASSED - Fedora release 42 (Adams) (4 tests)
-  PASSED - Gentoo Base System release 2.17 (4 tests)
-  PASSED - Kali GNU/Linux 2025.2 (4 tests)
-  PASSED - Mageia 9 (4 tests)
-  PASSED - Linux Mint 22 (4 tests)
-  PASSED - openEuler release 25.03 (4 tests)
-  FAILED - OpenMandriva Lx 4.3 (4 tests)
-  PASSED - openSUSE Leap 15.6 (4 tests)
-  PASSED - openSUSE Tumbleweed (4 tests)
-  PASSED - Oracle Linux Server release 9.6 (4 tests)
-  FAILED - Red Hat Enterprise Linux release 8.10 (Ootpa) (4 tests)
-  FAILED - Rocky Linux release 8.9 (Green Obsidian) (4 tests)
-  PASSED - Rocky Linux release 9.6 (Blue Onyx) (4 tests)
-  FAILED - Springdale Open Enterprise Linux release 9.2 (Parma) (4 tests)
-  PASSED - Ubuntu 24.04.2 LTS (4 tests)
-  PASSED - Ubuntu 25.04 (4 tests)
-(base) mchehab@foz /new_devel/mchehab_scripts $ ktap_reader.py /tmp/test_logs/*
-
-AlmaLinux release 9.6 (Sage Margay):
-------------------------------------
-    PASSED: OS detection: AlmaLinux release 9.6 (Sage Margay)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Amazon Linux release 2023 (Amazon Linux):
------------------------------------------
-    PASSED: OS detection: Amazon Linux release 2023 (Amazon Linux)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Arch Linux:
------------
-    PASSED: OS detection: Arch Linux
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.2.3
-
-CentOS Stream release 9:
-------------------------
-    PASSED: OS detection: CentOS Stream release 9
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Debian GNU/Linux 12:
---------------------
-    PASSED: OS detection: Debian GNU/Linux 12
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 5.3.0
-
-Devuan GNU/Linux 5:
--------------------
-    PASSED: OS detection: Devuan GNU/Linux 5
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 5.3.0
-
-Fedora release 42 (Adams):
---------------------------
-    PASSED: OS detection: Fedora release 42 (Adams)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-Gentoo Base System release 2.17:
---------------------------------
-    PASSED: OS detection: Gentoo Base System release 2.17
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.2.3
-
-Kali GNU/Linux 2025.2:
-----------------------
-    PASSED: OS detection: Kali GNU/Linux 2025.2
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-Mageia 9:
----------
-    PASSED: OS detection: Mageia 9
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 6.1.3
-    PASSED: Sphinx package: Sphinx 6.1.3
-
-Linux Mint 22:
---------------
-    PASSED: OS detection: Linux Mint 22
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.1.3
-    PASSED: Sphinx package: Sphinx 4.3.2
-
-openEuler release 25.03:
-------------------------
-    PASSED: OS detection: openEuler release 25.03
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
-OpenMandriva Lx 4.3:
---------------------
-    PASSED: OS detection: OpenMandriva Lx 4.3
-    FAILED: System packages:  Error: Unable to find a match: ensurepip
-    PARTIAL: Sphinx on venv: Installation failed
-    PASSED: Sphinx package: Sphinx 4.3.2
-
-openSUSE Leap 15.6:
--------------------
-    PASSED: OS detection: openSUSE Leap 15.6
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 7.2.6
-
-openSUSE Tumbleweed:
---------------------
-    PASSED: OS detection: openSUSE Tumbleweed
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.2.3
-
-Oracle Linux Server release 9.6:
---------------------------------
-    PASSED: OS detection: Oracle Linux Server release 9.6
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Red Hat Enterprise Linux release 8.10 (Ootpa):
-----------------------------------------------
-    PASSED: OS detection: Red Hat Enterprise Linux release 8.10 (Ootpa)
-    FAILED: System packages:  Error: Unable to find a match: google-noto-sans-cjk-ttc-fonts librsvg2-tools texlive-amscls texlive-amsfonts texlive-amsmath texlive-anyfontsize texlive-capt-of texlive-cmap texlive-collection-fontsrecommended texlive-collection-latex texlive-ec texlive-eqparbox texlive-euenc texlive-fancybox texlive-fancyvrb texlive-float texlive-fncychap texlive-framed texlive-luatex85 texlive-mdwtools texlive-multirow texlive-needspace texlive-oberdiek texlive-parskip texlive-polyglossia texlive-psnfss texlive-tabulary texlive-threeparttable texlive-titlesec texlive-tools texlive-ucs texlive-upquote texlive-wrapfig texlive-xecjk texlive-xetex-bin
-    PARTIAL: Sphinx on venv: No Sphinx version detected
-    PARTIAL: Sphinx package: No Sphinx version detected
-
-Rocky Linux release 8.9 (Green Obsidian):
------------------------------------------
-    PASSED: OS detection: Rocky Linux release 8.9 (Green Obsidian)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PARTIAL: Sphinx package: No Sphinx version detected
-
-Rocky Linux release 9.6 (Blue Onyx):
-------------------------------------
-    PASSED: OS detection: Rocky Linux release 9.6 (Blue Onyx)
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Springdale Open Enterprise Linux release 9.2 (Parma):
------------------------------------------------------
-    PASSED: OS detection: Springdale Open Enterprise Linux release 9.2 (Parma)
-    FAILED: System packages:  Error:   Problem: package ImageMagick-6.9.13.25-1.el9.x86_64 requires libMagickCore-6.Q16.so.7()(64bit), but none of the providers can be installed   - package ImageMagick-6.9.13.25-1.el9.x86_64 requires libMagickWand-6.Q16.so.7()(64bit), but none of the providers can be installed   - package ImageMagick-6.9.13.25-1.el9.x86_64 requires ImageMagick-libs(x86-64) = 6.9.13.25-1.el9, but none of the providers can be installed   - conflicting requests   - nothing provides libraw_r.so.23()(64bit) needed by ImageMagick-libs-6.9.13.25-1.el9.x86_64
-    PASSED: Sphinx on venv: Sphinx 7.4.7
-    PASSED: Sphinx package: Sphinx 3.4.3
-
-Ubuntu 24.04.2 LTS:
--------------------
-    PASSED: OS detection: Ubuntu 24.04.2 LTS
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 7.2.6
-
-Ubuntu 25.04:
--------------
-    PASSED: OS detection: Ubuntu 25.04
-    PASSED: System packages: Packages installed
-    PASSED: Sphinx on venv: Sphinx 8.2.3
-    PASSED: Sphinx package: Sphinx 8.1.3
-
----
-
-Mauro Carvalho Chehab (39):
-  scripts: sphinx-pre-install: fix version check for Fedora
-  scripts: sphinx-pre-install: rename it to
-    scripts/sphinx-pre-install.pl
-  scripts: sphinx-pre-install: Convert script to Python
-  scripts: sphinx-pre-install: Make it compatible with Python 3.6
-  scripts: sphinx-pre-install: run on a supported version
-  scripts: sphinx-pre-install: drop obsolete routines
-  scripts: sphinx-pre-install: drop support for old virtualenv
-  scripts: sphinx-pre-install: Address issues with OpenSUSE Leap 15.x
-  scripts: sphinx-pre-install: fix opensuse Leap hint for PyYAML
-  scripts: sphinx-pre-install: fix support for gentoo
-  scripts: sphinx-pre-install: Address issues with OpenSUSE Tumbleweed
-  scripts: sphinx-pre-install: only show portage hints once
-  scripts: sphinx-pre-install: cleanup rhel support
-  scripts: sphinx-pre-install: output Python and docutils version
-  scripts: sphinx-pre-install: add a missing f-string marker
-  scripts: sphinx-pre-install: fix Leap support for rsvg-convert
-  scripts: sphinx-pre-install: fix rhel recomendations
-  scripts: sphinx-pre-install: remove Scientific Linux
-  scripts: sphinx-pre-install: improve Gentoo package deps logic
-  scripts: sphinx-pre-install: fix OpenMandriva support
-  scripts: sphinx-pre-install: move package instructions to a new func
-  scripts: sphinx-pre-install: adjust a warning message
-  scripts: sphinx-pre-install: better handle Python min version
-  scripts: sphinx-pre-install: convert is_optional to a class
-  scripts: sphinx-pre-install: better handle RHEL-based distros
-  scripts: sphinx-pre-install: move missing logic to a separate class
-  scripts: sphinx-pre-install: move ancillary checkers to a separate
-    class
-  scripts: sphinx-pre-install: add more generic checkers on a class
-  scripts: sphinx-pre-install: move get_system_release()
-  scripts: sphinx-pre-install: add documentation for the ancillary
-    classes.
-  scripts: sphinx-pre-install: add docstring documentation
-  scripts: sphinx-pre-install: fix several codingstyle issues
-  scripts: sphinx-pre-install: rework install command logic
-  docs: Makefile: switch to the new scripts/sphinx-pre-install.py
-  scripts: sphinx-pre-install.pl: get rid of the old script
-  scripts: sphinx-pre-install: update mandatory system deps
-  scripts: sphinx-pre-install: add support for RHEL8-based distros
-  scripts: sphinx-pre-install: add a warning for Debian-based distros
-  scripts: sphinx-pre-install: some adjustments related to venv
-
- scripts/sphinx-pre-install | 2641 ++++++++++++++++++++++--------------
- 1 file changed, 1589 insertions(+), 1052 deletions(-)
-
--- 
-2.50.1
-
+Olek
