@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3818B27FD46
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6E5280A56
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755005215; cv=none; b=sqb6EfT43UAgDLL7LfkLOrxsVLryJDDMgA/9wXH8w/4WbzgrmEsfdVFqnNh0a6zXqXqkM9ZHLx1meTFxzV6bpKDsibtpykgbQBMcB+iHqJC8VcXLK20THeJ3IpCQo6QnGnzcGTIssTddUujj4GDHuUC29MmG4zFmhTvAA6VIwmY=
+	t=1755005219; cv=none; b=rTTpg9TH7uDYPMH6PqD4cmkgCLYqEu1PePODMCBRkJLdw97BJ+OJWtqSE7GZxO83/AbnKYGEBM91T/Q/p3uB8KMAJuomAp6/gxRobdbswFPgDtzwlSDo7u+Atl1VgsKdVP5D8gcftEgYKPPZnKHAYo5B3hRWMe6IKrd+BoqZcP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755005215; c=relaxed/simple;
-	bh=9/RZLCMjXQxGvwHsrxYm6WSdmas+FAtxJYkFWNEbaFU=;
+	s=arc-20240116; t=1755005219; c=relaxed/simple;
+	bh=svwcdRMIJEw5xAT6fmvSyI7M9DNKZMAHSataOorEZqU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hNxRbzs/NPuh+Bby03K5BZn3a9pXdN5/nHLqBr14dUwbWvFTSSGKGIhllvN+kljFM+PIha5UPO0uo130gdtFS/UWBONDN/yNrTLTQUxK5VBxFMj/ZztzegmpJTAXc367GMx6BPxcbNBO97V/ftMOz5+r/V0CFOAWX8bGMn2sygw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELXrUPWj; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=ZGsnRbLvW6642ReOrtSHyRh108HP8tGqp6bD74EAitvIEe5KOeq2heHj49FVjAzPWKr9v0FH2bmDhGQ8QysLzUK7e9E3pfVgnGWRDXn6S8tliDJyfUBPGEYzUp61QPgSfxps93S/VYMP92uy6aGWQZp2edO3mtHduJFdCCd2S7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mkqDmPbE; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELXrUPWj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mkqDmPbE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755005215; x=1786541215;
+  t=1755005218; x=1786541218;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9/RZLCMjXQxGvwHsrxYm6WSdmas+FAtxJYkFWNEbaFU=;
-  b=ELXrUPWjvyNFbaS1w3UhCP4SjWmUVL4Uv3firAeq2kzwxDfZrJlBnX8s
-   rIgU9wuWNz8wTg7EDE5PVpiwRUCocplgOE3Molx8qr2YSD+YGLVqZZAtP
-   tP0+gYkeChGsfSSTrADxo0ZUF+G8LzuV4gnhYU+693UMTS4iJabR3IMqP
-   UUvQTPyDf8Nmhzg9SY43YA+hKpNApxgmtiB53El9RenNA+CVg3PhcddyY
-   tpr9W5X8zyXit0Xu+Tho68EUv86CdFyimWPCMxZOrp/1WlKbmqiyQ/3TC
-   dI9Xqnc1dJskpxPxnhyikqz2+TRSTx4/r31dwQCdrExHhyzEe7wlXVCNT
+  bh=svwcdRMIJEw5xAT6fmvSyI7M9DNKZMAHSataOorEZqU=;
+  b=mkqDmPbEI9KCZyhxKVjpoHv8C6xib5xM0WGQjEhUTHOfL3FInImN866q
+   SfpM/Ny7cJFK5zvWjC/TZWG8+fYiJfRXer4Izeggg26INlRWx/N/5pGqT
+   Tkv1qU9dpzaPRNoEOVMG5wPVgDdR5sP7ODreuKdgjjhxrppGlPCHRv5a4
+   vbon3JjgigTsfkSSVY3OXsk38gTMznOz5r0QntF2ZGYx7xCAxTovx+Q9G
+   OvClHdS21guWL/t4SDfYXhsN8jnqmnPBISik/Qy3D9Qo5C6axU3M9Gk+P
+   FsX1dMHad/8NHqZcJdEJnpU9nl+S2nZsa6OpykOOJm4T0aB96DgUINGE+
    w==;
-X-CSE-ConnectionGUID: YfUb4F1XQiaTvlJzErZj5g==
-X-CSE-MsgGUID: K3yoONexSsmH2822BRxmnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903224"
+X-CSE-ConnectionGUID: wcol2V2RSRS4iXuOBrpFNg==
+X-CSE-MsgGUID: qXuGwncaTg2Rud+dSwoJLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903284"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="60903224"
+   d="scan'208";a="60903284"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:25:44 -0700
-X-CSE-ConnectionGUID: G0cKUUX3QdeIuuUQDf731Q==
-X-CSE-MsgGUID: HyifQRzJTUaZ4oYqgT0L6w==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:26:10 -0700
+X-CSE-ConnectionGUID: fEBGC8HBRSeUSf2GiP4qhQ==
+X-CSE-MsgGUID: dKdrPa1TQk6ZCZHGur3yuw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="165831317"
+   d="scan'208";a="165831361"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.54])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:25:22 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:25:43 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: nathan@kernel.org,
 	arnd@arndb.de,
@@ -131,9 +131,9 @@ Cc: linux-mm@kvack.org,
 	kasan-dev@googlegroups.com,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 02/18] kasan: sw_tags: Support tag widths less than 8 bits
-Date: Tue, 12 Aug 2025 15:23:38 +0200
-Message-ID: <780347f3897ea97e90968de028c9dd02f466204e.1755004923.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v4 03/18] kasan: Fix inline mode for x86 tag-based mode
+Date: Tue, 12 Aug 2025 15:23:39 +0200
+Message-ID: <0ee6ca89ff7617fe7a4eda63ef5cf376d609ccdd.1755004923.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
 References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
@@ -145,79 +145,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Samuel Holland <samuel.holland@sifive.com>
+The LLVM compiler uses hwasan-instrument-with-calls parameter to setup
+inline or outline mode in tag-based KASAN. If zeroed, it means the
+instrumentation implementation will be pasted into each relevant
+location along with KASAN related constants during compilation. If set
+to one all function instrumentation will be done with function calls
+instead.
 
-Allow architectures to override KASAN_TAG_KERNEL in asm/kasan.h. This
-is needed on RISC-V, which supports 57-bit virtual addresses and 7-bit
-pointer tags. For consistency, move the arm64 MTE definition of
-KASAN_TAG_MIN to asm/kasan.h, since it is also architecture-dependent;
-RISC-V's equivalent extension is expected to support 7-bit hardware
-memory tags.
+The default hwasan-instrument-with-calls value for the x86 architecture
+in the compiler is "1", which is not true for other architectures.
+Because of this, enabling inline mode in software tag-based KASAN
+doesn't work on x86 as the kernel script doesn't zero out the parameter
+and always sets up the outline mode.
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+Explicitly zero out hwasan-instrument-with-calls when enabling inline
+mode in tag-based KASAN.
+
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
- arch/arm64/include/asm/kasan.h   |  6 ++++--
- arch/arm64/include/asm/uaccess.h |  1 +
- include/linux/kasan-tags.h       | 13 ++++++++-----
- 3 files changed, 13 insertions(+), 7 deletions(-)
+Changelog v3:
+- Add this patch to the series.
 
-diff --git a/arch/arm64/include/asm/kasan.h b/arch/arm64/include/asm/kasan.h
-index e1b57c13f8a4..4ab419df8b93 100644
---- a/arch/arm64/include/asm/kasan.h
-+++ b/arch/arm64/include/asm/kasan.h
-@@ -6,8 +6,10 @@
+ scripts/Makefile.kasan | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+index 693dbbebebba..2c7be96727ac 100644
+--- a/scripts/Makefile.kasan
++++ b/scripts/Makefile.kasan
+@@ -76,8 +76,11 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress
+ RUSTFLAGS_KASAN := -Zsanitizer=kernel-hwaddress \
+ 		   -Zsanitizer-recover=kernel-hwaddress
  
- #include <linux/linkage.h>
- #include <asm/memory.h>
--#include <asm/mte-kasan.h>
--#include <asm/pgtable-types.h>
-+
-+#ifdef CONFIG_KASAN_HW_TAGS
-+#define KASAN_TAG_MIN			0xF0 /* minimum value for random tags */
-+#endif
- 
- #define arch_kasan_set_tag(addr, tag)	__tag_set(addr, tag)
- #define arch_kasan_reset_tag(addr)	__tag_reset(addr)
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 5b91803201ef..f890dadc7b4e 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -22,6 +22,7 @@
- #include <asm/cpufeature.h>
- #include <asm/mmu.h>
- #include <asm/mte.h>
-+#include <asm/mte-kasan.h>
- #include <asm/ptrace.h>
- #include <asm/memory.h>
- #include <asm/extable.h>
-diff --git a/include/linux/kasan-tags.h b/include/linux/kasan-tags.h
-index 4f85f562512c..e07c896f95d3 100644
---- a/include/linux/kasan-tags.h
-+++ b/include/linux/kasan-tags.h
-@@ -2,13 +2,16 @@
- #ifndef _LINUX_KASAN_TAGS_H
- #define _LINUX_KASAN_TAGS_H
- 
-+#include <asm/kasan.h>
-+
-+#ifndef KASAN_TAG_KERNEL
- #define KASAN_TAG_KERNEL	0xFF /* native kernel pointers tag */
--#define KASAN_TAG_INVALID	0xFE /* inaccessible memory tag */
--#define KASAN_TAG_MAX		0xFD /* maximum value for random tags */
-+#endif
-+
-+#define KASAN_TAG_INVALID	(KASAN_TAG_KERNEL - 1) /* inaccessible memory tag */
-+#define KASAN_TAG_MAX		(KASAN_TAG_KERNEL - 2) /* maximum value for random tags */
- 
--#ifdef CONFIG_KASAN_HW_TAGS
--#define KASAN_TAG_MIN		0xF0 /* minimum value for random tags */
--#else
-+#ifndef KASAN_TAG_MIN
- #define KASAN_TAG_MIN		0x00 /* minimum value for random tags */
- #endif
- 
++# LLVM sets hwasan-instrument-with-calls to 1 on x86 by default. Set it to 0
++# when inline mode is enabled.
+ ifdef CONFIG_KASAN_INLINE
+ 	kasan_params += hwasan-mapping-offset=$(KASAN_SHADOW_OFFSET)
++	kasan_params += hwasan-instrument-with-calls=0
+ else
+ 	kasan_params += hwasan-instrument-with-calls=1
+ endif
 -- 
 2.50.1
 
