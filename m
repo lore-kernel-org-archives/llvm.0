@@ -1,131 +1,93 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 093C120C004
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 06:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9901EA6F;
+	Tue, 12 Aug 2025 07:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754979636; cv=none; b=ra3wfbEXW0EJ8o62YHiaG8jl7DuKINo1yOPWIwn9Q0dixzUuap+/MuuYgxel6/BnnesbIZJNJUjVcmDRCpRljKt+ATZ5VkVEjuzRNA7QF6GVxGaFQmG1yXMBn2sA0nBECq7qkYcIHQZybL4ua3wk72JdEh0FRIHUZb2rlgJPrIM=
+	t=1754983678; cv=none; b=SlR6vQrvpcS3OGPEwp5j+XrhsdGl7DI8SEG7iWuwIqy+sFTzFFAuun2icrkm79e6zKH2rNB6f7/VXtna0BndvZ/CEHCWm95x23IvFmPT9YSkWk/zjDgXzQYEODIzSZC/ouectP7t90qcw0tgbmOnGb8SHwAxHJw3G25iZ014q3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754979636; c=relaxed/simple;
-	bh=Y7VqHf4C+JSQxOFwIP6hzbmo5lu9mZzg++Z+7+9xQJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gxGiAbNNkZjss+5+aR4xaZP3uzkouaL3VjAP0WYNCenM80GnI8FLy1tpAA1p9jWt1ppWBcmzD7nC9ytLoBHYlcu+XUdMfb5wtKNHczMFMIFnkiU/kU+ixs7CS/iK4kMuXNAMsR6tRrk3TYniYP96UM58+MpXDG+9HqLmtBKOUzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4c1LbP1ZCQz9sSH;
-	Tue, 12 Aug 2025 08:05:53 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3WR0gSTJzGY1; Tue, 12 Aug 2025 08:05:53 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4c1LbP0Kj8z9sSC;
-	Tue, 12 Aug 2025 08:05:53 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id DE8C38B764;
-	Tue, 12 Aug 2025 08:05:52 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id VXWlAoGWUx8D; Tue, 12 Aug 2025 08:05:52 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1C6768B763;
-	Tue, 12 Aug 2025 08:05:52 +0200 (CEST)
-Message-ID: <d72bb0f7-8dc3-42ca-84d9-c74b4db02445@csgroup.eu>
-Date: Tue, 12 Aug 2025 08:05:51 +0200
+	s=arc-20240116; t=1754983678; c=relaxed/simple;
+	bh=3e0EXaa+An4prh17FZN5+ByIUcZFPT//X78WqBkRjrY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=qBrnSd7u4ORnj93QHCk6RejjDudb0+ae2agRxy6iyvSbC1x/wF72ho03XjfzA5vMFccKCrARPp/TFHbxIRYEyj/5iydhFrtGU+dwfFp9bPYd64GAwQI24NxJSgCc6nH0SaEpZIfXoDZ52L+JkKXCuSVN8EVh4R3I6pt2Z0B4Nvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADi5A/zb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADi5A/zb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438C0C4CEF0;
+	Tue, 12 Aug 2025 07:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754983677;
+	bh=3e0EXaa+An4prh17FZN5+ByIUcZFPT//X78WqBkRjrY=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ADi5A/zbstIaLYuBH0MTxYxne9ur5CQ2iequZ+CAXyFnCcb/2ic9J6DnI1XC4vWex
+	 v/gv+N/UdkEmGTu9fCmOkmkb/XUifU4YWi+MT/Bwf3N66P3h6WAGzFkUHKyvuOGbh3
+	 Logyl9qcydOUXpnql7kE7GlSIeUNP3CI9XPm961PipTEGXQeNZep5CaQmn4QY9kiYZ
+	 eNLBA+WqrKvr1kh/mKjosvOESVoHAOc30J66z9Nwq9UEJgO5YERbKUH6RkxalZY5SU
+	 Sp4W/qU24KkmNvm8arjN3ntDqtXkR6kTWxPSTWJqTeVssecbs8K30accLFTZBS2cfX
+	 F5NglqnIC/yeg==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] selftests: vDSO: fix -Wunitialized in powerpc
- VDSO_CALL() wrapper
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
- <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
- kernel test robot <lkp@intel.com>
-References: <20250812-vdso-tests-fixes-v2-0-90f499dd35f8@linutronix.de>
- <20250812-vdso-tests-fixes-v2-1-90f499dd35f8@linutronix.de>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <20250812-vdso-tests-fixes-v2-1-90f499dd35f8@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 Aug 2025 09:27:50 +0200
+Message-Id: <DC09SG6IXEOG.3Q8DMJF5E7QBO@kernel.org>
+Cc: <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH v14 2/3] rust: support formatting of foreign types
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Tamir Duberstein" <tamird@gmail.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
+ <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Russ Weight"
+ <russ.weight@linux.dev>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Will Deacon" <will@kernel.org>, "Waiman Long"
+ <longman@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
+ Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
+ <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>, "Christian
+ Brauner" <brauner@kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20250710-cstr-core-v14-0-ca7e0ca82c82@gmail.com>
+ <20250710-cstr-core-v14-2-ca7e0ca82c82@gmail.com>
+In-Reply-To: <20250710-cstr-core-v14-2-ca7e0ca82c82@gmail.com>
 
+On Thu Jul 10, 2025 at 4:53 PM CEST, Tamir Duberstein wrote:
+> Introduce a `fmt!` macro which wraps all arguments in
+> `kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
+> formatting of foreign types (like `core::ffi::CStr`) that do not
+> implement `core::fmt::Display` due to concerns around lossy conversions
+> which do not apply in the kernel.
+>
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General=
+/topic/Custom.20formatting/with/516476467
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
+I'm not 100% sure we need to always use `first_span`, but it's probably
+fine.
 
-Le 12/08/2025 à 07:39, Thomas Weißschuh a écrit :
-> The _rval register variable is meant to be an output operand of the asm
-> statement but is instead used as input operand.
-> clang 20.1 notices this and triggers -Wuninitialized warnings:
-> 
-> tools/testing/selftests/timers/auxclock.c:154:10: error: variable '_rval' is uninitialized when used here [-Werror,-Wuninitialized]
->    154 |                 return VDSO_CALL(self->vdso_clock_gettime64, 2, clockid, ts);
->        |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> tools/testing/selftests/timers/../vDSO/vdso_call.h:59:10: note: expanded from macro 'VDSO_CALL'
->     59 |                 : "r" (_rval)                                           \
->        |                        ^~~~~
-> tools/testing/selftests/timers/auxclock.c:154:10: note: variable '_rval' is declared here
-> tools/testing/selftests/timers/../vDSO/vdso_call.h:47:2: note: expanded from macro 'VDSO_CALL'
->     47 |         register long _rval asm ("r3");                                 \
->        |         ^
-> 
-> It seems the list of input and output operands have been switched around.
-> However as the argument registers are not always initialized they can not
-> be marked as pure inputs as that would trigger -Wuninitialized warnings.
-> Adding _rval as another input and output operand does also not work as it
-> would collide with the existing _r3 variable.
-> 
-> Instead reuse _r3 for both the argument and the return value.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Foe-kbuild-all%2F202506180223.BOOk5jDK-lkp%40intel.com%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C611dd96dfdad4dcd55d708ddd9629305%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905739611064850%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=QcOje8P4T0%2BsqgkSaP%2BkT3fS875kqCZhxChDmvWVY%2Fg%3D&reserved=0
-> Fixes: 6eda706a535c ("selftests: vDSO: fix the way vDSO functions are called for powerpc")
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+Cheers,
+Benno
 
 > ---
->   tools/testing/selftests/vDSO/vdso_call.h | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/vdso_call.h b/tools/testing/selftests/vDSO/vdso_call.h
-> index bb237d771051bd4103367fc60b54b505b7586965..e7205584cbdca5e10c13c1e9425d2023b02cda7f 100644
-> --- a/tools/testing/selftests/vDSO/vdso_call.h
-> +++ b/tools/testing/selftests/vDSO/vdso_call.h
-> @@ -44,7 +44,6 @@
->   	register long _r6 asm ("r6");					\
->   	register long _r7 asm ("r7");					\
->   	register long _r8 asm ("r8");					\
-> -	register long _rval asm ("r3");					\
->   									\
->   	LOADARGS_##nr(fn, args);					\
->   									\
-> @@ -54,13 +53,13 @@
->   		"	bns+	1f\n"					\
->   		"	neg	3, 3\n"					\
->   		"1:"							\
-> -		: "+r" (_r0), "=r" (_r3), "+r" (_r4), "+r" (_r5),	\
-> +		: "+r" (_r0), "+r" (_r3), "+r" (_r4), "+r" (_r5),	\
->   		  "+r" (_r6), "+r" (_r7), "+r" (_r8)			\
-> -		: "r" (_rval)						\
-> +		:							\
->   		: "r9", "r10", "r11", "r12", "cr0", "cr1", "cr5",	\
->   		  "cr6", "cr7", "xer", "lr", "ctr", "memory"		\
->   	);								\
-> -	_rval;								\
-> +	_r3;								\
->   })
->   
->   #else
-> 
-
+>  rust/kernel/fmt.rs     | 87 ++++++++++++++++++++++++++++++++++++++++++++=
++-
+>  rust/kernel/prelude.rs |  3 +-
+>  rust/macros/fmt.rs     | 94 ++++++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  rust/macros/lib.rs     | 19 ++++++++++
+>  rust/macros/quote.rs   |  7 ++++
+>  5 files changed, 207 insertions(+), 3 deletions(-)
