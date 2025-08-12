@@ -1,100 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EB52FE573;
-	Tue, 12 Aug 2025 18:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6939017993;
+	Tue, 12 Aug 2025 18:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755021757; cv=none; b=lg5UyxXHqtW4iLXGYbZ/via2J0BQXrhq1Gq8urMhtSpe1b8zYMR92IZgSxCTcXTXbERyWlMRNShoqMob8YUo4/mhVowmnIMWngwiZqalkfskjukThY1fC8ixtVsN8JjhPiZqwKEfyDmwLaLf5dOPCsFCplztB5o7xj8eFo6d17Y=
+	t=1755022063; cv=none; b=qjZGQSCqFUTlCt9IBXVWWVqvnN3ryaYY0S9QWf8R0RAWX2pgh8qREOb26J+fjNiuLqEoF2c3I+bL8cDMYlWo/HkbUDsIu7aY/7lXJKPRgnQ8h2g7rXFSHx/4LUv+CyyRE/cDqd30YW1xqbz5rxtwxXlo/hXba8vxRLwBz0O90s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755021757; c=relaxed/simple;
-	bh=cTESMOkLVKR5uwzioJEzzF0am+6i99DL3eKP53iLwIM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kiASnGXcyxKDUv5D/1iNhhh7tMAddadCGgP7n0LndVmqopYTjLboXDxtFvvSU+QhUthyEr5Ij+YmSKfg4qJu+7IrAoYkz6uEiAwVT0ezQE8rvCky+KJfK0O9LHfVEzbNVImRwoFF3MfqA2AzPQcBBeqHMw90rztqIQhiUq6tUr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYZ4nJWo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755022063; c=relaxed/simple;
+	bh=7tVlMxBxSUqDkQ/YT+j6av2beaKwd8lQaB291K7ue9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HUGbgWL1vRK+gMgRq7DeeT0JkdsfCHHmtPNfaf2khm3G8xfhnDTjnkrZ2cklIjg6PAlBHkVecGzhuTEqrATAZkpRnUzZt/kDsnfo8jrCwWanlhDPYwEQNRZgc24aZVs5HEUb0ljS/dF1So2iv47i9gu9FbHb8MIO92wbWTN1R14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MMw++2i9; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYZ4nJWo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2E1C4CEF0;
-	Tue, 12 Aug 2025 18:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755021756;
-	bh=cTESMOkLVKR5uwzioJEzzF0am+6i99DL3eKP53iLwIM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=MYZ4nJWouj0qgw0SBFYVMna1pjnviIFV8Dcd8CY1p/PQx9OFeR/wf4MozbCd6L1jZ
-	 B2DsnZYYHANipgkDzV6czWZcH+Fhrf3rJa0HMipjnf0ZRvXj1Uh4bKAoRELHQ9vgeK
-	 VaPUv6dWsQdTeePH6KB2eY5CFv1J3XNWimupHUj+kh0yXPmy3iGDhB2PbnUXXCjkUN
-	 yvUDLwiLEipgMoPByvyVegif5i+61bSRUb2fBysfBhZ3ZTeYEX/TrMByjIyAn+Pbk6
-	 YUHZehJ7/eHZZje9TrWRH0CXOzGeLy+e+cRu9GdSEemU2Xn/0Vt+/A29TUAazFio2B
-	 IXeCTgirK7cxA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 12 Aug 2025 11:02:11 -0700
-Subject: [PATCH] bcachefs: Add statement to switch in
- check_bch_counter_ids_unique()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMw++2i9"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b46ec4d5d0aso1819858a12.2;
+        Tue, 12 Aug 2025 11:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755022062; x=1755626862; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7tVlMxBxSUqDkQ/YT+j6av2beaKwd8lQaB291K7ue9Y=;
+        b=MMw++2i986U161RSqHFGiZkXH2MsPVHFY/R4vksy91fYD3rbZYsCwbDZx6WaZJzU73
+         WLtLABMHnBti3EBKsk/gnKVpnFImxsf4UWBVTnzaRaUdR11U0b1e/F0RWE6EoPTahbJb
+         AGC2hj/PO3IRbDcoMubkkyS3efsDliTslnVQDFbXydNYczUvoJZd8liHt+/BA32WlYMw
+         opMYFdZgyxgbLWH2JbIWpoHtjw1DA9q585EwnfhacnpsG6OPu6OYcbz0IcWtB7rceTTh
+         z35pTYdFrTIICX8DaRCwRHOG7JAHy0/C3aSSw6jAQ0X6yeDPbaA6/4CNIBHLSpQuVsAX
+         Uq0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755022062; x=1755626862;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7tVlMxBxSUqDkQ/YT+j6av2beaKwd8lQaB291K7ue9Y=;
+        b=BC4HJBWv2FvBp++8e7zuMNKmY/Y8Z8yEnua8tijvQdvjeAj4iAkfxsso48VXtPMDjk
+         Bo4RZ2u/+MBdF2rSEi/G37QjOo5a+rck96kZ6h8lBMDX5FxxVlcq+THBNcon1sJWpaZA
+         4/aUhRwgYnKBfH0Iyboqifu+c+zH54lICIa0mXV24cH4VrY2LfvmQoiyALVTBj8aiNWZ
+         4I8kfks/9eFlmsIPK+6fvcezObhpEH6yIdpP0qkjsnxpa2FDB4MYY6kayPiT8JFYcpLX
+         Q6Xls9eXdrSzbD+Ge1rPKdoaGeg5cdgwusq8XfQvb2dsTKE5vKLmZWk5Tot4A+duNROg
+         8xSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2bJeU5XuYDkAHcH8l37Mrs9s6+DaJYmKtf90hIzYIAy3z36SSpYOsM9G2FqAKFnCDuUgl@lists.linux.dev, AJvYcCWz/vawvCKMEWH7wPEFRk8/EW9CNxJaFdNiQ3+Q1kQoi05uVM8BgUyJUFd2l1pUD20Fr6YFmAGFlYqv5tQ4rw==@lists.linux.dev
+X-Gm-Message-State: AOJu0YxxuiIVyPLJBTKOPwFvRIhwJ4ChuA7AbuQKtmDQhnxEkotpaVxu
+	2/KopQMMND7Hu7iLeQAGfT2xVwLg/UmpivQ1pskH6gp95dcHUnqW+dX8
+X-Gm-Gg: ASbGncsrNA3WmYnJZmFJD8WVMFq1p2JIwrrh4Z8v3KdEE8dcacC1MOHa7kYhj1Ihq75
+	C76JSVaiJIJfzouhJlIPG7JypPQ0/wNJ2kWTe3DQFBZmsEq0A3mJt5xFcP881zWfTT0Ttze+ovF
+	ReiNZeUTJZEwR/iAwZ2RDCglHdfo6/SQR/MyemdyTifRLazoRr+rPAAU+JTqRH4MvGOmjmUvv0i
+	HtY3nOxalcIAuHfpH3jIKHDKJvV7jMBzyoasVVtdRPLKwJ8xGS5DLIip7fqmGr9XN6cevNs1euX
+	ZYxnKh/XvqOm99AnZYGc436yUhdSHsPgg+Zntca9/fiYq4U7+1GNdWGLtlX5cnWHthpbcLc5pZE
+	IQgtFFH+JVm89wwtdeXF+08PphQIGcA==
+X-Google-Smtp-Source: AGHT+IH2eAbhw6s8RrO6LOuLceoPWy7RgMZVatbE8YimrP9qcp0B/w2fFg+C1Bb2gud7MsEdF4yB8g==
+X-Received: by 2002:a17:903:2447:b0:240:9006:1523 with SMTP id d9443c01a7336-2430d0b1ea3mr2286925ad.10.1755022061514;
+        Tue, 12 Aug 2025 11:07:41 -0700 (PDT)
+Received: from fedora ([2405:201:5501:4085:eece:e0ff:6b68:de2e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e89a077csm305678965ad.138.2025.08.12.11.07.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 11:07:40 -0700 (PDT)
+Date: Tue, 12 Aug 2025 23:38:06 +0530
+From: Ritvik Gupta <ritvikfoss@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v4] rust: kernel: introduce `unsafe_precondition_assert!`
+ macro
+Message-ID: <aJuDBtpYijOBQUJa@fedora>
+References: <20250808192005.209188-1-ritvikfoss@gmail.com>
+ <202508122341.rb7U1Q2P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250812-bcachefs-fix-switch-check_bch_counter_ids_unique-v1-1-def262fd6574@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKKBm2gC/x2N0QrCMAxFf2Xk2cBa0RV/RaSsWWaD0GmzqjD27
- wYfz4VzzwbKVVjh0m1Q+S0qSzFwhw4oj+XOKJMx+N6f+uA8Jhop86w4yxf1IytltIEeMVGOtLS
- yco0yaWxFXo3RhxCSO55TGAaw22dlU//J623ffwaFtfCCAAAA
-X-Change-ID: 20250812-bcachefs-fix-switch-check_bch_counter_ids_unique-2888b136b877
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Francis Rossi <francisdrossi@gmail.com>, linux-bcachefs@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1412; i=nathan@kernel.org;
- h=from:subject:message-id; bh=cTESMOkLVKR5uwzioJEzzF0am+6i99DL3eKP53iLwIM=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBmzG3ev0Rew4bir4todZiKanse1KdgqfvkL1tMO85OjP
- jlfLnnRUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbypYyRYbLuwomLb9sdS70j
- 7jpVTE5k6Zmj/KJlDXKHXvPbx6Z+2sfw38Nu7v7pRzY9W16amHXHau8KMVZr/ost05NUerbstXa
- rZwQA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202508122341.rb7U1Q2P-lkp@intel.com>
 
-Clang warns (or errors with CONFIG_WERROR=y):
+If someone's referring to it in the future, this was doctest issue.
 
-  fs/bcachefs/sb-counters_format.h:132:2: error: label at end of compound statement is a C23 extension [-Werror,-Wc23-extensions]
-    132 |         }
-        |         ^
+It’s actually the second time I’ve hit it.
+On my end, this error wasn't occurring when compiling the kernel.
 
-In older versions of clang, this is an unconditional hard error:
+What I was missing:
+1. Enable `Kernel Hacking > Kernel Testing and Coverage > KUnit`
+2. Enable Doctest in `Rust hacking > Doctests for the 'kernel' crate`
 
-  fs/bcachefs/sb-counters_format.h:130:34: error: label at end of compound statement: expected statement
-          BCH_PERSISTENT_COUNTERS()
-                                   ^
-                                    ;
-
-Add an empty statement to resolve the error/warning.
-
-Fixes: 38de86383436 ("bcachefs: Switch statement evaluate ids and confirm they are unique going forward")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- fs/bcachefs/sb-counters_format.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/bcachefs/sb-counters_format.h b/fs/bcachefs/sb-counters_format.h
-index bfeb713dd210..96ad64920810 100644
---- a/fs/bcachefs/sb-counters_format.h
-+++ b/fs/bcachefs/sb-counters_format.h
-@@ -129,6 +129,7 @@ static inline void __maybe_unused check_bch_counter_ids_unique(void) {
- #define x(t, n, ...) case (n):
-         BCH_PERSISTENT_COUNTERS()
- #undef x
-+		;
- 	}
- }
- 
-
----
-base-commit: 65c604dba89a86d3dae0bd98b7b0b6c077ac930c
-change-id: 20250812-bcachefs-fix-switch-check_bch_counter_ids_unique-2888b136b877
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+I can now reproduce capture the issue locally.
+Won't happen again :)
