@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189BB27FB28
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAC6281538
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755005238; cv=none; b=QPl45t7dWljNzCyHN8wRjCCYW/Fw106vseTaIP4s6uI6zsIZAGnI9AUTvW7PBB2U0qXM6kHVEXDCA17dyYG1T3kZQdejpAQe5jkcqBvNMoeGxuAq7E/fM0dcF6DSgV3xVdlG2PswMSn01yQHAoxXvb/OJm8LuZEEoTNA10h5FEw=
+	t=1755005260; cv=none; b=l85sSxlzjfMdjaH0k+kUT30T9Z3bWtb/Clec6N48HqeWUkPlNTSzmB8j2B55IesG07jl4A3TCxem3j59JE9kbfm9ioP/B6y7WHNHAGpxZ48MLFyPQtHva2vqZpx49S2viv1v98bnOHqd8tnArlX6pJF0v3cmRdkcSd+SEs5UpUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755005238; c=relaxed/simple;
-	bh=a8brDXoNQXGsX0O3+U1wqzz6qH0YVwQ2IYUmoUvYEIA=;
+	s=arc-20240116; t=1755005260; c=relaxed/simple;
+	bh=WytGKsbpVx+YjGfDckn4ztihfy/XnHxiwtMc2ueYMYI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=seKnx5QjuSScHAEiOOp8o101VEXICP4vDicbdtYMlyxto+cY/LT2GL0DEu7BP41rrSApcUDPzisfOc2Itx5E/7LpSCbqSrfFmt3r0um2og4zmTaZKw4pqSlOXDrN+QOSXPbAa1McwewUaKfWo0OtLJwWTzzU143vvHOoxamhPwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fo0Vm+Cg; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=h+etjhFto/14X5RNk7wkoOglCNmIIK9Geh4M8PjZ/cxxgGHiEuVGBG1Ynabu6o6nsFiq/oBzzshsMFKF1kn8ZTpxIb9MmZ57CGYe6GaY/LRrw6nViwtjzoBQ84HCXsHxtnjNDccL3xmUrnRTA6VrwRfEsnaXkO8KKmvJrwLnGO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y9IZV7OQ; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fo0Vm+Cg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y9IZV7OQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755005238; x=1786541238;
+  t=1755005259; x=1786541259;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=a8brDXoNQXGsX0O3+U1wqzz6qH0YVwQ2IYUmoUvYEIA=;
-  b=Fo0Vm+Cgv2xRxiSOTgYYPQfWq5G2niXASlxfNuFP0Jk35f8B13CnHJVp
-   chtRalOYmYbcJ3wPD+hEDoeuH8fOAYZ/D5EKQz3ufU1S3nySYIUN3kaf8
-   5xFdY09ItYwfqyMLGciDkX9cVwuvtK4B9+ZtGyN9DgEdE1QHOxck1cGxU
-   mh0h67u2/6vzqVo8zwnW4hYyA8zTCBTencL+9sH15nZwjxqgzu2XNOy44
-   F7WDDQCS+eKjGx4eAQOPpHu7M27ZgkbJ88KPVvqdHYAiCOr+8ikXa5O4O
-   at+TXbkjYm48sC/4S60SP5GB80Kcr4cT+4BGnzJQPENljXTdtGgovVu+1
-   w==;
-X-CSE-ConnectionGUID: slh+rxsDQfiZ8GfHvdaAHw==
-X-CSE-MsgGUID: 4MmD9AmtQvOi85D9T5mrCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903452"
+  bh=WytGKsbpVx+YjGfDckn4ztihfy/XnHxiwtMc2ueYMYI=;
+  b=Y9IZV7OQfryCWiouygBY8Noa/Iz+aeLwHUoWkowIJcwtfcH4c5lmJ/Bw
+   CSC14VzQ5KB9AmA2El6pKfBnDgC2I33UHrtXzsOd9oChkZAq8HLOd5Ro6
+   NQoFlz4eH9Rk8GpORFk7sBfllgfZUpGSm4kQiXJW4Dt6aOYFTS5vjMrb1
+   yCwTBLnC4lOqM/pnlysZe1PY2CxLQ6rUq5x366iWkSIya773wX15WurA0
+   ebM9bIy7EEoaNlXgpVuBi4kU/stx4yq0a5sWE9kW+VxvurIeGm80F0faP
+   NqMEaqyIDqdzdjmPPo2j8my5n2ozrOSJBPq9v0flncJu5GyljuNpS2MwA
+   A==;
+X-CSE-ConnectionGUID: 192qBB+rQluACdSg+IWz1Q==
+X-CSE-MsgGUID: cxAIa6GZStaLtpkACuKegw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903498"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="60903452"
+   d="scan'208";a="60903498"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:27:17 -0700
-X-CSE-ConnectionGUID: wC4pRigPTk65sPn+FhCwlg==
-X-CSE-MsgGUID: 65CUt4VoQ8Opy1+rKR26tg==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:27:38 -0700
+X-CSE-ConnectionGUID: 7sr1bGkITqqOrRUhUWybYQ==
+X-CSE-MsgGUID: Oy2/bGKxRJGKw5AHGzSS+w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="165831425"
+   d="scan'208";a="165831445"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.54])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:26:55 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:27:16 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: nathan@kernel.org,
 	arnd@arndb.de,
@@ -131,9 +131,9 @@ Cc: linux-mm@kvack.org,
 	kasan-dev@googlegroups.com,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 06/18] x86: Reset tag for virtual to physical address conversions
-Date: Tue, 12 Aug 2025 15:23:42 +0200
-Message-ID: <01e62233dcc39aeb8d640eb3ee794f5da533f2a3.1755004923.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v4 07/18] mm: x86: Untag addresses in EXECMEM_ROX related pointer arithmetic
+Date: Tue, 12 Aug 2025 15:23:43 +0200
+Message-ID: <aa501a8133ee0f336dc9f905fdc3453d964109ed.1755004923.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
 References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
@@ -145,91 +145,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Any place where pointer arithmetic is used to convert a virtual address
-into a physical one can raise errors if the virtual address is tagged.
+ARCH_HAS_EXECMEM_ROX was re-enabled in x86 at Linux 6.14 release.
+Related code has multiple spots where page virtual addresses end up used
+as arguments in arithmetic operations. Combined with enabled tag-based
+KASAN it can result in pointers that don't point where they should or
+logical operations not giving expected results.
 
-Reset the pointer's tag by sign extending the tag bits in macros that do
-pointer arithmetic in address conversions. There will be no change in
-compiled code with KASAN disabled since the compiler will optimize the
-__tag_reset() out.
+vm_reset_perms() calculates range's start and end addresses using min()
+and max() functions. To do that it compares pointers but some are not
+tagged - addr variable is, start and end variables aren't.
+
+within() and within_range() can receive tagged addresses which get
+compared to untagged start and end variables.
+
+Reset tags in addresses used as function arguments in min(), max(),
+within() and within_range().
+
+execmem_cache_add() adds tagged pointers to a maple tree structure,
+which then are incorrectly compared when walking the tree. That results
+in different pointers being returned later and page permission violation
+errors panicking the kernel.
+
+Reset tag of the address range inserted into the maple tree inside
+execmem_cache_add().
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
 Changelog v4:
-- Simplify page_to_virt() by removing pointless casts.
-- Remove change in __is_canonical_address() because it's taken care of
-  in a later patch due to a LAM compatible definition of canonical.
+- Add patch to the series.
 
- arch/x86/include/asm/page.h    | 14 +++++++++++---
- arch/x86/include/asm/page_64.h |  2 +-
- arch/x86/mm/physaddr.c         |  1 +
- 3 files changed, 13 insertions(+), 4 deletions(-)
+ arch/x86/mm/pat/set_memory.c | 1 +
+ mm/execmem.c                 | 4 +++-
+ mm/vmalloc.c                 | 4 ++--
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
-index 9265f2fca99a..15c95e96fd15 100644
---- a/arch/x86/include/asm/page.h
-+++ b/arch/x86/include/asm/page.h
-@@ -7,6 +7,7 @@
- #ifdef __KERNEL__
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 8834c76f91c9..1f14a1297db0 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -222,6 +222,7 @@ static inline void cpa_inc_lp_preserved(int level) { }
+ static inline int
+ within(unsigned long addr, unsigned long start, unsigned long end)
+ {
++	addr = (unsigned long)kasan_reset_tag((void *)addr);
+ 	return addr >= start && addr < end;
+ }
  
- #include <asm/page_types.h>
-+#include <asm/kasan.h>
+diff --git a/mm/execmem.c b/mm/execmem.c
+index 0822305413ec..743fa4a8c069 100644
+--- a/mm/execmem.c
++++ b/mm/execmem.c
+@@ -191,6 +191,8 @@ static int execmem_cache_add_locked(void *ptr, size_t size, gfp_t gfp_mask)
+ 	unsigned long lower, upper;
+ 	void *area = NULL;
  
- #ifdef CONFIG_X86_64
- #include <asm/page_64.h>
-@@ -41,7 +42,7 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
- #define __pa(x)		__phys_addr((unsigned long)(x))
- #endif
- 
--#define __pa_nodebug(x)	__phys_addr_nodebug((unsigned long)(x))
-+#define __pa_nodebug(x)	__phys_addr_nodebug((unsigned long)(__tag_reset(x)))
- /* __pa_symbol should be used for C visible symbols.
-    This seems to be the official gcc blessed way to do such arithmetic. */
- /*
-@@ -65,9 +66,16 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
-  * virt_to_page(kaddr) returns a valid pointer if and only if
-  * virt_addr_valid(kaddr) returns true.
-  */
--#define virt_to_page(kaddr)	pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
++	addr = arch_kasan_reset_tag(addr);
 +
-+#ifdef CONFIG_KASAN_SW_TAGS
-+#define page_to_virt(x) ({							\
-+	void *__addr = __va(page_to_pfn((struct page *)x) << PAGE_SHIFT);	\
-+	__tag_set(__addr, page_kasan_tag(x));					\
-+})
-+#endif
-+#define virt_to_page(kaddr)	pfn_to_page(__pa((void *)__tag_reset(kaddr)) >> PAGE_SHIFT)
- extern bool __virt_addr_valid(unsigned long kaddr);
--#define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long) (kaddr))
-+#define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long)(__tag_reset(kaddr)))
+ 	lower = addr;
+ 	upper = addr + size - 1;
  
- static __always_inline void *pfn_to_kaddr(unsigned long pfn)
+@@ -216,7 +218,7 @@ static int execmem_cache_add(void *ptr, size_t size, gfp_t gfp_mask)
+ static bool within_range(struct execmem_range *range, struct ma_state *mas,
+ 			 size_t size)
  {
-diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
-index 015d23f3e01f..de68ac40dba2 100644
---- a/arch/x86/include/asm/page_64.h
-+++ b/arch/x86/include/asm/page_64.h
-@@ -33,7 +33,7 @@ static __always_inline unsigned long __phys_addr_nodebug(unsigned long x)
- extern unsigned long __phys_addr(unsigned long);
- extern unsigned long __phys_addr_symbol(unsigned long);
- #else
--#define __phys_addr(x)		__phys_addr_nodebug(x)
-+#define __phys_addr(x)		__phys_addr_nodebug(__tag_reset(x))
- #define __phys_addr_symbol(x) \
- 	((unsigned long)(x) - __START_KERNEL_map + phys_base)
- #endif
-diff --git a/arch/x86/mm/physaddr.c b/arch/x86/mm/physaddr.c
-index fc3f3d3e2ef2..7f2b11308245 100644
---- a/arch/x86/mm/physaddr.c
-+++ b/arch/x86/mm/physaddr.c
-@@ -14,6 +14,7 @@
- #ifdef CONFIG_DEBUG_VIRTUAL
- unsigned long __phys_addr(unsigned long x)
- {
-+	x = __tag_reset(x);
- 	unsigned long y = x - __START_KERNEL_map;
+-	unsigned long addr = mas->index;
++	unsigned long addr = arch_kasan_reset_tag(mas->index);
  
- 	/* use the carry flag to determine if x was < __START_KERNEL_map */
+ 	if (addr >= range->start && addr + size < range->end)
+ 		return true;
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 6dbcdceecae1..83d666e4837a 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -3328,8 +3328,8 @@ static void vm_reset_perms(struct vm_struct *area)
+ 			unsigned long page_size;
+ 
+ 			page_size = PAGE_SIZE << page_order;
+-			start = min(addr, start);
+-			end = max(addr + page_size, end);
++			start = min((unsigned long)arch_kasan_reset_tag(addr), start);
++			end = max((unsigned long)arch_kasan_reset_tag(addr) + page_size, end);
+ 			flush_dmap = 1;
+ 		}
+ 	}
 -- 
 2.50.1
 
