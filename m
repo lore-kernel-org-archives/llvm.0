@@ -1,317 +1,408 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36AB27E052
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDD92ECD1E;
+	Tue, 12 Aug 2025 14:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755005519; cv=none; b=KRdktys+X2lgF9BG/O/+f0h1wiRRElYrRUdzKMmGwJXdqJHIZnX1Za4AIJys7tycM3dWfwgeTkUy5UlrS3sIt0+Yrvbc8gvnE+lUxAazKCpEhKlgV3eRzbILiV1R4lZ/OMOJS372wTZfUEQAXbqCh37OWJ6sFlTTW0g7kxesYtk=
+	t=1755010076; cv=none; b=DCQwk7k9M+hZHt9w84UJ4CYlPIDfLtGP/Znk9Osl0soZUhrUfHK74eD6KrqTZsCF1bvnaZXfWvlFE5zOtmLzyh1CZtNq1y5+BxX8qAlcOcbzH+glw0BFPUi6Cetiiq8m+loGz/lrrLy7tNmkVlxDcMQLX4y00qAppa8oEq8ST2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755005519; c=relaxed/simple;
-	bh=Vl29c6D1eR0f0U4vY2WrG9uFQFyXVuYuiDzYnN2VaZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IhxLeKCdH/Y3xTFkWQRsHx8/VGVYbmQxtXUYexvtzLm3HjX4si7wNDZw/LU1sC0JWYFsRk19NZhkeN9Dyazm0Hsc9gsQMsR5hMYpOD78S6Mk3nSj4bPX4wR02daBbgUqwfT10QD1c6tMDPevUCKRc9L0xpfWPSqe2BLdYzzA8SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D29jXwEq; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1755010076; c=relaxed/simple;
+	bh=+CPu5U+JXff4AfpVYRE/lxH7V7HwFVeYgEko8LGWaqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pW0y4NnoAmN6Qja0F19rHcon31TjpE8omtZgXUI2Sy6cejvJ6yIgKxj3T0olJPxmwTdyM04LRWxVyvRrjgSZAuNgctqOdXTJ6QcmTWMQxRQR+9gCxgad04IeiSTgsuBg6XLR5bgOos7NCvYLS6cbQlG0ifhThC5vTLa9BIV+Xd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZYA1qGP+; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D29jXwEq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZYA1qGP+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755005518; x=1786541518;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Vl29c6D1eR0f0U4vY2WrG9uFQFyXVuYuiDzYnN2VaZk=;
-  b=D29jXwEqo6GchciQsuUM3zktBQ8LY4AtXqFvm40Agf6cYPItfvwsOK4/
-   iNZ6UG0/L4485/0UKNv0dlQ1oFGMM5HPXcSz+kv6T5nyLJ2sn2rk9JRS+
-   tnczzDAzvmtklvJKk2JspdAq4Rjo25mqWN7wBx9MQUCsyCxI9LQ6ICwT6
-   tyWZW3n79xrywxCs3JbvaVGKiy+0McrKEMXKCLVfB6/ZROXu5dpels5FU
-   fQzcGhT0UxUMk/8p8hEoZUzTTu0l2ehjDZZBx5f9eWTJdZiIqofb+q3Xh
-   4WugayuiRwOdK54j4shDdjIvrudTn5PbF6IZx9kEUBwkjeQoUKkvhJbI0
-   g==;
-X-CSE-ConnectionGUID: WrlS6HnKSpa98Obn/bmIKA==
-X-CSE-MsgGUID: KImhXucYSRqUyWpAcWx0HA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60904204"
+  t=1755010075; x=1786546075;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+CPu5U+JXff4AfpVYRE/lxH7V7HwFVeYgEko8LGWaqQ=;
+  b=ZYA1qGP+K3zLwp6q8hKI+LtNuKZDgvCjEfICYHrAXgrsJ/2SCpGISqiG
+   VcTXTStcc0r6U9XX3eEJEqst4HtbIObDTqQDrCgZBpF4zzht1dkp8/UKX
+   rUfIwaI+H8/cPM8wY0xLgG2ghznB5VyIxGT4yAn2EjVDSrcFJpjPYNp3n
+   V5ZIznSfMmySbHntlqVBh41245Wzd1ceaumQoa+e8BURf2HNrj84Nr34M
+   jqPdV+G4+s7nSPua5mSrxn+imhvH1silPBoJ8lx6dP2HvnfeJ618MPiGk
+   uszkPFhOvb/jP3hnAxjUWKjBQqUhSLW+dcHmGnvx2NaXno+8t8OE3AxGB
+   A==;
+X-CSE-ConnectionGUID: bP1JEkexTEKtfJ2lGOkWCA==
+X-CSE-MsgGUID: VHUkDdvcTmSZtkk6pHt/iw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="56496939"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="60904204"
+   d="scan'208";a="56496939"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:31:57 -0700
-X-CSE-ConnectionGUID: uGwnKofIQG2MO3tLlIilYQ==
-X-CSE-MsgGUID: HOOQUTfdSZuSH6R+h2pTMg==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 07:47:54 -0700
+X-CSE-ConnectionGUID: MnD2gOO3SUuU0T0NQMJEdQ==
+X-CSE-MsgGUID: SIaAoEFUTkOryu6ulAH6KA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="165832158"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.54])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:31:31 -0700
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: nathan@kernel.org,
-	arnd@arndb.de,
-	broonie@kernel.org,
-	Liam.Howlett@oracle.com,
-	urezki@gmail.com,
-	will@kernel.org,
-	kaleshsingh@google.com,
-	rppt@kernel.org,
-	leitao@debian.org,
-	coxu@redhat.com,
-	surenb@google.com,
-	akpm@linux-foundation.org,
-	luto@kernel.org,
-	jpoimboe@kernel.org,
-	changyuanl@google.com,
-	hpa@zytor.com,
-	dvyukov@google.com,
-	kas@kernel.org,
-	corbet@lwn.net,
-	vincenzo.frascino@arm.com,
-	smostafa@google.com,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	andreyknvl@gmail.com,
-	alexander.shishkin@linux.intel.com,
-	thiago.bauermann@linaro.org,
-	catalin.marinas@arm.com,
-	ryabinin.a.a@gmail.com,
-	jan.kiszka@siemens.com,
-	jbohac@suse.cz,
-	dan.j.williams@intel.com,
-	joel.granados@kernel.org,
-	baohua@kernel.org,
-	kevin.brodsky@arm.com,
-	nicolas.schier@linux.dev,
-	pcc@google.com,
-	andriy.shevchenko@linux.intel.com,
-	wei.liu@kernel.org,
-	bp@alien8.de,
-	ada.coupriediaz@arm.com,
-	xin@zytor.com,
-	pankaj.gupta@amd.com,
-	vbabka@suse.cz,
-	glider@google.com,
-	jgross@suse.com,
-	kees@kernel.org,
-	jhubbard@nvidia.com,
-	joey.gouly@arm.com,
-	ardb@kernel.org,
-	thuth@redhat.com,
-	pasha.tatashin@soleen.com,
-	kristina.martsenko@arm.com,
-	bigeasy@linutronix.de,
-	maciej.wieczor-retman@intel.com,
-	lorenzo.stoakes@oracle.com,
-	jason.andryuk@amd.com,
-	david@redhat.com,
-	graf@amazon.com,
-	wangkefeng.wang@huawei.com,
-	ziy@nvidia.com,
-	mark.rutland@arm.com,
-	dave.hansen@linux.intel.com,
-	samuel.holland@sifive.com,
-	kbingham@kernel.org,
-	trintaeoitogc@gmail.com,
-	scott@os.amperecomputing.com,
-	justinstitt@google.com,
-	kuan-ying.lee@canonical.com,
-	maz@kernel.org,
-	tglx@linutronix.de,
-	samitolvanen@google.com,
-	mhocko@suse.com,
-	nunodasneves@linux.microsoft.com,
-	brgerst@gmail.com,
-	willy@infradead.org,
-	ubizjak@gmail.com,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	sohil.mehta@intel.com
-Cc: linux-mm@kvack.org,
-	linux-kbuild@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org,
-	llvm@lists.linux.dev,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 18/18] x86: Make software tag-based kasan available
-Date: Tue, 12 Aug 2025 15:23:54 +0200
-Message-ID: <414e258b828b4710966c3864aebc7a9bc598eb4f.1755004923.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
-References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+   d="scan'208";a="165849626"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 12 Aug 2025 07:47:47 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ulqHw-0006u3-0B;
+	Tue, 12 Aug 2025 14:47:44 +0000
+Date: Tue, 12 Aug 2025 22:47:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Balbir Singh <balbirs@nvidia.com>, dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Balbir Singh <balbirs@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+	Byungchul Park <byungchul@sk.com>,
+	Gregory Price <gourry@gourry.net>,
+	Ying Huang <ying.huang@linux.alibaba.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+	Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Ralph Campbell <rcampbell@nvidia.com>,
+	Mika =?iso-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Francois Dugast <francois.dugast@intel.com>
+Subject: Re: [v3 02/11] mm/thp: zone_device awareness in THP handling code
+Message-ID: <202508122212.qjsfr5Wf-lkp@intel.com>
+References: <20250812024036.690064-3-balbirs@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250812024036.690064-3-balbirs@nvidia.com>
 
-Make CONFIG_KASAN_SW_TAGS available for x86 machines if they have
-ADDRESS_MASKING enabled (LAM) as that works similarly to Top-Byte Ignore
-(TBI) that allows the software tag-based mode on arm64 platform.
+Hi Balbir,
 
-Set scale macro based on KASAN mode: in software tag-based mode 16 bytes
-of memory map to one shadow byte and 8 in generic mode.
+kernel test robot noticed the following build warnings:
 
-Disable CONFIG_KASAN_INLINE and CONFIG_KASAN_STACK when
-CONFIG_KASAN_SW_TAGS is enabled on x86 until the appropriate compiler
-support is available.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v4:
-- Add x86 specific kasan_mem_to_shadow().
-- Revert x86 to the older unsigned KASAN_SHADOW_OFFSET. Do the same to
-  KASAN_SHADOW_START/END.
-- Modify scripts/gdb/linux/kasan.py to keep x86 using unsigned offset.
-- Disable inline and stack support when software tags are enabled on
-  x86.
+url:    https://github.com/intel-lab-lkp/linux/commits/Balbir-Singh/mm-zone_device-support-large-zone-device-private-folios/20250812-105145
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250812024036.690064-3-balbirs%40nvidia.com
+patch subject: [v3 02/11] mm/thp: zone_device awareness in THP handling code
+config: x86_64-randconfig-001-20250812 (https://download.01.org/0day-ci/archive/20250812/202508122212.qjsfr5Wf-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250812/202508122212.qjsfr5Wf-lkp@intel.com/reproduce)
 
-Changelog v3:
-- Remove runtime_const from previous patch and merge the rest here.
-- Move scale shift definition back to header file.
-- Add new kasan offset for software tag based mode.
-- Fix patch message typo 32 -> 16, and 16 -> 8.
-- Update lib/Kconfig.kasan with x86 now having software tag-based
-  support.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508122212.qjsfr5Wf-lkp@intel.com/
 
-Changelog v2:
-- Remove KASAN dense code.
+All warnings (new ones prefixed by >>):
 
- Documentation/arch/x86/x86_64/mm.rst | 6 ++++--
- arch/x86/Kconfig                     | 4 +++-
- arch/x86/boot/compressed/misc.h      | 1 +
- arch/x86/include/asm/kasan.h         | 1 +
- arch/x86/kernel/setup.c              | 2 ++
- lib/Kconfig.kasan                    | 3 ++-
- scripts/gdb/linux/kasan.py           | 4 ++--
- 7 files changed, 15 insertions(+), 6 deletions(-)
+>> mm/migrate_device.c:154:19: warning: variable 'new_folio' set but not used [-Wunused-but-set-variable]
+     154 |                                 struct folio *new_folio;
+         |                                               ^
+   1 warning generated.
 
-diff --git a/Documentation/arch/x86/x86_64/mm.rst b/Documentation/arch/x86/x86_64/mm.rst
-index a6cf05d51bd8..ccbdbb4cda36 100644
---- a/Documentation/arch/x86/x86_64/mm.rst
-+++ b/Documentation/arch/x86/x86_64/mm.rst
-@@ -60,7 +60,8 @@ Complete virtual memory map with 4-level page tables
-    ffffe90000000000 |  -23    TB | ffffe9ffffffffff |    1 TB | ... unused hole
-    ffffea0000000000 |  -22    TB | ffffeaffffffffff |    1 TB | virtual memory map (vmemmap_base)
-    ffffeb0000000000 |  -21    TB | ffffebffffffffff |    1 TB | ... unused hole
--   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN shadow memory
-+   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN shadow memory (generic mode)
-+   fffff40000000000 |   -8    TB | fffffbffffffffff |    8 TB | KASAN shadow memory (software tag-based mode)
-   __________________|____________|__________________|_________|____________________________________________________________
-                                                               |
-                                                               | Identical layout to the 56-bit one from here on:
-@@ -130,7 +131,8 @@ Complete virtual memory map with 5-level page tables
-    ffd2000000000000 |  -11.5  PB | ffd3ffffffffffff |  0.5 PB | ... unused hole
-    ffd4000000000000 |  -11    PB | ffd5ffffffffffff |  0.5 PB | virtual memory map (vmemmap_base)
-    ffd6000000000000 |  -10.5  PB | ffdeffffffffffff | 2.25 PB | ... unused hole
--   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN shadow memory
-+   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN shadow memory (generic mode)
-+   ffeffc0000000000 |   -6    PB | fffffbffffffffff |    4 PB | KASAN shadow memory (software tag-based mode)
-   __________________|____________|__________________|_________|____________________________________________________________
-                                                               |
-                                                               | Identical layout to the 47-bit one from here on:
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b8df57ac0f28..f44fec1190b6 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -69,6 +69,7 @@ config X86
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_CONFIGURES_CPU_MITIGATIONS
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-+	select ARCH_DISABLE_KASAN_INLINE	if X86_64 && KASAN_SW_TAGS
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if X86_64 && HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_MEMORY_HOTPLUG if X86_64
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE if MEMORY_HOTPLUG
-@@ -199,6 +200,7 @@ config X86
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
-+	select HAVE_ARCH_KASAN_SW_TAGS		if ADDRESS_MASKING
- 	select HAVE_ARCH_KFENCE
- 	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
-@@ -403,7 +405,7 @@ config AUDIT_ARCH
- 
- config KASAN_SHADOW_OFFSET
- 	hex
--	depends on KASAN
-+	default 0xeffffc0000000000 if KASAN_SW_TAGS
- 	default 0xdffffc0000000000
- 
- config HAVE_INTEL_TXT
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index db1048621ea2..ded92b439ada 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -13,6 +13,7 @@
- #undef CONFIG_PARAVIRT_SPINLOCKS
- #undef CONFIG_KASAN
- #undef CONFIG_KASAN_GENERIC
-+#undef CONFIG_KASAN_SW_TAGS
- 
- #define __NO_FORTIFY
- 
-diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-index f3e34a9754d2..385f4e9daab3 100644
---- a/arch/x86/include/asm/kasan.h
-+++ b/arch/x86/include/asm/kasan.h
-@@ -7,6 +7,7 @@
- #include <linux/types.h>
- #define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
- #ifdef CONFIG_KASAN_SW_TAGS
-+#define KASAN_SHADOW_SCALE_SHIFT 4
- 
- /*
-  * LLVM ABI for reporting tag mismatches in inline KASAN mode.
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 1b2edd07a3e1..5b819f84f6db 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1207,6 +1207,8 @@ void __init setup_arch(char **cmdline_p)
- 
- 	kasan_init();
- 
-+	kasan_init_sw_tags();
-+
- 	/*
- 	 * Sync back kernel address range.
- 	 *
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index f82889a830fa..9ddbc6aeb5d5 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -100,7 +100,8 @@ config KASAN_SW_TAGS
- 
- 	  Requires GCC 11+ or Clang.
- 
--	  Supported only on arm64 CPUs and relies on Top Byte Ignore.
-+	  Supported on arm64 CPUs that support Top Byte Ignore and on x86 CPUs
-+	  that support Linear Address Masking.
- 
- 	  Consumes about 1/16th of available memory at kernel start and
- 	  add an overhead of ~20% for dynamic allocations.
-diff --git a/scripts/gdb/linux/kasan.py b/scripts/gdb/linux/kasan.py
-index fca39968d308..4b86202b155f 100644
---- a/scripts/gdb/linux/kasan.py
-+++ b/scripts/gdb/linux/kasan.py
-@@ -7,7 +7,7 @@
- #
- 
- import gdb
--from linux import constants, mm
-+from linux import constants, utils, mm
- from ctypes import c_int64 as s64
- 
- def help():
-@@ -40,7 +40,7 @@ class KasanMemToShadow(gdb.Command):
-         else:
-             help()
-     def kasan_mem_to_shadow(self, addr):
--        if constants.CONFIG_KASAN_SW_TAGS:
-+        if constants.CONFIG_KASAN_SW_TAGS and not utils.is_target_arch('x86'):
-             addr = s64(addr)
-         return (addr >> self.p_ops.KASAN_SHADOW_SCALE_SHIFT) + self.p_ops.KASAN_SHADOW_OFFSET
- 
+
+vim +/new_folio +154 mm/migrate_device.c
+
+    56	
+    57	static int migrate_vma_collect_pmd(pmd_t *pmdp,
+    58					   unsigned long start,
+    59					   unsigned long end,
+    60					   struct mm_walk *walk)
+    61	{
+    62		struct migrate_vma *migrate = walk->private;
+    63		struct folio *fault_folio = migrate->fault_page ?
+    64			page_folio(migrate->fault_page) : NULL;
+    65		struct vm_area_struct *vma = walk->vma;
+    66		struct mm_struct *mm = vma->vm_mm;
+    67		unsigned long addr = start, unmapped = 0;
+    68		spinlock_t *ptl;
+    69		pte_t *ptep;
+    70	
+    71	again:
+    72		if (pmd_none(*pmdp))
+    73			return migrate_vma_collect_hole(start, end, -1, walk);
+    74	
+    75		if (pmd_trans_huge(*pmdp)) {
+    76			struct folio *folio;
+    77	
+    78			ptl = pmd_lock(mm, pmdp);
+    79			if (unlikely(!pmd_trans_huge(*pmdp))) {
+    80				spin_unlock(ptl);
+    81				goto again;
+    82			}
+    83	
+    84			folio = pmd_folio(*pmdp);
+    85			if (is_huge_zero_folio(folio)) {
+    86				spin_unlock(ptl);
+    87				split_huge_pmd(vma, pmdp, addr);
+    88			} else {
+    89				int ret;
+    90	
+    91				folio_get(folio);
+    92				spin_unlock(ptl);
+    93				/* FIXME: we don't expect THP for fault_folio */
+    94				if (WARN_ON_ONCE(fault_folio == folio))
+    95					return migrate_vma_collect_skip(start, end,
+    96									walk);
+    97				if (unlikely(!folio_trylock(folio)))
+    98					return migrate_vma_collect_skip(start, end,
+    99									walk);
+   100				ret = split_folio(folio);
+   101				if (fault_folio != folio)
+   102					folio_unlock(folio);
+   103				folio_put(folio);
+   104				if (ret)
+   105					return migrate_vma_collect_skip(start, end,
+   106									walk);
+   107			}
+   108		}
+   109	
+   110		ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
+   111		if (!ptep)
+   112			goto again;
+   113		arch_enter_lazy_mmu_mode();
+   114	
+   115		for (; addr < end; addr += PAGE_SIZE, ptep++) {
+   116			struct dev_pagemap *pgmap;
+   117			unsigned long mpfn = 0, pfn;
+   118			struct folio *folio;
+   119			struct page *page;
+   120			swp_entry_t entry;
+   121			pte_t pte;
+   122	
+   123			pte = ptep_get(ptep);
+   124	
+   125			if (pte_none(pte)) {
+   126				if (vma_is_anonymous(vma)) {
+   127					mpfn = MIGRATE_PFN_MIGRATE;
+   128					migrate->cpages++;
+   129				}
+   130				goto next;
+   131			}
+   132	
+   133			if (!pte_present(pte)) {
+   134				/*
+   135				 * Only care about unaddressable device page special
+   136				 * page table entry. Other special swap entries are not
+   137				 * migratable, and we ignore regular swapped page.
+   138				 */
+   139				struct folio *folio;
+   140	
+   141				entry = pte_to_swp_entry(pte);
+   142				if (!is_device_private_entry(entry))
+   143					goto next;
+   144	
+   145				page = pfn_swap_entry_to_page(entry);
+   146				pgmap = page_pgmap(page);
+   147				if (!(migrate->flags &
+   148					MIGRATE_VMA_SELECT_DEVICE_PRIVATE) ||
+   149				    pgmap->owner != migrate->pgmap_owner)
+   150					goto next;
+   151	
+   152				folio = page_folio(page);
+   153				if (folio_test_large(folio)) {
+ > 154					struct folio *new_folio;
+   155					struct folio *new_fault_folio = NULL;
+   156	
+   157					/*
+   158					 * The reason for finding pmd present with a
+   159					 * device private pte and a large folio for the
+   160					 * pte is partial unmaps. Split the folio now
+   161					 * for the migration to be handled correctly
+   162					 */
+   163					pte_unmap_unlock(ptep, ptl);
+   164	
+   165					folio_get(folio);
+   166					if (folio != fault_folio)
+   167						folio_lock(folio);
+   168					if (split_folio(folio)) {
+   169						if (folio != fault_folio)
+   170							folio_unlock(folio);
+   171						ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
+   172						goto next;
+   173					}
+   174	
+   175					new_folio = page_folio(page);
+   176					if (fault_folio)
+   177						new_fault_folio = page_folio(migrate->fault_page);
+   178	
+   179					/*
+   180					 * Ensure the lock is held on the correct
+   181					 * folio after the split
+   182					 */
+   183					if (!new_fault_folio) {
+   184						folio_unlock(folio);
+   185						folio_put(folio);
+   186					} else if (folio != new_fault_folio) {
+   187						folio_get(new_fault_folio);
+   188						folio_lock(new_fault_folio);
+   189						folio_unlock(folio);
+   190						folio_put(folio);
+   191					}
+   192	
+   193					addr = start;
+   194					goto again;
+   195				}
+   196	
+   197				mpfn = migrate_pfn(page_to_pfn(page)) |
+   198						MIGRATE_PFN_MIGRATE;
+   199				if (is_writable_device_private_entry(entry))
+   200					mpfn |= MIGRATE_PFN_WRITE;
+   201			} else {
+   202				pfn = pte_pfn(pte);
+   203				if (is_zero_pfn(pfn) &&
+   204				    (migrate->flags & MIGRATE_VMA_SELECT_SYSTEM)) {
+   205					mpfn = MIGRATE_PFN_MIGRATE;
+   206					migrate->cpages++;
+   207					goto next;
+   208				}
+   209				page = vm_normal_page(migrate->vma, addr, pte);
+   210				if (page && !is_zone_device_page(page) &&
+   211				    !(migrate->flags & MIGRATE_VMA_SELECT_SYSTEM)) {
+   212					goto next;
+   213				} else if (page && is_device_coherent_page(page)) {
+   214					pgmap = page_pgmap(page);
+   215	
+   216					if (!(migrate->flags &
+   217						MIGRATE_VMA_SELECT_DEVICE_COHERENT) ||
+   218						pgmap->owner != migrate->pgmap_owner)
+   219						goto next;
+   220				}
+   221				mpfn = migrate_pfn(pfn) | MIGRATE_PFN_MIGRATE;
+   222				mpfn |= pte_write(pte) ? MIGRATE_PFN_WRITE : 0;
+   223			}
+   224	
+   225			/* FIXME support THP */
+   226			if (!page || !page->mapping || PageTransCompound(page)) {
+   227				mpfn = 0;
+   228				goto next;
+   229			}
+   230	
+   231			/*
+   232			 * By getting a reference on the folio we pin it and that blocks
+   233			 * any kind of migration. Side effect is that it "freezes" the
+   234			 * pte.
+   235			 *
+   236			 * We drop this reference after isolating the folio from the lru
+   237			 * for non device folio (device folio are not on the lru and thus
+   238			 * can't be dropped from it).
+   239			 */
+   240			folio = page_folio(page);
+   241			folio_get(folio);
+   242	
+   243			/*
+   244			 * We rely on folio_trylock() to avoid deadlock between
+   245			 * concurrent migrations where each is waiting on the others
+   246			 * folio lock. If we can't immediately lock the folio we fail this
+   247			 * migration as it is only best effort anyway.
+   248			 *
+   249			 * If we can lock the folio it's safe to set up a migration entry
+   250			 * now. In the common case where the folio is mapped once in a
+   251			 * single process setting up the migration entry now is an
+   252			 * optimisation to avoid walking the rmap later with
+   253			 * try_to_migrate().
+   254			 */
+   255			if (fault_folio == folio || folio_trylock(folio)) {
+   256				bool anon_exclusive;
+   257				pte_t swp_pte;
+   258	
+   259				flush_cache_page(vma, addr, pte_pfn(pte));
+   260				anon_exclusive = folio_test_anon(folio) &&
+   261						  PageAnonExclusive(page);
+   262				if (anon_exclusive) {
+   263					pte = ptep_clear_flush(vma, addr, ptep);
+   264	
+   265					if (folio_try_share_anon_rmap_pte(folio, page)) {
+   266						set_pte_at(mm, addr, ptep, pte);
+   267						if (fault_folio != folio)
+   268							folio_unlock(folio);
+   269						folio_put(folio);
+   270						mpfn = 0;
+   271						goto next;
+   272					}
+   273				} else {
+   274					pte = ptep_get_and_clear(mm, addr, ptep);
+   275				}
+   276	
+   277				migrate->cpages++;
+   278	
+   279				/* Set the dirty flag on the folio now the pte is gone. */
+   280				if (pte_dirty(pte))
+   281					folio_mark_dirty(folio);
+   282	
+   283				/* Setup special migration page table entry */
+   284				if (mpfn & MIGRATE_PFN_WRITE)
+   285					entry = make_writable_migration_entry(
+   286								page_to_pfn(page));
+   287				else if (anon_exclusive)
+   288					entry = make_readable_exclusive_migration_entry(
+   289								page_to_pfn(page));
+   290				else
+   291					entry = make_readable_migration_entry(
+   292								page_to_pfn(page));
+   293				if (pte_present(pte)) {
+   294					if (pte_young(pte))
+   295						entry = make_migration_entry_young(entry);
+   296					if (pte_dirty(pte))
+   297						entry = make_migration_entry_dirty(entry);
+   298				}
+   299				swp_pte = swp_entry_to_pte(entry);
+   300				if (pte_present(pte)) {
+   301					if (pte_soft_dirty(pte))
+   302						swp_pte = pte_swp_mksoft_dirty(swp_pte);
+   303					if (pte_uffd_wp(pte))
+   304						swp_pte = pte_swp_mkuffd_wp(swp_pte);
+   305				} else {
+   306					if (pte_swp_soft_dirty(pte))
+   307						swp_pte = pte_swp_mksoft_dirty(swp_pte);
+   308					if (pte_swp_uffd_wp(pte))
+   309						swp_pte = pte_swp_mkuffd_wp(swp_pte);
+   310				}
+   311				set_pte_at(mm, addr, ptep, swp_pte);
+   312	
+   313				/*
+   314				 * This is like regular unmap: we remove the rmap and
+   315				 * drop the folio refcount. The folio won't be freed, as
+   316				 * we took a reference just above.
+   317				 */
+   318				folio_remove_rmap_pte(folio, page, vma);
+   319				folio_put(folio);
+   320	
+   321				if (pte_present(pte))
+   322					unmapped++;
+   323			} else {
+   324				folio_put(folio);
+   325				mpfn = 0;
+   326			}
+   327	
+   328	next:
+   329			migrate->dst[migrate->npages] = 0;
+   330			migrate->src[migrate->npages++] = mpfn;
+   331		}
+   332	
+   333		/* Only flush the TLB if we actually modified any entries */
+   334		if (unmapped)
+   335			flush_tlb_range(walk->vma, start, end);
+   336	
+   337		arch_leave_lazy_mmu_mode();
+   338		pte_unmap_unlock(ptep - 1, ptl);
+   339	
+   340		return 0;
+   341	}
+   342	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
