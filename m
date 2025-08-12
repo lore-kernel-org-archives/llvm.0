@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAC6281538
-	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF4628314A
+	for <llvm@lists.linux.dev>; Tue, 12 Aug 2025 13:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755005260; cv=none; b=l85sSxlzjfMdjaH0k+kUT30T9Z3bWtb/Clec6N48HqeWUkPlNTSzmB8j2B55IesG07jl4A3TCxem3j59JE9kbfm9ioP/B6y7WHNHAGpxZ48MLFyPQtHva2vqZpx49S2viv1v98bnOHqd8tnArlX6pJF0v3cmRdkcSd+SEs5UpUU=
+	t=1755005283; cv=none; b=fCuzJlNaLqQQwL8r5XK7EjrWdXxS+UzdVJoyezI/GGfvRx1fnvqhnsYCyadNymTPaXaNeMkYq5QAwZu27xI30//TDa1gxn9I7/cv4RGy6esNip24LAEqPAj2QbPlVfthYJQo4H8HvaQ+gO1tMJshbYsuXQV3bgwemVvXmwOc/Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755005260; c=relaxed/simple;
-	bh=WytGKsbpVx+YjGfDckn4ztihfy/XnHxiwtMc2ueYMYI=;
+	s=arc-20240116; t=1755005283; c=relaxed/simple;
+	bh=lO1wQ1uF80MsG8cgULvpACCbJsuEPvTrA5VlE9nVfaY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h+etjhFto/14X5RNk7wkoOglCNmIIK9Geh4M8PjZ/cxxgGHiEuVGBG1Ynabu6o6nsFiq/oBzzshsMFKF1kn8ZTpxIb9MmZ57CGYe6GaY/LRrw6nViwtjzoBQ84HCXsHxtnjNDccL3xmUrnRTA6VrwRfEsnaXkO8KKmvJrwLnGO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y9IZV7OQ; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=ouOILFbmvxom/LgpZ58CrdlpVxAregWuy+Gl+iJX5QIdg6iqFKaOuzoz0S8AC7mnBY8XXHEyKloHuwSTT/RAyR5bzeS0kFO15Q+iunsz1eSJcxHymILUkDeSFk6Sd0Qak2woC8xH1OYyTjEMCB2iLVWyWlVwxgX9FIUHI8LHvaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NSpMBbJQ; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y9IZV7OQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NSpMBbJQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755005259; x=1786541259;
+  t=1755005283; x=1786541283;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WytGKsbpVx+YjGfDckn4ztihfy/XnHxiwtMc2ueYMYI=;
-  b=Y9IZV7OQfryCWiouygBY8Noa/Iz+aeLwHUoWkowIJcwtfcH4c5lmJ/Bw
-   CSC14VzQ5KB9AmA2El6pKfBnDgC2I33UHrtXzsOd9oChkZAq8HLOd5Ro6
-   NQoFlz4eH9Rk8GpORFk7sBfllgfZUpGSm4kQiXJW4Dt6aOYFTS5vjMrb1
-   yCwTBLnC4lOqM/pnlysZe1PY2CxLQ6rUq5x366iWkSIya773wX15WurA0
-   ebM9bIy7EEoaNlXgpVuBi4kU/stx4yq0a5sWE9kW+VxvurIeGm80F0faP
-   NqMEaqyIDqdzdjmPPo2j8my5n2ozrOSJBPq9v0flncJu5GyljuNpS2MwA
-   A==;
-X-CSE-ConnectionGUID: 192qBB+rQluACdSg+IWz1Q==
-X-CSE-MsgGUID: cxAIa6GZStaLtpkACuKegw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903498"
+  bh=lO1wQ1uF80MsG8cgULvpACCbJsuEPvTrA5VlE9nVfaY=;
+  b=NSpMBbJQSm+iQhzMqnRLeZpu0i4XLbOJ52v1bG5IfcNjtGOW5al8LZLn
+   fr+5fvA1ugliqACNifcPer6flIVd7Q9AoD3cysY7lpCW5wWQlv9BX7l02
+   xkeJpGJl30o6ROwnGYfFq74R5MHB1LwYHxwekoosGS/ta5AALXAFU1LlQ
+   +qsEkIAAQZzhQSFVaYF3Bdor/vHNDov/NFPNed4Du3ORe+oo91pGHvY2c
+   GRR59PWh9lt/gfVcVthwxGJQFjDU/5+2H7ivaXlev3I1OF5zwY4CrbJfT
+   63C+J8paJUgBFidPyvaIzi2pi4vtAll+WExOOTTBxdnsvhOlxsmE6t77j
+   g==;
+X-CSE-ConnectionGUID: 1DbhF+J0TEGw2aSdAZ8INA==
+X-CSE-MsgGUID: xMAP4sQUR+GTUGHGdVfT1A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="60903560"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="60903498"
+   d="scan'208";a="60903560"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:27:38 -0700
-X-CSE-ConnectionGUID: 7sr1bGkITqqOrRUhUWybYQ==
-X-CSE-MsgGUID: Oy2/bGKxRJGKw5AHGzSS+w==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:28:02 -0700
+X-CSE-ConnectionGUID: 63q+EOftQWWQMSotLrPagg==
+X-CSE-MsgGUID: fl7/gRLpTkieCVLNXAAdgQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="165831445"
+   d="scan'208";a="165831460"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.54])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:27:16 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2025 06:27:38 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: nathan@kernel.org,
 	arnd@arndb.de,
@@ -131,9 +131,9 @@ Cc: linux-mm@kvack.org,
 	kasan-dev@googlegroups.com,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 07/18] mm: x86: Untag addresses in EXECMEM_ROX related pointer arithmetic
-Date: Tue, 12 Aug 2025 15:23:43 +0200
-Message-ID: <aa501a8133ee0f336dc9f905fdc3453d964109ed.1755004923.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v4 08/18] x86: Physical address comparisons in fill_p*d/pte
+Date: Tue, 12 Aug 2025 15:23:44 +0200
+Message-ID: <ef6496efec1b978c0f479a5cc62ff92edce82912.1755004923.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
 References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
@@ -145,89 +145,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ARCH_HAS_EXECMEM_ROX was re-enabled in x86 at Linux 6.14 release.
-Related code has multiple spots where page virtual addresses end up used
-as arguments in arithmetic operations. Combined with enabled tag-based
-KASAN it can result in pointers that don't point where they should or
-logical operations not giving expected results.
+Calculating page offset returns a pointer without a tag. When comparing
+the calculated offset to a tagged page pointer an error is raised
+because they are not equal.
 
-vm_reset_perms() calculates range's start and end addresses using min()
-and max() functions. To do that it compares pointers but some are not
-tagged - addr variable is, start and end variables aren't.
-
-within() and within_range() can receive tagged addresses which get
-compared to untagged start and end variables.
-
-Reset tags in addresses used as function arguments in min(), max(),
-within() and within_range().
-
-execmem_cache_add() adds tagged pointers to a maple tree structure,
-which then are incorrectly compared when walking the tree. That results
-in different pointers being returned later and page permission violation
-errors panicking the kernel.
-
-Reset tag of the address range inserted into the maple tree inside
-execmem_cache_add().
+Change pointer comparisons to physical address comparisons as to avoid
+issues with tagged pointers that pointer arithmetic would create. Open
+code pte_offset_kernel(), pmd_offset(), pud_offset() and p4d_offset().
+Because one parameter is always zero and the rest of the function
+insides are enclosed inside __va(), removing that layer lowers the
+complexity of final assembly.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
-Changelog v4:
-- Add patch to the series.
+Changelog v2:
+- Open code *_offset() to avoid it's internal __va().
 
- arch/x86/mm/pat/set_memory.c | 1 +
- mm/execmem.c                 | 4 +++-
- mm/vmalloc.c                 | 4 ++--
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ arch/x86/mm/init_64.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 8834c76f91c9..1f14a1297db0 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -222,6 +222,7 @@ static inline void cpa_inc_lp_preserved(int level) { }
- static inline int
- within(unsigned long addr, unsigned long start, unsigned long end)
- {
-+	addr = (unsigned long)kasan_reset_tag((void *)addr);
- 	return addr >= start && addr < end;
- }
- 
-diff --git a/mm/execmem.c b/mm/execmem.c
-index 0822305413ec..743fa4a8c069 100644
---- a/mm/execmem.c
-+++ b/mm/execmem.c
-@@ -191,6 +191,8 @@ static int execmem_cache_add_locked(void *ptr, size_t size, gfp_t gfp_mask)
- 	unsigned long lower, upper;
- 	void *area = NULL;
- 
-+	addr = arch_kasan_reset_tag(addr);
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 76e33bd7c556..51a247e258b1 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -251,7 +251,10 @@ static p4d_t *fill_p4d(pgd_t *pgd, unsigned long vaddr)
+ 	if (pgd_none(*pgd)) {
+ 		p4d_t *p4d = (p4d_t *)spp_getpage();
+ 		pgd_populate(&init_mm, pgd, p4d);
+-		if (p4d != p4d_offset(pgd, 0))
 +
- 	lower = addr;
- 	upper = addr + size - 1;
- 
-@@ -216,7 +218,7 @@ static int execmem_cache_add(void *ptr, size_t size, gfp_t gfp_mask)
- static bool within_range(struct execmem_range *range, struct ma_state *mas,
- 			 size_t size)
- {
--	unsigned long addr = mas->index;
-+	unsigned long addr = arch_kasan_reset_tag(mas->index);
- 
- 	if (addr >= range->start && addr + size < range->end)
- 		return true;
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 6dbcdceecae1..83d666e4837a 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -3328,8 +3328,8 @@ static void vm_reset_perms(struct vm_struct *area)
- 			unsigned long page_size;
- 
- 			page_size = PAGE_SIZE << page_order;
--			start = min(addr, start);
--			end = max(addr + page_size, end);
-+			start = min((unsigned long)arch_kasan_reset_tag(addr), start);
-+			end = max((unsigned long)arch_kasan_reset_tag(addr) + page_size, end);
- 			flush_dmap = 1;
- 		}
++		if (__pa(p4d) != (pgtable_l5_enabled() ?
++				  __pa(pgd) :
++				  (unsigned long)pgd_val(*pgd) & PTE_PFN_MASK))
+ 			printk(KERN_ERR "PAGETABLE BUG #00! %p <-> %p\n",
+ 			       p4d, p4d_offset(pgd, 0));
  	}
+@@ -263,7 +266,7 @@ static pud_t *fill_pud(p4d_t *p4d, unsigned long vaddr)
+ 	if (p4d_none(*p4d)) {
+ 		pud_t *pud = (pud_t *)spp_getpage();
+ 		p4d_populate(&init_mm, p4d, pud);
+-		if (pud != pud_offset(p4d, 0))
++		if (__pa(pud) != (p4d_val(*p4d) & p4d_pfn_mask(*p4d)))
+ 			printk(KERN_ERR "PAGETABLE BUG #01! %p <-> %p\n",
+ 			       pud, pud_offset(p4d, 0));
+ 	}
+@@ -275,7 +278,7 @@ static pmd_t *fill_pmd(pud_t *pud, unsigned long vaddr)
+ 	if (pud_none(*pud)) {
+ 		pmd_t *pmd = (pmd_t *) spp_getpage();
+ 		pud_populate(&init_mm, pud, pmd);
+-		if (pmd != pmd_offset(pud, 0))
++		if (__pa(pmd) != (pud_val(*pud) & pud_pfn_mask(*pud)))
+ 			printk(KERN_ERR "PAGETABLE BUG #02! %p <-> %p\n",
+ 			       pmd, pmd_offset(pud, 0));
+ 	}
+@@ -287,7 +290,7 @@ static pte_t *fill_pte(pmd_t *pmd, unsigned long vaddr)
+ 	if (pmd_none(*pmd)) {
+ 		pte_t *pte = (pte_t *) spp_getpage();
+ 		pmd_populate_kernel(&init_mm, pmd, pte);
+-		if (pte != pte_offset_kernel(pmd, 0))
++		if (__pa(pte) != (pmd_val(*pmd) & pmd_pfn_mask(*pmd)))
+ 			printk(KERN_ERR "PAGETABLE BUG #03!\n");
+ 	}
+ 	return pte_offset_kernel(pmd, vaddr);
 -- 
 2.50.1
 
