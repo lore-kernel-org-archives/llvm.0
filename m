@@ -1,86 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486A12EA491
-	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 13:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD2E2EAB8A;
+	Wed, 13 Aug 2025 13:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755092970; cv=none; b=L+ywY2u5Ubk7qAkmiD6owsAHNioW3LZJbf6U3/9Ca02Ye6nAyAoEFRNQ/5/hTDLc2QU+uiZCcWkIgu9aTQt8olykjumA3L4wlf7FOmDVCMRexnWyP+0V0N+SZGEx53ulrddfLvqRgL1SfuQpVIUAwgOcFNlq52fcS5yLUiXmJac=
+	t=1755093170; cv=none; b=QgHIHTLppQ17kxyZJzhLZbWTPzCM0hRYVJ9D+nnM5haKednXYJiQFqXbgWoGSDTD4gBUYbY/MZjRvpsRwXQ45qKohY5ESmuYoS8KRv6xlH6B8+02jEVn4sZ/RpNwmHOttdTJrI7x3f0Zk9PEkLSDshqWNNDIiysf/zW3yJMahAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755092970; c=relaxed/simple;
-	bh=ngX7KqakvaHrr7jdbnboB1CiS7jx0blLv4FZ9WlGS6Y=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=iccE3s+5kljXX13gBX5Gn0ZRScFYbdMGWeWzOQieKK7dTTTtZQoWHaOHWii2a7h6LJeW6ZGhyfJD5FMgX686SVJIa1PzBdvUX9aZcMqpDav/C9lAwtwYf+erZsiR/hRr5DbVCtyS+VjFfi9Tm7LxRIQUNv/BgmjMxMB6KMENtOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RQpLU5gK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1755093170; c=relaxed/simple;
+	bh=yRzIBpcwo03V92Cu9B8zeqXJTartIC1MviVhaIBxQdM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j9YUhWaLzKBnG66U/zaEyxT6yN/eOt9KJWc4q5a6PGOAxp4rXQJFY7Gi8mHTuGpsZaqmXTqXadelceGFwUjRsoearY2pb9MZULTuAfLmRzOP7CNWpno9X5jhYV4rGeL4qvBiosWM3RBNKtE+7ZG/vk22Yiftb2wan/WKk05GHaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZAwj9hMe; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RQpLU5gK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755092968;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ngX7KqakvaHrr7jdbnboB1CiS7jx0blLv4FZ9WlGS6Y=;
-	b=RQpLU5gKqAQmlPqTTWU06eTp7WVhLv3Vnl4g51hLES5izZjnBGAH2eCxdM8ZL0khQVKRt1
-	AtfNiUcgpOHAwHnSg38LDq8hjUbBN87OQHr+qJ2IWlQq3jmeXfIs/mICKHioPYJ3Ch5MUX
-	cP83/PuVPFzdNG3hDphW/vCyaYsQxvU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-85-7Vo1U-J3ONyy5NFUj1oonA-1; Wed,
- 13 Aug 2025 09:49:25 -0400
-X-MC-Unique: 7Vo1U-J3ONyy5NFUj1oonA-1
-X-Mimecast-MFC-AGG-ID: 7Vo1U-J3ONyy5NFUj1oonA_1755092957
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2ACA2195609F;
-	Wed, 13 Aug 2025 13:49:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.21])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1AE64300145D;
-	Wed, 13 Aug 2025 13:49:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <aJwj4dQ3b599qKHn@codewreck.org>
-References: <aJwj4dQ3b599qKHn@codewreck.org> <20250811-iot_iter_folio-v1-1-d9c223adf93c@codewreck.org> <202508120250.Eooq2ydr-lkp@intel.com> <20250813051633.GA3895812@ax162>
-To: Dominique Martinet <asmadeus@codewreck.org>,
-    Christian Brauner <brauner@kernel.org>
-Cc: dhowells@redhat.com, Nathan Chancellor <nathan@kernel.org>,
-    kernel test robot <lkp@intel.com>,
-    Dominique Martinet via B4 Relay <devnull+asmadeus.codewreck.org@kernel.org>,
-    "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-    Alexander Viro <viro@zeniv.linux.org.uk>,
-    Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-    oe-kbuild-all@lists.linux.dev,
-    Linux Memory Management List <linux-mm@kvack.org>,
-    Maximilian Bosch <maximilian@mbosch.me>, Ryan Lahfa <ryan@lahfa.xyz>,
-    Christian Theune <ct@flyingcircus.io>,
-    Arnout Engelen <arnout@bzzt.net>, linux-kernel@vger.kernel.org,
-    linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-    stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] iov_iter: iterate_folioq: fix handling of offset >= folio size
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZAwj9hMe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755093170; x=1786629170;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yRzIBpcwo03V92Cu9B8zeqXJTartIC1MviVhaIBxQdM=;
+  b=ZAwj9hMeBbrlCEqTO1etqD52Ib7zYRuFfbkqzsVrMfKiNpQRlEPFCXGn
+   3nIOvMchcMhGBsxiAH9Kt2iX4/9H4G4RYXE434AsGeKcuAtwy3PXYGnwy
+   4bgJHzoYiEp+cb2DvpmEGtkiaPy+nVyQ5hoRntie97P9KMoNSj48OlRGk
+   L4CDHVaLEm2HXbZt4KZdTbdXR3E7ncapUlFhlRmJXRWTqrQKKcGDI2iTW
+   Y/MCDxfioY4Ut6THrPCEElSadYsntHEeh+e+DH+B8DJaIXnXKsfxVwhSp
+   bt9MNyzoC8EusmhT6ok2Sw4zXOxoSd8fgNV58Fkl3uzYTGOvPouGm+eUI
+   w==;
+X-CSE-ConnectionGUID: t6aQdzDfTFGLyu7iTjOHJw==
+X-CSE-MsgGUID: R1YLOVbdQG+y9XC5s6IODw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57289144"
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="57289144"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 06:52:49 -0700
+X-CSE-ConnectionGUID: a6XmckWnTmOaZ0W7wn/o/A==
+X-CSE-MsgGUID: 9CE9RbIqTnCtSYCj/rZ3aA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,285,1747724400"; 
+   d="scan'208";a="170928900"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 06:52:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1umBuB-00000005RqB-41aP;
+	Wed, 13 Aug 2025 16:52:39 +0300
+Date: Wed, 13 Aug 2025 16:52:39 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Dominique Martinet <asmadeus@codewreck.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Dominique Martinet via B4 Relay <devnull+asmadeus.codewreck.org@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Maximilian Bosch <maximilian@mbosch.me>,
+	Ryan Lahfa <ryan@lahfa.xyz>, Christian Theune <ct@flyingcircus.io>,
+	Arnout Engelen <arnout@bzzt.net>, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] iov_iter: iterate_folioq: fix handling of offset >=
+ folio size
+Message-ID: <aJyYp-3VA9kJ5YMd@smile.fi.intel.com>
+References: <20250811-iot_iter_folio-v1-1-d9c223adf93c@codewreck.org>
+ <202508120250.Eooq2ydr-lkp@intel.com>
+ <20250813051633.GA3895812@ax162>
+ <aJwj4dQ3b599qKHn@codewreck.org>
+ <aJyVfWKX2eSMsfrb@black.igk.intel.com>
+ <aJyW_QNI8vIdr03O@codewreck.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <758962.1755092947.1@warthog.procyon.org.uk>
-Date: Wed, 13 Aug 2025 14:49:07 +0100
-Message-ID: <758963.1755092947@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aJyW_QNI8vIdr03O@codewreck.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Dominique Martinet <asmadeus@codewreck.org> wrote:
+On Wed, Aug 13, 2025 at 10:45:33PM +0900, Dominique Martinet wrote:
+> Andy Shevchenko wrote on Wed, Aug 13, 2025 at 03:39:09PM +0200:
+> > > I assume Andrew will pick it up eventually?
+> > 
+> > I hope this to happen sooner as it broke my builds too (I always do now `make W=1`
+> > and suggest all developers should follow).
+> 
+> I actually test with W=1 too, but somehow this warning doesn't show up
+> in my build, I'm not quite sure why :/
+> (even if I try clang like the test robot... But there's plenty of
+> other warnings all around everywhere else, so I agree this is all way
+> too manual)
 
-> I assume Andrew will pick it up eventually?
+Depends on your config, last few releases I was specifically targetting x86
+defconfigs (32- and 64-bit) to be build with `make W=1`. There are a couple of
+changes that are still pending, but otherwise it builds with GCC and clang.
 
-These might be more a Christian/VFS thing.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-David
 
