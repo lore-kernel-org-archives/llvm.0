@@ -1,63 +1,63 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E9426FA6E
-	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 13:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55AB2E7BAF
+	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 13:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755090643; cv=none; b=FBfc1Bcjx+H579bDQFQxLiKSQlBpjxaK31Gp8tQy6PloJjeeCMTJza1/8BNlj4DcIJ1qbRQmk8niYbMdDWhhuMH1m2lLwmRfpPTVWpz1S+zwYUmOAnZ18AeyXnykZ6MNopB+K504E0+VXlL0SHzWR825dUvWedydFfehklFG6+w=
+	t=1755090651; cv=none; b=IYIRH3zQ42U5e6iECN+8PgAIVTk0fy1o/+fyrk48rU3zIwks796EABTQEPyT+JG/WvKbdvgkvyfEmbpxQGxQrlXgAc1b1rGjQm2ixTaLWa2cPOHMSIrLXe2293q9Yqq3vnxMwprEipXKxTdWbXmwpfbULAqvmqDC/PxpGPG4+x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755090643; c=relaxed/simple;
-	bh=b5OW2nvC0OiS+NDU9XbBImsCJbeszsgz9w9AdKXNSzI=;
+	s=arc-20240116; t=1755090651; c=relaxed/simple;
+	bh=bgDOTihFN7L3uo6z3OGyDLMdghqDtCb8HF1nArl4feQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qmIx4slUNsLXa4c1e53aqw5Ecb1lISzF1aK02uMlP5Vsqr5ZIalDLronOPWhQgRvfXkWYy36rwYS5iNnYZHwt56fprWVKrML31vaK1XQ2ZurghcJkedXnHB9mrkBWHce/UlrKO0AU9bn85APrrPcZTyj/V46/HMllIvUyXopxfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8TNch+G; arc=none smtp.client-ip=209.85.216.50
+	 MIME-Version; b=JNwjdRi0g9BMSm9tFAWrPQXXLIK9i5uw5c+99ei3/vVok/xbTTX+d0bHP+gUOtTygS12h8kxxHPATBmeEh+1+Wml7P1UdhQ5ghp7S8Gw2KuWodJ1PaQpg3wXTP+NPa6EtXU1CmneQPxgFr+f1T2Oj2h4VH2V+nxRvyc7EdShlvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fXeTRly3; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8TNch+G"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-31eb40b050bso5662025a91.0
-        for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 06:10:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fXeTRly3"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-242ff06b130so17413795ad.0
+        for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 06:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755090642; x=1755695442; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1755090649; x=1755695449; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MVrou259Nqx2mf6vUTvrTuOu7ushA+qQgGCR5MKGSus=;
-        b=I8TNch+G+iSd3MXck1Eh7iNFiudSyk/xdWvpnxn5kw+mAj4F3db3wXRGh8ZvWgnTOg
-         3GylI+FH72s9bmuCnqu0s2zaXdHqgkATt/YUDoiJLngD46nCrKGHk9+iG2F3soFIMLrO
-         NLki/VRWKnSssmmkQbpxuzSy0S0Zvb6ax3t3r7T7GGAxCo96q3WgxiJl4BqiOWceUZIC
-         ggUixYMY2oR878PLxjSYb2b9GyDRTS6pmBzFewoXeReygTznSfav6kSCOAQukqqKC56C
-         lkRsiNDhocJRQ//WJTDFh45rGaYwfux8Kv3eyVh9K2nquqXcYx8fYHHUOBHpX22Hco7u
-         2YJA==
+        bh=eEgfXQmBvwIZTKnjUPX92QY8u5Mv9cN/Yg04BQtYTgI=;
+        b=fXeTRly3Ri4yp9uY+YRHWVORQwp86bUaeomzf4mCJtH4+oTQXL/ID7lSEMXYDFVL8q
+         SBU1kwOmeZaTvvQw6xgRv/TqIWwG6q2cVw4vX8PdA80aNTrYPCo+sURmiLNncChEsfwv
+         bs6cmIfCdPQIUWEcbBUvMHXhAcE2dhTNeJOyMYUsIHLlqlTI3C5mTxvXgwK4DqSZfloj
+         Mvd0qpgb2KnWKxu9GA5p1bnvOFk3p8rmlRmGnyZNXsHn7tu3IkeymsTcvFQPyzf7HN8c
+         KDsGSDMIGfit+5MVTUKZvwIT2bA1BYlSFymCwR1Z9vK5giBD1otGNUIprYRXchDfgQfG
+         Lm9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755090642; x=1755695442;
+        d=1e100.net; s=20230601; t=1755090649; x=1755695449;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MVrou259Nqx2mf6vUTvrTuOu7ushA+qQgGCR5MKGSus=;
-        b=JxjLrvz/G/w+ueYaTcNB31l+5OkKG+Em9pj6BYaBJYvhbzHo3xfPCP+69JnxYGUnoA
-         Igjrj0pApDIj6qeC0eNUn4VXvJZIgFMVuPu1h3TK0o5QZwuY0uuzoXm1PhwXEQLU79pO
-         /oJiBO2O8yX/nt67X5waonn3Jp45VrLc5fi6WrIfd1E8bh0T7yvGVDoVt1FA1j6SlumY
-         knHe/A4+9W+6oAuIhikY0cTAU1RtXkY6Wka3OXG1caEG4OspXMWBWNHWKFXWc4wzfR+f
-         E+jb80q0ZHGVf1yhSVkQZFMJZ9ODCud1GRiUZBmOYmOqomtV6C+OWESceYGCMC4oQiKy
-         1kbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUw1tEG/hT9CL+sNxGbAVRjAJI8Ahj2asLEiH1mqpRlNipLDAjLQu7JMZAWIUFWizy1upik@lists.linux.dev
-X-Gm-Message-State: AOJu0YxaHBtBSDGypGta2jVCQV99Ow5ultdKjcPzS9vXOKXgCWSOSPhj
-	PhsRAgSE5xNzeMzw5J8HSc17UKwNXAzyo4POQgHuOr0NHdRnd9X3Pl4w
-X-Gm-Gg: ASbGncsTNLp4mgi9Yq8LuY+D6GraRQp/ofhN/oztHbUtOGTbkenxkhRNNJkDdY+oYSU
-	1p4RoDxQoympUrgLp6XqoC3i/mc7SgfAryC9Du11IOEvGnkK4s2naIEtACpyCSeio/MMiRxA3ge
-	F6cqvvLjd9YJ75+BDrYrTE7U3dKeIbvq+EQOslIralCwCnSfFeXcOV6oipwhQWx7CkXo9Tq9T2a
-	eNex17Oo4gYdMh51binidKouDPb0wwNHHvG7yvjIUtcOTlmstguJnBZHTHrf+gazMprZ312hr99
-	9rjDG9kllB4+Q9+VgC0oAnp2suTh4HUEYdJlrTNmvzwpyy4Qp9nHHZ5Xd3DAQ4skXt6n0owQP8G
-	D3nh3wuQlCi3FusBnMythbyxNgzP7nwU=
-X-Google-Smtp-Source: AGHT+IF9eIDvu72BaiBaVH/s5UjG5F3YVyyMdRM4uurQwBv+OhAFEyxqshUJkkmFATqSx/qzFuLPNw==
-X-Received: by 2002:a17:90b:58e7:b0:312:26d9:d5b2 with SMTP id 98e67ed59e1d1-321d0b2940dmr4886750a91.0.1755090641390;
-        Wed, 13 Aug 2025 06:10:41 -0700 (PDT)
+        bh=eEgfXQmBvwIZTKnjUPX92QY8u5Mv9cN/Yg04BQtYTgI=;
+        b=ETD+6sX50HhzeTMpYm4Nn3KKS5Q0u1NpG2rpJT9t1g5Xww1mN+1ynmnCd/FybQjKG/
+         s84N8Ar0CT++PWAaJ8qT1lKa9M6KWfc1PdP0vYx6DTzqm/qKSknLzN7vWjeLttFoh3Ct
+         rsj2j9M2HR+mk7ojlrO+ZbGXnQoZrh8NuJwr5kCvdUk6HyeQ8XNxNe8dgD2YUCDntOMc
+         sWzFH8blN2VPM6A2BGKaG4rvSdx6eIeS76NZYXUBASDixIlLlcJc0RHH4YWZ8m5GcG1E
+         d/dP5ZN4rlDYf1601ZX28hkIFIe8Ww1Hh0ffqW8dAbtoPlqxRWWC6IsZqXwYW0B0eds5
+         bO3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXil7S1gKUjGLgW6Chv7hIBFNdAlKJF9LWCCU53/tCk3lARLc0AvSJ38XzovBcadM9Ab+J1@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy9APsye6+xO+QP8JVNvV1M6goNg5jv2Ou8QKS2JKaAg+Zk3bzT
+	p0Dt6iwZhGC2nN6bNvF9UAgPUUg/YB1VfzfzCf8tyNBbENVjQe2l4uQ7
+X-Gm-Gg: ASbGncsvhRC0xB+Lw14jT6A7bd07IZILnqg5D4K6UoVRW5w9XOIeQBpUi2PnmbR/F5x
+	+U6cSDwxJrKN2APbX6YrwUG1xwDQv2AiyT/4pRxwRF+5qROWU24e7Uep1hh3v0vZx6hJ0U4wxWP
+	9ZYi35isXHrEENh5M1o0kjrtF6Yg3xR4GM3xSDrwsC1V3FdEIJiygtFYUh3Qblwo78m9nTsG0kC
+	H9+cuIGUGQDKyymNELTitFHaRGMLdagJnksigNECOvLzUkuT1NQWPAoAtQKbFAhwDL/ie6rUCN/
+	bAnIP23Y1vuNIYymlMe5miTdYuOoUnF+5RJkef71XxquQjhi9vcbE1QOjV1AsudFEYCmWVHjCee
+	Eq2Fi8NGfKuEoTOWZrZ9hXUlAomeAhsE=
+X-Google-Smtp-Source: AGHT+IGQetOgmxbvgH8GlqPCrs2OPO9JHPjy7ZNd3WOoXSBNnPAm/Dj6z2ZNFN01W49Z7HuDNX97gQ==
+X-Received: by 2002:a17:903:1965:b0:242:a3fc:5900 with SMTP id d9443c01a7336-2430d0dc1eamr41861055ad.8.1755090649047;
+        Wed, 13 Aug 2025 06:10:49 -0700 (PDT)
 Received: from rockpi-5b ([45.112.0.216])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.10.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32325765df6sm161504a91.12.2025.08.13.06.10.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 06:10:40 -0700 (PDT)
+        Wed, 13 Aug 2025 06:10:48 -0700 (PDT)
 From: Anand Moon <linux.amoon@gmail.com>
 To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -77,9 +77,9 @@ To: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
 Cc: Anand Moon <linux.amoon@gmail.com>,
 	Mateusz Majewski <m.majewski2@samsung.com>
-Subject: [PATCH v7 3/7] thermal/drivers/exynos: Remove redundant IS_ERR() checks for clk_sec clock
-Date: Wed, 13 Aug 2025 18:39:47 +0530
-Message-ID: <20250813131007.343402-4-linux.amoon@gmail.com>
+Subject: [PATCH v7 4/7] thermal/drivers/exynos: Fixed the efuse min max value for exynos5422
+Date: Wed, 13 Aug 2025 18:39:48 +0530
+Message-ID: <20250813131007.343402-5-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250813131007.343402-1-linux.amoon@gmail.com>
 References: <20250813131007.343402-1-linux.amoon@gmail.com>
@@ -91,47 +91,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove unnecessary IS_ERR() checks for the clk_sec clock,
-the clk_enable() and clk_disable() functions can handle NULL clock
-pointers, so the additional checks are redundant and have been removed
-to simplify the code.
+As per Exynos5422 user manual e-Fuse range min~max range is 16~76.
+if e-Fuse value is out of this range, then thermal sensor may not
+sense thermal data properly. Additionally, refactors the efuse
+initialization logic in exynos_map_dt_data() by replacing nested
+if-else blocks with a switch statement for better readability
+and maintainability. Ensures correct efuse setup based on SoC type.
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
-v7: None
-v6: Add Rb - Lukasz and Fix the typo in the subject
+v7: drop the Rb Llukasz, as we dropped the nested switch to set efuse.
+v6: Add Rb Lukasz and fix typo in subject
 v5: None
-v4: drop IE_ERR() for clk_unprepare() as its handle in earlier code.
-v3: improve the commit message.
+V4: None
 ---
- drivers/thermal/samsung/exynos_tmu.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-index aa0726b33c84..5f017a78f437 100644
+index 5f017a78f437..3d12e95703bf 100644
 --- a/drivers/thermal/samsung/exynos_tmu.c
 +++ b/drivers/thermal/samsung/exynos_tmu.c
-@@ -258,8 +258,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
- 
- 	mutex_lock(&data->lock);
- 	clk_enable(data->clk);
--	if (!IS_ERR(data->clk_sec))
--		clk_enable(data->clk_sec);
-+	clk_enable(data->clk_sec);
- 
- 	status = readb(data->base + EXYNOS_TMU_REG_STATUS);
- 	if (!status) {
-@@ -269,8 +268,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
- 		data->tmu_clear_irqs(data);
- 	}
- 
--	if (!IS_ERR(data->clk_sec))
--		clk_disable(data->clk_sec);
-+	clk_disable(data->clk_sec);
- 	clk_disable(data->clk);
- 	mutex_unlock(&data->lock);
- 
+@@ -884,6 +884,22 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+ 	case SOC_ARCH_EXYNOS4412:
+ 	case SOC_ARCH_EXYNOS5250:
+ 	case SOC_ARCH_EXYNOS5260:
++		data->tmu_set_low_temp = exynos4412_tmu_set_low_temp;
++		data->tmu_set_high_temp = exynos4412_tmu_set_high_temp;
++		data->tmu_disable_low = exynos4412_tmu_disable_low;
++		data->tmu_disable_high = exynos4210_tmu_disable_high;
++		data->tmu_set_crit_temp = exynos4412_tmu_set_crit_temp;
++		data->tmu_initialize = exynos4412_tmu_initialize;
++		data->tmu_control = exynos4210_tmu_control;
++		data->tmu_read = exynos4412_tmu_read;
++		data->tmu_set_emulation = exynos4412_tmu_set_emulation;
++		data->tmu_clear_irqs = exynos4210_tmu_clear_irqs;
++		data->gain = 8;
++		data->reference_voltage = 16;
++		data->efuse_value = 55;
++		data->min_efuse_value = 0;
++		data->max_efuse_value = 100;
++		break;
+ 	case SOC_ARCH_EXYNOS5420:
+ 	case SOC_ARCH_EXYNOS5420_TRIMINFO:
+ 		data->tmu_set_low_temp = exynos4412_tmu_set_low_temp;
+@@ -899,12 +915,8 @@ static int exynos_map_dt_data(struct platform_device *pdev)
+ 		data->gain = 8;
+ 		data->reference_voltage = 16;
+ 		data->efuse_value = 55;
+-		if (data->soc != SOC_ARCH_EXYNOS5420 &&
+-		    data->soc != SOC_ARCH_EXYNOS5420_TRIMINFO)
+-			data->min_efuse_value = 40;
+-		else
+-			data->min_efuse_value = 0;
+-		data->max_efuse_value = 100;
++		data->min_efuse_value = 16;
++		data->max_efuse_value = 76;
+ 		break;
+ 	case SOC_ARCH_EXYNOS5433:
+ 		data->tmu_set_low_temp = exynos5433_tmu_set_low_temp;
 -- 
 2.50.1
 
