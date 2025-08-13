@@ -1,61 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078F12F530B;
-	Wed, 13 Aug 2025 23:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64A330146B;
+	Wed, 13 Aug 2025 23:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755126262; cv=none; b=Lco7pbKcRNLZPqix2GqraKyUr1wt0rgeDbpT114VALRGomnfL8JVxz3rDBf4Bt/HwlCE5h8lJa31z9AoiDLVCOLI3RrkdHdEqE5K/lkVgNVclJ/XMCJ1lbRGyrAQTysiAf8y7TV8LYIBZBKhwlkVHFNaXFtilCwc4mKtXf3ky5E=
+	t=1755127303; cv=none; b=ii8iIBdHBI+QpqI//rAavsNPWFp/enlYWShOG1OdbzLgwTF1xAl+mvBMKoo8p6JXsAaUmcw+DwuJyAfrKyJWN7D3X5mdcbdksQLtsbM9z+zGdbW1cbQNzOTp1KUOVxXLVj0oH/YdUmLVKe2/taY6mqwQxRe3u7mlTJs+HFerkfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755126262; c=relaxed/simple;
-	bh=3F+ogyrYcJ8PY1I57KN+xxu49Rm1DOvKC0zBkVlpS24=;
+	s=arc-20240116; t=1755127303; c=relaxed/simple;
+	bh=3FUHzB5zFPjRpIGR9t/HnNbe+pc72m44Y8u/Tn0719M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJPc19zqY4UrPJ3rgMzgQYwazErsyB2fJNol85h4DaWtOt1mFkOfzNbmAFYcgDZ4FjEuJn7TYl3TPIXvNoOXokU3weFT/Mv650ID1OS6kfY1JL4vAYBmxl9w8zgdv6B2yYLfHacDWG4UxHwTCMr6x0kV6JHGGsdozNdiqp6UUxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gULORzCb; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=lVhHYiBFMxgUT6GRWGuHnfBrVl7LYGspGNrShza6RmKAUQGVlHR3eIqlFSIhofy+iKLK7nK/9eiyLbCbdw6nD8w9vNklsDiqi5Bi4sv3G2nds//FiKZ3QtewY+mrY/V2ADi5ncCXn32LlhtdljSWW6KdKrSRMge1IkhjcXbNQ80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZmVQa/9K; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gULORzCb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5ADC4CEF5;
-	Wed, 13 Aug 2025 23:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755126261;
-	bh=3F+ogyrYcJ8PY1I57KN+xxu49Rm1DOvKC0zBkVlpS24=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=gULORzCbX4t52dAfG5DuKvm4YIIqfvOAx2w15GEnWcGA3zPp1j7Cf5X0DN1XTUtdv
-	 n74MCqWqzp5i6s8L31cAIYg53ELJQ/y78Ez/QPWAtAMqFKENy687JX6LZtwcI1YySK
-	 X/4AixLfnG9jFoOCWc1ggn2g0Agkl+XXXBRlStfpOCy03YBcMGgEJ8P4X0dasp2onI
-	 ySv+D7D4PiGjXg6hX02QoDFlpOVGN/82cxQhy2q1soLdwF2tgPFkX+o6RBjn5T4ADE
-	 HhxlAxjwmBcpTl+gyAlfkbcB5xyfUjjHWZvzun5VoZ0syqCiu4T32eftEcAdCVhLqA
-	 dt4p4tG6o1mzg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id D4BCCCE0A48; Wed, 13 Aug 2025 16:04:19 -0700 (PDT)
-Date: Wed, 13 Aug 2025 16:04:19 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Dominique Martinet <asmadeus@codewreck.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Dominique Martinet via B4 Relay <devnull+asmadeus.codewreck.org@kernel.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Maximilian Bosch <maximilian@mbosch.me>,
-	Ryan Lahfa <ryan@lahfa.xyz>, Christian Theune <ct@flyingcircus.io>,
-	Arnout Engelen <arnout@bzzt.net>, linux-kernel@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] iov_iter: iterate_folioq: fix handling of offset >=
- folio size
-Message-ID: <f389ac0d-de77-4443-9302-3d8895e39daf@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250811-iot_iter_folio-v1-1-d9c223adf93c@codewreck.org>
- <202508120250.Eooq2ydr-lkp@intel.com>
- <20250813051633.GA3895812@ax162>
- <aJwj4dQ3b599qKHn@codewreck.org>
- <aJyVfWKX2eSMsfrb@black.igk.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZmVQa/9K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755127302; x=1786663302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3FUHzB5zFPjRpIGR9t/HnNbe+pc72m44Y8u/Tn0719M=;
+  b=ZmVQa/9K1M/9szvnBXqvVWDL+Rnut3IRbxsbqkiNw9pw61islh4JCPXb
+   7sEOoSpb4P8RGJeBULpBPaUwFH6SNq3NnJVdoy5dL/+BqUKrCzoJ+V+a/
+   FNfP2KGMub9wFzlCO5xOoD5obvorW+vPowrejZAo5WagL4tHtQP6rbjIF
+   9pZz2ZSp5qXWBV26hcArfjpg+a+toVZrUd/OH+RfA8/h/MCDSWSL3z268
+   FYNUPagtyockwiHiwVOhENL82PQ9we6m+S3huxuxPnkbeY/BuhujPgFju
+   /fCfJfG1cOQsMFd8KnmRrnh8JbIMSV4ipQEneEbCt9Ibgvmw2wKhExxSY
+   g==;
+X-CSE-ConnectionGUID: FVk7OpL7RVqwScZc+zROig==
+X-CSE-MsgGUID: +MOvtBpbT/KZLU+Sbw9KuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57154938"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="57154938"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 16:21:41 -0700
+X-CSE-ConnectionGUID: zqWI8wdARxiqbK0emdenWw==
+X-CSE-MsgGUID: GmLq9DUqTWWYubE5nQx4Ng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="166096675"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 13 Aug 2025 16:21:38 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1umKml-000AOi-0m;
+	Wed, 13 Aug 2025 23:21:35 +0000
+Date: Thu, 14 Aug 2025 07:21:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Santos <Jonathan.Santos@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Santos <Jonathan.Santos@analog.com>,
+	Michael.Hennerich@analog.com, jic23@kernel.org,
+	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jonath4nns@gmail.com
+Subject: Re: [PATCH 4/4] iio: adc: ad7768-1: add support for ADAQ776x-1 ADC
+ Family
+Message-ID: <202508140742.AhFMglnF-lkp@intel.com>
+References: <f0c1cbc9c2994a90113788cad57df1f32f9db45e.1754617360.git.Jonathan.Santos@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,31 +69,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aJyVfWKX2eSMsfrb@black.igk.intel.com>
+In-Reply-To: <f0c1cbc9c2994a90113788cad57df1f32f9db45e.1754617360.git.Jonathan.Santos@analog.com>
 
-On Wed, Aug 13, 2025 at 03:39:09PM +0200, Andy Shevchenko wrote:
-> On Wed, Aug 13, 2025 at 02:34:25PM +0900, Dominique Martinet wrote:
-> > Nathan Chancellor wrote on Tue, Aug 12, 2025 at 10:16:33PM -0700:
-> > > >    1 warning generated.
-> > > 
-> > > I see this in -next now, should remain be zero initialized or is there
-> > > some other fix that is needed?
-> > 
-> > A zero-initialization is fine, I sent a v2 with zero-initialization
-> > fixed yesterday:
-> > https://lkml.kernel.org/r/20250812-iot_iter_folio-v2-1-f99423309478@codewreck.org
-> > 
-> > (and I'll send a v3 with the goto replaced with a bigger if later today
-> > as per David's request)
-> > 
-> > I assume Andrew will pick it up eventually?
-> 
-> I hope this to happen sooner as it broke my builds too (I always do now `make W=1`
-> and suggest all developers should follow).
+Hi Jonathan,
 
-This build failure is showing up in my testing as well.
+kernel test robot noticed the following build errors:
 
-In the service of preventing bisection issues, would it be possible to
-fold the fix into the original patch?
+[auto build test ERROR on 0a686b9c4f847dc21346df8e56d5b119918fefef]
 
-							Thanx, Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Santos/dt-bindings-iio-adc-ad7768-1-add-new-supported-parts/20250813-145315
+base:   0a686b9c4f847dc21346df8e56d5b119918fefef
+patch link:    https://lore.kernel.org/r/f0c1cbc9c2994a90113788cad57df1f32f9db45e.1754617360.git.Jonathan.Santos%40analog.com
+patch subject: [PATCH 4/4] iio: adc: ad7768-1: add support for ADAQ776x-1 ADC Family
+config: hexagon-randconfig-002-20250814 (https://download.01.org/0day-ci/archive/20250814/202508140742.AhFMglnF-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 3769ce013be2879bf0b329c14a16f5cb766f26ce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250814/202508140742.AhFMglnF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508140742.AhFMglnF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: rational_best_approximation
+   >>> referenced by ad7768-1.c:554 (drivers/iio/adc/ad7768-1.c:554)
+   >>>               drivers/iio/adc/ad7768-1.o:(ad7768_configure_dig_fil) in archive vmlinux.a
+   >>> referenced by ad7768-1.c:554 (drivers/iio/adc/ad7768-1.c:554)
+   >>>               drivers/iio/adc/ad7768-1.o:(ad7768_configure_dig_fil) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
