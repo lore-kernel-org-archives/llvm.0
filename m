@@ -1,82 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058B22D94A4;
-	Wed, 13 Aug 2025 14:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4A9194C96
+	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 14:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755096001; cv=none; b=Z7GC/XvsSbEHgq7OCEUdgyPw0/pMFPhJ6fyvJJwdIEeCODWhu1D76AutAHD8u6s4WcV6KpIUowQflsF5GWYq8V7vIW8qxPEtoDS6RHxTjSj+nOZxi5Tb7qQpPFaordJ0t8CLrj4ivlVhds4LKaWDGR3P9vS9PUyVUhoeu5+tbDQ=
+	t=1755096535; cv=none; b=DJY84rD6yLGeYnJytfuNQaZlv5L/RHSl3TrIZm9w/rO/oV7kXeS6vN1LPWPafBFwXd7tAkRTne9MTh6LAtO/8y/gDH/47ZaFjBL0DFr+IvBkfK20mYS4aUOnWs4GZTmu2kAvlPZbC276lwlN4db5zIqQA+aGrGiwzgR+j5dbOCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755096001; c=relaxed/simple;
-	bh=nIMn1kPl8ANV2TH1sXmHbDMsu1fIrTebb3WmS9IqLtc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=DYtLXP+SDI3s+CXoJgvG/ci79dR3UjXQmmnDEVip2z7KXow9hZfK2TvOZtCZ/ECXSe/OjT4fpOC6nVQV9feMNsJm6e+uPc8cmeKfAtAOmkC+GEbFhDTesNvW1EYVXQYCTOW7CSQzDYGlBl3I9nldNVTNRIp+8EoiMwfj8n/w/30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CbQsSzA9; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CbQsSzA9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF34C4CEED;
-	Wed, 13 Aug 2025 14:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755096000;
-	bh=nIMn1kPl8ANV2TH1sXmHbDMsu1fIrTebb3WmS9IqLtc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CbQsSzA9gk13zrXG8Mguj441Rgv+J7xz1DDqTcWxw0E6w+KZJXfXDgVjh7xIWKHG7
-	 j6BxIhjitWER3MKemcagzVbBuYX7kD62K9XfRR75YjcWhO7sCsh3QP6vSeKHndKiah
-	 3ifftJCIQRcfZh7MG5Pz2XXiYyNT3B393+5hqtBdbEl6D+4QZZrmSHXGS+NJCQgafm
-	 6RFGTmGeyREC+Xd/SyUzpTnMqIHHhW1zp9Xqjm/0jLxXARVc2HLBq0PTjCchGodC78
-	 vfNdgtQlWz8exx6940Evo8+kimAI/sJC/hh5kLk/MimIJcyV9nWgXfG5bLu1CrKOPp
-	 xcCx6Bzx8Zu3A==
+	s=arc-20240116; t=1755096535; c=relaxed/simple;
+	bh=QDCt6vH8aJxa4wubOXy6BdR0EGboDh52Gw503R3mLcY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fXonOic+rgWCcKU7bxuNFZLZsoOK6NztUTTU56MV5Ep4+PhjF3eBNiyeMG3b5dvRXNbdsiYbGePGNR40WvEWH3MyMXLPNh70Ap60OfUcLdYHuOpR90H6gEhVmnq/wsid6hTGY1WQ56Fiw34vSH0alWjJKqCcckgZjffWSytg1a4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4402312FC;
+	Wed, 13 Aug 2025 07:48:44 -0700 (PDT)
+Received: from [10.57.1.244] (unknown [10.57.1.244])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8166E3F5A1;
+	Wed, 13 Aug 2025 07:48:34 -0700 (PDT)
+Message-ID: <cae90aa0-9fa6-4066-bbc0-ba391f908fb2@arm.com>
+Date: Wed, 13 Aug 2025 15:48:32 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 13 Aug 2025 16:39:53 +0200
-Message-Id: <DC1DLSRDL44Z.W74NH6OV15J6@kernel.org>
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Tamir Duberstein" <tamird@gmail.com>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>, "Russ Weight"
- <russ.weight@linux.dev>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Will Deacon" <will@kernel.org>, "Waiman Long"
- <longman@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
- Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
- <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>, "Christian
- Brauner" <brauner@kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH v14 3/3] rust: replace `CStr` with `core::ffi::CStr`
-X-Mailer: aerc 0.20.1
-References: <20250710-cstr-core-v14-0-ca7e0ca82c82@gmail.com>
- <20250710-cstr-core-v14-3-ca7e0ca82c82@gmail.com>
- <DC0A9UKTPH05.2O2V0B2KHMIW8@kernel.org>
- <CAJ-ks9n4V-PEDhkTv6SXj_Oh6LB4LdsNi8Nnv_6JbT7dhvnh2w@mail.gmail.com>
-In-Reply-To: <CAJ-ks9n4V-PEDhkTv6SXj_Oh6LB4LdsNi8Nnv_6JbT7dhvnh2w@mail.gmail.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 02/18] kasan: sw_tags: Support tag widths less than 8
+ bits
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: nathan@kernel.org, arnd@arndb.de, broonie@kernel.org,
+ Liam.Howlett@oracle.com, urezki@gmail.com, will@kernel.org,
+ kaleshsingh@google.com, rppt@kernel.org, leitao@debian.org, coxu@redhat.com,
+ surenb@google.com, akpm@linux-foundation.org, luto@kernel.org,
+ jpoimboe@kernel.org, changyuanl@google.com, hpa@zytor.com,
+ dvyukov@google.com, kas@kernel.org, corbet@lwn.net,
+ vincenzo.frascino@arm.com, smostafa@google.com,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, andreyknvl@gmail.com,
+ alexander.shishkin@linux.intel.com, thiago.bauermann@linaro.org,
+ catalin.marinas@arm.com, ryabinin.a.a@gmail.com, jan.kiszka@siemens.com,
+ jbohac@suse.cz, dan.j.williams@intel.com, joel.granados@kernel.org,
+ baohua@kernel.org, kevin.brodsky@arm.com, nicolas.schier@linux.dev,
+ pcc@google.com, andriy.shevchenko@linux.intel.com, wei.liu@kernel.org,
+ bp@alien8.de, xin@zytor.com, pankaj.gupta@amd.com, vbabka@suse.cz,
+ glider@google.com, jgross@suse.com, kees@kernel.org, jhubbard@nvidia.com,
+ joey.gouly@arm.com, ardb@kernel.org, thuth@redhat.com,
+ pasha.tatashin@soleen.com, kristina.martsenko@arm.com,
+ bigeasy@linutronix.de, lorenzo.stoakes@oracle.com, jason.andryuk@amd.com,
+ david@redhat.com, graf@amazon.com, wangkefeng.wang@huawei.com,
+ ziy@nvidia.com, mark.rutland@arm.com, dave.hansen@linux.intel.com,
+ samuel.holland@sifive.com, kbingham@kernel.org, trintaeoitogc@gmail.com,
+ scott@os.amperecomputing.com, justinstitt@google.com,
+ kuan-ying.lee@canonical.com, maz@kernel.org, tglx@linutronix.de,
+ samitolvanen@google.com, mhocko@suse.com, nunodasneves@linux.microsoft.com,
+ brgerst@gmail.com, willy@infradead.org, ubizjak@gmail.com,
+ peterz@infradead.org, mingo@redhat.com, sohil.mehta@intel.com,
+ linux-mm@kvack.org, linux-kbuild@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, x86@kernel.org, llvm@lists.linux.dev,
+ kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ada Couprie Diaz <ada.coupriediaz@arm.com>
+References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+ <780347f3897ea97e90968de028c9dd02f466204e.1755004923.git.maciej.wieczor-retman@intel.com>
+From: Ada Couprie Diaz <ada.coupriediaz@arm.com>
+Content-Language: en-US
+Organization: Arm Ltd.
+In-Reply-To: <780347f3897ea97e90968de028c9dd02f466204e.1755004923.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed Aug 13, 2025 at 4:06 PM CEST, Tamir Duberstein wrote:
-> On Tue, Aug 12, 2025 at 3:50=E2=80=AFAM Benno Lossin <lossin@kernel.org> =
-wrote:
->> On Thu Jul 10, 2025 at 4:53 PM CEST, Tamir Duberstein wrote:
->> > +/// Extensions to [`CStr`].
->> > +pub trait CStrExt {
->>
->> Should we make this trait sealed?
+Hi,
+
+On 12/08/2025 14:23, Maciej Wieczor-Retman wrote:
+> From: Samuel Holland <samuel.holland@sifive.com>
 >
-> We can -- but is it harmful for someone to implement? I think probably no=
-t.
+> Allow architectures to override KASAN_TAG_KERNEL in asm/kasan.h. This
+> is needed on RISC-V, which supports 57-bit virtual addresses and 7-bit
+> pointer tags. For consistency, move the arm64 MTE definition of
+> KASAN_TAG_MIN to asm/kasan.h, since it is also architecture-dependent;
+> RISC-V's equivalent extension is expected to support 7-bit hardware
+> memory tags.
+>
+> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+>   arch/arm64/include/asm/kasan.h   |  6 ++++--
+>   arch/arm64/include/asm/uaccess.h |  1 +
+>   include/linux/kasan-tags.h       | 13 ++++++++-----
+>   3 files changed, 13 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kasan.h b/arch/arm64/include/asm/kasan.h
+> index e1b57c13f8a4..4ab419df8b93 100644
+> --- a/arch/arm64/include/asm/kasan.h
+> +++ b/arch/arm64/include/asm/kasan.h
+> @@ -6,8 +6,10 @@
+>   
+>   #include <linux/linkage.h>
+>   #include <asm/memory.h>
+> -#include <asm/mte-kasan.h>
+> -#include <asm/pgtable-types.h>
+> +
+> +#ifdef CONFIG_KASAN_HW_TAGS
+> +#define KASAN_TAG_MIN			0xF0 /* minimum value for random tags */
+> +#endif
+Building CONFIG_KASAN_HW_TAGS with -Werror on arm64 fails here
+due to a warning about KASAN_TAG_MIN being redefined.
 
-I don't think anything aside from `CStr` should implement it, so I'd say
-we make it sealed. There are also safe functions that return raw
-pointers & an implementation could just return a bogus pointer...
+On my side the error got triggered when compiling
+arch/arm64/kernel/asm-offsets.c due to the ordering of some includes :
+from <asm/processor.h>, <linux/kasan-tags.h> ends up being included
+(by <asm/cpufeatures.h> including <asm/sysreg.h>) before <asm/kasan.h>.
+(Build trace at the end for reference)
 
----
-Cheers,
-Benno
+Adding `#undef KASAN_TAG_MIN` before redefining the arch version
+allows building CONFIG_KASAN_HW_TAGS on arm64 without
+further issues, but I don't know if this is most appropriate fix.Thanks, 
+Ada ---
+
+   CC      arch/arm64/kernel/asm-offsets.s
+In file included from ./arch/arm64/include/asm/processor.h:42,
+                  from ./include/asm-generic/qrwlock.h:18,
+                  from ./arch/arm64/include/generated/asm/qrwlock.h:1,
+                  from ./arch/arm64/include/asm/spinlock.h:9,
+                  from ./include/linux/spinlock.h:95,
+                  from ./include/linux/mmzone.h:8,
+                  from ./include/linux/gfp.h:7,
+                  from ./include/linux/slab.h:16,
+                  from ./include/linux/resource_ext.h:11,
+                  from ./include/linux/acpi.h:13,
+                  from ./include/acpi/apei.h:9,
+                  from ./include/acpi/ghes.h:5,
+                  from ./include/linux/arm_sdei.h:8,
+                  from ./arch/arm64/kernel/asm-offsets.c:10:
+./arch/arm64/include/asm/kasan.h:11: error: "KASAN_TAG_MIN" redefined [-Werror]
+    11 | #define KASAN_TAG_MIN                   0xF0 /* minimum value for random tags */
+       |
+In file included from ./arch/arm64/include/asm/sysreg.h:14,
+                  from ./arch/arm64/include/asm/cputype.h:250,
+                  from ./arch/arm64/include/asm/cache.h:43,
+                  from ./include/vdso/cache.h:5,
+                  from ./include/linux/cache.h:6,
+                  from ./include/linux/slab.h:15:
+./include/linux/kasan-tags.h:23: note: this is the location of the previous definition
+    23 | #define KASAN_TAG_MIN           0x00 /* minimum value for random tags */
+       |
+
