@@ -1,67 +1,67 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F92E2857DF
-	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 15:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC3F2882C4
+	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 15:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755099916; cv=none; b=T3PZBRhJRmF8FWp8atW8iY3o5yKqkEpAOQZCj6r4axN8zk9Uwpdmoe+m7iU1Cw/8Q/UsK18BDeqchl880wEUzFw1B1of58HjJYyXs/5/B1UHDTkav7C69LCGramDxANx9fqhOSnd4djdiIMcss7hZGOndeojdCaNEyTZIvVTXfI=
+	t=1755099918; cv=none; b=F05amXbdSXxgAL8EXMKv6jt3SqxPcjx/ICjss7IRn4UFH+UCtcreKK1dAQiVbfIIJtuJOkkYAh5lX7gi6vGlb3oQ3YrcgEDtidYaR911OXGIvtIkUbTenQdZXon/457zSovKt3ZpxwawwaBwFpJqrNr4F/ddOPBYcpZYZTnndAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755099916; c=relaxed/simple;
-	bh=PTDvM2HBIQtiHRjiaQnIp9LPfNsXH8zj3ZtohuuvaLA=;
+	s=arc-20240116; t=1755099918; c=relaxed/simple;
+	bh=LjcCbHMUoV3TltewN0HsJRdLdRD1ekMI3/F3iYl7gdo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qpNC+3QI4IwbngpDXmVdAuCRMCU+YpJyLsG130kBEXc5+rSoURGI7r6ZVLvfhUGUoADGBA/w2Whuvx4crxJbXUpJvFyjYWjY4bm6+ORXn7H9uKTiF2fMfrZmhe3XG1cXs80B2JELBjAC5xed3EDK+bRAOqBQMHq0SfdORgw45P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=adP8FJnR; arc=none smtp.client-ip=209.85.219.51
+	 In-Reply-To:To:Cc; b=s3A4IP+uGqRnc6eqNwFyEz/ZPCrBCkM5Lq2RkVqZUlYlV21qe8aIkgiVxH2TSNFOQN/GPpbbwAe+dqJCe+EIv7/VAJ45Osgd19UEqq/71yUHCUN0u+42wSyPyLyc8gQ/Pkx4jxN4wev1hNza/kaTzZ7XeQxvSxWd1C5kaJbU57Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mn+mmiFq; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="adP8FJnR"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-70a9f55ea73so599886d6.2
-        for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 08:45:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mn+mmiFq"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-70a88db0416so812196d6.0
+        for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 08:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755099914; x=1755704714; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1755099916; x=1755704716; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0y+gnC6bXE+JfrQZkTYH2GNP1c2kKpqC9hVlpupTTFc=;
-        b=adP8FJnRj8s3kDXySvDDCJVbYx0OKM0F1F6nhy2Xv8EP5OnYyIt6wz78COI5Cqo/La
-         XucnUOvLlot4QroB0/u59haI7MkZzK54CFDpAsTT9T10K4VRR2d3+X13u+MRii1/2Rtw
-         dYxnwOz35UL8mRW9pwUP3/2KB3yX0BhRuxKGUoieB6uXbDl9WdXasxb+EQcM65a178AX
-         qN8xFSxUlSWuM2AFb7Z90yoze7hunOfHxumjrhreLC9VJmGN92RLptFL4leKHUALBj8T
-         DdvB8fE0WpPTrMOSzSxSgj+k5N0h5xRU01GqHFSLRLxxMBvXgWr9v1TjYT4V8o/IrHhz
-         3cCQ==
+        bh=QjwWWlaiSxuBLrutmj24/qoTYXM0TidVt0sz9ukj7i4=;
+        b=mn+mmiFqoePfW75Num97Er+juM+Ic1tGUNHn2ZqBuUo2bcuJa87ORN6vTXPbed1tLH
+         7UPpfjxcurXX3aRv9KPWEH9KG+oeGv2no14athG9quofepv8gykyBq3VR1n3gkLXd7wh
+         6YqrE9y2PJb+4kdfUDD1uzt+Q69RBFiQWIUNthnl+E/YYCUKwwZ8AJXf/oWBsCEIbr3T
+         HetXo0/UgHvSJfYyppYS0y3eSs8/lz70+4exvLfNyThipf9Q7cg49stXPbs65pLvFNV1
+         5GO3YHTDwfdi195W+VNe4o3GJyv6//QAusLkY407Pa2CQXrhcAq53D4+sfOsYzje31BJ
+         dKeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755099914; x=1755704714;
+        d=1e100.net; s=20230601; t=1755099916; x=1755704716;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0y+gnC6bXE+JfrQZkTYH2GNP1c2kKpqC9hVlpupTTFc=;
-        b=wVFJWH3pFNQ3QXjiSLRbBtvB88c0HDYG9Wxhtc/UHva6yoWFrKxZQE1lQulC36GRdE
-         GQoux0JC04lGmZXpXYDpKHppML/LaDZGlqCLrMBrGlu+mDTyO3/3r4SQRUw1uV2toX8L
-         bXFriSwINoYKDk8oDrTgZDCYH0RIlIUsV7R9HXdNNsfTWUdhK2IXvYQY+UrMPgcHVrge
-         6GGmScR4qnb2POgt0sGqWUfgm9gqFklKD/JPMq/QnfsDZ1E9h3UkLKqgVTXrmhsgAjJv
-         IrQ4j/QFmQTw281qUFx2WRg72/1GSjO1Ia0//m24DXYkkX49pbvWzaq3UNxtBYALZCKR
-         W9Ow==
-X-Forwarded-Encrypted: i=1; AJvYcCXLk5GmdajR6pp884zEgFtfe9EHvglDUHbARnq4QBwKumXoOs5JN2Gdgw54z6yMocv15Dc4@lists.linux.dev
-X-Gm-Message-State: AOJu0YyannBl+Q5NaHTu+YYAKz+N6TFsXSohl1inyo9bPhbu2rbCY/Ha
-	NG7X9dtPc8FlHyXieUOL1GmYEAt9vHPDSizb33ercs5r4LKbL8EAnR/2
-X-Gm-Gg: ASbGncueFe1+rSwqBsL1PiyEWpCjd11EOBIdpykT34dXWsf7WGxqsbvEGSkDFPEz599
-	KQKze05cLiwnW8wXLFGMigsYOh1FdLg8CYo7BTDQeLgubFyOYrKV+F9WkL/ncSQfcODI7gai/VJ
-	fqwNGCgxrGN53GwEFPLzYVjZ4uIb+QYMiFWZ3lTRW++83Rf/GMPnmY24MEuNrU2RohxPdO7Zofo
-	iR+WpOLqvmHSIT27OWVduI93U0I9CDf6ggTRQVQm18CV5hTGeb/uP0GdIA+YNEjpSkVmSLWFrkY
-	JWRWX3Ulhw4/Z571h8sdCWHQ7zX0UYqROzJcx0awBwn7ZzF67E9I3kAzORYitFpi8jr4/IxpVXn
-	xLhG81ovYPMIU7qdpf555l9wBCt3Oq62VygGKsrop2Gmi5oyFlYkLnj8MmDNF9I0htSxEAF9j+V
-	eaaekFf8ljG9RE+u6b6oasK8oBzdocusDVug==
-X-Google-Smtp-Source: AGHT+IHtLspbw3Tqyywo/LjGQ4g7+P+EzXr8xJKhOKm/r+Oa+FAmGtFSkFP7kWNYQjC+LEzUuxX5Hg==
-X-Received: by 2002:a05:6214:2587:b0:6fa:c408:5a3b with SMTP id 6a1803df08f44-709e87eb75emr38852556d6.9.1755099913733;
-        Wed, 13 Aug 2025 08:45:13 -0700 (PDT)
+        bh=QjwWWlaiSxuBLrutmj24/qoTYXM0TidVt0sz9ukj7i4=;
+        b=joaS07bKsEJduV87V09mjsL7X4DQf7YyxXAiqT5Lbn6h26NUXG1+1St0AHCPv1xG+m
+         yEzC8ckqQnQ6Dg3laTvK5KnrLiZL5/TkMc5Ved62BzllVXpm8gKtSmTPxOO2kbA1Bn5K
+         3lPE3ZiDjlcWbm3sAIJn6Yp4c5FY2h0jegCIg+fjd66ZqXRhgaYMrNByGmcpeUhBZmMZ
+         KlTozInsXofHZhWWRc3N/ArieOKmoQCGj77t/1b92JA8MqKSNitKQOC7GQo/lvtDEFry
+         pRueMGuaGhjB/i5YfbP7kNQOpL6cIBL4OfeJdsRvMqS5pPEWdxVaZjpjeL0FtGSnzuyK
+         Vzlw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUcEfrVRuDlRs1nLhWg9otOdSgbwA9ASmw9P4RylPuinv4N797KDPWVen88D+0JOmqh8ir@lists.linux.dev
+X-Gm-Message-State: AOJu0YxSWbnA6TVDm00HyhYvJp+2K9/rA83XCo7Qou8lrQvPUtzrUWpq
+	2FkSA8AukY1UOkO3RCXlrlmcOLj3Wtx8/Vn/iRbTncoX+/B1mqiZpNrQ
+X-Gm-Gg: ASbGncuIwmnl7Ml1PqwUyEUJ1B1S8KE7B951QNBM3m0iIzLCf7mvREkJS6lXSNN7jML
+	P7KbtOmOdwiKPYhCusgKxayn6XcLcyNgBRHhqpz95YGgDPxMdw//doMi1Icgu3BoovZIZ7L1Fp8
+	oibknNlLADQv2maUzGB/4fdbiMJQf4vhtzF1F/ifsw20DDLBwHNYOX3hrRRokoIJZ4BDtlBXJZ/
+	vLHFAt4ImSFtAIGVeQZpK2AYk3C3dVQc9Z89Y3i/+nhU/khoXMy7fr6M5PrRN5zztrxtWQrADUU
+	7OXfS7WGD0nFnOAS6+XyoHJhKC2Ock5o9FI6fHPfW6Jxc+4Kqpkofn7GeAshBP/OidhYiWptGOS
+	wuA0L4zMKTzFJsUd1smeVUgh79QTqIanLCpcB83JcrOlrEEhc/RMuDhk3FASEc33EQ419b9UxOC
+	jpTirRYDnzHO8nWmdDwYTkOhOVHLbXsJ88AA==
+X-Google-Smtp-Source: AGHT+IFo4WArkDrsCUK9t4B6jzw/aFmRiBWP2yrzAvS/zR6ACJmHYfP/VTbhopmm+LesuhQ0Tnd1Gg==
+X-Received: by 2002:a05:6214:c62:b0:707:5d90:5e92 with SMTP id 6a1803df08f44-709e8969c59mr52606936d6.23.1755099915764;
+        Wed, 13 Aug 2025 08:45:15 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4808:6353:5c00:d445:7694:2051:518c])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7077ca3621asm194127396d6.33.2025.08.13.08.45.11
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7077ca3621asm194127396d6.33.2025.08.13.08.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Aug 2025 08:45:12 -0700 (PDT)
+        Wed, 13 Aug 2025 08:45:15 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 13 Aug 2025 11:45:05 -0400
-Subject: [PATCH v15 1/4] rust: macros: reduce collections in `quote!` macro
+Date: Wed, 13 Aug 2025 11:45:06 -0400
+Subject: [PATCH v15 2/4] samples: rust: platform: remove trailing commas
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250813-cstr-core-v15-1-c732d9223f4e@gmail.com>
+Message-Id: <20250813-cstr-core-v15-2-c732d9223f4e@gmail.com>
 References: <20250813-cstr-core-v15-0-c732d9223f4e@gmail.com>
 In-Reply-To: <20250813-cstr-core-v15-0-c732d9223f4e@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -93,214 +93,47 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openssh-sha256; t=1755099909; l=8730;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1755099909; l=1557;
  i=tamird@gmail.com; h=from:subject:message-id;
- bh=PTDvM2HBIQtiHRjiaQnIp9LPfNsXH8zj3ZtohuuvaLA=;
+ bh=LjcCbHMUoV3TltewN0HsJRdLdRD1ekMI3/F3iYl7gdo=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
  MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QDmMTBy3KylRjaSxoOn6HVmt++mJSXkDOp3JVyI3SaRT41raCRvnlfJf1bMl3uR1+0uOFSYNuSO
- 2Pbl50BvO7AQ=
+ QO8mU4ZtUTy2WAWiBRXSVqeaRSmzF3VR/fQVAMv11BPx81UtsH2jPBVrPoOeIFZIGeK9uRKIC2T
+ lF7fw1KgGMA0=
 X-Developer-Key: i=tamird@gmail.com; a=openssh;
  fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-Remove a handful of unncessary intermediate vectors and token streams;
-mainly the top-level stream can be directly extended with the notable
-exception of groups.
+This prepares for the next commit in which we introduce a custom
+formatting macro; that macro doesn't handle these spurious commas, so
+just remove them.
 
-Remove an unnecessary `#[allow(dead_code)]` added in commit dbd5058ba60c
-("rust: make pin-init its own crate").
-
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Acked-by: Danilo Krummrich <dakr@kernel.org>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- rust/macros/quote.rs | 104 ++++++++++++++++++++++++---------------------------
- 1 file changed, 49 insertions(+), 55 deletions(-)
+ samples/rust/rust_driver_platform.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
-index 92cacc4067c9..acc140c18653 100644
---- a/rust/macros/quote.rs
-+++ b/rust/macros/quote.rs
-@@ -2,7 +2,6 @@
+diff --git a/samples/rust/rust_driver_platform.rs b/samples/rust/rust_driver_platform.rs
+index 69ed55b7b0fa..ad08df0d73f0 100644
+--- a/samples/rust/rust_driver_platform.rs
++++ b/samples/rust/rust_driver_platform.rs
+@@ -146,7 +146,7 @@ fn properties_parse(dev: &device::Device) -> Result {
  
- use proc_macro::{TokenStream, TokenTree};
+         let name = c_str!("test,u32-optional-prop");
+         let prop = fwnode.property_read::<u32>(name).or(0x12);
+-        dev_info!(dev, "'{name}'='{prop:#x}' (default = 0x12)\n",);
++        dev_info!(dev, "'{name}'='{prop:#x}' (default = 0x12)\n");
  
--#[allow(dead_code)]
- pub(crate) trait ToTokens {
-     fn to_tokens(&self, tokens: &mut TokenStream);
- }
-@@ -47,121 +46,116 @@ fn to_tokens(&self, tokens: &mut TokenStream) {
- /// `quote` crate but provides only just enough functionality needed by the current `macros` crate.
- macro_rules! quote_spanned {
-     ($span:expr => $($tt:tt)*) => {{
--        let mut tokens: ::std::vec::Vec<::proc_macro::TokenTree>;
--        #[allow(clippy::vec_init_then_push)]
-+        let mut tokens = ::proc_macro::TokenStream::new();
-         {
--            tokens = ::std::vec::Vec::new();
-             let span = $span;
-             quote_spanned!(@proc tokens span $($tt)*);
-         }
--        ::proc_macro::TokenStream::from_iter(tokens)
-+        tokens
-     }};
-     (@proc $v:ident $span:ident) => {};
-     (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) => {
--        let mut ts = ::proc_macro::TokenStream::new();
--        $crate::quote::ToTokens::to_tokens(&$id, &mut ts);
--        $v.extend(ts);
-+        $crate::quote::ToTokens::to_tokens(&$id, &mut $v);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) => {
-         for token in $id {
--            let mut ts = ::proc_macro::TokenStream::new();
--            $crate::quote::ToTokens::to_tokens(&token, &mut ts);
--            $v.extend(ts);
-+            $crate::quote::ToTokens::to_tokens(&token, &mut $v);
-         }
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) => {
-         #[allow(unused_mut)]
--        let mut tokens = ::std::vec::Vec::<::proc_macro::TokenTree>::new();
-+        let mut tokens = ::proc_macro::TokenStream::new();
-         quote_spanned!(@proc tokens $span $($inner)*);
--        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-+        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-             ::proc_macro::Delimiter::Parenthesis,
--            ::proc_macro::TokenStream::from_iter(tokens)
--        )));
-+            tokens,
-+        ))]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) => {
--        let mut tokens = ::std::vec::Vec::new();
-+        let mut tokens = ::proc_macro::TokenStream::new();
-         quote_spanned!(@proc tokens $span $($inner)*);
--        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-+        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-             ::proc_macro::Delimiter::Bracket,
--            ::proc_macro::TokenStream::from_iter(tokens)
--        )));
-+            tokens,
-+        ))]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) => {
--        let mut tokens = ::std::vec::Vec::new();
-+        let mut tokens = ::proc_macro::TokenStream::new();
-         quote_spanned!(@proc tokens $span $($inner)*);
--        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-+        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-             ::proc_macro::Delimiter::Brace,
--            ::proc_macro::TokenStream::from_iter(tokens)
--        )));
-+            tokens,
-+        ))]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident :: $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Joint)
--        ));
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::Spacing::Joint, ::proc_macro::Spacing::Alone].map(|spacing| {
-+            ::proc_macro::TokenTree::Punct(::proc_macro::Punct::new(':', spacing))
-+        }));
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident : $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident , $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident @ $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident ! $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident ; $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident + $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident = $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident # $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Punct(
--                ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone)
--        ));
-+        $v.extend([::proc_macro::TokenTree::Punct(
-+            ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident _ $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new("_", $span)));
-+        $v.extend([::proc_macro::TokenTree::Ident(
-+            ::proc_macro::Ident::new("_", $span),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
-     (@proc $v:ident $span:ident $id:ident $($tt:tt)*) => {
--        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(stringify!($id), $span)));
-+        $v.extend([::proc_macro::TokenTree::Ident(
-+            ::proc_macro::Ident::new(stringify!($id), $span),
-+        )]);
-         quote_spanned!(@proc $v $span $($tt)*);
-     };
- }
+         // A missing required property will print an error. Discard the error to
+         // prevent properties_parse from failing in that case.
+@@ -161,7 +161,7 @@ fn properties_parse(dev: &device::Device) -> Result {
+         let prop: [i16; 4] = fwnode.property_read(name).required_by(dev)?;
+         dev_info!(dev, "'{name}'='{prop:?}'\n");
+         let len = fwnode.property_count_elem::<u16>(name)?;
+-        dev_info!(dev, "'{name}' length is {len}\n",);
++        dev_info!(dev, "'{name}' length is {len}\n");
+ 
+         let name = c_str!("test,i16-array");
+         let prop: KVec<i16> = fwnode.property_read_array_vec(name, 4)?.required_by(dev)?;
 
 -- 
 2.50.1
