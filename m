@@ -1,103 +1,296 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A341F4CB2;
-	Wed, 13 Aug 2025 15:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE6E2857EA
+	for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 15:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755098233; cv=none; b=Y+BCzHWOOIhq1jLUM9boEUXcsY2vopCsrhJvGEUxqFvjlM7BA/BBRld7/tjGDFkE/hKnivOaGord6DySweF9zpT9yfOZUp1vWSOl+jRQXr5YTQk66jHzpZu0unxBOcT6FcMHlWev/bZjgur6TQ3y0zDsmDvuX0ltV1vAdyZcuPE=
+	t=1755099915; cv=none; b=ew5DotN/zkMBUQdq11olnx7l/S1lwF8AlGZT8hYVovQ2qoVH9tM+N3sfnLVjza9bKcCH7uJM/NEwVY2i/XfCDatfk6OMBLvZgZ3Yy9TcPv0/LwNOYNGHiegGCMauYwFu0yIA5d9bto3DGFhBbF7TqzVpl0oeNWYqXl0fRbUwfws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755098233; c=relaxed/simple;
-	bh=0UvE3D33DbMuFPY6dxrR8vwFv0Cc+jwGirlm+m7m8h8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VGzfbyrMMlG2ZM7qJBnK1XHvYaZZLgrWa7evifDTRCjQtAN88a5sKbUONGbLIYbf6YkneEGQk5Vm2jqyAnBviPvDfIAo+sMo5Pd4DwVGrdQLMsiKkZeX+i7flwus1whf6NWbw2yPOAZVvG+m/DUiWjFDbBhmhg/8wpzRAL5ZGvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WxLyCH8i; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1755099915; c=relaxed/simple;
+	bh=stzNSR7YVVO4mhJL85aVSZ9OiFGzP4bNmlXxQrGpD1w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LOj6qR+KL6ROnJFMjRog+Av1Yw9NeP2/YUubVRTBrXhQClPNQ7VaDeIyQUAsl0lYn48gp6LZIv1COh/jTwRB14rtz0lTeBgZ/rMUKE/Wmvbh0rbC9RzyZt3V4RimtAoUNUkg0bnvLU28CZLOzGHVzYR8PTXYwjDSmPbLzGp8mOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NqYb1qVz; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WxLyCH8i"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=pNSPGI3nahSLz3vSSHU/GM73uUfkJwp5wjG48WP8eNs=; b=WxLyCH8iH69E9BH7UtMzH7H17H
-	t6Ml0vI1fI2OOdNxOGP+5iq+poupLQ2GZTl8Qbg+GLZRMfJhbheIFXwQRw1fAo5vR3jjnVWGALbDA
-	GF76KZXk/18EMG+E2DoKUem8UcWsq4kimbAVigd1E9VJbGvY6eMOx/aSv7+4PZZXOjQZExeGyi9kM
-	hKX2INP+qOiw68z+tMFED9Du70a0VZMniilClGrYQN98aaHcaPJwhLCTFus3IDJnpPe0eJIJBCBdh
-	hGIx2Rn6domoKnDI7gda9nml2xVHmkJ45p9qHFrGca4GFufzKdq8T/KWcgwMoXA06x8qBnyuwj/3g
-	Q99O5ANA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1umDDr-00000009rE6-0f1W;
-	Wed, 13 Aug 2025 15:17:03 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C17623001D6; Wed, 13 Aug 2025 17:17:02 +0200 (CEST)
-Date: Wed, 13 Aug 2025 17:17:02 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: nathan@kernel.org, arnd@arndb.de, broonie@kernel.org,
-	Liam.Howlett@oracle.com, urezki@gmail.com, will@kernel.org,
-	kaleshsingh@google.com, rppt@kernel.org, leitao@debian.org,
-	coxu@redhat.com, surenb@google.com, akpm@linux-foundation.org,
-	luto@kernel.org, jpoimboe@kernel.org, changyuanl@google.com,
-	hpa@zytor.com, dvyukov@google.com, kas@kernel.org, corbet@lwn.net,
-	vincenzo.frascino@arm.com, smostafa@google.com,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	andreyknvl@gmail.com, alexander.shishkin@linux.intel.com,
-	thiago.bauermann@linaro.org, catalin.marinas@arm.com,
-	ryabinin.a.a@gmail.com, jan.kiszka@siemens.com, jbohac@suse.cz,
-	dan.j.williams@intel.com, joel.granados@kernel.org,
-	baohua@kernel.org, kevin.brodsky@arm.com, nicolas.schier@linux.dev,
-	pcc@google.com, andriy.shevchenko@linux.intel.com,
-	wei.liu@kernel.org, bp@alien8.de, ada.coupriediaz@arm.com,
-	xin@zytor.com, pankaj.gupta@amd.com, vbabka@suse.cz,
-	glider@google.com, jgross@suse.com, kees@kernel.org,
-	jhubbard@nvidia.com, joey.gouly@arm.com, ardb@kernel.org,
-	thuth@redhat.com, pasha.tatashin@soleen.com,
-	kristina.martsenko@arm.com, bigeasy@linutronix.de,
-	lorenzo.stoakes@oracle.com, jason.andryuk@amd.com, david@redhat.com,
-	graf@amazon.com, wangkefeng.wang@huawei.com, ziy@nvidia.com,
-	mark.rutland@arm.com, dave.hansen@linux.intel.com,
-	samuel.holland@sifive.com, kbingham@kernel.org,
-	trintaeoitogc@gmail.com, scott@os.amperecomputing.com,
-	justinstitt@google.com, kuan-ying.lee@canonical.com, maz@kernel.org,
-	tglx@linutronix.de, samitolvanen@google.com, mhocko@suse.com,
-	nunodasneves@linux.microsoft.com, brgerst@gmail.com,
-	willy@infradead.org, ubizjak@gmail.com, mingo@redhat.com,
-	sohil.mehta@intel.com, linux-mm@kvack.org,
-	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org, llvm@lists.linux.dev, kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 13/18] kasan: arm64: x86: Handle int3 for inline KASAN
- reports
-Message-ID: <20250813151702.GO4067720@noisy.programming.kicks-ass.net>
-References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
- <9030d5a35eb5a3831319881cb8cb040aad65b7b6.1755004923.git.maciej.wieczor-retman@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NqYb1qVz"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-70a9f6542f7so341466d6.3
+        for <llvm@lists.linux.dev>; Wed, 13 Aug 2025 08:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755099912; x=1755704712; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8va3jts9g6WRN4RL4mjY7ZuhFWahTXZ2Z84JGnvkdyg=;
+        b=NqYb1qVz9Boh8GTUkbzGYAs7zSIlvWcaDNLeysKRLDwsS3xjhqTQBdKFhAm2cQHqdR
+         2BU35rQcCK6i64IIOWz6C3dHbgnu1fAwbS7osmTP3cx4OQ5iV3eLlhUdvb0gWnIMYOK8
+         AWP+YaNhdnr1un/jo3rZB05XYoH/B3yXSdVz++XfLJGnHiEnnIEUL5o4lKNHErTS9e4t
+         8Xkn7eh/aqG5/10ODkXJkaiBmseQ9AA2bXnJ4CnNqbrJ3rGh4MblD9PJyf4bjpmC8Zpu
+         cVkOZqfyvlQcJqo0Nj17NTITnxPiVVcWOUx4s4KC/Mah+9+NeMDOpQuR/jx2uvMfWX+4
+         OpAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755099912; x=1755704712;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8va3jts9g6WRN4RL4mjY7ZuhFWahTXZ2Z84JGnvkdyg=;
+        b=fYTb5Z5j2QC15aPo6ffUl7brM17QwlHpq7n9syDUVEKxoCGGXfsBJSWgCRKyg8dmoz
+         VoNTpJtwY8TNwP9oF1k5AhQngX07Fw8msbjmMY1PQh/3HL6PgfvhbUoF2SrU+j/d8Nc3
+         123xTmlxQzAhLF+5MYPTCI+G3XdD9eZoILCD+Nx+B8+buOClZAZCtiSxUQ7I92yb4DEC
+         mmMarlFJ0So1r7aTvQHFzg/PSoGmPgSBaToGOdpNF1w/DeS3hqcxT/dvkCetG/vOqBZU
+         nj8XkmM25oewWzg8PaR4gEjmkwOcybIQ60NkHO+liNVdv1jafkJtEpJyvjFhOzv9QHS2
+         N1QA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbsJuuinqTEFnRO/ouH32URe2d2eYm9l9ovCExmJ7PzY8OoKgUsCq/bKiGqWBI6x3rIP9j@lists.linux.dev
+X-Gm-Message-State: AOJu0YykNIej1EqrKqTwAG4OOiKeD2PR4AZeSnrc6uA26paPaZEXprN0
+	wHeW7N9zZJgQpESARoGzm4ML7k/NC3uVM6NO/yxEkqicPathJqG2qp1g
+X-Gm-Gg: ASbGncvIVtKeIWj5k6bsVuXq1lbrI5H6Z0FuakHjIEKLX9b+JpFAvPRgrzjO9Wl7N8f
+	1h+0uwbOUepxAyxJM31HDltAPdIPdGWCAaoWex9lgMzwENuz/GfMKOVuWueWxuna+UyAmAN7fMP
+	OBrbWhfBySuAUoaMg5IGwI7bcAia2iHDfJxWL9mbZykrFKPj+c8onne+gb0e46uF6Ysh6QiuK3f
+	X27mWFf6bnzAJDxeUc1fDD528EC6H9n89jTCb1tCrJI7vGcj1iv7zvJ1wiDbhpFK6S1+TFOGOmZ
+	Ch9w6almpY2+bUQc9Zg6pRLKayQMFGqSQJC7qkQ/DfUSufOOUipidh78YvDjijydiG+kLOZxqvX
+	amiqC4J7Wh01VrW/SjG81PAYm/GlH4z/Gnw6fa3juQc4RQZZ7F1/NkuXO/eirPYZxtSi9YKSu9V
+	9H4pUlZE5cD6bu9TcJuoz9WztYDYU3pase4P+9xhqZdEwi
+X-Google-Smtp-Source: AGHT+IEw7GoCagC81P6CCxrhzikSDCAhCvx4D5275LDY8M+H1gVXmbg6eNOKubdSNSaVoML7/rQwgg==
+X-Received: by 2002:a05:6214:20c3:b0:709:b6bc:f6f4 with SMTP id 6a1803df08f44-709e89579a2mr47020186d6.32.1755099911489;
+        Wed, 13 Aug 2025 08:45:11 -0700 (PDT)
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4808:6353:5c00:d445:7694:2051:518c])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7077ca3621asm194127396d6.33.2025.08.13.08.45.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 08:45:10 -0700 (PDT)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v15 0/4] rust: replace kernel::str::CStr w/ core::ffi::CStr
+Date: Wed, 13 Aug 2025 11:45:04 -0400
+Message-Id: <20250813-cstr-core-v15-0-c732d9223f4e@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9030d5a35eb5a3831319881cb8cb040aad65b7b6.1755004923.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAGznGgC/5WSy07kMBBFf6WV9RhV+e1e8R+IhVMu0xGTDjghG
+ oT493GCmE66NQuWtnOujyv3oxm5dDw2x8NHU3juxm441wWaX4eGTvH8xKJLdaORIA1IQEHjVAQ
+ NhUXSbWhtQAmUm/r9S+Hc/VnDHh7rOpehF9OpcPxO0OAxoFHW2DvpPTghxRzTUIZ5fH6/fynDN
+ Jz72P2+o6FfIk/dOA3lfdWb7RL8LSI3IrMVILy2gZJNMuR0//QvZBGZ3X9JV8kU0dcjCVr5a9J
+ vSbUlfSWpVVladt56e02GC6nQbclQSYPJEhkps5XXJMIFNVJvUYTKWo0yBp1CcuaGxQ2rYMfiY
+ pwCAbXUBri9V15Yi2HHymXCQIFcq00AuGHVhXW7ltSjyta/4pLiNrh4MynUGxb3znpxjo6Bopf
+ kd86fX50r/PpWezt9Fa9p48iV7vtuOh58NpEVJLvMSitmhuQAvEox68Q+M5pkvFm61vM4xrXvx
+ 8Pq4qv5qrEK5Xge3iaBYl7eY7Qh1C1pnfPG6acxEQ1TBBPI4O5pn38BDTJLFJoDAAA=
+X-Change-ID: 20250201-cstr-core-d4b9b69120cf
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openssh-sha256; t=1755099909; l=8791;
+ i=tamird@gmail.com; h=from:subject:message-id;
+ bh=stzNSR7YVVO4mhJL85aVSZ9OiFGzP4bNmlXxQrGpD1w=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
+ MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QD7flcTHe7UNsJBM8aVqwkgEC54LB+YN5qPzZfyDhONFxgt0HDbUnZIdp6D8ttu/Ik71EC53EPO
+ tW/t9LnFC6QQ=
+X-Developer-Key: i=tamird@gmail.com; a=openssh;
+ fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-On Tue, Aug 12, 2025 at 03:23:49PM +0200, Maciej Wieczor-Retman wrote:
-> Inline KASAN on x86 does tag mismatch reports by passing the faulty
-> address and metadata through the INT3 instruction - scheme that's setup
-> in the LLVM's compiler code (specifically HWAddressSanitizer.cpp).
-> 
-> Add a kasan hook to the INT3 handling function.
-> 
-> Disable KASAN in an INT3 core kernel selftest function since it can raise
-> a false tag mismatch report and potentially panic the kernel.
-> 
-> Make part of that hook - which decides whether to die or recover from a
-> tag mismatch - arch independent to avoid duplicating a long comment on
-> both x86 and arm64 architectures.
-> 
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+have omitted Co-authored tags, as the end result is quite different.
 
-Can we please split this into an arm64 and x86 patch. Also, why use int3
-here rather than a #UD trap, which we use for all other such cases?
+This series is intended to be taken through rust-next. The final patch
+in the series requires some other subsystems' `Acked-by`s:
+- rust/kernel/device.rs: driver-core. Already acked by gregkh.
+- rust/kernel/firmware.rs: driver-core. Danilo, could you take a look?
+- rust/kernel/seq_file.rs: vfs, I think? missing MAINTAINERS entry.
+  Christian Brauner <brauner@kernel.org>, perhaps?
+- rust/kernel/sync/*: no clear owner, probably doesn't need any.
+
+This series depends on steps 2a[1] and 2b[2] which both depend on step
+1[3].
+
+Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+Link: https://lore.kernel.org/all/20250709-core-cstr-fanout-1-v1-0-64308e7203fc@gmail.com/ [1]
+Link: https://lore.kernel.org/all/20250709-core-cstr-fanout-1-v1-0-fd793b3e58a2@gmail.com/ [2]
+Link: https://lore.kernel.org/all/20250704-core-cstr-prepare-v1-0-a91524037783@gmail.com/ [3]
+Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v15:
+- Seal `CStrExt`. (Benno Lossin)
+- Add patch to remove trailing commas from
+  samples/rust/rust_driver_platform.rs.
+- Link to v14: https://lore.kernel.org/r/20250710-cstr-core-v14-0-ca7e0ca82c82@gmail.com
+
+Changes in v14:
+- Break the change into multiple series.
+- Move `CStr` reexport to `kernel::ffi`. (Alice Ryhl)
+- `pub use core::fmt::{....}` in `kernel/fmt.rs`. (Benno Lossin)
+- Avoid unnecessary binding to `first_lit` in `fmt!`. (Benno Lossin)
+- Add comment to `identifier`-extracting loop. (Benno Lossin)
+- Change `quote_spanned!` formatting. (Benno Lossin)
+- Link to v13: https://lore.kernel.org/r/20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com
+
+Changes in v13:
+- Rebase on v6.16-rc4.
+- Link to v12: https://lore.kernel.org/r/20250619-cstr-core-v12-0-80c9c7b45900@gmail.com
+
+Changes in v12:
+- Introduce `kernel::fmt::Display` to allow implementations on foreign
+  types.
+- Tidy up doc comment on `str_to_cstr`. (Alice Ryhl).
+- Link to v11: https://lore.kernel.org/r/20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com
+
+Changes in v11:
+- Use `quote_spanned!` to avoid `use<'a, T>` and generally reduce manual
+  token construction.
+- Add a commit to simplify `quote_spanned!`.
+- Drop first commit in favor of
+  https://lore.kernel.org/rust-for-linux/20240906164448.2268368-1-paddymills@proton.me/.
+  (Miguel Ojeda)
+- Correctly handle expressions such as `pr_info!("{a}", a = a = a)`.
+  (Benno Lossin)
+- Avoid dealing with `}}` escapes, which is not needed. (Benno Lossin)
+- Revert some unnecessary changes. (Benno Lossin)
+- Rename `c_str_avoid_literals!` to `str_to_cstr!`. (Benno Lossin &
+  Alice Ryhl).
+- Link to v10: https://lore.kernel.org/r/20250524-cstr-core-v10-0-6412a94d9d75@gmail.com
+
+Changes in v10:
+- Rebase on cbeaa41dfe26b72639141e87183cb23e00d4b0dd.
+- Implement Alice's suggestion to use a proc macro to work around orphan
+  rules otherwise preventing `core::ffi::CStr` to be directly printed
+  with `{}`.
+- Link to v9: https://lore.kernel.org/r/20250317-cstr-core-v9-0-51d6cc522f62@gmail.com
+
+Changes in v9:
+- Rebase on rust-next.
+- Restore `impl Display for BStr` which exists upstream[1].
+- Link: https://doc.rust-lang.org/nightly/std/bstr/struct.ByteStr.html#impl-Display-for-ByteStr [1]
+- Link to v8: https://lore.kernel.org/r/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com
+
+Changes in v8:
+- Move `{from,as}_char_ptr` back to `CStrExt`. This reduces the diff
+  some.
+- Restore `from_bytes_with_nul_unchecked_mut`, `to_cstring`.
+- Link to v7: https://lore.kernel.org/r/20250202-cstr-core-v7-0-da1802520438@gmail.com
+
+Changes in v7:
+- Rebased on mainline.
+- Restore functionality added in commit a321f3ad0a5d ("rust: str: add
+  {make,to}_{upper,lower}case() to CString").
+- Used `diff.algorithm patience` to improve diff readability.
+- Link to v6: https://lore.kernel.org/r/20250202-cstr-core-v6-0-8469cd6d29fd@gmail.com
+
+Changes in v6:
+- Split the work into several commits for ease of review.
+- Restore `{from,as}_char_ptr` to allow building on ARM (see commit
+  message).
+- Add `CStrExt` to `kernel::prelude`. (Alice Ryhl)
+- Remove `CStrExt::from_bytes_with_nul_unchecked_mut` and restore
+  `DerefMut for CString`. (Alice Ryhl)
+- Rename and hide `kernel::c_str!` to encourage use of C-String
+  literals.
+- Drop implementation and invocation changes in kunit.rs. (Trevor Gross)
+- Drop docs on `Display` impl. (Trevor Gross)
+- Rewrite docs in the style of the standard library.
+- Restore the `test_cstr_debug` unit tests to demonstrate that the
+  implementation has changed.
+
+Changes in v5:
+- Keep the `test_cstr_display*` unit tests.
+
+Changes in v4:
+- Provide the `CStrExt` trait with `display()` method, which returns a
+   `CStrDisplay` wrapper with `Display` implementation. This addresses
+   the lack of `Display` implementation for `core::ffi::CStr`.
+- Provide `from_bytes_with_nul_unchecked_mut()` method in `CStrExt`,
+   which might be useful and is going to prevent manual, unsafe casts.
+- Fix a typo (s/preffered/prefered/).
+
+Changes in v3:
+- Fix the commit message.
+- Remove redundant braces in `use`, when only one item is imported.
+
+Changes in v2:
+- Do not remove `c_str` macro. While it's preferred to use C-string
+   literals, there are two cases where `c_str` is helpful:
+   - When working with macros, which already return a Rust string literal
+     (e.g. `stringify!`).
+   - When building macros, where we want to take a Rust string literal as an
+     argument (for caller's convenience), but still use it as a C-string
+     internally.
+- Use Rust literals as arguments in macros (`new_mutex`, `new_condvar`,
+   `new_mutex`). Use the `c_str` macro to convert these literals to C-string
+   literals.
+- Use `c_str` in kunit.rs for converting the output of `stringify!` to a
+   `CStr`.
+- Remove `DerefMut` implementation for `CString`.
+
+---
+Tamir Duberstein (4):
+      rust: macros: reduce collections in `quote!` macro
+      samples: rust: platform: remove trailing commas
+      rust: support formatting of foreign types
+      rust: replace `CStr` with `core::ffi::CStr`
+
+ rust/ffi.rs                          |   2 +
+ rust/kernel/device.rs                |   1 +
+ rust/kernel/error.rs                 |   2 +
+ rust/kernel/firmware.rs              |   9 +-
+ rust/kernel/fmt.rs                   |  87 +++++++-
+ rust/kernel/prelude.rs               |   7 +-
+ rust/kernel/seq_file.rs              |   2 +-
+ rust/kernel/str.rs                   | 395 ++++++++---------------------------
+ rust/kernel/sync/condvar.rs          |   2 +-
+ rust/kernel/sync/lock.rs             |   2 +-
+ rust/kernel/sync/lock/global.rs      |   2 +-
+ rust/macros/fmt.rs                   |  94 +++++++++
+ rust/macros/lib.rs                   |  19 ++
+ rust/macros/quote.rs                 | 111 +++++-----
+ samples/rust/rust_driver_platform.rs |   4 +-
+ 15 files changed, 367 insertions(+), 372 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250201-cstr-core-d4b9b69120cf
+prerequisite-message-id: 20250813-core-cstr-fanout-1-v3-0-545c14bc44ff@gmail.com
+prerequisite-patch-id: 0ccc3545ff9bf22a67b79a944705cef2fb9c2bbf
+prerequisite-patch-id: b1866166714606d5c11a4d7506abe4c2f86dac8d
+prerequisite-patch-id: b575ae9ef33020b691c8c5a17bd1985676519e14
+prerequisite-patch-id: 8fee5e2daf0749362331dad4fc63d907a01b14e9
+prerequisite-patch-id: 366ef1f93fb40b1d039768f2041ff79995e7e228
+prerequisite-patch-id: 1d350291f9292f910081856d8f7d5e4d9545cfd1
+prerequisite-patch-id: 9a6a60bd2b209126de64c16a77a3a1d229dd898c
+prerequisite-patch-id: 08ae5855768ec3b4c68272b86d2a0e0667c9aa47
+prerequisite-patch-id: 801be981c2346617fa9412498930b68dc784693b
+prerequisite-patch-id: f0dbf0a55a27fe8e199e242d1f79ea800d1ddb66
+prerequisite-patch-id: c0b4abb4d44f7e63d002d0bfe5239296930c183e
+prerequisite-message-id: 20250813-core-cstr-fanout-1-v3-0-a15eca059c51@gmail.com
+prerequisite-patch-id: 6711f2a2f25c12784057aa725a9482feef6bb6f0
+prerequisite-patch-id: 3b5144133c0e239e0a258c9aa4da0df2dd464e66
+prerequisite-patch-id: 589a352ba7f7c9aefefd84dfd3b6b20e290b0d14
+prerequisite-patch-id: 2a4b0b9170e25637b9eba0e516863bdcdb4149a8
+prerequisite-patch-id: 3d89601bba1fb01d190b0ba415b28ad9cbf1e209
+prerequisite-patch-id: 10923aebf24011b727f60496c0f9e0ad57e0a967
+prerequisite-patch-id: 9a7e8ba460358985147efd347658be31fbc78ba2
+prerequisite-patch-id: f79b8755f3d75effc581d09eafe5725043516aad
+prerequisite-patch-id: d598958c2d64dcb56a5cd64b088594be51b1d752
+
+Best regards,
+--  
+Tamir Duberstein <tamird@gmail.com>
+
