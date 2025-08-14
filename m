@@ -1,60 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433DE253F12;
-	Thu, 14 Aug 2025 06:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9382C24468A;
+	Thu, 14 Aug 2025 07:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755153451; cv=none; b=u16su9mCEzdBVBRnc+Y8KrzB1p4p+WujZAhSnlSwnWWHqL039k3UowuaxJa2sEhuMdJibEniWMynYoBPqYMAbZEG+ASzySvodZsXYNdDYm7gXZjCn8A2PAfWD6CU7tYtHTXlADPCnqx460RwSjk6G5OpnpuGjfc1fOxEQxajctA=
+	t=1755155740; cv=none; b=avRkJlLsM/1S3HCTomVXqEfA9nREKFWdPJGqtsY82rN5BTAoWG0v/W5SwNw9iVnySc65QEx3khJbq4dGGIgWoLhK5X5+T3i0mv72l5HseXtu0nlbmLDQakIlGnT7acR7tay0K2ojuvgxDhJscKAbXQ2q6A5iS4yQIYOjFJ0UFo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755153451; c=relaxed/simple;
-	bh=Bz1atUoEf/yQPoc+B0KkOZCY/bNDcSlOllWHm1ASYuM=;
+	s=arc-20240116; t=1755155740; c=relaxed/simple;
+	bh=SaB56iFHq9R1lIIJgY1jOBN/SbTeOE8emRCvNnsEoq0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qbvYcGeRMU4UDGn1jZhvjoQWmjKlG2i1tO3rE5kycdCXm02af9vJK6zStckAzLdTnVyLV9dszZzBK4+Dy6lH8JzQIzEXtXc9wC0IO9cJTWxRXTFOUZU0DoGciKdIywUrAud+LgcM7Fdu7vOygs06e7Lex1bhgpuUTzMI3c2frUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bkS5o41D; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3RQy2Pmj9Fl8lc55CB5FJPsWZJj1lygVl9wXLl0XaGug4U3ii0ZnFgCMQhgsRb3/ufadoafhX/U9I8HrNiXeZJ9OLCifUwialYdnyT4r481mjIDvAuTn+kYhb65vRvbSLMAR21+Z/+oPsol+Uc4+EMjc/TJLMPeSdOD6JNibcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i1IKT2zw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bkS5o41D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755153450; x=1786689450;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bz1atUoEf/yQPoc+B0KkOZCY/bNDcSlOllWHm1ASYuM=;
-  b=bkS5o41DXkqLuQic6ouKYdk6EwXasv0KriCdKSQKaqXh4P9dZsLE43f1
-   Ul6itJFaNRXfACyvyB/Tq7qxCCiWigy/wvAq/UKVQBssdSICjxNaisrVG
-   UwoS1h9wH68M8vIjy7l/41ok/hzRBOBFXzRzNAktQwSDX2FcHHOT6CDJS
-   7udIO6ZjIG+WQ6/nJnz02qQtPji798KtUsaWIsFBaJp3Z28hyrvWjrNLv
-   6hyYPCC/9t2d9fG/M7WZ2f/tu1rQsyKPgttAZ6NJ6RofI1R5SeydgJ+zk
-   Cli+bI4dLCCShVRLsOUmicJvPSvtS3uAglRzHfxMvCj2wEW7/C+S4ZPVP
-   Q==;
-X-CSE-ConnectionGUID: gJ11hieXTzqz11O2+WyzZw==
-X-CSE-MsgGUID: BXoREOw1RJCuPvKyaZVfpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="57329129"
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="57329129"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2025 23:37:29 -0700
-X-CSE-ConnectionGUID: 63wpKtS+SYSj3L7Kh7MbjA==
-X-CSE-MsgGUID: f7V0aADYTKGyJb52uej3Uw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="167487346"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 13 Aug 2025 23:37:27 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1umRaX-000Aeo-1D;
-	Thu, 14 Aug 2025 06:37:25 +0000
-Date: Thu, 14 Aug 2025 14:36:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ethan Graham <ethan.w.s.graham@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 RFC 6/6] crypto: implement KFuzzTest targets for PKCS7
- and RSA parsing
-Message-ID: <202508141445.OdXh6p0u-lkp@intel.com>
-References: <20250813133812.926145-7-ethan.w.s.graham@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i1IKT2zw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0A94C4CEEF;
+	Thu, 14 Aug 2025 07:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755155740;
+	bh=SaB56iFHq9R1lIIJgY1jOBN/SbTeOE8emRCvNnsEoq0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i1IKT2zwhssHQnjqKIWtvjwXerI6qQ1PNJ4VSL+eAdBxYbqVIjTYRDr4HQdDI2lyQ
+	 u6nsFBnRLyaqgFWWbzOeyOQEECfpnB7HFRoM6E3hO6sGlgss41eOmCgTCj8UDbGGiV
+	 kcOFxGN3h7q6PRJ0LFnpAK1twBP/I25c5bcY/wvp+piLO9bOEem5o1u/IyOlnGVqs5
+	 L90FI8Llj1gEjlrSGyhD/ENLft+kX+3j3yL1mUP3JUHnDXG1H78KF3wqJLtE+umkB6
+	 9qj4v3Wff5u7Gq6G5C3vOrkknrJVOKySTv9AXEbB2AQ2VTkv5un2lOKqSHyQjbbKCj
+	 5qil2ya53k7Hw==
+Date: Thu, 14 Aug 2025 10:15:09 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: nathan@kernel.org, arnd@arndb.de, broonie@kernel.org,
+	Liam.Howlett@oracle.com, urezki@gmail.com, will@kernel.org,
+	kaleshsingh@google.com, leitao@debian.org, coxu@redhat.com,
+	surenb@google.com, akpm@linux-foundation.org, luto@kernel.org,
+	jpoimboe@kernel.org, changyuanl@google.com, hpa@zytor.com,
+	dvyukov@google.com, kas@kernel.org, corbet@lwn.net,
+	vincenzo.frascino@arm.com, smostafa@google.com,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	andreyknvl@gmail.com, alexander.shishkin@linux.intel.com,
+	thiago.bauermann@linaro.org, catalin.marinas@arm.com,
+	ryabinin.a.a@gmail.com, jan.kiszka@siemens.com, jbohac@suse.cz,
+	dan.j.williams@intel.com, joel.granados@kernel.org,
+	baohua@kernel.org, kevin.brodsky@arm.com, nicolas.schier@linux.dev,
+	pcc@google.com, andriy.shevchenko@linux.intel.com,
+	wei.liu@kernel.org, bp@alien8.de, ada.coupriediaz@arm.com,
+	xin@zytor.com, pankaj.gupta@amd.com, vbabka@suse.cz,
+	glider@google.com, jgross@suse.com, kees@kernel.org,
+	jhubbard@nvidia.com, joey.gouly@arm.com, ardb@kernel.org,
+	thuth@redhat.com, pasha.tatashin@soleen.com,
+	kristina.martsenko@arm.com, bigeasy@linutronix.de,
+	lorenzo.stoakes@oracle.com, jason.andryuk@amd.com, david@redhat.com,
+	graf@amazon.com, wangkefeng.wang@huawei.com, ziy@nvidia.com,
+	mark.rutland@arm.com, dave.hansen@linux.intel.com,
+	samuel.holland@sifive.com, kbingham@kernel.org,
+	trintaeoitogc@gmail.com, scott@os.amperecomputing.com,
+	justinstitt@google.com, kuan-ying.lee@canonical.com, maz@kernel.org,
+	tglx@linutronix.de, samitolvanen@google.com, mhocko@suse.com,
+	nunodasneves@linux.microsoft.com, brgerst@gmail.com,
+	willy@infradead.org, ubizjak@gmail.com, peterz@infradead.org,
+	mingo@redhat.com, sohil.mehta@intel.com, linux-mm@kvack.org,
+	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	x86@kernel.org, llvm@lists.linux.dev, kasan-dev@googlegroups.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 06/18] x86: Reset tag for virtual to physical address
+ conversions
+Message-ID: <aJ2M_eKPvBluyLKJ@kernel.org>
+References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+ <01e62233dcc39aeb8d640eb3ee794f5da533f2a3.1755004923.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,115 +75,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250813133812.926145-7-ethan.w.s.graham@gmail.com>
+In-Reply-To: <01e62233dcc39aeb8d640eb3ee794f5da533f2a3.1755004923.git.maciej.wieczor-retman@intel.com>
 
-Hi Ethan,
+On Tue, Aug 12, 2025 at 03:23:42PM +0200, Maciej Wieczor-Retman wrote:
+> Any place where pointer arithmetic is used to convert a virtual address
+> into a physical one can raise errors if the virtual address is tagged.
+> 
+> Reset the pointer's tag by sign extending the tag bits in macros that do
+> pointer arithmetic in address conversions. There will be no change in
+> compiled code with KASAN disabled since the compiler will optimize the
+> __tag_reset() out.
+> 
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+> Changelog v4:
+> - Simplify page_to_virt() by removing pointless casts.
+> - Remove change in __is_canonical_address() because it's taken care of
+>   in a later patch due to a LAM compatible definition of canonical.
+> 
+>  arch/x86/include/asm/page.h    | 14 +++++++++++---
+>  arch/x86/include/asm/page_64.h |  2 +-
+>  arch/x86/mm/physaddr.c         |  1 +
+>  3 files changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
+> index 9265f2fca99a..15c95e96fd15 100644
+> --- a/arch/x86/include/asm/page.h
+> +++ b/arch/x86/include/asm/page.h
+> @@ -7,6 +7,7 @@
+>  #ifdef __KERNEL__
+>  
+>  #include <asm/page_types.h>
+> +#include <asm/kasan.h>
+>  
+>  #ifdef CONFIG_X86_64
+>  #include <asm/page_64.h>
+> @@ -41,7 +42,7 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
+>  #define __pa(x)		__phys_addr((unsigned long)(x))
+>  #endif
+>  
+> -#define __pa_nodebug(x)	__phys_addr_nodebug((unsigned long)(x))
+> +#define __pa_nodebug(x)	__phys_addr_nodebug((unsigned long)(__tag_reset(x)))
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Why not reset the tag inside __phys_addr_nodebug() and __phys_addr()?
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[also build test WARNING on herbert-crypto-2.6/master linus/master v6.17-rc1 next-20250814]
-[cannot apply to akpm-mm/mm-nonmm-unstable]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>  /* __pa_symbol should be used for C visible symbols.
+>     This seems to be the official gcc blessed way to do such arithmetic. */
+>  /*
+> @@ -65,9 +66,16 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
+>   * virt_to_page(kaddr) returns a valid pointer if and only if
+>   * virt_addr_valid(kaddr) returns true.
+>   */
+> -#define virt_to_page(kaddr)	pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
+> +
+> +#ifdef CONFIG_KASAN_SW_TAGS
+> +#define page_to_virt(x) ({							\
+> +	void *__addr = __va(page_to_pfn((struct page *)x) << PAGE_SHIFT);	\
+> +	__tag_set(__addr, page_kasan_tag(x));					\
+> +})
+> +#endif
+> +#define virt_to_page(kaddr)	pfn_to_page(__pa((void *)__tag_reset(kaddr)) >> PAGE_SHIFT)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ethan-Graham/mm-kasan-implement-kasan_poison_range/20250813-214228
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20250813133812.926145-7-ethan.w.s.graham%40gmail.com
-patch subject: [PATCH v1 RFC 6/6] crypto: implement KFuzzTest targets for PKCS7 and RSA parsing
-config: i386-buildonly-randconfig-004-20250814 (https://download.01.org/0day-ci/archive/20250814/202508141445.OdXh6p0u-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250814/202508141445.OdXh6p0u-lkp@intel.com/reproduce)
+then virt_to_page() will remain the same, no?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508141445.OdXh6p0u-lkp@intel.com/
+>  extern bool __virt_addr_valid(unsigned long kaddr);
+> -#define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long) (kaddr))
+> +#define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long)(__tag_reset(kaddr)))
 
-All warnings (new ones prefixed by >>):
-
-   In file included from crypto/rsa_helper.c:12:
->> include/linux/kfuzztest.h:134:3: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
-     133 |         pr_info("reloc_table: { num_entries = %u, padding = %u } @ offset 0x%lx", rt->num_entries, rt->padding_size,
-         |                                                                             ~~~
-         |                                                                             %x
-     134 |                 (char *)rt - (char *)regions);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:580:34: note: expanded from macro 'pr_info'
-     580 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:507:60: note: expanded from macro 'printk'
-     507 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:479:19: note: expanded from macro 'printk_index_wrap'
-     479 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   In file included from crypto/rsa_helper.c:12:
-   include/linux/kfuzztest.h:140:37: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
-     140 |         pr_info("payload: [0x%lx, 0x%lx)", (char *)payload_start - (char *)regions,
-         |                              ~~~           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                              %x
-   include/linux/printk.h:580:34: note: expanded from macro 'pr_info'
-     580 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:507:60: note: expanded from macro 'printk'
-     507 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:479:19: note: expanded from macro 'printk_index_wrap'
-     479 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   In file included from crypto/rsa_helper.c:12:
-   include/linux/kfuzztest.h:141:3: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
-     140 |         pr_info("payload: [0x%lx, 0x%lx)", (char *)payload_start - (char *)regions,
-         |                                     ~~~
-         |                                     %x
-     141 |                 (char *)payload_end - (char *)regions);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:580:34: note: expanded from macro 'pr_info'
-     580 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:507:60: note: expanded from macro 'printk'
-     507 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:479:19: note: expanded from macro 'printk_index_wrap'
-     479 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   3 warnings generated.
-
-
-vim +134 include/linux/kfuzztest.h
-
-cc1dba9238a428 Ethan Graham 2025-08-13  116  
-cc1dba9238a428 Ethan Graham 2025-08-13  117  /*
-cc1dba9238a428 Ethan Graham 2025-08-13  118   * Dump some information on the parsed headers and payload. Can be useful for
-cc1dba9238a428 Ethan Graham 2025-08-13  119   * debugging inputs when writing an encoder for the KFuzzTest input format.
-cc1dba9238a428 Ethan Graham 2025-08-13  120   */
-cc1dba9238a428 Ethan Graham 2025-08-13  121  __attribute__((unused)) static inline void kfuzztest_debug_header(struct reloc_region_array *regions,
-cc1dba9238a428 Ethan Graham 2025-08-13  122  								  struct reloc_table *rt, void *payload_start,
-cc1dba9238a428 Ethan Graham 2025-08-13  123  								  void *payload_end)
-cc1dba9238a428 Ethan Graham 2025-08-13  124  {
-cc1dba9238a428 Ethan Graham 2025-08-13  125  	uint32_t i;
-cc1dba9238a428 Ethan Graham 2025-08-13  126  
-cc1dba9238a428 Ethan Graham 2025-08-13  127  	pr_info("regions: { num_regions = %u } @ %px", regions->num_regions, regions);
-cc1dba9238a428 Ethan Graham 2025-08-13  128  	for (i = 0; i < regions->num_regions; i++) {
-cc1dba9238a428 Ethan Graham 2025-08-13  129  		pr_info("  region_%u: { start: 0x%x, size: 0x%x }", i, regions->regions[i].offset,
-cc1dba9238a428 Ethan Graham 2025-08-13  130  			regions->regions[i].size);
-cc1dba9238a428 Ethan Graham 2025-08-13  131  	}
-cc1dba9238a428 Ethan Graham 2025-08-13  132  
-cc1dba9238a428 Ethan Graham 2025-08-13  133  	pr_info("reloc_table: { num_entries = %u, padding = %u } @ offset 0x%lx", rt->num_entries, rt->padding_size,
-cc1dba9238a428 Ethan Graham 2025-08-13 @134  		(char *)rt - (char *)regions);
-cc1dba9238a428 Ethan Graham 2025-08-13  135  	for (i = 0; i < rt->num_entries; i++) {
-cc1dba9238a428 Ethan Graham 2025-08-13  136  		pr_info("  reloc_%u: { src: %u, offset: 0x%x, dst: %u }", i, rt->entries[i].region_id,
-cc1dba9238a428 Ethan Graham 2025-08-13  137  			rt->entries[i].region_offset, rt->entries[i].value);
-cc1dba9238a428 Ethan Graham 2025-08-13  138  	}
-cc1dba9238a428 Ethan Graham 2025-08-13  139  
-cc1dba9238a428 Ethan Graham 2025-08-13  140  	pr_info("payload: [0x%lx, 0x%lx)", (char *)payload_start - (char *)regions,
-cc1dba9238a428 Ethan Graham 2025-08-13  141  		(char *)payload_end - (char *)regions);
-cc1dba9238a428 Ethan Graham 2025-08-13  142  }
-cc1dba9238a428 Ethan Graham 2025-08-13  143  
+The same here, I think tag_reset() should be inside __virt_addr_valid()
+  
+>  static __always_inline void *pfn_to_kaddr(unsigned long pfn)
+>  {
+> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+> index 015d23f3e01f..de68ac40dba2 100644
+> --- a/arch/x86/include/asm/page_64.h
+> +++ b/arch/x86/include/asm/page_64.h
+> @@ -33,7 +33,7 @@ static __always_inline unsigned long __phys_addr_nodebug(unsigned long x)
+>  extern unsigned long __phys_addr(unsigned long);
+>  extern unsigned long __phys_addr_symbol(unsigned long);
+>  #else
+> -#define __phys_addr(x)		__phys_addr_nodebug(x)
+> +#define __phys_addr(x)		__phys_addr_nodebug(__tag_reset(x))
+>  #define __phys_addr_symbol(x) \
+>  	((unsigned long)(x) - __START_KERNEL_map + phys_base)
+>  #endif
+> diff --git a/arch/x86/mm/physaddr.c b/arch/x86/mm/physaddr.c
+> index fc3f3d3e2ef2..7f2b11308245 100644
+> --- a/arch/x86/mm/physaddr.c
+> +++ b/arch/x86/mm/physaddr.c
+> @@ -14,6 +14,7 @@
+>  #ifdef CONFIG_DEBUG_VIRTUAL
+>  unsigned long __phys_addr(unsigned long x)
+>  {
+> +	x = __tag_reset(x);
+>  	unsigned long y = x - __START_KERNEL_map;
+>  
+>  	/* use the carry flag to determine if x was < __START_KERNEL_map */
+> -- 
+> 2.50.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
