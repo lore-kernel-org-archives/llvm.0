@@ -1,204 +1,228 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6B13002B0;
-	Thu, 14 Aug 2025 13:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D6B21ADA3;
+	Thu, 14 Aug 2025 17:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755179437; cv=none; b=Rxxz/tr8cGtyYkwepiM7Q6+xQ9jF7UBq5F4+fl8v7K/WV1wxKmNsYx5fDZ8FWNe68qTQFuKd54h5jMOUD9pvQeTWZK6mXmZ/Oq+KarEJFbrRKLtSypG+obbuuaNGQryqv1IBf51o+dAVWpTLzZOC6NXRZmaauVHm5gnrfOr/cOM=
+	t=1755192956; cv=none; b=IsfWSV+b48C6aHyUJPCgCDF/PJrn1OOhdyPZo/3OV1cCjkS/wiyj0Ksdn+Dc5oZTRzccFViZXntCVDMEqhfnaILMks1y6IhlobhooJjFXdW55qvHRkFGrOzVg+DuIbwkFEqwLMqhkj3ztYnHIs7ADOLH2XnNAmJISM6CJFbb07Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755179437; c=relaxed/simple;
-	bh=vFczm8e5OaiPzDro8LfC6emO/k/Igt0MHXU7T1y7z8g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pdrBZHZERso5aAQggXbaDBOMAY3lfQBuvPOSWZ2YGHC200+Ns7Q6bLfCdRMf/2j0mkywojH5BPHBSfT/yMfK5oDVl4Rqaw112rnOv8CD5UKFMsRogFADTRzwuN/QFlmFjZTzOvGmnoOzyYQpJ5RtmF7EWaN/9tfUOwXkHys8dMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4c2mf947xHz9sSR;
-	Thu, 14 Aug 2025 15:43:13 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mPu6Xjo1vLlQ; Thu, 14 Aug 2025 15:43:13 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4c2mf83Tw5z9sSL;
-	Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4D6A38B765;
-	Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id eqmp3JHpIEX9; Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id C584A8B763;
-	Thu, 14 Aug 2025 15:43:09 +0200 (CEST)
-Message-ID: <86186254-b2c6-4818-af0a-4eb67d90e501@csgroup.eu>
-Date: Thu, 14 Aug 2025 15:43:09 +0200
+	s=arc-20240116; t=1755192956; c=relaxed/simple;
+	bh=vA7dghHcirnitTg5uFoDQb2W7/JU6CZNCJaXQRZsIsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mSV95dAGTTARda/VHtcvf1ZMplxgc0CIP/m+qJE1Kf1r8ucNEj/9wCNKTWHHiBWo0Q9KpEFw/KZfArju4/K6a3KadaAvVrzuGHhTXy1bCJYGUKkWi7JTUEFdA7+BAOiF0Psiwu+2jo9gnERDXY9LIEWektLBKmTAHmu0iPcp1YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HD12aJ5/; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HD12aJ5/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755192953; x=1786728953;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vA7dghHcirnitTg5uFoDQb2W7/JU6CZNCJaXQRZsIsw=;
+  b=HD12aJ5/PEHklUF9Tpaw8agPIzgtOqJ/Wx+XQvHmYFitXDfgcRuVK8Cm
+   7vqOx2BvqSdQpP2k4gWmx0Nzk+p0bCbsrH3smYU9+uTzwaCg26A8aP6+J
+   60ZpOq/i9FVoagWsrTHybo3Ju/pev4th1QbiSK1KC4L2A0N2ipMvRIkos
+   pyjiazozoD8tcF8t421150H6fEOSxQ0Hj0bVGJBhj5pUf3oVwo4oLa/c5
+   0GNtOnHHimvbKRU1uK1p+CFHUJHiGXUE/xC1zoeM2BcB9sMsc7q9TA+ai
+   4HIjNwz80Ruggrn6xO2/DPUrhjOBbsVuxaKYg3d/PtgPJMFs9TEo9LEYB
+   w==;
+X-CSE-ConnectionGUID: 8pLdKv5CS1SWheeGzR1qBA==
+X-CSE-MsgGUID: 58wrywnNR6qh5hTZGLU5Ag==
+X-IronPort-AV: E=McAfee;i="6800,10657,11522"; a="68217569"
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="68217569"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 10:35:53 -0700
+X-CSE-ConnectionGUID: sZUuxG5XTLa/2vSs51xUlw==
+X-CSE-MsgGUID: sx2H6YTPQ0eqW601HqXdlQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="167630701"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 14 Aug 2025 10:35:51 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1umbrh-000BDN-0k;
+	Thu, 14 Aug 2025 17:35:49 +0000
+Date: Fri, 15 Aug 2025 01:34:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+Subject: [sailus-media-tree:devel 2/2] drivers/media/i2c/ov2735.c:938:17:
+ error: call to undeclared function 'devm_v4l2_sensor_clk_get'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202508150159.xbzqi1vt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/24] vdso: Reject absolute relocations during build
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
- linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>,
- Arnaldo Carvalho de Melo <acme@redhat.com>,
- Alexandre Ghiti <alexghiti@rivosinc.com>
-References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   git://linuxtv.org/sailus/media_tree.git devel
+head:   7b1c48d7d525ee84c4dc79d6810171873b954c92
+commit: 7b1c48d7d525ee84c4dc79d6810171873b954c92 [2/2] media: i2c: add ov2735 image sensor driver
+config: x86_64-randconfig-071-20250814 (https://download.01.org/0day-ci/archive/20250815/202508150159.xbzqi1vt-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508150159.xbzqi1vt-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508150159.xbzqi1vt-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov2735.c:938:17: error: call to undeclared function 'devm_v4l2_sensor_clk_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     938 |         ov2735->xclk = devm_v4l2_sensor_clk_get(ov2735->dev, NULL);
+         |                        ^
+>> drivers/media/i2c/ov2735.c:938:15: error: incompatible integer to pointer conversion assigning to 'struct clk *' from 'int' [-Wint-conversion]
+     938 |         ov2735->xclk = devm_v4l2_sensor_clk_get(ov2735->dev, NULL);
+         |                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
+vim +/devm_v4l2_sensor_clk_get +938 drivers/media/i2c/ov2735.c
 
-Le 12/08/2025 à 07:44, Thomas Weißschuh a écrit :
-> The compiler can emit absolute relocations in vDSO code,
-> which are invalid in vDSO code.
-> Detect them at compile-time.
+   908	
+   909	static int ov2735_probe(struct i2c_client *client)
+   910	{
+   911		struct ov2735 *ov2735;
+   912		unsigned int xclk_freq;
+   913		int ret;
+   914	
+   915		ov2735 = devm_kzalloc(&client->dev, sizeof(*ov2735), GFP_KERNEL);
+   916		if (!ov2735)
+   917			return -ENOMEM;
+   918	
+   919		ov2735->dev = &client->dev;
+   920	
+   921		v4l2_i2c_subdev_init(&ov2735->sd, client, &ov2735_subdev_ops);
+   922		ov2735->sd.internal_ops = &ov2735_internal_ops;
+   923	
+   924		ov2735->cci = devm_cci_regmap_init_i2c(client, 8);
+   925		if (IS_ERR(ov2735->cci))
+   926			return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->cci),
+   927					     "failed to initialize CCI\n");
+   928	
+   929		/* Set Current page to 0 */
+   930		ov2735->current_page = 0;
+   931	
+   932		ret = devm_mutex_init(ov2735->dev, &ov2735->page_lock);
+   933		if (ret)
+   934			return dev_err_probe(ov2735->dev, ret,
+   935					     "Failed to initialize lock\n");
+   936	
+   937		/* Get system clock (xvclk) */
+ > 938		ov2735->xclk = devm_v4l2_sensor_clk_get(ov2735->dev, NULL);
+   939		if (IS_ERR(ov2735->xclk))
+   940			return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->xclk),
+   941					     "failed to get xclk\n");
+   942	
+   943		xclk_freq = clk_get_rate(ov2735->xclk);
+   944		if (xclk_freq != OV2735_XCLK_FREQ)
+   945			return dev_err_probe(ov2735->dev, -EINVAL,
+   946					     "xclk frequency not supported: %u Hz\n",
+   947					     xclk_freq);
+   948	
+   949		ret = ov2735_get_regulators(ov2735);
+   950		if (ret)
+   951			return dev_err_probe(ov2735->dev, ret,
+   952					     "failed to get regulators\n");
+   953	
+   954		ret = ov2735_parse_endpoint(ov2735);
+   955		if (ret)
+   956			return dev_err_probe(ov2735->dev, ret,
+   957					     "failed to parse endpoint configuration\n");
+   958	
+   959		ov2735->reset_gpio = devm_gpiod_get_optional(ov2735->dev,
+   960							     "reset", GPIOD_OUT_LOW);
+   961		if (IS_ERR(ov2735->reset_gpio))
+   962			return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->reset_gpio),
+   963					     "failed to get reset GPIO\n");
+   964	
+   965		ov2735->enable_gpio = devm_gpiod_get_optional(ov2735->dev,
+   966							      "enable", GPIOD_OUT_LOW);
+   967		if (IS_ERR(ov2735->enable_gpio))
+   968			return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->enable_gpio),
+   969					     "failed to get enable GPIO\n");
+   970	
+   971		ret = ov2735_power_on(ov2735->dev);
+   972		if (ret)
+   973			return ret;
+   974	
+   975		ret = ov2735_identify_module(ov2735);
+   976		if (ret)
+   977			goto error_power_off;
+   978	
+   979		ret = ov2735_init_controls(ov2735);
+   980		if (ret)
+   981			goto error_power_off;
+   982	
+   983		/* Initialize subdev */
+   984		ov2735->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+   985		ov2735->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+   986		ov2735->pad.flags = MEDIA_PAD_FL_SOURCE;
+   987	
+   988		ret = media_entity_pads_init(&ov2735->sd.entity, 1, &ov2735->pad);
+   989		if (ret) {
+   990			dev_err_probe(ov2735->dev, ret, "failed to init entity pads\n");
+   991			goto error_handler_free;
+   992		}
+   993	
+   994		ov2735->sd.state_lock = ov2735->handler.lock;
+   995		ret = v4l2_subdev_init_finalize(&ov2735->sd);
+   996		if (ret) {
+   997			dev_err_probe(ov2735->dev, ret, "subdev init error\n");
+   998			goto error_media_entity;
+   999		}
+  1000	
+  1001		ret = devm_pm_runtime_get_noresume(ov2735->dev);
+  1002		if (ret) {
+  1003			dev_err_probe(ov2735->dev, ret,
+  1004				      "failed to get runtime PM noresume\n");
+  1005			goto error_subdev_cleanup;
+  1006		}
+  1007	
+  1008		ret = devm_pm_runtime_set_active_enabled(ov2735->dev);
+  1009		if (ret) {
+  1010			dev_err_probe(ov2735->dev, ret,
+  1011				      "failed to set runtime PM active+enabled\n");
+  1012			goto error_subdev_cleanup;
+  1013		}
+  1014	
+  1015		ret = v4l2_async_register_subdev_sensor(&ov2735->sd);
+  1016		if (ret) {
+  1017			dev_err_probe(ov2735->dev, ret,
+  1018				      "failed to register ov2735 sub-device\n");
+  1019			goto error_subdev_cleanup;
+  1020		}
+  1021	
+  1022		return 0;
+  1023	
+  1024	error_subdev_cleanup:
+  1025		v4l2_subdev_cleanup(&ov2735->sd);
+  1026	
+  1027	error_media_entity:
+  1028		media_entity_cleanup(&ov2735->sd.entity);
+  1029	
+  1030	error_handler_free:
+  1031		v4l2_ctrl_handler_free(ov2735->sd.ctrl_handler);
+  1032	
+  1033	error_power_off:
+  1034		ov2735_power_off(ov2735->dev);
+  1035	
+  1036		return ret;
+  1037	}
+  1038	
 
-I'm a bit puzzled with this series.
-
-If I understand correctly, the check will be done only when you have 
-RUST available ?
-
-I wouldn't expect having RUST to build a C kernel.
-
-By the way, aren't relocations already detected by command 
-cmd_vdso_check in lib/vdso/Makefile.include , using readelf ? Why is a 
-new tool needed and why does it have to be written in RUST langage ?
-
-Thanks
-Christophe
-
-> 
-> libc elf.h is missing some of the relocation constants,
-> so make user of the kernels own UAPI headers instead.
-> 
-> Kbuild and Rust folks: This contains custom definitions of hostprog
-> bindgen and rust library commands.
-> These are currently only defined inside the subsystem directory.
-> Let me know if they should go into scripts/Makefile.host.
-> 
-> This will conflict with my SPARC64 generic vDSO patches [0].
-> If both end up being applied at the same time, please leave out commit
-> 'vdso/vdsocheck: Drop the transitional kconfig option' from this series.
-> 
-> [0] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1%40linutronix.de%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749561064%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=HacF%2FvlUoxA9P6fTiN1ytw49gwayX1wNE7IxfEkFutE%3D&reserved=0
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
-> Changes in v4:
-> - Replace the inline shell logic with a dedicated build-time tool
-> - Link to v3: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20250611-vdso-absolute-reloc-v3-0-47897d73784b%40linutronix.de&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749584369%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=7NxAhutk6IXl%2B3fe1kkZEzhZz6CWye%2FVAcFO%2BgtS4uo%3D&reserved=0
-> 
-> Changes in v3:
-> - Drop already applied bugfix for arm64
-> - Disable LTO for the riscv vDSO, as it is incompatible
-> - Link to v2: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20250430-vdso-absolute-reloc-v2-0-5efcc3bc4b26%40linutronix.de&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749600546%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=uv0qMS5qq0DovLHtxfRvT42atbJEkztylpOS8zt6bJ4%3D&reserved=0
-> 
-> Changes in v2:
-> - Link to openend (invalid) GCC bug containing more explanations
-> - Refine commit messages
-> - Don't fail on commit absolute relocations in debug info
-> - Link to v1: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20250429-vdso-absolute-reloc-v1-0-987a0afd10b5%40linutronix.de&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749616057%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=K5iwoz0Xqc8kheotWEc4M2KrZ7UVMDObOyFfCPj4N8Q%3D&reserved=0
-> 
-> ---
-> Thomas Weißschuh (24):
->        elf, uapi: Add a header for relocation constants
->        x86/elf, um/x86/elf: Move relocation constants to UAPI
->        ARM: elf: Move relocation constants to UAPI
->        arm64: elf: Move relocation constants to UAPI
->        powerpc/elf: Move relocation constants to UAPI
->        riscv: elf: Move relocation constants to UAPI
->        LoongArch: Move relocation constants to UAPI
->        s390/elf: Move relocation constants to UAPI
->        MIPS: ELF: Move relocation constants to UAPI
->        tools headers UAPI: Sync ELF headers with the kernel sources
->        vdso: Add the vdsocheck tool
->        x86/vdso: Enable the vdsocheck tool
->        ARM: vdso: Enable the vdsocheck tool
->        arm64: vdso: Enable the vdsocheck tool
->        powerpc/elf: Add 32-bit REL16 relocation definitions
->        powerpc/vdso: Enable the vdsocheck tool
->        riscv: vdso: Deduplicate CFLAGS_REMOVE_* variables
->        riscv: vdso: Disable LTO for the vDSO
->        riscv: vdso: Enable the vdsocheck tool
->        LoongArch: vDSO: Enable the vdsocheck tool
->        s390/vdso: Enable the vdsocheck tool
->        MIPS: ELF: Add more PC-relative relocation definitions
->        MIPS: vdso: Enable the vdsocheck tool
->        vdso/vdsocheck: Drop the transitional kconfig option
-> 
->   arch/arm/include/asm/elf.h          |  24 --
->   arch/arm/vdso/Makefile              |   4 +-
->   arch/arm64/include/asm/elf.h        |  55 ----
->   arch/arm64/kernel/vdso/Makefile     |   4 +-
->   arch/loongarch/include/asm/elf.h    | 100 ------
->   arch/loongarch/vdso/Makefile        |   4 +-
->   arch/mips/include/asm/elf.h         |  53 ---
->   arch/mips/vdso/Makefile             |   8 +-
->   arch/powerpc/include/uapi/asm/elf.h | 201 ------------
->   arch/powerpc/kernel/vdso/Makefile   |   4 +-
->   arch/riscv/include/uapi/asm/elf.h   |  66 ----
->   arch/riscv/kernel/vdso/Makefile     |  11 +-
->   arch/s390/include/asm/elf.h         |  83 -----
->   arch/s390/kernel/vdso32/Makefile    |   4 +-
->   arch/s390/kernel/vdso64/Makefile    |   4 +-
->   arch/x86/entry/vdso/Makefile        |   6 +-
->   arch/x86/include/asm/elf.h          |  34 --
->   arch/x86/um/asm/elf.h               |  33 --
->   include/uapi/linux/elf-r.h          | 631 ++++++++++++++++++++++++++++++++++++
->   include/uapi/linux/elf.h            |   1 +
->   lib/vdso/Makefile                   |   2 +
->   lib/vdso/Makefile.include           |  17 +
->   lib/vdso/check/.gitignore           |   3 +
->   lib/vdso/check/Makefile             |  28 ++
->   lib/vdso/check/elf.rs               | 488 ++++++++++++++++++++++++++++
->   lib/vdso/check/vdsocheck.rs         | 279 ++++++++++++++++
->   tools/include/uapi/linux/elf-em.h   |  71 ++++
->   tools/include/uapi/linux/elf-r.h    | 631 ++++++++++++++++++++++++++++++++++++
->   tools/include/uapi/linux/elf.h      | 112 ++++++-
->   29 files changed, 2277 insertions(+), 684 deletions(-)
-> ---
-> base-commit: 5180c6526acc9f1cb58f8b11fba67583c22e0854
-> change-id: 20250428-vdso-absolute-reloc-a226293c1761
-> 
-> Best regards,
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
