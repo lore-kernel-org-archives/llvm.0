@@ -1,128 +1,142 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E473D2FCBE6;
-	Fri, 15 Aug 2025 10:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF762F659D;
+	Fri, 15 Aug 2025 10:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755252366; cv=none; b=NI0+5yFsz4XxlVB9jEdoY/Z+jHn5G1lxQlCAIBH/SMNHDV3oe7Jb9JYf/KDeNJLCC8aUJFaJAv2fxghFfTTb2GPxqwXybudAfvZG/7Wqy4hq8dRHedDV3NzfOUKEOGxNv835w0u/xpTQTc5fpBphfsTva/qSTPxpUOLfTsSWIuk=
+	t=1755252556; cv=none; b=RoJyCxic5yoa/owyFffiDsqucTX4RAHcqj9dJsUzkoyOtJvk2wreLzm/SpHmkr9SP1VgI/J9t3RbA/VggWEd86PyTyzEV1SJLxJs9OG8qJus2yRaZqLerMjA4972WQsvCZLeIxFQEjg96TzBVC+O5XcymcsVrVM9Xzi1oOTxoes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755252366; c=relaxed/simple;
-	bh=Qum2QJiRlsLf40QcWgyKpHqDOId5H79nbhv7G1AXN9Y=;
+	s=arc-20240116; t=1755252556; c=relaxed/simple;
+	bh=QYlDdduaMgfBrCrW40Ku6gKEFl3fJeLsf6RKdZGMQ2c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=msdvAgmOBcDqm7R6i4MEo/D0lB/vJJBGS5wPBZZJqmgAhKlv2QHAi37dyC5JmupKmxfyj5kNu3i1KfWIxjejRFE6zK6F1e3qEqrCPHQ+WM4mnyE81oM7V+fG0dw4clsqrHMi+5/BIKidIjYiKyoDMpAqSFE3SNthkydu0r/L4ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aO2iazZB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S6z9FpXD; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=I92/BOE6v1jeeuGaVNhR687/I8vjLHr94dKN9WG57p3pcFGeuDjWIYMsM09MEG9+fiGm40DSxvCVx8NGKUxvhC8kne7BXHbHzqN0XD4UgjtU3pK5rIRgGPCKN5SPn+hofHNtK0d+Muj+3tOHoON6b29XDsS8ZHfNUhwc8CLNlfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FltKowcW; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aO2iazZB";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S6z9FpXD"
-Date: Fri, 15 Aug 2025 12:06:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755252363;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NKM6vYBTvYJgJZpC+3klg9OwyY5OfNg57KkNb0OocWg=;
-	b=aO2iazZBVl4jvGHcxioVfsh65iLR3Izq+qWPXADbutMqMavKgUaUthaDr+R6w1r6xC69M7
-	pL5h2TEWtWYewAnpScYhJCkIaFAKgULbi15SjfGtKC8LJ/mZc1hQQzLg71FWu25eDTH0y1
-	MdUY3+nnowrj0PdDzw1hyrQ8ozJ0BdBe+J6xfrhxUNOLMiWm7280NRlOtJuKnvCK2Hl4+R
-	JjnaSPjNDatrg+pgW4dq3uCQftbz45AWPj/EWmXs4IklOD4k8lw//0rXGaZQYflfEXqJDN
-	ZoNnis/wD+gc1ASC2wdlydN0BBi8bv7A4d+0Pi34HL6a8GZJXUQvVqO1fxQIkg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755252363;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NKM6vYBTvYJgJZpC+3klg9OwyY5OfNg57KkNb0OocWg=;
-	b=S6z9FpXDI0m5KmQAvWcT/IWg9tN8RVfisToJ75YI5pbqWTKx4VxzrYh7GLy6FZouW5QiYj
-	9qWhB6v7+0ZZRyBg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v4 00/24] vdso: Reject absolute relocations during build
-Message-ID: <20250815112851-e613308f-d49e-44ae-b2dd-ca7946fa1fd9@linutronix.de>
-References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
- <86186254-b2c6-4818-af0a-4eb67d90e501@csgroup.eu>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FltKowcW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755252555; x=1786788555;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QYlDdduaMgfBrCrW40Ku6gKEFl3fJeLsf6RKdZGMQ2c=;
+  b=FltKowcWNvqZKO7h3n77P9joD80N+3SqWkAYaZVQjdzkVelB0MZRcK/P
+   5LpWq8WVRjmI+FTsJTFY/cQL9xadU1FJFTSYkJ7sioExozViL9/aH9OUp
+   Vwx28b8euLjUP7WyyV8JfAhYoxTnRClKeetRa6bE1DtBZL+qgiu+bZoSF
+   fRqNNdCZznhSB6BsfX7H5LytPITEj2Lbs7wK0QG+mi+NMGfxrRp0p/IZ3
+   C0+UcUshsWEOn6xWXkGYgPEi/ZLLqU5O0aKOyGKPLZMKbIDfJR78j/3Fi
+   iU6a2dJGz6DK79p1HqoNLl8zPDCEZb0lGvmbM6POTJAMIAyZgKNaeZn8n
+   g==;
+X-CSE-ConnectionGUID: mO3tMmCrTN6LVMhw2W2SXg==
+X-CSE-MsgGUID: Eb5Kv+cVQGKJBXmTP8bC+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11522"; a="61208895"
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="61208895"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 03:09:15 -0700
+X-CSE-ConnectionGUID: mpBGE/ipS1KK+d2B+6q4EA==
+X-CSE-MsgGUID: SZhZaxpVTAmT5ClKqnYCnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
+   d="scan'208";a="171115255"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 15 Aug 2025 03:09:13 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1umrN1-000BqS-2d;
+	Fri, 15 Aug 2025 10:09:11 +0000
+Date: Fri, 15 Aug 2025 18:08:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bharata B Rao <bharata@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v1 4/7] x86: ibs: In-kernel IBS driver for memory
+ access profiling
+Message-ID: <202508151720.OkJ7smVC-lkp@intel.com>
+References: <20250814134826.154003-5-bharata@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86186254-b2c6-4818-af0a-4eb67d90e501@csgroup.eu>
+In-Reply-To: <20250814134826.154003-5-bharata@amd.com>
 
-Hi Christophe,
+Hi Bharata,
 
-On Thu, Aug 14, 2025 at 03:43:09PM +0200, Christophe Leroy wrote:
-> Le 12/08/2025 à 07:44, Thomas Weißschuh a écrit :
-> > The compiler can emit absolute relocations in vDSO code,
-> > which are invalid in vDSO code.
-> > Detect them at compile-time.
-> 
-> I'm a bit puzzled with this series.
-> 
-> If I understand correctly, the check will be done only when you have RUST
-> available ?
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Yes, this new check will only be performed if a rust toolchain is available.
-CONFIG_RUST however is *not* required.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.17-rc1]
+[cannot apply to akpm-mm/mm-everything tip/x86/core tip/x86/mm next-20250815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> I wouldn't expect having RUST to build a C kernel.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharata-B-Rao/mm-migrate-Allow-misplaced-migration-without-VMA-too/20250814-215419
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250814134826.154003-5-bharata%40amd.com
+patch subject: [RFC PATCH v1 4/7] x86: ibs: In-kernel IBS driver for memory access profiling
+config: i386-buildonly-randconfig-003-20250815 (https://download.01.org/0day-ci/archive/20250815/202508151720.OkJ7smVC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508151720.OkJ7smVC-lkp@intel.com/reproduce)
 
-The build will work fine without Rust present and will fall back to the
-simplistic readelf test. A single report of breakage will allow us to fix the code,
-not everybody needs to run the full thing.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508151720.OkJ7smVC-lkp@intel.com/
 
-> By the way, aren't relocations already detected by command cmd_vdso_check in
-> lib/vdso/Makefile.include , using readelf ? Why is a new tool needed
+All errors (new ones prefixed by >>):
 
-The current cmd_vdso_check only validates the final vDSO image.
-However that is not sufficient, as some problematic relocations will not show
-up in the final image anymore but only the intermediary object files.
-And there the logic is more complex than can be reasonably expressed in inline
-shell scripts, see the previous revisions of this series for the attempts.
-The valid relocations depend on each architecture and the specific ELF section
-they appear in.
-For the real example that triggered all of this, see commit
-0c314cda9325 ("arm64: vdso: Work around invalid absolute relocations from GCC")
+   arch/x86/mm/ibs.c:198:19: warning: shift count >= width of type [-Wshift-count-overflow]
+     198 |         if (laddr & (1UL << 63)) {
+         |                          ^  ~~
+>> arch/x86/mm/ibs.c:252:7: error: call to undeclared function 'setup_APIC_eilvt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     252 |         if (!setup_APIC_eilvt(offset, 0, APIC_EILVT_MSG_NMI, 0))
+         |              ^
+   arch/x86/mm/ibs.c:252:7: note: did you mean 'setup_APIC_ibs'?
+   arch/x86/mm/ibs.c:244:13: note: 'setup_APIC_ibs' declared here
+     244 | static void setup_APIC_ibs(void)
+         |             ^
+     245 | {
+     246 |         int offset;
+     247 | 
+     248 |         offset = get_ibs_lvt_offset();
+     249 |         if (offset < 0)
+     250 |                 goto failed;
+     251 | 
+     252 |         if (!setup_APIC_eilvt(offset, 0, APIC_EILVT_MSG_NMI, 0))
+         |              ~~~~~~~~~~~~~~~~
+         |              setup_APIC_ibs
+   arch/x86/mm/ibs.c:265:3: error: call to undeclared function 'setup_APIC_eilvt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     265 |                 setup_APIC_eilvt(offset, 0, APIC_EILVT_MSG_FIX, 1);
+         |                 ^
+   1 warning and 2 errors generated.
 
-> and why does it have to be written in RUST langage ?
 
-There is no hard requirement for Rust. I chose it for convenience of
-implementation, especially around descriptive error handling and generic
-functions. tglx was fine with it.
+vim +/setup_APIC_eilvt +252 arch/x86/mm/ibs.c
 
+   243	
+   244	static void setup_APIC_ibs(void)
+   245	{
+   246		int offset;
+   247	
+   248		offset = get_ibs_lvt_offset();
+   249		if (offset < 0)
+   250			goto failed;
+   251	
+ > 252		if (!setup_APIC_eilvt(offset, 0, APIC_EILVT_MSG_NMI, 0))
+   253			return;
+   254	failed:
+   255		pr_warn("IBS APIC setup failed on cpu #%d\n",
+   256			smp_processor_id());
+   257	}
+   258	
 
-Thomas
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
