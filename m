@@ -1,61 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E211F37D3;
-	Fri, 15 Aug 2025 14:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39B621CA1E;
+	Fri, 15 Aug 2025 14:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755266411; cv=none; b=lhCgQ3P0AaEy05BhCMiJQ7sT+TI3yCaQw2zgUv3SFtCeuyqtkmZUFar28SSqCpAY90OlrbRsVpNOJWP8l2hzMMnk++FfSLN/uA9y/ir/ap+MAImlSMsfL+VjSR/w739QHhdybMXUrJ2CevRhySOK/QgU2uO+OsMcwZysF6Gh8Xk=
+	t=1755267372; cv=none; b=bgkM3LXQ5rUiB3Fe0vy/cRBfV/Oxj83EeWvzq9pcipDIE1vsW4Drr6vgTWjHUvKbDVcXO+l155B6SaeEzpbnVDHU6VRgcsPIB03OWd4bEQTsAteS50lD8Yr5zuHjeCyyYwsZQXffuwGRpoOeVugZJtRkHLbsgfazjUOxGnJI8FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755266411; c=relaxed/simple;
-	bh=LvI5XJFvMx8itZDzTZcg34YZDZmfWXqpnHQ/l0ZAdiU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KdvzXR5YXqLi7/EiMNs8VDP1W2yomUnYtf/Ab2hYFCL4Gvq6OecbHXiHq4lHo4lMLP/hSFwBHtUwLbYsYEfsdsayxleRqZpg968kCfAQHKnR6bzaQL72GDUMO/ocikCHosPNxHo93/9NoAn5nE6UNezV48dMJyptaao+GZxFeW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFlqIt2i; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755267372; c=relaxed/simple;
+	bh=s9kJmwCMSziAcLWlTjDKKVLqzB9UYAY5Fd1NiDLoqx8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=etep9HeGlFxoIv5L6EUDj4El/Gxi525WEAS5zOnfTSV5riuoypT+YWEHWZ48C1Nyh1SBz74FHLzJez+iJrcAaBmGdDcu+SYwd1KO+ksFWa+zvqHEyu5LFW6bzioDGMnK6sdhCvze+D8J5MBy3bDFxMT0+QoI4kp+ElMtNnLNbd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PQ0jZW3G; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFlqIt2i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755266410; x=1786802410;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LvI5XJFvMx8itZDzTZcg34YZDZmfWXqpnHQ/l0ZAdiU=;
-  b=iFlqIt2iq8dUrWpSqcS6KMVJS11njzJHbhJUYpoE8AlOYLlxBNDXZYKQ
-   h6d2zcXSC51fu1CyVEQXxMyn39SsLvsoTKvfeiPNKSFlkVjNbd8QThvzr
-   6unVZ7+nR4wNj8eh9OBk5gb5y0qeE7s2JIr04icsR/3+NuXhYdNi7dyFI
-   IAjXzeAOfLeHBq6IBRHKQhc/I0Ilyng7J6iqn+v6HNMGoGnjrRjHr3KA8
-   ftp47w634TPup9yjcSzvYGa4Y+DG6dHUSDk6UeSaKVDLRnJQPjOC4KMG6
-   E4wKcIgtJSS7djWtjxHHKqzGF9vX5iCkspwHbghGFDeUzyGdWo8hz6oNR
-   w==;
-X-CSE-ConnectionGUID: 8dGXSMjeQCKufMDz1gyqfQ==
-X-CSE-MsgGUID: MEW3P4z+ScqKLng3KTmaPQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="56796245"
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="56796245"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 07:00:09 -0700
-X-CSE-ConnectionGUID: RQgg06yDRO+b5DIvlSZAyQ==
-X-CSE-MsgGUID: ANbp42CRQ+SDXjzsGKcDbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="167833151"
-Received: from igk-lkp-server01.igk.intel.com (HELO ca260db0ef79) ([10.91.175.65])
-  by fmviesa010.fm.intel.com with ESMTP; 15 Aug 2025 07:00:08 -0700
-Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1umuyT-0000X5-35;
-	Fri, 15 Aug 2025 14:00:05 +0000
-Date: Fri, 15 Aug 2025 15:59:11 +0200
-From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 1320/2770]
- arch/mips/boot/dts/ralink/mt7628a.dtsi:42.21-133.5: Warning
- (avoid_unnecessary_addr_size): /palmbus@10000000/pinmux@60: unnecessary
- #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" or
- "ranges" property
-Message-ID: <202508151551.ingWk0yV-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PQ0jZW3G"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XDxHrD3TX9AedrU5KLSEMO2f62ogJmkuypzBhYFI+es=; b=PQ0jZW3Gt/YKfyB7A9r1pgw76l
+	rQduqzGPLkQ6qEnBZFb6+RR2IWvSJxDQkyXws/quSXO6w3t0Y/GauRAzWcz+vfu9vAXu8+r9WtEqz
+	pO1M0U1IYfbHyn7ovx/CqXvlDxUowuK2hwhgEOC5/5/xSqZaGha3kCpLP1sWAyzpgpLxJ6kIeqhUy
+	8N1Ntpnt10+ZtqxNTwXRffrvqjsxlIuwiaqwN4OZu95RYXqeHs6lc2RhU1zyeSMWjzT9B8d81/qL2
+	S0LnmRilElUK6EZHNhjBzN7tq3Au2y7CfHhIfaYnLxoi+IPnPoi/JsU02NkSYL7vRkxf5Tryc4mth
+	L8aoK0Tg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1umvDx-0000000Gje9-2EVx;
+	Fri, 15 Aug 2025 14:16:05 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 83BC03002ED; Fri, 15 Aug 2025 16:16:04 +0200 (CEST)
+Date: Fri, 15 Aug 2025 16:16:04 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	x86@kernel.org, linux-alpha@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 00/17] Add __attribute_const__ to ffs()-family
+ implementations
+Message-ID: <20250815141604.GD3289052@noisy.programming.kicks-ass.net>
+References: <20250804163910.work.929-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,71 +56,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250804163910.work.929-kees@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1357b2649c026b51353c84ddd32bc963e8999603
-commit: c072d2b49507420edd57ba3d87690ab81ef5273a [1320/2770] scripts/dtc: Update to upstream version v1.7.2-35-g52f07dcca47c
-config: mips-omega2p_defconfig (https://download.01.org/0day-ci/archive/20250815/202508151551.ingWk0yV-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 4f15debe13af14e0fd668ee4861aff6dbc5283df)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508151551.ingWk0yV-lkp@intel.com/reproduce)
+On Mon, Aug 04, 2025 at 09:43:56AM -0700, Kees Cook wrote:
+> Hi,
+> 
+> While tracking down a problem where constant expressions used by
+> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
+> initializer was convincing the compiler that it couldn't track the state
+> of the prior statically initialized value. Tracing this down found that
+> ffs() was used in the initializer macro, but since it wasn't marked with
+> __attribute_const__, the compiler had to assume the function might
+> change variable states as a side-effect (which is not true for ffs(),
+> which provides deterministic math results).
+> 
+> Add KUnit tests for the family of functions and then add __attribute_const__
+> to all architecture implementations and wrappers.
+> 
+> -Kees
+> 
+> [1] https://github.com/KSPP/linux/issues/364
+> 
+> Kees Cook (17):
+>   KUnit: Introduce ffs()-family tests
+>   bitops: Add __attribute_const__ to generic ffs()-family
+>     implementations
+>   csky: Add __attribute_const__ to ffs()-family implementations
+>   x86: Add __attribute_const__ to ffs()-family implementations
+>   powerpc: Add __attribute_const__ to ffs()-family implementations
+>   sh: Add __attribute_const__ to ffs()-family implementations
+>   alpha: Add __attribute_const__ to ffs()-family implementations
+>   hexagon: Add __attribute_const__ to ffs()-family implementations
+>   riscv: Add __attribute_const__ to ffs()-family implementations
+>   openrisc: Add __attribute_const__ to ffs()-family implementations
+>   m68k: Add __attribute_const__ to ffs()-family implementations
+>   mips: Add __attribute_const__ to ffs()-family implementations
+>   parisc: Add __attribute_const__ to ffs()-family implementations
+>   s390: Add __attribute_const__ to ffs()-family implementations
+>   xtensa: Add __attribute_const__ to ffs()-family implementations
+>   sparc: Add __attribute_const__ to ffs()-family implementations
+>   KUnit: ffs: Validate all the __attribute_const__ annotations
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508151551.ingWk0yV-lkp@intel.com/
-
-dtcheck warnings: (new ones prefixed by >>)
->> arch/mips/boot/dts/ralink/mt7628a.dtsi:42.21-133.5: Warning (avoid_unnecessary_addr_size): /palmbus@10000000/pinmux@60: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" or "ranges" property
-
-vim +42 arch/mips/boot/dts/ralink/mt7628a.dtsi
-
-9ea34af728f720 Stefan Roese       2019-05-27   3  
-7d4ad2e71d175b Harvey Hunt        2017-08-21   4  / {
-7d4ad2e71d175b Harvey Hunt        2017-08-21   5  	#address-cells = <1>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21   6  	#size-cells = <1>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21   7  	compatible = "ralink,mt7628a-soc";
-7d4ad2e71d175b Harvey Hunt        2017-08-21   8  
-7d4ad2e71d175b Harvey Hunt        2017-08-21   9  	cpus {
-7d4ad2e71d175b Harvey Hunt        2017-08-21  10  		#address-cells = <1>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  11  		#size-cells = <0>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  12  
-7d4ad2e71d175b Harvey Hunt        2017-08-21  13  		cpu@0 {
-7d4ad2e71d175b Harvey Hunt        2017-08-21  14  			compatible = "mti,mips24KEc";
-7d4ad2e71d175b Harvey Hunt        2017-08-21  15  			device_type = "cpu";
-7d4ad2e71d175b Harvey Hunt        2017-08-21  16  			reg = <0>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  17  		};
-7d4ad2e71d175b Harvey Hunt        2017-08-21  18  	};
-7d4ad2e71d175b Harvey Hunt        2017-08-21  19  
-7d4ad2e71d175b Harvey Hunt        2017-08-21  20  	cpuintc: interrupt-controller {
-7d4ad2e71d175b Harvey Hunt        2017-08-21  21  		#address-cells = <0>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  22  		#interrupt-cells = <1>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  23  		interrupt-controller;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  24  		compatible = "mti,cpu-interrupt-controller";
-7d4ad2e71d175b Harvey Hunt        2017-08-21  25  	};
-7d4ad2e71d175b Harvey Hunt        2017-08-21  26  
-7d4ad2e71d175b Harvey Hunt        2017-08-21  27  	palmbus@10000000 {
-7d4ad2e71d175b Harvey Hunt        2017-08-21  28  		compatible = "palmbus";
-7d4ad2e71d175b Harvey Hunt        2017-08-21  29  		reg = <0x10000000 0x200000>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  30  		ranges = <0x0 0x10000000 0x1FFFFF>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  31  
-7d4ad2e71d175b Harvey Hunt        2017-08-21  32  		#address-cells = <1>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  33  		#size-cells = <1>;
-7d4ad2e71d175b Harvey Hunt        2017-08-21  34  
-232085d118ff46 Sergio Paracuellos 2025-02-24  35  		sysc: syscon@0 {
-0e029c91a7ec02 Ezra Buehler       2025-06-24  36  			compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
-380f072c57a590 Stefan Roese       2019-05-27  37  			reg = <0x0 0x60>;
-232085d118ff46 Sergio Paracuellos 2025-02-24  38  			#clock-cells = <1>;
-232085d118ff46 Sergio Paracuellos 2025-02-24  39  			#reset-cells = <1>;
-380f072c57a590 Stefan Roese       2019-05-27  40  		};
-380f072c57a590 Stefan Roese       2019-05-27  41  
-380f072c57a590 Stefan Roese       2019-05-27 @42  		pinmux: pinmux@60 {
-
-:::::: The code at line 42 was first introduced by commit
-:::::: 380f072c57a590d7593050b8533d88e18b6a7daa MIPS: ralink: mt7628a.dtsi: Add pinmux DT node
-
-:::::: TO: Stefan Roese <sr@denx.de>
-:::::: CC: Paul Burton <paul.burton@mips.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
