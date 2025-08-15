@@ -1,67 +1,67 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E8821FF57
-	for <llvm@lists.linux.dev>; Fri, 15 Aug 2025 15:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67937634
+	for <llvm@lists.linux.dev>; Fri, 15 Aug 2025 15:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755270455; cv=none; b=mWQgHG5JBuotnE7vPlfko/GZCAq8BQwPgUkURNV8+PK1jhlaW4ms5LZhKENGiDtkBz7rRFL74K0v/tqWJ59HB8dEmR6WWeRvONkZ+GrsOzJAxjbgRFQ3vIj6pmni1xLQzd7mmbfEDcb1Lm67NTRsuUWJSDy+vzTw5ags388Dfvg=
+	t=1755270457; cv=none; b=agQWMykFGDSIpsSVCHwCEWcsRy2PKYCVaa4uSRFjIdHwrq7PfoMvYPZ15/3XKHcxiBJi1oV52OM4zXBf+vKjPAIjO4L8mZ3LTWWeIK/WZdDL6N7TniIqWwrvRg7n80cCdcbcXqnDFI1pxdcddF0959P9gDmUZK+zHl0HixPnduQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755270455; c=relaxed/simple;
-	bh=HPdnoqfMTW5K8PpSXd0uxj2ktrGo1NLLAxniXY1kt3g=;
+	s=arc-20240116; t=1755270457; c=relaxed/simple;
+	bh=k91CyiH72FbwUJJuYjdfRL6Li8iR2YI2J5hUcfGbFcw=;
 	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=hkJ+LjICmItQpUVeJRLOc9+uA/gM+f9wa64gWVizIil36EUNfEAUyQmd8J0WfeQ3RtiP86xf6OWpG0/v+HNDnv9WC2XLURRqTp4HDyVCI8yO6ImWuUiX4Oh62N3GiPLBl89RlnC2leMkIijQoEUOtEmLMCbeEoUVMOmUtrF58JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=OqeIXmiH; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type; b=LJWFchTCocDHyCiBFROjrN0YZ6AGb5bqK0VsBUUIyG/NDMUJ0gC73r1fWzwAQCJXH5JNDXGm4X4xVs4nangx3SO1YspGgJKeaXKhEIzZd0VMpSve4UkdLZix/pdFhliU58YegHqdcd+6UbSDtaDu1vHLIT4UM4lLt5fIfDcQ/oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=OaFO4y3I; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="OqeIXmiH"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-76e2e8e54f8so1854137b3a.1
-        for <llvm@lists.linux.dev>; Fri, 15 Aug 2025 08:07:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="OaFO4y3I"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-76e2e614b84so2125199b3a.0
+        for <llvm@lists.linux.dev>; Fri, 15 Aug 2025 08:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1755270452; x=1755875252; darn=lists.linux.dev;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1755270454; x=1755875254; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EHLPRMwsFUXklJ+HOrV/DsMAdiggx2WSG2UfKCJiulY=;
-        b=OqeIXmiH8vEZ3OIj3xtdI8g20KKp1dgpwhIpllqhcQvSUbkMpXphNeCuE8y9QDvytp
-         L36fwrCk3yweX1tvkallez0OZ2VTvSXIaHXcDFXAKofORZqbSHHouEn5vaJa4k+rx5zF
-         25ot416xDbp7K1vLsfLgcRQ4sR3eIpL2m5afNp79YP46hYH9ZhyjDOXMDACtpKavgtRY
-         TMlKT9d+tL3d/X6UvuxX+8Ikoql9XJUwXAy8hqUE0wezVeGmMW9u3MesP2S7tyPQbdlC
-         H4o3WikU24k/ybosaC0rYGtblDeiESkgatTOeptpMaf3gEJ4JI+VZcHhQMoyCuUhnhkq
-         beFg==
+        bh=HSuqWusYtC3hY8ploe0KH7jPL7SusiQWfMM3CIlvAWY=;
+        b=OaFO4y3ICidVUFl54ORZA6EfuTkjTUZoKsypyBkOc2H6FQPpMfMqvimxm12CcmeLNe
+         CknfocQcGAcu21vLD7b96IRomYjxObsQQgxxmA+TXzNCEG8rGpbx1+uaK6y0kNvaUFoW
+         7mHT4LyNy/q2RFidlCxCuFuiy15V/rrRkDkyqvXSIFL+qAS8T0eg26rMPrw5OMoXXhnC
+         BLqxycTWWwKdk81lpbvHOjj5fDWirZElUX9hgd3bKqZqxqkpkDlQDjDqgVugeIwU885H
+         OY9Wnpm6bBN0XGOg6oiL4pOhxCL9lY6pIcqd0p4+4AtA7IQ/7PthhvuXWofRv+Rj3zei
+         /DlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755270452; x=1755875252;
+        d=1e100.net; s=20230601; t=1755270454; x=1755875254;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EHLPRMwsFUXklJ+HOrV/DsMAdiggx2WSG2UfKCJiulY=;
-        b=aTH1CxmqwS9+y2MT2GfJBlxOGwzY9UZ9mp62mw0VlbSI5MYqSUMkYL20jsNS/J3qKR
-         Pbzo9TV4KNq13nj4+NzpYP/jLOZ6xjxW+X+m8ypXg8HF+Flo2VwqpaM0d9CAuJLt1wx0
-         tUeYmpZAnz/dFQZCOmpJM2W/PQEzzUq1WQ/RBvSjVuoNr5cfg8mBuBY77hPCLsshfoyk
-         Je7DkRRs3vcWHUJTYRI7+N+WqLW8J3AtY4WIPDrPieDN49Wyi1LlJw1HHMWrgNMUi9yd
-         3ywGFcpf4qHp1GvQpXYSe6WZBplQIVcC5n6nQNrSws77i7sxadtQgTIWVEdd9aXSMV7s
-         gb5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXXsK6IQV5bJBkn/d83f7k1iwsWhk9dOExF9hlhxZaLswMFZc0K8nD2qkVgX83NDGGh7nXd@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywv58KNx721hX9UuIxIu/mr5XpCjzK04Ev5loUWrKwhvpxSP9gh
-	tSMcYG0MVwtJDMUFSjNOW1eyoLByVSlKEyXQkTjPgj3HRi+kwub+lSLsJxEtgxvgkD8=
-X-Gm-Gg: ASbGncs+jEia2PHLz1B0QJQyNvcXgZ8LddVGAP0tc8vkWV3AkLyKU8qSNuUsniBGn9t
-	TWPLLc1umWs6+F6V+o5kdIdxa90nChXspVA1oGvUq+cLENuSDIqHv6fAg6Gfu7AjYrjs3Av3dQr
-	fWlzvTArYcvHBm9egYMWbE/J9/tKvUDrJqeFv5Es/riaWNxohPWMK8kPubStkBHJddgzsA2qCe8
-	rt6NmNz3IU0hKPyHqwowppMATg8y6rd9PbQUtME4Fpl2Kf1UncxAPET1q7TRLU61hMz0pAuf17r
-	XJJTduIJuKrVAco4LSsIiQUFZZajoloJKFzUxbd7S5wiaEiiqayzzs2yA0QvW/qgzlHr+ZAn32O
-	uY05egwKPPpSQDo/EIE5REIXzoR6yiYuV+DM=
-X-Google-Smtp-Source: AGHT+IHmxnV+YR9cR/LeaPBJErhvHjNkppxMDemXEcOX3MCe4Sp9OWex1hLOxvkMk2wkz7dST8S4eg==
-X-Received: by 2002:a05:6a00:4f96:b0:769:a6a2:fe1e with SMTP id d2e1a72fcca58-76e447e3389mr3104455b3a.11.1755270452302;
-        Fri, 15 Aug 2025 08:07:32 -0700 (PDT)
+        bh=HSuqWusYtC3hY8ploe0KH7jPL7SusiQWfMM3CIlvAWY=;
+        b=xOHQBVDsiwJgPzKRekwRBaoGSKZo86MWRxKBQhpyellOA1FDyqEhRx4K1/+rUm6Xrt
+         ZD3ODR3KL3DhmS4PvHLeZXkOBpie/ajpCYmyoDIL0G6tVGVV6WblxLIO0MPVD/u0db4O
+         AOZ51drPUhEd1TMwALUT0MseW63I2GtM54CaZeVQC2UOcpMHB/tPpm0hOi98Z0tJ2ocW
+         RxKycuJyYOWf24Roz+KV+Heurj/A7BXktSTbmHOWGgq7aLKcSAAnv5Fv/M9ugXvpiY+A
+         EsnmyPBjqQNYKaJ9xIm14ejqkCyjV0D3YwQqAXV9+1pfq8IDx5/FxaPSn+6xUgAgVQvp
+         +tFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIu98x+8I1++0VNpdaBjr/wZdMClqQLiUYPrzzdsSC0KSTwPHGE0/icFlfPjtdkNAYJp0B@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw3iDBcNYygMYENKV8HdhoeO3xH4f6m2jfIGEBck9mswj2A6akH
+	hAA8MVC8NCI4RyjJlqm4ECPjYZJL/M3cfql2KZ/0c+mwogirYUp60B6W/PPpjP0rIcg=
+X-Gm-Gg: ASbGncsz33uhv7E5fOmL7EA9y4QfivOvPmkUMqa317/j4hoNySt+0JiEhLBOWbvREj/
+	lR+UlGQV7N/swilZzSaAUf1uQ7uFA98p99z3XbkFAiO4MVkPWVXx8Vm2sOBIuAB+DXhjNk4Cb/w
+	R0VpiJDQpFdm1+1yCwfe5xyAcVm3lJ9E5ssOjoDNzdn2SyR36Mzl1qHZV4ITVvesmAT43Ls4a16
+	SWWC+tyvQpVT8wbnSPWBa+6IUHyv1YxNDsHQRclxankGREgwsCsXXsM+0FX8sG7Qe1pIPQOKPrY
+	irXU6Pxzj4V1TqOiF+/beVAODWZovfdrXU5kQ4WK7ta684Vs6J8jJUXFB4jXTwIs0J8MBpAUgxZ
+	T/bYvStTPGZ60Q0/efd6wj0mQ3aq5NKekpg4=
+X-Google-Smtp-Source: AGHT+IGQbGMaqUCBVjgHpE03NJ6lUtJGuN0cfMPLFV18k27l43zYHixLrnt22lRnZXhrjts5z9io5w==
+X-Received: by 2002:a05:6a20:1611:b0:23f:f5bf:35d7 with SMTP id adf61e73a8af0-240d3039205mr3462386637.45.1755270453673;
+        Fri, 15 Aug 2025 08:07:33 -0700 (PDT)
 Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-76e4558bf19sm1309791b3a.99.2025.08.15.08.07.31
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b472d5e58d0sm1499710a12.23.2025.08.15.08.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Aug 2025 08:07:31 -0700 (PDT)
-Date: Fri, 15 Aug 2025 08:07:31 -0700 (PDT)
-X-Google-Original-Date: Fri, 15 Aug 2025 08:06:56 PDT (-0700)
-Subject:     Re: [PATCH v4 17/24] riscv: vdso: Deduplicate CFLAGS_REMOVE_* variables
-In-Reply-To: <20250812-vdso-absolute-reloc-v4-17-61a8b615e5ec@linutronix.de>
+        Fri, 15 Aug 2025 08:07:33 -0700 (PDT)
+Date: Fri, 15 Aug 2025 08:07:33 -0700 (PDT)
+X-Google-Original-Date: Fri, 15 Aug 2025 08:07:29 PDT (-0700)
+Subject:     Re: [PATCH v4 18/24] riscv: vdso: Disable LTO for the vDSO
+In-Reply-To: <20250812-vdso-absolute-reloc-v4-18-61a8b615e5ec@linutronix.de>
 CC: Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
   Alexandre Ghiti <alex@ghiti.fr>, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
   justinstitt@google.com, luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
@@ -81,7 +81,7 @@ CC: Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
   thomas.weissschuh@linutronix.de
 From: Palmer Dabbelt <palmer@dabbelt.com>
 To: thomas.weissschuh@linutronix.de
-Message-ID: <mhng-540E0EE0-A9CF-4EE3-9E71-969B40D29C50@Palmers-Mini.rwc.dabbelt.com>
+Message-ID: <mhng-146EE95D-951E-41BB-898C-033437B27EA3@Palmers-Mini.rwc.dabbelt.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -91,39 +91,40 @@ Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Mon, 11 Aug 2025 22:44:30 PDT (-0700), thomas.weissschuh@linutronix.de wrote:
-> All vDSO objects need the same treatment.
-> To make changes to both the list of objects and the list of removed flags
-> easier, introduce a helper variable.
+On Mon, 11 Aug 2025 22:44:31 PDT (-0700), thomas.weissschuh@linutronix.de wrote:
+> All the other architectures supporting LTO (x86, arm64, loongarch) do not
+> use it for the vDSO.
+>
+> Its is problematic for some upcoming compile-time validation of the
+> generated object code.
+> The LTO object files do not contain the necessary relocation information
+> and -flto-fat-objects is not compatible with clang < 16.
+>
+> For consistency and to enable the mentioned compile-time checks,
+> disable LTO for the vDSO.
+> The vDSO heavily uses __always_inline anyways.
 >
 > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > Tested-by: Jan Stancek <jstancek@redhat.com>
 > ---
->  arch/riscv/kernel/vdso/Makefile | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  arch/riscv/kernel/vdso/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-> index 9ebb5e590f93a3228c451dca58e6d5cfbbc03ff7..c19c3c76f7c9f6b2f7523a59269de3b683656323 100644
+> index c19c3c76f7c9f6b2f7523a59269de3b683656323..9f1bf5bae9bd473e43d9fd3022e9e1a185128b73 100644
 > --- a/arch/riscv/kernel/vdso/Makefile
 > +++ b/arch/riscv/kernel/vdso/Makefile
-> @@ -49,9 +49,10 @@ CPPFLAGS_vdso.lds += -DHAS_VGETTIMEOFDAY
+> @@ -49,7 +49,7 @@ CPPFLAGS_vdso.lds += -DHAS_VGETTIMEOFDAY
 >  endif
 >
 >  # Disable -pg to prevent insert call site
-> -CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
-> -CFLAGS_REMOVE_getrandom.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
-> -CFLAGS_REMOVE_hwprobe.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
-> +CFLAGS_REMOVE_VDSO = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
-> +CFLAGS_REMOVE_vgettimeofday.o = $(CFLAGS_REMOVE_VDSO)
-> +CFLAGS_REMOVE_getrandom.o = $(CFLAGS_REMOVE_VDSO)
-> +CFLAGS_REMOVE_hwprobe.o = $(CFLAGS_REMOVE_VDSO)
->
->  # Force dependency
->  $(obj)/vdso.o: $(obj)/vdso.so
+> -CFLAGS_REMOVE_VDSO = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
+> +CFLAGS_REMOVE_VDSO = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_LTO)
+>  CFLAGS_REMOVE_vgettimeofday.o = $(CFLAGS_REMOVE_VDSO)
+>  CFLAGS_REMOVE_getrandom.o = $(CFLAGS_REMOVE_VDSO)
+>  CFLAGS_REMOVE_hwprobe.o = $(CFLAGS_REMOVE_VDSO)
 
-Reviewed-by: Palmer Dabbelt <palmer@dabbelt.com>
 Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
 
-Also assuming you want to take this with the others.
+Also assuming this goes with the others.  Thanks!
