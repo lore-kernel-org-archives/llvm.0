@@ -1,215 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37CF223A989;
-	Fri, 15 Aug 2025 14:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8EC2192F9
+	for <llvm@lists.linux.dev>; Fri, 15 Aug 2025 15:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755268985; cv=none; b=c39W0tS01BXU7n84Rr9FMxuOfroRL0RTgGiRT0G4B20jLtnN5Ptnt4Xv3o9IRk5EpEWy6CCyREVSL7WjZxErUwvYy+0F1K16QjY75cimTuwaCTvj+fnjkpeffTjH9AL3aApjF6H3hs/iHpReFURcYSSAkr4YriNGjPDIhoExlxM=
+	t=1755270352; cv=none; b=Ql4Rg1BFNp47AXp13xWh5FVdYInGpIPs+6dxHgksXiSFHqd/ZluC+bLPkEHZVCQzG8byDQx8RW4+JahXsYmpYzBoC67Mh3Zkgg91kaSTgnYhefNOUZGBM7fyq+2ivQYlXI1s3m5VWYW6hi66Z1cFPj46sKws8VX1c8vWz7oaY00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755268985; c=relaxed/simple;
-	bh=PDbt4o4k4p5SM1Gt0+Fj01ep6nfTfi7vRmc73604jks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o9oiZ+lv3CLt5fR/8qrEKHOxW6TcpMg8omufU/JekJV2VhoYCcrqZ9nlV45CnFjt8VnqCmkhJQdPK/yrsix6Jgl1xLJ5pMQv+0vFu6+pPIxDMT2WpHFhaeuAuxOH2KP0uAuKuXuwYWr8XTJ7ILIK9Hdj3ChQAQBSl4mx2o3PG+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hhpAWIDx; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755270352; c=relaxed/simple;
+	bh=wNfhEAk3rnqID1OBHwaELciuLi86NZwkA7swq1t5JdI=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=LkKMj6VKpd95BrWgDo5petM+P+xaW8E+Dz0aErbUGyYzTkT/ZJuMIdLDxuwIInkjFIRDeq4thrd4IKDqgzZFLhfjVcSlTm1gtTsZD6Plzue/LzVlHHHW5qwNBEbpk+04a6AX1EPaqs3Vs3kmM5kMaB2hD5lBOMQ2hxIT+7MRAUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=mMnNw5zV; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hhpAWIDx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755268984; x=1786804984;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PDbt4o4k4p5SM1Gt0+Fj01ep6nfTfi7vRmc73604jks=;
-  b=hhpAWIDx9MR1A1zuIo7dMr6EX6iFZUkTDou2nb1SD+ofwUGDQRl6suKU
-   lmICYfnc0qwfQFQY4/gp1PbJrF7HwnagJQQKHV2bZisq3S0zNsMkSSi7y
-   JUCjfAaGGyfBrjV17sYXEXsbapSgyO9D+LsWMfn8bf914G1eLIOQ8p//+
-   ahNTaxs+QosGAKruC8J7N02DNLrtWnojNj9e11yElZc7it3ByZV1sOZs0
-   e924cbu1/8L03tefDqCHV664r7Jd4Opldv3YrS4GfLXGZ1h0NvQ2/XBkq
-   49CIzu+f+fUo2bbdmjK8aIw34McuUdhKuHWyeEHIpLFwSIUocjMmSKJLS
-   g==;
-X-CSE-ConnectionGUID: 4jhcnF6DSJej02dZEazGVw==
-X-CSE-MsgGUID: sDRZYwCxQa+ROHiJAtCgBA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57697497"
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="57697497"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 07:43:04 -0700
-X-CSE-ConnectionGUID: HDI3bAhtQse1u7hHErNCdw==
-X-CSE-MsgGUID: WIzvz/EGQqij0YcCFKnAdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,290,1747724400"; 
-   d="scan'208";a="167378577"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 15 Aug 2025 07:43:02 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1umvdw-000C2G-15;
-	Fri, 15 Aug 2025 14:42:58 +0000
-Date: Fri, 15 Aug 2025 22:41:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Willem Grant <willemgrant@mailfence.com>, linux-fbdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Willem Grant <willemgrant@mailfence.com>
-Subject: Re: [PATCH] Cleared out formatting warnings/errors for
- drivers/staging/sm750fb
-Message-ID: <202508152258.xosReYAn-lkp@intel.com>
-References: <20250815011754.18078-1-willemgrant@mailfence.com>
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="mMnNw5zV"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b47174aec0eso1326471a12.2
+        for <llvm@lists.linux.dev>; Fri, 15 Aug 2025 08:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1755270350; x=1755875150; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38zqqxNHqbGz3C68JOy9Ugb8wAb711DWGVbxjNinx0U=;
+        b=mMnNw5zViTpRlWQJc4pm28Fl9fG6GVbrTc7QvHbRN8mbSW4ftaYavwfxndvLAhEs5B
+         GqmUdCN2lKZRoAchaAjwItYStDI04oAoyj3fjahl34HyxlFTvkF8jkAfs3JtutFbmVgm
+         nY9KbhiXZfNAxcANtzpEgl/Qr5cZSP87gfkIRGIacAPulo6niq+cItyOpwFkhR8sEQfI
+         uOU/nXf+3yNbXDao4gKv1huVp5vtKxY7XdTUHR7AvV8j+jxN9haoUz6NL5m79O4DFKCf
+         iKXttbdFOI/hfWrIz3Q+priGCV76emKXdjj/MDhg6/Qn5UzyYVYVcpzOfz1Nc0aEQNby
+         Ehhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755270350; x=1755875150;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=38zqqxNHqbGz3C68JOy9Ugb8wAb711DWGVbxjNinx0U=;
+        b=hSzpjr789QakI2DOAYhl0ZkCHS2GFralHiUodGbruxqSbUlJWNYG+6ZNPaU9dAvqYe
+         2kztwo2OjHRxa0l3q3FR3yeHqjsi0bTm3RQd4feAXdc8gumcYwlBtuKnnhv5FwiTOgEM
+         h6TFubao+q+Oei0GFIF17w4akpk6+KPtcNy3+GfImbD5hGTmKe8OXTDpk48DXULPmcyi
+         bJSb0VJdfWeH4NfLgbW0Fq3fOqAiCHB1hb2EpYzj1zz4ZL0V35Ltrj2MuI49Xr/9rJbc
+         XyrKD8oL6IU3dv2ZNQIktAdrkteiAL1+QHzdaZOcl/PlBkiawwT1lGFgXfeMuJqWYGlM
+         YloQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWo1GavpiU/LhQProtqZt9WzyOF8cmCRhn40UeIt9NTc08xy9RjdVRA6jX91fl+gtS3a0RE@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyn2MbqvC2nWct4LVE0GHOaWrn22J+tLhT8eA17VJe8ReDCL8Mh
+	0Nu/XCGX8nVTvm0WKBCD1fURTA9AnLpCgLCIrq09mAIN4mn3wEet4/Y24o8kTK2EnQw=
+X-Gm-Gg: ASbGnctGnoCMDilV6+gUBqhLcNLESUeujTLYtSe8ANwGMbIxnS9AnEwpdXdUf0Q/ku4
+	m5mCFhGjPp42hHXZllD9JI2AJM9KidZzMX42YZJAWVQJqFgQPueVJT9dgtNGHP3b+mUXhRae1CA
+	txPsKXJF6WcNQXkEpNJlBTZDJfajoH2xs6CJoqvh8yQSps1P/n3UKZm5TwR2QqN7gtjRBy0Hlfa
+	TqlPGWGtrXHBp5RsWZLO/C2kD5XLeXNfwjy4fDyrlAgA8z1XiC+b2WuPzVMaj4aF2JYZSCIXXQ3
+	OCR0Wjj6AJlYHjPkCl08JrDH/ysfQ5dCBcSPFAaec/wnrfnmG1FF7EvTfUYLbvKFzDQgpEuonVH
+	ioKiw6UNXTMpGt/ihzB6u+b9ttJlRDpEAm8w=
+X-Google-Smtp-Source: AGHT+IG3gBMogdOr+spUGY65daTLUVfmz5lhgO/opdXo6UimhkccgL0C2Gx+F8DUbrOBq4AI/2z6Vg==
+X-Received: by 2002:a17:903:198c:b0:240:a222:230c with SMTP id d9443c01a7336-2446d5af743mr41307075ad.12.1755270349908;
+        Fri, 15 Aug 2025 08:05:49 -0700 (PDT)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2446cadf96fsm16286885ad.41.2025.08.15.08.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Aug 2025 08:05:49 -0700 (PDT)
+Date: Fri, 15 Aug 2025 08:05:49 -0700 (PDT)
+X-Google-Original-Date: Fri, 15 Aug 2025 08:05:47 PDT (-0700)
+Subject:     Re: [PATCH v4 06/24] riscv: elf: Move relocation constants to UAPI
+In-Reply-To: <20250812-vdso-absolute-reloc-v4-6-61a8b615e5ec@linutronix.de>
+CC: Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+  Alexandre Ghiti <alex@ghiti.fr>, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+  justinstitt@google.com, luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
+  kees@kernel.org, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+  hpa@zytor.com, richard@nod.at, anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+  linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+  maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+  chenhuacai@kernel.org, kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
+  agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com, tsbogend@alpha.franken.de,
+  ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+  bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
+  tmgross@umich.edu, dakr@kernel.org, nicolas.schier@linux.dev, linux-riscv@lists.infradead.org,
+  linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org,
+  linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+  linux-s390@vger.kernel.org, linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org,
+  linux-kbuild@vger.kernel.org, jstancek@redhat.com, acme@redhat.com, alexghiti@rivosinc.com,
+  thomas.weissschuh@linutronix.de
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: thomas.weissschuh@linutronix.de
+Message-ID: <mhng-5B6E084E-60EE-440E-BFF9-5E81AAC9A473@Palmers-Mini.rwc.dabbelt.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250815011754.18078-1-willemgrant@mailfence.com>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Willem,
+On Mon, 11 Aug 2025 22:44:19 PDT (-0700), thomas.weissschuh@linutronix.de wrote:
+> These constants are useful for cross-platform userspace, for example to
+> process ELF files during kernel cross-compilation.
+>
+> Move them from the kernel-private architecture-specific header to the UAPI.
+>
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  arch/riscv/include/uapi/asm/elf.h | 66 ---------------------------------------
+>  include/uapi/linux/elf-r.h        | 66 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 66 insertions(+), 66 deletions(-)
 
-kernel test robot noticed the following build warnings:
+Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
 
-[auto build test WARNING on staging/staging-testing]
-[also build test WARNING on staging/staging-next staging/staging-linus linus/master v6.17-rc1 next-20250815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Willem-Grant/Cleared-out-formatting-warnings-errors-for-drivers-staging-sm750fb/20250815-092113
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250815011754.18078-1-willemgrant%40mailfence.com
-patch subject: [PATCH] Cleared out formatting warnings/errors for drivers/staging/sm750fb
-config: arm-randconfig-002-20250815 (https://download.01.org/0day-ci/archive/20250815/202508152258.xosReYAn-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508152258.xosReYAn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508152258.xosReYAn-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/sm750fb/sm750.c:543:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     543 |                 red = gray;
-         |                 ^
-   drivers/staging/sm750fb/sm750.c:540:2: note: previous statement is here
-     540 |         if (info->var.grayscale)
-         |         ^
->> drivers/staging/sm750fb/sm750.c:541:7: warning: unused variable 'gray' [-Wunused-variable]
-     541 |                 int gray = (red * 77 + green * 151 + blue * 28) >> 8;
-         |                     ^~~~
-   drivers/staging/sm750fb/sm750.c:543:9: error: use of undeclared identifier 'gray'; did you mean 'igrab'?
-     543 |                 red = gray;
-         |                       ^~~~
-         |                       igrab
-   include/linux/fs.h:3313:23: note: 'igrab' declared here
-    3313 | extern struct inode * igrab(struct inode *);
-         |                       ^
-   drivers/staging/sm750fb/sm750.c:544:11: error: use of undeclared identifier 'gray'; did you mean 'igrab'?
-     544 |                 green = gray;
-         |                         ^~~~
-         |                         igrab
-   include/linux/fs.h:3313:23: note: 'igrab' declared here
-    3313 | extern struct inode * igrab(struct inode *);
-         |                       ^
-   drivers/staging/sm750fb/sm750.c:545:10: error: use of undeclared identifier 'gray'; did you mean 'igrab'?
-     545 |                 blue = gray;
-         |                        ^~~~
-         |                        igrab
-   include/linux/fs.h:3313:23: note: 'igrab' declared here
-    3313 | extern struct inode * igrab(struct inode *);
-         |                       ^
-   drivers/staging/sm750fb/sm750.c:794:19: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
-     794 |                 g_fbmode[index] = g_def_fbmode;
-         |                 ~~~~~~~~~~~~~~~ ^
-   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
-      36 | static const char * const g_fbmode[] = {NULL, NULL};
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/sm750fb/sm750.c:796:20: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
-     796 |                         g_fbmode[index] = g_fbmode[0];
-         |                         ~~~~~~~~~~~~~~~ ^
-   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
-      36 | static const char * const g_fbmode[] = {NULL, NULL};
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/sm750fb/sm750.c:957:17: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
-     957 |                                 g_fbmode[0] = opt;
-         |                                 ~~~~~~~~~~~ ^
-   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
-      36 | static const char * const g_fbmode[] = {NULL, NULL};
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/sm750fb/sm750.c:961:17: error: cannot assign to variable 'g_fbmode' with const-qualified type 'const char *const[2]'
-     961 |                                 g_fbmode[1] = opt;
-         |                                 ~~~~~~~~~~~ ^
-   drivers/staging/sm750fb/sm750.c:36:27: note: variable 'g_fbmode' declared const here
-      36 | static const char * const g_fbmode[] = {NULL, NULL};
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 7 errors generated.
-
-
-vim +/if +543 drivers/staging/sm750fb/sm750.c
-
-   517	
-   518	static int lynxfb_ops_setcolreg(unsigned int regno,
-   519					unsigned int red,
-   520					unsigned int green,
-   521					unsigned int blue,
-   522					unsigned int transp,
-   523					struct fb_info *info)
-   524	{
-   525		struct lynxfb_par *par;
-   526		struct lynxfb_crtc *crtc;
-   527		struct fb_var_screeninfo *var;
-   528		int ret;
-   529	
-   530		par = info->par;
-   531		crtc = &par->crtc;
-   532		var = &info->var;
-   533		ret = 0;
-   534	
-   535		if (regno > 256) {
-   536			pr_err("regno = %d\n", regno);
-   537			return -EINVAL;
-   538		}
-   539	
-   540		if (info->var.grayscale)
- > 541			int gray = (red * 77 + green * 151 + blue * 28) >> 8;
-   542	
- > 543			red = gray;
-   544			green = gray;
-   545			blue = gray;
-   546	
-   547		if (var->bits_per_pixel == 8 &&
-   548		    info->fix.visual == FB_VISUAL_PSEUDOCOLOR) {
-   549			red >>= 8;
-   550			green >>= 8;
-   551			blue >>= 8;
-   552			ret = hw_sm750_set_col_reg(crtc, regno, red, green, blue);
-   553			goto exit;
-   554		}
-   555	
-   556		if (info->fix.visual == FB_VISUAL_TRUECOLOR && regno < 256) {
-   557			u32 val;
-   558	
-   559			if (var->bits_per_pixel == 16 ||
-   560			    var->bits_per_pixel == 32 ||
-   561			    var->bits_per_pixel == 24) {
-   562				val = chan_to_field(red, &var->red);
-   563				val |= chan_to_field(green, &var->green);
-   564				val |= chan_to_field(blue, &var->blue);
-   565				par->pseudo_palette[regno] = val;
-   566				goto exit;
-   567			}
-   568		}
-   569	
-   570		ret = -EINVAL;
-   571	
-   572	exit:
-   573		return ret;
-   574	}
-   575	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm going to assume you want to take these all together though some 
+other tree, thanks!
