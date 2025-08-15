@@ -1,110 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E779628506C;
-	Thu, 14 Aug 2025 22:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AFBE571;
+	Fri, 15 Aug 2025 01:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755211216; cv=none; b=uDoC2Ou8AeCqRyYd9aJddHR2UEBNA4LNUmWIbJYrx8hq7DNEbNVLfRZd9r6x/L75B3X+HzUbuAo986uV2DsLhuptggdnFV/rLKWX5ewEQkx1FDuBM8o+N6/QGRueyuSdVbz3OFT3Hgl2fT1cO4fdSeR/ihQQxvZ/Mae3zmsKG3c=
+	t=1755221510; cv=none; b=bJha62YjXWy0qU4Jr0wmsSYYY4x13acUgk5aME/14CeB5PwGU6s12ErI8H55CBvKWuMGcP4iPhV2wzCHGhUUdNbrw2c6/q2rwokneEiasq7ZR600ZWdMpYP2FtlKvxLPzanw0tOmmSaAF/9UnrYkcy6zabFeiVQjOXzWm/O8TXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755211216; c=relaxed/simple;
-	bh=pTLMkLB6wXhhCVQ7joRQHX/DusPVi5mmr45iiA3nAKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fx1TTBy7uHXyjWho6fRL5PqPbZXr3nA9eOtR9CgTMU2eW20rjUc4zuJGS68SpBjIBUJes1l3lIBvJx4HBwbZMhBPixCnYsYuJu1csg4Zg9n5yDBrORne1+Ptj7J6gCYEGQrid+p3j1zUWp8ELmmt3bKehedWDrbyVCbDQ8Ukn2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=op5tjY+0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755221510; c=relaxed/simple;
+	bh=e9/U7Zymov2op6Tt2ARZLhwTYZsxnmBtyH8fYBAWN4Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dSVtYjdv1kTrb2+NJ8L62nYDBj93hpYtZGB83OIM+XZB+BGycNBlxhnzN+8iDmR5a/0NRFhc5jWXKpeqgiRbTdSQmht1pc/HhIrhx8PPRwtHWMGXpwSoPu7MR8Kjz20ezz6I3D8+G43V/yq7AChHky8lMHelngsTcVHvbfGCteo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpifKG5M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="op5tjY+0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91533C4CEF1;
-	Thu, 14 Aug 2025 22:40:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpifKG5M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03D9C4CEED;
+	Fri, 15 Aug 2025 01:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755211214;
-	bh=pTLMkLB6wXhhCVQ7joRQHX/DusPVi5mmr45iiA3nAKM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=op5tjY+0coe42xZgSn92vSu4DWmxRe2EW19/jIEcpM3SHJsBeYKlvD3o15LLjjJRj
-	 mSVHNMt8fwx3qWYWv7hHHyZH3KQxkfffk7SkIPsU0UefSZBkQDX/+iEexNYUv0p8fV
-	 6zDTmh2m1RRSxCHk7wFrg8gu9u3ww8F93U1LfHPMuhppSsVwovAxyCkE1CjHDEjd6y
-	 L27IJlSY5y38SpfmZxKJo928EwrFlBhRhxNgKn4m9u6HP6JDyuI5079dxGPb4QpqQH
-	 zM33yH7IupG/ILxbKJuYAnF0r5se3Sy0DVqIj9jf+yEZ8Ukqyu7ZgTM/qDMg8PLQ6B
-	 OPIXTUzHlvaFg==
-Date: Thu, 14 Aug 2025 15:40:09 -0700
+	s=k20201202; t=1755221509;
+	bh=e9/U7Zymov2op6Tt2ARZLhwTYZsxnmBtyH8fYBAWN4Y=;
+	h=From:Subject:Date:To:Cc:From;
+	b=GpifKG5MQZT9Dc+mtXS6bS2OQD+C6e+AcGNzhnhE2GOKYW+JYSXRCgppXGndwjnr9
+	 +jSxk39nD6mnSVfKqci6gbyxhZF73fDPOUhioL5YimBijvj6VRx01hapCM7G8zP7JH
+	 d8APpazP3eIXavOn/Jq7J9GzjF4WvdpA9Lb3DQ0MT5VLQQeyaafMblsEXASYQ95vOf
+	 C01NQ//u0+LDWj0lH+CA+hcZo70abxPAqp+7FjvlUMTtJsuYbZ6Cl0TWVmoj7SOi8g
+	 YKPnOBbnd0OVxSgsWUsDt5sTfErr6xdvDTcYmj3jFTIoST8KaRXSE/06s5h29HtHZR
+	 9wKBxFyaoWK2A==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Koakuma <koachan@protonmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] sparc/module: Add R_SPARC_UA64 relocation handling
-Message-ID: <20250814224009.GA2217114@ax162>
-References: <20250609-b4-sparc-relocs-v1-0-aa52631735af@protonmail.com>
- <20250609-b4-sparc-relocs-v1-1-aa52631735af@protonmail.com>
- <L-bOu33R0ouNodufTRVlvyqOoz0SGuskQ_bqQ4X_xBkw91w4XmezvmkG0p6Ith-rsFIKYSkQWHUdMJ_G0lyYJhtg18c-mfWWjPKiI_Or6cE=@protonmail.com>
+Subject: [PATCH 0/6] x86: Clean ups after minimum support compiler version
+ bump
+Date: Thu, 14 Aug 2025 18:31:36 -0700
+Message-Id: <20250814-x86-min-ver-cleanups-v1-0-ff7f19457523@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <L-bOu33R0ouNodufTRVlvyqOoz0SGuskQ_bqQ4X_xBkw91w4XmezvmkG0p6Ith-rsFIKYSkQWHUdMJ_G0lyYJhtg18c-mfWWjPKiI_Or6cE=@protonmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPmNnmgC/x3MTQqAIBBA4avErBtI0f6uEi3UxhooC6UIorsnL
+ b/Few8kikwJ+uKBSBcn3kOGKAtwiwkzIU/ZICupq1YovNsaNw54UUS3kgnnkdB62xitvHCyg5w
+ ekTzf/3YY3/cDpm810mYAAAA=
+X-Change-ID: 20250814-x86-min-ver-cleanups-bfb7a54f1c29
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1004; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=e9/U7Zymov2op6Tt2ARZLhwTYZsxnmBtyH8fYBAWN4Y=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnz+phePrX/LHNU5HuMcM7pPxv9G7+pHxK9pDOnVfPyp
+ /L8+fd9OkpZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEbt5nZGj6cSAkXF56/sfD
+ fXczA9jWln3gfJr20mh76KN+/lK110qMDD+M1kv85HN7U2S1+ueJGz5W3RnTDzNdWXTh6qTdV1l
+ Kf/EBAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Sun, Aug 03, 2025 at 01:15:02AM +0000, Koakuma wrote:
-> Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org> wrote:
-> 
-> > From: Koakuma koachan@protonmail.com
-> > 
-> > 
-> > This is needed so that the kernel can handle R_SPARC_UA64 relocations,
-> > which is emitted by LLVM's IAS.
-> > 
-> > Signed-off-by: Koakuma koachan@protonmail.com
-> > 
-> > ---
-> > arch/sparc/include/asm/elf_64.h | 1 +
-> > arch/sparc/kernel/module.c | 1 +
-> > 2 files changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/sparc/include/asm/elf_64.h b/arch/sparc/include/asm/elf_64.h
-> > index 8fb09eec8c3e796a9a79aa0a7877842ceb7ea6d3..694ed081cf8d99adf70be25e5dc0e30a45f70398 100644
-> > --- a/arch/sparc/include/asm/elf_64.h
-> > +++ b/arch/sparc/include/asm/elf_64.h
-> > @@ -58,6 +58,7 @@
-> > #define R_SPARC_7 43
-> > #define R_SPARC_5 44
-> > #define R_SPARC_6 45
-> > +#define R_SPARC_UA64 54
-> > 
-> > /* Bits present in AT_HWCAP, primarily for Sparc32. */
-> > #define HWCAP_SPARC_FLUSH 0x00000001
-> > diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
-> > index b8c51cc23d96944037494f13d2d65a43bb187729..6e3d4dde4f9ab33040b300c40d5fd5d0584e166d 100644
-> > --- a/arch/sparc/kernel/module.c
-> > +++ b/arch/sparc/kernel/module.c
-> > @@ -87,6 +87,7 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
-> > break;
-> > #ifdef CONFIG_SPARC64
-> > case R_SPARC_64:
-> > + case R_SPARC_UA64:
-> > location[0] = v >> 56;
-> > 
-> > location[1] = v >> 48;
-> > 
-> > location[2] = v >> 40;
-> > 
-> > 
-> > --
-> > 2.49.0
-> 
-> Ping. Is there anything else I should do for this?
-> 
+Hi x86 folks,
 
-This seems reasonable to me, sorry for the delay in commenting. I would
-expect this to go via the SPARC tree but if they are too busy or
-unavailable to pick this up, we would try to route it via Andrew Morton.
-Is there more work needed for the integrated assembler other than this
-series?
+Here is a small series of clean ups that I noticed after PeterZ made a
+comment about '-mskip-rax-setup' being supported with all compiler
+versions that x86 requires to build (GCC 8.1+ and LLVM 15+). This has
+seen a build with GCC 8, GCC 15, LLVM 15, and LLVM 21.
 
-Cheers,
-Nathan
+---
+Nathan Chancellor (6):
+      x86/build: Remove cc-option for GCC retpoline flags
+      x86/build: Remove cc-option from stack alignment flags
+      x86/build: Clean up stack alignment flags in CC_FLAGS_FPU
+      x86/build: Remove cc-option from -mno-fp-ret-in-387
+      x86/build: Remove cc-option from -mskip-rax-setup
+      x86/Kconfig: Clean up LLVM version checks in IBT configurations
+
+ arch/x86/Kconfig  |  8 +-------
+ arch/x86/Makefile | 25 +++++++------------------
+ 2 files changed, 8 insertions(+), 25 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250814-x86-min-ver-cleanups-bfb7a54f1c29
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
