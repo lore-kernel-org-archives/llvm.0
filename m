@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310E1266A7;
-	Fri, 15 Aug 2025 19:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7921C195;
+	Fri, 15 Aug 2025 20:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755286946; cv=none; b=dzP90QVsqXbnUFripgrOqxOi+SaS34K0TRsCmNbKPYoNKC+Nw7IpKnJNahkxvAAfTIu3BNn3iJcLHpsD+r8nUh9DrUQ2qZIcddml26bBxQeCH2K1zlkULlldFclhXes2He2WOyCKkaR9nVgp2ILhRW3hYAOQMksIp0OwY4R8Jzk=
+	t=1755288248; cv=none; b=MT83VmRL7YJxNT53B//zls0RTev9YM+oSdUDMjHUFBE4sVQmIahjNZgoSq2yv602dYWnRYcZGr5fHwoICFf/qfA1AkYAA8F5qoIOb4dPbdgCKQ+zKrmyk6DO5BNsZ4HYhXLjkuvKih63pKum5B9YatAPgqCuxen7Fa9dQ2glcnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755286946; c=relaxed/simple;
-	bh=YDsRt9bglz4Anx9o16eNjIEM/0DTi7m+ySfvYxn5EfU=;
+	s=arc-20240116; t=1755288248; c=relaxed/simple;
+	bh=KdoNFM0JyALmDBeXeK9bjvyngTHO5qk2sJ3MRHhIr5Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HnNk/pI/hxNqzyLCJPYwUG0CayQ6t72WGGcEB84Mx3mDf5WrXbl7YMS/aMZQyGoCcvx01Wj61sbzGsZ9SVgzPn4Z2rbPiUbGMSR3aks2KgBH8Y78TWULHzsCV9p/KhbHYikdrHIh7QyzaWVQ+tJ9XXNQRxtqNUJkYrRVdYKuhyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cuxGZJKM; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=e2KGvfEMNCBSwPhrQCwwdNKXDJ2LXzrjXSd/0il+YdWce6JrxYc4xM8tWNUlFL8IGUIwk+mPxPOV+tKEVXmR0ZRChBI2KRtpwberGPuAvR+I5D8X7m5Ha624454FaATMNvUdHqNlz6Uc+46G47GWrHi4+JufSFoea6/H3uVv+UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IJb3AlOk; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cuxGZJKM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IJb3AlOk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755286946; x=1786822946;
+  t=1755288247; x=1786824247;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YDsRt9bglz4Anx9o16eNjIEM/0DTi7m+ySfvYxn5EfU=;
-  b=cuxGZJKMrqpxJUfXxHVMLZOS4uhGRJOvFuRyKS6tLyQXEp7lVsWTOW3y
-   Eo3zAEZiAQwsHUskXfCR0w1UjSZMdQqqhRSCTXoBeUS0XUgalexC47OA5
-   kZxHR1htHadSmU96K2BXHH1dM6hl5d2T0e5Th7U1SicaBONA5K0FTAtgE
-   ge6b+/IHgHxaQGmCU3r4J7jmeJjLEEG4J9qpqlsDFYE3ve8rLaE1x3i6y
-   WJVMe25r/+kNGCpVzYZKw/5SzGHCAiNUCRdElBqkOyHBkOmx+C1rUX3F5
-   qMGc/vCZq60hoPxhWlcfIcbuj4zu7bAz9e87aXME/6J+5eqGLnuYUtVwy
-   w==;
-X-CSE-ConnectionGUID: CuZfxgogTbei3VIG5yh0Yg==
-X-CSE-MsgGUID: m++0fQTrRWKKmAS1nlF5rA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57685498"
+  bh=KdoNFM0JyALmDBeXeK9bjvyngTHO5qk2sJ3MRHhIr5Y=;
+  b=IJb3AlOkwuwTKo2lScWfnVce0Lqy6O0lB2Cr+LTB74a86UVpLM27/C0o
+   stH6XifF8Ezm2BreCe5VF4z0pP3h4vBbScP6QOrDb+YW4Ykg0zd0TwhGV
+   IkP6ZbdkdTPWS6IAyqlO4RGSXGqvnGXCoa+FKn2xyjaNl+8F6pQeYdwjM
+   Xay4SXTjdriMdwl+/wRIQzO3wbYSf3vz8qd3BcY4Az0D8vYP4FHrlW5nS
+   b6pa/7O4EHkWW6l1TuIA31mS0oel9Xois5NynKc+XXdhZCwKY8I+2sD8A
+   Cotzu+2FIjnBLRL2A6uwTreYJV4XOstgxTZZlYVmTAGfnWxZ33ob3M6fP
+   g==;
+X-CSE-ConnectionGUID: 3bJy63rUS/2Pijq7DOIG7Q==
+X-CSE-MsgGUID: olT3s80/Q1W+yuLZsczkUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57716991"
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="57685498"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 12:42:25 -0700
-X-CSE-ConnectionGUID: 3A+4LzdVQeqfhJbHIKn5JQ==
-X-CSE-MsgGUID: 4y8wzIq5QBWJuYXceU6FTQ==
+   d="scan'208";a="57716991"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 13:04:06 -0700
+X-CSE-ConnectionGUID: p62lv+19RGmetwWyYZhq1A==
+X-CSE-MsgGUID: ipz8qSBhSIme0DYb3mWaXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="197940588"
+   d="scan'208";a="167048938"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 15 Aug 2025 12:42:23 -0700
+  by orviesa007.jf.intel.com with ESMTP; 15 Aug 2025 13:04:02 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1un0Jh-000CHo-12;
-	Fri, 15 Aug 2025 19:42:21 +0000
-Date: Sat, 16 Aug 2025 03:41:56 +0800
+	id 1un0eZ-000CIy-2g;
+	Fri, 15 Aug 2025 20:03:57 +0000
+Date: Sat, 16 Aug 2025 04:03:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Raghavendra K T <raghavendra.kt@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH V3 03/17] mm: Scan the mm and create a migration list
-Message-ID: <202508160305.4N7h8utZ-lkp@intel.com>
-References: <20250814153307.1553061-4-raghavendra.kt@amd.com>
+To: alistair23@gmail.com, chuck.lever@oracle.com, hare@kernel.org,
+	kernel-tls-handshake@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-nfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kbusch@kernel.org,
+	axboe@kernel.dk, hch@lst.de, sagi@grimberg.me, kch@nvidia.com,
+	alistair23@gmail.com, Alistair Francis <alistair.francis@wdc.com>
+Subject: Re: [PATCH 2/8] net/handshake: Make handshake_req_cancel public
+Message-ID: <202508160354.iNoLUr4h-lkp@intel.com>
+References: <20250815050210.1518439-3-alistair.francis@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,105 +67,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250814153307.1553061-4-raghavendra.kt@amd.com>
+In-Reply-To: <20250815050210.1518439-3-alistair.francis@wdc.com>
 
-Hi Raghavendra,
+Hi,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 038d61fd642278bab63ee8ef722c50d10ab01e8f]
+[auto build test WARNING on trondmy-nfs/linux-next]
+[also build test WARNING on net/main net-next/main linus/master linux-nvme/for-next v6.17-rc1 next-20250815]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Raghavendra-K-T/mm-Add-kscand-kthread-for-PTE-A-bit-scan/20250814-233829
-base:   038d61fd642278bab63ee8ef722c50d10ab01e8f
-patch link:    https://lore.kernel.org/r/20250814153307.1553061-4-raghavendra.kt%40amd.com
-patch subject: [RFC PATCH V3 03/17] mm: Scan the mm and create a migration list
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250816/202508160305.4N7h8utZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508160305.4N7h8utZ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/alistair23-gmail-com/net-handshake-Store-the-key-serial-number-on-completion/20250815-130804
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20250815050210.1518439-3-alistair.francis%40wdc.com
+patch subject: [PATCH 2/8] net/handshake: Make handshake_req_cancel public
+config: arm-mps2_defconfig (https://download.01.org/0day-ci/archive/20250816/202508160354.iNoLUr4h-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508160354.iNoLUr4h-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508160305.4N7h8utZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508160354.iNoLUr4h-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> mm/kscand.c:194:20: warning: variable 'mm' set but not used [-Wunused-but-set-variable]
-     194 |         struct mm_struct *mm;
-         |                           ^
+>> net/handshake/request.c:312:6: warning: no previous prototype for function 'handshake_req_cancel' [-Wmissing-prototypes]
+     312 | bool handshake_req_cancel(struct sock *sk)
+         |      ^
+   net/handshake/request.c:312:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     312 | bool handshake_req_cancel(struct sock *sk)
+         | ^
+         | static 
    1 warning generated.
 
 
-vim +/mm +194 mm/kscand.c
+vim +/handshake_req_cancel +312 net/handshake/request.c
 
-   186	
-   187	static int hot_vma_idle_pte_entry(pte_t *pte,
-   188					 unsigned long addr,
-   189					 unsigned long next,
-   190					 struct mm_walk *walk)
-   191	{
-   192		struct page *page;
-   193		struct folio *folio;
- > 194		struct mm_struct *mm;
-   195		struct vm_area_struct *vma;
-   196		struct kscand_migrate_info *info;
-   197		struct kscand_scanctrl *scanctrl = walk->private;
-   198		int srcnid;
-   199	
-   200		scanctrl->address = addr;
-   201		pte_t pteval = ptep_get(pte);
-   202	
-   203		if (!pte_present(pteval))
-   204			return 0;
-   205	
-   206		if (pte_none(pteval))
-   207			return 0;
-   208	
-   209		vma = walk->vma;
-   210		mm = vma->vm_mm;
-   211	
-   212		page = pte_page(*pte);
-   213	
-   214	
-   215		folio = page_folio(page);
-   216		folio_get(folio);
-   217	
-   218		if (!is_valid_folio(folio)) {
-   219			folio_put(folio);
-   220			return 0;
-   221		}
-   222		folio_set_idle(folio);
-   223		page_idle_clear_pte_refs(page, pte, walk);
-   224		srcnid = folio_nid(folio);
-   225	
-   226	
-   227		if (!folio_test_lru(folio)) {
-   228			folio_put(folio);
-   229			return 0;
-   230		}
-   231	
-   232		if (!kscand_eligible_srcnid(srcnid)) {
-   233			folio_put(folio);
-   234			return 0;
-   235		}
-   236		if (!folio_test_idle(folio) &&
-   237			(folio_test_young(folio) || folio_test_referenced(folio))) {
-   238	
-   239			/* XXX: Leaking memory. TBD: consume info */
-   240	
-   241			info = kzalloc(sizeof(struct kscand_migrate_info), GFP_NOWAIT);
-   242			if (info && scanctrl) {
-   243				info->pfn = folio_pfn(folio);
-   244				info->address = addr;
-   245				list_add_tail(&info->migrate_node, &scanctrl->scan_list);
-   246			}
-   247		}
-   248	
-   249		folio_put(folio);
-   250		return 0;
-   251	}
-   252	
+3b3009ea8abb71 Chuck Lever 2023-04-17  300  
+3b3009ea8abb71 Chuck Lever 2023-04-17  301  /**
+3b3009ea8abb71 Chuck Lever 2023-04-17  302   * handshake_req_cancel - Cancel an in-progress handshake
+3b3009ea8abb71 Chuck Lever 2023-04-17  303   * @sk: socket on which there is an ongoing handshake
+3b3009ea8abb71 Chuck Lever 2023-04-17  304   *
+3b3009ea8abb71 Chuck Lever 2023-04-17  305   * Request cancellation races with request completion. To determine
+3b3009ea8abb71 Chuck Lever 2023-04-17  306   * who won, callers examine the return value from this function.
+3b3009ea8abb71 Chuck Lever 2023-04-17  307   *
+3b3009ea8abb71 Chuck Lever 2023-04-17  308   * Return values:
+3b3009ea8abb71 Chuck Lever 2023-04-17  309   *   %true - Uncompleted handshake request was canceled
+3b3009ea8abb71 Chuck Lever 2023-04-17  310   *   %false - Handshake request already completed or not found
+3b3009ea8abb71 Chuck Lever 2023-04-17  311   */
+3b3009ea8abb71 Chuck Lever 2023-04-17 @312  bool handshake_req_cancel(struct sock *sk)
 
 -- 
 0-DAY CI Kernel Test Service
