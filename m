@@ -1,60 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B9F2D8380;
-	Sat, 16 Aug 2025 11:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FDE28688C;
+	Sat, 16 Aug 2025 11:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755342914; cv=none; b=ct3XylHRkLCnvjKYDIENZG5u0i67ElGG1tioEUYwWDrb2jmeS1/xQpcn4JitNBT3Bg2m7XI6dbVwdesohpB7XrM+s6ArE3fV4ZtYMTY1FAgkG3TWj9P9JqmxLQHRpPPLwg4UKcpAdKhyP7E9ny0f53KAO8hT54i4lOg6m/6DPzE=
+	t=1755343544; cv=none; b=RGxYOQK+WDYdClodj+zlK/lQ16mCHOEZYQfQ53mTQP+UB4WqZrFjCjA1ijK+loQ/h1t5WI6jZcr0uJioQtwcB+1EkuK2+SLz0+QP3aw57Rfg/IjYxjWbMFDaD+dShp4wR0ADcZjez22NOJZRHJu6rGzZ5gqMF9cm5leYRy9YGI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755342914; c=relaxed/simple;
-	bh=U5CMim5LoB8qmWk4X0T7bjQMuIKbXieIyZQ7MFtUErc=;
+	s=arc-20240116; t=1755343544; c=relaxed/simple;
+	bh=yXFNrlTsuKcIiCEG5HOLk1E5J3QOdw3cZCTv8+Nq19Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OSKdbEAcdT0jRLsmm/sM6+QyV0H/UpKrEy5HBLtF+79D3n0Ynpr2SVk2bNGWg/Wiah3qPxoAkP+QjzdDifgPiHgTzURHaQGTaPdZntquxfPb70wYYAWtgBjfjE5++GznLDcCOiKQqeCgD9/WCtmMC1DoaSPzUVtuFTJ7xh8y87w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mJW0aZSG; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=lymf+8swtYgb1MQ/awKjckKqmxpsrbAqBmBImqGNQSM8Ss1evvOcw8DXIKgvL1i65vX1D2049+yYP1sO8UD2uodCBlzi9ComXoPZSiVY2DcUE9DVGo/7lS+GdqnTrQvL8lsk374Yu9b5G6wUupXHzUQnQXf0BpmoOrCCvWLh2kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n71hZWok; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mJW0aZSG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n71hZWok"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755342913; x=1786878913;
+  t=1755343543; x=1786879543;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=U5CMim5LoB8qmWk4X0T7bjQMuIKbXieIyZQ7MFtUErc=;
-  b=mJW0aZSGgNAuyjQPsTPo6/Uz4Fmd2RBWu+xnIvC4iBk7THJFhAH3KTZM
-   P7TfmlSsOvdgUbKjzeZbtB5E8oc1iX0paSONOoLsbJvZ3rcUI8/uKUHM+
-   2oYvfnDq2xY5NwBu7lFsOkGXQtfTyfDLbWRHtJflfEXf8g35LuwNp7f7U
-   jxWjXNOqLGs57Kb8pYcgNjDFiko5eRkPvFLzlEeLw1IYs1v2DTWvsh7kK
-   p9Mx9VEH38bpCUHnMVtTBLgmJt4peugd9JA4dqNiYS62RZyKAcGH3oRJm
-   Q1Wtzrs6tXRGST3y/Fc4M/LrzIYb/yfWangujGE2fLZWc82+2+fB3Lx/v
-   w==;
-X-CSE-ConnectionGUID: ZrAfcLonSZquS7mKDf3oeA==
-X-CSE-MsgGUID: 0Yqh5zslQvSBelpCMuQpcw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57596899"
+  bh=yXFNrlTsuKcIiCEG5HOLk1E5J3QOdw3cZCTv8+Nq19Q=;
+  b=n71hZWokabrRDjOBI42sW1w7fjcwElw+LzgHU0HWoginULo6m9Vv5+uS
+   VyzB02IQqdsOytedHFHSh40WxiqMEcV+DKosm6IhunAJh/9KEGIVcu0B5
+   3Zcqq/SJdf0Usyo0xZGOPOpLX1DDprsi+gQARMq4Tgel+hOcBbjJOa5IP
+   +P/8s/RALDzHzxdN5m2A9XMsV8uaNUmxnusVFn9MFU4ACzsDhl6dK21dc
+   /xRbKU/yK/NKlXqY1P71MA66hBC9XFjVMy98tMEDk6gyi6yWuEvo/C8Ol
+   USGE1rcUl1OCcIWd14L+2avMlBLLJkWEMFJuPosfcDMWlXbKN43Aj/H1g
+   A==;
+X-CSE-ConnectionGUID: yO6lrrhQSnuNdz8wiJcKUg==
+X-CSE-MsgGUID: C3+vgQw3Tnaq1d0RPCsU3Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="57713462"
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="57596899"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2025 04:15:11 -0700
-X-CSE-ConnectionGUID: lvQbGZwcReCUi2yFPMYLdg==
-X-CSE-MsgGUID: eaSEQoDbT4WyfMxK5AqcRg==
+   d="scan'208";a="57713462"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2025 04:25:42 -0700
+X-CSE-ConnectionGUID: uGNPv/P0SAOZCDHGzi1O3w==
+X-CSE-MsgGUID: Tv9x7wr8Td6dRbiYNGSuGw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="167112212"
+   d="scan'208";a="190913937"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 16 Aug 2025 04:15:09 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 16 Aug 2025 04:25:38 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1unEsN-000CqA-1I;
-	Sat, 16 Aug 2025 11:15:07 +0000
-Date: Sat, 16 Aug 2025 19:14:15 +0800
+	id 1unF2T-000CqO-0F;
+	Sat, 16 Aug 2025 11:25:34 +0000
+Date: Sat, 16 Aug 2025 19:24:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 08/16] kmsan: convert kmsan_handle_dma to use physical
- addresses
-Message-ID: <202508161823.vfpArxa2-lkp@intel.com>
-References: <38de1c5ffb567c5705826f14742fcaf54522c083.1755193625.git.leon@kernel.org>
+To: Artur Rojek <contact@artur-rojek.eu>, Rob Landley <rob@landley.net>,
+	Jeff Dionne <jeff@coresemi.io>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Artur Rojek <contact@artur-rojek.eu>
+Subject: Re: [PATCH 3/3] net: j2: Introduce J-Core EMAC
+Message-ID: <202508161930.ergOga3z-lkp@intel.com>
+References: <20250815194806.1202589-4-contact@artur-rojek.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,98 +74,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <38de1c5ffb567c5705826f14742fcaf54522c083.1755193625.git.leon@kernel.org>
+In-Reply-To: <20250815194806.1202589-4-contact@artur-rojek.eu>
 
-Hi Leon,
+Hi Artur,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on akpm-mm/mm-everything trace/for-next linus/master v6.17-rc1 next-20250815]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.17-rc1 next-20250815]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Romanovsky/dma-mapping-introduce-new-DMA-attribute-to-indicate-MMIO-memory/20250815-015647
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/38de1c5ffb567c5705826f14742fcaf54522c083.1755193625.git.leon%40kernel.org
-patch subject: [PATCH v3 08/16] kmsan: convert kmsan_handle_dma to use physical addresses
-config: x86_64-buildonly-randconfig-004-20250816 (https://download.01.org/0day-ci/archive/20250816/202508161823.vfpArxa2-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508161823.vfpArxa2-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Artur-Rojek/dt-bindings-vendor-prefixes-Document-J-Core/20250816-042354
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250815194806.1202589-4-contact%40artur-rojek.eu
+patch subject: [PATCH 3/3] net: j2: Introduce J-Core EMAC
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250816/202508161930.ergOga3z-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508161930.ergOga3z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508161823.vfpArxa2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508161930.ergOga3z-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/kmsan/hooks.c:339:6: error: conflicting types for 'kmsan_handle_dma'
-     339 | void kmsan_handle_dma(phys_addr_t phys, size_t size,
-         |      ^
-   include/linux/kmsan.h:194:6: note: previous declaration is here
-     194 | void kmsan_handle_dma(phys_addr_t phys, size_t size,
-         |      ^
->> mm/kmsan/hooks.c:371:6: error: too many arguments to function call, expected 3, have 4
-     370 |                 kmsan_handle_dma(sg_page(item), item->offset, item->length,
-         |                 ~~~~~~~~~~~~~~~~
-     371 |                                  dir);
-         |                                  ^~~
-   mm/kmsan/hooks.c:361:19: note: 'kmsan_handle_dma' declared here
-     361 | EXPORT_SYMBOL_GPL(kmsan_handle_dma);
-         |                   ^~~~~~~~~~~~~~~~
-   include/linux/export.h:90:48: note: expanded from macro 'EXPORT_SYMBOL_GPL'
-      90 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
-         |                                                        ^~~
-   include/linux/export.h:86:54: note: expanded from macro '_EXPORT_SYMBOL'
-      86 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-         |                                                         ^~~
-   include/linux/export.h:76:21: note: expanded from macro '__EXPORT_SYMBOL'
-      76 |         extern typeof(sym) sym;                                 \
-         |                            ^~~
-   2 errors generated.
+>> drivers/net/ethernet/jcore_emac.c:231:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+     231 |         }
+         |         ^
+   1 warning generated.
 
 
-vim +/kmsan_handle_dma +339 mm/kmsan/hooks.c
+vim +231 drivers/net/ethernet/jcore_emac.c
 
-   337	
-   338	/* Helper function to handle DMA data transfers. */
- > 339	void kmsan_handle_dma(phys_addr_t phys, size_t size,
-   340			      enum dma_data_direction dir, unsigned int attrs)
-   341	{
-   342		struct page *page = phys_to_page(phys);
-   343		u64 page_offset, to_go, addr;
-   344	
-   345		if (PageHighMem(page))
-   346			return;
-   347		addr = (u64)page_address(page) + offset_in_page(phys);
-   348		/*
-   349		 * The kernel may occasionally give us adjacent DMA pages not belonging
-   350		 * to the same allocation. Process them separately to avoid triggering
-   351		 * internal KMSAN checks.
-   352		 */
-   353		while (size > 0) {
-   354			page_offset = offset_in_page(addr);
-   355			to_go = min(PAGE_SIZE - page_offset, (u64)size);
-   356			kmsan_handle_dma_page((void *)addr, to_go, dir);
-   357			addr += to_go;
-   358			size -= to_go;
-   359		}
-   360	}
-   361	EXPORT_SYMBOL_GPL(kmsan_handle_dma);
-   362	
-   363	void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
-   364				 enum dma_data_direction dir)
-   365	{
-   366		struct scatterlist *item;
-   367		int i;
-   368	
-   369		for_each_sg(sg, item, nents, i)
-   370			kmsan_handle_dma(sg_page(item), item->offset, item->length,
- > 371					 dir);
-   372	}
-   373	
+   192	
+   193	static void jcore_emac_set_rx_mode(struct net_device *ndev)
+   194	{
+   195		struct jcore_emac *priv = netdev_priv(ndev);
+   196		struct netdev_hw_addr *ha;
+   197		unsigned int reg, i, idx = 0, set_mask = 0, clear_mask = 0, addr = 0;
+   198	
+   199		if (ndev->flags & IFF_PROMISC)
+   200			set_mask |= JCORE_EMAC_PROMISC;
+   201		else
+   202			clear_mask |= JCORE_EMAC_PROMISC;
+   203	
+   204		if (ndev->flags & IFF_ALLMULTI)
+   205			set_mask |= JCORE_EMAC_MCAST;
+   206		else
+   207			clear_mask |= JCORE_EMAC_MCAST;
+   208	
+   209		regmap_update_bits(priv->map, JCORE_EMAC_CONTROL, set_mask | clear_mask,
+   210				   set_mask);
+   211	
+   212		if (!(ndev->flags & IFF_MULTICAST))
+   213			return;
+   214	
+   215		netdev_for_each_mc_addr(ha, ndev) {
+   216			/* Only the first 3 octets are used in a hardware mcast mask. */
+   217			memcpy(&addr, ha->addr, 3);
+   218	
+   219			for (i = 0; i < idx; i++) {
+   220				regmap_read(priv->map, JCORE_EMAC_MCAST_MASK(i), &reg);
+   221				if (reg == addr)
+   222					goto next_ha;
+   223			}
+   224	
+   225			regmap_write(priv->map, JCORE_EMAC_MCAST_MASK(idx), addr);
+   226			if (++idx >= JCORE_EMAC_MCAST_ADDRS) {
+   227				netdev_warn(ndev, "Multicast list limit reached\n");
+   228				break;
+   229			}
+   230	next_ha:
+ > 231		}
+   232	
+   233		/* Clear the remaining mask entries. */
+   234		for (i = idx; i < JCORE_EMAC_MCAST_ADDRS; i++)
+   235			regmap_write(priv->map, JCORE_EMAC_MCAST_MASK(i), 0);
+   236	}
+   237	
 
 -- 
 0-DAY CI Kernel Test Service
