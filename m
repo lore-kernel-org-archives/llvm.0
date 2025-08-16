@@ -1,71 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F368211C;
-	Sat, 16 Aug 2025 00:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689741537A7;
+	Sat, 16 Aug 2025 02:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755304583; cv=none; b=pIRY3yfriRyoi4Z3j7yd7Iyr7f/5aJa9us1G/mtR1t89sXmYlowjZuHPA/t4mazgJVERuhj8g6Pp5ZCCLlhxdmRKlMQcDlIujEMXf1GEgSmhWMQ9guXmfIFIXzVYuvuAG7tznfSV7HO90om75rCJLSMxH/AoeeSB8s2oK7jPzwU=
+	t=1755310945; cv=none; b=DFiETzbLHYjQXT6ij5LixT2z0cdbLKMW+meuEOjBQ7oEuQT8UeNxpJvJJC42o0MInFT6SDdpVV+RaDWllea5HZpgTll5kHh99lhRFTGoCawSLts9OylsFvKG6NjNe4hk877+7eGzaIWWsdElWsEX265lzYw9hELVqONLEOD8gaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755304583; c=relaxed/simple;
-	bh=YDxjULu7qEyWirbAvD6wzbjz+KYgzH+G9EhzWARCC7o=;
+	s=arc-20240116; t=1755310945; c=relaxed/simple;
+	bh=zN4OcRDdLbpY1W3ggye7Zz0tj5nwJJ/VPiLjEbQYupo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hGUwkL9/6ODqbv79yhfj9ebW3AU+jXYkbsL5FSd6en8D1RpPAq5t6dazXxQ5NfXxKlhpxYBgcPo7a7WFgWMhL6gX0KUBHFX1BrSr64/oHUVKS8NzMswuK75rfecbIGGzqIdhWY4aBooB/TGvkodBgHY/OlOJ3p0fh4gOReTuUaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/1idiUP; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=NxVpdPwOLTUAGEukBjfTi3CofuZQbdK39ymB37AhmX6h3teMkK9WbyOAtTFVqv9CDfSlNxLq+Ac/KKg3wTqSaZHZ91EQApqzxJNKFv8Yt53CLZ4PAtJG8vITAHgxXQvoD+dMwbOheE1BL4NM6D3KwdjcRFOytiETRtZDLiqzAs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DmBvt+b5; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/1idiUP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DmBvt+b5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755304582; x=1786840582;
+  t=1755310944; x=1786846944;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YDxjULu7qEyWirbAvD6wzbjz+KYgzH+G9EhzWARCC7o=;
-  b=l/1idiUPnxUiPFg4qvfwIdJboxMSBmjtt5GSENONRX9NdqqdRfAsTj+F
-   5ATEbgDh3jYRiEVqGapJ2hYSGEXa7eZnSDYnMRsHZpEb+C9vARzM7ikpQ
-   Un20YaJ9rpw8iStGIyWnGieMWIvaBPhPYrJESSDvmJSgGLbGqy9LAqmQ2
-   Ejte9BjRmlcb7zb18CkHWYiUVbUdYoFPA2C2U4or2fliDhaWKz4XuThhg
-   M0lbJ+3UhafH46r/94tIyFBv2BHCxxpDQMlskyHHav83r9XDTXbo2gznY
-   wi85CAKb8Q0VYoQbw9W5yyCXXpUpUyRnYMehyT01Ux/fyG8/G8E1Uyxmk
+  bh=zN4OcRDdLbpY1W3ggye7Zz0tj5nwJJ/VPiLjEbQYupo=;
+  b=DmBvt+b53LM9KBB8VhWnLbI099Aj8P9Km/WOLKOIJ0TIxHCDMy4XG5A+
+   rC/nbvtgMZUpYWF/TjFK1vZbAGbjQwpJh00urG6ZALeUFBbRJFWBpv2U5
+   oL0EUKrx/J+d6loUy5/JTJt+GggC57P+aiZXAGoPdumx2bixF2D2kVNcR
+   38depreYBYIKQnSed0Cva770Vrjt/erOSu8qRt30AuCGD/GCdN87mHhpb
+   i7bptCza8XxzsJuSKMPkQ0p6Foa0eLigzeQ1UoFBCRYcGn/LYwD6BKvfb
+   M5ArQDzP+iY1OfjRucq9y+YoPLhAkswVoW8dtzryNFOgwJbCsjM4jhdMF
    Q==;
-X-CSE-ConnectionGUID: dY+PRqCoQxqrn/UvkTI4Aw==
-X-CSE-MsgGUID: iDzqRX9lSruvQhi75sY6Pw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="68715614"
+X-CSE-ConnectionGUID: mLUrTCHnStuV4tgoebS9Ag==
+X-CSE-MsgGUID: m1D/4dt2TI+xzOpOJrO+HA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11523"; a="80208662"
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="68715614"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 17:36:21 -0700
-X-CSE-ConnectionGUID: QUhMb4KfTNKGb2SROBTq1A==
-X-CSE-MsgGUID: EXyFp8Q3T1ulfYyXeBEHvg==
+   d="scan'208";a="80208662"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2025 19:22:23 -0700
+X-CSE-ConnectionGUID: D7Z5p0x8T36LSycCTd3p+Q==
+X-CSE-MsgGUID: 8P41UBWLSDWEaWegFqvdyg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="172467174"
+   d="scan'208";a="172355567"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 15 Aug 2025 17:36:18 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 15 Aug 2025 19:22:15 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1un4u8-000CSG-01;
-	Sat, 16 Aug 2025 00:36:16 +0000
-Date: Sat, 16 Aug 2025 08:35:50 +0800
+	id 1un6Yf-000CVY-21;
+	Sat, 16 Aug 2025 02:22:13 +0000
+Date: Sat, 16 Aug 2025 10:21:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
+To: Alex Hung <alex.hung@amd.com>, dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH 4/6] hwmon: ltc4283-hwmon: Add support for the LTC4283
- Swap Controller
-Message-ID: <202508160822.04pfkosr-lkp@intel.com>
-References: <20250814-ltc4283-support-v1-4-88b2cef773f2@analog.com>
+	wayland-devel@lists.freedesktop.org, harry.wentland@amd.com,
+	alex.hung@amd.com, leo.liu@amd.com, ville.syrjala@linux.intel.com,
+	pekka.paalanen@collabora.com, contact@emersion.fr, mwen@igalia.com,
+	jadahl@redhat.com, sebastian.wick@redhat.com,
+	shashank.sharma@amd.com, agoins@nvidia.com, joshua@froggi.es,
+	mdaenzer@redhat.com, aleixpol@kde.org, xaver.hugl@gmail.com,
+	victoria@system76.com, daniel@ffwll.ch, uma.shankar@intel.com,
+	quic_naseer@quicinc.com, quic_cbraga@quicinc.com,
+	quic_abhinavk@quicinc.com, marcan@marcan.st, Liviu.Dudau@arm.com,
+	sashamcintosh@google.com, chaitanya.kumar.borah@intel.com,
+	louis.chauvet@bootlin.com, mcanal@igalia.com
+Subject: Re: [PATCH V11 28/47] drm/amd/display: Add support for sRGB EOTF in
+ BLND block
+Message-ID: <202508161043.tvyKbLyZ-lkp@intel.com>
+References: <20250815035047.3319284-29-alex.hung@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,59 +75,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250814-ltc4283-support-v1-4-88b2cef773f2@analog.com>
+In-Reply-To: <20250815035047.3319284-29-alex.hung@amd.com>
 
-Hi Nuno,
+Hi Alex,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 9703c672af8dd3573c76ce509dfff26bf6c4768d]
+[auto build test WARNING on drm-exynos/exynos-drm-next]
+[also build test WARNING on linus/master v6.17-rc1 next-20250815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-S-via-B4-Relay/dt-binbings-mfd-Add-bindings-for-the-LTC4283-Swap-Controller/20250814-190311
-base:   9703c672af8dd3573c76ce509dfff26bf6c4768d
-patch link:    https://lore.kernel.org/r/20250814-ltc4283-support-v1-4-88b2cef773f2%40analog.com
-patch subject: [PATCH 4/6] hwmon: ltc4283-hwmon: Add support for the LTC4283 Swap Controller
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250816/202508160822.04pfkosr-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508160822.04pfkosr-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Hung/drm-Add-helper-for-conversion-from-signed-magnitude/20250815-120435
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+patch link:    https://lore.kernel.org/r/20250815035047.3319284-29-alex.hung%40amd.com
+patch subject: [PATCH V11 28/47] drm/amd/display: Add support for sRGB EOTF in BLND block
+config: arm64-randconfig-002-20250816 (https://download.01.org/0day-ci/archive/20250816/202508161043.tvyKbLyZ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508161043.tvyKbLyZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508160822.04pfkosr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508161043.tvyKbLyZ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hwmon/ltc4283-hwmon.c:579:10: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-     579 |         if (tmp == BIT(16))
-         |             ~~~ ^  ~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_color.c:1295:35: warning: variable 'blend_lut' is uninitialized when used here [-Wuninitialized]
+    1295 |                 return __set_input_tf(NULL, tf, blend_lut, blend_size);
+         |                                                 ^~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_color.c:1276:39: note: initialize the variable 'blend_lut' to silence this warning
+    1276 |         const struct drm_color_lut *blend_lut;
+         |                                              ^
+         |                                               = NULL
    1 warning generated.
 
 
-vim +579 drivers/hwmon/ltc4283-hwmon.c
+vim +/blend_lut +1295 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_color.c
 
-   570	
-   571	static int __ltc4283_hwmon_write_in_history(struct ltc4283_hwmon *st,
-   572						    u32 reg, long lowest, u32 fs)
-   573	{
-   574		__be16 __raw;
-   575		u16 tmp;
-   576		int ret;
-   577	
-   578		tmp = DIV_ROUND_CLOSEST(BIT(16) * lowest, fs);
- > 579		if (tmp == BIT(16))
-   580			tmp = U16_MAX;
-   581	
-   582		__raw = cpu_to_be16(tmp);
-   583	
-   584		ret = regmap_bulk_write(st->map, reg, &__raw, sizeof(__raw));
-   585		if (ret)
-   586			return ret;
-   587	
-   588		tmp = 0;
-   589		return regmap_bulk_write(st->map, reg + 1,  &tmp, sizeof(tmp));
-   590	}
-   591	
+  1272	
+  1273		struct dc_transfer_func *tf = &dc_plane_state->blend_tf;
+  1274		struct drm_colorop *colorop = colorop_state->colorop;
+  1275		struct drm_device *drm = colorop->dev;
+  1276		const struct drm_color_lut *blend_lut;
+  1277		uint32_t blend_size = 0;
+  1278	
+  1279		if (colorop->type != DRM_COLOROP_1D_CURVE &&
+  1280		    colorop_state->curve_1d_type != DRM_COLOROP_1D_CURVE_SRGB_EOTF)
+  1281			return -EINVAL;
+  1282	
+  1283		if (colorop_state->bypass) {
+  1284			tf->type = TF_TYPE_BYPASS;
+  1285			tf->tf = TRANSFER_FUNCTION_LINEAR;
+  1286			return 0;
+  1287		}
+  1288	
+  1289		drm_dbg(drm, "Blend colorop with ID: %d\n", colorop->base.id);
+  1290	
+  1291		if (colorop->type == DRM_COLOROP_1D_CURVE) {
+  1292			tf->type = TF_TYPE_DISTRIBUTED_POINTS;
+  1293			tf->tf = amdgpu_colorop_tf_to_dc_tf(colorop_state->curve_1d_type);
+  1294			tf->sdr_ref_white_level = SDR_WHITE_LEVEL_INIT_VALUE;
+> 1295			return __set_input_tf(NULL, tf, blend_lut, blend_size);
+  1296		}
+  1297	
+  1298		return -EINVAL;
+  1299	}
+  1300	
 
 -- 
 0-DAY CI Kernel Test Service
