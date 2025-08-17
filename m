@@ -1,91 +1,103 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14EDB1D6BB;
-	Sun, 17 Aug 2025 09:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49AE7494
+	for <llvm@lists.linux.dev>; Sun, 17 Aug 2025 15:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755423568; cv=none; b=kjrdRRdVfMmpIri1h1rJbFJSnz+DBbrI3sm5/uxx8Kgss4ycP3GATDTsfU7+XEIP1itTqVKyyvPmN110n5R3APgq8T5jemjyGlGgUvS1go4ouJY5fPZsf4GR7r85I8/RukaRvhUZ++LLspfGV9j+kG8VMbTxZ7O8zGHI3Cjtvb0=
+	t=1755444189; cv=none; b=VCR+Y50joLeWSazg3HMf34xWNdO0bjKmfRbTKzeQHEINnfbTkBj7jmLaJDW53cghz23oqf/YlAstqvIkLsqpjq/+9AUheN8zXUhK6yTU5cZ89kFJL3BJiBaD7L80/r7eEQXnyCZFMJYF4V/uS2q9qu9WME/z08fRrrBYiU1RgK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755423568; c=relaxed/simple;
-	bh=x0wlHRCLNUADFhDxWzlFBA0EmRpXhumAsQQ4zF7tXVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bx5/hUIXSYduqMN2f9CtB1P5JKZVa1Hd9UnCZURaT+t9rs9Pc6VkcJJr2ZYimYl3rz/bdw1jWMLVADJ7YGr/O3xr6bxK6fA4wfgVMiWP+KULEFngK6XZ1kW6143vX3L3TnIvJbhfS6jCBGCThiNXtLPX3qgsftGVfU+ovvICXSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 57H9d5mh014247;
-	Sun, 17 Aug 2025 11:39:05 +0200
-Date: Sun, 17 Aug 2025 11:39:05 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/3] selftests/nolibc: don't pass CC to toplevel Makefile
-Message-ID: <20250817093905.GA14213@1wt.eu>
-References: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
- <20250719-nolibc-llvm-system-v1-2-1730216ce171@weissschuh.net>
- <20250721025627.GB1886@1wt.eu>
- <ebb84a9c-8771-4791-8a81-b615cecec7c3@t-8ch.de>
+	s=arc-20240116; t=1755444189; c=relaxed/simple;
+	bh=1GiuRAYS2vHjFeheZf8eNKJdhdWv/XXYKwfkhkwg8ww=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mftmtl9WlKTrHUmrdUtny7UJ42ABIrN2/i0it+bhNcY2p6prvplxXVV+CaO7vdnQddQTCUjMARhd3tkvfaccRgwtFaeV4jHgXL9jduBTtVU13Lz+pM/bw09cS48GhUv+KI/9ZiaVbRowfa8mDZtnBCTbW1H9jkaDZ/k6iRVGoQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RxhZj3wv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RxhZj3wv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755444186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SfsxtUaDG4SjEsHhUnvUR3fjAy7MzPOQHtKOcIJMspg=;
+	b=RxhZj3wvNIdoPuR67djqB4slOZn9DpESwCQlzXZtcTsTSXBSx6SR2hLeyqL/IlZywuBlkR
+	Fap4S7Uz7e34Rl+eOW5/OJ9CGcJClYW0/F+a/YdzThDaEO7/CPEL/p6oaR5CNe70uefMwJ
+	yKMe9RHGalXVzMITZfJksH+cUc+c/0k=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-184-G1vGt7a6MESU-0X5dgVUkQ-1; Sun,
+ 17 Aug 2025 11:23:04 -0400
+X-MC-Unique: G1vGt7a6MESU-0X5dgVUkQ-1
+X-Mimecast-MFC-AGG-ID: G1vGt7a6MESU-0X5dgVUkQ_1755444183
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E702180047F
+	for <llvm@lists.linux.dev>; Sun, 17 Aug 2025 15:23:03 +0000 (UTC)
+Received: from [172.20.84.71] (unknown [10.30.45.119])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0F14F180047F;
+	Sun, 17 Aug 2025 15:23:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc1,
+ upstream-mainline, 8d561baa)
+Date: Sun, 17 Aug 2025 15:23:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ebb84a9c-8771-4791-8a81-b615cecec7c3@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <38571.125081711230400175@us-mta-184.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: VakQCytmSrri7KUrIzmGN_8hSoUD1Jg57hkBJn63NQs_1755444183
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas!
+Hi, we tested your kernel and here are the results:
 
-On Sun, Aug 17, 2025 at 10:30:52AM +0200, Thomas Weißschuh wrote:
-> Hi Willy,
-> 
-> On 2025-07-21 04:56:27+0200, Willy Tarreau wrote:
-> > On Sat, Jul 19, 2025 at 05:38:28PM +0200, Thomas Weißschuh wrote:
-> > > The toplevel Makefile is capable of calculating CC from CROSS_COMPILE
-> > > and/or ARCH.
-> > > 
-> > > Stop passing the unnecessary variable.
-> > (...) 
-> > >  # Execute the toplevel kernel Makefile
-> > > -KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE)
-> > > +KBUILD_MAKE = $(MAKE) -C $(srctree) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
-> > 
-> > Here the goal was not to help the toplevel Makefile figure CC, but rather
-> > to permit the user to override it, and it's also listed in "make help",
-> > and even used in cc-option.
-> > 
-> > I understnad that you're trying to avoid forcing CC to clang when
-> > building, but in this case, what will CROSS_COMPILE contain ?  My
-> > guess is that you intend to make CROSS_COMPILE point to the gcc-based
-> > toolchain, and have CC point to clang for userland only. Is this the
-> > case ?
-> 
-> Correct.
-> 
-> > I think I'd be fine with this, but then we need to make it
-> > explicit in the help message and fix the current one, possibly just
-> > with this:
-> > 
-> > -	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
-> > +	@echo "  nolibc-test       build the executable (uses \$$CC)"
-> 
-> I don't think this is correct. $CC itself depends on $CROSS_COMPILE
-> through tools/scripts/Makefile.include.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-I don't understand what you mean by "depends on" here. CC defaults
-to ${CROSS_COMPILE}gcc and may override it if set. So if one sets
-CC, CROSS_COMPILE will not be used for it. Or maybe we could change
-it to this to indicate a precedence if that's the idea you want to
-convey ?
 
- -	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
- +	@echo "  nolibc-test       build the executable (uses \$$CC or \$$CROSS_COMPILE)"
+Kernel information:
+    Commit message: Merge tag 'x86_urgent_for_v6.17_rc2' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tip/tip
 
-Willy
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1988096302
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1988096302_aarch64_kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1988096302_x86_64_kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1988096302_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
