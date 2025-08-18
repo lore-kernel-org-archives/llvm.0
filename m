@@ -1,90 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9270B16E863
-	for <llvm@lists.linux.dev>; Mon, 18 Aug 2025 04:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AB81AF0A7
+	for <llvm@lists.linux.dev>; Mon, 18 Aug 2025 05:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755491179; cv=fail; b=FCoTBQKb2oLbESu1H9aHC6ILvL+DWr1EDdwbrJrr9Xrn0+do9tx8ie7ZdD7mIQnES9ZkY7YVH4bJsJ+Kjf4+6Mw9dWc7/cF0N5lvkVmIvDNxNAF3StyLfbK4w/FEe0h6rb2tB9+cG0qF4UQQwFqczgeMJqAE9I+5VQtrI4vQDlo=
+	t=1755495105; cv=fail; b=bCsbfPEUkJVvi4+iExjmNPJs6ycqmRd8hj2JqKI4TBPfSa3DGhY70BJBTC6MK4onqwNznNFiYSPvNgegC0RA6QhSnw+yMiOb+UmueoT7SUXOypDKJvaI3FKBHV/aH251eBA3s12B+GtvnQT/FznBIXJ+DLBH18CngoonlApKmqs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755491179; c=relaxed/simple;
-	bh=rKWss+1mSD9PjzoJ6wK/cqyTPKnFTVS7pPhiH0htuEc=;
+	s=arc-20240116; t=1755495105; c=relaxed/simple;
+	bh=mA6VB3txEeXianMJHU36PkNUJhj/vCvz7xtZuICQoH4=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=r5C5udOuNzNVHSUoIk+hpdtIkDWUWxZMs2AygjSgZyATSlij3XcbRf1jEbwWW2kf+zHM408KPIKg4+YucupM+5FBaLwFTHDu5TyyWItIgRaS4c2F5awNMA66X5XdOZsmvnVoFA0pOBPWe7SnLAAWLsUcIUgAnWN4Zmt+GYO78k8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f4yEjkFc; arc=fail smtp.client-ip=198.175.65.13
+	 Content-Disposition:In-Reply-To:MIME-Version; b=hsfSVTjTjKEF1WRqTDYV4HnLY7V6zoh7MPKcAbvPg3aym8elCggTkSbrcIm4y7iiKNBjzDSrarU4B8jo23kAOAoJLsi031jPW/u/GUp4Lti1D1oaoa7Ce2Uk54VEMbMark7d3kJx8AyjVKpGEwKi+x7K/y6Na3IpJSJ/bqeOjJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YKXpQY1s; arc=fail smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f4yEjkFc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YKXpQY1s"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755491178; x=1787027178;
+  t=1755495103; x=1787031103;
   h=date:from:to:cc:subject:message-id:references:
    content-transfer-encoding:in-reply-to:mime-version;
-  bh=rKWss+1mSD9PjzoJ6wK/cqyTPKnFTVS7pPhiH0htuEc=;
-  b=f4yEjkFcJXzUO/M1VVL6E4AgZZ99ePIhqsuv8AXxzYOA1++yOUkov367
-   RaI5o4svPalCp4qipC58gPig7QIadMYRebeLmJZdBZVEOuKoQ3EAPtgVY
-   8biAa/mEto+OjMUjmDhc03pkkCVe9iz6c84YrC/4PcqTujtnI+7c54+4b
-   CBWBgj38DJR1kkRsaLsiqB8V6LwQ7nU6qrdN+OZCETqDPUuRk7EGgTdSg
-   EDXgsJ3IfvvquMKkEDRtze4QvkU1GbRd9/xzhWXtTJ5dP07/LuhhH54+5
-   AYPj5zSh4eHdq6neAe0lXnbDT9EbKHICj0t4ww4Htm5nXodMqG56LTBxR
-   A==;
-X-CSE-ConnectionGUID: 792NQMoLRWKCNGFpZYxMYg==
-X-CSE-MsgGUID: cU1Fmd8dTGqDzymwmLZokA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11524"; a="68797701"
+  bh=mA6VB3txEeXianMJHU36PkNUJhj/vCvz7xtZuICQoH4=;
+  b=YKXpQY1sWponNOnq0Jx8opqzaVGW2HaorEMGMwRuG6/rfIV18qu3zups
+   0cc6yWvmqpHwmMDMo6ZbmFsOlB7OIlLsckd3+8eu5CtQ+yvd7/F4FEURE
+   j5eBMV351pQBZpH4QvtdPkg93mr2YpV4pKqWr23asVRFAadg+CeSusynZ
+   DPqlXNT4zl6qPEm7lBZRfNZkzlBQz96BjYGJRsjC1XRjlNr1jJAtV0COG
+   FBBZRIHKsKuQI+YadRQi2AwoizvbmVCHDfRxpK9+vke4W3SvR8GCQSw0T
+   c+zBBvbCZMPcBjDuEEW3zkvnfcWrCx5Yoj4Ircxvoss9LJmJucnPZwEbK
+   Q==;
+X-CSE-ConnectionGUID: Nmx+QU6CTdKbAO5/R2apXA==
+X-CSE-MsgGUID: /A7wIz9gQgS76jcF+c0lWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11524"; a="56738758"
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="68797701"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 21:26:17 -0700
-X-CSE-ConnectionGUID: 6b4qvhTjSkqaCKeGR4bDeA==
-X-CSE-MsgGUID: KTT+J61jTGSl2wqWdcBC7g==
+   d="scan'208";a="56738758"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 22:31:42 -0700
+X-CSE-ConnectionGUID: LIn+Oy5URz+3yGfCseAZ8Q==
+X-CSE-MsgGUID: mtUPVEPEQoGGQI1nkK8+Lw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="167449412"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 21:26:16 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+   d="scan'208";a="166714805"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 22:31:42 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Sun, 17 Aug 2025 21:26:14 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.2.2562.17; Sun, 17 Aug 2025 22:31:41 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Sun, 17 Aug 2025 21:26:14 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (40.107.94.45) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ 15.2.2562.17 via Frontend Transport; Sun, 17 Aug 2025 22:31:41 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (40.107.243.76)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Sun, 17 Aug 2025 21:26:14 -0700
+ 15.2.2562.17; Sun, 17 Aug 2025 22:31:24 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Jxb3JQSu1ODQbcXqtqf0JhAtZ+ZmI+8D8CSCb+V8ph9LPXjfrwCHyplJJJzUZt99gCHKJhQAFpOdUdfEJ+4Vx35NqzHCv8kOZ/noc1Y9Pz0xaUgD7XdsoEEDAshChd1CZlYi3mAfjyKZ2BVR7BiIY4PWtTdOcgnBnW/IategP14CsdyY4EBtRjpYfKJ/v8dP3gzZGY1U0aCqVGLqmdk9Ti9NLXsukSjNVk9yUXCkY0RJUWKLLh1Rr9g9FFxYGHJUP93O2+8zV9pw2z8Ot+Tn+v6Tm5GTwjWJQC2x53xb1+cvhHPtQLTNsolDux4lim1XfxSJhYDpfPKWCSLvuc2sRw==
+ b=Auw0QDy47r5JH7yd6gQeiSNpysKlitb92Wu1OI+Cx0WtSJTkPFZSl+QSwlIlLPaCQCaWShmkUhXvHKf2zaBQmUjrd1XGu2w+0Lrdjr/lSnXTlnEXR0lK8uoBgPa6VCNG83j2zoP1mMQfCw6KicCbBiU23gbvpHQlaE9DKKo5/zSG4Au3dEKFQSgnnzlcatjw5kqN1asoT+XXYAmjyNSOIsQP2c4i0uceSv2x1ANsQqIWGmf+5KY2D0HFn1A6ULRdPLaMvVdTqNMKCFp/V/B6IBOD5DAn4u3OSmu7XtZpUsZSkzT4c9+MOW9opfts8PKelE4xpvSjxi0ulPkE585c4w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=56kmjPSgiKy2l/WQHdzZAjlNCu2Uae2yrfhn6+CGtoM=;
- b=Pc+BfvpmjXFgme75YF5k4wa6HjOloPqR+6jPKCJ35nhTXmAqmi6aXWqZImFz2oZ7vx1gKg5p9wYdgaFIXfCk5/o/2xwp7xf+6R8yCGIFX5dP4Z9XjqIFNK79CkDG3yz7pOVmruejp0/agUx8mS7PxCbO3MwKAVTSjs7zMPfiaEB8aFcpXZI1zHg+AC8s0fPnIjZEqr3thvEQqc0Cvs6fc8GXkOQyvBW3UVWR3Uo7MAJSmtEgwcJfCzwxdF4ATEXELk++5rGg3xleWRtmRqg+uMpLu0U9HjIVguRsAE+a9fBEU9BILRZr4hgmhOda7fJv0Q0tR9HQZFoyetxZHJdJeg==
+ bh=jaUKubvxpufWioL8U2vmrgRQn1nfJpgwPvmZ0KwS6y8=;
+ b=SJ/it2h/q2jr4UoalSwrxCUHSTbqZ/yZC5HXcO0utsUwa3k2O7d3k+461xKf6xeTNX8Atk8eEEJwslWnc9/mRYS5cuCMNCgXoA8mjbwZIUqNUt839Q6nZtpHkghWUti8sZs/lMwwOw28fJtPSnymQ0md1q55fnNMhDf9fQkQ7ob8d3Fgy/1tkkueksbzbAmvEjeGFFpOHzJP/ARk36E0ATerpJgk3yx31O9tdIzX/bTHXUbAH13w+b+aZhCvKvsvCUpj1bJwCCXYn56xD5AGhs3FD+ojSOfCmmvVlwVxMDDagd+geWwdPEYry1moTTsBCTILrKBI8ZPV3uV9nmo+bQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from MN2PR11MB3934.namprd11.prod.outlook.com (2603:10b6:208:152::20)
- by IA1PR11MB6419.namprd11.prod.outlook.com (2603:10b6:208:3a9::13) with
+ by DS7PR11MB5965.namprd11.prod.outlook.com (2603:10b6:8:70::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.19; Mon, 18 Aug
- 2025 04:26:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
+ 2025 05:31:21 +0000
 Received: from MN2PR11MB3934.namprd11.prod.outlook.com
  ([fe80::45fd:d835:38c1:f5c2]) by MN2PR11MB3934.namprd11.prod.outlook.com
  ([fe80::45fd:d835:38c1:f5c2%6]) with mapi id 15.20.9031.023; Mon, 18 Aug 2025
- 04:26:06 +0000
-Date: Mon, 18 Aug 2025 06:24:44 +0200
+ 05:31:15 +0000
+Date: Mon, 18 Aug 2025 07:29:29 +0200
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Ada Couprie Diaz <ada.coupriediaz@arm.com>
+To: Mike Rapoport <rppt@kernel.org>
 CC: <nathan@kernel.org>, <arnd@arndb.de>, <broonie@kernel.org>,
 	<Liam.Howlett@oracle.com>, <urezki@gmail.com>, <will@kernel.org>,
-	<kaleshsingh@google.com>, <rppt@kernel.org>, <leitao@debian.org>,
-	<coxu@redhat.com>, <surenb@google.com>, <akpm@linux-foundation.org>,
-	<luto@kernel.org>, <jpoimboe@kernel.org>, <changyuanl@google.com>,
-	<hpa@zytor.com>, <dvyukov@google.com>, <kas@kernel.org>, <corbet@lwn.net>,
+	<kaleshsingh@google.com>, <leitao@debian.org>, <coxu@redhat.com>,
+	<surenb@google.com>, <akpm@linux-foundation.org>, <luto@kernel.org>,
+	<jpoimboe@kernel.org>, <changyuanl@google.com>, <hpa@zytor.com>,
+	<dvyukov@google.com>, <kas@kernel.org>, <corbet@lwn.net>,
 	<vincenzo.frascino@arm.com>, <smostafa@google.com>,
 	<nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
 	<andreyknvl@gmail.com>, <alexander.shishkin@linux.intel.com>,
@@ -93,8 +93,8 @@ CC: <nathan@kernel.org>, <arnd@arndb.de>, <broonie@kernel.org>,
 	<dan.j.williams@intel.com>, <joel.granados@kernel.org>, <baohua@kernel.org>,
 	<kevin.brodsky@arm.com>, <nicolas.schier@linux.dev>, <pcc@google.com>,
 	<andriy.shevchenko@linux.intel.com>, <wei.liu@kernel.org>, <bp@alien8.de>,
-	<xin@zytor.com>, <pankaj.gupta@amd.com>, <vbabka@suse.cz>,
-	<glider@google.com>, <jgross@suse.com>, <kees@kernel.org>,
+	<ada.coupriediaz@arm.com>, <xin@zytor.com>, <pankaj.gupta@amd.com>,
+	<vbabka@suse.cz>, <glider@google.com>, <jgross@suse.com>, <kees@kernel.org>,
 	<jhubbard@nvidia.com>, <joey.gouly@arm.com>, <ardb@kernel.org>,
 	<thuth@redhat.com>, <pasha.tatashin@soleen.com>,
 	<kristina.martsenko@arm.com>, <bigeasy@linutronix.de>,
@@ -111,19 +111,19 @@ CC: <nathan@kernel.org>, <arnd@arndb.de>, <broonie@kernel.org>,
 	<linux-kbuild@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<x86@kernel.org>, <llvm@lists.linux.dev>, <kasan-dev@googlegroups.com>,
 	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 02/18] kasan: sw_tags: Support tag widths less than 8
- bits
-Message-ID: <g4fm3avej2ss3am377ebv5og4kl5crano4n7gwl3hwxff4gx7s@uq2hb3egscno>
+Subject: Re: [PATCH v4 06/18] x86: Reset tag for virtual to physical address
+ conversions
+Message-ID: <tnswzssq2kyt3sla5enhzjmqh7m2xum6y7lprrimvrcajbqe7j@3cdk6tcdyjjy>
 References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
- <780347f3897ea97e90968de028c9dd02f466204e.1755004923.git.maciej.wieczor-retman@intel.com>
- <cae90aa0-9fa6-4066-bbc0-ba391f908fb2@arm.com>
+ <01e62233dcc39aeb8d640eb3ee794f5da533f2a3.1755004923.git.maciej.wieczor-retman@intel.com>
+ <aJ2M_eKPvBluyLKJ@kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cae90aa0-9fa6-4066-bbc0-ba391f908fb2@arm.com>
-X-ClientProxiedBy: DUZP191CA0018.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:10:4f9::8) To BN6PR11MB3923.namprd11.prod.outlook.com
- (2603:10b6:405:78::34)
+In-Reply-To: <aJ2M_eKPvBluyLKJ@kernel.org>
+X-ClientProxiedBy: DBBPR09CA0024.eurprd09.prod.outlook.com
+ (2603:10a6:10:c0::36) To MN2PR11MB3934.namprd11.prod.outlook.com
+ (2603:10b6:208:152::20)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -131,164 +131,195 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR11MB3934:EE_|IA1PR11MB6419:EE_
-X-MS-Office365-Filtering-Correlation-Id: aad6271b-dd35-4c10-3c82-08ddde0f5925
+X-MS-TrafficTypeDiagnostic: MN2PR11MB3934:EE_|DS7PR11MB5965:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae908470-7a49-45d7-c36a-08ddde187361
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?GwXtDYWN0/6A2zzfTqVA5WvFstj1NyikNtG3DXi9uXbL5s5oDPS/zZagJK?=
- =?iso-8859-1?Q?134yH/V+W2L3yHItDh7R/uRu616KzKTk3h3T1oOwokD0RqVcbuX7rOsS9u?=
- =?iso-8859-1?Q?LsFcvqgLgjH6szVRttMk6lEb/x9Oo1jaDYyfsbHsOr/c5qWaEnoRZ1SPtG?=
- =?iso-8859-1?Q?teqrWWMJiVnNcNTsh0c4dpQRcLfENDaORMjg/g1z9nR08iZe9KVXdJq84j?=
- =?iso-8859-1?Q?1o/8QDOSD5F4sp2VP7Guu9m2sKX+gTB/llqiuX90+xQWDPcMNWIszpnW6b?=
- =?iso-8859-1?Q?IB4IyT2niFdvnr5mNifFTpLYeC0R7t5nqUS55dIdtoczcrSMd6diafRHpo?=
- =?iso-8859-1?Q?qCHDt2YsnK5A0rFBAJ15PZnOglw2gYCt2lbGK6kWztBQ3/VxqVSYzF0Yuk?=
- =?iso-8859-1?Q?lA0AjzBa9HMnkpTAjYui3XyvsKWzKy6ewgd8pHOdntDTa8Oge3alHV7WsY?=
- =?iso-8859-1?Q?dsixhmRHDeQlapTkJQ0jfcduYHetQc7tyj6yVL9TzsW8eIRM/QKF88lW1b?=
- =?iso-8859-1?Q?/Zcz+RwbELimtfLoPfkNjcAnfuTeHW7YUA1uTYaFWbb8sK5kmQAI3A9fyp?=
- =?iso-8859-1?Q?2nOGkzs5FZkhj/XhPNjQauHZ1Q11pNr+bHjZGVO6sH2UfdBWJ96SaG7jkY?=
- =?iso-8859-1?Q?WJUhigPq/kyok8O0qP9mjKX2H/ZR9473ygCdeMk7GfU24JtcDLlB/PYG8A?=
- =?iso-8859-1?Q?pZi/Xq/37NSJ1bXQxVar6iszPJFp2cj+poW0OlIAoKSB2v++FdTwkGK3E1?=
- =?iso-8859-1?Q?dgrLdzj3cJtfJWr6+T8HGx6IJWB96BmLlv1Ab71XIVaJmHVvjAISIliVdV?=
- =?iso-8859-1?Q?bK7Wx+MFiazNgCBNcQOoWLCCRDgWJTQtbwfzamdqQVSba6obU9fVhj9s80?=
- =?iso-8859-1?Q?ieihFa3nKJqP2vXV6tF80exXTUQRH3tyJFaEfBYXmFx+8ePYNaPagj2IsY?=
- =?iso-8859-1?Q?ySB83PvJ2f4aLT+YkyVbBO0uvmYTUoP1P9GpTmL+KChqqNziY0S05eW3Yh?=
- =?iso-8859-1?Q?efe+Z1HIEbFC70unGMrnrVgrWgignKG8gp3h+TEzdo34bE1wfJYHAPlQlH?=
- =?iso-8859-1?Q?OoWIU1E7VSL5kccpq7lXhFwD/+pkgfpusirzVGFZ+WjYAE3iE0OqmFWOau?=
- =?iso-8859-1?Q?jTk+SagSVk/3FP9NfLpgQAAPFQqYJBNOoFmj7AxAQF2pKFo7DnathFU/pb?=
- =?iso-8859-1?Q?zzGTBTETesy6K4w4ty7RwKn2gjwakFxcrlc3KQNlqwre6EChiDk4eMNTYm?=
- =?iso-8859-1?Q?TwXs0Kz5ri5O1C8VKTF2yooyxZTfwBiACXna6DVHWUOtd40CiuBb+/7XEh?=
- =?iso-8859-1?Q?dZbDqn7iIZOOQHCjrxjn+it2i6zVnx+Cu/WoGXh0v88RHwCliMPwjhZzSA?=
- =?iso-8859-1?Q?iSUbELtWCPVdryFFe9VeaUQRDbBV4fi9L0nOITcEFaNFJt9Alm/1q80Mz0?=
- =?iso-8859-1?Q?ND9Y0uUC/mAtX4k1mzoTfTES9qYPBvUeHDvEOOo1dpME3SMrjLY0oLK9bT?=
- =?iso-8859-1?Q?M=3D?=
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?McwExDk10W7A1ubcJebC2Ciia49cGvGrT7h7Kr9KaSXlfS7/zgZTyXAj/J?=
+ =?iso-8859-1?Q?+WndzBowSC09EA4QZ7Gj+EtdVneHj38FFPUOWCqsFCDSuwH0sscXgarreT?=
+ =?iso-8859-1?Q?mBHgOVbTuapFJFqo8oL1hqSm0m45gg94x2SVy6Va6yOz7JEYBgJdWqkDAe?=
+ =?iso-8859-1?Q?c8o+2GDwZrJF67m4DzRMMqzbeWxZ/vQ0Qdk5FQ7ZBAKn9rwwivmF5Xzh97?=
+ =?iso-8859-1?Q?ov+NZRDrpnirXEeNJR4eDR+vMgeb9ghhgOipYVhu1JHGh3sPSM5U4l3s1r?=
+ =?iso-8859-1?Q?oxXxicBks0tZgLeeC5WMRyfGk6KaYm9UjiC4FXAeJYtwuqSK6EyPkhHO+e?=
+ =?iso-8859-1?Q?ZIHjCOYh+rfzYEMfzuPGxfOIcHbWnCkxm0+jbLRWTTpH9saTCT/fEyiZTW?=
+ =?iso-8859-1?Q?CNV4Yfm9WV4M0cJNU4ritVYZY1Jjr3/2FcC9HoEaJ2hQgLk60ZxL+BOG+S?=
+ =?iso-8859-1?Q?l59wXn6YZKBnD64hqIHXP0khEC3UP9OgwByuu8it3SXfjxPzE+jKJDUSw+?=
+ =?iso-8859-1?Q?6oPmKUWess6xQF3SPj2Ky1MWBD2lTvJy9Pq6u8TWYIrtIfCGL7wa0o+Pn5?=
+ =?iso-8859-1?Q?rjzc4zu9LNN6RED/Fn/X0FTKq36V+Ege5GTklmOLgYYzgxZOAJe1eikt9J?=
+ =?iso-8859-1?Q?WbaDOYBR6KoehzCXzBfiGV/GWkR/nXMnrz3rCO51/fdqMmath3koURTbTA?=
+ =?iso-8859-1?Q?+w6tfNiloMmanZxgR6GBKQ0omhaItlR+gMNxDe8l4PcA15cWtEBMBfW342?=
+ =?iso-8859-1?Q?aXMfDTi0kGg6qD9Oju/t6ZIi+MjM7OXpV7+PMTvlEuyIVX/OE9IStl+1Nj?=
+ =?iso-8859-1?Q?Ri031iZgk10t0lkpbS5P4d7AaiU5mzg2mZg9vSzByADMPRDXx0MouPjf0p?=
+ =?iso-8859-1?Q?oPmj16awG3xGwV5eyYF1bO0qTkru+RMz9o49B7Y69FyTHQk6F+C0vld+MO?=
+ =?iso-8859-1?Q?HSZE7oYiNEXkhlTbmBCu/0xGRfFr7L84jX9Zld1DZsLb/jhxDka9VazR7Q?=
+ =?iso-8859-1?Q?HpO5moSNAqmTRJA4UwwS4+k9JSnW+j/qp6AtZV3SuhEX+JQl4l/4xnsSZC?=
+ =?iso-8859-1?Q?sCc3AG6mryKEeKYAKb1HSQN5VG13XBotZ3VbE4j/iABIDedQmjSU6tqKke?=
+ =?iso-8859-1?Q?LJGLtmivZYmfBLoMPrpbihTbNPDO/8U7mDtKm5sABiq6/dEIxHSYEV/s64?=
+ =?iso-8859-1?Q?SLbmSYNki/fd75EsBObcipNFpNFk4YF5p2w86c8mOq+2UKeIKj0p2IdO5O?=
+ =?iso-8859-1?Q?YBfGXG0aWvWGn9ixamXrhV0VLn3quawBMpIrLEAO+oHB32QKsbP6pM1TCi?=
+ =?iso-8859-1?Q?lgymMRW8EPIFkcx8bWqEbvuXqYLYHIMi0avr9zVngUB20dhnbo4Pfv24Yq?=
+ =?iso-8859-1?Q?fys5yPzWEAVWMGC8H4MSQT26tIZ+ryle9IZp5eIkV+bm73m0A/WqNW0bH2?=
+ =?iso-8859-1?Q?hFbPtP7abjWlN1rm1DXNsqg+girzwVVuJRankQ=3D=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB3934.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?rpdnBcSo+bh/nWFcoNHSMawTtYqAFDAbrnBKzFRAscpGhiIWSql8xQehWh?=
- =?iso-8859-1?Q?3TtComW9vhC7+ItLwWjPq2IOFl7Mp5TqDAFeFHywB4JCWFIh2foSYiBmJN?=
- =?iso-8859-1?Q?eRkr+kZLwyzqneRtNE5TIJ7u6Lio/Fx6H4g0kXo3aAAZZk4Q8LilyWoREW?=
- =?iso-8859-1?Q?UYblEVa3K1S7dZ+ivA3hlJCuUM+3LI6ED4Eb3TfgYdr2ThMApCl/fB5eSj?=
- =?iso-8859-1?Q?hGGVS1ZLBUN/rYG8fxYtcqVUtcxAUoyd/qnjyPwispoZW6APDcTiZ3LXrV?=
- =?iso-8859-1?Q?CFR7S+Wa5SNMwq18wCRbexfbHLpQxRw7Iev6hY+T4CDIvHTdItTlSJo/Yq?=
- =?iso-8859-1?Q?gzWD16Jqvbig52YEWQocSRtErb1QegImYqyvPzzb9OKFe5vPanYrgbesPE?=
- =?iso-8859-1?Q?2KnMpaD2ih4aKxMF36bVvFgPRwH6O+Wcx/unF938s7Y5dVv42jj/R2r2sX?=
- =?iso-8859-1?Q?VrsUIxCTzY0RcvwJoMSX8SXXPJfY6U8CColv/8AUSYvl9klTBaKy72XSj3?=
- =?iso-8859-1?Q?NkLOqWmjOsI4dhVQDIyHZyLxKIGwSxUHtsJCd/rQdxYukWCf5M8hRGKUmN?=
- =?iso-8859-1?Q?PudwmYB004OW1DC6KJAs6jR0T/DwFYhlMHX/kli61YJ4XXhCDqL8qZwKmT?=
- =?iso-8859-1?Q?J1Bbq/KzurJhr9TlPaLK+fMzNE0LSzErIcZ/EHwM4YWjzHs7LTkciHoDdU?=
- =?iso-8859-1?Q?nLQT/bvN9qmVksDLVFQYhH+ThvtxZ+MUPlHrgNhk29N4EhMMSn2aRgOKYw?=
- =?iso-8859-1?Q?reKE0NjP3EbVl5qloVOfGvwt3cULlH2Vlx2k9fqc++PYxydEEDMmUJbpWL?=
- =?iso-8859-1?Q?R3RmPyQo5K37L0JZD95d73zbFsQ8AnEQ+ir5xQmnB2yBhS7Cu+NOG2NZx5?=
- =?iso-8859-1?Q?1MOc27pRc0+xQNIGTrPgLCnei5mp4cxu7brAq23cstnVNhUBOuOlIFj+pd?=
- =?iso-8859-1?Q?N84RuNmBiz/mkA1TKdCwgPWxPD/1T9ADqi0lweO1nXEOqVQZoN3bmEnUux?=
- =?iso-8859-1?Q?eOgWjzR6IYrIsDhW0XCf0Art47Dq8pxbIHTurv1WDNjJuZmZNwj+IOTQAB?=
- =?iso-8859-1?Q?fKiFnlBsDD1PngwF5mn4G+dEM7CWHeUi41GXGBSLLSNVQrvxPghn/4Aunb?=
- =?iso-8859-1?Q?ssLJdp6uD1AbguYWErQi1yUC5SUiYDQ9pjtK6NOCavq9/bNgbFIvxaPwz9?=
- =?iso-8859-1?Q?UalNwGn3LdX7iyIQdvUXxfWxETh8l8ji3oYqAOgCGFSV/d+j89TdsWWMVC?=
- =?iso-8859-1?Q?xJAx0CFhobo2yk8UQNbIc5A8uIU4lTYzWKt/5oFRrm2aexTUsoq5qus6ef?=
- =?iso-8859-1?Q?7PaL6eyOPfQDF3C5GewZfz2S1GzeAt9ECJspxGEtuggTYMg1lh09m2S0kz?=
- =?iso-8859-1?Q?GaS/JFksUTiWDKlK3iL5lA5SachdS0EJsiL6gWy/r0LLfzCIPBOCyhtTEP?=
- =?iso-8859-1?Q?8D+VBoxarKtw5uJd6vs93bnZWUd6NA0HBkzh/SutGr366dyzbYK9qkbnH4?=
- =?iso-8859-1?Q?lVXpospx9oGA2hSWlc832P9NeEWPVzGwjcOvUWNFkzHVuZ7ZVAtmvuMA8z?=
- =?iso-8859-1?Q?wkLjuvrcm92CHLPooB0Acg2WxT6XIJkqu9taD6OCpNPmvuY7OXBm8Ob2zM?=
- =?iso-8859-1?Q?kFyiqGXjgR/EPuXDr541XSQMnNtjv/Y9j4GW2GDpJ4MMJDN8xzL1tykDyV?=
- =?iso-8859-1?Q?2COyqA6PUr/7+f3UTJ8=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: aad6271b-dd35-4c10-3c82-08ddde0f5925
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB3923.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?pXjtlX1/LdtCLxvEvuP7NU8CI1tJ4aca2k9AZb74bHMhE6qhIa60SRhxLT?=
+ =?iso-8859-1?Q?5VsZZq2xHqCxlvvc1ONZnZJdWpYvwU3oeWn+JcA43LiCBoXRovDyf3HZOf?=
+ =?iso-8859-1?Q?8CugB4ar1LjB8WBy5c5hdGdF7pe3iyVKiUZs1I6ihCfLkivHX7iWH2ntl1?=
+ =?iso-8859-1?Q?lOnyeH4hNhjhfvadyivJZWy7m0diPmVnYwo+3GZTEY6NhFjujRWAAd+3Qv?=
+ =?iso-8859-1?Q?7i/HtFlKQqic4OLAQc7u6IelzGzrnQwAT8Wm1kKIEX47bbAn69vaLSZdjz?=
+ =?iso-8859-1?Q?HqGgqmTWflTl0k1Cavn+d3zgY5sfDiW40K5rdNMyxQMsuZDsWKE+YqwxQu?=
+ =?iso-8859-1?Q?v4kp+MvhfGTLVlc5oInmBamYmY2po9M89cafERUcE6fAXkh4atrktgAujU?=
+ =?iso-8859-1?Q?p4QxY/buffS9YbHz1NrSl4fmLBYZHjlxY+12mRcGW+/dV6kRP4tqYTolVm?=
+ =?iso-8859-1?Q?43B87oT3tHgUsTmcItUXHIj5kh5Vkq1QPnnm0yWeo+EO+J/l4flJKJ+cTu?=
+ =?iso-8859-1?Q?OKvTyjgAAtv5gJkXL2gAyWZ6G6/CNa620MB3Ud9bJEeDkoUXXsE9H94aiP?=
+ =?iso-8859-1?Q?jud5d60sES68QIvo+ZdOaL2FPTwCpsAtRA9wZJSj3zb20GT4dMSa9wrcr3?=
+ =?iso-8859-1?Q?ZMwvhujiHX7SoFrJa8xARDCHXqPsgyyRecVgA8K+ncwcasgTx1puz6Utfx?=
+ =?iso-8859-1?Q?+qOnwkP5i6p+FeZM7euOE9OIBTyQUHQMmHH7OtxYk9aNUCAVdFJbDzHxRO?=
+ =?iso-8859-1?Q?odK8NSTgMsl6low9bW8tveTJXoiboI2RHKXaFNSkyLw6CUsGwzlu8SxmX2?=
+ =?iso-8859-1?Q?X7H/HnGCojtiXKjHI059G3w3SP/viKzR7JsiVMvghGqJon45z8NrkySr25?=
+ =?iso-8859-1?Q?WHqsIK1cNoPq9vjmXoMso7xVuYPQuOuKeLAnzc3ScGWOHrDsn4rcEFgMFC?=
+ =?iso-8859-1?Q?F2l4j7RBSGJirXFjQ8o5kODHHkCtwWIW2jkSH8Fz3XY/ce8QCN65mtip6M?=
+ =?iso-8859-1?Q?5OrJzvlAC2jrzqaSY+UNlhGIqUzzuiBCZ2UNTKK0LTXnQzdDn3EdTZuDmw?=
+ =?iso-8859-1?Q?Jgv7GTffqhj8jD7CIl+ZQ4tq2EP7x5mKGTM+MkYxk5jN2Rk3TsDqg3nn7I?=
+ =?iso-8859-1?Q?Z7m4vigkWWyPA7q1R/jQ7ePRg844MzvHS6VoFHpH8NQq01KA4HzgfYcZHZ?=
+ =?iso-8859-1?Q?xkNCnJ6h9L4R6TORNcpHe/XmxzAViUnv1ergx822snPC/SwZvcnymFysjD?=
+ =?iso-8859-1?Q?IJiLUreYvSAwTO/anAfOUxKKmB/dDel7Mbmi3XM4fILZ1vnhIE7lnt6d8G?=
+ =?iso-8859-1?Q?zkdwWjgynmoL+gBUKUZogoFI6ZFbbfeZSDorlifUH3Mg5I7OGLiRE5ksRC?=
+ =?iso-8859-1?Q?b4wpOds51ny9VNsHObEoqeEIpo5jXSeIo/ZGB3ov9M7mq985NWNfo0zmG7?=
+ =?iso-8859-1?Q?vNucDKz+MFdQ4rKGlDSCzxIiLcWX52iPRwcNx34M+tbD7LY22RCQaZqVm8?=
+ =?iso-8859-1?Q?0W8OYZrLb5+ntX7+EOMdzRjAi46BCsztTb2IqJ1QGiG5+gkiClQQ9Al1dD?=
+ =?iso-8859-1?Q?rNez4a5CI1OYfL9bcM5xPU9zDmjzsXn+E4KPNg7KaP2VNLV5spY9+UNDyT?=
+ =?iso-8859-1?Q?Qr8+rQ9q7Bal+OfwsNFzqsoiCYeq+ygTKqL3XrzCvLtBiPwKP+pIH9PCGf?=
+ =?iso-8859-1?Q?tgfn0SL0Nw52g+gG7gI=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae908470-7a49-45d7-c36a-08ddde187361
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB3934.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 04:26:06.2247
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 05:31:15.5941
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: b2G59WhXEHdomVpYxHPAKIMI+x35k0cfpH4LIEk3m5r82zBtfwNmQtv8q6ddhlKgimoyomRyC1nK5rNhHyBrfQ/VAIUTCvUu9/yGac+LnuQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6419
+X-MS-Exchange-CrossTenant-UserPrincipalName: F4rljHcyBBvnMc2KbXxIWvuTItiyI9xobfyBjR50r0knG7M3oVxHeSzbqTQHIadOjk4L4Kqnh6/IGrrCEifR8rxA7gfxJRaITvPILVGeOdw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB5965
 X-OriginatorOrg: intel.com
 
-Hi, thanks for pointing it out :).
+Hi and thanks for looking at the patches :)
 
-I'll cross compile for arm64 it with different KASAN settings and fix any such
-errors. I did this a while ago and it went okay then, but there were so many
-rebases in the meantime I must have missed something.
-
-Kind regards
-Maciej Wieczór-Retman
-
-On 2025-08-13 at 15:48:32 +0100, Ada Couprie Diaz wrote:
->Hi,
->
->On 12/08/2025 14:23, Maciej Wieczor-Retman wrote:
->> From: Samuel Holland <samuel.holland@sifive.com>
+On 2025-08-14 at 10:15:09 +0300, Mike Rapoport wrote:
+>On Tue, Aug 12, 2025 at 03:23:42PM +0200, Maciej Wieczor-Retman wrote:
+>> Any place where pointer arithmetic is used to convert a virtual address
+>> into a physical one can raise errors if the virtual address is tagged.
 >> 
->> Allow architectures to override KASAN_TAG_KERNEL in asm/kasan.h. This
->> is needed on RISC-V, which supports 57-bit virtual addresses and 7-bit
->> pointer tags. For consistency, move the arm64 MTE definition of
->> KASAN_TAG_MIN to asm/kasan.h, since it is also architecture-dependent;
->> RISC-V's equivalent extension is expected to support 7-bit hardware
->> memory tags.
+>> Reset the pointer's tag by sign extending the tag bits in macros that do
+>> pointer arithmetic in address conversions. There will be no change in
+>> compiled code with KASAN disabled since the compiler will optimize the
+>> __tag_reset() out.
 >> 
->> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
->> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 >> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 >> ---
->>   arch/arm64/include/asm/kasan.h   |  6 ++++--
->>   arch/arm64/include/asm/uaccess.h |  1 +
->>   include/linux/kasan-tags.h       | 13 ++++++++-----
->>   3 files changed, 13 insertions(+), 7 deletions(-)
+>> Changelog v4:
+>> - Simplify page_to_virt() by removing pointless casts.
+>> - Remove change in __is_canonical_address() because it's taken care of
+>>   in a later patch due to a LAM compatible definition of canonical.
 >> 
->> diff --git a/arch/arm64/include/asm/kasan.h b/arch/arm64/include/asm/kasan.h
->> index e1b57c13f8a4..4ab419df8b93 100644
->> --- a/arch/arm64/include/asm/kasan.h
->> +++ b/arch/arm64/include/asm/kasan.h
->> @@ -6,8 +6,10 @@
->>   #include <linux/linkage.h>
->>   #include <asm/memory.h>
->> -#include <asm/mte-kasan.h>
->> -#include <asm/pgtable-types.h>
+>>  arch/x86/include/asm/page.h    | 14 +++++++++++---
+>>  arch/x86/include/asm/page_64.h |  2 +-
+>>  arch/x86/mm/physaddr.c         |  1 +
+>>  3 files changed, 13 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
+>> index 9265f2fca99a..15c95e96fd15 100644
+>> --- a/arch/x86/include/asm/page.h
+>> +++ b/arch/x86/include/asm/page.h
+>> @@ -7,6 +7,7 @@
+>>  #ifdef __KERNEL__
+>>  
+>>  #include <asm/page_types.h>
+>> +#include <asm/kasan.h>
+>>  
+>>  #ifdef CONFIG_X86_64
+>>  #include <asm/page_64.h>
+>> @@ -41,7 +42,7 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
+>>  #define __pa(x)		__phys_addr((unsigned long)(x))
+>>  #endif
+>>  
+>> -#define __pa_nodebug(x)	__phys_addr_nodebug((unsigned long)(x))
+>> +#define __pa_nodebug(x)	__phys_addr_nodebug((unsigned long)(__tag_reset(x)))
+>
+>Why not reset the tag inside __phys_addr_nodebug() and __phys_addr()?
+
+Right, this should be one less line in the changelog and no behavior changes.
+I'll fix it.
+
+>
+>>  /* __pa_symbol should be used for C visible symbols.
+>>     This seems to be the official gcc blessed way to do such arithmetic. */
+>>  /*
+>> @@ -65,9 +66,16 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
+>>   * virt_to_page(kaddr) returns a valid pointer if and only if
+>>   * virt_addr_valid(kaddr) returns true.
+>>   */
+>> -#define virt_to_page(kaddr)	pfn_to_page(__pa(kaddr) >> PAGE_SHIFT)
 >> +
->> +#ifdef CONFIG_KASAN_HW_TAGS
->> +#define KASAN_TAG_MIN			0xF0 /* minimum value for random tags */
+>> +#ifdef CONFIG_KASAN_SW_TAGS
+>> +#define page_to_virt(x) ({							\
+>> +	void *__addr = __va(page_to_pfn((struct page *)x) << PAGE_SHIFT);	\
+>> +	__tag_set(__addr, page_kasan_tag(x));					\
+>> +})
 >> +#endif
->Building CONFIG_KASAN_HW_TAGS with -Werror on arm64 fails here
->due to a warning about KASAN_TAG_MIN being redefined.
+>> +#define virt_to_page(kaddr)	pfn_to_page(__pa((void *)__tag_reset(kaddr)) >> PAGE_SHIFT)
 >
->On my side the error got triggered when compiling
->arch/arm64/kernel/asm-offsets.c due to the ordering of some includes :
->from <asm/processor.h>, <linux/kasan-tags.h> ends up being included
->(by <asm/cpufeatures.h> including <asm/sysreg.h>) before <asm/kasan.h>.
->(Build trace at the end for reference)
+>then virt_to_page() will remain the same, no?
+
+Oh, yes, that is redundant with __pa() resetting the tag. Thanks!
+
 >
->Adding `#undef KASAN_TAG_MIN` before redefining the arch version
->allows building CONFIG_KASAN_HW_TAGS on arm64 without
->further issues, but I don't know if this is most appropriate fix.Thanks, Ada
->---
+>>  extern bool __virt_addr_valid(unsigned long kaddr);
+>> -#define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long) (kaddr))
+>> +#define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long)(__tag_reset(kaddr)))
 >
->  CC      arch/arm64/kernel/asm-offsets.s
->In file included from ./arch/arm64/include/asm/processor.h:42,
->                 from ./include/asm-generic/qrwlock.h:18,
->                 from ./arch/arm64/include/generated/asm/qrwlock.h:1,
->                 from ./arch/arm64/include/asm/spinlock.h:9,
->                 from ./include/linux/spinlock.h:95,
->                 from ./include/linux/mmzone.h:8,
->                 from ./include/linux/gfp.h:7,
->                 from ./include/linux/slab.h:16,
->                 from ./include/linux/resource_ext.h:11,
->                 from ./include/linux/acpi.h:13,
->                 from ./include/acpi/apei.h:9,
->                 from ./include/acpi/ghes.h:5,
->                 from ./include/linux/arm_sdei.h:8,
->                 from ./arch/arm64/kernel/asm-offsets.c:10:
->./arch/arm64/include/asm/kasan.h:11: error: "KASAN_TAG_MIN" redefined [-Werror]
->   11 | #define KASAN_TAG_MIN                   0xF0 /* minimum value for random tags */
->      |
->In file included from ./arch/arm64/include/asm/sysreg.h:14,
->                 from ./arch/arm64/include/asm/cputype.h:250,
->                 from ./arch/arm64/include/asm/cache.h:43,
->                 from ./include/vdso/cache.h:5,
->                 from ./include/linux/cache.h:6,
->                 from ./include/linux/slab.h:15:
->./include/linux/kasan-tags.h:23: note: this is the location of the previous definition
->   23 | #define KASAN_TAG_MIN           0x00 /* minimum value for random tags */
->      |
+>The same here, I think tag_reset() should be inside __virt_addr_valid()
+
+Sure, that does sound better.
+
+>  
+>>  static __always_inline void *pfn_to_kaddr(unsigned long pfn)
+>>  {
+>> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+>> index 015d23f3e01f..de68ac40dba2 100644
+>> --- a/arch/x86/include/asm/page_64.h
+>> +++ b/arch/x86/include/asm/page_64.h
+>> @@ -33,7 +33,7 @@ static __always_inline unsigned long __phys_addr_nodebug(unsigned long x)
+>>  extern unsigned long __phys_addr(unsigned long);
+>>  extern unsigned long __phys_addr_symbol(unsigned long);
+>>  #else
+>> -#define __phys_addr(x)		__phys_addr_nodebug(x)
+>> +#define __phys_addr(x)		__phys_addr_nodebug(__tag_reset(x))
+>>  #define __phys_addr_symbol(x) \
+>>  	((unsigned long)(x) - __START_KERNEL_map + phys_base)
+>>  #endif
+>> diff --git a/arch/x86/mm/physaddr.c b/arch/x86/mm/physaddr.c
+>> index fc3f3d3e2ef2..7f2b11308245 100644
+>> --- a/arch/x86/mm/physaddr.c
+>> +++ b/arch/x86/mm/physaddr.c
+>> @@ -14,6 +14,7 @@
+>>  #ifdef CONFIG_DEBUG_VIRTUAL
+>>  unsigned long __phys_addr(unsigned long x)
+>>  {
+>> +	x = __tag_reset(x);
+>>  	unsigned long y = x - __START_KERNEL_map;
+>>  
+>>  	/* use the carry flag to determine if x was < __START_KERNEL_map */
+>> -- 
+>> 2.50.1
+>> 
 >
+>-- 
+>Sincerely yours,
+>Mike.
+
+-- 
+Kind regards
+Maciej Wieczór-Retman
