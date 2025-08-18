@@ -1,397 +1,352 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33C61D514E
-	for <llvm@lists.linux.dev>; Mon, 18 Aug 2025 07:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6848F30E844;
+	Mon, 18 Aug 2025 10:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755502950; cv=none; b=Kqpl8WpCEMjTLnhloBf3FyzGgLDj0WfHc3eD+hp5L8i+85N9PsQDdizpSXJzkyVGWtBZuxuabrWd9K0a2igbnlOIjfql2k1azcGOVN3usziSzn414XItn5wONuhTLWwIaF+z83NMtqf9jvdBU9yoxEar0s4cjiMuwaRS0/F6WMo=
+	t=1755512375; cv=none; b=MXJV8p6zi2kQqFtQTiHwFm0LR/yMV62xFyWq01VmroPtKBspics/NILxjR70+sfNtb/tBiFRoA5XU8KqW27mncQdoXH4N6/aGgz6yntuW8irlCAXTy3Dk52h7ra1iFNNe4LtEabSYDiPwUk744m6bm67cZ0UUrNfaIKjhF0L0xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755502950; c=relaxed/simple;
-	bh=7woM1c358O/hcbTU2E3Rcu2TiLoSakRylf5EWIaixkw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g/xoVD7OBB9y7AoJ4wEViBKNVp0dB8HAf20jX4ErOrTnYxh/anWZW24f+BuQ3FzsMSxkgUgGyXDUCV7CaP3ZLrPNaBw6swseaKf6Nz1IQVhesUSprZM7DCPzOBQtaaOKevuqjkUE+EB8HqBBXRZcXkRH2oU/CTsC3K6w6puhGYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KwIOWPqM; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1755512375; c=relaxed/simple;
+	bh=lZiiDjhlNsl+eM7oVIh7z93U9V6yzoNAKFATgG2dY5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=omvd/XS4t0OtEqWp0J/iNtNtv2LO16tL//DSdOwPBOrCyRY0zkFVEHMKpjFCggO+c9dWZ8uaLO9rGPQADIqM5Y/+zGfLFw0AN2ABnfPBTE/6C3DCRAVE/9MNtldh3CmvBlqnhfm7KLCJ918oJ5gl/O1mKpOZslYppuYF++aFNMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GavG6Q/9; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KwIOWPqM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755502946;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=7woM1c358O/hcbTU2E3Rcu2TiLoSakRylf5EWIaixkw=;
-	b=KwIOWPqM2ZM9BsgCiOmwgKP0vMJ6QtpxrOdcV4fLywjaaHz2JYeIm8YvJEYA+HFqWeaU3E
-	j5sv3V+LKr5aEn1w3SUORlIP3xoX3TRNBE+onEw1lWLN2e8io0//YBlw8e39lzsyqSXf1k
-	ZXER+SukWUpcOVfCFl4IK7W6c9e7skU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-50-hQ-cdqI_OXWOYbzMQJyD_w-1; Mon, 18 Aug 2025 03:42:25 -0400
-X-MC-Unique: hQ-cdqI_OXWOYbzMQJyD_w-1
-X-Mimecast-MFC-AGG-ID: hQ-cdqI_OXWOYbzMQJyD_w_1755502944
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7e8706c668cso1167363085a.3
-        for <llvm@lists.linux.dev>; Mon, 18 Aug 2025 00:42:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755502944; x=1756107744;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=50iptxgF76lSBHlPJpOAe74hdT1ws8yqI6TSKvItRkU=;
-        b=lypfnnfunxb+/CX2HFO9AwyA3RqrIIiNHde/luWty2rf9gr1I+hPMpsiaOSCKNxZu2
-         6mdlpVLLv6c5q4N8zf68VRzrxCa8vUskLWK7DGGEFTipjXe6uN16BOMxxUA/eg2YVnGr
-         MQwoEQaFbrrnTUZh76bTIpSBZp8uwDHX52ZTu33W5nD2VVyQqtt+PoYlfcOPzM6u9zrB
-         YjggCmfQo/n8yPaQ0dRYvkmS1jSVKn9tCbLGmdfZQ3tV+prUpzKqYs65JYIWY4k4JTMg
-         6FAtnH08YZL0QgyH6qgPzFH7ZS3QppD7t+bUpNnOmjPxmYtfuwuA8FpJDde1iwb5/kts
-         Zmwg==
-X-Gm-Message-State: AOJu0Yy8wzIce/mEnaLO0i+vSJnELhekg/ZYKxmXr1iWkCj4hCX6SXoU
-	wdLRTPqYlAkbxmh9aPTbRAiXaa2KirMMfds+r1g+jb2A+u9x96YEE9J/UNLMy/pu99e+6nJ5BWv
-	4jBYFgbldIO7r8BTmqdYM2C0/13YwRsjYVYPqRXgQEoNdiZaVD6h/gsQ=
-X-Gm-Gg: ASbGncu8Y7WWZQ8q8M9JVzUrQ+FPI1q2KDnKx0Z/3/hlJVL+nkyAnW/hWWdaoCJpKVN
-	hivec5BpBMb3JGhTwVczP0LGYmPPa9q7Y5p5B0QrpitB2wVO2Ej4kuRuBHMgg2NZIssWnahUId6
-	XiDXjjCWU4BtqtQs6Uuf19wNXWm+PIjIP4XQkqtEUbPkHW3dD9Ax4aqVF+vRHoGpYXddnIKBqY5
-	OFzcAM/o0Jn4Vv8jGgFU2MKe7cQgtEHkatcSM7AC/uRpWI5eoyVx3i3qXTacauj9Pt28RIiLwip
-	m8zp74rPUiKI0OHcTGBLWL0skPvyhiXDIrG8Ax+CjHUS771sVQkth7gfZQva2JUPMA==
-X-Received: by 2002:a05:620a:4091:b0:7e8:468e:67e2 with SMTP id af79cd13be357-7e87e022174mr1377493585a.26.1755502944526;
-        Mon, 18 Aug 2025 00:42:24 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGRXC2JR+1fI/my+9nPQsowb81rzv2FE65uoh0btXxA8YD6B27KnuUhBXdc6IplAFVmGWA78w==
-X-Received: by 2002:a05:620a:4091:b0:7e8:468e:67e2 with SMTP id af79cd13be357-7e87e022174mr1377491885a.26.1755502944042;
-        Mon, 18 Aug 2025 00:42:24 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([185.107.56.42])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b11de17cb4sm48380871cf.43.2025.08.18.00.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 00:42:23 -0700 (PDT)
-Message-ID: <9ee2ad87e78a87d0d4ff0aee6fc7cf01c21f7cf7.camel@redhat.com>
-Subject: Re: kernel/trace/rv/monitors/sleep/sleep.c:130:7: error: use of
- undeclared identifier '__NR_clock_nanosleep'
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: kernel test robot <lkp@intel.com>, Nam Cao <namcao@linutronix.de>, 
- Palmer Dabbelt <palmer@dabbelt.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, "Steven Rostedt (Google)"
- <rostedt@goodmis.org>
-Date: Mon, 18 Aug 2025 09:42:20 +0200
-In-Reply-To: <202508160204.SsFyNfo6-lkp@intel.com>
-References: <202508160204.SsFyNfo6-lkp@intel.com>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0ByZWRoYXQuY29tPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmbiuWMCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfJzZgD/TXjnqCyqaZH/Y2w+YVbvm93WX2eqBqiVZ6VEjTuGNs8A/iPrKbzdWC7AicnK
- xyhmqeUWOzFx5P43S1E1dhsrLWgP
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GavG6Q/9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755512373; x=1787048373;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lZiiDjhlNsl+eM7oVIh7z93U9V6yzoNAKFATgG2dY5Q=;
+  b=GavG6Q/9Qhp3y2bm3k9WtrdOo2olK/7A9eNy8DhCLa83StZedaLeSQjn
+   rqlZvkxenU5ytOkIpIRdVbQlW1YaJN034/uc5y1hDWsUh306qJXqKOSE9
+   dY0444TxF5lSbjKcBCSpifHeSRRE7BHvmGDlTjTXlM2lvNyPgCXDI+cpm
+   7mpfQjb0z5FdklxMOp8hPp+IkrbzbK2+WfrDyN1t1uVqWW3tzPkNzVb1F
+   pHJyGKudzubW9uOxV0pJchCjxZTGyWp6Wm47DOWkU/UtvwdrCEipCyIz9
+   57wphrwz0nrtJwazkISOZfXARSZ+4+s2GJzUZ+X92es08kX1k+5kod2bW
+   A==;
+X-CSE-ConnectionGUID: /i0HWWYeSKaKQn97jOLhhw==
+X-CSE-MsgGUID: q8AfEzxTSty01GHu7KS78Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11524"; a="80312630"
+X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
+   d="scan'208";a="80312630"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 03:19:33 -0700
+X-CSE-ConnectionGUID: gM3778k1SOyC1UpJ9uDsug==
+X-CSE-MsgGUID: uqegUku6SaaCpn2qnljGsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
+   d="scan'208";a="204703381"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 18 Aug 2025 03:19:31 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1unwxJ-000E99-1Z;
+	Mon, 18 Aug 2025 10:19:27 +0000
+Date: Mon, 18 Aug 2025 18:17:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-new 166/188] arch/arm/mm/flush.c:307:41: error:
+ incompatible pointer types passing 'memdesc_flags_t *' to parameter of type
+ 'volatile unsigned long *'
+Message-ID: <202508181807.zhZF5TQ0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: YMqilBi0tOQ_ujphj8fbPGuu1pqgXTMejZqrPaVg-fw_1755502944
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, 2025-08-16 at 02:37 +0800, kernel test robot wrote:
-> tree:=C2=A0=C2=A0
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=C2=A0m=
-a
-> ster
-> head:=C2=A0=C2=A0 ee94b00c1a648530333d9734200be7a45e6e00cd
-> commit: f74f8bb246cf22f27752977da62079cb615f55b2 rv: Add rtapp_sleep
-> monitor
-> date:=C2=A0=C2=A0 5 weeks ago
-> config: riscv-randconfig-001-20250816
-> (https://download.01.org/0day-ci/archive/20250816/202508160204.SsFyNf
-> o6-lkp@intel.com/config)
-> compiler: clang version 22.0.0git
-> (https://github.com/llvm/llvm-project=C2=A093d24b6b7b148c47a2fa228a4ef315=
-2
-> 4fa1d9f3f)
-> reproduce (this is a W=3D1 build):
-> (https://download.01.org/0day-ci/archive/20250816/202508160204.SsFyNf
-> o6-lkp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new
-> version of
-> the same patch/commit), kindly add following tags
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes:
-> > https://lore.kernel.org/oe-kbuild-all/202508160204.SsFyNfo6-lkp@intel.c=
-om/
->=20
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+head:   dd1510cefdfec9dc3fa2bae40e0f16f1bf825567
+commit: a2004477b3282318589bf43a786d952856adcaee [166/188] mm: introduce memdesc_flags_t
+config: arm-randconfig-002-20250818 (https://download.01.org/0day-ci/archive/20250818/202508181807.zhZF5TQ0-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250818/202508181807.zhZF5TQ0-lkp@intel.com/reproduce)
 
-Palmer, this issue is what you fix in
-https://lore.kernel.org/lkml/20250804194518.97620-2-palmer@dabbelt.com/
-, right?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508181807.zhZF5TQ0-lkp@intel.com/
 
-> All errors (new ones prefixed by >>):
->=20
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:804:2: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0=C2=A0 804 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 insb(addr, buffer, count);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0 arch/riscv/include/asm/io.h:104:53: note: expanded from macr=
-o
-> 'insb'
-> =C2=A0=C2=A0=C2=A0=C2=A0 104 | #define insb(addr, buffer, count) __insb(P=
-CI_IOBASE +
-> (addr), buffer, count)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- ~~~~~~~~~~ ^
-> =C2=A0=C2=A0 In file included from kernel/trace/rv/monitors/sleep/sleep.c=
-:2:
-> =C2=A0=C2=A0 In file included from include/linux/ftrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/trace_recursion.h:5:
-> =C2=A0=C2=A0 In file included from include/linux/interrupt.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/hardirq.h:11:
-> =C2=A0=C2=A0 In file included from
-> ./arch/riscv/include/generated/asm/hardirq.h:1:
-> =C2=A0=C2=A0 In file included from include/asm-generic/hardirq.h:17:
-> =C2=A0=C2=A0 In file included from include/linux/irq.h:20:
-> =C2=A0=C2=A0 In file included from include/linux/io.h:12:
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:812:2: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0=C2=A0 812 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 insw(addr, buffer, count);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0 arch/riscv/include/asm/io.h:105:53: note: expanded from macr=
-o
-> 'insw'
-> =C2=A0=C2=A0=C2=A0=C2=A0 105 | #define insw(addr, buffer, count) __insw(P=
-CI_IOBASE +
-> (addr), buffer, count)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- ~~~~~~~~~~ ^
-> =C2=A0=C2=A0 In file included from kernel/trace/rv/monitors/sleep/sleep.c=
-:2:
-> =C2=A0=C2=A0 In file included from include/linux/ftrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/trace_recursion.h:5:
-> =C2=A0=C2=A0 In file included from include/linux/interrupt.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/hardirq.h:11:
-> =C2=A0=C2=A0 In file included from
-> ./arch/riscv/include/generated/asm/hardirq.h:1:
-> =C2=A0=C2=A0 In file included from include/asm-generic/hardirq.h:17:
-> =C2=A0=C2=A0 In file included from include/linux/irq.h:20:
-> =C2=A0=C2=A0 In file included from include/linux/io.h:12:
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:820:2: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0=C2=A0 820 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 insl(addr, buffer, count);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0 arch/riscv/include/asm/io.h:106:53: note: expanded from macr=
-o
-> 'insl'
-> =C2=A0=C2=A0=C2=A0=C2=A0 106 | #define insl(addr, buffer, count) __insl(P=
-CI_IOBASE +
-> (addr), buffer, count)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- ~~~~~~~~~~ ^
-> =C2=A0=C2=A0 In file included from kernel/trace/rv/monitors/sleep/sleep.c=
-:2:
-> =C2=A0=C2=A0 In file included from include/linux/ftrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/trace_recursion.h:5:
-> =C2=A0=C2=A0 In file included from include/linux/interrupt.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/hardirq.h:11:
-> =C2=A0=C2=A0 In file included from
-> ./arch/riscv/include/generated/asm/hardirq.h:1:
-> =C2=A0=C2=A0 In file included from include/asm-generic/hardirq.h:17:
-> =C2=A0=C2=A0 In file included from include/linux/irq.h:20:
-> =C2=A0=C2=A0 In file included from include/linux/io.h:12:
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:829:2: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0=C2=A0 829 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 outsb(addr, buffer, count);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0 arch/riscv/include/asm/io.h:118:55: note: expanded from macr=
-o
-> 'outsb'
-> =C2=A0=C2=A0=C2=A0=C2=A0 118 | #define outsb(addr, buffer, count) __outsb=
-(PCI_IOBASE +
-> (addr), buffer, count)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 ~~~~~~~~~~ ^
-> =C2=A0=C2=A0 In file included from kernel/trace/rv/monitors/sleep/sleep.c=
-:2:
-> =C2=A0=C2=A0 In file included from include/linux/ftrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/trace_recursion.h:5:
-> =C2=A0=C2=A0 In file included from include/linux/interrupt.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/hardirq.h:11:
-> =C2=A0=C2=A0 In file included from
-> ./arch/riscv/include/generated/asm/hardirq.h:1:
-> =C2=A0=C2=A0 In file included from include/asm-generic/hardirq.h:17:
-> =C2=A0=C2=A0 In file included from include/linux/irq.h:20:
-> =C2=A0=C2=A0 In file included from include/linux/io.h:12:
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:838:2: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0=C2=A0 838 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 outsw(addr, buffer, count);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0 arch/riscv/include/asm/io.h:119:55: note: expanded from macr=
-o
-> 'outsw'
-> =C2=A0=C2=A0=C2=A0=C2=A0 119 | #define outsw(addr, buffer, count) __outsw=
-(PCI_IOBASE +
-> (addr), buffer, count)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 ~~~~~~~~~~ ^
-> =C2=A0=C2=A0 In file included from kernel/trace/rv/monitors/sleep/sleep.c=
-:2:
-> =C2=A0=C2=A0 In file included from include/linux/ftrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/trace_recursion.h:5:
-> =C2=A0=C2=A0 In file included from include/linux/interrupt.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/hardirq.h:11:
-> =C2=A0=C2=A0 In file included from
-> ./arch/riscv/include/generated/asm/hardirq.h:1:
-> =C2=A0=C2=A0 In file included from include/asm-generic/hardirq.h:17:
-> =C2=A0=C2=A0 In file included from include/linux/irq.h:20:
-> =C2=A0=C2=A0 In file included from include/linux/io.h:12:
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:847:2: warning: performing pointer
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0=C2=A0 847 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 outsl(addr, buffer, count);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0=C2=A0 arch/riscv/include/asm/io.h:120:55: note: expanded from macr=
-o
-> 'outsl'
-> =C2=A0=C2=A0=C2=A0=C2=A0 120 | #define outsl(addr, buffer, count) __outsl=
-(PCI_IOBASE +
-> (addr), buffer, count)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 ~~~~~~~~~~ ^
-> =C2=A0=C2=A0 In file included from kernel/trace/rv/monitors/sleep/sleep.c=
-:2:
-> =C2=A0=C2=A0 In file included from include/linux/ftrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/trace_recursion.h:5:
-> =C2=A0=C2=A0 In file included from include/linux/interrupt.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/hardirq.h:11:
-> =C2=A0=C2=A0 In file included from
-> ./arch/riscv/include/generated/asm/hardirq.h:1:
-> =C2=A0=C2=A0 In file included from include/asm-generic/hardirq.h:17:
-> =C2=A0=C2=A0 In file included from include/linux/irq.h:20:
-> =C2=A0=C2=A0 In file included from include/linux/io.h:12:
-> =C2=A0=C2=A0 In file included from arch/riscv/include/asm/io.h:136:
-> =C2=A0=C2=A0 include/asm-generic/io.h:1175:55: warning: performing pointe=
-r
-> arithmetic on a null pointer has undefined behavior [-Wnull-pointer-
-> arithmetic]
-> =C2=A0=C2=A0=C2=A0 1175 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- return (port > MMIO_UPPER_LIMIT) ? NULL :
-> PCI_IOBASE + port;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> ~~~~~~~~~~ ^
-> > > kernel/trace/rv/monitors/sleep/sleep.c:130:7: error: use of
-> > > undeclared identifier '__NR_clock_nanosleep'
-> =C2=A0=C2=A0=C2=A0=C2=A0 130 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 case __NR_clock_nanosleep:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~=
-~~~
-> > > kernel/trace/rv/monitors/sleep/sleep.c:141:7: error: use of
-> > > undeclared identifier '__NR_futex'
-> =C2=A0=C2=A0=C2=A0=C2=A0 141 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 case __NR_futex:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~
-> =C2=A0=C2=A0 7 warnings and 2 errors generated.
->=20
->=20
-> vim +/__NR_clock_nanosleep +130
-> kernel/trace/rv/monitors/sleep/sleep.c
->=20
-> =C2=A0=C2=A0 120=09
-> =C2=A0=C2=A0 121=09static void handle_sys_enter(void *data, struct pt_reg=
-s
-> *regs, long id)
-> =C2=A0=C2=A0 122=09{
-> =C2=A0=C2=A0 123=09=09struct ltl_monitor *mon;
-> =C2=A0=C2=A0 124=09=09unsigned long args[6];
-> =C2=A0=C2=A0 125=09=09int op, cmd;
-> =C2=A0=C2=A0 126=09
-> =C2=A0=C2=A0 127=09=09mon =3D ltl_get_monitor(current);
-> =C2=A0=C2=A0 128=09
-> =C2=A0=C2=A0 129=09=09switch (id) {
-> =C2=A0> 130=09=09case __NR_clock_nanosleep:
-> =C2=A0=C2=A0 131=09#ifdef __NR_clock_nanosleep_time64
-> =C2=A0=C2=A0 132=09=09case __NR_clock_nanosleep_time64:
-> =C2=A0=C2=A0 133=09#endif
-> =C2=A0=C2=A0 134=09=09=09syscall_get_arguments(current, regs, args);
-> =C2=A0=C2=A0 135=09=09=09ltl_atom_set(mon,
-> LTL_NANOSLEEP_CLOCK_MONOTONIC, args[0] =3D=3D CLOCK_MONOTONIC);
-> =C2=A0=C2=A0 136=09=09=09ltl_atom_set(mon, LTL_NANOSLEEP_CLOCK_TAI,
-> args[0] =3D=3D CLOCK_TAI);
-> =C2=A0=C2=A0 137=09=09=09ltl_atom_set(mon,
-> LTL_NANOSLEEP_TIMER_ABSTIME, args[1] =3D=3D TIMER_ABSTIME);
-> =C2=A0=C2=A0 138=09=09=09ltl_atom_update(current,
-> LTL_CLOCK_NANOSLEEP, true);
-> =C2=A0=C2=A0 139=09=09=09break;
-> =C2=A0=C2=A0 140=09
-> =C2=A0> 141=09=09case __NR_futex:
-> =C2=A0=C2=A0 142=09#ifdef __NR_futex_time64
-> =C2=A0=C2=A0 143=09=09case __NR_futex_time64:
-> =C2=A0=C2=A0 144=09#endif
-> =C2=A0=C2=A0 145=09=09=09syscall_get_arguments(current, regs, args);
-> =C2=A0=C2=A0 146=09=09=09op =3D args[1];
-> =C2=A0=C2=A0 147=09=09=09cmd =3D op & FUTEX_CMD_MASK;
-> =C2=A0=C2=A0 148=09
-> =C2=A0=C2=A0 149=09=09=09switch (cmd) {
-> =C2=A0=C2=A0 150=09=09=09case FUTEX_LOCK_PI:
-> =C2=A0=C2=A0 151=09=09=09case FUTEX_LOCK_PI2:
-> =C2=A0=C2=A0 152=09=09=09=09ltl_atom_update(current,
-> LTL_FUTEX_LOCK_PI, true);
-> =C2=A0=C2=A0 153=09=09=09=09break;
-> =C2=A0=C2=A0 154=09=09=09case FUTEX_WAIT:
-> =C2=A0=C2=A0 155=09=09=09case FUTEX_WAIT_BITSET:
-> =C2=A0=C2=A0 156=09=09=09case FUTEX_WAIT_REQUEUE_PI:
-> =C2=A0=C2=A0 157=09=09=09=09ltl_atom_update(current,
-> LTL_FUTEX_WAIT, true);
-> =C2=A0=C2=A0 158=09=09=09=09break;
-> =C2=A0=C2=A0 159=09=09=09}
-> =C2=A0=C2=A0 160=09=09=09break;
-> =C2=A0=C2=A0 161=09=09}
-> =C2=A0=C2=A0 162=09}
-> =C2=A0=C2=A0 163=09
+All errors (new ones prefixed by >>):
 
+>> arch/arm/mm/flush.c:307:41: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     307 |         if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
+         |                                                ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:194:66: note: expanded from macro 'test_and_set_bit'
+     194 | #define test_and_set_bit(nr,p)          ATOMIC_BITOP(test_and_set_bit,nr,p)
+         |                                                                          ^
+   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                           ^
+   arch/arm/include/asm/bitops.h:73:71: note: passing argument to parameter 'p' here
+      73 | ____atomic_test_and_set_bit(unsigned int bit, volatile unsigned long *p)
+         |                                                                       ^
+>> arch/arm/mm/flush.c:307:41: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     307 |         if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
+         |                                                ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:194:66: note: expanded from macro 'test_and_set_bit'
+     194 | #define test_and_set_bit(nr,p)          ATOMIC_BITOP(test_and_set_bit,nr,p)
+         |                                                                          ^
+   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                                           ^
+   arch/arm/include/asm/bitops.h:156:63: note: passing argument to parameter 'p' here
+     156 | extern int _test_and_set_bit(int nr, volatile unsigned long * p);
+         |                                                               ^
+>> arch/arm/mm/flush.c:346:33: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'const volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     346 |                 if (test_bit(PG_dcache_clean, &folio->flags))
+         |                                               ^~~~~~~~~~~~~
+   include/linux/bitops.h:60:50: note: expanded from macro 'test_bit'
+      60 | #define test_bit(nr, addr)              bitop(_test_bit, nr, addr)
+         |                                                              ^~~~
+   include/linux/bitops.h:47:17: note: expanded from macro 'bitop'
+      47 |          const##op(nr, addr) : op(nr, addr))
+         |                        ^~~~
+   include/asm-generic/bitops/generic-non-atomic.h:166:64: note: passing argument to parameter 'addr' here
+     166 | const_test_bit(unsigned long nr, const volatile unsigned long *addr)
+         |                                                                ^
+>> arch/arm/mm/flush.c:346:33: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'const volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     346 |                 if (test_bit(PG_dcache_clean, &folio->flags))
+         |                                               ^~~~~~~~~~~~~
+   include/linux/bitops.h:60:50: note: expanded from macro 'test_bit'
+      60 | #define test_bit(nr, addr)              bitop(_test_bit, nr, addr)
+         |                                                              ^~~~
+   include/linux/bitops.h:47:32: note: expanded from macro 'bitop'
+      47 |          const##op(nr, addr) : op(nr, addr))
+         |                                       ^~~~
+   include/asm-generic/bitops/generic-non-atomic.h:121:66: note: passing argument to parameter 'addr' here
+     121 | generic_test_bit(unsigned long nr, const volatile unsigned long *addr)
+         |                                                                  ^
+   arch/arm/mm/flush.c:347:31: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     347 |                         clear_bit(PG_dcache_clean, &folio->flags);
+         |                                                    ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:192:53: note: expanded from macro 'clear_bit'
+     192 | #define clear_bit(nr,p)                 ATOMIC_BITOP(clear_bit,nr,p)
+         |                                                                   ^
+   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                           ^
+   arch/arm/include/asm/bitops.h:48:83: note: passing argument to parameter 'p' here
+      48 | static inline void ____atomic_clear_bit(unsigned int bit, volatile unsigned long *p)
+         |                                                                                   ^
+   arch/arm/mm/flush.c:347:31: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     347 |                         clear_bit(PG_dcache_clean, &folio->flags);
+         |                                                    ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:192:53: note: expanded from macro 'clear_bit'
+     192 | #define clear_bit(nr,p)                 ATOMIC_BITOP(clear_bit,nr,p)
+         |                                                                   ^
+   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                                           ^
+   arch/arm/include/asm/bitops.h:154:57: note: passing argument to parameter 'p' here
+     154 | extern void _clear_bit(int nr, volatile unsigned long * p);
+         |                                                         ^
+   arch/arm/mm/flush.c:355:30: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     355 |                 clear_bit(PG_dcache_clean, &folio->flags);
+         |                                            ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:192:53: note: expanded from macro 'clear_bit'
+     192 | #define clear_bit(nr,p)                 ATOMIC_BITOP(clear_bit,nr,p)
+         |                                                                   ^
+   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                           ^
+   arch/arm/include/asm/bitops.h:48:83: note: passing argument to parameter 'p' here
+      48 | static inline void ____atomic_clear_bit(unsigned int bit, volatile unsigned long *p)
+         |                                                                                   ^
+   arch/arm/mm/flush.c:355:30: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     355 |                 clear_bit(PG_dcache_clean, &folio->flags);
+         |                                            ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:192:53: note: expanded from macro 'clear_bit'
+     192 | #define clear_bit(nr,p)                 ATOMIC_BITOP(clear_bit,nr,p)
+         |                                                                   ^
+   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                                           ^
+   arch/arm/include/asm/bitops.h:154:57: note: passing argument to parameter 'p' here
+     154 | extern void _clear_bit(int nr, volatile unsigned long * p);
+         |                                                         ^
+   arch/arm/mm/flush.c:362:28: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     362 |                 set_bit(PG_dcache_clean, &folio->flags);
+         |                                          ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
+     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
+         |                                                                 ^
+   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                           ^
+   arch/arm/include/asm/bitops.h:36:81: note: passing argument to parameter 'p' here
+      36 | static inline void ____atomic_set_bit(unsigned int bit, volatile unsigned long *p)
+         |                                                                                 ^
+   arch/arm/mm/flush.c:362:28: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     362 |                 set_bit(PG_dcache_clean, &folio->flags);
+         |                                          ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
+     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
+         |                                                                 ^
+   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                                           ^
+   arch/arm/include/asm/bitops.h:153:55: note: passing argument to parameter 'p' here
+     153 | extern void _set_bit(int nr, volatile unsigned long * p);
+         |                                                       ^
+   10 errors generated.
+--
+>> arch/arm/mm/copypage-v6.c:76:41: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+      76 |         if (!test_and_set_bit(PG_dcache_clean, &src->flags))
+         |                                                ^~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:194:66: note: expanded from macro 'test_and_set_bit'
+     194 | #define test_and_set_bit(nr,p)          ATOMIC_BITOP(test_and_set_bit,nr,p)
+         |                                                                          ^
+   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                           ^
+   arch/arm/include/asm/bitops.h:73:71: note: passing argument to parameter 'p' here
+      73 | ____atomic_test_and_set_bit(unsigned int bit, volatile unsigned long *p)
+         |                                                                       ^
+>> arch/arm/mm/copypage-v6.c:76:41: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+      76 |         if (!test_and_set_bit(PG_dcache_clean, &src->flags))
+         |                                                ^~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:194:66: note: expanded from macro 'test_and_set_bit'
+     194 | #define test_and_set_bit(nr,p)          ATOMIC_BITOP(test_and_set_bit,nr,p)
+         |                                                                          ^
+   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                                           ^
+   arch/arm/include/asm/bitops.h:156:63: note: passing argument to parameter 'p' here
+     156 | extern int _test_and_set_bit(int nr, volatile unsigned long * p);
+         |                                                               ^
+   2 errors generated.
+--
+>> arch/arm/mm/dma-mapping.c:721:30: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     721 |                                 set_bit(PG_dcache_clean, &folio->flags);
+         |                                                          ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
+     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
+         |                                                                 ^
+   arch/arm/include/asm/bitops.h:183:52: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                           ^
+   arch/arm/include/asm/bitops.h:36:81: note: passing argument to parameter 'p' here
+      36 | static inline void ____atomic_set_bit(unsigned int bit, volatile unsigned long *p)
+         |                                                                                 ^
+>> arch/arm/mm/dma-mapping.c:721:30: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+     721 |                                 set_bit(PG_dcache_clean, &folio->flags);
+         |                                                          ^~~~~~~~~~~~~
+   arch/arm/include/asm/bitops.h:191:49: note: expanded from macro 'set_bit'
+     191 | #define set_bit(nr,p)                   ATOMIC_BITOP(set_bit,nr,p)
+         |                                                                 ^
+   arch/arm/include/asm/bitops.h:183:68: note: expanded from macro 'ATOMIC_BITOP'
+     183 |         (__builtin_constant_p(nr) ? ____atomic_##name(nr, p) : _##name(nr,p))
+         |                                                                           ^
+   arch/arm/include/asm/bitops.h:153:55: note: passing argument to parameter 'p' here
+     153 | extern void _set_bit(int nr, volatile unsigned long * p);
+         |                                                       ^
+   2 errors generated.
+
+
+vim +307 arch/arm/mm/flush.c
+
+^1da177e4c3f415 Linus Torvalds          2005-04-16  283  
+6012191aa9c6fff Catalin Marinas         2010-09-13  284  #if __LINUX_ARM_ARCH__ >= 6
+6012191aa9c6fff Catalin Marinas         2010-09-13  285  void __sync_icache_dcache(pte_t pteval)
+6012191aa9c6fff Catalin Marinas         2010-09-13  286  {
+6012191aa9c6fff Catalin Marinas         2010-09-13  287  	unsigned long pfn;
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  288) 	struct folio *folio;
+6012191aa9c6fff Catalin Marinas         2010-09-13  289  	struct address_space *mapping;
+6012191aa9c6fff Catalin Marinas         2010-09-13  290  
+6012191aa9c6fff Catalin Marinas         2010-09-13  291  	if (cache_is_vipt_nonaliasing() && !pte_exec(pteval))
+6012191aa9c6fff Catalin Marinas         2010-09-13  292  		/* only flush non-aliasing VIPT caches for exec mappings */
+6012191aa9c6fff Catalin Marinas         2010-09-13  293  		return;
+6012191aa9c6fff Catalin Marinas         2010-09-13  294  	pfn = pte_pfn(pteval);
+6012191aa9c6fff Catalin Marinas         2010-09-13  295  	if (!pfn_valid(pfn))
+6012191aa9c6fff Catalin Marinas         2010-09-13  296  		return;
+6012191aa9c6fff Catalin Marinas         2010-09-13  297  
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  298) 	folio = page_folio(pfn_to_page(pfn));
+0c66c6f4e21cb22 Yongqiang Liu           2024-03-07  299  	if (folio_test_reserved(folio))
+0c66c6f4e21cb22 Yongqiang Liu           2024-03-07  300  		return;
+0c66c6f4e21cb22 Yongqiang Liu           2024-03-07  301  
+6012191aa9c6fff Catalin Marinas         2010-09-13  302  	if (cache_is_vipt_aliasing())
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  303) 		mapping = folio_flush_mapping(folio);
+6012191aa9c6fff Catalin Marinas         2010-09-13  304  	else
+6012191aa9c6fff Catalin Marinas         2010-09-13  305  		mapping = NULL;
+6012191aa9c6fff Catalin Marinas         2010-09-13  306  
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02 @307) 	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  308) 		__flush_dcache_folio(mapping, folio);
+8373dc38ca8d491 saeed bishara           2011-05-16  309  
+8373dc38ca8d491 saeed bishara           2011-05-16  310  	if (pte_exec(pteval))
+6012191aa9c6fff Catalin Marinas         2010-09-13  311  		__flush_icache_all();
+6012191aa9c6fff Catalin Marinas         2010-09-13  312  }
+6012191aa9c6fff Catalin Marinas         2010-09-13  313  #endif
+6012191aa9c6fff Catalin Marinas         2010-09-13  314  
+^1da177e4c3f415 Linus Torvalds          2005-04-16  315  /*
+^1da177e4c3f415 Linus Torvalds          2005-04-16  316   * Ensure cache coherency between kernel mapping and userspace mapping
+^1da177e4c3f415 Linus Torvalds          2005-04-16  317   * of this page.
+^1da177e4c3f415 Linus Torvalds          2005-04-16  318   *
+^1da177e4c3f415 Linus Torvalds          2005-04-16  319   * We have three cases to consider:
+^1da177e4c3f415 Linus Torvalds          2005-04-16  320   *  - VIPT non-aliasing cache: fully coherent so nothing required.
+^1da177e4c3f415 Linus Torvalds          2005-04-16  321   *  - VIVT: fully aliasing, so we need to handle every alias in our
+^1da177e4c3f415 Linus Torvalds          2005-04-16  322   *          current VM view.
+^1da177e4c3f415 Linus Torvalds          2005-04-16  323   *  - VIPT aliasing: need to handle one alias in our current VM view.
+^1da177e4c3f415 Linus Torvalds          2005-04-16  324   *
+^1da177e4c3f415 Linus Torvalds          2005-04-16  325   * If we need to handle aliasing:
+^1da177e4c3f415 Linus Torvalds          2005-04-16  326   *  If the page only exists in the page cache and there are no user
+^1da177e4c3f415 Linus Torvalds          2005-04-16  327   *  space mappings, we can be lazy and remember that we may have dirty
+^1da177e4c3f415 Linus Torvalds          2005-04-16  328   *  kernel cache lines for later.  Otherwise, we assume we have
+^1da177e4c3f415 Linus Torvalds          2005-04-16  329   *  aliasing mappings.
+df2f5e721ed36e2 Russell King            2005-11-30  330   *
+31bee4cf0e74e9c saeed bishara           2011-05-16  331   * Note that we disable the lazy flush for SMP configurations where
+31bee4cf0e74e9c saeed bishara           2011-05-16  332   * the cache maintenance operations are not automatically broadcasted.
+^1da177e4c3f415 Linus Torvalds          2005-04-16  333   */
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  334) void flush_dcache_folio(struct folio *folio)
+^1da177e4c3f415 Linus Torvalds          2005-04-16  335  {
+421fe93cc4b06b2 Russell King            2009-10-25  336  	struct address_space *mapping;
+421fe93cc4b06b2 Russell King            2009-10-25  337  
+421fe93cc4b06b2 Russell King            2009-10-25  338  	/*
+421fe93cc4b06b2 Russell King            2009-10-25  339  	 * The zero page is never written to, so never has any dirty
+421fe93cc4b06b2 Russell King            2009-10-25  340  	 * cache lines, and therefore never needs to be flushed.
+421fe93cc4b06b2 Russell King            2009-10-25  341  	 */
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  342) 	if (is_zero_pfn(folio_pfn(folio)))
+421fe93cc4b06b2 Russell King            2009-10-25  343  		return;
+421fe93cc4b06b2 Russell King            2009-10-25  344  
+00a19f3e25c0c40 Rabin Vincent           2016-11-08  345  	if (!cache_ops_need_broadcast() && cache_is_vipt_nonaliasing()) {
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02 @346) 		if (test_bit(PG_dcache_clean, &folio->flags))
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  347) 			clear_bit(PG_dcache_clean, &folio->flags);
+00a19f3e25c0c40 Rabin Vincent           2016-11-08  348  		return;
+00a19f3e25c0c40 Rabin Vincent           2016-11-08  349  	}
+00a19f3e25c0c40 Rabin Vincent           2016-11-08  350  
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  351) 	mapping = folio_flush_mapping(folio);
+^1da177e4c3f415 Linus Torvalds          2005-04-16  352  
+85848dd7ab75fce Catalin Marinas         2010-09-13  353  	if (!cache_ops_need_broadcast() &&
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  354) 	    mapping && !folio_mapped(folio))
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  355) 		clear_bit(PG_dcache_clean, &folio->flags);
+85848dd7ab75fce Catalin Marinas         2010-09-13  356  	else {
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  357) 		__flush_dcache_folio(mapping, folio);
+8830f04a092b47f Russell King            2005-06-20  358  		if (mapping && cache_is_vivt())
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  359) 			__flush_dcache_aliases(mapping, folio);
+826cbdaff29764b Catalin Marinas         2008-06-13  360  		else if (mapping)
+826cbdaff29764b Catalin Marinas         2008-06-13  361  			__flush_icache_all();
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  362) 		set_bit(PG_dcache_clean, &folio->flags);
+8830f04a092b47f Russell King            2005-06-20  363  	}
+^1da177e4c3f415 Linus Torvalds          2005-04-16  364  }
+8b5989f33337172 Matthew Wilcox (Oracle  2023-08-02  365) EXPORT_SYMBOL(flush_dcache_folio);
+6020dff09252e36 Russell King            2006-12-30  366  
+
+:::::: The code at line 307 was first introduced by commit
+:::::: 8b5989f3333717273d02ab87ba8781f72a6783ab arm: implement the new page table range API
+
+:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
