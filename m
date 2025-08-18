@@ -1,65 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029D02356B9;
-	Sun, 17 Aug 2025 21:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4535179CF;
+	Mon, 18 Aug 2025 00:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755464606; cv=none; b=tGMbikPU2KnxSR/udiogR/piAENpsdir5kGKbIV/l2WQjCfJnUGuIz2AZVsGfazU4A89AIm0I06XVRTZ6mzzg3cdfgr9dNeDp++8bq7KAk4uQBj8C3XZLOaIRYlwLGVeXC2Vh7jqHA0rLymwZEig7KYtEyhGx1evryIljCWRXDQ=
+	t=1755475350; cv=none; b=B313NhQXjCu5jCNiNUrHZ15Qnd5Bf7dLYVe5MTqVpm2MMbW4aUpFxy+CbVZubhrJeRYtjRk3orDrWkww0ZGNPrssuzt5WGYZj6jfV9v0WE+1hu50dO4PYPy8vCKenFz+Qv/mvQUaoEkqeWSniMgBOiXy3mT9LOGz0hQsbuMXs5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755464606; c=relaxed/simple;
-	bh=mXDm9pzQ2v2aMXQtgfLc6q6k54TIbxRQKNSFRAvlPm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCYxznjLEBisjZib8JvsUedCrhwkziwJXk1xWnUsoD52R/4SX56wEtYYn92q1kvXlXdyRJKzPu4iaW9I3+DIEMIiRcR6Gs5vPEXVbzjeWcwwF2dicy3xsyego9bD5cJ2slA0BCb6/aFTmFl9y04cHLFtXCOydWSAmJLwQR4H3w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lNkEzsNH; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1755475350; c=relaxed/simple;
+	bh=Y/Es8OFfCE/gXYxcxE6JREjB4BeQn7Y/c6ahehdhfts=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=redYYt8Bcl/Uvf9+NKp2u3DbvlZ6SnUN7u63q82vwUf9KPyUwoTfOjaEBFH4ZVpPpEwJSgnApspTsFc++wmWAJnOdctWZNciPvzmTSRfij2EaBn/SgjP8PAmLkh0TJKdHUnP3orYS89z8tSiQ/7q9AEn2hut2fXIdre9fr4/jKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iV0MAPUa; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lNkEzsNH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iV0MAPUa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755464605; x=1787000605;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mXDm9pzQ2v2aMXQtgfLc6q6k54TIbxRQKNSFRAvlPm8=;
-  b=lNkEzsNHf2oqXRqd6K88ujvtv0biztLmLcJ85cssiuuattMY7pfwir+9
-   ELTW84DmsB8gOZ6QEYWaPZLsNkr8+gfNAW5PDnxs5u7cEgg49nlnBKY/T
-   bfoAnTteCsF2UXT9YmnE/Hqq4PPAJtfvUrG+CE7JPDYFlvi+tf3K69PXo
-   0x0f7vS93HIMHeG0geIALF2tjLes6igaJkH6ZmhdUg6BHJpePbkWABCs9
-   F6iV8eH2fJ4fIVu3R5X5PoQ3jdvxh9SLr5lyjHbPojc+4PzlXPz7xadkN
-   TlGP3pCS7x3gySSGtt6yv8082gp2NlGILltAJcnxuIvXOkHEd6M9w54qh
+  t=1755475348; x=1787011348;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y/Es8OFfCE/gXYxcxE6JREjB4BeQn7Y/c6ahehdhfts=;
+  b=iV0MAPUapEiFg1N8lgGKx+8kZO19L571oREfrUrAkjTU30kFg3bHhpBl
+   8pqtQDlwwvY+rHM0gja7IZ1+3niZFEIWBG1gD760qIGzXYdAkx/ayoNy3
+   czX0sQHHWcjeWa/WCd6RFEZyBVQFEQDuC4VT9Y2Y9lskVOLYHVmAF79ri
+   RrzcHKSgpdUYT9Uqyo/r2wI5JUC/bRmlDlKhWnZb4Kp4L1br36dBi8HaE
+   uIJ6bIw78VERrvITF8FdeW7pCZcoFNapepC0d2mdSrljNhqEn8Fmz1jP2
+   SNRyGKB77Tj9T7AzxRwOORV+Ff7gAOnAH6+Bt8R68ROTxUgf2V30OjSkU
    g==;
-X-CSE-ConnectionGUID: 0Yy5EEZhQ6K25zPNDxrsGA==
-X-CSE-MsgGUID: kq3BKv0dTxepmqw+Ph0w4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11524"; a="69143668"
+X-CSE-ConnectionGUID: k4Wwt2xoSzSqPKAjRqZIgw==
+X-CSE-MsgGUID: j/OpSCkHRkyFFwpgbpEQkg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11524"; a="68298072"
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="69143668"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 14:03:25 -0700
-X-CSE-ConnectionGUID: XDR8jl+CQ7mIMDSoIjuRUw==
-X-CSE-MsgGUID: Itk0I8gxStyf6NnlXNz1YQ==
+   d="scan'208";a="68298072"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2025 17:02:28 -0700
+X-CSE-ConnectionGUID: HSSz/g3WS8O0mwfbJZ9q+g==
+X-CSE-MsgGUID: RyYBiT+ySOiicHO0o7N+lg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,293,1747724400"; 
-   d="scan'208";a="171644503"
+   d="scan'208";a="167051873"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 17 Aug 2025 14:03:21 -0700
+  by orviesa009.jf.intel.com with ESMTP; 17 Aug 2025 17:02:26 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1unkW4-000Dih-0l;
-	Sun, 17 Aug 2025 21:02:41 +0000
-Date: Mon, 18 Aug 2025 05:01:04 +0800
+	id 1unnKR-000Dmv-30;
+	Mon, 18 Aug 2025 00:02:23 +0000
+Date: Mon, 18 Aug 2025 08:02:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: fangyu.yu@linux.alibaba.com, anup@brainfault.org, atish.patra@linux.dev,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr
+To: Boqun Feng <boqun.feng@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	guoren@linux.alibaba.com, guoren@kernel.org, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Fangyu Yu <fangyu.yu@linux.alibaba.com>
-Subject: Re: [PATCH] RISC-V: KVM: Write hgatp register with valid mode bits
-Message-ID: <202508180228.aJykn9j0-lkp@intel.com>
-References: <20250816073234.77646-1-fangyu.yu@linux.alibaba.com>
+	Joel Fernandes <joelagnelf@nvidia.com>
+Subject: [jfern:rust-spinlock-irq 2/21]
+ arch/s390/include/asm/preempt.h:109:15: error: invalid operands to binary
+ expression ('int' and 'void')
+Message-ID: <202508180731.63jpKYCj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,69 +63,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250816073234.77646-1-fangyu.yu@linux.alibaba.com>
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on kvm/next mst-vhost/linux-next linus/master v6.17-rc1 next-20250815]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/fangyu-yu-linux-alibaba-com/RISC-V-KVM-Write-hgatp-register-with-valid-mode-bits/20250816-153513
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20250816073234.77646-1-fangyu.yu%40linux.alibaba.com
-patch subject: [PATCH] RISC-V: KVM: Write hgatp register with valid mode bits
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20250818/202508180228.aJykn9j0-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250818/202508180228.aJykn9j0-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rust-spinlock-irq
+head:   5b23adbb23dac965774935c047cc510bfaaa91c5
+commit: 0c303a0d1f2100cb288a6ec2bc374c899c9d0cbf [2/21] preempt: Introduce __preempt_count_{sub, add}_return()
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20250818/202508180731.63jpKYCj-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250818/202508180731.63jpKYCj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508180228.aJykn9j0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508180731.63jpKYCj-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/vmid.c:31:24: error: call to undeclared function 'kvm_riscv_gstage_mode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           csr_write(CSR_HGATP, (kvm_riscv_gstage_mode() << HGATP_MODE_SHIFT) | HGATP_VMID);
-                                 ^
-   arch/riscv/kvm/vmid.c:31:48: warning: shift count >= width of type [-Wshift-count-overflow]
-           csr_write(CSR_HGATP, (kvm_riscv_gstage_mode() << HGATP_MODE_SHIFT) | HGATP_VMID);
-                                                         ^  ~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/csr.h:538:38: note: expanded from macro 'csr_write'
-           unsigned long __v = (unsigned long)(val);               \
-                                               ^~~
-   1 warning and 1 error generated.
+   In file included from arch/s390/kernel/asm-offsets.c:9:
+   In file included from include/linux/sched.h:13:
+   In file included from arch/s390/include/asm/processor.h:33:
+   In file included from include/linux/irqflags.h:19:
+   In file included from arch/s390/include/asm/percpu.h:5:
+   In file included from include/linux/preempt.h:85:
+>> arch/s390/include/asm/preempt.h:109:15: error: invalid operands to binary expression ('int' and 'void')
+     109 |                         return val + __atomic_add_const(val, &get_lowcore()->preempt_count);
+         |                                ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:116:5: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     116 |                         (set1->sig[1] == set2->sig[1]) &&
+         |                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:14:
+   In file included from arch/s390/include/asm/stacktrace.h:7:
+   In file included from include/linux/ptrace.h:7:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:116:21: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     116 |                         (set1->sig[1] == set2->sig[1]) &&
+         |                                          ^         ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
 
 
-vim +/kvm_riscv_gstage_mode +31 arch/riscv/kvm/vmid.c
+vim +109 arch/s390/include/asm/preempt.h
 
-    24	
-    25	void __init kvm_riscv_gstage_vmid_detect(void)
-    26	{
-    27		unsigned long old;
-    28	
-    29		/* Figure-out number of VMID bits in HW */
-    30		old = csr_read(CSR_HGATP);
-  > 31		csr_write(CSR_HGATP, (kvm_riscv_gstage_mode() << HGATP_MODE_SHIFT) | HGATP_VMID);
-    32		vmid_bits = csr_read(CSR_HGATP);
-    33		vmid_bits = (vmid_bits & HGATP_VMID) >> HGATP_VMID_SHIFT;
-    34		vmid_bits = fls_long(vmid_bits);
-    35		csr_write(CSR_HGATP, old);
-    36	
-    37		/* We polluted local TLB so flush all guest TLB */
-    38		kvm_riscv_local_hfence_gvma_all();
-    39	
-    40		/* We don't use VMID bits if they are not sufficient */
-    41		if ((1UL << vmid_bits) < num_possible_cpus())
-    42			vmid_bits = 0;
-    43	}
-    44	
+   100	
+   101	static __always_inline int __preempt_count_add_return(int val)
+   102	{
+   103		/*
+   104		 * With some obscure config options and CONFIG_PROFILE_ALL_BRANCHES
+   105		 * enabled, gcc 12 fails to handle __builtin_constant_p().
+   106		 */
+   107		if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES)) {
+   108			if (__builtin_constant_p(val) && (val >= -128) && (val <= 127)) {
+ > 109				return val + __atomic_add_const(val, &get_lowcore()->preempt_count);
+   110			}
+   111		}
+   112		return val + __atomic_add(val, &get_lowcore()->preempt_count);
+   113	}
+   114	
 
 -- 
 0-DAY CI Kernel Test Service
