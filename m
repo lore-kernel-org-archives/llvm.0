@@ -1,81 +1,132 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B151D88D7
-	for <llvm@lists.linux.dev>; Mon, 18 Aug 2025 14:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF5724886A;
+	Mon, 18 Aug 2025 15:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755526051; cv=none; b=cRmow1JjK3cPzB3TcSNuHlx7h2Zk0jt520z5t9juFBMV7iqnNotfhSTxJOImJEkEB+SxvOHMqOi40O8aUHIMqnzh5nlHWBj7CWycQKO0Q7zYyyWKu12Nq49kjHTz0UoxRH3nge0edlQoT0y17lwHUT+EcA/PV5DQs4d6se4l6eI=
+	t=1755529626; cv=none; b=FkR7sxRAvrWHl5gEeBuxRqRmZVCvPGjT6Rx6ekImACPsHLvXi86A/9JTYK7p1usbIa55jMOICjxFd/IGpl/zlVg2uSsGekXz++ZOk5r00h0U7U0jMsKE8qey0lC/9SsicHy8ySGs+pPpCtsuLVkmO5Ppj8GJXZzCPD6cGSQ5pVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755526051; c=relaxed/simple;
-	bh=aWJdNsIL+OfTpQ7wAhWqjKJj/AXrvG8KIwRxbSMd0Ks=;
+	s=arc-20240116; t=1755529626; c=relaxed/simple;
+	bh=K3wfM6saGhUQWs89b5LMhe+u1iiQN3dMtS9kmXFdJas=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NGHNYCurfaQF76NxvXLWpmQa9velP5PevzqWPK/olROAawTNbBh5YK6ivpIcIbh50wEDVKNIpbKehBRh5A5L/oYo5ToNnLoJ5CsF+1PruLAytIn96DQUsjDRJAWh+eKnjEnMSs9GA5KD3TDnlvmJGUiOaVXa41QJ+qOro5yd7VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=uKRtaEcV; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=SpKfgOjpq5r6babPwewO9Xvo4d2hPayGp11NQ5q8XqEF42zj1fvLqhPQl1bOmN+76jCCvQ6Oq7jEkDkEVeNquEAGSmMoq65NyCeP4iV8FhQulDvMTR/vuscd0Memez9Sy7rWBQrAdCCOrIPtDXAqyF5Q28Mp6ul3qakT6YP1Ros=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYf5Tz43; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="uKRtaEcV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1755526041;
-	bh=aWJdNsIL+OfTpQ7wAhWqjKJj/AXrvG8KIwRxbSMd0Ks=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYf5Tz43"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11F8C4CEEB;
+	Mon, 18 Aug 2025 15:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755529625;
+	bh=K3wfM6saGhUQWs89b5LMhe+u1iiQN3dMtS9kmXFdJas=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uKRtaEcVKtXTiPWamZvVo+hWvY4SZTAPEAQF6+V7D5SvXfco8IGylDSVS2hFQt4Tv
-	 6NNb9/wjTU90ZBUD/TjktLML/FvQD5uT8RWQWyY4NDDhMhyreuCDffRSsB2rHvzS64
-	 lr3NbpCuzrO0AoTjHkuKFX5+UQ6x+RqlSqRDe56k=
-Date: Mon, 18 Aug 2025 16:07:21 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 2/3] selftests/nolibc: don't pass CC to toplevel Makefile
-Message-ID: <d742c315-273d-417e-b1c7-00a9cec6a2c4@t-8ch.de>
-References: <20250719-nolibc-llvm-system-v1-0-1730216ce171@weissschuh.net>
- <20250719-nolibc-llvm-system-v1-2-1730216ce171@weissschuh.net>
- <20250721025627.GB1886@1wt.eu>
- <ebb84a9c-8771-4791-8a81-b615cecec7c3@t-8ch.de>
- <20250817093905.GA14213@1wt.eu>
+	b=XYf5Tz43JJDCueeJYfM24Nubfegp36SkiqBO5owWlKF88+zKayugejamGBvPxpvac
+	 IutJYpI3U4nNwsnKYp7X37bRfj8Vc1qv9Ax53V9i12l77BJxB6U4/BkmeFUKVE0Ald
+	 xFtiXI+zsDo2FC/sYvBo6t91CQ1YCkPEdGgRZ8zAn4g4+xh6gDzErqX58lbsCRAKv/
+	 McSfemHdViSeMM2JwBvSABK0V+hZLAFlHpvqqu8iThMW6+MUMofhJ7yHA5wQRinWwi
+	 vijNcGLbFY8z3slMLw07SfGqBElMOheFmL2FFA5OoScAgbdULf46D1A2dAcETyUfeU
+	 T+NUq9+AFq02Q==
+Date: Mon, 18 Aug 2025 08:06:59 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Ben Collins <bcollins@watter.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] iio: mcp9600: Recognize chip id for mcp9601
+Message-ID: <20250818150659.GA2948920@ax162>
+References: <20250815164627.22002-4-bcollins@watter.com>
+ <202508161646.PDl6V4EU-lkp@intel.com>
+ <20250816110243.06fbf7fb@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250817093905.GA14213@1wt.eu>
+In-Reply-To: <20250816110243.06fbf7fb@jic23-huawei>
 
-On 2025-08-17 11:39:05+0200, Willy Tarreau wrote:
-> On Sun, Aug 17, 2025 at 10:30:52AM +0200, Thomas Weißschuh wrote:
-> > On 2025-07-21 04:56:27+0200, Willy Tarreau wrote:
-> > > On Sat, Jul 19, 2025 at 05:38:28PM +0200, Thomas Weißschuh wrote:
+Hi Jonathan,
 
-(...)
-
-> > > I think I'd be fine with this, but then we need to make it
-> > > explicit in the help message and fix the current one, possibly just
-> > > with this:
-> > > 
-> > > -	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
-> > > +	@echo "  nolibc-test       build the executable (uses \$$CC)"
+On Sat, Aug 16, 2025 at 11:02:43AM +0100, Jonathan Cameron wrote:
+> On Sat, 16 Aug 2025 16:46:12 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+> > Hi Ben,
 > > 
-> > I don't think this is correct. $CC itself depends on $CROSS_COMPILE
-> > through tools/scripts/Makefile.include.
+> > kernel test robot noticed the following build warnings:
+> > 
+> > [auto build test WARNING on jic23-iio/togreg]
+> > [also build test WARNING on linus/master v6.17-rc1 next-20250815]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Collins/dt-bindings-iio-mcp9600-Add-compatible-for-microchip-mcp9601/20250816-005705
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> > patch link:    https://lore.kernel.org/r/20250815164627.22002-4-bcollins%40watter.com
+> > patch subject: [PATCH 3/5] iio: mcp9600: Recognize chip id for mcp9601
+> > config: riscv-randconfig-001-20250816 (https://download.01.org/0day-ci/archive/20250816/202508161646.PDl6V4EU-lkp@intel.com/config)
+> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250816/202508161646.PDl6V4EU-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202508161646.PDl6V4EU-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+
+<trim unrelated -Wnull-pointer-arithmetic>
+
+> > >> drivers/iio/temperature/mcp9600.c:440:53: warning: invalid conversion specifier '\x0a' [-Wformat-invalid-specifier]  
+> >      440 |                                 "Expected id %02x, but device responded with %02\n",
+> >          |                                                                              ~~~^
+> >    include/linux/dev_printk.h:156:62: note: expanded from macro 'dev_warn'
+> >      156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+> >          |                                                                     ^~~
+> >    include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+> >       19 | #define dev_fmt(fmt) fmt
+> >          |                      ^~~
+> >    include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
+> >      110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+> >          |                              ^~~
+> > >> drivers/iio/temperature/mcp9600.c:441:26: warning: data argument not used by format string [-Wformat-extra-args]  
+> >      440 |                                 "Expected id %02x, but device responded with %02\n",
+> >          |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      441 |                                  chip_info->chip_id, dev_id);
+> >          |                                                      ^
+> >    include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
+> >      156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+> >          |                                                                     ~~~     ^
+> >    include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+> >      110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+> >          |                              ~~~    ^
+> >    drivers/iio/temperature/mcp9600.c:428:22: warning: unused variable 'ret' [-Wunused-variable]
+> >      428 |         int ch_sel, dev_id, ret;
+> >          |                             ^~~
+> >    10 warnings generated.
+> > 
+> > 
+> > vim +/x0a +440 drivers/iio/temperature/mcp9600.c
+> > 
+> >    422	
+> >    423	static int mcp9600_probe(struct i2c_client *client)
+> >    424	{
+> >    425		const struct mcp_chip_info *chip_info = i2c_get_match_data(client);
 > 
-> I don't understand what you mean by "depends on" here. CC defaults
-> to ${CROSS_COMPILE}gcc and may override it if set. So if one sets
-> CC, CROSS_COMPILE will not be used for it. Or maybe we could change
-> it to this to indicate a precedence if that's the idea you want to
-> convey ?
-> 
->  -	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
->  +	@echo "  nolibc-test       build the executable (uses \$$CC or \$$CROSS_COMPILE)"
+> Probably a false positive as I don't think we can probe without something matching and hence
+> that not being NULL but an error check on that match is still a nice to have and should
+> resolve this build warning.  Note there is very little chance a compiler could ever figure
+> out if this can be NULL or not so it's a reasonable warning!
 
-Yes, that is the idea. 
-I pushed a commit to this effect to nolibc/for-next.
+I am not sure I follow if you are referring to the -Wformat warnings
+above. Isn't it pointing out that the second specifier is missing the
+actual type? Shouldn't it be '%02x' or something of the sort?
 
-
-Thomas
+Cheers,
+Nathan
