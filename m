@@ -1,194 +1,947 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2064.outbound.protection.outlook.com [40.107.92.64])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5378118E377;
-	Mon, 18 Aug 2025 12:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755519748; cv=fail; b=mhweSS6bo9OLo5UCI0T/HJ6PU3l2e0pwgUDQj5l1hQ/b13eAJ28GO27BHcQHV1WMOaARl6X9cWzzXR4/Q7JCwM8lflAkzpiduFiYgpl1ys/deOlapOmA2hUp2fvQaPxDmvBl0Ja4jP9uUG4kwmo5CTB9oEt62/vGgqqZMlDStR8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755519748; c=relaxed/simple;
-	bh=fSxMRAAaqt7pcu5ZX4GiuCVhNDWygm2lws2avCiZado=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=YtVAMQOmB5GU8bzpWzCHYe25zML6BOt5oRD4H3PsezouHpOHsj2TzwsfxEX9GtIGD7AYEuDx9Go/mzlB135udMAGXKjKqpOArIOVWmwoERiNX4JOTpalpaY3xZBzRUQ4Ikj28LJq6pr0BuXPE+A1za4tmoxA4qYcdqdLD9HT8LQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zREnkxsi; arc=fail smtp.client-ip=40.107.92.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D145B3218B2;
+	Mon, 18 Aug 2025 12:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755521093; cv=none; b=LFko1+AsNjV0m/YaNp09Zk81LBQEqoGsqAu849YcC0WjXnQVEKQEnOBTaI7KzCGA1B7gmL5qH4IWZ4qiuAUl83WWxdRgtWFS8aBp+05AkwZrI1sz4sbyKezRo3/VuwFyF7U61shtwNNxe3CGbwrZFL61qYtf8vT3Tg0heOlxzvo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755521093; c=relaxed/simple;
+	bh=6umzCw36EnlSyqsyeVNPoX6ozFXOFbT37OquuRrIVgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sj7jdzo0itwyjImQR932Wityl5teplqv7jjZdx7kGo+T7tQwCeJokfqSYT7xvjKxIUAP54K3GseyRfKsiIDGHf5zrXpFY74kte+hhjPJvZfiDi0TZgoTUhwQoiekSXq59ctF/ofnywhIGeKuQVHRCwELQxZReyQF7S7xem2/tto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s0+rC5/i; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zREnkxsi"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Kk5U9wxjQHYDlWbMOtBHv7h2MqTV3w1/VmqsPLJr4CvbByZbYaUQoN9+uV6fBEW3LDyrbqKTOfcqPe79L+b7TkpIqfSuiOZ344xGHgNegLExLUdSp7sejoSOoBh8L/crWB0g9zBIGGHh9dEGVTVy3D9nyEr41Lab/AF3sfcbcIRomLxF1j1bu4fwZIlIAlslWx1+2BVlbs5bNEQTmNM0H1FsCDLAtTFp0ISmScx1MQqXFTKctjV+EJqUqsTYpB4d90xDnDaqCqKZN/c9fdLGoyETlhcjmEg3qRZLov+Gmp5qSN0l3R+2jYOpgLCXZ/b8mSP+s0DkxE4Cn8oleznRIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u7lY4yAlWa9eawfEs5Rb7jzOlosHKKqd2SBKhOLuEjA=;
- b=YGwOnw/kKuz0+NqpMbSzNru8fGZxA/BEqXBvpnaGSnsklK+aGt3DheI3rJtf9P+uFtzdba5FXPUZdApZfooU691bD9qUwCdk6ma10BMGPa4wTacG+PX8edOLysBl0BW36EGKz0aMwx5oK46tYxtYFqI7BZRsjWjn7P7L5Q09OG/jsWYP9KxRFvJ1qSkoAvTERuPjZBEWeVEHuUjFmKPMTkOPY+6hjZk891GfPwulAWzrVkaJ8MDOHmQYUlZMUrQuMwPaJ0iwDm39DbocSXysIF0LXgUpleUJmvbcpJZvzbKHZ/okIyjJ1UddJr9pmZiqK1jTjAbf4a+sOZYF7nHhmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u7lY4yAlWa9eawfEs5Rb7jzOlosHKKqd2SBKhOLuEjA=;
- b=zREnkxsi63R8w/z7xESKrFWiIm/zQ7YwiE2+0xRSMFiOCmZ+WBlZhYflZ4Vq0wfSfyj2cIktHgXoEFrcw/voKUqGaIckheXZXt2ahAg0AXw9Whteu8uFQy06TbXPDBzfcFRJZoUNYjvu8EmhoAbl5TbmL5dha9HAg1Kqvhr2frA=
-Received: from BL1PR12MB5333.namprd12.prod.outlook.com (2603:10b6:208:31f::11)
- by SJ2PR12MB8135.namprd12.prod.outlook.com (2603:10b6:a03:4f3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
- 2025 12:22:23 +0000
-Received: from BL1PR12MB5333.namprd12.prod.outlook.com
- ([fe80::d4a:9dd1:afd9:1c70]) by BL1PR12MB5333.namprd12.prod.outlook.com
- ([fe80::d4a:9dd1:afd9:1c70%4]) with mapi id 15.20.9031.023; Mon, 18 Aug 2025
- 12:22:22 +0000
-From: "Agarwal, Nikhil" <nikhil.agarwal@amd.com>
-To: "Gupta, Nipun" <Nipun.Gupta@amd.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "krzk@kernel.org"
-	<krzk@kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"maz@kernel.org" <maz@kernel.org>, "linux@weissschuh.net"
-	<linux@weissschuh.net>, "chenqiuji666@gmail.com" <chenqiuji666@gmail.com>,
-	"peterz@infradead.org" <peterz@infradead.org>, "robh@kernel.org"
-	<robh@kernel.org>, "Gangurde, Abhijit" <abhijit.gangurde@amd.com>,
-	"nathan@kernel.org" <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Subject: RE: [PATCH RESEND 1/2] cdx: don't select CONFIG_GENERIC_MSI_IRQ
-Thread-Topic: [PATCH RESEND 1/2] cdx: don't select CONFIG_GENERIC_MSI_IRQ
-Thread-Index: AQHcEAny9LoDasCHL02fh0sPtUe83rRoVRyg
-Date: Mon, 18 Aug 2025 12:22:22 +0000
-Message-ID:
- <BL1PR12MB5333E94CBA4297B21F3621C79D31A@BL1PR12MB5333.namprd12.prod.outlook.com>
-References: <20250818063244.1242634-1-nipun.gupta@amd.com>
-In-Reply-To: <20250818063244.1242634-1-nipun.gupta@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_ActionId=ccd3cd4c-3742-48a5-a696-57aef981a1b9;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_ContentBits=0;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_Enabled=true;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_Method=Privileged;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_Name=Non-Business_New;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_SetDate=2025-08-18T12:21:34Z;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_94523dde-f9d1-4aa7-80a9-c0900420d3c3_Tag=10,
- 0, 1, 1;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5333:EE_|SJ2PR12MB8135:EE_
-x-ms-office365-filtering-correlation-id: f42d601a-c32a-4036-30e2-08ddde51e256
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018|7053199007;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?licIXnw5lKqFQlKhS67Lbmsw90smxJoxWyb6ZljYyCJu/Qw0nYDR5NUpDLgn?=
- =?us-ascii?Q?pwL80mTEWgzvoSlevDFsuWYZD4DbNMHuACjmSS8P/TFxbtM2SWhAtY3OHc3U?=
- =?us-ascii?Q?V1Dy9WJeZGM7AFJ/bl4f2LJIqv/uwRFxZu0he1h4nigxA/lc9Yp+y0BaXh3S?=
- =?us-ascii?Q?h+DEPFcrX+BZyDD/8OIRrDS6K9MWIxHGw2Am92ipo4gsdiSbhLdmDdTirbti?=
- =?us-ascii?Q?NgS13rh3BGa0DJHGDXVpOqI7fEa2A7kWPrUjs0sjRu5kr5zudjeIbHUkbTxP?=
- =?us-ascii?Q?va4RTCcapOUurxg/jLh88KpnSCC0xTMsbGZ+kIIE2Lq9mvM4wL/dJQxIDx5T?=
- =?us-ascii?Q?ePwr7AuUWqSPkjRrkGDH5Eo5GBWlsTKI+RY3vAeH1Dv9xIjTcmoMXk67wDBm?=
- =?us-ascii?Q?y7XzeXWacLe+Gz9TlceOmUyVMt8qplY5eJtvh8P7hW8/1L6E8n5E5mE6tAT6?=
- =?us-ascii?Q?hMG69or3T7I9KJJhY++zY7cHzHZKy/m9OK5gSD3B0kffUGpVX23nEvO+T4Oj?=
- =?us-ascii?Q?WmNshLjw4b8fD2pDvT5zHgIXd9pwd8PEjJqNZKRa9xoGHzoJpglq941jGWmT?=
- =?us-ascii?Q?kWsdf1aRI48zbUWYO9PF5jjtZksfgC0l7YTtk1+qxNNoS+HKwHX7yzmsykuU?=
- =?us-ascii?Q?k53dVzJpHmF0O6hJj4iufWV0tztfUuN5vbWipIZIqGYxqsnGkiscDvwZKdqL?=
- =?us-ascii?Q?0JfP9hUyj9NiOW4JzB8yjhd29MGvemGSI/HBF0rIuYKLUW1y3Mseri7ac2Mv?=
- =?us-ascii?Q?O7Pf1lEKOYoZRcmpJLZNCiUQM/g848dJCcZFKor7XP1+GSXr+KLmLZc3+h7N?=
- =?us-ascii?Q?UMOjT5fJydfgx9WhzS0Y/E1AC2+Xc/NHKgd1g7uKeU3dZl3U66dYlEk2Nnrj?=
- =?us-ascii?Q?8zilKwucW1yVXI02sbSpM12aPs5KwN4Uc6XW1QQQxBEEkgHr6rbU70ePoKua?=
- =?us-ascii?Q?0Mir7jQ93CGUXR3+fjiwzwz6zx2d6Fr1mPL0gQvrBh3kI1FGXatKnWZfg5Ve?=
- =?us-ascii?Q?efBIDb/5vwNny/ZAW5xLmn+VqBhyw6N1QshNuEYfC+DxP+dYOl5tv8KXsU83?=
- =?us-ascii?Q?RXmxRQmxyAYahLCG6tzrgYFz1p1Y1jBWhmmzqQ16eS9+Koy7eQ+L62S8Dm0T?=
- =?us-ascii?Q?jDJj+vYweUFeBkJJGpn6T4g47aIY/F3dzhGQ0OcfYybDdrnwHroF9s9ZdynX?=
- =?us-ascii?Q?/wBRnYj0Ff0SwUfYnSvC2+AZmSRox3Ttft/ryqJ7W4E2cQfMJ2ngwafwPdS2?=
- =?us-ascii?Q?w8eiqCLAEY9tGZ+OMhdsnXV4j2R7SumJizLI0JHHjh0z770R//ZIyDcX2Z10?=
- =?us-ascii?Q?e9fwJpWqPblmKW5t1DCbQlwo/vf2tQnhlAFQUc9sjjbqgeZZ6nQo+8uPqvEJ?=
- =?us-ascii?Q?i5pYQE/WHJvmaUvMSSdwOkxgV3a5hk1XVa1XkHEmpdoJKpLRmajJvc6ZmCYV?=
- =?us-ascii?Q?Y7VrO5Ay/s7tCPYkzYCIKoRRfmuBC31IMGnBm3ENDiBPvp6C0ye8qg=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5333.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018)(7053199007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?dmDztRuISc+fMibiwyb8qOxFjnJiR6w49/6yaXFUQCdPPy3ijAu8bUzRGz6f?=
- =?us-ascii?Q?rfoPcuQ14BM2DVpT1IJoqt1XsEJ8Per4FlnoKjNk4k6Whf2qM7I10iVyiKn3?=
- =?us-ascii?Q?KjCO865SKeayEq4cGgWeMmY4N1suxvUnXrQODy/LzCPJ9jErbR+UGjv/wNn2?=
- =?us-ascii?Q?cACFs7C53YU8glF0GrVuv3tFxeWzBbkBZR29HhQhPJxPRWoMXFv0uTaZZaLN?=
- =?us-ascii?Q?mx9J89Ntu5MotvbjCHu0zVAfk4at9bsDNZhsPlyQkOzc+hp/Bz4gyg3ULbEB?=
- =?us-ascii?Q?77JeL46RxI+KvslbSaF42xpInWiZ2nbDmQV7cyPb1IPJdrGD/pm3sIXdZF4T?=
- =?us-ascii?Q?xz3HsCFxjLxdi6oHOi63M4qijd3Hvlzn5tBuqFWMjvgHA0i7+uoa542BglQg?=
- =?us-ascii?Q?znVHRsvE+ZtwDv1qgpC9gMoCTVjraDwFI/LK/PsOfLpaptWghzgKc8p0osJT?=
- =?us-ascii?Q?uU9darCvNiT+y3yCz89p/hYjlVSbSmExPNU8jGTyVWBZZHXDC81eMrRIbqKS?=
- =?us-ascii?Q?JpDyK2kaxLsKIvCzaHlM5iMFu2lvzUYEvOJxnKH6+H+HCKB+XexchMaF782B?=
- =?us-ascii?Q?IWnswkiIy9SYvUdSHwIqLGUPffo/FIGh/tGOCz6HUFuoNWh+i+SMFYOdoDMt?=
- =?us-ascii?Q?GwSv95rh8ol4GxxdVJ/TKkQcmcKeg84OKM2xQ4XznIo89oXOFaabYWxip3dy?=
- =?us-ascii?Q?cHqPhQzwH7D2Q9WuqfIYSYEWevvYmNwtkM4mjDHWUpxWwk6mW70Klt3EN/k+?=
- =?us-ascii?Q?p80+DwVncL3VSut+pNioGd3KG54jU3gyZ3m4lN8a1DVmdpDQYAwg8UR0mikc?=
- =?us-ascii?Q?khFpiV0q853NSnyEyBJSts10+HyL2IxIJnItcsFJHH4zQ7n7Dmb0bYxuZTNr?=
- =?us-ascii?Q?S0Rs9xFTosMBdr2dpJPlKE4tPJFCcHPPQbIiChmDXvwebgM6zG+7KsMMUnSj?=
- =?us-ascii?Q?gC51dKbLqVTAoRko3X7ai29pF5861HSaIdvdronYva/C4jBTB0snc+LgNNlf?=
- =?us-ascii?Q?H/8XLKr14c1emDVDm6/Lu7LSK74sJWkmdGXHuwK2gJbvRy2JBpCZuKmA7QDH?=
- =?us-ascii?Q?V0G4XY18HOTbKOvsOGk46G2gAp46b5LA4iB0qKqqn5ZhFmIJAO03jdYvZO+R?=
- =?us-ascii?Q?nT+8FQRF3FYGJfkyRdr8eqGsV+GzblZAm3ENY5XZ7FCtFlg+sk29xaHAbzVQ?=
- =?us-ascii?Q?6+6MWJ//FhnBfJQbL2k5qtvDEit01kuG/1PUqTqH4e//xcbhcbgoBiNcXwTs?=
- =?us-ascii?Q?aXG53dziI4LTZANj/V+9rgBadFX3iwCoV7UW8ONk7LSuffXEXoG0vTxgky+o?=
- =?us-ascii?Q?GlVx9VONPDpGM9+RUt2CgCGfVe4wEH3ip6mYFYYwG4f03tv+CiKDGrZD+TFM?=
- =?us-ascii?Q?AJmMTUENhGEAY8h2HpkwQ8uM9Bd7RHWpxgFIl4uC6KsVwWtLUqJP3S+RDAO7?=
- =?us-ascii?Q?Bp0MF7HNmn6FqHW5GPSA+MQZTbwl6xGKEmhu/wnE9XQoDyAWoXkj8wj4F/hY?=
- =?us-ascii?Q?bWiE741vXIQvcn7qJpwbnj089FSoro7ZG7IVLGzuIVwpgzTr58FGlaLHrvq0?=
- =?us-ascii?Q?9MSYLRNCPTx+fHGT9zg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s0+rC5/i"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QW8hqhTX8yt3ss6p2bOWGGDZ9wC8Lyuga+9TEJk5CV4=; b=s0+rC5/i9gW3LxcmgWafV8OQWE
+	vDEp1UTgRc78+/yvEPR8UhfkKJpJ0vn1Kqkq76ofg4PLf3g7/zPpYiB8fb6aGV8HNI+vTzC+BiEDH
+	vlVPnqbxH5d4CR64Xn514viQfl6RQFxfV0aNWHX95LE/euA3e6MKITSyfmlS+cquWEYpNkFReYnoV
+	C9INQOG1UB+FqQBQ7QTl9TY1HmdjhRcOLTKF29yEN95SuNkgSlmD70JhBXO91Sk8koXkqo1skjewG
+	d/LIikObCArWjaq+NeyoaDnNaGhEy5Hi4kOWGTcnjfRXxXSJ2UvpD5sI4TTDAlkgFSw0rfdP8NOb5
+	hEdQETXQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1unzED-00000005wkl-2XGW;
+	Mon, 18 Aug 2025 12:44:45 +0000
+Date: Mon, 18 Aug 2025 13:44:45 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-new 166/188] arch/arm/mm/flush.c:307:41: error:
+ incompatible pointer types passing 'memdesc_flags_t *' to parameter of type
+ 'volatile unsigned long *'
+Message-ID: <aKMgPRLD-WnkPxYm@casper.infradead.org>
+References: <202508181807.zhZF5TQ0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5333.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f42d601a-c32a-4036-30e2-08ddde51e256
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2025 12:22:22.6874
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /Nc2iLzyUeq/QUAnZGWG/Kgh4QHfgMsWpefSFmf/GiILW2JS1/7/1QPS/luXCDoh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8135
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202508181807.zhZF5TQ0-lkp@intel.com>
 
+On Mon, Aug 18, 2025 at 06:17:13PM +0800, kernel test robot wrote:
+> >> arch/arm/mm/flush.c:307:41: error: incompatible pointer types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
 
-> -----Original Message-----
-> From: Nipun Gupta <nipun.gupta@amd.com>
-> Sent: Monday, August 18, 2025 12:03 PM
-> To: arnd@arndb.de; gregkh@linuxfoundation.org; Agarwal, Nikhil
-> <nikhil.agarwal@amd.com>
-> Cc: linux-kernel@vger.kernel.org; llvm@lists.linux.dev; oe-kbuild-
-> all@lists.linux.dev; robin.murphy@arm.com; krzk@kernel.org; tglx@linutron=
-ix.de;
-> maz@kernel.org; linux@weissschuh.net; chenqiuji666@gmail.com;
-> peterz@infradead.org; robh@kernel.org; Gangurde, Abhijit
-> <abhijit.gangurde@amd.com>; nathan@kernel.org; Arnd Bergmann
-> <arnd@kernel.org>
-> Subject: [PATCH RESEND 1/2] cdx: don't select CONFIG_GENERIC_MSI_IRQ
->=20
-> From: Arnd Bergmann <arnd@kernel.org>
->=20
-> x86 does not use CONFIG_GENERIC_MSI_IRQ, and trying to enable it anyway
-> results in a build failure:
->=20
-> In file included from include/linux/ssb/ssb.h:10,
->                  from drivers/ssb/pcihost_wrapper.c:18:
-> include/linux/gpio/driver.h:41:33: error: field 'msiinfo' has incomplete =
-type
->    41 |         msi_alloc_info_t        msiinfo;
->       |                                 ^~~~~~~
-> In file included from include/linux/kvm_host.h:19,
->                  from arch/x86/events/intel/core.c:17:
-> include/linux/msi.h:528:33: error: field 'alloc_info' has incomplete type
->   528 |         msi_alloc_info_t        alloc_info;
->=20
-> Change the driver to actually build without this symbol and remove the in=
-correct
-> 'select' statements.
->=20
-> Fixes: e8b18c11731d ("cdx: Fix missing GENERIC_MSI_IRQ on compile test")
-> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+There's a lot of similar things to fix across a lot of architectures
+and I don't have cross-compilers for all of them.  You're going to get
+a lot of errors here, so if you can add this patch to the tree before
+testing on the dozens of builds you're going to try, you'll save
+both of us a lot of time.
+
+From c3b882bf4a14d6fcf6cf8be533bee4251ade8040 Mon Sep 17 00:00:00 2001
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Date: Mon, 18 Aug 2025 08:42:22 -0400
+Subject: [PATCH] fixes
+
+---
+ arch/arc/mm/cache.c                    |  8 ++++----
+ arch/arc/mm/tlb.c                      |  2 +-
+ arch/arm/include/asm/hugetlb.h         |  2 +-
+ arch/arm/mm/copypage-v4mc.c            |  2 +-
+ arch/arm/mm/copypage-v6.c              |  2 +-
+ arch/arm/mm/copypage-xscale.c          |  2 +-
+ arch/arm/mm/dma-mapping.c              |  2 +-
+ arch/arm/mm/fault-armv.c               |  2 +-
+ arch/arm/mm/flush.c                    | 10 +++++-----
+ arch/arm64/include/asm/hugetlb.h       |  6 +++---
+ arch/arm64/include/asm/mte.h           | 16 ++++++++--------
+ arch/arm64/mm/flush.c                  |  8 ++++----
+ arch/csky/abiv1/cacheflush.c           |  6 +++---
+ arch/nios2/mm/cacheflush.c             |  6 +++---
+ arch/openrisc/include/asm/cacheflush.h |  2 +-
+ arch/openrisc/mm/cache.c               |  2 +-
+ arch/parisc/kernel/cache.c             |  6 +++---
+ arch/powerpc/include/asm/cacheflush.h  |  4 ++--
+ arch/powerpc/include/asm/kvm_ppc.h     |  4 ++--
+ arch/powerpc/mm/book3s64/hash_utils.c  |  4 ++--
+ arch/powerpc/mm/pgtable.c              | 12 ++++++------
+ arch/riscv/include/asm/cacheflush.h    |  4 ++--
+ arch/riscv/include/asm/hugetlb.h       |  2 +-
+ arch/riscv/mm/cacheflush.c             |  4 ++--
+ arch/s390/include/asm/hugetlb.h        |  2 +-
+ arch/s390/kernel/uv.c                  | 12 ++++++------
+ arch/s390/mm/gmap.c                    |  2 +-
+ arch/s390/mm/hugetlbpage.c             |  2 +-
+ arch/sh/include/asm/hugetlb.h          |  2 +-
+ arch/sh/mm/cache-sh4.c                 |  2 +-
+ arch/sh/mm/cache-sh7705.c              |  2 +-
+ arch/sh/mm/cache.c                     | 14 +++++++-------
+ arch/sh/mm/kmap.c                      |  2 +-
+ arch/sparc/mm/init_64.c                | 10 +++++-----
+ arch/xtensa/mm/cache.c                 | 12 ++++++------
+ 35 files changed, 90 insertions(+), 90 deletions(-)
+
+diff --git a/arch/arc/mm/cache.c b/arch/arc/mm/cache.c
+index 9106ceac323c..7d2f93dc1e91 100644
+--- a/arch/arc/mm/cache.c
++++ b/arch/arc/mm/cache.c
+@@ -704,7 +704,7 @@ static inline void arc_slc_enable(void)
+ 
+ void flush_dcache_folio(struct folio *folio)
+ {
+-	clear_bit(PG_dc_clean, &folio->flags);
++	clear_bit(PG_dc_clean, &folio->flags.f);
+ 	return;
+ }
+ EXPORT_SYMBOL(flush_dcache_folio);
+@@ -889,8 +889,8 @@ void copy_user_highpage(struct page *to, struct page *from,
+ 
+ 	copy_page(kto, kfrom);
+ 
+-	clear_bit(PG_dc_clean, &dst->flags);
+-	clear_bit(PG_dc_clean, &src->flags);
++	clear_bit(PG_dc_clean, &dst->flags.f);
++	clear_bit(PG_dc_clean, &src->flags.f);
+ 
+ 	kunmap_atomic(kto);
+ 	kunmap_atomic(kfrom);
+@@ -900,7 +900,7 @@ void clear_user_page(void *to, unsigned long u_vaddr, struct page *page)
+ {
+ 	struct folio *folio = page_folio(page);
+ 	clear_page(to);
+-	clear_bit(PG_dc_clean, &folio->flags);
++	clear_bit(PG_dc_clean, &folio->flags.f);
+ }
+ EXPORT_SYMBOL(clear_user_page);
+ 
+diff --git a/arch/arc/mm/tlb.c b/arch/arc/mm/tlb.c
+index cae4a7aae0ed..ed6915ba76ec 100644
+--- a/arch/arc/mm/tlb.c
++++ b/arch/arc/mm/tlb.c
+@@ -488,7 +488,7 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 	 */
+ 	if (vma->vm_flags & VM_EXEC) {
+ 		struct folio *folio = page_folio(page);
+-		int dirty = !test_and_set_bit(PG_dc_clean, &folio->flags);
++		int dirty = !test_and_set_bit(PG_dc_clean, &folio->flags.f);
+ 		if (dirty) {
+ 			unsigned long offset = offset_in_folio(folio, paddr);
+ 			nr = folio_nr_pages(folio);
+diff --git a/arch/arm/include/asm/hugetlb.h b/arch/arm/include/asm/hugetlb.h
+index b766c4b373f6..700055b1ccb3 100644
+--- a/arch/arm/include/asm/hugetlb.h
++++ b/arch/arm/include/asm/hugetlb.h
+@@ -17,7 +17,7 @@
+ 
+ static inline void arch_clear_hugetlb_flags(struct folio *folio)
+ {
+-	clear_bit(PG_dcache_clean, &folio->flags);
++	clear_bit(PG_dcache_clean, &folio->flags.f);
+ }
+ #define arch_clear_hugetlb_flags arch_clear_hugetlb_flags
+ 
+diff --git a/arch/arm/mm/copypage-v4mc.c b/arch/arm/mm/copypage-v4mc.c
+index 7ddd82b9fe8b..ed843bb22020 100644
+--- a/arch/arm/mm/copypage-v4mc.c
++++ b/arch/arm/mm/copypage-v4mc.c
+@@ -67,7 +67,7 @@ void v4_mc_copy_user_highpage(struct page *to, struct page *from,
+ 	struct folio *src = page_folio(from);
+ 	void *kto = kmap_atomic(to);
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &src->flags.f))
+ 		__flush_dcache_folio(folio_flush_mapping(src), src);
+ 
+ 	raw_spin_lock(&minicache_lock);
+diff --git a/arch/arm/mm/copypage-v6.c b/arch/arm/mm/copypage-v6.c
+index a1a71f36d850..0710dba5c0bf 100644
+--- a/arch/arm/mm/copypage-v6.c
++++ b/arch/arm/mm/copypage-v6.c
+@@ -73,7 +73,7 @@ static void v6_copy_user_highpage_aliasing(struct page *to,
+ 	unsigned int offset = CACHE_COLOUR(vaddr);
+ 	unsigned long kfrom, kto;
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &src->flags.f))
+ 		__flush_dcache_folio(folio_flush_mapping(src), src);
+ 
+ 	/* FIXME: not highmem safe */
+diff --git a/arch/arm/mm/copypage-xscale.c b/arch/arm/mm/copypage-xscale.c
+index f1e29d3e8193..e16af68d709f 100644
+--- a/arch/arm/mm/copypage-xscale.c
++++ b/arch/arm/mm/copypage-xscale.c
+@@ -87,7 +87,7 @@ void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
+ 	struct folio *src = page_folio(from);
+ 	void *kto = kmap_atomic(to);
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &src->flags.f))
+ 		__flush_dcache_folio(folio_flush_mapping(src), src);
+ 
+ 	raw_spin_lock(&minicache_lock);
+diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+index 88c2d68a69c9..08641a936394 100644
+--- a/arch/arm/mm/dma-mapping.c
++++ b/arch/arm/mm/dma-mapping.c
+@@ -718,7 +718,7 @@ static void __dma_page_dev_to_cpu(struct page *page, unsigned long off,
+ 			if (size < sz)
+ 				break;
+ 			if (!offset)
+-				set_bit(PG_dcache_clean, &folio->flags);
++				set_bit(PG_dcache_clean, &folio->flags.f);
+ 			offset = 0;
+ 			size -= sz;
+ 			if (!size)
+diff --git a/arch/arm/mm/fault-armv.c b/arch/arm/mm/fault-armv.c
+index 39fd5df73317..91e488767783 100644
+--- a/arch/arm/mm/fault-armv.c
++++ b/arch/arm/mm/fault-armv.c
+@@ -203,7 +203,7 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 
+ 	folio = page_folio(pfn_to_page(pfn));
+ 	mapping = folio_flush_mapping(folio);
+-	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &folio->flags.f))
+ 		__flush_dcache_folio(mapping, folio);
+ 	if (mapping) {
+ 		if (cache_is_vivt())
+diff --git a/arch/arm/mm/flush.c b/arch/arm/mm/flush.c
+index 5219158d54cf..19470d938b23 100644
+--- a/arch/arm/mm/flush.c
++++ b/arch/arm/mm/flush.c
+@@ -304,7 +304,7 @@ void __sync_icache_dcache(pte_t pteval)
+ 	else
+ 		mapping = NULL;
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &folio->flags.f))
+ 		__flush_dcache_folio(mapping, folio);
+ 
+ 	if (pte_exec(pteval))
+@@ -343,8 +343,8 @@ void flush_dcache_folio(struct folio *folio)
+ 		return;
+ 
+ 	if (!cache_ops_need_broadcast() && cache_is_vipt_nonaliasing()) {
+-		if (test_bit(PG_dcache_clean, &folio->flags))
+-			clear_bit(PG_dcache_clean, &folio->flags);
++		if (test_bit(PG_dcache_clean, &folio->flags.f))
++			clear_bit(PG_dcache_clean, &folio->flags.f);
+ 		return;
+ 	}
+ 
+@@ -352,14 +352,14 @@ void flush_dcache_folio(struct folio *folio)
+ 
+ 	if (!cache_ops_need_broadcast() &&
+ 	    mapping && !folio_mapped(folio))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	else {
+ 		__flush_dcache_folio(mapping, folio);
+ 		if (mapping && cache_is_vivt())
+ 			__flush_dcache_aliases(mapping, folio);
+ 		else if (mapping)
+ 			__flush_icache_all();
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ EXPORT_SYMBOL(flush_dcache_folio);
+diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
+index 2a8155c4a882..44c1f757bfcf 100644
+--- a/arch/arm64/include/asm/hugetlb.h
++++ b/arch/arm64/include/asm/hugetlb.h
+@@ -21,12 +21,12 @@ extern bool arch_hugetlb_migration_supported(struct hstate *h);
+ 
+ static inline void arch_clear_hugetlb_flags(struct folio *folio)
+ {
+-	clear_bit(PG_dcache_clean, &folio->flags);
++	clear_bit(PG_dcache_clean, &folio->flags.f);
+ 
+ #ifdef CONFIG_ARM64_MTE
+ 	if (system_supports_mte()) {
+-		clear_bit(PG_mte_tagged, &folio->flags);
+-		clear_bit(PG_mte_lock, &folio->flags);
++		clear_bit(PG_mte_tagged, &folio->flags.f);
++		clear_bit(PG_mte_lock, &folio->flags.f);
+ 	}
+ #endif
+ }
+diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
+index 6567df8ec8ca..3b5069f4683d 100644
+--- a/arch/arm64/include/asm/mte.h
++++ b/arch/arm64/include/asm/mte.h
+@@ -48,12 +48,12 @@ static inline void set_page_mte_tagged(struct page *page)
+ 	 * before the page flags update.
+ 	 */
+ 	smp_wmb();
+-	set_bit(PG_mte_tagged, &page->flags);
++	set_bit(PG_mte_tagged, &page->flags.f);
+ }
+ 
+ static inline bool page_mte_tagged(struct page *page)
+ {
+-	bool ret = test_bit(PG_mte_tagged, &page->flags);
++	bool ret = test_bit(PG_mte_tagged, &page->flags.f);
+ 
+ 	VM_WARN_ON_ONCE(folio_test_hugetlb(page_folio(page)));
+ 
+@@ -82,7 +82,7 @@ static inline bool try_page_mte_tagging(struct page *page)
+ {
+ 	VM_WARN_ON_ONCE(folio_test_hugetlb(page_folio(page)));
+ 
+-	if (!test_and_set_bit(PG_mte_lock, &page->flags))
++	if (!test_and_set_bit(PG_mte_lock, &page->flags.f))
+ 		return true;
+ 
+ 	/*
+@@ -90,7 +90,7 @@ static inline bool try_page_mte_tagging(struct page *page)
+ 	 * already. Check if the PG_mte_tagged flag has been set or wait
+ 	 * otherwise.
+ 	 */
+-	smp_cond_load_acquire(&page->flags, VAL & (1UL << PG_mte_tagged));
++	smp_cond_load_acquire(&page->flags.f, VAL & (1UL << PG_mte_tagged));
+ 
+ 	return false;
+ }
+@@ -173,13 +173,13 @@ static inline void folio_set_hugetlb_mte_tagged(struct folio *folio)
+ 	 * before the folio flags update.
+ 	 */
+ 	smp_wmb();
+-	set_bit(PG_mte_tagged, &folio->flags);
++	set_bit(PG_mte_tagged, &folio->flags.f);
+ 
+ }
+ 
+ static inline bool folio_test_hugetlb_mte_tagged(struct folio *folio)
+ {
+-	bool ret = test_bit(PG_mte_tagged, &folio->flags);
++	bool ret = test_bit(PG_mte_tagged, &folio->flags.f);
+ 
+ 	VM_WARN_ON_ONCE(!folio_test_hugetlb(folio));
+ 
+@@ -196,7 +196,7 @@ static inline bool folio_try_hugetlb_mte_tagging(struct folio *folio)
+ {
+ 	VM_WARN_ON_ONCE(!folio_test_hugetlb(folio));
+ 
+-	if (!test_and_set_bit(PG_mte_lock, &folio->flags))
++	if (!test_and_set_bit(PG_mte_lock, &folio->flags.f))
+ 		return true;
+ 
+ 	/*
+@@ -204,7 +204,7 @@ static inline bool folio_try_hugetlb_mte_tagging(struct folio *folio)
+ 	 * already. Check if the PG_mte_tagged flag has been set or wait
+ 	 * otherwise.
+ 	 */
+-	smp_cond_load_acquire(&folio->flags, VAL & (1UL << PG_mte_tagged));
++	smp_cond_load_acquire(&folio->flags.f, VAL & (1UL << PG_mte_tagged));
+ 
+ 	return false;
+ }
+diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
+index 013eead9b695..fbf08b543c3f 100644
+--- a/arch/arm64/mm/flush.c
++++ b/arch/arm64/mm/flush.c
+@@ -53,11 +53,11 @@ void __sync_icache_dcache(pte_t pte)
+ {
+ 	struct folio *folio = page_folio(pte_page(pte));
+ 
+-	if (!test_bit(PG_dcache_clean, &folio->flags)) {
++	if (!test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 		sync_icache_aliases((unsigned long)folio_address(folio),
+ 				    (unsigned long)folio_address(folio) +
+ 					    folio_size(folio));
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+@@ -69,8 +69,8 @@ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+  */
+ void flush_dcache_folio(struct folio *folio)
+ {
+-	if (test_bit(PG_dcache_clean, &folio->flags))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++	if (test_bit(PG_dcache_clean, &folio->flags.f))
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ }
+ EXPORT_SYMBOL(flush_dcache_folio);
+ 
+diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
+index 171e8fb32285..4bc0aad3cf8a 100644
+--- a/arch/csky/abiv1/cacheflush.c
++++ b/arch/csky/abiv1/cacheflush.c
+@@ -25,12 +25,12 @@ void flush_dcache_folio(struct folio *folio)
+ 	mapping = folio_flush_mapping(folio);
+ 
+ 	if (mapping && !folio_mapped(folio))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	else {
+ 		dcache_wbinv_all();
+ 		if (mapping)
+ 			icache_inv_all();
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ EXPORT_SYMBOL(flush_dcache_folio);
+@@ -56,7 +56,7 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 		return;
+ 
+ 	folio = page_folio(pfn_to_page(pfn));
+-	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &folio->flags.f))
+ 		dcache_wbinv_all();
+ 
+ 	if (folio_flush_mapping(folio)) {
+diff --git a/arch/nios2/mm/cacheflush.c b/arch/nios2/mm/cacheflush.c
+index 0ee9c5f02e08..8321182eb927 100644
+--- a/arch/nios2/mm/cacheflush.c
++++ b/arch/nios2/mm/cacheflush.c
+@@ -187,7 +187,7 @@ void flush_dcache_folio(struct folio *folio)
+ 
+ 	/* Flush this page if there are aliases. */
+ 	if (mapping && !mapping_mapped(mapping)) {
+-		clear_bit(PG_dcache_clean, &folio->flags);
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	} else {
+ 		__flush_dcache_folio(folio);
+ 		if (mapping) {
+@@ -195,7 +195,7 @@ void flush_dcache_folio(struct folio *folio)
+ 			flush_aliases(mapping, folio);
+ 			flush_icache_range(start, start + folio_size(folio));
+ 		}
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ EXPORT_SYMBOL(flush_dcache_folio);
+@@ -227,7 +227,7 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 		return;
+ 
+ 	folio = page_folio(pfn_to_page(pfn));
+-	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
++	if (!test_and_set_bit(PG_dcache_clean, &folio->flags.f))
+ 		__flush_dcache_folio(folio);
+ 
+ 	mapping = folio_flush_mapping(folio);
+diff --git a/arch/openrisc/include/asm/cacheflush.h b/arch/openrisc/include/asm/cacheflush.h
+index 0e60af486ec1..cd8f971c0fec 100644
+--- a/arch/openrisc/include/asm/cacheflush.h
++++ b/arch/openrisc/include/asm/cacheflush.h
+@@ -75,7 +75,7 @@ static inline void sync_icache_dcache(struct page *page)
+ 
+ static inline void flush_dcache_folio(struct folio *folio)
+ {
+-	clear_bit(PG_dc_clean, &folio->flags);
++	clear_bit(PG_dc_clean, &folio->flags.f);
+ }
+ #define flush_dcache_folio flush_dcache_folio
+ 
+diff --git a/arch/openrisc/mm/cache.c b/arch/openrisc/mm/cache.c
+index 0f265b8e73ec..f33df46dae4e 100644
+--- a/arch/openrisc/mm/cache.c
++++ b/arch/openrisc/mm/cache.c
+@@ -83,7 +83,7 @@ void update_cache(struct vm_area_struct *vma, unsigned long address,
+ {
+ 	unsigned long pfn = pte_val(*pte) >> PAGE_SHIFT;
+ 	struct folio *folio = page_folio(pfn_to_page(pfn));
+-	int dirty = !test_and_set_bit(PG_dc_clean, &folio->flags);
++	int dirty = !test_and_set_bit(PG_dc_clean, &folio->flags.f);
+ 
+ 	/*
+ 	 * Since icaches do not snoop for updated data on OpenRISC, we
+diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
+index 37ca484cc495..4c5240d3a3c7 100644
+--- a/arch/parisc/kernel/cache.c
++++ b/arch/parisc/kernel/cache.c
+@@ -122,10 +122,10 @@ void __update_cache(pte_t pte)
+ 	pfn = folio_pfn(folio);
+ 	nr = folio_nr_pages(folio);
+ 	if (folio_flush_mapping(folio) &&
+-	    test_bit(PG_dcache_dirty, &folio->flags)) {
++	    test_bit(PG_dcache_dirty, &folio->flags.f)) {
+ 		while (nr--)
+ 			flush_kernel_dcache_page_addr(pfn_va(pfn + nr));
+-		clear_bit(PG_dcache_dirty, &folio->flags);
++		clear_bit(PG_dcache_dirty, &folio->flags.f);
+ 	} else if (parisc_requires_coherency())
+ 		while (nr--)
+ 			flush_kernel_dcache_page_addr(pfn_va(pfn + nr));
+@@ -481,7 +481,7 @@ void flush_dcache_folio(struct folio *folio)
+ 	pgoff_t pgoff;
+ 
+ 	if (mapping && !mapping_mapped(mapping)) {
+-		set_bit(PG_dcache_dirty, &folio->flags);
++		set_bit(PG_dcache_dirty, &folio->flags.f);
+ 		return;
+ 	}
+ 
+diff --git a/arch/powerpc/include/asm/cacheflush.h b/arch/powerpc/include/asm/cacheflush.h
+index f2656774aaa9..1fea42928f64 100644
+--- a/arch/powerpc/include/asm/cacheflush.h
++++ b/arch/powerpc/include/asm/cacheflush.h
+@@ -40,8 +40,8 @@ static inline void flush_dcache_folio(struct folio *folio)
+ 	if (cpu_has_feature(CPU_FTR_COHERENT_ICACHE))
+ 		return;
+ 	/* avoid an atomic op if possible */
+-	if (test_bit(PG_dcache_clean, &folio->flags))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++	if (test_bit(PG_dcache_clean, &folio->flags.f))
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ }
+ #define flush_dcache_folio flush_dcache_folio
+ 
+diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/asm/kvm_ppc.h
+index ca3829d47ab7..0953f2daa466 100644
+--- a/arch/powerpc/include/asm/kvm_ppc.h
++++ b/arch/powerpc/include/asm/kvm_ppc.h
+@@ -939,9 +939,9 @@ static inline void kvmppc_mmu_flush_icache(kvm_pfn_t pfn)
+ 
+ 	/* Clear i-cache for new pages */
+ 	folio = page_folio(pfn_to_page(pfn));
+-	if (!test_bit(PG_dcache_clean, &folio->flags)) {
++	if (!test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 		flush_dcache_icache_folio(folio);
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ 
+diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
+index 4693c464fc5a..3aee3af614af 100644
+--- a/arch/powerpc/mm/book3s64/hash_utils.c
++++ b/arch/powerpc/mm/book3s64/hash_utils.c
+@@ -1562,11 +1562,11 @@ unsigned int hash_page_do_lazy_icache(unsigned int pp, pte_t pte, int trap)
+ 	folio = page_folio(pte_page(pte));
+ 
+ 	/* page is dirty */
+-	if (!test_bit(PG_dcache_clean, &folio->flags) &&
++	if (!test_bit(PG_dcache_clean, &folio->flags.f) &&
+ 	    !folio_test_reserved(folio)) {
+ 		if (trap == INTERRUPT_INST_STORAGE) {
+ 			flush_dcache_icache_folio(folio);
+-			set_bit(PG_dcache_clean, &folio->flags);
++			set_bit(PG_dcache_clean, &folio->flags.f);
+ 		} else
+ 			pp |= HPTE_R_N;
+ 	}
+diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
+index dfaa9fd86f7e..56d7e8960e77 100644
+--- a/arch/powerpc/mm/pgtable.c
++++ b/arch/powerpc/mm/pgtable.c
+@@ -87,9 +87,9 @@ static pte_t set_pte_filter_hash(pte_t pte, unsigned long addr)
+ 		struct folio *folio = maybe_pte_to_folio(pte);
+ 		if (!folio)
+ 			return pte;
+-		if (!test_bit(PG_dcache_clean, &folio->flags)) {
++		if (!test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 			flush_dcache_icache_folio(folio);
+-			set_bit(PG_dcache_clean, &folio->flags);
++			set_bit(PG_dcache_clean, &folio->flags.f);
+ 		}
+ 	}
+ 	return pte;
+@@ -127,13 +127,13 @@ static inline pte_t set_pte_filter(pte_t pte, unsigned long addr)
+ 		return pte;
+ 
+ 	/* If the page clean, we move on */
+-	if (test_bit(PG_dcache_clean, &folio->flags))
++	if (test_bit(PG_dcache_clean, &folio->flags.f))
+ 		return pte;
+ 
+ 	/* If it's an exec fault, we flush the cache and make it clean */
+ 	if (is_exec_fault()) {
+ 		flush_dcache_icache_folio(folio);
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 		return pte;
+ 	}
+ 
+@@ -175,12 +175,12 @@ static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+ 		goto bail;
+ 
+ 	/* If the page is already clean, we move on */
+-	if (test_bit(PG_dcache_clean, &folio->flags))
++	if (test_bit(PG_dcache_clean, &folio->flags.f))
+ 		goto bail;
+ 
+ 	/* Clean the page and set PG_dcache_clean */
+ 	flush_dcache_icache_folio(folio);
+-	set_bit(PG_dcache_clean, &folio->flags);
++	set_bit(PG_dcache_clean, &folio->flags.f);
+ 
+  bail:
+ 	return pte_mkexec(pte);
+diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+index 6086b38d5427..0092513c3376 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -23,8 +23,8 @@ static inline void local_flush_icache_range(unsigned long start,
+ 
+ static inline void flush_dcache_folio(struct folio *folio)
+ {
+-	if (test_bit(PG_dcache_clean, &folio->flags))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++	if (test_bit(PG_dcache_clean, &folio->flags.f))
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ }
+ #define flush_dcache_folio flush_dcache_folio
+ #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+diff --git a/arch/riscv/include/asm/hugetlb.h b/arch/riscv/include/asm/hugetlb.h
+index 446126497768..0872d43fc0c0 100644
+--- a/arch/riscv/include/asm/hugetlb.h
++++ b/arch/riscv/include/asm/hugetlb.h
+@@ -7,7 +7,7 @@
+ 
+ static inline void arch_clear_hugetlb_flags(struct folio *folio)
+ {
+-	clear_bit(PG_dcache_clean, &folio->flags);
++	clear_bit(PG_dcache_clean, &folio->flags.f);
+ }
+ #define arch_clear_hugetlb_flags arch_clear_hugetlb_flags
+ 
+diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+index 4ca5aafce22e..d83a612464f6 100644
+--- a/arch/riscv/mm/cacheflush.c
++++ b/arch/riscv/mm/cacheflush.c
+@@ -101,9 +101,9 @@ void flush_icache_pte(struct mm_struct *mm, pte_t pte)
+ {
+ 	struct folio *folio = page_folio(pte_page(pte));
+ 
+-	if (!test_bit(PG_dcache_clean, &folio->flags)) {
++	if (!test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 		flush_icache_mm(mm, false);
+-		set_bit(PG_dcache_clean, &folio->flags);
++		set_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ #endif /* CONFIG_MMU */
+diff --git a/arch/s390/include/asm/hugetlb.h b/arch/s390/include/asm/hugetlb.h
+index 931fcc413598..69131736daaa 100644
+--- a/arch/s390/include/asm/hugetlb.h
++++ b/arch/s390/include/asm/hugetlb.h
+@@ -39,7 +39,7 @@ static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
+ 
+ static inline void arch_clear_hugetlb_flags(struct folio *folio)
+ {
+-	clear_bit(PG_arch_1, &folio->flags);
++	clear_bit(PG_arch_1, &folio->flags.f);
+ }
+ #define arch_clear_hugetlb_flags arch_clear_hugetlb_flags
+ 
+diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
+index 47f574cd1728..93b2a01bae40 100644
+--- a/arch/s390/kernel/uv.c
++++ b/arch/s390/kernel/uv.c
+@@ -144,7 +144,7 @@ int uv_destroy_folio(struct folio *folio)
+ 	folio_get(folio);
+ 	rc = uv_destroy(folio_to_phys(folio));
+ 	if (!rc)
+-		clear_bit(PG_arch_1, &folio->flags);
++		clear_bit(PG_arch_1, &folio->flags.f);
+ 	folio_put(folio);
+ 	return rc;
+ }
+@@ -193,7 +193,7 @@ int uv_convert_from_secure_folio(struct folio *folio)
+ 	folio_get(folio);
+ 	rc = uv_convert_from_secure(folio_to_phys(folio));
+ 	if (!rc)
+-		clear_bit(PG_arch_1, &folio->flags);
++		clear_bit(PG_arch_1, &folio->flags.f);
+ 	folio_put(folio);
+ 	return rc;
+ }
+@@ -289,7 +289,7 @@ static int __make_folio_secure(struct folio *folio, struct uv_cb_header *uvcb)
+ 	expected = expected_folio_refs(folio) + 1;
+ 	if (!folio_ref_freeze(folio, expected))
+ 		return -EBUSY;
+-	set_bit(PG_arch_1, &folio->flags);
++	set_bit(PG_arch_1, &folio->flags.f);
+ 	/*
+ 	 * If the UVC does not succeed or fail immediately, we don't want to
+ 	 * loop for long, or we might get stall notifications.
+@@ -483,18 +483,18 @@ int arch_make_folio_accessible(struct folio *folio)
+ 	 *    convert_to_secure.
+ 	 * As secure pages are never large folios, both variants can co-exists.
+ 	 */
+-	if (!test_bit(PG_arch_1, &folio->flags))
++	if (!test_bit(PG_arch_1, &folio->flags.f))
+ 		return 0;
+ 
+ 	rc = uv_pin_shared(folio_to_phys(folio));
+ 	if (!rc) {
+-		clear_bit(PG_arch_1, &folio->flags);
++		clear_bit(PG_arch_1, &folio->flags.f);
+ 		return 0;
+ 	}
+ 
+ 	rc = uv_convert_from_secure(folio_to_phys(folio));
+ 	if (!rc) {
+-		clear_bit(PG_arch_1, &folio->flags);
++		clear_bit(PG_arch_1, &folio->flags.f);
+ 		return 0;
+ 	}
+ 
+diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+index c7defe4ed1f6..8ff6bba107e8 100644
+--- a/arch/s390/mm/gmap.c
++++ b/arch/s390/mm/gmap.c
+@@ -2272,7 +2272,7 @@ static int __s390_enable_skey_hugetlb(pte_t *pte, unsigned long addr,
+ 	start = pmd_val(*pmd) & HPAGE_MASK;
+ 	end = start + HPAGE_SIZE;
+ 	__storage_key_init_range(start, end);
+-	set_bit(PG_arch_1, &folio->flags);
++	set_bit(PG_arch_1, &folio->flags.f);
+ 	cond_resched();
+ 	return 0;
+ }
+diff --git a/arch/s390/mm/hugetlbpage.c b/arch/s390/mm/hugetlbpage.c
+index e88c02c9e642..72e8fa136af5 100644
+--- a/arch/s390/mm/hugetlbpage.c
++++ b/arch/s390/mm/hugetlbpage.c
+@@ -155,7 +155,7 @@ static void clear_huge_pte_skeys(struct mm_struct *mm, unsigned long rste)
+ 		paddr = rste & PMD_MASK;
+ 	}
+ 
+-	if (!test_and_set_bit(PG_arch_1, &folio->flags))
++	if (!test_and_set_bit(PG_arch_1, &folio->flags.f))
+ 		__storage_key_init_range(paddr, paddr + size);
+ }
+ 
+diff --git a/arch/sh/include/asm/hugetlb.h b/arch/sh/include/asm/hugetlb.h
+index 4a92e6e4d627..974512f359f0 100644
+--- a/arch/sh/include/asm/hugetlb.h
++++ b/arch/sh/include/asm/hugetlb.h
+@@ -14,7 +14,7 @@ static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+ 
+ static inline void arch_clear_hugetlb_flags(struct folio *folio)
+ {
+-	clear_bit(PG_dcache_clean, &folio->flags);
++	clear_bit(PG_dcache_clean, &folio->flags.f);
+ }
+ #define arch_clear_hugetlb_flags arch_clear_hugetlb_flags
+ 
+diff --git a/arch/sh/mm/cache-sh4.c b/arch/sh/mm/cache-sh4.c
+index 46393b00137e..83fb34b39ca7 100644
+--- a/arch/sh/mm/cache-sh4.c
++++ b/arch/sh/mm/cache-sh4.c
+@@ -114,7 +114,7 @@ static void sh4_flush_dcache_folio(void *arg)
+ 	struct address_space *mapping = folio_flush_mapping(folio);
+ 
+ 	if (mapping && !mapping_mapped(mapping))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	else
+ #endif
+ 	{
+diff --git a/arch/sh/mm/cache-sh7705.c b/arch/sh/mm/cache-sh7705.c
+index b509a407588f..71f8be9fc8e0 100644
+--- a/arch/sh/mm/cache-sh7705.c
++++ b/arch/sh/mm/cache-sh7705.c
+@@ -138,7 +138,7 @@ static void sh7705_flush_dcache_folio(void *arg)
+ 	struct address_space *mapping = folio_flush_mapping(folio);
+ 
+ 	if (mapping && !mapping_mapped(mapping))
+-		clear_bit(PG_dcache_clean, &folio->flags);
++		clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	else {
+ 		unsigned long pfn = folio_pfn(folio);
+ 		unsigned int i, nr = folio_nr_pages(folio);
+diff --git a/arch/sh/mm/cache.c b/arch/sh/mm/cache.c
+index 6ebdeaff3021..c3f028bed049 100644
+--- a/arch/sh/mm/cache.c
++++ b/arch/sh/mm/cache.c
+@@ -64,14 +64,14 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
+ 	struct folio *folio = page_folio(page);
+ 
+ 	if (boot_cpu_data.dcache.n_aliases && folio_mapped(folio) &&
+-	    test_bit(PG_dcache_clean, &folio->flags)) {
++	    test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 		void *vto = kmap_coherent(page, vaddr) + (vaddr & ~PAGE_MASK);
+ 		memcpy(vto, src, len);
+ 		kunmap_coherent(vto);
+ 	} else {
+ 		memcpy(dst, src, len);
+ 		if (boot_cpu_data.dcache.n_aliases)
+-			clear_bit(PG_dcache_clean, &folio->flags);
++			clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ 
+ 	if (vma->vm_flags & VM_EXEC)
+@@ -85,14 +85,14 @@ void copy_from_user_page(struct vm_area_struct *vma, struct page *page,
+ 	struct folio *folio = page_folio(page);
+ 
+ 	if (boot_cpu_data.dcache.n_aliases && folio_mapped(folio) &&
+-	    test_bit(PG_dcache_clean, &folio->flags)) {
++	    test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 		void *vfrom = kmap_coherent(page, vaddr) + (vaddr & ~PAGE_MASK);
+ 		memcpy(dst, vfrom, len);
+ 		kunmap_coherent(vfrom);
+ 	} else {
+ 		memcpy(dst, src, len);
+ 		if (boot_cpu_data.dcache.n_aliases)
+-			clear_bit(PG_dcache_clean, &folio->flags);
++			clear_bit(PG_dcache_clean, &folio->flags.f);
+ 	}
+ }
+ 
+@@ -105,7 +105,7 @@ void copy_user_highpage(struct page *to, struct page *from,
+ 	vto = kmap_atomic(to);
+ 
+ 	if (boot_cpu_data.dcache.n_aliases && folio_mapped(src) &&
+-	    test_bit(PG_dcache_clean, &src->flags)) {
++	    test_bit(PG_dcache_clean, &src->flags.f)) {
+ 		vfrom = kmap_coherent(from, vaddr);
+ 		copy_page(vto, vfrom);
+ 		kunmap_coherent(vfrom);
+@@ -148,7 +148,7 @@ void __update_cache(struct vm_area_struct *vma,
+ 
+ 	if (pfn_valid(pfn)) {
+ 		struct folio *folio = page_folio(pfn_to_page(pfn));
+-		int dirty = !test_and_set_bit(PG_dcache_clean, &folio->flags);
++		int dirty = !test_and_set_bit(PG_dcache_clean, &folio->flags.f);
+ 		if (dirty)
+ 			__flush_purge_region(folio_address(folio),
+ 						folio_size(folio));
+@@ -162,7 +162,7 @@ void __flush_anon_page(struct page *page, unsigned long vmaddr)
+ 
+ 	if (pages_do_alias(addr, vmaddr)) {
+ 		if (boot_cpu_data.dcache.n_aliases && folio_mapped(folio) &&
+-		    test_bit(PG_dcache_clean, &folio->flags)) {
++		    test_bit(PG_dcache_clean, &folio->flags.f)) {
+ 			void *kaddr;
+ 
+ 			kaddr = kmap_coherent(page, vmaddr);
+diff --git a/arch/sh/mm/kmap.c b/arch/sh/mm/kmap.c
+index fa50e8f6e7a9..c9f32d5a54b8 100644
+--- a/arch/sh/mm/kmap.c
++++ b/arch/sh/mm/kmap.c
+@@ -31,7 +31,7 @@ void *kmap_coherent(struct page *page, unsigned long addr)
+ 	enum fixed_addresses idx;
+ 	unsigned long vaddr;
+ 
+-	BUG_ON(!test_bit(PG_dcache_clean, &folio->flags));
++	BUG_ON(!test_bit(PG_dcache_clean, &folio->flags.f));
+ 
+ 	preempt_disable();
+ 	pagefault_disable();
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index 7ed58bf3aaca..df9f7c444c39 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -224,7 +224,7 @@ inline void flush_dcache_folio_impl(struct folio *folio)
+ 	((1UL<<ilog2(roundup_pow_of_two(NR_CPUS)))-1UL)
+ 
+ #define dcache_dirty_cpu(folio) \
+-	(((folio)->flags >> PG_dcache_cpu_shift) & PG_dcache_cpu_mask)
++	(((folio)->flags.f >> PG_dcache_cpu_shift) & PG_dcache_cpu_mask)
+ 
+ static inline void set_dcache_dirty(struct folio *folio, int this_cpu)
+ {
+@@ -243,7 +243,7 @@ static inline void set_dcache_dirty(struct folio *folio, int this_cpu)
+ 			     "bne,pn	%%xcc, 1b\n\t"
+ 			     " nop"
+ 			     : /* no outputs */
+-			     : "r" (mask), "r" (non_cpu_bits), "r" (&folio->flags)
++			     : "r" (mask), "r" (non_cpu_bits), "r" (&folio->flags.f)
+ 			     : "g1", "g7");
+ }
+ 
+@@ -265,7 +265,7 @@ static inline void clear_dcache_dirty_cpu(struct folio *folio, unsigned long cpu
+ 			     " nop\n"
+ 			     "2:"
+ 			     : /* no outputs */
+-			     : "r" (cpu), "r" (mask), "r" (&folio->flags),
++			     : "r" (cpu), "r" (mask), "r" (&folio->flags.f),
+ 			       "i" (PG_dcache_cpu_mask),
+ 			       "i" (PG_dcache_cpu_shift)
+ 			     : "g1", "g7");
+@@ -292,7 +292,7 @@ static void flush_dcache(unsigned long pfn)
+ 		struct folio *folio = page_folio(page);
+ 		unsigned long pg_flags;
+ 
+-		pg_flags = folio->flags;
++		pg_flags = folio->flags.f;
+ 		if (pg_flags & (1UL << PG_dcache_dirty)) {
+ 			int cpu = ((pg_flags >> PG_dcache_cpu_shift) &
+ 				   PG_dcache_cpu_mask);
+@@ -480,7 +480,7 @@ void flush_dcache_folio(struct folio *folio)
+ 
+ 	mapping = folio_flush_mapping(folio);
+ 	if (mapping && !mapping_mapped(mapping)) {
+-		bool dirty = test_bit(PG_dcache_dirty, &folio->flags);
++		bool dirty = test_bit(PG_dcache_dirty, &folio->flags.f);
+ 		if (dirty) {
+ 			int dirty_cpu = dcache_dirty_cpu(folio);
+ 
+diff --git a/arch/xtensa/mm/cache.c b/arch/xtensa/mm/cache.c
+index 23be0e7516ce..5354df52d61f 100644
+--- a/arch/xtensa/mm/cache.c
++++ b/arch/xtensa/mm/cache.c
+@@ -134,8 +134,8 @@ void flush_dcache_folio(struct folio *folio)
+ 	 */
+ 
+ 	if (mapping && !mapping_mapped(mapping)) {
+-		if (!test_bit(PG_arch_1, &folio->flags))
+-			set_bit(PG_arch_1, &folio->flags);
++		if (!test_bit(PG_arch_1, &folio->flags.f))
++			set_bit(PG_arch_1, &folio->flags.f);
+ 		return;
+ 
+ 	} else {
+@@ -232,7 +232,7 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 
+ #if (DCACHE_WAY_SIZE > PAGE_SIZE)
+ 
+-	if (!folio_test_reserved(folio) && test_bit(PG_arch_1, &folio->flags)) {
++	if (!folio_test_reserved(folio) && test_bit(PG_arch_1, &folio->flags.f)) {
+ 		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
+ 		unsigned long tmp;
+ 
+@@ -247,10 +247,10 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 		}
+ 		preempt_enable();
+ 
+-		clear_bit(PG_arch_1, &folio->flags);
++		clear_bit(PG_arch_1, &folio->flags.f);
+ 	}
+ #else
+-	if (!folio_test_reserved(folio) && !test_bit(PG_arch_1, &folio->flags)
++	if (!folio_test_reserved(folio) && !test_bit(PG_arch_1, &folio->flags.f)
+ 	    && (vma->vm_flags & VM_EXEC) != 0) {
+ 		for (i = 0; i < nr; i++) {
+ 			void *paddr = kmap_local_folio(folio, i * PAGE_SIZE);
+@@ -258,7 +258,7 @@ void update_mmu_cache_range(struct vm_fault *vmf, struct vm_area_struct *vma,
+ 			__invalidate_icache_page((unsigned long)paddr);
+ 			kunmap_local(paddr);
+ 		}
+-		set_bit(PG_arch_1, &folio->flags);
++		set_bit(PG_arch_1, &folio->flags.f);
+ 	}
+ #endif
+ }
+-- 
+2.47.2
+
