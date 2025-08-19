@@ -1,79 +1,67 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FCF7262F;
-	Tue, 19 Aug 2025 13:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B30123AE9A;
+	Tue, 19 Aug 2025 13:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755610749; cv=none; b=hU6LCrsevHh7MGkF2+NUCnAWt9wrpMYNAfyujTUVsJXf4lz4WvIbNeRqcSkwsZypEt8nE1TvUCywro2MOA5nOnOXydy9To/dxMBdiY6GEzTq8Il1HevlbwQWFKlTojUfvu12qVDkN8JQ3dlEvZZT5DyD0QWFPIe7LV6nzE1cN7g=
+	t=1755611012; cv=none; b=sutuKBtwEjDwanr+FZQidIZPgUpl9GMG0i3V5hdq1ALMpW5As/D/VdqrldT+74wprlVk/lk84gtlEdq9GdhWLfJbsA3UgDrGFOYze7Nk1+YXdYa4aUl/DNXDHyS3TiBSP1xKjShpu7/pbpTTJ/Vb9Fwk5pGNBq89DJERdbX8pVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755610749; c=relaxed/simple;
-	bh=kKVpD/+U4H/9/Fm3FDnpqnB1RCJMjPohCtNqg0WUqsI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FXlHLUAzKsUiKb5HG0J3AF6nu6szDlOa8dqO7yYMD0XaTl9pkOAmNuE/c0cy+9t8k8XJun+s3Q5UUwiWdIOO07Z3o33G6VfRx/tGjMsdUQFgaGjNFeFDTLsYURVJYA8PHOhHe06+PRWTDgv9vrfCA/4uHCSRZDVyKhdnKuVeCFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uoLkJ-00063D-00; Tue, 19 Aug 2025 14:47:23 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 6960AC075D; Tue, 19 Aug 2025 14:08:11 +0200 (CEST)
-Date: Tue, 19 Aug 2025 14:08:11 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 05/10] mips: Unconditionally select
- ARCH_HAS_CURRENT_STACK_POINTER
-Message-ID: <aKRpK8v4NlzSBwLI@alpha.franken.de>
-References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
- <20250818-bump-min-llvm-ver-15-v1-5-c8b1d0f955e0@kernel.org>
+	s=arc-20240116; t=1755611012; c=relaxed/simple;
+	bh=26yGzcpoEMSGrmdlxNcFoAgjBUvz7SP8XHQo/OesNlU=;
+	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=PJyXNm9dVsNh5fW9NWy3Wm0/PBXqwuatSOL/2azOS8opro/BjMf1UK8lPLQdaFHOAkpY27RN/caATFfVPkjj0YyFJPsuai2L80/KBn6TzSty4s6QRpbm68GyZxlSap39kfCP+UY48KZgMeTubzndFo7VEIwLsKXv+M4wHbGixQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ih5KrQAg; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ih5KrQAg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9335DC113CF;
+	Tue, 19 Aug 2025 13:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755611012;
+	bh=26yGzcpoEMSGrmdlxNcFoAgjBUvz7SP8XHQo/OesNlU=;
+	h=Date:From:To:Subject:In-Reply-To:References:Cc:From;
+	b=ih5KrQAghMQipKwCv3CPpu9ILPwXk74370NIfZ4Xw6s2a0G2Ve2ctgh/nohKO5S8P
+	 r1p5B1mjnbqsVFjyS8cTMqUhnjHQvjyTcOD9q6woTvJoiBXAjjyvKrLecdB56dApKg
+	 3cACFEapvKWVlL+K8DYJnQ3KCPqb8sDYKjjVjsSR4KDohjL38uAFiRm0REpkwkULXH
+	 5DLb2QD/2c7cC+sCrQHzT1fOrCUkH2glqgsuC43yEhaVWer0v78tQwJ1E43mtFDbB7
+	 H5oFTSuPzpPSwzDlk1ZQRzP6y7JGKpUnkVMeNcIk1BFXc2lS/hBmO44KBdYlYlSrHP
+	 Z6794vLZioVfQ==
+Message-ID: <d50ed50aa1f09f27421fa7bf8d0e84c2@kernel.org>
+Date: Tue, 19 Aug 2025 13:43:29 +0000
+From: "Maxime Ripard" <mripard@kernel.org>
+To: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH v2 1/9] drm/display: bridge-connector: use
+ scope-specific variable for the bridge pointer
+In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-1-edb6ee81edf1@bootlin.com>
+References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-1-edb6ee81edf1@bootlin.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, "Andrzej
+ Hajda" <andrzej.hajda@intel.com>, "Bill Wendling" <morbo@google.com>, "Chaoyi
+ Chen" <chaoyi.chen@rock-chips.com>, "David Airlie" <airlied@gmail.com>, "Dmitry
+ Baryshkov" <dmitry.baryshkov@oss.qualcomm.com>, "Hui Pu" <Hui.Pu@gehealthcare.com>, "Jernej
+ Skrabec" <jernej.skrabec@gmail.com>, "Jonas Karlman" <jonas@kwiboo.se>, "Justin
+ Stitt" <justinstitt@google.com>, "Laurent Pinchart" <Laurent.pinchart@ideasonboard.com>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Neil
+ Armstrong" <neil.armstrong@linaro.org>, "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Robert
+ Foss" <rfoss@kernel.org>, "Simona Vetter" <simona@ffwll.ch>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Thomas Zimmermann" <tzimmermann@suse.de>, "Tomi
+ Valkeinen" <tomi.valkeinen@ideasonboard.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-5-c8b1d0f955e0@kernel.org>
 
-On Mon, Aug 18, 2025 at 11:57:21AM -0700, Nathan Chancellor wrote:
-> Now that the minimum supported version of LLVM for building the kernel
-> has been bumped to 15.0.0, the selection of
-> ARCH_HAS_CURRENT_STACK_POINTER can be made unconditional since it is
-> always true.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> ---
->  arch/mips/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index caf508f6e9ec..bc7473505f4a 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -6,7 +6,7 @@ config MIPS
->  	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
->  	select ARCH_HAS_CPU_CACHE_ALIASING
->  	select ARCH_HAS_CPU_FINALIZE_INIT
-> -	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
-> +	select ARCH_HAS_CURRENT_STACK_POINTER
->  	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
->  	select ARCH_HAS_DMA_OPS if MACH_JAZZ
->  	select ARCH_HAS_FORTIFY_SOURCE
-> 
-> -- 
-> 2.50.1
+On Fri, 8 Aug 2025 16:49:08 +0200, Luca Ceresoli wrote:
+> Currently drm_bridge_connector_init() reuses the 'bridge' variable, first
+> as a loop variable in the long drm_for_each_bridge_in_chain() and then in
+> the HDMI-specific code as a shortcut to bridge_connector->bridge_cec.
+>=20
+> We are about to remove the 'bridge' loop variable for
+>=20
+> [ ... ]
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks!
+Maxime
