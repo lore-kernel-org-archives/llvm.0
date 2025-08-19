@@ -1,67 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CA419F135;
-	Tue, 19 Aug 2025 05:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E2330FF23
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 07:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755582525; cv=none; b=TsqawHmBQUd9kblBuTxMu2OzKo/8ZIsuAvm8G95JcZDU2mzSXv2feSzwGn0KdsrW4OT1cs/EnwpGB4eQqjXBf2nsEW7poxM47qm2YLt5Mpbf+/DYJoKacw6ahISPWLA5ZskXwQy8sSQ/72wQcsgE2/eJ3ea9dbe98AA4DMaxGrM=
+	t=1755589186; cv=none; b=IBat75X7KNIddheotD1CXeZ7/hTqZc4AF6uY8coP+Np47klh1ZqvAtMXSvJiXdGyg39T1ZvzcpaYtvVhIHMRocpUhQT5WKuwqo2KS10tGdDbp0t0/g/GRjh7N4432xjBNMizFEZh/VdQf2zCMOxmw+bwiwymb8Fm8XBz/3T4F60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755582525; c=relaxed/simple;
-	bh=awBNQis2/Wp2vHf0nSTW4ilfCnxB3WgzqqA1wHWPNEw=;
+	s=arc-20240116; t=1755589186; c=relaxed/simple;
+	bh=eRD1kroDbQ1a6DO8DjocsXJeFSn2D5Gc+Oh+p/Mt9VA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I4negk4iD1MsmF19XYmdKpZYudyc8c2yTupsiFHemGeNL8vRDjNW/9/Se/1sUOsB1K88oEtI6q6caxPHcmZ8VzlpxAd9RIZJmJi66nOK7YDJwTIfNJLVnQzAqYenU5lQr7GwfXNPsXGuS43upjjmGY5irSpboCeahVYxiQMVazg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ENpjeqjJ; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qh9mavTeBfSjtpfZo/KL/f2Q980vWoUfeK4VWQz1RLTaPLWYa8aAA9YO8kFPAM9IROjYvhlzEJPlcNTlpoMBEhAM+1JzS+M2n9BPlUxHXpBGxkzwPGhq8s9cqKrOqhgYmeshl/7y8QqWGMON+la0yp0N0oNc7I9jItCdEJwAsiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LDIDutxr; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ENpjeqjJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755582524; x=1787118524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=awBNQis2/Wp2vHf0nSTW4ilfCnxB3WgzqqA1wHWPNEw=;
-  b=ENpjeqjJaIdCNK8NE4tGlzPbphCUZHI2lkuGizEcblearHP+v5gFewD7
-   T5+5PgT0HSo9s2RSU7RGect1Xhq6WDWFjg5ELWAwb+pMXx3y0C2sbLjaK
-   AynYVZwi/yDO9EICnbcmtSFk6g0TO5VmdxmCC0wShkyxmwqeZlKRhtcYo
-   S7dbm4fTpGo8ICXl4QO3YzTdvq34hVI6zmKmd/D2uFDYD9oBejiz88P1R
-   zMNb00W4dfztryWukhMdYPisaw28JmwYDb0+0ll0+G19WqqGXHka4cogt
-   +zzz5mnTtcNTA9izCE/yh7+VSki7majNjJ465vGqTB1mvWxg3CUiHnB0G
-   Q==;
-X-CSE-ConnectionGUID: qLMGuYMZTJuRXykr26DKyQ==
-X-CSE-MsgGUID: Oub1aCCWRAOnzFwW2t1VnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57921208"
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="57921208"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 22:48:43 -0700
-X-CSE-ConnectionGUID: W4Gr7TKHQFKWtBI3CtnaRg==
-X-CSE-MsgGUID: DGONlHHLSx27vdC+evfYkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="204909581"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 18 Aug 2025 22:48:39 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoFD2-000GXq-2I;
-	Tue, 19 Aug 2025 05:48:36 +0000
-Date: Tue, 19 Aug 2025 13:47:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nipun Gupta <nipun.gupta@amd.com>, arnd@arndb.de,
-	gregkh@linuxfoundation.org, nikhil.agarwal@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, robin.murphy@arm.com, krzk@kernel.org,
-	tglx@linutronix.de, maz@kernel.org, linux@weissschuh.net,
-	chenqiuji666@gmail.com, peterz@infradead.org, robh@kernel.org,
-	abhijit.gangurde@amd.com, nathan@kernel.org,
-	Nipun Gupta <nipun.gupta@amd.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 2/2] vfio/cdx: update driver to build without
- CONFIG_GENERIC_MSI_IRQ
-Message-ID: <202508191254.kSWLsaT3-lkp@intel.com>
-References: <20250818063244.1242634-2-nipun.gupta@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LDIDutxr"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6188b654241so8854640a12.1
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 00:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755589183; x=1756193983; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JlGG0MimgPVuD1cdmYrztEX7ylcMD0YKZDmGx1Z6TgU=;
+        b=LDIDutxrkbbfeihoOYTI5sN1MGkG8iOa4oMau/HyXF75ec0Ust1B2mfqMij/ZWH1WR
+         BffokBJulYsZfsP7STVrDJeoNeqYToyr/wDyaSgoj00U9qDBw7i+TNU+jkEetinar0mz
+         runw7pY6dMqs8K1ALSzRUAnkgdoy4FKaWBw406CYW0GPxdOggo/Ht7GEk9B5ZWkHkBOT
+         1/MwNi0/cIHI0VsHk1DKMf47pL6EwCcIm7ScKc14w9g+kdEAtO7Tbeq7Cy8BX5cx5f1A
+         p/NV2z8OE10isj3tyNaa8qPtvfp/zIj8SsChWIKgGdL+PXjvL0nIGNcHUc6ahegD8NON
+         BNpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755589183; x=1756193983;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JlGG0MimgPVuD1cdmYrztEX7ylcMD0YKZDmGx1Z6TgU=;
+        b=IgHlpPshJY1DG8wrsNixxykimlXSiKqaXBUb5SyUWs8xehIPMnNxEv4LAJKJEaww/z
+         pMVvNk7jUTY9HVef1lMco7OmY/1yTFmuL6pZhJc0JXA5EFdoLYH1oFkrWEwqa5YQLxgn
+         4rhBBYiXtZ9JzQECFc1bZTbjEYTEOjs7zOwWHOa5hWlW3TXU1SKl8u0LiBg23O2Aywua
+         gWsGqpqmCafws5RscsxWxvkvSpaSlcz0ZS+ssV/Mr4ra+pfnjBTmL8x4y7r1PAGAFrZr
+         SlMdt6vUmj+Yurg/2SHODjzyL0pYy40l1DvFTLcA0N/BQj5DRSAe7vEt3VHl+FiZavmS
+         hC+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVwXxOEMK4e4Zkag1my7FJb3LyuEIAPkzvQ3cISYR8abbiq4OysYLcn1NiTRfKPe/4DdcAr@lists.linux.dev
+X-Gm-Message-State: AOJu0YzZ9RR+A2qyspeXpfdzUbFppFsNTIoSPUIlaG7mi1+VY1mLv3u2
+	yIklAv62UHTjaUFt2e667M7//gQCkWA8fJLYJVh44ugeN5aUY9f+NuFd
+X-Gm-Gg: ASbGncupHSi5YnWaJ1EcJz8R/y1cvJT/OS38wx4c59ojhwxn2MZk4+kYrBmeIhGWTTg
+	bZs0aU6b4l2n56i/cIDXhBX3MyjU+C2nVSaSUiD6F9Ds6/6xGMX41OpH7mMkDO4+rbFD+XpSfyg
+	dRzx4ZChFhUWT6ZDlCHq5pvj4A49IF6OKqSM8sTr75t2NIJ3K4q1/zbiG1/CqzWJidzDJw3MPX+
+	u3poEgEx9IWHXmW0gqD4Qx7/oyq0EZKWS6BSLHT1kDWW1ehsuuSMSE9+3uKwIkM5PCvyJtAm333
+	Ckf1ArMetjssaD3jlu8e/Mpks8Z0bAHeTeG2dAJeIelnEH2Mag6nAUD2IsaEv7fHei5s2OoaFwD
+	uI8Sdy6AoG+RonLsylgDrxg==
+X-Google-Smtp-Source: AGHT+IFDydZFQrkosnxXfosEK8EVZgkb6qLnlT4kiVd7o1+cVB/7rTEUO0G9UdoGYY9iwV3LjvIXOQ==
+X-Received: by 2002:a17:907:3e1d:b0:afc:bcfc:b3b7 with SMTP id a640c23a62f3a-afddd0d283amr142302066b.38.1755589182644;
+        Tue, 19 Aug 2025 00:39:42 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afcdce53f2bsm973006866b.4.2025.08.19.00.39.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Aug 2025 00:39:42 -0700 (PDT)
+Date: Tue, 19 Aug 2025 07:39:41 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+	Bill Wendling <morbo@google.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/4] mm/mm_init: simplify deferred init of struct pages
+Message-ID: <20250819073941.esl7z5ibqqeabunh@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250818064615.505641-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,40 +82,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250818063244.1242634-2-nipun.gupta@amd.com>
+In-Reply-To: <20250818064615.505641-1-rppt@kernel.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-Hi Nipun,
+On Mon, Aug 18, 2025 at 09:46:11AM +0300, Mike Rapoport wrote:
+>From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+>Hi,
+>
+>These patches simplify deferred initialization of the memory map.
+>
+>Beside nice negative diffstat I measured 3ms reduction in the
+>initialization of deferred pages on single node system with 64GiB of RAM.
 
-kernel test robot noticed the following build errors:
+Nice cleanup.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.17-rc2 next-20250818]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For this series:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nipun-Gupta/vfio-cdx-update-driver-to-build-without-CONFIG_GENERIC_MSI_IRQ/20250818-143703
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250818063244.1242634-2-nipun.gupta%40amd.com
-patch subject: [PATCH 2/2] vfio/cdx: update driver to build without CONFIG_GENERIC_MSI_IRQ
-config: powerpc-randconfig-003-20250819 (https://download.01.org/0day-ci/archive/20250819/202508191254.kSWLsaT3-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508191254.kSWLsaT3-lkp@intel.com/reproduce)
+Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508191254.kSWLsaT3-lkp@intel.com/
+I guess the speed up is from "use a job per zone". So we do initialization per
+zone instead of per memblock range in the zone, right?
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
-
-ERROR: modpost: missing MODULE_LICENSE() in drivers/vfio/cdx/intr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vfio/cdx/intr.o
->> ERROR: modpost: "vfio_cdx_irqs_cleanup" [drivers/vfio/cdx/vfio-cdx.ko] undefined!
->> ERROR: modpost: "vfio_cdx_set_irqs_ioctl" [drivers/vfio/cdx/vfio-cdx.ko] undefined!
->> WARNING: modpost: module intr uses symbol cdx_enable_msi from namespace CDX_BUS, but does not import it.
->> WARNING: modpost: module intr uses symbol cdx_disable_msi from namespace CDX_BUS, but does not import it.
+>
+>I don't have access to large memory machines, so I'd really appreciate
+>testing of these patches on them to make sure there's no regression there.
+>
+>The patches are also available at git:
+>https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=deferred-memmap-init/v1
+>
+>Mike Rapoport (Microsoft) (4):
+>  mm/mm_init: use deferred_init_memmap_chunk() in deferred_grow_zone()
+>  mm/mm_init: deferred_init_memmap: use a job per zone
+>  mm/mm_init: drop deferred_init_maxorder()
+>  memblock: drop for_each_free_mem_pfn_range_in_zone_from()
+>
+> .clang-format            |   1 -
+> include/linux/memblock.h |  22 -----
+> mm/memblock.c            |  64 -------------
+> mm/mm_init.c             | 195 +++++++++++++--------------------------
+> 4 files changed, 62 insertions(+), 220 deletions(-)
+>
+>
+>base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+>-- 
+>2.50.1
+>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Wei Yang
+Help you, Help me
