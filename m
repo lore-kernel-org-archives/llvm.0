@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDCF275AF7;
-	Tue, 19 Aug 2025 10:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684FB31AF01;
+	Tue, 19 Aug 2025 10:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755600103; cv=none; b=WqDr84sF07E2ruVgiI/thl19iejzGP/8VSgjpo3NARNirpngqKmTr5U1ZsuJvGwP9KvgAoAnjjhFBFU31Q3YIVy4vT019aRBatFguJaw3Lblqc0pff9ujOhy6rxcNCe/lEWINuotmbrfdaQ3KpTMq1ZPZavZMH9pCq9H2VyfaBg=
+	t=1755600894; cv=none; b=mCoI1AtbN/3Ge3vWmbOD69W00gshtFJkRIn4Y2KEwd1f0J30evlNtg0WYaEVGoOY6C23PaBn/jYfNQK8Rh2Kg2Jh+qeS0kjNolvtDrQWEZ6BnNWyENGI3JzTn/1ahZGqD3rI3k2u7o9gjOuSPO+gxruGs4D+dugjbY0UyfDGlBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755600103; c=relaxed/simple;
-	bh=UmXA3hH10zy8+VYUZwjfKTWE12C/YJb1FO+ttbcpVBc=;
+	s=arc-20240116; t=1755600894; c=relaxed/simple;
+	bh=ObmAp/lIF5T9u/FjKqRF/LtJfWE6tMEI8MTlJt/e9nk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u4YNKDdh+aJn8CWWBAIYQAzdBSA7gxZ9N+W3hv0E8hK8bu5P2LUzBfLH5eYd4XgqAdgEadELdHagsSIOtgoX+3VQAe6PhAxc6GGDJ6w2gGpgchwo5aJDESV/Npf6rTvg4IXYJ7PewxuTwweP/6DowlU72oz2PwxC+FwQ1VcJ/II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PFDpESJr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=mk4eyRsx5OfSRGbPR1a+rZpUIKrDEmFPZ1xus/rbL2X96nO3a4+KpcPNuVj3soSBCOqYGq5/2ha+t1hDKFHmwSO/s7GWrdunDblvqfWezW7Frg85NXaD4NB8CVq1RRSVPOjW2oiNZI14lmOivhwrFSOwEY8PwOJ7F1MNtCwabUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zta/O5+p; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PFDpESJr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBF8C4CEF1;
-	Tue, 19 Aug 2025 10:41:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zta/O5+p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F22C113D0;
+	Tue, 19 Aug 2025 10:54:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755600102;
-	bh=UmXA3hH10zy8+VYUZwjfKTWE12C/YJb1FO+ttbcpVBc=;
+	s=k20201202; t=1755600894;
+	bh=ObmAp/lIF5T9u/FjKqRF/LtJfWE6tMEI8MTlJt/e9nk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PFDpESJrYV8aSfcoHIx0slZQ6yB1VuBnKvpYI5NhuQTBF/BfpMAwkixOe9YjrC9OI
-	 sMAcowjDQJ/vAi4v8aa2B0mTMB4anaZ7rhXDbF1yA+IWOOxSf/fkcO9l/RCboZmmwI
-	 0Px46iqYWBa34+zCyOeXrJCLLFlPYAfR5zcTAIND9kR7BprPF9izBk7ghY8hsi/N7V
-	 cMZ9gcsZiK7kZJICRHm3h7gllnrbN49CFz6DzTsTJDO84T+rdlQUYwxJz53OTihlfI
-	 bY3lqRXjcAfpMioNHTh8yX8eYTEwaLWu+wg7UVX6JJxZXu+w7Ffk98HnRlTSogbvql
-	 pnaPoY5j4nPBg==
-Date: Tue, 19 Aug 2025 13:41:35 +0300
+	b=Zta/O5+p9ya6IXOH6Q7+cZxn7RNLi4adAXeXJsIjFJrS4XDeTkRVROzGnykGbj9J2
+	 NawVnEa149OU4BcSauE9RmG3C+CsjjIGw1oweDUqwiB2dxsmRyIgiehjb3nfRXZ1Ah
+	 VM3Uy4z5JQpl3nONPeMkKwaXkiitTtOTyXHhhGV8TBYtuTatsLx2rO+/S8DI4mwUsU
+	 cG2J1m3fnnh8yfygqKj6NZ3KZNe4kBJiQv/d1flLffralOMTvlvoy+fc9T46+MmrsV
+	 WkHwsu1lFOfifsozGXTMdonZzMmF52USglfRh7fun0atw7wsUgzQ+/wZctq18qXR3H
+	 KS5CRwxz0/85w==
+Date: Tue, 19 Aug 2025 13:54:46 +0300
 From: Mike Rapoport <rppt@kernel.org>
 To: Wei Yang <richard.weiyang@gmail.com>
 Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
@@ -38,10 +38,12 @@ Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/4] mm/mm_init: simplify deferred init of struct pages
-Message-ID: <aKRU37wDTYYocsEh@kernel.org>
+Subject: Re: [PATCH 1/4] mm/mm_init: use deferred_init_memmap_chunk() in
+ deferred_grow_zone()
+Message-ID: <aKRX9iIe8h9fFi9v@kernel.org>
 References: <20250818064615.505641-1-rppt@kernel.org>
- <20250819073941.esl7z5ibqqeabunh@master>
+ <20250818064615.505641-2-rppt@kernel.org>
+ <20250819095223.ckjdsii4gc6u4nec@master>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,59 +52,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250819073941.esl7z5ibqqeabunh@master>
+In-Reply-To: <20250819095223.ckjdsii4gc6u4nec@master>
 
-On Tue, Aug 19, 2025 at 07:39:41AM +0000, Wei Yang wrote:
-> On Mon, Aug 18, 2025 at 09:46:11AM +0300, Mike Rapoport wrote:
-> >From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> >
-> >Hi,
-> >
-> >These patches simplify deferred initialization of the memory map.
-> >
-> >Beside nice negative diffstat I measured 3ms reduction in the
-> >initialization of deferred pages on single node system with 64GiB of RAM.
+On Tue, Aug 19, 2025 at 09:52:23AM +0000, Wei Yang wrote:
+> Hi, Mike
 > 
-> Nice cleanup.
+> After going through the code again, I have some trivial thoughts to discuss
+> with you. If not right, please let me know.
 > 
-> For this series:
+> On Mon, Aug 18, 2025 at 09:46:12AM +0300, Mike Rapoport wrote:
+> [...]
+> > bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
+> > {
+> >-	unsigned long nr_pages_needed = ALIGN(1 << order, PAGES_PER_SECTION);
+> >+	unsigned long nr_pages_needed = SECTION_ALIGN_UP(1 << order);
+> > 	pg_data_t *pgdat = zone->zone_pgdat;
+> > 	unsigned long first_deferred_pfn = pgdat->first_deferred_pfn;
+> > 	unsigned long spfn, epfn, flags;
+> > 	unsigned long nr_pages = 0;
+> >-	u64 i = 0;
+> > 
+> > 	/* Only the last zone may have deferred pages */
+> > 	if (zone_end_pfn(zone) != pgdat_end_pfn(pgdat))
+> >@@ -2262,37 +2272,26 @@ bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
+> > 		return true;
+> > 	}
 > 
-> Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
+> In the file above this line, there is a compare between first_deferred_pfn and
+> its original value after grab pgdat_resize_lock.
 
-Thanks!
+Do you mean this one:
 
-> I guess the speed up is from "use a job per zone". So we do initialization per
-> zone instead of per memblock range in the zone, right?
+	if (first_deferred_pfn != pgdat->first_deferred_pfn) {
+		pgdat_resize_unlock(pgdat, &flags);
+		return true;
+	}
  
-Yes, we run a job per zone instead of a job per memblock range in the zone.
+> I am thinking to compare first_deferred_pfn with ULONG_MAX, as it compared in
+> deferred_init_memmap(). This indicate this zone has already been initialized
+> totally.
 
-> >I don't have access to large memory machines, so I'd really appreciate
-> >testing of these patches on them to make sure there's no regression there.
-> >
-> >The patches are also available at git:
-> >https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=deferred-memmap-init/v1
-> >
-> >Mike Rapoport (Microsoft) (4):
-> >  mm/mm_init: use deferred_init_memmap_chunk() in deferred_grow_zone()
-> >  mm/mm_init: deferred_init_memmap: use a job per zone
-> >  mm/mm_init: drop deferred_init_maxorder()
-> >  memblock: drop for_each_free_mem_pfn_range_in_zone_from()
-> >
-> > .clang-format            |   1 -
-> > include/linux/memblock.h |  22 -----
-> > mm/memblock.c            |  64 -------------
-> > mm/mm_init.c             | 195 +++++++++++++--------------------------
-> > 4 files changed, 62 insertions(+), 220 deletions(-)
-> >
-> >
-> >base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-> >-- 
-> >2.50.1
-> >
+It may be another CPU ran deferred_grow_zone() and won the race for resize
+lock. Then pgdat->first_deferred_pfn will be larger than
+first_deferred_pfn, but still not entire zone would be initialized.
+ 
+> Current code guard this by spfn < zone_end_pfn(zone). Maybe a check ahead
+> would be more clear?
+
+Not sure I follow you here. The check that we don't pass zone_end_pfn is
+inside the loop for every section we initialize.
+ 
+> > 
+> >-	/* If the zone is empty somebody else may have cleared out the zone */
+> >-	if (!deferred_init_mem_pfn_range_in_zone(&i, zone, &spfn, &epfn,
+> >-						 first_deferred_pfn)) {
+> >-		pgdat->first_deferred_pfn = ULONG_MAX;
+> >-		pgdat_resize_unlock(pgdat, &flags);
+> >-		/* Retry only once. */
+> >-		return first_deferred_pfn != ULONG_MAX;
+> >+	/*
+> >+	 * Initialize at least nr_pages_needed in section chunks.
+> >+	 * If a section has less free memory than nr_pages_needed, the next
+> >+	 * section will be also initalized.
+> >+	 * Note, that it still does not guarantee that allocation of order can
+> >+	 * be satisfied if the sections are fragmented because of memblock
+> >+	 * allocations.
+> >+	 */
+> >+	for (spfn = first_deferred_pfn, epfn = SECTION_ALIGN_UP(spfn + 1);
 > 
-> -- 
-> Wei Yang
-> Help you, Help me
+> I am expecting first_deferred_pfn is section aligned. So epfn += PAGES_PER_SECTION
+> is fine?
+
+It should be, but I'd prefer to be on the safe side and keep it this way.
+ 
+> Maybe I missed something.
+> 
+> >+	     nr_pages < nr_pages_needed && spfn < zone_end_pfn(zone);
+> >+	     spfn = epfn, epfn += PAGES_PER_SECTION) {
+> >+		nr_pages += deferred_init_memmap_chunk(spfn, epfn, zone);
+> > 	}
+> > 
+> > 	/*
+> >-	 * Initialize and free pages in MAX_PAGE_ORDER sized increments so
+> >-	 * that we can avoid introducing any issues with the buddy
+> >-	 * allocator.
+> >+	 * There were no pages to initialize and free which means the zone's
+> >+	 * memory map is completely initialized.
+> > 	 */
+> >-	while (spfn < epfn) {
+> >-		/* update our first deferred PFN for this section */
+> >-		first_deferred_pfn = spfn;
+> >-
+> >-		nr_pages += deferred_init_maxorder(&i, zone, &spfn, &epfn);
+> >-		touch_nmi_watchdog();
+> >-
+> >-		/* We should only stop along section boundaries */
+> >-		if ((first_deferred_pfn ^ spfn) < PAGES_PER_SECTION)
+> >-			continue;
+> >-
+> >-		/* If our quota has been met we can stop here */
+> >-		if (nr_pages >= nr_pages_needed)
+> >-			break;
+> >-	}
+> >+	pgdat->first_deferred_pfn = nr_pages ? spfn : ULONG_MAX;
+> 
+> If we come here because spfn >= zone_end_pfn(zone), first_deferred_pfn is left
+> a "valid" value and deferred_init_memmap() will try to do its job. But
+> actually nothing left to initialize.
+
+We anyway run a thread for each node with memory. In the very unlikely case
+we've completely initialized a deferred zone that thread will finish much
+faster :)
+ 
+> For this case, I suggest to set it ULONG_MAX too. But this is really corner
+> case.
 
 -- 
 Sincerely yours,
