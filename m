@@ -1,214 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189C032A3D5;
-	Tue, 19 Aug 2025 13:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1201341ABE
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 13:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755611229; cv=none; b=Nm7XJuV2rLHfxhpaiwA2vbQexyPsr9Lr7Z+5iu5gpzXTWu5n1KTVz4R1nbH/zreQMNVQAa6o+h6/tPCDMnncrCY7ZcMxx9m41f1CiH0HQTm2LqPwDAGhNa/TsqMyv1tV+TDg6E/CXKkzRO3hj3frKaAlLrB2+Ep8cLYsr6Rofwc=
+	t=1755611288; cv=none; b=XpR/bukaDYLTAGaUMLBPd0+NooU6cjClWO2Hx1IFwC5jQBiTkQXgyAgAVYbSdfHNbL/KmZo22XN22gp4smDQvlsbvfZ8VmWR4TG7pudtYDUfk9NWhcSeoveV7FSzzzAF0pf5UEp3eLhNcLG1x+dxvaCszKyS/8jz3C7HvP0S0GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755611229; c=relaxed/simple;
-	bh=0LlM/TmY7kun3N086n8nz+vfKY+G/rfvAUc/zm69FRc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X5tmAecWz6jKvcYzTaDA8w614pYzVqTZmyTjeW4bYSoQUyH7aqhiLwT3mMHpOWnat88cCOSoAJ6syPYFGOjPjyzBOWOstQtqLKETjWsfS/zIzTDeUezCbhsztb3bYproeY9CASwmvx368Tj5OQ0azG58NuU6kutvrMg5BEaVa4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPgZ2hNm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755611288; c=relaxed/simple;
+	bh=WgxoQGTefGQy6krhXNt6jyY6Ogd2/MoAfO4+6xkHD0Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=bFk2mUr0ei1ip5Q/RTgUJTSaMnw1O3zlcUOelHDvjVAsVhetMyzVcbVoN9EJGs5GxsDAVnTHWBGdnOSVOgQsq9MhPr072NTh2PZsgQB4NeXwuolyTWWpam88MdLO6L7c+EjTAher1bBkaCsKsvfsdhQALY3DrAWcxW7K1/CfNJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mFOUIVth; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPgZ2hNm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B93C4CEF1;
-	Tue, 19 Aug 2025 13:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755611228;
-	bh=0LlM/TmY7kun3N086n8nz+vfKY+G/rfvAUc/zm69FRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dPgZ2hNmMIAmn8WEoRRyYSL0sWizL9k1mu/g9r/NnRoHOSPlpeiJ3o3whMNP9Lc2/
-	 8QZmljYITrfXGaoXap3f7VE/lFEkXmTAhrrbeprQHzqjIjmrA65rUnQh9hAF0Ls71/
-	 uZfIytlhFXGqDFbt5++c3lol+M7XjdZuWDReMqlVUXSYKupFNZPjibjLg1VS6LeBsk
-	 naSvLVDju+/AD7mHNscAMZfjdMmGCUV6RHuOLOuf+OxOUiodI0CdAgVXev6GdtyQMG
-	 kr4ygb90tdI0nQM/k1q12LAKuCRLdTTM4m5F8oJspYlDovBPR6pWYlHZ1jKvQwicnp
-	 GkP6m5LDerV7g==
-Date: Tue, 19 Aug 2025 15:47:06 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Chaoyi Chen <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/9] drm/bridge: add
- drm_for_each_bridge_in_chain_scoped()
-Message-ID: <7gpqrxlxxuarbp5b7bycukbbjdcuonlhn4zm6xinnrlqzrbeu7@rrpcwxnxxrag>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
- <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-3-edb6ee81edf1@bootlin.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mFOUIVth"
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250819134804euoutp0213fc72dc5fdab2cf3dcef62050326623~dLyl1y7qE1780017800euoutp02l
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 13:48:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250819134804euoutp0213fc72dc5fdab2cf3dcef62050326623~dLyl1y7qE1780017800euoutp02l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755611284;
+	bh=rNNRF4Z64xSeC0TtYIjoq13C5zAXQshZP/bVM+z+NiQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mFOUIVthvLpbk8Q9P5dhVu8SsExVI/BPt0Z7z5NmZ/0BURIHyaKRLVRxkisUyW0Qw
+	 X3hbHXJG+yJbvi5adKwc/jVgaTg1XRtnfy8V+km6bUL8Xp/Tomxl7s2LkkE0ynwrdF
+	 5Jie4pHMZfdyiWkfORKbBFBFRfXHyjsaS5B498AA=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11~dLylHjeKm2798127981eucas1p1o;
+	Tue, 19 Aug 2025 13:48:04 +0000 (GMT)
+Received: from AMDC4515.digital.local (unknown [106.120.51.28]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250819134803eusmtip14d110ea7c0e1c86224f6c2ecf32b88ba~dLykUPeUf2742627426eusmtip1o;
+	Tue, 19 Aug 2025 13:48:03 +0000 (GMT)
+From: Mateusz Majewski <m.majewski2@samsung.com>
+To: m.majewski2@samsung.com
+Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org,
+	justinstitt@google.com, krzk@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux.amoon@gmail.com, llvm@lists.linux.dev, lukasz.luba@arm.com,
+	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	rafael@kernel.org, rui.zhang@intel.com
+Subject: Re: [PATCH v7 6/7] thermal/drivers/exynos: Handle temperature
+ threshold IRQs with SoC-specific mapping
+Date: Tue, 19 Aug 2025 15:47:55 +0200
+Message-ID: <20250819134755.92187-1-m.majewski2@samsung.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250819131704.19780-1-m.majewski2@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="htlwy25bloclwdxh"
-Content-Disposition: inline
-In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-3-edb6ee81edf1@bootlin.com>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
+X-EPHeader: CA
+X-CMS-RootMailID: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
+References: <20250819131704.19780-1-m.majewski2@samsung.com>
+	<CGME20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11@eucas1p1.samsung.com>
 
+> +		pr_warn("exynos-tmu: Unknown SoC type %d, using fallback IRQ mapping\n", soc);
 
---htlwy25bloclwdxh
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 3/9] drm/bridge: add
- drm_for_each_bridge_in_chain_scoped()
-MIME-Version: 1.0
+I missed this when writing the previous reply, but this doesn't build:
+"soc" should be "data->soc". This line disappears in 7/7 though, so 7/7
+builds just fine for me.
 
-On Fri, Aug 08, 2025 at 04:49:10PM +0200, Luca Ceresoli wrote:
-> drm_for_each_bridge_in_chain() iterates ofer the bridges in an encoder
-> chain without protecting the lifetime of the bridges using
-> drm_bridge_get/put(). This creates a risk window where the bridge could be
-> freed while iterating on it. Users of drm_for_each_bridge_in_chain() cann=
-ot
-> solve this reliably.
->=20
-> Add variant of drm_for_each_bridge_in_chain() that gets/puts the bridge
-> reference at the beginning/end of each iteration, and puts it if breaking
-> ot of the loop.
->=20
-> Note that this requires adding a new drm_bridge_get_next_bridge_and_put()
-> function because, unlike similar functions as __of_get_next_child(),
-> drm_bridge_get_next_bridge() gets the "next" pointer but does not put the
-> "prev" pointer. Unfortunately drm_bridge_get_next_bridge() cannot be
-> modified to put the "prev" pointer because some of its users rely on
-> this, such as drm_atomic_bridge_propagate_bus_flags().
->=20
-> Also deprecate drm_for_each_bridge_in_chain(), in preparation for removing
-> it after converting all users to the scoped version.
->=20
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
->=20
-> ---
->=20
-> Changes in v2:
-> - clarified commit message and mention an example where the current
->   behaviour of drm_bridge_get_next_bridge() is wanted
->=20
-> Note 1: drm_for_each_bridge_in_chain_scoped() could be renamed removing t=
-he
->         _scoped suffix after removing all the users of the current macro
->         and eventually the current macro itself. Even though this series =
-is
->         converting all users, I'd at least wait one kernel release before
->         renaming, to minimize issues with existing patches which would fa=
-il
->         building.
->=20
-> Note 2: Yes, the drm_bridge_get_next_bridge_and_put() name is ugly, but we
->         do need a "next_bridge" function that does not put the "prev"
->         bridge and one that does. Any proposal for a better name or a
->         different implementation is welcome.
-> ---
->  .clang-format            |  1 +
->  include/drm/drm_bridge.h | 41 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 42 insertions(+)
->=20
-> diff --git a/.clang-format b/.clang-format
-> index 48405c54ef271e9546da08893d200a4cf48f3a55..1cac7d4976644c8f083f801e9=
-8f619782c2e23cc 100644
-> --- a/.clang-format
-> +++ b/.clang-format
-> @@ -168,6 +168,7 @@ ForEachMacros:
->    - 'drm_exec_for_each_locked_object'
->    - 'drm_exec_for_each_locked_object_reverse'
->    - 'drm_for_each_bridge_in_chain'
-> +  - 'drm_for_each_bridge_in_chain_scoped'
->    - 'drm_for_each_connector_iter'
->    - 'drm_for_each_crtc'
->    - 'drm_for_each_crtc_reverse'
-> diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-> index 620e119cc24c3491c2be5f08efaf51dfa8f708b3..a8e2f599aea764c705da3582d=
-f0ca428bb32f19c 100644
-> --- a/include/drm/drm_bridge.h
-> +++ b/include/drm/drm_bridge.h
-> @@ -1365,10 +1365,51 @@ drm_bridge_chain_get_first_bridge(struct drm_enco=
-der *encoder)
->   *	    iteration
->   *
->   * Iterate over all bridges present in the bridge chain attached to @enc=
-oder.
-> + *
-> + * This is deprecated, do not use!
-> + * New drivers shall use drm_for_each_bridge_in_chain_scoped().
->   */
->  #define drm_for_each_bridge_in_chain(encoder, bridge)			\
->  	list_for_each_entry(bridge, &(encoder)->bridge_chain, chain_node)
-> =20
-> +/**
-> + * drm_bridge_get_next_bridge_and_put - Get the next bridge in the chain
-> + *                                      and put the previous
-> + * @bridge: bridge object
-> + *
-> + * Same as drm_bridge_get_next_bridge() but additionally puts the @bridg=
-e.
-> + *
-> + * RETURNS:
-> + * the next bridge in the chain after @bridge, or NULL if @bridge is the=
- last.
-> + */
-> +static inline struct drm_bridge *
-> +drm_bridge_get_next_bridge_and_put(struct drm_bridge *bridge)
-> +{
-> +	struct drm_bridge *next =3D drm_bridge_get_next_bridge(bridge);
-> +
-> +	drm_bridge_put(bridge);
-> +
-> +	return next;
-> +}
-> +
-> +/**
-> + * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attach=
-ed
-> + *                                       to an encoder
-> + * @encoder: the encoder to iterate bridges on
-> + * @bridge: a bridge pointer updated to point to the current bridge at e=
-ach
-> + *	    iteration
-> + *
-> + * Iterate over all bridges present in the bridge chain attached to @enc=
-oder.
-> + *
-> + * Automatically gets/puts the bridge reference while iterating, and puts
-> + * the reference even if returning or breaking in the middle of the loop.
-> + */
-> +#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
-> +	for (struct drm_bridge *bridge __free(drm_bridge_put) =3D		\
-> +	     drm_bridge_chain_get_first_bridge(encoder);		\
-
-So my understanding is that the initial value of bridge would be cleaned
-up with drm_bridge_put...
-
-> +	     bridge;							\
-> +	     bridge =3D drm_bridge_get_next_bridge_and_put(bridge))
-
-=2E.. but also when iterating?
-
-So if we have more than 0 values, we put two references?
-
-Maxime
-
---htlwy25bloclwdxh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaKSAWQAKCRAnX84Zoj2+
-dhA2AYDTGUPXjz2H7WiASyErvNCLeuaxLXCa7Wx66jEggdCDb0pq2kPxc01R6yvv
-0YVIvSoBf3X67fAaK0eiAfBdd+jIsdplBNF+HcOHZp8Rq6mmtG7WTHeIIVqcRbK8
-mLJO7cSOdA==
-=eq2b
------END PGP SIGNATURE-----
-
---htlwy25bloclwdxh--
+Kind regards,
+Mateusz Majewski
