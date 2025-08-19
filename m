@@ -1,78 +1,79 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0F834320F
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 13:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FCF7262F;
+	Tue, 19 Aug 2025 13:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755609497; cv=none; b=XtOLzCNTmSPQQ8dqxoonLrRCYv/oPXPO/Mj3kOZcyot62LDZdroPjvjrpHvqkl+MbrsbvxRn9dz3C5SkQXB0qbVMpK0AOcqvFwkmiqBzVBnUThFvPhWQ19GrOuBXGFSoaEAlRA7XeKroMSIBxpnxL6Dg+LX+v4OdGg3p7zVpefk=
+	t=1755610749; cv=none; b=hU6LCrsevHh7MGkF2+NUCnAWt9wrpMYNAfyujTUVsJXf4lz4WvIbNeRqcSkwsZypEt8nE1TvUCywro2MOA5nOnOXydy9To/dxMBdiY6GEzTq8Il1HevlbwQWFKlTojUfvu12qVDkN8JQ3dlEvZZT5DyD0QWFPIe7LV6nzE1cN7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755609497; c=relaxed/simple;
-	bh=haelXDwMy02Pwc8ZA2q/PxzyUxHWHwhLuI5ijIySm2Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=ZReXa79LEydtsw7kosVAM3dULf5J1b7Clo8FvbeWNjFqClDJwan06A70ojW6nRygiVt9BsFTY2RYKXI/8bSHyeOsH4oCMKuEZT0zY7mW1X0/GwuJO8+eXYEfqofQl7H/U0jhymJ08UvAuj+ppZUcrWCq0qb6mQvScPZUlam73A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=b28gXOmJ; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="b28gXOmJ"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250819131814euoutp0247eb45c96304b653039c30e225991ef4~dLYibZv9G1451014510euoutp02A
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 13:18:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250819131814euoutp0247eb45c96304b653039c30e225991ef4~dLYibZv9G1451014510euoutp02A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755609494;
-	bh=haelXDwMy02Pwc8ZA2q/PxzyUxHWHwhLuI5ijIySm2Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=b28gXOmJv53Ukifr2jI0aPiN+kMb9HQZdc90+xIpGWsCXMjzXCs2BhEZzlqeWCbEe
-	 XNIxLDdM7+bmLvwFirdlYVt922QudW1edmFOYmAXkyD3uaUur4O+Q/SNp8+NZrmsew
-	 6FWIkB/NKoNcUv+wqS/Dz0JkHhZdn8oXOWJ/oSfs=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250819131814eucas1p2c57ccc084cf6736fed01a8a5c0b35fab~dLYiBBqeM2800428004eucas1p2h;
-	Tue, 19 Aug 2025 13:18:14 +0000 (GMT)
-Received: from AMDC4515.digital.local (unknown [106.120.51.28]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250819131813eusmtip1ef1102cfde54eb4bafb4302017462cbe~dLYhNgGmp2290322903eusmtip1f;
-	Tue, 19 Aug 2025 13:18:13 +0000 (GMT)
-From: Mateusz Majewski <m.majewski2@samsung.com>
-To: linux.amoon@gmail.com
-Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org,
-	justinstitt@google.com, krzk@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	llvm@lists.linux.dev, lukasz.luba@arm.com, m.majewski2@samsung.com,
-	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	rafael@kernel.org, rui.zhang@intel.com
-Subject: Re: [PATCH v7 7/7] thermal/drivers/exynos: Refactor IRQ clear logic
- using SoC-specific config
-Date: Tue, 19 Aug 2025 15:18:03 +0200
-Message-ID: <20250819131803.23296-1-m.majewski2@samsung.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250813131007.343402-8-linux.amoon@gmail.com>
+	s=arc-20240116; t=1755610749; c=relaxed/simple;
+	bh=kKVpD/+U4H/9/Fm3FDnpqnB1RCJMjPohCtNqg0WUqsI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FXlHLUAzKsUiKb5HG0J3AF6nu6szDlOa8dqO7yYMD0XaTl9pkOAmNuE/c0cy+9t8k8XJun+s3Q5UUwiWdIOO07Z3o33G6VfRx/tGjMsdUQFgaGjNFeFDTLsYURVJYA8PHOhHe06+PRWTDgv9vrfCA/4uHCSRZDVyKhdnKuVeCFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uoLkJ-00063D-00; Tue, 19 Aug 2025 14:47:23 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 6960AC075D; Tue, 19 Aug 2025 14:08:11 +0200 (CEST)
+Date: Tue, 19 Aug 2025 14:08:11 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH 05/10] mips: Unconditionally select
+ ARCH_HAS_CURRENT_STACK_POINTER
+Message-ID: <aKRpK8v4NlzSBwLI@alpha.franken.de>
+References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
+ <20250818-bump-min-llvm-ver-15-v1-5-c8b1d0f955e0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250819131814eucas1p2c57ccc084cf6736fed01a8a5c0b35fab
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250819131814eucas1p2c57ccc084cf6736fed01a8a5c0b35fab
-X-EPHeader: CA
-X-CMS-RootMailID: 20250819131814eucas1p2c57ccc084cf6736fed01a8a5c0b35fab
-References: <20250813131007.343402-8-linux.amoon@gmail.com>
-	<CGME20250819131814eucas1p2c57ccc084cf6736fed01a8a5c0b35fab@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-5-c8b1d0f955e0@kernel.org>
 
-> A unified
-> exynos4210_tmu_clear_irqs() implementation now replaces the previous
-> reliance on SoC-specific functions and hardcoded register mappings.
+On Mon, Aug 18, 2025 at 11:57:21AM -0700, Nathan Chancellor wrote:
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 15.0.0, the selection of
+> ARCH_HAS_CURRENT_STACK_POINTER can be made unconditional since it is
+> always true.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  arch/mips/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index caf508f6e9ec..bc7473505f4a 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -6,7 +6,7 @@ config MIPS
+>  	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
+>  	select ARCH_HAS_CPU_CACHE_ALIASING
+>  	select ARCH_HAS_CPU_FINALIZE_INIT
+> -	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
+> +	select ARCH_HAS_CURRENT_STACK_POINTER
+>  	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
+>  	select ARCH_HAS_DMA_OPS if MACH_JAZZ
+>  	select ARCH_HAS_FORTIFY_SOURCE
+> 
+> -- 
+> 2.50.1
 
-Well, right now we actually add exynos{4412,5420,5433}_tmu_clear_irqs :)
-But those are quite similar except irq_map values, so maybe they can be
-unified into one?
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Kind regards,
-Mateusz Majewski
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
