@@ -1,61 +1,35 @@
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B5223F291
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 16:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE20A246761;
+	Tue, 19 Aug 2025 16:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755619313; cv=none; b=QaVA6TPAFXJhKdR0bvsfI2nkzuM0biYrcAZYkef8gXg/koGCz7D3HnwZp+KT/bvoxudLr8tiHqBaz1Tx8aq8kzjDzKoeR1Kpjg9lQpjbTuSD/b5yXDHXjDCSqcjVywtZI1cf3JBJ7V4HqrqSlArOkr6qFPmtPCxKzKUWf2752xU=
+	t=1755621891; cv=none; b=DS6EZclEGwhdg2ZmlDELIozO5n3/yC6q6Ex7tM7kNX0nftRjBN41z131FcsE93kIAJ7MugoQOECGTIfsb36hc22LK5M3DBloxyyXhEBUbPAbcIIqnt320bhHsvu6181tFsJAZo+lTYTVp7S0TrIsZi3DT0mo1cSE8xRdCYn61sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755619313; c=relaxed/simple;
-	bh=fZ6+GjKEmyeibVijbqOoSe4XZ2Q+y84drPEeFaIZNNA=;
+	s=arc-20240116; t=1755621891; c=relaxed/simple;
+	bh=RU7nlGe30M46gbBtEbh2P8n5jWs2/CHoeEBSBsFHfeQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DTf7aDypQM+ak2j1d7VTV3EEpe3GVO8zxRJxFMmuoYIkuYcON5fS4+8FTz9dgmLCZtjO8/TnvVNwxCkY8nm2+7ohxlEG4aWh03IHVStguBRcp5JJ+eyrA0D6FMsUlYJ6CW9iUEuBvtAtqkhk72yuO1AB31bR3m14BABsaKRiff0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=b5FCqyVA; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="b5FCqyVA"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 27D8B4432F;
-	Tue, 19 Aug 2025 16:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1755619302;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ltpNMif16os2+Ik15uMFCGv0wNTw+E/lpUi+uydO/XY=;
-	b=b5FCqyVAX8LmMpQZDLg2qoroHaf7LnQSIkv96cIxOlz7XoGvYEjX3b9L+xkYLPrC6aqSx2
-	QU4Rzd73UEjSwGcl7fllMe17Ke9Bn48ahV3HDzYBQCgvZZxUb75pGYy+MDjjCxAweKCJ2p
-	sqNxJ1VX9FHQ5leEOnuqw/Huwm9OdpsyjbdoOf814+vNOES62kW/XK37tiuZh7BL8CBeEv
-	EtKxVRK7b6v76qkrpvrY7bujRPu2jcBayT0GejagkjxenTZT8rEal905FuD6pK4UMaRfh3
-	SiXXyIKH/pr/Y9WQ3ikxHRZY1EfvQ1fc1AIlhE4Phz+vdZ8PDpMPGtaNJ5/7lA==
-Date: Tue, 19 Aug 2025 18:01:37 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov
- <dmitry.baryshkov@oss.qualcomm.com>, Chaoyi Chen
- <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/9] drm/bridge: add
- drm_for_each_bridge_in_chain_scoped()
-Message-ID: <20250819180137.28ca89c0@booty>
-In-Reply-To: <7gpqrxlxxuarbp5b7bycukbbjdcuonlhn4zm6xinnrlqzrbeu7@rrpcwxnxxrag>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-	<20250808-drm-bridge-alloc-getput-for_each_bridge-v2-3-edb6ee81edf1@bootlin.com>
-	<7gpqrxlxxuarbp5b7bycukbbjdcuonlhn4zm6xinnrlqzrbeu7@rrpcwxnxxrag>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	 MIME-Version:Content-Type; b=GC0gTnO7iM8oOkZ2KFkKWIjuJa9oknZxY8s7pm2F+ezoJzJuDM30HrBvgmNtQbxYoaKUavcrdNfoDtXRUIjIKwH5mPS9i6IaEesCVMd2iZolQZxrfOdkipMW2XUee7iunuRzWeWOeMJv2nhR5TZU5aoeI1RaHepKgOndnIjpoYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 2156713662A;
+	Tue, 19 Aug 2025 16:44:42 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 9C6192002C;
+	Tue, 19 Aug 2025 16:44:40 +0000 (UTC)
+Date: Tue, 19 Aug 2025 12:44:40 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [koverstreet-bcachefs:bcachefs-testing 315/315] ld.lld: error:
+ duplicate symbol: __tracepoint_io_read
+Message-ID: <20250819124440.67f0f6a5@gandalf.local.home>
+In-Reply-To: <ujqytz6ysengalwiukpf5j24urkdyijq255ys7zgzevkzkyu2o@7ye2os3lu3a5>
+References: <202508192038.S6x4nOyC-lkp@intel.com>
+	<ujqytz6ysengalwiukpf5j24urkdyijq255ys7zgzevkzkyu2o@7ye2os3lu3a5>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,64 +38,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduheehledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdegpdhrtghpthhtohepmhhrihhprghrugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughriigvjhdrhhgrjhgurgesihhnthgvlhdrtghomhdprhgtphhtthhopehnvghilhdrrghrmhhsthhrohhngheslhhinhgrr
- hhordhorhhgpdhrtghpthhtoheprhhfohhssheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehjohhnrghssehkfihisghoohdrshgvpdhrtghpthhtohepjhgvrhhnvghjrdhskhhrrggsvggtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgrrghrthgvnhdrlhgrnhhkhhhorhhstheslhhinhhugidrihhnthgvlhdrtghomh
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Rspamd-Queue-Id: 9C6192002C
+X-Stat-Signature: rfyutshmppwz5rw6grdhwdyi6kz87ra6
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+KvaYYPUqBKDpTIrlnEUx7XrwXn1AwNAA=
+X-HE-Tag: 1755621880-601068
+X-HE-Meta: U2FsdGVkX1/lkLskUhTUMbjbO473JCVwq+5OlmuV/A4q4ncq8SoTPwMHX6oy2UoyEe/mSup/iqNqRKYYAcpAk8EmrATZ1h1mwrGZh7hHeCUP8k8WiB0fC/PChEltPr4OexFjwD3h4qUMoHv6Ekn9eAKKe4QVMVsIXGBr2pqkYBYFjSrdOXmLTpmstYE/h3YIk+A/+K+1FqYeEna8VdCNz0nYumEdmqh49cZja7op578KU1AODL3sCpejoy3R/wD0SEBd9CRkhijPpboc2cQucsupbwNHu7OmiEEFI22uuiBNGmkbQxZTB9Jr7DiiEwTV
 
-Hi Maxime,
+On Tue, 19 Aug 2025 10:57:19 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
 
-On Tue, 19 Aug 2025 15:47:06 +0200
-Maxime Ripard <mripard@kernel.org> wrote:
+> __traceiter_tracepointname - is this something easily fixable, or do I
+> just have to rename?
 
-> > +/**
-> > + * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
-> > + *                                       to an encoder
-> > + * @encoder: the encoder to iterate bridges on
-> > + * @bridge: a bridge pointer updated to point to the current bridge at each
-> > + *	    iteration
-> > + *
-> > + * Iterate over all bridges present in the bridge chain attached to @encoder.
-> > + *
-> > + * Automatically gets/puts the bridge reference while iterating, and puts
-> > + * the reference even if returning or breaking in the middle of the loop.
-> > + */
-> > +#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
-> > +	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
-> > +	     drm_bridge_chain_get_first_bridge(encoder);		\  
-> 
-> So my understanding is that the initial value of bridge would be cleaned
-> up with drm_bridge_put...
-> 
-> > +	     bridge;							\
-> > +	     bridge = drm_bridge_get_next_bridge_and_put(bridge))  
-> 
-> ... but also when iterating?
-> 
-> So if we have more than 0 values, we put two references?
+Best to just rename. Two static tracepoints can't have the same name, which
+is why I recommend always appending a prefix to them.
 
-No, this is not the case. The __free action is executed only when
-exiting the entire for loop, not a single iteration.
+Which is why we have: /sys/kernel/tracing/events/sched/sched_switch
+and not just: /sys/kernel/tracing/events/sched/switch
 
-This is consistent with the fact that the loop variable is persistent
-across iterations.
-
-I tested this macro in both cases:
-
- * looping over the entire chain the final value of @bridge will be
-   NULL and the cleanup action won't call drm_bridge_put()
- * breaking before the last element, @bridge is non-NULL and the
-   cleanup action does call drm_bridge_put()
-
-See examples such as for_each_child_of_node_scoped() and other OF
-iterators which work in the same way (which is no coincidence, I used
-them as starting point for writing this patch).
-
-Best regards,
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- Steve
