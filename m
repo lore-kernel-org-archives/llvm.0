@@ -1,150 +1,123 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F51311592
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 08:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E79226F2AE
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 09:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755592842; cv=none; b=tFfMBhTLbB/JrLeTotVOcpHfItWj6DTl3OqdJsWH3SjnwUlnwvIATZfd28zBVa8KRGCGtiaEuSoPNTNz9Mt7QXX6HIeimGJXZwhXIutCUF3buyqsXwbogXYFe+XMuLP8ofPS7Qjt94dosCND3zXDFs8+umAckmmfI7yq/UurOgs=
+	t=1755595379; cv=none; b=GlvmXTmJQvBzXry8+nv2dBmA408UBt7CUm6Y+YF1D8Miu02q3k0C7OzSKxij3boQmighHQioWEJyhDIb4djPUxx+orCUZ/wL2MS9Oe3NcnZLSvDY8ebyMQSFzK+2+QTA1GTVfNdmZ9YSN4aR0u+P0Uyxa/0ChFbvGLVpVW9b7Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755592842; c=relaxed/simple;
-	bh=s4rCdNrJl4PbZFUL3SQdLxne9G64dePB0cGlGicB9/0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=RAgB5TNgWQQLY75jJ3lzYKxszXFr3VTbraKmb7sGqHhDwPo3/KLVtEx5P6b7SW4LPbw8/y5V8v/G2HREcyzbfV1rl7sFtMIkOeKkENXzCGSkUkI9lA/YH8a7yIPICNtnmwTK6SZ/gQgBrjqtMD/ivczcMr1JEpXCQtqdtNT1804=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VVE2ZhuS; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1755595379; c=relaxed/simple;
+	bh=UXFwtf2p/003AReVcccluZVWMM0ZZ/Y6H3ApM7M7xhs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dH/aPEJOosfR2pNqdYUKcoYqtbS//iwDQSAwM14LrxoqMeqRGI68QMvytRbHxsQSijju3EqCOxdectkNU9aV/wAT+72s4a66x1FQUXJ6tkAseFMD4S937mXARhiBQVA/y4c0PuIFERBFCPxrekfJ+zIKWtnbrhXj1m+wD5xog+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CHXp0ADe; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VVE2ZhuS"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-76e2eb3726cso3126601b3a.3
-        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 01:40:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CHXp0ADe"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6188b5ad681so7054792a12.0
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 02:22:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755592840; x=1756197640; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fOvEbU0Cnc0FjNAEZg7vmgeVRfzmShXkhUtYM2eUAbM=;
-        b=VVE2ZhuSEVRoux23LL0sAm+awuAKo6f6P72mQHghN5JjqSa/0bB8aZzF5BTnoEChBp
-         tgh0ha6ZbLQhWxwWmQBIBdKoibUqJB9iFh1RbSDepZcep+cjRi1e/tHvZKgFX6i3D6QU
-         StmeayLPLKHY2jbnXWq7FfRFyIYFRoZ5fD0CU6cD0liTsnfhBxAkCEXOjtEgW3ZxxDKv
-         uYZpw1al/ndOnFKeNBxJW4bgVTvhDksIeuxeHcQG8XeQ+A8ioa5JXl2cXyNvpV+LwODo
-         aNMbBd5bhXDhMkojGpqK4kJofzf48vDQnoPlvkDVaeUx6JUNv1gKh7J3xI4mShJcLZc+
-         wTdA==
+        d=gmail.com; s=20230601; t=1755595376; x=1756200176; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/PiTmIvcXIWmnCk2bi7fdSkP9CO3hr2liu1TEw3WtOs=;
+        b=CHXp0ADeCe/2Vb4BeWsXCLTc1bLGhJIeUj9ThEi1yVgbbw3lXA5gxeuuYH+WvU3BIZ
+         5Xj77+lfzrdFmSAgtQvNvJxqJ8eEFtvEZxPEcrDRM9UTLtcAs7Vyzz4+xf+NZyM8eCav
+         dHvhqpbQDgbGoKyVfXWE/QuWgfYKoiG1DzwRrA8MZIeTEUPodsb3HiAtM0AA+AUT4CPb
+         CEPm+0TfdbQ/+kUqhPq9mZ+3wmoEzbDmUpZAnfGIduoaMJZ/o7DFhaNxo5FO1k+64sbS
+         fwf7JkSqzbscSnTY9X8G4Pcni+mzGwewBFUE5Mu8KHDAsb/WX1z4RYj/pcjzmmRaTV7O
+         3LxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755592840; x=1756197640;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fOvEbU0Cnc0FjNAEZg7vmgeVRfzmShXkhUtYM2eUAbM=;
-        b=d5NwCzXWjHbgmFvJW/yZcnWO3su8rNv0WonxNeH8tSI36voEquP+C9xOBBlv6u+DGE
-         U/8lPB4rEsRocOh7i7tszyhayYJ1fq0KNVPGggC5/p8tbRtM4IHcKTRCUpNMeZW1O7Ch
-         58R/9hfv/tV+doEWyQOjFRDWPrEoOiGzBj12LsnuMCDXrGm3wTlmyPg+l3tkv3DSiUG7
-         /1+HtCJef/aYRRTAAMPJbCda08cyIxeN1Tdu5poGIKsujb8UJXVN+xqN5vLT5hrmZa6l
-         D7LWroHJD4eY6UNJwHus1bFRapzuWZVFmhLzI0zLjDdGCx3VUmHXPAIzJ0YQ4/1Fqq9S
-         M2SA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHjwxKs1q4kEDmmQn5NSv7m9DREv72vrvkn4gfMt16J+WH9xCJc/tp2RU3/wUBLxcW5WpC@lists.linux.dev
-X-Gm-Message-State: AOJu0YygTU3FWyz+C5xyFW0rqPJJIHhlgLVMJuTYkeOWkTqIsyFip45V
-	vY6ysuEUg7Y9sOZMb0dFTfPqkoUTtMgms49fAwqvvi9h2AoVKSu/pnroR5pZDSKhkkNAm4n8j1r
-	rBHfD+Wqw0/iIO8+7RxpJFMuH50aaUGWYBbxIes8Anw==
-X-Gm-Gg: ASbGncuEqm2hw9C+tse0kosJYYIz2oclwszEzJWc7lh/2/uBXjNJnX7KgurvxCSA9C0
-	qFo0IEy/akEdKbt4v9zbfrx6BytY4q5kRO+e0my9Glph1EFLmKHFyRTWoILBAQ7h+2r41FH3Yz6
-	6pfRYqjzynseNwk5a4jCZS3nNRINHO8g/pX5PiQZs/Uf2rysm0LAo2Xi2IJWVmqKKFvyqOYpCVU
-	rTaHtqUjlXgdaVPW80l5ou+O7JTCOUvluW3tg9lJdj8MknYkw==
-X-Google-Smtp-Source: AGHT+IEGGBLrKnJA5rKPO3tG/2IpmKWfgJNSJRlHDGAPjusotj2Hf8o9mNnZTQtC90ugTktRZGVV8VN9rh1Puc8/i0A=
-X-Received: by 2002:a17:903:1ce:b0:23f:cd6e:8d0f with SMTP id
- d9443c01a7336-245e02d83f7mr22374655ad.13.1755592839617; Tue, 19 Aug 2025
- 01:40:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755595376; x=1756200176;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/PiTmIvcXIWmnCk2bi7fdSkP9CO3hr2liu1TEw3WtOs=;
+        b=LGzbcGhHBJIQKTxCWsPM8BL0PKCeQv3ogcZl07XitzmCGi6SBseFAJsc+ShRu1p9ZV
+         rZn+qAoi6uiJ+BylXspw7MsmqEjXqvulCc4OX478J+76h10GiokMeE8DCcjzfPXgCZd6
+         aeegh5cLpkkeVE2p8XDypFv2Ggqo51QWMTfNmM9tGL7Snk74miEMRzCv6lUeyon7/TkY
+         pjjhYbbgg0hfJlGQ7puwLiCgLkFaPgWmQGa4k/Og9GFn1rgHeDaeJtnURQj5rklJBuET
+         X/sG29K5+XrsJMmgoD6/eTJNyrJru777PC4U7mHzwCNbWZPvCtqp8Ot0wu6UZg9Grv68
+         DbCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUORwZEcuJ6xoOhR7qN5NZXwcdzPB7H2eria9MtA3cOcsUtUM4xl11++nkMNcCOkn/1RZJH@lists.linux.dev
+X-Gm-Message-State: AOJu0YwXgnugGnWGO4JQPaevWEQ3U9+fzu+cBHjM/JVRHdHLZx4dzCP9
+	n0kGEPyVfw6nWK3CrQ3aa2taIkLn/c86eur49uKq11dOFU5zvq4OuwU2
+X-Gm-Gg: ASbGncsKvWWyxvGdz2CnJGr2U/DpZUS4T4nOlEr03fNPJDqmymMCmb/9OHTkO1WCk6y
+	QGTZOlEU16VoRWPJ110NUXb6MZQlN+GXzk9McIXuod5Iw7wdZ4rt5zJpbpckt3V0CogpbYuKht7
+	13sVVJOZ5osJBpT0Usuj2DM06bUVWaEtHSNoWpJLADL/Vq4dfONFi57CC+n7Q+y9n66902s6DE0
+	Z23qu38qm3DTTfxzSKK6iJsjM3piZ2XxnfRoBiqgj4o/OtrGrMYUv7Z9jPsOwpVejNFBWfXX0PE
+	OryAFzkrxfDxlwt4t0pi1T5RkcPa8ke5AH80j5A/Bt577oT/NjpDSWTXlIqi067+w6tE7Kt+ndP
+	Qt5RqI6m51Uq+jN+U4HVm8A==
+X-Google-Smtp-Source: AGHT+IGWpnAEgDV2y4INDQK6XxsdDqFMGmNPUYQ0xXd1Cp2WxE73D3UX/rFS8w2LlQ8JvhzNRZ03EA==
+X-Received: by 2002:a05:6402:3494:b0:618:3a9d:53da with SMTP id 4fb4d7f45d1cf-61a7e765e7bmr1296928a12.31.1755595375783;
+        Tue, 19 Aug 2025 02:22:55 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61a761f2599sm1333486a12.5.2025.08.19.02.22.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Aug 2025 02:22:55 -0700 (PDT)
+Date: Tue, 19 Aug 2025 09:22:54 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bill Wendling <morbo@google.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/4] mm/mm_init: drop deferred_init_maxorder()
+Message-ID: <20250819092254.cddlg6npwl75fvbn@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250818064615.505641-1-rppt@kernel.org>
+ <20250818064615.505641-4-rppt@kernel.org>
+ <408d7eaa-5aea-4490-9fd0-978c4eb94d32@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 19 Aug 2025 14:10:27 +0530
-X-Gm-Features: Ac12FXwQ9ahb2ew69m1KVEd7V2w8TSXSPCLlnKGNCFNH7jf-h193q59E6JrscyY
-Message-ID: <CA+G9fYv+gELzgcL4y8rOQbTxv2Y2JQTFhNkgUcLbzPJ_yDTziA@mail.gmail.com>
-Subject: next-20250818: rust: `ARCH_KMALLOC_MINALIGN` is defined multiple times
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, rust-for-linux@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Cc: Miguel Ojeda <ojeda@kernel.org>, wedsonaf@gmail.com, Gary Guo <gary@garyguo.net>, 
-	Benno Lossin <benno.lossin@proton.me>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Ben Copeland <benjamin.copeland@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <408d7eaa-5aea-4490-9fd0-978c4eb94d32@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-Build regressions were detected on multiple architectures (arm, arm64,
-riscv) with the Linux next-20250818 tag when building with Rust-enabled
-configurations (rust-gcc and rust-clang) from selftests/rust/config.
+On Tue, Aug 19, 2025 at 09:54:22AM +0200, David Hildenbrand wrote:
+>> -static unsigned long __init
+>> -deferred_init_memmap_chunk(unsigned long start_pfn, unsigned long end_pfn,
+>> -			   struct zone *zone)
+>> -{
+>> -	unsigned long nr_pages = 0;
+>> -	unsigned long spfn, epfn;
+>> -	u64 i = 0;
+>> +		while (spfn < epfn) {
+>> +			unsigned long mo_pfn = ALIGN(spfn + 1, MAX_ORDER_NR_PAGES);
+>> +			unsigned long chunk_end = min(mo_pfn, epfn);
+>> -	deferred_init_mem_pfn_range_in_zone(&i, zone, &spfn, &epfn, start_pfn);
+>> +			nr_pages += deferred_init_pages(zone, spfn, chunk_end);
+>> +			deferred_free_pages(spfn, chunk_end - spfn);
+>
+>
+>I assume the expectation is that all PFNs in the start_pfn -> end_pfn range
+>will go to this zone, correct?
 
-Duplicate definition of ARCH_KMALLOC_MINALIGN in Rust bindings is
-causing build failures across affected toolchains.
+I think so.
 
-First seen on next-20250818
-Good: next-20250815
-Bad: next-20250818 and next-20250819
+defer_init only apply to the highest zone in one node.
 
-Regression Analysis:
-- New regression? yes
-- Reproducibility? yes
+>
+>-- 
+>Cheers
+>
+>David / dhildenb
+>
 
-* arm, build
-  - rustclang-lkftconfig-kselftest
-  - rustgcc-lkftconfig-kselftest
-
-* arm64, build
-  - rustclang-lkftconfig-kselftest
-  - rustgcc-lkftconfig-kselftest
-
-* riscv, build
-  - rustclang-nightly-lkftconfig-kselftest
-
-Boot regression: next-20250818 arm arm64 riscv rust
-`ARCH_KMALLOC_MINALIGN` is defined multiple times
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build log
-error[E0428]: the name `ARCH_KMALLOC_MINALIGN` is defined multiple times
-      --> /home/tuxbuild/.cache/tuxmake/builds/1/build/rust/bindings/bindings_generated.rs:125708:1
-       |
-5305   | pub const ARCH_KMALLOC_MINALIGN: u32 = 8;
-       | ----------------------------------------- previous definition
-of the value `ARCH_KMALLOC_MINALIGN` here
-...
-125708 | pub const ARCH_KMALLOC_MINALIGN: usize = 8;
-       | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-`ARCH_KMALLOC_MINALIGN` redefined here
-       |
-       = note: `ARCH_KMALLOC_MINALIGN` must be defined only once in
-the value namespace of this module
-
-error: aborting due to 1 previous error
-
-Please refer the full build log information in the below links.
-
-## Source
-* Kernel version: 6.17.0-rc2
-* Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
-* Git describe: next-20250818
-* Git commit: 3ac864c2d9bb8608ee236e89bf561811613abfce
-* Architectures: arm arm64 riscv
-* Toolchains: rust-gcc-13, rust-clang-20
-* Kconfigs: defconfig+rust
-
-## Build
-* Build log: https://qa-reports.linaro.org/api/testruns/29578517/log_file/
-* Build details 1:
-https://regressions.linaro.org/lkft/linux-next-master/next-20250818/build/rustgcc-lkftconfig-kselftest/
-* Build details 2:
-https://regressions.linaro.org/lkft/linux-next-master/next-20250818/build/rustclang-lkftconfig-kselftest/
-* Build details 3:
-https://regressions.linaro.org/lkft/linux-next-master/next-20250818/build/rustclang-nightly-lkftconfig-kselftest/
-* Build plan: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/31RcUoS2AqZLljDCs480MNNEyxJ
-* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/31RcUoS2AqZLljDCs480MNNEyxJ/
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/31RcUoS2AqZLljDCs480MNNEyxJ/config
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Wei Yang
+Help you, Help me
