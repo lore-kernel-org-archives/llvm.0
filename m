@@ -1,110 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3484EEDE;
-	Tue, 19 Aug 2025 01:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531E0248F70
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 03:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755565827; cv=none; b=D+sx+hVbrFtVNXd+zLdA4I2DgAB54ht490/iLS3HgcWRD5138360TJFnOr7la3o2UmTW3Cs3jzepWGZZs2Grxi6zwDLlpkLR4htEuvSG23iyYxx/fB/7sibP9mXjGng6G6dHxMUEHq2+L8WQD6zc1fBAyWDKt+y4lACoNvyp0QE=
+	t=1755574807; cv=none; b=KaCjGcNH9/Dm/aFTcJbPKR5vi8uswygpuS1tgsqMTBbtJ+ywo94ZdBlsSApIZn+oTUpKFB02q/JPDkh2heU8SFo4wbZ9TmusyJTwHm3oqyerXD1p/uHFSXf5KEGUNp2zL0IrZv6X6j2KwobTTvZ2/lsuPpYxaINqmXG7O6byCy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755565827; c=relaxed/simple;
-	bh=8ols7T2y7XVWY3yVV7Yv+BxGxeqnU+Gbg24qYQzUIvU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BOGHTvTV6a69ZjQjw6HADUDMgSRuhShNeVuJYDniiox3VqAX99p0z3n4Yj+wTPLSxlABVF61KjPC8ONMU6OJ97kLfCeuNLIBQUJq67+awfOXPmkaxpNRuZCFam8jhciu3/2/YsHL/h/4kyhQCVinnlP8qTRRn45tEQivX9b28iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZXQvPlql; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755574807; c=relaxed/simple;
+	bh=oMMTTpZ7DDLG7SH/wCcYpwJ8GcWUpvWEpD3dzj+P22E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mJg7ojKbTq+FX7/aDIglxiJN4WtuHnyiE5FBx+MZ9rcsurZIrNslXQtVYeAvnY6fGiZsyOenLvpwsmNbAfcqjHnMgDdSXnlF2B4QEFnhptWeccpURsMm3zfO+L4MX6yMT6ce5E5B4tQCz/uLjlHSAHglfo774rhyXJ8g5Sqtv/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TmL8LHc6; arc=none smtp.client-ip=209.85.210.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZXQvPlql"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755565826; x=1787101826;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8ols7T2y7XVWY3yVV7Yv+BxGxeqnU+Gbg24qYQzUIvU=;
-  b=ZXQvPlqlxClJTMBmp4eO+TOr0OoaQ94f10M6PaLVGnk0YVL4ZOZXmTny
-   PNtCDbxR8vaBL5xaeZxIhcOOX5XYlhXzqGcXOXnlXM4eQnTdIfUzBrMBh
-   3mi4FB9NlYR9WsmtciLZxZaWeNmAGas2iSwlIaTo/WkUWBikBNOS6+ocr
-   uzQUe3VNDAgBjcqdbpwfpqjTkzIUPp4xVZTHQX3HtAlf0r0YlEDRIC/6W
-   TGQm0LssfaOTAeBPOwRSSsQmmtiIuzUpClTPZVE8xruxumFloPhZIun/Y
-   XPdg0hz8xxFTBdHW0FK1DZKfVmLHacKHBwA4sgHBA07tte7WFV2IF0xt0
-   A==;
-X-CSE-ConnectionGUID: kVfMfB/pTnOcA8yIh0fLyg==
-X-CSE-MsgGUID: 3YoSTlNMSNWIv4HjsCp1yA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="68898770"
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="68898770"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2025 18:10:25 -0700
-X-CSE-ConnectionGUID: JgGBi5/DTsG97wU9f4HUbA==
-X-CSE-MsgGUID: 6XlgjQ9XSO+yyy9xt45L/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="171934282"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 18 Aug 2025 18:10:23 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoArj-000GMx-1Z;
-	Tue, 19 Aug 2025 01:10:19 +0000
-Date: Tue, 19 Aug 2025 09:10:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: srinivas.kandagatla@oss.qualcomm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 3/6] ASoC: qcom: audioreach: add support for static
- calibration
-Message-ID: <202508190818.gTYRlR8x-lkp@intel.com>
-References: <20250818125055.1226708-4-srinivas.kandagatla@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TmL8LHc6"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-76e2ea79219so5524192b3a.2
+        for <llvm@lists.linux.dev>; Mon, 18 Aug 2025 20:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755574805; x=1756179605; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yFHQgOMcHjeD9oe1SG5cmQkVXc+xDQWsrx1kiEfHVL4=;
+        b=TmL8LHc6vVzLyglcnyD2n6PHginMppzi0/BCn2IJWlkz4bUxE3ffQxv84PXLSoPxYI
+         egtUanSdx301QISQGtCi5Ecx4w92MahpW7klzKZ0Hd69kyrQIFXf/7CCRfoXNPehXrY1
+         fB/Atd1pbmzXgU1EerJ9SA5T8Fj0As+EUUwAEkZZGrMdxTGnnu1v3G7nVdnKogPZWalA
+         f/li1o7dKJvRXE3qbTRBwacW04c5Iulg37K+RMAm/CkWUlzQ1M1qCUUOhwpPW4Gbiu4s
+         Vl/BpemlgtO594TxX3sR2oMc5S1kSy+jao0n6DFX1pktSvUMBONT+4JKFK69R8I7ucm7
+         EF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755574805; x=1756179605;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yFHQgOMcHjeD9oe1SG5cmQkVXc+xDQWsrx1kiEfHVL4=;
+        b=xUG8/RHYREgRweQRiuwV6y9EZTG98REFMDUA9nt/Hd5rx3LvD5waqd48geXpatEi4B
+         3BPgku+CqSK172ay0erFTB7vA0yTMCwmj51tyA5LDued+OJ6kUTGCLdcaiPq8s6uIGVA
+         IkoI24E06C8ABCrwhtETzBHr5HdNnbclWyxzwub4YqYWNG2wM3eK7FeAHa+2JzngWwpD
+         hUkPIjBUHke5Gkth3oLnJTO3NL52o7x/PqXPKO9qF6UDy0yl+o1xjp2NjrOBLRSlyLjR
+         ngbTixUZJBrOKGLrfd0K243qfOA9s1qzvt/Avso6hI3Ffo/G/jnISBZHGTY7SBBEy82U
+         XNvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVWZHsbPz8f1khURooczpTYPD2mD0CY95YVkOidHOp/IQ+wzAf2nvN/aFAL+VIoo0J2XyAE@lists.linux.dev
+X-Gm-Message-State: AOJu0YyGd9PG8//NWYn1YUZPJoj3BVfL3hJo7e0VwXBD7Hq9ESDwx6if
+	PQ8wBGg4sm0FgSJdcMQbIlSdxTjzrhgvFIpn9xy0hP475k7bW6YmMvMM
+X-Gm-Gg: ASbGncs6aY2kHuFq/eBHPZea0D+R6ZBEOFDVnbyNrJpPFrVdV285jILJuUxy+Q2L0lY
+	qnBEspJ98a6G9jKNpVQoVOGZgTZWtDHLbRc4eF49jfs7/8dw0YNtfRURfUJnhBwZfj5+jQMjTLu
+	mV8JDJL+1iuZkNXzX0V0GG6HIJA7DgFChufUy//0niTm/5RJOaMC1F/UZH/j8AYqMzTgpSgKl4f
+	u/5FpfjtUMQJONYtIUXZl1+serBWUWqY/wOz95i7fLxspnpJpFosJh9Q9T7rD+D7rCsDylf4fCU
+	PUZ+SbDqZgs39ICNVXYmpnczgn1pqsd4X9kTVxxPzvd8X1RvEzb182Kmb1V7DeUbq7ZCHmiFnnq
+	GhYOeBHqJ7ZK/xELLhbYLDVyg5K3srw==
+X-Google-Smtp-Source: AGHT+IGo53aHj64WUcT7KLQgE0O5qWaO3awd9VIpUREednRbIbqbChBLi5/6xo0pVoRbbwFaPLl3jw==
+X-Received: by 2002:a05:6a00:3a07:b0:76e:7ae5:ec95 with SMTP id d2e1a72fcca58-76e81140c6fmr1453049b3a.31.1755574805503;
+        Mon, 18 Aug 2025 20:40:05 -0700 (PDT)
+Received: from 7940hx ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d0d22b8sm1109804b3a.4.2025.08.18.20.39.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Aug 2025 20:40:05 -0700 (PDT)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next 0/3] selftests/bpf: benchmark all symbols for kprobe-multi
+Date: Tue, 19 Aug 2025 11:39:53 +0800
+Message-ID: <20250819033956.59164-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818125055.1226708-4-srinivas.kandagatla@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Add the benchmark testcase "kprobe-multi-all", which will hook all the
+kernel functions during the testing.
 
-kernel test robot noticed the following build errors:
+This series is separated out from [1].
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.17-rc2 next-20250818]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Link: https://lore.kernel.org/bpf/20250817024607.296117-1-dongml2@chinatelecom.cn/ [1]
+Menglong Dong (3):
+  selftests/bpf: move get_ksyms and get_addrs to trace_helpers.c
+  selftests/bpf: skip recursive functions for kprobe_multi
+  selftests/bpf: add benchmark testing for kprobe-multi-all
 
-url:    https://github.com/intel-lab-lkp/linux/commits/srinivas-kandagatla-oss-qualcomm-com/ASoC-qcom-audioreach-deprecate-AR_TKN_U32_MODULE_-IN-OUT-_PORTS/20250818-210034
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20250818125055.1226708-4-srinivas.kandagatla%40oss.qualcomm.com
-patch subject: [PATCH v3 3/6] ASoC: qcom: audioreach: add support for static calibration
-config: x86_64-buildonly-randconfig-002-20250819 (https://download.01.org/0day-ci/archive/20250819/202508190818.gTYRlR8x-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508190818.gTYRlR8x-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508190818.gTYRlR8x-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/sound/snd_ar_tokens.h:243:2: error: unknown type name '__le32'
-     243 |         __le32 size;    /* size in bytes of the array, including all elements */
-         |         ^
-   ./usr/include/sound/snd_ar_tokens.h:244:2: error: unknown type name '__le32'
-     244 |         __le32 type;    /* SND_SOC_AR_TPLG_MODULE_CFG_TYPE */
-         |         ^
-   ./usr/include/sound/snd_ar_tokens.h:245:2: error: unknown type name '__le32'
-     245 |         __le32 priv[2]; /* Private data for future expansion */
-         |         ^
-   ./usr/include/sound/snd_ar_tokens.h:246:2: error: unknown type name '__le32'
-     246 |         __le32 data[0]; /* config data */
-         |         ^
-   4 errors generated.
+ tools/testing/selftests/bpf/bench.c           |   4 +
+ .../selftests/bpf/benchs/bench_trigger.c      |  54 ++++
+ .../selftests/bpf/benchs/run_bench_trigger.sh |   4 +-
+ .../bpf/prog_tests/kprobe_multi_test.c        | 220 +----------------
+ .../selftests/bpf/progs/trigger_bench.c       |  12 +
+ tools/testing/selftests/bpf/trace_helpers.c   | 233 ++++++++++++++++++
+ tools/testing/selftests/bpf/trace_helpers.h   |   3 +
+ 7 files changed, 311 insertions(+), 219 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
