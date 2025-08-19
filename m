@@ -1,144 +1,87 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F473322C60
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 10:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B462225BEF8;
+	Tue, 19 Aug 2025 10:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755599780; cv=none; b=GhGJYYmS9dlHLXb0PZfjTEShp6Wx315oAtaq8HZLZxSVkFHslTHusFQkF68vS3SHQegv2ZSev3Ge4vuFHzXi5bylrlZVgcVoOafnq73eGPRw2B7+t7GJiE95kP6QW/Y79qSP/yoGatTj2zNDBuns2WjgKnnwhwGOi/iI4W4cHDw=
+	t=1755599964; cv=none; b=VX7R5aSQTlakfOLQYLpubtQcIM2RSGJ3oHlkytRjQHnKXqmUz44zpFPaRSroYBb6Ey2wEP2U+4R6gaJeOmdW286FcSPb+Y9DufqAeokKT6s6pJwIgCDHHyIO13hTz6FVMlH0Euyk0NAYDWgoEJXzwbu+VrXBD9Pc+YjQUf65TM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755599780; c=relaxed/simple;
-	bh=f0QsgYzieVeY78Rm9/QS4ztp2XaR7DWI6fggUzgPROg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aSxXkg1VTovKpLJkSR03ETegZoGgRXRfWl2M2dzLtP5BKJBhiPq55rrZEZ7R6EOw+95zM0Hr6+hmuZEEcrEiY3fywpML9blBWL9iDka9DhYi2qOx3LDsEBrTZ/LOwje/ujjrXKocD/SAaxjGDASCReZBdm3dvlBq4VVWrElhG7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DGP6RWu6; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1755599964; c=relaxed/simple;
+	bh=C3p/9tmSjjIf5jIYjuZ3vrujwfpwDa8Gx8cZIkEqXH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FpNkLeV81lNa4DTmEiUnixAHOD6U7p9bRdvV9M44udOECzwuQX1VtiCbyd0PGUZuacBKPzoUIrhOG7L9+EJpcqq32nImePGPWnJoZe8SodW2Qdeg2ROa0Aw0YqIEsb0cOpkXxmmE7AMCOul4sKKaxIaQmrTJobFYEN6/ncu6Zg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q7pHrA4j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DGP6RWu6"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-71d603a269cso41441077b3.1
-        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 03:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755599774; x=1756204574; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2fN+Cw2GD8q7ciDJSfP7W+cnq2F/R7FubEkGbK5iPps=;
-        b=DGP6RWu69R8NMV+6omMmNUMvdTQ5yHnWqZslmZxTtLRs5I5VWR1uU46nMp6NRX0KI+
-         ZeZL2Ny8wQ/iUdUhH3ZfB6ZU/yntw/+31mIqzWA88JPzbtideJkPZm10LQwDKb8kj9cM
-         TJS5BqWLpWmj3RvBF94aDAkvSCsm2ZGqGHECPQjJS/sZS8yTLN3g7blcSNmYiHbjhwON
-         C3VLP7k7P8S2hs+ixblBSoUbzZ8rXGBOxAXS9bYUfIc2u9/V+Qdj/wUM7qA3kNCV7dlZ
-         i8/WghG+5k03ROZ8/pAWNx7jsBUf9YNKsSc2kJEemaYKZRcIsnipwL7hA1hPTO5ImfKw
-         L1DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755599774; x=1756204574;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2fN+Cw2GD8q7ciDJSfP7W+cnq2F/R7FubEkGbK5iPps=;
-        b=ZbHfVPSS9p5xg3nH+HS5fDUyy7WPhNMrnqtlnPAhMeD9MWRxNeR4EAfhXCZwQf+ohC
-         rH68XPOTtRj47wTTCNekyZcMZId9J9Z/df8XbpiNqLefg1l/N1KnUgoUBKfCbjxlJQG7
-         MV7wLP9Gms601LKh661PD58lfsllWW+7FZOk+C4XSJl9jO3YH/jWL0MC5utT55bUvkqx
-         3epTMjj04wJl344enf9UcAYeZ4WdbbVWBoFK9Z2pVUAEL6vJADBvyTNfEiqfDBMBxmP8
-         YWhlvaKT44LOCI3nZ2cmgsCAPQMoowWsZgsF0Y38QHQkiU0INElsEgGoyjIrL8PNx1Vk
-         II9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXO6siwhjTTgP6k4mBMg2pXFEnwLt0kC1TNrX/MZJYylWb3tAmFrhN4scxLHySY+9nr+rbO@lists.linux.dev
-X-Gm-Message-State: AOJu0YzzL9TVYNP/61nSWcrSplvuaMIgPw/1bAZuBRiwtguViT9xoZtS
-	GtwEYnW6/tVO3szsAl9qoL2eTbrbRoa098vFeRGHgc2fue2dkW1rks1DJtQfgdi4Dk+6e3UwnSx
-	W7bo5K/kiPhSEEPlK0yDOjioIsrZzJzXMCv+3CnzH
-X-Gm-Gg: ASbGnctyBpv/IbOk3lLgui9IGrQ9FtPqeYCsxFGG7WiSw20Wql7wns2PxZbclU9wBcl
-	fAVvMEl8hG9Pk/iTOvf34hrDueniUIOeUaoxztZnJdQjPnT2C4tjzc8LcscW631dN1woHvl8RAz
-	YHaU5ypobP0dXKP9xMWNof5UdxyORiPLObf7YRRn50So2nQ5BWaHaiJ8M0KZ1PXxXHMdpDvETvA
-	+oFDVoa+E4HoaTdu5aJC0RPMua5YpJEASf8WgnUCb3I8FK/my4BK0Ak
-X-Google-Smtp-Source: AGHT+IEyQkk7FbmcgWE6e5Fltqxk8e2OmEel306FAGI6BUzZSbzI9juKCgBNuurFH75DIL/XFm7wd0hLUiRSVtYPoVQ=
-X-Received: by 2002:a05:690c:6c02:b0:71e:325e:5468 with SMTP id
- 00721157ae682-71f9d494f58mr24000397b3.5.1755599774272; Tue, 19 Aug 2025
- 03:36:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q7pHrA4j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B851EC4CEF1;
+	Tue, 19 Aug 2025 10:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755599964;
+	bh=C3p/9tmSjjIf5jIYjuZ3vrujwfpwDa8Gx8cZIkEqXH4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q7pHrA4jSdouObZRf5BBF4zPfFQZpkvTr3HvXjroPz2apoCJKu9JXovzqRcsFf2zN
+	 RxUoa8NbRRdr+TQxroiXzSSImFDGYRFd3fxbcgibPcZAOQIVuNyg8Qh4uyYi1dxYBz
+	 rvH9cUP3sb7qPSGDLzYXl9D42w/VOc/OEXmeItlziBzmo9eXB/mBjs+as+69qT+TvM
+	 PZ57tEyT75kHH2htMbXdQEBacH8gEEzvLTZBjZTHxE6rLef9y8O7V+klQjdwQ8j833
+	 ar1xQpPVlR9PmVzi5Z05JRXWCQyaAdvGXwOTjOpFCgZ/dZ8+r0XKu2dkuM9/2UWmbv
+	 InJbnYCAV2UUA==
+Date: Tue, 19 Aug 2025 13:39:15 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Wei Yang <richard.weiyang@gmail.com>
+Cc: David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bill Wendling <morbo@google.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/4] mm/mm_init: drop deferred_init_maxorder()
+Message-ID: <aKRUUzq48xW5qPOp@kernel.org>
+References: <20250818064615.505641-1-rppt@kernel.org>
+ <20250818064615.505641-4-rppt@kernel.org>
+ <408d7eaa-5aea-4490-9fd0-978c4eb94d32@redhat.com>
+ <20250819092254.cddlg6npwl75fvbn@master>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org> <20250818-bump-min-llvm-ver-15-v1-9-c8b1d0f955e0@kernel.org>
-In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-9-c8b1d0f955e0@kernel.org>
-From: Marco Elver <elver@google.com>
-Date: Tue, 19 Aug 2025 12:35:37 +0200
-X-Gm-Features: Ac12FXy_pMfFpBqlyslz5YoDfRSNwKDNUf2Ii-KoSTGsRrmWmRwz_9vxZQpt2K4
-Message-ID: <CANpmjNN243_NoHOEdHvs0zDTzX5w4hjWoeo9TnQbwgfPzOWJAA@mail.gmail.com>
-Subject: Re: [PATCH 09/10] objtool: Drop noinstr hack for KCSAN_WEAK_MEMORY
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Kees Cook <kees@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250819092254.cddlg6npwl75fvbn@master>
 
-On Mon, 18 Aug 2025 at 20:58, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Now that the minimum supported version of LLVM for building the kernel
-> has been bumped to 15.0.0, __no_kcsan will always ensure that the thread
-> sanitizer functions are not generated, so remove the check for tsan
-> functions in is_profiling_func() and the always true depends and
-> unnecessary select lines in KCSAN_WEAK_MEMORY.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, Aug 19, 2025 at 09:22:54AM +0000, Wei Yang wrote:
+> On Tue, Aug 19, 2025 at 09:54:22AM +0200, David Hildenbrand wrote:
+> >> -static unsigned long __init
+> >> -deferred_init_memmap_chunk(unsigned long start_pfn, unsigned long end_pfn,
+> >> -			   struct zone *zone)
+> >> -{
+> >> -	unsigned long nr_pages = 0;
+> >> -	unsigned long spfn, epfn;
+> >> -	u64 i = 0;
+> >> +		while (spfn < epfn) {
+> >> +			unsigned long mo_pfn = ALIGN(spfn + 1, MAX_ORDER_NR_PAGES);
+> >> +			unsigned long chunk_end = min(mo_pfn, epfn);
+> >> -	deferred_init_mem_pfn_range_in_zone(&i, zone, &spfn, &epfn, start_pfn);
+> >> +			nr_pages += deferred_init_pages(zone, spfn, chunk_end);
+> >> +			deferred_free_pages(spfn, chunk_end - spfn);
+> >
+> >
+> >I assume the expectation is that all PFNs in the start_pfn -> end_pfn range
+> >will go to this zone, correct?
+> 
+> I think so.
+> 
+> defer_init only apply to the highest zone in one node.
 
-Acked-by: Marco Elver <elver@google.com>
+Right, we defer initialization of last zone in every node and there is a
+thread per node that does the initialization.
 
-Good riddance.
-
-> ---
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: kasan-dev@googlegroups.com
-> ---
->  lib/Kconfig.kcsan     |  6 ------
->  tools/objtool/check.c | 10 ----------
->  2 files changed, 16 deletions(-)
->
-> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> index 609ddfc73de5..4ce4b0c0109c 100644
-> --- a/lib/Kconfig.kcsan
-> +++ b/lib/Kconfig.kcsan
-> @@ -185,12 +185,6 @@ config KCSAN_WEAK_MEMORY
->         bool "Enable weak memory modeling to detect missing memory barriers"
->         default y
->         depends on KCSAN_STRICT
-> -       # We can either let objtool nop __tsan_func_{entry,exit}() and builtin
-> -       # atomics instrumentation in .noinstr.text, or use a compiler that can
-> -       # implement __no_kcsan to really remove all instrumentation.
-> -       depends on !ARCH_WANTS_NO_INSTR || HAVE_NOINSTR_HACK || \
-> -                  CC_IS_GCC || CLANG_VERSION >= 140000
-> -       select OBJTOOL if HAVE_NOINSTR_HACK
->         help
->           Enable support for modeling a subset of weak memory, which allows
->           detecting a subset of data races due to missing memory barriers.
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index d14f20ef1db1..efa4c060ff4e 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -2453,16 +2453,6 @@ static bool is_profiling_func(const char *name)
->         if (!strncmp(name, "__sanitizer_cov_", 16))
->                 return true;
->
-> -       /*
-> -        * Some compilers currently do not remove __tsan_func_entry/exit nor
-> -        * __tsan_atomic_signal_fence (used for barrier instrumentation) with
-> -        * the __no_sanitize_thread attribute, remove them. Once the kernel's
-> -        * minimum Clang version is 14.0, this can be removed.
-> -        */
-> -       if (!strncmp(name, "__tsan_func_", 12) ||
-> -           !strcmp(name, "__tsan_atomic_signal_fence"))
-> -               return true;
-> -
->         return false;
->  }
->
->
-> --
-> 2.50.1
->
+-- 
+Sincerely yours,
+Mike.
