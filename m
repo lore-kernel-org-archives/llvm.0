@@ -1,137 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5ED2279DAD;
-	Tue, 19 Aug 2025 10:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F473322C60
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 10:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755599761; cv=none; b=f7s0BEEKmJrHFl7HI9BvhKKrVeVA9KrYc4ZTL4qmY4T65K2a9AChHwUgitBBMUyaQ0h5YNAzQxMgwhfNaqyCahCI3GDxeSoIbJbE9CbBRAE3xb9qex+kzsKxkMEmnfDKb/nWFCfcruQPgOHXFKIkePPA9y+t3EjHwFKcOs9rQQA=
+	t=1755599780; cv=none; b=GhGJYYmS9dlHLXb0PZfjTEShp6Wx315oAtaq8HZLZxSVkFHslTHusFQkF68vS3SHQegv2ZSev3Ge4vuFHzXi5bylrlZVgcVoOafnq73eGPRw2B7+t7GJiE95kP6QW/Y79qSP/yoGatTj2zNDBuns2WjgKnnwhwGOi/iI4W4cHDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755599761; c=relaxed/simple;
-	bh=lEqqlSoiP/VHSItgElRylFsVcFhLCEIOadYg72sdtpg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NdIq55sEbdTO3tfghFChbSDCsYcAzfqf2ZZmO+R039juibPf+RPM2AKrsSGffJ/MwTBGP9tUNLH7S/cdm5U9fpfAZIFhhvDwHT0fvYq1ENJ87g0PF0252MFmnDxjvYhiT0f8ryHhI1qYeX6RoJSVr+psL6yo5AZBsJH47PgrYMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RGGU74g+; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755599780; c=relaxed/simple;
+	bh=f0QsgYzieVeY78Rm9/QS4ztp2XaR7DWI6fggUzgPROg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aSxXkg1VTovKpLJkSR03ETegZoGgRXRfWl2M2dzLtP5BKJBhiPq55rrZEZ7R6EOw+95zM0Hr6+hmuZEEcrEiY3fywpML9blBWL9iDka9DhYi2qOx3LDsEBrTZ/LOwje/ujjrXKocD/SAaxjGDASCReZBdm3dvlBq4VVWrElhG7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DGP6RWu6; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGGU74g+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755599758; x=1787135758;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lEqqlSoiP/VHSItgElRylFsVcFhLCEIOadYg72sdtpg=;
-  b=RGGU74g+XiFPUPZkPN6+KLTkmE+0/EWUadngdpU5jse6Ng+6prccgtu2
-   50YqpE6sbUfqV8o72sxdNuSEHL8hb2jm1OYQNwnWRWW7ntMOs6fKExasI
-   fFrPUGjmCvWBkOWEwbph9eV0nInbrjo/lcEidVmUnXpq/eFjHsQq/qCtW
-   0ag5z5O1jPcomxIWo3MH9TG9uHh4ckDO9TxAXvPbu9yk7Lsd19K6a9HWT
-   B3tZa4YD1y0u3qaN06MUPgVh1/E0GK4z4sqaY585+mYr/b1/ADu2DsdV1
-   FlQJh6On//XG1+HjMeOje09msMDu/KNbCCId8HMVSD2HkGnVBopSMNldK
-   Q==;
-X-CSE-ConnectionGUID: l69RiSnkROCEHmx/Gk1G6A==
-X-CSE-MsgGUID: BIFygEB9QB+GqAGA7kLbnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="83264725"
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="83264725"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 03:35:58 -0700
-X-CSE-ConnectionGUID: geLXWB/pRLuVa4XimsBReA==
-X-CSE-MsgGUID: 3wBDJ+lPRyWBQKn5uSYQUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="167320718"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Aug 2025 03:35:55 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoJh0-000Gkt-0k;
-	Tue, 19 Aug 2025 10:35:51 +0000
-Date: Tue, 19 Aug 2025 18:35:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	willy@infradead.org, sidhartha.kumar@oracle.com
-Subject: Re: [PATCH 1/6] drm: Convert aux_idr to XArray
-Message-ID: <202508191844.VZB7euYb-lkp@intel.com>
-References: <20250818190046.157962-2-sidhartha.kumar@oracle.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DGP6RWu6"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-71d603a269cso41441077b3.1
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 03:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755599774; x=1756204574; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2fN+Cw2GD8q7ciDJSfP7W+cnq2F/R7FubEkGbK5iPps=;
+        b=DGP6RWu69R8NMV+6omMmNUMvdTQ5yHnWqZslmZxTtLRs5I5VWR1uU46nMp6NRX0KI+
+         ZeZL2Ny8wQ/iUdUhH3ZfB6ZU/yntw/+31mIqzWA88JPzbtideJkPZm10LQwDKb8kj9cM
+         TJS5BqWLpWmj3RvBF94aDAkvSCsm2ZGqGHECPQjJS/sZS8yTLN3g7blcSNmYiHbjhwON
+         C3VLP7k7P8S2hs+ixblBSoUbzZ8rXGBOxAXS9bYUfIc2u9/V+Qdj/wUM7qA3kNCV7dlZ
+         i8/WghG+5k03ROZ8/pAWNx7jsBUf9YNKsSc2kJEemaYKZRcIsnipwL7hA1hPTO5ImfKw
+         L1DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755599774; x=1756204574;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2fN+Cw2GD8q7ciDJSfP7W+cnq2F/R7FubEkGbK5iPps=;
+        b=ZbHfVPSS9p5xg3nH+HS5fDUyy7WPhNMrnqtlnPAhMeD9MWRxNeR4EAfhXCZwQf+ohC
+         rH68XPOTtRj47wTTCNekyZcMZId9J9Z/df8XbpiNqLefg1l/N1KnUgoUBKfCbjxlJQG7
+         MV7wLP9Gms601LKh661PD58lfsllWW+7FZOk+C4XSJl9jO3YH/jWL0MC5utT55bUvkqx
+         3epTMjj04wJl344enf9UcAYeZ4WdbbVWBoFK9Z2pVUAEL6vJADBvyTNfEiqfDBMBxmP8
+         YWhlvaKT44LOCI3nZ2cmgsCAPQMoowWsZgsF0Y38QHQkiU0INElsEgGoyjIrL8PNx1Vk
+         II9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXO6siwhjTTgP6k4mBMg2pXFEnwLt0kC1TNrX/MZJYylWb3tAmFrhN4scxLHySY+9nr+rbO@lists.linux.dev
+X-Gm-Message-State: AOJu0YzzL9TVYNP/61nSWcrSplvuaMIgPw/1bAZuBRiwtguViT9xoZtS
+	GtwEYnW6/tVO3szsAl9qoL2eTbrbRoa098vFeRGHgc2fue2dkW1rks1DJtQfgdi4Dk+6e3UwnSx
+	W7bo5K/kiPhSEEPlK0yDOjioIsrZzJzXMCv+3CnzH
+X-Gm-Gg: ASbGnctyBpv/IbOk3lLgui9IGrQ9FtPqeYCsxFGG7WiSw20Wql7wns2PxZbclU9wBcl
+	fAVvMEl8hG9Pk/iTOvf34hrDueniUIOeUaoxztZnJdQjPnT2C4tjzc8LcscW631dN1woHvl8RAz
+	YHaU5ypobP0dXKP9xMWNof5UdxyORiPLObf7YRRn50So2nQ5BWaHaiJ8M0KZ1PXxXHMdpDvETvA
+	+oFDVoa+E4HoaTdu5aJC0RPMua5YpJEASf8WgnUCb3I8FK/my4BK0Ak
+X-Google-Smtp-Source: AGHT+IEyQkk7FbmcgWE6e5Fltqxk8e2OmEel306FAGI6BUzZSbzI9juKCgBNuurFH75DIL/XFm7wd0hLUiRSVtYPoVQ=
+X-Received: by 2002:a05:690c:6c02:b0:71e:325e:5468 with SMTP id
+ 00721157ae682-71f9d494f58mr24000397b3.5.1755599774272; Tue, 19 Aug 2025
+ 03:36:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818190046.157962-2-sidhartha.kumar@oracle.com>
+References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org> <20250818-bump-min-llvm-ver-15-v1-9-c8b1d0f955e0@kernel.org>
+In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-9-c8b1d0f955e0@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Tue, 19 Aug 2025 12:35:37 +0200
+X-Gm-Features: Ac12FXy_pMfFpBqlyslz5YoDfRSNwKDNUf2Ii-KoSTGsRrmWmRwz_9vxZQpt2K4
+Message-ID: <CANpmjNN243_NoHOEdHvs0zDTzX5w4hjWoeo9TnQbwgfPzOWJAA@mail.gmail.com>
+Subject: Re: [PATCH 09/10] objtool: Drop noinstr hack for KCSAN_WEAK_MEMORY
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Kees Cook <kees@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sidhartha,
+On Mon, 18 Aug 2025 at 20:58, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 15.0.0, __no_kcsan will always ensure that the thread
+> sanitizer functions are not generated, so remove the check for tsan
+> functions in is_profiling_func() and the always true depends and
+> unnecessary select lines in KCSAN_WEAK_MEMORY.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
+Acked-by: Marco Elver <elver@google.com>
 
-[auto build test ERROR on v6.16]
-[also build test ERROR on next-20250819]
-[cannot apply to drm-exynos/exynos-drm-next linus/master v6.17-rc2 v6.17-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Good riddance.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sidhartha-Kumar/drm-Convert-aux_idr-to-XArray/20250819-031755
-base:   v6.16
-patch link:    https://lore.kernel.org/r/20250818190046.157962-2-sidhartha.kumar%40oracle.com
-patch subject: [PATCH 1/6] drm: Convert aux_idr to XArray
-config: x86_64-buildonly-randconfig-002-20250819 (https://download.01.org/0day-ci/archive/20250819/202508191844.VZB7euYb-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508191844.VZB7euYb-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508191844.VZB7euYb-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/display/drm_dp_aux_dev.c:85:5: error: passing 'struct xa_limit' to parameter of incompatible type 'void *'
-      85 |                                 XA_LIMIT(0, DRM_AUX_MINORS - 1), aux_dev, GFP_KERNEL);
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/xarray.h:248:30: note: expanded from macro 'XA_LIMIT'
-     248 | #define XA_LIMIT(_min, _max) (struct xa_limit) { .min = _min, .max = _max }
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/xarray.h:872:9: note: passing argument to parameter 'entry' here
-     872 |                 void *entry, struct xa_limit limit, gfp_t gfp)
-         |                       ^
-   1 error generated.
-
-
-vim +85 drivers/gpu/drm/display/drm_dp_aux_dev.c
-
-    71	
-    72	static struct drm_dp_aux_dev *alloc_drm_dp_aux_dev(struct drm_dp_aux *aux)
-    73	{
-    74		struct drm_dp_aux_dev *aux_dev;
-    75		int err;
-    76	
-    77		aux_dev = kzalloc(sizeof(*aux_dev), GFP_KERNEL);
-    78		if (!aux_dev)
-    79			return ERR_PTR(-ENOMEM);
-    80		aux_dev->aux = aux;
-    81		atomic_set(&aux_dev->usecount, 1);
-    82		kref_init(&aux_dev->refcount);
-    83	
-    84		err = xa_alloc(&aux_xa, &aux_dev->index,
-  > 85					XA_LIMIT(0, DRM_AUX_MINORS - 1), aux_dev, GFP_KERNEL);
-    86		if (err < 0) {
-    87			kfree(aux_dev);
-    88			return ERR_PTR(err);
-    89		}
-    90	
-    91		return aux_dev;
-    92	}
-    93	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: kasan-dev@googlegroups.com
+> ---
+>  lib/Kconfig.kcsan     |  6 ------
+>  tools/objtool/check.c | 10 ----------
+>  2 files changed, 16 deletions(-)
+>
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index 609ddfc73de5..4ce4b0c0109c 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -185,12 +185,6 @@ config KCSAN_WEAK_MEMORY
+>         bool "Enable weak memory modeling to detect missing memory barriers"
+>         default y
+>         depends on KCSAN_STRICT
+> -       # We can either let objtool nop __tsan_func_{entry,exit}() and builtin
+> -       # atomics instrumentation in .noinstr.text, or use a compiler that can
+> -       # implement __no_kcsan to really remove all instrumentation.
+> -       depends on !ARCH_WANTS_NO_INSTR || HAVE_NOINSTR_HACK || \
+> -                  CC_IS_GCC || CLANG_VERSION >= 140000
+> -       select OBJTOOL if HAVE_NOINSTR_HACK
+>         help
+>           Enable support for modeling a subset of weak memory, which allows
+>           detecting a subset of data races due to missing memory barriers.
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index d14f20ef1db1..efa4c060ff4e 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -2453,16 +2453,6 @@ static bool is_profiling_func(const char *name)
+>         if (!strncmp(name, "__sanitizer_cov_", 16))
+>                 return true;
+>
+> -       /*
+> -        * Some compilers currently do not remove __tsan_func_entry/exit nor
+> -        * __tsan_atomic_signal_fence (used for barrier instrumentation) with
+> -        * the __no_sanitize_thread attribute, remove them. Once the kernel's
+> -        * minimum Clang version is 14.0, this can be removed.
+> -        */
+> -       if (!strncmp(name, "__tsan_func_", 12) ||
+> -           !strcmp(name, "__tsan_atomic_signal_fence"))
+> -               return true;
+> -
+>         return false;
+>  }
+>
+>
+> --
+> 2.50.1
+>
