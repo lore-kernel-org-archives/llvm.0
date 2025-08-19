@@ -1,88 +1,100 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF4A272E51
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 10:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1839527700C;
+	Tue, 19 Aug 2025 10:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755598518; cv=none; b=H3YVJ4AnoCEb7Uxxpt2h8w3Etn3rK1MPU6sx0n3Va9f7C7lXpGmVYQj5WImsHmRql6BK1ONIXOmzP4vCLtfH93cLl36LerNOv7elY3KE6e78LmwuTcS7Y9yBClHy24J6C/9cBbNaUjVIyYDHcVEaCAj8ZwJrotgEabJciIKLh0o=
+	t=1755598841; cv=none; b=hZMG+ga+tOpOrE8Wmy1Xksc32dS/t2yDJoGtkWFTI3QSL0sL6n3BkV0Vcqe6G2ELnCA4gRF6++3vwqynCLLs1AhzQXlITKYTMCPvi+g00aMgHxV1YVmzC02WYCGYCmerebvx89bceu2/mwDuAvPUiD+B+en0D7cegW8ymxp4Gsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755598518; c=relaxed/simple;
-	bh=cUGOOjaGkM6Jf7TMuhXO2JG7apiu/9dagHxz5wkg+0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OHXHFQEtT8sbUuZ2fTPClW33e+L4N0ykrXqISm9cipREvI4YyWteJkOiblA0w2omY5xz0C3/DeN+CdtWFwq4SqQP6v9toPibLWCT5Nd7XUkcRo/AhFgwjACGOGZVoHshq/TceolZsmst6MPb4ycer2K2ec2/z23E9ZQx0zzDlJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Qe76o2et; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1755598841; c=relaxed/simple;
+	bh=S47ygKL32ruBO8bjIs8S4nUDrgHAc2oSYPXd6ncSwnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F/Y/KVTPcV+vKc7a1SFWG5VLwdaX7DEPZaJAfiAnCb0CyjMuf3M+rlti3fl2PwsK8RXbZtUsPOPYHJd6X8F4pRxfE3OG69Rin8+thbedNoOnJldKXj48QRnCk/cp4W8ukrV8OBmn8GflC/S5/4DvrfIjVvFb1xu4V9mvPaTAAYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DKv0/oJi; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Qe76o2et"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 79CC51FD38;
-	Tue, 19 Aug 2025 10:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1755598509;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j1BlwARAd7XC47bHytw4rKPMTkQ2Zda9KuvTmOKI8Zg=;
-	b=Qe76o2etNDlqTA99DMe83pP9ElyHK39NqLpUD4YPDynEGN+rixgQe9RUfcVCQ4EsRTRAlR
-	hwOMer5JWI9c1UJht5Q1kCNiPawrzrY+FiBkOqsAAQu/QslNYMsVcZlkMcW1p5AhB9nXsL
-	LIt1Sqx5kCN8aqKTaNMoi0AmO4rrMRibWLk97OpxE+dNd9lZYIlzD7Z19lEvGrF7XCLLNy
-	cM3IzpFlBHeHSkL+WvEmYK+5dZvqNSaa52ktQpTmMR435B8Q8wiN/vzCE9Q7PvQ54/LXL1
-	sugJ5n0WzqhNmmLE9L7+n22FMTaxtZnqE2OdJlGRyyzvhdRnjWSvQ+PoMyar5Q==
-Date: Tue, 19 Aug 2025 12:15:04 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Miguel Ojeda
- <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Tomi Valkeinen
- <tomi.valkeinen@ideasonboard.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Chaoyi Chen
- <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 0/9] drm/bridge: get/put the bridge when looping over
- the encoder chain
-Message-ID: <20250819121504.0d5b45ff@booty>
-In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DKv0/oJi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755598839; x=1787134839;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S47ygKL32ruBO8bjIs8S4nUDrgHAc2oSYPXd6ncSwnQ=;
+  b=DKv0/oJide/eFDYed1s/eCJvkVK+9tZBMl1/8Yola1ixDe+pHDa8AGls
+   2Ns8jCEA645ScAeDDu/SRDeSqvnkz6vs5TD+2z4oHBKy6ZlTIzg5JGIZR
+   mwyojRKBqcF5WvD7L4i3WJXTpEonveXYuFD+cZyL0wDkE0ZvBOSJ4bxC6
+   QvSDSiOiyK+tkOnEfiO1G5NqoQbNs/WY06/SvY9VhRHK9b5wF+3l9V6oN
+   J8x6nN4VILNBgMbDWNzzkvAMzi2cht2x8Spwm6lLgd+dPZeJDtWENuyt1
+   zsGTUYjuGD6ed7RF8W3pAN8GcbagvU1J9JdqERxVshBnGeLWRBDX4a9QN
+   w==;
+X-CSE-ConnectionGUID: odmi4MaITo6fG2ZabUuh7w==
+X-CSE-MsgGUID: 67HnTc1uR0+qEo7p8OFR3Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="69210748"
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="69210748"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 03:20:38 -0700
+X-CSE-ConnectionGUID: lOIoTR8OSUOebrRJdcrf/Q==
+X-CSE-MsgGUID: lQlgxSwwTqerOwWQ0WNYmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="172049373"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 19 Aug 2025 03:20:35 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uoJSC-000Gjf-2S;
+	Tue, 19 Aug 2025 10:20:32 +0000
+Date: Tue, 19 Aug 2025 18:19:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kernel@collabora.com,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH] thermal: rockchip: shut up GRF warning
+Message-ID: <202508191909.EIZEWxiJ-lkp@intel.com>
+References: <20250818-thermal-rockchip-grf-warning-v1-1-134152c97097@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduheehvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdegpdhrtghpthhtoheprghnughriigvjhdrhhgrjhgurgesihhnthgvlhdrtghomhdprhgtphhtthhopehnvghilhdrrghrmhhsthhrohhngheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhfohhssheskhgvrhhnvghlr
- dhorhhgpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehjohhnrghssehkfihisghoohdrshgvpdhrtghpthhtohepjhgvrhhnvghjrdhskhhrrggsvggtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgrrghrthgvnhdrlhgrnhhkhhhorhhstheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehmrhhiphgrrhgusehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818-thermal-rockchip-grf-warning-v1-1-134152c97097@kernel.org>
 
-On Fri, 08 Aug 2025 16:49:07 +0200
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
+Hi Sebastian,
 
-> This series depends on:
-> 
->  * commit 103578241512 ("drm/bridge-connector: Fix bridge in
->    drm_connector_hdmi_audio_init()"), currently in drm-misc-fixes, not yet
->    on drm-misc-next
+kernel test robot noticed the following build warnings:
 
-Just a quick update: this commit is now in drm-misc-next, so this patch
-has zero dependencies now.
+[auto build test WARNING on c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9]
 
-Luca
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Reichel/thermal-rockchip-shut-up-GRF-warning/20250819-012807
+base:   c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+patch link:    https://lore.kernel.org/r/20250818-thermal-rockchip-grf-warning-v1-1-134152c97097%40kernel.org
+patch subject: [PATCH] thermal: rockchip: shut up GRF warning
+config: riscv-randconfig-001-20250819 (https://download.01.org/0day-ci/archive/20250819/202508191909.EIZEWxiJ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508191909.EIZEWxiJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508191909.EIZEWxiJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/thermal/rockchip_thermal.c:133 struct member 'grf_mode' not described in 'rockchip_tsadc_chip'
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
