@@ -1,65 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6412A31CA4F;
-	Tue, 19 Aug 2025 09:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB5C31CA61
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 09:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755595696; cv=none; b=JzfwCDMdyWXSpUDW4C/M0q+ovVthRC59kAiZ7vIkz7k+WcqLK50FBsAvm67eLNY7ap9RaBljaIpqsci6FzdJLysp6D9hSb0iYVfMt4M2KHtG+na3Es236JlX1jQDE5D9DzzF054umpxQIhBIkrqodO2WR7TmU4gSAid5diABb88=
+	t=1755597147; cv=none; b=kqg89N15hbGRn7b0LBTBJ0938ntweKt21r9ecQxfQEJWMK7Hp7JnxeeleLERP9cugCXQw9dDgtFNW/6zPZb2RAC6A6sftxGV7Rv/rU8I2FO6Xdgn5Hpuf/324g388E9Q6bG8fWXT6hW9uVyVlQ8hTNeSuPB0A/Mk36kMEowk0Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755595696; c=relaxed/simple;
-	bh=aY4nfATfEDBE9HkWCGMg4md5MJCVY8LRNdkz9R4iLJc=;
+	s=arc-20240116; t=1755597147; c=relaxed/simple;
+	bh=qAs0XcBYhHLYErfDfebFruRjYp1XDjaXf1ddxitMbfk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PVj1Zgvq+doyR2S6W85PARUFLyIARZfqgN1X9/SBSNxWODcLgood7L2ZwQM6g6TDejBLSOV0g354Q46F9cRBFKJTG3qTMZNDDcY+eNQbXKx16bGXtCbNz6SwjSuOxi6QmSd1KVEalIgPJBqTc9DVdCgclJFwMV0/WSBpqZ2i91Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X6l1J9pz; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=P5FkToq4qz1ozj7HU3J1QsJV6I0TiF5NzjY0z+RpuVekoQbxGhXuLARWzrPgA0GgEIoOeHRiRoEBZppbsc7NeGc1WpUxubaEcNAbNntEhZldP8fbOPMhjRxgqKbh2GXHYdv7MZDC/Wr+tZhrOPsfEV8rCvqNQ7rRrE1bdbhymCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DbuLjQ6J; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X6l1J9pz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755595694; x=1787131694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aY4nfATfEDBE9HkWCGMg4md5MJCVY8LRNdkz9R4iLJc=;
-  b=X6l1J9pzNIydf0Q8v4oEL8qSEYMQdrOGwM3fMiPvMmm8U48qQ522jJp9
-   r891X19k8oy3wkmt3ocW7++qjhqjm51eRkbp/SIcgMI19zaEsdFbpK2jC
-   YSOQ/SB09QL2DSR6N4xd6EqOISPlN3mqwTMqwkO7kgKBudm037b/1Eg2Z
-   gVM7/A/31kCY35v3gOM5thiSJDTueJMkIMX4cG2yfmFRe+b61yqsJoHxY
-   lAWU041PuEhipheuLUsPwk0CAMDDPoaPX7s5dvB+heaSD+Bz1v6EKxKu6
-   JPqjesNq9uDwE2YsNH1HCKdvuOdGpTGmekKmkXf7npNUBkaX/NUFCbovR
-   Q==;
-X-CSE-ConnectionGUID: 3JRERzovRy+zjTHYqJZyww==
-X-CSE-MsgGUID: t9t7sGg8TNKo+3M6BfsPIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="68099575"
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="68099575"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 02:28:13 -0700
-X-CSE-ConnectionGUID: /q+oVUUHQYOCAIczP/kgWA==
-X-CSE-MsgGUID: uUyaX2nBTx+XodmXZp2r0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
-   d="scan'208";a="172041528"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 19 Aug 2025 02:28:10 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoIdH-000Gh9-28;
-	Tue, 19 Aug 2025 09:27:58 +0000
-Date: Tue, 19 Aug 2025 17:26:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>, dhowells@redhat.com,
-	kees@kernel.org, gustavoars@kernel.org,
-	aleksander.lobakin@intel.com, tstruk@gigaio.com
-Subject: Re: [PATCH net-next] stddef: don't include compiler_types.h in the
- uAPI header
-Message-ID: <202508191741.O5OYysnF-lkp@intel.com>
-References: <20250818181848.799566-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DbuLjQ6J"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6188b7532f3so9170149a12.2
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 02:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755597144; x=1756201944; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DGKilKkH6ulJbbdDF/XnTU/jMrrNQ/OZzlvjuNWjrx4=;
+        b=DbuLjQ6J/Qyy8d7WUI52qngiyySvzGauyC9+ef+IgtfAe2Iqybqm8ImaJsFMWGQpu0
+         r94t4MfRzyYXkez8tHBGHVlEmXOxLbkpS4qogRwmdBcmjdYhLojqYD0rzD0yfrD7jRYQ
+         v1zZzE5YNJkBt3B64Grfs8D8ZOzLSPQRpwPuZAmax2L023422TKWLAUsvbF4dM1D+An3
+         bz2t1Ul2sD065tH320GxAEAqYhGP1oUWv1QIlvnY++W+8LcXLjiy3kJ8K7Fp1CJ2HzVH
+         PICMiL7NxRlSuWVa4m6QhZLXfCr7HvRlL3SQWZ1Z56GzfBa5dDnHIboAbDgjLro67o9+
+         limg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755597144; x=1756201944;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DGKilKkH6ulJbbdDF/XnTU/jMrrNQ/OZzlvjuNWjrx4=;
+        b=YzkRYdPaC7PlDCezXFdlQJ3p/vDg688J3DRbttBcf9pFg+sjiiQ3zddUxx00ApqJFf
+         dL1SJxDuqPFDyieGUiowZ2NEcfMb84JLyCLZho1Sjko5II+tRLIBIf1R09rxlnvQ8yOB
+         RyitBf/MsyVB6m4gDsgyWwhLqtaWtFqJJ9wsicKXS2OXEWEQFKkB6g9zmJ3kGlJZW2tH
+         zpsdzjm9HCSpSuHJkQG4lhuFzSnxf179XCar5PiBpFWFMf7maoMATMkMBcVllHWR9h+B
+         Ptor1aK189vdAh34HjjkLtdT/W4Onvp6soTqB99j4P5o+fEnQPXDGhtw2/eMAPqIMmNV
+         y5Ew==
+X-Forwarded-Encrypted: i=1; AJvYcCVvqYnH0aJXHdlDIi8j9wrd2s/uqZCWOv3masouTOzROKvLCHK/QK97+q8PFW0UKhjwSVHv@lists.linux.dev
+X-Gm-Message-State: AOJu0YwFpR22cxHjm5JYeAnVjCW8/oVMX+qK2FKYhbEt0lhbqxJa6zmz
+	dpxP0o8TRyNjhWhSjgrZHMvRKExb13YN9Ym2KX6pnSqyKCypxn9f2vqg
+X-Gm-Gg: ASbGncv+0YGUbRg2oEfNeA/LfxefvzkIckkiz+J9lyUngJ+59tClf3/8JaeKoMHf+sL
+	aLZASfUwUrTkwNdpFKDysxK8iuUhj5GR8tgZjpQfQyxkRjYpRFkWACISGF9VetekafEl6jZ1uSq
+	nFzb1UTujUX1nQBjvuplm4lPUlmH36tLP4lRa6WWgqzBeCScFqq602bJZzWbPeJki4wejcIi0xA
+	IaAyX43UdljlYa9fccH1vKS0Pqo3OnAdH3xDHf48yH5SY/UYSiM55rdKQVakJ2jbjQ+QNpUZMOt
+	fRwmS+u7qEo89fU+hqEviHO9sZyw+qqKuAgP6zmiNd2cW7gCRyAyfV1IIjGaK+ffGbDbWT2Aoz5
+	QBbbf6eHZdhc5lecKxKnBlg==
+X-Google-Smtp-Source: AGHT+IGl4szIJa+BhsJtYd6B7f8e6cbRaIoS3/RZYsKJqrTQ2MNq/q3Jkblc6AIW/S6WMxr98PJw4A==
+X-Received: by 2002:a17:907:d26:b0:af9:c31c:eeca with SMTP id a640c23a62f3a-afddd1ead43mr171516166b.48.1755597144172;
+        Tue, 19 Aug 2025 02:52:24 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afcdd04e4d9sm980813666b.113.2025.08.19.02.52.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 Aug 2025 02:52:23 -0700 (PDT)
+Date: Tue, 19 Aug 2025 09:52:23 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+	Bill Wendling <morbo@google.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/4] mm/mm_init: use deferred_init_memmap_chunk() in
+ deferred_grow_zone()
+Message-ID: <20250819095223.ckjdsii4gc6u4nec@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20250818064615.505641-1-rppt@kernel.org>
+ <20250818064615.505641-2-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,166 +84,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250818181848.799566-1-kuba@kernel.org>
+In-Reply-To: <20250818064615.505641-2-rppt@kernel.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-Hi Jakub,
+Hi, Mike
 
-kernel test robot noticed the following build errors:
+After going through the code again, I have some trivial thoughts to discuss
+with you. If not right, please let me know.
 
-[auto build test ERROR on net-next/main]
+On Mon, Aug 18, 2025 at 09:46:12AM +0300, Mike Rapoport wrote:
+[...]
+> bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
+> {
+>-	unsigned long nr_pages_needed = ALIGN(1 << order, PAGES_PER_SECTION);
+>+	unsigned long nr_pages_needed = SECTION_ALIGN_UP(1 << order);
+> 	pg_data_t *pgdat = zone->zone_pgdat;
+> 	unsigned long first_deferred_pfn = pgdat->first_deferred_pfn;
+> 	unsigned long spfn, epfn, flags;
+> 	unsigned long nr_pages = 0;
+>-	u64 i = 0;
+> 
+> 	/* Only the last zone may have deferred pages */
+> 	if (zone_end_pfn(zone) != pgdat_end_pfn(pgdat))
+>@@ -2262,37 +2272,26 @@ bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
+> 		return true;
+> 	}
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/stddef-don-t-include-compiler_types-h-in-the-uAPI-header/20250819-022023
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250818181848.799566-1-kuba%40kernel.org
-patch subject: [PATCH net-next] stddef: don't include compiler_types.h in the uAPI header
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250819/202508191741.O5OYysnF-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508191741.O5OYysnF-lkp@intel.com/reproduce)
+In the file above this line, there is a compare between first_deferred_pfn and
+its original value after grab pgdat_resize_lock.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508191741.O5OYysnF-lkp@intel.com/
+I am thinking to compare first_deferred_pfn with ULONG_MAX, as it compared in
+deferred_init_memmap(). This indicate this zone has already been initialized
+totally.
 
-All error/warnings (new ones prefixed by >>):
+Current code guard this by spfn < zone_end_pfn(zone). Maybe a check ahead
+would be more clear?
 
-   In file included from <built-in>:3:
-   In file included from lib/vdso/gettimeofday.c:5:
-   In file included from include/vdso/auxclock.h:5:
-   In file included from include/uapi/linux/time.h:5:
->> include/linux/types.h:265:21: error: field has incomplete type 'struct task_struct'
-     265 |         struct task_struct __rcu *task;
-         |                            ^
-   include/linux/types.h:265:9: note: forward declaration of 'struct task_struct'
-     265 |         struct task_struct __rcu *task;
-         |                ^
->> include/linux/types.h:265:26: error: expected ';' at end of declaration list
-     265 |         struct task_struct __rcu *task;
-         |                                 ^
-         |                                 ;
-   In file included from <built-in>:3:
-   In file included from lib/vdso/gettimeofday.c:6:
-   In file included from include/vdso/datapage.h:7:
-   In file included from include/linux/compiler.h:5:
-   In file included from include/linux/compiler_types.h:89:
->> include/linux/compiler_attributes.h:55:9: warning: '__always_inline' macro redefined [-Wmacro-redefined]
-      55 | #define __always_inline                 inline __attribute__((__In file included from arch/arm64/kernel/vdso32/note.c:11:
-   In file included from include/linux/elfnote.h:62:
-   In file included from include/uapi/linux/elf.h:5:
->> include/linux/types.h:265:21: error: field has incomplete type 'struct task_struct'
-   alw  ays_inline__))
-         |         ^
-   include/uapi/linux/stddef.h:6:9: note: previous definition is here
-       6 | #define __always_inline inline
-         |         ^
-   265 |         struct task_struct __rcu *task;
-         |                            ^
-   In file included from <built-in>:3:
-   In file included from lib/vdso/gettimeofday.c:6:
-   In file included from include/vdso/datapage.h:7:
-   In file included from include/linux/compiler.h:5:
->> include/linux/compiler_types.h:346:10: warning: '__counted_by' macro redefined [-Wmacro-redefined]
-     346 | # define __counted_by(member)           __attribute__((__counted_by__(member)))
-         |          ^
-   include/uapi/linux/stddef.h:60:9: note: previous definition is here
-      60 | #define __counted_by(m)
-         |         ^
-   In file included from include/linux/types.h:265:9: note: forward declaration of 'struct task_struct'
-     265 |         struct task_struct __rcu *task;
-         |                ^
-   <built-in>:3:
-   In file included from lib/vdso/gettimeofday.c:6:
-   In file included from include/vdso/datapage.h:7:
-   In file included from include/linux/compiler.h:5:
->> include/linux/compiler_types.h:367include/linux/types.h:265:26: error: expected ';' at end of declaration list
-   :  265 |         struct task_struct __rcu *task;
-         |                                 ^
-         |                                 ;
-   9: warning: '__counted_by_le' macro redefined [-Wmacro-redefined]
-     367 | #define __counted_by_le(member) __counted_by(member)
-         |         ^
-   include/uapi/linux/stddef.h:64:9: note: previous definition is here
-      64 | #define __counted_by_le(m)
-         |         ^
-   In file included from <built-in>:3:
-   In file included from lib/vdso/gettimeofday.c:6:
-   In file included from include/vdso/datapage.h:7:
-   In file included from include/linux/compiler.h:5:
->> include/linux/compiler_types.h:368:9: warning: '__counted_by_be' macro redefined [-Wmacro-redefined]
-     368 | #define __counted_by_be(member)
-         |         ^
-   include/uapi/linux/stddef.h:68:9: note: previous definition is here
-      68 | #define __counted_by_be(m)
-         |         ^
->> error: expected ';' after struct
->> arch/arm64/kernel/vdso32/note.c:14:1: error: unknown type name '_note_14'
-      14 | ELFNOTE32("Linux", 0, LINUX_VERSION_CODE);
-         | ^
-   include/linux/elfnote.h:95:37: note: expanded from macro 'ELFNOTE32'
-      95 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:93:2: note: expanded from macro 'ELFNOTE'
-      93 |         _ELFNOTE(size, name, __LINE__, type, desc)
-         |         ^
-   include/linux/elfnote.h:79:4: note: expanded from macro '_ELFNOTE'
-      79 |         } _ELFNOTE_PASTE(_note_, unique)                                \
-         |           ^
-   include/linux/elfnote.h:71:29: note: expanded from macro '_ELFNOTE_PASTE'
-      71 | #define _ELFNOTE_PASTE(a,b)     a##b
-         |                                 ^
-   <scratch space>:11:1: note: expanded from here
-      11 | _note_14
-         | ^
->> error: expected ';' after struct
->> arch/arm64/kernel/vdso32/note.c:15:1: error: unknown type name '_note_15'
-      15 | BUILD_SALT;
-         | ^
-   include/linux/build-salt.h:16:8: note: expanded from macro 'BUILD_SALT'
-      16 |        ELFNOTE32("Linux", LINUX_ELFNOTE_BUILD_SALT, CONFIG_BUILD_SALT)
-         |        ^
-   include/linux/elfnote.h:95:37: note: expanded from macro 'ELFNOTE32'
-      95 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:93:2: note: expanded from macro 'ELFNOTE'
-      93 |         _ELFNOTE(size, name, __LINE__, type, desc)
-         |         ^
-   include/linux/elfnote.h:79:4: note: expanded from macro '_ELFNOTE'
-      79 |         } _ELFNOTE_PASTE(_note_, unique)                                \
-         |           ^
-   include/linux/elfnote.h:71:29: note: expanded from macro '_ELFNOTE_PASTE'
-      71 | #define _ELFNOTE_PASTE(a,b)     a##b
-         |                                 ^
-   <scratch space>:21:1: note: expanded from here
-      21 | _note_15
-         | ^
-   6 errors generated.
-   make[3]: *** [arch/arm64/kernel/vdso32/Makefile:144: arch/arm64/kernel/vdso32/note.o] Error 1
-   4 warnings and 2 errors generated.
-   make[3]: *** [arch/arm64/kernel/vdso32/Makefile:146: arch/arm64/kernel/vdso32/vgettimeofday.o] Error 1
-   make[3]: Target 'arch/arm64/kernel/vdso32/vdso.so' not remade because of errors.
-   make[2]: *** [arch/arm64/Makefile:208: vdso_prepare] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+> 
+>-	/* If the zone is empty somebody else may have cleared out the zone */
+>-	if (!deferred_init_mem_pfn_range_in_zone(&i, zone, &spfn, &epfn,
+>-						 first_deferred_pfn)) {
+>-		pgdat->first_deferred_pfn = ULONG_MAX;
+>-		pgdat_resize_unlock(pgdat, &flags);
+>-		/* Retry only once. */
+>-		return first_deferred_pfn != ULONG_MAX;
+>+	/*
+>+	 * Initialize at least nr_pages_needed in section chunks.
+>+	 * If a section has less free memory than nr_pages_needed, the next
+>+	 * section will be also initalized.
+>+	 * Note, that it still does not guarantee that allocation of order can
+>+	 * be satisfied if the sections are fragmented because of memblock
+>+	 * allocations.
+>+	 */
+>+	for (spfn = first_deferred_pfn, epfn = SECTION_ALIGN_UP(spfn + 1);
 
+I am expecting first_deferred_pfn is section aligned. So epfn += PAGES_PER_SECTION
+is fine?
 
-vim +/__always_inline +55 include/linux/compiler_attributes.h
+Maybe I missed something.
 
-86cffecdeaa278 Kees Cook    2021-11-05  45  
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  46  /*
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  47   * Note: users of __always_inline currently do not write "inline" themselves,
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  48   * which seems to be required by gcc to apply the attribute according
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  49   * to its docs (and also "warning: always_inline function might not be
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  50   * inlinable [-Wattributes]" is emitted).
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  51   *
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  52   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-always_005finline-function-attribute
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  53   * clang: mentioned
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  54   */
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30 @55  #define __always_inline                 inline __attribute__((__always_inline__))
-a3f8a30f3f0079 Miguel Ojeda 2018-08-30  56  
+>+	     nr_pages < nr_pages_needed && spfn < zone_end_pfn(zone);
+>+	     spfn = epfn, epfn += PAGES_PER_SECTION) {
+>+		nr_pages += deferred_init_memmap_chunk(spfn, epfn, zone);
+> 	}
+> 
+> 	/*
+>-	 * Initialize and free pages in MAX_PAGE_ORDER sized increments so
+>-	 * that we can avoid introducing any issues with the buddy
+>-	 * allocator.
+>+	 * There were no pages to initialize and free which means the zone's
+>+	 * memory map is completely initialized.
+> 	 */
+>-	while (spfn < epfn) {
+>-		/* update our first deferred PFN for this section */
+>-		first_deferred_pfn = spfn;
+>-
+>-		nr_pages += deferred_init_maxorder(&i, zone, &spfn, &epfn);
+>-		touch_nmi_watchdog();
+>-
+>-		/* We should only stop along section boundaries */
+>-		if ((first_deferred_pfn ^ spfn) < PAGES_PER_SECTION)
+>-			continue;
+>-
+>-		/* If our quota has been met we can stop here */
+>-		if (nr_pages >= nr_pages_needed)
+>-			break;
+>-	}
+>+	pgdat->first_deferred_pfn = nr_pages ? spfn : ULONG_MAX;
+
+If we come here because spfn >= zone_end_pfn(zone), first_deferred_pfn is left
+a "valid" value and deferred_init_memmap() will try to do its job. But
+actually nothing left to initialize.
+
+For this case, I suggest to set it ULONG_MAX too. But this is really corner
+case.
+
+> 
+>-	pgdat->first_deferred_pfn = spfn;
+> 	pgdat_resize_unlock(pgdat, &flags);
+> 
+> 	return nr_pages > 0;
+>-- 
+>2.50.1
+>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Wei Yang
+Help you, Help me
