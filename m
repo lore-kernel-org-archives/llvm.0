@@ -1,111 +1,92 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E564C1FA272;
-	Tue, 19 Aug 2025 14:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5058F2253FC
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 14:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755612061; cv=none; b=tmAFFIml02faULvFKrI+g5NoUhGthJNFcADCL3hkLN1xFHpg/ZYyAw+5F258PWEF0Wfrb1hjNS1XZOvt8gG3lSZdvb8Tq/z4qT6upOgN95bLPWkuoNijHrSCD0mV9e67RxKh11Mbw3RA6Nd+Pe91tcr33ZS4yyLqWA2WT3R1Sy8=
+	t=1755615469; cv=none; b=DiWnZWsH1dVBPDOJiy3VkL3aAmyUA01v2ygRsbEQpMwYEHc85pS1FM6tUj6q3skkMM5SzIFJtq3qk0S+Pa/naXNaVAB8hJCEICWK69tOl9lZcMU9qVmhTAV4ssgHYENfIbD3vskwZqYzKF9k1EVAKGGuBDIQpUfo4C959OISWZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755612061; c=relaxed/simple;
-	bh=ha4t6RRIk6XpkYKIpDFUbToR4GM8kq4XAbtG+yoAZGk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S1ydCru2uPQLgRynnuVcYcNhFVavP6tmLT+tMuqmfyiHIIqHTYUg2k5tXqEmK4NiE9lmHpoGKaRx2f1M1td3bXcNiiGWUKqDIrEDp2lJXuEXW2OmB+d9v6MLAlyMnSBoPCHP4vQII8FcxLUGDl/uqu7Gm9MfgqHvmtmZhjrso24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CriPKwcL; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755615469; c=relaxed/simple;
+	bh=mUQmF2HpuZgKFr0NvJu8cI8+nN69AAUtuxAGgMJkyog=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P0Nissw+5AA1/tJXDH8i8OJFq84vyYnMrQynPrp3G9NZ1SjdYzFPk4Faor/8UhQadnViUrgS/GlLHrO8qkbJ5Skhl4C5ig0LhYvUBM4pMRA5JR+aR9WAXxBfzgqMajWv5VRnxkKAGKeDMS33Sts+uHewddxauqTaD06EpyhuErc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xlQ4HaAZ; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CriPKwcL"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24457f57ed4so9743955ad.0;
-        Tue, 19 Aug 2025 07:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755612059; x=1756216859; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=50WBtMPwvOw9oYEsHnoDkF8zoLwvDN0HfFQfOPg/bdE=;
-        b=CriPKwcLu0eKJtTcr3a8I0cqQlBe+bYIH7xwFNGIPrz5BaRZ3y7BLhYmb1CcNmRCE+
-         7p6tDlQxNKHW5XIxEbvgIrTCflaQZZfzu1smdXX8FGTLJdYrrYAaMyCR+8/qUavSHg50
-         qWFMMGYWk67lhGiMaKi5U0qUx1jkjwlLLIIoKvJONoBVP7PuMp4FfzJhd9KIa6UvLZ0q
-         7mluON59rfbC/o+EzoT8AdnmypHcTkUoEdrLn5KMPmmMsdHAVzqWpLkDgr2BBLZ9pN1m
-         VUmazSomNgul01RbUTy9EwHPuWOrFNMdX1D/QW6bvu3cz4l7DiVlQfufHhPFzPvf7Czd
-         ssMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755612059; x=1756216859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=50WBtMPwvOw9oYEsHnoDkF8zoLwvDN0HfFQfOPg/bdE=;
-        b=pX8+ubuj9k+n+OPsmkZwWnDW5vSSp6Kpr2AooxTLYXvtIw+5fi8ZFFHreG+crXxrrV
-         9QHBB2+vNXFLRMoQVW8SN5BJimE7jBaBhZ4QhAOJDebdUdgibC/xN2HPjYLVgi7Y+oyH
-         ml8AOFqvoH92ogCjC2Gt0JOhG4R9JWdUYJHWsO1GIJ9L25J8EcQGHWSuq/FG9+Lbr6rh
-         ETzR/gRraMb2sM4YcmehbcG2C5yZ5B3XosLlVbHcmgajN/DhY/Mkz45QdRTdYL7uKacD
-         sc/AWz0TboohRULlb7Wlep/3KFrLa5BkGkEUtgSsXILd8aODiiGOpiGA2ej039AhURzd
-         dOtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZmXBM7xg/rtDLWSbpEzzRFuJTawc+J9nas5s3LfCs5KD6jA8+zPif3Q19UAN2ElPYQ7LdhkG7uIThu1Y=@lists.linux.dev, AJvYcCXfw7yAEGQ9iirVlLgl5J6ZvKf7PYt1sfspd1IgdrqEikKm6wvtlbsrTFM4oWKxobdB+75M@lists.linux.dev
-X-Gm-Message-State: AOJu0YwU4hx5lwlPg1yxztSf65Im1iFLE0QORoH2NdXr9krDcUaVGx1q
-	xZqTZbITKFtKrdAAcEp0ptNGhxrqpybNnHOGMypS7HanEyruPNsV9rb9eEPLvGXoWJjeXyPUrLt
-	EwOTLz8VakrqriZvdsCB4FbNoA6r0U1E=
-X-Gm-Gg: ASbGnct283mRvj1B4PpXdO0R+f+oexo/eQFlt8x9QUKHLT2Xcn14z4BRl4bXCVGC3Ls
-	Aq4Pa0b938Osb9YMrWRTzY5vQhichj58KNuIjQggH4fDZcHFTFsPoxnS/HvsSsWMIie4Aid5HI8
-	Vfp2TewK52BeFh2XWZZqZNhOTHjm1kT0T+bEjGHRfBvd4pr5KwmzFu7+9sSYQVf4S+jDortrUsK
-	LfGB1p4
-X-Google-Smtp-Source: AGHT+IFGLtNsuaHcZ9bLDDqN7J8ChtiAW1fZ0dZtuV570UBvC/PTJYsyK7ZfZ8g0ZH1WGMch8OcgtZ3J7WCfv1Mzp/4=
-X-Received: by 2002:a17:902:f547:b0:240:1879:c2fd with SMTP id
- d9443c01a7336-245e02ba0ecmr19746985ad.2.1755612057723; Tue, 19 Aug 2025
- 07:00:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xlQ4HaAZ"
+Date: Tue, 19 Aug 2025 10:57:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755615465;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A8XZjOSj3Gm+y/dit7zSgbOod42EPkCv3AgOQjbvngs=;
+	b=xlQ4HaAZMzxNcNpNNfmY9WBWCmhRapUhXT5qUkH493ONqEownMcj7drd3zI1NpPeRBM+tj
+	keRSBUuJIgN+Hobo54HHH4ISjYj1fxA3pxOwA4IXtXy5hUyScaH0GpCB7RLmg6EtjQCwDD
+	khu2pkIDikTnUJ2xlaU1lccUeS8l5fA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [koverstreet-bcachefs:bcachefs-testing 315/315] ld.lld: error:
+ duplicate symbol: __tracepoint_io_read
+Message-ID: <ujqytz6ysengalwiukpf5j24urkdyijq255ys7zgzevkzkyu2o@7ye2os3lu3a5>
+References: <202508192038.S6x4nOyC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYv+gELzgcL4y8rOQbTxv2Y2JQTFhNkgUcLbzPJ_yDTziA@mail.gmail.com>
-In-Reply-To: <CA+G9fYv+gELzgcL4y8rOQbTxv2Y2JQTFhNkgUcLbzPJ_yDTziA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 19 Aug 2025 16:00:44 +0200
-X-Gm-Features: Ac12FXxTFIhGwb8CqneZObiwy9IEE8bW5R6jDoBMnubJoMsWPuCWTeTncYkgRXU
-Message-ID: <CANiq72k-Z9=EVVXgJp1OuKwSbQ3qq723B0F2PaPzRD4P+QEQ=A@mail.gmail.com>
-Subject: Re: next-20250818: rust: `ARCH_KMALLOC_MINALIGN` is defined multiple times
-To: Naresh Kamboju <naresh.kamboju@linaro.org>, Thorsten Leemhuis <linux@leemhuis.info>, 
-	Danilo Krummrich <dakr@kernel.org>
-Cc: open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, rust-for-linux@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Miguel Ojeda <ojeda@kernel.org>, wedsonaf@gmail.com, 
-	Gary Guo <gary@garyguo.net>, Benno Lossin <benno.lossin@proton.me>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Anders Roxell <anders.roxell@linaro.org>, Ben Copeland <benjamin.copeland@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202508192038.S6x4nOyC-lkp@intel.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Aug 19, 2025 at 10:40=E2=80=AFAM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> Build regressions were detected on multiple architectures (arm, arm64,
-> riscv) with the Linux next-20250818 tag when building with Rust-enabled
-> configurations (rust-gcc and rust-clang) from selftests/rust/config.
->
-> Duplicate definition of ARCH_KMALLOC_MINALIGN in Rust bindings is
-> causing build failures across affected toolchains.
+__traceiter_tracepointname - is this something easily fixable, or do I
+just have to rename?
 
-Thanks a lot Naresh, this was reported already by Thorsten and me yesterday=
-:
-
-    https://lore.kernel.org/rust-for-linux/8aa05f08-ef6e-4dfe-9453-beaab7b3=
-cb98@leemhuis.info/
-
-A patch from Danilo is in flight to fix it:
-
-    https://lore.kernel.org/rust-for-linux/20250818180923.192042-1-dakr@ker=
-nel.org/
-
-If you could test it, that would be great. I assume Danilo will apply
-the patch on top of alloc-next, since the issue is just inside that
-branch that goes into linux-next.
-
-Thanks!
-
-Cheers,
-Miguel
+On Tue, Aug 19, 2025 at 08:21:49PM +0800, kernel test robot wrote:
+> tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+> head:   18104c9e108e1d96c66acb5f4f26f891c3f643cd
+> commit: 18104c9e108e1d96c66acb5f4f26f891c3f643cd [315/315] bcachefs: trace_io_read()
+> config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250819/202508192038.S6x4nOyC-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250819/202508192038.S6x4nOyC-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202508192038.S6x4nOyC-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: duplicate symbol: __traceiter_io_read
+>    >>> defined at trace.c
+>    >>>            fs/bcachefs/trace.o:(__traceiter_io_read) in archive vmlinux.a
+>    >>> defined at debug.c
+>    >>>            drivers/net/wireless/silabs/wfx/debug.o:(.text+0x120) in archive vmlinux.a
+> --
+> >> ld.lld: error: duplicate symbol: __tracepoint_io_read
+>    >>> defined at trace.c
+>    >>>            fs/bcachefs/trace.o:(__tracepoint_io_read) in archive vmlinux.a
+>    >>> defined at debug.c
+>    >>>            drivers/net/wireless/silabs/wfx/debug.o:(__tracepoints+0x60) in archive vmlinux.a
+> --
+> >> ld.lld: error: duplicate symbol: __probestub_io_read
+>    >>> defined at trace.c
+>    >>>            fs/bcachefs/trace.o:(__probestub_io_read) in archive vmlinux.a
+>    >>> defined at debug.c
+>    >>>            drivers/net/wireless/silabs/wfx/debug.o:(.text+0x170) in archive vmlinux.a
+> --
+> >> ld.lld: error: duplicate symbol: __SCK__tp_func_io_read
+>    >>> defined at trace.c
+>    >>>            fs/bcachefs/trace.o:(__SCK__tp_func_io_read) in archive vmlinux.a
+>    >>> defined at debug.c
+>    >>>            drivers/net/wireless/silabs/wfx/debug.o:(.data+0xc) in archive vmlinux.a
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
