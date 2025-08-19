@@ -1,134 +1,171 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E2330FF23
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 07:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6577525A631
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 07:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755589186; cv=none; b=IBat75X7KNIddheotD1CXeZ7/hTqZc4AF6uY8coP+Np47klh1ZqvAtMXSvJiXdGyg39T1ZvzcpaYtvVhIHMRocpUhQT5WKuwqo2KS10tGdDbp0t0/g/GRjh7N4432xjBNMizFEZh/VdQf2zCMOxmw+bwiwymb8Fm8XBz/3T4F60=
+	t=1755589449; cv=none; b=P7wsNJ6G0gtvgrZ9YDzxOgH3kMN3DiT7+Uxwq6QgDj/Ron5LzgQ4QA/62t+sF8hqsiMdiCQrQ78CZdPxhSALAvgd7/nyO5BA5e/ORQwrcHmMo2iPpViMa6D3borY9R0KsJPqfZRh5sL0SVaIUIcw4YCAt43IcOd/nL4faF7H6iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755589186; c=relaxed/simple;
-	bh=eRD1kroDbQ1a6DO8DjocsXJeFSn2D5Gc+Oh+p/Mt9VA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qh9mavTeBfSjtpfZo/KL/f2Q980vWoUfeK4VWQz1RLTaPLWYa8aAA9YO8kFPAM9IROjYvhlzEJPlcNTlpoMBEhAM+1JzS+M2n9BPlUxHXpBGxkzwPGhq8s9cqKrOqhgYmeshl/7y8QqWGMON+la0yp0N0oNc7I9jItCdEJwAsiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LDIDutxr; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755589449; c=relaxed/simple;
+	bh=hbXiwwmv/TAyN+dMm4mGAmUTFqxcIwE6CLeyaSscGWU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=utK3P4Mx5E8SiZcJMkEHgcGfaKy37ep7iYCCW794l7gcsfVpRHkqBR8QhS0u9jlrMHMcy7fk3kOZR3c27SHyz6LIKgB5PeQEDMQnmvvq1pOc14oug3sBDDI71+7V+r/rf00/tRjMuQXQgDoZ5pu/mWdCJGI6SxWoX1AoYRyDPro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GtQlsVsl; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LDIDutxr"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6188b654241so8854640a12.1
-        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 00:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755589183; x=1756193983; darn=lists.linux.dev;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JlGG0MimgPVuD1cdmYrztEX7ylcMD0YKZDmGx1Z6TgU=;
-        b=LDIDutxrkbbfeihoOYTI5sN1MGkG8iOa4oMau/HyXF75ec0Ust1B2mfqMij/ZWH1WR
-         BffokBJulYsZfsP7STVrDJeoNeqYToyr/wDyaSgoj00U9qDBw7i+TNU+jkEetinar0mz
-         runw7pY6dMqs8K1ALSzRUAnkgdoy4FKaWBw406CYW0GPxdOggo/Ht7GEk9B5ZWkHkBOT
-         1/MwNi0/cIHI0VsHk1DKMf47pL6EwCcIm7ScKc14w9g+kdEAtO7Tbeq7Cy8BX5cx5f1A
-         p/NV2z8OE10isj3tyNaa8qPtvfp/zIj8SsChWIKgGdL+PXjvL0nIGNcHUc6ahegD8NON
-         BNpA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GtQlsVsl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755589446;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=fIj/g36bZghupXV216+l9nKZNoBOCc3syczxCiD8BLI=;
+	b=GtQlsVslDxNIJx6BcVO1ac/kfsnvBgGRCQsGlhnSFi4FuhqJrd+ptA4ggz/AZwvbe0Zm9p
+	EjdbO9AGK/wHVeM/PgGrQ2wpZEpE++ZpGcCzur1lJQvMuQyzl6J5Zcvu9U+ytH/5ghI0eg
+	45chY6BXVs4QW4MrmMEHvlq6ERJ4FKc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-117-YwZ0-u42OpuV6H9mvIaQ_g-1; Tue, 19 Aug 2025 03:44:04 -0400
+X-MC-Unique: YwZ0-u42OpuV6H9mvIaQ_g-1
+X-Mimecast-MFC-AGG-ID: YwZ0-u42OpuV6H9mvIaQ_g_1755589443
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45a1b1015f8so21799205e9.3
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 00:44:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755589183; x=1756193983;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JlGG0MimgPVuD1cdmYrztEX7ylcMD0YKZDmGx1Z6TgU=;
-        b=IgHlpPshJY1DG8wrsNixxykimlXSiKqaXBUb5SyUWs8xehIPMnNxEv4LAJKJEaww/z
-         pMVvNk7jUTY9HVef1lMco7OmY/1yTFmuL6pZhJc0JXA5EFdoLYH1oFkrWEwqa5YQLxgn
-         4rhBBYiXtZ9JzQECFc1bZTbjEYTEOjs7zOwWHOa5hWlW3TXU1SKl8u0LiBg23O2Aywua
-         gWsGqpqmCafws5RscsxWxvkvSpaSlcz0ZS+ssV/Mr4ra+pfnjBTmL8x4y7r1PAGAFrZr
-         SlMdt6vUmj+Yurg/2SHODjzyL0pYy40l1DvFTLcA0N/BQj5DRSAe7vEt3VHl+FiZavmS
-         hC+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVwXxOEMK4e4Zkag1my7FJb3LyuEIAPkzvQ3cISYR8abbiq4OysYLcn1NiTRfKPe/4DdcAr@lists.linux.dev
-X-Gm-Message-State: AOJu0YzZ9RR+A2qyspeXpfdzUbFppFsNTIoSPUIlaG7mi1+VY1mLv3u2
-	yIklAv62UHTjaUFt2e667M7//gQCkWA8fJLYJVh44ugeN5aUY9f+NuFd
-X-Gm-Gg: ASbGncupHSi5YnWaJ1EcJz8R/y1cvJT/OS38wx4c59ojhwxn2MZk4+kYrBmeIhGWTTg
-	bZs0aU6b4l2n56i/cIDXhBX3MyjU+C2nVSaSUiD6F9Ds6/6xGMX41OpH7mMkDO4+rbFD+XpSfyg
-	dRzx4ZChFhUWT6ZDlCHq5pvj4A49IF6OKqSM8sTr75t2NIJ3K4q1/zbiG1/CqzWJidzDJw3MPX+
-	u3poEgEx9IWHXmW0gqD4Qx7/oyq0EZKWS6BSLHT1kDWW1ehsuuSMSE9+3uKwIkM5PCvyJtAm333
-	Ckf1ArMetjssaD3jlu8e/Mpks8Z0bAHeTeG2dAJeIelnEH2Mag6nAUD2IsaEv7fHei5s2OoaFwD
-	uI8Sdy6AoG+RonLsylgDrxg==
-X-Google-Smtp-Source: AGHT+IFDydZFQrkosnxXfosEK8EVZgkb6qLnlT4kiVd7o1+cVB/7rTEUO0G9UdoGYY9iwV3LjvIXOQ==
-X-Received: by 2002:a17:907:3e1d:b0:afc:bcfc:b3b7 with SMTP id a640c23a62f3a-afddd0d283amr142302066b.38.1755589182644;
-        Tue, 19 Aug 2025 00:39:42 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afcdce53f2bsm973006866b.4.2025.08.19.00.39.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Aug 2025 00:39:42 -0700 (PDT)
-Date: Tue, 19 Aug 2025 07:39:41 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-	Bill Wendling <morbo@google.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/4] mm/mm_init: simplify deferred init of struct pages
-Message-ID: <20250819073941.esl7z5ibqqeabunh@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250818064615.505641-1-rppt@kernel.org>
+        d=1e100.net; s=20230601; t=1755589443; x=1756194243;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fIj/g36bZghupXV216+l9nKZNoBOCc3syczxCiD8BLI=;
+        b=c0q6WmPOmKwnsW9+JkTTWh7B23InVodUfdXV7/aG1zpOZBGm23M4lSVQkMI7wcSPrX
+         8zndjTb5Vwkp+GPEhrxB7hrhiUtsK/UxU1tQU6WjzdHrVdRjwNb6FC6FK1IF2uH+gpJY
+         PcyNjoxS5oP/zXDFecdcwy3wiZP4jNaj02DcRaguN7pMlejW+muFGBA9D8qfLQkFCUUU
+         iRSaSPu2dGwiFERWVjJovJ+3tdEvOqQ50YQt+WmUfIg02CDJoNcNcuAR92UcF0ld49w4
+         yhjHXK3wslKI0duWZyGnZWdR+CyglU349qEMJevmMdQWL517PaQ+uAOsUrZOS296He61
+         F7RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUoiLsBpK+NQyWxi4/T5lImSPtDyS/YB2nra5z2zETByCUcuXkQH+/Uz1nzVE0caI+np5Z9@lists.linux.dev
+X-Gm-Message-State: AOJu0YzypWxhmCwuy31VYuE+cMnF8xAsw4yX8zPUAvZ6HsPAG4/KfQja
+	3ZuWTP2OF+/pR00i+XEG54tE8n5HB6FQzco+ezlFVCR+CEvwgE46Xskd+nijMWjLFLbgbrMWBwZ
+	A61yUQxWNIVJ8DZjQHRj0wUrPSf4HJjJrNeAiISdECKjdvMXApciQmAc=
+X-Gm-Gg: ASbGnct7zxOblEYTCOhsOqyUV7Y0FHJrSJcRS9lzZv/25FbxXno0QxDtqKvCNVx1yVn
+	vu+EmJW3BSHgQ50miCpyBRUFacCSrBA9Bif1tNRxI3wlzgBxTPw3DOf9insm5j1HOl4WyYyMWNQ
+	xXoE+LThr7BeDTLV8Ar7ABTbUdN0YOID46PmnU+mSCLL1QVXAfhAN1pZoxxE5LxRKyOo0qHTdq8
+	r5MdnCmEPihqisZYkvvCyEN2mpyvkjLT1f8nfX9U7KIOj11xSUzYR1ILpoRytd4sg3Ld6/AnHlU
+	wTjVzfNMTCDy9yQEU30CifrkWTfIMOL0avGeuAdCXJpw1D0Sr7J4YIwGP+Xe6TREaPZt74Og/d8
+	/3Qu7cfRtkx8f+u9uJ9M9575kKlMRmTbmCgxcWVNCMc/ljx5W0gO6ogSqNhiHo1LVspA=
+X-Received: by 2002:a05:6000:4011:b0:3b7:9c79:3293 with SMTP id ffacd0b85a97d-3c0ecc318e6mr949022f8f.58.1755589443066;
+        Tue, 19 Aug 2025 00:44:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGX3aCtmn8Z/3+2rglxcbECtcQWpRCN5o9VXE9VpdiFc9WoRBf+18fJ1/CrjpVetKu7qCsWUA==
+X-Received: by 2002:a05:6000:4011:b0:3b7:9c79:3293 with SMTP id ffacd0b85a97d-3c0ecc318e6mr949000f8f.58.1755589442605;
+        Tue, 19 Aug 2025 00:44:02 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f07:8700:71be:5385:87b8:5a98? (p200300d82f07870071be538587b85a98.dip0.t-ipconnect.de. [2003:d8:2f07:8700:71be:5385:87b8:5a98])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074d43c77sm2612291f8f.23.2025.08.19.00.44.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Aug 2025 00:44:02 -0700 (PDT)
+Message-ID: <557f34ed-114b-48ff-8c01-ca9c939da08f@redhat.com>
+Date: Tue, 19 Aug 2025 09:44:01 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250818064615.505641-1-rppt@kernel.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] mm/mm_init: use deferred_init_memmap_chunk() in
+ deferred_grow_zone()
+To: Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Bill Wendling <morbo@google.com>, Daniel Jordan
+ <daniel.m.jordan@oracle.com>, Justin Stitt <justinstitt@google.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Miguel Ojeda <ojeda@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20250818064615.505641-1-rppt@kernel.org>
+ <20250818064615.505641-2-rppt@kernel.org>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20250818064615.505641-2-rppt@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: u_iJwQom_MvUpI49Fz7O1ynMMy1rw3Emn88R1iQoXGM_1755589443
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 18, 2025 at 09:46:11AM +0300, Mike Rapoport wrote:
->From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
->Hi,
->
->These patches simplify deferred initialization of the memory map.
->
->Beside nice negative diffstat I measured 3ms reduction in the
->initialization of deferred pages on single node system with 64GiB of RAM.
+On 18.08.25 08:46, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> deferred_grow_zone() initializes one or more sections in the memory map
+> if buddy runs out of initialized struct pages when
+> CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled.
+> 
+> It loops through memblock regions and initializes and frees pages in
+> MAX_ORDER_NR_PAGES chunks.
+> 
+> Essentially the same loop is implemented in deferred_init_memmap_chunk(),
+> the only actual difference is that deferred_init_memmap_chunk() does not
+> count initialized pages.
+> 
+> Make deferred_init_memmap_chunk() count the initialized pages and return
+> their number, wrap it with deferred_init_memmap_job() for multithreaded
+> initialization with padata_do_multithreaded() and replace open-coded
+> initialization of struct pages in deferred_grow_zone() with a call to
+> deferred_init_memmap_chunk().
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Nice cleanup.
-
-For this series:
-
-Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
-
-I guess the speed up is from "use a job per zone". So we do initialization per
-zone instead of per memblock range in the zone, right?
-
->
->I don't have access to large memory machines, so I'd really appreciate
->testing of these patches on them to make sure there's no regression there.
->
->The patches are also available at git:
->https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=deferred-memmap-init/v1
->
->Mike Rapoport (Microsoft) (4):
->  mm/mm_init: use deferred_init_memmap_chunk() in deferred_grow_zone()
->  mm/mm_init: deferred_init_memmap: use a job per zone
->  mm/mm_init: drop deferred_init_maxorder()
->  memblock: drop for_each_free_mem_pfn_range_in_zone_from()
->
-> .clang-format            |   1 -
-> include/linux/memblock.h |  22 -----
-> mm/memblock.c            |  64 -------------
-> mm/mm_init.c             | 195 +++++++++++++--------------------------
-> 4 files changed, 62 insertions(+), 220 deletions(-)
->
->
->base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
->-- 
->2.50.1
->
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
-Wei Yang
-Help you, Help me
+Cheers
+
+David / dhildenb
+
