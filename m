@@ -1,172 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684FB31AF01;
-	Tue, 19 Aug 2025 10:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6673032255F
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 11:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755600894; cv=none; b=mCoI1AtbN/3Ge3vWmbOD69W00gshtFJkRIn4Y2KEwd1f0J30evlNtg0WYaEVGoOY6C23PaBn/jYfNQK8Rh2Kg2Jh+qeS0kjNolvtDrQWEZ6BnNWyENGI3JzTn/1ahZGqD3rI3k2u7o9gjOuSPO+gxruGs4D+dugjbY0UyfDGlBA=
+	t=1755601361; cv=none; b=fEsnzmJ+HUSgnTHBzuyObGYvYgUxOi+RLATlORpbinRNwEkcyPcfsrdIbDGk7ASOZcIljnR8AO73Oa3bX+5Jp0zauI27xa3wwFiP7sBcAantZbuwtTfrg4A4CNU3I1yvJRnK2Omnjn6h/s8YgyPRc0MCbdJOonKop9p0QATZ1H4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755600894; c=relaxed/simple;
-	bh=ObmAp/lIF5T9u/FjKqRF/LtJfWE6tMEI8MTlJt/e9nk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mk4eyRsx5OfSRGbPR1a+rZpUIKrDEmFPZ1xus/rbL2X96nO3a4+KpcPNuVj3soSBCOqYGq5/2ha+t1hDKFHmwSO/s7GWrdunDblvqfWezW7Frg85NXaD4NB8CVq1RRSVPOjW2oiNZI14lmOivhwrFSOwEY8PwOJ7F1MNtCwabUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zta/O5+p; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755601361; c=relaxed/simple;
+	bh=QW+3Vl1wyeWqmGM44YIRS/8U4Otw7KMVLmpzWqAAJD4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X5aLl64GDREExErdict5H2uscOBtZqklKb20QSmOPDe4pWZrnVIp4XpQRDbyQcMNC0cPsivbQXiO3w0JI2feWO0Zqaltktv+Po1H7DQieqU589Lbs2nAmfhpV0pZl5203l5jH3gD1HlwuV1ZX5Fwahzlm3duZXD9IPhzcD4CuG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ElejmtJ7; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zta/O5+p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F22C113D0;
-	Tue, 19 Aug 2025 10:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755600894;
-	bh=ObmAp/lIF5T9u/FjKqRF/LtJfWE6tMEI8MTlJt/e9nk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Zta/O5+p9ya6IXOH6Q7+cZxn7RNLi4adAXeXJsIjFJrS4XDeTkRVROzGnykGbj9J2
-	 NawVnEa149OU4BcSauE9RmG3C+CsjjIGw1oweDUqwiB2dxsmRyIgiehjb3nfRXZ1Ah
-	 VM3Uy4z5JQpl3nONPeMkKwaXkiitTtOTyXHhhGV8TBYtuTatsLx2rO+/S8DI4mwUsU
-	 cG2J1m3fnnh8yfygqKj6NZ3KZNe4kBJiQv/d1flLffralOMTvlvoy+fc9T46+MmrsV
-	 WkHwsu1lFOfifsozGXTMdonZzMmF52USglfRh7fun0atw7wsUgzQ+/wZctq18qXR3H
-	 KS5CRwxz0/85w==
-Date: Tue, 19 Aug 2025 13:54:46 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Wei Yang <richard.weiyang@gmail.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-	Bill Wendling <morbo@google.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/4] mm/mm_init: use deferred_init_memmap_chunk() in
- deferred_grow_zone()
-Message-ID: <aKRX9iIe8h9fFi9v@kernel.org>
-References: <20250818064615.505641-1-rppt@kernel.org>
- <20250818064615.505641-2-rppt@kernel.org>
- <20250819095223.ckjdsii4gc6u4nec@master>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ElejmtJ7"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b47175d02dcso4300043a12.3
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 04:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755601358; x=1756206158; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sE9Ynzec1RnRGjYxwL9GtFPPQqbiY+yne+LG1e9v81Q=;
+        b=ElejmtJ7JnjoX7MJylhRv7yVAg51CN1DazEYMPyEh4rN+HBTh7WUHDMW9pP5u3/+Zn
+         zfqNECPNE31NWLF2KrzeVEent80RBRscHMEWsU3ZfxnOo790SJ2G2mFZik7pXHfeRTuu
+         DYV7zFc6bZUFxgNu/dA3xRPJI3/lOfsJrEmdaSH5Y3DFGaM7t5J5pYhxbRIeF2NUbrRw
+         EMPwaWqnjp6eLSP/iUazOSLMUdbnFLahUifajcOQjfB+RTlFXgytVcXljqAN+S9x8lkt
+         VrR6fzLCfjwMkWA0MfvrH1zXG0Xaky02RCBt+Bh2LC+baLypQDv/Nu8/gK75ghLHrC/a
+         uSyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755601358; x=1756206158;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sE9Ynzec1RnRGjYxwL9GtFPPQqbiY+yne+LG1e9v81Q=;
+        b=tio4pIZZtXgco4znoQicqi2/UMSAEHnx9guqwzPLt/UIIpJaKh8xOKklCxs9oHt91F
+         VQKMOU9Db4VzXGCd7M9T7fTz8RKuVtd1m2vKF+NAcS3flM8bFAKzCE+8g3x/9mtqF8nu
+         na9QrNXXaKyPz9OYjzVhB0bTdCeV3qJKLr7726+mJMLlk5HFb11XwjUm2vrlikGFAogw
+         nqHcCKSphHqX8ya1ikJjB8W8+g82wOcPUvJdhVGIRSkWxl0OBpgtD5umwFPnVTWwAb2/
+         5sWg4hx6EIKe7L1x1ALMAPjUAYTuU+2uwhnmwZy96pAmTepBl+CqKGXD3/u6noH3XORS
+         oW5A==
+X-Forwarded-Encrypted: i=1; AJvYcCXwh/PrF2h9EIsZtlAoJJ4otCDfDNKeTJUoLQbkhnwnY2ULtFA5w1TVKl/2OuZPRkq2Rnn7@lists.linux.dev
+X-Gm-Message-State: AOJu0YxWWXkN6/X/k1QoDzxa1Kx1a5WqhAc1lcN+qTXAJrMoiiJbAFls
+	nw+mUuiH+GDVVRFHcvfsAshL3EbLlNt4Gbd9MEgbC15Y0LzNi/v/4QbugHi1G+P96Ll0dlMyI5x
+	jgm+px2IP76Mei+avnXdUTbNMPriQB8CWXdr3goow
+X-Gm-Gg: ASbGncuR0tjZB4b1Lqa1rIpVvbpl1FIlu7uXFc7PXy91BF+KdE+84++wmDy2hxJTYv6
+	u75CKbXejRvQ2ikmZuzHLlZsWzmD7/dF9JG97UW00ddmGZJQ4/ereWgYgBE7pSsPsZribTfZF7f
+	JC4ILKCjoou2+Q7S+TBc/rxYLa3viLYyHOY2OItyQd/muTiTjQaOMnzLL6MI7ikk/m4pkg9hF5q
+	4Z1Ao6YA0GRjsPiDhCadRc9sJvWx/DsQXNDK8yVpJy1HMw2uxtM9KNl
+X-Google-Smtp-Source: AGHT+IFqyq2xNkxcn0+6woeZn1zX9V2Zv/t3YgCXofec8XIVMQnKyUVI7fT9ZOb2sYUD5zGqcBKM/HrzwRrnZFiQZFI=
+X-Received: by 2002:a17:902:e948:b0:240:6406:c471 with SMTP id
+ d9443c01a7336-245e02aa70cmr26553885ad.10.1755601358131; Tue, 19 Aug 2025
+ 04:02:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819095223.ckjdsii4gc6u4nec@master>
+References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org> <20250818-bump-min-llvm-ver-15-v1-10-c8b1d0f955e0@kernel.org>
+In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-10-c8b1d0f955e0@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Tue, 19 Aug 2025 13:02:01 +0200
+X-Gm-Features: Ac12FXzKM7g4sH5lbxe25GgocsgKN-jxowhmEsNtouQcGNhuUxoPY2G_RdLPDgM
+Message-ID: <CANpmjNNwp=RRc4Tm7vrKkSzYqdJueeDSOkPRY1sCG-2W-yPVdA@mail.gmail.com>
+Subject: Re: [PATCH 10/10] KMSAN: Remove tautological checks
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Kees Cook <kees@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Aug 19, 2025 at 09:52:23AM +0000, Wei Yang wrote:
-> Hi, Mike
-> 
-> After going through the code again, I have some trivial thoughts to discuss
-> with you. If not right, please let me know.
-> 
-> On Mon, Aug 18, 2025 at 09:46:12AM +0300, Mike Rapoport wrote:
-> [...]
-> > bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
-> > {
-> >-	unsigned long nr_pages_needed = ALIGN(1 << order, PAGES_PER_SECTION);
-> >+	unsigned long nr_pages_needed = SECTION_ALIGN_UP(1 << order);
-> > 	pg_data_t *pgdat = zone->zone_pgdat;
-> > 	unsigned long first_deferred_pfn = pgdat->first_deferred_pfn;
-> > 	unsigned long spfn, epfn, flags;
-> > 	unsigned long nr_pages = 0;
-> >-	u64 i = 0;
-> > 
-> > 	/* Only the last zone may have deferred pages */
-> > 	if (zone_end_pfn(zone) != pgdat_end_pfn(pgdat))
-> >@@ -2262,37 +2272,26 @@ bool __init deferred_grow_zone(struct zone *zone, unsigned int order)
-> > 		return true;
-> > 	}
-> 
-> In the file above this line, there is a compare between first_deferred_pfn and
-> its original value after grab pgdat_resize_lock.
+On Mon, 18 Aug 2025 at 20:58, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 15.0.0, two KMSAN checks can be cleaned up.
+>
+> CONFIG_HAVE_KMSAN_COMPILER will always be true when using clang so
+> remove the cc-option test and use a simple check for CONFIG_CC_IS_CLANG.
+>
+> CONFIG_HAVE_KMSAN_PARAM_RETVAL will always be true so it can be removed
+> outright.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Do you mean this one:
+Acked-by: Marco Elver <elver@google.com>
 
-	if (first_deferred_pfn != pgdat->first_deferred_pfn) {
-		pgdat_resize_unlock(pgdat, &flags);
-		return true;
-	}
- 
-> I am thinking to compare first_deferred_pfn with ULONG_MAX, as it compared in
-> deferred_init_memmap(). This indicate this zone has already been initialized
-> totally.
-
-It may be another CPU ran deferred_grow_zone() and won the race for resize
-lock. Then pgdat->first_deferred_pfn will be larger than
-first_deferred_pfn, but still not entire zone would be initialized.
- 
-> Current code guard this by spfn < zone_end_pfn(zone). Maybe a check ahead
-> would be more clear?
-
-Not sure I follow you here. The check that we don't pass zone_end_pfn is
-inside the loop for every section we initialize.
- 
-> > 
-> >-	/* If the zone is empty somebody else may have cleared out the zone */
-> >-	if (!deferred_init_mem_pfn_range_in_zone(&i, zone, &spfn, &epfn,
-> >-						 first_deferred_pfn)) {
-> >-		pgdat->first_deferred_pfn = ULONG_MAX;
-> >-		pgdat_resize_unlock(pgdat, &flags);
-> >-		/* Retry only once. */
-> >-		return first_deferred_pfn != ULONG_MAX;
-> >+	/*
-> >+	 * Initialize at least nr_pages_needed in section chunks.
-> >+	 * If a section has less free memory than nr_pages_needed, the next
-> >+	 * section will be also initalized.
-> >+	 * Note, that it still does not guarantee that allocation of order can
-> >+	 * be satisfied if the sections are fragmented because of memblock
-> >+	 * allocations.
-> >+	 */
-> >+	for (spfn = first_deferred_pfn, epfn = SECTION_ALIGN_UP(spfn + 1);
-> 
-> I am expecting first_deferred_pfn is section aligned. So epfn += PAGES_PER_SECTION
-> is fine?
-
-It should be, but I'd prefer to be on the safe side and keep it this way.
- 
-> Maybe I missed something.
-> 
-> >+	     nr_pages < nr_pages_needed && spfn < zone_end_pfn(zone);
-> >+	     spfn = epfn, epfn += PAGES_PER_SECTION) {
-> >+		nr_pages += deferred_init_memmap_chunk(spfn, epfn, zone);
-> > 	}
-> > 
-> > 	/*
-> >-	 * Initialize and free pages in MAX_PAGE_ORDER sized increments so
-> >-	 * that we can avoid introducing any issues with the buddy
-> >-	 * allocator.
-> >+	 * There were no pages to initialize and free which means the zone's
-> >+	 * memory map is completely initialized.
-> > 	 */
-> >-	while (spfn < epfn) {
-> >-		/* update our first deferred PFN for this section */
-> >-		first_deferred_pfn = spfn;
-> >-
-> >-		nr_pages += deferred_init_maxorder(&i, zone, &spfn, &epfn);
-> >-		touch_nmi_watchdog();
-> >-
-> >-		/* We should only stop along section boundaries */
-> >-		if ((first_deferred_pfn ^ spfn) < PAGES_PER_SECTION)
-> >-			continue;
-> >-
-> >-		/* If our quota has been met we can stop here */
-> >-		if (nr_pages >= nr_pages_needed)
-> >-			break;
-> >-	}
-> >+	pgdat->first_deferred_pfn = nr_pages ? spfn : ULONG_MAX;
-> 
-> If we come here because spfn >= zone_end_pfn(zone), first_deferred_pfn is left
-> a "valid" value and deferred_init_memmap() will try to do its job. But
-> actually nothing left to initialize.
-
-We anyway run a thread for each node with memory. In the very unlikely case
-we've completely initialized a deferred zone that thread will finish much
-faster :)
- 
-> For this case, I suggest to set it ULONG_MAX too. But this is really corner
-> case.
-
--- 
-Sincerely yours,
-Mike.
+> ---
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: kasan-dev@googlegroups.com
+> ---
+>  lib/Kconfig.kmsan | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+>
+> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+> index 0541d7b079cc..7251b6b59e69 100644
+> --- a/lib/Kconfig.kmsan
+> +++ b/lib/Kconfig.kmsan
+> @@ -3,10 +3,7 @@ config HAVE_ARCH_KMSAN
+>         bool
+>
+>  config HAVE_KMSAN_COMPILER
+> -       # Clang versions <14.0.0 also support -fsanitize=kernel-memory, but not
+> -       # all the features necessary to build the kernel with KMSAN.
+> -       depends on CC_IS_CLANG && CLANG_VERSION >= 140000
+> -       def_bool $(cc-option,-fsanitize=kernel-memory -mllvm -msan-disable-checks=1)
+> +       def_bool CC_IS_CLANG
+>
+>  config KMSAN
+>         bool "KMSAN: detector of uninitialized values use"
+> @@ -28,15 +25,9 @@ config KMSAN
+>
+>  if KMSAN
+>
+> -config HAVE_KMSAN_PARAM_RETVAL
+> -       # -fsanitize-memory-param-retval is supported only by Clang >= 14.
+> -       depends on HAVE_KMSAN_COMPILER
+> -       def_bool $(cc-option,-fsanitize=kernel-memory -fsanitize-memory-param-retval)
+> -
+>  config KMSAN_CHECK_PARAM_RETVAL
+>         bool "Check for uninitialized values passed to and returned from functions"
+>         default y
+> -       depends on HAVE_KMSAN_PARAM_RETVAL
+>         help
+>           If the compiler supports -fsanitize-memory-param-retval, KMSAN will
+>           eagerly check every function parameter passed by value and every
+>
+> --
+> 2.50.1
+>
