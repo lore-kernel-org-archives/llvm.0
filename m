@@ -1,76 +1,111 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1201341ABE
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 13:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E564C1FA272;
+	Tue, 19 Aug 2025 14:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755611288; cv=none; b=XpR/bukaDYLTAGaUMLBPd0+NooU6cjClWO2Hx1IFwC5jQBiTkQXgyAgAVYbSdfHNbL/KmZo22XN22gp4smDQvlsbvfZ8VmWR4TG7pudtYDUfk9NWhcSeoveV7FSzzzAF0pf5UEp3eLhNcLG1x+dxvaCszKyS/8jz3C7HvP0S0GA=
+	t=1755612061; cv=none; b=tmAFFIml02faULvFKrI+g5NoUhGthJNFcADCL3hkLN1xFHpg/ZYyAw+5F258PWEF0Wfrb1hjNS1XZOvt8gG3lSZdvb8Tq/z4qT6upOgN95bLPWkuoNijHrSCD0mV9e67RxKh11Mbw3RA6Nd+Pe91tcr33ZS4yyLqWA2WT3R1Sy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755611288; c=relaxed/simple;
-	bh=WgxoQGTefGQy6krhXNt6jyY6Ogd2/MoAfO4+6xkHD0Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=bFk2mUr0ei1ip5Q/RTgUJTSaMnw1O3zlcUOelHDvjVAsVhetMyzVcbVoN9EJGs5GxsDAVnTHWBGdnOSVOgQsq9MhPr072NTh2PZsgQB4NeXwuolyTWWpam88MdLO6L7c+EjTAher1bBkaCsKsvfsdhQALY3DrAWcxW7K1/CfNJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mFOUIVth; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1755612061; c=relaxed/simple;
+	bh=ha4t6RRIk6XpkYKIpDFUbToR4GM8kq4XAbtG+yoAZGk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S1ydCru2uPQLgRynnuVcYcNhFVavP6tmLT+tMuqmfyiHIIqHTYUg2k5tXqEmK4NiE9lmHpoGKaRx2f1M1td3bXcNiiGWUKqDIrEDp2lJXuEXW2OmB+d9v6MLAlyMnSBoPCHP4vQII8FcxLUGDl/uqu7Gm9MfgqHvmtmZhjrso24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CriPKwcL; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mFOUIVth"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250819134804euoutp0213fc72dc5fdab2cf3dcef62050326623~dLyl1y7qE1780017800euoutp02l
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 13:48:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250819134804euoutp0213fc72dc5fdab2cf3dcef62050326623~dLyl1y7qE1780017800euoutp02l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755611284;
-	bh=rNNRF4Z64xSeC0TtYIjoq13C5zAXQshZP/bVM+z+NiQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mFOUIVthvLpbk8Q9P5dhVu8SsExVI/BPt0Z7z5NmZ/0BURIHyaKRLVRxkisUyW0Qw
-	 X3hbHXJG+yJbvi5adKwc/jVgaTg1XRtnfy8V+km6bUL8Xp/Tomxl7s2LkkE0ynwrdF
-	 5Jie4pHMZfdyiWkfORKbBFBFRfXHyjsaS5B498AA=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11~dLylHjeKm2798127981eucas1p1o;
-	Tue, 19 Aug 2025 13:48:04 +0000 (GMT)
-Received: from AMDC4515.digital.local (unknown [106.120.51.28]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250819134803eusmtip14d110ea7c0e1c86224f6c2ecf32b88ba~dLykUPeUf2742627426eusmtip1o;
-	Tue, 19 Aug 2025 13:48:03 +0000 (GMT)
-From: Mateusz Majewski <m.majewski2@samsung.com>
-To: m.majewski2@samsung.com
-Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org,
-	justinstitt@google.com, krzk@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux.amoon@gmail.com, llvm@lists.linux.dev, lukasz.luba@arm.com,
-	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	rafael@kernel.org, rui.zhang@intel.com
-Subject: Re: [PATCH v7 6/7] thermal/drivers/exynos: Handle temperature
- threshold IRQs with SoC-specific mapping
-Date: Tue, 19 Aug 2025 15:47:55 +0200
-Message-ID: <20250819134755.92187-1-m.majewski2@samsung.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250819131704.19780-1-m.majewski2@samsung.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CriPKwcL"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24457f57ed4so9743955ad.0;
+        Tue, 19 Aug 2025 07:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755612059; x=1756216859; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=50WBtMPwvOw9oYEsHnoDkF8zoLwvDN0HfFQfOPg/bdE=;
+        b=CriPKwcLu0eKJtTcr3a8I0cqQlBe+bYIH7xwFNGIPrz5BaRZ3y7BLhYmb1CcNmRCE+
+         7p6tDlQxNKHW5XIxEbvgIrTCflaQZZfzu1smdXX8FGTLJdYrrYAaMyCR+8/qUavSHg50
+         qWFMMGYWk67lhGiMaKi5U0qUx1jkjwlLLIIoKvJONoBVP7PuMp4FfzJhd9KIa6UvLZ0q
+         7mluON59rfbC/o+EzoT8AdnmypHcTkUoEdrLn5KMPmmMsdHAVzqWpLkDgr2BBLZ9pN1m
+         VUmazSomNgul01RbUTy9EwHPuWOrFNMdX1D/QW6bvu3cz4l7DiVlQfufHhPFzPvf7Czd
+         ssMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755612059; x=1756216859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=50WBtMPwvOw9oYEsHnoDkF8zoLwvDN0HfFQfOPg/bdE=;
+        b=pX8+ubuj9k+n+OPsmkZwWnDW5vSSp6Kpr2AooxTLYXvtIw+5fi8ZFFHreG+crXxrrV
+         9QHBB2+vNXFLRMoQVW8SN5BJimE7jBaBhZ4QhAOJDebdUdgibC/xN2HPjYLVgi7Y+oyH
+         ml8AOFqvoH92ogCjC2Gt0JOhG4R9JWdUYJHWsO1GIJ9L25J8EcQGHWSuq/FG9+Lbr6rh
+         ETzR/gRraMb2sM4YcmehbcG2C5yZ5B3XosLlVbHcmgajN/DhY/Mkz45QdRTdYL7uKacD
+         sc/AWz0TboohRULlb7Wlep/3KFrLa5BkGkEUtgSsXILd8aODiiGOpiGA2ej039AhURzd
+         dOtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWZmXBM7xg/rtDLWSbpEzzRFuJTawc+J9nas5s3LfCs5KD6jA8+zPif3Q19UAN2ElPYQ7LdhkG7uIThu1Y=@lists.linux.dev, AJvYcCXfw7yAEGQ9iirVlLgl5J6ZvKf7PYt1sfspd1IgdrqEikKm6wvtlbsrTFM4oWKxobdB+75M@lists.linux.dev
+X-Gm-Message-State: AOJu0YwU4hx5lwlPg1yxztSf65Im1iFLE0QORoH2NdXr9krDcUaVGx1q
+	xZqTZbITKFtKrdAAcEp0ptNGhxrqpybNnHOGMypS7HanEyruPNsV9rb9eEPLvGXoWJjeXyPUrLt
+	EwOTLz8VakrqriZvdsCB4FbNoA6r0U1E=
+X-Gm-Gg: ASbGnct283mRvj1B4PpXdO0R+f+oexo/eQFlt8x9QUKHLT2Xcn14z4BRl4bXCVGC3Ls
+	Aq4Pa0b938Osb9YMrWRTzY5vQhichj58KNuIjQggH4fDZcHFTFsPoxnS/HvsSsWMIie4Aid5HI8
+	Vfp2TewK52BeFh2XWZZqZNhOTHjm1kT0T+bEjGHRfBvd4pr5KwmzFu7+9sSYQVf4S+jDortrUsK
+	LfGB1p4
+X-Google-Smtp-Source: AGHT+IFGLtNsuaHcZ9bLDDqN7J8ChtiAW1fZ0dZtuV570UBvC/PTJYsyK7ZfZ8g0ZH1WGMch8OcgtZ3J7WCfv1Mzp/4=
+X-Received: by 2002:a17:902:f547:b0:240:1879:c2fd with SMTP id
+ d9443c01a7336-245e02ba0ecmr19746985ad.2.1755612057723; Tue, 19 Aug 2025
+ 07:00:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
-X-EPHeader: CA
-X-CMS-RootMailID: 20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11
-References: <20250819131704.19780-1-m.majewski2@samsung.com>
-	<CGME20250819134804eucas1p1ed14f9680e66327a86af4e98319eed11@eucas1p1.samsung.com>
+References: <CA+G9fYv+gELzgcL4y8rOQbTxv2Y2JQTFhNkgUcLbzPJ_yDTziA@mail.gmail.com>
+In-Reply-To: <CA+G9fYv+gELzgcL4y8rOQbTxv2Y2JQTFhNkgUcLbzPJ_yDTziA@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 19 Aug 2025 16:00:44 +0200
+X-Gm-Features: Ac12FXxTFIhGwb8CqneZObiwy9IEE8bW5R6jDoBMnubJoMsWPuCWTeTncYkgRXU
+Message-ID: <CANiq72k-Z9=EVVXgJp1OuKwSbQ3qq723B0F2PaPzRD4P+QEQ=A@mail.gmail.com>
+Subject: Re: next-20250818: rust: `ARCH_KMALLOC_MINALIGN` is defined multiple times
+To: Naresh Kamboju <naresh.kamboju@linaro.org>, Thorsten Leemhuis <linux@leemhuis.info>, 
+	Danilo Krummrich <dakr@kernel.org>
+Cc: open list <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, rust-for-linux@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Miguel Ojeda <ojeda@kernel.org>, wedsonaf@gmail.com, 
+	Gary Guo <gary@garyguo.net>, Benno Lossin <benno.lossin@proton.me>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Ben Copeland <benjamin.copeland@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> +		pr_warn("exynos-tmu: Unknown SoC type %d, using fallback IRQ mapping\n", soc);
+On Tue, Aug 19, 2025 at 10:40=E2=80=AFAM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> Build regressions were detected on multiple architectures (arm, arm64,
+> riscv) with the Linux next-20250818 tag when building with Rust-enabled
+> configurations (rust-gcc and rust-clang) from selftests/rust/config.
+>
+> Duplicate definition of ARCH_KMALLOC_MINALIGN in Rust bindings is
+> causing build failures across affected toolchains.
 
-I missed this when writing the previous reply, but this doesn't build:
-"soc" should be "data->soc". This line disappears in 7/7 though, so 7/7
-builds just fine for me.
+Thanks a lot Naresh, this was reported already by Thorsten and me yesterday=
+:
 
-Kind regards,
-Mateusz Majewski
+    https://lore.kernel.org/rust-for-linux/8aa05f08-ef6e-4dfe-9453-beaab7b3=
+cb98@leemhuis.info/
+
+A patch from Danilo is in flight to fix it:
+
+    https://lore.kernel.org/rust-for-linux/20250818180923.192042-1-dakr@ker=
+nel.org/
+
+If you could test it, that would be great. I assume Danilo will apply
+the patch on top of alloc-next, since the issue is just inside that
+branch that goes into linux-next.
+
+Thanks!
+
+Cheers,
+Miguel
