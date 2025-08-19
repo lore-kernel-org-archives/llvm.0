@@ -1,73 +1,73 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45F22B9B9
-	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 07:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B613451DB
+	for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 07:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755589521; cv=none; b=kiNO0oyxjihKaAd2JeHX/dDynRVn8lxLIZ+AaEp1tT44c2BnEAYYFDYLSX1RKQjjAquzoIDPCNyFvXT3DdU6Lz8ZeEhZXFDk9OVl3yA57st4R1cXCwOP+JMKSREIWqub6JCk1AOVzh7T7egg+PoXJ72VclzKex1TXMqdcXimp9s=
+	t=1755590070; cv=none; b=DBGApk+iTne0pKbWQeViAUTaszyLtNVK/D13PT8ZPIyIZdmM69HOud+OhMuzCR8c7K3OlwmYNuX2MS5duV+YN2xR3iHcH5tHDRw9wFtD4zZlLwbv6yhLl4ruxE0IE5AhR59HxCDp4JI0IGUDzcYy6wH1O2dC7o+89GyfDE/msvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755589521; c=relaxed/simple;
-	bh=u1XdziIYi6XRyFp3TBjWcLKp69FAqDTV9qlwZWFUkXI=;
+	s=arc-20240116; t=1755590070; c=relaxed/simple;
+	bh=5YqL0ZgT4aBHGX0m80T4NxccIZCR0nYtF5Godthib0E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QYsUA1olUm4cWBRQs6jGuqKv4seTR0SoKrRWjeKVjCFQO3dARR7eBMf4P+jB1A1NpKSlhgtxKKgxYDh0rF5KTp0uXFDYxEVV4+5u8Ipxt9b1z49TTcS4qg1oK56h/wRp8BHFHztY2/jt9gfcZMttUmZUPxhzqOJAnnfcY4JDnUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e+UfcnjH; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=SqcrwPNWo1CiLNXK69aOMVRmUXIcPSkhERIFwshfxbTxOJcULTy8v47gUpVnLx04vIn7y282W3iyTwPSvZgoUEm67X64WbN4eide9/Bim1ypPvNXYxqJwmV/3J43MapsqOXbByGu9sKEH2NA2Al6K9+R6Qm2pNrhfIKKS1RVN04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H8RbYvPp; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e+UfcnjH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H8RbYvPp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755589518;
+	s=mimecast20190719; t=1755590068;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=jaSsyvGbvSM38Wd/2ZkaS08nr9HXu1O6vpmRgr2LSpc=;
-	b=e+UfcnjHDGZ8rFE+j5eSjkUKQhhptuTzhVPCHZZcSQQuGnrI7uZ3qNM5kJ/yYaRL/sqGEo
-	gaDjL3x1K7Yo7pqaabZR6U6AA01B46GiinbgzX4RqpDDugHVntlYNNcV+rLX6CMCOOBdoz
-	YcjXCqbis3cOGBVWHLSwYaMgiZj8sCE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=C9W9Lxnwsqcb0sJAwIsuZAMV48nhSH9Z6F1jCNOWQGw=;
+	b=H8RbYvPplxvDr+RMf3ivFS9ZpGIvaSTWv8ZMp6NuUWiNeH1LXS9PQa1AHJaKRWwL+9hUTT
+	z/g0chOyVzdH2KLGo9/uN+ICtKJFAyEPSI6bbSZqASjm0mJdopYwW+6ZiPgRs2yV354gzd
+	3NtNWG6aIwc4SWSFvdwX/qyLQq9m1Ks=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-638-SzGQ8xmGMZSWIWon9iiezQ-1; Tue, 19 Aug 2025 03:45:15 -0400
-X-MC-Unique: SzGQ8xmGMZSWIWon9iiezQ-1
-X-Mimecast-MFC-AGG-ID: SzGQ8xmGMZSWIWon9iiezQ_1755589514
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45a1b05b15eso35360525e9.1
-        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 00:45:14 -0700 (PDT)
+ us-mta-274--itvQTAhNLu9PUjut9tUqQ-1; Tue, 19 Aug 2025 03:54:25 -0400
+X-MC-Unique: -itvQTAhNLu9PUjut9tUqQ-1
+X-Mimecast-MFC-AGG-ID: -itvQTAhNLu9PUjut9tUqQ_1755590064
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3b9a3471121so3079974f8f.0
+        for <llvm@lists.linux.dev>; Tue, 19 Aug 2025 00:54:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755589513; x=1756194313;
+        d=1e100.net; s=20230601; t=1755590064; x=1756194864;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jaSsyvGbvSM38Wd/2ZkaS08nr9HXu1O6vpmRgr2LSpc=;
-        b=PafkwYqu4K6B7ol+ZUZ9RY0ssBZaqU8TBO2rFDcv2Bp0aO4zg3s6T7Ive/eD6EfH1y
-         udw852TJp2/6GMWqmolHxQVBxos3+Y/BvYAtDvGnqYEVsFzfKsMnefBGLc843gDfhlTn
-         ZLTSyMuCMiEFimmtbOuRPew7zHO59FZ4jhLBwzI2YU9EnP8/lFb32w36OXleeqribGdg
-         SoYAT5fltOyUAZAQE5NkOJ9qXqez2pBAQAerVoX5lc7/IBmNS4tzPa3dGs/+xN90/tBu
-         5tH2CHfcu2wEdFLIMEVfh3A7rDJINltt9yXVqhiGW3RG8093upO2MW/cWwb8c45NaTV/
-         uPJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOyxvUE59P0YKi8CkPrI+Z9GqmBcwiAL3otjbKSBWql7/NDNKP6CPJG5KYPwTpX08lTjTT@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyqx8XVy0Ep1O+Vzul/6Yqd7Eu85L0LauFIIPzvkAy0Czpl2qGH
-	Y6n6PSmB/dC14bInd8WImOCbCtByNjk9nKP59a9SQav8VKd9Q9DdeHTWOGpbXsajOP/zgUhewI9
-	ZdQeuXjlOgatMC9Na/FmDBeizP1ZDDJwi8sbvkaRON3rYWuFKoKmREWg=
-X-Gm-Gg: ASbGncvL0dRgCpJ7fHilR8YcbCsJ0KImqtc381FvogtST6W64pEXtcUL0oaQlwilpEV
-	8B6gEulZ6sNF4UCcESztIn3jKWRPUfngHoQKpIjuOV7xHeAll8kB+VBeIZvShb3bO5w9d2RL+2X
-	Q8q4Cg+PQ0y1yXL/z/XTy9S/wIG4hDjzShK+X85RPN5o2zx/luFh2RgHCnzBpXJhXbyjL+ShBYh
-	T+pxmYUzefEVnxt7MorFScr0A6TjgZG/t/Py6t/B89kZdF1tcqSaPAMyS9xH97KtXAupaAH6s0V
-	lFP2d0wP8xnx4j2Fz0ouW2JIQqGtsxKOnqzslbTG24sYykJMso5GKFeuQgdK0qC8kjY8mkBa4dQ
-	rHRvg8xoLwnrf1jAUJIo4uyhaRTeu6fl7CVDKg78vt5diTuzUdyjCC7Hr+gjd9KVHues=
-X-Received: by 2002:a05:600c:a47:b0:458:bfe1:4a91 with SMTP id 5b1f17b1804b1-45b43df3bdfmr9399055e9.20.1755589513659;
-        Tue, 19 Aug 2025 00:45:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE6GRVXz7Cx6EgfusRet+O1WDwTGD7wA+6B/968k+/fs2jCw0lM6Ro9nUD4E26sceRnKdIeog==
-X-Received: by 2002:a05:600c:a47:b0:458:bfe1:4a91 with SMTP id 5b1f17b1804b1-45b43df3bdfmr9398795e9.20.1755589513162;
-        Tue, 19 Aug 2025 00:45:13 -0700 (PDT)
+        bh=C9W9Lxnwsqcb0sJAwIsuZAMV48nhSH9Z6F1jCNOWQGw=;
+        b=iW8ra4WHiQE2bydrphKaaSSvNWtQTgylQU5S8FsY6u68muRcKgOmgzZKcC45d4A5H4
+         +fVfZYukqfjDK+eM2R8d6WqrXCVHsqJDAYHT8OSm21zNK390p3vJEd/zJttlwefgjeJL
+         dBbyNIgnhx1GDMTqcNo/bG0ZoKhh3QvE/bcBB7Kukc88DeDjtH72/1AEHA4oTdePpBTM
+         kVhFga1oU/FKFgG+m12TjxGEeEOMKux9NTZZZDHx0EVJamXArbsWTUXbjWpxLM5o0HqI
+         hrnluc+QcyAfBUm0TI7x7kXAkOm2MmbZfhIDyBq+X91ScTfcMHE/3ykkIlEQPf1JmFRQ
+         EcNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXLWAbxvlDTDrYLKYHHHAiN+zXUxjd63CKWPIgMdV5tSvnCyXwa6EgeFmwK8S8J1UVPjgvU@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0vJ7xSumLryAH+QVUZPJFmLilBXmjVCuMLEaiyjItOPp0wMNt
+	w7pg7m+AdZtA8Vu8wHpIOVZ9S732QYCQNnXdLtC/PgkRx8KQROPOaujZ7e5430DO/PeXzfyWriC
+	cZOmzbrI5DylepNBRNRqrX5qFcouX5Pkkqm6IKSk6fDv6/OY1yrkNYe8=
+X-Gm-Gg: ASbGncuF2Lt83F4JkH/pOisvZCsNYXSq3aL7if1N0BhtKZVR8OwPVJ1wITi/krSI2le
+	d0TrL/oXa1WfY2TWQmrBDasF6GKymgg5aKccMrlOqSitZD1a9Y+zEu817yIE7u6Oj1QXyI6wowu
+	pEs0lKn/GVSAwrFMd7pCZH8L03hbYU3+NpvlEwcx4kLjFBrR4bA8EdT7IRXmpv1i5rBVqH+W+iQ
+	NhR4N8MoPtHtcW2qh1cDn6GftjDYC/YIPhiju7MK71pGpH/sau31NIH0smx1NdtPj4lDArvWMEd
+	ggpC3zdmmZzN0gOQkPsfBQbxLY0yg4RO9bfUWHrSpjgI8Q69SqN4U8r5uIS2VfIBX6ZYyMPTky9
+	gShs8OqEj6JtkHPaFMmSqGbaIEjzq47alDkp/LJlNJDTE+aEL9nyMEPSX5NskRRBXgt0=
+X-Received: by 2002:a05:6000:2c0e:b0:3b7:76ac:8b9f with SMTP id ffacd0b85a97d-3c14858912fmr1072744f8f.25.1755590064217;
+        Tue, 19 Aug 2025 00:54:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG47MQ2FAABjTTxBPmZqsECDlQCU6YLlmvMBefknIf+UtmxQ2Zf3tk6D8BTtfNAIZ8f0BKPFA==
+X-Received: by 2002:a05:6000:2c0e:b0:3b7:76ac:8b9f with SMTP id ffacd0b85a97d-3c14858912fmr1072717f8f.25.1755590063759;
+        Tue, 19 Aug 2025 00:54:23 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f07:8700:71be:5385:87b8:5a98? (p200300d82f07870071be538587b85a98.dip0.t-ipconnect.de. [2003:d8:2f07:8700:71be:5385:87b8:5a98])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b42a97c02sm30232865e9.23.2025.08.19.00.45.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074d43bc6sm2574711f8f.25.2025.08.19.00.54.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Aug 2025 00:45:12 -0700 (PDT)
-Message-ID: <b6e79117-bc16-41d9-b981-3610ee2919b5@redhat.com>
-Date: Tue, 19 Aug 2025 09:45:11 +0200
+        Tue, 19 Aug 2025 00:54:23 -0700 (PDT)
+Message-ID: <408d7eaa-5aea-4490-9fd0-978c4eb94d32@redhat.com>
+Date: Tue, 19 Aug 2025 09:54:22 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,7 +75,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] mm/mm_init: deferred_init_memmap: use a job per zone
+Subject: Re: [PATCH 3/4] mm/mm_init: drop deferred_init_maxorder()
 To: Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
 Cc: Andrew Morton <akpm@linux-foundation.org>,
  Bill Wendling <morbo@google.com>, Daniel Jordan
@@ -85,7 +85,7 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 References: <20250818064615.505641-1-rppt@kernel.org>
- <20250818064615.505641-3-rppt@kernel.org>
+ <20250818064615.505641-4-rppt@kernel.org>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -131,39 +131,33 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20250818064615.505641-3-rppt@kernel.org>
+In-Reply-To: <20250818064615.505641-4-rppt@kernel.org>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 0GcEHEARun1WPxkD4QocaobIGnpA1UiqgIFKdth_qMY_1755589514
+X-Mimecast-MFC-PROC-ID: LVyS8AkBCUAL8GNBet9RwIw7Q9ZZLLQU5ifZlNREaEc_1755590064
 X-Mimecast-Originator: redhat.com
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 18.08.25 08:46, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> deferred_init_memmap() loops over free memory ranges and creates a
-> padata_mt_job for every free range that intersects with the zone being
-> initialized.
-> 
-> padata_do_multithreaded() then splits every such range to several chunks
-> and runs a thread that initializes struct pages in that chunk using
-> deferred_init_memmap_chunk(). The number of threads is limited by amount of
-> the CPUs on the node (or 1 for memoryless nodes).
-> 
-> Looping through free memory ranges is then repeated in
-> deferred_init_memmap_chunk() first to find the first range that should be
-> initialized and then to traverse the ranges until the end of the chunk is
-> reached.
-> 
-> Remove the loop over free memory regions in deferred_init_memmap() and pass
-> the entire zone to padata_do_multithreaded() so that it will be divided to
-> several chunks by the parallelization code.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
+>   
+> -static unsigned long __init
+> -deferred_init_memmap_chunk(unsigned long start_pfn, unsigned long end_pfn,
+> -			   struct zone *zone)
+> -{
+> -	unsigned long nr_pages = 0;
+> -	unsigned long spfn, epfn;
+> -	u64 i = 0;
+> +		while (spfn < epfn) {
+> +			unsigned long mo_pfn = ALIGN(spfn + 1, MAX_ORDER_NR_PAGES);
+> +			unsigned long chunk_end = min(mo_pfn, epfn);
+>   
+> -	deferred_init_mem_pfn_range_in_zone(&i, zone, &spfn, &epfn, start_pfn);
+> +			nr_pages += deferred_init_pages(zone, spfn, chunk_end);
+> +			deferred_free_pages(spfn, chunk_end - spfn);
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+
+I assume the expectation is that all PFNs in the start_pfn -> end_pfn 
+range will go to this zone, correct?
 
 -- 
 Cheers
