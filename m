@@ -1,100 +1,102 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D3A320395
-	for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 13:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1BF31CA72;
+	Wed, 20 Aug 2025 16:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755696556; cv=none; b=kHWf9N84JG1o3VwH8Yg1wmzDIXNRZRwpzi00owDH9ecKHJI9caWIew7spspfvTWStNGtxfhLlG7BC1+fiiz6G44phQ5wM+6MARaiA7khm/Q9KJaU07YGy8jXezaGM2FYkgKSX3c57/6OOCu7yPtZCnhmExtoQShU29yS54BD0D8=
+	t=1755706271; cv=none; b=lqJVy16j/M4ndx1UopZpIWngbkecc9R5YjTLXYp9Fh9oQ7cW7CRgQ2UMQCmVIUteQPn1+1PFkuyjIVoLRUpX9qomOhH0XWs30lQ6jhxc7GTv75cgCDDvIOwoiu7HdYERSxAgQV93xj1oiSP9U59D/f03hAyC//MrKJJTbZUyQ10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755696556; c=relaxed/simple;
-	bh=jcAhPAgzkLaVyfYJ6HVDIU6MyZqCUM3ppV4rWifv/Jk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aoXtYyniJ+BMZGpMYFdQLn2I7yPfRwZcVYYKmKNDdPJrq5JV5cb2SFIdCN2S+nOKNmhAMFFFXD+2eVpTvw27HbE3jT+7F29/+0nZCjzHFeU9vUTVCHw8qHBc07GwZENEZKUKrFiDxfVFkcD8lrpSzPxDj93elP3OL/tDVedB3bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dlx2rg8Z; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755706271; c=relaxed/simple;
+	bh=kILSVk3z9gI+nFGfR1y5ThbvAl+I3YUQHPIyOglHZhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uyUvmYG+2VtyVKNMK6quHRw1/8G+FnZCh8Z/dEZdIAU6TP9BQ6exQmtO8+LLWy/wj7A1L8ZUtBMo7E/qYIQDSkSOkxYRzDLtGUpVVrE4qnSWx6K0obcp9G5SS9w7l563X1ONNRHUcNnX3lekWr1QYofnYMCrHq4a7hNOkufXqeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7AiuSJH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dlx2rg8Z"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-618b62dbb21so9458122a12.2
-        for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 06:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755696553; x=1756301353; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jcAhPAgzkLaVyfYJ6HVDIU6MyZqCUM3ppV4rWifv/Jk=;
-        b=Dlx2rg8ZyJpecNCOI7N7PYkeOdcpiL/rOf2pl2tYpuAC2L806x05466ml/bnN21GUR
-         n0qOe6/8e6SLjvNHWgy8t9JTYVn5xwp5uKlNKwqsRqK3kETzV35mzd3v7WwDA4eCxsf3
-         /3nQMkIrXkHMNTcJoHQD7EcJTKSKYFe6cLWRvdNd7buCiIXPArZ9kCEQHoNpnkmxiK37
-         1A/JJNYb1dI/zR0T1uXKz6xXBlfFndvoPsUIRfTOqY3V9MRPuEmcfAX0aYJIznWKdE+e
-         g4wxglC6fxOZ6JqYqjzbZnV29wJiduW1rGNw6lHmnS7UX5LO9WRRQr2BEC0p+eU4rqnl
-         THFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755696553; x=1756301353;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jcAhPAgzkLaVyfYJ6HVDIU6MyZqCUM3ppV4rWifv/Jk=;
-        b=K6YgpdFnKpPdWQVU8x73B/rhtEZn4Q90CnA6xkA0UBnPcThfbVBEeeakg4hWAaVjgZ
-         zubSx3jK3Q8EKLUvrtdJ3EnahvKBGSlKDu9MDRIm/p1TOVBBqVxTskixO5EEt6HhGAxl
-         bZ9I/c5r7CEqcoQDmaKba7D7oxE0TwtJxa6knKJ/IjbMDbaLNicVbsEYy7/y+EjJ8x+U
-         m8+0b67JHzT2LqK4FzZ0TbALgP9Wp1+X/hDRvpCuOS2Nnlt0tRM6ti72/jPjqV0FzkYe
-         BD7QM9L0iuv/nyYLGkBoVeou6y/YRYRRWZop0Km/GFx8LPF4/aJtkKi1T0xQs4XrHExF
-         k/mg==
-X-Forwarded-Encrypted: i=1; AJvYcCVY+5s7u8W/a8d7jVI5/jFz3nzKooz7EFcgEyHfcJgMrMUGm2I+ZYgDMbowMGoiCMD/3eXh@lists.linux.dev
-X-Gm-Message-State: AOJu0YwLffpsweqUxiJI4C/TRfEHoaWcYlQNOjcVgaQvimYhsA9b/+8D
-	U31F77S+chlCF7jJyHvxGgJ8rgk7ORCoQes/+TG0i/OZfzApV3oqEPkjFaRcEoJpTgMStZlg9yH
-	bFBcxBflpUAWhWhHZp9M31a9zCZYzR3E=
-X-Gm-Gg: ASbGncvIK03z5U+el23+YpCWuOucbZ+uSuZyAdQLY4N3wULLMPn0jhXWgkVqz0Eg5uW
-	nIFG821Rk5w1oKseA3OoO8NS2+YB6p9Nld2srz1kq9CB7CTBYbrfTRSIzbAawItoYgINIMGV3AK
-	syoRPkNulJDps8Tdfph06qmVJhr915vu5KPw1bv2BkBupNP1pvSbYppKFZR/hBW0UhYi+t2xbQ7
-	bnQbLuewXJSuWFt
-X-Google-Smtp-Source: AGHT+IHFi3UnZfTw+Hv/V/cy2pIQVkpT2x65dTknRglGXAcVRAIsoET4c6TvnkcXRx3Ti2/3OD7ZQ+iy7/fDDxqGtI8=
-X-Received: by 2002:a05:6402:510e:b0:617:e4ba:30aa with SMTP id
- 4fb4d7f45d1cf-61a9786a600mr2311059a12.32.1755696553444; Wed, 20 Aug 2025
- 06:29:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7AiuSJH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAE9C4CEE7;
+	Wed, 20 Aug 2025 16:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755706269;
+	bh=kILSVk3z9gI+nFGfR1y5ThbvAl+I3YUQHPIyOglHZhk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X7AiuSJHOQJiqlv8uD9FBGgeBFTKKvDcdvlq6x5IWBb0UlDJhj+vzIHW/5y2C3mn6
+	 EyOvm0QWPGDdv2EW8cRjyzcyD0YIaDSKiOoS/OZIECJflmbbpbAeo/6IVCY0xapsMn
+	 xU41tdoZvlQ2Q9Z99eMMr1zm74Lzh3miB8pgDLoWG070z2+enR8ycjy08wLrLSKtWD
+	 PJX2zlPNEpbf2O3ScCCW9wHsY78289YB9c1goxC9QoKdK5bRz+xkbOgKLNnKs3LRvN
+	 QqDp8MrA5hLfpCzIRhOWuoFtUa9uQHSZBwc0aU3WDoqI+4lNUBmWcDbmqZ5o4u68pc
+	 eel+KA9tJ81xQ==
+Date: Wed, 20 Aug 2025 09:11:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 07/10] riscv: Remove version check for LTO_CLANG selects
+Message-ID: <20250820161104.GA3805667@ax162>
+References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
+ <20250818-bump-min-llvm-ver-15-v1-7-c8b1d0f955e0@kernel.org>
+ <8078e385-e08e-40a5-b6df-31c0b5be8f43@ghiti.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CGME20250819131814eucas1p2c57ccc084cf6736fed01a8a5c0b35fab@eucas1p2.samsung.com>
- <20250813131007.343402-8-linux.amoon@gmail.com> <20250819131803.23296-1-m.majewski2@samsung.com>
-In-Reply-To: <20250819131803.23296-1-m.majewski2@samsung.com>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Wed, 20 Aug 2025 18:58:56 +0530
-X-Gm-Features: Ac12FXxN9zWO5PU4nqi_PrX_I2ZcRMkaURhXBeEwISjFg2LiE8-GfoSiC8m4kiU
-Message-ID: <CANAwSgTW7qZiSKRJuW-AqW9BKBrjsUMm8qqa1VKrxjUJFDG6zw@mail.gmail.com>
-Subject: Re: [PATCH v7 7/7] thermal/drivers/exynos: Refactor IRQ clear logic
- using SoC-specific config
-To: Mateusz Majewski <m.majewski2@samsung.com>
-Cc: alim.akhtar@samsung.com, bzolnier@gmail.com, daniel.lezcano@linaro.org, 
-	justinstitt@google.com, krzk@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, llvm@lists.linux.dev, lukasz.luba@arm.com, 
-	morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	rafael@kernel.org, rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8078e385-e08e-40a5-b6df-31c0b5be8f43@ghiti.fr>
 
-Hi Mateusz
+On Wed, Aug 20, 2025 at 09:23:08AM +0200, Alexandre Ghiti wrote:
+> Hi Nathan,
+> 
+> On 8/18/25 20:57, Nathan Chancellor wrote:
+> > Now that the minimum supported version of LLVM for building the kernel
+> > has been bumped to 15.0.0, there is no need to check the LLD version
+> > before selecting ARCH_SUPPORTS_LTO_CLANG{,_THIN} because it will always
+> > be true.
+> > 
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Alexandre Ghiti <alex@ghiti.fr>
+> > Cc: linux-riscv@lists.infradead.org
+> > 
+> > Small note, this will conflict with
+> > https://lore.kernel.org/20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org/
+> > but I think it is simple enough to deal with.
+> 
+> FYI, I'll send this patch for some 6.17-rcX.
 
-Thanks for your review comments..
-On Tue, 19 Aug 2025 at 18:48, Mateusz Majewski <m.majewski2@samsung.com> wrote:
->
-> > A unified
-> > exynos4210_tmu_clear_irqs() implementation now replaces the previous
-> > reliance on SoC-specific functions and hardcoded register mappings.
->
-> Well, right now we actually add exynos{4412,5420,5433}_tmu_clear_irqs :)
-> But those are quite similar except irq_map values, so maybe they can be
-> unified into one?
->
-No, the BIT fields for RISE and FALL are a bit different for SoC
-So that's the reason for splitting, the IRQ handle should be clean and compact.
-So make them simple.
+Thanks, that would help.
 
-> Kind regards,
-> Mateusz Majewski
-Thanks
--Anand
+> I found another bunch of LLD_VERSION check in this file that could be
+> removed:
+
+Huh, I am very surprised that I missed those :/ thanks a lot for
+catching that!
+
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L253
+
+I have added a patch removing CONFIG_RISCV_USE_LINKER_RELAXATION.
+
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L262
+
+I don't think this one can be currently cleaned up since it won't always
+be either true or false.
+
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L630
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L731
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L746
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L781
+> https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L804
+
+I have added a patch converting those version checks to just LD_IS_LLD.
+
+Cheers,
+Nathan
