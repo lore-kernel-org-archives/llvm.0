@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8A52BF3DF;
-	Wed, 20 Aug 2025 06:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419A74690;
+	Wed, 20 Aug 2025 06:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755670990; cv=none; b=LYduf2I7lLnscrHqnmUIVgp7v4y+s2kQ6rNld7ec5DeSV/0edefsx1Mmr2V9WF6y3WxDrCXBnBhoA41WyBXC9PCB+u+1A+E9FUeyVdcTM0BIVx4MtUCdS3Hlkq3gXT5+Ez1DR0F+XZGGSxawN32oh/ZwlYVplydMzP6LTDVvtmk=
+	t=1755672339; cv=none; b=kNmQmKdX8Z/dtVx3S5qV9iEI/TZTkHu8S7F+mDQK2REnrLney83vqrXdL6OHCdbfm95ocXUq0CeClpT759H6j2wT7GW0oTm11DYfBlkMe1DCcmIq6ONOlbUaxYG/a9LszCdo/rHf5YDasMrWnUmGkWtaw49kXfK2tp/kBJWt/+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755670990; c=relaxed/simple;
-	bh=watyWEw6hBThy2QiBcLZwaeTiW1G7/06gJrk2f2XSwg=;
+	s=arc-20240116; t=1755672339; c=relaxed/simple;
+	bh=Aks18XLnFJDywmToiC/hQRBj84tcW/vcMhMm0McgHP4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u2qLVUONdf+tIVTA4UkQILZDpExsYT6OP9KbNS+EJefJ/MtJacCqFYfWmXNipnFRE0j7GCtTthLEaXXgjHVUzpki7zvCPwU2jjfkHqfSElW3U0pzLS1fpe5hQOajh94ze1mPt/5YIdMh5eRDd13EPPT0jjJI5z3NAeTxuGRssOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=baaTAlFq; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=ns3xO28jhPWWWdx399d0IyDPvuZ22QDJZHSGEW99SuLcL2fg8zmmtySbqDLl8J7zQ4NV1J/uRzqoNdBuCJQazt6/4iKx9watDd+MGKa/4ToNCJgecFF7gX/izRLiPp56NwSydOD0wgVTkpRMS6zxEsOSqrUTsVb7ZYp+/HQ0B48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQXJa2Dk; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="baaTAlFq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQXJa2Dk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755670989; x=1787206989;
+  t=1755672337; x=1787208337;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=watyWEw6hBThy2QiBcLZwaeTiW1G7/06gJrk2f2XSwg=;
-  b=baaTAlFqRkxgPqo/MS/ttdfcV7C+lYXrDa97j/jMThZr1bOXsyK9ABlj
-   RsbsKlfCgJ70ufmwh9q4vmWpoT9bV5jazZkJOoTiQMD1jQMCnrTMEooC9
-   v4kMzE6PA/F9UEUohoeOM4kH/G7AYyyDRs8PFC3oe7Du6ppji6FGtQb45
-   ayesAPqY3n9u98H69wvFcFr8zzqnTNy6lgP9bbkfvNxW31dsIQXi8oojl
-   kpkV9FFCHqcrUGHH0sMNwQbLVBSfvYje9RRP4Q42dXw28K5vUxx9WVHB7
-   zJVNKhk4KrnrylLmx+z7yvlrkUhI0mSxYv8E3cDup/Siea3WQX43QikhE
+  bh=Aks18XLnFJDywmToiC/hQRBj84tcW/vcMhMm0McgHP4=;
+  b=BQXJa2DklheG1XobGiKPr7yfHJ1llIMtWEnmthEuG2o5XuQJhnZd4722
+   +r4ginOFQaGSEUGnmO/3zhl+ytz6YfJNcrajthLUsCrcqJyHsMf2/LpAV
+   AY3egFRSJco4Dh4wUl+GSItpo1Wcq7yRfeZICZT95j5RScDfm2Pv26g8J
+   wGhpaYcSwhYgj4WUe5SxR+V93cgCBi3CsHjQpLZIG072iwUGi+hQrrmiG
+   j2EfKJZV870QQCCUxmxMz5CHCiKoRlFTzHNT4iNEyO9IBiMJffcigLMXk
+   eZ0wdtzvwUQ9FXwwpTLG3b716xUuWMi4WvKmGukpY/i5jjsGwaUlbnav0
    Q==;
-X-CSE-ConnectionGUID: aNSH9+1TQ/GzZ+3yvTMWpg==
-X-CSE-MsgGUID: 3WADKhXBSB28H9iEWH7WvQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="83353610"
+X-CSE-ConnectionGUID: 8ZG2a137Swee4kvMbQ8/ZA==
+X-CSE-MsgGUID: 0cW7U3g/RIazgzCEsSu9Zg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="61745337"
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="83353610"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 23:23:08 -0700
-X-CSE-ConnectionGUID: c/pl5iFOQHuKwVQPFow/RA==
-X-CSE-MsgGUID: qOAb+k7sTmWH+p6b1U2CBQ==
+   d="scan'208";a="61745337"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 23:45:36 -0700
+X-CSE-ConnectionGUID: oZu6t+lTTiuD65z9o2thYw==
+X-CSE-MsgGUID: BZwrqRZbQTWCzxT/CDtEsg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="167547504"
+   d="scan'208";a="168851444"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Aug 2025 23:23:07 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 19 Aug 2025 23:45:32 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uocDx-000IGx-04;
-	Wed, 20 Aug 2025 06:23:05 +0000
-Date: Wed, 20 Aug 2025 14:22:44 +0800
+	id 1uocZd-000IJH-2r;
+	Wed, 20 Aug 2025 06:45:29 +0000
+Date: Wed, 20 Aug 2025 14:44:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nico Pache <npache@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v10 08/13] khugepaged: avoid unnecessary mTHP collapse
- attempts
-Message-ID: <202508201447.n6ubJ93W-lkp@intel.com>
-References: <20250819134205.622806-9-npache@redhat.com>
+To: Yunhui Cui <cuiyunhui@bytedance.com>, yury.norov@gmail.com,
+	linux@rasmusvillemoes.dk, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Yunhui Cui <cuiyunhui@bytedance.com>
+Subject: Re: [PATCH 2/2] riscv: introduce percpu.h into include/asm
+Message-ID: <202508201452.ciEgfhNO-lkp@intel.com>
+References: <20250819135007.85646-3-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,139 +67,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250819134205.622806-9-npache@redhat.com>
+In-Reply-To: <20250819135007.85646-3-cuiyunhui@bytedance.com>
 
-Hi Nico,
+Hi Yunhui,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[cannot apply to lwn/docs-next linus/master v6.17-rc2 next-20250819]
+[auto build test WARNING on linus/master]
+[also build test WARNING on dennis-percpu/for-next v6.17-rc2 next-20250819]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nico-Pache/khugepaged-rename-hpage_collapse_-to-collapse_/20250819-222051
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250819134205.622806-9-npache%40redhat.com
-patch subject: [PATCH v10 08/13] khugepaged: avoid unnecessary mTHP collapse attempts
-config: i386-randconfig-003-20250820 (https://download.01.org/0day-ci/archive/20250820/202508201447.n6ubJ93W-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250820/202508201447.n6ubJ93W-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunhui-Cui/riscv-remove-irqflags-h-inclusion-in-asm-bitops-h/20250819-215256
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250819135007.85646-3-cuiyunhui%40bytedance.com
+patch subject: [PATCH 2/2] riscv: introduce percpu.h into include/asm
+config: riscv-randconfig-002-20250820 (https://download.01.org/0day-ci/archive/20250820/202508201452.ciEgfhNO-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250820/202508201452.ciEgfhNO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508201447.n6ubJ93W-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508201452.ciEgfhNO-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> mm/khugepaged.c:1403:4: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    1403 |                         case SCAN_PAGE_RO:
-         |                         ^
-   mm/khugepaged.c:1403:4: note: insert '__attribute__((fallthrough));' to silence this warning
-    1403 |                         case SCAN_PAGE_RO:
-         |                         ^
-         |                         __attribute__((fallthrough)); 
-   mm/khugepaged.c:1403:4: note: insert 'break;' to avoid fall-through
-    1403 |                         case SCAN_PAGE_RO:
-         |                         ^
-         |                         break; 
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:19:
+   In file included from include/linux/workqueue.h:9:
+>> include/linux/alloc_tag.h:219:2: warning: implicit conversion from 'typeof (tag->counters->calls)' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+     219 |         this_cpu_dec(tag->counters->calls);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:512:28: note: expanded from macro 'this_cpu_dec'
+     512 | #define this_cpu_dec(pcp)               this_cpu_sub(pcp, 1)
+         |                                         ^~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:510:51: note: expanded from macro 'this_cpu_sub'
+     510 | #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
+         |                                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:501:70: note: expanded from macro 'this_cpu_add'
+     501 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   include/linux/percpu-defs.h:372:29: note: expanded from macro '__pcpu_size_call'
+     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
+         |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   arch/riscv/include/asm/percpu.h:96:78: note: expanded from macro 'this_cpu_add_8'
+      96 | #define this_cpu_add_8(pcp, val)        _pcp_protect(__percpu_add_amo_case_64, pcp, val)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   arch/riscv/include/asm/percpu.h:72:26: note: expanded from macro '_pcp_protect'
+      72 |         op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);                           \
+         |         ~~                      ^~~~~~~~~~~
+   1 warning generated.
+--
+   In file included from arch/riscv/errata/sifive/errata.c:7:
+   In file included from include/linux/memory.h:19:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:16:
+   In file included from include/linux/energy_model.h:7:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:16:
+   In file included from include/linux/kernfs.h:12:
+   In file included from include/linux/idr.h:15:
+   In file included from include/linux/radix-tree.h:16:
+   In file included from include/linux/percpu.h:5:
+>> include/linux/alloc_tag.h:219:2: warning: implicit conversion from 'typeof (tag->counters->calls)' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+     219 |         this_cpu_dec(tag->counters->calls);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:512:28: note: expanded from macro 'this_cpu_dec'
+     512 | #define this_cpu_dec(pcp)               this_cpu_sub(pcp, 1)
+         |                                         ^~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:510:51: note: expanded from macro 'this_cpu_sub'
+     510 | #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
+         |                                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:501:70: note: expanded from macro 'this_cpu_add'
+     501 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   include/linux/percpu-defs.h:372:29: note: expanded from macro '__pcpu_size_call'
+     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
+         |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   arch/riscv/include/asm/percpu.h:96:78: note: expanded from macro 'this_cpu_add_8'
+      96 | #define this_cpu_add_8(pcp, val)        _pcp_protect(__percpu_add_amo_case_64, pcp, val)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   arch/riscv/include/asm/percpu.h:72:26: note: expanded from macro '_pcp_protect'
+      72 |         op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);                           \
+         |         ~~                      ^~~~~~~~~~~
+   arch/riscv/errata/sifive/errata.c:29:14: warning: result of comparison of constant 9223372036854775815 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
+      29 |         if (arch_id != 0x8000000000000007 ||
+         |             ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~
+   arch/riscv/errata/sifive/errata.c:42:14: warning: result of comparison of constant 9223372036854775815 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
+      42 |         if (arch_id != 0x8000000000000007 && arch_id != 0x1)
+         |             ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:19:
+   In file included from include/linux/workqueue.h:9:
+>> include/linux/alloc_tag.h:219:2: warning: implicit conversion from 'typeof (tag->counters->calls)' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+     219 |         this_cpu_dec(tag->counters->calls);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:512:28: note: expanded from macro 'this_cpu_dec'
+     512 | #define this_cpu_dec(pcp)               this_cpu_sub(pcp, 1)
+         |                                         ^~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:510:51: note: expanded from macro 'this_cpu_sub'
+     510 | #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
+         |                                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:501:70: note: expanded from macro 'this_cpu_add'
+     501 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   include/linux/percpu-defs.h:372:29: note: expanded from macro '__pcpu_size_call'
+     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
+         |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   arch/riscv/include/asm/percpu.h:96:78: note: expanded from macro 'this_cpu_add_8'
+      96 | #define this_cpu_add_8(pcp, val)        _pcp_protect(__percpu_add_amo_case_64, pcp, val)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+   arch/riscv/include/asm/percpu.h:72:26: note: expanded from macro '_pcp_protect'
+      72 |         op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);                           \
+         |         ~~                      ^~~~~~~~~~~
    1 warning generated.
 
 
-vim +1403 mm/khugepaged.c
+vim +219 include/linux/alloc_tag.h
 
-  1350	
-  1351	/* Recursive function to consume the bitmap */
-  1352	static int collapse_scan_bitmap(struct mm_struct *mm, unsigned long address,
-  1353				int referenced, int unmapped, struct collapse_control *cc,
-  1354				bool *mmap_locked, unsigned long enabled_orders)
-  1355	{
-  1356		u8 order, next_order;
-  1357		u16 offset, mid_offset;
-  1358		int num_chunks;
-  1359		int bits_set, threshold_bits;
-  1360		int top = -1;
-  1361		int collapsed = 0;
-  1362		int ret;
-  1363		struct scan_bit_state state;
-  1364		bool is_pmd_only = (enabled_orders == (1 << HPAGE_PMD_ORDER));
-  1365	
-  1366		cc->mthp_bitmap_stack[++top] = (struct scan_bit_state)
-  1367			{ HPAGE_PMD_ORDER - KHUGEPAGED_MIN_MTHP_ORDER, 0 };
-  1368	
-  1369		while (top >= 0) {
-  1370			state = cc->mthp_bitmap_stack[top--];
-  1371			order = state.order + KHUGEPAGED_MIN_MTHP_ORDER;
-  1372			offset = state.offset;
-  1373			num_chunks = 1 << (state.order);
-  1374			/* Skip mTHP orders that are not enabled */
-  1375			if (!test_bit(order, &enabled_orders))
-  1376				goto next_order;
-  1377	
-  1378			/* copy the relavant section to a new bitmap */
-  1379			bitmap_shift_right(cc->mthp_bitmap_temp, cc->mthp_bitmap, offset,
-  1380					  MTHP_BITMAP_SIZE);
-  1381	
-  1382			bits_set = bitmap_weight(cc->mthp_bitmap_temp, num_chunks);
-  1383			threshold_bits = (HPAGE_PMD_NR - khugepaged_max_ptes_none - 1)
-  1384					>> (HPAGE_PMD_ORDER - state.order);
-  1385	
-  1386			/* Check if the region is "almost full" based on the threshold */
-  1387			if (bits_set > threshold_bits || is_pmd_only
-  1388				|| test_bit(order, &huge_anon_orders_always)) {
-  1389				ret = collapse_huge_page(mm, address, referenced, unmapped,
-  1390							 cc, mmap_locked, order,
-  1391							 offset * KHUGEPAGED_MIN_MTHP_NR);
-  1392	
-  1393				/*
-  1394				 * Analyze failure reason to determine next action:
-  1395				 * - goto next_order: try smaller orders in same region
-  1396				 * - continue: try other regions at same order
-  1397				 * - break: stop all attempts (system-wide failure)
-  1398				 */
-  1399				switch (ret) {
-  1400				/* Cases were we should continue to the next region */
-  1401				case SCAN_SUCCEED:
-  1402					collapsed += (1 << order);
-> 1403				case SCAN_PAGE_RO:
-  1404				case SCAN_PTE_MAPPED_HUGEPAGE:
-  1405					continue;
-  1406				/* Cases were lower orders might still succeed */
-  1407				case SCAN_LACK_REFERENCED_PAGE:
-  1408				case SCAN_EXCEED_NONE_PTE:
-  1409				case SCAN_EXCEED_SWAP_PTE:
-  1410				case SCAN_EXCEED_SHARED_PTE:
-  1411				case SCAN_PAGE_LOCK:
-  1412				case SCAN_PAGE_COUNT:
-  1413				case SCAN_PAGE_LRU:
-  1414				case SCAN_PAGE_NULL:
-  1415				case SCAN_DEL_PAGE_LRU:
-  1416				case SCAN_PTE_NON_PRESENT:
-  1417				case SCAN_PTE_UFFD_WP:
-  1418				case SCAN_ALLOC_HUGE_PAGE_FAIL:
-  1419					goto next_order;
-  1420				/* All other cases should stop collapse attempts */
-  1421				default:
-  1422					break;
-  1423				}
-  1424				break;
-  1425			}
-  1426	
-  1427	next_order:
-  1428			if (state.order > 0) {
-  1429				next_order = state.order - 1;
-  1430				mid_offset = offset + (num_chunks / 2);
-  1431				cc->mthp_bitmap_stack[++top] = (struct scan_bit_state)
-  1432					{ next_order, mid_offset };
-  1433				cc->mthp_bitmap_stack[++top] = (struct scan_bit_state)
-  1434					{ next_order, offset };
-  1435			}
-  1436		}
-  1437		return collapsed;
-  1438	}
-  1439	
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  202  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  203  static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes)
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  204  {
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  205  	struct alloc_tag *tag;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  206  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  207  	alloc_tag_sub_check(ref);
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  208  	if (!ref || !ref->ct)
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  209  		return;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  210  
+239d6c96d86f8a Suren Baghdasaryan 2024-03-21  211  	if (is_codetag_empty(ref)) {
+239d6c96d86f8a Suren Baghdasaryan 2024-03-21  212  		ref->ct = NULL;
+239d6c96d86f8a Suren Baghdasaryan 2024-03-21  213  		return;
+239d6c96d86f8a Suren Baghdasaryan 2024-03-21  214  	}
+239d6c96d86f8a Suren Baghdasaryan 2024-03-21  215  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  216  	tag = ct_to_alloc_tag(ref->ct);
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  217  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  218  	this_cpu_sub(tag->counters->bytes, bytes);
+22d407b164ff79 Suren Baghdasaryan 2024-03-21 @219  	this_cpu_dec(tag->counters->calls);
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  220  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  221  	ref->ct = NULL;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  222  }
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  223  
 
 -- 
 0-DAY CI Kernel Test Service
