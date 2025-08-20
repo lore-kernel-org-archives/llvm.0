@@ -1,223 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419A74690;
-	Wed, 20 Aug 2025 06:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E3E23AB9C;
+	Wed, 20 Aug 2025 07:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755672339; cv=none; b=kNmQmKdX8Z/dtVx3S5qV9iEI/TZTkHu8S7F+mDQK2REnrLney83vqrXdL6OHCdbfm95ocXUq0CeClpT759H6j2wT7GW0oTm11DYfBlkMe1DCcmIq6ONOlbUaxYG/a9LszCdo/rHf5YDasMrWnUmGkWtaw49kXfK2tp/kBJWt/+0=
+	t=1755674600; cv=none; b=Rzy+m6Bunr9jWOzMPzA9H6pflnxLv2tkZDqcKFttGVmUaB3YADhB3JqHbpaO1NNdqTk5SmFBCzI7flbfqOFpUzZeYmKHMMbbTlftGCtgWg7khXoI/jIVMkUqgHWIIyjfEzZT3VVkJcx7DC3IUCQzdo6e1Oi6sQc3vpYBWoA7feU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755672339; c=relaxed/simple;
-	bh=Aks18XLnFJDywmToiC/hQRBj84tcW/vcMhMm0McgHP4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ns3xO28jhPWWWdx399d0IyDPvuZ22QDJZHSGEW99SuLcL2fg8zmmtySbqDLl8J7zQ4NV1J/uRzqoNdBuCJQazt6/4iKx9watDd+MGKa/4ToNCJgecFF7gX/izRLiPp56NwSydOD0wgVTkpRMS6zxEsOSqrUTsVb7ZYp+/HQ0B48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQXJa2Dk; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQXJa2Dk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755672337; x=1787208337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Aks18XLnFJDywmToiC/hQRBj84tcW/vcMhMm0McgHP4=;
-  b=BQXJa2DklheG1XobGiKPr7yfHJ1llIMtWEnmthEuG2o5XuQJhnZd4722
-   +r4ginOFQaGSEUGnmO/3zhl+ytz6YfJNcrajthLUsCrcqJyHsMf2/LpAV
-   AY3egFRSJco4Dh4wUl+GSItpo1Wcq7yRfeZICZT95j5RScDfm2Pv26g8J
-   wGhpaYcSwhYgj4WUe5SxR+V93cgCBi3CsHjQpLZIG072iwUGi+hQrrmiG
-   j2EfKJZV870QQCCUxmxMz5CHCiKoRlFTzHNT4iNEyO9IBiMJffcigLMXk
-   eZ0wdtzvwUQ9FXwwpTLG3b716xUuWMi4WvKmGukpY/i5jjsGwaUlbnav0
-   Q==;
-X-CSE-ConnectionGUID: 8ZG2a137Swee4kvMbQ8/ZA==
-X-CSE-MsgGUID: 0cW7U3g/RIazgzCEsSu9Zg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="61745337"
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="61745337"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 23:45:36 -0700
-X-CSE-ConnectionGUID: oZu6t+lTTiuD65z9o2thYw==
-X-CSE-MsgGUID: BZwrqRZbQTWCzxT/CDtEsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="168851444"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 19 Aug 2025 23:45:32 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uocZd-000IJH-2r;
-	Wed, 20 Aug 2025 06:45:29 +0000
-Date: Wed, 20 Aug 2025 14:44:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yunhui Cui <cuiyunhui@bytedance.com>, yury.norov@gmail.com,
-	linux@rasmusvillemoes.dk, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Yunhui Cui <cuiyunhui@bytedance.com>
-Subject: Re: [PATCH 2/2] riscv: introduce percpu.h into include/asm
-Message-ID: <202508201452.ciEgfhNO-lkp@intel.com>
-References: <20250819135007.85646-3-cuiyunhui@bytedance.com>
+	s=arc-20240116; t=1755674600; c=relaxed/simple;
+	bh=lAJQKe2IUXmpnDMH2MLQn/N2R7Eh9rHNLAeuZxEA8YA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c7FYvPew/wPLHqqIojsvdt+c9PRVqahnADCmf//iY3vy5kYyK9IQPoWoqCCrUws1Qa2wiHMipQ9Y29sF1OD5YCtRam7L0A1HgohdSd0aLyWEcjo24JBcNdWGBgBxpkUX/TrstjsznecQHfAjYIqwYg4a4E2Skv8AAxJUcAt9V1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BD45442D0;
+	Wed, 20 Aug 2025 07:23:08 +0000 (UTC)
+Message-ID: <8078e385-e08e-40a5-b6df-31c0b5be8f43@ghiti.fr>
+Date: Wed, 20 Aug 2025 09:23:08 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819135007.85646-3-cuiyunhui@bytedance.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/10] riscv: Remove version check for LTO_CLANG selects
+To: Nathan Chancellor <nathan@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
+ Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org
+References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
+ <20250818-bump-min-llvm-ver-15-v1-7-c8b1d0f955e0@kernel.org>
+Content-Language: en-US
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-7-c8b1d0f955e0@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduheejjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeejveeuuddtuedtffevkeevteelffelueeiveeitdevieejgeffteekkeevhedugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtdegmegtvggttdemuddvudgumehfvdefvdemjegufhekmegsfhegsgemgeeliegvmeduugegsgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtgeemtggvtgdtmeduvdduugemfhdvfedvmeejughfkeemsghfgegsmeegleeivgemudgugegspdhhvghloheplgfkrfggieemvdgrtdegmegtvggttdemuddvudgumehfvdefvdemjegufhekmegsfhegsgemgeeliegvmeduugegsggnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepuddvpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrkhhpmheslhhin
+ hhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehkvggvsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alex@ghiti.fr
 
-Hi Yunhui,
+Hi Nathan,
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on dennis-percpu/for-next v6.17-rc2 next-20250819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yunhui-Cui/riscv-remove-irqflags-h-inclusion-in-asm-bitops-h/20250819-215256
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250819135007.85646-3-cuiyunhui%40bytedance.com
-patch subject: [PATCH 2/2] riscv: introduce percpu.h into include/asm
-config: riscv-randconfig-002-20250820 (https://download.01.org/0day-ci/archive/20250820/202508201452.ciEgfhNO-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250820/202508201452.ciEgfhNO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508201452.ciEgfhNO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/riscv/kernel/asm-offsets.c:8:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/alloc_tag.h:219:2: warning: implicit conversion from 'typeof (tag->counters->calls)' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     219 |         this_cpu_dec(tag->counters->calls);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:512:28: note: expanded from macro 'this_cpu_dec'
-     512 | #define this_cpu_dec(pcp)               this_cpu_sub(pcp, 1)
-         |                                         ^~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:510:51: note: expanded from macro 'this_cpu_sub'
-     510 | #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
-         |                                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:501:70: note: expanded from macro 'this_cpu_add'
-     501 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   include/linux/percpu-defs.h:372:29: note: expanded from macro '__pcpu_size_call'
-     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
-         |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   arch/riscv/include/asm/percpu.h:96:78: note: expanded from macro 'this_cpu_add_8'
-      96 | #define this_cpu_add_8(pcp, val)        _pcp_protect(__percpu_add_amo_case_64, pcp, val)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   arch/riscv/include/asm/percpu.h:72:26: note: expanded from macro '_pcp_protect'
-      72 |         op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);                           \
-         |         ~~                      ^~~~~~~~~~~
-   1 warning generated.
---
-   In file included from arch/riscv/errata/sifive/errata.c:7:
-   In file included from include/linux/memory.h:19:
-   In file included from include/linux/node.h:18:
-   In file included from include/linux/device.h:16:
-   In file included from include/linux/energy_model.h:7:
-   In file included from include/linux/kobject.h:20:
-   In file included from include/linux/sysfs.h:16:
-   In file included from include/linux/kernfs.h:12:
-   In file included from include/linux/idr.h:15:
-   In file included from include/linux/radix-tree.h:16:
-   In file included from include/linux/percpu.h:5:
->> include/linux/alloc_tag.h:219:2: warning: implicit conversion from 'typeof (tag->counters->calls)' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     219 |         this_cpu_dec(tag->counters->calls);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:512:28: note: expanded from macro 'this_cpu_dec'
-     512 | #define this_cpu_dec(pcp)               this_cpu_sub(pcp, 1)
-         |                                         ^~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:510:51: note: expanded from macro 'this_cpu_sub'
-     510 | #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
-         |                                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:501:70: note: expanded from macro 'this_cpu_add'
-     501 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   include/linux/percpu-defs.h:372:29: note: expanded from macro '__pcpu_size_call'
-     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
-         |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   arch/riscv/include/asm/percpu.h:96:78: note: expanded from macro 'this_cpu_add_8'
-      96 | #define this_cpu_add_8(pcp, val)        _pcp_protect(__percpu_add_amo_case_64, pcp, val)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   arch/riscv/include/asm/percpu.h:72:26: note: expanded from macro '_pcp_protect'
-      72 |         op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);                           \
-         |         ~~                      ^~~~~~~~~~~
-   arch/riscv/errata/sifive/errata.c:29:14: warning: result of comparison of constant 9223372036854775815 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-      29 |         if (arch_id != 0x8000000000000007 ||
-         |             ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~
-   arch/riscv/errata/sifive/errata.c:42:14: warning: result of comparison of constant 9223372036854775815 with expression of type 'unsigned long' is always true [-Wtautological-constant-out-of-range-compare]
-      42 |         if (arch_id != 0x8000000000000007 && arch_id != 0x1)
-         |             ~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
---
-   In file included from arch/riscv/kernel/asm-offsets.c:8:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:19:
-   In file included from include/linux/workqueue.h:9:
->> include/linux/alloc_tag.h:219:2: warning: implicit conversion from 'typeof (tag->counters->calls)' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     219 |         this_cpu_dec(tag->counters->calls);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:512:28: note: expanded from macro 'this_cpu_dec'
-     512 | #define this_cpu_dec(pcp)               this_cpu_sub(pcp, 1)
-         |                                         ^~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:510:51: note: expanded from macro 'this_cpu_sub'
-     510 | #define this_cpu_sub(pcp, val)          this_cpu_add(pcp, -(typeof(pcp))(val))
-         |                                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:501:70: note: expanded from macro 'this_cpu_add'
-     501 | #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   include/linux/percpu-defs.h:372:29: note: expanded from macro '__pcpu_size_call'
-     372 |                 case 8: stem##8(variable, __VA_ARGS__);break;           \
-         |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   arch/riscv/include/asm/percpu.h:96:78: note: expanded from macro 'this_cpu_add_8'
-      96 | #define this_cpu_add_8(pcp, val)        _pcp_protect(__percpu_add_amo_case_64, pcp, val)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-   arch/riscv/include/asm/percpu.h:72:26: note: expanded from macro '_pcp_protect'
-      72 |         op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);                           \
-         |         ~~                      ^~~~~~~~~~~
-   1 warning generated.
+On 8/18/25 20:57, Nathan Chancellor wrote:
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 15.0.0, there is no need to check the LLD version
+> before selecting ARCH_SUPPORTS_LTO_CLANG{,_THIN} because it will always
+> be true.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Alexandre Ghiti <alex@ghiti.fr>
+> Cc: linux-riscv@lists.infradead.org
+>
+> Small note, this will conflict with
+> https://lore.kernel.org/20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org/
+> but I think it is simple enough to deal with.
 
 
-vim +219 include/linux/alloc_tag.h
+FYI, I'll send this patch for some 6.17-rcX.
 
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  202  
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  203  static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes)
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  204  {
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  205  	struct alloc_tag *tag;
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  206  
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  207  	alloc_tag_sub_check(ref);
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  208  	if (!ref || !ref->ct)
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  209  		return;
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  210  
-239d6c96d86f8a Suren Baghdasaryan 2024-03-21  211  	if (is_codetag_empty(ref)) {
-239d6c96d86f8a Suren Baghdasaryan 2024-03-21  212  		ref->ct = NULL;
-239d6c96d86f8a Suren Baghdasaryan 2024-03-21  213  		return;
-239d6c96d86f8a Suren Baghdasaryan 2024-03-21  214  	}
-239d6c96d86f8a Suren Baghdasaryan 2024-03-21  215  
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  216  	tag = ct_to_alloc_tag(ref->ct);
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  217  
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  218  	this_cpu_sub(tag->counters->bytes, bytes);
-22d407b164ff79 Suren Baghdasaryan 2024-03-21 @219  	this_cpu_dec(tag->counters->calls);
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  220  
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  221  	ref->ct = NULL;
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  222  }
-22d407b164ff79 Suren Baghdasaryan 2024-03-21  223  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>   arch/riscv/Kconfig | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index a4b233a0659e..1d53bf02d0fa 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -64,9 +64,8 @@ config RISCV
+>   	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+>   	select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
+>   	select ARCH_SUPPORTS_HUGETLBFS if MMU
+> -	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
+> -	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
+> -	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
+> +	select ARCH_SUPPORTS_LTO_CLANG
+> +	select ARCH_SUPPORTS_LTO_CLANG_THIN
+>   	select ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS if 64BIT && MMU
+>   	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+>   	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+>
+
+I found another bunch of LLD_VERSION check in this file that could be 
+removed:
+
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L253
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L262
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L630
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L731
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L746
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L781
+https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L804
+
+Thanks,
+
+Alex
+
