@@ -1,172 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96AE335BAA;
-	Wed, 20 Aug 2025 21:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4022848B6
+	for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 22:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755726027; cv=none; b=q79DI6aoHcN6JzL0HS4FfZSZT22QAKtf4ERxyIA4KX0e3i6GeOXxefE7FEMfVQ67nmTJ9JXaSz+bXX0sRJBb/W/XBNwY91Xpq6x+dpp73ZL+08f4aWl4IWp+PrLH8f71gzWNnXSE/ej5jEOwiWscPM5P+yZmCd2F1YjaDvrRDSI=
+	t=1755730067; cv=none; b=SD0hB6pEmcS0p9dm9hJGIlt8O/nwF12i4NTtMxC2khZLy9gaxvgroa1qZ+lIHFx9j9uie80llM1Gcnfpf8TRuPHuhEzzUEsOTuBpxTV7vnS+rDWh8M+w7Xjii8Y/ATCDBsQKAHCg68FzVrc9vxA0fABwYhFVadhXPwHDMNJR2Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755726027; c=relaxed/simple;
-	bh=aqrzuja6PkdBjHdKKBqgqK5rjzETuEpzr+JbKNliyDQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fGPFicrP0rPtExiUTnal31VW7NUxNMNR0kt+UgcY80MR6r6T9PT/fzZeyyDEYcJTvOGOul6yBr8Xq+SrVV/tTESG+VbZkYQZl6mA19ysML3FM+UmQGFM1OBziamxCK1reTm/VJuHDiM/v2gnBNm6g7VVF7xlVZnYYa6JkRFXqck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MXdkDdKO; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755730067; c=relaxed/simple;
+	bh=aKHlxeIJj0NhWL5rFj8SAJiHfOeC64OVey16cOjjDKI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PHQ/yYeiobmjg/uUEEyY3pLqkzaRWK7gGItyBK4w8WnY8nx4NgQ/qA9EohOqQ9LPUVc9gR3HyZyA+SjIoYohcG457NFQBKGZbXy86DIi4bJJuqZKPGTWZDxWKSP0yQvEU9kRi80XJeHK2iQ0AmoZER9upiksWl9IRRuu1TKV71c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VIqxm/Og; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MXdkDdKO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755726025; x=1787262025;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aqrzuja6PkdBjHdKKBqgqK5rjzETuEpzr+JbKNliyDQ=;
-  b=MXdkDdKOnBMyQm2bqZWnnnFgCRLEADktCEyLHEiout08QUVmghdwc9AU
-   W4991QjIk8mRr181WbqhyiMvqFHgMogHhTzwEmyLCEegzVfYSXRk+xCre
-   TRuRXul9pLl9hSekskXN52Dk1PJbjs/aEcQjRJtP8fLR9M62LsGxVyccy
-   mSzQGWuzNeXCbTHFDxhTFg1FRZ/XJNLU+4E708gUW2y2s39ZtQXOfIpbu
-   Uf1MqGdmqM1do7bLRfaWPa2eFBMfQ0gNMTELHFkz8x1Zkgyz+/ebQllTH
-   MH+HWmdIm/nR9uLP8Xe9dRkegatFgdqcJY3PIOo/cLvefuF4EUZ9jgfGw
-   Q==;
-X-CSE-ConnectionGUID: P3gc8Z6CRteVVHwhiVD8wQ==
-X-CSE-MsgGUID: EMZDrOCGSeOm+9SfH5F2oA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="58075777"
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="58075777"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 14:40:25 -0700
-X-CSE-ConnectionGUID: sN8PLPyXRAG60IreOnKWrQ==
-X-CSE-MsgGUID: Od1r34daTTCon8kbzxMmAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="172659357"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 20 Aug 2025 14:40:24 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoqWu-000JhD-34;
-	Wed, 20 Aug 2025 21:39:50 +0000
-Date: Thu, 21 Aug 2025 05:39:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:perf/core 29/41] arch/x86/kernel/uprobes.c:834:16:
- error: incompatible pointer types passing 'unsigned long *' to parameter of
- type 'u64 *' (aka 'unsigned long long *')
-Message-ID: <202508210550.rgoAtXMe-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VIqxm/Og"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-24458194d83so3004175ad.2
+        for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 15:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755730064; x=1756334864; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CxmSUEH8XUSKiQrWMIiadQU2ELcXoRKtyFDMxUyNAvc=;
+        b=VIqxm/Ogeh4twbzOdf6tcti4F/3twjfgKpEhogrH8j8i5ClCMGfcJ0Z0hRzRRHyhII
+         DzhVMn8dr6E5RswD5m27ZGXEloGcSS6neaDbBBz7mO2ojZQVru4pR1XdSOFZnGyIxA5n
+         WHO0S1tr1BjIMqMTVLZuiF8XsSbMRpqA8LULwisLCtDz1XmnpD/R0Y1nitp8syX569H0
+         xncluEnRhMnLzD8x3vaXze+58FwPkCbanki5IVzApDgjFmHUWz6KaVcCgkG6PJK5h25S
+         vWsaLNqrydk3z4e+Tw7kiQp2+ONBrT5fpy2552oHDkwHnj1eZHVtoJVxW5OPDnkwr5tD
+         tgEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755730064; x=1756334864;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CxmSUEH8XUSKiQrWMIiadQU2ELcXoRKtyFDMxUyNAvc=;
+        b=FZPw1ucooBzeWb5R3W1w+NSytzj6fNpJ9wp939odX0wUgqCVY0OE0vCSNs+powUx+/
+         E671pFcqAikSFdpQgjkB/ok+lQHAWkK6QM3xDQpQdjDLX+XASHWjGgCucQD/uDUUVJ/O
+         PFK1Ds0oEQtrKXaU4cQXPY4ACidOBSt6T+i9z41Y70kRzxKXbfMckQ1igjzZjlP0NOQJ
+         ivRfBtS9VLGfcD0VzxBi7sC4qGLpKCJ4M8X3eC4z/BiW6eclCIM3u2V/uKPD3nZpVWsN
+         FTdbvCycsgqd0wOccs7x2JbiD/4Q2RDBdkoDj+aDPojKKqiwQprPzWX8Qgcal1eTXr3H
+         N4nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGBe5QsUqKZbUA7uo/dkBeDQ2a083gfBtAFgHbidIMjvrIFVNTtp+9Uro4yOsEXtOhLBbT@lists.linux.dev
+X-Gm-Message-State: AOJu0YxkkM8p3kVgZx8wHKDpAC3spMJ28M9hfIfh4ZtxTDtSZTO6a+2G
+	ExYV4R3s6510sVgHAz888u4xfPWJRRz0vV8sQdXnZSlhlHMMK/LWyPwHn9OBFgfqFFZ0DXKIXGA
+	QcdSZ5UNp+PzfteiQMNzaLIUlJ4jhVfw=
+X-Gm-Gg: ASbGncuuuzHzlbqIT+jheWNzePY8z5OE3i1tIlDXIw/JasUZ/QBJOS0zDubLieYLFT3
+	rOLYhqpRA1RcuM6LW5gSTOzFi8Ippc5I7lbSx+cAn7tQV5KO2BcY7CeVjswy2USUxsGIdgxCy+C
+	pA5V66cJo+KntEIFmjHDIMURUKVFU9dgvhFnyWkJEG7kreTVUhk4KDBY8pNj7FgUmiyNdnxt/Nc
+	ma/beDNPHQJUmqDvviiohjYCfxBBwnMti9z3bqGGhzd
+X-Google-Smtp-Source: AGHT+IGfXE/LPyy5OpwjdvIBYFagxDqu+JLxgJsnoM4MRvNr7cBY/jRWzrvpmvFodOiN1fufMP+/m2v1odbFJOTclS0=
+X-Received: by 2002:a17:902:e884:b0:23f:f707:f97e with SMTP id
+ d9443c01a7336-245fec04067mr6138445ad.17.1755730063826; Wed, 20 Aug 2025
+ 15:47:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250819033956.59164-1-dongml2@chinatelecom.cn> <20250819033956.59164-3-dongml2@chinatelecom.cn>
+In-Reply-To: <20250819033956.59164-3-dongml2@chinatelecom.cn>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 20 Aug 2025 15:47:29 -0700
+X-Gm-Features: Ac12FXxwNFYx3X1C5Pu9tp-WySpazWQxJmdHRR6C2ikj-hLBBFxY7DT7gZK46Co
+Message-ID: <CAEf4BzZBztC69GFDuA4YJHPmWOXuq3+tSNMspPNA3tksGaEi=A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: skip recursive functions for kprobe_multi
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
+	shuah@kernel.org, davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, 
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com, 
+	justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
-head:   44711c518722e9e0594d07e7f7af72ec9d48c1dd
-commit: 89f3fe617685431a4d82091c95ab14dd0d3b8dd6 [29/41] uprobes/x86: Fix shadow stack
-config: x86_64-buildonly-randconfig-003-20250821 (https://download.01.org/0day-ci/archive/20250821/202508210550.rgoAtXMe-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508210550.rgoAtXMe-lkp@intel.com/reproduce)
+On Mon, Aug 18, 2025 at 8:40=E2=80=AFPM Menglong Dong <menglong8.dong@gmail=
+.com> wrote:
+>
+> Some functions is recursive for the kprobe_multi and impact the benchmark
+> results. So just skip them.
+>
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> ---
+>  tools/testing/selftests/bpf/trace_helpers.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+> index d24baf244d1f..9da9da51b132 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -559,6 +559,22 @@ static bool skip_entry(char *name)
+>         if (!strncmp(name, "__ftrace_invalid_address__",
+>                      sizeof("__ftrace_invalid_address__") - 1))
+>                 return true;
+> +
+> +       if (!strcmp(name, "migrate_disable"))
+> +               return true;
+> +       if (!strcmp(name, "migrate_enable"))
+> +               return true;
+> +       if (!strcmp(name, "rcu_read_unlock_strict"))
+> +               return true;
+> +       if (!strcmp(name, "preempt_count_add"))
+> +               return true;
+> +       if (!strcmp(name, "preempt_count_sub"))
+> +               return true;
+> +       if (!strcmp(name, "__rcu_read_lock"))
+> +               return true;
+> +       if (!strcmp(name, "__rcu_read_unlock"))
+> +               return true;
+> +
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508210550.rgoAtXMe-lkp@intel.com/
+static const char *trace_blacklist[] =3D {
+    "migrate_disable",
+    "migrate_enable",
+    ...
+};
 
-All errors (new ones prefixed by >>):
+it's not like it's one or two functions where copy-pasting strcmp might be =
+fine
 
->> arch/x86/kernel/uprobes.c:834:16: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'u64 *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-     834 |         if (shstk_pop(&sret) == 0 && sret != args.retaddr)
-         |                       ^~~~~
-   arch/x86/include/asm/shstk.h:26:20: note: passing argument to parameter 'val' here
-      26 | int shstk_pop(u64 *val);
-         |                    ^
-   1 error generated.
+pw-bot: cr
 
 
-vim +834 arch/x86/kernel/uprobes.c
-
-   802	
-   803	SYSCALL_DEFINE0(uprobe)
-   804	{
-   805		struct pt_regs *regs = task_pt_regs(current);
-   806		struct uprobe_syscall_args args;
-   807		unsigned long ip, sp, sret;
-   808		int err;
-   809	
-   810		/* Allow execution only from uprobe trampolines. */
-   811		if (!in_uprobe_trampoline(regs->ip))
-   812			goto sigill;
-   813	
-   814		err = copy_from_user(&args, (void __user *)regs->sp, sizeof(args));
-   815		if (err)
-   816			goto sigill;
-   817	
-   818		ip = regs->ip;
-   819	
-   820		/*
-   821		 * expose the "right" values of ax/r11/cx/ip/sp to uprobe_consumer/s, plus:
-   822		 * - adjust ip to the probe address, call saved next instruction address
-   823		 * - adjust sp to the probe's stack frame (check trampoline code)
-   824		 */
-   825		regs->ax  = args.ax;
-   826		regs->r11 = args.r11;
-   827		regs->cx  = args.cx;
-   828		regs->ip  = args.retaddr - 5;
-   829		regs->sp += sizeof(args);
-   830		regs->orig_ax = -1;
-   831	
-   832		sp = regs->sp;
-   833	
- > 834		if (shstk_pop(&sret) == 0 && sret != args.retaddr)
-   835			goto sigill;
-   836	
-   837		handle_syscall_uprobe(regs, regs->ip);
-   838	
-   839		/*
-   840		 * Some of the uprobe consumers has changed sp, we can do nothing,
-   841		 * just return via iret.
-   842		 */
-   843		if (regs->sp != sp) {
-   844			/* skip the trampoline call */
-   845			if (args.retaddr - 5 == regs->ip)
-   846				regs->ip += 5;
-   847			return regs->ax;
-   848		}
-   849	
-   850		regs->sp -= sizeof(args);
-   851	
-   852		/* for the case uprobe_consumer has changed ax/r11/cx */
-   853		args.ax  = regs->ax;
-   854		args.r11 = regs->r11;
-   855		args.cx  = regs->cx;
-   856	
-   857		/* keep return address unless we are instructed otherwise */
-   858		if (args.retaddr - 5 != regs->ip)
-   859			args.retaddr = regs->ip;
-   860	
-   861		if (shstk_push(args.retaddr) == -EFAULT)
-   862			goto sigill;
-   863	
-   864		regs->ip = ip;
-   865	
-   866		err = copy_to_user((void __user *)regs->sp, &args, sizeof(args));
-   867		if (err)
-   868			goto sigill;
-   869	
-   870		/* ensure sysret, see do_syscall_64() */
-   871		regs->r11 = regs->flags;
-   872		regs->cx  = regs->ip;
-   873		return 0;
-   874	
-   875	sigill:
-   876		force_sig(SIGILL);
-   877		return -1;
-   878	}
-   879	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>         return false;
+>  }
+>
+> --
+> 2.50.1
+>
