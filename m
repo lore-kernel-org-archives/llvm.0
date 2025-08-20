@@ -1,107 +1,134 @@
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E3E23AB9C;
-	Wed, 20 Aug 2025 07:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB7425CC69;
+	Wed, 20 Aug 2025 08:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755674600; cv=none; b=Rzy+m6Bunr9jWOzMPzA9H6pflnxLv2tkZDqcKFttGVmUaB3YADhB3JqHbpaO1NNdqTk5SmFBCzI7flbfqOFpUzZeYmKHMMbbTlftGCtgWg7khXoI/jIVMkUqgHWIIyjfEzZT3VVkJcx7DC3IUCQzdo6e1Oi6sQc3vpYBWoA7feU=
+	t=1755677271; cv=none; b=dGwEMoGKXZYrF5MGIg4KEZXEuWU0q3PFc8n/dqtlmlE92WicCwb+AkK9vfb8CldGAvYotPEtx8oh1ojbX+poWx0mlIrh85uT9Rcr0mhBQxmzK94A3dFkCUwCjlvp0MtVoPLtmHJDmZLdjrWN3TOwTfrlXqmVxcEM2cPWQriTrhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755674600; c=relaxed/simple;
-	bh=lAJQKe2IUXmpnDMH2MLQn/N2R7Eh9rHNLAeuZxEA8YA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c7FYvPew/wPLHqqIojsvdt+c9PRVqahnADCmf//iY3vy5kYyK9IQPoWoqCCrUws1Qa2wiHMipQ9Y29sF1OD5YCtRam7L0A1HgohdSd0aLyWEcjo24JBcNdWGBgBxpkUX/TrstjsznecQHfAjYIqwYg4a4E2Skv8AAxJUcAt9V1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BD45442D0;
-	Wed, 20 Aug 2025 07:23:08 +0000 (UTC)
-Message-ID: <8078e385-e08e-40a5-b6df-31c0b5be8f43@ghiti.fr>
-Date: Wed, 20 Aug 2025 09:23:08 +0200
+	s=arc-20240116; t=1755677271; c=relaxed/simple;
+	bh=1LchkEdSUPOGHvF8BqxbIW+DxgHBEG7fHZ0C9P7w9bk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C/3zrdAr5fniSMNwJVRuxOUYfneUbyYVgb3kyfDMkJxd8L7tiBZvjje0vvZhFbpDd72Xi9s3fuZMJ4t3z+bCfOJEXhzonGuluIfjw6xYt+HFU79XW7NyGm7A0xpC/KPhPyMvHyMDkA8lkE+D/rhHu4AKD7sb+3STQCs00WbcTu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dOcyVhuo; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dOcyVhuo"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id EEED01A0D4F;
+	Wed, 20 Aug 2025 08:07:46 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C032D606AF;
+	Wed, 20 Aug 2025 08:07:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 41BCB1C22D86F;
+	Wed, 20 Aug 2025 10:07:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1755677265; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=BqOeKH44mmo+fNgntbIgoiF5KwaoWXtJymnj9DvA82U=;
+	b=dOcyVhuo4R38XYIpSGRStvC6gWxn/IXf/BnB8QnIGcJbHDO0V+a8hg90NTf93oxn7Z3qLv
+	uiJKLhMw67PzGmtKQiVl046uQdqgbdxtpUBm7DGOCf4/QIZZjst1gtN+5INLfos3ORjaTt
+	bU7aQVQabj5eoNEs38/PWsKzetcU+gZZcz4wWJV959VNZQh5HUVdEDYmwaYCUtkAPpF6Cy
+	rsYduX0WN+Lxydxuk3FNXaU/NF2tcXIH0BAed0aLhUXdjWMH7uNlDZereJ2IYp/qPOSHrM
+	1bD/kZLKySsfTZk3pJsZZUK43MHlf5GNV4U0PET/W2Gwio2OGPN4oqyIQRDN3w==
+From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev
+Subject:
+ Re: [PATCH] mmc: sdhci-cadence: Fix -Wuninitialized in
+ sdhci_cdns_tune_blkgap()
+Date: Wed, 20 Aug 2025 10:07:35 +0200
+Message-ID: <2560300.XAFRqVoOGU@benoit.monin>
+In-Reply-To:
+ <20250819-mmc-sdhci-cadence-fix-uninit-hrs37_mode-v1-1-94aa2d0c438a@kernel.org>
+References:
+ <20250819-mmc-sdhci-cadence-fix-uninit-hrs37_mode-v1-1-94aa2d0c438a@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/10] riscv: Remove version check for LTO_CLANG selects
-To: Nathan Chancellor <nathan@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
- Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org
-References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
- <20250818-bump-min-llvm-ver-15-v1-7-c8b1d0f955e0@kernel.org>
-Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-7-c8b1d0f955e0@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduheejjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeejveeuuddtuedtffevkeevteelffelueeiveeitdevieejgeffteekkeevhedugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtdegmegtvggttdemuddvudgumehfvdefvdemjegufhekmegsfhegsgemgeeliegvmeduugegsgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtgeemtggvtgdtmeduvdduugemfhdvfedvmeejughfkeemsghfgegsmeegleeivgemudgugegspdhhvghloheplgfkrfggieemvdgrtdegmegtvggttdemuddvudgumehfvdefvdemjegufhekmegsfhegsgemgeeliegvmeduugegsggnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepuddvpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrkhhpmheslhhin
- hhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehkvggvsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-Sasl: alex@ghiti.fr
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Last-TLS-Session-Version: TLSv1.3
 
 Hi Nathan,
 
-On 8/18/25 20:57, Nathan Chancellor wrote:
-> Now that the minimum supported version of LLVM for building the kernel
-> has been bumped to 15.0.0, there is no need to check the LLD version
-> before selecting ARCH_SUPPORTS_LTO_CLANG{,_THIN} because it will always
-> be true.
->
+On Tuesday, 19 August 2025 at 19:28:49 CEST, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=3Dy):
+>=20
+>   drivers/mmc/host/sdhci-cadence.c:297:9: error: variable 'hrs37_mode' is=
+ uninitialized when used here [-Werror,-Wuninitialized]
+>     297 |         writel(hrs37_mode, hrs37_reg);
+>         |                ^~~~~~~~~~
+>   drivers/mmc/host/sdhci-cadence.c:291:16: note: initialize the variable =
+'hrs37_mode' to silence this warning
+>     291 |         u32 hrs37_mode;
+>         |                       ^
+>         |                        =3D 0
+>=20
+> A previous revision assigned SDHCI_CDNS_HRS37_MODE_MMC_HS200 to
+> hrs37_mode in a switch statement but the final revision moved to a
+> simple if statement. Pass that as the value to writel() and
+> remove hrs37_mode, clearing up the warning.
+>=20
+> Fixes: 60613a8b9b81 ("mmc: sdhci-cadence: implement multi-block read gap =
+tuning")
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Alexandre Ghiti <alex@ghiti.fr>
-> Cc: linux-riscv@lists.infradead.org
->
-> Small note, this will conflict with
-> https://lore.kernel.org/20250710-riscv-restrict-lto-to-medany-v1-1-b1dac9871ecf@kernel.org/
-> but I think it is simple enough to deal with.
+>  drivers/mmc/host/sdhci-cadence.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-ca=
+dence.c
+> index a2a4a5b0ab96..eaa88897a256 100644
+> --- a/drivers/mmc/host/sdhci-cadence.c
+> +++ b/drivers/mmc/host/sdhci-cadence.c
+> @@ -288,13 +288,12 @@ static int sdhci_cdns_tune_blkgap(struct mmc_host *=
+mmc)
+>  	void __iomem *hrs38_reg =3D priv->hrs_addr + SDHCI_CDNS_HRS38;
+>  	int ret;
+>  	u32 gap;
+> -	u32 hrs37_mode;
+> =20
+>  	/* Currently only needed in HS200 mode */
+>  	if (host->timing !=3D MMC_TIMING_MMC_HS200)
+>  		return 0;
+> =20
+> -	writel(hrs37_mode, hrs37_reg);
+> +	writel(SDHCI_CDNS_HRS37_MODE_MMC_HS200, hrs37_reg);
+> =20
+>  	for (gap =3D 0; gap <=3D SDHCI_CDNS_HRS38_BLKGAP_MAX; gap++) {
+>  		writel(gap, hrs38_reg);
+>=20
+Thanks for the catch!
 
+I don't get how gcc does not raise a warning here, only clang does. I
+did build with gcc-11 and gcc-15 and they don't complain about this
+uninitialized variable.
 
-FYI, I'll send this patch for some 6.17-rcX.
-
+Tested-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
 
 > ---
->   arch/riscv/Kconfig | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index a4b233a0659e..1d53bf02d0fa 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -64,9 +64,8 @@ config RISCV
->   	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
->   	select ARCH_SUPPORTS_HUGE_PFNMAP if TRANSPARENT_HUGEPAGE
->   	select ARCH_SUPPORTS_HUGETLBFS if MMU
-> -	# LLD >= 14: https://github.com/llvm/llvm-project/issues/50505
-> -	select ARCH_SUPPORTS_LTO_CLANG if LLD_VERSION >= 140000
-> -	select ARCH_SUPPORTS_LTO_CLANG_THIN if LLD_VERSION >= 140000
-> +	select ARCH_SUPPORTS_LTO_CLANG
-> +	select ARCH_SUPPORTS_LTO_CLANG_THIN
->   	select ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS if 64BIT && MMU
->   	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
->   	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
->
+> base-commit: 7138017038c42feb682445407974ed736e1ff308
+> change-id: 20250819-mmc-sdhci-cadence-fix-uninit-hrs37_mode-cc1246cb39d8
+>=20
+> Best regards,
+> -- =20
+> Nathan Chancellor <nathan@kernel.org>
+>=20
+>=20
 
-I found another bunch of LLD_VERSION check in this file that could be 
-removed:
+Best regards,
+=2D-=20
+Beno=C3=AEt Monin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L253
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L262
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L630
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L731
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L746
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L781
-https://elixir.bootlin.com/linux/v6.17-rc2/source/arch/riscv/Kconfig#L804
 
-Thanks,
-
-Alex
 
