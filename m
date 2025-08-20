@@ -1,67 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A403324EA90;
-	Wed, 20 Aug 2025 18:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2818427D77B;
+	Wed, 20 Aug 2025 19:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755714696; cv=none; b=UKcWr8iaDT1Esp1ryUqOZSOYqv08QCtxQcjsLxGdpkQEB74wyzzQnWVYoOxfvaAQffbEE8kQMHyjcWLWyfwH+bWu0J3i/YXAr3mbdTuNnXQvmyFoQtUBB1npM3cdw/v6T2hhelJ3Yeq0Z8aMkUPFeV2/cqofE7bT8db/AnxPOyk=
+	t=1755716602; cv=none; b=OR/jZtXoXnpBKuMbb4nns3yYTu1aS6EvQlTf8QNix0ccNHklEOIV1X73T0qlsVJuAsJlhyzyf1lZWjTnquLB5AwCdq6Nd4K6EkuIkkkERUpcQoaNFiCIvdJlIV958Kub4WKxNSvwYGASkKAVKzRog/Oki8GCiED6cVLwqKz/k7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755714696; c=relaxed/simple;
-	bh=odKuUwppF1tAKXek3OL0+/6yPLjV/i+MWkX+owgQf/A=;
+	s=arc-20240116; t=1755716602; c=relaxed/simple;
+	bh=5GfvpmvDEwt7/WHZ41ArcJBD9qOfspQN8odDWzwdDho=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WMbAGjqblL6MeAdyzevoCF2nFyghxbGiWXJO27SQ3hISf0D/1sITTNq4EgAtaRJ7xrUwUq/KR7Rhr+m4HGESHdKLM3l0P/guuKGTzIzkacMB87nun7mbOpOBte8+xsfyldBa4KV3S/uNyAOfuOUZHHaSvWYO3gvlHXBRqwvqfqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELDs56ji; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=G44w5HFJ0X6BW8yTkVsYu37UszOtKKrms2bnPfLYkcAbVAKsd8Y5BEOPKnHUshsiO4z7dvbyD6CoYt76AnBuuHZKChYRM59SSo9W1gkKkPta6fjdeTI+rvpA5sgThq4nOGBUD9xZj1yKtpEzhqZ9elyTgcfSVVpLdOVzr3mx3DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q8FGzNCM; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELDs56ji"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q8FGzNCM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755714694; x=1787250694;
+  t=1755716600; x=1787252600;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=odKuUwppF1tAKXek3OL0+/6yPLjV/i+MWkX+owgQf/A=;
-  b=ELDs56jiyMK3a+uaYq/MWbm/DC7JWaW+zmpYtCjo4OyJXhscr7LV4kUx
-   z5DefvnYGnIlij19ARSq/SCB7PM3+4LU2+qx3boJpMRGQ2p702T3SEhYP
-   09AicVFwh0i2ZweX19n3aDFiyBOJqWeu65Lzv21Mzx16hKxw69djINaj8
-   7Hys/YPAef/TSo5XDmiy43aRBrMTO5C9RFQpUjgMUtSKJVaTQRF7fyEb0
-   NzbJEqlU36Vxf8s2x+fXNbo5mW735QPfTJhjqFm9AFdfcprtbbMf9lMTi
-   N96Wd0MTopLRsXbmxN19guN+pjeAn0Msi6xogl+T+XtXYsI0HPUrWOizZ
+  bh=5GfvpmvDEwt7/WHZ41ArcJBD9qOfspQN8odDWzwdDho=;
+  b=Q8FGzNCMNRohoPX9LmjtRR98F7ugAJ+fw7MEorLNmGAD3vedbZTxhT43
+   4XIbdF8aw65ewf+O014sbvZnkPHzSrWeyIqa6IHXc1L3TaHK7BpCxwveh
+   aw34AsEORxp+nuPhigu/ITXOX0xeZIl/de/F5C8rvLKxnFPvF+4E5Xllp
+   waviboo+sUr2ZE3PyBY7kfpyF3FkYexJa1VhBL/z1mWIC+cDiyYa0I4AB
+   gCCE/gnEXOaxtbJkVYMhAJlIYg0eRXkYmM1Pj0ORojeAK6X8WWaW6iA7X
+   oMkSOY0oGcPrJW2MEApHcM2YH1q8Xwh/OfoDjWG5vE3HMfxd6w9i1PQsR
    w==;
-X-CSE-ConnectionGUID: kpzEeeI5SJWddY86v9mcrQ==
-X-CSE-MsgGUID: +oBp87KJS8amcC90+8W3mA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="60620378"
+X-CSE-ConnectionGUID: tJ28vlTiTmKlt12O6WlZGw==
+X-CSE-MsgGUID: Qhht7fU3R5SP4ZvaaSkolg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="58064888"
 X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="60620378"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 11:31:32 -0700
-X-CSE-ConnectionGUID: DWjqdWMDTSKUkQgSr9qtaw==
-X-CSE-MsgGUID: L0ZGg7U+QJiBRvH/Uax2HQ==
+   d="scan'208";a="58064888"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 12:03:19 -0700
+X-CSE-ConnectionGUID: XsAQ5YMoRIiHW1uiss991A==
+X-CSE-MsgGUID: 474uIyjeSk+QHWasyB2kSw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="167406830"
+   d="scan'208";a="199075421"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 20 Aug 2025 11:31:29 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 20 Aug 2025 12:03:12 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uonao-000Jb9-2t;
-	Wed, 20 Aug 2025 18:31:26 +0000
-Date: Thu, 21 Aug 2025 02:31:13 +0800
+	id 1uoo5R-000Jbr-1r;
+	Wed, 20 Aug 2025 19:03:07 +0000
+Date: Thu, 21 Aug 2025 03:02:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Marie Zhussupova <marievic@google.com>, marievictoria875@gmail.com,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
+To: Anthony Yznaga <anthony.yznaga@oracle.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Gow <davidgow@google.com>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	intel-xe@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] drm/xe/tests: Fix some additional gen_params
- signatures
-Message-ID: <202508210248.4CiPvWGD-lkp@intel.com>
-References: <20250819073434.1411114-1-davidgow@google.com>
+	akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
+	bp@alien8.de, brauner@kernel.org, bsegall@google.com,
+	corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
+	dietmar.eggemann@arm.com, ebiederm@xmission.com, hpa@zytor.com,
+	jakub.wartak@mailbox.org, jannh@google.com, juri.lelli@redhat.com,
+	khalid@kernel.org, liam.howlett@oracle.com,
+	linyongting@bytedance.com, lorenzo.stoakes@oracle.com,
+	luto@kernel.org, markhemm@googlemail.com, maz@kernel.org,
+	mhiramat@kernel.org, mgorman@suse.de, mhocko@suse.com,
+	mingo@redhat.com, muchun.song@linux.dev, neilb@suse.de,
+	osalvador@suse.de
+Subject: Re: [PATCH v3 07/22] mm/mshare: Add mmap support
+Message-ID: <202508210230.0Zc3YDIy-lkp@intel.com>
+References: <20250820010415.699353-8-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,57 +73,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250819073434.1411114-1-davidgow@google.com>
+In-Reply-To: <20250820010415.699353-8-anthony.yznaga@oracle.com>
 
-Hi David,
+Hi Anthony,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on shuah-kselftest/kunit]
-[also build test ERROR on linus/master v6.17-rc2 next-20250820]
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on tip/sched/core trace/for-next tip/x86/core tip/x86/mm kees/for-next/execve linus/master v6.17-rc2 next-20250820]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/kunit-Only-output-a-test-plan-if-we-re-using-kunit_array_gen_params/20250819-154731
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
-patch link:    https://lore.kernel.org/r/20250819073434.1411114-1-davidgow%40google.com
-patch subject: [PATCH 1/2] drm/xe/tests: Fix some additional gen_params signatures
-config: x86_64-randconfig-071-20250820 (https://download.01.org/0day-ci/archive/20250821/202508210248.4CiPvWGD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Anthony-Yznaga/mm-Add-msharefs-filesystem/20250820-091021
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250820010415.699353-8-anthony.yznaga%40oracle.com
+patch subject: [PATCH v3 07/22] mm/mshare: Add mmap support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250821/202508210230.0Zc3YDIy-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508210248.4CiPvWGD-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508210230.0Zc3YDIy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508210248.4CiPvWGD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508210230.0Zc3YDIy-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:4:
->> drivers/gpu/drm/xe/tests/xe_pci_test.h:28:49: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
-      28 | const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
-         |                                                 ^
-   drivers/gpu/drm/xe/tests/xe_pci_test.h:29:46: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
-      29 | const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
-         |                                              ^
-   drivers/gpu/drm/xe/tests/xe_pci_test.h:30:40: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
-      30 | const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
-         |                                        ^
-   drivers/gpu/drm/xe/tests/xe_pci_test.h:31:49: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
-      31 | const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
-         |                                                 ^
-   4 errors generated.
+>> mm/mshare.c:121:16: warning: variable 'mshare_start' set but not used [-Wunused-but-set-variable]
+     121 |         unsigned long mshare_start, mshare_size;
+         |                       ^
+   1 warning generated.
 
 
-vim +28 drivers/gpu/drm/xe/tests/xe_pci_test.h
+vim +/mshare_start +121 mm/mshare.c
 
-    27	
-  > 28	const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
-    29	const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
-    30	const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
-    31	const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
-    32	
+   113	
+   114	static unsigned long
+   115	msharefs_get_unmapped_area(struct file *file, unsigned long addr,
+   116			unsigned long len, unsigned long pgoff, unsigned long flags)
+   117	{
+   118		struct mshare_data *m_data = file->private_data;
+   119		struct mm_struct *mm = current->mm;
+   120		struct vm_area_struct *vma, *prev;
+ > 121		unsigned long mshare_start, mshare_size;
+   122		const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
+   123	
+   124		mmap_assert_write_locked(mm);
+   125	
+   126		if ((flags & MAP_TYPE) == MAP_PRIVATE)
+   127			return -EINVAL;
+   128	
+   129		if (!mshare_is_initialized(m_data))
+   130			return -EINVAL;
+   131	
+   132		mshare_start = m_data->start;
+   133		mshare_size = m_data->size;
+   134	
+   135		if (len != mshare_size)
+   136			return -EINVAL;
+   137	
+   138		if (len > mmap_end - mmap_min_addr)
+   139			return -ENOMEM;
+   140	
+   141		if (flags & MAP_FIXED) {
+   142			if (!IS_ALIGNED(addr, mshare_align))
+   143				return -EINVAL;
+   144			return addr;
+   145		}
+   146	
+   147		if (addr) {
+   148			addr = ALIGN(addr, mshare_align);
+   149			vma = find_vma_prev(mm, addr, &prev);
+   150			if (mmap_end - len >= addr && addr >= mmap_min_addr &&
+   151			    (!vma || addr + len <= vm_start_gap(vma)) &&
+   152			    (!prev || addr >= vm_end_gap(prev)))
+   153				return addr;
+   154		}
+   155	
+   156		if (!mm_flags_test(MMF_TOPDOWN, mm))
+   157			return msharefs_get_unmapped_area_bottomup(file, addr, len,
+   158					pgoff, flags);
+   159		else
+   160			return msharefs_get_unmapped_area_topdown(file, addr, len,
+   161					pgoff, flags);
+   162	}
+   163	
 
 -- 
 0-DAY CI Kernel Test Service
