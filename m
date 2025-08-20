@@ -1,134 +1,177 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB7425CC69;
-	Wed, 20 Aug 2025 08:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2082DC342
+	for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 08:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755677271; cv=none; b=dGwEMoGKXZYrF5MGIg4KEZXEuWU0q3PFc8n/dqtlmlE92WicCwb+AkK9vfb8CldGAvYotPEtx8oh1ojbX+poWx0mlIrh85uT9Rcr0mhBQxmzK94A3dFkCUwCjlvp0MtVoPLtmHJDmZLdjrWN3TOwTfrlXqmVxcEM2cPWQriTrhM=
+	t=1755680293; cv=none; b=uJoDHlJF11uHYqqvpv1oS7mHeTaPcnNmKQ2J0krMtKZMI84t+4IqBrSSEeJpaMduLUTEu+rABi3XC91iROUeCQqpQZoSFUPvvjb8o8ii9lVWjfiL+16rnJhjM++iXvqnyWvAMsLqYbMk2dBP9h/do65thFTiiaBb7fmWUYpQdpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755677271; c=relaxed/simple;
-	bh=1LchkEdSUPOGHvF8BqxbIW+DxgHBEG7fHZ0C9P7w9bk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C/3zrdAr5fniSMNwJVRuxOUYfneUbyYVgb3kyfDMkJxd8L7tiBZvjje0vvZhFbpDd72Xi9s3fuZMJ4t3z+bCfOJEXhzonGuluIfjw6xYt+HFU79XW7NyGm7A0xpC/KPhPyMvHyMDkA8lkE+D/rhHu4AKD7sb+3STQCs00WbcTu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dOcyVhuo; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1755680293; c=relaxed/simple;
+	bh=9ZUXMVSyMXHq8LX6AkmtfjhFesC1kZpmtysgJnKq3Vk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TmhGUp/gnT+DYJKZvosjzMl5I+DJx+XSDZYaCgrPdzRKqNRoOT/jmGstWupluPZ3hJe+ZpTkqgXYySCErLbcCmJvmqeNYqDSL/UeyILuh0/WFCF1FjLfIwoQ3e0NSEZLxO7SuoOghdW9ATZd+p8sWfhawmoJOE+4tqkaEia6sGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qUMW6Hbj; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dOcyVhuo"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id EEED01A0D4F;
-	Wed, 20 Aug 2025 08:07:46 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C032D606AF;
-	Wed, 20 Aug 2025 08:07:46 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 41BCB1C22D86F;
-	Wed, 20 Aug 2025 10:07:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1755677265; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=BqOeKH44mmo+fNgntbIgoiF5KwaoWXtJymnj9DvA82U=;
-	b=dOcyVhuo4R38XYIpSGRStvC6gWxn/IXf/BnB8QnIGcJbHDO0V+a8hg90NTf93oxn7Z3qLv
-	uiJKLhMw67PzGmtKQiVl046uQdqgbdxtpUBm7DGOCf4/QIZZjst1gtN+5INLfos3ORjaTt
-	bU7aQVQabj5eoNEs38/PWsKzetcU+gZZcz4wWJV959VNZQh5HUVdEDYmwaYCUtkAPpF6Cy
-	rsYduX0WN+Lxydxuk3FNXaU/NF2tcXIH0BAed0aLhUXdjWMH7uNlDZereJ2IYp/qPOSHrM
-	1bD/kZLKySsfTZk3pJsZZUK43MHlf5GNV4U0PET/W2Gwio2OGPN4oqyIQRDN3w==
-From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
-Subject:
- Re: [PATCH] mmc: sdhci-cadence: Fix -Wuninitialized in
- sdhci_cdns_tune_blkgap()
-Date: Wed, 20 Aug 2025 10:07:35 +0200
-Message-ID: <2560300.XAFRqVoOGU@benoit.monin>
-In-Reply-To:
- <20250819-mmc-sdhci-cadence-fix-uninit-hrs37_mode-v1-1-94aa2d0c438a@kernel.org>
-References:
- <20250819-mmc-sdhci-cadence-fix-uninit-hrs37_mode-v1-1-94aa2d0c438a@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qUMW6Hbj"
+Message-ID: <7a34da58-874d-4271-9dbb-7991468d58ff@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755680278;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IEEqRTpCY494Z2w/6UzF2GroDTGA/QgdLl+vHg5gpWM=;
+	b=qUMW6Hbj6XpyGTTHVacRcB0VNDElfP38acQxvpCBCvZDxpr6JIaa3vx9DWfjqG/5FKivrI
+	RqR+lXLDft931IhrqBn0p+7Efk3WT0rnTMqj5MN7gHgyl9Dj+Zr/LghS3hdDZjK5bD9hLn
+	eJCXsIae2gMiusK3+gUaUwmHUD5vdag=
+Date: Wed, 20 Aug 2025 16:57:48 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Last-TLS-Session-Version: TLSv1.3
-
-Hi Nathan,
-
-On Tuesday, 19 August 2025 at 19:28:49 CEST, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=3Dy):
->=20
->   drivers/mmc/host/sdhci-cadence.c:297:9: error: variable 'hrs37_mode' is=
- uninitialized when used here [-Werror,-Wuninitialized]
->     297 |         writel(hrs37_mode, hrs37_reg);
->         |                ^~~~~~~~~~
->   drivers/mmc/host/sdhci-cadence.c:291:16: note: initialize the variable =
-'hrs37_mode' to silence this warning
->     291 |         u32 hrs37_mode;
->         |                       ^
->         |                        =3D 0
->=20
-> A previous revision assigned SDHCI_CDNS_HRS37_MODE_MMC_HS200 to
-> hrs37_mode in a switch statement but the final revision moved to a
-> simple if statement. Pass that as the value to writel() and
-> remove hrs37_mode, clearing up the warning.
->=20
-> Fixes: 60613a8b9b81 ("mmc: sdhci-cadence: implement multi-block read gap =
-tuning")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/mmc/host/sdhci-cadence.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-ca=
-dence.c
-> index a2a4a5b0ab96..eaa88897a256 100644
-> --- a/drivers/mmc/host/sdhci-cadence.c
-> +++ b/drivers/mmc/host/sdhci-cadence.c
-> @@ -288,13 +288,12 @@ static int sdhci_cdns_tune_blkgap(struct mmc_host *=
-mmc)
->  	void __iomem *hrs38_reg =3D priv->hrs_addr + SDHCI_CDNS_HRS38;
->  	int ret;
->  	u32 gap;
-> -	u32 hrs37_mode;
-> =20
->  	/* Currently only needed in HS200 mode */
->  	if (host->timing !=3D MMC_TIMING_MMC_HS200)
->  		return 0;
-> =20
-> -	writel(hrs37_mode, hrs37_reg);
-> +	writel(SDHCI_CDNS_HRS37_MODE_MMC_HS200, hrs37_reg);
-> =20
->  	for (gap =3D 0; gap <=3D SDHCI_CDNS_HRS38_BLKGAP_MAX; gap++) {
->  		writel(gap, hrs38_reg);
->=20
-Thanks for the catch!
-
-I don't get how gcc does not raise a warning here, only clang does. I
-did build with gcc-11 and gcc-15 and they don't complain about this
-uninitialized variable.
-
-Tested-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
-
-> ---
-> base-commit: 7138017038c42feb682445407974ed736e1ff308
-> change-id: 20250819-mmc-sdhci-cadence-fix-uninit-hrs37_mode-cc1246cb39d8
->=20
-> Best regards,
-> -- =20
-> Nathan Chancellor <nathan@kernel.org>
->=20
->=20
-
-Best regards,
-=2D-=20
-Beno=C3=AEt Monin, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Subject: Re: [PATCH] panic: Clean up message about deprecated 'panic_print'
+ parameter
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Jonathan Corbet <corbet@lwn.net>,
+ linux-kernel@vger.kernel.org, paulmck@kernel.org, john.ogness@linutronix.de,
+ kernel test robot <lkp@intel.com>, Feng Tang <feng.tang@linux.alibaba.com>
+References: <aKRJKZHgcxyNF3y7@pathway.suse.cz>
+ <202508200907.PsZ3geub-lkp@intel.com>
+ <ae9bb2ea-c6e5-4a4b-ae25-aea1d6fe084d@linux.dev>
+ <33a897b4-7d9a-4641-9c7a-07c19bb9cb6f@linux.dev>
+In-Reply-To: <33a897b4-7d9a-4641-9c7a-07c19bb9cb6f@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
+
+On 2025/8/20 09:56, Lance Yang wrote:
+> 
+> 
+> On 2025/8/20 09:54, Lance Yang wrote:
+>>
+>>
+>> On 2025/8/20 09:31, kernel test robot wrote:
+>>> Hi Petr,
+>>>
+>>> kernel test robot noticed the following build errors:
+>>>
+>>>
+>>>
+>>> url:    https://github.com/intel-lab-lkp/linux/commits/ 
+>>> UPDATE-20250819-180717/Feng-Tang/lib-sys_info-handle-sys_info_mask-0- 
+>>> case/20250815-152131
+>>> base:   the 3th patch of https://lore.kernel.org/ 
+>>> r/20250815071428.98041-4-feng.tang%40linux.alibaba.com
+>>> patch link:    https://lore.kernel.org/r/ 
+>>> aKRJKZHgcxyNF3y7%40pathway.suse.cz
+>>> patch subject: [PATCH] panic: Clean up message about deprecated 
+>>> 'panic_print' parameter
+>>> config: i386-buildonly-randconfig-004-20250820 (https:// 
+>>> download.01.org/0day-ci/archive/20250820/202508200907.PsZ3geub- 
+>>> lkp@intel.com/config)
+>>> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 
+>>> 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ 
+>>> archive/20250820/202508200907.PsZ3geub-lkp@intel.com/reproduce)
+>>>
+>>> If you fix the issue in a separate patch/commit (i.e. not just a new 
+>>> version of
+>>> the same patch/commit), kindly add following tags
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Closes: https://lore.kernel.org/oe-kbuild- 
+>>> all/202508200907.PsZ3geub- lkp@intel.com/
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>>>> kernel/panic.c:952:2: error: call to undeclared function 
+>>>>> 'panic_print_deprecated'; ISO C99 and later do not support implicit 
+>>>>> function declarations [-Wimplicit-function-declaration]
+>>>       952 |         panic_print_deprecated();
+>>>           |         ^
+>>>     kernel/panic.c:958:2: error: call to undeclared function 
+>>> 'panic_print_deprecated'; ISO C99 and later do not support implicit 
+>>> function declarations [-Wimplicit-function-declaration]
+>>>       958 |         panic_print_deprecated();
+>>>           |         ^
+>>>     2 errors generated.
+>>
+>>
+>> Oops, panic_print_deprecated() is defined within the #ifdef
+>> CONFIG_PROC_SYSCTL block, but it's also called from panic_print_set()
+> 
+> Correction:
+> 
+> CONFIG_SYSCTL block - sorry ;(
+> 
+>> and panic_print_get(), which are outside of that block.
+>>
+>> So, we need to move the definition out of the block to a common
+>> scope where all its callers can see it. @Petr wdyt?
+>>
+
+If Petr is cool, @Andrew could you squash the following?
+
+---
+Subject: [PATCH 1/1] fixup: panic: clean up message about deprecated
+  'panic_print' parameter
+
+From: Lance Yang <lance.yang@linux.dev>
+
+Moving the definition out of the CONFIG_SYSCTL block to a common scope
+where all its callers can see it.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: 
+https://lore.kernel.org/oe-kbuild-all/202508200907.PsZ3geub-lkp@intel.com/
+Signed-off-by: Lance Yang <lance.yang@linux.dev>
+---
+  kernel/panic.c | 10 +++++-----
+  1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/panic.c b/kernel/panic.c
+index d3907fd95d72..24bca263f896 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -77,6 +77,11 @@ ATOMIC_NOTIFIER_HEAD(panic_notifier_list);
+
+  EXPORT_SYMBOL(panic_notifier_list);
+
++static void panic_print_deprecated(void)
++{
++	pr_info_once("Kernel: The 'panic_print' parameter is now deprecated. 
+Please use 'panic_sys_info' and 'panic_console_replay' instead.\n");
++}
++
+  #ifdef CONFIG_SYSCTL
+
+  /*
+@@ -122,11 +127,6 @@ static int proc_taint(const struct ctl_table 
+*table, int write,
+  	return err;
+  }
+
+-static void panic_print_deprecated(void)
+-{
+-	pr_info_once("Kernel: The 'panic_print' parameter is now deprecated. 
+Please use 'panic_sys_info' and 'panic_console_replay' instead.\n");
+-}
+-
+  static int sysctl_panic_print_handler(const struct ctl_table *table, 
+int write,
+  			   void *buffer, size_t *lenp, loff_t *ppos)
+  {
+--
+2.49.0
 
