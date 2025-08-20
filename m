@@ -1,63 +1,62 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2702F2DCF65
-	for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 09:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DB32DF3FB
+	for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 09:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755682423; cv=none; b=SsRxyMRD0tJsKMkgV1TvU7et22PU1bHpYrzh27Ci0v0IjS6Qe7FMt2FqHV+t5ufPpMTpNUedUfxdcrexfFUT44itYA3OHUd92tobWEhEU37Hbd1LfDARqFFLNNZqUtB/7ayOqYoS7du1Cq/i0A+BlcRibvYnydtDg0lR2Y3MN4g=
+	t=1755682840; cv=none; b=g45L0Kvg/tio4yw5cM2yTXUsvO8za8tT0UMTOYOwPXGiVyPmDgZrq8iOWURrrgFMO0lZo1ohTp1usDLLF854cE5G5OCZXDdMiKOT71wMzclxZ10BdexR1DxODOsEs4y1dtAyH8H2By5K4Rs6PwbI50DrBT6xlxiPrZqOoelKndE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755682423; c=relaxed/simple;
-	bh=HbWeIT+jA4hjhJwyfV83Luo/UR3MkpPBEH6bueMs7M8=;
+	s=arc-20240116; t=1755682840; c=relaxed/simple;
+	bh=jseJB8mxRO8twsWpgM50wcB2CH10FcIVLbrukEtfdPI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ed1+8fLNSWQoKDqsxcjEdRJ7PC3TuAbUMmTUV/PphpdKwy6rmYIX0BzWxIOTPClUPDUVonV0U+I44QgZRaFUFhkMKptMAVrfcAD3AOjs64Qn5Ozx83XIeGwJpX5Hk2iP0ayBwYkjumHnILQBeTWDUHN5xS/s4Ro8MCFH4Hk69w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eiODSEGd; arc=none smtp.client-ip=209.85.218.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=XnMz/3mtM/cxhQxJQ8bF60hxZDJao1tq+jcO3TP4SdpFuPnwK4ZAuzOsHlSgJAWgY0BE3PKhYVNOswliCcuht5KJnRGwGtgZDpFxHH/SteSkYIaekUa/9vHwWttyi+BP8OaQOTZlUHFYazSjCIgNtxJM5Q95yYRuTyYQMrGgPXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HxmXl+/o; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eiODSEGd"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-afcb73394b4so933631866b.0
-        for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 02:33:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HxmXl+/o"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-afcb7a8dd3dso894565666b.3
+        for <llvm@lists.linux.dev>; Wed, 20 Aug 2025 02:40:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1755682419; x=1756287219; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lUtGYQFblf9pQrLVu24aMqFiXE6ucdsRYulZCvjWiao=;
-        b=eiODSEGdvepdiMlMsYTIzJF6QCMX0iCIFyDOTBrJ5/KShcwItQHRxTHNI/slNeJ63h
-         aSq7mKvux1KFZkb4VRnMLDfYyIsyCGn+v/JgbbeQYI31RCASuWSy90D5AyvlBYF+yZ+9
-         xoZDntxYrotXE1RTxyyyhwcQVxoICUJXsdMdNdVD/iwZmYWCcEvuPCOTehUVZ4Pt/Jh9
-         7zfvz0QTbO4D9WVjbniyPu7ZhnEFOhWuN7ilKy11jXCW3JyBTyNG6FIBmDVKSPIIy0Mc
-         TDF64DUASATWJXb+9nomlbriLOoU35bKON1XOhI8VzH6g8enm7r53anSIK0ZxeWv3+SO
-         9mKA==
+        d=suse.com; s=google; t=1755682834; x=1756287634; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NM0fyXJdFVsVnU/yS6K0gQI6XozNG1TCaWkFW+vAlK8=;
+        b=HxmXl+/oG2W0jYIWkszNBuyifXTTWv7RJqkDS8XUTdBcpVOYYRDhOzQmev17PzPMOA
+         5y/bfOh3xxJpzfaFot98wRVylzivKu6joVadsU/Ae8zemdlS7RTpDHso08yOQ7OGx5Ge
+         vwUdCax1xgSD+nMhEyfFuMqKyhNVtFt+ocjNrwIrVfJHjXaIdr2BXLC289KxhVFe5D2H
+         7sFg1Wix9ReHuUSjJRq6p8P3DE6CCjSQ3l/JTC2K6iFbZVZ2SA3N6zoyX0X7te8d6Q8W
+         fDxkSHszoTgfct7EOuFFdZ2poodHhnERXTx0rf1VKfKCT6uIBNBGTa9PSBbBXabFD1gL
+         2xAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755682419; x=1756287219;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUtGYQFblf9pQrLVu24aMqFiXE6ucdsRYulZCvjWiao=;
-        b=vmkt/YwrZ7GgC1fFVtEHw0pHINWZoiOtGXYobwaMYlC/FiWzmoheJ4fkFzuuLDOBHX
-         c8+gZdSHKamoJquwPefTjd0QdED/ACekhEwlRC4Ro2NwuoTtA8jEw19/EDphFO+xP0f4
-         bUCltpVhabDd0KwuquqXrCoH60KjnfihmMS1UNtS0l+WMLZTF3aJegCJ5AfwC5yYfPUZ
-         b5B7QyoIN0gmt/tfr2pF9+9Sy41GDyNV+9UhkDVjaGBoaz2uJwEI+mFdMHq+UQwqVNcV
-         YqaS9BpPypa+npUEb7gYmotDcvGrPsA31FvhA7+6kQ4Sz8kMGUS3zvctS59dMccd9iKO
-         UKtw==
-X-Gm-Message-State: AOJu0YwT6ja0wZ6L1lDCQA/F9LovIor1SF9DTux3PkVUQyddCz0zYVW2
-	dklJU+JXQw0S0NNoIFvTeS1L8tD05kbTD1qyfbEiLY+DHNbCcwIWZc11yjNymHxBLMg=
-X-Gm-Gg: ASbGncvkeDH8I3NGRL9tNlG2eXtnyYAJcgsuVwu98HxzJZgCXdl+xJYQvOdTSE6n0nn
-	s+F2MmlByRp7OfNw39EAY0yfnBTs3sjM+T74Vc5g1moyUU5pQeWNw8uL3uFnvuktmNlFinBpby0
-	73RNesDy7XwLEJB/QxjS6AyyLs8nkZG190F+xq2ERmYnkBBNBLRcecbNH4pboFYFgCoYhL2JP2r
-	pHNgwtWOesNBn0VHsAmo4lytJouL1XNvD0CakGfCaTZb/tHp1J1xZXWXaK0auMtnIrQqZJrYlZ4
-	JvrFlPvkZvkK5OW/P/lw4v6sZpyIoCB4bWHLvhmN1+zcHCFXuABHK5qBCqmnRXQiPv7oaub5Qjc
-	hK7ywhNENhfdFEVeLJZsYykGy7tcol3Vl5azD
-X-Google-Smtp-Source: AGHT+IGXHe3+t3BEKmunC18D/1Y6ekjPUy9xaq9clkZufAl4R+B2NGg/Uju7EdG3WK9qHxpL/vyc6w==
-X-Received: by 2002:a17:907:3e8f:b0:af2:5a26:b32a with SMTP id a640c23a62f3a-afdf01b27bcmr193049566b.30.1755682419377;
-        Wed, 20 Aug 2025 02:33:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755682834; x=1756287634;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NM0fyXJdFVsVnU/yS6K0gQI6XozNG1TCaWkFW+vAlK8=;
+        b=euHCydocbBk65+gDgr1WT1PajyXfLzGHe9Jlj0wzlpafqkgUj5/n19vXzhlrPHJwy5
+         jpr39SR+FMtsZ2lVVuo58HNSRp3XKy4iem1aM9X1We7jq+jSm0uKxW/0FJSb0alHO5gd
+         vyEFm2n/TYnzZpGARLIBLMD9KI5QO32adTocbFVdOXIr647v86Co+a3kI7H4/UrOx79+
+         nFLYprTmJlQ5AZDS72Q8hIEuKiacbIkhx+2dB5zD/WgfCNShNd+p0CiXHUzAB2mA2PsH
+         18t4vf7QrB/aMyDzyEDEljUUQJIkuICAgMt9Ui4v2S804X7Ag/0tDLfZI+h57FQTO6JK
+         X+5w==
+X-Gm-Message-State: AOJu0YwVWom8DdhfrikWGG8nAKfAIlBfq3RKfRdXWKR03UbQWH3xbhhY
+	lHwM5A0dQWE+eXeZaWb7eCsEKUBcgJY2mSbI4qWlomzp2Ey8pNljAGQ6D/a8lXeVZDM=
+X-Gm-Gg: ASbGncshO9Zrziy+2pvwmRf/UxU0jWXQieVrQfGecr+/nrfeDUpxAY/1G257rNUUXRG
+	ZTEgVLMaC3cfRb1tqC8fOPPoTRLg4qxIIVRyMEvt0M83JGfuUUkeZhW9mnPxojzjQsM9UhWEMF+
+	b7vUb8GYvaAMdDNdcHQLmlkpx/ETpTU6JAhLaoES3eo/9e+vEhCmeS6IqY6niRWbOzD+uajsrFL
+	sfNq413ILNchXuEwLAhiu6fBz1kt8S1fA7UrtNuM4MCh4kroJoDh6S67oK6sX6//AGHwFY3uckz
+	80h2cj7YJCGnzO6mK0PpYoPWmdjJ4/IL67qkVx3TTwgIzWbXMuAI3wCN1jdPWtlF9G3OjpNbwL/
+	ofis6zVNo1KO67q2ITLnZKYf2nQ==
+X-Google-Smtp-Source: AGHT+IEL5yizeK4oP3hcKNDpDCbogCgeCUIgrsK+feZZ6+ybN7ZuuNRbKKwxk5Z77sh2bbe8+uaS7Q==
+X-Received: by 2002:a17:907:3c8b:b0:ad8:9645:798c with SMTP id a640c23a62f3a-afdf0209598mr168513766b.51.1755682834470;
+        Wed, 20 Aug 2025 02:40:34 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afdfc4bfe65sm12791466b.85.2025.08.20.02.33.37
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-afded478a14sm148404966b.76.2025.08.20.02.40.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 02:33:38 -0700 (PDT)
-Date: Wed, 20 Aug 2025 11:33:36 +0200
+        Wed, 20 Aug 2025 02:40:34 -0700 (PDT)
+Date: Wed, 20 Aug 2025 11:40:32 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: Lance Yang <lance.yang@linux.dev>,
 	Andrew Morton <akpm@linux-foundation.org>
@@ -68,77 +67,46 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	paulmck@kernel.org, john.ogness@linutronix.de,
 	kernel test robot <lkp@intel.com>,
 	Feng Tang <feng.tang@linux.alibaba.com>
-Subject: Re: [PATCH] panic: Clean up message about deprecated 'panic_print'
+Subject: [PATCH v2] panic: Clean up message about deprecated 'panic_print'
  parameter
-Message-ID: <aKWWcPOf9qPIoCe4@pathway.suse.cz>
+Message-ID: <aKWYELPjbhC7R8NO@pathway.suse.cz>
 References: <aKRJKZHgcxyNF3y7@pathway.suse.cz>
  <202508200907.PsZ3geub-lkp@intel.com>
  <ae9bb2ea-c6e5-4a4b-ae25-aea1d6fe084d@linux.dev>
  <33a897b4-7d9a-4641-9c7a-07c19bb9cb6f@linux.dev>
  <7a34da58-874d-4271-9dbb-7991468d58ff@linux.dev>
+ <aKWWcPOf9qPIoCe4@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a34da58-874d-4271-9dbb-7991468d58ff@linux.dev>
+In-Reply-To: <aKWWcPOf9qPIoCe4@pathway.suse.cz>
 
-On Wed 2025-08-20 16:57:48, Lance Yang wrote:
-> On 2025/8/20 09:56, Lance Yang wrote:
-> > On 2025/8/20 09:54, Lance Yang wrote:
-> > > On 2025/8/20 09:31, kernel test robot wrote:
-> > > > All errors (new ones prefixed by >>):
-> > > > 
-> > > > > > kernel/panic.c:952:2: error: call to undeclared function
-> > > > > > 'panic_print_deprecated'; ISO C99 and later do not
-> > > > > > support implicit function declarations
-> > > > > > [-Wimplicit-function-declaration]
-> > > >       952 |         panic_print_deprecated();
-> > > >           |         ^
-> > > >     kernel/panic.c:958:2: error: call to undeclared function
-> > > > 'panic_print_deprecated'; ISO C99 and later do not support
-> > > > implicit function declarations [-Wimplicit-function-declaration]
-> > > >       958 |         panic_print_deprecated();
-> > > >           |         ^
-> > > >     2 errors generated.
-> > > 
-> > > 
-> > > Oops, panic_print_deprecated() is defined within the #ifdef
-> > > CONFIG_PROC_SYSCTL block, but it's also called from panic_print_set()
-> > 
-> 
-> If Petr is cool, @Andrew could you squash the following?
-> 
-> ---
-> Subject: [PATCH 1/1] fixup: panic: clean up message about deprecated
->  'panic_print' parameter
+Remove duplication of the message about deprecated 'panic_print'
+parameter.
 
-The patch was malformed probably by your mail client.
-Below is the fixed and revied variant.
-I am going to resend also the squashed version.
+Also make the wording more direct. Make it clear that the new
+parameters already exist and should be used instead.
 
-Here is the fixed followup patch:
-
-From 35ded31e9ff2c9925d7a78472115c9929b582c63 Mon Sep 17 00:00:00 2001
-From: Lance Yang <lance.yang@linux.dev>
-Date: Wed, 20 Aug 2025 11:25:31 +0200
-Subject: [PATCH] fixup: panic: clean up message about deprecated 'panic_print'
- parameter
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202508200907.PsZ3geub-lkp@intel.com/
-Signed-off-by: Lance Yang <lance.yang@linux.dev>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/panic.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Changes since v1:
+
+  - fixed compilation with CONFIG_SYSCTL disabled (kernel test
+    robot <lkp@intel.com>)
+
+Thanks Lance Yang <lance.yang@linux.dev> for debugging the compilation
+error reported by the test robot.
+
+ kernel/panic.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/panic.c b/kernel/panic.c
-index d3907fd95d72..24bca263f896 100644
+index 12a10e17ab4a..24bca263f896 100644
 --- a/kernel/panic.c
 +++ b/kernel/panic.c
 @@ -77,6 +77,11 @@ ATOMIC_NOTIFIER_HEAD(panic_notifier_list);
@@ -153,18 +121,31 @@ index d3907fd95d72..24bca263f896 100644
  #ifdef CONFIG_SYSCTL
  
  /*
-@@ -122,11 +127,6 @@ static int proc_taint(const struct ctl_table *table, int write,
- 	return err;
- }
- 
--static void panic_print_deprecated(void)
--{
--	pr_info_once("Kernel: The 'panic_print' parameter is now deprecated. Please use 'panic_sys_info' and 'panic_console_replay' instead.\n");
--}
--
+@@ -125,7 +130,7 @@ static int proc_taint(const struct ctl_table *table, int write,
  static int sysctl_panic_print_handler(const struct ctl_table *table, int write,
  			   void *buffer, size_t *lenp, loff_t *ppos)
  {
+-	pr_info_once("Kernel: 'panic_print' sysctl interface will be obsoleted by both 'panic_sys_info' and 'panic_console_replay'\n");
++	panic_print_deprecated();
+ 	return proc_doulongvec_minmax(table, write, buffer, lenp, ppos);
+ }
+ 
+@@ -944,13 +949,13 @@ core_param(panic_console_replay, panic_console_replay, bool, 0644);
+ 
+ static int panic_print_set(const char *val, const struct kernel_param *kp)
+ {
+-	pr_info_once("Kernel: 'panic_print' parameter will be obsoleted by both 'panic_sys_info' and 'panic_console_replay'\n");
++	panic_print_deprecated();
+ 	return  param_set_ulong(val, kp);
+ }
+ 
+ static int panic_print_get(char *val, const struct kernel_param *kp)
+ {
+-	pr_info_once("Kernel: 'panic_print' parameter will be obsoleted by both 'panic_sys_info' and 'panic_console_replay'\n");
++	panic_print_deprecated();
+ 	return  param_get_ulong(val, kp);
+ }
+ 
 -- 
 2.50.1
 
