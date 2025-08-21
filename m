@@ -1,103 +1,84 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839FD27603B
-	for <llvm@lists.linux.dev>; Thu, 21 Aug 2025 16:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C21927814A;
+	Thu, 21 Aug 2025 16:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755794591; cv=none; b=rqV+UHLCfVHT3l1ZIjvm6u2SMnT0KETWd/mQlE+WHxAUEKK2zykBBsM1AB5tdhcZssAXBSMJfRVnlyMUjrhRCFyic8v2ipelcuOVsq5O63clFOfDTBmYndEBOcVxbaQC0kyKguYWNnaEswJtVdvRDpPC16ekmQ9LuMTdcxcTHA8=
+	t=1755794917; cv=none; b=J7JD9QiDITADNv89lDEgkp41ei1F4dSq/kxlQ3LEaqInSOMnaN/cs3PAeUHbJG6A7pyHsTl4V4F7V4+k80oyW6T84yBLgHkjCYFBhPyfqgc3Em8CcD/zypUVd7Td8kdvQKWiyyFv4YUI5AS5sQSVy3i2Ebdv3zfjxA+4yCXj0lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755794591; c=relaxed/simple;
-	bh=w1Elm5OgRNOKrCJ2Vor0puP7Ag4jRHuBP75amJj+YvI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=URH7moBI29vhjwvAI8Xmh1eV1KC1Crzo7CYHB+n0Jb7Td4L0bt2cfiKNUGPwTZqlRfpYxR34aRkz9X8WBKERk8XWe7/CpL4mJEG73Y77WMXQMmQ8i5zlsVrQDHH2O96YnmcDkH/4O9WfBq9u2cmRRigBkoFf8+S8Ov41m4GQCRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g13mLSvH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1755794917; c=relaxed/simple;
+	bh=livIxDrnwdmQcTTAy2HG7jouCBIKKNVPDKxdcemhdwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQbIBA3aLB1xjR3h3KhAEAK6PDc0fpPTE+xSV+nVScFdiUUfGLPq7ZZ9JqgHEJ3Rru2xYPdeREZv93AfCSHNKRtnWPO6HgOS+oxG2ICQhsGck77SlwsYMg4fGkIlwNgdu59O0DSgaiwo0JP0vzmTiFruh2RE50wXhvXm89uAOAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCDsHAdE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g13mLSvH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755794588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FRZtJvgQusAkMbPY/1JJYj8SKLl/tHNQxsJeUnE/B/g=;
-	b=g13mLSvH9AIOPkFChVPN4gU/99KwTOlKUOGIWlyeJ7SxSZatklwBUkobw6iKXhu3cV3PxV
-	yKJ7wztIH73rk86ePHcZsqEFYhKEhS93BeZdwLTLgB50x6i7cnurEiPVWztJaZIwzwNWFm
-	TbCqgBgqc+2tHXTljQb913gPD++K63o=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-500-AZkWjaZyM5aG6_O9COdKuQ-1; Thu,
- 21 Aug 2025 12:43:06 -0400
-X-MC-Unique: AZkWjaZyM5aG6_O9COdKuQ-1
-X-Mimecast-MFC-AGG-ID: AZkWjaZyM5aG6_O9COdKuQ_1755794586
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0ACA5180028C
-	for <llvm@lists.linux.dev>; Thu, 21 Aug 2025 16:43:06 +0000 (UTC)
-Received: from [172.20.48.110] (unknown [10.30.45.91])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 76FBA30001A1;
-	Thu, 21 Aug 2025 16:43:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc2,
- upstream-mainline, 1c656b1e)
-Date: Thu, 21 Aug 2025 16:43:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCDsHAdE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184DFC4CEEB;
+	Thu, 21 Aug 2025 16:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755794916;
+	bh=livIxDrnwdmQcTTAy2HG7jouCBIKKNVPDKxdcemhdwk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DCDsHAdEx/SdTwK0v3GMeU3YBCpVikRawO7a8lMYA29Kp1qWtU48tXwhlkiBtonqL
+	 1iiTr/moUv9nNSA/w0327gSnTGxjSqLpd+hW4gLnhrHB7XGCE2sHKBQiXkLaoaaNFX
+	 Ll7xkh7RYBV/NN3KVPZm+xiu4gDOKYTnYpsDjuVRcG8QJKFgTqMLcuTJcm2B2ef79E
+	 O85B6bWNPmHaYR0rgYHyAUEFVZK5pI67Eed6OKUHiSZrMDLQAmYmCjocmIM2Jf5CxL
+	 knFmiSpojfbys3k7Ou8MYWMhQeNtPrX/twgNp6UDWWDZVBc8qMD/AvrQnSZxe0Y8Lj
+	 NQEiRPd9+VLoA==
+Date: Thu, 21 Aug 2025 18:48:21 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 01/10] kbuild: Bump minimum version of LLVM for building
+ the kernel to 15.0.0
+Message-ID: <aKdN1VFGJ1pNvC5z@levanger>
+References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
+ <20250818-bump-min-llvm-ver-15-v1-1-c8b1d0f955e0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <83346.125082112430700165@us-mta-500.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: eelY8gT90QJ1_cpp6pwiT2VAKdi8poaijHw8eqtvmx8_1755794586
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-1-c8b1d0f955e0@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+On Mon, Aug 18, 2025 at 11:57:17AM -0700, Nathan Chancellor wrote:
+> s390 and x86 have required LLVM 15 since
+> 
+>   30d17fac6aae ("scripts/min-tool-version.sh: raise minimum clang version to 15.0.0 for s390")
+>   7861640aac52 ("x86/build: Raise the minimum LLVM version to 15.0.0")
+> 
+> respectively but most other architectures allow LLVM 13.0.1 or newer. In
+> accordance with the recent minimum supported version of GCC bump that
+> happened in
+> 
+>   118c40b7b503 ("kbuild: require gcc-8 and binutils-2.30")
+> 
+> do the same for LLVM to 15.0.0.
+> 
+> Of the supported releases of Arch Linux, Debian, Fedora, and OpenSUSE
+> surveyed in evaluating this bump, this only leaves behind Debian
+> Bookworm (14.0.6) and Ubuntu Jammy (14.0.0). Debian Trixie has 19.1.7
+> and Ubuntu Noble has 18.1.3 (so there are viable upgrade paths) or users
+> can use apt.llvm.org, which provides even newer packages for those
+> distributions.
+> 
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Cc: linux-kbuild@vger.kernel.org
+> ---
+>  Documentation/process/changes.rst | 2 +-
+>  scripts/min-tool-version.sh       | 6 ++----
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+> 
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'loongarch-fixes-6.17-1' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1996738821
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1996738821_aarch64_kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1996738821_x86_64_kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1996738821_x86_64_kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Acked-by: Nicolas Schier <nsc@kernel.org>
