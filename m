@@ -1,98 +1,220 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34D23C17;
-	Thu, 21 Aug 2025 05:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755752541; cv=none; b=ZBiQ1gNzAn8lUvNcKZVjtbtRtnJXO6xHbkSfBVTCgYBmkJJWLm/MGuCUW3e554gzSrZsMvq8hP5ToKCI6lg7iu9WyJdoQQy860Cwo0wGMqNd4/x94B9jm60dYucE4bB9kEXZUsuaj83i30ftzUkYj22nJHqF9dtH0RaLlYCIf+k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755752541; c=relaxed/simple;
-	bh=XEJG0+45BaDu79H9dxTNbj4u+VG844zPwUQqhku+wQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iK5/U/KlZ+erYLFE/N+FKBVFsT4PHGDV2CX/MHNj2nUSYIf+Q4Xgy4/beLbOyeO84NkoPVWWYeRcfjgmJ5rQwYAmBsVvIcFUTMZ8o0KF/a/NMBfUeS+neKvWKAFGb1iiic6AQZzCYVZCiLmD1l9ZGDHZul3m9FRd7H2B37oofDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hZCJDaTX; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F8327F732;
+	Thu, 21 Aug 2025 07:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755760404; cv=fail; b=aVZKVw2PsJI+aKF7xcN0btkX9mUM4hECLGKZkLI0gYeVK4lcPTLqB4mmObW1JMPLum0rgC11TewcVrXLfA7kp+5STAmu9x1hiitCdla8lH0jxCi7imtdxJPeEhKurJVQPpY3PCUvaS2R2oeZKkn0DVM66oKqwH0qBWtwLanTB+s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755760404; c=relaxed/simple;
+	bh=PAO4AxspZ1bMc/gqN/VUryhuhWP0g1UMnSYWxPWkV1g=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=s8XVmHfgWkxj0LFLXNqnwJfIkKQAyE8RKzg2ae5RlioPyQWwM1qFZz8F+ZLf0m0N3ZzPMff0P2mAztQ2SxArNwynS4868UsFLH1Bf77AcKU9RvkJ+Gjaj67rQHfqZ9jZ14FIBpRVBgKDIqujSahUMYusjF4kfpCBYB0jIQs2DCw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xelBFV62; arc=fail smtp.client-ip=40.107.243.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hZCJDaTX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755752540; x=1787288540;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XEJG0+45BaDu79H9dxTNbj4u+VG844zPwUQqhku+wQo=;
-  b=hZCJDaTX/U1oCxD7gAJIXPqp0hT+fGUmydYskSLut/08v98hbaR2u8lm
-   LHWXl+0+hzk8/zICj4Q50YQHjvVyzjsosPC/vBQ50LRBHaiIwkUwnZDlX
-   lM8BZrPKt0qI/H1Gl8okBbQZGe2LzSTWnaHN/koe4RF4rZpIj4GJWZfme
-   N/AoRb3q/M8c0rlnRQ8kMLRcu9//kNmv2lMAiPzPVd3M96Byy2cWb8wBm
-   J+ysCF/uH5puhT8aaFFuMxqxreNZ5Ubd4XWMSqzwwMP8i/t6nxwi+TTA/
-   Sq8sY237nF25Ax7t8tfY+HVLXiVieZy8V5E+zqDEQ/YrD/EvOGKUlOmXO
-   Q==;
-X-CSE-ConnectionGUID: 4/abRzHaQxS4u9H+WC/RvQ==
-X-CSE-MsgGUID: uUsl2zYrR8iMEku5o5+B4A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="61858940"
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="61858940"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 22:02:18 -0700
-X-CSE-ConnectionGUID: 6mHlzczSQ1SK59BDM3ZX5Q==
-X-CSE-MsgGUID: 39Sw/yNSQfqIscJy6W9wDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="167927918"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 20 Aug 2025 22:02:17 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uoxRG-000Jwx-2Q;
-	Thu, 21 Aug 2025 05:02:14 +0000
-Date: Thu, 21 Aug 2025 13:00:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 02/11] mm: khugepaged: generalize collapse_file for
- mTHP support
-Message-ID: <202508211210.SeYYBgRw-lkp@intel.com>
-References: <6a2f28b4541bbbc56ea9e07f24b67cef87899a50.1755677674.git.baolin.wang@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xelBFV62"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ehDtgpfUFGEFQq2WWtPcsvzdacD+TI4/S1zMB8xuymBcLH9u+NDFN5OlcUY4tx28MPYtp2vAeH9IjV+8MvvlsXR895x0j0JNvS8fyoiEnM0V9lrVMQKHFnEwCyzCOqsfQ5ue+HruMQdZ0106EFFmDspwtYu9bhNuk5HMgyD5LkRVf+w0hg3kHjMwtebZ3nzNQOUjgGWtnjLnTLk2qjkWo3blENMBiyTQJ4rB2yYcREReVoGKexptS1EoasUD+AEkOHP2f2RO3nt8uQN3NVAq5BkhiXCZkCfW8y1dDHm7iGpZCBrx8urESIILz9A80xKbQCK/M+vjd3nW06pfjpFgMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q+ReWXz4AOR5NBW05Dl4zFJz7bpm+7af6bMofYaInHM=;
+ b=Yx37G+B4k5Zms34x/U5ed+a8d8PKNkG9cttfVYmh7X3PZo+itKvI4Ob/kKzNZXlZPh4R+ufVVmkm/nvoYh2AT39WcSeIklFfJ/0hFlxNAHceaQOMpHpMZrTHiijpCo8cPnSSFzdtNxrGZd463sBehAtcUNplr20u2BaiW2yXiV3D8utRBa3ZYnHoSqfphHcRfT8fQhlVBqV1Ra5Av9jYiDgaGbMeVI1C/f48AT3aBodkTvcSzSRCqXxOPX2sVsyxJYBsewt8NTaEAcOtvhZ32XOK+jR/wFqd6zisy/F2u2gR9yZeWI0VWUUxv3NHpnP6EgRIthVemOioPe0r9qko4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q+ReWXz4AOR5NBW05Dl4zFJz7bpm+7af6bMofYaInHM=;
+ b=xelBFV62sZm+rofMyKFAz1xeBLVJcDuavhH1fv/eYI8fEumXDwjAMyLymMyfz85lF35OYL/xY6W+cVxGPjJ5HoBUS7BEHjobtW4afDbGUf9Q7bPy4ooYEEZzYxgLWBVX8zcfTMWdfNAhgNzjt11LsvmnB8MBCi/1Z9E8eaOSnUw=
+Received: from BL6PEPF00016410.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1004:0:17) by PH0PR12MB8099.namprd12.prod.outlook.com
+ (2603:10b6:510:29d::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.25; Thu, 21 Aug
+ 2025 07:13:18 +0000
+Received: from BN2PEPF00004FBE.namprd04.prod.outlook.com
+ (2a01:111:f403:c803::7) by BL6PEPF00016410.outlook.office365.com
+ (2603:1036:903:4::a) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.15 via Frontend Transport; Thu,
+ 21 Aug 2025 07:13:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN2PEPF00004FBE.mail.protection.outlook.com (10.167.243.184) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9052.8 via Frontend Transport; Thu, 21 Aug 2025 07:13:18 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 21 Aug
+ 2025 02:13:17 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 21 Aug
+ 2025 02:13:16 -0500
+Received: from xhdnipung41x.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Thu, 21 Aug 2025 02:13:12 -0500
+From: Nipun Gupta <nipun.gupta@amd.com>
+To: <arnd@arndb.de>, <gregkh@linuxfoundation.org>, <nikhil.agarwal@amd.com>
+CC: <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <robin.murphy@arm.com>, <krzk@kernel.org>,
+	<tglx@linutronix.de>, <maz@kernel.org>, <linux@weissschuh.net>,
+	<chenqiuji666@gmail.com>, <peterz@infradead.org>, <robh@kernel.org>,
+	<abhijit.gangurde@amd.com>, <nathan@kernel.org>, <nipun.gupta@amd.com>, "Arnd
+ Bergmann" <arnd@kernel.org>
+Subject: [PATCH v2 1/2] cdx: don't select CONFIG_GENERIC_MSI_IRQ
+Date: Thu, 21 Aug 2025 12:43:07 +0530
+Message-ID: <20250821071308.1572106-1-nipun.gupta@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a2f28b4541bbbc56ea9e07f24b67cef87899a50.1755677674.git.baolin.wang@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB05.amd.com: nipun.gupta@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBE:EE_|PH0PR12MB8099:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ead3589-fa62-4393-402e-08dde0823413
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700013|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ATzkNq5Xfe+Ec161+WYvEa7MVLoy54RWoPQs9DZTR97AszVAnEtMKmVSojJi?=
+ =?us-ascii?Q?4xdJv8p58WAaq7MCo+6YzodgZdhyst7ngKjnHPhBDI8sVxaIWQLmRf+hEodf?=
+ =?us-ascii?Q?IoZua9CPW/2Db8FV5Sbc2aFXk47zD/vKLxPgkNpXisvMqn62suDYshdWTwJw?=
+ =?us-ascii?Q?DuKqsjSWv9+8003ILjx1x6IUsMwj6/je33N5rODH2ezcGateB4nCXEmM4yD0?=
+ =?us-ascii?Q?7lxWIxRRPHd4TXXyPJkxBatH9nzYNRprQuMdrMHK7SOY/YBlUNYJRjEWXAzF?=
+ =?us-ascii?Q?jp8C97M9IQJJAT6GquuBuUObTDi5dBiSGbp8oY6703iSg00Zgm13l5pa5SPf?=
+ =?us-ascii?Q?eb3poIiEc/DeZfukLlJC+rSdJ6vWYD7Nn+MB9ffOhZ0G0H2uddpEZx8STGON?=
+ =?us-ascii?Q?5pInemYuaq5p56h/XpMIxazM/t6zIUiRrb67xvpozT7Zvwn5k7rRrgBueTmw?=
+ =?us-ascii?Q?VJF73MqZj88kk88pY+5ty422qEKywsLGivnW0SRm+mTLwB6EbZL/9/zkUGAn?=
+ =?us-ascii?Q?XCooJNyYS9NO35mNfvKcWZVoD0Gtc5bN0Ezw9e9wQiViVAhBQ4QKEqZ3im+G?=
+ =?us-ascii?Q?XsRAdCJkcbgF+prfRm9yPO4HdFu6tTYp/f8Ak+CBEqDOU93esdnZP/R7eJC8?=
+ =?us-ascii?Q?4pfguaf+1UkXy6z9fMzQuHlqXHOQ8RjLlmTLg/7p84cVYdaZmJlUBYSCKpom?=
+ =?us-ascii?Q?fUCfMi8Q0zIo4n7kA6KTM0LwYQYC3hfxr17FUagIkDSfh1XRZdk3b7OJbS6M?=
+ =?us-ascii?Q?mJnMtUU7lB0GdcH2BRV8LBNBn69t05MU7bu8TgrlHtF+vDCJJ4aYgomUZLLj?=
+ =?us-ascii?Q?JM0i+PUQEsCJ5L6jBZUEbsoN5DiU2qpO9Rmf6vkfl+aSElYXcokVyKABLJo/?=
+ =?us-ascii?Q?jiLAOIUCOJ7XC3EojYMQvHNv39D+1bcP6spFEnZCzS3XYIl/SRYhFqxumQ6P?=
+ =?us-ascii?Q?93ELPrNsaVbJUvEeSA1rA1ehc99wsQz8Cjzk4SwPFTBdTFq5KtR3WKS+zxhc?=
+ =?us-ascii?Q?Y8WTOfVpWALRdIoj+cgiJ1c6mNnZdbPIjz30KWpvbwzlv1qQTLsN7dB18Unw?=
+ =?us-ascii?Q?4hgfCwabaej+oSYMU7NukEVjq7umZFy2I1XVHiJd4jHpDKemoiSapJ9Gph8F?=
+ =?us-ascii?Q?4vNOnlZe0EcoOYHlGFo6/IXI3UYqkQtPeySCw6a4YyYFdWm/lYeBTppruSQS?=
+ =?us-ascii?Q?cKQULaGcEOL4NoONixXORtYK4hzGmx+xQ45jJWa30IKZKE8N5t1h5WlHERYJ?=
+ =?us-ascii?Q?Mhgtavi7PGlFvRq7lpEqFsp+dPvMWhlNbMoZJWF9b57j5rxwR0DrZHhTEWs8?=
+ =?us-ascii?Q?LWKnx/MmWdqIVfDUvuY70+sXbNtRr00s9hbh4KEAojCam7n8sX7XdlFnno6/?=
+ =?us-ascii?Q?JtOIApA9TqJW+lH9/cOzYl6xb162KqJy1+vLr5LxrHjADhlJBJQrFjQxn4Il?=
+ =?us-ascii?Q?LMaudK6+Y044rgFoxT+WuXpL8OGwWkkG2hAmQUAAKsutA1tuKqN4dwlPjFSO?=
+ =?us-ascii?Q?R99CU/eFOrSVe3tpSJ37ydQH0f9PwdQhmbY9?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 07:13:18.0095
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ead3589-fa62-4393-402e-08dde0823413
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF00004FBE.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8099
 
-Hi Baolin,
+From: Arnd Bergmann <arnd@kernel.org>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+x86 does not use CONFIG_GENERIC_MSI_IRQ, and trying to enable it anyway
+results in a build failure:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[cannot apply to linus/master v6.17-rc2 next-20250820]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+In file included from include/linux/ssb/ssb.h:10,
+                 from drivers/ssb/pcihost_wrapper.c:18:
+include/linux/gpio/driver.h:41:33: error: field 'msiinfo' has incomplete type
+   41 |         msi_alloc_info_t        msiinfo;
+      |                                 ^~~~~~~
+In file included from include/linux/kvm_host.h:19,
+                 from arch/x86/events/intel/core.c:17:
+include/linux/msi.h:528:33: error: field 'alloc_info' has incomplete type
+  528 |         msi_alloc_info_t        alloc_info;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/mm-khugepaged-add-khugepaged_max_ptes_none-check-in-collapse_file/20250820-171124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/6a2f28b4541bbbc56ea9e07f24b67cef87899a50.1755677674.git.baolin.wang%40linux.alibaba.com
-patch subject: [RFC PATCH 02/11] mm: khugepaged: generalize collapse_file for mTHP support
-config: x86_64-buildonly-randconfig-002-20250821 (https://download.01.org/0day-ci/archive/20250821/202508211210.SeYYBgRw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508211210.SeYYBgRw-lkp@intel.com/reproduce)
+Change the driver to actually build without this symbol and remove the
+incorrect 'select' statements.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508211210.SeYYBgRw-lkp@intel.com/
+Fixes: e8b18c11731d ("cdx: Fix missing GENERIC_MSI_IRQ on compile test")
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+---
 
-All warnings (new ones prefixed by >>):
+No change in this patch from v1 -> v2 (change is in patch 2/2)
 
->> Warning: mm/khugepaged.c:2068 function parameter 'order' not described in 'collapse_file'
+ drivers/cdx/Kconfig                     | 1 -
+ drivers/cdx/cdx.c                       | 2 +-
+ drivers/cdx/controller/Kconfig          | 1 -
+ drivers/cdx/controller/cdx_controller.c | 3 ++-
+ 4 files changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/cdx/Kconfig b/drivers/cdx/Kconfig
+index 3af41f51cf38..1f1e360507d7 100644
+--- a/drivers/cdx/Kconfig
++++ b/drivers/cdx/Kconfig
+@@ -8,7 +8,6 @@
+ config CDX_BUS
+ 	bool "CDX Bus driver"
+ 	depends on OF && ARM64 || COMPILE_TEST
+-	select GENERIC_MSI_IRQ
+ 	help
+ 	  Driver to enable Composable DMA Transfer(CDX) Bus. CDX bus
+ 	  exposes Fabric devices which uses composable DMA IP to the
+diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+index 092306ca2541..1a5c95ba09ba 100644
+--- a/drivers/cdx/cdx.c
++++ b/drivers/cdx/cdx.c
+@@ -310,7 +310,7 @@ static int cdx_probe(struct device *dev)
+ 	 * Setup MSI device data so that generic MSI alloc/free can
+ 	 * be used by the device driver.
+ 	 */
+-	if (cdx->msi_domain) {
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ) && cdx->msi_domain) {
+ 		error = msi_setup_device_data(&cdx_dev->dev);
+ 		if (error)
+ 			return error;
+diff --git a/drivers/cdx/controller/Kconfig b/drivers/cdx/controller/Kconfig
+index 0641a4c21e66..a480b62cbd1f 100644
+--- a/drivers/cdx/controller/Kconfig
++++ b/drivers/cdx/controller/Kconfig
+@@ -10,7 +10,6 @@ if CDX_BUS
+ config CDX_CONTROLLER
+ 	tristate "CDX bus controller"
+ 	depends on HAS_DMA
+-	select GENERIC_MSI_IRQ
+ 	select REMOTEPROC
+ 	select RPMSG
+ 	help
+diff --git a/drivers/cdx/controller/cdx_controller.c b/drivers/cdx/controller/cdx_controller.c
+index fca83141e3e6..5e3fd89b6b56 100644
+--- a/drivers/cdx/controller/cdx_controller.c
++++ b/drivers/cdx/controller/cdx_controller.c
+@@ -193,7 +193,8 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
+ 	cdx->ops = &cdx_ops;
+ 
+ 	/* Create MSI domain */
+-	cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ))
++		cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
+ 	if (!cdx->msi_domain) {
+ 		ret = dev_err_probe(&pdev->dev, -ENODEV, "cdx_msi_domain_init() failed");
+ 		goto cdx_msi_fail;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
