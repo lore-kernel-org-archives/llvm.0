@@ -1,198 +1,144 @@
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2066.outbound.protection.outlook.com [40.107.100.66])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6A18F54;
-	Thu, 21 Aug 2025 07:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755760411; cv=fail; b=izInfFEO9I2o+aFoL0HMhtCWqPDFsHpLPBZwKw7Jg2LQUKAge1YG3Ywl98KG/tjyTQo7tjLW6o2M7MUo5i0N4eELIz/avgv36a9/xBDaSYGNxwxi/OpMy8Aevq6cTyH5Q7N5SrUzeBMrYJS4m0iQ/IfvBiPGY7DIDtjiNzpTu/w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755760411; c=relaxed/simple;
-	bh=ILOH7bMXKSzNVKyyrs7Wy9Bl3nrb0asKJA+nme1xeJk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dRvOuSyPImMDGc2WKDVwRPuukCOM1+X+jdZBuJVD/A8B5hvy4mC75ZVmIFcaf3z3GJJsbefHEXgksXX5/Dyq6SEYfTf9iqhdV72PFt72BeWBlplS6SU5DS1E1PVqG3uJbxGYvG9h8pW0WvRmJ03VJ8C/QyWrb5+SKOZ1zqINW4g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=a1bArBvN; arc=fail smtp.client-ip=40.107.100.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920862EAB80;
+	Thu, 21 Aug 2025 08:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755765686; cv=none; b=DrxDVPw6y5KXj4quXFhvs0wSSZkcrELO7OZxOHg2IZQzniMcSoh75X5lc8o6XTHy6u9w9fORiErPFUztqUJtE3ijk7Ie8H15FzwuGEPK48C16J9ReomD5xUhCGqhDQ4XDojpIVwjoM37QFNkzUfk1UmUA41x7o3vUX/mF3TXuGk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755765686; c=relaxed/simple;
+	bh=n1jvE7GQvNq+ke5s5OIhDsUmMtDBv0GtY6vWyj5QfNo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fJfzg2Icr8DXhvOaqIxqwJm1FZS6ltAF0InjvmkH4TuwWIfTOy8zMIM0dk4f9Q75/+W95oXvSmh+m4oKVQft0TetTvHpAKOt1lJfy+mBkG5vpOYXj1ensy2RyJECaxZAQlR+dMtyFC4ZwjD0t8BTTc/kB3mem9BOi9CFODzmoPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OR9sMzoa; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="a1bArBvN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L9g5fEsSzwMo5uCwwDbAGyAwKbtYwOaqaP5c2XvMzGO37qkzJUZnPr7wyssDHClNkVBv3s1tlFmildBoBHoQpjmey+7Iy8YyIsIPzTIIIQrQoJAcrfNNMGckkzR9YJdoYJ5+T0RtlRPId5bs+7GVbZGxjzOwC5+EVAuj+Cbvjxx+qda5I/31raIkVrRHasRJ8OKQzLcj/BWSiwpSiJxfr4JkeWuvl3LdlOxDeidzvUY5Zw6/3kwJX8KBIHzZ16zoeQzg/AJmu5PAU0HQClxaWdczpl0PNnNFGRpU4P+7p6L2TfUDSuFBwligqQkUfERry0eaNO7YFZOty3kw4RDXfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=krq6ndpsv8x9Hhv4NeEZAGkACdLQ3Dar9ZaFw3UEzhg=;
- b=ZsIkpapcaXVeU8XicgjynjmMydyJgcZW70oF+vJ4T9tjZdVKPPA5ccPKC+7D9odHz2fyXylVAHalRSwtfSahoOt/BeUUiYVslIJUapBzpaThcpvg/Ev4e6ueBDY9wWDTZINfCbL8QffEP5fjoI0VU8EkuHYU9eq2/zG4k+rZwBsEDDlxkWviI96slShIv2Mz77uHoRR5zPq2bwv3cQnmmg5PkGvMF12JzWEv0UUE/ngsH4jn+1e6yyebTR7nW1UQoDaYeMP9a+I2sSWcE9Zogw/+w5usqc/zUCrRXLxDDugSdKZt0IpMgW1qraCurDHlbDPrlcuN/q5R78LLBPF/nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=krq6ndpsv8x9Hhv4NeEZAGkACdLQ3Dar9ZaFw3UEzhg=;
- b=a1bArBvN/ujr5S2rwcD6YcJmLq6+77CWA0yTKF4D/ep2kV7zfNKUmdpiurZe5YFeiBXwq7WZ+xW+HuCdg3LiXiT3E7wTKw9TsWKDZ7IWTPn+3ceVV1V6YLHXeaZvQ7/t1gk32aUZp2v4k68+OQ9tF/fFa7gt8bahsCLfNV0cmoQ=
-Received: from SJ0PR03CA0045.namprd03.prod.outlook.com (2603:10b6:a03:33e::20)
- by DS4PR12MB9769.namprd12.prod.outlook.com (2603:10b6:8:2a9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.13; Thu, 21 Aug
- 2025 07:13:26 +0000
-Received: from CY4PEPF0000EE36.namprd05.prod.outlook.com
- (2603:10b6:a03:33e:cafe::9e) by SJ0PR03CA0045.outlook.office365.com
- (2603:10b6:a03:33e::20) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.14 via Frontend Transport; Thu,
- 21 Aug 2025 07:13:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CY4PEPF0000EE36.mail.protection.outlook.com (10.167.242.42) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9052.8 via Frontend Transport; Thu, 21 Aug 2025 07:13:25 +0000
-Received: from satlexmb10.amd.com (10.181.42.219) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 21 Aug
- 2025 02:13:23 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb10.amd.com
- (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Thu, 21 Aug
- 2025 00:13:22 -0700
-Received: from xhdnipung41x.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 21 Aug 2025 02:13:18 -0500
-From: Nipun Gupta <nipun.gupta@amd.com>
-To: <arnd@arndb.de>, <gregkh@linuxfoundation.org>, <nikhil.agarwal@amd.com>
-CC: <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <robin.murphy@arm.com>, <krzk@kernel.org>,
-	<tglx@linutronix.de>, <maz@kernel.org>, <linux@weissschuh.net>,
-	<chenqiuji666@gmail.com>, <peterz@infradead.org>, <robh@kernel.org>,
-	<abhijit.gangurde@amd.com>, <nathan@kernel.org>, <nipun.gupta@amd.com>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH v2 2/2] vfio/cdx: update driver to build without CONFIG_GENERIC_MSI_IRQ
-Date: Thu, 21 Aug 2025 12:43:08 +0530
-Message-ID: <20250821071308.1572106-2-nipun.gupta@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250821071308.1572106-1-nipun.gupta@amd.com>
-References: <20250821071308.1572106-1-nipun.gupta@amd.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OR9sMzoa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755765685; x=1787301685;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n1jvE7GQvNq+ke5s5OIhDsUmMtDBv0GtY6vWyj5QfNo=;
+  b=OR9sMzoa8QkoX9d94YD6nsUoI1vbUp3Yt+7Fw/dugh+FoqMNA31b+hWI
+   8ky9V0ocKtz4lTZQAq2SK9CFLrmQVoRZS01qah+PInhMsx158frtrCT/I
+   x/24cs7NVnTArAQ+7StQSifKR2TxMCKp8uKJ9ppASZ3gmuiYqCCAuLVe2
+   yJ9mXFNNoY5sxWBNstEjHoW695+BWkO/JMhDXIffQMDG94eiHAN778iPO
+   8ulBEaUcHEvkYW203RWgJC060GYBSLPTKnF/QHz8P0a9ukdgSDiXXloq7
+   8Yp3IeO3ihnoGND/JxcNeGvC/Q7vTbe56PYLmNM5xTlU34wmxxvTBD3ge
+   Q==;
+X-CSE-ConnectionGUID: auwwaeBXT2KH1nPKaeaYLA==
+X-CSE-MsgGUID: uOE6tXcGSxSy4S/j9JUPbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="69488929"
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="69488929"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 01:41:22 -0700
+X-CSE-ConnectionGUID: 6fnUNu6/SsWDcIXzDofbaw==
+X-CSE-MsgGUID: 7GhbDLjtT5ahcqKwb2KLOQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="167583175"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 21 Aug 2025 01:41:20 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1up0rF-000K6j-0p;
+	Thu, 21 Aug 2025 08:41:17 +0000
+Date: Thu, 21 Aug 2025 16:41:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+	platform-driver-x86@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Derek John Clark <derekjohn.clark@gmail.com>,
+	=?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: Re: [PATCH v1 4/5] platform/x86: ayaneo-ec: Add controller power and
+ modules attributes
+Message-ID: <202508211640.8MtPueLL-lkp@intel.com>
+References: <20250820160628.99678-5-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE36:EE_|DS4PR12MB9769:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd95c130-a968-4e72-fcae-08dde082389f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xMrgTMvQRBUv8tEMA2ocEGrhl2BfgfwGw+Wzo043CosllAs88hbO9/lAGPod?=
- =?us-ascii?Q?/ypXoXbAO3gwsCsp+sXjQ4d5NxYzm11r341/Nvtvyz0aFNAfkWAC2S+/KXDg?=
- =?us-ascii?Q?tiC+Btr1y4nC3pbAKPgDEFiEu6JbJc1GaT6+V5HwD8dMlP9rpALKbptEEV83?=
- =?us-ascii?Q?ZObVUxtWQrpTPo8vFoKcPAhBioMI1zzubT/HcW1N5w4U2p7C32w030NU4wmt?=
- =?us-ascii?Q?RRu6iWP473Zd8o4IdF7tNszZkpt4cAx8b72MBGxCSSmkfw2XIo4yEruo3yPI?=
- =?us-ascii?Q?kG9FI8sj13PYk3q9t6j6RiztB/G9w6vEiNDIkZvfKmpxGN/PFjthDRdmtKM8?=
- =?us-ascii?Q?QPn/9GM9Wet33kSFPSnjzSoPtzdLXOJdX4TP02OVvPdkkKcM1AQu/F7U8PUI?=
- =?us-ascii?Q?ahLr0fW2zI4tfcNHvsERu2MyUfX+LoLFZ/d+ObN9FIvcJsIJ516jk2CBiiIH?=
- =?us-ascii?Q?bEGGzl0jozfszKRFS39TOWIN1OVU6FWG7TfaNJIwe42hZ3meTqCH3+LqT1Mh?=
- =?us-ascii?Q?8qwwDKZNvQWVP6xwbxYCoOPEU66xfr0iawmUpK63+cEv+lp4arVgSBuh6V+I?=
- =?us-ascii?Q?ONJDqzjYpBekclL+ag3OOrswePd+jvSBvb8nLcDvCy2X5u+epugwwFOKgRUR?=
- =?us-ascii?Q?RsYrIsh50Px7sSwxbetiJR5zhcWnyBGDA+JwazpUCgjJLOROFWRyQ5ygITq/?=
- =?us-ascii?Q?ZugpzDYa3baf6r5k1kwVVIQjlm/kKNc8JDYEWxl22RudHyEZBxhRuw4mWN+Y?=
- =?us-ascii?Q?awK0cmkbl3jONq330im2zoxz5GDHOQiWnM20syVGEqMEpbR+WZgxIns5hmuu?=
- =?us-ascii?Q?uocIKrMu8rjkTCoSyDbkAttcN3rXf/PdYFeNZw0ZJlphAli5N5LEH0lOLDp5?=
- =?us-ascii?Q?he34M0YWxM7HdYLypYTc1rVbGJAQvJnNJ0l19XDJhas9zibsxGYYye28WNbg?=
- =?us-ascii?Q?J5jDxtKFve2yHiA33K+3Fz1PV4Vj3KIrNboLIpQBpstA939jJgJThS0G2wqf?=
- =?us-ascii?Q?NQUlpa5IezU9eKdGZT6uo45dTg6cQAAr30bjwCWXFNnxT8KuLJjxCAYF/3zJ?=
- =?us-ascii?Q?tJku2iAuPwcOCJjLJMLFb5bCpxCunB72xcrkQvrhnVMW5AC0o1e91pMQfc73?=
- =?us-ascii?Q?EBYl/caMyHPZV6nIr19Np7oe/N1puHJjTvJV6In2ZTlk2s5qvWNRDX0A3KEc?=
- =?us-ascii?Q?g8w2ocGqI2KGQLiflwqz4xShx7+i5OO6k+AaimTflr6acqCgDIOcc0mQwLXY?=
- =?us-ascii?Q?aGsp5OG3edrFMeCWvjjkT0qmq1PS3kdCdf6mbqZyJNP+rrMwIPFNTq2xper/?=
- =?us-ascii?Q?Kh7+ueaG0vawfkhnVviWtDma9oPFSORD+CvpHJsv/WVGsDjzz8DqXyyexg73?=
- =?us-ascii?Q?PcRnBH+Kne5oT+Elqv0+yUN2u+iylN+V/Aq7K0K5TUl+XD8f5/vh1oNTGbBG?=
- =?us-ascii?Q?QCTb2rpCDmFGrOce8a0I5iFkmGeyd5LK/6RK/zJmsJfFK10IXPG0ADbBYW6E?=
- =?us-ascii?Q?x+tic2kP2vtGBDF1Iqco+g8Ixwaq6+EAL8nDXN1CvWXtly6CVrYJvS6P0A?=
- =?us-ascii?Q?=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 07:13:25.5950
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd95c130-a968-4e72-fcae-08dde082389f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE36.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR12MB9769
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250820160628.99678-5-lkml@antheas.dev>
 
-Define dummy MSI related APIs in VFIO CDX driver to build the
-driver without enabling CONFIG_GENERIC_MSI_IRQ flag.
+Hi Antheas,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202508070308.opy5dIFX-lkp@intel.com/
-Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
----
-Changes v1->v2:
-- fix linking intr.c file in Makefile
+kernel test robot noticed the following build warnings:
 
- drivers/vfio/cdx/Makefile  |  6 +++++-
- drivers/vfio/cdx/private.h | 14 ++++++++++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+[auto build test WARNING on c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9]
 
-diff --git a/drivers/vfio/cdx/Makefile b/drivers/vfio/cdx/Makefile
-index df92b320122a..dadbef2419ea 100644
---- a/drivers/vfio/cdx/Makefile
-+++ b/drivers/vfio/cdx/Makefile
-@@ -5,4 +5,8 @@
- 
- obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
- 
--vfio-cdx-objs := main.o intr.o
-+vfio-cdx-objs := main.o
-+
-+ifdef CONFIG_GENERIC_MSI_IRQ
-+vfio-cdx-objs += intr.o
-+endif
-diff --git a/drivers/vfio/cdx/private.h b/drivers/vfio/cdx/private.h
-index dc56729b3114..0482a1516439 100644
---- a/drivers/vfio/cdx/private.h
-+++ b/drivers/vfio/cdx/private.h
-@@ -38,11 +38,25 @@ struct vfio_cdx_device {
- 	u8			config_msi;
- };
- 
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
- 			    u32 flags, unsigned int index,
- 			    unsigned int start, unsigned int count,
- 			    void *data);
- 
- void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev);
-+#else
-+static int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
-+				   u32 flags, unsigned int index,
-+				   unsigned int start, unsigned int count,
-+				   void *data)
-+{
-+	return 0;
-+}
-+
-+static void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev)
-+{
-+}
-+#endif
- 
- #endif /* VFIO_CDX_PRIVATE_H */
+url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/platform-x86-ayaneo-ec-Add-Ayaneo-Embedded-Controller-platform-driver/20250821-002525
+base:   c17b750b3ad9f45f2b6f7e6f7f4679844244f0b9
+patch link:    https://lore.kernel.org/r/20250820160628.99678-5-lkml%40antheas.dev
+patch subject: [PATCH v1 4/5] platform/x86: ayaneo-ec: Add controller power and modules attributes
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250821/202508211640.8MtPueLL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508211640.8MtPueLL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508211640.8MtPueLL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/ayaneo-ec.c:395:12: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     395 |                 else if (sysfs_streq(buf, "off"))
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/ayaneo-ec.c:397:7: note: uninitialized use occurs here
+     397 |                 if (ret)
+         |                     ^~~
+   drivers/platform/x86/ayaneo-ec.c:395:8: note: remove the 'if' if its condition is always true
+     395 |                 else if (sysfs_streq(buf, "off"))
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     396 |                         ret = ec_write(AYANEO_POWER_REG, AYANEO_POWER_OFF);
+   drivers/platform/x86/ayaneo-ec.c:389:9: note: initialize the variable 'ret' to silence this warning
+     389 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +395 drivers/platform/x86/ayaneo-ec.c
+
+   382	
+   383	static ssize_t current_value_store(struct kobject *kobj,
+   384					   struct kobj_attribute *attr, const char *buf,
+   385					   size_t count)
+   386	{
+   387		struct ayaneo_fw_attr *fw_attr =
+   388			container_of(attr, struct ayaneo_fw_attr, current_value);
+   389		int ret;
+   390	
+   391		switch (fw_attr->fw_attr_id) {
+   392		case AYANEO_ATTR_CONTROLLER_POWER:
+   393			if (sysfs_streq(buf, "on"))
+   394				ret = ec_write(AYANEO_POWER_REG, AYANEO_POWER_ON);
+ > 395			else if (sysfs_streq(buf, "off"))
+   396				ret = ec_write(AYANEO_POWER_REG, AYANEO_POWER_OFF);
+   397			if (ret)
+   398				return ret;
+   399			return count;
+   400		case AYANEO_ATTR_CONTROLLER_MODULES:
+   401			return -EINVAL;
+   402		}
+   403		return -EINVAL;
+   404	}
+   405	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
