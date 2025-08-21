@@ -1,194 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43314393DCD;
-	Thu, 21 Aug 2025 21:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F8A2877E0;
+	Thu, 21 Aug 2025 21:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755810413; cv=none; b=SrQPWTM2SGpiumw1luWCwLIDlqxbTVP7PwLxb7N6545f6GxJkvNNFvDFOh4AKrQSwaZU8OOzZOBX/e+MlP44ZDYliLvyBOmxiElWjnNlAoTcVng/epYG01lbSZAXVZfshd8G7h98r3goNNLupYnmiBIiT+nGdBTAqSW/2EfZZOw=
+	t=1755810955; cv=none; b=nAg+BcYot4Kc5IFCLLUon+46mwrHLmrBGH8vxaf4UAgrZUWvYPf+9Z47NPlNvI4na2++oXx2lC7UyWpjk/zMEeEuCauS5WHAdMFE/UkpZUBSDC7BEo/nvynssYdMzb7ApYdYkF03eB1P4NzzoQakZ1lSTxYKh7i5CiLe0baVEyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755810413; c=relaxed/simple;
-	bh=bedfVgu0AHiZRQg1jgmBL0HGHqbb9BNp7v2TpYnM1kM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ek8sMVyIn4u/svPKHFFc8NqieFR6ydEesBbDVC5TqCPvb6u2shmu6ENvv4wOPItKpeBdWdEpHDKc7Ww5TKSFKTxPI+tqYfkyqSvb8WwnCEmMZOkUFhgmdshxmJePHwWSkm+hgIyoAwrDEDEfAf4RtVHX2YbosU88bQy6/No+iHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V4yBVSDh; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755810955; c=relaxed/simple;
+	bh=pOQAZPk+siIZkKBpkkHyydqf+iJWdipFSBVhf2HWXnk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fjqipuv3QvM0mXzW4qFfU8EBrZztAk8fS6HeEXNbtzhA55fkAL2jHyJOWQHBoASEJQip0KUNujo/B3lJsgz0B34w+O08oV74u6yOo5F+x241hpn5+qdjuBUUQ/6K3Uv/PlsZ8VweNoGgGPAnGjtI2PnqP0mL+/xIJHCZU7Ox07E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQZ01Sr4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V4yBVSDh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755810411; x=1787346411;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bedfVgu0AHiZRQg1jgmBL0HGHqbb9BNp7v2TpYnM1kM=;
-  b=V4yBVSDhSkg6yfa3MgvvTTrl2LshRsucuMm7HdqfJXo0AxMNLb2RoqUj
-   IrO8ArkncfHWK7MeRAPFJ2iV/1hMVvViyqJMYIWvbeLrvTNSudrH6MSFC
-   BIaOc0gCWWGGc2oCW260cxqLgF+Vq3dsCA+7x+Ad55dTURHgXPeLVq3ga
-   8bRGJc6B/Zd1OCWbgrirkUhZ+N543zScrle2eVnjFLyqvRqfZWACDuHGT
-   cvqXPZcR2pqVA5w3XB4nWChIfbEZYH27/ze1Jv00Cqv8ZlXBD8gxiV98e
-   +5Yf1i+yorr0LGWBRN6aODQYUhBClrk5q+bCa5hA2bPPEkBzOLPJ284mm
-   w==;
-X-CSE-ConnectionGUID: b90zpYiGRuitsj8AOxUwRQ==
-X-CSE-MsgGUID: CXn73GCeT26Y9it+/eZ+1w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="75698764"
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="75698764"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 14:06:50 -0700
-X-CSE-ConnectionGUID: L1wOvzxgSpKQZ+4cYycWQg==
-X-CSE-MsgGUID: AZY2c83+TaCxNMv0MWFb5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="168419614"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 21 Aug 2025 14:06:50 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1upCUJ-000Kf9-0d;
-	Thu, 21 Aug 2025 21:06:40 +0000
-Date: Fri, 22 Aug 2025 05:06:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:ramdax 1/1] drivers/nvdimm/ramdax.c:44:11: error: call to
- undeclared function 'kzalloc'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202508220413.PjQEKKgT-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQZ01Sr4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9A8C4CEEB;
+	Thu, 21 Aug 2025 21:15:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755810954;
+	bh=pOQAZPk+siIZkKBpkkHyydqf+iJWdipFSBVhf2HWXnk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=uQZ01Sr4y5UBxZbhDZfvUDEeNvw7RqMPpecFt11yc7bsaW5ovYL0XUfzrWWsiNXzZ
+	 c8++tipPQjqwKYp0k0gDhrvljaAd7re4WVkFUF5WrFBqQqEIN8iR74Vee7BNt/CA+g
+	 /tG0RI1G9MmS/0WG3vAsp0ldl5sjGRh0EGxzNxVH1Tm0PYZoCyCQqG00dIozdKH/oE
+	 pE+AKTCsKwpp5uIo1NEGnmB8ycta84iEl1LU6UXiRm6kopTiphBIqE2wbsbInRJaJl
+	 x/kzDSN/k618a3jDJ0BA65cb43YnV0uqrkYoP768loOw8+WrPigrhNPUtuX3uXdZuq
+	 W/LW5Ik2tcyqg==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 00/12] Bump minimum supported version of LLVM for
+ building the kernel to 15.0.0
+Date: Thu, 21 Aug 2025 14:15:37 -0700
+Message-Id: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHqMp2gC/22NQQ6CMBBFr0Jm7ZhOzSi48h6GhcAAE6GQVhsN4
+ e5W3Lp8L/nvLxDEqwQ4Zwt4iRp0cgnsLoO6v7lOUJvEYI1lcyKD1XOccVSHwxBHjOKRGAu2B2p
+ JqiMzpOnspdXXlr2WiXsNj8m/t5dIX/sL5pT/D0ZCg3VeUWPaglnM5S7eybCffAfluq4fb81km
+ bkAAAA=
+X-Change-ID: 20250710-bump-min-llvm-ver-15-95231f1eb655
+To: linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org, 
+ Russell King <linux@armlinux.org.uk>, Ard Biesheuvel <ardb@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, Will Deacon <will@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ linuxppc-dev@lists.ozlabs.org, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
+ Marco Elver <elver@google.com>, 
+ "Peter Zijlstra (Intel)" <peterz@infraded.org>, kasan-dev@googlegroups.com
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3775; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=pOQAZPk+siIZkKBpkkHyydqf+iJWdipFSBVhf2HWXnk=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnLexp5jt71uLBmLnPYsZJXWxZZ/jvpEC46Jadf9c7Uw
+ ETlF/9MO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEbpkw/I9487fgnDGfn0/r
+ 3M6FSqzXJdY9UrRtFZK/fJjFtn+JsiAjw7+LX1KSfVQYtyp9370iKU3tw4SvX9nUW67uL1go/I+
+ LnxkA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git ramdax
-head:   349f76d4596ebf970cfdec905e98534a84251cd8
-commit: 349f76d4596ebf970cfdec905e98534a84251cd8 [1/1] nvdimm: allow exposing RAM carveouts as NVDIMM DIMM devices
-config: x86_64-buildonly-randconfig-004-20250822 (https://download.01.org/0day-ci/archive/20250822/202508220413.PjQEKKgT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508220413.PjQEKKgT-lkp@intel.com/reproduce)
+s390 and x86 have required LLVM 15 since
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508220413.PjQEKKgT-lkp@intel.com/
+  30d17fac6aae ("scripts/min-tool-version.sh: raise minimum clang version to 15.0.0 for s390")
+  7861640aac52 ("x86/build: Raise the minimum LLVM version to 15.0.0")
 
-All errors (new ones prefixed by >>):
+respectively. This series bumps the rest of the kernel to 15.0.0 to
+match, which allows for a decent number of clean ups.
 
->> drivers/nvdimm/ramdax.c:44:11: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      44 |         nd_set = kzalloc(sizeof(*nd_set), GFP_KERNEL);
-         |                  ^
->> drivers/nvdimm/ramdax.c:44:9: error: incompatible integer to pointer conversion assigning to 'struct nd_interleave_set *' from 'int' [-Wint-conversion]
-      44 |         nd_set = kzalloc(sizeof(*nd_set), GFP_KERNEL);
-         |                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/nvdimm/ramdax.c:71:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      71 |         kfree(nd_set);
-         |         ^
-   drivers/nvdimm/ramdax.c:84:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      84 |         dimm = kzalloc(sizeof(*dimm), GFP_KERNEL);
-         |                ^
->> drivers/nvdimm/ramdax.c:84:7: error: incompatible integer to pointer conversion assigning to 'struct ramdax_dimm *' from 'int' [-Wint-conversion]
-      84 |         dimm = kzalloc(sizeof(*dimm), GFP_KERNEL);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/nvdimm/ramdax.c:117:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     117 |         kfree(dimm);
-         |         ^
-   6 errors generated.
+On the distros front, we will only leave behind Debian Bookworm and
+Ubuntu Jammy. In both of those cases, builders / developers can either
+use the kernel.org toolchains or https://apt.llvm.org to get newer
+versions that will run on those distributions, if they cannot upgrade.
 
+  archlinux:latest              clang version 20.1.8
+  debian:oldoldstable-slim      Debian clang version 11.0.1-2
+  debian:oldstable-slim         Debian clang version 14.0.6
+  debian:stable-slim            Debian clang version 19.1.7 (3+b1)
+  debian:testing-slim           Debian clang version 19.1.7 (3+b1)
+  debian:unstable-slim          Debian clang version 19.1.7 (3+b2)
+  fedora:41                     clang version 19.1.7 (Fedora 19.1.7-4.fc41)
+  fedora:latest                 clang version 20.1.8 (Fedora 20.1.8-3.fc42)
+  fedora:rawhide                clang version 20.1.8 (Fedora 20.1.8-3.fc43)
+  opensuse/leap:latest          clang version 17.0.6
+  opensuse/tumbleweed:latest    clang version 20.1.8
+  ubuntu:focal                  clang version 10.0.0-4ubuntu1
+  ubuntu:jammy                  Ubuntu clang version 14.0.0-1ubuntu1.1
+  ubuntu:noble                  Ubuntu clang version 18.1.3 (1ubuntu1)
+  ubuntu:latest                 Ubuntu clang version 18.1.3 (1ubuntu1)
+  ubuntu:rolling                Ubuntu clang version 20.1.2 (0ubuntu1)
+  ubuntu:devel                  Ubuntu clang version 20.1.8 (0ubuntu1)
 
-vim +/kzalloc +44 drivers/nvdimm/ramdax.c
+I plan to carry this via the Kbuild tree with the appropriate acks.
 
-    34	
-    35	static int ramdax_register_region(struct resource *res,
-    36					    struct nvdimm *nvdimm,
-    37					    struct nvdimm_bus *nvdimm_bus)
-    38	{
-    39		struct nd_mapping_desc mapping;
-    40		struct nd_region_desc ndr_desc;
-    41		struct nd_interleave_set *nd_set;
-    42		int nid = phys_to_target_node(res->start);
-    43	
-  > 44		nd_set = kzalloc(sizeof(*nd_set), GFP_KERNEL);
-    45		if (!nd_set)
-    46			return -ENOMEM;
-    47	
-    48		nd_set->cookie1 = 0xcafebeefcafebeef;
-    49		nd_set->cookie2 = nd_set->cookie1;
-    50		nd_set->altcookie = nd_set->cookie1;
-    51	
-    52		memset(&mapping, 0, sizeof(mapping));
-    53		mapping.nvdimm = nvdimm;
-    54		mapping.start = 0;
-    55		mapping.size = resource_size(res) - LABEL_AREA_SIZE;
-    56	
-    57		memset(&ndr_desc, 0, sizeof(ndr_desc));
-    58		ndr_desc.res = res;
-    59		ndr_desc.numa_node = numa_map_to_online_node(nid);
-    60		ndr_desc.target_node = nid;
-    61		ndr_desc.num_mappings = 1;
-    62		ndr_desc.mapping = &mapping;
-    63		ndr_desc.nd_set = nd_set;
-    64	
-    65		if (!nvdimm_pmem_region_create(nvdimm_bus, &ndr_desc))
-    66			goto err_free_nd_set;
-    67	
-    68		return 0;
-    69	
-    70	err_free_nd_set:
-  > 71		kfree(nd_set);
-    72		return -ENXIO;
-    73	}
-    74	
-    75	static int ramdax_register_dimm(struct resource *res, void *data)
-    76	{
-    77		resource_size_t start = res->start;
-    78		resource_size_t size = resource_size(res);
-    79		unsigned long flags = 0, cmd_mask = 0;
-    80		struct nvdimm_bus *nvdimm_bus = data;
-    81		struct ramdax_dimm *dimm;
-    82		int err;
-    83	
-  > 84		dimm = kzalloc(sizeof(*dimm), GFP_KERNEL);
-    85		if (!dimm)
-    86			return -ENOMEM;
-    87	
-    88		dimm->label_area = memremap(start + size - LABEL_AREA_SIZE,
-    89					    LABEL_AREA_SIZE, MEMREMAP_WB);
-    90		if (!dimm->label_area)
-    91			goto err_free_dimm;
-    92	
-    93		set_bit(NDD_LABELING, &flags);
-    94		set_bit(NDD_REGISTER_SYNC, &flags);
-    95		set_bit(ND_CMD_GET_CONFIG_SIZE, &cmd_mask);
-    96		set_bit(ND_CMD_GET_CONFIG_DATA, &cmd_mask);
-    97		set_bit(ND_CMD_SET_CONFIG_DATA, &cmd_mask);
-    98		dimm->nvdimm = nvdimm_create(nvdimm_bus, dimm,
-    99					     /* dimm_attribute_groups */ NULL,
-   100					     flags, cmd_mask, 0, NULL);
-   101		if (!dimm->nvdimm) {
-   102			err = -ENOMEM;
-   103			goto err_unmap_label;
-   104		}
-   105	
-   106		err = ramdax_register_region(res, dimm->nvdimm, nvdimm_bus);
-   107		if (err)
-   108			goto err_remove_nvdimm;
-   109	
-   110		return 0;
-   111	
-   112	err_remove_nvdimm:
-   113		nvdimm_delete(dimm->nvdimm);
-   114	err_unmap_label:
-   115		memunmap(dimm->label_area);
-   116	err_free_dimm:
-   117		kfree(dimm);
-   118		return err;
-   119	}
-   120	
+---
+Changes in v2:
+- Add two new patches for RISC-V to clean up more LLD_VERSION checks
+  (Alex)
+- Pick up provided tags (thanks all!)
+- Link to v1: https://lore.kernel.org/r/20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+Nathan Chancellor (12):
+      kbuild: Bump minimum version of LLVM for building the kernel to 15.0.0
+      arch/Kconfig: Drop always true condition from RANDOMIZE_KSTACK_OFFSET
+      ARM: Clean up definition of ARM_HAS_GROUP_RELOCS
+      arm64: Remove tautological LLVM Kconfig conditions
+      mips: Unconditionally select ARCH_HAS_CURRENT_STACK_POINTER
+      powerpc: Drop unnecessary initializations in __copy_inst_from_kernel_nofault()
+      riscv: Remove version check for LTO_CLANG selects
+      riscv: Unconditionally use linker relaxation
+      riscv: Remove ld.lld version checks from many TOOLCHAIN_HAS configs
+      lib/Kconfig.debug: Drop CLANG_VERSION check from DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+      objtool: Drop noinstr hack for KCSAN_WEAK_MEMORY
+      KMSAN: Remove tautological checks
+
+ Documentation/process/changes.rst |  2 +-
+ arch/Kconfig                      |  1 -
+ arch/arm/Kconfig                  | 11 ++++-------
+ arch/arm64/Kconfig                |  5 +----
+ arch/mips/Kconfig                 |  2 +-
+ arch/powerpc/include/asm/inst.h   |  4 ----
+ arch/riscv/Kconfig                | 21 +++++++--------------
+ arch/riscv/Makefile               |  9 +--------
+ lib/Kconfig.debug                 |  2 +-
+ lib/Kconfig.kcsan                 |  6 ------
+ lib/Kconfig.kmsan                 | 11 +----------
+ scripts/min-tool-version.sh       |  6 ++----
+ tools/objtool/check.c             | 10 ----------
+ 13 files changed, 19 insertions(+), 71 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250710-bump-min-llvm-ver-15-95231f1eb655
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
