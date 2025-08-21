@@ -1,167 +1,194 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1731393DE6
-	for <llvm@lists.linux.dev>; Thu, 21 Aug 2025 20:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43314393DCD;
+	Thu, 21 Aug 2025 21:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755809998; cv=none; b=eiez4nuz0cgka9O53WVmrDVXUs+rOU+lqB1rBTUh121/mUuBYOdLbtXhc7NZT+6ulbTVdtQtH6kWBSpbQ0QFUf9TyQ/O2SrGL0idPlw2DKMmz0IA1UoiraTbuurUkL1OS8B8zrc/OufzhLsDNTp8tLymH2BaH+N81Bvm/CR4N5s=
+	t=1755810413; cv=none; b=SrQPWTM2SGpiumw1luWCwLIDlqxbTVP7PwLxb7N6545f6GxJkvNNFvDFOh4AKrQSwaZU8OOzZOBX/e+MlP44ZDYliLvyBOmxiElWjnNlAoTcVng/epYG01lbSZAXVZfshd8G7h98r3goNNLupYnmiBIiT+nGdBTAqSW/2EfZZOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755809998; c=relaxed/simple;
-	bh=iZGYE1Xd6jy1p5PRZ84O4xkm6GrvOQTQufb1eQO5abw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ei3OiG4ljY5tA0mcms70Yw5nUzsTc+slTnuWng5/MOHQ5tHXKHMVDLkbfQkRL+3bmunQ6B2AQHKPIWLqSHQr6NbuQXRsMkeR90F1dkyXfG9N1IMaLo2H5q5Kl+3OO6fdKWJcwFYvfqj7LFUg1ACGA6EDQfIvkF/ODLni/OOn0Gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P1KeL0pO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1755810413; c=relaxed/simple;
+	bh=bedfVgu0AHiZRQg1jgmBL0HGHqbb9BNp7v2TpYnM1kM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ek8sMVyIn4u/svPKHFFc8NqieFR6ydEesBbDVC5TqCPvb6u2shmu6ENvv4wOPItKpeBdWdEpHDKc7Ww5TKSFKTxPI+tqYfkyqSvb8WwnCEmMZOkUFhgmdshxmJePHwWSkm+hgIyoAwrDEDEfAf4RtVHX2YbosU88bQy6/No+iHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V4yBVSDh; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P1KeL0pO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755809995;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4G04SOJ0glNxufycnOsZm8GbV4T3e/3GwhGPhyQ8IQ8=;
-	b=P1KeL0pOcNlfoIpiEL+/Bs+7fJKCR7NuBBJzuI/D8gk+tkGNL7KqOPdMKy/8Tb5KcMOz9b
-	+VWGnE2/gRLdw7db3wZai0fXpfH4fSWx3YghS+8EaGB6kiPsNC189/U1LWXChEv/HdrHtM
-	VIg25ixKfYeOR9t4Iv01ilikV6XXb8k=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-70-btkNoBHgO62UzUQQdvBZWw-1; Thu, 21 Aug 2025 16:59:54 -0400
-X-MC-Unique: btkNoBHgO62UzUQQdvBZWw-1
-X-Mimecast-MFC-AGG-ID: btkNoBHgO62UzUQQdvBZWw_1755809994
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-88432d9d5d1so11833239f.1
-        for <llvm@lists.linux.dev>; Thu, 21 Aug 2025 13:59:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755809994; x=1756414794;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4G04SOJ0glNxufycnOsZm8GbV4T3e/3GwhGPhyQ8IQ8=;
-        b=DzLFWRVaYG5qWIhP3+DXoWDjCc+xKweBjcXfnEp7jXc/iFNiLwDephRPiOaU8NBgE/
-         /GbMcuhZCh7Js+EaSDtZigK5eQ9eHyj7rGj6ASHQhZQUsa0cOjPEI6Kt3YhP8ziKUI84
-         4QJ7c9mAFMEoc7FvpXSN25hfKCsUaoKUTYb9lPLqTc1uDbK4/Mo9taKrjPg0xo0rrqsH
-         /QCjT2QgA1jq+9DP73GlzagCrQb4ESPswY5jl/weN0An10llajbmoQF2dzvbIYS02Sht
-         XL0F8qySTM4ZMX1rJrWCrJtA0EOQANrxiCLVVFsPb7t1HTtPKF/sBN0sYGk0Voh8VAG/
-         6pjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXwxX9deHdgDTuMcMAvWth7SG8O5qSZAzs7KlPGs/XOAM89Hc6/oDG3bg4COPukn4rBffjP@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy5RE0u44OIj7+l5bR07hWFq99XysCkU5nWCdusW9+njOVz8akt
-	qChKjX1mGnum27ShXFy3C2mvGEt0DMwjHYqpD00mSqAC0P2f73zp8KXvfqOPOl5PyDL7jYMD79t
-	hhxNS9fJvEBkhDJ46qB0m7QTnV0y5FL/cgLEy9I44AWn2Foj7QrF0Szo=
-X-Gm-Gg: ASbGncvYUU4XJmK3ww/VYs0bqq7oQInh40O/ZOIiOJI/3CQTJIvLLBAERScaT4vCB17
-	mWLOiACLo33qGYWTOAcSXRkOt60WvbjJ/jeboB+/gAq/f2iOt0ieLL06mn66BvZnLNpyCj0tzfV
-	KFZQ2dhBToUpkii9qi0Zrt97VQLorUfPBqupKVxS9AUYdjKzxLV5VrdoavX/vxLIsJmQw0t+vW+
-	cGHh777F5be7nRoGfIL7YY3VW4Jq5Y2qHKunoPyV3K6R51Jte7Gmhjg7wP/xgfKO4EI2qMKqNbd
-	Qfd4C39Ylao0ywPtwPk25TVav0P4pTdK/rxbr/a0ahE=
-X-Received: by 2002:a05:6602:2cc9:b0:881:659f:cd6c with SMTP id ca18e2360f4ac-886bd101642mr35933339f.1.1755809993779;
-        Thu, 21 Aug 2025 13:59:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFWsV1EzHTqmOI9QMn9r4+1m0MFqBhgNbF+N2ic8JnDHSvJKjdfICIF99AEr9+2AABgW89gRQ==
-X-Received: by 2002:a05:6602:2cc9:b0:881:659f:cd6c with SMTP id ca18e2360f4ac-886bd101642mr35932439f.1.1755809993389;
-        Thu, 21 Aug 2025 13:59:53 -0700 (PDT)
-Received: from redhat.com ([38.15.36.11])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-884702457d5sm273437639f.17.2025.08.21.13.59.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 13:59:51 -0700 (PDT)
-Date: Thu, 21 Aug 2025 14:59:49 -0600
-From: Alex Williamson <alex.williamson@redhat.com>
-To: Nipun Gupta <nipun.gupta@amd.com>
-Cc: <arnd@arndb.de>, <gregkh@linuxfoundation.org>, <nikhil.agarwal@amd.com>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
- <oe-kbuild-all@lists.linux.dev>, <robin.murphy@arm.com>, <krzk@kernel.org>,
- <tglx@linutronix.de>, <maz@kernel.org>, <linux@weissschuh.net>,
- <chenqiuji666@gmail.com>, <peterz@infradead.org>, <robh@kernel.org>,
- <abhijit.gangurde@amd.com>, <nathan@kernel.org>, kernel test robot
- <lkp@intel.com>
-Subject: Re: [PATCH v2 2/2] vfio/cdx: update driver to build without
- CONFIG_GENERIC_MSI_IRQ
-Message-ID: <20250821145949.7fa51308.alex.williamson@redhat.com>
-In-Reply-To: <20250821071308.1572106-2-nipun.gupta@amd.com>
-References: <20250821071308.1572106-1-nipun.gupta@amd.com>
-	<20250821071308.1572106-2-nipun.gupta@amd.com>
-Organization: Red Hat
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V4yBVSDh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755810411; x=1787346411;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bedfVgu0AHiZRQg1jgmBL0HGHqbb9BNp7v2TpYnM1kM=;
+  b=V4yBVSDhSkg6yfa3MgvvTTrl2LshRsucuMm7HdqfJXo0AxMNLb2RoqUj
+   IrO8ArkncfHWK7MeRAPFJ2iV/1hMVvViyqJMYIWvbeLrvTNSudrH6MSFC
+   BIaOc0gCWWGGc2oCW260cxqLgF+Vq3dsCA+7x+Ad55dTURHgXPeLVq3ga
+   8bRGJc6B/Zd1OCWbgrirkUhZ+N543zScrle2eVnjFLyqvRqfZWACDuHGT
+   cvqXPZcR2pqVA5w3XB4nWChIfbEZYH27/ze1Jv00Cqv8ZlXBD8gxiV98e
+   +5Yf1i+yorr0LGWBRN6aODQYUhBClrk5q+bCa5hA2bPPEkBzOLPJ284mm
+   w==;
+X-CSE-ConnectionGUID: b90zpYiGRuitsj8AOxUwRQ==
+X-CSE-MsgGUID: CXn73GCeT26Y9it+/eZ+1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="75698764"
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="75698764"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 14:06:50 -0700
+X-CSE-ConnectionGUID: L1wOvzxgSpKQZ+4cYycWQg==
+X-CSE-MsgGUID: AZY2c83+TaCxNMv0MWFb5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="168419614"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 21 Aug 2025 14:06:50 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1upCUJ-000Kf9-0d;
+	Thu, 21 Aug 2025 21:06:40 +0000
+Date: Fri, 22 Aug 2025 05:06:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:ramdax 1/1] drivers/nvdimm/ramdax.c:44:11: error: call to
+ undeclared function 'kzalloc'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202508220413.PjQEKKgT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: c3FO-EY_tRuwsElXuxTXlBoHXhb8lnwkR8RJCFs0hhs_1755809994
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 21 Aug 2025 12:43:08 +0530
-Nipun Gupta <nipun.gupta@amd.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git ramdax
+head:   349f76d4596ebf970cfdec905e98534a84251cd8
+commit: 349f76d4596ebf970cfdec905e98534a84251cd8 [1/1] nvdimm: allow exposing RAM carveouts as NVDIMM DIMM devices
+config: x86_64-buildonly-randconfig-004-20250822 (https://download.01.org/0day-ci/archive/20250822/202508220413.PjQEKKgT-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508220413.PjQEKKgT-lkp@intel.com/reproduce)
 
-> Define dummy MSI related APIs in VFIO CDX driver to build the
-> driver without enabling CONFIG_GENERIC_MSI_IRQ flag.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202508070308.opy5dIFX-lkp@intel.com/
-> Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> ---
-> Changes v1->v2:
-> - fix linking intr.c file in Makefile
-> 
->  drivers/vfio/cdx/Makefile  |  6 +++++-
->  drivers/vfio/cdx/private.h | 14 ++++++++++++++
->  2 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vfio/cdx/Makefile b/drivers/vfio/cdx/Makefile
-> index df92b320122a..dadbef2419ea 100644
-> --- a/drivers/vfio/cdx/Makefile
-> +++ b/drivers/vfio/cdx/Makefile
-> @@ -5,4 +5,8 @@
->  
->  obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
->  
-> -vfio-cdx-objs := main.o intr.o
-> +vfio-cdx-objs := main.o
-> +
-> +ifdef CONFIG_GENERIC_MSI_IRQ
-> +vfio-cdx-objs += intr.o
-> +endif
-> diff --git a/drivers/vfio/cdx/private.h b/drivers/vfio/cdx/private.h
-> index dc56729b3114..0482a1516439 100644
-> --- a/drivers/vfio/cdx/private.h
-> +++ b/drivers/vfio/cdx/private.h
-> @@ -38,11 +38,25 @@ struct vfio_cdx_device {
->  	u8			config_msi;
->  };
->  
-> +#ifdef CONFIG_GENERIC_MSI_IRQ
->  int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
->  			    u32 flags, unsigned int index,
->  			    unsigned int start, unsigned int count,
->  			    void *data);
->  
->  void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev);
-> +#else
-> +static int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
-> +				   u32 flags, unsigned int index,
-> +				   unsigned int start, unsigned int count,
-> +				   void *data)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev)
-> +{
-> +}
-> +#endif
->  
->  #endif /* VFIO_CDX_PRIVATE_H */
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508220413.PjQEKKgT-lkp@intel.com/
 
-Why are we returning success if we don't implement the function?  This
-provides the wrong return value to the user.
+All errors (new ones prefixed by >>):
 
-Also, aren't we also missing in patch 1/ that cdx_dev->num_msi is
-initialized and therefore vfio_cdx_ioctl_get_info() might return that
-an interrupt is supported when it is not?  Thanks,
+>> drivers/nvdimm/ramdax.c:44:11: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      44 |         nd_set = kzalloc(sizeof(*nd_set), GFP_KERNEL);
+         |                  ^
+>> drivers/nvdimm/ramdax.c:44:9: error: incompatible integer to pointer conversion assigning to 'struct nd_interleave_set *' from 'int' [-Wint-conversion]
+      44 |         nd_set = kzalloc(sizeof(*nd_set), GFP_KERNEL);
+         |                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/nvdimm/ramdax.c:71:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      71 |         kfree(nd_set);
+         |         ^
+   drivers/nvdimm/ramdax.c:84:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      84 |         dimm = kzalloc(sizeof(*dimm), GFP_KERNEL);
+         |                ^
+>> drivers/nvdimm/ramdax.c:84:7: error: incompatible integer to pointer conversion assigning to 'struct ramdax_dimm *' from 'int' [-Wint-conversion]
+      84 |         dimm = kzalloc(sizeof(*dimm), GFP_KERNEL);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/nvdimm/ramdax.c:117:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     117 |         kfree(dimm);
+         |         ^
+   6 errors generated.
 
-Alex
 
+vim +/kzalloc +44 drivers/nvdimm/ramdax.c
+
+    34	
+    35	static int ramdax_register_region(struct resource *res,
+    36					    struct nvdimm *nvdimm,
+    37					    struct nvdimm_bus *nvdimm_bus)
+    38	{
+    39		struct nd_mapping_desc mapping;
+    40		struct nd_region_desc ndr_desc;
+    41		struct nd_interleave_set *nd_set;
+    42		int nid = phys_to_target_node(res->start);
+    43	
+  > 44		nd_set = kzalloc(sizeof(*nd_set), GFP_KERNEL);
+    45		if (!nd_set)
+    46			return -ENOMEM;
+    47	
+    48		nd_set->cookie1 = 0xcafebeefcafebeef;
+    49		nd_set->cookie2 = nd_set->cookie1;
+    50		nd_set->altcookie = nd_set->cookie1;
+    51	
+    52		memset(&mapping, 0, sizeof(mapping));
+    53		mapping.nvdimm = nvdimm;
+    54		mapping.start = 0;
+    55		mapping.size = resource_size(res) - LABEL_AREA_SIZE;
+    56	
+    57		memset(&ndr_desc, 0, sizeof(ndr_desc));
+    58		ndr_desc.res = res;
+    59		ndr_desc.numa_node = numa_map_to_online_node(nid);
+    60		ndr_desc.target_node = nid;
+    61		ndr_desc.num_mappings = 1;
+    62		ndr_desc.mapping = &mapping;
+    63		ndr_desc.nd_set = nd_set;
+    64	
+    65		if (!nvdimm_pmem_region_create(nvdimm_bus, &ndr_desc))
+    66			goto err_free_nd_set;
+    67	
+    68		return 0;
+    69	
+    70	err_free_nd_set:
+  > 71		kfree(nd_set);
+    72		return -ENXIO;
+    73	}
+    74	
+    75	static int ramdax_register_dimm(struct resource *res, void *data)
+    76	{
+    77		resource_size_t start = res->start;
+    78		resource_size_t size = resource_size(res);
+    79		unsigned long flags = 0, cmd_mask = 0;
+    80		struct nvdimm_bus *nvdimm_bus = data;
+    81		struct ramdax_dimm *dimm;
+    82		int err;
+    83	
+  > 84		dimm = kzalloc(sizeof(*dimm), GFP_KERNEL);
+    85		if (!dimm)
+    86			return -ENOMEM;
+    87	
+    88		dimm->label_area = memremap(start + size - LABEL_AREA_SIZE,
+    89					    LABEL_AREA_SIZE, MEMREMAP_WB);
+    90		if (!dimm->label_area)
+    91			goto err_free_dimm;
+    92	
+    93		set_bit(NDD_LABELING, &flags);
+    94		set_bit(NDD_REGISTER_SYNC, &flags);
+    95		set_bit(ND_CMD_GET_CONFIG_SIZE, &cmd_mask);
+    96		set_bit(ND_CMD_GET_CONFIG_DATA, &cmd_mask);
+    97		set_bit(ND_CMD_SET_CONFIG_DATA, &cmd_mask);
+    98		dimm->nvdimm = nvdimm_create(nvdimm_bus, dimm,
+    99					     /* dimm_attribute_groups */ NULL,
+   100					     flags, cmd_mask, 0, NULL);
+   101		if (!dimm->nvdimm) {
+   102			err = -ENOMEM;
+   103			goto err_unmap_label;
+   104		}
+   105	
+   106		err = ramdax_register_region(res, dimm->nvdimm, nvdimm_bus);
+   107		if (err)
+   108			goto err_remove_nvdimm;
+   109	
+   110		return 0;
+   111	
+   112	err_remove_nvdimm:
+   113		nvdimm_delete(dimm->nvdimm);
+   114	err_unmap_label:
+   115		memunmap(dimm->label_area);
+   116	err_free_dimm:
+   117		kfree(dimm);
+   118		return err;
+   119	}
+   120	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
