@@ -1,192 +1,229 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF2C2EAB82;
-	Thu, 21 Aug 2025 08:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F96119E83C
+	for <llvm@lists.linux.dev>; Thu, 21 Aug 2025 12:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755765686; cv=none; b=Pcr/ys9GuSYQrnNsvPgezopwDFe/y8j6ymbZIE3wuWKu0rHAE41QISkEPksCDWSr70H56gPf7SzAduEexJVzwbtBwO8fZwbFsxC31xoRiQklGlFKrVMdf8D6qbsaS4U6HFDsHVkzU35a0aOnlaIx/LM3NwbmvMXEgPBZxWeVm4o=
+	t=1755779498; cv=none; b=iPfWKP4bb0bMckcXV/jJ3A0PeD1Vp/25iheW8b9g69qba/LSLxVats8TIkBw6rERIePMklIp2XtaWQzBFtrrwZnf1+bEXTC/+eVEU4aImhvyKik7heBRm+XegD407WmP55gUQoy1rPZPXk4TGHrK8gQW6Esf726Eg0c5lsYrwhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755765686; c=relaxed/simple;
-	bh=Hr2Mq/c3wRRLOd0x+eYAg6WQzQOLsymSwbT9bZ4h144=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lGfilkozWmrrC/67w1roxUnYBOdKFo9BDJc9rdqcsKndS1lL4tTL4Gxf0tmymPeaAMxCamXkabhcN69iIKbKPum32vW0/WJmISgJ1tyQ3/cDD5v3GlPUNBq7M9T80GCzPm2kbQuTCLRnxTYSUoW1pp3OUztFLs9xw5DZViURwIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qljfhbkh; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qljfhbkh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755765685; x=1787301685;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hr2Mq/c3wRRLOd0x+eYAg6WQzQOLsymSwbT9bZ4h144=;
-  b=QljfhbkhbjcZWVOOvL8XgZnw0HR6JRo+u6aqWNRJw5H7UjTD9QnRTtw8
-   AUAGcg/An0hLQKnFYp5KopLnSpx2X+JFupMt63T5nD9KBOwasy9BXCV/7
-   hiMawYXUDEoLgXqFPhgltqNkgqOs8xYLhDw0R/ER+DBaMGpGFrJh5m5WK
-   e6dUjIc17K24NTxLqMec4/YUw12P3gTdodDIf0mYJE7MB2wLBn26DGirG
-   CuoX7oUBS3nWkY5S3V287oAkmwSZM2KAAWpCz+ldObP/zQzl8j5vEW24W
-   RNPhbIj1Tu15d6mEkKbmIZiL5DcPHjl1JCreBG691bvJ+I262u9zsekcD
-   w==;
-X-CSE-ConnectionGUID: LfuLALLLTwCuYR+bq8PH7w==
-X-CSE-MsgGUID: pBPnWOU/QlCtlbXlcfxkdQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57759722"
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="57759722"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 01:41:24 -0700
-X-CSE-ConnectionGUID: VBxdbat7RHmC/2tZJbIT4A==
-X-CSE-MsgGUID: sI80Ql8OSPiy1PZeQZXOGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
-   d="scan'208";a="199229185"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 21 Aug 2025 01:41:19 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1up0rF-000K6l-0s;
-	Thu, 21 Aug 2025 08:41:17 +0000
-Date: Thu, 21 Aug 2025 16:41:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yulin Lu <luyulin@eswincomputing.com>, dlemoal@kernel.org,
-	cassel@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linux-ide@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	vkoul@kernel.org, kishon@kernel.org, linux-phy@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ningyu@eswincomputing.com, zhengyu@eswincomputing.com,
-	linmin@eswincomputing.com, huangyifeng@eswincomputing.com,
-	fenglin@eswincomputing.com, lianghujun@eswincomputing.com,
-	luyulin <luyulin@eswincomputing.com>
-Subject: Re: [PATCH v2 3/3] phy: eswin: Create eswin directory and add
- EIC7700 SATA PHY driver
-Message-ID: <202508211623.d8Spdqn7-lkp@intel.com>
-References: <20250819140043.1862-1-luyulin@eswincomputing.com>
+	s=arc-20240116; t=1755779498; c=relaxed/simple;
+	bh=wSBvw55YuhTUqmASHzPdh67urTqTQ8G3C8Yt7petnF8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m6cvIXv2r6SR9HVh9vXEYvaBzwhgcNSLoF4rVF8OpdiFcmbpgYk3vI0or/bajhcYkBNPDtqO+bMI31ZtP9Zct5S0bjsM9fg/ut8K/NJsgz752hB1g2vRH5Y6meHD2qeo+wUzzTvm26/fJPvAVVWKxyq61cUN+EwZRo1pJBEhfio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D09B168F;
+	Thu, 21 Aug 2025 05:31:27 -0700 (PDT)
+Received: from [10.57.1.220] (unknown [10.57.1.220])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8ED163F63F;
+	Thu, 21 Aug 2025 05:31:18 -0700 (PDT)
+Message-ID: <9eb211ee-94bf-431b-981c-e305c8ea5e0b@arm.com>
+Date: Thu, 21 Aug 2025 13:30:28 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250819140043.1862-1-luyulin@eswincomputing.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/18] kasan: x86: arm64: KASAN tag-based mode for x86
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: nathan@kernel.org, arnd@arndb.de, broonie@kernel.org,
+ Liam.Howlett@oracle.com, urezki@gmail.com, will@kernel.org,
+ kaleshsingh@google.com, rppt@kernel.org, leitao@debian.org, coxu@redhat.com,
+ surenb@google.com, akpm@linux-foundation.org, luto@kernel.org,
+ jpoimboe@kernel.org, changyuanl@google.com, hpa@zytor.com,
+ dvyukov@google.com, kas@kernel.org, corbet@lwn.net,
+ vincenzo.frascino@arm.com, smostafa@google.com,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, andreyknvl@gmail.com,
+ alexander.shishkin@linux.intel.com, thiago.bauermann@linaro.org,
+ catalin.marinas@arm.com, ryabinin.a.a@gmail.com, jan.kiszka@siemens.com,
+ jbohac@suse.cz, dan.j.williams@intel.com, joel.granados@kernel.org,
+ baohua@kernel.org, kevin.brodsky@arm.com, nicolas.schier@linux.dev,
+ pcc@google.com, andriy.shevchenko@linux.intel.com, wei.liu@kernel.org,
+ bp@alien8.de, xin@zytor.com, pankaj.gupta@amd.com, vbabka@suse.cz,
+ glider@google.com, jgross@suse.com, kees@kernel.org, jhubbard@nvidia.com,
+ joey.gouly@arm.com, ardb@kernel.org, thuth@redhat.com,
+ pasha.tatashin@soleen.com, kristina.martsenko@arm.com,
+ bigeasy@linutronix.de, lorenzo.stoakes@oracle.com, jason.andryuk@amd.com,
+ david@redhat.com, graf@amazon.com, wangkefeng.wang@huawei.com,
+ ziy@nvidia.com, mark.rutland@arm.com, dave.hansen@linux.intel.com,
+ samuel.holland@sifive.com, kbingham@kernel.org, trintaeoitogc@gmail.com,
+ scott@os.amperecomputing.com, justinstitt@google.com,
+ kuan-ying.lee@canonical.com, maz@kernel.org, tglx@linutronix.de,
+ samitolvanen@google.com, mhocko@suse.com, nunodasneves@linux.microsoft.com,
+ brgerst@gmail.com, willy@infradead.org, ubizjak@gmail.com,
+ peterz@infradead.org, mingo@redhat.com, sohil.mehta@intel.com,
+ linux-mm@kvack.org, linux-kbuild@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, x86@kernel.org, llvm@lists.linux.dev,
+ kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ada Couprie Diaz <ada.coupriediaz@arm.com>
+References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+From: Ada Couprie Diaz <ada.coupriediaz@arm.com>
+Content-Language: en-US
+Organization: Arm Ltd.
+In-Reply-To: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Yulin,
+Hi,
 
-kernel test robot noticed the following build errors:
+On 12/08/2025 14:23, Maciej Wieczor-Retman wrote:
+> [...]
+> ======= Testing
+> Checked all the kunits for both software tags and generic KASAN after
+> making changes.
+>
+> In generic mode the results were:
+>
+> kasan: pass:59 fail:0 skip:13 total:72
+> Totals: pass:59 fail:0 skip:13 total:72
+> ok 1 kasan
+>
+> and for software tags:
+>
+> kasan: pass:63 fail:0 skip:9 total:72
+> Totals: pass:63 fail:0 skip:9 total:72
+> ok 1 kasan
+I tested the series on arm64 and after fixing the build issues mentioned
+I was able to boot without issues and did not observe any regressions
+in the KASAN KUnit tests with either generic or software tags.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.17-rc2 next-20250820]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So this is Tested-by: Ada Couprie Diaz <ada.coupriediaz@arm.com> (For arm64)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yulin-Lu/dt-bindings-ata-eswin-Document-for-EIC7700-SoC-ahci/20250820-213411
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250819140043.1862-1-luyulin%40eswincomputing.com
-patch subject: [PATCH v2 3/3] phy: eswin: Create eswin directory and add EIC7700 SATA PHY driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250821/202508211623.d8Spdqn7-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508211623.d8Spdqn7-lkp@intel.com/reproduce)
+I will note that the tests `kmalloc_memmove_negative_size` and
+`kmalloc_memmove_invalid_size` seem to be able to corrupt memory
+and lead to kernel crashes if `memmove()` is not properly instrumented,
+which I discovered while investigating [0].
+> [...]
+> ======= Compilation
+> Clang was used to compile the series (make LLVM=1) since gcc doesn't
+> seem to have support for KASAN tag-based compiler instrumentation on
+> x86.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508211623.d8Spdqn7-lkp@intel.com/
+Interestingly, while investigating [0], this comment slipped by me and
+I managed to compile your series for x86 with software tags using GCC,
+though it is a bit hacky.
+You need to update the CC_HAS_KASAN_SW_TAGS to pass `-mlam=u48`
+or `-mlam=u57`, as it is disabled by default, and pass `-march=arrowlake`
+for compilation (the support for software tags depends on the arch).
+You could then test with GCC (though the issue in [0] also applies to x86).
 
-All errors (new ones prefixed by >>):
+Best,
+Ada
 
->> drivers/phy/eswin/phy-eic7700-sata.c:60:8: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      60 |                 if ((readl(base + reg) & checkbit) == status)
-         |                      ^
-   drivers/phy/eswin/phy-eic7700-sata.c:79:8: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      79 |         val = readl(sata_phy->regs + SATA_CLK_CTRL);
-         |               ^
->> drivers/phy/eswin/phy-eic7700-sata.c:81:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      81 |         writel(val, sata_phy->regs + SATA_CLK_CTRL);
-         |         ^
-   drivers/phy/eswin/phy-eic7700-sata.c:119:8: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     119 |         val = readl(sata_phy->regs + SATA_RESET_CTRL);
-         |               ^
-   drivers/phy/eswin/phy-eic7700-sata.c:121:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     121 |         writel(val, sata_phy->regs + SATA_RESET_CTRL);
-         |         ^
-   drivers/phy/eswin/phy-eic7700-sata.c:172:8: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     172 |         val = readl(sata_phy->regs + SATA_CLK_CTRL);
-         |               ^
-   drivers/phy/eswin/phy-eic7700-sata.c:174:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     174 |         writel(val, sata_phy->regs + SATA_CLK_CTRL);
-         |         ^
-   7 errors generated.
+[0]: https://groups.google.com/g/kasan-dev/c/v1PYeoitg88
 
-
-vim +/readl +60 drivers/phy/eswin/phy-eic7700-sata.c
-
-    52	
-    53	static int wait_for_phy_ready(void __iomem *base, u32 reg, u32 checkbit,
-    54				      u32 status)
-    55	{
-    56		unsigned long start = jiffies;
-    57		unsigned long timeout = start + PHY_READY_TIMEOUT;
-    58	
-    59		while (time_before(start, timeout)) {
-  > 60			if ((readl(base + reg) & checkbit) == status)
-    61				return 0;
-    62			usleep_range(50, 70);
-    63		}
-    64	
-    65		return -EFAULT;
-    66	}
-    67	
-    68	static int eic7700_sata_phy_init(struct phy *phy)
-    69	{
-    70		struct eic7700_sata_phy *sata_phy = phy_get_drvdata(phy);
-    71		u32 val = 0;
-    72		int ret = 0;
-    73	
-    74		/*
-    75		 * The SATA_CLK_CTRL register offset controls the pmalive, rxoob,
-    76		 * and rbc clocks gate provided by the PHY through the HSP bus,
-    77		 * and it is not registered in the clock tree.
-    78		 */
-    79		val = readl(sata_phy->regs + SATA_CLK_CTRL);
-    80		val |= SATA_SYS_CLK_EN;
-  > 81		writel(val, sata_phy->regs + SATA_CLK_CTRL);
-    82	
-    83		writel(SATA_CLK_RST_SOURCE_PHY, sata_phy->regs + SATA_REF_CTRL1);
-    84		writel(SATA_P0_AMPLITUDE_GEN1 | SATA_P0_AMPLITUDE_GEN2 |
-    85		       SATA_P0_AMPLITUDE_GEN3, sata_phy->regs + SATA_PHY_CTRL0);
-    86		writel(SATA_P0_PHY_TX_PREEMPH_GEN1 | SATA_P0_PHY_TX_PREEMPH_GEN2 |
-    87		       SATA_P0_PHY_TX_PREEMPH_GEN3, sata_phy->regs + SATA_PHY_CTRL1);
-    88		writel(SATA_LOS_LEVEL | SATA_LOS_BIAS,
-    89		       sata_phy->regs + SATA_LOS_IDEN);
-    90		writel(SATA_M_CSYSREQ | SATA_S_CSYSREQ,
-    91		       sata_phy->regs + SATA_AXI_LP_CTRL);
-    92		writel(SATA_REF_REPEATCLK_EN | SATA_REF_USE_PAD,
-    93		       sata_phy->regs + SATA_REG_CTRL);
-    94		writel(SATA_MPLL_MULTIPLIER, sata_phy->regs + SATA_MPLL_CTRL);
-    95		usleep_range(15, 20);
-    96	
-    97		/*
-    98		 * The SATA_RESET_CTRL register offset controls reset/deassert
-    99		 * for both the port and the PHY through the HSP bus,
-   100		 * and it is not registered in the reset tree.
-   101		 */
-   102		val = readl(sata_phy->regs + SATA_RESET_CTRL);
-   103		val &= ~(SATA_PHY_RESET | SATA_PORT_RESET);
-   104		writel(val, sata_phy->regs + SATA_RESET_CTRL);
-   105	
-   106		ret = wait_for_phy_ready(sata_phy->regs, SATA_P0_PHY_STAT,
-   107					 SATA_P0_PHY_READY, 1);
-   108		if (ret < 0)
-   109			dev_err(&sata_phy->phy->dev,
-   110				"PHY READY check failed\n");
-   111		return ret;
-   112	}
-   113	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ======= Dependencies
+> The base branch for the series is the mainline kernel, tag 6.17-rc1.
+>
+> ======= Enabling LAM for testing
+> Since LASS is needed for LAM and it can't be compiled without it I
+> applied the LASS series [1] first, then applied my patches.
+>
+> [1] https://lore.kernel.org/all/20250707080317.3791624-1-kirill.shutemov@linux.intel.com/
+>
+> Changes v4:
+> - Revert x86 kasan_mem_to_shadow() scheme to the same on used in generic
+>    KASAN. Keep the arithmetic shift idea for the KASAN in general since
+>    it makes more sense for arm64 and in risc-v.
+> - Fix inline mode but leave it unavailable until a complementary
+>    compiler patch can be merged.
+> - Apply Dave Hansen's comments on series formatting, patch style and
+>    code simplifications.
+>
+> Changes v3:
+> - Remove the runtime_const patch and setup a unified offset for both 5
+>    and 4 paging levels.
+> - Add a fix for inline mode on x86 tag-based KASAN. Add a handler for
+>    int3 that is generated on inline tag mismatches.
+> - Fix scripts/gdb/linux/kasan.py so the new signed mem_to_shadow() is
+>    reflected there.
+> - Fix Documentation/arch/arm64/kasan-offsets.sh to take new offsets into
+>    account.
+> - Made changes to the kasan_non_canonical_hook() according to upstream
+>    discussion.
+> - Remove patches 2 and 3 since they related to risc-v and this series
+>    adds only x86 related things.
+> - Reorder __tag_*() functions so they're before arch_kasan_*(). Remove
+>    CONFIG_KASAN condition from __tag_set().
+>
+> Changes v2:
+> - Split the series into one adding KASAN tag-based mode (this one) and
+>    another one that adds the dense mode to KASAN (will post later).
+> - Removed exporting kasan_poison() and used a wrapper instead in
+>    kasan_init_64.c
+> - Prepended series with 4 patches from the risc-v series and applied
+>    review comments to the first patch as the rest already are reviewed.
+>
+> Maciej Wieczor-Retman (16):
+>    kasan: Fix inline mode for x86 tag-based mode
+>    x86: Add arch specific kasan functions
+>    kasan: arm64: x86: Make special tags arch specific
+>    x86: Reset tag for virtual to physical address conversions
+>    mm: x86: Untag addresses in EXECMEM_ROX related pointer arithmetic
+>    x86: Physical address comparisons in fill_p*d/pte
+>    x86: KASAN raw shadow memory PTE init
+>    x86: LAM compatible non-canonical definition
+>    x86: LAM initialization
+>    x86: Minimal SLAB alignment
+>    kasan: arm64: x86: Handle int3 for inline KASAN reports
+>    kasan: x86: Apply multishot to the inline report handler
+>    kasan: x86: Logical bit shift for kasan_mem_to_shadow
+>    mm: Unpoison pcpu chunks with base address tag
+>    mm: Unpoison vms[area] addresses with a common tag
+>    x86: Make software tag-based kasan available
+>
+> Samuel Holland (2):
+>    kasan: sw_tags: Use arithmetic shift for shadow computation
+>    kasan: sw_tags: Support tag widths less than 8 bits
+>
+>   Documentation/arch/arm64/kasan-offsets.sh |  8 ++-
+>   Documentation/arch/x86/x86_64/mm.rst      |  6 +-
+>   MAINTAINERS                               |  4 +-
+>   arch/arm64/Kconfig                        | 10 ++--
+>   arch/arm64/include/asm/kasan-tags.h       |  9 +++
+>   arch/arm64/include/asm/kasan.h            |  6 +-
+>   arch/arm64/include/asm/memory.h           | 14 ++++-
+>   arch/arm64/include/asm/uaccess.h          |  1 +
+>   arch/arm64/kernel/traps.c                 | 17 +-----
+>   arch/arm64/mm/kasan_init.c                |  7 ++-
+>   arch/x86/Kconfig                          |  4 +-
+>   arch/x86/boot/compressed/misc.h           |  1 +
+>   arch/x86/include/asm/cache.h              |  4 ++
+>   arch/x86/include/asm/kasan-tags.h         |  9 +++
+>   arch/x86/include/asm/kasan.h              | 71 ++++++++++++++++++++++-
+>   arch/x86/include/asm/page.h               | 24 +++++++-
+>   arch/x86/include/asm/page_64.h            |  2 +-
+>   arch/x86/kernel/alternative.c             |  4 +-
+>   arch/x86/kernel/head_64.S                 |  3 +
+>   arch/x86/kernel/setup.c                   |  2 +
+>   arch/x86/kernel/traps.c                   |  4 ++
+>   arch/x86/mm/Makefile                      |  2 +
+>   arch/x86/mm/init.c                        |  3 +
+>   arch/x86/mm/init_64.c                     | 11 ++--
+>   arch/x86/mm/kasan_init_64.c               | 19 +++++-
+>   arch/x86/mm/kasan_inline.c                | 26 +++++++++
+>   arch/x86/mm/pat/set_memory.c              |  1 +
+>   arch/x86/mm/physaddr.c                    |  1 +
+>   include/linux/kasan-tags.h                | 21 +++++--
+>   include/linux/kasan.h                     | 51 +++++++++++++++-
+>   include/linux/mm.h                        |  6 +-
+>   include/linux/mmzone.h                    |  1 -
+>   include/linux/page-flags-layout.h         |  9 +--
+>   lib/Kconfig.kasan                         |  3 +-
+>   mm/execmem.c                              |  4 +-
+>   mm/kasan/hw_tags.c                        | 11 ++++
+>   mm/kasan/report.c                         | 45 ++++++++++++--
+>   mm/kasan/shadow.c                         | 18 ++++++
+>   mm/vmalloc.c                              |  8 +--
+>   scripts/Makefile.kasan                    |  3 +
+>   scripts/gdb/linux/kasan.py                |  5 +-
+>   scripts/gdb/linux/mm.py                   |  5 +-
+>   42 files changed, 381 insertions(+), 82 deletions(-)
+>   mode change 100644 => 100755 Documentation/arch/arm64/kasan-offsets.sh
+>   create mode 100644 arch/arm64/include/asm/kasan-tags.h
+>   create mode 100644 arch/x86/include/asm/kasan-tags.h
+>   create mode 100644 arch/x86/mm/kasan_inline.c
+>
