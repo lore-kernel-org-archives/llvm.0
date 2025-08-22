@@ -1,39 +1,38 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C322F285CBA;
-	Fri, 22 Aug 2025 10:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from smtpout2.mo533.mail-out.ovh.net (smtpout2.mo533.mail-out.ovh.net [51.210.94.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D9121C17D
+	for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 11:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.210.94.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755858037; cv=none; b=WWaYJAREyoRO/VLOzEGreYFQF66qe5kQFA15YI6n9LCm6hHZkIxk04GJ3Y++EJtEcK7wRSGxiConU8pqkyqrLYykHrB6tlhjv0WDoZ8sWHsLkQkmc9/GGRzg0QBxffSjYnzgFWZkau6FJk+e6gPn9gpVTZZ5RJq5X3Gh+np40N0=
+	t=1755861413; cv=none; b=Z24e34ASSfWuVGIZ7xKXZ33NnT4KE7suRgv4Ge8szQpP526lr7bU6P49tW/uqWDZ5uZbPn7Qnn4l/vDr8WTRdOvkWNqMXrP6gMwP+3kWocviWuK84R7BVSTJvqZGt6p1KEBeQQ8Y8EI87obyNRNSgv0hDrIXJ+f09PziqQvjFj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755858037; c=relaxed/simple;
-	bh=rzGxnwCJtieGgdp0m86s2BNd6Pc/bNxGGpfjRDdO6qM=;
+	s=arc-20240116; t=1755861413; c=relaxed/simple;
+	bh=Ryaxrw4eT3nAdUGPXwQzb7ucMxWAqtq5xPrHy63u2ec=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WHiR0OVw0shtnJ/rWLzmZFzhbNSTrcxfTLiKRsrzS47dEmcOslA3XMfaVN3R5r+OVYA8GcvgxK/R39wH5mv6o+aytccdlvoKboPNIcUWXfzK9q+RXq6Hv1DxE3CMwuO2M8+oYFI02LBAFb3Sn95pWAM7VJPRyHzZMHb+Kt9nQuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4c7bMB03M7z9sSq;
-	Fri, 22 Aug 2025 12:01:58 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y_ks77h51LJ0; Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4c7bM96P6yz9sSp;
-	Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id C1B9A8B77E;
-	Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id xG2Hu46FC68E; Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 29CC98B763;
-	Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
-Message-ID: <285e1504-a25a-452d-958e-9db3963a02cb@csgroup.eu>
-Date: Fri, 22 Aug 2025 12:01:57 +0200
+	 In-Reply-To:Content-Type; b=ADJltnAuDBVnSfvzeY/GE+21BEeCYFeDnuedH/NmuOag5eZHVZxZayIbB8kWahCUZ/Ryf9rdCObYYRmjOIE5YVJr/95e/umho6+rECkI3rISiU3vwGONi0GERQ/48Eug/UtEtdtSWnL2FiLpoqtDjGqfXYoHvywNQZFcRqhRAco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orca.pet; spf=pass smtp.mailfrom=orca.pet; dkim=pass (2048-bit key) header.d=orca.pet header.i=@orca.pet header.b=dAUXjV4n; arc=none smtp.client-ip=51.210.94.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orca.pet
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=orca.pet
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=orca.pet header.i=@orca.pet header.b="dAUXjV4n"
+Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net [79.137.60.37])
+	by mo533.mail-out.ovh.net (Postfix) with ESMTPS id 4c7cvB1LFjz5vst;
+	Fri, 22 Aug 2025 11:11:18 +0000 (UTC)
+Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net. [127.0.0.1])
+        by director4.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+        for <brgl@bgdev.pl>; Fri, 22 Aug 2025 11:11:18 +0000 (UTC)
+Received: from mta11.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.37.33])
+	by director4.derp.mail-out.ovh.net (Postfix) with ESMTPS id 4c7cv971Cdz1xpF;
+	Fri, 22 Aug 2025 11:11:17 +0000 (UTC)
+Received: from orca.pet (unknown [10.1.6.10])
+	by mta11.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id 2C90F9A32F1;
+	Fri, 22 Aug 2025 11:11:16 +0000 (UTC)
+Authentication-Results:garm.ovh; auth=pass (GARM-109S00348983bfb-2252-412c-9c76-f625bcf17fb6,
+                    ADC0680FE15BB91110492B9A34CE42AA242C155A) smtp.auth=marcos@orca.pet
+X-OVh-ClientIp:79.117.22.109
+Message-ID: <26b90664-ac3d-4eac-b082-4ddb6297dd00@orca.pet>
+Date: Fri, 22 Aug 2025 13:11:16 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,63 +40,82 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/12] powerpc: Drop unnecessary initializations in
- __copy_inst_from_kernel_nofault()
-To: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- linuxppc-dev@lists.ozlabs.org
-References: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
- <20250821-bump-min-llvm-ver-15-v2-6-635f3294e5f0@kernel.org>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <20250821-bump-min-llvm-ver-15-v2-6-635f3294e5f0@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v3 1/3] gpio: gpio-regmap: add flags to control some
+ behaviour
+To: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Michael Walle <mwalle@kernel.org>,
+ Lee Jones <lee@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+ linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20250821101902.626329-2-marcos@orca.pet>
+ <202508221142.ETxcEpjA-lkp@intel.com>
+Content-Language: es-ES
+From: Marcos Del Sol Vives <marcos@orca.pet>
+In-Reply-To: <202508221142.ETxcEpjA-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 5788814372848948838
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieefiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeforghrtghoshcuffgvlhcuufholhcugghivhgvshcuoehmrghrtghoshesohhrtggrrdhpvghtqeenucggtffrrghtthgvrhhnpeetieeiteffgfffffeuudfgueeugfdtffeuueehtefhhfehhffffeeukeeivdeffeenucffohhmrghinhepghhithdqshgtmhdrtghomhdpghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdptddurdhorhhgnecukfhppeduvdejrddtrddtrddupdejledruddujedrvddvrddutdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehmrghrtghoshesohhrtggrrdhpvghtpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopegsrhhglhessghguggvvhdrphhlpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmfigrlhhlvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhushdrfi
+ grlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohgvqdhksghuihhlugdqrghllheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhgphhiohesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+DKIM-Signature: a=rsa-sha256; bh=ooMiXhCtrpCJThxBkirXE/4Y5yuLSDN6OaDBZRlDF4E=;
+ c=relaxed/relaxed; d=orca.pet; h=From; s=ovhmo-selector-1; t=1755861078;
+ v=1;
+ b=dAUXjV4nXWjdCZe1KhXGKwDw8WbdNMlQabWe+tKmIGab50WLwSitojB1+6BLEQQmKZZvOknP
+ FlukwtYeAgZYIXauIhtXOYCBvouGGbgf8/MZTLr83Y/3hw1D42HwMiBOZA0IbW9xpZLvudS2CZX
+ HZ5/gCqUNd44sutWfMsprs0nCVkazjNG7T2Wd5CDD8oSP5MNGSgIMGh3XtSS60AUSyAU/KLdfyR
+ Eg5bgSmB0Tiu8rhyzdoacOB0m8jnq4w3TYHIXxfJReI1tIU8/ZgiC9ZVeR/WUsYXL1y/NMmPznQ
+ 2mPwpfSTnxZAQ9LFlN7+p9HkI1y1Z6/6Ob97EwcQzKZZA==
 
-
-
-Le 21/08/2025 à 23:15, Nathan Chancellor a écrit :
-> Now that the minimum supported version of LLVM for building the kernel
-> has been bumped to 15.0.0, the zero initializations of val and suffix
-> added by commit 0d76914a4c99 ("powerpc/inst: Optimise
-> copy_inst_from_kernel_nofault()") to avoid a bogus case of
-> -Wuninitialized can be dropped because the preprocessor condition is
-> always false.
+El 22/08/2025 a las 5:27, kernel test robot escribió:
+> Hi Marcos,
 > 
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-> ---
-> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> ---
->   arch/powerpc/include/asm/inst.h | 4 ----
->   1 file changed, 4 deletions(-)
+> kernel test robot noticed the following build errors:
 > 
-> diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/inst.h
-> index 684d3f453282..ffa82167c860 100644
-> --- a/arch/powerpc/include/asm/inst.h
-> +++ b/arch/powerpc/include/asm/inst.h
-> @@ -143,10 +143,6 @@ static inline int __copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
->   {
->   	unsigned int val, suffix;
->   
-> -/* See https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FClangBuiltLinux%2Flinux%2Fissues%2F1521&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C23038335822b4dbe2adc08dde0f7f50e%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638914077769007882%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=EfgIB7nIdCB2e3KWeEvsXKG%2B8LrK%2FjpUrA4RIeMcreo%3D&reserved=0 */
-> -#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 140000
-> -	val = suffix = 0;
-> -#endif
->   	__get_kernel_nofault(&val, src, u32, Efault);
->   	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
->   		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> [auto build test ERROR on brgl/gpio/for-next]
+> [also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes pci/next pci/for-linus linus/master v6.17-rc2 next-20250821]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-
+> url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Del-Sol-Vives/gpio-gpio-regmap-add-flags-to-control-some-behaviour/20250821-182416
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+> patch link:    https://lore.kernel.org/r/20250821101902.626329-2-marcos%40orca.pet
+> patch subject: [PATCH v3 1/3] gpio: gpio-regmap: add flags to control some behaviour
+> config: x86_64-buildonly-randconfig-001-20250822 (https://download.01.org/0day-ci/archive/20250822/202508221142.ETxcEpjA-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508221142.ETxcEpjA-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202508221142.ETxcEpjA-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/gpio/gpio-fxl6408.c:11:
+>>> include/linux/gpio/regmap.h:26:31: error: call to undeclared function 'BIT'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>       26 |         GPIO_REGMAP_DIR_BEFORE_SET      = BIT(0),
+>          |                                           ^
+>>> include/linux/gpio/regmap.h:26:31: error: expression is not an integer constant expression
+>       26 |         GPIO_REGMAP_DIR_BEFORE_SET      = BIT(0),
+>          |                                           ^~~~~~
+>    In file included from drivers/gpio/gpio-fxl6408.c:12:
+>    In file included from include/linux/i2c.h:13:
+>    In file included from include/linux/acpi.h:14:
+>    In file included from include/linux/device.h:32:
+>    In file included from include/linux/device/driver.h:21:
+>    In file included from include/linux/module.h:20:
+>    In file included from include/linux/elf.h:6:
+>    In file included from arch/x86/include/asm/elf.h:10:
+>    In file included from arch/x86/include/asm/ia32.h:7:
+>    In file included from include/linux/compat.h:17:
+>    In file included from include/linux/fs.h:34:
+>    In file included from include/linux/percpu-rwsem.h:7:
+>    In file included from include/linux/rcuwait.h:6:
+>    In file included from include/linux/sched/signal.h:6:
+>    include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+This is correct, thanks. I added a missing "#include <linux/bits.h>" to
+fix it. Will be in a v4 of the patch set.
