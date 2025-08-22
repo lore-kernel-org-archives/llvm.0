@@ -1,177 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79FD2367DF;
-	Fri, 22 Aug 2025 15:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AE028751F
+	for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 16:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755878089; cv=none; b=Z12VqAWStGJHvi8l75KmpaCcKESecRthOy53bA5plF4IIwmw0QYjDetkZqI1xm9ze4RjyBjsDfIUQtsoRyNyRjiPkD72y45U5ORdCOmBnwHwrcTbTSWgPCw2okfTjYXzwEE86Wzi6aTtPC1xuMIeRCXlMlvI7Rs/e+DfdlV669Q=
+	t=1755880391; cv=none; b=TQYCy4pgMW/nNQ2y3StirJuNyh5CpWSdN93PVNqN67Kve4htKpZ8Pcw5P88hgmQ9+brjaTha7a0awof0ov04UrcwE7VtzqRRinfbS2PEl863RtzoJuPOeZpCGUu4teovfNcBm6/9xBj4lhFmKVHlVCRWrsVB0uWdqM+DHkSHkMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755878089; c=relaxed/simple;
-	bh=5CpJwtN4YU5k7r9j3IGFBd2WOJPPnufcGTcQczlLJ9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hIlBEtdavTvPmc5ao9pWCNay0j74SBmgh8WmkL++IWOWpAbggzOkAnZBlVn+Adq/d4mI5QbM6u0IM68kkY5j5urL/x3Izcx+kdJJJo49O4tmrJ530oN86DExtGOnLNn5ZJeJwF8VDi5qOJEMbi23EqbTFr7nKAOaCt+2St1NM28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpGC63Vt; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755880391; c=relaxed/simple;
+	bh=1Sj7/DPjj+ty126Tnij9QlaIDEzyvJjZ/CT777R/TOs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=h4QF3PcSZBX6q8Vs68nbTnoBhDU4sa1Vma7crwu3/uHyOKPhSweO95vEjqnfoAxMMNoruL6iww4jpPiXQfDhQGAPjGlIx9H6FpWomx0B+6itasVEZda/byWk7LI8sTNJDzKN6pRF+udSWoW5PHSVXObh2dI/PCbtbP+3jwbxyHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PE6yROCi; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpGC63Vt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755878088; x=1787414088;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5CpJwtN4YU5k7r9j3IGFBd2WOJPPnufcGTcQczlLJ9I=;
-  b=bpGC63Vt+pd+y1AmDD00O7WQqQ9inJQwnikOeJUi2fpXp6mmFCJM026e
-   u8nWzyLdooBV0tzBGJAYm3BBHvrDRRFo0gROvPFy6Z0bR9bxeDITJSUAx
-   41fc+pD6IAaxmZJxb5p/ZGy239+KuTZxm4nbtKv2DvsjzhtN3N+LfgopY
-   JHSjs2bqcrO/ROiVbUBflIhqJ6b4s+PNAZK0HWB/Q8Uc7xbGShNF3SR6v
-   bMNeZmUBFSrL4cmCBDJX6xwnzxd/BOzNqb9jzAbPETZBIgCpnP7maaI3t
-   bYtsZ5XE5zUHsPWMAxD51Lj9aGdBLwla0dplqsnK88Zf2N82BadHaDf8C
-   Q==;
-X-CSE-ConnectionGUID: Gm7WULEVT8S3RYOfktzIRQ==
-X-CSE-MsgGUID: c0C0tblnT76jMyAONZxQaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="75772700"
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="75772700"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 08:54:45 -0700
-X-CSE-ConnectionGUID: 5XhtKKiRRh65vNnD+8r4dg==
-X-CSE-MsgGUID: T79+0M6mTB2gSjfwwlp2sw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="199620288"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Aug 2025 08:54:44 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1upU6D-000LUr-1f;
-	Fri, 22 Aug 2025 15:54:41 +0000
-Date: Fri, 22 Aug 2025 23:53:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ethan Ferguson <ethan.ferguson@zetier.com>, linkinjeon@kernel.org,
-	sj1557.seo@samsung.com, yuezhang.mo@sony.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ethan Ferguson <ethan.ferguson@zetier.com>
-Subject: Re: [PATCH v3 1/1] exfat: Add support for FS_IOC_{GET,SET}FSLABEL
-Message-ID: <202508222315.aWhqo6ik-lkp@intel.com>
-References: <20250821150926.1025302-2-ethan.ferguson@zetier.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PE6yROCi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755880388;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9B8yYCevCV9/rb1yuNkbjcGtbLDJCrInvPfd7b9F/LY=;
+	b=PE6yROCiS97iEv2ebai4/0RdfGBolzubPZdKyWAJVuFaNA8M8oj6HOGq+EhWvaheb2zzxN
+	WkUievRYafwV+vWG+B2rpH2cFwmw4sD10N0AU+RiEaY9qAXLUDYh3MKr7J3I6lywyKqrmf
+	4zIeqWwY/JNYuAjJX2uuACDlq9kpu+g=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-397-VdEMvQAxOpOnkUQSj4FZOQ-1; Fri,
+ 22 Aug 2025 12:33:06 -0400
+X-MC-Unique: VdEMvQAxOpOnkUQSj4FZOQ-1
+X-Mimecast-MFC-AGG-ID: VdEMvQAxOpOnkUQSj4FZOQ_1755880385
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8BED31956087
+	for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 16:33:05 +0000 (UTC)
+Received: from [172.20.48.110] (unknown [10.30.45.91])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 237B118003FC;
+	Fri, 22 Aug 2025 16:33:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc2,
+ upstream-mainline, cf6fc5ee)
+Date: Fri, 22 Aug 2025 16:33:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821150926.1025302-2-ethan.ferguson@zetier.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <09396.125082212330610268@us-mta-397.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: LQf5xJ25NT8lpLuqEu92Ua0mFD5-yW43AGlH7EGsZzE_1755880385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ethan,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on linus/master v6.17-rc2 next-20250822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ethan-Ferguson/exfat-Add-support-for-FS_IOC_-GET-SET-FSLABEL/20250821-231649
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250821150926.1025302-2-ethan.ferguson%40zetier.com
-patch subject: [PATCH v3 1/1] exfat: Add support for FS_IOC_{GET,SET}FSLABEL
-config: s390-randconfig-001-20250822 (https://download.01.org/0day-ci/archive/20250822/202508222315.aWhqo6ik-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d26ea02060b1c9db751d188b2edb0059a9eb273d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508222315.aWhqo6ik-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508222315.aWhqo6ik-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from <built-in>:3:
-   In file included from include/linux/compiler_types.h:171:
-   include/linux/compiler-clang.h:37:9: warning: '__SANITIZE_THREAD__' macro redefined [-Wmacro-redefined]
-      37 | #define __SANITIZE_THREAD__
-         |         ^
-   <built-in>:368:9: note: previous definition is here
-     368 | #define __SANITIZE_THREAD__ 1
-         |         ^
->> fs/exfat/super.c:727:6: warning: variable 'bh' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     727 |         if (uniname->name_len > EXFAT_VOLUME_LABEL_LEN) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/exfat/super.c:757:6: note: uninitialized use occurs here
-     757 |         if (bh) {
-         |             ^~
-   fs/exfat/super.c:727:2: note: remove the 'if' if its condition is always false
-     727 |         if (uniname->name_len > EXFAT_VOLUME_LABEL_LEN) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     728 |                 ret = -EINVAL;
-         |                 ~~~~~~~~~~~~~~
-     729 |                 goto cleanup;
-         |                 ~~~~~~~~~~~~~
-     730 |         }
-         |         ~
-   fs/exfat/super.c:724:24: note: initialize the variable 'bh' to silence this warning
-     724 |         struct buffer_head *bh;
-         |                               ^
-         |                                = NULL
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +727 fs/exfat/super.c
+Kernel information:
+    Commit message: Merge tag 's390-6.17-3' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/s390/linux
 
-   718	
-   719	int exfat_write_volume_label(struct super_block *sb,
-   720				     struct exfat_uni_name *uniname)
-   721	{
-   722		int ret, i;
-   723		struct exfat_sb_info *sbi = EXFAT_SB(sb);
-   724		struct buffer_head *bh;
-   725		struct exfat_dentry *ep;
-   726	
- > 727		if (uniname->name_len > EXFAT_VOLUME_LABEL_LEN) {
-   728			ret = -EINVAL;
-   729			goto cleanup;
-   730		}
-   731	
-   732		ret = exfat_get_volume_label_ptrs(sb, &bh, &ep, true);
-   733		if (ret < 0)
-   734			goto cleanup;
-   735	
-   736		ret = exfat_alloc_volume_label(sb);
-   737		if (ret < 0)
-   738			goto cleanup;
-   739	
-   740		memcpy(sbi->volume_label, uniname->name,
-   741		       uniname->name_len * sizeof(short));
-   742	
-   743		mutex_lock(&sbi->s_lock);
-   744		for (i = 0; i < uniname->name_len; i++)
-   745			ep->dentry.volume_label.volume_label[i] =
-   746				cpu_to_le16(sbi->volume_label[i]);
-   747		// Fill the rest of the str with 0x0000
-   748		for (; i < EXFAT_VOLUME_LABEL_LEN; i++)
-   749			ep->dentry.volume_label.volume_label[i] = 0x0000;
-   750	
-   751		ep->dentry.volume_label.char_count = uniname->name_len;
-   752		mutex_unlock(&sbi->s_lock);
-   753	
-   754		ret = 0;
-   755	
-   756	cleanup:
-   757		if (bh) {
-   758			exfat_update_bh(bh, true);
-   759			brelse(bh);
-   760		}
-   761	
-   762		return ret;
-   763	}
-   764	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1998883271
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1998883271_aarch64_kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1998883271_x86_64_kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1998883271_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
