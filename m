@@ -1,47 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDD82E2DEF;
-	Fri, 22 Aug 2025 05:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34FB1F4289;
+	Fri, 22 Aug 2025 06:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755842081; cv=none; b=sY/MDvGDn1o66GMyHMyOAeMXGnviLHvRLRy+xvm/S62at5gsCk2rQmFtN2uTsmlS71+jXt/nLV8Oo4oxFBGTRqNKJNkOXJ6pSK2hMGORdPiIA8Nqny/fZzYZHgz1n5swxrKBzTGLAx2/cGgFFFi6Q35e/rBGg4ARTG6Ky1TJFtM=
+	t=1755842563; cv=none; b=GHo1jP2/iT1AToKE0EYD1UhIYhzBM7Gp7SpxkiCe8r+y1YwvJbT9vgsNETJxyolRjZo4dH/cZ2xUfH0vc2goABTIjF187A5a9G6PX0Bd3tLgQ5fpQSvIP3TVD2TOzaYUCUzGtY3mQXWVi8VnAO6huuYVMbcpw6Vj3jWn1WYK5y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755842081; c=relaxed/simple;
-	bh=2tPcGfaM9fCEwka0ObLPD13Jx+z47kuisz3Emc4w6xw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PaWwpQbqIVoWfQsVTSBlvXJO9tikZ9C3NGwXe5TWIt7bLFTMOXUZaWdxdmsnwu/zsN5aSqoCOtJpt9hZige1ydDxXfjhsZKHBvQD1w6jd/YrKT7z0vECmKEivmQA+txospgNHvgCMbQX+2BjusNtF57ChunDcilpYbPatb+0njk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BALTpbRI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755842563; c=relaxed/simple;
+	bh=+NPqbdv38fetVrn0lDnin2z6y3GhqtfzToIRn6eO6pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XCS2i5P35bFcLRAcvoP4ArcsTFbJK4Sypfx/65PsCA0bC/k/j3GGs5PKeZj1FG8icTYLGjr3m9zBdlawhIktUVO8gTFuzOZuhK7eS+zVoIV7oik+KPjfyIA+rdrBSB6intBuhcf26/lqi6+s6LY22hxvvE5aiqYXf7P4RhwaCVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lMQq3keO; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BALTpbRI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24A7C4CEF1;
-	Fri, 22 Aug 2025 05:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755842081;
-	bh=2tPcGfaM9fCEwka0ObLPD13Jx+z47kuisz3Emc4w6xw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BALTpbRISpGpz7f9L+iMxDqhbRXo+WEArVF+If32LVKoLo9g1XGL7T6MEwr6Nir4A
-	 U1RLLNsCiXjyVn5PsScryWng/UsqdS1yaluv95zbxPd+E3h9mEcib97pt7lU5mP3Tf
-	 sEoEHAup6UQZ3wFig68QpIntp0PO95oZbgq6qUJdwrJC8nxcPSiJyHwmPrl5okW5UR
-	 yp9w7LZzfEutso9xFz2djU61/c8wD9Ncqq9AmzhwF+PkqT9IZ5aKYlBfRhnGu28+Tp
-	 5v2ByFvQuIYoslZlpKtrhKVW1XH/K4w5B0Q6K/3cDdAFQ+TNj832aGAMSjL9dYjk3D
-	 JU9Sivey4NMNw==
-Date: Fri, 22 Aug 2025 08:54:32 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Bill Wendling <morbo@google.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 0/4] mm/mm_init: simplify deferred init of struct pages
-Message-ID: <aKgGGLEcLEKEHt0Q@kernel.org>
-References: <20250818064615.505641-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lMQq3keO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755842562; x=1787378562;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+NPqbdv38fetVrn0lDnin2z6y3GhqtfzToIRn6eO6pc=;
+  b=lMQq3keOB6sGC6lGEsu+qr2bksuFF3isFmzz9GWQ9uKfA27eD3v1xz7L
+   m9Pbx9wFKnG2nB+79k6UohKXevJmAJBqNJKrFRROlzs0FMrZ2xrj6T56F
+   QYYnHOSWDBivRV0Iw66VLCXYkgG3aVd41DTJyNbeftUXOHDvOE4BH2CFi
+   cKZjAqAheIySnvYVbzjSMGEEn0nrV1ITMrArW+ZHrXKjUitl0pAMc0Kb/
+   Qu8Sl7QqI+8kqckcwUv/KDyc3Yra4nN/RcRSPq7E/zoOJ5g2071wqqV9T
+   +YmhoYeXUfad9uWzkqFnJP//EFhkzlQs87fkCjh0QYwGJwlWSa+342cyc
+   A==;
+X-CSE-ConnectionGUID: 8EjGPnJARqeugSHFCxzdrQ==
+X-CSE-MsgGUID: K0dxM/myRl2Liw2p0K3j9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="69516641"
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="69516641"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 23:01:54 -0700
+X-CSE-ConnectionGUID: VIbIxPTvSBueLCake4V/uw==
+X-CSE-MsgGUID: 1++NJTM+TDmp3YHWP1j9cA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="169440821"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 21 Aug 2025 23:01:52 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1upKq8-000KxP-0Y;
+	Fri, 22 Aug 2025 06:01:44 +0000
+Date: Fri, 22 Aug 2025 14:01:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jirislaby:devel 47/48] Warning:
+ drivers/tty/serial/8250/8250_core.c:577 function parameter 'up' not
+ described in 'serial8250_suspend_port'
+Message-ID: <202508221357.BFL3PhpS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,44 +62,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250818064615.505641-1-rppt@kernel.org>
 
-On Mon, Aug 18, 2025 at 09:46:11AM +0300, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Hi,
-> 
-> These patches simplify deferred initialization of the memory map.
-> 
-> Beside nice negative diffstat I measured 3ms reduction in the
-> initialization of deferred pages on single node system with 64GiB of RAM.
-> 
-> I don't have access to large memory machines, so I'd really appreciate
-> testing of these patches on them to make sure there's no regression there.
-> 
-> The patches are also available at git:
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=deferred-memmap-init/v1
-> 
-> Mike Rapoport (Microsoft) (4):
->   mm/mm_init: use deferred_init_memmap_chunk() in deferred_grow_zone()
->   mm/mm_init: deferred_init_memmap: use a job per zone
->   mm/mm_init: drop deferred_init_maxorder()
->   memblock: drop for_each_free_mem_pfn_range_in_zone_from()
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   0926f0595441527a1b067314368d6b4afd949a09
+commit: 07e7f9e30917ad531ded38bc825a161b2561a765 [47/48] serial8250 port operations work on struct uart_8250_port
+config: x86_64-buildonly-randconfig-003-20250822 (https://download.01.org/0day-ci/archive/20250822/202508221357.BFL3PhpS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508221357.BFL3PhpS-lkp@intel.com/reproduce)
 
-I've added those to memblock tree
- 
->  .clang-format            |   1 -
->  include/linux/memblock.h |  22 -----
->  mm/memblock.c            |  64 -------------
->  mm/mm_init.c             | 195 +++++++++++++--------------------------
->  4 files changed, 62 insertions(+), 220 deletions(-)
-> 
-> 
-> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-> -- 
-> 2.50.1
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508221357.BFL3PhpS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/tty/serial/8250/8250_core.c:577 function parameter 'up' not described in 'serial8250_suspend_port'
+>> Warning: drivers/tty/serial/8250/8250_core.c:600 function parameter 'up' not described in 'serial8250_resume_port'
 
 -- 
-Sincerely yours,
-Mike.
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
