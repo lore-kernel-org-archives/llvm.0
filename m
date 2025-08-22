@@ -1,40 +1,39 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FE2278E67
-	for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 10:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C322F285CBA;
+	Fri, 22 Aug 2025 10:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755856843; cv=none; b=P+kSV5TkPd6MBpzWcIfu1fHeJ0AbQ5CwBAqLvXDUfHPceG5znFvvIwz8+hCg1y9CDUu8qdl5lPFxgKFynbzxxJuDFLaXNz3G9FwBnnwUxY6slwhjxgRKT1n4dyBm6rvb48uodQwizkc6pm0oeHH/C7WPL8pmJCjQIyx7jYLMF3s=
+	t=1755858037; cv=none; b=WWaYJAREyoRO/VLOzEGreYFQF66qe5kQFA15YI6n9LCm6hHZkIxk04GJ3Y++EJtEcK7wRSGxiConU8pqkyqrLYykHrB6tlhjv0WDoZ8sWHsLkQkmc9/GGRzg0QBxffSjYnzgFWZkau6FJk+e6gPn9gpVTZZ5RJq5X3Gh+np40N0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755856843; c=relaxed/simple;
-	bh=KX1whVnGIXfAaXHzOtQ9m6c964Ll60XPU3DshLpZbNw=;
+	s=arc-20240116; t=1755858037; c=relaxed/simple;
+	bh=rzGxnwCJtieGgdp0m86s2BNd6Pc/bNxGGpfjRDdO6qM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ouGpIrV71/rdFmVBvOyRlvKrX67foMQIlPZbvFA8VO5vVC5A+mzlgrm6rOA2KujAQkJl12GSe6S0P6DRT2+8fVm3QMNO04Bi9E5cDvE+sQhZYi8Syrn7Uwmk1TyPH5bp/vJ33sL9R0cVa3lL3va8KPkWwt3BOsOa75pyFeduoME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ItRoWf+n; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ItRoWf+n"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 8A5264E408EA;
-	Fri, 22 Aug 2025 10:00:38 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5D6EC604AD;
-	Fri, 22 Aug 2025 10:00:38 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A5F881C228674;
-	Fri, 22 Aug 2025 12:00:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1755856837; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=Cwcx/LLJrt6Uufc15KwGlNwi/lfz0dnv+k38+ZDJcSY=;
-	b=ItRoWf+nQG+M1Lwn65p6sSiFvXticGD8sE6THoM6h5mfmlo7E4wkegkFFkjxRCAwAkUCfN
-	CQa8DEr0JLLoRNie6KJNmW9nX6t2FXMO7cWRWiu7TmZWDWavLcFL99MzRh5mVdLp26oxws
-	C9vjARs1PMfQLc6AmBRwRkYJ4YTgskKbs3sbcaYVN06Mh/N9p8I9yxpwIFJfHi9mqNsWP4
-	18bAYde0DtCt+xGLSjy5vDV+JEj2lrOGb1w7yV5ulK7qARF24SNN36deyBEyb30HsmSpTI
-	kMOFKyjteZTcNTPx4CN4LktKK88tP+2UqH31hIPWUahG+5E3gXtULCLf/hUtKQ==
-Message-ID: <fb499f87-141b-4098-9011-37ec273a07dd@bootlin.com>
-Date: Fri, 22 Aug 2025 11:59:57 +0200
+	 In-Reply-To:Content-Type; b=WHiR0OVw0shtnJ/rWLzmZFzhbNSTrcxfTLiKRsrzS47dEmcOslA3XMfaVN3R5r+OVYA8GcvgxK/R39wH5mv6o+aytccdlvoKboPNIcUWXfzK9q+RXq6Hv1DxE3CMwuO2M8+oYFI02LBAFb3Sn95pWAM7VJPRyHzZMHb+Kt9nQuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4c7bMB03M7z9sSq;
+	Fri, 22 Aug 2025 12:01:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id y_ks77h51LJ0; Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4c7bM96P6yz9sSp;
+	Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C1B9A8B77E;
+	Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id xG2Hu46FC68E; Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 29CC98B763;
+	Fri, 22 Aug 2025 12:01:57 +0200 (CEST)
+Message-ID: <285e1504-a25a-452d-958e-9db3963a02cb@csgroup.eu>
+Date: Fri, 22 Aug 2025 12:01:57 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,73 +41,63 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 08/16] net: phy: Introduce generic SFP
- handling for PHY drivers
-To: kernel test robot <lkp@intel.com>, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, thomas.petazzoni@bootlin.com,
- Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Herve Codina <herve.codina@bootlin.com>,
- Florian Fainelli <f.fainelli@gmail.com>,
- Heiner Kallweit <hkallweit1@gmail.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>,
- =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- Oleksij Rempel <o.rempel@pengutronix.de>,
- =?UTF-8?Q?Nicol=C3=B2_Veronese?= <nicveronese@gmail.com>,
- Simon Horman <horms@kernel.org>, mwojtas@chromium.org,
- Antoine Tenart <atenart@kernel.org>, devicetree@vger.kernel.org,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
- Rob Herring <robh@kernel.org>, Romain Gantois <romain.gantois@bootlin.com>,
- Daniel Golle <daniel@makrotopia.org>
-References: <20250814135832.174911-9-maxime.chevallier@bootlin.com>
- <202508151058.jqJsn9VB-lkp@intel.com>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <202508151058.jqJsn9VB-lkp@intel.com>
+Subject: Re: [PATCH v2 06/12] powerpc: Drop unnecessary initializations in
+ __copy_inst_from_kernel_nofault()
+To: Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ llvm@lists.linux.dev, patches@lists.linux.dev,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org
+References: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
+ <20250821-bump-min-llvm-ver-15-v2-6-635f3294e5f0@kernel.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <20250821-bump-min-llvm-ver-15-v2-6-635f3294e5f0@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
 
 
-On 15/08/2025 05:25, kernel test robot wrote:
-> Hi Maxime,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on net-next/main]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/dt-bindings-net-Introduce-the-ethernet-connector-description/20250814-221559
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20250814135832.174911-9-maxime.chevallier%40bootlin.com
-> patch subject: [PATCH net-next v11 08/16] net: phy: Introduce generic SFP handling for PHY drivers
-> config: i386-randconfig-013-20250815 (https://download.01.org/0day-ci/archive/20250815/202508151058.jqJsn9VB-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250815/202508151058.jqJsn9VB-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508151058.jqJsn9VB-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/net/phy/phy_device.c:1625:47: warning: variable 'iface' is uninitialized when used here [-Wuninitialized]
->      1625 |                 return port->ops->configure_mii(port, true, iface);
->           |                                                             ^~~~~
->     drivers/net/phy/phy_device.c:1597:2: note: variable 'iface' is declared here
->      1597 |         phy_interface_t iface;
->           |         ^
->     1 warning generated.
->
-That's completly wrong indeed... I had an extra question to ask to Russell
-wrt. that feature, then forgot about it and sent the series...
+Le 21/08/2025 à 23:15, Nathan Chancellor a écrit :
+> Now that the minimum supported version of LLVM for building the kernel
+> has been bumped to 15.0.0, the zero initializations of val and suffix
+> added by commit 0d76914a4c99 ("powerpc/inst: Optimise
+> copy_inst_from_kernel_nofault()") to avoid a bogus case of
+> -Wuninitialized can be dropped because the preprocessor condition is
+> always false.
+> 
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-I'll address that then
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Maxime
+> ---
+> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> ---
+>   arch/powerpc/include/asm/inst.h | 4 ----
+>   1 file changed, 4 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/inst.h
+> index 684d3f453282..ffa82167c860 100644
+> --- a/arch/powerpc/include/asm/inst.h
+> +++ b/arch/powerpc/include/asm/inst.h
+> @@ -143,10 +143,6 @@ static inline int __copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
+>   {
+>   	unsigned int val, suffix;
+>   
+> -/* See https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FClangBuiltLinux%2Flinux%2Fissues%2F1521&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C23038335822b4dbe2adc08dde0f7f50e%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638914077769007882%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=EfgIB7nIdCB2e3KWeEvsXKG%2B8LrK%2FjpUrA4RIeMcreo%3D&reserved=0 */
+> -#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 140000
+> -	val = suffix = 0;
+> -#endif
+>   	__get_kernel_nofault(&val, src, u32, Efault);
+>   	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+>   		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> 
+
