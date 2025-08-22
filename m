@@ -1,121 +1,114 @@
-Received: from smtpout2.mo533.mail-out.ovh.net (smtpout2.mo533.mail-out.ovh.net [51.210.94.139])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D9121C17D
-	for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 11:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.210.94.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32E02FABE5;
+	Fri, 22 Aug 2025 12:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755861413; cv=none; b=Z24e34ASSfWuVGIZ7xKXZ33NnT4KE7suRgv4Ge8szQpP526lr7bU6P49tW/uqWDZ5uZbPn7Qnn4l/vDr8WTRdOvkWNqMXrP6gMwP+3kWocviWuK84R7BVSTJvqZGt6p1KEBeQQ8Y8EI87obyNRNSgv0hDrIXJ+f09PziqQvjFj4=
+	t=1755864384; cv=none; b=tm/X7pmwSug0B562ytBAe87KO62HxM7VMzL2Ilzs/fR/ADwqpr16YPi8fB06TGsyzAK68lDSlv7nnIBbANsDZ+Ig/1SBxOPZgBuDgcG6OV/U/7poeFfDF9YtKUnAAVFKIjRViKZL5iz9vrtLFOJp4hOI3Hjx0agDAe3wQJZU7ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755861413; c=relaxed/simple;
-	bh=Ryaxrw4eT3nAdUGPXwQzb7ucMxWAqtq5xPrHy63u2ec=;
+	s=arc-20240116; t=1755864384; c=relaxed/simple;
+	bh=oo7a9LMl6LvKVsaPP9YxoC1Kx8MNfiAwhl5ihmWoLPI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ADJltnAuDBVnSfvzeY/GE+21BEeCYFeDnuedH/NmuOag5eZHVZxZayIbB8kWahCUZ/Ryf9rdCObYYRmjOIE5YVJr/95e/umho6+rECkI3rISiU3vwGONi0GERQ/48Eug/UtEtdtSWnL2FiLpoqtDjGqfXYoHvywNQZFcRqhRAco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orca.pet; spf=pass smtp.mailfrom=orca.pet; dkim=pass (2048-bit key) header.d=orca.pet header.i=@orca.pet header.b=dAUXjV4n; arc=none smtp.client-ip=51.210.94.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orca.pet
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=orca.pet
+	 In-Reply-To:Content-Type; b=MILUTqCBLYHrDFLxNT/0pt0VWxjzZqvyhXhL+9G9MDS+b3MflaI83NuBh/xixdA7yDMVq2Icx2RoxVYYqze7sXRhWPWE59/2qFLmlYxIsTLCOIXiQ2DJw6zjLn4+yNK3wgC7aaIr/YlR9wFWXt19a6FfAxTPO8FfxpRFjb8/yNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=N1or8S1w; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=orca.pet header.i=@orca.pet header.b="dAUXjV4n"
-Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net [79.137.60.37])
-	by mo533.mail-out.ovh.net (Postfix) with ESMTPS id 4c7cvB1LFjz5vst;
-	Fri, 22 Aug 2025 11:11:18 +0000 (UTC)
-Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net. [127.0.0.1])
-        by director4.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
-        for <brgl@bgdev.pl>; Fri, 22 Aug 2025 11:11:18 +0000 (UTC)
-Received: from mta11.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.37.33])
-	by director4.derp.mail-out.ovh.net (Postfix) with ESMTPS id 4c7cv971Cdz1xpF;
-	Fri, 22 Aug 2025 11:11:17 +0000 (UTC)
-Received: from orca.pet (unknown [10.1.6.10])
-	by mta11.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id 2C90F9A32F1;
-	Fri, 22 Aug 2025 11:11:16 +0000 (UTC)
-Authentication-Results:garm.ovh; auth=pass (GARM-109S00348983bfb-2252-412c-9c76-f625bcf17fb6,
-                    ADC0680FE15BB91110492B9A34CE42AA242C155A) smtp.auth=marcos@orca.pet
-X-OVh-ClientIp:79.117.22.109
-Message-ID: <26b90664-ac3d-4eac-b082-4ddb6297dd00@orca.pet>
-Date: Fri, 22 Aug 2025 13:11:16 +0200
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="N1or8S1w"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ccPu4bTJVH4YGNhd1S906YfRzpqLPlcWMDklK0KtHtk=; b=N1or8S1wu8Iw+g1rx1tY+aHF+Y
+	OzAyfUAzK8J2Z61/AEiyJ3Qk24qEEMGRAcZMNoCMxWGUI+CTgbX4i7JUQ0KnbKcB9nRGSsFNxEwJM
+	3Aan6Zj4SGMOu4KtTD8+6UrIpJW3T0pIRUCJPsRGRrrohotkoktao3y22E35AB9Qgb9w7oaSp9Ge4
+	Ibuj0BDOpw7fglFc9tC65j9f2iqNQA3l2JZo+9p8xIHB17VLqigEljZP3VvEO4tGeRlVD5vhgjxU8
+	QVUTc8TjdG3G/jlvRiGzO5xlmDUm38alEBLzxfHR8J6okyKECwdU69yPqalxl5125kJeQbJqkhBii
+	sxSTDzlg==;
+Received: from [223.233.71.242] (helo=[192.168.1.8])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1upQX9-0005Vq-8O; Fri, 22 Aug 2025 14:06:15 +0200
+Message-ID: <dfb52ed4-8f18-1489-e6b4-56180cfa5440@igalia.com>
+Date: Fri, 22 Aug 2025 17:36:09 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] gpio: gpio-regmap: add flags to control some
- behaviour
-To: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v8 3/5] treewide: Replace 'get_task_comm()' with
+ 'strscpy_pad()'
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, Bhupesh <bhupesh@igalia.com>,
+ akpm@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Michael Walle <mwalle@kernel.org>,
- Lee Jones <lee@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
- linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20250821101902.626329-2-marcos@orca.pet>
- <202508221142.ETxcEpjA-lkp@intel.com>
-Content-Language: es-ES
-From: Marcos Del Sol Vives <marcos@orca.pet>
-In-Reply-To: <202508221142.ETxcEpjA-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 5788814372848948838
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieefiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeforghrtghoshcuffgvlhcuufholhcugghivhgvshcuoehmrghrtghoshesohhrtggrrdhpvghtqeenucggtffrrghtthgvrhhnpeetieeiteffgfffffeuudfgueeugfdtffeuueehtefhhfehhffffeeukeeivdeffeenucffohhmrghinhepghhithdqshgtmhdrtghomhdpghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdptddurdhorhhgnecukfhppeduvdejrddtrddtrddupdejledruddujedrvddvrddutdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehmrghrtghoshesohhrtggrrdhpvghtpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopegsrhhglhessghguggvvhdrphhlpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmfigrlhhlvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhushdrfi
- grlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohgvqdhksghuihhlugdqrghllheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhgphhiohesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-DKIM-Signature: a=rsa-sha256; bh=ooMiXhCtrpCJThxBkirXE/4Y5yuLSDN6OaDBZRlDF4E=;
- c=relaxed/relaxed; d=orca.pet; h=From; s=ovhmo-selector-1; t=1755861078;
- v=1;
- b=dAUXjV4nXWjdCZe1KhXGKwDw8WbdNMlQabWe+tKmIGab50WLwSitojB1+6BLEQQmKZZvOknP
- FlukwtYeAgZYIXauIhtXOYCBvouGGbgf8/MZTLr83Y/3hw1D42HwMiBOZA0IbW9xpZLvudS2CZX
- HZ5/gCqUNd44sutWfMsprs0nCVkazjNG7T2Wd5CDD8oSP5MNGSgIMGh3XtSS60AUSyAU/KLdfyR
- Eg5bgSmB0Tiu8rhyzdoacOB0m8jnq4w3TYHIXxfJReI1tIU8/ZgiC9ZVeR/WUsYXL1y/NMmPznQ
- 2mPwpfSTnxZAQ9LFlN7+p9HkI1y1Z6/6Ob97EwcQzKZZA==
+ kernel-dev@igalia.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, oliver.sang@intel.com, laoar.shao@gmail.com,
+ pmladek@suse.com, rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+ arnaldo.melo@gmail.com, alexei.starovoitov@gmail.com,
+ andrii.nakryiko@gmail.com, mirq-linux@rere.qmqm.pl, peterz@infradead.org,
+ willy@infradead.org, david@redhat.com, viro@zeniv.linux.org.uk,
+ keescook@chromium.org, ebiederm@xmission.com, brauner@kernel.org,
+ jack@suse.cz, mingo@redhat.com, juri.lelli@redhat.com, bsegall@google.com,
+ mgorman@suse.de
+References: <20250821102152.323367-4-bhupesh@igalia.com>
+ <202508221127.LiaxcbdW-lkp@intel.com>
+From: Bhupesh Sharma <bhsharma@igalia.com>
+In-Reply-To: <202508221127.LiaxcbdW-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-El 22/08/2025 a las 5:27, kernel test robot escribió:
-> Hi Marcos,
-> 
+On 8/22/25 9:29 AM, kernel test robot wrote:
+> Hi Bhupesh,
+>
 > kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on brgl/gpio/for-next]
-> [also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes pci/next pci/for-linus linus/master v6.17-rc2 next-20250821]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Del-Sol-Vives/gpio-gpio-regmap-add-flags-to-control-some-behaviour/20250821-182416
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-> patch link:    https://lore.kernel.org/r/20250821101902.626329-2-marcos%40orca.pet
-> patch subject: [PATCH v3 1/3] gpio: gpio-regmap: add flags to control some behaviour
-> config: x86_64-buildonly-randconfig-001-20250822 (https://download.01.org/0day-ci/archive/20250822/202508221142.ETxcEpjA-lkp@intel.com/config)
+>
+> [auto build test ERROR on 5303936d609e09665deda94eaedf26a0e5c3a087]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh/exec-Remove-obsolete-comments/20250821-182426
+> base:   5303936d609e09665deda94eaedf26a0e5c3a087
+> patch link:    https://lore.kernel.org/r/20250821102152.323367-4-bhupesh%40igalia.com
+> patch subject: [PATCH v8 3/5] treewide: Replace 'get_task_comm()' with 'strscpy_pad()'
+> config: x86_64-buildonly-randconfig-001-20250822 (https://download.01.org/0day-ci/archive/20250822/202508221127.LiaxcbdW-lkp@intel.com/config)
 > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508221142.ETxcEpjA-lkp@intel.com/reproduce)
-> 
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508221127.LiaxcbdW-lkp@intel.com/reproduce)
+>
 > If you fix the issue in a separate patch/commit (i.e. not just a new version of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508221142.ETxcEpjA-lkp@intel.com/
-> 
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202508221127.LiaxcbdW-lkp@intel.com/
+>
 > All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/gpio/gpio-fxl6408.c:11:
->>> include/linux/gpio/regmap.h:26:31: error: call to undeclared function 'BIT'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->       26 |         GPIO_REGMAP_DIR_BEFORE_SET      = BIT(0),
->          |                                           ^
->>> include/linux/gpio/regmap.h:26:31: error: expression is not an integer constant expression
->       26 |         GPIO_REGMAP_DIR_BEFORE_SET      = BIT(0),
->          |                                           ^~~~~~
->    In file included from drivers/gpio/gpio-fxl6408.c:12:
->    In file included from include/linux/i2c.h:13:
->    In file included from include/linux/acpi.h:14:
->    In file included from include/linux/device.h:32:
->    In file included from include/linux/device/driver.h:21:
->    In file included from include/linux/module.h:20:
->    In file included from include/linux/elf.h:6:
->    In file included from arch/x86/include/asm/elf.h:10:
->    In file included from arch/x86/include/asm/ia32.h:7:
->    In file included from include/linux/compat.h:17:
->    In file included from include/linux/fs.h:34:
->    In file included from include/linux/percpu-rwsem.h:7:
->    In file included from include/linux/rcuwait.h:6:
->    In file included from include/linux/sched/signal.h:6:
->    include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-This is correct, thanks. I added a missing "#include <linux/bits.h>" to
-fix it. Will be in a v4 of the patch set.
+>
+>>> drivers/gpu/drm/panthor/panthor_sched.c:3420:2: error: call to undeclared function 'get_task_comm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      3420 |         get_task_comm(group->task_info.comm, task);
+>           |         ^
+>     drivers/gpu/drm/panthor/panthor_sched.c:3420:2: note: did you mean 'get_task_mm'?
+>     include/linux/sched/mm.h:151:26: note: 'get_task_mm' declared here
+>       151 | extern struct mm_struct *get_task_mm(struct task_struct *task);
+>           |                          ^
+>     1 error generated.
+>
+>
+> vim +/get_task_comm +3420 drivers/gpu/drm/panthor/panthor_sched.c
+>
+> de85488138247d Boris Brezillon 2024-02-29  3414
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3415  static void group_init_task_info(struct panthor_group *group)
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3416  {
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3417  	struct task_struct *task = current->group_leader;
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3418
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3419  	group->task_info.pid = task->pid;
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17 @3420  	get_task_comm(group->task_info.comm, task);
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3421  }
+> 33b9cb6dcda252 Chia-I Wu       2025-07-17  3422
+>
+Ok, let me check the same and fix it in v9.
+
+Thanks.
