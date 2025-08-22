@@ -1,121 +1,119 @@
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8777A27F724;
-	Fri, 22 Aug 2025 20:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3B22EB87B;
+	Fri, 22 Aug 2025 20:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755893062; cv=none; b=GCqRmVR/66hadlaxKSjHxs5sii1kdfJTMb4wYu/s4SsgnReDzGkRLu3B0c1egAWONJFC8wXAqA8gDDA/TYCDKkk2oJBF57czgfPafsJo6SOyaaDUzs4k8Eb1EiB2opEh1WLf/1jRZfy4WtikGVbrmT9b+EqpN0R06Qilgz4iY7Y=
+	t=1755895773; cv=none; b=Y9fhirzfA8btHMfCH4/NplP8ora6WGTDy930QG5vpA+aj0cbYnb7l+7cidG0056MDp21uIFhLW2UA5lNpvluAQEjhW5LUYjUXhqEpsRh3XrlHdr+qm8CKMO967NZogrG9TZbgBxNxj2jMrdADr9AGJDvM8tYVh8fEOSQGDSvwSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755893062; c=relaxed/simple;
-	bh=S+ZbtUWMKAkpRyRiegOe1/MVHDgacB6bJNDByLQ5Vis=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=SGJ5CMaqKxpZZbXakSC07WBZOgO8tqsUgucK+CXCSTbrLbhaSVo4QQWcxkXtvn5ewIkYb4Y97VSHiqwbsDKD0yidr3S/LJXwPVIsD7vH18R/w++uO9Fb75fxuBxG/120g0e5TOkZ8Tep61E6Qw6xHYYxmitZThqaSxEUDgOcpiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=g1HofqZ1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jIbf9X5l; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1755895773; c=relaxed/simple;
+	bh=T6qRJEDHnq+mnjsWtsK8R7/Xtst4O7SL4dK318Mo5qM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s1xQ3RJXzlXb1NVLjy1acaXvdfaMI7kYzs9zNxgxu7R8ZgbITe4MAmZ7Cm5T8tt4U09CtokbwFx219alWoue54aN6bm6uq4DkjHu+2ZKXGEoTtE1+K/Y+NkE2wRShsQYbP9GRDBETSAzoMYGcJC2UAGCdjDQZ920JgDRnKyjzz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D6ITf2XT; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="g1HofqZ1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jIbf9X5l"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A9F2514000AE;
-	Fri, 22 Aug 2025 16:04:19 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Fri, 22 Aug 2025 16:04:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1755893059;
-	 x=1755979459; bh=SaguppChqqh0T3xpb1iPjntc9UQEFriFZKmZ9cwC9rw=; b=
-	g1HofqZ1FDkxUX1EN10UhfQGTZutikf2NWBS6Fue54TEvPvQ6nzLwnCc2IRCVzH0
-	8t2nKxn8StykNSAkWVdV9eHkM+tHyzzKheVf2a5KIP+tecZfbMZ+v3nstCZ0J5pn
-	tsl4myo3vg/lVTcIsJaCMagtILlEXIAdOjtwbIKmmvC4yFe6sKBg7MkKmLdde0Sz
-	Yeh/L8gio2HD3li8KzCN+/53zV4/+CcXt3FKpqTTZyUzyAzWDVFXCz2G9lRlzDe7
-	k2cAFx5o7vQkc/9MCmK2m3iIbLuc8tMSooAd0S2rAqFKSm7bCQZOjt03xcMwh5Pl
-	DEOz6Kcco5JaJymytwLATg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1755893059; x=
-	1755979459; bh=SaguppChqqh0T3xpb1iPjntc9UQEFriFZKmZ9cwC9rw=; b=j
-	Ibf9X5lh8TR650uFXOODimISurb4xpv088prDwV9ZAS9oGbougdOHqkX5bYoznxk
-	qXaOJRWxsI65pLnE0+O5wuFXlQK+8e47SePDLXcJFVy+UCtijV4B4OBdEkFGltK/
-	IbNdxDPh/DmXaSSAyc4pAm+ZvojjErnSAtJUGLYBboCG7v1BMvPLJb7sWxyPbBBo
-	czjr3abbJxYMSIFjnpZhH8NE1kyAlwoepjeZY1gP8YE3TZ/WqPLEp2aC+VIZHjxE
-	SAi49yWhj7UeIfpCLJWXceBx8PG1RhsVdW4jcvlF0JZsf2ZrDx2IFWX07h0rrofv
-	xgS1c5c7opPvmJXLyHfOw==
-X-ME-Sender: <xms:Qs2oaBBCQ5nGFOoSjO12zz5OYcJaDdGHkSOCvO_JpaqkKggUGZuOlw>
-    <xme:Qs2oaPics73hU5YQZEMZ7MrhMPoyzd77FuWf3sgHyZVN8KDX8SWWLSBjeIGhrDaQL
-    5_cxYdJtUYqALLhc5o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieegieejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpth
-    htohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhmlhesghhmrghilhdrtghomhdp
-    rhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopegrrhgusgeskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghr
-    mhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
-    eplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:Qs2oaPPD2S6KJfQtNZgDcowAtXw04HSqI8xCnJFShDtl17oTGvZJRg>
-    <xmx:Qs2oaEbOYcCUOVWh2VjTu6m10E1cYvef1KVSLGEWxc8HOHjizcINqw>
-    <xmx:Qs2oaFw26veJtsO_bqhobENtqgct64Mx-DPN1pMM9436UwSzIT2a7g>
-    <xmx:Qs2oaLPuT13pzeb7gpX_2aJSeob9VEvZK3hVJtia2LFFG__TRjSAvA>
-    <xmx:Q82oaKKCM-_-8_w54zVC7rl7DcirIJmCco6POS4dq2-9zUlwnpyYopT0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D430A700069; Fri, 22 Aug 2025 16:04:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D6ITf2XT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755895771; x=1787431771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T6qRJEDHnq+mnjsWtsK8R7/Xtst4O7SL4dK318Mo5qM=;
+  b=D6ITf2XTVFDv10Y1q6lQvn4tTyTkKJ/WBOqlr6pk0275CJqb9ndGckli
+   QZqI3EfBU78w7Moh72ki7r8RslL1eDZY/Yv4hSE6Kmf4Pkgz2aAqgyAgN
+   EUrn4dtR7941AoJo54zpZECsKJdwUbUBUxl0ENUNox26lS5cQyw43xZQI
+   15I/HCAisuGNrgB0g7bHZbd7kWdyipig/m1BtjktcQyz3ybVpe7N3Z09O
+   wb2DrpCoYMYYNedj/ADf2fAMuWJ4ZBpmXTHxhUI8T4d16BsMM9SgQmT0g
+   Zc73xI+c33E2zKOh0TpCAKQ8C1np4YECZUk5HSa5gRnP7jDsqgD/OXNF/
+   A==;
+X-CSE-ConnectionGUID: O19BdHqHRi+uMGSnUTttaQ==
+X-CSE-MsgGUID: 6EpyaXE8R1SZWblU2ZKbNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="58356632"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="58356632"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 13:49:30 -0700
+X-CSE-ConnectionGUID: n/+zYlt0RPqPyOa2rQ36qA==
+X-CSE-MsgGUID: m+IUK9QUTnelV4MFBQJK3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="168399112"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 22 Aug 2025 13:49:28 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1upYhR-000Lp5-2X;
+	Fri, 22 Aug 2025 20:49:25 +0000
+Date: Sat, 23 Aug 2025 04:48:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: mediatek: clk-mux: Do not pass flags to
+ clk_mux_determine_rate_flags()
+Message-ID: <202508230416.OIwROhOT-lkp@intel.com>
+References: <20250822062854.2633133-1-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AlhDZOV2HdTF
-Date: Fri, 22 Aug 2025 22:03:58 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>, linux-kernel@vger.kernel.org
-Cc: "Kees Cook" <kees@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- "Russell King" <linux@armlinux.org.uk>, "Ard Biesheuvel" <ardb@kernel.org>,
- linux-arm-kernel@lists.infradead.org
-Message-Id: <6b2c0063-1523-4644-a32c-6aa918ad9dd8@app.fastmail.com>
-In-Reply-To: <35178205-7cff-4b4b-abdd-b4cfb9e69dc2@app.fastmail.com>
-References: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
- <20250821-bump-min-llvm-ver-15-v2-3-635f3294e5f0@kernel.org>
- <35178205-7cff-4b4b-abdd-b4cfb9e69dc2@app.fastmail.com>
-Subject: Re: [PATCH v2 03/12] ARM: Clean up definition of ARM_HAS_GROUP_RELOCS
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250822062854.2633133-1-wenst@chromium.org>
 
-On Fri, Aug 22, 2025, at 09:05, Arnd Bergmann wrote:
-> On Thu, Aug 21, 2025, at 23:15, Nathan Chancellor wrote:
->
-> Would it be possible to either change the macro or to move
-> the overflow_stack_ptr closer in order to completely eliminate
-> the CONFIG_ARM_HAS_GROUP_RELOCS symbol and have VMAP_STACK
-> enabled for all CONFIG_MMU builds?
->
-> Are there any other build testing issues with ARM_HAS_GROUP_RELOCS
-> besides the one I saw here?
+Hi Chen-Yu,
 
-With some more randconfig testing, I did come across a few
-configurations that each fail with hundreds of errors like
+kernel test robot noticed the following build warnings:
 
-arm-linux-gnueabi-ld: drivers/crypto/hifn_795x.o(.text+0x99c): overflow whilst splitting 0x10a61854 for group relocation R_ARM_LDR_PC_G2
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on linus/master v6.17-rc2 next-20250822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-so I guess we'll have to stick with the current dependency,
-at least for ARMv6 and below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yu-Tsai/clk-mediatek-clk-mux-Do-not-pass-flags-to-clk_mux_determine_rate_flags/20250822-143106
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20250822062854.2633133-1-wenst%40chromium.org
+patch subject: [PATCH] clk: mediatek: clk-mux: Do not pass flags to clk_mux_determine_rate_flags()
+config: x86_64-buildonly-randconfig-004-20250823 (https://download.01.org/0day-ci/archive/20250823/202508230416.OIwROhOT-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508230416.OIwROhOT-lkp@intel.com/reproduce)
 
-    Arnd
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508230416.OIwROhOT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/mediatek/clk-mux.c:149:22: warning: unused variable 'mux' [-Wunused-variable]
+     149 |         struct mtk_clk_mux *mux = to_mtk_clk_mux(hw);
+         |                             ^~~
+   1 warning generated.
+
+
+vim +/mux +149 drivers/clk/mediatek/clk-mux.c
+
+a3ae549917f163 Owen Chen                  2019-03-05  145  
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11  146  static int mtk_clk_mux_determine_rate(struct clk_hw *hw,
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11  147  				      struct clk_rate_request *req)
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11  148  {
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11 @149  	struct mtk_clk_mux *mux = to_mtk_clk_mux(hw);
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11  150  
+6c66f834fd3bf9 Chen-Yu Tsai               2025-08-22  151  	return clk_mux_determine_rate_flags(hw, req, 0);
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11  152  }
+b05ea3314390e9 AngeloGioacchino Del Regno 2022-10-11  153  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
