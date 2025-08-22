@@ -1,66 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61F61096F;
-	Fri, 22 Aug 2025 03:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E893D76;
+	Fri, 22 Aug 2025 04:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755833345; cv=none; b=capihOsVvtw5j3hetzMPR87pa1xeX7ukPnpqIwU2ZeA6ZZ9OIUJiQ86VqW0TOBNDWMZ1k1WZLs4t0AKTV2vtWyI64gWISYtj0XigpQGhHvrHH1oKeytsse0sjUl9WBNhmjSe8gv6mv4W0Kss9+POZcvFtdxt0suxzMLxIF1HHhg=
+	t=1755835333; cv=none; b=ftTQw//uohXDEo2dxrQl3OpZB1mYUmfzkdWAqX7OdfVq4KADesnI889z3jz8vRQu/F4Nd/uIAe57/KMHx4y8grTKb5SwagLOskp7ZTa1BNU6xR+opgQBg2X9s18dn43yr94beZGU5NUqiVCltzuZDshQLuIdEeqfsFGmArfY8/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755833345; c=relaxed/simple;
-	bh=4g+NOdWwaTNFdwMM6/vbTTgDQgvH1CGzNnjQxHwcBQg=;
+	s=arc-20240116; t=1755835333; c=relaxed/simple;
+	bh=/2ROtHmJaUr9LhJbv1++PQhIJX2V9C+1ND0616Z6a24=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=irwqx36rwPyRNeJkf9PqOP4HIjrXbQVkIPfssYtZsdCV2mrWS5WlTl1EazXtlhu4MWYJ/8I3zuJY4bHQjNStCb6E7FFWWz2UVbMbzOuhddcGMNfQq3LGZ61znkjfHEIT9vAtgZ1qvdKGxF8Hr0jL4tU+lYLoYtlQ4Z5VsfmLul0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZIi+6fFh; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=H8Vk/1jIO11nkd/YhRNFitK/LX5AMeZkKLmJwmLyYc4MZ7eO9mLd0rjkJE5yxaEyFFzPa6A+9YSfBZE1CESDi/mlL6jUPmv2niPRqwlbr4Qbj39cLDk9kzniQKrnu7P6chH+czP5MxgEdqxrto9mwEp3y7UpOJ1Jx9md2tGdznQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ME2tEbbv; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZIi+6fFh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ME2tEbbv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755833343; x=1787369343;
+  t=1755835332; x=1787371332;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4g+NOdWwaTNFdwMM6/vbTTgDQgvH1CGzNnjQxHwcBQg=;
-  b=ZIi+6fFhOfJavPXnwzUFxFHKrfThglRbTuMFgSXJca9L7t4oX1XHUnZZ
-   FY7QJJp1sd6rra8iv6qkAeeNZ+IsYMKNCJjI5gXBx5zXyWih88vttFPNs
-   6Q2gEGNxfggnYjLEqLZ5VqGBQD/18h4E9PALU8b8dk9456stjBsjzItSE
-   u5EUeSb9IxlGAM8HTBXYetjfiZ9WlIFey6vg5Wdx83MqtD5rZHJzYxWt3
-   cXuRHrPP5s8k6WrsbfeTZNlPEUqY9WziCc80F4qoVIy+WjxeQQEZKbcv2
-   eOfo5egzTQw7z1vKpJAq3fe7iVZmrnEi7aX0b26+AwSTl4p1KJRI2B3lL
-   g==;
-X-CSE-ConnectionGUID: j4u7OZ0eQTe21rdmDClK9Q==
-X-CSE-MsgGUID: 4k+P15f0ReGdkh1Cnb0+Ew==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="69575024"
+  bh=/2ROtHmJaUr9LhJbv1++PQhIJX2V9C+1ND0616Z6a24=;
+  b=ME2tEbbveJiTW4jdCGO2fupVttYZUHzsdx4XQaSBnqhmfbUczoTL38+O
+   QZAryClPx/tzwdlAfe5ES7zO3m7uxu9UQSYJDAbpJoaHRUaQo/zqzhpRo
+   DNQCFalIWdZWDzPRoqDoxlvbrk8pDWXb/sbYiGPmPZY4KTpnjKtqeCRsW
+   +3tr1XA2sAOThdLaWsT5P4kj0BSu5myfPegKF8H6ldqLXDcpz4LfxPGJ8
+   8+gXP4BUV/ThWG6m8u2HLwNlWJ2npMAFzd2J7/fxM8PnUwTfNAKKKCkuk
+   TtcvQ5YH5YgmnrAA1v987D5YJmdbrFDMrwDaLN+PDvoPh8cd5EOmbp/mP
+   w==;
+X-CSE-ConnectionGUID: sDxVtwJeSwuDEaU3QJy2aQ==
+X-CSE-MsgGUID: tl44YjpATwmXt2JHtWwd+A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="57339835"
 X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="69575024"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 20:29:03 -0700
-X-CSE-ConnectionGUID: 0GUAmjcMR3u1FdznOpBq/g==
-X-CSE-MsgGUID: l+1pqG1rTImOpTAfJ8Xm/w==
+   d="scan'208";a="57339835"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 21:02:04 -0700
+X-CSE-ConnectionGUID: HoNmLB6YRbmMZ5elSlrDeg==
+X-CSE-MsgGUID: VVHpgrRVTgiUxTAicaXTvQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
-   d="scan'208";a="168496106"
+   d="scan'208";a="168804505"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 21 Aug 2025 20:29:00 -0700
+  by orviesa008.jf.intel.com with ESMTP; 21 Aug 2025 21:01:53 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1upISY-000KsD-0k;
-	Fri, 22 Aug 2025 03:28:58 +0000
-Date: Fri, 22 Aug 2025 11:27:38 +0800
+	id 1upIxI-000Ktb-17;
+	Fri, 22 Aug 2025 04:01:12 +0000
+Date: Fri, 22 Aug 2025 11:59:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marcos Del Sol Vives <marcos@orca.pet>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marcos Del Sol Vives <marcos@orca.pet>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Michael Walle <mwalle@kernel.org>, Lee Jones <lee@kernel.org>,
-	Bjorn Helgaas <helgaas@kernel.org>, linux-gpio@vger.kernel.org,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] gpio: gpio-regmap: add flags to control some
- behaviour
-Message-ID: <202508221142.ETxcEpjA-lkp@intel.com>
-References: <20250821101902.626329-2-marcos@orca.pet>
+To: Bhupesh <bhupesh@igalia.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bhupesh@igalia.com,
+	kernel-dev@igalia.com, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	oliver.sang@intel.com, lkp@intel.com, laoar.shao@gmail.com,
+	pmladek@suse.com, rostedt@goodmis.org,
+	mathieu.desnoyers@efficios.com, arnaldo.melo@gmail.com,
+	alexei.starovoitov@gmail.com, andrii.nakryiko@gmail.com,
+	mirq-linux@rere.qmqm.pl, peterz@infradead.org, willy@infradead.org,
+	david@redhat.com, viro@zeniv.linux.org.uk, keescook@chromium.org,
+	ebiederm@xmission.com, brauner@kernel.org, jack@suse.cz,
+	mingo@redhat.com, juri.lelli@redhat.com, bsegall@google.com,
+	mgorman@suse.de
+Subject: Re: [PATCH v8 3/5] treewide: Replace 'get_task_comm()' with
+ 'strscpy_pad()'
+Message-ID: <202508221127.LiaxcbdW-lkp@intel.com>
+References: <20250821102152.323367-4-bhupesh@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,157 +75,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250821101902.626329-2-marcos@orca.pet>
+In-Reply-To: <20250821102152.323367-4-bhupesh@igalia.com>
 
-Hi Marcos,
+Hi Bhupesh,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes pci/next pci/for-linus linus/master v6.17-rc2 next-20250821]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 5303936d609e09665deda94eaedf26a0e5c3a087]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Del-Sol-Vives/gpio-gpio-regmap-add-flags-to-control-some-behaviour/20250821-182416
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20250821101902.626329-2-marcos%40orca.pet
-patch subject: [PATCH v3 1/3] gpio: gpio-regmap: add flags to control some behaviour
-config: x86_64-buildonly-randconfig-001-20250822 (https://download.01.org/0day-ci/archive/20250822/202508221142.ETxcEpjA-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh/exec-Remove-obsolete-comments/20250821-182426
+base:   5303936d609e09665deda94eaedf26a0e5c3a087
+patch link:    https://lore.kernel.org/r/20250821102152.323367-4-bhupesh%40igalia.com
+patch subject: [PATCH v8 3/5] treewide: Replace 'get_task_comm()' with 'strscpy_pad()'
+config: x86_64-buildonly-randconfig-001-20250822 (https://download.01.org/0day-ci/archive/20250822/202508221127.LiaxcbdW-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508221142.ETxcEpjA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250822/202508221127.LiaxcbdW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508221142.ETxcEpjA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508221127.LiaxcbdW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpio-fxl6408.c:11:
->> include/linux/gpio/regmap.h:26:31: error: call to undeclared function 'BIT'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      26 |         GPIO_REGMAP_DIR_BEFORE_SET      = BIT(0),
-         |                                           ^
->> include/linux/gpio/regmap.h:26:31: error: expression is not an integer constant expression
-      26 |         GPIO_REGMAP_DIR_BEFORE_SET      = BIT(0),
-         |                                           ^~~~~~
-   In file included from drivers/gpio/gpio-fxl6408.c:12:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
+>> drivers/gpu/drm/panthor/panthor_sched.c:3420:2: error: call to undeclared function 'get_task_comm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3420 |         get_task_comm(group->task_info.comm, task);
          |         ^
-   In file included from drivers/gpio/gpio-fxl6408.c:12:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpio-fxl6408.c:12:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpio-fxl6408.c:12:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/gpio/gpio-fxl6408.c:12:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+   drivers/gpu/drm/panthor/panthor_sched.c:3420:2: note: did you mean 'get_task_mm'?
+   include/linux/sched/mm.h:151:26: note: 'get_task_mm' declared here
+     151 | extern struct mm_struct *get_task_mm(struct task_struct *task);
+         |                          ^
+   1 error generated.
 
 
-vim +/BIT +26 include/linux/gpio/regmap.h
+vim +/get_task_comm +3420 drivers/gpu/drm/panthor/panthor_sched.c
 
-    14	
-    15	
-    16	/**
-    17	 * enum gpio_regmap_flags - flags to control GPIO operation
-    18	 */
-    19	enum gpio_regmap_flags {
-    20		/**
-    21		 * @GPIO_REGMAP_DIR_BEFORE_SET: when setting a pin as an output, set
-    22		 * its direction before the value. The output value will be undefined
-    23		 * for a short time which may have unwanted side effects, but some
-    24		 * hardware requires this.
-    25		 */
-  > 26		GPIO_REGMAP_DIR_BEFORE_SET	= BIT(0),
-    27	};
-    28	
+de85488138247d Boris Brezillon 2024-02-29  3414  
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3415  static void group_init_task_info(struct panthor_group *group)
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3416  {
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3417  	struct task_struct *task = current->group_leader;
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3418  
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3419  	group->task_info.pid = task->pid;
+33b9cb6dcda252 Chia-I Wu       2025-07-17 @3420  	get_task_comm(group->task_info.comm, task);
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3421  }
+33b9cb6dcda252 Chia-I Wu       2025-07-17  3422  
 
 -- 
 0-DAY CI Kernel Test Service
