@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD7A1F948;
-	Sat, 23 Aug 2025 12:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215A817555;
+	Sat, 23 Aug 2025 13:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755952787; cv=none; b=DNmP1ON5T41w48jqigy04FUK5fuvn1UBk6FObdDFQxlXXwigFg6NLVRq4eEB4apXwaLJ5jDSuTpKLW+e4NMf7PAZHtTNcKRbifRIy3Ufye+yr7i+zbfeSukKm/faFObrRLbA4RXv8Oatpt+WKO3BJWhNA2uNMn55JRR+p5eFdS0=
+	t=1755956626; cv=none; b=VlngYCdNpGoYMQ4JxVWhI/Aq/3X71gxNaxQ3fOjx31EFSFKPLYggjoTEugvxmsvNQ3Akq4aDI9TQ0Z+O7lUcJkgkoy7AasN2StrM7oGVNhbMkGsOOg4DWXiqjoKcuJGTWbtG8fo0eYlr6CL1Kp5gxpVgB3JZe8cn9u1DbXYhewY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755952787; c=relaxed/simple;
-	bh=7wE2m0dJcLwFUoWErp1t+SLSWI5UdvCrXvs1irA1LLw=;
+	s=arc-20240116; t=1755956626; c=relaxed/simple;
+	bh=SYKe5CulOhjzGY27kdF2knpr1wIg8AMU2aTe6y/qo2Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KzidVgqUR7MMf9Cv+GJbiSVA9QNd6wtfrQFkZXvMwDicJB0t7QZc3cuPzflTZcHUVlVcuevRQGYYiqdzEV/ba+iZvMyhgTPQ0b9GsCqCK3zvkAGmXqIlKPJXsv1TFD9ltnYBVsWqWDpY8IEU/9Nrxo5JJAvtiaXgxlDfvyMHQvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pfvmm3Z9; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=s34OD/BT6ucpMOTYZjmxNu9w2SlkTj+KFrOg6v+lVDe5EplV7u28GHRF1lDoXKj1Hs1OT8RKyML6kGa8YzlAEgcbMXbSjcUzKaDOSn515GIq33EvQLodxvOmVlG6oYomNLsW2+X/JNBygYqGwTY6VtgewJdDdoYhsMcNYmKWWx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i7YTC6Hw; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pfvmm3Z9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i7YTC6Hw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755952786; x=1787488786;
+  t=1755956624; x=1787492624;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7wE2m0dJcLwFUoWErp1t+SLSWI5UdvCrXvs1irA1LLw=;
-  b=Pfvmm3Z9hCVCPd8bmF/84lO8p0rj0g/GENG2V1R4r2DBghV6tC5atXKt
-   kTUWkdQT4uSYO/KAfWBK9X96zr6uQcu9MnwQ8ygbJaTSx+0Qh5FpWBW7A
-   0S6jaf4x1aZuHTaOsR6yho5NFw9dSLKe0qN/5suuAqhRpzlE1eYR3GOYA
-   vyenFnQCoEf0cPBEjxI7PTygj16T2FT0/XktV2RcBdLEsGWDx1Wp7EfQa
-   ltKMJox1OGdNvOo5ImKGxmT1fFcHnRQnCxKeFDzDA0nZVb8xmtYyCRBDz
-   izgo3cutNmcIAQtcOm34dHsejvpY04SgRUbPJEYRyNeVRIF42nawi35KM
-   g==;
-X-CSE-ConnectionGUID: OXD5sQ/KT2mkGBs0g48x1w==
-X-CSE-MsgGUID: Qqjt0uFfTX29XvmO1T3R6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="57256404"
+  bh=SYKe5CulOhjzGY27kdF2knpr1wIg8AMU2aTe6y/qo2Q=;
+  b=i7YTC6HwV4nT/YhtNQaQoGpDemAZ9TY2mbquej49vOJ3uV7vcLkZfh35
+   7jSTVT168adKN7SuSb3q9M77ZmJGV4tmvjJQqMogvSAMjAUqoQzhGyNJ0
+   xMauLwBwWWd9UWwJNpCI4oU3/Lp5pA6/OVixeJ+1ZvV8nNujx5GP9deF2
+   Lp/euPbthQb8d0PNePpXUPMa1wd0+kaLbqOWa8KBoG5qhPBgBvziw1cSe
+   Z+8UrlVPrTJfiB2Ncz7/GCwZ7SlIszHDr+ejKHZb2A8CEX4DXrd6gm0o5
+   /2nIyDVfn8hIFs2eXxaLtfWlRBoFc+A0iLq9VvBMop0rhuYewBW4Ai+q8
+   Q==;
+X-CSE-ConnectionGUID: qRWJLvKlQXiPCiu1fcblnw==
+X-CSE-MsgGUID: xSKG4GOBTqqCPFaDMcKqrw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="69674082"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="57256404"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 05:39:45 -0700
-X-CSE-ConnectionGUID: yIQ99niGSnSLtoXoMPNvPA==
-X-CSE-MsgGUID: W8bmIO7BRbW244ObW8D5mw==
+   d="scan'208";a="69674082"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 06:43:44 -0700
+X-CSE-ConnectionGUID: lR+NW7hMSP2RsX2TRruhIg==
+X-CSE-MsgGUID: RlFVeZHwRFu9xoLNogRMnw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="206086323"
+   d="scan'208";a="169275987"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 23 Aug 2025 05:39:41 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 23 Aug 2025 06:43:42 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1upnWy-000MIt-1C;
-	Sat, 23 Aug 2025 12:39:37 +0000
-Date: Sat, 23 Aug 2025 20:38:53 +0800
+	id 1upoWx-000MK7-0t;
+	Sat, 23 Aug 2025 13:43:39 +0000
+Date: Sat, 23 Aug 2025 21:43:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shanker Donthineni <sdonthineni@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	James Morse <james.morse@arm.com>
-Subject: [morse:mpam/snapshot/v6.17-rc2 11/89]
- drivers/resctrl/mpam_devices.c:107:21: warning: result of comparison of
- constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned
- int') is always false
-Message-ID: <202508232014.DXou0s7d-lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:bcachefs-rebalance 336/336]
+ fs/bcachefs/rebalance.c:598:3: error: initializer element is not a
+ compile-time constant
+Message-ID: <202508232149.WXCTVTwc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,94 +63,142 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.17-rc2
-head:   c0646bf01fb5098c7d6cbc44af567a8bb2ca82d6
-commit: 91e0d5599e4dbfdae2f7579aba82a3b4bd5c15bf [11/89] arm_mpam: Add support for memory controller MSC on DT platforms
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250823/202508232014.DXou0s7d-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508232014.DXou0s7d-lkp@intel.com/reproduce)
+tree:   https://github.com/koverstreet/bcachefs bcachefs-rebalance
+head:   20ae3d99d2755617d23d984971def2fb3fba21e5
+commit: 20ae3d99d2755617d23d984971def2fb3fba21e5 [336/336] more rebalance work NOTES
+config: x86_64-buildonly-randconfig-003-20250823 (https://download.01.org/0day-ci/archive/20250823/202508232149.WXCTVTwc-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508232149.WXCTVTwc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508232014.DXou0s7d-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508232149.WXCTVTwc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/resctrl/mpam_devices.c:107:21: warning: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-     107 |                         if (component_id == ~0UL) {
-         |                             ~~~~~~~~~~~~ ^  ~~~~
-   1 warning generated.
+>> fs/bcachefs/rebalance.c:598:3: error: initializer element is not a compile-time constant
+     598 |                 bch2_bkey_needs_rebalance(c, k, io_opts, &move_ptrs, &compress_ptrs, &csum_ptrs, false);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> fs/bcachefs/io_write.c:362:41: error: use of undeclared identifier 'op'
+     362 |                 bch2_bkey_set_needs_rebalance(trans, &op->opts, k,
+         |                                                       ^
+   1 error generated.
 
 
-vim +107 drivers/resctrl/mpam_devices.c
+vim +598 fs/bcachefs/rebalance.c
 
-    60	
-    61	static int mpam_dt_parse_resource(struct mpam_msc *msc, struct device_node *np,
-    62					  u32 ris_idx)
-    63	{
-    64		int err = 0;
-    65		u32 class_id = 0, component_id = 0;
-    66		struct device_node *cache = NULL, *memory = NULL;
-    67		enum mpam_class_types type = MPAM_CLASS_UNKNOWN;
-    68	
-    69		do {
-    70			/* What kind of MSC is this? */
-    71			if (of_device_is_compatible(np, "arm,mpam-cache")) {
-    72				cache = of_parse_phandle(np, "arm,mpam-device", 0);
-    73				if (!cache) {
-    74					pr_err("Failed to read phandle\n");
-    75					break;
-    76				}
-    77				type = MPAM_CLASS_CACHE;
-    78			} else if (of_device_is_compatible(np->parent, "cache")) {
-    79				cache = of_node_get(np->parent);
-    80				type = MPAM_CLASS_CACHE;
-    81			} else if (of_device_is_compatible(np, "arm,mpam-memory")) {
-    82				memory = of_parse_phandle(np, "arm,mpam-device", 0);
-    83				if (!memory) {
-    84					pr_err("Failed to read phandle\n");
-    85					break;
-    86				}
-    87				type = MPAM_CLASS_MEMORY;
-    88			} else if (of_device_is_compatible(np, "arm,mpam-memory-controller-msc")) {
-    89				memory = of_node_get(np->parent);
-    90				type = MPAM_CLASS_MEMORY;
-    91			} else {
-    92				/*
-    93				 * For now, only caches and memory controllers are
-    94				 * supported.
-    95				 */
-    96				break;
-    97			}
-    98	
-    99			/* Determine the class and component ids, based on type. */
-   100			if (type == MPAM_CLASS_CACHE) {
-   101				err = of_property_read_u32(cache, "cache-level", &class_id);
-   102				if (err) {
-   103					pr_err("Failed to read cache-level\n");
-   104					break;
-   105				}
-   106				component_id = cache_of_calculate_id(cache);
- > 107				if (component_id == ~0UL) {
-   108					err = -ENOENT;
-   109					break;
-   110				}
-   111			} else if (type == MPAM_CLASS_MEMORY) {
-   112				err = of_node_to_nid(np);
-   113				component_id = (err == NUMA_NO_NODE) ? 0 : err;
-   114				class_id = 255;
-   115			}
-   116	
-   117			err = mpam_ris_create(msc, ris_idx, type, class_id,
-   118					      component_id);
-   119		} while (0);
-   120		of_node_put(cache);
-   121		of_node_put(memory);
-   122	
-   123		return err;
-   124	}
-   125	
+1c6fdbd8f2465d Kent Overstreet 2017-03-16  565  
+fb3f57bb1177ae Kent Overstreet 2023-10-20  566  static struct bkey_s_c next_rebalance_extent(struct btree_trans *trans,
+063bc61f55098f Kent Overstreet 2025-08-20  567  			struct per_snapshot_io_opts *snapshot_io_opts,
+fb3f57bb1177ae Kent Overstreet 2023-10-20  568  			struct bpos work_pos,
+fb3f57bb1177ae Kent Overstreet 2023-10-20  569  			struct btree_iter *extent_iter,
+063bc61f55098f Kent Overstreet 2025-08-20  570  			struct bch_io_opts **io_opts_ret,
+fb3f57bb1177ae Kent Overstreet 2023-10-20  571  			struct data_update_opts *data_opts)
+1c6fdbd8f2465d Kent Overstreet 2017-03-16  572  {
+fb3f57bb1177ae Kent Overstreet 2023-10-20  573  	struct bch_fs *c = trans->c;
+fb3f57bb1177ae Kent Overstreet 2023-10-20  574  
+951d23507b08c2 Kent Overstreet 2025-07-30  575  	bch2_trans_iter_exit(extent_iter);
+fb3f57bb1177ae Kent Overstreet 2023-10-20  576  	bch2_trans_iter_init(trans, extent_iter,
+fb3f57bb1177ae Kent Overstreet 2023-10-20  577  			     work_pos.inode ? BTREE_ID_extents : BTREE_ID_reflink,
+fb3f57bb1177ae Kent Overstreet 2023-10-20  578  			     work_pos,
+5dd8c60e1e0448 Kent Overstreet 2024-04-07  579  			     BTREE_ITER_all_snapshots);
+25201eae7abed7 Kent Overstreet 2025-07-30  580  	struct bkey_s_c k = bch2_btree_iter_peek_slot(extent_iter);
+fb3f57bb1177ae Kent Overstreet 2023-10-20  581  	if (bkey_err(k))
+fb3f57bb1177ae Kent Overstreet 2023-10-20  582  		return k;
+fb3f57bb1177ae Kent Overstreet 2023-10-20  583  
+063bc61f55098f Kent Overstreet 2025-08-20  584  	struct bch_io_opts *io_opts =
+063bc61f55098f Kent Overstreet 2025-08-20  585  		bch2_extent_get_apply_io_opts(trans, snapshot_io_opts,
+5fb2bccc7dfb8c Kent Overstreet 2025-08-20  586  					      extent_iter->pos, extent_iter, k,
+5fb2bccc7dfb8c Kent Overstreet 2025-08-20  587  					      SET_NEEDS_REBALANCE_other);
+063bc61f55098f Kent Overstreet 2025-08-20  588  	int ret = PTR_ERR_OR_ZERO(io_opts);
+3de8b72731dbb4 Kent Overstreet 2024-10-19  589  	if (ret)
+3de8b72731dbb4 Kent Overstreet 2024-10-19  590  		return bkey_s_c_err(ret);
+1c6fdbd8f2465d Kent Overstreet 2017-03-16  591  
+063bc61f55098f Kent Overstreet 2025-08-20  592  	*io_opts_ret = io_opts;
+063bc61f55098f Kent Overstreet 2025-08-20  593  
+e525fb25001600 Kent Overstreet 2025-08-20  594  	unsigned move_ptrs	= 0;
+e525fb25001600 Kent Overstreet 2025-08-20  595  	unsigned compress_ptrs	= 0;
+e525fb25001600 Kent Overstreet 2025-08-20  596  	unsigned csum_ptrs	= 0;
+20ae3d99d27556 Kent Overstreet 2025-08-20  597  	static struct bch_extent_rebalance r =
+e525fb25001600 Kent Overstreet 2025-08-20 @598  		bch2_bkey_needs_rebalance(c, k, io_opts, &move_ptrs, &compress_ptrs, &csum_ptrs, false);
+e525fb25001600 Kent Overstreet 2025-08-20  599  
+fb3f57bb1177ae Kent Overstreet 2023-10-20  600  	memset(data_opts, 0, sizeof(*data_opts));
+e525fb25001600 Kent Overstreet 2025-08-20  601  	data_opts->rewrite_ptrs		= move_ptrs|compress_ptrs|csum_ptrs;
+3de8b72731dbb4 Kent Overstreet 2024-10-19  602  	data_opts->target		= io_opts->background_target;
+14e2523fc59d16 Kent Overstreet 2025-01-19  603  	data_opts->write_flags		|= BCH_WRITE_only_specified_devs;
+fb3f57bb1177ae Kent Overstreet 2023-10-20  604  
+20ae3d99d27556 Kent Overstreet 2025-08-20  605  	if (r.need_rb & BIT(BCH_REBALANCE_erasure_code)) {
+20ae3d99d27556 Kent Overstreet 2025-08-20  606  	}
+20ae3d99d27556 Kent Overstreet 2025-08-20  607  
+20ae3d99d27556 Kent Overstreet 2025-08-20  608  	if (r.need_rb & BIT(BCH_REBALANCE_data_replicas)) {
+20ae3d99d27556 Kent Overstreet 2025-08-20  609  	}
+20ae3d99d27556 Kent Overstreet 2025-08-20  610  
+e525fb25001600 Kent Overstreet 2025-08-20  611  	/* XXX: handle ec, increase/decrease replicas */
+e525fb25001600 Kent Overstreet 2025-08-20  612  
+20ae3d99d27556 Kent Overstreet 2025-08-20  613  	/* XXX: can we handle metadata? */
+20ae3d99d27556 Kent Overstreet 2025-08-20  614  
+20ae3d99d27556 Kent Overstreet 2025-08-20  615  	/* XXX: device scan cookies */
+20ae3d99d27556 Kent Overstreet 2025-08-20  616  
+fb3f57bb1177ae Kent Overstreet 2023-10-20  617  	if (!data_opts->rewrite_ptrs) {
+fb3f57bb1177ae Kent Overstreet 2023-10-20  618  		/*
+fb3f57bb1177ae Kent Overstreet 2023-10-20  619  		 * device we would want to write to offline? devices in target
+fb3f57bb1177ae Kent Overstreet 2023-10-20  620  		 * changed?
+fb3f57bb1177ae Kent Overstreet 2023-10-20  621  		 *
+fb3f57bb1177ae Kent Overstreet 2023-10-20  622  		 * We'll now need a full scan before this extent is picked up
+fb3f57bb1177ae Kent Overstreet 2023-10-20  623  		 * again:
+fb3f57bb1177ae Kent Overstreet 2023-10-20  624  		 */
+fb3f57bb1177ae Kent Overstreet 2023-10-20  625  		int ret = bch2_bkey_clear_needs_rebalance(trans, extent_iter, k);
+fb3f57bb1177ae Kent Overstreet 2023-10-20  626  		if (ret)
+fb3f57bb1177ae Kent Overstreet 2023-10-20  627  			return bkey_s_c_err(ret);
+fb3f57bb1177ae Kent Overstreet 2023-10-20  628  		return bkey_s_c_null;
+182084e3dc5f55 Kent Overstreet 2020-01-20  629  	}
+fb3f57bb1177ae Kent Overstreet 2023-10-20  630  
+25d1e39df0e284 Kent Overstreet 2023-11-24  631  	if (trace_rebalance_extent_enabled()) {
+fb021e8ae7db85 Kent Overstreet 2025-07-14  632  		CLASS(printbuf, buf)();
+25d1e39df0e284 Kent Overstreet 2023-11-24  633  
+a652c56590a912 Kent Overstreet 2024-10-26  634  		bch2_bkey_val_to_text(&buf, c, k);
+a652c56590a912 Kent Overstreet 2024-10-26  635  		prt_newline(&buf);
+a652c56590a912 Kent Overstreet 2024-10-26  636  
+de1d7af8f987a9 Kent Overstreet 2025-08-20  637  		if (move_ptrs) {
+de1d7af8f987a9 Kent Overstreet 2025-08-20  638  			prt_str(&buf, "move=");
+de1d7af8f987a9 Kent Overstreet 2025-08-20  639  			bch2_target_to_text(&buf, c, io_opts->background_target);
+25d1e39df0e284 Kent Overstreet 2023-11-24  640  			prt_str(&buf, " ");
+de1d7af8f987a9 Kent Overstreet 2025-08-20  641  			bch2_prt_u64_base2(&buf, move_ptrs);
+a652c56590a912 Kent Overstreet 2024-10-26  642  			prt_newline(&buf);
+a652c56590a912 Kent Overstreet 2024-10-26  643  		}
+a652c56590a912 Kent Overstreet 2024-10-26  644  
+de1d7af8f987a9 Kent Overstreet 2025-08-20  645  		if (compress_ptrs) {
+de1d7af8f987a9 Kent Overstreet 2025-08-20  646  			prt_str(&buf, "compression=");
+de1d7af8f987a9 Kent Overstreet 2025-08-20  647  			bch2_compression_opt_to_text(&buf, io_opts->background_compression);
+a652c56590a912 Kent Overstreet 2024-10-26  648  			prt_str(&buf, " ");
+de1d7af8f987a9 Kent Overstreet 2025-08-20  649  			bch2_prt_u64_base2(&buf, compress_ptrs);
+a652c56590a912 Kent Overstreet 2024-10-26  650  			prt_newline(&buf);
+a652c56590a912 Kent Overstreet 2024-10-26  651  		}
+25d1e39df0e284 Kent Overstreet 2023-11-24  652  
+567173c1b644eb Kent Overstreet 2025-08-20  653  		if (csum_ptrs) {
+567173c1b644eb Kent Overstreet 2025-08-20  654  			prt_str(&buf, "csum=");
+567173c1b644eb Kent Overstreet 2025-08-20  655  			bch2_prt_csum_opt(&buf, io_opts->data_checksum);
+567173c1b644eb Kent Overstreet 2025-08-20  656  			prt_str(&buf, " ");
+567173c1b644eb Kent Overstreet 2025-08-20  657  			bch2_prt_u64_base2(&buf, csum_ptrs);
+567173c1b644eb Kent Overstreet 2025-08-20  658  			prt_newline(&buf);
+567173c1b644eb Kent Overstreet 2025-08-20  659  		}
+567173c1b644eb Kent Overstreet 2025-08-20  660  
+25d1e39df0e284 Kent Overstreet 2023-11-24  661  		trace_rebalance_extent(c, buf.buf);
+25d1e39df0e284 Kent Overstreet 2023-11-24  662  	}
+f1f242e7d6d5d3 Kent Overstreet 2025-08-18  663  	count_event(c, rebalance_extent);
+25d1e39df0e284 Kent Overstreet 2023-11-24  664  
+fb3f57bb1177ae Kent Overstreet 2023-10-20  665  	return k;
+182084e3dc5f55 Kent Overstreet 2020-01-20  666  }
+182084e3dc5f55 Kent Overstreet 2020-01-20  667  
+
+:::::: The code at line 598 was first introduced by commit
+:::::: e525fb250016003c7d1aef9e0a1074261973b5df more rebalance work
+
+:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
 0-DAY CI Kernel Test Service
