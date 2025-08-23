@@ -1,55 +1,55 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E6F13A244
-	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4303A1E1E16
+	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755909168; cv=none; b=GwCo/dH3uRwiSe58LD6QzD17YNoj6iTkZwyYKYkOIw8Yx7mbm7OCjS/9JpSofUY/++THGRQAlxGJHnJJLl6ygP2AluksBqgdY943CuX/3zBz18q2/yAmAy4CCMjH92PvYQjO0O/xoP67Ypf/4yddLBGqhuY6gtg1MyKlZaPDmcw=
+	t=1755909171; cv=none; b=ElfFAO7FOSe1u2mttae7z/Ze7p6sPU45JqVxOfNr43HbcuAlyc+u6QKDxe9I1+fhFIAxKP0DbDM5neSkH5x64QJb6V8qtX8xuzdXeQwMVWUvas0QmdQ0sF8uddvhBQPFi+AWj/xKwnni3/3gsvuT0IrlcwSEsTWlQx6g+uvucfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755909168; c=relaxed/simple;
-	bh=0ozmjdqmiUy38NLd3mjJiTMgTSR0mcPgWNA2BVBdmUc=;
+	s=arc-20240116; t=1755909171; c=relaxed/simple;
+	bh=Z7VPssF3bUNgdTwlsTGD3V6ckx5vCdjZubep8K/fgLU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=nEKRmd+9A6Rx6ttI6ds09vAeARE8My+tggaXV3OPk5XRPY/iG17NgHldXAhtJAAI2lpW9YV8vK8bjAGQkUR7izgYbNrJU3qmbzNWZ1R1nzXOU3kGpqDvuW8mSAk/RdzTZ43eMOL0i+cZi9ORynpLUz3E7lIJM1lCXztCNAnr1iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I5xe/v7o; arc=none smtp.client-ip=209.85.214.201
+	 To:Content-Type; b=pfxmJLyRWLMWLrM0FsYFTzgWh811Znzku6kb+jGTrBaR3E8fDeyDA6xB1ISyyDzrZf431JZ0Astxaz4Yis399n/fKIDjnrP9YdOgZlAPdLnT/rirbh299tIjQLI27Cd6RRGy9lKt52ahkZCT8YAOM2SIQsPgkGUsbBtIK2CeY18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h+MkKTsL; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I5xe/v7o"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-246088fc25cso26836635ad.1
-        for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 17:32:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h+MkKTsL"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-24636484391so14219315ad.3
+        for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 17:32:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755909165; x=1756513965; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1755909168; x=1756513968; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VF5CM2vLbajn/0/hZ+iG3dArvYCDH2HTv0M3yBwbcdc=;
-        b=I5xe/v7oCT6PRazAMabJ9q3liksO5+3tumlcnKpXKayOkuxy7vxTNBxcsYM2qMc7hS
-         yLLRppA49oVNgWSUrHoniJDueDfB5owRVDADI5bwqOu5aSUaMYSTeJbtm9C9/PauzPM1
-         P0Bnnri6W0hry5xia3G40HJPMSjzhjq4Zq+ItWQZmMm3E0q31DJ6+yllj2EdK9Qj4mGo
-         agbOiarZ/2ke6yqB9WvxjLPKU2sRBMY86pYe18VPljc00QKZ8Ez4Io2PRMkYgjDZB4aP
-         Ar1qkCWTPYExFPwH1gc5bq0BHWV1/Mshn46G6gb+EU9GXVQDyKqFoII8+msreDRcJTJ5
-         mwTA==
+        bh=q3gB61DCA/Vjel4Yg0VRmeHLBpoCrBc48QfkMoiPEdE=;
+        b=h+MkKTsLotp6cEmbJd3gfop+PpCSbbBhrdYsHz30zhhKXR3IqD/SjVVJRfariQFG61
+         68IMHwNSFQkHGzyT1Q5nubwiYaE+2lyOuenV16CW7qIAS0DVQpYzvCn+6fmRJpPtj+nT
+         TUblYbV4yT2qBBVF11AvWGDXg17bsXnl9LNKxMLksZRl0RtzWp2x5DEIINKBAZXxKx8a
+         XRY6yueQ0ea76RdfeBa/nCQy4rrHfETRNi4bGF+OxK5Lyfs6KaI6Gd3i33tAFRqz3sdC
+         NJJPTsRO2NxNOU+YWGxzsuCob6gnhUNj0UV6vKSSbAyhAcTudwQKIgTwhp5rsa2SlgzO
+         coBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755909165; x=1756513965;
+        d=1e100.net; s=20230601; t=1755909168; x=1756513968;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VF5CM2vLbajn/0/hZ+iG3dArvYCDH2HTv0M3yBwbcdc=;
-        b=fgDZgzUMPYwcF54njpRtmMm/zQbQuZl5JmeiKjTXxn3IPh/DSmTfXLni1S+XmI8ujY
-         5ARj0qKMSu8MI375cW6fu7huzAAAvj2TqFRJ+jeo3dXkX/rSWfuh2LX4dRwYwnxG3yWO
-         yEPdwjfJj0LJXImNmd8UQLRdEWxJP1xLOXbsT2TCn+6J0X4YDM5o7apqFWCgDsEXdxhN
-         re9+lZQcLApodt/Nu0jexAVGiLnrRT61g38ExPD69CYumndriVXdN0l7SNPB98CQGe55
-         tD0Dexi/yODKh+RM3wARkUxlql0poIMxp54513a4IxrYZDbgaUfQkF8IZKzSF4OAJKzh
-         t7Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBSXsyPnFL+2rLOAOTVJW1+OkRXOapQ6I21kaCovJ0WZm+vm3+5SrCbRkKiwZpi85+hbqc@lists.linux.dev
-X-Gm-Message-State: AOJu0YzAH+tyKwmbxtBsMngu3MlslZQaf1gFLdnim0gSGIlYxat7ipf9
-	xuoQYeX5vVPJuZujtlFz2ewFezEGizgf6ABDNQK/WAf2Yz8tx7o9/qXOFEmBvJZD1CjwRuyU2N1
-	hdp75Zq27Eg==
-X-Google-Smtp-Source: AGHT+IHcBVHGjqZPYoRt453/JseuhLTKBct17IqGPmeEReDDCr7lrPYMm5P0Iz8qbPilxI4LujrWdfsoai5v
-X-Received: from pldq21.prod.google.com ([2002:a17:902:c9d5:b0:234:9673:1d13])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:22c5:b0:246:2ac3:a8ae
- with SMTP id d9443c01a7336-2462efdc71emr62128425ad.58.1755909165283; Fri, 22
- Aug 2025 17:32:45 -0700 (PDT)
-Date: Fri, 22 Aug 2025 17:32:04 -0700
+        bh=q3gB61DCA/Vjel4Yg0VRmeHLBpoCrBc48QfkMoiPEdE=;
+        b=sPkwDXmB/fdMRu6gsKSWa9HnYsSv1Hx4QguWM8KzR1BpdqDb40VbMBYyy9zg6xIjDz
+         8E0ssklMyUoAB9nEkb6Lgz3RJdKtc7TtM0VkDOr1j1BplhUoxtijyGpRxGUNf6h1NJ6u
+         Dg7ri2VUkJhvloSt4n3IysBLMclolcEvxDA8nt/BnD51njTMB0uNnflJpPez3Zhfvnpp
+         pclxosXOrdX5DdvFy8Uaal7gmsj2RKYmDepAl10mDLm1JwiuYmwbulMwrrP2StsahXua
+         g4gQnilWtW6y/WGgbJcasbJkpsmuhhauToPnnLrXZddsrfTq6+KlSDsW6SnSfjj3LK2O
+         iJxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVk44UJ1vJ48dOvXOzqWv4s/GCqxErntMZgsbOzn7j+j5qsIf8QSXzrUNeSspnWKwzx3V0q@lists.linux.dev
+X-Gm-Message-State: AOJu0YwDvumEwSyKOws1xgK7oAbcsrW7FTTBEY24XxpQBRgFcO64gjXC
+	M+4MOayVGFO72XYKctG1i+SEzbH1Xadxa76haNanOmBUPaLwRzyQx5wbf3Fto2KO2q05uaSZwQ7
+	/nEMTBMBb+A==
+X-Google-Smtp-Source: AGHT+IHHqOvMgCSRCa9kzTTb1GJ5NWUejKwbyrtF0K9SjnWfitaXUm4aUh+Cu2YxhPsOQ6+Tb6T83W4Ui2VE
+X-Received: from pldb10.prod.google.com ([2002:a17:902:ed0a:b0:244:6b9d:49da])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:fc8e:b0:240:49bf:6332
+ with SMTP id d9443c01a7336-2462ef6d9b8mr60932825ad.47.1755909168410; Fri, 22
+ Aug 2025 17:32:48 -0700 (PDT)
+Date: Fri, 22 Aug 2025 17:32:05 -0700
 In-Reply-To: <20250823003216.733941-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250823003216.733941-1-irogers@google.com>
 X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
-Message-ID: <20250823003216.733941-9-irogers@google.com>
-Subject: [PATCH v5 08/19] perf llvm: Mangle libperf-llvm.so function names
+Message-ID: <20250823003216.733941-10-irogers@google.com>
+Subject: [PATCH v5 09/19] perf dso: Move read_symbol from llvm/capstone to dso
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -80,159 +80,350 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Song Liu <song@kernel.org>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-For a function like llvm_addr2line having the libperf-llvm.so exported
-symbol named llvm_addr2line meant that the perf llvm_addr2line could
-sometimes erroneously be returned. This led to infinite recursion and
-eventual stack overflow. To avoid this conflict add a new
-BUILDING_PERF_LLVMSO when libperf-llvm.so is being built and use it to
-alter the behavior of MANGLE_PERF_LLVM_API, a macro that prefixes the
-name when libperf-llvm.so is being built. The prefixed named avoids
-the name collision.
+Move the read_symbol function to dso.h, make the return type const and
+add a mutable out_buf out parameter. In future changes this will allow
+a code pointer to be returned without necessary allocating memory.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf           |  3 ++-
- tools/perf/util/llvm-c-helpers.cpp | 29 ++++++++++++++++++-----------
- tools/perf/util/llvm-c-helpers.h   | 24 ++++++++++++++++--------
- 3 files changed, 36 insertions(+), 20 deletions(-)
+ tools/perf/util/capstone.c | 64 +++++-----------------------
+ tools/perf/util/dso.c      | 67 +++++++++++++++++++++++++++++
+ tools/perf/util/dso.h      |  4 ++
+ tools/perf/util/llvm.c     | 87 +++++++-------------------------------
+ 4 files changed, 97 insertions(+), 125 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index bfa4ad7ea89d..116c935c06f7 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -1002,7 +1002,8 @@ $(LIBSYMBOL)-clean:
- 	$(Q)$(RM) -r -- $(LIBSYMBOL_OUTPUT)
- 
- ifdef LIBLLVM_DYNAMIC
--LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS)) -DHAVE_LIBLLVM_SUPPORT
-+LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS))
-+LIBPERF_LLVM_CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT -DBUILDING_PERF_LLVMSO
- LIBPERF_LLVM_LIBS = -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM) -lstdc++
- 
- $(OUTPUT)$(LIBPERF_LLVM): util/llvm-c-helpers.cpp
-diff --git a/tools/perf/util/llvm-c-helpers.cpp b/tools/perf/util/llvm-c-helpers.cpp
-index 5a6f76e6b705..8cea380be5c2 100644
---- a/tools/perf/util/llvm-c-helpers.cpp
-+++ b/tools/perf/util/llvm-c-helpers.cpp
-@@ -99,10 +99,12 @@ static int extract_file_and_line(const DILineInfo &line_info, char **file,
- #endif
- 
- extern "C"
--int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
--		   char **file __maybe_unused, unsigned int *line __maybe_unused,
--		   bool unwind_inlines __maybe_unused,
--		   llvm_a2l_frame **inline_frames __maybe_unused)
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name __maybe_unused,
-+                                         u64 addr __maybe_unused,
-+                                         char **file __maybe_unused,
-+                                         unsigned int *line __maybe_unused,
-+                                         bool unwind_inlines __maybe_unused,
-+                                         llvm_a2l_frame **inline_frames __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -177,7 +179,8 @@ int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
- 		if (!handle)
- 			return 0;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_addr2line"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_addr2line)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_addr2line\n");
- 		fn_init = true;
-@@ -215,8 +218,9 @@ make_symbol_relative_string(struct dso *dso, const char *sym_name,
- #endif
- 
- extern "C"
--char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -242,7 +246,8 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_code"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_code)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_code\n");
- 		fn_init = true;
-@@ -256,8 +261,9 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
+diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+index fa9aa9cde68d..5aeae261f7ee 100644
+--- a/tools/perf/util/capstone.c
++++ b/tools/perf/util/capstone.c
+@@ -434,66 +434,23 @@ static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
+ 	return 0;
  }
  
- extern "C"
--char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
+-static u8 *
+-read_symbol(const char *filename, struct map *map, struct symbol *sym,
+-	    u64 *len, bool *is_64bit)
+-{
+-	struct dso *dso = map__dso(map);
+-	struct nscookie nsc;
+-	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 end = map__rip_2objdump(map, sym->end);
+-	int fd, count;
+-	u8 *buf = NULL;
+-	struct find_file_offset_data data = {
+-		.ip = start,
+-	};
+-
+-	*is_64bit = false;
+-
+-	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
+-	fd = open(filename, O_RDONLY);
+-	nsinfo__mountns_exit(&nsc);
+-	if (fd < 0)
+-		return NULL;
+-
+-	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
+-			    is_64bit) == 0)
+-		goto err;
+-
+-	*len = end - start;
+-	buf = malloc(*len);
+-	if (buf == NULL)
+-		goto err;
+-
+-	count = pread(fd, buf, *len, data.offset);
+-	close(fd);
+-	fd = -1;
+-
+-	if ((u64)count != *len)
+-		goto err;
+-
+-	return buf;
+-
+-err:
+-	if (fd >= 0)
+-		close(fd);
+-	free(buf);
+-	return NULL;
+-}
+-
+ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 				 struct symbol *sym __maybe_unused,
+ 				 struct annotate_args *args __maybe_unused)
  {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -283,7 +289,8 @@ char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
+ 	struct annotation *notes = symbol__annotation(sym);
+ 	struct map *map = args->ms.map;
++	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 len;
+ 	u64 offset;
+ 	int i, count, free_count;
+ 	bool is_64bit = false;
+ 	bool needs_cs_close = false;
+-	u8 *buf = NULL;
++	/* Malloc-ed buffer containing instructions read from disk. */
++	u8 *code_buf = NULL;
++	/* Pointer to code to be disassembled. */
++	const u8 *buf;
++	u64 buf_len;
+ 	csh handle;
+ 	struct cs_insn *insn = NULL;
+ 	char disasm_buf[512];
+@@ -503,7 +460,8 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 	if (args->options->objdump_path)
+ 		return -1;
  
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_data"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_data)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_data\n");
- 		fn_init = true;
-diff --git a/tools/perf/util/llvm-c-helpers.h b/tools/perf/util/llvm-c-helpers.h
-index d2b99637a28a..cfcfd540cdae 100644
---- a/tools/perf/util/llvm-c-helpers.h
-+++ b/tools/perf/util/llvm-c-helpers.h
-@@ -13,6 +13,14 @@
- extern "C" {
- #endif
+-	buf = read_symbol(filename, map, sym, &len, &is_64bit);
++	buf = dso__read_symbol(dso, filename, map, sym,
++			       &code_buf, &buf_len, &is_64bit);
+ 	if (buf == NULL)
+ 		return -1;
  
-+/* Support name mangling so that libperf_llvm.so's names don't match those in perf. */
-+#ifdef BUILDING_PERF_LLVMSO
-+#define MANGLE_PERF_LLVM_API(x) PERF_LLVM_SO_ ## x
-+#else
-+#define MANGLE_PERF_LLVM_API(x) x
-+#endif
-+#define MANGLE_PERF_LLVM_API_STR(x) "PERF_LLVM_SO_" #x
+@@ -532,7 +490,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 
+ 	needs_cs_close = true;
+ 
+-	free_count = count = perf_cs_disasm(handle, buf, len, start, len, &insn);
++	free_count = count = perf_cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
+ 	for (i = 0, offset = 0; i < count; i++) {
+ 		int printed;
+ 
+@@ -556,7 +514,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 	}
+ 
+ 	/* It failed in the middle: probably due to unknown instructions */
+-	if (offset != len) {
++	if (offset != buf_len) {
+ 		struct list_head *list = &notes->src->source;
+ 
+ 		/* Discard all lines and fallback to objdump */
+@@ -575,7 +533,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 		if (free_count > 0)
+ 			perf_cs_free(insn, free_count);
+ 	}
+-	free(buf);
++	free(code_buf);
+ 	return count < 0 ? count : 0;
+ 
+ err:
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index 282e3af85d5a..87d075942de6 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -1798,3 +1798,70 @@ bool is_perf_pid_map_name(const char *dso_name)
+ 
+ 	return perf_pid_map_tid(dso_name, &tid);
+ }
 +
- struct dso;
++struct find_file_offset_data {
++	u64 ip;
++	u64 offset;
++};
++
++/* This will be called for each PHDR in an ELF binary */
++static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
++{
++	struct find_file_offset_data *data = arg;
++
++	if (start <= data->ip && data->ip < start + len) {
++		data->offset = pgoff + data->ip - start;
++		return 1;
++	}
++	return 0;
++}
++
++const u8 *dso__read_symbol(struct dso *dso, const char *symfs_filename,
++			   const struct map *map, const struct symbol *sym,
++			   u8 **out_buf, u64 *out_buf_len, bool *is_64bit)
++{
++	struct nscookie nsc;
++	u64 start = map__rip_2objdump(map, sym->start);
++	u64 end = map__rip_2objdump(map, sym->end);
++	int fd, count;
++	u8 *buf = NULL;
++	size_t len;
++	struct find_file_offset_data data = {
++		.ip = start,
++	};
++
++	*out_buf = NULL;
++	*out_buf_len = 0;
++	*is_64bit = false;
++
++	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
++	fd = open(symfs_filename, O_RDONLY);
++	nsinfo__mountns_exit(&nsc);
++	if (fd < 0)
++		return NULL;
++
++	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data, is_64bit) == 0)
++		goto err;
++
++	len = end - start;
++	buf = malloc(len);
++	if (buf == NULL)
++		goto err;
++
++	count = pread(fd, buf, len, data.offset);
++	close(fd);
++	fd = -1;
++
++	if ((u64)count != len)
++		goto err;
++
++	*out_buf = buf;
++	*out_buf_len = len;
++	return buf;
++
++err:
++	if (fd >= 0)
++		close(fd);
++	free(buf);
++	return NULL;
++}
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 3457d713d3c5..acdd6c8a1fc9 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -903,4 +903,8 @@ u64 dso__findnew_global_type(struct dso *dso, u64 addr, u64 offset);
+ bool perf_pid_map_tid(const char *dso_name, int *tid);
+ bool is_perf_pid_map_name(const char *dso_name);
  
- struct llvm_a2l_frame {
-@@ -37,12 +45,12 @@ struct llvm_a2l_frame {
-  * a newly allocated array with that length. The caller is then responsible
-  * for freeing both the strings and the array itself.
-  */
--int llvm_addr2line(const char* dso_name,
--                   u64 addr,
--                   char** file,
--                   unsigned int* line,
--                   bool unwind_inlines,
--                   struct llvm_a2l_frame** inline_frames);
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name,
-+					 u64 addr,
-+					 char **file,
-+					 unsigned int *line,
-+					 bool unwind_inlines,
-+					 struct llvm_a2l_frame **inline_frames);
++const u8 *dso__read_symbol(struct dso *dso, const char *symfs_filename,
++			   const struct map *map, const struct symbol *sym,
++			   u8 **out_buf, u64 *out_buf_len, bool *is_64bit);
++
+ #endif /* __PERF_DSO */
+diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+index f6a8943b7c9d..a0774373f0d6 100644
+--- a/tools/perf/util/llvm.c
++++ b/tools/perf/util/llvm.c
+@@ -296,71 +296,6 @@ void dso__free_a2l_llvm(struct dso *dso __maybe_unused)
+ 	/* Nothing to free. */
+ }
  
+-
+-struct find_file_offset_data {
+-	u64 ip;
+-	u64 offset;
+-};
+-
+-/* This will be called for each PHDR in an ELF binary */
+-static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
+-{
+-	struct find_file_offset_data *data = arg;
+-
+-	if (start <= data->ip && data->ip < start + len) {
+-		data->offset = pgoff + data->ip - start;
+-		return 1;
+-	}
+-	return 0;
+-}
+-
+-static u8 *
+-read_symbol(const char *filename, struct map *map, struct symbol *sym,
+-	    u64 *len, bool *is_64bit)
+-{
+-	struct dso *dso = map__dso(map);
+-	struct nscookie nsc;
+-	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 end = map__rip_2objdump(map, sym->end);
+-	int fd, count;
+-	u8 *buf = NULL;
+-	struct find_file_offset_data data = {
+-		.ip = start,
+-	};
+-
+-	*is_64bit = false;
+-
+-	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
+-	fd = open(filename, O_RDONLY);
+-	nsinfo__mountns_exit(&nsc);
+-	if (fd < 0)
+-		return NULL;
+-
+-	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
+-			    is_64bit) == 0)
+-		goto err;
+-
+-	*len = end - start;
+-	buf = malloc(*len);
+-	if (buf == NULL)
+-		goto err;
+-
+-	count = pread(fd, buf, *len, data.offset);
+-	close(fd);
+-	fd = -1;
+-
+-	if ((u64)count != *len)
+-		goto err;
+-
+-	return buf;
+-
+-err:
+-	if (fd >= 0)
+-		close(fd);
+-	free(buf);
+-	return NULL;
+-}
+-
  /*
-  * Simple symbolizers for addresses; will convert something like
-@@ -50,8 +58,8 @@ int llvm_addr2line(const char* dso_name,
-  *
-  * The returned value must be freed by the caller, with free().
-  */
--char *llvm_name_for_code(struct dso *dso, const char *dso_name, u64 addr);
--char *llvm_name_for_data(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso, const char *dso_name, u64 addr);
+  * Whenever LLVM wants to resolve an address into a symbol, it calls this
+  * callback. We don't ever actually _return_ anything (in particular, because
+@@ -397,8 +332,11 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	struct map *map = args->ms.map;
+ 	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+-	u8 *buf;
+-	u64 len;
++	/* Malloc-ed buffer containing instructions read from disk. */
++	u8 *code_buf = NULL;
++	/* Pointer to code to be disassembled. */
++	const u8 *buf;
++	u64 buf_len;
+ 	u64 pc;
+ 	bool is_64bit;
+ 	char triplet[64];
+@@ -418,7 +356,8 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	perf_LLVMInitializeAllTargetMCs();
+ 	perf_LLVMInitializeAllDisassemblers();
  
- #ifdef __cplusplus
+-	buf = read_symbol(filename, map, sym, &len, &is_64bit);
++	buf = dso__read_symbol(dso, filename, map, sym,
++			       &code_buf, &buf_len, &is_64bit);
+ 	if (buf == NULL)
+ 		return -1;
+ 
+@@ -466,14 +405,18 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	annotation_line__add(&dl->al, &notes->src->source);
+ 
+ 	pc = start;
+-	for (u64 offset = 0; offset < len; ) {
++	for (u64 offset = 0; offset < buf_len; ) {
+ 		unsigned int ins_len;
+ 
+ 		storage.branch_addr = 0;
+ 		storage.pcrel_load_addr = 0;
+ 
+-		ins_len = perf_LLVMDisasmInstruction(disasm, buf + offset,
+-						     len - offset, pc,
++		/*
++		 * LLVM's API has the code be disassembled as non-const, cast
++		 * here as we may be disassembling from mapped read-only memory.
++		 */
++		ins_len = perf_LLVMDisasmInstruction(disasm, (u8 *)(buf + offset),
++						     buf_len - offset, pc,
+ 						     disasm_buf, sizeof(disasm_buf));
+ 		if (ins_len == 0)
+ 			goto err;
+@@ -531,7 +474,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 
+ err:
+ 	perf_LLVMDisasmDispose(disasm);
+-	free(buf);
++	free(code_buf);
+ 	free(line_storage);
+ 	return ret;
  }
 -- 
 2.51.0.rc2.233.g662b1ed5c5-goog
