@@ -1,205 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215A817555;
-	Sat, 23 Aug 2025 13:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D175393DEA
+	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 16:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755956626; cv=none; b=VlngYCdNpGoYMQ4JxVWhI/Aq/3X71gxNaxQ3fOjx31EFSFKPLYggjoTEugvxmsvNQ3Akq4aDI9TQ0Z+O7lUcJkgkoy7AasN2StrM7oGVNhbMkGsOOg4DWXiqjoKcuJGTWbtG8fo0eYlr6CL1Kp5gxpVgB3JZe8cn9u1DbXYhewY=
+	t=1755967764; cv=none; b=W+z9ZcBq7HLs3U4lJrK8zEWLq7WBlWGdPV2MTSIanKl7dqa9evbvny3Zlj63c4nKEUEQD5A6GaAGUW2kHj84Nb2T8DodUNOkS5xBtqVwO3EU4nqakfs3sDS7wYDlWm0a1N4yJDOSqwoCybOv3qVbYtC7zwDzYreOC1uLDXiiK1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755956626; c=relaxed/simple;
-	bh=SYKe5CulOhjzGY27kdF2knpr1wIg8AMU2aTe6y/qo2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=s34OD/BT6ucpMOTYZjmxNu9w2SlkTj+KFrOg6v+lVDe5EplV7u28GHRF1lDoXKj1Hs1OT8RKyML6kGa8YzlAEgcbMXbSjcUzKaDOSn515GIq33EvQLodxvOmVlG6oYomNLsW2+X/JNBygYqGwTY6VtgewJdDdoYhsMcNYmKWWx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i7YTC6Hw; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1755967764; c=relaxed/simple;
+	bh=8YpxJPRMsJBkynas/VbqXASvJV+LVskvWZ5lioILCQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H91kckXE8/oTDgtczImZo2T72fDl56C48c3Nj+PWFDVVlqqNNE+I/rEh6/wix1LTq0s9asLcrtIcCORz/W6VkPH4Sr0x6xrW8k+pr6/LC9OQJQT5oS5jpIDR3JYVThVehLzOIWTD9LVylZNg6icuK7RMK3SjibeOw8BNgb1T/+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EQjXCE+4; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i7YTC6Hw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755956624; x=1787492624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SYKe5CulOhjzGY27kdF2knpr1wIg8AMU2aTe6y/qo2Q=;
-  b=i7YTC6HwV4nT/YhtNQaQoGpDemAZ9TY2mbquej49vOJ3uV7vcLkZfh35
-   7jSTVT168adKN7SuSb3q9M77ZmJGV4tmvjJQqMogvSAMjAUqoQzhGyNJ0
-   xMauLwBwWWd9UWwJNpCI4oU3/Lp5pA6/OVixeJ+1ZvV8nNujx5GP9deF2
-   Lp/euPbthQb8d0PNePpXUPMa1wd0+kaLbqOWa8KBoG5qhPBgBvziw1cSe
-   Z+8UrlVPrTJfiB2Ncz7/GCwZ7SlIszHDr+ejKHZb2A8CEX4DXrd6gm0o5
-   /2nIyDVfn8hIFs2eXxaLtfWlRBoFc+A0iLq9VvBMop0rhuYewBW4Ai+q8
-   Q==;
-X-CSE-ConnectionGUID: qRWJLvKlQXiPCiu1fcblnw==
-X-CSE-MsgGUID: xSKG4GOBTqqCPFaDMcKqrw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="69674082"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69674082"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 06:43:44 -0700
-X-CSE-ConnectionGUID: lR+NW7hMSP2RsX2TRruhIg==
-X-CSE-MsgGUID: RlFVeZHwRFu9xoLNogRMnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="169275987"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 23 Aug 2025 06:43:42 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1upoWx-000MK7-0t;
-	Sat, 23 Aug 2025 13:43:39 +0000
-Date: Sat, 23 Aug 2025 21:43:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-rebalance 336/336]
- fs/bcachefs/rebalance.c:598:3: error: initializer element is not a
- compile-time constant
-Message-ID: <202508232149.WXCTVTwc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EQjXCE+4"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-246257e49c8so125455ad.0
+        for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 09:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755967762; x=1756572562; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8YpxJPRMsJBkynas/VbqXASvJV+LVskvWZ5lioILCQw=;
+        b=EQjXCE+4GeJSV70x81oON7cfp1aIuB+hr8vutBkcRPBT6bRYWVr5cuyxfWanZ8yREt
+         VC02nONCCs3/R/CqHfozxPJUqERzmxdPWmfMIoGzMg6sgdYubvO3C7h6P3Vib4fbdGnA
+         VH9onJHY9hOlDgndg5BLejmRrDenaOvTK0rpCm50U5wWiymcxnYo/hM3vMvae8XY4hW9
+         WYcP96bmY+PCczIxTridrjWrdA5LbZiQKKUEfn/Tj8zKEi+ZnY1KHt9biUQqIqsIB/eH
+         y24en+X5NJo+TcXagGMT9yKXtR//Owy6cQ+3Nom8BlSQVlv7sopHOWCCgfw8sXppWJ92
+         iTrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755967762; x=1756572562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8YpxJPRMsJBkynas/VbqXASvJV+LVskvWZ5lioILCQw=;
+        b=IPq/EouFUx6ZYT7XzCz2kn9/At6ewjufdUqTe4WbAKb6nS7b9aLPuglqfJy8XJZZdA
+         ts+27Xck/csHI5pZl5D+6RTlzTmva8voH8MVlbzX3K6lAeIQl+1vRPJwQ1YZ4Ni4RhH0
+         5RpiRjHN6zVb3wlgyYi7ziyc0/y1GcI09WVfzzEB+p0tudxY7Ynx0AH/YYH4SC/UGeQ2
+         Ec5qwf1M+73EqXa0N1ZAmfLoSnWQwgEK55X0UajMbM4xsMMFCOrcLwWOVBQLkN3iTpM/
+         kCcxHhkKAEwqJIRSolfOd3ITEEJs5pMxSh5KcY1A6B1Agxt22evBtkcm9QBjgwVIrVoj
+         UATg==
+X-Forwarded-Encrypted: i=1; AJvYcCVuboEV8rTo1S2fNG3bf6z45rIFkWexJ8BOHpZW4frcRTg9qZhdtxOYfC9vZGxzNwIcIgdf@lists.linux.dev
+X-Gm-Message-State: AOJu0YxOHmsKs1VUKq/BKlymdpssf1ThhNKql21lkYljec3qw2XthNcM
+	azCy53WCffanKca8PwZycy2T3y0PkcI96hpSzKRPLNdb5T8M0WqZU9nwWKjcujdQGzLd0H6XRML
+	6gE86H30S4UVmyZN4xjxE2l04oUXHHe3AL8r7EfkK
+X-Gm-Gg: ASbGnctsB9yC7Bo8AUOE/cdfat5sFru0d3eSMaIGftYZyy7mUYKm95HSgdo1I4jw2g3
+	Np7POVVvAyl2vOAmEBOeJeEYxIfSy1w8hwnaWod83+caM9LfhA0yXVmKoYhRnra4vcLxSG+jTyN
+	Sq8JVP1UNovp/8WtYsU1/WrumOqMYktq32SnHUYga0eusW92dft2od1r1VU02pTmy10tYnKxnWI
+	vDLA0+4Y4cilA==
+X-Google-Smtp-Source: AGHT+IGGKzyig0sJhIDWW/nSQxj4OQzvDA0OPRGfLHvzMGNVvjSyeTmmkEB5lOEbZ5yCPiIdJ8wlqYpa3Scf59bznr8=
+X-Received: by 2002:a17:903:2f82:b0:240:520b:3cbc with SMTP id
+ d9443c01a7336-2466fa251e2mr2803115ad.14.1755967761957; Sat, 23 Aug 2025
+ 09:49:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <87ldnacz33.fsf@gentoo.org> <87cy8mcyy4.fsf@gentoo.org>
+In-Reply-To: <87cy8mcyy4.fsf@gentoo.org>
+From: Ian Rogers <irogers@google.com>
+Date: Sat, 23 Aug 2025 09:49:10 -0700
+X-Gm-Features: Ac12FXx_I9TlyYoS8Acvvq3h2swrT6lD-bRfYeprBApJYtrL-ohu-WwZy8Q9SnA
+Message-ID: <CAP-5=fV+-VZ+SsGL1SJGYMEv-gwkv1AKk_6MZJ4tLBrCXFnMQA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/19] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
+To: Sam James <sam@gentoo.org>
+Cc: acme@kernel.org, adityag@linux.ibm.com, adrian.hunter@intel.com, 
+	ak@linux.intel.com, alexander.shishkin@linux.intel.com, amadio@gentoo.org, 
+	atrajeev@linux.vnet.ibm.com, bpf@vger.kernel.org, chaitanyas.prakash@arm.com, 
+	changbin.du@huawei.com, charlie@rivosinc.com, dvyukov@google.com, 
+	james.clark@linaro.org, jolsa@kernel.org, justinstitt@google.com, 
+	kan.liang@linux.intel.com, kjain@linux.ibm.com, lihuafei1@huawei.com, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev, mark.rutland@arm.com, mhiramat@kernel.org, 
+	mingo@redhat.com, morbo@google.com, namhyung@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, peterz@infradead.org, sesse@google.com, 
+	song@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-rebalance
-head:   20ae3d99d2755617d23d984971def2fb3fba21e5
-commit: 20ae3d99d2755617d23d984971def2fb3fba21e5 [336/336] more rebalance work NOTES
-config: x86_64-buildonly-randconfig-003-20250823 (https://download.01.org/0day-ci/archive/20250823/202508232149.WXCTVTwc-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508232149.WXCTVTwc-lkp@intel.com/reproduce)
+On Fri, Aug 22, 2025 at 11:52=E2=80=AFPM Sam James <sam@gentoo.org> wrote:
+>
+> > A few months ago, objdump was the only way to get
+> > source line support [0]. Is that still the case?
+>
+> ... or is this perhaps handled by "[PATCH v5 18/19] perf srcline:
+> Fallback between addr2line implementations", in which case, shouldn't
+> that really land first so people can try the LLVM impl and use the
+> binutils one if it fails?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508232149.WXCTVTwc-lkp@intel.com/
+So my opinion, BUILD_NON_DISTRO isn't supported and the code behind it
+should go away. Please don't do anything to the contrary or enable it
+for your distribution - this was supposed to be implied by the name.
+The forking and running addr2line gets around the license issue that
+is GPLv3* but comes with a performance overhead. It also has a
+maintenance overhead supporting llvm and binutil addr2line, when the
+addr2line output changes things break, etc. (LLVM has been evolving
+their output but I'm not aware of it breaking things yet). We should
+(imo) delete the forking and running addr2line support, it fits the
+billing of something we can do when capstone and libLLVM support
+aren't there but the code is a hot mess and we don't do exhaustive
+testing against the many addr2line flavors, the best case is buyer
+beware. Capstone is derived from libLLVM, I'm not sure it makes sense
+having 2 libraries for this stuff. There's libLLVM but what it
+provides through a C API is a mess requiring the C++ shimming. Tbh, I
+think most of what these libraries provide we should just get over
+ourselves and provide in perf itself. For example, does it make sense
+to be trying to add type annotations to objdump output, to just update
+objdump or have a disassembler library where we can annotate things as
+we see fit? Library bindings don't break when text output formats get
+tweaked. Given we're doing so much dwarf processing, do we need a
+library for that or should that just be in-house? We can side step
+most of this mess by starting again in python as is being shown in the
+textual changes that bring with it stuff like console flame graphs:
+https://lore.kernel.org/lkml/CAP-5=3DfU=3Dz8kcY4zjezoxSwYf9vczYzHztiMSBvJxd=
+wwBPVWv2Q@mail.gmail.com/
+So I think long term we make the perf tool minimal with minimal
+dependencies (ie no addr2line, libLLVM, etc.), we work on having nice
+stuff in the python stuff where we can reuse or build new libraries
+for addr2line, objdump-ing, etc. Use >1 thread, use asyncio, etc.
 
-All errors (new ones prefixed by >>):
+For where we are now, ie no python stuff, BUILD_NON_DISTRO should go
+away as nobody is maintaining it and hasn't for 2 years (what happens
+when libbfd and libiberty change?). We should focus on making the best
+of what we have via libraries/tools that are supported - while not
+forcing the libraries to be there or making the perf binary massive by
+dragging in say libLLVM. The patch series pushes in that direction and
+I commend it to the reader.
 
->> fs/bcachefs/rebalance.c:598:3: error: initializer element is not a compile-time constant
-     598 |                 bch2_bkey_needs_rebalance(c, k, io_opts, &move_ptrs, &compress_ptrs, &csum_ptrs, false);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> fs/bcachefs/io_write.c:362:41: error: use of undeclared identifier 'op'
-     362 |                 bch2_bkey_set_needs_rebalance(trans, &op->opts, k,
-         |                                                       ^
-   1 error generated.
+No, reordering the patches to compare performance of binutils doesn't
+make sense, just build with and without the patch series if you want
+to do this, but also don't do this as BUILD_NON_DISTRO should go away.
 
+Thanks,
+Ian
 
-vim +598 fs/bcachefs/rebalance.c
-
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  565  
-fb3f57bb1177ae Kent Overstreet 2023-10-20  566  static struct bkey_s_c next_rebalance_extent(struct btree_trans *trans,
-063bc61f55098f Kent Overstreet 2025-08-20  567  			struct per_snapshot_io_opts *snapshot_io_opts,
-fb3f57bb1177ae Kent Overstreet 2023-10-20  568  			struct bpos work_pos,
-fb3f57bb1177ae Kent Overstreet 2023-10-20  569  			struct btree_iter *extent_iter,
-063bc61f55098f Kent Overstreet 2025-08-20  570  			struct bch_io_opts **io_opts_ret,
-fb3f57bb1177ae Kent Overstreet 2023-10-20  571  			struct data_update_opts *data_opts)
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  572  {
-fb3f57bb1177ae Kent Overstreet 2023-10-20  573  	struct bch_fs *c = trans->c;
-fb3f57bb1177ae Kent Overstreet 2023-10-20  574  
-951d23507b08c2 Kent Overstreet 2025-07-30  575  	bch2_trans_iter_exit(extent_iter);
-fb3f57bb1177ae Kent Overstreet 2023-10-20  576  	bch2_trans_iter_init(trans, extent_iter,
-fb3f57bb1177ae Kent Overstreet 2023-10-20  577  			     work_pos.inode ? BTREE_ID_extents : BTREE_ID_reflink,
-fb3f57bb1177ae Kent Overstreet 2023-10-20  578  			     work_pos,
-5dd8c60e1e0448 Kent Overstreet 2024-04-07  579  			     BTREE_ITER_all_snapshots);
-25201eae7abed7 Kent Overstreet 2025-07-30  580  	struct bkey_s_c k = bch2_btree_iter_peek_slot(extent_iter);
-fb3f57bb1177ae Kent Overstreet 2023-10-20  581  	if (bkey_err(k))
-fb3f57bb1177ae Kent Overstreet 2023-10-20  582  		return k;
-fb3f57bb1177ae Kent Overstreet 2023-10-20  583  
-063bc61f55098f Kent Overstreet 2025-08-20  584  	struct bch_io_opts *io_opts =
-063bc61f55098f Kent Overstreet 2025-08-20  585  		bch2_extent_get_apply_io_opts(trans, snapshot_io_opts,
-5fb2bccc7dfb8c Kent Overstreet 2025-08-20  586  					      extent_iter->pos, extent_iter, k,
-5fb2bccc7dfb8c Kent Overstreet 2025-08-20  587  					      SET_NEEDS_REBALANCE_other);
-063bc61f55098f Kent Overstreet 2025-08-20  588  	int ret = PTR_ERR_OR_ZERO(io_opts);
-3de8b72731dbb4 Kent Overstreet 2024-10-19  589  	if (ret)
-3de8b72731dbb4 Kent Overstreet 2024-10-19  590  		return bkey_s_c_err(ret);
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  591  
-063bc61f55098f Kent Overstreet 2025-08-20  592  	*io_opts_ret = io_opts;
-063bc61f55098f Kent Overstreet 2025-08-20  593  
-e525fb25001600 Kent Overstreet 2025-08-20  594  	unsigned move_ptrs	= 0;
-e525fb25001600 Kent Overstreet 2025-08-20  595  	unsigned compress_ptrs	= 0;
-e525fb25001600 Kent Overstreet 2025-08-20  596  	unsigned csum_ptrs	= 0;
-20ae3d99d27556 Kent Overstreet 2025-08-20  597  	static struct bch_extent_rebalance r =
-e525fb25001600 Kent Overstreet 2025-08-20 @598  		bch2_bkey_needs_rebalance(c, k, io_opts, &move_ptrs, &compress_ptrs, &csum_ptrs, false);
-e525fb25001600 Kent Overstreet 2025-08-20  599  
-fb3f57bb1177ae Kent Overstreet 2023-10-20  600  	memset(data_opts, 0, sizeof(*data_opts));
-e525fb25001600 Kent Overstreet 2025-08-20  601  	data_opts->rewrite_ptrs		= move_ptrs|compress_ptrs|csum_ptrs;
-3de8b72731dbb4 Kent Overstreet 2024-10-19  602  	data_opts->target		= io_opts->background_target;
-14e2523fc59d16 Kent Overstreet 2025-01-19  603  	data_opts->write_flags		|= BCH_WRITE_only_specified_devs;
-fb3f57bb1177ae Kent Overstreet 2023-10-20  604  
-20ae3d99d27556 Kent Overstreet 2025-08-20  605  	if (r.need_rb & BIT(BCH_REBALANCE_erasure_code)) {
-20ae3d99d27556 Kent Overstreet 2025-08-20  606  	}
-20ae3d99d27556 Kent Overstreet 2025-08-20  607  
-20ae3d99d27556 Kent Overstreet 2025-08-20  608  	if (r.need_rb & BIT(BCH_REBALANCE_data_replicas)) {
-20ae3d99d27556 Kent Overstreet 2025-08-20  609  	}
-20ae3d99d27556 Kent Overstreet 2025-08-20  610  
-e525fb25001600 Kent Overstreet 2025-08-20  611  	/* XXX: handle ec, increase/decrease replicas */
-e525fb25001600 Kent Overstreet 2025-08-20  612  
-20ae3d99d27556 Kent Overstreet 2025-08-20  613  	/* XXX: can we handle metadata? */
-20ae3d99d27556 Kent Overstreet 2025-08-20  614  
-20ae3d99d27556 Kent Overstreet 2025-08-20  615  	/* XXX: device scan cookies */
-20ae3d99d27556 Kent Overstreet 2025-08-20  616  
-fb3f57bb1177ae Kent Overstreet 2023-10-20  617  	if (!data_opts->rewrite_ptrs) {
-fb3f57bb1177ae Kent Overstreet 2023-10-20  618  		/*
-fb3f57bb1177ae Kent Overstreet 2023-10-20  619  		 * device we would want to write to offline? devices in target
-fb3f57bb1177ae Kent Overstreet 2023-10-20  620  		 * changed?
-fb3f57bb1177ae Kent Overstreet 2023-10-20  621  		 *
-fb3f57bb1177ae Kent Overstreet 2023-10-20  622  		 * We'll now need a full scan before this extent is picked up
-fb3f57bb1177ae Kent Overstreet 2023-10-20  623  		 * again:
-fb3f57bb1177ae Kent Overstreet 2023-10-20  624  		 */
-fb3f57bb1177ae Kent Overstreet 2023-10-20  625  		int ret = bch2_bkey_clear_needs_rebalance(trans, extent_iter, k);
-fb3f57bb1177ae Kent Overstreet 2023-10-20  626  		if (ret)
-fb3f57bb1177ae Kent Overstreet 2023-10-20  627  			return bkey_s_c_err(ret);
-fb3f57bb1177ae Kent Overstreet 2023-10-20  628  		return bkey_s_c_null;
-182084e3dc5f55 Kent Overstreet 2020-01-20  629  	}
-fb3f57bb1177ae Kent Overstreet 2023-10-20  630  
-25d1e39df0e284 Kent Overstreet 2023-11-24  631  	if (trace_rebalance_extent_enabled()) {
-fb021e8ae7db85 Kent Overstreet 2025-07-14  632  		CLASS(printbuf, buf)();
-25d1e39df0e284 Kent Overstreet 2023-11-24  633  
-a652c56590a912 Kent Overstreet 2024-10-26  634  		bch2_bkey_val_to_text(&buf, c, k);
-a652c56590a912 Kent Overstreet 2024-10-26  635  		prt_newline(&buf);
-a652c56590a912 Kent Overstreet 2024-10-26  636  
-de1d7af8f987a9 Kent Overstreet 2025-08-20  637  		if (move_ptrs) {
-de1d7af8f987a9 Kent Overstreet 2025-08-20  638  			prt_str(&buf, "move=");
-de1d7af8f987a9 Kent Overstreet 2025-08-20  639  			bch2_target_to_text(&buf, c, io_opts->background_target);
-25d1e39df0e284 Kent Overstreet 2023-11-24  640  			prt_str(&buf, " ");
-de1d7af8f987a9 Kent Overstreet 2025-08-20  641  			bch2_prt_u64_base2(&buf, move_ptrs);
-a652c56590a912 Kent Overstreet 2024-10-26  642  			prt_newline(&buf);
-a652c56590a912 Kent Overstreet 2024-10-26  643  		}
-a652c56590a912 Kent Overstreet 2024-10-26  644  
-de1d7af8f987a9 Kent Overstreet 2025-08-20  645  		if (compress_ptrs) {
-de1d7af8f987a9 Kent Overstreet 2025-08-20  646  			prt_str(&buf, "compression=");
-de1d7af8f987a9 Kent Overstreet 2025-08-20  647  			bch2_compression_opt_to_text(&buf, io_opts->background_compression);
-a652c56590a912 Kent Overstreet 2024-10-26  648  			prt_str(&buf, " ");
-de1d7af8f987a9 Kent Overstreet 2025-08-20  649  			bch2_prt_u64_base2(&buf, compress_ptrs);
-a652c56590a912 Kent Overstreet 2024-10-26  650  			prt_newline(&buf);
-a652c56590a912 Kent Overstreet 2024-10-26  651  		}
-25d1e39df0e284 Kent Overstreet 2023-11-24  652  
-567173c1b644eb Kent Overstreet 2025-08-20  653  		if (csum_ptrs) {
-567173c1b644eb Kent Overstreet 2025-08-20  654  			prt_str(&buf, "csum=");
-567173c1b644eb Kent Overstreet 2025-08-20  655  			bch2_prt_csum_opt(&buf, io_opts->data_checksum);
-567173c1b644eb Kent Overstreet 2025-08-20  656  			prt_str(&buf, " ");
-567173c1b644eb Kent Overstreet 2025-08-20  657  			bch2_prt_u64_base2(&buf, csum_ptrs);
-567173c1b644eb Kent Overstreet 2025-08-20  658  			prt_newline(&buf);
-567173c1b644eb Kent Overstreet 2025-08-20  659  		}
-567173c1b644eb Kent Overstreet 2025-08-20  660  
-25d1e39df0e284 Kent Overstreet 2023-11-24  661  		trace_rebalance_extent(c, buf.buf);
-25d1e39df0e284 Kent Overstreet 2023-11-24  662  	}
-f1f242e7d6d5d3 Kent Overstreet 2025-08-18  663  	count_event(c, rebalance_extent);
-25d1e39df0e284 Kent Overstreet 2023-11-24  664  
-fb3f57bb1177ae Kent Overstreet 2023-10-20  665  	return k;
-182084e3dc5f55 Kent Overstreet 2020-01-20  666  }
-182084e3dc5f55 Kent Overstreet 2020-01-20  667  
-
-:::::: The code at line 598 was first introduced by commit
-:::::: e525fb250016003c7d1aef9e0a1074261973b5df more rebalance work
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+* (As I understand the issue IANAL) GPLv3 and GPLv2 can't be linked
+together. Why not just use GPLv3? A major issue for me is that GPLv3
+adds a requirement for =E2=80=9CInstallation Information=E2=80=9D to be pro=
+vided,
+which means placing a binary in a cryptographically signed OS
+partition you'd need to reveal the signing key which defeats the
+purpose of signing the partition to ensure you aren't hacked. I like
+open source and using the code, I don't want to be hacked by giving to
+the hackers my signing keys.
