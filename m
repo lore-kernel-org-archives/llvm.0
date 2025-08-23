@@ -1,103 +1,198 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471EBEEB2
-	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FD811CBA
+	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755909133; cv=none; b=R2dFupOQJampY6IgAb2rP97eO5S9KrJ1i0kH7nSZFoNaT22Us8WYnnYuYqTKPx27nCigEHdfokCMYRTHeVDQ64/YS5aOHF4RKVXxP6ZdPYMTkGcx2vieNAoODEcL000eFYX2anN6lbNn0hy8WiSzAKA+rK7FxvEWSHsDylySbAc=
+	t=1755909151; cv=none; b=UqJFFpsLyFxIsHv2YqkMligHmDJM2eHJXXHFoPRCpqIuoXtbtuJjX2MyBOXROQn5ut6UrBwauD74zkmFottEqWRvVNew5zovqlkgRJEeBB4ZkkgnTHaT1x9sSEPs4Hxyh1/5P114qGgt/qQ1FGEZyBeYsp0wfBLSUahUxB6IdVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755909133; c=relaxed/simple;
-	bh=dH68MXdvL0ZDuDe9a7OjyLeA9VR5m4Qg5+qKmH752pY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZP0bz4oQeFOufItzSMrVfrT2tNqwinnEJc52GdpAXQ2zArt/3PhgDecXriiwerLfQDx7pJMUANQg1HWsolJoNXqHtaFxpkB/IaZaeKPrY7Qa+OFMoHSjKKORAIMJvTn5/A0Z/UJ3ysZ9YqnwuaE5H9SHaBc/78YbL83BzCJqNW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ORKzR6lS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1755909151; c=relaxed/simple;
+	bh=mZ5k/3Vkyfz8Z4KJVL7joRVzBpIaiSreRWEnmU1umtk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=UNiWI5fI3ARo7IfIqzSoFl3ZTrOgXMfJ212MH3AF2lYozSq/aZ7yUjsXBWo8nZ7Ibr/rpYpVFruYQu7ISMiUwcB9sSnitL30bz8Kq3DUqpWey+Nauo2AAdGFSqD4OwKTmuLfIuSl+rMIOVG2ldfk1+xGQp1WK3asGY1w5wk5i1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MP5y+C7K; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ORKzR6lS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755909129;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=o4yVFI68aT84gzFQE82Qz4AEP6bAbGrPsvjacF+ju2M=;
-	b=ORKzR6lSVsoqcCHjH4U9ws9G8/qPi4zmWuXMowngLXhBPLs622hOe4WWIKdO1ThjiQQPj0
-	P1Cuxi8Z75yAs+1/eYGVhsEXCXxfnVJghZ+aNHsVkAPhScqopm8jKNDC7vnvRM2DZEVswK
-	/3C2A6hJD7Q59o1MniZDDGQEQgzV3K4=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-614-DT0d5Dy6Pc2PnZQi4BgBmA-1; Fri,
- 22 Aug 2025 20:32:07 -0400
-X-MC-Unique: DT0d5Dy6Pc2PnZQi4BgBmA-1
-X-Mimecast-MFC-AGG-ID: DT0d5Dy6Pc2PnZQi4BgBmA_1755909127
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9939F19560B2
-	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:06 +0000 (UTC)
-Received: from [172.20.48.110] (unknown [10.30.45.91])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 247303001453;
-	Sat, 23 Aug 2025 00:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc2,
- upstream-mainline, 6debb690)
-Date: Sat, 23 Aug 2025 00:32:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MP5y+C7K"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-24457ef983fso53504655ad.0
+        for <llvm@lists.linux.dev>; Fri, 22 Aug 2025 17:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755909149; x=1756513949; darn=lists.linux.dev;
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YShzOxlKe/FmAZPtZyBmMwoWni8azVcezuusK/af7Dk=;
+        b=MP5y+C7KEanwGiDzN3YrMPmhbpWoyTkhw7n7yc1FRWiZzY0sjqdHa7c554anhO/uPi
+         DY4Q7ngjqS05asAlHMP3Jh6nysMXQxKBxIavAFifSz4itZ4jHrUE5GKnbvNJGl4SB9NA
+         XpaiVx88/MBs5qEKp3JyQgXk+9MG1dNGaGE3ld29iJqRtK+ylxfFYhFO9GWpi42QRA9H
+         4TjMuUHlbqKI3D8sKGHf5w07XWOiC3f/BkXffFao1UEZY0y79OpZErGoh+7eC7jftYKm
+         o7pG5gz7IfYr8zC78PFy75UZIFKZ07oAVC52YS/B67++gVfUgGfMV4EVVCfR6YED2rqr
+         lvFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755909149; x=1756513949;
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YShzOxlKe/FmAZPtZyBmMwoWni8azVcezuusK/af7Dk=;
+        b=K9aNEpf4DolcR85svFfQr6ZVbBPfKESi/gvYGHcClIRARfZi3u3GYdVa06k12299sl
+         T7F7XtTyVPODZ/PsClXIn8NgZw3denzmpuOkWO1Ifa4A9YyUzBIEg5i726iQNgQ7HEf6
+         foM/jR6fSNUHwhe7zBMnbaJT7Sdjm9wDivvv65napeSPM+7KUmAHGrIE70sjAcJOkrg3
+         tnI50XBMVMs4+qMnGzrteNZFZ+Zl7U8OjDBxDKFsNSlbMloJUBkLp7YGDCicBTjpUGeN
+         Rb2PLh7o5c948zn568694T7IhNNVw6sH26hjeJw0rkjn0MK3FDjen5vKajFdGYcH623V
+         P5ww==
+X-Forwarded-Encrypted: i=1; AJvYcCUUB79izeevR+D4V64arqU4Qk++0xSMfnqpSybOdpng5hcAyd9eUXB4JI7UumKeeFIkmFld@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzsh0YVOK3uw43YMtYq+iXGmrSpisBbYm3vJmQM1mhkW4hpcaM+
+	RsnL0N9w3wan0al3Iippj3FKk10nntdl3FzxR4gSlYlDF2OqxfD67zwcyX/r7gTbDv+Ete8YEJb
+	jlqkipOOMjQ==
+X-Google-Smtp-Source: AGHT+IGzr6GhJucF9cOZgIikuIRQUPQ/76/GCNWGjtrx0aVv6U1BMzYz9dndilEDmun6oUSPS7zZGIkHIVj6
+X-Received: from plbd18.prod.google.com ([2002:a17:902:f152:b0:23f:fded:852b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d4cf:b0:244:9c9e:3c6d
+ with SMTP id d9443c01a7336-2462ef1307cmr63652425ad.46.1755909148861; Fri, 22
+ Aug 2025 17:32:28 -0700 (PDT)
+Date: Fri, 22 Aug 2025 17:31:56 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <94235.125082220320701911@us-mta-614.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: CX8SJHoH3VFnZ76LUAYZO2x_CNXs0HbNpDRTtaHFyWM_1755909127
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
+Message-ID: <20250823003216.733941-1-irogers@google.com>
+Subject: [PATCH v5 00/19] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Aditya Gupta <adityag@linux.ibm.com>, 
+	"Steinar H. Gunderson" <sesse@google.com>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Changbin Du <changbin.du@huawei.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Kajol Jain <kjain@linux.ibm.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Li Huafei <lihuafei1@huawei.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>, 
+	Chaitanya S Prakash <chaitanyas.prakash@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
+	Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Linking against libcapstone and libLLVM can be a significant increase
+in dependencies and file size if building statically. For something
+like `perf record` the disassembler and addr2line functionality won't
+be used. Support dynamically loading these libraries using dlopen and
+then calling the appropriate functions found using dlsym.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+BUILD_NONDISTRO is used to build perf against the license incompatible
+libbfd and libiberty libraries. As this has been opt-in for nearly 2
+years, commit dd317df07207 ("perf build: Make binutil libraries opt
+in"), remove the code to simplify the code base.
 
+The patch series:
+1) does some initial clean up;
+2) moves the capstone and LLVM code to their own C files,
+3) simplifies a little the capstone code;
+4) adds perf_ variants of the functions that will either directly call
+   the function or use dlsym to discover it;
+5) adds BPF JIT disassembly support to LLVM and capstone disassembly;
+6) removes the BUILD_NONDISTRO code, reduces scope and removes what's possible;
+7) adds fallback to srcline's addr2line so that llvm_addr2line is
+   tried first and then the forked command tried next, moving the code
+   for forking out of the main srcline.c file in the process.
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2025-08-23-1' of https://gitlab.fr=
-eedesktop.org/drm/kernel
+The addr2line LLVM functionality is written in C++. To avoid linking
+against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
+the C++ code with the libLLVM dependency will be built into a
+libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
+would extend their C API to avoid this.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1999436691
+The libbfd BPF disassembly supported source lines, this wasn't ported
+to the capstone and LLVM disassembly.
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1999436691_aarch64_kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1999436691_x86_64_kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1999436691_x86_64_kernel-debug
+v5: Rebase and comment typo fix.
+v4: Rebase and addition of a patch removing an unused struct variable.
+v3: Add srcline addr2line fallback trying LLVM first then forking a
+    process. This came up in conversation with Steinar Gunderson
+    <sesse@google.com>.
+    Tweak the cover letter message to try to address Andi Kleen's
+    <ak@linux.intel.com> feedback that the series doesn't really
+    achieve anything.
+v2: Add mangling of the function names in libperf-llvm.so to avoid
+    potential infinite recursion. Add BPF JIT disassembly support to
+    LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
+    series from:
+    https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
+    Some other minor additional clean up.
 
+Ian Rogers (19):
+  perf build: Remove libtracefs configuration
+  perf map: Constify objdump offset/address conversion APIs
+  perf capstone: Move capstone functionality into its own file
+  perf llvm: Move llvm functionality into its own file
+  perf capstone: Remove open_capstone_handle
+  perf capstone: Support for dlopen-ing libcapstone.so
+  perf llvm: Support for dlopen-ing libLLVM.so
+  perf llvm: Mangle libperf-llvm.so function names
+  perf dso: Move read_symbol from llvm/capstone to dso
+  perf dso: Support BPF programs in dso__read_symbol
+  perf llvm: Disassemble cleanup
+  perf dso: Clean up read_symbol error handling
+  perf build: Remove libbfd support
+  perf build: Remove libiberty support
+  perf build: Remove unused defines
+  perf disasm: Remove disasm_bpf
+  perf disasm: Make ins__scnprintf and ins__is_nop static
+  perf srcline: Fallback between addr2line implementations
+  perf disasm: Remove unused evsel from annotate_args
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+ tools/perf/Documentation/perf-check.txt |   1 -
+ tools/perf/Makefile.config              |  95 +--
+ tools/perf/Makefile.perf                |  35 +-
+ tools/perf/builtin-check.c              |   1 -
+ tools/perf/builtin-script.c             |   2 -
+ tools/perf/tests/Build                  |   1 -
+ tools/perf/tests/builtin-test.c         |   1 -
+ tools/perf/tests/make                   |   4 +-
+ tools/perf/tests/pe-file-parsing.c      | 101 ----
+ tools/perf/tests/tests.h                |   1 -
+ tools/perf/util/Build                   |   6 +-
+ tools/perf/util/addr2line.c             | 439 ++++++++++++++
+ tools/perf/util/addr2line.h             |  20 +
+ tools/perf/util/annotate.c              |   1 -
+ tools/perf/util/annotate.h              |   1 -
+ tools/perf/util/capstone.c              | 682 +++++++++++++++++++++
+ tools/perf/util/capstone.h              |  24 +
+ tools/perf/util/config.c                |   2 +-
+ tools/perf/util/demangle-cxx.cpp        |  22 +-
+ tools/perf/util/disasm.c                | 628 +------------------
+ tools/perf/util/disasm.h                |   6 +-
+ tools/perf/util/disasm_bpf.c            | 195 ------
+ tools/perf/util/disasm_bpf.h            |  12 -
+ tools/perf/util/dso.c                   |  98 +++
+ tools/perf/util/dso.h                   |   4 +
+ tools/perf/util/llvm-c-helpers.cpp      | 120 +++-
+ tools/perf/util/llvm-c-helpers.h        |  24 +-
+ tools/perf/util/llvm.c                  | 484 +++++++++++++++
+ tools/perf/util/llvm.h                  |  21 +
+ tools/perf/util/map.c                   |  19 +-
+ tools/perf/util/map.h                   |   6 +-
+ tools/perf/util/print_insn.c            | 117 +---
+ tools/perf/util/srcline.c               | 772 +-----------------------
+ tools/perf/util/srcline.h               |   7 +-
+ tools/perf/util/symbol-elf.c            |  85 ---
+ tools/perf/util/symbol.c                | 145 -----
+ tools/perf/util/symbol.h                |   4 -
+ 37 files changed, 2020 insertions(+), 2166 deletions(-)
+ delete mode 100644 tools/perf/tests/pe-file-parsing.c
+ create mode 100644 tools/perf/util/addr2line.c
+ create mode 100644 tools/perf/util/addr2line.h
+ create mode 100644 tools/perf/util/capstone.c
+ create mode 100644 tools/perf/util/capstone.h
+ delete mode 100644 tools/perf/util/disasm_bpf.c
+ delete mode 100644 tools/perf/util/disasm_bpf.h
+ create mode 100644 tools/perf/util/llvm.c
+ create mode 100644 tools/perf/util/llvm.h
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-- 
+2.51.0.rc2.233.g662b1ed5c5-goog
 
