@@ -1,58 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2F3C26;
-	Sat, 23 Aug 2025 07:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD7A1F948;
+	Sat, 23 Aug 2025 12:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755935632; cv=none; b=lETdwDKzpLcn314lx5sG0JSEhpuT4Z+ZnYqrwThzUoAMof5chkSvDDpNl5eg/mbQ+Z3KyIs6me36rv0koqbOHvQAMm8BhdA7WqPZkLlQeFCjBtWaQLV5ANTPn7zDPr69hGAztYuBdyKrYzNar0/VmaWnVVOHI4oJkTbYCNG6Rkk=
+	t=1755952787; cv=none; b=DNmP1ON5T41w48jqigy04FUK5fuvn1UBk6FObdDFQxlXXwigFg6NLVRq4eEB4apXwaLJ5jDSuTpKLW+e4NMf7PAZHtTNcKRbifRIy3Ufye+yr7i+zbfeSukKm/faFObrRLbA4RXv8Oatpt+WKO3BJWhNA2uNMn55JRR+p5eFdS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755935632; c=relaxed/simple;
-	bh=tkwEdL9tzdcawV9nya6XFlUogcn6ps7dV7hKg+ucbZg=;
+	s=arc-20240116; t=1755952787; c=relaxed/simple;
+	bh=7wE2m0dJcLwFUoWErp1t+SLSWI5UdvCrXvs1irA1LLw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lu6APwPJYiFdZHOSbGFwjLgiHw4Q+guoi6KoNj3/lYf0TMGcADQNLTV7zUd7D+chpIMPuWc+HchQ6WdZrjoffmQFZTinTbDUzrGBJzqgQpgyYFMC2mTrOD3gcEpOxtaR90JWY/zpaJX7/NfPRQkTGW9Cs3z3lxjBYjGVziqGQTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aq1sJTfI; arc=none smtp.client-ip=198.175.65.19
+	 Content-Disposition; b=KzidVgqUR7MMf9Cv+GJbiSVA9QNd6wtfrQFkZXvMwDicJB0t7QZc3cuPzflTZcHUVlVcuevRQGYYiqdzEV/ba+iZvMyhgTPQ0b9GsCqCK3zvkAGmXqIlKPJXsv1TFD9ltnYBVsWqWDpY8IEU/9Nrxo5JJAvtiaXgxlDfvyMHQvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pfvmm3Z9; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aq1sJTfI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pfvmm3Z9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755935630; x=1787471630;
+  t=1755952786; x=1787488786;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tkwEdL9tzdcawV9nya6XFlUogcn6ps7dV7hKg+ucbZg=;
-  b=aq1sJTfIDeilaaJJ0zJdN1S0l09NzxwmQlW0iG3xz/+pSXjP7bEipgg/
-   nlXbLCjllEFVJqfgfWAbeqUnNz1Unjs0wBzA8oH0I9g4YONbqkCWk22SZ
-   zcliEGJCmY2P3Q1IQeJc114DfKO6N3NFQ61CiCBU7FujTfiFgl/q58vKw
-   mI6OIAIfAY2LN/qthtBF5u7SknOaW8zcxmOpwKJoK/YUpSukiUZY6qU9r
-   oFsUngcrpidMrG4Srm5hSS16ZO4QyP0uVF6eJM4KaUg7O+PfvRj0Rujly
-   3uMgmov0bHuQsQgK31FpC+w3Tst9sz413AJsEOZSXxPvrmYEHe2OBS5y4
+  bh=7wE2m0dJcLwFUoWErp1t+SLSWI5UdvCrXvs1irA1LLw=;
+  b=Pfvmm3Z9hCVCPd8bmF/84lO8p0rj0g/GENG2V1R4r2DBghV6tC5atXKt
+   kTUWkdQT4uSYO/KAfWBK9X96zr6uQcu9MnwQ8ygbJaTSx+0Qh5FpWBW7A
+   0S6jaf4x1aZuHTaOsR6yho5NFw9dSLKe0qN/5suuAqhRpzlE1eYR3GOYA
+   vyenFnQCoEf0cPBEjxI7PTygj16T2FT0/XktV2RcBdLEsGWDx1Wp7EfQa
+   ltKMJox1OGdNvOo5ImKGxmT1fFcHnRQnCxKeFDzDA0nZVb8xmtYyCRBDz
+   izgo3cutNmcIAQtcOm34dHsejvpY04SgRUbPJEYRyNeVRIF42nawi35KM
    g==;
-X-CSE-ConnectionGUID: /UGryhVmQKmfFPi6PSq1Mw==
-X-CSE-MsgGUID: skpTA/qASKGL2teyr3DfvA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="58090738"
+X-CSE-ConnectionGUID: OXD5sQ/KT2mkGBs0g48x1w==
+X-CSE-MsgGUID: Qqjt0uFfTX29XvmO1T3R6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="57256404"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58090738"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 00:53:49 -0700
-X-CSE-ConnectionGUID: /+NPcWYbQlOnDYAZcB9xwg==
-X-CSE-MsgGUID: gFAtohXYRLC9jkn0N9zoUQ==
+   d="scan'208";a="57256404"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 05:39:45 -0700
+X-CSE-ConnectionGUID: yIQ99niGSnSLtoXoMPNvPA==
+X-CSE-MsgGUID: W8bmIO7BRbW244ObW8D5mw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="199838634"
+   d="scan'208";a="206086323"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 23 Aug 2025 00:53:49 -0700
+  by orviesa001.jf.intel.com with ESMTP; 23 Aug 2025 05:39:41 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1upj4A-000MBH-1Y;
-	Sat, 23 Aug 2025 07:53:42 +0000
-Date: Sat, 23 Aug 2025 15:52:37 +0800
+	id 1upnWy-000MIt-1C;
+	Sat, 23 Aug 2025 12:39:37 +0000
+Date: Sat, 23 Aug 2025 20:38:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:nth_page 13/34] mm/hugetlb.c:3250:28: error: use
- of undeclared identifier 'pfn'
-Message-ID: <202508231549.LAQRn060-lkp@intel.com>
+To: Shanker Donthineni <sdonthineni@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	James Morse <james.morse@arm.com>
+Subject: [morse:mpam/snapshot/v6.17-rc2 11/89]
+ drivers/resctrl/mpam_devices.c:107:21: warning: result of comparison of
+ constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned
+ int') is always false
+Message-ID: <202508232014.DXou0s7d-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,58 +65,94 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/davidhildenbrand/linux nth_page
-head:   6604ef076c5814154b00afdb7ea9ce90fd598b08
-commit: a81868b2ce05b94ec839ecbb2bb93376cf44c724 [13/34] mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()
-config: i386-buildonly-randconfig-003-20250823 (https://download.01.org/0day-ci/archive/20250823/202508231549.LAQRn060-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508231549.LAQRn060-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.17-rc2
+head:   c0646bf01fb5098c7d6cbc44af567a8bb2ca82d6
+commit: 91e0d5599e4dbfdae2f7579aba82a3b4bd5c15bf [11/89] arm_mpam: Add support for memory controller MSC on DT platforms
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250823/202508232014.DXou0s7d-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508232014.DXou0s7d-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508231549.LAQRn060-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508232014.DXou0s7d-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/hugetlb.c:3250:28: error: use of undeclared identifier 'pfn'
-    3250 |                 __init_single_page(page, pfn, zone, nid);
-         |                                          ^
-   1 error generated.
+>> drivers/resctrl/mpam_devices.c:107:21: warning: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     107 |                         if (component_id == ~0UL) {
+         |                             ~~~~~~~~~~~~ ^  ~~~~
+   1 warning generated.
 
 
-vim +/pfn +3250 mm/hugetlb.c
+vim +107 drivers/resctrl/mpam_devices.c
 
-aa888a74977a8f2 Andi Kleen        2008-07-23  3232  
-fde1c4ecf91640e Usama Arif        2023-09-13  3233  /* Initialize [start_page:end_page_number] tail struct pages of a hugepage */
-fde1c4ecf91640e Usama Arif        2023-09-13  3234  static void __init hugetlb_folio_init_tail_vmemmap(struct folio *folio,
-fde1c4ecf91640e Usama Arif        2023-09-13  3235  					unsigned long start_page_number,
-fde1c4ecf91640e Usama Arif        2023-09-13  3236  					unsigned long end_page_number)
-fde1c4ecf91640e Usama Arif        2023-09-13  3237  {
-fde1c4ecf91640e Usama Arif        2023-09-13  3238  	enum zone_type zone = zone_idx(folio_zone(folio));
-fde1c4ecf91640e Usama Arif        2023-09-13  3239  	int nid = folio_nid(folio);
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3240  	struct page *head_page = folio_page(folio, 0);
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3241  	struct page *page = folio_page(folio, start_page_number);
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3242  	unsigned long i;
-fde1c4ecf91640e Usama Arif        2023-09-13  3243  	int ret;
-fde1c4ecf91640e Usama Arif        2023-09-13  3244  
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3245  	/*
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3246  	 * We mark all tail pages with memblock_reserved_mark_noinit(),
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3247  	 * so these pages are completely uninitialized.
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3248  	 */
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3249  	for (i = start_page_number; i < end_page_number; i++, page++) {
-fde1c4ecf91640e Usama Arif        2023-09-13 @3250  		__init_single_page(page, pfn, zone, nid);
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3251  		prep_compound_tail(head_page, i);
-a81868b2ce05b94 David Hildenbrand 2025-08-07  3252  		set_page_count(page, 0);
-fde1c4ecf91640e Usama Arif        2023-09-13  3253  	}
-fde1c4ecf91640e Usama Arif        2023-09-13  3254  }
-fde1c4ecf91640e Usama Arif        2023-09-13  3255  
-
-:::::: The code at line 3250 was first introduced by commit
-:::::: fde1c4ecf91640e5a95ec36b71ec2e8ec379ce40 mm: hugetlb: skip initialization of gigantic tail struct pages if freed by HVO
-
-:::::: TO: Usama Arif <usama.arif@bytedance.com>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+    60	
+    61	static int mpam_dt_parse_resource(struct mpam_msc *msc, struct device_node *np,
+    62					  u32 ris_idx)
+    63	{
+    64		int err = 0;
+    65		u32 class_id = 0, component_id = 0;
+    66		struct device_node *cache = NULL, *memory = NULL;
+    67		enum mpam_class_types type = MPAM_CLASS_UNKNOWN;
+    68	
+    69		do {
+    70			/* What kind of MSC is this? */
+    71			if (of_device_is_compatible(np, "arm,mpam-cache")) {
+    72				cache = of_parse_phandle(np, "arm,mpam-device", 0);
+    73				if (!cache) {
+    74					pr_err("Failed to read phandle\n");
+    75					break;
+    76				}
+    77				type = MPAM_CLASS_CACHE;
+    78			} else if (of_device_is_compatible(np->parent, "cache")) {
+    79				cache = of_node_get(np->parent);
+    80				type = MPAM_CLASS_CACHE;
+    81			} else if (of_device_is_compatible(np, "arm,mpam-memory")) {
+    82				memory = of_parse_phandle(np, "arm,mpam-device", 0);
+    83				if (!memory) {
+    84					pr_err("Failed to read phandle\n");
+    85					break;
+    86				}
+    87				type = MPAM_CLASS_MEMORY;
+    88			} else if (of_device_is_compatible(np, "arm,mpam-memory-controller-msc")) {
+    89				memory = of_node_get(np->parent);
+    90				type = MPAM_CLASS_MEMORY;
+    91			} else {
+    92				/*
+    93				 * For now, only caches and memory controllers are
+    94				 * supported.
+    95				 */
+    96				break;
+    97			}
+    98	
+    99			/* Determine the class and component ids, based on type. */
+   100			if (type == MPAM_CLASS_CACHE) {
+   101				err = of_property_read_u32(cache, "cache-level", &class_id);
+   102				if (err) {
+   103					pr_err("Failed to read cache-level\n");
+   104					break;
+   105				}
+   106				component_id = cache_of_calculate_id(cache);
+ > 107				if (component_id == ~0UL) {
+   108					err = -ENOENT;
+   109					break;
+   110				}
+   111			} else if (type == MPAM_CLASS_MEMORY) {
+   112				err = of_node_to_nid(np);
+   113				component_id = (err == NUMA_NO_NODE) ? 0 : err;
+   114				class_id = 255;
+   115			}
+   116	
+   117			err = mpam_ris_create(msc, ris_idx, type, class_id,
+   118					      component_id);
+   119		} while (0);
+   120		of_node_put(cache);
+   121		of_node_put(memory);
+   122	
+   123		return err;
+   124	}
+   125	
 
 -- 
 0-DAY CI Kernel Test Service
