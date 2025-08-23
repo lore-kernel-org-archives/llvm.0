@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE41393DD4;
-	Sat, 23 Aug 2025 05:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4633F1DE3DC;
+	Sat, 23 Aug 2025 05:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755927420; cv=none; b=F6zJ0KUKJY+o/XZL9+UJfJYuqqUs/0kHGls2tiZQjx27E+9yRAF44USxHkKR9WexDjy9n4A//LqZorSxqY7HMq76RfV33uwa7geuqGSOU92PLS4BvNqtKrmML8QzgBxHAiy+VMAIcqBPHs6RLsSnyls7jfpLjIjOpYbMShdLgdo=
+	t=1755927421; cv=none; b=IHVrBs+E0Eldj8c/AGI04Vyz9Q3w8EPx8vsxSb2Aqb6KKdSN+Z1Nrr7uC/Y8/jeMxsXw1tWtOzn2vX4Dl0k4qYFFJfOjehm4/3W6xC/Hq5ZNFMrQVgltre5EBIrvgvlL9mKwnQB1iR2SqoqluIqWwwKDy/8hW/ELolugluddoRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755927420; c=relaxed/simple;
-	bh=1tUpIASBQrRnxUJgYcJxXdTtAc/gOVsJeaZLSIXbdgA=;
+	s=arc-20240116; t=1755927421; c=relaxed/simple;
+	bh=uK/ueCfU4pns+bwPpZslSYBj9WPm/c7mPAKo4rXRMKw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nFok5MaV+enF1/r00YPdDbB75okBt9qQyeLIT6cBCiSmbwomatI8oE+mia2/G8onXqKpTz8nHvoj/Vz8cUL3CWa3SsUdzV5bzSJeHaHnqLV0U32EBHAdZLC+mHWhHgfTZU9Y9kYiDfIYMT74t8AtztS9kB43UCqkfKb/WWhjxbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VLMa6rvw; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=UIFtelvk5UKkR5gHSM4+sh9jlwnmNKtwRTS+3D0ml1XKNPGKcOqQsljmFseJE6cwf35FelymGt3agoZtVHhLlQ6aw+vwlQUzNrg4sHGDjEzJ23kqzeDEqfgjIdkjINCITlJ/sUBBk/sJC288zoMGvNsSRh83EbCllpv5sXyYThQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TJCguNRV; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VLMa6rvw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TJCguNRV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1755927419; x=1787463419;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1tUpIASBQrRnxUJgYcJxXdTtAc/gOVsJeaZLSIXbdgA=;
-  b=VLMa6rvwZUFAkAs7gJIyxxFi27AhnYI0Hg+2Jn+VVcQGXJw6clUatgS+
-   qHS6J83Rit3lkoHKhLrfsEhtKdiCCnWq//FaGXhHy8h2NDCGKkFToQhQg
-   CiWirBuNo3i4RkxXWwKebOdsY17+pmJxIE1ye74JbyT4XZZbw9qcGt6kw
-   CJvwJdk7KSQNDUGqE+OmenYvqHODqH1ZyDUFknG3eBhhPhjjcdn7vfWW/
-   bNUgkhHgLdsjSVXbnbsabHA9kVV+RPOCnXxCMslkSCCcDAom02X7Ty6zU
-   gzSQs7Q3ivlFjAQvBSuqFrdCz0KJhf9RTZqVdwn8uktMYdX/KdNV4RiOc
-   w==;
-X-CSE-ConnectionGUID: 7UeYaZaQQXSBgORAY6JBjQ==
-X-CSE-MsgGUID: Mu2P+uDOTMCkGywJYxR/hA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="58178132"
+  bh=uK/ueCfU4pns+bwPpZslSYBj9WPm/c7mPAKo4rXRMKw=;
+  b=TJCguNRVlngwzz1qzLVp7j2Bjh9HWCbzXHVG5WGGbuZ0jPBkkck2+v+q
+   Z6ATJKtI0t2XO2ty25FvbeRNdQXoVjB09r8hLkFMrcMrVZAJ1A/T9I3fZ
+   jP/l1DP28cexbQwgI4+zL/sH7lcViXMN0ZrM9RBz3z/bI9H7woUbQkPQn
+   xAOAvphSV6RfHxq+o+EQSChNrdqUocB8f1m2x0RMw5ARegCb4yvu8QT4n
+   kedakZI0RPazSPLn0Z7E5XS3dHigND+0/msEBxF/sGwSVM7LV5XK7+HWu
+   jdSRfwxm0dg0jTW2AowXfxwFRnYkl/N5dJDhmWgqpXCXT0z2bZSz4Hkm6
+   A==;
+X-CSE-ConnectionGUID: 6P7XPnULT/WO7DgNvi7g/A==
+X-CSE-MsgGUID: XeEqsOG2Rb2tQBzP3DHIsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="75684113"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58178132"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 22:36:58 -0700
-X-CSE-ConnectionGUID: koOk2SmgRrGtXkcIZHYKQA==
-X-CSE-MsgGUID: W9tA1HNtRXy871+AluoCXw==
+   d="scan'208";a="75684113"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 22:36:59 -0700
+X-CSE-ConnectionGUID: vNBtLRQSSWqej6v2t+G8rA==
+X-CSE-MsgGUID: BkxMHIugTAe/Z93RHTc3+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="168763733"
+   d="scan'208";a="168370247"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 22 Aug 2025 22:36:56 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 22 Aug 2025 22:36:56 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1upgvu-000M6p-0l;
+	id 1upgvu-000M6r-0p;
 	Sat, 23 Aug 2025 05:36:54 +0000
-Date: Sat, 23 Aug 2025 13:36:03 +0800
+Date: Sat, 23 Aug 2025 13:36:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Faith Ekstrand <faith@gfxstrand.net>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Faith Ekstrand <faith.ekstrand@collabora.com>
-Subject: Re: [PATCH 1/7] drm/shmem: Add a drm_gem_shmem_sync_mmap() helper
-Message-ID: <202508231334.pWN5ScdS-lkp@intel.com>
-References: <20250822142954.902402-2-faith.ekstrand@collabora.com>
+To: John Ousterhout <ouster@cs.stanford.edu>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
+	edumazet@google.com, horms@kernel.org, kuba@kernel.org,
+	John Ousterhout <ouster@cs.stanford.edu>
+Subject: Re: [PATCH net-next v15 15/15] net: homa: create Makefile and Kconfig
+Message-ID: <202508231353.SNg0KuDi-lkp@intel.com>
+References: <20250818205551.2082-16-ouster@cs.stanford.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,34 +64,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250822142954.902402-2-faith.ekstrand@collabora.com>
+In-Reply-To: <20250818205551.2082-16-ouster@cs.stanford.edu>
 
-Hi Faith,
+Hi John,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on drm-exynos/exynos-drm-next]
-[also build test WARNING on linus/master v6.17-rc2 next-20250822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Faith-Ekstrand/drm-shmem-Add-a-drm_gem_shmem_sync_mmap-helper/20250822-223306
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20250822142954.902402-2-faith.ekstrand%40collabora.com
-patch subject: [PATCH 1/7] drm/shmem: Add a drm_gem_shmem_sync_mmap() helper
-config: x86_64-buildonly-randconfig-003-20250823 (https://download.01.org/0day-ci/archive/20250823/202508231334.pWN5ScdS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508231334.pWN5ScdS-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Ousterhout/net-homa-define-user-visible-API-for-Homa/20250819-050052
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250818205551.2082-16-ouster%40cs.stanford.edu
+patch subject: [PATCH net-next v15 15/15] net: homa: create Makefile and Kconfig
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250823/202508231353.SNg0KuDi-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508231353.SNg0KuDi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508231334.pWN5ScdS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508231353.SNg0KuDi-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Warning: drivers/gpu/drm/drm_gem_shmem_helper.c:673 function parameter 'dir' not described in 'drm_gem_shmem_sync_mmap'
+   In file included from net/homa/homa_incoming.c:5:
+   In file included from net/homa/homa_impl.h:13:
+   In file included from include/linux/icmp.h:16:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from net/homa/homa_incoming.c:5:
+   In file included from net/homa/homa_impl.h:33:
+>> arch/x86/include/asm/tsc.h:70:28: error: typedef redefinition with different types ('unsigned long long' vs 'unsigned long')
+      70 | typedef unsigned long long cycles_t;
+         |                            ^
+   include/asm-generic/timex.h:8:23: note: previous definition is here
+       8 | typedef unsigned long cycles_t;
+         |                       ^
+   In file included from net/homa/homa_incoming.c:5:
+   In file included from net/homa/homa_impl.h:33:
+>> arch/x86/include/asm/tsc.h:77:24: error: redefinition of 'get_cycles'
+      77 | static inline cycles_t get_cycles(void)
+         |                        ^
+   include/asm-generic/timex.h:10:24: note: previous definition is here
+      10 | static inline cycles_t get_cycles(void)
+         |                        ^
+   In file included from net/homa/homa_incoming.c:5:
+   In file included from net/homa/homa_impl.h:33:
+>> arch/x86/include/asm/tsc.h:80:7: error: call to undeclared function 'DISABLED_MASK_BIT_SET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      80 |             !cpu_feature_enabled(X86_FEATURE_TSC))
+         |              ^
+   arch/um/include/asm/cpufeature.h:52:32: note: expanded from macro 'cpu_feature_enabled'
+      52 |         (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit))
+         |                                       ^
+   1 warning and 3 errors generated.
+
+
+vim +70 arch/x86/include/asm/tsc.h
+
+288a4ff0ad29d1 arch/x86/include/asm/tsc.h Xin Li (Intel             2025-05-02  66) 
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  67  /*
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  68   * Standard way to access the cycle counter.
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  69   */
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06 @70  typedef unsigned long long cycles_t;
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  71  
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  72  extern unsigned int cpu_khz;
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  73  extern unsigned int tsc_khz;
+73018a66e70fa6 include/asm-x86/tsc.h      Glauber de Oliveira Costa 2008-01-30  74  
+73018a66e70fa6 include/asm-x86/tsc.h      Glauber de Oliveira Costa 2008-01-30  75  extern void disable_TSC(void);
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  76  
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06 @77  static inline cycles_t get_cycles(void)
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  78  {
+3bd4abc07a267e arch/x86/include/asm/tsc.h Jason A. Donenfeld        2022-04-08  79  	if (!IS_ENABLED(CONFIG_X86_TSC) &&
+3bd4abc07a267e arch/x86/include/asm/tsc.h Jason A. Donenfeld        2022-04-08 @80  	    !cpu_feature_enabled(X86_FEATURE_TSC))
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  81  		return 0;
+4ea1636b04dbd6 arch/x86/include/asm/tsc.h Andy Lutomirski           2015-06-25  82  	return rdtsc();
+6d63de8dbcda98 include/asm-x86/tsc.h      Andi Kleen                2008-01-30  83  }
+3bd4abc07a267e arch/x86/include/asm/tsc.h Jason A. Donenfeld        2022-04-08  84  #define get_cycles get_cycles
+2272b0e03ea573 include/asm-i386/tsc.h     Andres Salomon            2007-03-06  85  
 
 -- 
 0-DAY CI Kernel Test Service
