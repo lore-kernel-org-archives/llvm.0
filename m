@@ -1,87 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFF520322;
-	Fri, 22 Aug 2025 22:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471EBEEB2
+	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755900547; cv=none; b=K79z4pEKy0sRlgmU+KtQdlN+/57esXQuaoOe3LE8pr8uy/vOaUf3q1RTlv6pBXByi2zhvebGqeA44V0n0rtXfRRJMfzXc9GQp7GmHvgEXJLd/A00A/LR/OZGKeK40z5WKOafZM7KywvEaLxodeM7bDAKKOxc9Zf1S6pnSjVUqtc=
+	t=1755909133; cv=none; b=R2dFupOQJampY6IgAb2rP97eO5S9KrJ1i0kH7nSZFoNaT22Us8WYnnYuYqTKPx27nCigEHdfokCMYRTHeVDQ64/YS5aOHF4RKVXxP6ZdPYMTkGcx2vieNAoODEcL000eFYX2anN6lbNn0hy8WiSzAKA+rK7FxvEWSHsDylySbAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755900547; c=relaxed/simple;
-	bh=+76XesRQfwoY1jEOmEJj0AwVlQTN3XUHf6f+eVyTwds=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=AW0C8xAo9W3x7lhZpoZzX4VkU3yhfx6b+XsnUC+cH7/NxvP/UT7aZtjc9YE40BfLIxFlet/SPjkCWJMU9HjC2D3R+O3ywNyQt4ZTVEWY7neB/il4fAatYLY6+KU+XxB0EqCD+Lcnao1Lbu4HSOpOhaCb8BgEI6Vx6l+kW0mBAzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cKAnUECY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755909133; c=relaxed/simple;
+	bh=dH68MXdvL0ZDuDe9a7OjyLeA9VR5m4Qg5+qKmH752pY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ZP0bz4oQeFOufItzSMrVfrT2tNqwinnEJc52GdpAXQ2zArt/3PhgDecXriiwerLfQDx7pJMUANQg1HWsolJoNXqHtaFxpkB/IaZaeKPrY7Qa+OFMoHSjKKORAIMJvTn5/A0Z/UJ3ysZ9YqnwuaE5H9SHaBc/78YbL83BzCJqNW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ORKzR6lS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cKAnUECY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C315DC4CEED;
-	Fri, 22 Aug 2025 22:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1755900547;
-	bh=+76XesRQfwoY1jEOmEJj0AwVlQTN3XUHf6f+eVyTwds=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cKAnUECY3qTdBMpzcdGQSEWAve14+6uMcO//W7omALZoPTIIfzx83LOHwRj4QS0XS
-	 iE/ciok3Xn3L/j9nlsYmi5n5lKHDjNNXwiWbjVIFikY2+eFsK/pf8w2AbpEn9P1GPz
-	 P5x3C9Kr9Cg+1YDv39PELXoo8gC6+nMCKI+95qdY=
-Date: Fri, 22 Aug 2025 15:09:06 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Rohan McLure <rmclure@linux.ibm.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>, Andrew Donnellan <ajd@linux.ibm.com>, Pasha Tatashin
- <pasha.tatashin@soleen.com>
-Subject: Re: [akpm-mm:mm-new 216/233]
- arch/riscv/include/asm/pgtable.h:951:36: error: too few arguments to
- function call, expected 3, have 2
-Message-Id: <20250822150906.7a6a87a7a8ad69f2ad67c817@linux-foundation.org>
-In-Reply-To: <202508230551.qiEQu04P-lkp@intel.com>
-References: <202508230551.qiEQu04P-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ORKzR6lS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755909129;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o4yVFI68aT84gzFQE82Qz4AEP6bAbGrPsvjacF+ju2M=;
+	b=ORKzR6lSVsoqcCHjH4U9ws9G8/qPi4zmWuXMowngLXhBPLs622hOe4WWIKdO1ThjiQQPj0
+	P1Cuxi8Z75yAs+1/eYGVhsEXCXxfnVJghZ+aNHsVkAPhScqopm8jKNDC7vnvRM2DZEVswK
+	/3C2A6hJD7Q59o1MniZDDGQEQgzV3K4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-614-DT0d5Dy6Pc2PnZQi4BgBmA-1; Fri,
+ 22 Aug 2025 20:32:07 -0400
+X-MC-Unique: DT0d5Dy6Pc2PnZQi4BgBmA-1
+X-Mimecast-MFC-AGG-ID: DT0d5Dy6Pc2PnZQi4BgBmA_1755909127
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9939F19560B2
+	for <llvm@lists.linux.dev>; Sat, 23 Aug 2025 00:32:06 +0000 (UTC)
+Received: from [172.20.48.110] (unknown [10.30.45.91])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 247303001453;
+	Sat, 23 Aug 2025 00:32:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc2,
+ upstream-mainline, 6debb690)
+Date: Sat, 23 Aug 2025 00:32:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <94235.125082220320701911@us-mta-614.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: CX8SJHoH3VFnZ76LUAYZO2x_CNXs0HbNpDRTtaHFyWM_1755909127
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 23 Aug 2025 05:30:45 +0800 kernel test robot <lkp@intel.com> wrote:
+Hi, we tested your kernel and here are the results:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
-> head:   a8af4c2fd982fd94fffde3c5b6b764fd20af68fe
-> commit: e009b0f3187482a5756ff3b015cf30277cc1cfd9 [216/233] mm/page_table_check: reinstate address parameter in [__]page_table_check_pud_clear()
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-> config: riscv-randconfig-001-20250823 (https://download.01.org/0day-ci/archive/20250823/202508230551.qiEQu04P-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d26ea02060b1c9db751d188b2edb0059a9eb273d)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250823/202508230551.qiEQu04P-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508230551.qiEQu04P-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from arch/riscv/kernel/asm-offsets.c:8:
->    In file included from include/linux/mm.h:31:
->    In file included from include/linux/pgtable.h:6:
-> >> arch/riscv/include/asm/pgtable.h:951:36: error: too few arguments to function call, expected 3, have 2
->      951 |         page_table_check_pud_clear(mm, pud);
->          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~        ^
 
-Thanks, I added this:
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2025-08-23-1' of https://gitlab.fr=
+eedesktop.org/drm/kernel
 
---- a/arch/riscv/include/asm/pgtable.h~mm-page_table_check-reinstate-address-parameter-in-page_table_check_pud_set-fix
-+++ a/arch/riscv/include/asm/pgtable.h
-@@ -948,7 +948,7 @@ static inline pud_t pudp_huge_get_and_cl
- {
- 	pud_t pud = __pud(atomic_long_xchg((atomic_long_t *)pudp, 0));
- 
--	page_table_check_pud_clear(mm, pud);
-+	page_table_check_pud_clear(mm, address, pud);
- 
- 	return pud;
- }
-_
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1999436691
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1999436691_aarch64_kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1999436691_x86_64_kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1999436691_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
