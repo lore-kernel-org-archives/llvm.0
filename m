@@ -1,144 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11689221282;
-	Sun, 24 Aug 2025 05:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0175617555;
+	Sun, 24 Aug 2025 06:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756014314; cv=none; b=O97NifmW2R0kezRySXiemlQjP++Dc2IIeC+LM2/iF62u7TsesDaF3ufcxt5FdllFez84yX5TeaXtSN65m2Ei/EjK21G4+J7Ttfgxk32Q2pImrqg7aQksFotTnS4SYwGvjDxGqAMVAs5LYkDWKrWuJQ0oL2CzMmxB1co7EO5qFIE=
+	t=1756017203; cv=none; b=Ub51uo+BeSsJuMhQoa/qKMVIj4hg8mi9IeAFPmEeWRjqBZAdnOM1LgFRPvC7emPwZeWQ/XbnpATHJBow/d/7dBz0u8T3Z0+agBj0lYIIqBxIGY6WIIjVIaU+dysnz0gyt2jiO5OUDoN2l1wHshlSjAuYsmfybjNx/XzOYr5r5Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756014314; c=relaxed/simple;
-	bh=X/vTFYC94hkW5oLPnNPbHBd0Zgs3VNMNFY5H5mrQbKI=;
-	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=g/IUZoNghjcEJBqfHFVVjtkxQ8WB9pikk7g04B0eiECYCj8agVGQKQ7eH8C92BFw27ZmJKk586OYh47vZVtmK+igD0Rwh/A4shWiLmur7+NrUYKWqqUqZQZJbrlfofkbH71mtl1fUCCsCRfpPSO/aGmvLga4lb6FBnf0xjQ3Xo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NXCR80cQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756017203; c=relaxed/simple;
+	bh=gJ7brMJ7j9Jf+pX5rF+KPff9Z+TTXk4Vge0KzSZ/Puc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=n+0GUyx0p9fE87IznBywKe/Nuhy77AUe/in0bSWo1HRD37Wv7Ql/SF+vB9f5e8szB4JOt4rMgazHUMdFgiGG5aHTD73XqDwY7UejulV+DsmLW+DoJopzYVr3wJ21S8gjZh7dSbbVxSvaYS7y/QfV1HvY1Vmu0MYQ3NBNasIRWXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aDyx1DNO; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NXCR80cQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867A9C4CEEB;
-	Sun, 24 Aug 2025 05:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756014313;
-	bh=X/vTFYC94hkW5oLPnNPbHBd0Zgs3VNMNFY5H5mrQbKI=;
-	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=NXCR80cQm1WBd/qQb3ZKqD+liiwGHYASiBJVFNWgAIBDGiKPzegNMgw6aqBnQtzDL
-	 Uh/RJmmofdXVFaOVMYNKyN5VyH/aqxLmZIlfcOyb0avTCZDRF0J/Dg1nJ7C7dQice6
-	 s/z0Z14sQiaOwXHGzJKfv7hPm00ZXTvIYECONUgg=
-Subject: Patch "kbuild: Update assembler calls to use proper flags and language target" has been added to the 5.4-stable tree
-To: anders.roxell@linaro.org,gregkh@linuxfoundation.org,lkft@linaro.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,ndesaulniers@google.com,sashal@kernel.org
-Cc: <stable-commits@vger.kernel.org>
-From: <gregkh@linuxfoundation.org>
-Date: Sun, 24 Aug 2025 07:44:52 +0200
-In-Reply-To: <20250811235151.1108688-3-nathan@kernel.org>
-Message-ID: <2025082452-boxcar-paralegal-b328@gregkh>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aDyx1DNO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756017202; x=1787553202;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gJ7brMJ7j9Jf+pX5rF+KPff9Z+TTXk4Vge0KzSZ/Puc=;
+  b=aDyx1DNOfQDhhIrnrpgkO91p/NEBRIWT9Rd3diEqb9st2xZ7E8bC6O7E
+   nhzwB2TTop4znefKFNFIpJaaV36LmDLh8Pz9+W9Sybw27F4KHOFLzU8/b
+   FZJgp0FosCeMLxmoG6VRjRmTq4S3+HVtcRT/bepn0LEqfopg5anbMDTFk
+   r/sZTybPLPILyFu90ExoDH35I156NrR4EoirPkbSEnj8qjIaGXLhg2dz4
+   hjYh59X47ywy7dPIi/Fdk/9lWsH6Bb/0/6Hu0sv0jREYXzKhik7UuAYKm
+   nlibCEW8GI67kf+Vn52rfUeSsYUlm3kWyVsOr9Qh/wzJGNU0OIPnBHuIz
+   g==;
+X-CSE-ConnectionGUID: mE+vT2VmRd6Js36Z9YgfTg==
+X-CSE-MsgGUID: PvVNzZXxRJaTcpOoXuHcUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58190255"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="58190255"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 23:33:20 -0700
+X-CSE-ConnectionGUID: dfhS840gSHyLhMpICQABKw==
+X-CSE-MsgGUID: haTiPpeBRxSMphQUCwGWPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="169405883"
+Received: from igk-lkp-server01.igk.intel.com (HELO ca260db0ef79) ([10.91.175.65])
+  by fmviesa008.fm.intel.com with ESMTP; 23 Aug 2025 23:33:18 -0700
+Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uq4I0-0002Cd-0b;
+	Sun, 24 Aug 2025 06:33:16 +0000
+Date: Sun, 24 Aug 2025 08:32:48 +0200
+From: kernel test robot <lkp@intel.com>
+To: Naman Jain <namjain@linux.microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Wei Liu <wei.liu@kernel.org>,
+	Roman Kisel <romank@linux.microsoft.com>,
+	Saurabh Sengar <ssengar@linux.microsoft.com>,
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+	Michael Kelley <mhklinux@outlook.com>
+Subject: [linux-next:master 3139/4234] error: <unknown>:0:0: ran out of
+ registers during register allocation in function 'hv_call_get_vp_registers'
+Message-ID: <202508240828.pVaUV45D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
-X-stable: commit
-X-Patchwork-Hint: ignore
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0f4c93f7eb861acab537dbe94441817a270537bf
+commit: 96a1d2495c2f48467a91b8657bd594350b84ea9e [3139/4234] Drivers: hv: Introduce mshv_vtl driver
+config: i386-buildonly-randconfig-2003-20250824 (https://download.01.org/0day-ci/archive/20250824/202508240828.pVaUV45D-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250824/202508240828.pVaUV45D-lkp@intel.com/reproduce)
 
-This is a note to let you know that I've just added the patch titled
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508240828.pVaUV45D-lkp@intel.com/
 
-    kbuild: Update assembler calls to use proper flags and language target
+All errors (new ones prefixed by >>):
 
-to the 5.4-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_get_vp_registers'
+>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_set_vp_registers'
+>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_get_partition_property'
+   3 errors generated.
 
-The filename of the patch is:
-     kbuild-update-assembler-calls-to-use-proper-flags-and-language-target.patch
-and it can be found in the queue-5.4 subdirectory.
-
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
-
-
-From stable+bounces-167083-greg=kroah.com@vger.kernel.org Tue Aug 12 01:52:49 2025
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 11 Aug 2025 16:51:47 -0700
-Subject: kbuild: Update assembler calls to use proper flags and language target
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, llvm@lists.linux.dev
-Message-ID: <20250811235151.1108688-3-nathan@kernel.org>
-
-From: Nick Desaulniers <ndesaulniers@google.com>
-
-commit d5c8d6e0fa61401a729e9eb6a9c7077b2d3aebb0 upstream.
-
-as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS. This can
-cause as-option to fail unexpectedly when CONFIG_WERROR is set, because
-clang will emit -Werror,-Wunused-command-line-argument for various -m
-and -f flags in KBUILD_CFLAGS for assembler sources.
-
-Callers of as-option and as-instr should be adding flags to
-KBUILD_AFLAGS / aflags-y, not KBUILD_CFLAGS / cflags-y. Use
-KBUILD_AFLAGS in all macros to clear up the initial problem.
-
-Unfortunately, -Wunused-command-line-argument can still be triggered
-with clang by the presence of warning flags or macro definitions because
-'-x assembler' is used, instead of '-x assembler-with-cpp', which will
-consume these flags. Switch to '-x assembler-with-cpp' in places where
-'-x assembler' is used, as the compiler is always used as the driver for
-out of line assembler sources in the kernel.
-
-Finally, add -Werror to these macros so that they behave consistently
-whether or not CONFIG_WERROR is set.
-
-[nathan: Reworded and expanded on problems in commit message
-         Use '-x assembler-with-cpp' in a couple more places]
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- scripts/Kbuild.include |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -99,16 +99,16 @@ try-run = $(shell set -e;		\
- 	fi)
- 
- # as-option
--# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-+# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
- 
- as-option = $(call try-run,\
--	$(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-+	$(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
- 
- # as-instr
--# Usage: cflags-y += $(call as-instr,instr,option1,option2)
-+# Usage: aflags-y += $(call as-instr,instr,option1,option2)
- 
- as-instr = $(call try-run,\
--	printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
-+	printf "%b\n" "$(1)" | $(CC) -Werror $(KBUILD_AFLAGS) -c -x assembler-with-cpp -o "$$TMP" -,$(2),$(3))
- 
- # __cc-option
- # Usage: MY_CFLAGS += $(call __cc-option,$(CC),$(MY_CFLAGS),-march=winchip-c6,-march=i586)
-
-
-Patches currently in stable-queue which might be from nathan@kernel.org are
-
-queue-5.4/kbuild-add-clang_flags-to-as-instr.patch
-queue-5.4/wifi-brcmsmac-remove-const-from-tbl_ptr-parameter-in-wlc_lcnphy_common_read_table.patch
-queue-5.4/mips-include-kbuild_cppflags-in-checkflags-invocation.patch
-queue-5.4/kbuild-add-clang_flags-to-kbuild_cppflags.patch
-queue-5.4/ftrace-also-allocate-and-copy-hash-for-reading-of-filter-files.patch
-queue-5.4/memstick-core-zero-initialize-id_reg-in-h_memstick_read_dev_id.patch
-queue-5.4/kbuild-update-assembler-calls-to-use-proper-flags-and-language-target.patch
-queue-5.4/phonet-pep-move-call-to-pn_skb_get_dst_sockaddr-earlier-in-pep_sock_accept.patch
-queue-5.4/arm-9448-1-use-an-absolute-path-to-unified.h-in-kbuild_aflags.patch
-queue-5.4/kbuild-add-kbuild_cppflags-to-as-option-invocation.patch
-queue-5.4/usb-atm-cxacru-merge-cxacru_upload_firmware-into-cxacru_heavy_init.patch
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
