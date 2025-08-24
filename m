@@ -1,65 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682CF21348;
-	Sun, 24 Aug 2025 19:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6D814A4DB;
+	Sun, 24 Aug 2025 20:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756064343; cv=none; b=c3FR98moUNXJA8C9jQL1WOskY/xyWwUidZtP7gPAnSdU91N4+j4hYvnlIjtXrEH/N5xd/YMFoeAeF1DE8dAVGqZBmI4Vp/D3+IR6uVCJJC/wA7aPGCKzbkmthqd1IpKBshpe09HoDZyWZoDwRyrJkKRTUcAa4TkD4diUWmdPUdA=
+	t=1756067638; cv=none; b=O5Dv0cV1RFKSmd/85ls61wjchT9eh92uFVK7dkdBupSz37b/f8hIysZjLRGZgc/i0kHbqJjgRwUzM0/XD+eZl+4RLm6/CLWBhe3vel0r6dmhANtgpGqbh5cCUUnqyUUSlsBKPhcVCs4PEnb6MBnfvFnKhbfW6vMXwZZwZYbWE1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756064343; c=relaxed/simple;
-	bh=8DlnE/rWJ6b3Mfl7JEc3Sc72YTacrmk6cJufKubDOs4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CpiTZjxz2SIproBGO6IQtma6Istf8q+P7q7PPx2lKT06N7dJHCitVBb1Vilc0oICGIRxnYqfAHWck8BYYZYiTqXmVHuUf86n3t48QHooSNwagE7Rjs/wpxffk7Bqz5dvJkmZ5lRBo6Qet6TWP/aPQ7aOKyxQa/a07xIwaNpuPuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ldv31Tmn; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1756067638; c=relaxed/simple;
+	bh=SqDeRpNwXPBzlkYaa0OI0H95790e1SkY3SUzUL3lKMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DFq1yARh40ls/MzX9HLdXWsKJJzLjFJBcf/yhRmS9Uqrj+GWkHH4r/X2ZYsU+vaswGhneFkq49YUVuVLN+U2JTwGVQ+tC1z9sdcrhyxRHvXKWXiG9XiBIVsnZSA4d6sAE65IPlTezm47OZ6W9i8pF6ieNjoL8MpXz4/uOSpwvZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g7gxIoB8; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ldv31Tmn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g7gxIoB8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756064341; x=1787600341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8DlnE/rWJ6b3Mfl7JEc3Sc72YTacrmk6cJufKubDOs4=;
-  b=Ldv31TmnDZcQGYdCOuS0SZcbvRA+IGb1ej0d3Tj+jZmjyHxE9GSpea+Z
-   OIWuLJUgsuM/TrjumN4mCfZdHLRhT2jPUwogg5EskvCqSgemRb8GKUK9F
-   iSSQ7s8zidIH1fLFYcU3O301d3atzD0zXdpMvN0nvCZIcVXrTA2vZ9RxM
-   YHrFafhyyyrA6jsd0gh8Zq/0a/Xn8P57buDdju58XXdWYx4goxzqbo/BF
-   DOcv5eKjgE9hOc69nhyeDPj33pRsVyfSxiQeWT9/qn0FlI5EWz9JlvcVc
-   bEaxAMFd4xuGtn4GoULSOIjm9pGOqb1JRw6kpcM2cBCIDn5J3OodMi917
-   A==;
-X-CSE-ConnectionGUID: CaHlylBMRn2d0Qy6V/+2Ng==
-X-CSE-MsgGUID: rcoSwESjREmCcZot1lmFJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69386970"
+  t=1756067637; x=1787603637;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SqDeRpNwXPBzlkYaa0OI0H95790e1SkY3SUzUL3lKMI=;
+  b=g7gxIoB8GFksXV7BXLX46nsZHjnG3rORJF5GErENkYUacDWhk7ozILFH
+   R+H6Qw6ta8CbUgSztdLIj/WIBFD3gjxA+zl/yk0qBTEh3LfSESwC/lANN
+   hprrB3+BGvp65lochDoNn6yEwJ8js04x6hDO2eaZZqWXOv9XJqmX6S87d
+   STdlSc9as3/nFG1YsCh8s9M3GkMj8JoHrDuK5qJsUW+9loCxiRIzJBQj0
+   usrcd6y7zGr1N+8hHqmohtZyEnKh3bfvStCjKu/24ckjH964L0iivdzvg
+   0Ab0lmQv5G5uMLWIgvVcnQDDJieHApf5MXq/cFrSwDTonmLHlAu9H9MXk
+   w==;
+X-CSE-ConnectionGUID: oLLj+2lNSIGhSq9GcHpKZA==
+X-CSE-MsgGUID: ZwWRmCcURc2FB3E3xRmQJg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58210404"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69386970"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2025 12:39:00 -0700
-X-CSE-ConnectionGUID: MSw73TzIQPKqeRD6Q/wQQw==
-X-CSE-MsgGUID: E77TZh/xTvu73DwINgJcmQ==
+   d="scan'208";a="58210404"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2025 13:33:56 -0700
+X-CSE-ConnectionGUID: RmZtcAGqQyO7HDtWHxjVyQ==
+X-CSE-MsgGUID: nyo8PQIiToqxBURW4Jxo5Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="192793643"
+   d="scan'208";a="206304745"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Aug 2025 12:38:58 -0700
+  by orviesa001.jf.intel.com with ESMTP; 24 Aug 2025 13:33:54 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uqGYJ-000NBP-1Q;
-	Sun, 24 Aug 2025 19:38:55 +0000
-Date: Mon, 25 Aug 2025 03:38:06 +0800
+	id 1uqHOJ-000NCf-2p;
+	Sun, 24 Aug 2025 20:33:06 +0000
+Date: Mon, 25 Aug 2025 04:32:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/14] dmaengine: dma350: Support ARM DMA-250
-Message-ID: <202508250351.vxyvTsJa-lkp@intel.com>
-References: <20250823154009.25992-15-jszhang@kernel.org>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot+extras/v6.17-rc2 136/139]
+ drivers/resctrl/mpam_resctrl.c:2076:2: warning: label at end of compound
+ statement is a C23 extension
+Message-ID: <202508250402.1K4EvfIp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,165 +62,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250823154009.25992-15-jszhang@kernel.org>
 
-Hi Jisheng,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on robh/for-next krzk-dt/for-next linus/master v6.17-rc2 next-20250822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/dmaengine-dma350-Fix-CH_CTRL_USESRCTRIGIN-definition/20250824-000425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-patch link:    https://lore.kernel.org/r/20250823154009.25992-15-jszhang%40kernel.org
-patch subject: [PATCH 14/14] dmaengine: dma350: Support ARM DMA-250
-config: x86_64-buildonly-randconfig-002-20250824 (https://download.01.org/0day-ci/archive/20250825/202508250351.vxyvTsJa-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250825/202508250351.vxyvTsJa-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot+extras/v6.17-rc2
+head:   4c30cf5050a1d18551d882cb084196e0f8f1fbff
+commit: c34144538a91d139236500e17de8f4a83abd60bf [136/139] arm_mpam: resctrl: Add NUMA node notifier for domain online/offline
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250825/202508250402.1K4EvfIp-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250825/202508250402.1K4EvfIp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508250351.vxyvTsJa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508250402.1K4EvfIp-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/dma/arm-dma350.c:849:34: warning: variable 'sg' is uninitialized when used here [-Wuninitialized]
-     849 |         sglen = DIV_ROUND_UP(sg_dma_len(sg), step_max) * periods;
-         |                                         ^~
-   include/linux/scatterlist.h:34:27: note: expanded from macro 'sg_dma_len'
-      34 | #define sg_dma_len(sg)          ((sg)->dma_length)
-         |                                   ^~
-   include/uapi/linux/const.h:51:40: note: expanded from macro '__KERNEL_DIV_ROUND_UP'
-      51 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
-         |                                        ^
-   drivers/dma/arm-dma350.c:835:24: note: initialize the variable 'sg' to silence this warning
-     835 |         struct scatterlist *sg;
-         |                               ^
-         |                                = NULL
-   1 warning generated.
+   drivers/resctrl/mpam_resctrl.c:492:27: warning: variable 'l3' set but not used [-Wunused-but-set-variable]
+     492 |         struct mpam_resctrl_res *l3;
+         |                                  ^
+   drivers/resctrl/mpam_resctrl.c:561:27: warning: variable 'l3' set but not used [-Wunused-but-set-variable]
+     561 |         struct mpam_resctrl_res *l3;
+         |                                  ^
+   drivers/resctrl/mpam_resctrl.c:1245:3: warning: variable 'dom' is uninitialized when used here [-Wuninitialized]
+    1245 |                 dom->mbm_local_evt_cfg = 0;
+         |                 ^~~
+   drivers/resctrl/mpam_resctrl.c:1239:30: note: initialize the variable 'dom' to silence this warning
+    1239 |         struct mpam_resctrl_dom *dom;
+         |                                     ^
+         |                                      = NULL
+>> drivers/resctrl/mpam_resctrl.c:2076:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+    2076 |         }
+         |         ^
+   4 warnings generated.
 
 
-vim +/sg +849 drivers/dma/arm-dma350.c
+vim +2076 drivers/resctrl/mpam_resctrl.c
 
-   824	
-   825	static struct dma_async_tx_descriptor *
-   826	d250_prep_cyclic(struct dma_chan *chan, dma_addr_t buf_addr,
-   827			 size_t buf_len, size_t period_len, enum dma_transfer_direction dir,
-   828			 unsigned long flags)
-   829	{
-   830		struct d350_chan *dch = to_d350_chan(chan);
-   831		u32 len, periods, trig, *cmd, tsz;
-   832		dma_addr_t src, dst, phys, mem_addr;
-   833		size_t xfer_len, step_max;
-   834		struct d350_desc *desc;
-   835		struct scatterlist *sg;
-   836		struct d350_sg *dsg;
-   837		int sglen, i;
-   838	
-   839		if (unlikely(!is_slave_direction(dir) || !buf_len || !period_len))
-   840			return NULL;
-   841	
-   842		if (dir == DMA_MEM_TO_DEV)
-   843			tsz = __ffs(dch->config.dst_addr_width | (1 << dch->tsz));
-   844		else
-   845			tsz = __ffs(dch->config.src_addr_width | (1 << dch->tsz));
-   846		step_max = ((1UL << 16) - 1) << tsz;
-   847	
-   848		periods = buf_len / period_len;
- > 849		sglen = DIV_ROUND_UP(sg_dma_len(sg), step_max) * periods;
-   850	
-   851		desc = kzalloc(struct_size(desc, sg, sglen), GFP_NOWAIT);
-   852		if (!desc)
-   853			return NULL;
-   854	
-   855		dch->cyclic = true;
-   856		dch->periods = periods;
-   857		desc->sglen = sglen;
-   858	
-   859		sglen = 0;
-   860		for (i = 0; i < periods; i++) {
-   861			len = period_len;
-   862			mem_addr = buf_addr + i * period_len;
-   863			do {
-   864				desc->sg[sglen].command = dma_pool_zalloc(dch->cmd_pool, GFP_NOWAIT, &phys);
-   865				if (unlikely(!desc->sg[sglen].command))
-   866					goto err_cmd_alloc;
-   867	
-   868				xfer_len = (len > step_max) ? step_max : len;
-   869				desc->sg[sglen].phys = phys;
-   870				dsg = &desc->sg[sglen];
-   871	
-   872				if (dir == DMA_MEM_TO_DEV) {
-   873					src = mem_addr;
-   874					dst = dch->config.dst_addr;
-   875					trig = CH_CTRL_USEDESTRIGIN;
-   876				} else {
-   877					src = dch->config.src_addr;
-   878					dst = mem_addr;
-   879					trig = CH_CTRL_USESRCTRIGIN;
-   880				}
-   881				dsg->tsz = tsz;
-   882				dsg->xsize = lower_16_bits(xfer_len >> dsg->tsz);
-   883	
-   884				cmd = dsg->command;
-   885				cmd[0] = LINK_CTRL | LINK_SRCADDR | LINK_DESADDR |
-   886					 LINK_XSIZE | LINK_SRCTRANSCFG |
-   887					 LINK_DESTRANSCFG | LINK_XADDRINC | LINK_LINKADDR;
-   888	
-   889				cmd[1] = FIELD_PREP(CH_CTRL_TRANSIZE, dsg->tsz) |
-   890					 FIELD_PREP(CH_CTRL_XTYPE, CH_CTRL_XTYPE_CONTINUE) |
-   891					 FIELD_PREP(CH_CTRL_DONETYPE, CH_CTRL_DONETYPE_CMD) | trig;
-   892	
-   893				cmd[2] = lower_32_bits(src);
-   894				cmd[3] = lower_32_bits(dst);
-   895				cmd[4] = FIELD_PREP(CH_XY_SRC, dsg->xsize) |
-   896					 FIELD_PREP(CH_XY_DES, dsg->xsize);
-   897				if (dir == DMA_MEM_TO_DEV) {
-   898					cmd[0] |= LINK_DESTRIGINCFG;
-   899					cmd[5] = dch->coherent ? TRANSCFG_WB : TRANSCFG_NC;
-   900					cmd[6] = TRANSCFG_DEVICE;
-   901					cmd[7] = FIELD_PREP(CH_XY_SRC, 1);
-   902					cmd[8] = FIELD_PREP(CH_DESTRIGINMODE, CH_DESTRIG_DMA_FC) |
-   903						  FIELD_PREP(CH_DESTRIGINTYPE, CH_DESTRIG_HW_REQ);
-   904				} else {
-   905					cmd[0] |= LINK_SRCTRIGINCFG;
-   906					cmd[5] = TRANSCFG_DEVICE;
-   907					cmd[6] = dch->coherent ? TRANSCFG_WB : TRANSCFG_NC;
-   908					cmd[7] = FIELD_PREP(CH_XY_DES, 1);
-   909					cmd[8] = FIELD_PREP(CH_SRCTRIGINMODE, CH_SRCTRIG_DMA_FC) |
-   910						  FIELD_PREP(CH_SRCTRIGINTYPE, CH_SRCTRIG_HW_REQ);
-   911				}
-   912	
-   913				if (sglen)
-   914					desc->sg[sglen - 1].command[9] = phys | CH_LINKADDR_EN;
-   915	
-   916				len -= xfer_len;
-   917				mem_addr += xfer_len;
-   918				sglen++;
-   919			} while (len);
-   920			desc->sg[sglen - 1].command[1] |= FIELD_PREP(CH_CTRL_DONETYPE,
-   921								     CH_CTRL_DONETYPE_CMD);
-   922		}
-   923	
-   924		/* cyclic list */
-   925		desc->sg[sglen - 1].command[9] = desc->sg[0].phys | CH_LINKADDR_EN;
-   926	
-   927		mb();
-   928	
-   929		return vchan_tx_prep(&dch->vc, &desc->vd, flags);
-   930	
-   931	err_cmd_alloc:
-   932		for (i = 0; i < sglen; i++)
-   933			dma_pool_free(dch->cmd_pool, desc->sg[i].command, desc->sg[i].phys);
-   934		kfree(desc);
-   935		return NULL;
-   936	}
-   937	
+  2049	
+  2050	static int mpam_resctrl_node_notifier(struct notifier_block *self,
+  2051					      unsigned long action, void *arg)
+  2052	{
+  2053		struct node_notify *nn = arg;
+  2054	
+  2055		if (nn->nid < 0 || !mb_uses_numa_nid)
+  2056			return NOTIFY_OK;
+  2057	
+  2058		/*
+  2059		 * Ignore nid that have CPUs. Resctrl needs to see the cpu offline
+  2060		 * call for each CPU to update the CPUs in control groups. Moving
+  2061		 * the overflow handler isn't an issue as only L3 can be mon_capable,
+  2062		 * and NUMA nid used as domain-id are only an option for MBA.
+  2063		 */
+  2064		if (!cpumask_empty(cpumask_of_node(nn->nid)))
+  2065			return NOTIFY_OK;
+  2066	
+  2067		switch (action) {
+  2068		case NODE_ADDED_FIRST_MEMORY:
+  2069			mpam_resctrl_online_node(nn->nid);
+  2070			break;
+  2071		case NODE_REMOVED_LAST_MEMORY:
+  2072			mpam_resctrl_offline_node(nn->nid);
+  2073			break;
+  2074		default:
+  2075			/* don't care */
+> 2076		}
+  2077	
+  2078		return NOTIFY_OK;
+  2079	}
+  2080	
 
 -- 
 0-DAY CI Kernel Test Service
