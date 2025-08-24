@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9EB548EE;
-	Sun, 24 Aug 2025 05:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B60E220680;
+	Sun, 24 Aug 2025 05:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756014294; cv=none; b=ImVD3Gv3xEcFOikGsBYyGzAK6AenOExPpRUkw7almGDBfSMK6mOjqjoAQ6F/sIhSNDEtAQqhjuSRsLOR6p3kB3qs7J06lQ3PqLQQtwEYHCItyT1+KjJykvS8f3hLCwHYwCrpNni4NFwTdBPkZC6+k0e6+KFNPC9C4ECFiwBznPk=
+	t=1756014302; cv=none; b=OpMVCJpPHNKDlAD1ANDFXT4n1bdJxXgYm9pSsrmsAIjbfKFL3fHgjvMYueZ+IHJgGl8lWJ0VvnHUbVHlMd5H8JTdPqca9AhO7X+eMpS/MT9gUoOqUCUNHbnUHiLMOdR38G0Afk3LpYzhFTwe8VC7VZ9EqLjDpH3r6lKrFq53RZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756014294; c=relaxed/simple;
-	bh=Rvs38LMeYoGCszcKMzBaPllVGZ35Zdx7jA51sxr5sWc=;
+	s=arc-20240116; t=1756014302; c=relaxed/simple;
+	bh=kyRhEHONyMaoLA/pE1TYOXmdFDrU4264Lfo4L4LlRuQ=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=jAPxD978akaXKBbRncRSQl6/Ou4wsU8xZ8SmK++kED26v1WrTJoZXaoBtxKrPOLU0GdKYctNUAWYvUtM8CvFVOsBVlmoITgNteSPKWfDnVXnAYgyBOeEvl356b/FS5QIbZ9YLW/EpBertiAfIA/1rhwKi9ThnhpIybNIiHIaaxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=j+G9bgHv; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type; b=EcDihsDWoc/QCtM0VYOLXP9drTXEcfP1NbEKULsxl+wC543rK9ZqCuVHo34J1MXHx+uEFVuT5GUdAVJrZL8cQEUSKoBBQ7P9zd+RYcukA4hKuM9+FAGKUP/s/Dzx6jVYIrAjVaXn3TN1Ohjgzb0J0vUHl7mfNfUSiowLzThPA0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1dcTJk1n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="j+G9bgHv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA6DC4CEEB;
-	Sun, 24 Aug 2025 05:44:53 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1dcTJk1n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB075C4CEEB;
+	Sun, 24 Aug 2025 05:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756014293;
-	bh=Rvs38LMeYoGCszcKMzBaPllVGZ35Zdx7jA51sxr5sWc=;
+	s=korg; t=1756014302;
+	bh=kyRhEHONyMaoLA/pE1TYOXmdFDrU4264Lfo4L4LlRuQ=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=j+G9bgHv5EyY+6rpOGlXzcFuWlc3Z/tVTUVhpWA15freT//Xsmai1m8gllQfk3tEN
-	 I6Ppii0+32NRuMoHUtbRJRV/3u+EuDqtZGC2Tq5tuU3Yjss48hYAbZm4hdZ3kVgSvs
-	 51BXZ09jHzH3ReMcHGukNNj5qqbVmnX3ah7DHHF8=
-Subject: Patch "ARM: 9448/1: Use an absolute path to unified.h in KBUILD_AFLAGS" has been added to the 5.4-stable tree
-To: bot@kernelci.org,gregkh@linuxfoundation.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,rmk+kernel@armlinux.org.uk,sashal@kernel.org
+	b=1dcTJk1nYANqYrOS0AoNzT34tNjSpJGJvJ8BaTQsWk+fBZMM99EievIoCfZPg62TQ
+	 7ra8y2WYfOAY9P2lcB15EvNdOTshoUq+oeKbByKCgo/fzHuq4pXVe8bw0DtVQ0nrI8
+	 kflM8co3cZdMr77K/I4nTSEK8FBQYuWg4lL7jCA8=
+Subject: Patch "kbuild: Add CLANG_FLAGS to as-instr" has been added to the 5.4-stable tree
+To: gregkh@linuxfoundation.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,sashal@kernel.org
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
 Date: Sun, 24 Aug 2025 07:44:51 +0200
-In-Reply-To: <20250811235151.1108688-2-nathan@kernel.org>
-Message-ID: <2025082450-startling-brewing-d568@gregkh>
+In-Reply-To: <20250811235151.1108688-5-nathan@kernel.org>
+Message-ID: <2025082451-tinsel-deliverer-6442@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,79 +44,65 @@ X-Patchwork-Hint: ignore
 
 This is a note to let you know that I've just added the patch titled
 
-    ARM: 9448/1: Use an absolute path to unified.h in KBUILD_AFLAGS
+    kbuild: Add CLANG_FLAGS to as-instr
 
 to the 5.4-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
-     arm-9448-1-use-an-absolute-path-to-unified.h-in-kbuild_aflags.patch
+     kbuild-add-clang_flags-to-as-instr.patch
 and it can be found in the queue-5.4 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
-From stable+bounces-167082-greg=kroah.com@vger.kernel.org Tue Aug 12 01:52:48 2025
+From stable+bounces-167085-greg=kroah.com@vger.kernel.org Tue Aug 12 01:52:35 2025
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 11 Aug 2025 16:51:46 -0700
-Subject: ARM: 9448/1: Use an absolute path to unified.h in KBUILD_AFLAGS
+Date: Mon, 11 Aug 2025 16:51:49 -0700
+Subject: kbuild: Add CLANG_FLAGS to as-instr
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
 Cc: stable@vger.kernel.org, llvm@lists.linux.dev
-Message-ID: <20250811235151.1108688-2-nathan@kernel.org>
+Message-ID: <20250811235151.1108688-5-nathan@kernel.org>
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-commit 87c4e1459e80bf65066f864c762ef4dc932fad4b upstream.
+commit cff6e7f50bd315e5b39c4e46c704ac587ceb965f upstream.
 
-After commit d5c8d6e0fa61 ("kbuild: Update assembler calls to use proper
-flags and language target"), which updated as-instr to use the
-'assembler-with-cpp' language option, the Kbuild version of as-instr
-always fails internally for arch/arm with
+A future change will move CLANG_FLAGS from KBUILD_{A,C}FLAGS to
+KBUILD_CPPFLAGS so that '--target' is available while preprocessing.
+When that occurs, the following errors appear multiple times when
+building ARCH=powerpc powernv_defconfig:
 
-  <command-line>: fatal error: asm/unified.h: No such file or directory
-  compilation terminated.
+  ld.lld: error: vmlinux.a(arch/powerpc/kernel/head_64.o):(.text+0x12d4): relocation R_PPC64_ADDR16_HI out of range: -4611686018409717520 is not in [-2147483648, 2147483647]; references '__start___soft_mask_table'
+  ld.lld: error: vmlinux.a(arch/powerpc/kernel/head_64.o):(.text+0x12e8): relocation R_PPC64_ADDR16_HI out of range: -4611686018409717392 is not in [-2147483648, 2147483647]; references '__stop___soft_mask_table'
 
-because '-include' flags are now taken into account by the compiler
-driver and as-instr does not have '$(LINUXINCLUDE)', so unified.h is not
-found.
+Diffing the .o.cmd files reveals that -DHAVE_AS_ATHIGH=1 is not present
+anymore, because as-instr only uses KBUILD_AFLAGS, which will no longer
+contain '--target'.
 
-This went unnoticed at the time of the Kbuild change because the last
-use of as-instr in Kbuild that arch/arm could reach was removed in 5.7
-by commit 541ad0150ca4 ("arm: Remove 32bit KVM host support") but a
-stable backport of the Kbuild change to before that point exposed this
-potential issue if one were to be reintroduced.
+Mirror Kconfig's as-instr and add CLANG_FLAGS explicitly to the
+invocation to ensure the target information is always present.
 
-Follow the general pattern of '-include' paths throughout the tree and
-make unified.h absolute using '$(srctree)' to ensure KBUILD_AFLAGS can
-be used independently.
-
-Closes: https://lore.kernel.org/CACo-S-1qbCX4WAVFA63dWfHtrRHZBTyyr2js8Lx=Az03XHTTHg@mail.gmail.com/
-
-Cc: stable@vger.kernel.org
-Fixes: d5c8d6e0fa61 ("kbuild: Update assembler calls to use proper flags and language target")
-Reported-by: KernelCI bot <bot@kernelci.org>
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-[nathan: Fix conflicts]
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/Makefile |    2 +-
+ scripts/Kbuild.include |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -136,7 +136,7 @@ endif
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -108,7 +108,7 @@ as-option = $(call try-run,\
+ # Usage: aflags-y += $(call as-instr,instr,option1,option2)
  
- # Need -Uarm for gcc < 3.x
- KBUILD_CFLAGS	+=$(CFLAGS_ABI) $(CFLAGS_ISA) $(arch-y) $(tune-y) $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,)) -msoft-float -Uarm
--KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include asm/unified.h -msoft-float
-+KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include $(srctree)/arch/arm/include/asm/unified.h -msoft-float
+ as-instr = $(call try-run,\
+-	printf "%b\n" "$(1)" | $(CC) -Werror $(KBUILD_AFLAGS) -c -x assembler-with-cpp -o "$$TMP" -,$(2),$(3))
++	printf "%b\n" "$(1)" | $(CC) -Werror $(CLANG_FLAGS) $(KBUILD_AFLAGS) -c -x assembler-with-cpp -o "$$TMP" -,$(2),$(3))
  
- CHECKFLAGS	+= -D__arm__
- 
+ # __cc-option
+ # Usage: MY_CFLAGS += $(call __cc-option,$(CC),$(MY_CFLAGS),-march=winchip-c6,-march=i586)
 
 
 Patches currently in stable-queue which might be from nathan@kernel.org are
