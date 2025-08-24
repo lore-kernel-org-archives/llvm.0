@@ -1,176 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5071D5CD4;
-	Sat, 23 Aug 2025 23:38:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9EB548EE;
+	Sun, 24 Aug 2025 05:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755992325; cv=none; b=dpLM5ZzJK9s1/pWmWW2ImVv9KFLYhJhljDjXm+FDZpjYK16Obfpf+KzDmCWiBZ2arm3rWJQX8yztOSSe2hZB3GI4ZItouSbOKUGQFlv9rklYP4yN5jMGxI9oCGQlfP7FUFZLQsPYjWjW0QAfZUrWIrY3eI+1OhZm+C5Ax+xqFOg=
+	t=1756014294; cv=none; b=ImVD3Gv3xEcFOikGsBYyGzAK6AenOExPpRUkw7almGDBfSMK6mOjqjoAQ6F/sIhSNDEtAQqhjuSRsLOR6p3kB3qs7J06lQ3PqLQQtwEYHCItyT1+KjJykvS8f3hLCwHYwCrpNni4NFwTdBPkZC6+k0e6+KFNPC9C4ECFiwBznPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755992325; c=relaxed/simple;
-	bh=i8P3xtpQlErUkSY9JwtuydOwI2lOMtHbx58R10LnaZs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EzSSFSWT2cszZPbUsu5h7S2FCiU/nqYpDNREQm6luQ3TkxYdUsFudjTokzlD8767qd2v2CIb9kQc51lNgnbbM9ufaoQmtUi6jhGKF8oUo3ZyuGGwDDCr3DzHPYyDUWyeLqwZvdX9i/hMxNSKQvd7ll9K9K0EOPIb2jcquwG8K3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UKZmiCMs; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756014294; c=relaxed/simple;
+	bh=Rvs38LMeYoGCszcKMzBaPllVGZ35Zdx7jA51sxr5sWc=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=jAPxD978akaXKBbRncRSQl6/Ou4wsU8xZ8SmK++kED26v1WrTJoZXaoBtxKrPOLU0GdKYctNUAWYvUtM8CvFVOsBVlmoITgNteSPKWfDnVXnAYgyBOeEvl356b/FS5QIbZ9YLW/EpBertiAfIA/1rhwKi9ThnhpIybNIiHIaaxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=j+G9bgHv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UKZmiCMs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755992323; x=1787528323;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i8P3xtpQlErUkSY9JwtuydOwI2lOMtHbx58R10LnaZs=;
-  b=UKZmiCMsstHvtT0d/Em0A2UJ4mPwK/k5UgVZUCImOn1hnQJc9/+8u1Mo
-   R8Kho+SKXOXJ3B0/GAl2hQJkY+vpqKoIr1UjfvmyNF/cSasA0qURvzOe5
-   KOfQ4h4tNji10WrhtmlVNQiqR0FdK0ZuIxf2mhQrpE99/DZquE1w5afvb
-   WJ1oDnt+eCIM/HAukFSJ6SXc74nF1IOuuDT91X2Q7uhgYThlbNgDwx2nL
-   DIE8ZhTXPAqktqqcl3mCTXky5MbSRGbXnjMEd/kKafxhhW6DGtwMgjPU7
-   0QFdhveURolN+MI4boou5JyDelhP3lIY+LIU/OAR5uNrXhNPS64IaHoJD
-   g==;
-X-CSE-ConnectionGUID: eEKgeKV0TNmXSCjStFaYhQ==
-X-CSE-MsgGUID: ZvxHPeNaSD6wu27BNpTqSA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="57454210"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="57454210"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2025 16:38:42 -0700
-X-CSE-ConnectionGUID: qtQC9l18STe0NUzjMUqITQ==
-X-CSE-MsgGUID: gnfULNySTwuJJwc0uH0slg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="192654241"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 23 Aug 2025 16:38:41 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1upxoX-000Mev-1R;
-	Sat, 23 Aug 2025 23:38:30 +0000
-Date: Sun, 24 Aug 2025 07:37:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot/v6.17-rc2 71/89]
- drivers/resctrl/mpam_resctrl.c:388:27: warning: variable 'l3' set but not
- used
-Message-ID: <202508240741.ggiwOVTb-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="j+G9bgHv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA6DC4CEEB;
+	Sun, 24 Aug 2025 05:44:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1756014293;
+	bh=Rvs38LMeYoGCszcKMzBaPllVGZ35Zdx7jA51sxr5sWc=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:From;
+	b=j+G9bgHv5EyY+6rpOGlXzcFuWlc3Z/tVTUVhpWA15freT//Xsmai1m8gllQfk3tEN
+	 I6Ppii0+32NRuMoHUtbRJRV/3u+EuDqtZGC2Tq5tuU3Yjss48hYAbZm4hdZ3kVgSvs
+	 51BXZ09jHzH3ReMcHGukNNj5qqbVmnX3ah7DHHF8=
+Subject: Patch "ARM: 9448/1: Use an absolute path to unified.h in KBUILD_AFLAGS" has been added to the 5.4-stable tree
+To: bot@kernelci.org,gregkh@linuxfoundation.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,rmk+kernel@armlinux.org.uk,sashal@kernel.org
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Sun, 24 Aug 2025 07:44:51 +0200
+In-Reply-To: <20250811235151.1108688-2-nathan@kernel.org>
+Message-ID: <2025082450-startling-brewing-d568@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi James,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.17-rc2
-head:   c0646bf01fb5098c7d6cbc44af567a8bb2ca82d6
-commit: cc5c3a178290a55e8ebb9ea8c8df08bbd54951c3 [71/89] arm64: mpam: Select ARCH_HAS_CPU_RESCTRL
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250824/202508240741.ggiwOVTb-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250824/202508240741.ggiwOVTb-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508240741.ggiwOVTb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/resctrl/mpam_resctrl.c:388:27: warning: variable 'l3' set but not used [-Wunused-but-set-variable]
-     388 |         struct mpam_resctrl_res *l3;
-         |                                  ^
-   drivers/resctrl/mpam_resctrl.c:457:27: warning: variable 'l3' set but not used [-Wunused-but-set-variable]
-     457 |         struct mpam_resctrl_res *l3;
-         |                                  ^
-   2 warnings generated.
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore
 
 
-vim +/l3 +388 drivers/resctrl/mpam_resctrl.c
+This is a note to let you know that I've just added the patch titled
 
-693be57547c83b James Morse 2023-03-09  380  
-02ced84e49c79a James Morse 2021-06-25  381  int resctrl_arch_rmid_read(struct rdt_resource	*r, struct rdt_mon_domain *d,
-02ced84e49c79a James Morse 2021-06-25  382  			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
-02ced84e49c79a James Morse 2021-06-25  383  			   u64 *val, void *arch_mon_ctx)
-02ced84e49c79a James Morse 2021-06-25  384  {
-02ced84e49c79a James Morse 2021-06-25  385  	int err;
-02ced84e49c79a James Morse 2021-06-25  386  	u64 cdp_val;
-02ced84e49c79a James Morse 2021-06-25  387  	struct mon_cfg cfg;
-02ced84e49c79a James Morse 2021-06-25 @388  	struct mpam_resctrl_res *l3;
-02ced84e49c79a James Morse 2021-06-25  389  	enum mpam_device_features type;
-02ced84e49c79a James Morse 2021-06-25  390  	struct mpam_resctrl_dom *l3_dom;
-02ced84e49c79a James Morse 2021-06-25  391  	struct mpam_component *mon_comp;
-02ced84e49c79a James Morse 2021-06-25  392  	u32 mon_idx = *(u32 *)arch_mon_ctx;
-02ced84e49c79a James Morse 2021-06-25  393  	struct mpam_resctrl_mon *mon = &mpam_resctrl_counters[eventid];
-02ced84e49c79a James Morse 2021-06-25  394  
-02ced84e49c79a James Morse 2021-06-25  395  	resctrl_arch_rmid_read_context_check();
-02ced84e49c79a James Morse 2021-06-25  396  
-02ced84e49c79a James Morse 2021-06-25  397  	if (!mon->class)
-02ced84e49c79a James Morse 2021-06-25  398  		return -EINVAL;
-02ced84e49c79a James Morse 2021-06-25  399  
-02ced84e49c79a James Morse 2021-06-25  400  	l3 = container_of(r, struct mpam_resctrl_res, resctrl_res);
-02ced84e49c79a James Morse 2021-06-25  401  	l3_dom = container_of(d, struct mpam_resctrl_dom, resctrl_mon_dom);
-02ced84e49c79a James Morse 2021-06-25  402  	mon_comp = l3_dom->mon_comp[eventid];
-02ced84e49c79a James Morse 2021-06-25  403  
-02ced84e49c79a James Morse 2021-06-25  404  	switch (eventid) {
-02ced84e49c79a James Morse 2021-06-25  405  	case QOS_L3_OCCUP_EVENT_ID:
-02ced84e49c79a James Morse 2021-06-25  406  		type = mpam_feat_msmon_csu;
-02ced84e49c79a James Morse 2021-06-25  407  		break;
-02ced84e49c79a James Morse 2021-06-25  408  	case QOS_L3_MBM_LOCAL_EVENT_ID:
-02ced84e49c79a James Morse 2021-06-25  409  	case QOS_L3_MBM_TOTAL_EVENT_ID:
-02ced84e49c79a James Morse 2021-06-25  410  		type = mpam_feat_msmon_mbwu;
-02ced84e49c79a James Morse 2021-06-25  411  		break;
-02ced84e49c79a James Morse 2021-06-25  412  	default:
-02ced84e49c79a James Morse 2021-06-25  413  	case QOS_NUM_EVENTS:
-02ced84e49c79a James Morse 2021-06-25  414  		return -EINVAL;
-02ced84e49c79a James Morse 2021-06-25  415  	}
-02ced84e49c79a James Morse 2021-06-25  416  
-02ced84e49c79a James Morse 2021-06-25  417  	cfg.mon = mon_idx;
-02ced84e49c79a James Morse 2021-06-25  418  	if (cfg.mon == USE_RMID_IDX) {
-02ced84e49c79a James Morse 2021-06-25  419  		cfg.mon = resctrl_arch_rmid_idx_encode(closid, rmid);
-02ced84e49c79a James Morse 2021-06-25  420  		cfg.mon = mon->mbwu_idx_to_mon[cfg.mon];
-02ced84e49c79a James Morse 2021-06-25  421  		if (cfg.mon == -1)
-02ced84e49c79a James Morse 2021-06-25  422  			return -EINVAL;
-02ced84e49c79a James Morse 2021-06-25  423  	}
-02ced84e49c79a James Morse 2021-06-25  424  
-02ced84e49c79a James Morse 2021-06-25  425  	cfg.match_pmg = true;
-02ced84e49c79a James Morse 2021-06-25  426  	cfg.pmg = rmid;
-693be57547c83b James Morse 2023-03-09  427  	cfg.opts = resctrl_evt_config_to_mpam(l3_dom->mbm_local_evt_cfg);
-02ced84e49c79a James Morse 2021-06-25  428  
-02ced84e49c79a James Morse 2021-06-25  429  	if (irqs_disabled()) {
-02ced84e49c79a James Morse 2021-06-25  430  		/* Check if we can access this domain without an IPI */
-02ced84e49c79a James Morse 2021-06-25  431  		err = -EIO;
-02ced84e49c79a James Morse 2021-06-25  432  	} else {
-02ced84e49c79a James Morse 2021-06-25  433  		if (cdp_enabled) {
-02ced84e49c79a James Morse 2021-06-25  434  			cfg.partid = closid << 1;
-02ced84e49c79a James Morse 2021-06-25  435  			err = mpam_msmon_read(mon_comp, &cfg, type, val);
-02ced84e49c79a James Morse 2021-06-25  436  			if (err)
-02ced84e49c79a James Morse 2021-06-25  437  				return err;
-02ced84e49c79a James Morse 2021-06-25  438  
-02ced84e49c79a James Morse 2021-06-25  439  			cfg.partid += 1;
-02ced84e49c79a James Morse 2021-06-25  440  			err = mpam_msmon_read(mon_comp, &cfg, type, &cdp_val);
-02ced84e49c79a James Morse 2021-06-25  441  			if (!err)
-02ced84e49c79a James Morse 2021-06-25  442  				*val += cdp_val;
-02ced84e49c79a James Morse 2021-06-25  443  		} else {
-02ced84e49c79a James Morse 2021-06-25  444  			cfg.partid = closid;
-02ced84e49c79a James Morse 2021-06-25  445  			err = mpam_msmon_read(mon_comp, &cfg, type, val);
-02ced84e49c79a James Morse 2021-06-25  446  		}
-02ced84e49c79a James Morse 2021-06-25  447  	}
-02ced84e49c79a James Morse 2021-06-25  448  
-02ced84e49c79a James Morse 2021-06-25  449  	return err;
-02ced84e49c79a James Morse 2021-06-25  450  }
-02ced84e49c79a James Morse 2021-06-25  451  
+    ARM: 9448/1: Use an absolute path to unified.h in KBUILD_AFLAGS
 
-:::::: The code at line 388 was first introduced by commit
-:::::: 02ced84e49c79a20e94e574cd230d9e744d6dc1c arm_mpam: resctrl: Add resctrl_arch_rmid_read() and resctrl_arch_reset_rmid()
+to the 5.4-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
-:::::: TO: James Morse <james.morse@arm.com>
-:::::: CC: James Morse <james.morse@arm.com>
+The filename of the patch is:
+     arm-9448-1-use-an-absolute-path-to-unified.h-in-kbuild_aflags.patch
+and it can be found in the queue-5.4 subdirectory.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From stable+bounces-167082-greg=kroah.com@vger.kernel.org Tue Aug 12 01:52:48 2025
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 11 Aug 2025 16:51:46 -0700
+Subject: ARM: 9448/1: Use an absolute path to unified.h in KBUILD_AFLAGS
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, llvm@lists.linux.dev
+Message-ID: <20250811235151.1108688-2-nathan@kernel.org>
+
+From: Nathan Chancellor <nathan@kernel.org>
+
+commit 87c4e1459e80bf65066f864c762ef4dc932fad4b upstream.
+
+After commit d5c8d6e0fa61 ("kbuild: Update assembler calls to use proper
+flags and language target"), which updated as-instr to use the
+'assembler-with-cpp' language option, the Kbuild version of as-instr
+always fails internally for arch/arm with
+
+  <command-line>: fatal error: asm/unified.h: No such file or directory
+  compilation terminated.
+
+because '-include' flags are now taken into account by the compiler
+driver and as-instr does not have '$(LINUXINCLUDE)', so unified.h is not
+found.
+
+This went unnoticed at the time of the Kbuild change because the last
+use of as-instr in Kbuild that arch/arm could reach was removed in 5.7
+by commit 541ad0150ca4 ("arm: Remove 32bit KVM host support") but a
+stable backport of the Kbuild change to before that point exposed this
+potential issue if one were to be reintroduced.
+
+Follow the general pattern of '-include' paths throughout the tree and
+make unified.h absolute using '$(srctree)' to ensure KBUILD_AFLAGS can
+be used independently.
+
+Closes: https://lore.kernel.org/CACo-S-1qbCX4WAVFA63dWfHtrRHZBTyyr2js8Lx=Az03XHTTHg@mail.gmail.com/
+
+Cc: stable@vger.kernel.org
+Fixes: d5c8d6e0fa61 ("kbuild: Update assembler calls to use proper flags and language target")
+Reported-by: KernelCI bot <bot@kernelci.org>
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+[nathan: Fix conflicts]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -136,7 +136,7 @@ endif
+ 
+ # Need -Uarm for gcc < 3.x
+ KBUILD_CFLAGS	+=$(CFLAGS_ABI) $(CFLAGS_ISA) $(arch-y) $(tune-y) $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,)) -msoft-float -Uarm
+-KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include asm/unified.h -msoft-float
++KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include $(srctree)/arch/arm/include/asm/unified.h -msoft-float
+ 
+ CHECKFLAGS	+= -D__arm__
+ 
+
+
+Patches currently in stable-queue which might be from nathan@kernel.org are
+
+queue-5.4/kbuild-add-clang_flags-to-as-instr.patch
+queue-5.4/wifi-brcmsmac-remove-const-from-tbl_ptr-parameter-in-wlc_lcnphy_common_read_table.patch
+queue-5.4/mips-include-kbuild_cppflags-in-checkflags-invocation.patch
+queue-5.4/kbuild-add-clang_flags-to-kbuild_cppflags.patch
+queue-5.4/ftrace-also-allocate-and-copy-hash-for-reading-of-filter-files.patch
+queue-5.4/memstick-core-zero-initialize-id_reg-in-h_memstick_read_dev_id.patch
+queue-5.4/kbuild-update-assembler-calls-to-use-proper-flags-and-language-target.patch
+queue-5.4/phonet-pep-move-call-to-pn_skb_get_dst_sockaddr-earlier-in-pep_sock_accept.patch
+queue-5.4/arm-9448-1-use-an-absolute-path-to-unified.h-in-kbuild_aflags.patch
+queue-5.4/kbuild-add-kbuild_cppflags-to-as-option-invocation.patch
+queue-5.4/usb-atm-cxacru-merge-cxacru_upload_firmware-into-cxacru_heavy_init.patch
