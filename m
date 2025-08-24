@@ -1,110 +1,103 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7B51DE3BB
-	for <llvm@lists.linux.dev>; Sun, 24 Aug 2025 16:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EF4A55
+	for <llvm@lists.linux.dev>; Sun, 24 Aug 2025 16:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756053587; cv=none; b=eTBempkx99c7xyZWa43yKZhF2ak2upBJOYtCoGvpaeQbGlk+q1qNBkV42xXftrEi86aIdpulNZJk+qSmLUwywFAznM5oFIPefgRWZ+MQP6SftjES18qI8P6LmNNclgWt7oPEAqgA23JEDDblg8ZQCg2ylCf+I/BwCtbxMUcHHyE=
+	t=1756054390; cv=none; b=oJGmjsrF/TX0G+gf2mKYGg5ys7dJJroktviaNZXhQnbXNph4aBO4AGBa3aFYdnsXQSXvXreMQq5Me/Ptxbfv/DEiVME+3wBFlhTEvz4FpGoRcCUQ3KdilFZoE1Gq34tpfhCR8tTJgC2EOXPLm9/f/D5QL6Yz7I1ggjrcjpJi2UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756053587; c=relaxed/simple;
-	bh=rzbrFRokTuoA/BGlN6chg/kU+YDV0lrR5n5SZHBY0yw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KHtih9hrSzCmmTFvRKY3RdrgsrgOJQ90mZLhFM16HGbCNuGlCKO3DrE7hqOVH3JD9BWoH3+YYlvx8m75opG+djdkbQPj1CZujfFkmak4xmgHaNYWzbUUVqnialL5kFqM7jEheoWg8Y594iHxd1KfaE4SjgdB7GccuUEJ6bkOmMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TaAHRh1r; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1756054390; c=relaxed/simple;
+	bh=NOkftqDk4AEJbuiUWAJVC9CuhG5lwyOp1JIzV2ztLac=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=FeAjPbH42VF/KSWXynzQmACzkc0NOJF3C0dJMzfXjrdN0jDutk9/ND6AaoEb72ceHzD+X1JYIEsB8ev7x1tecrYxgReGSmjWDyKx8BMpLBBLVHtT5I9qNFcFAcJee9R+UmnVQW2lZLGaSNlsrL0uzzOwOHkud/0+YH9TZB7SHNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SEt48QLq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TaAHRh1r"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24611734e50so186485ad.1
-        for <llvm@lists.linux.dev>; Sun, 24 Aug 2025 09:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756053586; x=1756658386; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzbrFRokTuoA/BGlN6chg/kU+YDV0lrR5n5SZHBY0yw=;
-        b=TaAHRh1rifiy4kLhqJveLIaDu10XWujFny7XlaLRQlEnUhFTAsuYMVtA2qXntU0TvR
-         rbYTsa/sMEKoBydI7lhEcCfuRGTOUe+ipflowWW8lgICUgicm96feR3FAeoayY9fU4W1
-         NFYOPCFnS1Z3dWg7PrZuzY37NfE9ORb4wACocptKQspnpw4ooKeH0Q/oHvzV01B0qYHm
-         pTjecQ/FW1nmjFR1+1tY6wr3Z2OXRY6Ah1gFMsKvmtlUvR4gMN4yl5hOYel3bKKLLLWo
-         8B1zy++9NklBeSPVSHEKFqx1oi3E4/h8zcdtKQ5q1a7nrj+xA/iYOBORpDaFTOnvsP8G
-         C/Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756053586; x=1756658386;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rzbrFRokTuoA/BGlN6chg/kU+YDV0lrR5n5SZHBY0yw=;
-        b=QxOVJ1yQrz6IsAO98b2LtfqD8YG0qqddhvDX38lXT9UdBspMGeefiZCM14La3BDYoV
-         1zTcxyo4tLc0PhtPIeQWlhMEpVtlrnaZWa/+loIFcZNQipKyJC+n/3ucUZ15lD5m78U4
-         IOFyeQa1YBWsNjoV/T0YCSg6p5sPnBN4Pl0HajmxHjkFM1ZDG0R5+H7H2z3BSLvRNI9N
-         +jjWlrUZ/AI38+5+PMrc7q2ZOKSVXqFDgpWBp/W8bNr6mxTQuHWuvWBLCS6IeOiojpmA
-         0z1NsXmHlv4hsH2ERlGL1//9qmdjJMd8Skn823Ad8bd25Gi4zgEdoXIXCXl8X+D+D0bi
-         VAHw==
-X-Forwarded-Encrypted: i=1; AJvYcCWFxQqx24E6KUqSqvSt2QUHKPBVOF6JjLbwT1IOg6zq5TbttJZo8lrLaECK//r+djiKM4kV@lists.linux.dev
-X-Gm-Message-State: AOJu0YzGE5I1SBUyhjyx515kMjrG0cuAPylJNTVK+IxxE52HZQ5lGdHm
-	yefjDXOJgZSNh6rUNpfc97woOfmsnJHdjTaQLYUiZKRiq4sdl1ALrwwMYaCoHEjN715Nx8saQSU
-	5egVTiwVZqDryeQ7dR9HhfdK5FET8+F/7vmCe+wWL
-X-Gm-Gg: ASbGncs5LSyNZo4DTbV/n9qbwJD+qHwmooBCZF0+0etulDtMrtw/mh/HX6tZnVN2CVh
-	gSxHlBHM8vkhvAG7bNTc+unpAmx5QUP/8F1B2U01xbSDKF+8/Ck8CuVLPDaETtQk49RO4yvyxEh
-	FFm+3Uc/4pZkP03QyrntI3ijDWM+Fp5PTptpYNeFPV4ruXT90/W/AKtU/+W+E/QWIzVuEprslXO
-	6LTW3xoyWQroR6yFaPg6qFAng==
-X-Google-Smtp-Source: AGHT+IF8ztkEHXB7jHNLH5b0qoR949xdKvlTltrfHLNI9mn4T2PAdsWoPgL0Nz5jySsDqNoznj8VNBGkS1VgvZI1Uk4=
-X-Received: by 2002:a17:902:cecc:b0:236:7079:fb10 with SMTP id
- d9443c01a7336-2467a21e4c1mr3101485ad.3.1756053585241; Sun, 24 Aug 2025
- 09:39:45 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SEt48QLq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756054387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oFqdIPoF56JesxWcS08Dn1CdDNSCd50QD5tONmmR5iQ=;
+	b=SEt48QLqU/BiwvMh2m2OcQeHO4lJQWBRMo1UerjxV8VAAyGZaN/XEG6Lps1MERLbjF7tGn
+	aLnJfvuQK2WeYiOHAD7tdY/AnpcgeFKE4oEkhoDmJtCxW7XK6QlkXJ3xksBC/T3i0V4dRa
+	c8F+pegk7pBG/IgfHkUrYKHRhLyHIo0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-190-1XnfyuiOPUaRil-mUW88iw-1; Sun,
+ 24 Aug 2025 12:53:05 -0400
+X-MC-Unique: 1XnfyuiOPUaRil-mUW88iw-1
+X-Mimecast-MFC-AGG-ID: 1XnfyuiOPUaRil-mUW88iw_1756054384
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2FDC81800451
+	for <llvm@lists.linux.dev>; Sun, 24 Aug 2025 16:53:04 +0000 (UTC)
+Received: from [172.20.48.110] (unknown [10.30.45.91])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B08D919560AB;
+	Sun, 24 Aug 2025 16:53:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc2,
+ upstream-mainline, c330cb60)
+Date: Sun, 24 Aug 2025 16:53:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250823003216.733941-1-irogers@google.com> <aKpP8yn7hoyQJe9h@tassilo>
-In-Reply-To: <aKpP8yn7hoyQJe9h@tassilo>
-From: Ian Rogers <irogers@google.com>
-Date: Sun, 24 Aug 2025 09:39:33 -0700
-X-Gm-Features: Ac12FXzo4nNl7CWXzsGv5Kuj8o4HmwvIozQ_8cCU8zkwDdeVOkH53u0lihj7JbY
-Message-ID: <CAP-5=fUa6xcn7j6_SGrmK7pTPTcUADodXo6o3UTLbFWBAeUUAg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/19] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
-To: Andi Kleen <ak@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
-	Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <90734.125082412530500185@us-mta-190.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vjL1jgkQOCr3kqI66duYnfyYOdE01OMDf9ANwsBn87o_1756054384
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 23, 2025 at 4:34=E2=80=AFPM Andi Kleen <ak@linux.intel.com> wro=
-te:
->
-> > BUILD_NONDISTRO is used to build perf against the license incompatible
-> > libbfd and libiberty libraries. As this has been opt-in for nearly 2
-> > years, commit dd317df07207 ("perf build: Make binutil libraries opt
-> > in"), remove the code to simplify the code base.
->
-> The last time I tried the LLVM stuff was totally broken, couldn't
-> resolve many things. The only workaround was to go back to the actually
-> working libbfd. Please don't remove the only working option.
+Hi, we tested your kernel and here are the results:
 
-Andi, did you report a bug? Does the non-libbfd stuff work? Yes, as
-every distribution has shipped it since binutils went to GPLv3 (in
-2007?). While I don't want LLVM stuff not to work, bugs happen, libbfd
-is license incompatible with GPLv2 and maintaining it in the source
-tree is a burden. When something doesn't work, create a test to repeat
-the issue and then we can make it work and ensure it doesn't break
-again. In general I've not had issues with the LLVM code.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Thanks,
-Ian
+
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.17-rc3' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/wsa/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2000772086
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2000772086_aarch64_kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2000772086_x86_64_kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2000772086_x86_64_kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
