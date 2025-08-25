@@ -1,103 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E88A30103A
-	for <llvm@lists.linux.dev>; Mon, 25 Aug 2025 16:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AC823E340
+	for <llvm@lists.linux.dev>; Mon, 25 Aug 2025 17:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756139588; cv=none; b=ba5II3c7Dmo90qVlhZ4Y0G/ffB+oTeMeIDYnuUjmJ9UUivFCkJAnU/SHV7fN0j5Aa7QXmzEYAiPp3TyvXVY0+71gpQfy7ylfeHxR/7M9mw6JzCR+/zcgZdldSxGA659lqKJuPk5HKlc7Fff4vnZA4BqD5Ok78RxlehcbfXN5Ui8=
+	t=1756141242; cv=none; b=RMcQXXJKBEudKkB0HSkLdWFGwCJNpQl68+2PmJkZVov1j5fFZ3A5MK8Sp2YHkM4qKU7jpy2ojjgjMlMPFF6MVj+4uZTuF0OBQD9s0quAetSQXbyPoqcT4u9v8XUstM17FfgzbnRpgRAcAOJNb6/UXXxH7Ewjt+GwbqjxjMk5up0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756139588; c=relaxed/simple;
-	bh=I1Wrt9lOX2TP5mT9tQ0jH6C4WE23J3XnQzUCujt7j54=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KGIRWy3LghK3cpb328anBRPS8YY3P7Fe4hiaZf4ENDq1aVYkMpdlwCRq/O3Mb6seYYN6fGBl3KpsIAMdjwtnNYlaD/F8upHwQQ0eTocgyCTnnYQzyvfbbUs2Bgiy0GBuzj4sQLsMQtfWFjPVe83ftQPa4L1nT+aKhQVBQ5m/IM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XR64Z/oI; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1756141242; c=relaxed/simple;
+	bh=rzQMACObvWiM9uVvHkabX7dVPQNESJ2VQB0+KavI+nA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l9YPRiaobAYhWfmMhVkSgKTcMjIOkdtUyOBAH22UfQL9sJmblnSz9jhe+RE8YYhUIWo1+U7YTC87ENlo5H76IzjgUpa8VhzkaWsfMLD37uJ6V2cP0+aCYo9hJR14hr0kxt6LiC7XkH6Qa142A6VYu7srchO/1r+9kJvAkQE6eQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yz8QpBVO; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XR64Z/oI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756139585;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KtxGF0wg6Qp3cKXj2vJ6ZsDdVRjKNZ6v1rYhtBnFLLE=;
-	b=XR64Z/oI7XkGnleu7mDCKvpSv8Ppdwuzr2Ud8hrwu84lJeN8d/bS/RT7uGlbyZFbIHSS1b
-	Ugk8UY+37hXDdZV9toqCI3kwCmbOrgM9ovHm10SyDF4CZLf31ZFOvcuTYqyygD5x9lmyIE
-	ssEwOlogl7J61CMV5LHC9y5RGO7t4Xo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-541-OkuRhd1UMLGQP7CvkMgKNg-1; Mon,
- 25 Aug 2025 12:33:03 -0400
-X-MC-Unique: OkuRhd1UMLGQP7CvkMgKNg-1
-X-Mimecast-MFC-AGG-ID: OkuRhd1UMLGQP7CvkMgKNg_1756139583
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 088C6195608F
-	for <llvm@lists.linux.dev>; Mon, 25 Aug 2025 16:33:03 +0000 (UTC)
-Received: from [172.20.48.110] (unknown [10.30.45.91])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8B1B219560AB;
-	Mon, 25 Aug 2025 16:33:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc3,
- upstream-mainline, b6add54b)
-Date: Mon, 25 Aug 2025 16:33:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yz8QpBVO"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b4717384710so604184a12.1
+        for <llvm@lists.linux.dev>; Mon, 25 Aug 2025 10:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756141240; x=1756746040; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f0oEN90SLYgvRgTxYwIkfotkQK1LJND5IDEHVs53sDg=;
+        b=Yz8QpBVOQnnYZW7ipt6wx6NBgd5jkEpVx6Tzlwmb5TWadmo3X3v6XVsPx+Tz1yehCb
+         ceLRrVGA+FJC0VIdQa7qWz7bsKJl2o7DwExKI7KCoN5PP75UkWOjdFeop85EoQvmLylq
+         bTwTCHrBCcFY/0T2M966A8qcNfEh7whlD+cQs8XFLrTX8SnAoVIFW2lOfAbcjgj+zvIV
+         A561BjSZH4kDEUrXA5/FLDDfhLDrYxyFmlvp2KY2BgqsgByV1qOgI80zscSMaTQD3tQH
+         vgDX5mUEWDGD+EJQ63EVQ+XeRxlNKM1EyQIQ087aoZ06QmTVsDVfxqPTqwflzuZyTBYN
+         9AXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756141240; x=1756746040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f0oEN90SLYgvRgTxYwIkfotkQK1LJND5IDEHVs53sDg=;
+        b=SAuLmDWvp+rvJw2tD5j/ov6ElUEWgRzqMHQHGHfuH+5BGJ29ThOHHwNZyvySFM5V1Y
+         IFn19lb4qXVT5qVKin3c/6m5i5vWA66IXTDv/pgh6J0uJOs9RRzshs1FPOv4l4ZLULED
+         q1TutCjy9j/8cb4FnVNULMzXr2RSF7V8Qmd4qOmpQclvhE7x9BZVNDrztkueQwmgSu/f
+         Xs5ygKmZemaUHUP/YaOX+t4GUmRkbGq/KIJjjphloWUARv19MirMJxoAlqhsS62A3uxR
+         Dyjzat4EotAfLAqzpmOMyuHnZAHALri0FMA5UYNx1qVtotyRDyP3h+o/BE8FKC1UzNaj
+         Wqow==
+X-Forwarded-Encrypted: i=1; AJvYcCVopuzSAYtletFih7Nh+vu9/k5f9gqs/lemQGqoyf4owVgEg0LenTs38K1ECRuNO5HLI62P@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0msEKLkr6kMFXl52kjOXtDdjU6XPwjAOH6UcuJlrvq6rbZwyS
+	G+sOs4bPwvuedNDsjWVkv2FwxVpIs24/3lL7zHh4JaIgyWpqQzJ/CSQd0YE33WqcM40aQvDxzPD
+	gaXe8DznfpFSCbNDZpNKW7ilFWbDzrUQ=
+X-Gm-Gg: ASbGncvMkX+6xWjcPb6k0BbwH6VKmW7OmeFeYe7ymGmEWUndg98Km/KDaQ/+FW119Wn
+	8u8JezSc9KISHw4LtTozP86/GgOSVouZfmiimph/EdpLv2NfGIuQ4i3GI2xHOu84Gi83zzN7yQa
+	4Vu3BqzHSMehHv0TEiAUorr87cvhEWGbcFvO0lrSU3iC5Bv2IyMTxgixc+3eETSJxp1Q54F4i4O
+	CQn9dG0rGR8+M9E9kRZe5r4Y1EXolB9TCylql33q6rg+3FkKyrlLHA/A0p0TB9xF2+BSUQmkBI7
+	GDAOrif+5bnd/i7tUUq+qlQMQQ==
+X-Google-Smtp-Source: AGHT+IHKT4JJBJ9rgR6CsJmxUiw1K8DlbFWihB3KfiTBy1l9WKV/JStW65ETOGMdOn/RgdA5Ko6AVAJXlO2Hf7k2FPY=
+X-Received: by 2002:a17:902:cf09:b0:240:729c:a022 with SMTP id
+ d9443c01a7336-24630427edbmr91627825ad.11.1756141239755; Mon, 25 Aug 2025
+ 10:00:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <51362.125082512330301244@us-mta-541.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Vkw_yJqeAz-t2vduhrAyXeO0JIzNUkFMTAeut6fM8lE_1756139583
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20250825141316.work.967-kees@kernel.org> <20250825142603.1907143-5-kees@kernel.org>
+ <CANiq72kc7Ky6+7Ny7jR04s8vU-g23qBQC0rQrOZDxDzXT+m1TQ@mail.gmail.com> <202508250834.E2456B9@keescook>
+In-Reply-To: <202508250834.E2456B9@keescook>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 25 Aug 2025 19:00:22 +0200
+X-Gm-Features: Ac12FXyYN3VEhnMM3td2GuBBEWm8dOLy6K6qZL3tvq3QOv-O5HJfG5pSFZcSTv8
+Message-ID: <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
+Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+To: Kees Cook <kees@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@outflux.net>, 
+	Sami Tolvanen <samitolvanen@google.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Nathan Chancellor <nathan@kernel.org>, x86@kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Aug 25, 2025 at 5:35=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+>
+> Yeah, that's a good idea. What the right way to do that?
+>
+> config CFI_CLANG
+>         bool "Use Clang's Control Flow Integrity (CFI)"
+>         depends on ARCH_SUPPORTS_CFI
+>         select CFI
+>
+> ?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+I don't recall what is the idiomatic solution for renames, but I
+remember Linus talking about this topic and about avoiding losing old
+values if possible (perhaps getting a new question in `oldconfig` is
+OK as long as the `olddefconfig` respects the old value).
 
+I think your suggestion above will still make it appear twice in
+`menuconfig` -- there may be a way to play with visibility to make it
+better.
 
-Kernel information:
-    Commit message: Merge tag 'pinctrl-v6.17-2' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/linusw/linux-pinctrl
+A simple possibility I can think of (assuming it works) is having the
+CFI symbol for the time being introduced just as a `def_bool
+CFI_CLANG` for a few releases so that people get the new one in their
+configs.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2002429711
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2002429711_aarch64_kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2002429711_x86_64_kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2002429711_x86_64_kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Miguel
