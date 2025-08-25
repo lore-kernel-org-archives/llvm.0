@@ -1,96 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF3B304993;
-	Mon, 25 Aug 2025 16:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97B71E89C;
+	Mon, 25 Aug 2025 16:16:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756138322; cv=none; b=J+6iIoluPx0kaQg27SySwSxzD+OmuT7gz8RSBynwra8FNX4NzB+wu1ns5WlV+ESt/9MJ5h/pOa8DFGxAULLulDHNZPsHdO6ga0AVQ3gRxRw2ETXy/L1VE+T/ZzRdY09Y540c+Jw0uvr6tzhpn8EM/i7XZ8eB07TFWaEu2ep8/+Y=
+	t=1756138605; cv=none; b=oF0Q2GVRfBgGZJ98EySkM04HUKi6WyHC1/4Q3pg2gT5IlbFkTZzz3g0y1vyiazXenrRVovLCOC/Z4BoDhKBy4qJsg2iIFXIVvrDSaa0oYDs4OBB+4BntsTYrFI1dH8LTsNvzPuEScNdfOzoXWtiVE+ejKqwJIhGsbteHvOmVQz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756138322; c=relaxed/simple;
-	bh=lRmwIXXuuVxuUeGAauGH9Bx39v/B949+O0RVAstjSuk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FMxKl5oZpUpkLdBI+imibDLkTqYEdlPYriEMfv9HL0W7tOY9nfhuLxMwWd2iqM5WS6g/cva11UrPAmX7BTmzDvAgG4TTjiYthpKBo3Q1lbe0NCPa5ZpfXtJL4QcFm8DVQ+TFUv8+rk4ZYEAeua6c+6+5PjouHfle9eAn+DLi5Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQ7VlgxH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756138605; c=relaxed/simple;
+	bh=9C0JTroVYJnMkJclSuilfgsfM6RmsoK/moXeHS/dRAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=toPfLBLMhEMRNahJ1LUutbw6FGgKrSSubRVTOZGIB5FguKfEa1U3fxnRr1mcg73Y+yLkflxktapXgxwVJt4jkwj8o6xxOOZeywJytyDiRvJSuEqq+9d0wTmxKY0Y7qcv94oFngBOWnl+cH8D0Wfra8WB0S1CXKtQcmWTCSZ5sfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfFYvZXM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQ7VlgxH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F2DC4CEED;
-	Mon, 25 Aug 2025 16:11:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfFYvZXM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6A4C4CEED;
+	Mon, 25 Aug 2025 16:16:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756138321;
-	bh=lRmwIXXuuVxuUeGAauGH9Bx39v/B949+O0RVAstjSuk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cQ7VlgxHju8BEVWwXx8S5s9QO0VAGvXQFLrv/Uk7vG//TkWLtQ958x6s8s27sBA9K
-	 ZcC+Vqlxi7SLRsijcAT4VR40IpnOE02lPJoJxRdH4JLlfsembYa20HUZxxM4Ykvuhd
-	 gR9Ewz0C17+TNmcjSvn8rsyUEZ3eHGOfihpu+yQUtN2eQgqTq4UevTo4hW53DjKucR
-	 RcfXKEtkDNMjSmnffIYVrTmNpy0yJ+On9axRFVmIFarvx0PpkxtcTqBkLOK2JQ/CFW
-	 UV/FEDmGacDp6s4U8xtBgsmf+FYq4bHcugm4JlhafhGE0dBr3Z/OCxvHsJZPXPRon0
-	 vH/QeTkJt0PjQ==
-Date: Mon, 25 Aug 2025 09:11:58 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Jaehoon Chung <jh80.chung@samsung.com>, Ulf
- Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, Shreeya
- Patel <shreeya.patel@collabora.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>, Andy Yan
- <andy.yan@rock-chips.com>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Vinod Koul <vkoul@kernel.org>, Kishon
- Vijay Abraham I <kishon@kernel.org>, Nicolas Frattaroli
- <frattaroli.nicolas@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, Mark
- Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
- <tiwai@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre
- Torgue <alexandre.torgue@foss.st.com>, Shawn Lin
- <shawn.lin@rock-chips.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>, Manivannan
- Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, MyungJoo Ham
- <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>, Qin
- Jian <qinjian@cqplus1.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 15/20] net: stmmac: dwmac-rk: switch to
- FIELD_PREP_WM16 macro
-Message-ID: <20250825091158.07893b12@kernel.org>
-In-Reply-To: <20250825-byeword-update-v3-15-947b841cdb29@collabora.com>
-References: <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
-	<20250825-byeword-update-v3-15-947b841cdb29@collabora.com>
+	s=k20201202; t=1756138605;
+	bh=9C0JTroVYJnMkJclSuilfgsfM6RmsoK/moXeHS/dRAc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HfFYvZXMBbgRSX0K3rOpSm2H32pNwz0EEz0H4S8bd5+3uFOutsnu/gA4+ctEHS7ur
+	 VtzlPW/aRP0P5S9aTe+JhuI3FChzXIEqbC+aN2veGXaOG1WRIWV4Psi+l4ONt+ohTF
+	 RyjzwfR0rTyuppZ+FJ3jNBUbzMZaGKzzoFEBXFRp23llVJvWbp47wn+tZBjZQGeoWB
+	 tb71D1+B7nImbFFmi9AowNEy8a6DHnwM8VKGxCarOVIkIRzF9fk369PfmrjngRV5/s
+	 NiocBqHCJ5uUXBhjX8UU+eppr7zFxbil46Apb7ckJhm0LZaf7z5J34/iQwh6ScYl9O
+	 CfcB+v7OD/pyg==
+Date: Mon, 25 Aug 2025 09:16:45 -0700
+From: Kees Cook <kees@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>, x86@kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 3/5] x86/cfi: Add option for cfi=debug bootparam
+Message-ID: <202508250916.6424C531F@keescook>
+References: <20250825141316.work.967-kees@kernel.org>
+ <20250825142603.1907143-3-kees@kernel.org>
+ <20250825155923.GY3245006@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250825155923.GY3245006@noisy.programming.kicks-ass.net>
 
-On Mon, 25 Aug 2025 10:28:35 +0200 Nicolas Frattaroli wrote:
-> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-> drivers that use constant masks.
+On Mon, Aug 25, 2025 at 05:59:23PM +0200, Peter Zijlstra wrote:
+> On Mon, Aug 25, 2025 at 07:25:50AM -0700, Kees Cook wrote:
 > 
-> Like many other Rockchip drivers, dwmac-rk has its own HIWORD_UPDATE
-> macro. Its semantics allow us to redefine it as a wrapper to the shared
-> hw_bitfield.h FIELD_PREP_WM16 macros though.
 > 
-> Replace the implementation of this driver's very own HIWORD_UPDATE macro
-> with an instance of FIELD_PREP_WM16 from hw_bitfield.h. This keeps the
-> diff easily reviewable, while giving us more compile-time error
-> checking.
+> > +	if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
+> > +		if (builtin && cfi_debug)
 > 
-> The related GRF_BIT macro is left alone for now; any attempt to rework
-> the code to not use its own solution here would likely end up harder to
-> review and less pretty for the time being.
+> You could just make that cfi_debug and add:
+> 
+> 	if (builtin)
+> 		cfi_debug = false;
+> 
+> at the very end of __apply_fineibt().
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Oh sneaky! Yeah. Will do.
+
+-- 
+Kees Cook
