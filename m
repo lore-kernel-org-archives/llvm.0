@@ -1,72 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E93EEBD;
-	Mon, 25 Aug 2025 13:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA03E38FB9;
+	Mon, 25 Aug 2025 14:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756128305; cv=none; b=dYvIvRuNoZMcRRB26OhjqYaypkP4AEYy+cVHGzSbw9LjkzoDMBuOlbDStas+972/X7AcAWEHpb6Zl4gSLUkVX7WTMMOVGqICsHHNUKV6Avblo/akygNs6Z+4PpZcLFsjTek4k3JM8IAzUl+w1kfz//mFQBzKjilQDDdpL9AIKJ4=
+	t=1756131964; cv=none; b=oswmYukC9XnZmjoo24LM1uZG9kOM2jVqyifPlz86iDPs5KeeOix31fiq+4+PLCCYDnRaSPAa67yU/KaWRr1/sc9GQnnNUBWjTKYQf2EchU89aMxq4/MqHzBuWmxcdxyNkDEvUsptPqzFU0wJQ/K/M/39m/WyxPuV45m7dVb4/No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756128305; c=relaxed/simple;
-	bh=oxp9yvF+n0i71BJjAd2BA7FgZBFAQoFQbazz+ja8VsA=;
+	s=arc-20240116; t=1756131964; c=relaxed/simple;
+	bh=qKnJwvVOQdbIM7AwmZDu1aieujqnr4MVL8xJV+3xcWU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WA1Q3/h4GajNGatJUTXu3w6P3Rg1GUU9myRHGZt4cV7Gef6gHMTez9+CoCMlFoGs+8fEaSlmpDMBUuKDMMR+cgqsHet+fRriJ1h9kRKD0Q63rFDK9cGvp6v74vWqZ9gPwDRcdNZdivQClOQY/Oukf0qNyUgjp9LuounlIa994d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJ82w7fa; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=TEjIRi1LXKuBLD5jUTAohhszLUME9ODlaUxswkhzMvaE1nUsCmECAhCX/G/L2Lhxv9xRQ11w2hl4so/ZwxuUj0ixsS4d1otDpLwZ/5ocE7K6/rk/9y8teH+GtNB4u99nPSvEjBO3tp2ruN+GHO6rQm1kf0X7OvKkuQjrlBJLs/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bPWPBLMJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJ82w7fa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DD8C4CEED;
-	Mon, 25 Aug 2025 13:25:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bPWPBLMJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81222C116C6;
+	Mon, 25 Aug 2025 14:26:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756128304;
-	bh=oxp9yvF+n0i71BJjAd2BA7FgZBFAQoFQbazz+ja8VsA=;
+	s=k20201202; t=1756131963;
+	bh=qKnJwvVOQdbIM7AwmZDu1aieujqnr4MVL8xJV+3xcWU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pJ82w7faSbCM0h7bldpujTb59xvahMEOm0pDooR6fCy7ievEilcx9fy9RNraYAosi
-	 GlWbt5N2nBqWUnHfhnZNgeVYYZjRWSPzyxx+k16cCjing1CrYCfeJojEenNu2hRqzV
-	 3WLTMGRFk6Fcz8PlOpgpFyQv2oOepx89UWRYSnI/soXp+PiAi0XE1Y2yJJB2ZVkoq9
-	 +Vwq74CmREUkXjAz9qadvs6X9iMYmiB5iEk1gE4NRTDS9gxjMjNg9/GaPFv+UpU8NJ
-	 MkpXH0p/wU4lWofymkoo8ft48YBfSrXPoiIcPXc6utG4Fhe+tcNJ560j9sCpAMBahx
-	 WbSKuqe4NAywg==
+	b=bPWPBLMJbqPu4Ihz/jn1p85BL57qjQm0GeXE5FNWeLlN++/7RKlMCJ8dHmh3NN98j
+	 a2MJOEJMImQWuqo4ojpxl7wQxUW+kMSttdKngdXjPS2kCUyc+BZ+1e8oOgQ0Ti2/6m
+	 reEgKi6EjffV33DLzQyIgr8V9g2nlmSVYUG7EaM/MyY7M2lKY2Zv/dN2S7hOdASMCl
+	 /HccRg3BXD9cdYB8R3XGPA4vYe8uLuojG1CaSJ1AIvlscFmLwGNseHrwr/ONQGONLO
+	 cnGyoQE6fc06n1ued9gtzzjBPgY/6MjOfjPP43UQ+V4sPfnprtr50fs3xdqa5Qy6Yd
+	 aMsiVDBIbNsJA==
 From: Kees Cook <kees@kernel.org>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: Kees Cook <kees@kernel.org>,
-	linux-hardening@vger.kernel.org,
+	Sami Tolvanen <samitolvanen@google.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	x86@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
 	llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] hardening: Require clang 20.1.0 for __counted_by
-Date: Mon, 25 Aug 2025 06:25:01 -0700
-Message-Id: <175612830030.1493362.14216012036494775840.b4-ty@kernel.org>
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 2/5] x86/traps: Clarify KCFI instruction layout
+Date: Mon, 25 Aug 2025 07:25:49 -0700
+Message-Id: <20250825142603.1907143-2-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
-References: <20250807-fix-counted_by-clang-19-v1-1-902c86c1d515@kernel.org>
+In-Reply-To: <20250825141316.work.967-kees@kernel.org>
+References: <20250825141316.work.967-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Thu, 07 Aug 2025 14:36:28 -0700, Nathan Chancellor wrote:
-> After an innocuous change in -next that modified a structure that
-> contains __counted_by, clang-19 start crashing when building certain
-> files in drivers/gpu/drm/xe. When assertions are enabled, the more
-> descriptive failure is:
-> 
->   clang: clang/lib/AST/RecordLayoutBuilder.cpp:3335: const ASTRecordLayout &clang::ASTContext::getASTRecordLayout(const RecordDecl *) const: Assertion `D && "Cannot get layout of forward declarations!"' failed.
-> 
-> [...]
+Just a nit-picky change to the KCFI indirect call check instruction
+documentation. The addl offset isn't always -4 (it depends on patchable
+function entry configuration).
 
-Applied to for-linus/hardening, thanks!
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ arch/x86/kernel/cfi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1/1] hardening: Require clang 20.1.0 for __counted_by
-      https://git.kernel.org/kees/c/871fcff457f9
-
-Take care,
-
+diff --git a/arch/x86/kernel/cfi.c b/arch/x86/kernel/cfi.c
+index 77086cf565ec..638eb5c933e0 100644
+--- a/arch/x86/kernel/cfi.c
++++ b/arch/x86/kernel/cfi.c
+@@ -27,7 +27,7 @@ static bool decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
+ 	 * for indirect call checks:
+ 	 *
+ 	 *   movl    -<id>, %r10d       ; 6 bytes
+-	 *   addl    -4(%reg), %r10d    ; 4 bytes
++	 *   addl    -<pos>(%reg), %r10d; 4 bytes
+ 	 *   je      .Ltmp1             ; 2 bytes
+ 	 *   ud2                        ; <- regs->ip
+ 	 *   .Ltmp1:
 -- 
-Kees Cook
+2.34.1
 
