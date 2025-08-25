@@ -1,125 +1,228 @@
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35444A08;
-	Mon, 25 Aug 2025 01:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756084034; cv=none; b=bdBqMoPbwfu0u+HU/NC5I1a7uw/jkGsk7B5Bj9bbDtU8EuiPHnkcb1rzlUGnk8lU1C6oXJfudK060f3L8C/lofRsv0l2UERo1j4Tixr9XTBeEQ5YWW+jnN1FvlOFN0KdcpS7Qpxb1MgDFH6+txcxWhK0A2OTPi9oHnE6obvP3kE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756084034; c=relaxed/simple;
-	bh=qzvjptTdbu1HRrNm17uglIEKW/C3ojiHltnOpJd8zPM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DGHCQDm0HgfOsygrKM5EXw+qjsSx2pDsC04IimRZjlXZAWL2Z9dq/pBnx35a8ylN3A5rP+MLUmbfk4MjLecrI28ARgHru6ogvReqxh13XITSEYfq+hSkOQs/JaCClTs1ws5vtAKws3A1opfaY+zf/aWMhVePluus9d7Wu1gJs2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=UnFCW2Jv; arc=none smtp.client-ip=115.124.30.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE521A9F86;
+	Mon, 25 Aug 2025 04:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756096298; cv=fail; b=saVusD6ClDe+/p++U/bIxR62p2uWltaPiswbliFc9gJnIZJuKgNeRoY/IX1NPVN/f6pXpSJAyEc5+HMYGM4njBGIisjPwr2qlzUVeXfSzfT0y0J1v0VvkUxs6LYCf0yxuxvqoC26vwr7677SI8v6G49YqmfWc4lqTd64RMmVYOM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756096298; c=relaxed/simple;
+	bh=lGK5HaYSPCWT19tCdRgJzygK1iiJ8sXOiP6rMgU2uN8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KkYueibltN+4BZBp6R3ve4I/h2Q1AoQWTzFSHPuhYEAIRUO38LsXckpZAw2RPykFE239kwsBeNJTzmZTXh2D1gVfrqOndP5Oo8Quy2sRNd+xvLaeMUDcAIlqjX/5IxoO/uwDk0GZOysw8r2zjoH6SH8Z7uA53FczO1lrt9EyCys=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XcG5VVrl; arc=fail smtp.client-ip=40.107.220.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="UnFCW2Jv"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1756084023; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=hT7fyki4cRVVgwQPXO+m+tGFXjnan9mDi20ca9rK7Dw=;
-	b=UnFCW2Jvw40YBuQq9nQKWhWcZOIhKAsqXz84ruyZUWh1yy2xJEEKN04AOs2ZR0Wm/S9LUDE+0kFiGPfPc+ewS4S11zLCOyNOoDDE+ej8oAqSYuCzEGp93C9ZrNVP81gt+ZzuqZByyy0amQxqyWGbfPmdiHRhZuYm+2eb4hp/CF0=
-Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0WmPcp-O_1756083701 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 25 Aug 2025 09:01:42 +0800
-Date: Mon, 25 Aug 2025 09:01:41 +0800
-From: Feng Tang <feng.tang@linux.alibaba.com>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Lance Yang <lance.yang@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	paulmck@kernel.org, john.ogness@linutronix.de,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] panic: Clean up message about deprecated
- 'panic_print' parameter
-Message-ID: <aKu19RZ4tffb8eNC@U-2FWC9VHC-2323.local>
-References: <aKRJKZHgcxyNF3y7@pathway.suse.cz>
- <202508200907.PsZ3geub-lkp@intel.com>
- <ae9bb2ea-c6e5-4a4b-ae25-aea1d6fe084d@linux.dev>
- <33a897b4-7d9a-4641-9c7a-07c19bb9cb6f@linux.dev>
- <7a34da58-874d-4271-9dbb-7991468d58ff@linux.dev>
- <aKWWcPOf9qPIoCe4@pathway.suse.cz>
- <aKWYELPjbhC7R8NO@pathway.suse.cz>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XcG5VVrl"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=puf257Yr3fl0dTdevtTjngIfDTCt8HuYExw8fEWLAtQuKyTyEUpfYEVHwJcSMgoDLGj08Q9Yo1iML/zSwT4FgAti2hEWyUO71X4BTkFfiIuqLJ0aX+BiUUd2pWIIe7+UeKuX+VEoijeF6+0VTIbrd4+Vsd+aY3FAN+0X23CDLkwG+5UR0nHvzZTPG7r/Y1frR9DHaokm6joFLgh/1TDQE2R1BabLHxlUTMX3blLmdhpqq/Uz3xd5qnXW9iy2PF651kbGJ7CMe/CkaYONwtu7Q6imbVE9Fn7Yb0bCOF+itwrgViVfRV36yxx9ediVDgYoArtPvmOgt8YEaPtMHEohNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WpLBjgU6CR2jq1ZR0/me1toR8BwOxJNwEZfIy9KTeFs=;
+ b=gajA1Zg14G5fr5MLRoW1BNPE9o6JhbFsmst4f9UvHMMg3wHg2HOtCJg53nsro8Hc1jsaQ1K77QSeNhFGVlZf66dCeRRv6ORbUYaUs7aBtAxm2kx7SV/E0pwC2CnBZCRAHadrStQp4Oj3EiyO6M0kfbaP8r6aKIpQSLC62fxNIE8eiB6ZqMjD0liGNYCm8zHyarfXAUmpuJ6P3YstPgZRob/vaz/PfP1rhjTDRho+aNPobvlmUkINsEau+jMTDPJxmzI0UKRGz1X6XnapoP97V+sxbB4k06oAF8CFB2hLJrtifZr3eePzAfsJs45+nAsvygT+Z7w7bRdoJg9o5W7+SQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WpLBjgU6CR2jq1ZR0/me1toR8BwOxJNwEZfIy9KTeFs=;
+ b=XcG5VVrlNZITQYFoVVUfXh5ughW9UpGjkb9fK14BeQntT7djUFa5xRCnVQN20hbLKzgNQnjmNDZiDrUz7A9KZitdYGeg3FWmPjNP4kEhRAakpNwDd8lx/iUV+ng6DcV3MahZ+u7eDgxs3lHaabCZwCyII92pQEsV/nwILKbp7/M=
+Received: from BY5PR13CA0020.namprd13.prod.outlook.com (2603:10b6:a03:180::33)
+ by MW3PR12MB4457.namprd12.prod.outlook.com (2603:10b6:303:2e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.21; Mon, 25 Aug
+ 2025 04:31:33 +0000
+Received: from SN1PEPF0002BA4D.namprd03.prod.outlook.com
+ (2603:10b6:a03:180:cafe::b2) by BY5PR13CA0020.outlook.office365.com
+ (2603:10b6:a03:180::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.13 via Frontend Transport; Mon,
+ 25 Aug 2025 04:31:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF0002BA4D.mail.protection.outlook.com (10.167.242.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9073.11 via Frontend Transport; Mon, 25 Aug 2025 04:31:32 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 24 Aug
+ 2025 23:31:32 -0500
+Received: from xhdnipung41x.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Sun, 24 Aug 2025 23:31:27 -0500
+From: Nipun Gupta <nipun.gupta@amd.com>
+To: <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+	<alex.williamson@redhat.com>, <nikhil.agarwal@amd.com>, <kvm@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <robin.murphy@arm.com>, <krzk@kernel.org>,
+	<tglx@linutronix.de>, <maz@kernel.org>, <linux@weissschuh.net>,
+	<chenqiuji666@gmail.com>, <peterz@infradead.org>, <robh@kernel.org>,
+	<abhijit.gangurde@amd.com>, <nathan@kernel.org>, Nipun Gupta
+	<nipun.gupta@amd.com>, Arnd Bergmann <arnd@kernel.org>
+Subject: [PATCH v3 1/2] cdx: don't select CONFIG_GENERIC_MSI_IRQ
+Date: Mon, 25 Aug 2025 10:01:21 +0530
+Message-ID: <20250825043122.2126859-1-nipun.gupta@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aKWYELPjbhC7R8NO@pathway.suse.cz>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB04.amd.com: nipun.gupta@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA4D:EE_|MW3PR12MB4457:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f484808-44ad-4910-5ce8-08dde39044f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?SoAiVI7M+ra53W2ixeBwSwv5Ckak0dV+zJqnx1PsujPeFWCg9YJEqecN78lx?=
+ =?us-ascii?Q?+613tbHenOjkA0Ckc+CRw9HCe7Cx61lFW2NzGFy8GA7Qc55iEqwv2Ntma4Es?=
+ =?us-ascii?Q?PdS8+CETR2IwHicf/tZIFN25kbGekXhAx6qsxfYKmCH/0PG4hT09IjvNi0RR?=
+ =?us-ascii?Q?vC1NoBgLQ5+kLe2tTbFwhG5R2V4pkkU7XrDoST2NgQXWx/PsgPL2h5GRNDfu?=
+ =?us-ascii?Q?Vj/l/estjQyOQpDGJkENSAjq3dbHPSXPSbEuksyw92dUAOu3Lf+vFD9ugc4B?=
+ =?us-ascii?Q?fa9Cqp88xlnKiNBz/4Q7OMPtP+5wZTm3FI5S6A9GJSbXsO/R1Mn13gn+H7Hv?=
+ =?us-ascii?Q?LI3bDmXQP1uomYAxk2/P6vKHLXrpNLA2ZLa1hX9YO5HTeakWtlIyh/xgdNeQ?=
+ =?us-ascii?Q?Wuq2px0jYS1YNq8GztHOoodDnTXEkx+tN1Z8swrRjebFYJpXiBzACmLNvsLi?=
+ =?us-ascii?Q?dTNKmek/A9kfWO3J6knMr1hzYWeyap2r1TPk4zdoW+yATk03kDTjcT75VA6e?=
+ =?us-ascii?Q?DDC8xZCJTN/onlsocR947bY/je+K3K6XADBbS/orXJQMzBu42Tf8eYMg09S9?=
+ =?us-ascii?Q?Uk+D99dvLuVR1NTISbgI0UeVW3piMXjB7NypEJiEhZ28sLvlQpzpW75DQRov?=
+ =?us-ascii?Q?Aejhpwv/I1jFCGiywjUGCFUkmTjViAMUizGmR/LsrzDV1Pio8o3dXADLt4G2?=
+ =?us-ascii?Q?c+HibdHhaxqOFo77zr6fk1vUuI3wb8vLTbyoXl0TBFbnjuKbGZtWHm6kgLaP?=
+ =?us-ascii?Q?7HwoGo73aplEOerHIxE6pK6mLOQlcWkvmrVwWmvIjCP3quLU73yjFwuhG0Lf?=
+ =?us-ascii?Q?q8TqnWgMV/BNmvZsNEOYK+Ahwx6XbihpkMXhWyJ03Ae4F7RRSmwGVfT53b7v?=
+ =?us-ascii?Q?Phgr5mO5gbCuRBu82wkKeUQEBMMyNo+w8OeVUUjdw4qH6heX1qy6KUivEilL?=
+ =?us-ascii?Q?Mo2EeFA6/emRdBzxR17B6SH5s016F+WODykk21ef3wmihOjcgMGwpbZNM2lZ?=
+ =?us-ascii?Q?yZa0GD11By+SsCEubcHrarqcLXXwPrJ1Z4PnkPBxc1TZx7Gzkd/nR519VZlF?=
+ =?us-ascii?Q?hoCCYLA5Wsaxi6tDs//snk3FrabmH60nyE6xbwUb3BVQMI8991z1+t50Hnnf?=
+ =?us-ascii?Q?py3Qeua8H89ILRf4vTfZeGITOomqgEuAs94gn/kta8bin9w7LUjfJMM/NhiD?=
+ =?us-ascii?Q?2U0oQUe8e/9ou2Un+1RIzoegJhhiQCZoAjjhLAFwxZ/0AKCglEZ9FkFx+BWW?=
+ =?us-ascii?Q?Ut8gLf5b4WA3Tyn4mQc45VAxs7A7nOUAzGIsaZr1hG/Feml9jFpolgeajtU4?=
+ =?us-ascii?Q?wPx4BbPvdSQ7fcrgPURe7y3/HweJppzCkiO1asoguvFT0JK/L5A6boWd5aNY?=
+ =?us-ascii?Q?tJOUmgzB2tvcap3GQp9ijcBggvWoON0pQiiu+GXNTJkjN2eBozYHvSGyNzA3?=
+ =?us-ascii?Q?5OWpo88AYe0gME9vtvOSrt/FiM4EQYVnty9F4kZ5Ec3qPbZ8TvtTjBd0liAc?=
+ =?us-ascii?Q?yFmnDin6AChXNzr7MIp60Kpc/rdgQAzdqnCk?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2025 04:31:32.7471
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f484808-44ad-4910-5ce8-08dde39044f5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002BA4D.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4457
 
-On Wed, Aug 20, 2025 at 11:40:32AM +0200, Petr Mladek wrote:
-> Remove duplication of the message about deprecated 'panic_print'
-> parameter.
-> 
-> Also make the wording more direct. Make it clear that the new
-> parameters already exist and should be used instead.
-> 
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
+x86 does not use CONFIG_GENERIC_MSI_IRQ, and trying to enable it anyway
+results in a build failure:
 
-Thanks for the cleanup!
+In file included from include/linux/ssb/ssb.h:10,
+                 from drivers/ssb/pcihost_wrapper.c:18:
+include/linux/gpio/driver.h:41:33: error: field 'msiinfo' has incomplete type
+   41 |         msi_alloc_info_t        msiinfo;
+      |                                 ^~~~~~~
+In file included from include/linux/kvm_host.h:19,
+                 from arch/x86/events/intel/core.c:17:
+include/linux/msi.h:528:33: error: field 'alloc_info' has incomplete type
+  528 |         msi_alloc_info_t        alloc_info;
 
-Reviewed-by: Feng Tang <feng.tang@linux.alibaba.com>
+Change the driver to actually build without this symbol and remove the
+incorrect 'select' statements.
 
-> ---
-> Changes since v1:
-> 
->   - fixed compilation with CONFIG_SYSCTL disabled (kernel test
->     robot <lkp@intel.com>)
-> 
-> Thanks Lance Yang <lance.yang@linux.dev> for debugging the compilation
-> error reported by the test robot.
-> 
->  kernel/panic.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index 12a10e17ab4a..24bca263f896 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -77,6 +77,11 @@ ATOMIC_NOTIFIER_HEAD(panic_notifier_list);
->  
->  EXPORT_SYMBOL(panic_notifier_list);
->  
-> +static void panic_print_deprecated(void)
-> +{
-> +	pr_info_once("Kernel: The 'panic_print' parameter is now deprecated. Please use 'panic_sys_info' and 'panic_console_replay' instead.\n");
-> +}
-> +
->  #ifdef CONFIG_SYSCTL
->  
->  /*
-> @@ -125,7 +130,7 @@ static int proc_taint(const struct ctl_table *table, int write,
->  static int sysctl_panic_print_handler(const struct ctl_table *table, int write,
->  			   void *buffer, size_t *lenp, loff_t *ppos)
->  {
-> -	pr_info_once("Kernel: 'panic_print' sysctl interface will be obsoleted by both 'panic_sys_info' and 'panic_console_replay'\n");
-> +	panic_print_deprecated();
->  	return proc_doulongvec_minmax(table, write, buffer, lenp, ppos);
->  }
->  
-> @@ -944,13 +949,13 @@ core_param(panic_console_replay, panic_console_replay, bool, 0644);
->  
->  static int panic_print_set(const char *val, const struct kernel_param *kp)
->  {
-> -	pr_info_once("Kernel: 'panic_print' parameter will be obsoleted by both 'panic_sys_info' and 'panic_console_replay'\n");
-> +	panic_print_deprecated();
->  	return  param_set_ulong(val, kp);
->  }
->  
->  static int panic_print_get(char *val, const struct kernel_param *kp)
->  {
-> -	pr_info_once("Kernel: 'panic_print' parameter will be obsoleted by both 'panic_sys_info' and 'panic_console_replay'\n");
-> +	panic_print_deprecated();
->  	return  param_get_ulong(val, kp);
->  }
->  
-> -- 
-> 2.50.1
+Fixes: e8b18c11731d ("cdx: Fix missing GENERIC_MSI_IRQ on compile test")
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+---
+
+Changes v1->v2:
+- No change
+Changes v2->v3:
+- add CONFIG_GENERIC_MSI_IRQ while assigning num_msi and setting msi domain
+
+ drivers/cdx/Kconfig                     | 1 -
+ drivers/cdx/cdx.c                       | 4 ++--
+ drivers/cdx/controller/Kconfig          | 1 -
+ drivers/cdx/controller/cdx_controller.c | 3 ++-
+ 4 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cdx/Kconfig b/drivers/cdx/Kconfig
+index 3af41f51cf38..1f1e360507d7 100644
+--- a/drivers/cdx/Kconfig
++++ b/drivers/cdx/Kconfig
+@@ -8,7 +8,6 @@
+ config CDX_BUS
+ 	bool "CDX Bus driver"
+ 	depends on OF && ARM64 || COMPILE_TEST
+-	select GENERIC_MSI_IRQ
+ 	help
+ 	  Driver to enable Composable DMA Transfer(CDX) Bus. CDX bus
+ 	  exposes Fabric devices which uses composable DMA IP to the
+diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+index 092306ca2541..3d50f8cd9c0b 100644
+--- a/drivers/cdx/cdx.c
++++ b/drivers/cdx/cdx.c
+@@ -310,7 +310,7 @@ static int cdx_probe(struct device *dev)
+ 	 * Setup MSI device data so that generic MSI alloc/free can
+ 	 * be used by the device driver.
+ 	 */
+-	if (cdx->msi_domain) {
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ) && cdx->msi_domain) {
+ 		error = msi_setup_device_data(&cdx_dev->dev);
+ 		if (error)
+ 			return error;
+@@ -833,7 +833,7 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
+ 		     ((cdx->id << CDX_CONTROLLER_ID_SHIFT) | (cdx_dev->bus_num & CDX_BUS_NUM_MASK)),
+ 		     cdx_dev->dev_num);
+ 
+-	if (cdx->msi_domain) {
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ) && cdx->msi_domain) {
+ 		cdx_dev->num_msi = dev_params->num_msi;
+ 		dev_set_msi_domain(&cdx_dev->dev, cdx->msi_domain);
+ 	}
+diff --git a/drivers/cdx/controller/Kconfig b/drivers/cdx/controller/Kconfig
+index 0641a4c21e66..a480b62cbd1f 100644
+--- a/drivers/cdx/controller/Kconfig
++++ b/drivers/cdx/controller/Kconfig
+@@ -10,7 +10,6 @@ if CDX_BUS
+ config CDX_CONTROLLER
+ 	tristate "CDX bus controller"
+ 	depends on HAS_DMA
+-	select GENERIC_MSI_IRQ
+ 	select REMOTEPROC
+ 	select RPMSG
+ 	help
+diff --git a/drivers/cdx/controller/cdx_controller.c b/drivers/cdx/controller/cdx_controller.c
+index fca83141e3e6..5e3fd89b6b56 100644
+--- a/drivers/cdx/controller/cdx_controller.c
++++ b/drivers/cdx/controller/cdx_controller.c
+@@ -193,7 +193,8 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
+ 	cdx->ops = &cdx_ops;
+ 
+ 	/* Create MSI domain */
+-	cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ))
++		cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
+ 	if (!cdx->msi_domain) {
+ 		ret = dev_err_probe(&pdev->dev, -ENODEV, "cdx_msi_domain_init() failed");
+ 		goto cdx_msi_fail;
+-- 
+2.34.1
+
