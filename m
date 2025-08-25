@@ -1,49 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F91302CC4;
-	Mon, 25 Aug 2025 17:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4672797A1;
+	Mon, 25 Aug 2025 19:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756142772; cv=none; b=MXGRRNjfe6lgpNdmjfzQNhoQ3KH/u6b1h2lHzgSlru9NxiJVN1BNcRVgqbhcJ4r2iUKXhCL4BlFfadA7klv5DMABaKzZ7gjgE0yXwGK/CEsZfAVbuSS646bLPvHXe4KK6GtDEUH4rN/d9LwlOrSr/kjgpE2wDGrnr5lHwk+7zFQ=
+	t=1756149879; cv=none; b=ZnOy0SunluODyvKt/x4CeuOoouIraB7e3pcadLrMHWCKRAjrNb55Z9+5GbQ5lh69358o4MQNjhvKLYAC3phHytJWUUF4uTB0JFhH+FtADoweYagcuI++byGYIbMgFlxhwjmnwd5HAijPKi+rx13B5VDS8QLkhUL7LWRaFsMO4j4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756142772; c=relaxed/simple;
-	bh=PUJ5HIkUh42sX/ftQy6jAE/g9Z8l0O7YfbHM3lXiA24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MpGXO4AEarX0KOYL9Z4ak3TCO9UmMbl8FTMIZ/rlmFl0N/U7KbE010d0yW5R0pH/C9fvpPRu7qtp/jnNxda/hQdg07gEe5MChyghsDsIbNnIGYOi13AXqRgGey/6+wExbfAqX9jaO7aWFXCfI131aZ+s0AraQixrXT0XrhNSv/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOzm0w80; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756149879; c=relaxed/simple;
+	bh=gl62tBm8UQ/ttSNnxsehDR6RntmGpPaDQGfy90qZfLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OPsJApwwxAGD6UER8pNMvmPKIy2WbB/vivGXspLXQasfr8w3fVyYt/pFclbqXHCnwF314jyzDmDUsC5tAEqwnzsXD60pz0z/uZLshzkjFW6+h/b2nb9X1mWzGsJxscrnGu+rZWwYnyPvGd8Xz9NXWfGkP9p5vRogZUhkgwcKl88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xsy60M3Y; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WOzm0w80"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37708C4CEED;
-	Mon, 25 Aug 2025 17:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756142772;
-	bh=PUJ5HIkUh42sX/ftQy6jAE/g9Z8l0O7YfbHM3lXiA24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WOzm0w80AZfThXq6MOreXZcTNhIDn3mCTHtDxSZ3s7SuqRD3zT07e7tgXaUxC/jEG
-	 EmZ4vcFInQQrp+jVskW6ni09AlD1yU0OZkZ1EKJU0ACkX4BOWi4hRtqIBBoGewW5/+
-	 qPOSs6Ryzy6ZcbZiRhkiQGy6N0OfCgb+oxDud4ZAIwypRq/nZ+xZYcF3m/vZeCklfH
-	 BY9255g7YRI/vYCEJ/SZhXCjxLeZ17f98CGh8oD+mTQ0sycy8t188ryiX9+f1EXwNt
-	 eKmG8jM6MNijG7Fk32HHS7o2ZvreBtPDBHm/LYKbsQ2Kh7PqmFlLg9k8LR/FiJXpMu
-	 Rhl+xG62GToSg==
-Date: Mon, 25 Aug 2025 10:26:07 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Kelley <mhklinux@outlook.com>
-Cc: Naman Jain <namjain@linux.microsoft.com>,
-	kernel test robot <lkp@intel.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	Wei Liu <wei.liu@kernel.org>,
-	Roman Kisel <romank@linux.microsoft.com>,
-	Saurabh Sengar <ssengar@linux.microsoft.com>,
-	Alok Tiwari <alok.a.tiwari@oracle.com>,
-	Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Subject: Re: [linux-next:master 3139/4234] error: <unknown>:0:0: ran out of
- registers during register allocation in function 'hv_call_get_vp_registers'
-Message-ID: <20250825172607.GA704510@ax162>
-References: <202508240828.pVaUV45D-lkp@intel.com>
- <56833fbe-0ea1-4a0d-8d5b-809d983d3ab9@linux.microsoft.com>
- <SN6PR02MB415787F0ABF1E5BA8157E0C3D43EA@SN6PR02MB4157.namprd02.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xsy60M3Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756149878; x=1787685878;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gl62tBm8UQ/ttSNnxsehDR6RntmGpPaDQGfy90qZfLs=;
+  b=Xsy60M3YRXqy3Ky65+XT/+bu9guq7fkkMm/NDPX/nsHs+ee7mOkdIUep
+   XcSZg9rFx/eU/AWAijuyk6YmrzFxf0HnvL4hblapNRKnmyEFC8PYSg4SG
+   N2DRO0Sx3q6N71vgrPbVTJbYWgqi7ZEicGxZDXMUf+8kMGjB27yuhM7pL
+   E87vaRE1HQ41mEIpA7ubozWd9YSzhZi0FlPyk4pHlH8Y6v4RxjGkgyzH/
+   xYnba1u2p6KLpJJaTy9l7zDYuWuxP/qzqyD+QD9XH6jxOkcd1aR0Cj7oP
+   1YUH5Yc4KaEUy8lGvkhQnWtb5g4sLeLBVnFsM8x1u+7gScHucUIaIK5vv
+   Q==;
+X-CSE-ConnectionGUID: xl8E9Z+0Tp+W83PMvysU4w==
+X-CSE-MsgGUID: 7gytL/hQQIGYjchxBlsdCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11533"; a="61006253"
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="61006253"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 12:24:35 -0700
+X-CSE-ConnectionGUID: fGSTXrdiRUGGgoMlJhN6jA==
+X-CSE-MsgGUID: TB1Tk4fKRYCojH8dEzBodQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="193043777"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 25 Aug 2025 12:24:33 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uqcnu-000Nxh-26;
+	Mon, 25 Aug 2025 19:24:30 +0000
+Date: Tue, 26 Aug 2025 03:23:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	K Prateek Nayak <kprateek.nayak@amd.com>
+Subject: [peterz-queue:sched/core 1/1] arch/s390/kernel/topology.c:512:23:
+ error: conflicting types for 'cpu_coregroup_mask'
+Message-ID: <202508260328.jsXPrTzT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,65 +62,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SN6PR02MB415787F0ABF1E5BA8157E0C3D43EA@SN6PR02MB4157.namprd02.prod.outlook.com>
 
-On Mon, Aug 25, 2025 at 05:06:53PM +0000, Michael Kelley wrote:
-> From: Naman Jain <namjain@linux.microsoft.com> Sent: Sunday, August 24, 2025 10:44 AM
-> > 
-> > On 8/24/2025 12:02 PM, kernel test robot wrote:
-> > > tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > > head:   0f4c93f7eb861acab537dbe94441817a270537bf
-> > > commit: 96a1d2495c2f48467a91b8657bd594350b84ea9e [3139/4234] Drivers: hv: Introduce mshv_vtl driver
-> > > config: i386-buildonly-randconfig-2003-20250824 (https://download.01.org/0day-ci/archive/20250824/202508240828.pVaUV45D-lkp@intel.com/config)
-> > > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250824/202508240828.pVaUV45D-lkp@intel.com/reproduce)
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202508240828.pVaUV45D-lkp@intel.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > >>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_get_vp_registers'
-> > >>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_set_vp_registers'
-> > >>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_get_partition_property'
-> > >     3 errors generated.
-> > >
-> 
-> The other thing that's curious here is that these three functions are in
-> drivers/hv/mshv_common.c, which is only built on x64 and when
-> CONFIG_MSHV_ROOT or CONFIG_MSHV_VTL is set. None of these conditions 
-> are true for the supplied config file, so why is mshv_common.c being compiled?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   6aa2edf8f340935f35e7be32f223792b028b574d
+commit: 6aa2edf8f340935f35e7be32f223792b028b574d [1/1] sched/fair: Get rid of sched_domains_curr_level hack for tl->cpumask()
+config: s390-randconfig-001-20250826 (https://download.01.org/0day-ci/archive/20250826/202508260328.jsXPrTzT-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d26ea02060b1c9db751d188b2edb0059a9eb273d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250826/202508260328.jsXPrTzT-lkp@intel.com/reproduce)
 
-Yeah, that is odd... FWIW, these are not the only functions that display this
-error. On mainline with the same configuration.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508260328.jsXPrTzT-lkp@intel.com/
 
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hyperv_flush_guest_mapping'
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hyperv_flush_guest_mapping_range'
-  2 errors generated.
-  make[6]: *** [scripts/Makefile.build:287: arch/x86/hyperv/nested.o] Error 1
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hyperv_flush_tlb_multi'
-  1 error generated.
-  make[6]: *** [scripts/Makefile.build:287: arch/x86/hyperv/mmu.o] Error 1
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_apicid_to_vp_index'
-  1 error generated.
-  make[6]: *** [scripts/Makefile.build:287: arch/x86/hyperv/hv_init.o] Error 1
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_map_interrupt'
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_unmap_interrupt'
-  2 errors generated.
-  make[6]: *** [scripts/Makefile.build:287: arch/x86/hyperv/irqdomain.o] Error 1
-  make[6]: Target 'arch/x86/hyperv/' not remade because of errors.
-  make[5]: *** [scripts/Makefile.build:556: arch/x86/hyperv] Error 2
-  make[5]: Target 'arch/x86/' not remade because of errors.
-  make[4]: *** [scripts/Makefile.build:556: arch/x86] Error 2
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_post_message'
-  1 error generated.
-  make[6]: *** [scripts/Makefile.build:287: drivers/hv/hv.o] Error 1
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_get_partition_id'
-  error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_query_ext_cap'
-  2 errors generated.
-  make[6]: *** [scripts/Makefile.build:287: drivers/hv/hv_common.o] Error 1
+All errors (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> arch/s390/kernel/topology.c:512:23: error: conflicting types for 'cpu_coregroup_mask'
+     512 | const struct cpumask *cpu_coregroup_mask(struct sched_domain_topology_level *tl, int cpu)
+         |                       ^
+   arch/s390/include/asm/topology.h:50:23: note: previous declaration is here
+      50 | const struct cpumask *cpu_coregroup_mask(int cpu);
+         |                       ^
+>> arch/s390/kernel/topology.c:529:12: error: incompatible function pointer types initializing 'sched_domain_mask_f' (aka 'const struct cpumask *(*)(struct sched_domain_topology_level *, int)') with an expression of type 'const struct cpumask *(int)' [-Wincompatible-function-pointer-types]
+     529 |         SDTL_INIT(cpu_coregroup_mask, cpu_core_flags, MC),
+         |                   ^~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/cpu_coregroup_mask +512 arch/s390/kernel/topology.c
+
+   511	
+ > 512	const struct cpumask *cpu_coregroup_mask(struct sched_domain_topology_level *tl, int cpu)
+   513	{
+   514		return &cpu_topology[cpu].core_mask;
+   515	}
+   516	
+   517	static const struct cpumask *cpu_book_mask(struct sched_domain_topology_level *tl, int cpu)
+   518	{
+   519		return &cpu_topology[cpu].book_mask;
+   520	}
+   521	
+   522	static const struct cpumask *cpu_drawer_mask(struct sched_domain_topology_level *tl, int cpu)
+   523	{
+   524		return &cpu_topology[cpu].drawer_mask;
+   525	}
+   526	
+   527	static struct sched_domain_topology_level s390_topology[] = {
+   528		SDTL_INIT(tl_smt_mask, cpu_smt_flags, SMT),
+ > 529		SDTL_INIT(cpu_coregroup_mask, cpu_core_flags, MC),
+   530		SDTL_INIT(cpu_book_mask, NULL, BOOK),
+   531		SDTL_INIT(cpu_drawer_mask, NULL, DRAWER),
+   532		SDTL_INIT(tl_pkg_mask, NULL, PKG),
+   533		{ NULL, },
+   534	};
+   535	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
