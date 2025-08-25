@@ -1,58 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B1A1DE2D7;
-	Mon, 25 Aug 2025 22:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E25747F;
+	Mon, 25 Aug 2025 23:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756162799; cv=none; b=ip01z/rxZkqHcjrm4PSZPwkU7Lv+IPGsvEsB3JD6w5UWXkx91T9fceSZnrW0Z7Pa1nzf1o6DLWrnce4TnoupYCSpBkhaKFCMe0i2auaM9twVpYpCyneyG7iWMp5b7ZTzs7JzzvOI9K/AmEmbL246saCJYY6GLl+1xl5l9dpFZw8=
+	t=1756165330; cv=none; b=JgFH3+GY527ma94BQABTd+gcmmw0z1fvGT3gDpPmnjhXiFyasl6LF6lsvnPUHbQyyiaJwr75FtXPVOBgKrYz1fm6NGZUuz4YhCEx3pWDqiF3IXNR9lxtkD2jYGAK9U5n7ifZo96TluhAyE473uwjOBGa9K5xUsPyB5DqV9383c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756162799; c=relaxed/simple;
-	bh=mRRKgjKMyvpCzk18ydfgoZX5u+mr51mF2sVn28BYaig=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kaSQl3lOmfVljcliN8rWeqH3+lCCBrnfmF1bAIvZzo0sM0Sid6RhDQ/0adMYIswk14p6oFMXuLcEC+kCFwcouzMhGtOsSlk6WDNhrGNdsBkM2DJFllxcQAN031+tJEj7Zu32WarHo37jDC25Q/kP/pnCAIRBhbRh0cXEhBT5dv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CQb8rG2S; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1756165330; c=relaxed/simple;
+	bh=J367x8GJDZMLTwx8qc/sItzW7eQs4mCr/b+cuY5NxP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fwv8pjYdeOEeHgF9kPQu3Vq2HpdbVEif1IgG/SPRA/w0UoJkIR1s32c9ZiEbXBlzJOqQQ3jRPnaKI8FRQy9lyzgwq7AIVmp/5YMkT+bhUt8pTEaDEIoYZ3Ne40dScFF9l1QmwaVm5o7BtcxT9VBCYjXdu/n9cCrKjf3x3vnfuMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IcnZBpQs; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CQb8rG2S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IcnZBpQs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756162798; x=1787698798;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mRRKgjKMyvpCzk18ydfgoZX5u+mr51mF2sVn28BYaig=;
-  b=CQb8rG2SaPmHpA0W7FRox80DerUmUZdyl/cq+9XyFWZFOnMBLgY7TrfE
-   /iBi/PAfwAxANrngUddTfnDczx9O9nU4LipYdR4vPwxnw64NzhJsXmF5B
-   qar9A2x2poEHA6jg8QDzbZJGCYKsL89VljnMkuMhSxCfEaw/Oeot1UB+K
-   VcqAiAgqlWtoJVZeoV8gH/k7m5PFUtWws9mf/uOMDqjFfS0D23c+tIgCY
-   RxFKj9RoLg8DRPSGm0a1vICTR8mbIF+HVF2xCP0SSg8JZusSDvIgBcBTB
-   fWBVIFwhcZU/gS3cb2ShjLF1z59S5OKcetmGuBBK046RIKDSOd7KPdDH7
+  t=1756165328; x=1787701328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J367x8GJDZMLTwx8qc/sItzW7eQs4mCr/b+cuY5NxP8=;
+  b=IcnZBpQsX6O14Z3wbJNKy7JHnZRYRRxjDFANfG/USgbEXbiMDDxWqV9c
+   Yb2MMKA0HQ8aNJgO3zqlHPAX33x9LwTAdeKPv7du05Ci0BSNR6ipmZjIv
+   qRXqsG6cwYv7WJ/fHvfCzMrGKqGGqxyKA/G9rO+V3sNtnmzHZ99COMRah
+   DMxqzxa/Us0Qe1Pc+g2mLWaUzYSL/XAnC1KHlHVyufE0eoe2xjkN3ZAAL
+   Uw9+UP4SypRjU/7PMaMIe+u055zg1RUDe32oOz71r3nPwVGts3UMTbAcR
+   Zbf045B4G/EqA9SA+v/3q1rBa9MGeniTQ+mGmf+vLQ56eLVqSTdq3KYUP
    w==;
-X-CSE-ConnectionGUID: OB25opRRSaCbOmiKCt48Vw==
-X-CSE-MsgGUID: wfkybadLTe2PUuwSV9z7Pw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58306455"
+X-CSE-ConnectionGUID: y/AuZw65SSSzY3Q+g6IApw==
+X-CSE-MsgGUID: sqWl/4hESDGUgnyCseDBKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="80981786"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58306455"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 15:59:57 -0700
-X-CSE-ConnectionGUID: VszVHAz3RYGaXoO3yjfUFw==
-X-CSE-MsgGUID: fzwol7PbRWinD5JwzBss+Q==
+   d="scan'208";a="80981786"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 16:42:07 -0700
+X-CSE-ConnectionGUID: ZQLJOKNrSkypbFLo7ru5Gg==
+X-CSE-MsgGUID: jg/agINJQwqHtf0ttoLzjg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="168625154"
+   d="scan'208";a="169020979"
 Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 25 Aug 2025 15:59:56 -0700
+  by orviesa009.jf.intel.com with ESMTP; 25 Aug 2025 16:41:54 -0700
 Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uqgAM-000O3X-1c;
-	Mon, 25 Aug 2025 22:59:54 +0000
-Date: Tue, 26 Aug 2025 06:59:10 +0800
+	id 1uqgoV-000O4R-2c;
+	Mon, 25 Aug 2025 23:41:27 +0000
+Date: Tue, 26 Aug 2025 07:41:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:nth_page 23/36] ERROR: modpost:
- "page_range_contiguous" [fs/ecryptfs/ecryptfs.ko] undefined!
-Message-ID: <202508260617.FWetJFVm-lkp@intel.com>
+To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
+	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
+	ray.huang@amd.com, gautham.shenoy@amd.com,
+	mario.limonciello@amd.com, perry.yuan@amd.com,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-tegra@vger.kernel.org, treding@nvidia.com,
+	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com,
+	sanjayc@nvidia.com, bbasu@nvidia.com, sumitg@nvidia.com
+Subject: Re: [PATCH v2 1/7] ACPI: CPPC: add perf control read API and clarify
+ naming
+Message-ID: <202508260711.I7imWLTG-lkp@intel.com>
+References: <20250823200121.1320197-2-sumitg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,32 +73,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250823200121.1320197-2-sumitg@nvidia.com>
 
-tree:   https://github.com/davidhildenbrand/linux nth_page
-head:   40aae5778d339c4665481ad44d0c3c71b434fa93
-commit: 18758b891cba728a11ddbc87a1f75adbb6d318c0 [23/36] scatterlist: disallow non-contigous page ranges in a single SG entry
-config: i386-buildonly-randconfig-003-20250826 (https://download.01.org/0day-ci/archive/20250826/202508260617.FWetJFVm-lkp@intel.com/config)
+Hi Sumit,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.17-rc3 next-20250825]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/ACPI-CPPC-add-perf-control-read-API-and-clarify-naming/20250824-040531
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250823200121.1320197-2-sumitg%40nvidia.com
+patch subject: [PATCH v2 1/7] ACPI: CPPC: add perf control read API and clarify naming
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250826/202508260711.I7imWLTG-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250826/202508260617.FWetJFVm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250826/202508260711.I7imWLTG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508260617.FWetJFVm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508260711.I7imWLTG-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "page_range_contiguous" [fs/ecryptfs/ecryptfs.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [crypto/tcrypt.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [crypto/essiv.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/tty/serial/pch_uart.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/char/agp/intel-gtt.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/gpu/drm/xe/xe.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/gpu/drm/nouveau/nouveau.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/crypto/hifn_795x.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/hwtracing/intel_th/intel_th_msu.ko] undefined!
->> ERROR: modpost: "page_range_contiguous" [drivers/hwtracing/intel_th/intel_th_msu_sink.ko] undefined!
-WARNING: modpost: suppressed 2 unresolved symbol warnings because there were too many)
+>> drivers/cpufreq/amd-pstate.c:524:8: error: call to undeclared function 'cppc_set_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     524 |         ret = cppc_set_perf(cpudata->cpu, &perf_ctrls);
+         |               ^
+   drivers/cpufreq/amd-pstate.c:524:8: note: did you mean 'cppc_set_epp'?
+   include/acpi/cppc_acpi.h:170:12: note: 'cppc_set_epp' declared here
+     170 | extern int cppc_set_epp(int cpu, u64 epp_val);
+         |            ^
+   1 error generated.
+
+
+vim +/cppc_set_perf +524 drivers/cpufreq/amd-pstate.c
+
+e059c184da47e9 Huang Rui         2021-12-24  480  
+77fbea69b0ffad Mario Limonciello 2024-12-09  481  static int shmem_update_perf(struct cpufreq_policy *policy, u8 min_perf,
+555bbe67a622b2 Dhananjay Ugwekar 2025-02-05  482  			     u8 des_perf, u8 max_perf, u8 epp, bool fast_switch)
+e059c184da47e9 Huang Rui         2021-12-24  483  {
+77fbea69b0ffad Mario Limonciello 2024-12-09  484  	struct amd_cpudata *cpudata = policy->driver_data;
+e059c184da47e9 Huang Rui         2021-12-24  485  	struct cppc_perf_ctrls perf_ctrls;
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  486  	u64 value, prev;
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  487  	int ret;
+e059c184da47e9 Huang Rui         2021-12-24  488  
+fff395796917ac Mario Limonciello 2024-12-09  489  	if (cppc_state == AMD_PSTATE_ACTIVE) {
+77fbea69b0ffad Mario Limonciello 2024-12-09  490  		int ret = shmem_set_epp(policy, epp);
+fff395796917ac Mario Limonciello 2024-12-09  491  
+fff395796917ac Mario Limonciello 2024-12-09  492  		if (ret)
+fff395796917ac Mario Limonciello 2024-12-09  493  			return ret;
+fff395796917ac Mario Limonciello 2024-12-09  494  	}
+fff395796917ac Mario Limonciello 2024-12-09  495  
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  496  	value = prev = READ_ONCE(cpudata->cppc_req_cached);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  497  
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  498  	value &= ~(AMD_CPPC_MAX_PERF_MASK | AMD_CPPC_MIN_PERF_MASK |
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  499  		   AMD_CPPC_DES_PERF_MASK | AMD_CPPC_EPP_PERF_MASK);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  500  	value |= FIELD_PREP(AMD_CPPC_MAX_PERF_MASK, max_perf);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  501  	value |= FIELD_PREP(AMD_CPPC_DES_PERF_MASK, des_perf);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  502  	value |= FIELD_PREP(AMD_CPPC_MIN_PERF_MASK, min_perf);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  503  	value |= FIELD_PREP(AMD_CPPC_EPP_PERF_MASK, epp);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  504  
+77fbea69b0ffad Mario Limonciello 2024-12-09  505  	if (trace_amd_pstate_epp_perf_enabled()) {
+77fbea69b0ffad Mario Limonciello 2024-12-09  506  		union perf_cached perf = READ_ONCE(cpudata->perf);
+77fbea69b0ffad Mario Limonciello 2024-12-09  507  
+77fbea69b0ffad Mario Limonciello 2024-12-09  508  		trace_amd_pstate_epp_perf(cpudata->cpu,
+77fbea69b0ffad Mario Limonciello 2024-12-09  509  					  perf.highest_perf,
+77fbea69b0ffad Mario Limonciello 2024-12-09  510  					  epp,
+77fbea69b0ffad Mario Limonciello 2024-12-09  511  					  min_perf,
+77fbea69b0ffad Mario Limonciello 2024-12-09  512  					  max_perf,
+77fbea69b0ffad Mario Limonciello 2024-12-09  513  					  policy->boost_enabled,
+77fbea69b0ffad Mario Limonciello 2024-12-09  514  					  value != prev);
+77fbea69b0ffad Mario Limonciello 2024-12-09  515  	}
+77fbea69b0ffad Mario Limonciello 2024-12-09  516  
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  517  	if (value == prev)
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  518  		return 0;
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  519  
+e059c184da47e9 Huang Rui         2021-12-24  520  	perf_ctrls.max_perf = max_perf;
+e059c184da47e9 Huang Rui         2021-12-24  521  	perf_ctrls.min_perf = min_perf;
+e059c184da47e9 Huang Rui         2021-12-24  522  	perf_ctrls.desired_perf = des_perf;
+e059c184da47e9 Huang Rui         2021-12-24  523  
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09 @524  	ret = cppc_set_perf(cpudata->cpu, &perf_ctrls);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  525  	if (ret)
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  526  		return ret;
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  527  
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  528  	WRITE_ONCE(cpudata->cppc_req_cached, value);
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  529  
+9f5daa2f2f6ddd Mario Limonciello 2024-12-09  530  	return 0;
+e059c184da47e9 Huang Rui         2021-12-24  531  }
+e059c184da47e9 Huang Rui         2021-12-24  532  
 
 -- 
 0-DAY CI Kernel Test Service
