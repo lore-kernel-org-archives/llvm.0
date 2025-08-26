@@ -1,66 +1,66 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDB12E228D
-	for <llvm@lists.linux.dev>; Tue, 26 Aug 2025 22:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC8B2D29C7
+	for <llvm@lists.linux.dev>; Tue, 26 Aug 2025 22:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756248715; cv=none; b=AnbckRaeLwlqyxoX4yjZhnrr0AsmBawc+QYy7sDY+oo6c3XSSd7sp4eXbhCiCT/9brt/xYDGkvvNCyTbCElplYbUStrwW/w19CeeRHvgEf+3VXfnaXa7eWzb9plH2kZWB84eR6VWl8TSQ2cB+gO30ZeM42N9I4dIccymporkTfg=
+	t=1756248715; cv=none; b=uqXjMZCoFI/OS0HPII6Dkbtz+ayHMJv5EL7efx6QIkabJOynmdkvv3fxKNid7fn+gMUPX2Pjp00cYM8yI2P/Q9JEEPuIv7Qp2l7yjNDa9ICIEfgminI7q73lOtybG7RNKgL3rUjBV/ro++zOW1xWOx66Ul+QNQDWZe7CjV0MU+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756248715; c=relaxed/simple;
-	bh=nkgAgHfDk/2F0xYm3P4OtMs0EfdJM0Zbncn4co8vnRo=;
+	bh=BF7kBQO7ZYNGz++8lrkbtrB7W8yYMojaBKbsVPLuNc4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=reDgwLQFqlpbKVXv5tXF0B9sNiRLmgrL2nQm/fvGC9ejdLuEiSOF5ESfuReCYhw3VW501EhlFZ78VbVQPgp/qm6UlnVCIrO+3bS0zdf9+IyaupPbJgLl6v7DhvBHFtERD3RqnpNR5y4xRJZ7+AQYMQ8fC8nHm5EVlEY66g9Whpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=isOszZe1; arc=none smtp.client-ip=209.85.215.182
+	 In-Reply-To:To:Cc; b=P+jFHFVl/nnPVMncTFXNmUfGv44eCgiH4Uy9rpHzjZ1k51h3OW+jX18/GBtuVS6FMy4L2nVhG17Nafw0D90q7xTsohoam2vZxM6a3Xdvt4t0GwVNur4fB15/vRL4zVfj8TE7yNLanFvMIXnrVALPBoJSmD+cNcITt9lcXLHiEDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F+g3Xsn2; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isOszZe1"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b49e0686139so2671891a12.2
-        for <llvm@lists.linux.dev>; Tue, 26 Aug 2025 15:51:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F+g3Xsn2"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-771ff6f117aso936718b3a.2
+        for <llvm@lists.linux.dev>; Tue, 26 Aug 2025 15:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756248712; x=1756853512; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1756248711; x=1756853511; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TmShpxcfS462EVS+o44vyyydTMfDb5DHqYeZ5mEw6/I=;
-        b=isOszZe1K2WqLdERLQJ7C9E8ie5PF7WEdA/f5irJnI5ri5tonGUpFqRVZiunaHGNT2
-         kOJjoe66yMLol/wunvnOvpTeTtY95ItVTilG9ybRGNF/SbanbrLn2i6kXN9BPOeVzAXZ
-         7F6RNTbdUgt9cRw0IYfsu+KHnRg7uT6k1+tH0+s8WHpgkhEbAKRClOKpPTc4oIRHD5Xc
-         m02Vj2XN6Pfj/+V91FJUUzewENJtPnS8+9dwDoIYCMA0gTgaWCSsg1daoqo3QIr/T1YC
-         YolN8ZBNfZLWw2JDEJhOY5R9Pg4uDS2BxnStVWHWvrJLz6Pc8FpJ6Ruu8LFJxEiMtxCL
-         7QxQ==
+        bh=yR8G0czTv3htBZuNHGulWIjLUJ2zOwYOErFDW8owQ5M=;
+        b=F+g3Xsn2rEn5isg4NCjxEOmN5kWlTEjIP19eX0pZUppA4OIveZ4vuYSVcE+PQHVHHS
+         BmdtuxNfQ9T6ZQg1XbCD3babIEsrw10hTClb8dMh1lz9Q3hCgfHVTk9/DmjMJd9Of68R
+         itn+XWlB9VWCbKvwqrPiUOxscGqMrBD+B+fFhdZXHzYKX7LK7VGKGxvgfjBkMbZDQxBO
+         C3TurXD7WGbPG5ss1c6qyJEecxVqPWJbqv/IcFZh6RO+xbLsjy6l3exFd2o8wUPrduzU
+         9Pe6bR4GUuzqVTTdrzr8jIh4degBKwtZx4g2prlM14KqEhDExIwrk3Oh6/Xeg5f0ISM5
+         wRXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756248712; x=1756853512;
+        d=1e100.net; s=20230601; t=1756248711; x=1756853511;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TmShpxcfS462EVS+o44vyyydTMfDb5DHqYeZ5mEw6/I=;
-        b=Nviph46q22O1TEDTEvfkhZeU1FWTFrq8eSLnjTcm/F3mF2qyUG2fiBlQ9Ks+bVT/zd
-         FbEbHi9tXFaUuwHUX6LwEeBhqmHxBJiEKLheY3PYFA2hZlFl77KsQzPwiKrOwYlX0u/m
-         xxYn5TK0dPMU2NqjvUPaKE4EiDhdU6UbSeMBqQLSoug1NnoAFOoKHecfFr0Cml8BRkFL
-         lFV0uXSxjA2H+RI5thIkHFJm1R1enu+ASn+Sox9JQtZHM+EXd5nNnK3ddJQ40aB7KKcr
-         zPGWQnyY4DZLe5qOT7H3kVzcv7dRDeCsvNk64l+uLnM0marIH/IZpu+UARmD0fYiSmgO
-         Egkg==
-X-Forwarded-Encrypted: i=1; AJvYcCVj9YSQT0u90Zu/FN6I053O9PUAlwaXRI9IQfWc9zNv/zOP7omDqCdw+QEORg4FwLCdYHTc@lists.linux.dev
-X-Gm-Message-State: AOJu0YwHwXWbJNpMVtJs7vsUh1M2JLME67CyzHbkOmurTk7cvuymTo2O
-	nHtmSft22FwFLt2vMs8TKpZ+qqbQye0NcyeEWKI/ZGdc3Mkib5cuFbnD
-X-Gm-Gg: ASbGncsHrCAxx15sOQ+/QaAafckhH4Weouwq+afsi+O13AV13k4W6XlQI5Bud86w6/v
-	vTl+yI+k80HU7z6BpC7hnC2LjXYF1j1MpriQRMNnI3boaBWDOYxRRoxPN7fy5IQK0e/T5pUKalb
-	iJKu3Zwriv8MF0hn/xBTSkoZLEGAXQGhI2DxJm2fM+ZDmid6ujo1+0EcrYGYymW2oeKkpwAIdcG
-	yb+J6wzQo7YADRmNUs2FxzfjvHLbjJTdXCCQkRsPEgZkpIQASwjD8Tmpi6M0Q8GdyOwdy+BXhra
-	dP2zex+ZoNmtZNvnchItuFFnSnhRlz+EZGVja8ZoekIuoxr5xkMlasTAvmlDm62YBs2zLKyXjwb
-	W7gRkGR9VekUABhZk8sMP
-X-Google-Smtp-Source: AGHT+IFWObHwEwct9wKgFlnQvPXciZeYkPjQRUnjpBOi9syrDOVV1chJhjD7o+c9mv2hvltz/iplog==
-X-Received: by 2002:a17:902:cf09:b0:235:eefe:68f4 with SMTP id d9443c01a7336-2462eeb62edmr227348585ad.29.1756248711956;
-        Tue, 26 Aug 2025 15:51:51 -0700 (PDT)
+        bh=yR8G0czTv3htBZuNHGulWIjLUJ2zOwYOErFDW8owQ5M=;
+        b=LnNrpTj5CPLYEI/etROVYdshtIdMVuHmDlpz6Isu4SxqlbtrWhmzQoHNUclZFYwXeT
+         apEAH/9dlQMByqwlUvQMxTFB6C/b8UjTFWrXVEj/zN0W7h+4voXOz8YgeTcmuiVOMtP1
+         VdzjFWk+elEgcdb/QM28AKyFJLvz1tdAJPLuHhK0rlZvLWKeuq6qxIMm6C9a+SUG8x7z
+         XEyQxM6tkcJKcmsJz/1NjolP2G9jNAgJ+CnV5Af3xv+OlKy5Q4brl6kMhg4SIUqv0qjG
+         66qvXt3ss6Tig+89Rkks2UUYu2n91qFEDLRgwBKM/d4aUTX1HxZ27oVcASnXzrveT2/d
+         JlUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmmcnQ5SJQsbvs3ulDQbkPb6adK1riDbs3I2B+eaZM5p+Y4U3slCtqUTQfvJvDP1G4OaK+@lists.linux.dev
+X-Gm-Message-State: AOJu0YzjxG/zZzCAgWGYNO+veVdQUBdOo5Qq61dXr+UpOx6JPw4rJUqW
+	/YrZmEm5XdOi7XHJ3T4p69NIY1ETLAMc3L9mnOexi3cqYqOJv1ew+Hog
+X-Gm-Gg: ASbGncvwKLq4BtNPgsXWVBc58qLiAMgg/2779bWDentErPIfIQxcKF59lJar9t2c7Bq
+	oGj0qDvtDI5l4BNchIAUL3Trpq8d3pSagSgdJ2fW8ujQZNmTDCiBgcPxLJAbMmbyaTirjnyTjdw
+	jYPqLwLFt8g2UxTPv031A1a4Iypy/Ty+TEU6T51yAv666oTWtQeKucJ0hvWaWiaDvqrEJMWQXaj
+	VLUw6oOkKYi0bK0v+sE8YwMn8hBid30gP+IYZ0uWHnV3z8lXC7vcA+w9oCj9ZzQpVwICQb3zjX5
+	pmACu2uTV2XZJH4ZUWb8aCrBQ9QZvxm7S17RGmiu6OrteYBn3roHqAghX2bJ6wqTL5gbetxvJuJ
+	7DSbM1+iaw1W2NkmoqjDJE5ZxG0yVIDE=
+X-Google-Smtp-Source: AGHT+IEjSg/wptlibuEPS3+h0fbv78JdD9oVr0ztHncjA7DYzOHurKEY4HSpVjseAYYr8cUoJiW0Ew==
+X-Received: by 2002:a17:903:fa5:b0:246:b56f:7ec2 with SMTP id d9443c01a7336-246b56f7f2cmr112085625ad.51.1756248710622;
+        Tue, 26 Aug 2025 15:51:50 -0700 (PDT)
 Received: from [0.0.5.57] ([136.159.213.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246688a601esm105340815ad.162.2025.08.26.15.51.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246688a601esm105340815ad.162.2025.08.26.15.51.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Aug 2025 15:51:51 -0700 (PDT)
+        Tue, 26 Aug 2025 15:51:50 -0700 (PDT)
 From: Abhinav Saxena <xandfury@gmail.com>
-Date: Tue, 26 Aug 2025 16:51:33 -0600
-Subject: [RFC PATCH 3/5] tty: Add mock TTY driver for KUnit testing
+Date: Tue, 26 Aug 2025 16:51:32 -0600
+Subject: [RFC PATCH 2/5] tty: Add KUnit test helper functions
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250826-tty-tests-v1-3-e904a817df92@gmail.com>
+Message-Id: <20250826-tty-tests-v1-2-e904a817df92@gmail.com>
 References: <20250826-tty-tests-v1-0-e904a817df92@gmail.com>
 In-Reply-To: <20250826-tty-tests-v1-0-e904a817df92@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -81,260 +81,685 @@ Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
  llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
  Abhinav Saxena <xandfury@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756248706; l=6583;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756248706; l=21106;
  i=xandfury@gmail.com; s=20250614; h=from:subject:message-id;
- bh=nkgAgHfDk/2F0xYm3P4OtMs0EfdJM0Zbncn4co8vnRo=;
- b=Z+qKGqJA9fK9NZS8wYfo/EhikMqsPVB7GCBpPxOPCqpPCOIL1nmddP0h2FHBuuOZ+3iVWDpuX
- YZGPBmtp4TkAqcLWTSy4Z7+ex31aI47u+L/qeY8QoLZDVdFqwwpwMne
+ bh=BF7kBQO7ZYNGz++8lrkbtrB7W8yYMojaBKbsVPLuNc4=;
+ b=VJhVgezEu94oBRKkY5V7RHnBCvBdi0oWZnsx+LFzy8JerAQJjI4ixfYORIOK9/bk+lEtY3WOX
+ /xbWGTHdopNC79Y2ETPw68vjUOhMyLlYuE0rw1+xRWDoPSQ6sB7sYTA
 X-Developer-Key: i=xandfury@gmail.com; a=ed25519;
  pk=YN6w7WNet8skqvMWxhG5BlAmtd1SQmo8If6Mofh4k44=
 
-Implement a minimal mock TTY driver that provides deterministic
-behavior for testing core TTY functionality. The driver simulates
-immediate data transmission with configurable statistics tracking.
+Introduce comprehensive test helper infrastructure for TTY driver
+testing through real kernel entry points. The helpers are included
+directly into tty_io.c when CONFIG_TTY_KUNIT_TESTS=y to access
+internal functions while maintaining clean symbol export boundaries.
 
-The mock driver enables testing of TTY core paths without hardware
-dependencies or timing-sensitive behavior, ensuring reproducible
-test results across different systems.
+Key features:
+- Complete TTY lifecycle testing (open/close/read/write)
+- RX data injection via flip buffers
+- Termios manipulation for configuration testing
+- Automatic resource cleanup via KUnit actions
+
+All functions use EXPORT_SYMBOL_IF_KUNIT() to prevent production
+symbol table pollution while enabling comprehensive testing.
 
 Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
 ---
- drivers/tty/tests/tty_mock.c | 186 +++++++++++++++++++++++++++++++++++++++++++
- drivers/tty/tests/tty_mock.h |  34 ++++++++
- 2 files changed, 220 insertions(+)
+ drivers/tty/tests/tty_test_helpers.c | 387 +++++++++++++++++++++++++++++++++++
+ drivers/tty/tests/tty_test_helpers.h | 239 +++++++++++++++++++++
+ drivers/tty/tty_io.c                 |   4 +
+ 3 files changed, 630 insertions(+)
 
-diff --git a/drivers/tty/tests/tty_mock.c b/drivers/tty/tests/tty_mock.c
+diff --git a/drivers/tty/tests/tty_test_helpers.c b/drivers/tty/tests/tty_test_helpers.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..d5488760bb83c2837bb5226e3c33ec370c2c9c07
+index 0000000000000000000000000000000000000000..0de61626ccef1d4e4246f43347401ff46ac432ec
 --- /dev/null
-+++ b/drivers/tty/tests/tty_mock.c
-@@ -0,0 +1,186 @@
++++ b/drivers/tty/tests/tty_test_helpers.c
+@@ -0,0 +1,387 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Minimal mock TTY driver for KUnit tests. Based on ttynull and ttyprintk
++ * KUnit test helpers for TTY drivers
 + *
-+ * Behavior:
-+ *   - write() pretends to transmit all bytes immediately
-+ *   - write_room() is large
-+ *   - chars_in_buffer() is 0
++ * This file is included directly into tty_io.c when CONFIG_TTY_KUNIT_TESTS=y.
++ * This allows the helper functions to access internal TTY functions like
++ * tty_open() and tty_release() while providing exported symbols for use
++ * by test modules.
 + *
-+ * Tracks only: total_writes, total_bytes, last_write_len
++ * All functions are exported via EXPORT_SYMBOL_IF_KUNIT() so they are
++ * only available when KUNIT is enabled, preventing pollution of the
++ * production symbol table.
 + *
-+ * Copyright (c) 2025 Abhinav Saxena <xandury@gmail.com>
++ * Copyright (c) 2025 Abhinav Saxena <xandfury@gmail.com>
 + */
 +
++#include <kunit/test.h>
 +#include <kunit/visibility.h>
++#include <linux/fs.h>
++#include <linux/kdev_t.h>
++#include <linux/uio.h>
 +#include <linux/tty.h>
 +#include <linux/tty_driver.h>
 +#include <linux/tty_flip.h>
-+#include <linux/module.h>
-+#include <linux/spinlock.h>
++#include <linux/tty_ldisc.h>
++#include <linux/termios.h>
 +
-+#include "tty_mock.h"
++#include "tests/tty_test_helpers.h"
 +
-+#define TTYMOCK_NAME "ttymock"
-+#define TTYMOCK_ROOM 4096
 +
-+static struct tty_port mock_port; /* single port */
++static struct cdev tty_cdev;
 +
-+/* --- Stats (private) --- */
-+static struct {
-+	u64 total_writes;
-+	u64 total_bytes;
-+	u32 last_write_len;
-+	spinlock_t lock;
-+} mock_state;
-+
-+/* --- tty_operations --- */
-+
-+static int mock_open(struct tty_struct *tty, struct file *file)
++/**
++ * _tty_test_cleanup_release - KUnit cleanup action for TTY release
++ * @data: Pointer to tty_test_fixture
++ *
++ * Internal cleanup function registered with kunit_add_action() to ensure
++ * TTY is properly released even if test fails or exits early.
++ * This prevents resource leaks and system instability.
++ */
++static void _tty_test_cleanup_release(void *data)
 +{
-+	tty->driver_data = &mock_port;
-+	return tty_port_open(&mock_port, tty, file);
-+}
-+
-+static void mock_close(struct tty_struct *tty, struct file *file)
-+{
-+	tty_port_close(&mock_port, tty, file);
-+	tty->driver_data = NULL;
-+}
-+
-+static ssize_t mock_write(struct tty_struct *tty, const u8 *buf, size_t cnt)
-+{
-+	unsigned long flags;
-+
-+	if (!buf)
-+		return -EINVAL;
-+
-+	spin_lock_irqsave(&mock_state.lock, flags);
-+	mock_state.total_writes++;
-+	mock_state.total_bytes += cnt;
-+	mock_state.last_write_len = cnt;
-+	spin_unlock_irqrestore(&mock_state.lock, flags);
-+
-+	return cnt; /* everything written immediately */
-+}
-+
-+static unsigned int mock_write_room(struct tty_struct *tty)
-+{
-+	return TTYMOCK_ROOM;
-+}
-+
-+static unsigned int mock_chars_in_buffer(struct tty_struct *tty)
-+{
-+	return 0;
-+}
-+
-+static const struct tty_operations mock_ops = {
-+	.open = mock_open,
-+	.close = mock_close,
-+	.write = mock_write,
-+	.write_room = mock_write_room,
-+	.chars_in_buffer = mock_chars_in_buffer,
-+};
-+
-+/* --- tty_port_operations --- */
-+
-+static bool mock_carrier_raised(struct tty_port *port)
-+{
-+	return true;
-+}
-+
-+static void mock_shutdown(struct tty_port *port) { }
-+
-+static const struct tty_port_operations mock_port_ops = {
-+	.carrier_raised = mock_carrier_raised,
-+	.shutdown = mock_shutdown,
-+};
-+
-+/* --- Public helpers --- */
-+
-+int tty_mock_register(struct tty_driver **out_drv, struct device *parent)
-+{
-+	struct tty_driver *drv;
-+	struct device *dev;
++	struct tty_test_fixture *fx = data;
 +	int ret;
 +
-+	spin_lock_init(&mock_state.lock);
-+
-+	drv = tty_alloc_driver(1, TTY_DRIVER_RESET_TERMIOS |
-+				  TTY_DRIVER_REAL_RAW |
-+				  TTY_DRIVER_UNNUMBERED_NODE |
-+				  TTY_DRIVER_DYNAMIC_DEV);
-+	if (IS_ERR(drv))
-+		return PTR_ERR(drv);
-+
-+	drv->driver_name = TTYMOCK_NAME;
-+	drv->name = TTYMOCK_NAME;
-+	drv->type = TTY_DRIVER_TYPE_SERIAL;
-+	drv->subtype = SERIAL_TYPE_NORMAL;
-+	drv->init_termios = tty_std_termios;
-+	tty_set_operations(drv, &mock_ops);
-+
-+	ret = tty_register_driver(drv);
-+	if (ret) {
-+		tty_driver_kref_put(drv);
-+		return ret;
-+	}
-+
-+	tty_port_init(&mock_port);
-+	mock_port.ops = &mock_port_ops;
-+
-+	dev = tty_port_register_device(&mock_port, drv, 0, parent);
-+	if (IS_ERR(dev)) {
-+		ret = PTR_ERR(dev);
-+		tty_unregister_driver(drv);
-+		tty_driver_kref_put(drv);
-+		tty_port_destroy(&mock_port);
-+		return ret;
-+	}
-+
-+	if (out_drv)
-+		*out_drv = drv;
-+	return 0;
-+}
-+EXPORT_SYMBOL_IF_KUNIT(tty_mock_register);
-+
-+void tty_mock_unregister(struct tty_driver *drv)
-+{
-+	if (!drv)
++	if (!fx || !fx->opened || !fx->file || !fx->inode)
 +		return;
 +
-+	tty_port_unregister_device(&mock_port, drv, 0);
-+	tty_unregister_driver(drv);
-+	tty_driver_kref_put(drv);
-+	tty_port_destroy(&mock_port);
++	ret = tty_release(fx->inode, fx->file);
++	if (ret)
++		pr_warn("TTY test cleanup failed: %d\n", ret);
++	fx->opened = false;
 +}
-+EXPORT_SYMBOL_IF_KUNIT(tty_mock_unregister);
 +
-+struct tty_mock_stats tty_mock_get_stats(void)
++/**
++ * tty_test_create_fixture - Create a test fixture for TTY driver testing
++ */
++struct tty_test_fixture *tty_test_create_fixture(struct kunit *test,
++						 struct tty_driver *driver,
++						 unsigned int index)
 +{
-+	unsigned long flags;
-+	struct tty_mock_stats state;
++	struct tty_test_fixture *fx;
 +
-+	spin_lock_irqsave(&mock_state.lock, flags);
-+	state.total_writes   = mock_state.total_writes;
-+	state.total_bytes    = mock_state.total_bytes;
-+	state.last_write_len = mock_state.last_write_len;
-+	spin_unlock_irqrestore(&mock_state.lock, flags);
++	KUNIT_ASSERT_NOT_NULL(test, driver);
 +
-+	return state;
++	fx = kunit_kzalloc(test, sizeof(*fx), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, fx);
++
++	fx->test = test;
++	fx->driver = driver;
++	fx->dev = MKDEV(driver->major, driver->minor_start + index);
++
++	/* Create synthetic VFS structures for real TTY operations */
++	fx->file = kunit_kzalloc(test, sizeof(*fx->file), GFP_KERNEL);
++	fx->inode = kunit_kzalloc(test, sizeof(*fx->inode), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, fx->file);
++	KUNIT_ASSERT_NOT_NULL(test, fx->inode);
++
++	/* Initialize as character device with appropriate permissions */
++	init_special_inode(fx->inode, S_IFCHR | 0600, fx->dev);
++	fx->inode->i_rdev = fx->dev;
++	fx->inode->i_cdev = &tty_cdev;
++	KUNIT_ASSERT_NOT_NULL(test, fx->inode->i_cdev);
++
++	fx->file->f_flags = O_RDWR;
++	fx->file->f_mode = FMODE_READ | FMODE_WRITE;
++	fx->file->f_inode = fx->inode;
++
++	/* Register cleanup before any operations that might fail */
++	kunit_add_action(test, _tty_test_cleanup_release, fx);
++
++	fx->opened = false;
++	return fx;
 +}
-+EXPORT_SYMBOL_IF_KUNIT(tty_mock_get_stats);
++EXPORT_SYMBOL_IF_KUNIT(tty_test_create_fixture);
 +
-+void tty_mock_reset_stats(void)
++/**
++ * tty_test_open - Open TTY through standard kernel path
++ */
++int tty_test_open(struct tty_test_fixture *fx)
 +{
-+	unsigned long flags;
++	int ret;
 +
-+	spin_lock_irqsave(&mock_state.lock, flags);
-+	mock_state.total_writes = 0;
-+	mock_state.total_bytes = 0;
-+	mock_state.last_write_len = 0;
-+	spin_unlock_irqrestore(&mock_state.lock, flags);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->file);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->inode);
++
++	ret = tty_open(fx->inode, fx->file);
++	if (ret)
++		return ret;
++
++	fx->tty = file_tty(fx->file);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->tty);
++
++	/* Verify the TTY is properly set up */
++	KUNIT_EXPECT_TRUE(fx->test, !list_empty(&fx->tty->tty_files));
++	/* Ldisc must now be fully installed */
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->tty->ldisc);
++	KUNIT_EXPECT_TRUE(fx->test, fx->tty->ldisc->ops);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->tty->disc_data);
++	KUNIT_EXPECT_NOT_NULL(fx->test, fx->tty->port);
++
++	fx->port = fx->tty->port;
++	ret = fx->tty->ldisc->ops->open(fx->tty);
++	if (ret) {
++		tty_release(fx->inode, fx->file);
++		return ret;
++	}
++
++	/* Enable non-blocking mode for predictable test behavior */
++	fx->file->f_flags |= O_NONBLOCK;
++	fx->opened = true;
++	return 0;
 +}
-+EXPORT_SYMBOL_IF_KUNIT(tty_mock_reset_stats);
++EXPORT_SYMBOL_IF_KUNIT(tty_test_open);
 +
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/tests/tty_mock.h b/drivers/tty/tests/tty_mock.h
++/**
++ * tty_test_release - Close TTY through standard kernel path
++ */
++int tty_test_release(struct tty_test_fixture *fx)
++{
++	int ret;
++
++	if (!fx || !fx->opened)
++		return 0;
++
++	/*
++	 * This calls the internal tty_release() function directly.
++	 * This works because this code is compiled as part of tty_io.c.
++	 */
++	ret = tty_release(fx->inode, fx->file);
++	if (!ret) {
++		fx->opened = false;
++		fx->tty = NULL;
++		fx->port = NULL;
++	}
++	return ret;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_release);
++
++/**
++ * tty_test_write - Write data to TTY
++ */
++ssize_t tty_test_write(struct tty_test_fixture *fx, const void *buf,
++		       size_t count)
++{
++	struct kiocb iocb;
++	struct iov_iter from;
++	struct kvec kvec = { .iov_base = (void *)buf, .iov_len = count };
++
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->file);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++
++	init_sync_kiocb(&iocb, fx->file);
++	iov_iter_kvec(&from, WRITE, &kvec, 1, count);
++
++	/* tty_write() is exported, so this works */
++	return tty_write(&iocb, &from);
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_write);
++
++/**
++ * tty_test_write_all - Write all data or fail
++ */
++int tty_test_write_all(struct tty_test_fixture *fx, const void *buf, size_t len)
++{
++	size_t off = 0;
++	int retries = 10;
++
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++
++	while (off < len && retries--) {
++		ssize_t n =
++			tty_test_write(fx, (const char *)buf + off, len - off);
++		if (n < 0)
++			return n;
++		if (n == 0) {
++			/* No progress - prevent infinite loop */
++			if (--retries <= 0) {
++				KUNIT_FAIL(fx->test,
++					   "Write stalled after %zu bytes",
++					   off);
++				return -EIO;
++			}
++			continue;
++		}
++		off += n;
++	}
++
++	if (off < len) {
++		KUNIT_FAIL(fx->test, "Incomplete write: %zu/%zu bytes", off,
++			   len);
++		return -EIO;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_write_all);
++
++/**
++ * tty_test_read - Read data from TTY (non-blocking)
++ */
++ssize_t tty_test_read(struct tty_test_fixture *fx, void *buf, size_t count)
++{
++	struct kiocb iocb;
++	struct iov_iter to;
++	struct kvec kvec = { .iov_base = buf, .iov_len = count };
++
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->file);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++
++	init_sync_kiocb(&iocb, fx->file);
++	iov_iter_kvec(&to, READ, &kvec, 1, count);
++
++	return tty_read(&iocb, &to);
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_read);
++
++/**
++ * tty_test_read_all - Attempt to read all requested data
++ */
++ssize_t tty_test_read_all(struct tty_test_fixture *fx, void *buf, size_t want)
++{
++	size_t off = 0;
++	int tries = 8;
++
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++
++	while (off < want && tries--) {
++		ssize_t n = tty_test_read(fx, (char *)buf + off, want - off);
++
++		if (n == -EAGAIN)
++			continue;
++		if (n < 0)
++			return n;
++		if (n == 0)
++			continue;
++		off += n;
++	}
++	return off;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_read_all);
++
++/**
++ * tty_test_simulate_rx - Inject received data for testing
++ */
++int tty_test_simulate_rx(struct tty_test_fixture *fx, const unsigned char *data,
++			 size_t len)
++{
++	int ret;
++
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->port);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++
++	ret = tty_insert_flip_string(fx->port, data, len);
++	if (ret > 0)
++		tty_flip_buffer_push(fx->port);
++
++	return ret;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_simulate_rx);
++
++/**
++ * tty_fx_supports_rx - Check if fixture supports RX testing
++ */
++bool tty_fx_supports_rx(const struct tty_test_fixture *fx)
++{
++	struct tty_ldisc *ld;
++	const struct tty_ldisc_ops *ops;
++
++	if (!fx || !fx->tty || !fx->opened)
++		return false;
++
++	ld = tty_ldisc_ref(fx->tty);
++	if (!ld)
++		return false;
++
++	ops = READ_ONCE(ld->ops);
++	if (ops && (ops->receive_buf || ops->receive_buf2)) {
++		tty_ldisc_deref(ld);
++		return true;
++	}
++
++	tty_ldisc_deref(ld);
++	return false;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_fx_supports_rx);
++
++/**
++ * tty_test_assert_valid_ops - Validate driver has required operations
++ */
++void tty_test_assert_valid_ops(struct kunit *test,
++			       const struct tty_driver *driver)
++{
++	KUNIT_ASSERT_NOT_NULL(test, driver);
++	KUNIT_ASSERT_NOT_NULL(test, driver->ops);
++	KUNIT_ASSERT_NOT_NULL(test, driver->ops->open);
++	KUNIT_ASSERT_NOT_NULL(test, driver->ops->close);
++	KUNIT_ASSERT_NOT_NULL(test, driver->ops->write);
++	KUNIT_ASSERT_NOT_NULL(test, driver->ops->write_room);
++	KUNIT_EXPECT_TRUE(test, driver->flags & TTY_DRIVER_INSTALLED);
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_assert_valid_ops);
++
++/**
++ * tty_test_get_chars_in_buffer - Get number of chars in output buffer
++ */
++unsigned int tty_test_get_chars_in_buffer(struct tty_test_fixture *fx)
++{
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->tty);
++
++	if (fx->tty->ops->chars_in_buffer)
++		return fx->tty->ops->chars_in_buffer(fx->tty);
++
++	return 0;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_get_chars_in_buffer);
++
++/**
++ * tty_test_get_write_room - Get available write room
++ */
++unsigned int tty_test_get_write_room(struct tty_test_fixture *fx)
++{
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->tty);
++
++	if (fx->tty->ops->write_room)
++		return fx->tty->ops->write_room(fx->tty);
++
++	return 0;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_get_write_room);
++
++/**
++ * tty_test_set_termios - Set terminal attributes for testing
++ */
++int tty_test_set_termios(struct tty_test_fixture *fx,
++			 const struct ktermios *termios)
++{
++	struct ktermios old_termios;
++
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx);
++	KUNIT_ASSERT_TRUE(fx->test, fx->opened);
++	KUNIT_ASSERT_NOT_NULL(fx->test, fx->tty);
++	KUNIT_ASSERT_NOT_NULL(fx->test, termios);
++
++	/* Save old termios for potential restoration */
++	old_termios = fx->tty->termios;
++
++	/* Update termios */
++	fx->tty->termios = *termios;
++
++	/* Call driver's set_termios if it exists */
++	if (fx->tty->ops->set_termios)
++		fx->tty->ops->set_termios(fx->tty, &old_termios);
++
++	return 0;
++}
++EXPORT_SYMBOL_IF_KUNIT(tty_test_set_termios);
+diff --git a/drivers/tty/tests/tty_test_helpers.h b/drivers/tty/tests/tty_test_helpers.h
 new file mode 100644
-index 0000000000000000000000000000000000000000..e61eeccc6181fc459d8db790b29350dbf3d9f588
+index 0000000000000000000000000000000000000000..10da4189e35880399e2c857f599ea7f4107f9e90
 --- /dev/null
-+++ b/drivers/tty/tests/tty_mock.h
-@@ -0,0 +1,34 @@
++++ b/drivers/tty/tests/tty_test_helpers.h
+@@ -0,0 +1,239 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * TTY - Mock driver
++ * KUnit test helpers for TTY drivers - Header declarations
 + *
-+ * Copyright (c) 2025 Abhinav Saxena <xandury@gmail.com>
++ * Provides reusable infrastructure for testing TTY drivers through
++ * real kernel entry points without requiring userspace interaction
++ * or hardware dependencies.
++ *
++ * The implementation (tty_test_helpers.c) is included directly into
++ * tty_io.c to allow access to internal TTY functions while providing
++ * exported symbols for test modules.
++ *
++ * Copyright (c) 2025 Abhinav Saxena <xandfury@gmail.com>
 + *
 + */
 +
-+#ifndef _TTY_MOCK_H
-+#define _TTY_MOCK_H
++#ifndef _TTY_TEST_HELPERS_H
++#define _TTY_TEST_HELPERS_H
 +
-+#include <linux/device.h>
++#include <kunit/test.h>
++#include <linux/tty.h>
 +#include <linux/tty_driver.h>
-+#include <linux/types.h>
++#include <linux/fs.h>
 +
-+/* Register a single-port mock tty driver and create device #0. */
-+int tty_mock_register(struct tty_driver **out_drv, struct device *parent);
-+/* Tear down device, unregister driver and destroy port. */
-+void tty_mock_unregister(struct tty_driver *drv);
-+
-+/* --- Stats available to KUnit tests --- */
-+struct tty_mock_stats {
-+	u64 total_writes;
-+	u64 total_bytes;
-+	u32 last_write_len;
++/**
++ * struct tty_test_fixture - Test fixture for TTY driver testing
++ * @test: KUnit test context for assertions and memory management
++ * @driver: TTY driver being tested
++ * @tty: TTY structure (valid after successful open)
++ * @port: TTY port structure (valid after successful open)
++ * @file: Synthetic file structure for VFS operations
++ * @inode: Synthetic inode structure for device operations
++ * @dev: Device number (major:minor) for this TTY
++ * @opened: True if TTY has been opened successfully
++ *
++ * This fixture provides all necessary structures for testing TTY drivers
++ * through the standard kernel interfaces. Memory is managed by KUnit and
++ * automatic cleanup ensures proper resource release.
++ */
++struct tty_test_fixture {
++	struct kunit *test;
++	struct tty_driver *driver;
++	struct tty_struct *tty;
++	struct tty_port *port;
++	struct file *file;
++	struct inode *inode;
++	dev_t dev;
++	bool opened;
 +};
 +
-+/* Returns a snapshot of counters. */
-+struct tty_mock_stats tty_mock_get_stats(void);
++/* Core fixture management */
 +
-+/* Reset all statistics counters to zero. */
-+void tty_mock_reset_stats(void);
++/**
++ * tty_test_create_fixture - Create a test fixture for TTY driver testing
++ * @test: KUnit test context
++ * @driver: TTY driver to test (must be registered)
++ * @index: Minor number index for this TTY instance
++ *
++ * Creates a complete test fixture with synthetic VFS structures that
++ * enable testing through real tty_open()/tty_release() paths.
++ * All memory is managed by KUnit with automatic cleanup.
++ *
++ * Return: Allocated fixture or NULL on failure (test will abort)
++ */
++struct tty_test_fixture *tty_test_create_fixture(struct kunit *test,
++						 struct tty_driver *driver,
++						 unsigned int index);
 +
-+#endif /* _TTY_MOCK_H */
++/* TTY lifecycle operations */
++
++/**
++ * tty_test_open - Open TTY through standard kernel path
++ * @fx: Test fixture created with tty_test_create_fixture()
++ *
++ * Opens the TTY using tty_open(), the same entry point used by userspace.
++ * This exercises the complete open sequence including driver install,
++ * line discipline attachment, and port initialization.
++ *
++ * After successful open:
++ * - fx->tty points to the allocated TTY structure
++ * - fx->port points to the associated TTY port
++ * - File is set to non-blocking mode for test convenience
++ *
++ * Return: 0 on success, negative error code on failure
++ */
++int tty_test_open(struct tty_test_fixture *fx);
++
++/**
++ * tty_test_release - Close TTY through standard kernel path
++ * @fx: Test fixture with opened TTY
++ *
++ * Closes the TTY using tty_release(), exercising the complete close
++ * Safe to call multiple times or on unopened fixtures.
++ *
++ * Return: 0 on success, negative error code on failure
++ */
++int tty_test_release(struct tty_test_fixture *fx);
++
++/* Data transfer operations */
++
++/**
++ * tty_test_write - Write data to TTY
++ * @fx: Test fixture with opened TTY
++ * @buf: Data buffer to write
++ * @count: Number of bytes to write
++ *
++ * Writes data using tty_write(), the same path used by userspace write().
++ * This exercises line discipline processing, flow control, and driver
++ * write operations. May return partial writes based on buffer availability.
++ *
++ * Return: Number of bytes written, or negative error code
++ */
++ssize_t tty_test_write(struct tty_test_fixture *fx, const void *buf,
++		       size_t count);
++
++/**
++ * tty_test_write_all - Write all data or fail
++ * @fx: Test fixture with opened TTY
++ * @buf: Data buffer to write completely
++ * @len: Number of bytes that must be written
++ *
++ * Ensures all data is written by retrying partial writes.
++ * Useful for testing scenarios where complete data delivery is required.
++ * Will assert-fail the test if any individual write returns 0 bytes.
++ *
++ * Return: 0 on complete success, negative error code on failure
++ */
++int tty_test_write_all(struct tty_test_fixture *fx, const void *buf,
++		       size_t len);
++
++/**
++ * tty_test_read - Read data from TTY (non-blocking)
++ * @fx: Test fixture with opened TTY
++ * @buf: Buffer to receive data
++ * @count: Maximum bytes to read
++ *
++ * Reads data using tty_read() in non-blocking mode. This is useful for
++ * verifying that injected RX data is properly delivered through the
++ * line discipline to userspace. Returns immediately with -EAGAIN if
++ * no data is available.
++ *
++ * Return: Number of bytes read, -EAGAIN if no data, or other negative error
++ */
++ssize_t tty_test_read(struct tty_test_fixture *fx, void *buf, size_t count);
++
++/**
++ * tty_test_read_all - Attempt to read all requested data
++ * @fx: Test fixture with opened TTY
++ * @buf: Buffer to receive data
++ * @want: Number of bytes desired
++ *
++ * Makes a bounded number of read attempts to collect the requested amount
++ * of data. Useful for reading back data that was injected via flip buffers,
++ * accounting for potential delays in line discipline processing.
++ *
++ * Return: Number of bytes actually read (may be less than requested)
++ */
++ssize_t tty_test_read_all(struct tty_test_fixture *fx, void *buf, size_t want);
++
++/* RX simulation and testing */
++
++/**
++ * tty_test_simulate_rx - Inject received data for testing
++ * @fx: Test fixture with opened TTY
++ * @data: Data bytes to inject
++ * @len: Number of bytes to inject
++ *
++ * Simulates data reception by injecting bytes through the flip buffer
++ * interface and pushing them to the line discipline. This allows testing
++ * of RX data paths, flow control, and line discipline processing without
++ * requiring actual hardware or external data sources.
++ *
++ * Return: Number of bytes successfully queued, or negative error code
++ */
++int tty_test_simulate_rx(struct tty_test_fixture *fx, const unsigned char *data,
++			 size_t len);
++
++/**
++ * tty_fx_supports_rx - Check if fixture supports RX testing
++ * @fx: Test fixture to check
++ *
++ * Determines if the TTY has a line discipline attached that can receive
++ * data. This is used to conditionally run RX-related tests since not all
++ * TTY configurations support data reception (e.g., write-only devices).
++ *
++ * Return: true if RX testing is supported, false otherwise
++ */
++bool tty_fx_supports_rx(const struct tty_test_fixture *fx);
++
++/* Driver validation and utility functions */
++
++/**
++ * tty_test_assert_valid_ops - Validate driver has required operations
++ * @test: KUnit test context
++ * @driver: TTY driver to validate
++ *
++ * Performs basic sanity checks on TTY driver structure to ensure it has
++ * the minimum required operations. This catches configuration errors that
++ * would cause NULL pointer dereferences during testing.
++ */
++void tty_test_assert_valid_ops(struct kunit *test,
++			       const struct tty_driver *driver);
++
++/**
++ * tty_test_get_chars_in_buffer - Get number of chars in output buffer
++ * @fx: Test fixture with opened TTY
++ *
++ * Returns the number of characters currently in the driver's output buffer.
++ * Useful for testing flow control and buffer management.
++ *
++ * Return: Number of characters in buffer, or 0 if not supported
++ */
++unsigned int tty_test_get_chars_in_buffer(struct tty_test_fixture *fx);
++
++/**
++ * tty_test_get_write_room - Get available write room
++ * @fx: Test fixture with opened TTY
++ *
++ * Returns the number of bytes that can be written without blocking.
++ * Useful for testing buffer management and flow control.
++ *
++ * Return: Number of bytes available for writing
++ */
++unsigned int tty_test_get_write_room(struct tty_test_fixture *fx);
++
++/**
++ * tty_test_set_termios - Set terminal attributes for testing
++ * @fx: Test fixture with opened TTY
++ * @termios: Terminal attributes to set
++ *
++ * Sets terminal attributes through the standard termios interface.
++ * Useful for testing different terminal configurations.
++ *
++ * Return: 0 on success, negative error code on failure
++ */
++int tty_test_set_termios(struct tty_test_fixture *fx,
++			 const struct ktermios *termios);
++
++#endif /* _TTY_TEST_HELPERS_H */
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index e2d92cf70eb78ec6b2b93b55192e46781160c9dc..ac94a037358c9df0ba4013152878ca83a2e001c5 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -3650,3 +3650,7 @@ int __init tty_init(void)
+ #endif
+ 	return 0;
+ }
++
++#ifdef CONFIG_TTY_KUNIT_TESTS
++#include "tests/tty_test_helpers.c"
++#endif
 
 -- 
 2.43.0
