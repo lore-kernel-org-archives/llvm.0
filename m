@@ -1,43 +1,37 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6092B640
-	for <llvm@lists.linux.dev>; Tue, 26 Aug 2025 20:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756241116; cv=pass; b=iH4FFVoW7tgyMKBps5aldjNHMyZ2o9yaBPnGyQQfzWVmK0ZXPX40lLuTYEZnhWEi4XqHTg1iuACWv8qC94Ecv35xsoV5/abdJuPvTAE+lvMTnaH6XLGOvnQc5OVj9Thpo2bJkKQgbfqyYNmPmiGihoFbPdu/sNjVERUU42TKTO4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756241116; c=relaxed/simple;
-	bh=KJjS8I6gJSijIC7JO2aXSuBJftstDuSC97VuLN7ULDM=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3925E2AE8D;
+	Tue, 26 Aug 2025 20:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756241230; cv=none; b=e17Q+lMnQ9KYC8nhkb2C1skSLqDDYvlu2RJ7J61Jfl7WITH4hUuLhppwk3Y4HqLelkPDGXaZCJul4ku011wuRAKeLSMljdntVGIm0uns+h+DrSRhwjgozDz+unMSJmmhrjnXJ+j8uMdA+QavWbWf8n80G8IiyIcCv5dVCOWneKs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756241230; c=relaxed/simple;
+	bh=i5YhQfiG/kxVzXvIr3BfqNM1nS7xEEp8AvpkqFuX6sE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GzFs9a3XpltoOcFASYUqaPb/xObP4sX1GtDhwBXTemh9fzinyah7qvKQqOBupl753mNhsDxWWXSC4ZXzOBoqnNpjSNxHmsA6nsOgxybz44ac+4tDkDT2Q4mG3AQmO0tlOckUtViKK2qtVpnuEKrZn8r5BOJiFoVLjPFGmUBoHDI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=Ki9wPHON; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	 In-Reply-To:Content-Type; b=llQKM5H2bxn3n4CWMeAVoBOkybp/jAiRH+dnUfImH3I0t+65IOZOGRxveRcL4MCI+mXx+B5eovkPFuNkH2BrCqFRrjEdMc+xvm7Tmo9JA2HTWf2soExNvW1SsX75Q1PI5CP5iValZVDP0bD+WEFTHv1rVuyjcqgnzMJpX0PtjDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=drIAP/GK; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="Ki9wPHON"
-ARC-Seal: i=1; a=rsa-sha256; t=1756241053; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=j2yVxPbvVmnkEx3m/dN6e1AnUw4nYDLYLrQh9jouqxO5BJjiiCr793G8HSPBwBdIjatD9NagViFauNjRfSXiN5OkOvRkuqJsv3BkMAKRRezf9KhkZ9qHONfzjNiYdn92suhyL8w0t2CahFZ6j03Kzk/PHMsJrm8p8efMx+NlI/M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1756241053; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=h44Qfi5J3Y304gTJmb6TLXLe4gIhtF4d/gBhlL0gNV4=; 
-	b=N2xtWkuh45RuU2Vs8YqwfZJBv6pw4MgqWCT3y3wTsVdIc4i07F27CpHJTe6r0RHrYKECjA2mdKudHQ73mnL9z6hLRcvSqq2844PABhn+1mHxPbT5bMHwssg/rwWgr6mQ/zKgi0MKUL5PN5Wc1C2feJz+9yYB4bE83Epayd99uKE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
-	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1756241053;
-	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=h44Qfi5J3Y304gTJmb6TLXLe4gIhtF4d/gBhlL0gNV4=;
-	b=Ki9wPHONx+Kgfg+EjzLJhd6LwqGwWdyDua6+Z+EDmJEbzyVUdyErOswt5JJ7uGnV
-	yBZm/csgF+b9XzuM3ZCk9g4oG2mnCIHV2SY/tvJsxQ81i+wvrbET0R14VjHnkb41YXS
-	mDPO7PRK+qiv+NHwXJGh2VBPtPHhrJ7sOczkb5CI=
-Received: by mx.zohomail.com with SMTPS id 1756241051276539.1866484786493;
-	Tue, 26 Aug 2025 13:44:11 -0700 (PDT)
-Message-ID: <676d88d1-c15a-4648-a4c5-c668e40b12f0@collabora.com>
-Date: Tue, 26 Aug 2025 23:43:57 +0300
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="drIAP/GK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=sT4ev/FdTzZETUvUN8PEvig3jztSVIJQJ9RfnYabzfY=; b=drIAP/GKbJZ0YgUU7Obiak6QbN
+	wTob9zUqx/u0rk/OFNruOWUAXyC75cS9mVAyX5UTAz30Za16gI2OETdtppSmS5Musm1WmxtZ5rG+G
+	GWwLGcePfk27Z668rSh2xON4afqpi1JLndDCx5Ij17X1XbjjiDvJCgri9M1VHyFJgBhc0BDwK5Qet
+	fJrC67Jx75NACE++OCX/FPrNuG5IJR/QO3p/hrBRE63UhngsUrGwPnawNmhwntA9aHR/1faJW16V3
+	OhbW0TuLSy7VavxdJUHAsUmnt1MjzJ+ap1F7ydzYyeYuuvkR+Uf36z57hc2B77ge5Bul4j5r437wp
+	kcslENlw==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ur0ZQ-0000000D8Jw-1Drk;
+	Tue, 26 Aug 2025 20:47:08 +0000
+Message-ID: <5ffaaba9-9890-4198-9ea8-03edba6e0725@infradead.org>
+Date: Tue, 26 Aug 2025 13:47:07 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,96 +39,59 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/20] media: synopsys: hdmirx: replace macros with
- bitfield variants
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Yury Norov <yury.norov@gmail.com>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang
- <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+Subject: Re: [PATCH v4 08/15] iommupt: Add read_and_clear_dirty op
+To: Jason Gunthorpe <jgg@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev
-References: <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
- <20250825-byeword-update-v3-4-947b841cdb29@collabora.com>
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+ Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+References: <8-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
 Content-Language: en-US
-In-Reply-To: <20250825-byeword-update-v3-4-947b841cdb29@collabora.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <8-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
 
-On 8/25/25 11:28, Nicolas Frattaroli wrote:
-> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
-> drivers that use constant masks.
-> 
-> Replace the UPDATE macro with bitfield.h's FIELD_PREP, to give us
-> additional error checking.
-> 
-> Also, replace the HIWORD_UPDATE macro at the same time with the new
-> FIELD_PREP_WM16 macro in hw_bitfield.h, which also gives us additional
-> error checking.
-> 
-> The UPDATE/HIWORD_UPDATE macros are left as wrappers around the
-> replacement macros, in order to not rock the boat too much, and keep the
-> changes easy to review.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h
-> index 220ab99ca61152b36b0a08b398ddefdb985709a5..b26668a98aafd1682b8342cc11f84666a13f07a3 100644
-> --- a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h
-> +++ b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.h
-> @@ -8,10 +8,12 @@
->  #ifndef DW_HDMIRX_H
->  #define DW_HDMIRX_H
->  
-> +#include <linux/bitfield.h>
->  #include <linux/bitops.h>
-> +#include <linux/hw_bitfield.h>
->  
-> -#define UPDATE(x, h, l)		(((x) << (l)) & GENMASK((h), (l)))
-> -#define HIWORD_UPDATE(v, h, l)	(((v) << (l)) | (GENMASK((h), (l)) << 16))
-> +#define UPDATE(x, h, l)		(FIELD_PREP(GENMASK((h), (l)), (x)))
-> +#define HIWORD_UPDATE(v, h, l)	(FIELD_PREP_WM16(GENMASK((h), (l)), (v)))
 
-Nit: the extra parens around FIELD_PREP may be omitted
 
-Acked-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+On 8/26/25 10:18 AM, Jason Gunthorpe wrote:
+> +/**
+> + * read_and_clear_dirty() - Manipulate the HW set write dirty state
+> + * @iommu_table: Table to manipulate
+> + * @iova: IO virtual address to start
+> + * @size: Length of the IOVA
+> + * @flags: A bitmap of IOMMU_DIRTY_NO_CLEAR
+> + *
+
+Mismatch between @params above and function arguments, both in names
+and one argument (@dirty:) is missing above.
+
+> + * Iterate over all the entries in the mapped range and record their write dirty
+> + * status in iommu_dirty_bitmap. If IOMMU_DIRTY_NO_CLEAR is not specified then
+> + * the entries will be left dirty, otherwise they are returned to being not
+> + * write dirty.
+> + *
+> + * Context: The caller must hold a read range lock that includes @iova.
+> + *
+> + * Returns: -ERRNO on failure, 0 on success.
+> + */
+> +int DOMAIN_NS(read_and_clear_dirty)(struct iommu_domain *domain,
+> +				    unsigned long iova, size_t size,
+> +				    unsigned long flags,
+> +				    struct iommu_dirty_bitmap *dirty)
+> +{
+
 
 -- 
-Best regards,
-Dmitry
+~Randy
+
