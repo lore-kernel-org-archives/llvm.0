@@ -1,112 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6CB393DC5;
-	Tue, 26 Aug 2025 00:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756168313; cv=none; b=HXWgBE56md5xLcqqCNE7xNlvgEKmwv+yGyRnZSn6qgMCHqeGjtpN93+fmjpBk/eIBKtpkdj5W+ENyEDuQa4y5Zc79XHsQRaUtsT/Ro49RpO1mciBThFas918UF2U7qpozCHoTRoDO744QBhaRiZwUXs2cwQy5mo7cuIsRyFcmcI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756168313; c=relaxed/simple;
-	bh=CPnEBZBjXV/lzxeV1sHV1BY++uFlByZX7Cld6l17i/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jJ8FViHaIpx8eKmX2WfX0NSjiIDg+ESEEwbvBKt8C2r1OrWiohVoDT66cvh3Tjl7I38+I4HGtb0T3qK6lcn5HCA70dzz1mhi8a/p/zNmUVOJfr7he3JhJ78JcKkkTHhOMJTCDoMNLbRaQ61oFo9Xll1BOJ7SJutXUaTsai8OKWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kA2Zg+k0; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA941A314E;
+	Tue, 26 Aug 2025 04:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756183155; cv=fail; b=ZSdHvZTA08PXGJNCLH/pvuEp/s4drqdXgPzrMTfA26a6+VtFCnleLwTEOStGdHTkrag6nKnHR+opWqzeUP01W5I38qP0HW0RO+aAlH6TRUEpFv0ova7mvibaiInkApfdZA6vGFJI5TtIIoe6egp852qQRHTfsQH/nX2IKMJD9Bs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756183155; c=relaxed/simple;
+	bh=UlaH+k2FXm4PYk3xIFfqjDc5FKciZaip5q9RKdbqyOA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tSJRl5QZbwGtdus99GdgTj/GpysMKv98X9PYlZD1vHGI8Pert9sb9GBmzAFWrtO/5cyP4OaKS01K5EblvCFjQ8t5AQ0umN6w5GJX99tn1lx3yRd+B4o9Voy/UJxXHoP+JeAQiXElDLM5+Q+44Zy8L/82PlUSqVC0IbU63tWy7zI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gjeuAwTz; arc=fail smtp.client-ip=40.107.94.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kA2Zg+k0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE7AC4CEED;
-	Tue, 26 Aug 2025 00:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756168312;
-	bh=CPnEBZBjXV/lzxeV1sHV1BY++uFlByZX7Cld6l17i/o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kA2Zg+k0pFEQcnjhuXBjqyRvKdActGu0y02/REUiju6RRF33HK1L49cHZ2OcXyvfs
-	 xPNOq4d0Yil6Opx4YruYw6aot2yRWsuEkJIqCpxg7M8fa+RoHaAA7OhzNdJJbCvira
-	 mQhZV/++2JQ9eNWw21C80dhDSDzP7GJP+oifHkrDmvnM9vfRiZ524th8fPCaUXM7p3
-	 rKGTRw13OGvqaKfety2/ASYQFTUHLMOqvYPI+VpDjxEaacChxEzNMY+pscjKooUZ1+
-	 QaMI/tGVtIBfkbpP1ch1LSrG6WORLmDKuPwlGhkrBbiJA3vSAY7ZhesV8VoOfKUkXN
-	 n7ZBU3+quSuIg==
-Date: Mon, 25 Aug 2025 17:31:51 -0700
-From: Kees Cook <kees@kernel.org>
-To: kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from'
- declared with 'error' attribute: copy source size is too small
-Message-ID: <202508251728.D5CA199F35@keescook>
-References: <202508060351.OMeX2wGa-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gjeuAwTz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qLr9JDWvsjR2y+6p+i4SB5FM8AJKjG8FJA8ncU5fUmhYZxrpBArZay86jkhO22L9TQJ5XuKgPcHG8DyKMJv4M/8YD45VQEPTCXJ85Lhm02EZQEmA7xbWLhDs3hqMY+THcQDQNLYfH+shvBoPjR79NFHUDBfWzPYcVK+eYMcZisnfR71H5SDazikFU7VD451S1c/aXsuX7tWXq4hvlYLS+HDs1ZuIR1/4ze2SNvBKOjvwXHQRDH18MJkJ0XZ/QMAyCTjh+QwZ0PbLi5UfwW9ecrBBB7edlKz6SEC0nVclmC2bwcHaP/aGLnRtjuzFa4idOvdebPP9i9a54KTyg8idng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q8BqBCUXsqAqtN6aKE2b3++ajuiIBm18SPTet2ijIGQ=;
+ b=Bx6KT/F905kh+Nt0zlNvXuIwLuOdYoEV+0iAWJMDEr9V6qRiwddx6UaEDBZxQUCZMnadXsAmTyTBQRHW4DPLWLc+TAcwdtMxrSY+2OVQXJFBP3NxGhl1oZi3DRbaxHe7QraT+EwyPN0dkrub/qQc45nd4bhEvgh6f4twQLDtn5zNzxjeGC+yW/ls5jEdzuPLCOIfR/RtVrEbQxX3r85g15RF3BP5p8JHjghfgm8nEq6aUfkl0dvxQw+4FucNcd7DGt8wJ4bpzrqmMPzqwYUV6KAMG8Dx9uCbl3mxWscoTQjNlDVLBygDSWEcIRn4iB5ZhX5fPYdNyvZepE2KV3+iwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q8BqBCUXsqAqtN6aKE2b3++ajuiIBm18SPTet2ijIGQ=;
+ b=gjeuAwTz4y5QkafkN7TFu5yQ0zuHqKHM4sE2obSXkY3XhwxiPmwr5ZHEtLm8GgRWqFBKqxX7aw2VoKEyOCcA7NkOlDLQZqQEN2vGxqfpe3kuu0u+DeF+qC9Pz7vju2uHq6vjfKTBvBo2rQgbUx85bpghY84hpjCHT58a5HVmN0Y=
+Received: from BYAPR08CA0007.namprd08.prod.outlook.com (2603:10b6:a03:100::20)
+ by IA1PR12MB6233.namprd12.prod.outlook.com (2603:10b6:208:3e7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.19; Tue, 26 Aug
+ 2025 04:39:08 +0000
+Received: from MWH0EPF000971E9.namprd02.prod.outlook.com
+ (2603:10b6:a03:100:cafe::4c) by BYAPR08CA0007.outlook.office365.com
+ (2603:10b6:a03:100::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.22 via Frontend Transport; Tue,
+ 26 Aug 2025 04:39:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000971E9.mail.protection.outlook.com (10.167.243.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.9052.8 via Frontend Transport; Tue, 26 Aug 2025 04:39:07 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 25 Aug
+ 2025 23:39:02 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 25 Aug
+ 2025 23:39:02 -0500
+Received: from xhdnipung41x.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 25 Aug 2025 23:38:57 -0500
+From: Nipun Gupta <nipun.gupta@amd.com>
+To: <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+	<alex.williamson@redhat.com>, <nikhil.agarwal@amd.com>, <kvm@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>, <robin.murphy@arm.com>, <krzk@kernel.org>,
+	<tglx@linutronix.de>, <maz@kernel.org>, <linux@weissschuh.net>,
+	<chenqiuji666@gmail.com>, <peterz@infradead.org>, <robh@kernel.org>,
+	<abhijit.gangurde@amd.com>, <nathan@kernel.org>, Nipun Gupta
+	<nipun.gupta@amd.com>, Arnd Bergmann <arnd@kernel.org>
+Subject: [PATCH v4 1/2] cdx: don't select CONFIG_GENERIC_MSI_IRQ
+Date: Tue, 26 Aug 2025 10:08:51 +0530
+Message-ID: <20250826043852.2206008-1-nipun.gupta@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202508060351.OMeX2wGa-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB05.amd.com: nipun.gupta@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E9:EE_|IA1PR12MB6233:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88b482f1-8b97-4a6a-0af8-08dde45a7ea2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?schMZ+Znq0lK//8myuDjlHXof7uQC5HW6KA/+2s+yQDcpjVeCg0QxXgao06+?=
+ =?us-ascii?Q?3j+rLIwiaT3umcN3Ch35IuNDZmTWDeAVGJQtxg6ftuzhq9y2SfVNZBNpcfUX?=
+ =?us-ascii?Q?sRuVqVMXP0LhfRsig9WfC0n9xNdyemTht2GxILQ8J/BcwLd8PHDxodOdcJ8L?=
+ =?us-ascii?Q?BRelY4d0gYf7zBqqMgCLCPK1JvxO346kFL3uv3pgpKMtc7Ot/ZTDhYeRQ/M4?=
+ =?us-ascii?Q?Hrg97OKLpPqTEfg/XCBDzhoIOTtFlj2zXbjzUBhFxTSqkPNLkKsPoTrZYznG?=
+ =?us-ascii?Q?90QEAVDQxOOA9Qk95lY+ohb/bcGlFdb74ZB/1FxPRYt7ODxE70Lwxs7cLhlJ?=
+ =?us-ascii?Q?xjnq0aBYZy3i31/j0ErEjwcNjZkmqgo+sjcDt54UCvbp2OFg7GcB0feA/u+8?=
+ =?us-ascii?Q?Z4WkWn/p4oefdePCyCV3RDRLLrHPV5HPEIf0jdsY500oKt650UZEmkxhRqyT?=
+ =?us-ascii?Q?kK/qddnmS5+UJFUnUKLfnE7Tj9VHHEutVrTl7DFiz0pS7kx7yZOpf2NcDU6T?=
+ =?us-ascii?Q?jpSCmGhhtYd1gQHr1YUix7lwBBdzJPfIdNTWmtKkCBakcNY/8vdwjbbv3fCW?=
+ =?us-ascii?Q?dVOz3fS2G3FS2fq5sxZA6pD5rZmFhw2m+sNcbG3gLu+n4S9L7FJsm057ymj8?=
+ =?us-ascii?Q?LHL9nPfeE8lWdTT5cvFiNTgSNjlkRGfDuvUBzDMWzNNN9TEUF1eiM8XaBW5o?=
+ =?us-ascii?Q?Ltm/NoBqkM67LWdU8w9H6dLRMUawpAquqBy1TG3EaYEo+nBCb7uch/+2mwmX?=
+ =?us-ascii?Q?7hssrN0TpRXGo1SYRsWpVRPh0u7CQY6PItxwBRC/9PbkZtcDrnxYBXhtFBUh?=
+ =?us-ascii?Q?CrGl9CTchcI/OKWvtee19oGKWuVgS3vfz85gPJlxlFZ/hLY7rWgQlauOLku/?=
+ =?us-ascii?Q?ReBlkJAUMAV6cvPdXUxBichOTx+20sVMF9cOQPwB8fJpUUSQNHei2rLMgXag?=
+ =?us-ascii?Q?ZEUwYQEswotV2Ov6lMy3fAegIgC24wy8VC42j0nomedsLo97GWvsUmiAv5fR?=
+ =?us-ascii?Q?5H2xVph6pPZ0ELTtFBxyFaf55JPzgNCb0BDnycWiD2L5qxEcZijMA+JwQW26?=
+ =?us-ascii?Q?V/hye29i74ECCqDPmBRV1VyITl0uIIahwQlxxW3Eais0Km8c699nUYuWknvs?=
+ =?us-ascii?Q?Pi0QNkILC9spfmYuX9reGwbIx+7d4rFcFxKfRhFbrEyZdW2O04GhXzHCfjdb?=
+ =?us-ascii?Q?n3R3h7umbbnXIC14gKEeiTXufLbcdVEymR9GjwgGSViI116awOcwgSwWBgjf?=
+ =?us-ascii?Q?JOd1jvfjm5S2U3e1Y7s/r3Svc9X416kI2dghjwXTUvAVcwoinn2QcsAwlJUh?=
+ =?us-ascii?Q?EUqDiS9hrUfQAQQEnDBgpQdQ1owAhv0Am9haiTTrZj6gUYeiRu5kCOdg22yp?=
+ =?us-ascii?Q?Apypl0IGs9dHZZIyRjm5YDhtTFiRpWpiKwHpFQ3NxTt8ZSZtu6tnVLnVtxTZ?=
+ =?us-ascii?Q?miV1+v//7aX91T29TzOoTh8O8fAEWBAwYFjCckOE+MnVeVCEN41db2UHvJlr?=
+ =?us-ascii?Q?FAks1bZ3ivj9lCCAZReRDjz7/buYT650J7gu?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 04:39:07.7876
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88b482f1-8b97-4a6a-0af8-08dde45a7ea2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000971E9.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6233
 
-On Wed, Aug 06, 2025 at 03:49:28AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
-> commit: 808aac63e2bdf9bae08485e072bf3d317a18acbf uaccess: Introduce ucopysize.h
-> date:   5 months ago
-> config: um-randconfig-001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/config)
+x86 does not use CONFIG_GENERIC_MSI_IRQ, and trying to enable it anyway
+results in a build failure:
 
-The option inducing the miscompile (the "len" argument gets turned into
-a compiler-constant value +1 from where it actually should be across the
-inlinings of copy_to_user) is, *drum roll*  -fsanitize=alignment
+In file included from include/linux/ssb/ssb.h:10,
+                 from drivers/ssb/pcihost_wrapper.c:18:
+include/linux/gpio/driver.h:41:33: error: field 'msiinfo' has incomplete type
+   41 |         msi_alloc_info_t        msiinfo;
+      |                                 ^~~~~~~
+In file included from include/linux/kvm_host.h:19,
+                 from arch/x86/events/intel/core.c:17:
+include/linux/msi.h:528:33: error: field 'alloc_info' has incomplete type
+  528 |         msi_alloc_info_t        alloc_info;
 
-So, I think we need to ban CONFIG_UBSAN_ALIGNMENT on at least on x86...
+Change the driver to actually build without this symbol and remove the
+incorrect 'select' statements.
 
--Kees
+Fixes: e8b18c11731d ("cdx: Fix missing GENERIC_MSI_IRQ on compile test")
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+---
 
-> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202508060351.OMeX2wGa-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from net/sctp/socket.c:45:
->    In file included from include/linux/sched/signal.h:9:
->    In file included from include/linux/sched/task.h:13:
->    In file included from include/linux/uaccess.h:10:
-> >> include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
->                            __bad_copy_from();
->                            ^
->    1 error generated.
-> 
-> 
-> vim +45 include/linux/ucopysize.h
-> 
->     36	
->     37	static __always_inline __must_check bool
->     38	check_copy_size(const void *addr, size_t bytes, bool is_source)
->     39	{
->     40		int sz = __builtin_object_size(addr, 0);
->     41		if (unlikely(sz >= 0 && sz < bytes)) {
->     42			if (!__builtin_constant_p(bytes))
->     43				copy_overflow(sz, bytes);
->     44			else if (is_source)
->   > 45				__bad_copy_from();
->     46			else
->     47				__bad_copy_to();
->     48			return false;
->     49		}
->     50		if (WARN_ON_ONCE(bytes > INT_MAX))
->     51			return false;
->     52		check_object_size(addr, bytes, is_source);
->     53		return true;
->     54	}
->     55	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Changes v1->v2:
+- No change
+Changes v2->v3:
+- add CONFIG_GENERIC_MSI_IRQ while assigning num_msi and setting msi domain
+Changes v3->v4:
+- No change
 
+ drivers/cdx/Kconfig                     | 1 -
+ drivers/cdx/cdx.c                       | 4 ++--
+ drivers/cdx/controller/Kconfig          | 1 -
+ drivers/cdx/controller/cdx_controller.c | 3 ++-
+ 4 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cdx/Kconfig b/drivers/cdx/Kconfig
+index 3af41f51cf38..1f1e360507d7 100644
+--- a/drivers/cdx/Kconfig
++++ b/drivers/cdx/Kconfig
+@@ -8,7 +8,6 @@
+ config CDX_BUS
+ 	bool "CDX Bus driver"
+ 	depends on OF && ARM64 || COMPILE_TEST
+-	select GENERIC_MSI_IRQ
+ 	help
+ 	  Driver to enable Composable DMA Transfer(CDX) Bus. CDX bus
+ 	  exposes Fabric devices which uses composable DMA IP to the
+diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
+index 092306ca2541..3d50f8cd9c0b 100644
+--- a/drivers/cdx/cdx.c
++++ b/drivers/cdx/cdx.c
+@@ -310,7 +310,7 @@ static int cdx_probe(struct device *dev)
+ 	 * Setup MSI device data so that generic MSI alloc/free can
+ 	 * be used by the device driver.
+ 	 */
+-	if (cdx->msi_domain) {
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ) && cdx->msi_domain) {
+ 		error = msi_setup_device_data(&cdx_dev->dev);
+ 		if (error)
+ 			return error;
+@@ -833,7 +833,7 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
+ 		     ((cdx->id << CDX_CONTROLLER_ID_SHIFT) | (cdx_dev->bus_num & CDX_BUS_NUM_MASK)),
+ 		     cdx_dev->dev_num);
+ 
+-	if (cdx->msi_domain) {
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ) && cdx->msi_domain) {
+ 		cdx_dev->num_msi = dev_params->num_msi;
+ 		dev_set_msi_domain(&cdx_dev->dev, cdx->msi_domain);
+ 	}
+diff --git a/drivers/cdx/controller/Kconfig b/drivers/cdx/controller/Kconfig
+index 0641a4c21e66..a480b62cbd1f 100644
+--- a/drivers/cdx/controller/Kconfig
++++ b/drivers/cdx/controller/Kconfig
+@@ -10,7 +10,6 @@ if CDX_BUS
+ config CDX_CONTROLLER
+ 	tristate "CDX bus controller"
+ 	depends on HAS_DMA
+-	select GENERIC_MSI_IRQ
+ 	select REMOTEPROC
+ 	select RPMSG
+ 	help
+diff --git a/drivers/cdx/controller/cdx_controller.c b/drivers/cdx/controller/cdx_controller.c
+index fca83141e3e6..5e3fd89b6b56 100644
+--- a/drivers/cdx/controller/cdx_controller.c
++++ b/drivers/cdx/controller/cdx_controller.c
+@@ -193,7 +193,8 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
+ 	cdx->ops = &cdx_ops;
+ 
+ 	/* Create MSI domain */
+-	cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
++	if (IS_ENABLED(CONFIG_GENERIC_MSI_IRQ))
++		cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
+ 	if (!cdx->msi_domain) {
+ 		ret = dev_err_probe(&pdev->dev, -ENODEV, "cdx_msi_domain_init() failed");
+ 		goto cdx_msi_fail;
 -- 
-Kees Cook
+2.34.1
+
