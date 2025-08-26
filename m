@@ -1,70 +1,41 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E25747F;
-	Mon, 25 Aug 2025 23:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6CB393DC5;
+	Tue, 26 Aug 2025 00:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756165330; cv=none; b=JgFH3+GY527ma94BQABTd+gcmmw0z1fvGT3gDpPmnjhXiFyasl6LF6lsvnPUHbQyyiaJwr75FtXPVOBgKrYz1fm6NGZUuz4YhCEx3pWDqiF3IXNR9lxtkD2jYGAK9U5n7ifZo96TluhAyE473uwjOBGa9K5xUsPyB5DqV9383c4=
+	t=1756168313; cv=none; b=HXWgBE56md5xLcqqCNE7xNlvgEKmwv+yGyRnZSn6qgMCHqeGjtpN93+fmjpBk/eIBKtpkdj5W+ENyEDuQa4y5Zc79XHsQRaUtsT/Ro49RpO1mciBThFas918UF2U7qpozCHoTRoDO744QBhaRiZwUXs2cwQy5mo7cuIsRyFcmcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756165330; c=relaxed/simple;
-	bh=J367x8GJDZMLTwx8qc/sItzW7eQs4mCr/b+cuY5NxP8=;
+	s=arc-20240116; t=1756168313; c=relaxed/simple;
+	bh=CPnEBZBjXV/lzxeV1sHV1BY++uFlByZX7Cld6l17i/o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fwv8pjYdeOEeHgF9kPQu3Vq2HpdbVEif1IgG/SPRA/w0UoJkIR1s32c9ZiEbXBlzJOqQQ3jRPnaKI8FRQy9lyzgwq7AIVmp/5YMkT+bhUt8pTEaDEIoYZ3Ne40dScFF9l1QmwaVm5o7BtcxT9VBCYjXdu/n9cCrKjf3x3vnfuMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IcnZBpQs; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jJ8FViHaIpx8eKmX2WfX0NSjiIDg+ESEEwbvBKt8C2r1OrWiohVoDT66cvh3Tjl7I38+I4HGtb0T3qK6lcn5HCA70dzz1mhi8a/p/zNmUVOJfr7he3JhJ78JcKkkTHhOMJTCDoMNLbRaQ61oFo9Xll1BOJ7SJutXUaTsai8OKWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kA2Zg+k0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IcnZBpQs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756165328; x=1787701328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J367x8GJDZMLTwx8qc/sItzW7eQs4mCr/b+cuY5NxP8=;
-  b=IcnZBpQsX6O14Z3wbJNKy7JHnZRYRRxjDFANfG/USgbEXbiMDDxWqV9c
-   Yb2MMKA0HQ8aNJgO3zqlHPAX33x9LwTAdeKPv7du05Ci0BSNR6ipmZjIv
-   qRXqsG6cwYv7WJ/fHvfCzMrGKqGGqxyKA/G9rO+V3sNtnmzHZ99COMRah
-   DMxqzxa/Us0Qe1Pc+g2mLWaUzYSL/XAnC1KHlHVyufE0eoe2xjkN3ZAAL
-   Uw9+UP4SypRjU/7PMaMIe+u055zg1RUDe32oOz71r3nPwVGts3UMTbAcR
-   Zbf045B4G/EqA9SA+v/3q1rBa9MGeniTQ+mGmf+vLQ56eLVqSTdq3KYUP
-   w==;
-X-CSE-ConnectionGUID: y/AuZw65SSSzY3Q+g6IApw==
-X-CSE-MsgGUID: sqWl/4hESDGUgnyCseDBKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="80981786"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="80981786"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 16:42:07 -0700
-X-CSE-ConnectionGUID: ZQLJOKNrSkypbFLo7ru5Gg==
-X-CSE-MsgGUID: jg/agINJQwqHtf0ttoLzjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="169020979"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 25 Aug 2025 16:41:54 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uqgoV-000O4R-2c;
-	Mon, 25 Aug 2025 23:41:27 +0000
-Date: Tue, 26 Aug 2025 07:41:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
-	ray.huang@amd.com, gautham.shenoy@amd.com,
-	mario.limonciello@amd.com, perry.yuan@amd.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kA2Zg+k0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE7AC4CEED;
+	Tue, 26 Aug 2025 00:31:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756168312;
+	bh=CPnEBZBjXV/lzxeV1sHV1BY++uFlByZX7Cld6l17i/o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kA2Zg+k0pFEQcnjhuXBjqyRvKdActGu0y02/REUiju6RRF33HK1L49cHZ2OcXyvfs
+	 xPNOq4d0Yil6Opx4YruYw6aot2yRWsuEkJIqCpxg7M8fa+RoHaAA7OhzNdJJbCvira
+	 mQhZV/++2JQ9eNWw21C80dhDSDzP7GJP+oifHkrDmvnM9vfRiZ524th8fPCaUXM7p3
+	 rKGTRw13OGvqaKfety2/ASYQFTUHLMOqvYPI+VpDjxEaacChxEzNMY+pscjKooUZ1+
+	 QaMI/tGVtIBfkbpP1ch1LSrG6WORLmDKuPwlGhkrBbiJA3vSAY7ZhesV8VoOfKUkXN
+	 n7ZBU3+quSuIg==
+Date: Mon, 25 Aug 2025 17:31:51 -0700
+From: Kees Cook <kees@kernel.org>
+To: kernel test robot <lkp@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-tegra@vger.kernel.org, treding@nvidia.com,
-	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com,
-	sanjayc@nvidia.com, bbasu@nvidia.com, sumitg@nvidia.com
-Subject: Re: [PATCH v2 1/7] ACPI: CPPC: add perf control read API and clarify
- naming
-Message-ID: <202508260711.I7imWLTG-lkp@intel.com>
-References: <20250823200121.1320197-2-sumitg@nvidia.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from'
+ declared with 'error' attribute: copy source size is too small
+Message-ID: <202508251728.D5CA199F35@keescook>
+References: <202508060351.OMeX2wGa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,99 +44,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250823200121.1320197-2-sumitg@nvidia.com>
+In-Reply-To: <202508060351.OMeX2wGa-lkp@intel.com>
 
-Hi Sumit,
+On Wed, Aug 06, 2025 at 03:49:28AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   6bcdbd62bd56e6d7383f9e06d9d148935b3c9b73
+> commit: 808aac63e2bdf9bae08485e072bf3d317a18acbf uaccess: Introduce ucopysize.h
+> date:   5 months ago
+> config: um-randconfig-001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/config)
 
-kernel test robot noticed the following build errors:
+The option inducing the miscompile (the "len" argument gets turned into
+a compiler-constant value +1 from where it actually should be across the
+inlinings of copy_to_user) is, *drum roll*  -fsanitize=alignment
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.17-rc3 next-20250825]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So, I think we need to ban CONFIG_UBSAN_ALIGNMENT on at least on x86...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/ACPI-CPPC-add-perf-control-read-API-and-clarify-naming/20250824-040531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250823200121.1320197-2-sumitg%40nvidia.com
-patch subject: [PATCH v2 1/7] ACPI: CPPC: add perf control read API and clarify naming
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250826/202508260711.I7imWLTG-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250826/202508260711.I7imWLTG-lkp@intel.com/reproduce)
+-Kees
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508260711.I7imWLTG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cpufreq/amd-pstate.c:524:8: error: call to undeclared function 'cppc_set_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     524 |         ret = cppc_set_perf(cpudata->cpu, &perf_ctrls);
-         |               ^
-   drivers/cpufreq/amd-pstate.c:524:8: note: did you mean 'cppc_set_epp'?
-   include/acpi/cppc_acpi.h:170:12: note: 'cppc_set_epp' declared here
-     170 | extern int cppc_set_epp(int cpu, u64 epp_val);
-         |            ^
-   1 error generated.
-
-
-vim +/cppc_set_perf +524 drivers/cpufreq/amd-pstate.c
-
-e059c184da47e9 Huang Rui         2021-12-24  480  
-77fbea69b0ffad Mario Limonciello 2024-12-09  481  static int shmem_update_perf(struct cpufreq_policy *policy, u8 min_perf,
-555bbe67a622b2 Dhananjay Ugwekar 2025-02-05  482  			     u8 des_perf, u8 max_perf, u8 epp, bool fast_switch)
-e059c184da47e9 Huang Rui         2021-12-24  483  {
-77fbea69b0ffad Mario Limonciello 2024-12-09  484  	struct amd_cpudata *cpudata = policy->driver_data;
-e059c184da47e9 Huang Rui         2021-12-24  485  	struct cppc_perf_ctrls perf_ctrls;
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  486  	u64 value, prev;
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  487  	int ret;
-e059c184da47e9 Huang Rui         2021-12-24  488  
-fff395796917ac Mario Limonciello 2024-12-09  489  	if (cppc_state == AMD_PSTATE_ACTIVE) {
-77fbea69b0ffad Mario Limonciello 2024-12-09  490  		int ret = shmem_set_epp(policy, epp);
-fff395796917ac Mario Limonciello 2024-12-09  491  
-fff395796917ac Mario Limonciello 2024-12-09  492  		if (ret)
-fff395796917ac Mario Limonciello 2024-12-09  493  			return ret;
-fff395796917ac Mario Limonciello 2024-12-09  494  	}
-fff395796917ac Mario Limonciello 2024-12-09  495  
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  496  	value = prev = READ_ONCE(cpudata->cppc_req_cached);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  497  
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  498  	value &= ~(AMD_CPPC_MAX_PERF_MASK | AMD_CPPC_MIN_PERF_MASK |
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  499  		   AMD_CPPC_DES_PERF_MASK | AMD_CPPC_EPP_PERF_MASK);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  500  	value |= FIELD_PREP(AMD_CPPC_MAX_PERF_MASK, max_perf);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  501  	value |= FIELD_PREP(AMD_CPPC_DES_PERF_MASK, des_perf);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  502  	value |= FIELD_PREP(AMD_CPPC_MIN_PERF_MASK, min_perf);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  503  	value |= FIELD_PREP(AMD_CPPC_EPP_PERF_MASK, epp);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  504  
-77fbea69b0ffad Mario Limonciello 2024-12-09  505  	if (trace_amd_pstate_epp_perf_enabled()) {
-77fbea69b0ffad Mario Limonciello 2024-12-09  506  		union perf_cached perf = READ_ONCE(cpudata->perf);
-77fbea69b0ffad Mario Limonciello 2024-12-09  507  
-77fbea69b0ffad Mario Limonciello 2024-12-09  508  		trace_amd_pstate_epp_perf(cpudata->cpu,
-77fbea69b0ffad Mario Limonciello 2024-12-09  509  					  perf.highest_perf,
-77fbea69b0ffad Mario Limonciello 2024-12-09  510  					  epp,
-77fbea69b0ffad Mario Limonciello 2024-12-09  511  					  min_perf,
-77fbea69b0ffad Mario Limonciello 2024-12-09  512  					  max_perf,
-77fbea69b0ffad Mario Limonciello 2024-12-09  513  					  policy->boost_enabled,
-77fbea69b0ffad Mario Limonciello 2024-12-09  514  					  value != prev);
-77fbea69b0ffad Mario Limonciello 2024-12-09  515  	}
-77fbea69b0ffad Mario Limonciello 2024-12-09  516  
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  517  	if (value == prev)
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  518  		return 0;
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  519  
-e059c184da47e9 Huang Rui         2021-12-24  520  	perf_ctrls.max_perf = max_perf;
-e059c184da47e9 Huang Rui         2021-12-24  521  	perf_ctrls.min_perf = min_perf;
-e059c184da47e9 Huang Rui         2021-12-24  522  	perf_ctrls.desired_perf = des_perf;
-e059c184da47e9 Huang Rui         2021-12-24  523  
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09 @524  	ret = cppc_set_perf(cpudata->cpu, &perf_ctrls);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  525  	if (ret)
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  526  		return ret;
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  527  
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  528  	WRITE_ONCE(cpudata->cppc_req_cached, value);
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  529  
-9f5daa2f2f6ddd Mario Limonciello 2024-12-09  530  	return 0;
-e059c184da47e9 Huang Rui         2021-12-24  531  }
-e059c184da47e9 Huang Rui         2021-12-24  532  
+> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508060351.OMeX2wGa-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202508060351.OMeX2wGa-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from net/sctp/socket.c:45:
+>    In file included from include/linux/sched/signal.h:9:
+>    In file included from include/linux/sched/task.h:13:
+>    In file included from include/linux/uaccess.h:10:
+> >> include/linux/ucopysize.h:45:4: error: call to '__bad_copy_from' declared with 'error' attribute: copy source size is too small
+>                            __bad_copy_from();
+>                            ^
+>    1 error generated.
+> 
+> 
+> vim +45 include/linux/ucopysize.h
+> 
+>     36	
+>     37	static __always_inline __must_check bool
+>     38	check_copy_size(const void *addr, size_t bytes, bool is_source)
+>     39	{
+>     40		int sz = __builtin_object_size(addr, 0);
+>     41		if (unlikely(sz >= 0 && sz < bytes)) {
+>     42			if (!__builtin_constant_p(bytes))
+>     43				copy_overflow(sz, bytes);
+>     44			else if (is_source)
+>   > 45				__bad_copy_from();
+>     46			else
+>     47				__bad_copy_to();
+>     48			return false;
+>     49		}
+>     50		if (WARN_ON_ONCE(bytes > INT_MAX))
+>     51			return false;
+>     52		check_object_size(addr, bytes, is_source);
+>     53		return true;
+>     54	}
+>     55	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
