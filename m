@@ -1,205 +1,126 @@
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D993C2D3A74;
-	Tue, 26 Aug 2025 04:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756183156; cv=fail; b=BLw7zyriYnzPNlRKK8rdqPKvYoGmn/9m3jguYLs24n17F4yjvmcyvAcad6brYxo2ePIF67K9/RwpvqxBB3RX9+MXtHejed4wXn7MzAEE0wwxoIInARrHeiW/tw8PQkoglEx3mHnPqLOks+rlqxitZiC6rmFXHeo1Df24YH+TY5A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756183156; c=relaxed/simple;
-	bh=vvAjagogF/8N0Fma4npjrHLBmb8sdyB7yzYiNKPiktY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=npm7ejFB8FGgA1ZPIpx59XYFRrm0UBaU0KjTvZcVlmqDLJrmR9NLEPUdNZqz1pjFshQgxZN6/wSSiGaK/Sajftl6aa0gw9xJHSCbyQthIOmBVyOwRkDVgjyhgCyRnfUUml2KOW96Ry+8RUpELSlkXBQvo2yScGPQ68kwR9dt1nI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eVoCehhk; arc=fail smtp.client-ip=40.107.100.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8BD2853E9;
+	Tue, 26 Aug 2025 06:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756190461; cv=none; b=cdPJ4lccgY9xJ66y80yiOU4+F3TEgeapmfrOdBTMmqxQTm6f7FR7XDVY8xwa9nzuYmK5091IVvYbezztwJnMnINuyBAWOo28cu4s3voLpY4OCIkZWX+DP3afTmXFBOS+/9kEJPS8CDWnzvG+aTLtJrhp9xdhklrpybcF+uXAUnQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756190461; c=relaxed/simple;
+	bh=TTDSQsLEBYyrYsmc46nx5/yrcIhEliUXOyAujJOJPpw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kFyNCnu5Rr0H15CbdvQOuaND49f6wakYpwUcXdkL++6HuQcLsZhmXZ8ij81fAcB4lD5tuqFXmWq73nEm5VUovrPz+fpmqdFRZzxNArK9mmJQuCT7b/VmtwPlXoWws3rDgla47kg4lRgpy1764UIE3ue4aCPYW2FWztzDM3wmUfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ZgyVdnr0; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eVoCehhk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=axNXwrlj5fj9rMEPe21P/DugT/0m+2FXrSaxA54nWyP4/Lk9kh0eoec25oQ6xsb2lKZSghGx0+5akZgTo86T9dDrCtPsr8aIqOACw9gWpHjboQd9BWkhRr/ta/P9DTYjIKlSDqUihgD55gkFcLjHYQM9ug+bqPEfxdpgrly0jHw6/229jmP9g9H+jmcdJNTlEguUc1rRsmyq0fgAqpB+p640hA7YLaKE6uGMybqlphxGthRmPPtdt9zbgpimD+axgHzpL7b1MnnYjzFHD+AleLpHgFs0F0KwDZTO0vzWHGHI0EtnE8IsjI8ZOqjHptSyqPERfiJPoE+nYUOSvuS7Mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wMx4Po+RE/qO+99sEhaQI5XlW92P/IpLTTGplYAYd/4=;
- b=kIq+jY/p66VL2jMSmCqQ0As2c7jjh5CGrV8rXldZtdI6g8xCaEc1BMQEmnzsX3N+SctLCNp71cTbIkU8c7GD9ReWigUNIb0Lz6RWGVHqPmZuls38G9rAVk2TGHSUejXiNOT8n99/Ne2C3fsjTcKzNGTOH3V1CGjhAz3Klk2KS6BMkcF3PbmsjVD6V71D+QkMwgYEEQgMUjGYf3FaF3jPx/oRRrr7Foh0ulKnMZt4wF6enNg0D6qp+Yz1lCwBcPlAr5ZNg6oWuHiQNNVhJoEiEqyRyIPSQKkbi0eZX7O6MzR9FxbZy48oIyBrh+I/gxiKeH4VaypngsT62/xzYH1gaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=arndb.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wMx4Po+RE/qO+99sEhaQI5XlW92P/IpLTTGplYAYd/4=;
- b=eVoCehhkBXqB1dKM9NrbeOgj4Mortw+7mNl6YmVrMMAdf0FNUR5A1jRbFu3q706+xCRY9w7HCzvvCuzHOr+tQDyAhZqvtQGd5dIP5MX9SGmKMpn+TpTc8o+vUGEl34z6dkcNQhPNHfSKfSiGujLaIvpWoSJ1dqYH7RF7FafXEsI=
-Received: from BYAPR06CA0015.namprd06.prod.outlook.com (2603:10b6:a03:d4::28)
- by CY5PR12MB6370.namprd12.prod.outlook.com (2603:10b6:930:20::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.16; Tue, 26 Aug
- 2025 04:39:10 +0000
-Received: from SJ5PEPF000001CB.namprd05.prod.outlook.com
- (2603:10b6:a03:d4:cafe::cb) by BYAPR06CA0015.outlook.office365.com
- (2603:10b6:a03:d4::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.22 via Frontend Transport; Tue,
- 26 Aug 2025 04:39:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- SJ5PEPF000001CB.mail.protection.outlook.com (10.167.242.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9073.11 via Frontend Transport; Tue, 26 Aug 2025 04:39:09 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 25 Aug
- 2025 23:39:09 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb09.amd.com
- (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Mon, 25 Aug
- 2025 21:39:08 -0700
-Received: from xhdnipung41x.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Mon, 25 Aug 2025 23:39:03 -0500
-From: Nipun Gupta <nipun.gupta@amd.com>
-To: <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-	<alex.williamson@redhat.com>, <nikhil.agarwal@amd.com>, <kvm@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <robin.murphy@arm.com>, <krzk@kernel.org>,
-	<tglx@linutronix.de>, <maz@kernel.org>, <linux@weissschuh.net>,
-	<chenqiuji666@gmail.com>, <peterz@infradead.org>, <robh@kernel.org>,
-	<abhijit.gangurde@amd.com>, <nathan@kernel.org>, Nipun Gupta
-	<nipun.gupta@amd.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCH v4 2/2] vfio/cdx: update driver to build without CONFIG_GENERIC_MSI_IRQ
-Date: Tue, 26 Aug 2025 10:08:52 +0530
-Message-ID: <20250826043852.2206008-2-nipun.gupta@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250826043852.2206008-1-nipun.gupta@amd.com>
-References: <20250826043852.2206008-1-nipun.gupta@amd.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ZgyVdnr0"
+Received: from [100.79.0.226] (unknown [4.194.122.162])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 6759A2015BCE;
+	Mon, 25 Aug 2025 23:40:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6759A2015BCE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1756190455;
+	bh=JVGCHPIrdH/5wbFB6BTPeap6EXGx7GMcHlqIHaSGOXQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZgyVdnr064ai3X6OsYJyVFxcrB3rTBH5VVnvDdKAl235+dTLB9EtwAzrJXMGWn5Ao
+	 JPXJsB9TKGL2U/6kilklbN8cHNJyb3Swqj6a5FGXygzXDYTxfa4YTOjwqpgUY+NZ7T
+	 JTu0EnBIAVjoc+bSJHSc7bbCveL1NkLTDzfXF2Gg=
+Message-ID: <344603f8-34df-4b9d-9909-c449de585e30@linux.microsoft.com>
+Date: Tue, 26 Aug 2025 12:10:49 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CB:EE_|CY5PR12MB6370:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5b0695a8-d6b9-4956-31fd-08dde45a7fd4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YQ9GZGB/jQtgOhwRUUPEuzWhYfws9ka+QOkeX+IvWQ23dPK3+ru68iGmHC1G?=
- =?us-ascii?Q?9qVZiRVvRr1SXFXkyAdenBBkhLiDOkLaiRFEsD3tMnrIYNPRt1+ous+pMMXV?=
- =?us-ascii?Q?ljbefMqB8fAlgZNlEjsF9KpAVfCLITVAhoPsG9Mom/RCK9xgKcQtNVw6g2Z2?=
- =?us-ascii?Q?BzeQlDOXzqvZ6iOhjTg480pQD3G8cQxw0lI1uKcFLG+ar9RTpjPEDFBMc85p?=
- =?us-ascii?Q?n2gKtmm35mnbqttGsDh4YELbtgkUTRkA2psaRuWfBWwFOP3/oYSSZ4XJZKHy?=
- =?us-ascii?Q?cgRA5VAu4q4eZuGYC5ISTk/HU6fGiT7WYJ62NahMLMNc2Iwh6rX8HuDe2YZC?=
- =?us-ascii?Q?FFFEBKCo2I7MW5p3BbbBf8YQ4UgTzRwwnocypEZiG21r69v2FNLvlW+t5y8m?=
- =?us-ascii?Q?cLMX8y3r1GzvRshTsdLB273ksaVrnhR3bUB1c1Wzh8tMFs5ckegeznLfG3qt?=
- =?us-ascii?Q?FCLyXRluZ4mR/ZOqd/B+JphVrA5CfLxf+kesZRqBTBBCNP35Vv3XopNZw/1T?=
- =?us-ascii?Q?JzYjVC7j3iF058YShWqmIopkJOOJAAQnt8zm9Z8YBjaVMDXn3sDyJJdeK+NH?=
- =?us-ascii?Q?K9eZpkIbWnGGg6y7dGfsUWjI+IALFinxyqcgISg9EynotOLWvzeI3HEUz15b?=
- =?us-ascii?Q?JhvyTdt9Ao1fczgC09Xkh1b0j22e815TZ7Z+xhVKT3qUEuu5bfew9+L+KMRW?=
- =?us-ascii?Q?AYPsgWruyW1pBbZOQ3EUkpAZglznO6roXy5UD46k2ivDtPL2kvm+qiml7/kg?=
- =?us-ascii?Q?rbfaagTuHSvS5Kg5S/4soFIW9DwK+4x5GKtIyV0Aly6rWh2jG1BkpwO8kkY1?=
- =?us-ascii?Q?axY8tAMT7Ryfr3hUG/qA5d8TVnjKMQgQH0VrblP3E8wx0ckJ6K0ATISmIks4?=
- =?us-ascii?Q?Jm3p++6Urm/0fiwfwk9LdRqhoeAv/dguK07u7kUr6EmXlm4maTTa5eH7btS1?=
- =?us-ascii?Q?q0ljL2CfbisNMcfQU8t2caHmsX6kSnR/phHJFCpOAMy8X4SZmutSj5msJlne?=
- =?us-ascii?Q?VvR1rXwrSlIlg1rY4zQL4l6RD1cozHkjNbHC0YskUNH0hfqgVsDIQfP6F89y?=
- =?us-ascii?Q?AZxrjmVYhtgR/zaBxWDOAc52hRdNn5aetSroPbHQTz0q+7urPo1Pt8VZFTmV?=
- =?us-ascii?Q?FJxOGAFl61/jDRAdEykIRaR97S4SoNSLvdOY5cNGXYtSY67VbHyA1qOnHfzs?=
- =?us-ascii?Q?7RZkZ/2C5bsaq/8kext6N5b2xfERqoinIB2OM+dEWbuIDjzuZjHjW4LzHp91?=
- =?us-ascii?Q?qC+lFqjs+dJyBmDm/zUZuvMqs5zAyo6pJIB5vR90Q+qi7y83pOPc0fcM8oyV?=
- =?us-ascii?Q?jbeq0Ty1qLkK7T1KIDm172FJumO21TOIhJTzjLwXv8Ldd3EqscxRDroVCubQ?=
- =?us-ascii?Q?bLax30QK+cCIL9qgFO8aT6r45Zre3bMyGfB7TisFV1wBHr56pK2tHFqpC3/J?=
- =?us-ascii?Q?kfeASh2VUchdNmvazzVPvzje73Kiv5btRL3sauc4AV70HGD+aNWzlf/IuV4c?=
- =?us-ascii?Q?OAtJ29RUqF/BLH0jg7SxcBNrJ+Eze6bCJT7u?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 04:39:09.7925
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b0695a8-d6b9-4956-31fd-08dde45a7fd4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001CB.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6370
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linux-next:master 3139/4234] error: <unknown>:0:0: ran out of
+ registers during register allocation in function 'hv_call_get_vp_registers'
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Wei Liu <wei.liu@kernel.org>,
+ Roman Kisel <romank@linux.microsoft.com>,
+ Saurabh Sengar <ssengar@linux.microsoft.com>,
+ Alok Tiwari <alok.a.tiwari@oracle.com>,
+ Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+ Michael Kelley <mhklinux@outlook.com>
+References: <202508240828.pVaUV45D-lkp@intel.com>
+ <56833fbe-0ea1-4a0d-8d5b-809d983d3ab9@linux.microsoft.com>
+ <20250825170051.GB2719297@ax162>
+Content-Language: en-US
+From: Naman Jain <namjain@linux.microsoft.com>
+In-Reply-To: <20250825170051.GB2719297@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Define dummy MSI related APIs in VFIO CDX driver to build the
-driver without enabling CONFIG_GENERIC_MSI_IRQ flag.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202508070308.opy5dIFX-lkp@intel.com/
-Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-Reviewed-by: Alex Williamson <alex.williamson@redhat.com>
-Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
----
 
-Changes v1->v2:
-- fix linking intr.c file in Makefile
-Changes v2->v3:
-- return error from vfio_cdx_set_irqs_ioctl() when CONFIG_GENERIC_MSI_IRQ
-  is disabled
-Changes v3->v4:
-- changed the return value to -EINVAL from -ENODEV
+On 8/25/2025 10:30 PM, Nathan Chancellor wrote:
+> Hi Naman,
+> 
+> On Sun, Aug 24, 2025 at 11:13:51PM +0530, Naman Jain wrote:
+>>
+>>
+>> On 8/24/2025 12:02 PM, kernel test robot wrote:
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+>>> head:   0f4c93f7eb861acab537dbe94441817a270537bf
+>>> commit: 96a1d2495c2f48467a91b8657bd594350b84ea9e [3139/4234] Drivers: hv: Introduce mshv_vtl driver
+>>> config: i386-buildonly-randconfig-2003-20250824 (https://download.01.org/0day-ci/archive/20250824/202508240828.pVaUV45D-lkp@intel.com/config)
+>>> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250824/202508240828.pVaUV45D-lkp@intel.com/reproduce)
+>>>
+>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>> the same patch/commit), kindly add following tags
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202508240828.pVaUV45D-lkp@intel.com/
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>>>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_get_vp_registers'
+>>>>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_set_vp_registers'
+>>>>> error: <unknown>:0:0: ran out of registers during register allocation in function 'hv_call_get_partition_property'
+>>>      3 errors generated.
+>>>
+>>
+>> +Nathan
+>>
+>> I can see a bunch of similar warnings previously reported, in different
+>> functions, but could not find a fix for it, or if this
+>> is a blocking error:
+>>
+>> https://lore.kernel.org/all/?q=s%3A%22ran+out+of+registers+during+register+allocation%22
+>>
+>> These all are reported on below 32 bit config, compiled with LLVM:
+>> i386-buildonly-randconfig-*
+>>
+>> Found previous comment from Nathan Chancellor, here, which seems to be
+>> related to this error:
+>> https://lore.kernel.org/all/20250507022649.GA1984217@ax162/
+>>
+>> """
+>> This configuration has CONFIG_MATOM=y, which does not really work well
+>> with clang for this reason and some others that have come up in the
+>> past. Given it is likely that nobody will care enough to fix this on the
+>> LLVM side (since it is 32-bit), we should probably just block using
+>> MATOM with CC_IS_CLANG, which Arnd and I had talked about at the last
+>> ClangBuiltLinux meeting.
+>> """
+>>
+>> This gives me an impression that we can safely ignore these errors from
+>> kernel test bot.
+>> Requesting Nathan to please correct me if I am wrong.
+> 
+> Yes, this is all correct. I will try to pursue an actual kernel side fix
+> for this in Kconfig but I think the Intel folks can also start ignoring
+> these reports for ARCH=i386 and CONFIG_MATOM so that they do not get
+> sent to other kernel developers for random changes.
+> 
+> Cheers,
+> Nathan
 
- drivers/vfio/cdx/Makefile  |  6 +++++-
- drivers/vfio/cdx/private.h | 14 ++++++++++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+Hi Nathan,
+Thanks for confirming.
 
-diff --git a/drivers/vfio/cdx/Makefile b/drivers/vfio/cdx/Makefile
-index df92b320122a..dadbef2419ea 100644
---- a/drivers/vfio/cdx/Makefile
-+++ b/drivers/vfio/cdx/Makefile
-@@ -5,4 +5,8 @@
- 
- obj-$(CONFIG_VFIO_CDX) += vfio-cdx.o
- 
--vfio-cdx-objs := main.o intr.o
-+vfio-cdx-objs := main.o
-+
-+ifdef CONFIG_GENERIC_MSI_IRQ
-+vfio-cdx-objs += intr.o
-+endif
-diff --git a/drivers/vfio/cdx/private.h b/drivers/vfio/cdx/private.h
-index dc56729b3114..5343eb61bec4 100644
---- a/drivers/vfio/cdx/private.h
-+++ b/drivers/vfio/cdx/private.h
-@@ -38,11 +38,25 @@ struct vfio_cdx_device {
- 	u8			config_msi;
- };
- 
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
- 			    u32 flags, unsigned int index,
- 			    unsigned int start, unsigned int count,
- 			    void *data);
- 
- void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev);
-+#else
-+static int vfio_cdx_set_irqs_ioctl(struct vfio_cdx_device *vdev,
-+				   u32 flags, unsigned int index,
-+				   unsigned int start, unsigned int count,
-+				   void *data)
-+{
-+	return -EINVAL;
-+}
-+
-+static void vfio_cdx_irqs_cleanup(struct vfio_cdx_device *vdev)
-+{
-+}
-+#endif
- 
- #endif /* VFIO_CDX_PRIVATE_H */
--- 
-2.34.1
+Regards,
+Naman
 
