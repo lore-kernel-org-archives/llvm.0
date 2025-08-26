@@ -1,127 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144FD30CDBB;
-	Tue, 26 Aug 2025 19:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D23430CD81;
+	Tue, 26 Aug 2025 20:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756237493; cv=none; b=UEBA17owx0edcxVf5UEidH/Dvhpd/0UhdJ889oersMFAGiBUzjsck8KWG8FndgXMjEFyoBQzVfrf9JEV0zgFINLuSQKXof5cwUfLtLHzfuw2noOf9wdxqEJUtMwcVt6nalxdXqCY5b/HpOM47dwhsnVuSmfRqCJhIQeq7clqT+A=
+	t=1756241054; cv=none; b=IG0yvZ/9EIA+AVf7aoNkf3GweY9gbL+ZPRQb5L8tZuo1KBxuZ2F7YRTM3cVD94xz1biXdRsTGHlOmdXY19VPIFCshN/sr89DBnlgBMWPDFtLTjiHjiFSm4QqWnBeY52xeOM2gEJ4vmTVYS76ZSoCzjpH9SVPcbt/sVAIHCQv87k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756237493; c=relaxed/simple;
-	bh=VKw4BgDEQyKwKTM6j7IGL5GIiDaIXWa7ZkotB2Dukzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ReTfbeFsmyc/1ZPBQqCaBjdO7p3LvtDimliIjuVDMML5FUr4UMDSBRCCZ540CNDSHeqB+dLhaD0VhonhCejrx9p8E7i5PuAR75JHQUI1356Nm+8ZptGdAaVh8iEk6hB/QrVUKsgmFLwCwfA8bjTXutY2Wqb4qmyGTCzkw8hTnAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j0JGAXs2; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756241054; c=relaxed/simple;
+	bh=tUr7YfLfSkqF792HrLXXg5iorzazaISzXMuWcLvRst4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=helyNYIV4mZR/1qvoHWVmuOXrp2zpzMeTsgjBRDdlq7Q95sH5BVQ0nOe1kCp/gb1sr6mRpn1wO6HBk4xPcG/RZcv4icdyh+mt8JWKQNk7/usfOhr+zpsj5mEueD0BtRpAnsTAn7HhauRI7PPGtolW/BfTnxSz+h1XO+ZNp2QyeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZCcsEOlv; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0JGAXs2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756237493; x=1787773493;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VKw4BgDEQyKwKTM6j7IGL5GIiDaIXWa7ZkotB2Dukzs=;
-  b=j0JGAXs2hFMtw3Yw3NsIYa92cUNT5zm7VcQGL5vGWmJnH2hjvQmjKwE2
-   WvjrFOQbzZIR2777En67t7G23EfbZk/iNbGJub+rLOq51CZlNylm+xMQh
-   19ix67HRRY3iC/JVFq5cmYyZnmDY0MiKD2jP9xwmNUcCoKbFGienMdjnu
-   OI7C5gtsfJTXO7bdEq+TNeleMvWTpOoAQMTSYrnR1dJttE4VFf2nlhsN+
-   KKAyAV7Mzp+pXRDrWyozBqlST5qWOsNhSVktNZ1ShJiQGCSjkjmuZAFzK
-   nFXQclahSRlOPg3qcutjeceTCZzmbdD72J5GyNA5PH8czIWJT89FLDk8o
-   A==;
-X-CSE-ConnectionGUID: KvC9JnfOTEKSh5TRM3YSgw==
-X-CSE-MsgGUID: pkMt8RYDSjm2yiOwcf3TgA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="58196650"
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="58196650"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 12:44:52 -0700
-X-CSE-ConnectionGUID: f73lg6zjQ2yo0dh1YiGlqw==
-X-CSE-MsgGUID: Hm4oMGHeRlm2lc6MuQ0yrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="200613591"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 26 Aug 2025 12:44:50 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uqzaV-000SL7-1R;
-	Tue, 26 Aug 2025 19:44:24 +0000
-Date: Wed, 27 Aug 2025 03:42:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:kthread/core-v2 35/35]
- kernel/irq/manage.c:1411:46: error: no member named 'affinity' in 'struct
- irq_common_data'
-Message-ID: <202508270331.tMyrfknq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZCcsEOlv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=FZ9HxEh5E9NV2SJ1puHz/9cexjmxNy2BECtL3MgCeZU=; b=ZCcsEOlvAE4CLFp53XDu9sS1C6
+	o7i1zwbptCwec2mIgwF0BIGijWYVJ1cgQYBWQTkMR6dbIBcAHjROJGWDAeceYuwfpgsre73f/7PyE
+	+51ugBjxifh6wPxJrKoB61gcn1JRWMaSAO++RE8mNF3wWr0zQUdpIJjecA7wmDzNU4Cm39GD22CHd
+	6R0klrvMltr+R2yNLy3hTAeeQUJFuFjGxU2acUfbX+rawMObg4hKQVtMFL1R7kw0PCV6Bjw1FrOMv
+	16w/qaehyh+t90paPezWQZUmTdLjRszHIOZ6Rm8fdMd5OIaCjjKkPvNRP33sYGrdJ9H2YT2mIoYyS
+	wtKEpkkA==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ur0WY-0000000D7u0-3Acj;
+	Tue, 26 Aug 2025 20:44:10 +0000
+Message-ID: <d1150889-e693-4f37-896e-54a871cf4863@infradead.org>
+Date: Tue, 26 Aug 2025 13:44:09 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 06/15] iommupt: Add unmap_pages op
+To: Jason Gunthorpe <jgg@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+References: <6-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <6-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git kthread/core-v2
-head:   6bcb15d1aebd50828a313a2ec927dea9d0ab9b8f
-commit: 6bcb15d1aebd50828a313a2ec927dea9d0ab9b8f [35/35] genirq: Correctly handle preferred kthreads affinity
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250827/202508270331.tMyrfknq-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d26ea02060b1c9db751d188b2edb0059a9eb273d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250827/202508270331.tMyrfknq-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508270331.tMyrfknq-lkp@intel.com/
+On 8/26/25 10:18 AM, Jason Gunthorpe wrote:
+> 
+> Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/iommu/generic_pt/iommu_pt.h | 155 ++++++++++++++++++++++++++++
+>  include/linux/generic_pt/iommu.h    |  10 +-
+>  2 files changed, 163 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/generic_pt/iommu_pt.h b/drivers/iommu/generic_pt/iommu_pt.h
+> index 9413f868a65bfa..53901a4a977935 100644
+> --- a/drivers/iommu/generic_pt/iommu_pt.h
+> +++ b/drivers/iommu/generic_pt/iommu_pt.h
+> @@ -14,6 +14,29 @@
+>  #include <linux/iommu.h>
+>  #include "../iommu-pages.h"
+>  #include <linux/export.h>
+> +#include <linux/cleanup.h>
+> +#include <linux/dma-mapping.h>
+> +
+> +static void gather_range_pages(struct iommu_iotlb_gather *iotlb_gather,
+> +			       struct pt_iommu *iommu_table, pt_vaddr_t iova,
+> +			       pt_vaddr_t len,
+> +			       struct iommu_pages_list *free_list)
+> +{
+> +	struct pt_common *common = common_from_iommu(iommu_table);
+> +
+> +	if (pt_feature(common, PT_FEAT_FLUSH_RANGE_NO_GAPS) &&
+> +	    iommu_iotlb_gather_is_disjoint(iotlb_gather, iova, len)) {
+> +		iommu_iotlb_sync(&iommu_table->domain, iotlb_gather);
+> +		/*
+> +		 * Note that the sync frees the gather's free list, so we must
+> +		 * not have any pages on that list that are covered by iova/len
+> +		 */
+> +	} else if (pt_feature(common, PT_FEAT_FLUSH_RANGE)) {
+> +		iommu_iotlb_gather_add_range(iotlb_gather, iova, len);
+> +	}
+> +
+> +	iommu_pages_list_splice(free_list, &iotlb_gather->freelist);
+> +}
+>  
+>  #define DOMAIN_NS(op) CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), op)
+>  
+> @@ -167,6 +190,138 @@ static inline struct pt_table_p *table_alloc_top(struct pt_common *common,
+>  		log2_to_int(pt_top_memsize_lg2(common, top_of_table)));
+>  }
+>  
 
-All errors (new ones prefixed by >>):
+[snip]
 
->> kernel/irq/manage.c:1411:46: error: no member named 'affinity' in 'struct irq_common_data'
-    1411 |         if (cpumask_available(desc->irq_common_data.affinity))
-         |                               ~~~~~~~~~~~~~~~~~~~~~ ^
-   1 error generated.
+> +
+> +/**
+> + * unmap_pages() - Make a range of IOVA empty/not present
+> + * @iommu_table: Table to manipulate
+> + * @iova: IO virtual address to start
+> + * @pgsize: Length of each page
+> + * @pgcount: Length of the range in pgsize units starting from @iova
+> + * @gather: Gather struct that must be flushed on return
 
+Eh, 2 of these @params don't match the function's arguments (names).
 
-vim +1411 kernel/irq/manage.c
-
-  1385	
-  1386	static int
-  1387	setup_irq_thread(struct irqaction *new, struct irq_desc *desc,
-  1388			 unsigned int irq, bool secondary)
-  1389	{
-  1390		const struct cpumask *mask;
-  1391		struct task_struct *t;
-  1392	
-  1393		if (!secondary) {
-  1394			t = kthread_create(irq_thread, new, "irq/%d-%s", irq,
-  1395					   new->name);
-  1396		} else {
-  1397			t = kthread_create(irq_thread, new, "irq/%d-s-%s", irq,
-  1398					   new->name);
-  1399		}
-  1400	
-  1401		if (IS_ERR(t))
-  1402			return PTR_ERR(t);
-  1403	
-  1404		/*
-  1405		 * We keep the reference to the task struct even if
-  1406		 * the thread dies to avoid that the interrupt code
-  1407		 * references an already freed task_struct.
-  1408		 */
-  1409		new->thread = get_task_struct(t);
-  1410	
-> 1411		if (cpumask_available(desc->irq_common_data.affinity))
-  1412			mask = irq_data_get_effective_affinity_mask(&desc->irq_data);
-  1413		else
-  1414			mask = cpu_possible_mask;
-  1415	
-  1416		kthread_affine_preferred(t, mask);
-  1417	
-  1418		return 0;
-  1419	}
-  1420	
-
+> + *
+> + * unmap_pages() will remove a translation created by map_pages(). It cannot
+> + * subdivide a mapping created by map_pages(), so it should be called with IOVA
+> + * ranges that match those passed to map_pages(). The IOVA range can aggregate
+> + * contiguous map_pages() calls so long as no individual range is split.
+> + *
+> + * Context: The caller must hold a write range lock that includes
+> + * the whole range.
+> + *
+> + * Returns: Number of bytes of VA unmapped. iova + res will be the point
+> + * unmapping stopped.
+> + */
+> +size_t DOMAIN_NS(unmap_pages)(struct iommu_domain *domain, unsigned long iova,
+> +			      size_t pgsize, size_t pgcount,
+> +			      struct iommu_iotlb_gather *iotlb_gather)
+> +{
+> +	struct pt_iommu *iommu_table =
+> +		container_of(domain, struct pt_iommu, domain);
+> +	struct pt_unmap_args unmap = { .free_list = IOMMU_PAGES_LIST_INIT(
+> +					       unmap.free_list) };
+> +	pt_vaddr_t len = pgsize * pgcount;
+> +	struct pt_range range;
+> +	int ret;
+> +
+> +	ret = make_range(common_from_iommu(iommu_table), &range, iova, len);
+> +	if (ret)
+> +		return 0;
+> +
+> +	pt_walk_range(&range, __unmap_range, &unmap);
+> +
+> +	gather_range_pages(iotlb_gather, iommu_table, iova, len,
+> +			   &unmap.free_list);
+> +
+> +	return unmap.unmapped;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(unmap_pages), "GENERIC_PT_IOMMU");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+~Randy
+
