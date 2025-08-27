@@ -1,101 +1,55 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B861B25C81B
-	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 03:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04592366;
+	Wed, 27 Aug 2025 03:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756264588; cv=none; b=Uu3B9ZaQFrk9egsDeDa6A0FxlGT+R95kiYPSIuqT3JjcZuOZ8PgT0MMxfyArVflNpiIl0aG8YO2/h3iA/ZxRzVOcWQaECldU04Bkv/Ck9+O8fpnvL5aYDgAisFQ4Cg3k3QpgFEpLFqgTEosNSNbP0fr7fkL5HYZoiNE+STdjPhs=
+	t=1756265928; cv=none; b=gf4pZGyFOIt82twcmUIQwejCw2tl0QfFiSoHK8enXdkeO/2XDZ9wVDxXB8ZO9qrLij190k7WoCY7s3euPa9hVyoV+AjMDo+5dOC9dc/Rk6LcOAxhZMMKgGcZ/a0U5MORURZ4hCPLMpvn5dbxDwfttHFe4CTrxzOSAIyb/neDpb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756264588; c=relaxed/simple;
-	bh=Qs2OM8u+Lsz6MOPYflBgcuyoauChwiyNm0Qg9Fp8l+Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CkCLg6STxGOKFAlRNiaOFsfH6c0XJDWVHW/n3HFRJHMgmdjFaLcDwcb4BmtfHdVRIbG6qko/pW0nYAyeJEOa491XhQpmHiAxjeazIUIHAICJZaa+A3MhyMBzLebTodoaCRIlobsFG7BHp8llOxxtuFzT8BH8exDq5l6qD+9jibY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NFc7s06I; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1756265928; c=relaxed/simple;
+	bh=vbOwvKfken9Q0kduteQTYsYdcXvxD6+VkMSEss+uVSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=AgxM0pJqmo0JQRyF0acqvvNx5R+Kw3i+SacwkZPROnXbSRw3+TWOcmepwRQ/bbENSZPQcqcQeP5Rtvjx3kRdbeERS7xIPr8Of992QWLCNqWbzh2J24TJjvIPWaAtN5ZfB9fGOedyhgl52jiGoeYU0iYy9yflpiBSYmS7OiWoMEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A7SSQHnp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NFc7s06I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=J0
-	iCFAWZwK2LvypLJsD3Kz9xYwE43hjGdHVixQJu+A4=; b=NFc7s06IbOvdJXwOCv
-	qcfR255RbqM4W4cadxZZwdHdZ1419RFAnD74XK1SUCCP8tlG+HwmpDd/LDy4MG7L
-	U6qlphAcKfBFMvoIOpD2usNjFGhMRJt4RDO1SGmjINMC0MvXmZIEXBisTdfSjZRt
-	1zQEyW/jDcwgtB6y/P5ZKGLfw=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3F+RdeK5ocMYdEw--.56776S2;
-	Wed, 27 Aug 2025 11:15:42 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
-Date: Wed, 27 Aug 2025 11:15:40 +0800
-Message-Id: <20250827031540.461017-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A7SSQHnp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945E3C4CEF4;
+	Wed, 27 Aug 2025 03:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756265927;
+	bh=vbOwvKfken9Q0kduteQTYsYdcXvxD6+VkMSEss+uVSw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=A7SSQHnpb7ZChD2nGEGioESJ3LbTy/4BzWyFUDIZ+79vgBmA4lxWhGBDSc5v2eqjV
+	 Lc98Ry1mIOLbb5QcNCZDH/Mc7lXItMUUFNy/GlwqyWh8OYi7rlUGnrpWqx9TC5aOAD
+	 wctOjyll/IzUtXWVAuMBHTtiIxhjKgnn2SrDeYeZ4SoRdktGQ3+6IbFJcbAYszx0yZ
+	 vOghVznhR/TSspx3aOfDH6tkavVAH/IjzEjrOX9eg3WWeAhOXoaFrU+13J0eAKPoqH
+	 566Z+zNTfj/YibAQMOf8lq+SY18VNg0HU+1B8nqv1d0wSfXveMLCLZ7XV6kjdPpVIE
+	 mgQwoVOjdGenQ==
+Date: Tue, 26 Aug 2025 20:38:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 21.1.0 uploaded
+Message-ID: <20250827033843.GA2135688@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3F+RdeK5ocMYdEw--.56776S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tw18tr4UZFW5tF4kuFyUZFb_yoW8Gry7pw
-	18X3s8tFyS9r1UX3W7Jr4UWF1rWFsaqr48Ar40yr9rAF98GF97Jr1xKFyYgr93Xr4furW3
-	Zrsrtw43CF4kAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UKzuZUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiYwO2eGiudCWPIwAAsV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Hi all,
 
-The following issue occurs when compiling with clang version 17.0.6,
-but not with version 18.1.8. Add a version restriction to fix this problem.
+I have built and uploaded LLVM 21.1.0 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-progs/compute_live_registers.c:251:3: error: invalid operand for instruction
-  251 |                 "r0 = 1;"
-      |                 ^
-<inline asm>:1:22: note: instantiated into assembly here
-    1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
-      |                             ^
-1 error generated.
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 21.x
+series is no longer supported.
 
-Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- tools/testing/selftests/bpf/progs/compute_live_registers.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-index 6884ab99a421..56aec43f206f 100644
---- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -240,6 +240,7 @@ __naked void if2(void)
- 		::: __clobber_all);
- }
- 
-+#if __clang_major__ >= 18
- /* Verifier misses that r2 is alive if jset is not handled properly */
- SEC("socket")
- __log_level(2)
-@@ -255,6 +256,7 @@ __naked void if3_jset_bug(void)
- 		"exit;"
- 		::: __clobber_all);
- }
-+#endif
- 
- SEC("socket")
- __log_level(2)
--- 
-2.43.0
-
+Cheers,
+Nathan
