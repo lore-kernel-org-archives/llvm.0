@@ -1,236 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC4B801;
-	Wed, 27 Aug 2025 00:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FD21A8F6D
+	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 00:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756253520; cv=none; b=k+tZbbKcMlUSb7RLof7PGvrHvot6p+NDxwt675h0pRl3mk9wFKN8OjuB7OWeVR+UJVNa+hDooikavD6iXzFG8dA54ptS+LX0D0SfAt+MWjyoDImYqXcTAAE+ohDLqEcQSm35y3Oj7axrs1dXe9xBtP47haqR7PlowWhhvyFd1k4=
+	t=1756255583; cv=none; b=pHn/1Ve9YYbMGCQwsjm61ZaY7NLWWipluKyT1Shap4WjdBUhuCMlNuLvouTunuiFcJ7liSqSNK5wF6WrDYlveVV2Le8pJlQ05Nz1DVQPMtvirEZzkXG759nXp5sCxtk11cmUXxssmQjex1IeHiVBRtPiawPHeDoRtL2kX2fBV5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756253520; c=relaxed/simple;
-	bh=kYq4pPZmuhx2i66OXf/o5NxlVeUf781bZNfXOPxDsUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=d9U+D/dc3CamG+Jgpyg5LdLo3tRUuedLsyPHC2mCNWf3FfOTARqqQ+BLvprqOqaQrIyeENtB7XQSVkCRm8IXLQTtLHI7VtvZ2sGr7JZmWQMBPrxDdqP1wMYK+rQ742uNNrzgGzBENGjfOruQf2O283D0pAmkfFreW1sJ15dvKZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SkMhd0CE; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756255583; c=relaxed/simple;
+	bh=H+kkfzVW4fOfE6BunEcIw/4uno8zsE2Jauu4d0HhpAo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L1t4obXXkNBvXJMMIfUVPxuwHO8/aptLqtaBUGZtHF0zQ1x+nWo4egjkt8RsW60ZytX43x5FupBMP0s7LMA4RCdnU6gushY1GFR1TdkKwXFvcJpW7xjIqkkUkfPeiSsr8pP5vmOYficluRL4VtzXQOWf65+7QOlZ0Df53b2wZe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=E9V9JE8y; arc=none smtp.client-ip=209.85.166.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SkMhd0CE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756253518; x=1787789518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kYq4pPZmuhx2i66OXf/o5NxlVeUf781bZNfXOPxDsUs=;
-  b=SkMhd0CEeK/pQwgCz1gX+YsrHb2OHyVk+Zvga2MOqtcDK7LW5M109NFH
-   ZGy/7AsMBUkdIdp+ppNl3Ct9Y86DlRzY3Ch6/ZS504QB6smXFJbp44Vt5
-   ptg3UQ0mZoXAwMWuSsQHghzHE1xxrXpSD61Vs0XMs1ZHlUrk1bLomlJzC
-   qRWqKUK7wmjV6qNGVfO6ofmThOXGwvaofqtc4b5sU2meNgwBuZuX4dPgh
-   XBB5IcTzV1TDuXacS8YGn2HDICIcRpVyaUoSzoUsN9QqKhoLQRFZyVBNs
-   wwSqAA2R3vd2Yddz+xVq/IUoSXjJsm0mj8IF7d5e5SlGxqQq+bdjBcX0E
-   Q==;
-X-CSE-ConnectionGUID: u/oVqFmSR/6EJpZFcAKbLQ==
-X-CSE-MsgGUID: okftFi8fTG+0VtHwS5dX+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="58567048"
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="58567048"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 17:11:55 -0700
-X-CSE-ConnectionGUID: ZzuTzCVZSTetWv9r7QpFiw==
-X-CSE-MsgGUID: d0MyrVefRTqq4JwZvhD+aQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="169216874"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Aug 2025 17:11:54 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ur3lY-000SW7-03;
-	Wed, 27 Aug 2025 00:11:52 +0000
-Date: Wed, 27 Aug 2025 08:11:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [vbabka:slub-percpu-sheaves-v6r0 3/15] mm/slub.c:4622:2: error: no
- member named 'dep_map' in 'local_trylock_t'
-Message-ID: <202508270822.YcObEv8L-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="E9V9JE8y"
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-88432daa973so158350839f.1
+        for <llvm@lists.linux.dev>; Tue, 26 Aug 2025 17:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1756255581; x=1756860381; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zclw1iBD4zpqjkUTKL/tBf6jKpfLRB4Ld2/pw8/YSMc=;
+        b=E9V9JE8yDtfHyg8M8p5edfQhaqqHaN7x5Wo2dly1oC+aLIn3iJe+Pu83SKZ3d93lKv
+         B2tGI183kKc5mXc8522Qb45FJZym8cj1rMPOcWFqFi7PY8Mmw/yOz3yqcQMrIxwPEqPk
+         wbrCqOJDj0DrTJwrcusSwn6NEZYWB0qFBodP9LYW5cgPSq44UxA1cbSvc2e9hA4HSAuJ
+         yWS3CRtqJ2NCSUxlO2ooB8CGKSDXqHawYNdUjXCikZzs65W9LbH7Gu7cJ16qPwEB0seq
+         PcFE1n9rmQDnv7S9L5g+v0zjBVkw37IE3mLw6ZKb6GuXk9v14sRw4zFRTNhwMkyf+KdE
+         cBQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756255581; x=1756860381;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zclw1iBD4zpqjkUTKL/tBf6jKpfLRB4Ld2/pw8/YSMc=;
+        b=R5MUIlrCMlvEJPnoAHqfvdxNxWOay5QJKTSkMuAd9Aeq55tMEp9aVPcR/lW39VD83Q
+         4hmrSnzza6NV2j4vw/qckfETfwsD/6Hcwzt3/tIYKwsev5k0C7WB8/SEyvOp+iQORCVH
+         Orzb6qDUuqN187A67ZGyyBFYK1OrnPGxFlfM14++cQ6b2xh84ppzKbK0S/yf9mOXO1nF
+         5iFVzltzlpgTfWi+NkSyAKhjEE+drN95mqmYwYXDpkPK3V6VMMNisY2iBFi7rb5FnSv/
+         M2pRMviLqyqRUpiKKoa9cE/ZT79u1FTlEDeyTCd2yILuKRPDN9E7q3jsUKz1pWcwBGeq
+         YHpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVs7Jm1uyk5UboSqNfE0R4U0vmh6G76bp08KfsCxFJJ2ln4y9kSxWA43j7C4z2juCfpmUCw@lists.linux.dev
+X-Gm-Message-State: AOJu0YzdsR7Wx96CXoyTIzIcwNZgi4EIIvOcUq2VgJEqOd+LsfOgiuEt
+	p+FnOug3DXovyMf71Y2pGO/nngvHUHF4DdAs4FHRDbgfrF2AxenDtEeKqX9KXGA5Jbg=
+X-Gm-Gg: ASbGnct36kGS4eMJMfiQNt+aKfPhN/ITGGMj1YZwbIzpMoK7FnU3DRlqYcNtn6hQgat
+	TPYT5tgQ888YChlMe5p+5RuL49nafVgd0OgSXXlldJJ9zcfx+Qr6stxzWjknL+GUXBhTqdSgBjF
+	NxMJZe7yl42KZynW4egrRzxPuI7B/dS5l71t3j2ClJkpvjgrSmXkcPYFMvUARyGzJrW5omIX8gr
+	LPBLFTCDfVSQbS+UTqefGWg3NCumIOh9eyynbD9r/6kYZD0wa0rQrXiC7BxgMjU4lrwFFoPpCHu
+	rcBqgVLXhKLonHGj3/uCC16op5bCngotOYBJ+9P/fGy8FBAPpq8HiU+6mN57G12TPeI10xSd4eH
+	3Dt/74s78b7cESNaDTAt93C/vJwbUF44mzt680A==
+X-Google-Smtp-Source: AGHT+IGfh2W97xdVpFCgiQyq3Pb9/ifBsTlwqyh1OAHr3R34PnfYQnj+aQ8bMShNsAl8EpMrNrhaMQ==
+X-Received: by 2002:a05:6e02:1b0c:b0:3ef:1b56:c8ea with SMTP id e9e14a558f8ab-3ef1b56c9f9mr43866025ab.11.1756255580619;
+        Tue, 26 Aug 2025 17:46:20 -0700 (PDT)
+Received: from [100.64.0.1] ([170.85.11.2])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ef2ff2dd60sm14606295ab.9.2025.08.26.17.46.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Aug 2025 17:46:20 -0700 (PDT)
+Message-ID: <2e9ee035-9a1d-4a7b-b380-6ea1985eb7be@sifive.com>
+Date: Tue, 26 Aug 2025 19:46:19 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 10/19] x86: LAM compatible non-canonical definition
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+ Dave Hansen <dave.hansen@intel.com>
+Cc: x86@kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org,
+ llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
+ <c1902b7c161632681dac51bc04ab748853e616d0.1756151769.git.maciej.wieczor-retman@intel.com>
+ <c68330de-c076-45be-beac-147286f2b628@intel.com>
+ <4rkxgsa5zfrvjqtii7cxocdk6g2qel3hif4hcpeboos2exndoe@hp7bok5o2inx>
+From: Samuel Holland <samuel.holland@sifive.com>
+Content-Language: en-US
+In-Reply-To: <4rkxgsa5zfrvjqtii7cxocdk6g2qel3hif4hcpeboos2exndoe@hp7bok5o2inx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-percpu-sheaves-v6r0
-head:   849dd5f00d4107b14da6fdd07b026e8950a3c763
-commit: af6e1c57c858adcf8b0521760981afd9149b206e [3/15] slab: add opt-in caching layer of percpu sheaves
-config: i386-buildonly-randconfig-004-20250827 (https://download.01.org/0day-ci/archive/20250827/202508270822.YcObEv8L-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250827/202508270822.YcObEv8L-lkp@intel.com/reproduce)
+Hi Maciej,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508270822.YcObEv8L-lkp@intel.com/
+On 2025-08-26 3:08 AM, Maciej Wieczor-Retman wrote:
+> On 2025-08-25 at 14:36:35 -0700, Dave Hansen wrote:
+>> On 8/25/25 13:24, Maciej Wieczor-Retman wrote:
+>>> +/*
+>>> + * CONFIG_KASAN_SW_TAGS requires LAM which changes the canonicality checks.
+>>> + */
+>>> +#ifdef CONFIG_KASAN_SW_TAGS
+>>> +static __always_inline u64 __canonical_address(u64 vaddr, u8 vaddr_bits)
+>>> +{
+>>> +	return (vaddr | BIT_ULL(63) | BIT_ULL(vaddr_bits - 1));
+>>> +}
+>>> +#else
+>>>  static __always_inline u64 __canonical_address(u64 vaddr, u8 vaddr_bits)
+>>>  {
+>>>  	return ((s64)vaddr << (64 - vaddr_bits)) >> (64 - vaddr_bits);
+>>>  }
+>>> +#endif
+>>
+>> This is the kind of thing that's bound to break. Could we distill it
+>> down to something simpler, perhaps?
+>>
+>> In the end, the canonical enforcement mask is the thing that's changing.
+>> So perhaps it should be all common code except for the mask definition:
+>>
+>> #ifdef CONFIG_KASAN_SW_TAGS
+>> #define CANONICAL_MASK(vaddr_bits) (BIT_ULL(63) | BIT_ULL(vaddr_bits-1))
+>> #else
+>> #define CANONICAL_MASK(vaddr_bits) GENMASK_UL(63, vaddr_bits)
+>> #endif
+>>
+>> (modulo off-by-one bugs ;)
+>>
+>> Then the canonical check itself becomes something like:
+>>
+>> 	unsigned long cmask = CANONICAL_MASK(vaddr_bits);
+>> 	return (vaddr & mask) == mask;
+>>
+>> That, to me, is the most straightforward way to do it.
+> 
+> Thanks, I'll try something like this. I will also have to investigate what
+> Samuel brought up that KVM possibly wants to pass user addresses to this
+> function as well.
+> 
+>>
+>> I don't see it addressed in the cover letter, but what happens when a
+>> CONFIG_KASAN_SW_TAGS=y kernel is booted on non-LAM hardware?
+> 
+> That's a good point, I need to add it to the cover letter. On non-LAM hardware
+> the kernel just doesn't boot. Disabling KASAN in runtime on unsupported hardware
+> isn't that difficult in outline mode, but I'm not sure it can work in inline
+> mode (where checks into shadow memory are just pasted into code by the
+> compiler).
 
-All errors (new ones prefixed by >>):
+On RISC-V at least, I was able to run inline mode with missing hardware support.
+The shadow memory is still allocated, so the inline tag checks do not fault. And
+with a patch to make kasan_enabled() return false[1], all pointers remain
+canonical (they match the MatchAllTag), so the inline tag checks all succeed.
 
->> mm/slub.c:4622:2: error: no member named 'dep_map' in 'local_trylock_t'
-    4622 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:54: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                               ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
-     171 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   mm/slub.c:5236:2: error: no member named 'dep_map' in 'local_trylock_t'
-    5236 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:54: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                               ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
-     171 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   mm/slub.c:5285:2: error: no member named 'dep_map' in 'local_trylock_t'
-    5285 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:54: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                               ^
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
-     171 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   3 errors generated.
+[1]:
+https://lore.kernel.org/linux-riscv/20241022015913.3524425-3-samuel.holland@sifive.com/
 
+Regards,
+Samuel
 
-vim +4622 mm/slub.c
+> Since for now there is no compiler support for the inline mode anyway, I'll try to
+> disable KASAN on non-LAM hardware in runtime.
+> 
 
-  4606	
-  4607	/*
-  4608	 * Replace the empty main sheaf with a (at least partially) full sheaf.
-  4609	 *
-  4610	 * Must be called with the cpu_sheaves local lock locked. If successful, returns
-  4611	 * the pcs pointer and the local lock locked (possibly on a different cpu than
-  4612	 * initially called). If not successful, returns NULL and the local lock
-  4613	 * unlocked.
-  4614	 */
-  4615	static struct slub_percpu_sheaves *
-  4616	__pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs, gfp_t gfp)
-  4617	{
-  4618		struct slab_sheaf *empty = NULL;
-  4619		struct slab_sheaf *full;
-  4620		bool can_alloc;
-  4621	
-> 4622		lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
-  4623	
-  4624		if (pcs->spare && pcs->spare->size > 0) {
-  4625			swap(pcs->main, pcs->spare);
-  4626			return pcs;
-  4627		}
-  4628	
-  4629		full = barn_replace_empty_sheaf(pcs->barn, pcs->main);
-  4630	
-  4631		if (full) {
-  4632			stat(s, BARN_GET);
-  4633			pcs->main = full;
-  4634			return pcs;
-  4635		}
-  4636	
-  4637		stat(s, BARN_GET_FAIL);
-  4638	
-  4639		can_alloc = gfpflags_allow_blocking(gfp);
-  4640	
-  4641		if (can_alloc) {
-  4642			if (pcs->spare) {
-  4643				empty = pcs->spare;
-  4644				pcs->spare = NULL;
-  4645			} else {
-  4646				empty = barn_get_empty_sheaf(pcs->barn);
-  4647			}
-  4648		}
-  4649	
-  4650		local_unlock(&s->cpu_sheaves->lock);
-  4651	
-  4652		if (!can_alloc)
-  4653			return NULL;
-  4654	
-  4655		if (empty) {
-  4656			if (!refill_sheaf(s, empty, gfp)) {
-  4657				full = empty;
-  4658			} else {
-  4659				/*
-  4660				 * we must be very low on memory so don't bother
-  4661				 * with the barn
-  4662				 */
-  4663				free_empty_sheaf(s, empty);
-  4664			}
-  4665		} else {
-  4666			full = alloc_full_sheaf(s, gfp);
-  4667		}
-  4668	
-  4669		if (!full)
-  4670			return NULL;
-  4671	
-  4672		/*
-  4673		 * we can reach here only when gfpflags_allow_blocking
-  4674		 * so this must not be an irq
-  4675		 */
-  4676		local_lock(&s->cpu_sheaves->lock);
-  4677		pcs = this_cpu_ptr(s->cpu_sheaves);
-  4678	
-  4679		/*
-  4680		 * If we are returning empty sheaf, we either got it from the
-  4681		 * barn or had to allocate one. If we are returning a full
-  4682		 * sheaf, it's due to racing or being migrated to a different
-  4683		 * cpu. Breaching the barn's sheaf limits should be thus rare
-  4684		 * enough so just ignore them to simplify the recovery.
-  4685		 */
-  4686	
-  4687		if (pcs->main->size == 0) {
-  4688			barn_put_empty_sheaf(pcs->barn, pcs->main);
-  4689			pcs->main = full;
-  4690			return pcs;
-  4691		}
-  4692	
-  4693		if (!pcs->spare) {
-  4694			pcs->spare = full;
-  4695			return pcs;
-  4696		}
-  4697	
-  4698		if (pcs->spare->size == 0) {
-  4699			barn_put_empty_sheaf(pcs->barn, pcs->spare);
-  4700			pcs->spare = full;
-  4701			return pcs;
-  4702		}
-  4703	
-  4704		barn_put_full_sheaf(pcs->barn, full);
-  4705		stat(s, BARN_PUT);
-  4706	
-  4707		return pcs;
-  4708	}
-  4709	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
