@@ -1,119 +1,124 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D60304BA8
-	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 08:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0E5340D9C
+	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 08:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756283138; cv=none; b=e8n6JBP0R9hDqqk8zgp+f+iO7m7/mLaPvv1mgHdJIpJwDjh9zpRQa+dn/lH5Nzr0RiV4r4cRuLPcRdeX2O/fBsN7DxfDfaUez0LZHgAS4AtCwVXWQzkNh6thMcv2UGFrvbGRrKC5sWmUhv0eUc2ntJtXjoYxK0scGVJUrV3l+8k=
+	t=1756285191; cv=none; b=Jd5OAZL60UBhV8EoRXtZoXPRWYbw1f+OYgz+ENHWQ4af1q8QmR2nXyXugyLyE9v4SRPi7HV812ZHvGr/wlhj/fMqBNr0sNkn068f2Shcxc5w0PMVKg2Km236tY8dBN6JHzmxH8WlbdO2+BjZ4HCeDYGz5+T1fQ+hufH/1xaufF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756283138; c=relaxed/simple;
-	bh=7yH03eTtUp7PQkwnsjeDrqdZzmEk5LgaHlyfri/PEsg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T1p1AdOtP3rHXttqwYdPDg9MA26h2rDMCfh3tRVveY8gMf3ajGz85GewKHFk0We+JnsT2y8p9kPDqvlX71HpdcVbzkFo7Mc3fqCHJlVFI9+scXrLvbwN030Dtzc57A0+YOHi/KkVk3BDxaRd0BJQ1UiqnkWDZLR+i0jGtZvG2Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VpAg/fLC; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1756285191; c=relaxed/simple;
+	bh=G5RHcyAQhhynG+8D21Feb80SFmDzlYfQlsKBEaqLyto=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=C/54H294A7FDS+Cl1DN3U0Bf5vwPUaPaZ3iIwqWGGTijuRSHxpIQgcHMyfMbmYGl2CkYcRNofhk0gdYHCM4zWP7sB58bXIHRSnzV/43FuKfK9CPi13fndUH3d6+AS7xNgteFO6PR+VNY3ReeXMU49Jh7ZH4yHqtCWvQVNmObg3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e7R+xbaU; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VpAg/fLC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=aS
-	q+b+hyvX8WZFX0VYIrKOcI1psgF51uCekfBntmRKU=; b=VpAg/fLCTPjw8TJa/N
-	VwDbevrXKDEXmg4qpkB+4c2m9vYJwJrHtSGfsUeTXdjPy5YtdpeuWRKjHJshmtLp
-	hI7x162tT8uTyXTQFh/pyhqZp7pROmSqZ+5ogu7uAByhFHDfO5ngeXBOhWZyBS0R
-	c2rrz589x+JX16oPWEqav7S28=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wBnjnjUwK5o7ki9Eg--.18237S2;
-	Wed, 27 Aug 2025 16:24:54 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	martin.lau@linux.dev,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yangfeng59949@163.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
-Date: Wed, 27 Aug 2025 16:24:52 +0800
-Message-Id: <20250827082452.1381181-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2e20aea407140c22d12f89cdf07605c31c61d0fa.camel@gmail.com>
-References: <2e20aea407140c22d12f89cdf07605c31c61d0fa.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e7R+xbaU"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3c79f0a57ddso2220653f8f.1
+        for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 01:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756285188; x=1756889988; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mCbvYqZ7Q+ZgN4xz3iEc7/nCTDhxbVjaEX6q4+sX7Vo=;
+        b=e7R+xbaUrpENK7F9rGC83LF1qme5zYiUsX0D8JNtrc3tv9lK9+NAUaWqzS6Qsz3/EH
+         wxRAhchNw6B7ZqdziWO24XNKCETcqDAacLYv8Ip8xUBOG3s3rxAkn7IvBbL5gHPwu0T0
+         o1gTzgfC3HWhcZbDF9FsHw1wDc5wk7EjkqBhBdkn6+/jS6yUvO01fMM8s8KLlBhYs1uT
+         u2q29AmD133X1xRFms61b7ETiwiExb/MLiYdaJ+omt5/F3O9f2hMe8U2hC8ZCSam47Dd
+         wmxYNApBx4RXoR75wgejs67Aac9MGsN7hJuukB/aieNLDTX3/OkvjNrGy6iQ6f/MGfyA
+         jB0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756285188; x=1756889988;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mCbvYqZ7Q+ZgN4xz3iEc7/nCTDhxbVjaEX6q4+sX7Vo=;
+        b=gu6Mu2HQemheNuMgr7dTU3WeVDBeEMguOxoIRW1GgYVecsCP8b4HRHBlkPRBs0mdDj
+         S7AfXU2Ya0A/j5NH6u9cvQ5rv7rbInKrSEUDTUSO6OMV87v+NPCu35VQyfkT/hsfeYk0
+         eSBpvTnziQ3BVWMW6xdfUjpI7OMXDCwcY2fSC4gkeCEzx7NPgm0K/dB3F4NoLVo3plY+
+         nRA3hr4FtFeLYuHt5AoT6LJ76nG4sWfHdZvrpPN28QF17I8FMYLRxn2gRBIubYHfGqaA
+         xzlVUD8vzoXMAZBu3gTOtkmXlLD0LsxkNdWkvjvfEGobrneF9A+EN4yAKpKfsO5pSVLY
+         6T0g==
+X-Forwarded-Encrypted: i=1; AJvYcCWSWtlr8b6zj6ZQMq4928/oWqIxbgnxdzyPOd40sayPIA+CPp09CMhrY0WgTpFk4vEA9YGL@lists.linux.dev
+X-Gm-Message-State: AOJu0YxJPIjZWVx2Eqt3xfPKRqg63h8OjbMDiz3XITUWT8PJZHAFPmqH
+	bsjpmR4BeDZi/9phFtMIJpMyV+YpoAt6quY8uQdpjiUvqjjSYiPs6cX4fUOXq2BM9/+XEUJ47F5
+	F05+KHpTPjg82iQ==
+X-Google-Smtp-Source: AGHT+IFC3E/+dRj3XpK74Hc/BqhSS54lPq0I2RSkjwdKWfWuGOOUksaXYb0YFnepvi7Gl5iDWfEyn1t3jdZJSQ==
+X-Received: from wrsm11.prod.google.com ([2002:adf:fe4b:0:b0:3cc:31a8:d973])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6000:25c6:b0:3ca:4e3:6ea6 with SMTP id ffacd0b85a97d-3ca04e3768amr6875722f8f.46.1756285188065;
+ Wed, 27 Aug 2025 01:59:48 -0700 (PDT)
+Date: Wed, 27 Aug 2025 08:59:43 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBnjnjUwK5o7ki9Eg--.18237S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF4fJw47Zry8Xw1DXFW3Awb_yoW8trWDp3
-	48W34qkF1Sqr15XF17Jr47WF4rWrsaqr48Zw10yryDuFy5GF97Jr1IgFWYgr93Xw4fur43
-	ZF4ktw1a9F48AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR75rwUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbipQy2eGiuuvXK2AAAs8
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAP7IrmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDCyNz3dzE4pLUIl0jYxNTi8SkJEMDoxQloOKCotS0zAqwQdGxtbUAjd7 smFgAAAA=
+X-Change-Id: 20250827-master-23458abb102d
+X-Mailer: b4 0.14.2
+Message-ID: <20250827-master-v1-1-19f9f367219c@google.com>
+Subject: [PATCH] .gitignore: ignore temporary files from 'bear'
+From: Brendan Jackman <jackmanb@google.com>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>
+Cc: linux-kernel@vger.kernel.org, Justin Stitt <justinstitt@google.com>, 
+	llvm@lists.linux.dev, Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, 26 Aug 2025 21:48:43 -0700, Eduard Zingerman <eddyz87@gmail.com> wrote:
+Bear [0] is a tool for generating compile_commands.json. For Kbuild,
+Bear is not useful, since Kbuild already generates the necessary info
+and that can be converted to compile_commands.json by
+gen_compile_commads.py.
 
-> On Wed, 2025-08-27 at 11:15 +0800, Feng Yang wrote:
-> > From: Feng Yang <yangfeng@kylinos.cn>
-> > 
-> > The following issue occurs when compiling with clang version 17.0.6,
-> > but not with version 18.1.8. Add a version restriction to fix this problem.
-> > 
-> > progs/compute_live_registers.c:251:3: error: invalid operand for instruction
-> >   251 |                 "r0 = 1;"
-> >       |                 ^
-> > <inline asm>:1:22: note: instantiated into assembly here
-> >     1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
-> >       |                             ^
-> > 1 error generated.
-> > 
-> > Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
-> > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-> > ---
-> >  tools/testing/selftests/bpf/progs/compute_live_registers.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-> > index 6884ab99a421..56aec43f206f 100644
-> > --- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-> > +++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-> > @@ -240,6 +240,7 @@ __naked void if2(void)
-> >  		::: __clobber_all);
-> >  }
-> >  
-> > +#if __clang_major__ >= 18
+However, for code in tools/, it's handy. For example, this command
+updates compile_commands.json so that clangd code navigation will also
+work for the VMA unit tests:
 
-> Instead of guarding this with compiler version, could you please use
-> progs/bpf_misc.h:__imm_insn() macro for the jset instruction?
+	bear --append -- make -C tools/testing/vma -j
 
-I don't know much about assembly language. Could you tell me if the following changes are correct?
+Bear generates some temporary files. These are usually deleted again
+but having them show up ephemerally confuses tools that trigger
+recompilation on source code changes. Ignore them in Git so that these
+tools can tell they aren't source code.
 
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-index 6884ab99a421..01d73ad76faf 100644
---- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -249,11 +249,13 @@ __naked void if3_jset_bug(void)
- 	asm volatile (
- 		"r0 = 1;"
- 		"r2 = 2;"
--		"if r1 & 0x7 goto +1;"
-+		".8byte %[jset];" /* same as 'if r1 & 0x7 goto +1;' */
- 		"exit;"
- 		"r0 = r2;"
- 		"exit;"
--		::: __clobber_all);
-+		:
-+		: __imm_insn(jset, BPF_JMP_IMM(BPF_JSET, BPF_REG_1, 0x7, 1))
-+		: __clobber_all);
- }
+[0]: https://github.com/rizsotto/Bear
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+ .gitignore | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/.gitignore b/.gitignore
+index 929054df5212d68a32a1f5ee2b267389fcd1c8db..b07c8c8383bd791e903ce985c14c231cb6928411 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -53,6 +53,7 @@
+ *.tar
+ *.xz
+ *.zst
++*.tmp
+ Module.symvers
+ dtbs-list
+ modules.order
+@@ -177,6 +178,9 @@ x509.genkey
+ 
+ # Clang's compilation database file
+ /compile_commands.json
++# Temporary files created by 'bear', a tool used for generating
++# compile_commands.json for non-Kbuild code.
++*.events.json
+ 
+ # Documentation toolchain
+ sphinx_*/
+
+---
+base-commit: fab1beda7597fac1cecc01707d55eadb6bbe773c
+change-id: 20250827-master-23458abb102d
+
+Best regards,
+-- 
+Brendan Jackman <jackmanb@google.com>
 
