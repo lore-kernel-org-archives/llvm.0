@@ -1,109 +1,119 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E4C30CDBB;
-	Wed, 27 Aug 2025 08:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D60304BA8
+	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 08:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756282034; cv=none; b=YahqCKfS2Yn9PU9kiA8aMNTzgU8fzeowaH97Qm57ljDM/MBinT5tsMhAYMPQT28I1lA/DdilCP21fcX1wM0jZkD4XcjrEqHpkUc6E3iKCTsYMyGiMJeaFZWvkIDvh2bW0F10QAm9tBb4rk4cx/g6xTHOXzWesr8PtJjOwR0csYM=
+	t=1756283138; cv=none; b=e8n6JBP0R9hDqqk8zgp+f+iO7m7/mLaPvv1mgHdJIpJwDjh9zpRQa+dn/lH5Nzr0RiV4r4cRuLPcRdeX2O/fBsN7DxfDfaUez0LZHgAS4AtCwVXWQzkNh6thMcv2UGFrvbGRrKC5sWmUhv0eUc2ntJtXjoYxK0scGVJUrV3l+8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756282034; c=relaxed/simple;
-	bh=nHn0/2tcQ6NKxDIG6MXiOpQl/j8R5Yoanaeftq4zEbE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j6oKmw1r5jllACLrCUuvQKwS6loUciUdS5c8yU06ZEU+2cNZFMUC+IO+oG2jtrR3jt3n1S4wEWeyvgf9Nwm6DlxN0/3IZROrwj3Wd6pdwURy6xi+crd0qRcNVwy/w05JHQ0L2HkKqQVEPR/DJ3k9fkxVkCMIEtVsmGJ5lnLq9OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=lpvZbN1v; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+	s=arc-20240116; t=1756283138; c=relaxed/simple;
+	bh=7yH03eTtUp7PQkwnsjeDrqdZzmEk5LgaHlyfri/PEsg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=T1p1AdOtP3rHXttqwYdPDg9MA26h2rDMCfh3tRVveY8gMf3ajGz85GewKHFk0We+JnsT2y8p9kPDqvlX71HpdcVbzkFo7Mc3fqCHJlVFI9+scXrLvbwN030Dtzc57A0+YOHi/KkVk3BDxaRd0BJQ1UiqnkWDZLR+i0jGtZvG2Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VpAg/fLC; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="lpvZbN1v"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=nHn0/2tcQ6NKxDIG6MXiOpQl/j8R5Yoanaeftq4zEbE=; b=lpvZbN1vFE1catKAjtPmzOO25D
-	zQe3EYADcLN+u+VAb4HEmMxBKY5SafJaDYo/N6TNMFuP2oZom+6QyC/AcQGjJZbELGVRCEqd3EteB
-	Fb13EBgEXMvzyuuYrFYrMfeYHRByJKSbUcvu3E66udd77HpJJotr8ch5V7KlYoSDEMMaTt98Gcnvd
-	Wa3nuIX7IzNZjVImMGkSlLN4d6L623lauFYlOX5VWScp13JJTS9jUan+msw/NJB5G0gmicI7Kd3F9
-	PhjF5C7+pBOZ2eafUWP7tC5PQRvDdbAh3Cp2DSoY0CmCakj8e/QkSktaIWTntJgsOAU9qJ6LDboUR
-	m1ZKL4hQ==;
-Received: from [213.244.170.152] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1urBB2-0000Hv-Tf; Wed, 27 Aug 2025 10:06:40 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Yury Norov <yury.norov@gmail.com>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Shreeya Patel <shreeya.patel@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
- Andy Yan <andy.yan@rock-chips.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Shawn Lin <shawn.lin@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- linux-sound@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Subject: Re: [PATCH v3 19/20] clk: sp7021: switch to FIELD_PREP_WM16 macro
-Date: Wed, 27 Aug 2025 10:06:39 +0200
-Message-ID: <5154190.bB369e8A3T@phil>
-In-Reply-To: <20250825-byeword-update-v3-19-947b841cdb29@collabora.com>
-References:
- <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
- <20250825-byeword-update-v3-19-947b841cdb29@collabora.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VpAg/fLC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=aS
+	q+b+hyvX8WZFX0VYIrKOcI1psgF51uCekfBntmRKU=; b=VpAg/fLCTPjw8TJa/N
+	VwDbevrXKDEXmg4qpkB+4c2m9vYJwJrHtSGfsUeTXdjPy5YtdpeuWRKjHJshmtLp
+	hI7x162tT8uTyXTQFh/pyhqZp7pROmSqZ+5ogu7uAByhFHDfO5ngeXBOhWZyBS0R
+	c2rrz589x+JX16oPWEqav7S28=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wBnjnjUwK5o7ki9Eg--.18237S2;
+	Wed, 27 Aug 2025 16:24:54 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: eddyz87@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	song@kernel.org,
+	yangfeng59949@163.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
+Date: Wed, 27 Aug 2025 16:24:52 +0800
+Message-Id: <20250827082452.1381181-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2e20aea407140c22d12f89cdf07605c31c61d0fa.camel@gmail.com>
+References: <2e20aea407140c22d12f89cdf07605c31c61d0fa.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBnjnjUwK5o7ki9Eg--.18237S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF4fJw47Zry8Xw1DXFW3Awb_yoW8trWDp3
+	48W34qkF1Sqr15XF17Jr47WF4rWrsaqr48Zw10yryDuFy5GF97Jr1IgFWYgr93Xw4fur43
+	ZF4ktw1a9F48AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR75rwUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbipQy2eGiuuvXK2AAAs8
 
-Am Montag, 25. August 2025, 10:28:39 Mitteleurop=C3=A4ische Sommerzeit schr=
-ieb Nicolas Frattaroli:
-> The sp7021 clock driver has its own shifted high word mask macro,
-> similar to the ones many Rockchip drivers have.
->=20
-> Remove it, and replace instances of it with hw_bitfield.h's
-> FIELD_PREP_WM16 macro, which does the same thing except in a common
-> macro that also does compile-time error checking.
->=20
-> This was compile-tested with 32-bit ARM with Clang, no runtime tests
-> were performed as I lack the hardware. However, I verified that fix
-> commit 5c667d5a5a3e ("clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()=
-")
-> is not regressed. No warning is produced.
->=20
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+On Tue, 26 Aug 2025 21:48:43 -0700, Eduard Zingerman <eddyz87@gmail.com> wrote:
 
-While I have no connection with that specific piece of hardware,
-the change itself looks correct, so
+> On Wed, 2025-08-27 at 11:15 +0800, Feng Yang wrote:
+> > From: Feng Yang <yangfeng@kylinos.cn>
+> > 
+> > The following issue occurs when compiling with clang version 17.0.6,
+> > but not with version 18.1.8. Add a version restriction to fix this problem.
+> > 
+> > progs/compute_live_registers.c:251:3: error: invalid operand for instruction
+> >   251 |                 "r0 = 1;"
+> >       |                 ^
+> > <inline asm>:1:22: note: instantiated into assembly here
+> >     1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
+> >       |                             ^
+> > 1 error generated.
+> > 
+> > Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
+> > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> > ---
+> >  tools/testing/selftests/bpf/progs/compute_live_registers.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+> > index 6884ab99a421..56aec43f206f 100644
+> > --- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
+> > +++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+> > @@ -240,6 +240,7 @@ __naked void if2(void)
+> >  		::: __clobber_all);
+> >  }
+> >  
+> > +#if __clang_major__ >= 18
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> Instead of guarding this with compiler version, could you please use
+> progs/bpf_misc.h:__imm_insn() macro for the jset instruction?
 
+I don't know much about assembly language. Could you tell me if the following changes are correct?
+
+diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+index 6884ab99a421..01d73ad76faf 100644
+--- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
++++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+@@ -249,11 +249,13 @@ __naked void if3_jset_bug(void)
+ 	asm volatile (
+ 		"r0 = 1;"
+ 		"r2 = 2;"
+-		"if r1 & 0x7 goto +1;"
++		".8byte %[jset];" /* same as 'if r1 & 0x7 goto +1;' */
+ 		"exit;"
+ 		"r0 = r2;"
+ 		"exit;"
+-		::: __clobber_all);
++		:
++		: __imm_insn(jset, BPF_JMP_IMM(BPF_JSET, BPF_REG_1, 0x7, 1))
++		: __clobber_all);
+ }
 
