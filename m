@@ -1,60 +1,71 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D7B220F37;
-	Wed, 27 Aug 2025 16:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5EC269AE9;
+	Wed, 27 Aug 2025 16:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756311609; cv=none; b=riF3ThvaXqJEqsLlspEi2grjEoOTmg7cDvj1K/gN+3aaiOGTGneezTCa6xBBqNEhxTXbQRlQnvQw4HGX/JL5vSHKo6yK3ZUm61ma9wvX750Or7kzAVXOixA7i3z83a5syM6L2JfUu3tjbrK44MwDmh0NQ68H+oG3IDOdvkA+zho=
+	t=1756312387; cv=none; b=hqRiIISgZ9c+0TOvCkAZzDtLdnidZpknHBqGgefQu7tzYQNz6gJf4vrsw1b/VynPao1D/LPZLFz1cF9duCUYEQ3sH08/4JlgCLeFTD5I5yu+fTSBAwWGgm3FSskge9cBQjfla9rEaN3o1jTpQU2HM/QeQbGu4LCtARHN/uKQ9Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756311609; c=relaxed/simple;
-	bh=kyk6kTq2qcFyp5bx0VIZv44pposRSgOMF9MPKN02490=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gRUfl5+mL1b1tmgu55aB1sW9mptViprWbCTuVZcPDGH3GKSziaJk+kYapFEnd2hyHIxC4nrL+kTYw0PsxaimmMVZdcsxCxwFo4PFxQhdmG86WiV+iD8c6HAm+OQcs7tYRzxdrW9FyiIDecGv4Of+k9Erj5uGu/GxJ6LLuVkTQaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=izYLA5U8; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1756312387; c=relaxed/simple;
+	bh=tnTA/PNxi7uOQgEmoAZ2b1rNPAWX95IlTIWABbktj2E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbSli23GtQ6Fp/mRt7HCxZvQBT7805CuIOBmn5oa0J0hWMqlbTvnpcTbajWM5Y8IOhcDCevA4dew9hF/XnDqg55dXxEu6pNkklNZEINnwtlx8WGC7y0W3UFM4iURitho300NVhDIpp4+ABW+IWDFg9SEWmEfdAXtBDSmb8KPTng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apQS+cdA; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="izYLA5U8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apQS+cdA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756311607; x=1787847607;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kyk6kTq2qcFyp5bx0VIZv44pposRSgOMF9MPKN02490=;
-  b=izYLA5U8DhMfMoU/BOK95mbj+RXNFDyKavTC/+Ce6GQQ4Gyc+Tjp5pkP
-   8jZUC70SA6PRR9gK29lejmMNUWlnCUiXIhI40kI7JXxA114yXDRUkaqA6
-   03oBRsTuPocJKrXRA1Rvy6l323qYLJMpf4+nk+6otWeJWxS6K6Q/tuKXF
-   IgwUVwMOWQammFKWGNqhGUK7Pp69dkjYzINuq2+7HZW3qmkqH1ssDObMf
-   6bd/b7Qnu5rNftjPIUiVB0y8xJs/Gq3tL/V7Fgh5oa8SrGTfdM5lmiJa6
-   AgBPCU+V1Qc9YsPnImvo+K/UMyHJ2JYQqCD5YRepGDkamhDmKqeln5Jp1
-   A==;
-X-CSE-ConnectionGUID: v71i86OcSkO5jkUj8CYXIw==
-X-CSE-MsgGUID: A2J4clpsRlqVO0oza8VlXw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="69938438"
+  t=1756312383; x=1787848383;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tnTA/PNxi7uOQgEmoAZ2b1rNPAWX95IlTIWABbktj2E=;
+  b=apQS+cdA3jx7PHRUjRPblci18MuG+w+WIrlPnBiyqLx4iZkMElIIq9ho
+   ldabFk1G7CuUsXuzyp1uhR4iOQYeAMDpK/a6zHEz4zWwogoPoszgqkHV+
+   jwNJ7jsxsX0+10KnxDy3yEiOpeNSMzNe7YE+nUcfJy1BL7bm9QZuZKTlQ
+   rtMWXcqrJzr6dNThNOUyJWE58bv4M8sGVCXzxRYtdUwmrOJ14tuONXEen
+   1vJz+Y9ollBrVc/Cp3otYiAYpPGxbMMNVqnRuxpiCOYMkuqy0GwBkvFkf
+   NWc0LAjgcCiO4nnXKNsgVz3Bqxq7JJjU+HotdVZvFbhhnct31ZUG3GISi
+   w==;
+X-CSE-ConnectionGUID: bBPWyrDlQI6mXMWfsxLawA==
+X-CSE-MsgGUID: ssXlODGVQwi+PLV/vbMexA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="69939969"
 X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="69938438"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2025 09:20:00 -0700
-X-CSE-ConnectionGUID: 0cl/YjwWSnScDpHL3oSYtg==
-X-CSE-MsgGUID: 9EUoQQhRSMy8O0si23VIZA==
+   d="scan'208";a="69939969"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2025 09:33:01 -0700
+X-CSE-ConnectionGUID: rsYzn5mVRVy6Xw1pxl621w==
+X-CSE-MsgGUID: LXp69DIGTUqK7FFQVmGRRw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="175180379"
-Received: from igk-lkp-server01.igk.intel.com (HELO ca260db0ef79) ([10.91.175.65])
-  by orviesa005.jf.intel.com with ESMTP; 27 Aug 2025 09:19:58 -0700
-Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
+   d="scan'208";a="170708925"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 27 Aug 2025 09:32:51 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1urIsO-0002fb-1z;
-	Wed, 27 Aug 2025 16:19:56 +0000
-Date: Wed, 27 Aug 2025 18:18:58 +0200
+	id 1urJ4T-000T4N-1n;
+	Wed, 27 Aug 2025 16:32:49 +0000
+Date: Thu, 28 Aug 2025 00:29:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+To: Guoniu Zhou <guoniu.zhou@nxp.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Frank Li <frank.li@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [jgunthorpe:iommu_pt_all 55/56]
- drivers/iommu/generic_pt/.kunitconfig_perf: warning: ignored by one of the
- .gitignore files
-Message-ID: <202508271842.v7wXoklG-lkp@intel.com>
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Guoniu Zhou <guoniu.zhou@nxp.com>
+Subject: Re: [PATCH 2/5] media: nxp: imx8-isi: Simplify code by using helper
+ macro
+Message-ID: <202508280040.QKK6nZ3x-lkp@intel.com>
+References: <20250827-isi_imx93-v1-2-83e6b4b50c4d@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,23 +74,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250827-isi_imx93-v1-2-83e6b4b50c4d@nxp.com>
 
-tree:   https://github.com/jgunthorpe/linux iommu_pt_all
-head:   451e6e58d3fc7e3c1eb9a6d5bfb5d5da4b088133
-commit: 3670dde0678ed27cfbdd610ad61cc5791894176e [55/56] iommupt: Add kunit test to benchmark page table operations
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250827/202508271842.v7wXoklG-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250827/202508271842.v7wXoklG-lkp@intel.com/reproduce)
+Hi Guoniu,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on a75b8d198c55e9eb5feb6f6e155496305caba2dc]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guoniu-Zhou/media-dt-bindings-nxp-imx8-isi-Add-i-MX91-ISI-compatible-string/20250827-175809
+base:   a75b8d198c55e9eb5feb6f6e155496305caba2dc
+patch link:    https://lore.kernel.org/r/20250827-isi_imx93-v1-2-83e6b4b50c4d%40nxp.com
+patch subject: [PATCH 2/5] media: nxp: imx8-isi: Simplify code by using helper macro
+config: riscv-randconfig-002-20250827 (https://download.01.org/0day-ci/archive/20250828/202508280040.QKK6nZ3x-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d26ea02060b1c9db751d188b2edb0059a9eb273d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250828/202508280040.QKK6nZ3x-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508271842.v7wXoklG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508280040.QKK6nZ3x-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/generic_pt/.kunitconfig_perf: warning: ignored by one of the .gitignore files
+>> drivers/media/platform/nxp/imx8-isi/imx8-isi-gasket.c:36:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      36 |         val = GASKET_CTRL_DATA_TYPE(fd->entry[0].bus.csi2.dt);
+         |               ^
+   drivers/media/platform/nxp/imx8-isi/imx8-isi-gasket.c:19:36: note: expanded from macro 'GASKET_CTRL_DATA_TYPE'
+      19 | #define GASKET_CTRL_DATA_TYPE(dt)               FIELD_PREP(GENMASK(13, 8), (dt))
+         |                                                 ^
+   drivers/media/platform/nxp/imx8-isi/imx8-isi-gasket.c:70:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      70 |         val = DISP_MIX_CAMERA_MUX_DATA_TYPE(fd->entry[0].bus.csi2.dt);
+         |               ^
+   drivers/media/platform/nxp/imx8-isi/imx8-isi-gasket.c:60:49: note: expanded from macro 'DISP_MIX_CAMERA_MUX_DATA_TYPE'
+      60 | #define DISP_MIX_CAMERA_MUX_DATA_TYPE(x)        FIELD_PREP(GENMASK(8, 3), (x))
+         |                                                 ^
+   2 errors generated.
+
+
+vim +/FIELD_PREP +36 drivers/media/platform/nxp/imx8-isi/imx8-isi-gasket.c
+
+f48498ad0a4106e Guoniu.zhou 2023-06-29  25  
+f48498ad0a4106e Guoniu.zhou 2023-06-29  26  static void mxc_imx8_gasket_enable(struct mxc_isi_dev *isi,
+f48498ad0a4106e Guoniu.zhou 2023-06-29  27  				   const struct v4l2_mbus_frame_desc *fd,
+f48498ad0a4106e Guoniu.zhou 2023-06-29  28  				   const struct v4l2_mbus_framefmt *fmt,
+f48498ad0a4106e Guoniu.zhou 2023-06-29  29  				   const unsigned int port)
+f48498ad0a4106e Guoniu.zhou 2023-06-29  30  {
+f48498ad0a4106e Guoniu.zhou 2023-06-29  31  	u32 val;
+f48498ad0a4106e Guoniu.zhou 2023-06-29  32  
+f48498ad0a4106e Guoniu.zhou 2023-06-29  33  	regmap_write(isi->gasket, GASKET_BASE(port) + GASKET_HSIZE, fmt->width);
+f48498ad0a4106e Guoniu.zhou 2023-06-29  34  	regmap_write(isi->gasket, GASKET_BASE(port) + GASKET_VSIZE, fmt->height);
+f48498ad0a4106e Guoniu.zhou 2023-06-29  35  
+f48498ad0a4106e Guoniu.zhou 2023-06-29 @36  	val = GASKET_CTRL_DATA_TYPE(fd->entry[0].bus.csi2.dt);
+f48498ad0a4106e Guoniu.zhou 2023-06-29  37  	if (fd->entry[0].bus.csi2.dt == MIPI_CSI2_DT_YUV422_8B)
+f48498ad0a4106e Guoniu.zhou 2023-06-29  38  		val |= GASKET_CTRL_DUAL_COMP_ENABLE;
+f48498ad0a4106e Guoniu.zhou 2023-06-29  39  
+f48498ad0a4106e Guoniu.zhou 2023-06-29  40  	val |= GASKET_CTRL_ENABLE;
+f48498ad0a4106e Guoniu.zhou 2023-06-29  41  	regmap_write(isi->gasket, GASKET_BASE(port) + GASKET_CTRL, val);
+f48498ad0a4106e Guoniu.zhou 2023-06-29  42  }
+f48498ad0a4106e Guoniu.zhou 2023-06-29  43  
 
 -- 
 0-DAY CI Kernel Test Service
