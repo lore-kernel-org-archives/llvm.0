@@ -1,127 +1,211 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2082.outbound.protection.outlook.com [40.107.100.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2D223301
-	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 10:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756290121; cv=none; b=KX5qBBtmTd7pBDIE7VHeEQ+aKa1fvOe3bPKyD+7GAem+JKuVNekb4eW5YUYJC1RcfZzWzIZIl4abirp0oDtf+lR63WDzQHQ0bLZgm6ch1Ik+VivGO5rT7QTkCOMW6Y7tpv/1xRzvICaMJ2bK2aXkQpdnAI5yYhS5ktzISvDzuaU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756290121; c=relaxed/simple;
-	bh=lWGnrKUEhpYeD21CuLeEotP8PCBIr3/OuRbGU8QS7F8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=COijYhU4UPZrrQ3CceiHln+0Q/LYhEicALGHekFQKRTe1uMd31QfIXdt4tlfZg7pAd+GJ9aW4ab+NX4JAYZdYNidyisT7gnpm0dvHrZduGC0WG/IFXQwXDuTeNyCAD3B428udygOjxKRLXWxmVKgxsNwfSz7lLPtTyH6slrLbsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bmv4fDh5; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57431FA178;
+	Wed, 27 Aug 2025 11:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756292658; cv=fail; b=qeYtiK9AyMGbxH54mr65rPUdcqtDhRYc5ulmAYfBXXtXizEIYlsqS7LCCyDKlRmon6Zeo6KWv/QWC1OhaOSCCiKE4xXZD9UOs+8rjPEuONfO84XdKOlsOSh8z8GBx2zfnL+DaDC5xeia06QuUo5q7mhxs9Ic1re/Nd1vhlrBDzA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756292658; c=relaxed/simple;
+	bh=vEi5/kzcPW9Zva+Z1muOvPU1DBP7KEulIe3UbGJnq1g=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=bkxJECvNGK9/58yOeQETeXWwtKXMs5XW1xuZ5FYcrjiloBVhCKHqtf5BLBPtNAsXzgP9n1Fx56sxdncP79xEFhdhocTw8aafwvSo/XfmhBb6YUaOMG9QsLGLTrJdcQpl2pbnyeWA++QHX0TGRT1yrFGx25Ez6OXgYLT9sv/PDSg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=R6o67rrB; arc=fail smtp.client-ip=40.107.100.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bmv4fDh5"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-77057266cb8so2749802b3a.0
-        for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 03:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756290119; x=1756894919; darn=lists.linux.dev;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aq3fc6aO1OdCHOdewiqMtQD6LH39KbeVaeZG01Zb1Dc=;
-        b=Bmv4fDh5HVdiId5pcFsJX0W5If/onTu8lxlulpGq0q2ftceMrngSRHOsZYGuzi1uey
-         NEFB/W6h6ZclqcQvW38UmjB/qEV8rt0S96c2uK5DKs61Xid0nOHmHtCMjeZy2bx3vmxB
-         OiIrcaQ7y8/ZqHSyqDFydt+60f25Hmvr+Lgex+dnhkbeUlrQ2JbkKeDKCCC9aSSZofww
-         3Jee8YGKMt1lG55YeYmqkG/updBi5D1j98R8/lF0INEgj57aWWw3nXpk6Uuh/MTe1ZFi
-         K1cbMT8FSJfu5DKyoaRLCl2Pa6qZmIkB9wFL6B0v3nkCNkhYY/iZZdVTZXxqIsjqkGfV
-         sLqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756290119; x=1756894919;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aq3fc6aO1OdCHOdewiqMtQD6LH39KbeVaeZG01Zb1Dc=;
-        b=peGNCDbeyrLddl6nzbYt/k0ZzkeDnvrDqCUs4wglOaSCywB8ZsxntX+inX1KYl0VUu
-         nL8SODyPdV3rmxBxQ+4VHS5AIOCCOwg7S3OlneN/j5tKxg9JZTkrkfkitW3owANeGL9q
-         U6t+r+IZZlNaIKT/01NR7FNkFKD3lSfugJ3qLCm/i8aNGWA2ivg0zeCU0Fl8iSLOwbzl
-         6LT+Tfhc/V+tXXg7YPHHMWvurE0E0e7SAb2bYOLlyQemRgfAiJTYR1GbI+7F/UNo66JA
-         08yVzoLh/JgkhhRiCIpwn45f6/dgnLU6oUn4i1lFze9QvXR8Mtj5AMV1QZE3YQzt+b3A
-         6Qzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSGign8zY6RGedqm+qJvTARuVFPb9oFPFftpfDe3w97pBO5sop6pTF9e7h5q4S5vqFtcKm@lists.linux.dev
-X-Gm-Message-State: AOJu0YxFgocp/R6ngxQPwdMhMLbTGD2mgVylQ4TF3zjLfmOd45QIjo6I
-	bx8Ag/0TYKdTF4OfA4+nXzhrbpOUvQwe1jG1oIUkOJNAFoW0drYNFmyO
-X-Gm-Gg: ASbGncuc9n40Jzx1ak5RSHn/VuKKrRZ4yzZCRoLFFBLNu20149O4gTgC9ZeOGHv4+fq
-	wT2P/wCV0NVDi1bRNHEAoDltT4DILmsXIHggTKOSiNvL9yjvDTQ7stu3WdayZthznUe6yGuoALx
-	k0T95rU0OKM70F4ZVkyDdDZjzlz/dAS0qNUztmDiy3Oe1q8jrIC6DkUjdY0JrKnVpELp8NPRxau
-	eZPPdjUhUS6rj4iRGuTigiPcV0+dHPdQ11RhriZRPgvg3PkDsm8tA6fVW0jVcsnOUzStI5dPQW6
-	2exU1O5re/SOTwfjc1r1EnunsQMoicuPj633AlvDN9MlSQobY+NMWrMKz4eZL+thd6w/+q8fqEn
-	iuXfHD8VifzUlR35seQ==
-X-Google-Smtp-Source: AGHT+IH3WNUVmPqMTukxtKHvHigKxqb3p981KugKiFvNM38h1dKzUOMN7hkmjUIfx2XFxBTJ/6RQWQ==
-X-Received: by 2002:a05:6a00:4095:b0:771:e434:6c80 with SMTP id d2e1a72fcca58-771e43485c6mr10159776b3a.11.1756290118544;
-        Wed, 27 Aug 2025 03:21:58 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-771fc26aa82sm3865371b3a.104.2025.08.27.03.21.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 03:21:58 -0700 (PDT)
-Message-ID: <79d0e1894ffbfe4945ccf6aff7aa6564334e2600.camel@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix the invalid operand for
- instruction issue
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Feng Yang <yangfeng59949@163.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, 	haoluo@google.com, john.fastabend@gmail.com,
- jolsa@kernel.org, kpsingh@kernel.org, 	linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	llvm@lists.linux.dev,
- martin.lau@linux.dev, sdf@fomichev.me, song@kernel.org, 
-	yonghong.song@linux.dev
-Date: Wed, 27 Aug 2025 03:21:54 -0700
-In-Reply-To: <20250827082452.1381181-1-yangfeng59949@163.com>
-References: <2e20aea407140c22d12f89cdf07605c31c61d0fa.camel@gmail.com>
-	 <20250827082452.1381181-1-yangfeng59949@163.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="R6o67rrB"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fPxT+GugqKmeCVHl6umZ3ETkB3cAUV9mh4OPvluWC3GNzPQPzxHz0bzzpvorUHzLnYptnUzxmX852swX+f5ckt3EuI+voaItcSBCoLvYdUpdYM+gB9o1fxw8+6fkOitGu86qyzStyIaAGKQEUXDtBJaR16LAson67xKjKWuop8nnN/QlhGpOcRNMXJZdcQBe8dTdVzkzVettQbS8Z7Oead50bnMv7mpMUtAJrYAy5A02f+H88hNGRrK6PpoZ57aTFL831KWbAcngQjYiEYNK1IZQe/9trsK4VKsOuBraBGxqYZ+6CzahXSBchhyppqG4fkPxmXcdonOHqoN/7EA2fQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aAYjLe8ovXZozHxUvrmu8lsRdz7q9t/fSSTqpFbM+as=;
+ b=i9jR0ODp3lJwSHiHapuX2fvY3z3wab+w3I0NRcMqX0XUoo7pU91FRRbVlMsTXmCJvtS/fHoD0ORlOCTeEDfiJwjFRaAgcJc8tUE325NOyFdMAyXpcwIHZBB1l7YyLaBP9t19EG9cLQgmETOvrrM/ipFB0ejw9x+yNdImqpYIy6l3YRdwTADOiW+sNTL4lxDHwzPeQQ/y4/7Vr1oHwRg7TcGKZZQV7RxxnXjM+pZLW8j5NWXpxNwg3ivLrylBIr+j/yysDVWVqjNZfZJMorSmERdfWP32OSFXbllDsZ1CIR4AyVSbGT1EXNQ5RMw9X4gUUXZOh/sxEdRBEpEMqBbLEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aAYjLe8ovXZozHxUvrmu8lsRdz7q9t/fSSTqpFbM+as=;
+ b=R6o67rrBuSYeiyXKekoGNioIMTnYGagynfi3TdZyX18tbKrPenEnEaC2Yqqp4crpeZfC6S8iFM7KqussxJ9143RfbOKKOp+XnrCT0ybhToyJUGKjpWE7WCNhvzFOhvBNTIynSeo6qw9FpqMIQEY57MeFwqHAZy20DgVP809n7Kw=
+Received: from CH3PR12MB9193.namprd12.prod.outlook.com (2603:10b6:610:195::14)
+ by MN0PR12MB5883.namprd12.prod.outlook.com (2603:10b6:208:37b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.13; Wed, 27 Aug
+ 2025 11:04:13 +0000
+Received: from CH3PR12MB9193.namprd12.prod.outlook.com
+ ([fe80::7818:d337:2640:e6c7]) by CH3PR12MB9193.namprd12.prod.outlook.com
+ ([fe80::7818:d337:2640:e6c7%5]) with mapi id 15.20.9052.021; Wed, 27 Aug 2025
+ 11:04:13 +0000
+From: "Gupta, Nipun" <Nipun.Gupta@amd.com>
+To: Alex Williamson <alex.williamson@redhat.com>
+CC: "arnd@arndb.de" <arnd@arndb.de>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "oe-kbuild-all@lists.linux.dev"
+	<oe-kbuild-all@lists.linux.dev>, "robin.murphy@arm.com"
+	<robin.murphy@arm.com>, "krzk@kernel.org" <krzk@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "maz@kernel.org" <maz@kernel.org>,
+	"linux@weissschuh.net" <linux@weissschuh.net>, "chenqiuji666@gmail.com"
+	<chenqiuji666@gmail.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"robh@kernel.org" <robh@kernel.org>, "Gangurde, Abhijit"
+	<abhijit.gangurde@amd.com>, "nathan@kernel.org" <nathan@kernel.org>, kernel
+ test robot <lkp@intel.com>
+Subject: RE: [PATCH v4 2/2] vfio/cdx: update driver to build without
+ CONFIG_GENERIC_MSI_IRQ
+Thread-Topic: [PATCH v4 2/2] vfio/cdx: update driver to build without
+ CONFIG_GENERIC_MSI_IRQ
+Thread-Index: AQHcFkNicDcbnAftJky3NIvn781skbR1HzQAgAEDbyA=
+Date: Wed, 27 Aug 2025 11:04:12 +0000
+Message-ID:
+ <CH3PR12MB91935A30AE6BFFA18A5D4B32E838A@CH3PR12MB9193.namprd12.prod.outlook.com>
+References: <20250826043852.2206008-1-nipun.gupta@amd.com>
+	<20250826043852.2206008-2-nipun.gupta@amd.com>
+ <20250826102416.68ed8fc6.alex.williamson@redhat.com>
+In-Reply-To: <20250826102416.68ed8fc6.alex.williamson@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-08-27T07:52:49.0000000Z;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR12MB9193:EE_|MN0PR12MB5883:EE_
+x-ms-office365-filtering-correlation-id: a870567a-81cd-4f23-37af-08dde55974c6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|7416014|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?9FvwcaOZkT+HqQU/5AhtIBSSWRHQfE828CUxaR0NrZrPGkGWRBLoqEtfBMdI?=
+ =?us-ascii?Q?Tm5GtS/gF7jam8jpgNF60ozcusHMC/vFUyBOYjpc8ixyCsLQjxlOdDvw0apW?=
+ =?us-ascii?Q?G5bTbLbpUhW+B8NWcuTtSwOi6CdNrzSUSACcn+aHL4yRs5hKuHEH7RC/0zgR?=
+ =?us-ascii?Q?YNJSLQSrp+chc8EHbxOCZF5t0byI0ddFTNa8AU/1HAbo8UADKVjHCyRAcXTs?=
+ =?us-ascii?Q?gDcGyqLkAJ/aI9pTamoY350QUEH0YcNNBLo0JLGVk55Pvgy6VHFtDgaoOhbp?=
+ =?us-ascii?Q?dKURjThuXRi1opcqvMZKtpa38QrJIZKqvs2YSgnFEGkYs+SarBZmI00sA7tS?=
+ =?us-ascii?Q?nY7h3Gb/zc48p6ZZEWijhqa5VUM47F56CWobYvB5SjBOQu5brma9IoswpYxl?=
+ =?us-ascii?Q?Nn1Yc+G2eDp8SoyZD8bn0nhI90S7jNaur3wt7DkixeM24wyL/HIcx3LEezAC?=
+ =?us-ascii?Q?MgJlPRsc7VAcAvSxBCi5G/IdTG39SAsGICGBk6EhJyR0Cy8lH60ZmvxifHTi?=
+ =?us-ascii?Q?gWAfKROLy2DW+tKZssv7haFzw/5L7m595s17bfVeXc6MGJKCsYQdF56GvUoe?=
+ =?us-ascii?Q?jzSiH/HpwBqldf7rPW8SGz6wqLJ5bjZqeffNon/wFfMCjpj+IS28446rK5nU?=
+ =?us-ascii?Q?k1lYqpod1bLYPa51HNruH6ojQixOUxrNyYhuYkozEb4pg+TeZp/bcK94NTCt?=
+ =?us-ascii?Q?2HuHKe7yZWd+wMFKoMEuGeoJuoxe83Fn2HJ+bmHvELm+vAFv84+Z4jKBlV2F?=
+ =?us-ascii?Q?4gTsoXoXp4h8ytCqsZYCm57h2odobYZI6/+V5fgvQ/HSxF8u5R/6rnW8N0LT?=
+ =?us-ascii?Q?70VvmhbJXzqapd6NiA28kPJVmZnAVBi8da+c/t9K9DHtVP3RqguBBOaJWfqV?=
+ =?us-ascii?Q?5igjXKZcwMa17xSio5ROJmfUZ14QQ5mveLha/sx0KYZF3rSfgVrx8T9RvOaD?=
+ =?us-ascii?Q?fiG1v6HXsXrfKrCb02UzlfP31AC1dmVjfqDB/f7OyO5CiuGzM27inQNRRomo?=
+ =?us-ascii?Q?HEJeBYEXFEyViYejXQUGwzU81F2bEIzbSINLVQpY4kGEKH9t6s0MXr8d3aus?=
+ =?us-ascii?Q?u/ncLPLBNdBlfQRkBskiW2TluJ3EPBV/z0c+h01Y+s6VlQn4JIJ3nFpDIlQ7?=
+ =?us-ascii?Q?2V6ZnIrLwu5GXIXJuajYqdM5XUeQpNQfOIirjyPN1/clBT+KGWoeXLuciwSp?=
+ =?us-ascii?Q?cW38Fbb/SpPr8GuLKGQdHRWadrcArm2HpKJJ+KQB32DPcUivAY4hfCUvfByH?=
+ =?us-ascii?Q?PZscViOTjDNWHwYdVEZZszVhEI8lTBPvfym8u+P1vy9fi0n8g5B/P2s5Jlgg?=
+ =?us-ascii?Q?EVwZZ6wuBgTaunjZqsULSLzQobhAGQBR5iJp2mR7SkB+Y6FcYsUWZvyFY9OD?=
+ =?us-ascii?Q?Obtm+tO5E8W8D9ESrY1iuecyfKGBmGGCAJWSWeZ5shK0UMLWRZIfsqd1QcH6?=
+ =?us-ascii?Q?s5ZdrGERi1uiA05wzfUz4CuvM6/3IZ2V8tns4HBjqu0oA4hIgIG70P12DxlR?=
+ =?us-ascii?Q?FEKOyk3ISoLJj18=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9193.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?CWKG7vIj+UlDEy5h2TOZJA6l6HoNifK/tpm+OsRz2zfOWralclY2DNJU9OF5?=
+ =?us-ascii?Q?3CQhkknAguh2an+C/XPvGRGQJr7+CZmEDvYla+Qn6SKC9a8wKcv3V/suruRk?=
+ =?us-ascii?Q?NEh67eRhpIjXVUAPzxcy5yq23qJOrQgQkXu2Hdz871nkQAsxVugsjRAdVYfP?=
+ =?us-ascii?Q?rHKTrU+Uf6MtpH8boFnTetYd0NHz03NH4XrBLPpRTP/SyBXrD4A8WRK83KiF?=
+ =?us-ascii?Q?B3TM3g4k2nChZkifEwOmA4aH04K7QeaLbdda8cINwapQWFmPVyYytZFtxc44?=
+ =?us-ascii?Q?xyiU3jL4j1T4lHUEpwEnleXpnYWzyBn6dle5WrqWHqNaCE5OdRqc7V9Iye2i?=
+ =?us-ascii?Q?tVlMA+MLSo3TavxV237skOC+jdH/JUjrOmqnb5vcZw0iPPaLNpIEZULTd6YD?=
+ =?us-ascii?Q?X8GECAqyxUVVdYmd2DgsxJVHsaLnPWKwWs3CBKwEQLUeVoLwABp00lcS6GEh?=
+ =?us-ascii?Q?emiwTcyVRsEvXfk3seEPT3AN92uO1SJK2FO03sWMqs3/59B/FRXEwfI0etSm?=
+ =?us-ascii?Q?nWjrjRH7DoPa9JWICMLpx06LbwKbpt75TyvSLDN/MDl2jGvgj8KiomIPULX1?=
+ =?us-ascii?Q?FIeIf0uqttfPhIyoTZs3jCNN2eGkcSXd0TARwIuUYSbQm3lvtM7prCJXMYSj?=
+ =?us-ascii?Q?VrO9c9n5iL6x2UebIyeNzpl9DTYli1arHzfPytCEQK92ZrXomgKWjuHo9BIh?=
+ =?us-ascii?Q?qn3Mqqtd91Zpzt7Bdw19hvQWwL+t7oUxTUq2FX53WbJ7JdsVqidX43zo0t9a?=
+ =?us-ascii?Q?3ezOjfVVIP7YhMSmX7jo3+5g7hojJiIfuMs9fq3rkrpXtlLLU4DxWNFFk4v9?=
+ =?us-ascii?Q?oz2HiODLqmAS4p8cLdCHjShAVohipEaXWbd5VIrDP4mSK4wfPQDcIvwJS0Pc?=
+ =?us-ascii?Q?3oJZUXQiwtrPLabhuKsAp1fGeXbay8uAUF/OnbFT9KybQBhzdvaTrHJIZck6?=
+ =?us-ascii?Q?78mKFnL4GOZImdgPI4/bqauE98vL1Y2MTdGiDk/FEwkRK+d3ywyjJmL0l3dC?=
+ =?us-ascii?Q?CFhCZurE3a0bNahIB7iYhO7mych2VgqTmoqx7PBAMzBRbfEleYOgYaWRgArF?=
+ =?us-ascii?Q?pX2qzgr29iyPXkQ4jGNGthIxGv5UFXpmMlVtSwvPcCeKHyATpl09+vUDI3ME?=
+ =?us-ascii?Q?bZJA2gw/F24Ebp2HlxzsjW18leBt1IODPdJh97171I6Pax0EiNiFrRVsM7HA?=
+ =?us-ascii?Q?3Zg7ZSgmbhGYU2PssWpNjJ5PbA2fsHmRX0LH/wCb4KSR+y170pIDcpZpVVa7?=
+ =?us-ascii?Q?LWRfxsqyjiA7sprvAg3lx5Bj7kHvIfqTjMdZTws55cxA3ulgRYevvZNL+Y4H?=
+ =?us-ascii?Q?SKrt2P7mlUkohiXi9t9Fk7nYvSWou/znsaHO8kerx0CdBWiME1rlgxgrhd7E?=
+ =?us-ascii?Q?q46llEptELyEi6FhnKWAwb33sy1Za8O1V58nRF/UQxS2yoajzJMMUG00dWPU?=
+ =?us-ascii?Q?pSil7omPIxInYcksqUcRFY8XDWpIwTg4TQ7gkcqTDDphQ6ljQFfE6PGwG0UW?=
+ =?us-ascii?Q?78fpzz57qYVHEZOHcfIDSqjtDkoy8LDxUHJKiAYmLr2DWnq1/Ge38y74vAGV?=
+ =?us-ascii?Q?fz2KQG0AzOJgKtztZOY=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9193.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a870567a-81cd-4f23-37af-08dde55974c6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2025 11:04:13.0083
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +ypl+ItjJ7IZwoDaHAzBlDrS14kKdzA8jWzMmtIwSV3rl6UDHqwR+bF2EKY8+ogj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5883
 
-On Wed, 2025-08-27 at 16:24 +0800, Feng Yang wrote:
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-[...]
+> -----Original Message-----
+> From: Alex Williamson <alex.williamson@redhat.com>
+> Sent: Tuesday, August 26, 2025 9:54 PM
+> To: Gupta, Nipun <Nipun.Gupta@amd.com>
+> Cc: arnd@arndb.de; gregkh@linuxfoundation.org; Agarwal, Nikhil
+> <nikhil.agarwal@amd.com>; kvm@vger.kernel.org; linux-kernel@vger.kernel.o=
+rg;
+> llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; robin.murphy@arm.com=
+;
+> krzk@kernel.org; tglx@linutronix.de; maz@kernel.org; linux@weissschuh.net=
+;
+> chenqiuji666@gmail.com; peterz@infradead.org; robh@kernel.org; Gangurde,
+> Abhijit <abhijit.gangurde@amd.com>; nathan@kernel.org; kernel test robot
+> <lkp@intel.com>
+> Subject: Re: [PATCH v4 2/2] vfio/cdx: update driver to build without
+> CONFIG_GENERIC_MSI_IRQ
+>
+> On Tue, 26 Aug 2025 10:08:52 +0530
+> Nipun Gupta <nipun.gupta@amd.com> wrote:
+>
+> > Define dummy MSI related APIs in VFIO CDX driver to build the
+> > driver without enabling CONFIG_GENERIC_MSI_IRQ flag.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202508070308.opy5dIFX-
+> lkp@intel.com/
+> > Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> > Reviewed-by: Alex Williamson <alex.williamson@redhat.com>
+> > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> > ---
+> >
+> > Changes v1->v2:
+> > - fix linking intr.c file in Makefile
+> > Changes v2->v3:
+> > - return error from vfio_cdx_set_irqs_ioctl() when CONFIG_GENERIC_MSI_I=
+RQ
+> >   is disabled
+> > Changes v3->v4:
+> > - changed the return value to -EINVAL from -ENODEV
+>
+> What are your intentions for merging this series, char-misc or vfio?
 
-> I don't know much about assembly language. Could you tell me if the follo=
-wing changes are correct?
+Yes please, this can be taken via vfio.
 
-Looks correct, should be similar to verifier_search_pruning.c:short_loop1()=
-.
-
-Unfortunately, I'm afraid that the best source for assembly syntax doc
-are llvm backend tests and sources, e.g.:
-- https://github.com/llvm/llvm-project/blob/main/llvm/test/CodeGen/BPF/asse=
-mbler-disassembler.s
-- https://github.com/llvm/llvm-project/blob/main/llvm/test/CodeGen/BPF/asse=
-mbler-disassembler-v4.s
-- https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/BPF/BPFIns=
-trInfo.td
-
-The directives should gas compatible (subset supported by llvm):
-- https://sourceware.org/binutils/docs/as/8byte.html
-
-> diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b=
-/tools/testing/selftests/bpf/progs/compute_live_registers.c
-> index 6884ab99a421..01d73ad76faf 100644
-> --- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-> +++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-> @@ -249,11 +249,13 @@ __naked void if3_jset_bug(void)
->  	asm volatile (
->  		"r0 =3D 1;"
->  		"r2 =3D 2;"
-> -		"if r1 & 0x7 goto +1;"
-> +		".8byte %[jset];" /* same as 'if r1 & 0x7 goto +1;' */
->  		"exit;"
->  		"r0 =3D r2;"
->  		"exit;"
-> -		::: __clobber_all);
-> +		:
-> +		: __imm_insn(jset, BPF_JMP_IMM(BPF_JSET, BPF_REG_1, 0x7, 1))
-> +		: __clobber_all);
->  }
->=20
+Thanks,
+Nipun
