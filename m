@@ -1,165 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2B14A33;
-	Wed, 27 Aug 2025 01:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B861B25C81B
+	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 03:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756258490; cv=none; b=EECLdGyNgIk3udQHT6PaWy7sCtc+9wEQs6w6/YR1Iz51JgFWRrjOtC94/BnAewfydoiLlnEv9Ri7rBwmsuklCS1Hr6qwLtDWAUnI5zGgW7HeNRTUTqgwthsz6AdtQ6drfFfulCSk06LdgxZpIcPG75GP5/qaxs94ODz3t5yWwCc=
+	t=1756264588; cv=none; b=Uu3B9ZaQFrk9egsDeDa6A0FxlGT+R95kiYPSIuqT3JjcZuOZ8PgT0MMxfyArVflNpiIl0aG8YO2/h3iA/ZxRzVOcWQaECldU04Bkv/Ck9+O8fpnvL5aYDgAisFQ4Cg3k3QpgFEpLFqgTEosNSNbP0fr7fkL5HYZoiNE+STdjPhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756258490; c=relaxed/simple;
-	bh=4eiZvo+hL550WY6CZyKaK4fRP2VeqMte3/ZsoSFK2Bs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XEfbsOs1FS8yj/xlGm4jnruqTWDGKnep6QKoqOJKz1MQqRYCI8pPRbewK+YA/z/G7CYjEBq5C/nzu9RWPI3X565+qd3UGebZ/Uua8HL/5aj32uWU7k+IabHYYabyjLe3ytmDf7PwBWea7RjbFhLwqyifzC6T3bSy3/HHDZiLLOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNIp4MzC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756264588; c=relaxed/simple;
+	bh=Qs2OM8u+Lsz6MOPYflBgcuyoauChwiyNm0Qg9Fp8l+Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CkCLg6STxGOKFAlRNiaOFsfH6c0XJDWVHW/n3HFRJHMgmdjFaLcDwcb4BmtfHdVRIbG6qko/pW0nYAyeJEOa491XhQpmHiAxjeazIUIHAICJZaa+A3MhyMBzLebTodoaCRIlobsFG7BHp8llOxxtuFzT8BH8exDq5l6qD+9jibY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NFc7s06I; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNIp4MzC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78EAC4CEF1;
-	Wed, 27 Aug 2025 01:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756258489;
-	bh=4eiZvo+hL550WY6CZyKaK4fRP2VeqMte3/ZsoSFK2Bs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iNIp4MzCAz/2Su6Q9ie6SJSrrgadQvUrBTeD8Iqgom97Azq/yiTX5YT/3bytvQl+R
-	 c77dFs4j5ymA0p96r2A9q2eclhACDC0BeMXTZP3LnGFleYKgQ9mzTP+GLP+5gY/9Ld
-	 t7KLAwBt93khS7Q2I4taw+eQH0o+6z/5mLHT/GtxiSd8i5gwIHOrQUTdUKOkadkKml
-	 BoJhCES05WcIZSHiAvdbLB6rQmXqn6pV9HA0YzCMKsq74yPYyioPU2x3Lxud9h9HZh
-	 77zbyyS0CGOO7salab+iMazbkewswWMxdSjGCMEwRVQAwc5Bm5GbuGBYLRhm1vqbze
-	 /uP+OMYTMYmNg==
-Date: Tue, 26 Aug 2025 18:34:44 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@outflux.net>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-Message-ID: <20250827013444.GA2859318@ax162>
-References: <20250825141316.work.967-kees@kernel.org>
- <20250825142603.1907143-5-kees@kernel.org>
- <CANiq72kc7Ky6+7Ny7jR04s8vU-g23qBQC0rQrOZDxDzXT+m1TQ@mail.gmail.com>
- <202508250834.E2456B9@keescook>
- <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
- <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NFc7s06I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=J0
+	iCFAWZwK2LvypLJsD3Kz9xYwE43hjGdHVixQJu+A4=; b=NFc7s06IbOvdJXwOCv
+	qcfR255RbqM4W4cadxZZwdHdZ1419RFAnD74XK1SUCCP8tlG+HwmpDd/LDy4MG7L
+	U6qlphAcKfBFMvoIOpD2usNjFGhMRJt4RDO1SGmjINMC0MvXmZIEXBisTdfSjZRt
+	1zQEyW/jDcwgtB6y/P5ZKGLfw=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3F+RdeK5ocMYdEw--.56776S2;
+	Wed, 27 Aug 2025 11:15:42 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
+Date: Wed, 27 Aug 2025 11:15:40 +0800
+Message-Id: <20250827031540.461017-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net>
+X-CM-TRANSID:_____wD3F+RdeK5ocMYdEw--.56776S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw18tr4UZFW5tF4kuFyUZFb_yoW8Gry7pw
+	18X3s8tFyS9r1UX3W7Jr4UWF1rWFsaqr48Ar40yr9rAF98GF97Jr1xKFyYgr93Xr4furW3
+	Zrsrtw43CF4kAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UKzuZUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiYwO2eGiudCWPIwAAsV
 
-On Mon, Aug 25, 2025 at 03:31:34PM -0400, Kees Cook wrote:
-> On August 25, 2025 1:00:22 PM EDT, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
-> >On Mon, Aug 25, 2025 at 5:35 PM Kees Cook <kees@kernel.org> wrote:
-> >>
-> >> Yeah, that's a good idea. What the right way to do that?
-> >>
-> >> config CFI_CLANG
-> >>         bool "Use Clang's Control Flow Integrity (CFI)"
-> >>         depends on ARCH_SUPPORTS_CFI
-> >>         select CFI
-> >>
-> >> ?
-> >
-> >I don't recall what is the idiomatic solution for renames, but I
-> >remember Linus talking about this topic and about avoiding losing old
-> >values if possible (perhaps getting a new question in `oldconfig` is
-> >OK as long as the `olddefconfig` respects the old value).
-> >
-> >I think your suggestion above will still make it appear twice in
-> >`menuconfig` -- there may be a way to play with visibility to make it
-> >better.
-> >
-> >A simple possibility I can think of (assuming it works) is having the
-> >CFI symbol for the time being introduced just as a `def_bool
-> >CFI_CLANG` for a few releases so that people get the new one in their
-> >configs.
-> 
-> Ah, I think this works:
-> 
-> config CFI_CLANG
->     bool
-> 
-> config CFI
->     bool "...."
->     default CFI_CLANG
-> 
-> I will add that for v2.
+From: Feng Yang <yangfeng@kylinos.cn>
 
-That does not appear to work for me. I applied
+The following issue occurs when compiling with clang version 17.0.6,
+but not with version 18.1.8. Add a version restriction to fix this problem.
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index c25a45d9aa96..0d3ed03c76c2 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -876,8 +876,12 @@ config ARCH_SUPPORTS_CFI
- config ARCH_USES_CFI_TRAPS
-        bool
+progs/compute_live_registers.c:251:3: error: invalid operand for instruction
+  251 |                 "r0 = 1;"
+      |                 ^
+<inline asm>:1:22: note: instantiated into assembly here
+    1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
+      |                             ^
+1 error generated.
 
-+config CFI_CLANG
-+       bool
-+
- config CFI
-        bool "Use Kernel Control Flow Integrity (kCFI)"
-+       default CFI_CLANG
-        depends on ARCH_SUPPORTS_CFI
-        depends on $(cc-option,-fsanitize=kcfi)
-        help
+Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+ tools/testing/selftests/bpf/progs/compute_live_registers.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-on top of this series and
+diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+index 6884ab99a421..56aec43f206f 100644
+--- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
++++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+@@ -240,6 +240,7 @@ __naked void if2(void)
+ 		::: __clobber_all);
+ }
+ 
++#if __clang_major__ >= 18
+ /* Verifier misses that r2 is alive if jset is not handled properly */
+ SEC("socket")
+ __log_level(2)
+@@ -255,6 +256,7 @@ __naked void if3_jset_bug(void)
+ 		"exit;"
+ 		::: __clobber_all);
+ }
++#endif
+ 
+ SEC("socket")
+ __log_level(2)
+-- 
+2.43.0
 
-  CONFIG_CFI_CLANG=y
-  # CONFIG_CFI_ICALL_NORMALIZE_INTEGERS is not set
-  # CONFIG_CFI_PERMISSIVE is not set
-
-gets turned into
-
-  # CONFIG_CFI is not set
-
-after olddefconfig. CONFIG_CFI_CLANG has to be user selectable with a
-prompt but the only solution I can think of at the moment results in a
-duplicate prompt for Clang.
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index c25a45d9aa96..93bf9b41a9de 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -876,8 +876,17 @@ config ARCH_SUPPORTS_CFI
- config ARCH_USES_CFI_TRAPS
-        bool
-
-+config CFI_CLANG
-+       bool "Use Kernel Control Flow Integrity (kCFI) - Transitional" if CC_IS_CLANG
-+       select CFI
-+       depends on ARCH_SUPPORTS_CFI
-+       depends on $(cc-option,-fsanitize=kcfi)
-+       help
-+         This is a transitional symbol to CONFIG_CFI, see its help text
-+         for more information.
-+
- config CFI
--       bool "Use Kernel Control Flow Integrity (kCFI)"
-+       bool "Use Kernel Control Flow Integrity (kCFI)" if CC_IS_GCC
-        depends on ARCH_SUPPORTS_CFI
-        depends on $(cc-option,-fsanitize=kcfi)
-        help
-
-Maybe that does not matter for the sake of keeping things working?
-Otherwise, we could just keep things as they are with the patch set and
-expect people to actually use oldconfig or diff the results of
-olddefconfig (which I think is good practice anyways).
-
-Cheers,
-Nathan
