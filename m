@@ -1,186 +1,113 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D384B2EB86B;
-	Wed, 27 Aug 2025 07:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6DA319843;
+	Wed, 27 Aug 2025 07:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756280121; cv=none; b=GplswYkpwnPBqARAoJspj4Dv0MDBkbXtKrp1FBlad2vVC1YRPAekktA7slc1uKBvJ83LHWNhXHU/9bfI+vc0TvVxOHdUVw798ODlvVpES8MpG1y9RG3CrbWaG2c8/f1SQr6xkT0MEOEDOpqG4sX6eGWcQT1UeXTYD2nYga+Rhkg=
+	t=1756280293; cv=none; b=YJm9KeumMozASkOBwyLV2Nl0v37iY6IWaMa4NqJUmggWI7/WGKjoV6CvO2jwUIqVCfYgkeu7W2eG3xbjvFqStTjAttPhvpAEpe8kqNuJVY9Rnf/p9/KFv8W5otrysBO3kI5zzFjERYsOYum5fyaeTsXta4efFrEzArInFvpF78c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756280121; c=relaxed/simple;
-	bh=JpZU34O0y13xdJwUloE5EThj8IgGuLwGvzsrACzJnqA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YVfDC/R4rXyQGrDFpxmLkY8iO9Nmtt4KNyuP5vsZsfnO20D/iIZGFBqE+PJsDGclm8cUyJJp+E/i79gnKKiuNT3mPOfu/eohJTcUrPgGem0uhlPHFivYswEg2H2SMuyiOI1Xiimf9azwvTxb1GVr7dAlnc2GFhtMKQrWOHmtwPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nW5h0WqW; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1756280293; c=relaxed/simple;
+	bh=A0g4115fIgBE403Cl3EfktmE7DlY2fExfjJG9NOynE8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tBDayGV+5dXf/9ghOmDNdi1c9HSa77pMyFDPKMOXMEDbuqwIfsisklB8k2F4/0Op/GDn/6qX1Nm/NQfvT94ETaEUGeenGpHoSD6GtVZE0FeSY1sIuJSIYXh4+VMZcIRNDVNn/t0p57TrCBFH2MVq4wXPnEWOkqc7cGRzeU2rVR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=RHfVaqBi; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nW5h0WqW"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=ygVK7PPX7sJIICzV5JhCjyvebdnrlwk5X1BS1henDE8=; b=nW5h0WqW5pUxaGcoIMjeOwsdoR
-	vn/w/j9D6WF1tdtovaNK4kbCJTRQeUI8FHcNGFVMZgx1y53XW7FBUOcD3qHn1vPspo9kLuky34XFL
-	gKAAOmQeYHlWNKGE4tSV1xn5gZaOEaKzGcin9YOuTOVOzI80DBWAWgDstBFaPYNCKuLKbpF1X2Q1g
-	aA94msO066thyP4wsFuYX2VllMUTz8O/l9DFlps/UX3B3ACCabBKUZ/NICnKvJz07Wl3LDyZhYOwV
-	73lhxPiAj3RIo2MdZMc/B7HTqZpWpXEbcRLI/b1h7LjSFrL/Xa1IGkz7zy9f2j0fgvfoM3i/u/gcg
-	3Esyjm3A==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1urAga-0000000ERTT-435N;
-	Wed, 27 Aug 2025 07:35:13 +0000
-Message-ID: <56c2b1ce-00a4-403c-9927-79bfd9a23574@infradead.org>
-Date: Wed, 27 Aug 2025 00:35:12 -0700
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="RHfVaqBi"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=A0g4115fIgBE403Cl3EfktmE7DlY2fExfjJG9NOynE8=; b=RHfVaqBiuWv5qA9rEDSV76B74j
+	/VRQEQEMJq+nrAYoEUfkbgqWaVFcKadDL23pvoNbN9HYno5c4fVFKKfHkm22CaOkniiuJytlbHD4H
+	7K/s0kBWZ2gDHfzNqBy15zPAWfeIvhakAsL7tyUP4aCcAMp4Yn0l/l8ZevpodPz8FWhwZsoGGwVSb
+	Z5HU/Cr/JFL/2E6StotztE4Bn9Fz07uO+kKVaugdC58pSD1jdkeB9Rpu6Mjm+PA/A5gNKITUdtDmd
+	bazV4H7WtQdO5d1VmNDBiBkWutZ6vOrDBqE7JVQExXP7kAkhWocTvSvaKBVGHGuRUNaEos8Aep0E6
+	n6v0sEgQ==;
+Received: from [213.244.170.152] (helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1urAj0-0007uF-FN; Wed, 27 Aug 2025 09:37:42 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Jaehoon Chung <jh80.chung@samsung.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Shreeya Patel <shreeya.patel@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Sandy Huang <hjc@rock-chips.com>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Shawn Lin <shawn.lin@rock-chips.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+ linux-sound@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev,
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Subject:
+ Re: [PATCH v3 13/20] drm/rockchip: dw_hdmi: switch to FIELD_PREP_WM16* macros
+Date: Wed, 27 Aug 2025 09:37:41 +0200
+Message-ID: <18528244.tv2OnDr8pf@phil>
+In-Reply-To: <20250825-byeword-update-v3-13-947b841cdb29@collabora.com>
+References:
+ <20250825-byeword-update-v3-0-947b841cdb29@collabora.com>
+ <20250825-byeword-update-v3-13-947b841cdb29@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@outflux.net>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>,
- Linus Walleij <linus.walleij@linaro.org>, Mark Rutland
- <mark.rutland@arm.com>, Puranjay Mohan <puranjay@kernel.org>,
- David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- x86@kernel.org, linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20250825141316.work.967-kees@kernel.org>
- <20250825142603.1907143-5-kees@kernel.org>
- <CANiq72kc7Ky6+7Ny7jR04s8vU-g23qBQC0rQrOZDxDzXT+m1TQ@mail.gmail.com>
- <202508250834.E2456B9@keescook>
- <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
- <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net>
- <20250827013444.GA2859318@ax162>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250827013444.GA2859318@ax162>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
+Am Montag, 25. August 2025, 10:28:33 Mitteleurop=C3=A4ische Sommerzeit schr=
+ieb Nicolas Frattaroli:
+> The era of hand-rolled HIWORD_UPDATE macros is over, at least for those
+> drivers that use constant masks.
+>=20
+> Remove this driver's very own HIWORD_UPDATE macro, and replace all
+> instances of it with equivalent instantiations of FIELD_PREP_WM16 or
+> FIELD_PREP_WM16_CONST, depending on whether it's in an initializer.
+>=20
+> This gives us better error checking, and a centrally agreed upon
+> signature for this macro, to ease in code comprehension.
+>=20
+> Because FIELD_PREP_WM16/FIELD_PREP_WM16_CONST shifts the value to the
+> mask (like FIELD_PREP et al do), a lot of macro instantiations get
+> easier to read.
+>=20
+> This was tested on an RK3568 ODROID M1, as well as an RK3399 ROCKPro64.
+>=20
+> Reviewed-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> Tested-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-On 8/26/25 6:34 PM, Nathan Chancellor wrote:
-> On Mon, Aug 25, 2025 at 03:31:34PM -0400, Kees Cook wrote:
->> On August 25, 2025 1:00:22 PM EDT, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
->>> On Mon, Aug 25, 2025 at 5:35 PM Kees Cook <kees@kernel.org> wrote:
->>>>
->>>> Yeah, that's a good idea. What the right way to do that?
->>>>
->>>> config CFI_CLANG
->>>>         bool "Use Clang's Control Flow Integrity (CFI)"
->>>>         depends on ARCH_SUPPORTS_CFI
->>>>         select CFI
->>>>
->>>> ?
->>>
->>> I don't recall what is the idiomatic solution for renames, but I
->>> remember Linus talking about this topic and about avoiding losing old
->>> values if possible (perhaps getting a new question in `oldconfig` is
->>> OK as long as the `olddefconfig` respects the old value).
->>>
->>> I think your suggestion above will still make it appear twice in
->>> `menuconfig` -- there may be a way to play with visibility to make it
->>> better.
->>>
->>> A simple possibility I can think of (assuming it works) is having the
->>> CFI symbol for the time being introduced just as a `def_bool
->>> CFI_CLANG` for a few releases so that people get the new one in their
->>> configs.
->>
->> Ah, I think this works:
->>
->> config CFI_CLANG
->>     bool
->>
->> config CFI
->>     bool "...."
->>     default CFI_CLANG
->>
->> I will add that for v2.
-> 
-> That does not appear to work for me. I applied
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index c25a45d9aa96..0d3ed03c76c2 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -876,8 +876,12 @@ config ARCH_SUPPORTS_CFI
->  config ARCH_USES_CFI_TRAPS
->         bool
-> 
-> +config CFI_CLANG
-> +       bool
-> +
->  config CFI
->         bool "Use Kernel Control Flow Integrity (kCFI)"
-> +       default CFI_CLANG
->         depends on ARCH_SUPPORTS_CFI
->         depends on $(cc-option,-fsanitize=kcfi)
->         help
-> 
-> on top of this series and
-> 
->   CONFIG_CFI_CLANG=y
->   # CONFIG_CFI_ICALL_NORMALIZE_INTEGERS is not set
->   # CONFIG_CFI_PERMISSIVE is not set
-> 
-> gets turned into
-> 
->   # CONFIG_CFI is not set
-> 
-> after olddefconfig. CONFIG_CFI_CLANG has to be user selectable with a
-
-Could/did you test with 'oldconfig' instead?
-
-olddefconfig is going to use the default value from the Kconfig file,
-which if CFI_CLANG which is undefined/No/Not set.
-
-oldconfig will use the old value from the .config file.
-
-
-
-> prompt but the only solution I can think of at the moment results in a
-> duplicate prompt for Clang.
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index c25a45d9aa96..93bf9b41a9de 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -876,8 +876,17 @@ config ARCH_SUPPORTS_CFI
->  config ARCH_USES_CFI_TRAPS
->         bool
-> 
-> +config CFI_CLANG
-> +       bool "Use Kernel Control Flow Integrity (kCFI) - Transitional" if CC_IS_CLANG
-> +       select CFI
-> +       depends on ARCH_SUPPORTS_CFI
-> +       depends on $(cc-option,-fsanitize=kcfi)
-> +       help
-> +         This is a transitional symbol to CONFIG_CFI, see its help text
-> +         for more information.
-> +
->  config CFI
-> -       bool "Use Kernel Control Flow Integrity (kCFI)"
-> +       bool "Use Kernel Control Flow Integrity (kCFI)" if CC_IS_GCC
->         depends on ARCH_SUPPORTS_CFI
->         depends on $(cc-option,-fsanitize=kcfi)
->         help
-> 
-> Maybe that does not matter for the sake of keeping things working?
-> Otherwise, we could just keep things as they are with the patch set and
-> expect people to actually use oldconfig or diff the results of
-> olddefconfig (which I think is good practice anyways).
-> 
-> Cheers,
-> Nathan
-> 
-
--- 
-~Randy
 
