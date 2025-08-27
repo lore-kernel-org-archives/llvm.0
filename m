@@ -1,133 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9C32D7D2A;
-	Wed, 27 Aug 2025 17:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8432FF67D
+	for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 18:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756317318; cv=none; b=HsudBPll7RHb3/ufmvFQ27dyb1UJX5LR7H40uSNlIEJWTw1r3GMJ0CuoIReSiOzvM92vRRDimBFELkFPnxi8/mm2IkiRQrYdfEGwEjNlpo7juB/EojFwvlc31uMxJqrH2Kqp6CwDDFXglZ0VDPm9c1i2p/z0e2iNugsc1Ak/5Ow=
+	t=1756320969; cv=none; b=rO3NnkTzru8Xvl0gIu/eR12OAPoo0SiUCTf7p5DF1Yqsmu1T3QLeltLb03EKz1ieKfPGcvQUuiacas6kDEh1Wm6uy98ZFhfR5xKnTT5RizqphJKlTpPqdAhyeeKHYHI2taIZTn+Ua+JEIIWKh5bEkqrpsPKCKFTWUeE6gZEY/mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756317318; c=relaxed/simple;
-	bh=kwd198YuCgA0kZ9xjDCn4ZtyCIY8uP5Rn5q+t2dyKX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JnQC8cMlfNAznc4Jbk54UHZJfZkSxyuY57C0+Qfn29RD5o+di7FwS4Lb8M35jP38ux0/8moUQ4Mb8IYX9fglyKXgtdE+uERsxTrTbVeDYeaQy6Ltq8g4GDlEJlbrMH4MskLB+CX0jyfINeKQPbbj6DXlOvl7TLAFmpYKesVGnKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OH6omwl0; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756320969; c=relaxed/simple;
+	bh=8ok7WAgHWHzIb67w4OKsGxYVKHOMk/whxVn9yr022jA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GSehkEB/8tU9BBhRniDNmINv0s2wLocJZmlVqrtrw9nH1arHvHaLqmBm2vUIX29J8uNeIm4XZCpfJStPPkHqMMBR1jUuxy5PaIE4I+TDXJf+6Qab3l2a1mf25G5JdiLNt0vV7eFVSe98nct2JILo3TYh6uF5j97jq7UCudrzFTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F6KldMlY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OH6omwl0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756317317; x=1787853317;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kwd198YuCgA0kZ9xjDCn4ZtyCIY8uP5Rn5q+t2dyKX4=;
-  b=OH6omwl0wypxKmY5p8vMJ/joYLwk3qUtBI8QTQKd8NBJFCKIUlswQXd9
-   oDe37oODsOwuBSzsqRoj6nw6/dnVj03pRXDz5V1UkzTtj0Wo0hHOFcdr7
-   ZVzBqg1xJ7S6HRADfr3WDNnLwGar4jy3tYwEnEJVJn/Vv7kGUbni86WfE
-   B+QHiFxKBzadn+KLzdh3Ilvv4vWWLPXHj6lzNXwG+0vWuYCgETDNU8mqJ
-   AHG46J74NiUvSfJiDcmnGehNRpUGwAcDmYfIkKYPZoLriPLSI+Ee3uCQr
-   K1CbCKv3FULE1mL9s2LL0wl1CR2r9aBpmGu9EUdxi187bmFgSSxfbvKnw
-   w==;
-X-CSE-ConnectionGUID: 1Gw4V1/BQiOoALNAVYxFZA==
-X-CSE-MsgGUID: DaROxYOySPeyvhjIBI2wgA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="62220512"
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="62220512"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2025 10:55:16 -0700
-X-CSE-ConnectionGUID: knnLbb9kSuCnrXBl4xYRgg==
-X-CSE-MsgGUID: st431V+TTTabCjdhhUGtfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="207062895"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 27 Aug 2025 10:55:13 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1urKMO-000T8R-18;
-	Wed, 27 Aug 2025 17:55:02 +0000
-Date: Thu, 28 Aug 2025 01:54:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: admiyo@os.amperecomputing.com, Jeremy Kerr <jk@codeconstruct.com.au>,
-	Matt Johnston <matt@codeconstruct.com.au>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Huisong Li <lihuisong@huawei.com>
-Subject: Re: [PATCH net-next v25 1/1] mctp pcc: Implement MCTP over PCC
- Transport
-Message-ID: <202508280145.bix2s4fv-lkp@intel.com>
-References: <20250827044810.152775-2-admiyo@os.amperecomputing.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F6KldMlY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756320966;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LaJTrQIELffdqMUepm7rFcVjoX613nWdx1blyGA6qhk=;
+	b=F6KldMlY8fXKB2cMnIsFUlEvh1SO3JPz5i3jSCkJnAgCqV5gUYcAsZxJpM3/ZBDv+T2zU5
+	KyaG6P+22l2qbIINMfMYwj3ZLSCUx35QJ52nCA9lM6yqjQ4zaNm6X/IiI5rA/hdV5/as/9
+	MvlJX7pGNkogsZRJv7ELSCALSk5933w=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-281-J2zTK49APXe21y9EWZW2Zw-1; Wed, 27 Aug 2025 14:56:01 -0400
+X-MC-Unique: J2zTK49APXe21y9EWZW2Zw-1
+X-Mimecast-MFC-AGG-ID: J2zTK49APXe21y9EWZW2Zw_1756320960
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3f08869d948so387915ab.3
+        for <llvm@lists.linux.dev>; Wed, 27 Aug 2025 11:56:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756320960; x=1756925760;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LaJTrQIELffdqMUepm7rFcVjoX613nWdx1blyGA6qhk=;
+        b=BqQnp52ggIMdZyDCFKaYIy5AOTBKbg+Is1OSo7e4eXaTiWjoi8PQ7mYqhLzxpxGW6P
+         AV4u4Z+4rVZyLleRWsfmZtDEupSIuPyjGaP0+0jz/BOvJKErZB7w59Zfj5SliJ8Dj2Wm
+         Mtf3k5h4KoO04fnaYvzZBTuubdn1A+beIUyDnSJevDtgfIhT1s9WdvLkc5DI0JoO5jiD
+         NK4sFlV0zPHBgATUQhxdGqfmdkr1sRmDcCjRrFIk4vWCY8PGa0V00WjMi3UuK8gkicKf
+         /Gtn1sjrHlMQ4/wiUH/fQSHaxWVIKQHORg1g6IJhB1df6HkqD24pFAYA8t40UqF6IMQM
+         2ulg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWCBO1I2I3dY6cn0xXlwnHyufcPl3r3S+YABUzDusny/2CqmiYrjGyrjukTBSiT3nHTf0a@lists.linux.dev
+X-Gm-Message-State: AOJu0YyleeIoat5tuj4nqNfj6eZ7isJESxbPWfuTbsW3nwYqxE4nnFz2
+	Tt7yHH+zu9psdNspcOD5smZgEeREGUv8Wfecr/y1X9ktIbhyrZONnzDd7LpNYk8N16dZGbNr9VK
+	mdyK3cQtlaGAhXTRnMq7gwpDmy0PbibZ+gnBFlZ1dbHSrcYtJFxy3h8g=
+X-Gm-Gg: ASbGncvdpAz017vB+FVOSmJaWWg7MBKD7fqlHoHfBf82fyicKwZCTcy0TWq4z6LQSAc
+	PuH6UZ49Qe61q+iJ0Sci93aRuYCM4MCjSP7sjNknVdp9SlYiXhCNGaTst+aXeP+ZUL0+AJWD2Mt
+	B8RbgsZOjWABJQNFr7gBTL9aDDhwAtnWHg7MuhfzaVMPdIWTYXdwA227rfB23da8PmZwSha5h4K
+	1emwofPs42MtcQMLHfYiZfY/IfCbyn+z68iKajKZ59Rn9LulonIEB8lJGqXzlkKFqY5OuU7xEM6
+	gvFTVUM6nqYTf0AlvRS3AGlqk3+bNtcAf4zwdutAo3s=
+X-Received: by 2002:a05:6e02:1c0b:b0:3ec:173e:8b6c with SMTP id e9e14a558f8ab-3ec173e8e6emr65344385ab.4.1756320960271;
+        Wed, 27 Aug 2025 11:56:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFPb2pJYAkguncuQSx6IZaNOZrvdB1Zk3MUKrevEct/LLAhqT63GRfQVhKzRAZJNEzz7BkGLQ==
+X-Received: by 2002:a05:6e02:1c0b:b0:3ec:173e:8b6c with SMTP id e9e14a558f8ab-3ec173e8e6emr65344105ab.4.1756320959727;
+        Wed, 27 Aug 2025 11:55:59 -0700 (PDT)
+Received: from redhat.com ([38.15.36.11])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3f0a3a1ae9esm10463375ab.3.2025.08.27.11.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 11:55:59 -0700 (PDT)
+Date: Wed, 27 Aug 2025 12:55:57 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: "Gupta, Nipun" <Nipun.Gupta@amd.com>
+Cc: "arnd@arndb.de" <arnd@arndb.de>, "gregkh@linuxfoundation.org"
+ <gregkh@linuxfoundation.org>, "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+ <llvm@lists.linux.dev>, "oe-kbuild-all@lists.linux.dev"
+ <oe-kbuild-all@lists.linux.dev>, "robin.murphy@arm.com"
+ <robin.murphy@arm.com>, "krzk@kernel.org" <krzk@kernel.org>,
+ "tglx@linutronix.de" <tglx@linutronix.de>, "maz@kernel.org"
+ <maz@kernel.org>, "linux@weissschuh.net" <linux@weissschuh.net>,
+ "chenqiuji666@gmail.com" <chenqiuji666@gmail.com>, "peterz@infradead.org"
+ <peterz@infradead.org>, "robh@kernel.org" <robh@kernel.org>, "Gangurde,
+ Abhijit" <abhijit.gangurde@amd.com>, "nathan@kernel.org"
+ <nathan@kernel.org>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v4 2/2] vfio/cdx: update driver to build without
+ CONFIG_GENERIC_MSI_IRQ
+Message-ID: <20250827125557.6340d8d3.alex.williamson@redhat.com>
+In-Reply-To: <CH3PR12MB91935A30AE6BFFA18A5D4B32E838A@CH3PR12MB9193.namprd12.prod.outlook.com>
+References: <20250826043852.2206008-1-nipun.gupta@amd.com>
+	<20250826043852.2206008-2-nipun.gupta@amd.com>
+	<20250826102416.68ed8fc6.alex.williamson@redhat.com>
+	<CH3PR12MB91935A30AE6BFFA18A5D4B32E838A@CH3PR12MB9193.namprd12.prod.outlook.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827044810.152775-2-admiyo@os.amperecomputing.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: myDEbuEkRsKscRQ8ePmEwLForNFnJ3n3R4s29AI9jJg_1756320960
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Wed, 27 Aug 2025 11:04:12 +0000
+"Gupta, Nipun" <Nipun.Gupta@amd.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> [AMD Official Use Only - AMD Internal Distribution Only]
+> 
+> > -----Original Message-----
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Tuesday, August 26, 2025 9:54 PM
+> > To: Gupta, Nipun <Nipun.Gupta@amd.com>
+> > Cc: arnd@arndb.de; gregkh@linuxfoundation.org; Agarwal, Nikhil
+> > <nikhil.agarwal@amd.com>; kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; robin.murphy@arm.com;
+> > krzk@kernel.org; tglx@linutronix.de; maz@kernel.org; linux@weissschuh.net;
+> > chenqiuji666@gmail.com; peterz@infradead.org; robh@kernel.org; Gangurde,
+> > Abhijit <abhijit.gangurde@amd.com>; nathan@kernel.org; kernel test robot
+> > <lkp@intel.com>
+> > Subject: Re: [PATCH v4 2/2] vfio/cdx: update driver to build without
+> > CONFIG_GENERIC_MSI_IRQ
+> >
+> > On Tue, 26 Aug 2025 10:08:52 +0530
+> > Nipun Gupta <nipun.gupta@amd.com> wrote:
+> >  
+> > > Define dummy MSI related APIs in VFIO CDX driver to build the
+> > > driver without enabling CONFIG_GENERIC_MSI_IRQ flag.
+> > >
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202508070308.opy5dIFX-  
+> > lkp@intel.com/  
+> > > Reviewed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> > > Reviewed-by: Alex Williamson <alex.williamson@redhat.com>
+> > > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> > > ---
+> > >
+> > > Changes v1->v2:
+> > > - fix linking intr.c file in Makefile
+> > > Changes v2->v3:
+> > > - return error from vfio_cdx_set_irqs_ioctl() when CONFIG_GENERIC_MSI_IRQ
+> > >   is disabled
+> > > Changes v3->v4:
+> > > - changed the return value to -EINVAL from -ENODEV  
+> >
+> > What are your intentions for merging this series, char-misc or vfio?  
+> 
+> Yes please, this can be taken via vfio.
 
-[auto build test WARNING on net-next/main]
+Series applied to vfio next branch for v6.18.  Thanks,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/admiyo-os-amperecomputing-com/mctp-pcc-Implement-MCTP-over-PCC-Transport/20250827-124953
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250827044810.152775-2-admiyo%40os.amperecomputing.com
-patch subject: [PATCH net-next v25 1/1] mctp pcc: Implement MCTP over PCC Transport
-config: i386-randconfig-002-20250827 (https://download.01.org/0day-ci/archive/20250828/202508280145.bix2s4fv-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250828/202508280145.bix2s4fv-lkp@intel.com/reproduce)
+Alex
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508280145.bix2s4fv-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/mctp/mctp-pcc.c:110:24: warning: variable 'mctp_pcc_ndev' set but not used [-Wunused-but-set-variable]
-     110 |         struct mctp_pcc_ndev *mctp_pcc_ndev;
-         |                               ^
-   1 warning generated.
-
-
-vim +/mctp_pcc_ndev +110 drivers/net/mctp/mctp-pcc.c
-
-   107	
-   108	static void mctp_pcc_tx_done(struct mbox_client *c, void *mssg, int r)
-   109	{
- > 110		struct mctp_pcc_ndev *mctp_pcc_ndev;
-   111		struct mctp_pcc_mailbox *box;
-   112		struct sk_buff *skb = NULL;
-   113		struct sk_buff *curr_skb;
-   114	
-   115		mctp_pcc_ndev = container_of(c, struct mctp_pcc_ndev, outbox.client);
-   116		box = container_of(c, struct mctp_pcc_mailbox, client);
-   117		spin_lock(&box->packets.lock);
-   118		skb_queue_walk(&box->packets, curr_skb) {
-   119			skb = curr_skb;
-   120			if (skb->data == mssg) {
-   121				__skb_unlink(skb, &box->packets);
-   122				break;
-   123			}
-   124		}
-   125		spin_unlock(&box->packets.lock);
-   126	
-   127		if (skb)
-   128			dev_consume_skb_any(skb);
-   129	}
-   130	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
