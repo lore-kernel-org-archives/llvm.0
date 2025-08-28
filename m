@@ -1,74 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4669D18C011;
-	Thu, 28 Aug 2025 09:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42D725E44D;
+	Thu, 28 Aug 2025 09:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756373673; cv=none; b=MUVRgiB7jFgAxZ+He0j1j2ydV78A/pxbTyg+ZVFAk/A6pNCpTzap9PkvZyY/dKnk7AaSo46CZ15xUrT4vFuyN9YOtKFGvAuFtRWh6zJ8/4dItieJjftQf4wdDSfFtE9afH3Hso0S1ylFEKScb7sYBM1hnpVe7mVb5i5KPj72BiY=
+	t=1756374647; cv=none; b=TcZ5ZLuVdLO4eRM1DDr3ONnJOB71mdw0F6PM4F/FV038kuKx+KbaLnMGY7xsbXkjXrt0YJN8PwnthL1Utt2YPVRipH89hqNpAVETxcFQ3AGs0+WSDMlQ+UoNUpXMy1L9yXC2T2SJ2rt3uXVqCOzfXkAD6QQ+0zEN3ARih7AWUcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756373673; c=relaxed/simple;
-	bh=yuynSKYGfxPDARXbNkOVcirGGnm9MJdjYgpoYNnyvqk=;
+	s=arc-20240116; t=1756374647; c=relaxed/simple;
+	bh=nsd/srhjb2GA1BGIBjZu6MLWkDZmOCy2pcy5zHmDL74=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pj7cnJnBmNhRwRXYDlYEWE77dTf9Aay+gpz1AYDqm7m36rnmQq/gV0fzCl241lXPnidK4xchehgni4DeAvnmwfp+QPydyRoFHbYRjs7u+sRxE3v+zrHZ927l/ywkOLL4i0qrbjvkT5E5ZvIRx77TuPPN3f8ix5wh4TAEawKKASY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HZ1Mdz6O; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZVKgl0PvZuXD4tAhn7tkkYDKi00pQkeXJx9S2jVFzf2T/7CqFuvQJB9DsJAdHJxCrkr7xMKup4nsJjHi5zZPuksJggTeWuSA84+PdfqNfM4bs8LfVvSxuw72HFflfmucOaceB52SrLwp9fCzDg7K7SKP5nze5YteENkie5skcXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VtsLfDMM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HZ1Mdz6O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756373672; x=1787909672;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yuynSKYGfxPDARXbNkOVcirGGnm9MJdjYgpoYNnyvqk=;
-  b=HZ1Mdz6OFFA8/lzdG0aL4m0xFGMIpSf8wZRD4PxHF0NbY8Y0ktjo8RNs
-   Uex8rCJkuUA+1rhmESloQlKPqM9lZIbo6SHhyUYUpsNbU+gnkUpEB1UJJ
-   Pkpl1cGPI26RQBbMzH4eH/ttUVHnaOg5YluLoWoZDEPJk4my0mDObr2na
-   IUuETNUph1ZwsFkzTkJqGzX4Ye845UwsFSVfX+5kGh2KSKxD/6N+pUKOT
-   vhI/x2oEn0zNOXZ9TdlfiqejnHo2u3petb4diyFgTNPneAqIuSvm8Q0CO
-   ZZpCsLZQX3A6x2IaWojIAvxnpuspA53oJ//Ax3W3WC0rKWIIA66rgMj3G
-   g==;
-X-CSE-ConnectionGUID: rMMXvW4DTTuBnkW57rPwCQ==
-X-CSE-MsgGUID: uKxPuxv8RASpM3HgmFbucg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="58787351"
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="58787351"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 02:34:31 -0700
-X-CSE-ConnectionGUID: 3oW4vjZ0SqCDl3Ptz+McUg==
-X-CSE-MsgGUID: M5KpuRq8SLWF14awLIFgLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
-   d="scan'208";a="170462631"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 28 Aug 2025 02:34:26 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1urZ0v-000Tbr-1n;
-	Thu, 28 Aug 2025 09:33:57 +0000
-Date: Thu, 28 Aug 2025 17:32:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gatien Chevallier <gatien.chevallier@foss.st.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: Re: [PATCH net-next v3 1/2] drivers: net: stmmac: handle start time
- set in the past for flexible PPS
-Message-ID: <202508281615.ExryCwiA-lkp@intel.com>
-References: <20250827-relative_flex_pps-v3-1-673e77978ba2@foss.st.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtsLfDMM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2032C4CEEB;
+	Thu, 28 Aug 2025 09:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756374646;
+	bh=nsd/srhjb2GA1BGIBjZu6MLWkDZmOCy2pcy5zHmDL74=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VtsLfDMMLPSn8X7FB1qyNCklBXX9jl5VJY1SBRcbhOVICoFXA67QPx/qy7W6dd3vD
+	 yfVYCeZ9qxnPjnysPEtIFtXsq9TpqQ7ht02VkXWKJSH5mhi7sLsK8f6czjwjLvDknI
+	 EM7JLLbBT14GmJfNk3pIinT5sdlwUfUTxOOuJcXPVeVRMUQIKLsvsdrWX0j4LVT7gq
+	 SCz62qpwpxFqTRTlUURPRhZQBzchubGPagz85CseSPu0lif/72BG8k0aV+YX0q1VLD
+	 e4NAgp3YEZ2oeqsVUxXVdVb/8ObVWHiurodKtnBRh0zfOBY24G5vDUPm3Vou9eV7r2
+	 4uhT7unkY+MBg==
+Date: Thu, 28 Aug 2025 12:50:19 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: sohil.mehta@intel.com, baohua@kernel.org, david@redhat.com,
+	kbingham@kernel.org, weixugc@google.com, Liam.Howlett@oracle.com,
+	alexandre.chartre@oracle.com, kas@kernel.org, mark.rutland@arm.com,
+	trintaeoitogc@gmail.com, axelrasmussen@google.com,
+	yuanchu@google.com, joey.gouly@arm.com, samitolvanen@google.com,
+	joel.granados@kernel.org, graf@amazon.com,
+	vincenzo.frascino@arm.com, kees@kernel.org, ardb@kernel.org,
+	thiago.bauermann@linaro.org, glider@google.com, thuth@redhat.com,
+	kuan-ying.lee@canonical.com, pasha.tatashin@soleen.com,
+	nick.desaulniers+lkml@gmail.com, vbabka@suse.cz,
+	kaleshsingh@google.com, justinstitt@google.com,
+	catalin.marinas@arm.com, alexander.shishkin@linux.intel.com,
+	samuel.holland@sifive.com, dave.hansen@linux.intel.com,
+	corbet@lwn.net, xin@zytor.com, dvyukov@google.com,
+	tglx@linutronix.de, scott@os.amperecomputing.com,
+	jason.andryuk@amd.com, morbo@google.com, nathan@kernel.org,
+	lorenzo.stoakes@oracle.com, mingo@redhat.com, brgerst@gmail.com,
+	kristina.martsenko@arm.com, bigeasy@linutronix.de, luto@kernel.org,
+	jgross@suse.com, jpoimboe@kernel.org, urezki@gmail.com,
+	mhocko@suse.com, ada.coupriediaz@arm.com, hpa@zytor.com,
+	leitao@debian.org, peterz@infradead.org, wangkefeng.wang@huawei.com,
+	surenb@google.com, ziy@nvidia.com, smostafa@google.com,
+	ryabinin.a.a@gmail.com, ubizjak@gmail.com, jbohac@suse.cz,
+	broonie@kernel.org, akpm@linux-foundation.org,
+	guoweikang.kernel@gmail.com, pcc@google.com, jan.kiszka@siemens.com,
+	nicolas.schier@linux.dev, will@kernel.org, andreyknvl@gmail.com,
+	jhubbard@nvidia.com, bp@alien8.de, x86@kernel.org,
+	linux-doc@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 07/19] mm: x86: Untag addresses in EXECMEM_ROX related
+ pointer arithmetic
+Message-ID: <aLAmW-UV6hv9k1LT@kernel.org>
+References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
+ <c773559ea60801f3a5ca01171ea2ac0f9b0da56a.1756151769.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,32 +72,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250827-relative_flex_pps-v3-1-673e77978ba2@foss.st.com>
+In-Reply-To: <c773559ea60801f3a5ca01171ea2ac0f9b0da56a.1756151769.git.maciej.wieczor-retman@intel.com>
 
-Hi Gatien,
+On Mon, Aug 25, 2025 at 10:24:32PM +0200, Maciej Wieczor-Retman wrote:
+> ARCH_HAS_EXECMEM_ROX was re-enabled in x86 at Linux 6.14 release.
+> Related code has multiple spots where page virtual addresses end up used
+> as arguments in arithmetic operations. Combined with enabled tag-based
+> KASAN it can result in pointers that don't point where they should or
+> logical operations not giving expected results.
+> 
+> vm_reset_perms() calculates range's start and end addresses using min()
+> and max() functions. To do that it compares pointers but some are not
+> tagged - addr variable is, start and end variables aren't.
+> 
+> within() and within_range() can receive tagged addresses which get
+> compared to untagged start and end variables.
+> 
+> Reset tags in addresses used as function arguments in min(), max(),
+> within().
+> 
+> execmem_cache_add() adds tagged pointers to a maple tree structure,
+> which then are incorrectly compared when walking the tree. That results
+> in different pointers being returned later and page permission violation
+> errors panicking the kernel.
+> 
+> Reset tag of the address range inserted into the maple tree inside
+> execmem_cache_add().
+> 
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+> Changelog v5:
+> - Remove the within_range() change.
+> - arch_kasan_reset_tag -> kasan_reset_tag.
+> 
+> Changelog v4:
+> - Add patch to the series.
+> 
+>  mm/execmem.c | 2 +-
+>  mm/vmalloc.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/execmem.c b/mm/execmem.c
+> index 0822305413ec..f7b7bdacaec5 100644
+> --- a/mm/execmem.c
+> +++ b/mm/execmem.c
+> @@ -186,7 +186,7 @@ static DECLARE_WORK(execmem_cache_clean_work, execmem_cache_clean);
+>  static int execmem_cache_add_locked(void *ptr, size_t size, gfp_t gfp_mask)
+>  {
+>  	struct maple_tree *free_areas = &execmem_cache.free_areas;
+> -	unsigned long addr = (unsigned long)ptr;
+> +	unsigned long addr = (unsigned long)kasan_reset_tag(ptr);
 
-kernel test robot noticed the following build errors:
+Thinking more about it, we anyway reset tag in execmem_alloc() and return
+untagged pointer to the caller. Let's just move kasan_reset_tag() to
+execmem_vmalloc() so that we always use untagged pointers. Seems more
+robust to me.
 
-[auto build test ERROR on 242041164339594ca019481d54b4f68a7aaff64e]
+>  	MA_STATE(mas, free_areas, addr - 1, addr + 1);
+>  	unsigned long lower, upper;
+>  	void *area = NULL;
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 6dbcdceecae1..c93893fb8dd4 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -3322,7 +3322,7 @@ static void vm_reset_perms(struct vm_struct *area)
+>  	 * the vm_unmap_aliases() flush includes the direct map.
+>  	 */
+>  	for (i = 0; i < area->nr_pages; i += 1U << page_order) {
+> -		unsigned long addr = (unsigned long)page_address(area->pages[i]);
+> +		unsigned long addr = (unsigned long)kasan_reset_tag(page_address(area->pages[i]));
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gatien-Chevallier/drivers-net-stmmac-handle-start-time-set-in-the-past-for-flexible-PPS/20250827-190905
-base:   242041164339594ca019481d54b4f68a7aaff64e
-patch link:    https://lore.kernel.org/r/20250827-relative_flex_pps-v3-1-673e77978ba2%40foss.st.com
-patch subject: [PATCH net-next v3 1/2] drivers: net: stmmac: handle start time set in the past for flexible PPS
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250828/202508281615.ExryCwiA-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250828/202508281615.ExryCwiA-lkp@intel.com/reproduce)
+This is not strictly related to execemem, there may other users of
+VM_FLUSH_RESET_PERMS.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508281615.ExryCwiA-lkp@intel.com/
+Regardless, I wonder how this works on arm64 with tags enabled?
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Also, it's not the only place in the kernel that does (unsigned
+long)page_address(page). Do other sites need to reset the tag as well?
 
->> ERROR: modpost: "timespec64_add_safe" [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
+>  
+>  		if (addr) {
+>  			unsigned long page_size;
+> -- 
+> 2.50.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
