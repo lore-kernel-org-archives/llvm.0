@@ -1,314 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8129831577A
-	for <llvm@lists.linux.dev>; Thu, 28 Aug 2025 16:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756398183; cv=fail; b=GGj3fnJ2ziec1Xpqz1QRJKIG9J3PM6Q4qy97JF+bmTidzdmyNpCVdEXMCvbyRTLuohHgkwkSftZcQ63edPD8m71A5y5ulN3FyPBRZSLziCoDAjx5ZSYm7cWXLx9oUkz6Lq3vLvKdBUTPZG7D6uNgGBiauQaruolvE7mX6+wmwfM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756398183; c=relaxed/simple;
-	bh=4sf5JRYJABAAAcdmbi24nvCB0Nqpc5BMN6SAbHZh8GU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=f4Nra433vOWExpnlK1VK7qqhQnqtvD4JKRCm8fzOSLecG/afoS2EWUmtBXGNHfgUVTRLRu+opSqmblcYSEQ0qel6VBXoinIcUxFTWRbC76lDc22eIs26bNybV5FO86B+5eKrl+lLxsRsEeEKujTLyYz6XPkXZAN99l2b0v3M5uE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/QAmWji; arc=fail smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B22278E7E;
+	Thu, 28 Aug 2025 20:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756412361; cv=none; b=LX5/5NT4xcb2k+PC0i53rmDu/LgS26Z/iHkpewrvp26JzU8SID9N11gVX1nX7LcRzA/KPwCFdPeFDdJnf+kbZdoAeosP9keo2xY4I475DxQMcL9WwukWlPar8uIiLSpaB844COTya7ixmM4AtfScrms0wkr6G78/13XOHnKCgro=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756412361; c=relaxed/simple;
+	bh=EfjnmzRM4EzcfrEjZb23/Q388aWEyQC6jnzqc5fc3EY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LYaN4af2vOLwAPvJt0IKUn6XlhZ+6YGJNPTq1kg/rOGIumg/LdyUqzgnnVAG5P5mMegPEYQQ2i5vKjw6UeFxAaFEwtqGCjmtowDkbXHaALlemOdYt9yyiHpiu7DE0DG1a5i5XaVuCxttyPt4Z2/TdZXThBuibnoc7y+7PB7dAek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWYmvZjG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/QAmWji"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756398181; x=1787934181;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=4sf5JRYJABAAAcdmbi24nvCB0Nqpc5BMN6SAbHZh8GU=;
-  b=l/QAmWjiILvOhHtuPAYMpHU+Rap2nT0qGI1tGBGH47dnIdfuVnRU8kOx
-   3ARxye5OT3994C7M/PL7OM+rzeRpcXxeW1VmVDNgSFuD+BulDeioCU0IG
-   g0z3k/EJ/ZgL5cBxFOlNx+D2fVPU1rVo9R44lHM652+LC8gvjxHiB58Pr
-   KEEQGE0PcIirYOeJt7DxBLLIBlaz1i7pTX8powZmbt31YnGWL0VGYcZC5
-   6P45br0vPM211dGLDLn27gngTO/Qk4WwPrs7Or+l21sWDYtSR2HmSGFP+
-   JJXvNHOdQDWwDe22tswEYIJsCM23HVdUwTTFPUxnrJuNdwp/r+yARy88q
-   w==;
-X-CSE-ConnectionGUID: CLIPohoqTYCbOzyJLDir2Q==
-X-CSE-MsgGUID: veVHPTZZSvajFIobwdIWhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="70114524"
-X-IronPort-AV: E=Sophos;i="6.18,220,1751266800"; 
-   d="scan'208";a="70114524"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:23:00 -0700
-X-CSE-ConnectionGUID: /RkdbtyJSquvWyRRU2/rPA==
-X-CSE-MsgGUID: c+Bmqq2pSdSniNE3ssVZVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,220,1751266800"; 
-   d="scan'208";a="170066601"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:23:00 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Thu, 28 Aug 2025 09:22:59 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Thu, 28 Aug 2025 09:22:59 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (40.107.220.74)
- by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Thu, 28 Aug 2025 09:22:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fpDFPNl6VitZNIuFEZ16F/+fpgsakWu4NZA6Ap+Wmj7Vudic0cQaNckxywfpxzWWNReW4XMWdfb/LH6t7qYrjzF71qsANH8GXL+WRo5bPd/HdyPTV+AIwyXxMm9JpuwrssHWrq7PU+803D67sMVO0irbyLgZWyO3DYnrAFPJLVxPvgy/ntN7OQVUX2DVKtugBLtkrCnUf+jwJ0ywjwS50oIuYOE4GqLTyIzjxwsVc8ZaMGLZYP9yp0s6u6QZ0h6iKEHASG0nn8x9SzBgIOjqdg6czyK/HJ767VEfblVIDd3hZsNkvbBO7lHn/YD8AJAKQvfXwAHWw54xa3/ZOh5ARA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NY1E+HEpRudnoO5ALXqo3ZkeRafkLOj99owFq1zILhU=;
- b=oQzF7/Cr0jQmTZBFd3Vba0XgdjiLrdnYU0JKMvTgW4kjvdMTWPB1cux8GDE9+q5MtXRKwvhDzzWhtJ/hZOAxELPORzMp+dSanPNkWU7UWUwM29v7MaIQeZFsy2pgPnzEUh7qgKtpQiIAKH+1+2JBrkSlRjfY234Gy3LG9V4IINGfcIPhO4FdVM3iO82PgOtN+tFvyxF2qnn8OX6L9lhJYaIEhXVQSl5xmmn1nkocZvbXmJgxqz/+IAj2e2qJG57sGsr+d+S+kzIeB0AvgbMP/BNbE7Oz4Nb0sLr78f4Jf9mX4AlbC1/l/iPT3Eamgx00uN98toCO11EBQX3HVqm1nA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN2PR11MB3934.namprd11.prod.outlook.com (2603:10b6:208:152::20)
- by CY5PR11MB6162.namprd11.prod.outlook.com (2603:10b6:930:29::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.17; Thu, 28 Aug
- 2025 16:22:48 +0000
-Received: from MN2PR11MB3934.namprd11.prod.outlook.com
- ([fe80::45fd:d835:38c1:f5c2]) by MN2PR11MB3934.namprd11.prod.outlook.com
- ([fe80::45fd:d835:38c1:f5c2%6]) with mapi id 15.20.9052.019; Thu, 28 Aug 2025
- 16:22:48 +0000
-Date: Thu, 28 Aug 2025 18:22:02 +0200
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: <sohil.mehta@intel.com>, <baohua@kernel.org>, <david@redhat.com>,
-	<kbingham@kernel.org>, <weixugc@google.com>, <Liam.Howlett@oracle.com>,
-	<alexandre.chartre@oracle.com>, <kas@kernel.org>, <mark.rutland@arm.com>,
-	<trintaeoitogc@gmail.com>, <axelrasmussen@google.com>, <yuanchu@google.com>,
-	<joey.gouly@arm.com>, <samitolvanen@google.com>, <joel.granados@kernel.org>,
-	<graf@amazon.com>, <vincenzo.frascino@arm.com>, <kees@kernel.org>,
-	<ardb@kernel.org>, <thiago.bauermann@linaro.org>, <glider@google.com>,
-	<thuth@redhat.com>, <kuan-ying.lee@canonical.com>,
-	<pasha.tatashin@soleen.com>, <nick.desaulniers+lkml@gmail.com>,
-	<vbabka@suse.cz>, <kaleshsingh@google.com>, <justinstitt@google.com>,
-	<catalin.marinas@arm.com>, <alexander.shishkin@linux.intel.com>,
-	<samuel.holland@sifive.com>, <dave.hansen@linux.intel.com>, <corbet@lwn.net>,
-	<xin@zytor.com>, <dvyukov@google.com>, <tglx@linutronix.de>,
-	<scott@os.amperecomputing.com>, <jason.andryuk@amd.com>, <morbo@google.com>,
-	<nathan@kernel.org>, <lorenzo.stoakes@oracle.com>, <mingo@redhat.com>,
-	<brgerst@gmail.com>, <kristina.martsenko@arm.com>, <bigeasy@linutronix.de>,
-	<luto@kernel.org>, <jgross@suse.com>, <jpoimboe@kernel.org>,
-	<urezki@gmail.com>, <mhocko@suse.com>, <ada.coupriediaz@arm.com>,
-	<hpa@zytor.com>, <leitao@debian.org>, <peterz@infradead.org>,
-	<wangkefeng.wang@huawei.com>, <surenb@google.com>, <ziy@nvidia.com>,
-	<smostafa@google.com>, <ryabinin.a.a@gmail.com>, <ubizjak@gmail.com>,
-	<jbohac@suse.cz>, <broonie@kernel.org>, <akpm@linux-foundation.org>,
-	<guoweikang.kernel@gmail.com>, <pcc@google.com>, <jan.kiszka@siemens.com>,
-	<nicolas.schier@linux.dev>, <will@kernel.org>, <andreyknvl@gmail.com>,
-	<jhubbard@nvidia.com>, <bp@alien8.de>, <x86@kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-mm@kvack.org>, <llvm@lists.linux.dev>,
-	<linux-kbuild@vger.kernel.org>, <kasan-dev@googlegroups.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v5 07/19] mm: x86: Untag addresses in EXECMEM_ROX related
- pointer arithmetic
-Message-ID: <bfqimycwy35iilpjwvx7vtddnpkdrlzk6r4o37l7ro2mintcr3@tml6cbbum2w4>
-References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
- <c773559ea60801f3a5ca01171ea2ac0f9b0da56a.1756151769.git.maciej.wieczor-retman@intel.com>
- <aLAmW-UV6hv9k1LT@kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aLAmW-UV6hv9k1LT@kernel.org>
-X-ClientProxiedBy: DU7P251CA0028.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:10:551::12) To MN2PR11MB3934.namprd11.prod.outlook.com
- (2603:10b6:208:152::20)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWYmvZjG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8182C4CEEB;
+	Thu, 28 Aug 2025 20:19:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756412361;
+	bh=EfjnmzRM4EzcfrEjZb23/Q388aWEyQC6jnzqc5fc3EY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BWYmvZjGSIhGsXSITNjValCU+H/NakH+Ls/Djn/tsb1jdJotNaLCwT5loQOWcouAI
+	 L9RCLZblArg6XxZ+165bTtoXHQyfMZbRxY+nq4By7/Vbriu4UDciz9M/fhi292xlfg
+	 MlvDF7Q4gmgRW+JnZQb3ugIJFYG51hxAsvnNyrfGhLWRmuR6Q0Z09CQF+EJfYGL/kc
+	 ZLYOLaR3Cf0mRUUVYgkqT6Dsu1hWwB2LTJDQceK8ZyzuT6aZQBjTVDVsis5JCRanln
+	 EYIsBdufpk0e3794rEjgqj9JtPTkeB3oYtJopEGq552ZGP7crVncu0xWF1Qjhp/ycN
+	 0/2Ql3ZHeRFRw==
+Date: Thu, 28 Aug 2025 13:19:15 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Kees Cook <kees@outflux.net>,
+	Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+Message-ID: <20250828201915.GA219815@ax162>
+References: <20250825141316.work.967-kees@kernel.org>
+ <20250825142603.1907143-5-kees@kernel.org>
+ <CANiq72kc7Ky6+7Ny7jR04s8vU-g23qBQC0rQrOZDxDzXT+m1TQ@mail.gmail.com>
+ <202508250834.E2456B9@keescook>
+ <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
+ <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net>
+ <20250827013444.GA2859318@ax162>
+ <56c2b1ce-00a4-403c-9927-79bfd9a23574@infradead.org>
+ <20250827193815.GA2293657@ax162>
+ <CANiq72nX7d3XQtQKDdeUh2RFy5HqSg360m4pzesJyBP+y9K7FA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR11MB3934:EE_|CY5PR11MB6162:EE_
-X-MS-Office365-Filtering-Correlation-Id: db945b96-7571-4a51-e1fc-08dde64f2053
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?JbyeV051BmVnrDwuQyZ7ekPK/iGKhpRdKNceChpryL02yiLah9txI2X07U?=
- =?iso-8859-1?Q?XnLGFby9zh8MAhxQD/2J6b+bbDfx6FHycNiemRAzoVUm8yDJG021EeujS3?=
- =?iso-8859-1?Q?GuILaNvCTFITB6Bazy2aQdcOh5ds1ymmZ9+Czpl7Hl2MCrCdWoCf++ogwg?=
- =?iso-8859-1?Q?afTe8zkjMrNpGticwXrhnLJx2NsYSxqZAx0JdoFwwDjD0LXUZ0Qr7vvs3w?=
- =?iso-8859-1?Q?exRk8QQC1gTOdB6twTA8REZA1PwZOUDyr4p3oMGIs9LvfDZQuNkC9jNjtC?=
- =?iso-8859-1?Q?3kXAEZ9VDPT+e/x+m+1s30w8K3+3p/Xcw4J6dbTLl+iv1hPxL3ivRg+B4+?=
- =?iso-8859-1?Q?M+gji6q/uT6lqfb9NXJDrE8J0mjJSDiYP+5YBrqHCBJaeAJu5D+Uq4XtiY?=
- =?iso-8859-1?Q?JLjCa1jSZn971Cmw8LWMoNZu/6ZzGR7lr9JF7lQweBhc0w7i9lUq/g3eq1?=
- =?iso-8859-1?Q?aelcJflmyIr1LeW4Ruc386e7GbFzMpIjycAHTfxRzWCFXLW8hs0lk+Ar/H?=
- =?iso-8859-1?Q?aqwu3wJR0OzIwUQWiYmaoSdfbt+QqhJ0dRflJSyj1RtpsUbED2PGuVB0a8?=
- =?iso-8859-1?Q?tki76qgFp3yxnVo2iss4ZusdLLjtZBfLSv9zIATMAlpk4l471ZjFDzxm97?=
- =?iso-8859-1?Q?7C+/jXB1w1k5b/8LF9y1zFZdiHpYRO8vOyrRPY+Qn9VyUKjWX1W5FSYWpd?=
- =?iso-8859-1?Q?+BNpM7HTmX2nHKaE1vm945bM2EESUCW72aeH2LOfmMgfAB21hX9TFF6th9?=
- =?iso-8859-1?Q?kLdRK37PwbhQ+1Xq9CVGc9hrrNUs5OF20JhJ0JkbO9DRWbmxi4uAIpAJwa?=
- =?iso-8859-1?Q?IOlWGfJcFyaEZFX8dYKA+Qwr2sI5KPteTDBNILyvy7yX0PyfcRVe4o5ozK?=
- =?iso-8859-1?Q?ex+rCsJZAG1pWqlsmgB47E0wCKY1h0tqGFiYWu7bItZUb72Z28bfWEd60o?=
- =?iso-8859-1?Q?gYgzwbSjJxVHExOTh1u3YUa/35yduFQ//AOoRgsuEBC2Pe//SSCwpSfeTZ?=
- =?iso-8859-1?Q?bvHB0D2MraTiECWW90oWiPxrHNO1slZljaJWhtW0aD8IiBMUxjteXZpBeR?=
- =?iso-8859-1?Q?P/+3N3yWg56MftHXsUTYgu+MSw8eMFN5fjpZioIXodIHtzxl3xB1VutqGM?=
- =?iso-8859-1?Q?T28X2+t080/Pb5+qFaKJX1tcYJeTI6SfxVsxmSIebnUbPLVpS+TewEpLL1?=
- =?iso-8859-1?Q?myOfdI7+DaZplOxAiECBf4XnsHqcU5c7zQyxllK9HZ/JIR2AsAWBD7/ff3?=
- =?iso-8859-1?Q?6z8P07dvHFBCugJTczvuer8xXn0z5wcN0gmUFijJVOpaoaI+FJX9oVP98a?=
- =?iso-8859-1?Q?1vuz0M5+4stHLzeFxtNUSOYoGa5t4uU6QicryD8N8Si+nAd1I4a7MfHlb8?=
- =?iso-8859-1?Q?JbcSa5oijRVpZYUDbuCTgYULW2iAfq7VdzDdEn3/Mmoaas1t3k7tdQ/wgI?=
- =?iso-8859-1?Q?GVybPi4XsAGQAN3IRMQ711BAgZ9MQu/k2QGWrPaWsrvzuX6sRByGT/HT3p?=
- =?iso-8859-1?Q?I=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB3934.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?L9bH3fh/g39CfF9draqGbsozksZ5jzN8UfPX3PKElXXNQPP0qRAopkRwho?=
- =?iso-8859-1?Q?lSy2sdEQxWAOHe87AOybOsiMoo8b17mRmTOG9rAskp37PevRf+XFIHRSCP?=
- =?iso-8859-1?Q?fG+6bBdn20RaAjhs0s2Z+IjN6nnksUYogz1DDHEyz0B/bYVGJdsZFna4n3?=
- =?iso-8859-1?Q?GpaUnk3zRxjtVNyiN0ZtOmAPMQ3fQkQNAhhxZKTbdLnykie3aATBW1FX24?=
- =?iso-8859-1?Q?zGCqEvTbY5H0nYSHzdcic9mM/D8viR/IgoFiVck+j+wN54eNRzesUWqglM?=
- =?iso-8859-1?Q?0s9I7731gXJyayWYIcDWQHTZ/w9P2fY72EdSxlXad8pyQUdMU41eqB7SY/?=
- =?iso-8859-1?Q?txui2OMvh4mt13wL/wrPRC0XOScxvoyv7cDiD7X5tW5yCW908T1nHu79cm?=
- =?iso-8859-1?Q?j7LCGlZuSizmmWZbLysTd4KFcMP3+L43CXb+pvHjCIFETr7Iim4uz6zhZl?=
- =?iso-8859-1?Q?pX7quZI6lBVwDS7Mccj2gdq6V1K+7uMo8RyooW+PLb6VC/CpyP0zNUQscw?=
- =?iso-8859-1?Q?dxTpz2Xj1l0Y3HxFou+oqLFbHBTYsjF5t0lHKzn5/iRhDQMLyKtzqMnqbH?=
- =?iso-8859-1?Q?DrKzLkwDxYF4Qm0vOyYJITnbQmlzalIC7OabLCfFz77qwAFUBhZ4Tx4iFG?=
- =?iso-8859-1?Q?MTuzYAyvyoSXuHx9U3Oa/G7kO40U3Zi8y1cs0Qq+8o07icT1SE1pqgO3w4?=
- =?iso-8859-1?Q?/teK5XiYCh/T6sTaSJ6vNLyihLu4gMd4HpdRsXcbC/9GbJR7WdcguNcZZx?=
- =?iso-8859-1?Q?EBVRWRHAVx0lf3DRmsfHomVMINc4+q1Q8ahtYgPqop5Am192OWxRCl/hUS?=
- =?iso-8859-1?Q?dRrYTSTL34z6g1GBPfBToQMWAE5eLsv0gPUFkHiHuz5+nE/v69hUhrNOeW?=
- =?iso-8859-1?Q?UQJDTiSS9ysNqL+1PhVXv66jwMBBuzqEkxPdomaiCLnnBAn23IngDIB+mq?=
- =?iso-8859-1?Q?eCkffY0jBTV0TBnXyUzLUH5C69phiJzBQdc09RgMTobgGSonU4usdqLGVh?=
- =?iso-8859-1?Q?4KQzDf+jZktoaR5jL4JIUeLjOHadrDOI+GEbvF7oOaMHRfHz1FUYZxrqtO?=
- =?iso-8859-1?Q?exfe/v/TTpZQGbb3EDcmyKDmTXiao+UfHmcWRQ4z+Nf4Zj7A+P13ZMRD8Q?=
- =?iso-8859-1?Q?XV+jq1DhwDl/Gg561fD67YcLfak2zE5AuM23Lsi1l3CwDMDDwmJyaUg4uM?=
- =?iso-8859-1?Q?Pv6qzXhtyGjfpUox9t2l9Oka7dlCeZN7LIs/UOhO+3HVDfdMQFn/BEvUnS?=
- =?iso-8859-1?Q?/KqIOzvds7urcqEb4a6gKFb0Yfk8Er2/16Bc4CxeL2/BeJp5xnJBjPRaj6?=
- =?iso-8859-1?Q?aAO0LyUH2ESqNCDHpTrn4ocY1Q8+h6jeNn7dcUDBGq8jemrYyI99c6d2r+?=
- =?iso-8859-1?Q?ZNQ64MSLbHBmaChyxVn9aN7Wi54x8lofaZxMkeMT5kJAdDAZI6luNuiv24?=
- =?iso-8859-1?Q?kniIfRHrd8xpPua2HROG/Kk/QdkOFjp/HzaU/GVUsj/fqQDKJ4jNnqpr99?=
- =?iso-8859-1?Q?tmnfE4MJTqYm1bBlHckTl4laWwKSixEgA35P9WHCH5UJymI9s9Ls1XU6s4?=
- =?iso-8859-1?Q?1dk0HgmfjlEsLzZkSuaZQA+o0LnUnbeYMnGjJfswTutKSs5M54rGoMZz1i?=
- =?iso-8859-1?Q?fyYVObWjGguIkf3JuIokZ8FrMpZWrF60snN++aSbUe6ZICff2qcyU5V2C6?=
- =?iso-8859-1?Q?tNLOHfb8+Pc1zA4/Kv8=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: db945b96-7571-4a51-e1fc-08dde64f2053
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB3934.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 16:22:48.2523
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YrjDUde0RdDyFEF7c3yDXp9SABzMcfh0HYrQUyCuQdNCjT8GXr1be5zP9mOohEwv2jYhk5O1STAxD4e/z/lrdc17XwFSJ+LilLCBvpTS7mk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6162
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72nX7d3XQtQKDdeUh2RFy5HqSg360m4pzesJyBP+y9K7FA@mail.gmail.com>
 
-On 2025-08-28 at 12:50:19 +0300, Mike Rapoport wrote:
->On Mon, Aug 25, 2025 at 10:24:32PM +0200, Maciej Wieczor-Retman wrote:
->> ARCH_HAS_EXECMEM_ROX was re-enabled in x86 at Linux 6.14 release.
->> Related code has multiple spots where page virtual addresses end up used
->> as arguments in arithmetic operations. Combined with enabled tag-based
->> KASAN it can result in pointers that don't point where they should or
->> logical operations not giving expected results.
->> 
->> vm_reset_perms() calculates range's start and end addresses using min()
->> and max() functions. To do that it compares pointers but some are not
->> tagged - addr variable is, start and end variables aren't.
->> 
->> within() and within_range() can receive tagged addresses which get
->> compared to untagged start and end variables.
->> 
->> Reset tags in addresses used as function arguments in min(), max(),
->> within().
->> 
->> execmem_cache_add() adds tagged pointers to a maple tree structure,
->> which then are incorrectly compared when walking the tree. That results
->> in different pointers being returned later and page permission violation
->> errors panicking the kernel.
->> 
->> Reset tag of the address range inserted into the maple tree inside
->> execmem_cache_add().
->> 
->> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
->> ---
->> Changelog v5:
->> - Remove the within_range() change.
->> - arch_kasan_reset_tag -> kasan_reset_tag.
->> 
->> Changelog v4:
->> - Add patch to the series.
->> 
->>  mm/execmem.c | 2 +-
->>  mm/vmalloc.c | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->> 
->> diff --git a/mm/execmem.c b/mm/execmem.c
->> index 0822305413ec..f7b7bdacaec5 100644
->> --- a/mm/execmem.c
->> +++ b/mm/execmem.c
->> @@ -186,7 +186,7 @@ static DECLARE_WORK(execmem_cache_clean_work, execmem_cache_clean);
->>  static int execmem_cache_add_locked(void *ptr, size_t size, gfp_t gfp_mask)
->>  {
->>  	struct maple_tree *free_areas = &execmem_cache.free_areas;
->> -	unsigned long addr = (unsigned long)ptr;
->> +	unsigned long addr = (unsigned long)kasan_reset_tag(ptr);
->
->Thinking more about it, we anyway reset tag in execmem_alloc() and return
->untagged pointer to the caller. Let's just move kasan_reset_tag() to
->execmem_vmalloc() so that we always use untagged pointers. Seems more
->robust to me.
+On Thu, Aug 28, 2025 at 02:11:51PM +0200, Miguel Ojeda wrote:
+> On Wed, Aug 27, 2025 at 9:38â€¯PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > Another idea I had to avoid this is introducing CONFIG_CFI_GCC as a user
+> > selectable symbol and making CONFIG_CFI the hidden symbol that both
+> > compiler symbols select. After a couple of releases (or maybe the next
+> > LTS), both CONFIG_CFI_CLANG and CONFIG_CFI_GCC could be eliminated with
+> > CONFIG_CFI becoming user selectable, which would keep things working
+> > since CONFIG_CFI=y will be present in the previous configuration.
+> 
+> If we are OK with something like this (i.e. waiting a few releases),
+> then isn't it simpler the `def_bool` approach I mentioned? i.e. it
+> means one less symbol and one less rename later, right?
 
-Sure, I'll test if it works and change it :)
+Ah yes, I reread your suggestion and that would probably be the best
+course of action, as it does avoid the extra symbol (although I am not
+sure what you mean by one less rename?). As I understand it:
 
->
->>  	MA_STATE(mas, free_areas, addr - 1, addr + 1);
->>  	unsigned long lower, upper;
->>  	void *area = NULL;
->> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->> index 6dbcdceecae1..c93893fb8dd4 100644
->> --- a/mm/vmalloc.c
->> +++ b/mm/vmalloc.c
->> @@ -3322,7 +3322,7 @@ static void vm_reset_perms(struct vm_struct *area)
->>  	 * the vm_unmap_aliases() flush includes the direct map.
->>  	 */
->>  	for (i = 0; i < area->nr_pages; i += 1U << page_order) {
->> -		unsigned long addr = (unsigned long)page_address(area->pages[i]);
->> +		unsigned long addr = (unsigned long)kasan_reset_tag(page_address(area->pages[i]));
->
->This is not strictly related to execemem, there may other users of
->VM_FLUSH_RESET_PERMS.
->
->Regardless, I wonder how this works on arm64 with tags enabled?
+  config CFI_CLANG
+      bool "Use Kernel Control Flow Integrity (kCFI)"
+      depends on ARCH_SUPPORTS_CFI
+      depends on $(cc-option,-fsanitize=kcfi)
+      help
+        <generic help text>
 
-Hmm, good point, I'll check it out in qemu if this function is called on arm64.
+  config CFI
+      def_bool CFI_CLANG
 
-However this issue didn't pop up for me before 6.14 when EXECMEM_ROX was
-enabled, so maybe it just didn't hit tagged pages before? I'll try to recheck
-that on x86 too.
+then keep the rest of the change the same with the rename? I guess the
+CLANG in the symbol name could be confusing for some people but thinking
+about the timeline more, kCFI would not ship until GCC 16 in the spring
+of 2026, which would be after the Linux LTS release at the end of 2025.
+That means we could easily drop CONFIG_CFI_CLANG in the first release of
+2026 so that compatible GCC users should only ever see CONFIG_CFI from
+mainline. They could see CONFIG_CFI_CLANG in the LTS release but at
+least it would work.
 
->Also, it's not the only place in the kernel that does (unsigned
->long)page_address(page). Do other sites need to reset the tag as well?
-
-This place is special in the sense that it does "start = min(addr, start)" and
-"end = max(addr, end)" just a few lines later. And start and end seem to always be
-untagged, while addr sometimes gets tagged. So with software KASAN and vmalloc
-support enabled it would get the final start and end values wrong and then a
-page permission error would happen someplace else.
-
-I don't think all other page_address(page) sites need resetting, but I'll double
-check if there is any pointer arithmetic there.
-
->
->>  
->>  		if (addr) {
->>  			unsigned long page_size;
->> -- 
->> 2.50.1
->> 
->
->-- 
->Sincerely yours,
->Mike.
-
--- 
-Kind regards
-Maciej Wieczór-Retman
+Cheers,
+Nathan
