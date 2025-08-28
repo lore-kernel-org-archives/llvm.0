@@ -1,181 +1,108 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4E8277C84;
-	Thu, 28 Aug 2025 06:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4669D18C011;
+	Thu, 28 Aug 2025 09:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756361686; cv=none; b=lfhNrGCfzlSej4Joo+yS5gnCXD16p8uhcAlHVm9+HxUoh68MxOjmOpHfyTkvyg437k1XjSIGiqm/0QJnkZ4xiQhgTMl/oz3OZy5rIxTOqdHliZZCjCnSlSBZrxBYXBMe4V5Ts7bphDtkhNGt4mGcWQ/s7rqdcmhxA5ZEhr4nu2c=
+	t=1756373673; cv=none; b=MUVRgiB7jFgAxZ+He0j1j2ydV78A/pxbTyg+ZVFAk/A6pNCpTzap9PkvZyY/dKnk7AaSo46CZ15xUrT4vFuyN9YOtKFGvAuFtRWh6zJ8/4dItieJjftQf4wdDSfFtE9afH3Hso0S1ylFEKScb7sYBM1hnpVe7mVb5i5KPj72BiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756361686; c=relaxed/simple;
-	bh=24RtXmBs8sDbV+FKZY3m2RQfjwKVsmeGc/ycJ8DwMBw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ks0sc6XGzELAOPcuOZzwHqUfbIte4X2nyiLJDr1FuH9EAEzNKACheMD6j8LVHUL8V71BQG+rLcN43YDAMMtcWezgHk6t15lY2s3nRxyfQjAjE9GpveYAVmKB8ZkbHVRKQ0OZxj9fzk3nZNtm6gkwcJgukmvlt1XXqaptdLOCV3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bkxGi3Q6; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1756373673; c=relaxed/simple;
+	bh=yuynSKYGfxPDARXbNkOVcirGGnm9MJdjYgpoYNnyvqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pj7cnJnBmNhRwRXYDlYEWE77dTf9Aay+gpz1AYDqm7m36rnmQq/gV0fzCl241lXPnidK4xchehgni4DeAvnmwfp+QPydyRoFHbYRjs7u+sRxE3v+zrHZ927l/ywkOLL4i0qrbjvkT5E5ZvIRx77TuPPN3f8ix5wh4TAEawKKASY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HZ1Mdz6O; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bkxGi3Q6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=mLP5bwfx5JUrcHsz6CyZc7tgsZnbyjt3ON1W+9DUhmE=; b=bkxGi3Q6m6lm+Igj/KqLC35diy
-	D+8C+V1d7b7P294LP3kloHaUZQsS5V2wNmdrRa9BnpUsrNdGc9sjnIFq5AVDEdvpfr2CRtTaXXt6/
-	ZTCf7PVZigQcjx7zulNTvhErrYr+n50RnGuPZBTN+x/vD9kAZFGU983GYe6EkyK8JE7zP0NreezE8
-	dsJezbWOu2t9JxU8z/Gtny6N+IrqdZm3jVq7jSIaiNtr2M0vMWF8rbRYtFLyJX4HQQOhJ98tIZQc2
-	jwoD23j7ZEdtvosv6JKqa4SoOnqZ9GR/bHA5PxbpW0DcZWbKDISZecRVQVLixsAWZGKU8JYJAXrfm
-	WpmdxvJQ==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1urVuA-00000000Phx-1KCr;
-	Thu, 28 Aug 2025 06:14:38 +0000
-Message-ID: <61cd6dac-14e1-474e-9aa3-4fe782e81ba9@infradead.org>
-Date: Wed, 27 Aug 2025 23:14:36 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HZ1Mdz6O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756373672; x=1787909672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yuynSKYGfxPDARXbNkOVcirGGnm9MJdjYgpoYNnyvqk=;
+  b=HZ1Mdz6OFFA8/lzdG0aL4m0xFGMIpSf8wZRD4PxHF0NbY8Y0ktjo8RNs
+   Uex8rCJkuUA+1rhmESloQlKPqM9lZIbo6SHhyUYUpsNbU+gnkUpEB1UJJ
+   Pkpl1cGPI26RQBbMzH4eH/ttUVHnaOg5YluLoWoZDEPJk4my0mDObr2na
+   IUuETNUph1ZwsFkzTkJqGzX4Ye845UwsFSVfX+5kGh2KSKxD/6N+pUKOT
+   vhI/x2oEn0zNOXZ9TdlfiqejnHo2u3petb4diyFgTNPneAqIuSvm8Q0CO
+   ZZpCsLZQX3A6x2IaWojIAvxnpuspA53oJ//Ax3W3WC0rKWIIA66rgMj3G
+   g==;
+X-CSE-ConnectionGUID: rMMXvW4DTTuBnkW57rPwCQ==
+X-CSE-MsgGUID: uKxPuxv8RASpM3HgmFbucg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11535"; a="58787351"
+X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
+   d="scan'208";a="58787351"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 02:34:31 -0700
+X-CSE-ConnectionGUID: 3oW4vjZ0SqCDl3Ptz+McUg==
+X-CSE-MsgGUID: M5KpuRq8SLWF14awLIFgLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,217,1751266800"; 
+   d="scan'208";a="170462631"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 28 Aug 2025 02:34:26 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1urZ0v-000Tbr-1n;
+	Thu, 28 Aug 2025 09:33:57 +0000
+Date: Thu, 28 Aug 2025 17:32:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gatien Chevallier <gatien.chevallier@foss.st.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Gatien Chevallier <gatien.chevallier@foss.st.com>
+Subject: Re: [PATCH net-next v3 1/2] drivers: net: stmmac: handle start time
+ set in the past for flexible PPS
+Message-ID: <202508281615.ExryCwiA-lkp@intel.com>
+References: <20250827-relative_flex_pps-v3-1-673e77978ba2@foss.st.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@outflux.net>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Kees Cook <kees@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>,
- Linus Walleij <linus.walleij@linaro.org>, Mark Rutland
- <mark.rutland@arm.com>, Puranjay Mohan <puranjay@kernel.org>,
- David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- x86@kernel.org, linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20250825141316.work.967-kees@kernel.org>
- <20250825142603.1907143-5-kees@kernel.org>
- <CANiq72kc7Ky6+7Ny7jR04s8vU-g23qBQC0rQrOZDxDzXT+m1TQ@mail.gmail.com>
- <202508250834.E2456B9@keescook>
- <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
- <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net>
- <20250827013444.GA2859318@ax162>
- <56c2b1ce-00a4-403c-9927-79bfd9a23574@infradead.org>
- <20250827193815.GA2293657@ax162>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250827193815.GA2293657@ax162>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250827-relative_flex_pps-v3-1-673e77978ba2@foss.st.com>
 
+Hi Gatien,
 
+kernel test robot noticed the following build errors:
 
-On 8/27/25 12:38 PM, Nathan Chancellor wrote:
-> On Wed, Aug 27, 2025 at 12:35:12AM -0700, Randy Dunlap wrote:
->> On 8/26/25 6:34 PM, Nathan Chancellor wrote:
->>> On Mon, Aug 25, 2025 at 03:31:34PM -0400, Kees Cook wrote:
->>>> On August 25, 2025 1:00:22 PM EDT, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
->>>>> On Mon, Aug 25, 2025 at 5:35 PM Kees Cook <kees@kernel.org> wrote:
->>>>>>
->>>>>> Yeah, that's a good idea. What the right way to do that?
->>>>>>
->>>>>> config CFI_CLANG
->>>>>>         bool "Use Clang's Control Flow Integrity (CFI)"
->>>>>>         depends on ARCH_SUPPORTS_CFI
->>>>>>         select CFI
->>>>>>
->>>>>> ?
->>>>>
->>>>> I don't recall what is the idiomatic solution for renames, but I
->>>>> remember Linus talking about this topic and about avoiding losing old
->>>>> values if possible (perhaps getting a new question in `oldconfig` is
->>>>> OK as long as the `olddefconfig` respects the old value).
->>>>>
->>>>> I think your suggestion above will still make it appear twice in
->>>>> `menuconfig` -- there may be a way to play with visibility to make it
->>>>> better.
->>>>>
->>>>> A simple possibility I can think of (assuming it works) is having the
->>>>> CFI symbol for the time being introduced just as a `def_bool
->>>>> CFI_CLANG` for a few releases so that people get the new one in their
->>>>> configs.
->>>>
->>>> Ah, I think this works:
->>>>
->>>> config CFI_CLANG
->>>>     bool
->>>>
->>>> config CFI
->>>>     bool "...."
->>>>     default CFI_CLANG
->>>>
->>>> I will add that for v2.
->>>
->>> That does not appear to work for me. I applied
->>>
->>> diff --git a/arch/Kconfig b/arch/Kconfig
->>> index c25a45d9aa96..0d3ed03c76c2 100644
->>> --- a/arch/Kconfig
->>> +++ b/arch/Kconfig
->>> @@ -876,8 +876,12 @@ config ARCH_SUPPORTS_CFI
->>>  config ARCH_USES_CFI_TRAPS
->>>         bool
->>>
->>> +config CFI_CLANG
->>> +       bool
->>> +
->>>  config CFI
->>>         bool "Use Kernel Control Flow Integrity (kCFI)"
->>> +       default CFI_CLANG
->>>         depends on ARCH_SUPPORTS_CFI
->>>         depends on $(cc-option,-fsanitize=kcfi)
->>>         help
->>>
->>> on top of this series and
->>>
->>>   CONFIG_CFI_CLANG=y
->>>   # CONFIG_CFI_ICALL_NORMALIZE_INTEGERS is not set
->>>   # CONFIG_CFI_PERMISSIVE is not set
->>>
->>> gets turned into
->>>
->>>   # CONFIG_CFI is not set
->>>
->>> after olddefconfig. CONFIG_CFI_CLANG has to be user selectable with a
->>
->> Could/did you test with 'oldconfig' instead?
->>
->> olddefconfig is going to use the default value from the Kconfig file,
->> which if CFI_CLANG which is undefined/No/Not set.
->>
->> oldconfig will use the old value from the .config file.
-> 
-> I am not sure I understand what you mean here. With the series as it is
-> or Kees's suggested fix, oldconfig still prompts the user to enable
+[auto build test ERROR on 242041164339594ca019481d54b4f68a7aaff64e]
 
-OK, I don't know the state of the CFI_CLANG / CLANG patch(es).
+url:    https://github.com/intel-lab-lkp/linux/commits/Gatien-Chevallier/drivers-net-stmmac-handle-start-time-set-in-the-past-for-flexible-PPS/20250827-190905
+base:   242041164339594ca019481d54b4f68a7aaff64e
+patch link:    https://lore.kernel.org/r/20250827-relative_flex_pps-v3-1-673e77978ba2%40foss.st.com
+patch subject: [PATCH net-next v3 1/2] drivers: net: stmmac: handle start time set in the past for flexible PPS
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250828/202508281615.ExryCwiA-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250828/202508281615.ExryCwiA-lkp@intel.com/reproduce)
 
-I just mean the difference in 'make oldconfig' and 'make olddefconfig'
-(at least AIUI).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508281615.ExryCwiA-lkp@intel.com/
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-> CONFIG_CFI with CONFIG_CFI_CLANG=y in the old configuration. Both Miguel
-> and I allude to that being fine but it would be really nice if users
-> with CONFIG_CFI_CLANG=y were automatically transitioned to CONFIG_CFI=y
-> without any action on their part. That seems to be in line with how
-
-Yes, I agree.
-
-> Linus feels even as recently as this past merge window:
-> 
-> https://lore.kernel.org/CAHk-=wgO0Rx2LcYT4f75Xs46orbJ4JxO2jbAFQnVKDYAjV5HeQ@mail.gmail.com/
-> 
-> Another idea I had to avoid this is introducing CONFIG_CFI_GCC as a user
-> selectable symbol and making CONFIG_CFI the hidden symbol that both
-> compiler symbols select. After a couple of releases (or maybe the next
-> LTS), both CONFIG_CFI_CLANG and CONFIG_CFI_GCC could be eliminated with
-> CONFIG_CFI becoming user selectable, which would keep things working
-> since CONFIG_CFI=y will be present in the previous configuration.
-
+>> ERROR: modpost: "timespec64_add_safe" [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
 
 -- 
-~Randy
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
