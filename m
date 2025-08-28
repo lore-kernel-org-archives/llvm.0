@@ -1,60 +1,60 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D6426FD9D
-	for <llvm@lists.linux.dev>; Thu, 28 Aug 2025 22:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705BF265CCD
+	for <llvm@lists.linux.dev>; Thu, 28 Aug 2025 22:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756421190; cv=none; b=SUlRgSXSdl2S2OlEK2h6q+wMRCYqdtEmm6q2yH2aTku/TYjk0hQF0CzOKTVErovo81/aZx5iGPlfgDDwYLqiWnMQ09qlkc9aU9j29L4ev4d44sdy5cjczzoEKenO0SCUi9CpZnL1u9rT+4BOTxp0mu/Hik1LXDl+sDnsdIhAqSs=
+	t=1756421760; cv=none; b=O7M6Ku6wI7C3t6Sl1mObtCZVj1JoWTTff8cVjqDSFiN84glmGrSSe0J3ESelQMHZ9os+Fl7CmjBsF0cuUpGyYn6jGNtf3kgaBD5w2bqm6BQp4n5nui6zjMBpM1Dp7KUoBqVodbfO7SCs+GMFkmO+tBXfKbr7U6t072Z67XAI/Fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756421190; c=relaxed/simple;
-	bh=qZcEmOVzMLqyrHZwTmPM2aNebxZHRLa3GU1AdRbcKTA=;
+	s=arc-20240116; t=1756421760; c=relaxed/simple;
+	bh=oOlmlhx/uoqj1tpz6UAHfclWZ6+mPZOOZPCd2SEw9SI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k9AEBpZPsnGvH5+7OsOvEHdB2AsWiRCSLW7IIqvncEPueN2qHPIMLjrl3mpj+FgKrCjiMCuJ0MD1wNtB5m0JzXhv2lBaED3v99xNjQns2MvKfu1OLlcCvUH63V1FbrtFQtxrHql/s4Brv60yDxI0POkEar0KehFUzs4HMQGcS+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q7GJ3Noj; arc=none smtp.client-ip=209.85.214.172
+	 To:Cc:Content-Type; b=M0cvQEuB6oo5ioi1lsZv9M1I3YvBXHmvvsDDOMjLs3cpIKG7t5DQhasl6NI3xn2bVTV2XL/K2NAEZLAbwlAaAdI8LG0qsOhECzvAEyAFeSyFY1dFd9POG2F5IkX/qZ3Me8ATj9hOXIbilFznVMA8N50edUkG2hZoKrPimsqQ4AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a4kxKKL7; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q7GJ3Noj"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2489b6b6cbdso1905275ad.1
-        for <llvm@lists.linux.dev>; Thu, 28 Aug 2025 15:46:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a4kxKKL7"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-32326e25000so225360a91.2
+        for <llvm@lists.linux.dev>; Thu, 28 Aug 2025 15:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756421188; x=1757025988; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1756421759; x=1757026559; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aWTfsYajgxspjw0BEVIGAJj43TSZuMXWhqAKPxCzuMo=;
-        b=Q7GJ3NojK2qEvpesCVG0FMlnZqiXfd4cjSKac7V3wAXBgdv/2Jy6Y+zbYph6DZAwmH
-         QFMsRLC8xhdIavIJ7SJgRmcZOiL2v2Fi3GOK01HQB+LBq5grKapUrzNCLbeARr+WHhT3
-         3FKDwQ8f2pXQ4sErrLmAw8mCXdeBqSxsTYwaxd7Nxxt4LNO8mHYRm1AfTkTP/kRg2aFZ
-         n8+WyGP5yoNCbuCYY0Qy/s4pj7RXrkqdtARCAFq9qm/B9aT835T2aCOBh00OxrYh1bFK
-         n5y7x3QNPMeeDx+C0W89DmeVlSX9L/xKslZPs3dKzhF5xBdAq+lIDiMn+fiVe7oInHB1
-         FY/g==
+        bh=oOlmlhx/uoqj1tpz6UAHfclWZ6+mPZOOZPCd2SEw9SI=;
+        b=a4kxKKL7HtkvmBnvemzgsGZe/eN3RemAwwiElooQKumzancJ0Bswf0nUkeu6QZ221b
+         No0MXqtpIqfmfL5ih3wmswi1/5TNYIH4VP23kElNGEIJ8l2/Wg4GGP2pdNZWEua4k2kL
+         r2lqlHdm+CVs6dZsSFgeR9F2G1sjvLJPkTverNaoov7Gtywya7ZnjHqJietqKpH9oRx9
+         dNqe018GaOGO4lrgnfm2QSIootZ/mmqKH3kgSFs4VJfUar+FQT2tcS7WIruFFpGAzH8N
+         nnRcqYXgbYcLoRJjRq5wlfJpSQL4dP99wRzaIpDXYwlkHVlryhgpMjL6Au7POzcRiAth
+         k7NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756421188; x=1757025988;
+        d=1e100.net; s=20230601; t=1756421759; x=1757026559;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aWTfsYajgxspjw0BEVIGAJj43TSZuMXWhqAKPxCzuMo=;
-        b=pHPNkfsdyMInqbfNr023sjDLJL+hLLi9vZI1CG8lmZnwoi4Z8uNYkaP8aaIxVKLk/+
-         a2xwpiRk6GLOMZ7CQht/VNCdBib8we+M9BbJhsuTEnXRqUxJMrKGXiGR70cR/rfjvOqt
-         hznw6NC/FzDf2FrA3pe35owgAe+LYqnObQVnoSjAt3y63Ji6xySGvnzPhWJ45k7H0bD7
-         Zbbu/aTDZR+LifztCmtKm9C+RW69+PRVSwF/0UOqrTJ36T3DaYYmBIiHrzY18uSoxgvv
-         AvkOsNTU/oClMiuCCLU5RDkoVWZ4oIStQ1rTMnpquDQjHhC89rgFwle2y7RgvKRBLEBk
-         eMxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVx8WmYpEVK5DB3vohKqMxTgs8nBLF6csu+SblmDsctXSrVWO2J3NC7vG3QvQDuWAFqT2A7@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyvr9FMKTkHuzX9zCrdD9QKa0a4uT9SGXvQALQBV1A9+oE7exek
-	GsvkjKeFAmfpEY7Y18l0aPjMU3jSC/bvhxI1kH+wbuxd5pbxnCEwnAm8cH6+qo5Rbi/NH7eQZjP
-	xw7S5EuLfO4Vzv6p1HpaU7usJ0Yr07cQ=
-X-Gm-Gg: ASbGnctQ/shzUEfVP5KA0dJrQWnN6LDNjs7POCtqPPHkehBIlLi0t73WeibcB41uK+5
-	HpR6UhLnTeoZGEcAnXIwdNPJTeBhsfzLI+uB7GjXXnTfurDJaQyqbnfYMEjAjcrdfd8JKNLJzQJ
-	q6UDvFXXl0OK0ZBy2wBs0DvYVbhLeXBn0+ZxQJ5VvpBg9C3IkeDmBGeOkK3vgWbdhcV2XsVOd5v
-	cuc6i+ZGfm97oD16YEM1GDVBqWpE24PW83Wr7GXT1NezkrJUWmpsq+k9GniUaBdY1VqkHGSZKYp
-	s8+cYxjg25XcAE7QK2Vw/KCA1g==
-X-Google-Smtp-Source: AGHT+IEki7N5+ZTphBMAlPvPh8Ed2D0soQ3ee4I0yeC35pDHbq+VM6I/+v50+BWUjpOg7vsfojcxdwe+ytoieurevJg=
-X-Received: by 2002:a17:903:2f0c:b0:248:b43a:3ff with SMTP id
- d9443c01a7336-248b43a098cmr46736235ad.8.1756421188295; Thu, 28 Aug 2025
- 15:46:28 -0700 (PDT)
+        bh=oOlmlhx/uoqj1tpz6UAHfclWZ6+mPZOOZPCd2SEw9SI=;
+        b=Hi90jLQAofOx30WjHu3foXfKfw7KSh64/CYza2/D+qiUXbGUUbYmfB+MakIwUOYX1y
+         0E0SiaYU4QPcliSItefjIUYtL5BuzpBKtyg7qVerZ+I9s16EH9p3SJ5ebfiqnS8ZNwg/
+         rg04cmliTJPlVLqaK81KrwKIHK69aDEJKJ3nHMCeSsevlSqfD2fMd444Ur2h5PSrDigz
+         QZKGI8kNDtGxhik6Oj1phrWT9Vja4nZFPJyZBBjf9X59z0FOIb4xIQVsG+Hk6575ZCM5
+         Z6xdU+OMtuyeg+6+xJnwFCtffrVWLdRyq7H1xQgZ7+6cGUzZzVQnn+taYHdLqdfav6hG
+         CT8g==
+X-Forwarded-Encrypted: i=1; AJvYcCUacRswK7R9CBoqetSpz0f/ekl4fGhyfbOHdZo9Zvb0KjbdcuWF8AokdYvLMtk84Pn9022N@lists.linux.dev
+X-Gm-Message-State: AOJu0YyOBcX5TEuOMG18NXsSXqz6gqftEL1mUZNgFJNBKS8wFVwt9158
+	KOv5KGrfzEn3gGKHP/4QIJuChlXLYSKibb0KDB78J9tfg4E4RRr1L6OyyT7nFscs9lkCenOK+oI
+	0lpyTbgX3FPYfvppuCDI/WETl9voU0BBkhzOUVe0=
+X-Gm-Gg: ASbGncvIqIoG22xjWWapFd445pdHyEduDLLSm9HZ3XNbOs/HwKecQj413+K/aKtJR5Y
+	jrXdSQObfTwvjkiQp2eKV9JW2KGcTEmguCauJMn3zPmviD40m3sXVn6rfIwoF5ke8cHGXAb9b0y
+	JfiMwOBpm8a3CIYuL4DPawf/xPUtpTMTLGLMRI0w279aFN56ybtRIONYIBXGR1Xh+LrRAmY5dp+
+	k/GJStJMVDNuf9+I2sJS3uKtuvMHgiqYO0WgfyU1VNGZ0bA54JHxbXQ2CH8c++aV8zTZ2gJ/8gC
+	+tfAjhyGMasKuNoP81m1LWdmkQ==
+X-Google-Smtp-Source: AGHT+IGyhiVQPmqOT0rpkocxIF4+MoNVf9DAEsmChvxF7JPD+Cb6PcP1MNWLZ1lQ4jj5g+ohcbCqTNY4bA0OxcF+1AI=
+X-Received: by 2002:a17:903:22c8:b0:246:a93c:aa0d with SMTP id
+ d9443c01a7336-246a93cacc7mr149453825ad.11.1756421758714; Thu, 28 Aug 2025
+ 15:55:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,49 +66,40 @@ References: <20250825141316.work.967-kees@kernel.org> <20250825142603.1907143-5-
  <202508250834.E2456B9@keescook> <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
  <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net> <20250827013444.GA2859318@ax162>
  <56c2b1ce-00a4-403c-9927-79bfd9a23574@infradead.org> <20250827193815.GA2293657@ax162>
- <CANiq72nX7d3XQtQKDdeUh2RFy5HqSg360m4pzesJyBP+y9K7FA@mail.gmail.com> <20250828201915.GA219815@ax162>
-In-Reply-To: <20250828201915.GA219815@ax162>
+ <CANiq72nX7d3XQtQKDdeUh2RFy5HqSg360m4pzesJyBP+y9K7FA@mail.gmail.com>
+ <20250828201915.GA219815@ax162> <25B398C8-4D9A-46C6-AED9-9DA2805DF9D7@kernel.org>
+In-Reply-To: <25B398C8-4D9A-46C6-AED9-9DA2805DF9D7@kernel.org>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 29 Aug 2025 00:46:16 +0200
-X-Gm-Features: Ac12FXy71Ta7noj8hoAJaRqNi-cWiWGGHMHvo9xSNtrTkaZTnVcq8IZX729diUc
-Message-ID: <CANiq72mRKHunT2Zkdj4dS5yHrx==MsmY33BvBqOy52_pNqrZFw@mail.gmail.com>
+Date: Fri, 29 Aug 2025 00:55:46 +0200
+X-Gm-Features: Ac12FXxNeQ4YfImZMukInEZi5M8BoR7IH_90HG8_feBBu1eJLxGu0KIOUkXPLIY
+Message-ID: <CANiq72=1XKdy6VrAPE7xH65nadFzmrBBJWsLw5tYmxNJqFbnYg@mail.gmail.com>
 Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Kees Cook <kees@outflux.net>, Kees Cook <kees@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Puranjay Mohan <puranjay@kernel.org>, David Woodhouse <dwmw2@infradead.org>, 
-	Jonathan Corbet <corbet@lwn.net>, x86@kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Kees Cook <kees@outflux.net>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, x86@kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 28, 2025 at 10:19=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
+On Thu, Aug 28, 2025 at 10:32=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
 >
-> Ah yes, I reread your suggestion and that would probably be the best
-> course of action, as it does avoid the extra symbol (although I am not
-> sure what you mean by one less rename?). As I understand it:
->
->   config CFI_CLANG
->       bool "Use Kernel Control Flow Integrity (kCFI)"
->       depends on ARCH_SUPPORTS_CFI
->       depends on $(cc-option,-fsanitize=3Dkcfi)
->       help
->         <generic help text>
->
->   config CFI
->       def_bool CFI_CLANG
->
-> then keep the rest of the change the same with the rename? I guess the
+> Oh! Keep CFI_CLANG the visible option? Will the later rename work right? =
+I'll give it a try.
 
-Yeah, exactly. The name isn't great, though, as you mention, if users
-with GCC see it early on.
+Yeah -- whenever we want, we can move everything to the CFI one, and
+hopefully many users that enabled it will not see the prompt since
+they will already have the value there already.
 
-By one less rename I just meant that we wouldn't have both CFI_GCC and
-CFI_CLANG "moved"/"merged" into CFI later on (just 1).
+Kconfig doesn't save the unset value in this case, so some users will
+still see the prompt. Which I guess is good for the GCC users, since
+for them it is a new possibility after all, that they should consider.
+
+I didn't really test it thoroughly though. Caveat emptor and all that...
 
 Cheers,
 Miguel
