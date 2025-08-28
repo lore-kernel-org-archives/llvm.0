@@ -1,105 +1,181 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95602BCF5
-	for <llvm@lists.linux.dev>; Thu, 28 Aug 2025 02:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4E8277C84;
+	Thu, 28 Aug 2025 06:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756346545; cv=none; b=HYKZsot4QpW4Nla4ymYojQn9oavDjobHjYGeooteZR2Q9ZxdMwJSsHweycUcZ17QepR1KLGUnbqtlK457LZCkdXM2+DrieyPT3j1NF3X65hBb4RaXeqLZ58cVOGN6Jhpl6oE0L8SubqjJQLHbSpsjnP9OXikaLLhFLt/bSJxPzA=
+	t=1756361686; cv=none; b=lfhNrGCfzlSej4Joo+yS5gnCXD16p8uhcAlHVm9+HxUoh68MxOjmOpHfyTkvyg437k1XjSIGiqm/0QJnkZ4xiQhgTMl/oz3OZy5rIxTOqdHliZZCjCnSlSBZrxBYXBMe4V5Ts7bphDtkhNGt4mGcWQ/s7rqdcmhxA5ZEhr4nu2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756346545; c=relaxed/simple;
-	bh=vsfhv3Gr7aPA9DerCN7CntWRlP3vsCWyOX62qut/PpE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NdxBiZT9b3MN7YtLYIFt/q1yRUVjlCLv0n8n1FBQh4VBzgctMN2LWysrUziX1z0e/LOXdRErI6Ys6ld1HTs4fxWh159iiX3EbAH+LBZKlf+xCgj9lE2BOoskBhuJX7gzzXliwR7BWL1oAoM2iIcff+uG1+taA+x7L7p2FR8vIfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kQG/Le85; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1756361686; c=relaxed/simple;
+	bh=24RtXmBs8sDbV+FKZY3m2RQfjwKVsmeGc/ycJ8DwMBw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ks0sc6XGzELAOPcuOZzwHqUfbIte4X2nyiLJDr1FuH9EAEzNKACheMD6j8LVHUL8V71BQG+rLcN43YDAMMtcWezgHk6t15lY2s3nRxyfQjAjE9GpveYAVmKB8ZkbHVRKQ0OZxj9fzk3nZNtm6gkwcJgukmvlt1XXqaptdLOCV3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bkxGi3Q6; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kQG/Le85"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=OC
-	PqRs8ymz/48v/kbOviYYdt13c7ovX3tb/1u5IzY5o=; b=kQG/Le850NIFk5U8k/
-	rjYOVs3cyLtvg2+HveeRz1XgvBb70po5NLdGAJ0lIg5fPMI9Zulmaj3ay/ZURPeV
-	X6etzSBaj6+I6ZXjqJr9WOlp6eQ8Gksll+rP/x56NOtHgKq/EiosmHE11saEjWjO
-	VUwzjtJY+dDrBDk3i/cHVvRbQ=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wA3NVB_uK9o16VVEQ--.1167S2;
-	Thu, 28 Aug 2025 10:01:37 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
-Date: Thu, 28 Aug 2025 10:01:35 +0800
-Message-Id: <20250828020135.248869-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bkxGi3Q6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=mLP5bwfx5JUrcHsz6CyZc7tgsZnbyjt3ON1W+9DUhmE=; b=bkxGi3Q6m6lm+Igj/KqLC35diy
+	D+8C+V1d7b7P294LP3kloHaUZQsS5V2wNmdrRa9BnpUsrNdGc9sjnIFq5AVDEdvpfr2CRtTaXXt6/
+	ZTCf7PVZigQcjx7zulNTvhErrYr+n50RnGuPZBTN+x/vD9kAZFGU983GYe6EkyK8JE7zP0NreezE8
+	dsJezbWOu2t9JxU8z/Gtny6N+IrqdZm3jVq7jSIaiNtr2M0vMWF8rbRYtFLyJX4HQQOhJ98tIZQc2
+	jwoD23j7ZEdtvosv6JKqa4SoOnqZ9GR/bHA5PxbpW0DcZWbKDISZecRVQVLixsAWZGKU8JYJAXrfm
+	WpmdxvJQ==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1urVuA-00000000Phx-1KCr;
+	Thu, 28 Aug 2025 06:14:38 +0000
+Message-ID: <61cd6dac-14e1-474e-9aa3-4fe782e81ba9@infradead.org>
+Date: Wed, 27 Aug 2025 23:14:36 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@outflux.net>,
+ Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Kees Cook <kees@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Mark Rutland
+ <mark.rutland@arm.com>, Puranjay Mohan <puranjay@kernel.org>,
+ David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
+ x86@kernel.org, linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20250825141316.work.967-kees@kernel.org>
+ <20250825142603.1907143-5-kees@kernel.org>
+ <CANiq72kc7Ky6+7Ny7jR04s8vU-g23qBQC0rQrOZDxDzXT+m1TQ@mail.gmail.com>
+ <202508250834.E2456B9@keescook>
+ <CANiq72mQsLqhpX29NP3Zm8HZ5m429tSXjgFcRYJM3e=Zac1G1w@mail.gmail.com>
+ <9CCDBE93-7DBD-41D0-B9B6-05900F2AB1EE@outflux.net>
+ <20250827013444.GA2859318@ax162>
+ <56c2b1ce-00a4-403c-9927-79bfd9a23574@infradead.org>
+ <20250827193815.GA2293657@ax162>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250827193815.GA2293657@ax162>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wA3NVB_uK9o16VVEQ--.1167S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww48WrWxZFyxWry7Cr4rXwb_yoW8XF15p3
-	W8W3s0qF1Sgr15XF47Jr47WF4rGFs3Xr48Cw40ywsrAF15Cr97JryxKrWYgr9xWa93ur4f
-	ZFn7tr4a9F4DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UMc_hUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiYxi3eGivsoPJhQAAsO
 
-From: Feng Yang <yangfeng@kylinos.cn>
 
-The following issue occurs when compiling with clang version 17.0.6:
-progs/compute_live_registers.c:251:3: error: invalid operand for instruction
-  251 |                 "r0 = 1;"
-      |                 ^
-<inline asm>:1:22: note: instantiated into assembly here
-    1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
-      |                             ^
-1 error generated.
 
-Use __imm_insn to fix this issue.
+On 8/27/25 12:38 PM, Nathan Chancellor wrote:
+> On Wed, Aug 27, 2025 at 12:35:12AM -0700, Randy Dunlap wrote:
+>> On 8/26/25 6:34 PM, Nathan Chancellor wrote:
+>>> On Mon, Aug 25, 2025 at 03:31:34PM -0400, Kees Cook wrote:
+>>>> On August 25, 2025 1:00:22 PM EDT, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
+>>>>> On Mon, Aug 25, 2025 at 5:35 PM Kees Cook <kees@kernel.org> wrote:
+>>>>>>
+>>>>>> Yeah, that's a good idea. What the right way to do that?
+>>>>>>
+>>>>>> config CFI_CLANG
+>>>>>>         bool "Use Clang's Control Flow Integrity (CFI)"
+>>>>>>         depends on ARCH_SUPPORTS_CFI
+>>>>>>         select CFI
+>>>>>>
+>>>>>> ?
+>>>>>
+>>>>> I don't recall what is the idiomatic solution for renames, but I
+>>>>> remember Linus talking about this topic and about avoiding losing old
+>>>>> values if possible (perhaps getting a new question in `oldconfig` is
+>>>>> OK as long as the `olddefconfig` respects the old value).
+>>>>>
+>>>>> I think your suggestion above will still make it appear twice in
+>>>>> `menuconfig` -- there may be a way to play with visibility to make it
+>>>>> better.
+>>>>>
+>>>>> A simple possibility I can think of (assuming it works) is having the
+>>>>> CFI symbol for the time being introduced just as a `def_bool
+>>>>> CFI_CLANG` for a few releases so that people get the new one in their
+>>>>> configs.
+>>>>
+>>>> Ah, I think this works:
+>>>>
+>>>> config CFI_CLANG
+>>>>     bool
+>>>>
+>>>> config CFI
+>>>>     bool "...."
+>>>>     default CFI_CLANG
+>>>>
+>>>> I will add that for v2.
+>>>
+>>> That does not appear to work for me. I applied
+>>>
+>>> diff --git a/arch/Kconfig b/arch/Kconfig
+>>> index c25a45d9aa96..0d3ed03c76c2 100644
+>>> --- a/arch/Kconfig
+>>> +++ b/arch/Kconfig
+>>> @@ -876,8 +876,12 @@ config ARCH_SUPPORTS_CFI
+>>>  config ARCH_USES_CFI_TRAPS
+>>>         bool
+>>>
+>>> +config CFI_CLANG
+>>> +       bool
+>>> +
+>>>  config CFI
+>>>         bool "Use Kernel Control Flow Integrity (kCFI)"
+>>> +       default CFI_CLANG
+>>>         depends on ARCH_SUPPORTS_CFI
+>>>         depends on $(cc-option,-fsanitize=kcfi)
+>>>         help
+>>>
+>>> on top of this series and
+>>>
+>>>   CONFIG_CFI_CLANG=y
+>>>   # CONFIG_CFI_ICALL_NORMALIZE_INTEGERS is not set
+>>>   # CONFIG_CFI_PERMISSIVE is not set
+>>>
+>>> gets turned into
+>>>
+>>>   # CONFIG_CFI is not set
+>>>
+>>> after olddefconfig. CONFIG_CFI_CLANG has to be user selectable with a
+>>
+>> Could/did you test with 'oldconfig' instead?
+>>
+>> olddefconfig is going to use the default value from the Kconfig file,
+>> which if CFI_CLANG which is undefined/No/Not set.
+>>
+>> oldconfig will use the old value from the .config file.
+> 
+> I am not sure I understand what you mean here. With the series as it is
+> or Kees's suggested fix, oldconfig still prompts the user to enable
 
-Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
-Changes in v2:
-- Use __imm_insn, thanks: Eduard Zingerman.
-- Link to v1: https://lore.kernel.org/all/20250827031540.461017-1-yangfeng59949@163.com/
----
- tools/testing/selftests/bpf/progs/compute_live_registers.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+OK, I don't know the state of the CFI_CLANG / CLANG patch(es).
 
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-index 6884ab99a421..01d73ad76faf 100644
---- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -249,11 +249,13 @@ __naked void if3_jset_bug(void)
- 	asm volatile (
- 		"r0 = 1;"
- 		"r2 = 2;"
--		"if r1 & 0x7 goto +1;"
-+		".8byte %[jset];" /* same as 'if r1 & 0x7 goto +1;' */
- 		"exit;"
- 		"r0 = r2;"
- 		"exit;"
--		::: __clobber_all);
-+		:
-+		: __imm_insn(jset, BPF_JMP_IMM(BPF_JSET, BPF_REG_1, 0x7, 1))
-+		: __clobber_all);
- }
- 
- SEC("socket")
+I just mean the difference in 'make oldconfig' and 'make olddefconfig'
+(at least AIUI).
+
+
+> CONFIG_CFI with CONFIG_CFI_CLANG=y in the old configuration. Both Miguel
+> and I allude to that being fine but it would be really nice if users
+> with CONFIG_CFI_CLANG=y were automatically transitioned to CONFIG_CFI=y
+> without any action on their part. That seems to be in line with how
+
+Yes, I agree.
+
+> Linus feels even as recently as this past merge window:
+> 
+> https://lore.kernel.org/CAHk-=wgO0Rx2LcYT4f75Xs46orbJ4JxO2jbAFQnVKDYAjV5HeQ@mail.gmail.com/
+> 
+> Another idea I had to avoid this is introducing CONFIG_CFI_GCC as a user
+> selectable symbol and making CONFIG_CFI the hidden symbol that both
+> compiler symbols select. After a couple of releases (or maybe the next
+> LTS), both CONFIG_CFI_CLANG and CONFIG_CFI_GCC could be eliminated with
+> CONFIG_CFI becoming user selectable, which would keep things working
+> since CONFIG_CFI=y will be present in the previous configuration.
+
+
 -- 
-2.43.0
+~Randy
 
