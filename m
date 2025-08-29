@@ -1,42 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12497256C88;
-	Fri, 29 Aug 2025 23:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC79273F9;
+	Fri, 29 Aug 2025 23:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756509698; cv=none; b=XF/f5efIbWLZ3JMqib6e1edcROflfXAd3CCgzPq7pla7CkqsmrwwkN5i1gPrXSWQ84si9E7qWjAbc+1Ezy9UC8Kv/Ur8tAzbpgZBsBwOizHefKnxzu0hxB/6Y/Pe9qclVB3qmclOysgvHGlR4evoHdO8uqEk7N/BMEMExqZpXyk=
+	t=1756510709; cv=none; b=qYn2JIbi8u9Pe6VWTiZkimdbtIOiQvEuk0ItCQJzFDW91acsT5/rAaNVIXBpjPxrgmZZRP1k/CLENgehH6Z24ULWJTJ0TlrLg88xBZrxQ47r0Iwd1pJs3ozniulfFZZLebKuQ9UZ+l9Usk+sKh50ZNwELkPXcEgQOm84OOc/Hzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756509698; c=relaxed/simple;
-	bh=Sl+/MKf/uj5ySIsifpXz8dMFd98cOdz9H2oGaKfLj9I=;
+	s=arc-20240116; t=1756510709; c=relaxed/simple;
+	bh=WkvTp6f06aBzz6mMxgJlv68d8gusZL5MpxOSsdmeb2Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K+KPx+8hMTwQuiQkDjnHPHRxgaqzQon4uAkeBdJWr+AnEQF9d3G51LuIIRaVv1qkCMsQcRMYQ/+fhQrSt3dZQk7YBdMulgoMhLib5XWNhynmV1upgP/CxPfiT/+tggyJ23b+C1JKrLgeTAPxONot3yb2NiCpZyySUfUiBfUOsGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mbDV5XVc; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=G6Z+fQu7avLjOhXB2hrevxc6cl11ZhjfiFmHGTIqqt3XCnRZfhtc/wVHLH1rcX7nQe+He00onDXzG/6JIeoOn9QGhcbJJ0dqdLcGrozQPITreoPdsOcy3aACrjFTWvZtinZAvt7HRKSJccQs2NhXaACSJqmifBd1y3x5pjHrl2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DYj29Dlr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mbDV5XVc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85068C4CEF0;
-	Fri, 29 Aug 2025 23:21:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DYj29Dlr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D40C4CEF0;
+	Fri, 29 Aug 2025 23:38:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756509697;
-	bh=Sl+/MKf/uj5ySIsifpXz8dMFd98cOdz9H2oGaKfLj9I=;
+	s=k20201202; t=1756510709;
+	bh=WkvTp6f06aBzz6mMxgJlv68d8gusZL5MpxOSsdmeb2Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mbDV5XVcwt9gn0NE/NYtR50UbmKoyRt3E9nwIorx6nauJ1XC96xNmPKNxB9PP9r9/
-	 6JcYZKc9KuqhyoUrxQDxfvgxBYqh6WGVYopnlZNRSInmNoKOeSbJKdd0YZSYNolIpP
-	 p2bPQH1Z6ivrFxoe/w/5tfW6HAC6IBMX0hst+rRKAXe2se+S09pfVurOpKkhYpspQ+
-	 dXKht5kByedl4H9ucV0keUYA+vgS82Qh3AbJFHvH2GzNHA1eDgD2f0luCYoMQb7qIs
-	 jGaBso77VAkQ5bBcwUWdt1wmGZ3a7rU9hNRler66pHHxIAyJuCJdUodNA8lb4VpomS
-	 49w5wLydWgdUQ==
-Date: Fri, 29 Aug 2025 16:21:32 -0700
+	b=DYj29DlrQwydXqOF86OiP1MmfJvNkS7E672zE1FZ9NugTUm51xr/S/EkmnxMI+iVC
+	 gD5iPIyL/+kdJXinqVci+0QOI4vJdt2UsTnzQjCSdVxSLoaizmQh3U3wqTs+sIQxdZ
+	 yYXv02A3fWGJht2eWGvNTkH4JifGAlEJWm9KcxXHgB+9Oq2KSMhfDAGDvvL7T92MNW
+	 v+ZD6PW4H3T4blxL+Z9cWQgjq7qO+KmO8x78DZOcQoHyn/EUzkrg3Llhw7mLP0W3gq
+	 Np4++1FWEbAnrdsLuIDxaBP82sKwHqlVUC+JR1k1Cy1+7uMqhnPXcBq+3QT/Dmj+CD
+	 ILwjLMuxTH0Zw==
+Date: Fri, 29 Aug 2025 16:38:24 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: peter.ujfalusi@gmail.com, vkoul@kernel.org, dmaengine@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	dan.carpenter@linaro.org, arnd@arndb.de,
-	benjamin.copeland@linaro.org
-Subject: Re: [PATCH] dmaengine: ti: edma: Fix memory allocation size for
- queue_priority_map
-Message-ID: <20250829232132.GA1983886@ax162>
-References: <20250829131346.3697633-1-anders.roxell@linaro.org>
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, Nicolas Schier <nsc@kernel.org>
+Subject: Re: [PATCH] .gitignore: ignore temporary files from 'bear'
+Message-ID: <20250829233824.GB1983886@ax162>
+References: <20250827-master-v1-1-19f9f367219c@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,61 +44,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250829131346.3697633-1-anders.roxell@linaro.org>
+In-Reply-To: <20250827-master-v1-1-19f9f367219c@google.com>
 
-Hi Anders,
+Hi Brendan,
 
-On Fri, Aug 29, 2025 at 03:13:46PM +0200, Anders Roxell wrote:
-> Fix a critical memory allocation bug in edma_setup_from_hw() where
-> queue_priority_map was allocated with insufficient memory. The code
-> declared queue_priority_map as s8 (*)[2] (pointer to array of 2 s8), but
-> allocated memory using sizeof(s8) instead of sizeof(s8[2]).
+On Wed, Aug 27, 2025 at 08:59:43AM +0000, Brendan Jackman wrote:
+> Bear [0] is a tool for generating compile_commands.json. For Kbuild,
+> Bear is not useful, since Kbuild already generates the necessary info
+> and that can be converted to compile_commands.json by
+> gen_compile_commads.py.
 > 
-> This caused out-of-bounds memory writes when accessing:
->   queue_priority_map[i][0] = i;
->   queue_priority_map[i][1] = i;
+> However, for code in tools/, it's handy. For example, this command
+> updates compile_commands.json so that clangd code navigation will also
+> work for the VMA unit tests:
 > 
-> The bug manifested as kernel crashes with "Oops - undefined instruction"
-> on ARM platforms (BeagleBoard-X15) during EDMA driver probe, as the
-> memory corruption triggered kernel hardening features on Clang.
+> 	bear --append -- make -C tools/testing/vma -j
 > 
-> Change the allocation from:
->   devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8), GFP_KERNEL)
-> to this:
->   devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]), GFP_KERNEL)
+> Bear generates some temporary files. These are usually deleted again
+> but having them show up ephemerally confuses tools that trigger
+> recompilation on source code changes. Ignore them in Git so that these
+> tools can tell they aren't source code.
 > 
-> This ensures proper allocation of (ecc->num_tc + 1) * 2 bytes to match
-> the expected 2D array structure.
+> [0]: https://github.com/rizsotto/Bear
 > 
-> Fixes: 2b6b3b742019 ("ARM/dmaengine: edma: Merge the two drivers under drivers/dma/")
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+
+We can likely take this via the Kbuild tree. I do wonder if this would
+be better in a tools/.gitignore file since bear is really only of use
+there but I am not sure it matters much.
+
 > ---
->  drivers/dma/ti/edma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .gitignore | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-> index 3ed406f08c44..8f9b65e4bc87 100644
-> --- a/drivers/dma/ti/edma.c
-> +++ b/drivers/dma/ti/edma.c
-> @@ -2064,7 +2064,7 @@ static int edma_setup_from_hw(struct device *dev, struct edma_soc_info *pdata,
->  	 * priority. So Q0 is the highest priority queue and the last queue has
->  	 * the lowest priority.
->  	 */
-> -	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8),
-> +	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]),
+> diff --git a/.gitignore b/.gitignore
+> index 929054df5212d68a32a1f5ee2b267389fcd1c8db..b07c8c8383bd791e903ce985c14c231cb6928411 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -53,6 +53,7 @@
+>  *.tar
+>  *.xz
+>  *.zst
+> +*.tmp
 
-Would
+Please keep the globs alphabetized.
 
-  sizeof(*queue_priority_map)
+>  Module.symvers
+>  dtbs-list
+>  modules.order
+> @@ -177,6 +178,9 @@ x509.genkey
+>  
+>  # Clang's compilation database file
+>  /compile_commands.json
+> +# Temporary files created by 'bear', a tool used for generating
+> +# compile_commands.json for non-Kbuild code.
+> +*.events.json
 
-work instead? That tends to be preferred within the kernel so that the
-type information is not open coded twice and it helps avoid bugs exactly
-like this one. See other uses of devm_kcalloc() and "14) Allocating
-memory" in Documentation/process/coding-style.rst.
+Please rebase this on kbuild-next, as '/' is no longer present in the
+compile_commands.json line:
 
->  					  GFP_KERNEL);
->  	if (!queue_priority_map)
->  		return -ENOMEM;
+https://git.kernel.org/kbuild/l/kbuild-next
+
+The comment feels a little lengthy compared to the rest of the file but
+I am not sure it can really be slimmed down...
+
+I am guessing the pattern cannot be made more specific, as I do wonder
+if anyone would introduce files with this pattern but that is why we
+have the check in scripts/misc-check, so it is probably not that big of
+a deal.
+
+>  
+>  # Documentation toolchain
+>  sphinx_*/
+> 
+> ---
+> base-commit: fab1beda7597fac1cecc01707d55eadb6bbe773c
+> change-id: 20250827-master-23458abb102d
+> 
+> Best regards,
 > -- 
-> 2.50.1
+> Brendan Jackman <jackmanb@google.com>
+> 
 > 
