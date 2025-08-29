@@ -1,116 +1,105 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD9823507E;
-	Fri, 29 Aug 2025 22:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12497256C88;
+	Fri, 29 Aug 2025 23:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756507850; cv=none; b=OxBZmZHUUXkGuqdU5jzhZeBjstZ14ExAcehFnz5XM3MnAdORZFpdRYdiNXWEYewjqmqi6Q99oVW09EfGxBaED1cVkxTUBAh9AaBdwv7TbJUjrMEBU9LvPiUxZ3eRwQn6izwDdzmeAMydmZvx3WRzr2U5a3WxsCDax2Rp6gcmbvk=
+	t=1756509698; cv=none; b=XF/f5efIbWLZ3JMqib6e1edcROflfXAd3CCgzPq7pla7CkqsmrwwkN5i1gPrXSWQ84si9E7qWjAbc+1Ezy9UC8Kv/Ur8tAzbpgZBsBwOizHefKnxzu0hxB/6Y/Pe9qclVB3qmclOysgvHGlR4evoHdO8uqEk7N/BMEMExqZpXyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756507850; c=relaxed/simple;
-	bh=yQrl3gCtzdyKztNdAWjGjfEx4RFSnzGpjf6FUTnKgcQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SogMMMGrJ5Io2j8ViZodebUFWKwu5oGMop/hxgxLGEoJGt9bKXVkWqVVzYOhkEoewPHTX+xJvn9H/8AsBXE+vOp0NdRnpP5DyW/0L44mhlsAkX/Jx2hd4f4fsAM7D5gVi/hQzLGzYiJI0o5K0oCgiM3P3zYPJaU2vOjUPi4U8lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pITCHuWU; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1756509698; c=relaxed/simple;
+	bh=Sl+/MKf/uj5ySIsifpXz8dMFd98cOdz9H2oGaKfLj9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+KPx+8hMTwQuiQkDjnHPHRxgaqzQon4uAkeBdJWr+AnEQF9d3G51LuIIRaVv1qkCMsQcRMYQ/+fhQrSt3dZQk7YBdMulgoMhLib5XWNhynmV1upgP/CxPfiT/+tggyJ23b+C1JKrLgeTAPxONot3yb2NiCpZyySUfUiBfUOsGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mbDV5XVc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pITCHuWU"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=vBqocCSrw/I/eTnjICc/R9VLegWS9kJ8fWJ+dhUrmbM=; b=pITCHuWUJuiDHiaEscGXVXczcK
-	I0/Wd74s+NDD/sEhJ3i0C7fgA9qpUSo8PJP1moXRGQnykNvxDXnxrqB2EIlySGG8dICRLkd4z6RHb
-	8KmkRHhoO+I/My0S3KX39ab8d3rYDeE0cLqWyIEYKNp5So3JeyY3f4amPxDo5zRskH7MdCU2cT4Kg
-	lkyk0k5hFEHpftWgCDxLX8H16kaIyfhbK35YVpzi0iECQVlLfDs/SxqnbrdaJz7dKqPuxbamvVnQ7
-	pLhICedjX9Wm5Ox+ZzOhDlVKF8oktW8T2cu4SuiApJT5Yps43hWywifM8Dr6AoBWERW4ru+BpvfZ0
-	QYZbU3VQ==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1us7vg-00000006zQp-3RYK;
-	Fri, 29 Aug 2025 22:50:44 +0000
-Message-ID: <e11b42b9-8294-4cc3-b27c-2344ae898ce0@infradead.org>
-Date: Fri, 29 Aug 2025 15:50:43 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mbDV5XVc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85068C4CEF0;
+	Fri, 29 Aug 2025 23:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756509697;
+	bh=Sl+/MKf/uj5ySIsifpXz8dMFd98cOdz9H2oGaKfLj9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mbDV5XVcwt9gn0NE/NYtR50UbmKoyRt3E9nwIorx6nauJ1XC96xNmPKNxB9PP9r9/
+	 6JcYZKc9KuqhyoUrxQDxfvgxBYqh6WGVYopnlZNRSInmNoKOeSbJKdd0YZSYNolIpP
+	 p2bPQH1Z6ivrFxoe/w/5tfW6HAC6IBMX0hst+rRKAXe2se+S09pfVurOpKkhYpspQ+
+	 dXKht5kByedl4H9ucV0keUYA+vgS82Qh3AbJFHvH2GzNHA1eDgD2f0luCYoMQb7qIs
+	 jGaBso77VAkQ5bBcwUWdt1wmGZ3a7rU9hNRler66pHHxIAyJuCJdUodNA8lb4VpomS
+	 49w5wLydWgdUQ==
+Date: Fri, 29 Aug 2025 16:21:32 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: peter.ujfalusi@gmail.com, vkoul@kernel.org, dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	dan.carpenter@linaro.org, arnd@arndb.de,
+	benjamin.copeland@linaro.org
+Subject: Re: [PATCH] dmaengine: ti: edma: Fix memory allocation size for
+ queue_priority_map
+Message-ID: <20250829232132.GA1983886@ax162>
+References: <20250829131346.3697633-1-anders.roxell@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/15] genpt: Generic Page Table base API
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
- Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
- Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
- Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
- James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-References: <1-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
- <bdbd466f-01d3-40ac-abca-81527dbfb901@infradead.org>
- <20250829185124.GE79520@nvidia.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250829185124.GE79520@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250829131346.3697633-1-anders.roxell@linaro.org>
 
+Hi Anders,
 
-
-On 8/29/25 11:51 AM, Jason Gunthorpe wrote:
-> On Wed, Aug 27, 2025 at 12:11:40AM -0700, Randy Dunlap wrote:
->>> +/**
->>> + * pt_entry_num_contig_lg2() - Number of contiguous items for this leaf entry
->>> + * @pts: Entry to query
->>> + *
->>> + * Returns the number of contiguous items this leaf entry spans. If the entry is
->>
->>  * Returns:
+On Fri, Aug 29, 2025 at 03:13:46PM +0200, Anders Roxell wrote:
+> Fix a critical memory allocation bug in edma_setup_from_hw() where
+> queue_priority_map was allocated with insufficient memory. The code
+> declared queue_priority_map as s8 (*)[2] (pointer to array of 2 s8), but
+> allocated memory using sizeof(s8) instead of sizeof(s8[2]).
 > 
-> I think I prefer to leave many of these as is, putting the entire body
-> in a Returns: block seems too weird. I did the ones that seemed to fit
-> that pattern.
-
-Sure, no problem.
-
-> Most of these descriptions are entirely talking about the return value
-> since that is the only thing the function does.
+> This caused out-of-bounds memory writes when accessing:
+>   queue_priority_map[i][0] = i;
+>   queue_priority_map[i][1] = i;
 > 
->>> + * If true the caller use at level 0 pt_install_leaf_entry(PAGE_SHIFT). This is
->>
->>                          uses
->> ?
->> although it might just be missing a word or two? I can't tell.
+> The bug manifested as kernel crashes with "Oops - undefined instruction"
+> on ARM platforms (BeagleBoard-X15) during EDMA driver probe, as the
+> memory corruption triggered kernel hardening features on Clang.
 > 
->  * If true the caller can use, at level 0, pt_install_leaf_entry(PAGE_SHIFT).
->  * This is useful to create optimized paths for common cases of PAGE_SIZE
->  * mappings.
-
-Ack.
-
->>> + * Otherwise the bit in position pt_table_item_lg2sz() should be set indicating
->>> + * that a non-contigous singe item leaf entry is supported. The following
->>
->>              non-contiguous
->> Also, is that               single
->> ?
->> or is "singe" a real word here? (IDK.)
+> Change the allocation from:
+>   devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8), GFP_KERNEL)
+> to this:
+>   devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]), GFP_KERNEL)
 > 
->  * Otherwise the bit in position pt_table_item_lg2sz() should be set indicating
->  * that a non-contiguous single item leaf entry is supported. The following
+> This ensures proper allocation of (ecc->num_tc + 1) * 2 bytes to match
+> the expected 2D array structure.
+> 
+> Fixes: 2b6b3b742019 ("ARM/dmaengine: edma: Merge the two drivers under drivers/dma/")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>  drivers/dma/ti/edma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+> index 3ed406f08c44..8f9b65e4bc87 100644
+> --- a/drivers/dma/ti/edma.c
+> +++ b/drivers/dma/ti/edma.c
+> @@ -2064,7 +2064,7 @@ static int edma_setup_from_hw(struct device *dev, struct edma_soc_info *pdata,
+>  	 * priority. So Q0 is the highest priority queue and the last queue has
+>  	 * the lowest priority.
+>  	 */
+> -	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8),
+> +	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]),
 
-Ack.
+Would
 
-thanks.
+  sizeof(*queue_priority_map)
 
--- 
-~Randy
+work instead? That tends to be preferred within the kernel so that the
+type information is not open coded twice and it helps avoid bugs exactly
+like this one. See other uses of devm_kcalloc() and "14) Allocating
+memory" in Documentation/process/coding-style.rst.
 
+>  					  GFP_KERNEL);
+>  	if (!queue_priority_map)
+>  		return -ENOMEM;
+> -- 
+> 2.50.1
+> 
