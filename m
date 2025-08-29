@@ -1,175 +1,273 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2078.outbound.protection.outlook.com [40.107.237.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA9433A02B;
-	Fri, 29 Aug 2025 17:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.78
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756490325; cv=fail; b=AjS0yKdPlKx5f8NNLHoLoWlUR16n6v1sw3LvsEdJ3xcLK90/2A3I4vyQ9A68nET16cmRaAudh1/NUV3uxcNfq3ir7BFt5PCpGlVS/hurl++rTJqbK2bYKFJx20H8/B3uPjDPiknUGPpkAJmtZvDKSWqquM1KsNGA4jmStfdGADQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756490325; c=relaxed/simple;
-	bh=/L3eUlxckGxRK7jkit6y1Vbtnud9MIAecNtpEQgKHrs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=LCVRrlE0+O0iHAFRgO0pHkJchLamoXcw/2navJ04VXOvjpyvshTkYx8QVaQqz2VUoFPzd+4fPf2w5RJ/K1U28mLDHhbXWUbMJH0steQsgw/+YUxW6nUOIe5vMEeQk69uPGjTMT1lBXq0eS6XpcVgPQ5t4+sNs/rcnecd7idwgLw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=C+GBYFKK; arc=fail smtp.client-ip=40.107.237.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B8733EAEC;
+	Fri, 29 Aug 2025 17:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756490365; cv=none; b=u7G5ijuqYuLUYM9Ti8u9r1t/dS3kZF2OtPZ0EeQZu5oDR3Qrwo2pOVjSI6yZ5NJJ/ShNQLF+FeLjtZtI++uM80Cv2wyR4i6dZwU7w/G4XPDA2+2OBJijQNs5TgKp+UksQ2mrrBTSEgbH2pguJlYAL8v4O7wgJ5PFVzTyB66JvkA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756490365; c=relaxed/simple;
+	bh=mOdcB8GbdMKp2t/NG+w5fECIeIvwGWTJ1ytEpQ5MXsY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XiQa5YIgk6pcEFgamH0pkZSQnOZpajzWO8+zvJU4y3gQFM6rZ4XAvI5SWuKMor7LKg2M++uQ+1fE5CmvZAFZOuT5K3gsuq6XiyKofYNi3QXQAWPwmWjkwllYS3d1KwN/Rz2fOXzSnQYF2EfaMwjLEkzDxnnFoEH1BOY+Pe9bPvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UmhsmdgZ; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="C+GBYFKK"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ctKYJ5mCoq+iW6kPACo0lMR9ewSV2TnYs9aXvelycehoyByGLp1F7p3r3j7AbZFSWlghFwIm8Q9EDw6atNPyyMLHZcSTrGtVCrcvtUM6L3Eh5V9+BEwnmIEeMR3LHIgML3kOtiyh+KPdkaJ13nDp02f+SPTV2YEiq5L1N06p/Bsj7EpOI/rdft3KjrsAcuMJyMsATvm9NNfeTzDAx8gtuMtdni4NwCZ3rmfRpi31oe+2K2/sSaIUL1qlpT7i7Hz1Zr1QJIXA9LvXPKQEaIRyCJ21JPsDxlt31pWzUXs7y/bsCr8EAeCf0rInQtxkeGIEQloljCpkIeDy5GJpQIHilQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sr4VG/u5fbl1jMX4OAFRYmYbQmmcy7GC2BHdp0xVX6o=;
- b=yWlIBiuCSxGP7TQ3oL7eqPBBxH2TVW/rJEuY7jtrLtwt09r7xSSuPRSBFHiYF6+PMK/FDS1CFe/u/iha8lj4TVNcsMQDB8BCH1bXRVWtE5nbyAwXeoq3v/NjEZMrtnm02CFRBFXvmRPCAUEQSB4kngdbEna9f1ftNhPiRT6K/SyeUPpOseLOVG7pMn1EkCGrZnoQFTCkxSvwMcNQkkeFuSVs+MtPpoblc3yJUQG36AVj6fg0x4guMeESfs5HocTTgRi3nFwFaOSzD2i+vJb5PrQa0mXBEFh+4GR9KfMbXwt6Es26e+nEPmUijdAqIvaAytsu1bWNd0w0cLvG6kJv9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sr4VG/u5fbl1jMX4OAFRYmYbQmmcy7GC2BHdp0xVX6o=;
- b=C+GBYFKKZCY9QZeDEkuw+I3rPTXz2+GNaTNKkBGxvhTDPGjgaWQGEM3akgvB6d2vx/Lm/Lur8mTFb644wOoUBscqrjDNAC+oOwN5bX1neus9kELbYppPVDIYQiw8WHwkJnqtGNCsHx05shnorcUP8P2MTYt5psN04yT09nq0nqleld6WYjMZt60+aPvIQvhw3eOk9kyQet5kaHQezCNVXioN+WWDDymr9GJ3eEpguOOmI/MhoWVUujhK/ve6Vm7npqmL8IG34NShtKDZvQhy173jgKnguLw8sLS4eLaFWJ+yamvwottJzkGiZI5/R6L/yqBNAC/3gAyDOilMciqd1A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by CY5PR12MB6180.namprd12.prod.outlook.com (2603:10b6:930:23::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.20; Fri, 29 Aug
- 2025 17:58:36 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.9073.021; Fri, 29 Aug 2025
- 17:58:36 +0000
-Date: Fri, 29 Aug 2025 14:58:34 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v4 12/15] iommupt: Add the x86 64 bit page table format
-Message-ID: <20250829175834.GD79520@nvidia.com>
-References: <12-v4-0d6a6726a372+18959-iommu_pt_jgg@nvidia.com>
- <adf12245-08c2-4a14-bac9-2cf7a1bf8107@infradead.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adf12245-08c2-4a14-bac9-2cf7a1bf8107@infradead.org>
-X-ClientProxiedBy: BL0PR05CA0010.namprd05.prod.outlook.com
- (2603:10b6:208:91::20) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UmhsmdgZ"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4b30f73ca2cso9069251cf.0;
+        Fri, 29 Aug 2025 10:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756490362; x=1757095162; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzdpvd9RhN3thFvxfLj8J0a3RKDZVl45M7XvZcko3Rc=;
+        b=UmhsmdgZgYUYDYFg4+s5yjqgK38OxbbeY+wVFqwVR7qMTREXYvyU7sIxXDMur53WAt
+         G9H7+MShpBNCU/4JfyMeUyFjIoDbCy3FAksBNZLHfXCCQKpQlmnd0xkhL7IFiKYm+b4y
+         edKz97th1jhw2GUh3UrduXmXVXl7kNTjES/RmWZEfx/DqTffA2xNkNQJF0JrAR7K1Kzw
+         JGZxQ+otkyCds79KzMy9YJqnFGQSPJHuKlWYZvFHNzHzP/+mW/7gZZX5ksWXZaIXsZ90
+         rDzKO4bXm+jc0rPo/RECyIbdb58yx2NGOezAP+qN+mjJcF8Yf8N4Jw73KQo6ykhiUAOC
+         DPNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756490362; x=1757095162;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uzdpvd9RhN3thFvxfLj8J0a3RKDZVl45M7XvZcko3Rc=;
+        b=CzzY6Iv/grRCUUQZhpY58j4vUHnKjkH7oAOYNxCFyTvpKjzjdL7iS8fFhHugueF6WX
+         yVrv474CaoJUshKgjWkAhmnBxMcKaub1bpMfYXU148hekpZgKZsinywmI9VBKFFNSZBz
+         mQz72BnWaoxZqws+mlkCzIyAtntK6GTvZ9qLlTUleciMVR6FROpKkOdxdfopJT5GjQXJ
+         3e2KnwCbX/Vi2m660VKHrfHiFbYxY50+ZBBUPlGcjC1xQ33IQZ4f0DBXfy5meyo3njUz
+         WGGxorS073zEoXPw0Jk9Kxkr/VQqndwC0Enn0O967GrUcKtCG1c6kBcT5JAfF7NJhieR
+         KSWA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcQsz6K78CZRvRU2/5vr4FO0jt6Lv+X+jFUzJMu66nYhAC1+8Ec5oPF5x1UJGzQavNEFEVkDs3cY6n6mUj@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx3LwUUz2KheayMcWl3crchFnwLuScr5OdmbkagJ9Xb6VNnP6BT
+	lcunSm1WwZC9YfN+cWPMCxQV9zVWaL7PGiRCIx9Ur01JzpnBfgCF4osIwVIa4agQVVVJrWCcgXm
+	nsaFb7dFKDy/DJq3ipXDVLY2AMQz/qfg=
+X-Gm-Gg: ASbGncvrVwTMdFltnh6xyjWGs1ZSdxqGjO3jenJpPPEdOnGeVFA3bSxfTPrwQA59mee
+	5T9UsbxaUYVUoxxA3gpZA9d7cVtZimghIkptuMJEpYZ6asAmB/LYUD9p/96frcH7Hqm4wO0XPyM
+	ae2iZn89lKQq/wqdJpEZPY9Sc+dMolvj+yaLLOA7j5LA+0rlqR983KW2hBBz5qGoF2wh5oOK7Z/
+	k/8UCHSHjTv7oHioz2tH+/7eUgDB0NUiK1qST9TRNM5JQzNHUXC8osFw46TTu4Hy2NNXp0kDS7H
+	n9UFSsXvVJOkuDdfolE5Wr8AhBks490P
+X-Google-Smtp-Source: AGHT+IHupljaA2Q6/3ptYRdDpiCwRMF2EccEDQec2Udsz7gkl1/EBD55KOjKvYqtezdT5Uz1t1vpvMWfGuF/vU/58VU=
+X-Received: by 2002:a05:6214:4019:b0:70d:fcf7:8a17 with SMTP id
+ 6a1803df08f44-70dfcf78bd4mr60957996d6.51.1756490362217; Fri, 29 Aug 2025
+ 10:59:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CY5PR12MB6180:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd4b0ebb-ae3b-4fcc-1928-08dde725accb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mSzg1kAkV1u8udFsZ8OZ1hW/MN0TjHuz2qt8f7+cnsv/zjhd7h3K7IdP2Te9?=
- =?us-ascii?Q?5kJX7T5fEoBz4COE9w1uhCL5iqImjSKUAgacQTHqqYBRQwwWx9GadFTNlIRV?=
- =?us-ascii?Q?J+TmqTT6MtH5QfFg4fNOipoebEy9HUlyjbBoPNgT4UKbXs+wZvZtV81M7GPL?=
- =?us-ascii?Q?a4stD3bMcLs7kwS8tzauNMTtaG6rdnKjzLEOug7DoyXbcNjBWgdKvlJoudbd?=
- =?us-ascii?Q?Pl/YFCpg2eDiF1C7RmAy8hawF/9nxp/cgj9YplzjU3RRP3cipZMh179qUPIo?=
- =?us-ascii?Q?764S9WBLdL0STsWEf57PcN0LxM9SH8PEqfVbJsiG60IKv0dnJ1FwlgBYsMzF?=
- =?us-ascii?Q?kxYijHZE/lEMAsy51t3GLBd4BIMXnh4cWb1Jc3JujE1G56gWnHhk8pfornN4?=
- =?us-ascii?Q?doIl8qFZ/5GSu0r+3omFjC0IxDjAjisxfpZRqZfbxWd5Qm8cZCP8zoVnt0ZR?=
- =?us-ascii?Q?nMJMWSe/cKBVW4ftFvWf/ZceduuttF8ZhUaBB4S82drq030LPzhfhLOFQIet?=
- =?us-ascii?Q?EUlWLC0fiOi2vYYUfKlePK93HD9DLzqXPi6FWHMBEXQcaUkK+AAugCBV+KiM?=
- =?us-ascii?Q?7kASUfnOf+RBAfGyGVF6uEZA650pqxu8BgKy79n/WSkxFvZt4I0d7BUQRrY+?=
- =?us-ascii?Q?j87vYGvI1kV6uLlIpsfcN79+65ktZZoFz7LS1ZQNXpoZdhW679lmOvwT1sJx?=
- =?us-ascii?Q?daKbXp6Sdw31P9Sh6dT+6vWkZmOuIdbB8tNg1QC7fya0IBAsHiW1dTEOBWXd?=
- =?us-ascii?Q?BXkoXc7HmTLlxnkgaqFQTR47DNtXVEzWze471fgUgnxPaBN5uvhkNQP+YEpG?=
- =?us-ascii?Q?lwL/+UD3aZ05z56f8UJ9fw/L62yWLK5C4IBa1Zhb7ostiU9jWX2gDgGm6anH?=
- =?us-ascii?Q?zX+XZtB7LDdPsi9acVmT6vthHZz6cCVshnKjNWiP++9B2FLhtpQITHdlhSCQ?=
- =?us-ascii?Q?Gh7dAFN1zy4HLYJ/JP/vMr2kRK/8xg8aqYnDGhcpeUvlEHnD+C8WCpYlhF7P?=
- =?us-ascii?Q?iv7abKC9f3iQ5sy40VnTn05EGwFzt0vuUW3BTh8u57KSYBrV/CUI6SLeBIx5?=
- =?us-ascii?Q?lm1XhXmBSgwIo9Cw9zgQp7OPlbhsEhPMLZKsQ0V7Af0bFy6vmwxVQ945mA9X?=
- =?us-ascii?Q?TE0qArdNjkZF+yBcpOA5pXuuGlPh5FeP5tGUbk8Aedr8uyEilgDMn7Y/akcI?=
- =?us-ascii?Q?8pAY24ptAqRPPOvdETmNigZK9alz6eyhaZEYLGP6p+TXWOglpNHLp+tF4aGg?=
- =?us-ascii?Q?vji2C6VXuCue9dwxiVqn6mnyNl6rq4XKcB4j8khU8MdVWrBLfERsltq0jihh?=
- =?us-ascii?Q?2rfAXCkHEHYE3juwE6ZXnp0lNGx7dZDrk3mkSOhc0rafoN/8wJ8FOAXbCpOH?=
- =?us-ascii?Q?k3aOCtWxu5vVQ2GABzyj0WuiPW8YUekVYvc9H1fS4Gd5Leiy0i0k7Fbk09ry?=
- =?us-ascii?Q?KUKzsKFmQws=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DD2fWJFaON6hTAaXEWfCZRCQ0r55Vymc9S45FbeiIcLx+DcmBMUQEDH7lIDT?=
- =?us-ascii?Q?N2jwySEH9lHxw1iCRI18nR+0Qy5n8MZmwt29fJnY/WixheHvQQLeC9voBl31?=
- =?us-ascii?Q?6prYFf1Q0Nt1JKuSxiiINO2kwa6zUmR/dkV4gt3w1VHVEwGC2g+iOhPsKCPd?=
- =?us-ascii?Q?RsitY5y5xzLovut7dYWgHtkvH5M9SaXEo0YHd5VgEub4x0FhwL5QsJHGyeFc?=
- =?us-ascii?Q?F5ohvICdSBrrhjf+zykE7xUZXylFqKwFJFaYP2To1EW7pgWyN453a1J/iqLI?=
- =?us-ascii?Q?JCQfsadsXtW6nmGqba3f/e1WRHEfOzEjuRaJw8gOc1W+mI7sI1KquJRWpW8P?=
- =?us-ascii?Q?AiHqMil/04ceWavu9Atg/c3iT/Y+NRbW6wVPlk+Gm7gah4anKDiVfqVZo3zC?=
- =?us-ascii?Q?c7/5lRNPNugZ9JPN8bfnhHw4sOv1mdt3s2W8CT/24k9E5dodNeVIs9kStAe1?=
- =?us-ascii?Q?xnM4OrDwGnCdteChyCS5KIcFvbg1z9YURzgcjNlo1a8vllOaIGwZyn/T1jzu?=
- =?us-ascii?Q?rTJ6xpM580HgT/hzoYcSG80zq0WKSprt4wQS2qX7Njsmx31wKndBKAN4bc4Y?=
- =?us-ascii?Q?htPoKZXLq1KpzajNei3kOGMJBG2sf5nRh4Qe7PjrnX4gb8lFdtJN4ZlrlTHd?=
- =?us-ascii?Q?gA0Hp545gXLvvQ1HujAyj0SPx+Jt/Vhl8nfKOKQvSvqcDCFhAxiK7dTFaJn2?=
- =?us-ascii?Q?UfV1W5psC6NaUPVYalGZhP6G+aAOv1bXcBV6avB9PO7vtKKLlahK5vin1bMb?=
- =?us-ascii?Q?qc/4HDvyG7UVJDCHKF3sPgEY/ShfF/T0Q47KiU4jG6Hou78yw9vfN/+g0jd/?=
- =?us-ascii?Q?j9AdkQKe746qF9uhszX3QtodQ4nsy65ObPHIeqZM+7JFb7QGrVVhBe5mf6Io?=
- =?us-ascii?Q?jPnVMttEV/M5jPzI1R5rq9yN1ZJfpMtfQDspaUshGTvCt0mlwEsFGSUCCtJk?=
- =?us-ascii?Q?lJ26khQOJsXxFwz6O+33tGt3T5kKmOLr5c+t8+cz0HFfE24AefkA5E6VESIZ?=
- =?us-ascii?Q?xf8flV3bPAjIaHIWGz/FoY4rElDeAk85SSWyZPz6qsocTMBtmm6ec1R66g/A?=
- =?us-ascii?Q?A/rQJJEV8nbtDi/6N6bC6OvXAzoHS42lfl0v1nPQAtbuFdF0mNf2B1Xh7Bnr?=
- =?us-ascii?Q?qM/AQs7aj2eQCnWve4DbAWJD9DnDkc0rX9lKsUpMeLJteg0SfYF1vGAo61/8?=
- =?us-ascii?Q?OgKcHIR7axMBzr1s7oWB4HNKIXOu2+CU9pE2Kr7oeBwdEPlc64vKapiaOUBw?=
- =?us-ascii?Q?q2sF0rWf/PmvZXdw/qGyZfhO/3CjGw3WQnC7tmE9htMPug6thkBb3zRi9OvW?=
- =?us-ascii?Q?1dyheVxBmsHg7oMpNmYcVfHOiYeIfW1EVnOnGXv7Y/lgi4XS7k4LpGpUmUsW?=
- =?us-ascii?Q?QPJz+6sdFHMV/4wY5LKvEnk85w0aP+XgdPqlAo7n+IknTYA1w+uhwV52KgtX?=
- =?us-ascii?Q?uAUy+8FVx8OezZBNrZ6gfs+OMeyrMPcsrqrjFuaXkt+3Vbw+sp3d3sPPrsQV?=
- =?us-ascii?Q?MWJf2YBfPGO4DVJ7n2dbWgg+djCwLN8v0iL8/Swl2Lb/yS7+J9ra2AIqJ8Po?=
- =?us-ascii?Q?/2T0kEqVvgsg+K0KBvK9iRM1dYtLrpSVAyzCfnCQ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd4b0ebb-ae3b-4fcc-1928-08dde725accb
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2025 17:58:36.2972
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MxA7dYpU5mG369ampLiH7ciBeHlhQL29TT9SgNVTYrGJYfFZP+vkv+nGybspZdW3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6180
+References: <202508291432.M5gWPqJX-lkp@intel.com> <c18ba6b4-847e-4470-bd0e-9e5232add730@samba.org>
+In-Reply-To: <c18ba6b4-847e-4470-bd0e-9e5232add730@samba.org>
+From: Steve French <smfrench@gmail.com>
+Date: Fri, 29 Aug 2025 12:59:09 -0500
+X-Gm-Features: Ac12FXzR6gFq22ImE-6fqvCCp5xnqd-ooH1SHmDHEHs_fLGA6dx45i5GlohPc6E
+Message-ID: <CAH2r5mvksbiH-D4FbVb0PVg1vnik+WU7d0kxRUk0S9h9S+=zvw@mail.gmail.com>
+Subject: Re: [cifs:for-next-next 28/146] fs/smb/client/smbdirect.c:1856:25:
+ warning: stack frame size (1272) exceeds limit (1024) in 'smbd_get_connection'
+To: Stefan Metzmacher <metze@samba.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
+	Steve French <stfrench@microsoft.com>, kernel test robot <lkp@intel.com>
+Content-Type: multipart/mixed; boundary="00000000000017a9d7063d84c869"
 
-On Tue, Aug 26, 2025 at 04:38:41PM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 8/26/25 10:18 AM, Jason Gunthorpe wrote:
-> > diff --git a/drivers/iommu/generic_pt/Kconfig b/drivers/iommu/generic_pt/Kconfig
-> > index 57dc81060f9f0d..8665a1d4299b7a 100644
-> > --- a/drivers/iommu/generic_pt/Kconfig
-> > +++ b/drivers/iommu/generic_pt/Kconfig
-> > @@ -41,10 +41,21 @@ config IOMMU_PT_AMDV1
-> >  
-> >  	  Selected automatically by an IOMMU driver that uses this format.
-> >  
-> > +config IOMMU_PT_X86_64
-> > +       tristate "IOMMU page table for x86 64 bit, 4/5 levels"
-> 
-> 	                                     64-bit,
-> and use tab to indent, not spaces.
+--00000000000017a9d7063d84c869
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-All fixed thanks
+I have updated the patch (see attached), and updated cifs-2.6.git for-next-=
+next
 
-Jason
+>I'm not sure if the following should be added
+> Reported-by: kernel test robot <lkp@intel.com>
+
+That is a good question, but I lean against it since the "initial bug"
+was not reported by them that caused the patch.  If it was a distinct
+patch fixing the bug they pointed out, then yes it should be added,
+but could be confusing if what they pointed out was totally unrelated
+to the purpose of the patch.
+
+On Fri, Aug 29, 2025 at 6:41=E2=80=AFAM Stefan Metzmacher <metze@samba.org>=
+ wrote:
+>
+> Hi Steve,
+>
+> this is strange, but the following should fix the problem:
+>
+> --- a/fs/smb/common/smbdirect/smbdirect_socket.h
+> +++ b/fs/smb/common/smbdirect/smbdirect_socket.h
+> @@ -259,9 +259,11 @@ struct smbdirect_socket {
+>
+>   static __always_inline void smbdirect_socket_init(struct smbdirect_sock=
+et *sc)
+>   {
+> -       *sc =3D (struct smbdirect_socket) {
+> -               .status =3D SMBDIRECT_SOCKET_CREATED,
+> -       };
+> +       /*
+> +        * This also sets status =3D SMBDIRECT_SOCKET_CREATED
+> +        */
+> +       BUILD_BUG_ON(SMBDIRECT_SOCKET_CREATED !=3D 0);
+> +       memset(sc, 0, sizeof(*sc));
+>
+>          init_waitqueue_head(&sc->status_wait);
+>
+>
+> It needs to be squashed into this commit:
+> f2e2769275f4aa6e4d5fa98004301e91282a094a smb: smbdirect: introduce smbdir=
+ect_socket_init()
+>
+> Can you do that?
+>
+> I'm not sure if the following should be added
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202508291432.M5gWPqJX-lkp@i=
+ntel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202508291615.Mxyg9D9N-lkp@i=
+ntel.com/
+>
+> Thanks!
+> metze
+>
+> Am 29.08.25 um 09:06 schrieb kernel test robot:
+> > tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next-next
+> > head:   b79712ce1752aa38da9553b06767f68367b0d7ff
+> > commit: 36d70a0c8405556dea3d4e9beef708d7ed3c2b07 [28/146] smb: client: =
+make use of smbdirect_socket_init()
+> > config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/2=
+0250829/202508291432.M5gWPqJX-lkp@intel.com/config)
+> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 60=
+09708b4367171ccdbf4b5905cb6a803753fe18)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20250829/202508291432.M5gWPqJX-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202508291432.M5gWPqJX-l=
+kp@intel.com/
+>
+>
+> > All warnings (new ones prefixed by >>):
+> >
+> >>> fs/smb/client/smbdirect.c:1856:25: warning: stack frame size (1272) e=
+xceeds limit (1024) in 'smbd_get_connection' [-Wframe-larger-than]
+> >      1856 | struct smbd_connection *smbd_get_connection(
+> >           |                         ^
+> >     1 warning generated.
+>
+> >
+> > vim +/smbd_get_connection +1856 fs/smb/client/smbdirect.c
+> >
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1855
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17 @1856  struct sm=
+bd_connection *smbd_get_connection(
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1857          s=
+truct TCP_Server_Info *server, struct sockaddr *dstaddr)
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1858  {
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1859          s=
+truct smbd_connection *ret;
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1860          i=
+nt port =3D SMBD_PORT;
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1861
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1862  try_again=
+:
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1863          r=
+et =3D _smbd_get_connection(server, dstaddr, port);
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1864
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1865          /=
+* Try SMB_PORT if SMBD_PORT doesn't work */
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1866          i=
+f (!ret && port =3D=3D SMBD_PORT) {
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1867           =
+       port =3D SMB_PORT;
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1868           =
+       goto try_again;
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1869          }
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1870          r=
+eturn ret;
+> > 399f9539d951adf fs/cifs/smbdirect.c Long Li 2017-11-17  1871  }
+> > f64b78fd1835d1d fs/cifs/smbdirect.c Long Li 2017-11-22  1872
+> >
+> > :::::: The code at line 1856 was first introduced by commit
+> > :::::: 399f9539d951adf26a1078e38c1b0f10cf6c3e71 CIFS: SMBD: Implement f=
+unction to create a SMB Direct connection
+> >
+> > :::::: TO: Long Li <longli@microsoft.com>
+> > :::::: CC: Steve French <smfrench@gmail.com>
+> >
+>
+
+
+--=20
+Thanks,
+
+Steve
+
+--00000000000017a9d7063d84c869
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-smb-client-make-use-of-smbdirect_socket_init.patch"
+Content-Disposition: attachment; 
+	filename="0001-smb-client-make-use-of-smbdirect_socket_init.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mex4wcy70>
+X-Attachment-Id: f_mex4wcy70
+
+RnJvbSA0MTVlZTAzZGZmNDgxNjQ2MTFiNjg0MDM2YjQwNWI1MTMzMzdkZTc5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGVmYW4gTWV0em1hY2hlciA8bWV0emVAc2FtYmEub3JnPgpE
+YXRlOiBGcmksIDggQXVnIDIwMjUgMTU6MTA6NTIgKzAyMDAKU3ViamVjdDogW1BBVENIXSBzbWI6
+IGNsaWVudDogbWFrZSB1c2Ugb2Ygc21iZGlyZWN0X3NvY2tldF9pbml0KCkKCkl0J3MgbXVjaCBz
+YWZlciB0byBpbml0aWFsaXplIHRoZSB3aG9sZSBzdHJ1Y3R1cmUgYXQKdGhlIGJlZ2lubmluZyB0
+aGFuIGRvaW5nIGl0IGFsbCBvdmVyIHRoZSBwbGFjZQphbmQgdGhlbiBtaXNzIHRvIG1vdmUgaXQg
+aWYgY29kZSBjaGFuZ2VzLgoKQ2M6IFN0ZXZlIEZyZW5jaCA8c21mcmVuY2hAZ21haWwuY29tPgpD
+YzogVG9tIFRhbHBleSA8dG9tQHRhbHBleS5jb20+CkNjOiBMb25nIExpIDxsb25nbGlAbWljcm9z
+b2Z0LmNvbT4KQ2M6IGxpbnV4LWNpZnNAdmdlci5rZXJuZWwub3JnCkNjOiBzYW1iYS10ZWNobmlj
+YWxAbGlzdHMuc2FtYmEub3JnClNpZ25lZC1vZmYtYnk6IFN0ZWZhbiBNZXR6bWFjaGVyIDxtZXR6
+ZUBzYW1iYS5vcmc+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9z
+b2Z0LmNvbT4KLS0tCiBmcy9zbWIvY2xpZW50L3NtYmRpcmVjdC5jICAgICAgICAgICAgICAgICAg
+fCAxMyArLS0tLS0tLS0tLS0tCiBmcy9zbWIvY29tbW9uL3NtYmRpcmVjdC9zbWJkaXJlY3Rfc29j
+a2V0LmggfCAgOCArKysrKy0tLQogMiBmaWxlcyBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDE1
+IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL3NtYi9jbGllbnQvc21iZGlyZWN0LmMgYi9m
+cy9zbWIvY2xpZW50L3NtYmRpcmVjdC5jCmluZGV4IGI2N2EyNjRhNjAzMC4uZGVkOTEyZTkwNGYw
+IDEwMDY0NAotLS0gYS9mcy9zbWIvY2xpZW50L3NtYmRpcmVjdC5jCisrKyBiL2ZzL3NtYi9jbGll
+bnQvc21iZGlyZWN0LmMKQEAgLTEzNTEsMTMgKzEzNTEsNiBAQCBzdGF0aWMgaW50IGFsbG9jYXRl
+X3JlY2VpdmVfYnVmZmVycyhzdHJ1Y3Qgc21iZF9jb25uZWN0aW9uICppbmZvLCBpbnQgbnVtX2J1
+ZikKIAlzdHJ1Y3Qgc21iZGlyZWN0X3JlY3ZfaW8gKnJlc3BvbnNlOwogCWludCBpOwogCi0JSU5J
+VF9MSVNUX0hFQUQoJnNjLT5yZWN2X2lvLnJlYXNzZW1ibHkubGlzdCk7Ci0Jc3Bpbl9sb2NrX2lu
+aXQoJnNjLT5yZWN2X2lvLnJlYXNzZW1ibHkubG9jayk7Ci0Jc2MtPnJlY3ZfaW8ucmVhc3NlbWJs
+eS5kYXRhX2xlbmd0aCA9IDA7Ci0Jc2MtPnJlY3ZfaW8ucmVhc3NlbWJseS5xdWV1ZV9sZW5ndGgg
+PSAwOwotCi0JSU5JVF9MSVNUX0hFQUQoJnNjLT5yZWN2X2lvLmZyZWUubGlzdCk7Ci0Jc3Bpbl9s
+b2NrX2luaXQoJnNjLT5yZWN2X2lvLmZyZWUubG9jayk7CiAJaW5mby0+Y291bnRfcmVjZWl2ZV9x
+dWV1ZSA9IDA7CiAKIAlpbml0X3dhaXRxdWV1ZV9oZWFkKCZpbmZvLT53YWl0X3JlY2VpdmVfcXVl
+dWVzKTsKQEAgLTE2NTYsMTQgKzE2NDksMTIgQEAgc3RhdGljIHN0cnVjdCBzbWJkX2Nvbm5lY3Rp
+b24gKl9zbWJkX2dldF9jb25uZWN0aW9uKAogCWlmICghaW5mbykKIAkJcmV0dXJuIE5VTEw7CiAJ
+c2MgPSAmaW5mby0+c29ja2V0OworCXNtYmRpcmVjdF9zb2NrZXRfaW5pdChzYyk7CiAJc3AgPSAm
+c2MtPnBhcmFtZXRlcnM7CiAKIAlpbmZvLT5pbml0aWF0b3JfZGVwdGggPSAxOwogCWluZm8tPnJl
+c3BvbmRlcl9yZXNvdXJjZXMgPSBTTUJEX0NNX1JFU1BPTkRFUl9SRVNPVVJDRVM7CiAKLQlpbml0
+X3dhaXRxdWV1ZV9oZWFkKCZzYy0+c3RhdHVzX3dhaXQpOwotCi0Jc2MtPnN0YXR1cyA9IFNNQkRJ
+UkVDVF9TT0NLRVRfQ1JFQVRFRDsKIAlyYyA9IHNtYmRfaWFfb3BlbihpbmZvLCBkc3RhZGRyLCBw
+b3J0KTsKIAlpZiAocmMpIHsKIAkJbG9nX3JkbWFfZXZlbnQoSU5GTywgInNtYmRfaWFfb3BlbiBy
+Yz0lZFxuIiwgcmMpOwpAQCAtMTc3Myw4ICsxNzY0LDYgQEAgc3RhdGljIHN0cnVjdCBzbWJkX2Nv
+bm5lY3Rpb24gKl9zbWJkX2dldF9jb25uZWN0aW9uKAogCWxvZ19yZG1hX2V2ZW50KElORk8sICJj
+b25uZWN0aW5nIHRvIElQICVwSTQgcG9ydCAlZFxuIiwKIAkJJmFkZHJfaW4tPnNpbl9hZGRyLCBw
+b3J0KTsKIAotCWluaXRfd2FpdHF1ZXVlX2hlYWQoJnNjLT5yZWN2X2lvLnJlYXNzZW1ibHkud2Fp
+dF9xdWV1ZSk7Ci0KIAlXQVJOX09OX09OQ0Uoc2MtPnN0YXR1cyAhPSBTTUJESVJFQ1RfU09DS0VU
+X1JETUFfQ09OTkVDVF9ORUVERUQpOwogCXNjLT5zdGF0dXMgPSBTTUJESVJFQ1RfU09DS0VUX1JE
+TUFfQ09OTkVDVF9SVU5OSU5HOwogCXJjID0gcmRtYV9jb25uZWN0KHNjLT5yZG1hLmNtX2lkLCAm
+Y29ubl9wYXJhbSk7CmRpZmYgLS1naXQgYS9mcy9zbWIvY29tbW9uL3NtYmRpcmVjdC9zbWJkaXJl
+Y3Rfc29ja2V0LmggYi9mcy9zbWIvY29tbW9uL3NtYmRpcmVjdC9zbWJkaXJlY3Rfc29ja2V0LmgK
+aW5kZXggNjRhYmU2OTMyZmVmLi5jNjJkMTJmNjNlMTMgMTAwNjQ0Ci0tLSBhL2ZzL3NtYi9jb21t
+b24vc21iZGlyZWN0L3NtYmRpcmVjdF9zb2NrZXQuaAorKysgYi9mcy9zbWIvY29tbW9uL3NtYmRp
+cmVjdC9zbWJkaXJlY3Rfc29ja2V0LmgKQEAgLTI1OSw5ICsyNTksMTEgQEAgc3RydWN0IHNtYmRp
+cmVjdF9zb2NrZXQgewogCiBzdGF0aWMgX19hbHdheXNfaW5saW5lIHZvaWQgc21iZGlyZWN0X3Nv
+Y2tldF9pbml0KHN0cnVjdCBzbWJkaXJlY3Rfc29ja2V0ICpzYykKIHsKLQkqc2MgPSAoc3RydWN0
+IHNtYmRpcmVjdF9zb2NrZXQpIHsKLQkJLnN0YXR1cyA9IFNNQkRJUkVDVF9TT0NLRVRfQ1JFQVRF
+RCwKLQl9OworCS8qCisJICogVGhpcyBhbHNvIHNldHMgc3RhdHVzID0gU01CRElSRUNUX1NPQ0tF
+VF9DUkVBVEVECisJICovCisJQlVJTERfQlVHX09OKFNNQkRJUkVDVF9TT0NLRVRfQ1JFQVRFRCAh
+PSAwKTsKKwltZW1zZXQoc2MsIDAsIHNpemVvZigqc2MpKTsKIAogCWluaXRfd2FpdHF1ZXVlX2hl
+YWQoJnNjLT5zdGF0dXNfd2FpdCk7CiAKLS0gCjIuNDguMQoK
+--00000000000017a9d7063d84c869--
