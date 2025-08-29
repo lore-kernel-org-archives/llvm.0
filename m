@@ -1,124 +1,151 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF2A31B123
-	for <llvm@lists.linux.dev>; Fri, 29 Aug 2025 13:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162D432C32E;
+	Fri, 29 Aug 2025 15:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756473241; cv=none; b=NnrlXkR6/aagB65SBPRJ05xKE+7eaZATZPYzHSMrHd6XEVNfhLmYj7pYSRrINqlWpp4y8da9p1RhTFelQL/KIF9HsLBPKQr9r77EGyrnW0664BoKCrGhvXZCwqKNpX2edGTMrvsKWfwYYo/diPoLbLiaGdokH5ay74/xmpM4+68=
+	t=1756482793; cv=none; b=ZDnOjohj6qltfD2mBORH7oqA+TEDJ9BCAkAftiIfy9SgDOoLGQ8FQ8BkLCCyDMunSORlD/5sQTz0azpiLKfWpdDC6BxVQdtr7Ls4zB9XwOhFck8HVZD0377JDouhEkdZyF0VJVzJCYYKeuEO8hEw2D6gKpgCoTW0qw76KGNS9qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756473241; c=relaxed/simple;
-	bh=jEDrWRqVtKULrTucTSLr0n/DeF/H+SMQdH2t6erHpwA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YhRU8QsIACtFAqYcSoB967Ir+FSmhfkBgJvrozeRutU+6fLFBjKRU28LHxGvKi5CUWBgSR66y8jvuVw29K2QoQu7FdXbcNpjSkwaos2Wc9xqMyE+vbRIg1HhQOODE0uGa5LaPos3urojMAhEGs/6PUScCPyB90RwR3KFvtGF+Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hSgX7HYz; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1756482793; c=relaxed/simple;
+	bh=XKkRs/IcCE9mjve0Gx265u3Mj72r0BXCLoU7/fhGsA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XoFsQz+j1jzBtQdcePZwdNqURqNVYJYzFch6Bw6EuAMqHKM3guvd1aXQ4jIcb7ctsw4jFyzgqvjmzhxKgM1FS/zOza+me+UKiwyKWFkNjdgUD5eKeJkTiaNXezohOTgCv4pw92Efgz6Japd1sb0XWZmndEtZudx91MiGW1HX6ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyDo0JtH; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hSgX7HYz"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55f6d7a2a09so8868e87.1
-        for <llvm@lists.linux.dev>; Fri, 29 Aug 2025 06:13:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756473237; x=1757078037; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FE9Jl8MLsGFXC4bdNsn+0eHbgCcJaZ4UJYq9PxJ9Nrw=;
-        b=hSgX7HYzPANQ3NlhZwNxNpjgWGRV3IGY+MaEfzPfTjtf18xm/PxcIQ67RyiX01i9I9
-         qDa7dh7jrddKpAsS2bTLKT+hRdIn0mYgsEdPJuJeK8SKhSt57nqv9ectcExMGU5hJCYa
-         poUSpm5SYAnx2yCv439vfoeTIht9mUaUOa8hKDB+quDTpVIhJ+8bVseideNn8VVxsyQ+
-         6sHdOQnNfp1d5mzy0x00u2+gk0RxCvunOjFpFy0LLwWrLmdcw6Dr6F37WdPbchPlEawR
-         saubQaRynSCUPTJYm4ImXrhv3aylzjLHILZWniw8THtTNFpQp4erT7z+qI1Tp5lE246S
-         QTrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756473237; x=1757078037;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FE9Jl8MLsGFXC4bdNsn+0eHbgCcJaZ4UJYq9PxJ9Nrw=;
-        b=WOTbR3WcmH3DnTNyZqnkVGPilKQ4qTy9sPbSShhwMtze8MKqVMvxM5eB7T8uyGUqv9
-         nDRqrwaMkSphulM2TATgAzG1ZkevAD5Gge1Hu5Cr+3NRPCwlExWtA3wWMUslZD6vL1gu
-         KamFt+FU6M/wLZhYnXqfjwRoG9Bb27gMHvl1YyVkpcUVM0fhramYZYqXY/WTaMNRVwbU
-         U7ZGph86NlTuqAfynHGALI8TI+Fm4n/TwI5YH6GpjuhM7OtqQbiyZypW5yGw8AOgiICK
-         7NZQKJfaOyCTAtpOpfXMzQDymB0VZE4h4Z/z9AM02gh76nwl6Ol+91uZ9kWrX1Wjw2hH
-         6Xfw==
-X-Forwarded-Encrypted: i=1; AJvYcCVwrfz4sWgoA+MFm6DbxtKTzHftX/CWVvcpA2Qd9MPk/vNfMCWcLfINh7DIMgRxXlyv4Az1@lists.linux.dev
-X-Gm-Message-State: AOJu0YwM2EVGrp8lRZKXB/NaJkJXQqm46Fod9EVkI4jaeX8CnUzyuWxq
-	iX3Mux6fI4KVAJlgnHnPmJGfexk4nBrKP133P6byYSm5tl+FtuY0q2Ml4i6ijtvyafQ=
-X-Gm-Gg: ASbGncvMifzGI9DYTv7Sit7h9vOHIZMyPBFJT/Z6/7J+U5UaxkgfF76u78vU+IAbaw9
-	ccdn71FTDcLHmLe8gq2vImRkpCOCXYHYgZsCCNTv4ZSi0fYR6Vk/06AmRo/l1JeTvvNkQxUAM6w
-	aesVd+btBUGZ9VqDL4EMUEG+XGmZ/VOPP+mezYd0wYBWAVPEdg3BongrJmkLSV5lYmR9Qwc8weT
-	4lo9zCz83SUqcE095mtQFDubigs6KxoPz9Jl1mYTz0y8yzFutDwCvhhwPd2YGA34J/7DaCH26dH
-	5SloS5ckUcSHhmUKRGTSK9JL/j21xgrrd4OYXLKnxAUVrvXfgfhgS3QP5eEil8NY6XnKcgPE96m
-	UcWFAr+sJ/T9tO8P15YQTuUtpm0E5uMyTjYhsLW60e3zV1dPS4gKDCNm9x/WUrnsjHjGu
-X-Google-Smtp-Source: AGHT+IG/8Xqj716iiBt/qchOr1OFGqPi5/74id2OSt/hQJFdA0DdakhT+OcqxRtL9E/IhDxB0ZX1Dg==
-X-Received: by 2002:a05:651c:2121:b0:336:a73b:b605 with SMTP id 38308e7fff4ca-336b8da6293mr2896991fa.5.1756473236831;
-        Fri, 29 Aug 2025 06:13:56 -0700 (PDT)
-Received: from localhost (c-85-229-7-191.bbcust.telenor.se. [85.229.7.191])
-        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-336b489c487sm4641041fa.49.2025.08.29.06.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Aug 2025 06:13:56 -0700 (PDT)
-From: Anders Roxell <anders.roxell@linaro.org>
-To: peter.ujfalusi@gmail.com,
-	vkoul@kernel.org,
-	nathan@kernel.org
-Cc: dmaengine@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	dan.carpenter@linaro.org,
-	arnd@arndb.de,
-	benjamin.copeland@linaro.org,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] dmaengine: ti: edma: Fix memory allocation size for queue_priority_map
-Date: Fri, 29 Aug 2025 15:13:46 +0200
-Message-ID: <20250829131346.3697633-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyDo0JtH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756482792; x=1788018792;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XKkRs/IcCE9mjve0Gx265u3Mj72r0BXCLoU7/fhGsA8=;
+  b=nyDo0JtHG8ScJUL2z5LshOLJpNuheYdkRAxuwWBFJPt6HWrG4FvUwIX2
+   6sHrUqyD3h1vbLzCuA4tl7GWh6M7TB2iMoXrXpPjA15c8CqmSNhWXjZhd
+   tqT5i9ZSntHMvJYlCsnArBzAQjqpbFHDrSM2LbayZCri8e0fW8wFz+KeF
+   Yz7jAkxsIajXzo0GG3TAaaJH9nUGlkvSj8urIAs+P6s33SDYxuj5SrlMG
+   rJ18RqXx8B9aGkety4ZUZNG3GfOAz2krkKFZTG54MRAl3ZBu5FXz1JaJP
+   vLHPoC/cwhegrWj37nyMSfax85Nmz+M6ZMamIE7IvQZbcWbl9wmPaZz6o
+   A==;
+X-CSE-ConnectionGUID: FCBClCUjTai/wLrtXaaong==
+X-CSE-MsgGUID: hhTMnqJaRBm0TWgH1CbQbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58696866"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="58696866"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 08:53:11 -0700
+X-CSE-ConnectionGUID: has8hhHqQSmMSLEh/PUMRg==
+X-CSE-MsgGUID: F+oGRAzLQ7KmWjIknfXp3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="201324197"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 29 Aug 2025 08:53:09 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1us1PR-000UjD-2K;
+	Fri, 29 Aug 2025 15:53:07 +0000
+Date: Fri, 29 Aug 2025 23:52:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [daveh-devel:kpte 2/6] include/asm-generic/pgalloc.h:144:21:
+ warning: variable 'ptdesc' is uninitialized when used here
+Message-ID: <202508292320.plYGOdi2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fix a critical memory allocation bug in edma_setup_from_hw() where
-queue_priority_map was allocated with insufficient memory. The code
-declared queue_priority_map as s8 (*)[2] (pointer to array of 2 s8), but
-allocated memory using sizeof(s8) instead of sizeof(s8[2]).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git kpte
+head:   d5eaa925a3150c716e8ec564c51069fbdd303fbc
+commit: ccbd04de39826d130b67374e68599e128b53acab [2/6] mm: Actually mark kernel page table pages
+config: x86_64-buildonly-randconfig-004-20250829 (https://download.01.org/0day-ci/archive/20250829/202508292320.plYGOdi2-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250829/202508292320.plYGOdi2-lkp@intel.com/reproduce)
 
-This caused out-of-bounds memory writes when accessing:
-  queue_priority_map[i][0] = i;
-  queue_priority_map[i][1] = i;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508292320.plYGOdi2-lkp@intel.com/
 
-The bug manifested as kernel crashes with "Oops - undefined instruction"
-on ARM platforms (BeagleBoard-X15) during EDMA driver probe, as the
-memory corruption triggered kernel hardening features on Clang.
+All warnings (new ones prefixed by >>):
 
-Change the allocation from:
-  devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8), GFP_KERNEL)
-to this:
-  devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]), GFP_KERNEL)
+   In file included from kernel/fork.c:110:
+   In file included from arch/x86/include/asm/pgalloc.h:13:
+>> include/asm-generic/pgalloc.h:144:21: warning: variable 'ptdesc' is uninitialized when used here [-Wuninitialized]
+     144 |                 ptdesc_set_kernel(ptdesc);
+         |                                   ^~~~~~
+   include/asm-generic/pgalloc.h:139:23: note: initialize the variable 'ptdesc' to silence this warning
+     139 |         struct ptdesc *ptdesc;
+         |                              ^
+         |                               = NULL
+   include/asm-generic/pgalloc.h:179:21: warning: variable 'ptdesc' is uninitialized when used here [-Wuninitialized]
+     179 |                 ptdesc_set_kernel(ptdesc);
+         |                                   ^~~~~~
+   include/asm-generic/pgalloc.h:175:23: note: initialize the variable 'ptdesc' to silence this warning
+     175 |         struct ptdesc *ptdesc;
+         |                              ^
+         |                               = NULL
+   include/asm-generic/pgalloc.h:235:21: warning: variable 'ptdesc' is uninitialized when used here [-Wuninitialized]
+     235 |                 ptdesc_set_kernel(ptdesc);
+         |                                   ^~~~~~
+   include/asm-generic/pgalloc.h:231:23: note: initialize the variable 'ptdesc' to silence this warning
+     231 |         struct ptdesc *ptdesc;
+         |                              ^
+         |                               = NULL
+   include/asm-generic/pgalloc.h:281:21: warning: variable 'ptdesc' is uninitialized when used here [-Wuninitialized]
+     281 |                 ptdesc_set_kernel(ptdesc);
+         |                                   ^~~~~~
+   include/asm-generic/pgalloc.h:277:23: note: initialize the variable 'ptdesc' to silence this warning
+     277 |         struct ptdesc *ptdesc;
+         |                              ^
+         |                               = NULL
+   4 warnings generated.
 
-This ensures proper allocation of (ecc->num_tc + 1) * 2 bytes to match
-the expected 2D array structure.
 
-Fixes: 2b6b3b742019 ("ARM/dmaengine: edma: Merge the two drivers under drivers/dma/")
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- drivers/dma/ti/edma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+vim +/ptdesc +144 include/asm-generic/pgalloc.h
 
-diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-index 3ed406f08c44..8f9b65e4bc87 100644
---- a/drivers/dma/ti/edma.c
-+++ b/drivers/dma/ti/edma.c
-@@ -2064,7 +2064,7 @@ static int edma_setup_from_hw(struct device *dev, struct edma_soc_info *pdata,
- 	 * priority. So Q0 is the highest priority queue and the last queue has
- 	 * the lowest priority.
- 	 */
--	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8),
-+	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]),
- 					  GFP_KERNEL);
- 	if (!queue_priority_map)
- 		return -ENOMEM;
+   124	
+   125	#ifndef __HAVE_ARCH_PMD_ALLOC_ONE
+   126	/**
+   127	 * pmd_alloc_one - allocate memory for a PMD-level page table
+   128	 * @mm: the mm_struct of the current context
+   129	 *
+   130	 * Allocate memory for a page table and ptdesc and runs pagetable_pmd_ctor().
+   131	 *
+   132	 * Allocations use %GFP_PGTABLE_USER in user context and
+   133	 * %GFP_PGTABLE_KERNEL in kernel context.
+   134	 *
+   135	 * Return: pointer to the allocated memory or %NULL on error
+   136	 */
+   137	static inline pmd_t *pmd_alloc_one_noprof(struct mm_struct *mm, unsigned long addr)
+   138	{
+   139		struct ptdesc *ptdesc;
+   140		gfp_t gfp = GFP_PGTABLE_USER;
+   141	
+   142		if (mm == &init_mm) {
+   143			gfp = GFP_PGTABLE_KERNEL;
+ > 144			ptdesc_set_kernel(ptdesc);
+   145		}
+   146		ptdesc = pagetable_alloc_noprof(gfp, 0);
+   147		if (!ptdesc)
+   148			return NULL;
+   149		if (!pagetable_pmd_ctor(mm, ptdesc)) {
+   150			pagetable_free(ptdesc);
+   151			return NULL;
+   152		}
+   153		return ptdesc_address(ptdesc);
+   154	}
+   155	#define pmd_alloc_one(...)	alloc_hooks(pmd_alloc_one_noprof(__VA_ARGS__))
+   156	#endif
+   157	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
