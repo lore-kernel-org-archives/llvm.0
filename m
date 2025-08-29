@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162D432C32E;
-	Fri, 29 Aug 2025 15:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3FF32A3D9;
+	Fri, 29 Aug 2025 16:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756482793; cv=none; b=ZDnOjohj6qltfD2mBORH7oqA+TEDJ9BCAkAftiIfy9SgDOoLGQ8FQ8BkLCCyDMunSORlD/5sQTz0azpiLKfWpdDC6BxVQdtr7Ls4zB9XwOhFck8HVZD0377JDouhEkdZyF0VJVzJCYYKeuEO8hEw2D6gKpgCoTW0qw76KGNS9qg=
+	t=1756485287; cv=none; b=A5aB7Jm8LfMtnGCeoDtNdxEUvvdy9/9qz/bus7YNxCb3ZPjMCSZM3+cJeOKa6i3dkRcqfczMVYDe2C6CzS4QLpyr8S5dwY2uQrSKgsAWvgxoFqflu4wcaR3jfgvtdT40CzPK/+XcCCs+jRfV3NFQry4nj9YFv3Nb37d3FYpDxV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756482793; c=relaxed/simple;
-	bh=XKkRs/IcCE9mjve0Gx265u3Mj72r0BXCLoU7/fhGsA8=;
+	s=arc-20240116; t=1756485287; c=relaxed/simple;
+	bh=PSyZtno1JoUDkX89LLEGe3GPDhjQY52/rF9nhN6uqOQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XoFsQz+j1jzBtQdcePZwdNqURqNVYJYzFch6Bw6EuAMqHKM3guvd1aXQ4jIcb7ctsw4jFyzgqvjmzhxKgM1FS/zOza+me+UKiwyKWFkNjdgUD5eKeJkTiaNXezohOTgCv4pw92Efgz6Japd1sb0XWZmndEtZudx91MiGW1HX6ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nyDo0JtH; arc=none smtp.client-ip=198.175.65.21
+	 Content-Disposition; b=HKkAU/WDwzGedaSo/hhBprll9YXWbuiDQoNVXfcfYqT/xtf3TwD5TLl3hpD17UShYhnKjEY20+AiIv391+m4cvGB6EeTeo0I4KSebTAy/jYgvTE4iUT6qkjb9TqDrdLWnCsLLfKY5DK081TVxmMqfqkQ8WycfX7jzTqCbJVnb5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aqvNhyop; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nyDo0JtH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aqvNhyop"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756482792; x=1788018792;
+  t=1756485285; x=1788021285;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XKkRs/IcCE9mjve0Gx265u3Mj72r0BXCLoU7/fhGsA8=;
-  b=nyDo0JtHG8ScJUL2z5LshOLJpNuheYdkRAxuwWBFJPt6HWrG4FvUwIX2
-   6sHrUqyD3h1vbLzCuA4tl7GWh6M7TB2iMoXrXpPjA15c8CqmSNhWXjZhd
-   tqT5i9ZSntHMvJYlCsnArBzAQjqpbFHDrSM2LbayZCri8e0fW8wFz+KeF
-   Yz7jAkxsIajXzo0GG3TAaaJH9nUGlkvSj8urIAs+P6s33SDYxuj5SrlMG
-   rJ18RqXx8B9aGkety4ZUZNG3GfOAz2krkKFZTG54MRAl3ZBu5FXz1JaJP
-   vLHPoC/cwhegrWj37nyMSfax85Nmz+M6ZMamIE7IvQZbcWbl9wmPaZz6o
+  bh=PSyZtno1JoUDkX89LLEGe3GPDhjQY52/rF9nhN6uqOQ=;
+  b=aqvNhyopAtt33JV7tiTwhZTHgqnSVCxwWlOWLcKGOs7cEcflSBIUyWs5
+   pZgLu9Y1nZlBQyczVM1gHr4F5Iic2xnYzFhL92xaPpPTOBUeOij5UXKZd
+   BkgtEV5s966xTVidepiLCwSId8w+E2MFJ1+eGyXmqmbkDLZJg/dW4+1AS
+   JewJ/IkryfQvSa5+1hmf6+pb3+IHtSC/1gONQEP/xMNCm2Jv5owQEq/uX
+   Ce+AqBD5rpnbChundc6iKAcRg8F/Yjcz3yDg1x0JSQWSz8koRZRCyetza
+   2Csk82GJ+Wf6KmV3cPM2oxoUkcPF4oKReUMuZC0TmFKMwIEvCBYV28fOo
    A==;
-X-CSE-ConnectionGUID: FCBClCUjTai/wLrtXaaong==
-X-CSE-MsgGUID: hhTMnqJaRBm0TWgH1CbQbg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58696866"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58696866"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 08:53:11 -0700
-X-CSE-ConnectionGUID: has8hhHqQSmMSLEh/PUMRg==
-X-CSE-MsgGUID: F+oGRAzLQ7KmWjIknfXp3A==
+X-CSE-ConnectionGUID: iBYDvkxnR9Cgkl++6z7B0w==
+X-CSE-MsgGUID: 4ihBauxyTB+o2J8/c2NpDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11537"; a="58482966"
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="58482966"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 09:34:45 -0700
+X-CSE-ConnectionGUID: zcivS3DfSkW03fX7mPRohA==
+X-CSE-MsgGUID: bzgU7cZrSfKIwgRKDEZdOQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="201324197"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Aug 2025 08:53:09 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+   d="scan'208";a="169989631"
+Received: from igk-lkp-server01.igk.intel.com (HELO ca260db0ef79) ([10.91.175.65])
+  by orviesa009.jf.intel.com with ESMTP; 29 Aug 2025 09:34:43 -0700
+Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1us1PR-000UjD-2K;
-	Fri, 29 Aug 2025 15:53:07 +0000
-Date: Fri, 29 Aug 2025 23:52:42 +0800
+	id 1us23k-0002uF-2X;
+	Fri, 29 Aug 2025 16:34:40 +0000
+Date: Fri, 29 Aug 2025 18:33:44 +0200
 From: kernel test robot <lkp@intel.com>
 To: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [daveh-devel:kpte 2/6] include/asm-generic/pgalloc.h:144:21:
  warning: variable 'ptdesc' is uninitialized when used here
-Message-ID: <202508292320.plYGOdi2-lkp@intel.com>
+Message-ID: <202508291824.iykihj3B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,14 +65,15 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git kpte
 head:   d5eaa925a3150c716e8ec564c51069fbdd303fbc
 commit: ccbd04de39826d130b67374e68599e128b53acab [2/6] mm: Actually mark kernel page table pages
-config: x86_64-buildonly-randconfig-004-20250829 (https://download.01.org/0day-ci/archive/20250829/202508292320.plYGOdi2-lkp@intel.com/config)
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250829/202508291824.iykihj3B-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250829/202508292320.plYGOdi2-lkp@intel.com/reproduce)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250829/202508291824.iykihj3B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508292320.plYGOdi2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508291824.iykihj3B-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
