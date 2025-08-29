@@ -1,72 +1,149 @@
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5178321F51;
-	Fri, 29 Aug 2025 18:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338A521019E;
+	Fri, 29 Aug 2025 18:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756490643; cv=none; b=FYCOLVHeg9HA+5iXo7m3XB8MaSDZaBr35UskA5jGMIK5NALCILuCdH1zYt/LTfwbPSXmE1yb5OEisGc6GXiMiWj+DBLFgipvjmXyLgO/34q+U1w8QHJpyzMFihITtNLSADQ1hNUGvH4V+ILbfyXTEeb36vXWi674C2TreIlxppg=
+	t=1756491020; cv=none; b=PW1RbyFm6pAlb8a+rD/IY1krM6TRHsBDRHPtN9L2g6fvl2XqOhE0K2ajXc66q4BwrBrW0zqqmwqw8GoxhTaqfD6YXbeF1pqAMS1jdN0Ayy4s5tcAo186lp5n6bcVptFkbsg7k0J3XhtZPAHrRYNIJdiVp8ZauRyAbpxvwUXX9YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756490643; c=relaxed/simple;
-	bh=NcPQlIy5RLt8gpltJUR964uaQycyIlyScg8LlCNvIso=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oLUYRud+nbwr+BWQB2nr/IMU3X9+uF6Wzq3zfKqCvKVuPm+Vt7wA/RsNXVJqM6e49KKNPtfTwOdq9U1P7/dCN7L/CcTK4Xr2OFDtT7KX4EM4zEZZu0D/C+J6JeRrV0QdPsYFbxiepNeh6G8f5+T9QVqCqAZGNQjwFUJjCUO5e/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=PaITX8Lr; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+	s=arc-20240116; t=1756491020; c=relaxed/simple;
+	bh=SXu3T17dYbp/ukZ8uJydGVdZ6zcCuFcjGzpDGMwa+Nc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HKD1whapY09keBQKdviaQHsUdOtbcq2/nWQqUIfA+MBiClFxxigbachQOj6jlJA9Y7y4TZJ1fO9zlV5VDRkw3rfSFRk9i8jfFppsHaktJMqikvI6HRUqUDcy4VMbFdbyi/BmdApYw/Ho51oJK/GxkkaCav/QL+HCp1DPTuowxVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ooi7zA7T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="PaITX8Lr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=From:Cc:To:Date:Message-ID;
-	bh=NcPQlIy5RLt8gpltJUR964uaQycyIlyScg8LlCNvIso=; b=PaITX8LrYogS9eQ0cPDE+1A9BO
-	5J+GCV9D+EtdBlBgL82oKoqNI/c1oKbRR8eo5GpI8maZfwZy4K/QiQJeFv/o7Wu8rFj92hXfik82m
-	eMFooAK+wooe0Cg56a6kqAGK4iJRKuOsZkL3LHgqbeuZY0jvdTxmqYNDl12G6h0Zi+9vTkrbUwqli
-	aZaogIWSlYUtyrCpfAjY2bEw8SWAa+UpeMiPyHQhIdCVMR4YyjClfzQTLPdetBg6brIte3FQ3TLSJ
-	C44kFzQkO1okhj8v7luYsn2S1i+Fy+18kXbNnvEJSbfEgIQ4ALCGTsnpTh5UpmXWM9vcf9m5FfOPw
-	NHyvO2CyIBP+B8Ya18bJG53pR1mNAkwSe869F3Z8bnSHLgfmhYhgJtP+hdbbhRdtCkvBIYIgfvlwL
-	LCw0r5C6yK1pL7obzAz3IQwDh68WzA9UYx79aUDBox1rFvNtvCo0KSYAnG90n4usWJlSSlmTk4Dh1
-	OKyzAomBhbHnlnCZYwVxwigT;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1us3SA-001TJm-07;
-	Fri, 29 Aug 2025 18:03:58 +0000
-Message-ID: <2854f742-a0bc-4456-a372-9fa2d4e2ee3f@samba.org>
-Date: Fri, 29 Aug 2025 20:03:57 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ooi7zA7T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C02C4CEF0;
+	Fri, 29 Aug 2025 18:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756491018;
+	bh=SXu3T17dYbp/ukZ8uJydGVdZ6zcCuFcjGzpDGMwa+Nc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ooi7zA7T9NmpAVf2EhalPYoUyuzdraHp5C4oj/l4tumul2weopj5FJ1utOM+alOHE
+	 kKgusS+zU63i44OmypyAXKPtErTb3bB1GndFYFN2okuf9dT8hCaNdpoFVkJ5p8agh+
+	 KkkEsMX5T3gC8JIm2Ov+5zT8s4L7tpEw7w/6ThgCsQL1Xlg6GXrAAbC6OLHWNTeh0w
+	 FXzd4JTSiV52V1QufIh9KkzXjYT+hvbp3zSg4ylf/XGvXabRt4g7AwLZFCUhy7Zrgf
+	 S8hNoGjWZuOpsjDmYOt//9aCCpoZgyxV/RwMeINevxHuMv5KmXpH/JQL39xFf9C15W
+	 UspQvwHff7f7A==
+Date: Fri, 29 Aug 2025 11:10:07 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jinghao Jia <jinghao7@illinois.edu>,
+	Wentao Zhang <wentaoz5@illinois.edu>,
+	Sasha Levin <sashal@kernel.org>
+Cc: Matt.Kelly2@boeing.com, akpm@linux-foundation.org,
+	andrew.j.oppelt@boeing.com, anton.ivanov@cambridgegreys.com,
+	ardb@kernel.org, arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+	chuck.wolber@boeing.com, dave.hansen@linux.intel.com,
+	dvyukov@google.com, hpa@zytor.com, johannes@sipsolutions.net,
+	jpoimboe@kernel.org, justinstitt@google.com, kees@kernel.org,
+	kent.overstreet@linux.dev, linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org, Wentao Zhang <wentaoz5@illinois.edu>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	llvm@lists.linux.dev, luto@kernel.org, marinov@illinois.edu,
+	masahiroy@kernel.org, maskray@google.com,
+	mathieu.desnoyers@efficios.com, matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
+	ndesaulniers@google.com, oberpar@linux.ibm.com, paulmck@kernel.org,
+	peterz@infradead.org, richard@nod.at, rostedt@goodmis.org,
+	samitolvanen@google.com, samuel.sarkisian@boeing.com,
+	steven.h.vanderleest@boeing.com, tglx@linutronix.de,
+	tingxur@illinois.edu, tyxu@illinois.edu, x86@kernel.org
+Subject: Re: [PATCH v2 0/4] Enable measuring the kernel's Source-based Code
+ Coverage and MC/DC with Clang
+Message-ID: <20250829181007.GA468030@ax162>
+References: <20241002045347.GE555609@thelio-3990X>
+ <20241002064252.41999-1-wentaoz5@illinois.edu>
+ <20241003232938.GA1663252@thelio-3990X>
+ <284fe8fa-c094-49b7-8e16-3318676d38e3@illinois.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [cifs:for-next-next 28/146] fs/smb/client/smbdirect.c:1856:25:
- warning: stack frame size (1272) exceeds limit (1024) in
- 'smbd_get_connection'
-To: Steve French <smfrench@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- Steve French <stfrench@microsoft.com>, kernel test robot <lkp@intel.com>
-References: <202508291432.M5gWPqJX-lkp@intel.com>
- <c18ba6b4-847e-4470-bd0e-9e5232add730@samba.org>
- <CAH2r5mvksbiH-D4FbVb0PVg1vnik+WU7d0kxRUk0S9h9S+=zvw@mail.gmail.com>
-Content-Language: en-US
-From: Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <CAH2r5mvksbiH-D4FbVb0PVg1vnik+WU7d0kxRUk0S9h9S+=zvw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <284fe8fa-c094-49b7-8e16-3318676d38e3@illinois.edu>
 
-QW0gMjkuMDguMjUgdW0gMTk6NTkgc2NocmllYiBTdGV2ZSBGcmVuY2g6DQo+IEkgaGF2ZSB1
-cGRhdGVkIHRoZSBwYXRjaCAoc2VlIGF0dGFjaGVkKSwgYW5kIHVwZGF0ZWQgY2lmcy0yLjYu
-Z2l0IGZvci1uZXh0LW5leHQNCj4gDQo+PiBJJ20gbm90IHN1cmUgaWYgdGhlIGZvbGxvd2lu
-ZyBzaG91bGQgYmUgYWRkZWQNCj4+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8
-bGtwQGludGVsLmNvbT4NCj4gDQo+IFRoYXQgaXMgYSBnb29kIHF1ZXN0aW9uLCBidXQgSSBs
-ZWFuIGFnYWluc3QgaXQgc2luY2UgdGhlICJpbml0aWFsIGJ1ZyINCj4gd2FzIG5vdCByZXBv
-cnRlZCBieSB0aGVtIHRoYXQgY2F1c2VkIHRoZSBwYXRjaC4gIElmIGl0IHdhcyBhIGRpc3Rp
-bmN0DQo+IHBhdGNoIGZpeGluZyB0aGUgYnVnIHRoZXkgcG9pbnRlZCBvdXQsIHRoZW4geWVz
-IGl0IHNob3VsZCBiZSBhZGRlZCwNCj4gYnV0IGNvdWxkIGJlIGNvbmZ1c2luZyBpZiB3aGF0
-IHRoZXkgcG9pbnRlZCBvdXQgd2FzIHRvdGFsbHkgdW5yZWxhdGVkDQo+IHRvIHRoZSBwdXJw
-b3NlIG9mIHRoZSBwYXRjaC4NCg0KWW91IHNxdWFzaGVkIGl0IGludG8gdGhlIHdyb25nIGNv
-bW1pdC4gUGxlYXNlIHBhdGNoIHRoaXMgb25lOg0KZjJlMjc2OTI3NWY0YWE2ZTRkNWZhOTgw
-MDQzMDFlOTEyODJhMDk0YSBzbWI6IHNtYmRpcmVjdDogaW50cm9kdWNlIHNtYmRpcmVjdF9z
-b2NrZXRfaW5pdCgpDQoNClRoYW5rcyENCm1ldHplDQo=
+Hi Jinghao and Wentao,
+
+On Thu, Nov 21, 2024 at 11:05:14PM -0600, Jinghao Jia wrote:
+...
+> On 10/3/24 6:29 PM, Nathan Chancellor wrote:
+> > I seem to have narrowed down it to a few different configurations on top
+> > of x86_64_defconfig but I will include the full bad configuration as an
+> > attachment just in case anything else is relevant.
+...
+> > $ qemu-system-x86_64 \
+> >     -display none \
+> >     -nodefaults \
+> >     -M q35 \
+> >     -d unimp,guest_errors \
+> >     -append 'console=ttyS0 earlycon=uart8250,io,0x3f8' \
+> >     -kernel arch/x86/boot/bzImage
+> >     -initrd rootfs.cpio \
+> >     -cpu host \
+> >     -enable-kvm \
+> >     -m 8G \
+> >     -smp 8 \
+> >     -serial mon:stdio
+> > <hangs with no output>
+> 
+> This hang is caused by an early boot exception -- gdb shows the execution
+> reaches the halt loop in early_fixup_exception().  Dumping regs->ip associated
+> with this exception points us to the following instruction:
+> 
+> ffffffff89b58074:       48 ff 05 85 7f 4a 76    incq   0x764a7f85(%rip)        # 0 <fixed_percpu_data>
+> 
+> This is apparently an incorrect access to the per-cpu variable (the cpu offset
+> in %gs is needed) and triggers a null-ptr-deref. Without CONFIG_AMD_MEM_ENCRYPT
+> (one of the bad configs), it turns out the instruction is actually accessing
+> the llvm prof-counter of strscpy():
+> 
+> ffffffff89b85a04:       48 ff 05 6d 94 7d fa    incq   -0x5826b93(%rip)        # ffffffff8435ee78 <__profc__Z13sized_strscpyPcU25pass_dynamic_object_size1PKcU25pass_dynamic_object_size1m>
+> 
+> This symbol is left undefined in the bad vmlinux, which explains why the
+> faulting instruction is accessing address 0.  Tracing through the kernel
+> linking process shows that the symbol is still defined (as a weak symbol) in
+> vmlinux.a and vmlinux.o, but becomes undefined after the first round of linking
+> of the kernel image (.tmp_vmlinux1).
+> 
+> After playing with it a little bit, we found the creation of vmlinux.o to be
+> the problem. Specifically, if we use mold[1] instead of lld to create the
+> object and pass it to the later stages of kernel linking, the symbol will be
+> properly defined as a data symbol (and the kernel can boot).
+> 
+> It seems that the issue does not reproduce with LLVM-20. Nevertheless we have
+> reported[2] this to upstream llvm.
+> 
+> [1]: https://github.com/rui314/mold
+> [2]: https://github.com/llvm/llvm-project/issues/116575
+
+Sasha pinged me on IRC earlier this week about this series and this
+issue, noting that he was unable to reproduce it with a similar
+toolchain version and the instructions above. I was able to confirm that
+at 6.17-rc1 with this patch set applied (after fixing a couple of minor
+conflicts), I no longer see this boot issue but it is still reproducible
+on 6.12.
+
+In attempting to narrow my bisect window to find what patch fixes this
+issue, I noticed that this configuration actually fails to build with
+
+  Absolute reference to symbol '__llvm_prf_cnts' not permitted in .head.text
+
+in 6.15 and 6.14 as a result of Ard's commit faf0ed487415 ("x86/boot:
+Reject absolute references in .head.text"). Bisecting between 6.15 and
+6.16 reveals Ard's commit a3cbbb4717e1 ("x86/boot: Move SEV startup code
+into startup/") resolves the build error and that kernel boots, which
+seems to make sense to me given what code was involved here. It is
+possible that arch/x86/boot/startup will want 'LLVM_COV_PROFILE := n'
+since all other instrumentation is disabled.
+
+I built v6.17-rc1 + this series with a fuller distribution configuration
+and CONFIG_LLVM_COV_PROFILE_ALL=y. That kernel boots fine in QEMU but I
+have done no further evaluation.
+
+Cheers,
+Nathan
