@@ -1,70 +1,106 @@
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA19E19D8A7;
-	Sat, 30 Aug 2025 13:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63031DBB13;
+	Sat, 30 Aug 2025 15:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756558909; cv=none; b=ef7C1O6LIlN67uRj+bPx5ceoLOi+UZRzLwOVQ3KsCVtadw/zpZJnR6vMGTSYXvtMLv5iypYa4OKjiAqgUqcHuVLELa9jmFQVZI8LaQem1bewmZXmTsZO90r3XR/0uG40EKcjwWED5FJRs7gGadgPPciAHbzkF7tRbKtmHCrHkUo=
+	t=1756568502; cv=none; b=gGzfNa1s754emDh1mMsKe2m7/MCM6uWJZuwaCeHSh/c6UwhCwnRhcYJ7BxqCdNZ5th+bpOoVhMI9N6/SNS1/r3jZgceuDocEkXhWIqEjBrwb39fXajsMnu1Bk7TgX8QP1mK4gI2Fw0cn+Db7J1QMSw1TSxSw9uJqus/9Kc1HO30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756558909; c=relaxed/simple;
-	bh=1xN84HVnh5TKVt5zCoR4FPrED9BI3DwgO0JPtFWLZwA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nf0vxPv91q7mCEi767TWHb0SRzP2EtZjFtOH9gSXujQbtP4hgmdYNWLuVV+x9opJiUv0UCQnLy4htRkTaSFVbbw1TQCHSpEdKfMWZh1++TP5ZJvStuD6nulJwq4CH2Q08rQcTgWxw5cSnofv4trhHpN1thAt6gIlVPylqtELBpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=HnPkC1En; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+	s=arc-20240116; t=1756568502; c=relaxed/simple;
+	bh=+iRaXVzECcvXTDXDtnzHEgBKOBeHUhWKVoYey/7sHQA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NyBOdYvdl4eoSZrx4WHZqFu1R5Rglb98zUVvEVIS/WcvxmKzl2hbffgzMnS4Kqvy+YHlFn9Y3ZoTrWon8apbg7/nFyR+HkovEVZ8tpAMhx0lrygCSl5rqX4jjEL8baCKwoOv7snkEmFNrPLaUMTkc0mgV9HIVIFIC2/KyfO4BQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YdaxGnq2; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="HnPkC1En"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=From:Cc:To:Date:Message-ID;
-	bh=w2r31b6ZTZZA1hM3FAitQ+11WoJRiWHiNo6ir0lqUzA=; b=HnPkC1EnBTCOFeXQmdM1hhfEjz
-	sfgcLJsHV+N7VkeNXAamtlMVl2IptrEfifO9VfB7+NbKaqSzeCTaya6mUpcem5SDGSIXE4TL0CAt4
-	kHxFad++mEPoWLOrWw5zuQb6Wtn1BRWpgK//EdHcKpoE/uFGlu1TubYJQZKaMLIyvJH/k0d5ax5DX
-	AMViecKVJEOOX78kKJswdHOYI0qhZeHIXZ0p9f4gsd94JQKYoEQJr+PBIGjkeMsSS3Y2DpexL79G5
-	uWAIhEnAhqKwhJygVjB9MOav9OHQamvbiC4SB1v6KOWrhwHii3F7G0F5VSDq2w4sJ8UIqF6ltgVRP
-	eOQujMZVit7wUi3NqOYtm3ryZgKtSu2wfhHbZOM5kvLx6X5k4XL9StUJjUSwjYGXltItuEyAsZcqk
-	D+fxZoeyjbj24Yw4/26Al87zgPsxsS4YZR5zoD99YZ/VtgJgu2D0GSLPWwmbFnyp/A0LY7i0ClCS2
-	8GP02QdtkuMJ+7DFdp1SaCTW;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1usLD9-001acg-1v;
-	Sat, 30 Aug 2025 13:01:39 +0000
-Message-ID: <6197b8f3-7f44-42a8-a2f5-061888898865@samba.org>
-Date: Sat, 30 Aug 2025 15:01:38 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YdaxGnq2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756568501; x=1788104501;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+iRaXVzECcvXTDXDtnzHEgBKOBeHUhWKVoYey/7sHQA=;
+  b=YdaxGnq2ce3gkLM6+OdRWKTIcfk9AqhMsLTFCuikvJuwvq+G41xm52fh
+   hXVdTeZGqgVASDlBLPf9PUvlGx1SCOIGUZDshVv7MZJaR7h3aY42FkrQy
+   ukv10GsxtKC6vM7MVK7ODEg2BNg4NtfOgn15srUq12vGMHSgQ31pPM1Mx
+   jiXvF3aCwSKHnhGMxVUNMK8tuq2nHa2RMBAdWs/3LE2VDwq0L1pYJgLMC
+   Xoj+o9V9Vcv72bjbz1/2Nohh2GGCtOvhMPqz9BE21XJSUuWceVx6Y2WjG
+   jmSGqlki/ocGzlmEVlXM/Wis95irAdtfm/23aP/mJmdDLaEe9w2Y3b2ga
+   w==;
+X-CSE-ConnectionGUID: yLrjeWz1SqKedYJPPCwx+A==
+X-CSE-MsgGUID: cHtd0KNYS1mMLzZQsMzfPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11537"; a="58933702"
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="58933702"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2025 08:41:40 -0700
+X-CSE-ConnectionGUID: 2BBGvx6DQ/eEQNu3xubSNg==
+X-CSE-MsgGUID: fPRSJ2fiRj+oowIs6XSrxw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="169912325"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 30 Aug 2025 08:41:36 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1usNhi-000VT3-2q;
+	Sat, 30 Aug 2025 15:41:26 +0000
+Date: Sat, 30 Aug 2025 23:40:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Russell King - ARM Linux <linux@armlinux.org.uk>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>,
+	David Miller <davem@davemloft.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/5] arm64: dts: ls1043a-qds: switch to new
+ fixed-link binding
+Message-ID: <202508302350.uP3JO7bq-lkp@intel.com>
+References: <fe4c021d-c188-4fc2-8b2f-9c3c269056eb@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [cifs:for-next-next 28/146] fs/smb/client/smbdirect.c:1856:25:
- warning: stack frame size (1272) exceeds limit (1024) in
- 'smbd_get_connection'
-To: Steve French <smfrench@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
- Steve French <stfrench@microsoft.com>, kernel test robot <lkp@intel.com>,
- Meetakshi Setiya <meetakshisetiyaoss@gmail.com>
-References: <202508291432.M5gWPqJX-lkp@intel.com>
- <c18ba6b4-847e-4470-bd0e-9e5232add730@samba.org>
- <CAH2r5mvksbiH-D4FbVb0PVg1vnik+WU7d0kxRUk0S9h9S+=zvw@mail.gmail.com>
- <2854f742-a0bc-4456-a372-9fa2d4e2ee3f@samba.org>
- <CAH2r5muGufmSdjxqTv9wcpbZoMsoEq=1ufFo_Yty352uDf+3-w@mail.gmail.com>
-Content-Language: en-US
-From: Stefan Metzmacher <metze@samba.org>
-In-Reply-To: <CAH2r5muGufmSdjxqTv9wcpbZoMsoEq=1ufFo_Yty352uDf+3-w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe4c021d-c188-4fc2-8b2f-9c3c269056eb@gmail.com>
 
-Am 30.08.25 um 00:31 schrieb Steve French:
-> updated " smb: smbdirect: introduce smbdirect_socket_init()" patch attached
-> 
-> Also updated cifs-2.6.git for-next-next
+Hi Heiner,
 
-Thanks! Looks good now.
+kernel test robot noticed the following build errors:
 
-metze
+[auto build test ERROR on net-next/main]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/arm64-dts-ls1043a-qds-switch-to-new-fixed-link-binding/20250830-183341
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/fe4c021d-c188-4fc2-8b2f-9c3c269056eb%40gmail.com
+patch subject: [PATCH net-next 1/5] arm64: dts: ls1043a-qds: switch to new fixed-link binding
+config: arm64-randconfig-002-20250830 (https://download.01.org/0day-ci/archive/20250830/202508302350.uP3JO7bq-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project ac23f7465eedd0dd565ffb201f573e7a69695fa3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250830/202508302350.uP3JO7bq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508302350.uP3JO7bq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm64/boot/dts/freescale/fsl-ls1043a-qds.dts:212.3-33 Properties must precede subnodes
+   FATAL ERROR: Unable to parse input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
