@@ -1,140 +1,126 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE1522A4F8
-	for <llvm@lists.linux.dev>; Sat, 30 Aug 2025 09:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD494221FBF
+	for <llvm@lists.linux.dev>; Sat, 30 Aug 2025 09:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756547316; cv=none; b=sjc3gIhwQEwE3TpbCMgQq0NR1ysg+L4p/+HW4AdQBaZxV1CQCK6w9LDebBBNl3rsLTN9cSkqJgiot6hYZ5xnQ7qr7nYHsdkx9tghbgQGRPSVbz6EsjkI14yHFKWX9kzCtL2W0OSGvdzqW0OuoxApF7yT8jZ5JECS/xKRtvwzmXk=
+	t=1756547400; cv=none; b=nQHx1kvXhVs/uRlBV4Mpn4PqUrNAJSDky7lm/oggmhiI+df4FTlopyGNw+/m+YXKkf3tFaUnlDqj/kOryVDr/tdKPt44UscmLu8+kIS01/XT2XljJhMAjijMoqSBPtMIJhPs8uONXbMMrB2uCAOg5AVVxlT4K+UZF+Wt/G9XTvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756547316; c=relaxed/simple;
-	bh=k8rdPyp5NnXLNmLAM5692d7carYniAWw+sO8SLajSu4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qLcbxoWZvG+QEV32GLIm1cX6xuNEoyFrs7vIfkIfcynSsfGckRxwCip3GuHQH5QMFmX8u0as56y/hMRr6VGU2TJOueXBF4jzUeABpyFdFy35Y5whZQLdX8YbOD9GvOpCpzHCl/ZVc7TkOoMjErzBoJzI4yjnPfRYsbkeEitOzrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WJvv16L5; arc=none smtp.client-ip=209.85.222.180
+	s=arc-20240116; t=1756547400; c=relaxed/simple;
+	bh=MhydSjpAwABmF/rCF0KsztuXi9gwym6dmu8o5mvUOII=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Z/ND2vXorOzqlyhUnOM94M7zVAvZuhNovfUIz2yQWdgzGPzon76TO2pi1mqyYXpjfFi0xc2H+Ew3fUhMEk2apgA5XuTlSBGey9kKEZ8QImO48MGglcGc56iQHZA/qMpzZxBVfELtMgmQPtutFPYlh82/4d6KtjBzO1js2C6lIUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mAs0ZWqb; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WJvv16L5"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7ff7e7e2652so8019385a.0
-        for <llvm@lists.linux.dev>; Sat, 30 Aug 2025 02:48:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mAs0ZWqb"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-55f6d63afb5so121032e87.1
+        for <llvm@lists.linux.dev>; Sat, 30 Aug 2025 02:49:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756547314; x=1757152114; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1756547397; x=1757152197; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O53sSv19BO8/CcZChzTjPzbh29PlzUTaZHAX/6sSM9k=;
-        b=WJvv16L56QsHf+yQ+KaMOkCV3s5XfEUpk32hCbioaUrFxcYGoB4TkSeaSDl6XQ1E4q
-         qR7JXDtlzlqlWeN9ACp2kM6xITrnrzfLets4pfThM1e/b5/WQEo/DLaG/DJuspyDyhRD
-         O9mRcPWR7zIMR5A3zIyYW7uGV8Ll9vz1XoLQ3JV53EfoW1JyCM1fvidg1VHXXwNv6kso
-         8VEO32L4uMI3BVF4thMQElDl5AWAHb73e47pLowqBF6EhsF3j3HHoENKG4Y+CDp1VDlJ
-         2sDdzYsW2zaHA0pcp9OETZ/ZedKeRQ7ULQVBVe1JTU6bA7RPGUXVcCkTswDT99lP4zP7
-         W0Ow==
+        bh=jRNROOHHAw2Bc/THJAy9MOJuP831ZvEwTWSfbFMLjGk=;
+        b=mAs0ZWqbBbaYaa/v4atIdg5LJhf/B2m/AKvwLHgiD+B8tvsXWtwYIVnZ0oEiFsu10o
+         T2Pa0AqgEz2fy+Iktv/pWVdA5r40cV+YBfoMxxJnJIezyqDJHJsnh53Grv7RZR0MOxnS
+         /SpRv1rKrhOqoH+ZooZ/ibUHo4jDQ+iWM0M4cPvnG/P5/96NHdlZWuBgKUP6ijzAkVzM
+         JwBFWB2lBXPiIZOhaBqYg03OWcPfCX0+tiZ1kvOTArklWDOGjrU8jfC9OENatdyTGm1I
+         Lx0cLnJGMSfjv+qrOzGDF11sen7CqJh/c6y5rAevJboVnhMpfagkUUpAonxGRcQIo9kZ
+         D5Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756547314; x=1757152114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1756547397; x=1757152197;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O53sSv19BO8/CcZChzTjPzbh29PlzUTaZHAX/6sSM9k=;
-        b=VqW989CTjmevKvENxbIrgm/y2jyXdrHqrwKAJbyhU47JncA6E5sKLFuaLyBwfqELwz
-         KcQ86TCdWochKeDHc5X2whAgp/GK8d4CZOpE+0tjleALkhLL39jjhrqInG15Gy52sDiY
-         hT3JfHtbTfcoLqVFmZB+jCXlUJSeG18iFTWF9zfcvJjKLwy/qPeoigt0ucoMcGh6M7m2
-         NndcZoRDuZ5ZHfhBLGCUWJvsN2siCravRO8gmRNfkmXDVVD351mNaKOOqfocJn1ay6tc
-         lN5Xd3lEyUxkVrjtx08c/A5/9klWsC7tvpxHMw/z1mXmHkjQuEVaRRBBYxTGuXtrlLlH
-         IGog==
-X-Forwarded-Encrypted: i=1; AJvYcCX7jIOEcocHqzcZjhNYAlW6evtMkE2IAwyYO6JVJ6u2Z0pT5gsfd9ZZQPw/o0Uk97/oJTDs@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz14Q1DwlCwtBd0t3489s54V/GJUqq+36zc+dPgGAwRDfbpLVkU
-	3T0fjeZhEE8/Q0/R8xc6e6qP0YGFrIIhmmKaBwRoRUevhMjekYLWMsBmgBraXmh7xkPNzOSXDmx
-	4UcUA7ZwmbvPcc5Fwivr0CmTDvw0MukNBsT0KQkloUQ==
-X-Gm-Gg: ASbGncv09UkrO6kwXqjuGgVFPUjmG98gMBQ0834XCqufsgnrDJEClDQIuHyoccAQWLv
-	aIg7b+BM4tdQYhWVILdgFefUbzDPEKZVsY3E9oWoVcK0L9BLLVrcpaVN8MBYKQiHnzLr2Cg8/Du
-	OAXaFkbp7tk8PAtTXIDYxOKmH9zk+4miID9+PtIPswaBjTL9D1tOe+u2NFzYndnuwwJetUgI/q2
-	85cVJKFSigNH6JD
-X-Google-Smtp-Source: AGHT+IGE0Py88CGitXRrUiODaco5VRpXPPZYcuL5qgF4c2qTNFu2t6a/n3uB1c8tKAquQX4FMnnHmvhUsQyxAUhJNQs=
-X-Received: by 2002:a05:6214:d8f:b0:70d:ee9b:9cf3 with SMTP id
- 6a1803df08f44-70fa1b8793emr30990516d6.0.1756547313850; Sat, 30 Aug 2025
- 02:48:33 -0700 (PDT)
+        bh=jRNROOHHAw2Bc/THJAy9MOJuP831ZvEwTWSfbFMLjGk=;
+        b=YsC1EpOyS0xRFD5A1Ratzsx7InWjLZzSOXUkQV0yyAwQKTEqz9TT5igbOMtSsvFsmo
+         JPXbUVU6txqs731b6DppRSJ3zfzmP/h7GcO9BNH41MdZXaMLRxgiWRdnznqe6uBFXzfh
+         EH+GgsIPNWKtGO9q3U26Ewgxpi+iCF2guFzvR7/H1snrTSz9Tw0Hjzyq85YRZCghe+/4
+         zJqCBY6uy5CsToUrsvNwzTzKPVO6TTF0Ufk13Q4HJMFxJdmC+vpSPcDTRMJVj1Xmgl2D
+         0WKCk++IlWe9ZmTxahK5wxiLnfredSCSU9XpoWZxCCHqBYmrKbIG4lgYbHQ06fE4v++T
+         gffQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWIrhTkOREx4hHDm7tnaQrw8CxgmrMihv2ZxNX2vzvIaJrJ31gl+NwPkmKPpZ7ElOxzjy0t@lists.linux.dev
+X-Gm-Message-State: AOJu0YyoG8xe13i1Dd1lnx/gPgo8KvC3d8vH8ss9a47B/DZh7bpNIu09
+	BFRRgHbLHWxFX8gSLoxqWtz8EtA6fwnTHgcPbbEatGLjRJ3airB4cGzyEvVzgaMLNLJ+E0kCzMB
+	DpPyy
+X-Gm-Gg: ASbGncsUYg5hmvlGkW1Aye5bBIkW7wwHrnsYi2ld4+3sWDu/iRvN5MisLoOY/x+8RL+
+	JvfhTVSrQVxOfcarq1plr+bDd7UNog3c2oTFzyYu+6KzA45oWKyru+Ndq6BcZkbklTXbt+LwEzW
+	Zv5svYDRWUFB37JZ7PxZy7XmMnNydcpwKx8/z16nL7rUe5Sestg4SX3nQ5bfMr9/icE64Dw0LY7
+	VAfhi4ozJZdZsRGKGJrGB3jemmphlXfG8dyOxT5k21vHuojqeCDSqIbARazVeEwC7vnK3l3ohN6
+	Bb5sJKCe7QA+dDwJB8EHM3JDBvQzQ1s4c+HsFjIh3uS4y3IvlPyQnHe9URgivvPCp4quPoxCT3x
+	PuLzdvVJLlgnwBeaY0GtGg3WhKmZ+RE6KabEJr/36+J6+jXN/yGRFcnxct091+qvO0aYx
+X-Google-Smtp-Source: AGHT+IG3HJ4okzHDbXzyC+DgyjCqGWEYnjZkIT75Na3msr+BLTTBdvc2Ju4vaDO6zUBBUpv9efwGtg==
+X-Received: by 2002:a05:6512:104e:b0:55f:612b:b350 with SMTP id 2adb3069b0e04-55f6afd91d7mr563621e87.3.1756547396895;
+        Sat, 30 Aug 2025 02:49:56 -0700 (PDT)
+Received: from localhost (c-85-229-7-191.bbcust.telenor.se. [85.229.7.191])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-55f6784fdcbsm1325961e87.98.2025.08.30.02.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Aug 2025 02:49:56 -0700 (PDT)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: peter.ujfalusi@gmail.com,
+	vkoul@kernel.org,
+	nathan@kernel.org
+Cc: dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	dan.carpenter@linaro.org,
+	arnd@arndb.de,
+	benjamin.copeland@linaro.org,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCHv2] dmaengine: ti: edma: Fix memory allocation size for queue_priority_map
+Date: Sat, 30 Aug 2025 11:49:53 +0200
+Message-ID: <20250830094953.3038012-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250829232132.GA1983886@ax162>
+References: <20250829232132.GA1983886@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250829131346.3697633-1-anders.roxell@linaro.org> <20250829232132.GA1983886@ax162>
-In-Reply-To: <20250829232132.GA1983886@ax162>
-From: Anders Roxell <anders.roxell@linaro.org>
-Date: Sat, 30 Aug 2025 11:48:22 +0200
-X-Gm-Features: Ac12FXyHu3hHuGLZl4KhxlWVoLXmzpAgyCiaFhzljq-f-0aBvo2YQhrSZWoV0xY
-Message-ID: <CADYN=9JgDeXByZy7PhUyaY091775G0Md+QvoFMb7AZa9vcKQqw@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: ti: edma: Fix memory allocation size for queue_priority_map
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: peter.ujfalusi@gmail.com, vkoul@kernel.org, dmaengine@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, dan.carpenter@linaro.org, 
-	arnd@arndb.de, benjamin.copeland@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, 30 Aug 2025 at 01:21, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Anders,
->
-> On Fri, Aug 29, 2025 at 03:13:46PM +0200, Anders Roxell wrote:
-> > Fix a critical memory allocation bug in edma_setup_from_hw() where
-> > queue_priority_map was allocated with insufficient memory. The code
-> > declared queue_priority_map as s8 (*)[2] (pointer to array of 2 s8), bu=
-t
-> > allocated memory using sizeof(s8) instead of sizeof(s8[2]).
-> >
-> > This caused out-of-bounds memory writes when accessing:
-> >   queue_priority_map[i][0] =3D i;
-> >   queue_priority_map[i][1] =3D i;
-> >
-> > The bug manifested as kernel crashes with "Oops - undefined instruction=
-"
-> > on ARM platforms (BeagleBoard-X15) during EDMA driver probe, as the
-> > memory corruption triggered kernel hardening features on Clang.
-> >
-> > Change the allocation from:
-> >   devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8), GFP_KERNEL)
-> > to this:
-> >   devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8[2]), GFP_KERNEL)
-> >
-> > This ensures proper allocation of (ecc->num_tc + 1) * 2 bytes to match
-> > the expected 2D array structure.
-> >
-> > Fixes: 2b6b3b742019 ("ARM/dmaengine: edma: Merge the two drivers under =
-drivers/dma/")
-> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> > ---
-> >  drivers/dma/ti/edma.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-> > index 3ed406f08c44..8f9b65e4bc87 100644
-> > --- a/drivers/dma/ti/edma.c
-> > +++ b/drivers/dma/ti/edma.c
-> > @@ -2064,7 +2064,7 @@ static int edma_setup_from_hw(struct device *dev,=
- struct edma_soc_info *pdata,
-> >        * priority. So Q0 is the highest priority queue and the last que=
-ue has
-> >        * the lowest priority.
-> >        */
-> > -     queue_priority_map =3D devm_kcalloc(dev, ecc->num_tc + 1, sizeof(=
-s8),
-> > +     queue_priority_map =3D devm_kcalloc(dev, ecc->num_tc + 1, sizeof(=
-s8[2]),
->
-> Would
->
->   sizeof(*queue_priority_map)
->
-> work instead? That tends to be preferred within the kernel so that the
-> type information is not open coded twice and it helps avoid bugs exactly
-> like this one. See other uses of devm_kcalloc() and "14) Allocating
-> memory" in Documentation/process/coding-style.rst.
+Fix a critical memory allocation bug in edma_setup_from_hw() where
+queue_priority_map was allocated with insufficient memory. The code
+declared queue_priority_map as s8 (*)[2] (pointer to array of 2 s8),
+but allocated memory using sizeof(s8) instead of the correct size.
 
-Thank you Nathan for the review, that makes sense. I=E2=80=99ll send a v2 s=
-hortly.
+This caused out-of-bounds memory writes when accessing:
+  queue_priority_map[i][0] = i;
+  queue_priority_map[i][1] = i;
 
-Cheers,
-Anders
+The bug manifested as kernel crashes with "Oops - undefined instruction"
+on ARM platforms (BeagleBoard-X15) during EDMA driver probe, as the
+memory corruption triggered kernel hardening features on Clang.
+
+Change the allocation to use sizeof(*queue_priority_map) which
+automatically gets the correct size for the 2D array structure.
+
+Fixes: 2b6b3b742019 ("ARM/dmaengine: edma: Merge the two drivers under drivers/dma/")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ drivers/dma/ti/edma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+index 3ed406f08c44..552be71db6c4 100644
+--- a/drivers/dma/ti/edma.c
++++ b/drivers/dma/ti/edma.c
+@@ -2064,8 +2064,8 @@ static int edma_setup_from_hw(struct device *dev, struct edma_soc_info *pdata,
+ 	 * priority. So Q0 is the highest priority queue and the last queue has
+ 	 * the lowest priority.
+ 	 */
+-	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8),
+-					  GFP_KERNEL);
++	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1,
++					  sizeof(*queue_priority_map), GFP_KERNEL);
+ 	if (!queue_priority_map)
+ 		return -ENOMEM;
+ 
+-- 
+2.50.1
+
