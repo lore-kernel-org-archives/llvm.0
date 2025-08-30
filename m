@@ -1,128 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC79273F9;
-	Fri, 29 Aug 2025 23:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92DD7261A
+	for <llvm@lists.linux.dev>; Sat, 30 Aug 2025 00:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756510709; cv=none; b=qYn2JIbi8u9Pe6VWTiZkimdbtIOiQvEuk0ItCQJzFDW91acsT5/rAaNVIXBpjPxrgmZZRP1k/CLENgehH6Z24ULWJTJ0TlrLg88xBZrxQ47r0Iwd1pJs3ozniulfFZZLebKuQ9UZ+l9Usk+sKh50ZNwELkPXcEgQOm84OOc/Hzg=
+	t=1756513390; cv=none; b=p/kjaQan5YXYQ/6zbcrtPBnIery2eYGiNYXkRdOAIj++0hBeslSb4llW46tyPzk5eznXSRcgyRBZnMDBALc/ElN+5iZnAhanSCXXs0djIdXBqaTZRHq/0TgWLxmtoxzs7lYInEPmy3gamRnUVuK2yIIavvAWgNf9utqVXkSuKN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756510709; c=relaxed/simple;
-	bh=WkvTp6f06aBzz6mMxgJlv68d8gusZL5MpxOSsdmeb2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G6Z+fQu7avLjOhXB2hrevxc6cl11ZhjfiFmHGTIqqt3XCnRZfhtc/wVHLH1rcX7nQe+He00onDXzG/6JIeoOn9QGhcbJJ0dqdLcGrozQPITreoPdsOcy3aACrjFTWvZtinZAvt7HRKSJccQs2NhXaACSJqmifBd1y3x5pjHrl2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DYj29Dlr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756513390; c=relaxed/simple;
+	bh=H52Gvg42+ooGJKJLwUaDslOJ7BFogGmTdL4dzsAn9Ho=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jirCKkr1bpd1t3ReJWZ/GEQQpuRlxjdoJd/DfpxcHIzWxg5X3wnntHo7tPTSmE2OnQ0ZJgfa6lasuM/3aOypZ922mICrt7vS2ZGWdbMjrE7kJcMKWQOYo9RFwNKPtvHVoU+urJJv1yqZvz0FzqVUNe5Lp0XEepGaHSnkFO3mAdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OTXVznDd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DYj29Dlr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D40C4CEF0;
-	Fri, 29 Aug 2025 23:38:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756510709;
-	bh=WkvTp6f06aBzz6mMxgJlv68d8gusZL5MpxOSsdmeb2Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DYj29DlrQwydXqOF86OiP1MmfJvNkS7E672zE1FZ9NugTUm51xr/S/EkmnxMI+iVC
-	 gD5iPIyL/+kdJXinqVci+0QOI4vJdt2UsTnzQjCSdVxSLoaizmQh3U3wqTs+sIQxdZ
-	 yYXv02A3fWGJht2eWGvNTkH4JifGAlEJWm9KcxXHgB+9Oq2KSMhfDAGDvvL7T92MNW
-	 v+ZD6PW4H3T4blxL+Z9cWQgjq7qO+KmO8x78DZOcQoHyn/EUzkrg3Llhw7mLP0W3gq
-	 Np4++1FWEbAnrdsLuIDxaBP82sKwHqlVUC+JR1k1Cy1+7uMqhnPXcBq+3QT/Dmj+CD
-	 ILwjLMuxTH0Zw==
-Date: Fri, 29 Aug 2025 16:38:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, Nicolas Schier <nsc@kernel.org>
-Subject: Re: [PATCH] .gitignore: ignore temporary files from 'bear'
-Message-ID: <20250829233824.GB1983886@ax162>
-References: <20250827-master-v1-1-19f9f367219c@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OTXVznDd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756513387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y1bVzrk1AbcS/HhXaGMDSdqDL0MfaK9AlNKlJ9qVSc0=;
+	b=OTXVznDdxeHybHiMWeyvPD1g4OJ4HuWhDwXdN6GPYzX+axOlMRfR1sL7MgiMJogf65ajW8
+	Am7Z2e7YQRAnhM5Zl1+XqHpQOCRMvRXkcX7qxzelgV98h5GcjLV6lVdAEsiuYEOEl8BADu
+	PZXsLCZ6sjTg639M+NTfEprbMHiUlCQ=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-9rJLgS_LMyuQ1FeVWtmi3g-1; Fri,
+ 29 Aug 2025 20:23:05 -0400
+X-MC-Unique: 9rJLgS_LMyuQ1FeVWtmi3g-1
+X-Mimecast-MFC-AGG-ID: 9rJLgS_LMyuQ1FeVWtmi3g_1756513385
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1229B1956087
+	for <llvm@lists.linux.dev>; Sat, 30 Aug 2025 00:23:05 +0000 (UTC)
+Received: from [172.20.143.215] (unknown [10.30.44.138])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A5C861800291;
+	Sat, 30 Aug 2025 00:23:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc3,
+ upstream-mainline, 11e7861d)
+Date: Sat, 30 Aug 2025 00:23:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827-master-v1-1-19f9f367219c@google.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <57754.125082920230600119@us-mta-478.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: RtCJW0fCJBFg3vbcdoHTM-AYoR43bdwAaclWR1McHi8_1756513385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Brendan,
+Hi, we tested your kernel and here are the results:
 
-On Wed, Aug 27, 2025 at 08:59:43AM +0000, Brendan Jackman wrote:
-> Bear [0] is a tool for generating compile_commands.json. For Kbuild,
-> Bear is not useful, since Kbuild already generates the necessary info
-> and that can be converted to compile_commands.json by
-> gen_compile_commads.py.
-> 
-> However, for code in tools/, it's handy. For example, this command
-> updates compile_commands.json so that clangd code navigation will also
-> work for the VMA unit tests:
-> 
-> 	bear --append -- make -C tools/testing/vma -j
-> 
-> Bear generates some temporary files. These are usually deleted again
-> but having them show up ephemerally confuses tools that trigger
-> recompilation on source code changes. Ignore them in Git so that these
-> tools can tell they aren't source code.
-> 
-> [0]: https://github.com/rizsotto/Bear
-> 
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
 
-We can likely take this via the Kbuild tree. I do wonder if this would
-be better in a tools/.gitignore file since bear is really only of use
-there but I am not sure it matters much.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-> ---
->  .gitignore | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/.gitignore b/.gitignore
-> index 929054df5212d68a32a1f5ee2b267389fcd1c8db..b07c8c8383bd791e903ce985c14c231cb6928411 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -53,6 +53,7 @@
->  *.tar
->  *.xz
->  *.zst
-> +*.tmp
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
 
-Please keep the globs alphabetized.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2012446091
 
->  Module.symvers
->  dtbs-list
->  modules.order
-> @@ -177,6 +178,9 @@ x509.genkey
->  
->  # Clang's compilation database file
->  /compile_commands.json
-> +# Temporary files created by 'bear', a tool used for generating
-> +# compile_commands.json for non-Kbuild code.
-> +*.events.json
+One or more kernel builds failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2012446091_aarch64_kernel
+                   Issue: upstream build: No rule to make target 'kernel.sb=
+at' -> Update CONFIG_EFI_SBAT_FILE
+                          https://gitlab.com/cki-project/infrastructure/-/i=
+ssues/897
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2012446091_x86_64_kernel
+                   Issue: upstream build: No rule to make target 'kernel.sb=
+at' -> Update CONFIG_EFI_SBAT_FILE
+                          https://gitlab.com/cki-project/infrastructure/-/i=
+ssues/897
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2012446091_x86_64_kernel-debug
+                   Issue: upstream build: No rule to make target 'kernel.sb=
+at' -> Update CONFIG_EFI_SBAT_FILE
+                          https://gitlab.com/cki-project/infrastructure/-/i=
+ssues/897
 
-Please rebase this on kbuild-next, as '/' is no longer present in the
-compile_commands.json line:
 
-https://git.kernel.org/kbuild/l/kbuild-next
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-The comment feels a little lengthy compared to the rest of the file but
-I am not sure it can really be slimmed down...
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-I am guessing the pattern cannot be made more specific, as I do wonder
-if anyone would introduce files with this pattern but that is why we
-have the check in scripts/misc-check, so it is probably not that big of
-a deal.
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
->  
->  # Documentation toolchain
->  sphinx_*/
-> 
-> ---
-> base-commit: fab1beda7597fac1cecc01707d55eadb6bbe773c
-> change-id: 20250827-master-23458abb102d
-> 
-> Best regards,
-> -- 
-> Brendan Jackman <jackmanb@google.com>
-> 
-> 
