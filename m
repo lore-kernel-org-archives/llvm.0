@@ -1,43 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F4A201266;
-	Sat, 30 Aug 2025 19:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614FC7E9;
+	Sun, 31 Aug 2025 00:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756581993; cv=none; b=Nk92WI3ksDGde/TvWZJVNw9LuxaAB6JV+xsWL+I8+/rnXqLLORtPyvoQpzQwxRtkgfrvu8hQ+BTA8a8saek/V8zfIOhueUpLQS7TMHbBnw7GDNaK8E8t2ErF7BiqJQebTGFtLTv8njnQF4t4JnOWpnEJufIeHxHwShRREOLeWKk=
+	t=1756598601; cv=none; b=KkZBgLg2K7A30mQZGw2TxaUxRrgD83uNfbgGsNIq3rBrkkaVhYO7zic0fikf8fsVBUGZyTDo53Ou2AeVvPLtO1aDDytsDI02DK5k+S8UlIiAO+wJm5CbfmjXNtxhpL32YF7iuwvlFCpCC6FIhCdRNk83U31hRuP5mBez20zKFos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756581993; c=relaxed/simple;
-	bh=EFzZ/dRswnSMMyqhrChBf68AnBA7vwYE05vr7IlPs4M=;
+	s=arc-20240116; t=1756598601; c=relaxed/simple;
+	bh=2BrtOcf57CNuvwDSSNXh0IHPVsyE5b1IIP0ktB5bFGY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXmlZNAu6ZOUEWXll1DK4uDUuw5o/JJvOl2/yYkAAWjey7F1buLgTvjtm0833igfIhfC1wtxS+aprZ+eL8arULaOXvKlgPBnhwHTsnrn223W8ZGnGTmEqaZiLHTv68ZskFAc+JIJpiXRXO29TQwqYCmHWoR8vUarAsogrk5tdRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dk56bp5O; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=W4j6s4XhL1k8BnHXQJjJ3cZP1xP9Caf9hKAVmoUDQXF27YU5nYIcTJIemILvEwuhKyQVF9DPsUFNvIZ8Z8Dbd9qSaRwZbozH89NoJgeq3PJfJnqtpwZUf4O6LAUd0a9p9leuFACVYSvyPu6mizmspkKEBDZObA8u35b0GDfm/p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gNMObcSI; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dk56bp5O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95053C4CEEB;
-	Sat, 30 Aug 2025 19:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756581992;
-	bh=EFzZ/dRswnSMMyqhrChBf68AnBA7vwYE05vr7IlPs4M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dk56bp5OvrPV6ylIV3PBEDXzYUNWWy7DqgEv4CG7Z6kTGFtQonp+pxf8roItsuzKx
-	 xUtYwrRRH8iRLM3VY0eCwMaWxjtwDAYpnMp7MRuX8ShoCOq3MbnnhTJ7m3y6UuEi70
-	 4MXJbRRrsQIzWYv+WKJvprv/nmU5OubQj0dJ25Cqk8p1vWnLTHU5TlwHXIsdWeAyOo
-	 3dxovkrwfPr7O4ZJigPKlN39JgWV5R+u5UpRli/6SEWr0RPtYiV9XebXgs8A/c/ZVz
-	 r1tYoxpU1eOUSM9BF3W4SviXEj1ZPodWnjNXCiLA5Dep700Oi6IuSvjIdkg0dE6y22
-	 bms8kh3nAQhHQ==
-Date: Sat, 30 Aug 2025 21:25:10 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Brendan Jackman <jackmanb@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] .gitignore: ignore temporary files from 'bear'
-Message-ID: <aLNQFmgS2IcDbPmd@levanger>
-References: <20250827-master-v1-1-19f9f367219c@google.com>
- <20250829233824.GB1983886@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gNMObcSI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756598600; x=1788134600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2BrtOcf57CNuvwDSSNXh0IHPVsyE5b1IIP0ktB5bFGY=;
+  b=gNMObcSIfygMflqgUhVXNKK4w6M+TvV03R3TshPlKbDNqGXyzbu1Jw/i
+   SpfSi6NYKcFPp7x4hS2nMbLND7xgpjH+wk7l2PbmIZSipt1M+TGE4xzvU
+   eKyhiWf7N1Hvl40BVf1g5UwHdXmPTRKxekaUdpOAJ1KgfJ5Sj3LugGboq
+   5bDSbGF48MHt+HKP6pMyW8BLd7VReNbCpLjOOxkGjAk87BM+HyQdci7Dm
+   P/QCCW+X4nLd/LpOt6abihWeKoRAOB+edIIpaDmIeH81WaC1iJ92iiuaU
+   8GgIvd2qoIsnNjBPTtoAuu4InMeJPPdXAvFbb5E1HKt7GXRLNPT5w88xP
+   A==;
+X-CSE-ConnectionGUID: 0CmVHthBSFS3D8Izfcb9dA==
+X-CSE-MsgGUID: qIz29dmaS2CETsSgjmku0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11537"; a="62483079"
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="62483079"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2025 17:03:19 -0700
+X-CSE-ConnectionGUID: G1aVsjfxSaeV3Hw0YOtS8A==
+X-CSE-MsgGUID: XEJPcX4ORb+wvMIcIDjafQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="170577587"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Aug 2025 17:03:17 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1usVXP-000VmJ-00;
+	Sun, 31 Aug 2025 00:03:15 +0000
+Date: Sun, 31 Aug 2025 08:02:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dzmitry Sankouski <dsankouski@gmail.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: Re: [PATCH] mfd: max77705: rework interrupts
+Message-ID: <202508310735.f7Evkqz7-lkp@intel.com>
+References: <20250831-max77705-fix_interrupt_handling-v1-1-73e078012e51@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,50 +66,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250829233824.GB1983886@ax162>
+In-Reply-To: <20250831-max77705-fix_interrupt_handling-v1-1-73e078012e51@gmail.com>
 
-On Fri, Aug 29, 2025 at 04:38:24PM -0700, Nathan Chancellor wrote:
-> Hi Brendan,
-> 
-> On Wed, Aug 27, 2025 at 08:59:43AM +0000, Brendan Jackman wrote:
-> > Bear [0] is a tool for generating compile_commands.json. For Kbuild,
-> > Bear is not useful, since Kbuild already generates the necessary info
-> > and that can be converted to compile_commands.json by
-> > gen_compile_commads.py.
-> > 
-> > However, for code in tools/, it's handy. For example, this command
-> > updates compile_commands.json so that clangd code navigation will also
-> > work for the VMA unit tests:
-> > 
-> > 	bear --append -- make -C tools/testing/vma -j
-> > 
-> > Bear generates some temporary files. These are usually deleted again
-> > but having them show up ephemerally confuses tools that trigger
-> > recompilation on source code changes. Ignore them in Git so that these
-> > tools can tell they aren't source code.
-> > 
-> > [0]: https://github.com/rizsotto/Bear
-> > 
-> > Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> 
-> We can likely take this via the Kbuild tree. I do wonder if this would
-> be better in a tools/.gitignore file since bear is really only of use
-> there but I am not sure it matters much.
+Hi Dzmitry,
 
-yeah, please consider using tools/.gitignore.  Please have a look at
-this thread about ignoring files from "external" tools:
+kernel test robot noticed the following build warnings:
 
-https://lore.kernel.org/lkml/CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com/
+[auto build test WARNING on 3cace99d63192a7250461b058279a42d91075d0c]
 
-If using tools/.gitignore is not possible, I think the best way for
-ignoring files that are not natively related to kernel build tools is to 
-update the local ~/.config/git/ignore, as suggested in
+url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/mfd-max77705-rework-interrupts/20250831-061657
+base:   3cace99d63192a7250461b058279a42d91075d0c
+patch link:    https://lore.kernel.org/r/20250831-max77705-fix_interrupt_handling-v1-1-73e078012e51%40gmail.com
+patch subject: [PATCH] mfd: max77705: rework interrupts
+config: hexagon-randconfig-002-20250831 (https://download.01.org/0day-ci/archive/20250831/202508310735.f7Evkqz7-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250831/202508310735.f7Evkqz7-lkp@intel.com/reproduce)
 
-https://lore.kernel.org/lkml/CAK7LNAQas0cK7pgi72tYC3yU=ZkQxnr41YYW1mXd-sWiHtG+UA@mail.gmail.com/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508310735.f7Evkqz7-lkp@intel.com/
 
-compare to:
+All warnings (new ones prefixed by >>):
 
-https://docs.github.com/en/get-started/git-basics/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer
+>> drivers/mfd/max77705.c:89:37: warning: unused variable 'max77705_topsys_irq_chip' [-Wunused-const-variable]
+      89 | static const struct regmap_irq_chip max77705_topsys_irq_chip = {
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-Kind regards,
-Nicolas
+
+vim +/max77705_topsys_irq_chip +89 drivers/mfd/max77705.c
+
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  88  
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23 @89  static const struct regmap_irq_chip max77705_topsys_irq_chip = {
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  90  	.name		= "max77705-topsys",
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  91  	.status_base	= MAX77705_PMIC_REG_SYSTEM_INT,
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  92  	.mask_base	= MAX77705_PMIC_REG_SYSTEM_INT_MASK,
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  93  	.num_regs	= 1,
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  94  	.irqs		= max77705_topsys_irqs,
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  95  	.num_irqs	= ARRAY_SIZE(max77705_topsys_irqs),
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  96  };
+c8d50f029748b7 Dzmitry Sankouski 2025-01-23  97  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
