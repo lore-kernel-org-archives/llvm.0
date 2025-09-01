@@ -1,88 +1,127 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0B881724
-	for <llvm@lists.linux.dev>; Mon,  1 Sep 2025 04:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB8A258ED8;
+	Mon,  1 Sep 2025 06:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756701039; cv=none; b=A56e1RXQKaGNksGFn8Y7YovM09k9vLbDebzjEa9FN0iYZ7sgtbkL4iuJUhd+z5mFoUjBgKSkHmp8YVXkHSKrlMPdgG0PmYpKrMUSt6zNwsqqTcIZS1tUvvia7IlRMcWNAzw7+KGzKT6KeH8dSOShPomiJ62m3dhsauXL7uJRp+0=
+	t=1756707957; cv=none; b=n6DxUXv4hIrfKDEkTJlQcqkofuryyHm5pPDBeqaTLW5uLgPYAxHFjRPn729vxKejgVF86LZNOo9wmeq1p7CxRKHNSYgCWbQ5KdfDbU6o4xBz72LkpNm3nV/RN3vzR/NHSvJ5SpE23yvzAAqTaxVsSrmFwcsy93u1OVHIJMQvKYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756701039; c=relaxed/simple;
-	bh=pSzCqOyvvoq5Jt9kSV5uDNs9QJ567H1LEks3EmaQerM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M5uFB+Wt6LMC6wvxAJHBVCs5ZGwiWVtfDd95vpM7Ruqij2mvOgsBicpO+myzCRiovKI74Tonq88J3icuGQIslEVqW4om2eeQmZ25Pi7ERvRE4sNjc1gkXPVq/ca872SbW0xQv5g0wqj9ou925GOf32C0QU34F8///1qQH+uAbpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=NmpTKA+g; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
+	s=arc-20240116; t=1756707957; c=relaxed/simple;
+	bh=0XF0fhL9Q6yHz0dNLpM5f+vC3Vfe1E+LvLHi7lzYfLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X/MYA09OITXD7UcnxUNXZETQI+7QWi/utgte6ccs3gUwtSEVHz95qQwcXHtSFcujvL824EZXP0LzDnNBhRxvqkJuvgZXXek8Pic5acditN7Uwjc2iZaLMgdqJDHL5qMpeMHf0w7oj12CcCiJoAIrlZwn/Gc/oMcrgEnU3DLYtF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aLVdRAq7; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="NmpTKA+g"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b0225483ca0so244690466b.2
-        for <llvm@lists.linux.dev>; Sun, 31 Aug 2025 21:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1756701036; x=1757305836; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LDQIe0i3X76egFX6529AeV7wfu/j7t3pxfvYUfSQIbM=;
-        b=NmpTKA+gB2W8Bc/FHBw4qFyLD1aMM5GP/JYSK8UhNTnc4b8qOXTIP6MwQGmdO8rZUy
-         2KSmjagD7VHqs2Zlcnxgz2owW2omj087WAHxMrpkxDG5GIHMfjOh29CEciSFgA7sVax9
-         uf6FQydUHCD7KZtgo98ODaEuL+a6Rx2sZIpIa1vDUpLjhZ9heciH3xn9mGXldLr2lOZ5
-         pN/GSMH3HMe0jt+rBRmzruBRB72xyFIUnJchv6XV53HJFfINIOAtpRPgyqM97gAuR3sw
-         i0HDdjal2zrZp8IeX22nOueFxXQmS2v5t0JOJw1cVXMhIEgYIWdeWlmPDqFYW0935ulG
-         p1GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756701036; x=1757305836;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LDQIe0i3X76egFX6529AeV7wfu/j7t3pxfvYUfSQIbM=;
-        b=JHe0LJaAsAFhdxGG73TEk+DF0bZVdzcP0yiHYO5g0iobTrjDYkMZ2fscbiwiNq3F/M
-         hNN96Nq6JZe16QK3mhjQCorf5MOmr2GC33Gh+kftfXgEkE7JCDJUkpBRe9+bbf4kobYA
-         77rBlmtSQ3Rr55asEP8+8xVNRyvVJ0RsOD27qowEaF2uC2da+5OEPHBgyjfpNml/Sb6V
-         bc3s+0RsPaewdSu1ot0Lvq7DSwjgz1ZGCjlaM5WyY7U915PiV4C5mpvZ5gvwyS9qB9uy
-         06nfGW/d8aBxK7HdrIWX2m/qDLosPRwJePQPQbkEH2PPbO+k5kpXiScIfD8GtWRNa18i
-         U16g==
-X-Forwarded-Encrypted: i=1; AJvYcCXLJN4dhfTD12g2Rc4MYvhBtZ3t3tAbEIC+1xPx/3dF9jvaPeuG2bfkbZIpzjNF2zPm3vf9@lists.linux.dev
-X-Gm-Message-State: AOJu0YwCHNX+MgJ6KrHilPnnV0cK/iwgoV6t+la406nIR8B+jybYs1jV
-	7xcZ/O80n3lqO2c7QKeRobXkG06Y5EEU1DVXAKzolk3rt0KjRRTMtHwTbGWv620bmqBYwqT+rvO
-	rFrnHezQtPn+HoF2LRAyRm2uIzcu5flWlfHgYSg0JRw==
-X-Gm-Gg: ASbGncsQCCwvZLEtx3xEEOBtCvj3vrDJzXtDqhmtPiM/ozeVWGVA0qzTl83WMGUyAxK
-	n9SQvb7oALeDtxt2JILNws8QUooTiunkDl267s4KWzFuPWwXA6SkepunHkg/Bt5i9gkJ9P0pDfS
-	iyg/nDR1UfPaKDRz55xzDXFOlWIzaEaW+ZHpTU9Z+MWZimgX7N/A0Zx9pzlyAWh1G8jBj9cHITg
-	4dyqFZO6Qf+wgaEGnMzU73gkFfMeQt0JTyQW+ygsEUhSA==
-X-Google-Smtp-Source: AGHT+IGfZ9IK7/pUtfeHc6DgLv6HZzhwz9kNk2kkDLAQy9Iwa65qh4E0Ue47kA3UHq9LU15ooN9UNEALddPaiQniOhA=
-X-Received: by 2002:a17:907:3f10:b0:af6:2f1d:a73f with SMTP id
- a640c23a62f3a-b01d976e782mr648284266b.53.1756701035779; Sun, 31 Aug 2025
- 21:30:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aLVdRAq7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756707955; x=1788243955;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0XF0fhL9Q6yHz0dNLpM5f+vC3Vfe1E+LvLHi7lzYfLQ=;
+  b=aLVdRAq7YQokQxt6+R5F1VcFisnBfkIocO5hOh7IjBkhnC6BM6cid8hS
+   z5vtW8I2/Jrqnx8jhM/V5ju+OcvEN9+0cjIfjsEJKCX8bbCl/GqSfIzt1
+   4l6VHY4YqUidoVsjm2RpOECQOFaYwLvUQcPCASQ+0DvvTV+6ZA20M5ICp
+   Q0tej4CdpOvhBH56M1nqhDowN0+b7BV9DFk0yztQ6L7ycGHHo7gCzZclP
+   QARNzoKsvT1CftziOMgwJFknuxPEJTO7HPvyy3RcH3UZduoR/pUiZCS6V
+   kYKDLTLGC6BmBWPJNt/JeMFEd7uddrgMzAjkUZ5fDIH4yVDGEKuCrK8z2
+   g==;
+X-CSE-ConnectionGUID: 0+AUXNnVRyGsKe4ksdxCvw==
+X-CSE-MsgGUID: UKNFKq3bQOurpPJQReNwMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11539"; a="76350085"
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="76350085"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2025 23:25:54 -0700
+X-CSE-ConnectionGUID: MD+fzlBFRcKqYq5qb9hWsg==
+X-CSE-MsgGUID: JsUP8CjNSLudjfSi3DbsZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="176152265"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 31 Aug 2025 23:25:52 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1usxzC-0000Hz-1L;
+	Mon, 01 Sep 2025 06:25:50 +0000
+Date: Mon, 1 Sep 2025 14:25:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jorge Marques <jorge.marques@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Frank Li <Frank.Li@nxp.com>
+Subject: drivers/i3c/master/../internals.h:53:9: error: passing 'const void
+ *' to parameter of type 'void *' discards qualifiers
+Message-ID: <202509011442.yweEPWw4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250831093918.2815332-9-max.kellermann@ionos.com> <202509010724.bSPPSD1X-lkp@intel.com>
-In-Reply-To: <202509010724.bSPPSD1X-lkp@intel.com>
-From: Max Kellermann <max.kellermann@ionos.com>
-Date: Mon, 1 Sep 2025 06:30:24 +0200
-X-Gm-Features: Ac12FXx1zNxU809yDaeQgGpOMM6Li-1LYjsJkwZ1JPL5dRiRDC0y6VWcjO3jTXw
-Message-ID: <CAKPOu+_7w9kd7aOp2J2YtYMDbrV1pfrdUT-CnPmHfexGb7RScg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/12] arch, mm/util: add const to arch_pick_mmap_layout()
- parameter
-To: kernel test robot <lkp@intel.com>
-Cc: akpm@linux-foundation.org, david@redhat.com, axelrasmussen@google.com, 
-	yuanchu@google.com, willy@infradead.org, hughd@google.com, mhocko@suse.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, surenb@google.com, 
-	vishal.moola@gmail.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Sep 1, 2025 at 1:44=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
-> All errors (new ones prefixed by >>):
->
-> >> arch/sparc/kernel/sys_sparc_64.c:1:1: error: unknown type name 'ickj'
->        1 | ickj// SPDX-License-Identifier: GPL-2.0
->          | ^
+Hi Jorge,
 
-Oops how did that slip in here...
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b320789d6883cc00ac78ce83bccbfe7ed58afcf0
+commit: c20d3fa7049144f519b21616e6020e6939822145 i3c: master: cdns: Use i3c_writel_fifo() and i3c_readl_fifo()
+date:   5 weeks ago
+config: sparc64-randconfig-001-20250901 (https://download.01.org/0day-ci/archive/20250901/202509011442.yweEPWw4-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250901/202509011442.yweEPWw4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509011442.yweEPWw4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/i3c/master/i3c-master-cdns.c:26:
+>> drivers/i3c/master/../internals.h:53:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+      53 |         readsl(addr, buf, nbytes / 4);
+         |                ^~~~
+   arch/sparc/include/asm/io_64.h:265:41: note: passing argument to parameter 'port' here
+     265 | static inline void readsl(void __iomem *port, void *buf, unsigned long count)
+         |                                         ^
+   1 error generated.
+
+
+vim +53 drivers/i3c/master/../internals.h
+
+733b439375b494 Jorge Marques 2025-06-24  43  
+733b439375b494 Jorge Marques 2025-06-24  44  /**
+733b439375b494 Jorge Marques 2025-06-24  45   * i3c_readl_fifo - Read data buffer from 32bit FIFO
+733b439375b494 Jorge Marques 2025-06-24  46   * @addr: FIFO Address to read from
+733b439375b494 Jorge Marques 2025-06-24  47   * @buf: Pointer to the buffer to store read bytes
+733b439375b494 Jorge Marques 2025-06-24  48   * @nbytes: Number of bytes to read
+733b439375b494 Jorge Marques 2025-06-24  49   */
+733b439375b494 Jorge Marques 2025-06-24  50  static inline void i3c_readl_fifo(const void __iomem *addr, void *buf,
+733b439375b494 Jorge Marques 2025-06-24  51  				  int nbytes)
+733b439375b494 Jorge Marques 2025-06-24  52  {
+733b439375b494 Jorge Marques 2025-06-24 @53  	readsl(addr, buf, nbytes / 4);
+733b439375b494 Jorge Marques 2025-06-24  54  	if (nbytes & 3) {
+733b439375b494 Jorge Marques 2025-06-24  55  		u32 tmp;
+733b439375b494 Jorge Marques 2025-06-24  56  
+733b439375b494 Jorge Marques 2025-06-24  57  		tmp = readl(addr);
+733b439375b494 Jorge Marques 2025-06-24  58  		memcpy(buf + (nbytes & ~3), &tmp, nbytes & 3);
+733b439375b494 Jorge Marques 2025-06-24  59  	}
+733b439375b494 Jorge Marques 2025-06-24  60  }
+733b439375b494 Jorge Marques 2025-06-24  61  
+
+:::::: The code at line 53 was first introduced by commit
+:::::: 733b439375b494e8a6950ab47d18a4b615b73cb3 i3c: master: Add inline i3c_readl_fifo() and i3c_writel_fifo()
+
+:::::: TO: Jorge Marques <jorge.marques@analog.com>
+:::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
