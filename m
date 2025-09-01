@@ -1,126 +1,94 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFC426C3BE
-	for <llvm@lists.linux.dev>; Mon,  1 Sep 2025 07:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142752FB99F;
+	Mon,  1 Sep 2025 08:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756711610; cv=none; b=Mylaz0MmzUry/DI9XEry5EI4wqumduSakpxjdrmYFIbyV9zjgqcpHLrOp8ioiHviNc7+zDW6F2jrxJqNOH1esAQfo1HbjU1k9ZXUFfAQ7xomWM1wDOIsWc8It2KzAMaW0miBMqMwlsIUOJ4ATUcq1WYO/e7diyk31VIC+i7MNfM=
+	t=1756715671; cv=none; b=fIn6mBJVCpHzmhrcUv+z3yDH4Bue1xEAa9NQw6rOGXKUKOmErnnwuLm6mUCoTOU2lP5c8wrMqb6jOOlNwhRikmdILq4x2OBuSyBDS4efVp2ddbTk643GqwAOSMo3Xk9B+0gctJWiOB5nPZ9L30HUT+UGXUDkWXkThtR+mbHrLAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756711610; c=relaxed/simple;
-	bh=pSHwAFwOfxOBvMo2kM3V6r4cQ6ye7Bys4JLLOIbr5PI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eu7kxo6Z72O2oMtfjqEXN6AH6Okynuhfp+hi8txDH7W3hnCRgdAbIb7kIvtd6WEiKpcwC2LCNLPErhmbqAQggnvirjRLkOpF14qFXdQYWkLnEENpLXzFOAp8rFledO4V+44ezTJTpBFgrOvFKmtAyrv7boEizsHQdwiP6MhP9Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=rF5xMTXk; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1756715671; c=relaxed/simple;
+	bh=YniABXTMehUmrQNyxrnxV6TCLO8GP4oi7+6p/ouGAZ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VVaM0aJaUvTOG0qGf2Tu03CXkzFbzuVISaqkXqy5LwpQuUGhyTawelEhbzzEwtQ0riHKX9jf/ZyuUZSeO9RmkVCykurAwVjpO1dUmfOvd+mbgBivlBt+vYvB9gwE+4a+4eZSzqWbjkPNZelvor+b/4D4GgQWvXcrdilxHWM6u5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fSayuxF+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="rF5xMTXk"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id E930A1A0D7C;
-	Mon,  1 Sep 2025 07:26:40 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BFF1060699;
-	Mon,  1 Sep 2025 07:26:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3A0761C22C8BB;
-	Mon,  1 Sep 2025 09:26:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756711599; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=xX3xnbfaXObDKRcnsl31P/YbYD6AiX8y2WIn/LzP6VQ=;
-	b=rF5xMTXk0xL8N4aA2p82VmeP5KdoSALmQXlcJp5aOLjhIxxTslGkfghuWytMMJTr7pLOFJ
-	V8SB33LvJOhKvd78TOhZ8gO033NN1Fuchh55r9A8IvMRB3LF5OdWqqHbscQZnG8GizfmVm
-	B3e4fs6fQ7Vw9w26+gD3Ha5+0529+9BNQEYLk5s1gdaFpFiT49cLzItL1ela11+OMJjDh+
-	0Dn0EfXx6MWZkyPmZNQEEkOJ+TG4nMGd61v7xPGcXRfVHa7H9Db5NA2dVVq9O/9SXl5f9j
-	EFU55zXk2fdMfJZEqnpBbijIU3CHzfq/7WGsxVnxJ9tgAtLH+v/K002xK+JBFw==
-Date: Mon, 1 Sep 2025 09:26:35 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Jorge Marques <jorge.marques@analog.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Frank Li <Frank.Li@nxp.com>
-Subject: Re: drivers/i3c/master/../internals.h:53:9: error: passing 'const
- void *' to parameter of type 'void *' discards qualifiers
-Message-ID: <20250901072635d908c251@mail.local>
-References: <202509011442.yweEPWw4-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fSayuxF+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34389C4CEF4;
+	Mon,  1 Sep 2025 08:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756715670;
+	bh=YniABXTMehUmrQNyxrnxV6TCLO8GP4oi7+6p/ouGAZ4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fSayuxF+wbFCiWZEBOUbqBm+UQcn47oEm7NsLj08ek+p9jMmQvyzqYzjypmRmiK15
+	 r7F/+n5PoNJbRo2vag6G4CjffX0MWC6AacU1Zj8wOXfmeK7uLCerqcqHD7BJl8nnUZ
+	 bSUZh8CJItd8xbAbt069DRXV3+ET6D/dNEDf/y+bJFvXv+IN4LBOglsgIht7e1/MqK
+	 El2Mt85kX1XTMz1cUS6M3kngnw7N3fvyVf7SKcxYpuDRLtaUDvk+m7crTBb5j4QsHI
+	 mV/LCqvIJxksn0Ohexg/0LNLGYqkJH8bmyIm0dVnytqm0w3SsiKuF47zBnMNk1k0aQ
+	 I5TjNUc//phrA==
+From: Mike Rapoport <rppt@kernel.org>
+To: linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Bill Wendling <morbo@google.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	David Hildenbrand <david@redhat.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 0/4] mm/mm_init: simplify deferred init of struct pages
+Date: Mon,  1 Sep 2025 11:34:19 +0300
+Message-ID: <20250901083423.3061349-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202509011442.yweEPWw4-lkp@intel.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-Hello,
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-On 01/09/2025 14:25:03+0800, kernel test robot wrote:
-> Hi Jorge,
-> 
-> FYI, the error/warning still remains.
+Hi,
 
-The issue is not in the i3c code but in the sparc64 code.
+These patches simplify deferred initialization of the memory map.
 
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   b320789d6883cc00ac78ce83bccbfe7ed58afcf0
-> commit: c20d3fa7049144f519b21616e6020e6939822145 i3c: master: cdns: Use i3c_writel_fifo() and i3c_readl_fifo()
-> date:   5 weeks ago
-> config: sparc64-randconfig-001-20250901 (https://download.01.org/0day-ci/archive/20250901/202509011442.yweEPWw4-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250901/202509011442.yweEPWw4-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509011442.yweEPWw4-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/i3c/master/i3c-master-cdns.c:26:
-> >> drivers/i3c/master/../internals.h:53:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->       53 |         readsl(addr, buf, nbytes / 4);
->          |                ^~~~
->    arch/sparc/include/asm/io_64.h:265:41: note: passing argument to parameter 'port' here
->      265 | static inline void readsl(void __iomem *port, void *buf, unsigned long count)
->          |                                         ^
->    1 error generated.
-> 
-> 
-> vim +53 drivers/i3c/master/../internals.h
-> 
-> 733b439375b494 Jorge Marques 2025-06-24  43  
-> 733b439375b494 Jorge Marques 2025-06-24  44  /**
-> 733b439375b494 Jorge Marques 2025-06-24  45   * i3c_readl_fifo - Read data buffer from 32bit FIFO
-> 733b439375b494 Jorge Marques 2025-06-24  46   * @addr: FIFO Address to read from
-> 733b439375b494 Jorge Marques 2025-06-24  47   * @buf: Pointer to the buffer to store read bytes
-> 733b439375b494 Jorge Marques 2025-06-24  48   * @nbytes: Number of bytes to read
-> 733b439375b494 Jorge Marques 2025-06-24  49   */
-> 733b439375b494 Jorge Marques 2025-06-24  50  static inline void i3c_readl_fifo(const void __iomem *addr, void *buf,
-> 733b439375b494 Jorge Marques 2025-06-24  51  				  int nbytes)
-> 733b439375b494 Jorge Marques 2025-06-24  52  {
-> 733b439375b494 Jorge Marques 2025-06-24 @53  	readsl(addr, buf, nbytes / 4);
-> 733b439375b494 Jorge Marques 2025-06-24  54  	if (nbytes & 3) {
-> 733b439375b494 Jorge Marques 2025-06-24  55  		u32 tmp;
-> 733b439375b494 Jorge Marques 2025-06-24  56  
-> 733b439375b494 Jorge Marques 2025-06-24  57  		tmp = readl(addr);
-> 733b439375b494 Jorge Marques 2025-06-24  58  		memcpy(buf + (nbytes & ~3), &tmp, nbytes & 3);
-> 733b439375b494 Jorge Marques 2025-06-24  59  	}
-> 733b439375b494 Jorge Marques 2025-06-24  60  }
-> 733b439375b494 Jorge Marques 2025-06-24  61  
-> 
-> :::::: The code at line 53 was first introduced by commit
-> :::::: 733b439375b494e8a6950ab47d18a4b615b73cb3 i3c: master: Add inline i3c_readl_fifo() and i3c_writel_fifo()
-> 
-> :::::: TO: Jorge Marques <jorge.marques@analog.com>
-> :::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Beside nice negative diffstat I measured 3ms (55ms vs 58ms) reduction in
+the initialization of deferred pages on single node system with 64GiB of
+RAM.
 
+I don't have access to large memory machines, so I'd really appreciate
+testing of these patches on them to make sure there's no regression there.
+
+v2 changes: 
+* fix "sleeping function called from invalid context" bug reported by
+kbuild:
+https://lore.kernel.org/all/202508251443.f2d9f77f-lkp@intel.com
+
+v1: https://lore.kernel.org/all/20250818064615.505641-1-rppt@kernel.org
+
+I pushed the patches to memblock tree for wider testing.
+https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock.git/log/?h=for-next
+
+Mike Rapoport (Microsoft) (4):
+  mm/mm_init: use deferred_init_memmap_chunk() in deferred_grow_zone()
+  mm/mm_init: deferred_init_memmap: use a job per zone
+  mm/mm_init: drop deferred_init_maxorder()
+  memblock: drop for_each_free_mem_pfn_range_in_zone_from()
+
+ .clang-format            |   1 -
+ include/linux/memblock.h |  22 -----
+ mm/memblock.c            |  64 -------------
+ mm/mm_init.c             | 197 +++++++++++++--------------------------
+ 4 files changed, 65 insertions(+), 219 deletions(-)
+
+
+base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.50.1
+
