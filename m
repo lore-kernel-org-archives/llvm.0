@@ -1,139 +1,187 @@
-Received: from fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.74.81.189])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7AD33EB01;
-	Mon,  1 Sep 2025 14:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.74.81.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF92A324B08;
+	Mon,  1 Sep 2025 16:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756737014; cv=none; b=eeAHUpFGRpEJ/4L3qW23OGfl6rEiMsQaenMxzVWKNvu4GFL9Zp0+kS4ad0otjtEQlmEyur5LU85AQQ+nClh6S9KMddMl1MVNFG09XA4FEgHujNvtB+kUSIYhwDidNKUJ6IQ6kv+T9/qx4nrmrXwUCh5Si6CFkjR9AnuYecalr6A=
+	t=1756744625; cv=none; b=modnuFGkZbURdRSugTHDLaO6jKN9p1Ej1rRnXxMnaTZWiF2FSRW2IaDOO4UkaRsfOof6DzhIyz9vY4U1u4u0BxmYj8RX5m1SxLh2mnwv9WowAsopEEMzjLcbQgQ3heNZTqgk9UEH1cAiFpGco0mTjZUKnPDM8L2EMGIqTukV0ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756737014; c=relaxed/simple;
-	bh=qSkaqIips+4MLEo4Zp8mEeudv7ytxIUgJAsoPjt+h/c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=dBbblhhJIS+KkSeM0mo7sdFXzP1x9PBsX5cyf5oS+u9dXlJws3x4e6fGLAq1TVSdbJc/v56uOc+4Tz5IQITJqL5nxYbnS7e26NguptfUUG4Y3VXXWyNXRveVyDpq/EGYjlzBYyuOiXFL0txqiwAuZ3dv/gaou04S+9umQY+eGB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=i58tV0JG; arc=none smtp.client-ip=3.74.81.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1756744625; c=relaxed/simple;
+	bh=keNSKPuw2F2CZECiinRy3q4cbKeIscOHFCwb7KIcJbs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A4KoMDizDpAV7iM1FmnBjuVUfrHqepMDt7NHBfvPGxRJV1K4Ec9mvvYVVsvw0PM1lcvCVfS8lDJpmogDhDfZtwkgCjtk2VNVSbU+vy10H98FQTIpZQRtj6mhQ9fQ/WIHiah4Gr2yibhe5I6c8s9ebYe3RkzqRuJMnKrHdDv/xaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X8n0/J1R; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="i58tV0JG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1756737012; x=1788273012;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=+uHBZTpRi5ucUMryB+eBopJlrYLUcWv6+yyQSUEyLxg=;
-  b=i58tV0JGt5/KFwJZWTlh2842BHTFY6q2EdbQ5jr8ykJawInEw5uYEv4E
-   S51sMzfU3W7ifp+KY+ycIRkIgqNIIDVfL3KC9D5f6dlS7zGgd7q4ou4iE
-   q58Kqc/N5rVT4RJYN/XLCVJP3HjIUW3PtlFg2avXFjvRIJbKZvT6XsqGM
-   dbI2nhN6y/n2em53rqf6z1xp6OODx2An4G0fpVmrXUO9u1pxFcd85RL5t
-   zJ00jeSw5htqfJGISkesblieZ7yu2OmwynvlNa/DFkjKS2ihDmPVn0sE5
-   UXcmcQrx6rqTyLi/X2ke0mohyLAYgnKna8c2qY19ci5i7Q4d4cXNt4Nui
-   Q==;
-X-CSE-ConnectionGUID: kiEDH9xIR0aujLgFjO6lnw==
-X-CSE-MsgGUID: s9FOoKmtQR+HopUw9GuFYA==
-X-IronPort-AV: E=Sophos;i="6.18,214,1751241600"; 
-   d="scan'208";a="1469011"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 14:30:02 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:23272]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.43.161:2525] with esmtp (Farcaster)
- id 6107cd3d-5fbe-4c88-a87b-1e89852fe40b; Mon, 1 Sep 2025 14:30:01 +0000 (UTC)
-X-Farcaster-Flow-ID: 6107cd3d-5fbe-4c88-a87b-1e89852fe40b
-Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.17;
- Mon, 1 Sep 2025 14:30:01 +0000
-Received: from [192.168.30.195] (10.106.83.14) by
- EX19D022EUC002.ant.amazon.com (10.252.51.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Mon, 1 Sep 2025 14:30:00 +0000
-Message-ID: <8dd43501-80be-43bf-8eac-a4265e7595ea@amazon.com>
-Date: Mon, 1 Sep 2025 15:29:59 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X8n0/J1R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756744623; x=1788280623;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=keNSKPuw2F2CZECiinRy3q4cbKeIscOHFCwb7KIcJbs=;
+  b=X8n0/J1Ribxt2/tz13OQkIROMEekSixQkPrwwQExTtOaZJtvrHtH0lH8
+   vyo4qxWkoxwliHoEr62V1P1CGr29ah3zEuuC415IFvkPZkUjGWAwDUVSE
+   5RfrewP4AMCkud2uv3ZAbzXhARVBX0f8O40u3wzjSkNK9RdaaUCjUGS+H
+   2h8dsEk8tukoo5xRXzzwjj3LXFRcc2g1XIFrQtDJZTQUBlkCPzWBJi2NI
+   8R2wWlalqxtgOljzLzKZa6ZJ7FtqSsXnv2JYvYI1L7qjoonq60KLhRbOA
+   mrAQ3DqjAGMJtKHxd/kAsnYwj7SqfAAHWhGDwL9/S66vqfJ9IA7Nj4NMm
+   g==;
+X-CSE-ConnectionGUID: XO6qG+DERDOwihC9+1l7mg==
+X-CSE-MsgGUID: u5pvTfBaSmamO6XitgmeEg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="81589235"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="81589235"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 09:37:01 -0700
+X-CSE-ConnectionGUID: 6L0HCz0tR9eQw2JQTXGv2A==
+X-CSE-MsgGUID: 9V1OToB3SDe3bBiM7WSh2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="208263614"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 01 Sep 2025 09:36:57 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ut7Vx-0000oV-0V;
+	Mon, 01 Sep 2025 16:36:27 +0000
+Date: Tue, 2 Sep 2025 00:35:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Tran <alex.t.tran@gmail.com>, broonie@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+	shenghao-ding@ti.com, kevin-lu@ti.com, baojun.xu@ti.com,
+	linus.walleij@linaro.org, brgl@bgdev.pl,
+	linux-sound@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alex Tran <alex.t.tran@gmail.com>
+Subject: Re: [PATCH v2] ASoC: codecs: tlv320dac33: switch to gpiod api
+Message-ID: <202509020014.XuEeJtZr-lkp@intel.com>
+References: <20250901035956.1195081-1-alex.t.tran@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v4 1/2] KVM: guest_memfd: add generic population via write
-To: David Hildenbrand <david@redhat.com>, kernel test robot <lkp@intel.com>,
-	"Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "pbonzini@redhat.com"
-	<pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jthoughton@google.com" <jthoughton@google.com>, "Roy, Patrick"
-	<roypat@amazon.co.uk>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Manwaring,
- Derek" <derekmn@amazon.com>, "Cali, Marco" <xmarcalx@amazon.co.uk>
-References: <20250828153049.3922-2-kalyazin@amazon.com>
- <202508310252.E5uFh1hx-lkp@intel.com>
- <be511fb0-217e-43b2-9744-f9b001bff389@redhat.com>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <be511fb0-217e-43b2-9744-f9b001bff389@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D001EUA004.ant.amazon.com (10.252.50.19) To
- EX19D022EUC002.ant.amazon.com (10.252.51.137)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250901035956.1195081-1-alex.t.tran@gmail.com>
+
+Hi Alex,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.17-rc4 next-20250901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Tran/ASoC-codecs-tlv320dac33-switch-to-gpiod-api/20250901-120204
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20250901035956.1195081-1-alex.t.tran%40gmail.com
+patch subject: [PATCH v2] ASoC: codecs: tlv320dac33: switch to gpiod api
+config: loongarch-randconfig-002-20250901 (https://download.01.org/0day-ci/archive/20250902/202509020014.XuEeJtZr-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250902/202509020014.XuEeJtZr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509020014.XuEeJtZr-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/tlv320dac33.c:1506:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1506 |         if (IS_ERR(dac33->reset_gpiod)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tlv320dac33.c:1531:9: note: uninitialized use occurs here
+    1531 |         return ret;
+         |                ^~~
+   sound/soc/codecs/tlv320dac33.c:1506:2: note: remove the 'if' if its condition is always false
+    1506 |         if (IS_ERR(dac33->reset_gpiod)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1507 |                 dev_err_probe(&client->dev, PTR_ERR(dac33->reset_gpiod),
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1508 |                               "Failed to get reset GPIO\n");
+         |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1509 |                 goto err;
+         |                 ~~~~~~~~~
+    1510 |         }
+         |         ~
+   sound/soc/codecs/tlv320dac33.c:1477:9: note: initialize the variable 'ret' to silence this warning
+    1477 |         int ret, i;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
+vim +1506 sound/soc/codecs/tlv320dac33.c
 
-On 01/09/2025 11:09, David Hildenbrand wrote:
+  1473	
+  1474	static int dac33_i2c_probe(struct i2c_client *client)
+  1475	{
+  1476		struct tlv320dac33_priv *dac33;
+  1477		int ret, i;
+  1478	
+  1479		dac33 = devm_kzalloc(&client->dev, sizeof(struct tlv320dac33_priv),
+  1480				     GFP_KERNEL);
+  1481		if (dac33 == NULL)
+  1482			return -ENOMEM;
+  1483	
+  1484		dac33->reg_cache = devm_kmemdup_array(&client->dev, dac33_reg, ARRAY_SIZE(dac33_reg),
+  1485						      sizeof(dac33_reg[0]), GFP_KERNEL);
+  1486		if (!dac33->reg_cache)
+  1487			return -ENOMEM;
+  1488	
+  1489		dac33->i2c = client;
+  1490		mutex_init(&dac33->mutex);
+  1491		spin_lock_init(&dac33->lock);
+  1492	
+  1493		i2c_set_clientdata(client, dac33);
+  1494	
+  1495		if (!dac33->burst_bclkdiv)
+  1496			dac33->burst_bclkdiv = 8;
+  1497		if (!dac33->mode1_latency)
+  1498			dac33->mode1_latency = 10000; /* 10ms */
+  1499		dac33->irq = client->irq;
+  1500		/* Disable FIFO use by default */
+  1501		dac33->fifo_mode = DAC33_FIFO_BYPASS;
+  1502	
+  1503		/* request optional reset GPIO */
+  1504		dac33->reset_gpiod =
+  1505			devm_gpiod_get_optional(&client->dev, "reset", GPIOD_OUT_LOW);
+> 1506		if (IS_ERR(dac33->reset_gpiod)) {
+  1507			dev_err_probe(&client->dev, PTR_ERR(dac33->reset_gpiod),
+  1508				      "Failed to get reset GPIO\n");
+  1509			goto err;
+  1510		}
+  1511	
+  1512		for (i = 0; i < ARRAY_SIZE(dac33->supplies); i++)
+  1513			dac33->supplies[i].supply = dac33_supply_names[i];
+  1514	
+  1515		ret = devm_regulator_bulk_get(&client->dev, ARRAY_SIZE(dac33->supplies),
+  1516					 dac33->supplies);
+  1517	
+  1518		if (ret != 0) {
+  1519			dev_err(&client->dev, "Failed to request supplies: %d\n", ret);
+  1520			goto err;
+  1521		}
+  1522	
+  1523		ret = devm_snd_soc_register_component(&client->dev,
+  1524				&soc_component_dev_tlv320dac33, &dac33_dai, 1);
+  1525		if (ret < 0)
+  1526			goto err;
+  1527	
+  1528		return ret;
+  1529	
+  1530	err:
+  1531		return ret;
+  1532	}
+  1533	
 
-> On 30.08.25 20:56, kernel test robot wrote:
->> Hi Nikita,
->>
->> kernel test robot noticed the following build errors:
->>
->> [auto build test ERROR on a6ad54137af92535cfe32e19e5f3bc1bb7dbd383]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Kalyazin- 
->> Nikita/KVM-guest_memfd-add-generic-population-via-write/20250828-233437
->> base:   a6ad54137af92535cfe32e19e5f3bc1bb7dbd383
->> patch link:    https://lore.kernel.org/r/20250828153049.3922-2- 
->> kalyazin%40amazon.com
->> patch subject: [PATCH v4 1/2] KVM: guest_memfd: add generic population 
->> via write
->> config: x86_64-randconfig-001-20250830 (https://download.01.org/0day- 
->> ci/archive/20250831/202508310252.E5uFh1hx-lkp@intel.com/config)
->> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 
->> 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ 
->> archive/20250831/202508310252.E5uFh1hx-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new 
->> version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202508310252.E5uFh1hx- 
->> lkp@intel.com/
->>
->> All errors (new ones prefixed by >>, old ones prefixed by <<):
->>
->>>> ERROR: modpost: "filemap_remove_folio" [arch/x86/kvm/kvm.ko] undefined!
-> 
-> Right, that one is not exported.
-
-Indeed.  Having a look at other .write_end implementations, it looks 
-like the convention is zeroing the uncopied part instead of trying to 
-remove the folio from the cache.  Will do it in the next version.
-
-> 
-> -- 
-> Cheers
-> 
-> David / dhildenb
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
