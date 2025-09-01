@@ -1,132 +1,139 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.74.81.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EE530F813
-	for <llvm@lists.linux.dev>; Mon,  1 Sep 2025 11:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7AD33EB01;
+	Mon,  1 Sep 2025 14:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.74.81.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756726188; cv=none; b=ZAO+oFu0fwAWlcnemOioGa8G79cr+3hgp/4e7RwFjuNblbNfW2zsn9xv4n5fnqMciyd9PawRcdlAFdX2jxIoDrBBLfO+QvnGtXOCMQbW2kz3ec61ogEmn2qvJMWmWC5xa2e3mg275WzH6Nn5b2jDu/qTvtOaojSmPTiQB93VN6U=
+	t=1756737014; cv=none; b=eeAHUpFGRpEJ/4L3qW23OGfl6rEiMsQaenMxzVWKNvu4GFL9Zp0+kS4ad0otjtEQlmEyur5LU85AQQ+nClh6S9KMddMl1MVNFG09XA4FEgHujNvtB+kUSIYhwDidNKUJ6IQ6kv+T9/qx4nrmrXwUCh5Si6CFkjR9AnuYecalr6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756726188; c=relaxed/simple;
-	bh=hwu2Kbbf5ntjzdSbAs6MMa0FLXiSeyDsJHXXkCApxlM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nK/yiD/HTaGf2K22RvvZSxFk9tYDTqB/qWJXg2h02ALlvg5JH18gCFTrV8akOTU2qZqnzPECdF5dZ0RQkLtYfDLoYaUsVhCQ8DVKSJB8/UUWHX+4z4ykaH/V/1jirTh5a1Gyg9c1DSfGSPLv5f6/tdik6p1qbYSh6zSzXlaG87s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AJZOYblN; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1756737014; c=relaxed/simple;
+	bh=qSkaqIips+4MLEo4Zp8mEeudv7ytxIUgJAsoPjt+h/c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dBbblhhJIS+KkSeM0mo7sdFXzP1x9PBsX5cyf5oS+u9dXlJws3x4e6fGLAq1TVSdbJc/v56uOc+4Tz5IQITJqL5nxYbnS7e26NguptfUUG4Y3VXXWyNXRveVyDpq/EGYjlzBYyuOiXFL0txqiwAuZ3dv/gaou04S+9umQY+eGB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=i58tV0JG; arc=none smtp.client-ip=3.74.81.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AJZOYblN"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-45b8a2b9fcaso9014645e9.0
-        for <llvm@lists.linux.dev>; Mon, 01 Sep 2025 04:29:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="i58tV0JG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756726185; x=1757330985; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lek17aB1MdxVzJYdNsx3fQ/dyCaMBNbVMi2QTvU5Diw=;
-        b=AJZOYblN+tRj26zBhG30UKEvP6mX1NNoFTkOJBkRE6t48H5QAlSSju25j4pzPHZHEZ
-         IgLV6eB6dyvBLUhnYGdPyIIqmJYwzTvux1PBrqmcIQK2uVBrH7cZXO8crv1J4HH9kyrk
-         7DkJ1IiVI16IPXI7gzZ4/UeqtLckxGw599H9mK/X4o+/hmFj12NkCaFxMygcPW/9yGtT
-         tXz5a1xsbKt1bIiZEbUb4cHYX0i3BG2shrDBtxasd5cuhz8cNIZYQWrRgzAbf+EcBxze
-         IgCsu3V4XKo/xEKNfRL/qcU9GA/o2Gk5AKrD5SYynXoSrhopdypj122fOhknWj5KUmqw
-         nH5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756726185; x=1757330985;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lek17aB1MdxVzJYdNsx3fQ/dyCaMBNbVMi2QTvU5Diw=;
-        b=PbbIjRlasz/FSS1GEZYGAvnWMm40B3QaEHip4ddQajGeQnl+TALqoNR4AxvihlWXc3
-         rdHtWq8cKc8OdWjNL1gcMTnEfX/zD7O5vtCqJ/HZAy3u4ylW1zoH3y93e49brIXar8KX
-         bSVORM/2FYAyX+nzipU4xgVeWgg+ZlyPw0YDi83Xr5FVA4j1UgESbQTqTHcdOZf2UJF2
-         bFuAOSFnc/onItw91/mm43NVGAzTX8Q6h0qrWnJ/yaWYNVvIS/EHcnX7At919A+2jAKG
-         ycXzHuJTG/JWlQnfW3JCN0EyNEjVg4dDYVs3Ci53n+Z9jQJTq8aN60s4fNgfWJmfS8zF
-         Nv0g==
-X-Forwarded-Encrypted: i=1; AJvYcCWDJKfdJzgIyDkWX/PqV+k0dujSbrOK8ahmgz8MEUho7g3buW0zVUxxgY9p4oLA+JdzcrtI@lists.linux.dev
-X-Gm-Message-State: AOJu0YzIGPSqajo+B34Pq15peozdSoacIMQufzEiSU9fq90VVwr+X5ZR
-	z10zXnR/82HWmZ7EAhu5AVdkHpAvl/iMNT8ZpdE3g0gliNhHMkBoGJvXRHPCJ5fZU/dkY3tM5Tg
-	iq/Dv/+9LzfsDMA==
-X-Google-Smtp-Source: AGHT+IF4u4k+AvvaTYncGek0o5I+2pA6zNg1judsWL0THNmQ7yIx18EN0m9On1TLUujNdBUHvq3Ytm4oIUWuoA==
-X-Received: from wmbes21.prod.google.com ([2002:a05:600c:8115:b0:458:bb2b:d73e])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4fcd:b0:459:e025:8c40 with SMTP id 5b1f17b1804b1-45b85533712mr68266195e9.10.1756726184881;
- Mon, 01 Sep 2025 04:29:44 -0700 (PDT)
-Date: Mon, 01 Sep 2025 11:29:44 +0000
-In-Reply-To: <aLNQFmgS2IcDbPmd@levanger>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1756737012; x=1788273012;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=+uHBZTpRi5ucUMryB+eBopJlrYLUcWv6+yyQSUEyLxg=;
+  b=i58tV0JGt5/KFwJZWTlh2842BHTFY6q2EdbQ5jr8ykJawInEw5uYEv4E
+   S51sMzfU3W7ifp+KY+ycIRkIgqNIIDVfL3KC9D5f6dlS7zGgd7q4ou4iE
+   q58Kqc/N5rVT4RJYN/XLCVJP3HjIUW3PtlFg2avXFjvRIJbKZvT6XsqGM
+   dbI2nhN6y/n2em53rqf6z1xp6OODx2An4G0fpVmrXUO9u1pxFcd85RL5t
+   zJ00jeSw5htqfJGISkesblieZ7yu2OmwynvlNa/DFkjKS2ihDmPVn0sE5
+   UXcmcQrx6rqTyLi/X2ke0mohyLAYgnKna8c2qY19ci5i7Q4d4cXNt4Nui
+   Q==;
+X-CSE-ConnectionGUID: kiEDH9xIR0aujLgFjO6lnw==
+X-CSE-MsgGUID: s9FOoKmtQR+HopUw9GuFYA==
+X-IronPort-AV: E=Sophos;i="6.18,214,1751241600"; 
+   d="scan'208";a="1469011"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 14:30:02 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:23272]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.43.161:2525] with esmtp (Farcaster)
+ id 6107cd3d-5fbe-4c88-a87b-1e89852fe40b; Mon, 1 Sep 2025 14:30:01 +0000 (UTC)
+X-Farcaster-Flow-ID: 6107cd3d-5fbe-4c88-a87b-1e89852fe40b
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.17;
+ Mon, 1 Sep 2025 14:30:01 +0000
+Received: from [192.168.30.195] (10.106.83.14) by
+ EX19D022EUC002.ant.amazon.com (10.252.51.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Mon, 1 Sep 2025 14:30:00 +0000
+Message-ID: <8dd43501-80be-43bf-8eac-a4265e7595ea@amazon.com>
+Date: Mon, 1 Sep 2025 15:29:59 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250827-master-v1-1-19f9f367219c@google.com> <20250829233824.GB1983886@ax162>
- <aLNQFmgS2IcDbPmd@levanger>
-X-Mailer: aerc 0.20.1
-Message-ID: <DCHFGJXCAPAZ.3JG065Y5DZVLZ@google.com>
-Subject: Re: [PATCH] .gitignore: ignore temporary files from 'bear'
-From: Brendan Jackman <jackmanb@google.com>
-To: Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	<linux-kernel@vger.kernel.org>, Justin Stitt <justinstitt@google.com>, 
-	<llvm@lists.linux.dev>, <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v4 1/2] KVM: guest_memfd: add generic population via write
+To: David Hildenbrand <david@redhat.com>, kernel test robot <lkp@intel.com>,
+	"Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jthoughton@google.com" <jthoughton@google.com>, "Roy, Patrick"
+	<roypat@amazon.co.uk>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Manwaring,
+ Derek" <derekmn@amazon.com>, "Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <20250828153049.3922-2-kalyazin@amazon.com>
+ <202508310252.E5uFh1hx-lkp@intel.com>
+ <be511fb0-217e-43b2-9744-f9b001bff389@redhat.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <be511fb0-217e-43b2-9744-f9b001bff389@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D001EUA004.ant.amazon.com (10.252.50.19) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-On Sat Aug 30, 2025 at 7:25 PM UTC, Nicolas Schier wrote:
-> On Fri, Aug 29, 2025 at 04:38:24PM -0700, Nathan Chancellor wrote:
->> Hi Brendan,
->> 
->> On Wed, Aug 27, 2025 at 08:59:43AM +0000, Brendan Jackman wrote:
->> > Bear [0] is a tool for generating compile_commands.json. For Kbuild,
->> > Bear is not useful, since Kbuild already generates the necessary info
->> > and that can be converted to compile_commands.json by
->> > gen_compile_commads.py.
->> > 
->> > However, for code in tools/, it's handy. For example, this command
->> > updates compile_commands.json so that clangd code navigation will also
->> > work for the VMA unit tests:
->> > 
->> > 	bear --append -- make -C tools/testing/vma -j
->> > 
->> > Bear generates some temporary files. These are usually deleted again
->> > but having them show up ephemerally confuses tools that trigger
->> > recompilation on source code changes. Ignore them in Git so that these
->> > tools can tell they aren't source code.
->> > 
->> > [0]: https://github.com/rizsotto/Bear
->> > 
->> > Signed-off-by: Brendan Jackman <jackmanb@google.com>
->> 
->> We can likely take this via the Kbuild tree. I do wonder if this would
->> be better in a tools/.gitignore file since bear is really only of use
->> there but I am not sure it matters much.
->
-> yeah, please consider using tools/.gitignore.  
 
-I don't believe that works here, because AFAIK clangd assumes a single
-compile_commands.json, so while we could git-ignore
-tools/compile_commands.json that wouldn't really serve the usecase I
-have here with 'bear --append'.
 
-> Please have a look at
-> this thread about ignoring files from "external" tools:
->
-> https://lore.kernel.org/lkml/CAHk-=wiJHMje8cpiTajqrLrM23wZK0SWetuK1Bd67c0OGM_BzQ@mail.gmail.com/
+On 01/09/2025 11:09, David Hildenbrand wrote:
 
-Hm, I would read the spirit of that thread as not being about things
-from 'external tools', rather Linus' objection seems to be that the
-_lifetime_ of the mbox files is unrelated to the kernel build. Well, to
-be honest the only coherent principle I can get from it is "don't break
-Linus' workflow". Which... yeah, is still a pretty valid concern.
+> On 30.08.25 20:56, kernel test robot wrote:
+>> Hi Nikita,
+>>
+>> kernel test robot noticed the following build errors:
+>>
+>> [auto build test ERROR on a6ad54137af92535cfe32e19e5f3bc1bb7dbd383]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Kalyazin- 
+>> Nikita/KVM-guest_memfd-add-generic-population-via-write/20250828-233437
+>> base:   a6ad54137af92535cfe32e19e5f3bc1bb7dbd383
+>> patch link:    https://lore.kernel.org/r/20250828153049.3922-2- 
+>> kalyazin%40amazon.com
+>> patch subject: [PATCH v4 1/2] KVM: guest_memfd: add generic population 
+>> via write
+>> config: x86_64-randconfig-001-20250830 (https://download.01.org/0day- 
+>> ci/archive/20250831/202508310252.E5uFh1hx-lkp@intel.com/config)
+>> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 
+>> 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ 
+>> archive/20250831/202508310252.E5uFh1hx-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new 
+>> version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202508310252.E5uFh1hx- 
+>> lkp@intel.com/
+>>
+>> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>>
+>>>> ERROR: modpost: "filemap_remove_folio" [arch/x86/kvm/kvm.ko] undefined!
+> 
+> Right, that one is not exported.
 
-> If using tools/.gitignore is not possible, I think the best way for
-> ignoring files that are not natively related to kernel build tools is to 
-> update the local ~/.config/git/ignore, as suggested in
->
-> https://lore.kernel.org/lkml/CAK7LNAQas0cK7pgi72tYC3yU=ZkQxnr41YYW1mXd-sWiHtG+UA@mail.gmail.com/
+Indeed.  Having a look at other .write_end implementations, it looks 
+like the convention is zeroing the uncopied part instead of trying to 
+remove the folio from the cache.  Will do it in the next version.
 
-Given this alternative, and given the fact that I'm ignoring a very
-generic suffix in *.tmp (if it was just *.events.json I'd say the
-practical risk has gotta be close to nil), I think we could just drop
-this unless anyone else pops up with evidence that 'bear' is important
-to lots of people or something.
+> 
+> -- 
+> Cheers
+> 
+> David / dhildenb
+> 
 
-Cheers,
-Brendan
