@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA9D267729;
-	Mon,  1 Sep 2025 23:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB2E23B0;
+	Tue,  2 Sep 2025 03:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756770784; cv=none; b=bHuNke9EdkcRmNCIdbevwKdSTYggMTIyu+NjMNTeITkGvOdoEg1s8x8m7lebb0YVpn5fnAqafic5wJ1Len8khMbt21dRxQvT4pzKxQIJSgwj1GLbA1ml/HDzBlp7lNzMhIAqK8o6Kl6NGbpYkxXC8e5Kd3Cj8BkQlhVb2kdDqIc=
+	t=1756782149; cv=none; b=CHjmwflhXXcG+j92ZPm4VOa4qXJbtRfJeJGZqq9O1Fz9EFaKx/Qz1DL18e1bb81RUs3WyAyPRmR1KV0zn3h9qL6/J7hHwMzaV2vDfYBcV+xCoK80s8ethbDBwjf5SCu9xVCj+OrLjMGSWylPAQCrqLl4ChYHVPDxRGwfk1j2e2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756770784; c=relaxed/simple;
-	bh=AKaz2gXLFBcGppZPdkDcXxHQrB0YeI3uov69H4gLVQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jt1bH0Zrtnrg6w0BSyOgY4xbx4MG5SsJDHSczUq9G0vAPbD6KCtJnMb4HX9ovw8yUG+IW//N4VEO6n7Ej2qslNrq0NBXkYflSkCL//OZnGkUfJDSZmvgzRgq4hHmADElkfvghadmgAm+IJpzmTp+oR649hOY/14yrAtCw7+V+jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kWCEC75C; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1756782149; c=relaxed/simple;
+	bh=1Gh4BqMKqszZroZ6M2m0kcCxrk3b/eSwMhjntGGwUtw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K2NCyyB3ryNq3dm38QGafa3oCSQtHrZksJWRlwo7sVH2HtBgGyAYGREiQdgw3DNIIyFVEXZ85ZlTcxQKxJCqeLc5n8yPOfFtUUyPGfFqSawC4VXgn6zaTKu5plNmYSND3+3CsdWpkmUBtQ+1XFvkNbzJF+Rl+3w27zruOhxkUJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MO+f1OVG; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kWCEC75C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MO+f1OVG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756770782; x=1788306782;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AKaz2gXLFBcGppZPdkDcXxHQrB0YeI3uov69H4gLVQc=;
-  b=kWCEC75CWBuJC039L9KIEU6T9rGbwTPvKgugJ4fkkLfftTgpkef2EwUI
-   4DZ1Kr++egShdzbiZY26qSQKzrcjMp0C7yp9zsLOSSluQDVhDY81IkvyV
-   lJgnriG0i+JgeWKLOVpXgsS4YZlJiDIMZGSyXEjZrwE+56+8GbLdAcsTF
-   eET5o6N5yAO5zb4++dQ39bytLjMoukqEqxjVp1N36/23aeiFLdZ/MUpC5
-   Nxc7eP5eRfLGo1REdMaUYwZl4IPXcuqbHT7NS6peaiDoMCRInzKqQkc47
-   sCfomeg30IAiIjFjpKyLND4u2rKbHgUwpgtGHJwWX/YBpzd8CSVIBA/w8
-   A==;
-X-CSE-ConnectionGUID: O3iQGuOoRS+IT0DJPaxMBw==
-X-CSE-MsgGUID: 2JGBgBPUTbmwZtFKauE42A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="69732728"
+  t=1756782147; x=1788318147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1Gh4BqMKqszZroZ6M2m0kcCxrk3b/eSwMhjntGGwUtw=;
+  b=MO+f1OVGh6T69jok9amrdlK5B1KyPSeAuIi6drtWTwxAIwkk9OyjGCnf
+   QQSwst5jxcx8Z+pXMe2Usyg4B3uTjhauNbeKjm491mVKRAHMzkp/BDUAh
+   uHcO8IzEkCw/Ke39Va4qfM6KMO7c0txD4TBnfv/bEEfB/Zww1L5M8UuDa
+   keNrzR9PcKTJTp9IlIECKWuBpz7Yd81zBV7NZtt8ufU4pL/sa2ZButWdY
+   kmZXURq4LVyBkxYKr2c7BF7rlmkxbnVy8aCtShT2fgQFZhYeGUVQ4lC8m
+   CvvzCw/eyj/B/+L5ao1yMZs5XiegqTdskOXffKg8ol+5ygJVLALESuqrA
+   w==;
+X-CSE-ConnectionGUID: KRNOZM/AQ/K/coFf50Q9og==
+X-CSE-MsgGUID: UDtItDogQUuoPm8giMCP2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="58894613"
 X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="69732728"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 16:53:02 -0700
-X-CSE-ConnectionGUID: KAwL+83pSZywVdleGqDz4Q==
-X-CSE-MsgGUID: 6Lzorvm5S2KPXqUtZBwAUw==
+   d="scan'208";a="58894613"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 20:02:26 -0700
+X-CSE-ConnectionGUID: NTeTGezGRzW8J2udFwWO2w==
+X-CSE-MsgGUID: dIH/17HRQsa3Uq9uWbJ+hw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
-   d="scan'208";a="171566478"
+   d="scan'208";a="202075857"
 Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Sep 2025 16:53:00 -0700
+  by orviesa002.jf.intel.com with ESMTP; 01 Sep 2025 20:02:25 -0700
 Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1utEKY-0001Df-1t;
-	Mon, 01 Sep 2025 23:52:58 +0000
-Date: Tue, 2 Sep 2025 07:50:22 +0800
+	id 1utHHc-0001Nj-0q;
+	Tue, 02 Sep 2025 03:02:11 +0000
+Date: Tue, 2 Sep 2025 11:00:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
+To: Yu Kuai <yukuai1@huaweicloud.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:nfs-testing 9/9] fs/nfsd/nfs4xdr.c:2646:2: error: called
- object type 'int' is not a function or function pointer
-Message-ID: <202509020747.cpYtM7wb-lkp@intel.com>
+Subject: Re: [PATCH RFC v3 11/15] md/md-linear: convert to use
+ bio_submit_split_bioset()
+Message-ID: <202509021006.fXvkxKHg-lkp@intel.com>
+References: <20250901033220.42982-12-yukuai1@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,108 +63,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250901033220.42982-12-yukuai1@huaweicloud.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git nfs-testing
-head:   4e87a4abdfe1b489fbcbd282c2f0dea2fbfd227d
-commit: 4e87a4abdfe1b489fbcbd282c2f0dea2fbfd227d [9/9] sunrpc: add a Kconfig option to redirect dfprintk() output to trace buffer
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250902/202509020747.cpYtM7wb-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250902/202509020747.cpYtM7wb-lkp@intel.com/reproduce)
+Hi Yu,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v6.17-rc4 next-20250901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/block-cleanup-bio_issue/20250901-114701
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20250901033220.42982-12-yukuai1%40huaweicloud.com
+patch subject: [PATCH RFC v3 11/15] md/md-linear: convert to use bio_submit_split_bioset()
+config: i386-buildonly-randconfig-004-20250902 (https://download.01.org/0day-ci/archive/20250902/202509021006.fXvkxKHg-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250902/202509021006.fXvkxKHg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509020747.cpYtM7wb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509021006.fXvkxKHg-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/nfsd/nfs4xdr.c:2646:2: error: called object type 'int' is not a function or function pointer
-    2646 |         dprintk("nfsd4_encode_components(%s)\n", components);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sunrpc/debug.h:25:2: note: expanded from macro 'dprintk'
-      25 |         dfprintk(FACILITY, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sunrpc/debug.h:42:3: note: expanded from macro 'dfprintk'
-      42 |                 __sunrpc_printk(fmt, ##__VA_ARGS__);                    \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sunrpc/debug.h:34:37: note: expanded from macro '__sunrpc_printk'
-      34 | #  define __sunrpc_printk(fmt, ...)     trace_printk(fmt, ##__VA_ARGS__)
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:265:3: note: expanded from macro 'trace_printk'
-     265 |                 trace_puts(fmt);                        \
-         |                 ^~~~~~~~~~~~~~~
-   include/linux/kernel.h:321:38: note: expanded from macro 'trace_puts'
-     321 |                 __trace_puts(_THIS_IP_, str, strlen(str));              \
-         |                                              ~~~~~~^
+>> drivers/md/md-linear.c:260:22: error: too many arguments to function call, expected 3, have 4
+     259 |                 bio = bio_submit_split_bioset(bio, end_sector - bio_sector,
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~
+     260 |                                               GFP_NOIO, &mddev->bio_set);
+         |                                                         ^~~~~~~~~~~~~~~
+   include/linux/blkdev.h:1003:13: note: 'bio_submit_split_bioset' declared here
+    1003 | struct bio *bio_submit_split_bioset(struct bio *bio, unsigned int split_sectors,
+         |             ^                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1004 |                                     struct bio_set *bs);
+         |                                     ~~~~~~~~~~~~~~~~~~
    1 error generated.
 
 
-vim +/int +2646 fs/nfsd/nfs4xdr.c
+vim +260 drivers/md/md-linear.c
 
-21d316a767ac2e Chuck Lever           2023-10-09  2632  
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2633  /* Encode as an array of strings the string given with components
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2634   * separated @sep, escaped with esc_enter and esc_exit.
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2635   */
-ddd1ea56367202 J. Bruce Fields       2013-08-27  2636  static __be32 nfsd4_encode_components_esc(struct xdr_stream *xdr, char sep,
-ddd1ea56367202 J. Bruce Fields       2013-08-27  2637  					  char *components, char esc_enter,
-ddd1ea56367202 J. Bruce Fields       2013-08-27  2638  					  char esc_exit)
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2639  {
-ddd1ea56367202 J. Bruce Fields       2013-08-27  2640  	__be32 *p;
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2641  	__be32 pathlen;
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2642  	int pathlen_offset;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2643  	int strlen, count=0;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2644  	char *str, *end, *next;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2645  
-81c3f4130202a1 J.Bruce Fields        2006-10-04 @2646  	dprintk("nfsd4_encode_components(%s)\n", components);
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2647  
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2648  	pathlen_offset = xdr->buf->len;
-ddd1ea56367202 J. Bruce Fields       2013-08-27  2649  	p = xdr_reserve_space(xdr, 4);
-ddd1ea56367202 J. Bruce Fields       2013-08-27  2650  	if (!p)
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2651  		return nfserr_resource;
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2652  	p++; /* We will fill this in with @count later */
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2653  
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2654  	end = str = components;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2655  	while (*end) {
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2656  		bool found_esc = false;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2657  
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2658  		/* try to parse as esc_start, ..., esc_end, sep */
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2659  		if (*str == esc_enter) {
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2660  			for (; *end && (*end != esc_exit); end++)
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2661  				/* find esc_exit or end of string */;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2662  			next = end + 1;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2663  			if (*end && (!*next || *next == sep)) {
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2664  				str++;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2665  				found_esc = true;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2666  			}
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2667  		}
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2668  
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2669  		if (!found_esc)
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2670  			for (; *end && (*end != sep); end++)
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2671  				/* find sep or end of string */;
-e7a0444aef4a16 Weston Andros Adamson 2012-04-24  2672  
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2673  		strlen = end - str;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2674  		if (strlen) {
-30c1d2411acd6d Chuck Lever           2024-10-17  2675  			if (xdr_stream_encode_opaque(xdr, str, strlen) < 0)
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2676  				return nfserr_resource;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2677  			count++;
-30c1d2411acd6d Chuck Lever           2024-10-17  2678  		} else
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2679  			end++;
-5a64e56976f1ba Benjamin Coddington   2014-12-07  2680  		if (found_esc)
-5a64e56976f1ba Benjamin Coddington   2014-12-07  2681  			end = next;
-5a64e56976f1ba Benjamin Coddington   2014-12-07  2682  
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2683  		str = end;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2684  	}
-bf7491f1be5e12 Benjamin Coddington   2014-12-07  2685  	pathlen = htonl(count);
-082d4bd72a4527 J. Bruce Fields       2013-08-29  2686  	write_bytes_to_xdr_buf(xdr->buf, pathlen_offset, &pathlen, 4);
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2687  	return 0;
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2688  }
-81c3f4130202a1 J.Bruce Fields        2006-10-04  2689  
-
-:::::: The code at line 2646 was first introduced by commit
-:::::: 81c3f4130202a1dcb2b28ab56684eb5e9d43d8c1 [PATCH] knfsd: nfsd4: xdr encoding for fs_locations
-
-:::::: TO: J.Bruce Fields <bfields@fieldses.org>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
+127186cfb184ea Yu Kuai 2025-01-02  231  
+127186cfb184ea Yu Kuai 2025-01-02  232  static bool linear_make_request(struct mddev *mddev, struct bio *bio)
+127186cfb184ea Yu Kuai 2025-01-02  233  {
+127186cfb184ea Yu Kuai 2025-01-02  234  	struct dev_info *tmp_dev;
+127186cfb184ea Yu Kuai 2025-01-02  235  	sector_t start_sector, end_sector, data_offset;
+127186cfb184ea Yu Kuai 2025-01-02  236  	sector_t bio_sector = bio->bi_iter.bi_sector;
+127186cfb184ea Yu Kuai 2025-01-02  237  
+127186cfb184ea Yu Kuai 2025-01-02  238  	if (unlikely(bio->bi_opf & REQ_PREFLUSH)
+127186cfb184ea Yu Kuai 2025-01-02  239  	    && md_flush_request(mddev, bio))
+127186cfb184ea Yu Kuai 2025-01-02  240  		return true;
+127186cfb184ea Yu Kuai 2025-01-02  241  
+127186cfb184ea Yu Kuai 2025-01-02  242  	tmp_dev = which_dev(mddev, bio_sector);
+127186cfb184ea Yu Kuai 2025-01-02  243  	start_sector = tmp_dev->end_sector - tmp_dev->rdev->sectors;
+127186cfb184ea Yu Kuai 2025-01-02  244  	end_sector = tmp_dev->end_sector;
+127186cfb184ea Yu Kuai 2025-01-02  245  	data_offset = tmp_dev->rdev->data_offset;
+127186cfb184ea Yu Kuai 2025-01-02  246  
+127186cfb184ea Yu Kuai 2025-01-02  247  	if (unlikely(bio_sector >= end_sector ||
+127186cfb184ea Yu Kuai 2025-01-02  248  		     bio_sector < start_sector))
+127186cfb184ea Yu Kuai 2025-01-02  249  		goto out_of_bounds;
+127186cfb184ea Yu Kuai 2025-01-02  250  
+127186cfb184ea Yu Kuai 2025-01-02  251  	if (unlikely(is_rdev_broken(tmp_dev->rdev))) {
+127186cfb184ea Yu Kuai 2025-01-02  252  		md_error(mddev, tmp_dev->rdev);
+127186cfb184ea Yu Kuai 2025-01-02  253  		bio_io_error(bio);
+127186cfb184ea Yu Kuai 2025-01-02  254  		return true;
+127186cfb184ea Yu Kuai 2025-01-02  255  	}
+127186cfb184ea Yu Kuai 2025-01-02  256  
+127186cfb184ea Yu Kuai 2025-01-02  257  	if (unlikely(bio_end_sector(bio) > end_sector)) {
+127186cfb184ea Yu Kuai 2025-01-02  258  		/* This bio crosses a device boundary, so we have to split it */
+bb50131f159ad3 Yu Kuai 2025-09-01  259  		bio = bio_submit_split_bioset(bio, end_sector - bio_sector,
+127186cfb184ea Yu Kuai 2025-01-02 @260  					      GFP_NOIO, &mddev->bio_set);
+bb50131f159ad3 Yu Kuai 2025-09-01  261  		if (!bio) {
+127186cfb184ea Yu Kuai 2025-01-02  262  			return true;
+127186cfb184ea Yu Kuai 2025-01-02  263  		}
+127186cfb184ea Yu Kuai 2025-01-02  264  	}
+127186cfb184ea Yu Kuai 2025-01-02  265  
+127186cfb184ea Yu Kuai 2025-01-02  266  	md_account_bio(mddev, &bio);
+127186cfb184ea Yu Kuai 2025-01-02  267  	bio_set_dev(bio, tmp_dev->rdev->bdev);
+127186cfb184ea Yu Kuai 2025-01-02  268  	bio->bi_iter.bi_sector = bio->bi_iter.bi_sector -
+127186cfb184ea Yu Kuai 2025-01-02  269  		start_sector + data_offset;
+127186cfb184ea Yu Kuai 2025-01-02  270  
+127186cfb184ea Yu Kuai 2025-01-02  271  	if (unlikely((bio_op(bio) == REQ_OP_DISCARD) &&
+127186cfb184ea Yu Kuai 2025-01-02  272  		     !bdev_max_discard_sectors(bio->bi_bdev))) {
+127186cfb184ea Yu Kuai 2025-01-02  273  		/* Just ignore it */
+127186cfb184ea Yu Kuai 2025-01-02  274  		bio_endio(bio);
+127186cfb184ea Yu Kuai 2025-01-02  275  	} else {
+127186cfb184ea Yu Kuai 2025-01-02  276  		if (mddev->gendisk)
+127186cfb184ea Yu Kuai 2025-01-02  277  			trace_block_bio_remap(bio, disk_devt(mddev->gendisk),
+127186cfb184ea Yu Kuai 2025-01-02  278  					      bio_sector);
+127186cfb184ea Yu Kuai 2025-01-02  279  		mddev_check_write_zeroes(mddev, bio);
+127186cfb184ea Yu Kuai 2025-01-02  280  		submit_bio_noacct(bio);
+127186cfb184ea Yu Kuai 2025-01-02  281  	}
+127186cfb184ea Yu Kuai 2025-01-02  282  	return true;
+127186cfb184ea Yu Kuai 2025-01-02  283  
+127186cfb184ea Yu Kuai 2025-01-02  284  out_of_bounds:
+127186cfb184ea Yu Kuai 2025-01-02  285  	pr_err("md/linear:%s: make_request: Sector %llu out of bounds on dev %pg: %llu sectors, offset %llu\n",
+127186cfb184ea Yu Kuai 2025-01-02  286  	       mdname(mddev),
+127186cfb184ea Yu Kuai 2025-01-02  287  	       (unsigned long long)bio->bi_iter.bi_sector,
+127186cfb184ea Yu Kuai 2025-01-02  288  	       tmp_dev->rdev->bdev,
+127186cfb184ea Yu Kuai 2025-01-02  289  	       (unsigned long long)tmp_dev->rdev->sectors,
+127186cfb184ea Yu Kuai 2025-01-02  290  	       (unsigned long long)start_sector);
+127186cfb184ea Yu Kuai 2025-01-02  291  	bio_io_error(bio);
+127186cfb184ea Yu Kuai 2025-01-02  292  	return true;
+127186cfb184ea Yu Kuai 2025-01-02  293  }
+127186cfb184ea Yu Kuai 2025-01-02  294  
 
 -- 
 0-DAY CI Kernel Test Service
