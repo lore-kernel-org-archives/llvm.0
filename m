@@ -1,147 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016F2203706;
-	Tue,  2 Sep 2025 20:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7318826CE3A
+	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 22:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756846074; cv=none; b=WzioUZY13nmuWWs1+dlP+cORUzNo+Y+xdmQkTMAOFtQsLP+roU0sHHL6Toe6UYDykeWZ1UL1SyuS6tVpu6+hjQCXfEX0B45nJ6goiuqU71Tm87e24XY+czp4D+zsH/hrwpx8r5BwCk8MI9uqpbzkU+whO2/lOv39LOGFfpAOIfM=
+	t=1756850872; cv=none; b=Ubuqkc0S8uWimxC6cSnFPitztTsYZZPVhFGKoJ5aH52NAwPsVNker4LkUWM6lSUETRos0aKYaw4nvGUenfJC6sL1ndbzhvap5MHYgRKsh18xw47gt73cBEKPZMvFA9mmH3XhlikjbBGZi1257u3InlBQKTJNj+2/2cYZ4QZDZkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756846074; c=relaxed/simple;
-	bh=F2kD4w31rmC8aRc55QM8VeAbD7vVZzwGup32InjmXFY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GLQMsC5fdrCwDlKXw41ab4vY3pUfhW09l8/YcV4Z+PPt7To0UrJsyKQ4WeBQGAvz9uCAlGJ/nnzHpkShosI8/BltUv5yp8q9Um8evOGLphtOD57H8JnDq9YmxM+5nrZ5+vo+2i2N5IPNrzz7AV0uJL7+FNC7XpdbK3poFejjMeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgLUEb4P; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756850872; c=relaxed/simple;
+	bh=ItFG1T7/E8/ZPrI5DQMhDZwiCfiNmpQlDjwao2bBscQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Bhv2JD2pXfN5qne/QVO5ONr46lU0j+MwMUTa7vi8V9qUKpRHBUakyAakUickYZa+UCCxVT6pYsgJUjZMOkrZY2Luho6pC6SslPVatfta9pTw++P3PIWVkR2iThVDbMFt9iFx06Z49r6Ow6yjC4S/ob4uVNxMOqlitE6TRQGbVb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=W4Wn71t0; arc=none smtp.client-ip=217.70.178.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgLUEb4P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EE9C4CEED;
-	Tue,  2 Sep 2025 20:47:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756846073;
-	bh=F2kD4w31rmC8aRc55QM8VeAbD7vVZzwGup32InjmXFY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WgLUEb4P3BucztLyEYtKfNbcksfLtRcdtfoZO90JxzgpGZzCs8hwUk8QA5cvR0jUW
-	 ZTBkkco5IlzvxRkHoOEdYhPCLL5oj02TXNMHtyk0aE+djN49Ov+8B9FQzpcoV/Ath1
-	 8ZwoxSXvYk1vHzBJKct89wwCOfRO50a/4ElIARX4Zcsj+3+isPnd23pVQTQG8Lo60x
-	 enNR7yy9R8fP5Qt2XdgfpFT/HMVBfvRJy4O+q0xchVigrvNKG9Aty9aQShIc+6UdmV
-	 c9PAX0rFX7P3/fNyLgNUR/+WN5FixODVqoQ08WW/mVoC8AWEktbHukjERwcnQWCvZd
-	 eMbTjJGLelOZg==
-Message-ID: <9600871d-7a68-4e7e-8cc1-5280af554378@kernel.org>
-Date: Tue, 2 Sep 2025 22:47:48 +0200
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W4Wn71t0"
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	by mslow3.mail.gandi.net (Postfix) with ESMTP id 923D5582A00
+	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 21:53:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F127C41DE2;
+	Tue,  2 Sep 2025 21:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1756850015;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=br/QgVoy/c9/5rdndTufFT/AwJSOiX40/l6/1pESy2E=;
+	b=W4Wn71t0ERnKj+15R+6nOiFru5MHlxap9PUNx0hhPgURCDHhHcLz06thXfcbSt+mgDmGDD
+	WF1OcYas8FP2V/i3eALEJeS1uhoVlHI0QSSD3nC7IJE7oxz5213OdxhmGpLmSuZsCwnblE
+	sN15FwekQWvsaZJMjT7uEmHTglMngF7o0i66Kf+ik950cVo0q5WWh8JAmxCvS24+Q6vCLh
+	Fr4ibsSTGtFmkbsUh2fRbq20u9gvgaWVYKkLBBBU5XpHp5dVa99niAu/zX6sh7ylULCF5j
+	82f1boSl7fdtq5tAukfWCFh8yiEbZkSvB0QByw7x8JeWRcjnZdtvs9WP/4W/Tw==
+Date: Tue, 2 Sep 2025 23:53:26 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
+ <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
+ Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
+ <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
+ <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov
+ <dmitry.baryshkov@oss.qualcomm.com>, Chaoyi Chen
+ <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/9] drm/bridge: add
+ drm_for_each_bridge_in_chain_scoped()
+Message-ID: <20250902235326.678947cd@booty>
+In-Reply-To: <20250820114030.401e5d4f@booty>
+References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
+	<20250808-drm-bridge-alloc-getput-for_each_bridge-v2-3-edb6ee81edf1@bootlin.com>
+	<7gpqrxlxxuarbp5b7bycukbbjdcuonlhn4zm6xinnrlqzrbeu7@rrpcwxnxxrag>
+	<20250819180137.28ca89c0@booty>
+	<20250820114030.401e5d4f@booty>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] HID: lg-g15 - Add support for Logitech G13.
-To: kernel test robot <lkp@intel.com>, "Leo L. Schwab" <ewhac@ewhac.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Kate Hsuan <hpa@redhat.com>, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, linux-input@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250902003659.361934-2-ewhac@ewhac.org>
- <202509030200.ITZPZGmG-lkp@intel.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <202509030200.ITZPZGmG-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-GND-State: clean
+X-GND-Score: -51
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddufeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfeukedufeekuddugfeuteekgeelveelgfduteefjeffjeeiveetvefflefguddtnecuffhomhgrihhnpehophgvnhdqshhtugdrohhrghdpghhithhhuhgsrdhiohdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegrgeeivdemudgsuggumeeluddtudemvdelgehfnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegrgeeivdemudgsuggumeeluddtudemvdelgehfpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvgedprhgtphhtthhopehmrhhiphgrrhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhiivghjr
+ dhhrghjuggrsehinhhtvghlrdgtohhmpdhrtghpthhtohepnhgvihhlrdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrghdprhgtphhtthhopehrfhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopefnrghurhgvnhhtrdhpihhntghhrghrthesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepjhhonhgrsheskhifihgsohhordhsvgdprhgtphhtthhopehjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdprhgtphhtthhopehmrggrrhhtvghnrdhlrghnkhhhohhrshhtsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hi,
+Hi Maxime,
 
-On 2-Sep-25 21:46, kernel test robot wrote:
-> Hi Leo,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on hid/for-next]
-> [also build test ERROR on linus/master v6.17-rc4 next-20250902]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Leo-L-Schwab/HID-lg-g15-Add-support-for-Logitech-G13/20250902-091504
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-> patch link:    https://lore.kernel.org/r/20250902003659.361934-2-ewhac%40ewhac.org
-> patch subject: [PATCH v5] HID: lg-g15 - Add support for Logitech G13.
-> config: i386-buildonly-randconfig-006-20250902 (https://download.01.org/0day-ci/archive/20250903/202509030200.ITZPZGmG-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250903/202509030200.ITZPZGmG-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509030200.ITZPZGmG-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> drivers/hid/hid-lg-g15.c:692:30: error: no member named 'brightness_hw_changed' in 'struct led_classdev'
->      692 |                                            ^ (g15->leds[0].cdev.brightness_hw_changed > 0);
->          |                                               ~~~~~~~~~~~~~~~~~ ^
->    1 error generated.
+On Wed, 20 Aug 2025 11:40:30 +0200
+Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
 
-Ah right, IS_ENABLED() only helps to avoid errors about references which
-are resolved link-time and this is a compile-time issue.
-
-But as discussed in the v3 thread we don't want to use 
-cdev.brightness_hw_changed anyways.
-
-Regards,
-
-Hans
-
-
+> Hi Maxime,
 > 
-> vim +692 drivers/hid/hid-lg-g15.c
+> On Tue, 19 Aug 2025 18:01:37 +0200
+> Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
 > 
->    655	
->    656	static int lg_g13_event(struct lg_g15_data *g15, u8 const *data)
->    657	{
->    658		struct g13_input_report const * const rep = (struct g13_input_report *) data;
->    659		int i, val;
->    660	
->    661		/*
->    662		 * Main macropad and menu keys.
->    663		 * Emit key events defined for each bit position.
->    664		 */
->    665		for (i = 0; i < ARRAY_SIZE(g13_keys_for_bits); ++i) {
->    666			if (g13_keys_for_bits[i]) {
->    667				val = TEST_BIT(rep->keybits, i);
->    668				input_report_key(g15->input, g13_keys_for_bits[i], val);
->    669			}
->    670		}
->    671		input_sync(g15->input);
->    672	
->    673		/*
->    674		 * Joystick.
->    675		 * Emit button and deflection events.
->    676		 */
->    677		for (i = 0; i < ARRAY_SIZE(g13_keys_for_bits_js); ++i) {
->    678			val = TEST_BIT(rep->keybits, i + G13_JS_KEYBITS_OFFSET);
->    679			input_report_key(g15->input_js, g13_keys_for_bits_js[i], val);
->    680		}
->    681		input_report_abs(g15->input_js, ABS_X, rep->joy_x);
->    682		input_report_abs(g15->input_js, ABS_Y, rep->joy_y);
->    683		input_sync(g15->input_js);
->    684	
->    685		if (IS_ENABLED(CONFIG_LEDS_BRIGHTNESS_HW_CHANGED)) {
->    686			/*
->    687			 * Bit 23 of keybits[] reports the current backlight on/off
->    688			 * state.  If it has changed from the last cached value, apply
->    689			 * an update.
->    690			 */
->    691			bool hw_brightness_changed = (!!TEST_BIT(rep->keybits, 23))
->  > 692						   ^ (g15->leds[0].cdev.brightness_hw_changed > 0);
->    693			if (hw_brightness_changed)
->    694				led_classdev_notify_brightness_hw_changed(
->    695					&g15->leds[0].cdev,
->    696					TEST_BIT(rep->keybits, 23) ? LED_FULL : LED_OFF);
->    697		}
->    698	
->    699		return 0;
->    700	}
->    701	
+> > Hi Maxime,
+> > 
+> > On Tue, 19 Aug 2025 15:47:06 +0200
+> > Maxime Ripard <mripard@kernel.org> wrote:
+> >   
+> > > > +/**
+> > > > + * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
+> > > > + *                                       to an encoder
+> > > > + * @encoder: the encoder to iterate bridges on
+> > > > + * @bridge: a bridge pointer updated to point to the current bridge at each
+> > > > + *	    iteration
+> > > > + *
+> > > > + * Iterate over all bridges present in the bridge chain attached to @encoder.
+> > > > + *
+> > > > + * Automatically gets/puts the bridge reference while iterating, and puts
+> > > > + * the reference even if returning or breaking in the middle of the loop.
+> > > > + */
+> > > > +#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
+> > > > +	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
+> > > > +	     drm_bridge_chain_get_first_bridge(encoder);		\      
+> > > 
+> > > So my understanding is that the initial value of bridge would be cleaned
+> > > up with drm_bridge_put...
+> > >     
+> > > > +	     bridge;							\
+> > > > +	     bridge = drm_bridge_get_next_bridge_and_put(bridge))      
+> > > 
+> > > ... but also when iterating?
+> > > 
+> > > So if we have more than 0 values, we put two references?    
+> > 
+> > No, this is not the case. The __free action is executed only when
+> > exiting the entire for loop, not a single iteration.
+> > 
+> > This is consistent with the fact that the loop variable is persistent
+> > across iterations.  
 > 
+> PS: here's the C language spec reference:
+> 
+> > 6.8.5.3 The for statement
+> > The statement
+> > for ( clause-1 ; expression-2 ; expression-3 ) statement
+> > behaves as follows:
+> > [...]
+> > If clause-1 is a declaration, the scope of any identifiers it declares
+> > is the remainder of the declaration and the entire loop   
+> 
+> https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+> https://rgambord.github.io/c99-doc/sections/6/8/5/3/index.html
 
+I think my replies have proven the correctness of the bridge cleanup in
+this patch. Based on my arguments, do you agree this patch is correct?
+
+If it is, I think most of the remainder of this series is trivial to
+review, and it would be a good step forward for dynamic bridge lifetime
+implementation.
+
+Otherwise, don't hesitate to let me know your concerns.
+
+Best regards,
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
