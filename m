@@ -1,63 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642C91E3DE5;
-	Tue,  2 Sep 2025 19:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E0F350D42;
+	Tue,  2 Sep 2025 19:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756842404; cv=none; b=nT+BsP4GurozqSPu4ui9WX7byFz0U6Tp4yw4VDYxsAwKbKrdYIP0pDVgBpZ82RSjZ8N/PVSvFoFQmn50BhzWX07rxeh226BdHDAO+R9rzw24ayLk49EIY7icdavIGXTWUVTBeGnFLjpz8A689GuzgUr032ShrBViGnv/qDTEF+s=
+	t=1756843071; cv=none; b=uIZdQTCJ+pdE38qZSqe3Vo97/apMkeQK16yAJG21S2yiG+r0RGkUbycA2aXPFlMlH3px1Xrn4dqRaMfBTJCCusIc7t8dQwHRYtp1j/sj6R1p026yg5acf++jg8ojJL88Isaq+tTMwAxpIp/by1w/t9d44aQEGNW7nRYX+MLjymk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756842404; c=relaxed/simple;
-	bh=aiaZWQm8cItPl/RpfEsCq/MTzAAGUWn+iS50Uo0NurM=;
+	s=arc-20240116; t=1756843071; c=relaxed/simple;
+	bh=WG20E1PYl6zQTGosd4M112pEByXyuxZIRP6y1iHCS5I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UZ6+WSfWIw+E7bxcD2jcg1og9TxDIlo5uOLr4JhCdRaiewl+lmdlw90cpECM8Yq85WQ8tlcxIphGRcTLIPb7TLreB0T/fgec2MMPrYwF/uQteNiiorkEs06anJd0gnuRmVJBLwCNy08vdu1kKxhqne+igSrs4OBgDVYBh0nVaRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gxjMS+TN; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=UZRl/onYdH8tB955R2E0WDPULYCfRLG5Lghl+A/Z+7CfEcDjXAi+BMO/ZE67TsZxCir2Bu2ZfpSbl4T2MSKee4qaMgMlVa9kDXVUlR/Vo3XFLgX10x0jZecg42OdukdMUu0dMiqgpRNs8qgxEL3UqkkGfcyLZX6Lew/fN331074=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DC7XUSI7; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gxjMS+TN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DC7XUSI7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756842401; x=1788378401;
+  t=1756843070; x=1788379070;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=aiaZWQm8cItPl/RpfEsCq/MTzAAGUWn+iS50Uo0NurM=;
-  b=gxjMS+TNuOJ/+OoJj/H2+ejqHR5h9R/ymKOxhsSx8YrstqivVY8nDkrT
-   AfxlVISo0fAq40Sg0byOw0/6zCoBLkQJa3eJDOYY7VwoXf6WkA7p9Xnyc
-   UhF7ROREsaGTOa9NTxUxwZK0pAGN4zMXiFyzWSgRXKQmtB+1BZURiorhw
-   YoL7AQ5acSswSTUucSOIk5YL2ggxUYPZpmizq/gVDa005KP6tkEn+BSOU
-   i/E2maVJKfF7jS6fNuFZNgcLa57nfjx86+hvAxnQ4VGTGqiZNzl1n8GTz
-   lP1b/94Y6te+NeJAF2n/qv2reINjAihm/cOdjNiWO2mjji53YAYd40OoK
+  bh=WG20E1PYl6zQTGosd4M112pEByXyuxZIRP6y1iHCS5I=;
+  b=DC7XUSI7BWgxM+rvYREzOollahiqwxKD8+xRVbPbGnZGMJ30PCVMuMnh
+   cauwACMfFRcMdyHPB86GP7tkfrq2255eo4xp+Ylt9xNFrkHP9cs05GdPI
+   fflTTQ+oSJfanSoaEKEjzlODQLqi0ojU7fIfxp7QRWZn50rNsCi4FKlpm
+   g4OqoaZpKu7Ot9B5Fv2nU8jW4GTsJlkiGnb91PNx3omLuBesYwH6QqBpm
+   4bXP+AfpnNUnCY3fDgCPdXKoXD9EPfc8ESieEL4jMc27j01DuPUvVOuPv
+   wk+tzLi2yO3tqv+2KU7Gi/ttv6q77R5FGxVd/n3fbGA/ugvJrj7dTTvzU
    Q==;
-X-CSE-ConnectionGUID: bkjQy1A9S7CACBFx0lkECA==
-X-CSE-MsgGUID: yKOTC8wxQ7SfLEaetsHYow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62966100"
+X-CSE-ConnectionGUID: bIZCOidxR8u8MecIln7/OQ==
+X-CSE-MsgGUID: FISE0aTPQv+sGdiZgdqneg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62967189"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="62966100"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 12:46:41 -0700
-X-CSE-ConnectionGUID: dsWdXLJMT0aI0vjeBPBLMQ==
-X-CSE-MsgGUID: yYBJnSU4TiuPOK7P8BYBVA==
+   d="scan'208";a="62967189"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 12:57:50 -0700
+X-CSE-ConnectionGUID: k62XfXQIQmuVDv1f8T8fmA==
+X-CSE-MsgGUID: 4ImPeJBGRRiVYLHkJVP4Ig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,233,1751266800"; 
-   d="scan'208";a="202279186"
+   d="scan'208";a="170647122"
 Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 02 Sep 2025 12:46:38 -0700
+  by orviesa010.jf.intel.com with ESMTP; 02 Sep 2025 12:57:45 -0700
 Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1utWxf-0002yZ-2o;
-	Tue, 02 Sep 2025 19:46:35 +0000
-Date: Wed, 3 Sep 2025 03:46:22 +0800
+	id 1utX8Q-0002z7-08;
+	Tue, 02 Sep 2025 19:57:42 +0000
+Date: Wed, 3 Sep 2025 03:56:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Leo L. Schwab" <ewhac@ewhac.org>, Hans de Goede <hansg@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, x86@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kate Hsuan <hpa@redhat.com>, "Leo L. Schwab" <ewhac@ewhac.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] HID: lg-g15 - Add support for Logitech G13.
-Message-ID: <202509030200.ITZPZGmG-lkp@intel.com>
-References: <20250902003659.361934-2-ewhac@ewhac.org>
+	akpm@linux-foundation.org, david@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, hpa@zytor.com, mingo@redhat.com,
+	mjguzik@gmail.com, luto@kernel.org, peterz@infradead.org,
+	acme@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+	willy@infradead.org, raghavendra.kt@amd.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	ankur.a.arora@oracle.com
+Subject: Re: [PATCH v6 11/15] mm: define clear_pages(), clear_user_pages()
+Message-ID: <202509030341.jBuh7Fma-lkp@intel.com>
+References: <20250902080816.3715913-12-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,88 +70,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250902003659.361934-2-ewhac@ewhac.org>
+In-Reply-To: <20250902080816.3715913-12-ankur.a.arora@oracle.com>
 
-Hi Leo,
+Hi Ankur,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v6.17-rc4 next-20250902]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Leo-L-Schwab/HID-lg-g15-Add-support-for-Logitech-G13/20250902-091504
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20250902003659.361934-2-ewhac%40ewhac.org
-patch subject: [PATCH v5] HID: lg-g15 - Add support for Logitech G13.
-config: i386-buildonly-randconfig-006-20250902 (https://download.01.org/0day-ci/archive/20250903/202509030200.ITZPZGmG-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250903/202509030200.ITZPZGmG-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ankur-Arora/perf-bench-mem-Remove-repetition-around-time-measurement/20250902-161417
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250902080816.3715913-12-ankur.a.arora%40oracle.com
+patch subject: [PATCH v6 11/15] mm: define clear_pages(), clear_user_pages()
+config: arm-randconfig-002-20250903 (https://download.01.org/0day-ci/archive/20250903/202509030341.jBuh7Fma-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250903/202509030341.jBuh7Fma-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509030200.ITZPZGmG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509030341.jBuh7Fma-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/hid/hid-lg-g15.c:692:30: error: no member named 'brightness_hw_changed' in 'struct led_classdev'
-     692 |                                            ^ (g15->leds[0].cdev.brightness_hw_changed > 0);
-         |                                               ~~~~~~~~~~~~~~~~~ ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+>> include/linux/mm.h:3886:3: error: call to undeclared function 'clear_user_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   clear_user_page(addr + i * PAGE_SIZE,
+                   ^
+   include/linux/mm.h:3886:3: note: did you mean 'clear_user_pages'?
+   include/linux/mm.h:3882:20: note: 'clear_user_pages' declared here
+   static inline void clear_user_pages(void *addr, unsigned long vaddr,
+                      ^
    1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/arm/kernel/asm-offsets.s] Error 1 shuffle=1003087465
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1282: prepare0] Error 2 shuffle=1003087465
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1003087465
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1003087465
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +692 drivers/hid/hid-lg-g15.c
+vim +/clear_user_page +3886 include/linux/mm.h
 
-   655	
-   656	static int lg_g13_event(struct lg_g15_data *g15, u8 const *data)
-   657	{
-   658		struct g13_input_report const * const rep = (struct g13_input_report *) data;
-   659		int i, val;
-   660	
-   661		/*
-   662		 * Main macropad and menu keys.
-   663		 * Emit key events defined for each bit position.
-   664		 */
-   665		for (i = 0; i < ARRAY_SIZE(g13_keys_for_bits); ++i) {
-   666			if (g13_keys_for_bits[i]) {
-   667				val = TEST_BIT(rep->keybits, i);
-   668				input_report_key(g15->input, g13_keys_for_bits[i], val);
-   669			}
-   670		}
-   671		input_sync(g15->input);
-   672	
-   673		/*
-   674		 * Joystick.
-   675		 * Emit button and deflection events.
-   676		 */
-   677		for (i = 0; i < ARRAY_SIZE(g13_keys_for_bits_js); ++i) {
-   678			val = TEST_BIT(rep->keybits, i + G13_JS_KEYBITS_OFFSET);
-   679			input_report_key(g15->input_js, g13_keys_for_bits_js[i], val);
-   680		}
-   681		input_report_abs(g15->input_js, ABS_X, rep->joy_x);
-   682		input_report_abs(g15->input_js, ABS_Y, rep->joy_y);
-   683		input_sync(g15->input_js);
-   684	
-   685		if (IS_ENABLED(CONFIG_LEDS_BRIGHTNESS_HW_CHANGED)) {
-   686			/*
-   687			 * Bit 23 of keybits[] reports the current backlight on/off
-   688			 * state.  If it has changed from the last cached value, apply
-   689			 * an update.
-   690			 */
-   691			bool hw_brightness_changed = (!!TEST_BIT(rep->keybits, 23))
- > 692						   ^ (g15->leds[0].cdev.brightness_hw_changed > 0);
-   693			if (hw_brightness_changed)
-   694				led_classdev_notify_brightness_hw_changed(
-   695					&g15->leds[0].cdev,
-   696					TEST_BIT(rep->keybits, 23) ? LED_FULL : LED_OFF);
-   697		}
-   698	
-   699		return 0;
-   700	}
-   701	
+  3880	
+  3881	#ifndef clear_user_pages
+  3882	static inline void clear_user_pages(void *addr, unsigned long vaddr,
+  3883					    struct page *pg, unsigned int npages)
+  3884	{
+  3885		for (int i = 0; i < npages; i++)
+> 3886			clear_user_page(addr + i * PAGE_SIZE,
+  3887					vaddr + i * PAGE_SIZE, pg + i);
+  3888	}
+  3889	#endif
+  3890	
 
 -- 
 0-DAY CI Kernel Test Service
