@@ -1,153 +1,117 @@
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7318826CE3A
-	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 22:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3234249E5
+	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 22:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756850872; cv=none; b=Ubuqkc0S8uWimxC6cSnFPitztTsYZZPVhFGKoJ5aH52NAwPsVNker4LkUWM6lSUETRos0aKYaw4nvGUenfJC6sL1ndbzhvap5MHYgRKsh18xw47gt73cBEKPZMvFA9mmH3XhlikjbBGZi1257u3InlBQKTJNj+2/2cYZ4QZDZkY=
+	t=1756852333; cv=none; b=hzRXGLpo6fnzt42l64fbqWvMlpdt3a4Lzrq/TYJC6CY3Fjker74dmzu4y49OmZwVX2HdyVLbuQEeM7Ty7z0uy2MMLI0W+lHnpJ9b4yV5M5lMjcDEgFFs/+/8Zo7z8dlYOeI25e1OSFEd5qOVmpl3xRzkya8z1v4vVbBnBfBgCEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756850872; c=relaxed/simple;
-	bh=ItFG1T7/E8/ZPrI5DQMhDZwiCfiNmpQlDjwao2bBscQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bhv2JD2pXfN5qne/QVO5ONr46lU0j+MwMUTa7vi8V9qUKpRHBUakyAakUickYZa+UCCxVT6pYsgJUjZMOkrZY2Luho6pC6SslPVatfta9pTw++P3PIWVkR2iThVDbMFt9iFx06Z49r6Ow6yjC4S/ob4uVNxMOqlitE6TRQGbVb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=W4Wn71t0; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1756852333; c=relaxed/simple;
+	bh=MFGh8A84Lba3ftPajjqGf0krP3NFed+ZW/A/Y7/vF1o=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GNxyTt3Jn0BFOybz2f8FxeTLeX1/C/XKjSpLAwe3QIicn1YxmWv48CwwRyFdwlWfUb6L9mAS9c+9MjNP9sQdVhpi18IJkgf2L0Y5mBYHfUrJH16pGZuykSkGRTdPpcDJVS/e3INiW4uyO4K3FeGSYrAOyyngeVJT/8ItXVQdU0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DVTL94Fc; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W4Wn71t0"
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id 923D5582A00
-	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 21:53:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F127C41DE2;
-	Tue,  2 Sep 2025 21:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1756850015;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DVTL94Fc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756852329;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=br/QgVoy/c9/5rdndTufFT/AwJSOiX40/l6/1pESy2E=;
-	b=W4Wn71t0ERnKj+15R+6nOiFru5MHlxap9PUNx0hhPgURCDHhHcLz06thXfcbSt+mgDmGDD
-	WF1OcYas8FP2V/i3eALEJeS1uhoVlHI0QSSD3nC7IJE7oxz5213OdxhmGpLmSuZsCwnblE
-	sN15FwekQWvsaZJMjT7uEmHTglMngF7o0i66Kf+ik950cVo0q5WWh8JAmxCvS24+Q6vCLh
-	Fr4ibsSTGtFmkbsUh2fRbq20u9gvgaWVYKkLBBBU5XpHp5dVa99niAu/zX6sh7ylULCF5j
-	82f1boSl7fdtq5tAukfWCFh8yiEbZkSvB0QByw7x8JeWRcjnZdtvs9WP/4W/Tw==
-Date: Tue, 2 Sep 2025 23:53:26 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov
- <dmitry.baryshkov@oss.qualcomm.com>, Chaoyi Chen
- <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/9] drm/bridge: add
- drm_for_each_bridge_in_chain_scoped()
-Message-ID: <20250902235326.678947cd@booty>
-In-Reply-To: <20250820114030.401e5d4f@booty>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-	<20250808-drm-bridge-alloc-getput-for_each_bridge-v2-3-edb6ee81edf1@bootlin.com>
-	<7gpqrxlxxuarbp5b7bycukbbjdcuonlhn4zm6xinnrlqzrbeu7@rrpcwxnxxrag>
-	<20250819180137.28ca89c0@booty>
-	<20250820114030.401e5d4f@booty>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RtbhxscjWhaH2JL2yauGDnJRtlui29DkQaEAHfXBc1E=;
+	b=DVTL94FcMbQOqa70WhzKYY+2eXph4VKy8mnJ5nYGyYa05Iz0DulEkbqiHblUEJhWHABpAK
+	o78BRUzce/p2wHZS22bvQofZBhbpZzrReaAAAKdRCHpm/mdFY3KInd5ZPD1DLZnDvYolsH
+	2h2DPEmUY49y8BzkQXZOAIeEu9ITBpA=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-363-E4fqojtgMreQ1LUd9TObtg-1; Tue,
+ 02 Sep 2025 18:32:08 -0400
+X-MC-Unique: E4fqojtgMreQ1LUd9TObtg-1
+X-Mimecast-MFC-AGG-ID: E4fqojtgMreQ1LUd9TObtg_1756852327
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5E1BD1800352
+	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 22:32:07 +0000 (UTC)
+Received: from [172.20.143.215] (unknown [10.30.44.138])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DEECA19560AB;
+	Tue,  2 Sep 2025 22:32:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc4,
+ upstream-mainline, e6b9dce0)
+Date: Tue, 02 Sep 2025 22:32:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -51
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddufeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfeukedufeekuddugfeuteekgeelveelgfduteefjeffjeeiveetvefflefguddtnecuffhomhgrihhnpehophgvnhdqshhtugdrohhrghdpghhithhhuhgsrdhiohdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegrgeeivdemudgsuggumeeluddtudemvdelgehfnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegrgeeivdemudgsuggumeeluddtudemvdelgehfpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvgedprhgtphhtthhopehmrhhiphgrrhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhiivghjr
- dhhrghjuggrsehinhhtvghlrdgtohhmpdhrtghpthhtohepnhgvihhlrdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrghdprhgtphhtthhopehrfhhoshhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopefnrghurhgvnhhtrdhpihhntghhrghrthesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepjhhonhgrsheskhifihgsohhordhsvgdprhgtphhtthhopehjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdprhgtphhtthhopehmrggrrhhtvghnrdhlrghnkhhhohhrshhtsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <34680.125090218320800263@us-mta-363.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: HX7_KCGIquZay45cIORti4fPmeoMn0jmYIzINMNgCWI_1756852327
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maxime,
+Hi, we tested your kernel and here are the results:
 
-On Wed, 20 Aug 2025 11:40:30 +0200
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
 
-> Hi Maxime,
-> 
-> On Tue, 19 Aug 2025 18:01:37 +0200
-> Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
-> 
-> > Hi Maxime,
-> > 
-> > On Tue, 19 Aug 2025 15:47:06 +0200
-> > Maxime Ripard <mripard@kernel.org> wrote:
-> >   
-> > > > +/**
-> > > > + * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
-> > > > + *                                       to an encoder
-> > > > + * @encoder: the encoder to iterate bridges on
-> > > > + * @bridge: a bridge pointer updated to point to the current bridge at each
-> > > > + *	    iteration
-> > > > + *
-> > > > + * Iterate over all bridges present in the bridge chain attached to @encoder.
-> > > > + *
-> > > > + * Automatically gets/puts the bridge reference while iterating, and puts
-> > > > + * the reference even if returning or breaking in the middle of the loop.
-> > > > + */
-> > > > +#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)		\
-> > > > +	for (struct drm_bridge *bridge __free(drm_bridge_put) =		\
-> > > > +	     drm_bridge_chain_get_first_bridge(encoder);		\      
-> > > 
-> > > So my understanding is that the initial value of bridge would be cleaned
-> > > up with drm_bridge_put...
-> > >     
-> > > > +	     bridge;							\
-> > > > +	     bridge = drm_bridge_get_next_bridge_and_put(bridge))      
-> > > 
-> > > ... but also when iterating?
-> > > 
-> > > So if we have more than 0 values, we put two references?    
-> > 
-> > No, this is not the case. The __free action is executed only when
-> > exiting the entire for loop, not a single iteration.
-> > 
-> > This is consistent with the fact that the loop variable is persistent
-> > across iterations.  
-> 
-> PS: here's the C language spec reference:
-> 
-> > 6.8.5.3 The for statement
-> > The statement
-> > for ( clause-1 ; expression-2 ; expression-3 ) statement
-> > behaves as follows:
-> > [...]
-> > If clause-1 is a declaration, the scope of any identifiers it declares
-> > is the remainder of the declaration and the entire loop   
-> 
-> https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
-> https://rgambord.github.io/c99-doc/sections/6/8/5/3/index.html
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I think my replies have proven the correctness of the bridge cleanup in
-this patch. Based on my arguments, do you agree this patch is correct?
+Kernel information:
+    Commit message: Merge tag 'sound-6.17-rc5' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/tiwai/sound
 
-If it is, I think most of the remainder of this series is trivial to
-review, and it would be a good step forward for dynamic bridge lifetime
-implementation.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2018116965
 
-Otherwise, don't hesitate to let me know your concerns.
+One or more kernel builds failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2018116965_aarch64_kernel
+                   Issue: upstream build: No rule to make target 'kernel.sb=
+at' -> Update CONFIG_EFI_SBAT_FILE
+                          https://gitlab.com/cki-project/infrastructure/-/i=
+ssues/897
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2018116965_x86_64_kernel
+                   Issue: upstream build: No rule to make target 'kernel.sb=
+at' -> Update CONFIG_EFI_SBAT_FILE
+                          https://gitlab.com/cki-project/infrastructure/-/i=
+ssues/897
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2018116965_x86_64_kernel-debug
+                   Issue: upstream build: No rule to make target 'kernel.sb=
+at' -> Update CONFIG_EFI_SBAT_FILE
+                          https://gitlab.com/cki-project/infrastructure/-/i=
+ssues/897
 
-Best regards,
-Luca
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
