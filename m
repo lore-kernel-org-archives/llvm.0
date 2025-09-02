@@ -1,117 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3234249E5
-	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 22:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB9A27A469;
+	Tue,  2 Sep 2025 22:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756852333; cv=none; b=hzRXGLpo6fnzt42l64fbqWvMlpdt3a4Lzrq/TYJC6CY3Fjker74dmzu4y49OmZwVX2HdyVLbuQEeM7Ty7z0uy2MMLI0W+lHnpJ9b4yV5M5lMjcDEgFFs/+/8Zo7z8dlYOeI25e1OSFEd5qOVmpl3xRzkya8z1v4vVbBnBfBgCEo=
+	t=1756853373; cv=none; b=DjJoMmftpiCPljaZFWBcglCqIl+U9p0mN0cz29yidzhhV8YSwX6/5O7WUpjN6MeYF5iAYrP9U0RT2v/a/7iIeRyF125G+spToK0uYnX6DuwBywC15w9dt+Er1ZOD0T6IrLUucDgwhTK7GKrXb4xqW31C67ZAKgXNanRM8Ev8FZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756852333; c=relaxed/simple;
-	bh=MFGh8A84Lba3ftPajjqGf0krP3NFed+ZW/A/Y7/vF1o=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GNxyTt3Jn0BFOybz2f8FxeTLeX1/C/XKjSpLAwe3QIicn1YxmWv48CwwRyFdwlWfUb6L9mAS9c+9MjNP9sQdVhpi18IJkgf2L0Y5mBYHfUrJH16pGZuykSkGRTdPpcDJVS/e3INiW4uyO4K3FeGSYrAOyyngeVJT/8ItXVQdU0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DVTL94Fc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1756853373; c=relaxed/simple;
+	bh=0DZTl8k2AipkYnKDzUpqimWr/FzOIW31cDY1tZK3nQ0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hQ2oN0OgZZUkqRYRxIXltYFBVCtNrVcwg9AmRX/drp7DNyQoTkV9JO16G4e48vBmNfeLHKlo04ETxN98cA6CIY8UkZOWrXRGuPp2wotbafTCmtC6SyZyam7RefMUQfswsXQf+iTnBWOd1OemDQvIDFh4xq7IHeV4f93FkY7/nT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwn8N6+J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DVTL94Fc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756852329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RtbhxscjWhaH2JL2yauGDnJRtlui29DkQaEAHfXBc1E=;
-	b=DVTL94FcMbQOqa70WhzKYY+2eXph4VKy8mnJ5nYGyYa05Iz0DulEkbqiHblUEJhWHABpAK
-	o78BRUzce/p2wHZS22bvQofZBhbpZzrReaAAAKdRCHpm/mdFY3KInd5ZPD1DLZnDvYolsH
-	2h2DPEmUY49y8BzkQXZOAIeEu9ITBpA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-363-E4fqojtgMreQ1LUd9TObtg-1; Tue,
- 02 Sep 2025 18:32:08 -0400
-X-MC-Unique: E4fqojtgMreQ1LUd9TObtg-1
-X-Mimecast-MFC-AGG-ID: E4fqojtgMreQ1LUd9TObtg_1756852327
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5E1BD1800352
-	for <llvm@lists.linux.dev>; Tue,  2 Sep 2025 22:32:07 +0000 (UTC)
-Received: from [172.20.143.215] (unknown [10.30.44.138])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DEECA19560AB;
-	Tue,  2 Sep 2025 22:32:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc4,
- upstream-mainline, e6b9dce0)
-Date: Tue, 02 Sep 2025 22:32:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwn8N6+J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2C9C4CEF4;
+	Tue,  2 Sep 2025 22:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756853373;
+	bh=0DZTl8k2AipkYnKDzUpqimWr/FzOIW31cDY1tZK3nQ0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=pwn8N6+J5brTIo7ffp6w4Wjceht7lEWoW/hQinz/dqoKgq/6/W835c0aTqP4Hr3YO
+	 qb52W6qDz20kjm9rJaP0StwMyOfv09Xrb+F5/SQ2ncKKy66SNvSNqtWmD1ylx+rnrI
+	 1S39xewqbxiKywApY4JNKIvL8ynibMI7/25cWMHC3C89OyE3Str8FeJ7gf/VnZszlJ
+	 nySVARD2HK0OL/qaXqLwOwfUw9iScyuw9xPtqyWJBAWnb/nkhmBltT8crajRR9FVf6
+	 meKQFhbBLTd8A0kaWGW1Zvn6PiB7oO1wi9DvW3gVoh0UtziDIwWhE0IDESJlrhxOCk
+	 a+BlMUGYkRjKQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 02 Sep 2025 15:49:26 -0700
+Subject: [PATCH] compiler-clang.h: Define __SANITIZE_*__ macros only when
+ undefined
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <34680.125090218320800263@us-mta-363.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: HX7_KCGIquZay45cIORti4fPmeoMn0jmYIzINMNgCWI_1756852327
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250902-clang-update-sanitize-defines-v1-1-cf3702ca3d92@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHV0t2gC/x2MQQqDQAwAvyI5G4ihQvUr0sOyGzVQVtlYkYp/N
+ 3icGZgTTIqKQV+dUGRX0yU7NHUFcQ55EtTkDEzcUkeM8esWf2sKm6CFrJv+BZOMmsXw/WqJKHK
+ XOII/1uLheP7D57puP/hve28AAAA=
+X-Change-ID: 20250902-clang-update-sanitize-defines-845000c29d2c
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+ Alexander Potapenko <glider@google.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+ Marco Elver <elver@google.com>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3508; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=0DZTl8k2AipkYnKDzUpqimWr/FzOIW31cDY1tZK3nQ0=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnbSyor3R42frFJDXvwra3kuth7/wXGS63uOl61Uz76h
+ 9WoecWJjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARxUBGhlvLUv4LtvVvm/qk
+ 9NDrsis/VrZp3r+a6bzd4YpTnH/Ei8OMDC+ZjzifF9ZyT+jzmHjrUcDKdF0+YYMP+z8ZPt8WdVL
+ jHjcA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Clang 22 recently added support for defining __SANITIZE__ macros similar
+to GCC [1], which causes warnings (or errors with CONFIG_WERROR=y or
+W=e) with the existing defines that the kernel creates to emulate this
+behavior with existing clang versions.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
+  In file included from <built-in>:3:
+  In file included from include/linux/compiler_types.h:171:
+  include/linux/compiler-clang.h:37:9: error: '__SANITIZE_THREAD__' macro redefined [-Werror,-Wmacro-redefined]
+     37 | #define __SANITIZE_THREAD__
+        |         ^
+  <built-in>:352:9: note: previous definition is here
+    352 | #define __SANITIZE_THREAD__ 1
+        |         ^
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Refactor compiler-clang.h to only define the sanitizer macros when they
+are undefined and adjust the rest of the code to use these macros for
+checking if the sanitizers are enabled, clearing up the warnings and
+allowing the kernel to easily drop these defines when the minimum
+supported version of LLVM for building the kernel becomes 22.0.0 or
+newer.
 
-Kernel information:
-    Commit message: Merge tag 'sound-6.17-rc5' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/tiwai/sound
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/commit/568c23bbd3303518c5056d7f03444dae4fdc8a9c [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Andrew, would it be possible to take this via mm-hotfixes?
+---
+ include/linux/compiler-clang.h | 29 ++++++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2018116965
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index fa4ffe037bc7..8720a0705900 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -18,23 +18,42 @@
+ #define KASAN_ABI_VERSION 5
+ 
+ /*
++ * Clang 22 added preprocessor macros to match GCC, in hopes of eventually
++ * dropping __has_feature support for sanitizers:
++ * https://github.com/llvm/llvm-project/commit/568c23bbd3303518c5056d7f03444dae4fdc8a9c
++ * Create these macros for older versions of clang so that it is easy to clean
++ * up once the minimum supported version of LLVM for building the kernel always
++ * creates these macros.
++ *
+  * Note: Checking __has_feature(*_sanitizer) is only true if the feature is
+  * enabled. Therefore it is not required to additionally check defined(CONFIG_*)
+  * to avoid adding redundant attributes in other configurations.
+  */
++#if __has_feature(address_sanitizer) && !defined(__SANITIZE_ADDRESS__)
++#define __SANITIZE_ADDRESS__
++#endif
++#if __has_feature(hwaddress_sanitizer) && !defined(__SANITIZE_HWADDRESS__)
++#define __SANITIZE_HWADDRESS__
++#endif
++#if __has_feature(thread_sanitizer) && !defined(__SANITIZE_THREAD__)
++#define __SANITIZE_THREAD__
++#endif
+ 
+-#if __has_feature(address_sanitizer) || __has_feature(hwaddress_sanitizer)
+-/* Emulate GCC's __SANITIZE_ADDRESS__ flag */
++/*
++ * Treat __SANITIZE_HWADDRESS__ the same as __SANITIZE_ADDRESS__ in the kernel.
++ */
++#ifdef __SANITIZE_HWADDRESS__
+ #define __SANITIZE_ADDRESS__
++#endif
++
++#ifdef __SANITIZE_ADDRESS__
+ #define __no_sanitize_address \
+ 		__attribute__((no_sanitize("address", "hwaddress")))
+ #else
+ #define __no_sanitize_address
+ #endif
+ 
+-#if __has_feature(thread_sanitizer)
+-/* emulate gcc's __SANITIZE_THREAD__ flag */
+-#define __SANITIZE_THREAD__
++#ifdef __SANITIZE_THREAD__
+ #define __no_sanitize_thread \
+ 		__attribute__((no_sanitize("thread")))
+ #else
 
-One or more kernel builds failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2018116965_aarch64_kernel
-                   Issue: upstream build: No rule to make target 'kernel.sb=
-at' -> Update CONFIG_EFI_SBAT_FILE
-                          https://gitlab.com/cki-project/infrastructure/-/i=
-ssues/897
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2018116965_x86_64_kernel
-                   Issue: upstream build: No rule to make target 'kernel.sb=
-at' -> Update CONFIG_EFI_SBAT_FILE
-                          https://gitlab.com/cki-project/infrastructure/-/i=
-ssues/897
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:2018116965_x86_64_kernel-debug
-                   Issue: upstream build: No rule to make target 'kernel.sb=
-at' -> Update CONFIG_EFI_SBAT_FILE
-                          https://gitlab.com/cki-project/infrastructure/-/i=
-ssues/897
+---
+base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
+change-id: 20250902-clang-update-sanitize-defines-845000c29d2c
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
