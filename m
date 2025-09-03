@@ -1,113 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D3321A425;
-	Wed,  3 Sep 2025 09:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7C62DAFDD
+	for <llvm@lists.linux.dev>; Wed,  3 Sep 2025 10:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756892895; cv=none; b=kJlYJfhYZpZpdDGsvDVw9kE6iT4kfZmS3w1qCIdcCVlAijCwV+Pa5VZfImeCHvPgjygCu1Eh0RllYwYzd15eKipD38nXXVfMNIgvUKVFnlApL9QAk2ZwdGunpuQb5YNWQBDjx2BJBDfOku6tQzl5POzkNifd1zen3TPR0Ujdu1U=
+	t=1756894104; cv=none; b=sa8kyhEZwfi/lX+nke511IQh8D1+WVfwn5ZXLbgvQqnsdoUPEtGJ11gpl9XyzEJpv1x2rp6iEe2UmRIZwkBL+kUK7onxFqKf5vP0WuspdZTJ0V6MVPgKOMWdTAE5xlYDcv7+tnO+z/Ur1Z3V/KEZiynIybilebOLWCPO3rVmPM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756892895; c=relaxed/simple;
-	bh=bMCZYJzX4r1caQDY+4LLdVSIBbbsh6amHV8lHquVp1U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GaqCTqfHn5gVQSTEsnyc6uI5mmI0aNLZdaSHIH84bs2AILRumVPXTshZEAHJbnqrBQMkUiu2l25EEITJfS278eoDDv9eOym9mSg6mz+MWCNbPYr+C03upQt5OEGUw/AoxAa//SgLRvmSDB+1GHhF80dOo7GmWuJjVaG7W6lIJyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vEpkRS8e; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756894104; c=relaxed/simple;
+	bh=N60bxwoBK42jCkCkhaiyJ2RpMvLMJ+7cNdqT2d4o0Pw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=fVT5nHcvk9up4xaH+6dpRy/DIuxAz5fdv7YpSSE8fJNjs+K2J/oNd5u9Hu20A7U8k+qd+erTbASWkLskBEq4ilgr0HvEpyKES6lGDn25MYJovd/XrZIG5L1BHBjNFYIcTEziZG58BMqr+AJ24vuy5prUFnOusPZauaYGsfq6kyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QD6Eo5R5; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vEpkRS8e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0CFC4CEF1;
-	Wed,  3 Sep 2025 09:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1756892894;
-	bh=bMCZYJzX4r1caQDY+4LLdVSIBbbsh6amHV8lHquVp1U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vEpkRS8ep6J0XdI2ePyO0Jn8LI59zyV42pu0BySpJ5arERSo6pTQc/QEcrkaEoogC
-	 sdnI9h5eN8VfuJ6pJ6v+6OFdyp8PqPQRn1R8KNWdH+cKT9Ribn3OtBnM7LQbuSFCFJ
-	 lQaDRtXmrPksc8lx1Yo8JVnN4P/MARyDX0Q8aRno=
-Date: Wed, 3 Sep 2025 11:48:11 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-	conor@kernel.org, hargar@microsoft.com, broonie@kernel.org,
-	achill@achill.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Ben Copeland <benjamin.copeland@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH 5.4 00/23] 5.4.298-rc1 review
-Message-ID: <2025090317-envelope-professed-b38a@gregkh>
-References: <20250902131924.720400762@linuxfoundation.org>
- <CA+G9fYtoKARW00i0ct=M+-1OAWoQhE_rvsS6RJPPQ7YEcZ4C1w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QD6Eo5R5"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3280264a6e8so3352201a91.3
+        for <llvm@lists.linux.dev>; Wed, 03 Sep 2025 03:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756894102; x=1757498902; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m8UwOAQLFxlapL4wJjDPziLZroOio1WKHWOdBe615V4=;
+        b=QD6Eo5R54PIu2KzHjRhEnmLkGhh6ZsdSRiBC1KexRhDjZz17jfryQhhBkl5eDidEoT
+         +K0H3HkUApBkrDLbkcm/ctgBdvbcabqF0rmg9m70Gikjrd6p51QP+hMIMJDP1SySwvUn
+         aT5YdBz1hbe8qrTgwkmdV/EVMEyLSS+9FaSi0JM46yKUgVXB3TdC4X9y60HgwaJhEMo/
+         AZeJcaYo7TZQ7aMCmxiJXLH90DZeAbIyUjRy2DgY731qZTXPT1ilPRWD9VoFIkV+v9xN
+         ugHEVwzXJXpfIkOmNuL4w1lXuQi9r4YgTx9jJn/fuiX0YZbZ3ur9eZVEb+p75mtJX7BR
+         WN7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756894102; x=1757498902;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m8UwOAQLFxlapL4wJjDPziLZroOio1WKHWOdBe615V4=;
+        b=o7WY83NnFhoqLKC6486cymXYSDy6Q7WxF662C4W3CSiQhSwwcQpn53b0lLHDdp97dE
+         AnBKqH17MzRMRqYJNxVxXGEDn/yUUaB7jt7HXWX0yCUFc6xFbr2YYVGDZ6nor44F46tP
+         Ne97NwDIl/BWwMjrqJA8FMqVUueRUjfnvMsDGhFO4gElO1J24vb4TNM9nQLQuQ6ZP76j
+         ECV3LJxwbrU6odLDJNazYAZqgAQSz91D7fquCXWQINcH/tyZEN4TMd+eIk8CYFRksEKV
+         6/VWWshX6oAIcbBlVPBrDOWsVL11MLKSUVE2ahLeP0BRDm9j+FPSSA56u6/jEZpIac0z
+         EIoA==
+X-Gm-Message-State: AOJu0YyIQq+FZGkrZAproAI1f7cNap8T3NR7LmuqRS9c69CfqsYT3KCE
+	y8izv/MKeuokNRSQI22InQlKlf7mpBOtG3I2NALzKVnCNKtBehNU/ULuY0SIxq/EtTRAvCdZD+9
+	VvYI6xDCVS8URZI5iaWHEwDFXOE1Bx64Cyi37xM2yvXyGJHe737BcUOU=
+X-Gm-Gg: ASbGnctIhcw56Qr609Zrw+7/fFoAUduMrMcJruU7HTXOYNzmnsOE8acV2cp5m0ZmkvW
+	IvlCh+LA/f14wVp4l0XT5vRD9rO75SNcDB/C19QPpz5n4vzlThW/u1HHTsgF8KQbqC1ZpTAtaKB
+	S4IUpb0NQw99nPSKxnFRhmd7aIHAMdgIWAZho5tz6XwoUSc89zMl5//4RPoWgkOz9wnkxKdZKs4
+	yMvxKuluuE7Ivj8Re9UTgaf6WMrStn9klUuovpf
+X-Google-Smtp-Source: AGHT+IFXPS/WTlketDT7Ry+T0jvnXkJWiEWLHz4L2qR0cIclYFFQxTiDX5NTPXgKjBbk7T07stAxT1Awro5pXflUEHw=
+X-Received: by 2002:a17:90b:54c5:b0:329:8160:437a with SMTP id
+ 98e67ed59e1d1-3298160446amr17933963a91.24.1756894102326; Wed, 03 Sep 2025
+ 03:08:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtoKARW00i0ct=M+-1OAWoQhE_rvsS6RJPPQ7YEcZ4C1w@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 3 Sep 2025 15:38:11 +0530
+X-Gm-Features: Ac12FXxzMFZM2zT7oOOLzDits6M_03K1dnyTRhCYTrY8QuqW8ke90eorpMyKwq0
+Message-ID: <CA+G9fYsPcMfW-e_0_TRqu4cnwqOqYF3aJOeKUYk6Z4qRStdFvg@mail.gmail.com>
+Subject: next-20250903 x86_64 clang-20 allyesconfig mmp_pdma.c:1188:14: error:
+ shift count >= width of type [-Werror,-Wshift-count-overflow]
+To: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	dmaengine@vger.kernel.org, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>
+Cc: Vinod Koul <vkoul@kernel.org>, Guodong Xu <guodong@riscstar.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Ben Copeland <benjamin.copeland@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 03, 2025 at 03:11:26PM +0530, Naresh Kamboju wrote:
-> On Tue, 2 Sept 2025 at 19:17, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.4.298 release.
-> > There are 23 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 04 Sep 2025 13:19:14 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.298-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> 
-> The following build warnings / errors were noticed on powerpc cell_defconfig
-> and mpc83xx_defconfig with clang-20 toolchain on stable-rc 5.4.298-rc1.
-> 
-> But the gcc-12 build passed.
-> 
-> * powerpc, build
->   - clang-20-cell_defconfig
->   - clang-20-mpc83xx_defconfig
->   - clang-nightly-cell_defconfig
->   - clang-nightly-mpc83xx_defconfig
-> 
-> Regression Analysis:
-> - New regression? yes
-> - Reproducibility? yes
-> 
-> First seen on 5.4.298-rc1
-> Bad: 5.4.298-rc1
-> Good: v5.4.297
-> 
-> Build regression: stable-rc 5.4.298-rc1 powerpc/boot/util.S:44: Error:
-> junk at end of line, first unrecognized character is `0'
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The following build warnings / errors were noticed on x86_64 allyesconfig
+with clang-20 toolchain running on Linux next-20250903 tag.
 
-Known issue, patch already submitted:
-	https://lore.kernel.org/r/20250902235234.2046667-1-nathan@kernel.org
+But the gcc-13 builds passed.
 
-Will queue that up for the next round of releases, using clang-20 on
-5.4.y is brave :)
+Regression Analysis:
+- New regression? yes
+- Reproducibility? yes
 
-thanks,
+First seen on next-20250903
+Bad: next-20250903
+Good: next-20250902
 
-greg k-h
+Build regression: next-20250903 x86_64 clang-20 allyesconfig
+mmp_pdma.c:1188:14: error: shift count >= width of type
+[-Werror,-Wshift-count-overflow]
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+x86_64:
+  build:
+    * clang-20-allyesconfig
+
+Build error:
+drivers/dma/mmp_pdma.c:1188:14: error: shift count >= width of type
+[-Werror,-Wshift-count-overflow]
+ 1188 |         .dma_mask = DMA_BIT_MASK(64),   /* force 64-bit DMA
+addr capability */
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+   73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+      |                                                      ^ ~~~
+1 error generated.
+make[5]: *** [scripts/Makefile.build:287: drivers/dma/mmp_pdma.o] Error 1
+
+
+## Source
+* Kernel version: 6.17.0-rc4
+* Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+* Git describe: next-20250903
+* Git commit: 5d50cf9f7cf20a17ac469c20a2e07c29c1f6aab7
+* Architectures: x86_64
+* Toolchains: clang-20
+* Kconfigs: allyesconfig
+
+## Build
+* Build log: https://qa-reports.linaro.org/api/testruns/29752023/log_file/
+* Build details:
+https://regressions.linaro.org/lkft/linux-next-master/next-20250903/build/clang-20-allyesconfig/
+* Build plan: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/32B39xPuITjxcbak13h2MrLZJP4
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/32B39xPuITjxcbak13h2MrLZJP4/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/32B39xPuITjxcbak13h2MrLZJP4/config
+
+--
+Linaro LKFT
+https://lkft.linaro.org
