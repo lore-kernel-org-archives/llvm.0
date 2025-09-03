@@ -1,43 +1,41 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9A1BC58
-	for <llvm@lists.linux.dev>; Wed,  3 Sep 2025 03:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6FE2C326E;
+	Wed,  3 Sep 2025 05:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756870842; cv=none; b=KnS7pEKzVyx03rA5EhdZVQS9+5fp2lk6keD88OvPjU+Qb+xJ+FOu4pV4jHuz/mcn2zFTao6UHc4mWo+wGXvlOuOu+4K20IiOuvlQKH8WIZsOF00IcDwGcxv7ZkhW85l8uyUy2nb/zgHCpTlfQNE9GQhgWzx2qFe2VZ3E3FoeKFY=
+	t=1756878417; cv=none; b=NhOkbGFAvtel/3h7UeegFs0F99sPxkSArOxeZnxcPf7KxAPjwbtO87E4Ru+cljTxVgjDo2pd/Lm8Dn8JpqEMrUR//7Qc9oiRnX/X33LXFdqpnQZpgk3Jfuh5fLT24h2UQh+BThUd1gjX4bCScJLXki9ow4AlYqf31b7qURAuL34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756870842; c=relaxed/simple;
-	bh=PZgjvwj0OFeppMHhIxBFtZfeiloPnVqelWd+nX8OLBs=;
+	s=arc-20240116; t=1756878417; c=relaxed/simple;
+	bh=9hTp2kzf2eoaja1GXk0znP0J6RMALdtD0zzMgSf3jas=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MuoZlLbkpNSzBeU3My869LEgCs/ykVwZKlkET6xzF57YMr9I5Wjdw2azx8m+w+2nJDXNrA8ih5SiU3pFjJ9id+c5MK+Njo7CVoct49lCKxbXh7mFzbN6xm6Ty8r1pBzkxJtRHe6aZQuRWcbZbctnaCZUud7A7drf5uTpa3piEV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=KtGZM1kk; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=kyem+/0gsi/kvCqtKomzSQcXhPfggOPfIrMRNr3rWl6PYz9Eh9gxwiugcdp4BpWu071fxOEBol47Z7TlUplf30gEg7r0xV/2d1u/YRRuzz5RTVnrYbo56GPR+UOMWWdjlkT7V2v8sY3tZwaNHKSMbqH3Yc46zEpuHG0y+Vz80jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AJGPNGVA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KtGZM1kk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xS4AE9kCT2ByAtc0cNk8ehmD8+ovn4l5cjIeWujc7Gw=; b=KtGZM1kkX55R0FgrR4kaOTAzRl
-	bJaTOVMEshIttRJDIvRajsiDF8KhksF9ZLCQFY7X+dEQ1m5r+16j9o1dIKd3EMZkUGdr/H+D84RkS
-	/gD8lY0x86l5ndk81qnA66OTKJo3a0QAuW1szZApVitCkpOqP8CPDXeGNbophgK4UZ3RjH1680s5p
-	KkozDrnr5YzNCx4LhwOeFWFvxytelYkBdSn/IWsfaby2ZlanltvZ5H2KvJGDWQh6gvutMWmLAlVh/
-	1dMgEBFM4rViBQh6E+fp2XG8z2F+4ux9SYn+73bg2eE0u2ntViYMC7XEn9DeCdrHNOOFGlyIS/PSj
-	qXCohDtg==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uteMJ-0000000Eh4P-1FE8;
-	Wed, 03 Sep 2025 03:40:31 +0000
-Date: Wed, 3 Sep 2025 04:40:31 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-	linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: clang-22 -Walloc-size in mm/kfence/kfence_test.c in 6.6 and 6.1
-Message-ID: <aLe4rwzXhnypHSSm@casper.infradead.org>
-References: <20250903000752.GA2403288@ax162>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AJGPNGVA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDC9C4CEF8;
+	Wed,  3 Sep 2025 05:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1756878415;
+	bh=9hTp2kzf2eoaja1GXk0znP0J6RMALdtD0zzMgSf3jas=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AJGPNGVAHNfcMwl+UO+6jBifopFrd2PXY1MvGAyqs3CuQ6FNRE8+PbNy+Q5KFiDGY
+	 tCxHY67CdocyO6cLnL09/x56RyjQN/oNhEfCPLSSSgW/i2N+ddNUtenJ/tTJoxExs1
+	 LUPvuFe4Id9gpnGBa8WUXutxOWIGIefhBh4rhTDU=
+Date: Wed, 3 Sep 2025 07:46:51 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Paul Moore <paul@paul-moore.com>, Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4] selftests/tty: add TIOCSTI test suite
+Message-ID: <2025090312-pebbly-groggy-3df7@gregkh>
+References: <20250902-toicsti-bug-v4-1-e5c960e0b3d6@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,30 +44,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250903000752.GA2403288@ax162>
+In-Reply-To: <20250902-toicsti-bug-v4-1-e5c960e0b3d6@gmail.com>
 
-On Tue, Sep 02, 2025 at 05:07:52PM -0700, Nathan Chancellor wrote:
-> Hi kfence folks,
-> 
-> After [1] in clang, I am seeing an instance of this pop up in
-> mm/kfence/kfence_test.c on linux-6.6.y and linux-6.1.y:
-> 
->   mm/kfence/kfence_test.c:723:8: error: allocation of insufficient size '0' for type 'char' with size '1' [-Werror,-Walloc-size]
->     723 |         buf = krealloc(buf, 0, GFP_KERNEL); /* Free. */
->         |               ^
-> 
-> I do not see this in linux-6.12.y or newer but I wonder if that is just
-> because the memory allocation profiling adds some indirection that makes
-> it harder for clang to perform this analysis?
-> 
-> Should this warning just be silenced for this translation unit or is
-> there some other fix that could be done here?
+On Tue, Sep 02, 2025 at 06:17:56PM -0600, Abhinav Saxena wrote:
+> TIOCSTI is a TTY ioctl command that allows inserting characters into
+> the terminal input queue, making it appear as if the user typed those
+> characters. This functionality has behavior that varies based on system
+> configuration and process credentials.
 
-I mean, it's defined behaviour:
+<snip>
 
-        if (unlikely(!new_size)) {
-                kfree(p);
-                return ZERO_SIZE_PTR;
-        }
+Any specific reason you didn't cc: the tty/serial maintainers and the
+linux-serial list for this?
 
-so we have to have a test which checks that it works.
+thanks,
+
+greg k-h
