@@ -1,67 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B663B2459F8;
-	Thu,  4 Sep 2025 18:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF39215F5C;
+	Thu,  4 Sep 2025 20:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757011670; cv=none; b=PEmOEJjgw7rbwhQaZUH3wvYWFcicS94/KCyu7dSJDXzoDUV2ez0XKeCdx1LE/mNgjXccfdqWzH43TCNGoyAKIRXKIvp5kgfuLhWS0wXDxXXtPg98PN4RN4ArlknlRMoOLNgldmpFlfGgVjtAST9rwZiJDpYNC3bal25yjt/gK28=
+	t=1757016112; cv=none; b=tvy41QhKdMrlQBTo2is+IzAUAi71NVzGa1G1QvyZCTlcBZ2AAAdDzx0UTR0XI3GC2vnvxWRGFO/5Qn+5FhfdBEuPIG22xy/d7fk5PhmOWIUvoCo0ZuRDqL3EHSmQg4oiQyIlMHuGrZN5vyKZT7EBw0R10Eb9rEaMUJrK7rzxMIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757011670; c=relaxed/simple;
-	bh=KzUGxTop9JhPXBG4T/1leWl65MjxiWSzlGCzfJwjlsQ=;
+	s=arc-20240116; t=1757016112; c=relaxed/simple;
+	bh=giDG6yLbZbChEwyrNi7daCsisorV/2wtCDx2g6t/AQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A12a3NQCpUYr2bBk/R0B2rQkPivTMSZHBVYXhp4vRE4uqjumSts0JmSkCvgKQQqezi68l2OIOH2eM/x1xiuWRGvOk9nqy8d7qa1fcF/6s5k1ON31ytYL9wfiM+clCBbFC3IHOc+jhACwDYUSvQhudTK4cVGbp7icfosPovEC+Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jd3hjVEO; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dS4dLiqnh1H/odsLa6dRDAXReZ1a8Tnx7Ecs4OjHaejjMRdaWf3+QdMXko/CWi9AMWOPpzz8OG6XT7/5EGslPNKJWxNATBAn5r0Y4R1OCc999G98vd8b+bNywQumjQpVCsCrloCAVlmMFYhzl3AEg5lrPnBn/CtJZQZWD65H0Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Wdrg70sz; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jd3hjVEO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757011669; x=1788547669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KzUGxTop9JhPXBG4T/1leWl65MjxiWSzlGCzfJwjlsQ=;
-  b=Jd3hjVEOYEJvilCPA2LjzrYVtbtu62ros5qiwyfKyp+54bCkIAERuZfm
-   +hNabt4h1eJobfYFTrCN1VaPL0q4MXyl2UZqCdT+ARtXZmVk/69tHiDfl
-   SSxZtRK97Uk0AbKFFPW2ITo2MU+qK5tJ++6J1tV2dap0bwDOkk6U4CLww
-   UKzNLZhdeYb+NEzYDA3TBuc9ycl5WPSTAEopKYAt1C00KhPgeMUvOKniq
-   yqnD1jmZTECN6bIHzm6Mm228ziv3B8jHN8OH+q3xo+u01UGv2DnEq9E4C
-   pKqqvpYqo+9ZLJZ1nzcaUGcCWVdfxVQhutgpf8gDlJtGkp4rjPJTnIHgn
-   g==;
-X-CSE-ConnectionGUID: wiGXQ0zCTiSjDpBEdLJzFA==
-X-CSE-MsgGUID: OrRvIOX+T0GxJzsTxZDjuA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="69978541"
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="69978541"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 11:47:48 -0700
-X-CSE-ConnectionGUID: UM8whEFzQOK8xu7mfj6JoQ==
-X-CSE-MsgGUID: SZWJjCQXSYizn4utPvz7kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="176091002"
-Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 04 Sep 2025 11:47:45 -0700
-Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uuEzm-0005dr-13;
-	Thu, 04 Sep 2025 18:47:42 +0000
-Date: Fri, 5 Sep 2025 02:46:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincent Mailhol <mailhol@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vincent Mailhol <mailhol@kernel.org>,
-	=?iso-8859-1?Q?St=E9phane?= Grosjean <stephane.grosjean@hms-networks.com>,
-	Robert Nawrath <mbro1689@gmail.com>,
-	Minh Le <minh.le.aj@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/21] can: netlink: add can_validate_databittiming()
-Message-ID: <202509050259.NjPdQyAD-lkp@intel.com>
-References: <20250903-canxl-netlink-prep-v1-6-904bd6037cd9@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Wdrg70sz"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=HwRnJdXLUnbJzEliJ8F7yWyHZeWeHGJT0waJGQRe0iU=; b=Wdrg70szvN/Jf+5SKMdlqaYhhw
+	7wWW7bSsYxodvgACuWp5HYjdBWfyuJ1ud6jBYmz+eZo9rPDD5PW/trO/gw+IViNTpZpf2MhGS34vm
+	Q094atAW/NFnksVkTTUhS1uUUa/DW81zkQNOjwiNSwNqmVEBabodf/RzW+XJaJSoWzjekPp09SD+4
+	LOkJnffbEPz0fYXukeH2U4soT0qjZYu53RF7UlA8COJDghYxoJsqpdiKmP8azk+TtE+kTH8uiED1p
+	XQhvYFDVIHRyKaHgFC2vsbXb7ptjqwRwxF8Nbkb2cvQiqHRbxU/XhxzCkG37SQPfn8M9IUb8eVmEJ
+	cT+kcimw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uuG9H-00000004PgU-3yfk;
+	Thu, 04 Sep 2025 20:01:36 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B8E2D300220; Thu, 04 Sep 2025 22:01:34 +0200 (CEST)
+Date: Thu, 4 Sep 2025 22:01:34 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Ramon de C Valle <rcvalle@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	x86@kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] kcfi: Prepare for GCC support
+Message-ID: <20250904200134.GA4067720@noisy.programming.kicks-ass.net>
+References: <20250904033217.it.414-kees@kernel.org>
+ <20250904070410.GX4067720@noisy.programming.kicks-ass.net>
+ <202509040933.06AF02E714@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,96 +73,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250903-canxl-netlink-prep-v1-6-904bd6037cd9@kernel.org>
+In-Reply-To: <202509040933.06AF02E714@keescook>
 
-Hi Vincent,
+On Thu, Sep 04, 2025 at 09:37:14AM -0700, Kees Cook wrote:
+> On Thu, Sep 04, 2025 at 09:04:10AM +0200, Peter Zijlstra wrote:
+> > On Wed, Sep 03, 2025 at 08:46:39PM -0700, Kees Cook wrote:
+> > 
+> > > Kees Cook (9):
+> > >   compiler_types.h: Move __nocfi out of compiler-specific header
+> > >   x86/traps: Clarify KCFI instruction layout
+> > >   x86/cfi: Document the "cfi=" bootparam options
+> > >   x86/cfi: Standardize on common "CFI:" prefix for CFI reports
+> > >   x86/cfi: Add "debug" option to "cfi=" bootparam
+> > >   x86/cfi: Remove __noinitretpoline and __noretpoline
+> > 
+> > So I can take these first 6 patches (and edit that debug patch to
+> > un-annoy myself ;-), but I'm thinking this Kconfig stuff:
+> 
+> Sure, yeah. Do you want a v3 for the debug stuff that uses your proposed
+> helper?
 
-kernel test robot noticed the following build warnings:
+Nah, already done :-) I just pushed out these 6 and my UDB hackery to
+queue.git/x86/core. If the robots don't complain, I'll stuff it into tip
+in a few days.
 
-[auto build test WARNING on 2fd4161d0d2547650d9559d57fc67b4e0a26a9e3]
+> > >   kconfig: Add transitional symbol attribute for migration support
+> > >   kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+> > 
+> > Should perhaps go through the kbuild tree? A
+> 
+> I had chatted offline with Nathan about this series, and he'd suggested
+> the kconfig change could go with it's first user (the rename). So if you
+> don't want to put it in -tip, I can take it in the hardening tree.
+> (There's no dependencies between these 2 and the first 6.)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/can-dev-move-struct-data_bittiming_params-to-linux-can-bittiming-h/20250903-170807
-base:   2fd4161d0d2547650d9559d57fc67b4e0a26a9e3
-patch link:    https://lore.kernel.org/r/20250903-canxl-netlink-prep-v1-6-904bd6037cd9%40kernel.org
-patch subject: [PATCH 06/21] can: netlink: add can_validate_databittiming()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250905/202509050259.NjPdQyAD-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050259.NjPdQyAD-lkp@intel.com/reproduce)
+So I suppose I can carry them, just to keep the lot together, but then I
+need an ack from someone that actually knows this Kconfig language stuff
+:-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509050259.NjPdQyAD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/can/dev/netlink.c:111:6: warning: variable 'is_on' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/dev/netlink.c:119:6: note: uninitialized use occurs here
-     119 |         if (is_on) {
-         |             ^~~~~
-   drivers/net/can/dev/netlink.c:111:2: note: remove the 'if' if its condition is always true
-     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     112 |                 data_tdc = data[IFLA_CAN_TDC];
-     113 |                 tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
-     114 |                 is_on = flags & CAN_CTRLMODE_FD;
-     115 |         } else {
-         |           ~~~~~~
-     116 |                 WARN_ON(1); /* Place holder for CAN XL */
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     117 |         }
-         |         ~
-   drivers/net/can/dev/netlink.c:108:12: note: initialize the variable 'is_on' to silence this warning
-     108 |         bool is_on;
-         |                   ^
-         |                    = 0
-   1 warning generated.
-
-
-vim +111 drivers/net/can/dev/netlink.c
-
-   101	
-   102	static int can_validate_databittiming(struct nlattr *data[],
-   103					      struct netlink_ext_ack *extack,
-   104					      int ifla_can_data_bittiming, u32 flags)
-   105	{
-   106		struct nlattr *data_tdc;
-   107		u32 tdc_flags;
-   108		bool is_on;
-   109		int err;
-   110	
- > 111		if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
-   112			data_tdc = data[IFLA_CAN_TDC];
-   113			tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
-   114			is_on = flags & CAN_CTRLMODE_FD;
-   115		} else {
-   116			WARN_ON(1); /* Place holder for CAN XL */
-   117		}
-   118	
-   119		if (is_on) {
-   120			if (!data[IFLA_CAN_BITTIMING] || !data[ifla_can_data_bittiming])
-   121				return -EOPNOTSUPP;
-   122		}
-   123	
-   124		if (data[ifla_can_data_bittiming] || data_tdc) {
-   125			if (!is_on)
-   126				return -EOPNOTSUPP;
-   127		}
-   128	
-   129		err = can_validate_bittiming(data, extack, ifla_can_data_bittiming);
-   130		if (err)
-   131			return err;
-   132	
-   133		err = can_validate_tdc(data_tdc, extack, tdc_flags);
-   134		if (err)
-   135			return err;
-   136	
-   137		return 0;
-   138	}
-   139	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You taking them through the hardening tree also works for em.
