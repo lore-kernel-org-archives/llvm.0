@@ -1,238 +1,221 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0BA2D6E65;
-	Thu,  4 Sep 2025 22:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BAD2F3C3F
+	for <llvm@lists.linux.dev>; Thu,  4 Sep 2025 22:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757023366; cv=none; b=T8+BrEtdY+MvhiNQJ3lqzxyALfXaTTQV5jlwtzacCz8sX+RU/LLiu674AEh+g7Ih4jYWB4YYhoMwVydx1uADdt4jc9/7P18LQUmpTQ2mKinmm9EPAWPQoz6Zkdk/HQBYLrXu0t9+ocovd3BBSt4f4q03iuLgrYa2isxqPnFff1A=
+	t=1757026610; cv=none; b=kZS4+BnYSDo1auLo4SvKgqcYI51cPoNy3wpOzjWaotqaM/kVelqugwvBYfQCzw5ba4zoRnKgqwc4dmkLDQ+3HhGLC+V5IJukM5HLWMGYHIocaEXODtr1RuzY+KkG9Ew2ZdHHdx5BDRCQ8TQdDKoYvaCDSKxRZz+CtEdVEjWv9fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757023366; c=relaxed/simple;
-	bh=YGBOBYVHcwskEjwSDQ07AodkAK4jg+Ii7MFxCwoqKqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o60L/lQzRhsxyyl/tixVmZ2SZUSxIV9zVh4ULMXGod9ulgUlGIzFTxXvEWt9V8MBObk9lkHc3pqxCWG88ZCyDCcFGadHX5pzhfopuy9W7pgvY8TDwlBFDl42wXSa6nyFJzDl8WVg/xtgjTHlyAS/dMKkELmVFsFy/mRsxIyqPmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aBJnOU+n; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757026610; c=relaxed/simple;
+	bh=JYcdaBsJPM3aXP97DSmZE1zLWV6/mzt9FeGlt4RrHgc=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Aq9mkqccDs03z5TI0EgJUkxBduZAjiLp5i+JI6PRYB4iiE2VVjvBfAjpUli57Z3VrxoeIBWMOO4peeCF7VLxnqVDWb7En3DCv5sO+fVwFYY5mH4qiKtZzIrpv+87FH9nBDEIRSU2d6MwN7xsQHtaEgVRA0TWxefPqWlehWJ73fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cv2RctZe; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aBJnOU+n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757023364; x=1788559364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YGBOBYVHcwskEjwSDQ07AodkAK4jg+Ii7MFxCwoqKqw=;
-  b=aBJnOU+nz8c2pNAdcOmp46inGxoL/Pz+9Tj57XeBQ4bd+17DmXK5BzYP
-   8Xs3VDveSxnyMwmozBvyX3/2sAyllLkTRf2HdJYEAXoJ1HP2n1XflJxJd
-   DnHozAy2DpEOdfWH/deRCu8tXh+Gy9qzYm6cxQvuCwZi7Iu/kM+VWoUw3
-   HD7kpOuUE2fiXUX+64upKEB5cwanZwSPQkDtZJDB5suhQFDS7rRQYSr/c
-   +tJtItvgeWhWeoKHMx0qoChIUIzHgLkLkjo7SkgRudCIdThi020g8DfjP
-   j4sfilJm0xWmdnyMCA6YZGqJcz2nDHOmD//d+6mNO3X3m60dE9E71AJsw
-   A==;
-X-CSE-ConnectionGUID: 8E+3oRXySeGo56TAnuyltA==
-X-CSE-MsgGUID: PJN8NYECRU2UmREKQI0a2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="70805158"
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="70805158"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 15:02:43 -0700
-X-CSE-ConnectionGUID: L94f7WjeSmWfsbvS5lsy2g==
-X-CSE-MsgGUID: 1y1YUecNQs6jp+xNNArMdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="177260579"
-Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 04 Sep 2025 15:02:40 -0700
-Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uuI29-0005yR-24;
-	Thu, 04 Sep 2025 22:02:37 +0000
-Date: Fri, 5 Sep 2025 06:01:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincent Mailhol <mailhol@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vincent Mailhol <mailhol@kernel.org>,
-	=?iso-8859-1?Q?St=E9phane?= Grosjean <stephane.grosjean@hms-networks.com>,
-	Robert Nawrath <mbro1689@gmail.com>,
-	Minh Le <minh.le.aj@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 18/21] can: netlink: make can_tdc_fill_info() FD agnostic
-Message-ID: <202509050541.1FKRbqOi-lkp@intel.com>
-References: <20250903-canxl-netlink-prep-v1-18-904bd6037cd9@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cv2RctZe"
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e9e137d69aaso38233276.0
+        for <llvm@lists.linux.dev>; Thu, 04 Sep 2025 15:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757026608; x=1757631408; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aZJsJ6Dias4aJk5oVm4edgReGaNhIOC6r9PNPMsZ5pk=;
+        b=cv2RctZeZQeqLNZH3dyhWfGdNvqemfmqCG07TiQ6/YZVTh2ZFpVXnFAbN5wqPCMWbN
+         uStwdMlE/aBfxVtxsL8xMWggUo/ccZRFxda00ZFRApFycrAesS4ph+3XDHdj0/X1u2Of
+         1X/HEfeWBTtgv1/+kSbK+sngl+Ksqp7CJIVpTTuaWAYGnwBiopv5MKESKtT7RpHe+pLz
+         s8FS0rJMiLhIEIeupjHYiqQJsRv1KjYluQSOayp7JgcrkxCCpWKaLIDAurPI/z19KIgp
+         Hxxb8KT3GLX3GL6KTt5B/ebgX80YgbJA9+k35/ToBrTK1zHzF75dRTOKHjiFYha96zhY
+         NhYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757026608; x=1757631408;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZJsJ6Dias4aJk5oVm4edgReGaNhIOC6r9PNPMsZ5pk=;
+        b=KpJR/Iys5Vm7m4B+T+8mC27xD7lL3B+YysjfvkTJBb82+xdoG/R6TKCajpQnEK4vJw
+         ap2NEnxnuCuvPtC5TwLpMXsX4Goz/viNX2yAMTHQ4YzvVvR7LrpKtNPsPkJc42/95WpL
+         mpbFETSkGQVNANwqnbif7nTECyqpN8Oc1StOXIHFbdyCmBwP7KfNIKob6/Ze+3Ye4bGp
+         SqVBHWKeGdnpwV+GaC7+wMtyiPzjA0L7BFyBEfe6i8Ov+tVtuz0TFbssnyrVGubMDIi0
+         uYnaw9rwJjRrGFcqT0tq6v6J0Jf+YN7pZ+t163B6mQ1BVrzmmNjBT2JOWYcqIG+AtpZd
+         dhfg==
+X-Forwarded-Encrypted: i=1; AJvYcCVerDCuHsVKT8N1L6nqosE0hoiumYd/VzxA7sPMj3sKQ72X1sSRIIRv66SmwhM/URincnlL@lists.linux.dev
+X-Gm-Message-State: AOJu0YzYFoHBsx9q9R76yoPdal/NGRiD4hv0e0/AyhEkCoXSkdxuf0oD
+	DpB9DWfP84DsVuQ9GibsGY2VfNkERFbIQthZqzAQ60V7igO+cGCOe8lv
+X-Gm-Gg: ASbGncs+W8mb68V00+x1J25C8IXfk9yYic7syC7wIgRyE5Bfn+BXSZ802YCyeN4S3yy
+	jp3rMAeERW/kEMPKVyXDIeoUE1IfQ4S2/l/znCTwesu1ByYo/Z3ZZf/RGzoDuLqO/E3Hi63QOtH
+	Hown6wpV4ZlrBpoIUUjZZgIaeYuUY2SBIvT6lEc2vL4UZ9yhKRzlCkyaW6lHKzqHhxFwBl9Z7PL
+	gtFON/UBrBw9JmgoPDXpz4btlMhWO0e41PNcfNeevvPp5EMGAhNDHbdXLNH84QZnNBivwr78Mub
+	8sMuhCMDUleCRayg0MYotlh3Z+rTXXOsiQkHheRCVYIt9lnl0tHEoRwiOECgSFrwhHI2eYNpv7c
+	/cfOYyV2UcgXn4vq1mwtrpF7vY8cuHdhdykxYQX8w/FrMbz+sJkMVgFU+onmn9+U=
+X-Google-Smtp-Source: AGHT+IEHGA0wsG9SM+lLIiJeqw57Hw+stWOBnY10zVsxOztzEXgl10NjAasmizVO1rfQqLWWpmuaDQ==
+X-Received: by 2002:a05:690c:6a03:b0:724:c055:3cf3 with SMTP id 00721157ae682-724c0553f47mr40845437b3.14.1757026606920;
+        Thu, 04 Sep 2025 15:56:46 -0700 (PDT)
+Received: from [192.168.1.209] (74.211.99.176.16clouds.com. [74.211.99.176])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-723a855a865sm24681447b3.54.2025.09.04.15.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Sep 2025 15:56:46 -0700 (PDT)
+From: Asuna <spriteovo@gmail.com>
+X-Google-Original-From: Asuna <SpriteOvO@gmail.com>
+Message-ID: <f7434b76-49d0-4ef3-8c77-c1642dc211cd@gmail.com>
+Date: Fri, 5 Sep 2025 06:56:35 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250903-canxl-netlink-prep-v1-18-904bd6037cd9@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] RISC-V: re-enable gcc + rust builds
+To: Conor Dooley <conor@kernel.org>
+Cc: Jason Montleon <jmontleo@redhat.com>, Han Gao <rabenda.cn@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Tejun Heo <tj@kernel.org>, Kees Cook <kees@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Matthew Maurer <mmaurer@google.com>,
+ Jeff Xu <jeffxu@chromium.org>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jan Hendrik Farr <kernel@jfarr.cc>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Christian Brauner <brauner@kernel.org>,
+ Brian Gerst <brgerst@gmail.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20250830-cheesy-prone-ee5fae406c22@spud>
+ <20250903190806.2604757-1-SpriteOvO@gmail.com>
+ <20250903190806.2604757-2-SpriteOvO@gmail.com>
+ <20250904-sterilize-swagger-c7999b124e83@spud>
+Content-Language: en-US
+In-Reply-To: <20250904-sterilize-swagger-c7999b124e83@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Vincent,
+> One thing - please don't send new versions
+> of patchsets in response to earlier versions or other threads. It
+> doesn't do you any favours with mailbox visibility.
 
-kernel test robot noticed the following build warnings:
+I apologize for this, I'm pretty much new to mailing lists, so I had 
+followed the step "Explicit In-Reply-To headers" [1] in doc. For future 
+patches I'll send them alone instead of replying to existing threads.
 
-[auto build test WARNING on 2fd4161d0d2547650d9559d57fc67b4e0a26a9e3]
+[1]: 
+https://www.kernel.org/doc/html/v6.9/process/submitting-patches.html#explicit-in-reply-to-headers
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/can-dev-move-struct-data_bittiming_params-to-linux-can-bittiming-h/20250903-170807
-base:   2fd4161d0d2547650d9559d57fc67b4e0a26a9e3
-patch link:    https://lore.kernel.org/r/20250903-canxl-netlink-prep-v1-18-904bd6037cd9%40kernel.org
-patch subject: [PATCH 18/21] can: netlink: make can_tdc_fill_info() FD agnostic
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250905/202509050541.1FKRbqOi-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050541.1FKRbqOi-lkp@intel.com/reproduce)
+> Other than Zicsr/Zifencei that may need explicit handling in a dedicated
+> option, the approach here seems kinda backwards.
+> Individually these symbols don't actually mean what they say they do,
+> which is confusing: "recognises" here is true even when it may not be
+> true at all because TOOLCHAIN_HAS_FOO is not set. Why can these options
+> not be removed, and instead the TOOLCHAIN_HAS_FOO options grow a
+> "depends on !RUST || <condition>"?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509050541.1FKRbqOi-lkp@intel.com/
+Yes, it's kinda "backwards", which is intentional, based on the 
+following considerations:
 
-All warnings (new ones prefixed by >>):
+1) As mentioned in rust/Makefile, filtering flags for libclang is a 
+hack, because currently bindgen only has libclang as backend, and 
+ideally bindgen should support GCC so that the passed CC flags are 
+supposed to be fully compatible. On the RISC-V side, I tend to think 
+that version checking for extensions for libclang is also a hack, which 
+could have been accomplished with just the cc-option function, ideally.
 
-   drivers/net/can/dev/netlink.c:111:6: warning: variable 'is_on' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/dev/netlink.c:119:6: note: uninitialized use occurs here
-     119 |         if (is_on) {
-         |             ^~~~~
-   drivers/net/can/dev/netlink.c:111:2: note: remove the 'if' if its condition is always true
-     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     112 |                 data_tdc = data[IFLA_CAN_TDC];
-     113 |                 tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
-     114 |                 is_on = flags & CAN_CTRLMODE_FD;
-     115 |         } else {
-         |           ~~~~~~
-     116 |                 WARN_ON(1); /* Place holder for CAN XL */
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     117 |         }
-         |         ~
-   drivers/net/can/dev/netlink.c:108:12: note: initialize the variable 'is_on' to silence this warning
-     108 |         bool is_on;
-         |                   ^
-         |                    = 0
-   drivers/net/can/dev/netlink.c:281:6: warning: variable 'data_bittiming' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     281 |         if (fd) {
-         |             ^~
-   drivers/net/can/dev/netlink.c:290:7: note: uninitialized use occurs here
-     290 |         if (!data_bittiming)
-         |              ^~~~~~~~~~~~~~
-   drivers/net/can/dev/netlink.c:281:2: note: remove the 'if' if its condition is always true
-     281 |         if (fd) {
-         |         ^~~~~~~
-     282 |                 data_bittiming = data[IFLA_CAN_DATA_BITTIMING];
-     283 |                 data_tdc = data[IFLA_CAN_TDC];
-     284 |                 dbt_params = &priv->fd;
-     285 |                 tdc_mask = CAN_CTRLMODE_FD_TDC_MASK;
-     286 |         } else {
-         |           ~~~~~~
-     287 |                 WARN_ON(1); /* Place holder for CAN XL */
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     288 |         }
-         |         ~
-   drivers/net/can/dev/netlink.c:273:31: note: initialize the variable 'data_bittiming' to silence this warning
-     273 |         struct nlattr *data_bittiming, *data_tdc;
-         |                                      ^
-         |                                       = NULL
->> drivers/net/can/dev/netlink.c:591:6: warning: variable 'dbt_params' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     591 |         if (ifla_can_tdc == IFLA_CAN_TDC) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/can/dev/netlink.c:598:14: note: uninitialized use occurs here
-     598 |         tdc_const = dbt_params->tdc_const;
-         |                     ^~~~~~~~~~
-   drivers/net/can/dev/netlink.c:591:2: note: remove the 'if' if its condition is always true
-     591 |         if (ifla_can_tdc == IFLA_CAN_TDC) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     592 |                 dbt_params = &priv->fd;
-     593 |                 tdc_is_enabled = can_fd_tdc_is_enabled(priv);
-     594 |                 tdc_manual = priv->ctrlmode & CAN_CTRLMODE_TDC_MANUAL;
-     595 |         } else {
-         |           ~~~~~~
-     596 |                 WARN_ON(1); /* Place holder for CAN XL */
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     597 |         }
-         |         ~
-   drivers/net/can/dev/netlink.c:585:42: note: initialize the variable 'dbt_params' to silence this warning
-     585 |         struct data_bittiming_params *dbt_params;
-         |                                                 ^
-         |                                                  = NULL
-   3 warnings generated.
+2) Rust bindgen only "generates" FFI stuff, it is not involved in the 
+final assembly stage. In other words, it doesn't matter so much what 
+RISC-V extensions to turn on for bindgen (although it does have a little 
+impact, like some macro switches), it's more matter to CC.
+
+Therefore, I chose not to modify the original extension config 
+conditions so that if libclang doesn't support the CC flag for an 
+extension, then the Rust build is not supported, rather than treating 
+the extension as not supported.
+
+Nonetheless, it occurred to me as I was writing this reply that if GCC 
+implements a new extension in the future that LLVM/Clang doesn't yet 
+have, this could once again lead to a break in GCC+Rust build support if 
+the kernel decides to use the new extension. So it's a trade-off, you 
+guys decide, I'm fine with both.
+
+Regarding the name, initially I named it "compatible", and ended up 
+changed it to "recognize" before sending the patch. If we continue on 
+this path, I'm not sure what name is appropriate to use here, do you 
+guys have any ideas?
+
+> What does the libclang >= 17 requirement actually do here? Is that the
+> version where llvm starts to require that Zicsr/Zifencei is set in order
+> to use them? I think a comment to that effect is required if so. This
+> doesn't actually need to be blocking either, should just be able to
+> filter it out of march when passing to bindgen, no?
+
+libclang >= 17 starts recognizing Zicsr/Zifencei in -march, passing them 
+to -march doesn't generate an error, and passing them or not doesn't 
+have any real difference. (still follows ISA before version 20190608 -- 
+Zicsr/Zifencei are included in base ISA). I should have written a 
+comment there to avoid confusion.
+
+Reference commit in LLVM/Clang 22e199e6af ("[RISCV] Accept zicsr and 
+zifencei command line options")
+https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+
+> What about the case where TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI is not
+> set at all? Currently your patch is going to block rust in that case,
+> when actually nothing needs to be done at all - no part of the toolchain
+> requires understanding Zicsr/Zifencei as standalone extensions in this
+> case.
+
+This is a bug, I missed this case. So it should be corrected to:
+
+    config RUST_BINDGEN_LIBCLANG_RECOGNIZES_ZICSR_ZIFENCEI
+         def_bool y
+         depends on TOOLCHAIN_NEEDS_OLD_ISA_SPEC ||
+    !TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI ||
+    RUST_BINDGEN_LIBCLANG_VERSION >= 170000
 
 
-vim +591 drivers/net/can/dev/netlink.c
+> The TOOLCHAIN_NEEDS_OLD_ISA_SPEC handling I don't remember 100% how it
+> works, but if bindgen requires them to be set to use the extension
+> this will return true but do nothing to add the extensions to march?
+> That seems wrong to me.
+> I'd be fairly amenable to disabling rust though when used in combination
+> with gcc < 11.3 and gas >=2.36 since it's such a niche condition, rather
+> doing work to support it. That'd be effectively an inversion of your
+> first condition.
 
-   580	
-   581	static int can_tdc_fill_info(struct sk_buff *skb, const struct net_device *dev,
-   582				     int ifla_can_tdc)
-   583	{
-   584		struct can_priv *priv = netdev_priv(dev);
-   585		struct data_bittiming_params *dbt_params;
-   586		const struct can_tdc_const *tdc_const;
-   587		struct can_tdc *tdc;
-   588		struct nlattr *nest;
-   589		bool tdc_is_enabled, tdc_manual;
-   590	
- > 591		if (ifla_can_tdc == IFLA_CAN_TDC) {
-   592			dbt_params = &priv->fd;
-   593			tdc_is_enabled = can_fd_tdc_is_enabled(priv);
-   594			tdc_manual = priv->ctrlmode & CAN_CTRLMODE_TDC_MANUAL;
-   595		} else {
-   596			WARN_ON(1); /* Place holder for CAN XL */
-   597		}
-   598		tdc_const = dbt_params->tdc_const;
-   599		tdc = &dbt_params->tdc;
-   600	
-   601		if (!tdc_const)
-   602			return 0;
-   603	
-   604		nest = nla_nest_start(skb, ifla_can_tdc);
-   605		if (!nest)
-   606			return -EMSGSIZE;
-   607	
-   608		if (tdc_manual &&
-   609		    (nla_put_u32(skb, IFLA_CAN_TDC_TDCV_MIN, tdc_const->tdcv_min) ||
-   610		     nla_put_u32(skb, IFLA_CAN_TDC_TDCV_MAX, tdc_const->tdcv_max)))
-   611			goto err_cancel;
-   612		if (nla_put_u32(skb, IFLA_CAN_TDC_TDCO_MIN, tdc_const->tdco_min) ||
-   613		    nla_put_u32(skb, IFLA_CAN_TDC_TDCO_MAX, tdc_const->tdco_max))
-   614			goto err_cancel;
-   615		if (tdc_const->tdcf_max &&
-   616		    (nla_put_u32(skb, IFLA_CAN_TDC_TDCF_MIN, tdc_const->tdcf_min) ||
-   617		     nla_put_u32(skb, IFLA_CAN_TDC_TDCF_MAX, tdc_const->tdcf_max)))
-   618			goto err_cancel;
-   619	
-   620		if (tdc_is_enabled) {
-   621			u32 tdcv;
-   622			int err = -EINVAL;
-   623	
-   624			if (tdc_manual) {
-   625				tdcv = tdc->tdcv;
-   626				err = 0;
-   627			} else if (dbt_params->do_get_auto_tdcv) {
-   628				err = dbt_params->do_get_auto_tdcv(dev, &tdcv);
-   629			}
-   630			if (!err && nla_put_u32(skb, IFLA_CAN_TDC_TDCV, tdcv))
-   631				goto err_cancel;
-   632			if (nla_put_u32(skb, IFLA_CAN_TDC_TDCO, tdc->tdco))
-   633				goto err_cancel;
-   634			if (tdc_const->tdcf_max &&
-   635			    nla_put_u32(skb, IFLA_CAN_TDC_TDCF, tdc->tdcf))
-   636				goto err_cancel;
-   637		}
-   638	
-   639		nla_nest_end(skb, nest);
-   640		return 0;
-   641	
-   642	err_cancel:
-   643		nla_nest_cancel(skb, nest);
-   644		return -EMSGSIZE;
-   645	}
-   646	
+The current latest version of LLVM/Clang still does not require explicit 
+Zicsr/Zifence to enable these two extensions, Clang just accepts them in 
+-march and then silently ignores them.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Checking the usage of CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC:
+
+    ifdef CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+    KBUILD_CFLAGS += -Wa,-misa-spec=2.2
+    KBUILD_AFLAGS += -Wa,-misa-spec=2.2
+    else
+    riscv-march-$(CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI) :=
+    $(riscv-march-y)_zicsr_zifencei
+    endif
+
+It just uses -Wa to force an older ISA version to GAS. So the 
+RUST_BINDGEN_LIBCLANG_RECOGNIZES_ZICSR_ZIFENCEI I corrected above should 
+be fine now I guess? Or would you still prefer your idea of blocking 
+Rust if TOOLCHAIN_NEEDS_OLD_ISA_SPEC is true?
+
+(To be clear, the breaking changes regarding Zicsr/Zifence are since ISA 
+version 20190608, and versions 2.0, 2.1, 2.2 are older than 20190608)
+
+The only thing I'm confused about is that according to the comment of 
+TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI, GCC-12.1.0 bumped the default 
+ISA to 20191213, but why doesn't the depends-on have condition || 
+(CC_IS_GCC && GCC_VERSION >= 120100)?
+
+Thanks for your detailed review.
