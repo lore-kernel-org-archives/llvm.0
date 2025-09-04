@@ -1,69 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B2C29A30E;
-	Thu,  4 Sep 2025 21:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0BA2D6E65;
+	Thu,  4 Sep 2025 22:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757021637; cv=none; b=h5g6tobOCM4jPSqWGC851Fa3IS2U//5nXUGZrVi8aybyOvotlsbb1A55JZD8s2vPB10JGEWrbyWwOCjLxrgFFVLyMwmhlVBES6qFpxPnp6rFSlJVTsfR2S7iMIvCwn4SdFBLVoRzY6OSAvEpu8ithb6OivRkgaEjE7tERP9+sJI=
+	t=1757023366; cv=none; b=T8+BrEtdY+MvhiNQJ3lqzxyALfXaTTQV5jlwtzacCz8sX+RU/LLiu674AEh+g7Ih4jYWB4YYhoMwVydx1uADdt4jc9/7P18LQUmpTQ2mKinmm9EPAWPQoz6Zkdk/HQBYLrXu0t9+ocovd3BBSt4f4q03iuLgrYa2isxqPnFff1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757021637; c=relaxed/simple;
-	bh=p/s/kJpm8SZfihBzXvBjykI1k2rg3DZ0ryhkDZpJKe4=;
+	s=arc-20240116; t=1757023366; c=relaxed/simple;
+	bh=YGBOBYVHcwskEjwSDQ07AodkAK4jg+Ii7MFxCwoqKqw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q75Rip2Nq9j9Etpq43NCzvH24+bhN6vYsMAweqcVIL2jq4aFx53vpvfrwtcbX1+RkpqEUBs4jt/PcvJ9Fld9J5xwswE8DlL1k02fgbbYQ/NfJKtbAmkmwIyJ+CioPOd2xqwUXZ+4BGsbX4E5jmhFkYsYgQynBv0d5lHCeHkBOVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fSiUCYcQ; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=o60L/lQzRhsxyyl/tixVmZ2SZUSxIV9zVh4ULMXGod9ulgUlGIzFTxXvEWt9V8MBObk9lkHc3pqxCWG88ZCyDCcFGadHX5pzhfopuy9W7pgvY8TDwlBFDl42wXSa6nyFJzDl8WVg/xtgjTHlyAS/dMKkELmVFsFy/mRsxIyqPmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aBJnOU+n; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fSiUCYcQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aBJnOU+n"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757021636; x=1788557636;
+  t=1757023364; x=1788559364;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=p/s/kJpm8SZfihBzXvBjykI1k2rg3DZ0ryhkDZpJKe4=;
-  b=fSiUCYcQqPUoC+0oVVx2LIg01FIa6JOmML/lNH3Y37JdoInrnOq1ppX4
-   azwqJRwY+3A2bWOmU6y6zZMyuuwAyWG4y8IwZHVdycOchxVNxqtxzQ315
-   qk8gNyRuLZgbItuvs6RCsXx+Kc5mioOOMFEsd7W7Em7AKl71JDeh8uNK5
-   v29nYIUkG6Hc5LKPkxUjM/Kp4j5v96rWDWtOUi9C+aX2mTcnWaziEnaqU
-   nUis4RF51OD+pK3LjBLP3HGbI2Zce0KxqU07gPAQbqYuGfGCN1KVwC3IE
-   Jg+d6LzUWLenu7um91D7JLZT+sJzmvoPO0T0rY39CSdtdFJe5B/6Lcpsz
+  bh=YGBOBYVHcwskEjwSDQ07AodkAK4jg+Ii7MFxCwoqKqw=;
+  b=aBJnOU+nz8c2pNAdcOmp46inGxoL/Pz+9Tj57XeBQ4bd+17DmXK5BzYP
+   8Xs3VDveSxnyMwmozBvyX3/2sAyllLkTRf2HdJYEAXoJ1HP2n1XflJxJd
+   DnHozAy2DpEOdfWH/deRCu8tXh+Gy9qzYm6cxQvuCwZi7Iu/kM+VWoUw3
+   HD7kpOuUE2fiXUX+64upKEB5cwanZwSPQkDtZJDB5suhQFDS7rRQYSr/c
+   +tJtItvgeWhWeoKHMx0qoChIUIzHgLkLkjo7SkgRudCIdThi020g8DfjP
+   j4sfilJm0xWmdnyMCA6YZGqJcz2nDHOmD//d+6mNO3X3m60dE9E71AJsw
    A==;
-X-CSE-ConnectionGUID: 0Gvey4iES5i1UVaAsW5mTA==
-X-CSE-MsgGUID: sAnd9tqoRQeRPQWFF34obg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59522601"
+X-CSE-ConnectionGUID: 8E+3oRXySeGo56TAnuyltA==
+X-CSE-MsgGUID: PJN8NYECRU2UmREKQI0a2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="70805158"
 X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="59522601"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 14:33:55 -0700
-X-CSE-ConnectionGUID: d8h7wvHORNuG1VzVvVYbxw==
-X-CSE-MsgGUID: X2KPy3u+TVekGncrgIKZIQ==
+   d="scan'208";a="70805158"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 15:02:43 -0700
+X-CSE-ConnectionGUID: L94f7WjeSmWfsbvS5lsy2g==
+X-CSE-MsgGUID: 1y1YUecNQs6jp+xNNArMdQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="171891495"
+   d="scan'208";a="177260579"
 Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 04 Sep 2025 14:33:49 -0700
+  by orviesa005.jf.intel.com with ESMTP; 04 Sep 2025 15:02:40 -0700
 Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uuHa1-0005wZ-1p;
-	Thu, 04 Sep 2025 21:33:25 +0000
-Date: Fri, 5 Sep 2025 05:30:48 +0800
+	id 1uuI29-0005yR-24;
+	Thu, 04 Sep 2025 22:02:37 +0000
+Date: Fri, 5 Sep 2025 06:01:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
-	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+To: Vincent Mailhol <mailhol@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Oliver Hartkopp <socketcan@hartkopp.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v2 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-Message-ID: <202509050501.MXDrcrZA-lkp@intel.com>
-References: <20250903-ltc4283-support-v2-2-6bce091510bf@analog.com>
+	Vincent Mailhol <mailhol@kernel.org>,
+	=?iso-8859-1?Q?St=E9phane?= Grosjean <stephane.grosjean@hms-networks.com>,
+	Robert Nawrath <mbro1689@gmail.com>,
+	Minh Le <minh.le.aj@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 18/21] can: netlink: make can_tdc_fill_info() FD agnostic
+Message-ID: <202509050541.1FKRbqOi-lkp@intel.com>
+References: <20250903-canxl-netlink-prep-v1-18-904bd6037cd9@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,59 +70,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250903-ltc4283-support-v2-2-6bce091510bf@analog.com>
+In-Reply-To: <20250903-canxl-netlink-prep-v1-18-904bd6037cd9@kernel.org>
 
-Hi Nuno,
+Hi Vincent,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 9703c672af8dd3573c76ce509dfff26bf6c4768d]
+[auto build test WARNING on 2fd4161d0d2547650d9559d57fc67b4e0a26a9e3]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-S-via-B4-Relay/dt-binbings-hwmon-Document-the-LTC4283-Swap-Controller/20250903-180813
-base:   9703c672af8dd3573c76ce509dfff26bf6c4768d
-patch link:    https://lore.kernel.org/r/20250903-ltc4283-support-v2-2-6bce091510bf%40analog.com
-patch subject: [PATCH v2 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap Controller
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250905/202509050501.MXDrcrZA-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050501.MXDrcrZA-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/can-dev-move-struct-data_bittiming_params-to-linux-can-bittiming-h/20250903-170807
+base:   2fd4161d0d2547650d9559d57fc67b4e0a26a9e3
+patch link:    https://lore.kernel.org/r/20250903-canxl-netlink-prep-v1-18-904bd6037cd9%40kernel.org
+patch subject: [PATCH 18/21] can: netlink: make can_tdc_fill_info() FD agnostic
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250905/202509050541.1FKRbqOi-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050541.1FKRbqOi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509050501.MXDrcrZA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509050541.1FKRbqOi-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hwmon/ltc4283.c:595:10: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-     595 |         if (tmp == BIT(16))
-         |             ~~~ ^  ~~~~~~~
-   1 warning generated.
+   drivers/net/can/dev/netlink.c:111:6: warning: variable 'is_on' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/can/dev/netlink.c:119:6: note: uninitialized use occurs here
+     119 |         if (is_on) {
+         |             ^~~~~
+   drivers/net/can/dev/netlink.c:111:2: note: remove the 'if' if its condition is always true
+     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |                 data_tdc = data[IFLA_CAN_TDC];
+     113 |                 tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
+     114 |                 is_on = flags & CAN_CTRLMODE_FD;
+     115 |         } else {
+         |           ~~~~~~
+     116 |                 WARN_ON(1); /* Place holder for CAN XL */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     117 |         }
+         |         ~
+   drivers/net/can/dev/netlink.c:108:12: note: initialize the variable 'is_on' to silence this warning
+     108 |         bool is_on;
+         |                   ^
+         |                    = 0
+   drivers/net/can/dev/netlink.c:281:6: warning: variable 'data_bittiming' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     281 |         if (fd) {
+         |             ^~
+   drivers/net/can/dev/netlink.c:290:7: note: uninitialized use occurs here
+     290 |         if (!data_bittiming)
+         |              ^~~~~~~~~~~~~~
+   drivers/net/can/dev/netlink.c:281:2: note: remove the 'if' if its condition is always true
+     281 |         if (fd) {
+         |         ^~~~~~~
+     282 |                 data_bittiming = data[IFLA_CAN_DATA_BITTIMING];
+     283 |                 data_tdc = data[IFLA_CAN_TDC];
+     284 |                 dbt_params = &priv->fd;
+     285 |                 tdc_mask = CAN_CTRLMODE_FD_TDC_MASK;
+     286 |         } else {
+         |           ~~~~~~
+     287 |                 WARN_ON(1); /* Place holder for CAN XL */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     288 |         }
+         |         ~
+   drivers/net/can/dev/netlink.c:273:31: note: initialize the variable 'data_bittiming' to silence this warning
+     273 |         struct nlattr *data_bittiming, *data_tdc;
+         |                                      ^
+         |                                       = NULL
+>> drivers/net/can/dev/netlink.c:591:6: warning: variable 'dbt_params' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     591 |         if (ifla_can_tdc == IFLA_CAN_TDC) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/can/dev/netlink.c:598:14: note: uninitialized use occurs here
+     598 |         tdc_const = dbt_params->tdc_const;
+         |                     ^~~~~~~~~~
+   drivers/net/can/dev/netlink.c:591:2: note: remove the 'if' if its condition is always true
+     591 |         if (ifla_can_tdc == IFLA_CAN_TDC) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     592 |                 dbt_params = &priv->fd;
+     593 |                 tdc_is_enabled = can_fd_tdc_is_enabled(priv);
+     594 |                 tdc_manual = priv->ctrlmode & CAN_CTRLMODE_TDC_MANUAL;
+     595 |         } else {
+         |           ~~~~~~
+     596 |                 WARN_ON(1); /* Place holder for CAN XL */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     597 |         }
+         |         ~
+   drivers/net/can/dev/netlink.c:585:42: note: initialize the variable 'dbt_params' to silence this warning
+     585 |         struct data_bittiming_params *dbt_params;
+         |                                                 ^
+         |                                                  = NULL
+   3 warnings generated.
 
 
-vim +595 drivers/hwmon/ltc4283.c
+vim +591 drivers/net/can/dev/netlink.c
 
-   586	
-   587	static int __ltc4283_write_in_history(struct ltc4283_hwmon *st,
-   588					      u32 reg, long lowest, u32 fs)
-   589	{
-   590		__be16 __raw;
-   591		u16 tmp;
-   592		int ret;
-   593	
-   594		tmp = DIV_ROUND_CLOSEST(BIT(16) * lowest, fs);
- > 595		if (tmp == BIT(16))
-   596			tmp = U16_MAX;
-   597	
-   598		__raw = cpu_to_be16(tmp);
-   599	
-   600		ret = regmap_bulk_write(st->map, reg, &__raw, sizeof(__raw));
-   601		if (ret)
-   602			return ret;
+   580	
+   581	static int can_tdc_fill_info(struct sk_buff *skb, const struct net_device *dev,
+   582				     int ifla_can_tdc)
+   583	{
+   584		struct can_priv *priv = netdev_priv(dev);
+   585		struct data_bittiming_params *dbt_params;
+   586		const struct can_tdc_const *tdc_const;
+   587		struct can_tdc *tdc;
+   588		struct nlattr *nest;
+   589		bool tdc_is_enabled, tdc_manual;
+   590	
+ > 591		if (ifla_can_tdc == IFLA_CAN_TDC) {
+   592			dbt_params = &priv->fd;
+   593			tdc_is_enabled = can_fd_tdc_is_enabled(priv);
+   594			tdc_manual = priv->ctrlmode & CAN_CTRLMODE_TDC_MANUAL;
+   595		} else {
+   596			WARN_ON(1); /* Place holder for CAN XL */
+   597		}
+   598		tdc_const = dbt_params->tdc_const;
+   599		tdc = &dbt_params->tdc;
+   600	
+   601		if (!tdc_const)
+   602			return 0;
    603	
-   604		tmp = 0;
-   605		return regmap_bulk_write(st->map, reg + 1,  &tmp, sizeof(tmp));
-   606	}
+   604		nest = nla_nest_start(skb, ifla_can_tdc);
+   605		if (!nest)
+   606			return -EMSGSIZE;
    607	
+   608		if (tdc_manual &&
+   609		    (nla_put_u32(skb, IFLA_CAN_TDC_TDCV_MIN, tdc_const->tdcv_min) ||
+   610		     nla_put_u32(skb, IFLA_CAN_TDC_TDCV_MAX, tdc_const->tdcv_max)))
+   611			goto err_cancel;
+   612		if (nla_put_u32(skb, IFLA_CAN_TDC_TDCO_MIN, tdc_const->tdco_min) ||
+   613		    nla_put_u32(skb, IFLA_CAN_TDC_TDCO_MAX, tdc_const->tdco_max))
+   614			goto err_cancel;
+   615		if (tdc_const->tdcf_max &&
+   616		    (nla_put_u32(skb, IFLA_CAN_TDC_TDCF_MIN, tdc_const->tdcf_min) ||
+   617		     nla_put_u32(skb, IFLA_CAN_TDC_TDCF_MAX, tdc_const->tdcf_max)))
+   618			goto err_cancel;
+   619	
+   620		if (tdc_is_enabled) {
+   621			u32 tdcv;
+   622			int err = -EINVAL;
+   623	
+   624			if (tdc_manual) {
+   625				tdcv = tdc->tdcv;
+   626				err = 0;
+   627			} else if (dbt_params->do_get_auto_tdcv) {
+   628				err = dbt_params->do_get_auto_tdcv(dev, &tdcv);
+   629			}
+   630			if (!err && nla_put_u32(skb, IFLA_CAN_TDC_TDCV, tdcv))
+   631				goto err_cancel;
+   632			if (nla_put_u32(skb, IFLA_CAN_TDC_TDCO, tdc->tdco))
+   633				goto err_cancel;
+   634			if (tdc_const->tdcf_max &&
+   635			    nla_put_u32(skb, IFLA_CAN_TDC_TDCF, tdc->tdcf))
+   636				goto err_cancel;
+   637		}
+   638	
+   639		nla_nest_end(skb, nest);
+   640		return 0;
+   641	
+   642	err_cancel:
+   643		nla_nest_cancel(skb, nest);
+   644		return -EMSGSIZE;
+   645	}
+   646	
 
 -- 
 0-DAY CI Kernel Test Service
