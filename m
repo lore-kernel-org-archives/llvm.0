@@ -1,118 +1,182 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E4E1459F7
-	for <llvm@lists.linux.dev>; Wed,  3 Sep 2025 23:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0717B1A239D;
+	Thu,  4 Sep 2025 01:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756942039; cv=none; b=uiRaIrLIcu29JysYVRU2nZU4+n6D2r8KF7Ej4S+fdTYPygPUqqCpzwLk7/FSTXfJ5M9r6j4FhhCssu8qI/eGuMnGoGK54VldcXR+ruFd+amaeNiAA38z0ENehTLuwopgPaUPeUWEJwZA8cDNUpQsEkJCI6wDDf2NLH80X8h3LEg=
+	t=1756950985; cv=none; b=kqAHUHQtQ1dwgqngvT1zljhf4LJRhwG0+lLNBBXqT7si47X6QnFQOY3j32QEDUpYVrhUIdBEXZ4EBaDMjLwId88PeAxui09IINVjGD+J34+HT0cao0+vcLS32aYx7aC5RPkNBzYT2r1TKA470WH69paU7ci+Kn9Kk45PFk08iSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756942039; c=relaxed/simple;
-	bh=agSZSZe+tQVZN8rhVQvwRsToQCPpFg14KIdGBgQcrtA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qCJxMXh7YlfAO0sQNoKXpuOCbCVpxC42ORib+LCj8XIrgzK1Tt5AeuL7ZCcBfs4YIlI3M/EmrqcXsXCOTTnwvPRNdive9ezZXI716XQbkukye/gVD+u9IpbIgbuT2cUtlCSHx9z7ZA4d2zOJsyeMAnoZXjCWsd8WwPbO9vElLwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G8qLXkpw; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756950985; c=relaxed/simple;
+	bh=Bhk+XvSd6SUJL+TJWmrhapBH0viraxUMrMNhFqMleRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GOopfmRKO1qz75SEbhkt51x/Uts0gXBKkjCZQ++bAxyhLjVXy5VGakkFKwImOVNnvdUANfqze31i9ByydHATSlC5MRdmD3sXU29AfztgF4S43RqLOmIMTllxXfsrvbyh9ymiudpEipPVLLMDHgV41UOpbxW8HYUGwby22sWzlxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PnReapsM; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8qLXkpw"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-24602f6d8b6so758795ad.1
-        for <llvm@lists.linux.dev>; Wed, 03 Sep 2025 16:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756942036; x=1757546836; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=agSZSZe+tQVZN8rhVQvwRsToQCPpFg14KIdGBgQcrtA=;
-        b=G8qLXkpwBrwHuP0TEO0SI/iwwmPgJP/RwIq5vUZp+UEvr8R/4NDIeTry2WALpivDWZ
-         UhGR5HGpFnuJPwyQILPyfd+FDo9aOgD9dolLwQnj17Fpx6s+fTo64Se41+8eppE9XChS
-         J1WVr6yAQGRal7pa1+sKVEaDNWS4J1W4DtwRqERv2ALX5YJRkzCFBbdg8YMmxf9mC3Fi
-         S3A60h9UJylCdtuGn1h4wnntxSrlUw8wbVc3tAvsbDPcknYhDC1dlnxRFcb/VuEDfi/J
-         UPsTDSpbI+tN7n3b93j2kkpmT81J5kET3/Gup7ndQvB9ib+eRPpvP9Ht1C6+vHy0H7Jd
-         opRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756942036; x=1757546836;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=agSZSZe+tQVZN8rhVQvwRsToQCPpFg14KIdGBgQcrtA=;
-        b=F01aKk3YaumQgy60PT6oxCnCCGexhgH4DHNAosWXPAKNaX7Y5wpVrq5V2v6QL71DqL
-         7y810Al+gQw0CZdNe3Yi0XozjFY9IYjBJ4tnC7uEqa17e5ylRqY2LK77OhyqQJ8goDk8
-         v87GnBgRO+NvY92YqHayQXgnMtUn32l+D3zsLbi7pjCweLPqjOijJ7d+AknEzDGzPAaH
-         RnpZNoSNqZ33+JFEdxs77rkbmx7LnjMr5rmvrcAwbJMmg+FB5rCwypvT4lMUxva4qCVH
-         RQif09QCyeZiPvididIFWmfjazl0KtI8TUGXWu50bio/xMVnxT+GOKnOiMXWzApU9Vqa
-         WIhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVcCIvE9Kr+1V4tLLvy+ZlSlkH8mQAmpuRacmHqclkctkFE95WlmQHWBSLA+2U7iqd98gko@lists.linux.dev
-X-Gm-Message-State: AOJu0YwYqIQiIr8ZW4Jrf407MeYWKBWIPHsd41JMXByIYbiSu5LZEFhj
-	Qz2RLkgWMzdBwa217mP/ne1h4MIc3fgImS6GkMGti4Px3mrESzubpORA5MKeY6eV2QAozBqSoj6
-	PPpgWtjyxODDptyqngIcSps8cHMcoOws=
-X-Gm-Gg: ASbGncu9pHms7AKEM/gFVkPmXHfXxQ0lIPPfyr0RlivyY4PFefF2u1y2axg3uXSo5FJ
-	N4pkr9AWc+fIyzG5Rs6fgGlljVshgvQmydJAjU0Ot54ud5BDt9wzE1Ye538eGI8QbfdPdhpdyvX
-	TrP/f9lxu62onGZHeiKrW2gVp6Gj46H0BhFTDkZESwWIvyC2Gew4jQj3zOp7Q3Q9IxAStXl4ikR
-	VlcKrKiiRJzolMdnf9tlZufiVFblYGUbOygnFrk7KZjJhFnURmph6yWAjP3eBpq1S9Cy0vcZmEm
-	FE6bGy1pv+NDYEi4LYExm6Yz2jttGCWe4KE1
-X-Google-Smtp-Source: AGHT+IHTidnBVrl9x28IZyAbFtRyk1faHWra3cfcqzPBbplLrvafS2wCVDCjldwrmyF+S5C53slJRXjDIWwmfw6CDg4=
-X-Received: by 2002:a17:90b:4a8c:b0:329:cc8e:247c with SMTP id
- 98e67ed59e1d1-329cc8e278cmr7164799a91.8.1756942035722; Wed, 03 Sep 2025
- 16:27:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PnReapsM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756950984; x=1788486984;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bhk+XvSd6SUJL+TJWmrhapBH0viraxUMrMNhFqMleRY=;
+  b=PnReapsM2d9yblT7Y9+EfrSYnK32qFZC63WpCEVYf5DDZPeK5SIWzai0
+   KdQKYGqSQI/WhCs43yopzXfBqhCwArbWxKczcgcEZpoV3wP87oP3a/VoD
+   qRgn9lMkUW9F/AnuDuX71xyVk+FOyT77ggi5s2BnEtUCpj4pssmy2qG0q
+   92R1aGLsWma9BztqWM8qos0GBjtvg3GBp6RCOWJdcI0c4HbS/OrEDR7YB
+   n4VfnFZvZx6emkhJZD9ec1fjJdCb1djuxhmSUTKcvN1t+ai8hS1HyivRs
+   X2n9P9ciqgY/jLSkL4vG8hgQ2rXm/s29B1ETuf2jU5HQJ8hhWxcvbBW0k
+   g==;
+X-CSE-ConnectionGUID: 1pURCK76RxOpLD23CGrnvA==
+X-CSE-MsgGUID: MgEyhtyWTvOXgauJZm8wgA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="59426176"
+X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
+   d="scan'208";a="59426176"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 18:56:23 -0700
+X-CSE-ConnectionGUID: 0WVjAwxiQT+hsDuEQ+Ub7w==
+X-CSE-MsgGUID: BlAeTP+dTKOhUW5Sm8F3WA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
+   d="scan'208";a="172583573"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 03 Sep 2025 18:56:22 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1utzBw-0004an-0m;
+	Thu, 04 Sep 2025 01:55:28 +0000
+Date: Thu, 4 Sep 2025 09:53:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:bcachefs-testing 325/330]
+ fs/bcachefs/btree_iter.c:196:2: warning: label followed by a declaration is
+ a C23 extension
+Message-ID: <202509040924.OaOsaL1n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250830-cheesy-prone-ee5fae406c22@spud> <20250903190806.2604757-1-SpriteOvO@gmail.com>
- <20250903190806.2604757-2-SpriteOvO@gmail.com>
-In-Reply-To: <20250903190806.2604757-2-SpriteOvO@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 4 Sep 2025 01:27:03 +0200
-X-Gm-Features: Ac12FXzLAKLE3bvYxnCEro37dgST78_dgCYHlfdxLKDH7Bk_32DLgZHXXdMAE08
-Message-ID: <CANiq72=FJSRwOPNG4ZFeoex3MssTjmhozp5Xd++PTCCSJaJ3hA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] RISC-V: re-enable gcc + rust builds
-To: Asuna Yang <spriteovo@gmail.com>
-Cc: Conor Dooley <conor@kernel.org>, Jason Montleon <jmontleo@redhat.com>, 
-	Han Gao <rabenda.cn@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Tejun Heo <tj@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Matthew Maurer <mmaurer@google.com>, Jeff Xu <jeffxu@chromium.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jan Hendrik Farr <kernel@jfarr.cc>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Christian Brauner <brauner@kernel.org>, Brian Gerst <brgerst@gmail.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	rust-for-linux <rust-for-linux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Sep 3, 2025 at 9:08=E2=80=AFPM Asuna Yang <spriteovo@gmail.com> wro=
-te:
->
-> Commit 33549fcf37ec ("RISC-V: disallow gcc + rust builds") disabled GCC
-> + Rust builds for RISC-V due to differences in extension handling
-> compared to LLVM.
->
-> Add a Kconfig non-visible symbol to ensure that all important RISC-V
-> specific flags that will be used by GCC can be correctly recognized by
-> Rust bindgen's libclang, otherwise config HAVE_RUST will not be
-> selected.
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   bfa840548738b8b2e3dc14c850b98878335bbfcc
+commit: 39e3fc7603211022b72480fecf34c9fe9dfc7429 [325/330] bcachefs: Fix __bch2_btree_path_verify_level() for interior nodes
+config: i386-buildonly-randconfig-005-20250904 (https://download.01.org/0day-ci/archive/20250904/202509040924.OaOsaL1n-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250904/202509040924.OaOsaL1n-lkp@intel.com/reproduce)
 
-I think the commit message should try to explain each the changes here
-(or to split them).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509040924.OaOsaL1n-lkp@intel.com/
 
-e.g. it doesn't mention the other config symbols added, nor the extra
-flag skipped, nor the `error` call.
+All warnings (new ones prefixed by >>):
 
-Cc'ing the rust-for-linux list.
+>> fs/bcachefs/btree_iter.c:196:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     196 |         CLASS(printbuf, buf)();
+         |         ^
+   include/linux/cleanup.h:290:2: note: expanded from macro 'CLASS'
+     290 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+         |         ^
+   <scratch space>:5:1: note: expanded from here
+       5 | class_printbuf_t
+         | ^
+   1 warning generated.
 
-Thanks!
 
-Cheers,
-Miguel
+vim +196 fs/bcachefs/btree_iter.c
+
+   136	
+   137	static void __bch2_btree_path_verify_level(struct btree_trans *trans,
+   138					struct btree_path *path, unsigned level)
+   139	{
+   140		struct btree_path_level *l = &path->l[level];
+   141		bool locked = btree_node_locked(path, level);
+   142	
+   143		if (path->cached) {
+   144			if (!level)
+   145				__bch2_btree_path_verify_cached(trans, path);
+   146			return;
+   147		}
+   148	
+   149		if (!btree_path_node(path, level))
+   150			return;
+   151	
+   152		if (!bch2_btree_node_relock_notrace(trans, path, level))
+   153			return;
+   154	
+   155		BUG_ON(!btree_path_pos_in_node(path, l->b));
+   156	
+   157		bch2_btree_node_iter_verify(&l->iter, l->b);
+   158	
+   159		/* For interior nodes, the iterator may have skipped past deleted keys: */
+   160		struct btree_node_iter tmp = l->iter;
+   161		const struct bkey_packed *p = level
+   162			? bch2_btree_node_iter_prev(&tmp, l->b)
+   163			: bch2_btree_node_iter_prev_all(&tmp, l->b);
+   164		tmp = l->iter;
+   165		const struct bkey_packed *k = level
+   166			? bch2_btree_node_iter_peek(&tmp, l->b)
+   167			: bch2_btree_node_iter_peek_all(&tmp, l->b);
+   168	
+   169		const char *msg;
+   170		if (!(level > path->level && trans->journal_replay_not_finished)) {
+   171			/*
+   172			 * We can't run these checks for interior nodes when we're still
+   173			 * using the journal overlay because there might be a key in
+   174			 * the interior node that points midway through the current leaf
+   175			 * node - which is deleted in the journal overlay, but set_pos()
+   176			 * will skip past it and cause the interior node iterators to be
+   177			 * inconsistent in a way that doesn't matter and it can't check
+   178			 * for.
+   179			 */
+   180	
+   181			if (p && bkey_iter_pos_cmp(l->b, p, &path->pos) >= 0) {
+   182				msg = "before";
+   183				goto err;
+   184			}
+   185	
+   186			if (k && bkey_iter_pos_cmp(l->b, k, &path->pos) < 0) {
+   187				msg = "after";
+   188				goto err;
+   189			}
+   190		}
+   191	
+   192		if (!locked)
+   193			btree_node_unlock(trans, path, level);
+   194		return;
+   195	err:
+ > 196		CLASS(printbuf, buf)();
+   197		prt_printf(&buf, "path should be %s key at level %u", msg, level);
+   198	
+   199		prt_str(&buf, "\npath pos ");
+   200		bch2_bpos_to_text(&buf, path->pos);
+   201	
+   202		prt_str(&buf, "\nprev key ");
+   203		if (p) {
+   204			struct bkey uk = bkey_unpack_key(l->b, p);
+   205			bch2_bkey_to_text(&buf, &uk);
+   206		} else {
+   207			prt_printf(&buf, "(none)");
+   208		}
+   209	
+   210		prt_str(&buf, "\ncur  key ");
+   211		if (k) {
+   212			struct bkey uk = bkey_unpack_key(l->b, k);
+   213			bch2_bkey_to_text(&buf, &uk);
+   214		} else {
+   215			prt_printf(&buf, "(none)");
+   216		}
+   217	
+   218		panic("%s\n", buf.buf);
+   219	}
+   220	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
