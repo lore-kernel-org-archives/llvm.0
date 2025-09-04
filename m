@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A7B284693;
-	Thu,  4 Sep 2025 21:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BDF298CA6;
+	Thu,  4 Sep 2025 21:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757019624; cv=none; b=uPkbCsoDfs1en5UmfCHXsImIkrqYOCJe8aQUtfAlvqW6caTINWZmJLhPbW+Ae/b2ewGKVUOt1L1y8GWd2OBkAbvEBQRikGtipuKy3W9qoedRYZTTHUaAUyhszbenroSvZ37AOG3f9V7asVe48OLmM0HyudSP9r4EhtOKGo+t2QA=
+	t=1757020233; cv=none; b=e657R3elfSHrHduvKN6LFOwl5HRKC+IJEd5NFjEC4OyX/hqcKifmkL8nZWrr8oR+c7kyRW8MJmRlK5Tkjb1j8QyD3bqO7L+phQjrp1RNHCfrpmspaeC8bjF6ffdRTRkxsMU7vyoY64hPO+4Di7TEMPrRNhzZ9s6QtW2FuWgJ4PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757019624; c=relaxed/simple;
-	bh=hfb0jJEaDVUQIZi23GABhhywWqoqoKPbPcj9mhXwHtk=;
+	s=arc-20240116; t=1757020233; c=relaxed/simple;
+	bh=3epT3pamOe0lVDQuEH1DZKMn89bAcvXi5Ix/lheBIz0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XzfkLwhCt1PAmS5EGrSqQ5KlS1CNXZH8Pnlxb4w2BykpzVy9XOm4qztxGVC+lAUmo63obLdVOPryGN0uh50mWoPaFE7TCto0bTVP21UBw/4DkH4DzG+m5Usw/9WSbKsAIdi93/M/TRJ/vMJcc7TQHEzpuhrpvHGQEANWpU7Aqgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G0qsR489; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=Xu1RmsbmyBCtlA5AWzklyuSrrcCx/3T94ikHm35qVL1ixMnem5Z8EyMG6dImwLlF3ay2MYkcwOK0mtLA1shA28u/H0HxjRe1lvC8qr7lp+yn3/DcZuJ/RLbWD6HOdk5RBdQH/e3ngYRIx4tR/UOmP9rrlNAec01e8pcT2NOw6Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=McqKLhn7; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G0qsR489"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="McqKLhn7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757019623; x=1788555623;
+  t=1757020231; x=1788556231;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hfb0jJEaDVUQIZi23GABhhywWqoqoKPbPcj9mhXwHtk=;
-  b=G0qsR489dUcD9DIv9QlYZs2/N3loso4dujGiHYnyEcloCbj0AVqidS4S
-   4qrYFWGNS+QpoHJBJkkIM3IMlRXVgMlqbRUNLLM8MSfItJXHWHj6jtwX8
-   yckEd/QCwEQU1GVSXqygjTM8eGMdiipn4YZDvwkTPJEJuwklR+lyD7zZu
-   bSyYklUph6v925S3hrMjrdTLppA7QofhO+KnOXI1XPc0CbhifQ/+znwm5
-   +Os5ZT1lU5n0j5hZRi3doR4wgxa0QTnxQX0JWpqovrSkE57ll3dwBXGwH
-   HaWuwBfv4Qj2N56LnXggbKIpk2JCb2vEXKuJ4eLwkvZL3OK4kppOtn6jP
-   Q==;
-X-CSE-ConnectionGUID: vJiFPWDpTJ2ssH8KvXUObg==
-X-CSE-MsgGUID: cdA3h17aTye7MH14NE5epg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="70470819"
+  bh=3epT3pamOe0lVDQuEH1DZKMn89bAcvXi5Ix/lheBIz0=;
+  b=McqKLhn7Ja9BhoYWBKuHS4j3rcotqUFNtrt3BcF+e24DRn4Y6Dh6ehb5
+   Fo9e3PNeHoiO+ZoTEiK0bJBhfx+palEuE2G91os7TAlYEWrsh6zmzMXgU
+   cFhB9sG/rTvg/Bs7xa5RNV43pcWpjtuEypdq2rRIaCz68T0MxOwupxOCl
+   I7xnC8Ih4sHE9Mwtq8xNZoBg67aQ3VN5ot1bd1ADxhqQ1SrwJSDD8QUaM
+   Qw6OWAKV69Cq5qlHWKou7fPwXmFORqM546k2TTNZn4Qakf95qlmka9mIK
+   cDVMROtu7nB8d26kGCzeRoZqkqpHnQWJrIyJpxzCUjOHlDocNhc6kM0j9
+   A==;
+X-CSE-ConnectionGUID: YWcf//tMTAOtAK8CDOlq5Q==
+X-CSE-MsgGUID: c8dLQQv3Qrm2C3+GXi01FQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="76980334"
 X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="70470819"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 14:00:21 -0700
-X-CSE-ConnectionGUID: Pw8jXoUgTMCyRxpc7PwYkw==
-X-CSE-MsgGUID: JPR96OYuSza0WRefOjng3g==
+   d="scan'208";a="76980334"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 14:10:30 -0700
+X-CSE-ConnectionGUID: 95KdcKTiTaCabr60RobxUQ==
+X-CSE-MsgGUID: dR5iXm3WSfGVPq3AXdIWsg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="177218652"
+   d="scan'208";a="176115103"
 Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 04 Sep 2025 14:00:19 -0700
+  by orviesa003.jf.intel.com with ESMTP; 04 Sep 2025 14:10:28 -0700
 Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uuH45-0005ut-11;
-	Thu, 04 Sep 2025 21:00:17 +0000
-Date: Fri, 5 Sep 2025 05:00:09 +0800
+	id 1uuHDu-0005vP-08;
+	Thu, 04 Sep 2025 21:10:26 +0000
+Date: Fri, 5 Sep 2025 05:10:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Chuyi Zhou <zhouchuyi@bytedance.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 316/351]
- fs/bcachefs/backpointers.c:969:5: error: call to undeclared function
- '__WARN'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202509050437.mtgpC5gW-lkp@intel.com>
+	cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>
+Subject: [tj-cgroup:for-6.18 17/17] kernel/cgroup/cgroup.c:3029:24: warning:
+ unused variable 'ss'
+Message-ID: <202509050527.YEPZiaXZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,172 +63,49 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   ee47b5b15f8620c81d1382cc851a1c01b96b9c96
-commit: e0277fea307f1b134bbed3cb22ec32613e9140fc [316/351] bcachefs: Fix infinite loop in backpointers fsck on upgrade
-config: x86_64-buildonly-randconfig-001-20250905 (https://download.01.org/0day-ci/archive/20250905/202509050437.mtgpC5gW-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-6.18
+head:   d8b269e009bbc471cb2735b5f737839495efce3b
+commit: d8b269e009bbc471cb2735b5f737839495efce3b [17/17] cgroup: Remove unused cgroup_subsys::post_attach
+config: i386-buildonly-randconfig-003-20250905 (https://download.01.org/0day-ci/archive/20250905/202509050527.YEPZiaXZ-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050437.mtgpC5gW-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050527.YEPZiaXZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509050437.mtgpC5gW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509050527.YEPZiaXZ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/bcachefs/backpointers.c:969:5: error: call to undeclared function '__WARN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     969 |                                 __WARN();
-         |                                 ^
-   1 error generated.
+>> kernel/cgroup/cgroup.c:3029:24: warning: unused variable 'ss' [-Wunused-variable]
+    3029 |         struct cgroup_subsys *ss;
+         |                               ^~
+>> kernel/cgroup/cgroup.c:3030:6: warning: unused variable 'ssid' [-Wunused-variable]
+    3030 |         int ssid;
+         |             ^~~~
+   2 warnings generated.
 
 
-vim +/__WARN +969 fs/bcachefs/backpointers.c
+vim +/ss +3029 kernel/cgroup/cgroup.c
 
-   866	
-   867	static int check_bucket_backpointer_mismatch(struct btree_trans *trans, struct bkey_s_c alloc_k,
-   868						     bool *had_mismatch,
-   869						     struct bkey_buf *last_flushed,
-   870						     struct bpos *last_pos,
-   871						     unsigned *nr_iters)
-   872	{
-   873		struct bch_fs *c = trans->c;
-   874		struct bch_alloc_v4 a_convert;
-   875		const struct bch_alloc_v4 *a = bch2_alloc_to_v4(alloc_k, &a_convert);
-   876		bool need_commit = false;
-   877	
-   878		if (!bpos_eq(*last_pos, alloc_k.k->p))
-   879			*nr_iters = 0;
-   880	
-   881		*last_pos = alloc_k.k->p;
-   882	
-   883		*had_mismatch = false;
-   884	
-   885		if (a->data_type == BCH_DATA_sb ||
-   886		    a->data_type == BCH_DATA_journal ||
-   887		    a->data_type == BCH_DATA_parity)
-   888			return 0;
-   889	
-   890		u32 sectors[ALLOC_SECTORS_NR];
-   891		memset(sectors, 0, sizeof(sectors));
-   892	
-   893		CLASS(bch2_dev_bucket_tryget_noerror, ca)(trans->c, alloc_k.k->p);
-   894		if (!ca)
-   895			return 0;
-   896	
-   897		struct bkey_s_c bp_k;
-   898		int ret = 0;
-   899		for_each_btree_key_max_norestart(trans, iter, BTREE_ID_backpointers,
-   900					bucket_pos_to_bp_start(ca, alloc_k.k->p),
-   901					bucket_pos_to_bp_end(ca, alloc_k.k->p), 0, bp_k, ret) {
-   902			if (bp_k.k->type != KEY_TYPE_backpointer)
-   903				continue;
-   904	
-   905			struct bkey_s_c_backpointer bp = bkey_s_c_to_backpointer(bp_k);
-   906	
-   907			if (c->sb.version_upgrade_complete < bcachefs_metadata_version_backpointer_bucket_gen &&
-   908			    (bp.v->bucket_gen != a->gen ||
-   909			     bp.v->pad)) {
-   910				ret = bch2_backpointer_del(trans, bp_k.k->p);
-   911				if (ret)
-   912					return ret;
-   913	
-   914				need_commit = true;
-   915				continue;
-   916			}
-   917	
-   918			if (bp.v->bucket_gen != a->gen)
-   919				continue;
-   920	
-   921			int alloc_counter = data_type_to_alloc_counter(bp.v->data_type);
-   922			if (alloc_counter < 0)
-   923				continue;
-   924	
-   925			sectors[alloc_counter] += bp.v->bucket_len;
-   926		};
-   927		if (ret)
-   928			return ret;
-   929	
-   930		if (need_commit) {
-   931			ret = bch2_trans_commit(trans, NULL, NULL, BCH_TRANS_COMMIT_no_enospc);
-   932			if (ret)
-   933				return ret;
-   934		}
-   935	
-   936		if (sectors[ALLOC_dirty]  != a->dirty_sectors ||
-   937		    sectors[ALLOC_cached] != a->cached_sectors ||
-   938		    sectors[ALLOC_stripe] != a->stripe_sectors) {
-   939			if (sectors[ALLOC_dirty]  > a->dirty_sectors ||
-   940			    sectors[ALLOC_cached] > a->cached_sectors ||
-   941			    sectors[ALLOC_stripe] > a->stripe_sectors) {
-   942				if (*nr_iters) {
-   943					CLASS(printbuf, buf)();
-   944					bch2_log_msg_start(c, &buf);
-   945	
-   946					prt_printf(&buf, "backpointer sectors > bucket sectors, but found no bad backpointers\n"
-   947						   "bucket %llu:%llu data type %s, counters\n",
-   948						   alloc_k.k->p.inode,
-   949						   alloc_k.k->p.offset,
-   950						   __bch2_data_types[a->data_type]);
-   951					if (sectors[ALLOC_dirty]  > a->dirty_sectors)
-   952						prt_printf(&buf, "dirty: %u > %u\n",
-   953							   sectors[ALLOC_dirty], a->dirty_sectors);
-   954					if (sectors[ALLOC_cached] > a->cached_sectors)
-   955						prt_printf(&buf, "cached: %u > %u\n",
-   956							   sectors[ALLOC_cached], a->cached_sectors);
-   957					if (sectors[ALLOC_stripe] > a->stripe_sectors)
-   958						prt_printf(&buf, "stripe: %u > %u\n",
-   959							   sectors[ALLOC_stripe], a->stripe_sectors);
-   960	
-   961					for_each_btree_key_max_norestart(trans, iter, BTREE_ID_backpointers,
-   962								bucket_pos_to_bp_start(ca, alloc_k.k->p),
-   963								bucket_pos_to_bp_end(ca, alloc_k.k->p), 0, bp_k, ret) {
-   964						bch2_bkey_val_to_text(&buf, c, bp_k);
-   965						prt_newline(&buf);
-   966					}
-   967	
-   968					bch2_print_str(c, KERN_ERR, buf.buf);
- > 969					__WARN();
-   970					return ret;
-   971				}
-   972	
-   973				*nr_iters += 1;
-   974	
-   975				return check_bucket_backpointers_to_extents(trans, ca, alloc_k.k->p) ?:
-   976					bch_err_throw(c, transaction_restart_nested);
-   977			}
-   978	
-   979			/*
-   980			 * Post 1.14 upgrade, we assume that backpointers are mostly
-   981			 * correct and a sector count mismatch is probably due to a
-   982			 * write buffer race
-   983			 *
-   984			 * Pre upgrade, we expect all the buckets to be wrong, a write
-   985			 * buffer flush is pointless:
-   986			 */
-   987			if (c->sb.version_upgrade_complete >= bcachefs_metadata_version_backpointer_bucket_gen) {
-   988				ret = bch2_backpointers_maybe_flush(trans, alloc_k, last_flushed);
-   989				if (ret)
-   990					return ret;
-   991			}
-   992	
-   993			bool empty = (sectors[ALLOC_dirty] +
-   994				      sectors[ALLOC_stripe] +
-   995				      sectors[ALLOC_cached]) == 0;
-   996	
-   997			ret = bch2_bucket_bitmap_set(ca, &ca->bucket_backpointer_mismatch,
-   998						     alloc_k.k->p.offset) ?:
-   999				(empty
-  1000				 ? bch2_bucket_bitmap_set(ca, &ca->bucket_backpointer_empty,
-  1001							  alloc_k.k->p.offset)
-  1002				 : 0);
-  1003	
-  1004			*had_mismatch = true;
-  1005		}
-  1006	
-  1007		return 0;
-  1008	}
-  1009	
+bbcb81d09104f0 kernel/cgroup.c        Paul Menage 2007-10-18  3026  
+4f7e7236435ca0 kernel/cgroup/cgroup.c Tejun Heo   2022-08-15  3027  void cgroup_procs_write_finish(struct task_struct *task, bool threadgroup_locked)
+715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15  3028  {
+715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15 @3029  	struct cgroup_subsys *ss;
+715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15 @3030  	int ssid;
+081aa458c38ba5 kernel/cgroup.c        Li Zefan    2013-03-13  3031  
+715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15  3032  	/* release reference from cgroup_procs_write_start() */
+715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15  3033  	put_task_struct(task);
+3014dde762f618 kernel/cgroup.c        Tejun Heo   2015-09-16  3034  
+4f7e7236435ca0 kernel/cgroup/cgroup.c Tejun Heo   2022-08-15  3035  	cgroup_attach_unlock(threadgroup_locked);
+af351026aafc8d kernel/cgroup.c        Paul Menage 2008-07-25  3036  }
+af351026aafc8d kernel/cgroup.c        Paul Menage 2008-07-25  3037  
+
+:::::: The code at line 3029 was first introduced by commit
+:::::: 715c809d9a9e38d8fb9476757ddaf64c1a9f767f cgroup: reorganize cgroup.procs / task write path
+
+:::::: TO: Tejun Heo <tj@kernel.org>
+:::::: CC: Tejun Heo <tj@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
