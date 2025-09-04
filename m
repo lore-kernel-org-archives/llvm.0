@@ -1,59 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BDF298CA6;
-	Thu,  4 Sep 2025 21:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589E9296BD0;
+	Thu,  4 Sep 2025 21:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757020233; cv=none; b=e657R3elfSHrHduvKN6LFOwl5HRKC+IJEd5NFjEC4OyX/hqcKifmkL8nZWrr8oR+c7kyRW8MJmRlK5Tkjb1j8QyD3bqO7L+phQjrp1RNHCfrpmspaeC8bjF6ffdRTRkxsMU7vyoY64hPO+4Di7TEMPrRNhzZ9s6QtW2FuWgJ4PU=
+	t=1757020294; cv=none; b=dT0VMx2sfX2fT9KtrOZnxsReocigRN0B0NeRdDGu9p4Evs5gURtatnuX+BEWiqIQ+ngu3dkOvmXKGjudqVB0kuY6LG8ZcJMjApy0WHbZ4UQLqU5+OHhvOspR15SVsKUFMeKokgTTMtpxrbKTCP+m+XQrQBGP1iQF3juFsBJ8Zvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757020233; c=relaxed/simple;
-	bh=3epT3pamOe0lVDQuEH1DZKMn89bAcvXi5Ix/lheBIz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xu1RmsbmyBCtlA5AWzklyuSrrcCx/3T94ikHm35qVL1ixMnem5Z8EyMG6dImwLlF3ay2MYkcwOK0mtLA1shA28u/H0HxjRe1lvC8qr7lp+yn3/DcZuJ/RLbWD6HOdk5RBdQH/e3ngYRIx4tR/UOmP9rrlNAec01e8pcT2NOw6Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=McqKLhn7; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1757020294; c=relaxed/simple;
+	bh=o3hG4agtS9G7U6cY5dbG3D1IVkgCdsnfrqkX/1YLurY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EtqkDIpAyHnCp99R5mU4jKqtROSP9J3ke1Q3u73PprBE63ILbX8v9nITXv1CATzcLOrQvy13YB6/tmcPyueeeMTaH1DYKR7iUCukw85MBZBSLF0ZUAoMLHleT2Uhr6B18//gQcJGCoIuL0e54WZp7ZgBu2TTh4qRWcPuCpy5QjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jV4EqNqf; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="McqKLhn7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jV4EqNqf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757020231; x=1788556231;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3epT3pamOe0lVDQuEH1DZKMn89bAcvXi5Ix/lheBIz0=;
-  b=McqKLhn7Ja9BhoYWBKuHS4j3rcotqUFNtrt3BcF+e24DRn4Y6Dh6ehb5
-   Fo9e3PNeHoiO+ZoTEiK0bJBhfx+palEuE2G91os7TAlYEWrsh6zmzMXgU
-   cFhB9sG/rTvg/Bs7xa5RNV43pcWpjtuEypdq2rRIaCz68T0MxOwupxOCl
-   I7xnC8Ih4sHE9Mwtq8xNZoBg67aQ3VN5ot1bd1ADxhqQ1SrwJSDD8QUaM
-   Qw6OWAKV69Cq5qlHWKou7fPwXmFORqM546k2TTNZn4Qakf95qlmka9mIK
-   cDVMROtu7nB8d26kGCzeRoZqkqpHnQWJrIyJpxzCUjOHlDocNhc6kM0j9
-   A==;
-X-CSE-ConnectionGUID: YWcf//tMTAOtAK8CDOlq5Q==
-X-CSE-MsgGUID: c8dLQQv3Qrm2C3+GXi01FQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="76980334"
+  t=1757020292; x=1788556292;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o3hG4agtS9G7U6cY5dbG3D1IVkgCdsnfrqkX/1YLurY=;
+  b=jV4EqNqfeVz+XZaV0fhH4ph+0qwSQxXhkh2fr6Dpo44PaBxySdGxqAM1
+   0KJCORh04/L/LwQQiSHQ92Wqncrzl6CWSK+r1eOgrEsVPxqdZfgCaekNr
+   1GdypgJ5S5h26pgvoakhlzH5GaZg2X0o7rkBM4ISKQe+N5yiWKMdNwwxi
+   XpXeXzqOxmkICtbFFe9T0HJjFiIOsAUuniaeF7RnJsDCg40RyF9GfnEhs
+   7J/cmpLlI6YOX2TmJdcwNkcGsTSWkkDGJjkH+Y8Tn9uc7XTdOxiFaBaIl
+   2PgueEesOY14tKM0fZOZhfIFDdibTEJ8OPg9lKTO7mOyn3Cw/t6RIHivB
+   w==;
+X-CSE-ConnectionGUID: gSAx6pRCTdmuERV45OwdlA==
+X-CSE-MsgGUID: vQkBs4Z5RVmL362Uzr7l8A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="70078888"
 X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="76980334"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 14:10:30 -0700
-X-CSE-ConnectionGUID: 95KdcKTiTaCabr60RobxUQ==
-X-CSE-MsgGUID: dR5iXm3WSfGVPq3AXdIWsg==
+   d="scan'208";a="70078888"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 14:11:31 -0700
+X-CSE-ConnectionGUID: aDFwf0HIRkmjp06zkGZ2sQ==
+X-CSE-MsgGUID: 3LHLMkHcQV6iqtG8oK6sFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="176115103"
+   d="scan'208";a="171574115"
 Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 04 Sep 2025 14:10:28 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 04 Sep 2025 14:11:28 -0700
 Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uuHDu-0005vP-08;
-	Thu, 04 Sep 2025 21:10:26 +0000
-Date: Fri, 5 Sep 2025 05:10:25 +0800
+	id 1uuHEs-0005vT-0P;
+	Thu, 04 Sep 2025 21:11:26 +0000
+Date: Fri, 5 Sep 2025 05:10:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuyi Zhou <zhouchuyi@bytedance.com>
+To: Sascha Hauer <s.hauer@pengutronix.de>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>
-Subject: [tj-cgroup:for-6.18 17/17] kernel/cgroup/cgroup.c:3029:24: warning:
- unused variable 'ss'
-Message-ID: <202509050527.YEPZiaXZ-lkp@intel.com>
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel@pengutronix.de,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-gpio@vger.kernel.org,
+	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: [PATCH v6 2/2] clk: add TI CDCE6214 clock driver
+Message-ID: <202509050404.kfqjYP6B-lkp@intel.com>
+References: <20250903-clk-cdce6214-v6-2-b2cc0a6f282b@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,50 +72,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250903-clk-cdce6214-v6-2-b2cc0a6f282b@pengutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-6.18
-head:   d8b269e009bbc471cb2735b5f737839495efce3b
-commit: d8b269e009bbc471cb2735b5f737839495efce3b [17/17] cgroup: Remove unused cgroup_subsys::post_attach
-config: i386-buildonly-randconfig-003-20250905 (https://download.01.org/0day-ci/archive/20250905/202509050527.YEPZiaXZ-lkp@intel.com/config)
+Hi Sascha,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on b320789d6883cc00ac78ce83bccbfe7ed58afcf0]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sascha-Hauer/dt-bindings-clock-add-TI-CDCE6214-binding/20250903-215839
+base:   b320789d6883cc00ac78ce83bccbfe7ed58afcf0
+patch link:    https://lore.kernel.org/r/20250903-clk-cdce6214-v6-2-b2cc0a6f282b%40pengutronix.de
+patch subject: [PATCH v6 2/2] clk: add TI CDCE6214 clock driver
+config: i386-randconfig-014-20250905 (https://download.01.org/0day-ci/archive/20250905/202509050404.kfqjYP6B-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050527.YEPZiaXZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050404.kfqjYP6B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509050527.YEPZiaXZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509050404.kfqjYP6B-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/cgroup/cgroup.c:3029:24: warning: unused variable 'ss' [-Wunused-variable]
-    3029 |         struct cgroup_subsys *ss;
-         |                               ^~
->> kernel/cgroup/cgroup.c:3030:6: warning: unused variable 'ssid' [-Wunused-variable]
-    3030 |         int ssid;
-         |             ^~~~
-   2 warnings generated.
+>> drivers/clk/clk-cdce6214.c:1537:3: error: field designator 'is_generic' does not refer to any field in type 'const struct pinconf_ops'
+    1537 |         .is_generic = true,
+         |         ~^~~~~~~~~~~~~~~~~
+>> drivers/clk/clk-cdce6214.c:1549:3: error: field designator 'num_custom_params' does not refer to any field in type 'struct pinctrl_desc'
+    1549 |         .num_custom_params = ARRAY_SIZE(cdce6214_dt_params),
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/clk-cdce6214.c:1550:3: error: field designator 'custom_params' does not refer to any field in type 'struct pinctrl_desc'
+    1550 |         .custom_params = cdce6214_dt_params,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/clk-cdce6214.c:1551:3: error: field designator 'custom_conf_items' does not refer to any field in type 'struct pinctrl_desc'
+    1551 |         .custom_conf_items = cdce6214_conf_items,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
 
 
-vim +/ss +3029 kernel/cgroup/cgroup.c
+vim +1537 drivers/clk/clk-cdce6214.c
 
-bbcb81d09104f0 kernel/cgroup.c        Paul Menage 2007-10-18  3026  
-4f7e7236435ca0 kernel/cgroup/cgroup.c Tejun Heo   2022-08-15  3027  void cgroup_procs_write_finish(struct task_struct *task, bool threadgroup_locked)
-715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15  3028  {
-715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15 @3029  	struct cgroup_subsys *ss;
-715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15 @3030  	int ssid;
-081aa458c38ba5 kernel/cgroup.c        Li Zefan    2013-03-13  3031  
-715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15  3032  	/* release reference from cgroup_procs_write_start() */
-715c809d9a9e38 kernel/cgroup/cgroup.c Tejun Heo   2017-05-15  3033  	put_task_struct(task);
-3014dde762f618 kernel/cgroup.c        Tejun Heo   2015-09-16  3034  
-4f7e7236435ca0 kernel/cgroup/cgroup.c Tejun Heo   2022-08-15  3035  	cgroup_attach_unlock(threadgroup_locked);
-af351026aafc8d kernel/cgroup.c        Paul Menage 2008-07-25  3036  }
-af351026aafc8d kernel/cgroup.c        Paul Menage 2008-07-25  3037  
-
-:::::: The code at line 3029 was first introduced by commit
-:::::: 715c809d9a9e38d8fb9476757ddaf64c1a9f767f cgroup: reorganize cgroup.procs / task write path
-
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Tejun Heo <tj@kernel.org>
+  1535	
+  1536	static const struct pinconf_ops cdce6214_pinconf_ops = {
+> 1537		.is_generic = true,
+  1538		.pin_config_get = cdce6214_pinconf_get,
+  1539		.pin_config_set = cdce6214_pinconf_set,
+  1540	};
+  1541	
+  1542	static struct pinctrl_desc cdce6214_pdesc = {
+  1543		.name = "cdce6214-pinctrl",
+  1544		.pins = cdce6214_pinctrl_pins,
+  1545		.npins = ARRAY_SIZE(cdce6214_pinctrl_pins),
+  1546		.pctlops = &rtc_pinctrl_ops,
+  1547		.owner = THIS_MODULE,
+  1548		.confops = &cdce6214_pinconf_ops,
+> 1549		.num_custom_params = ARRAY_SIZE(cdce6214_dt_params),
+> 1550		.custom_params = cdce6214_dt_params,
+> 1551		.custom_conf_items = cdce6214_conf_items,
+  1552	};
+  1553	
 
 -- 
 0-DAY CI Kernel Test Service
