@@ -1,102 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B9A286D57
-	for <llvm@lists.linux.dev>; Thu,  4 Sep 2025 09:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A3023D294;
+	Thu,  4 Sep 2025 11:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756976672; cv=none; b=FCCbbMCgwkKL1pTkl/nAeKkMyfdRZbMmJ9Po07bEqlVrwL5Bbx53PF6v9P/vsgR1mkB5jIjSYM4CUp6Kdr0NqKFpPGbEh6sSwySnEyjcmDse4YtVczo1S1jcjbtlcltgGQyuHFAMySkZZtBNarwDKi0XJr0uYQ6LWTKGUIQs9f8=
+	t=1756985766; cv=none; b=GcaqXUpye9qvJL0j+3qySoPk/yHDAHmCZOYBY+ZxhjTV2OcaLYm1N9l7IRng3fkSQwHcvzCLA9tgiXNVLRUtEkMlzdtv4j0h50OODXJyqIH/HkOLoqhs079D+k8nSWayZH+0MiKrJ88mGMhqtv3SSH8yYLbMZs6qg87B3CFhWXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756976672; c=relaxed/simple;
-	bh=l6j2BAL8B9Jl9DGCMUcF7Ikqoa6pnHZsWN8KE462QuA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AJ6rA9ABZw60xE4AUIPhSLfvwJao6YWV2GsHPEs+Gl2KK51alQrRXvUerlZGjSUlsi22dTNwuLkjMIVy+zp/SEZNjipevBW0PMEvAoiJ0T0C+6x+A+c9a6FdhgNzTUnLmue3csEAvlx8knGko+Qp3XIC7X0DSDGsm3RvfkFRqqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jE/8Rl5n; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1756985766; c=relaxed/simple;
+	bh=XooMgB/G8lNJMCdIzzBtmWjZeeaz3fKqex6i/QbgCAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FWi0Tdm1ajUtb3DCBZjHLhFsJD+y16Vmb9RzUBOrEFnC6G/gIfX6mddRFsxl8RICsSg7yMAcWYRUsHvd1Jt9I0N6zqBw82SWBqh2rDDUcbc3cbHoO8E9zfqpJiezvejD3Dv8kChw6ESUZMgSB11WUmWWNH00p7dMkyhNwLUGd70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DUsS8D3x; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jE/8Rl5n"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DUsS8D3x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756976670; x=1788512670;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=l6j2BAL8B9Jl9DGCMUcF7Ikqoa6pnHZsWN8KE462QuA=;
-  b=jE/8Rl5nvqi7VabHpgn62OCMMb9q7g3PdomSkAYTGVJ0vd9o2gKjj9iE
-   LjumagJ3HMnVAHqAtASPtCk8JxaNnf5pQIzOxKn+vEEK8YgFLJSH9VKUc
-   u94JmuSdlDyuLMtC1i/HukAknn4z2qxwTXr9RAQJSOtoooWThD4PjQHlO
-   ETWpj71Xlrc85+HqGHilkTHC9iiQah3GnryLV5SOm/7TGO0xYWKDhF64f
-   Sw952O8MwlZfNQGg0W9NIuQbKfAlA3Z2iEX/Z3scO904HVemih5XksuT6
-   dZsC8TBu7LfXtUJ7R9D4L63CySaGNh3ue59Gp4EyzVtAXEw3ztSsmn1im
-   Q==;
-X-CSE-ConnectionGUID: sogWcE5iRkGfM0eDrhYqbg==
-X-CSE-MsgGUID: XFpZoXwtQPylIyWyddpS6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="59418327"
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="59418327"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 02:04:29 -0700
-X-CSE-ConnectionGUID: /g8fJMWZRRO37IE8lAdetQ==
-X-CSE-MsgGUID: mHNykIaaS0KaF3glhfuDAA==
+  t=1756985765; x=1788521765;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XooMgB/G8lNJMCdIzzBtmWjZeeaz3fKqex6i/QbgCAs=;
+  b=DUsS8D3x5BhS5A+UlJ3/GRseG5OuT4tSLzDXq7Dmd7b46LtaHD/TKRse
+   GkcjfJa7zXmHUuQP5laTBzjEHB6yAvdKIEK2CUCAWAg5rwKL3uZbeAKcf
+   VtXYbkicCfCz51JOPbshSXsYeoU/Xs4uGKchgLmfLwjyX+q77bDfJUOqX
+   jlzHGQrxLqcpkR3T69xt1CShJztemMWfT5LAikfhICKHT0UGti2JaKD0x
+   orAgntdUkTcUQRS1Dj+6IHDxa4Q0jH04kwozWnwMBOJS2LK4cIHtJF2Nz
+   5kygYcZBT8ucvL4wy+PV3jJmJkWAo+oWgAkLl3UUrb9galhNnFO72Pjvc
+   w==;
+X-CSE-ConnectionGUID: g6++lvlST8OEAul2RL9WFQ==
+X-CSE-MsgGUID: 9hNaOzBBSQKrKNDEfNTd6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="70416303"
+X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
+   d="scan'208";a="70416303"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 04:36:04 -0700
+X-CSE-ConnectionGUID: 2HCD2rLNSbiGPoee94Y5lg==
+X-CSE-MsgGUID: Tg6EjqbvT3+7BOniHFVSmA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="171771381"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa006.fm.intel.com with ESMTP; 04 Sep 2025 02:04:26 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 0321794; Thu, 04 Sep 2025 11:04:25 +0200 (CEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org,
-	maple-tree@lists.infradead.org,
-	linux-mm@kvack.org,
-	llvm@lists.linux.dev
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] mapple_tree: Fix build error (`make W=1`)
-Date: Thu,  4 Sep 2025 11:04:23 +0200
-Message-ID: <20250904090423.2293933-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
+X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
+   d="scan'208";a="176228730"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Sep 2025 04:36:02 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uu8F0-0005AJ-3B;
+	Thu, 04 Sep 2025 11:35:18 +0000
+Date: Thu, 4 Sep 2025 19:32:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fidal Palamparambil <palamparambilfidal089@gmail.com>,
+	kgdb-bugreport@lists.sourceforge.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, daniel.thompson@linaro.org,
+	dianders@chromium.org,
+	Fidal Palamparambil <hellomystoryswherei@gmail.com>
+Subject: Re: [PATCH] media: pci: Add core driver for Techwell TW68xx video
+ capture devices
+Message-ID: <202509041912.qtRHikwE-lkp@intel.com>
+References: <20250903174657.1689-1-hellomystoryswherei@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250903174657.1689-1-hellomystoryswherei@gmail.com>
 
-clang complains about unused function:
+Hi Fidal,
 
-lib/maple_tree.c:179:19: error: unused function 'mt_alloc_bulk' [-Werror,-Wunused-function]
+kernel test robot noticed the following build warnings:
 
-Fix this by removing unused code.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.17-rc4 next-20250904]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: a48d52b2d21b ("maple_tree: Convert forking to use the sheaf interface")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- lib/maple_tree.c | 5 -----
- 1 file changed, 5 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Fidal-Palamparambil/media-pci-Add-core-driver-for-Techwell-TW68xx-video-capture-devices/20250904-014821
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250903174657.1689-1-hellomystoryswherei%40gmail.com
+patch subject: [PATCH] media: pci: Add core driver for Techwell TW68xx video capture devices
+config: i386-buildonly-randconfig-006-20250904 (https://download.01.org/0day-ci/archive/20250904/202509041912.qtRHikwE-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250904/202509041912.qtRHikwE-lkp@intel.com/reproduce)
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index fce329d6c1b2..ca8b3c2e0362 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -176,11 +176,6 @@ static inline struct maple_node *mt_alloc_one(gfp_t gfp)
- 	return kmem_cache_alloc(maple_node_cache, gfp);
- }
- 
--static inline int mt_alloc_bulk(gfp_t gfp, size_t size, void **nodes)
--{
--	return kmem_cache_alloc_bulk(maple_node_cache, gfp, size, nodes);
--}
--
- static inline void mt_free_bulk(size_t size, void __rcu **nodes)
- {
- 	kmem_cache_free_bulk(maple_node_cache, size, (void **)nodes);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509041912.qtRHikwE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/pci/tw68/tw68-core.c:381:18: warning: unused variable 'pci_dev' [-Wunused-variable]
+     381 |         struct pci_dev *pci_dev = to_pci_dev(dev_d);
+         |                         ^~~~~~~
+   1 warning generated.
+
+
+vim +/pci_dev +381 drivers/media/pci/tw68/tw68-core.c
+
+   378	
+   379	static int __maybe_unused tw68_resume(struct device *dev_d)
+   380	{
+ > 381		struct pci_dev *pci_dev = to_pci_dev(dev_d);
+   382		struct v4l2_device *v4l2_dev = dev_get_drvdata(dev_d);
+   383		struct tw68_dev *dev = container_of(v4l2_dev, struct tw68_dev, v4l2_dev);
+   384		struct tw68_buf *buf;
+   385		unsigned long flags;
+   386	
+   387		/* Do things that are done in tw68_initdev,
+   388		 * except for initializing memory structures.
+   389		 */
+   390		msleep(100);
+   391	
+   392		tw68_hw_init1(dev);
+   393		tw68_set_tvnorm_hw(dev);
+   394	
+   395		/* Restore interrupt mask */
+   396		tw_setl(TW68_INTMASK, dev->pci_irqmask);
+   397	
+   398		/* Resume unfinished buffer(s) */
+   399		spin_lock_irqsave(&dev->slock, flags);
+   400		if (!list_empty(&dev->active)) {
+   401			buf = container_of(dev->active.next, struct tw68_buf, list);
+   402			tw68_video_start_dma(dev, buf);
+   403		}
+   404		spin_unlock_irqrestore(&dev->slock, flags);
+   405	
+   406		return 0;
+   407	}
+   408	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
