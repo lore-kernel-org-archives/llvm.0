@@ -1,70 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7A0223328;
-	Thu,  4 Sep 2025 18:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20420342CAD;
+	Thu,  4 Sep 2025 18:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757010351; cv=none; b=V1NjoZO1ZtaFHm1hlEse7/cLBXidpkD77W4Fz1V5pgkwHqbQXHy8CxF5O64fGNzJbpjmwoowI6GSj44LLkFzKGu4CX+8mkt4inQjOE9KUwme+9DWVnce+4iqM6zFrT5PwnOtUXnwW+iaVHwZIGD4BG1P3D0GAVWDPn89cR70Kow=
+	t=1757010519; cv=none; b=BvTtlcrcYvhuNsjigbvvg9zY9rdKoTIFUJsQsnuZXyKcG1p36aSiyoa8oxIXBT9fDFpKhAIj1Jq0j2Kd/y8T/dByQookGmNOEkd/eULAd9+EOG1vdx1gZY3aUhkRh8UxycRRyEUalM4QCp+uaRYjOkaTDCsXA9iqo9174pNJSnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757010351; c=relaxed/simple;
-	bh=fODPQuazUhzIXcrOVissOgZN6RxqkXm+I9fvTVso/kw=;
+	s=arc-20240116; t=1757010519; c=relaxed/simple;
+	bh=+XQg5Gr7AwL8fTXdZyl2qxqsdyHuqVxLGzPFbhKUbHQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekaK59yClNNwExcpbFtUHLn56U+oBTskkQiCFC3Y0wUPMOo69AcIMrgQWPrzqt6kCmoerZGJKBD4Z5CnpfyodoFBbgghh+weks/uVYp9XHZF6qqQXqszUPv381KnW3x5yNQ7pYF+Fnx4KN8MpFA6g3rHuPllNp/uxInLAzLwquY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mqfvPQCQ; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=JHy+saTwbdO2O13V6mveKXTex91+uhIT2t2EXPRlL2m4deDsCeAMqSL+6q+hfsJJ7g0wsHRpZxQ7YhQ6MGT6ahZlgAN4+0Ns8nVus+HVMD74txogkynNzanTYQxbufsWh+6xHQw2cUwdhQowtkORYA9gxIVUoIHUFbHCcMCy/QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNb2zDM1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqfvPQCQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757010350; x=1788546350;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fODPQuazUhzIXcrOVissOgZN6RxqkXm+I9fvTVso/kw=;
-  b=mqfvPQCQ/Xf1leHiBIb7PUr0Bir7+BNm5qf9dpJvckO6oS2N5aTJVnNb
-   jB7mFUnscgcQEgxjlW2c9fzJ30jcsemS95GH3dPewiztWlvFXXlEvKRut
-   CefFgCdm4xbDjy2cI94cnjVv87psE4GGxJxeAoVfUnK/97Aee816zCW3M
-   yFgpOS4cNXucqZdFO5jvFf/p6uqOkAUIicNqLQq4XE0SsUQfFQkkIb2EO
-   jlmuVrWePE88d5WmNa275rD3u3QVom55B0jSDJ0aknOAsKyhhhbN+hN1m
-   n6qMxQv5DynEiW0geoy9PBQbv4jJugvtcLb6PYnfVlRt4g0jl/VvTKQLq
-   A==;
-X-CSE-ConnectionGUID: 6BKlbjA/RI67Q+uBXtN0Iw==
-X-CSE-MsgGUID: U58amnzYQu6c3xooH1VjUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="76815858"
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="76815858"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 11:25:50 -0700
-X-CSE-ConnectionGUID: zBHdrTl7S9yy4bqqmzmJtg==
-X-CSE-MsgGUID: 4Vn3UJaJRUmjB7jTV0qmCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
-   d="scan'208";a="176305149"
-Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 04 Sep 2025 11:25:46 -0700
-Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uuEeV-0005cN-1t;
-	Thu, 04 Sep 2025 18:25:43 +0000
-Date: Fri, 5 Sep 2025 02:25:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Adam Young <admiyo@os.amperecomputing.com>,
-	Jeremy Kerr <jk@codeconstruct.com.au>,
-	Matt Johnston <matt@codeconstruct.com.au>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Huisong Li <lihuisong@huawei.com>
-Subject: Re: [PATCH net-next v28 1/1] mctp pcc: Implement MCTP over PCC
- Transport
-Message-ID: <202509050150.wt57Mjwg-lkp@intel.com>
-References: <20250904040544.598469-2-admiyo@os.amperecomputing.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNb2zDM1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053CDC4CEF1;
+	Thu,  4 Sep 2025 18:28:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757010517;
+	bh=+XQg5Gr7AwL8fTXdZyl2qxqsdyHuqVxLGzPFbhKUbHQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iNb2zDM1DtPkwJjb2Km/2/fT+7BssKm2TAp9GcwMc2kwey4bKvumwTBZC8XjicAgC
+	 O8vKxGEQ6ZrnbzNzRsgKdmln5fi1QVQ+ggBSNnCmXRh2F8TKHBagjC/7JuI0gjZ7a0
+	 eQeXW07loWW1uGspxhWsQshfExAjBMJoe10aDY1wE58xKccTgdaulrjO8VykzTyEWg
+	 Ax0/oRKgjIAljA0ajad4796myhhQBKaRVODi31HN6fiOYLHb/KzOb4vpTxPYRFYA+E
+	 rlfsr63uFdOgrmw0DWihkM2EWyMEbqUss3dI0PwAziP2dKS58ObkfVS0tvszvFgLRH
+	 hoMvTNN+MFWew==
+Date: Thu, 4 Sep 2025 11:28:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Marco Elver <elver@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Ramon de C Valle <rcvalle@google.com>, llvm@lists.linux.dev,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] compiler_types.h: Move __nocfi out of
+ compiler-specific header
+Message-ID: <20250904182829.GA2110053@ax162>
+References: <20250904033217.it.414-kees@kernel.org>
+ <20250904034656.3670313-1-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,96 +66,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250904040544.598469-2-admiyo@os.amperecomputing.com>
+In-Reply-To: <20250904034656.3670313-1-kees@kernel.org>
 
-Hi Adam,
+On Wed, Sep 03, 2025 at 08:46:40PM -0700, Kees Cook wrote:
+> Prepare for GCC KCFI support and move the __nocfi attribute from
+> compiler-clang.h to compiler_types.h. This was already gated by
+> CONFIG_CFI_CLANG, so this remains safe for non-KCFI GCC builds.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
 
-kernel test robot noticed the following build warnings:
+I reviewed this on v1:
 
-[auto build test WARNING on net-next/main]
+https://lore.kernel.org/20250827194657.GA3572128@ax162/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Young/mctp-pcc-Implement-MCTP-over-PCC-Transport/20250904-120728
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250904040544.598469-2-admiyo%40os.amperecomputing.com
-patch subject: [PATCH net-next v28 1/1] mctp pcc: Implement MCTP over PCC Transport
-config: i386-buildonly-randconfig-005-20250905 (https://download.01.org/0day-ci/archive/20250905/202509050150.wt57Mjwg-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050150.wt57Mjwg-lkp@intel.com/reproduce)
+but just to make sure it sticks :)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509050150.wt57Mjwg-lkp@intel.com/
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/mctp/mctp-pcc.c:327:6: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
-     327 |         if (rc)
-         |             ^~
-   drivers/net/mctp/mctp-pcc.c:303:8: note: initialize the variable 'rc' to silence this warning
-     303 |         int rc;
-         |               ^
-         |                = 0
-   1 warning generated.
-
-
-vim +/rc +327 drivers/net/mctp/mctp-pcc.c
-
-   293	
-   294	static int mctp_pcc_driver_add(struct acpi_device *acpi_dev)
-   295	{
-   296		struct mctp_pcc_lookup_context context = {0};
-   297		struct mctp_pcc_ndev *mctp_pcc_ndev;
-   298		struct device *dev = &acpi_dev->dev;
-   299		struct net_device *ndev;
-   300		acpi_handle dev_handle;
-   301		acpi_status status;
-   302		char name[32];
-   303		int rc;
-   304	
-   305		dev_dbg(dev, "Adding mctp_pcc device for HID %s\n",
-   306			acpi_device_hid(acpi_dev));
-   307		dev_handle = acpi_device_handle(acpi_dev);
-   308		status = acpi_walk_resources(dev_handle, "_CRS", lookup_pcct_indices,
-   309					     &context);
-   310		if (!ACPI_SUCCESS(status)) {
-   311			dev_err(dev, "FAILURE to lookup PCC indexes from CRS\n");
-   312			return -EINVAL;
-   313		}
-   314	
-   315		snprintf(name, sizeof(name), "mctppcc%d", context.inbox_index);
-   316		ndev = alloc_netdev(sizeof(*mctp_pcc_ndev), name, NET_NAME_PREDICTABLE,
-   317				    mctp_pcc_setup);
-   318		if (!ndev)
-   319			return -ENOMEM;
-   320	
-   321		mctp_pcc_ndev = netdev_priv(ndev);
-   322	
-   323		mctp_pcc_initialize_mailbox(dev, &mctp_pcc_ndev->inbox,
-   324					    context.inbox_index);
-   325		mctp_pcc_initialize_mailbox(dev, &mctp_pcc_ndev->outbox,
-   326					    context.outbox_index);
- > 327		if (rc)
-   328			goto free_netdev;
-   329	
-   330		mctp_pcc_ndev->outbox.client.tx_done = mctp_pcc_tx_done;
-   331		mctp_pcc_ndev->acpi_device = acpi_dev;
-   332		mctp_pcc_ndev->ndev = ndev;
-   333		acpi_dev->driver_data = mctp_pcc_ndev;
-   334	
-   335		initialize_MTU(ndev);
-   336	
-   337		rc = mctp_register_netdev(ndev, NULL, MCTP_PHYS_BINDING_PCC);
-   338		if (rc)
-   339			goto free_netdev;
-   340	
-   341		return devm_add_action_or_reset(dev, mctp_cleanup_netdev, ndev);
-   342	free_netdev:
-   343		free_netdev(ndev);
-   344		return rc;
-   345	}
-   346	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  include/linux/compiler-clang.h | 5 -----
+>  include/linux/compiler_types.h | 4 +++-
+>  2 files changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index fa4ffe037bc7..7a4568e421dc 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
+> @@ -96,11 +96,6 @@
+>  # define __noscs	__attribute__((__no_sanitize__("shadow-call-stack")))
+>  #endif
+>  
+> -#if __has_feature(kcfi)
+> -/* Disable CFI checking inside a function. */
+> -#define __nocfi		__attribute__((__no_sanitize__("kcfi")))
+> -#endif
+> -
+>  /*
+>   * Turn individual warnings and errors on and off locally, depending
+>   * on version.
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 16755431fc11..a910f9fa5341 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -432,7 +432,9 @@ struct ftrace_likely_data {
+>  # define __noscs
+>  #endif
+>  
+> -#ifndef __nocfi
+> +#if defined(CONFIG_CFI_CLANG)
+> +# define __nocfi		__attribute__((__no_sanitize__("kcfi")))
+> +#else
+>  # define __nocfi
+>  #endif
+>  
+> -- 
+> 2.34.1
+> 
