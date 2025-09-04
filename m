@@ -1,63 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4A6260580;
-	Thu,  4 Sep 2025 16:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C873148D4;
+	Thu,  4 Sep 2025 18:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757003837; cv=none; b=PFQPSnLwKuxSms5ZKmP5KAw/QVnCMAV58mlBVh6QOGCkNIeGEMcmjUbL2C+BgT0LtCCGbb9YWWtUS5WKZTdsyVRKGqDd2PP05f5uWzUC6C2BaJCVENQJrjsfjZo9vbb/yMPjU1OeW4EPFook5mIMPCpZ3LE+Y1J29gQPwWMXErc=
+	t=1757009033; cv=none; b=j471FRhqHD00Eb1e5oIRHtqctwvu7txoMManBZBQFZlYrXAMnC8W0szE4iHS3r6ATOeYhV74bTRkd1Lxcdzoed0VOIvw/eiWvH/IktbP0Dz323YeXndrczQP8H5I3q043d7moZOct2iGER2YI6q5v/uAPxma+aojLSBQpjTVrgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757003837; c=relaxed/simple;
-	bh=ktaFNYGOy663BwK6rfV/ONBV11uoyQrRziv09fSFQ1A=;
+	s=arc-20240116; t=1757009033; c=relaxed/simple;
+	bh=ymrXcQJetdvND6FIBkZJMvg9Zf1rW9i5Xw3TcvudkzQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=siu2oTl+s7ROMotrWVaIRSYrmztMJPQUXKHDa5tQ3GamggDGHTcTncaaCKbBuh+M5BIC0tW/6manYJcdR5gtutI9wDJjUOFPgTTGPtXeIBSl22EPj/KiM+YtQJ7GFN0cOf0A/19BTBsb6OeJs6HtisUWAx4LAwVvaSezO8/lSoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hkRDPCwc; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=rQUixZm3y8KUgbRLNv5u7f7a/J+Q8xLUD3aUgn8Q/Yv/yLJb+07AwivDaKzKkzxRKzchRunzYUaoM/2C44AqYgBpIcPolYIaoxg+QlSfpluXlIViHLlm17PqfF8ZOZZtVrOK7hcWznodIHkGASzdQpgsAu8BBiZGPgPTWqRncAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cTB/Jyds; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hkRDPCwc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87D8C4CEF0;
-	Thu,  4 Sep 2025 16:37:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757003834;
-	bh=ktaFNYGOy663BwK6rfV/ONBV11uoyQrRziv09fSFQ1A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hkRDPCwcgpV8W/82FQ58Hd5lN+OM+10trpdtVo186jo1w+T6Sew0RKJ/4TY/RX2Ip
-	 r200ZrHL354DiFKrwms7xBmVqu08JXVvLuE4NErIdKRHDGruat+xbl3SHNKLxHP+Hz
-	 2/WSWuM5/y1bZJZUAm39JvLJzGixYRvMVE6a8VVY+F5r9Hi65LJpnWGBwz1ehPZwj6
-	 B8r2LYhfLODBKHBqtiyERC74r87xZITyQ8hJ0JE7fK8OpjHuW+RUNRMV3BKI9ySJcD
-	 CToGmN2fu60jEhJ6XbgicYPHuEjgzHP2Ww9lFQhmlX4HgTFwgMQkOh4COZI1fTKdBI
-	 6xyRidT+lU2Sw==
-Date: Thu, 4 Sep 2025 09:37:14 -0700
-From: Kees Cook <kees@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Marco Elver <elver@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Ramon de C Valle <rcvalle@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] kcfi: Prepare for GCC support
-Message-ID: <202509040933.06AF02E714@keescook>
-References: <20250904033217.it.414-kees@kernel.org>
- <20250904070410.GX4067720@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cTB/Jyds"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757009031; x=1788545031;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ymrXcQJetdvND6FIBkZJMvg9Zf1rW9i5Xw3TcvudkzQ=;
+  b=cTB/JydsEqqm8HZm+0/xYuM9kG5cQ6nwCq7vmUy7xMFdu0G/3gJ7u78g
+   GDlOzFCR5Tig8N1CfjodFzAUag1U0FJ82/WplCzdWITj2NuG/RfoKfA/P
+   M2rkTrGsZoNVtw6tGW7XZRDdkXxTbOA7vQppRffTAejfTPtbs2o0chuK8
+   +YaDrQqSw1mhDTuAkrleaJoVIcUX5VVGDgZBBpF0py17qBKrcN50h+BgD
+   TpsLeZaT/ajD6TZT3Se/aWpXATzCvtBeUFH7xRyWAaqjwKk6mpRHccs+j
+   sM9qaCxf7NRZIHedM1PpVrnv2HV+HG7OTRZiGH5jryewL0ofueyPFkoFf
+   Q==;
+X-CSE-ConnectionGUID: Z/JBrS+TTJOIsAWLuHL3MA==
+X-CSE-MsgGUID: poqZn6WwSW+ZqiU0lks8og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="76813767"
+X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
+   d="scan'208";a="76813767"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 11:03:51 -0700
+X-CSE-ConnectionGUID: FLrroYHCTxqjnDVywxxXNg==
+X-CSE-MsgGUID: L/CHNkqlRoGSYBA13Cnh+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
+   d="scan'208";a="177226633"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 04 Sep 2025 11:03:49 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uuEIe-0005aZ-38;
+	Thu, 04 Sep 2025 18:03:26 +0000
+Date: Fri, 5 Sep 2025 02:03:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chen Yufeng <chenyufeng@iie.ac.cn>, axboe@kernel.dk
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-block@vger.kernel.org, Chen Yufeng <chenyufeng@iie.ac.cn>
+Subject: Re: [PATCH] Sanitize set_task_ioprio() permission checks
+Message-ID: <202509050122.1DzOHKji-lkp@intel.com>
+References: <20250904031312.887-1-chenyufeng@iie.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,50 +63,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250904070410.GX4067720@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250904031312.887-1-chenyufeng@iie.ac.cn>
 
-On Thu, Sep 04, 2025 at 09:04:10AM +0200, Peter Zijlstra wrote:
-> On Wed, Sep 03, 2025 at 08:46:39PM -0700, Kees Cook wrote:
-> 
-> > Kees Cook (9):
-> >   compiler_types.h: Move __nocfi out of compiler-specific header
-> >   x86/traps: Clarify KCFI instruction layout
-> >   x86/cfi: Document the "cfi=" bootparam options
-> >   x86/cfi: Standardize on common "CFI:" prefix for CFI reports
-> >   x86/cfi: Add "debug" option to "cfi=" bootparam
-> >   x86/cfi: Remove __noinitretpoline and __noretpoline
-> 
-> So I can take these first 6 patches (and edit that debug patch to
-> un-annoy myself ;-), but I'm thinking this Kconfig stuff:
+Hi Chen,
 
-Sure, yeah. Do you want a v3 for the debug stuff that uses your proposed
-helper?
+kernel test robot noticed the following build errors:
 
-> >   kconfig: Add transitional symbol attribute for migration support
-> >   kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-> 
-> Should perhaps go through the kbuild tree? A
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v6.17-rc4 next-20250904]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I had chatted offline with Nathan about this series, and he'd suggested
-the kconfig change could go with it's first user (the rename). So if you
-don't want to put it in -tip, I can take it in the hardening tree.
-(There's no dependencies between these 2 and the first 6.)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yufeng/Sanitize-set_task_ioprio-permission-checks/20250904-112027
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20250904031312.887-1-chenyufeng%40iie.ac.cn
+patch subject: [PATCH] Sanitize set_task_ioprio() permission checks
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250905/202509050122.1DzOHKji-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050122.1DzOHKji-lkp@intel.com/reproduce)
 
-> Leaving this:
-> 
-> >   ARM: traps: Implement KCFI trap handler for ARM32
-> 
-> Can that go independently through the arm tree, or are there
-> dependencies?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509050122.1DzOHKji-lkp@intel.com/
 
-I can take this too, assuming ARM folks don't want to snag it. I may,
-however, wait on it, just to avoid implementing the kernel support
-before the GCC folks are happy with the arm32 KCFI backend and its UDF
-encoding, etc.
+All errors (new ones prefixed by >>):
 
-Thanks for looking at these! :)
+>> block/blk-ioc.c:249:7: error: call to undeclared function 'ptrace_may_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     249 |         if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+         |              ^
+>> block/blk-ioc.c:249:31: error: use of undeclared identifier 'PTRACE_MODE_READ_REALCREDS'
+     249 |         if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+         |                                      ^
+   2 errors generated.
 
--Kees
+
+vim +/ptrace_may_access +249 block/blk-ioc.c
+
+   243	
+   244	int set_task_ioprio(struct task_struct *task, int ioprio)
+   245	{
+   246		int err;
+   247	
+   248		rcu_read_lock();
+ > 249		if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+   250			rcu_read_unlock();
+   251			return -EPERM;
+   252		}
+   253		rcu_read_unlock();
+   254	
+   255		err = security_task_setioprio(task, ioprio);
+   256		if (err)
+   257			return err;
+   258	
+   259		task_lock(task);
+   260		if (unlikely(!task->io_context)) {
+   261			struct io_context *ioc;
+   262	
+   263			task_unlock(task);
+   264	
+   265			ioc = alloc_io_context(GFP_ATOMIC, NUMA_NO_NODE);
+   266			if (!ioc)
+   267				return -ENOMEM;
+   268	
+   269			task_lock(task);
+   270			if (task->flags & PF_EXITING) {
+   271				kmem_cache_free(iocontext_cachep, ioc);
+   272				goto out;
+   273			}
+   274			if (task->io_context)
+   275				kmem_cache_free(iocontext_cachep, ioc);
+   276			else
+   277				task->io_context = ioc;
+   278		}
+   279		task->io_context->ioprio = ioprio;
+   280	out:
+   281		task_unlock(task);
+   282		return 0;
+   283	}
+   284	EXPORT_SYMBOL_GPL(set_task_ioprio);
+   285	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
