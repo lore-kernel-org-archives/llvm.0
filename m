@@ -1,64 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B59930F528;
-	Thu,  4 Sep 2025 18:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B663B2459F8;
+	Thu,  4 Sep 2025 18:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757011218; cv=none; b=Dgmgi7q+vna22KjEmN3dlBuAm8gQ1PVtvbB2Ti5w01NjWrVddLBIH8X0vkz7droHlqzY51q8h7XHRht0tgpyoEjhwVz02UaT/+/wY9HKwPUAP27H68p4bYoTmwpeiSovpTYmcJDWT2kxbD1PGdXWQNnKSrB2Tglq0w9x0nG86ag=
+	t=1757011670; cv=none; b=PEmOEJjgw7rbwhQaZUH3wvYWFcicS94/KCyu7dSJDXzoDUV2ez0XKeCdx1LE/mNgjXccfdqWzH43TCNGoyAKIRXKIvp5kgfuLhWS0wXDxXXtPg98PN4RN4ArlknlRMoOLNgldmpFlfGgVjtAST9rwZiJDpYNC3bal25yjt/gK28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757011218; c=relaxed/simple;
-	bh=ILiVByv+j8sL6RIqPKHr6lcD5lYejE6CwCw4EFoN4f8=;
+	s=arc-20240116; t=1757011670; c=relaxed/simple;
+	bh=KzUGxTop9JhPXBG4T/1leWl65MjxiWSzlGCzfJwjlsQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=obk7RyANdLP5hePch2jjrbzVTqa7gqjIua1Y9g1aKwuwGYtlcmExVeY7hEjkWIG3KEHQFgbWV2H8VcRiiaohmJspjJ5ho/I48fb+Q3GqRxvQBEd4tbm1DysBfMdGHr5yUqxEkhO8+pWvV4FDKPMWH/fNsRjrsxd6dnZ4a0tK4X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QuPqvLm3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=A12a3NQCpUYr2bBk/R0B2rQkPivTMSZHBVYXhp4vRE4uqjumSts0JmSkCvgKQQqezi68l2OIOH2eM/x1xiuWRGvOk9nqy8d7qa1fcF/6s5k1ON31ytYL9wfiM+clCBbFC3IHOc+jhACwDYUSvQhudTK4cVGbp7icfosPovEC+Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jd3hjVEO; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QuPqvLm3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0ADC4CEF6;
-	Thu,  4 Sep 2025 18:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757011214;
-	bh=ILiVByv+j8sL6RIqPKHr6lcD5lYejE6CwCw4EFoN4f8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QuPqvLm3BxpuhLbqcQawdON7moRQflTsG/i697n1BQm5czZrXEMAY0SKKt8ZbpKxa
-	 CfwMIMFPO+HtPWYHlb1Dykig0UCLgZwo/CZVLh9iGcfAIqbv4EK6UrGC+zUj2DG5Nk
-	 32t9+6h5DTNfOBTEbQuhvMqcW/zTCLi/NvfCiXtdUFFg+epbo4E3OP7h1OzCZyb/mU
-	 bykMskO9KqcE00XXI9fXVewJdKZOELlVb9E1ydT1pFn3FhuhAqq7kJIGaawMvcskQa
-	 Kg99OHJffxp9hNXtIzfwD4PvSRtB6Y6dKy/9mfg2g6N2552wzx/5T9va88RdST70Jr
-	 1N01jP9mlh7Iw==
-Date: Thu, 4 Sep 2025 11:40:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Marco Elver <elver@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Ramon de C Valle <rcvalle@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 4/9] x86/cfi: Standardize on common "CFI:" prefix for
- CFI reports
-Message-ID: <20250904184004.GC2110053@ax162>
-References: <20250904033217.it.414-kees@kernel.org>
- <20250904034656.3670313-4-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jd3hjVEO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757011669; x=1788547669;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KzUGxTop9JhPXBG4T/1leWl65MjxiWSzlGCzfJwjlsQ=;
+  b=Jd3hjVEOYEJvilCPA2LjzrYVtbtu62ros5qiwyfKyp+54bCkIAERuZfm
+   +hNabt4h1eJobfYFTrCN1VaPL0q4MXyl2UZqCdT+ARtXZmVk/69tHiDfl
+   SSxZtRK97Uk0AbKFFPW2ITo2MU+qK5tJ++6J1tV2dap0bwDOkk6U4CLww
+   UKzNLZhdeYb+NEzYDA3TBuc9ycl5WPSTAEopKYAt1C00KhPgeMUvOKniq
+   yqnD1jmZTECN6bIHzm6Mm228ziv3B8jHN8OH+q3xo+u01UGv2DnEq9E4C
+   pKqqvpYqo+9ZLJZ1nzcaUGcCWVdfxVQhutgpf8gDlJtGkp4rjPJTnIHgn
+   g==;
+X-CSE-ConnectionGUID: wiGXQ0zCTiSjDpBEdLJzFA==
+X-CSE-MsgGUID: OrRvIOX+T0GxJzsTxZDjuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="69978541"
+X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
+   d="scan'208";a="69978541"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 11:47:48 -0700
+X-CSE-ConnectionGUID: UM8whEFzQOK8xu7mfj6JoQ==
+X-CSE-MsgGUID: SZWJjCQXSYizn4utPvz7kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
+   d="scan'208";a="176091002"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 04 Sep 2025 11:47:45 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uuEzm-0005dr-13;
+	Thu, 04 Sep 2025 18:47:42 +0000
+Date: Fri, 5 Sep 2025 02:46:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincent Mailhol <mailhol@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Vincent Mailhol <mailhol@kernel.org>,
+	=?iso-8859-1?Q?St=E9phane?= Grosjean <stephane.grosjean@hms-networks.com>,
+	Robert Nawrath <mbro1689@gmail.com>,
+	Minh Le <minh.le.aj@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/21] can: netlink: add can_validate_databittiming()
+Message-ID: <202509050259.NjPdQyAD-lkp@intel.com>
+References: <20250903-canxl-netlink-prep-v1-6-904bd6037cd9@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,89 +70,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250904034656.3670313-4-kees@kernel.org>
+In-Reply-To: <20250903-canxl-netlink-prep-v1-6-904bd6037cd9@kernel.org>
 
-On Wed, Sep 03, 2025 at 08:46:43PM -0700, Kees Cook wrote:
-> Use a regular "CFI:" prefix for CFI reports during alternatives setup,
-> including reporting when nothing has happened (i.e. CONFIG_FINEIBT=n).
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
+Hi Vincent,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+kernel test robot noticed the following build warnings:
 
-Obviously minor but I had pointed out on v1 that there appears to be
-some inconsistency within the diff around capitalization, "ignoring" vs.
-"Ignoring".
+[auto build test WARNING on 2fd4161d0d2547650d9559d57fc67b4e0a26a9e3]
 
-> ---
->  arch/x86/kernel/alternative.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index 7bde68247b5f..d8f4ac95b4df 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -1266,26 +1266,26 @@ static __init int cfi_parse_cmdline(char *str)
->  		} else if (!strcmp(str, "norand")) {
->  			cfi_rand = false;
->  		} else if (!strcmp(str, "warn")) {
-> -			pr_alert("CFI mismatch non-fatal!\n");
-> +			pr_alert("CFI: mismatch non-fatal!\n");
->  			cfi_warn = true;
->  		} else if (!strcmp(str, "paranoid")) {
->  			if (cfi_mode == CFI_FINEIBT) {
->  				cfi_paranoid = true;
->  			} else {
-> -				pr_err("Ignoring paranoid; depends on fineibt.\n");
-> +				pr_err("CFI: ignoring paranoid; depends on fineibt.\n");
->  			}
->  		} else if (!strcmp(str, "bhi")) {
->  #ifdef CONFIG_FINEIBT_BHI
->  			if (cfi_mode == CFI_FINEIBT) {
->  				cfi_bhi = true;
->  			} else {
-> -				pr_err("Ignoring bhi; depends on fineibt.\n");
-> +				pr_err("CFI: ignoring bhi; depends on fineibt.\n");
->  			}
->  #else
-> -			pr_err("Ignoring bhi; depends on FINEIBT_BHI=y.\n");
-> +			pr_err("CFI: ignoring bhi; depends on FINEIBT_BHI=y.\n");
->  #endif
->  		} else {
-> -			pr_err("Ignoring unknown cfi option (%s).", str);
-> +			pr_err("CFI: Ignoring unknown option (%s).", str);
->  		}
->  
->  		str = next;
-> @@ -1757,7 +1757,7 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
->  	switch (cfi_mode) {
->  	case CFI_OFF:
->  		if (builtin)
-> -			pr_info("Disabling CFI\n");
-> +			pr_info("CFI: disabled\n");
->  		return;
->  
->  	case CFI_KCFI:
-> @@ -1766,7 +1766,8 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
->  			goto err;
->  
->  		if (builtin)
-> -			pr_info("Using kCFI\n");
-> +			pr_info("CFI: Using %sretpoline kCFI\n",
-> +				cfi_rand ? "rehashed " : "");
->  		return;
->  
->  	case CFI_FINEIBT:
-> @@ -2005,6 +2006,8 @@ bool decode_fineibt_insn(struct pt_regs *regs, unsigned long *target, u32 *type)
->  static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
->  			    s32 *start_cfi, s32 *end_cfi, bool builtin)
->  {
-> +	if (IS_ENABLED(CONFIG_CFI) && builtin)
-> +		pr_info("CFI: Using standard kCFI\n");
->  }
->  
->  #ifdef CONFIG_X86_KERNEL_IBT
-> -- 
-> 2.34.1
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/can-dev-move-struct-data_bittiming_params-to-linux-can-bittiming-h/20250903-170807
+base:   2fd4161d0d2547650d9559d57fc67b4e0a26a9e3
+patch link:    https://lore.kernel.org/r/20250903-canxl-netlink-prep-v1-6-904bd6037cd9%40kernel.org
+patch subject: [PATCH 06/21] can: netlink: add can_validate_databittiming()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250905/202509050259.NjPdQyAD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050259.NjPdQyAD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509050259.NjPdQyAD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/can/dev/netlink.c:111:6: warning: variable 'is_on' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/can/dev/netlink.c:119:6: note: uninitialized use occurs here
+     119 |         if (is_on) {
+         |             ^~~~~
+   drivers/net/can/dev/netlink.c:111:2: note: remove the 'if' if its condition is always true
+     111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |                 data_tdc = data[IFLA_CAN_TDC];
+     113 |                 tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
+     114 |                 is_on = flags & CAN_CTRLMODE_FD;
+     115 |         } else {
+         |           ~~~~~~
+     116 |                 WARN_ON(1); /* Place holder for CAN XL */
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     117 |         }
+         |         ~
+   drivers/net/can/dev/netlink.c:108:12: note: initialize the variable 'is_on' to silence this warning
+     108 |         bool is_on;
+         |                   ^
+         |                    = 0
+   1 warning generated.
+
+
+vim +111 drivers/net/can/dev/netlink.c
+
+   101	
+   102	static int can_validate_databittiming(struct nlattr *data[],
+   103					      struct netlink_ext_ack *extack,
+   104					      int ifla_can_data_bittiming, u32 flags)
+   105	{
+   106		struct nlattr *data_tdc;
+   107		u32 tdc_flags;
+   108		bool is_on;
+   109		int err;
+   110	
+ > 111		if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+   112			data_tdc = data[IFLA_CAN_TDC];
+   113			tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
+   114			is_on = flags & CAN_CTRLMODE_FD;
+   115		} else {
+   116			WARN_ON(1); /* Place holder for CAN XL */
+   117		}
+   118	
+   119		if (is_on) {
+   120			if (!data[IFLA_CAN_BITTIMING] || !data[ifla_can_data_bittiming])
+   121				return -EOPNOTSUPP;
+   122		}
+   123	
+   124		if (data[ifla_can_data_bittiming] || data_tdc) {
+   125			if (!is_on)
+   126				return -EOPNOTSUPP;
+   127		}
+   128	
+   129		err = can_validate_bittiming(data, extack, ifla_can_data_bittiming);
+   130		if (err)
+   131			return err;
+   132	
+   133		err = can_validate_tdc(data_tdc, extack, tdc_flags);
+   134		if (err)
+   135			return err;
+   136	
+   137		return 0;
+   138	}
+   139	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
