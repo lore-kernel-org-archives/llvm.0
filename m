@@ -1,48 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACD931D72E;
-	Fri,  5 Sep 2025 15:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4913E1E04AD
+	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 16:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757087956; cv=none; b=S3bs/iDDQOhvrJwqepBCZmo4EL2OaBmkH1YapROYpRtrvYHqumQDdfDvzPH4hP3rGzAUmGYCGTMCNxmteFcem2c9VaGyvled9VJbsDmrnFDLo+WtQwQF9jTILfIhrzQpJXDSoxBJXRLWXNnZ2iMJ3XXBhodnFJyaujgDcHIzZqQ=
+	t=1757090104; cv=none; b=Ah9yVZSKnyY0ldoDhO9XwOCymlr2GmrQIBoQdY5RzoaJWzU8tIsTEtonXCPCSiKb+1dXb61boxUhLzTKYWUFfuIIE4Fy3TDUrbEzihx23TWcYvkEget1TCYuyhp/VxehSOACPsJ/PG54lw+T+Wwry6tI5gbV9VKGqCu4DDjP9yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757087956; c=relaxed/simple;
-	bh=eSR4TUXkvx/9lqvlUc87GuT3m88dAjDqGBb9KS2uelY=;
+	s=arc-20240116; t=1757090104; c=relaxed/simple;
+	bh=s7SrPYl52WuWozmbo5gIbiNPa5h8Fo7Zn10BfZuwANY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WESsFAxkMMrQwX67TSccUWTz7vQ9GbXt5raqzYoJCGw0OJBzInMSiNvzsP7fSboYAqWjjKnkdoxLXmw0Yx/rSXm7UMF6RFpEc+5y2Blp5DawJRlEX5hgSz2LSsV20FmqGgo7WDVqmaNoqJ9dCvtkcTMpoLOEClSsljg54pqDtQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3BLjbQ+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=WE7FrFtEM0OnoQUTLP38NOGD37OvW2yXNTVOS8SumDNEqBgbY5N5EX0rBD1y4AUXPv/Lw+AW1oOdpNrl1pt4P6Cm3zf88gtegU3BKHBKWUbZIQFudPYYfm3wOMcM0hq6kC44E3omRk+XwtpvttB2Rwtnc0ot4dVALvDtz1BzxzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AGfrpvgJ; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3BLjbQ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77101C4CEF4;
-	Fri,  5 Sep 2025 15:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757087955;
-	bh=eSR4TUXkvx/9lqvlUc87GuT3m88dAjDqGBb9KS2uelY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q3BLjbQ+8OkT8qvpn4s3NSjeQidQ2M7anZICert5+EGY0zu8wPr2u7XU4+cBjW5Wu
-	 fPY7IePrZr1wkXMOCb/t0Uz0Fg1tca/5mDSGiL1TRE/W0hfBy3W0E1a95UwZpYIMGX
-	 8qgOrhFeWJwLSMl+4KH8IAHcWVt9K2k4JraCMY6qo9VdtBNHhO/4NulSKIIgMElOOJ
-	 TuA8jWLgtBUs63qB4o4HWd0USFli9kZY6eBz+qDgWUK3rZ1dB7xPd7XO5hNDIYVasy
-	 QvK0lGpOdbnNHOL8bE9ZRiCrQ6KPzE+i4MuKwNear/aScZbMezE4aKLronoh52A4fp
-	 PPiqX70ygaAag==
-Date: Fri, 5 Sep 2025 08:59:15 -0700
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	linux-kbuild@vger.kernel.org,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: Re-enable -Wunterminated-string-initialization
-Message-ID: <202509050856.E5D810BC@keescook>
-References: <20250802184328.it.438-kees@kernel.org>
- <20250803173235.GA716998@ax162>
- <e4d801e3-3004-484b-897d-ed43c25e1576@intel.com>
- <20250805214823.GB200407@ax162>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AGfrpvgJ"
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3f664c47adbso25610705ab.2
+        for <llvm@lists.linux.dev>; Fri, 05 Sep 2025 09:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1757090101; x=1757694901; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pNJVMZejeJ0dWtaoJq/BzsUu7eg4eLar9GAHcQR+XNw=;
+        b=AGfrpvgJNs+ZSQuF7OzmmU4CngZx9Mbrp0jb4WD3h2j9DxOXzZDcj6eH+FgwhqIoub
+         BTU2JY5mYBGlRd9ZRFHj3fweq+6/fnviKdYAxYlMxwGCw491ARs0ghXEvWtMWKKsalFl
+         dDowD3ILJ8K9jUvb9t3WmyJhgJDXPuXndVhwX8JXPd77ER3T7vycwZjUCpMJr0aSkRfe
+         zujRZhpcRInz8Sp1JBhpNoOV/tNudyKOJilyy/eF+tbZHhJmrsEeWCIFu+VT2mD+LN85
+         0MU7sjVh5PbyCDRH3j9Iv1Vzz6pOqthPnHeyX6h5/9Jsv4jqsgN5s3Wpe4eArTofK5gt
+         Uh+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757090101; x=1757694901;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pNJVMZejeJ0dWtaoJq/BzsUu7eg4eLar9GAHcQR+XNw=;
+        b=hmlJBwiAvuLhlpDA57Adp0h+DorYSm2Wn9lMOI6EvGK8v2acTuJHJ/kbTzVlSpfExt
+         aQXQfhUM9WDN26gRb0kwyMC2YxGy1C3ByRx133E8dLz+dHRh5bLRZy6fchxLGVQxCG4m
+         G0UY0pQTZVxnbxR4452/FKwGM9z5eCyPvXSAduF9w+5IdwGmD/92RR+9jOe6zlEamRK0
+         SOBSziZfOoCT1B7RhFXJ5cPSWS0AOxxb5TI2+h6YxfiQQS4ri8y9XZvETN/NuTcoNpXj
+         w8khlIivVoGuVxMrWZuvGmB2bt2TcZSVgdgGYV073hnHFwRBeomWg4rveQwNC4tdXc/x
+         tK+A==
+X-Forwarded-Encrypted: i=1; AJvYcCU8Rmvux5sVwRgZE2jzr+/r3IJNtR85cD6/I9WwWJGGbkkL4noGfiP6ETUjeaJJRiO0STZx@lists.linux.dev
+X-Gm-Message-State: AOJu0YwskPJNepAiNwl+1eMfqI/Wa3mNXi4nqhpJWWNpyKPx0Gp2vgkJ
+	DfMwGMiNK42r9+zXsf/r6tJXpIFn4aQx7yHOsXKa2q/giIMGs29l6sPdRKjCqCf0qw==
+X-Gm-Gg: ASbGnctUXPtj+was+O1IsYluKyfg6KhCTPSGRfwB2/D25l0VWBYF0whuLLDOq92hF71
+	Aj7uyZtbh0+2lZMwbV0h0DG6dvjqMSpwrTQuE8EeoqShSrx02IkTtL81+lYAJ3E/6a3X8giyDzy
+	qmhvK8alXbxzONRQHc9Df85Arz3w9HLZ98JC7CIfk/oZD++Sq/G1MGdlhJKCEYod74T8OmpPRGf
+	RsmGh+CmSP5E0Q6G3zlcNpvnBgL04tzTD5HoKK6wC705MzxOdW0nASWVbrsMBb4Xp6N78XTPIL0
+	dOizFg8wwq4P9d7UQal6XgAq3fzXkWTrbSu2H8HWOMbmzcl3Jqov7gN2oTt9qPumHfJayD5OeA4
+	uDiuGbeIgjD/u1y7rtvBuwO6GmzkN9EUDAgb5W7Bf+1n5q7ozu8s2FaO3vnGHpWYqEdrG3B385g
+	==
+X-Google-Smtp-Source: AGHT+IFFNvKFGEmjvy9xgKPnnOq+Go0iiWzE8ixq+1GtVP43Q8XMv1fd8zP0NU6M6xvxRKA9GPLB4g==
+X-Received: by 2002:a05:6e02:3e06:b0:3f8:b464:6d1c with SMTP id e9e14a558f8ab-3f8b4646df5mr45284865ab.14.1757090101071;
+        Fri, 05 Sep 2025 09:35:01 -0700 (PDT)
+Received: from google.com (2.82.29.34.bc.googleusercontent.com. [34.29.82.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50ec9c752a1sm5721324173.26.2025.09.05.09.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Sep 2025 09:35:00 -0700 (PDT)
+Date: Fri, 5 Sep 2025 09:34:56 -0700
+From: Justin Stitt <justinstitt@google.com>
+To: Paul Barker <paul@pbarker.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gen_compile_commands: Look in KBUILD_OUTPUT if set
+Message-ID: <3fya5rij6amcwt36jthyezkzov44m6rdvlacymqfpbkcmzrnw4@fymsxhcqq6tj>
+References: <20250905-gen_compile_commands-v1-1-9f5194542d4d@pbarker.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,55 +76,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250805214823.GB200407@ax162>
+In-Reply-To: <20250905-gen_compile_commands-v1-1-9f5194542d4d@pbarker.dev>
 
-On Tue, Aug 05, 2025 at 02:48:23PM -0700, Nathan Chancellor wrote:
-> On Tue, Aug 05, 2025 at 04:50:28PM +0200, Alexander Lobakin wrote:
-> > From: Nathan Chancellor <nathan@kernel.org>
-> > Date: Sun, 3 Aug 2025 10:32:35 -0700
-> > 
-> > > On Sat, Aug 02, 2025 at 11:43:32AM -0700, Kees Cook wrote:
-> > >> With the few remaining fixes now landed, we can re-enable the option
-> > >> -Wunterminated-string-initialization (via -Wextra). Both GCC and Clang
-> > >> have the required multi-dimensional nonstring attribute support.
-> > 
-> > [...]
-> > 
-> > > diff --git a/drivers/net/ethernet/ti/netcp_ethss.c b/drivers/net/ethernet/ti/netcp_ethss.c
-> > > index 55a1a96cd834..05d4323c6a13 100644
-> > > --- a/drivers/net/ethernet/ti/netcp_ethss.c
-> > > +++ b/drivers/net/ethernet/ti/netcp_ethss.c
-> > > @@ -771,7 +771,7 @@ static struct netcp_module xgbe_module;
-> > >  
-> > >  /* Statistic management */
-> > >  struct netcp_ethtool_stat {
-> > > -	char desc[ETH_GSTRING_LEN];
-> > > +	char desc[ETH_GSTRING_LEN] __nonstring;
-> > 
-> > 
-> > Hmmm, ETH_GSTRING_LEN is the maximum length of the driver's statistics
-> > name to be reported to Ethtool and this *includes* \0 at the end.
+Hi,
 
-This is not true. ethtool uses non-C-String logic to report these values
-in userspace. These are _not_ C-Strings -- they're NUL padded to
-ETH_GSTRING_LEN, so some drivers _happen_ to use C-String APIs, but
-they're "wasting" a byte.
-
-> > If this compilation flag triggers a warning here, the driver devs need
-> > to fix their code. There should always be \0 at the end, `desc` is a
-> > "proper" C 0-terminated string.
+On Fri, Sep 05, 2025 at 11:17:43AM +0100, Paul Barker wrote:
+> If someone is already using the KBUILD_OUTPUT environment variable to
+> specify the directory where object files are placed, they shouldn't need
+> to repeat the same information to gen_compile_commands.py.
 > 
-> Ack, I had misunderstood a previous fix that Kees did for a similar but
-> different instance of the warning in another Ethernet driver and I
-> did not look much further than the driver copying these values around
-> with memcpy(). This does trigger a warning, from the original message:
+> Signed-off-by: Paul Barker <paul@pbarker.dev>
+> ---
+>  scripts/clang-tools/gen_compile_commands.py | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+> index 96e6e46ad1a702cb0fad5d524a9a02d222b236ec..7b94a2ffba0b4d5f1290b51bd602fb3f33acce6a 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -39,8 +39,9 @@ def parse_arguments():
+>      parser = argparse.ArgumentParser(description=usage)
+>  
+>      directory_help = ('specify the output directory used for the kernel build '
+> -                      '(defaults to the working directory)')
+> -    parser.add_argument('-d', '--directory', type=str, default='.',
+> +                      '(defaults to $KBUILD_OUTPUT (if set) or the working directory)')
+> +    parser.add_argument('-d', '--directory', type=str,
+> +                        default=os.environ.get('KBUILD_OUTPUT', '.'),
+>                          help=directory_help)
+>  
+>      output_help = ('path to the output command database (defaults to ' +
+> 
 
-These don't need to be renamed -- they just need to use memcpy instead
-of C String helpers.
+Thinking out loud: It might make sense to also change the default output
+path in some cases but not in all cases. For my clangd setup in vim, it
+does some discovery for a compile_commands.json and I have some
+different ones in various build-* directories -- I guess it'd be cool if
+they were automatically placed in their appropriate spot. With all that
+being said probably YAGNI.
 
-ETH_GSTRING stuff is not NUL terminated.
+Tested-by: Justin Stitt <justinstitt@google.com>
 
--Kees
+> ---
+> base-commit: d69eb204c255c35abd9e8cb621484e8074c75eaa
+> change-id: 20250905-gen_compile_commands-b03d9c923fe5
+> 
+> Best regards,
+> -- 
+> Paul Barker
+> 
+>
 
--- 
-Kees Cook
+Thanks
+Justin
