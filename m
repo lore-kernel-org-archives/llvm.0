@@ -1,111 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BAA225408;
-	Fri,  5 Sep 2025 15:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A706F31D749
+	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 15:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757086133; cv=none; b=ErJwssJvDkeffWpK5bcFVku9DXAwxZITJOe0BPN4hLXJ3gASTf6Y6+2pU8jlRMxDsOQPaBRisJQul1WcKfqBGyjJSjxdDS8l46scz7fuwb3gaTZIEuJlaGuiaXT8HsFCriVaC78gsYrOAeedIJyNZY+KUNA2mzutdoOJMM5r4Y4=
+	t=1757087720; cv=none; b=b7ajlt0iysSWiz4JAbZ0ppcCvtKFuwqeQ6lX5nO35tw5UyEoo9eWbyu45M3eq8ThEqLiqDcaULzx7eab8d38LdPeCrxbJ1bR3Fx8ztqe2WWHoKgDR4JE4TJhpZ+jR2cC87Do4Y0kLX8Oownc2FsFcGKIZfPY+ExvPXaGiAAZDqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757086133; c=relaxed/simple;
-	bh=sPEEy5vULDAfl0FqPxMJIccT/9QzwSSYVorKW+7DqOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lD3DCjnqSllmu9NpufXuE13MoWK8C7xxTIhYdUfK7SjjOMYVeCbiwlU20Gzj05YNhNVsfiA49setVke1eytRi1eiSz648HYLkNA6aTC9zBM8Zt5l6h2OB3XO7415v2MDMM/4/SHP9kEiLSQDm/37RntBosiQVotqwyEi9nsc59g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfuKzJoB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757087720; c=relaxed/simple;
+	bh=VK5L9ZQl5SjCnEBuOT7vVdJruIk2fkLuhS+o/xPYcMw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PdUgFLcPC1KrHy+gc6U3LzUKDXxzqz27LEFHZWZ7FoYgUjWK6oPsRuo/QqQLvc7twztnBri3xQ6lEoPMoaGxR85Z48xj4pYckcx8Ex4uoPoYCQRuicrOqjcGrsdni8RT+Y2RQGDrp57cdsaP/UvQ/7i4ymCL3fvI+Q0V2qJZyM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Cu/U+6Ps; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfuKzJoB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F727C4CEF1;
-	Fri,  5 Sep 2025 15:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757086133;
-	bh=sPEEy5vULDAfl0FqPxMJIccT/9QzwSSYVorKW+7DqOw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kfuKzJoB7YDS6ZdqbW1seO4OuIsImFFTGR/bXgnGmFJpT8WbxoE0kxe+/AkT2++HE
-	 aM2+HP3yidLqlM3C+RLjI7Z5r8mzwoxE4wfa2ikahg+1BswcHiQsmrt5orqitio4Ea
-	 Qas/HwsGqrfN7eF5HmmhXZFQfIN7s0XA/8Rk4kwnC3vgtWWQo+sOJlC6GgRHRTukOh
-	 GciBrU64ZYTKgOP2Bqx1S4J+G3efY9zyq4RFVewODDTRq5TghYcbO/XOMJiJ6Z/wWt
-	 eB9VWDk6YF1Dork/u60T77O+xEjdWSGPRaBYnwNzwHVccac84mr6BwXDrUCjTAHOkF
-	 LPXsaZS7k04ow==
-Date: Fri, 5 Sep 2025 16:28:43 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Asuna <spriteovo@gmail.com>
-Cc: Jason Montleon <jmontleo@redhat.com>, Han Gao <rabenda.cn@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Tejun Heo <tj@kernel.org>,
-	Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	Matthew Maurer <mmaurer@google.com>, Jeff Xu <jeffxu@chromium.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Brian Gerst <brgerst@gmail.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/2] RISC-V: re-enable gcc + rust builds
-Message-ID: <20250905-swipe-unstuck-dd7ad6e5466a@spud>
-References: <20250830-cheesy-prone-ee5fae406c22@spud>
- <20250903190806.2604757-1-SpriteOvO@gmail.com>
- <20250903190806.2604757-2-SpriteOvO@gmail.com>
- <20250904-sterilize-swagger-c7999b124e83@spud>
- <f7434b76-49d0-4ef3-8c77-c1642dc211cd@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Cu/U+6Ps"
+Message-ID: <ca64e62b-740e-4e02-a386-e1016317b071@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1757087706;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5SkhDx01VH5ULkTtGZmBjnS7ayJVpHz3ZygQmDSZ2dE=;
+	b=Cu/U+6PsLuRwZnWv3E3Wzw7kScSJJHds5FQyisY7hZ2cFZhr1wFebmDS00NgIUvDISC20c
+	jqLR1yuKPB/o4rskbDHmRuCW9PQ1W88xlz4xNKj8JykWG/iTU2llI7HZIojAN8dn8KU1kW
+	vgZ9r3FJPxIJrxzu629/XpqNrIiGBRU=
+Date: Fri, 5 Sep 2025 08:54:45 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cr2zhJdWyNpNS/E7"
-Content-Disposition: inline
-In-Reply-To: <f7434b76-49d0-4ef3-8c77-c1642dc211cd@gmail.com>
+Subject: Re: [RFC bpf-next v2 1/1] libbpf: add compile-time OOB warning to
+ bpf_tail_call_static
+Content-Language: en-GB
+To: Hoyeon Lee <hoyeon.lee@suse.com>
+Cc: netdev@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ "open list:BPF [LIBRARY] (libbpf)" <bpf@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
+ <llvm@lists.linux.dev>
+References: <20250905051814.291254-1-hoyeon.lee@suse.com>
+ <20250905051814.291254-2-hoyeon.lee@suse.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20250905051814.291254-2-hoyeon.lee@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
---cr2zhJdWyNpNS/E7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 05, 2025 at 06:56:35AM +0800, Asuna wrote:
-> > One thing - please don't send new versions
-> > of patchsets in response to earlier versions or other threads. It
-> > doesn't do you any favours with mailbox visibility.
->=20
-> I apologize for this, I'm pretty much new to mailing lists, so I had
-> followed the step "Explicit In-Reply-To headers" [1] in doc. For future
-> patches I'll send them alone instead of replying to existing threads.
->=20
-> [1]: https://www.kernel.org/doc/html/v6.9/process/submitting-patches.html=
-#explicit-in-reply-to-headers
+On 9/4/25 10:18 PM, Hoyeon Lee wrote:
+> Add a compile-time check to bpf_tail_call_static() to warn when a
+> constant slot(index) >= map->max_entries. This uses a small
+> BPF_MAP_ENTRIES() macro together with Clang's diagnose_if attribute.
+>
+> Clang front-end keeps the map type with a '(*max_entries)[N]' field,
+> so the expression
+>
+>      sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)
+>
+> is resolved to N entirely at compile time. This allows diagnose_if()
+> to emit a warning when a constant slot index is out of range.
+>
+> Out-of-bounds tail calls are currently silent no-ops at runtime, so
+> emitting a compile-time warning helps detect logic errors earlier.
+> This is currently limited to Clang (due to diagnose_if) and only for
+> constant indices, but should still catch the common cases.
+>
+> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+> ---
+> Changes in V2:
+> - add function definition for __bpf_tail_call_warn for compile error
+>
+>   tools/lib/bpf/bpf_helpers.h | 21 +++++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+>
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 80c028540656..98bc1536c497 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -173,6 +173,27 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+>   		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+>   		     : "r0", "r1", "r2", "r3", "r4", "r5");
+>   }
+> +
+> +#if __has_attribute(diagnose_if)
+> +static __always_inline void __bpf_tail_call_warn(int oob)
+> +	__attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries",
+> +				   "warning"))) {};
+> +
+> +#define BPF_MAP_ENTRIES(m) \
+> +	((__u32)(sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)))
+> +
+> +#ifndef bpf_tail_call_static
+> +#define bpf_tail_call_static(ctx, map, slot)				      \
+> +({									      \
+> +	/* wrapped to avoid double evaluation. */                             \
+> +	const __u32 __slot = (slot);                                          \
+> +	__bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                 \
+> +	/* Avoid re-expand & invoke original as (bpf_tail_call_static)(..) */ \
+> +	(bpf_tail_call_static)(ctx, map, __slot);                             \
+> +})
+> +#endif /* bpf_tail_call_static */
+> +#endif
 
-Ye I think this is mostly just misleading. You're better off providing a
-lore link in the body of the mail than replying to some old thread. I
-find that explicit in-reply-to stuff only really helpful to send a
-single patch as part of a conversation where it's effectively an RFC.
+I got the following error with llvm21.
 
---cr2zhJdWyNpNS/E7
-Content-Type: application/pgp-signature; name="signature.asc"
+progs/tailcall_bpf2bpf3.c:20:3: error: bpf_tail_call: slot >= max_entries [-Werror,-Wuser-defined-warnings]
+    20 |                 bpf_tail_call_static(skb, &jmp_table,progs/tailcall_bpf2bpf2.c:17:3 10);
+       | :                ^
+  /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:190:53: note: expanded from macro
+       'bpf_tail_call_static'
+   190 |         __bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                 \
+       |                                                            ^
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:179:17: note: from 'diagnose_if'
+       attribute on '__bpf_tail_call_warn':
+   179 |         __attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries",
+       |                        ^           ~~~
+error: bpf_tail_call: slot >= max_entries [-Werror,-Wuser-defined-warnings]
+    17 |                 bpf_tail_call_static(skb, &jmp_table, 1);
+       |                 ^
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:190:53: note: expanded from macro
+       'bpf_tail_call_static'
+   190 |         __bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                 \
+       |                                                            ^
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:179:17: note: from 'diagnose_if'
+       attribute on '__bpf_tail_call_warn':
+   179 |         __attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries",
+       |                        ^           ~~~
+   CLNG-BPF [test_progs] tailcall_poke.bpf.o
+1 error generated.
+make: *** [Makefile:733: /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tailcall_bpf2bpf3.bpf.o] Error 1
 
------BEGIN PGP SIGNATURE-----
+> +
+>   #endif
+>   #endif
+>
+> --
+> 2.51.0
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaLsBqwAKCRB4tDGHoIJi
-0o8oAQDiIK6HL6oaYXWxQpproLYlTxZVq7be/QUm0+0M9Fhj4gEAyoX5K7PDnHGS
-NVoLGxCGdehDtQmXjvmrQUSeQfwA8Ao=
-=fC2y
------END PGP SIGNATURE-----
-
---cr2zhJdWyNpNS/E7--
