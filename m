@@ -1,104 +1,107 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D2321D011
-	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 06:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2ACDF71
+	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 07:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757052104; cv=none; b=F5YDXsizwGEetqUdkktw/dC6SY+3O/t/CsG+C81rvcigsWapHayckd9lECzuOR4FhxqFm5olvbxO5jYUWT7+vXvHsnARjxTJt2eRBYNf7SKUxxFiHVAvzAXdM8IJu3bB2pu25JrlqrRE44n4/XZm8zOUK7i38mwfDzd6DCASPNY=
+	t=1757058296; cv=none; b=oRPegg9iXNrh9Zw9pvMvcDNah+13qt4FBYhpokrCgdu20UGbBtduFeLKOZmphfBCpHesz0Y3GKUOLSPknmISeDPjSButiiAI2DvkRL4xpjJ23gSGrk+lv2iMTR2/jwhZ8Y53XPsXTRjKfHnTj8csGoXS6vCVrrGpbGfH3Yx1N4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757052104; c=relaxed/simple;
-	bh=3knstRovj93xkUytRtrTV4g+ye1JGAHeEex24QMnCko=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=inYYYIMIOU3FWWRgJX0KjEo6K0c8xDTwjgIJmjjDZQlNltTyz7Wctd1PY+1/4iRzBPTBcSQes5/NRtA/rnVwf76dpTsNiR1KWhExpgt+yL+NgMBOMyNnWH9iszQnjmvONHF6HkSm547q+Bxn0w0IGnyqksfN1qmJu2bdQpGX/Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Jg92GSH6; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1757058296; c=relaxed/simple;
+	bh=9FriGNAMQK60A3zi1qw0sJL8xNzp+kQ4bPAmGrninAY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hbnfwOi2O6WtG2Qb0iuFbr1KA971hN9nTwjacQ6MJ7D0N3OElRgu7wnZr9qB+Khj0eCVGFalxjLHcBV9gCLV+DLCCXGC/3TqiBqrBbrTtpvEq0KoXTGowX+G3Uk2khmQ7UESraBGPNv6Ell95bJHZUNeujgWIPBKwEwKcZKm9zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cq0uN+8k; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Jg92GSH6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Od
-	8KnfSygcUPovid5hxz+wVBe3lxMm/XME01VPFpLt0=; b=Jg92GSH6RVWVFg6wot
-	74T4jMndPS0t3kUMA/e91Gfc+bTzmRNco9fP5qES/eQJ3suWB+LvaKEHom6y73W/
-	V/jJ+S74HkuxsWWuAxddboyIIt84XeTJa/spfyhnxLd7NbNjnm7MptPz7f6bkfvy
-	g0oogz6hwh/V16icIufEI9Cwo=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wC3eap7fLpok1QJGQ--.24371S2;
-	Fri, 05 Sep 2025 14:00:28 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	martin.lau@linux.dev,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yangfeng59949@163.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
-Date: Fri,  5 Sep 2025 14:00:26 +0800
-Message-Id: <20250905060026.1285979-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
-References: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cq0uN+8k"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24b1331cb98so2561715ad.2
+        for <llvm@lists.linux.dev>; Fri, 05 Sep 2025 00:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757058294; x=1757663094; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9FriGNAMQK60A3zi1qw0sJL8xNzp+kQ4bPAmGrninAY=;
+        b=cq0uN+8k92Yv79ERULKNSGKPXEfmvFrmwAKdTEFs6LJNR+w7unIQHcqXKGBzUR75Gw
+         0aF7Hc1pRW7sC7k02er3nErBandIkLNkZbHh/e0Mdx20ZJU6jgUbSTz3U8K2dTuYfBJf
+         uoyEhlD/E4VmhVRMgtCsZS6H2/PkAgmcbKvOCJSlQNpHAZC4RzYbddDjLG4iXws7snX8
+         qfMu2LymxAzCDzDX2oMzvhRaXmK7XUpraHZqBWkgtdBAdGfnXWGEZjyd0i+y+n3iHZOp
+         HEwU0wsUy9QH7KSbhMpbpzbfsPhaV1p4q+USmeaJAe7fDlYKex5TTubMdN1gYZblQXjs
+         RGOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757058294; x=1757663094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9FriGNAMQK60A3zi1qw0sJL8xNzp+kQ4bPAmGrninAY=;
+        b=wNwc9Z7wtsH6JLub1FYSZqupn9gnivlQprNogw5iHPmEP8/L4OF3x4zEfZxFssaBMt
+         CdyrHmtS+TufLpnyuSWBaGBRFIRQo80k0yv6l4GrHegRpb31RqgLL3OfzBunlDWSDGS2
+         js91uBYP20CmTJsIOJN98UDBC+++hD85TlVytyFh7u496hrt0OI9F5UK5/UH1yyGuPQt
+         8WUKCCd2xWNJOF+SY+cT+WjGd3Rh2iUZ+6Js121X9KTFG5Qn7WAgmEox1Ypn9F4SNq7u
+         fdpR45G1jgJg+B2gmrPwij54bypPUxpt1uCisMLPwW6Rt3ix82W1GeZpuUzoUayiJdpf
+         qt+g==
+X-Forwarded-Encrypted: i=1; AJvYcCXIVSy2u42HQiBcLUPRdMFkJLImDphZSzxkbS5j53fHV2TABSZvDqesYNsDIMTe4Pn09LX0@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy3q42EAEFRfXtZ7BYGlSCxk8XCsa5hsXcaRBNXKH6ShdDSzS60
+	kozIdmMMDJ+NNFv2NBtmTXzxo0m7lx2Qs6ML4DsNiieXjGflYzPDd5vsFbVT4JU/Ex4JwsrjNsI
+	eAdgoTe05WV4G8eVBkSRFYSTleqXzmbE=
+X-Gm-Gg: ASbGncuC6yqidYmh6LXG7ucRU1n6/AfNknGlUj8lg98iqgDEjuqC9rlmFt+5pV654yU
+	Z0vGfwsH+9E4DRD6nRGUtITNY9QRzsSSk38DYuZqv7TaFSF6HJPBmYHikWToKnZP148r3ov7H1y
+	68Y1cGhGW0UKZhHR+7qI3EbhlK8nQxRi6jXm4lsnuYwpKQLAzfb+OVTtWUFh3qHyuBQO1pC0J5p
+	QAFJZLLKOsLLlG+53ZUPgLTQfjcvcVMwbPSq/xkYvptBoAHgCzyS54e95qv+0FUaoXXJNWGMKQi
+	azIcCzp0KRUaEuDRsKvUl8mVpA==
+X-Google-Smtp-Source: AGHT+IGp+cfcPTE7KjWQu/swfr5iYBHHS7MaJe/UBLnqHcZT/xW+eAFQaePAZ9b+NKm2RPENGVUXqKIAn3gIBqf29BI=
+X-Received: by 2002:a17:902:d488:b0:24c:b6b6:e54c with SMTP id
+ d9443c01a7336-24cb6b6e5f9mr45340275ad.3.1757058293921; Fri, 05 Sep 2025
+ 00:44:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wC3eap7fLpok1QJGQ--.24371S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CrWxWFW5CrykKF1UCF48Zwb_yoW8JFWrpF
-	yrWr1DKF4rJFyUJr13Jw4aqF1Yvw4SkrWrGrW8Ar9rGr90ywsIyFyxGryY9asIgw47u3yY
-	9rW8X3yfCw4qyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRcTmhUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbipRO-eGi6aW8nQAACsA
+References: <20250904033217.it.414-kees@kernel.org> <20250904070410.GX4067720@noisy.programming.kicks-ass.net>
+ <202509040933.06AF02E714@keescook> <20250904200134.GA4067720@noisy.programming.kicks-ass.net>
+ <202509041740.1007FFEA@keescook>
+In-Reply-To: <202509041740.1007FFEA@keescook>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 5 Sep 2025 09:44:41 +0200
+X-Gm-Features: Ac12FXxuAyzV67ABgZG5WJnwUzLnA_eITH6K0nXKAnUgoCmOACBUUDhH7lZTQYk
+Message-ID: <CANiq72==vG_L35sQDGF6OFmTf=17qGs0k1NKiD17JYoforR30w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] kcfi: Prepare for GCC support
+To: Kees Cook <kees@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Vegard Nossum <vegard.nossum@oracle.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, David Woodhouse <dwmw2@infradead.org>, 
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Marco Elver <elver@google.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Ramon de C Valle <rcvalle@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Mark Rutland <mark.rutland@arm.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	x86@kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 04 Sep 2025 08:48:45 -0700 Eduard Zingerman wrote:
+On Fri, Sep 5, 2025 at 2:42=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>
+> Assuming Nathan (and Vegard? or other folks from the other thread?) are
+> okay with the kconfig changes, I'll take it via hardening.
 
-> On Thu, 2025-08-28 at 10:01 +0800, Feng Yang wrote:
-> > From: Feng Yang <yangfeng@kylinos.cn>
-> > 
-> > The following issue occurs when compiling with clang version 17.0.6:
-> > progs/compute_live_registers.c:251:3: error: invalid operand for instruction
-> >   251 |                 "r0 = 1;"
-> >       |                 ^
-> > <inline asm>:1:22: note: instantiated into assembly here
-> >     1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
-> >       |                             ^
-> > 1 error generated.
-> > 
-> > Use __imm_insn to fix this issue.
-> > 
-> > Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
-> > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-> > ---
-> 
-> Hi Feng,
-> 
-> This message felt through cracks a bit.  It's a minor thing, of
-> course, but there is a legit question of how much backward we'd like
-> to support clang versions for the test suite.
-> 
-> Could you please provide some detail on your build environment,
-> why do you want to run the tests with older clang?
+I haven't had time to take a proper look, test it etc., so I didn't
+reply, sorry -- but I am following the thread and I am glad if we have
+something to easily/properly support this, so thanks for this.
 
-Hi Eduard,
+(And sorry for having triggered all this discussion/work -- at least
+if we get this done it will have been worth it :)
 
-Actually, there is no specific reason to test with an older version of Clang.
-It's just that the Clang downloaded from the source is this version,
-and installing a newer version by myself would be rather troublesome.
+I will leave a quick message about the commit message.
 
-clang version 17.0.6
-GNU Make 4.4.1
-gcc (GCC) 12.3.1
-linux version: 6.6
-arch: x86-64
-
+Cheers,
+Miguel
