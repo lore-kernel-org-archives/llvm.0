@@ -1,90 +1,124 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C8E35E4EE
-	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 13:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA99306B3D;
+	Fri,  5 Sep 2025 14:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757080504; cv=none; b=Bwq4xSlggyIeiwWaWH7e1sCU5I2WFHOU6TuFEbPFGGAv1RSIoBrw3AJ+gFAsFmf4iB+tXpiaebdv2MSb5EO8P3XzZs7Ejw5r0OXVgTvYzcGkH4NOE4fXKWtg8/eJWmIhQ7EEcj67A+3yClrtYuRVBrVZlVDs4JlRaT2IbUP3zhg=
+	t=1757084130; cv=none; b=Q15/WBoojf1KhrxmAi9O1q7pK8qpMjD68ZwjOY6YWj03PC9eahBmHMIitTj/d975coha9N2n4lgbVS77m2WwmdnqUepcAc1btqFzHTyyt+2kSbXqK8+Hhoa/j0lVQTg7L6xkynn/UP65b8uM2zHpchAdFuQi+3NfVltJNYmsDoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757080504; c=relaxed/simple;
-	bh=UCiGATb/qHq9xnqHinm4V+YkHiCr4MxapKsdsK8p3/M=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nojwOXZmRvQ2SyGoJ34WJNChjWG5FoZfXf7zeKcnYI5BGeWAU6ql7b6r58+qWSXFbyPm0fbjcyjPvfsm6bp4Pv6XyMHu4OTJVUqBWmYDvIo2BKRxyCvLjo6LL1ikeDrmcYDWDjl9HyZjDA2DvvR5FbT7tT648pI12dE+adMeObM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NWVuXeMQ; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1757084130; c=relaxed/simple;
+	bh=OCfVsz4GNG8tZpCHvCp7Pwkr+YCb7Q/NGZO1AQDPduA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=biDgpHvD4karHO7T5MtYX71RhY+v+wr2Xecjmxs18sU/X0KxTbUVuW/AqtEi7E4AlbIBjVeJaUN6rkzaJKbcGta6cV9XM9auz0ZatZpWwFis3prfjk/5yh3QbJtcJxioOeYRlvgq2N+fErtaZKCbdcBc+ZYkcNih4ppoGeHuNMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDeppUVf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NWVuXeMQ"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A97BD1A0DD7;
-	Fri,  5 Sep 2025 13:54:59 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7F8E56060B;
-	Fri,  5 Sep 2025 13:54:59 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 603E7102F27F9;
-	Fri,  5 Sep 2025 15:54:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1757080498; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=wXuDvE2U7zArCNiE29U7rGYQ6gNdC7m1Plskv1PwsfQ=;
-	b=NWVuXeMQs40iG/K4xjae3frw9k+oo7GG4MkGDvrQaYSWA2HZsBGfgpCmlLE8+sJ76pBcb9
-	AfkX2KpluWe1Swv+rn3dFYmoRrK3MYGznIxlAVhUBSL9Xz5lH1qDMdT1ECWe8YS9dP22Dl
-	57ssoT1BiGT3s5A0gCd6hpm5HKUVK18DkNA/g3mJ+HOqilN7Vu2aN280IIMCNLuuOJ/jEj
-	iy3Z/d8fBf0tQhAqzpMjXuQIJxIADAJsQkvNm7gNVKlxuvk8aWQHX3ifL+SZal3Fkf8a0Z
-	v3ey4D0uKndOz5kgGQFMdK34MSjVuiX+BZChzKhinyLAwjQuVjRpyRFLJFPwsw==
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Chaoyi Chen <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev
-In-Reply-To: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-Subject: Re: (subset) [PATCH v2 0/9] drm/bridge: get/put the bridge when
- looping over the encoder chain
-Message-Id: <175708046120.649333.5235747071021830726.b4-ty@bootlin.com>
-Date: Fri, 05 Sep 2025 15:54:21 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDeppUVf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433EEC4CEF1;
+	Fri,  5 Sep 2025 14:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757084129;
+	bh=OCfVsz4GNG8tZpCHvCp7Pwkr+YCb7Q/NGZO1AQDPduA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RDeppUVfo9rdn4rj2lFKj5nH1eCZTL3kk8iGOrmTHtHv9L12slp0wffsBj5avJX1O
+	 CVNQOPlLzISjQBwCM+MumnN+DkZ/Gad+sXtsv6pmn+s0gUINahBwBtynWPZQyGMTI1
+	 TEuY8NQlC622r863FKWPt1g8+jibRfKzDS4IsZP4Xfmmsxa35DUeB3jHuqJ+4t1XSu
+	 CLLh30qM3CmaXDDYsSShE6POIWFAbj3T/Sr5wf9lJhD+i3qhGdYbs4Ab2LzYeG+WtY
+	 a3P5aqBY2EhytsicqAHajqw2dDHfq6Wtndd0hy8jV3dWFvZ9wR9SHB/si7YeNcKXL8
+	 jLT6cSfo8wucg==
+Message-ID: <8009fd35-421b-4091-99a5-fda86e1cfaaa@kernel.org>
+Date: Fri, 5 Sep 2025 23:55:26 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14.2
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/21] can: netlink: add can_validate_databittiming()
+To: kernel test robot <lkp@intel.com>, Marc Kleine-Budde
+ <mkl@pengutronix.de>, Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ =?UTF-8?Q?St=C3=A9phane_Grosjean?= <stephane.grosjean@hms-networks.com>,
+ Robert Nawrath <mbro1689@gmail.com>, Minh Le <minh.le.aj@renesas.com>,
+ Duy Nguyen <duy.nguyen.rh@renesas.com>, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250903-canxl-netlink-prep-v1-6-904bd6037cd9@kernel.org>
+ <202509050259.NjPdQyAD-lkp@intel.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol@kernel.org>
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <202509050259.NjPdQyAD-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-On Fri, 08 Aug 2025 16:49:07 +0200, Luca Ceresoli wrote:
-> This series adds drm_bridge_get/put() calls for DRM bridges used when
-> looping over bridges in an encoder chain.
+On 05/09/2025 at 03:46, kernel test robot wrote:
+> Hi Vincent,
 > 
-> This is part of the work towards removal of bridges from a still existing
-> DRM pipeline without use-after-free. The grand plan was discussed in [1].
-> Here's the work breakdown (➜ marks the current series):
+> kernel test robot noticed the following build warnings:
 > 
-> [...]
+> [auto build test WARNING on 2fd4161d0d2547650d9559d57fc67b4e0a26a9e3]
 
-Applied, thanks!
+OK. I will silence it in v2, but I don't think this is anyhow problematic.
 
-[2/9] drm/display: bridge-connector: remove unused variable assignment
-      commit: 9e05c8dc4e8bb14bdb86eccff1d07169cfd69df8
+> url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/can-dev-move-struct-data_bittiming_params-to-linux-can-bittiming-h/20250903-170807
+> base:   2fd4161d0d2547650d9559d57fc67b4e0a26a9e3
+> patch link:    https://lore.kernel.org/r/20250903-canxl-netlink-prep-v1-6-904bd6037cd9%40kernel.org
+> patch subject: [PATCH 06/21] can: netlink: add can_validate_databittiming()
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250905/202509050259.NjPdQyAD-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050259.NjPdQyAD-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202509050259.NjPdQyAD-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/net/can/dev/netlink.c:111:6: warning: variable 'is_on' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>      111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+>          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/net/can/dev/netlink.c:119:6: note: uninitialized use occurs here
+>      119 |         if (is_on) {
+>          |             ^~~~~
+>    drivers/net/can/dev/netlink.c:111:2: note: remove the 'if' if its condition is always true
 
-Best regards,
--- 
-Luca Ceresoli <luca.ceresoli@bootlin.com>
+That's it. This if condition is always true at the moment because all the
+callers specify ifla_can_data_bittiming as IFLA_CAN_DATA_BITTIMING. But I do not
+want to remove the else branch because is serves to show to the reader what is
+coming up next and help to understand the refactor logic.
+>      111 |         if (ifla_can_data_bittiming == IFLA_CAN_DATA_BITTIMING) {
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      112 |                 data_tdc = data[IFLA_CAN_TDC];
+>      113 |                 tdc_flags = flags & CAN_CTRLMODE_FD_TDC_MASK;
+>      114 |                 is_on = flags & CAN_CTRLMODE_FD;
+>      115 |         } else {
+>          |           ~~~~~~
+>      116 |                 WARN_ON(1); /* Place holder for CAN XL */
+>          |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The WARN_ON(1) was to point out that the else branch should never be reached.
+
+I will change this to:
+
+	return -EOPNOTSUPP; /* Place holder for CAN XL */
+
+in v2. This will serve the same purpose as the current WARN_ON(1) but will
+suppress the warning.
+
+I will do the exact same on patches 11/21 and 18/21 on which the kernel test
+robot also sent a similar report.
+
+
+Yours sincerely,
+Vincent Mailhol
 
