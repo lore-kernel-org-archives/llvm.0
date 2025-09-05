@@ -1,123 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5D514E2F2;
-	Fri,  5 Sep 2025 02:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13CC1DE89A
+	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 02:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757038951; cv=none; b=pvGV+5vDpvFlGf2KkQqJ52p5FxTDzRgbc1ZqKOsy84xuUgnGarDqtobh1vBNwzSkAA0Ex+YO4cYgE+zraerng/J0ZM0vuCztFguiWdSVu0otoJ1w6zYEXYdVef+3qElvuZssbOsPNeV/ZFIQLuDIHI7TsEq10YHczqNUguaMch8=
+	t=1757040875; cv=none; b=smbklLFUlESgwhslYF/gTtZwywIvQeK/SfkgU+Tec66eoCC5UYTvpV+qOfGC9B41lRIDzxmjYf8gSq4JeZg4JljR/BQcCGsnOLltoNzA24sXuklGJ05BEF+bwLSRLSdhAPpPBtQNPdI2AXawhjNaPPUl+/ah8aq9xIUh11HC058=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757038951; c=relaxed/simple;
-	bh=knywOHehCDlqFUogdERVd6NewBksJlhHBTn2QlOem8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qUHwPi0a+CAVmWVvCP4mt6T05vRkqFdRaqyMlHF9QnfUf+Rp43v+iacD4qLw8LKSBlVnvIF1kLL0sXgKEZLOixei9xkKVyGK7Xy4ZveF9HsQYgxOX32Umw4twtqMjpiN/RCnnf9cvn/Jk+frrEiF+lLFTVLIE9o37kPl0xD1kHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cke/BzB9; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757040875; c=relaxed/simple;
+	bh=undCemkUqZF9gBus1X/Ltrp7nF3cY3rXTXb46EMVxBw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uowH3dDlO83WQFVl9J7Chj1BEdPjlGmhIk7OrXACH6PDYda0zzSiRoDwJP1ceVz/NpgcBOJ7ucZcU3zHMxGNY5R6ZKSCPnl2Wi5YyrOqZjxLxsfof1itCzpwYWGvxjSu+K/qeqUMef7cyIYC6M4Ca91r6RYk35YFV9GsPRlffF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=a/mS6Fjk; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cke/BzB9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757038950; x=1788574950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=knywOHehCDlqFUogdERVd6NewBksJlhHBTn2QlOem8M=;
-  b=Cke/BzB9433n1vDqW4Xis/4gDivpLk81Mwu21k+EWe8hcqvYPwtNcidL
-   28FSwupIvOtdPOiMhKFqdyXFqlPbKtBnJlSXn62NgJSyiYE7TMbTd6P6C
-   tj52675HcNO3krZDgM+O8oO1lGsFYrecm1n0JIEc8A+fJwLNoV/SVBe74
-   sofLFKuwzfJhOXdvP5e1dGVMD0XVZsly2YVHH9JxzLlfGnLZr7Ov05okg
-   qYIuCMtvHtzpKRZSrNdv/3usiiJx2WbYIgsT3z7jmVGLSsU93BanEDqnV
-   eHM8LWZg3oWdq/ZEGGpc2uCSWTSYmMI+zKBuq/Dw7NeKhM2vavp2XA4Xh
-   A==;
-X-CSE-ConnectionGUID: OCgXJcxiQ5WTOu9jDNg8wQ==
-X-CSE-MsgGUID: QdeW01PvRTm3jojgRoU8+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="46963308"
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="46963308"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 19:22:29 -0700
-X-CSE-ConnectionGUID: 0Rn253ScSgGj44TT3Nko8Q==
-X-CSE-MsgGUID: RDlGAhGKTQKFQYOoztrlPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="171941816"
-Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 04 Sep 2025 19:22:27 -0700
-Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uuM5C-00067b-26;
-	Fri, 05 Sep 2025 02:21:56 +0000
-Date: Fri, 5 Sep 2025 10:21:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Max Kellermann <max.kellermann@ionos.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Subject: [linux-next:master 6089/6355]
- include/linux/highmem-internal.h:86:39: error: passing 'const struct folio
- *' to parameter of type 'struct folio *' discards qualifiers
-Message-ID: <202509051023.d6AUXYH1-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="a/mS6Fjk"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3e3aafe06a7so145697f8f.0
+        for <llvm@lists.linux.dev>; Thu, 04 Sep 2025 19:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1757040870; x=1757645670; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CHgv0NAqDCmZyIrAUaPsVJq1dy+s9KkgFo573UQUBVs=;
+        b=a/mS6FjkBrwIU4MylQ7/6G0AUm/3NOr+0vc5RjDHlgkM2Rpc6SBjNfxXjcjt08NuZd
+         /zFHVvK4cQjrO5T3tUgSnSuGWcXU9f0X4drjFSE3wdGySIQjxjV2i82rKWDvV+OWQLr3
+         KkqbhL+kGJ0RUOmhA/FR6J6MCMr0DmA63astFAnslP90FgXs146UC1cZDA3gK4fcPfgG
+         7EivwNaS7Q+N2quoewct29mMKApNlIv76fU8gAKebAgebkFyIfp1tWQMZ5ip+yzQD6EH
+         8TSca8q8GpL2l0fpHUYMbfLNi0DXXa6RIA3/XDbHOa5bTeeGIk7oaBkarINEUIhkRNmB
+         WlAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757040870; x=1757645670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CHgv0NAqDCmZyIrAUaPsVJq1dy+s9KkgFo573UQUBVs=;
+        b=PpDLp+JdBQgj9csKEDKbhnNr1wE4IasV0aM2wNfls25URTYkTe+/6giNsDKdO0Jdy9
+         oP+wKSAspeEahm6jFPkI919Jh+K9EznF8vyf/la7IEU0A8AjvKabEpgevFOHoM8ijAcL
+         awLzXzTaDTN65C1fO+VP1Nt+f5UoLuhYcaBIebg1aSNMdic/YAApm7QsPoFSD6d/c/G9
+         kTolANZrzC+xrZBVoTaoF6LEJ0ymCmnNzu8wgHi3hCxlJHZR/e/r59oB9XFhl1dbWxHl
+         koTETJuD1KwtM0yHdyym6DEjcFr2/H+MOlv8U8nPgb60pE6i+2exNsMBu2u/kwKSwbXt
+         rV1A==
+X-Forwarded-Encrypted: i=1; AJvYcCW+jDTIV7O57BpRZipZjDh2hmn3sN6qCRuye/Ggo7HY/sgLXMjxlMp+1ixY9lOT/zF/KyvJ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy5famZEunSgrFr2Zp/DZYOxBu3+ZUmCUE3L1ptfNj5+edFFUKy
+	XVvVGkB63V9S9LF/WhSidyUV9q3yv3VVsL/5hqsJLiQQanm0/N5RXxy2/GsAfdiL6iw=
+X-Gm-Gg: ASbGncuGYu6ktEraHRqLiLk6tevrFVzZXCk+O2157xfzrlQ9o8UYHY2KWFUU5kSyDAZ
+	kqo3VextARkfciEIMlLkUltxz0zI4b2IBG/U2Jx0ffqaHfcgShZcVAbElp1qT4MD1shyT4maI0G
+	XUIvRYGzrT1VI/N3lIivwCctLLZE1nHx1YCCnTrqSRocPotwErm0jX7W55nDcnmPTJ2ZcQV+DBU
+	6Nzcl25/3W9wOE7xgfWSn7PK97pkqiZ+G20HCtjLEsigNxWm3LosG6Se/bvawFsKT/cVlujwxae
+	0yyLPV3lrkY2dQGc1dFBRXxxIpVIejt3vxy3y4MSiR4lC+XvbE7bzVZaq4T6LQoUaBX5K1oJvko
+	gae5t3sEuq8n/+mO9dRwa1mqP9ww=
+X-Google-Smtp-Source: AGHT+IHlQ5NtCWhhn706uFBkQkHtdTdgPPiLOwM5uLuiEP1poKNVs7I6ylodCTB9/wLUvkUlnXWfJg==
+X-Received: by 2002:a05:6000:1887:b0:3e2:4a3e:d3cf with SMTP id ffacd0b85a97d-3e24a3ef8a9mr2789665f8f.5.1757040870188;
+        Thu, 04 Sep 2025 19:54:30 -0700 (PDT)
+Received: from F5.localdomain ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b520b545a96sm457225a12.20.2025.09.04.19.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Sep 2025 19:54:29 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: 
+Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	bpf@vger.kernel.org (open list:BPF [LIBRARY] (libbpf)),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [RFC bpf-next 0/1] libbpf: add compile-time OOB warning to bpf_tail_call_static
+Date: Fri,  5 Sep 2025 11:53:10 +0900
+Message-ID: <20250905025314.245650-1-hoyeon.lee@suse.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4ac65880ebca1b68495bd8704263b26c050ac010
-commit: 598ad57d4b4687c7cbb9fc8af954143d250b03ae [6089/6355] mm: constify highmem related functions for improved const-correctness
-config: i386-buildonly-randconfig-002-20250905 (https://download.01.org/0day-ci/archive/20250905/202509051023.d6AUXYH1-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509051023.d6AUXYH1-lkp@intel.com/reproduce)
+This RFC adds a compile-time check to bpf_tail_call_static() to warn
+when a constant slot(index) is >= map->max_entries. This uses a small
+BPF_MAP_ENTRIES() macro together with Clang's diagnose_if attribute.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509051023.d6AUXYH1-lkp@intel.com/
+Clang front-end keeps the map type with a '(*max_entries)[N]' field,
+so the expression
 
-Note: the linux-next/master HEAD 4ac65880ebca1b68495bd8704263b26c050ac010 builds fine.
-      It may have been fixed somewhere.
+    sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)
 
-All errors (new ones prefixed by >>):
+is resolved to N entirely at compile time. This allows diagnose_if()
+to emit a warning when a constant slot index is out of range.
 
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:23:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:14:
->> include/linux/highmem-internal.h:86:39: error: passing 'const struct folio *' to parameter of type 'struct folio *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      86 |         const struct page *page = folio_page(folio, offset / PAGE_SIZE);
-         |                                              ^~~~~
-   include/linux/page-flags.h:319:53: note: passing argument to parameter 'folio' here
-     319 | static inline struct page *folio_page(struct folio *folio, unsigned long n)
-         |                                                     ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:182: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=2013769869
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1282: prepare0] Error 2 shuffle=2013769869
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=2013769869
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=2013769869
-   make: Target 'prepare' not remade because of errors.
+Example:
 
+    struct { /* BPF_MAP_TYPE_PROG_ARRAY = 3 */
+        __uint(type, 3);             // int (*type)[3];
+        __uint(max_entries, 100);    // int (*max_entries)[100];
+        __type(key, __u32);          // typeof(__u32) *key;
+        __type(value, __u32);        // typeof(__u32) *value;
+    } progs SEC(".maps");
 
-vim +86 include/linux/highmem-internal.h
+    bpf_tail_call_static(ctx, &progs, 111);
 
-    83	
-    84	static inline void *kmap_local_folio(const struct folio *folio, size_t offset)
-    85	{
-  > 86		const struct page *page = folio_page(folio, offset / PAGE_SIZE);
-    87		return __kmap_local_page_prot(page, kmap_prot) + offset % PAGE_SIZE;
-    88	}
-    89	
+produces:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    bound.bpf.c:26:9: warning: bpf_tail_call: slot >= max_entries [-Wuser-defined-warnings]
+       26 |         bpf_tail_call_static(ctx, &progs, 111);
+          |         ^
+    /usr/local/include/bpf/bpf_helpers.h:190:54: note: expanded from macro 'bpf_tail_call_static'
+      190 |          __bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                  \
+          |                                                             ^
+    /usr/local/include/bpf/bpf_helpers.h:183:20: note: from 'diagnose_if' attribute on '__bpf_tail_call_warn':
+      183 |     __attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries", "warning")));
+          |                    ^           ~~~
+
+Out-of-bounds tail call checkup is no-ops at runtime. Emitting a
+compile-time warning can help developers detect mistakes earlier. The
+check is currently limited to Clang (due to diagnose_if) and constant
+indices, but should catch common errors.
+
+Hoyeon Lee (1):
+  libbpf: add compile-time OOB warning to bpf_tail_call_static
+
+ tools/lib/bpf/bpf_helpers.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+--
+2.51.0
