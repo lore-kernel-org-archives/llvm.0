@@ -1,154 +1,105 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A706F31D749
-	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 15:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACD931D72E;
+	Fri,  5 Sep 2025 15:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757087720; cv=none; b=b7ajlt0iysSWiz4JAbZ0ppcCvtKFuwqeQ6lX5nO35tw5UyEoo9eWbyu45M3eq8ThEqLiqDcaULzx7eab8d38LdPeCrxbJ1bR3Fx8ztqe2WWHoKgDR4JE4TJhpZ+jR2cC87Do4Y0kLX8Oownc2FsFcGKIZfPY+ExvPXaGiAAZDqg=
+	t=1757087956; cv=none; b=S3bs/iDDQOhvrJwqepBCZmo4EL2OaBmkH1YapROYpRtrvYHqumQDdfDvzPH4hP3rGzAUmGYCGTMCNxmteFcem2c9VaGyvled9VJbsDmrnFDLo+WtQwQF9jTILfIhrzQpJXDSoxBJXRLWXNnZ2iMJ3XXBhodnFJyaujgDcHIzZqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757087720; c=relaxed/simple;
-	bh=VK5L9ZQl5SjCnEBuOT7vVdJruIk2fkLuhS+o/xPYcMw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PdUgFLcPC1KrHy+gc6U3LzUKDXxzqz27LEFHZWZ7FoYgUjWK6oPsRuo/QqQLvc7twztnBri3xQ6lEoPMoaGxR85Z48xj4pYckcx8Ex4uoPoYCQRuicrOqjcGrsdni8RT+Y2RQGDrp57cdsaP/UvQ/7i4ymCL3fvI+Q0V2qJZyM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Cu/U+6Ps; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1757087956; c=relaxed/simple;
+	bh=eSR4TUXkvx/9lqvlUc87GuT3m88dAjDqGBb9KS2uelY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WESsFAxkMMrQwX67TSccUWTz7vQ9GbXt5raqzYoJCGw0OJBzInMSiNvzsP7fSboYAqWjjKnkdoxLXmw0Yx/rSXm7UMF6RFpEc+5y2Blp5DawJRlEX5hgSz2LSsV20FmqGgo7WDVqmaNoqJ9dCvtkcTMpoLOEClSsljg54pqDtQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3BLjbQ+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Cu/U+6Ps"
-Message-ID: <ca64e62b-740e-4e02-a386-e1016317b071@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757087706;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5SkhDx01VH5ULkTtGZmBjnS7ayJVpHz3ZygQmDSZ2dE=;
-	b=Cu/U+6PsLuRwZnWv3E3Wzw7kScSJJHds5FQyisY7hZ2cFZhr1wFebmDS00NgIUvDISC20c
-	jqLR1yuKPB/o4rskbDHmRuCW9PQ1W88xlz4xNKj8JykWG/iTU2llI7HZIojAN8dn8KU1kW
-	vgZ9r3FJPxIJrxzu629/XpqNrIiGBRU=
-Date: Fri, 5 Sep 2025 08:54:45 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3BLjbQ+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77101C4CEF4;
+	Fri,  5 Sep 2025 15:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757087955;
+	bh=eSR4TUXkvx/9lqvlUc87GuT3m88dAjDqGBb9KS2uelY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q3BLjbQ+8OkT8qvpn4s3NSjeQidQ2M7anZICert5+EGY0zu8wPr2u7XU4+cBjW5Wu
+	 fPY7IePrZr1wkXMOCb/t0Uz0Fg1tca/5mDSGiL1TRE/W0hfBy3W0E1a95UwZpYIMGX
+	 8qgOrhFeWJwLSMl+4KH8IAHcWVt9K2k4JraCMY6qo9VdtBNHhO/4NulSKIIgMElOOJ
+	 TuA8jWLgtBUs63qB4o4HWd0USFli9kZY6eBz+qDgWUK3rZ1dB7xPd7XO5hNDIYVasy
+	 QvK0lGpOdbnNHOL8bE9ZRiCrQ6KPzE+i4MuKwNear/aScZbMezE4aKLronoh52A4fp
+	 PPiqX70ygaAag==
+Date: Fri, 5 Sep 2025 08:59:15 -0700
+From: Kees Cook <kees@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kbuild@vger.kernel.org,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: Re-enable -Wunterminated-string-initialization
+Message-ID: <202509050856.E5D810BC@keescook>
+References: <20250802184328.it.438-kees@kernel.org>
+ <20250803173235.GA716998@ax162>
+ <e4d801e3-3004-484b-897d-ed43c25e1576@intel.com>
+ <20250805214823.GB200407@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [RFC bpf-next v2 1/1] libbpf: add compile-time OOB warning to
- bpf_tail_call_static
-Content-Language: en-GB
-To: Hoyeon Lee <hoyeon.lee@suse.com>
-Cc: netdev@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "open list:BPF [LIBRARY] (libbpf)" <bpf@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
- <llvm@lists.linux.dev>
-References: <20250905051814.291254-1-hoyeon.lee@suse.com>
- <20250905051814.291254-2-hoyeon.lee@suse.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20250905051814.291254-2-hoyeon.lee@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250805214823.GB200407@ax162>
 
+On Tue, Aug 05, 2025 at 02:48:23PM -0700, Nathan Chancellor wrote:
+> On Tue, Aug 05, 2025 at 04:50:28PM +0200, Alexander Lobakin wrote:
+> > From: Nathan Chancellor <nathan@kernel.org>
+> > Date: Sun, 3 Aug 2025 10:32:35 -0700
+> > 
+> > > On Sat, Aug 02, 2025 at 11:43:32AM -0700, Kees Cook wrote:
+> > >> With the few remaining fixes now landed, we can re-enable the option
+> > >> -Wunterminated-string-initialization (via -Wextra). Both GCC and Clang
+> > >> have the required multi-dimensional nonstring attribute support.
+> > 
+> > [...]
+> > 
+> > > diff --git a/drivers/net/ethernet/ti/netcp_ethss.c b/drivers/net/ethernet/ti/netcp_ethss.c
+> > > index 55a1a96cd834..05d4323c6a13 100644
+> > > --- a/drivers/net/ethernet/ti/netcp_ethss.c
+> > > +++ b/drivers/net/ethernet/ti/netcp_ethss.c
+> > > @@ -771,7 +771,7 @@ static struct netcp_module xgbe_module;
+> > >  
+> > >  /* Statistic management */
+> > >  struct netcp_ethtool_stat {
+> > > -	char desc[ETH_GSTRING_LEN];
+> > > +	char desc[ETH_GSTRING_LEN] __nonstring;
+> > 
+> > 
+> > Hmmm, ETH_GSTRING_LEN is the maximum length of the driver's statistics
+> > name to be reported to Ethtool and this *includes* \0 at the end.
 
+This is not true. ethtool uses non-C-String logic to report these values
+in userspace. These are _not_ C-Strings -- they're NUL padded to
+ETH_GSTRING_LEN, so some drivers _happen_ to use C-String APIs, but
+they're "wasting" a byte.
 
-On 9/4/25 10:18 PM, Hoyeon Lee wrote:
-> Add a compile-time check to bpf_tail_call_static() to warn when a
-> constant slot(index) >= map->max_entries. This uses a small
-> BPF_MAP_ENTRIES() macro together with Clang's diagnose_if attribute.
->
-> Clang front-end keeps the map type with a '(*max_entries)[N]' field,
-> so the expression
->
->      sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)
->
-> is resolved to N entirely at compile time. This allows diagnose_if()
-> to emit a warning when a constant slot index is out of range.
->
-> Out-of-bounds tail calls are currently silent no-ops at runtime, so
-> emitting a compile-time warning helps detect logic errors earlier.
-> This is currently limited to Clang (due to diagnose_if) and only for
-> constant indices, but should still catch the common cases.
->
-> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> ---
-> Changes in V2:
-> - add function definition for __bpf_tail_call_warn for compile error
->
->   tools/lib/bpf/bpf_helpers.h | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index 80c028540656..98bc1536c497 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -173,6 +173,27 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
->   		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
->   		     : "r0", "r1", "r2", "r3", "r4", "r5");
->   }
-> +
-> +#if __has_attribute(diagnose_if)
-> +static __always_inline void __bpf_tail_call_warn(int oob)
-> +	__attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries",
-> +				   "warning"))) {};
-> +
-> +#define BPF_MAP_ENTRIES(m) \
-> +	((__u32)(sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)))
-> +
-> +#ifndef bpf_tail_call_static
-> +#define bpf_tail_call_static(ctx, map, slot)				      \
-> +({									      \
-> +	/* wrapped to avoid double evaluation. */                             \
-> +	const __u32 __slot = (slot);                                          \
-> +	__bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                 \
-> +	/* Avoid re-expand & invoke original as (bpf_tail_call_static)(..) */ \
-> +	(bpf_tail_call_static)(ctx, map, __slot);                             \
-> +})
-> +#endif /* bpf_tail_call_static */
-> +#endif
+> > If this compilation flag triggers a warning here, the driver devs need
+> > to fix their code. There should always be \0 at the end, `desc` is a
+> > "proper" C 0-terminated string.
+> 
+> Ack, I had misunderstood a previous fix that Kees did for a similar but
+> different instance of the warning in another Ethernet driver and I
+> did not look much further than the driver copying these values around
+> with memcpy(). This does trigger a warning, from the original message:
 
-I got the following error with llvm21.
+These don't need to be renamed -- they just need to use memcpy instead
+of C String helpers.
 
-progs/tailcall_bpf2bpf3.c:20:3: error: bpf_tail_call: slot >= max_entries [-Werror,-Wuser-defined-warnings]
-    20 |                 bpf_tail_call_static(skb, &jmp_table,progs/tailcall_bpf2bpf2.c:17:3 10);
-       | :                ^
-  /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:190:53: note: expanded from macro
-       'bpf_tail_call_static'
-   190 |         __bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                 \
-       |                                                            ^
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:179:17: note: from 'diagnose_if'
-       attribute on '__bpf_tail_call_warn':
-   179 |         __attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries",
-       |                        ^           ~~~
-error: bpf_tail_call: slot >= max_entries [-Werror,-Wuser-defined-warnings]
-    17 |                 bpf_tail_call_static(skb, &jmp_table, 1);
-       |                 ^
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:190:53: note: expanded from macro
-       'bpf_tail_call_static'
-   190 |         __bpf_tail_call_warn(__slot >= BPF_MAP_ENTRIES(map));                 \
-       |                                                            ^
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:179:17: note: from 'diagnose_if'
-       attribute on '__bpf_tail_call_warn':
-   179 |         __attribute__((diagnose_if(oob, "bpf_tail_call: slot >= max_entries",
-       |                        ^           ~~~
-   CLNG-BPF [test_progs] tailcall_poke.bpf.o
-1 error generated.
-make: *** [Makefile:733: /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tailcall_bpf2bpf3.bpf.o] Error 1
+ETH_GSTRING stuff is not NUL terminated.
 
-> +
->   #endif
->   #endif
->
-> --
-> 2.51.0
+-Kees
 
+-- 
+Kees Cook
