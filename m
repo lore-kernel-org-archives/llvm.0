@@ -1,228 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94E8257830;
-	Fri,  5 Sep 2025 05:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D2321D011
+	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 06:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757050175; cv=none; b=JpI6AAKnFNzch7KAZWx+zoEKsVeRl3ylOneJTuX6RHiAKSSmF8OJYvrEEkALvaio6wJfsE2pTM+lj1S0CJXzmsCyWiw0fgVHOaI2VnJiT9WkrWkFt/oyki8i7N7iTdiogsAy6i5N44xBbCPAObbpF1HhehkQNu886G1/1vccZ4M=
+	t=1757052104; cv=none; b=F5YDXsizwGEetqUdkktw/dC6SY+3O/t/CsG+C81rvcigsWapHayckd9lECzuOR4FhxqFm5olvbxO5jYUWT7+vXvHsnARjxTJt2eRBYNf7SKUxxFiHVAvzAXdM8IJu3bB2pu25JrlqrRE44n4/XZm8zOUK7i38mwfDzd6DCASPNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757050175; c=relaxed/simple;
-	bh=+GGeWtzOnhlywY1SautnLIfVlb/W/eBi0k6tGAU9xmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RxN/84BQI6JhluuAMBbEFK8ufhAHNxCOEAG8N0VNWN8Rewxdip/XsiyfcFm1B7Zjg6SukkJXX/Ut5/t4wGGxl6coanMF9rv3cRALUzomaXbEZkFtnzjRKccmaktdu9a8+yqXJxF8t0ozS4c4HLlQA4OT6EjjRaRM0+Il18lRo7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W00GLw71; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757052104; c=relaxed/simple;
+	bh=3knstRovj93xkUytRtrTV4g+ye1JGAHeEex24QMnCko=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=inYYYIMIOU3FWWRgJX0KjEo6K0c8xDTwjgIJmjjDZQlNltTyz7Wctd1PY+1/4iRzBPTBcSQes5/NRtA/rnVwf76dpTsNiR1KWhExpgt+yL+NgMBOMyNnWH9iszQnjmvONHF6HkSm547q+Bxn0w0IGnyqksfN1qmJu2bdQpGX/Hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Jg92GSH6; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W00GLw71"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757050173; x=1788586173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+GGeWtzOnhlywY1SautnLIfVlb/W/eBi0k6tGAU9xmE=;
-  b=W00GLw71hzfX2HfeNO36bLjsMZ4fccn1kxnzjObAlbgvl35oVfhCdSlj
-   UtKkg8vxNwxVFnNIgPNxdhkbxTy6zKd27Ld90tulmFMC7G70IlF+ZzQA5
-   /SpkC1URu8d3YB4b7r6IqG1NqKIk3rpSJNZurAOH6mQufWpKxHjNw1n5U
-   YhjMc2bCBXUJ1TB9cJk4Q6JHJG2aRrAd0oh9W/HJtkYGcGcPwPArrMmcQ
-   BeYxqImAMX1gisVliwj3SmgQgrxqo+w+a95Gs3MrND5yKaJrOnb4JsNA9
-   rUURNtFq9OV2hAYQ6ds+toINuATdYHOXX26C5EzXkGGRZEJisJwKfgazY
-   Q==;
-X-CSE-ConnectionGUID: Ed9Y8QTNSCCVY+YD2zYYGA==
-X-CSE-MsgGUID: TtRhRf8IT/KI3INVZK3a9g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59509164"
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="59509164"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 22:29:32 -0700
-X-CSE-ConnectionGUID: Zu57G14KQ228dbPwUZN39g==
-X-CSE-MsgGUID: QRofuRMxRbCSJ9Zg5SFtLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
-   d="scan'208";a="176412850"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Sep 2025 22:29:27 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uuP0m-00003X-31;
-	Fri, 05 Sep 2025 05:29:24 +0000
-Date: Fri, 5 Sep 2025 13:29:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thierry Reding <thierry.reding@gmail.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Brian Starkey <Brian.Starkey@arm.com>,
-	John Stultz <jstultz@google.com>,
-	"T.J. Mercier" <tjmercier@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Hildenbrand <david@redhat.com>,
-	Mike Rapoport <rppt@kernel.org>, dri-devel@lists.freedesktop.org,
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH 5/9] dma-buf: heaps: Add support for Tegra VPR
-Message-ID: <202509051316.Hlzf9HAw-lkp@intel.com>
-References: <20250902154630.4032984-6-thierry.reding@gmail.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Jg92GSH6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Od
+	8KnfSygcUPovid5hxz+wVBe3lxMm/XME01VPFpLt0=; b=Jg92GSH6RVWVFg6wot
+	74T4jMndPS0t3kUMA/e91Gfc+bTzmRNco9fP5qES/eQJ3suWB+LvaKEHom6y73W/
+	V/jJ+S74HkuxsWWuAxddboyIIt84XeTJa/spfyhnxLd7NbNjnm7MptPz7f6bkfvy
+	g0oogz6hwh/V16icIufEI9Cwo=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wC3eap7fLpok1QJGQ--.24371S2;
+	Fri, 05 Sep 2025 14:00:28 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: eddyz87@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	song@kernel.org,
+	yangfeng59949@163.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Fix the invalid operand for instruction issue
+Date: Fri,  5 Sep 2025 14:00:26 +0800
+Message-Id: <20250905060026.1285979-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
+References: <7a037c0579e1cbabb83935c05c24ddbc6bc43327.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250902154630.4032984-6-thierry.reding@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wC3eap7fLpok1QJGQ--.24371S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CrWxWFW5CrykKF1UCF48Zwb_yoW8JFWrpF
+	yrWr1DKF4rJFyUJr13Jw4aqF1Yvw4SkrWrGrW8Ar9rGr90ywsIyFyxGryY9asIgw47u3yY
+	9rW8X3yfCw4qyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRcTmhUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbipRO-eGi6aW8nQAACsA
 
-Hi Thierry,
+On Thu, 04 Sep 2025 08:48:45 -0700 Eduard Zingerman wrote:
 
-kernel test robot noticed the following build errors:
+> On Thu, 2025-08-28 at 10:01 +0800, Feng Yang wrote:
+> > From: Feng Yang <yangfeng@kylinos.cn>
+> > 
+> > The following issue occurs when compiling with clang version 17.0.6:
+> > progs/compute_live_registers.c:251:3: error: invalid operand for instruction
+> >   251 |                 "r0 = 1;"
+> >       |                 ^
+> > <inline asm>:1:22: note: instantiated into assembly here
+> >     1 |         r0 = 1;r2 = 2;if r1 & 0x7 goto +1;exit;r0 = r2;exit;
+> >       |                             ^
+> > 1 error generated.
+> > 
+> > Use __imm_insn to fix this issue.
+> > 
+> > Fixes: 4a4b84ba9e453 ("selftests/bpf: verify jset handling in CFG computation")
+> > Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> > ---
+> 
+> Hi Feng,
+> 
+> This message felt through cracks a bit.  It's a minor thing, of
+> course, but there is a legit question of how much backward we'd like
+> to support clang versions for the test suite.
+> 
+> Could you please provide some detail on your build environment,
+> why do you want to run the tests with older clang?
 
-[auto build test ERROR on next-20250902]
-[also build test ERROR on v6.17-rc4]
-[cannot apply to robh/for-next akpm-mm/mm-everything tegra/for-next linus/master v6.17-rc4 v6.17-rc3 v6.17-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi Eduard,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thierry-Reding/dt-bindings-reserved-memory-Document-Tegra-VPR/20250902-235038
-base:   next-20250902
-patch link:    https://lore.kernel.org/r/20250902154630.4032984-6-thierry.reding%40gmail.com
-patch subject: [PATCH 5/9] dma-buf: heaps: Add support for Tegra VPR
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250905/202509051316.Hlzf9HAw-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509051316.Hlzf9HAw-lkp@intel.com/reproduce)
+Actually, there is no specific reason to test with an older version of Clang.
+It's just that the Clang downloaded from the source is this version,
+and installing a newer version by myself would be rather troublesome.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509051316.Hlzf9HAw-lkp@intel.com/
+clang version 17.0.6
+GNU Make 4.4.1
+gcc (GCC) 12.3.1
+linux version: 6.6
+arch: x86-64
 
-All errors (new ones prefixed by >>):
-
->> drivers/dma-buf/heaps/tegra-vpr.c:158:26: error: called object type 'void *' is not a function or function pointer
-     158 |                 err = pm_generic_freeze(node->dev);
-         |                       ~~~~~~~~~~~~~~~~~^
-   drivers/dma-buf/heaps/tegra-vpr.c:175:24: error: called object type 'void *' is not a function or function pointer
-     175 |                 err = pm_generic_thaw(node->dev);
-         |                       ~~~~~~~~~~~~~~~^
-   drivers/dma-buf/heaps/tegra-vpr.c:192:14: error: call to undeclared function '__ptep_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     192 |         pte_t pte = __ptep_get(ptep);
-         |                     ^
-   drivers/dma-buf/heaps/tegra-vpr.c:192:14: note: did you mean 'ptep_get'?
-   include/linux/pgtable.h:338:21: note: 'ptep_get' declared here
-     338 | static inline pte_t ptep_get(pte_t *ptep)
-         |                     ^
-   drivers/dma-buf/heaps/tegra-vpr.c:192:8: error: initializing 'pte_t' with an expression of incompatible type 'int'
-     192 |         pte_t pte = __ptep_get(ptep);
-         |               ^     ~~~~~~~~~~~~~~~~
-   drivers/dma-buf/heaps/tegra-vpr.c:194:36: error: use of undeclared identifier 'PROT_NORMAL'; did you mean 'ZONE_NORMAL'?
-     194 |         pte = clear_pte_bit(pte, __pgprot(PROT_NORMAL));
-         |                                           ^~~~~~~~~~~
-         |                                           ZONE_NORMAL
-   arch/s390/include/asm/page.h:122:36: note: expanded from macro '__pgprot'
-     122 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
-   include/linux/mmzone.h:806:2: note: 'ZONE_NORMAL' declared here
-     806 |         ZONE_NORMAL,
-         |         ^
-   drivers/dma-buf/heaps/tegra-vpr.c:195:34: error: use of undeclared identifier 'PROT_DEVICE_nGnRnE'
-     195 |         pte = set_pte_bit(pte, __pgprot(PROT_DEVICE_nGnRnE));
-         |                                         ^
-   drivers/dma-buf/heaps/tegra-vpr.c:197:2: error: call to undeclared function '__set_pte'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     197 |         __set_pte(ptep, pte);
-         |         ^
-   drivers/dma-buf/heaps/tegra-vpr.c:197:2: note: did you mean 'set_pte'?
-   arch/s390/include/asm/pgtable.h:1041:20: note: 'set_pte' declared here
-    1041 | static inline void set_pte(pte_t *ptep, pte_t pte)
-         |                    ^
-   drivers/dma-buf/heaps/tegra-vpr.c:205:14: error: call to undeclared function '__ptep_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     205 |         pte_t pte = __ptep_get(ptep);
-         |                     ^
-   drivers/dma-buf/heaps/tegra-vpr.c:205:8: error: initializing 'pte_t' with an expression of incompatible type 'int'
-     205 |         pte_t pte = __ptep_get(ptep);
-         |               ^     ~~~~~~~~~~~~~~~~
-   drivers/dma-buf/heaps/tegra-vpr.c:207:36: error: use of undeclared identifier 'PROT_DEVICE_nGnRnE'
-     207 |         pte = clear_pte_bit(pte, __pgprot(PROT_DEVICE_nGnRnE));
-         |                                           ^
-   drivers/dma-buf/heaps/tegra-vpr.c:208:34: error: use of undeclared identifier 'PROT_NORMAL'; did you mean 'ZONE_NORMAL'?
-     208 |         pte = set_pte_bit(pte, __pgprot(PROT_NORMAL));
-         |                                         ^~~~~~~~~~~
-         |                                         ZONE_NORMAL
-   arch/s390/include/asm/page.h:122:36: note: expanded from macro '__pgprot'
-     122 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
-   include/linux/mmzone.h:806:2: note: 'ZONE_NORMAL' declared here
-     806 |         ZONE_NORMAL,
-         |         ^
-   drivers/dma-buf/heaps/tegra-vpr.c:210:2: error: call to undeclared function '__set_pte'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     210 |         __set_pte(ptep, pte);
-         |         ^
-   12 errors generated.
-
-
-vim +158 drivers/dma-buf/heaps/tegra-vpr.c
-
-   135	
-   136	static int tegra_vpr_resize(struct tegra_vpr *vpr)
-   137	{
-   138		struct tegra_vpr_device *node;
-   139		phys_addr_t base, size;
-   140		int err;
-   141	
-   142		err = tegra_vpr_get_extents(vpr, &base, &size);
-   143		if (err < 0) {
-   144			pr_err("%s(): failed to get VPR extents: %d\n", __func__, err);
-   145			return err;
-   146		}
-   147	
-   148		if (vpr->use_freezer) {
-   149			err = freeze_processes();
-   150			if (err < 0) {
-   151				pr_err("%s(): failed to freeze processes: %d\n",
-   152				       __func__, err);
-   153				return err;
-   154			}
-   155		}
-   156	
-   157		list_for_each_entry(node, &vpr->devices, node) {
- > 158			err = pm_generic_freeze(node->dev);
-   159			if (err < 0) {
-   160				pr_err("failed to runtime suspend %s\n",
-   161				       dev_name(node->dev));
-   162				continue;
-   163			}
-   164		}
-   165	
-   166		trace_tegra_vpr_set(base, size);
-   167	
-   168		err = tegra_vpr_set(base, size);
-   169		if (err < 0) {
-   170			pr_err("failed to secure VPR: %d\n", err);
-   171			return err;
-   172		}
-   173	
-   174		list_for_each_entry(node, &vpr->devices, node) {
-   175			err = pm_generic_thaw(node->dev);
-   176			if (err < 0) {
-   177				pr_err("failed to runtime resume %s\n",
-   178				       dev_name(node->dev));
-   179				continue;
-   180			}
-   181		}
-   182	
-   183		if (vpr->use_freezer)
-   184			thaw_processes();
-   185	
-   186		return 0;
-   187	}
-   188	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
