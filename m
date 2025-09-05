@@ -1,158 +1,157 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971EE315D24
-	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 18:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55F92ECD2D;
+	Fri,  5 Sep 2025 21:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757098657; cv=none; b=TUT9KxfOA5hTF+mSRCXgVD1BQGAgjpQpJVHiSLZ9R8zU31pr6MRSKCPwuVr9Hr7m23NsQ4r9vIWO70B8YfHFSjxcqwNCI/EqVWXLWUj/ZR+lmGwNIUXnf97oeai0kBqnJY7LmCYBj3qgj33NL+cFodCDlX8qApdy9YhoEshqkpo=
+	t=1757106551; cv=none; b=RSjSCF8lvk4ccraiTyxh4Syudd+t5AfGcBbbO67ge9UixGgjIyJbPr835HqCZEX9EICTphGU91j2aqfkbk2pYmVKozfkHXA6b8uYig6C6a9N1J9wucm5lAa069ztO7IYO2JB0swoxdZzpWpHh0cEqo6lLttw6I/ZeNMQtJLTfoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757098657; c=relaxed/simple;
-	bh=Sh2W9S33o9oHSqjqqDPu97sA2vKA/BObXcqy8rxc/KQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LDhUmatjo3QJyo3O6KVvODd/ZKcWuaFcPRei2sm+w9FOWOKHBmQ6fe00u70QTnX1HZ/7ofyowVThVNS+mMc+b+uvIXMns9aKu8IRZEqpbnJ3Ra2mXv5P8jRKGsiS5oCj3uQJrMgJyxrATxa3Ff27fy3i6lPD6jSDjo6kIX3l7kM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gpIcIup7; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1757106551; c=relaxed/simple;
+	bh=Q4/Hy3I/j5BNl0X6z2Pxo3w50TkPZNmdARahvFuu1ZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e0DyxalI72hzrn4C1j5IFSdfFlYneFJ+wnndRcmTfYjr6IQTU6ZdXr19d+B/pmIbc2GBrtvBr2Zg/YbXCst9hmXA4AzuhLfA7cDNn+GNhPfmSUWE9jgy5iA2a15H941ArEwOkL0WhNMiH3qMYDfBt4ST+hNAQbyS/rYnCJtIjRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OUhiTyiG; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gpIcIup7"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b4dc35711d9so1688265a12.0
-        for <llvm@lists.linux.dev>; Fri, 05 Sep 2025 11:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757098655; x=1757703455; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Phcp6Y13YTj5On7joWI7rno+f1V1BMv8Ow6mbXVUb6w=;
-        b=gpIcIup7FACEGSjOhP2LJ0buQ8y0+2HU6FPgpSXApXpBUZkGg60m4gBYILjxtTHGEz
-         /pk6zAMAUC4Vkx4FVd+DhLeST4yl538BFn6LzYT6MQ4dSEQYww/xmG0dIDvu+HSblrIF
-         64vrFeA7nDBqcQ5yq8XP3QgnBPu+c1YpYlWDx8A+9mPg3ruEY1PYHdQ/uV8fGIFv4I5/
-         ZCd77UhpZAqx9ZRaNFkmIHY3+zbIFcWH3jW7YRxPnxbF2zs9f0JozC7dJZoiXiEbOKER
-         UM9fukgnA5N6GxfQXscAi1+u9s9kMIjoEsF32mMLbHHYs3O8VO6hHsNoMX3QPG2VUxJi
-         YOPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757098655; x=1757703455;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Phcp6Y13YTj5On7joWI7rno+f1V1BMv8Ow6mbXVUb6w=;
-        b=eD01Dg9HRmb8+LZuMsxxyTd/EhFUSytx1nERtTb8FwvGzZ5DvTm4gj8HgLYFKF4A9v
-         oQL3kDag9kKgXmfJ1qN0ZovyrL35LF32iroMfjoggJ3ehifBfhYx2rUtsU0xEQgyEQ/0
-         a55/rmZR7OdgQ4wzrqiR92wO/lT0KtHcigYGKc+rnaqFYjqmQDqxBmxeO/POcbZrLZIZ
-         UlNxyme+gxP86ZULwv9M6e7mWtf0nV0gI8SX2g3PsK3QInjHsv0VNTt7mtJxeJwoprcj
-         b4n6fg2zMVZKX1QurnAJxvf7IWPbE8rL+6g5chTjz3+yNXXfoNznT63RRdm7T1H0luLr
-         hPow==
-X-Forwarded-Encrypted: i=1; AJvYcCV3u6TpQ2yNqEYOcA5DGOk/LH5SkSt7A+PCLwsyqmqgROov5EACKIr9v9Jxbtabne8PFyU7@lists.linux.dev
-X-Gm-Message-State: AOJu0YzzikOJD2YXcIzOCJUCr+C+aCh8JuzgNjEhPhXb5mVIHBIlEsyr
-	H38OmQjZ3JDf5E8RKm1H1uNBo5KrIw95SO780NgNKbz/FxxO7MTjQQIMMnOJKLZs2MEEB2tbaVP
-	UZCj/jkwfLcbkb9U9631r26nOVHP/TPCr3A==
-X-Gm-Gg: ASbGnct+mQ4QgGSFGz6OrjW11GyMD/vUEK55IAI/5skvuvPto8cYwOSbfv8H1YOG767
-	/yghZZEmf4Yi377dsgppwKzOVKrQhmOZh9xVqJ/dhakqtJ8YefmlfAR7O4gjove8JdCxy2Cg/yV
-	Re7lKg25Hd3DEn7e5hsl4pU69X3JVd5Ms7we2RBHJqdIYYiuqvURm3nXSCj96fpUUkcXOio2Ggy
-	CtwkGDIBadGL+8=
-X-Google-Smtp-Source: AGHT+IEWUVD5cYlMBi/1ejQQ5/n7xicywFu4Y7kfT/oTopx6krdGSLXXSCmtKhpytMvanDAdT1YNmnjzFXeyQbM4J2g=
-X-Received: by 2002:a17:902:e80d:b0:249:308:353 with SMTP id
- d9443c01a7336-24944ad2e89mr321812025ad.41.1757098654855; Fri, 05 Sep 2025
- 11:57:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OUhiTyiG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757106550; x=1788642550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q4/Hy3I/j5BNl0X6z2Pxo3w50TkPZNmdARahvFuu1ZQ=;
+  b=OUhiTyiGsWxhmX78IdDcEfhA14iXvJKCeyZvneladrfIQAPwhXlNczEJ
+   F3OhGaN9YPvns4hNLMrIEYE0J6E5NtJPl0s/ZbA7bnlUpPbig/JH+XByW
+   ieJbXNltStB1h/cApb/4HnIe1znHoq7RCdjt1u/ihMumQw1b63SJNG/Pg
+   wjKiHo8D0DHAmx8Gzd5yKtB41kL3tZwtZlFDfIcOOXRQnY/9bojTqFAwv
+   nNVnNpnkJ6bjV0G4qqI4btkHlyqObe8BgGDrDzgcTs/uiBjY+px3+NURH
+   ZhYTIp+WITLzUiT0nTmf6LdTclK1JiCf95OYIXyknIoco5AWrBJ33/UJx
+   g==;
+X-CSE-ConnectionGUID: bi9t7H/4R8GEfDjLxGJHvA==
+X-CSE-MsgGUID: q/4Jyy/qQEuaX+OkKvVk5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59531459"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="59531459"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 14:09:09 -0700
+X-CSE-ConnectionGUID: VOWIU12ASdy49fjY+iID5g==
+X-CSE-MsgGUID: 1Ts5C591QMqIbNOwjdMlSQ==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 05 Sep 2025 14:09:05 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uudg7-0000rF-1I;
+	Fri, 05 Sep 2025 21:09:03 +0000
+Date: Sat, 6 Sep 2025 05:08:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liu Ying <victor.liu@nxp.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Dmitry Baryshkov <lumag@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Liu Ying <victor.liu@nxp.com>
+Subject: Re: [PATCH] drm/bridge: ite-it6263: Support HDMI vendor specific
+ infoframe
+Message-ID: <202509060412.LmXs40Rg-lkp@intel.com>
+References: <20250904-it6263-vendor-specific-infoframe-v1-1-6efe6545b634@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250905051814.291254-1-hoyeon.lee@suse.com> <3pevfugpcd2j44b2wkrjhspn2a2ta627nhnqxc6ty7dxy3nt3v@qhytbn7lmqum>
-In-Reply-To: <3pevfugpcd2j44b2wkrjhspn2a2ta627nhnqxc6ty7dxy3nt3v@qhytbn7lmqum>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 5 Sep 2025 11:57:22 -0700
-X-Gm-Features: Ac12FXxq2WqmGReWjLpExvK8MuV1pV6f8MehGAHjrpq7LQVwRkY2LEyn3ySnMWg
-Message-ID: <CAEf4BzbsLP-_GkWaW5t4vM61m=qXEBOeOEJKShmB8_T5Ab8puw@mail.gmail.com>
-Subject: Re: [RFC bpf-next v2 0/1] libbpf: add compile-time OOB warning to bpf_tail_call_static
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: bpf@vger.kernel.org, Hoyeon Lee <hoyeon.lee@suse.com>, netdev@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250904-it6263-vendor-specific-infoframe-v1-1-6efe6545b634@nxp.com>
 
-On Fri, Sep 5, 2025 at 1:42=E2=80=AFAM Shung-Hsi Yu <shung-hsi.yu@suse.com>=
- wrote:
->
-> Adding some context that I think was miss per off-list discussion with
-> Hoyeon.
->
-> On Fri, Sep 05, 2025 at 02:18:11PM +0900, Hoyeon Lee wrote:
-> > This RFC adds a compile-time check to bpf_tail_call_static() to warn
-> > when a constant slot(index) is >=3D map->max_entries. This uses a small
-> > BPF_MAP_ENTRIES() macro together with Clang's diagnose_if attribute.
->
-> This is an attempt to see if it is possible to warn user of out-of-bound
-> tail calls, with the assumption being that with bpf_tail_call_static()
-> users would not be intentionally calling with an index that is superior
-> to the number of entries.
->
-> However, there concerns with the current implementation, so this is
-> being sent as RFC to gather feedback, and to see if it can be better
-> done. Currently the concerns are:
-> - use macro to override bpf_tail_call_static()
-> - only works for Clang and not GCC
-> - uncertain whether this fit into libbpf conventions
+Hi Liu,
 
-- map definition's max_entries can be set from user space at runtime
-making this check actively wrong
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 4ac65880ebca1b68495bd8704263b26c050ac010]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Ying/drm-bridge-ite-it6263-Support-HDMI-vendor-specific-infoframe/20250904-171143
+base:   4ac65880ebca1b68495bd8704263b26c050ac010
+patch link:    https://lore.kernel.org/r/20250904-it6263-vendor-specific-infoframe-v1-1-6efe6545b634%40nxp.com
+patch subject: [PATCH] drm/bridge: ite-it6263: Support HDMI vendor specific infoframe
+config: i386-buildonly-randconfig-001-20250906 (https://download.01.org/0day-ci/archive/20250906/202509060412.LmXs40Rg-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250906/202509060412.LmXs40Rg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509060412.LmXs40Rg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/bridge/ite-it6263.c:810:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     810 |                 const char zero_bulk[HDMI_PKT_HB_PB_CHUNK_SIZE] = { };
+         |                 ^
+   1 warning generated.
 
 
-This diagnose_if attribute seems very useful, but I'm not sure we
-should do this for anything map-related because statically provided
-map attributes are all overridable from user space when loading BPF
-object.
+vim +810 drivers/gpu/drm/bridge/ite-it6263.c
 
->
-> > Clang front-end keeps the map type with a '(*max_entries)[N]' field,
-> > so the expression
-> >
-> >     sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)
-> >
-> > is resolved to N entirely at compile time. This allows diagnose_if()
-> > to emit a warning when a constant slot index is out of range.
-> >
-> > Example:
-> >
-> >     struct { /* BPF_MAP_TYPE_PROG_ARRAY =3D 3 */
-> >         __uint(type, 3);             // int (*type)[3];
-> >         __uint(max_entries, 100);    // int (*max_entries)[100];
-> >         __type(key, __u32);          // typeof(__u32) *key;
-> >         __type(value, __u32);        // typeof(__u32) *value;
-> >     } progs SEC(".maps");
-> >
-> >     bpf_tail_call_static(ctx, &progs, 111);
-> >
-> > produces:
-> >
-> >     bound.bpf.c:26:9: warning: bpf_tail_call: slot >=3D max_entries [-W=
-user-defined-warnings]
-> >        26 |         bpf_tail_call_static(ctx, &progs, 111);
-> >           |         ^
-> >     /usr/local/include/bpf/bpf_helpers.h:190:54: note: expanded from ma=
-cro 'bpf_tail_call_static'
-> >       190 |          __bpf_tail_call_warn(__slot >=3D BPF_MAP_ENTRIES(m=
-ap));                  \
-> >           |                                                            =
- ^
-> >     /usr/local/include/bpf/bpf_helpers.h:183:20: note: from 'diagnose_i=
-f' attribute on '__bpf_tail_call_warn':
-> >       183 |     __attribute__((diagnose_if(oob, "bpf_tail_call: slot >=
-=3D max_entries", "warning")));
-> >           |                    ^           ~~~
-> >
-> > Out-of-bounds tail call checkup is no-ops at runtime. Emitting a
-> > compile-time warning can help developers detect mistakes earlier. The
-> > check is currently limited to Clang (due to diagnose_if) and constant
-> > indices, but should catch common errors.
-> ...
+   782	
+   783	static int it6263_hdmi_write_infoframe(struct drm_bridge *bridge,
+   784					       enum hdmi_infoframe_type type,
+   785					       const u8 *buffer, size_t len)
+   786	{
+   787		struct it6263 *it = bridge_to_it6263(bridge);
+   788		struct regmap *regmap = it->hdmi_regmap;
+   789	
+   790		switch (type) {
+   791		case HDMI_INFOFRAME_TYPE_AVI:
+   792			/* write the first AVI infoframe data byte chunk(DB1-DB5) */
+   793			regmap_bulk_write(regmap, HDMI_REG_AVI_DB1,
+   794					  &buffer[HDMI_INFOFRAME_HEADER_SIZE],
+   795					  HDMI_AVI_DB_CHUNK1_SIZE);
+   796	
+   797			/* write the second AVI infoframe data byte chunk(DB6-DB13) */
+   798			regmap_bulk_write(regmap, HDMI_REG_AVI_DB6,
+   799					  &buffer[HDMI_INFOFRAME_HEADER_SIZE +
+   800						  HDMI_AVI_DB_CHUNK1_SIZE],
+   801					  HDMI_AVI_DB_CHUNK2_SIZE);
+   802	
+   803			/* write checksum */
+   804			regmap_write(regmap, HDMI_REG_AVI_CSUM, buffer[3]);
+   805	
+   806			regmap_write(regmap, HDMI_REG_AVI_INFOFRM_CTRL,
+   807				     ENABLE_PKT | REPEAT_PKT);
+   808			break;
+   809		case HDMI_INFOFRAME_TYPE_VENDOR:
+ > 810			const char zero_bulk[HDMI_PKT_HB_PB_CHUNK_SIZE] = { };
+   811	
+   812			/* clear NULL packet registers due to undefined default value */
+   813			regmap_bulk_write(regmap, HDMI_REG_PKT_HB(0),
+   814					  zero_bulk, sizeof(zero_bulk));
+   815	
+   816			/* write header and payload */
+   817			regmap_bulk_write(regmap, HDMI_REG_PKT_HB(0), buffer, len);
+   818	
+   819			regmap_write(regmap, HDMI_REG_PKT_NULL_CTRL,
+   820				     ENABLE_PKT | REPEAT_PKT);
+   821			break;
+   822		default:
+   823			dev_dbg(it->dev, "unsupported HDMI infoframe 0x%x\n", type);
+   824		}
+   825	
+   826		return 0;
+   827	}
+   828	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
