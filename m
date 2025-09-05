@@ -1,117 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708072AD25;
-	Fri,  5 Sep 2025 18:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971EE315D24
+	for <llvm@lists.linux.dev>; Fri,  5 Sep 2025 18:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757095382; cv=none; b=sTDEPdPgSgZg+NQn3p3KAGHfZ7SnESbsX/Xyc5niEoGVY41dXDfGn0UjW70jf2/vmAYos29xS2qzopvs3ENucSRyJXsZhuw7d2whmVnwa0gbWde+4HAKQSTjrUeJlQdhlyruTpy2E5gxe4u2fSDVI1wkyOHLFpJmMW5OjBFhGPs=
+	t=1757098657; cv=none; b=TUT9KxfOA5hTF+mSRCXgVD1BQGAgjpQpJVHiSLZ9R8zU31pr6MRSKCPwuVr9Hr7m23NsQ4r9vIWO70B8YfHFSjxcqwNCI/EqVWXLWUj/ZR+lmGwNIUXnf97oeai0kBqnJY7LmCYBj3qgj33NL+cFodCDlX8qApdy9YhoEshqkpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757095382; c=relaxed/simple;
-	bh=hAJ4x2W+ROFMjcNY1H+cl3OVZvsIOc93Nsd1wiY/2aE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rjDEG4D9o1UwsSDr/KCAwXeae/WjrlKFOHtl2JPLqrr+383f/SOwMghub9FIklmG1nYD9Y3M5gVOA2yZWVKOrThJNOltcnWztT+nsukdcL43H4q52eFgRZKTECqH2NFYQIc8lCcBY4/EYEQhHNJckW7XE/3KsM/z6WJElXmMyrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Imvi4AOT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757098657; c=relaxed/simple;
+	bh=Sh2W9S33o9oHSqjqqDPu97sA2vKA/BObXcqy8rxc/KQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LDhUmatjo3QJyo3O6KVvODd/ZKcWuaFcPRei2sm+w9FOWOKHBmQ6fe00u70QTnX1HZ/7ofyowVThVNS+mMc+b+uvIXMns9aKu8IRZEqpbnJ3Ra2mXv5P8jRKGsiS5oCj3uQJrMgJyxrATxa3Ff27fy3i6lPD6jSDjo6kIX3l7kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gpIcIup7; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Imvi4AOT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34696C4CEF1;
-	Fri,  5 Sep 2025 18:02:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757095381;
-	bh=hAJ4x2W+ROFMjcNY1H+cl3OVZvsIOc93Nsd1wiY/2aE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Imvi4AOTOGUvNfESIb6chOwQnvzxZAyS9BmPWSaKINeEifc3n6FVzsp88c+h+/wdR
-	 4EgFVZpGUrx+acUYbYFiAXRgESG8xI1eAzxPmiNV2nwgYFQ3oPO+9zxvZ7SkYbaonI
-	 leLkOR57WCVdib7UAKKu+cZXPghGh4cuS/uIkzGMu0AUsyDVrRRIT1dd1l5mwFH6mX
-	 sZ5dZQxg++4ZEd261+NHxNlael/23r0U6nbK1BBgwO8iRWomA84+TiFFNyGcN5ycF0
-	 L3up9g5rZcqE4fxG6sm9KdtLb3JPN8NsWvR2orjIB/oqyWROS9ANnb/ZmRKUs0R91m
-	 EPB8nd9Rajaxw==
-Date: Fri, 5 Sep 2025 11:02:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Paul Barker <paul@pbarker.dev>
-Cc: Justin Stitt <justinstitt@google.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gen_compile_commands: Look in KBUILD_OUTPUT if set
-Message-ID: <20250905180256.GA319413@ax162>
-References: <20250905-gen_compile_commands-v1-1-9f5194542d4d@pbarker.dev>
- <3fya5rij6amcwt36jthyezkzov44m6rdvlacymqfpbkcmzrnw4@fymsxhcqq6tj>
- <e09dce93d521a89e3820a91e7c319d680cae203f.camel@pbarker.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gpIcIup7"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b4dc35711d9so1688265a12.0
+        for <llvm@lists.linux.dev>; Fri, 05 Sep 2025 11:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757098655; x=1757703455; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Phcp6Y13YTj5On7joWI7rno+f1V1BMv8Ow6mbXVUb6w=;
+        b=gpIcIup7FACEGSjOhP2LJ0buQ8y0+2HU6FPgpSXApXpBUZkGg60m4gBYILjxtTHGEz
+         /pk6zAMAUC4Vkx4FVd+DhLeST4yl538BFn6LzYT6MQ4dSEQYww/xmG0dIDvu+HSblrIF
+         64vrFeA7nDBqcQ5yq8XP3QgnBPu+c1YpYlWDx8A+9mPg3ruEY1PYHdQ/uV8fGIFv4I5/
+         ZCd77UhpZAqx9ZRaNFkmIHY3+zbIFcWH3jW7YRxPnxbF2zs9f0JozC7dJZoiXiEbOKER
+         UM9fukgnA5N6GxfQXscAi1+u9s9kMIjoEsF32mMLbHHYs3O8VO6hHsNoMX3QPG2VUxJi
+         YOPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757098655; x=1757703455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Phcp6Y13YTj5On7joWI7rno+f1V1BMv8Ow6mbXVUb6w=;
+        b=eD01Dg9HRmb8+LZuMsxxyTd/EhFUSytx1nERtTb8FwvGzZ5DvTm4gj8HgLYFKF4A9v
+         oQL3kDag9kKgXmfJ1qN0ZovyrL35LF32iroMfjoggJ3ehifBfhYx2rUtsU0xEQgyEQ/0
+         a55/rmZR7OdgQ4wzrqiR92wO/lT0KtHcigYGKc+rnaqFYjqmQDqxBmxeO/POcbZrLZIZ
+         UlNxyme+gxP86ZULwv9M6e7mWtf0nV0gI8SX2g3PsK3QInjHsv0VNTt7mtJxeJwoprcj
+         b4n6fg2zMVZKX1QurnAJxvf7IWPbE8rL+6g5chTjz3+yNXXfoNznT63RRdm7T1H0luLr
+         hPow==
+X-Forwarded-Encrypted: i=1; AJvYcCV3u6TpQ2yNqEYOcA5DGOk/LH5SkSt7A+PCLwsyqmqgROov5EACKIr9v9Jxbtabne8PFyU7@lists.linux.dev
+X-Gm-Message-State: AOJu0YzzikOJD2YXcIzOCJUCr+C+aCh8JuzgNjEhPhXb5mVIHBIlEsyr
+	H38OmQjZ3JDf5E8RKm1H1uNBo5KrIw95SO780NgNKbz/FxxO7MTjQQIMMnOJKLZs2MEEB2tbaVP
+	UZCj/jkwfLcbkb9U9631r26nOVHP/TPCr3A==
+X-Gm-Gg: ASbGnct+mQ4QgGSFGz6OrjW11GyMD/vUEK55IAI/5skvuvPto8cYwOSbfv8H1YOG767
+	/yghZZEmf4Yi377dsgppwKzOVKrQhmOZh9xVqJ/dhakqtJ8YefmlfAR7O4gjove8JdCxy2Cg/yV
+	Re7lKg25Hd3DEn7e5hsl4pU69X3JVd5Ms7we2RBHJqdIYYiuqvURm3nXSCj96fpUUkcXOio2Ggy
+	CtwkGDIBadGL+8=
+X-Google-Smtp-Source: AGHT+IEWUVD5cYlMBi/1ejQQ5/n7xicywFu4Y7kfT/oTopx6krdGSLXXSCmtKhpytMvanDAdT1YNmnjzFXeyQbM4J2g=
+X-Received: by 2002:a17:902:e80d:b0:249:308:353 with SMTP id
+ d9443c01a7336-24944ad2e89mr321812025ad.41.1757098654855; Fri, 05 Sep 2025
+ 11:57:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e09dce93d521a89e3820a91e7c319d680cae203f.camel@pbarker.dev>
+References: <20250905051814.291254-1-hoyeon.lee@suse.com> <3pevfugpcd2j44b2wkrjhspn2a2ta627nhnqxc6ty7dxy3nt3v@qhytbn7lmqum>
+In-Reply-To: <3pevfugpcd2j44b2wkrjhspn2a2ta627nhnqxc6ty7dxy3nt3v@qhytbn7lmqum>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 5 Sep 2025 11:57:22 -0700
+X-Gm-Features: Ac12FXxq2WqmGReWjLpExvK8MuV1pV6f8MehGAHjrpq7LQVwRkY2LEyn3ySnMWg
+Message-ID: <CAEf4BzbsLP-_GkWaW5t4vM61m=qXEBOeOEJKShmB8_T5Ab8puw@mail.gmail.com>
+Subject: Re: [RFC bpf-next v2 0/1] libbpf: add compile-time OOB warning to bpf_tail_call_static
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, Hoyeon Lee <hoyeon.lee@suse.com>, netdev@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Paul
+On Fri, Sep 5, 2025 at 1:42=E2=80=AFAM Shung-Hsi Yu <shung-hsi.yu@suse.com>=
+ wrote:
+>
+> Adding some context that I think was miss per off-list discussion with
+> Hoyeon.
+>
+> On Fri, Sep 05, 2025 at 02:18:11PM +0900, Hoyeon Lee wrote:
+> > This RFC adds a compile-time check to bpf_tail_call_static() to warn
+> > when a constant slot(index) is >=3D map->max_entries. This uses a small
+> > BPF_MAP_ENTRIES() macro together with Clang's diagnose_if attribute.
+>
+> This is an attempt to see if it is possible to warn user of out-of-bound
+> tail calls, with the assumption being that with bpf_tail_call_static()
+> users would not be intentionally calling with an index that is superior
+> to the number of entries.
+>
+> However, there concerns with the current implementation, so this is
+> being sent as RFC to gather feedback, and to see if it can be better
+> done. Currently the concerns are:
+> - use macro to override bpf_tail_call_static()
+> - only works for Clang and not GCC
+> - uncertain whether this fit into libbpf conventions
 
-On Fri, Sep 05, 2025 at 06:26:32PM +0100, Paul Barker wrote:
-> On Fri, 2025-09-05 at 09:34 -0700, Justin Stitt wrote:
-> > On Fri, Sep 05, 2025 at 11:17:43AM +0100, Paul Barker wrote:
-> > > If someone is already using the KBUILD_OUTPUT environment variable to
-> > > specify the directory where object files are placed, they shouldn't need
-> > > to repeat the same information to gen_compile_commands.py.
-> > > 
-> > > Signed-off-by: Paul Barker <paul@pbarker.dev>
-> > > ---
-> > >  scripts/clang-tools/gen_compile_commands.py | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> > > index 96e6e46ad1a702cb0fad5d524a9a02d222b236ec..7b94a2ffba0b4d5f1290b51bd602fb3f33acce6a 100755
-> > > --- a/scripts/clang-tools/gen_compile_commands.py
-> > > +++ b/scripts/clang-tools/gen_compile_commands.py
-> > > @@ -39,8 +39,9 @@ def parse_arguments():
-> > >      parser = argparse.ArgumentParser(description=usage)
-> > >  
-> > >      directory_help = ('specify the output directory used for the kernel build '
-> > > -                      '(defaults to the working directory)')
-> > > -    parser.add_argument('-d', '--directory', type=str, default='.',
-> > > +                      '(defaults to $KBUILD_OUTPUT (if set) or the working directory)')
-> > > +    parser.add_argument('-d', '--directory', type=str,
-> > > +                        default=os.environ.get('KBUILD_OUTPUT', '.'),
-> > >                          help=directory_help)
-> > >  
-> > >      output_help = ('path to the output command database (defaults to ' +
-> > > 
-> > 
-> > Thinking out loud: It might make sense to also change the default output
-> > path in some cases but not in all cases. For my clangd setup in vim, it
-> > does some discovery for a compile_commands.json and I have some
-> > different ones in various build-* directories -- I guess it'd be cool if
-> > they were automatically placed in their appropriate spot. With all that
-> > being said probably YAGNI.
-> 
-> I think it makes sense to place the output file in the current directory by
-> default if you run gen_compile_commands.py directly.
-> 
-> The `make compile_commands.json` target places it in the output directory, and
+- map definition's max_entries can be set from user space at runtime
+making this check actively wrong
 
-Yeah, I think it should be made clearer in the commit message that this
-change should only impact people who run the script manually. When it is
-generated through the compile_commands.json make target (which is the
-preferred way IMO), KBUILD_OUTPUT should already be respected because
-gen_compile_commands.py is run with $(objtree) as the current working
-directory.
 
-I am fine with the actual contents of the change though, it does not
-feel like much of a burden to support this scenario.
+This diagnose_if attribute seems very useful, but I'm not sure we
+should do this for anything map-related because statically provided
+map attributes are all overridable from user space when loading BPF
+object.
 
-> `make rust-analyzer` does the same for the rust-project.json file. I did think
-> about whether we should change these, since clangd and rust-analyzer look for
-> the relevant files in the source tree or its parent directories. But people may
-> be using multiple output directories for different configs or archs, so writing
-> the files to the source tree isn't a good default for everyone.
-
-Yeah, I do not think this should be generated in the source tree
-unconditionally since those commands are tied to that build directory
-due to CONFIG_ options and such.
-
-Cheers,
-Nathan
+>
+> > Clang front-end keeps the map type with a '(*max_entries)[N]' field,
+> > so the expression
+> >
+> >     sizeof(*(m)->max_entries) / sizeof(**(m)->max_entries)
+> >
+> > is resolved to N entirely at compile time. This allows diagnose_if()
+> > to emit a warning when a constant slot index is out of range.
+> >
+> > Example:
+> >
+> >     struct { /* BPF_MAP_TYPE_PROG_ARRAY =3D 3 */
+> >         __uint(type, 3);             // int (*type)[3];
+> >         __uint(max_entries, 100);    // int (*max_entries)[100];
+> >         __type(key, __u32);          // typeof(__u32) *key;
+> >         __type(value, __u32);        // typeof(__u32) *value;
+> >     } progs SEC(".maps");
+> >
+> >     bpf_tail_call_static(ctx, &progs, 111);
+> >
+> > produces:
+> >
+> >     bound.bpf.c:26:9: warning: bpf_tail_call: slot >=3D max_entries [-W=
+user-defined-warnings]
+> >        26 |         bpf_tail_call_static(ctx, &progs, 111);
+> >           |         ^
+> >     /usr/local/include/bpf/bpf_helpers.h:190:54: note: expanded from ma=
+cro 'bpf_tail_call_static'
+> >       190 |          __bpf_tail_call_warn(__slot >=3D BPF_MAP_ENTRIES(m=
+ap));                  \
+> >           |                                                            =
+ ^
+> >     /usr/local/include/bpf/bpf_helpers.h:183:20: note: from 'diagnose_i=
+f' attribute on '__bpf_tail_call_warn':
+> >       183 |     __attribute__((diagnose_if(oob, "bpf_tail_call: slot >=
+=3D max_entries", "warning")));
+> >           |                    ^           ~~~
+> >
+> > Out-of-bounds tail call checkup is no-ops at runtime. Emitting a
+> > compile-time warning can help developers detect mistakes earlier. The
+> > check is currently limited to Clang (due to diagnose_if) and constant
+> > indices, but should catch common errors.
+> ...
