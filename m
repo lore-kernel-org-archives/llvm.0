@@ -1,59 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C99C79F2;
-	Sat,  6 Sep 2025 05:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CD91C4609;
+	Sat,  6 Sep 2025 05:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757136721; cv=none; b=m2hV4WRYy0ZmIAIkwxR+qbroOCfPx2s7MntFU87ZScakpKv98jSCEJIV44dUdF4hidwPeX/0x0JwFhQ+EFGgXkdwX6SWfbWMCDzZypkn94AN8qWgs4mDW7t1UIHM1U3H3I4ZeKm+DIKbbfKZtyvvut6yspBRm3hpDSZ++Qefxt8=
+	t=1757137323; cv=none; b=ZBIvoaUres88n68Sfs+LZFonS5r/iEW2Kw/Z1cSt/eRixxQT7CAEJLpMkUOIM9rEk4zLkb5+SmjfLKtbANC0ylRcBwrB+jjHgL8LXPAx0HXiNVtY3fcEkthbxjfxy5P+++rIbpLtsW0n8xrAbeR/pjbpniTVg9ZDYy2ZYa60Z8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757136721; c=relaxed/simple;
-	bh=TRog8V2zzRaih4pVcDXsx02GVrHWpiqzfQ2lhT5sXv4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IaDVWa0ac5o99hqa1A35f6pSrF6KGhnfqRPD/5Rppsh+JEOwgSykzLywdkkjIOt1E8PA7JVh64CLffRN4greWKQw3nXpKtNXHBe8SBwgFjmu+lzKJCzK0Bl6fprJ4h+c7fHaQB17D8+cujasVIIG2XxCmxdo5XkaFtd5tVAcngs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=exqqIdIS; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1757137323; c=relaxed/simple;
+	bh=rK0a45cyPDU1+P/ijKgLaA8dHdauWPWjRPDDmwW1Tw0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRfCADxei2HuK7WqQ7uvzsSs7z0mHBHFLTq/vik7qcgX0T2JY3Kivv07lR91RXrjVm8q2EYQKzhCurU+CprlyVQQ5MvwIEICLqxOHF3Oen3klKZBLdLVSdkdi5wNxCEAhR+Jhk451Tt3cd4ivL4+sc5hpH+PpYUdQ+3oI0k7qjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PCJGlK+J; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="exqqIdIS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PCJGlK+J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757136719; x=1788672719;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TRog8V2zzRaih4pVcDXsx02GVrHWpiqzfQ2lhT5sXv4=;
-  b=exqqIdIScgewHxedvo9r/axYHpvvtJU+iXKFSVpRorgSCQ/WU/9j5yoB
-   pRQ9iWq8dWcyp0FKRFEWIvPhUHFLjy1U/X5pSaG4MiYj6Sc6sEba8kbsN
-   uBCQPnxvjhoKwyhZRziPwRb9QBwB98o7q2EW2xBURc37so2ALscWZaW2f
-   unYO4i69biBniRtSo6I+mBlDC406VD5SXWiMbw6X5waky+YL8EGBLkPrg
-   d6izGgA3W0sKNCK/6/B8FHBK8TQY4LtLuhhbzAfd+3ssLcUSORanoS+ft
-   0GBXoMF5kE4sG1p2NpCryVxFytTC/hwBaPSQt753vqXefgO7AlWOmxX3+
-   g==;
-X-CSE-ConnectionGUID: Nk6TYtTVQ+aLCRLRKHfF6Q==
-X-CSE-MsgGUID: TtGsq5FlRWW0Wrd9bwDNug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11544"; a="59590483"
+  t=1757137322; x=1788673322;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rK0a45cyPDU1+P/ijKgLaA8dHdauWPWjRPDDmwW1Tw0=;
+  b=PCJGlK+JHrMeG3G9HUNC8XrpOHmlai+haZuZSiZhx0qNd7452keq/1eS
+   ERYXo0N39GdJioU40AWdlHcxiudHLcobNdcyMBCVBK0mgTYHmPO5hevMT
+   Wqty3q/owcwrCWcXrTgTGyDwTokoMGbMxHyreLG8zTkz0dTxW9FC4OTKl
+   YoCp2UvkX+2e6Dsn6AQauHrdLOcmNTAoVOH60iUl8msfdLKtbD9TPc8DN
+   lcWtHPvr5zkjFd0PKgPpLJywH+feaEkiZofH7Acl73kOcKb6wUV7CdOuh
+   tSDtIZ0K1hoiNFFF3Njw+09aSAUahjmVOu08A90MbKDrQTI2xb7YxLH13
+   Q==;
+X-CSE-ConnectionGUID: f9B1WoVQTsCG0+vYtXplqg==
+X-CSE-MsgGUID: MflXEqpeTP+4az3w0GwyHg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11544"; a="70910696"
 X-IronPort-AV: E=Sophos;i="6.18,243,1751266800"; 
-   d="scan'208";a="59590483"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 22:31:58 -0700
-X-CSE-ConnectionGUID: 22QApUWyS+ivNoKnJgkOMw==
-X-CSE-MsgGUID: i8ay8JSYQ6e8p28aVhwwCA==
+   d="scan'208";a="70910696"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 22:42:02 -0700
+X-CSE-ConnectionGUID: zgFDTCoTRVuvZAD8qs+F1Q==
+X-CSE-MsgGUID: UMvaLGJdTWitpbBwnk2U9g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,243,1751266800"; 
-   d="scan'208";a="172247149"
+   d="scan'208";a="176411187"
 Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 05 Sep 2025 22:31:58 -0700
+  by orviesa003.jf.intel.com with ESMTP; 05 Sep 2025 22:41:59 -0700
 Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uulWl-0001EJ-2C;
-	Sat, 06 Sep 2025 05:31:55 +0000
-Date: Sat, 6 Sep 2025 13:31:34 +0800
+	id 1uulgS-0001Ed-2P;
+	Sat, 06 Sep 2025 05:41:56 +0000
+Date: Sat, 6 Sep 2025 13:41:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 365/365]
- fs/bcachefs/btree_io.c:30:17: warning: unused variable
- 'bch2_btree_read_corrupt_ratio'
-Message-ID: <202509061356.XlQ8syVI-lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Dmitry Osipenko <digetx@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] usb: phy: tegra: use phy type directly
+Message-ID: <202509061310.SU5Tf105-lkp@intel.com>
+References: <20250904163238.238105-2-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,39 +69,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250904163238.238105-2-clamor95@gmail.com>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   149a8691d3f20c0f344f3bbc7f2d037dbf44a122
-commit: 149a8691d3f20c0f344f3bbc7f2d037dbf44a122 [365/365] fixup! bcachefs: btree_read_corrupt_device modparam
-config: i386-buildonly-randconfig-001-20250906 (https://download.01.org/0day-ci/archive/20250906/202509061356.XlQ8syVI-lkp@intel.com/config)
+Hi Svyatoslav,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tegra/for-next]
+[cannot apply to usb/usb-testing usb/usb-next usb/usb-linus staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.17-rc4 next-20250905]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/usb-phy-tegra-use-phy-type-directly/20250905-003521
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250904163238.238105-2-clamor95%40gmail.com
+patch subject: [PATCH v1 1/2] usb: phy: tegra: use phy type directly
+config: i386-buildonly-randconfig-006-20250906 (https://download.01.org/0day-ci/archive/20250906/202509061310.SU5Tf105-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250906/202509061356.XlQ8syVI-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250906/202509061310.SU5Tf105-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509061356.XlQ8syVI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509061310.SU5Tf105-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/bcachefs/btree_io.c:30:17: warning: unused variable 'bch2_btree_read_corrupt_ratio' [-Wunused-variable]
-      30 | static unsigned bch2_btree_read_corrupt_ratio;
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/usb/phy/phy-tegra-usb.c:874:2: warning: variable 'err' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     874 |         default:
+         |         ^~~~~~~
+   drivers/usb/phy/phy-tegra-usb.c:878:6: note: uninitialized use occurs here
+     878 |         if (err)
+         |             ^~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/usb/phy/phy-tegra-usb.c:860:9: note: initialize the variable 'err' to silence this warning
+     860 |         int err;
+         |                ^
+         |                 = 0
+   drivers/usb/phy/phy-tegra-usb.c:905:2: warning: variable 'err' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     905 |         default:
+         |         ^~~~~~~
+   drivers/usb/phy/phy-tegra-usb.c:909:6: note: uninitialized use occurs here
+     909 |         if (err)
+         |             ^~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/usb/phy/phy-tegra-usb.c:891:9: note: initialize the variable 'err' to silence this warning
+     891 |         int err;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +/bch2_btree_read_corrupt_ratio +30 fs/bcachefs/btree_io.c
+vim +/err +874 drivers/usb/phy/phy-tegra-usb.c
 
-4e4758c6cbbbc3 Kent Overstreet 2020-03-27  29  
-9c2be641dfafa9 Kent Overstreet 2025-07-03 @30  static unsigned bch2_btree_read_corrupt_ratio;
-149a8691d3f20c Kent Overstreet 2025-09-05  31  static int bch2_btree_read_corrupt_device;
-149a8691d3f20c Kent Overstreet 2025-09-05  32  
-
-:::::: The code at line 30 was first introduced by commit
-:::::: 9c2be641dfafa99d733f9200d6be2bee32961f70 bcachefs: Debug param for injecting btree node corruption on read
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+   857	
+   858	static int tegra_usb_phy_power_on(struct tegra_usb_phy *phy)
+   859	{
+   860		int err;
+   861	
+   862		if (phy->powered_on)
+   863			return 0;
+   864	
+   865		switch (phy->phy_type) {
+   866		case USBPHY_INTERFACE_MODE_UTMI:
+   867			err = utmi_phy_power_on(phy);
+   868			break;
+   869	
+   870		case USBPHY_INTERFACE_MODE_ULPI:
+   871			err = ulpi_phy_power_on(phy);
+   872			break;
+   873	
+ > 874		default:
+   875			break;
+   876		}
+   877	
+   878		if (err)
+   879			return err;
+   880	
+   881		phy->powered_on = true;
+   882	
+   883		/* Let PHY settle down */
+   884		usleep_range(2000, 2500);
+   885	
+   886		return 0;
+   887	}
+   888	
 
 -- 
 0-DAY CI Kernel Test Service
