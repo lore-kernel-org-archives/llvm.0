@@ -1,70 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55F92ECD2D;
-	Fri,  5 Sep 2025 21:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C600D2797AE;
+	Sat,  6 Sep 2025 04:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757106551; cv=none; b=RSjSCF8lvk4ccraiTyxh4Syudd+t5AfGcBbbO67ge9UixGgjIyJbPr835HqCZEX9EICTphGU91j2aqfkbk2pYmVKozfkHXA6b8uYig6C6a9N1J9wucm5lAa069ztO7IYO2JB0swoxdZzpWpHh0cEqo6lLttw6I/ZeNMQtJLTfoY=
+	t=1757134258; cv=none; b=UUzYINH2EaAV6yFpx9yW69TcewsfHCkVirGVaIT0zc6KiONViG/qyKwdEE49ZEGG7Meaz8hjILzo7w37wmb+S1ObxFkkkzl6di0wA+SiHJaBTjsC89HFMBpBxjZ3fRDDazxG3NL3hP/aTroVe2zVcxIteM8VRHIE6jcbQPbiYl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757106551; c=relaxed/simple;
-	bh=Q4/Hy3I/j5BNl0X6z2Pxo3w50TkPZNmdARahvFuu1ZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e0DyxalI72hzrn4C1j5IFSdfFlYneFJ+wnndRcmTfYjr6IQTU6ZdXr19d+B/pmIbc2GBrtvBr2Zg/YbXCst9hmXA4AzuhLfA7cDNn+GNhPfmSUWE9jgy5iA2a15H941ArEwOkL0WhNMiH3qMYDfBt4ST+hNAQbyS/rYnCJtIjRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OUhiTyiG; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1757134258; c=relaxed/simple;
+	bh=DHl0vAyZnoTad7jRVdJdPD0cLY8Ih6FckSMdHa3PgvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uqDLH1qoJcsySOpOLVQWO17iVVbWC2ahLOlrATO59C/OoZHQeTUnxzvgmWAnpZnRumORPiOVGs209/UW3+Z01jSqIDu+UR7H9d8ZP3pCudHa3/tLF8rGvymj0W5uAUeiHGRQaeeLONYBkTVAtPRIDv310hMbeEx0J/dSPRMIADk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IHUUVs8b; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OUhiTyiG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IHUUVs8b"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757106550; x=1788642550;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q4/Hy3I/j5BNl0X6z2Pxo3w50TkPZNmdARahvFuu1ZQ=;
-  b=OUhiTyiGsWxhmX78IdDcEfhA14iXvJKCeyZvneladrfIQAPwhXlNczEJ
-   F3OhGaN9YPvns4hNLMrIEYE0J6E5NtJPl0s/ZbA7bnlUpPbig/JH+XByW
-   ieJbXNltStB1h/cApb/4HnIe1znHoq7RCdjt1u/ihMumQw1b63SJNG/Pg
-   wjKiHo8D0DHAmx8Gzd5yKtB41kL3tZwtZlFDfIcOOXRQnY/9bojTqFAwv
-   nNVnNpnkJ6bjV0G4qqI4btkHlyqObe8BgGDrDzgcTs/uiBjY+px3+NURH
-   ZhYTIp+WITLzUiT0nTmf6LdTclK1JiCf95OYIXyknIoco5AWrBJ33/UJx
-   g==;
-X-CSE-ConnectionGUID: bi9t7H/4R8GEfDjLxGJHvA==
-X-CSE-MsgGUID: q/4Jyy/qQEuaX+OkKvVk5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59531459"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="59531459"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 14:09:09 -0700
-X-CSE-ConnectionGUID: VOWIU12ASdy49fjY+iID5g==
-X-CSE-MsgGUID: 1Ts5C591QMqIbNOwjdMlSQ==
+  t=1757134257; x=1788670257;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DHl0vAyZnoTad7jRVdJdPD0cLY8Ih6FckSMdHa3PgvE=;
+  b=IHUUVs8bi3MpJYzG3M+ggyDOWPpIGnedN/ugxpxStak51U2f+4EvE7u1
+   +gaSr+84HQr+qhCNLiDvO6oYElJj6xXFXagt0+Q7F18/iAm1yMaA+00u6
+   DrTczzsWeh179u4PIk/IajJ6qqlbKcyhW4G3C2ceYhZmoVJ67LuK5pSxq
+   JLemMLmCImG+jBIim59dgSYht/ajUC49BEuwDFNN424O1YaQtN0Wsy8tS
+   zkrj3d5px/m/zK1GZ7QjKg0Hmpg7Nx1BvJILeOJ2nHQy9+CWulrJyaDwv
+   Jr251dVhKy5xJzeYQnM5SmEW9EDj7SGBlJPR3ScStSBlQzhj+zgV8l3gI
+   w==;
+X-CSE-ConnectionGUID: e4uM4GKiTkisl76dC9y/wQ==
+X-CSE-MsgGUID: 9wtHbssDT9yjniAWI8RqTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11544"; a="84915069"
+X-IronPort-AV: E=Sophos;i="6.18,243,1751266800"; 
+   d="scan'208";a="84915069"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 21:50:56 -0700
+X-CSE-ConnectionGUID: RPZ8JZwqSdWP3K9Nxq1YGw==
+X-CSE-MsgGUID: u9KsqsDWTS+DFuVM2iwpkQ==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,243,1751266800"; 
+   d="scan'208";a="172433023"
 Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 05 Sep 2025 14:09:05 -0700
+  by orviesa008.jf.intel.com with ESMTP; 05 Sep 2025 21:50:55 -0700
 Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uudg7-0000rF-1I;
-	Fri, 05 Sep 2025 21:09:03 +0000
-Date: Sat, 6 Sep 2025 05:08:40 +0800
+	id 1uukt2-0001DD-1p;
+	Sat, 06 Sep 2025 04:50:52 +0000
+Date: Sat, 6 Sep 2025 12:49:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Liu Ying <victor.liu@nxp.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Dmitry Baryshkov <lumag@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Liu Ying <victor.liu@nxp.com>
-Subject: Re: [PATCH] drm/bridge: ite-it6263: Support HDMI vendor specific
- infoframe
-Message-ID: <202509060412.LmXs40Rg-lkp@intel.com>
-References: <20250904-it6263-vendor-specific-infoframe-v1-1-6efe6545b634@nxp.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:bcachefs-testing 363/365]
+ fs/bcachefs/btree_io.c:1445:7: error: use of undeclared identifier
+ 'bch2_btree_read_corrupt_device'
+Message-ID: <202509061251.2BM6rEgC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,84 +62,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250904-it6263-vendor-specific-infoframe-v1-1-6efe6545b634@nxp.com>
 
-Hi Liu,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 4ac65880ebca1b68495bd8704263b26c050ac010]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Ying/drm-bridge-ite-it6263-Support-HDMI-vendor-specific-infoframe/20250904-171143
-base:   4ac65880ebca1b68495bd8704263b26c050ac010
-patch link:    https://lore.kernel.org/r/20250904-it6263-vendor-specific-infoframe-v1-1-6efe6545b634%40nxp.com
-patch subject: [PATCH] drm/bridge: ite-it6263: Support HDMI vendor specific infoframe
-config: i386-buildonly-randconfig-001-20250906 (https://download.01.org/0day-ci/archive/20250906/202509060412.LmXs40Rg-lkp@intel.com/config)
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   149a8691d3f20c0f344f3bbc7f2d037dbf44a122
+commit: 14d31858448b773630a36ee5adce6b8f7a660a39 [363/365] bcachefs: btree_read_corrupt_device modparam
+config: x86_64-buildonly-randconfig-001-20250906 (https://download.01.org/0day-ci/archive/20250906/202509061251.2BM6rEgC-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250906/202509060412.LmXs40Rg-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250906/202509061251.2BM6rEgC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509060412.LmXs40Rg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509061251.2BM6rEgC-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the koverstreet-bcachefs/bcachefs-testing HEAD 149a8691d3f20c0f344f3bbc7f2d037dbf44a122 builds fine.
+      It only hurts bisectability.
 
->> drivers/gpu/drm/bridge/ite-it6263.c:810:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     810 |                 const char zero_bulk[HDMI_PKT_HB_PB_CHUNK_SIZE] = { };
-         |                 ^
-   1 warning generated.
+All errors (new ones prefixed by >>):
+
+>> fs/bcachefs/btree_io.c:1445:7: error: use of undeclared identifier 'bch2_btree_read_corrupt_device'
+    1445 |                 if (bch2_btree_read_corrupt_device == rb->pick.ptr.dev ||
+         |                     ^
+   fs/bcachefs/btree_io.c:1446:7: error: use of undeclared identifier 'bch2_btree_read_corrupt_device'
+    1446 |                     bch2_btree_read_corrupt_device < 0)
+         |                     ^
+   2 errors generated.
 
 
-vim +810 drivers/gpu/drm/bridge/ite-it6263.c
+vim +/bch2_btree_read_corrupt_device +1445 fs/bcachefs/btree_io.c
 
-   782	
-   783	static int it6263_hdmi_write_infoframe(struct drm_bridge *bridge,
-   784					       enum hdmi_infoframe_type type,
-   785					       const u8 *buffer, size_t len)
-   786	{
-   787		struct it6263 *it = bridge_to_it6263(bridge);
-   788		struct regmap *regmap = it->hdmi_regmap;
-   789	
-   790		switch (type) {
-   791		case HDMI_INFOFRAME_TYPE_AVI:
-   792			/* write the first AVI infoframe data byte chunk(DB1-DB5) */
-   793			regmap_bulk_write(regmap, HDMI_REG_AVI_DB1,
-   794					  &buffer[HDMI_INFOFRAME_HEADER_SIZE],
-   795					  HDMI_AVI_DB_CHUNK1_SIZE);
-   796	
-   797			/* write the second AVI infoframe data byte chunk(DB6-DB13) */
-   798			regmap_bulk_write(regmap, HDMI_REG_AVI_DB6,
-   799					  &buffer[HDMI_INFOFRAME_HEADER_SIZE +
-   800						  HDMI_AVI_DB_CHUNK1_SIZE],
-   801					  HDMI_AVI_DB_CHUNK2_SIZE);
-   802	
-   803			/* write checksum */
-   804			regmap_write(regmap, HDMI_REG_AVI_CSUM, buffer[3]);
-   805	
-   806			regmap_write(regmap, HDMI_REG_AVI_INFOFRM_CTRL,
-   807				     ENABLE_PKT | REPEAT_PKT);
-   808			break;
-   809		case HDMI_INFOFRAME_TYPE_VENDOR:
- > 810			const char zero_bulk[HDMI_PKT_HB_PB_CHUNK_SIZE] = { };
-   811	
-   812			/* clear NULL packet registers due to undefined default value */
-   813			regmap_bulk_write(regmap, HDMI_REG_PKT_HB(0),
-   814					  zero_bulk, sizeof(zero_bulk));
-   815	
-   816			/* write header and payload */
-   817			regmap_bulk_write(regmap, HDMI_REG_PKT_HB(0), buffer, len);
-   818	
-   819			regmap_write(regmap, HDMI_REG_PKT_NULL_CTRL,
-   820				     ENABLE_PKT | REPEAT_PKT);
-   821			break;
-   822		default:
-   823			dev_dbg(it->dev, "unsupported HDMI infoframe 0x%x\n", type);
-   824		}
-   825	
-   826		return 0;
-   827	}
-   828	
+  1389	
+  1390	static void btree_node_read_work(struct work_struct *work)
+  1391	{
+  1392		struct btree_read_bio *rb =
+  1393			container_of(work, struct btree_read_bio, work);
+  1394		struct bch_fs *c	= rb->c;
+  1395		struct bch_dev *ca	= rb->have_ioref ? bch2_dev_have_ref(c, rb->pick.ptr.dev) : NULL;
+  1396		struct btree *b		= rb->b;
+  1397		struct bio *bio		= &rb->bio;
+  1398		struct bch_io_failures failed = { .nr = 0 };
+  1399		int ret = 0;
+  1400	
+  1401		CLASS(printbuf, buf)();
+  1402		bch2_log_msg_start(c, &buf);
+  1403	
+  1404		prt_printf(&buf, "btree node read error at btree ");
+  1405		bch2_btree_pos_to_text(&buf, c, b);
+  1406		prt_newline(&buf);
+  1407	
+  1408		goto start;
+  1409		while (1) {
+  1410			ret = bch2_bkey_pick_read_device(c,
+  1411						bkey_i_to_s_c(&b->key),
+  1412						&failed, &rb->pick, -1);
+  1413			if (ret <= 0)
+  1414				break;
+  1415	
+  1416			ca = bch2_dev_get_ioref(c, rb->pick.ptr.dev, READ, BCH_DEV_READ_REF_btree_node_read);
+  1417			rb->have_ioref		= ca != NULL;
+  1418			rb->start_time		= local_clock();
+  1419			bio_reset(bio, NULL, REQ_OP_READ|REQ_SYNC|REQ_META);
+  1420			bio->bi_iter.bi_sector	= rb->pick.ptr.offset;
+  1421			bio->bi_iter.bi_size	= btree_buf_bytes(b);
+  1422	
+  1423			if (rb->have_ioref) {
+  1424				bio_set_dev(bio, ca->disk_sb.bdev);
+  1425				submit_bio_wait(bio);
+  1426			} else {
+  1427				bio->bi_status = BLK_STS_REMOVED;
+  1428			}
+  1429	
+  1430			bch2_account_io_completion(ca, BCH_MEMBER_ERROR_read,
+  1431						   rb->start_time, !bio->bi_status);
+  1432	start:
+  1433			if (rb->have_ioref)
+  1434				enumerated_ref_put(&ca->io_ref[READ], BCH_DEV_READ_REF_btree_node_read);
+  1435			rb->have_ioref = false;
+  1436	
+  1437			if (bio->bi_status) {
+  1438				bch2_mark_io_failure(&failed, &rb->pick, false);
+  1439				continue;
+  1440			}
+  1441	
+  1442			memset(&bio->bi_iter, 0, sizeof(bio->bi_iter));
+  1443			bio->bi_iter.bi_size	= btree_buf_bytes(b);
+  1444	
+> 1445			if (bch2_btree_read_corrupt_device == rb->pick.ptr.dev ||
+  1446			    bch2_btree_read_corrupt_device < 0)
+  1447				bch2_maybe_corrupt_bio(bio, bch2_btree_read_corrupt_ratio);
+  1448	
+  1449			ret = bch2_btree_node_read_done(c, ca, b, &failed, &buf);
+  1450			if (ret != -BCH_ERR_btree_node_read_err_want_retry &&
+  1451			    ret != -BCH_ERR_btree_node_read_err_must_retry)
+  1452				break;
+  1453		}
+  1454	
+  1455		bch2_io_failures_to_text(&buf, c, &failed);
+  1456	
+  1457		/*
+  1458		 * only print retry success if we read from a replica with no errors
+  1459		 */
+  1460		if (ret) {
+  1461			set_btree_node_read_error(b);
+  1462			bch2_btree_lost_data(c, &buf, b->c.btree_id);
+  1463			prt_printf(&buf, "ret %s", bch2_err_str(ret));
+  1464		} else if (failed.nr) {
+  1465			if (!bch2_dev_io_failures(&failed, rb->pick.ptr.dev))
+  1466				prt_printf(&buf, "retry success");
+  1467			else
+  1468				prt_printf(&buf, "repair success");
+  1469		}
+  1470	
+  1471		if ((failed.nr ||
+  1472		     btree_node_need_rewrite(b)) &&
+  1473		    !btree_node_read_error(b) &&
+  1474		    c->recovery.curr_pass != BCH_RECOVERY_PASS_scan_for_btree_nodes) {
+  1475			prt_printf(&buf, " (rewriting node)");
+  1476			bch2_btree_node_rewrite_async(c, b);
+  1477		}
+  1478		prt_newline(&buf);
+  1479	
+  1480		if (ret || failed.nr)
+  1481			bch2_print_str_ratelimited(c, KERN_ERR, buf.buf);
+  1482	
+  1483		async_object_list_del(c, btree_read_bio, rb->list_idx);
+  1484		bch2_time_stats_update(&c->times[BCH_TIME_btree_node_read],
+  1485				       rb->start_time);
+  1486		bio_put(&rb->bio);
+  1487		clear_btree_node_read_in_flight(b);
+  1488		smp_mb__after_atomic();
+  1489		wake_up_bit(&b->flags, BTREE_NODE_read_in_flight);
+  1490	}
+  1491	
 
 -- 
 0-DAY CI Kernel Test Service
