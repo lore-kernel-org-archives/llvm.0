@@ -1,107 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2992798E1;
-	Sat,  6 Sep 2025 21:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D881D7E41
+	for <llvm@lists.linux.dev>; Sat,  6 Sep 2025 22:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757194715; cv=none; b=gqqsNsHKZsKQTQOP+KyfRw2TYA/HQUvd1heWjB9hhx635i6i0zzZBHaLnFSkvX2edPtOx4g/xEm+GHZ8q4UX8+ZY6+w237gpeu1+6xf6CljPsPMQjQBFpi300VgSxj++Qo7naSomMf/5Ni4+RyFcWlNpYFzQ/NuGFYuQTlTKlEw=
+	t=1757197565; cv=none; b=HR0ffPA9HDkaSK7VUyue8uY0PQVRyCqCjqVXC2tpUq25xSmA2w+n3qZXJ0yQs/jrZpNLb593Ndqm/kEXm8CEWP7+6EJiSNHqJG06dFmhj82YO6JLOSzNRpAZHFSIsnEy1iyky3mlEqQ+sG9dm6S6HEBSGGxV5Xi7GUh02cBgaZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757194715; c=relaxed/simple;
-	bh=JXEOk2QzWC9682vZw1qqeUMm3THVRhXOl6giQNpWULQ=;
+	s=arc-20240116; t=1757197565; c=relaxed/simple;
+	bh=JqldWRPERw4IKoFvl0pMtg74CW2Zzkauedrn/ZTVcd8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ugW42B3j6XiSLs16PXgjUhTvZxtzbnZjgzj0slQqkbjxEekw4LlueUaNZV6XVTf0VxEKlRWmL+5I/CLzKBfvaRzutGwmwn9103QT8wrRlr4xB/6rOvEB+QZEtI5VkU3vUxfvLxPuVW6JIu65U2KziKO7eBE3J5TAyP6GO+BTNnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fzjKh0bS; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=l5vrO/5Exfgk5nr5LDHxrtTIqHyNqioSkr001fSdBVc9lDjAk2Imbw34a3fUlIekxWOh27JAuUbdyaMcxSvPZMXKeR6kvSr/Z3j7AEO61WWZ39eGBltz85/QrpKM81153622K0iKT0MR3Ei2UOINSmO225Q8NfXd6tmWccUvMBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=WD3MTiEV; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fzjKh0bS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757194714; x=1788730714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JXEOk2QzWC9682vZw1qqeUMm3THVRhXOl6giQNpWULQ=;
-  b=fzjKh0bSM13orfS6/GIJnNUVKpy92nBVVPsO2ZwPYRNsxjxlctxBQAsF
-   aykjUPQRf6KrMp6Mw3o8wCdwWIjVwzc4mt8Ubel0MByaouXoxWwxKGc04
-   9DlUmVd/O5gKCEPu1tFLPdALDjK8ZDSHMAxIqcEF7IkyeeYCbKm1FRWh5
-   Wn3Brk5etGiUTvoHi7HJTGQySDOzPSqbcRzKMSFJihCJAqK96khk2wE36
-   ALaL97jAkroGJLeTm5snI79r+4ZomISZfcBK4R+1PFeMRZ5brDeCB/c5c
-   O8bnboewPZf9f7TRUlCCtgO9G/R4rlTXBxZYkZ7x8sLU06TwIWyPeKT7q
-   A==;
-X-CSE-ConnectionGUID: R0XukVUFSJWVosuoecD1aw==
-X-CSE-MsgGUID: 6Jjo/p/3SWqiLcY7brNO6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11545"; a="70932753"
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="70932753"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2025 14:38:34 -0700
-X-CSE-ConnectionGUID: 4tTalin+TdCn15mJRkFqKg==
-X-CSE-MsgGUID: RkmorfaWR/aVxvOOQ20rTQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="176792664"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 06 Sep 2025 14:38:28 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uv0c6-0001oR-1W;
-	Sat, 06 Sep 2025 21:38:26 +0000
-Date: Sun, 7 Sep 2025 05:37:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Siddharth Vadapalli <s-vadapalli@ti.com>, lpieralisi@kernel.org,
-	kwilczynski@kernel.org, mani@kernel.org, robh@kernel.org,
-	bhelgaas@google.com, jingoohan1@gmail.com, fan.ni@samsung.com,
-	quic_wenbyao@quicinc.com, namcao@linutronix.de,
-	mayank.rana@oss.qualcomm.com, thippeswamy.havalige@amd.com,
-	quic_schintav@quicinc.com, shradha.t@samsung.com,
-	inochiama@gmail.com, cassel@kernel.org, kishon@kernel.org,
-	18255117159@163.com, rongqianfeng@vivo.com, jirislaby@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, srk@ti.com,
-	s-vadapalli@ti.com
-Subject: Re: [PATCH 11/11] PCI: keystone: Add support to build as a loadable
- module
-Message-ID: <202509070521.fQTJ7ygm-lkp@intel.com>
-References: <20250903124505.365913-12-s-vadapalli@ti.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="WD3MTiEV"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 731A340E0173;
+	Sat,  6 Sep 2025 22:25:53 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Czw7wzyQ6SdZ; Sat,  6 Sep 2025 22:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1757197550; bh=+xt7zC4IHQ+iWsE/ZnrUTR3tvhZamW/XzIhStal409Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WD3MTiEV8OF4augBQVbQgNGLghdqY3TGMGBKaP04329b5L0DfzUVoj6QisowlNw4q
+	 /IMj/MOBJpym9nNPw614ZhpVoMP5w1yuQF5kPartCXJqMa8Y8XYxvSfck0Q/01W3B3
+	 nn8KSHr9Gl9zpWcYyX9FfXtO6rv8Acj0x8J7cOCKSj7mneCH1pBnU4tALMr//aSRiV
+	 JsarJg70bFFzngYonXdqFYcd12mk/nnjOgMSn6aBM+bE/OriCnRs6R4Hulgb2qz6O/
+	 VW7Lr/J5fCtr7CVUTwUERpePji+KXecc2VZ6m6Qvyhs18CQK1KPjx4x8gXZ046Pk5J
+	 3ue3KUJaHHsifVJ3uZy3f1QgGhX0OBZHyL7GvLXsHTTNOuD9O4weesISUfuLDcM5K1
+	 OqlaKTYRVzaGe4EITMImM1OnWIUj6FuCaK98tfb5WxnD2Z7ieoNWkgThfI0dvol3Vq
+	 YlxqNXWxHfq2LA3HPkRSY65mcoR7Eh6E0HB4bJWEmt5xWen+K9E4umS1F/OD92hhGH
+	 x/tsRl/3VkdOQ6cX5+jIkYx3cXzNLyCOeR/mpL4kDIhRgHxR4HfeXCIvAIa8Hi2rTU
+	 w+8vl+o4wHFs8OKdpAX5CGtYq90mFZUnHa2qU7Zed/GPtfOzClrq8bmmTPkBK70yan
+	 XdV58lIASbpHeb2xhWiQxkN8=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id AA3B540E00DD;
+	Sat,  6 Sep 2025 22:24:29 +0000 (UTC)
+Date: Sun, 7 Sep 2025 00:24:20 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: sohil.mehta@intel.com, baohua@kernel.org, david@redhat.com,
+	kbingham@kernel.org, weixugc@google.com, Liam.Howlett@oracle.com,
+	alexandre.chartre@oracle.com, kas@kernel.org, mark.rutland@arm.com,
+	trintaeoitogc@gmail.com, axelrasmussen@google.com,
+	yuanchu@google.com, joey.gouly@arm.com, samitolvanen@google.com,
+	joel.granados@kernel.org, graf@amazon.com,
+	vincenzo.frascino@arm.com, kees@kernel.org, ardb@kernel.org,
+	thiago.bauermann@linaro.org, glider@google.com, thuth@redhat.com,
+	kuan-ying.lee@canonical.com, pasha.tatashin@soleen.com,
+	nick.desaulniers+lkml@gmail.com, vbabka@suse.cz,
+	kaleshsingh@google.com, justinstitt@google.com,
+	catalin.marinas@arm.com, alexander.shishkin@linux.intel.com,
+	samuel.holland@sifive.com, dave.hansen@linux.intel.com,
+	corbet@lwn.net, xin@zytor.com, dvyukov@google.com,
+	tglx@linutronix.de, scott@os.amperecomputing.com,
+	jason.andryuk@amd.com, morbo@google.com, nathan@kernel.org,
+	lorenzo.stoakes@oracle.com, mingo@redhat.com, brgerst@gmail.com,
+	kristina.martsenko@arm.com, bigeasy@linutronix.de, luto@kernel.org,
+	jgross@suse.com, jpoimboe@kernel.org, urezki@gmail.com,
+	mhocko@suse.com, ada.coupriediaz@arm.com, hpa@zytor.com,
+	leitao@debian.org, peterz@infradead.org, wangkefeng.wang@huawei.com,
+	surenb@google.com, ziy@nvidia.com, smostafa@google.com,
+	ryabinin.a.a@gmail.com, ubizjak@gmail.com, jbohac@suse.cz,
+	broonie@kernel.org, akpm@linux-foundation.org,
+	guoweikang.kernel@gmail.com, rppt@kernel.org, pcc@google.com,
+	jan.kiszka@siemens.com, nicolas.schier@linux.dev, will@kernel.org,
+	andreyknvl@gmail.com, jhubbard@nvidia.com, x86@kernel.org,
+	linux-doc@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 11/19] x86: LAM initialization
+Message-ID: <20250906222420.GBaLy0lL5lHcVlYU0C@fat_crate.local>
+References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
+ <ffd8c5ee9bfc5acbf068a01ef45d3bf506c191a3.1756151769.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250903124505.365913-12-s-vadapalli@ti.com>
+In-Reply-To: <ffd8c5ee9bfc5acbf068a01ef45d3bf506c191a3.1756151769.git.maciej.wieczor-retman@intel.com>
 
-Hi Siddharth,
+On Mon, Aug 25, 2025 at 10:24:36PM +0200, Maciej Wieczor-Retman wrote:
+> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+> index bb57e93b4caf..756bd96c3b8b 100644
+> --- a/arch/x86/mm/init.c
+> +++ b/arch/x86/mm/init.c
+> @@ -763,6 +763,9 @@ void __init init_mem_mapping(void)
+>  	probe_page_size_mask();
+>  	setup_pcid();
+>  
+> +	if (boot_cpu_has(X86_FEATURE_LAM) && IS_ENABLED(CONFIG_KASAN_SW_TAGS))
 
-kernel test robot noticed the following build warnings:
+cpu_feature_enabled()
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.17-rc4 next-20250905]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +		cr4_set_bits_and_update_boot(X86_CR4_LAM_SUP);
+> +
+>  #ifdef CONFIG_X86_64
+>  	end = max_pfn << PAGE_SHIFT;
+>  #else
+> -- 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Siddharth-Vadapalli/PCI-Export-pci_get_host_bridge_device-for-use-by-pci-keystone/20250903-204848
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20250903124505.365913-12-s-vadapalli%40ti.com
-patch subject: [PATCH 11/11] PCI: keystone: Add support to build as a loadable module
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20250907/202509070521.fQTJ7ygm-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7fb1dc08d2f025aad5777bb779dfac1197e9ef87)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250907/202509070521.fQTJ7ygm-lkp@intel.com/reproduce)
+Also, for all your patches' subjects and text:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509070521.fQTJ7ygm-lkp@intel.com/
+Pls read
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-subject
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
->> WARNING: modpost: vmlinux: section mismatch in reference: ks_pcie_host_init+0x594 (section: .text) -> hook_fault_code (section: .init.text)
+and fixup.
+
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
