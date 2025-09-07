@@ -1,134 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735C729B22F;
-	Sun,  7 Sep 2025 18:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD79273811
+	for <llvm@lists.linux.dev>; Sun,  7 Sep 2025 19:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757270075; cv=none; b=JmxexsimHGU+XbL5y7PwQJMFDY2Tlsy4eXLTreNvaygRgi98Qu38tZ4zPI1jQnx2HmmUpohXiTNGcwwpGv2/V0EUbMHWZ4a1jYoQnBhJTkAfu6MJFNozFnyzrgcAs/BQS8gWhuO5aPcBneWx934mrMm/03PoNuupqHCGP695mek=
+	t=1757272980; cv=none; b=Xsd8BIaSdQWZgeYpkI+helnZ9a0Rz7/iBMvEyZOMTJDoQ+KN/uwCeLaIbXl6jk0hPcUp7YKjmuMiPl5twaxz2/QGsYjoEjxeiYDj8N8mgesql2ppP/UGlaRhcMlSuk2+RiXPrxRWszHjPJ6QWfNTpPO+auCBF3YGg5jaKturV8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757270075; c=relaxed/simple;
-	bh=37tgsekhRC7jsz5y0sdfR8LK3cgAZ+5Q6tUdBMysNJo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QVyVVlSr0V4WnauBGnhpe2NbhvRJlIL7Fs8vNmRH2Xo9GpJUfM45OAAVEi6UmUr45VsiyoyA+uHQyMnQIs7cA3/uHTRX+JmQMrqDW6xkyDVYX3fWCaxx6FG+mPnSIU6zYjhgPclBoLQiuo7VcKnG41L4ymOnFQcLWASSsWT+Qmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mwGxmmbD; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757272980; c=relaxed/simple;
+	bh=O9qppLhJrFdjnO0BDVGG4qFudKZIpEcz9G6sqj99YGA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qxBen5kMinapE/jpvaGaOhIXZ1HSOukQAM9E8nuKyeL9IJCuIyvyBbGWs9shZWE5ZXeWdfbnLxv82aESCf0ltQG+uif19XkZMXADx99MjDgwMfUAVrJaC70JT/WJbNFm53t6/x/TK+Bz1Bkkz9aTGolIc6vzpavgnHIo0lE5d2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqUZgimk; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mwGxmmbD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757270074; x=1788806074;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=37tgsekhRC7jsz5y0sdfR8LK3cgAZ+5Q6tUdBMysNJo=;
-  b=mwGxmmbDwecUefC3H0OAQ2ywdbnF6qOHk9e5CgPtKqMUVEbADPv/uAar
-   Hfn86quRFaxJhcInvcwGdgES83HPGwAGNxmJ2caYodhIPszJEzZNeWBuA
-   c7jkNxJGGvlVYcL+GoTKvt13x9tsPxNVN6KyW9JdXD00cMzNwJ8OaEwg9
-   PxfmWqYjMHyQRhsQvgl3ai/FRsuycpU2AFNVwppab2Cjc8Rg3HrAZeYnE
-   S+hhZ1SL3XRpiUydM1DChcfY/qzMlElwCpTHaeuyVg76Q2CYMYVwk7iCQ
-   oga2zka5uPHbktaLgidklMf7xegxYA9j9hm/2KAlenL1qr3chbt4ua9uT
-   w==;
-X-CSE-ConnectionGUID: k1vJnNEVSX2QFAHcU+t2xA==
-X-CSE-MsgGUID: NcFvttj5R5mCglc/DimSEQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="59610919"
-X-IronPort-AV: E=Sophos;i="6.18,246,1751266800"; 
-   d="scan'208";a="59610919"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2025 11:34:33 -0700
-X-CSE-ConnectionGUID: n9AuYTOgQ8eek0iHO+jCJg==
-X-CSE-MsgGUID: BIDTGyqgQUyCMnji1ccjow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,246,1751266800"; 
-   d="scan'208";a="203398514"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 07 Sep 2025 11:34:30 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uvKDb-0002Rj-0g;
-	Sun, 07 Sep 2025 18:34:27 +0000
-Date: Mon, 8 Sep 2025 02:33:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fidal Palamparambil <rootuserhere@gmail.com>,
-	linux-modules@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	linux-kernel@vger.kernel.org,
-	Fidal palamparambil <rootuserhere@gmail.com>
-Subject: Re: [PATCH] Fixed the build warning in
- init_trace_printk_function_export():
-Message-ID: <202509080203.SxCdQOOY-lkp@intel.com>
-References: <20250907140755.529-1-rootuserhere@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqUZgimk"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-248f2da72edso7368285ad.2
+        for <llvm@lists.linux.dev>; Sun, 07 Sep 2025 12:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757272978; x=1757877778; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O9qppLhJrFdjnO0BDVGG4qFudKZIpEcz9G6sqj99YGA=;
+        b=TqUZgimk7b9e8Vo3/paJtqW6L6a6/eGFxGA9u0OybXlXnXStARIbp1wbZlCQBHDyUO
+         PYjDd7fBoCvBgkFFMwlz8aKryOjzYym7Py0cJkLiN+gKML6FBMz2LlZZVsdKCp53KSGn
+         yn0a8nFHDa90gwXnVYn3Ah6pJulFsOYABo69gMZiKzM43/3khS1JWB6pQtHPTXAYMCLI
+         xw2tUoUKMcgheCwyUS0XknCAH6YSEVNLcr2PJDwlJy4zbI8x+id6idXuMjCss5319eoA
+         /yu+oPbjwgqpHYa5Ep+2qwhpioNNbmtHgHGstsej2uv08qfXNLgn/JlLgpXf1z/jZJzY
+         stjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757272978; x=1757877778;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O9qppLhJrFdjnO0BDVGG4qFudKZIpEcz9G6sqj99YGA=;
+        b=GeAiL7UvNMsGwod+tTjngXYXQ/DPTPi46sqdgSGxOCpwsfhaRss5IaFl+N3RdZIpAX
+         1KaL94WHB09fJnBlYCgQ69YAnX4gczELaTWz+Gc6bgQfbnI34UUQl8MdyoDGbE4WHSSG
+         qFgmOwpKQdfTlB/H7+2aeUtuE8OkgmOekBx1eN8nySYN9lCsxYR0mh9I2XMhgBXVeR6q
+         V/jtpD4/pP/s/lGxM3sUg2WJ2xhTSnm74Jy3xD7S7QD9qRhh4VJzgtO5Wk0S1g//p3mZ
+         DQqGWEGChvUYeRSyMCC/T+J/sHms+xdKtQIrP7XZkYBhsdeIa6PlIki8njpchbzQo4md
+         iPCA==
+X-Forwarded-Encrypted: i=1; AJvYcCVynsSexeGBRHLDa5/f5vuK1b/XkP5hzlI8qBJVru9rb7ZhMXL+2zvyqLf5VcubkYvkNBds@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzxs2Stdk3EOqqXT8rYHG0Jg4GJyyoCUqi2ASTekbF5/72PTAxJ
+	pwbhPCVkbijxK5MsDI/Kg25tTLlH2CbnahhKgny5HTUvaJSRe1yaHgENXKTb6KJO8YPuE3Kgs/h
+	voa7KcIOci5LOwG3sJl4ctMECWG5G1gw=
+X-Gm-Gg: ASbGnctZoWwDd/imFLNAuXIDvtQTh/WuG2TmQ6noNMCwSWfAyZhYE+wlAm2zI67bzRb
+	THA83ezH8Yty95Uzcm/kDJsFRD38avLCrQ2aEfwLAJIDVgDFEk1va70ycDXxb9W7Pkq1BIGzyoM
+	cZoOJwFdzYqs7WCceeX/58B4SpBMdvg7nraOwzSf5qc3I8yK8h79O1mhh52oNviOmNY8VsVEZbO
+	W9KyJVIH72vAwD6DfBTuJ40aWzvi1GJeSzdH19nkiyX6Nq2ZF8fvAb00KLyUzTyqyvaCwXpBbC6
+	Iq3P+jtwZjX5fzVv26D3O45vZUiPat9MBvij
+X-Google-Smtp-Source: AGHT+IG9yX7YTrisqI7Rxo8QTbikLjcKwRoWujERfLUMkae2pI2D0+hLhPSBxYgvPobhme1gsnfwfLZW89Q7xm2tV34=
+X-Received: by 2002:a17:902:c949:b0:24b:2310:9824 with SMTP id
+ d9443c01a7336-25175f6eb11mr46298535ad.9.1757272978324; Sun, 07 Sep 2025
+ 12:22:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250907140755.529-1-rootuserhere@gmail.com>
+References: <20250811012000.444173-1-ritvikfoss@gmail.com>
+In-Reply-To: <20250811012000.444173-1-ritvikfoss@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 7 Sep 2025 21:22:45 +0200
+X-Gm-Features: AS18NWAo30zVGsfP74LBLri6JUJ0z8lNv4k0MaRzoeIUSkg5OaYFBZAtzPELSSY
+Message-ID: <CANiq72=7dQ1msy6Xqy+yfAFuzkz8XGnnTsFLb6t5CUFzsoSCfg@mail.gmail.com>
+Subject: Re: [PATCH] rust: kernel: cpu: mark `CpuId::current()` inline
+To: Ritvik Gupta <ritvikfoss@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, skhan@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Fidal,
+On Mon, Aug 11, 2025 at 3:19=E2=80=AFAM Ritvik Gupta <ritvikfoss@gmail.com>=
+ wrote:
+>
+> When building the kernel using llvm-20.1.7-rust-1.89.0-x86_64,
+> this symbol is generated:
+>
+> $ llvm-nm --demangle vmlinux | grep CpuId
+> ffffffff84c77450 T <kernel::cpu::CpuId>::current
+>
+> However, this Rust symbol is a trivial wrapper around
+> `raw_smp_processor_id` function. It doesn't make sense
+> to go through a trivial wrapper for such functions,
+> so mark it inline.
+>
+> After applying this patch, the above command will produce no output.
+>
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Signed-off-by: Ritvik Gupta <ritvikfoss@gmail.com>
 
-kernel test robot noticed the following build errors:
+If no one is planning to pick this one, I will -- thanks!
 
-[auto build test ERROR on trace/for-next]
-[also build test ERROR on linus/master v6.17-rc4 next-20250905]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fidal-Palamparambil/Fixed-the-build-warning-in-init_trace_printk_function_export/20250907-221041
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20250907140755.529-1-rootuserhere%40gmail.com
-patch subject: [PATCH] Fixed the build warning in init_trace_printk_function_export():
-config: x86_64-buildonly-randconfig-002-20250907 (https://download.01.org/0day-ci/archive/20250908/202509080203.SxCdQOOY-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250908/202509080203.SxCdQOOY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509080203.SxCdQOOY-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/trace/trace_printk.c:369:18: error: passing 'const struct file *' to parameter of type 'struct file *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     369 |         return seq_open(file, &show_format_seq_ops);
-         |                         ^~~~
-   include/linux/seq_file.h:108:27: note: passing argument to parameter here
-     108 | int seq_open(struct file *, const struct seq_operations *);
-         |                           ^
->> kernel/trace/trace_printk.c:373:10: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, const struct file *)' [-Wincompatible-function-pointer-types]
-     373 |         .open = ftrace_formats_open,
-         |                 ^~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +369 kernel/trace/trace_printk.c
-
-7975a2be16dd42 Steven Rostedt          2009-03-12  359  
-7975a2be16dd42 Steven Rostedt          2009-03-12  360  static int
-66670b02cb828c Fidal palamparambil     2025-09-07  361  ftrace_formats_open(struct inode *inode, const struct file *file)
-7975a2be16dd42 Steven Rostedt          2009-03-12  362  {
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  363) 	int ret;
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  364) 
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  365) 	ret = security_locked_down(LOCKDOWN_TRACEFS);
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  366) 	if (ret)
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  367) 		return ret;
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  368) 
-c8961ec6da22ea Li Zefan                2009-06-24 @369  	return seq_open(file, &show_format_seq_ops);
-7975a2be16dd42 Steven Rostedt          2009-03-12  370  }
-7975a2be16dd42 Steven Rostedt          2009-03-12  371  
-7975a2be16dd42 Steven Rostedt          2009-03-12  372  static const struct file_operations ftrace_formats_fops = {
-7975a2be16dd42 Steven Rostedt          2009-03-12 @373  	.open = ftrace_formats_open,
-7975a2be16dd42 Steven Rostedt          2009-03-12  374  	.read = seq_read,
-7975a2be16dd42 Steven Rostedt          2009-03-12  375  	.llseek = seq_lseek,
-7975a2be16dd42 Steven Rostedt          2009-03-12  376  	.release = seq_release,
-7975a2be16dd42 Steven Rostedt          2009-03-12  377  };
-7975a2be16dd42 Steven Rostedt          2009-03-12  378  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
