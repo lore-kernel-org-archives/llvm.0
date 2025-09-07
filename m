@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C398D19644B;
-	Sun,  7 Sep 2025 04:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735C729B22F;
+	Sun,  7 Sep 2025 18:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757220137; cv=none; b=U2CH37NnzI3gNo+4zX6OVLI83ku4MIpx5sQdwZvOiKABTbSAiRbVcd2Ewd96yc0TvIgQEXq4yh0Ml5NKbwn5QFxam7ppixAza7y034a2CWJuXdkXnQFnqR40BYc9R1C4SIldvJIgkPsbA8VKSUgjhhARurWAfYLbNCi9XaAIDH4=
+	t=1757270075; cv=none; b=JmxexsimHGU+XbL5y7PwQJMFDY2Tlsy4eXLTreNvaygRgi98Qu38tZ4zPI1jQnx2HmmUpohXiTNGcwwpGv2/V0EUbMHWZ4a1jYoQnBhJTkAfu6MJFNozFnyzrgcAs/BQS8gWhuO5aPcBneWx934mrMm/03PoNuupqHCGP695mek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757220137; c=relaxed/simple;
-	bh=ajgu/EmLWqqRkhxrP9is6iXAwcRl6RqLR3pYXOWjI7c=;
+	s=arc-20240116; t=1757270075; c=relaxed/simple;
+	bh=37tgsekhRC7jsz5y0sdfR8LK3cgAZ+5Q6tUdBMysNJo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cclxtzcM2/vsWVfSGhnKwWaIyD2h5GxHHgAGDl7l9v8XUM7mTfrEHS2aOafkloDjL6Xe6/rkiMumWpTkhALuI8rjcmNESwPeUxbAH60W6aGry93PcnP7ax8lYU6cv6KUFOHVWB49ov296z+enOP7hxpnFEi9PofIMWzcsB7savQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WCbHE3nz; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=QVyVVlSr0V4WnauBGnhpe2NbhvRJlIL7Fs8vNmRH2Xo9GpJUfM45OAAVEi6UmUr45VsiyoyA+uHQyMnQIs7cA3/uHTRX+JmQMrqDW6xkyDVYX3fWCaxx6FG+mPnSIU6zYjhgPclBoLQiuo7VcKnG41L4ymOnFQcLWASSsWT+Qmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mwGxmmbD; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WCbHE3nz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mwGxmmbD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757220135; x=1788756135;
+  t=1757270074; x=1788806074;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ajgu/EmLWqqRkhxrP9is6iXAwcRl6RqLR3pYXOWjI7c=;
-  b=WCbHE3nzWQ9jkYKFWSmt0cAnN1+cewWUu00UcTyALQlBzriUkK7XFBJU
-   JOIuhcwQkzcOYY7g7GBkONhty5iEkEhmsDog6V946Qing9LoqMJ+SEd2r
-   n5jwlYmlvfZDqbddllpn//qVX1JJoitKXHnkuG7mYNizaXQO2WyUT+5AL
-   Tz4O+2V5cPWNXqyPEa7Obt9lJSjjSMDUEcziXXJkMdMCfUzj7fjm4+KXC
-   fK15b++GpNsrOtzRORb3WMWAyfjSdRvAj1DLkEuixDWkLBTK48tFDntis
-   1PZXakch8aNET4tbZMUbIgfRs6WxsOcojq066Xxm7Lz7aGAUG6/hQkiZS
-   Q==;
-X-CSE-ConnectionGUID: RZAhvIv3SiK7jEE3qpz5wA==
-X-CSE-MsgGUID: XNW+3vOEQrSjdlOV7OMLJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11545"; a="47083138"
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="47083138"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2025 21:42:14 -0700
-X-CSE-ConnectionGUID: B1x7ott1S2ioueeokamgSw==
-X-CSE-MsgGUID: MjiIu9bnR96rBUXpwDNCHw==
+  bh=37tgsekhRC7jsz5y0sdfR8LK3cgAZ+5Q6tUdBMysNJo=;
+  b=mwGxmmbDwecUefC3H0OAQ2ywdbnF6qOHk9e5CgPtKqMUVEbADPv/uAar
+   Hfn86quRFaxJhcInvcwGdgES83HPGwAGNxmJ2caYodhIPszJEzZNeWBuA
+   c7jkNxJGGvlVYcL+GoTKvt13x9tsPxNVN6KyW9JdXD00cMzNwJ8OaEwg9
+   PxfmWqYjMHyQRhsQvgl3ai/FRsuycpU2AFNVwppab2Cjc8Rg3HrAZeYnE
+   S+hhZ1SL3XRpiUydM1DChcfY/qzMlElwCpTHaeuyVg76Q2CYMYVwk7iCQ
+   oga2zka5uPHbktaLgidklMf7xegxYA9j9hm/2KAlenL1qr3chbt4ua9uT
+   w==;
+X-CSE-ConnectionGUID: k1vJnNEVSX2QFAHcU+t2xA==
+X-CSE-MsgGUID: NcFvttj5R5mCglc/DimSEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="59610919"
+X-IronPort-AV: E=Sophos;i="6.18,246,1751266800"; 
+   d="scan'208";a="59610919"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2025 11:34:33 -0700
+X-CSE-ConnectionGUID: n9AuYTOgQ8eek0iHO+jCJg==
+X-CSE-MsgGUID: BIDTGyqgQUyCMnji1ccjow==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="209656304"
+X-IronPort-AV: E=Sophos;i="6.18,246,1751266800"; 
+   d="scan'208";a="203398514"
 Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 06 Sep 2025 21:42:13 -0700
+  by orviesa002.jf.intel.com with ESMTP; 07 Sep 2025 11:34:30 -0700
 Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uv7EA-00022N-1e;
-	Sun, 07 Sep 2025 04:42:10 +0000
-Date: Sun, 7 Sep 2025 12:41:46 +0800
+	id 1uvKDb-0002Rj-0g;
+	Sun, 07 Sep 2025 18:34:27 +0000
+Date: Mon, 8 Sep 2025 02:33:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen Yufeng <chenyufeng@iie.ac.cn>, stf_xl@wp.pl
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org, Chen Yufeng <chenyufeng@iie.ac.cn>
-Subject: Re: [PATCH] iwlegacy: Sanity check for sta_id
-Message-ID: <202509071251.YuF4EGpk-lkp@intel.com>
-References: <20250906094232.1580-1-chenyufeng@iie.ac.cn>
+To: Fidal Palamparambil <rootuserhere@gmail.com>,
+	linux-modules@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mcgrof@kernel.org,
+	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+	linux-kernel@vger.kernel.org,
+	Fidal palamparambil <rootuserhere@gmail.com>
+Subject: Re: [PATCH] Fixed the build warning in
+ init_trace_printk_function_export():
+Message-ID: <202509080203.SxCdQOOY-lkp@intel.com>
+References: <20250907140755.529-1-rootuserhere@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,102 +67,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250906094232.1580-1-chenyufeng@iie.ac.cn>
+In-Reply-To: <20250907140755.529-1-rootuserhere@gmail.com>
 
-Hi Chen,
+Hi Fidal,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.17-rc4 next-20250905]
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.17-rc4 next-20250905]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yufeng/iwlegacy-Sanity-check-for-sta_id/20250906-174354
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20250906094232.1580-1-chenyufeng%40iie.ac.cn
-patch subject: [PATCH] iwlegacy: Sanity check for sta_id
-config: x86_64-buildonly-randconfig-002-20250907 (https://download.01.org/0day-ci/archive/20250907/202509071251.YuF4EGpk-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Fidal-Palamparambil/Fixed-the-build-warning-in-init_trace_printk_function_export/20250907-221041
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250907140755.529-1-rootuserhere%40gmail.com
+patch subject: [PATCH] Fixed the build warning in init_trace_printk_function_export():
+config: x86_64-buildonly-randconfig-002-20250907 (https://download.01.org/0day-ci/archive/20250908/202509080203.SxCdQOOY-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250907/202509071251.YuF4EGpk-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250908/202509080203.SxCdQOOY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509071251.YuF4EGpk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509080203.SxCdQOOY-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/wireless/intel/iwlegacy/common.c:1742:3: error: incompatible pointer types initializing 'const char *' with an expression of type 'struct il_priv *' [-Werror,-Wincompatible-pointer-types]
-    1742 |                 IL_ERR(il, "invalid sta_id %u", sta_id);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlegacy/common.h:31:25: note: expanded from macro 'IL_ERR'
-      31 | #define IL_ERR(f, a...) dev_err(&il->pci_dev->dev, f, ## a)
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:154:2: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:109:3: note: expanded from macro 'dev_printk_index_wrap'
-     109 |                 dev_printk_index_emit(level, fmt);                      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:105:2: note: expanded from macro 'dev_printk_index_emit'
-     105 |         printk_index_subsys_emit("%s %s: ", level, fmt)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:481:2: note: expanded from macro 'printk_index_subsys_emit'
-     481 |         __printk_index_emit(fmt, level, subsys_fmt_prefix)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:447:12: note: expanded from macro '__printk_index_emit'
-     447 |                                 .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/intel/iwlegacy/common.c:1742:10: error: incompatible pointer types passing 'struct il_priv *' to parameter of type 'const char *' [-Werror,-Wincompatible-pointer-types]
-    1742 |                 IL_ERR(il, "invalid sta_id %u", sta_id);
-         |                        ^~
-   drivers/net/wireless/intel/iwlegacy/common.h:31:52: note: expanded from macro 'IL_ERR'
-      31 | #define IL_ERR(f, a...) dev_err(&il->pci_dev->dev, f, ## a)
-         |                                                    ^
-   include/linux/dev_printk.h:154:57: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ^~~
-   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
-      19 | #define dev_fmt(fmt) fmt
-         |                      ^~~
-   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:50:53: note: passing argument to parameter 'fmt' here
-      50 | void _dev_err(const struct device *dev, const char *fmt, ...);
-         |                                                     ^
+>> kernel/trace/trace_printk.c:369:18: error: passing 'const struct file *' to parameter of type 'struct file *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     369 |         return seq_open(file, &show_format_seq_ops);
+         |                         ^~~~
+   include/linux/seq_file.h:108:27: note: passing argument to parameter here
+     108 | int seq_open(struct file *, const struct seq_operations *);
+         |                           ^
+>> kernel/trace/trace_printk.c:373:10: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'int (struct inode *, const struct file *)' [-Wincompatible-function-pointer-types]
+     373 |         .open = ftrace_formats_open,
+         |                 ^~~~~~~~~~~~~~~~~~~
    2 errors generated.
 
 
-vim +1742 drivers/net/wireless/intel/iwlegacy/common.c
+vim +369 kernel/trace/trace_printk.c
 
-  1736	
-  1737	/* il->sta_lock must be held */
-  1738	static int
-  1739	il_sta_ucode_activate(struct il_priv *il, u8 sta_id)
-  1740	{
-  1741		if (sta_id >= IL_STATION_COUNT) {
-> 1742			IL_ERR(il, "invalid sta_id %u", sta_id);
-  1743			return -EINVAL;
-  1744		}
-  1745		if (!(il->stations[sta_id].used & IL_STA_DRIVER_ACTIVE))
-  1746			IL_ERR("ACTIVATE a non DRIVER active station id %u addr %pM\n",
-  1747			       sta_id, il->stations[sta_id].sta.sta.addr);
-  1748	
-  1749		if (il->stations[sta_id].used & IL_STA_UCODE_ACTIVE) {
-  1750			D_ASSOC("STA id %u addr %pM already present"
-  1751				" in uCode (according to driver)\n", sta_id,
-  1752				il->stations[sta_id].sta.sta.addr);
-  1753		} else {
-  1754			il->stations[sta_id].used |= IL_STA_UCODE_ACTIVE;
-  1755			D_ASSOC("Added STA id %u addr %pM to uCode\n", sta_id,
-  1756				il->stations[sta_id].sta.sta.addr);
-  1757		}
-  1758		return 0;
-  1759	}
-  1760	
+7975a2be16dd42 Steven Rostedt          2009-03-12  359  
+7975a2be16dd42 Steven Rostedt          2009-03-12  360  static int
+66670b02cb828c Fidal palamparambil     2025-09-07  361  ftrace_formats_open(struct inode *inode, const struct file *file)
+7975a2be16dd42 Steven Rostedt          2009-03-12  362  {
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  363) 	int ret;
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  364) 
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  365) 	ret = security_locked_down(LOCKDOWN_TRACEFS);
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  366) 	if (ret)
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  367) 		return ret;
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  368) 
+c8961ec6da22ea Li Zefan                2009-06-24 @369  	return seq_open(file, &show_format_seq_ops);
+7975a2be16dd42 Steven Rostedt          2009-03-12  370  }
+7975a2be16dd42 Steven Rostedt          2009-03-12  371  
+7975a2be16dd42 Steven Rostedt          2009-03-12  372  static const struct file_operations ftrace_formats_fops = {
+7975a2be16dd42 Steven Rostedt          2009-03-12 @373  	.open = ftrace_formats_open,
+7975a2be16dd42 Steven Rostedt          2009-03-12  374  	.read = seq_read,
+7975a2be16dd42 Steven Rostedt          2009-03-12  375  	.llseek = seq_lseek,
+7975a2be16dd42 Steven Rostedt          2009-03-12  376  	.release = seq_release,
+7975a2be16dd42 Steven Rostedt          2009-03-12  377  };
+7975a2be16dd42 Steven Rostedt          2009-03-12  378  
 
 -- 
 0-DAY CI Kernel Test Service
