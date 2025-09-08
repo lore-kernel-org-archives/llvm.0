@@ -1,114 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB94304BA2;
-	Mon,  8 Sep 2025 15:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FA430FC22;
+	Mon,  8 Sep 2025 15:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757344887; cv=none; b=oRFjdF536xQIHCbMSXW2AKKrE/JhgPfuYUkCq7QBGZM3BilwAm+rrksD5YxrEH5cm5aqF1ICs27VmWlcpAz3GCCDfvCCCZHuUgAl3VVgEZEDgCTNK0l2ZRMfP7qXT1cs9fRB1+cG6LNbG5WIMcV18PaDLprp9CNuZTub+sfNw1A=
+	t=1757346068; cv=none; b=Q/oxIFPow8D/vXH08xq2MNxqeMoftRK+GNQYcIf9/5Qp4MciFg+p65pUp5XAnzOCSV478P+ystUaNkdeueVKcfWBmCnJrGV9Y5aWiM8f5Cvp4SqwOzrksJ/iTvQUIVlgfWe/vCY0GZXhTRcr3xqfAn1mpfvyTk96E0Dv47aB7vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757344887; c=relaxed/simple;
-	bh=OZYdUZ3F6fjaLvpJvs2wUT3CRDr/Uoo0+nPnQIDx9iM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZTc4nu7Y+HVTGQ5Wmpm/8w/cCpcYwUBLvc735bGIp1NqTM9fqelSINJeiS8YIiHyuMwuC0tcwqCdz+lcGd9HD0GkxLj/iliKQxQSuLMIeyExJbsuQMbKoj+drDz5ft4bM197BTsa9WUFK8nVj9SkotRRlcgBdauO3EK9bvwNytc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mbxiZ99F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757346068; c=relaxed/simple;
+	bh=Z6jrl4mLAXX6r9DE8sEMl+1MLl0DAZ0bEBGDAozfhTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HFA8Ofq9WWvLvMwHtjbZM84M3UTXljOcg4evZQrfvODa0LCyfsieZDsQOyak0wWGrmuwKm1ILfQw9DHHyzIaIDrk2nVIe1nhGVma7Eh05X32qJgja2ZdvbZmSpz4GZ5tKDakpnPj+3GgADaABDKIFDcYTxJ0cwWAlPzx6DfyJ/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GBi0aSjX; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mbxiZ99F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AF4C4CEF1;
-	Mon,  8 Sep 2025 15:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757344886;
-	bh=OZYdUZ3F6fjaLvpJvs2wUT3CRDr/Uoo0+nPnQIDx9iM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mbxiZ99FTxf+pUeqyhMhwsLMESmbnzY3faUcsHhPyNut5cmiru8kMA7QOpuY+YtuI
-	 t+DGPuOCYSZ2/Bu/rhP58qrYiIOHyxVv0zNQpuhpOQvlpZJyBAW2M4nSEsdGzWBVOn
-	 tsC1Eeq0R8e3vOI4tPJzS54jfm1InhybiM8yYP2pimQpTBYvIfF09MakZnsJ+e2ZXU
-	 PzRDhiPxPxJ9xa9c2fQpyPFXeDIad3OcxhlGwO0BCpiYpCjzU50scCSYRf7TkTXjlT
-	 RX/6gcAYG5ba8rdS8iPrzuyIynfVZti7xuGWcXez3FBXThjNsG5l23H7WkT5HQ0pZg
-	 +78P/Hw9vnZeg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	hawk@kernel.org,
-	ilias.apalodimas@linaro.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	llvm@lists.linux.dev
-Subject: [PATCH net-next] page_pool: always add GFP_NOWARN for ATOMIC allocations
-Date: Mon,  8 Sep 2025 08:21:23 -0700
-Message-ID: <20250908152123.97829-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GBi0aSjX"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=i/NTHz2QW7PrsPI9dqlnUBz3BBd0hMA6KRgZuxingf0=; b=GBi0aSjXvmeOh74/NWSi3Netvt
+	umXLRbKELo8BXdYxPT9vJ2FKLymdmCKs9+em8KbrcqX5x00auk1qmfwCy56dH7bfo+4jsjIbkXiNF
+	Py8LhDHqpag7Y3M0CkWiEKvdMIcgJ5JAp5LybORafLtsFTB5aXzU+ehZDwT0JwzbDJVRGHTX2c2Zj
+	UYIaPgOuNqdZRD4w4j4SgdGitxRIMxyjAv/mhet+Oc06/B0dKLFB3Ah9dtlIlwAW3lFr+MQiYUx0I
+	FkKCVk8NQSLmu0KmpPeagx0WYy54sRY9J1MQNXqs8UmccEueofDmvgnKJ2Ycx8lDiQBosX0/IswBx
+	uzwXl7dw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uvdzB-000000055Nt-1QWl;
+	Mon, 08 Sep 2025 15:40:53 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D2D5E300230; Mon, 08 Sep 2025 17:40:52 +0200 (CEST)
+Date: Mon, 8 Sep 2025 17:40:52 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: nathan@kernel.org, arnd@arndb.de, broonie@kernel.org,
+	Liam.Howlett@oracle.com, urezki@gmail.com, will@kernel.org,
+	kaleshsingh@google.com, rppt@kernel.org, leitao@debian.org,
+	coxu@redhat.com, surenb@google.com, akpm@linux-foundation.org,
+	luto@kernel.org, jpoimboe@kernel.org, changyuanl@google.com,
+	hpa@zytor.com, dvyukov@google.com, kas@kernel.org, corbet@lwn.net,
+	vincenzo.frascino@arm.com, smostafa@google.com,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	andreyknvl@gmail.com, alexander.shishkin@linux.intel.com,
+	thiago.bauermann@linaro.org, catalin.marinas@arm.com,
+	ryabinin.a.a@gmail.com, jan.kiszka@siemens.com, jbohac@suse.cz,
+	dan.j.williams@intel.com, joel.granados@kernel.org,
+	baohua@kernel.org, kevin.brodsky@arm.com, nicolas.schier@linux.dev,
+	pcc@google.com, andriy.shevchenko@linux.intel.com,
+	wei.liu@kernel.org, bp@alien8.de, ada.coupriediaz@arm.com,
+	xin@zytor.com, pankaj.gupta@amd.com, vbabka@suse.cz,
+	glider@google.com, jgross@suse.com, kees@kernel.org,
+	jhubbard@nvidia.com, joey.gouly@arm.com, ardb@kernel.org,
+	thuth@redhat.com, pasha.tatashin@soleen.com,
+	kristina.martsenko@arm.com, bigeasy@linutronix.de,
+	lorenzo.stoakes@oracle.com, jason.andryuk@amd.com, david@redhat.com,
+	graf@amazon.com, wangkefeng.wang@huawei.com, ziy@nvidia.com,
+	mark.rutland@arm.com, dave.hansen@linux.intel.com,
+	samuel.holland@sifive.com, kbingham@kernel.org,
+	trintaeoitogc@gmail.com, scott@os.amperecomputing.com,
+	justinstitt@google.com, kuan-ying.lee@canonical.com, maz@kernel.org,
+	tglx@linutronix.de, samitolvanen@google.com, mhocko@suse.com,
+	nunodasneves@linux.microsoft.com, brgerst@gmail.com,
+	willy@infradead.org, ubizjak@gmail.com, mingo@redhat.com,
+	sohil.mehta@intel.com, linux-mm@kvack.org,
+	linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	x86@kernel.org, llvm@lists.linux.dev, kasan-dev@googlegroups.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 13/18] kasan: arm64: x86: Handle int3 for inline KASAN
+ reports
+Message-ID: <20250908154052.GG4067720@noisy.programming.kicks-ass.net>
+References: <cover.1755004923.git.maciej.wieczor-retman@intel.com>
+ <9030d5a35eb5a3831319881cb8cb040aad65b7b6.1755004923.git.maciej.wieczor-retman@intel.com>
+ <20250813151702.GO4067720@noisy.programming.kicks-ass.net>
+ <nuzda7g3l2e4qeqdh6m4bmhlux6ywnrrh4ktivldljm2od7vou@z4wtuggklxei>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nuzda7g3l2e4qeqdh6m4bmhlux6ywnrrh4ktivldljm2od7vou@z4wtuggklxei>
 
-Driver authors often forget to add GFP_NOWARN for page allocation
-from the datapath. This is annoying to operators as OOMs are a fact
-of life, and we pretty much expect network Rx to hit page allocation
-failures during OOM. Make page pool add GFP_NOWARN for ATOMIC allocations
-by default.
+On Mon, Aug 18, 2025 at 08:26:11AM +0200, Maciej Wieczor-Retman wrote:
+> On 2025-08-13 at 17:17:02 +0200, Peter Zijlstra wrote:
+> >On Tue, Aug 12, 2025 at 03:23:49PM +0200, Maciej Wieczor-Retman wrote:
+> >> Inline KASAN on x86 does tag mismatch reports by passing the faulty
+> >> address and metadata through the INT3 instruction - scheme that's setup
+> >> in the LLVM's compiler code (specifically HWAddressSanitizer.cpp).
+> >> 
+> >> Add a kasan hook to the INT3 handling function.
+> >> 
+> >> Disable KASAN in an INT3 core kernel selftest function since it can raise
+> >> a false tag mismatch report and potentially panic the kernel.
+> >> 
+> >> Make part of that hook - which decides whether to die or recover from a
+> >> tag mismatch - arch independent to avoid duplicating a long comment on
+> >> both x86 and arm64 architectures.
+> >> 
+> >> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> >
+> >Can we please split this into an arm64 and x86 patch. Also, why use int3
+> >here rather than a #UD trap, which we use for all other such cases?
+> 
+> Sure, two patches seem okay. I'll first add all the new functions and modify the
+> x86 code, then add the arm64 patch which will replace its die() + comment with
+> kasan_inline_recover().
+> 
+> About INT3 I'm not sure, it's just how it's written in the LLVM code. I didn't
+> see any justification why it's not #UD. My guess is SMD describes INT3 as an
+> interrupt for debugger purposes while #UD is described as "for software
+> testing". So from the documentation point INT3 seems to have a stronger case.
+> 
+> Does INT3 interfere with something? Or is #UD better just because of
+> consistency?
 
-Don't compare to GFP_ATOMIC because it's a mask with 2 bits set.
-We want a single bit so that the compiler can do an unconditional
-mask and shift. clang builds the condition as:
+INT3 from kernel space is already really tricky, since it is used for
+self-modifying code.
 
-    1c31: 89 e8                        	movl	%ebp, %eax
-    1c33: 83 e0 20                     	andl	$0x20, %eax
-    1c36: c1 e0 0d                     	shll	$0xd, %eax
-    1c39: 09 e8                        	orl	%ebp, %eax
-
-so there seems to be no need any more to use the old flag multiplication
-tricks which is less readable. Pick the lowest bit out of GFP_ATOMIC
-to limit the size of the instructions.
-
-The specific change which makes me propose this is that bnxt, after
-commit cd1fafe7da1f ("eth: bnxt: add support rx side device memory TCP"),
-lost the GFP_NOWARN, again. It used to allocate with page_pool_dev_alloc_*
-which added the NOWARN unconditionally. While switching to
-__bnxt_alloc_rx_netmem() authors forgot to add NOWARN in the explicitly
-specified flags.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: hawk@kernel.org
-CC: ilias.apalodimas@linaro.org
-CC: nathan@kernel.org
-CC: nick.desaulniers+lkml@gmail.com
-CC: morbo@google.com
-CC: justinstitt@google.com
-CC: llvm@lists.linux.dev
----
- net/core/page_pool.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index ba70569bd4b0..6ffce0e821e4 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -555,6 +555,13 @@ static noinline netmem_ref __page_pool_alloc_netmems_slow(struct page_pool *pool
- 	netmem_ref netmem;
- 	int i, nr_pages;
- 
-+	/* Unconditionally set NOWARN if allocating from the datapath.
-+	 * Use a single bit from the ATOMIC mask to help compiler optimize.
-+	 */
-+	BUILD_BUG_ON(!(GFP_ATOMIC & __GFP_HIGH));
-+	if (gfp & __GFP_HIGH)
-+		gfp |= __GFP_NOWARN;
-+
- 	/* Don't support bulk alloc for high-order pages */
- 	if (unlikely(pp_order))
- 		return page_to_netmem(__page_pool_alloc_page_order(pool, gfp));
--- 
-2.51.0
-
+I suppose we *can* do this, but #UD is already set up to effectively
+forward to WARN and friends, and has UBSAN integration. Its just really
+weird to have KASAN do something else again.
