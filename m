@@ -1,135 +1,199 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B686279DC0;
-	Mon,  8 Sep 2025 19:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DD02D3745
+	for <llvm@lists.linux.dev>; Mon,  8 Sep 2025 19:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757359721; cv=none; b=NbieiPtKGHOjOd1Fp1jqJp+9b/yuDvSjiJBWeI30d/JK0pE9N/8YgkTnmy2D5xkNCm1XRZAxbOCTF37zE3FGh7Wy/InxnciWUUorgHVmQQBn5aXwG1Fdsl79diIarzYlv/sHG+JujSSdsslFEvAz6SnseT0BV+uZ4qjyn8GnOUQ=
+	t=1757361492; cv=none; b=PNUkV03K21SAB6IeYmSvqGKgW0YEh9YT97BEn+DNnaBKX3ciTvP/i01lVW0Ll1DJcmsOuFNCDCZxzeazFzxvQrtVt9+E6Lr4VGwT4u4fuMNFRNKJPrva8PZCLfkWhCptzHNqXqN2VRnvPEAbddTuFww+pAQyc2RCe7q3oF/pK6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757359721; c=relaxed/simple;
-	bh=Kc1ivBx3wdmv0c+s/R8Ldc7a1tQUzs0ZvVoAwlClrVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lzkEo9nN5u6v3ni+iuNsctko2fsOmlmCQ/OuoIcvpgMNPq1doHTi97kqmhMc7G7a8/6lioswufzWjAgyW03V+HIdg/oNedMUXeF78kdSDajE91xcbTBaBDVsFnhlzNLBOV6CoWMWEIx3WR+FmcZm5B3mmZqryU/3MdbyQP4no5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OMOUtbaN; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1757361492; c=relaxed/simple;
+	bh=C8OBztZ6vPk8ZFff7QvtWdo3gfREr1untuw3Po2M6Yw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mg5ypKnPyavrq1SYDr9jWJTnDt300ekMQ8HsXrc6kg+2WyGTVa5L4R6AAvtCxFPXDr91mmRIdVhnnmjn97nD3uatlTNm7KhjeETAHkjj1KNFF8br6NhpgNla1CDT6cfKavkyWETHoTSrtJuv541dnjFQlaxBhjl3+a204S5zQsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TYF/BZGW; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OMOUtbaN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TYF/BZGW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757359720; x=1788895720;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Kc1ivBx3wdmv0c+s/R8Ldc7a1tQUzs0ZvVoAwlClrVM=;
-  b=OMOUtbaNqHe6xMAXXM+Fn+Zgj0PFrQoHMALu/P7HplngAOdIGNxarKiQ
-   PvDqiM4obXmRpOE9tUhDykjXCxkFbeDEl2IcfbgcMQGgpdiwAbwrtLtN3
-   IGBcevc128XVmmLaV4RzPrtgb9g1D7RiDYvXNZ7c2lV/Zlagu/UB8JOHR
-   Gfa/0qml5PTMP92KFSrf//hUCPKGYMuMn6xUKMP4wlM9XUA9cw04EiKcq
-   UTqKwTr7IrtCe4pVV7FjwyhJrVeTw+82VyJkLK0woA83InRh9jLCOT2m6
-   rfIixZCsGflqzvRGIINTJ7rj0Ino2elZrSqnnxgLy9hl7baIALQrb22cK
-   A==;
-X-CSE-ConnectionGUID: NzaUoKaaQo2Mv/k+xJ/JNw==
-X-CSE-MsgGUID: D/sIGHRGTsy8aVzMoAUhnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="62260140"
+  t=1757361491; x=1788897491;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C8OBztZ6vPk8ZFff7QvtWdo3gfREr1untuw3Po2M6Yw=;
+  b=TYF/BZGW8vJLco28dw5T/Yi4fBIUX6n+/zRb1elKBhGIZe5vyw3PPgmr
+   CZGLHyqFI4Wc/dBKxeBpLkhE/0XfGQy3NAa+nzlEUoGq9CzdsVkCwgupF
+   yAducJJ6LiEkUXKd1gQRpWrAmtbdCDbVf3wEU8+DLlX65DUqoWiL9wp8k
+   k9s81mb2ijiSVxdSCQpwPr34Xo/MoCErgS7croU3ZH/uKBmFPUpQoF/SN
+   kQIb7ziQ7ij86Ncrnu1BSNC1k1ZYUBDD4X8eIbdS30k8KoxrO7Ckg1nov
+   F6+/4yBcE/WawPwTuqiOsV6doaqK+tlSqNroPkc53qEXRk7ukBYR6zV+h
+   Q==;
+X-CSE-ConnectionGUID: +r4SMPZuRKCZwgbrmzjFjw==
+X-CSE-MsgGUID: sGmO5a+iRHuNPuV3n1dfxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="77088887"
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="62260140"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 12:28:39 -0700
-X-CSE-ConnectionGUID: jdiEDUMxRp2H4jBZcO6iBw==
-X-CSE-MsgGUID: e7Oi1WytQEOnmXLm/NO1yQ==
+   d="scan'208";a="77088887"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 12:58:11 -0700
+X-CSE-ConnectionGUID: yAykBEaGRQyH47xO8bvRrA==
+X-CSE-MsgGUID: KOMD6AyzSvOGgqIeAFmVJw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="203660826"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 Sep 2025 12:28:38 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uvhXX-000467-07;
-	Mon, 08 Sep 2025 19:28:35 +0000
-Date: Tue, 9 Sep 2025 03:28:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeongjun Park <aha310510@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jiri Kosina <jikos@kernel.org>
-Subject: [linux-next:master 1042/7110] drivers/hid/hid-steelseries.c:599:1:
- warning: unused label 'srws1_remove'
-Message-ID: <202509090334.76D4qGtW-lkp@intel.com>
+   d="scan'208";a="177189716"
+Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
+  by orviesa004.jf.intel.com with ESMTP; 08 Sep 2025 12:58:10 -0700
+From: Tony Nguyen <anthony.l.nguyen@intel.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	anthony.l.nguyen@intel.com,
+	michal.kubiak@intel.com,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	przemyslaw.kitszel@intel.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	horms@kernel.org,
+	sdf@fomichev.me,
+	nxne.cnse.osdt.itp.upstreaming@intel.com,
+	bpf@vger.kernel.org,
+	kees@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	llvm@lists.linux.dev,
+	Ramu R <ramu.r@intel.com>
+Subject: [PATCH net-next 01/13] xdp, libeth: make the xdp_init_buff() micro-optimization generic
+Date: Mon,  8 Sep 2025 12:57:31 -0700
+Message-ID: <20250908195748.1707057-2-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250908195748.1707057-1-anthony.l.nguyen@intel.com>
+References: <20250908195748.1707057-1-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3e8e5822146bc396d2a7e5fbb7be13271665522a
-commit: a84eeacbf9325fd7f604b80f246aaba157730cd5 [1042/7110] HID: steelseries: refactor probe() and remove()
-config: um-randconfig-002-20250908 (https://download.01.org/0day-ci/archive/20250909/202509090334.76D4qGtW-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7fb1dc08d2f025aad5777bb779dfac1197e9ef87)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250909/202509090334.76D4qGtW-lkp@intel.com/reproduce)
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509090334.76D4qGtW-lkp@intel.com/
+Often times the compilers are not able to expand two consecutive 32-bit
+writes into one 64-bit on the corresponding architectures. This applies
+to xdp_init_buff() called for every received frame (or at least once
+per each 64 frames when the frag size is fixed).
+Move the not-so-pretty hack from libeth_xdp straight to xdp_init_buff(),
+but using a proper union around ::frame_sz and ::flags.
+The optimization is limited to LE architectures due to the structure
+layout.
 
-All warnings (new ones prefixed by >>):
+One simple example from idpf with the XDP series applied (Clang 22-git,
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE => -O2):
 
-   In file included from drivers/hid/hid-steelseries.c:13:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/hid/hid-steelseries.c:599:1: warning: unused label 'srws1_remove' [-Wunused-label]
-     599 | srws1_remove:
-         | ^~~~~~~~~~~~~
-   2 warnings generated.
+add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-27 (-27)
+Function                                     old     new   delta
+idpf_vport_splitq_napi_poll                 5076    5049     -27
 
+The perf difference with XDP_DROP is around +0.8-1% which I see as more
+than satisfying.
 
-vim +/srws1_remove +599 drivers/hid/hid-steelseries.c
+Suggested-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+Tested-by: Ramu R <ramu.r@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ include/net/libeth/xdp.h | 11 +----------
+ include/net/xdp.h        | 28 +++++++++++++++++++++++++---
+ 2 files changed, 26 insertions(+), 13 deletions(-)
 
-   576	
-   577	static void steelseries_remove(struct hid_device *hdev)
-   578	{
-   579		struct steelseries_device *sd;
-   580		unsigned long flags;
-   581	
-   582		if (hdev->product == USB_DEVICE_ID_STEELSERIES_SRWS1) {
-   583	#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-   584	    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-   585			goto srws1_remove;
-   586	#endif
-   587			return;
-   588		}
-   589	
-   590		sd = hid_get_drvdata(hdev);
-   591	
-   592		spin_lock_irqsave(&sd->lock, flags);
-   593		sd->removed = true;
-   594		spin_unlock_irqrestore(&sd->lock, flags);
-   595	
-   596		cancel_delayed_work_sync(&sd->battery_work);
-   597	
-   598		hid_hw_close(hdev);
- > 599	srws1_remove:
-   600		hid_hw_stop(hdev);
-   601	}
-   602	
-
+diff --git a/include/net/libeth/xdp.h b/include/net/libeth/xdp.h
+index f4880b50e804..bc3507edd589 100644
+--- a/include/net/libeth/xdp.h
++++ b/include/net/libeth/xdp.h
+@@ -1274,7 +1274,6 @@ bool libeth_xdp_buff_add_frag(struct libeth_xdp_buff *xdp,
+  * Internal, use libeth_xdp_process_buff() instead. Initializes XDP buffer
+  * head with the Rx buffer data: data pointer, length, headroom, and
+  * truesize/tailroom. Zeroes the flags.
+- * Uses faster single u64 write instead of per-field access.
+  */
+ static inline void libeth_xdp_prepare_buff(struct libeth_xdp_buff *xdp,
+ 					   const struct libeth_fqe *fqe,
+@@ -1282,17 +1281,9 @@ static inline void libeth_xdp_prepare_buff(struct libeth_xdp_buff *xdp,
+ {
+ 	const struct page *page = __netmem_to_page(fqe->netmem);
+ 
+-#ifdef __LIBETH_WORD_ACCESS
+-	static_assert(offsetofend(typeof(xdp->base), flags) -
+-		      offsetof(typeof(xdp->base), frame_sz) ==
+-		      sizeof(u64));
+-
+-	*(u64 *)&xdp->base.frame_sz = fqe->truesize;
+-#else
+-	xdp_init_buff(&xdp->base, fqe->truesize, xdp->base.rxq);
+-#endif
+ 	xdp_prepare_buff(&xdp->base, page_address(page) + fqe->offset,
+ 			 pp_page_to_nmdesc(page)->pp->p.offset, len, true);
++	xdp_init_buff(&xdp->base, fqe->truesize, xdp->base.rxq);
+ }
+ 
+ /**
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index b40f1f96cb11..af60e11b336c 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -85,8 +85,20 @@ struct xdp_buff {
+ 	void *data_hard_start;
+ 	struct xdp_rxq_info *rxq;
+ 	struct xdp_txq_info *txq;
+-	u32 frame_sz; /* frame size to deduce data_hard_end/reserved tailroom*/
+-	u32 flags; /* supported values defined in xdp_buff_flags */
++
++	union {
++		struct {
++			/* frame size to deduce data_hard_end/tailroom */
++			u32 frame_sz;
++			/* supported values defined in xdp_buff_flags */
++			u32 flags;
++		};
++
++#ifdef __LITTLE_ENDIAN
++		/* Used to micro-optimize xdp_init_buff(), don't use directly */
++		u64 frame_sz_flags_init;
++#endif
++	};
+ };
+ 
+ static __always_inline bool xdp_buff_has_frags(const struct xdp_buff *xdp)
+@@ -118,9 +130,19 @@ static __always_inline void xdp_buff_set_frag_pfmemalloc(struct xdp_buff *xdp)
+ static __always_inline void
+ xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
+ {
+-	xdp->frame_sz = frame_sz;
+ 	xdp->rxq = rxq;
++
++#ifdef __LITTLE_ENDIAN
++	/*
++	 * Force the compilers to initialize ::flags and assign ::frame_sz with
++	 * one write on 64-bit LE architectures as they're often unable to do
++	 * it themselves.
++	 */
++	xdp->frame_sz_flags_init = frame_sz;
++#else
++	xdp->frame_sz = frame_sz;
+ 	xdp->flags = 0;
++#endif
+ }
+ 
+ static __always_inline void
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
