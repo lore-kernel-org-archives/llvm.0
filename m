@@ -1,97 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E3D279337;
-	Mon,  8 Sep 2025 21:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DA621B9C8;
+	Tue,  9 Sep 2025 01:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757366755; cv=none; b=Vxnu24yhUaRgyOndmRu3wmXORAbIYMHD/u3RkGLYMBJs2MXZZRPHsYL+QOQGCi1Qc6DpKU8VhGhf/sITGpWgZOPZZw6o9owrcqVlcNfUTdObfSJ/isu8B/6speE8YF7/DkYxcxJv/kDOYqHQqx1/3kOBUX2zxLuBM+d+YtsU6W8=
+	t=1757381012; cv=none; b=fjcZl2x+p2cgu4IJlhhp+T9QUs5jc5jh1zKkISKrMjFLFM/0gA1IN0zNKC2udaH9C4SI8nrxoZrrnmsTi9wV6THslpoWBTQSkoYoMdMCR5lJ4VeeEhbf6rjFsG6Dk4wfWdNmkixaJmfQJPy0Uyv0sJcT8FksJLAqSCRZ3ZAIOI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757366755; c=relaxed/simple;
-	bh=Fu8+aayxVNZCT/oRSmjlPZbESme4v7nIzu2hac/jq2E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ot58xF2+al3pdDskHnJyeMigQcIvBVoLZ6bmZPdvOhwU97RSDkQvBmNPoaKJ+OaJvkBOXVxOSLbbrQvl6DWEWSlmT54Efwfa1cmlvpE8O/N8wF4obTi7N8z7q5EAUXv99viR5x3nvBd8su6rUkWHquTXFlm902Tfg6cQz2je+Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FtHx4s3S; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757381012; c=relaxed/simple;
+	bh=RZi5ocmJPJF9G1DcWXVwXv/MggPhU7VqkehKrP9eEQM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NXpy+E2aMCZewSPWUmgxcamFjbov4owhHykuawJG5iwpLA4OAcfCoJPD/1CZT72uA9VrCzpmGzmGATd4JsNAKhl3K5KYwu2IbtG5bTN0pC9Wx5ZZYuFu4uEZv3MD0gbZ9prAAe1H79LgY6UE5fKZti5R+3VYz5ae4DaLDFGJTqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWB+Zq9D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FtHx4s3S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757366754; x=1788902754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fu8+aayxVNZCT/oRSmjlPZbESme4v7nIzu2hac/jq2E=;
-  b=FtHx4s3SNiTLS9roOPHgX7+KAqUONC7pGmI6oOyv6SiZu6idmOwtIl14
-   mmo0S9ze0jyLdTHg4GiBFMb9kYVvw0STcFAbgBCHyDWQiveCETFLv7M2s
-   eKEVAIy3QJXAY+IN2O8OakRuodrzr9m0xsx1SOEI5PHaahsaNC/dQOLLs
-   JpjVoaVAEHdkfyOyHQoGEx0S1ZoaBgyATXBJHpe5pcOJWK9ruPV3nZQOC
-   zX4uj3k1V8we2I0zy8vkXYcgDhADHtFgPw5E79u+GFndXgPSWSN/ydg/B
-   c1o0qdq8r+defmXzwpswarqSiIapLkSh4y3OpzfdxDYsvvDNdPq9U1EEz
-   g==;
-X-CSE-ConnectionGUID: gc4hz1pJQvC4JTw77C7SCg==
-X-CSE-MsgGUID: GmaxHditRkWfRE1dUYT+Sg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="70337130"
-X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="70337130"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 14:25:53 -0700
-X-CSE-ConnectionGUID: HtjZveYrRG2X2LOIsBwwEg==
-X-CSE-MsgGUID: 2TFM5I92RN2w0wCE+oqhEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,249,1751266800"; 
-   d="scan'208";a="203884073"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Sep 2025 14:25:51 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uvjMy-0004Ad-30;
-	Mon, 08 Sep 2025 21:25:48 +0000
-Date: Tue, 9 Sep 2025 05:25:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	fuqiang wang <fuqiang.wang@easystack.cn>, x86@kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-	Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] crash: Add KUnit tests for crash_exclude_mem_range
-Message-ID: <202509090415.cOytgte4-lkp@intel.com>
-References: <20250904093855.1180154-2-coxu@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWB+Zq9D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394A3C4CEF1;
+	Tue,  9 Sep 2025 01:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757381012;
+	bh=RZi5ocmJPJF9G1DcWXVwXv/MggPhU7VqkehKrP9eEQM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sWB+Zq9D+EPxcmEuSUN/CZ/QMxQCsbx/pQTaA2ypiYosTDjzW9x99+wFGlGLc6phF
+	 riySFglLMfZCk0vfKmop6U8SFUqAmEr2HVOVFkD8cCBgN8umZQjII7ncEI6s+Wmbaf
+	 mYbmXUXaBbsz1BN6P8Xxgn8BAuvh8+RyJpZKNeYj30oK9jNKYUO8dpD2D1/cek7pcl
+	 KXTDF4pfhv2Ggt5qEnU8ACLb+xpSWuEbQ6SIOV8BnklqZ950eEvFRKG/A3O4esXZbJ
+	 Srd+Sxe683V5+dqlRj4tTad7F6gnpwtDhFUpymiS+HJlIow3iE3MUSGcOUDAsNpM3e
+	 r67Y6iLAli75w==
+From: SeongJae Park <sj@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	damon@lists.linux.dev
+Subject: Re: [sj:damon/next 118/128] mm/damon/tests/core-kunit.h:453:2: warning: unannotated fall-through between switch labels
+Date: Mon,  8 Sep 2025 18:23:29 -0700
+Message-Id: <20250909012329.66924-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <202509082042.24Nb5PCp-lkp@intel.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250904093855.1180154-2-coxu@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Coiby,
+On Mon, 8 Sep 2025 20:35:07 +0800 kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build errors:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+> head:   387bf1dec467127e728b28dc7624723d7df2813c
+> commit: d53726dd7bd14e94f2c46a842c8c45c2231090b7 [118/128] mm/damon/tests/core-kunit: split out damos_test_commit_quota_goal()
+> config: i386-buildonly-randconfig-006-20250908 (https://download.01.org/0day-ci/archive/20250908/202509082042.24Nb5PCp-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250908/202509082042.24Nb5PCp-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202509082042.24Nb5PCp-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from mm/damon/core.c:3156:
+> >> mm/damon/tests/core-kunit.h:453:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+>      453 |         default:
+>          |         ^
+>    mm/damon/tests/core-kunit.h:453:2: note: insert 'break;' to avoid fall-through
+>      453 |         default:
+>          |         ^
+>          |         break; 
+>    1 warning generated.
 
-[auto build test ERROR on b320789d6883cc00ac78ce83bccbfe7ed58afcf0]
+Thank you for reporting this!  I just pushed a fix to my tree:
+http://git.kernel.org/sj/c/922891e5eea9872058e013249d9aeab0eb6471d5
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Coiby-Xu/crash-Add-KUnit-tests-for-crash_exclude_mem_range/20250904-174105
-base:   b320789d6883cc00ac78ce83bccbfe7ed58afcf0
-patch link:    https://lore.kernel.org/r/20250904093855.1180154-2-coxu%40redhat.com
-patch subject: [PATCH v6 2/2] crash: Add KUnit tests for crash_exclude_mem_range
-config: x86_64-randconfig-073-20250908 (https://download.01.org/0day-ci/archive/20250909/202509090415.cOytgte4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250909/202509090415.cOytgte4-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509090415.cOytgte4-lkp@intel.com/
+Thanks,
+SJ
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "crash_exclude_mem_range" [kernel/crash_core_test.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[...]
