@@ -1,103 +1,162 @@
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6198033EAF1
-	for <llvm@lists.linux.dev>; Tue,  9 Sep 2025 17:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD60025A651;
+	Tue,  9 Sep 2025 18:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757438805; cv=none; b=UC3tsqaUhMpSm57C86ltf1hIh2+eWO9cQSUZgmKQKoxTEdkMMkQXBZKXVLE7rjz2Xw6pH2YsXzYEQ0byQ4bQiAR0JCpy5bxWGkBBYunJzDDPxOqw1mZ95SADpIUbBb1LUCKfZ9hcJ6wqu6uK4EasX/rdYwO2ZdHTlGSXZWbP4wY=
+	t=1757442926; cv=none; b=eTZ5zBUghTR8ky3gEOD0YlMQNCcK3gblQ3XCezJPKc1K/hut6g67dSv6X2vMMuPmeXC1Lr+4/KeWUrb9N4QXRIJESfk/DH6MSvkQMq0ll2/Xm4LdRZjGwAPK74rWTG/aOYoqApRdDAjkyZhBVaSJ7ONP+sjR62hIJSJRHlgDzeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757438805; c=relaxed/simple;
-	bh=N+pGwPw9MZww6G+9DA4s3ooxnN9i57hMzT73xzakERs=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=fVuqGZ2xAuOKBdC2S/K3Tz3PGyhhs6fnu9osCUH20v8X9wi5lpXltLxhoOPXErMnm2iJE295yozx7we/4zDHiJMHKiEm7aUI6C0Uzmmi5HwpAVs8KDpqL2I3SbmPKDA5DQUF3CCgM8EePdMTg2tYV7NrhUcGpFbTn6dG4sHcnMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EdXe3xnn; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1757442926; c=relaxed/simple;
+	bh=owOjEvSUqhYxWUGwns+Pu2QmlSYEwlSNCSUwleRViPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LJYX4LbCoJYXDi/zeFRGApCWPEs1/xP/PLqFeXzEbNb1q5urfOhM6OkySMIQ0muq6DYLQbuKhSrKuHXfBlOg75wdRmt+sggmtijmaOGBjhjk/J3Lak+0ovJ9GGcmDkBzs6wkfoPb5FK6xKHCTXiKq/1HCY9+ldL6suSaoqVSWHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=krA0gL++; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EdXe3xnn"
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e96fc00ad79so4932873276.0
-        for <llvm@lists.linux.dev>; Tue, 09 Sep 2025 10:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757438803; x=1758043603; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0oIkfurNYJ8ubibO+ta3BmDEx7AccbTt3F6wYbDoMRI=;
-        b=EdXe3xnnxITlztUXYzDC5jlRd+ZEy6t8mE334xqE6BD/ig5KcYADh4tJiBrMxt9Whr
-         7+Zg5Wo2nG3PEeSSlewtsPD9p57lDfZEMIeB0xAEWSLFVpVpqf/TIHMV8M/8bxV81EeO
-         JLd2181MIYGBUMwabWeiXhhbuOw8y10YkQ+iE2rcqkn8aweEPcVGm7qOLy687IhfxbQd
-         pFCiOSU9wSFKTJEePDB/ZHLwDwSBb3jlzI4YqpmD341UAuLMnAB/nvQFEWYlvv6tlAqs
-         ZNWKYKNJLKmOq6bUVPmrrs2yv3V8MM6KhE8rbD/yRP8IxZjHCoi3NGJNn7SY6CKFelpf
-         SVMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757438803; x=1758043603;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0oIkfurNYJ8ubibO+ta3BmDEx7AccbTt3F6wYbDoMRI=;
-        b=Zn+bXJWCh19342QMpcGSdBxRXsUruVzv++ftE6j29Nx8XqgW38NpJOkcXJ0Vpp06cd
-         bX+24fy6priydfv68GpeiSkTtn1pMyPWkTm+JBE8anPz3M77+J+Yof2OMu49Sw3uyk8A
-         XpyWUqtj4k5O+F0Y3s4q0N/cBGgD3UMYbMOklmfQNfcBUOoTvjAROMbgxW1yJ/4gvLpV
-         IXSx6mhI7nmGg/Z13Iq4vthtNykP7LhniTEkftAZ9MONyFI4ez2r8qEQYeXPY1UvuJ8m
-         vTekBmCJ9md+akWuwaVVkay9K2vU3E3d2NFCnGOrlTLKVwaVNdoyn0Kjk7yYNtJQpazn
-         UQsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqSKqmbrIUtq54bRuW+hkJWB1ixUG0UxInwL+DAjuYcaTM1Js1lAoAhg7v4uLZWE/yzmkQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw31SjHa8H/MD069JWCYSJ+99XKihakEJZgRO/7+6urasAPxs/Z
-	cv+zKwfdYyjkQNHicT8q2zcP8MAWlgjUKMQPYIP1g8Rxd/jfcIVh6J6R
-X-Gm-Gg: ASbGncvLq2JqzPR7lo0xX3SdumC5HTeKc0MlH40YtBXLoACzJnVRCDfp5+TZjUaxzkx
-	s1xfLMx6A3YX7016OF8uAkA6rHbZffd6i1TXl9BZ7BUM5cjgFwbzEnvyT8esGIAE4fbSfkHBixl
-	sZUgW75Kt3YJ2dQH7TF7Rhjs/+kDk4PGadG3j5xnU+6D+5eN+/+On1RqF/vpj1W4t88H/rvtsOs
-	iGmoWF1ks1nrCBCQLrvCIq63GV955HnsW3HmJnPj0Fo2UdfeNsw2tM4Iv4CRh3aVKFQBWy/Gq6B
-	wwCXKeo+2WEU6PsvGjuO16EYt5p2ABfe89JGHNvL7dt4xy6RE/9CRFthQTp/YRl5U5O7d1tEwBc
-	7X82wF1ZBez3ZWBpmr42rYI/cIopzG6IwzXYRoUBT26U3CjzHrDc6
-X-Google-Smtp-Source: AGHT+IGWvHZDYiA4RGkwYsweLqhI/RtpyRtGhg9Auj53oYUggWnrYnKSkAk9+pz7VYUcyUr/yHalzg==
-X-Received: by 2002:a05:6902:2b8c:b0:e97:1bc:b273 with SMTP id 3f1490d57ef6-e9f662ee3b5mr12680572276.21.1757438802651;
-        Tue, 09 Sep 2025 10:26:42 -0700 (PDT)
-Received: from [192.168.1.209] (74.211.99.176.16clouds.com. [74.211.99.176])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e9bbdf1fcbasm6726070276.6.2025.09.09.10.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Sep 2025 10:26:42 -0700 (PDT)
-From: Asuna <spriteovo@gmail.com>
-X-Google-Original-From: Asuna <SpriteOvO@gmail.com>
-Message-ID: <a78dca6d-5504-4f46-910b-820cb9ca750c@gmail.com>
-Date: Wed, 10 Sep 2025 01:26:33 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="krA0gL++"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757442924; x=1788978924;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=owOjEvSUqhYxWUGwns+Pu2QmlSYEwlSNCSUwleRViPU=;
+  b=krA0gL++lWR62/2iZ8ejLTX8/D2unc5NuRxu4WzQV9l1rFSUnndo9/PH
+   +BFXv3EmawK3VAtFyBK6xHZUKsMAjEvxaZt0vk6SKB1YE0KPEf8MSRRnO
+   I7JgyI1Ic8DysJWmLBs/5+4Av6Z/S4miVkuVFgmPJc66wMOZQuYLOVo+V
+   7nWh7WOO6iFGLYc55IkcSxtC3eR/l/fyKO2eDVAcmD9SOJF3MxfiR32c3
+   I6meRmCWxdNoYNFMr0bp1g6RDAaSm0+KvG0FF4CyKm9TQkePAEugzp4fN
+   oa1tTt/cpGwirWGVZRJ7XwEbcz1iiOO1RSxJ49dBR9Nr9zHssTyOTCEb3
+   g==;
+X-CSE-ConnectionGUID: kx3tOjxsSL6LHYu5CaMQzA==
+X-CSE-MsgGUID: yikH7kbeSqKhBgDzrV4nxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="63569870"
+X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
+   d="scan'208";a="63569870"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 11:35:24 -0700
+X-CSE-ConnectionGUID: /f+lrVe/RHKTLUpSZ1FSuw==
+X-CSE-MsgGUID: TAb7yJo4S4+xANFndvz91g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
+   d="scan'208";a="173957922"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 09 Sep 2025 11:35:22 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uw3BY-0005B3-18;
+	Tue, 09 Sep 2025 18:35:20 +0000
+Date: Wed, 10 Sep 2025 02:35:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [linuxtv-media-pending:next 102/122]
+ drivers/media/platform/qcom/camss/camss-vfe-340.c:186:21: error: call to
+ undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202509100228.xLeeYzpG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] RISC-V: re-enable gcc + rust builds
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Han Gao <rabenda.cn@gmail.com>, Conor Dooley <conor@kernel.org>,
- rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20250909-gcc-rust-v2-v2-1-35e086b1b255@gmail.com>
- <CANiq72kZAeVjPF_O+o9zy=1-wh+6nUiW26_ngqf8unNi4twMCA@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CANiq72kZAeVjPF_O+o9zy=1-wh+6nUiW26_ngqf8unNi4twMCA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 9/10/25 1:12 AM, Miguel Ojeda wrote:
-> To clarify, since this probably targets the next cycle, there is time
-> to discuss and get feedback to do whatever we feel it is best
-> (personally, I can take a look after Kangrejos at some point). Is
-> there a particular rush for this?
+tree:   https://git.linuxtv.org/media-ci/media-pending.git next
+head:   39d919edea1dd9c254a10b36deeafdbe0c2b813c
+commit: b5e67bd1da323f125dd490d26948a2810b90e181 [102/122] media: qcom: camss: Add support for TFE (Spectra 340)
+config: hexagon-randconfig-002-20250910 (https://download.01.org/0day-ci/archive/20250910/202509100228.xLeeYzpG-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7fb1dc08d2f025aad5777bb779dfac1197e9ef87)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509100228.xLeeYzpG-lkp@intel.com/reproduce)
 
-Nah, no rush, as long as it works so that RISC-V distros can deliver 
-Rust-based components, that's the main issue I'm trying to address.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509100228.xLeeYzpG-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/platform/qcom/camss/camss-vfe-340.c:186:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     186 |                         if (bus_status & TFE_BUS_IRQ_MASK_RUP_DONE(i))
+         |                                          ^
+   drivers/media/platform/qcom/camss/camss-vfe-340.c:36:40: note: expanded from macro 'TFE_BUS_IRQ_MASK_RUP_DONE'
+      36 | #define         TFE_BUS_IRQ_MASK_RUP_DONE(sc)   FIELD_PREP(TFE_BUS_IRQ_MASK_RUP_DONE_MASK, BIT(sc))
+         |                                                 ^
+   drivers/media/platform/qcom/camss/camss-vfe-340.c:191:21: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     191 |                         if (bus_status & TFE_BUS_IRQ_MASK_BUF_DONE(i))
+         |                                          ^
+   drivers/media/platform/qcom/camss/camss-vfe-340.c:38:40: note: expanded from macro 'TFE_BUS_IRQ_MASK_BUF_DONE'
+      38 | #define         TFE_BUS_IRQ_MASK_BUF_DONE(sg)   FIELD_PREP(TFE_BUS_IRQ_MASK_BUF_DONE_MASK, BIT(sg))
+         |                                                 ^
+   2 errors generated.
+
+
+vim +/FIELD_PREP +186 drivers/media/platform/qcom/camss/camss-vfe-340.c
+
+   163	
+   164	static irqreturn_t vfe_isr(int irq, void *dev)
+   165	{
+   166		struct vfe_device *vfe = dev;
+   167		u32 status;
+   168		int i;
+   169	
+   170		status = readl_relaxed(vfe->base + TFE_IRQ_STATUS_0);
+   171		writel_relaxed(status, vfe->base + TFE_IRQ_CLEAR_0);
+   172		writel_relaxed(TFE_IRQ_CMD_CLEAR, vfe->base + TFE_IRQ_CMD);
+   173	
+   174		if (status & TFE_IRQ_MASK_0_RST_DONE) {
+   175			dev_dbg(vfe->camss->dev, "VFE%u: Reset done!", vfe->id);
+   176			vfe_isr_reset_ack(vfe);
+   177		}
+   178	
+   179		if (status & TFE_IRQ_MASK_0_BUS_WR) {
+   180			u32 bus_status = readl_relaxed(vfe->base + TFE_BUS_IRQ_STATUS_0);
+   181	
+   182			writel_relaxed(bus_status, vfe->base + TFE_BUS_IRQ_CLEAR_0);
+   183			writel_relaxed(TFE_BUS_IRQ_CMD_CLEAR, vfe->base + TFE_BUS_IRQ_CMD);
+   184	
+   185			for (i = 0; i < TFE_IFACE_NUM; i++) {
+ > 186				if (bus_status & TFE_BUS_IRQ_MASK_RUP_DONE(i))
+   187					vfe->res->hw_ops->reg_update_clear(vfe, __iface_to_line(i));
+   188			}
+   189	
+   190			for (i = 0; i < TFE_SUBGROUP_NUM; i++) {
+   191				if (bus_status & TFE_BUS_IRQ_MASK_BUF_DONE(i))
+   192					vfe_buf_done(vfe, __subgroup_to_line(i));
+   193			}
+   194	
+   195			if (bus_status & TFE_BUS_IRQ_MASK_0_CONS_VIOL)
+   196				dev_err_ratelimited(vfe->camss->dev, "VFE%u: Bad config violation",
+   197						    vfe->id);
+   198	
+   199			if (bus_status & TFE_BUS_IRQ_MASK_0_VIOL)
+   200				dev_err_ratelimited(vfe->camss->dev, "VFE%u: Input data violation",
+   201						    vfe->id);
+   202	
+   203			if (bus_status & TFE_BUS_IRQ_MASK_0_IMG_VIOL)
+   204				dev_err_ratelimited(vfe->camss->dev, "VFE%u: Image size violation",
+   205						    vfe->id);
+   206		}
+   207	
+   208		status = readl_relaxed(vfe->base + TFE_BUS_OVERFLOW_STATUS);
+   209		if (status) {
+   210			writel_relaxed(status, vfe->base + TFE_BUS_STATUS_CLEAR);
+   211			for (i = 0; i < TFE_WM_NUM; i++) {
+   212				if (status & BIT(i))
+   213					dev_err_ratelimited(vfe->camss->dev,
+   214							    "VFE%u: bus overflow for wm %u\n",
+   215							    vfe->id, i);
+   216			}
+   217		}
+   218	
+   219		return IRQ_HANDLED;
+   220	}
+   221	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
