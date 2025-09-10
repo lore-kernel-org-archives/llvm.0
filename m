@@ -1,40 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1471F3D58;
-	Tue,  9 Sep 2025 21:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1961F0E34;
+	Wed, 10 Sep 2025 01:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757454826; cv=none; b=ABl979wxpqg7PcBz0BI5OO/fMwyVYK71AXrU1GvH0923upXJobmiQC6XJKkChfEcLuwrpjEjTsMgCs4E4ELcDVwGX6YOMYwm0OfYP2Tc8TuQfdKH0UlQ/Qmv4/WElS6msDHaW3NVnZfvvq1Esbed64KluiVFPZkVByJBS3Njozg=
+	t=1757467752; cv=none; b=R6F2oUbDYv2XT1CknMlSnTdMPOEg2fAobO062h0IWGK13WBDnm4GB5R0EM0wOs4Mw5lsVFOCNaValQebyDQiqve0N0TIFKLaWgx07lY+cICRv7nfuEKsLnBsl46rL5x8LpvRoK8+VnSIIN7lpIFRGipNaB9FXUHXOm8z6QRRs4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757454826; c=relaxed/simple;
-	bh=JfV3jcyCfrGLgp5szqgkAln9z/dw+6m7BtuEawilnqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fuSQS/9KlmGDpPTsH3vsUdIY8cVfaOGiCiINxSlJ330yCobsujUlAp/wbQvyJMm8l3YVXk6grFCyjXutceroCHuZfrvBZvJMBeMUTBK0gllS2bkaiiP+hs+HUI2+Ymg8PWomNEOMRt1NUsgzMftI1r1OZxSq+n39NdJH5jYpKbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mv6x6JCp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757467752; c=relaxed/simple;
+	bh=HscWie2Ilk4xQV1Zd+7YGIelayTD0+3EqzpU5bE4Id8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=it4aHnRBCLMUCNxRBsljmaU3QMqlFE0/9K8JSfBoduN1xFiAv/u7QijPXRfSBmsy0fjj/GapXA9Y6tbemrtW1bJ6h4AUi7QXRq6cXQ4zA27jCxBbji71yyQoX/JHY1Um7eiSKP70z0dngHVyT+VdHFetNcAMYVHF1i1hxFPchmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H9DWl5Kq; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mv6x6JCp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B26C4CEF4;
-	Tue,  9 Sep 2025 21:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757454826;
-	bh=JfV3jcyCfrGLgp5szqgkAln9z/dw+6m7BtuEawilnqM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Mv6x6JCpz23oxi9dzTkHo/LiLRkEXdfSXyCBeEVTlBlazUDZwgM/Dvxmvsf6sc5AO
-	 upfsNnLmmG7ErBLIoKhZKe+qu9Ksgug6FvY616Ayk0ku4WEdMrexobSTvLyacfD13b
-	 URNOobeTSKu5NpSfceOTo6mqa2xv140chCL2UvkhVxHE/Z1RyF+DU1GKO0py9JWpdY
-	 cGYPhC4H60VlTsMDKd0RJezh4+pY1+CiAmm5KesVuzeQlJ/nWINFow3mOFTFMVGiN6
-	 Y+WQ7j+7FpxvB/fnvHMRWotC5O+BWOo0RQpCQSLsXw56y1nHwiM1y9Btaa/LnzK5cK
-	 I3JxTJS4RHHUg==
-Date: Tue, 9 Sep 2025 14:53:42 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [jirislaby:devel 28/53] drivers/tty/vt/keyboard.c:1789:7: error:
- cannot jump from this asm goto statement to one of its possible targets
-Message-ID: <20250909215342.GA2456480@ax162>
-References: <202509091702.Oc7eCRDw-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H9DWl5Kq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757467751; x=1789003751;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HscWie2Ilk4xQV1Zd+7YGIelayTD0+3EqzpU5bE4Id8=;
+  b=H9DWl5KqYy1eTgxph0qJheHRhUj1j1SOwGZvdzGHa17fpM+BwB3A/FB+
+   rB3WZfrVk9G1mtslmgpfxwncieZrNTD0S+04HbIi5c6OpNUUn1/+/RQ+Y
+   LAZr7cILj4GZn+64HWYyow+JgQc3ptM1WbiCqDMq4Fw/XHyVRR9iVz5ba
+   6Ou9Uxz46tuk3JVruBEPBcHzr61Q5bnxAJwKnuT0O5mW4SAQI2LRYYl9x
+   OV2Ddf3tLSScl/uO8PzFqIyq9J9Rqb/mEMYoUbwIjGqzjWvJD8AWhzX0R
+   TBXtDdmnnx1g0MMae09KxB9qxeMfAyPyUWmXeHb9n1HQo2azk4IW7vbk6
+   A==;
+X-CSE-ConnectionGUID: hzMojuxKTheRv10sAdcQJQ==
+X-CSE-MsgGUID: +3oaDorvTKuRyYRO0lZbVQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59831765"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="59831765"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 18:29:08 -0700
+X-CSE-ConnectionGUID: N4YyE0CzQp6s/++X2UlYzg==
+X-CSE-MsgGUID: Cm+AoObWTHW/zsMd/lkGIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,252,1751266800"; 
+   d="scan'208";a="173156661"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Sep 2025 18:29:06 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uw9dv-0005Pt-2J;
+	Wed, 10 Sep 2025 01:29:03 +0000
+Date: Wed, 10 Sep 2025 09:28:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/vdso-sparc64-generic-2 3/20]
+ include/linux/seqlock.h:836:9: error: call to undeclared function
+ 'cpu_relax'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202509100933.esuTIrM4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,327 +62,419 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202509091702.Oc7eCRDw-lkp@intel.com>
 
-On Tue, Sep 09, 2025 at 05:10:36PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-> head:   71311086e214f78774f7c36ef14866b211ea94df
-> commit: 215a9ed05f527245cba11f20f81cf39637088b78 [28/53] vt/keyboard: use __free()
-> config: arm64-randconfig-001-20250909 (https://download.01.org/0day-ci/archive/20250909/202509091702.Oc7eCRDw-lkp@intel.com/config)
-> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250909/202509091702.Oc7eCRDw-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509091702.Oc7eCRDw-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/tty/vt/keyboard.c:1789:7: error: cannot jump from this asm goto statement to one of its possible targets
->                    if (get_user(ct, &a->kb_cnt))
->                        ^
->    arch/arm64/include/asm/uaccess.h:272:18: note: expanded from macro 'get_user'
->    #define get_user        __get_user
->                            ^
->    arch/arm64/include/asm/uaccess.h:268:2: note: expanded from macro '__get_user'
->            __get_user_error((x), (ptr), __gu_err);                         \
->            ^
->    arch/arm64/include/asm/uaccess.h:258:3: note: expanded from macro '__get_user_error'
->                    __raw_get_user((x), __p, __gu_failed);                  \
->                    ^
->    note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->    arch/arm64/include/asm/uaccess.h:211:3: note: expanded from macro '__raw_get_mem'
->                    __get_mem_asm(ldr "b", "%w", __gu_val, (ptr), label, type);     \
->                    ^
->    arch/arm64/include/asm/uaccess.h:189:2: note: expanded from macro '__get_mem_asm'
->            asm_goto_output(                                                \
->            ^
->    include/linux/compiler_types.h:488:31: note: expanded from macro 'asm_goto_output'
->    #define asm_goto_output(x...) asm volatile goto(x)
->                                  ^
->    drivers/tty/vt/keyboard.c:1736:7: note: possible target of asm goto statement
->                    if (put_user(asize, &a->kb_cnt))
->                        ^
->    arch/arm64/include/asm/uaccess.h:369:18: note: expanded from macro 'put_user'
->    #define put_user        __put_user
->                            ^
->    arch/arm64/include/asm/uaccess.h:365:2: note: expanded from macro '__put_user'
->            __put_user_error((x), (ptr), __pu_err);                         \
->            ^
->    arch/arm64/include/asm/uaccess.h:355:3: note: expanded from macro '__put_user_error'
->                    __raw_put_user((x), __p, __pu_failed);                  \
->                    ^
->    arch/arm64/include/asm/uaccess.h:342:2: note: expanded from macro '__raw_put_user'
->            __rpu_failed:                                                   \
->            ^
->    drivers/tty/vt/keyboard.c:1784:23: note: jump exits scope of variable with __attribute__((cleanup))
->                    void __free(kfree) *buf = NULL;
->                                        ^
->    drivers/tty/vt/keyboard.c:1722:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
->                    void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
->                                        ^
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/vdso-sparc64-generic-2
+head:   cfbb19760241686a2899d3f83ce4ad7695f61f4b
+commit: 36fdead9d1980586c1db9a961289a181a38086f9 [3/20] vdso/datapage: Make headers always usable
+config: riscv-randconfig-002-20250910 (https://download.01.org/0day-ci/archive/20250910/202509100933.esuTIrM4-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7fb1dc08d2f025aad5777bb779dfac1197e9ef87)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509100933.esuTIrM4-lkp@intel.com/reproduce)
 
-Unfortunately, this is an instance of
-https://github.com/ClangBuiltLinux/linux/issues/1886#issuecomment-1645979992,
-which was fixed in clang-17. This could be worked around by separating
-each case statement into its own function to hide from the scope checker
-but I am not sure how palpable that is...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509100933.esuTIrM4-lkp@intel.com/
 
-Cheers,
-Nathan
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
-index 5c495753c883..1887bf34aa73 100644
---- a/drivers/tty/vt/keyboard.c
-+++ b/drivers/tty/vt/keyboard.c
-@@ -1649,134 +1649,143 @@ int __init kbd_init(void)
- 
- /* Ioctl support code */
- 
--/**
-- *	vt_do_diacrit		-	diacritical table updates
-- *	@cmd: ioctl request
-- *	@udp: pointer to user data for ioctl
-- *	@perm: permissions check computed by caller
-- *
-- *	Update the diacritical tables atomically and safely. Lock them
-- *	against simultaneous keypresses
-- */
--int vt_do_diacrit(unsigned int cmd, void __user *udp, int perm)
-+static int vt_do_kdgkbdiacr(void __user *udp)
- {
--	int asize;
--
--	switch (cmd) {
--	case KDGKBDIACR:
--	{
--		struct kbdiacrs __user *a = udp;
--		int i;
-+	struct kbdiacrs __user *a = udp;
-+	int i, asize;
- 
--		struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
--								  GFP_KERNEL);
--		if (!dia)
--			return -ENOMEM;
-+	struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
-+							  GFP_KERNEL);
-+	if (!dia)
-+		return -ENOMEM;
- 
--		/* Lock the diacriticals table, make a copy and then
--		   copy it after we unlock */
--		scoped_guard(spinlock_irqsave, &kbd_event_lock) {
--			asize = accent_table_size;
--			for (i = 0; i < asize; i++) {
--				dia[i].diacr = conv_uni_to_8bit(accent_table[i].diacr);
--				dia[i].base = conv_uni_to_8bit(accent_table[i].base);
--				dia[i].result = conv_uni_to_8bit(accent_table[i].result);
--			}
-+	/* Lock the diacriticals table, make a copy and then
-+	   copy it after we unlock */
-+	scoped_guard(spinlock_irqsave, &kbd_event_lock) {
-+		asize = accent_table_size;
-+		for (i = 0; i < asize; i++) {
-+			dia[i].diacr = conv_uni_to_8bit(accent_table[i].diacr);
-+			dia[i].base = conv_uni_to_8bit(accent_table[i].base);
-+			dia[i].result = conv_uni_to_8bit(accent_table[i].result);
- 		}
--
--		if (put_user(asize, &a->kb_cnt))
--			return -EFAULT;
--		if (copy_to_user(a->kbdiacr, dia, asize * sizeof(struct kbdiacr)))
--			return -EFAULT;
--		return 0;
- 	}
--	case KDGKBDIACRUC:
--	{
--		struct kbdiacrsuc __user *a = udp;
- 
--		void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
--							GFP_KERNEL);
--		if (buf == NULL)
--			return -ENOMEM;
-+	if (put_user(asize, &a->kb_cnt))
-+		return -EFAULT;
-+	if (copy_to_user(a->kbdiacr, dia, asize * sizeof(struct kbdiacr)))
-+		return -EFAULT;
-+	return 0;
-+}
- 
--		/* Lock the diacriticals table, make a copy and then
--		   copy it after we unlock */
--		scoped_guard(spinlock_irqsave, &kbd_event_lock) {
--			asize = accent_table_size;
--			memcpy(buf, accent_table, asize * sizeof(struct kbdiacruc));
--		}
-+static int vt_do_kdgkbdiacruc(void __user *udp)
-+{
-+	struct kbdiacrsuc __user *a = udp;
-+	int asize;
- 
--		if (put_user(asize, &a->kb_cnt))
--			return -EFAULT;
--		if (copy_to_user(a->kbdiacruc, buf, asize * sizeof(struct kbdiacruc)))
--			return -EFAULT;
-+	void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
-+						GFP_KERNEL);
-+	if (buf == NULL)
-+		return -ENOMEM;
- 
--		return 0;
-+	/* Lock the diacriticals table, make a copy and then
-+	   copy it after we unlock */
-+	scoped_guard(spinlock_irqsave, &kbd_event_lock) {
-+		asize = accent_table_size;
-+		memcpy(buf, accent_table, asize * sizeof(struct kbdiacruc));
- 	}
- 
--	case KDSKBDIACR:
--	{
--		struct kbdiacrs __user *a = udp;
--		struct kbdiacr __free(kfree) *dia = NULL;
--		unsigned int ct;
--		int i;
-+	if (put_user(asize, &a->kb_cnt))
-+		return -EFAULT;
-+	if (copy_to_user(a->kbdiacruc, buf, asize * sizeof(struct kbdiacruc)))
-+		return -EFAULT;
- 
--		if (!perm)
--			return -EPERM;
--		if (get_user(ct, &a->kb_cnt))
--			return -EFAULT;
--		if (ct >= MAX_DIACR)
--			return -EINVAL;
-+	return 0;
-+}
- 
--		if (ct) {
--			dia = memdup_array_user(a->kbdiacr,
--						ct, sizeof(struct kbdiacr));
--			if (IS_ERR(dia))
--				return PTR_ERR(dia);
--		}
-+static int vt_do_kdskbdiacr(void __user *udp, int perm)
-+{
-+	struct kbdiacrs __user *a = udp;
-+	struct kbdiacr __free(kfree) *dia = NULL;
-+	unsigned int ct;
-+	int i;
- 
--		guard(spinlock_irqsave)(&kbd_event_lock);
--		accent_table_size = ct;
--		for (i = 0; i < ct; i++) {
--			accent_table[i].diacr =
--					conv_8bit_to_uni(dia[i].diacr);
--			accent_table[i].base =
--					conv_8bit_to_uni(dia[i].base);
--			accent_table[i].result =
--					conv_8bit_to_uni(dia[i].result);
--		}
-+	if (!perm)
-+		return -EPERM;
-+	if (get_user(ct, &a->kb_cnt))
-+		return -EFAULT;
-+	if (ct >= MAX_DIACR)
-+		return -EINVAL;
- 
--		return 0;
-+	if (ct) {
-+		dia = memdup_array_user(a->kbdiacr,
-+					ct, sizeof(struct kbdiacr));
-+		if (IS_ERR(dia))
-+			return PTR_ERR(dia);
- 	}
- 
--	case KDSKBDIACRUC:
--	{
--		struct kbdiacrsuc __user *a = udp;
--		unsigned int ct;
--		void __free(kfree) *buf = NULL;
-+	guard(spinlock_irqsave)(&kbd_event_lock);
-+	accent_table_size = ct;
-+	for (i = 0; i < ct; i++) {
-+		accent_table[i].diacr =
-+				conv_8bit_to_uni(dia[i].diacr);
-+		accent_table[i].base =
-+				conv_8bit_to_uni(dia[i].base);
-+		accent_table[i].result =
-+				conv_8bit_to_uni(dia[i].result);
-+	}
- 
--		if (!perm)
--			return -EPERM;
-+	return 0;
-+}
- 
--		if (get_user(ct, &a->kb_cnt))
--			return -EFAULT;
-+static int vt_do_kdskbdiacruc(void __user *udp, int perm)
-+{
-+	struct kbdiacrsuc __user *a = udp;
-+	unsigned int ct;
-+	void __free(kfree) *buf = NULL;
- 
--		if (ct >= MAX_DIACR)
--			return -EINVAL;
-+	if (!perm)
-+		return -EPERM;
- 
--		if (ct) {
--			buf = memdup_array_user(a->kbdiacruc,
--						ct, sizeof(struct kbdiacruc));
--			if (IS_ERR(buf))
--				return PTR_ERR(buf);
--		}
--		guard(spinlock_irqsave)(&kbd_event_lock);
--		if (ct)
--			memcpy(accent_table, buf,
--					ct * sizeof(struct kbdiacruc));
--		accent_table_size = ct;
--		return 0;
-+	if (get_user(ct, &a->kb_cnt))
-+		return -EFAULT;
-+
-+	if (ct >= MAX_DIACR)
-+		return -EINVAL;
-+
-+	if (ct) {
-+		buf = memdup_array_user(a->kbdiacruc,
-+					ct, sizeof(struct kbdiacruc));
-+		if (IS_ERR(buf))
-+			return PTR_ERR(buf);
- 	}
-+	guard(spinlock_irqsave)(&kbd_event_lock);
-+	if (ct)
-+		memcpy(accent_table, buf,
-+				ct * sizeof(struct kbdiacruc));
-+	accent_table_size = ct;
-+	return 0;
-+}
-+
-+/**
-+ *	vt_do_diacrit		-	diacritical table updates
-+ *	@cmd: ioctl request
-+ *	@udp: pointer to user data for ioctl
-+ *	@perm: permissions check computed by caller
-+ *
-+ *	Update the diacritical tables atomically and safely. Lock them
-+ *	against simultaneous keypresses
-+ */
-+int vt_do_diacrit(unsigned int cmd, void __user *udp, int perm)
-+{
-+	switch (cmd) {
-+	case KDGKBDIACR:
-+		return vt_do_kdgkbdiacr(udp);
-+	case KDGKBDIACRUC:
-+		return vt_do_kdgkbdiacruc(udp);
-+	case KDSKBDIACR:
-+		return vt_do_kdskbdiacr(udp, perm);
-+	case KDSKBDIACRUC:
-+		return vt_do_kdskbdiacruc(udp, perm);
- 	}
- 	return 0;
- }
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:17:
+>> include/linux/seqlock.h:836:9: error: call to undeclared function 'cpu_relax'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     836 |         return read_seqcount_begin(&sl->seqcount);
+         |                ^
+   include/linux/seqlock.h:299:2: note: expanded from macro 'read_seqcount_begin'
+     299 |         raw_read_seqcount_begin(s);                                     \
+         |         ^
+   include/linux/seqlock.h:288:36: note: expanded from macro 'raw_read_seqcount_begin'
+     288 | #define raw_read_seqcount_begin(s) __read_seqcount_begin(s)
+         |                                    ^
+   include/linux/seqlock.h:276:3: note: expanded from macro '__read_seqcount_begin'
+     276 |                 cpu_relax();                                            \
+         |                 ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                                      ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+--
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:24: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+         |                                      ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
+     140 |                 r->sig[3] = op(a3, b3);                                 \
+         |                 ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:141:3: note: expanded from macro '_SIG_SET_BINOP'
+     141 |                 r->sig[2] = op(a2, b2);                                 \
+         |                 ^      ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:27: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                                  ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                 ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                                  ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                 ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:13:
+   In file included from include/linux/posix-timers.h:5:
+   In file included from include/linux/alarmtimer.h:6:
+>> include/linux/hrtimer.h:222:2: error: call to undeclared function 'cpu_relax'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     222 |         cpu_relax();
+         |         ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     804 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     812 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     820 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     829 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     838 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     847 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:11:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:29:
+   In file included from include/linux/cgroup-defs.h:20:
+>> include/linux/u64_stats_sync.h:171:9: error: call to undeclared function 'cpu_relax'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     171 |         return read_seqcount_begin(&syncp->seq);
+         |                ^
+   include/linux/seqlock.h:299:2: note: expanded from macro 'read_seqcount_begin'
+     299 |         raw_read_seqcount_begin(s);                                     \
+         |         ^
+   include/linux/seqlock.h:288:36: note: expanded from macro 'raw_read_seqcount_begin'
+     288 | #define raw_read_seqcount_begin(s) __read_seqcount_begin(s)
+         |                                    ^
+   include/linux/seqlock.h:276:3: note: expanded from macro '__read_seqcount_begin'
+     276 |                 cpu_relax();                                            \
+         |                 ^
+   In file included from arch/riscv/kernel/asm-offsets.c:11:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+>> include/linux/cgroup.h:481:3: error: call to undeclared function 'cpu_relax'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     481 |                 cpu_relax();
+         |                 ^
+   35 warnings and 4 errors generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=3791524517
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1282: prepare0] Error 2 shuffle=3791524517
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3791524517
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3791524517
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/cpu_relax +836 include/linux/seqlock.h
+
+9b0fd802e8c054 Mathieu Desnoyers         2014-07-16  804  
+6617feca15c68a Thomas Gleixner           2011-07-16  805  #define __SEQLOCK_UNLOCKED(lockname)					\
+6617feca15c68a Thomas Gleixner           2011-07-16  806  	{								\
+1909760f5fc3f1 Ahmed S. Darwish          2020-09-04  807  		.seqcount = SEQCNT_SPINLOCK_ZERO(lockname, &(lockname).lock), \
+6617feca15c68a Thomas Gleixner           2011-07-16  808  		.lock =	__SPIN_LOCK_UNLOCKED(lockname)			\
+6617feca15c68a Thomas Gleixner           2011-07-16  809  	}
+6617feca15c68a Thomas Gleixner           2011-07-16  810  
+89b88845e05752 Ahmed S. Darwish          2020-07-20  811  /**
+89b88845e05752 Ahmed S. Darwish          2020-07-20  812   * seqlock_init() - dynamic initializer for seqlock_t
+89b88845e05752 Ahmed S. Darwish          2020-07-20  813   * @sl: Pointer to the seqlock_t instance
+89b88845e05752 Ahmed S. Darwish          2020-07-20  814   */
+89b88845e05752 Ahmed S. Darwish          2020-07-20  815  #define seqlock_init(sl)						\
+6617feca15c68a Thomas Gleixner           2011-07-16  816  	do {								\
+89b88845e05752 Ahmed S. Darwish          2020-07-20  817  		spin_lock_init(&(sl)->lock);				\
+1909760f5fc3f1 Ahmed S. Darwish          2020-09-04  818  		seqcount_spinlock_init(&(sl)->seqcount, &(sl)->lock);	\
+6617feca15c68a Thomas Gleixner           2011-07-16  819  	} while (0)
+6617feca15c68a Thomas Gleixner           2011-07-16  820  
+89b88845e05752 Ahmed S. Darwish          2020-07-20  821  /**
+24a18772868222 Sebastian Andrzej Siewior 2020-09-24  822   * DEFINE_SEQLOCK(sl) - Define a statically allocated seqlock_t
+89b88845e05752 Ahmed S. Darwish          2020-07-20  823   * @sl: Name of the seqlock_t instance
+89b88845e05752 Ahmed S. Darwish          2020-07-20  824   */
+89b88845e05752 Ahmed S. Darwish          2020-07-20  825  #define DEFINE_SEQLOCK(sl) \
+89b88845e05752 Ahmed S. Darwish          2020-07-20  826  		seqlock_t sl = __SEQLOCK_UNLOCKED(sl)
+6617feca15c68a Thomas Gleixner           2011-07-16  827  
+89b88845e05752 Ahmed S. Darwish          2020-07-20  828  /**
+89b88845e05752 Ahmed S. Darwish          2020-07-20  829   * read_seqbegin() - start a seqlock_t read side critical section
+89b88845e05752 Ahmed S. Darwish          2020-07-20  830   * @sl: Pointer to seqlock_t
+89b88845e05752 Ahmed S. Darwish          2020-07-20  831   *
+89b88845e05752 Ahmed S. Darwish          2020-07-20  832   * Return: count, to be passed to read_seqretry()
+6617feca15c68a Thomas Gleixner           2011-07-16  833   */
+6617feca15c68a Thomas Gleixner           2011-07-16  834  static inline unsigned read_seqbegin(const seqlock_t *sl)
+6617feca15c68a Thomas Gleixner           2011-07-16  835  {
+183ec5f26b2fc9 Marco Elver               2024-11-04 @836  	return read_seqcount_begin(&sl->seqcount);
+6617feca15c68a Thomas Gleixner           2011-07-16  837  }
+6617feca15c68a Thomas Gleixner           2011-07-16  838  
+
+:::::: The code at line 836 was first introduced by commit
+:::::: 183ec5f26b2fc97a4a9871865bfe9b33c41fddb2 kcsan, seqlock: Fix incorrect assumption in read_seqbegin()
+
+:::::: TO: Marco Elver <elver@google.com>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
