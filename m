@@ -1,213 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE679276051;
-	Wed, 10 Sep 2025 20:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D88224AF3;
+	Wed, 10 Sep 2025 23:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757536747; cv=none; b=JLuZpEpPDzaEFjwKvqrKXVI0eZPLdVbgSSB7g81R9lWj3cj2YzLQoxmBqT2EoBGA74Y6euzcAjvhhqql19hhqrKnikoIYC9PHZr3hUrBn/pMQN0OJ0bvDRM/ptQsi6q4vO5tEHHTN8xkfss7NQP6r8Ue/Cgk9ZJJRFdvOK8DBCw=
+	t=1757546181; cv=none; b=k5jLuhesJH8QscYgmiV85kmInKW8MrEMVmUq097OoHZkiebwTzfXtcOPwytUcjUUVQnGXLtD8tPxHgIJ78702CP487kmuQIwpckmLcD67qf5Y+G2rpTlFE9xEGTMQLhQr0e3uMZc7pVY6owHOKi2RulhQWKpGlundttHyEOROvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757536747; c=relaxed/simple;
-	bh=B6fkvpBK+Ee+0YOFckXyRfEu8C3ZmYjOmbvJLcYj7rE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oHdMcnh2VV+GoCnJ0/2BC9O5XjeB6RLlvkVGHMDduuDTBwfB7UbyulnhQhj5O3POB/PI7D2TB9yv7a2CKxcZr0SOZlK1wstKwvuHdLCH9rXcwtqW6Pn4khAF2dbKOWAbb+yoLn+nLCyuqnCDueuFKgRNmvyRxbdxjV5Kr6F6gTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EF3ia0m2; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1757546181; c=relaxed/simple;
+	bh=9aOxjr11JbWeRsCcuR3pvqpQ2x8opRYC+Cx28BGCnS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CfZsixvaeuQRKCz36hNsvymbSuXmhGwm83yEB6++mY0XGTBvkyM50//8mAEnDgcYc17jvXsc1o3PZAtI0tBU5uD3aooYhpmx5gAZkyTj1HHfaXJg1BwyQAgfLOn5/1RECxogpvdqHU7Uz3d3WG47f39oVdHRe80M6hY/zVnH/YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CHK1Mf5r; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EF3ia0m2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHK1Mf5r"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757536746; x=1789072746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B6fkvpBK+Ee+0YOFckXyRfEu8C3ZmYjOmbvJLcYj7rE=;
-  b=EF3ia0m2CVyH6+95CotBl+oX2wu960ATK/tsFzRpRM7vf1h0RBfefm71
-   /XcsuNusKaQLNVdAvIkSERh6j9wcqI0IIec4O3KOaWyjNfFDpI/PyTbrL
-   h3Xg/7vXYlQab+0gIWasyO9/8idPMPZkr2gxIm8nwo5zZnj+VBoS3Ij3D
-   dPQJv4ndGg9S2R2SFqf8UCpJrbhoEUXs51+2tdkYrq81DZMMQ0/twpc7b
-   cuOL0giJqcOliwTCyjnpU4JEO9gY8l8ytRZsJPNK3msAwMzE5nodHk8PB
-   cEuhwAq89qlqvqgqonwzC2mdYPM3lp5YDrYEqrFJecF4qjlHTT5YXbHMX
-   A==;
-X-CSE-ConnectionGUID: y7pB+KzPRC+hHuNOBORkFg==
-X-CSE-MsgGUID: q9xPx6BsQvW/HTVyj7HrsA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="59083177"
-X-IronPort-AV: E=Sophos;i="6.18,255,1751266800"; 
-   d="scan'208";a="59083177"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 13:39:05 -0700
-X-CSE-ConnectionGUID: 0pc5aoHiT2OxenyLymEnVA==
-X-CSE-MsgGUID: Sz8c7R3oQ0WyCVA7akPy3A==
+  t=1757546180; x=1789082180;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9aOxjr11JbWeRsCcuR3pvqpQ2x8opRYC+Cx28BGCnS8=;
+  b=CHK1Mf5rW2jplDmoE+5HnoF70K3aLmWpopsv+RwBL/GOZRKBtV2mpU94
+   PxB0daHPz80GtapndR5OUKyilJNU/QR7z2Hz/DfL3XpP2D11xw3JIIPKm
+   sICLDNKTFdbBTFdOw3e/FKaBF+X48Htp9P4lDkPzwnquU25txgh/VCERJ
+   +o5405aIthFX4MLUfcJQdezie/UuaV9zc9UNC+JVJr0aBI6AZda7pZFP/
+   CXqqslkFgEdqDtmb/IXgdDheu0oE5TAMN7g+GK+hBGFxdwwHHLCGrdGUb
+   SbdiRUHrM1N2hxcxwTJ3HaySVLcQwSYMtMCIlJIu8VR/rFdJFbvXmcIa4
+   Q==;
+X-CSE-ConnectionGUID: NZqCYsJMTSKsRQF0zTRrgw==
+X-CSE-MsgGUID: l9UG1oXGShGsxiWqemYpXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63699084"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63699084"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 16:16:17 -0700
+X-CSE-ConnectionGUID: eDasrrH0RdSrYgdw1txesg==
+X-CSE-MsgGUID: iitMak+ISfKDFegrY6t8NA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,255,1751266800"; 
-   d="scan'208";a="210615967"
+   d="scan'208";a="173429375"
 Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 10 Sep 2025 13:39:00 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 10 Sep 2025 16:16:15 -0700
 Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uwRaj-0006GZ-2H;
-	Wed, 10 Sep 2025 20:38:57 +0000
-Date: Thu, 11 Sep 2025 04:38:15 +0800
+	id 1uwU2v-0006Lx-0k;
+	Wed, 10 Sep 2025 23:16:13 +0000
+Date: Thu, 11 Sep 2025 07:15:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Herve Codina (Schneider Electric)" <herve.codina@bootlin.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Hoan Tran <hoan@os.amperecomputing.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Serge Semin <fancer.lancer@gmail.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Phil Edworthy <phil.edworthy@renesas.com>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Pascal Eberhard <pascal.eberhard@se.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 3/8] of/irq: Introduce for_each_of_imap_item
-Message-ID: <202509110402.OHHgtxRA-lkp@intel.com>
-References: <20250909120041.154459-4-herve.codina@bootlin.com>
+	intel-xe@lists.freedesktop.org,
+	Matthew Brost <matthew.brost@intel.com>
+Subject: [drm-xe:drm-xe-next 12/13]
+ drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_stolen.h:46:9: warning:
+ variable 'err' is uninitialized when used here
+Message-ID: <202509110707.feCc83AG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250909120041.154459-4-herve.codina@bootlin.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Herve,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on tip/irq/core linus/master v6.17-rc5 next-20250910]
-[cannot apply to geert-renesas-devel/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina-Schneider-Electric/ARM-dts-r9a06g032-Add-GPIO-controllers/20250909-200642
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250909120041.154459-4-herve.codina%40bootlin.com
-patch subject: [PATCH v2 3/8] of/irq: Introduce for_each_of_imap_item
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250911/202509110402.OHHgtxRA-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250911/202509110402.OHHgtxRA-lkp@intel.com/reproduce)
+tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+head:   844150c255c94230aec41f88db8e2875cb97439e
+commit: 1f1541720f651727591411e68c16299de0447b43 [12/13] drm/xe: Rework instances of variants of xe_bo_create_locked()
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250911/202509110707.feCc83AG-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250911/202509110707.feCc83AG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509110402.OHHgtxRA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509110707.feCc83AG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/base/platform.c:15:
->> include/linux/of_irq.h:123:29: warning: no previous prototype for function 'of_imap_parser_one' [-Wmissing-prototypes]
-     123 | extern struct of_imap_item *of_imap_parser_one(struct of_imap_parser *parser,
-         |                             ^
-   include/linux/of_irq.h:123:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     123 | extern struct of_imap_item *of_imap_parser_one(struct of_imap_parser *parser,
-         |        ^
+   In file included from drivers/gpu/drm/i915/display/intel_fbc.c:47:
+>> drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_stolen.h:46:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+      46 |         return err;
+         |                ^~~
+   drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_stolen.h:25:9: note: initialize the variable 'err' to silence this warning
+      25 |         int err;
+         |                ^
+         |                 = 0
    1 warning generated.
 
 
-vim +/of_imap_parser_one +123 include/linux/of_irq.h
+vim +/err +46 drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_stolen.h
 
-    58	
-    59	extern int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq);
-    60	extern unsigned int irq_create_of_mapping(struct of_phandle_args *irq_data);
-    61	extern int of_irq_to_resource(struct device_node *dev, int index,
-    62				      struct resource *r);
-    63	
-    64	#ifdef CONFIG_OF_IRQ
-    65	extern void of_irq_init(const struct of_device_id *matches);
-    66	extern int of_irq_parse_one(struct device_node *device, int index,
-    67				  struct of_phandle_args *out_irq);
-    68	extern int of_irq_count(struct device_node *dev);
-    69	extern int of_irq_get(struct device_node *dev, int index);
-    70	extern int of_irq_get_byname(struct device_node *dev, const char *name);
-    71	extern int of_irq_to_resource_table(struct device_node *dev,
-    72			struct resource *res, int nr_irqs);
-    73	extern struct device_node *of_irq_find_parent(struct device_node *child);
-    74	extern int of_imap_parser_init(struct of_imap_parser *parser,
-    75				       struct device_node *node,
-    76				       struct of_imap_item *item);
-    77	extern struct of_imap_item *of_imap_parser_one(struct of_imap_parser *parser,
-    78						       struct of_imap_item *item);
-    79	extern struct irq_domain *of_msi_get_domain(struct device *dev,
-    80						    const struct device_node *np,
-    81						    enum irq_domain_bus_token token);
-    82	extern struct irq_domain *of_msi_map_get_device_domain(struct device *dev,
-    83								u32 id,
-    84								u32 bus_token);
-    85	extern void of_msi_configure(struct device *dev, const struct device_node *np);
-    86	extern u32 of_msi_xlate(struct device *dev, struct device_node **msi_np, u32 id_in);
-    87	#else
-    88	static inline void of_irq_init(const struct of_device_id *matches)
-    89	{
-    90	}
-    91	static inline int of_irq_parse_one(struct device_node *device, int index,
-    92					   struct of_phandle_args *out_irq)
-    93	{
-    94		return -EINVAL;
-    95	}
-    96	static inline int of_irq_count(struct device_node *dev)
-    97	{
-    98		return 0;
-    99	}
-   100	static inline int of_irq_get(struct device_node *dev, int index)
-   101	{
-   102		return 0;
-   103	}
-   104	static inline int of_irq_get_byname(struct device_node *dev, const char *name)
-   105	{
-   106		return 0;
-   107	}
-   108	static inline int of_irq_to_resource_table(struct device_node *dev,
-   109						   struct resource *res, int nr_irqs)
-   110	{
-   111		return 0;
-   112	}
-   113	static inline void *of_irq_find_parent(struct device_node *child)
-   114	{
-   115		return NULL;
-   116	}
-   117	static inline int of_imap_parser_init(struct of_imap_parser *parser,
-   118					      struct device_node *node,
-   119					      struct of_imap_item *item)
-   120	{
-   121		return -ENOSYS;
-   122	}
- > 123	extern struct of_imap_item *of_imap_parser_one(struct of_imap_parser *parser,
-   124						       struct of_imap_item *item)
-   125	{
-   126		return NULL;
-   127	}
-   128	static inline struct irq_domain *of_msi_get_domain(struct device *dev,
-   129							   struct device_node *np,
-   130							   enum irq_domain_bus_token token)
-   131	{
-   132		return NULL;
-   133	}
-   134	static inline struct irq_domain *of_msi_map_get_device_domain(struct device *dev,
-   135							u32 id, u32 bus_token)
-   136	{
-   137		return NULL;
-   138	}
-   139	static inline void of_msi_configure(struct device *dev, struct device_node *np)
-   140	{
-   141	}
-   142	static inline u32 of_msi_xlate(struct device *dev, struct device_node **msi_np, u32 id_in)
-   143	{
-   144		return id_in;
-   145	}
-   146	#endif
-   147	
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  18  
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  19  static inline int i915_gem_stolen_insert_node_in_range(struct xe_device *xe,
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  20  						       struct i915_stolen_fb *fb,
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  21  						       u32 size, u32 align,
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  22  						       u32 start, u32 end)
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  23  {
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  24  	struct xe_bo *bo;
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  25  	int err;
+62742d12663145 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Lucas De Marchi     2024-03-22  26  	u32 flags = XE_BO_FLAG_PINNED | XE_BO_FLAG_STOLEN;
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  27  
+48b1f11c95e8c9 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Matthew Auld        2024-04-12  28  	if (start < SZ_4K)
+48b1f11c95e8c9 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Matthew Auld        2024-04-12  29  		start = SZ_4K;
+48b1f11c95e8c9 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Matthew Auld        2024-04-12  30  
+48b1f11c95e8c9 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Matthew Auld        2024-04-12  31  	if (align) {
+8ea8c918e7dbd5 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Vinod Govindapillai 2024-01-12  32  		size = ALIGN(size, align);
+48b1f11c95e8c9 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Matthew Auld        2024-04-12  33  		start = ALIGN(start, align);
+48b1f11c95e8c9 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Matthew Auld        2024-04-12  34  	}
+8ea8c918e7dbd5 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Vinod Govindapillai 2024-01-12  35  
+1f1541720f6517 drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_stolen.h Thomas Hellström    2025-09-08  36  	bo = xe_bo_create_pin_range_novm(xe, xe_device_get_root_tile(xe),
+1f1541720f6517 drivers/gpu/drm/xe/compat-i915-headers/gem/i915_gem_stolen.h Thomas Hellström    2025-09-08  37  					 size, start, end, ttm_bo_type_kernel, flags);
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  38  	if (IS_ERR(bo)) {
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  39  		err = PTR_ERR(bo);
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  40  		bo = NULL;
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  41  		return err;
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  42  	}
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  43  
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  44  	fb->bo = bo;
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  45  
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13 @46  	return err;
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  47  }
+c5a2eadd729ba3 drivers/gpu/drm/xe/compat-i915-headers/i915_gem_stolen.h     Jouni Högander      2023-09-13  48  
+
+:::::: The code at line 46 was first introduced by commit
+:::::: c5a2eadd729ba3538f77ea2e055ca1f2efe82092 drm/xe/display: Xe stolen memory handling for fbc support
+
+:::::: TO: Jouni Högander <jouni.hogander@intel.com>
+:::::: CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
