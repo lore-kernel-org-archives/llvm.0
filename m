@@ -1,173 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A23324B33;
-	Wed, 10 Sep 2025 14:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7166415E5D4;
+	Wed, 10 Sep 2025 15:15:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757514447; cv=none; b=PHbNeRMfe6ZEte50Sg9YkgAiP1kJrrJAN/je0Ps4SQhylOq92KQfghh6ak4yX4ogRrhTYIHaRce1mPLAEM0jNGMeKH79+Y1b5Ki7jG3h2QPtHDkorBQQdEnWbVYXv2F1Obr2qg4HWoytJk34+ECj5/GkTC5LlkEw4vMPp6jg1h8=
+	t=1757517332; cv=none; b=Tdv5ZtkmX7GSHOWbE/a3FLtn3u1+SUSx6MgaasgOzKHErQ2mEa3JMsVkADPjnG72QBidY/x3UAFt2nvlpH1Lw3ST7kWj+zW38rNx9YaVXXCUGcdOgJnY3yGSSpFn3yOijsfQ8Jgm1+hNfs1EG+Trd8gaH3WYG2AnJBnsZx7xdG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757514447; c=relaxed/simple;
-	bh=5g5RBXhPqG8J7yMsN/VQOQGJMxPjWBvVy7aoWO0AUds=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=brBrs2Q17O1PDqFUu9PVmTpXIROO7S5NwWT/uFEyeRGjsH89Hoh25blibtwd2cnYsiEurHB6ICOjHhlywS1wlaeeLpK5cxwBlW32HxWyNPaFbfSc86yLmi2dGeic2vn5ZNIfNOE0PZTCSCjUVTT3racjq6BUcv0Z4qYWD+zVVVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VgVuC69I; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757517332; c=relaxed/simple;
+	bh=004ojRjA0Z1v7vY42xy8S+nXCdgtTiqcCSVmkxVZ4dc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XqcrJpQXWBJ5u6GGzrrJjZksChPD4wjpYd/xV+spjV20hVjXv+8mfPiwbdj/uMT9xRTV4JlLz23qgvcjPONfxNbWnkhSgWthrPXcKupqgYGPFWHYEbObAeiCyNxSQK/3WimBp6HCiiyCcVjE8UcrI7ICTbMTrFn7snksGDbidV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G4Tr3Iwq; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VgVuC69I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A3DC4CEEB;
-	Wed, 10 Sep 2025 14:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757514447;
-	bh=5g5RBXhPqG8J7yMsN/VQOQGJMxPjWBvVy7aoWO0AUds=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VgVuC69I2qrVBPMfqkgTTLxAyUIuw76pJEbQ38ySGUovDRmI8lPGgl9VOtjd0N5ef
-	 ijzr+reZCZmyXh7jK3TI9w4LOjsS70ahUFH/iBSe6PJP3ZV14vJZy5OGTn2wdxqYgY
-	 JWJeQGDYoyH2qG2JTGXF5R7IYQXN/PC7+0AbzzqLmgxIvN/YzpsxHWzo+4zhGXAt5r
-	 riklA7PCu75l3QKjY2ueNesmDrZRW76jCTBEXlAFmyqVW1DWdi+Dv5cA3FFMgvg8Ps
-	 I7IhPyT7ZSQpELg1/N13ETsNErDw67UnFcc5RPVjsxCAHEMp/hh7teC8KDfrpj5FOR
-	 m8Lmz6j7BcKkA==
-Date: Wed, 10 Sep 2025 15:27:19 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Asuna Yang <spriteovo@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Han Gao <rabenda.cn@gmail.com>, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] RISC-V: re-enable gcc + rust builds
-Message-ID: <20250910-harmless-bamboo-ebc94758fdad@spud>
-References: <20250909-gcc-rust-v2-v2-1-35e086b1b255@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G4Tr3Iwq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757517330; x=1789053330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=004ojRjA0Z1v7vY42xy8S+nXCdgtTiqcCSVmkxVZ4dc=;
+  b=G4Tr3Iwq0889vCDpekqgvyVHwLqmY6ZE5qX42E6BUJTP132oODy1j9Lf
+   UCVrFf6EuqRRj1qMDS3xzsi+UmZYtpH+5y0F2qTjawf5ELJvjkqZ3auwc
+   0MMw+8CHYD3isOazoik4ntZH1m7LmCqsIi7TVzu+j3MHe7Ugj+eDdZEAt
+   1a1IqypoEvns2SzURqJYDrm8UPbQbjqBv2ZjEt8PL4k+WcrmjYvc9LIlH
+   WlLR5DEN59mblt41K87Z0sSx+yS12UJCnf9eBKy61sU/xmcLU8CiRIbAA
+   PpYaueKmzwoGAgkUQN6ThfbjEjI5d+ps/UOFgjmIdv4JyIec9vHxwaADA
+   g==;
+X-CSE-ConnectionGUID: fmcLc03ITaOHI6HDKy2j9A==
+X-CSE-MsgGUID: 0JRPCC1bTRi+szDyzr/GIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="70522075"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="70522075"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 08:15:29 -0700
+X-CSE-ConnectionGUID: yAMFH3p8QfWZkK7/iwf6WA==
+X-CSE-MsgGUID: mHZVKwI5RXeAYRmizsn1Bw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="174225326"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 10 Sep 2025 08:15:28 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uwMXe-000635-0i;
+	Wed, 10 Sep 2025 15:15:26 +0000
+Date: Wed, 10 Sep 2025 23:14:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-xe@lists.freedesktop.org,
+	Matthew Brost <matthew.brost@intel.com>
+Subject: [drm-xe:drm-xe-next 7/13]
+ drivers/gpu/drm/xe/display/xe_fb_pin.c:314:8: warning: variable 'ret' is
+ uninitialized when used here
+Message-ID: <202509102218.kZLrvcuD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9LQSzFz/Ck3gJsLT"
-Content-Disposition: inline
-In-Reply-To: <20250909-gcc-rust-v2-v2-1-35e086b1b255@gmail.com>
-
-
---9LQSzFz/Ck3gJsLT
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 09, 2025 at 06:53:11PM +0200, Asuna Yang wrote:
-> Commit 33549fcf37ec ("RISC-V: disallow gcc + rust builds") disabled GCC
-> + Rust builds for RISC-V due to differences in extension handling
-> compared to LLVM.
->=20
-> Add a Kconfig symbol to indicate the version of libclang used by Rust
-> bindgen and add conditions for the availability of libclang to the
-> RISC-V extension Kconfig symbols that depend on the cc-option function.
->=20
-> For Zicsr/Zifencei special handling, since LLVM/Clang always enables
-> these two extensions, either don't pass them to -march, or pass them
-> explicitly and Rust bindgen libclang must recognize them.
->=20
-> Clang does not support -mno-riscv-attribute flag, filter it out to
-> resolve error: unknown argument: '-mno-riscv-attribute'.
->=20
-> Define BINDGEN_TARGET_riscv to pass the target triplet to Rust bindgen
-> libclang for RISC-V to resolve error: unsupported argument 'medany' to
-> option '-mcmodel=3D' for target 'unknown'. Improve to output a clearer
-> error message if the target triplet is undefined for Rust bindgen
-> libclang.
->=20
-> Update the documentation, GCC + Rust builds are now supported.
->=20
-> ---
+tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+head:   844150c255c94230aec41f88db8e2875cb97439e
+commit: 7bcb6e38c14d7d2654555a1b05b2a9a5411c693c [7/13] drm/xe/display: Convert __xe_pin_fb_vma()
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250910/202509102218.kZLrvcuD-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509102218.kZLrvcuD-lkp@intel.com/reproduce)
 
-FWIW, this --- breaks git, and anything after this line (including your
-signoff) is lost when the patch is applied.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509102218.kZLrvcuD-lkp@intel.com/
 
-> Discussion:
-> https://lore.kernel.org/linux-riscv/68496eed-b5a4-4739-8d84-dcc428a08e20@=
-gmail.com/
-> Patch v1:
-> https://lore.kernel.org/linux-riscv/20250903190806.2604757-1-SpriteOvO@gm=
-ail.com/
->=20
-> GCC + Rust builds for RISC-V are disabled about a year ago due to differe=
-nces in
-> extension handling compared to LLVM, as discussed in
-> https://lore.kernel.org/all/20240917000848.720765-1-jmontleo@redhat.com/
->=20
-> This patch re-enables GCC + Rust builds. Compared to v1, v2 reverts the
-> separation of get-rust-bindgen-libclang script and improves Kconfig condi=
-tions
-> based on Conor's review.
->=20
-> The separation of get-rust-bindgen-libclang script is reverted based on t=
-he
-> concerns raised by Miguel. However, it's worth noting that we now have 3
-> different places rust/Makefile scripts/{Kconfig.include,rust_is_avilable.=
-sh}
-> where manually calling bindgen rust_is_available_bindgen_libclang.h + sed=
- to get
-> the version of libclang, and in particular, for our newly added Kconfig s=
-ymbol,
-> we now use awk to canonicalize the version to an integer. I would still l=
-ike to
-> do the script separation later for better maintainability and readability=
- if
-> possible, which can be discussed further later when Miguel has time.
->=20
-> Signed-off-by: Asuna Yang <SpriteOvO@gmail.com>
+All warnings (new ones prefixed by >>):
 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index e3eb63eadc8757a10b091c74bbee8008278c0521..0859d308a48591df769c7dbae=
-f6f035324892bd3 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -82,6 +82,12 @@ config RUSTC_LLVM_VERSION
->  	int
->  	default $(rustc-llvm-version)
-> =20
-> +config RUST_BINDGEN_LIBCLANG_VERSION
-> +	int
-> +	default $(rustc-bindgen-libclang-version)
-> +	help
-> +	  This is the version of `libclang` used by the Rust bindings generator.
+>> drivers/gpu/drm/xe/display/xe_fb_pin.c:314:8: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     314 |                             ret) {
+         |                             ^~~
+   drivers/gpu/drm/xe/xe_validation.h:189:57: note: expanded from macro 'xe_validation_guard'
+     189 |         scoped_guard(xe_validation, _ctx, _val, _exec, _flags, _ret) \
+         |                                                                ^~~~
+   include/linux/cleanup.h:429:44: note: expanded from macro 'scoped_guard'
+     429 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+         |                                                   ^~~~
+   include/linux/cleanup.h:420:27: note: expanded from macro '__scoped_guard'
+     420 |         for (CLASS(_name, scope)(args);                                 \
+         |                                  ^~~~
+   drivers/gpu/drm/xe/display/xe_fb_pin.c:286:9: note: initialize the variable 'ret' to silence this warning
+     286 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-The riscv patchwork CI stuff is really unhappy with this change:
-init/Kconfig:87: syntax error
-init/Kconfig:87: invalid statement
-init/Kconfig:88: invalid statement
-init/Kconfig:89:warning: ignoring unsupported character '`'
-init/Kconfig:89:warning: ignoring unsupported character '`'
-init/Kconfig:89:warning: ignoring unsupported character '.'
-init/Kconfig:89: unknown statement "This"
 
-Is this bogus, or can rustc-bindgen-libclang-version return nothing
-under some conditions where rust is not available?
-Should this have 2 default lines like some other options in the file?
+vim +/ret +314 drivers/gpu/drm/xe/display/xe_fb_pin.c
 
---9LQSzFz/Ck3gJsLT
-Content-Type: application/pgp-signature; name="signature.asc"
+   274	
+   275	static struct i915_vma *__xe_pin_fb_vma(const struct intel_framebuffer *fb,
+   276						const struct i915_gtt_view *view,
+   277						unsigned int alignment)
+   278	{
+   279		struct drm_device *dev = fb->base.dev;
+   280		struct xe_device *xe = to_xe_device(dev);
+   281		struct i915_vma *vma = kzalloc(sizeof(*vma), GFP_KERNEL);
+   282		struct drm_gem_object *obj = intel_fb_bo(&fb->base);
+   283		struct xe_bo *bo = gem_to_xe_bo(obj);
+   284		struct xe_validation_ctx ctx;
+   285		struct drm_exec exec;
+   286		int ret;
+   287	
+   288		if (!vma)
+   289			return ERR_PTR(-ENODEV);
+   290	
+   291		refcount_set(&vma->ref, 1);
+   292		if (IS_DGFX(to_xe_device(bo->ttm.base.dev)) &&
+   293		    intel_fb_rc_ccs_cc_plane(&fb->base) >= 0 &&
+   294		    !(bo->flags & XE_BO_FLAG_NEEDS_CPU_ACCESS)) {
+   295			struct xe_vram_region *vram = xe_device_get_root_tile(xe)->mem.vram;
+   296	
+   297			/*
+   298			 * If we need to able to access the clear-color value stored in
+   299			 * the buffer, then we require that such buffers are also CPU
+   300			 * accessible.  This is important on small-bar systems where
+   301			 * only some subset of VRAM is CPU accessible.
+   302			 */
+   303			if (xe_vram_region_io_size(vram) < xe_vram_region_usable_size(vram)) {
+   304				ret = -EINVAL;
+   305				goto err;
+   306			}
+   307		}
+   308	
+   309		/*
+   310		 * Pin the framebuffer, we can't use xe_bo_(un)pin functions as the
+   311		 * assumptions are incorrect for framebuffers
+   312		 */
+   313		xe_validation_guard(&ctx, &xe->val, &exec, (struct xe_val_flags) {.interruptible = true},
+ > 314				    ret) {
+   315			ret = drm_exec_lock_obj(&exec, &bo->ttm.base);
+   316			drm_exec_retry_on_contention(&exec);
+   317			if (ret)
+   318				break;
+   319	
+   320			if (IS_DGFX(xe))
+   321				ret = xe_bo_migrate(bo, XE_PL_VRAM0, NULL, &exec);
+   322			else
+   323				ret = xe_bo_validate(bo, NULL, true, &exec);
+   324			drm_exec_retry_on_contention(&exec);
+   325			xe_validation_retry_on_oom(&ctx, &ret);
+   326			if (!ret)
+   327				ttm_bo_pin(&bo->ttm);
+   328		}
+   329		if (ret)
+   330			goto err;
+   331	
+   332		vma->bo = bo;
+   333		if (intel_fb_uses_dpt(&fb->base))
+   334			ret = __xe_pin_fb_vma_dpt(fb, view, vma, alignment);
+   335		else
+   336			ret = __xe_pin_fb_vma_ggtt(fb, view, vma,  alignment);
+   337		if (ret)
+   338			goto err_unpin;
+   339	
+   340		return vma;
+   341	
+   342	err_unpin:
+   343		ttm_bo_reserve(&bo->ttm, false, false, NULL);
+   344		ttm_bo_unpin(&bo->ttm);
+   345		ttm_bo_unreserve(&bo->ttm);
+   346	err:
+   347		kfree(vma);
+   348		return ERR_PTR(ret);
+   349	}
+   350	
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMGKxwAKCRB4tDGHoIJi
-0i95AQCss36HRy+RsBlpl62gIPI85+hygKJh0GXl428sU0nQ8AEA2u/2TAxBFT7L
-YIW9Fn96HjUF3TjlXvi7128E1IzngQg=
-=mZl4
------END PGP SIGNATURE-----
-
---9LQSzFz/Ck3gJsLT--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
