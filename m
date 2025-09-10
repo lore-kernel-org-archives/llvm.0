@@ -1,140 +1,149 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67FD25A320
-	for <llvm@lists.linux.dev>; Wed, 10 Sep 2025 16:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36622D1F72;
+	Wed, 10 Sep 2025 17:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757521985; cv=none; b=qop04qLBOlPyAeFpBx9x/IhxysrcYKM+TMAZjJ33mJK5JPTJDOGTbDewm3l9n88VsMsbADlfgPcNld1Uw9C7yHRJhQHgcj4FC/4T49RdosBYdoH0HmOAKlxHzLBPVCQZyknNQ1hTti7Qff1DDp5p6rHq/12ri1/e35WJt1TyPyg=
+	t=1757525350; cv=none; b=jsiyJtNtQDL6xDMoqCHdGEt5RPS2hj7ZoXcAtqP0UH6bt17agf04CIzkXyl4u4H80WS1qZ4ZGdmrFXyN1F5+CDOIlVPVfesyTZyp64J6yiod5Uold7nEpxgptoRicXGuLWYKQLSO6rHzHDlNVHL/By4Ppm+tlA5HIL59vSVKRRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757521985; c=relaxed/simple;
-	bh=6QWP6copzj9cf5FPkW3R7sbrZtIvIyER6xtRBGhVG/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hAnNr+i8Yz/qyhc0TnIGB5iNeIM/4QzT9I1gfTwgcCtl4l5cP+Wp6hXaTSWrWkNdGf76aefG8AIlQBeNHChPXe8SHzsPC9Z+SoiWB21rw8nMrNvC/Sx3RnmnMYDOWoQDsPkUmrhA0PAzg0GgIxHwgNn8LeP7Moffrqvq4eJdwIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=asr7Awi0; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1757525350; c=relaxed/simple;
+	bh=lnqyI9f64I1yhXVL6nN7wKwIlUzM9Wz76sbGLU0tYUk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WhnXqx4V68NuaWSD66QxlPVEBFDDMs+yrCoyeoWgDyPfLzP3868s1pa/lWAd0SiKsnLnSOIYaS5eVzQ7myE6w131DYddBNJjVZ5RM+aymhEk0lpiDMJL9gSTeH7dbNPE/pB26aq1cyfhKQMoeIxh/HjZxTbAKKYnGEQOpYWkfSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMjocJ4q; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="asr7Awi0"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b4cb3367d87so4785993a12.3
-        for <llvm@lists.linux.dev>; Wed, 10 Sep 2025 09:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757521983; x=1758126783; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=crg9ulSxnVedet7AE0tAYFjDi5iUeW7YmzwRm7NeGuA=;
-        b=asr7Awi0D157UCjZ9/cMpv0JqFTRNX65Sz6rlmVM+e7BBjQq2VIP9+aBQQGaGVkEBT
-         tFULgELpL7XJJnhn7QtNmb+FjnYSAywN6XnB20n/R9vL7irttIF3FsJlml8/hIIuNT9B
-         aSxiy2eqh/pBFLIilM5pu2wgovYrGOeE0ooWl7bhG9MXTU/dhdK1GFkVTaepoP1jIjb9
-         1fjDY39qVhvIeuktaEGcf6fyKrJ/iJ6DfhvpkUGYqPOpoS28dcrqq5puQL3fPP08RkI9
-         rF3LiIxihg3IrdoFByaMMrJ31vEra3wkZKMEDC+EPP70vJPQ1/iPf1gL/LsIQkyvYJIE
-         nOHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757521983; x=1758126783;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=crg9ulSxnVedet7AE0tAYFjDi5iUeW7YmzwRm7NeGuA=;
-        b=Q+q6SzaMsfUKzAnH/LaUr1PrkdimqML6V2qBRHBJ+Pw7uHvVsddeeOhqmpxHN0ijy1
-         T2JwbYBQQFBh7f1+OmUXmJqAI5wOHW1RbuDWNbKAz8DrBt444UA1270w+xYObeHyxO3h
-         QC8Boq7dQPA80/b1GVEdQZzcGdtIuC82Lmd0jIpEmmZ9CxXh+BcRJm7rJ+A82TpTb1lQ
-         0UppisuswWkNJqmrBTJOYWQvsPpmPxisQsdMFxNcI8MrEKT+qEh7uP59fLOh0Hii8Egb
-         drPS9S5+m/eQA7I8C/42DifIJwkaRSLtc1I+Ad33OjivFRIr9VDwE/uD3IiLmDaq+3NI
-         +jkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZVn74uNAvjU1LHaM0pV98tPwGF629jyX9TyRdxL4FInqkCltNbIJmMoMdYsGdzGiaI/h7@lists.linux.dev
-X-Gm-Message-State: AOJu0YzOtpe9N/QFZlCspEh5wUO1YCRbhXfwG9JSquxSwA9skJ+86/q7
-	/1/0SBKmCJQtOh08fuC+WoaiMYSx4dyaSpNlALuEo0QZ3mJMLaekR70BWOgs2mi4jLK352RCFGB
-	3MhcS8YS0JHoXGWZNF/TBOT1XE9f+gSu1gouVvtGa
-X-Gm-Gg: ASbGncvQf1E6mUH7txvEG1+3gjq36sMI0h019IvYNBNqGOiAw5VCHSZi3IWhIuJyFJN
-	czU5WkuSQ7ogr3VxXiB51fKnHakF1Udaen8KRfNRVO6dBHVfYnJVH3f19FypzjSwDPlI2GcLoaZ
-	7JKCDVgK2JIhCxccgCVDyeWQMZ+ec8IG1280fr8eRAzztCCfmx7XJtRB4tD9aqqTT6LbLME44it
-	cFcHQmDeMJprgQgOkgd2LNeZYCOMvbZJ1mhTt3yjF2O/YE=
-X-Google-Smtp-Source: AGHT+IFygkRcH7mrdQ4Zhgc7n2vieMLoI6r6NoPaSe1OOy5LbAIzXpvm7rozB2gTILsaRSM0LL+d/usqZ1C3z4HoNpo=
-X-Received: by 2002:a17:902:f54a:b0:24b:25f:5f81 with SMTP id
- d9443c01a7336-2516dfcb5c4mr232806255ad.17.1757521982717; Wed, 10 Sep 2025
- 09:33:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMjocJ4q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757525349; x=1789061349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lnqyI9f64I1yhXVL6nN7wKwIlUzM9Wz76sbGLU0tYUk=;
+  b=ZMjocJ4q7C2ph3ikV22BEByOGh9PHIFXQTo/5pULQu/X34zsIrO1LQZW
+   y7J6j8q9OT6KhzHSwEoZLx7EA/GEUjQBQODGlNNkV2TN2kp8G0RQuJClr
+   bfIOYe65CNqJJ2k1cZeU7Z4nMlMUy9bN/aF+vQIqIJPIJuTwNZ4G2+Lr5
+   o1FnfzOm6dqGyhiZ8gZSv3VjMyJWHBJZpSdLMlyG26vjAR7ekcTwjtlgN
+   C3qlLYxCspiCMa8374ZLKaC+YkJbA/mGt5Bj2nA3E9EC/DRwccpsYFScx
+   7Pl+lQScJM853chYCHdhUB41CMMAjkLxQACW1RqMMFKPUGEK+FOYp9+0T
+   Q==;
+X-CSE-ConnectionGUID: hpjjrVBnS1SDZ5gp/5RI7Q==
+X-CSE-MsgGUID: GtU/wcyfQeKwPkRwk8i4Ag==
+X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="58886904"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="58886904"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 10:29:08 -0700
+X-CSE-ConnectionGUID: 4mWWF5aTSDe+1XoKr5D04w==
+X-CSE-MsgGUID: ltXG1s5yRRe/xWJO8Hq3Ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,255,1751266800"; 
+   d="scan'208";a="173826211"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 10 Sep 2025 10:28:42 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uwOca-0006Al-0G;
+	Wed, 10 Sep 2025 17:28:40 +0000
+Date: Thu, 11 Sep 2025 01:27:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yafang Shao <laoar.shao@gmail.com>, akpm@linux-foundation.org,
+	david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+	hannes@cmpxchg.org, usamaarif642@gmail.com,
+	gutierrez.asier@huawei-partners.com, willy@infradead.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	ameryhung@gmail.com, rientjes@google.com, corbet@lwn.net,
+	21cnbao@gmail.com, shakeel.butt@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bpf@vger.kernel.org, linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Lance Yang <ioworker0@gmail.com>
+Subject: Re: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from
+ khugepaged_mm_slot
+Message-ID: <202509110109.PSgSHb31-lkp@intel.com>
+References: <20250910024447.64788-2-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250909204632.3994767-4-kuniyu@google.com> <202509101912.ROjtP2uL-lkp@intel.com>
-In-Reply-To: <202509101912.ROjtP2uL-lkp@intel.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Wed, 10 Sep 2025 09:32:51 -0700
-X-Gm-Features: Ac12FXx6aKnMeDmD-Oqq_oMACp8aNPwM23p9lZayrp8qexUb1gFrzTNdorO62hI
-Message-ID: <CAAVpQUAXoxU4r1dgC3wtTxx6oVMpOWjd9q7Ub=SEsnHMpL3RAw@mail.gmail.com>
-Subject: Re: [PATCH v7 bpf-next/net 3/6] net-memcg: Introduce
- net.core.memcg_exclusive sysctl.
-To: kernel test robot <lkp@intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Mina Almasry <almasrymina@google.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250910024447.64788-2-laoar.shao@gmail.com>
 
-On Wed, Sep 10, 2025 at 4:58=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Kuniyuki,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on bpf-next/net]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/=
-tcp-Save-lock_sock-for-memcg-in-inet_csk_accept/20250910-044928
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
-net
-> patch link:    https://lore.kernel.org/r/20250909204632.3994767-4-kuniyu%=
-40google.com
-> patch subject: [PATCH v7 bpf-next/net 3/6] net-memcg: Introduce net.core.=
-memcg_exclusive sysctl.
-> config: um-randconfig-001-20250910 (https://download.01.org/0day-ci/archi=
-ve/20250910/202509101912.ROjtP2uL-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7=
-fb1dc08d2f025aad5777bb779dfac1197e9ef87)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250910/202509101912.ROjtP2uL-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509101912.ROjtP2uL-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permis=
-sions
->    /usr/bin/ld: mm/memcontrol.o: in function `mem_cgroup_sk_set':
-> >> memcontrol.c:(.text+0xa1e0): undefined reference to `init_net'
->    clang: error: linker command failed with exit code 1 (use -v to see in=
-vocation)
+Hi Yafang,
 
-CONFIG_NET=3Dn... will fix it in v8.
+kernel test robot noticed the following build errors:
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 0d017c8b8a00..b7d405b57e23 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5002,8 +5002,10 @@ static void mem_cgroup_sk_set(struct sock *sk,
-struct mem_cgroup *memcg)
+[auto build test ERROR on akpm-mm/mm-everything]
 
-  sk->sk_memcg =3D memcg;
+url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/mm-thp-remove-disabled-task-from-khugepaged_mm_slot/20250910-144850
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250910024447.64788-2-laoar.shao%40gmail.com
+patch subject: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from khugepaged_mm_slot
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250911/202509110109.PSgSHb31-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250911/202509110109.PSgSHb31-lkp@intel.com/reproduce)
 
-+#ifdef CONFIG_NET
-  if (READ_ONCE(sock_net(sk)->core.sysctl_memcg_exclusive))
-    mem_cgroup_sk_set_flags(sk, SK_MEMCG_EXCLUSIVE);
-+#endif
- }
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509110109.PSgSHb31-lkp@intel.com/
 
- void mem_cgroup_sk_alloc(struct sock *sk)
+All errors (new ones prefixed by >>):
+
+>> kernel/sys.c:2500:6: error: call to undeclared function 'hugepage_pmd_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2500 |             hugepage_pmd_enabled())
+         |             ^
+>> kernel/sys.c:2501:3: error: call to undeclared function '__khugepaged_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2501 |                 __khugepaged_enter(mm);
+         |                 ^
+   2 errors generated.
+
+
+vim +/hugepage_pmd_enabled +2500 kernel/sys.c
+
+  2471	
+  2472	static int prctl_set_thp_disable(bool thp_disable, unsigned long flags,
+  2473					 unsigned long arg4, unsigned long arg5)
+  2474	{
+  2475		struct mm_struct *mm = current->mm;
+  2476	
+  2477		if (arg4 || arg5)
+  2478			return -EINVAL;
+  2479	
+  2480		/* Flags are only allowed when disabling. */
+  2481		if ((!thp_disable && flags) || (flags & ~PR_THP_DISABLE_EXCEPT_ADVISED))
+  2482			return -EINVAL;
+  2483		if (mmap_write_lock_killable(current->mm))
+  2484			return -EINTR;
+  2485		if (thp_disable) {
+  2486			if (flags & PR_THP_DISABLE_EXCEPT_ADVISED) {
+  2487				mm_flags_clear(MMF_DISABLE_THP_COMPLETELY, mm);
+  2488				mm_flags_set(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+  2489			} else {
+  2490				mm_flags_set(MMF_DISABLE_THP_COMPLETELY, mm);
+  2491				mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+  2492			}
+  2493		} else {
+  2494			mm_flags_clear(MMF_DISABLE_THP_COMPLETELY, mm);
+  2495			mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+  2496		}
+  2497	
+  2498		if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm) &&
+  2499		    !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
+> 2500		    hugepage_pmd_enabled())
+> 2501			__khugepaged_enter(mm);
+  2502		mmap_write_unlock(current->mm);
+  2503		return 0;
+  2504	}
+  2505	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
