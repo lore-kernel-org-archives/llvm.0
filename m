@@ -1,77 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB20259CA9;
-	Wed, 10 Sep 2025 11:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDDB28853A;
+	Wed, 10 Sep 2025 12:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757505498; cv=none; b=liIvwD4iqveshLX3spZPUf+EL/LOzCFyJmHKUTBjmmndM03w/SVIU2gweUdugVnm60+aDhDx5Vjl/XjxLucHyoV/C5CnlnF/O9BAaAzNgUzlWtGXHT3ynHLA0Xd4/aUrKR7Yf7ka33bXCPAH+lG99K6yp+yD4f86ewqw185bcuk=
+	t=1757507973; cv=none; b=KMyjRyDlqm/bkUck9j3p7VOW0jMNKYx6rrciHTU0hfmxgyGiceWas21sDsOEpRNMFhqDW/OgInrqb66T8VUrY1qwpr99NrhVQKGmnMPovipLGjZC0aUVRlvZ8BYFClf8gczgiONPnYs9QepRrqf5p+T3UERkyqGkmp/+XSaIaeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757505498; c=relaxed/simple;
-	bh=YgHoSlMyGCwyBPFYKxKiq0pYJf9NvlcVUq+xwRtrf+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jc18bXUFlBSPezUJ4MZzxM+39d33ylrwBQCH5i9B0xWzq7H5NJelWNrwvy2/auOm3Z+swSmDVIb1wMLrM0LkIiPmmEOQ3utVNNUWHyuA+qxbPVAWZs9aSfxpmfhQutanXLuMoZdIJ6eCClo8bTa00FBdIPcGnjNa6DHVEe30nCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T0OAgWT2; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1757507973; c=relaxed/simple;
+	bh=hjPl/kivd8rKY7NW9S7vBLylc64b1IKZDxEQXLdzBQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rUIR+/wG9OLCTdAt2iLEQOf3GFhmsNDN+rTQcNrdgJT+Bpnl8+p0n5qq+ya7tYirQGJcOUALJvtLBu+Q7ArHucSv5GQ2vjuGDUXvourM/OU0y/LjtuzVDNyOWsgg4OaG5vEVUrbhJoRWbpwclGCgFx3ATZIkcw2aQBWv4eLoSrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TTmpz25i; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T0OAgWT2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TTmpz25i"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757505497; x=1789041497;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YgHoSlMyGCwyBPFYKxKiq0pYJf9NvlcVUq+xwRtrf+A=;
-  b=T0OAgWT2AL/hoKfqv5/oLH6WCUNCMiMLn7XW96OQWgxobdOb5UtL36+z
-   CNXacYawLAlL0lgxnlTcVyKMxwQxVxTErD6aVS2nBrBTxdq3nEL1GhIRa
-   RL7NSAsW9rID1TZAixao1CYxfp57PRs4TtHAbqFyyoT/BkrFzYgajtBhJ
-   Ad8x5I09kllYFXg0yBwqnEwkSw1oQgc1SsTkhDH9ge5a9LqwWvKikOMVA
-   CHWk7hSPMAzLooBPySvisdlmkA2ng4tFf37sdVFLl689FpgQMN7bLF4BJ
-   TZQoQshcCDJOyLMqAFTMAzc/bn55mn3N0ytol4qXabgNdlWRvPncGa7Ch
-   Q==;
-X-CSE-ConnectionGUID: uMzz/cu+R4qa5bN08HBxrA==
-X-CSE-MsgGUID: RhLeDvpkTW+MPcroe3Ca2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="70911873"
+  t=1757507973; x=1789043973;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hjPl/kivd8rKY7NW9S7vBLylc64b1IKZDxEQXLdzBQg=;
+  b=TTmpz25i4uCoCXrB696qCSLyyXKImSUALAEwdAMLV51YgxkxUgsP2Umo
+   5ba2GOIIPty/yeNHB3Uh9ty/7BXtvLsKxn0W6SBM83IG6Yv0G6ND8K+vN
+   XGcEJpFUPxfrFyVkP+wCZAwPHhYbe1g6si77/Qh5tSvW+iuwy/99yeBmn
+   JPFqUXtp+tzZpCDl4S4k0kyi60lMcB+4ixN1rM1VP8tkWaAIfYlYO5fiO
+   bRQ+YHqxIjyMtP2/rayK9IwHqifMQTnFYRAg+t8XKpwOM/a7K9ivb2yWi
+   fi8DVkczK4+i0JDrRS88RC9wF+sCkBAnR5GGhfqPOQKBwgufPwR9HaDmF
+   w==;
+X-CSE-ConnectionGUID: EbEiE0PvRxCOlRXEbCJngw==
+X-CSE-MsgGUID: EdNV5FYTTN28vcHWecJxxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="77271537"
 X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
-   d="scan'208";a="70911873"
+   d="scan'208";a="77271537"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 04:58:16 -0700
-X-CSE-ConnectionGUID: cQXzNYOUQDyxOUWUNGJnrQ==
-X-CSE-MsgGUID: mP/ModIiRNmkZaym8tqETw==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 05:39:16 -0700
+X-CSE-ConnectionGUID: NnBKEI4DTfq1U5XR1tu2jA==
+X-CSE-MsgGUID: T3Yj0Vm7QRKP9yoqgnhh7A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
-   d="scan'208";a="197042998"
+   d="scan'208";a="197052739"
 Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Sep 2025 04:58:11 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 10 Sep 2025 05:39:14 -0700
 Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uwJSi-0005tf-1K;
-	Wed, 10 Sep 2025 11:58:08 +0000
-Date: Wed, 10 Sep 2025 19:57:39 +0800
+	id 1uwK6R-0005vl-29;
+	Wed, 10 Sep 2025 12:39:11 +0000
+Date: Wed, 10 Sep 2025 20:38:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>
+To: Xu Yang <xu.yang_2@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v7 bpf-next/net 3/6] net-memcg: Introduce
- net.core.memcg_exclusive sysctl.
-Message-ID: <202509101912.ROjtP2uL-lkp@intel.com>
-References: <20250909204632.3994767-4-kuniyu@google.com>
+	Chanwoo Choi <cw00.choi@samsung.com>, Frank Li <Frank.Li@nxp.com>
+Subject: [chanwoo-extcon:extcon-next 13/14] ERROR: modpost:
+ "fwnode_typec_switch_get" [drivers/extcon/extcon-ptn5150.ko] undefined!
+Message-ID: <202509102038.MUz1UwM6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,33 +62,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250909204632.3994767-4-kuniyu@google.com>
 
-Hi Kuniyuki,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf-next/net]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/tcp-Save-lock_sock-for-memcg-in-inet_csk_accept/20250910-044928
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20250909204632.3994767-4-kuniyu%40google.com
-patch subject: [PATCH v7 bpf-next/net 3/6] net-memcg: Introduce net.core.memcg_exclusive sysctl.
-config: um-randconfig-001-20250910 (https://download.01.org/0day-ci/archive/20250910/202509101912.ROjtP2uL-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7fb1dc08d2f025aad5777bb779dfac1197e9ef87)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509101912.ROjtP2uL-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
+head:   e6f75eba4a860cc419ed632313523e25689fd144
+commit: 0d6a9aca15c987b4774f7fdb34114ab0d483766a [13/14] extcon: ptn5150: Add Type-C orientation switch support
+config: i386-buildonly-randconfig-006-20250909 (https://download.01.org/0day-ci/archive/20250910/202509102038.MUz1UwM6-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509102038.MUz1UwM6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509101912.ROjtP2uL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509102038.MUz1UwM6-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: mm/memcontrol.o: in function `mem_cgroup_sk_set':
->> memcontrol.c:(.text+0xa1e0): undefined reference to `init_net'
-   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+>> ERROR: modpost: "fwnode_typec_switch_get" [drivers/extcon/extcon-ptn5150.ko] undefined!
+>> ERROR: modpost: "typec_switch_set" [drivers/extcon/extcon-ptn5150.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
