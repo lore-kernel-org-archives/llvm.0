@@ -1,153 +1,228 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DDF31D39F
-	for <llvm@lists.linux.dev>; Wed, 10 Sep 2025 05:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9A6221739;
+	Wed, 10 Sep 2025 07:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757481834; cv=none; b=rK5wj6YMU1PX0yFwlSo0RORTCsWE3GapLwdmvZ9Hl8tc11mKtffzkcnSIKpuS2NE8xMc4pg72TsRoBlaNDnDyszZHrmg9O5spAMsQ7Pis/nWU8lmhSqmdYBSj7tt2tkn6j65MqeKsMY6L6GpjDx70rMXlc95RFuS8gEU29x8/6c=
+	t=1757488853; cv=none; b=bHSWrkjqKlzcOMKJcBdh8cnZnzE7yZwOViW9mU5w5dWXzvlWG5J1GGTOopTS9eUq6uizOCRSweFGPaHVocKF1+BB5dFoNYXXcbzFancczqkWPRX8ITsg4omOWoEqnWuq1aFOdk6f099xITkHMQJExjcXGj2QJCJppZr+ZXA0OgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757481834; c=relaxed/simple;
-	bh=eHYwl2SvdpYCIE+w1VAp1TDDeuuUoFp3VVfWX0rWtFw=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=BqbQLqkHEwJba7AHwKRi7eUHLB3vAhP3zMH0FAyC9Pl+KYFpuookDfFoEBwVIl+GcBARgw+n4ZefubNwty5hXVSYgS4yUZdKAwLe2UyoMjbKnh5yB/jOwMgAhVm4eRBMrGjWzteWuUSrNjO8u+FeA5YV7+25kfPt1ywYzKLeuYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZXRELfAm; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1757488853; c=relaxed/simple;
+	bh=vwghiswpYI7TXrHNriSxTn1AeR8u/UjYfD1TYxdWHII=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s7ekZuiJo0RQ88MMSb7yNC9oi5Pk0LKJQtp9YjX3bXTViqR2i+Nq4vU0Y0D3nbCLiDjbhzsNhSb4wM759yoiNWC+OM1NrYniWVJyBL1Cuds5PXLinSFOSCFLogIwUOGFPxVV2+k1wSHOwmawW2+80V3qseer1lxdsckTV7yrAK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eBTJMKpp; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZXRELfAm"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-62733e779bbso3895723a12.1
-        for <llvm@lists.linux.dev>; Tue, 09 Sep 2025 22:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757481830; x=1758086630; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0SLkTI7VsCIjGKE41hH9Kal8XD5ZHaA/UCLCaUVgP1I=;
-        b=ZXRELfAmlPIF5IeaHtLDa3FBl3Qf1uuSn1vxi5+3sbG76XSCaVVw0YBYB/biHKbwmp
-         K83ZDuNXEjI/H2eYFKrXdqr5iejs/kI7RiUBKv8kDUwLpwKs6pKK7f9D71+zT/ylhEKt
-         4RGntd4xJJQV9pplE9qmu8oShzIrBIMRrOPqe/nZKFZtXGCYO4+LWOqOh1LsXlkUQrnF
-         LsjCP0FT+nYC8VfAT1VqyiZpkgkzKtk1WqaUXRZqInECLYaNcul/jGZgxCDXhM1qz6FZ
-         GIgVPEX7tfWC8QBKcABjzzqagR2DmkR9s+QmN20n1wYkjWw8XCDPinCDaVR7xVjmquAv
-         as2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757481830; x=1758086630;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0SLkTI7VsCIjGKE41hH9Kal8XD5ZHaA/UCLCaUVgP1I=;
-        b=edwHcsB4m6DBpuryTFsySF80CzM8sj8E+trrIqmGabSQ8H0GrxMAIzceE7zv2Zvp6d
-         +Djk26Lugion4zHe3fKHYtfkJZCucnm4K+cYnKWhgw302BLiUOJ1CHlKsu9w+3RqLLyS
-         K2B3gRyDd27yoSsiE2C0iNwmppDhFZO9kPUggCNhEKVjD9bUMbu9UeQv5yAMgFDv4WFm
-         6oDzedoFMCkl97yj1LOK1JTDximzj85zbPHXKThKso3/wig6LQwFg9XeF4rOeBUlZR8C
-         7rqNo2tVKQmWGSJQV0TnCvUL8cgjun1k375v6xJFR7yxaqG+3kkQB7752yhru7AHmKvf
-         U1FA==
-X-Gm-Message-State: AOJu0Ywhk1DDeBUcr8sexhuXMBgQCtObxTvlSQM2B/I7t2Eq/pIOpQiA
-	U7iyh031TTjYoh2ocj7INvH1ftS80AHPrE2+WUBnKJFOzwFXmnMUKO/j2220j/lQphls6AAkMyR
-	yEakq
-X-Gm-Gg: ASbGncvEez2B8B92+s5prBS1xAppbJwRBMldIMMaa1yQlkYaZfTfVdSqW6xlcn82dyN
-	OZ2fFfpi2TI0lipASFhiLlJePD7IddqQD4k4Dl3muNnILQ4rwgG7BJmpxCoRoX2RQA05IWh7pG1
-	el9z6ziBlxmc6OW1q7oECAuhkLgPCGCQQnjMvsdZhxzOUOtTQR9iM6S/YQJ+YN8ovDLpyh+iUoh
-	EKpRpFAlxFdcmohgOuBnfYYXUTAIq9TrcKWx+VBKLO0jLHKIN0aevHzgwLZVmbgViptGOiKGlKd
-	8U8f/YPrsh/LPNK0lr9OX+h7l4m7q37/M3zyNORMuLHTxdof9Dvat0Gpqaewk0LdrnE8woz+rb7
-	aHSQQPI1SwXlfqs56m6vpKNr1rLspgIFYt+guCTN7f+C/+YBwsTx5xpM9vzDLTgAEaYP1P36Ip9
-	dpkEc5
-X-Google-Smtp-Source: AGHT+IELLssG+C0Q0+J3SVNPuA5ZpvP1mnCQ3Qa1lgs0RgaJ7lMQ1Wfpg2oiQ+v2e4MbvkEQexwaXw==
-X-Received: by 2002:a05:6402:1ec8:b0:628:f0df:2ca2 with SMTP id 4fb4d7f45d1cf-628f0df30f3mr7778270a12.9.1757481829961;
-        Tue, 09 Sep 2025 22:23:49 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62bfef684a5sm2441542a12.13.2025.09.09.22.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Sep 2025 22:23:49 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Wed, 10 Sep 2025 05:23:47 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1155652020.15599.1757481829520@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-22-init-6898-gdf430c33a71f: Failure on
- aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eBTJMKpp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757488851; x=1789024851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vwghiswpYI7TXrHNriSxTn1AeR8u/UjYfD1TYxdWHII=;
+  b=eBTJMKppeUgHYKY/5qn6gp6HML8ufXzUsPJA5SQaWdB8ZhnYPuKGeIVd
+   3QcdHjcEB0guQOKtO7Dn95vBrZowHIybNPoES2/nPVybmD/MjhPXIcpaM
+   MT5PzlqGFccjxucqKJgfTUkzh8mYc31pZUErAB6DD9eVj5MKJJTuEpA1f
+   HeOl/y9JgapbmZTrjVTf26Bbf9hF3fqxNUP48mDhAtwE7XE+k1Fd3fcT2
+   4hbeajmQ5peQEj0JftPjzadmPUTjB0jr80eIH+ZkkCM0iuYdjE+18+vKR
+   3S5oPxjKpT/Dn1GJuN2Ok5sXZgIAuToiiL2RC7qTLm1X9jBOOrek7cV2M
+   Q==;
+X-CSE-ConnectionGUID: MelniKn4QGG+YFAZ0A2t1w==
+X-CSE-MsgGUID: B2wxbc62TgerkxJF2ZIidA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="63419534"
+X-IronPort-AV: E=Sophos;i="6.18,253,1751266800"; 
+   d="scan'208";a="63419534"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 00:20:51 -0700
+X-CSE-ConnectionGUID: 0fxhi66TTnKyjpK5TAuUng==
+X-CSE-MsgGUID: I5EVtNQTQNuuqUs0B5E2hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,253,1751266800"; 
+   d="scan'208";a="196976033"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 10 Sep 2025 00:20:48 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uwF8C-0005dH-1X;
+	Wed, 10 Sep 2025 07:20:40 +0000
+Date: Wed, 10 Sep 2025 15:19:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lachlan Hodges <lachlan.hodges@morsemicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC wireless-next 1/3] wifi: cfg80211: correctly implement and
+ validate S1G chandef
+Message-ID: <202509101438.7YHHFQrG-lkp@intel.com>
+References: <20250909080758.1004956-2-lachlan.hodges@morsemicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_15598_2058154629.1757481827618"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250909080758.1004956-2-lachlan.hodges@morsemicro.com>
 
-------=_Part_15598_2058154629.1757481827618
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi Lachlan,
 
-Dear contributor,
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on next-20250909]
+[cannot apply to wireless/main linus/master v6.17-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In tcwg_kernel/llvm-master-aarch64-stable-allyesconfig, after:
-  | commit llvmorg-22-init-6898-gdf430c33a71f
-  | Author: Nathan Chancellor <nathan@kernel.org>
-  | Date:   Mon Sep 8 11:33:57 2025 -0700
-  | 
-  |     [Frontend] Define __SANITIZE__ macros for kernel address variants (#156543)
-  |     
-  |     GCC defines these macros for both userspace and kernel address
-  |     sanitizers:
-  |     
-  | ... 29 lines of the commit log omitted.
+url:    https://github.com/intel-lab-lkp/linux/commits/Lachlan-Hodges/wifi-cfg80211-correctly-implement-and-validate-S1G-chandef/20250909-161105
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20250909080758.1004956-2-lachlan.hodges%40morsemicro.com
+patch subject: [RFC wireless-next 1/3] wifi: cfg80211: correctly implement and validate S1G chandef
+config: i386-buildonly-randconfig-004-20250910 (https://download.01.org/0day-ci/archive/20250910/202509101438.7YHHFQrG-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250910/202509101438.7YHHFQrG-lkp@intel.com/reproduce)
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 316
-  | # First few build errors in logs:
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | # 00:08:01 ./include/linux/compiler-clang.h:28:9: error: '__SANITIZE_ADDRESS__' macro redefined [-Werror,-Wmacro-redefined]
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 24163
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509101438.7YHHFQrG-lkp@intel.com/
 
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+All warnings (new ones prefixed by >>):
 
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-2089. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+>> net/wireless/chan.c:370:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     370 |                 u32 control_khz, start_khz, end_khz;
+         |                 ^
+   1 warning generated.
 
 
+vim +370 net/wireless/chan.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/366/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/365/artifact/artifacts
+   341	
+   342	bool cfg80211_chandef_valid(const struct cfg80211_chan_def *chandef)
+   343	{
+   344		u32 control_freq;
+   345	
+   346		if (!chandef->chan)
+   347			return false;
+   348	
+   349		if (chandef->freq1_offset >= 1000)
+   350			return false;
+   351	
+   352		control_freq = chandef->chan->center_freq;
+   353	
+   354		switch (chandef->width) {
+   355		case NL80211_CHAN_WIDTH_5:
+   356		case NL80211_CHAN_WIDTH_10:
+   357		case NL80211_CHAN_WIDTH_20:
+   358		case NL80211_CHAN_WIDTH_20_NOHT:
+   359			if (ieee80211_chandef_to_khz(chandef) !=
+   360			    ieee80211_channel_to_khz(chandef->chan))
+   361				return false;
+   362			if (chandef->center_freq2)
+   363				return false;
+   364			break;
+   365		case NL80211_CHAN_WIDTH_1:
+   366		case NL80211_CHAN_WIDTH_2:
+   367		case NL80211_CHAN_WIDTH_4:
+   368		case NL80211_CHAN_WIDTH_8:
+   369		case NL80211_CHAN_WIDTH_16:
+ > 370			u32 control_khz, start_khz, end_khz;
+   371	
+   372			if (!cfg80211_chandef_is_s1g(chandef))
+   373				return false;
+   374			if (chandef->center_freq2)
+   375				return false;
+   376	
+   377			control_khz = ieee80211_channel_to_khz(chandef->chan);
+   378			start_khz = cfg80211_s1g_get_start_freq_khz(chandef);
+   379			end_khz = cfg80211_s1g_get_end_freq_khz(chandef);
+   380	
+   381			if (control_khz < start_khz || control_khz > end_khz)
+   382				return false;
+   383			break;
+   384		case NL80211_CHAN_WIDTH_80P80:
+   385			if (!chandef->center_freq2)
+   386				return false;
+   387			/* adjacent is not allowed -- that's a 160 MHz channel */
+   388			if (chandef->center_freq1 - chandef->center_freq2 == 80 ||
+   389			    chandef->center_freq2 - chandef->center_freq1 == 80)
+   390				return false;
+   391			break;
+   392		default:
+   393			if (chandef->center_freq2)
+   394				return false;
+   395			break;
+   396		}
+   397	
+   398		switch (chandef->width) {
+   399		case NL80211_CHAN_WIDTH_5:
+   400		case NL80211_CHAN_WIDTH_10:
+   401		case NL80211_CHAN_WIDTH_20:
+   402		case NL80211_CHAN_WIDTH_20_NOHT:
+   403		case NL80211_CHAN_WIDTH_1:
+   404		case NL80211_CHAN_WIDTH_2:
+   405		case NL80211_CHAN_WIDTH_4:
+   406		case NL80211_CHAN_WIDTH_8:
+   407		case NL80211_CHAN_WIDTH_16:
+   408			/* all checked above */
+   409			break;
+   410		case NL80211_CHAN_WIDTH_320:
+   411			if (chandef->center_freq1 == control_freq + 150 ||
+   412			    chandef->center_freq1 == control_freq + 130 ||
+   413			    chandef->center_freq1 == control_freq + 110 ||
+   414			    chandef->center_freq1 == control_freq + 90 ||
+   415			    chandef->center_freq1 == control_freq - 90 ||
+   416			    chandef->center_freq1 == control_freq - 110 ||
+   417			    chandef->center_freq1 == control_freq - 130 ||
+   418			    chandef->center_freq1 == control_freq - 150)
+   419				break;
+   420			fallthrough;
+   421		case NL80211_CHAN_WIDTH_160:
+   422			if (chandef->center_freq1 == control_freq + 70 ||
+   423			    chandef->center_freq1 == control_freq + 50 ||
+   424			    chandef->center_freq1 == control_freq - 50 ||
+   425			    chandef->center_freq1 == control_freq - 70)
+   426				break;
+   427			fallthrough;
+   428		case NL80211_CHAN_WIDTH_80P80:
+   429		case NL80211_CHAN_WIDTH_80:
+   430			if (chandef->center_freq1 == control_freq + 30 ||
+   431			    chandef->center_freq1 == control_freq - 30)
+   432				break;
+   433			fallthrough;
+   434		case NL80211_CHAN_WIDTH_40:
+   435			if (chandef->center_freq1 == control_freq + 10 ||
+   436			    chandef->center_freq1 == control_freq - 10)
+   437				break;
+   438			fallthrough;
+   439		default:
+   440			return false;
+   441		}
+   442	
+   443		if (!cfg80211_valid_center_freq(chandef->center_freq1, chandef->width))
+   444			return false;
+   445	
+   446		if (chandef->width == NL80211_CHAN_WIDTH_80P80 &&
+   447		    !cfg80211_valid_center_freq(chandef->center_freq2, chandef->width))
+   448			return false;
+   449	
+   450		/* channel 14 is only for IEEE 802.11b */
+   451		if (chandef->center_freq1 == 2484 &&
+   452		    chandef->width != NL80211_CHAN_WIDTH_20_NOHT)
+   453			return false;
+   454	
+   455		if (cfg80211_chandef_is_edmg(chandef) &&
+   456		    !cfg80211_edmg_chandef_valid(chandef))
+   457			return false;
+   458	
+   459		return valid_puncturing_bitmap(chandef);
+   460	}
+   461	EXPORT_SYMBOL(cfg80211_chandef_valid);
+   462	
 
-Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/llvm/sha1/df430c33a71ffb22b8d33d24538775c5fc9de6e1/tcwg_kernel/llvm-master-aarch64-stable-allyesconfig/reproduction_instructions.txt
-
-Full commit : https://github.com/llvm/llvm-project/commit/df430c33a71ffb22b8d33d24538775c5fc9de6e1
-------=_Part_15598_2058154629.1757481827618--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
