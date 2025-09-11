@@ -1,93 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235CD314A97;
-	Thu, 11 Sep 2025 13:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F078A2E8E17;
+	Thu, 11 Sep 2025 13:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757595920; cv=none; b=tztCmS0krYBq9t7cdVJGD3dp1tQJElgCgbpFIcPHj3/+hIBoJxfQcgQAptOY61OBQzOncPSH/CEdqr6O71h4FDPgtpeoHwlvYD2SwsrXCiHO5mR8d6ETABrgR7qGGBE2/q5UZPSLkx6NrAwCsS+KMWym1759Z3eZromu8llwehA=
+	t=1757596481; cv=none; b=iXSoCuNQ+BLQ2uiGYft7FEpe/hzs3Ktl59+RkfEfvj1nc7YCr7rTz7MZMl031ciWi9pOkzKlAzJ6odNFsTk2k8eLETGj0i1rA2SufEocK6S2JpLhxQ8H/VKjMhbjp6s0RvuJeSzpp/rPuTJGLgJTrptSflkjrxHPAe0CSFax6r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757595920; c=relaxed/simple;
-	bh=3cTu3t1kABFgYDURDBVW7RvACYUtHwzvTu1HQFQwBrE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DcVnJrQFgoY0Du1o33xwXAOPw6W+bLWbHXghQ6JqeUmDF9lXzJd9rS2LXEaR4rQ0ofoSbjjAIqXy8ZKnZMuK9lnN7PW6kwQXbEuJVIgegX4PR0FRQQ0PmRx6Zz9TVX5AkCcQ8HxVIolTxKLWXQ5lqFciuzQ6uWZjaIvo0TUmDY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IpLaEWgh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757596481; c=relaxed/simple;
+	bh=KX7xrHa+olS2oROnPjX8J2BFoTeFIgxJ4Lv3gDXpUMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GX3V14Xn2ZpYGQK/bY2awgq4BF4HuKsM1SYB2PVvk65zddQ69iJAbVeha+CrqB+Abz6pVbK9xaOczzuiKp3sZ/dm6+X6ATv5hpDOzMbrh4LCs6V6qV7DewqCcimcUZEv+NRugqJcL7HmgfpOz8hvF1LyEfKt0XV4tgTCA1bToZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMNY8ka5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IpLaEWgh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E26CC4CEF7;
-	Thu, 11 Sep 2025 13:05:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMNY8ka5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C8EDC4CEF8;
+	Thu, 11 Sep 2025 13:14:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757595919;
-	bh=3cTu3t1kABFgYDURDBVW7RvACYUtHwzvTu1HQFQwBrE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IpLaEWghBa5tYMxCDG0sjjg4V/u3gIB5GXvKS0QT+rYChZqB/iW30acZpzJ16tDhN
-	 6bPsToGoA15Qk39Wj4KtZBN1J7438fQNLDVueFH7TQ78kwKlLjdyQDXqlYWt6aeCfv
-	 YecrLMEM4j062LMtihWQ7MCSdN/CzonOyBg0j2RG3CZUvgFhLgJhHYE7J1vlbAD4on
-	 zk2x3sS6JLkz+nWyyHyGgp4Ho+O8r/u21CwaUqTYTQf7rhkSLmlhjF9dQ8FfVsBziN
-	 NHrGjOKn6AJb7wQeLgrp7623OIDdui++gANvZqO26Lt8gO2J7/Q0MOuTzTKPyx7UKz
-	 ZXnlDSBzMOCUg==
-Message-ID: <7ea8e560-89f6-4f3a-97a6-cf70c1d3d0d0@kernel.org>
-Date: Thu, 11 Sep 2025 15:05:14 +0200
+	s=k20201202; t=1757596480;
+	bh=KX7xrHa+olS2oROnPjX8J2BFoTeFIgxJ4Lv3gDXpUMk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BMNY8ka5NU+VI1MvoMs8tdN9twEhfEOt6uHnMuw/zG9gVEyVe/5lVgCJ02DWkmQLq
+	 Fdl3RoRxTueqgHTHfbVxagk8VtPvmwoEyZEau6cD7wse+rO2nbfwmJmmiS553+DP2B
+	 yZ2WsSAMYwSJGbjThMmq184i//iYfBog+QuW84FpNFuhkUyC2+JoPzcfaD9Ztl8I78
+	 1gPLPfUZkieEE52ZtrlTwyr5e027kXiXhtJhWQuAYcNDC9WqmWB1PVx6ZfIC6jcIQd
+	 XfPzPxjtqx1fJ5gagtreHl0mLS/Bz0TnTtqOcTBQYcwz+rQz/XSLpRvbtAo6AeJly1
+	 9KlPyFS3bVuoQ==
+Date: Thu, 11 Sep 2025 14:14:33 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Asuna <spriteovo@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Han Gao <rabenda.cn@gmail.com>, rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] RISC-V: re-enable gcc + rust builds
+Message-ID: <20250911-reprogram-conductor-f02af5f6d03e@spud>
+References: <20250909-gcc-rust-v2-v2-1-35e086b1b255@gmail.com>
+ <20250910-harmless-bamboo-ebc94758fdad@spud>
+ <6bceca9d-44cd-4373-a456-7c2129b418e3@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] page_pool: always add GFP_NOWARN for ATOMIC
- allocations
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, ilias.apalodimas@linaro.org,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, llvm@lists.linux.dev, Linux-MM <linux-mm@kvack.org>
-References: <20250908152123.97829-1-kuba@kernel.org>
- <20250910175240.72c56e86@kernel.org>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20250910175240.72c56e86@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Pv6XXkkXxcuB8WU5"
+Content-Disposition: inline
+In-Reply-To: <6bceca9d-44cd-4373-a456-7c2129b418e3@gmail.com>
 
 
+--Pv6XXkkXxcuB8WU5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 11/09/2025 02.52, Jakub Kicinski wrote:
-> On Mon,  8 Sep 2025 08:21:23 -0700 Jakub Kicinski wrote:
->> Driver authors often forget to add GFP_NOWARN for page allocation
->> from the datapath. This is annoying to operators as OOMs are a fact
->> of life, and we pretty much expect network Rx to hit page allocation
->> failures during OOM. Make page pool add GFP_NOWARN for ATOMIC allocations
->> by default.
-> 
-> Hi Jesper! Are you okay with this? [2] It's not a lot of instructions and
-> it's in the _slow() function, anyway. 
+On Thu, Sep 11, 2025 at 12:46:01PM +0800, Asuna wrote:
+> On 9/10/25 10:27 PM, Conor Dooley wrote:
+> > FWIW, this --- breaks git, and anything after this line (including your
+> > signoff) is lost when the patch is applied.
+>=20
+> I used b4 command to prepare and send the cover letter and patch for v2, =
+not
+> sure what happened.
 
-For this "_slow()" function I don't worry about the performance.
-The optimization you did seems a bit premature... did you run the
-page_pool benchmark to see if it is worth it?
+Dunno. Maybe while editing your commit message you omitted the signoff
+somehow? I don't use b4-submit, so I don't know how it formats stuff. If
+it inserted the --- and what was below it was your intended cover
+letter, your patch itself might be missing the signoff?
+>=20
+> I see that other people's patches have a [PATCH 0/n] email as a start that
+> describes their patch series, this is called a cover-letter in b4 and
+> git-send-email right?
 
-> TBH I wrote the patch to fix the
-> driver (again) first but when writing the commit message I realized my
-> explanation why we can't fix this in the core was sounding like BS :$
+Yes it is. Not really needed if you only have one patch though.
 
-It feels slightly strange to fix drivers misuse of the API in the core,
-but again I'm not going to nack it, as it might be easier for us as
-maintainers as it is hard to catch all cases during driver review.
+> > The riscv patchwork CI stuff is really unhappy with this change:
+> > init/Kconfig:87: syntax error
+> > init/Kconfig:87: invalid statement
+> > init/Kconfig:88: invalid statement
+> > init/Kconfig:89:warning: ignoring unsupported character '`'
+> > init/Kconfig:89:warning: ignoring unsupported character '`'
+> > init/Kconfig:89:warning: ignoring unsupported character '.'
+> > init/Kconfig:89: unknown statement "This"
+> >=20
+> > Is this bogus, or can rustc-bindgen-libclang-version return nothing
+> > under some conditions where rust is not available?
+> > Should this have 2 default lines like some other options in the file?
+>=20
+> This is because rustc-bindgen-libclang-version can't find the bindgen and
+> returns nothing. Sorry I forgot to mention this, it's another reason why I
+> wanted to separate the script, in a separate script we can easily fallback
+> to return 0 when an error is encountered.
+>=20
+> Adding a second line `default 0` doesn't work, I'll try to fix it. BTW, w=
+hen
+> I fix it, if the diff isn't too large, do I need to open a v3 patch, or
+> simply replying to the thread just fine?
 
-All driver are suppose to use page_pool_dev_alloc[1] as it sets
-(GFP_ATOMIC | __GFP_NOWARN).  Or page_pool_dev_alloc_netmems().
+Feel free to reply with the diff if you're looking to discuss the
+implantation, but for the sake of the various bits of automation
+(patchwork, ci bots etc) please submit a v3 when you're happy with what
+you've produced.
 
-  [1] https://elixir.bootlin.com/linux/v6.16.6/source/include/net/
-page_pool/helpers.h#L175-L179
+--Pv6XXkkXxcuB8WU5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The reason I added page_pool_dev_alloc() is because all driver used to
-call a function named dev_alloc_page(), that also sets the appropriate
-GFP flags.  So, I simple piggybacked on that design decision (which I
-don't know whom came up with). Thus, I'm open to change.  Maybe DaveM
-can remember/explain why "dev_alloc" was a requirement.
+-----BEGIN PGP SIGNATURE-----
 
-I'll let it be up to you,
---Jesper
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMLLNgAKCRB4tDGHoIJi
+0sTWAQDdTuuMdgIe7i+D0GfClKSNwZiGeo6RL2W+QEs7l4LftQD7BqPNj+VBOnFy
+pCrKuAA/4HOvXEmHWCYJdIAAEL+4bA0=
+=CuGR
+-----END PGP SIGNATURE-----
 
-[2] https://lore.kernel.org/all/20250908152123.97829-1-kuba@kernel.org/
+--Pv6XXkkXxcuB8WU5--
