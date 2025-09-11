@@ -1,222 +1,305 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D2D24C676;
-	Thu, 11 Sep 2025 05:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757569116; cv=fail; b=Gk3Vou73ZEYIdYXW69C7apgKYX5wlQDnPvftJgjqO88cY6QDPt09E/VkdatPFQaqsa96HMbyi4TgpzjrxuETKeRYTm6Y9cdWMT6huAjBInxwh8PgVdjmx+ObUGkqSaio+D7bojG7RB1nX/l/B+ZePVkkI7kuHONswB8NURGxsMg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757569116; c=relaxed/simple;
-	bh=Pmji6PbJSQA2S85di80QczaZwvE0axdDRm46QQoAwtc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ICUQu6+sCjMhXPE7PYXUAnSlV2cSGgjqap+wxwPFSfHn75CclWwPm4pqguCgDUuX5FfRdi6orrr+eXkxTWef2WIrhICKdupSqtdveLzeOXgoSOQnZ/+yfLTDD1lqQwm3yKSBt+MlHZzYRSSwoBqtjgwImQjbUgF/0UzOSM6dzA8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JEa3aIgb; arc=fail smtp.client-ip=40.107.93.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98631804A;
+	Thu, 11 Sep 2025 06:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757572459; cv=none; b=jtgjihdhlX+SYWjAERVs6K6avBNePtZWinsl2jDwkZ1K6GEysyMoXrW0Y2ieQBx2WtGTxMkMMdA267MsbdTViSNFzhO3tk7VfqABNSYBO4U7X/jyYZzlOu5oLYQzabUalCFQzd/G8FOFEUZ5N2JaATrmikfaD7W7N7q/EUDoEB4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757572459; c=relaxed/simple;
+	bh=XtL7Kx9yeZESFYmPY07/YUv6CKRmyo8/pZoRO8Oauak=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oa0d5y25ks5u5gXeK0WzlrR9iAclBs8K68cm4GNiwVdu/ulQgJAFVu7fw3wh9NMQcKZBI4GBO6omluEB3Sns5zC622PzlZShWKOxn70ap/QX1pHdp4GOPykfJYCDqD3mMmG9CrqL4cCbQhU+EA1I6UdSJeSK85NK8yPt1b1MVlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a26p26qK; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JEa3aIgb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bbySwZcvleOjlnGK2dY0s+7A4jLfq9oSGukpia13sHvRRlfk1bCWtyZXDw0uNgr8oZVkpVKBFnuZ75fOS3HQif6qMxwVYyUBm+mcLBdVMv3jeEIpJQH8kwplTXvHBFbaSixl6PhZvdupXpTkVD+B8qd31laM7k9nYpkZDnsNFU/eGk0rorDxaMYl3QENIAsLDLKbwl/nq/eFeDbRDhOWWVkSHJeSM/FVszyIrL0/hB88ONcaDJsSq4s4B+t+SG/n1zT2T9HpA6xQ3ooqiM5471q5RUAdnC1YiepWn9SJRCAIiL3Bs//nQYQAcUxq3s15Olxa4QnM3CbpKHACwu1TpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EI0+oJqVn5UcnIDmyCfCsAMdForWsY6pjFSTdMLpPIU=;
- b=qqeSU4b4ZyIpQgRkLu1zQ75Ds1BQxtXVC33pPKZwkJDubsMQajf1OFkyYvo6lzg9L1jzTHSN4WvQAtenwP0wS0kAn/n11qGDKMudTU0qjnl0yQZhY4YYgOq38donM5R779Ny4x/Z5Bg/MOp9WwMV/VWYMp0Qq+MRl6AUx7Hik4VnI6u4eWneOtBkFubtLHbfwvBprQR6t11UFwkWUA18wBqmBGL/Q/CWThEdYbHJS4q2siT/1S2wjr3nHytG0zsE+FKqdyqGgAsKRI0gYojAMNviL2X3sOz6Emp99y26yBk8RzUFYYwro2fN414tgPOZH6jc5sY1cnTjFbdmR1NGrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EI0+oJqVn5UcnIDmyCfCsAMdForWsY6pjFSTdMLpPIU=;
- b=JEa3aIgbEe4Qrf0PgVD2WI7kLOejRY0UrrMzg+oUJim7PWyozBFWbrEFLTwmqDmPBb0eYVp+gvfpDZa1Zfc3ynLEQN5fowi7ysFKXSozj806JG2EUs9eVsD9G+1LC2JPXpqnLC1qAgb5az5qjiiw2xT6rKEEfksy/P5bPUuR/FKgvPZrJaeB6Ld4SvwXuLVUP1IFLwW9BQMSlHYOSNnhWFudi/vV5V/MWSFW5t0ZiIi+u/U1ToLUg6rPfxWb9nd23B2EqaOBvvcPKySdo9TxRmRkxHg7ZszzGdM0+Q58YB6P7Pq/7piDBBE63ZPm7jgCxwBidP4ovkq/t00OccCiSw==
-Received: from BLAPR03CA0037.namprd03.prod.outlook.com (2603:10b6:208:32d::12)
- by LV8PR12MB9135.namprd12.prod.outlook.com (2603:10b6:408:18c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Thu, 11 Sep
- 2025 05:38:30 +0000
-Received: from BN1PEPF00004681.namprd03.prod.outlook.com
- (2603:10b6:208:32d:cafe::7b) by BLAPR03CA0037.outlook.office365.com
- (2603:10b6:208:32d::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9115.16 via Frontend Transport; Thu,
- 11 Sep 2025 05:38:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN1PEPF00004681.mail.protection.outlook.com (10.167.243.87) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9115.13 via Frontend Transport; Thu, 11 Sep 2025 05:38:30 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 10 Sep
- 2025 22:38:20 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 10 Sep 2025 22:38:19 -0700
-Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.126.190.180)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 10 Sep 2025 22:38:14 -0700
-Date: Wed, 10 Sep 2025 22:38:12 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Jonathan Corbet <corbet@lwn.net>, <iommu@lists.linux.dev>, Joerg Roedel
-	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
-	<kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>, Bill Wendling
-	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
- Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
- Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon
-	<will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
-	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
- Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
-	<patches@lists.linux.dev>
-Subject: Re: [PATCH v5 03/15] iommupt: Add the basic structure of the iommu
- implementation
-Message-ID: <aMJgRGl+znjXJRyJ@nvidia.com>
-References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <3-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a26p26qK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757572458; x=1789108458;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=XtL7Kx9yeZESFYmPY07/YUv6CKRmyo8/pZoRO8Oauak=;
+  b=a26p26qKmPSl5slfSLZs7/MtMSSXDLGnwNm2Aw3Plj/r5JbHTkvaq5oE
+   G0/z/p2linvAT+trb27ABvJ6os20O4NuJfP4UBj4pBC71o8Y1kW1P3nue
+   Ed0wNQ7898ZsPQwPEgrFo8/RaFOSYlp2cw6nRwk7WnnYXYBQi4MPLlZb6
+   kNXH6vkTMLcex+/EB0CgWhwmD2dElXboPbOGBigIDFfMFvqurVbMT4vTQ
+   GFh1KYL0gqU8GYATl/UCJHBDxynRUlXHi048su9D7NSF2iDTQk45RXmbV
+   ZR6qi04JTudtcU7HJf2bOW5UUGuNY2E32nngJGmgPxSFpOwII0ix2iwfy
+   g==;
+X-CSE-ConnectionGUID: 9nEjEdDBTLmlh021cI75xw==
+X-CSE-MsgGUID: B12GvmdfTfyzXymhQyCQdQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="71318650"
+X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
+   d="scan'208";a="71318650"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 23:34:17 -0700
+X-CSE-ConnectionGUID: YPWajGZ4QluqWjUvQc6psA==
+X-CSE-MsgGUID: pSP0tFhTS225j7yNRVe5Nw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
+   d="scan'208";a="210740802"
+Received: from bergbenj-mobl1.ger.corp.intel.com (HELO [10.245.245.168]) ([10.245.245.168])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 23:34:15 -0700
+Message-ID: <9f88c6c5e3087b86e63b06a358abbe56a00f70ed.camel@linux.intel.com>
+Subject: Re: [drm-xe:drm-xe-next 11/13]
+ drivers/gpu/drm/xe/xe_migrate.c:422:3: error: cannot jump from this
+ indirect goto statement to one of its possible targets
+From: Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, intel-xe@lists.freedesktop.org, Matthew
+ Brost	 <matthew.brost@intel.com>
+Date: Thu, 11 Sep 2025 08:34:12 +0200
+In-Reply-To: <20250910193928.GA2640818@ax162>
+References: <202509101853.nDmyxTEM-lkp@intel.com>
+	 <4a68cafa4e06e8962d205e30521c9e333e9cbb35.camel@linux.intel.com>
+	 <20250910193928.GA2640818@ax162>
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00004681:EE_|LV8PR12MB9135:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35592c8b-dfc3-4ba1-f9bd-08ddf0f570a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|7416014|1800799024|36860700013|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?XimgNsGRrYi5YagYVf+g2OvmnyfEv5LAk94TqlhFmi32oh5OjtL5k7P6t3LA?=
- =?us-ascii?Q?w39iVJmqpwGTTath5uZnBB9q2YKi7UOvAMFc3YXEPoq95j3jz88GByFSU+z6?=
- =?us-ascii?Q?7CqWLL1osZXq2yC6YUi+SfAeuMJ+7aoIxLoZiajNbuoPQGj4YDgkASjeUjOa?=
- =?us-ascii?Q?3grdgTcHRPpuUvbqFilr39D8lhMbFeBoLBMdD3pEmfNbmyyal3e/ZAVjAJ+c?=
- =?us-ascii?Q?tkDNtNFJgLSANObfzKnmqoCml/77txdZoorC9dy9iVrPvXYk4CVWU5MVagno?=
- =?us-ascii?Q?ihVaoDtIPzj5Cci69fX8mf0g79pRAAB0KAhPDiN0apr+WwPuTRinCDiAKO9P?=
- =?us-ascii?Q?aRYbhjs0F3R5003jtLB16Wcby2thmnNn7cLDDjuujNApGuc24glSkplFQxXa?=
- =?us-ascii?Q?hTjgY5e8lSrhgax6GuoJP8OL4d8555ZHc9ksNfEWhJNaMasWXkuuFBwC3ZhZ?=
- =?us-ascii?Q?jzuuFYwpiR+kJxhrCSjwmXQsesVZ9KvnFZdDWStFE9FTd7JGow87FJgAkmVr?=
- =?us-ascii?Q?NRxcTZA4btydZSG33ATdF5b1bsbuVFtRuOLF30uv0ZdFl3M9Vw5J/JtWYBM1?=
- =?us-ascii?Q?mzMd1252Vp3IDV34toADhIMVo5MGcCQT8KY0ibsNuRPa4a6p33mNvtyU78Qk?=
- =?us-ascii?Q?rW0kwBvR8aCDkB+1TYuc7HHeAAVYXLSOZEYjp7vVg1HqUWcgpIAw7Bvv9pEI?=
- =?us-ascii?Q?ALzPimFUz5jOgkauZyQf7mop4xlKnAaw/iskKgDqd9UmRHn53vDTq/Ziw6a7?=
- =?us-ascii?Q?mx4fYApcep5clTW7S0ILJ6XK9Y7AYCRtfRpeN55JvU9aVqse2NxytEORIQU0?=
- =?us-ascii?Q?3/snpIUrJI8E0azabfqsBDjxx/XenD3XDz172dHFZTIhVtToDpSbu381ztsO?=
- =?us-ascii?Q?zCTxLIkTvFl0JfP5ey0aOLp/wg+mCy/uLcU6ViEz/6WakgcH4PIz4qqYpqix?=
- =?us-ascii?Q?VUyGjUxphITl3CQorQV/HdmUMB3PQFM+FoUtTXGQFwUYf4/5H2U6gfxUIGjb?=
- =?us-ascii?Q?rrVxeUzlVLGITNLA2cDcvOTyApxQNGbCwEOtd187iSBeNpKwPQWzIWdJYtc4?=
- =?us-ascii?Q?bqaX+MMteHiePvAJs0TYwE0JIj54u24GkVkQ1LHOYanXAvDwYiy5JCs/+Q52?=
- =?us-ascii?Q?pl/mYrKdMV2mWTwkhDvcxkMg8wmAW/fnn115G3YPOMgeqi3OCF9q7K3lh2Lr?=
- =?us-ascii?Q?oMCFhMLSgConIs1qID7A5WVg/JItOMaLKjiSnktmpdafFtThVOIjhp2X3n1e?=
- =?us-ascii?Q?ot8WMFdYBhFS2LShlPFcsnZUDYU+C+ZIYhR30jgxXXyXvEPUYUNH+QlK7EZP?=
- =?us-ascii?Q?6J5EQg9LiTFG+NrnCU0K1/aqnSvcpyL0WhnmpQFoceeOXRpFWzxQQbwKhgDy?=
- =?us-ascii?Q?+kDLbKe/nff5YayQACuYP6am7EFIENcY4Ajg4JYIWjn0cfyDgW6IsNXO+dIj?=
- =?us-ascii?Q?nnP6ht2l6Mt3wcFvrMirw5yE7T34Xjb86yvCg4/CoGkyo2/dBqO16JFjlFMv?=
- =?us-ascii?Q?shWKAFRYBE0WuiIb4ULnQlXWocNlcvgjnezK?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2025 05:38:30.2014
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35592c8b-dfc3-4ba1-f9bd-08ddf0f570a1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00004681.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9135
 
-On Wed, Sep 03, 2025 at 02:46:30PM -0300, Jason Gunthorpe wrote:
-> The top level struct used by the drivers is pt_iommu_table_FMT. It
-> contains the other structs to allow container_of() to move between the
-> driver, iommu page table, generic page table, and generic format layers.
-> 
->    struct pt_iommu_table_amdv1 {
->        struct pt_iommu {
-> 	      struct iommu_domain domain;
->        } iommu;
->        struct pt_amdv1 {
-> 	      struct pt_common {
-> 	      } common;
+Hi,
 
-According to include/linux/generic_pt/common.h, it should be just:
-		struct pt_common common;
-?
+On Wed, 2025-09-10 at 12:39 -0700, Nathan Chancellor wrote:
+> On Wed, Sep 10, 2025 at 05:16:50PM +0200, Thomas Hellstr=C3=B6m wrote:
+> > On Wed, 2025-09-10 at 18:33 +0800, kernel test robot wrote:
+> > > tree:=C2=A0=C2=A0 https://gitlab.freedesktop.org/drm/xe/kernel.git=C2=
+=A0drm-xe-
+> > > next
+> > > head:=C2=A0=C2=A0 844150c255c94230aec41f88db8e2875cb97439e
+> > > commit: 59eabff2a3524d7f3bf6c24890cd197c4c116fcb [11/13] drm/xe:
+> > > Convert xe_bo_create_pin_map() for exhaustive eviction
+> > > config: loongarch-randconfig-001-20250910
+> > > (
+> > > https://download.01.org/0day-ci/archive/20250910/202509101853.nDmy
+> > > xT
+> > > EM-lkp@intel.com/config)
+> > > compiler: clang version 18.1.8
+> > > (
+> > > https://github.com/llvm/llvm-project=C2=A03b5b5c1ec4a3095ab096dd780e8=
+4d
+> > > 7a
+> > > b81f3d7ff)
+> > > reproduce (this is a W=3D1 build):
+> > > (
+> > > https://download.01.org/0day-ci/archive/20250910/202509101853.nDmy
+> > > xT
+> > > EM-lkp@intel.com/reproduce)
+> > >=20
+> > > If you fix the issue in a separate patch/commit (i.e. not just a
+> > > new
+> > > version of
+> > > the same patch/commit), kindly add following tags
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Closes:
+> > > > https://lore.kernel.org/oe-kbuild-all/202509101853.nDmyxTEM-lkp@int=
+el.com/
+> > >=20
+> > > All errors (new ones prefixed by >>):
+> > >=20
+> > > > > drivers/gpu/drm/xe/xe_migrate.c:422:3: error: cannot jump
+> > > > > from
+> >=20
+> > This one looks like a clang loongarch bug. It doesn't happen on
+> > clang
+> > x86 and looks implausible.
+>=20
+> This does not appear for x86_64 because its defintion of _THIS_IP_ in
+> arch/x86/include/asm/linkage.h does not use the address of a label
+>=20
+> =C2=A0 #ifdef CONFIG_64BIT
+> =C2=A0 /*
+> =C2=A0=C2=A0 * The generic version tends to create spurious ENDBR instruc=
+tions
+> under
+> =C2=A0=C2=A0 * certain conditions.
+> =C2=A0=C2=A0 */
+> =C2=A0 #define _THIS_IP_ ({ unsigned long __here; asm ("lea 0(%%rip), %0"
+> : "=3Dr" (__here)); __here; })
+> =C2=A0 #endif
+>=20
+> compared to
+>=20
+> =C2=A0 #ifndef _THIS_IP_
+> =C2=A0 #define _THIS_IP_=C2=A0 ({ __label__ __here; __here: (unsigned
+> long)&&__here; })
+> =C2=A0 #endif
+>=20
+> for all other architectures. I can reproduce this with both arm64 and
+> i386:
+>=20
+> =C2=A0 $ make -skj"$(nproc)" ARCH=3Di386 LLVM=3D1 clean defconfig
+>=20
+> =C2=A0 $ scripts/config -e DRM_XE -e PROVE_LOCKING
+>=20
+> =C2=A0 $ make -skj"$(nproc)" ARCH=3Di386 LLVM=3D1 olddefconfig
+> drivers/gpu/drm/xe/xe_migrate.o
+> =C2=A0 drivers/gpu/drm/xe/xe_migrate.c:422:3: error: cannot jump from thi=
+s
+> indirect goto statement to one of its possible targets
+> =C2=A0=C2=A0=C2=A0 422 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drm_exec_retry_on_contenti=
+on(&exec);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/drm/drm_exec.h:123:4: note: expanded from macro
+> 'drm_exec_retry_on_contention'
+> =C2=A0=C2=A0=C2=A0 123 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 goto
+> *__drm_exec_retry_ptr;=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 \
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 drivers/gpu/drm/xe/xe_migrate.c:465:2: note: possible target of
+> indirect goto statement
+> =C2=A0=C2=A0=C2=A0 465 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+might_lock(&m->job_mutex);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/linux/lockdep.h:553:33: note: expanded from macro
+> 'might_lock'
+> =C2=A0=C2=A0=C2=A0 553 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+lock_release(&(lock)->dep_map,
+> _THIS_IP_);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/linux/instruction_pointer.h:10:41: note: expanded from
+> macro '_THIS_IP_'
+> =C2=A0=C2=A0=C2=A0=C2=A0 10 | #define _THIS_IP_=C2=A0 ({ __label__ __here=
+; __here: (unsigned
+> long)&&__here; })
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 drivers/gpu/drm/xe/xe_migrate.c:420:2: note: jump exits scope of
+> variable with __attribute__((cleanup))
+> =C2=A0=C2=A0=C2=A0 420 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+xe_validation_guard(&ctx, &xe->val, &exec, (struct
+> xe_val_flags) {}, err) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 drivers/gpu/drm/xe/xe_validation.h:189:2: note: expanded from macr=
+o
+> 'xe_validation_guard'
+> =C2=A0=C2=A0=C2=A0 189 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+scoped_guard(xe_validation, _ctx, _val, _exec,
+> _flags, _ret) \
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/linux/cleanup.h:429:2: note: expanded from macro
+> 'scoped_guard'
+> =C2=A0=C2=A0=C2=A0 429 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+__scoped_guard(_name, __UNIQUE_ID(label), args)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/linux/cleanup.h:420:20: note: expanded from macro
+> '__scoped_guard'
+> =C2=A0=C2=A0=C2=A0 420 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+for (CLASS(_name,
+> scope)(args);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 drivers/gpu/drm/xe/xe_migrate.c:465:2: note: jump enters a
+> statement expression
+> =C2=A0=C2=A0=C2=A0 465 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+might_lock(&m->job_mutex);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/linux/lockdep.h:553:33: note: expanded from macro
+> 'might_lock'
+> =C2=A0=C2=A0=C2=A0 553 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+lock_release(&(lock)->dep_map,
+> _THIS_IP_);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> =C2=A0 include/linux/instruction_pointer.h:10:20: note: expanded from
+> macro '_THIS_IP_'
+> =C2=A0=C2=A0=C2=A0=C2=A0 10 | #define _THIS_IP_=C2=A0 ({ __label__ __here=
+; __here: (unsigned
+> long)&&__here; })
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 ^
+> =C2=A0 ...
+>=20
+> While I agree that this is clearly a false positive because
+> __drm_exec_retry_ptr is only assigned the label in
+> drm_exec_until_all_locked() so we know __here will never be jumped to
+> via 'goto *__drm_exec_retry_ptr;', I am not sure that this is a clang
+> bug. Both compilers agree that the kernel's use of the address of a
+> label in _THIS_IP_ is problematic because it does not conform to the
+> only supported use case for taking the address of a label, which is
+> for
+> computed gotos:
+>=20
+> =C2=A0 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D44298
+> =C2=A0 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D120071
+> =C2=A0 https://github.com/llvm/llvm-project/issues/138272
+> =C2=A0 https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html
+>=20
+> Given that is the only supported use case, I don't think it is
+> unreasonable for clang to make sure all address-taken labels in a
+> function are valid jump targets for a computed goto since that is the
+> only reason they should be exist in a function.
+>=20
+> This could be worked around fairly simply with something like the
+> following diff.
+>=20
+> Cheers,
+> Nathan
 
-> +static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
-> +				struct iommu_domain *domain)
-> +{
-...
+Yeah, I already have a patch in our CI that moves the goto and the
+corresponding label to a separate static function so we can keep the
+lockdep check.
+
+Given your explanation, I need to change the commit message, though.
+
+Thanks,
+Thomas
+
+
+>=20
+> diff --git a/drivers/gpu/drm/xe/xe_migrate.c
+> b/drivers/gpu/drm/xe/xe_migrate.c
+> index 6fad5d469629..b80eddf1a36e 100644
+> --- a/drivers/gpu/drm/xe/xe_migrate.c
+> +++ b/drivers/gpu/drm/xe/xe_migrate.c
+> @@ -462,7 +462,13 @@ int xe_migrate_init(struct xe_migrate *m)
+> =C2=A0
+> =C2=A0	mutex_init(&m->job_mutex);
+> =C2=A0	fs_reclaim_acquire(GFP_KERNEL);
+> +#ifndef CONFIG_CC_IS_CLANG
 > +	/*
-> +	 * A 64-bit high address space table on a 32-bit system cannot work.
+> +	 * _THIS_IP_ runs afoul of clang's scope checking and the
+> computed goto
+> +	 * in drm_exec_retry_on_contention().
 > +	 */
-
-Nit: this fits to a single line.
-
-> +#ifdef pt_iommu_fmt_hw_info
-> +#define pt_iommu_table_hw_info CONCATENATE(pt_iommu_table, _hw_info)
-> +#define pt_iommu_hw_info CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), hw_info)
-> +void pt_iommu_hw_info(struct pt_iommu_table *fmt_table,
-> +		      struct pt_iommu_table_hw_info *info)
-> +{
-> +	struct pt_iommu *iommu_table = &fmt_table->iommu;
-> +	struct pt_common *common = common_from_iommu(iommu_table);
-> +	struct pt_range top_range = pt_top_range(common);
-> +
-> +	pt_iommu_fmt_hw_info(fmt_table, &top_range, info);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(pt_iommu_hw_info, "GENERIC_PT_IOMMU");
+> =C2=A0	might_lock(&m->job_mutex);
 > +#endif
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("IOMMU Page table implementation for " __stringify(PTPFX_RAW));
-> +MODULE_IMPORT_NS("GENERIC_PT");
-> +
-> +#endif
+> =C2=A0	fs_reclaim_release(GFP_KERNEL);
+> =C2=A0
+> =C2=A0	err =3D devm_add_action_or_reset(xe->drm.dev, xe_migrate_fini,
+> m);
 
-Nit: maybe
-#endif /* __GENERIC_PT_IOMMU_PT_H */
-?
-
-> +struct pt_iommu_cfg {
-> +	/**
-> +	 * @features: Features required. Only these features will be turned on.
-> +	 * The feature list should reflect what the IOMMU HW is capable of.
-> +	 */
-> +	unsigned int features;
-> +	/**
-> +	 * @hw_max_vasz_lg2: Maximum VA the IOMMU HW can support. This will
-> +	 * imply the top level of the table.
-> +	 */
-> +	u8 hw_max_vasz_lg2;
-> +	/**
-> +	 * @hw_max_oasz_lg2: Maximum OA the IOMMU HW can support. The format
-> +	 * might select a lower maximum OA.
-> +	 */
-> +	u8 hw_max_oasz_lg2;
-> +};
-> +
-> +#endif
-
-#endif /*  __GENERIC_PT_IOMMU_H */
-
-Otherwise,
-
-Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
