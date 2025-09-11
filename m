@@ -1,55 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AB724C676;
-	Wed, 10 Sep 2025 23:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E7719309E;
+	Thu, 11 Sep 2025 00:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757548714; cv=none; b=OosCAN+NdPm03oSykGdRf3Vqk6mEjGP9yVMnmtUDl9Lh7r0hTTDZwFIE1rqh0w4rR3qMaxjdhoj2d4/IXm3BtD3ZnTpYjF2UqWZuNXL6HUhrQULPy5IZ680M384qGBoRnRmqz2JZ9y04zq3zSv+MapF/c4le6P3GMiyKlwPkDvU=
+	t=1757551962; cv=none; b=k7nGNK/vsZ+pEpl4FfSvzMxpcwbP09efmyn+Kurr0x8DZ5K2FQNqLVcYUi6uiq+rHZdLVNZgq9UawtkZFR3ZWyYE5e7y5ycUojqbyiSywi4UqAiKfZ1uQTZQ8BppWMcfboyDWaq5iGJGTvsITYhsm0GYtO6wVSi3SfZxgz6iBPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757548714; c=relaxed/simple;
-	bh=G/Y8KaG03rqMl1Aox6CuhGQyJe+3r4BVje0MntuJFVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=P1mjkNE1nRe/TF339UyUAgyKnI7hRNa1hM+pRHgLU+TcFeP0GsUgJcSgujHHg/QL+d88P7Gzuz+arJe9IhFGr9IsS/aX/Uz8jL+bWrhUhbXJEsfBZQGtyBa4kfBefO6Lm2NPw4EVtUCyNWI4A4PxCpKp5+0SMcDk3kA6yX9e92c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVk4LXht; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757551962; c=relaxed/simple;
+	bh=V8xpZ+8EhZp3so4fvB8IMMv2kOizosAzyULq4a4Whcg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QtMK4paxvEHxMxxbLRw6sWdKG0Xhe5YlSnkrUNQgEeuuMukWxKeWKN3LhcPVKtTS8Dn0G/2/XPsw30BlWdYfrGSOhOB1oJG3CLlrI777u7Ug+x/CmNeTAZ+I5dHUdaU5bI8T7Yt/6iI7Pl3muxqOYF9P4tSJ1o07Jw6ZiFj9SD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nb62S9Ri; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVk4LXht"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A55C4CEEB;
-	Wed, 10 Sep 2025 23:58:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nb62S9Ri"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB21C4CEEB;
+	Thu, 11 Sep 2025 00:52:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757548714;
-	bh=G/Y8KaG03rqMl1Aox6CuhGQyJe+3r4BVje0MntuJFVY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=nVk4LXhthQXwvlie2NKbdtjNOT5UlaAKvLGyFtlZ9/X9kmkzKkq8RYWFvucyuuxeG
-	 03H6udJth/p9Um+IohmlDeIda6XM6SbFkZnOV9pGvE94Y3F6ubdQ1HviDoyON8uWnH
-	 8W1ahD9ffFDSblIj5Zg5NdStVn8FxpoQ0mptyipHYD7WzdoXauQBSvsyD4sg7RBrD+
-	 3kco9+qR85JFHCA1oxqfs63T1IOPKRQ8lKkw1P+jLI9LQsHh9ieelAk21IGKEtrDH5
-	 DKrZc1vc9pJP29utRYlG5wUp3h/Oijj3sAtp+B+AOZ2Wul37omn/RkMbODpHfj5Ec3
-	 7jr+IRlZF1w3g==
-Date: Wed, 10 Sep 2025 16:58:30 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: ojeda@kernel.org
-Subject: Prebuilt LLVM 21.1.1 uploaded
-Message-ID: <20250910235830.GA1133148@ax162>
+	s=k20201202; t=1757551961;
+	bh=V8xpZ+8EhZp3so4fvB8IMMv2kOizosAzyULq4a4Whcg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nb62S9RikRNNrxSmYWlXFL1v3AvgVoV4t1QDscjX9c9vNFgqnQ7VBi+/+nZd4fApc
+	 aA3gEVEh43XTCU6/iBvtv3RcAgFQQNx6jkTTd+aLrnFl2UONNbfpZxgWcpQEMb+tyH
+	 +RzbRdRo8W+YiJ1pfQiJDD3aep5t/lM7h9NlZBtDt29aJhfp9903diIAq2YDy9I2XP
+	 eDLzAJfWXEql86JELFzv4QtzPqaMr0AwnEcK0wXDte+DVOezCdTN6p9xJimxTmCb5J
+	 PoXWomCPzqHtMGagmxPAFf+NNHL5gE56cWy6nE4TIgmHStvPO9ohbfTtl50FRGdxNO
+	 Ccy5hxFvJKduw==
+Date: Wed, 10 Sep 2025 17:52:40 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net, hawk@kernel.org
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, ilias.apalodimas@linaro.org,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next] page_pool: always add GFP_NOWARN for ATOMIC
+ allocations
+Message-ID: <20250910175240.72c56e86@kernel.org>
+In-Reply-To: <20250908152123.97829-1-kuba@kernel.org>
+References: <20250908152123.97829-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Mon,  8 Sep 2025 08:21:23 -0700 Jakub Kicinski wrote:
+> Driver authors often forget to add GFP_NOWARN for page allocation
+> from the datapath. This is annoying to operators as OOMs are a fact
+> of life, and we pretty much expect network Rx to hit page allocation
+> failures during OOM. Make page pool add GFP_NOWARN for ATOMIC allocations
+> by default.
 
-I have built and uploaded LLVM 21.1.1 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
-
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-opportunity to get them fixed in main and backported before the 21.x
-series is no longer supported.
-
-Cheers,
-Nathan
+Hi Jesper! Are you okay with this? It's not a lot of instructions and
+it's in the _slow() function, anyway. TBH I wrote the patch to fix the
+driver (again) first but when writing the commit message I realized my
+explanation why we can't fix this in the core was sounding like BS :$
