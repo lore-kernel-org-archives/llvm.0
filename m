@@ -1,112 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A273279334;
-	Thu, 11 Sep 2025 20:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE32171CD
+	for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 21:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757622299; cv=none; b=GU2khXoN6vy7fl9jhwvNuaIsDmJdzMdxKw+HitTN2Zesyx0odZX87EHFuk/RhD8HH7f8aXnwWsh7QBrip/Cp26qeywmQ/lb/Q9wSIJAM5v/neO4sSXfFpo741IFhMjKorIhmvJ7cyWlBmLnIGJ1RuQTwENgOyGOMilebq/Lc98w=
+	t=1757625990; cv=none; b=SWRPYY+t7aIlQs1a9O2mOZVGPO8aZQiGl4LLppq/0igrxmy7uY62XznSlwzTc42YTPOfEsyaz4FMt0z1pjlOKENJ7ZH9CdPQXgOxlqJaQ3SyxW1PzzUG2Ob4X7fUhoc/fneKfTZcZCL3NFcyYrG/EKS9x/myRrDGWbPHWOyRqCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757622299; c=relaxed/simple;
-	bh=22VCHFy4KNRQGaf9uaDJFhGbMiUhnhRsXF9X0lLDmRI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OAiIme8IQ0zkq3RpEi/Tp8QOe1vRSpRK5tkWUeLNvyNJtcPKT6KtgTpjAeVW961V+ic56gvkwv/1rAokSq7bi1nN25F6Jjv3RprHzebn5WcLrONdgr8l+LMTzBmd8ZezFBzWIH57MJ3XL5QERsVYv/uk9CXtyxDCAydlCIflGYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PVjxgDun; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757625990; c=relaxed/simple;
+	bh=sFo11LJDFbgdEzVFkudN41eUwSXYsUo78kBXh07zsiw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tR+Tt4osn6gttpipQR5clfGN/KTiumBGbo58YI70h1kiBOiPOVFw490bbRu3o0W1A8MZOTowjS4PMob1opjAxAhzR0c90bIyKphA/sKzBn1kjDsJRvt2mgPNay573WfR4orDkpIJiODpzU+G+tQCLQGiTdb2BGJhvnxDhDCQL4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdEPqZ1m; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PVjxgDun"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2ECC4CEF0;
-	Thu, 11 Sep 2025 20:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757622299;
-	bh=22VCHFy4KNRQGaf9uaDJFhGbMiUhnhRsXF9X0lLDmRI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=PVjxgDun/nBFFjYBgdawOyp86YFHQXxV7QXbbULLBIZ4dVAZyDxSRoVim2nsg8CTT
-	 g0KfqpySU62vHHbKSJzDwcgSU4VxJj9tAV2pBHM48YIweNtWHs7COz7qGmFzsqowP2
-	 K6FhR8PZpR8Jiv/srq5SZ058rvCCEWjNGr5MKmq3xlXRbTHXHHgxKgHkjfi+dlPlz5
-	 1XV6sjI97eyPAHPoBLv84ORmTNif1Wfni6sQRYhqUh+gE1nYJCDnf2AeIUg/CLfceI
-	 aMFuBBxmWs53YI/9a+dB+0E+mRsoHMFK/vJMIK1TyNILII18Yfdjq0Azw6+MSlG2PB
-	 vWuF9N3uWEX5Q==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 11 Sep 2025 13:24:42 -0700
-Subject: [PATCH] drm/omap: Mark dispc_save_context() with
- noinline_for_stack
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdEPqZ1m"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2445806e03cso14028055ad.1
+        for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 14:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757625988; x=1758230788; darn=lists.linux.dev;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EjquTq5MAgSVrD6End1v2/eMfRkFt39jWpb1aBSSPxk=;
+        b=BdEPqZ1mEyAivChqM3rT0Cdlw42oQ+pREsfn4BcDvuaiMbrv/tH7qejBLiGF546a/l
+         Ge6+Ww/kFPejai9IaKLDUKQjVINJXtwIroOb1dPbKYvL1R8n3d74WnT/EiqTCulB1k75
+         +McrefJO+ceIDmPcuG6e4OSsIISnKz0gWG/EghLX657JZlJR/1Nwz2KohD9IRLfzoelt
+         ibea3e3HTnwRkNjP/h1tcJ5Dh8GCpcJkbr0NxqGft9dhstTJNB7Y9u5RKsePZ3f2h/Gk
+         qeDh+h1yS84ckD0YnHDJjAKpEgD+qG86RgHQiTRjd8ZCXSygy+SskM9csTTzyPxQlTSm
+         k22g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757625988; x=1758230788;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EjquTq5MAgSVrD6End1v2/eMfRkFt39jWpb1aBSSPxk=;
+        b=KdkZLOWrDfQLYGv7s0Z1PYyFTnEl/j8hur3eSRYlt28/wBQP7x8ybsGzjgBoZVpMro
+         HcDanZe8o6rYbwriVzsqoQZ/FGt8/YPMTtLm8R76E2+e8FLA5lmWYioyQitvFFpqf6uh
+         HPTaybqSY5BuEmTP7BmLTTMJJZQxsotujGsY4r1Uz6jCRswJv0ha30TL36rMpoiRycvs
+         DFHLWflDolH+HhOvF2RorzrB8OccE89ENCM3picb+H9tvlGrw6Rdc2TgoyvAIStu11Jb
+         DaAW4w+AX/hn2gn+b3fPwdJBvC0Cj1KG5Jrx2kF9VHVol4898iQNZVvUbd2OAMxka7+D
+         Zj9Q==
+X-Gm-Message-State: AOJu0YwpRzvhGD4m6X0TTbTF4nKO3vejOayB5fO0m/4DTHoAgVwtwbI7
+	9tZDgkgwpv4v+XCxbLb/znIg2QRYqMM3c48kUOEiN7meIQSuQ8Df7Nv4
+X-Gm-Gg: ASbGncs3AtP0LDhTpI8hCATq3yGZlLPp+nKpGok56jX1pQ2YRZpR/VnGrn9FRu68+tC
+	Xd4rPFgtAeJvu70aDdWQ0YKDBODISMoutEi9a4UQoc8lwtmvSbEJsA0FV0UmORByLtPl0l2EBzO
+	5Wvm6teqqvn9X322uw2rJDV+GLhksG0RIdMA1Kkk2Uv6Je0o9AP5MU1ewvPuREdzBuk/1yAVV5e
+	/hMF9giXxIg+oC9ZW4Vhv3vbiAs9Z7lejhaSxcJNn9wkA9+KOArmP63sIxYNYAmZ242jL94nGSB
+	1SiB0bn6lKNREgWkZQYA01c3WNv30zMTykUNGgNl9XG9RHxJf+1w1LLChwb4/zq6iCCpi3w56yk
+	trjr77wSQ0L2A2UDNABMMFMst4Ga/iw==
+X-Google-Smtp-Source: AGHT+IEjwfOvzZk84xflzxjLm5xONbXJLauvwJlikYGw0U/j6U74AKTutnNrVqldFjubLYTuTs0HYg==
+X-Received: by 2002:a17:903:1b08:b0:25c:9688:bdca with SMTP id d9443c01a7336-25d26e43a33mr7095795ad.50.1757625988238;
+        Thu, 11 Sep 2025 14:26:28 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25c37295f4fsm28513255ad.42.2025.09.11.14.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Sep 2025 14:26:27 -0700 (PDT)
+Message-ID: <c846a153010e40a52e98b8abe9db69f7d4cadd58.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 09/10] bpf: disable and remove registers
+ chain based liveness
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	andrii@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
+Date: Thu, 11 Sep 2025 14:26:24 -0700
+In-Reply-To: <202509112112.wkWw6wJW-lkp@intel.com>
+References: <20250911010437.2779173-10-eddyz87@gmail.com>
+	 <202509112112.wkWw6wJW-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250911-omapdrm-reduce-clang-stack-usage-pt-2-v1-1-5ab6b5d34760@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAkww2gC/x2NQQrCQAwAv1JyNtBdUYhfEQ/pbtSgbZekFaH07
- waPA8PMBi6m4nDpNjD5qOs8BaRDB+XJ00NQazDkPp96SgnnkVu1EU3qWgTLOyT0hcsLV+fw24I
- ZiYmF8vk4UIJoNZO7fv+f623ffw0tGOF3AAAA
-X-Change-ID: 20250911-omapdrm-reduce-clang-stack-usage-pt-2-9a9ae9263b91
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2203; i=nathan@kernel.org;
- h=from:subject:message-id; bh=22VCHFy4KNRQGaf9uaDJFhGbMiUhnhRsXF9X0lLDmRI=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBmHDST8z4jMDLDKfqKZ6vBvynr32y9bzK3mme6InOd85
- +k5d32ejlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARdS9GhgVOCW4v/t60St8+
- NeW7U4G//nfmnwFOe8NXZ8ibBu61XcrwvySlpq1a2Ktwj5vr368PFx2S9t0+f9oSvihNOY0rwdL
- B/AA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-A recent innocuous internal optimization change in LLVM [1] causes the
-same issue that necessitated commit 660942f2441d ("drm: omapdrm: reduce
-clang stack usage") to occur in dispc_runtime_suspend() from inlinling
-dispc_save_context().
+On Thu, 2025-09-11 at 22:19 +0800, kernel test robot wrote:
+> Hi Eduard,
+>=20
+> kernel test robot noticed the following build warnings:
+>=20
+> [auto build test WARNING on bpf-next/master]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Eduard-Zingerman/b=
+pf-bpf_verifier_state-cleaned-flag-instead-of-REG_LIVE_DONE/20250911-090604
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
+master
+> patch link:    https://lore.kernel.org/r/20250911010437.2779173-10-eddyz8=
+7%40gmail.com
+> patch subject: [PATCH bpf-next v1 09/10] bpf: disable and remove register=
+s chain based liveness
+> config: x86_64-buildonly-randconfig-003-20250911 (https://download.01.org=
+/0day-ci/archive/20250911/202509112112.wkWw6wJW-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250911/202509112112.wkWw6wJW-lkp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202509112112.wkWw6wJW-lkp=
+@intel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> > > kernel/bpf/verifier.c:19305:11: warning: variable 'err' is uninitiali=
+zed when used here [-Wuninitialized]
+>     19305 |                                 err =3D err ? : push_jmp_hist=
+ory(env, cur, 0, 0);
+>           |                                       ^~~
+>    kernel/bpf/verifier.c:19140:12: note: initialize the variable 'err' to=
+ silence this warning
+>     19140 |         int n, err, states_cnt =3D 0;
+>           |                   ^
+>           |                    =3D 0
+>    1 warning generated.
+>=20
+>=20
+> vim +/err +19305 kernel/bpf/verifier.c
 
-  drivers/gpu/drm/omapdrm/dss/dispc.c:4720:27: error: stack frame size (2272) exceeds limit (2048) in 'dispc_runtime_suspend' [-Werror,-Wframe-larger-than]
-   4720 | static __maybe_unused int dispc_runtime_suspend(struct device *dev)
-        |                           ^
+This was sloppy on my side, should look as follows:
 
-There is an unfortunate interaction between the inner loops of
-dispc_save_context() getting unrolled and the calculation of the index
-into the ctx array being spilled to the stack when sanitizers are
-enabled [2].
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19297,9 +19297,12 @@ static int is_state_visited(struct bpf_verifier_en=
+v *env, int insn_idx)
+                         * the precision needs to be propagated back in
+                         * the current state.
+                         */
+-                       if (is_jmp_point(env, env->insn_idx))
+-                               err =3D err ? : push_jmp_history(env, cur, =
+0, 0);
+-                       err =3D err ? : propagate_precision(env, &sl->state=
+, cur, NULL);
++                       if (is_jmp_point(env, env->insn_idx)) {
++                               err =3D push_jmp_history(env, cur, 0, 0);
++                               if (err)
++                                       return err;
++                       }
++                       err =3D propagate_precision(env, &sl->state, cur, N=
+ULL);
+                        if (err)
+                                return err;
+                        /* When processing iterator based loops above propa=
+gate_liveness and
 
-While this should obviously be addressed on the LLVM side, such a fix
-may not be easy to craft and it is simple enough to work around the
-issue in the same manner as before by marking dispc_save_context() with
-noinline_for_stack, which makes it use the same amount of stack as
-dispc_restore_context() does after the same change.
 
-Cc: stable@vger.kernel.org
-Link: https://github.com/llvm/llvm-project/commit/055bfc027141bbfafd51fb43f5ab81ba3b480649 [1]
-Link: https://llvm.org/pr143908 [2]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/omapdrm/dss/dispc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/omapdrm/dss/dispc.c b/drivers/gpu/drm/omapdrm/dss/dispc.c
-index cf055815077cffad554a4ae58cfd7b81edcbb0d4..d079f557c8f24d1afd0bc182edd13165cb9c356c 100644
---- a/drivers/gpu/drm/omapdrm/dss/dispc.c
-+++ b/drivers/gpu/drm/omapdrm/dss/dispc.c
-@@ -417,7 +417,7 @@ static bool dispc_has_feature(struct dispc_device *dispc,
- #define RR(dispc, reg) \
- 	dispc_write_reg(dispc, DISPC_##reg, dispc->ctx[DISPC_##reg / sizeof(u32)])
- 
--static void dispc_save_context(struct dispc_device *dispc)
-+static noinline_for_stack void dispc_save_context(struct dispc_device *dispc)
- {
- 	int i, j;
- 
-
----
-base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
-change-id: 20250911-omapdrm-reduce-clang-stack-usage-pt-2-9a9ae9263b91
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+[...]
