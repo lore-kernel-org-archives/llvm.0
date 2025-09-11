@@ -1,231 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D820C173;
-	Thu, 11 Sep 2025 02:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1E52343C7
+	for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 02:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757556242; cv=none; b=ZKsiEonFu8Gv56P7ZJnlgSt93FtfQzSunBrMg5wIOK1DrnjRDqXR4aAW/PHZtpAuXCyvcGQNNVRkWSLkcjnlIlivy41hJxhg/5es3o2zjmeY59sArC9EpSKmQMw3WT/iSezkuBJW9DFrBc8ZuH+vs//WSdas3cfTDP769qoYh5I=
+	t=1757556791; cv=none; b=tSiwbTRMU7q4ItSNIKZrh++Ip4YANl/z1GoAwptI+FEBb5CgyTNuLi3UjQ6UU2j9CeUDcDb4E0q7Z2Oqb7cyt87dPcHsUikmufAOppdCrgcu1pYiRxon7tJCoFO7BHY7ggxtuHZqiIqNC7eHXOEQcygTzaZQoCC55L/oOtjIEuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757556242; c=relaxed/simple;
-	bh=Z68IFztTwwT+G/boPAxo1CtTW3sBZB56ExZy97gj378=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cgmp9k+5Jfyp7BYsEJIr1KQwMSFQBgJIs8l4mosGA10ufsmilQnhGFF1blbpyvaXwXN1cam6Y6Bqi+xSy1r3aPzOr7/1gXRNHOW07EbmdyvEhravqVYzIOab4bLrHMsbgM3MkXXVFpv+cG4JsUlCZz8zGCXudwQpbeyfcwoN7D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZI6HIP/s; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757556791; c=relaxed/simple;
+	bh=MiFkUNNLIs6svqoUo8bA/tnfrB6BFBFyn24WE5dbnC0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bTak6+Yvc/xFWH6dFBic47a5cLEqRYzrw2zXMXym6bSIqk+1K4wG9l2cqD130OP6r6qEzggou5x4BApAzb+I1hV/cBKYHCVzvc56GbUeJMjiURdemACLj8a5PC0YKHSP/LbriiEqfMdyCLiqbBGFaAG7FrNRB7FU8AxrxDbn/vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M1G8t34H; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZI6HIP/s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757556241; x=1789092241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z68IFztTwwT+G/boPAxo1CtTW3sBZB56ExZy97gj378=;
-  b=ZI6HIP/sjfDaPL+2sFrNtiHpAIdJHMngI56zBkGME4SNfB1/m2QayfDi
-   ETDMPWxrAXLTg3wNmCs7pSo9Ux7Rn77behXwtzhzPuEZLLKvhJLrPpaHL
-   yFwY9vp84/OL1y0cs4vcSjx3XJAn+hOPIefbOy7jjFemOdtGgFN/m5BfF
-   Jsoy0Vp4LiSWFch79BnEvxwXQIiCD9veheG3KzlRsECwqThQJRsS+F2lO
-   9Hk5OxqNa9B/AnIidRHkUDueoDAqdpKo60gp78VCNKokBWSauICaG9Uyr
-   aqDAp5VK+DS3hysXOQzGN15V9KiAxoCa3CK8k1oplCL9ScwCvvL43d9PS
-   g==;
-X-CSE-ConnectionGUID: nwWB7ypGT6KGwWSLojWF2w==
-X-CSE-MsgGUID: 4Kxwj9cXT8ipET3CgXQRAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="59816154"
-X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
-   d="scan'208";a="59816154"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 19:04:00 -0700
-X-CSE-ConnectionGUID: IyFFpqfjSNm7t9qQflySDw==
-X-CSE-MsgGUID: 8wwaSvr8R9uyI2WZjp7ClQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
-   d="scan'208";a="173456112"
-Received: from lkp-server01.sh.intel.com (HELO b9b8c76d6e3f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 10 Sep 2025 19:03:54 -0700
-Received: from kbuild by b9b8c76d6e3f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uwWfA-00003j-0e;
-	Thu, 11 Sep 2025 02:03:52 +0000
-Date: Thu, 11 Sep 2025 10:03:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aaron Lu <ziqianlu@bytedance.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Ben Segall <bsegall@google.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Xi Wang <xii@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
-	Chuyi Zhou <zhouchuyi@bytedance.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Florian Bezdeka <florian.bezdeka@siemens.com>,
-	Songtang Liu <liusongtang@bytedance.com>,
-	Chen Yu <yu.c.chen@intel.com>,
-	Matteo Martelli <matteo.martelli@codethink.co.uk>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH 4/4] sched/fair: Do not balance task to a throttled cfs_rq
-Message-ID: <202509110908.a2P8HZ8A-lkp@intel.com>
-References: <20250910095044.278-5-ziqianlu@bytedance.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M1G8t34H"
+Message-ID: <49b70945-7483-4af1-95ba-e128eb9f6d7e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1757556786;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5x97LCOYyTXkOfHYlT/QUqsdu9EY9w2HudE5QcAbwMs=;
+	b=M1G8t34H0j0/s6kKNLbIj/nDQ8gNW61ZSNACRNV2OIl3EYf/+ktW1Iv26EI/RWOojX6wwm
+	4SSrTVjmZNyULE2yRObTF4Oi2atDivC4ft5N6eclHcEGgMcWHqB0D+7QD/+C+rl0xOm2zc
+	1zLu7Gvq5NRCnb++mS9mooyudDthQkU=
+Date: Thu, 11 Sep 2025 10:12:48 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250910095044.278-5-ziqianlu@bytedance.com>
+Subject: Re: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from
+ khugepaged_mm_slot
+Content-Language: en-US
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+ linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ Lance Yang <ioworker0@gmail.com>, akpm@linux-foundation.org,
+ gutierrez.asier@huawei-partners.com, rientjes@google.com, andrii@kernel.org,
+ david@redhat.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ Liam.Howlett@oracle.com, ameryhung@gmail.com, ryan.roberts@arm.com,
+ lorenzo.stoakes@oracle.com, usamaarif642@gmail.com, willy@infradead.org,
+ corbet@lwn.net, npache@redhat.com, dev.jain@arm.com, 21cnbao@gmail.com,
+ shakeel.butt@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ hannes@cmpxchg.org, kernel test robot <lkp@intel.com>
+References: <20250910024447.64788-2-laoar.shao@gmail.com>
+ <202509110109.PSgSHb31-lkp@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <202509110109.PSgSHb31-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Aaron,
+Hi Yafang,
 
-kernel test robot noticed the following build errors:
+On 2025/9/11 01:27, kernel test robot wrote:
+> Hi Yafang,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/mm-thp-remove-disabled-task-from-khugepaged_mm_slot/20250910-144850
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20250910024447.64788-2-laoar.shao%40gmail.com
+> patch subject: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from khugepaged_mm_slot
+> config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250911/202509110109.PSgSHb31-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250911/202509110109.PSgSHb31-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202509110109.PSgSHb31-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> kernel/sys.c:2500:6: error: call to undeclared function 'hugepage_pmd_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      2500 |             hugepage_pmd_enabled())
+>           |             ^
+>>> kernel/sys.c:2501:3: error: call to undeclared function '__khugepaged_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      2501 |                 __khugepaged_enter(mm);
+>           |                 ^
+>     2 errors generated.
 
-[auto build test ERROR on 5b726e9bf9544a349090879a513a5e00da486c14]
+Oops, seems like hugepage_pmd_enabled() and __khugepaged_enter() are only
+available when CONFIG_TRANSPARENT_HUGEPAGE is enabled ;)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Lu/sched-fair-Propagate-load-for-throttled-cfs_rq/20250910-175310
-base:   5b726e9bf9544a349090879a513a5e00da486c14
-patch link:    https://lore.kernel.org/r/20250910095044.278-5-ziqianlu%40bytedance.com
-patch subject: [PATCH 4/4] sched/fair: Do not balance task to a throttled cfs_rq
-config: i386-randconfig-012-20250911 (https://download.01.org/0day-ci/archive/20250911/202509110908.a2P8HZ8A-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250911/202509110908.a2P8HZ8A-lkp@intel.com/reproduce)
+> 
+> 
+> vim +/hugepage_pmd_enabled +2500 kernel/sys.c
+> 
+>    2471	
+>    2472	static int prctl_set_thp_disable(bool thp_disable, unsigned long flags,
+>    2473					 unsigned long arg4, unsigned long arg5)
+>    2474	{
+>    2475		struct mm_struct *mm = current->mm;
+>    2476	
+>    2477		if (arg4 || arg5)
+>    2478			return -EINVAL;
+>    2479	
+>    2480		/* Flags are only allowed when disabling. */
+>    2481		if ((!thp_disable && flags) || (flags & ~PR_THP_DISABLE_EXCEPT_ADVISED))
+>    2482			return -EINVAL;
+>    2483		if (mmap_write_lock_killable(current->mm))
+>    2484			return -EINTR;
+>    2485		if (thp_disable) {
+>    2486			if (flags & PR_THP_DISABLE_EXCEPT_ADVISED) {
+>    2487				mm_flags_clear(MMF_DISABLE_THP_COMPLETELY, mm);
+>    2488				mm_flags_set(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+>    2489			} else {
+>    2490				mm_flags_set(MMF_DISABLE_THP_COMPLETELY, mm);
+>    2491				mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+>    2492			}
+>    2493		} else {
+>    2494			mm_flags_clear(MMF_DISABLE_THP_COMPLETELY, mm);
+>    2495			mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+>    2496		}
+>    2497	
+>    2498		if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm) &&
+>    2499		    !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
+>> 2500		    hugepage_pmd_enabled())
+>> 2501			__khugepaged_enter(mm);
+>    2502		mmap_write_unlock(current->mm);
+>    2503		return 0;
+>    2504	}
+>    2505	
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509110908.a2P8HZ8A-lkp@intel.com/
+So, let's wrap the new logic in an #ifdef CONFIG_TRANSPARENT_HUGEPAGE block.
 
-All errors (new ones prefixed by >>):
+diff --git a/kernel/sys.c b/kernel/sys.c
+index a1c1e8007f2d..c8600e017933 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -2495,10 +2495,13 @@ static int prctl_set_thp_disable(bool 
+thp_disable, unsigned long flags,
+                 mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+         }
 
->> kernel/sched/fair.c:9382:41: error: no member named 'cfs_rq' in 'struct task_group'
-    9382 |             throttled_hierarchy(task_group(p)->cfs_rq[env->dst_cpu]))
-         |                                 ~~~~~~~~~~~~~  ^
-   1 error generated.
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+         if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm) &&
+             !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
+             hugepage_pmd_enabled())
+                 __khugepaged_enter(mm);
++#endif
++
+         mmap_write_unlock(current->mm);
+         return 0;
+  }
 
-
-vim +9382 kernel/sched/fair.c
-
-  9356	
-  9357	/*
-  9358	 * can_migrate_task - may task p from runqueue rq be migrated to this_cpu?
-  9359	 */
-  9360	static
-  9361	int can_migrate_task(struct task_struct *p, struct lb_env *env)
-  9362	{
-  9363		long degrades, hot;
-  9364	
-  9365		lockdep_assert_rq_held(env->src_rq);
-  9366		if (p->sched_task_hot)
-  9367			p->sched_task_hot = 0;
-  9368	
-  9369		/*
-  9370		 * We do not migrate tasks that are:
-  9371		 * 1) delayed dequeued unless we migrate load, or
-  9372		 * 2) target cfs_rq is in throttled hierarchy, or
-  9373		 * 3) cannot be migrated to this CPU due to cpus_ptr, or
-  9374		 * 4) running (obviously), or
-  9375		 * 5) are cache-hot on their current CPU, or
-  9376		 * 6) are blocked on mutexes (if SCHED_PROXY_EXEC is enabled)
-  9377		 */
-  9378		if ((p->se.sched_delayed) && (env->migration_type != migrate_load))
-  9379			return 0;
-  9380	
-  9381		if (task_group(p) &&
-> 9382		    throttled_hierarchy(task_group(p)->cfs_rq[env->dst_cpu]))
-  9383			return 0;
-  9384	
-  9385		/*
-  9386		 * We want to prioritize the migration of eligible tasks.
-  9387		 * For ineligible tasks we soft-limit them and only allow
-  9388		 * them to migrate when nr_balance_failed is non-zero to
-  9389		 * avoid load-balancing trying very hard to balance the load.
-  9390		 */
-  9391		if (!env->sd->nr_balance_failed &&
-  9392		    task_is_ineligible_on_dst_cpu(p, env->dst_cpu))
-  9393			return 0;
-  9394	
-  9395		/* Disregard percpu kthreads; they are where they need to be. */
-  9396		if (kthread_is_per_cpu(p))
-  9397			return 0;
-  9398	
-  9399		if (task_is_blocked(p))
-  9400			return 0;
-  9401	
-  9402		if (!cpumask_test_cpu(env->dst_cpu, p->cpus_ptr)) {
-  9403			int cpu;
-  9404	
-  9405			schedstat_inc(p->stats.nr_failed_migrations_affine);
-  9406	
-  9407			env->flags |= LBF_SOME_PINNED;
-  9408	
-  9409			/*
-  9410			 * Remember if this task can be migrated to any other CPU in
-  9411			 * our sched_group. We may want to revisit it if we couldn't
-  9412			 * meet load balance goals by pulling other tasks on src_cpu.
-  9413			 *
-  9414			 * Avoid computing new_dst_cpu
-  9415			 * - for NEWLY_IDLE
-  9416			 * - if we have already computed one in current iteration
-  9417			 * - if it's an active balance
-  9418			 */
-  9419			if (env->idle == CPU_NEWLY_IDLE ||
-  9420			    env->flags & (LBF_DST_PINNED | LBF_ACTIVE_LB))
-  9421				return 0;
-  9422	
-  9423			/* Prevent to re-select dst_cpu via env's CPUs: */
-  9424			cpu = cpumask_first_and_and(env->dst_grpmask, env->cpus, p->cpus_ptr);
-  9425	
-  9426			if (cpu < nr_cpu_ids) {
-  9427				env->flags |= LBF_DST_PINNED;
-  9428				env->new_dst_cpu = cpu;
-  9429			}
-  9430	
-  9431			return 0;
-  9432		}
-  9433	
-  9434		/* Record that we found at least one task that could run on dst_cpu */
-  9435		env->flags &= ~LBF_ALL_PINNED;
-  9436	
-  9437		if (task_on_cpu(env->src_rq, p) ||
-  9438		    task_current_donor(env->src_rq, p)) {
-  9439			schedstat_inc(p->stats.nr_failed_migrations_running);
-  9440			return 0;
-  9441		}
-  9442	
-  9443		/*
-  9444		 * Aggressive migration if:
-  9445		 * 1) active balance
-  9446		 * 2) destination numa is preferred
-  9447		 * 3) task is cache cold, or
-  9448		 * 4) too many balance attempts have failed.
-  9449		 */
-  9450		if (env->flags & LBF_ACTIVE_LB)
-  9451			return 1;
-  9452	
-  9453		degrades = migrate_degrades_locality(p, env);
-  9454		if (!degrades)
-  9455			hot = task_hot(p, env);
-  9456		else
-  9457			hot = degrades > 0;
-  9458	
-  9459		if (!hot || env->sd->nr_balance_failed > env->sd->cache_nice_tries) {
-  9460			if (hot)
-  9461				p->sched_task_hot = 1;
-  9462			return 1;
-  9463		}
-  9464	
-  9465		schedstat_inc(p->stats.nr_failed_migrations_hot);
-  9466		return 0;
-  9467	}
-  9468	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Lance
