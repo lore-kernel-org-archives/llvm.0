@@ -1,225 +1,222 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC6A23D7C4
-	for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 05:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757568737; cv=none; b=Mfs2zT5Yfx7nw0Q+Lt9xtYbfY2MZfwawjWYSEUKlaCgzCmhLVBcz9alIOYI/QUf3vEzzSKxL2K2ZRFeib81TzOw0Lj9u03ONFJthv7mvVPX9SoVAItsBGFe+ErLyilblj+0rSMncUWttgW4rofWdpd632T+A3ilZ5nCyrWOMbvM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757568737; c=relaxed/simple;
-	bh=I2dgBNDE2BIw99xmb2jcp7bFg7Af6bflHKDWWcQvZO0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iv/U4DO7JXgPWg5u6SSkQW6t5PCxO+qnph8HFeM1yamYALQGA+I/szProksUjZtNjehm+4puwtWwICI4Om+boq7bbHBkQFKVNRLumpRhQt0DYVikxHkeiKR1w6Xc5J4oh+7x6lbFwEpg3DHpbF1+05wjHZ/miqGsLKLNOyhu1nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bK55z8oI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D2D24C676;
+	Thu, 11 Sep 2025 05:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757569116; cv=fail; b=Gk3Vou73ZEYIdYXW69C7apgKYX5wlQDnPvftJgjqO88cY6QDPt09E/VkdatPFQaqsa96HMbyi4TgpzjrxuETKeRYTm6Y9cdWMT6huAjBInxwh8PgVdjmx+ObUGkqSaio+D7bojG7RB1nX/l/B+ZePVkkI7kuHONswB8NURGxsMg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757569116; c=relaxed/simple;
+	bh=Pmji6PbJSQA2S85di80QczaZwvE0axdDRm46QQoAwtc=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ICUQu6+sCjMhXPE7PYXUAnSlV2cSGgjqap+wxwPFSfHn75CclWwPm4pqguCgDUuX5FfRdi6orrr+eXkxTWef2WIrhICKdupSqtdveLzeOXgoSOQnZ/+yfLTDD1lqQwm3yKSBt+MlHZzYRSSwoBqtjgwImQjbUgF/0UzOSM6dzA8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JEa3aIgb; arc=fail smtp.client-ip=40.107.93.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bK55z8oI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757568733;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nt3VQynD9HNbfB8MHx/snEu9a5Epk41vkA4mNHYPnio=;
-	b=bK55z8oIb8kytvXgCR/q+rdnQ4vRDkuu3qvV3mpb9F1iijlC1stcqQjack5YNlQDPkaNvX
-	ZgCbGlp913/meVaiqmCVvPDWTVGY9IGnuQY0nk10LT4eDgOWYbu8Vafztxb0M6DSS6lUbX
-	VBxcl12xobJJPrfCV9Vn/A9Qt6cMRr8=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-28-LXVjP2HXPVqRiRJ91QdJOw-1; Thu,
- 11 Sep 2025 01:32:12 -0400
-X-MC-Unique: LXVjP2HXPVqRiRJ91QdJOw-1
-X-Mimecast-MFC-AGG-ID: LXVjP2HXPVqRiRJ91QdJOw_1757568731
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 600311956087
-	for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 05:32:11 +0000 (UTC)
-Received: from [172.20.141.126] (unknown [10.30.44.25])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9DB09300018D;
-	Thu, 11 Sep 2025 05:32:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc5,
- upstream-mainline, 7aac7190)
-Date: Thu, 11 Sep 2025 05:32:10 -0000
-To: ftjahjad@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com,
- yoyang@redhat.com
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JEa3aIgb"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bbySwZcvleOjlnGK2dY0s+7A4jLfq9oSGukpia13sHvRRlfk1bCWtyZXDw0uNgr8oZVkpVKBFnuZ75fOS3HQif6qMxwVYyUBm+mcLBdVMv3jeEIpJQH8kwplTXvHBFbaSixl6PhZvdupXpTkVD+B8qd31laM7k9nYpkZDnsNFU/eGk0rorDxaMYl3QENIAsLDLKbwl/nq/eFeDbRDhOWWVkSHJeSM/FVszyIrL0/hB88ONcaDJsSq4s4B+t+SG/n1zT2T9HpA6xQ3ooqiM5471q5RUAdnC1YiepWn9SJRCAIiL3Bs//nQYQAcUxq3s15Olxa4QnM3CbpKHACwu1TpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EI0+oJqVn5UcnIDmyCfCsAMdForWsY6pjFSTdMLpPIU=;
+ b=qqeSU4b4ZyIpQgRkLu1zQ75Ds1BQxtXVC33pPKZwkJDubsMQajf1OFkyYvo6lzg9L1jzTHSN4WvQAtenwP0wS0kAn/n11qGDKMudTU0qjnl0yQZhY4YYgOq38donM5R779Ny4x/Z5Bg/MOp9WwMV/VWYMp0Qq+MRl6AUx7Hik4VnI6u4eWneOtBkFubtLHbfwvBprQR6t11UFwkWUA18wBqmBGL/Q/CWThEdYbHJS4q2siT/1S2wjr3nHytG0zsE+FKqdyqGgAsKRI0gYojAMNviL2X3sOz6Emp99y26yBk8RzUFYYwro2fN414tgPOZH6jc5sY1cnTjFbdmR1NGrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EI0+oJqVn5UcnIDmyCfCsAMdForWsY6pjFSTdMLpPIU=;
+ b=JEa3aIgbEe4Qrf0PgVD2WI7kLOejRY0UrrMzg+oUJim7PWyozBFWbrEFLTwmqDmPBb0eYVp+gvfpDZa1Zfc3ynLEQN5fowi7ysFKXSozj806JG2EUs9eVsD9G+1LC2JPXpqnLC1qAgb5az5qjiiw2xT6rKEEfksy/P5bPUuR/FKgvPZrJaeB6Ld4SvwXuLVUP1IFLwW9BQMSlHYOSNnhWFudi/vV5V/MWSFW5t0ZiIi+u/U1ToLUg6rPfxWb9nd23B2EqaOBvvcPKySdo9TxRmRkxHg7ZszzGdM0+Q58YB6P7Pq/7piDBBE63ZPm7jgCxwBidP4ovkq/t00OccCiSw==
+Received: from BLAPR03CA0037.namprd03.prod.outlook.com (2603:10b6:208:32d::12)
+ by LV8PR12MB9135.namprd12.prod.outlook.com (2603:10b6:408:18c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Thu, 11 Sep
+ 2025 05:38:30 +0000
+Received: from BN1PEPF00004681.namprd03.prod.outlook.com
+ (2603:10b6:208:32d:cafe::7b) by BLAPR03CA0037.outlook.office365.com
+ (2603:10b6:208:32d::12) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9115.16 via Frontend Transport; Thu,
+ 11 Sep 2025 05:38:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN1PEPF00004681.mail.protection.outlook.com (10.167.243.87) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9115.13 via Frontend Transport; Thu, 11 Sep 2025 05:38:30 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 10 Sep
+ 2025 22:38:20 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 10 Sep 2025 22:38:19 -0700
+Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.126.190.180)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Wed, 10 Sep 2025 22:38:14 -0700
+Date: Wed, 10 Sep 2025 22:38:12 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Jonathan Corbet <corbet@lwn.net>, <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
+	<kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>, Bill Wendling
+	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
+ Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon
+	<will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
+	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
+ Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+	<patches@lists.linux.dev>
+Subject: Re: [PATCH v5 03/15] iommupt: Add the basic structure of the iommu
+ implementation
+Message-ID: <aMJgRGl+znjXJRyJ@nvidia.com>
+References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <3-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <28492.125091101321200985@us-mta-28.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: d8ePGLQ5UOtFUxRUU4i1kNASrXHhkBNOUZA1aHEJhpM_1757568731
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004681:EE_|LV8PR12MB9135:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35592c8b-dfc3-4ba1-f9bd-08ddf0f570a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|7416014|1800799024|36860700013|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?XimgNsGRrYi5YagYVf+g2OvmnyfEv5LAk94TqlhFmi32oh5OjtL5k7P6t3LA?=
+ =?us-ascii?Q?w39iVJmqpwGTTath5uZnBB9q2YKi7UOvAMFc3YXEPoq95j3jz88GByFSU+z6?=
+ =?us-ascii?Q?7CqWLL1osZXq2yC6YUi+SfAeuMJ+7aoIxLoZiajNbuoPQGj4YDgkASjeUjOa?=
+ =?us-ascii?Q?3grdgTcHRPpuUvbqFilr39D8lhMbFeBoLBMdD3pEmfNbmyyal3e/ZAVjAJ+c?=
+ =?us-ascii?Q?tkDNtNFJgLSANObfzKnmqoCml/77txdZoorC9dy9iVrPvXYk4CVWU5MVagno?=
+ =?us-ascii?Q?ihVaoDtIPzj5Cci69fX8mf0g79pRAAB0KAhPDiN0apr+WwPuTRinCDiAKO9P?=
+ =?us-ascii?Q?aRYbhjs0F3R5003jtLB16Wcby2thmnNn7cLDDjuujNApGuc24glSkplFQxXa?=
+ =?us-ascii?Q?hTjgY5e8lSrhgax6GuoJP8OL4d8555ZHc9ksNfEWhJNaMasWXkuuFBwC3ZhZ?=
+ =?us-ascii?Q?jzuuFYwpiR+kJxhrCSjwmXQsesVZ9KvnFZdDWStFE9FTd7JGow87FJgAkmVr?=
+ =?us-ascii?Q?NRxcTZA4btydZSG33ATdF5b1bsbuVFtRuOLF30uv0ZdFl3M9Vw5J/JtWYBM1?=
+ =?us-ascii?Q?mzMd1252Vp3IDV34toADhIMVo5MGcCQT8KY0ibsNuRPa4a6p33mNvtyU78Qk?=
+ =?us-ascii?Q?rW0kwBvR8aCDkB+1TYuc7HHeAAVYXLSOZEYjp7vVg1HqUWcgpIAw7Bvv9pEI?=
+ =?us-ascii?Q?ALzPimFUz5jOgkauZyQf7mop4xlKnAaw/iskKgDqd9UmRHn53vDTq/Ziw6a7?=
+ =?us-ascii?Q?mx4fYApcep5clTW7S0ILJ6XK9Y7AYCRtfRpeN55JvU9aVqse2NxytEORIQU0?=
+ =?us-ascii?Q?3/snpIUrJI8E0azabfqsBDjxx/XenD3XDz172dHFZTIhVtToDpSbu381ztsO?=
+ =?us-ascii?Q?zCTxLIkTvFl0JfP5ey0aOLp/wg+mCy/uLcU6ViEz/6WakgcH4PIz4qqYpqix?=
+ =?us-ascii?Q?VUyGjUxphITl3CQorQV/HdmUMB3PQFM+FoUtTXGQFwUYf4/5H2U6gfxUIGjb?=
+ =?us-ascii?Q?rrVxeUzlVLGITNLA2cDcvOTyApxQNGbCwEOtd187iSBeNpKwPQWzIWdJYtc4?=
+ =?us-ascii?Q?bqaX+MMteHiePvAJs0TYwE0JIj54u24GkVkQ1LHOYanXAvDwYiy5JCs/+Q52?=
+ =?us-ascii?Q?pl/mYrKdMV2mWTwkhDvcxkMg8wmAW/fnn115G3YPOMgeqi3OCF9q7K3lh2Lr?=
+ =?us-ascii?Q?oMCFhMLSgConIs1qID7A5WVg/JItOMaLKjiSnktmpdafFtThVOIjhp2X3n1e?=
+ =?us-ascii?Q?ot8WMFdYBhFS2LShlPFcsnZUDYU+C+ZIYhR30jgxXXyXvEPUYUNH+QlK7EZP?=
+ =?us-ascii?Q?6J5EQg9LiTFG+NrnCU0K1/aqnSvcpyL0WhnmpQFoceeOXRpFWzxQQbwKhgDy?=
+ =?us-ascii?Q?+kDLbKe/nff5YayQACuYP6am7EFIENcY4Ajg4JYIWjn0cfyDgW6IsNXO+dIj?=
+ =?us-ascii?Q?nnP6ht2l6Mt3wcFvrMirw5yE7T34Xjb86yvCg4/CoGkyo2/dBqO16JFjlFMv?=
+ =?us-ascii?Q?shWKAFRYBE0WuiIb4ULnQlXWocNlcvgjnezK?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2025 05:38:30.2014
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35592c8b-dfc3-4ba1-f9bd-08ddf0f570a1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004681.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9135
 
-Hi, we tested your kernel and here are the results:
+On Wed, Sep 03, 2025 at 02:46:30PM -0300, Jason Gunthorpe wrote:
+> The top level struct used by the drivers is pt_iommu_table_FMT. It
+> contains the other structs to allow container_of() to move between the
+> driver, iommu page table, generic page table, and generic format layers.
+> 
+>    struct pt_iommu_table_amdv1 {
+>        struct pt_iommu {
+> 	      struct iommu_domain domain;
+>        } iommu;
+>        struct pt_amdv1 {
+> 	      struct pt_common {
+> 	      } common;
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+According to include/linux/generic_pt/common.h, it should be just:
+		struct pt_common common;
+?
 
+> +static int pt_iommu_init_domain(struct pt_iommu *iommu_table,
+> +				struct iommu_domain *domain)
+> +{
+...
+> +	/*
+> +	 * A 64-bit high address space table on a 32-bit system cannot work.
+> +	 */
 
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.17-3' of git://git.linux-nfs.org/p=
-rojects/trondmy/linux-nfs
+Nit: this fits to a single line.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2032895035
+> +#ifdef pt_iommu_fmt_hw_info
+> +#define pt_iommu_table_hw_info CONCATENATE(pt_iommu_table, _hw_info)
+> +#define pt_iommu_hw_info CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), hw_info)
+> +void pt_iommu_hw_info(struct pt_iommu_table *fmt_table,
+> +		      struct pt_iommu_table_hw_info *info)
+> +{
+> +	struct pt_iommu *iommu_table = &fmt_table->iommu;
+> +	struct pt_common *common = common_from_iommu(iommu_table);
+> +	struct pt_range top_range = pt_top_range(common);
+> +
+> +	pt_iommu_fmt_hw_info(fmt_table, &top_range, info);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(pt_iommu_hw_info, "GENERIC_PT_IOMMU");
+> +#endif
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("IOMMU Page table implementation for " __stringify(PTPFX_RAW));
+> +MODULE_IMPORT_NS("GENERIC_PT");
+> +
+> +#endif
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_s390x_kernel_kcidb_tool_19554643_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_s390x_kernel_kcidb_tool_19554644_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_aarch64_kernel_kcidb_tool_19554636_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_aarch64_kernel_kcidb_tool_19554637_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel_kcidb_tool_19554640_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel_kcidb_tool_19554641_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_ppc64le_kernel_kcidb_tool_19555393_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel-debug_kcidb_tool_19554645_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel-debug_kcidb_tool_19554772_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        Reboot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_s390x_kernel_kcidb_tool_19554643_11
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_s390x_kernel_kcidb_tool_19554644_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_aarch64_kernel_kcidb_tool_19554636_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_aarch64_kernel_kcidb_tool_19554637_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel_kcidb_tool_19554640_8
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel_kcidb_tool_19554641_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_ppc64le_kernel_kcidb_tool_19555393_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel-debug_kcidb_tool_19554645_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel-debug_kcidb_tool_19554772_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL /10_avc_check
-        xfstests - nfsv4.2
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel_kcidb_tool_19554641_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/221
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2032895035_x86_64_kernel-debug_kcidb_tool_19554772_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/221
+Nit: maybe
+#endif /* __GENERIC_PT_IOMMU_PT_H */
+?
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                Boot test [aarch64]
-                Reboot test [aarch64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+> +struct pt_iommu_cfg {
+> +	/**
+> +	 * @features: Features required. Only these features will be turned on.
+> +	 * The feature list should reflect what the IOMMU HW is capable of.
+> +	 */
+> +	unsigned int features;
+> +	/**
+> +	 * @hw_max_vasz_lg2: Maximum VA the IOMMU HW can support. This will
+> +	 * imply the top level of the table.
+> +	 */
+> +	u8 hw_max_vasz_lg2;
+> +	/**
+> +	 * @hw_max_oasz_lg2: Maximum OA the IOMMU HW can support. The format
+> +	 * might select a lower maximum OA.
+> +	 */
+> +	u8 hw_max_oasz_lg2;
+> +};
+> +
+> +#endif
 
+#endif /*  __GENERIC_PT_IOMMU_H */
 
+Otherwise,
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
