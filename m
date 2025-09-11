@@ -1,179 +1,188 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2049.outbound.protection.outlook.com [40.107.212.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A4920C037
-	for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 02:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757558357; cv=none; b=nxvU8TTYnNaioweQf+W/G5/J32yKC02nvgVq0dH9rxe5eY5ulm2djIx24bp6zsDzCMaUr3ef0wz3sQljx5ODlEbvtD5JpgWqIG4I1578miJDMIfXwBVL2Yo9w848/DRXsRzV17noouUiUk/NbykT+RkxF4/ebOVTgv6E9A7mNzE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757558357; c=relaxed/simple;
-	bh=PFvtNKguubhIfWjSjC6Fb/MczM4GGfIa3uYB6ppTtv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FmPs31NBX7duR/6OdLhPOCoJ7RmHK9xu+nuthm8hAHrYPG50qdrj5/Rif5w/dCoLZjQZDwZsVGNTdxkt70ZkunPorsJQlZV6Ucfj5IO4J9qOpCySReYNrG5HAYMMxLC78Q0xb4aBKDp+TT+cGqi+bFT8d+pTPrwUYe6K1bwRhRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HwUiZZ57; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C341F63CD;
+	Thu, 11 Sep 2025 04:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757564656; cv=fail; b=H5Oz1Uqiy/PrcerAkpiSmX6HIuoHL08Xjt7NMYcb6Z31+gDyeJHaAO4PgWQfuGYsEJbfhUjGnCzgtTu2oJHbqT2iZTsc2dJDos7pL8C2JmAMLUj69mHhldeNq+4ly7bGnIBiYdbOQpu15iOMnJumCVrUamjCmUutFl1d4ip9JQ0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757564656; c=relaxed/simple;
+	bh=EtK/UQWfzhTxT1DaI4ydzd2C2iSuIJ1A9KH5yKZWZWM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s8UoinJ9UbMbAX94pWAG+cHvIavxf183hw8IMvql4JJJflT0IoSptsYNjiYBnSCKXOHFcLlbquREVDqhUo7x8uUBOLGsNE9RynjsxcA9xt0U6V1sOoCivqx20+4pIg8kWOE2FCMwlFwTuD4UmjVy41MbtCSMX1pF07FVd1cvxWI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tX1Zth1F; arc=fail smtp.client-ip=40.107.212.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HwUiZZ57"
-Message-ID: <da274606-1064-45cd-9ebf-ec906e9d9f74@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1757558343;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e9PPyv7+boNGUzzOupoHa1DOIH/TVj7FBAqrgegDDTk=;
-	b=HwUiZZ57ysrOi/yC8M8PEPM+a14G6LPukDNNBb/FpNvZAeOa4OnZOQRwi++L8v57aklnVP
-	1mK7E+u3sr8fTszO/Jkkv2bbrq7uWUD/4vaAgRN9UoY5++oQACtNvOK6McSq5DscH6HyfU
-	O4287UNc+udxnHUrbXtrALhrZNFyB6I=
-Date: Thu, 11 Sep 2025 10:38:45 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tX1Zth1F"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bULQufMKnv1AohdmYQNAD+E+dqUJK32GQAcocEg76zthYRr08tTPcLxL7oIActj4kdOhgGyp+v/3HqqjO4K3ey93l3nAjFFi1aX5G8IIykT/y8JWRSznbjCYySBhAfmVpnMbHVMb1F+LlGmgecH6K0RoDZK2k0T3HR6iiqUSS7hn/9cU+uZg9zibVmqd7zXYcuWFmXnrx5BzOZHCzOxJ6b+j9cGGrBPUjQrSOZX3HVyWpeOwl7g/tlZ7WIN841gaIEMNY8gPjHGNREE+lkDxVsSNPhEVr1zrTgN1Vd3zYVQJr3d72b4OvNrWXSFFSmU5QImGhLGy1z0oClGcLNmTLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eUal2+K3yxQXBTsIil8WmLVw/0Xkrf5pk77UqqfCQb8=;
+ b=pmFrX0Hli+GkSXEaITjs7TnIEhprXh79uyEBDFGuiCC3YuUJQGVo41dK625XS6kiSnBi0DqDO3wPGQ29XDY+sTLPML3Kb/xaUh7rd/9lavaZCVCJuyyhRBc6rgKrP+W4iWcYINAtuhrMPqNZid/q2ndgPTFnJutnb/gEBjlJ1Cqu7kwfQ0hw221OVAUcqj2gu/1G01911K7pyTUnJnIZIMfgasiM97RgSOWeP9TrgRdVPbLOPSovnsp+Dx+rX6NjZI5rGpqFMh4vU+9Xku49/mfjs51/cad55JSoJjM3FPROOILVHuQx7GXqk8TSlhFryUlx1IPtpwpH/agpcXg7Cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eUal2+K3yxQXBTsIil8WmLVw/0Xkrf5pk77UqqfCQb8=;
+ b=tX1Zth1FDBVdPs0j+oP5O9P8oZxv+rnWfhEsM4XkniFEQoXdUPO630Ve6BirHQjj8Y8fYrqJKLyPZV5MEW6lzMR2Xru71ozBxd5zDncBYVe8O5sVpDACXYUW8YtYIlyF/M7ihqatkHUE9Sk2GbxyoL+0VJ2mblYXvGqhbxUIwCWLoGwgDuhDbqYlVE0AcODLejs1evsz9pKgn4Om8CLLRAHSNr6XnjVG0ez1cyXyEtOByl3MUh4dk8Ha1JwpKdautZoCuYvAxtsYX1VhLbIdZk6ksr2yLBCcKLgPAojZxeFV735ycOeUcXuPjY2CKrCy9CqeZmD9Mxcyv7jBWx6VRQ==
+Received: from BYAPR05CA0041.namprd05.prod.outlook.com (2603:10b6:a03:74::18)
+ by BN5PR12MB9510.namprd12.prod.outlook.com (2603:10b6:408:2ac::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Thu, 11 Sep
+ 2025 04:24:10 +0000
+Received: from CO1PEPF000044F5.namprd05.prod.outlook.com
+ (2603:10b6:a03:74:cafe::da) by BYAPR05CA0041.outlook.office365.com
+ (2603:10b6:a03:74::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.6 via Frontend Transport; Thu,
+ 11 Sep 2025 04:24:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1PEPF000044F5.mail.protection.outlook.com (10.167.241.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9115.13 via Frontend Transport; Thu, 11 Sep 2025 04:24:09 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 10 Sep
+ 2025 21:23:55 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 10 Sep
+ 2025 21:23:54 -0700
+Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Wed, 10 Sep 2025 21:23:48 -0700
+Date: Wed, 10 Sep 2025 21:23:47 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Jonathan Corbet <corbet@lwn.net>, <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
+	<kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>, Bill Wendling
+	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
+ Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon
+	<will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
+	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
+ Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+	<patches@lists.linux.dev>
+Subject: Re: [PATCH v5 02/15] genpt: Add Documentation/ files
+Message-ID: <aMJO09VXljI3eOAA@nvidia.com>
+References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <2-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from
- khugepaged_mm_slot
-Content-Language: en-US
-To: Zi Yan <ziy@nvidia.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, Lance Yang <ioworker0@gmail.com>,
- akpm@linux-foundation.org, gutierrez.asier@huawei-partners.com,
- rientjes@google.com, andrii@kernel.org, david@redhat.com,
- baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com, ameryhung@gmail.com,
- ryan.roberts@arm.com, lorenzo.stoakes@oracle.com, usamaarif642@gmail.com,
- willy@infradead.org, corbet@lwn.net, npache@redhat.com, dev.jain@arm.com,
- 21cnbao@gmail.com, shakeel.butt@linux.dev, ast@kernel.org,
- daniel@iogearbox.net, hannes@cmpxchg.org, kernel test robot <lkp@intel.com>
-References: <20250910024447.64788-2-laoar.shao@gmail.com>
- <202509110109.PSgSHb31-lkp@intel.com>
- <49b70945-7483-4af1-95ba-e128eb9f6d7e@linux.dev>
- <DF4CA2C0-25AF-462B-A6D2-888DB20E0DFA@nvidia.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <DF4CA2C0-25AF-462B-A6D2-888DB20E0DFA@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F5:EE_|BN5PR12MB9510:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8855930f-0bca-4343-d344-08ddf0eb0e11
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?z9B+18eC0kA/1cn715kvXlYzupidP/vJ70aonVQo3nE27pTf6Y2vaWC/e+06?=
+ =?us-ascii?Q?HPDitedZ1JWUq0JxnNphVwodm5zt0x4tAsh5iaHUV3vLNrbyQxCtAQwvZ0Ax?=
+ =?us-ascii?Q?VTLM9a54SJVYHqtaHHDGYR1whtux8DdvUbpFWOv2/mTy/rEP9LgXsz7+Ll99?=
+ =?us-ascii?Q?ri5j9ewcTGVlQwYYIFdkmK0nB8K903nM94SQgymU8Xr5LSBJ3afhv+GP8YRl?=
+ =?us-ascii?Q?odBt71adhDlRVzPFz+5iENRuw6971jLcsQb01qo9vCDnDHrOIXizYiXzeGW/?=
+ =?us-ascii?Q?9PcFou2Z7rvrtV/j2uMEPx2A+9wiZ0iOxywAVpoiVPzxvPdQmlhLC+A6DV24?=
+ =?us-ascii?Q?xIrhQmzSBLfsl37ypFD7dwowuKKlVrB3YqYFQvU2MR5u1hnkVHwU1MncHYfk?=
+ =?us-ascii?Q?pXT+Ng1xRM1eAFpuznftkjhlykrUYvut6vzvVEqaa4qjE3w2eLcU3wVaK5Ct?=
+ =?us-ascii?Q?mfyjNKNcNI6KhJkIVdgGLKjKxQUYIj9jFfgh09VBhahtbA62sdd9ZpYDtjbl?=
+ =?us-ascii?Q?osMQ1o4do7CeMrFa12thj+xGNVY7LrgMQW00fBOvIgzPYzkNDFI5hewUW9EV?=
+ =?us-ascii?Q?k80QyCnVc83PU7XoTFuvosYLqKC6tCzMSkWU3C0s7ootcaXRACRnWW6b1bg4?=
+ =?us-ascii?Q?w4Z91VwkFD8HqmCKfVtgKU3lB6GpF+jI0z8lxW6S5R1fzxnPZjFzJ2leMIYR?=
+ =?us-ascii?Q?WWSZb5QbDhnQBR6/RiPT8rO3yObPRTGXafZWtyYRRT64f+zlQO+UQyw2+Klf?=
+ =?us-ascii?Q?PIdj2X9AAHClmVARhxYkL9eFhahpaQKqOgma+T6vC/ZszeWNYfecbBvOF7dB?=
+ =?us-ascii?Q?HMUqNWaNqx5Fj8nHlp2YHMq2qlXuMGwEARbttHPDfwx/FvC3fHi8Xbd/uoSd?=
+ =?us-ascii?Q?ZwC0Xnncy+8D2SrwQpuR92g990XFf+mHUxCGohzBWIAXBpEuTGECHNhw33Fa?=
+ =?us-ascii?Q?S6QOBjHhBnNQ+5xyNh9Ncp4GmQy8+TltJ88QvOvDwFFzaf/3k8AxTu0tP8px?=
+ =?us-ascii?Q?y1cgWcjdFuSjLda0rVkru1XqsmWir3+RXF1kGZcHw5SjzulgvLjVbfVRE3zN?=
+ =?us-ascii?Q?qly1sZQ9hKJafTtETMWCOZ8pyJgN/FkyVBq4YgRmybWn1VXlUn47/sQ9ZgaN?=
+ =?us-ascii?Q?c8Saw0cVKiugwRjGkzKEY5HB8FYtOiOpMlTorFiH1r4VZSKEyu7lUM7T2Kkb?=
+ =?us-ascii?Q?dOBbapnnAEOy1hH1RbpxWxbqe6Ulq68rB8kztPtu7vyiNs1EZz1ibZaYzd5u?=
+ =?us-ascii?Q?t5V83DfkquKK+frnskknd74vTw1SYJ0LkVI9wQzK5tcljJPYhUsQqF1o2TqE?=
+ =?us-ascii?Q?UktqABjPuFT4r7aufnolFMssV9dmDD1zhuYJcR543+YR6/P80o6oNu/F16KG?=
+ =?us-ascii?Q?WiMU//Utl/DcRi/L9Ev4xdsihXaUpVr8LckDlAOgMAppwqWm+RyaXfBsV6sX?=
+ =?us-ascii?Q?vVVdcU2O6yyDqtX2O1MukgFcBAnpBJ4HhQ5UFtlKmhLLG6Pjk2mbLL8CAt9r?=
+ =?us-ascii?Q?Yio/qVTAhHl8MHA1vYQprF8msvKRdOctR+Gn?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2025 04:24:09.8750
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8855930f-0bca-4343-d344-08ddf0eb0e11
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044F5.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR12MB9510
 
+On Wed, Sep 03, 2025 at 02:46:29PM -0300, Jason Gunthorpe wrote:
+> +For this to work the .c file for each compilation unit will include both the
+> +format headers and the generic code for the implementation. For instance in an
+> +implementation compilation unit the headers would normally be included as
+> +follows::
+> +
+> +	#include <linux/generic_pt/common.h>
+> +	#include "fmt/defs_amdv1.h"
+> +	#include "pt_defs.h"
+> +	#include "fmt/amdv1.h"
+> +	#include "pt_common.h"
+> +	#include "pt_iter.h"
+> +	#include "IOMMUt_pt.h"  /* The IOMMU implementation */
 
+Should the last one be "iommu_pt.h" that's mentioned below?
 
-On 2025/9/11 10:28, Zi Yan wrote:
-> On 10 Sep 2025, at 22:12, Lance Yang wrote:
-> 
->> Hi Yafang,
->>
->> On 2025/9/11 01:27, kernel test robot wrote:
->>> Hi Yafang,
->>>
->>> kernel test robot noticed the following build errors:
->>>
->>> [auto build test ERROR on akpm-mm/mm-everything]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/mm-thp-remove-disabled-task-from-khugepaged_mm_slot/20250910-144850
->>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
->>> patch link:    https://lore.kernel.org/r/20250910024447.64788-2-laoar.shao%40gmail.com
->>> patch subject: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from khugepaged_mm_slot
->>> config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250911/202509110109.PSgSHb31-lkp@intel.com/config)
->>> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
->>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250911/202509110109.PSgSHb31-lkp@intel.com/reproduce)
->>>
->>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>> the same patch/commit), kindly add following tags
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Closes: https://lore.kernel.org/oe-kbuild-all/202509110109.PSgSHb31-lkp@intel.com/
->>>
->>> All errors (new ones prefixed by >>):
->>>
->>>>> kernel/sys.c:2500:6: error: call to undeclared function 'hugepage_pmd_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>>       2500 |             hugepage_pmd_enabled())
->>>            |             ^
->>>>> kernel/sys.c:2501:3: error: call to undeclared function '__khugepaged_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>>       2501 |                 __khugepaged_enter(mm);
->>>            |                 ^
->>>      2 errors generated.
->>
->> Oops, seems like hugepage_pmd_enabled() and __khugepaged_enter() are only
->> available when CONFIG_TRANSPARENT_HUGEPAGE is enabled ;)
->>
->>>
->>>
->>> vim +/hugepage_pmd_enabled +2500 kernel/sys.c
->>>
->>>     2471	
->>>     2472	static int prctl_set_thp_disable(bool thp_disable, unsigned long flags,
->>>     2473					 unsigned long arg4, unsigned long arg5)
->>>     2474	{
->>>     2475		struct mm_struct *mm = current->mm;
->>>     2476	
->>>     2477		if (arg4 || arg5)
->>>     2478			return -EINVAL;
->>>     2479	
->>>     2480		/* Flags are only allowed when disabling. */
->>>     2481		if ((!thp_disable && flags) || (flags & ~PR_THP_DISABLE_EXCEPT_ADVISED))
->>>     2482			return -EINVAL;
->>>     2483		if (mmap_write_lock_killable(current->mm))
->>>     2484			return -EINTR;
->>>     2485		if (thp_disable) {
->>>     2486			if (flags & PR_THP_DISABLE_EXCEPT_ADVISED) {
->>>     2487				mm_flags_clear(MMF_DISABLE_THP_COMPLETELY, mm);
->>>     2488				mm_flags_set(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
->>>     2489			} else {
->>>     2490				mm_flags_set(MMF_DISABLE_THP_COMPLETELY, mm);
->>>     2491				mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
->>>     2492			}
->>>     2493		} else {
->>>     2494			mm_flags_clear(MMF_DISABLE_THP_COMPLETELY, mm);
->>>     2495			mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
->>>     2496		}
->>>     2497	
->>>     2498		if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm) &&
->>>     2499		    !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
->>>> 2500		    hugepage_pmd_enabled())
->>>> 2501			__khugepaged_enter(mm);
->>>     2502		mmap_write_unlock(current->mm);
->>>     2503		return 0;
->>>     2504	}
->>>     2505	
->>
->> So, let's wrap the new logic in an #ifdef CONFIG_TRANSPARENT_HUGEPAGE block.
->>
->> diff --git a/kernel/sys.c b/kernel/sys.c
->> index a1c1e8007f2d..c8600e017933 100644
->> --- a/kernel/sys.c
->> +++ b/kernel/sys.c
->> @@ -2495,10 +2495,13 @@ static int prctl_set_thp_disable(bool thp_disable, unsigned long flags,
->>                  mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
->>          }
->>
->> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->>          if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm) &&
->>              !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
->>              hugepage_pmd_enabled())
->>                  __khugepaged_enter(mm);
->> +#endif
->> +
->>          mmap_write_unlock(current->mm);
->>          return 0;
->>   }
-> 
-> Or in the header file,
-> 
-> #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> ...
-> #else
-> bool hugepage_pmd_enabled()
-> {
-> 	return false;
-> }
-> 
-> int __khugepaged_enter(struct mm_struct *mm)
-> {
-> 	return 0;
-> }
-> #endif
+> +iommu_pt.h includes definitions that will generate the operations functions for
+> +map/unmap/etc. using the definitions provided by AMDv1. The resulting module
+> +will have exported symbols named like pt_iommu_amdv1_init().
+-----
 
-Nice. That's a much better approach.
+> +Refer to drivers/iommu/generic-pt/fmt/iommu_template.h for an example of how the
+> +IOMMU implementation uses multi-compilation to generate per-format ops structs
+> +pointers.
+
+It should be "generic_pt" in the path, instead of "generic-pt".
+
+> diff --git a/drivers/iommu/generic_pt/pt_iter.h b/drivers/iommu/generic_pt/pt_iter.h
+> index 6bd84f96f5ad6e..0956c8a45646c9 100644
+> --- a/drivers/iommu/generic_pt/pt_iter.h
+> +++ b/drivers/iommu/generic_pt/pt_iter.h
+> @@ -21,7 +21,7 @@
+>   * pt_check_range() - Validate the range can be iterated
+>   * @range: Range to validate
+>   *
+> - * Check that va and last_va fall within the permitted range of VAs. If the
+> + * Check that VA and last_va fall within the permitted range of VAs. If the
+>   * format is using PT_FEAT_SIGN_EXTEND then this also checks the sign extension
+>   * is correct.
+ 
+I suppose it should be squashed into the previous patch :)
+
+Thanks
+Nicolin
