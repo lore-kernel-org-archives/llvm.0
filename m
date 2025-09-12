@@ -1,115 +1,145 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C228341AC5
-	for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 22:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50532BA45
+	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 00:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757628477; cv=none; b=RGR7qbcg881r+N+kY9YyO+OpVyZFhEb35lYZEw/8MK5yPsBW4QBxvftCWzaQoJ8WjIpf7y/6T26Ywu1SmFE4gDUh3A2JAgK023wq9M99AfksYXUeapAmDULCZQyJSrmWyihn2MUaLKZZU6x581tzOumGoyMjVH4lU0eQ28PQ0Fg=
+	t=1757635337; cv=none; b=Y+xfDTo5ZzKrXVvqqdyax1vbjlfw4GJHpP7Eoe/tVyuYuY+eLX4xrGBVIqytzj8P0rETyQHnlQ06TsCu/DJKZKNGsXaxgLzvCf3ql1gXt+qTju0Hlgvg5kSfkgH4bJBT53pXmURaTvxlyh64iWcmKT9h3Zgv4TVFif9GcxJrJ9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757628477; c=relaxed/simple;
-	bh=jtcnfarZA6UzrvRtmWR0Evc6ldU/VzjjNKluiCCXV3g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=giITvBeHDmbDENU4mV/CBwkMRzR2iWnOsFW/2mY/ES5PVW5u+iFzQOtBEAJRqA5jvfJxSr81hRnuAByoQy/Tl+iGkoTA2Q93JFJHIxzFxst3XM3efWNNpxsvmsT3wRrLBl8V6EBRy74NGYpEOBa+Q9QkrE04ygwKLZcN6isZRcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rr9MwOBB; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1757635337; c=relaxed/simple;
+	bh=UdLeBd8Nshd+/FwoQzkdq2oMadvkqe6j9LjIDhZUPxY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Eq8fPvj+N7MNOJxrKFsmPgkYlBf5UWBlmy4Cz2qY3OSu2b1eJdbpR0mxK+cvRXtJHzjC0xPhlrjaEUHcEIHp+GFPG4DB9gAhHN43NHHZ5S38BXfXbTdEzcBGcL/E27iZE9jP11aVh+nSbCsQccYTvRdOx/TKZPDUcJHj6Sp1KcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SKfrkvVB; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rr9MwOBB"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b523af71683so1043235a12.3
-        for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 15:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757628475; x=1758233275; darn=lists.linux.dev;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PIzLX4YwMmt2w1/Or//9q2o4ZqfSWElSTB34sVpm3Zk=;
-        b=Rr9MwOBBdyUN2A+7vikVw8c4JMi4FwxhYeIJ8Jr4Y37iXRXw2GgfKSdfGLp3yGoSwv
-         ahS7lg3mStHqi88mP3xFxknQuReyyzM+HDsPtfWSJXZPuagMK8D5oUaIXn1w6x0bW/gU
-         NXB2anTT4DG9TNN1pxq3GtFI/HlhjDsbztwcqNPk/P7179Zl45cZ1DLQXXcGI/+3ATQH
-         q0bNnTDVtgX9t0TLVoIfOUqPfLJ+3F4fUOmoPy06kAVntAGEBHmXnZNhqQQllmrzyB7T
-         FfSLBUnI4DkltYkWjCH5CjrltHRI/ro6/MMa1DM3dZ3a6WJZDOuyyQbJBucmUoN7Iigk
-         zC8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757628475; x=1758233275;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PIzLX4YwMmt2w1/Or//9q2o4ZqfSWElSTB34sVpm3Zk=;
-        b=SIruM5r4LrSx3N+QUkIPFwzT/5KKgr5zM7qvQkCyRtFrBJfGpn76qNnXI+j297iQvb
-         ZHAaLUIqh+xRstI1ixB2X2e6DxJpSigaXVjZrkotjy/k4BWko0o21fnIw5f8KCOLD1+q
-         DMT7X6biTqqy0FCcEdsWxGV2VgUOJ0f/Ic4IRbFdwp8iMU0ycLYZ0m1pi7nFKCFNAIx5
-         eRjaVFwYDBTjj3j+W4y0sd/UNknR7yJ2kCQzM0ZEw0LhOqlc6E3v5J3OhV7WoXXMR+ag
-         8XlWH0W4mBbp9+XD+h8fW1EixicQ1CvpKfmwBUBk7orJHjQ0iSuygpo/RE0KydgeLSer
-         Qesw==
-X-Forwarded-Encrypted: i=1; AJvYcCWKVWZ/81Fv+HjoN8JX8IuLrKSwanloIKx95rXiYUiAxpwpH2HwoFI8JSYz5JFD2uVvvkHk@lists.linux.dev
-X-Gm-Message-State: AOJu0YyIkzxTO/PyCzXhXiZVFu4cn/le7mkyFlfm20Pl1AFtZiX8ok03
-	1iPaht+S/bvpJRBdpR9GbbvipnnShdm5E7Y1EHQP6EJr7Hj9BhLn+C6r
-X-Gm-Gg: ASbGnctx7tXoTHwf8kFmc9pi5YjpcVhUIvvpTekVt/1rAeT/AMgMejf/Guf/Pa9C+Xc
-	DKCf4r8+deiDw7bYK9RM2dIIF2U869txKIoffE5eR5zT3+5QTAiqnRb408hyYak5tRdAaMPH//p
-	c2F6xTHlXyDj7jHTjBKM841YD16/VnyORJq4MffYYQCqZSmRG++G96jg0yJa37M+F93FlBZIFEM
-	rZCDb7dGHASrBS8ln1XCFeMBsMj2w7V8K2GhAc4U3Z5T9UUhLMnhvNEO0JJayFXMiJYMR1pgVw3
-	drrUQqLH37lEmbyfJ2YJzw17Ep/WC7zh/ABOQluE3jARVz3K/Xw/fSceUO7g3lgHPMiEjyeO245
-	Bws8wS1Io8RKkdu8ZWnc=
-X-Google-Smtp-Source: AGHT+IGfIKtuAcKICp7ZxJp8lOEaeeLF1BaJMcTC3R/RXVkYiy5e+/ccc4815OulQS5TGLefpo1+Zw==
-X-Received: by 2002:a05:6a20:3c8f:b0:248:7a71:c25 with SMTP id adf61e73a8af0-2602c71ab31mr890725637.50.1757628474841;
-        Thu, 11 Sep 2025 15:07:54 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77607a69a8csm3148324b3a.44.2025.09.11.15.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Sep 2025 15:07:54 -0700 (PDT)
-Message-ID: <6fd0e1fdf651f0728d1daf4fad3d6e4d4c11d221.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 09/10] bpf: disable and remove registers
- chain based liveness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, 	oe-kbuild-all@lists.linux.dev,
- Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>, Yonghong Song	
- <yonghong.song@linux.dev>
-Date: Thu, 11 Sep 2025 15:07:51 -0700
-In-Reply-To: <CAADnVQKGwghC=+V8u0tSPdkJ1f4usY5LeYUpxnJno=3xW8tYGg@mail.gmail.com>
-References: <20250911010437.2779173-10-eddyz87@gmail.com>
-	 <202509112112.wkWw6wJW-lkp@intel.com>
-	 <c846a153010e40a52e98b8abe9db69f7d4cadd58.camel@gmail.com>
-	 <CAADnVQKGwghC=+V8u0tSPdkJ1f4usY5LeYUpxnJno=3xW8tYGg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SKfrkvVB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757635333;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=A42pcZIXrq50IGqPjeQECqZLQDAI2+n5TeaUBYjJkYE=;
+	b=SKfrkvVBCh1khyz17ZqhUpIDC2lhzagA93A93zmwivK+VkGFU3cw5jJsGsomQwhdpz/Lal
+	uEIxqQrYr8MI/X0K8Fwqnspc+3/S77fkLLtF1fILAXAahP5Nvg86rs2PvzJod/YOGxN5qU
+	vcDL4QbszNF5jNVv6dytJuj7RRQEEPg=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-17-qc3Td3UTOwGfuyOlXw-GMw-1; Thu,
+ 11 Sep 2025 20:02:12 -0400
+X-MC-Unique: qc3Td3UTOwGfuyOlXw-GMw-1
+X-Mimecast-MFC-AGG-ID: qc3Td3UTOwGfuyOlXw-GMw_1757635331
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91DF219560B2
+	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 00:02:11 +0000 (UTC)
+Received: from [172.20.141.126] (unknown [10.30.44.25])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0E7BF19560BD;
+	Fri, 12 Sep 2025 00:02:10 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 18 of 137): Test report for master
+ (6.17.0-rc5, upstream-mainline, 02ffd6f8)
+Date: Fri, 12 Sep 2025 00:02:10 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <47678.125091120021200275@us-mta-17.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ureEuGNWGNjOlzqG2oSM1IeO96lOPdJLnbhmU-7UKyM_1757635331
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-09-11 at 15:00 -0700, Alexei Starovoitov wrote:
+Hi, we tested your kernel and here are the results:
 
-[...]
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -19297,9 +19297,12 @@ static int is_state_visited(struct bpf_verifie=
-r_env *env, int insn_idx)
-> >                          * the precision needs to be propagated back in
-> >                          * the current state.
-> >                          */
-> > -                       if (is_jmp_point(env, env->insn_idx))
-> > -                               err =3D err ? : push_jmp_history(env, c=
-ur, 0, 0);
-> > -                       err =3D err ? : propagate_precision(env, &sl->s=
-tate, cur, NULL);
-> > +                       if (is_jmp_point(env, env->insn_idx)) {
-> > +                               err =3D push_jmp_history(env, cur, 0, 0=
-);
-> > +                               if (err)
-> > +                                       return err;
-> > +                       }
-> > +                       err =3D propagate_precision(env, &sl->state, cu=
-r, NULL);
->=20
-> hmm. init err=3D0 instead and avoid explicit if (err)return err ?
 
-Or like that, yes.
+Kernel information:
+    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/bpf/bpf
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2034652383
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - nfsv4.2
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2034652383_x86_64_kernel_kcidb_tool_19561315_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/221
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+    Storage - blktests - throtl [x86_64]
+    Storage - blktests - ublk [x86_64]
+    stress: stress-ng - cpu-cache [x86_64]
+    stress: stress-ng - memory [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
