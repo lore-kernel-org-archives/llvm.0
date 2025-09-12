@@ -1,145 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50532BA45
-	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 00:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E7B1F948;
+	Fri, 12 Sep 2025 00:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757635337; cv=none; b=Y+xfDTo5ZzKrXVvqqdyax1vbjlfw4GJHpP7Eoe/tVyuYuY+eLX4xrGBVIqytzj8P0rETyQHnlQ06TsCu/DJKZKNGsXaxgLzvCf3ql1gXt+qTju0Hlgvg5kSfkgH4bJBT53pXmURaTvxlyh64iWcmKT9h3Zgv4TVFif9GcxJrJ9M=
+	t=1757635711; cv=none; b=QtbMK1S+B9hGz7QRzm2jjSkrbS6kaRhipcCYHXGzYXwKs1dCsHkNmmvtL9aoVuTyGtOCPLgXjPHoY///EFV+mwqsWkr0MyORy04JB8LKmhmVxqjBeD84w4lfF9MqCV8PHLmZ840l/uKQAG58zpNEDowSPW6qtvR60imIvfF1F3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757635337; c=relaxed/simple;
-	bh=UdLeBd8Nshd+/FwoQzkdq2oMadvkqe6j9LjIDhZUPxY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Eq8fPvj+N7MNOJxrKFsmPgkYlBf5UWBlmy4Cz2qY3OSu2b1eJdbpR0mxK+cvRXtJHzjC0xPhlrjaEUHcEIHp+GFPG4DB9gAhHN43NHHZ5S38BXfXbTdEzcBGcL/E27iZE9jP11aVh+nSbCsQccYTvRdOx/TKZPDUcJHj6Sp1KcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SKfrkvVB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1757635711; c=relaxed/simple;
+	bh=UxcuXC6sExcpG8BeW6MP7jgxfMtnH1Fa8tN/NA404Fg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bV1LhvnOLznGIJdl7tBbnDwFeY8UgDPgfEBKV/PT0GLX2QSlD31ZunRWAZkU1OdjxgblQWq7rs/fi+I7gRixoB03+4OqeIcBGuoIINk4/J525RbV66bnYDnBJF1oCVxlUD8pJ81wLv45JXq38ar7EQq7J2R/bVwKBXWx1tduOMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NPcHy8dV; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SKfrkvVB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757635333;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=A42pcZIXrq50IGqPjeQECqZLQDAI2+n5TeaUBYjJkYE=;
-	b=SKfrkvVBCh1khyz17ZqhUpIDC2lhzagA93A93zmwivK+VkGFU3cw5jJsGsomQwhdpz/Lal
-	uEIxqQrYr8MI/X0K8Fwqnspc+3/S77fkLLtF1fILAXAahP5Nvg86rs2PvzJod/YOGxN5qU
-	vcDL4QbszNF5jNVv6dytJuj7RRQEEPg=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-17-qc3Td3UTOwGfuyOlXw-GMw-1; Thu,
- 11 Sep 2025 20:02:12 -0400
-X-MC-Unique: qc3Td3UTOwGfuyOlXw-GMw-1
-X-Mimecast-MFC-AGG-ID: qc3Td3UTOwGfuyOlXw-GMw_1757635331
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91DF219560B2
-	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 00:02:11 +0000 (UTC)
-Received: from [172.20.141.126] (unknown [10.30.44.25])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0E7BF19560BD;
-	Fri, 12 Sep 2025 00:02:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 18 of 137): Test report for master
- (6.17.0-rc5, upstream-mainline, 02ffd6f8)
-Date: Fri, 12 Sep 2025 00:02:10 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NPcHy8dV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757635710; x=1789171710;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UxcuXC6sExcpG8BeW6MP7jgxfMtnH1Fa8tN/NA404Fg=;
+  b=NPcHy8dVB0iuvC5pQB64RBtcao1jIpE4xNT+WfIoc/WSsQ75R+37P58c
+   j3IIdXvUFDH8lYPJDBAJ5lLBJJ83lmlCDV5m5T4W9XzedVbOHPbeL8njA
+   bw8DaUSrV1jEnmw9ExrNVk4SfQSBjqoWx7zyiB5Xr6pYxMMXHuMDuvrWf
+   84bWNdm6L2ukojSLkBe2dh48i/1Ku4AgbuRIVv7s1CglNKSN0D/NK7iMH
+   iRFLL8UxUlW8OUNsLt4H3VYcZBmS8jhNpfOuyQuY9f5vFcfKtbTEJ6osK
+   iEf3tP4b8a3x7ziE6tg33BdIsf4IVRDl03pUOyFBHvCyP3VENFyOgCVYi
+   Q==;
+X-CSE-ConnectionGUID: nu8Bulr7SxKJ9VREcYKlPQ==
+X-CSE-MsgGUID: NisRXcZ4QfaT0LncsvKEOw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60040654"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="60040654"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 17:08:29 -0700
+X-CSE-ConnectionGUID: JkE15ZKyT4Wcs/nc8sjVrw==
+X-CSE-MsgGUID: jm0+/LUrS322nD6lO7OCzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,258,1751266800"; 
+   d="scan'208";a="178163399"
+Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 11 Sep 2025 17:08:26 -0700
+Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uwrKx-0000iO-2Z;
+	Fri, 12 Sep 2025 00:08:23 +0000
+Date: Fri, 12 Sep 2025 08:08:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peng Fan <peng.fan@nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	arm-scmi@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 2/2] firmware: imx: sm-misc: Dump syslog info
+Message-ID: <202509120758.omltrDMi-lkp@intel.com>
+References: <20250910-sm-syslog-v1-2-5b36f8f21da6@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <47678.125091120021200275@us-mta-17.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ureEuGNWGNjOlzqG2oSM1IeO96lOPdJLnbhmU-7UKyM_1757635331
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250910-sm-syslog-v1-2-5b36f8f21da6@nxp.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Peng,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on 65dd046ef55861190ecde44c6d9fcde54b9fb77d]
 
-Kernel information:
-    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/bpf/bpf
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan/firmware-arm_scmi-imx-Support-getting-syslog-of-MISC-protocol/20250910-223316
+base:   65dd046ef55861190ecde44c6d9fcde54b9fb77d
+patch link:    https://lore.kernel.org/r/20250910-sm-syslog-v1-2-5b36f8f21da6%40nxp.com
+patch subject: [PATCH 2/2] firmware: imx: sm-misc: Dump syslog info
+config: i386-buildonly-randconfig-004-20250912 (https://download.01.org/0day-ci/archive/20250912/202509120758.omltrDMi-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250912/202509120758.omltrDMi-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2034652383
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509120758.omltrDMi-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - nfsv4.2
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2034652383_x86_64_kernel_kcidb_tool_19561315_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/221
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [aarch64, ppc64le, s390x, x86_64]
-                Reboot test [aarch64, ppc64le, s390x, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
+>> drivers/firmware/imx/sm-misc.c:54:39: error: use of undeclared identifier 'SZ_4K'
+      54 |         void *syslog __free(kfree) = kmalloc(SZ_4K, GFP_KERNEL);
+         |                                              ^
+>> drivers/firmware/imx/sm-misc.c:54:39: error: use of undeclared identifier 'SZ_4K'
+>> drivers/firmware/imx/sm-misc.c:54:39: error: use of undeclared identifier 'SZ_4K'
+   drivers/firmware/imx/sm-misc.c:56:13: error: use of undeclared identifier 'SZ_4K'
+      56 |         u16 size = SZ_4K / 4;
+         |                    ^
+   drivers/firmware/imx/sm-misc.c:64:14: error: use of undeclared identifier 'SZ_4K'
+      64 |                 if (size > SZ_4K / 4) {
+         |                            ^
+   drivers/firmware/imx/sm-misc.c:64:14: error: use of undeclared identifier 'SZ_4K'
+   drivers/firmware/imx/sm-misc.c:64:14: error: use of undeclared identifier 'SZ_4K'
+   7 errors generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [x86_64]
-    /distribution/command [x86_64]
-    /test/misc/machineinfo [x86_64]
-    Boot test [x86_64]
-    CKI/restraint [x86_64]
-    Reboot test [x86_64]
-    SELinux Custom Module Setup [x86_64]
-    Storage - blktests - throtl [x86_64]
-    Storage - blktests - ublk [x86_64]
-    stress: stress-ng - cpu-cache [x86_64]
-    stress: stress-ng - memory [x86_64]
-    xfstests - btrfs [x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [x86_64]
+vim +/SZ_4K +54 drivers/firmware/imx/sm-misc.c
 
+    49	
+    50	static int syslog_show(struct seq_file *file, void *priv)
+    51	{
+    52		struct device *dev = file->private;
+    53		/* 4KB is large enough for syslog */
+  > 54		void *syslog __free(kfree) = kmalloc(SZ_4K, GFP_KERNEL);
+    55		/* syslog API use num words, not num bytes */
+    56		u16 size = SZ_4K / 4;
+    57		int ret;
+    58	
+    59		if (!ph)
+    60			return -ENODEV;
+    61	
+    62		ret = imx_misc_ctrl_ops->misc_syslog(ph, &size, syslog);
+    63		if (ret) {
+    64			if (size > SZ_4K / 4) {
+    65				dev_err(dev, "syslog size is larger than 4KB, please enlarge\n");
+    66				return ret;
+    67			}
+    68		}
+    69	
+    70		seq_hex_dump(file, " ", DUMP_PREFIX_NONE, 16, sizeof(u32), syslog, size * 4, false);
+    71		seq_putc(file, '\n');
+    72	
+    73		return 0;
+    74	}
+    75	DEFINE_SHOW_ATTRIBUTE(syslog);
+    76	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
