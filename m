@@ -1,67 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E7B1F948;
-	Fri, 12 Sep 2025 00:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCAFF2550AD
+	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 03:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757635711; cv=none; b=QtbMK1S+B9hGz7QRzm2jjSkrbS6kaRhipcCYHXGzYXwKs1dCsHkNmmvtL9aoVuTyGtOCPLgXjPHoY///EFV+mwqsWkr0MyORy04JB8LKmhmVxqjBeD84w4lfF9MqCV8PHLmZ840l/uKQAG58zpNEDowSPW6qtvR60imIvfF1F3E=
+	t=1757648699; cv=none; b=njBXKizHfmiYsaVHFev6eRLLdHD6JiN+CmyxhiorMAlCoANc3qXSYSlBcfz51L8o4XcFtwd3fyo/VJczWLnAWE5z01E80E+WlOkgwLcos2NMEdSUZRiqPmJnX5+LUqYy2tH38aDOe0Qb7rGAtQWRVGPJ08Fv4w1E/sjaNoa3V6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757635711; c=relaxed/simple;
-	bh=UxcuXC6sExcpG8BeW6MP7jgxfMtnH1Fa8tN/NA404Fg=;
+	s=arc-20240116; t=1757648699; c=relaxed/simple;
+	bh=ZpxiM4NXhcZmKQdU/kQz5uIyINJQczpioixRluD7LSk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bV1LhvnOLznGIJdl7tBbnDwFeY8UgDPgfEBKV/PT0GLX2QSlD31ZunRWAZkU1OdjxgblQWq7rs/fi+I7gRixoB03+4OqeIcBGuoIINk4/J525RbV66bnYDnBJF1oCVxlUD8pJ81wLv45JXq38ar7EQq7J2R/bVwKBXWx1tduOMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NPcHy8dV; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jwlo32C+gFCGap0F2dYf8bvw5zpa+8gMICCfdYF1Lxl9PfTBsYEo2wjFUXRW3CVDNZEYEgIKidw8PTlQ+iEzMbyRQz0uwvJ0qBhenhXIvOX/BNd1LafNhp+c10H/T3sNgsyxK7gKFr2lIjfYh5WDeIp2cq59arnyzNDBAqEnvCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=XEvDxzQ8; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NPcHy8dV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757635710; x=1789171710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UxcuXC6sExcpG8BeW6MP7jgxfMtnH1Fa8tN/NA404Fg=;
-  b=NPcHy8dVB0iuvC5pQB64RBtcao1jIpE4xNT+WfIoc/WSsQ75R+37P58c
-   j3IIdXvUFDH8lYPJDBAJ5lLBJJ83lmlCDV5m5T4W9XzedVbOHPbeL8njA
-   bw8DaUSrV1jEnmw9ExrNVk4SfQSBjqoWx7zyiB5Xr6pYxMMXHuMDuvrWf
-   84bWNdm6L2ukojSLkBe2dh48i/1Ku4AgbuRIVv7s1CglNKSN0D/NK7iMH
-   iRFLL8UxUlW8OUNsLt4H3VYcZBmS8jhNpfOuyQuY9f5vFcfKtbTEJ6osK
-   iEf3tP4b8a3x7ziE6tg33BdIsf4IVRDl03pUOyFBHvCyP3VENFyOgCVYi
-   Q==;
-X-CSE-ConnectionGUID: nu8Bulr7SxKJ9VREcYKlPQ==
-X-CSE-MsgGUID: NisRXcZ4QfaT0LncsvKEOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60040654"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="60040654"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 17:08:29 -0700
-X-CSE-ConnectionGUID: JkE15ZKyT4Wcs/nc8sjVrw==
-X-CSE-MsgGUID: jm0+/LUrS322nD6lO7OCzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,258,1751266800"; 
-   d="scan'208";a="178163399"
-Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 11 Sep 2025 17:08:26 -0700
-Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uwrKx-0000iO-2Z;
-	Fri, 12 Sep 2025 00:08:23 +0000
-Date: Fri, 12 Sep 2025 08:08:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peng Fan <peng.fan@nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	arm-scmi@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 2/2] firmware: imx: sm-misc: Dump syslog info
-Message-ID: <202509120758.omltrDMi-lkp@intel.com>
-References: <20250910-sm-syslog-v1-2-5b36f8f21da6@nxp.com>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="XEvDxzQ8"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-32b8919e7c7so1692186a91.2
+        for <llvm@lists.linux.dev>; Thu, 11 Sep 2025 20:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1757648697; x=1758253497; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dLXLF/8rG6hnfrvnt+B3nOdP0tZ4TwcwQmPFhduodfg=;
+        b=XEvDxzQ8VeuGLp2IlDc+MlbXwFYkb/hxBfeXDZrsPB5LVN9l1p/1bf6l0olMuo/xiE
+         0MAmxtvXVZoRpON0qViAyk2PFY84Q1u0KhIBMeAtz2jcr/NE7Z8j6wyTytn8rHxjVlBx
+         GXr+hWfLh2lz6pVcX4NgDCMjEuCFnPkdT9Np0SMRu/zEOle+530F3Avnu3EQlmDKHJOL
+         TIc+Cfz/I28X7ZDllsjACTmBKn37eHONZ4Vfpn5SyUt0SgfRn8ghFyIirGl5oDl4/FsO
+         VTDGSZwlw2Y8018Ey03XNWoI1BmQj4+Pa/U17duqvAUrFO+IyELn04+PcxSjqjlZr5PK
+         u6rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757648697; x=1758253497;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dLXLF/8rG6hnfrvnt+B3nOdP0tZ4TwcwQmPFhduodfg=;
+        b=sJVrpJCOqB+WFNr5jfZqCQWx+3bU0ATl237rUyUQtwX72y2gcqCWELo7AhU9TE5569
+         LqQ6pwI+t/zFhK/TLKWKWc5xWtUoIEQPDI6M6CQwOVsLJMFMR8o+Thy+OdMmm5xKMpLR
+         A/utRF8k5hyRjBVw8IDMZDSIymjOWoPE9ui6gfiupzK2eZom8J9q6XhbwnsXcrILw1ch
+         ngKbLPMoVagerAi7qafmhT054tWEgZDoK9zYrWjGScraWg1jzmV9TV5J1k96Nt7a0Uu5
+         5Tb6/xvtUgDdw2NnCj4mceApzVoyFXEFzPo2uVIeU/lXwmUGUf456jjSpqzCqjSzIr8I
+         ONrw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAqZOX9etSdQPzoVHQWWiWzLpYjHa4IPyscQksTUUzFbEnnqzu+MmstHmPLmEZ5h3ZMfIo@lists.linux.dev
+X-Gm-Message-State: AOJu0YyOT8E17IDUIpCKkTc2IyMngXIRnf03m/HAhdPiML69oq3WHzqA
+	2MxT1pWWqoVBl6fFmQMIlq2yxI1VmfdY0gDuodeJ1t9fWYMha4gHghNIvWgO35QATg==
+X-Gm-Gg: ASbGnctwv8dTK+zlyNO5rL2ZSj1mAXmQr+VIMhNLSRPERrQ/Td3K6PuaXZ1lSqt75RE
+	19D7DwHWubV1jmxJc7T0NkkkCkBUafdIB5zlN3QQp2Dz+yHeAc7GYJhEYTGhnQZAplhbSqCcy+I
+	CD4krPZ62kJaFNymDHWsF1BSkw+yhgm/WQovso6Yre7lmQW8yd61PoRuNqlYzSREC+FQDMcA5nR
+	ZQxoh0zBhh7noVC0dOBhiOyaeWmWmTKZjYECZsP5oORFb/AhStIJz4i5Z8ADTCA59QrXqQ6SFSl
+	RMI7SoLhOoSKWWtDEVucTSuNUj5y9/xxKmLym489fFaAgGvnZ3aV4hIcvQ+ZHDnL0nfsEruD8fl
+	8+f3j2ew6UcY+9g1qESW0Ms+EvyiYsbWSxmQQaAvYykDMqV3GXw==
+X-Google-Smtp-Source: AGHT+IFy47WDgms/J9fw3Arbmga7E0E69RmMlFIFl878TTLy6zDNn+h2L90/JBQCa9swVYMkh+9a9Q==
+X-Received: by 2002:a17:90b:5386:b0:32d:e413:966a with SMTP id 98e67ed59e1d1-32de4f9c4aamr1454436a91.32.1757648696964;
+        Thu, 11 Sep 2025 20:44:56 -0700 (PDT)
+Received: from bytedance ([61.213.176.57])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b54a36d0d5bsm3385304a12.22.2025.09.11.20.44.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Sep 2025 20:44:56 -0700 (PDT)
+Date: Fri, 12 Sep 2025 11:44:28 +0800
+From: Aaron Lu <ziqianlu@bytedance.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: kernel test robot <lkp@intel.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Ben Segall <bsegall@google.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Xi Wang <xii@google.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Mel Gorman <mgorman@suse.de>,
+	Chuyi Zhou <zhouchuyi@bytedance.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Florian Bezdeka <florian.bezdeka@siemens.com>,
+	Songtang Liu <liusongtang@bytedance.com>,
+	Chen Yu <yu.c.chen@intel.com>,
+	Matteo Martelli <matteo.martelli@codethink.co.uk>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH update 4/4] sched/fair: Do not balance task to a throttled
+ cfs_rq
+Message-ID: <20250912034428.GA33@bytedance>
+References: <20250910095044.278-5-ziqianlu@bytedance.com>
+ <202509110908.a2P8HZ8A-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,76 +93,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250910-sm-syslog-v1-2-5b36f8f21da6@nxp.com>
+In-Reply-To: <202509110908.a2P8HZ8A-lkp@intel.com>
 
-Hi Peng,
+When doing load balance and the target cfs_rq is in throttled hierarchy,
+whether to allow balancing there is a question.
 
-kernel test robot noticed the following build errors:
+The good side to allow balancing is: if the target CPU is idle or less
+loaded and the being balanced task is holding some kernel resources,
+then it seems a good idea to balance the task there and let the task get
+the CPU earlier and release kernel resources sooner. The bad part is, if
+the task is not holding any kernel resources, then the balance seems not
+that useful.
 
-[auto build test ERROR on 65dd046ef55861190ecde44c6d9fcde54b9fb77d]
+While theoretically it's debatable, a performance test[0] which involves
+200 cgroups and each cgroup runs hackbench(20 sender, 20 receiver) in
+pipe mode showed a performance degradation on AMD Genoa when allowing
+load balance to throttled cfs_rq. Analysis[1] showed hackbench doesn't
+like task migration across LLC boundary. For this reason, add a check in
+can_migrate_task() to forbid balancing to a cfs_rq that is in throttled
+hierarchy. This reduced task migration a lot and performance restored.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan/firmware-arm_scmi-imx-Support-getting-syslog-of-MISC-protocol/20250910-223316
-base:   65dd046ef55861190ecde44c6d9fcde54b9fb77d
-patch link:    https://lore.kernel.org/r/20250910-sm-syslog-v1-2-5b36f8f21da6%40nxp.com
-patch subject: [PATCH 2/2] firmware: imx: sm-misc: Dump syslog info
-config: i386-buildonly-randconfig-004-20250912 (https://download.01.org/0day-ci/archive/20250912/202509120758.omltrDMi-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250912/202509120758.omltrDMi-lkp@intel.com/reproduce)
+[0]: https://lore.kernel.org/lkml/20250822110701.GB289@bytedance/
+[1]: https://lore.kernel.org/lkml/20250903101102.GB42@bytedance/
+Signed-off-by: Aaron Lu <ziqianlu@bytedance.com>
+---
+update: fix build error reported by kernel test robot when
+CONFIG_FAIR_GROUP_SCHED is not set.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509120758.omltrDMi-lkp@intel.com/
+ kernel/sched/fair.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/firmware/imx/sm-misc.c:54:39: error: use of undeclared identifier 'SZ_4K'
-      54 |         void *syslog __free(kfree) = kmalloc(SZ_4K, GFP_KERNEL);
-         |                                              ^
->> drivers/firmware/imx/sm-misc.c:54:39: error: use of undeclared identifier 'SZ_4K'
->> drivers/firmware/imx/sm-misc.c:54:39: error: use of undeclared identifier 'SZ_4K'
-   drivers/firmware/imx/sm-misc.c:56:13: error: use of undeclared identifier 'SZ_4K'
-      56 |         u16 size = SZ_4K / 4;
-         |                    ^
-   drivers/firmware/imx/sm-misc.c:64:14: error: use of undeclared identifier 'SZ_4K'
-      64 |                 if (size > SZ_4K / 4) {
-         |                            ^
-   drivers/firmware/imx/sm-misc.c:64:14: error: use of undeclared identifier 'SZ_4K'
-   drivers/firmware/imx/sm-misc.c:64:14: error: use of undeclared identifier 'SZ_4K'
-   7 errors generated.
-
-
-vim +/SZ_4K +54 drivers/firmware/imx/sm-misc.c
-
-    49	
-    50	static int syslog_show(struct seq_file *file, void *priv)
-    51	{
-    52		struct device *dev = file->private;
-    53		/* 4KB is large enough for syslog */
-  > 54		void *syslog __free(kfree) = kmalloc(SZ_4K, GFP_KERNEL);
-    55		/* syslog API use num words, not num bytes */
-    56		u16 size = SZ_4K / 4;
-    57		int ret;
-    58	
-    59		if (!ph)
-    60			return -ENODEV;
-    61	
-    62		ret = imx_misc_ctrl_ops->misc_syslog(ph, &size, syslog);
-    63		if (ret) {
-    64			if (size > SZ_4K / 4) {
-    65				dev_err(dev, "syslog size is larger than 4KB, please enlarge\n");
-    66				return ret;
-    67			}
-    68		}
-    69	
-    70		seq_hex_dump(file, " ", DUMP_PREFIX_NONE, 16, sizeof(u32), syslog, size * 4, false);
-    71		seq_putc(file, '\n');
-    72	
-    73		return 0;
-    74	}
-    75	DEFINE_SHOW_ATTRIBUTE(syslog);
-    76	
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 3dbdfaa697477..18a30ae35441a 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5737,6 +5737,11 @@ static inline int throttled_hierarchy(struct cfs_rq *cfs_rq)
+ 	return cfs_bandwidth_used() && cfs_rq->throttle_count;
+ }
+ 
++static inline int lb_throttled_hierarchy(struct task_struct *p, int dst_cpu)
++{
++	return throttled_hierarchy(task_group(p)->cfs_rq[dst_cpu]);
++}
++
+ static inline bool task_is_throttled(struct task_struct *p)
+ {
+ 	return cfs_bandwidth_used() && p->throttled;
+@@ -6733,6 +6738,11 @@ static inline int throttled_hierarchy(struct cfs_rq *cfs_rq)
+ 	return 0;
+ }
+ 
++static inline int lb_throttled_hierarchy(struct task_struct *p, int dst_cpu)
++{
++	return 0;
++}
++
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b, struct cfs_bandwidth *parent) {}
+ static void init_cfs_rq_runtime(struct cfs_rq *cfs_rq) {}
+@@ -9369,14 +9379,18 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
+ 	/*
+ 	 * We do not migrate tasks that are:
+ 	 * 1) delayed dequeued unless we migrate load, or
+-	 * 2) cannot be migrated to this CPU due to cpus_ptr, or
+-	 * 3) running (obviously), or
+-	 * 4) are cache-hot on their current CPU, or
+-	 * 5) are blocked on mutexes (if SCHED_PROXY_EXEC is enabled)
++	 * 2) target cfs_rq is in throttled hierarchy, or
++	 * 3) cannot be migrated to this CPU due to cpus_ptr, or
++	 * 4) running (obviously), or
++	 * 5) are cache-hot on their current CPU, or
++	 * 6) are blocked on mutexes (if SCHED_PROXY_EXEC is enabled)
+ 	 */
+ 	if ((p->se.sched_delayed) && (env->migration_type != migrate_load))
+ 		return 0;
+ 
++	if (lb_throttled_hierarchy(p, env->dst_cpu))
++		return 0;
++
+ 	/*
+ 	 * We want to prioritize the migration of eligible tasks.
+ 	 * For ineligible tasks we soft-limit them and only allow
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
