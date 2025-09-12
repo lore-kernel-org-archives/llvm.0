@@ -1,146 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7573D544;
-	Fri, 12 Sep 2025 05:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F15846F
+	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 06:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757653757; cv=none; b=geiG0+CNoe5GYGtoA3nigPRkPq8h50TqYNoQGbw0V+vP+D3uXMjsRiOHJBrXl/CIw97VfZk9gfUUFzYsVnQ2AcmTK8DzPhENnwPItin9Wm0gLWFGbqnwSeepZ20hFUWLAd2vEgQNqkdmBZXAAeyEEQ71DXQe7eAYhJqYfwbk+LQ=
+	t=1757656939; cv=none; b=No7IV7OxVBQ0sAgtqXPM/mGTEoTvzJGs6WlBhCS+yL1CP1jb0oYBTj8w8HE7R08je+HPusLZydCdDlRq8hT3fppIY64caRIRlFhCZJ8xmpkpl02Hia897GErUDatH8UtxNRwt9SanGeNJavXk4P5IDPrcgIuE7bzuPiBEs/o04A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757653757; c=relaxed/simple;
-	bh=5Sv52k5u28oEP7ozheRx2UKgazKeixsYXp9Xrw63D20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+XJGa81uN7Oo4zH/xDWeJBTP8dLm+MjdFw81lO+wyEsagWfTx7H4Jv4x/9A2pMGMjaLWgwYf9bHXQYJ/FqrUqwerxVlUxGf2QtTzW1TyQySqwy0L0D0u81A14+aJ62D1iGCXoOcnlAcjYpwqjsJYAyRMdwqGB6wTE5bWXSIcKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UXRld1qB; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757656939; c=relaxed/simple;
+	bh=uGlZvhlpp3tPml9ujD8dr5xmPxsTzfnzx8WsMMMPogk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=c/FTZbzWSQnXO+amiWrSqT++erxaiXnE7srUvbsz/OZnwVXEk8yS3I6Zn+sOvR0tcrbnPBnbrNXck86C9TEWgcHXYvifidD10HMPz3FIC9b8PFennQpEom6+iJEZymjzgztS4F3UZ4A1zo4ElPIPL0BDmSSqJZGRMUyOfXmyZUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UJqdJ52M; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UXRld1qB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757653755; x=1789189755;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5Sv52k5u28oEP7ozheRx2UKgazKeixsYXp9Xrw63D20=;
-  b=UXRld1qBEpbNqDVeFxvE9h0xxkAlMovroWsC8EVrgcIYLq5SFKA089LM
-   9mFmysi1dmWfry+19h+WZCuoFPJqqUNA8nZpRNc7TQ4GrD8sGDC6LwzqW
-   kn8Aa5rdyu+SU8M5wxZM6kdCPELzMfyI7YY19Lnvy5uh9Z3HBcL8qOlmJ
-   F1BKBr9TQ1IIoJH+2DwbsBagKVq3K921Fpv8tF8tCyyszlzCmj+WZkBrR
-   Np5Vkl8pc29dOohdbZ87WGyHXq6e5UbOHDRlTvVBLfm5EqqZvZonXKH4U
-   qkts7rYV3gkml+I0tHUrDLHhDRyTznXZjOxbpi3x4ok2vcJzvPCzZ3RdP
-   Q==;
-X-CSE-ConnectionGUID: M0SgE9EaSpmsznkhMO5zew==
-X-CSE-MsgGUID: ssChLQ78QniLyRMjdQaVLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11550"; a="59035026"
-X-IronPort-AV: E=Sophos;i="6.18,259,1751266800"; 
-   d="scan'208";a="59035026"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 22:09:14 -0700
-X-CSE-ConnectionGUID: Chkn6f1JSeqZFCMjjKycKA==
-X-CSE-MsgGUID: UIGyh3Q8S1+iLeSJ6X/vNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,259,1751266800"; 
-   d="scan'208";a="173165172"
-Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 11 Sep 2025 22:09:09 -0700
-Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uww1y-0000rE-0r;
-	Fri, 12 Sep 2025 05:09:06 +0000
-Date: Fri, 12 Sep 2025 13:08:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	maple-tree@lists.infradead.org, linux-kernel@vger.kernel.org,
-	David Hildenbrand <david@redhat.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	Charan Teja Kalla <quic_charante@quicinc.com>,
-	shikemeng@huaweicloud.com, kasong@tencent.com, nphamcs@gmail.com,
-	bhe@redhat.com, baohua@kernel.org, chrisl@kernel.org,
-	Matthew Wilcox <willy@infradead.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>
-Subject: Re: [PATCH v1 8/9] mm/vma: Use unmap_desc in vms_clear_ptes() and
- exit_mmap()
-Message-ID: <202509121212.sx5Tfe4e-lkp@intel.com>
-References: <20250909190945.1030905-9-Liam.Howlett@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UJqdJ52M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757656935;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=378FMBY4X2+FfP8BKeeFW7hKYa5IutW0dEyt5+hSalg=;
+	b=UJqdJ52MtyjXyPZFH26Q59zTwkO4KeKyyvLMLIvBgctrgXSynCcTd+87rXA7fIC8Yk9c82
+	BE6w8E47RY106w5/UrIZSFuPlS727zkL/juIc7blSevkY45+0ZSGSG08hZRhQ1NJkvI6I0
+	c8bjqDVEpT8iS+ActSqTVhEx0U72nOI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-250-cOF9Qiy-OGiw3fyl9D3PXQ-1; Fri,
+ 12 Sep 2025 02:02:14 -0400
+X-MC-Unique: cOF9Qiy-OGiw3fyl9D3PXQ-1
+X-Mimecast-MFC-AGG-ID: cOF9Qiy-OGiw3fyl9D3PXQ_1757656933
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E6161800576
+	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 06:02:13 +0000 (UTC)
+Received: from [172.20.141.126] (unknown [10.30.44.25])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8AF87180035E;
+	Fri, 12 Sep 2025 06:02:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc5,
+ upstream-mainline, e59a0391)
+Date: Fri, 12 Sep 2025 06:02:12 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250909190945.1030905-9-Liam.Howlett@oracle.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <10896.125091202021400241@us-mta-250.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: zVGkhXW1ZMmndqUceOQc2V_3dpGBeu3I734hxxj8BpE_1757656933
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Liam,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[cannot apply to linus/master v6.17-rc5 next-20250911]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Liam-R-Howlett/mm-mmap-Move-exit_mmap-trace-point/20250910-031555
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250909190945.1030905-9-Liam.Howlett%40oracle.com
-patch subject: [PATCH v1 8/9] mm/vma: Use unmap_desc in vms_clear_ptes() and exit_mmap()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250912/202509121212.sx5Tfe4e-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 21857ae337e0892a5522b6e7337899caa61de2a6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250912/202509121212.sx5Tfe4e-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509121212.sx5Tfe4e-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/filemap.c:53:
-   In file included from mm/internal.h:23:
->> mm/vma.h:173:22: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
-     173 |         desc->last_pgaddr = USER_PGTABLES_CEILING;
-         |                             ^~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/filemap.c:65:
-   mm/swap.h:461:10: error: call to undeclared function 'swp_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     461 |                 return swp_offset(folio->swap);
-         |                        ^
-   2 errors generated.
---
-   In file included from mm/oom_kill.c:50:
-   In file included from mm/internal.h:23:
->> mm/vma.h:173:22: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
-     173 |         desc->last_pgaddr = USER_PGTABLES_CEILING;
-         |                             ^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/USER_PGTABLES_CEILING +173 mm/vma.h
+Kernel information:
+    Commit message: Merge tag 's390-6.17-4' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/s390/linux
 
-   166	
-   167	static inline void unmap_all_init(struct unmap_desc *desc,
-   168			struct vma_iterator *vmi, struct vm_area_struct *vma)
-   169	{
-   170		desc->mas = &vmi->mas;
-   171		desc->first = vma;
-   172		desc->first_pgaddr = FIRST_USER_ADDRESS;
- > 173		desc->last_pgaddr = USER_PGTABLES_CEILING;
-   174		desc->vma_min = 0;
-   175		desc->vma_max = ULONG_MAX;
-   176		desc->tree_max = ULONG_MAX;
-   177		desc->tree_reset = vma->vm_end;
-   178		desc->mm_wr_locked = false;
-   179	}
-   180	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2034781651
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - nfsv4.2
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2034781651_x86_64_kernel_kcidb_tool_19560911_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/221
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2034781651_x86_64_kernel-debug_kcidb_tool_19561861_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/221
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
