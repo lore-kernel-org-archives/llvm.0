@@ -1,63 +1,63 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298ED2E88BB
-	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 10:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E893D2E8E01
+	for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 10:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757671948; cv=none; b=AZF+I2qYJir3RQ/fRcMVsA6L9uzduGDs28DS+RByOSwc+cDEDDQEOSrzE8k8uEOepfRJDbWu1AKesngnBuu/eMjNpM2T/jp3WgCGwZEOK2hqWSOj+GWT5nOgM1czard1LYB4cIRfGSlIFlAi++e21/ZEE7txja9gHDy9IpH3PjU=
+	t=1757671953; cv=none; b=M6bC2WFpnOLEMD+uvYrJwKMb2hO5WebHNgV7CKZZzZi/yUIlQwtOps4n5exBnj5Ox/H66L5kkNQUSWqPQqepDV0qaDnu/quh9B86rzeUJtR+d0TjbAXhXRQ6g0UPjcUJfbbaMxHhjrKxLdYa0F5Ej4QhFzAPFe1irVxpTbIhhWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757671948; c=relaxed/simple;
-	bh=HtnvcRfhS9CLWmrVuR1TwMxPtWHSQtXzxVQktoPREbE=;
+	s=arc-20240116; t=1757671953; c=relaxed/simple;
+	bh=0LDaB0nCUJks9qfGHQUupDX5ghXvVPG655pHEUpPv0Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=szCrHDeZ2DxxrxFENjGPXPkpx+A+Ih01ver3xERcJkd7AxNx23oZ77JTacyOq5nM6KPASHJPbDi6U4k05c1iGFFnbmR6uGZ8C1GoZw/sEiG3vs0+ZQ97Oy2j/toorMIBqx2TsEu2qfYFgYgqS9Tb6VVHdeYNLLEp79KmbudS7qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/sSUNXC; arc=none smtp.client-ip=209.85.216.44
+	 MIME-Version; b=ONk+xPDp03W6uruXMbXYRKOGTjCsWZZtgfOcWQNtPaymn9pTmUq0bbKNLgp+YR8R53SvOYdp4tkvuI/LoJPdlN4/dFY4fBBGf7cFkbHCy2Qg6OtRPutwXzhFRi50QTY/FKMmyykHp4gnSkfiUWKoxHoVqs608SSIUsNf0gm0G8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BOC6KGzz; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/sSUNXC"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-32df1321879so198209a91.2
-        for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 03:12:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BOC6KGzz"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-25669596921so16096665ad.1
+        for <llvm@lists.linux.dev>; Fri, 12 Sep 2025 03:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757671946; x=1758276746; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1757671951; x=1758276751; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Btw7JeEHjCHi0fmk72XeSdeksiIjhqX1c6woWjS/nBg=;
-        b=A/sSUNXCHdTc+T4kecgDMMEFBIokILrUY7y61O7WUWfpYKIEKq2wMuyRCKGQatKy3O
-         H/M722G3JCqArzCM6hHE2IlL6NDdVRCeJp3LByxUHq+bAuCzQCCV0PEBiEXTrdRiVtqg
-         OnwHM8NZzuzOXFqu2dy+O9BUshMqr93AyxURkEFKhgtYL3/iq3LotTAzQepiQDvy913A
-         gofF3ZmGwohdicw6y1oLto6rYWvgD/r5hWg45k4z9NCz2Y7VFEK/PEKV4bvfVrizXI/Q
-         GFolUvCj39+b7U4YZ67zNWnvNFOhHHyV25BrXhz+/EoD7WDdQd3PGQH5Z6OWClPlBOSe
-         jsJg==
+        bh=J0CmyIyII1+MjAJi7HJRtv0YVAXaAwAF3MNYXoEmi5A=;
+        b=BOC6KGzzuTwl9gscrNbDOKj+uXoJmqAPMaD24NIzHXE1mU7Y78Uxylwc7w8ULZaywR
+         Ig/vY+XOF9D/yUElSEVao7ehQQKzz6jt4N6KDuojwDEf8tABPUuMtiOUIQarfpDhZNv7
+         ow7JT7/o6rjTlR5ZT28cQXfOIfOraRZXQc/JsvtoMCqqOjBogM1EdCOCaLmJ1y6VoDNv
+         YnQBG5RcP+MyESu7GBMFp5h71lPPA2weroI0DEYW0Ljz34gTtPyyMlCQFsJp4XqLsqyv
+         L4AYhUnEHCQCfaB6PzVl2L2xvbg76QVj/sb+h7N3JziO/OV2BGP6ZnN4S3krNYCr+LFC
+         QefA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757671946; x=1758276746;
+        d=1e100.net; s=20230601; t=1757671951; x=1758276751;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Btw7JeEHjCHi0fmk72XeSdeksiIjhqX1c6woWjS/nBg=;
-        b=ppa+o3bt7W6CL1mWYrPJkwBBj1MCcVM5I2cFbrG1QDLGoS0bU6BYufI6eJTCQiX1EM
-         Bxk+yk5L0yM6P4tM3h2zbhylWomc8Wq5wiuNYY2DeaerBEBgjCjfbqdV2YU7RhsFqq4b
-         pb4ZbaVzoWmDNYXXwuaqL89Yq8qwreaw/hxBUKTQn7oQt6a3PneBdtV0pN6p6DAFaaKO
-         KiVlGszMfeUfRhl83cqhICvR9F2UHQE2BtXZuam588FuhgJ36KY20X7hSFUr4uXRodwF
-         siVtx2aEJ3H0BoLH/Qj2rKfAr47MAI24ezZY2MS5l9cLW/0XxLmdwoRHyFZyTVJuTjOx
-         SjgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVujjMp9BvdECZERgS8JxsN+vUveRAHGkm2vs6LbmCt5TvzZFnTplj3TdB5pKXkjPQ5RmTU@lists.linux.dev
-X-Gm-Message-State: AOJu0YzMnH+MGnLlNo+S3wDWCDs8UKlDna9s6Hnx0MEZk0/kCzXoVgqh
-	K1ltMRfRW+57SnwQSXDE03tpd1fTMqTPXnZ4iR2VG4vL8vnIFquI1Gn3
-X-Gm-Gg: ASbGncsRX1rVi0uHEEy0o3jYRwBGTZ1igZq3MVX9fhi2PD9efEPJTSiKytM7A98xIbl
-	QI4wMz0NXMVQnXcb1ceujLkYrgpbJF4+89vTRCySQ09vtunXbakrMItlaOlsQUqcji7SCGZQLYu
-	Q037K8NxMshsgA+OBGkDKdEvHJ1NWDYHrhrgy3OQ5ZX96Dj2kA3uKy7QIvYVmtCWISXj8PNaG4a
-	Maj2ievfQWyailu/TGAK2feyFpPQ56NolLr8GCWr7dadtPtCyNoFA/U+0bdF/pI+G18ve9E5MJb
-	z5GkW3arbn7Uq7r6gJLHv45ew//l80OMh8FLhMbKDO0Yhf/jyOvZYfoi48V3+atCXYNZfVYIjJv
-	R/1yA8Nk9uNh8EDUSlnDrhdk7cpzp0+ed8N4hUSvStOZP/HdJ1w==
-X-Google-Smtp-Source: AGHT+IE+sH0wcZG9HaKcll5QXaOw6VOwT34jJJKFyIXbetNwLJVfpmHy9Irzue+96yqtkUewE0lXYQ==
-X-Received: by 2002:a17:90b:534e:b0:32b:df0e:928f with SMTP id 98e67ed59e1d1-32de4fb9a28mr2940174a91.37.1757671946347;
-        Fri, 12 Sep 2025 03:12:26 -0700 (PDT)
+        bh=J0CmyIyII1+MjAJi7HJRtv0YVAXaAwAF3MNYXoEmi5A=;
+        b=JwA+bYjjwXJlVyyTsUELNJtdI7chN0zY4wzfMrU9hpb94/bRkL8Yekk267BPGD4Aky
+         K0llh+hgPJ5v/5IopVswbmpFNsRlQb6rHS8uVlrDB6CgxoXFf8a2i7JV562ye2C7Sg64
+         oNrMkND8CsoHLFyWvoo1dGw2dY+LjvY74xbcrbnm5Zwvzv/rkgcUq4m8LYni7e/Td3qR
+         3cZoOmDMoVGy8F3XS8Nlm4R2lQJC3QWYvMcsf+gC/N6NGI3CAbObMpBOKSVdxWjHVAt4
+         WDZBNyf7+mf6YVSodp6DGgOoT/LDyPKa/PXflxvwlpF6zGL1wJPx7zTzY+kZ7Sqf0xnx
+         EhAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUiJtAj1HrmdsApa3g+kRpMPDaqz/zxKc6toPVOFlEk1ekL6gtbaN4XUblryK2Mnb/LAFDj@lists.linux.dev
+X-Gm-Message-State: AOJu0YxEmWc7AamC1eewm5M1idzy1eM8Vzoc/yLUpQBve224z+0C5dRR
+	S5widYHGc2DWMVYgL6EqVi5CoqU4ioJfcOCowDLszbYXpPTFD/akMpqZ
+X-Gm-Gg: ASbGnculG1prqzjAsXQTcL5zRImsZ2evIVntp6Snlotiaa/vDS008LlP9LUi0XHVBng
+	0YEf14Wn+NYfd6VdpkpuHCJm6sq4N4ESQc+eqaa0GVwS/qLFkWaeTrTVc61AZNBTKvb7PkZuBbr
+	p0tQ5L3yWhtxzPaaPkjvc8lL3qRCkWpcU5eqmJctLiVn4KUfGWrATl/sgHx80h5JAF95lPWb7U8
+	Vt3DZUkIkH/1AN3Hm4d0+ewAa8FzzDekOQxxPC09gZqXhpXtg1ahhcXXlUS35sJrz7Bj+shCEv9
+	OPUqpYos5mkNc6vaz3zMkXq6xNk8yvqjPx/q8IeGOQ+gH6R5mBjT6CEXdx4LQXH7capL5rmsw2U
+	7G8XJSloYwloTkmWyckmw7YuPIUKnXJmu8JfSE90=
+X-Google-Smtp-Source: AGHT+IF00yk89VG+lmEZt4lMLX0bbsabe7ZkX4XQg7tfyuz6vAWZHryAYuUydwk9sktzZqpEFk926w==
+X-Received: by 2002:a17:903:3c2c:b0:24b:2b07:5fa5 with SMTP id d9443c01a7336-25d26663dcamr29087525ad.29.1757671951122;
+        Fri, 12 Sep 2025 03:12:31 -0700 (PDT)
 Received: from localhost ([185.49.34.62])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77607a48c19sm4972892b3a.36.2025.09.12.03.12.25
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25c3b4f1127sm44400285ad.147.2025.09.12.03.12.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Sep 2025 03:12:25 -0700 (PDT)
+        Fri, 12 Sep 2025 03:12:30 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -122,9 +122,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-trace-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v4 06/21] mm/ksw: add singleton /proc/kstackwatch interface
-Date: Fri, 12 Sep 2025 18:11:16 +0800
-Message-ID: <20250912101145.465708-7-wangjinchao600@gmail.com>
+Subject: [PATCH v4 07/21] mm/ksw: add HWBP pre-allocation
+Date: Fri, 12 Sep 2025 18:11:17 +0800
+Message-ID: <20250912101145.465708-8-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250912101145.465708-1-wangjinchao600@gmail.com>
 References: <20250912101145.465708-1-wangjinchao600@gmail.com>
@@ -136,150 +136,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Provide the /proc/kstackwatch file to read or update the configuration.
-Only a single process can open this file at a time, enforced using atomic
-config_file_busy, to prevent concurrent access.
-
-ksw_get_config() exposes the configuration pointer as const.
+Pre-allocate per-CPU hardware breakpoints at init with a place holder
+address, which will be retargeted dynamically in kprobe handler.
+This avoids allocation in atomic context.
 
 Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 ---
- mm/kstackwatch/kernel.c      | 75 +++++++++++++++++++++++++++++++++++-
- mm/kstackwatch/kstackwatch.h |  3 ++
- 2 files changed, 77 insertions(+), 1 deletion(-)
+ mm/kstackwatch/kstackwatch.h |  4 +++
+ mm/kstackwatch/watch.c       | 55 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-diff --git a/mm/kstackwatch/kernel.c b/mm/kstackwatch/kernel.c
-index 1502795e02af..8e1dca45003e 100644
---- a/mm/kstackwatch/kernel.c
-+++ b/mm/kstackwatch/kernel.c
-@@ -3,7 +3,10 @@
+diff --git a/mm/kstackwatch/kstackwatch.h b/mm/kstackwatch/kstackwatch.h
+index 277b192f80fa..3ea191370970 100644
+--- a/mm/kstackwatch/kstackwatch.h
++++ b/mm/kstackwatch/kstackwatch.h
+@@ -38,4 +38,8 @@ struct ksw_config {
+ // singleton, only modified in kernel.c
+ const struct ksw_config *ksw_get_config(void);
  
- #include <linux/kstrtox.h>
- #include <linux/module.h>
-+#include <linux/proc_fs.h>
-+#include <linux/seq_file.h>
- #include <linux/string.h>
-+#include <linux/uaccess.h>
- 
- #include "kstackwatch.h"
- 
-@@ -12,6 +15,7 @@ MODULE_DESCRIPTION("Kernel Stack Watch");
- MODULE_LICENSE("GPL");
- 
- static struct ksw_config *ksw_config;
-+static atomic_t config_file_busy = ATOMIC_INIT(0);
- 
- /*
-  * Format of the configuration string:
-@@ -23,7 +27,7 @@ static struct ksw_config *ksw_config;
-  * - local_var_offset : offset from the stack pointer at function+ip_offset
-  * - local_var_len    : length of the local variable(1,2,4,8)
-  */
--static int __maybe_unused ksw_parse_config(char *buf, struct ksw_config *config)
-+static int ksw_parse_config(char *buf, struct ksw_config *config)
- {
- 	char *func_part, *local_var_part = NULL;
- 	char *token;
-@@ -92,18 +96,87 @@ static int __maybe_unused ksw_parse_config(char *buf, struct ksw_config *config)
- 	return -EINVAL;
- }
- 
-+static ssize_t kstackwatch_proc_write(struct file *file,
-+				      const char __user *buffer, size_t count,
-+				      loff_t *pos)
++/* watch management */
++int ksw_watch_init(void);
++void ksw_watch_exit(void);
++
+ #endif /* _KSTACKWATCH_H */
+diff --git a/mm/kstackwatch/watch.c b/mm/kstackwatch/watch.c
+index cec594032515..d3399ac840b2 100644
+--- a/mm/kstackwatch/watch.c
++++ b/mm/kstackwatch/watch.c
+@@ -1 +1,56 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/hw_breakpoint.h>
++#include <linux/perf_event.h>
++#include <linux/printk.h>
++
++#include "kstackwatch.h"
++
++static struct perf_event *__percpu *watch_events;
++
++static unsigned long watch_holder;
++
++static struct perf_event_attr watch_attr;
++
++bool panic_on_catch;
++module_param(panic_on_catch, bool, 0644);
++MODULE_PARM_DESC(panic_on_catch, "panic immediately on corruption catch");
++static void ksw_watch_handler(struct perf_event *bp,
++			      struct perf_sample_data *data,
++			      struct pt_regs *regs)
 +{
-+	char input[MAX_CONFIG_STR_LEN];
++	pr_err("========== KStackWatch: Caught stack corruption =======\n");
++	pr_err("config %s\n", ksw_get_config()->config_str);
++	dump_stack();
++	pr_err("=================== KStackWatch End ===================\n");
++
++	if (panic_on_catch)
++		panic("Stack corruption detected");
++}
++
++int ksw_watch_init(void)
++{
 +	int ret;
 +
-+	if (count == 0 || count >= sizeof(input))
-+		return -EINVAL;
-+
-+	if (copy_from_user(input, buffer, count))
-+		return -EFAULT;
-+
-+	input[count] = '\0';
-+	strim(input);
-+
-+	if (!strlen(input)) {
-+		pr_info("config cleared\n");
-+		return count;
-+	}
-+
-+	ret = ksw_parse_config(input, ksw_config);
-+	if (ret) {
-+		pr_err("Failed to parse config %d\n", ret);
++	hw_breakpoint_init(&watch_attr);
++	watch_attr.bp_addr = (unsigned long)&watch_holder;
++	watch_attr.bp_len = sizeof(watch_holder);
++	watch_attr.bp_type = HW_BREAKPOINT_W;
++	watch_events = register_wide_hw_breakpoint(&watch_attr,
++						   ksw_watch_handler,
++						   NULL);
++	if (IS_ERR(watch_events)) {
++		ret = PTR_ERR(watch_events);
++		pr_err("failed to register wide hw breakpoint: %d\n", ret);
 +		return ret;
 +	}
 +
-+	return count;
-+}
-+
-+static int kstackwatch_proc_show(struct seq_file *m, void *v)
-+{
-+	seq_printf(m, "%s\n", ksw_config->config_str);
 +	return 0;
 +}
 +
-+static int kstackwatch_proc_open(struct inode *inode, struct file *file)
++void ksw_watch_exit(void)
 +{
-+	if (atomic_cmpxchg(&config_file_busy, 0, 1))
-+		return -EBUSY;
-+
-+	return single_open(file, kstackwatch_proc_show, NULL);
++	unregister_wide_hw_breakpoint(watch_events);
++	watch_events = NULL;
 +}
-+
-+static int kstackwatch_proc_release(struct inode *inode, struct file *file)
-+{
-+	atomic_set(&config_file_busy, 0);
-+	return single_release(inode, file);
-+}
-+
-+static const struct proc_ops kstackwatch_proc_ops = {
-+	.proc_open = kstackwatch_proc_open,
-+	.proc_read = seq_read,
-+	.proc_write = kstackwatch_proc_write,
-+	.proc_lseek = seq_lseek,
-+	.proc_release = kstackwatch_proc_release,
-+};
-+
-+const struct ksw_config *ksw_get_config(void)
-+{
-+	return ksw_config;
-+}
- static int __init kstackwatch_init(void)
- {
- 	ksw_config = kzalloc(sizeof(*ksw_config), GFP_KERNEL);
- 	if (!ksw_config)
- 		return -ENOMEM;
- 
-+	if (!proc_create("kstackwatch", 0600, NULL, &kstackwatch_proc_ops)) {
-+		pr_err("create proc kstackwatch fail");
-+		kfree(ksw_config);
-+		return -ENOMEM;
-+	}
-+
- 	pr_info("module loaded\n");
- 	return 0;
- }
- 
- static void __exit kstackwatch_exit(void)
- {
-+	remove_proc_entry("kstackwatch", NULL);
- 	kfree(ksw_config);
- 
- 	pr_info("module unloaded\n");
-diff --git a/mm/kstackwatch/kstackwatch.h b/mm/kstackwatch/kstackwatch.h
-index 7c595c5c24d1..277b192f80fa 100644
---- a/mm/kstackwatch/kstackwatch.h
-+++ b/mm/kstackwatch/kstackwatch.h
-@@ -35,4 +35,7 @@ struct ksw_config {
- 	char config_str[MAX_CONFIG_STR_LEN];
- };
- 
-+// singleton, only modified in kernel.c
-+const struct ksw_config *ksw_get_config(void);
-+
- #endif /* _KSTACKWATCH_H */
 -- 
 2.43.0
 
