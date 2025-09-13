@@ -1,345 +1,223 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64ED72836A6
-	for <llvm@lists.linux.dev>; Sat, 13 Sep 2025 08:29:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F0DC148
+	for <llvm@lists.linux.dev>; Sat, 13 Sep 2025 20:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757752175; cv=none; b=PZXjB5n+ActNbkSVUqNLGt1ALJ5SGfGB5fuWl0/ipsWNkNDBvyO8Im154MByN8Kp8sqLOQrUIT4RRaPKILwrFd9Zp/GLwl3EYAO1SSXTpRsZJcpyOtKWLoIOSqDuDcJ/BIhVk165oBxGvVaaTfx63sJl22pehGMNAiJaija6k5I=
+	t=1757796410; cv=none; b=j3oKCsSq5bqezA93EwB0Bh7eIfAI6I2U+XHSiPFi8nfFzL+dTTpqfp1WDCRVWrGwNUY+EUYi5DbH4Fk0sBG31fy1jSRBFMJFoBlHy2Jg/WD38NtfQ79lcMwoZl094OaTClWsk9XqndAstaawlTVhTDPRwE0aB9DNUf4XvkMXqFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757752175; c=relaxed/simple;
-	bh=WiqVXraGALrOqDB27ZJ3vIfpQB+ZQkeST6U9mN9rMIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kaqr5274jB+PM0aeHFsbx/+VMk4JEkeW77486Pal9sSqAlwURdeVQlNC0gjhxEVeMWEvRJn09ZJ3VJi9vx5GT8tgVMQzPuk1lCUImqL8EVu3yh6nXupHQG6uynb+Bx++Pl12dukM+OINopo7Gu+7jLwq29xqTK6J1O65qpdgw0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LaFcLViP; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1757796410; c=relaxed/simple;
+	bh=7Z7MCzQL01ky3hCuIBFWkKjCmjaCW3oov0qmsAX2Ass=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NzYs7I1NFHUqL2/bYA+fdffHBwHY4A5/kZMRVzmHgrfCJpIBUMbmG2A/cN3czlbU5fme03c7XZuVQXpViGXyKZZ+qy5N/YgP+ERxmgBjr1I8hNQ8Yy1SRXjVkvZVE5onPmXc4umWtaZTcxshDd+Urxl3UYcPYUj2XckPuNxPuO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Vl1wE06q; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mnytsj7B; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Vl1wE06q; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mnytsj7B; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LaFcLViP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757752172;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PIeQDW6Tdi47ZNT16hYEbfLPFjdOb5UbtK5p18GEOMw=;
-	b=LaFcLViPi5TJqwgenvqS9TQ7MVjDP0pLXVq3rDFOsWMSjKBl7Mgo11W1UqC4HS0JVjR0A5
-	A+45Zf7KEwDZktZhmnk9COAPSdP8GgtOLgaZh9Sk4/VTbdDXCO9JjfUCXx8OT3IpNtzVHY
-	rOQVLEIwyIlUsgqM40FqS1rST987/hU=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-479-CvX__QxHNQuLD9FNb-HKJQ-1; Sat,
- 13 Sep 2025 04:29:29 -0400
-X-MC-Unique: CvX__QxHNQuLD9FNb-HKJQ-1
-X-Mimecast-MFC-AGG-ID: CvX__QxHNQuLD9FNb-HKJQ_1757752165
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Vl1wE06q";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mnytsj7B";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Vl1wE06q";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mnytsj7B"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 966C7180045C;
-	Sat, 13 Sep 2025 08:29:24 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.45])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E99FA1954126;
-	Sat, 13 Sep 2025 08:29:19 +0000 (UTC)
-Date: Sat, 13 Sep 2025 16:29:15 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	andreyknvl@gmail.com
-Cc: sohil.mehta@intel.com, baohua@kernel.org, david@redhat.com,
-	kbingham@kernel.org, weixugc@google.com, Liam.Howlett@oracle.com,
-	alexandre.chartre@oracle.com, kas@kernel.org, mark.rutland@arm.com,
-	trintaeoitogc@gmail.com, axelrasmussen@google.com,
-	yuanchu@google.com, joey.gouly@arm.com, samitolvanen@google.com,
-	joel.granados@kernel.org, graf@amazon.com,
-	vincenzo.frascino@arm.com, kees@kernel.org, ardb@kernel.org,
-	thiago.bauermann@linaro.org, glider@google.com, thuth@redhat.com,
-	kuan-ying.lee@canonical.com, pasha.tatashin@soleen.com,
-	nick.desaulniers+lkml@gmail.com, vbabka@suse.cz,
-	kaleshsingh@google.com, justinstitt@google.com,
-	catalin.marinas@arm.com, alexander.shishkin@linux.intel.com,
-	samuel.holland@sifive.com, dave.hansen@linux.intel.com,
-	corbet@lwn.net, xin@zytor.com, dvyukov@google.com,
-	tglx@linutronix.de, scott@os.amperecomputing.com,
-	jason.andryuk@amd.com, morbo@google.com, nathan@kernel.org,
-	lorenzo.stoakes@oracle.com, mingo@redhat.com, brgerst@gmail.com,
-	kristina.martsenko@arm.com, bigeasy@linutronix.de, luto@kernel.org,
-	jgross@suse.com, jpoimboe@kernel.org, urezki@gmail.com,
-	mhocko@suse.com, ada.coupriediaz@arm.com, hpa@zytor.com,
-	leitao@debian.org, peterz@infradead.org, wangkefeng.wang@huawei.com,
-	surenb@google.com, ziy@nvidia.com, smostafa@google.com,
-	ryabinin.a.a@gmail.com, ubizjak@gmail.com, jbohac@suse.cz,
-	broonie@kernel.org, akpm@linux-foundation.org,
-	guoweikang.kernel@gmail.com, rppt@kernel.org, pcc@google.com,
-	jan.kiszka@siemens.com, nicolas.schier@linux.dev, will@kernel.org,
-	andreyknvl@gmail.com, jhubbard@nvidia.com, bp@alien8.de,
-	x86@kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 17/19] mm: Unpoison pcpu chunks with base address tag
-Message-ID: <aMUrW1Znp1GEj7St@MiWiFi-R3L-srv>
-References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
- <bcf18f220ef3b40e02f489fdb90fc7a5a153a383.1756151769.git.maciej.wieczor-retman@intel.com>
+	by smtp-out1.suse.de (Postfix) with ESMTPS id AD4703EB95;
+	Sat, 13 Sep 2025 20:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757796406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
+	b=Vl1wE06qrNqMW0HqlqZ/M+jT5XnJfPIujr/Qb0Xs9xEj/Tk9x1GBSOMOl86kc7Er4faLmC
+	sapigQUSDzhXgI4x4khq9IcYklyzWxaWRWGvibBTPmGiTJw5mWTSqKdXF5234efuVYWuh4
+	hcUPmVa0SL4cIpXLA6FfomQWaAx4OgU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757796406;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
+	b=Mnytsj7BFrJRllabJ3CaQTCHsRj6GG4ORvjb6d7DlXVcBjTz9D2Ymrewba1pGD39R3iiQI
+	I2KPaYW3SufbnNAg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Vl1wE06q;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Mnytsj7B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757796406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
+	b=Vl1wE06qrNqMW0HqlqZ/M+jT5XnJfPIujr/Qb0Xs9xEj/Tk9x1GBSOMOl86kc7Er4faLmC
+	sapigQUSDzhXgI4x4khq9IcYklyzWxaWRWGvibBTPmGiTJw5mWTSqKdXF5234efuVYWuh4
+	hcUPmVa0SL4cIpXLA6FfomQWaAx4OgU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757796406;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
+	b=Mnytsj7BFrJRllabJ3CaQTCHsRj6GG4ORvjb6d7DlXVcBjTz9D2Ymrewba1pGD39R3iiQI
+	I2KPaYW3SufbnNAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 93ECA1372E;
+	Sat, 13 Sep 2025 20:46:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id KfLDIjbYxWjcZAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Sat, 13 Sep 2025 20:46:46 +0000
+Message-ID: <b1628e73-92d6-4b2a-b0a0-0f7e26f8c3a1@suse.cz>
+Date: Sat, 13 Sep 2025 22:46:46 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bcf18f220ef3b40e02f489fdb90fc7a5a153a383.1756151769.git.maciej.wieczor-retman@intel.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [vbabka-slab:slab/for-6.18/kmalloc_nolock 14/14]
+ mm/slub.c:3866:2: warning: variable 'flags' is used uninitialized whenever
+ '&&' condition is false
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, Alexei Starovoitov <ast@kernel.org>,
+ Harry Yoo <harry.yoo@oracle.com>, clang-built-linux <llvm@lists.linux.dev>,
+ oe-kbuild-all@lists.linux.dev, linux-mm <linux-mm@kvack.org>
+References: <202509121822.aOV6H1ts-lkp@intel.com>
+ <8fe99133-3322-4e39-9b58-80df547b8d1f@suse.cz>
+ <CAADnVQJWXk+Zzsf_oVTaJkpm4nO3iq34bGcUDQRarOVSX+tLbA@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CAADnVQJWXk+Zzsf_oVTaJkpm4nO3iq34bGcUDQRarOVSX+tLbA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: AD4703EB95
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -3.01
 
-Hi ,
-
-On 08/25/25 at 10:24pm, Maciej Wieczor-Retman wrote:
-> The problem presented here is related to NUMA systems and tag-based
-> KASAN mode. It can be explained in the following points:
+On 9/12/25 18:39, Alexei Starovoitov wrote:
+> On Fri, Sep 12, 2025 at 6:23 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> --- a/mm/slub.c
+>> +++ b/mm/slub.c
+>> @@ -3772,8 +3772,11 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>>  #define local_lock_cpu_slab(s, flags)  \
+>>         local_lock_irqsave(&(s)->cpu_slab->lock, flags)
+>>  #else
+>> -#define local_lock_cpu_slab(s, flags)  \
+>> -       lockdep_assert(local_trylock_irqsave(&(s)->cpu_slab->lock, flags))
+>> +#define gg(s, flags)                                         \
+>> +       do {                                                                   \
+>> +               bool __l = local_trylock_irqsave(&(s)->cpu_slab->lock, flags); \
+>> +               lockdep_assert(__l);
 > 
-> 	1. There can be more than one virtual memory chunk.
-> 	2. Chunk's base address has a tag.
-> 	3. The base address points at the first chunk and thus inherits
-> 	   the tag of the first chunk.
-> 	4. The subsequent chunks will be accessed with the tag from the
-> 	   first chunk.
-> 	5. Thus, the subsequent chunks need to have their tag set to
-> 	   match that of the first chunk.
+> That works, but would raise questions for anyone looking at
+> these two lines as-is, since it's an implementation
+> detail of lockdep_assert() and combination of .config flags.
+
+TBH when I see some code with a side-effect wrapped in a WARN or assert that
+can be configured off, it already raises a question if that gets executed
+when configured off. There are examples where it does, and where it doesn't.
+
+> what clang warning suggested is imo cleaner:
+
+That silences the warning about flags, however it means that when lockdep
+gets disabled on runtime, the locks stop locking (but not unlocking). While
+debug_locks_off() only seems to get called in a serious situations
+currently, we should not make things even worse then.
+
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 4079abb5d0e1..a6b50cd1d95f 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -3865,7 +3865,7 @@ static void put_cpu_partial(struct kmem_cache
+> *s, struct slab *slab, int drain)
+>  {
+>         struct slab *oldslab;
+>         struct slab *slab_to_put = NULL;
+> -       unsigned long flags;
+> +       unsigned long flags = 0;
+>         int slabs = 0;
 > 
-> Refactor code by moving it into a helper in preparation for the actual
-> fix.
+> Could you fold one of them in?
 
-I got a boot breakage on a hpe-apollo arm64 system with sw_tags mode, and
-the boot breakage can be met stably. The detailed situation is reported
-in below link:
-
-System is broken in KASAN sw_tags mode during bootup
-https://lore.kernel.org/all/aKMLgHdTOEf9B92E@MiWiFi-R3L-srv/T/#u
-
-After applying this patch 17 and patch 18 in this series, I can confirm
-the breakage is gone. Thanks for the great fix, and please feel free to
-add:
-
-Tested-by: Baoquan He <bhe@redhat.com>
-
-========================
-CONFIG_KASAN=y
-CONFIG_CC_HAS_KASAN_MEMINTRINSIC_PREFIX=y
-# CONFIG_KASAN_GENERIC is not set
-CONFIG_KASAN_SW_TAGS=y
-# CONFIG_KASAN_HW_TAGS is not set
-# CONFIG_KASAN_OUTLINE is not set
-CONFIG_KASAN_INLINE=y
-CONFIG_KASAN_STACK=y
-CONFIG_KASAN_VMALLOC=y
-CONFIG_KASAN_KUNIT_TEST=m
-================================
-
-[  100.907469] ==================================================================
-[  100.907485] BUG: KASAN: invalid-access in pcpu_alloc_noprof+0x42c/0x9a8
-[  100.907509] Write of size 160 at addr 10fffd7fbdc00000 by task systemd/1
-[  100.907524] Pointer tag: [10], memory tag: [5b]
-[  100.907532]
-[  100.907544] CPU: 229 UID: 0 PID: 1 Comm: systemd Not tainted 6.16.0+ #2 PREEMPT(voluntary)
-[  100.907562] Hardware name: HPE Apollo 70             /C01_APACHE_MB         , BIOS L50_5.13_1.16 07/29/2020
-[  100.907571] Call trace:
-[  100.907578]  show_stack+0x30/0x98 (C)
-[  100.907597]  dump_stack_lvl+0x7c/0xa0
-[  100.907614]  print_address_description.isra.0+0x90/0x2b8
-[  100.907635]  print_report+0x120/0x208
-[  100.907651]  kasan_report+0xc8/0x110
-[  100.907669]  kasan_check_range+0x80/0xa0
-[  100.907685]  __asan_memset+0x30/0x68
-[  100.907700]  pcpu_alloc_noprof+0x42c/0x9a8
-[  100.907716]  css_rstat_init+0x1bc/0x220
-[  100.907734]  cgroup_create+0x188/0x540
-[  100.907749]  cgroup_mkdir+0xb4/0x330
-[  100.907765]  kernfs_iop_mkdir+0xb0/0x120
-[  100.907783]  vfs_mkdir+0x250/0x380
-[  100.907800]  do_mkdirat+0x254/0x298
-[  100.907815]  __arm64_sys_mkdirat+0x80/0xc0
-[  100.907831]  invoke_syscall.constprop.0+0x88/0x148
-[  100.907848]  el0_svc_common.constprop.0+0x78/0x148
-[  100.907863]  do_el0_svc+0x38/0x50
-[  100.907877]  el0_svc+0x3c/0x160
-[  100.907895]  el0t_64_sync_handler+0x10c/0x138
-[  100.907911]  el0t_64_sync+0x1b0/0x1b8
-[  100.907925]
-[  100.907931] The buggy address belongs to a 0-page vmalloc region starting at 0x5bfffd7fbdc00000 allocated at pcpu_get_vm_areas+0x0/0x1da8
-[  100.907963] The buggy address belongs to the physical page:
-[  100.907970] page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x8811a35
-[  100.907984] flags: 0xa6a00000000000(node=1|zone=2|kasantag=0x6a)
-[  100.908006] raw: 00a6a00000000000 0000000000000000 dead000000000122 0000000000000000
-[  100.908019] raw: 0000000000000000 b4ff00878bce6400 00000001ffffffff 0000000000000000
-[  100.908029] raw: 00000000000fffff 0000000000000000
-[  100.908037] page dumped because: kasan: bad access detected
-[  100.908044]
-[  100.908048] Memory state around the buggy address:
-[  100.908059] Unable to handle kernel paging request at virtual address ffff7fd7fbdbffe0
-[  100.908068] KASAN: probably wild-memory-access in range [0xfffffd7fbdbffe00-0xfffffd7fbdbffe0f]
-[  100.908078] Mem abort info:
-[  100.908083]   ESR = 0x0000000096000007
-[  100.908089]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  100.908098]   SET = 0, FnV = 0
-[  100.908105]   EA = 0, S1PTW = 0
-[  100.908111]   FSC = 0x07: level 3 translation fault
-[  100.908118] Data abort info:
-[  100.908123]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
-[  100.908130]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[  100.908138]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[  100.908147] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000008ff8b76000
-[  100.908156] [ffff7fd7fbdbffe0] pgd=1000008ff0299403, p4d=1000008ff0299403, pud=1000008ff0298403, pmd=1000008811a17403, pte=0000000000000000
-[  100.908192] Internal error: Oops: 0000000096000007 [#1]  SMP
-[  101.185060] Modules linked in: i2c_dev
-[  101.188820] CPU: 229 UID: 0 PID: 1 Comm: systemd Not tainted 6.16.0+ #2 PREEMPT(voluntary)
-[  101.197175] Hardware name: HPE Apollo 70             /C01_APACHE_MB         , BIOS L50_5.13_1.16 07/29/2020
-[  101.206912] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  101.213877] pc : __pi_memcpy_generic+0x24/0x230
-[  101.218418] lr : kasan_metadata_fetch_row+0x20/0x30
-[  101.223299] sp : ffff8000859b7700
-[  101.226610] x29: ffff8000859b7700 x28: 0000000000000100 x27: ffff008ec6291800
-[  101.233758] x26: 00000000000000a0 x25: 0000000000000000 x24: fffffd7fbdbfff00
-[  101.240904] x23: ffff8000826b1e58 x22: fffffd7fbdc00000 x21: 00000000fffffffe
-[  101.248051] x20: ffff800082669d18 x19: fffffd7fbdbffe00 x18: 0000000000000000
-[  101.255196] x17: 3030303030303030 x16: 2066666666666666 x15: 6631303030303030
-[  101.262342] x14: 0000000000000001 x13: 0000000000000001 x12: 0000000000000001
-[  101.269487] x11: 687420646e756f72 x10: 0000000000000020 x9 : 0000000000000000
-[  101.276633] x8 : ffff78000859b76a x7 : 0000000000000000 x6 : 000000000000003a
-[  101.283778] x5 : ffff8000859b7768 x4 : ffff7fd7fbdbfff0 x3 : efff800000000000
-[  101.290924] x2 : 0000000000000010 x1 : ffff7fd7fbdbffe0 x0 : ffff8000859b7758
-[  101.298070] Call trace:
-[  101.300512]  __pi_memcpy_generic+0x24/0x230 (P)
-[  101.305051]  print_report+0x180/0x208
-[  101.308719]  kasan_report+0xc8/0x110
-[  101.312299]  kasan_check_range+0x80/0xa0
-[  101.316227]  __asan_memset+0x30/0x68
-[  101.319807]  pcpu_alloc_noprof+0x42c/0x9a8
-[  101.323908]  css_rstat_init+0x1bc/0x220
-[  101.327749]  cgroup_create+0x188/0x540
-[  101.331502]  cgroup_mkdir+0xb4/0x330
-[  101.335082]  kernfs_iop_mkdir+0xb0/0x120
-[  101.339011]  vfs_mkdir+0x250/0x380
-[  101.342416]  do_mkdirat+0x254/0x298
-[  101.345908]  __arm64_sys_mkdirat+0x80/0xc0
-[  101.350008]  invoke_syscall.constprop.0+0x88/0x148
-[  101.354803]  el0_svc_common.constprop.0+0x78/0x148
-[  101.359598]  do_el0_svc+0x38/0x50
-[  101.362916]  el0_svc+0x3c/0x160
-[  101.366061]  el0t_64_sync_handler+0x10c/0x138
-[  101.370423]  el0t_64_sync+0x1b0/0x1b8
-[  101.374095] Code: f100805f 540003c8 f100405f 540000c3 (a9401c26)
-[  101.380187] ---[ end trace 0000000000000000 ]---
-[  101.384802] note: systemd[1] ex
-** replaying previous printk message **
-
-
-> 
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> ---
-> Changelog v4:
-> - Redo the patch message numbered list.
-> - Do the refactoring in this patch and move additions to the next new
->   one.
-> 
-> Changelog v3:
-> - Remove last version of this patch that just resets the tag on
->   base_addr and add this patch that unpoisons all areas with the same
->   tag instead.
-> 
->  include/linux/kasan.h | 10 ++++++++++
->  mm/kasan/hw_tags.c    | 11 +++++++++++
->  mm/kasan/shadow.c     | 10 ++++++++++
->  mm/vmalloc.c          |  4 +---
->  4 files changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index 7a2527794549..3ec432d7df9a 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -613,6 +613,13 @@ static __always_inline void kasan_poison_vmalloc(const void *start,
->  		__kasan_poison_vmalloc(start, size);
->  }
->  
-> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms);
-> +static __always_inline void kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{
-> +	if (kasan_enabled())
-> +		__kasan_unpoison_vmap_areas(vms, nr_vms);
-> +}
-> +
->  #else /* CONFIG_KASAN_VMALLOC */
->  
->  static inline void kasan_populate_early_vm_area_shadow(void *start,
-> @@ -637,6 +644,9 @@ static inline void *kasan_unpoison_vmalloc(const void *start,
->  static inline void kasan_poison_vmalloc(const void *start, unsigned long size)
->  { }
->  
-> +static inline void kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{ }
-> +
->  #endif /* CONFIG_KASAN_VMALLOC */
->  
->  #if (defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)) && \
-> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-> index 9a6927394b54..1f569df313c3 100644
-> --- a/mm/kasan/hw_tags.c
-> +++ b/mm/kasan/hw_tags.c
-> @@ -382,6 +382,17 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
->  	 */
->  }
->  
-> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{
-> +	int area;
-> +
-> +	for (area = 0 ; area < nr_vms ; area++) {
-> +		vms[area]->addr = __kasan_unpoison_vmalloc(
-> +			vms[area]->addr, vms[area]->size,
-> +			KASAN_VMALLOC_PROT_NORMAL);
-> +	}
-> +}
-> +
->  #endif
->  
->  void kasan_enable_hw_tags(void)
-> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-> index d2c70cd2afb1..b41f74d68916 100644
-> --- a/mm/kasan/shadow.c
-> +++ b/mm/kasan/shadow.c
-> @@ -646,6 +646,16 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
->  	kasan_poison(start, size, KASAN_VMALLOC_INVALID, false);
->  }
->  
-> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{
-> +	int area;
-> +
-> +	for (area = 0 ; area < nr_vms ; area++) {
-> +		kasan_poison(vms[area]->addr, vms[area]->size,
-> +			     arch_kasan_get_tag(vms[area]->addr), false);
-> +	}
-> +}
-> +
->  #else /* CONFIG_KASAN_VMALLOC */
->  
->  int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index c93893fb8dd4..00be0abcaf60 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -4847,9 +4847,7 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
->  	 * With hardware tag-based KASAN, marking is skipped for
->  	 * non-VM_ALLOC mappings, see __kasan_unpoison_vmalloc().
->  	 */
-> -	for (area = 0; area < nr_vms; area++)
-> -		vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
-> -				vms[area]->size, KASAN_VMALLOC_PROT_NORMAL);
-> +	kasan_unpoison_vmap_areas(vms, nr_vms);
->  
->  	kfree(vas);
->  	return vms;
-> -- 
-> 2.50.1
-> 
-> 
-
+And so I've folded in mine.
