@@ -1,118 +1,135 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E658A13AD05;
-	Sat, 13 Sep 2025 04:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302DB45C14
+	for <llvm@lists.linux.dev>; Sat, 13 Sep 2025 07:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757736801; cv=none; b=Kkjuge7HR53z1NDlubOh2GtCXMMRPYALblRq0iVfA1Cu3/sTbpq4EHLepEg9qXuLqKvHbaOZGpkl8OuX+4xVbeWwlxvvzs9RBmhwydJip0Bd2/XPe7z80s/RUqtlY/7GYctLTOF2vU9mS0zhE9AeH99LsAj0rJ2/zDEzyHRuU+k=
+	t=1757748731; cv=none; b=nBr8o7CVPq40Y81Fyr3JWzTNrWTbP6HqbaefyUzQAIylswwmMzmKv/E0nQvJOEOaiEJ3FxYZ2ACPG5d9bQ3XzVzEQeTJz7/CzNV/f3emTxVuolCyK+dUGOjTrvQytp7KL6r7KOh6+y877AuUwG3s09vyz+BqVubmctIe9GBr+Uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757736801; c=relaxed/simple;
-	bh=U9kKsshevJqGszGf9fsgE68j9TrfFI4hVI82DPtJMYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BNmrP0addK4CP3H/iEFOIlC4+bIVxOWgcTrQIiWe9xC6eC1smiXzuZluCmV0yY6AdHa2IbiZ3TDqCKa/5ulxXKf/Hc0uyWl2+wXMNKPZ5dBmyG2pYh4MghILqz/cnvfWaAqpoiDaCSPS4zlX9sv5LJ9ExYzUrFpoeZ64FYNtljw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=xPzy07H5; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1757748731; c=relaxed/simple;
+	bh=iV2axcADQRuvIqTlcsFCcJMaFVlg2CMgXCJ0KWuJzyI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HP8JjK9IBlgkwUvyzZrnWt0sAwFpy5JfbuCgoaayby72H1K9HmS2ewbCraplAHgaWHh2tcu/X1mHSsl/ZNYTPkt/i09s16jcmCsgL4h5MhJwZnPvbrjSxkTxJIWTtlM30JwLzySQm+qYyxTlDVNgMSQulJijIT5ppxlg32WDynQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DDSuFlpp; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="xPzy07H5"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-	bh=u7ndZnQxyXKvcCzhFli8oZf0PjWLBirdplU5n0FJmLw=; b=xPzy07H5oLyRzMkKUDnRYxRbA8
-	FB9s/mgtYrIEncNja4JJjGye+zGOM5arCPaXRnqY0vBLCsFj8oDAeoSE0UqBh4+bDiLKE1WlvVIGg
-	KVrxlIQZrGV8DB3SCKRdz/WridjNvy5CXv+SD1Va6LVYxjNBA+mGHiEbQRiwSEI+cHvjloDDoXglj
-	0dK5WfUej0zVDXKQOXKsr5DuKq3kr+d9vFJrusNVKTTSLwcsCky4pU6kPywtug6qim/3Nk3gXwtyf
-	vbw1VCU9MqDSbqZvzBQzA1VgqzMvxCdl5wn99ll+PJEWgdoqb2XafQieoBP+l+brAtdIBvxrTKifR
-	pUY01Pvg==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uxHdN-0000000D6om-3RkA;
-	Sat, 13 Sep 2025 04:13:09 +0000
-Message-ID: <6b5e5d3e-5db8-44f2-8dca-42f317be8e0d@infradead.org>
-Date: Fri, 12 Sep 2025 21:13:07 -0700
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DDSuFlpp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757748729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Q84o99FR8cBDbELdBVvDaimyF52B7jOfSy0G24dU0Nc=;
+	b=DDSuFlpp8ummhLl+ywfMCrTN6Z8Hp7ePHH1jOOsFwMasJNyg0eBpH80WXX6hCBL1fbiYeF
+	7mw/ndpPUEOCavXKbsNlPYvcviq6WCDCxJdzLNjVHON/U0yDHixlF90HvwBAye/22RXcY6
+	s2zknuFnN/ahD0oo/DgMywHgtqF0JYY=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-206-ouuCcKfbMKipqd2KbiZ6Qg-1; Sat,
+ 13 Sep 2025 03:32:07 -0400
+X-MC-Unique: ouuCcKfbMKipqd2KbiZ6Qg-1
+X-Mimecast-MFC-AGG-ID: ouuCcKfbMKipqd2KbiZ6Qg_1757748726
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A672D1955E88
+	for <llvm@lists.linux.dev>; Sat, 13 Sep 2025 07:32:06 +0000 (UTC)
+Received: from [172.20.141.126] (unknown [10.30.44.25])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5063618003FC;
+	Sat, 13 Sep 2025 07:32:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 23 of 110): Test report for master
+ (6.17.0-rc5, upstream-mainline, 22f20375)
+Date: Sat, 13 Sep 2025 07:32:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 03/21] HWBP: Add modify_wide_hw_breakpoint_local() API
-To: Jinchao Wang <wangjinchao600@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Mike Rapoport <rppt@kernel.org>,
- Alexander Potapenko <glider@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Rong Xu <xur@google.com>,
- Naveen N Rao <naveen@kernel.org>, David Kaplan <david.kaplan@amd.com>,
- Andrii Nakryiko <andrii@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
- Nam Cao <namcao@linutronix.de>, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, kasan-dev@googlegroups.com,
- "David S. Miller" <davem@davemloft.net>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org
-References: <20250912101145.465708-1-wangjinchao600@gmail.com>
- <20250912101145.465708-4-wangjinchao600@gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250912101145.465708-4-wangjinchao600@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <89040.125091303320700667@us-mta-206.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: R4GvK-a1PASj-y3VzMq-RrlbMItC3TfbSsNCzoS2AXk_1757748726
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
+Kernel information:
+    Commit message: Merge tag 'pci-v6.17-fixes-3' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/pci/pci
 
-On 9/12/25 3:11 AM, Jinchao Wang wrote:
-> +/**
-> + * modify_wide_hw_breakpoint_local - update breakpoint config for local cpu
-> + * @bp: the hwbp perf event for this cpu
-> + * @attr: the new attribute for @bp
-> + *
-> + * This does not release and reserve the slot of HWBP, just reuse the current
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2037045616
 
-                                                 of a HWBP; it just reuses
+One or more kernel builds failed:
+    Builds that are failing to boot:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:2037045616_x86_64_kernel-debug
 
-and preferable s/cpu/CPU/ in comments.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [aarch64, ppc64le, s390x, x86_64]
+                Reboot test [aarch64, ppc64le, s390x, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
-> + * slot on local CPU. So the users must update the other CPUs by themselves.
-> + * Also, since this does not release/reserve the slot, this can not change the
-> + * type to incompatible type of the HWBP.
-> + * Return err if attr is invalid or the cpu fails to update debug register
-> + * for new @attr.
-> + */
-> +#ifdef CONFIG_HAVE_REINSTALL_HW_BREAKPOINT
-> +int modify_wide_hw_breakpoint_local(struct perf_event *bp,
-> +				    struct perf_event_attr *attr)
-> +{
 
--- 
-~Randy
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
