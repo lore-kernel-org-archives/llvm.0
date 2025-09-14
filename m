@@ -1,223 +1,255 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F0DC148
-	for <llvm@lists.linux.dev>; Sat, 13 Sep 2025 20:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DCA20311
+	for <llvm@lists.linux.dev>; Sun, 14 Sep 2025 02:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757796410; cv=none; b=j3oKCsSq5bqezA93EwB0Bh7eIfAI6I2U+XHSiPFi8nfFzL+dTTpqfp1WDCRVWrGwNUY+EUYi5DbH4Fk0sBG31fy1jSRBFMJFoBlHy2Jg/WD38NtfQ79lcMwoZl094OaTClWsk9XqndAstaawlTVhTDPRwE0aB9DNUf4XvkMXqFE=
+	t=1757818178; cv=none; b=ilaqRn7jPqYxY/DOCgFV8R4W5AZdeDnpqOVBVluFHeY7pKwgHSTraWKHxvlBqYPnv2F603wuTHK+ErpUtG/FMowpbSrjmsT1guYKahNR+cGYYoJ7Dq0L99efjsTb62r8wBkmrETlsEszRdnnI8LQdxjOzcUCnFmDpqPAD2Pfwds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757796410; c=relaxed/simple;
-	bh=7Z7MCzQL01ky3hCuIBFWkKjCmjaCW3oov0qmsAX2Ass=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NzYs7I1NFHUqL2/bYA+fdffHBwHY4A5/kZMRVzmHgrfCJpIBUMbmG2A/cN3czlbU5fme03c7XZuVQXpViGXyKZZ+qy5N/YgP+ERxmgBjr1I8hNQ8Yy1SRXjVkvZVE5onPmXc4umWtaZTcxshDd+Urxl3UYcPYUj2XckPuNxPuO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Vl1wE06q; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mnytsj7B; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Vl1wE06q; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Mnytsj7B; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1757818178; c=relaxed/simple;
+	bh=/ocrDdQqG9fW+geJ98ijPvowjxtpgo25jcfqXLbwHro=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mb4m/q2v8Pw4xZHmWjzT5bG03Ahms5lpKw9j+C324mBMJW7Lm/Cl+cc4/72mk1jujVb+KhT9BmBnlPT7hoz6F+FQhYZxPymgBXmtIlJt2Ki3MQazrQeUVMViAt4NVTUcKRdM1Dkiq+MlV/RQYLClYAx1lN0wKZkWvY/7cRi/Ljk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/2Ku/UL; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Vl1wE06q";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mnytsj7B";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Vl1wE06q";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Mnytsj7B"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id AD4703EB95;
-	Sat, 13 Sep 2025 20:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757796406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
-	b=Vl1wE06qrNqMW0HqlqZ/M+jT5XnJfPIujr/Qb0Xs9xEj/Tk9x1GBSOMOl86kc7Er4faLmC
-	sapigQUSDzhXgI4x4khq9IcYklyzWxaWRWGvibBTPmGiTJw5mWTSqKdXF5234efuVYWuh4
-	hcUPmVa0SL4cIpXLA6FfomQWaAx4OgU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757796406;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
-	b=Mnytsj7BFrJRllabJ3CaQTCHsRj6GG4ORvjb6d7DlXVcBjTz9D2Ymrewba1pGD39R3iiQI
-	I2KPaYW3SufbnNAg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Vl1wE06q;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Mnytsj7B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757796406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
-	b=Vl1wE06qrNqMW0HqlqZ/M+jT5XnJfPIujr/Qb0Xs9xEj/Tk9x1GBSOMOl86kc7Er4faLmC
-	sapigQUSDzhXgI4x4khq9IcYklyzWxaWRWGvibBTPmGiTJw5mWTSqKdXF5234efuVYWuh4
-	hcUPmVa0SL4cIpXLA6FfomQWaAx4OgU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757796406;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=38MKvmoG9sJlDP35qP5Jp0TIm1uAH+pH6cn4t8ko1Cc=;
-	b=Mnytsj7BFrJRllabJ3CaQTCHsRj6GG4ORvjb6d7DlXVcBjTz9D2Ymrewba1pGD39R3iiQI
-	I2KPaYW3SufbnNAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 93ECA1372E;
-	Sat, 13 Sep 2025 20:46:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id KfLDIjbYxWjcZAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Sat, 13 Sep 2025 20:46:46 +0000
-Message-ID: <b1628e73-92d6-4b2a-b0a0-0f7e26f8c3a1@suse.cz>
-Date: Sat, 13 Sep 2025 22:46:46 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/2Ku/UL"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-770db3810a7so10884286d6.0
+        for <llvm@lists.linux.dev>; Sat, 13 Sep 2025 19:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757818175; x=1758422975; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LFavhNV1lWZBO2CYtF6B2ruxGVEn2hxFtUjzEBzIPFo=;
+        b=E/2Ku/ULfBJ/RADP9oLyz5GCOllFdx631LeanR/LMPgVWMcl13C/7kKsWEVddh/FOq
+         UunKB4zbjHsoUc0xr1UyqPiAXUaXxJvl6eZ0Q7IdJxy2r7uEOX4FnCcBCAIzHCJWHLyf
+         2E2cajeP7O9ttWp6CAw0f+lQDJHRV8yTZMAe/dgOYhhIkjJVEcbHSzwPehWI6+LJw8hh
+         d+BlpsXV3hUTQ5VeJhQwI3kgRv4ZFGl6fGO8Jbjk7ihOa6A0DF+v4gdujOJS38tkh9Vw
+         7PViD1wIB/np457We10NyFRTZysGtcDyp+27loIWuUpDiHT2CvXuKkamiSwY0HxiIoNk
+         LLfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757818175; x=1758422975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LFavhNV1lWZBO2CYtF6B2ruxGVEn2hxFtUjzEBzIPFo=;
+        b=gw3uCozLlDlqDL+RK3/X+zmMhf4c/awsRto4bDzunLH4hvUd9n8BwQWZsynSIpEniJ
+         t8XDPSteFXR7C20Ez0bmMlLzYVhFmYGz1emL141ptJhPujBCIVAa6JK0XNEIOdpWjTYe
+         KyG9qYlwsA1p+D2sQANWLJ0oB/Z8f/NUyAg6OQREr5s+7gjEA8D8Hj/6sl4AV2qRRFiT
+         sXoe1dh5BzFT/GJqKophVc3kKQvqf92n/JfACqbVzmhPspEio/C00NWOHy63SgQkJ0tX
+         cCjj/OQMBBFrHtXtPQMV/5EtGeBe4MJoysgnHLQTm/gYyFcvTNxEZ5chiwfOaYm+0UIe
+         oBLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUeTQu8ui8NTP1+0o6kV0Ucdms9164wuZTu5MBl10UsTixwGQjRBThPpp4xZWZIoCK8PVF0@lists.linux.dev
+X-Gm-Message-State: AOJu0YyxTm9t7tCHa14sO1+xT6ExBK4rUfY9rnF4B0jfmUEzHAYmsl7F
+	IiV7tgSO+BOVLXk+mUT/fQ2II7WCzfaD6FOv1C3Zsq4pe2i0dBEmUaPq86LU3oT3pr+S8c3vQU5
+	3O5yzRbL7IF/MWeYkpRoKMBRC8BZZf1w=
+X-Gm-Gg: ASbGnctLXDoaXbpAhZIh1alnl7IDBLOX4VRSWdRNiXaooheylnR16/T0wDspQ469MEW
+	chSUiVmTMo/fTiI5cfV9uetV/Auo3sOSF2+ON6qLZpyPVeOAaReKKgFeyefkuXb3FpXNHj9jMEE
+	UW1gIwmgaS8lXEZSnmSFfSLi5/qMSZB7w/Jd+oGunlMx6bGsglqHihZF4dbG97Q8kFOIc8+mGg4
+	g+10HKoiuyaZVWXTzdf56e2lOk9J96ViHXeJ1cIuvIw8tKGMsg=
+X-Google-Smtp-Source: AGHT+IHu4nD3kgKhcw1xieNm3ZVi/4aJiGK44+ie7MDg9WJVIme29An0JlKCztQhHPTvo3RppfrMwRprZmHweH0qAnU=
+X-Received: by 2002:ad4:5aad:0:b0:728:4af1:e4f9 with SMTP id
+ 6a1803df08f44-767c46cccf4mr121368526d6.47.1757818175268; Sat, 13 Sep 2025
+ 19:49:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [vbabka-slab:slab/for-6.18/kmalloc_nolock 14/14]
- mm/slub.c:3866:2: warning: variable 'flags' is used uninitialized whenever
- '&&' condition is false
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, Alexei Starovoitov <ast@kernel.org>,
- Harry Yoo <harry.yoo@oracle.com>, clang-built-linux <llvm@lists.linux.dev>,
- oe-kbuild-all@lists.linux.dev, linux-mm <linux-mm@kvack.org>
-References: <202509121822.aOV6H1ts-lkp@intel.com>
- <8fe99133-3322-4e39-9b58-80df547b8d1f@suse.cz>
- <CAADnVQJWXk+Zzsf_oVTaJkpm4nO3iq34bGcUDQRarOVSX+tLbA@mail.gmail.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <CAADnVQJWXk+Zzsf_oVTaJkpm4nO3iq34bGcUDQRarOVSX+tLbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: AD4703EB95
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -3.01
+References: <20250910024447.64788-2-laoar.shao@gmail.com> <202509110109.PSgSHb31-lkp@intel.com>
+ <49b70945-7483-4af1-95ba-e128eb9f6d7e@linux.dev> <DF4CA2C0-25AF-462B-A6D2-888DB20E0DFA@nvidia.com>
+ <7d4548ce-e381-47fe-8bb3-5ea38a172527@lucifer.local>
+In-Reply-To: <7d4548ce-e381-47fe-8bb3-5ea38a172527@lucifer.local>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 14 Sep 2025 10:48:59 +0800
+X-Gm-Features: AS18NWCQoXZMjj8Obq1_xmQrE5op8oMXWfkf-LaS63VH7m9IskWXpSuwhtt-rJU
+Message-ID: <CALOAHbAK54mrpWYbCzWjMPrrRFOb7-8kAM7Ud7s6tCMyU7fjsg@mail.gmail.com>
+Subject: Re: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task from khugepaged_mm_slot
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Zi Yan <ziy@nvidia.com>, Lance Yang <lance.yang@linux.dev>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-doc@vger.kernel.org, Lance Yang <ioworker0@gmail.com>, akpm@linux-foundation.org, 
+	gutierrez.asier@huawei-partners.com, rientjes@google.com, andrii@kernel.org, 
+	david@redhat.com, baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com, 
+	ameryhung@gmail.com, ryan.roberts@arm.com, usamaarif642@gmail.com, 
+	willy@infradead.org, corbet@lwn.net, npache@redhat.com, dev.jain@arm.com, 
+	21cnbao@gmail.com, shakeel.butt@linux.dev, ast@kernel.org, 
+	daniel@iogearbox.net, hannes@cmpxchg.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/12/25 18:39, Alexei Starovoitov wrote:
-> On Fri, Sep 12, 2025 at 6:23 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->>
->> --- a/mm/slub.c
->> +++ b/mm/slub.c
->> @@ -3772,8 +3772,11 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
->>  #define local_lock_cpu_slab(s, flags)  \
->>         local_lock_irqsave(&(s)->cpu_slab->lock, flags)
->>  #else
->> -#define local_lock_cpu_slab(s, flags)  \
->> -       lockdep_assert(local_trylock_irqsave(&(s)->cpu_slab->lock, flags))
->> +#define gg(s, flags)                                         \
->> +       do {                                                                   \
->> +               bool __l = local_trylock_irqsave(&(s)->cpu_slab->lock, flags); \
->> +               lockdep_assert(__l);
-> 
-> That works, but would raise questions for anyone looking at
-> these two lines as-is, since it's an implementation
-> detail of lockdep_assert() and combination of .config flags.
+On Thu, Sep 11, 2025 at 9:47=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+>
+> On Wed, Sep 10, 2025 at 10:28:30PM -0400, Zi Yan wrote:
+> > On 10 Sep 2025, at 22:12, Lance Yang wrote:
+> >
+> > > Hi Yafang,
+> > >
+> > > On 2025/9/11 01:27, kernel test robot wrote:
+> > >> Hi Yafang,
+> > >>
+> > >> kernel test robot noticed the following build errors:
+> > >>
+> > >> [auto build test ERROR on akpm-mm/mm-everything]
+> > >>
+> > >> url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/m=
+m-thp-remove-disabled-task-from-khugepaged_mm_slot/20250910-144850
+> > >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git =
+mm-everything
+> > >> patch link:    https://lore.kernel.org/r/20250910024447.64788-2-laoa=
+r.shao%40gmail.com
+> > >> patch subject: [PATCH v7 mm-new 01/10] mm: thp: remove disabled task=
+ from khugepaged_mm_slot
+> > >> config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/=
+20250911/202509110109.PSgSHb31-lkp@intel.com/config)
+> > >> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project=
+ 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> > >> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/=
+archive/20250911/202509110109.PSgSHb31-lkp@intel.com/reproduce)
+> > >>
+> > >> If you fix the issue in a separate patch/commit (i.e. not just a new=
+ version of
+> > >> the same patch/commit), kindly add following tags
+> > >> | Reported-by: kernel test robot <lkp@intel.com>
+> > >> | Closes: https://lore.kernel.org/oe-kbuild-all/202509110109.PSgSHb3=
+1-lkp@intel.com/
+> > >>
+> > >> All errors (new ones prefixed by >>):
+> > >>
+> > >>>> kernel/sys.c:2500:6: error: call to undeclared function 'hugepage_=
+pmd_enabled'; ISO C99 and later do not support implicit function declaratio=
+ns [-Wimplicit-function-declaration]
+> > >>      2500 |             hugepage_pmd_enabled())
+> > >>           |             ^
+> > >>>> kernel/sys.c:2501:3: error: call to undeclared function '__khugepa=
+ged_enter'; ISO C99 and later do not support implicit function declarations=
+ [-Wimplicit-function-declaration]
+> > >>      2501 |                 __khugepaged_enter(mm);
+> > >>           |                 ^
+> > >>     2 errors generated.
+> > >
+> > > Oops, seems like hugepage_pmd_enabled() and __khugepaged_enter() are =
+only
+> > > available when CONFIG_TRANSPARENT_HUGEPAGE is enabled ;)
+> > >
+> > >>
+> > >>
+> > >> vim +/hugepage_pmd_enabled +2500 kernel/sys.c
+> > >>
+> > >>    2471
+> > >>    2472    static int prctl_set_thp_disable(bool thp_disable, unsign=
+ed long flags,
+> > >>    2473                                     unsigned long arg4, unsi=
+gned long arg5)
+> > >>    2474    {
+> > >>    2475            struct mm_struct *mm =3D current->mm;
+> > >>    2476
+> > >>    2477            if (arg4 || arg5)
+> > >>    2478                    return -EINVAL;
+> > >>    2479
+> > >>    2480            /* Flags are only allowed when disabling. */
+> > >>    2481            if ((!thp_disable && flags) || (flags & ~PR_THP_D=
+ISABLE_EXCEPT_ADVISED))
+> > >>    2482                    return -EINVAL;
+> > >>    2483            if (mmap_write_lock_killable(current->mm))
+> > >>    2484                    return -EINTR;
+> > >>    2485            if (thp_disable) {
+> > >>    2486                    if (flags & PR_THP_DISABLE_EXCEPT_ADVISED=
+) {
+> > >>    2487                            mm_flags_clear(MMF_DISABLE_THP_CO=
+MPLETELY, mm);
+> > >>    2488                            mm_flags_set(MMF_DISABLE_THP_EXCE=
+PT_ADVISED, mm);
+> > >>    2489                    } else {
+> > >>    2490                            mm_flags_set(MMF_DISABLE_THP_COMP=
+LETELY, mm);
+> > >>    2491                            mm_flags_clear(MMF_DISABLE_THP_EX=
+CEPT_ADVISED, mm);
+> > >>    2492                    }
+> > >>    2493            } else {
+> > >>    2494                    mm_flags_clear(MMF_DISABLE_THP_COMPLETELY=
+, mm);
+> > >>    2495                    mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADV=
+ISED, mm);
+> > >>    2496            }
+> > >>    2497
+> > >>    2498            if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm=
+) &&
+> > >>    2499                !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
+> > >>> 2500                  hugepage_pmd_enabled())
+> > >>> 2501                      __khugepaged_enter(mm);
+> > >>    2502            mmap_write_unlock(current->mm);
+> > >>    2503            return 0;
+> > >>    2504    }
+> > >>    2505
+> > >
+> > > So, let's wrap the new logic in an #ifdef CONFIG_TRANSPARENT_HUGEPAGE=
+ block.
+> > >
+> > > diff --git a/kernel/sys.c b/kernel/sys.c
+> > > index a1c1e8007f2d..c8600e017933 100644
+> > > --- a/kernel/sys.c
+> > > +++ b/kernel/sys.c
+> > > @@ -2495,10 +2495,13 @@ static int prctl_set_thp_disable(bool thp_dis=
+able, unsigned long flags,
+> > >                 mm_flags_clear(MMF_DISABLE_THP_EXCEPT_ADVISED, mm);
+> > >         }
+> > >
+> > > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > >         if (!mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm) &&
+> > >             !mm_flags_test(MMF_VM_HUGEPAGE, mm) &&
+> > >             hugepage_pmd_enabled())
+> > >                 __khugepaged_enter(mm);
+> > > +#endif
+> > > +
+> > >         mmap_write_unlock(current->mm);
+> > >         return 0;
+> > >  }
+> >
+> > Or in the header file,
+> >
+> > #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > ...
+> > #else
+> > bool hugepage_pmd_enabled()
+> > {
+> >       return false;
+> > }
+> >
+> > int __khugepaged_enter(struct mm_struct *mm)
+> > {
+> >       return 0;
+> > }
+>
+> It seems we have a convention of just not implementing things here if the=
+y're
+> necessarily used in core code paths (and _with my suggested change_) it's=
+ _just_
+> khugepaged that's invoking them).
+>
+> Anyway with my suggestion we can fix this entirely with:
+>
+> #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>
+> void khugepaged_enter_mm(struct mm_struct *mm);
+>
+> #else
+>
+> void khugepaged_enter_mm(struct mm_struct *mm)
+> {
+> }
+>
+> #endif
 
-TBH when I see some code with a side-effect wrapped in a WARN or assert that
-can be configured off, it already raises a question if that gets executed
-when configured off. There are examples where it does, and where it doesn't.
+ack
 
-> what clang warning suggested is imo cleaner:
+Thanks for all the suggestions.
 
-That silences the warning about flags, however it means that when lockdep
-gets disabled on runtime, the locks stop locking (but not unlocking). While
-debug_locks_off() only seems to get called in a serious situations
-currently, we should not make things even worse then.
-
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 4079abb5d0e1..a6b50cd1d95f 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3865,7 +3865,7 @@ static void put_cpu_partial(struct kmem_cache
-> *s, struct slab *slab, int drain)
->  {
->         struct slab *oldslab;
->         struct slab *slab_to_put = NULL;
-> -       unsigned long flags;
-> +       unsigned long flags = 0;
->         int slabs = 0;
-> 
-> Could you fold one of them in?
-
-And so I've folded in mine.
+--=20
+Regards
+Yafang
