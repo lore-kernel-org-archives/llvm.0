@@ -1,126 +1,325 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323111C5D55;
-	Sun, 14 Sep 2025 13:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB9842A96;
+	Sun, 14 Sep 2025 13:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757855016; cv=none; b=rw+dsau+So5XoM7BFvrfqeiDO7QYSaiCole+2gnSzU9J+KGXhUebragApSb1AqssmNFuzSXqoUcWbQhNjp5zTQ63JzTuMncta0iEjwue7s1tHGCgtcIydX6Zjes6HnOqHc35wzt3JMze8YK03IVoa8sH54sDZ9TmHRJqK/KqZu4=
+	t=1757857979; cv=none; b=LD9NiuKCSsVa1DBcxAGZx2kz93m8jJzx+wFmeeZ6qvOX/cEqTvJ46T9E/0MzucHgLVRFi9A277aFuuOEVWka+s03yy5vMjct4RcwlM5wOfVrhu0BeTkJsKt5kiHEJmZKzl6rVJvVNyx7fgFRL7gcMvBUg7eSOvLgXavdeP6ezRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757855016; c=relaxed/simple;
-	bh=YvQSGv3+ITrtWtqX0tQjYwlbtPwK+65J7QAVpMnWBSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VkQf7BGPjQCjX/WEV2DZnCFerAcnl6cJ/CkdHedPVIxM3pE5zw2w81S3ngfFpUuaW+kOoS6ZuhXR6InVSSYnpGXUXK4fj4x/kh4gyrTrCeM64cv7NoyBsFnWGuJzbk/pRR5hgSaW71GtR51ICzDu8sol+zNk1JffZnizx3xzHxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gYFpfuWd; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757857979; c=relaxed/simple;
+	bh=37L/puyV0GzSe9BaFG26DDCjfs3MDxprvSq5MtRjnW0=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=pZ8WMnQNlGpFw1qoBdZ5+rvoWc+rpcNZ4JOkDsVnHVoYF7Q1uVClA3tat19yrD3Mxn6SX8GlK3WCD1PcEgfXm53foNEXZDAo+k+fAyxq6DOcwvoQFKDy8hZWe35UEaZjCysicg4rhuTYA13P79u8QEKCJLkCAE825NUnL33MRUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bECoVG1z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gYFpfuWd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757855014; x=1789391014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YvQSGv3+ITrtWtqX0tQjYwlbtPwK+65J7QAVpMnWBSs=;
-  b=gYFpfuWdHSpDcl592Q5yDacAkuMkjeZG82MfvTKqaWmh8zaE82aQ3X7q
-   l3QLAa0y8xl8qgBs9fMm7c7GRcV7iu+rb1W+3i2H5VJu5f5iHOrxx+qmz
-   T1iDvMZxDEMSB0L9FdWHNB70id/gjP9PVElZ7v0/lJj332qj8S9WcMihi
-   /oNSD+WlVm2J/46qrbkpwgWcMM3rhipLAnypqS2yyr+BQ4jKMPBE4btlw
-   vrJaE0md0a9S1qI1s0XAncHNd4/rDPcqaYLPx2RFVkiaMY0tfXPyd49Jb
-   32T3SSKMrjImud/5+bVJCLqD6KwS6yhjgLSGtXxa+SLA2MEGnZA2gsjRN
-   A==;
-X-CSE-ConnectionGUID: tG84sK8bTamb1ij0ctnAHQ==
-X-CSE-MsgGUID: MdltpCEuTy+56ihLH0GDjA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11553"; a="63950947"
-X-IronPort-AV: E=Sophos;i="6.18,264,1751266800"; 
-   d="scan'208";a="63950947"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2025 06:03:33 -0700
-X-CSE-ConnectionGUID: XsGtmFeASWi9vAkPUg6x/Q==
-X-CSE-MsgGUID: /KpYDJz7Tqulsy/cge9/1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,264,1751266800"; 
-   d="scan'208";a="173941581"
-Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 14 Sep 2025 06:03:30 -0700
-Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uxmO7-0002PM-1p;
-	Sun, 14 Sep 2025 13:03:27 +0000
-Date: Sun, 14 Sep 2025 21:02:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: xu.xin16@zte.com.cn, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	shakeel.butt@linux.dev, hannes@cmpxchg.org, mhocko@kernel.org,
-	roman.gushchin@linux.dev, david@redhat.com,
-	chengming.zhou@linux.dev, muchun.song@linux.dev,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	cgroups@vger.kernel.org, xu.xin16@zte.com.cn
-Subject: Re: [PATCH v2 4/5] memcg: add per-memcg ksm_profit
-Message-ID: <202509142046.QatEaTQV-lkp@intel.com>
-References: <20250914180750448qMRz3iTon78DoExPyZusD@zte.com.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bECoVG1z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA19C4CEF0;
+	Sun, 14 Sep 2025 13:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757857979;
+	bh=37L/puyV0GzSe9BaFG26DDCjfs3MDxprvSq5MtRjnW0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=bECoVG1zEMs+vWcw9+n+EsirVXp9fVwqwBw8pr1cnMHuKwtnpguud39cSqncKvSlM
+	 5P9AiNSsWL0BS2rssgcNDHMdNOGjVL8INd/wucFte+qZQ7R2QOJ60Vem2/J0HBJRJ2
+	 5uTK5KpwKceGpShpNyBM7I/EnLOKtJ4xmivDiE02IDf0PulJ0Je+Cn55zNvLvbdq8m
+	 hQPJym74sUDYZL9SHdiuuXHEpfjdiBB3h2M5apKhi/dFDQog4u9Z0B0UMfkxrPjpuo
+	 PzYNu+Q6q9N1EXXBzeVSfXGGbGDe31fYxRBO6+PjM23P+lNTUjX9ZAkT3i6TqMCK0c
+	 GtI8DNHL7jraw==
+Date: Sun, 14 Sep 2025 22:52:42 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Jinchao Wang <wangjinchao600@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra
+ <peterz@infradead.org>, Mike Rapoport <rppt@kernel.org>, Alexander
+ Potapenko <glider@google.com>, Jonathan Corbet <corbet@lwn.net>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Juri Lelli
+ <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman
+ <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, Arnaldo
+ Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, David Hildenbrand
+ <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>, Miguel
+ Ojeda <ojeda@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Rong Xu
+ <xur@google.com>, Naveen N Rao <naveen@kernel.org>, David Kaplan
+ <david.kaplan@amd.com>, Andrii Nakryiko <andrii@kernel.org>, Jinjie Ruan
+ <ruanjinjie@huawei.com>, Nam Cao <namcao@linutronix.de>,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-mm@kvack.org, llvm@lists.linux.dev, Andrey Ryabinin
+ <ryabinin.a.a@gmail.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry
+ Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ kasan-dev@googlegroups.com, "David S. Miller" <davem@davemloft.net>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/21] x86/hw_breakpoint: Unify breakpoint
+ install/uninstall
+Message-Id: <20250914225242.b289de4a30557fec718b8cc8@kernel.org>
+In-Reply-To: <20250912101145.465708-2-wangjinchao600@gmail.com>
+References: <20250912101145.465708-1-wangjinchao600@gmail.com>
+	<20250912101145.465708-2-wangjinchao600@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250914180750448qMRz3iTon78DoExPyZusD@zte.com.cn>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Fri, 12 Sep 2025 18:11:11 +0800
+Jinchao Wang <wangjinchao600@gmail.com> wrote:
 
-kernel test robot noticed the following build errors:
+> Consolidate breakpoint management to reduce code duplication.
+> The diffstat was misleading, so the stripped code size is compared instead.
+> After refactoring, it is reduced from 11976 bytes to 11448 bytes on my
+> x86_64 system built with clang.
+> 
+> This also makes it easier to introduce arch_reinstall_hw_breakpoint().
+> 
+> In addition, including linux/types.h to fix a missing build dependency.
+> 
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on tj-cgroup/for-next linus/master v6.17-rc5 next-20250912]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Looks good to me.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xu-xin16-zte-com-cn/memcg-add-per-memcg-ksm_rmap_items-stat/20250914-181132
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250914180750448qMRz3iTon78DoExPyZusD%40zte.com.cn
-patch subject: [PATCH v2 4/5] memcg: add per-memcg ksm_profit
-config: um-randconfig-001-20250914 (https://download.01.org/0day-ci/archive/20250914/202509142046.QatEaTQV-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 21857ae337e0892a5522b6e7337899caa61de2a6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250914/202509142046.QatEaTQV-lkp@intel.com/reproduce)
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509142046.QatEaTQV-lkp@intel.com/
+Thanks,
 
-All errors (new ones prefixed by >>):
+> Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
+> ---
+>  arch/x86/include/asm/hw_breakpoint.h |   6 ++
+>  arch/x86/kernel/hw_breakpoint.c      | 141 +++++++++++++++------------
+>  2 files changed, 84 insertions(+), 63 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hw_breakpoint.h b/arch/x86/include/asm/hw_breakpoint.h
+> index 0bc931cd0698..aa6adac6c3a2 100644
+> --- a/arch/x86/include/asm/hw_breakpoint.h
+> +++ b/arch/x86/include/asm/hw_breakpoint.h
+> @@ -5,6 +5,7 @@
+>  #include <uapi/asm/hw_breakpoint.h>
+>  
+>  #define	__ARCH_HW_BREAKPOINT_H
+> +#include <linux/types.h>
+>  
+>  /*
+>   * The name should probably be something dealt in
+> @@ -18,6 +19,11 @@ struct arch_hw_breakpoint {
+>  	u8		type;
+>  };
+>  
+> +enum bp_slot_action {
+> +	BP_SLOT_ACTION_INSTALL,
+> +	BP_SLOT_ACTION_UNINSTALL,
+> +};
+> +
+>  #include <linux/kdebug.h>
+>  #include <linux/percpu.h>
+>  #include <linux/list.h>
+> diff --git a/arch/x86/kernel/hw_breakpoint.c b/arch/x86/kernel/hw_breakpoint.c
+> index b01644c949b2..3658ace4bd8d 100644
+> --- a/arch/x86/kernel/hw_breakpoint.c
+> +++ b/arch/x86/kernel/hw_breakpoint.c
+> @@ -48,7 +48,6 @@ static DEFINE_PER_CPU(unsigned long, cpu_debugreg[HBP_NUM]);
+>   */
+>  static DEFINE_PER_CPU(struct perf_event *, bp_per_reg[HBP_NUM]);
+>  
+> -
+>  static inline unsigned long
+>  __encode_dr7(int drnum, unsigned int len, unsigned int type)
+>  {
+> @@ -85,96 +84,112 @@ int decode_dr7(unsigned long dr7, int bpnum, unsigned *len, unsigned *type)
+>  }
+>  
+>  /*
+> - * Install a perf counter breakpoint.
+> - *
+> - * We seek a free debug address register and use it for this
+> - * breakpoint. Eventually we enable it in the debug control register.
+> - *
+> - * Atomic: we hold the counter->ctx->lock and we only handle variables
+> - * and registers local to this cpu.
+> + * We seek a slot and change it or keep it based on the action.
+> + * Returns slot number on success, negative error on failure.
+> + * Must be called with IRQs disabled.
+>   */
+> -int arch_install_hw_breakpoint(struct perf_event *bp)
+> +static int manage_bp_slot(struct perf_event *bp, enum bp_slot_action action)
+>  {
+> -	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
+> -	unsigned long *dr7;
+> -	int i;
+> -
+> -	lockdep_assert_irqs_disabled();
+> +	struct perf_event *old_bp;
+> +	struct perf_event *new_bp;
+> +	int slot;
+> +
+> +	switch (action) {
+> +	case BP_SLOT_ACTION_INSTALL:
+> +		old_bp = NULL;
+> +		new_bp = bp;
+> +		break;
+> +	case BP_SLOT_ACTION_UNINSTALL:
+> +		old_bp = bp;
+> +		new_bp = NULL;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+>  
+> -	for (i = 0; i < HBP_NUM; i++) {
+> -		struct perf_event **slot = this_cpu_ptr(&bp_per_reg[i]);
+> +	for (slot = 0; slot < HBP_NUM; slot++) {
+> +		struct perf_event **curr = this_cpu_ptr(&bp_per_reg[slot]);
+>  
+> -		if (!*slot) {
+> -			*slot = bp;
+> -			break;
+> +		if (*curr == old_bp) {
+> +			*curr = new_bp;
+> +			return slot;
+>  		}
+>  	}
+>  
+> -	if (WARN_ONCE(i == HBP_NUM, "Can't find any breakpoint slot"))
+> -		return -EBUSY;
+> +	if (old_bp) {
+> +		WARN_ONCE(1, "Can't find matching breakpoint slot");
+> +		return -EINVAL;
+> +	}
+> +
+> +	WARN_ONCE(1, "No free breakpoint slots");
+> +	return -EBUSY;
+> +}
+> +
+> +static void setup_hwbp(struct arch_hw_breakpoint *info, int slot, bool enable)
+> +{
+> +	unsigned long dr7;
+>  
+> -	set_debugreg(info->address, i);
+> -	__this_cpu_write(cpu_debugreg[i], info->address);
+> +	set_debugreg(info->address, slot);
+> +	__this_cpu_write(cpu_debugreg[slot], info->address);
+>  
+> -	dr7 = this_cpu_ptr(&cpu_dr7);
+> -	*dr7 |= encode_dr7(i, info->len, info->type);
+> +	dr7 = this_cpu_read(cpu_dr7);
+> +	if (enable)
+> +		dr7 |= encode_dr7(slot, info->len, info->type);
+> +	else
+> +		dr7 &= ~__encode_dr7(slot, info->len, info->type);
+>  
+>  	/*
+> -	 * Ensure we first write cpu_dr7 before we set the DR7 register.
+> -	 * This ensures an NMI never see cpu_dr7 0 when DR7 is not.
+> +	 * Enabling:
+> +	 *   Ensure we first write cpu_dr7 before we set the DR7 register.
+> +	 *   This ensures an NMI never see cpu_dr7 0 when DR7 is not.
+>  	 */
+> +	if (enable)
+> +		this_cpu_write(cpu_dr7, dr7);
+> +
+>  	barrier();
+>  
+> -	set_debugreg(*dr7, 7);
+> +	set_debugreg(dr7, 7);
+> +
+>  	if (info->mask)
+> -		amd_set_dr_addr_mask(info->mask, i);
+> +		amd_set_dr_addr_mask(enable ? info->mask : 0, slot);
+>  
+> -	return 0;
+> +	/*
+> +	 * Disabling:
+> +	 *   Ensure the write to cpu_dr7 is after we've set the DR7 register.
+> +	 *   This ensures an NMI never see cpu_dr7 0 when DR7 is not.
+> +	 */
+> +	if (!enable)
+> +		this_cpu_write(cpu_dr7, dr7);
+>  }
+>  
+>  /*
+> - * Uninstall the breakpoint contained in the given counter.
+> - *
+> - * First we search the debug address register it uses and then we disable
+> - * it.
+> - *
+> - * Atomic: we hold the counter->ctx->lock and we only handle variables
+> - * and registers local to this cpu.
+> + * find suitable breakpoint slot and set it up based on the action
+>   */
+> -void arch_uninstall_hw_breakpoint(struct perf_event *bp)
+> +static int arch_manage_bp(struct perf_event *bp, enum bp_slot_action action)
+>  {
+> -	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
+> -	unsigned long dr7;
+> -	int i;
+> +	struct arch_hw_breakpoint *info;
+> +	int slot;
+>  
+>  	lockdep_assert_irqs_disabled();
+>  
+> -	for (i = 0; i < HBP_NUM; i++) {
+> -		struct perf_event **slot = this_cpu_ptr(&bp_per_reg[i]);
+> -
+> -		if (*slot == bp) {
+> -			*slot = NULL;
+> -			break;
+> -		}
+> -	}
+> -
+> -	if (WARN_ONCE(i == HBP_NUM, "Can't find any breakpoint slot"))
+> -		return;
+> +	slot = manage_bp_slot(bp, action);
+> +	if (slot < 0)
+> +		return slot;
+>  
+> -	dr7 = this_cpu_read(cpu_dr7);
+> -	dr7 &= ~__encode_dr7(i, info->len, info->type);
+> +	info = counter_arch_bp(bp);
+> +	setup_hwbp(info, slot, action != BP_SLOT_ACTION_UNINSTALL);
+>  
+> -	set_debugreg(dr7, 7);
+> -	if (info->mask)
+> -		amd_set_dr_addr_mask(0, i);
+> +	return 0;
+> +}
+>  
+> -	/*
+> -	 * Ensure the write to cpu_dr7 is after we've set the DR7 register.
+> -	 * This ensures an NMI never see cpu_dr7 0 when DR7 is not.
+> -	 */
+> -	barrier();
+> +int arch_install_hw_breakpoint(struct perf_event *bp)
+> +{
+> +	return arch_manage_bp(bp, BP_SLOT_ACTION_INSTALL);
+> +}
+>  
+> -	this_cpu_write(cpu_dr7, dr7);
+> +void arch_uninstall_hw_breakpoint(struct perf_event *bp)
+> +{
+> +	arch_manage_bp(bp, BP_SLOT_ACTION_UNINSTALL);
+>  }
+>  
+>  static int arch_bp_generic_len(int x86_len)
+> -- 
+> 2.43.0
+> 
+> 
 
-   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: mm/ksm.o: in function `evaluate_memcg_ksm_stat':
->> mm/ksm.c:3335:(.ltext+0x163d): undefined reference to `ksm_process_profit'
-   clang: error: linker command failed with exit code 1 (use -v to see invocation)
-
-
-vim +3335 mm/ksm.c
-
-  3324	
-  3325	static int evaluate_memcg_ksm_stat(struct task_struct *task, void *arg)
-  3326	{
-  3327		struct mm_struct *mm;
-  3328		struct memcg_ksm_stat *ksm_stat = arg;
-  3329	
-  3330		mm = get_task_mm(task);
-  3331		if (mm) {
-  3332			ksm_stat->ksm_rmap_items += mm->ksm_rmap_items;
-  3333			ksm_stat->ksm_zero_pages += mm_ksm_zero_pages(mm);
-  3334			ksm_stat->ksm_merging_pages += mm->ksm_merging_pages;
-> 3335			ksm_stat->ksm_profit += ksm_process_profit(mm);
-  3336			mmput(mm);
-  3337		}
-  3338	
-  3339		return 0;
-  3340	}
-  3341	
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
