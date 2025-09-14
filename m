@@ -1,267 +1,305 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF4D277C8C;
-	Sun, 14 Sep 2025 06:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3750154423
+	for <llvm@lists.linux.dev>; Sun, 14 Sep 2025 07:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757830241; cv=none; b=AgssDOdFbHa+bbmPK04g94LYAgt3iagWuk3ufIeRiC9K8yh8vMJbkNYg4r9ezhsqlN582EnYL4qginmcGe45/fcwuRbxbKqcY4jgSClGR0CaT9nYMv0LEpEFNospxEAHTPVudNOb/He105TxMvJqI0Xel02UsZqzNvJqizQdLwE=
+	t=1757834244; cv=none; b=M9dNEIea6+tSFVxO8NPaSi/fQolzTolAwq3v1ooY7FomFFSLwD9P6VLCMpaBQjErHEyEuWdqYdQL50rLyIP0EI2PaZHGUZhwqvylKeQL8ipR63TMOeEmfim+oO/Jh+Ha7HKDqxfCFHVR9eSDNDER05Qdl6iOYAh81I1nrJnPc0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757830241; c=relaxed/simple;
-	bh=TnYOG+zU80fUH9AlYIHN4VWeKwWBClKGHV+KnhdenSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F1kmYQVpeM5HxAR3HoPIAUuAURVnh55oAQ7b6uEiEGfUsQaBpRdHrcO41LcbN2NuawB3RnDqgOQSJ04aD53npVris3A2O2oXSzC48hRK9zvOIuN6gzt3Deh/xrPv8aP8+i5MGp2kju5o7UhSvI2d803lZIp6eKVF/gvjUtQpjVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PVdKwwxB; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757834244; c=relaxed/simple;
+	bh=G9zdYvr6zoyBaWWF4RcGMv4hY9mXUIz9lI5ZVt3JFEQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GU7ksKdwvrsh9rK0X21jer8FixnIN/Fcr1sMO+QzItjWvinhukW5sbPBVgvq5bIpfhFALMMyG07Ibbx1FSxOjfS2zxo+0U7LUCgLBMJme95GYVCkK+TvBtYRfW2RxVy/xTft4jLZcd7i7COly63N2n6ultF+KCpax8B4pqVT4Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+eGmmL2; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PVdKwwxB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757830240; x=1789366240;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TnYOG+zU80fUH9AlYIHN4VWeKwWBClKGHV+KnhdenSo=;
-  b=PVdKwwxBFn4wyJFy7hTMGxJ8er5P06D0tGwuNTOkGdubfQ/ix+i9WZIn
-   PvYEReyh1L0Vwo6hoP4TAQpIb5hgg3ik3IxrcQhictjW1DnMluERKsw49
-   LeDZfJiGRRm/EANyu+Eb4Unx3hqe4+McKWt7f3W3AlwMCpkbc5sIN1TOr
-   n9MZRZP9uhFqBV1bivdR4MpIoVUEK2NmFyeT2FA8tB+p/U0bzCId/1eiB
-   7UaLlecq/azS/BDlbk9OLkMHc71cln9CcXVRuM4I98u4UVP4OOKcDIVsT
-   DSao2uGnjjpzTTeCVO0O2Yv3dTK1oHNuzDHZE3d3TlV+TcJ5rDpAAmXmu
-   A==;
-X-CSE-ConnectionGUID: gHDo03ImSYmDceIVKgHqBw==
-X-CSE-MsgGUID: BOLNJZ9tSuKPcoqbkAmu1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11552"; a="60186122"
-X-IronPort-AV: E=Sophos;i="6.18,263,1751266800"; 
-   d="scan'208";a="60186122"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2025 23:10:39 -0700
-X-CSE-ConnectionGUID: 2ICbEcbwTYKefiZAIZPEyQ==
-X-CSE-MsgGUID: b9+ZbyOvQfq6A7QlUK1q+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,263,1751266800"; 
-   d="scan'208";a="198048155"
-Received: from lkp-server02.sh.intel.com (HELO eb5fdfb2a9b7) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 13 Sep 2025 23:10:37 -0700
-Received: from kbuild by eb5fdfb2a9b7 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uxfwY-00029d-33;
-	Sun, 14 Sep 2025 06:10:34 +0000
-Date: Sun, 14 Sep 2025 14:10:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alice Ryhl <aliceryhl@google.com>, Benno Lossin <lossin@kernel.org>,
-	Elle Rhumsaa <elle@weathered-steel.dev>
-Subject: [tip:locking/core 1/13] error[E0425]: cannot find function
- `atomic_add` in crate `bindings`
-Message-ID: <202509141437.5iiM1sOF-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+eGmmL2"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-55f7b6e4145so3399471e87.1
+        for <llvm@lists.linux.dev>; Sun, 14 Sep 2025 00:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757834240; x=1758439040; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bG3IzL2LjXVOtESbexoXtNfTjZZg9on0erahEnGwuyw=;
+        b=i+eGmmL2XktoR6/DE6ybnt8C1zJnPDrJKWDgCr6bJrNxD+RbcWi3w9prF5NRW8nBpN
+         cmRWlD7f+Pt8NHJjux7Q38t2IQjvKmUtoCDbd0D/o6OQvpavsYFY5LylTYB2LHsx1VqF
+         AUaFFSWjVYH3kEcA8zvpwHilv6qOtovb3e1beSVHXTA0BSEE7QSvw77kowjNakh5Frol
+         JvSIQM4HrQXecYvWnY2raSPeTnp0I5oQTk7KVFgNa2vUACIN5vGdMb5oww/42mS1H+0W
+         aYuyUV9WxhPY6KNGnxVvF98v/pqtN74/TEiqAkBCzW3a50GWkAhiiGo1gzvTePIufgjo
+         5gWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757834240; x=1758439040;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bG3IzL2LjXVOtESbexoXtNfTjZZg9on0erahEnGwuyw=;
+        b=peUzRFje+8z7FeaEhOQaMFlRoLianpuWKUs/b26eeGWEAcgq2YdXfyIr8d7gGqdXpw
+         42mi8xP5CbDyUrX5ggcptsgXatg8SwldCTL6yXAG6UpQjHuIxrFbh80g86MQW6Mpsybj
+         YTnNQcaqafOZU7ntqUQLHFZClFFcBYqzfgVcNjXi/5bdCqqMI+LjUgGPOXdC42HJFi8L
+         dAsZf1OnBI48ewzc0FbcKWVxgMBl5HLiuvVgKVhAjQVkqwLILMnOi/H/B+k/lDK5nFlL
+         VTjJRSCD9YRWf5rvtfOwmgV/3UEo3ydFkUh73rb1bOSTQFT00ge9cARo3beRA28vNMDe
+         GuWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpQMgYY+X/+c0M45gYUsuvpucu77JDH+TpyDNRPAvWb0oceag/MUGIth2/kjdrhHCkalv4@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVeuGaFrMCzW1XBRzCsqqLWbgzziYIlpr+a6vNqfGnyZbAdEpL
+	agVkXlXL6qcpWZhXyyHpHfm4iHbIyhZHrqzo2P1jhQlB8nnj5rnEmxmt
+X-Gm-Gg: ASbGncsaJGgOWT/3SqhHYiPtyRiIqXVUoh42+HO2ZggfB73qporDJMqFLb5m6CbDYMe
+	XsY0IYejWyGVh+r9s+BQUymNNyP2CLzCj62EOswm9zJmwnlRWJv9Itak3orJ4ntgygZ6Knftap5
+	Z1c7z0adjHHhfGSDV7h0qy0ht7ap3gKfIzSKfXZJT7k7GdZeA81Vow+uuU6tXgPCiCxgoKfPe4p
+	4TtiGVmZdBq2rlJmh9LwwydVP01ZynsYct8Oc9IWIjqpi4g9x79ZCmEaDN9nWse3AHh0XIlNQ/q
+	JzNWYzj9i+q38JJ415HT4ggGQrIu8UiKb2og/MsMc1Tf34mt5dDp0wK6KWV/HP5y12m3hI1nOKl
+	25VsC
+X-Google-Smtp-Source: AGHT+IGuqlVGw+pNXypOYIGLs5ZdoCHzOKrf3n1RDu4cLKNgN6KSPHqq382i7oXWa1WvUEscJbrQ1g==
+X-Received: by 2002:a05:6512:3043:b0:560:956e:4392 with SMTP id 2adb3069b0e04-570489fca64mr2505069e87.9.1757834239309;
+        Sun, 14 Sep 2025 00:17:19 -0700 (PDT)
+Received: from minun.felixc.at ([2a01:4f9:6b:1cc4::2])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-56e5c3b62c9sm2572478e87.27.2025.09.14.00.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Sep 2025 00:17:18 -0700 (PDT)
+From: Asuna Yang <spriteovo@gmail.com>
+X-Google-Original-From: Asuna Yang <SpriteOvO@gmail.com>
+Date: Sun, 14 Sep 2025 15:16:40 +0800
+Subject: [PATCH v3] RISC-V: re-enable gcc + rust builds
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250914-gcc-rust-v3-v3-1-34d4d5864144@gmail.com>
+X-B4-Tracking: v=1; b=H4sIANdrxmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS0MT3fTkZN2i0uIS3TJj3UQTQ1OTRAsjMwMTUyWgjoKi1LTMCrBp0bG
+ 1tQBGHRiyXQAAAA==
+X-Change-ID: 20250914-gcc-rust-v3-a4154a826045
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Han Gao <rabenda.cn@gmail.com>, Jason Montleon <jmontleo@redhat.com>, 
+ Conor Dooley <conor@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ Asuna Yang <SpriteOvO@gmail.com>
+X-Mailer: b4 0.14.2
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-head:   502ae97746ab6d7b7b48d54b6a85a11815f390d0
-commit: eb57133305f61b612252382d0c1478bba7f57b67 [1/13] rust: sync: Add basic atomic operation mapping framework
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250914/202509141437.5iiM1sOF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250914/202509141437.5iiM1sOF-lkp@intel.com/reproduce)
+Commit 33549fcf37ec ("RISC-V: disallow gcc + rust builds") disabled GCC
++ Rust builds for RISC-V due to differences in extension handling
+compared to LLVM.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509141437.5iiM1sOF-lkp@intel.com/
+Add a Kconfig symbol to indicate the version of libclang used by Rust
+bindgen and add conditions for the availability of libclang to the
+RISC-V extension Kconfig symbols that depend on the cc-option function.
 
-All errors (new ones prefixed by >>):
+For Zicsr/Zifencei special handling, since LLVM/Clang always enables
+these two extensions, either don't pass them to -march, or pass them
+explicitly and Rust bindgen libclang must recognize them.
 
->> error[E0425]: cannot find function `atomic_read_acquire` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   201 | / declare_and_impl_atomic_methods!(
-   202 | |     /// Basic atomic operations
-   203 | |     pub trait AtomicBasicOps {
-   204 | |         /// Atomic read (load).
-   ...   |
-   216 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic_read` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   201 | / declare_and_impl_atomic_methods!(
-   202 | |     /// Basic atomic operations
-   203 | |     pub trait AtomicBasicOps {
-   204 | |         /// Atomic read (load).
-   ...   |
-   216 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic_xchg_relaxed` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
-   help: consider importing this function
-   |
-   7   + use core::intrinsics::atomic_xchg_relaxed;
-   |
---
->> error[E0425]: cannot find function `atomic_xchg` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic_try_cmpxchg_acquire` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic_try_cmpxchg_release` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic_try_cmpxchg_relaxed` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic_try_cmpxchg` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic64_xchg_acquire` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic64_xchg_release` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `atomic64_xchg_relaxed` in crate `bindings`
-   --> rust/kernel/sync/atomic/internal.rs:124:37
-   |
-   124 |                   $unsafe { bindings::[< $ctype _ $func >]($($c_arg,)*) }
-   |                                       ^^^^^^^^^^^^^^^^^^^^ not found in `bindings`
-   ...
-   218 | / declare_and_impl_atomic_methods!(
-   219 | |     /// Exchange and compare-and-exchange atomic operations
-   220 | |     pub trait AtomicExchangeOps {
-   221 | |         /// Atomic exchange.
-   ...   |
-   243 | | );
-   | |_- in this macro invocation
-   |
-   = note: this error originates in the macro `impl_atomic_method` which comes from the expansion of the macro `declare_and_impl_atomic_methods` (in Nightly builds, run with -Z macro-backtrace for more info)
-..
+Clang does not support -mno-riscv-attribute flag, filter it out to
+resolve error: unknown argument: '-mno-riscv-attribute'.
 
+Define BINDGEN_TARGET_riscv to pass the target triplet to Rust bindgen
+libclang for RISC-V to resolve error: unsupported argument 'medany' to
+option '-mcmodel=' for target 'unknown'. Improve to output a clearer
+error message if the target triplet is undefined for Rust bindgen
+libclang.
+
+Update the documentation, GCC + Rust builds are now supported.
+
+Signed-off-by: Asuna Yang <SpriteOvO@gmail.com>
+---
+ Documentation/rust/arch-support.rst |  2 +-
+ arch/riscv/Kconfig                  | 30 +++++++++++++++++++++++++++++-
+ init/Kconfig                        |  6 ++++++
+ rust/Makefile                       |  7 ++++++-
+ scripts/Kconfig.include             |  1 +
+ 5 files changed, 43 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+index 6e6a515d08991a130a8e79dc4ad7ad09da244020..5282e0e174e8de66b4c6fec354cf329fd2aec873 100644
+--- a/Documentation/rust/arch-support.rst
++++ b/Documentation/rust/arch-support.rst
+@@ -18,7 +18,7 @@ Architecture   Level of support  Constraints
+ ``arm``        Maintained        ARMv7 Little Endian only.
+ ``arm64``      Maintained        Little Endian only.
+ ``loongarch``  Maintained        \-
+-``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
++``riscv``      Maintained        ``riscv64`` only.
+ ``um``         Maintained        \-
+ ``x86``        Maintained        ``x86_64`` only.
+ =============  ================  ==============================================
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 51dcd8eaa24356d947ebe0f1c4a701a3cfc6b757..3e892864f930778218073e8ee5980eb8f4e1594a 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -191,7 +191,7 @@ config RISCV
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RETHOOK if !XIP_KERNEL
+ 	select HAVE_RSEQ
+-	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
++	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && TOOLCHAIN_MATCHES_ZICSR_ZIFENCEI
+ 	select HAVE_SAMPLE_FTRACE_DIRECT
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+ 	select HAVE_STACKPROTECTOR
+@@ -629,6 +629,8 @@ config TOOLCHAIN_HAS_V
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32imv)
+ 	depends on LLD_VERSION >= 140000 || LD_VERSION >= 23800
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/e6de53b4de4aecca4ac892500a0907805896ed27
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 140000
+ 
+ config RISCV_ISA_V
+ 	bool "Vector extension support"
+@@ -693,6 +695,8 @@ config TOOLCHAIN_HAS_ZABHA
+ 	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zabha)
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zabha)
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/6b7444964a8d028989beee554a1f5c61d16a1cac
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 190100
+ 
+ config RISCV_ISA_ZABHA
+ 	bool "Zabha extension support for atomic byte/halfword operations"
+@@ -711,6 +715,8 @@ config TOOLCHAIN_HAS_ZACAS
+ 	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zacas)
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zacas)
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/614aeda93b2225c6eb42b00ba189ba7ca2585c60
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 200100
+ 
+ config RISCV_ISA_ZACAS
+ 	bool "Zacas extension support for atomic CAS"
+@@ -730,6 +736,8 @@ config TOOLCHAIN_HAS_ZBB
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbb)
+ 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/33d008b169f3c813a4a45da220d0952f795ac477
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 140000
+ 
+ # This symbol indicates that the toolchain supports all v1.0 vector crypto
+ # extensions, including Zvk*, Zvbb, and Zvbc.  LLVM added all of these at once.
+@@ -745,6 +753,8 @@ config TOOLCHAIN_HAS_ZBA
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zba)
+ 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/33d008b169f3c813a4a45da220d0952f795ac477
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 140000
+ 
+ config RISCV_ISA_ZBA
+ 	bool "Zba extension support for bit manipulation instructions"
+@@ -780,6 +790,8 @@ config TOOLCHAIN_HAS_ZBC
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbc)
+ 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/33d008b169f3c813a4a45da220d0952f795ac477
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 140000
+ 
+ config RISCV_ISA_ZBC
+ 	bool "Zbc extension support for carry-less multiplication instructions"
+@@ -803,6 +815,8 @@ config TOOLCHAIN_HAS_ZBKB
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbkb)
+ 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+ 	depends on AS_HAS_OPTION_ARCH
++	# https://github.com/llvm/llvm-project/commit/7ee1c162cc53d37f717f9a138276ad64fa6863bc
++	depends on !RUST || RUST_BINDGEN_LIBCLANG_VERSION >= 140000
+ 
+ config RISCV_ISA_ZBKB
+ 	bool "Zbkb extension support for bit manipulation instructions"
+@@ -890,6 +904,20 @@ config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
+ 	  versions of clang and GCC to be passed to GAS, which has the same result
+ 	  as passing zicsr and zifencei to -march.
+ 
++config TOOLCHAIN_MATCHES_ZICSR_ZIFENCEI
++	def_bool y
++	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
++	depends on TOOLCHAIN_NEEDS_OLD_ISA_SPEC || !TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI || RUST_BINDGEN_LIBCLANG_VERSION >= 170000
++	help
++	  LLVM/Clang >= 17.0.0 starts recognizing Zicsr/Zifencei in -march, passing
++	  them to -march doesn't generate an error anymore, and passing them or not
++	  doesn't have any real difference, it still follows ISA before version
++	  20190608 - Zicsr/Zifencei are included in base ISA.
++
++	  The current latest version of LLVM/Clang still does not require explicit
++	  Zicsr/Zifencei to enable these two extensions, Clang just accepts them in
++	  -march and then silently ignores them.
++
+ config FPU
+ 	bool "FPU support"
+ 	default y
+diff --git a/init/Kconfig b/init/Kconfig
+index e3eb63eadc8757a10b091c74bbee8008278c0521..0859d308a48591df769c7dbaef6f035324892bd3 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -82,6 +82,12 @@ config RUSTC_LLVM_VERSION
+ 	int
+ 	default $(rustc-llvm-version)
+ 
++config RUST_BINDGEN_LIBCLANG_VERSION
++	int
++	default $(rustc-bindgen-libclang-version)
++	help
++	  This is the version of `libclang` used by the Rust bindings generator.
++
+ config CC_CAN_LINK
+ 	bool
+ 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
+diff --git a/rust/Makefile b/rust/Makefile
+index bfa915b0e58854045b367557342727fee4fe2808..8c6f84487c41880816d1e55ba4c0df0e5af4e8fd 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -290,20 +290,25 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
+ 	-fno-inline-functions-called-once -fsanitize=bounds-strict \
+ 	-fstrict-flex-arrays=% -fmin-function-alignment=% \
+ 	-fzero-init-padding-bits=% -mno-fdpic \
+-	--param=% --param asan-%
++	--param=% --param asan-% -mno-riscv-attribute
+ 
+ # Derived from `scripts/Makefile.clang`.
+ BINDGEN_TARGET_x86	:= x86_64-linux-gnu
+ BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
+ BINDGEN_TARGET_arm	:= arm-linux-gnueabi
+ BINDGEN_TARGET_loongarch	:= loongarch64-linux-gnusf
++BINDGEN_TARGET_riscv	:= riscv64-linux-gnu
+ BINDGEN_TARGET_um	:= $(BINDGEN_TARGET_$(SUBARCH))
+ BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
+ 
++ifeq ($(BINDGEN_TARGET),)
++$(error add '--target=' option to rust/Makefile)
++else
+ # All warnings are inhibited since GCC builds are very experimental,
+ # many GCC warnings are not supported by Clang, they may only appear in
+ # some configurations, with new GCC versions, etc.
+ bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET)
++endif
+ 
+ # Auto variable zero-initialization requires an additional special option with
+ # clang that is going to be removed sometime in the future (likely in
+diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+index 33193ca6e8030e659d6b321acaea1acd42c387a4..b893bbc130f774bdca831893fed9b76d42bf540a 100644
+--- a/scripts/Kconfig.include
++++ b/scripts/Kconfig.include
+@@ -67,6 +67,7 @@ m64-flag := $(cc-option-bit,-m64)
+ 
+ rustc-version := $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
+ rustc-llvm-version := $(shell,$(srctree)/scripts/rustc-llvm-version.sh $(RUSTC))
++rustc-bindgen-libclang-version := $(shell,trap 'echo 0' EXIT; $(BINDGEN) $(srctree)/scripts/rust_is_available_bindgen_libclang.h 2>&1 | sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p' | awk -F'.' '{print $1 * 10000 + $2 * 100 + $3}')
+ 
+ # $(rustc-option,<flag>)
+ # Return y if the Rust compiler supports <flag>, n otherwise
+
+---
+base-commit: f777d1112ee597d7f7dd3ca232220873a34ad0c8
+change-id: 20250914-gcc-rust-v3-a4154a826045
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Asuna Yang <SpriteOvO@gmail.com>
+
