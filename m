@@ -1,44 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB1D23957D;
-	Mon, 15 Sep 2025 22:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9AD29E114;
+	Mon, 15 Sep 2025 22:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757974482; cv=none; b=KeDqihAza6gRT/h0050QWNLTsLANYGK6NO9neXCDPz5Ffw2OjZPSAfEO4rUWJz+uSr0KrhrPt3CbbZUILUvZ5wq0pCtf+xnyR+W2vzCfTpRmpbvjKirR5Nux9PIhtiZcCgVKjd9e1Acf3Tq+DL1sFrnony0J21s0xhN8tRhE9gI=
+	t=1757974752; cv=none; b=LPH2znTb2tOhZvs5WQPeSQxv5M+IMYQLc/rf/1UWPzX52I3dqoz+AeHadUqOFhzogt7/FC1KkFacm4KVaMohqdiD/kf7n2SPmcO8YWhKP0AWxtDMPnE3pMiWP8OUU+ecj4MPxqT3aHLDKZ6Jo3Us+GlFvr8AI/KTewjbVz4iUe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757974482; c=relaxed/simple;
-	bh=42PF0UhqIVstyAZvj9Oxhvu2NgizRC3FkzlZTmN8t2M=;
+	s=arc-20240116; t=1757974752; c=relaxed/simple;
+	bh=b/KAMT/vU3fpIChuCZ8uax4id1ddqwonwf8AV/cakto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FIUBatP7BBwZDl27dZClZHjd/9pfZYxOV0y0WRUn0zZ9j+5sJO/LczbIesgfe8o4nP1tP+j/LcT/gieimvccIyt4wPOeN0FVPIeUxNqS5WQ2DxYeiMpTv3Q0+4iju3mC7RklLaDPIjlS+MdjpuQCS+f4GxfR5UXcD6txrfA2lOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YB4kjVRM; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2U0buxusUzkJR/mgwCfcWv/x01Mg5aCeq1SjGR2vTYPUg8y93wc9t+mpDqBMEbyZRhgSJJCqS4ULenjJ5/aZul+aUg2W0OHE0qz2/pcB+CwI/JTzscmVVdHAdV6HJNraEqbMfQPpSY4cAm7trYxcJp5wjGCyaQEwb5uUzXE6VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGT6EmnQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YB4kjVRM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A2FC4CEF9;
-	Mon, 15 Sep 2025 22:14:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGT6EmnQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C50C4CEF1;
+	Mon, 15 Sep 2025 22:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757974481;
-	bh=42PF0UhqIVstyAZvj9Oxhvu2NgizRC3FkzlZTmN8t2M=;
+	s=k20201202; t=1757974751;
+	bh=b/KAMT/vU3fpIChuCZ8uax4id1ddqwonwf8AV/cakto=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YB4kjVRMGqWWTf5wx+xKc4Av/dO5yqwEAym1wFCSV/5nWHnbNo5Lld+08DaWnhr7x
-	 9V3+gQGc8/EdEMv/AXCrXZMaL6yampUroqB8aArDG751VC+NlbtWXOKP2qaWOMKdpr
-	 B5/Wi7CWNBdNHM6JvaKQ7lEPQ9wXwvFJJQNTzQLUhwHovt8/LAajy0/kqRGbP8Mc4a
-	 RSqs8xBQwTTXpNMB1qMqjuTPXJxY7UmzvcoEOWizaWFp2/kRf8eL0PEC+fd0vHKzQ/
-	 mzNgMyB7qF6OJeezzh65LYAxBFVzQbUwWAl78Pc9ls9Iui6l2lAd0wrOKu0m63EhQ6
-	 4UXoVFJZKOu2Q==
-Date: Mon, 15 Sep 2025 15:14:36 -0700
+	b=gGT6EmnQvukqFMqMtqlepbmHr2WQI1aQineneVKQQSGzOY1R6Q+XDnwa3NsHXFQOV
+	 hmI40g/TeZ7O/rX9/+oJl1mrj/tdRdV5JiW6497YhnCgSztVVbei6nPKjfkGcS0eVG
+	 6J/oVwgHOtWRKx2Q2bxpv/YuoGK0hmyIOFQ01bKfzCSnazZXtKE5x6b/Rz39elUVTF
+	 dJmk2wUg4D3bzoi7AqfyRJi1PJTa7b2g2oomBqh773Qjhba70EW1sj2NgI9EPVxqON
+	 x2hGtjFgJvhONx5/L8mpl0ia6De74xa66l+Y6mAi5ahONM7ADPHt9qw/alKSWsd0Qs
+	 d1D0WOSovq6ZA==
+Date: Mon, 15 Sep 2025 15:18:59 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+	Sabrina Dubroca <sd@queasysnail.net>, netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Michael Guralnik <michaelgur@nvidia.com>,
+	Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] kexec: Remove unused code in
- kimage_load_cma_segment()
-Message-ID: <20250915221436.GA925462@ax162>
-References: <20250915155543.2912469-1-andriy.shevchenko@linux.intel.com>
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Patrisious Haddad <phaddad@nvidia.com>
+Subject: Re: [PATCH net-next V2] net/mlx5: Improve write-combining test
+ reliability for ARM64 Grace CPUs
+Message-ID: <20250915221859.GB925462@ax162>
+References: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,72 +79,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250915155543.2912469-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
 
-Hi Andy,
-
-On Mon, Sep 15, 2025 at 05:55:43PM +0200, Andy Shevchenko wrote:
-> clang is not happy about set but unused variable:
-> 
-> kernel/kexec_core.c:745:16: error: variable 'maddr' set but not used [-Werror,-Wunused-but-set-variable]
->   745 |         unsigned long maddr;
->       |                       ^
-> 1 error generated.
-> 
-> Fix the compilation breakage (`make W=1` build) by removing unused variable.
-> 
-> Fixes: 07d24902977e ("kexec: enable CMA based contiguous allocation")
-
-I don't think this fixes tag is right. maddr definitely looks used in
-that diff. I think it is a follow up simplification that introduces
-this.
-
-Fixes: f4fecb50d6e1 ("kexec_core: remove superfluous page offset handling in segment loading")
-
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-
-Otherwise, this patch looks correct to me and GCC 16 will warn on this
-as well.
-
-  kernel/kexec_core.c: In function 'kimage_load_cma_segment':
-  kernel/kexec_core.c:745:23: error: variable 'maddr' set but not used [-Werror=unused-but-set-variable=]
-    745 |         unsigned long maddr;
-        |                       ^~~~~
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
->  kernel/kexec_core.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 5357ed39e9d1..32722926bc7e 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -742,7 +742,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
->  	struct kexec_segment *segment = &image->segment[idx];
->  	struct page *cma = image->segment_cma[idx];
->  	char *ptr = page_address(cma);
-> -	unsigned long maddr;
->  	size_t ubytes, mbytes;
->  	int result = 0;
->  	unsigned char __user *buf = NULL;
-> @@ -754,7 +753,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
->  		buf = segment->buf;
->  	ubytes = segment->bufsz;
->  	mbytes = segment->memsz;
-> -	maddr = segment->mem;
+On Mon, Sep 15, 2025 at 11:35:08AM +0300, Tariq Toukan wrote:
+...
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/Makefile b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
+> index d77696f46eb5..06d0eb190816 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/Makefile
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
+> @@ -176,3 +176,9 @@ mlx5_core-$(CONFIG_PCIE_TPH) += lib/st.o
 >  
->  	/* Then copy from source buffer to the CMA one */
->  	while (mbytes) {
-> @@ -782,7 +780,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
->  		}
->  
->  		ptr    += mchunk;
-> -		maddr  += mchunk;
->  		mbytes -= mchunk;
->  
->  		cond_resched();
-> -- 
-> 2.50.1
-> 
+>  obj-$(CONFIG_MLX5_DPLL) += mlx5_dpll.o
+>  mlx5_dpll-y :=	dpll.o
+> +
+> +#
+> +# NEON WC specific for mlx5
+> +#
+> +mlx5_core-$(CONFIG_KERNEL_MODE_NEON) += lib/wc_neon_iowrite64_copy.o
+> +FLAGS_lib/wc_neon_iowrite64_copy.o += $(CC_FLAGS_FPU)
+
+Does this work as is? I think this needs to be CFLAGS instead of FLAGS
+but I did not test to verify.
+
+Cheers,
+Nathan
