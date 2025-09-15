@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CA7308F2A;
-	Mon, 15 Sep 2025 12:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DFA327A19;
+	Mon, 15 Sep 2025 14:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757940813; cv=none; b=gz6F9TqMqRpAIE2EfzJpy0NF0cQo2U70VHjj4dXo43kABksx4BJO1JIteqOt4PO0bhA32m5hJeRkpkvD8aEDQ5kMS+Qs+yPq0tnP7V64EDYqNXiNjHKk/RDGapexPjX8znGaYXD2whPSM9c2DbsiDBG1UctQ8dZutWRUhg5rv/w=
+	t=1757946342; cv=none; b=ZXoveixITskUle96UUdOB+bVTe0oGRZEC6Ye+j56+GGVndcQhIMzDtzCe05tg9gDdYfKQBtO0Ngtmz15is6LUZXd+X0EG2+79xjoHIS0KhAEANhwVYJ2/jj2ZENskr8qlYOgRPWrk+wdqE07Y1crdMELg8bjuqYvIVma3JMpJak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757940813; c=relaxed/simple;
-	bh=SdX8AjQVlaitGassOJiFuSnW7pCyzl/B3JGxEkxwdFg=;
+	s=arc-20240116; t=1757946342; c=relaxed/simple;
+	bh=sotKzKeMRre9Y3CW/HCu1/nev4wM8yBFBDrivWmy6pg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BUEWeasZn/DAL272uOQ9nPqae1OHXkOR0EFhniLIJCaaVZtwW2QvYY7leRaNuAhNG86RedE4zs+I3Q9bRv4VbeeiFFuD2XxabBKgoBXH8lxUslc7RRWAlw4WrKCRhe7E2kNXN758Kd38ZSwVon0rMzcK/NH/bk7SFmBUu+Agre8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BqZqXhmD; arc=none smtp.client-ip=198.175.65.14
+	 Content-Disposition; b=Ytov0vXVbVkc/7MhxCV2sLcFvJOwGB9chP+1empPDQQVNqd9ApLczABq0LsAnGGfnnImtZeXlqPvR7bcdpO1x+v23gL99dYNwUHghNLy9q69LOCx8G6CjosG2jj/L5jlQyUS6kI7gYpzJo0xeopCXDsGEaSIuMxQDqtQOPVf9Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YiR+0C5E; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BqZqXhmD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YiR+0C5E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757940812; x=1789476812;
+  t=1757946340; x=1789482340;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SdX8AjQVlaitGassOJiFuSnW7pCyzl/B3JGxEkxwdFg=;
-  b=BqZqXhmDssk5Hqedc21SfQ8VXzbFm9Mis6bqMeOkpugVkkMTn90wGdo8
-   1mE0tz2xKvm+I1RYfASU++bfufiqCzggOWSqsbDGTqnoYFuD2NvaJXRMY
-   8jHS5fTf8J55OjRWSOa9NaaixG3p2fWfX2IGqLN1iNK5Bg4sFSK2/VHW5
-   cTCxtgzc8I2Qwdl4Jun/+gQpE1o08oXUDSYlNoBFzV2NdAWlnC/Ft87oj
-   dxSAQEv/hiDG7LEc7v03yE+ChFX9KuwBaowxbRPnAYR+B/udf5V4RJvgu
-   6Ur478/7Yt2yiVUzONVvwXETyXO/X6pyz5WTrB88lSc+iZI/cl5ohKqHF
-   A==;
-X-CSE-ConnectionGUID: GCvuV0PUQ9aYaF4bVJSSAA==
-X-CSE-MsgGUID: CeZw7iZWSLeMxY5HJP1XMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64004788"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64004788"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 05:53:31 -0700
-X-CSE-ConnectionGUID: KoSN1MMZTIShKfBJ20X8QA==
-X-CSE-MsgGUID: b3fkp+YZQsWUjbL3TfZuZw==
+  bh=sotKzKeMRre9Y3CW/HCu1/nev4wM8yBFBDrivWmy6pg=;
+  b=YiR+0C5EqTi8w7GAov8ZD3Cmm/4xje8jeTUuXolyToGZNKQmPmwSmvXP
+   wIc+pL1vdbMUEJUXn/Yh5gyWYckzFZeH/wOVQiKvY70sR/rSm41C68eVk
+   poqRK7/2EeV6SHEhb+kAoD5LDX8iWzoW1KdJ6TUYHk62uA3posNXauX3i
+   sTwYJnTgiPqnPorF7L6Ak2Cc5uPUJnc4q28A0s/r4YxnmLKcLL4wEWcfl
+   MVq9gkXUjCv/F8LoVk8F8traNNVaDifG7OBQf76KVYOxeZ/LP4+9cjn4r
+   a1cuOL922dvCiChzHePJp9n1lCVgPsi+689O+ZfA4mAD1B+8gk6VnPBGd
+   Q==;
+X-CSE-ConnectionGUID: wPVI3sbGQK2+8cnFj+XSIA==
+X-CSE-MsgGUID: mjBSaYsATh+S75dwgFFj1A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="60269024"
+X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
+   d="scan'208";a="60269024"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 07:25:40 -0700
+X-CSE-ConnectionGUID: W5EJm7f2TqW0HAHVhc2Bhg==
+X-CSE-MsgGUID: UuU7av3uTraGXT+9jn6cCg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="174450894"
+   d="scan'208";a="179021792"
 Received: from lkp-server01.sh.intel.com (HELO 5b01dd97f97c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 15 Sep 2025 05:53:30 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 15 Sep 2025 07:25:38 -0700
 Received: from kbuild by 5b01dd97f97c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uy8hz-0000Eh-2C;
-	Mon, 15 Sep 2025 12:53:27 +0000
-Date: Mon, 15 Sep 2025 20:52:49 +0800
+	id 1uyA9A-0000J9-0Q;
+	Mon, 15 Sep 2025 14:25:36 +0000
+Date: Mon, 15 Sep 2025 22:25:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:kho/vmalloc/v4 3/4] kernel/kexec_handover.c:849:15: warning:
- variable 'num_elms' is uninitialized when used here
-Message-ID: <202509152038.NqSCwQU9-lkp@intel.com>
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [cilium:pr/netkit-iouring 11/13] drivers/net/netkit.c:396:13: error:
+ no member named 'pool' in 'struct netdev_rx_queue'
+Message-ID: <202509152205.rMP7qLkG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,97 +63,85 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git kho/vmalloc/v4
-head:   4198c802be71f6b2ce7716a8f89fb779b09575a2
-commit: 01ea1bd238b11a157114d172bc88608ed08c3b17 [3/4] kho: add support for preserving vmalloc allocations
-config: arm64-randconfig-001-20250915 (https://download.01.org/0day-ci/archive/20250915/202509152038.NqSCwQU9-lkp@intel.com/config)
+tree:   https://github.com/cilium/linux.git pr/netkit-iouring
+head:   2349bbb5912e0d52fba70db82bfbf45064f824f6
+commit: 75c1fb3cba77335698d2293e139596fb67f3a330 [11/13] netkit: Implement ndo_queue_xsk_pool_{register,get,clear} operations
+config: powerpc-randconfig-003-20250915 (https://download.01.org/0day-ci/archive/20250915/202509152205.rMP7qLkG-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 65ad21d730d25789454d18e811f8ff5db79cb5d4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250915/202509152038.NqSCwQU9-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250915/202509152205.rMP7qLkG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509152038.NqSCwQU9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509152205.rMP7qLkG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/kexec_handover.c:849:15: warning: variable 'num_elms' is uninitialized when used here [-Wuninitialized]
-     849 |                 chunk->phys[num_elms++] = phys;
-         |                             ^~~~~~~~
-   kernel/kexec_handover.c:824:37: note: initialize the variable 'num_elms' to silence this warning
-     824 |         unsigned int order, flags, num_elms, nr_contig_pages;
-         |                                            ^
-         |                                             = 0
-   1 warning generated.
+   In file included from <built-in>:3:
+   In file included from include/linux/compiler_types.h:171:
+   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
+      28 | #define __SANITIZE_ADDRESS__
+         |         ^
+   <built-in>:351:9: note: previous definition is here
+     351 | #define __SANITIZE_ADDRESS__ 1
+         |         ^
+   drivers/net/netkit.c:390:6: error: call to undeclared function 'xsk_get_pool_from_qid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     390 |         if (xsk_get_pool_from_qid(phys, phys_idx))
+         |             ^
+   drivers/net/netkit.c:393:6: error: incomplete definition of type 'struct xsk_buff_pool'
+     393 |         pool->netdev = phys;
+         |         ~~~~^
+   include/linux/netdevice.h:1007:11: note: forward declaration of 'struct xsk_buff_pool'
+    1007 |                         struct xsk_buff_pool *pool;
+         |                                ^
+   drivers/net/netkit.c:394:6: error: incomplete definition of type 'struct xsk_buff_pool'
+     394 |         pool->queue_id = phys_idx;
+         |         ~~~~^
+   include/linux/netdevice.h:1007:11: note: forward declaration of 'struct xsk_buff_pool'
+    1007 |                         struct xsk_buff_pool *pool;
+         |                                ^
+>> drivers/net/netkit.c:396:13: error: no member named 'pool' in 'struct netdev_rx_queue'
+     396 |         rxq->peer->pool = pool;
+         |         ~~~~~~~~~  ^
+   drivers/net/netkit.c:412:20: error: no member named 'pool' in 'struct netdev_rx_queue'
+     412 |         return rxq->peer->pool;
+         |                ~~~~~~~~~  ^
+   drivers/net/netkit.c:426:13: error: no member named 'pool' in 'struct netdev_rx_queue'
+     426 |         rxq->peer->pool = NULL;
+         |         ~~~~~~~~~  ^
+   1 warning and 6 errors generated.
 
 
-vim +/num_elms +849 kernel/kexec_handover.c
+vim +396 drivers/net/netkit.c
 
-   804	
-   805	/**
-   806	 * kho_preserve_vmalloc - preserve memory allocated with vmalloc() across kexec
-   807	 * @ptr: pointer to the area in vmalloc address space
-   808	 * @preservation: placeholder for preservation metadata
-   809	 *
-   810	 * Instructs KHO to preserve the area in vmalloc address space at @ptr. The
-   811	 * physical pages mapped at @ptr will be preserved and on successful return
-   812	 * @preservation will hold the physical address of a structure that describes
-   813	 * the preservation.
-   814	 *
-   815	 * NOTE: The memory allocated with vmalloc_node() variants cannot be reliably
-   816	 * restored on the same node
-   817	 *
-   818	 * Return: 0 on success, error code on failure
-   819	 */
-   820	int kho_preserve_vmalloc(void *ptr, struct kho_vmalloc *preservation)
-   821	{
-   822		struct kho_vmalloc_chunk *chunk;
-   823		struct vm_struct *vm = find_vm_area(ptr);
-   824		unsigned int order, flags, num_elms, nr_contig_pages;
-   825		int err;
-   826	
-   827		if (!vm)
-   828			return -EINVAL;
-   829	
-   830		if (vm->flags & ~KHO_VMALLOC_FLAGS_MASK)
-   831			return -EOPNOTSUPP;
-   832	
-   833		flags = vm->flags & KHO_VMALLOC_FLAGS_MASK;
-   834		order = get_vm_area_page_order(vm);
-   835	
-   836		chunk = new_vmalloc_chunk(NULL);
-   837		if (!chunk)
-   838			return -ENOMEM;
-   839		KHOSER_STORE_PTR(preservation->first, chunk);
-   840	
-   841		nr_contig_pages = (1 << order);
-   842		for (int i = 0; i < vm->nr_pages; i += nr_contig_pages) {
-   843			phys_addr_t phys = page_to_phys(vm->pages[i]);
-   844	
-   845			err = kho_preserve_pages(vm->pages[i], nr_contig_pages);
-   846			if (err)
-   847				goto err_free;
-   848	
- > 849			chunk->phys[num_elms++] = phys;
-   850			if (num_elms == ARRAY_SIZE(chunk->phys)) {
-   851				chunk = new_vmalloc_chunk(chunk);
-   852				if (!chunk)
-   853					goto err_free;
-   854			}
-   855		}
-   856	
-   857		preservation->total_pages = vm->nr_pages;
-   858		preservation->flags = flags;
-   859		preservation->order = order;
-   860	
-   861		return 0;
-   862	
-   863	err_free:
-   864		kho_vmalloc_free_chunks(preservation);
-   865		return err;
-   866	}
-   867	EXPORT_SYMBOL_GPL(kho_preserve_vmalloc);
-   868	
+   372	
+   373	static int netkit_queue_xsk_pool_register(struct net_device *dev,
+   374						  struct xsk_buff_pool *pool, int idx)
+   375	{
+   376		struct netdev_rx_queue *rxq;
+   377		struct net_device *phys;
+   378		int phys_idx;
+   379	
+   380		if (idx >= dev->real_num_rx_queues)
+   381			return -EINVAL;
+   382	
+   383		rxq = __netif_get_rx_queue(dev, idx);
+   384		if (!rxq->peer)
+   385			return -EOPNOTSUPP;
+   386	
+   387		phys = rxq->peer->dev;
+   388		phys_idx = get_netdev_rx_queue_index(rxq->peer);
+   389	
+   390		if (xsk_get_pool_from_qid(phys, phys_idx))
+   391			return -EBUSY;
+   392	
+   393		pool->netdev = phys;
+   394		pool->queue_id = phys_idx;
+   395	
+ > 396		rxq->peer->pool = pool;
+   397		return 0;
+   398	}
+   399	
 
 -- 
 0-DAY CI Kernel Test Service
