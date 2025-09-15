@@ -1,148 +1,105 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944D822A1D4
-	for <llvm@lists.linux.dev>; Mon, 15 Sep 2025 15:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD621C75E2
+	for <llvm@lists.linux.dev>; Mon, 15 Sep 2025 16:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757951917; cv=none; b=MUH7mxxifKodvuqeOn2b4d7omtIdgVJMArSDRKdcj14MYIWhOhB3HuGbOnpPwL7Q+YIs1S/41I0fdXdAcsZGkg7jmLG1+JJkBNAHIcCXXslbB4TvjEX0j1QFlSAkMrbkuBr3FQ/UHF53gqm/UVE7qF7mQhvrga78tLr0gXjgg1A=
+	t=1757952155; cv=none; b=Pl7paZD+7fnr+YCGhXLHAdWzN2YphRUWvg+wokGP3llsBVhqymq+1jlA+PG1LM6KjN1lCauGXRpE8kkRMGXTzfg6Uv103R52F5cs3iVF5AEIl8WtDLz8aPzN7sRTTF5WNI3lB0z5yQrjWkmb+8+8j6ApgPY04yAs1d77o1B6qgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757951917; c=relaxed/simple;
-	bh=XgZwLsglGazDQIGAEWOdcUILG780w7iP0hbpgVxGkpU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HBj/SfCSAgRDfZ/dhouYwwCiNR/pv3w7wvR+P9B7MUtxny3LK84aCHM6lwuUMvhRAkwyn/6oos7TU2Oj9u+gwIGM+h4WKb1BoZENqmTShvRidXm1qaUxKglApTGHpE7Vslu0gHcx6XZZ9LR26YoT0c+lz3HkzZIkhQTHqt49VHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=x4Pdobj0; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1757952155; c=relaxed/simple;
+	bh=KrdcTcOmvrTnZXWtRS2/iVJmA+q1zLW/5mkZAZj3qVg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cB6rGzoC9GTM3NVLuNx4QqSbc0YLhatfX4UFCbRBFLKCl+rBJyi00ddr6JsCKc0DLGRfHXcp/3QdYzsANNEnSdizEWQLh8HwY0uAQiwJeFLywHG+XFFO8FXv+hUlY/xkoyCaCZ9fmkhuEVqhG+znVtjLYjenRiqPhzAfQtHswJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ur/PuRRN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="x4Pdobj0"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 949274E40B5C;
-	Mon, 15 Sep 2025 15:58:32 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5F8586063F;
-	Mon, 15 Sep 2025 15:58:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3CAA2102F2A5C;
-	Mon, 15 Sep 2025 17:58:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1757951911; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=DamnrMPL+mXDLfGrUw/hnqqyh2Urrlm64DKRH83FzbA=;
-	b=x4Pdobj0zrZkumQ8rF0dGvCIOsihT6/tmEvJOSyK4ZM0dL/TEFffUsWfNHpA7tCnZz0rHY
-	ExaPG8VC8y1PjnbyfB7XnWAEIz4TkImhBHb4IKjMRMm8ZZyEgTKXoArnZPj6QGAkVIJH0H
-	IIshDWowrJo0o6E4Qj4bAE+bmOu0ZLKHwPfybuNEM2HA+rXIqVe0nSF01e2O8xQnIXYSkv
-	37ShdxkQoV3IIJRYSlJ66AmfcAlGv0A+JgYl2xlCzlQlSXQ238ykgpGR+RUAst5M9VW6tH
-	9rvsThszzjgCcqgxGhPD+tl7fpmY+TlomeJ0GcyyTukkii93hp4ksi0OVYd1tg==
-Date: Mon, 15 Sep 2025 17:58:05 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov
- <dmitry.baryshkov@oss.qualcomm.com>, Chaoyi Chen
- <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 7/9] drm/bridge: remove
- drm_for_each_bridge_in_chain()
-Message-ID: <20250915175805.6e8df6ef@booty>
-In-Reply-To: <20250915-optimal-hornet-of-potency-efa54a@penduick>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-	<20250808-drm-bridge-alloc-getput-for_each_bridge-v2-7-edb6ee81edf1@bootlin.com>
-	<20250915-optimal-hornet-of-potency-efa54a@penduick>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ur/PuRRN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757952150; x=1789488150;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KrdcTcOmvrTnZXWtRS2/iVJmA+q1zLW/5mkZAZj3qVg=;
+  b=Ur/PuRRNpLmjPGEuXGhGXClFAceaEgf1k3EP6i6jp6jfLM3LOGbwNHf6
+   xWuAv5Tu7Awd5RfSrIn+MTlvDeKhNvqZsX//iIlOkzfmM/G/Os/43/O3X
+   p2rdPJ9L1X71ycUt431GiGE4xCEtLZxAL4f8KgkiPKUtEElPIu8iI+Nc3
+   Gz/9P4Vno31g6SEaQsLqhWHYv11gh1DMOANGgHBAcJ0aKillYNqR+ArTe
+   2hQBcAxzgl9fWPcKU9I3+4DpcpyrpXrcuX6qRWiMZGdICRa3jCjTK+khy
+   PXnc12de8te8eHHiExFjFCaJVLG7AMU2MKWXEb8X3pRUp4PcfIge2nrrT
+   w==;
+X-CSE-ConnectionGUID: 8fR3YdART1aIxCB4BNxf1g==
+X-CSE-MsgGUID: 0q8z8M6eQDKayS62NRqKeg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="70462410"
+X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
+   d="scan'208";a="70462410"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 09:02:29 -0700
+X-CSE-ConnectionGUID: PY5zR71HRaehcY/K9csPBg==
+X-CSE-MsgGUID: s6tF1+90Q9SB6KinGRyPQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
+   d="scan'208";a="178666903"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa003.jf.intel.com with ESMTP; 15 Sep 2025 09:02:26 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 45F2A94; Mon, 15 Sep 2025 18:02:25 +0200 (CEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Jan Kara <jack@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] lock_mount(): Remove unused function
+Date: Mon, 15 Sep 2025 18:02:21 +0200
+Message-ID: <20250915160221.2916038-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-On Mon, 15 Sep 2025 14:22:24 +0200
-Maxime Ripard <mripard@kernel.org> wrote:
+clang is not happy about unused function:
 
-> Hi,
-> 
-> On Fri, Aug 08, 2025 at 04:49:14PM +0200, Luca Ceresoli wrote:
-> > All users have been replaced by drm_for_each_bridge_in_chain_scoped().
-> > 
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > ---
-> >  .clang-format            |  1 -
-> >  include/drm/drm_bridge.h | 14 --------------
-> >  2 files changed, 15 deletions(-)
-> > 
-> > diff --git a/.clang-format b/.clang-format
-> > index 1cac7d4976644c8f083f801e98f619782c2e23cc..d5c05db1a0d96476b711b95912d2b82b2e780397 100644
-> > --- a/.clang-format
-> > +++ b/.clang-format
-> > @@ -167,7 +167,6 @@ ForEachMacros:
-> >    - 'drm_connector_for_each_possible_encoder'
-> >    - 'drm_exec_for_each_locked_object'
-> >    - 'drm_exec_for_each_locked_object_reverse'
-> > -  - 'drm_for_each_bridge_in_chain'
-> >    - 'drm_for_each_bridge_in_chain_scoped'
-> >    - 'drm_for_each_connector_iter'
-> >    - 'drm_for_each_crtc'
-> > diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-> > index a8e2f599aea764c705da3582df0ca428bb32f19c..6adf9221c2d462ec8e0e4e281c97b39081b3da24 100644
-> > --- a/include/drm/drm_bridge.h
-> > +++ b/include/drm/drm_bridge.h
-> > @@ -1358,20 +1358,6 @@ drm_bridge_chain_get_first_bridge(struct drm_encoder *encoder)
-> >  						       struct drm_bridge, chain_node));
-> >  }
-> >  
-> > -/**
-> > - * drm_for_each_bridge_in_chain() - Iterate over all bridges present in a chain
-> > - * @encoder: the encoder to iterate bridges on
-> > - * @bridge: a bridge pointer updated to point to the current bridge at each
-> > - *	    iteration
-> > - *
-> > - * Iterate over all bridges present in the bridge chain attached to @encoder.
-> > - *
-> > - * This is deprecated, do not use!
-> > - * New drivers shall use drm_for_each_bridge_in_chain_scoped().
-> > - */
-> > -#define drm_for_each_bridge_in_chain(encoder, bridge)			\
-> > -	list_for_each_entry(bridge, &(encoder)->bridge_chain, chain_node)
-> > -  
-> 
-> I think I'd go a step further and rename
-> drm_for_each_bridge_in_chain_scoped to drm_for_each_bridge_in_chain,
-> there's no need to have a "scoped" variant if it's our only variant.
-> 
-> It can be done in a subsequent patch though.
+/fs/namespace.c:2856:20: error: unused function 'lock_mount' [-Werror,-Wunused-function]
+ 2856 | static inline void lock_mount(const struct path *path,
+      |                    ^~~~~~~~~~
+1 error generated.
 
-Sure, that's the plan. There's a note in patch 3:
+Fix the compilation breakage (`make W=1` build) by removing unused function.
 
-Note 1: drm_for_each_bridge_in_chain_scoped() could be renamed removing the
-        _scoped suffix after removing all the users of the current macro
-        and eventually the current macro itself. Even though this series is
-        converting all users, I'd at least wait one kernel release before
-        renaming, to minimize issues with existing patches which would fail
-        building.
+Fixes: d14b32629541 ("change calling conventions for lock_mount() et.al.")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ fs/namespace.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-> For the entire series:
-> Reviewed-by: Maxime Ripard <mripard@kernel.org>
-
-Great, thanks!
-
-I'll wait a few more days before applying.
-
-Luca
-
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 14924dd3a21b..ebd61d903a59 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2853,12 +2853,6 @@ static void do_lock_mount(const struct path *path,
+ 	} while (err == -EAGAIN);
+ }
+ 
+-static inline void lock_mount(const struct path *path,
+-			      struct pinned_mountpoint *m)
+-{
+-	do_lock_mount(path, m, false);
+-}
+-
+ static void __unlock_mount(struct pinned_mountpoint *m)
+ {
+ 	inode_unlock(m->mp->m_dentry->d_inode);
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.50.1
+
