@@ -1,105 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD621C75E2
-	for <llvm@lists.linux.dev>; Mon, 15 Sep 2025 16:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB1D23957D;
+	Mon, 15 Sep 2025 22:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757952155; cv=none; b=Pl7paZD+7fnr+YCGhXLHAdWzN2YphRUWvg+wokGP3llsBVhqymq+1jlA+PG1LM6KjN1lCauGXRpE8kkRMGXTzfg6Uv103R52F5cs3iVF5AEIl8WtDLz8aPzN7sRTTF5WNI3lB0z5yQrjWkmb+8+8j6ApgPY04yAs1d77o1B6qgs=
+	t=1757974482; cv=none; b=KeDqihAza6gRT/h0050QWNLTsLANYGK6NO9neXCDPz5Ffw2OjZPSAfEO4rUWJz+uSr0KrhrPt3CbbZUILUvZ5wq0pCtf+xnyR+W2vzCfTpRmpbvjKirR5Nux9PIhtiZcCgVKjd9e1Acf3Tq+DL1sFrnony0J21s0xhN8tRhE9gI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757952155; c=relaxed/simple;
-	bh=KrdcTcOmvrTnZXWtRS2/iVJmA+q1zLW/5mkZAZj3qVg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cB6rGzoC9GTM3NVLuNx4QqSbc0YLhatfX4UFCbRBFLKCl+rBJyi00ddr6JsCKc0DLGRfHXcp/3QdYzsANNEnSdizEWQLh8HwY0uAQiwJeFLywHG+XFFO8FXv+hUlY/xkoyCaCZ9fmkhuEVqhG+znVtjLYjenRiqPhzAfQtHswJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ur/PuRRN; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1757974482; c=relaxed/simple;
+	bh=42PF0UhqIVstyAZvj9Oxhvu2NgizRC3FkzlZTmN8t2M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FIUBatP7BBwZDl27dZClZHjd/9pfZYxOV0y0WRUn0zZ9j+5sJO/LczbIesgfe8o4nP1tP+j/LcT/gieimvccIyt4wPOeN0FVPIeUxNqS5WQ2DxYeiMpTv3Q0+4iju3mC7RklLaDPIjlS+MdjpuQCS+f4GxfR5UXcD6txrfA2lOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YB4kjVRM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ur/PuRRN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757952150; x=1789488150;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KrdcTcOmvrTnZXWtRS2/iVJmA+q1zLW/5mkZAZj3qVg=;
-  b=Ur/PuRRNpLmjPGEuXGhGXClFAceaEgf1k3EP6i6jp6jfLM3LOGbwNHf6
-   xWuAv5Tu7Awd5RfSrIn+MTlvDeKhNvqZsX//iIlOkzfmM/G/Os/43/O3X
-   p2rdPJ9L1X71ycUt431GiGE4xCEtLZxAL4f8KgkiPKUtEElPIu8iI+Nc3
-   Gz/9P4Vno31g6SEaQsLqhWHYv11gh1DMOANGgHBAcJ0aKillYNqR+ArTe
-   2hQBcAxzgl9fWPcKU9I3+4DpcpyrpXrcuX6qRWiMZGdICRa3jCjTK+khy
-   PXnc12de8te8eHHiExFjFCaJVLG7AMU2MKWXEb8X3pRUp4PcfIge2nrrT
-   w==;
-X-CSE-ConnectionGUID: 8fR3YdART1aIxCB4BNxf1g==
-X-CSE-MsgGUID: 0q8z8M6eQDKayS62NRqKeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="70462410"
-X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="70462410"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 09:02:29 -0700
-X-CSE-ConnectionGUID: PY5zR71HRaehcY/K9csPBg==
-X-CSE-MsgGUID: s6tF1+90Q9SB6KinGRyPQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,266,1751266800"; 
-   d="scan'208";a="178666903"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa003.jf.intel.com with ESMTP; 15 Sep 2025 09:02:26 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 45F2A94; Mon, 15 Sep 2025 18:02:25 +0200 (CEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Christian Brauner <brauner@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jan Kara <jack@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YB4kjVRM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A2FC4CEF9;
+	Mon, 15 Sep 2025 22:14:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757974481;
+	bh=42PF0UhqIVstyAZvj9Oxhvu2NgizRC3FkzlZTmN8t2M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YB4kjVRMGqWWTf5wx+xKc4Av/dO5yqwEAym1wFCSV/5nWHnbNo5Lld+08DaWnhr7x
+	 9V3+gQGc8/EdEMv/AXCrXZMaL6yampUroqB8aArDG751VC+NlbtWXOKP2qaWOMKdpr
+	 B5/Wi7CWNBdNHM6JvaKQ7lEPQ9wXwvFJJQNTzQLUhwHovt8/LAajy0/kqRGbP8Mc4a
+	 RSqs8xBQwTTXpNMB1qMqjuTPXJxY7UmzvcoEOWizaWFp2/kRf8eL0PEC+fd0vHKzQ/
+	 mzNgMyB7qF6OJeezzh65LYAxBFVzQbUwWAl78Pc9ls9Iui6l2lAd0wrOKu0m63EhQ6
+	 4UXoVFJZKOu2Q==
+Date: Mon, 15 Sep 2025 15:14:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] lock_mount(): Remove unused function
-Date: Mon, 15 Sep 2025 18:02:21 +0200
-Message-ID: <20250915160221.2916038-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] kexec: Remove unused code in
+ kimage_load_cma_segment()
+Message-ID: <20250915221436.GA925462@ax162>
+References: <20250915155543.2912469-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250915155543.2912469-1-andriy.shevchenko@linux.intel.com>
 
-clang is not happy about unused function:
+Hi Andy,
 
-/fs/namespace.c:2856:20: error: unused function 'lock_mount' [-Werror,-Wunused-function]
- 2856 | static inline void lock_mount(const struct path *path,
-      |                    ^~~~~~~~~~
-1 error generated.
+On Mon, Sep 15, 2025 at 05:55:43PM +0200, Andy Shevchenko wrote:
+> clang is not happy about set but unused variable:
+> 
+> kernel/kexec_core.c:745:16: error: variable 'maddr' set but not used [-Werror,-Wunused-but-set-variable]
+>   745 |         unsigned long maddr;
+>       |                       ^
+> 1 error generated.
+> 
+> Fix the compilation breakage (`make W=1` build) by removing unused variable.
+> 
+> Fixes: 07d24902977e ("kexec: enable CMA based contiguous allocation")
 
-Fix the compilation breakage (`make W=1` build) by removing unused function.
+I don't think this fixes tag is right. maddr definitely looks used in
+that diff. I think it is a follow up simplification that introduces
+this.
 
-Fixes: d14b32629541 ("change calling conventions for lock_mount() et.al.")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- fs/namespace.c | 6 ------
- 1 file changed, 6 deletions(-)
+Fixes: f4fecb50d6e1 ("kexec_core: remove superfluous page offset handling in segment loading")
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 14924dd3a21b..ebd61d903a59 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2853,12 +2853,6 @@ static void do_lock_mount(const struct path *path,
- 	} while (err == -EAGAIN);
- }
- 
--static inline void lock_mount(const struct path *path,
--			      struct pinned_mountpoint *m)
--{
--	do_lock_mount(path, m, false);
--}
--
- static void __unlock_mount(struct pinned_mountpoint *m)
- {
- 	inode_unlock(m->mp->m_dentry->d_inode);
--- 
-2.50.1
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
+Otherwise, this patch looks correct to me and GCC 16 will warn on this
+as well.
+
+  kernel/kexec_core.c: In function 'kimage_load_cma_segment':
+  kernel/kexec_core.c:745:23: error: variable 'maddr' set but not used [-Werror=unused-but-set-variable=]
+    745 |         unsigned long maddr;
+        |                       ^~~~~
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+>  kernel/kexec_core.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 5357ed39e9d1..32722926bc7e 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -742,7 +742,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
+>  	struct kexec_segment *segment = &image->segment[idx];
+>  	struct page *cma = image->segment_cma[idx];
+>  	char *ptr = page_address(cma);
+> -	unsigned long maddr;
+>  	size_t ubytes, mbytes;
+>  	int result = 0;
+>  	unsigned char __user *buf = NULL;
+> @@ -754,7 +753,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
+>  		buf = segment->buf;
+>  	ubytes = segment->bufsz;
+>  	mbytes = segment->memsz;
+> -	maddr = segment->mem;
+>  
+>  	/* Then copy from source buffer to the CMA one */
+>  	while (mbytes) {
+> @@ -782,7 +780,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
+>  		}
+>  
+>  		ptr    += mchunk;
+> -		maddr  += mchunk;
+>  		mbytes -= mchunk;
+>  
+>  		cond_resched();
+> -- 
+> 2.50.1
+> 
