@@ -1,49 +1,49 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12447243968
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423CB29AAFA
+	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758050259; cv=none; b=dh4Fjk5mds89KMkE7AiXkkvlzVX6gMhRqSL/M9gAABXJAHmtS1JpA3Lggbvm17zomSRXwBRfjLL7qyqZuN9pus7tuTFKO2lK9+e3CtRic+9dBXh5zI8JRAKnqnBwdVcGjpvFkslfxzjEBKlc2diPGP9TAguCNc/5gNGwwmrfdDY=
+	t=1758050262; cv=none; b=nS8qJFwOLRNX/PEOzrfiJ0wWifDc7e+djJGx3vCmEF0nE2uE7Gzrg+KWxYJxK4+gsbbjH/u/NDJAHSpw788Gb3ODBL79UhRflu98K9dEECakfA1gxlzQYC+6rMPgsIW3+aYgXVAtqDXI8/CHFJbuuCAhYwNxIfyqR/qRINA68mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758050259; c=relaxed/simple;
-	bh=6HRfKZ+16AJd28rMX8MtwpPXTGL4VEZK3Nxe7Wzw94Q=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=IjpZwfqkvfjrRI5RLHFDP7UTclDHRG0aJ0AYwKlSCdjuLTb4wjerjHYSk50m5jfWU/8ItAHA4s58cSgIa6RFilSSD+m0z8oK/YhZoy2yUU+sgEWQa0HPW1Lj/GDPUevCr+2YQxZOpgi3kZT4xPvmObctDDqHSTGkjEhbNR3nZJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L9Lus+wh; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1758050262; c=relaxed/simple;
+	bh=DPEdzjBbU+zYb/mSod7qiwEQZtcywtqqtGsClJvh7WU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ugL6sfJPkIRtzr1Rn78sjcskabvQHeNM8JTJle3YzKZdyDFUHkSTv5u0V+U+p8yq4X4cba/TWBKinyBfM2jN+wT2T91uf1QkUmhP8GWdS5BV7b56HC42wo+eQqi2GoYLqXPQVL3CWcdJ7SIMxtuUfN2PVyOPYdCeiG8HhNWskOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HcT2EFHC; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L9Lus+wh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HcT2EFHC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758050257;
+	s=mimecast20190719; t=1758050260;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=0FXhuwZR1tCqPa9S+EHTbOLeptxbhOBDCxbwndRsMMU=;
-	b=L9Lus+wh+m8Df5B7cgoHEzObD4nkbTqhSCGkadxk9AsTCfXdhIsAraPXCL5pb79Tc8hAyy
-	fiayn1tg+5RIx3LmV6H0Esvx7RoiJndYfazXON/jnod10MXsLGeGlqQ9tsPS0e+3iTPajN
-	1m2NwDFu1hmwcSXm6l4K9xCfBwhZPQ0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=08SjDBv8vvTyRmmJ1LBOwlkRTlrbCjVRSI9ByoiKyuU=;
+	b=HcT2EFHCX6heazhN2HJy1da1ZMNMiAqr7+kv08UMt6rzZqTyLnM93+cJrh/PXMyHlUmqTL
+	wzqbtGJdTQ+80+HouKslmIBwbkmwnZDn+hcssVlLxlAlYw99srqoDP+gKQDPwPLEOMtw+H
+	UEDLOuTXi8fUmNkrXCACQxRQ/5ad+zg=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-592-QBYkkdzFM5eg1ZGj5DZkvQ-1; Tue,
- 16 Sep 2025 15:17:35 -0400
-X-MC-Unique: QBYkkdzFM5eg1ZGj5DZkvQ-1
-X-Mimecast-MFC-AGG-ID: QBYkkdzFM5eg1ZGj5DZkvQ_1758050255
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-448-4ctpkpHFP-OAbGqSCTfvbg-1; Tue,
+ 16 Sep 2025 15:17:39 -0400
+X-MC-Unique: 4ctpkpHFP-OAbGqSCTfvbg-1
+X-Mimecast-MFC-AGG-ID: 4ctpkpHFP-OAbGqSCTfvbg_1758050258
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1F5D118002CE
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:17:35 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 233AE1956058
+	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:17:38 +0000 (UTC)
 Received: from [172.20.100.178] (unknown [10.30.44.68])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8762730001B5;
-	Tue, 16 Sep 2025 19:17:34 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D02BA300018D;
+	Tue, 16 Sep 2025 19:17:37 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.16.0-0,
- upstream-mainline, 37816488)
-Date: Tue, 16 Sep 2025 19:17:34 -0000
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 113): Test report for master
+ (6.16.0-0, upstream-mainline, bec07716)
+Date: Tue, 16 Sep 2025 19:17:37 -0000
 To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,9 +52,9 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <25692.125091615173600100@us-mta-592.us.mimecast.lan>
+Message-Id: <69219.125091615173900103@us-mta-448.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: wsexwaAxkhLOqnpe5nMnC4YKIbDisiXVFQYiU5dRFqo_1758050255
+X-Mimecast-MFC-PROC-ID: zkJx7dxhiUvsdHnc6B31Ur_BGpkAXYEit4VzouTm6vI_1758050258
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -68,18 +68,18 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'net-6.17-rc1' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net
+    Commit message: Merge tag 's390-6.17-2' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/s390/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1973721305
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1973689220
 
 One or more kernel tests failed:
     Unrecognized or new issues:
         xfstests - nfsv4.2
               x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1973721305_x86_64_kernel_kcidb_tool_19320501_33
+redhat:1973689220_x86_64_kernel_kcidb_tool_19320310_33
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL generic/221
 
@@ -97,6 +97,19 @@ rch/powerpc/lib/crtsavres.o: No such file or directory
                 kselftests upstream - bpf_test_progs [x86_64]
                 kselftests upstream - net [x86_64]
 
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [s390x]
+    /distribution/command [s390x]
+    /test/misc/machineinfo [s390x]
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - throtl [s390x]
+    Storage - blktests - ublk [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
 
 
 If you find a failure unrelated to your changes, please ask the test mainta=
