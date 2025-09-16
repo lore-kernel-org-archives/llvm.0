@@ -1,49 +1,49 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB483313D66
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C421A27732
+	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758050112; cv=none; b=MeVoWWq1giZ/c/DJqn6XfrDI5u67eVKTPG79P5ibYjwdoa9uU/5NeHKrs6AagyexzbweX6/vTz0ct0jYzrO+uGJuV9wx80Nv1GFyPWIidED6KnbC8LSDHJ0G7EYg8LYAWXfOPFw57oYhB29m+vQPuEDKvn/zrOmCOJ+tI0p/og8=
+	t=1758050146; cv=none; b=MYouLwmrEUYxS1lxfaI7PT5n+1s5GqsJ6FUQLNDUT5a7z0l0enmwB6QqApYBaf/LeJvmnbGSRE4FvISSwMPDqwvuJyd7sIP/EozR4NGkWrTYRPstFUk6/ZZHeb2foj0Wbg0OS+60Y8od42SSUCBZqEo8K6AuGhEfVY9jY8Tl+Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758050112; c=relaxed/simple;
-	bh=S/CA1vmsxYzB+hZsK9J92WGH3qv3ono09AA3FZNzyIU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=NwQhk/ondyTu4piESFp4uqNu5Vg/jquo8eC+/wHb60VxooiB1ZzXcEzzWoP4Xmb9sXB/sdP3P6DSnFcFgn5s4vbQMI5oT0UrsIBWbo8EaX+hB+WcGvBEgA73IiIl9sEtp2zqKX0TJle54tKGUNW6lD7B79I7LSLa36DWUKMoDdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NUQ14B3U; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1758050146; c=relaxed/simple;
+	bh=KOge0cvUuAxAhrJbOqg7qT7puQP7wAnTN0Nx/941LkY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iSwR+adTudfmOK9DwFJ4sux+5aOPC6pMFywCK7V4zt42JMtnKZNTAHud4twMwWSCxewvOif1clLC+95+SI6tqJFkXITQu+O+R6RBQlqEYFvnilK2oMuC6WItm1aXWaWQPVV8Sf9w0IYSm1feHzvvTrWF/ued6rcqiKy5sJ+0KZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A7AT7ftr; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NUQ14B3U"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A7AT7ftr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758050109;
+	s=mimecast20190719; t=1758050143;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=w0iQwXRlV6EEvTqPyhjFRt0lecO5z5rFy2Qi9sN8qE0=;
-	b=NUQ14B3Uee2yW5J4TZA9YqIk7WodDmMA6gDEvkZMHo+YcEvsWAPP0A+Tv9SgSWyxh20+Gy
-	/IhlRQU1aEgvjRq4+toV4nuhq0VdmH2s6FdX1yxLXpEI/2wXtR3T9M/6XGfTIeaHsS1JVO
-	5/ZTv9FYWLRN+TumxSabgi0Pa7JDKhE=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=giZKXCmvgR8i5f5FdFZn7tD8QZmoG9IBmKjvxuITdx8=;
+	b=A7AT7ftraMWp513ZkIUXROBXXtG/jZ6WkWZEVTnYwbdQuaQCPesbxRs8CKpuEFkrytdkES
+	sCmKdUMCcThxm/UNWA8Um5wVx+nhTJlEGinYSkwNeDV4CBYlKdus6nA0D/PiVMhX2gxZDJ
+	0sMCD5ze74+goiWveOaeBwnwGU3fu/8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-154-CLece9pgOtmEA5x1Cf80fA-1; Tue,
- 16 Sep 2025 15:15:08 -0400
-X-MC-Unique: CLece9pgOtmEA5x1Cf80fA-1
-X-Mimecast-MFC-AGG-ID: CLece9pgOtmEA5x1Cf80fA_1758050107
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-BE1QWnJLOvWc9lZZrruElQ-1; Tue,
+ 16 Sep 2025 15:15:42 -0400
+X-MC-Unique: BE1QWnJLOvWc9lZZrruElQ-1
+X-Mimecast-MFC-AGG-ID: BE1QWnJLOvWc9lZZrruElQ_1758050141
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BD7641800290
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:15:07 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 92C071800372
+	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:15:41 +0000 (UTC)
 Received: from [172.20.100.178] (unknown [10.30.44.68])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1BAF519560B8;
-	Tue, 16 Sep 2025 19:15:07 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4B6AC19560B8;
+	Tue, 16 Sep 2025 19:15:41 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL (MISSED 18 of 137): Test report for master
- (6.17.0-rc1, upstream-mainline, 3a4a0367)
-Date: Tue, 16 Sep 2025 19:15:06 -0000
+ (6.17.0-rc1, upstream-mainline, 0e39a731)
+Date: Tue, 16 Sep 2025 19:15:41 -0000
 To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,9 +52,9 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <71817.125091615150800995@us-mta-154.us.mimecast.lan>
+Message-Id: <96093.125091615154202218@us-mta-586.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: bnyfJmxH17Bx__nPyJr9BWe0xZ2XnT4AzswXuZYO6K8_1758050107
+X-Mimecast-MFC-PROC-ID: eNHzCXUTc43OUWjgi9V75WOvbnv1k8UNsT2qK8HwmIc_1758050141
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -68,34 +68,34 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'rcu.fixes.6.17' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/rcu/linux
+    Commit message: Merge tag 'for-6.17-rc1-tag' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/kdave/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1982777945
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1980274479
 
 One or more kernel tests failed:
     Unrecognized or new issues:
         xfstests - nfsv4.2
               x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1982777945_x86_64_kernel_kcidb_tool_19358967_42
+redhat:1980274479_x86_64_kernel_kcidb_tool_19351176_42
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL generic/221
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
         Issue: [net] [kselftests upstream] catch all failures
             URL: https://issues.redhat.com/browse/RHELTEST-1362
             Affected tests:
                 kselftests upstream - bpf [x86_64, x86_64]
                 kselftests upstream - bpf_test_progs [x86_64, x86_64]
                 kselftests upstream - net [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
 
 Tests that were not ran because of internal issues:
