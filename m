@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC422773F4;
-	Tue, 16 Sep 2025 19:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A168A2DD60F;
+	Tue, 16 Sep 2025 20:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758052672; cv=none; b=hVmaJ+IQOVGRdYrV4Ep0qC6O7fXkvfXS3xyyV/3rbrcOvv1ZjEqEUhXbmaN+GTSxzsL1+4tBAlQxDevNQ1WGSqZY9k68ygJyum2SU1DeiSGSn680evKS+9Ezv/YZ7VJAGWlraVFmfHnHPesvrwdANRCY2mN326U0kkukNw9txLM=
+	t=1758053996; cv=none; b=pslhdtZswkNsfeogJCnucsZdkZBOSA7Hl2DknUao0pKkiCXbeXNEud9Ji/Y1nUAuW5TmR2LP7lXih94LwfQ1O8JUKfr8/ZlG1nObQtch4Mn6GQ3+X7XR/anbf3i/2vvAhwCiCiYOonurYyq7IGILDiLtSkU7YNEFuoLjs16s+co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758052672; c=relaxed/simple;
-	bh=V1Z1PLCRtD6I4oNcKRH8YTS6Yv66dTHYRIfgdtzwL88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HPXeA4xjW+/Ha3V63F6NEPhwQ+yyylP8NAPLKxZ7giXFcdYOUZiYHRtaj9ZXEfY7zIaEwjw+k/htC/zEwd4nQEJ9WOU7iLXij3h4jTvyt3x3w2KhQ1e2b2JbJI89sEnwLedKwwnBJJE3p0zsYpDl4b8RegRbSeOyoDW+w57F7Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X78ge4eZ; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1758053996; c=relaxed/simple;
+	bh=QRyrY3mZglOsp3cknKA9nwk8NNGbN1ybYI28G5fU28w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UtuPPcsIG2Gi/OYPslanOSGigUl9os4mUrgiee3fgDFU7vqdieweue4eD3Kq+BOq6rP2BEDAg0vwVFpvSQZKixWahLojtj4DV4+aZvoryh96yRfN61F08x8+JN7Eo/ioYWx9zJmAb39cMQzvBJjSAe6JEbcTg+pHwsZE4yB4HMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m1RZaIcv; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X78ge4eZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m1RZaIcv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758052671; x=1789588671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V1Z1PLCRtD6I4oNcKRH8YTS6Yv66dTHYRIfgdtzwL88=;
-  b=X78ge4eZRe593LR+w2KiGqSzsY9fnQhmUO1jqY4JiR67Ziz7WGJA7g9C
-   NeTHAR3Fj9yWCmRWegPPtPzTd/BJt8Z3azw2kfg9ZpCQ9FW9Qz8SNaCc3
-   1wXyv0JEovPZ56c5TFglxIX4ctHywndiQRtO1g2nL5Bghy/LoVl9ETbmc
-   szY3KQCRdl7R85jHRY8vDlnhvNcE0Sg9kUEoclr9Yfc7xFhMia0lz8+BY
-   ceL/Qtu+kw97EWaEbLTPBffZYissnv9+AHbAg5QcwlfzWjoY4RApF5Uz7
-   NoliWGe4iUXXxvM8swtj4dECuzdlGZSPNC09kU2eAUY5ySmsxYRd5i164
+  t=1758053995; x=1789589995;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QRyrY3mZglOsp3cknKA9nwk8NNGbN1ybYI28G5fU28w=;
+  b=m1RZaIcv1JWB5fkFyrjpleXEDlqReQS8u5uj6do6L9ESEcOq9hTkX43+
+   N/2JdFOgB4Vtu//UbFLnZQX5LN1kKpkM6bfcu0qXuCE8J3iXdh7KhzzoD
+   jqrj4i9hUZKoUfyRQaYPAxJk4NSjQ90edUy08JqTe5FezYiJxC7igYZH+
+   mlT9FWUx1CB/XpPLYr8mI/bAGQWIM8VXa6n6IezCm1rqMPTu8BcEmwDtB
+   /ifHwgfJGEWW1Flgxc3uuHVjIXWwsVE65oXsZPAHZtXrZFTTqpL2nJiAU
+   yVuCD2SIuWzRjxT9z7Iij77rssF+bF9Y2BAIWzFw4mfzaNvzQelWeuBpJ
    A==;
-X-CSE-ConnectionGUID: r9WgaJRqSIW19WuUo5oEWA==
-X-CSE-MsgGUID: 1vuUFvutTlqp+3WqWpUf/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11555"; a="71028912"
+X-CSE-ConnectionGUID: +w6oIlN/SOm4izuA74RIEQ==
+X-CSE-MsgGUID: hixp3HFWTb2RjPXjZFsIDQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11555"; a="64167523"
 X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
-   d="scan'208";a="71028912"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 12:57:49 -0700
-X-CSE-ConnectionGUID: MjBeqBL6QS6kxxX+iHlFdg==
-X-CSE-MsgGUID: c9ds/YMzT3CeA/aLWjzcgA==
+   d="scan'208";a="64167523"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 13:19:52 -0700
+X-CSE-ConnectionGUID: OHXcJtZWRfqsZnfknOl3fQ==
+X-CSE-MsgGUID: CJEt3bBxQxaBRNTVbVaBZA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
-   d="scan'208";a="205822477"
+   d="scan'208";a="175822197"
 Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 16 Sep 2025 12:57:48 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 16 Sep 2025 13:19:50 -0700
 Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uybo9-0000h9-1U;
-	Tue, 16 Sep 2025 19:57:45 +0000
-Date: Wed, 17 Sep 2025 03:57:25 +0800
+	id 1uyc9U-0000iB-0R;
+	Tue, 16 Sep 2025 20:19:48 +0000
+Date: Wed, 17 Sep 2025 04:19:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank van der Linden <fvdl@google.com>
+To: Leon Romanovsky <leonro@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 04/12] mm/cma: keep a global sorted list of CMA ranges
-Message-ID: <202509170355.O6CTWu7T-lkp@intel.com>
-References: <20250915195153.462039-5-fvdl@google.com>
+Subject: [leon-rdma:dmabuf-vfio 42/42] kernel/dma/mapping.c:174:2: warning:
+ non-void function does not return a value in all control paths
+Message-ID: <202509170453.TJrTBB4U-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,82 +61,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250915195153.462039-5-fvdl@google.com>
 
-Hi Frank,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on powerpc/fixes powerpc/topic/ppc-kvm s390/features linus/master v6.17-rc6 next-20250916]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-van-der-Linden/mm-cma-add-tunable-for-CMA-fallback-limit/20250916-035514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20250915195153.462039-5-fvdl%40google.com
-patch subject: [RFC PATCH 04/12] mm/cma: keep a global sorted list of CMA ranges
-config: i386-buildonly-randconfig-006-20250917 (https://download.01.org/0day-ci/archive/20250917/202509170355.O6CTWu7T-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dmabuf-vfio
+head:   887b59804850b679831fda6eba707cc1b1b077e0
+commit: 887b59804850b679831fda6eba707cc1b1b077e0 [42/42] dma-mapping: remove unused map_page callback
+config: x86_64-buildonly-randconfig-002-20250916 (https://download.01.org/0day-ci/archive/20250917/202509170453.TJrTBB4U-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250917/202509170355.O6CTWu7T-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250917/202509170453.TJrTBB4U-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509170355.O6CTWu7T-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509170453.TJrTBB4U-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/cma_debug.c:58:40: error: too many arguments to function call, expected single argument 'cmr', have 2 arguments
-      58 |                 bitmap_maxno = cma_bitmap_maxno(cma, cmr);
-         |                                ~~~~~~~~~~~~~~~~      ^~~
-   mm/cma.h:71:29: note: 'cma_bitmap_maxno' declared here
-      71 | static inline unsigned long cma_bitmap_maxno(struct cma_memrange *cmr)
-         |                             ^                ~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/cma_debug.c:187:39: error: too many arguments to function call, expected single argument 'cmr', have 2 arguments
-     187 |                         DIV_ROUND_UP(cma_bitmap_maxno(cma, cmr),
-         |                                      ~~~~~~~~~~~~~~~~      ^~~
-   include/linux/math.h:49:22: note: expanded from macro 'DIV_ROUND_UP'
-      49 | #define DIV_ROUND_UP __KERNEL_DIV_ROUND_UP
-         |                      ^
-   include/uapi/linux/const.h:51:40: note: expanded from macro '__KERNEL_DIV_ROUND_UP'
-      51 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
-         |                                        ^
-   mm/cma.h:71:29: note: 'cma_bitmap_maxno' declared here
-      71 | static inline unsigned long cma_bitmap_maxno(struct cma_memrange *cmr)
-         |                             ^                ~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   kernel/dma/mapping.c:160:13: warning: variable 'addr' set but not used [-Wunused-but-set-variable]
+     160 |         dma_addr_t addr = DMA_MAPPING_ERROR;
+         |                    ^
+>> kernel/dma/mapping.c:174:2: warning: non-void function does not return a value in all control paths [-Wreturn-type]
+     174 |         }
+         |         ^
+   kernel/dma/mapping.c:176:2: error: expected identifier or '('
+     176 |         if (!is_mmio)
+         |         ^
+   kernel/dma/mapping.c:178:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     178 |         trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
+         |         ^
+         |         int
+   kernel/dma/mapping.c:178:21: error: a parameter list without types is only allowed in a function definition
+     178 |         trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
+         |                            ^
+   kernel/dma/mapping.c:179:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     179 |         debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
+         |         ^
+         |         int
+   kernel/dma/mapping.c:179:21: error: a parameter list without types is only allowed in a function definition
+     179 |         debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
+         |                            ^
+   kernel/dma/mapping.c:181:2: error: expected identifier or '('
+     181 |         return addr;
+         |         ^
+   kernel/dma/mapping.c:182:1: error: extraneous closing brace ('}')
+     182 | }
+         | ^
+   2 warnings and 7 errors generated.
 
 
-vim +/cmr +58 mm/cma_debug.c
+vim +174 kernel/dma/mapping.c
 
-2e32b947606daa Dmitry Safonov       2015-04-15  45  
-2e32b947606daa Dmitry Safonov       2015-04-15  46  static int cma_maxchunk_get(void *data, u64 *val)
-2e32b947606daa Dmitry Safonov       2015-04-15  47  {
-2e32b947606daa Dmitry Safonov       2015-04-15  48  	struct cma *cma = data;
-c009da4258f988 Frank van der Linden 2025-02-28  49  	struct cma_memrange *cmr;
-2e32b947606daa Dmitry Safonov       2015-04-15  50  	unsigned long maxchunk = 0;
-c009da4258f988 Frank van der Linden 2025-02-28  51  	unsigned long start, end;
-c009da4258f988 Frank van der Linden 2025-02-28  52  	unsigned long bitmap_maxno;
-c009da4258f988 Frank van der Linden 2025-02-28  53  	int r;
-2e32b947606daa Dmitry Safonov       2015-04-15  54  
-0ef7dcac998fef Mike Kravetz         2021-05-04  55  	spin_lock_irq(&cma->lock);
-c009da4258f988 Frank van der Linden 2025-02-28  56  	for (r = 0; r < cma->nranges; r++) {
-c009da4258f988 Frank van der Linden 2025-02-28  57  		cmr = &cma->ranges[r];
-c009da4258f988 Frank van der Linden 2025-02-28 @58  		bitmap_maxno = cma_bitmap_maxno(cma, cmr);
-c79147e4b02fa3 Yury Norov (NVIDIA   2025-07-19  59) 		for_each_clear_bitrange(start, end, cmr->bitmap, bitmap_maxno)
-2e32b947606daa Dmitry Safonov       2015-04-15  60  			maxchunk = max(end - start, maxchunk);
-2e32b947606daa Dmitry Safonov       2015-04-15  61  	}
-0ef7dcac998fef Mike Kravetz         2021-05-04  62  	spin_unlock_irq(&cma->lock);
-2e32b947606daa Dmitry Safonov       2015-04-15  63  	*val = (u64)maxchunk << cma->order_per_bit;
-2e32b947606daa Dmitry Safonov       2015-04-15  64  
-2e32b947606daa Dmitry Safonov       2015-04-15  65  	return 0;
-2e32b947606daa Dmitry Safonov       2015-04-15  66  }
-a9ea242a063c62 zhong jiang          2019-11-30  67  DEFINE_DEBUGFS_ATTRIBUTE(cma_maxchunk_fops, cma_maxchunk_get, NULL, "%llu\n");
-2e32b947606daa Dmitry Safonov       2015-04-15  68  
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  154  
+98aa19211ca8ab Leon Romanovsky      2025-06-17  155  dma_addr_t dma_map_phys(struct device *dev, phys_addr_t phys, size_t size,
+98aa19211ca8ab Leon Romanovsky      2025-06-17  156  		enum dma_data_direction dir, unsigned long attrs)
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  157  {
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  158  	const struct dma_map_ops *ops = get_dma_ops(dev);
+c332420ebc1822 Leon Romanovsky      2025-06-17  159  	bool is_mmio = attrs & DMA_ATTR_MMIO;
+19e1683200df53 Leon Romanovsky      2025-09-15 @160  	dma_addr_t addr = DMA_MAPPING_ERROR;
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  161  
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  162  	BUG_ON(!valid_dma_direction(dir));
+f959dcd6ddfd29 Thomas Tai           2020-09-17  163  
+f959dcd6ddfd29 Thomas Tai           2020-09-17  164  	if (WARN_ON_ONCE(!dev->dma_mask))
+f959dcd6ddfd29 Thomas Tai           2020-09-17  165  		return DMA_MAPPING_ERROR;
+f959dcd6ddfd29 Thomas Tai           2020-09-17  166  
+8d8d53cf8fd028 Alexey Kardashevskiy 2020-10-29  167  	if (dma_map_direct(dev, ops) ||
+c332420ebc1822 Leon Romanovsky      2025-06-17  168  	    (!is_mmio && arch_dma_map_phys_direct(dev, phys + size)))
+907f79a29dcbc1 Leon Romanovsky      2025-06-17  169  		addr = dma_direct_map_phys(dev, phys, size, dir, attrs);
+b5c58b2fdc427e Leon Romanovsky      2024-07-24  170  	else if (use_dma_iommu(dev))
+fe635b87c42ebd Leon Romanovsky      2025-06-17  171  		addr = iommu_dma_map_phys(dev, phys, size, dir, attrs);
+098e1e1eeeee44 Leon Romanovsky      2025-09-15  172  	else if (ops->map_phys)
+098e1e1eeeee44 Leon Romanovsky      2025-09-15  173  		addr = ops->map_phys(dev, phys, size, dir, attrs);
+c332420ebc1822 Leon Romanovsky      2025-06-17 @174  	}
+00730608c19fca Leon Romanovsky      2025-06-17  175  
+c332420ebc1822 Leon Romanovsky      2025-06-17  176  	if (!is_mmio)
+00730608c19fca Leon Romanovsky      2025-06-17  177  		kmsan_handle_dma(phys, size, dir);
+7d6250d472a5fb Leon Romanovsky      2025-06-17  178  	trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
+46758939d12150 Leon Romanovsky      2025-06-17  179  	debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  180  
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  181  	return addr;
+d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  182  }
+98aa19211ca8ab Leon Romanovsky      2025-06-17  183  EXPORT_SYMBOL_GPL(dma_map_phys);
+98aa19211ca8ab Leon Romanovsky      2025-06-17  184  
+
+:::::: The code at line 174 was first introduced by commit
+:::::: c332420ebc1822897e61cef6b9f361cde917dc21 dma-mapping: implement DMA_ATTR_MMIO for dma_(un)map_page_attrs()
+
+:::::: TO: Leon Romanovsky <leonro@nvidia.com>
+:::::: CC: Leon Romanovsky <leon@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
