@@ -1,156 +1,158 @@
-Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59F9280A56;
-	Tue, 16 Sep 2025 08:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6448299A84;
+	Tue, 16 Sep 2025 09:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758013139; cv=none; b=lwlSpGC7XDQMIfDOX9sLB6QiqnV+sBLp+fOE4pNaPbzvIZtMBqMAlIntPxI/pfx167+zd+we70676XQ6CvpkuTs1X2hW7gypfaFtCHgknjulfD/wbwugHbqVCtB9PVEL09A7jZTWEx149h7a1lPVwF6vq4scdQUabgZCe6eBpQY=
+	t=1758013424; cv=none; b=Q2rwZwQ9hFj96EBRl7z/vfxMsf21cN7uexDgsXXuT8q1wMhaBhYwBielQejL4Awu+3LslnXBrY/GiClrTXqFc9bJSyTxPOwIuSDL06cLrjLpB288c/Bpvdl/tJTvzXKlOMDUev4CP2rF1GL+T1ubpRWbZXxxawapwHjJ0MBHQ/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758013139; c=relaxed/simple;
-	bh=RDFVS/12vlPEvpAPazD0+caxnLwdBqgtuPi/RSkpkIE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=jHGPNkiRpIL4Cofn2PXWC5/gTijneB6X31P/fjW0SDcsqb3RTT6WwU/SN22+QQTkvhnP4mDkbTJ7VZ/gTrCR/hhDwQXdRiLc9RnYlIBuGuwKYlNYzcPKTSH5rNQnk5idt+hVNRN1kTNKvuQ0qM8J+1ZtsnI3/M08is7NIzshBcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=p/B+WJFJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kZSbvBvX; arc=none smtp.client-ip=202.12.124.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1758013424; c=relaxed/simple;
+	bh=MZwGrBHn7fPx6J7jWScTagGw2ALfjMRVbO4DtaIYdUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DdrDbeuwFEA1NdHs7XaMb8OZCEYhVOPPHQhKtPc6FFYGuXEh+xlQ+NXCb3VIM8k5cgP2PsoU0O5mc/Q1YNGaaDzaA3SdwkojTp/kw8pOXPvi+6RdoeNVt05kUZdAXMXoPSufqhxyjzWgbCZH46SCUSsV3T2yggkp6EKmqNbGlI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iL7oN6ib; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="p/B+WJFJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kZSbvBvX"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 5ED701300B79;
-	Tue, 16 Sep 2025 04:58:54 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Tue, 16 Sep 2025 04:58:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1758013134;
-	 x=1758020334; bh=9M1JEPa5y3WON6Gl+eiqRK9O7fk6z6pQgd71K0v19EU=; b=
-	p/B+WJFJ3zvsd0DyDuUadqyZnXAI6cYiqhiv6unBmCXntIE8psMAM6DfQy7CG4tu
-	dwuUTBcBHSAmSEokKeGyllqybSHONkBvptXBA49szippYTJiD18aJSwaXIGwCtNY
-	M4Vexja9gLMW6tG7GZSUPNj3XbnBGmnMLH8EJxrwOk1Pupiwv1Y8zd0I3brVRvq4
-	D9DwKD12EGhlSPUUQlTZtgs7UmYHav2Vee+sSpz2O3FkdqJ04sN2DYT0Fa261rdJ
-	zUCK8nQojIxcEGwn8mnKjGJLQ7OKURxhnaFzwYgYF5uPtmLhEztOEtqrDnlAIMa6
-	KsXxnW3BCtMxV2+qIVjtRw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758013134; x=
-	1758020334; bh=9M1JEPa5y3WON6Gl+eiqRK9O7fk6z6pQgd71K0v19EU=; b=k
-	ZSbvBvXbZuuI9RT3eGTsfHKByF+ZYaWJ2C56VraoQgu7pifGWWofVsbIIEVdktZD
-	Zgq9DAEqiHxGxdfMtJ+kR7aKKqn1sPCY8D596jXBIhNGyK/SBEeXdScxW0InqE6O
-	qrY5nRnQXuYODkZ3xzAIHdQT7dtovownRaXBEC5LhXtolsSjNT+UIzmLu3WT+1ie
-	x36JKxShesGDBx1YNAhv4/BnouYSGpy6XplG4rLes4MUUJXHfdacX4Qc+hwgSNTq
-	edzDF2TvkCrNunZbdVxobnKXzw5lWyp1YcjOcWz+B929Qbl+ty+UkBq+ymJtzfNC
-	L+YLd5TA9UfPFkMGA66Kg==
-X-ME-Sender: <xms:zCbJaEaLHcyIvWW6yAWebvipT0oeBmOpqiAOk2PxnEu8TuEJOpTtHQ>
-    <xme:zCbJaPZMM9QRAWhJwYx9hvmc0gwpjKOD1eLOaoGD2PqomqH5rQvWYoIzG3axry8pT
-    DOXKryxEXEd8GyNWIU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdegtdduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtoheptggrthgrlhhinh
-    drmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
-    ugesrghrmhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
-    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
-    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsg
-    hosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivghrshesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghird
-    gtohhm
-X-ME-Proxy: <xmx:zSbJaFqf1ylLAb5gbeCOgjC42fcc-bcdMn6ok2S1qEyqHza2sq_ESg>
-    <xmx:zSbJaKHheu5wueAQCpzv6yMqp8xGn9dh1VJoHL0vji4s96JlMLoipQ>
-    <xmx:zSbJaP6YqZyPZevTNB4oava3p0DgaX1jC7Tr_5cyKn-xfAkjAP_DDw>
-    <xmx:zSbJaABJudgqO6Fn60G_MknxnUxo0wlD6rpwQbgzC-V0LETDssng-A>
-    <xmx:zibJaGV2CuE5GYECVXMv7P9FR615dxHK3VuxLkHNVBVgrh4Vls-mjUw3>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E3F0B700069; Tue, 16 Sep 2025 04:58:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iL7oN6ib"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CFBC4CEEB;
+	Tue, 16 Sep 2025 09:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758013424;
+	bh=MZwGrBHn7fPx6J7jWScTagGw2ALfjMRVbO4DtaIYdUU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iL7oN6ibPnr6d7GQE8OAHny60zW/mzn/tDXnzQgFQR7+vf2SJVb4P4Pq5N2+VyJUG
+	 q7ANJyAG8L2AIho1rgjoEgGTOQJcmfJXQWpXocWsG+Q+e4sHI13OChBO2D2azFuFyu
+	 MlfXpicvnoSPlFkzfLAZK14fWTbrgOHxOyyYsM5qH/gWjyj+BDmKa2LBV0mXJxThxC
+	 hoFfQB1gsnY0bax6j42NeJNHVcN/fQsf72WZGC8iJFwJC4U2a8d4Lv3+1lQeUZzWhJ
+	 N0EtDzFu/OAo5+Wy/9GuV0qie36ilqZ1A4xlnZPNmvCLdSqERVsiMEWq+XUPC2bdYm
+	 8JOGBUzdFdIjQ==
+Date: Tue, 16 Sep 2025 11:03:41 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Chaoyi Chen <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 7/9] drm/bridge: remove drm_for_each_bridge_in_chain()
+Message-ID: <20250916-jade-seal-of-cleaning-5ee2bd@houat>
+References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
+ <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-7-edb6ee81edf1@bootlin.com>
+ <20250915-optimal-hornet-of-potency-efa54a@penduick>
+ <20250915175805.6e8df6ef@booty>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ApGCQqXJ7W6B
-Date: Tue, 16 Sep 2025 10:58:32 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Patrisious Haddad" <phaddad@nvidia.com>,
- "Nathan Chancellor" <nathan@kernel.org>, "Jason Gunthorpe" <jgg@nvidia.com>
-Cc: "Tariq Toukan" <tariqt@nvidia.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Saeed Mahameed" <saeedm@nvidia.com>,
- "Leon Romanovsky" <leon@kernel.org>, "Mark Bloch" <mbloch@nvidia.com>,
- "Sabrina Dubroca" <sd@queasysnail.net>, Netdev <netdev@vger.kernel.org>,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- "Gal Pressman" <gal@nvidia.com>, "Leon Romanovsky" <leonro@nvidia.com>,
- "Michael Guralnik" <michaelgur@nvidia.com>,
- "Moshe Shemesh" <moshe@nvidia.com>, "Will Deacon" <will@kernel.org>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
- "Justin Stitt" <justinstitt@google.com>, linux-s390@vger.kernel.org,
- llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
- "Bill Wendling" <morbo@google.com>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Salil Mehta" <salil.mehta@huawei.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
- "Yisen Zhuang" <yisen.zhuang@huawei.com>,
- "Leon Romanovsky" <leonro@mellanox.com>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
- "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Jijie Shao" <shaojijie@huawei.com>
-Message-Id: <9d4cd8d2-343e-4448-ab59-65e69728c850@app.fastmail.com>
-In-Reply-To: <d259ffa9-6c9e-488f-a64f-81025deba75c@nvidia.com>
-References: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
- <20250915221859.GB925462@ax162> <20250915222758.GC925462@ax162>
- <20250915224810.GM1024672@nvidia.com> <20250915231506.GA973819@ax162>
- <d259ffa9-6c9e-488f-a64f-81025deba75c@nvidia.com>
-Subject: Re: [PATCH net-next V2] net/mlx5: Improve write-combining test reliability for
- ARM64 Grace CPUs
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="j5gg2kqgg6e4zl3s"
+Content-Disposition: inline
+In-Reply-To: <20250915175805.6e8df6ef@booty>
+
+
+--j5gg2kqgg6e4zl3s
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 7/9] drm/bridge: remove drm_for_each_bridge_in_chain()
+MIME-Version: 1.0
 
-On Tue, Sep 16, 2025, at 10:39, Patrisious Haddad wrote:
-> On 9/16/2025 2:15 AM, Nathan Chancellor wrote:
->> External email: Use caution opening links or attachments
->
-> ifeq ($(ARCH),arm64)
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 CFLAGS_lib/neon_iowrite64_copy.o +=3D -ff=
-reestanding
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 CFLAGS_REMOVE_lib/neon_iowrite64_copy.o +=
-=3D -mgeneral-regs-only
-> endif
->
-> Which is actually equivalent to the diff you sent, Thanks for the=20
-> heads-up will fix and resend.
->
+On Mon, Sep 15, 2025 at 05:58:05PM +0200, Luca Ceresoli wrote:
+> On Mon, 15 Sep 2025 14:22:24 +0200
+> Maxime Ripard <mripard@kernel.org> wrote:
+> > On Fri, Aug 08, 2025 at 04:49:14PM +0200, Luca Ceresoli wrote:
+> > > All users have been replaced by drm_for_each_bridge_in_chain_scoped().
+> > >=20
+> > > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > > ---
+> > >  .clang-format            |  1 -
+> > >  include/drm/drm_bridge.h | 14 --------------
+> > >  2 files changed, 15 deletions(-)
+> > >=20
+> > > diff --git a/.clang-format b/.clang-format
+> > > index 1cac7d4976644c8f083f801e98f619782c2e23cc..d5c05db1a0d96476b711b=
+95912d2b82b2e780397 100644
+> > > --- a/.clang-format
+> > > +++ b/.clang-format
+> > > @@ -167,7 +167,6 @@ ForEachMacros:
+> > >    - 'drm_connector_for_each_possible_encoder'
+> > >    - 'drm_exec_for_each_locked_object'
+> > >    - 'drm_exec_for_each_locked_object_reverse'
+> > > -  - 'drm_for_each_bridge_in_chain'
+> > >    - 'drm_for_each_bridge_in_chain_scoped'
+> > >    - 'drm_for_each_connector_iter'
+> > >    - 'drm_for_each_crtc'
+> > > diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+> > > index a8e2f599aea764c705da3582df0ca428bb32f19c..6adf9221c2d462ec8e0e4=
+e281c97b39081b3da24 100644
+> > > --- a/include/drm/drm_bridge.h
+> > > +++ b/include/drm/drm_bridge.h
+> > > @@ -1358,20 +1358,6 @@ drm_bridge_chain_get_first_bridge(struct drm_e=
+ncoder *encoder)
+> > >  						       struct drm_bridge, chain_node));
+> > >  }
+> > > =20
+> > > -/**
+> > > - * drm_for_each_bridge_in_chain() - Iterate over all bridges present=
+ in a chain
+> > > - * @encoder: the encoder to iterate bridges on
+> > > - * @bridge: a bridge pointer updated to point to the current bridge =
+at each
+> > > - *	    iteration
+> > > - *
+> > > - * Iterate over all bridges present in the bridge chain attached to =
+@encoder.
+> > > - *
+> > > - * This is deprecated, do not use!
+> > > - * New drivers shall use drm_for_each_bridge_in_chain_scoped().
+> > > - */
+> > > -#define drm_for_each_bridge_in_chain(encoder, bridge)			\
+> > > -	list_for_each_entry(bridge, &(encoder)->bridge_chain, chain_node)
+> > > - =20
+> >=20
+> > I think I'd go a step further and rename
+> > drm_for_each_bridge_in_chain_scoped to drm_for_each_bridge_in_chain,
+> > there's no need to have a "scoped" variant if it's our only variant.
+> >=20
+> > It can be done in a subsequent patch though.
+>=20
+> Sure, that's the plan. There's a note in patch 3:
+>=20
+> Note 1: drm_for_each_bridge_in_chain_scoped() could be renamed removing t=
+he
+>         _scoped suffix after removing all the users of the current macro
+>         and eventually the current macro itself. Even though this series =
+is
+>         converting all users, I'd at least wait one kernel release before
+>         renaming, to minimize issues with existing patches which would fa=
+il
+>         building.
 
-I think it's better to handle this inside of the inline asm itself
-by adding
+No need to wait that long, and the best time to do it is right now
+actually, about the time we start collecting the patches for a new
+release.
 
-      ".arch_extension simd;\n\t"
+Maxime
 
-at the start of it.
+--j5gg2kqgg6e4zl3s
+Content-Type: application/pgp-signature; name="signature.asc"
 
-     Arnd
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaMkn4gAKCRAnX84Zoj2+
+diPbAYCE0rN0Hys4v3lgLLkZRuYYI0Gb8t/xeW3MGR8DoeSuRalFsZbza8OQj62I
+uKDA+8ABgMfMlLq3E2nNIB21uXhtaO+otkyU/nIntjQV4yQTEzi8wU1GnNHMU2H9
+nilJreknJg==
+=KvpI
+-----END PGP SIGNATURE-----
+
+--j5gg2kqgg6e4zl3s--
