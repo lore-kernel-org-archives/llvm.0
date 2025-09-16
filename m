@@ -1,116 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E945A23C51D;
-	Tue, 16 Sep 2025 08:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59F9280A56;
+	Tue, 16 Sep 2025 08:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758012582; cv=none; b=X+hvGa0nZ40vnTGg0GMOlaKqhBRU33npH43z8dBw89HNuPM7UDQFR7LmuhKayrrHzD6R5rgS5i9GI4N8ObHFff1KehkAFZTqhT1+GYfzwbcmGtfq7prSQrI7gykmzvTisYad3qhdSDMHtHG0VK4JIrxzM/ClLbBmvVN3b8MODYk=
+	t=1758013139; cv=none; b=lwlSpGC7XDQMIfDOX9sLB6QiqnV+sBLp+fOE4pNaPbzvIZtMBqMAlIntPxI/pfx167+zd+we70676XQ6CvpkuTs1X2hW7gypfaFtCHgknjulfD/wbwugHbqVCtB9PVEL09A7jZTWEx149h7a1lPVwF6vq4scdQUabgZCe6eBpQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758012582; c=relaxed/simple;
-	bh=XACujb/waoNFbdX5lO9KBlT7ea7U5VOdh7HZFWCOvL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OlgB9V3bqbgpeNqMBsrblTyjhu4scC4AQp0ieK3pNXywZI1nnYIzA48C4UW3/pe+hK4/ZsDdKkIhd5+IPl8SFYsYxIJL3koV05ITmPlukzOeiq7Uh0bmgs27GnjZJGQWlF7byKaCSyfi8frsitrupYbSgM61+TkdZjcWNjoKfF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AZHgWa1E; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758013139; c=relaxed/simple;
+	bh=RDFVS/12vlPEvpAPazD0+caxnLwdBqgtuPi/RSkpkIE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=jHGPNkiRpIL4Cofn2PXWC5/gTijneB6X31P/fjW0SDcsqb3RTT6WwU/SN22+QQTkvhnP4mDkbTJ7VZ/gTrCR/hhDwQXdRiLc9RnYlIBuGuwKYlNYzcPKTSH5rNQnk5idt+hVNRN1kTNKvuQ0qM8J+1ZtsnI3/M08is7NIzshBcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=p/B+WJFJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kZSbvBvX; arc=none smtp.client-ip=202.12.124.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AZHgWa1E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758012580; x=1789548580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XACujb/waoNFbdX5lO9KBlT7ea7U5VOdh7HZFWCOvL4=;
-  b=AZHgWa1EXq4i6Nf9aiHqx5JyBPlJv5b7bYEorUlzlQAik5EOnRZnKaY2
-   znA9NSO2r8Eejxx5WZXbdYan7753rXOYI821fgg7WqjN6uLa85EzZ4KkW
-   wNhvjqrpk69mcFFeWTPfsOAKVC7a0aoVZuNlbXc+FcVsMSkVCHPSqvTEj
-   SJTwdXYO1pRbve0aLe4UFvX9dYXDS2zo504xfdlUHMspcLNtTnNKLMX3n
-   /yR0aZDJnLK75cCB4Xrk8U1LXZq7RvG/XS9YMbP+AUWxlxWLgUDy052rH
-   d3F0Su/10r7xVKlG/2hgJGULL1mspb9QWnmL9Cukpj5cHGC7E/pT1Vuud
-   A==;
-X-CSE-ConnectionGUID: dKrIJU9pQParIs4f9rFTKA==
-X-CSE-MsgGUID: BlqgsfqqR6ur5YpCsYyBqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64091774"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64091774"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 01:49:39 -0700
-X-CSE-ConnectionGUID: iMcBTyxSTY+AF/kGEVSfKQ==
-X-CSE-MsgGUID: wtHeKtfCR6+LKmTF7+B/RQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,268,1751266800"; 
-   d="scan'208";a="180131267"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 16 Sep 2025 01:49:37 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uyRNW-00007R-2l;
-	Tue, 16 Sep 2025 08:49:34 +0000
-Date: Tue, 16 Sep 2025 16:48:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Amir Goldstein <amir73il@gmail.com>,
-	buildfailureaftermergeofthevfstree@sirena.org.uk,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure in the vfs tree
-Message-ID: <202509161649.GzVNYeqs-lkp@intel.com>
-References: <aMhzi0WpakpN7oH5@sirena.org.uk>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="p/B+WJFJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kZSbvBvX"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id 5ED701300B79;
+	Tue, 16 Sep 2025 04:58:54 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 16 Sep 2025 04:58:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1758013134;
+	 x=1758020334; bh=9M1JEPa5y3WON6Gl+eiqRK9O7fk6z6pQgd71K0v19EU=; b=
+	p/B+WJFJ3zvsd0DyDuUadqyZnXAI6cYiqhiv6unBmCXntIE8psMAM6DfQy7CG4tu
+	dwuUTBcBHSAmSEokKeGyllqybSHONkBvptXBA49szippYTJiD18aJSwaXIGwCtNY
+	M4Vexja9gLMW6tG7GZSUPNj3XbnBGmnMLH8EJxrwOk1Pupiwv1Y8zd0I3brVRvq4
+	D9DwKD12EGhlSPUUQlTZtgs7UmYHav2Vee+sSpz2O3FkdqJ04sN2DYT0Fa261rdJ
+	zUCK8nQojIxcEGwn8mnKjGJLQ7OKURxhnaFzwYgYF5uPtmLhEztOEtqrDnlAIMa6
+	KsXxnW3BCtMxV2+qIVjtRw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758013134; x=
+	1758020334; bh=9M1JEPa5y3WON6Gl+eiqRK9O7fk6z6pQgd71K0v19EU=; b=k
+	ZSbvBvXbZuuI9RT3eGTsfHKByF+ZYaWJ2C56VraoQgu7pifGWWofVsbIIEVdktZD
+	Zgq9DAEqiHxGxdfMtJ+kR7aKKqn1sPCY8D596jXBIhNGyK/SBEeXdScxW0InqE6O
+	qrY5nRnQXuYODkZ3xzAIHdQT7dtovownRaXBEC5LhXtolsSjNT+UIzmLu3WT+1ie
+	x36JKxShesGDBx1YNAhv4/BnouYSGpy6XplG4rLes4MUUJXHfdacX4Qc+hwgSNTq
+	edzDF2TvkCrNunZbdVxobnKXzw5lWyp1YcjOcWz+B929Qbl+ty+UkBq+ymJtzfNC
+	L+YLd5TA9UfPFkMGA66Kg==
+X-ME-Sender: <xms:zCbJaEaLHcyIvWW6yAWebvipT0oeBmOpqiAOk2PxnEu8TuEJOpTtHQ>
+    <xme:zCbJaPZMM9QRAWhJwYx9hvmc0gwpjKOD1eLOaoGD2PqomqH5rQvWYoIzG3axry8pT
+    DOXKryxEXEd8GyNWIU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdegtdduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtoheptggrthgrlhhinh
+    drmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
+    ugesrghrmhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
+    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsg
+    hosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivghrshesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghird
+    gtohhm
+X-ME-Proxy: <xmx:zSbJaFqf1ylLAb5gbeCOgjC42fcc-bcdMn6ok2S1qEyqHza2sq_ESg>
+    <xmx:zSbJaKHheu5wueAQCpzv6yMqp8xGn9dh1VJoHL0vji4s96JlMLoipQ>
+    <xmx:zSbJaP6YqZyPZevTNB4oava3p0DgaX1jC7Tr_5cyKn-xfAkjAP_DDw>
+    <xmx:zSbJaABJudgqO6Fn60G_MknxnUxo0wlD6rpwQbgzC-V0LETDssng-A>
+    <xmx:zibJaGV2CuE5GYECVXMv7P9FR615dxHK3VuxLkHNVBVgrh4Vls-mjUw3>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E3F0B700069; Tue, 16 Sep 2025 04:58:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMhzi0WpakpN7oH5@sirena.org.uk>
+X-ThreadId: ApGCQqXJ7W6B
+Date: Tue, 16 Sep 2025 10:58:32 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Patrisious Haddad" <phaddad@nvidia.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Jason Gunthorpe" <jgg@nvidia.com>
+Cc: "Tariq Toukan" <tariqt@nvidia.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Leon Romanovsky" <leon@kernel.org>, "Mark Bloch" <mbloch@nvidia.com>,
+ "Sabrina Dubroca" <sd@queasysnail.net>, Netdev <netdev@vger.kernel.org>,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Gal Pressman" <gal@nvidia.com>, "Leon Romanovsky" <leonro@nvidia.com>,
+ "Michael Guralnik" <michaelgur@nvidia.com>,
+ "Moshe Shemesh" <moshe@nvidia.com>, "Will Deacon" <will@kernel.org>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Justin Stitt" <justinstitt@google.com>, linux-s390@vger.kernel.org,
+ llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Salil Mehta" <salil.mehta@huawei.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
+ "Yisen Zhuang" <yisen.zhuang@huawei.com>,
+ "Leon Romanovsky" <leonro@mellanox.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Jijie Shao" <shaojijie@huawei.com>
+Message-Id: <9d4cd8d2-343e-4448-ab59-65e69728c850@app.fastmail.com>
+In-Reply-To: <d259ffa9-6c9e-488f-a64f-81025deba75c@nvidia.com>
+References: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
+ <20250915221859.GB925462@ax162> <20250915222758.GC925462@ax162>
+ <20250915224810.GM1024672@nvidia.com> <20250915231506.GA973819@ax162>
+ <d259ffa9-6c9e-488f-a64f-81025deba75c@nvidia.com>
+Subject: Re: [PATCH net-next V2] net/mlx5: Improve write-combining test reliability for
+ ARM64 Grace CPUs
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+On Tue, Sep 16, 2025, at 10:39, Patrisious Haddad wrote:
+> On 9/16/2025 2:15 AM, Nathan Chancellor wrote:
+>> External email: Use caution opening links or attachments
+>
+> ifeq ($(ARCH),arm64)
+>  =C2=A0 =C2=A0 =C2=A0 =C2=A0 CFLAGS_lib/neon_iowrite64_copy.o +=3D -ff=
+reestanding
+>  =C2=A0 =C2=A0 =C2=A0 =C2=A0 CFLAGS_REMOVE_lib/neon_iowrite64_copy.o +=
+=3D -mgeneral-regs-only
+> endif
+>
+> Which is actually equivalent to the diff you sent, Thanks for the=20
+> heads-up will fix and resend.
+>
 
-kernel test robot noticed the following build errors:
+I think it's better to handle this inside of the inline asm itself
+by adding
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[cannot apply to linus/master v6.17-rc6 next-20250915]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+      ".arch_extension simd;\n\t"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Brown/linux-next-build-failure-in-the-vfs-tree/20250916-041652
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/aMhzi0WpakpN7oH5%40sirena.org.uk
-patch subject: linux-next: build failure in the vfs tree
-config: hexagon-randconfig-002-20250916 (https://download.01.org/0day-ci/archive/20250916/202509161649.GzVNYeqs-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 65ad21d730d25789454d18e811f8ff5db79cb5d4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250916/202509161649.GzVNYeqs-lkp@intel.com/reproduce)
+at the start of it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509161649.GzVNYeqs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/nsfs.c:582:11: error: incompatible function pointer types initializing 'struct file *(*)(struct path *, unsigned int)' with an expression of type 'struct file *(const struct path *, unsigned int)' [-Wincompatible-function-pointer-types]
-     582 |         .open           = nsfs_export_open,
-         |                           ^~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +582 fs/nsfs.c
-
-06c4ff965e95b0b Christian Brauner 2025-09-12  578  
-06c4ff965e95b0b Christian Brauner 2025-09-12  579  static const struct export_operations nsfs_export_operations = {
-06c4ff965e95b0b Christian Brauner 2025-09-12  580  	.encode_fh	= nsfs_encode_fh,
-06c4ff965e95b0b Christian Brauner 2025-09-12  581  	.fh_to_dentry	= nsfs_fh_to_dentry,
-06c4ff965e95b0b Christian Brauner 2025-09-12 @582  	.open		= nsfs_export_open,
-06c4ff965e95b0b Christian Brauner 2025-09-12  583  	.permission	= nsfs_export_permission,
-06c4ff965e95b0b Christian Brauner 2025-09-12  584  };
-06c4ff965e95b0b Christian Brauner 2025-09-12  585  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     Arnd
