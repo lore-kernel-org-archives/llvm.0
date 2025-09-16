@@ -1,49 +1,49 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11255BA4A
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A371BA4A
+	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758050340; cv=none; b=OQMAFGz829b3iINI1JylWgQyUMZ21GrwdjzT4HJ7CVrYBAyiFXVGovbgGj95m8c0DX+lnxVYl1n9LqgL10pZM36KbMoo8qJnU2wX1LOHSNevMUt7r//ytdhG8fAsFzuM+sJnLihJlK/wCVa3TBu2HkgZQBXufNP3ShQXs/ZNos0=
+	t=1758050345; cv=none; b=T1FrnkJip6ZLRBgeBgpai0c4W2rGgYclcf8cotWTTloZjKVGpPQjzdbOo8kKEHFqFGhICU26lJEzzzXXa+UKjjbPtbgZmWSOZl0hjCIho/wmi2GkmKOOV9bzUAjv04tbn/qql+QszuDQSLHlEYVyvHcGjyAXzShPNDBjh3mWK5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758050340; c=relaxed/simple;
-	bh=HWBI/G2GZVvMuHHvb9jP/d382omomNx5HReBmMVCnjY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jFBqbRDm/8N3qZos0Kud2tehreFD6gunw86v6L05Z35Vv0jmurHBAzTNunqSsr234XMt3QutIXS2qf3a/C789avwy11zz+fhV1jUK2SF8N7k17HH6y8fQHV7BWY4vuPSBbrkV8cOvjAAMfPXVztWezwh0VYU1NmA8bctyJdN9Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G5IiMg+7; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1758050345; c=relaxed/simple;
+	bh=s48TZ2UupWF6TW8Z2Yz0vYScSmB0ilc07X8sw68JJHk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=m+MIA2Ec7hp71j7DbggglKKEy9ELIKNNEnsP4RB8B9ACtT6fkC8BHrAJujOnv2bse3R4Xd9D3HoquQesXC/bPnpA7a/Y/JpS5JQLpuw0RTrA6U9Cflr3gVwIk1NX8y9IgcWcE9fViMxEK2D1gHJGFAy+K+a7idVKxfuTedA+TGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L1Wq4UYh; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G5IiMg+7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L1Wq4UYh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758050338;
+	s=mimecast20190719; t=1758050343;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=y7zQxRSSgBg9a1Uz6pN/I8s6Ln8kifQktqnWwARgYpQ=;
-	b=G5IiMg+7MdiWOZoKw5P7PCOYo6wn3eDmwHAImCuloYt67h2EBVU8CktPuzDEshyc0YBgCd
-	4KqgDRvwCzDCtPFk3YOTl/JwKHz1qyJSpYI6v23SSiMccX3jfPUUMCo5MKSbiZ7EQogttm
-	S2UZcaQPyHsmM1w/jDk0j7uk7nzQWao=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=C8/AGWcwUcePPq1SO+hhrQQKmVwKKhbEujmUbwufkEg=;
+	b=L1Wq4UYhX2O67QB/MB81al4lkwals/qJJJtJ1X24/QQ+uvXKcnZmEzVQJjGdl5WqM8yKf0
+	kznL7Ig/qFslmZ4agEvWBtWahoTjJJh7jdkRxeahHlxOnxQuqx/m/CgAVpRI/WIskVSu2X
+	K1S5DDk+AAPK+FleL3a78IEFUvi2qq0=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-121-ZLNT7R9qN5WxJhIXjjWbPA-1; Tue,
- 16 Sep 2025 15:18:56 -0400
-X-MC-Unique: ZLNT7R9qN5WxJhIXjjWbPA-1
-X-Mimecast-MFC-AGG-ID: ZLNT7R9qN5WxJhIXjjWbPA_1758050336
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-343-bA3Ts6HhMKCryMtEVS6aOw-1; Tue,
+ 16 Sep 2025 15:19:01 -0400
+X-MC-Unique: bA3Ts6HhMKCryMtEVS6aOw-1
+X-Mimecast-MFC-AGG-ID: bA3Ts6HhMKCryMtEVS6aOw_1758050341
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 282F7180028C
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:18:56 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11B3419560AB
+	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 19:19:01 +0000 (UTC)
 Received: from [172.20.100.178] (unknown [10.30.44.68])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 75E99300018D;
-	Tue, 16 Sep 2025 19:18:55 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AFB5F30001A4;
+	Tue, 16 Sep 2025 19:19:00 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 60 of 137): Test report for master
- (6.16.0-0, upstream-mainline, 806381e1)
-Date: Tue, 16 Sep 2025 19:18:55 -0000
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 68 of 137): Test report for master
+ (6.16.0-0, upstream-mainline, e991acf1)
+Date: Tue, 16 Sep 2025 19:19:00 -0000
 To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,9 +52,9 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <67278.125091615185603029@us-mta-121.us.mimecast.lan>
+Message-Id: <19936.125091615190101471@us-mta-343.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: GjNTjFzFXBjyvkHTtAlhIJeRRUTWvzhUcuEI25we_8k_1758050336
+X-Mimecast-MFC-PROC-ID: u_VWT7n_HJRtzb-VatSJsUfIT9ZJ4yRBcdLnNVdc_2U_1758050341
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -68,30 +68,37 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'powerpc-6.17-2' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/powerpc/linux
+    Commit message: Merge tag 'mm-nonmm-stable-2025-08-03-12-47' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1963834484
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1963746893
 
 One or more kernel tests failed:
     Unrecognized or new issues:
         Boot test
-             aarch64
+              x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1963834484_aarch64_kernel_kcidb_tool_19282525_6
+redhat:1963746893_x86_64_kernel-debug_kcidb_tool_19286035_6
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
 heck
         Reboot test
-             aarch64
+              x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1963834484_aarch64_kernel_kcidb_tool_19282525_10
+redhat:1963746893_x86_64_kernel-debug_kcidb_tool_19286035_10
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: [cki] [tests] unblocking setup-task failures (SELinux Custom=
+ Module Setup|CKI/restraint|machineinfo|setup-nfsdump)
+            URL: https://gitlab.com/cki-project/infrastructure/-/issues/777
+            Affected tests:
+                /test/misc/machineinfo [aarch64]
+                CKI/restraint [aarch64]
+                SELinux Custom Module Setup [aarch64]
         Issue: [net] [kselftests upstream] catch all failures
             URL: https://issues.redhat.com/browse/RHELTEST-1362
             Affected tests:
@@ -108,7 +115,7 @@ Tests that were not ran because of internal issues:
     CKI/restraint [aarch64, ppc64le, s390x, x86_64]
     Reboot test [aarch64, ppc64le, s390x, x86_64]
     SELinux Custom Module Setup [aarch64, ppc64le, s390x, x86_64]
-    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x]
+    selinux-policy: serge-testsuite [aarch64, ppc64le, s390x, x86_64]
     Storage - blktests - throtl [s390x]
     Storage - blktests - ublk [s390x]
     stress: stress-ng - cpu-cache [s390x]
