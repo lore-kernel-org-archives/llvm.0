@@ -1,153 +1,145 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3104721CA0D
-	for <llvm@lists.linux.dev>; Tue, 16 Sep 2025 13:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878B92C2AA2;
+	Tue, 16 Sep 2025 13:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758028743; cv=none; b=qKFNcxXmSLZxGIJvRRBeHQJGY0EPkWGdrRwCi1z+jZ7WcjM4o5n1UtTZQDxb9h1AbSGJi/cgpueGIYEwp2NcH9JrhR/W4PLbasUOijwmh9ZfQmtxHkv7vnnoxqJxwtYOK23TvlYETRju18dk4m+D1pRul2nDMoad/HalA+3B1eM=
+	t=1758028777; cv=none; b=eHrdaZsdy001Lipn1jQhuJlJPGHhn6ml7BgihCcqUo9yVHgsLvqcPpXTqMmGNIjMA7gt0NO6hfS6vk0J7lsvpiBzo9vTLU7bAQp3olyo7EvXg+yYCUEbYWpvJLch9jkUgsfpHqohzXvUoGjvg0xblQE5I60ZforQkKKKR5rit0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758028743; c=relaxed/simple;
-	bh=BkuQcbeHhp5ZKWXkLnecpeDwwZi8XUXwuZXJn+ZkKXU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cOQ90DBcZXgCF+OD9tfie61ery7KfXG5YhYjuuDzdZSkLCVe6bctI0Ni4LoRrCy3Y7TnXDPfF/NbuGNRjqeyBrn/DtKb9vMLj7mXUoF6CpoIjCbV/6W1KmK5MkNA1YqZX5NwBaaY/mK5JMw3SphvSTDOt+LsQ0cUEY07JMiylLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dyKVxWHh; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1758028777; c=relaxed/simple;
+	bh=GCqjILCeKyNT+/Gxo+qzeEjfs57+lZtCCEoAb15K/7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Ih8SviGKnZCRWCOR2YaqzDisYM+69+rriYbwF5MiUwQX7vzOYqT8/XHe4vMlGzaHrWIFbnPfWgP3dRw+vqzncy8PtrX5Kc2v3tbDjU2kvI2PV8b+ErqJ80fKGc/CY9Y3BLVQX1xZAOnHDvg9/MXPX4T/pBnc5m3vSqREiHm/AN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ybxI+xpW; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dyKVxWHh"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 48D3C4E40C41;
-	Tue, 16 Sep 2025 13:18:59 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 14D266061E;
-	Tue, 16 Sep 2025 13:18:59 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5A876102F16EE;
-	Tue, 16 Sep 2025 15:18:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758028736; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=hZcaro1fx4n72AQLpyGPBESFnCpWzT17H3DCwpOtEXY=;
-	b=dyKVxWHhl1Wixgqwi8S7OiryNCQU1TDd+uXP4raQu5n+kHknr09kNi/wdrZhP3POIhT5Xu
-	81QbBGI35IaD1yniNOt7joSVlo/tm+f/LaqWpO6UF1RpLv10aeyhrRX475H/5xNnrYpCen
-	+VB04xiHy5vDEjrlsUT5I9tmgoeHf6Y9ZKmeUT9sX4Gd1uWfrXrRHCT28aO0TDPzEI+Mfb
-	PvGwCY3x+14g42leiaLh8nb3WQwyrHkjZ+/A8SkQIMAoM00AgjIlkccIARhXCIxHS8Y0HI
-	tmhRbqMw45zAjSTW8u3zfDp/XSVV7hhBSGn+O+SxwyIJDgOxGCNfeZIbMKg6HQ==
-Date: Tue, 16 Sep 2025 15:18:35 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Dmitry Baryshkov
- <dmitry.baryshkov@oss.qualcomm.com>, Chaoyi Chen
- <chaoyi.chen@rock-chips.com>, Hui Pu <Hui.Pu@gehealthcare.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 7/9] drm/bridge: remove
- drm_for_each_bridge_in_chain()
-Message-ID: <20250916151835.0c0d2e7b@booty>
-In-Reply-To: <20250916-jade-seal-of-cleaning-5ee2bd@houat>
-References: <20250808-drm-bridge-alloc-getput-for_each_bridge-v2-0-edb6ee81edf1@bootlin.com>
-	<20250808-drm-bridge-alloc-getput-for_each_bridge-v2-7-edb6ee81edf1@bootlin.com>
-	<20250915-optimal-hornet-of-potency-efa54a@penduick>
-	<20250915175805.6e8df6ef@booty>
-	<20250916-jade-seal-of-cleaning-5ee2bd@houat>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ybxI+xpW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1758028775; x=1789564775;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GCqjILCeKyNT+/Gxo+qzeEjfs57+lZtCCEoAb15K/7Q=;
+  b=ybxI+xpW9lD5nmPqkFk52cvYGt5usqRZOJrZwrv8tudvOV/RpVyFlPpH
+   TrNhJGwshIgZqF/v8OzVfk3LxkGEXABXnWQ2cqajjorJ5YM37EtURTBxW
+   bZiJOBx4X2SFb/R49uCmKezytPV78dM5+EqK/KHQXB/chUzwrJ3ESQsTT
+   cFJReoIxA4H8RbMA73+70HWJge14ZXtA9VtdApJc+lVqXT+mFj/kxWemF
+   D482oxle5hU0lfhmuzR77mMFFP/11do/ZVLxtn9EjXSDvet2WuXeTtBJy
+   r0kB85ONcq1CJQlxcxWYbDP4J31uxd8pHNa3G0kdAysn7kCxc+WI+kS8g
+   w==;
+X-CSE-ConnectionGUID: V/byoQjpSTeHg7RE9/pKtQ==
+X-CSE-MsgGUID: IY9Gcb90RGOMWsNzTufLXQ==
+X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
+   d="scan'208";a="52399102"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2025 06:19:28 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Tue, 16 Sep 2025 06:19:15 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Tue, 16 Sep 2025 06:19:12 -0700
+Message-ID: <0695ca65-536c-48d9-ad1b-49452e67a6f9@microchip.com>
+Date: Tue, 16 Sep 2025 15:19:11 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL] ARM: microchip: clk for 6.18 #1
+To: <sboyd@kernel.org>, <mturquette@baylibre.com>,
+	<linux-clk@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, SoC Team
+	<soc@kernel.org>
+CC: Linux Kernel list <linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Conor Dooley <conor@kernel.org>, Claudiu
+ Beznea <claudiu.beznea@tuxon.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<llvm@lists.linux.dev>, kbuild test robot <lkp@intel.com>
+References: <20250916080545.9310-1-nicolas.ferre@microchip.com>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-US, fr
+Organization: microchip
+In-Reply-To: <20250916080545.9310-1-nicolas.ferre@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, 16 Sep 2025 11:03:41 +0200
-Maxime Ripard <mripard@kernel.org> wrote:
-
-> On Mon, Sep 15, 2025 at 05:58:05PM +0200, Luca Ceresoli wrote:
-> > On Mon, 15 Sep 2025 14:22:24 +0200
-> > Maxime Ripard <mripard@kernel.org> wrote:  
-> > > On Fri, Aug 08, 2025 at 04:49:14PM +0200, Luca Ceresoli wrote:  
-> > > > All users have been replaced by drm_for_each_bridge_in_chain_scoped().
-> > > > 
-> > > > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > > > ---
-> > > >  .clang-format            |  1 -
-> > > >  include/drm/drm_bridge.h | 14 --------------
-> > > >  2 files changed, 15 deletions(-)
-> > > > 
-> > > > diff --git a/.clang-format b/.clang-format
-> > > > index 1cac7d4976644c8f083f801e98f619782c2e23cc..d5c05db1a0d96476b711b95912d2b82b2e780397 100644
-> > > > --- a/.clang-format
-> > > > +++ b/.clang-format
-> > > > @@ -167,7 +167,6 @@ ForEachMacros:
-> > > >    - 'drm_connector_for_each_possible_encoder'
-> > > >    - 'drm_exec_for_each_locked_object'
-> > > >    - 'drm_exec_for_each_locked_object_reverse'
-> > > > -  - 'drm_for_each_bridge_in_chain'
-> > > >    - 'drm_for_each_bridge_in_chain_scoped'
-> > > >    - 'drm_for_each_connector_iter'
-> > > >    - 'drm_for_each_crtc'
-> > > > diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-> > > > index a8e2f599aea764c705da3582df0ca428bb32f19c..6adf9221c2d462ec8e0e4e281c97b39081b3da24 100644
-> > > > --- a/include/drm/drm_bridge.h
-> > > > +++ b/include/drm/drm_bridge.h
-> > > > @@ -1358,20 +1358,6 @@ drm_bridge_chain_get_first_bridge(struct drm_encoder *encoder)
-> > > >  						       struct drm_bridge, chain_node));
-> > > >  }
-> > > >  
-> > > > -/**
-> > > > - * drm_for_each_bridge_in_chain() - Iterate over all bridges present in a chain
-> > > > - * @encoder: the encoder to iterate bridges on
-> > > > - * @bridge: a bridge pointer updated to point to the current bridge at each
-> > > > - *	    iteration
-> > > > - *
-> > > > - * Iterate over all bridges present in the bridge chain attached to @encoder.
-> > > > - *
-> > > > - * This is deprecated, do not use!
-> > > > - * New drivers shall use drm_for_each_bridge_in_chain_scoped().
-> > > > - */
-> > > > -#define drm_for_each_bridge_in_chain(encoder, bridge)			\
-> > > > -	list_for_each_entry(bridge, &(encoder)->bridge_chain, chain_node)
-> > > > -    
-> > > 
-> > > I think I'd go a step further and rename
-> > > drm_for_each_bridge_in_chain_scoped to drm_for_each_bridge_in_chain,
-> > > there's no need to have a "scoped" variant if it's our only variant.
-> > > 
-> > > It can be done in a subsequent patch though.  
-> > 
-> > Sure, that's the plan. There's a note in patch 3:
-> > 
-> > Note 1: drm_for_each_bridge_in_chain_scoped() could be renamed removing the
-> >         _scoped suffix after removing all the users of the current macro
-> >         and eventually the current macro itself. Even though this series is
-> >         converting all users, I'd at least wait one kernel release before
-> >         renaming, to minimize issues with existing patches which would fail
-> >         building.  
+On 16/09/2025 at 10:05, nicolas.ferre@microchip.com wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
 > 
-> No need to wait that long, and the best time to do it is right now
-> actually, about the time we start collecting the patches for a new
-> release.
+> Dear clock maintainers,
+> 
+> Here are the first clk changes for 6.18.
+> I don't think they have conflict with changes for the deprecated round_rate()
+> to determine_rate() topic.
+> They are in linux-next for a couple of days.
 
-Ah, thanks, good to know!
+But... this series depends on this patch:
+https://lore.kernel.org/r/20250827145427.46819-4-nicolas.ferre@microchip.com
 
-Applied, but 'b4 ty' does not behave so no automatic notification email
-at this time, sorry.
+Which will be part of a pull-request to-be-sent soon to arm-soc (which 
+is part of linux-next, so the build error doesn't appear there).
 
-Luca
+Once the pull-request is done, do you prefer that I do an immutable 
+branch between CLK and ARM, that I queue this at91 PM patch into the clk 
+pull-request or that everything goes through arm-soc?
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks to the kbuild test bot.
+Regards,
+   Nicolas
+
+> Please pull. Thanks, best regards,
+>    Nicolas
+> 
+> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+> 
+>    Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-microchip-6.18
+> 
+> for you to fetch changes up to e3130c2a9a0c8e549e044e659be6f762a1b1f725:
+> 
+>    ARM: at91: remove default values for PMC_PLL_ACR (2025-09-15 16:24:25 +0200)
+> 
+> ----------------------------------------------------------------
+> Microchip clock updates for v6.18
+> 
+> This update includes:
+> - add one clock for sam9x75
+> - new meaning for MCR register field in clk-master
+> - use force-write to PLL update register to ensure
+>    reliable programming sequence
+> - update Analog Control Register (ACR) management to accommodate
+>    differences across SoCs
+> 
+> ----------------------------------------------------------------
+> Balamanikandan Gunasundar (1):
+>        clk: at91: sam9x7: Add peripheral clock id for pmecc
+> 
+> Cristian Birsan (2):
+>        clk: at91: add ACR in all PLL settings
+>        ARM: at91: remove default values for PMC_PLL_ACR
+> 
+> Nicolas Ferre (1):
+>        clk: at91: clk-sam9x60-pll: force write to PLL_UPDT register
+> 
+> Ryan Wanner (1):
+>        clk: at91: clk-master: Add check for divide by 3
+> 
+>   drivers/clk/at91/clk-master.c      |  3 ++
+>   drivers/clk/at91/clk-sam9x60-pll.c | 82 +++++++++++++++++------------------
+>   drivers/clk/at91/pmc.h             |  1 +
+>   drivers/clk/at91/sam9x60.c         |  2 +
+>   drivers/clk/at91/sam9x7.c          |  6 +++
+>   drivers/clk/at91/sama7d65.c        |  4 ++
+>   drivers/clk/at91/sama7g5.c         |  2 +
+>   include/linux/clk/at91_pmc.h       |  2 -
+>   8 files changed, 59 insertions(+), 43 deletions(-)
+> 
