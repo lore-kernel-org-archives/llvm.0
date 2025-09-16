@@ -1,58 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A168A2DD60F;
-	Tue, 16 Sep 2025 20:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F05732B4BE;
+	Tue, 16 Sep 2025 20:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758053996; cv=none; b=pslhdtZswkNsfeogJCnucsZdkZBOSA7Hl2DknUao0pKkiCXbeXNEud9Ji/Y1nUAuW5TmR2LP7lXih94LwfQ1O8JUKfr8/ZlG1nObQtch4Mn6GQ3+X7XR/anbf3i/2vvAhwCiCiYOonurYyq7IGILDiLtSkU7YNEFuoLjs16s+co=
+	t=1758054596; cv=none; b=jldef0JVfIWFH/JkJmf/dpjCHxHvKrq4ap6xA9oxwltVljGYbXY8yX7sbUDrlYGSijKC5BtObzfgjDUfhs1pv3WHc712+Kw6Wsd7855RkmC4ugpcP5eLw+w9By/GVuRWsrBRt/z1kAnAJX0Lji2ux2XPveHsl+BRg6egOdLgtkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758053996; c=relaxed/simple;
-	bh=QRyrY3mZglOsp3cknKA9nwk8NNGbN1ybYI28G5fU28w=;
+	s=arc-20240116; t=1758054596; c=relaxed/simple;
+	bh=epoftPhmDK1NPqyrMdLb5nHKUl46cjDtb9Chef5znsM=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UtuPPcsIG2Gi/OYPslanOSGigUl9os4mUrgiee3fgDFU7vqdieweue4eD3Kq+BOq6rP2BEDAg0vwVFpvSQZKixWahLojtj4DV4+aZvoryh96yRfN61F08x8+JN7Eo/ioYWx9zJmAb39cMQzvBJjSAe6JEbcTg+pHwsZE4yB4HMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m1RZaIcv; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=Hexs9jCsHGgf5zJBRjGV+2ES4vUcKiivSPpxOT+e8K4vEruQhYZIM8KneHNGymXHHZxQRFtrD/jWgTeQqoOUHQeVpdIiioHdDZhmfRLcgJlF37VaAx5EEOHbMpfTPQNpPkF4FFJBGQRAKOCMYCxAwAwM3VenK/9eyUfNxYKvHTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bG7wRiVi; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m1RZaIcv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bG7wRiVi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758053995; x=1789589995;
+  t=1758054594; x=1789590594;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QRyrY3mZglOsp3cknKA9nwk8NNGbN1ybYI28G5fU28w=;
-  b=m1RZaIcv1JWB5fkFyrjpleXEDlqReQS8u5uj6do6L9ESEcOq9hTkX43+
-   N/2JdFOgB4Vtu//UbFLnZQX5LN1kKpkM6bfcu0qXuCE8J3iXdh7KhzzoD
-   jqrj4i9hUZKoUfyRQaYPAxJk4NSjQ90edUy08JqTe5FezYiJxC7igYZH+
-   mlT9FWUx1CB/XpPLYr8mI/bAGQWIM8VXa6n6IezCm1rqMPTu8BcEmwDtB
-   /ifHwgfJGEWW1Flgxc3uuHVjIXWwsVE65oXsZPAHZtXrZFTTqpL2nJiAU
-   yVuCD2SIuWzRjxT9z7Iij77rssF+bF9Y2BAIWzFw4mfzaNvzQelWeuBpJ
-   A==;
-X-CSE-ConnectionGUID: +w6oIlN/SOm4izuA74RIEQ==
-X-CSE-MsgGUID: hixp3HFWTb2RjPXjZFsIDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11555"; a="64167523"
-X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
-   d="scan'208";a="64167523"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 13:19:52 -0700
-X-CSE-ConnectionGUID: OHXcJtZWRfqsZnfknOl3fQ==
-X-CSE-MsgGUID: CJEt3bBxQxaBRNTVbVaBZA==
+  bh=epoftPhmDK1NPqyrMdLb5nHKUl46cjDtb9Chef5znsM=;
+  b=bG7wRiViSKFBqnaZfcSrOfj9rttkrhOo/9eW23Ygj94mschn0meHWy7D
+   Jq7ZtFTgD6cSbW5pnKHx5BJX/+RGoKalGz5HNUvk6BMFHIkeV4US5AwYq
+   m6TAe8I9oCdfQKvZsnsEc3LsaeBSi9Rnlc3r7SUJQa9ciYTPm2wH1nac5
+   vEg4eZKxTSXvUY1T1SlRHE82x0k2CiRgWrljNX6Uq9jVxNsv4kXHLoHdR
+   OKcM6VluRqFmAF/Y1+l81/fTQNR+nevy/gGC+7YgzOvKJEPFA6PhdB9FH
+   oRtGDT9IdndQlRMDt229BuoIF0A0X/aMqCMJdO+ghjllW0Eyk2eb4PYMJ
+   g==;
+X-CSE-ConnectionGUID: xIP5iteiTNyP44WzaoPXsw==
+X-CSE-MsgGUID: vNDU0bx+Q9+2MKfht10HYw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11555"; a="60043876"
+X-IronPort-AV: E=Sophos;i="6.18,270,1751266800"; 
+   d="scan'208";a="60043876"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 13:29:53 -0700
+X-CSE-ConnectionGUID: PAF4sLYcTH6vxTztaYxhlQ==
+X-CSE-MsgGUID: paIl1qckQZyDZutOhIiYoQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,269,1751266800"; 
-   d="scan'208";a="175822197"
+X-IronPort-AV: E=Sophos;i="6.18,270,1751266800"; 
+   d="scan'208";a="198728548"
 Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Sep 2025 13:19:50 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 16 Sep 2025 13:29:51 -0700
 Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uyc9U-0000iB-0R;
-	Tue, 16 Sep 2025 20:19:48 +0000
-Date: Wed, 17 Sep 2025 04:19:06 +0800
+	id 1uycJB-0000iZ-0P;
+	Tue, 16 Sep 2025 20:29:49 +0000
+Date: Wed, 17 Sep 2025 04:29:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [leon-rdma:dmabuf-vfio 42/42] kernel/dma/mapping.c:174:2: warning:
- non-void function does not return a value in all control paths
-Message-ID: <202509170453.TJrTBB4U-lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lee Jones <lee@kernel.org>, Simona Vetter <simona.vetter@ffwll.ch>,
+	"Daniel Thompson (RISCstar)" <danielt@kernel.org>
+Subject: [lee-backlight:for-backlight-next 14/14]
+ drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams427ap24.c:718:25: error: call
+ to undeclared function 'device_property_read_bool'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202509170410.RubSxK3n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,91 +66,115 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dmabuf-vfio
-head:   887b59804850b679831fda6eba707cc1b1b077e0
-commit: 887b59804850b679831fda6eba707cc1b1b077e0 [42/42] dma-mapping: remove unused map_page callback
-config: x86_64-buildonly-randconfig-002-20250916 (https://download.01.org/0day-ci/archive/20250917/202509170453.TJrTBB4U-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/backlight.git for-backlight-next
+head:   9f218f9bb9d274b9d5d48a4c95e1b199141fc1f2
+commit: 9f218f9bb9d274b9d5d48a4c95e1b199141fc1f2 [14/14] backlight: Do not include <linux/fb.h> in header file
+config: x86_64-buildonly-randconfig-004-20250917 (https://download.01.org/0day-ci/archive/20250917/202509170410.RubSxK3n-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250917/202509170453.TJrTBB4U-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250917/202509170410.RubSxK3n-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509170453.TJrTBB4U-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509170410.RubSxK3n-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   kernel/dma/mapping.c:160:13: warning: variable 'addr' set but not used [-Wunused-but-set-variable]
-     160 |         dma_addr_t addr = DMA_MAPPING_ERROR;
-         |                    ^
->> kernel/dma/mapping.c:174:2: warning: non-void function does not return a value in all control paths [-Wreturn-type]
-     174 |         }
-         |         ^
-   kernel/dma/mapping.c:176:2: error: expected identifier or '('
-     176 |         if (!is_mmio)
-         |         ^
-   kernel/dma/mapping.c:178:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     178 |         trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
-         |         ^
-         |         int
-   kernel/dma/mapping.c:178:21: error: a parameter list without types is only allowed in a function definition
-     178 |         trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
-         |                            ^
-   kernel/dma/mapping.c:179:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     179 |         debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
-         |         ^
-         |         int
-   kernel/dma/mapping.c:179:21: error: a parameter list without types is only allowed in a function definition
-     179 |         debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
-         |                            ^
-   kernel/dma/mapping.c:181:2: error: expected identifier or '('
-     181 |         return addr;
-         |         ^
-   kernel/dma/mapping.c:182:1: error: extraneous closing brace ('}')
-     182 | }
-         | ^
-   2 warnings and 7 errors generated.
+>> drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams427ap24.c:718:25: error: call to undeclared function 'device_property_read_bool'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     718 |         ctx->flip_horizontal = device_property_read_bool(dev, "flip-horizontal");
+         |                                ^
+   drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams427ap24.c:718:25: note: did you mean 'drm_property_create_bool'?
+   include/drm/drm_property.h:271:22: note: 'drm_property_create_bool' declared here
+     271 | struct drm_property *drm_property_create_bool(struct drm_device *dev,
+         |                      ^
+>> drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams427ap24.c:748:61: error: array has incomplete element type 'const struct of_device_id'
+     748 | static const struct of_device_id s6e88a0_ams427ap24_of_match[] = {
+         |                                                             ^
+   include/linux/device/driver.h:106:15: note: forward declaration of 'struct of_device_id'
+     106 |         const struct of_device_id       *of_match_table;
+         |                      ^
+   2 errors generated.
 
 
-vim +174 kernel/dma/mapping.c
+vim +/device_property_read_bool +718 drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams427ap24.c
 
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  154  
-98aa19211ca8ab Leon Romanovsky      2025-06-17  155  dma_addr_t dma_map_phys(struct device *dev, phys_addr_t phys, size_t size,
-98aa19211ca8ab Leon Romanovsky      2025-06-17  156  		enum dma_data_direction dir, unsigned long attrs)
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  157  {
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  158  	const struct dma_map_ops *ops = get_dma_ops(dev);
-c332420ebc1822 Leon Romanovsky      2025-06-17  159  	bool is_mmio = attrs & DMA_ATTR_MMIO;
-19e1683200df53 Leon Romanovsky      2025-09-15 @160  	dma_addr_t addr = DMA_MAPPING_ERROR;
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  161  
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  162  	BUG_ON(!valid_dma_direction(dir));
-f959dcd6ddfd29 Thomas Tai           2020-09-17  163  
-f959dcd6ddfd29 Thomas Tai           2020-09-17  164  	if (WARN_ON_ONCE(!dev->dma_mask))
-f959dcd6ddfd29 Thomas Tai           2020-09-17  165  		return DMA_MAPPING_ERROR;
-f959dcd6ddfd29 Thomas Tai           2020-09-17  166  
-8d8d53cf8fd028 Alexey Kardashevskiy 2020-10-29  167  	if (dma_map_direct(dev, ops) ||
-c332420ebc1822 Leon Romanovsky      2025-06-17  168  	    (!is_mmio && arch_dma_map_phys_direct(dev, phys + size)))
-907f79a29dcbc1 Leon Romanovsky      2025-06-17  169  		addr = dma_direct_map_phys(dev, phys, size, dir, attrs);
-b5c58b2fdc427e Leon Romanovsky      2024-07-24  170  	else if (use_dma_iommu(dev))
-fe635b87c42ebd Leon Romanovsky      2025-06-17  171  		addr = iommu_dma_map_phys(dev, phys, size, dir, attrs);
-098e1e1eeeee44 Leon Romanovsky      2025-09-15  172  	else if (ops->map_phys)
-098e1e1eeeee44 Leon Romanovsky      2025-09-15  173  		addr = ops->map_phys(dev, phys, size, dir, attrs);
-c332420ebc1822 Leon Romanovsky      2025-06-17 @174  	}
-00730608c19fca Leon Romanovsky      2025-06-17  175  
-c332420ebc1822 Leon Romanovsky      2025-06-17  176  	if (!is_mmio)
-00730608c19fca Leon Romanovsky      2025-06-17  177  		kmsan_handle_dma(phys, size, dir);
-7d6250d472a5fb Leon Romanovsky      2025-06-17  178  	trace_dma_map_phys(dev, phys, addr, size, dir, attrs);
-46758939d12150 Leon Romanovsky      2025-06-17  179  	debug_dma_map_phys(dev, phys, size, dir, addr, attrs);
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  180  
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  181  	return addr;
-d3fa60d7bfdc9a Christoph Hellwig    2020-07-08  182  }
-98aa19211ca8ab Leon Romanovsky      2025-06-17  183  EXPORT_SYMBOL_GPL(dma_map_phys);
-98aa19211ca8ab Leon Romanovsky      2025-06-17  184  
+5b67fdf1668fc37 Jakob Hauser    2024-10-28  683  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  684  static int s6e88a0_ams427ap24_probe(struct mipi_dsi_device *dsi)
+d5658db2a0768a7 Jakob Hauser    2024-10-28  685  {
+d5658db2a0768a7 Jakob Hauser    2024-10-28  686  	struct device *dev = &dsi->dev;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  687  	struct s6e88a0_ams427ap24 *ctx;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  688  	int ret;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  689  
+3a21fd4c9065c3c Anusha Srivatsa 2025-05-29  690  	ctx = devm_drm_panel_alloc(dev, struct s6e88a0_ams427ap24, panel,
+3a21fd4c9065c3c Anusha Srivatsa 2025-05-29  691  				   &s6e88a0_ams427ap24_panel_funcs,
+3a21fd4c9065c3c Anusha Srivatsa 2025-05-29  692  				   DRM_MODE_CONNECTOR_DSI);
+3a21fd4c9065c3c Anusha Srivatsa 2025-05-29  693  	if (IS_ERR(ctx))
+3a21fd4c9065c3c Anusha Srivatsa 2025-05-29  694  		return PTR_ERR(ctx);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  695  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  696  	ret = devm_regulator_bulk_get_const(dev,
+d5658db2a0768a7 Jakob Hauser    2024-10-28  697  				      ARRAY_SIZE(s6e88a0_ams427ap24_supplies),
+d5658db2a0768a7 Jakob Hauser    2024-10-28  698  				      s6e88a0_ams427ap24_supplies,
+d5658db2a0768a7 Jakob Hauser    2024-10-28  699  				      &ctx->supplies);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  700  	if (ret < 0)
+d5658db2a0768a7 Jakob Hauser    2024-10-28  701  		return ret;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  702  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  703  	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  704  	if (IS_ERR(ctx->reset_gpio))
+d5658db2a0768a7 Jakob Hauser    2024-10-28  705  		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+d5658db2a0768a7 Jakob Hauser    2024-10-28  706  				     "Failed to get reset-gpios\n");
+d5658db2a0768a7 Jakob Hauser    2024-10-28  707  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  708  	ctx->dsi = dsi;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  709  	mipi_dsi_set_drvdata(dsi, ctx);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  710  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  711  	dsi->lanes = 2;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  712  	dsi->format = MIPI_DSI_FMT_RGB888;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  713  	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+5b67fdf1668fc37 Jakob Hauser    2024-10-28  714  			  MIPI_DSI_MODE_NO_EOT_PACKET | MIPI_DSI_MODE_VIDEO_NO_HFP;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  715  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  716  	ctx->panel.prepare_prev_first = true;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  717  
+e70d4f8e242bbc4 Jakob Hauser    2024-10-28 @718  	ctx->flip_horizontal = device_property_read_bool(dev, "flip-horizontal");
+e70d4f8e242bbc4 Jakob Hauser    2024-10-28  719  
+5b67fdf1668fc37 Jakob Hauser    2024-10-28  720  	ret = s6e88a0_ams427ap24_register_backlight(ctx);
+5b67fdf1668fc37 Jakob Hauser    2024-10-28  721  	if (ret < 0)
+5b67fdf1668fc37 Jakob Hauser    2024-10-28  722  		return ret;
+5b67fdf1668fc37 Jakob Hauser    2024-10-28  723  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  724  	drm_panel_add(&ctx->panel);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  725  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  726  	ret = mipi_dsi_attach(dsi);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  727  	if (ret < 0) {
+d5658db2a0768a7 Jakob Hauser    2024-10-28  728  		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  729  		drm_panel_remove(&ctx->panel);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  730  		return ret;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  731  	}
+d5658db2a0768a7 Jakob Hauser    2024-10-28  732  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  733  	return 0;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  734  }
+d5658db2a0768a7 Jakob Hauser    2024-10-28  735  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  736  static void s6e88a0_ams427ap24_remove(struct mipi_dsi_device *dsi)
+d5658db2a0768a7 Jakob Hauser    2024-10-28  737  {
+d5658db2a0768a7 Jakob Hauser    2024-10-28  738  	struct s6e88a0_ams427ap24 *ctx = mipi_dsi_get_drvdata(dsi);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  739  	int ret;
+d5658db2a0768a7 Jakob Hauser    2024-10-28  740  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  741  	ret = mipi_dsi_detach(dsi);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  742  	if (ret < 0)
+d5658db2a0768a7 Jakob Hauser    2024-10-28  743  		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  744  
+d5658db2a0768a7 Jakob Hauser    2024-10-28  745  	drm_panel_remove(&ctx->panel);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  746  }
+d5658db2a0768a7 Jakob Hauser    2024-10-28  747  
+d5658db2a0768a7 Jakob Hauser    2024-10-28 @748  static const struct of_device_id s6e88a0_ams427ap24_of_match[] = {
+d5658db2a0768a7 Jakob Hauser    2024-10-28  749  	{ .compatible = "samsung,s6e88a0-ams427ap24" },
+d5658db2a0768a7 Jakob Hauser    2024-10-28  750  	{ /* sentinel */ },
+d5658db2a0768a7 Jakob Hauser    2024-10-28  751  };
+d5658db2a0768a7 Jakob Hauser    2024-10-28  752  MODULE_DEVICE_TABLE(of, s6e88a0_ams427ap24_of_match);
+d5658db2a0768a7 Jakob Hauser    2024-10-28  753  
 
-:::::: The code at line 174 was first introduced by commit
-:::::: c332420ebc1822897e61cef6b9f361cde917dc21 dma-mapping: implement DMA_ATTR_MMIO for dma_(un)map_page_attrs()
+:::::: The code at line 718 was first introduced by commit
+:::::: e70d4f8e242bbc4fd39f3a867dc3e33122d7e559 drm/panel: samsung-s6e88a0-ams427ap24: Add flip option
 
-:::::: TO: Leon Romanovsky <leonro@nvidia.com>
-:::::: CC: Leon Romanovsky <leon@kernel.org>
+:::::: TO: Jakob Hauser <jahau@rocketmail.com>
+:::::: CC: Neil Armstrong <neil.armstrong@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
