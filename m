@@ -1,47 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2DE226D0F;
-	Wed, 17 Sep 2025 22:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01263126C2;
+	Wed, 17 Sep 2025 23:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758147141; cv=none; b=k1YiudG2cdaeBbXq+PcglJ1JNZovFwMoJ3XD6j6TZiCYL4WR7iExWoJSkiteXuHUrPuBWo996JPrs/0DPvHQ7O33EL56FqQUdRggixnw9AUUdIOW64oguqq+aTwiVJytBxbz/GqXfTAMTLcl5VqadkBxZVhXuThW090mmNt3aBY=
+	t=1758152262; cv=none; b=HlUxQuFDKnSccwrW/vdyoGlWW54JJABSDTK2VTZ4qc2vZ3JVvRzkT4IwzyJZkadLcbiuqVMvM41E4kT+OqivY/k+mnAQ7MGFtw4z/gvcooCTWvlVw8zpEEiOYk7hqwtXmdKEExdaPqZPAxyyMj3uzV1Fhci67YSH6HKNBXJqvZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758147141; c=relaxed/simple;
-	bh=Naj1kSJiyrj7asx9r5GjSntcBHk8TTQNoxoL3rusSzA=;
+	s=arc-20240116; t=1758152262; c=relaxed/simple;
+	bh=Tm7LDGQYbF/5OYizYxd41PtQk/zW0KgP6XlgKNQteR0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kd857agbRX/h3kfyBOm3xm6AWhf4v2vkLUrfWPS404RBQLnj0UEhfnl8vt010zwQsc2Qs+SWAxGzta0oR6K6ulki6NHM8m5CINn/FnCaoF296DrJwcUmE2rPFZzmstL8ieCoJ1g6hOnVMYPEhyfc41hmz+5fbp/z2NWd3CHz6M4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQ1Axqd1; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=SoP1MrvC05aVBALe7ddqT8iO9ph6VnIMEIrOIyxbd+Ka/8YeCJWl9ceG5QY306+gEMt7JnREecTb76PkraiZJT82Vf4dIS+Z1Im+WuoeiA3+gcqM16Q+xH0y2hbcUm913oP/AVUU7PijIf2tvxE0Q617M7+Tf4XOZGql/mktII4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nu6DHH9U; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQ1Axqd1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88CBC4CEE7;
-	Wed, 17 Sep 2025 22:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758147141;
-	bh=Naj1kSJiyrj7asx9r5GjSntcBHk8TTQNoxoL3rusSzA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PQ1Axqd1S2UIn9uYamQuSw/vys2cYcDeYCWgsJiqqFbUVP8LFyQGmSSmPfAIzRyt8
-	 xfHTytvtPU46eZ2kk4D9foSje1LDk5hg6gyHFdHv0OfTntwZbP1HOmEasBqM1gLNTM
-	 SlbaSSVv5F2mwzlD9J8AAdI89c+oACjji8xDJImX2RmyieDAWMNGdcr9yFTgpE82Ui
-	 /p+vinah12V8O97CDHt0YcvAdkMRGPv+ECnQwkHwtSJ2U0eOtHm2sZzsUVUxQ2+N1+
-	 tu9zUfmIOEnqKA972XJLhWSjRSv9P6ulLu2tlBeckPjn71iHlKwnLNhGQmc+QJ25u1
-	 jyZRvkzer1A5A==
-Date: Wed, 17 Sep 2025 15:12:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Oliver Sang <oliver.sang@intel.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [jgunthorpe:iommu_pt_vtd 8/34] ERROR: modpost: "__udivdi3"
- [drivers/iommu/generic_pt/fmt/iommu_amdv1.ko] undefined!
-Message-ID: <20250917221217.GA650176@ax162>
-References: <202508271856.ixwxgh3g-lkp@intel.com>
- <20250902124856.GE186519@nvidia.com>
- <aMj38M8HeDSQHQPf@xsang-OptiPlex-9020>
- <20250916141256.GF1086830@nvidia.com>
- <20250917022043.GB3106929@ax162>
- <20250917112214.GY1086830@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nu6DHH9U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758152261; x=1789688261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tm7LDGQYbF/5OYizYxd41PtQk/zW0KgP6XlgKNQteR0=;
+  b=nu6DHH9UbBjEWEyc1mfHdH/H1FyDHdgWj/8YZCm1Qa62yvGwxiO5wIaE
+   etdhv7+wBJoaS7crC3xRDQD5O2hqk0AUl412UmqGX3c5Re99H99rPnYGA
+   +rSMhDZefpsaBNuW5a21mAxC129mw9TTXm9NA5GyOe9l0Ly/JkF/CkRnq
+   5bhvNoXkgHPsGFyg6hWP5c7nmc94+jBCMsxTSOVXgIqfj/8nHE8jEk6ZH
+   fAE2fVTmpmCCb+1s6ioSyqKDROiKLr/eDbWV4X+pfZj3MlbaJvAO8uUVG
+   5IshS48TtDL0MwNoDUvHuGyq+kDtA0RzVfDfiaML5oWiHL01xap4MQ0HD
+   A==;
+X-CSE-ConnectionGUID: 0mxsbasjRW+rjCKcI8mvoA==
+X-CSE-MsgGUID: nrLIBjhLRqKhov9eoNif8A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="71576744"
+X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
+   d="scan'208";a="71576744"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 16:37:41 -0700
+X-CSE-ConnectionGUID: QcxZYuG2QOyvuJ2rkRherg==
+X-CSE-MsgGUID: 5O/Z75r0RRWd2IesMQAMfQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
+   d="scan'208";a="175779636"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 17 Sep 2025 16:37:34 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uz1iN-0002ZT-2Q;
+	Wed, 17 Sep 2025 23:37:31 +0000
+Date: Thu, 18 Sep 2025 07:37:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ethan Graham <ethan.w.s.graham@gmail.com>, ethangraham@google.com,
+	glider@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andreyknvl@gmail.com, andy@kernel.org, brauner@kernel.org,
+	brendan.higgins@linux.dev, davem@davemloft.net, davidgow@google.com,
+	dhowells@redhat.com, dvyukov@google.com, elver@google.com,
+	herbert@gondor.apana.org.au, ignat@cloudflare.com, jack@suse.cz,
+	jannh@google.com, johannes@sipsolutions.net,
+	kasan-dev@googlegroups.com, kees@kernel.org,
+	kunit-dev@googlegroups.com, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lukas@wunner.de,
+	rmoar@google.com, shuah@kernel.org, tarasmadan@google.com
+Subject: Re: [PATCH v1 07/10] crypto: implement KFuzzTest targets for PKCS7
+ and RSA parsing
+Message-ID: <202509180721.GaBOMCkp-lkp@intel.com>
+References: <20250916090109.91132-8-ethan.w.s.graham@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,36 +73,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917112214.GY1086830@nvidia.com>
+In-Reply-To: <20250916090109.91132-8-ethan.w.s.graham@gmail.com>
 
-On Wed, Sep 17, 2025 at 08:22:14AM -0300, Jason Gunthorpe wrote:
-> On Tue, Sep 16, 2025 at 07:20:43PM -0700, Nathan Chancellor wrote:
-> > as the bad commit, which certainly makes sense, as C23 made this GCC
-> > extension as part of the standard so clang needed to account for that.
-> > As far as I can tell, GCC did the same thing in
-> > 
-> >   https://gcc.gnu.org/cgit/gcc/commit/?id=3b3083a598ca3f4b6203284e01ed39ab6ff0844f
-> > 
-> >   "The standard feature gives all the values of such an enum the enumerated
-> >   type (while keeping type int if that can represent all values of the
-> >   enumeration), where previously GCC only gave those values outside the range
-> >   of int the enumerated type... this patch makes the change to types of
-> >   enumerators unconditionally (if that causes problems in practice we could
-> >   always make it conditional on C2x mode instead)."
-> 
-> That makes sense, I did not know it had changed like that
-> 
-> But still, I'd expect the compiler to retain the original behavior
-> unless std23/gnu23 is specified given that it does change codegen and
-> causes errors.
-> 
-> Though that is even more perplexing if gcc has been working this way
-> since 13 why does it avoid the udiv..
+Hi Ethan,
 
-Looking at the preprocessed source and making some educated guesses, I
-am guessing with inlining and constant folding, GCC turn division into
-multiplication by the reciprocal. Clang implements some of these
-optimizations but not all, if I remember correctly.
+kernel test robot noticed the following build errors:
 
-Cheers,
-Nathan
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.17-rc6 next-20250917]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ethan-Graham/mm-kasan-implement-kasan_poison_range/20250916-210448
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20250916090109.91132-8-ethan.w.s.graham%40gmail.com
+patch subject: [PATCH v1 07/10] crypto: implement KFuzzTest targets for PKCS7 and RSA parsing
+config: x86_64-randconfig-075-20250918 (https://download.01.org/0day-ci/archive/20250918/202509180721.GaBOMCkp-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250918/202509180721.GaBOMCkp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509180721.GaBOMCkp-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: pkcs7_parse_message
+   >>> referenced by pkcs7_kfuzz.c:21 (crypto/asymmetric_keys/tests/pkcs7_kfuzz.c:21)
+   >>>               vmlinux.o:(kfuzztest_write_cb_test_pkcs7_parse_message)
+--
+>> ld.lld: error: undefined symbol: rsa_parse_pub_key
+   >>> referenced by rsa_helper_kfuzz.c:22 (crypto/asymmetric_keys/tests/rsa_helper_kfuzz.c:22)
+   >>>               vmlinux.o:(kfuzztest_write_cb_test_rsa_parse_pub_key)
+--
+>> ld.lld: error: undefined symbol: rsa_parse_priv_key
+   >>> referenced by rsa_helper_kfuzz.c:37 (crypto/asymmetric_keys/tests/rsa_helper_kfuzz.c:37)
+   >>>               vmlinux.o:(kfuzztest_write_cb_test_rsa_parse_priv_key)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
