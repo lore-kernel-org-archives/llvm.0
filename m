@@ -1,64 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94DC31A814;
-	Wed, 17 Sep 2025 12:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA923294FF;
+	Wed, 17 Sep 2025 12:15:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758111355; cv=none; b=o3HqGdFpto+faHg2vPz1esloirWXkmyVpmIgf8KDVfZmLam5DTKFnDY9E+zAsxnGUo77UqeREcYYz8VWlj2Ca5l1/ULSfVnjfg2CJk2xTqDGE1G2qDIEG/1KYlMsAUNtWHZqw/tLu90ZLAtnC33C50ypmYslSCQJ2NJCCi1IEmU=
+	t=1758111356; cv=none; b=L+H5/ZSswmRu/Szce6NncBbePMwFm4k9vlLz9Bpk2AVkr+kCLkttv5bZo12sn0sBmZOUkT8uWhdc4u1rhmM6oSfqzSOhMwAYsE+uAQzBsFW7QZparUVsN7WXN331r+yOk6nWjd0BOLns9B+lz8pBC2H+BK684yFYHqHUaRHwbjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758111355; c=relaxed/simple;
-	bh=lrdZawkRIwStzU2yfc2G77xAk+2MIGzDv7SZmR0L4QE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RaTvxys1BOFkCEM2+hrISJWJd5ucEkChilbjaMOoMnTkLeFid89fvpQw8G+E8/+erxMwPe6WWXWECeYqBSfNNpv/fbcfEJdu18e40a+rLsBPhj769luD31bz6S69SsYbpRaVOFQXLFQZauX5wZa4GmjE+5S0c742TSWbbxcZoAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lBrbbbIS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758111356; c=relaxed/simple;
+	bh=SEWjTVgTPTyI58PpxkWEaIBkTnLO24vi9jcL4Xx4sSY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FI++9LPzK0fSA++/6kVdyhlqeO463tfTH6/Ntr/Fj45ojuodzCYxW5TVoG8KQ8m9BiG6MClZnWI+I38bJjwRtAMArl4OQedzNW7cF2ctRRoElQs/5s+EkZJ7rtJ0/S7LG/vuqptWBYiN1TY8RDr4kUoDqpOp6ulDV04vVAW7wrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l/4062Zg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lBrbbbIS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED8FC4AF0B;
-	Wed, 17 Sep 2025 12:15:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l/4062Zg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1769EC4CEF0;
+	Wed, 17 Sep 2025 12:15:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758111355;
-	bh=lrdZawkRIwStzU2yfc2G77xAk+2MIGzDv7SZmR0L4QE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lBrbbbIScd0kAq84yYc3uTrivnTKTe4chMBtWl1x7zkjAEyU1OTe5QsgRXtHn598Z
-	 1Wgm+gT/bQdwkKdgNpPIDf0LfGqYzDKmsq4BHqvRJ8HmlB6EQXZfgxoGUiZyWGLldR
-	 ZjvfA+jloScArCXlAG4OQ8aHVLuE6wmv2/zwRERwjTROceLA4knbwRP+pNiAHAb5Vx
-	 WH8hNMneGwlzwxlE9gBcPAdrf/E4lNc23WaahnoMaMvWVXDxkLUEIQqiv85HSxyW9W
-	 /KNJYh7u7VlR97dG5gUE6P8aOYUkU4xEvpZJK/3/5B4F0fSO1T01qLGEv4DlEyC1/C
-	 1UlBs6GWoyCCw==
+	s=k20201202; t=1758111356;
+	bh=SEWjTVgTPTyI58PpxkWEaIBkTnLO24vi9jcL4Xx4sSY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=l/4062ZgM+t3GawVXiU97kma1PUlFyK8l5G/JHh9RQdFExWAxwyFiYtOOOdKqdqSC
+	 he7B4QZgPqbEdMG730zNaRkbTa0Q5GmNXY2AtVfgRlnjlu1UYRrT7JhSDC7GwLET0a
+	 zc2Ift4Cf0xtNheo3QJr5y3TBhzSs4+Ps69llN8Is9FJ5NPfxTml+wFIL2jlcKmEqQ
+	 16BB/34Vz6YBh8qOmCTRiRI7tWxu/WWs3Z0UrwDo1ForECDwdx2BHEtkg5GuX53ib8
+	 QfSWPWLDJAYEyRHBTiYD2pCUYCXT34Y8T7GQ206IS4NnMEZQ5O9ockliGUC8GEc3vY
+	 115o1g7XcS01w==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1uyr4h-0000000CGea-2ezA;
+	id 1uyr4h-0000000CGdB-08RW;
 	Wed, 17 Sep 2025 14:15:51 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	"Akira Yokosawa" <akiyks@gmail.com>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Akira Yokosawa <akiyks@gmail.com>,
 	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
+	Alex Shi <mchehab+huawei@kernel.org>,
 	Alice Ryhl <aliceryhl@google.com>,
 	Andreas Hindborg <mchehab+huawei@kernel.org>,
 	Benno Lossin <mchehab+huawei@kernel.org>,
 	Bill Wendling <morbo@google.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Danilo Krummrich <mchehab+huawei@kernel.org>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Federico Vaga <federico.vaga@vaga.pv.it>,
 	Gary Guo <gary@garyguo.net>,
 	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <mchehab+huawei@kernel.org>,
 	Miguel Ojeda <mchehab+huawei@kernel.org>,
 	Nathan Chancellor <mchehab+huawei@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Tamir Duberstein <tamird@gmail.com>,
 	Trevor Gross <tmgross@umich.edu>,
-	linux-kernel@vger.kernel.org,
+	Yanteng Si <si.yanteng@linux.dev>,
+	linux-kbuild@vger.kernel.org,
 	llvm@lists.linux.dev,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v7 22/24] tools/docs: sphinx-build-wrapper: move rust doc builder to wrapper
-Date: Wed, 17 Sep 2025 14:15:16 +0200
-Message-ID: <6794e21fda3158c1d7d385a2e61df2354d42ce54.1758111077.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v7 00/24] Split sphinx call logic from docs Makefile
+Date: Wed, 17 Sep 2025 14:14:54 +0200
+Message-ID: <cover.1758111077.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1758111077.git.mchehab+huawei@kernel.org>
-References: <cover.1758111077.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,261 +76,218 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Simplify even further the docs Makefile by moving rust build logic
-to the wrapper.
+Hi Jon,
 
-After this change, running make on an environment with rust enabled
-works as expected.
+This series should probably be called:
 
-With CONFIG_RUST:
+    "Move the trick-or-treat build hacks accumulated over time
+     into a single place and document them."
 
-    $ make O=/tmp/foo LLVM=1 SPHINXDIRS=peci htmldocs
-    make[1]: Entrando no diretório '/tmp/foo'
+as this reflects its main goal. As such:
 
-    Using alabaster theme
-    Using Python kernel-doc
-      GEN     Makefile
-      DESCEND objtool
-      CC      arch/x86/kernel/asm-offsets.s
-      INSTALL libsubcmd_headers
-      CALL    /new_devel/docs/scripts/checksyscalls.sh
-      RUSTC L rust/core.o
-      BINDGEN rust/bindings/bindings_generated.rs
-      BINDGEN rust/bindings/bindings_helpers_generated.rs
-    ...
+- it places the jobserver logic on a library;
+- it removes sphinx/parallel-wrapper.sh;
+- the code now properly implements a jobserver-aware logic
+  to do the parallelism when called via GNU make, failing back to
+  "-j" when there's  no jobserver;
+- converts check-variable-fonts.sh to Python and uses it via
+  function call;
+- drops an extra script to generate man pages, adding a makefile
+  target for it;
+- ensures that return code is 0 when PDF successfully builds;
+- about half of the script is comments and documentation.
 
-Without it:
-    $ make SPHINXDIRS=peci htmldocs
-    Using alabaster theme
-    Using Python kernel-doc
+I tried to do my best to document all tricks that are inside the
+script. This way, the docs build steps is now documented.
 
-Both work as it is it is supposed to do.
+It should be noticed that it is out of the scope of this series
+to change the implementation. Surely the process can be improved,
+but first let's consolidate and document everything on a single
+place.
 
-After the change, it is also possible to build directly with the script
-by passing "--rustodoc".
+Such script was written in a way that it can be called either
+directly or via a Makefile. Running outside Makefile is
+interesting specially when debug is needed. The command line
+interface replaces the need of having lots of env vars before
+calling sphinx-build:
 
-if CONFIG_RUST, this works fine:
+    $ ./tools/docs/sphinx-build-wrapper --help
+    usage: sphinx-build-wrapper [-h]
+           [--sphinxdirs SPHINXDIRS [SPHINXDIRS ...]] [--conf CONF]
+           [--builddir BUILDDIR] [--theme THEME] [--css CSS] [--paper {,a4,letter}] [-v]
+           [-j JOBS] [-i] [-V [VENV]]
+           {cleandocs,linkcheckdocs,htmldocs,epubdocs,texinfodocs,infodocs,mandocs,latexdocs,pdfdocs,xmldocs}
 
-    $ ./tools/docs/sphinx-build-wrapper --sphinxdirs peci --rustdoc -- htmldocs
-    Using alabaster theme
-    Using Python kernel-doc
-      SYNC    include/config/auto.conf
-    ...
-      RUSTC L rust/core.o
-    ...
+    Kernel documentation builder
 
-If not, it will produce a warning that RUST may be disabled:
+    positional arguments:
+      {cleandocs,linkcheckdocs,htmldocs,epubdocs,texinfodocs,infodocs,mandocs,latexdocs,pdfdocs,xmldocs}
+                            Documentation target to build
 
-    $ ./tools/docs/sphinx-build-wrapper --sphinxdirs peci --rustdoc -- htmldocs
-    Using alabaster theme
-    Using Python kernel-doc
-    ***
-    *** Configuration file ".config" not found!
-    ***
-    *** Please run some configurator (e.g. "make oldconfig" or
-    *** "make menuconfig" or "make xconfig").
-    ***
-    make[1]: *** [/new_devel/docs/Makefile:829: .config] Error 1
-    make: *** [Makefile:248: __sub-make] Error 2
-    Ignored errors when building rustdoc: Command '['make', 'LLVM=1', 'rustdoc']' returned non-zero exit status 2.. Is RUST enabled?
+    options:
+      -h, --help            show this help message and exit
+      --sphinxdirs SPHINXDIRS [SPHINXDIRS ...]
+                            Specific directories to build
+      --conf CONF           Sphinx configuration file
+      --builddir BUILDDIR   Sphinx configuration file
+      --theme THEME         Sphinx theme to use
+      --css CSS             Custom CSS file for HTML/EPUB
+      --paper {,a4,letter}  Paper size for LaTeX/PDF output
+      -v, --verbose         place build in verbose mode
+      -j, --jobs JOBS       Sets number of jobs to use with sphinx-build
+      -i, --interactive     Change latex default to run in interactive mode
+      -V, --venv [VENV]     If used, run Sphinx from a venv dir (default dir: sphinx_latest)
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+the only mandatory argument is the target, which is identical with
+"make" targets.
+
+The call inside Makefile doesn't use the last four arguments. They're
+there to help identifying problems at the build:
+
+    -v makes the output verbose;
+    -j helps to test parallelism;
+    -i runs latexmk in interactive mode, allowing to debug PDF
+       build issues;
+    -V is useful when testing it with different venvs.
+
+When used with GNU make (or some other make which implements jobserver),
+a call like:
+
+    make -j <targets> htmldocs
+
+will make the wrapper to automatically use POSIX jobserver to claim 
+the number of available job slots, calling sphinx-build with a
+"-j" parameter reflecting it. ON such case, the default can be
+overriden via SPHINXDIRS argument.
+
+Visiable changes when compared with the old behavior:
+
+When V=0, the only visible difference is that:
+- pdfdocs target now returns 0 on success, 1 on failures.
+  This addresses an issue over the current process where we
+  it always return success even on failures;
+- it will now print the name of PDF files that failed to build,
+  if any.
+
+In verbose mode, sphinx-build-wrapper and sphinx-build command lines
+are now displayed.
+
 ---
- Documentation/Makefile          | 29 +++++-----------
- tools/docs/sphinx-build-wrapper | 59 ++++++++++++++++++---------------
- 2 files changed, 41 insertions(+), 47 deletions(-)
 
-diff --git a/Documentation/Makefile b/Documentation/Makefile
-index aa42b2cb7030..b32f68387dfc 100644
---- a/Documentation/Makefile
-+++ b/Documentation/Makefile
-@@ -23,6 +23,7 @@ SPHINXOPTS    =
- SPHINXDIRS    = .
- DOCS_THEME    =
- DOCS_CSS      =
-+RUSTDOC       =
- SPHINX_CONF   = conf.py
- PAPER         =
- BUILDDIR      = $(obj)/output
-@@ -42,6 +43,10 @@ FONTS_CONF_DENY_VF ?= $(HOME)/deny-vf
- # User-friendly check for sphinx-build
- HAVE_SPHINX := $(shell if which $(SPHINXBUILD) >/dev/null 2>&1; then echo 1; else echo 0; fi)
- 
-+ifeq ($(CONFIG_RUST),y)
-+	RUSTDOC="--rustdoc"
-+endif
-+
- ifeq ($(HAVE_SPHINX),0)
- 
- .DEFAULT:
-@@ -53,10 +58,10 @@ ifeq ($(HAVE_SPHINX),0)
- else # HAVE_SPHINX
- 
- # Common documentation targets
--mandocs infodocs texinfodocs latexdocs epubdocs xmldocs pdfdocs linkcheckdocs:
-+htmldocs mandocs infodocs texinfodocs latexdocs epubdocs xmldocs pdfdocs linkcheckdocs:
- 	$(Q)@$(srctree)/tools/docs/sphinx-pre-install --version-check
--	+$(Q)$(PYTHON3) $(BUILD_WRAPPER) $@ \
--		--sphinxdirs="$(SPHINXDIRS)" --conf="$(SPHINX_CONF)" \
-+	+$(Q)$(PYTHON3) $(BUILD_WRAPPER) $@ $(RUSTDOC)\
-+		--sphinxdirs="$(SPHINXDIRS)" --conf="$(SPHINX_CONF)" $(RUSTDOC)\
- 		--builddir="$(BUILDDIR)" --deny-vf=$(FONTS_CONF_DENY_VF) \
- 		--theme=$(DOCS_THEME) --css=$(DOCS_CSS) --paper=$(PAPER)
- 
-@@ -67,24 +72,6 @@ pdfdocs:
- 	@echo "  SKIP    Sphinx $@ target."
- endif
- 
--# HTML main logic is identical to other targets. However, if rust is enabled,
--# an extra step at the end is required to generate rustdoc.
--htmldocs:
--	$(Q)@$(srctree)/tools/docs/sphinx-pre-install --version-check
--	+$(Q)$(PYTHON3) $(BUILD_WRAPPER) $@ \
--		--sphinxdirs="$(SPHINXDIRS)" --conf="$(SPHINX_CONF)" \
--		--builddir="$(BUILDDIR)" \
--		--theme=$(DOCS_THEME) --css=$(DOCS_CSS) --paper=$(PAPER)
--# If Rust support is available and .config exists, add rustdoc generated contents.
--# If there are any, the errors from this make rustdoc will be displayed but
--# won't stop the execution of htmldocs
--
--ifneq ($(wildcard $(srctree)/.config),)
--ifeq ($(CONFIG_RUST),y)
--	$(Q)$(MAKE) rustdoc || true
--endif
--endif
--
- endif # HAVE_SPHINX
- 
- # The following targets are independent of HAVE_SPHINX, and the rules should
-diff --git a/tools/docs/sphinx-build-wrapper b/tools/docs/sphinx-build-wrapper
-index 7a6eb41837e6..e24486dede76 100755
---- a/tools/docs/sphinx-build-wrapper
-+++ b/tools/docs/sphinx-build-wrapper
-@@ -96,14 +96,6 @@ class SphinxBuilder:
-     with the Kernel.
-     """
- 
--    def is_rust_enabled(self):
--        """Check if rust is enabled at .config"""
--        config_path = os.path.join(self.srctree, ".config")
--        if os.path.isfile(config_path):
--            with open(config_path, "r", encoding="utf-8") as f:
--                return "CONFIG_RUST=y" in f.read()
--        return False
--
-     def get_path(self, path, use_cwd=False, abs_path=False):
-         """
-         Ancillary routine to handle patches the right way, as shell does.
-@@ -218,8 +210,6 @@ class SphinxBuilder:
-                                                       "scripts/kernel-doc.py"))
-         self.builddir = self.get_path(builddir, use_cwd=True, abs_path=True)
- 
--        self.config_rust = self.is_rust_enabled()
--
-         #
-         # Get directory locations for LaTeX build toolchain
-         #
-@@ -274,7 +264,7 @@ class SphinxBuilder:
- 
-             return subprocess.call(cmd, *args, **pwargs)
- 
--    def handle_html(self, css, output_dir):
-+    def handle_html(self, css, output_dir, rustdoc):
-         """
-         Extra steps for HTML and epub output.
- 
-@@ -282,20 +272,34 @@ class SphinxBuilder:
-         copied to the output _static directory
-         """
- 
--        if not css:
--            return
-+        if css:
-+            css = os.path.expanduser(css)
-+            if not css.startswith("/"):
-+                css = os.path.join(self.srctree, css)
- 
--        css = os.path.expanduser(css)
--        if not css.startswith("/"):
--            css = os.path.join(self.srctree, css)
-+            static_dir = os.path.join(output_dir, "_static")
-+            os.makedirs(static_dir, exist_ok=True)
- 
--        static_dir = os.path.join(output_dir, "_static")
--        os.makedirs(static_dir, exist_ok=True)
-+            try:
-+                shutil.copy2(css, static_dir)
-+            except (OSError, IOError) as e:
-+                print(f"Warning: Failed to copy CSS: {e}", file=sys.stderr)
- 
--        try:
--            shutil.copy2(css, static_dir)
--        except (OSError, IOError) as e:
--            print(f"Warning: Failed to copy CSS: {e}", file=sys.stderr)
-+        if rustdoc:
-+            if "MAKE" in self.env:
-+                cmd = [self.env["MAKE"]]
-+            else:
-+                cmd = ["make", "LLVM=1"]
-+
-+            cmd += [ "rustdoc"]
-+            if self.verbose:
-+                print(" ".join(cmd))
-+
-+            try:
-+                subprocess.run(cmd, check=True)
-+            except subprocess.CalledProcessError as e:
-+                print(f"Ignored errors when building rustdoc: {e}. Is RUST enabled?",
-+                      file=sys.stderr)
- 
-     def build_pdf_file(self, latex_cmd, from_dir, path):
-         """Builds a single pdf file using latex_cmd"""
-@@ -576,7 +580,7 @@ class SphinxBuilder:
-         shutil.rmtree(self.builddir, ignore_errors=True)
- 
-     def build(self, target, sphinxdirs=None, conf="conf.py",
--              theme=None, css=None, paper=None, deny_vf=None):
-+              theme=None, css=None, paper=None, deny_vf=None, rustdoc=False):
-         """
-         Build documentation using Sphinx. This is the core function of this
-         module. It prepares all arguments required by sphinx-build.
-@@ -623,7 +627,7 @@ class SphinxBuilder:
- 
-             args.extend(["-D", f"latex_elements.papersize={paper}paper"])
- 
--        if self.config_rust:
-+        if rustdoc:
-             args.extend(["-t", "rustdoc"])
- 
-         if conf:
-@@ -699,7 +703,7 @@ class SphinxBuilder:
-             # Ensure that each html/epub output will have needed static files
-             #
-             if target in ["htmldocs", "epubdocs"]:
--                self.handle_html(css, output_dir)
-+                self.handle_html(css, output_dir, rustdoc)
- 
-         #
-         # Step 2: Some targets (PDF and info) require an extra step once
-@@ -756,6 +760,9 @@ def main():
-     parser.add_argument('--deny-vf',
-                         help="Configuration to deny variable fonts on pdf builds")
- 
-+    parser.add_argument('--rustdoc', action="store_true",
-+                        help="Enable rustdoc build. Requires CONFIG_RUST")
-+
-     parser.add_argument("-v", "--verbose", action='store_true',
-                         help="place build in verbose mode")
- 
-@@ -775,7 +782,7 @@ def main():
- 
-     builder.build(args.target, sphinxdirs=args.sphinxdirs, conf=args.conf,
-                   theme=args.theme, css=args.css, paper=args.paper,
--                  deny_vf=args.deny_vf)
-+                  rustdoc=args.rustdoc, deny_vf=args.deny_vf)
- 
- if __name__ == "__main__":
-     main()
+v7:
+- added a --help option to ./tools/docs/check-variable-fonts.py;
+- document FONTS_CONF_DENY_VF=;
+- moved the python_version changes to be earlier in the series,
+  before moving it to a separate library, as suggested by Jani;
+- added a --rustdoc to the wrapper, cleaning up Makefile
+  even further;
+- solved some problems related to DENY_VF logic.
+
+v6:
+- On success, PDF output is identical as before when V=0;
+- when V=1 is used, PDF output will print a build summary,
+  as on v5;
+- solved a problem when multiple PDF files have the same
+  basename but are located on different directories;
+- merged a patch series converting check-variable-fonts.sh
+  to Python. Its logic is now called directly without running
+  a subprocess.
+- venv patch moved to the end.
+
+v5:
+- merged comments with the script;
+- placed n_jobs on a separate function;
+- nitpick: dropped a for loop used instead of list append.
+
+v4:
+- updated references for sphinx-pre-install after its rename;
+- added some extra patches to add more options to python_version,
+  allowing it to bail out and suggest alternatives;
+- added a patch at the end to explicitly break doc builds when
+  python3 points to python3.6 or older.
+
+v3:
+- rebased on the top of docs-next;
+- added two patches to build man files that were on a separate
+  patch series.
+
+v2:
+- there's no generic exception handler anymore;
+- it moves sphinx-pre-install to tools/docs;
+- the logic which ensures a minimal Python version got moved
+  to a library, which is now used by both pre-install and wrapper;
+- The first wrapper (05/13) doesn't contain comments (except for
+  shebang and SPDX). The goal is to help showing the size increase
+  when moving from Makefile to Python. Some file increase is
+  unavoidable, as Makefile is more compact: no includes, multple
+  statements per line, no argparse, etc;
+- The second patch adds docstrings and comments. It has almost
+  the same size of the code itself;
+- I moved the venv logic to a third wrapper patch;
+- I fixed an issue at the paraller build logic;
+- There are no generic except blocks anymore.
+
+Mauro Carvalho Chehab (24):
+  scripts/jobserver-exec: move the code to a class
+  scripts/jobserver-exec: move its class to the lib directory
+  scripts/jobserver-exec: add a help message
+  scripts: check-variable-fonts.sh: convert to Python
+  tools/docs: check-variable-fonts.py: split into a lib and an exec file
+  check-variable-fonts.py: add a helper to display instructions
+  scripts: sphinx-pre-install: move it to tools/docs
+  tools/docs: sphinx-pre-install: drop a debug print
+  tools/docs: sphinx-pre-install: allow check for alternatives and bail
+    out
+  tools/docs: python_version: move version check from sphinx-pre-install
+  tools/docs: sphinx-build-wrapper: add a wrapper for sphinx-build
+  docs: parallel-wrapper.sh: remove script
+  docs: Makefile: document latex/PDF PAPER= parameter
+  docs: Makefile: document FONTS_CONF_DENY_VF= parameter
+  tools/docs: sphinx-build-wrapper: add an argument for LaTeX
+    interactive mode
+  tools/docs: sphinx-build-wrapper: allow building PDF files in parallel
+  tools/docs,scripts: sphinx-*: prevent sphinx-build crashes
+  tools/docs: sphinx-build-wrapper: Fix output for duplicated names
+  docs: add support to build manpages from kerneldoc output
+  tools: kernel-doc: add a see also section at man pages
+  scripts: kdoc_parser.py: warn about Python version only once
+  tools/docs: sphinx-build-wrapper: move rust doc builder to wrapper
+  tools/docs: sphinx-* break documentation bulds on openSUSE
+  tools/docs: sphinx-build-wrapper: add support to run inside venv
+
+ Documentation/Makefile                        | 144 +---
+ Documentation/doc-guide/kernel-doc.rst        |  29 +-
+ Documentation/doc-guide/sphinx.rst            |   4 +-
+ Documentation/sphinx/kerneldoc-preamble.sty   |   2 +-
+ Documentation/sphinx/parallel-wrapper.sh      |  33 -
+ .../translations/it_IT/doc-guide/sphinx.rst   |   4 +-
+ .../translations/zh_CN/doc-guide/sphinx.rst   |   4 +-
+ Documentation/translations/zh_CN/how-to.rst   |   2 +-
+ MAINTAINERS                                   |   4 +-
+ Makefile                                      |   2 +-
+ scripts/check-variable-fonts.sh               | 115 ---
+ scripts/jobserver-exec                        |  88 +-
+ scripts/lib/jobserver.py                      | 149 ++++
+ scripts/lib/kdoc/kdoc_files.py                |   5 +-
+ scripts/lib/kdoc/kdoc_output.py               |  84 +-
+ scripts/lib/kdoc/kdoc_parser.py               |   7 +-
+ scripts/split-man.pl                          |  28 -
+ tools/docs/check-variable-fonts.py            |  30 +
+ tools/docs/lib/latex_fonts.py                 | 166 ++++
+ tools/docs/lib/python_version.py              | 178 ++++
+ tools/docs/sphinx-build-wrapper               | 816 ++++++++++++++++++
+ {scripts => tools/docs}/sphinx-pre-install    | 135 +--
+ 22 files changed, 1536 insertions(+), 493 deletions(-)
+ delete mode 100644 Documentation/sphinx/parallel-wrapper.sh
+ delete mode 100755 scripts/check-variable-fonts.sh
+ create mode 100755 scripts/lib/jobserver.py
+ delete mode 100755 scripts/split-man.pl
+ create mode 100755 tools/docs/check-variable-fonts.py
+ create mode 100755 tools/docs/lib/latex_fonts.py
+ create mode 100644 tools/docs/lib/python_version.py
+ create mode 100755 tools/docs/sphinx-build-wrapper
+ rename {scripts => tools/docs}/sphinx-pre-install (93%)
+
 -- 
 2.51.0
 
