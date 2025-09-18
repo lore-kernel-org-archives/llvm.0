@@ -1,143 +1,178 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20516314D3A
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 15:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5582314B95
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 15:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758210770; cv=none; b=SxHZDWw8lHLxh3LW6H0P9qOYBrjdx0hq64pmru1tcROISP2qGO4XFq7FTU4/8vRGbT6S1afEFOW/dwq17DU/hF/rAZeEGs5r9TamlfmiyNAjkgebNGM0VFKdhqyEyS4yBuIDit3Pbk90GpquFFFYcunqrl1AFIYpPI0XaMXN4Sc=
+	t=1758211051; cv=none; b=O13uCDAI6JASSLIRgqy1NFR88HPTzw7seKA+8KFRV4Pm9/vgr3K6NGyGYXQJ8n76HQc6beHhKG0aAoAPxgYD4Z00RlmDbfHaPVURv5vnJIyOtKSMBjBes6ANvOTp7R0wwlEv4fBC1VSP+5H5gGgXy9tbjrJpWUM5IX8SpfV3QXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758210770; c=relaxed/simple;
-	bh=1ThK/rR645nYnWoPl5AGIZzEq0hrX0mKYDFiJ7pgpwQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hPYUWh9psD+dTynTlgiB6pxKR4vVfjSI65vfpm4Br3jQExxhZzC/XreLkK5LVIrg04JuFTdbu1AgiJNfuuKExmt4ysH7pdpSCX/sZQ+wsR4z9nDgK95E+LbZr2ixO8/6eQsaycAPYaXCuyLrNNhP6/nI3AgL5qrqCx9JY+NpzmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=enBn3UKo; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758211051; c=relaxed/simple;
+	bh=XhR1h2E8azi9+Iqslf03I/SakVc5s2CaBmw/N8HkwwM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k4i2AlgGMf5RjYUhL6/fmMuumomxE4wC+JNan42worWiuKGq+duoL2DE8y1leb0JwnEnKVSLJV9aoSKsJeuWcKQCr9NygaWx4AB3VQ1dUdGeFptwDhZ1VUjfU6PhAm9s5FPoIei6sKIpnwwESqHI5hRXCl1QgCxrij1L7zVzz2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=UBruLNG6; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enBn3UKo"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45de4ebe79eso1504765e9.0
-        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 08:52:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="UBruLNG6"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3515a0bca13so25308041fa.1
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 08:57:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758210767; x=1758815567; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b4tOEHafOTi5CrXOSO1m8dEnNyNggHvPpDClq9ufaB4=;
-        b=enBn3UKomm01Yuoj5S1+Q2+Sc31+Psgdw55S0EI5iKFQfugkV2fs8lO7I0YMIfT9tl
-         8KEHVSQWxwqA+4ctSlp1InaOplQoGerFdy7YyTnt8gp/7w4UwE25+eUO9d4WrRdqKkeP
-         EGU3T1X3J1cttK6HdTU/oUNSIv40Ucjomr9rhZ+A/M+BGAMmPNa1JpH3Wbgu+wZn+PzO
-         AYbuoPmUaq1ATgb66AyHzScyLiyyWj3Xia7nt+9ffhv/b8pTMP25gkIl2nxFADI4jWj2
-         +30l9BMl8m8hJEWQ9BCl+mJ44V7kMvQw7yaCgmNdN59W61tSDSxSewaBRx9ZMEUq+6OD
-         3vgw==
+        d=linux-foundation.org; s=google; t=1758211047; x=1758815847; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hpKO6CsQCuex3g+QZ22KGPC+ZgcKRmVKS1THDCqCkXc=;
+        b=UBruLNG6l1QuYF8xXEvD+dQRPUPaHStoLe8BuJNnMPQzuDyzR8hhxRNBy91DI4chEa
+         Pc2MF9hri5ENxwESYvRkd5IUQ6zcCg9sCqjTWD4HHfIKDCk5eSAvOE9INiCnh4P6C7Oa
+         s+tWY8RPLI9udRDTGiLrUB4CI9mPpT68v7bR4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758210767; x=1758815567;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b4tOEHafOTi5CrXOSO1m8dEnNyNggHvPpDClq9ufaB4=;
-        b=tkAlrWqohJa1fzqKCVPyTL+GbOVbG3qtbhWKhzEer4lGLugV1geeG94zGFk4p9y7sk
-         dfbcaFwfTa8TYVaaa5GuGF2n2B+cmDfqr1jSTFj35d8niG1xZxVod2XXzWq/b7PPjYdk
-         +dXPFYe8Hheh7JiTvJRL8x1R0d7rn6ZkSkLf44wCPVZWuHZvFhZReCtpr2EcDsm8h280
-         j4EuSvC99u/Nx7HwxaclQ9Bp+3yDSOmBtfUN9pLJ2ckwZdKcf6zIwdeKQVfMRHJZBFjO
-         6Aa1okfYndw2+z86J9OHPj486v00wvorO4AbciRipNOQmfe3SpUDI1eOfrNKldGn1VPi
-         uyTA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPj2HuMw91T5z7DwyIxdHyikgYnW8KTWYHUvRyW9kNV5eu/lZhk3u3haTNzJVEGpGKGD1Y@lists.linux.dev
-X-Gm-Message-State: AOJu0YwvvkllbABVnUOGw2W37vT8MDuEj0StpB9XQktc9B+OOHaVYQD4
-	1nXUYmxmPXiwTi0H4e2glUMdgbmVWiQs+FI4f/ZEGWqLSZ6jDRB+mdf2
-X-Gm-Gg: ASbGnctPs0cAvI8JVrjQsXjUV3myTyGGuzkqCWu7QpG4q8wWBV6fFSNZlwJXCn1AUte
-	tEexW+tqmabVPPRUOz6rgL7X93q3YN1d7NhUBONHcrNRZbZQUMSax55B2eFo6H0b1MFwkOSSja0
-	gUEQpCcB2EeDTGBiolDPifcy1K2NSE+JfiCR8y2yFa5Dbq2Twvob7m1eoDjEQXAI9yEqpqk0zGy
-	YGU0rEeIX5Vht0oPUq/YBd63CzxtK2cz7N4IQKGliW9Mpv5pDC7tFk+oReovNi+7GrXu4ynP5q0
-	o4KMJKuzV+6sTQc1miFMq+kFQ9R/M936tRz+oWaIjp7BYCfvfVBQXK2dBnpWbyretMfCIHSHYb6
-	hdFmUGRRfvmM0tC6C8if6IpifeWsQ5DGjZ6x6L/7eAap/liY=
-X-Google-Smtp-Source: AGHT+IG0MfbY3dY99xKFXmJfWWQhOAQTGGYXwxyEVK9fIcFhqDqMdo/IcROmJKmQtggm9VagY37U2w==
-X-Received: by 2002:a05:600c:6308:b0:45c:b6d8:d82a with SMTP id 5b1f17b1804b1-46206283dd3mr33695135e9.6.1758210767067;
-        Thu, 18 Sep 2025 08:52:47 -0700 (PDT)
-Received: from [10.214.98.247] ([80.93.240.68])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46138695223sm87677465e9.5.2025.09.18.08.52.42
+        d=1e100.net; s=20230601; t=1758211047; x=1758815847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hpKO6CsQCuex3g+QZ22KGPC+ZgcKRmVKS1THDCqCkXc=;
+        b=pcrlT5Hg9QGnA76WLk5Ofbt1D+xjDNydp9ZwRF2+W33bQ7M+5FI3IJkNoNynX22xEQ
+         VBPSToTBOTWoz5w99aZK60buXCrp7SFrmF6gxQJ7RjOar4tgfoEDGJNoj4T7rnNpBGSO
+         ycEa/TTqXOi8eLUzTG2o1fM3xBOqGp7uC8ct7OJa8ejk8kLibbHWUTSvoKgaH54YSr3Z
+         emIcFXulODmSPzDY+bs09hun3LgZSZknzMW8JYzuHfLFJFcQk8WfSKS9OVOfnFNX9yDG
+         AwlfTl7KYDDGPCmwia4fVhhzUe15qhz6xtblJhX+gOLIzlnDptBgx1GTdgaW3avqVrhg
+         YKoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUhCgLwMIyUrAH0F850nvzcDe1HccQPYjFoMEDLEsEcGOpP0HKfo6Zqflv2nDOIXByHjJWj@lists.linux.dev
+X-Gm-Message-State: AOJu0YyijcnJ+vPIi9SBBTDiLQsMNg90s1I1+EX8zW8z4hLf6ymvrQ4j
+	ZyhRkPpON3lYzCyCSDN2pe+8KzgUzu67ku2f9QMMFKC/BnzVSFzaccaEiUsL1QFivMnTM4JXmyj
+	l+kD+fvzQmg==
+X-Gm-Gg: ASbGncv3zTQVLEkE7cvvFKZgGfCUKcufoLGddF82LvigVCxg1fYT3aPy5Ff0SzqTYdm
+	uqdy8pwfqmBBNZzBbdfe5mQ5WvHNxd1ODMj0mqitlaR1xYUOV9bVC7Z7md5Nj8uV/0Kk4AaOeNc
+	l0VMEeW1/btpue9zx7GKTOryUXdrBh7ZbEJiUQRjebhBbSy8n3iC2ZVSv6fGAYdNpPoVTxKSLr2
+	23j3GUM15euS/UN+kVPG6t4GwcQ/zNUpH1+WyunToQFm4ZgUCyub+voG+nJBb9DMnYwWLDorvzP
+	884439K11dMAyOJ74Nzn+YPQD1zblOzXNx7k69BOBc93UpPYaU8vmrC8jOjNhlwNFcL1tfdQTrM
+	hE+BZDSmaleGTKr5Uv6MnLJEejN/BOG0W0K/bN2OEKuXmUH4jf1QXdUZb3Vp7z7yN6jbPM3hjJ9
+	kqNvM4h/G/0yUU488=
+X-Google-Smtp-Source: AGHT+IEn7VufH3X/Snt0k+wer96wfodht1vNouj4+3d3G8x6QoEXXbV0p2LyxrMFF5Y0Yzynwp6f4w==
+X-Received: by 2002:a05:651c:508:b0:336:ca1d:2289 with SMTP id 38308e7fff4ca-3640adc567bmr554931fa.14.1758211046529;
+        Thu, 18 Sep 2025 08:57:26 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-361a99eb018sm6507591fa.57.2025.09.18.08.57.26
+        for <llvm@lists.linux.dev>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 08:52:46 -0700 (PDT)
-Message-ID: <60b9d835-b164-4775-b9b4-64a523c98879@gmail.com>
-Date: Thu, 18 Sep 2025 17:52:39 +0200
+        Thu, 18 Sep 2025 08:57:26 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-55f720ffe34so1283540e87.1
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 08:57:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVX5TjxX8BF7ifgTTHwtq9Kxm/dEnBrELLGC0nf/VAcz6c28cL+LQY9upGspviPonC1fQ6I@lists.linux.dev
+X-Received: by 2002:a17:907:9612:b0:b10:ecc6:5d8d with SMTP id
+ a640c23a62f3a-b1fac9c9b84mr417765966b.26.1758210601571; Thu, 18 Sep 2025
+ 08:50:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 04/19] x86: Add arch specific kasan functions
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- sohil.mehta@intel.com, baohua@kernel.org, david@redhat.com,
- kbingham@kernel.org, weixugc@google.com, Liam.Howlett@oracle.com,
- alexandre.chartre@oracle.com, kas@kernel.org, mark.rutland@arm.com,
- trintaeoitogc@gmail.com, axelrasmussen@google.com, yuanchu@google.com,
- joey.gouly@arm.com, samitolvanen@google.com, joel.granados@kernel.org,
- graf@amazon.com, vincenzo.frascino@arm.com, kees@kernel.org,
- ardb@kernel.org, thiago.bauermann@linaro.org, glider@google.com,
- thuth@redhat.com, kuan-ying.lee@canonical.com, pasha.tatashin@soleen.com,
- nick.desaulniers+lkml@gmail.com, vbabka@suse.cz, kaleshsingh@google.com,
- justinstitt@google.com, catalin.marinas@arm.com,
- alexander.shishkin@linux.intel.com, samuel.holland@sifive.com,
- dave.hansen@linux.intel.com, corbet@lwn.net, xin@zytor.com,
- dvyukov@google.com, tglx@linutronix.de, scott@os.amperecomputing.com,
- jason.andryuk@amd.com, morbo@google.com, nathan@kernel.org,
- lorenzo.stoakes@oracle.com, mingo@redhat.com, brgerst@gmail.com,
- kristina.martsenko@arm.com, bigeasy@linutronix.de, luto@kernel.org,
- jgross@suse.com, jpoimboe@kernel.org, urezki@gmail.com, mhocko@suse.com,
- ada.coupriediaz@arm.com, hpa@zytor.com, leitao@debian.org,
- peterz@infradead.org, wangkefeng.wang@huawei.com, surenb@google.com,
- ziy@nvidia.com, smostafa@google.com, ubizjak@gmail.com, jbohac@suse.cz,
- broonie@kernel.org, akpm@linux-foundation.org, guoweikang.kernel@gmail.com,
- rppt@kernel.org, pcc@google.com, jan.kiszka@siemens.com,
- nicolas.schier@linux.dev, will@kernel.org, andreyknvl@gmail.com,
- jhubbard@nvidia.com, bp@alien8.de
-Cc: x86@kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org,
- llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
- <7cb9edae06aeaf8c69013a89f1fd13a9e1531d54.1756151769.git.maciej.wieczor-retman@intel.com>
-Content-Language: en-US
-From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <7cb9edae06aeaf8c69013a89f1fd13a9e1531d54.1756151769.git.maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250918140451.1289454-1-elver@google.com>
+In-Reply-To: <20250918140451.1289454-1-elver@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 18 Sep 2025 08:49:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgd-Wcp0GpYaQnU7S9ci+FvFmaNw1gm75mzf0ZWdNLxvw@mail.gmail.com>
+X-Gm-Features: AS18NWBk4u9ObN57KesSGhJyt-aPlWZgKdxYhvzpAyoaxlNUF53WHe4dSKjzUBg
+Message-ID: <CAHk-=wgd-Wcp0GpYaQnU7S9ci+FvFmaNw1gm75mzf0ZWdNLxvw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Christoph Hellwig <hch@lst.de>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, 18 Sept 2025 at 07:05, Marco Elver <elver@google.com> wrote:
+>
+> Capability analysis is a C language extension, which enables statically
+> checking that user-definable "capabilities" are acquired and released where
+> required. An obvious application is lock-safety checking for the kernel's
+> various synchronization primitives (each of which represents a "capability"),
+> and checking that locking rules are not violated.
+>
+> Clang originally called the feature "Thread Safety Analysis" [1],
 
-On 8/25/25 10:24 PM, Maciej Wieczor-Retman wrote:
+So this looks really interesting, but I absolutely *hate* the new
+"capability" name.
 
-> +static inline void *__tag_set(const void *__addr, u8 tag)
-> +{
-> +	u64 addr = (u64)__addr;
-> +
-> +	addr &= ~__tag_shifted(KASAN_TAG_MASK);
-> +	addr |= __tag_shifted(tag);
-> +
-> +	return (void *)addr;
-> +}
-> +
+We have existing and traditional - and very very different - meaning
+of "capabilities" in the kernel, and having this thing called
+"capability" is just wrong. Particularly as it then talks about
+"acquiring capabilities" - which is *EXACTLY* what our lon-existing
+capabilities are all about, but are something entirely and totally
+different.
 
+So please - call it something else. Even if clang then calls it
+'capability analysis", within the context of a kernel, please ignore
+that, and call it something that makes more sense (I don't think
+"capabilities" make sense even in the context of clang, but hey,
+that's _their_ choice - but we should not then take that bad choice
+and run with it).
 
-This requires some ifdef magic to avoid getting this into vdso32 image build process,
-otherwise we'll get this warning:
+Sparse called it "context analysis", and while the "analysis" part is
+debatable - sparse never did much anything clever enough to merit
+calling it analysis - at least the "context" part of the name is I
+think somewhat sane.
 
-CC      arch/x86/entry/vdso/vdso32/vclock_gettime.o
-In file included from ../arch/x86/include/asm/page.h:10,
-                 from ../arch/x86/include/asm/processor.h:20,
-                 from ../arch/x86/include/asm/timex.h:5,
-                 from ../include/linux/timex.h:67,
-                 from ../include/linux/time32.h:13,
-                 from ../include/linux/time.h:60,
-                 from ../arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11,
-                 from ../arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
-../arch/x86/include/asm/kasan.h: In function ‘__tag_set’:
-../arch/x86/include/asm/kasan.h:81:20: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-   81 |         u64 addr = (u64)__addr;
-      |                    ^
-../arch/x86/include/asm/kasan.h:86:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-   86 |         return (void *)addr;
-      |                ^
+Because it's about making decisions based on the context the code runs in.
 
+But I'm certainly not married to the "context" name either. I'd still
+claim it makes more sense than "capability", but the real problem with
+"capability" isn't that it doesn't make sense, it's that we already
+*HAVE* that as a concept, and old and traditional use is important.
 
+But we do use the word "context" in this context quite widely even
+outside of the sparse usage, ie that's what we say when we talk about
+things like locking and RCU (ie we talk about running in "process
+context", or about "interrupt context" etc). That's obviously where
+the sparse naming comes from - it's not like sparse made that up.
+
+So I'm really happy to see compilers start exposing these kinds of
+interfaces, and the patches look sane apart from the absolutely
+horrible and unacceptable name. Really - there is no way in hell we
+can call this "capability" in a kernel context.
+
+I'd suggest just doing a search-and-replace of 's/capability/context/'
+and it would already make things a ton better. But maybe there are
+better names for this still?
+
+I mean, even apart from the fact that we have an existing meaning for
+"capability", just look at the documentation patch, and read the first
+sentence:
+
+  Capability analysis is a C language extension, which enables statically
+  checking that user-definable "capabilities" are acquired and released where
+  required.
+
+and just from a plain English language standpoint, the word
+"capability" makes zero sense. I think you even realized that, in that
+you put that word in quotes, because it's _so_ nonsensical.
+
+And if not "context", maybe some other word? But really, absolutely
+*not* "capability". Because that's just crazy talk.
+
+Please? Because other than this naming issue, I think this really is a
+good idea.
+
+           Linus
