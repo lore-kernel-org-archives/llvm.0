@@ -1,117 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012039.outbound.protection.outlook.com [40.93.195.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01263126C2;
-	Wed, 17 Sep 2025 23:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758152262; cv=none; b=HlUxQuFDKnSccwrW/vdyoGlWW54JJABSDTK2VTZ4qc2vZ3JVvRzkT4IwzyJZkadLcbiuqVMvM41E4kT+OqivY/k+mnAQ7MGFtw4z/gvcooCTWvlVw8zpEEiOYk7hqwtXmdKEExdaPqZPAxyyMj3uzV1Fhci67YSH6HKNBXJqvZ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758152262; c=relaxed/simple;
-	bh=Tm7LDGQYbF/5OYizYxd41PtQk/zW0KgP6XlgKNQteR0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SoP1MrvC05aVBALe7ddqT8iO9ph6VnIMEIrOIyxbd+Ka/8YeCJWl9ceG5QY306+gEMt7JnREecTb76PkraiZJT82Vf4dIS+Z1Im+WuoeiA3+gcqM16Q+xH0y2hbcUm913oP/AVUU7PijIf2tvxE0Q617M7+Tf4XOZGql/mktII4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nu6DHH9U; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B9F11187;
+	Thu, 18 Sep 2025 00:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.39
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758154059; cv=fail; b=e30RdNjpt3lF+vYe4wEqblZUGBfkduEZusqMWaWSEg8GKUaSuYRCo69cuB0BjfUSMc2jYsYflZbxZOjmfY8YfYDdtRxA6BgGNtmKDE4ClwoFiyAOWsrBVA6pJaLROzsSjvW7qIoyLsr9g8E3xPqXCs0KkYv7uJJ/ulc5DVx5QWk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758154059; c=relaxed/simple;
+	bh=bCNq647ZOwRKmjQG6GErgwfd+svpnYZFzw4BcRLqX/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ruCA9UnSDSTiPxYwY+WSO07zpm/AxjMfcXKIS1PQY800CMNl8w0wnhfAtr+QAyPw5u6ufHmEpfGnCpEK/RpzZFt2pYvZ1r3jOzqr1MAFtPvf/Xv7YQqIX72vce1xJ88Rg4JWO/XnYlWaJH0iWAMir0q7AMGfRDlXb7wjE+6UuEY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=p+/L5ze+; arc=fail smtp.client-ip=40.93.195.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nu6DHH9U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758152261; x=1789688261;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tm7LDGQYbF/5OYizYxd41PtQk/zW0KgP6XlgKNQteR0=;
-  b=nu6DHH9UbBjEWEyc1mfHdH/H1FyDHdgWj/8YZCm1Qa62yvGwxiO5wIaE
-   etdhv7+wBJoaS7crC3xRDQD5O2hqk0AUl412UmqGX3c5Re99H99rPnYGA
-   +rSMhDZefpsaBNuW5a21mAxC129mw9TTXm9NA5GyOe9l0Ly/JkF/CkRnq
-   5bhvNoXkgHPsGFyg6hWP5c7nmc94+jBCMsxTSOVXgIqfj/8nHE8jEk6ZH
-   fAE2fVTmpmCCb+1s6ioSyqKDROiKLr/eDbWV4X+pfZj3MlbaJvAO8uUVG
-   5IshS48TtDL0MwNoDUvHuGyq+kDtA0RzVfDfiaML5oWiHL01xap4MQ0HD
-   A==;
-X-CSE-ConnectionGUID: 0mxsbasjRW+rjCKcI8mvoA==
-X-CSE-MsgGUID: nrLIBjhLRqKhov9eoNif8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="71576744"
-X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
-   d="scan'208";a="71576744"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 16:37:41 -0700
-X-CSE-ConnectionGUID: QcxZYuG2QOyvuJ2rkRherg==
-X-CSE-MsgGUID: 5O/Z75r0RRWd2IesMQAMfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,273,1751266800"; 
-   d="scan'208";a="175779636"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 17 Sep 2025 16:37:34 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uz1iN-0002ZT-2Q;
-	Wed, 17 Sep 2025 23:37:31 +0000
-Date: Thu, 18 Sep 2025 07:37:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ethan Graham <ethan.w.s.graham@gmail.com>, ethangraham@google.com,
-	glider@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andreyknvl@gmail.com, andy@kernel.org, brauner@kernel.org,
-	brendan.higgins@linux.dev, davem@davemloft.net, davidgow@google.com,
-	dhowells@redhat.com, dvyukov@google.com, elver@google.com,
-	herbert@gondor.apana.org.au, ignat@cloudflare.com, jack@suse.cz,
-	jannh@google.com, johannes@sipsolutions.net,
-	kasan-dev@googlegroups.com, kees@kernel.org,
-	kunit-dev@googlegroups.com, linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, lukas@wunner.de,
-	rmoar@google.com, shuah@kernel.org, tarasmadan@google.com
-Subject: Re: [PATCH v1 07/10] crypto: implement KFuzzTest targets for PKCS7
- and RSA parsing
-Message-ID: <202509180721.GaBOMCkp-lkp@intel.com>
-References: <20250916090109.91132-8-ethan.w.s.graham@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="p+/L5ze+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=W/UwcLcAvWUIeJxajeLtTSdmpWROdxGNjHiY8iveb3QVk9gOavoYulvClrsXy/GR7Eor1I9XHvhuEq8Pe4eZ1kwc9fIbTt2b6DZP+eGRW9tt4fa3LUIyFTz7+85S4ngo+jCedQOS38tsM5/0rMu5psFwsi3SWk8ZYMtExLBK0h2wzvoigsbEsfquYIaGp3ZgqZqvYpxGlj8K92CkBLWejrjYBo8GNUw5J9isazb8IiU9WdbTZVpXZuhAZhzGPGLDvjREliiPRawRwQcpLRPG6kv+hEqBh9TqHckjavpr/F+uZv+Eoi212So/2WDqgv+shYyMpH7twcuJqqr82UcOuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bCNq647ZOwRKmjQG6GErgwfd+svpnYZFzw4BcRLqX/A=;
+ b=YOJN0zXiypcptrpd85w7NZgPdhxhZ1GWbE2TVxWDVSR49UdwvoG1UXen/yTLuMjK2phwMftXyk4qAND+gp5gpS0VyOqbsdKnZ64AgBkkG4DeEwh/8htwnCP7KwrGWlVUDJTK5RdwfkEQYJeKcyxBX3aDLAGhJ8YKaRlmI03ne0/racbYIe31s/9hktly57hd81ZXQ6YNgRmJ1SHOJ2lg7CF3TYXWph2kAxmGc/yBv7WPNn7OhmORqviQX6PEtWI84sP4FbaikuAlcC1Utu6zqk/8T/h1KI83lOGGLw4A3g0hHp7/p2dt3OlxyBMnkHhiBOMUPZqNiIxk00MefXW/DA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bCNq647ZOwRKmjQG6GErgwfd+svpnYZFzw4BcRLqX/A=;
+ b=p+/L5ze+nRbgfusJjvzKRdlu9Uq2w+6t7btyu7D+VcGbctYXV2ncXRrWlIcRQFSGMgfnYnt6RCPdCMcRoU6MQyUPfPxEAww2ivu4lLdaEyVIXfh4Z+3rYT1MpzXeTfNQakAL76JBWPN7zbccyOQNxWRYKaZLBU6RWCIHwhrpp6FuzSY0OITT/DJiZHCxpXUlCDDagwKfeglnUOgW7xdvvJuLcwNgbFfFgg4KPdlh/hMRg0l4QsGpTwwJ228gq2gAEMMDbKE9aPzb+DU5tgWnSSOJLrbT33ez/VdVR7QCLsfUBIZlYKVLfRe5o1FhE0u6bpyB9yY/QHb32Z6Rr6F+OA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
+ by SA0PR12MB7464.namprd12.prod.outlook.com (2603:10b6:806:24b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Thu, 18 Sep
+ 2025 00:06:12 +0000
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9115.022; Thu, 18 Sep 2025
+ 00:06:12 +0000
+Date: Wed, 17 Sep 2025 21:06:10 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Oliver Sang <oliver.sang@intel.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [jgunthorpe:iommu_pt_vtd 8/34] ERROR: modpost: "__udivdi3"
+ [drivers/iommu/generic_pt/fmt/iommu_amdv1.ko] undefined!
+Message-ID: <20250918000610.GK1391379@nvidia.com>
+References: <202508271856.ixwxgh3g-lkp@intel.com>
+ <20250902124856.GE186519@nvidia.com>
+ <aMj38M8HeDSQHQPf@xsang-OptiPlex-9020>
+ <20250916141256.GF1086830@nvidia.com>
+ <20250917022043.GB3106929@ax162>
+ <20250917112214.GY1086830@nvidia.com>
+ <20250917221217.GA650176@ax162>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250917221217.GA650176@ax162>
+X-ClientProxiedBy: YT4PR01CA0450.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10d::29) To PH7PR12MB5757.namprd12.prod.outlook.com
+ (2603:10b6:510:1d0::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250916090109.91132-8-ethan.w.s.graham@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|SA0PR12MB7464:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2afd8432-fbc8-46af-2ee8-08ddf6472d2f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?qcNefA1Q4hxJ/qLiZuQfFguKzHxkCm0RL6h3QuSSXtr3MB3XqJn+j6vW0UUI?=
+ =?us-ascii?Q?YMPihY1S7FBxht63g/7w/CTP9Gz3FhBCsmdQhNzUuQJLxkx01mDLWThntqCZ?=
+ =?us-ascii?Q?0ACoRrtmgG+ksOpl8YUnhFeWGxZwfIeEQvmFs5XAdS9i6WrFhZFJLh7tU2rj?=
+ =?us-ascii?Q?hMvY2ZzH3yQFeAGmpazPmNrrnrtUa0ZI6qLaOij7/mb5hauuCV15H8OXYolz?=
+ =?us-ascii?Q?fAspLShE+L4IY87MUvqPxrb/JXaMnfF8a60D1vDwhoN9Bj1VvuRfrspr1Gwe?=
+ =?us-ascii?Q?EipNAFAUEOJwH5Jo+wotMEeyzgqUWV8xY6dGCuAmMSvHl44YUl0aSUvEDVZ4?=
+ =?us-ascii?Q?PSuBBwMPbFKzABAWgc6DbWi4tyLy7HPT8HJxSP2MRlgX6U0w572kOvjJvYfu?=
+ =?us-ascii?Q?7eNasSbcRZN1WJDHTu2AsRbhaFk1QJECzQvvbq0dEiVS+4Bgarikgnbn834Z?=
+ =?us-ascii?Q?eN5hdxOXEk5RUWxYHupYkf5OcTJ6vPUzw78L+fE2TjkJw65Q5ZDrnhto1tbu?=
+ =?us-ascii?Q?jWKumG0bbE7MPzzvlrz4/kiTCWLECYv4QRDYA2myEEfuJ9OQbs02Gci6idhE?=
+ =?us-ascii?Q?1FPr4viVZZPDx9aUzrb0lLmYBdiEILtc6O7oxuil8Gdw4HlhYJk+sUAHVd9z?=
+ =?us-ascii?Q?RO3yM/SHQNKX/LuXsUf5+c+QgB4GUgprinzzHCq/aHrJy6DEErzS39D1A8Iy?=
+ =?us-ascii?Q?6zaPa/fBtO42dDzruiTBnv/GBvOP93D+0YzQ3z3HnJ791NiZh/jIr8RyyZk8?=
+ =?us-ascii?Q?quXl+8VmqcprX799HvRHVjcR8f92aAoO+Zdz55GEX+t/h8kwMrSzYTyEVZQT?=
+ =?us-ascii?Q?mDsY+3REZHr40cI0Wnp89EOCa4X7z+mhJEbTThnhasT51qo7hq/mJs/Ndm49?=
+ =?us-ascii?Q?okkFmREGJRV0Gspkj3aTWrCar1zF2Z9AsgcORU6CV5JwfCrPE54xUwl2yLwE?=
+ =?us-ascii?Q?zCnanGlYNWInD6AhudK1ueEe1ubRmW334cEu+ZW+XKW1JdeTIHqo3b9HTLIs?=
+ =?us-ascii?Q?gRmtPjyi2UA/X8WxCXb9UVX8NE+0DEw98iih1ewpXr0pBiG7Ia+1mv6zDzAb?=
+ =?us-ascii?Q?wVlSwgfcC/ZMBpx5vXUcY7qOkoNpipSdbUqUxtbMymC4dXClafAZYWsG2EzO?=
+ =?us-ascii?Q?soZIkiMRN4lLqS90opQXIkbMVhPiBlee1wsHKInMQkVwn+GNv91clvn9gJds?=
+ =?us-ascii?Q?WUcCeDlfRRw4owFg6IVXJr1LqX6EnwZ/AnoV8J1OANmrE1wXcvHclp/XX9qi?=
+ =?us-ascii?Q?ta+45J2I7RDbCdG9uNkVaAw8nuc8ER6w+UOwhgw9zmQJrUWsHtYNwwpuvfAz?=
+ =?us-ascii?Q?OJkYMYRZ8n9ua12DZJJymZB979C0ECScA5n/zfleOxq4SUBpoHOOsteh2397?=
+ =?us-ascii?Q?TKDumbOfj6T+R2TZs/WXW16gHkxAMa8sa/0tb4PsI8xLtvT1WDLqJMrXZ7dm?=
+ =?us-ascii?Q?YyxuLz+lAzc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?izMlhps9tLGGTkmzi736egpCCYXXDEMBu5SpVm5tIahMGrGnWWkmkP5nQksK?=
+ =?us-ascii?Q?1+TIC8gbhJ2inCWnr6WP7rI2dTeBew0Lsv6J9RKbuC5HxKCCCkQ5lUysDqpV?=
+ =?us-ascii?Q?JjNZ81EQaAJJsi1bCC538P/Y4NNipAzSEXvi+QuZQJyzyWchWWV6h1jVsGKE?=
+ =?us-ascii?Q?3ZYuK85PCOzMGppEh5w4lGCQHDSlhWuXKDlxhqdTVdGzfPHIX1Up4smmppiB?=
+ =?us-ascii?Q?IN8OO8Xg5DNcS/1IEmBG9ZbGOhxceUaBfZM15ZXK/7JzUGMpS/cywzfgvVKh?=
+ =?us-ascii?Q?YEfEDh4gH8jQogHn80VDx5fU4mXwHkGi/cmBesF2eVmbOtB3wuxhPtThK8pt?=
+ =?us-ascii?Q?aToE5f7GpwdiVJz5+GEsltEZ2WZNKEj/RLl5B0A2F2bnNT/UB+EhlXXgKq42?=
+ =?us-ascii?Q?Fx40aFN62tpZxBkgZQClMNSn4kCj7+0DZghKWeTWEXt2vub6dSJ6FQakux/a?=
+ =?us-ascii?Q?Fw/Td3FSfnpPyAeZOw9xmS8SUtJMLfW5JfobAJ6P8yn2ruygIiNxqy8bo3tZ?=
+ =?us-ascii?Q?Orc2pM2LXtPvmcik4A01FtFSCqG6qy0eCrKaZ/mXjIidWIkcI1s+iqueK6Cv?=
+ =?us-ascii?Q?BQNtGiw2aKZxyZ1Cm8rR8QCKVDlleDqUD649LelohKXjIJYTn9hUxxszSp0x?=
+ =?us-ascii?Q?dl1ZDWU+HLPq5R/8ZqBTgi0SFrv0pFq8H7Upbr0NCtWDTxuJcNvyBqAqpUNQ?=
+ =?us-ascii?Q?E4EJ8m4d/feGQIvCd3BRU8Mzq5w29EceecnZdYLumaJn5KkApKYdQ1HZILge?=
+ =?us-ascii?Q?XWGRCAgYWNAeUw8IuIQ5rlHnUPx7PIzhqEy9kpAXlaDjRvo19t1IvNd8JiEQ?=
+ =?us-ascii?Q?MqqE0SGd+BZefgdjtuB+1b0r2qd5m2lWeSHxi9XWbSI7lADNGjDrC3kIRUKq?=
+ =?us-ascii?Q?m1QjSXEyuHszwsCNugBONqt3EHjZ0aPUmfRFmwINZ99vRNUswBFmsxkbxmJL?=
+ =?us-ascii?Q?dHbeSBueKvjCVU0q3z84wo4jDm/BeWtvBiHTEuYP3USmaFqcvB4fqQaVxBu2?=
+ =?us-ascii?Q?j9dpborBCndQnYM4k+30ETv8YRjnrLpop5hgL7jNMyQMcSSqWt1gL3tJ9vLv?=
+ =?us-ascii?Q?Wf0LTAkT5jHwApOYZ4gdpNeLeVSwE2Y1QRVvqE+DZXqarmOy4jNJOScbtYUa?=
+ =?us-ascii?Q?bA6OOeWCc7hj2/tiYc8c7wYkzzRL6T4mRJdZF+fuFODbxS+oOkOtA+7quqct?=
+ =?us-ascii?Q?nBCZzLsUe+LmNSdx3ViPeWZtjrLkfuQoxU6TwMnL8I2xAFCWeTXvfXMjA+mo?=
+ =?us-ascii?Q?Rcnp3gHDUG9wZcdVmBj897Q/iGADowbey1BlK9sS0nHgDSRzkDkno21wVQSd?=
+ =?us-ascii?Q?foRKNxgtTSNUmdmJOPHnuItO5Ds+tws/k/i5NjSb0Dr11SFbkcfcHj5NPoyO?=
+ =?us-ascii?Q?IhdRKs8+I3+z/N3Arfh1HSdyz1jd6rxFFfTX1N4GnB2wNJ2EY3HaoZyrv+WC?=
+ =?us-ascii?Q?EhzpMN/MzGe335460MLfV+Nw+ki/n7gUVoV7p3p+wNUWZbCkSJqwufWkqd/t?=
+ =?us-ascii?Q?Mz81oNkHCgHp0QWshDkY2bRZ3YhYy21g0h+ZxzTnZecpBcRRjxrdDLgZET5Q?=
+ =?us-ascii?Q?J4fUu8bxQQLJO7cMFq4=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2afd8432-fbc8-46af-2ee8-08ddf6472d2f
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 00:06:11.9851
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cBinkZLsS0lm7H5hbMZIOrymQOnz+9fCm6HE5imujsYFfAaJwkXZmqvxUbz+X95Q
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7464
 
-Hi Ethan,
+On Wed, Sep 17, 2025 at 03:12:17PM -0700, Nathan Chancellor wrote:
+> Looking at the preprocessed source and making some educated guesses, I
+> am guessing with inlining and constant folding, GCC turn division into
+> multiplication by the reciprocal. Clang implements some of these
+> optimizations but not all, if I remember correctly.
 
-kernel test robot noticed the following build errors:
+Oh interesting, I noticed that clang was measurably slower than gcc
+for this code, maybe this is some of why
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.17-rc6 next-20250917]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ethan-Graham/mm-kasan-implement-kasan_poison_range/20250916-210448
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20250916090109.91132-8-ethan.w.s.graham%40gmail.com
-patch subject: [PATCH v1 07/10] crypto: implement KFuzzTest targets for PKCS7 and RSA parsing
-config: x86_64-randconfig-075-20250918 (https://download.01.org/0day-ci/archive/20250918/202509180721.GaBOMCkp-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250918/202509180721.GaBOMCkp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509180721.GaBOMCkp-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: pkcs7_parse_message
-   >>> referenced by pkcs7_kfuzz.c:21 (crypto/asymmetric_keys/tests/pkcs7_kfuzz.c:21)
-   >>>               vmlinux.o:(kfuzztest_write_cb_test_pkcs7_parse_message)
---
->> ld.lld: error: undefined symbol: rsa_parse_pub_key
-   >>> referenced by rsa_helper_kfuzz.c:22 (crypto/asymmetric_keys/tests/rsa_helper_kfuzz.c:22)
-   >>>               vmlinux.o:(kfuzztest_write_cb_test_rsa_parse_pub_key)
---
->> ld.lld: error: undefined symbol: rsa_parse_priv_key
-   >>> referenced by rsa_helper_kfuzz.c:37 (crypto/asymmetric_keys/tests/rsa_helper_kfuzz.c:37)
-   >>>               vmlinux.o:(kfuzztest_write_cb_test_rsa_parse_priv_key)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jason
