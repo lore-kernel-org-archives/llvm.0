@@ -1,140 +1,486 @@
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79AB3112DD;
-	Thu, 18 Sep 2025 16:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A109331B823
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 16:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758212431; cv=none; b=qp+4RK0kl5BufXATJ00AxUkDeNDZdrLwDF6UDXyotPBAXLygJXw+i5GZQjq4gn7Ow3NDHI84TW6aUuWvfvs/98ccRwO46HETJ2U4ydDw5p8LU8tncBwHro01Dfs6kRbP3w2hs6mQ13N/Ge1dEKTF/LcgVv9oM6b7iA5UPr7Fk4o=
+	t=1758212529; cv=none; b=IsAqYjOx0kuX2iXahVrsSddJJ3wuAbCAGtCzC5aPvfx37f+ROxlAEFaHko7tLcwgoCZW3qjjCGufOE6mDO4T++ycpBPEPqKLZgutXCAmjdMieHiXD7lu0AbtGj7QICPel/9NFeVuy+qHJGjGzAkuGw/rAUqVOyhjgp7zLkJKHkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758212431; c=relaxed/simple;
-	bh=+QFOanT/mQexritkRfOqq2/uPgHue7oVT+RQTYO0HDk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pMCcOvQ44UqrulPnsNZ/DR7H0GnOBrKk8Kj6cZAVlTPMApMW0VANyRTQKx/956817ZI5rUdo1zvWWTaB980sz8vDQOCYcvzG0RDqqR98gSaT5BYPNrXHjwiJogqzMuEoONgcv4T0Yfec+//eOrqzFL71tuS7Do/Pou/JBveACu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=FV+l2ayH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gxIg8TDw; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1758212529; c=relaxed/simple;
+	bh=SAhQ4cQqqu3EVycuqcoZ3ffvgqhMm6L5akWnd1NUBCU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HpnNRAGJnQk0S8nxw+q4ZnwTjn/qK3rE83krzTs4a5VpY6gK+rXMFZhMPJYJPq3SxmBEnsJCIPiH/SA6KucvPmkZz7+n7UjayeRr7ncJF/U2qlOvIfPJsHH8ebLs0whogej6hRn0Rw8j4bqsiSGWCjI2DFkdYz+1Rt8vNbsdR4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MY1BxcuE; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="FV+l2ayH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gxIg8TDw"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 1F35DEC02F1;
-	Thu, 18 Sep 2025 12:20:29 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 18 Sep 2025 12:20:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758212429;
-	 x=1758298829; bh=tmGWVjr/plBDzfvbAKhx6iARmpyl4UPvOj4rfEO7kFM=; b=
-	FV+l2ayH/eDb0mQLXR69ETsvV1qwsAmKxzDJgbyGHaqHvcbnmgMlVcLbFTDMofpw
-	ON0sGpEUQqJAHVzhmTVaPn2yuU0xkFrCyvg4RRZP7vVFkytGO0EDPKli3Mz/9M7h
-	madQpnZ1cA3vlmu3NCA2QPYawD+8voKPb49ORqItcyJEdHMVztgyv41fqe21BKqO
-	hgAIifuWgDM1hVgC66Cjiap766hU/oXcPuxxwFTXJ3LRR42eEUYSKfWwv9lqx3kt
-	lQAYbvLZ+Rmo9mIBv/NfnASAa56gk0GgzB64SCIMHp7V3RpsU0Ya2/K0VPbEc2ed
-	ioS46Q/Poj6u2i1jZbiABA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758212429; x=
-	1758298829; bh=tmGWVjr/plBDzfvbAKhx6iARmpyl4UPvOj4rfEO7kFM=; b=g
-	xIg8TDw+wGDwdhNseeH8YQdZA4S5R0gePYw95PhCD4jHuWNjQLsNWc44HnbQJtIn
-	ErzSTc0jFUHzLSktqtB638BiFwdBONE2xAYeh4YE98XLJZHNHdJULWv4ryUpjabi
-	l2HawHRz8lsVPHJcDmgNnlZauAlI5ZR1pOZBwVuL5RZaVQxUbCGE1fNEmwLaKLiA
-	OY4+Li0ZUCih62P01D/wDLOgCMui+W7RFVzgTxKuzKyd5UC31QX0zKLy4n2EkPnZ
-	uGpaxFii3FIsOT7gV8Y9H48vAhv8BXaebUjFc5eUVa7htJAtmaXPJHXIBqFqU54r
-	hvY6/lxTYll8J5otMd0CA==
-X-ME-Sender: <xms:TDHMaHjr4m47XfRFLnooPRe2UNPSJT0r0GNmMrr792IfZtvVnzDVUQ>
-    <xme:TDHMaEAuwoBhuaFP-JQrg89S7UxFTnblwjJBrztLYKz6C208oByCmcXs4HKoFRBuH
-    Fe3PxP7tYusQng0YoU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdegieejlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeekleffjeetvedvgefhhfeihfen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
-    thhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegulhgrnhesghgvnh
-    htohhordhorhhgpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhm
-    lhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhogh
-    hlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphht
-    thhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhkohhulheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrrhgvshhhrdhkrghmsghojhhusehlihhn
-    rghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinh
-    hfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhig
-    rdguvghv
-X-ME-Proxy: <xmx:TDHMaJWhxE6rxyr5cSefV7mqkE0OKdEr0JChXXgYodtadvEo9XX01A>
-    <xmx:TDHMaIiva_JDjIyYc5ZQ80tB9qU93rVsR2cHpQHIOJaspdWO1QzhFg>
-    <xmx:TDHMaBdgmOziAfLicgsbA5M09jayoi0oO8IoAV4XMDf7mPHSdh5QcA>
-    <xmx:TDHMaP0DTYui7ukg6cwCVV80GEsHNvj9WkdzmT8QXhvkDxI3S7_Bew>
-    <xmx:TTHMaH7h5PkJyNVx-Xufz5qS5lyu8aPC2CeRkZ9vIKMesZ5ZAgZnvlCY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CE9F370006B; Thu, 18 Sep 2025 12:20:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MY1BxcuE"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-265f460ae7bso194675ad.0
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 09:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758212526; x=1758817326; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5MVxy+isNSGzxZ1RNWDgxpSBJ+uufmPyWYytHyGJgFE=;
+        b=MY1BxcuElkMo5Wx0IltauDJ9ZiASfmyzez9oFdNDxFkM5v+pASsUNbSGCNis7hpTKQ
+         xGfXrc1sV0GoSAgpINY1Y4LJij4nWK5hQwc4sQz3YjCKuFKiyCLVV4BITmzk1dP4N2+8
+         w4HSfG6vhtgM9aDXPstk2ML/YrOIXqHNba53Y7exKu7c5xxJdt9hSd4P6Cc7b08Msd4x
+         DnUY2tRvtHqVhzZ1337OmrahFxBHDX0btQrmchesr2rqtIZkYj5xaKI8+1Ni3fE4osHC
+         wi3uXohaiLIVcbEqYxtnTbRTFAIy4SzktsRmkJey++NGkrnsaBMBE0N+R2aOsWQZ77oE
+         XGng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758212526; x=1758817326;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5MVxy+isNSGzxZ1RNWDgxpSBJ+uufmPyWYytHyGJgFE=;
+        b=BNK+CTFmlfL0VGA2yFqTzyvMmGonp8hc0kAcCmqWkGvDgstp3RIn7iOJPrU2NeEWh0
+         /Y6+0lvu0HLn7Ftu9iK3CLMetr/073whJc2EeSlKa5hm3KaT5VqKCJm0i5hyyN5IZtcU
+         77ARk3MO2cZ1C6MsgYSbMD/1grP2VwZ7z7P1PcMdpRPxGnlyCDq6TY+I3b5iIAqP1ZTq
+         3uVuN8pyzZvFvBttp68NplJBdYrGqOf0eIn12/M5AzBCY1QjyoQzLgzcxxDX71fgDOql
+         FZrA5UPIj0nLhxVDAgnohsGTY8uGccAsWVOI0yDDbK3IVZ26s6pZysBacdwovFJzcpzJ
+         7KDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWLa6eV9f+5/IKJ/8tHhdyBoqgISRkqMNgDRaJTz3gQtGHVJMLoVFsa6WdZJDQYOK7aOvU1@lists.linux.dev
+X-Gm-Message-State: AOJu0YwrxAvXa+QOZYJIbT8w9JSi7WEny6qOnQf5PSr3c5qvjcx9hQhu
+	lrQ6jhS5dsP0sLh/6hqBbV025BVEOnpEpazt8ekHpVECFdZGAGUivtb9ssymZ2EC7Lf8rU5TGuf
+	SXOZyKUAOSo2tPMXkR1Uq3OBEf5x8seaZNrgsTnPD
+X-Gm-Gg: ASbGncslNppfpQkuzZ/+FpKij+D90KdAxU+Yjgf4FnwQgLxrRIl8+2JoHIOSFy/GMEG
+	6JCHXPz4BjR7vHfvQQEY7GBiryseSL6BM/yVWFArme2g+ryIGJQ1N9DUk0hGJiqfodbOTM6KJtn
+	O9zZQiq/TOyNPlSATKUffkWusoCxVKsAK0/QEwBPh7KQlUpSuWqtriSF+hg0/2klEkkwNixAKsH
+	ESoXwtfyy2DMcACpzsQjQycfvun8qlt7MY1sg/vu5z9MQsilfsYVjMuH/pd9V4=
+X-Google-Smtp-Source: AGHT+IHxGXO+MQMP4X/HxoMphmnj6jFmVCb1ai8uCipAkHFyHD7uKu4n7L234w2XjgKLmDc8UqgxzQ06juIY0O+RCyk=
+X-Received: by 2002:a17:902:d2d1:b0:265:e66:6c10 with SMTP id
+ d9443c01a7336-26800eb14c1mr10816965ad.4.1758212525092; Thu, 18 Sep 2025
+ 09:22:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ADSp2o6y9pwF
-Date: Thu, 18 Sep 2025 18:20:07 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Guodong Xu" <guodong@riscstar.com>, "Vinod Koul" <vkoul@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Yixun Lan" <dlan@gentoo.org>
-Cc: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- spacemit@lists.linux.dev, elder@riscstar.com,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>
-Message-Id: <d2a99673-cc0e-4024-bc66-76d395ea4313@app.fastmail.com>
-In-Reply-To: 
- <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
-References: 
- <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
-Subject: Re: [PATCH] dmaengine: mmp_pdma: fix DMA mask handling
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250918140451.1289454-1-elver@google.com>
+In-Reply-To: <20250918140451.1289454-1-elver@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 18 Sep 2025 09:21:53 -0700
+X-Gm-Features: AS18NWCdr0R3pX49u8RURP-UvB2JdrfJJnKQCP7CUfy991L56-Il3vjCOTsSBN4
+Message-ID: <CAP-5=fXBe0_aAep4PPwvfyHPJevMeLffHwA80jec2WVb2ugeYg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
+To: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Christoph Hellwig <hch@lst.de>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Jann Horn <jannh@google.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Triplett <josh@joshtriplett.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 18, 2025, at 16:27, Guodong Xu wrote:
-> The driver's existing logic for setting the DMA mask for "marvell,pdma-1.0"
-> was flawed. It incorrectly relied on pdev->dev->coherent_dma_mask instead
-> of declaring the hardware's fixed addressing capability. A cleaner and
-> more correct approach is to define the mask directly based on the hardware
-> limitations.
+On Thu, Sep 18, 2025 at 7:05=E2=80=AFAM Marco Elver <elver@google.com> wrot=
+e:
 >
-> The MMP/PXA PDMA controller is a 32-bit DMA engine. This is supported by
-> datasheets and various dtsi files for PXA25x, PXA27x, PXA3xx, and MMP2,
-> all of which are 32-bit systems.
+> Capability analysis is a C language extension, which enables statically
+> checking that user-definable "capabilities" are acquired and released whe=
+re
+> required. An obvious application is lock-safety checking for the kernel's
+> various synchronization primitives (each of which represents a "capabilit=
+y"),
+> and checking that locking rules are not violated.
 >
-> This patch simplifies the driver's logic by replacing the 'u64 dma_mask'
-> field with a simpler 'u32 dma_width' to store the addressing capability
-> in bits. The complex if/else block in probe() is then replaced with a
-> single, clear call to dma_set_mask_and_coherent(). This sets a fixed
-> 32-bit DMA mask for "marvell,pdma-1.0" and a 64-bit mask for
-> "spacemit,k1-pdma," matching each device's hardware capabilities.
+> Clang originally called the feature "Thread Safety Analysis" [1], with
+> some terminology still using the thread-safety-analysis-only names. This
+> was later changed and the feature became more flexible, gaining the
+> ability to define custom "capabilities". Its foundations can be found in
+> "capability systems" [2], used to specify the permissibility of
+> operations to depend on some capability being held (or not held).
 >
-> Finally, this change also works around a specific build error encountered
-> with clang-20 on x86_64 allyesconfig. The shift-count-overflow error is
-> caused by a known clang compiler issue where the DMA_BIT_MASK(n) macro's
-> ternary operator is not correctly evaluated in static initializers. By
-> moving the macro's evaluation into the probe() function, the driver avoids
-> this compiler bug.
+> Because the feature is not just able to express capabilities related to
+> synchronization primitives, the naming chosen for the kernel departs
+> from Clang's initial "Thread Safety" nomenclature and refers to the
+> feature as "Capability Analysis" to avoid confusion. The implementation
+> still makes references to the older terminology in some places, such as
+> `-Wthread-safety` being the warning enabled option that also still
+> appears in diagnostic messages.
 >
-> Fixes: 5cfe585d8624 ("dmaengine: mmp_pdma: Add SpacemiT K1 PDMA support 
-> with 64-bit addressing")
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Closes: 
-> https://lore.kernel.org/lkml/CA+G9fYsPcMfW-e_0_TRqu4cnwqOqYF3aJOeKUYk6Z4qRStdFvg@mail.gmail.com
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Guodong Xu <guodong@riscstar.com>
+> Enabling capability analysis can be seen as enabling a dialect of Linux
+> C with a Capability System.
+>
+> Additional details can be found in the added kernel-doc documentation.
+> An LWN article covered v2 of the series: https://lwn.net/Articles/1012990=
+/
+>
+>  [1] https://clang.llvm.org/docs/ThreadSafetyAnalysis.html
+>  [2] https://www.cs.cornell.edu/talc/papers/capabilities.pdf
+>
+> =3D=3D=3D Development Approach =3D=3D=3D
+>
+> Prior art exists in the form of Sparse's context tracking. Locking
+> annotations on functions exist, so the concept of analyzing locking rules
+> is not foreign to the kernel's codebase.
+>
+> However, Clang's analysis is more complete vs. Sparse's, with the
+> typical trade-offs in static analysis: improved completeness is
+> sacrificed for more possible false positives or additional annotations
+> required by the programmer. Numerous options exist to disable or opt out
+> certain code from analysis.
+>
+> This series initially aimed to retain compatibility with Sparse, which
+> can provide tree-wide analysis of a subset of the capability analysis
+> introduced, but it was later decided to drop Sparse compatibility. For
+> the most part, the new (and old) keywords used for annotations remain
+> the same, and many of the pre-existing annotations remain valid.
+>
+> One big question is how to enable this feature, given we end up with a
+> new dialect of C -- 2 approaches have been considered:
+>
+>   A. Tree-wide all-or-nothing approach. This approach requires tree-wide
+>      changes, adding annotations or selective opt-outs. Making additional
+>      primitives capability-enabled increases churn, esp. where maintainer=
+s
+>      are unaware of the feature's existence and how to use it.
+>
+> Because we can't change the programming language (even if from one C
+> dialect to another) of the kernel overnight, a different approach might
+> cause less friction.
+>
+>   B. A selective, incremental, and much less intrusive approach.
+>      Maintainers of subsystems opt in their modules or directories into
+>      "capability analysis" (via Makefile):
+>
+>        CAPABILITY_ANALYSIS_foo.o :=3D y   # foo.o only
+>        CAPABILITY_ANALYSIS :=3D y         # all TUs
+>
+>      Most (eventually all) synchronization primitives and more
+>      capabilities (including ones that could track "irq disabled",
+>      "preemption" disabled, etc.) could be supported.
+>
+> The approach taken by this series is B. This ensures that only
+> subsystems where maintainers are willing to deal with any warnings are
+> opted-in. Introducing the feature can be done incrementally, without
+> large tree-wide changes and adding numerous opt-outs and annotations to
+> the majority of code.
+>
+>   Note: Bart Van Assche concurrently worked on enabling -Wthread-safety:
+>   https://lore.kernel.org/all/20250206175114.1974171-1-bvanassche@acm.org=
+/
+>   Bart's work has shown what it might take to go with approach A
+>   (tree-wide, restricted to 'mutex' usage). This has shown that the
+>   analysis finds real issues when applied to enough subsystems!  We hope
+>   this serves as motivation to eventually enable the analysis in as many
+>   subsystems as possible, particularly subsystems that are not as easily
+>   tested by CI systems and test robots.
+>
+> =3D=3D=3D Initial Uses =3D=3D=3D
+>
+> With this initial series, the following synchronization primitives are
+> supported: `raw_spinlock_t`, `spinlock_t`, `rwlock_t`, `mutex`,
+> `seqlock_t`, `bit_spinlock`, RCU, SRCU (`srcu_struct`), `rw_semaphore`,
+> `local_lock_t`, `ww_mutex`.
+>
+> To demonstrate use of the feature on real kernel code, the series also
+> enables capability analysis for the following subsystems:
+>
+>         * kernel/kcov
+>         * kernel/kcsan
+>         * kernel/sched/
+>         * lib/rhashtable
+>         * lib/stackdepot
+>         * mm/kfence
+>         * security/tomoyo
+>         * crypto/
+>
+> The initial benefits are static detection of violations of locking
+> rules. As more capabilities are added, we would see more static checking
+> beyond what regular C can provide, all while remaining easy (read quick)
+> to use via the Clang compiler.
+>
+>   Note: The kernel already provides dynamic analysis tools Lockdep and
+>   KCSAN for lock-safety checking and data-race detection respectively.
+>   Unlike those, Clang's capability analysis is a compile-time static
+>   analysis with no runtime impact. The static analysis complements
+>   existing dynamic analysis tools, as it may catch some issues before
+>   even getting into a running kernel, but is *not* a replacement for
+>   whole-kernel testing with the dynamic analysis tools enabled!
+>
+> =3D=3D=3D Appendix =3D=3D=3D
+>
+> A Clang version that supports `-Wthread-safety-pointer` and the new
+> alias-analysis of capability pointers is required (from this version
+> onwards):
+>
+>         https://github.com/llvm/llvm-project/commit/b4c98fcbe1504841203e6=
+10c351a3227f36c92a4 [3]
+>
+> This series is also available at this Git tree:
+>
+>         https://git.kernel.org/pub/scm/linux/kernel/git/melver/linux.git/=
+log/?h=3Dcap-analysis/dev
+>
+> =3D=3D=3D Changelog =3D=3D=3D
+>
+> v3:
+>
+>   - Bump min. Clang version to 22+ (unreleased), which now supports:
+>
+>         * re-entrancy via __attribute__((reentrant_capability));
+>         * basic form of capability alias analysis [3] - which is the
+>           biggest improvement since v2.
+>
+>     This was the result of conclusions from this discussion:
+>     https://lore.kernel.org/all/CANpmjNPquO=3DW1JAh1FNQb8pMQjgeZAKCPQUAd7=
+qUg=3D5pjJ6x=3DQ@mail.gmail.com/
+>
+>   - Rename __asserts_cap/__assert_cap to __assumes_cap/__assume_cap.
+>
+>   - Switch to DECLARE_LOCK_GUARD_1_ATTRS().
+>
+>   - Add __acquire_ret and __acquire_shared_ret helper macros - can be
+>     used to define function-like macros that return objects which
+>     contains a held capabilities. Works now because of capability alias
+>     analysis.
+>
+>   - Add capability_unsafe_alias() helper, where the analysis rightfully
+>     points out we're doing strange things with aliases but we don't
+>     care.
+>
+>   - Support multi-argument attributes.
+>
+>   - Enable for kernel/sched/{core,fair}.c, kernel/kcsan.
+>   - Drop drivers/tty changes (revisit later).
+>
+> v2: https://lore.kernel.org/all/20250304092417.2873893-1-elver@google.com=
+/
+>
+>   - Remove Sparse context tracking support - after the introduction of
+>     Clang support, so that backports can skip removal of Sparse support.
+>
+>   - Remove __cond_lock() function-like helper.
+>
+>   - ww_mutex support.
+>
+>   - -Wthread-safety-addressof was reworked and committed in upstream
+>     Clang as -Wthread-safety-pointer.
+>
+>   - Make __cond_acquires() and __cond_acquires_shared() take abstract
+>     value, since compiler only cares about zero and non-zero.
+>
+>   - Rename __var_guarded_by to simply __guarded_by. Initially the idea
+>     was to be explicit about if the variable itself or the pointed-to
+>     data is guarded, but in the long-term, making this shorter might be
+>     better.
+>
+>   - Likewise rename __ref_guarded_by to __pt_guarded_by.
+>
+>   - Introduce common header warning suppressions - this is a better
+>     solution than guarding header inclusions with disable_ +
+>     enable_capability_analysis(). Header suppressions are disabled when
+>     selecting CONFIG_WARN_CAPABILITY_ANALYSIS_ALL=3Dy. This bumps the
+>     minimum Clang version required to 20+.
+>
+>   - Make the data_race() macro imply disabled capability analysis.
+>     Writing capability_unsafe(data_race(..)) is unnecessarily verbose
+>     and data_race() on its own already indicates something subtly unsafe
+>     is happening.  This change was made after analysis of a finding in
+>     security/tomoyo.
+>
+>   - Enable analysis in the following subsystems as additional examples
+>     of larger subsystem. Where it was obvious, the __guarded_by
+>     attribute was added to lock-guarded variables to improve coverage.
+>
+>         * drivers/tty
+>         * security/tomoyo
+>         * crypto/
+>
+> RFC v1: https://lore.kernel.org/lkml/20250206181711.1902989-1-elver@googl=
+e.com
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Thanks for this and lgtm. Fwiw, there is already thread safety
+analysis in tools/perf:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/mutex.h?h=3Dperf-tools-next#n43
+and we should migrate that code to use this code.
 
-Thanks for fixing this!
+Something that I've wondered about capabilities is to use them for
+detecting missing reference count "puts", which feel similar to missed
+unlocks. In my experience the sanitizers are weak in this area as in
+C++ you can trivially use RAII, however, frustratingly clang's
+capability analysis is disabled in C++'s constructors and destructors
+(not an issue here :-) and based on my rusty memory). To solve this
+for perf (and fix many many bugs) we did a form of runtime RAII:
+https://perfwiki.github.io/main/reference-count-checking/
+There is likely something better than can be done with the nearly RAII
+that is/are cleanups. Trying to make that sane for a data-structure
+like an rbtree is hard and maybe rust is just the only solution there.
+Anyway, it is great to see thread safety analysis pushed forward.
+
+Thanks,
+Ian
+
+> Marco Elver (35):
+>   compiler_types: Move lock checking attributes to
+>     compiler-capability-analysis.h
+>   compiler-capability-analysis: Add infrastructure for Clang's
+>     capability analysis
+>   compiler-capability-analysis: Add test stub
+>   Documentation: Add documentation for Compiler-Based Capability
+>     Analysis
+>   checkpatch: Warn about capability_unsafe() without comment
+>   cleanup: Basic compatibility with capability analysis
+>   lockdep: Annotate lockdep assertions for capability analysis
+>   locking/rwlock, spinlock: Support Clang's capability analysis
+>   compiler-capability-analysis: Change __cond_acquires to take return
+>     value
+>   locking/mutex: Support Clang's capability analysis
+>   locking/seqlock: Support Clang's capability analysis
+>   bit_spinlock: Include missing <asm/processor.h>
+>   bit_spinlock: Support Clang's capability analysis
+>   rcu: Support Clang's capability analysis
+>   srcu: Support Clang's capability analysis
+>   kref: Add capability-analysis annotations
+>   locking/rwsem: Support Clang's capability analysis
+>   locking/local_lock: Include missing headers
+>   locking/local_lock: Support Clang's capability analysis
+>   locking/ww_mutex: Support Clang's capability analysis
+>   debugfs: Make debugfs_cancellation a capability struct
+>   compiler-capability-analysis: Remove Sparse support
+>   compiler-capability-analysis: Remove __cond_lock() function-like
+>     helper
+>   compiler-capability-analysis: Introduce header suppressions
+>   compiler: Let data_race() imply disabled capability analysis
+>   MAINTAINERS: Add entry for Capability Analysis
+>   kfence: Enable capability analysis
+>   kcov: Enable capability analysis
+>   kcsan: Enable capability analysis
+>   stackdepot: Enable capability analysis
+>   rhashtable: Enable capability analysis
+>   printk: Move locking annotation to printk.c
+>   security/tomoyo: Enable capability analysis
+>   crypto: Enable capability analysis
+>   sched: Enable capability analysis for core.c and fair.c
+>
+>  .../dev-tools/capability-analysis.rst         | 148 +++++
+>  Documentation/dev-tools/index.rst             |   1 +
+>  Documentation/dev-tools/sparse.rst            |  19 -
+>  Documentation/mm/process_addrs.rst            |   6 +-
+>  MAINTAINERS                                   |  11 +
+>  Makefile                                      |   1 +
+>  crypto/Makefile                               |   2 +
+>  crypto/acompress.c                            |   6 +-
+>  crypto/algapi.c                               |   2 +
+>  crypto/api.c                                  |   1 +
+>  crypto/crypto_engine.c                        |   2 +-
+>  crypto/drbg.c                                 |   5 +
+>  crypto/internal.h                             |   2 +-
+>  crypto/proc.c                                 |   3 +
+>  crypto/scompress.c                            |  24 +-
+>  .../net/wireless/intel/iwlwifi/iwl-trans.c    |   4 +-
+>  .../net/wireless/intel/iwlwifi/iwl-trans.h    |   6 +-
+>  .../intel/iwlwifi/pcie/gen1_2/internal.h      |   5 +-
+>  .../intel/iwlwifi/pcie/gen1_2/trans.c         |   4 +-
+>  fs/dlm/lock.c                                 |   2 +-
+>  include/crypto/internal/acompress.h           |   7 +-
+>  include/crypto/internal/engine.h              |   2 +-
+>  include/linux/bit_spinlock.h                  |  24 +-
+>  include/linux/cleanup.h                       |  17 +
+>  include/linux/compiler-capability-analysis.h  | 423 +++++++++++++
+>  include/linux/compiler.h                      |   2 +
+>  include/linux/compiler_types.h                |  18 +-
+>  include/linux/console.h                       |   4 +-
+>  include/linux/debugfs.h                       |  12 +-
+>  include/linux/kref.h                          |   2 +
+>  include/linux/list_bl.h                       |   2 +
+>  include/linux/local_lock.h                    |  45 +-
+>  include/linux/local_lock_internal.h           |  73 ++-
+>  include/linux/lockdep.h                       |  12 +-
+>  include/linux/mm.h                            |  33 +-
+>  include/linux/mutex.h                         |  35 +-
+>  include/linux/mutex_types.h                   |   4 +-
+>  include/linux/rcupdate.h                      |  86 +--
+>  include/linux/refcount.h                      |   6 +-
+>  include/linux/rhashtable.h                    |  14 +-
+>  include/linux/rwlock.h                        |  22 +-
+>  include/linux/rwlock_api_smp.h                |  43 +-
+>  include/linux/rwlock_rt.h                     |  44 +-
+>  include/linux/rwlock_types.h                  |  10 +-
+>  include/linux/rwsem.h                         |  66 +-
+>  include/linux/sched.h                         |   6 +-
+>  include/linux/sched/signal.h                  |  16 +-
+>  include/linux/sched/task.h                    |   5 +-
+>  include/linux/sched/wake_q.h                  |   3 +
+>  include/linux/seqlock.h                       |  24 +
+>  include/linux/seqlock_types.h                 |   5 +-
+>  include/linux/spinlock.h                      |  89 ++-
+>  include/linux/spinlock_api_smp.h              |  34 +-
+>  include/linux/spinlock_api_up.h               | 112 +++-
+>  include/linux/spinlock_rt.h                   |  37 +-
+>  include/linux/spinlock_types.h                |  10 +-
+>  include/linux/spinlock_types_raw.h            |   5 +-
+>  include/linux/srcu.h                          |  60 +-
+>  include/linux/srcutiny.h                      |   4 +
+>  include/linux/srcutree.h                      |   6 +-
+>  include/linux/ww_mutex.h                      |  22 +-
+>  kernel/Makefile                               |   2 +
+>  kernel/kcov.c                                 |  36 +-
+>  kernel/kcsan/Makefile                         |   2 +
+>  kernel/kcsan/report.c                         |  11 +-
+>  kernel/printk/printk.c                        |   2 +
+>  kernel/sched/Makefile                         |   3 +
+>  kernel/sched/core.c                           |  89 ++-
+>  kernel/sched/fair.c                           |   9 +-
+>  kernel/sched/sched.h                          | 110 +++-
+>  kernel/signal.c                               |   4 +-
+>  kernel/time/posix-timers.c                    |  13 +-
+>  lib/Kconfig.debug                             |  45 ++
+>  lib/Makefile                                  |   6 +
+>  lib/dec_and_lock.c                            |   8 +-
+>  lib/rhashtable.c                              |   5 +-
+>  lib/stackdepot.c                              |  20 +-
+>  lib/test_capability-analysis.c                | 596 ++++++++++++++++++
+>  mm/kfence/Makefile                            |   2 +
+>  mm/kfence/core.c                              |  20 +-
+>  mm/kfence/kfence.h                            |  14 +-
+>  mm/kfence/report.c                            |   4 +-
+>  mm/memory.c                                   |   4 +-
+>  mm/pgtable-generic.c                          |  19 +-
+>  net/ipv4/tcp_sigpool.c                        |   2 +-
+>  scripts/Makefile.capability-analysis          |  11 +
+>  scripts/Makefile.lib                          |  10 +
+>  scripts/capability-analysis-suppression.txt   |  33 +
+>  scripts/checkpatch.pl                         |   8 +
+>  security/tomoyo/Makefile                      |   2 +
+>  security/tomoyo/common.c                      |  52 +-
+>  security/tomoyo/common.h                      |  77 +--
+>  security/tomoyo/domain.c                      |   1 +
+>  security/tomoyo/environ.c                     |   1 +
+>  security/tomoyo/file.c                        |   5 +
+>  security/tomoyo/gc.c                          |  28 +-
+>  security/tomoyo/mount.c                       |   2 +
+>  security/tomoyo/network.c                     |   3 +
+>  tools/include/linux/compiler_types.h          |   2 -
+>  99 files changed, 2370 insertions(+), 589 deletions(-)
+>  create mode 100644 Documentation/dev-tools/capability-analysis.rst
+>  create mode 100644 include/linux/compiler-capability-analysis.h
+>  create mode 100644 lib/test_capability-analysis.c
+>  create mode 100644 scripts/Makefile.capability-analysis
+>  create mode 100644 scripts/capability-analysis-suppression.txt
+>
+> --
+> 2.51.0.384.g4c02a37b29-goog
+>
