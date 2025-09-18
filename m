@@ -1,136 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7CC2E41E
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 07:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADED1F09BF;
+	Thu, 18 Sep 2025 09:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758181999; cv=none; b=cSWMz+gUHKeCsAJq/CE1Jvw5/U2AXW71g6ZregIrzlo03IMDWtqTY6v+v5oIgjC+wMTeA9erJGu6u7hpSqdxx7QhcF+hEkcbOo46XIC3utHVB43wVdhDwV/iKhrCF0QIOoTIsDAXMQoBvnv7gEuz2M3DUQJkfyYvFIhnyBgGA3U=
+	t=1758189169; cv=none; b=h6W9Fhp2LNOxvuKMH+BplcFNxuc+1OddaQyGxZwzOFo2D9KCBcGTLrinomEG48gFs2DGJoIHx+45RwOCSDYDjlTud/Nt9ve2EeD7pwSKNjmhjpLGtHrAAtlFpEqwv7xGBFzW8dIYrwjeQeDLtAWPIhNJHvJ+LRFnGgbu8vnZKbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758181999; c=relaxed/simple;
-	bh=N+b4/jD99T/HzX1k01ACleKiGGsxFp/sDpcZzybHSP8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PDvF618SvYt+00R2gJQ/HZBOOg2I/UV4ghhvGb31XE0XQl0FlAYmGlYbAUQdwyNWu76W2L3jnKt8955SrRr/TjvX+03stXmaDXpzLBwxc5hVocahT+Sco9/HmX1xSdMcTzesKFQX6efSLo12Oq8H18YnqFU5gdpEIdirqwXtjbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DLfdHwmv; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758189169; c=relaxed/simple;
+	bh=uggpLqEklF7aPa8WtKvaaRdHITJ4XoDIFxYFt+0xgEo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zg++gTOU+Vq7t7x4hvTxyh8i3RYvBgYfonHne/A74vU+g6gnl5DCcc7LZYS/SyQxYW9q2kUcDcZy2o+5jWZ4IV4mudtQGgAU+yU+HHVCpnOXDGw4x9jGkUoOfTLxA3KkamqTst8o2uq9fm+8Zq66v8qwcNrwmNTnlDTok0e1eqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CC56xiLP; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DLfdHwmv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758181993;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lL5oFsTuu4AHF3S5gZ496S2MX/eVDY2pIfBlI87XX34=;
-	b=DLfdHwmvZ8xZqErfS02/c0hFzmnvlUHbiYm03acpWbkDaw5/zWeSIeFQOB6XVID765z8Rk
-	XH3WApYNQlgSLCIlgaAURddi8MNcH3yHNpLe/hbXqFRqO05LsPWXAXwoBLlcgGCrMFq4kP
-	Gu8o0a6Y4NtBN1Tjn5hsqE9OItZysKo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-484-YFNIGfmAPsu6A2aOV9ER0Q-1; Thu,
- 18 Sep 2025 03:53:12 -0400
-X-MC-Unique: YFNIGfmAPsu6A2aOV9ER0Q-1
-X-Mimecast-MFC-AGG-ID: YFNIGfmAPsu6A2aOV9ER0Q_1758181991
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09D70195608C
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 07:53:11 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 71BCA1955F22;
-	Thu, 18 Sep 2025 07:53:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc6,
- upstream-mainline, 992d4e48)
-Date: Thu, 18 Sep 2025 07:53:10 -0000
-To: llvm@lists.linux.dev, ftjahjad@redhat.com, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CC56xiLP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758189166; x=1789725166;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uggpLqEklF7aPa8WtKvaaRdHITJ4XoDIFxYFt+0xgEo=;
+  b=CC56xiLPQPajRt+fWhVzjxQV1VB/yJAeHlMg9M1J/mHj1HgMwRLjsaMD
+   9aBEYSu9Je+m6KPSVH0hZngg9V/yJr8IdJ1Xpa7ntXpKoHJ0DyCOu5bto
+   Q5GkCcqbPbYk1YzrlQwIauYYSEAGtAjJiT233Hr0zmU+jHIKkwxTeFqN4
+   zTgprDJNy5ODDG6ofafzv1Itk40mMLAWwh2aukeHR896/DiJTqVcvINrQ
+   dk1odsQ7q2kiNnOSziH6JaHc2XjhO19H6/gKbfKmc2HXYLea2Pd5vyTzP
+   D91gqiEeSuZsVF67jf0wm+dauTc1RNzwoavQqx3FR2O+PuIBVhBpG2xZC
+   Q==;
+X-CSE-ConnectionGUID: 68DlqOCkT2STYnYlfj09Hw==
+X-CSE-MsgGUID: Zv8FEiRbRcywfz1qtgNZ4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="64142180"
+X-IronPort-AV: E=Sophos;i="6.18,274,1751266800"; 
+   d="scan'208";a="64142180"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 02:52:45 -0700
+X-CSE-ConnectionGUID: KNknfnMdQRS+XyskpsLUDQ==
+X-CSE-MsgGUID: CO4XNbPHQluhoPfDS4klTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,274,1751266800"; 
+   d="scan'208";a="175422987"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 18 Sep 2025 02:52:41 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzBJf-00034t-2e;
+	Thu, 18 Sep 2025 09:52:39 +0000
+Date: Thu, 18 Sep 2025 17:52:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+	will@kernel.org, oleg@redhat.com, tglx@linutronix.de,
+	peterz@infradead.org, luto@kernel.org, kees@kernel.org,
+	wad@chromium.org, charlie@rivosinc.com, macro@orcam.me.uk,
+	deller@gmx.de, akpm@linux-foundation.org, ldv@strace.io,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ruanjinjie@huawei.com
+Subject: Re: [PATCH -next v6 10/10] arm64: entry: Convert to generic entry
+Message-ID: <202509181742.AlhRJJjD-lkp@intel.com>
+References: <20250916082611.2972008-11-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <04342.125091803531200113@us-mta-484.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: cyINgK0Q0tZW-2sLQOGWD7yWIQDJJd1EVs1EWtghISg_1758181991
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250916082611.2972008-11-ruanjinjie@huawei.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jinjie,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on next-20250915]
 
-Kernel information:
-    Commit message: Merge tag 'probes-fixes-v6.17-rc6' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/trace/linux-trace
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/arm64-ptrace-Split-report_syscall-into-report_syscall_enter-exit/20250916-163202
+base:   next-20250915
+patch link:    https://lore.kernel.org/r/20250916082611.2972008-11-ruanjinjie%40huawei.com
+patch subject: [PATCH -next v6 10/10] arm64: entry: Convert to generic entry
+config: arm64-randconfig-001-20250918 (https://download.01.org/0day-ci/archive/20250918/202509181742.AlhRJJjD-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250918/202509181742.AlhRJJjD-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2046183234
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509181742.AlhRJJjD-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2046183234_x86_64_kernel-debug_kcidb_tool_19602153_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2046183234_x86_64_kernel-debug_kcidb_tool_19602153_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
+>> kernel/entry/syscall-common.c:30:8: warning: attribute declaration must precede definition [-Wignored-attributes]
+      30 | static __always_inline int arch_ptrace_report_syscall_entry(struct pt_regs *regs);
+         |        ^
+   include/linux/compiler_attributes.h:55:63: note: expanded from macro '__always_inline'
+      55 | #define __always_inline                 inline __attribute__((__always_inline__))
+         |                                                               ^
+   arch/arm64/include/asm/entry-common.h:62:19: note: previous definition is here
+      62 | static inline int arch_ptrace_report_syscall_entry(struct pt_regs *regs)
+         |                   ^
+   kernel/entry/syscall-common.c:115:8: warning: attribute declaration must precede definition [-Wignored-attributes]
+     115 | static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs,
+         |        ^
+   include/linux/compiler_attributes.h:55:63: note: expanded from macro '__always_inline'
+      55 | #define __always_inline                 inline __attribute__((__always_inline__))
+         |                                                               ^
+   arch/arm64/include/asm/entry-common.h:98:20: note: previous definition is here
+      98 | static inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs,
+         |                    ^
+   2 warnings generated.
 
 
+vim +30 kernel/entry/syscall-common.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+a70e9f647f501e3 Jinjie Ruan 2025-06-24  19  
+204f38f88c6f9db Jinjie Ruan 2025-09-16  20  /**
+204f38f88c6f9db Jinjie Ruan 2025-09-16  21   * arch_ptrace_report_syscall_entry - Architecture specific
+204f38f88c6f9db Jinjie Ruan 2025-09-16  22   *				      ptrace_report_syscall_entry().
+204f38f88c6f9db Jinjie Ruan 2025-09-16  23   *
+204f38f88c6f9db Jinjie Ruan 2025-09-16  24   * Invoked from syscall_trace_enter() to wrap ptrace_report_syscall_entry().
+204f38f88c6f9db Jinjie Ruan 2025-09-16  25   * Defaults to ptrace_report_syscall_entry.
+204f38f88c6f9db Jinjie Ruan 2025-09-16  26   *
+204f38f88c6f9db Jinjie Ruan 2025-09-16  27   * The main purpose is to support arch-specific ptrace_report_syscall_entry()
+204f38f88c6f9db Jinjie Ruan 2025-09-16  28   * implementation.
+204f38f88c6f9db Jinjie Ruan 2025-09-16  29   */
+204f38f88c6f9db Jinjie Ruan 2025-09-16 @30  static __always_inline int arch_ptrace_report_syscall_entry(struct pt_regs *regs);
+204f38f88c6f9db Jinjie Ruan 2025-09-16  31  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
