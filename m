@@ -1,84 +1,223 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0546C13D521
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9912D0C9A
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758206294; cv=none; b=MtNqVgeDTlrUv5NI50sPGBmGyaRlGeiJnaUhb1qQvNTMJZ+16WLCmDpggR4q7t/M5BMcgbRRSef3QgvbuIZPtqHc+1C5GUzMMVz5aamF7gudfizBJWnw/NvPCTICiZ/0RjcvioPdlgC9ksNHpg/IvCQ/vaSVleBj4qTlRQEJqrQ=
+	t=1758206717; cv=none; b=J/Cz0b2Xk87lod2n4ohfEDkbayZ5Z53riqXmIPbMQVWIVhyKtv1QI0rcjYjunghg1BKkqF3i3jmMsntlZfinLtqY+WYqozUw+aHtH+EkgoT2YI4Z1WZq3vdF/MUBh8pc+0qfRakLiFwv5nfJ27+dZVQB2UNLOEExqaENVeVdIpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758206294; c=relaxed/simple;
-	bh=ErYq1TN2gNxHsdO/CoNyrv+xOAeKq1mQd5/OAeURC+w=;
+	s=arc-20240116; t=1758206717; c=relaxed/simple;
+	bh=HNcr4hj+PWJezpWTMO69zuQ21fTIIsHEyalsjbUArJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l2KD7KnK4Dk4CHlPTPjE5k7CdZl/5FAzBe439um9Uc48dYr1BY5i+t9YX2RaAz6xTRYK9OoVS7Pp+KB1E4aditCJBGIcVuGcpj4H685DwAtJo2EA42nfppScfLwxHygLt+xDchABxG8VRiYgeoTfE6kfzye+CeX/r2jbZFyoJ1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 95E65227A88; Thu, 18 Sep 2025 16:38:05 +0200 (CEST)
-Date: Thu, 18 Sep 2025 16:38:05 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Marco Elver <elver@google.com>
-Cc: Christoph Hellwig <hch@lst.de>, Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Bill Wendling <morbo@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
-	rcu@vger.kernel.org
-Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and
- Locking-Analysis
-Message-ID: <20250918143805.GA31797@lst.de>
-References: <20250918140451.1289454-1-elver@google.com> <20250918141511.GA30263@lst.de> <CANpmjNN8Vx5p+0xZAjHA4s6HaGaEdMf_u1c1jiOf=ZKqYYz9Nw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZzRh7rapZCSpODduBAmr+pKYa7RTS7I3L55RkAJH2Kan4MBFbEmT5UXFowNzq6+phT1+0APbEEbewGCD84Or/UH3Dve64PHg56dEDiQPEQXLfkFo6G+a438VrvTst48aGR1MWr9oa1ljD72hQFuChl/l32iUihpDcnLQePhfVvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=wtH0nwzj; arc=none smtp.client-ip=83.166.143.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="wtH0nwzj"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cSHX84ZLvz3fN;
+	Thu, 18 Sep 2025 16:07:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1758204456;
+	bh=rSpP2Rhs4Sq+EnZLU66LII2TWUoL0bxMyPUD10kctzg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wtH0nwzjhFH9Jb32796bqsIMo9ianSywMgXXfU/95o66PAMWw9Kr2fYNb/znLGeMw
+	 0yLPPI9HNk4kwundaR99SoY6DDuuEAailrrQnyFAg/wT+j8RzUic3uaCFCRlkFmlR0
+	 xRnG4wXetOdYl1MA4R5tsZxdUnSC+ZghuRI3Sn0s=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cSHX66JKbzQqr;
+	Thu, 18 Sep 2025 16:07:34 +0200 (CEST)
+Date: Thu, 18 Sep 2025 16:07:15 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev, Daniel Verkamp <dverkamp@chromium.org>, 
+	Jeff Xu <jeffxu@chromium.org>
+Subject: Re: [PATCH RFC 0/4] landlock: add LANDLOCK_SCOPE_MEMFD_EXEC execution
+Message-ID: <20250918.io7too8ain7A@digikod.net>
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANpmjNN8Vx5p+0xZAjHA4s6HaGaEdMf_u1c1jiOf=ZKqYYz9Nw@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+X-Infomaniak-Routing: alpha
 
-On Thu, Sep 18, 2025 at 04:30:55PM +0200, Marco Elver wrote:
-> Not officially, but I can try to build something to share if you prefer.
-> Or a script that automatically pulls and builds clang for you - I have
-> this old script I just updated to the above commit:
-> https://gist.github.com/melver/fe8a5fd9e43e21fab569ee24fc9c6072
-> Does that help?
+Thanks for this patch series Abhinav!  The code looks good overall, but
+we should clarify the design.  Sorry for the delayed response, it is on
+my radar now.
 
-Just kicked it off, I'll see how long this will take on my laptop.
-At least the error checking that tells me about dependencies and work
-that needs to be done before starting the build is nice so that I
-hopefully don't have to restart the build too often.
+CCing Jeff and Daniel
+
+On Sat, Jul 19, 2025 at 05:13:10AM -0600, Abhinav Saxena wrote:
+> This patch series introduces LANDLOCK_SCOPE_MEMFD_EXEC, a new Landlock
+> scoping mechanism that restricts execution of anonymous memory file
+> descriptors (memfd) created via memfd_create(2). This addresses security
+> gaps where processes can bypass W^X policies and execute arbitrary code
+> through anonymous memory objects.
+> 
+> Fixes: https://github.com/landlock-lsm/linux/issues/37
+> 
+> SECURITY PROBLEM
+> ================
+> 
+> Current Landlock filesystem restrictions do not cover memfd objects,
+> allowing processes to:
+> 
+> 1. Read-to-execute bypass: Create writable memfd, inject code,
+>    then execute via mmap(PROT_EXEC) or direct execve()
+> 2. Anonymous execution: Execute code without touching the filesystem via
+>    execve("/proc/self/fd/N") where N is a memfd descriptor
+
+> 3. Cross-domain access violations: Pass memfd between processes to
+>    bypass domain restrictions
+
+Landlock only restricts access at open time, which is a useful property.
+This enables to create more restricted sandboxes but still get access to
+outside resources via trusted processes.  If the process passing the FDs
+is not trusted, the sandboxed process could just ask to execute
+arbitrary code outside the sandbox anyway.
+
+However, the Landlock scopes are designed to block IPC from within a
+sandbox to outside the sandbox.  We could have a new scope to forbid a
+sandbox process to receive or inherit file descriptors, but that would
+be a different and generic feature.  For compatibility reasons, this
+might not be easy to implement and I think there are more important
+features to implement before that.
+
+Thinking more about it, restricting memfd should not be a "scoped" flag
+because the semantic is not the same, but we should have a new ruleset
+property instead, something like "ruleset.denied" with a related
+LANDLOCK_DENY_EXECUTE_MEMFD flag.  This flag will only have an impact on
+newly created memfd from a sandboxed process with this restriction at
+creation time. This could be implemented with hook_file_alloc_security()
+by checking if the file is indeed a memfd and checking inode->i_mode for
+executability bits (which would imply MFD_NOEXEC_SEAL).
+
+> 
+> These scenarios can occur in sandboxed environments where filesystem
+> access is restricted but memfd creation remains possible.
+> 
+> IMPLEMENTATION
+> ==============
+> 
+> The implementation adds hierarchical execution control through domain
+> scoping:
+> 
+> Core Components:
+> - is_memfd_file(): Reliable memfd detection via "memfd:" dentry prefix
+> - domain_is_scoped(): Cross-domain hierarchy checking (moved to domain.c)
+> - LSM hooks: mmap_file, file_mprotect, bprm_creds_for_exec
+> - Creation-time restrictions: hook_file_alloc_security
+> 
+> Security Matrix:
+> Execution decisions follow domain hierarchy rules preventing both
+> same-domain bypass attempts and cross-domain access violations while
+> preserving legitimate hierarchical access patterns.
+> 
+> Domain Hierarchy with LANDLOCK_SCOPE_MEMFD_EXEC:
+> ===============================================
+> 
+> Root (no domain) - No restrictions
+>   |
+>   +-- Domain A [SCOPE_MEMFD_EXEC] Layer 1
+>   |     +-- memfd_A (tagged with Domain A as creator)
+>   |     |
+>   |     +-- Domain A1 (child) [NO SCOPE] Layer 2
+>   |     |     +-- Inherits Layer 1 restrictions from parent
+>   |     |     +-- memfd_A1 (can create, inherits restrictions)
+>   |     |     +-- Domain A1a [SCOPE_MEMFD_EXEC] Layer 3
+>   |     |           +-- memfd_A1a (tagged with Domain A1a)
+>   |     |
+>   |     +-- Domain A2 (child) [SCOPE_MEMFD_EXEC] Layer 2
+>   |           +-- memfd_A2 (tagged with Domain A2 as creator)
+>   |           +-- CANNOT access memfd_A1 (different subtree)
+>   |
+>   +-- Domain B [SCOPE_MEMFD_EXEC] Layer 1
+>         +-- memfd_B (tagged with Domain B as creator)
+>         +-- CANNOT access ANY memfd from Domain A subtree
+> 
+> Execution Decision Matrix:
+> ========================
+> Executor->  |  A  | A1 | A1a | A2 | B  | Root
+> Creator     |     |    |     |    |    |
+> ------------|-----|----|-----|----|----|-----
+> Domain A    |  X  | X  | X   | X  | X  |  Y
+> Domain A1   |  Y  | X  | X   | X  | X  |  Y
+> Domain A1a  |  Y  | Y  | X   | X  | X  |  Y
+> Domain A2   |  Y  | X  | X   | X  | X  |  Y
+> Domain B    |  X  | X  | X   | X  | X  |  Y
+> Root        |  Y  | Y  | Y   | Y  | Y  |  Y
+> 
+> Legend: Y = Execution allowed, X = Execution denied
+
+Because checks should not be related to scopes, this will be much
+simpler.
+
+> 
+> Scenarios Covered:
+> - Direct mmap(PROT_EXEC) on memfd files
+> - Two-stage mmap(PROT_READ) + mprotect(PROT_EXEC) bypass attempts
+> - execve("/proc/self/fd/N") anonymous execution
+> - execveat() and fexecve() file descriptor execution
+> - Cross-process memfd inheritance and IPC passing
+> 
+> TESTING
+> =======
+> 
+> All patches have been validated with:
+> - scripts/checkpatch.pl --strict (clean)
+> - Selftests covering same-domain restrictions, cross-domain 
+>   hierarchy enforcement, and regular file isolation
+> - KUnit tests for memfd detection edge cases
+
+Thanks for all these tests!
+
+> 
+> DISCLAIMER
+> ==========
+> 
+> My understanding of Landlock scoping semantics may be limited, but this
+> implementation reflects my current understanding based on available
+> documentation and code analysis. I welcome feedback and corrections
+> regarding the scoping logic and domain hierarchy enforcement.
+> 
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> ---
+> Abhinav Saxena (4):
+>       landlock: add LANDLOCK_SCOPE_MEMFD_EXEC scope
+>       landlock: implement memfd detection
+>       landlock: add memfd exec LSM hooks and scoping
+>       selftests/landlock: add memfd execution tests
+> 
+>  include/uapi/linux/landlock.h                      |   5 +
+>  security/landlock/.kunitconfig                     |   1 +
+>  security/landlock/audit.c                          |   4 +
+>  security/landlock/audit.h                          |   1 +
+>  security/landlock/cred.c                           |  14 -
+>  security/landlock/domain.c                         |  67 ++++
+>  security/landlock/domain.h                         |   4 +
+>  security/landlock/fs.c                             | 405 ++++++++++++++++++++-
+>  security/landlock/limits.h                         |   2 +-
+>  security/landlock/task.c                           |  67 ----
+>  .../selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++
+>  11 files changed, 812 insertions(+), 83 deletions(-)
+> ---
+> base-commit: 5b74b2eff1eeefe43584e5b7b348c8cd3b723d38
+> change-id: 20250716-memfd-exec-ac0d582018c3
+> 
+> Best regards,
+> -- 
+> Abhinav Saxena <xandfury@gmail.com>
+> 
+> 
