@@ -1,110 +1,126 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20614304BCD
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCEC1714B7
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758205896; cv=none; b=W7TYlfkExnA1U//NO4ser90GTKvbB6i9H3//rrBmf97R7hdJSHTFErKuaDDlegcBLfe8MJyQFXB7fGRayPwygvZyGElY/j7bfAJMmYkH6oz332g5zhnz25NDQ4UWbh14cCfWz/4xMRS/Vwfaj3ZNLQnlDS4KDkDlDZBDyo4dsAY=
+	t=1758206050; cv=none; b=QDrhqFaRQx0C/c4jccaPF6SrMFTJkfNYxHLWLZCK84IC8y8TCKKGKoVEwlAAiEuEd4xfSN2/PfbH1W1DqRgT+Gn72iDcsSj6bUNUMPm7uYo0ZspmHNdWhagFSf04zzXAFJXU/drc2330nGYmQrISMFg483khMRKD1N/cisVAQGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758205896; c=relaxed/simple;
-	bh=myP/sybN2zsJVXA5VSxoEq1YkiH03BHAZFTkykC2GiI=;
+	s=arc-20240116; t=1758206050; c=relaxed/simple;
+	bh=MBfiJfn6GCPk8lGYQ1D2ow124fRDtcVPcMxVyyku0+E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q8QRf/PIZ0zbuevjjtJEFjR95Ux6qr0rzAdWd8vRWYYTQgtqWN0IMsweJVJqurb/0tu8GkuE/N8K5KX+PiDj+BJtQKKsxS1Hscwyv/bYbypfcrVvfyufueRxR0EFRMXw3PlClGs6dkamF0LGQu2SZcmVuesxR76n0/xRdpw+uEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UDQZAiM/; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=jkceFp6KgE4nRh3X26dtIWfzoY2q5MABunTTRVyzlNJW9cm1AFHwNLYbhVy+LwftcE9LuSFN7RP2K99YMGZRSR0ZZj67SqCLXwcTsZDdNWXqFjGPBRuOU1aggxeSrupTqaHtCHcXBrzmLGn0NsQoBRt//MmApkslwQ7c5X7VdpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=q0XvEpkT; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UDQZAiM/"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-329b760080fso822723a91.1
-        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 07:31:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="q0XvEpkT"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-71d6014810fso8683077b3.0
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 07:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758205893; x=1758810693; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7wpgOqV2jwxbf7nUbBy2XlSiAc50BZhVeubzU1uvBU=;
-        b=UDQZAiM/hD/UMBZSKOblteWb18byz2eaAzUSgXFPxVJKXxqARLQFNKiLS2jE0BOfY3
-         RXrphJG905RtG2ctFkdqQQGRXal4Soi0WuUfcG7/7eg4dBGSeCbleYOf8Ua4ZeEpC6J9
-         tEH5AGZPr7716Rp8YGJVzN3QaxMs+URvSCjAfUa/y1CgOrBRBlFgcyOLoZjyJqEgOp2A
-         q9ygsGRvmI0vewFQeM+p25O7o29Nitqk5taRFSNXcrggjwZRHDH8lbLvHlz/m8xtvHaF
-         CEd3h1cXyC0LQzd4HHbqQtOE+KUMnyP7ZUzyUTNw2y7B8JkRbDL4jcMwF5zfXPyqjlRl
-         FBSA==
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1758206047; x=1758810847; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GsFstqf0aPKFXQULvb/QA1W20AW77hE7rNx0BoX95nc=;
+        b=q0XvEpkTIM06gfXb6ZGrzC0uhw6SmceHfeICt4PTFvBD/14amsQbTl7pV5ZZKxaN1n
+         I5+UGNSBo/mv7DW2UvyoxFxV585XUhFnruqcponA/EjdLjo+U1U/ywMifc+YsjWMizVI
+         v/MSBq2kYavX5fSLg/sKwwF8++zdsmWVTHrTbD1suBXaaxIe4ZmpFiwKrM5YnYW5q2o2
+         0/vYPIjhP/bWbN/JIWZ8febHACtrNaGpt+QimVyTnATVms7IfCgPTqZuQM5le0UIlDHc
+         F78SYTXk1OSpI8MPztIG4a0JxnMuPwiWSEJO4hg/ryue9g/50zi07DG3kE1Oc33+WLiU
+         AEqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758205893; x=1758810693;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x7wpgOqV2jwxbf7nUbBy2XlSiAc50BZhVeubzU1uvBU=;
-        b=f+wxV0RdWN9sUw0BdR4FNYiOgDYSnSZD6eupnAo4wfZ1qfCWEjhKXu3pQxUPNgexEm
-         Cad8IPFQqIvI0WE5R9pHqKfyFYMDCCr/RHII3GQbWI1dmYpzIFZNHVFnmsdSsask4X76
-         9U3zISoMTjeWWdrUvGsmzAS8pVzRtVI27TEB5MdxZjDj1lbp/3EtIe6D6r7KqUMR/9wp
-         8NI5FsRY1AYs2XE6QT8PgfL65bnaHvKA1SQTEFfHlJ+Vb6ZDuKGmuy7CNT6l/HD+IMoT
-         Cqi5yO6ExIH43AX9dOOkvUEjMgGz8LYBuBLAP+z2AA27oDHkdq2PbPOJcRkMEQWGKMbK
-         LVMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4F5OJvsvq9ejZesg8n2XLNkI3aUegxfzK3ilgDVUyN6OEDrBS1S9naYlq9FatLhbUF0RS@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxm3tvTDi1q31/dXiZSWfo21kKKGvgqyoAFis2nL/+aiRX1ad8J
-	zMqsNP0ymyIcagzrBtZQqLIDO7im68GMwbSFFWPEd/rR/O5IHJsnkbsbLqtvW46308osoFOq7DX
-	eFKL4SPwulmIv5Hv5hLkzU1OTeTJYD/I5qcHqYB7x
-X-Gm-Gg: ASbGnctFt88BtvOP+2/02L3l+5WO3N4wxhVBkU45GF0s9gnl+S+85wAzputhyTnhBUB
-	5lr3UtrzlJ5sheaAmHOOu8xErPIcsJJ58ckbeM8EbRMn6BqiqxCriWjV0+Rs4/VlkKECYpx6sHX
-	i9/Q+OCwrFYJhwjdUKD9e5w1OBvDOE7yA81Kv3OAIUj+AJY/C01UQMJkgLsm0YmEBVZpWsvom+C
-	QUsMtkiLSB8wzp2HdxnhdqjGPsiUa6vzDTcqd0xbeuW5M+qYdFTucfr/KrwAw==
-X-Google-Smtp-Source: AGHT+IHYGUcixIR/dwWsgGEgFB1TOwlgrZ0O4FlqafV2iJGSlcEq1KnUzPyMPrhTBrvu1VqtuDJ2xHHxKwyBuVmjxY4=
-X-Received: by 2002:a17:90a:e184:b0:32e:b2f8:8dc1 with SMTP id
- 98e67ed59e1d1-32ee3ee55c5mr7425841a91.10.1758205892532; Thu, 18 Sep 2025
- 07:31:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758206047; x=1758810847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GsFstqf0aPKFXQULvb/QA1W20AW77hE7rNx0BoX95nc=;
+        b=aizqgRLyf6iErVxpsqvAwKaADfyzIWbMeCyeVA+7hS4f8Ci3ivtC3ZpOTPrAXwcYIG
+         C7+XIHf47lO0JKalYoix6t6yOGv+7qNVPWd16dQ2DKcgOwj/gW65bRw8KT0dcPyJI3De
+         zBl9CeylVKW0inE8iNcDhI/CcYvksbxTB1yT9QZgLmF9mcZK9t2K1XijyY46fNOu2xbL
+         FRey0q6J+BooETnyhgo7fgXsFdIAsA0+vI8NEH0+Fo45hSqPgfXCfmwKPdUK1DkBHuPt
+         nJBgxm3AKPvYuRm2vaWU6527LyjggUZLnUPRDgk3EtxlG3ZodJdJNeOFvIzNoWf40BJs
+         owug==
+X-Forwarded-Encrypted: i=1; AJvYcCU4Y5x5Z7VYtq5BPlgiF4C22Rq8dPeXGMgp9OD2k4nVXtzd1mQfviNBV5Nrd4wCA+b+P5Um@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyd/u7qZcV1Z5lN/CxsWEwVbUhc4kYCIYf9ptUi75RVRO+46u9i
+	+YrUEQahbfpDvtTUv9gkNK30HnxnEPhBmug3sitSoLFkZ+xvtXcQJuU6Eji3CarVrJx65YbPo0M
+	O1C6LQb0sdXuxpCJzsphWUMdrZ/y12lZOhTyG1LECEA==
+X-Gm-Gg: ASbGncvL218hbIjY6ewY/8Zpfyh0tAB60300l8VNNxdBBJz6zAxmmunberiReOrZv+x
+	jK9VO31nxzOOYmcwBZ7m1DLv/f4idubmftUdcS9FfhJj8dH0AL2dFCw4NzV6rMWJO4VInysF7LX
+	KRg1tjpBifnJuC3fWcm1OELernfIbK8f5wuxlcqzZzVMXSdRQYGkv9PhPNvS+5qeXgWGBapgSOh
+	utmdb/WJdykPJhujLyeGqxTZwxsfBoDZ/ge3dyHbKCE3+LUnrhW1d+gAQ==
+X-Google-Smtp-Source: AGHT+IGGhIn8dGYcj5LaqtXCIoUBSX4wr/dd3ZmyZUAtSU0U2kK8GOGIRyt8aZK/8AqwjvXVn4MdC5tlBbzTORZV76A=
+X-Received: by 2002:a05:690c:9:b0:721:64ec:bc65 with SMTP id
+ 00721157ae682-73892852d3bmr54486027b3.44.1758206047207; Thu, 18 Sep 2025
+ 07:34:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250918140451.1289454-1-elver@google.com> <20250918141511.GA30263@lst.de>
-In-Reply-To: <20250918141511.GA30263@lst.de>
-From: Marco Elver <elver@google.com>
-Date: Thu, 18 Sep 2025 16:30:55 +0200
-X-Gm-Features: AS18NWD0SUeFqGV9WlY2IdwTn_KEVlrUb6EWkUXQGUd586AZF2O57bI6Ojf1TCc
-Message-ID: <CANpmjNN8Vx5p+0xZAjHA4s6HaGaEdMf_u1c1jiOf=ZKqYYz9Nw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
-To: Christoph Hellwig <hch@lst.de>
-Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
-	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
-	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
-	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	llvm@lists.linux.dev, rcu@vger.kernel.org
+References: <CA+G9fYsPcMfW-e_0_TRqu4cnwqOqYF3aJOeKUYk6Z4qRStdFvg@mail.gmail.com>
+ <a07b0ebf-25e7-48ba-a1da-2c04fc0e027f@app.fastmail.com> <20250903165931.GA3288670@ax162>
+ <CAH1PCMYWWkThMosDMW=wZZWZ8d_c4_zQWhJOJPKe354LPiV1bA@mail.gmail.com> <20250917182512.GA98086@ax162>
+In-Reply-To: <20250917182512.GA98086@ax162>
+From: Guodong Xu <guodong@riscstar.com>
+Date: Thu, 18 Sep 2025 22:33:54 +0800
+X-Gm-Features: AS18NWCkRCx-c09DhKbRjdrZJ83GwTW6_TUdgmfU5HjKCCFZgVCqB9ZOIxiAf5U
+Message-ID: <CAH1PCMYoo_AqCXOH7--omBbmOyo6DSNgbF3DY-oPJHaYO4GaNQ@mail.gmail.com>
+Subject: Re: next-20250903 x86_64 clang-20 allyesconfig mmp_pdma.c:1188:14:
+ error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	dmaengine@vger.kernel.org, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, Vinod Koul <vkoul@kernel.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Benjamin Copeland <benjamin.copeland@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 18 Sept 2025 at 16:15, Christoph Hellwig <hch@lst.de> wrote:
+On Thu, Sep 18, 2025 at 2:25=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
 >
-> On Thu, Sep 18, 2025 at 03:59:11PM +0200, Marco Elver wrote:
-> > A Clang version that supports `-Wthread-safety-pointer` and the new
-> > alias-analysis of capability pointers is required (from this version
-> > onwards):
-> >
-> >       https://github.com/llvm/llvm-project/commit/b4c98fcbe1504841203e610c351a3227f36c92a4 [3]
+> Hi Guodong,
 >
-> There's no chance to make say x86 pre-built binaries for that available?
+> On Thu, Sep 04, 2025 at 03:38:21PM +0800, Guodong Xu wrote:
+> > On Thu, Sep 4, 2025 at 12:59=E2=80=AFAM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > >
+> > > On Wed, Sep 03, 2025 at 02:04:10PM +0200, Arnd Bergmann wrote:
+> > > > On Wed, Sep 3, 2025, at 12:08, Naresh Kamboju wrote:
+> > > >
+> > > > > Build error:
+> > > > > drivers/dma/mmp_pdma.c:1188:14: error: shift count >=3D width of =
+type
+> > > > > [-Werror,-Wshift-count-overflow]
+> > > > >  1188 |         .dma_mask =3D DMA_BIT_MASK(64),   /* force 64-bit=
+ DMA
+> > > > > addr capability */
+> > > > >       |                     ^~~~~~~~~~~~~~~~
+> > > > > include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA=
+_BIT_MASK'
+> > > > >    73 | #define DMA_BIT_MASK(n) (((n) =3D=3D 64) ? ~0ULL : ((1ULL=
+<<(n))-1))
+> > > > >       |                                                      ^ ~~=
+~
+> ...
+> > Thanks, Arnd. I'll send a patch to clean up and simplify the logic.
+>
+> This error continues to break our -next builds. Have you submitted this
+> patch yet? I searched lore.kernel.org and I did not find anything but I
+> wanted to make sure I had not missed anything.
+>
+> Cheers,
+> Nathan
 
-Not officially, but I can try to build something to share if you prefer.
-Or a script that automatically pulls and builds clang for you - I have
-this old script I just updated to the above commit:
-https://gist.github.com/melver/fe8a5fd9e43e21fab569ee24fc9c6072
-Does that help?
+Hi, Nathan
+
+Yes, I just sent it out. Here is the link to the submission:
+https://lore.kernel.org/all/20250918-mmp-pdma-simplify-dma-addressing-v1-1-=
+5c2be2b85696@riscstar.com/
+
+BR,
+Guodong
