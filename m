@@ -1,115 +1,140 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9A0314D31
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 16:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79AB3112DD;
+	Thu, 18 Sep 2025 16:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758212013; cv=none; b=c1vxzIviB0dVbIGHXSXrG3EXAOWc1v4WafVpbUVxVJnNexs6wupU5bEQVlKHpUT5y9/DzVtdBht3UbvU971KaNiy38MRiCtngyDdCldC03Im5ej0ZU87KgRMI/lYm2GancV/ixeg9J3fZ65DWBvZFpHq81ddUzgc4GDkh216f6c=
+	t=1758212431; cv=none; b=qp+4RK0kl5BufXATJ00AxUkDeNDZdrLwDF6UDXyotPBAXLygJXw+i5GZQjq4gn7Ow3NDHI84TW6aUuWvfvs/98ccRwO46HETJ2U4ydDw5p8LU8tncBwHro01Dfs6kRbP3w2hs6mQ13N/Ge1dEKTF/LcgVv9oM6b7iA5UPr7Fk4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758212013; c=relaxed/simple;
-	bh=RkkHYldHqxfCy+eO9kZc2Nu88Vb/p3AF9OgOx7ZCEAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ln9/DwJIQCX2cqH2GdKvLHLKx7bX5pTYL5hfM7/16G+RPbYjK73zBjeEraX5caug/MpACRVRsfyITilFf+F96VdAME2Wt8lAr7/Wq/RYkRfPzK4v91X/xxXjT2geAhyowYTbJm/Yg6s1mFn3JGCpMWi6PQAw1mV99evIYKc31Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id 0D508118E89;
-	Thu, 18 Sep 2025 16:13:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 2846618;
-	Thu, 18 Sep 2025 16:13:08 +0000 (UTC)
-Date: Thu, 18 Sep 2025 12:14:16 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: Ian Rogers <irogers@google.com>, Marco Elver <elver@google.com>, Peter
- Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, Ingo
- Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko
- <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, Bill Wendling
- <morbo@google.com>, Christoph Hellwig <hch@lst.de>, Dmitry Vyukov
- <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, Frederic
- Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Herbert Xu <herbert@gondor.apana.org.au>,
- Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>,
- Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>,
- Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, Kentaro
- Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Tetsuo Handa
- <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>,
- Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman
- Long <longman@redhat.com>, kasan-dev@googlegroups.com,
- linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-security-module@vger.kernel.org,
- linux-sparse@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
-Subject: Re: [PATCH v3 02/35] compiler-capability-analysis: Add
- infrastructure for Clang's capability analysis
-Message-ID: <20250918121416.19a8041e@gandalf.local.home>
-In-Reply-To: <1ca90ba0-7bdc-43d1-af12-bba73dd3234a@acm.org>
-References: <20250918140451.1289454-1-elver@google.com>
-	<20250918140451.1289454-3-elver@google.com>
-	<CAP-5=fUfbMAKrLC_z04o9r0kGZ02tpHfv8cOecQAQaYPx44awA@mail.gmail.com>
-	<1ca90ba0-7bdc-43d1-af12-bba73dd3234a@acm.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1758212431; c=relaxed/simple;
+	bh=+QFOanT/mQexritkRfOqq2/uPgHue7oVT+RQTYO0HDk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=pMCcOvQ44UqrulPnsNZ/DR7H0GnOBrKk8Kj6cZAVlTPMApMW0VANyRTQKx/956817ZI5rUdo1zvWWTaB980sz8vDQOCYcvzG0RDqqR98gSaT5BYPNrXHjwiJogqzMuEoONgcv4T0Yfec+//eOrqzFL71tuS7Do/Pou/JBveACu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=FV+l2ayH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gxIg8TDw; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="FV+l2ayH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gxIg8TDw"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 1F35DEC02F1;
+	Thu, 18 Sep 2025 12:20:29 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 18 Sep 2025 12:20:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1758212429;
+	 x=1758298829; bh=tmGWVjr/plBDzfvbAKhx6iARmpyl4UPvOj4rfEO7kFM=; b=
+	FV+l2ayH/eDb0mQLXR69ETsvV1qwsAmKxzDJgbyGHaqHvcbnmgMlVcLbFTDMofpw
+	ON0sGpEUQqJAHVzhmTVaPn2yuU0xkFrCyvg4RRZP7vVFkytGO0EDPKli3Mz/9M7h
+	madQpnZ1cA3vlmu3NCA2QPYawD+8voKPb49ORqItcyJEdHMVztgyv41fqe21BKqO
+	hgAIifuWgDM1hVgC66Cjiap766hU/oXcPuxxwFTXJ3LRR42eEUYSKfWwv9lqx3kt
+	lQAYbvLZ+Rmo9mIBv/NfnASAa56gk0GgzB64SCIMHp7V3RpsU0Ya2/K0VPbEc2ed
+	ioS46Q/Poj6u2i1jZbiABA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758212429; x=
+	1758298829; bh=tmGWVjr/plBDzfvbAKhx6iARmpyl4UPvOj4rfEO7kFM=; b=g
+	xIg8TDw+wGDwdhNseeH8YQdZA4S5R0gePYw95PhCD4jHuWNjQLsNWc44HnbQJtIn
+	ErzSTc0jFUHzLSktqtB638BiFwdBONE2xAYeh4YE98XLJZHNHdJULWv4ryUpjabi
+	l2HawHRz8lsVPHJcDmgNnlZauAlI5ZR1pOZBwVuL5RZaVQxUbCGE1fNEmwLaKLiA
+	OY4+Li0ZUCih62P01D/wDLOgCMui+W7RFVzgTxKuzKyd5UC31QX0zKLy4n2EkPnZ
+	uGpaxFii3FIsOT7gV8Y9H48vAhv8BXaebUjFc5eUVa7htJAtmaXPJHXIBqFqU54r
+	hvY6/lxTYll8J5otMd0CA==
+X-ME-Sender: <xms:TDHMaHjr4m47XfRFLnooPRe2UNPSJT0r0GNmMrr792IfZtvVnzDVUQ>
+    <xme:TDHMaEAuwoBhuaFP-JQrg89S7UxFTnblwjJBrztLYKz6C208oByCmcXs4HKoFRBuH
+    Fe3PxP7tYusQng0YoU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdegieejlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeekleffjeetvedvgefhhfeihfen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
+    thhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegulhgrnhesghgvnh
+    htohhordhorhhgpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkhhm
+    lhesghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhogh
+    hlvgdrtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphht
+    thhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhkohhulheskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrrhgvshhhrdhkrghmsghojhhusehlihhn
+    rghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinh
+    hfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhig
+    rdguvghv
+X-ME-Proxy: <xmx:TDHMaJWhxE6rxyr5cSefV7mqkE0OKdEr0JChXXgYodtadvEo9XX01A>
+    <xmx:TDHMaIiva_JDjIyYc5ZQ80tB9qU93rVsR2cHpQHIOJaspdWO1QzhFg>
+    <xmx:TDHMaBdgmOziAfLicgsbA5M09jayoi0oO8IoAV4XMDf7mPHSdh5QcA>
+    <xmx:TDHMaP0DTYui7ukg6cwCVV80GEsHNvj9WkdzmT8QXhvkDxI3S7_Bew>
+    <xmx:TTHMaH7h5PkJyNVx-Xufz5qS5lyu8aPC2CeRkZ9vIKMesZ5ZAgZnvlCY>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id CE9F370006B; Thu, 18 Sep 2025 12:20:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 2846618
-X-Stat-Signature: jk37s4n4y1abypzz3ibjma6i8hwh3dpi
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX187tFXsL5Le7f+OEdXPb8EfevPMdYJjxao=
-X-HE-Tag: 1758211988-794253
-X-HE-Meta: U2FsdGVkX19m1tAn22PHk3kX2Wk2POBgAZFzgAQIMCx/TzKCFJHSRgy7lqGNU4t4JpUf2LxrofFc8Ml/SzvQUemqI2s/M2eVv2TcCTTofn0gFGf1qiKnggle2+rBi9jozqgLP+w5zmTzD8j5BYGNETdC7HYpSCmlxzgRl1HmUDgT6vBPRbNQKlew/GiSPntamWI4BN+3BQMlrQzHKrw2Hd44nH0TJbDzGUvq4EnHN5l77wWkx8yamYKm0wF/UonjU1auAq1+e+AHgLIMHgDBTy/q+l9/HvzB2gWDjclvwsnGTS+Jv2LDmjZbgWOiLNXP1sp9TafIX1LTwyRs55KIsTFDvD2gur62c5R5bpv6t02yJBvS9Pt6FACmEbxkfSaUp1nLcDU5Q19B7Ha8v33a91ClwZlXoj1UYYAtqvo6OkbX+GZwbhQ0RoFfAYIW3JVWEzxWKbCA0qFysRVjwJOtsFC2FqAYNCgDAkEhxNFg1LQ=
+X-ThreadId: ADSp2o6y9pwF
+Date: Thu, 18 Sep 2025 18:20:07 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Guodong Xu" <guodong@riscstar.com>, "Vinod Koul" <vkoul@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Yixun Lan" <dlan@gentoo.org>
+Cc: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+ spacemit@lists.linux.dev, elder@riscstar.com,
+ "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Message-Id: <d2a99673-cc0e-4024-bc66-76d395ea4313@app.fastmail.com>
+In-Reply-To: 
+ <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
+References: 
+ <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
+Subject: Re: [PATCH] dmaengine: mmp_pdma: fix DMA mask handling
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, 18 Sep 2025 09:03:17 -0700
-Bart Van Assche <bvanassche@acm.org> wrote:
+On Thu, Sep 18, 2025, at 16:27, Guodong Xu wrote:
+> The driver's existing logic for setting the DMA mask for "marvell,pdma-1.0"
+> was flawed. It incorrectly relied on pdev->dev->coherent_dma_mask instead
+> of declaring the hardware's fixed addressing capability. A cleaner and
+> more correct approach is to define the mask directly based on the hardware
+> limitations.
+>
+> The MMP/PXA PDMA controller is a 32-bit DMA engine. This is supported by
+> datasheets and various dtsi files for PXA25x, PXA27x, PXA3xx, and MMP2,
+> all of which are 32-bit systems.
+>
+> This patch simplifies the driver's logic by replacing the 'u64 dma_mask'
+> field with a simpler 'u32 dma_width' to store the addressing capability
+> in bits. The complex if/else block in probe() is then replaced with a
+> single, clear call to dma_set_mask_and_coherent(). This sets a fixed
+> 32-bit DMA mask for "marvell,pdma-1.0" and a 64-bit mask for
+> "spacemit,k1-pdma," matching each device's hardware capabilities.
+>
+> Finally, this change also works around a specific build error encountered
+> with clang-20 on x86_64 allyesconfig. The shift-count-overflow error is
+> caused by a known clang compiler issue where the DMA_BIT_MASK(n) macro's
+> ternary operator is not correctly evaluated in static initializers. By
+> moving the macro's evaluation into the probe() function, the driver avoids
+> this compiler bug.
+>
+> Fixes: 5cfe585d8624 ("dmaengine: mmp_pdma: Add SpacemiT K1 PDMA support 
+> with 64-bit addressing")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Closes: 
+> https://lore.kernel.org/lkml/CA+G9fYsPcMfW-e_0_TRqu4cnwqOqYF3aJOeKUYk6Z4qRStdFvg@mail.gmail.com
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Guodong Xu <guodong@riscstar.com>
 
-> On 9/18/25 8:58 AM, Ian Rogers wrote:
-> > On Thu, Sep 18, 2025 at 7:05=E2=80=AFAM Marco Elver <elver@google.com> =
-wrote: =20
-> >> +config WARN_CAPABILITY_ANALYSIS
-> >> +       bool "Compiler capability-analysis warnings"
-> >> +       depends on CC_IS_CLANG && CLANG_VERSION >=3D 220000
-> >> +       # Branch profiling re-defines "if", which messes with the comp=
-iler's
-> >> +       # ability to analyze __cond_acquires(..), resulting in false p=
-ositives.
-> >> +       depends on !TRACE_BRANCH_PROFILING =20
-> >=20
-> > Err, wow! What and huh, and why? Crikes. I'm amazed you found such an
-> > option exists. I must be very naive to have never heard of it and now
-> > I wonder if it is needed and load bearing? =20
->=20
-> (+Steven)
->=20
-> This is an old option. I think this commit introduced it:
->=20
-> commit 52f232cb720a7babb752849cbc2cab2d24021209
-> Author: Steven Rostedt <rostedt@goodmis.org>
-> Date:   Wed Nov 12 00:14:40 2008 -0500
->=20
->      tracing: likely/unlikely branch annotation tracer
->=20
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-I still use it every year (enable it during December for a few weeks on my
-workstation and server) and post the results publicly. When I get time, I
-try to fix (add / remove) likely/unlikely statements. Unfortunately, I
-haven't had time to look deeper at them.
-
- https://rostedt.org/branches/current/
-
-This year I missed December and ended up running it in January instead.
-
--- Steve
+Thanks for fixing this!
