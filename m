@@ -1,597 +1,914 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C8F30CB40;
-	Thu, 18 Sep 2025 14:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758204395; cv=fail; b=TgK4x4vKC+ytgWqb56dCqHr8e6mOaPZObWEpG/f92XiWPbOw46eTlA7uOEJHaTuZ13oP3ZG4AEUrvSuNpJXGYUdLurxrs+CJdp9I/NRWMcJk8UFWbl2Ystr8Shwk8FjHVan4uGvBUD2W1WieNAF3O1VbjqFvrBT75zIfC3JBdLQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD23D315D55
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758204395; cv=none; b=JGZnOFkkTb/4ut2tIQfhmUMn4E0byCUgI3HAm3OOHUlHz7vMewcurUYAoK6Kjy9I6kxC0eLwcggZyv+61VPOm7eIA4bFYFBO7nY48XDeFV0VuczjkVBmYirxxuRjXdGo6jIRsLHGLcME1C2SyGwIXX+fgJMEXN0Bl+hnppBqReA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758204395; c=relaxed/simple;
-	bh=L0Gdh/tFOextT6rPebM4CgnmBfyeNY03ZZDxmom+PJ4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=NfZiu2OUyhAToThzvQ27qULdfCmzyR105QuJMK8gRyv6CCrK/Z7RiIgaZ/zRsP0xetNAgYtlR6qJDOyutKM8/rAiu+C4tp0ez42+9ZxdelKw0aC80kkpA8HXvhaHw6ZLBzQItEVsyVpDNaW0+7DLcFLmGuTirE/whpQaYMxS3Xs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nfhgoOGX; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=tZiTRgwP; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	bh=Cwa3yaODrdvGJTurCsWpVtmAe04flkKQ4rRJMJkPOYI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Pv7jbuQFgXHyuJQb6Iixk7D/UaaD6i21Jj5JKkl+8DvsPaAbeowoUEH33vWWI6FOB+gOWO0huXheXxhlW87/vBrIZEYvglzo2gjXUvJ4RaQFFZWutJIO40GqWmKLDAakj7WJoMrGHaKnDSR8QcC4qZfhAeyyEqvmmSqKjzR+yP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pBXhjnaE; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nfhgoOGX";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="tZiTRgwP"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58I7fxaL021303;
-	Thu, 18 Sep 2025 14:06:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=h8AizG08JAePPpriKyhYh0GsLxM2LdlHfUhA32Yv2WA=; b=
-	nfhgoOGXUo3yJjBNp/K2xqBGy8dWvccyx7NHNUd8N2NVzbXhT7Su5sD4HxHQiC5Q
-	/sxdBvyHppWnINZrLvlpHWrsM0V28sH21sv2UsdbdTjuBI+Xbfq4bPU8WXybnL8S
-	LTRZgK9JX0Zz1Jf7NN8VCsGsOh9uEcq8Qu84Yqw5+j2xal21ec1IgoRQSrfpS/Si
-	G1u8DcFLyrn7tYi6u+FvxJtXDXPI1DWDB2a/LP76bPVTer36TgzLo/ZAo21T1c8B
-	2ZLvJtVBbPEMV67l8AkzRTWThue5iKBgAxxqYSa7A00zhwDIhqFCzPWUoL73xcxE
-	Z+RI7M0PBoAZfGcvLqsezA==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 497fx9ukkn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 18 Sep 2025 14:06:31 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 58ID6Ma3027324;
-	Thu, 18 Sep 2025 14:06:30 GMT
-Received: from ch1pr05cu001.outbound.protection.outlook.com (mail-northcentralusazon11010055.outbound.protection.outlook.com [52.101.193.55])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 494y2nf8gh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 18 Sep 2025 14:06:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WSA6gWqHQFslxTsF7qFHju/OwFWzqrdmjmN+XLy2OevOD3l4DDSy7CleajQHJjEWUVXSWPMYfyTe+VGo9i3PnLFl7wI4OPdmS/MBqiBUEBaNWu4txm+h9HYxezcsMqVo4S2R3vFs3t2nAfPwm3d3TpK96H9Nj3/zj1uv7JbcMV0rbvkfVsw3sbi8v2sJcTs2UFYStspu8jbsGgE7PCdp++6EdXnQat3RzzjhR1J1c6fzdUhmqJE/ndWvb6NEuYan+3hS0P4Utmyq4fX20gsXz7ghsapHePTNNNNu8rDAnpZ9t2iyuk/oZxm8qwWP26lv0HrvV0+8RazqK3HdKqUQxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h8AizG08JAePPpriKyhYh0GsLxM2LdlHfUhA32Yv2WA=;
- b=ymBTP0n87BNUcskxLN69F+vsQsw0IykWCshcZlWpmE/BHX1ohzWnSVm1woXqMM5YySg0stqwqvByJewYTSSR25sAfSuZuilNEoHrUbkuy/ofr8AgEhdYgYe9KIwwxd6EqPtbd2+GfT0AODfWpQz/3ddXvlYWha1Hn1bHZHrG1RU0vaUrQFS/2ab4uNMj3WwnqM6Es5O3Pb5YLnZdMME/zpIM6Uib4avMH9NaNAJE7JovncYCq0hvgExTKLEUjnjDhA9bIHcLHUuDx1siCctV7UxNKcjifNhgCvgAnFTSKwgVBzn6UibP0GDDPzZZxPUmVyRf8PyXGvfLeiWHDLWCjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pBXhjnaE"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-62f935e6221so876314a12.2
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 07:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h8AizG08JAePPpriKyhYh0GsLxM2LdlHfUhA32Yv2WA=;
- b=tZiTRgwP58MrYQGg/8ej+p+qwEXFPBpGY/ElwknioNGPZBqEF7DCjFfTtZLqWfcIEvh5/Oi7qSkRgm8BJG99mN4hDQ3wqN4supa5S4JqwbNGMp7SrjCKdHbm2e1qJ1uORlToPjUk1AE95jN3ZsHSPBTPESmLj/IEKO3lMdCB8Dw=
-Received: from DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::c1d) by PH0PR10MB4807.namprd10.prod.outlook.com
- (2603:10b6:510:3f::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Thu, 18 Sep
- 2025 14:06:27 +0000
-Received: from DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- ([fe80::211d:441:2594:6cca]) by DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- ([fe80::211d:441:2594:6cca%8]) with mapi id 15.20.9115.020; Thu, 18 Sep 2025
- 14:06:26 +0000
-Message-ID: <ed3b1065-f4c6-40a5-9a83-f3ec8252553a@oracle.com>
-Date: Thu, 18 Sep 2025 09:06:24 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [kleikamp-shaggy:jfs-next 1/5] fs/jfs/jfs_dtree.c:2906:31:
- warning: result of comparison of constant 128 with expression of type 's8'
- (aka 'signed char') is always false
-To: kernel test robot <lkp@intel.com>, Zheng Yu <zheng.yu@northwestern.edu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <202509181832.frk03WjF-lkp@intel.com>
-From: Dave Kleikamp <dave.kleikamp@oracle.com>
-Content-Language: en-US
-In-Reply-To: <202509181832.frk03WjF-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0049.namprd03.prod.outlook.com
- (2603:10b6:610:b3::24) To DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::c1d)
+        d=google.com; s=20230601; t=1758204390; x=1758809190; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jkk6mUsFuJFMkBQYcIPdpHbgYByhZwbPKISMbgaAjV0=;
+        b=pBXhjnaE3Hv9RyQt8udLQzUmGsEyZoNfWNi+tEIi9eLM4g4UFhraTB876z1dnQkcVw
+         Dr/CvP0jSlFP/BJP8cpq/9InHUopJE06aYn5mtCXnUWg9ptOD4GrtLJGpw1xJhy6m2BE
+         phSZFVMDLVmSAOYXYuK9oeHUdz4xy0Mb7i2YbIr2UQso4oXRBS2cA4b6HtrU64D1LUbZ
+         /nR+GDfZ6p0gFcrkeR7Ltpvj1aHggocK0ROGBJpsWp1bp/QY8GJjV4b9XEvBta0gd5cT
+         Ac4H2rRGKsYVF6TlYU5SZ3OCf78j9eyy4ozgX1mmQYxE/18dRErIp4wrST7EBrCdDcdl
+         qp1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758204390; x=1758809190;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jkk6mUsFuJFMkBQYcIPdpHbgYByhZwbPKISMbgaAjV0=;
+        b=LiHMSM1Smrxhpwlfa9Yr0W3Jai9rXd+R2RMyLORtggvugMTt482pZvU7+QblH4uY7r
+         bIJ0TL+5AHgmw/9e1tZ2Ny1ancJILPlGt8hHZHhCrU98rYuyWB7ZSfcFePnnsOaWHNQ4
+         QxRc+EfGbv82qklUlgq4VeaC9OloPptT8DSWJNNXlNCHRp4elEa76NA8/THscnxsZeeA
+         CRqYy+5BGM6a6SYIE2UjHaWkaD35UKvrXJc0ps19kI9S6+WKQj27I5nWmY1Ik/E2zIp1
+         JS6b495G8tYEaG5XqGEx1641LmCDsm6aKUvIY/ZHRict9V2zjwQojQuanJTF2HiJPq5F
+         JHzg==
+X-Forwarded-Encrypted: i=1; AJvYcCW6SXG26uPy054EjVKw9C+2QfC8NohaG4NCWSipG3CNUKa24jbJF/87LLYKouZXV8g1VwX6@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx9YjUOsVivelOf9qNzQHLw8EiXVWIMJ0ip6H99En4jcZhF0woR
+	dva2X6APrURBq71rKc4P6Q+ArINDlV60PQ132o3GunOr4apWD1fM48F8NRwv4slZWmwd6Gfamno
+	rlQ==
+X-Google-Smtp-Source: AGHT+IF4fOf5HXgbgeKyfN1qpd3A/UVv/l2+J0beGALqHEO+meG74uppEhmt1NMEKDfmZFc2hf71GqDvIg==
+X-Received: from edg11.prod.google.com ([2002:a05:6402:23cb:b0:62c:a16c:b054])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:5252:b0:62c:34ed:bbed
+ with SMTP id 4fb4d7f45d1cf-62f844410ddmr5661335a12.19.1758204389213; Thu, 18
+ Sep 2025 07:06:29 -0700 (PDT)
+Date: Thu, 18 Sep 2025 15:59:34 +0200
+In-Reply-To: <20250918140451.1289454-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM3PPF35CFB4DBF:EE_|PH0PR10MB4807:EE_
-X-MS-Office365-Filtering-Correlation-Id: faf42787-5b83-4fed-0052-08ddf6bc8e26
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cFBuZXJCdzVreWlEZkhUTXZKZUhQVERoSEdvY1FFMGRBemdCRUtNVGprTlUy?=
- =?utf-8?B?SUcwN3huR212TnhJUXF5MkRhOSsvNTJWaGtFWFdSS1R4RE5FWU5NVitnZEpM?=
- =?utf-8?B?SitMNmwxb1V4SG43d0hXcDQzNGNnZGozMFJaS3Jucm84MXdkdmhuY0RvWm00?=
- =?utf-8?B?cy92S3pkWlM0UDJYVGJjd2pmbnpXTStXZjg3cjByaUY4ek9GdzZLeGZ5NStl?=
- =?utf-8?B?d05BN3VDVW5mT3pmdXNxUTRIYnZXMVdnZ2tMV2NYODFqK0ljd1AxTjVxMk5h?=
- =?utf-8?B?K2ZOb1grcTN1blE5cmdnbHlxckFmclMzZjFaR29hQ3duZVdIUFIyUHplWU9E?=
- =?utf-8?B?MGlhcDhRcFc4KzQzWmpneGcyVVo1WWFJNUY1R0djc1BiSlgySCtocVZUY3M4?=
- =?utf-8?B?bjhmaU1UMVNnR09RUWtuUzhoK3FxV2psYmRJYjU0YTNoR3hzdktHSlE1NWhI?=
- =?utf-8?B?c3lJdkhzcGhDUU5ZSnk1SW5zMGRFbWU3eDJJNW1INHZoWGh1c21SM2FwTFFW?=
- =?utf-8?B?WTJscVV2ZThvZ2QvQVQ4aXJxTklWYXRIZHdQeFJYaHl6WVMvc0xBdGp3VUhu?=
- =?utf-8?B?T2xoT1FhbVZsd2RHRS9JQ0JMTXAwaVJvaUFBUXdZYi9WYnFhcmFEU1ZVakJi?=
- =?utf-8?B?WHI1b1d6cWVqVmZXVkhCYzMwWUhGUVdlU3RUb1BURWZFVEZUZWpoT3Bta2Vy?=
- =?utf-8?B?bVJkdlVTdk9BNmc4QlIzMVBSU0JuT3VLT3pZbUplc09vc0x4SXNKbzNHaFp5?=
- =?utf-8?B?UFJCQkhlcWE2a0NHd2RqcEt0TzhUUEUxTFhWSG56bWVpVERLT0tMK0VUR0Vr?=
- =?utf-8?B?bjlnSEl3eWNiUHJvWmV1ZlM3UG53SFUyc0ZPS1ZkSllTVU9VTnE4cTZuR09q?=
- =?utf-8?B?THpRL1N4ZEVET2pwRU8rMCtZdk1qSXJWcXBhLytOa2VpdzRrMjR5R3U4Y09u?=
- =?utf-8?B?VmhlK2Q5bjB0T1lMZWI2b2pmNkpJNS9CdW9ucGE3eDRhUGZWWERvWXBzcjBy?=
- =?utf-8?B?OStrQVQzRmFXTCtlQ09TVjVrNTVNd05BYThSNnhXQm85alBzQWk0RnFEa2p3?=
- =?utf-8?B?SVNjRE5TQjNVQ29Ub1I3c2dQVzBEd2dzOFJsOExDN0tTamswN1Z5NUVLSUpS?=
- =?utf-8?B?eDY3eld1Z1hIRlhYZE13UldWWTk3UitEZklMUHlUc3lzUDAzNi9jY1M2d2Nu?=
- =?utf-8?B?Q25PM0o4NmhZLzlUTU9nNTRWcDNUdDNjdWVGdXNSbVFWdlh6SWdhTjQ5T0JH?=
- =?utf-8?B?Z05INXFnUmNJUngwNUc2NERLS3Zpb2drY0VNak1TaHYyWTZzR1M0RlkvTHdt?=
- =?utf-8?B?bk1uUkZpeWFaVFNwM2swTzBRRlBIa0ZuWjM2QktmUEZOalNGQWZoVnFwMUVZ?=
- =?utf-8?B?VnRweVZxRW95R0ZYbll3NXF4RG1rRVFjKzBUYmxBUmxWOVNJZ3o5Z2FlcUlh?=
- =?utf-8?B?cjJ1YldrREhzWmhic1RFNFhPYjJoUEd6Y0V3YVN0Skx3dy9NSDJSZTJSN0Zi?=
- =?utf-8?B?dmVZM0w3Vi9jMzM4OXUrQXNNM1JTNlJjVWZyNkZydVJoczZIbW02N3ZjV1dO?=
- =?utf-8?B?Z3RjWldDa3dLYkhROGI0R0JqRjNFNzR5ZE1mcExDSThtVkFMK1R3bzJGeWhK?=
- =?utf-8?B?NzVsc1hodlJrWHIzTU10RTFOMkMvMGIyR2xnUmk0OE43cDl0dWpiUWhGUFYz?=
- =?utf-8?B?VnRCVm9haGdYb0h6b3NxRG9XeEloMFdhUWtSZ3pUS3dnZHpPSGV1V3VYcmlL?=
- =?utf-8?B?TmtpRWZOWFhxZG5GRVRwRzkzMWgwNEFKZCsyL1c4ZHRzcmtoZXZ0d3BESGw2?=
- =?utf-8?B?SllTYjJkbEZsek53czZMNk9ySVNBdStrRmhlSnFWUmNPK2NpTzRySHBacy9E?=
- =?utf-8?Q?uvEZt8qOxiI4R?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PPF35CFB4DBF.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cGF0NnRRbkdKVHMxNjhSZ0syM0NBNmMraktUT0kydjZCeU1Pb2Rob0FlRXp5?=
- =?utf-8?B?UU1MY0Z6ZFBIemx2cWxieFlRQ1NyUElPMWNGRjlqWlAveUdXY2lXMzJSYmdZ?=
- =?utf-8?B?NkIyNDJwUU5NdFZkVjZpR3YveEtVOTdrT3JLS2pELzNOWDFkWnlROTNvQVdQ?=
- =?utf-8?B?VFZ5NFp3ODI5d1BNRFdyVU1JTWI0ZWxTdGNGVUEwS1VPelhZTklzdmwva2NT?=
- =?utf-8?B?LzFTQnJlS1BrdnZzeFhpUWQxTHZteW90UlduN005aVBWOTVKQXd4YWpMK2h2?=
- =?utf-8?B?ekJXVkROdFJsTFRXcHZRUlhLcUpTTjhLTlF2NmJQWS8wSWxUQ2lVSDZVQU51?=
- =?utf-8?B?WU44VWloZElDVjZhTUZPUUFFZkZYMHdQeE4rZTdMdDNuUVB5ZkhsWmkybGEv?=
- =?utf-8?B?WFY5SUtlZVhlZEUvbkhVWUJKekNhM0x3SFg2clhtZVdTQlBaN0NSU1NILzIz?=
- =?utf-8?B?QnpIdG02MjV5bXFjTlc3aDNYMFBaUDdyMWpORFcxSTZIenFRdFpJV1FpTVlp?=
- =?utf-8?B?QVA0dWRGb3JkTTlTUFRCVk9oeEF4TWM5V0k4OVNhOEJMcWlOdmZHeFNnUEFF?=
- =?utf-8?B?anU5N1kxVDdhNUh3anpjZkpsYWlpNGNjbGlRRGNjbWlsTy8vbS9TbGFOTWRQ?=
- =?utf-8?B?TzVZSXhjbEIxTDYwclNBeG14Ym5PMDZhcHIxLzNCVHhwTGRIa3VzWEpxRVdZ?=
- =?utf-8?B?OU12TWw3ZE5yTCtMOTM4UWFFQi9Vd1VHWjNoUEZJbUtQOUZKY0pHTWFTNzFx?=
- =?utf-8?B?dDMyMXA4ckFXc1MxSGRlemIrRmpFQTFoNWxldHN2YWFDK3F4ZGNFZ1ZTVzdI?=
- =?utf-8?B?KzBrbFM2b1gxMXZXRGxGSFVENUduZzZTOWNXa3JNMHE2SzlIY1ZyaGg2dUpz?=
- =?utf-8?B?aWxHaVJPU2xXczlCNWptc3ExVFBFUWZXY214TzFJeURuNkVsQ0pCRG16TW1p?=
- =?utf-8?B?ZGo0d0Z0QU5jMXdWbFRUMDZDU2FDVFovSmJMeVd2MkhqdnVEMy9OUS93L1Yz?=
- =?utf-8?B?U2c4UngrbW83L1daejdRN2ZsdjdwOTRpVjdvVnpRRENJQ3VWNWRjRFc4TS9p?=
- =?utf-8?B?Um95SmREcW13dXBDRDNsbHBuaHFDekdCNndBSENQbGU4b0VvVDJseGx6Vmhh?=
- =?utf-8?B?ejBkakxTNVBCelJySFRDb3EzVnQ4NzI0NkY1UGxQMGJqVEttMXBtYTU4MXJY?=
- =?utf-8?B?QXg2WHhvR21IamdWOEVGcC9mbWhxRVlvblFLSUJVNjZIMlNKTUdXUlpNTVBT?=
- =?utf-8?B?cHFWVEZHeDJxcXJ0SHdOWDU3MmlJVVF0RVBpMjVJL0lDNElKYXU3ZW9EUWtS?=
- =?utf-8?B?VitVckxxalVmTUFzdWtCSFNMZ3Fsd1pKOFoyMXMrdERmMEprZHVscEN2cWRw?=
- =?utf-8?B?d0hUeGxZcysxWmNXMnB0TGtDZEdhdHUrZWMrNkZ2UEVMNzRmamJDTzhBVjg3?=
- =?utf-8?B?NFd5a1VYeW9meDBlbWpPZ1hCM0pFM0g1SkNiNG5OdnN4am8vY0wrRXQ4UmtJ?=
- =?utf-8?B?R3JteWlMNXRkSk5lZHlhdHY1d3pmamRqQ0hGWVF2WEZ2a0g3NHZ0cG14R0R6?=
- =?utf-8?B?ZE1Ra09HZCsvT1pmcUF1YzVmSHdDMmxHbFF6SnU5SkZtMzN6OVdqS05VZFRM?=
- =?utf-8?B?aUcwN3JPdW1WVXJXNWNyeUxCWG8xT3d0NnZhbXI5NzRDY2lwUFV1S1c2WmFC?=
- =?utf-8?B?T2s2cVY4MkI3bzV6S09QZ2p0dlNQNUtMN3o3MnVKU292ZFg5bHJ6TzRkYyta?=
- =?utf-8?B?TXo0dzR2K2FqamZ3d2xLMmZFNW1PL0hISlhta0pVQm1kT1NQc3JkbGJ5Wlox?=
- =?utf-8?B?R1NkN2JwREcxbTRQMWhhNjVhL1lGV25lUE8xUEE1UEhlalJ3aXpXUU1xdUNm?=
- =?utf-8?B?SWpMQU1wbHlBbUtXT2tSK1E3RUZYRWtHckl0NVlKdXQyZGJCQUpMcHEzSTRI?=
- =?utf-8?B?eFBRdXQxSFh3bURMR2hYZFBlbzlsUStqTThtS1VHemRXRjZhM29sYVNMcy8w?=
- =?utf-8?B?NjNGTm51UEhvdEp4NVk5UU1ZLzlvL1hYb2UxRXIxbCtTZjhhdVNyV3AvMzRU?=
- =?utf-8?B?MGZpYjVKdzkwZnI1cGRXMEt6T3NvRldrY3dTcUVLSFJCN2trc24zMjdKUjZw?=
- =?utf-8?B?UXFESFV5YXZjTFNQb0MyaFp6eGdNcVY2dHJIR1JKb1RFRkdyeFdCOXJPczdP?=
- =?utf-8?B?elE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	IigI5RJjJabbfXS7jrx4KxiKEKbDqrelo+L3I4hN70YF/b7qugWWcQ2pxCHvrsUpMwcRqaLFm/Y0MXqn5F57jyKWy7cj6Ei1vT2+ywDSpm420YNB0S2joEZmniIpTlPFv9hgifWrOmqGvFkNvrXIBOOUxVzNwJWaztF5xTqzwyPwrZ8T3GsiFqiVFW5Cj6rhCjOoHrN6xduDKgeEpg7HAqbyFukM3DXyc5tlfL4zcrkok9wuNJnTG17rLnNphv+FYEoKQJsfC9PKAgjkM0TkRrwD5nzGY4fps+v5JWxka/Q6Mu9kshUo9gcFvBraUKRwgSHbODAgl+QrycX1DNDpGqtIlagZp5I/ZCZw5S+GlX+SCZ40PMD6831cqvfuNk8kDvf82YlGJA4//t2tgiS4lVrp7+M16L97GHHCqNJPCirBlLPXdF6yI4/lBPBgD+GqBEnThQt7wFXjmh7zjmrSqBDZcXZVEOjSvZksKd96zUuIBqn276aLYxo5kCNQw7e0pdrt70IvQzZGxqPLRrXLgmoS3SxbFhxTKpsw2YjwOBczOuFoLm+XdsR66xXu1vyR9azw8Gmw7PikSCXQVu26KW348esd+R9eGqE3TIAX6Bw=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: faf42787-5b83-4fed-0052-08ddf6bc8e26
-X-MS-Exchange-CrossTenant-AuthSource: DM3PPF35CFB4DBF.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 14:06:26.2789
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4TIZYTFLA+gHg47VMuVS5+yjvECQKOPaH2pzBMTsdX7YI3lUBBxIYSGGXLvDbFyRXgogUgLiCoBfqekozwvH4FtbsNeIRur64Itazn9OSoo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4807
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-18_01,2025-09-18_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0
- mlxlogscore=999 suspectscore=0 malwarescore=0 spamscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2508110000 definitions=main-2509180129
-X-Proofpoint-ORIG-GUID: 5m9EVsLSVcTj5_ppcFAlrZQ312qyToTt
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX0pdgNcBbjPZ4
- M8wPLooYlzcFsWjDZQjhvWc1TwR270+536bGtlppt2LLW2KdLwL4O6m26in71x28yuXKFS4U+4k
- iYDEyvC5n0utFP5KHbpYBIca8K8286p+63nFwTYgh+VlFIhtfzPQfGg1Tc/lDJ1zHolsQ0s+mXZ
- 7Fq1yRJg00xmaHUQC3vj63c+GGD4W4eZsmSuc1jVMAC1gvlE0ydJktLIJ4EyS/X6THAOOGIMQFW
- Z/RQjrQ/mMkg/R5AJIehlTlIRtolIRygkPBaohKgGia1JZfaU5Zgq1V8SEeAYRoRg1XIDjTSiJN
- qrGgjtwUvhqCjTdVTinX3b2pXPtiOxe8rHscVNUGJjj4nSO/2dSccipBASxG45P9Kzol05VFTht
- 5UwO1pjoQgGKnMdtP0mj0QE3UauShQ==
-X-Proofpoint-GUID: 5m9EVsLSVcTj5_ppcFAlrZQ312qyToTt
-X-Authority-Analysis: v=2.4 cv=C7vpyRP+ c=1 sm=1 tr=0 ts=68cc11e7 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=yJojWOMRYYMA:10 a=GoEa3M9JfhUA:10 a=NEAV23lmAAAA:8 a=i3X5FwGiAAAA:8
- a=QyXUC8HyAAAA:8 a=VwQbUJbxAAAA:8 a=piRyk3YmtN996NnmDkEA:9 a=QEXdDO2ut3YA:10
- a=mmqRlSCDY2ywfjPLJ4af:22 cc=ntf awl=host:12083
+Mime-Version: 1.0
+References: <20250918140451.1289454-1-elver@google.com>
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
+Message-ID: <20250918140451.1289454-24-elver@google.com>
+Subject: [PATCH v3 23/35] compiler-capability-analysis: Remove __cond_lock()
+ function-like helper
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Christoph Hellwig <hch@lst.de>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/18/25 5:25AM, kernel test robot wrote:
-> tree:   https://github.com/kleikamp/linux-shaggy jfs-next
-> head:   c87ed72ff7cfd52843fef97be14567e2d377f584
-> commit: 79e48b88ffd89a4446f407680ab4e7e5679a04e8 [1/5] jfs: replace hardcoded magic number with DTPAGEMAXSLOT constant
-> config: arm-randconfig-001-20250918 (https://download.01.org/0day-ci/archive/20250918/202509181832.frk03WjF-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250918/202509181832.frk03WjF-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509181832.frk03WjF-lkp@intel.com/
+As discussed in [1], removing __cond_lock() will improve the readability
+of trylock code. Now that Sparse context tracking support has been
+removed, we can also remove __cond_lock().
 
-Zheng,
+Change existing APIs to either drop __cond_lock() completely, or make
+use of the __cond_acquires() function attribute instead.
 
-This is my bad. I had trouble applying your patch, so I made the changes 
-manually and used > instead of >=. I'll fix the patch and re-push it.
+In particular, spinlock and rwlock implementations required switching
+over to inline helpers rather than statement-expressions for their
+trylock_* variants.
 
-Shaggy
+Link: https://lore.kernel.org/all/20250207082832.GU7145@noisy.programming.kicks-ass.net/ [1]
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v2:
+* New patch.
+---
+ .../dev-tools/capability-analysis.rst         |  2 -
+ Documentation/mm/process_addrs.rst            |  6 +-
+ .../net/wireless/intel/iwlwifi/iwl-trans.c    |  4 +-
+ .../net/wireless/intel/iwlwifi/iwl-trans.h    |  6 +-
+ .../intel/iwlwifi/pcie/gen1_2/internal.h      |  5 +-
+ .../intel/iwlwifi/pcie/gen1_2/trans.c         |  4 +-
+ include/linux/compiler-capability-analysis.h  | 33 ----------
+ include/linux/mm.h                            | 33 ++--------
+ include/linux/rwlock.h                        | 11 +---
+ include/linux/rwlock_api_smp.h                | 14 ++++-
+ include/linux/rwlock_rt.h                     | 21 ++++---
+ include/linux/sched/signal.h                  | 14 +----
+ include/linux/spinlock.h                      | 45 +++++---------
+ include/linux/spinlock_api_smp.h              | 20 ++++++
+ include/linux/spinlock_api_up.h               | 61 ++++++++++++++++---
+ include/linux/spinlock_rt.h                   | 26 ++++----
+ kernel/signal.c                               |  4 +-
+ kernel/time/posix-timers.c                    | 13 +---
+ lib/dec_and_lock.c                            |  8 +--
+ mm/memory.c                                   |  4 +-
+ mm/pgtable-generic.c                          | 19 +++---
+ tools/include/linux/compiler_types.h          |  2 -
+ 22 files changed, 162 insertions(+), 193 deletions(-)
 
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> fs/jfs/jfs_dtree.c:2906:31: warning: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Wtautological-constant-out-of-range-compare]
->      2906 |                         if (stbl[i] < 0 || stbl[i] > DTPAGEMAXSLOT) {
->           |                                            ~~~~~~~ ^ ~~~~~~~~~~~~~
->     fs/jfs/jfs_dtree.c:3111:30: warning: result of comparison of constant 128 with expression of type 's8' (aka 'signed char') is always false [-Wtautological-constant-out-of-range-compare]
->      3111 |                 if (stbl[0] < 0 || stbl[0] > DTPAGEMAXSLOT) {
->           |                                    ~~~~~~~ ^ ~~~~~~~~~~~~~
->     2 warnings generated.
-> 
-> 
-> vim +2906 fs/jfs/jfs_dtree.c
-> 
->    2702	
->    2703	/*
->    2704	 *	jfs_readdir()
->    2705	 *
->    2706	 * function: read directory entries sequentially
->    2707	 *	from the specified entry offset
->    2708	 *
->    2709	 * parameter:
->    2710	 *
->    2711	 * return: offset = (pn, index) of start entry
->    2712	 *	of next jfs_readdir()/dtRead()
->    2713	 */
->    2714	int jfs_readdir(struct file *file, struct dir_context *ctx)
->    2715	{
->    2716		struct inode *ip = file_inode(file);
->    2717		struct nls_table *codepage = JFS_SBI(ip->i_sb)->nls_tab;
->    2718		int rc = 0;
->    2719		loff_t dtpos;	/* legacy OS/2 style position */
->    2720		struct dtoffset {
->    2721			s16 pn;
->    2722			s16 index;
->    2723			s32 unused;
->    2724		} *dtoffset = (struct dtoffset *) &dtpos;
->    2725		s64 bn;
->    2726		struct metapage *mp;
->    2727		dtpage_t *p;
->    2728		int index;
->    2729		s8 *stbl;
->    2730		struct btstack btstack;
->    2731		int i, next;
->    2732		struct ldtentry *d;
->    2733		struct dtslot *t;
->    2734		int d_namleft, len, outlen;
->    2735		unsigned long dirent_buf;
->    2736		char *name_ptr;
->    2737		u32 dir_index;
->    2738		int do_index = 0;
->    2739		uint loop_count = 0;
->    2740		struct jfs_dirent *jfs_dirent;
->    2741		int jfs_dirents;
->    2742		int overflow, fix_page, page_fixed = 0;
->    2743		static int unique_pos = 2;	/* If we can't fix broken index */
->    2744	
->    2745		if (ctx->pos == DIREND)
->    2746			return 0;
->    2747	
->    2748		if (DO_INDEX(ip)) {
->    2749			/*
->    2750			 * persistent index is stored in directory entries.
->    2751			 * Special cases:	 0 = .
->    2752			 *			 1 = ..
->    2753			 *			-1 = End of directory
->    2754			 */
->    2755			do_index = 1;
->    2756	
->    2757			dir_index = (u32) ctx->pos;
->    2758	
->    2759			/*
->    2760			 * NFSv4 reserves cookies 1 and 2 for . and .. so the value
->    2761			 * we return to the vfs is one greater than the one we use
->    2762			 * internally.
->    2763			 */
->    2764			if (dir_index)
->    2765				dir_index--;
->    2766	
->    2767			if (dir_index > 1) {
->    2768				struct dir_table_slot dirtab_slot;
->    2769	
->    2770				if (dtEmpty(ip) ||
->    2771				    (dir_index >= JFS_IP(ip)->next_index)) {
->    2772					/* Stale position.  Directory has shrunk */
->    2773					ctx->pos = DIREND;
->    2774					return 0;
->    2775				}
->    2776			      repeat:
->    2777				rc = read_index(ip, dir_index, &dirtab_slot);
->    2778				if (rc) {
->    2779					ctx->pos = DIREND;
->    2780					return rc;
->    2781				}
->    2782				if (dirtab_slot.flag == DIR_INDEX_FREE) {
->    2783					if (loop_count++ > JFS_IP(ip)->next_index) {
->    2784						jfs_err("jfs_readdir detected infinite loop!");
->    2785						ctx->pos = DIREND;
->    2786						return 0;
->    2787					}
->    2788					dir_index = le32_to_cpu(dirtab_slot.addr2);
->    2789					if (dir_index == -1) {
->    2790						ctx->pos = DIREND;
->    2791						return 0;
->    2792					}
->    2793					goto repeat;
->    2794				}
->    2795				bn = addressDTS(&dirtab_slot);
->    2796				index = dirtab_slot.slot;
->    2797				DT_GETPAGE(ip, bn, mp, PSIZE, p, rc);
->    2798				if (rc) {
->    2799					ctx->pos = DIREND;
->    2800					return 0;
->    2801				}
->    2802				if (p->header.flag & BT_INTERNAL) {
->    2803					jfs_err("jfs_readdir: bad index table");
->    2804					DT_PUTPAGE(mp);
->    2805					ctx->pos = DIREND;
->    2806					return 0;
->    2807				}
->    2808			} else {
->    2809				if (dir_index == 0) {
->    2810					/*
->    2811					 * self "."
->    2812					 */
->    2813					ctx->pos = 1;
->    2814					if (!dir_emit(ctx, ".", 1, ip->i_ino, DT_DIR))
->    2815						return 0;
->    2816				}
->    2817				/*
->    2818				 * parent ".."
->    2819				 */
->    2820				ctx->pos = 2;
->    2821				if (!dir_emit(ctx, "..", 2, PARENT(ip), DT_DIR))
->    2822					return 0;
->    2823	
->    2824				/*
->    2825				 * Find first entry of left-most leaf
->    2826				 */
->    2827				if (dtEmpty(ip)) {
->    2828					ctx->pos = DIREND;
->    2829					return 0;
->    2830				}
->    2831	
->    2832				if ((rc = dtReadFirst(ip, &btstack)))
->    2833					return rc;
->    2834	
->    2835				DT_GETSEARCH(ip, btstack.top, bn, mp, p, index);
->    2836			}
->    2837		} else {
->    2838			/*
->    2839			 * Legacy filesystem - OS/2 & Linux JFS < 0.3.6
->    2840			 *
->    2841			 * pn = 0; index = 1:	First entry "."
->    2842			 * pn = 0; index = 2:	Second entry ".."
->    2843			 * pn > 0:		Real entries, pn=1 -> leftmost page
->    2844			 * pn = index = -1:	No more entries
->    2845			 */
->    2846			dtpos = ctx->pos;
->    2847			if (dtpos < 2) {
->    2848				/* build "." entry */
->    2849				ctx->pos = 1;
->    2850				if (!dir_emit(ctx, ".", 1, ip->i_ino, DT_DIR))
->    2851					return 0;
->    2852				dtoffset->index = 2;
->    2853				ctx->pos = dtpos;
->    2854			}
->    2855	
->    2856			if (dtoffset->pn == 0) {
->    2857				if (dtoffset->index == 2) {
->    2858					/* build ".." entry */
->    2859					if (!dir_emit(ctx, "..", 2, PARENT(ip), DT_DIR))
->    2860						return 0;
->    2861				} else {
->    2862					jfs_err("jfs_readdir called with invalid offset!");
->    2863				}
->    2864				dtoffset->pn = 1;
->    2865				dtoffset->index = 0;
->    2866				ctx->pos = dtpos;
->    2867			}
->    2868	
->    2869			if (dtEmpty(ip)) {
->    2870				ctx->pos = DIREND;
->    2871				return 0;
->    2872			}
->    2873	
->    2874			if ((rc = dtReadNext(ip, &ctx->pos, &btstack))) {
->    2875				jfs_err("jfs_readdir: unexpected rc = %d from dtReadNext",
->    2876					rc);
->    2877				ctx->pos = DIREND;
->    2878				return 0;
->    2879			}
->    2880			/* get start leaf page and index */
->    2881			DT_GETSEARCH(ip, btstack.top, bn, mp, p, index);
->    2882	
->    2883			/* offset beyond directory eof ? */
->    2884			if (bn < 0) {
->    2885				ctx->pos = DIREND;
->    2886				return 0;
->    2887			}
->    2888		}
->    2889	
->    2890		dirent_buf = __get_free_page(GFP_KERNEL);
->    2891		if (dirent_buf == 0) {
->    2892			DT_PUTPAGE(mp);
->    2893			jfs_warn("jfs_readdir: __get_free_page failed!");
->    2894			ctx->pos = DIREND;
->    2895			return -ENOMEM;
->    2896		}
->    2897	
->    2898		while (1) {
->    2899			jfs_dirent = (struct jfs_dirent *) dirent_buf;
->    2900			jfs_dirents = 0;
->    2901			overflow = fix_page = 0;
->    2902	
->    2903			stbl = DT_GETSTBL(p);
->    2904	
->    2905			for (i = index; i < p->header.nextindex; i++) {
->> 2906				if (stbl[i] < 0 || stbl[i] > DTPAGEMAXSLOT) {
->    2907					jfs_err("JFS: Invalid stbl[%d] = %d for inode %ld, block = %lld",
->    2908						i, stbl[i], (long)ip->i_ino, (long long)bn);
->    2909					free_page(dirent_buf);
->    2910					DT_PUTPAGE(mp);
->    2911					return -EIO;
->    2912				}
->    2913	
->    2914				d = (struct ldtentry *) & p->slot[stbl[i]];
->    2915	
->    2916				if (((long) jfs_dirent + d->namlen + 1) >
->    2917				    (dirent_buf + PAGE_SIZE)) {
->    2918					/* DBCS codepages could overrun dirent_buf */
->    2919					index = i;
->    2920					overflow = 1;
->    2921					break;
->    2922				}
->    2923	
->    2924				d_namleft = d->namlen;
->    2925				name_ptr = jfs_dirent->name;
->    2926				jfs_dirent->ino = le32_to_cpu(d->inumber);
->    2927	
->    2928				if (do_index) {
->    2929					len = min(d_namleft, DTLHDRDATALEN);
->    2930					jfs_dirent->position = le32_to_cpu(d->index);
->    2931					/*
->    2932					 * d->index should always be valid, but it
->    2933					 * isn't.  fsck.jfs doesn't create the
->    2934					 * directory index for the lost+found
->    2935					 * directory.  Rather than let it go,
->    2936					 * we can try to fix it.
->    2937					 */
->    2938					if ((jfs_dirent->position < 2) ||
->    2939					    (jfs_dirent->position >=
->    2940					     JFS_IP(ip)->next_index)) {
->    2941						if (!page_fixed && !isReadOnly(ip)) {
->    2942							fix_page = 1;
->    2943							/*
->    2944							 * setting overflow and setting
->    2945							 * index to i will cause the
->    2946							 * same page to be processed
->    2947							 * again starting here
->    2948							 */
->    2949							overflow = 1;
->    2950							index = i;
->    2951							break;
->    2952						}
->    2953						jfs_dirent->position = unique_pos++;
->    2954					}
->    2955					/*
->    2956					 * We add 1 to the index because we may
->    2957					 * use a value of 2 internally, and NFSv4
->    2958					 * doesn't like that.
->    2959					 */
->    2960					jfs_dirent->position++;
->    2961				} else {
->    2962					jfs_dirent->position = dtpos;
->    2963					len = min(d_namleft, DTLHDRDATALEN_LEGACY);
->    2964				}
->    2965	
->    2966				/* copy the name of head/only segment */
->    2967				outlen = jfs_strfromUCS_le(name_ptr, d->name, len,
->    2968							   codepage);
->    2969				jfs_dirent->name_len = outlen;
->    2970	
->    2971				/* copy name in the additional segment(s) */
->    2972				next = d->next;
->    2973				while (next >= 0) {
->    2974					t = (struct dtslot *) & p->slot[next];
->    2975					name_ptr += outlen;
->    2976					d_namleft -= len;
->    2977					/* Sanity Check */
->    2978					if (d_namleft == 0) {
->    2979						jfs_error(ip->i_sb,
->    2980							  "JFS:Dtree error: ino = %ld, bn=%lld, index = %d\n",
->    2981							  (long)ip->i_ino,
->    2982							  (long long)bn,
->    2983							  i);
->    2984						goto skip_one;
->    2985					}
->    2986					len = min(d_namleft, DTSLOTDATALEN);
->    2987					outlen = jfs_strfromUCS_le(name_ptr, t->name,
->    2988								   len, codepage);
->    2989					jfs_dirent->name_len += outlen;
->    2990	
->    2991					next = t->next;
->    2992				}
->    2993	
->    2994				jfs_dirents++;
->    2995				jfs_dirent = next_jfs_dirent(jfs_dirent);
->    2996	skip_one:
->    2997				if (!do_index)
->    2998					dtoffset->index++;
->    2999			}
->    3000	
->    3001			if (!overflow) {
->    3002				/* Point to next leaf page */
->    3003				if (p->header.flag & BT_ROOT)
->    3004					bn = 0;
->    3005				else {
->    3006					bn = le64_to_cpu(p->header.next);
->    3007					index = 0;
->    3008					/* update offset (pn:index) for new page */
->    3009					if (!do_index) {
->    3010						dtoffset->pn++;
->    3011						dtoffset->index = 0;
->    3012					}
->    3013				}
->    3014				page_fixed = 0;
->    3015			}
->    3016	
->    3017			/* unpin previous leaf page */
->    3018			DT_PUTPAGE(mp);
->    3019	
->    3020			jfs_dirent = (struct jfs_dirent *) dirent_buf;
->    3021			while (jfs_dirents--) {
->    3022				ctx->pos = jfs_dirent->position;
->    3023				if (!dir_emit(ctx, jfs_dirent->name,
->    3024					    jfs_dirent->name_len,
->    3025					    jfs_dirent->ino, DT_UNKNOWN))
->    3026					goto out;
->    3027				jfs_dirent = next_jfs_dirent(jfs_dirent);
->    3028			}
->    3029	
->    3030			if (fix_page) {
->    3031				if ((rc = add_missing_indices(ip, bn)))
->    3032					goto out;
->    3033				page_fixed = 1;
->    3034			}
->    3035	
->    3036			if (!overflow && (bn == 0)) {
->    3037				ctx->pos = DIREND;
->    3038				break;
->    3039			}
->    3040	
->    3041			DT_GETPAGE(ip, bn, mp, PSIZE, p, rc);
->    3042			if (rc) {
->    3043				free_page(dirent_buf);
->    3044				return rc;
->    3045			}
->    3046		}
->    3047	
->    3048	      out:
->    3049		free_page(dirent_buf);
->    3050	
->    3051		return rc;
->    3052	}
->    3053	
-> 
+diff --git a/Documentation/dev-tools/capability-analysis.rst b/Documentation/dev-tools/capability-analysis.rst
+index 2b89d346723b..3456132261c6 100644
+--- a/Documentation/dev-tools/capability-analysis.rst
++++ b/Documentation/dev-tools/capability-analysis.rst
+@@ -115,10 +115,8 @@ Keywords
+                  __releases_shared
+                  __acquire
+                  __release
+-                 __cond_lock
+                  __acquire_shared
+                  __release_shared
+-                 __cond_lock_shared
+                  capability_unsafe
+                  __capability_unsafe
+                  disable_capability_analysis enable_capability_analysis
+diff --git a/Documentation/mm/process_addrs.rst b/Documentation/mm/process_addrs.rst
+index be49e2a269e4..25d551a01f16 100644
+--- a/Documentation/mm/process_addrs.rst
++++ b/Documentation/mm/process_addrs.rst
+@@ -582,7 +582,7 @@ To access PTE-level page tables, a helper like :c:func:`!pte_offset_map_lock` or
+ :c:func:`!pte_offset_map` can be used depending on stability requirements.
+ These map the page table into kernel memory if required, take the RCU lock, and
+ depending on variant, may also look up or acquire the PTE lock.
+-See the comment on :c:func:`!__pte_offset_map_lock`.
++See the comment on :c:func:`!pte_offset_map_lock`.
+ 
+ Atomicity
+ ^^^^^^^^^
+@@ -666,7 +666,7 @@ must be released via :c:func:`!pte_unmap_unlock`.
+ .. note:: There are some variants on this, such as
+    :c:func:`!pte_offset_map_rw_nolock` when we know we hold the PTE stable but
+    for brevity we do not explore this.  See the comment for
+-   :c:func:`!__pte_offset_map_lock` for more details.
++   :c:func:`!pte_offset_map_lock` for more details.
+ 
+ When modifying data in ranges we typically only wish to allocate higher page
+ tables as necessary, using these locks to avoid races or overwriting anything,
+@@ -685,7 +685,7 @@ At the leaf page table, that is the PTE, we can't entirely rely on this pattern
+ as we have separate PMD and PTE locks and a THP collapse for instance might have
+ eliminated the PMD entry as well as the PTE from under us.
+ 
+-This is why :c:func:`!__pte_offset_map_lock` locklessly retrieves the PMD entry
++This is why :c:func:`!pte_offset_map_lock` locklessly retrieves the PMD entry
+ for the PTE, carefully checking it is as expected, before acquiring the
+ PTE-specific lock, and then *again* checking that the PMD entry is as expected.
+ 
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-trans.c b/drivers/net/wireless/intel/iwlwifi/iwl-trans.c
+index 3694b41d6621..5c32f0d95da4 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-trans.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-trans.c
+@@ -566,11 +566,11 @@ int iwl_trans_read_config32(struct iwl_trans *trans, u32 ofs,
+ 	return iwl_trans_pcie_read_config32(trans, ofs, val);
+ }
+ 
+-bool _iwl_trans_grab_nic_access(struct iwl_trans *trans)
++bool iwl_trans_grab_nic_access(struct iwl_trans *trans)
+ {
+ 	return iwl_trans_pcie_grab_nic_access(trans);
+ }
+-IWL_EXPORT_SYMBOL(_iwl_trans_grab_nic_access);
++IWL_EXPORT_SYMBOL(iwl_trans_grab_nic_access);
+ 
+ void __releases(nic_access)
+ iwl_trans_release_nic_access(struct iwl_trans *trans)
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-trans.h b/drivers/net/wireless/intel/iwlwifi/iwl-trans.h
+index d0e658801c2e..d6b11893e6c7 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-trans.h
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-trans.h
+@@ -1101,11 +1101,7 @@ int iwl_trans_sw_reset(struct iwl_trans *trans);
+ void iwl_trans_set_bits_mask(struct iwl_trans *trans, u32 reg,
+ 			     u32 mask, u32 value);
+ 
+-bool _iwl_trans_grab_nic_access(struct iwl_trans *trans);
+-
+-#define iwl_trans_grab_nic_access(trans)		\
+-	__cond_lock(nic_access,				\
+-		    likely(_iwl_trans_grab_nic_access(trans)))
++bool iwl_trans_grab_nic_access(struct iwl_trans *trans);
+ 
+ void __releases(nic_access)
+ iwl_trans_release_nic_access(struct iwl_trans *trans);
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/internal.h b/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/internal.h
+index f48aeebb151c..ccc891e99d8f 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/internal.h
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/internal.h
+@@ -542,10 +542,7 @@ void iwl_trans_pcie_free(struct iwl_trans *trans);
+ void iwl_trans_pcie_free_pnvm_dram_regions(struct iwl_dram_regions *dram_regions,
+ 					   struct device *dev);
+ 
+-bool __iwl_trans_pcie_grab_nic_access(struct iwl_trans *trans, bool silent);
+-#define _iwl_trans_pcie_grab_nic_access(trans, silent)		\
+-	__cond_lock(nic_access_nobh,				\
+-		    likely(__iwl_trans_pcie_grab_nic_access(trans, silent)))
++bool _iwl_trans_pcie_grab_nic_access(struct iwl_trans *trans, bool silent);
+ 
+ void iwl_trans_pcie_check_product_reset_status(struct pci_dev *pdev);
+ void iwl_trans_pcie_check_product_reset_mode(struct pci_dev *pdev);
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/trans.c b/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/trans.c
+index 327366bf87de..c9ab1d124fc6 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/trans.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/gen1_2/trans.c
+@@ -2304,7 +2304,7 @@ EXPORT_SYMBOL(iwl_trans_pcie_reset);
+  * This version doesn't disable BHs but rather assumes they're
+  * already disabled.
+  */
+-bool __iwl_trans_pcie_grab_nic_access(struct iwl_trans *trans, bool silent)
++bool _iwl_trans_pcie_grab_nic_access(struct iwl_trans *trans, bool silent)
+ {
+ 	int ret;
+ 	struct iwl_trans_pcie *trans_pcie = IWL_TRANS_GET_PCIE_TRANS(trans);
+@@ -2392,7 +2392,7 @@ bool iwl_trans_pcie_grab_nic_access(struct iwl_trans *trans)
+ 	bool ret;
+ 
+ 	local_bh_disable();
+-	ret = __iwl_trans_pcie_grab_nic_access(trans, false);
++	ret = _iwl_trans_pcie_grab_nic_access(trans, false);
+ 	if (ret) {
+ 		/* keep BHs disabled until iwl_trans_pcie_release_nic_access */
+ 		return ret;
+diff --git a/include/linux/compiler-capability-analysis.h b/include/linux/compiler-capability-analysis.h
+index 6046fca44f17..f8a1da67589c 100644
+--- a/include/linux/compiler-capability-analysis.h
++++ b/include/linux/compiler-capability-analysis.h
+@@ -326,25 +326,6 @@ static inline void _capability_unsafe_alias(void **p) { }
+  */
+ #define __release(x)		__release_cap(x)
+ 
+-/**
+- * __cond_lock() - function that conditionally acquires a capability
+- *                 exclusively
+- * @x: capability instance pinter
+- * @c: boolean expression
+- *
+- * Return: result of @c
+- *
+- * No-op function that conditionally acquires capability instance @x
+- * exclusively, if the boolean expression @c is true. The result of @c is the
+- * return value, to be able to create a capability-enabled interface; for
+- * example:
+- *
+- * .. code-block:: c
+- *
+- *	#define spin_trylock(l) __cond_lock(&lock, _spin_trylock(&lock))
+- */
+-#define __cond_lock(x, c)	__try_acquire_cap(x, c)
+-
+ /**
+  * __must_hold_shared() - function attribute, caller must hold shared capability
+  *
+@@ -401,20 +382,6 @@ static inline void _capability_unsafe_alias(void **p) { }
+  */
+ #define __release_shared(x)	__release_shared_cap(x)
+ 
+-/**
+- * __cond_lock_shared() - function that conditionally acquires a capability
+- *                        shared
+- * @x: capability instance pinter
+- * @c: boolean expression
+- *
+- * Return: result of @c
+- *
+- * No-op function that conditionally acquires capability instance @x with shared
+- * access, if the boolean expression @c is true. The result of @c is the return
+- * value, to be able to create a capability-enabled interface.
+- */
+-#define __cond_lock_shared(x, c) __try_acquire_shared_cap(x, c)
+-
+ /**
+  * __acquire_ret() - helper to acquire capability of return value
+  * @call: call expression
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 1ae97a0b8ec7..0ca9005378c5 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2713,15 +2713,8 @@ static inline pud_t pud_mkspecial(pud_t pud)
+ }
+ #endif	/* CONFIG_ARCH_SUPPORTS_PUD_PFNMAP */
+ 
+-extern pte_t *__get_locked_pte(struct mm_struct *mm, unsigned long addr,
+-			       spinlock_t **ptl);
+-static inline pte_t *get_locked_pte(struct mm_struct *mm, unsigned long addr,
+-				    spinlock_t **ptl)
+-{
+-	pte_t *ptep;
+-	__cond_lock(*ptl, ptep = __get_locked_pte(mm, addr, ptl));
+-	return ptep;
+-}
++extern pte_t *get_locked_pte(struct mm_struct *mm, unsigned long addr,
++			     spinlock_t **ptl);
+ 
+ #ifdef __PAGETABLE_P4D_FOLDED
+ static inline int __p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
+@@ -3005,31 +2998,15 @@ static inline bool pagetable_pte_ctor(struct mm_struct *mm,
+ 	return true;
+ }
+ 
+-pte_t *___pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
+-static inline pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr,
+-			pmd_t *pmdvalp)
+-{
+-	pte_t *pte;
++pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
+ 
+-	__cond_lock(RCU, pte = ___pte_offset_map(pmd, addr, pmdvalp));
+-	return pte;
+-}
+ static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
+ {
+ 	return __pte_offset_map(pmd, addr, NULL);
+ }
+ 
+-pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
+-			unsigned long addr, spinlock_t **ptlp);
+-static inline pte_t *pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
+-			unsigned long addr, spinlock_t **ptlp)
+-{
+-	pte_t *pte;
+-
+-	__cond_lock(RCU, __cond_lock(*ptlp,
+-			pte = __pte_offset_map_lock(mm, pmd, addr, ptlp)));
+-	return pte;
+-}
++pte_t *pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
++			   unsigned long addr, spinlock_t **ptlp);
+ 
+ pte_t *pte_offset_map_ro_nolock(struct mm_struct *mm, pmd_t *pmd,
+ 				unsigned long addr, spinlock_t **ptlp);
+diff --git a/include/linux/rwlock.h b/include/linux/rwlock.h
+index 78e4d02ee2c6..827ea95c9e06 100644
+--- a/include/linux/rwlock.h
++++ b/include/linux/rwlock.h
+@@ -50,8 +50,8 @@ do {								\
+  * regardless of whether CONFIG_SMP or CONFIG_PREEMPT are set. The various
+  * methods are defined as nops in the case they are not required.
+  */
+-#define read_trylock(lock)	__cond_lock_shared(lock, _raw_read_trylock(lock))
+-#define write_trylock(lock)	__cond_lock(lock, _raw_write_trylock(lock))
++#define read_trylock(lock)	_raw_read_trylock(lock)
++#define write_trylock(lock)	_raw_write_trylock(lock)
+ 
+ #define write_lock(lock)	_raw_write_lock(lock)
+ #define read_lock(lock)		_raw_read_lock(lock)
+@@ -113,12 +113,7 @@ do {								\
+ 	} while (0)
+ #define write_unlock_bh(lock)		_raw_write_unlock_bh(lock)
+ 
+-#define write_trylock_irqsave(lock, flags)		\
+-	__cond_lock(lock, ({				\
+-		local_irq_save(flags);			\
+-		_raw_write_trylock(lock) ?		\
+-		1 : ({ local_irq_restore(flags); 0; });	\
+-	}))
++#define write_trylock_irqsave(lock, flags) _raw_write_trylock_irqsave(lock, &(flags))
+ 
+ #ifdef arch_rwlock_is_contended
+ #define rwlock_is_contended(lock) \
+diff --git a/include/linux/rwlock_api_smp.h b/include/linux/rwlock_api_smp.h
+index 3e975105a606..b289c3089ab7 100644
+--- a/include/linux/rwlock_api_smp.h
++++ b/include/linux/rwlock_api_smp.h
+@@ -26,8 +26,8 @@ unsigned long __lockfunc _raw_read_lock_irqsave(rwlock_t *lock)
+ 							__acquires(lock);
+ unsigned long __lockfunc _raw_write_lock_irqsave(rwlock_t *lock)
+ 							__acquires(lock);
+-int __lockfunc _raw_read_trylock(rwlock_t *lock);
+-int __lockfunc _raw_write_trylock(rwlock_t *lock);
++int __lockfunc _raw_read_trylock(rwlock_t *lock)	__cond_acquires_shared(true, lock);
++int __lockfunc _raw_write_trylock(rwlock_t *lock)	__cond_acquires(true, lock);
+ void __lockfunc _raw_read_unlock(rwlock_t *lock)	__releases_shared(lock);
+ void __lockfunc _raw_write_unlock(rwlock_t *lock)	__releases(lock);
+ void __lockfunc _raw_read_unlock_bh(rwlock_t *lock)	__releases_shared(lock);
+@@ -41,6 +41,16 @@ void __lockfunc
+ _raw_write_unlock_irqrestore(rwlock_t *lock, unsigned long flags)
+ 							__releases(lock);
+ 
++static inline bool _raw_write_trylock_irqsave(rwlock_t *lock, unsigned long *flags)
++	__cond_acquires(true, lock)
++{
++	local_irq_save(*flags);
++	if (_raw_write_trylock(lock))
++		return true;
++	local_irq_restore(*flags);
++	return false;
++}
++
+ #ifdef CONFIG_INLINE_READ_LOCK
+ #define _raw_read_lock(lock) __raw_read_lock(lock)
+ #endif
+diff --git a/include/linux/rwlock_rt.h b/include/linux/rwlock_rt.h
+index 52ef2dc63a96..6015e296914f 100644
+--- a/include/linux/rwlock_rt.h
++++ b/include/linux/rwlock_rt.h
+@@ -26,11 +26,11 @@ do {							\
+ } while (0)
+ 
+ extern void rt_read_lock(rwlock_t *rwlock)	__acquires_shared(rwlock);
+-extern int rt_read_trylock(rwlock_t *rwlock);
++extern int rt_read_trylock(rwlock_t *rwlock)	__cond_acquires_shared(true, rwlock);
+ extern void rt_read_unlock(rwlock_t *rwlock)	__releases_shared(rwlock);
+ extern void rt_write_lock(rwlock_t *rwlock)	__acquires(rwlock);
+ extern void rt_write_lock_nested(rwlock_t *rwlock, int subclass)	__acquires(rwlock);
+-extern int rt_write_trylock(rwlock_t *rwlock);
++extern int rt_write_trylock(rwlock_t *rwlock)	__cond_acquires(true, rwlock);
+ extern void rt_write_unlock(rwlock_t *rwlock)	__releases(rwlock);
+ 
+ static __always_inline void read_lock(rwlock_t *rwlock)
+@@ -59,7 +59,7 @@ static __always_inline void read_lock_irq(rwlock_t *rwlock)
+ 		flags = 0;				\
+ 	} while (0)
+ 
+-#define read_trylock(lock)	__cond_lock_shared(lock, rt_read_trylock(lock))
++#define read_trylock(lock)	rt_read_trylock(lock)
+ 
+ static __always_inline void read_unlock(rwlock_t *rwlock)
+ 	__releases_shared(rwlock)
+@@ -123,14 +123,15 @@ static __always_inline void write_lock_irq(rwlock_t *rwlock)
+ 		flags = 0;				\
+ 	} while (0)
+ 
+-#define write_trylock(lock)	__cond_lock(lock, rt_write_trylock(lock))
++#define write_trylock(lock)	rt_write_trylock(lock)
+ 
+-#define write_trylock_irqsave(lock, flags)		\
+-	__cond_lock(lock, ({				\
+-		typecheck(unsigned long, flags);	\
+-		flags = 0;				\
+-		rt_write_trylock(lock);			\
+-	}))
++static __always_inline bool _write_trylock_irqsave(rwlock_t *rwlock, unsigned long *flags)
++	__cond_acquires(true, rwlock)
++{
++	*flags = 0;
++	return rt_write_trylock(rwlock);
++}
++#define write_trylock_irqsave(lock, flags) _write_trylock_irqsave(lock, &(flags))
+ 
+ static __always_inline void write_unlock(rwlock_t *rwlock)
+ 	__releases(rwlock)
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index 1ef1edbaaf79..bc7f83b012fb 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -733,18 +733,8 @@ static inline int thread_group_empty(struct task_struct *p)
+ #define delay_group_leader(p) \
+ 		(thread_group_leader(p) && !thread_group_empty(p))
+ 
+-extern struct sighand_struct *__lock_task_sighand(struct task_struct *task,
+-							unsigned long *flags);
+-
+-static inline struct sighand_struct *lock_task_sighand(struct task_struct *task,
+-						       unsigned long *flags)
+-{
+-	struct sighand_struct *ret;
+-
+-	ret = __lock_task_sighand(task, flags);
+-	(void)__cond_lock(&task->sighand->siglock, ret);
+-	return ret;
+-}
++extern struct sighand_struct *lock_task_sighand(struct task_struct *task,
++						unsigned long *flags);
+ 
+ static inline void unlock_task_sighand(struct task_struct *task,
+ 						unsigned long *flags)
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 22295a126c3a..d0cef13bfb33 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -213,7 +213,7 @@ static inline void do_raw_spin_unlock(raw_spinlock_t *lock) __releases(lock)
+  * various methods are defined as nops in the case they are not
+  * required.
+  */
+-#define raw_spin_trylock(lock)	__cond_lock(lock, _raw_spin_trylock(lock))
++#define raw_spin_trylock(lock)	_raw_spin_trylock(lock)
+ 
+ #define raw_spin_lock(lock)	_raw_spin_lock(lock)
+ 
+@@ -284,22 +284,11 @@ static inline void do_raw_spin_unlock(raw_spinlock_t *lock) __releases(lock)
+ 	} while (0)
+ #define raw_spin_unlock_bh(lock)	_raw_spin_unlock_bh(lock)
+ 
+-#define raw_spin_trylock_bh(lock) \
+-	__cond_lock(lock, _raw_spin_trylock_bh(lock))
++#define raw_spin_trylock_bh(lock)	_raw_spin_trylock_bh(lock)
+ 
+-#define raw_spin_trylock_irq(lock)			\
+-	__cond_lock(lock, ({				\
+-		local_irq_disable();			\
+-		_raw_spin_trylock(lock) ?		\
+-		1 : ({ local_irq_enable(); 0;  });	\
+-	}))
++#define raw_spin_trylock_irq(lock)	_raw_spin_trylock_irq(lock)
+ 
+-#define raw_spin_trylock_irqsave(lock, flags)		\
+-	__cond_lock(lock, ({				\
+-		local_irq_save(flags);			\
+-		_raw_spin_trylock(lock) ?		\
+-		1 : ({ local_irq_restore(flags); 0; }); \
+-	}))
++#define raw_spin_trylock_irqsave(lock, flags) _raw_spin_trylock_irqsave(lock, &(flags))
+ 
+ #ifndef CONFIG_PREEMPT_RT
+ /* Include rwlock functions for !RT */
+@@ -433,8 +422,12 @@ static __always_inline int spin_trylock_irq(spinlock_t *lock)
+ 	return raw_spin_trylock_irq(&lock->rlock);
+ }
+ 
+-#define spin_trylock_irqsave(lock, flags)			\
+-	__cond_lock(lock, raw_spin_trylock_irqsave(spinlock_check(lock), flags))
++static __always_inline bool _spin_trylock_irqsave(spinlock_t *lock, unsigned long *flags)
++	__cond_acquires(true, lock) __no_capability_analysis
++{
++	return raw_spin_trylock_irqsave(spinlock_check(lock), *flags);
++}
++#define spin_trylock_irqsave(lock, flags) _spin_trylock_irqsave(lock, &(flags))
+ 
+ /**
+  * spin_is_locked() - Check whether a spinlock is locked.
+@@ -512,23 +505,17 @@ static inline int rwlock_needbreak(rwlock_t *lock)
+  * Decrements @atomic by 1.  If the result is 0, returns true and locks
+  * @lock.  Returns false for all other cases.
+  */
+-extern int _atomic_dec_and_lock(atomic_t *atomic, spinlock_t *lock);
+-#define atomic_dec_and_lock(atomic, lock) \
+-		__cond_lock(lock, _atomic_dec_and_lock(atomic, lock))
++extern int atomic_dec_and_lock(atomic_t *atomic, spinlock_t *lock) __cond_acquires(true, lock);
+ 
+ extern int _atomic_dec_and_lock_irqsave(atomic_t *atomic, spinlock_t *lock,
+-					unsigned long *flags);
+-#define atomic_dec_and_lock_irqsave(atomic, lock, flags) \
+-		__cond_lock(lock, _atomic_dec_and_lock_irqsave(atomic, lock, &(flags)))
++					unsigned long *flags) __cond_acquires(true, lock);
++#define atomic_dec_and_lock_irqsave(atomic, lock, flags) _atomic_dec_and_lock_irqsave(atomic, lock, &(flags))
+ 
+-extern int _atomic_dec_and_raw_lock(atomic_t *atomic, raw_spinlock_t *lock);
+-#define atomic_dec_and_raw_lock(atomic, lock) \
+-		__cond_lock(lock, _atomic_dec_and_raw_lock(atomic, lock))
++extern int atomic_dec_and_raw_lock(atomic_t *atomic, raw_spinlock_t *lock) __cond_acquires(true, lock);
+ 
+ extern int _atomic_dec_and_raw_lock_irqsave(atomic_t *atomic, raw_spinlock_t *lock,
+-					unsigned long *flags);
+-#define atomic_dec_and_raw_lock_irqsave(atomic, lock, flags) \
+-		__cond_lock(lock, _atomic_dec_and_raw_lock_irqsave(atomic, lock, &(flags)))
++					    unsigned long *flags) __cond_acquires(true, lock);
++#define atomic_dec_and_raw_lock_irqsave(atomic, lock, flags) _atomic_dec_and_raw_lock_irqsave(atomic, lock, &(flags))
+ 
+ int __alloc_bucket_spinlocks(spinlock_t **locks, unsigned int *lock_mask,
+ 			     size_t max_size, unsigned int cpu_mult,
+diff --git a/include/linux/spinlock_api_smp.h b/include/linux/spinlock_api_smp.h
+index a77b76003ebb..1b1896595cbc 100644
+--- a/include/linux/spinlock_api_smp.h
++++ b/include/linux/spinlock_api_smp.h
+@@ -95,6 +95,26 @@ static inline int __raw_spin_trylock(raw_spinlock_t *lock)
+ 	return 0;
+ }
+ 
++static __always_inline bool _raw_spin_trylock_irq(raw_spinlock_t *lock)
++	__cond_acquires(true, lock)
++{
++	local_irq_disable();
++	if (_raw_spin_trylock(lock))
++		return true;
++	local_irq_enable();
++	return false;
++}
++
++static __always_inline bool _raw_spin_trylock_irqsave(raw_spinlock_t *lock, unsigned long *flags)
++	__cond_acquires(true, lock)
++{
++	local_irq_save(*flags);
++	if (_raw_spin_trylock(lock))
++		return true;
++	local_irq_restore(*flags);
++	return false;
++}
++
+ /*
+  * If lockdep is enabled then we use the non-preemption spin-ops
+  * even on CONFIG_PREEMPTION, because lockdep assumes that interrupts are
+diff --git a/include/linux/spinlock_api_up.h b/include/linux/spinlock_api_up.h
+index 018f5aabc1be..a9d5c7c66e03 100644
+--- a/include/linux/spinlock_api_up.h
++++ b/include/linux/spinlock_api_up.h
+@@ -24,14 +24,11 @@
+  * flags straight, to suppress compiler warnings of unused lock
+  * variables, and to add the proper checker annotations:
+  */
+-#define ___LOCK_void(lock) \
+-  do { (void)(lock); } while (0)
+-
+ #define ___LOCK_(lock) \
+-  do { __acquire(lock); ___LOCK_void(lock); } while (0)
++  do { __acquire(lock); (void)(lock); } while (0)
+ 
+ #define ___LOCK_shared(lock) \
+-  do { __acquire_shared(lock); ___LOCK_void(lock); } while (0)
++  do { __acquire_shared(lock); (void)(lock); } while (0)
+ 
+ #define __LOCK(lock, ...) \
+   do { preempt_disable(); ___LOCK_##__VA_ARGS__(lock); } while (0)
+@@ -78,10 +75,56 @@
+ #define _raw_spin_lock_irqsave(lock, flags)	__LOCK_IRQSAVE(lock, flags)
+ #define _raw_read_lock_irqsave(lock, flags)	__LOCK_IRQSAVE(lock, flags, shared)
+ #define _raw_write_lock_irqsave(lock, flags)	__LOCK_IRQSAVE(lock, flags)
+-#define _raw_spin_trylock(lock)			({ __LOCK(lock, void); 1; })
+-#define _raw_read_trylock(lock)			({ __LOCK(lock, void); 1; })
+-#define _raw_write_trylock(lock)			({ __LOCK(lock, void); 1; })
+-#define _raw_spin_trylock_bh(lock)		({ __LOCK_BH(lock, void); 1; })
++
++static __always_inline int _raw_spin_trylock(raw_spinlock_t *lock)
++	__cond_acquires(true, lock)
++{
++	__LOCK(lock);
++	return 1;
++}
++
++static __always_inline int _raw_spin_trylock_bh(raw_spinlock_t *lock)
++	__cond_acquires(true, lock)
++{
++	__LOCK_BH(lock);
++	return 1;
++}
++
++static __always_inline int _raw_spin_trylock_irq(raw_spinlock_t *lock)
++	__cond_acquires(true, lock)
++{
++	__LOCK_IRQ(lock);
++	return 1;
++}
++
++static __always_inline int _raw_spin_trylock_irqsave(raw_spinlock_t *lock, unsigned long *flags)
++	__cond_acquires(true, lock)
++{
++	__LOCK_IRQSAVE(lock, *(flags));
++	return 1;
++}
++
++static __always_inline int _raw_read_trylock(rwlock_t *lock)
++	__cond_acquires_shared(true, lock)
++{
++	__LOCK(lock, shared);
++	return 1;
++}
++
++static __always_inline int _raw_write_trylock(rwlock_t *lock)
++	__cond_acquires(true, lock)
++{
++	__LOCK(lock);
++	return 1;
++}
++
++static __always_inline int _raw_write_trylock_irqsave(rwlock_t *lock, unsigned long *flags)
++	__cond_acquires(true, lock)
++{
++	__LOCK_IRQSAVE(lock, *(flags));
++	return 1;
++}
++
+ #define _raw_spin_unlock(lock)			__UNLOCK(lock)
+ #define _raw_read_unlock(lock)			__UNLOCK(lock, shared)
+ #define _raw_write_unlock(lock)			__UNLOCK(lock)
+diff --git a/include/linux/spinlock_rt.h b/include/linux/spinlock_rt.h
+index 9688675b7536..23760f0e35e2 100644
+--- a/include/linux/spinlock_rt.h
++++ b/include/linux/spinlock_rt.h
+@@ -37,8 +37,8 @@ extern void rt_spin_lock_nested(spinlock_t *lock, int subclass)	__acquires(lock)
+ extern void rt_spin_lock_nest_lock(spinlock_t *lock, struct lockdep_map *nest_lock) __acquires(lock);
+ extern void rt_spin_unlock(spinlock_t *lock)	__releases(lock);
+ extern void rt_spin_lock_unlock(spinlock_t *lock);
+-extern int rt_spin_trylock_bh(spinlock_t *lock);
+-extern int rt_spin_trylock(spinlock_t *lock);
++extern int rt_spin_trylock_bh(spinlock_t *lock) __cond_acquires(true, lock);
++extern int rt_spin_trylock(spinlock_t *lock) __cond_acquires(true, lock);
+ 
+ static __always_inline void spin_lock(spinlock_t *lock)
+ 	__acquires(lock)
+@@ -130,21 +130,19 @@ static __always_inline void spin_unlock_irqrestore(spinlock_t *lock,
+ 	rt_spin_unlock(lock);
+ }
+ 
+-#define spin_trylock(lock)				\
+-	__cond_lock(lock, rt_spin_trylock(lock))
++#define spin_trylock(lock)	rt_spin_trylock(lock)
+ 
+-#define spin_trylock_bh(lock)				\
+-	__cond_lock(lock, rt_spin_trylock_bh(lock))
++#define spin_trylock_bh(lock)	rt_spin_trylock_bh(lock)
+ 
+-#define spin_trylock_irq(lock)				\
+-	__cond_lock(lock, rt_spin_trylock(lock))
++#define spin_trylock_irq(lock)	rt_spin_trylock(lock)
+ 
+-#define spin_trylock_irqsave(lock, flags)		\
+-	__cond_lock(lock, ({				\
+-		typecheck(unsigned long, flags);	\
+-		flags = 0;				\
+-		rt_spin_trylock(lock);			\
+-	}))
++static __always_inline bool _spin_trylock_irqsave(spinlock_t *lock, unsigned long *flags)
++	__cond_acquires(true, lock)
++{
++	*flags = 0;
++	return rt_spin_trylock(lock);
++}
++#define spin_trylock_irqsave(lock, flags) _spin_trylock_irqsave(lock, &(flags))
+ 
+ #define spin_is_contended(lock)		(((void)(lock), 0))
+ 
+diff --git a/kernel/signal.c b/kernel/signal.c
+index fe9190d84f28..9ff96a341e42 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1355,8 +1355,8 @@ int zap_other_threads(struct task_struct *p)
+ 	return count;
+ }
+ 
+-struct sighand_struct *__lock_task_sighand(struct task_struct *tsk,
+-					   unsigned long *flags)
++struct sighand_struct *lock_task_sighand(struct task_struct *tsk,
++					 unsigned long *flags)
+ {
+ 	struct sighand_struct *sighand;
+ 
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 8b582174b1f9..3c043330aa21 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -66,14 +66,7 @@ static const struct k_clock clock_realtime, clock_monotonic;
+ #error "SIGEV_THREAD_ID must not share bit with other SIGEV values!"
+ #endif
+ 
+-static struct k_itimer *__lock_timer(timer_t timer_id);
+-
+-#define lock_timer(tid)							\
+-({	struct k_itimer *__timr;					\
+-	__cond_lock(&__timr->it_lock, __timr = __lock_timer(tid));	\
+-	__timr;								\
+-})
+-
++static struct k_itimer *lock_timer(timer_t timer_id);
+ static inline void unlock_timer(struct k_itimer *timr)
+ {
+ 	if (likely((timr)))
+@@ -85,7 +78,7 @@ static inline void unlock_timer(struct k_itimer *timr)
+ 
+ #define scoped_timer				(scope)
+ 
+-DEFINE_CLASS(lock_timer, struct k_itimer *, unlock_timer(_T), __lock_timer(id), timer_t id);
++DEFINE_CLASS(lock_timer, struct k_itimer *, unlock_timer(_T), lock_timer(id), timer_t id);
+ DEFINE_CLASS_IS_COND_GUARD(lock_timer);
+ 
+ static struct timer_hash_bucket *hash_bucket(struct signal_struct *sig, unsigned int nr)
+@@ -601,7 +594,7 @@ COMPAT_SYSCALL_DEFINE3(timer_create, clockid_t, which_clock,
+ }
+ #endif
+ 
+-static struct k_itimer *__lock_timer(timer_t timer_id)
++static struct k_itimer *lock_timer(timer_t timer_id)
+ {
+ 	struct k_itimer *timr;
+ 
+diff --git a/lib/dec_and_lock.c b/lib/dec_and_lock.c
+index 1dcca8f2e194..8c7c398fd770 100644
+--- a/lib/dec_and_lock.c
++++ b/lib/dec_and_lock.c
+@@ -18,7 +18,7 @@
+  * because the spin-lock and the decrement must be
+  * "atomic".
+  */
+-int _atomic_dec_and_lock(atomic_t *atomic, spinlock_t *lock)
++int atomic_dec_and_lock(atomic_t *atomic, spinlock_t *lock)
+ {
+ 	/* Subtract 1 from counter unless that drops it to 0 (ie. it was 1) */
+ 	if (atomic_add_unless(atomic, -1, 1))
+@@ -32,7 +32,7 @@ int _atomic_dec_and_lock(atomic_t *atomic, spinlock_t *lock)
+ 	return 0;
+ }
+ 
+-EXPORT_SYMBOL(_atomic_dec_and_lock);
++EXPORT_SYMBOL(atomic_dec_and_lock);
+ 
+ int _atomic_dec_and_lock_irqsave(atomic_t *atomic, spinlock_t *lock,
+ 				 unsigned long *flags)
+@@ -50,7 +50,7 @@ int _atomic_dec_and_lock_irqsave(atomic_t *atomic, spinlock_t *lock,
+ }
+ EXPORT_SYMBOL(_atomic_dec_and_lock_irqsave);
+ 
+-int _atomic_dec_and_raw_lock(atomic_t *atomic, raw_spinlock_t *lock)
++int atomic_dec_and_raw_lock(atomic_t *atomic, raw_spinlock_t *lock)
+ {
+ 	/* Subtract 1 from counter unless that drops it to 0 (ie. it was 1) */
+ 	if (atomic_add_unless(atomic, -1, 1))
+@@ -63,7 +63,7 @@ int _atomic_dec_and_raw_lock(atomic_t *atomic, raw_spinlock_t *lock)
+ 	raw_spin_unlock(lock);
+ 	return 0;
+ }
+-EXPORT_SYMBOL(_atomic_dec_and_raw_lock);
++EXPORT_SYMBOL(atomic_dec_and_raw_lock);
+ 
+ int _atomic_dec_and_raw_lock_irqsave(atomic_t *atomic, raw_spinlock_t *lock,
+ 				     unsigned long *flags)
+diff --git a/mm/memory.c b/mm/memory.c
+index 0ba4f6b71847..454baefb4989 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2086,8 +2086,8 @@ static pmd_t *walk_to_pmd(struct mm_struct *mm, unsigned long addr)
+ 	return pmd;
+ }
+ 
+-pte_t *__get_locked_pte(struct mm_struct *mm, unsigned long addr,
+-			spinlock_t **ptl)
++pte_t *get_locked_pte(struct mm_struct *mm, unsigned long addr,
++		      spinlock_t **ptl)
+ {
+ 	pmd_t *pmd = walk_to_pmd(mm, addr);
+ 
+diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+index 567e2d084071..808f18d68279 100644
+--- a/mm/pgtable-generic.c
++++ b/mm/pgtable-generic.c
+@@ -278,7 +278,7 @@ static unsigned long pmdp_get_lockless_start(void) { return 0; }
+ static void pmdp_get_lockless_end(unsigned long irqflags) { }
+ #endif
+ 
+-pte_t *___pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
++pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+ {
+ 	unsigned long irqflags;
+ 	pmd_t pmdval;
+@@ -330,13 +330,12 @@ pte_t *pte_offset_map_rw_nolock(struct mm_struct *mm, pmd_t *pmd,
+ }
+ 
+ /*
+- * pte_offset_map_lock(mm, pmd, addr, ptlp), and its internal implementation
+- * __pte_offset_map_lock() below, is usually called with the pmd pointer for
+- * addr, reached by walking down the mm's pgd, p4d, pud for addr: either while
+- * holding mmap_lock or vma lock for read or for write; or in truncate or rmap
+- * context, while holding file's i_mmap_lock or anon_vma lock for read (or for
+- * write). In a few cases, it may be used with pmd pointing to a pmd_t already
+- * copied to or constructed on the stack.
++ * pte_offset_map_lock(mm, pmd, addr, ptlp) is usually called with the pmd
++ * pointer for addr, reached by walking down the mm's pgd, p4d, pud for addr:
++ * either while holding mmap_lock or vma lock for read or for write; or in
++ * truncate or rmap context, while holding file's i_mmap_lock or anon_vma lock
++ * for read (or for write). In a few cases, it may be used with pmd pointing to
++ * a pmd_t already copied to or constructed on the stack.
+  *
+  * When successful, it returns the pte pointer for addr, with its page table
+  * kmapped if necessary (when CONFIG_HIGHPTE), and locked against concurrent
+@@ -387,8 +386,8 @@ pte_t *pte_offset_map_rw_nolock(struct mm_struct *mm, pmd_t *pmd,
+  * table, and may not use RCU at all: "outsiders" like khugepaged should avoid
+  * pte_offset_map() and co once the vma is detached from mm or mm_users is zero.
+  */
+-pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
+-			     unsigned long addr, spinlock_t **ptlp)
++pte_t *pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
++			   unsigned long addr, spinlock_t **ptlp)
+ {
+ 	spinlock_t *ptl;
+ 	pmd_t pmdval;
+diff --git a/tools/include/linux/compiler_types.h b/tools/include/linux/compiler_types.h
+index d09f9dc172a4..067a5b4e0f7b 100644
+--- a/tools/include/linux/compiler_types.h
++++ b/tools/include/linux/compiler_types.h
+@@ -20,7 +20,6 @@
+ # define __releases(x)	__attribute__((context(x,1,0)))
+ # define __acquire(x)	__context__(x,1)
+ # define __release(x)	__context__(x,-1)
+-# define __cond_lock(x,c)	((c) ? ({ __acquire(x); 1; }) : 0)
+ #else /* __CHECKER__ */
+ /* context/locking */
+ # define __must_hold(x)
+@@ -28,7 +27,6 @@
+ # define __releases(x)
+ # define __acquire(x)	(void)0
+ # define __release(x)	(void)0
+-# define __cond_lock(x,c) (c)
+ #endif /* __CHECKER__ */
+ 
+ /* Compiler specific macros. */
+-- 
+2.51.0.384.g4c02a37b29-goog
 
