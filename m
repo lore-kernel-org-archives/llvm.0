@@ -1,834 +1,442 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4D01DF74F
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 13:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9453B2236E0
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758203601; cv=none; b=al7CfmByYd0lAITBf1QearicGy8HbUl6vtjaKgHofx/or2D4Mh8mh4QBJkm6T8SaDABQc9oq8AErq8xwsKJ/aE3GoFuoMMXsZMV2DE10NO3umZY8BKlb1iCqJxeTllYycWCUgUjcF4ZM9I91j96KgKsqs03NhiWt/b74yLiEWew=
+	t=1758204331; cv=none; b=Ge9ggKyz42K9z8MYFcd6Rtpych4KxKxNXqPCf4BjUG1IkDDwJEtwxy+RYpFVM1swZCwp5Nxoq8qGWmeMNl/B/BlP6eDDztDmxK7eNwxMXpixLNnYu3PFjNnEyh4SIhQDl/stAu8PviscIp3r7oAHyPoKcW02gZwURKqeGJWTaSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758203601; c=relaxed/simple;
-	bh=rPprPP8NH+pTkrn0wSXcmns5K0eOrx9dXvuFoBqEhoI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OhB+OB9vndxuJ8KeD2IjLJORjsYSqy2PdC4xFoSCqitkk8sPqctQJHvgG+4mk8UbCkNGeCQoIPaXEpPJ8k/KYXzyOGpTBNEKxAkRQgAua23QbBiFysKSLbT6OW9rO8qP7PO49y7+05ni0iG2RIR+jbJPwMvxumFvdgha6E8HAF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=uqITXsg9; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1758204331; c=relaxed/simple;
+	bh=jvD6EbLu6C+1usQPR8tlA6aJATIG8Vj8v16gqqXIbxQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VGrsrlHPyT/zFC2WS1Stt3M3M30YB0+RDgZaAOrrY20qkrMSpDC984DRWYaWurdSEZIcpF7YYo/Yp2sbC+vuhckfzRif0bd6hZq8lR9F41opoQGvH85DgM+cqX+yyTfES34Lq2BAkGsNTrWaG4/7dz5z9sYGXZFR2+HWZaFbp94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RLQCSwqw; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="uqITXsg9"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4cSHCb1JR9z9tVj;
-	Thu, 18 Sep 2025 15:53:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1758203595; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OUBYYvSGe+MepVbrBScAhlp/CIm+gqllylEfovme28g=;
-	b=uqITXsg9G4RGk0ll8yauIDt5/9URtVno802vy+Hyju6yyn+LHlpoWVi/ko/+oeeJqEpN1I
-	eZINJe11521zAhvO9nuIUxZuCLyhSgVooA/bdOM8fcv/iDxwMMQFmG3FbLAF7E383JcRMx
-	6Yl1CLwYpUf03DW35QyF7V/3wn5VsBj29Tm+Py9kYyGuylI8Ren7n9T2GwXGnvn9TrNP+S
-	n3o1TKRmcSzEXgdvdHRu6TpxMjYmdDrZGyVrhxdRU7S71VlSOddEq4d08bhtwoGJdVacd2
-	G7OYRuzjrFrPu4kwgZdpIbqAipfX3Xuxvq6e4tA+wA71CjAA7e1xXlbEhaMQUA==
-Message-ID: <c6910eec62f3eb4a22945cc10d02413572ea9bb7.camel@mailbox.org>
-Subject: Re: [RFC PATCH] rust: sync: Add dma_fence abstractions
-From: Philipp Stanner <phasta@mailbox.org>
-Reply-To: phasta@kernel.org
-To: Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, Philipp
- Stanner <phasta@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>,  Boqun Feng <boqun.feng@gmail.com>, Gary Guo
- <gary@garyguo.net>, =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
- Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
- Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will
- Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>,  Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Sumit Semwal
- <sumit.semwal@linaro.org>,  Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, Asahi
- Lina <lina+kernel@asahilina.net>, Daniel Almeida
- <daniel.almeida@collabora.com>,  Tamir Duberstein <tamird@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, FUJITA Tomonori
- <fujita.tomonori@gmail.com>, Krishna Ketan Rai <prafulrai522@gmail.com>, 
- Lyude Paul <lyude@redhat.com>, Mitchell Levy <levymitchell0@gmail.com>,
- Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org
-Date: Thu, 18 Sep 2025 15:53:06 +0200
-In-Reply-To: <6d37c0a8-5066-4012-96bd-8d37df18312f@amd.com>
-References: <20250918123100.124738-2-phasta@kernel.org>
-	 <6d37c0a8-5066-4012-96bd-8d37df18312f@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RLQCSwqw"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3ecdb10a612so613849f8f.2
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 07:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758204327; x=1758809127; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wxDWT9Jhe5/U9R8flrhyT53CUNqFwMWNSIwpcA9ZCHg=;
+        b=RLQCSwqwWT6Ltg7Tejh6TVnPGERS1n6aEWI9OQcL0IyWjzncG5WO5rDYhv0UhUyOJd
+         SJpsP0+LwTnZTxJL93y5QmbDE5L+mOZGRtjL+i2j2EuDOiyvGQEqlauEBHVmu1tPjDI4
+         pN1noY6ZXOtd/8hxbAYbxcH6gMK2VoAP7JkWwkuiXReU/G6dWPMNx6KZHXFRCTC5JtqA
+         ajDHp8x1v7D+ACI1YDXi9Uz+EU8ohCruydpVmWFrnDgr6KfnKkRNUK3VZkt6PCQz6uOF
+         ln+KhFIUcGJfs451A4AJ0zo2fI2U4T6h52U6XjxNqUHPrvkt6/LOU7bg7EX0tXSTKcwg
+         tkqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758204327; x=1758809127;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wxDWT9Jhe5/U9R8flrhyT53CUNqFwMWNSIwpcA9ZCHg=;
+        b=JzIN6JIjqPJU4GXv2xhliDFpArdh0uRcSG0mJ3u0N9jEf8VKNfMkdEvzkR4xB2hVlh
+         SDVyWIGWwUBWLtaOYZQkuuU8Y2vxbo6IeDXcVm4Y3uNch3w3z5V8IgjzZHYYjrMHhKCA
+         awLkF8Gv+Uwd3ONjhddYYJW0qnNd1DIUrerF7P1ZhiKqvM7VxHXcNj5ogodTJfwoWCE3
+         LouF8hqXBvUMXrXB8ngV6Z2KWe/Jhn0UnzY45ni2brUijkoLkGygDAKIUoP9iK/lZGpr
+         IdecBfDrheM1c6NmhPvi1o8HGQvXD6kjdtcQYOVGvo1Ie7kBfl8jTn29PQHrMzvC8uuk
+         3yAw==
+X-Forwarded-Encrypted: i=1; AJvYcCWjru8OOnUjEJujvaxitet698EF4K29AGeeqbVJUJt9df2cp6dA5pAx693EvnrC3PZJrk+Y@lists.linux.dev
+X-Gm-Message-State: AOJu0YwDKWQkXna0vBEsgO5aqKPKpqVXzfsvtyRAK2Td9cUyan4msRWv
+	KE0/yN2hb4v2hGEYEF7JExpWgFWC6H7ySn+ZXGZNuub3FHY0okzILNvwDrdzoUuvk9XN97smTcF
+	vSA==
+X-Google-Smtp-Source: AGHT+IFy9SVTK9lkhhDe0k4MlUcY+fM8F7qwF5+lA1VEUPlhPe12zIpwiGbwOtlWJNddLkgwJGEEi7ziYQ==
+X-Received: from wrbcc12.prod.google.com ([2002:a5d:5c0c:0:b0:3ec:e0b7:7699])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:2483:b0:3cd:ef83:a9a1
+ with SMTP id ffacd0b85a97d-3ecdf9c2666mr5663097f8f.20.1758204326802; Thu, 18
+ Sep 2025 07:05:26 -0700 (PDT)
+Date: Thu, 18 Sep 2025 15:59:11 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MBO-RS-META: fh4gxs65q1hz1ppk4ohkstxxabrodkdi
-X-MBO-RS-ID: 7add6b8ef0eeea938de
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
+Message-ID: <20250918140451.1289454-1-elver@google.com>
+Subject: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Christoph Hellwig <hch@lst.de>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2025-09-18 at 15:11 +0200, Christian K=C3=B6nig wrote:
-> Oh, now it gets funny.
+Capability analysis is a C language extension, which enables statically
+checking that user-definable "capabilities" are acquired and released where
+required. An obvious application is lock-safety checking for the kernel's
+various synchronization primitives (each of which represents a "capability"),
+and checking that locking rules are not violated.
 
-For the Rust compiler maybe ^^'
-dma_fence is a tough nut to crack because of all its callbacks and
-strict rules <.<
+Clang originally called the feature "Thread Safety Analysis" [1], with
+some terminology still using the thread-safety-analysis-only names. This
+was later changed and the feature became more flexible, gaining the
+ability to define custom "capabilities". Its foundations can be found in
+"capability systems" [2], used to specify the permissibility of
+operations to depend on some capability being held (or not held).
 
->=20
-> Adding Tvrtko as well since he recently looked into making dma_fences mor=
-e robust regarding context lifetime.
->=20
-> On 18.09.25 14:30, Philipp Stanner wrote:
-> > dma_fence is a synchronization mechanism which is needed by virtually
-> > all GPU drivers.
-> >=20
-> > A dma_fence offers many features, among which the most important ones
-> > are registering callbacks (for example to kick off a work item) which
-> > get executed once a fence gets signalled.
-> >=20
-> > dma_fence has a number of callbacks. Only the two most basic ones
-> > (get_driver_name(), get_timeline_name() are abstracted since they are
-> > enough to enable the basic functionality.
-> >=20
-> > Callbacks in Rust are registered by passing driver data which implement=
-s
-> > the Rust callback trait, whose function will be called by the C backend=
-.
-> >=20
-> > dma_fence's are always refcounted, so implement AlwaysRefcounted for
-> > them. Once a reference drops to zero, the C backend calls a release
-> > function, where we implement drop_in_place() to conveniently marry that
-> > C-cleanup mechanism with Rust's ownership concepts.
-> >=20
-> > This patch provides basic functionality, but is still missing:
-> > =C2=A0 - An implementation of PinInit<T, Error> for all driver data.
-> > =C2=A0 - A clever implementation for working dma_fence_begin_signalling=
-()
-> > =C2=A0=C2=A0=C2=A0 guards. See the corresponding TODO in the code.
-> > =C2=A0 - Additional useful helper functions such as dma_fence_is_signal=
-ed().
-> > =C2=A0=C2=A0=C2=A0 These _should_ be relatively trivial to implement, t=
-hough.
-> >=20
-> > Signed-off-by: Philipp Stanner <phasta@kernel.org>
-> > ---
-> > So. =C2=A1Hola!
-> >=20
-> > This is a highly WIP RFC. It's obviously at many places not yet
-> > conforming very well to Rust's standards.
-> >=20
-> > Nevertheless, it has progressed enough that I want to request comments
-> > from the community.
-> >=20
-> > There are a number of TODOs in the code to which I need input.
-> >=20
-> > Notably, it seems (half-)illegal to use a shared static reference to an
-> > Atomic, which I currently use for the dma_fence unit test / docstring
-> > test. I'm willing to rework that if someone suggests how.
-> > (Still, shouldn't changing a global Atomic always be legal? It can race=
-,
-> > of course. But that's kind of the point of an atomic)
-> >=20
-> > What I want comments on the most is the design of the callbacks. I thin=
-k
-> > it's a great opportunity to provide Rust drivers with rust-only
-> > callbacks, so that they don't have to bother about the C functions.
-> >=20
-> > dma_fence wise, only the most basic callbacks currently get implemented=
-.
-> > For Nova, AFAICS, we don't need much more than signalling fences and
-> > registering callbacks.
-> >=20
-> >=20
-> > Another, solvable, issue I'm having is designing the
-> > dma_fence_begin_signallin() abstractions. There are TODOs about that in
-> > the code. That should ideally be robust and not racy. So we might want
-> > some sort of synchronized (locked?) way for using that abstraction.
-> >=20
-> >=20
-> > Regarding the manually created spinlock of mine: I so far never need
-> > that spinlock anywhere in Rust and wasn't sure what's then the best way
-> > to pass a "raw" spinlock to C.
->=20
-> I was hoping to remove that anyway. Maybe it's time to do so now.
+Because the feature is not just able to express capabilities related to
+synchronization primitives, the naming chosen for the kernel departs
+from Clang's initial "Thread Safety" nomenclature and refers to the
+feature as "Capability Analysis" to avoid confusion. The implementation
+still makes references to the older terminology in some places, such as
+`-Wthread-safety` being the warning enabled option that also still
+appears in diagnostic messages.
 
-Remove what, the spinlock pointer from struct dma_fence?
-Or were you trying to quote the section above about
-dma_fence_begin_signalling()?
+Enabling capability analysis can be seen as enabling a dialect of Linux
+C with a Capability System.
 
-If the lock were to be removed, would then the driver be responsible
-for locking through its fence context?
+Additional details can be found in the added kernel-doc documentation.
+An LWN article covered v2 of the series: https://lwn.net/Articles/1012990/
 
+ [1] https://clang.llvm.org/docs/ThreadSafetyAnalysis.html
+ [2] https://www.cs.cornell.edu/talc/papers/capabilities.pdf
 
-P.
+=== Development Approach ===
 
->=20
-> Anyway I will need some time to look into it deeper.
->=20
-> Regards,
-> Christian.
->=20
-> >=20
-> >=20
-> > So much from my side. Hope to hear from you.
-> >=20
-> > (I've compiled and tested this with the unit test on the current -rc3)
-> >=20
-> > Philipp
-> > ---
-> > =C2=A0rust/bindings/bindings_helper.h |=C2=A0=C2=A0 1 +
-> > =C2=A0rust/helpers/dma_fence.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 23 ++
-> > =C2=A0rust/helpers/helpers.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > =C2=A0rust/helpers/spinlock.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0=C2=A0 5 +
-> > =C2=A0rust/kernel/sync.rs=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 +
-> > =C2=A0rust/kernel/sync/dma_fence.rs=C2=A0=C2=A0 | 388 +++++++++++++++++=
-+++++++++++++++
-> > =C2=A06 files changed, 420 insertions(+)
-> > =C2=A0create mode 100644 rust/helpers/dma_fence.c
-> > =C2=A0create mode 100644 rust/kernel/sync/dma_fence.rs
-> >=20
-> > diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_h=
-elper.h
-> > index 84d60635e8a9..107cb6b6f4a4 100644
-> > --- a/rust/bindings/bindings_helper.h
-> > +++ b/rust/bindings/bindings_helper.h
-> > @@ -48,6 +48,7 @@
-> > =C2=A0#include <linux/cred.h>
-> > =C2=A0#include <linux/device/faux.h>
-> > =C2=A0#include <linux/dma-mapping.h>
-> > +#include <linux/dma-fence.h>
-> > =C2=A0#include <linux/errname.h>
-> > =C2=A0#include <linux/ethtool.h>
-> > =C2=A0#include <linux/file.h>
-> > diff --git a/rust/helpers/dma_fence.c b/rust/helpers/dma_fence.c
-> > new file mode 100644
-> > index 000000000000..a9fc4829bbae
-> > --- /dev/null
-> > +++ b/rust/helpers/dma_fence.c
-> > @@ -0,0 +1,23 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <linux/dma-fence.h>
-> > +
-> > +void rust_helper_dma_fence_get(struct dma_fence *f)
-> > +{
-> > +	dma_fence_get(f);
-> > +}
-> > +
-> > +void rust_helper_dma_fence_put(struct dma_fence *f)
-> > +{
-> > +	dma_fence_put(f);
-> > +}
-> > +
-> > +bool rust_helper_dma_fence_begin_signalling(void)
-> > +{
-> > +	return dma_fence_begin_signalling();
-> > +}
-> > +
-> > +void rust_helper_dma_fence_end_signalling(bool cookie)
-> > +{
-> > +	dma_fence_end_signalling(cookie);
-> > +}
-> > diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-> > index 7cf7fe95e41d..99a7f7834c03 100644
-> > --- a/rust/helpers/helpers.c
-> > +++ b/rust/helpers/helpers.c
-> > @@ -20,6 +20,7 @@
-> > =C2=A0#include "cred.c"
-> > =C2=A0#include "device.c"
-> > =C2=A0#include "dma.c"
-> > +#include "dma_fence.c"
-> > =C2=A0#include "drm.c"
-> > =C2=A0#include "err.c"
-> > =C2=A0#include "fs.c"
-> > diff --git a/rust/helpers/spinlock.c b/rust/helpers/spinlock.c
-> > index 42c4bf01a23e..017ac447ebbd 100644
-> > --- a/rust/helpers/spinlock.c
-> > +++ b/rust/helpers/spinlock.c
-> > @@ -16,6 +16,11 @@ void rust_helper___spin_lock_init(spinlock_t *lock, =
-const char *name,
-> > =C2=A0#endif /* CONFIG_DEBUG_SPINLOCK */
-> > =C2=A0}
-> > =C2=A0
-> > +void rust_helper_spin_lock_init(spinlock_t *lock)
-> > +{
-> > +	spin_lock_init(lock);
-> > +}
-> > +
-> > =C2=A0void rust_helper_spin_lock(spinlock_t *lock)
-> > =C2=A0{
-> > =C2=A0	spin_lock(lock);
-> > diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> > index 00f9b558a3ad..6e59526020bc 100644
-> > --- a/rust/kernel/sync.rs
-> > +++ b/rust/kernel/sync.rs
-> > @@ -12,6 +12,7 @@
-> > =C2=A0mod arc;
-> > =C2=A0pub mod aref;
-> > =C2=A0pub mod completion;
-> > +pub mod dma_fence;
-> > =C2=A0mod condvar;
-> > =C2=A0pub mod lock;
-> > =C2=A0mod locked_by;
-> > @@ -20,6 +21,7 @@
-> > =C2=A0
-> > =C2=A0pub use arc::{Arc, ArcBorrow, UniqueArc};
-> > =C2=A0pub use completion::Completion;
-> > +pub use dma_fence::{DmaFence, DmaFenceCtx, DmaFenceNames, DmaFenceCb, =
-DmaFenceCbFunc};
-> > =C2=A0pub use condvar::{new_condvar, CondVar, CondVarTimeoutResult};
-> > =C2=A0pub use lock::global::{global_lock, GlobalGuard, GlobalLock, Glob=
-alLockBackend, GlobalLockedBy};
-> > =C2=A0pub use lock::mutex::{new_mutex, Mutex, MutexGuard};
-> > diff --git a/rust/kernel/sync/dma_fence.rs b/rust/kernel/sync/dma_fence=
-.rs
-> > new file mode 100644
-> > index 000000000000..a00bb10b2208
-> > --- /dev/null
-> > +++ b/rust/kernel/sync/dma_fence.rs
-> > @@ -0,0 +1,388 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +//! DmaFence support.
-> > +//!
-> > +//! Reference: <https://docs.kernel.org/driver-api/dma-buf.html#c.dma_=
-fence>
-> > +//!
-> > +//! C header: [`include/linux/dma-fence.h`](srctree/include/linux/dma-=
-fence.h)
-> > +
-> > +use crate::{
-> > +=C2=A0=C2=A0=C2=A0 bindings,
-> > +=C2=A0=C2=A0=C2=A0 prelude::*,
-> > +=C2=A0=C2=A0=C2=A0 str::CStr,
-> > +=C2=A0=C2=A0=C2=A0 types::ForeignOwnable,
-> > +=C2=A0=C2=A0=C2=A0 types::{ARef, AlwaysRefCounted, Opaque},
-> > +};
-> > +
-> > +use core::{
-> > +=C2=A0=C2=A0=C2=A0 ptr::{drop_in_place, NonNull},
-> > +=C2=A0=C2=A0=C2=A0 sync::atomic::{AtomicU64, Ordering},
-> > +};
-> > +
-> > +use kernel::sync::{Arc, ArcBorrow};
-> > +
-> > +/// The C dma_fence backend functions ask for certain name parameters =
-at times. In order to avoid
-> > +/// storing those names in [`DmaFence`] (there can be millions of fenc=
-es at the same time, wasting
-> > +/// much memory), the driver must provide associated constants which t=
-he C backend will access,
-> > +/// ultimately.
-> > +pub trait DmaFenceNames {
-> > +=C2=A0=C2=A0=C2=A0 /// The driver's name.
-> > +=C2=A0=C2=A0=C2=A0 const DRIVER_NAME: &CStr;
-> > +=C2=A0=C2=A0=C2=A0 /// The name of the timeline the fence is associate=
-d with.
-> > +=C2=A0=C2=A0=C2=A0 const TIMELINE_NAME: &CStr;
-> > +}
-> > +
-> > +/// Defines the callback function the dma-fence backend will call once=
- the fence gets signalled.
-> > +pub trait DmaFenceCbFunc {
-> > +=C2=A0=C2=A0=C2=A0 /// The callback function. `cb` is a container of t=
-he data which the driver passed in
-> > +=C2=A0=C2=A0=C2=A0 /// [`DmaFence::register_callback`].
-> > +=C2=A0=C2=A0=C2=A0 fn callback(cb: Pin<KBox<DmaFenceCb<Self>>>)
-> > +=C2=A0=C2=A0=C2=A0 where
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Self: Sized;
-> > +}
-> > +
-> > +/// Container for driver data which the driver gets back in its callba=
-ck once the fence gets
-> > +/// signalled.
-> > +#[pin_data]
-> > +pub struct DmaFenceCb<T: DmaFenceCbFunc> {
-> > +=C2=A0=C2=A0=C2=A0 /// C struct needed for the backend.
-> > +=C2=A0=C2=A0=C2=A0 #[pin]
-> > +=C2=A0=C2=A0=C2=A0 inner: Opaque<bindings::dma_fence_cb>,
-> > +=C2=A0=C2=A0=C2=A0 /// Driver data.
-> > +=C2=A0=C2=A0=C2=A0 #[pin]
-> > +=C2=A0=C2=A0=C2=A0 pub data: T,
-> > +}
-> > +
-> > +impl<T: DmaFenceCbFunc + 'static> DmaFenceCb<T> {
-> > +=C2=A0=C2=A0=C2=A0 fn new(data: impl PinInit<T>) -> Result<Pin<KBox<Se=
-lf>>> {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let cb =3D try_pin_init!(Se=
-lf {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 inn=
-er: Opaque::zeroed(), // This gets initialized by the C backend.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dat=
-a <- data,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 });
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KBox::pin_init(cb, GFP_KERN=
-EL)
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// Callback for the C dma_fence backend.
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// # Safety
-> > +=C2=A0=C2=A0=C2=A0 /// All data used and cast in this function was val=
-idly created by
-> > +=C2=A0=C2=A0=C2=A0 /// [`DmaFence::register_callback`] and isn't modif=
-ied by the C backend until this callback
-> > +=C2=A0=C2=A0=C2=A0 /// here has run.
-> > +=C2=A0=C2=A0=C2=A0 unsafe extern "C" fn callback(
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 _fence_ptr: *mut bindings::=
-dma_fence,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cb_ptr: *mut bindings::dma_=
-fence_cb,
-> > +=C2=A0=C2=A0=C2=A0 ) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let cb_ptr =3D Opaque::cast=
-_from(cb_ptr);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: The constructor =
-guarantees that `cb_ptr` is always `inner` of a DmaFenceCb.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let cb_ptr =3D unsafe { cra=
-te::container_of!(cb_ptr, Self, inner) }.cast_mut() as *mut c_void;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `cp_ptr` is the =
-heap memory of a Pin<Kbox<Self>> because it was created by
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // invoking ForeignOwnable:=
-:into_foreign() on such an instance.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let cb =3D unsafe { <Pin<KB=
-ox<Self>> as ForeignOwnable>::from_foreign(cb_ptr) };
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // Pass ownership back over=
- to the driver.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 T::callback(cb);
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +}
-> > +
-> > +/// A dma-fence context. A fence context takes care of associating rel=
-ated fences with each other,
-> > +/// providing each with raising sequence numbers and a common identifi=
-er.
-> > +#[pin_data]
-> > +pub struct DmaFenceCtx {
-> > +=C2=A0=C2=A0=C2=A0 /// An opaque spinlock. Only ever passed to the C b=
-ackend, never used by Rust.
-> > +=C2=A0=C2=A0=C2=A0 #[pin]
-> > +=C2=A0=C2=A0=C2=A0 lock: Opaque<bindings::spinlock_t>,
-> > +=C2=A0=C2=A0=C2=A0 /// The fence context number.
-> > +=C2=A0=C2=A0=C2=A0 nr: u64,
-> > +=C2=A0=C2=A0=C2=A0 /// The sequence number for the next fence created.
-> > +=C2=A0=C2=A0=C2=A0 seqno: AtomicU64,
-> > +}
-> > +
-> > +impl DmaFenceCtx {
-> > +=C2=A0=C2=A0=C2=A0 /// Create a new `DmaFenceCtx`.
-> > +=C2=A0=C2=A0=C2=A0 pub fn new() -> Result<Arc<Self>> {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let ctx =3D pin_init!(Self =
-{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // =
-Feed in a non-Rust spinlock for now, since the Rust side never needs the lo=
-ck.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 loc=
-k <- Opaque::ffi_init(|slot: *mut bindings::spinlock| {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `slot` is a valid pointer to an uninitiali=
-zed `struct spinlock_t`.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 unsafe { bindings::spin_lock_init(slot) };
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // =
-SAFETY: `dma_fence_context_alloc()` merely works on a global atomic. Parame=
-ter `1`
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // =
-is the number of contexts we want to allocate.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 nr:=
- unsafe { bindings::dma_fence_context_alloc(1) },
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 seq=
-no: AtomicU64::new(0),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 });
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Arc::pin_init(ctx, GFP_KERN=
-EL)
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 fn get_new_fence_seqno(&self) -> u64 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 self.seqno.fetch_add(1, Ord=
-ering::Relaxed)
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +}
-> > +
-> > +impl ArcBorrow<'_, DmaFenceCtx> {
-> > +=C2=A0=C2=A0=C2=A0 /// Create a new fence, consuming `data`.
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// The fence will increment the refcount of the fe=
-nce context associated with this
-> > +=C2=A0=C2=A0=C2=A0 /// [`DmaFenceCtx`].
-> > +=C2=A0=C2=A0=C2=A0 pub fn new_fence<T: DmaFenceNames>(
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &mut self,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data: impl PinInit<T>,
-> > +=C2=A0=C2=A0=C2=A0 ) -> Result<ARef<DmaFence<T>>> {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let fctx: Arc<DmaFenceCtx> =
-=3D (*self).into();
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let seqno: u64 =3D fctx.get=
-_new_fence_seqno();
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // TODO: Should we reset se=
-qno in case of failure?
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // Pass `fctx` by value so =
-that the fence will hold a reference to the DmaFenceCtx as long
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // as it lives.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 DmaFence::new(fctx, data, &=
-self.lock, self.nr, seqno)
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +}
-> > +
-> > +/// A synchronization primitive mainly for GPU drivers.
-> > +///
-> > +/// DmaFences are always reference counted. The typical use case is th=
-at one side registers
-> > +/// callbacks on the fence which will perform a certain action (such a=
-s queueing work) once the
-> > +/// other side signals the fence.
-> > +///
-> > +/// # Examples
-> > +///
-> > +/// ```
-> > +/// use kernel::c_str;
-> > +/// use kernel::sync::{Arc, ArcBorrow, DmaFence, DmaFenceCtx, DmaFence=
-Names, DmaFenceCb, DmaFenceCbFunc};
-> > +/// use core::sync::atomic::{self, AtomicBool};
-> > +///
-> > +/// static mut CHECKER: AtomicBool =3D AtomicBool::new(false);
-> > +///
-> > +/// struct CallbackData {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 i: u32,
-> > +/// }
-> > +///
-> > +/// impl CallbackData {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 fn new() -> Self {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Self { i: 9 }
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +/// }
-> > +///
-> > +/// impl DmaFenceCbFunc for CallbackData {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 fn callback(cb: Pin<KBox<DmaFenceCb<Self>>=
->) where Self: Sized {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 assert_eq!(cb.data=
-.i, 9);
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: Just to=
- have an easy way for testing. This cannot race with the checker
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // because the fen=
-ce signalling callbacks are executed synchronously.
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsafe { CHECKER.s=
-tore(true, atomic::Ordering::Relaxed); }
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +/// }
-> > +///
-> > +/// struct DriverData {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 i: u32,
-> > +/// }
-> > +///
-> > +/// impl DriverData {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 fn new() -> Self {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Self { i: 5 }
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +/// }
-> > +///
-> > +/// impl DmaFenceNames for DriverData {
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 const DRIVER_NAME: &CStr =3D c_str!("DUMMY=
-_DRIVER");
-> > +///=C2=A0=C2=A0=C2=A0=C2=A0 const TIMELINE_NAME: &CStr =3D c_str!("DUM=
-MY_TIMELINE");
-> > +/// }
-> > +///
-> > +/// let data =3D DriverData::new();
-> > +/// let fctx =3D DmaFenceCtx::new()?;
-> > +///
-> > +/// let mut fence =3D fctx.as_arc_borrow().new_fence(data)?;
-> > +///
-> > +/// let cb_data =3D CallbackData::new();
-> > +/// fence.register_callback(cb_data);
-> > +/// // fence.begin_signalling();
-> > +/// fence.signal()?;
-> > +/// // Now check wehether the callback was actually executed.
-> > +/// // SAFETY: `fence.signal()` above works sequentially. We just chec=
-k here whether the signalling
-> > +/// // actually did set the boolean correctly.
-> > +/// unsafe { assert_eq!(CHECKER.load(atomic::Ordering::Relaxed), true)=
-; }
-> > +///
-> > +/// Ok::<(), Error>(())
-> > +/// ```
-> > +#[pin_data]
-> > +pub struct DmaFence<T> {
-> > +=C2=A0=C2=A0=C2=A0 /// The actual dma_fence passed to C.
-> > +=C2=A0=C2=A0=C2=A0 #[pin]
-> > +=C2=A0=C2=A0=C2=A0 inner: Opaque<bindings::dma_fence>,
-> > +=C2=A0=C2=A0=C2=A0 /// User data.
-> > +=C2=A0=C2=A0=C2=A0 #[pin]
-> > +=C2=A0=C2=A0=C2=A0 data: T,
-> > +=C2=A0=C2=A0=C2=A0 /// Marks whether the fence is currently in the sig=
-nalling critical section.
-> > +=C2=A0=C2=A0=C2=A0 signalling: bool,
-> > +=C2=A0=C2=A0=C2=A0 /// A boolean needed for the C backend's lockdep gu=
-ard.
-> > +=C2=A0=C2=A0=C2=A0 signalling_cookie: bool,
-> > +=C2=A0=C2=A0=C2=A0 /// A reference to the associated [`DmaFenceCtx`] s=
-o that it cannot be dropped while there are
-> > +=C2=A0=C2=A0=C2=A0 /// still fences around.
-> > +=C2=A0=C2=A0=C2=A0 fctx: Arc<DmaFenceCtx>,
-> > +}
-> > +
-> > +// SAFETY: `DmaFence` is safe to be sent to any task.
-> > +unsafe impl<T> Send for DmaFence<T> {}
-> > +
-> > +// SAFETY: `DmaFence` is safe to be accessed concurrently.
-> > +unsafe impl<T> Sync for DmaFence<T> {}
-> > +
-> > +// SAFETY: These implement the C backends refcounting methods which ar=
-e proven to work correctly.
-> > +unsafe impl<T: DmaFenceNames> AlwaysRefCounted for DmaFence<T> {
-> > +=C2=A0=C2=A0=C2=A0 fn inc_ref(&self) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `self.as_raw()` =
-is a pointer to a valid `struct dma_fence`.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsafe { bindings::dma_fenc=
-e_get(self.as_raw()) }
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// # Safety
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// `ptr`must be a valid pointer to a [`DmaFence`].
-> > +=C2=A0=C2=A0=C2=A0 unsafe fn dec_ref(ptr: NonNull<Self>) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `ptr` is never a=
- NULL pointer; and when `dec_ref()` is called
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // the fence is by definiti=
-on still valid.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let fence =3D unsafe { (*pt=
-r.as_ptr()).inner.get() };
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: Valid because `f=
-ence` was created validly above.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsafe { bindings::dma_fenc=
-e_put(fence) }
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +}
-> > +
-> > +impl<T: DmaFenceNames> DmaFence<T> {
-> > +=C2=A0=C2=A0=C2=A0 // TODO: There could be a subtle potential problem =
-here? The LLVM compiler backend can create
-> > +=C2=A0=C2=A0=C2=A0 // several versions of this constant. Their content=
- would be identical, but their addresses
-> > +=C2=A0=C2=A0=C2=A0 // different.
-> > +=C2=A0=C2=A0=C2=A0 const OPS: bindings::dma_fence_ops =3D Self::ops_cr=
-eate();
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// Create an initializer for a new [`DmaFence`].
-> > +=C2=A0=C2=A0=C2=A0 fn new(
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fctx: Arc<DmaFenceCtx>,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data: impl PinInit<T>, // T=
-ODO: The driver data should implement PinInit<T, Error>
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 lock: &Opaque<bindings::spi=
-nlock_t>,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 context: u64,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 seqno: u64,
-> > +=C2=A0=C2=A0=C2=A0 ) -> Result<ARef<Self>> {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let fence =3D pin_init!(Sel=
-f {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 inn=
-er <- Opaque::ffi_init(|slot: *mut bindings::dma_fence| {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 let lock_ptr =3D &raw const (*lock);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `slot` is a valid pointer to an uninitiali=
-zed `struct dma_fence`.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // `lock_ptr` is a pointer to the spinlock of the fen=
-ce context, which is shared
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // among all the fences. This can't become a UAF beca=
-use each fence takes a
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 // reference of the fence context.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 unsafe { bindings::dma_fence_init(slot, &Self::OPS, O=
-paque::cast_into(lock_ptr), context, seqno) };
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dat=
-a <- data,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sig=
-nalling: false,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sig=
-nalling_cookie: false,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fct=
-x: fctx,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 });
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let b =3D KBox::pin_init(fe=
-nce, GFP_KERNEL)?;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: We don't move th=
-e contents of `b` anywhere here. After unwrapping it, ARef will
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // take care of preventing =
-memory moves.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let rawptr =3D KBox::into_r=
-aw(unsafe { Pin::into_inner_unchecked(b) });
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `rawptr` was cre=
-ated validly above.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let aref =3D unsafe { ARef:=
-:from_raw(NonNull::new_unchecked(rawptr)) };
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Ok(aref)
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// Mark the beginning of a DmaFence signalling cri=
-tical section. Should be called once a fence
-> > +=C2=A0=C2=A0=C2=A0 /// gets published.
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// The signalling critical section is marked as fi=
-nished automatically once the fence signals.
-> > +=C2=A0=C2=A0=C2=A0 pub fn begin_signalling(&mut self) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // FIXME: this needs to be =
-mutable, obviously, but we can't borrow mutably. *sigh*
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 self.signalling =3D true;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // TODO: Should we warn if =
-a user tries to do this several times for the same
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // fence? And should we ign=
-ore the request if the fence is already signalled?
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `dma_fence_begin=
-_signalling()` works on global lockdep data and calling it is
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // always safe.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 self.signalling_cookie =3D =
-unsafe { bindings::dma_fence_begin_signalling() };
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 const fn ops_create() -> bindings::dma_fence_ops {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: Zeroing out memo=
-ry on the stack is always safe.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let mut ops: bindings::dma_=
-fence_ops =3D unsafe { core::mem::zeroed() };
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ops.get_driver_name =3D Som=
-e(Self::get_driver_name);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ops.get_timeline_name =3D S=
-ome(Self::get_timeline_name);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ops.release =3D Some(Self::=
-release);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ops
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 extern "C" fn get_driver_name(_ptr: *mut bindings::=
-dma_fence) -> *const c_char {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 T::DRIVER_NAME.as_ptr()
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 extern "C" fn get_timeline_name(_ptr: *mut bindings=
-::dma_fence) -> *const c_char {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 T::TIMELINE_NAME.as_ptr()
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// The release function called by the C backend on=
-ce the refcount drops to 0. We use this to
-> > +=C2=A0=C2=A0=C2=A0 /// drop the Rust dma-fence, too. Since [`DmaFence`=
-] implements [`AlwaysRefCounted`], this is
-> > +=C2=A0=C2=A0=C2=A0 /// perfectly safe and a convenient way to concile =
-the two release mechanisms of C and Rust.
-> > +=C2=A0=C2=A0=C2=A0 unsafe extern "C" fn release(ptr: *mut bindings::dm=
-a_fence) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let ptr =3D Opaque::cast_fr=
-om(ptr);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: The constructor =
-guarantees that `ptr` is always the inner fence of a DmaFence.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let fence =3D unsafe { crat=
-e::container_of!(ptr, Self, inner) }.cast_mut();
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: See above. Also,=
- the release callback will only be called once, when the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // refcount drops to 0, and=
- when that happens the fence is by definition still valid.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsafe { drop_in_place(fenc=
-e) };
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// Signal the fence. This will invoke all register=
-ed callbacks.
-> > +=C2=A0=C2=A0=C2=A0 pub fn signal(&self) -> Result {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `self` is refcou=
-nted.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let ret =3D unsafe { bindin=
-gs::dma_fence_signal(self.as_raw()) };
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ret !=3D 0 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret=
-urn Err(Error::from_errno(ret));
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if self.signalling {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // =
-SAFETY: `dma_fence_end_signalling()` works on global lockdep data. The only
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // =
-parameter is a boolean passed by value.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 uns=
-afe { bindings::dma_fence_end_signalling(self.signalling_cookie) };
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Ok(())
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 /// Register a callback on a [`DmaFence`]. The call=
-back will be invoked in the fence's
-> > +=C2=A0=C2=A0=C2=A0 /// signalling path, i.e., critical section.
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// Consumes `data`. `data` is passed back to the i=
-mplemented callback function when the fence
-> > +=C2=A0=C2=A0=C2=A0 /// gets signalled.
-> > +=C2=A0=C2=A0=C2=A0 pub fn register_callback<U: DmaFenceCbFunc + 'stati=
-c>(&self, data: impl PinInit<U>) -> Result {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let cb =3D DmaFenceCb::new(=
-data)?;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let ptr =3D cb.into_foreign=
-() as *mut DmaFenceCb<U>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `ptr` was create=
-d validly directly above.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let inner_cb =3D unsafe { (=
-*ptr).inner.get() };
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // SAFETY: `self.as_raw()` =
-is valid because `self` is refcounted, `inner_cb` was created
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // validly above and was tu=
-rned into a ForeignOwnable, so it won't be dropped. `callback`
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // has static life time.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 let ret =3D unsafe {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bin=
-dings::dma_fence_add_callback(
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 self.as_raw(),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 inner_cb,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 Some(DmaFenceCb::<U>::callback),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 )
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ret !=3D 0 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret=
-urn Err(Error::from_errno(ret));
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Ok(())
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +
-> > +=C2=A0=C2=A0=C2=A0 fn as_raw(&self) -> *mut bindings::dma_fence {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 self.inner.get()
-> > +=C2=A0=C2=A0=C2=A0 }
-> > +}
->=20
+Prior art exists in the form of Sparse's context tracking. Locking
+annotations on functions exist, so the concept of analyzing locking rules
+is not foreign to the kernel's codebase.
+
+However, Clang's analysis is more complete vs. Sparse's, with the
+typical trade-offs in static analysis: improved completeness is
+sacrificed for more possible false positives or additional annotations
+required by the programmer. Numerous options exist to disable or opt out
+certain code from analysis.
+
+This series initially aimed to retain compatibility with Sparse, which
+can provide tree-wide analysis of a subset of the capability analysis
+introduced, but it was later decided to drop Sparse compatibility. For
+the most part, the new (and old) keywords used for annotations remain
+the same, and many of the pre-existing annotations remain valid.
+
+One big question is how to enable this feature, given we end up with a
+new dialect of C -- 2 approaches have been considered:
+
+  A. Tree-wide all-or-nothing approach. This approach requires tree-wide
+     changes, adding annotations or selective opt-outs. Making additional
+     primitives capability-enabled increases churn, esp. where maintainers
+     are unaware of the feature's existence and how to use it.
+
+Because we can't change the programming language (even if from one C
+dialect to another) of the kernel overnight, a different approach might
+cause less friction.
+
+  B. A selective, incremental, and much less intrusive approach.
+     Maintainers of subsystems opt in their modules or directories into
+     "capability analysis" (via Makefile):
+  
+       CAPABILITY_ANALYSIS_foo.o := y	# foo.o only
+       CAPABILITY_ANALYSIS := y  	# all TUs
+  
+     Most (eventually all) synchronization primitives and more
+     capabilities (including ones that could track "irq disabled",
+     "preemption" disabled, etc.) could be supported.
+
+The approach taken by this series is B. This ensures that only
+subsystems where maintainers are willing to deal with any warnings are
+opted-in. Introducing the feature can be done incrementally, without
+large tree-wide changes and adding numerous opt-outs and annotations to
+the majority of code.
+
+  Note: Bart Van Assche concurrently worked on enabling -Wthread-safety:
+  https://lore.kernel.org/all/20250206175114.1974171-1-bvanassche@acm.org/
+  Bart's work has shown what it might take to go with approach A
+  (tree-wide, restricted to 'mutex' usage). This has shown that the
+  analysis finds real issues when applied to enough subsystems!  We hope
+  this serves as motivation to eventually enable the analysis in as many
+  subsystems as possible, particularly subsystems that are not as easily
+  tested by CI systems and test robots.
+
+=== Initial Uses ===
+
+With this initial series, the following synchronization primitives are
+supported: `raw_spinlock_t`, `spinlock_t`, `rwlock_t`, `mutex`,
+`seqlock_t`, `bit_spinlock`, RCU, SRCU (`srcu_struct`), `rw_semaphore`,
+`local_lock_t`, `ww_mutex`.
+
+To demonstrate use of the feature on real kernel code, the series also
+enables capability analysis for the following subsystems:
+
+	* kernel/kcov
+	* kernel/kcsan
+	* kernel/sched/
+	* lib/rhashtable
+	* lib/stackdepot
+	* mm/kfence
+	* security/tomoyo
+    	* crypto/
+
+The initial benefits are static detection of violations of locking
+rules. As more capabilities are added, we would see more static checking
+beyond what regular C can provide, all while remaining easy (read quick)
+to use via the Clang compiler.
+
+  Note: The kernel already provides dynamic analysis tools Lockdep and
+  KCSAN for lock-safety checking and data-race detection respectively.
+  Unlike those, Clang's capability analysis is a compile-time static
+  analysis with no runtime impact. The static analysis complements
+  existing dynamic analysis tools, as it may catch some issues before
+  even getting into a running kernel, but is *not* a replacement for
+  whole-kernel testing with the dynamic analysis tools enabled!
+
+=== Appendix ===
+
+A Clang version that supports `-Wthread-safety-pointer` and the new
+alias-analysis of capability pointers is required (from this version
+onwards):
+
+	https://github.com/llvm/llvm-project/commit/b4c98fcbe1504841203e610c351a3227f36c92a4 [3]
+
+This series is also available at this Git tree:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/melver/linux.git/log/?h=cap-analysis/dev
+
+=== Changelog ===
+
+v3:
+
+  - Bump min. Clang version to 22+ (unreleased), which now supports:
+
+	* re-entrancy via __attribute__((reentrant_capability));
+	* basic form of capability alias analysis [3] - which is the
+	  biggest improvement since v2.
+
+    This was the result of conclusions from this discussion:
+    https://lore.kernel.org/all/CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com/
+
+  - Rename __asserts_cap/__assert_cap to __assumes_cap/__assume_cap.
+
+  - Switch to DECLARE_LOCK_GUARD_1_ATTRS().
+
+  - Add __acquire_ret and __acquire_shared_ret helper macros - can be
+    used to define function-like macros that return objects which
+    contains a held capabilities. Works now because of capability alias
+    analysis.
+
+  - Add capability_unsafe_alias() helper, where the analysis rightfully
+    points out we're doing strange things with aliases but we don't
+    care.
+
+  - Support multi-argument attributes.
+
+  - Enable for kernel/sched/{core,fair}.c, kernel/kcsan.
+  - Drop drivers/tty changes (revisit later).
+
+v2: https://lore.kernel.org/all/20250304092417.2873893-1-elver@google.com/
+
+  - Remove Sparse context tracking support - after the introduction of
+    Clang support, so that backports can skip removal of Sparse support.
+
+  - Remove __cond_lock() function-like helper.
+
+  - ww_mutex support.
+
+  - -Wthread-safety-addressof was reworked and committed in upstream
+    Clang as -Wthread-safety-pointer.
+
+  - Make __cond_acquires() and __cond_acquires_shared() take abstract
+    value, since compiler only cares about zero and non-zero.
+
+  - Rename __var_guarded_by to simply __guarded_by. Initially the idea
+    was to be explicit about if the variable itself or the pointed-to
+    data is guarded, but in the long-term, making this shorter might be
+    better.
+
+  - Likewise rename __ref_guarded_by to __pt_guarded_by.
+
+  - Introduce common header warning suppressions - this is a better
+    solution than guarding header inclusions with disable_ +
+    enable_capability_analysis(). Header suppressions are disabled when
+    selecting CONFIG_WARN_CAPABILITY_ANALYSIS_ALL=y. This bumps the
+    minimum Clang version required to 20+.
+
+  - Make the data_race() macro imply disabled capability analysis.
+    Writing capability_unsafe(data_race(..)) is unnecessarily verbose
+    and data_race() on its own already indicates something subtly unsafe
+    is happening.  This change was made after analysis of a finding in
+    security/tomoyo.
+
+  - Enable analysis in the following subsystems as additional examples
+    of larger subsystem. Where it was obvious, the __guarded_by
+    attribute was added to lock-guarded variables to improve coverage.
+
+    	* drivers/tty
+	* security/tomoyo
+    	* crypto/
+
+RFC v1: https://lore.kernel.org/lkml/20250206181711.1902989-1-elver@google.com
+
+Marco Elver (35):
+  compiler_types: Move lock checking attributes to
+    compiler-capability-analysis.h
+  compiler-capability-analysis: Add infrastructure for Clang's
+    capability analysis
+  compiler-capability-analysis: Add test stub
+  Documentation: Add documentation for Compiler-Based Capability
+    Analysis
+  checkpatch: Warn about capability_unsafe() without comment
+  cleanup: Basic compatibility with capability analysis
+  lockdep: Annotate lockdep assertions for capability analysis
+  locking/rwlock, spinlock: Support Clang's capability analysis
+  compiler-capability-analysis: Change __cond_acquires to take return
+    value
+  locking/mutex: Support Clang's capability analysis
+  locking/seqlock: Support Clang's capability analysis
+  bit_spinlock: Include missing <asm/processor.h>
+  bit_spinlock: Support Clang's capability analysis
+  rcu: Support Clang's capability analysis
+  srcu: Support Clang's capability analysis
+  kref: Add capability-analysis annotations
+  locking/rwsem: Support Clang's capability analysis
+  locking/local_lock: Include missing headers
+  locking/local_lock: Support Clang's capability analysis
+  locking/ww_mutex: Support Clang's capability analysis
+  debugfs: Make debugfs_cancellation a capability struct
+  compiler-capability-analysis: Remove Sparse support
+  compiler-capability-analysis: Remove __cond_lock() function-like
+    helper
+  compiler-capability-analysis: Introduce header suppressions
+  compiler: Let data_race() imply disabled capability analysis
+  MAINTAINERS: Add entry for Capability Analysis
+  kfence: Enable capability analysis
+  kcov: Enable capability analysis
+  kcsan: Enable capability analysis
+  stackdepot: Enable capability analysis
+  rhashtable: Enable capability analysis
+  printk: Move locking annotation to printk.c
+  security/tomoyo: Enable capability analysis
+  crypto: Enable capability analysis
+  sched: Enable capability analysis for core.c and fair.c
+
+ .../dev-tools/capability-analysis.rst         | 148 +++++
+ Documentation/dev-tools/index.rst             |   1 +
+ Documentation/dev-tools/sparse.rst            |  19 -
+ Documentation/mm/process_addrs.rst            |   6 +-
+ MAINTAINERS                                   |  11 +
+ Makefile                                      |   1 +
+ crypto/Makefile                               |   2 +
+ crypto/acompress.c                            |   6 +-
+ crypto/algapi.c                               |   2 +
+ crypto/api.c                                  |   1 +
+ crypto/crypto_engine.c                        |   2 +-
+ crypto/drbg.c                                 |   5 +
+ crypto/internal.h                             |   2 +-
+ crypto/proc.c                                 |   3 +
+ crypto/scompress.c                            |  24 +-
+ .../net/wireless/intel/iwlwifi/iwl-trans.c    |   4 +-
+ .../net/wireless/intel/iwlwifi/iwl-trans.h    |   6 +-
+ .../intel/iwlwifi/pcie/gen1_2/internal.h      |   5 +-
+ .../intel/iwlwifi/pcie/gen1_2/trans.c         |   4 +-
+ fs/dlm/lock.c                                 |   2 +-
+ include/crypto/internal/acompress.h           |   7 +-
+ include/crypto/internal/engine.h              |   2 +-
+ include/linux/bit_spinlock.h                  |  24 +-
+ include/linux/cleanup.h                       |  17 +
+ include/linux/compiler-capability-analysis.h  | 423 +++++++++++++
+ include/linux/compiler.h                      |   2 +
+ include/linux/compiler_types.h                |  18 +-
+ include/linux/console.h                       |   4 +-
+ include/linux/debugfs.h                       |  12 +-
+ include/linux/kref.h                          |   2 +
+ include/linux/list_bl.h                       |   2 +
+ include/linux/local_lock.h                    |  45 +-
+ include/linux/local_lock_internal.h           |  73 ++-
+ include/linux/lockdep.h                       |  12 +-
+ include/linux/mm.h                            |  33 +-
+ include/linux/mutex.h                         |  35 +-
+ include/linux/mutex_types.h                   |   4 +-
+ include/linux/rcupdate.h                      |  86 +--
+ include/linux/refcount.h                      |   6 +-
+ include/linux/rhashtable.h                    |  14 +-
+ include/linux/rwlock.h                        |  22 +-
+ include/linux/rwlock_api_smp.h                |  43 +-
+ include/linux/rwlock_rt.h                     |  44 +-
+ include/linux/rwlock_types.h                  |  10 +-
+ include/linux/rwsem.h                         |  66 +-
+ include/linux/sched.h                         |   6 +-
+ include/linux/sched/signal.h                  |  16 +-
+ include/linux/sched/task.h                    |   5 +-
+ include/linux/sched/wake_q.h                  |   3 +
+ include/linux/seqlock.h                       |  24 +
+ include/linux/seqlock_types.h                 |   5 +-
+ include/linux/spinlock.h                      |  89 ++-
+ include/linux/spinlock_api_smp.h              |  34 +-
+ include/linux/spinlock_api_up.h               | 112 +++-
+ include/linux/spinlock_rt.h                   |  37 +-
+ include/linux/spinlock_types.h                |  10 +-
+ include/linux/spinlock_types_raw.h            |   5 +-
+ include/linux/srcu.h                          |  60 +-
+ include/linux/srcutiny.h                      |   4 +
+ include/linux/srcutree.h                      |   6 +-
+ include/linux/ww_mutex.h                      |  22 +-
+ kernel/Makefile                               |   2 +
+ kernel/kcov.c                                 |  36 +-
+ kernel/kcsan/Makefile                         |   2 +
+ kernel/kcsan/report.c                         |  11 +-
+ kernel/printk/printk.c                        |   2 +
+ kernel/sched/Makefile                         |   3 +
+ kernel/sched/core.c                           |  89 ++-
+ kernel/sched/fair.c                           |   9 +-
+ kernel/sched/sched.h                          | 110 +++-
+ kernel/signal.c                               |   4 +-
+ kernel/time/posix-timers.c                    |  13 +-
+ lib/Kconfig.debug                             |  45 ++
+ lib/Makefile                                  |   6 +
+ lib/dec_and_lock.c                            |   8 +-
+ lib/rhashtable.c                              |   5 +-
+ lib/stackdepot.c                              |  20 +-
+ lib/test_capability-analysis.c                | 596 ++++++++++++++++++
+ mm/kfence/Makefile                            |   2 +
+ mm/kfence/core.c                              |  20 +-
+ mm/kfence/kfence.h                            |  14 +-
+ mm/kfence/report.c                            |   4 +-
+ mm/memory.c                                   |   4 +-
+ mm/pgtable-generic.c                          |  19 +-
+ net/ipv4/tcp_sigpool.c                        |   2 +-
+ scripts/Makefile.capability-analysis          |  11 +
+ scripts/Makefile.lib                          |  10 +
+ scripts/capability-analysis-suppression.txt   |  33 +
+ scripts/checkpatch.pl                         |   8 +
+ security/tomoyo/Makefile                      |   2 +
+ security/tomoyo/common.c                      |  52 +-
+ security/tomoyo/common.h                      |  77 +--
+ security/tomoyo/domain.c                      |   1 +
+ security/tomoyo/environ.c                     |   1 +
+ security/tomoyo/file.c                        |   5 +
+ security/tomoyo/gc.c                          |  28 +-
+ security/tomoyo/mount.c                       |   2 +
+ security/tomoyo/network.c                     |   3 +
+ tools/include/linux/compiler_types.h          |   2 -
+ 99 files changed, 2370 insertions(+), 589 deletions(-)
+ create mode 100644 Documentation/dev-tools/capability-analysis.rst
+ create mode 100644 include/linux/compiler-capability-analysis.h
+ create mode 100644 lib/test_capability-analysis.c
+ create mode 100644 scripts/Makefile.capability-analysis
+ create mode 100644 scripts/capability-analysis-suppression.txt
+
+-- 
+2.51.0.384.g4c02a37b29-goog
 
