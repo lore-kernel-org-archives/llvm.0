@@ -1,303 +1,672 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14A7288DA
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 05:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758174997; cv=none; b=VL+olQ72lRwvvl3jmb4+2xtUTKO3WFpOC4KP7BFIYgdc+G/zbpArjBbPEBfopgj5UCO5jz0iRuiQgqNwzU4TI6x47xRkUK+vLMm5usnX6sZgTjEc7RrNzII9dT+kxf8/zSuCNfNqyKFL9qBx7vMnAWBC1efJtx4ljFmXCuG9NBs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758174997; c=relaxed/simple;
-	bh=lfjlZ5yEEW0FqZlSU5dEgD0szSxc6bYm56+XzUkjJTA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qVGiGqt0f2ysJko0NG7/6cTUI2eQPbTkTh3XOOYg0cojL9mbywdaSYal7eluBt2v/nqx4MYw607vyA6FDusH2GSslBNFmjBqh6E/bX9FOLDka7JoH5fdzTyfxlYYB3ehmalkXw0XqLiDbuhMz0iWm2FDRoDE+W3ghxl9iul1jeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=AtMbUHaC; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=R4leFrKi; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340B12E22AB;
+	Thu, 18 Sep 2025 06:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758178162; cv=fail; b=a8mmHkz5pfns0hZ1wT9hgRQWs3XvIxz+cos9xyXDh72MM1+vDPTNFyidgZpoIsgzOY94ACZf0nF7IyWNZrFUQiFRaaTAWs3gGfdP80yRlaQWzTPKDvvVXLQ2mm8QNBovj7DeRBXVY/geuBVYVygVCogZsnvcao1scM6ABjERthA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758178162; c=relaxed/simple;
+	bh=I7/vHC+QnOnn9BGCs4TgBXQUmbs2jtGzJpNclkaDKLk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qRLeeI7/VyooprVh+Uj7fr42FoVwYeo1Q18J9dno99LRbj1blYVCSh4vv/f0PmgU7i66//5i/5Kp7pJk6oa1Bb7XOEBmTo1tgb+jhkEFU9ejhuICwRsW0g6zOye2fVFuwzPJZu84lajXAzy3uY3hgR9AteNzrSbF9CPnlDH7qow=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jJiyngc2; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="AtMbUHaC";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="R4leFrKi"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2908333791;
-	Thu, 18 Sep 2025 05:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1758174993; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=lfjlZ5yEEW0FqZlSU5dEgD0szSxc6bYm56+XzUkjJTA=;
-	b=AtMbUHaCjW8kIerM63RfMvkErkluHt/SoYLmUs6qb9k4NU1QSr5uWo9CkXYlH+YTU43Den
-	2SWsUXvP/0Vt9uoqik9/L0vC3M6Z9G9AJAnbUrv7UO0QhwoTA03342SQ0Z9wQdLq4P6Gn+
-	mimKXiWJmNXOH90iYfHk//qyq0p1d7E=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1758174992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=lfjlZ5yEEW0FqZlSU5dEgD0szSxc6bYm56+XzUkjJTA=;
-	b=R4leFrKiL6F0zpBOylDqOymlaGvFjHox96zXAMsfFKHxD7x/Vo3F/XX22z8mE/rPgM16Uv
-	3WtffFPPrzbns2Sv1emStnm5M6qP0x6+Gq+iS6MPYF54AFpaC+6zybzxbhjlNHWXv2w5we
-	Q8PLRwdm5uiZnu+zJ7NwCq14UO3rf0k=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3340013A51;
-	Thu, 18 Sep 2025 05:56:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id pxnVCg+fy2ivEgAAD6G6ig
-	(envelope-from <jgross@suse.com>); Thu, 18 Sep 2025 05:56:31 +0000
-Message-ID: <078d5556-c5a9-40f5-906d-f96253a22739@suse.com>
-Date: Thu, 18 Sep 2025 07:56:30 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJiyngc2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758178159; x=1789714159;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=I7/vHC+QnOnn9BGCs4TgBXQUmbs2jtGzJpNclkaDKLk=;
+  b=jJiyngc20h4reXQN8jwHGbgCoc+RXKGztuMdhnV4Da/FXfzqT3H++kgp
+   qbYfbvy30HckCOlGiKyxIVQUAeHH5xmXZU7+vEuoc6uYnjJFcwQhekAJZ
+   s3Ng/zqpNeWvHSO3I1FKfJMlqh1BKGPOQvG354+6nCfnvG1UWC+vU1ThC
+   MVMmWMrdUHvt/I2L+eNfOvRJzVurHZed6PB4b7FVaOVNldZXda1z4Clmu
+   TI/cgQBUMlJSsQH7UEHrZ7pQtcVuGHz4xWarfGjD+jev/KMpUDewDLCxo
+   prLHsDkBrnT/694O84KDlqIMIiXaOWYLdf1WIRfhqc7EyVFYFwV8cKNEP
+   w==;
+X-CSE-ConnectionGUID: iALsqdwyTTyF7XIukgG7NA==
+X-CSE-MsgGUID: PfT2KQq6Qk+Tv/S9t33woQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11556"; a="71601660"
+X-IronPort-AV: E=Sophos;i="6.18,274,1751266800"; 
+   d="scan'208";a="71601660"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 23:49:18 -0700
+X-CSE-ConnectionGUID: yb6VmCzUQNOy/p+InUk7NA==
+X-CSE-MsgGUID: T/pFZwBXSg2ng60k+qykTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,274,1751266800"; 
+   d="scan'208";a="179865932"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2025 23:49:17 -0700
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 17 Sep 2025 23:49:16 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Wed, 17 Sep 2025 23:49:16 -0700
+Received: from MW6PR02CU001.outbound.protection.outlook.com (52.101.48.13) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 17 Sep 2025 23:49:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fDbSk6g7SgKj0yaYQ2ptLhPoBgRhMW83naTdLlVmuFvuFSV/5dFiBhJ/IZW0looR9zfeK9Se2e4/e2VBE8TEFvi+3xl2UK9UFSqiRFWt5rQ5J7LM1dWlBzoiv1tgrmVNqVmlEWbTNY8iSAPcpUbZwkSyGQSoWnaCwUlzLf+Pi67mf6jg20EVqwaKgFS4sSJ0IKhF56HzQsKIgEP+OpTIjWMVNfZVLS4aMXCPcpNC1CIq8U3+slZp9DEYW2wWhHKq0fUXKdAbsMN2FS5fFzR+KcHrk3kO5FkggmXfcVBeOV8tr5oAi98yiRC3AGMrV9718wiWztJgFeVrvQv2ibJn+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NwTmrsuI7UVn4Yx0KXmOXDPS5G6TQVAQBy0ZxnD0QUo=;
+ b=kn2LDwPotrIT1suDMhXPqWqtBlSfLPyUUSzTkNbBK1cRFdJHa9vX0q0dhINwa6bc7Pkg0334J9DtLqxtMWFP1QLCgRfUDfPzl1HEVkJviPHDaZc4+sW7lLuXXKuBsN7PghNn3+SEtNvhuxLpNCoXx2cM9BcSezm9g7sSoep/xeDxhIdurtheoHXfx+JFTnmvznwGa+xCWOiDPyc2T7brRy/g/QonCZrtGdG40raSwKK2kEeiQ6Q/+cSWh4bPZChtkQaCuKyTd27REYsjWs/ENxGo9mj2uddqPfF8sH0Lc8KtoXa9s9yzBBHHBkbEqQAGUGAE+meaPRaTuWlHlXUJHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by CH0PR11MB5268.namprd11.prod.outlook.com (2603:10b6:610:e3::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Thu, 18 Sep
+ 2025 06:49:08 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9137.012; Thu, 18 Sep 2025
+ 06:49:08 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Bill Wendling
+	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
+ Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>
+CC: Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
+	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
+ Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH v5 01/15] genpt: Generic Page Table base API
+Thread-Topic: [PATCH v5 01/15] genpt: Generic Page Table base API
+Thread-Index: AQHcHPrLfNePWPa2q0qW7OShpmqDlbSXCZ4g
+Date: Thu, 18 Sep 2025 06:49:08 +0000
+Message-ID: <BN9PR11MB527669A84AD24A550FDDD85A8C16A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <1-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <1-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CH0PR11MB5268:EE_
+x-ms-office365-filtering-correlation-id: 289b0fbd-6bb5-442f-7e58-08ddf67f77ad
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021|921020;
+x-microsoft-antispam-message-info: =?us-ascii?Q?7foxUn8uYU675l3u9jPBCwvkromC6sGBhUA5lSrukJ/kZLRMLV7kZf3b04hm?=
+ =?us-ascii?Q?eXWP2MQv7lyjUV8jeWzp/nnetjEr6RkVIQCCIDeca+j7HloncOmjtoslKIH5?=
+ =?us-ascii?Q?uK4WZrqabh1C4Rbp4PeBH8WZr+TO80/YQ01fjI6gO2x+Sk6uycHgmjn+TuLm?=
+ =?us-ascii?Q?8TMrCpa2Mn/bAyl1t6GzOq2/bogiC6OMSHkAvkfqFiAjWKy04NKP6Eg6cOv4?=
+ =?us-ascii?Q?pvCpvamKTCEr1SMzmWpe/jO1auqp0n/13LcyzuRNx3N2aB/ZHFek3GZwUV6g?=
+ =?us-ascii?Q?m1PX1YzH/AOeC+RAp6TrOHjSk/f1qmRUaoxawHMhM5OYkGjzZr2yxP7UfRe4?=
+ =?us-ascii?Q?HZeR0l1wVSeiMCYHEBMKi7g9X3MzG9tLWbP9JN04CoMD5sY7SNL4jGs1lpP2?=
+ =?us-ascii?Q?ctk2r34sGMCjmOqLnoTXPuGAt1/Ci2tHT6AwvyHjospHnA9BouEREIydT1sM?=
+ =?us-ascii?Q?kXuuZjMim3frfHQVmRaPoeaxYP1F9IJIPt3dywZwiJmXEa3EyuJiX3UoHDlh?=
+ =?us-ascii?Q?bpzNiNRoZqjLicHVZ1ZkesJfBpx7WDB3+KGoqjLRVm8C3tUccnbwCG5H8m7N?=
+ =?us-ascii?Q?OQtzHNymrsHrcX5DkMrso4ujw8ZXwY8Vdy4QjNeE3qHJTAuR3zQu0yrEqxWH?=
+ =?us-ascii?Q?fajXHEAruVXZKy0z354TISa0VezSVLoIuIjpJ2oOz+3IoeBOIeSgdWpM3ViY?=
+ =?us-ascii?Q?NGw16YeLpI5n5xLkAanxN2REjVO8cWnkVo92yD/yLKgYpukThu2ZFioMxVvs?=
+ =?us-ascii?Q?ooe8WUlDAahrhNviRxoIjqRqoy9n6gsu8L8tJMCnJ/e7snI4JCa5EMWyIq75?=
+ =?us-ascii?Q?2EU6F5SPNBjaOU6Z4Tn3aR4byYxLR6WNNdWaa9Fzf7upEEJmj20nnYTIDmmI?=
+ =?us-ascii?Q?yTEFmAmk8slXnKOxxN+TmuZVxDJ/7TM5oLv3Qihmmngw7N3oWv00TuOzH3Jh?=
+ =?us-ascii?Q?zepVDoksyai+j5ghBVMWZ6gBDC3Hm8+gJFMHXEEekUvR2JEESfVKV1imqIbO?=
+ =?us-ascii?Q?sAN3ASQKE2yx79NP21C+q4iNQBxKV02iFZwHZZdseqAdHKmN+bujHbUkvjtG?=
+ =?us-ascii?Q?Tci6dpBz4FWgAr7jA9yasaGvGkOHuSHOLCWf1ZvJg6y9R6MyuAojn5ih8Ibk?=
+ =?us-ascii?Q?2zmZUnRQejvEbZ7u5vodROPcD616G3a+Nfw/F7zXc3lvsaXijPMCzXWdw+MS?=
+ =?us-ascii?Q?uhR95Mng947RAitdXrPnG9jTrRwg5CPVjSEZrJve+CaMCAVaen1pHjJv62Iz?=
+ =?us-ascii?Q?HOTtlH6mEimCRQtAmp18dIA8nRpK22NZgtXOeJxY9O51DNCbLVcF3ZMhpL7c?=
+ =?us-ascii?Q?Wg8KqZOTKz59c9UNktmyWYoihVvNdOu1mrxe7Vm3wTPTkrnI9+iIQV4tMeZR?=
+ =?us-ascii?Q?BQ2r0ZnPr2CMgzpHSeok6fr1sBKc5nMw8/kEL50pqSlux25DISkmFbVVNeEa?=
+ =?us-ascii?Q?siRHowm2q1ounHhV5sBVIMaV2+1Kdh2s/gxWxJGpkz1WvFG4jMN21lSDSOjX?=
+ =?us-ascii?Q?eJI+hSXxk9G0W90=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lDm++4mmhHrYIx7Lar5tfV8IY1auf70N8Qk1pY2QI22Z6zRjgpFn5p6VsNmN?=
+ =?us-ascii?Q?FmCywbP0OEzx1J+nVVrX7Ot8yGUbwgnwD3AiVn66JSXwjaG/yMr5sw54cHd9?=
+ =?us-ascii?Q?2l32swHs1m/jkX+7EC5M8IN1/xobb0vDZZEyP8fLLpFx82KC9Bh8mLo5Fk4C?=
+ =?us-ascii?Q?6MNKFLXE/UPdLH/lRj21Nzrp9H0jvw986lf1YTfjdVvbJyuw3C1FkFt+apkp?=
+ =?us-ascii?Q?+6+pKkXGsw+Tlt/snyt9LFRL4FOqMOFv3eKZMA739NDS/J5YD1M7b49qCi2Q?=
+ =?us-ascii?Q?Q/A6v8WooMwCnYlY/ysmJLZbtgivXQT+wenntnXDLCLae+LV2InwAWFd/JU6?=
+ =?us-ascii?Q?dNM2+32a8a4X9bymxVS6qzbvaLF5ch/qs8FqhG9UWXP4Kpue2vzAUTbNTk3B?=
+ =?us-ascii?Q?Gr6asiQO/FtXBcGHguPGofp2zHB5eYPQZ9DT+1CrfC0f2I/UdRfJ181Z8RII?=
+ =?us-ascii?Q?pk25/0ft8eEJ5Bc2hcYLkNlWRqec6edvJGon6irDEPNFFo+7DucCWOLq/LHj?=
+ =?us-ascii?Q?EvWm6kv4NyJLG9ZfQepTUROVBtFdCejlAN5tRzvBMXoQ81ZfP0zuaGfSYfbH?=
+ =?us-ascii?Q?19JhCZKAFZFJmt+PJQwPdPDQk58rKO8mefEJRd//Aud9J9oYfVI6rUZywYco?=
+ =?us-ascii?Q?4gE/Az/Nm8zeBKKB0U/IKDDQm73lNc6ZKxA4bIds/w0gH4//CClDciA2shCP?=
+ =?us-ascii?Q?c4aPaR/JWawSr0i/yuyo/y/WXceQ3hZAiVAHyC/8WfyxeWhSoWUSm1eYk53q?=
+ =?us-ascii?Q?Pod+T2R4vqNPck8j2SjjuLaQq8kFxIcbj2Y8/jNgc573GnXxC+Jx7vkHRMnS?=
+ =?us-ascii?Q?qBO3xCEYj4cGaKzB+GoZZ/K40pUR4xRSdWnupR8xuayJL3QRffex5LemrUrH?=
+ =?us-ascii?Q?IfuZP5jyIEdf/ZuimA8AzYvR9Yb0PAAM1zTgECldpX50AE7i2Dr/M+PRKZ2R?=
+ =?us-ascii?Q?b1FPCJYfvyao4aosCRvWvVGW/S1gipMjWrr3IGHuqpeFGPa0BjxzuFR5BtCk?=
+ =?us-ascii?Q?tcsc6dp0w6s+002FD3vOGLmxUMoD8DlIJXtJ0iD3a/NWIi2guBJjvAHHwmXQ?=
+ =?us-ascii?Q?JwA9G1vUe41FAP4ZZtBtorQYiqg/khb+Dy95VsASQ3KZ1Uwa4Cd9aXdQrh/c?=
+ =?us-ascii?Q?CnFCy7YdmRBZuP+nTJiPleH7wBSQTba/sxZXjGCgqvhsPSL3pB7N8/pyW8ub?=
+ =?us-ascii?Q?k62rTboBBdaumwTudpefHUR0gq0tyUi5brqMwMDVhHbFxaMrsv6fW6jlSA8M?=
+ =?us-ascii?Q?Y47FQTJQ8vVJW1fAUQPez4saveuKnO5dnDqcR649YKZrbk5Pc9iQKs7TEsLo?=
+ =?us-ascii?Q?HAK3aiAQkW4BHtBwc64pmoU4xyHKPwnyfjQ57XghAk9kjUycvfGuW1eVS7my?=
+ =?us-ascii?Q?qlWebzZwf19P0TNDaC4LoLmeleU+UykQByFMEOcijkg/JQtlO+KfZWd1uTVu?=
+ =?us-ascii?Q?ffVcnTN27JsEOAls3EfvczVOarz1jTybMoplS2Ms3mOtjkpFfKevVm1QHi4a?=
+ =?us-ascii?Q?TKTTeDRFssl+XTDlxVgtGe45up27/o1z2pHm9BLquK/CThynPvpqBJuWcReo?=
+ =?us-ascii?Q?lZ5yn+mLSSorc4pKmB4YZhx8qTZEwVkNHPtsk2IV?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 21/21] x86/pvlocks: Move paravirt spinlock functions
- into own header
-To: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-hyperv@vger.kernel.org,
- virtualization@lists.linux.dev, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Ajay Kaher <ajay.kaher@broadcom.com>,
- Alexey Makhalov <alexey.makhalov@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, xen-devel@lists.xenproject.org
-References: <20250917145220.31064-22-jgross@suse.com>
- <202509181008.MoLd2u4e-lkp@intel.com>
-Content-Language: en-US
-From: Juergen Gross <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <202509181008.MoLd2u4e-lkp@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------d9VnNNakkD8gVqBNvxOXiPAE"
-X-Spamd-Result: default: False [-5.20 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SIGNED_PGP(-2.00)[];
-	MIME_BASE64_TEXT_BOGUS(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
-	NEURAL_HAM_SHORT(-0.20)[-0.993];
-	MIME_UNKNOWN(0.10)[application/pgp-keys];
-	MIME_BASE64_TEXT(0.10)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+,1:+,2:+,3:+,4:~,5:~];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,imap1.dmz-prg2.suse.org:helo,suse.com:mid,intel.com:email,git-scm.com:url];
-	HAS_ATTACHMENT(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -5.20
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 289b0fbd-6bb5-442f-7e58-08ddf67f77ad
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Sep 2025 06:49:08.5543
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sGYVUccp8JJJBNlBlixONT6A9ZISAo62fu9VTpWcyQqWYToiMAk+scoyGVe7ldGWDRIfKvAUx9Xke9shEEDbPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5268
+X-OriginatorOrg: intel.com
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------d9VnNNakkD8gVqBNvxOXiPAE
-Content-Type: multipart/mixed; boundary="------------Csi8XDs0o0YVMq0XLmHh6km5";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-hyperv@vger.kernel.org,
- virtualization@lists.linux.dev, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Ajay Kaher <ajay.kaher@broadcom.com>,
- Alexey Makhalov <alexey.makhalov@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, xen-devel@lists.xenproject.org
-Message-ID: <078d5556-c5a9-40f5-906d-f96253a22739@suse.com>
-Subject: Re: [PATCH v2 21/21] x86/pvlocks: Move paravirt spinlock functions
- into own header
-References: <20250917145220.31064-22-jgross@suse.com>
- <202509181008.MoLd2u4e-lkp@intel.com>
-In-Reply-To: <202509181008.MoLd2u4e-lkp@intel.com>
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Thursday, September 4, 2025 1:46 AM
+>=20
+[...]
+>=20
+> This is enough to implement the 8 initial format variations with all of
+> their features:
+>  * Entries comprised of contiguous blocks of IO PTEs for larger page
+>    sizes (AMDv1, ARMv8)
+>  * Multi-level tables, up to 6 levels. Runtime selected top level
+>  * Runtime variable table level size (ARM's concatenated tables)
+>  * Expandable top level (AMDv1)
 
---------------Csi8XDs0o0YVMq0XLmHh6km5
-Content-Type: multipart/mixed; boundary="------------zcB9cwd0ZBMDf0rsBpcDRZ9W"
+any more context about this one? how is it different from the earlier
+"runtime selected top level"?
 
---------------zcB9cwd0ZBMDf0rsBpcDRZ9W
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> --- /dev/null
+> +++ b/drivers/iommu/generic_pt/pt_common.h
+> @@ -0,0 +1,355 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES
+> + *
+> + * This header is included after the format. It contains definitions
+> + * that build on the format definitions to create the basic format API.
+> + *
+> + * The format API is listed here, with kdocs, in alphabetical order. The
 
-T24gMTguMDkuMjUgMDQ6NDUsIGtlcm5lbCB0ZXN0IHJvYm90IHdyb3RlOg0KPiBIaSBKdWVy
-Z2VuLA0KPiANCj4ga2VybmVsIHRlc3Qgcm9ib3Qgbm90aWNlZCB0aGUgZm9sbG93aW5nIGJ1
-aWxkIHdhcm5pbmdzOg0KPiANCj4gW2F1dG8gYnVpbGQgdGVzdCBXQVJOSU5HIG9uIHRpcC9z
-Y2hlZC9jb3JlXQ0KPiBbYWxzbyBidWlsZCB0ZXN0IFdBUk5JTkcgb24ga3ZtL3F1ZXVlIGt2
-bS9uZXh0IGxpbnVzL21hc3RlciB2Ni4xNy1yYzYgbmV4dC0yMDI1MDkxN10NCj4gW2Nhbm5v
-dCBhcHBseSB0byB0aXAveDg2L2NvcmUga3ZtL2xpbnV4LW5leHRdDQo+IFtJZiB5b3VyIHBh
-dGNoIGlzIGFwcGxpZWQgdG8gdGhlIHdyb25nIGdpdCB0cmVlLCBraW5kbHkgZHJvcCB1cyBh
-IG5vdGUuDQo+IEFuZCB3aGVuIHN1Ym1pdHRpbmcgcGF0Y2gsIHdlIHN1Z2dlc3QgdG8gdXNl
-ICctLWJhc2UnIGFzIGRvY3VtZW50ZWQgaW4NCj4gaHR0cHM6Ly9naXQtc2NtLmNvbS9kb2Nz
-L2dpdC1mb3JtYXQtcGF0Y2gjX2Jhc2VfdHJlZV9pbmZvcm1hdGlvbl0NCj4gDQo+IHVybDog
-ICAgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0cy9KdWVy
-Z2VuLUdyb3NzL3g4Ni1wYXJhdmlydC1SZW1vdmUtbm90LW5lZWRlZC1pbmNsdWRlcy1vZi1w
-YXJhdmlydC1oLzIwMjUwOTE3LTIzMDMyMQ0KPiBiYXNlOiAgIHRpcC9zY2hlZC9jb3JlDQo+
-IHBhdGNoIGxpbms6ICAgIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNTA5MTcxNDUy
-MjAuMzEwNjQtMjItamdyb3NzJTQwc3VzZS5jb20NCj4gcGF0Y2ggc3ViamVjdDogW1BBVENI
-IHYyIDIxLzIxXSB4ODYvcHZsb2NrczogTW92ZSBwYXJhdmlydCBzcGlubG9jayBmdW5jdGlv
-bnMgaW50byBvd24gaGVhZGVyDQo+IGNvbmZpZzogeDg2XzY0LXJhbmRjb25maWctMDAzLTIw
-MjUwOTE4IChodHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUvMjAyNTA5
-MTgvMjAyNTA5MTgxMDA4Lk1vTGQydTRlLWxrcEBpbnRlbC5jb20vY29uZmlnKQ0KPiBjb21w
-aWxlcjogY2xhbmcgdmVyc2lvbiAyMC4xLjggKGh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xs
-dm0tcHJvamVjdCA4N2YwMjI3Y2I2MDE0N2EyNmExZWViNGZiMDZlM2I1MDVlOWM3MjYxKQ0K
-PiByZXByb2R1Y2UgKHRoaXMgaXMgYSBXPTEgYnVpbGQpOiAoaHR0cHM6Ly9kb3dubG9hZC4w
-MS5vcmcvMGRheS1jaS9hcmNoaXZlLzIwMjUwOTE4LzIwMjUwOTE4MTAwOC5Nb0xkMnU0ZS1s
-a3BAaW50ZWwuY29tL3JlcHJvZHVjZSkNCj4gDQo+IElmIHlvdSBmaXggdGhlIGlzc3VlIGlu
-IGEgc2VwYXJhdGUgcGF0Y2gvY29tbWl0IChpLmUuIG5vdCBqdXN0IGEgbmV3IHZlcnNpb24g
-b2YNCj4gdGhlIHNhbWUgcGF0Y2gvY29tbWl0KSwga2luZGx5IGFkZCBmb2xsb3dpbmcgdGFn
-cw0KPiB8IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4N
-Cj4gfCBDbG9zZXM6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAy
-NTA5MTgxMDA4Lk1vTGQydTRlLWxrcEBpbnRlbC5jb20vDQo+IA0KPiBBbGwgd2FybmluZ3Mg
-KG5ldyBvbmVzIHByZWZpeGVkIGJ5ID4+KToNCj4gDQo+Pj4gYXJjaC94ODYva2VybmVsL3Bh
-cmF2aXJ0LXNwaW5sb2Nrcy5jOjEzOjEzOiB3YXJuaW5nOiBubyBwcmV2aW91cyBwcm90b3R5
-cGUgZm9yIGZ1bmN0aW9uICduYXRpdmVfcHZfbG9ja19pbml0JyBbLVdtaXNzaW5nLXByb3Rv
-dHlwZXNdDQo+ICAgICAgICAxMyB8IHZvaWQgX19pbml0IG5hdGl2ZV9wdl9sb2NrX2luaXQo
-dm9pZCkNCj4gICAgICAgICAgIHwgICAgICAgICAgICAgXg0KPiAgICAgYXJjaC94ODYva2Vy
-bmVsL3BhcmF2aXJ0LXNwaW5sb2Nrcy5jOjEzOjE6IG5vdGU6IGRlY2xhcmUgJ3N0YXRpYycg
-aWYgdGhlIGZ1bmN0aW9uIGlzIG5vdCBpbnRlbmRlZCB0byBiZSB1c2VkIG91dHNpZGUgb2Yg
-dGhpcyB0cmFuc2xhdGlvbiB1bml0DQo+ICAgICAgICAxMyB8IHZvaWQgX19pbml0IG5hdGl2
-ZV9wdl9sb2NrX2luaXQodm9pZCkNCj4gICAgICAgICAgIHwgXg0KPiAgICAgICAgICAgfCBz
-dGF0aWMNCj4gICAgIDEgd2FybmluZyBnZW5lcmF0ZWQuDQoNCldpbGwgYmUgZml4ZWQgaW4g
-VjMuDQoNCg0KSnVlcmdlbg0K
---------------zcB9cwd0ZBMDf0rsBpcDRZ9W
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Is alphabetical order important here? It's not strictly followed, e.g.:
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+	pt_entry_make_write_dirty()
+	pt_dirty_supported()
+	pt_entry_num_contig_lg2()
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+and several other violations at a glance. IMHO grouping related functions
+together is more meaningful (e.g. dirty related) and less burden than
+following the alphabetical order.
 
---------------zcB9cwd0ZBMDf0rsBpcDRZ9W--
+> + * functions without bodies are implemented in the format using the
+> pattern:
+> + *     static inline FMTpt_XXX(..) {..}
+> + *     #define pt_XXX FMTpt_XXX
 
---------------Csi8XDs0o0YVMq0XLmHh6km5--
+or provided by pt_fmt_defaults.h
 
---------------d9VnNNakkD8gVqBNvxOXiPAE
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+> + *
+> + * The routines marked "@pts: Entry to query" operate on the entire
+> contiguous
+> + * entry and can be called with a pts->index pointing to any sub item th=
+at
+> makes
+> + * up that entry.
+> + *
+> + * The header order is:
+> + *  pt_defs.h
+> + *  fmt_XX.h
 
------BEGIN PGP SIGNATURE-----
+s/fmt_XX.h/FMT.h/
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmjLnw4FAwAAAAAACgkQsN6d1ii/Ey+x
-CQf+IQ1ng7WiKO4LhrrXkz1rSgyDCT7guo7w2f3gI6ps+45ddPrXGGTIGK0NrAjgRJnZW57Jnolf
-AGGN0NdoQQ3GLzherZQ5xl710Ed5WuWi6zWMEf0xgkcFRHsfWO3+Qo8O4kzARZMrxPCs4EgprQsr
-pEjdEqx7QK7jGQuGYQn5i7ItiB+lc0xXMAO0r3kcqickyQBiOBvQNuerpHkkbG+tcAiqg5ykGqNe
-y7cQ56AudOXRuZn46scyapBudBJLJGkMrZCiBggp0EFEmvVO9loIwF4Hnj4mnyDlv7H/A9oI5Tj6
-XbaXkcJ6a3s9ctqNarLQl404rq00+9moguCVUiQd9g==
-=EGob
------END PGP SIGNATURE-----
+or rename amdv1.h etc. to fmt_amdv1.h etc. to be consistent
 
---------------d9VnNNakkD8gVqBNvxOXiPAE--
+> +/**
+> + * pt_entry_make_write_dirty() - Make an entry dirty
+> + * @pts: Table index to change
+
+it's about the entire entry instead of a specific index? if yes then
+"entry to change" makes more sense.
+
+> +
+> +/**
+> + * pt_entry_oa_full() - Return the full OA for an entry
+> + * @pts: Entry to query
+
+s/full/exact/?
+
+> +
+> +/**
+> + * pt_entry_set_write_clean() - Make the entry write clean
+> + * @pts: Table index to change
+
+ditto "entry to change"
+
+> +/**
+> + * pt_has_system_page() - True if level 0 can install a PAGE_SHIFT entry
+> + * @common: Page table to query
+
+pt_has_system_page_size()
+
+> +/**
+> + * pt_install_leaf_entry() - Write a leaf entry to the table
+> + * @pts: Table index to change
+> + * @oa: Output Address for this leaf
+> + * @oasz_lg2: Size in VA for this leaf
+> + * @attrs: Attributes to modify the entry
+> + *
+> + * A leaf OA entry will return PT_ENTRY_OA from pt_load_entry(). It
+> translates
+> + * the VA indicated by pts to the given OA.
+> + *
+> + * For a single item non-contiguous entry oasz_lg2 is pt_table_item_lg2s=
+z().
+> + * For contiguous it is pt_table_item_lg2sz() + num_contig_lg2.
+
+this sounds a fixed thing then could be judged within the function instead =
+of
+letting the caller to set?
+
+> +
+> +/**
+> + * pt_max_output_address_lg2() - Return the maximum OA the table
+> format can hold
+> + * @common: Page table to query
+
+pt_max_oa_lg2()
+
+> +/**
+> + * DOC: Generic Page Table Language
+> + *
+> + * Language used in Generic Page Table
+> + *  VA
+> + *     The input address to the page table, often the virtual address.
+> + *  OA
+> + *     The output address from the page table, often the physical addres=
+s.
+> + *  leaf
+> + *     An entry that results in an output address. I.e. a physical memor=
+y addr
+
+"I.e. a physical ..." is redundant to what OA already explains
+
+> + *  start/end
+> + *     An half-open range, e.g. [0,0) refers to no VA.
+> + *  start/last
+> + *     An inclusive closed range, e.g. [0,0] refers to the VA 0
+> + *  common
+> + *     The generic page table container struct pt_common
+> + *  level
+> + *     The number of table hops from the lowest leaf. Level 0
+> + *     is always a table of only leaves of the least significant VA bits=
+. The
+> + *     labels used by HW descriptions are never used.
+> + *  top_level
+> + *     The inclusive highest level of the table. A two-level table
+> + *     has a top level of 1.
+> + *  table
+> + *     A linear array of entries representing the translation items for =
+that
+> + *     level.
+
+to not mix 'entry' and 'item' in one description:
+
+"A linear array of translation items for that level"
+
+> + *  index
+> + *     The position in a table of an element: item =3D table[index]
+> + *  item
+> + *     A single position in a table
+
+'position' is called 'index'
+
+> + *  entry
+> + *     A single logical element in a table. If contiguous pages are not
+> + *     supported then item and entry are the same thing, otherwise entry
+> refers
+> + *     to the all the items that comprise a single contiguous translatio=
+n.
+
+'refers to all the items"
+
+> + *  item/entry_size
+> + *     The number of bytes of VA the table translates for.
+> + *     If the item is a table entry then the next table covers
+> + *     this size. If the entry is an output address then the
+
+s/is/translates/
+
+> + *     full OA is: OA | (VA % entry_size)
+> + *  contig_count
+> + *     The number of consecutive items fused into a single entry.
+> + *     item_size * contig_count is the size of that entry's translation.
+> + *  lg2
+> + *     Indicates the value is encoded as log2, i.e. 1<<x is the actual v=
+alue.
+> + *     Normally the compiler is fine to optimize divide and mod with log=
+2
+> values
+> + *     automatically when inlining, however if the values are not consta=
+nt
+> + *     expressions it can't. So we do it by hand; we want to avoid 64-bi=
+t
+> + *     divmod.
+> + */
+> +
+> +/* Returned by pt_load_entry() and for_each_pt_level_entry() */
+> +enum pt_entry_type {
+> +	PT_ENTRY_EMPTY,
+> +	PT_ENTRY_TABLE,
+
+add a comment to be consistent with following line
+
+> +	/* Entry is valid and returns an output address */
+> +	PT_ENTRY_OA,
+> +};
+> +
+> +struct pt_range {
+> +	struct pt_common *common;
+> +	struct pt_table_p *top_table;
+> +	pt_vaddr_t va;
+> +	pt_vaddr_t last_va;
+> +	u8 top_level;
+> +	u8 max_vasz_lg2;
+> +};
+> +
+> +/*
+> + * Similar to xa_state, this records information about an in-progress pa=
+rse
+> at a
+> + * single level.
+> + */
+> +struct pt_state {
+> +	struct pt_range *range;
+> +	struct pt_table_p *table;
+> +	struct pt_table_p *table_lower;
+> +	u64 entry;
+> +	enum pt_entry_type type;
+> +	unsigned short index;
+> +	unsigned short end_index;
+> +	u8 level;
+> +};
+> +
+> +#define pt_cur_table(pts, type) ((type *)((pts)->table))
+> +
+> +/*
+> + * Try to install a new table pointer. The locking methodology requires =
+this
+> to
+> + * be atomic (multiple threads can race to install a pointer) the losing
+> threads
+
+"... install a pointer). The losing threads..."
+
+> +static inline bool pt_feature(const struct pt_common *common,
+> +			      unsigned int feature_nr)
+> +{
+> +	if (PT_FORCE_ENABLED_FEATURES & BIT(feature_nr))
+> +		return true;
+> +	if (!PT_SUPPORTED_FEATURE(feature_nr))
+> +		return false;
+> +	return common->features & BIT(feature_nr);
+> +}
+
+common->features is already verified in pt_init_common(). So above is
+kind of an optimization using compiler to filter out static checks in fast
+path?
+
+> +/*
+> + * PT_WARN_ON is used for invariants that the kunit should be checking
+> can't
+> + * happen.
+> + */
+> +#if IS_ENABLED(CONFIG_DEBUG_GENERIC_PT)
+> +#define PT_WARN_ON WARN_ON
+> +#else
+> +static inline bool PT_WARN_ON(bool condition)
+> +{
+> +	return false;
+> +}
+> +#endif
+
+Then call it PT_DBG_WARN_ON() to be more explicit?
+
+btw looks there is no plain WARN_ON() used in generic-pt. Just be curious
+about the rationale behind. Is it a new trend to contain all warnings under
+a debug option?
+
+> +
+> +/* These all work on the VA type */
+> +#define log2_to_int(a_lg2) log2_to_int_t(pt_vaddr_t, a_lg2)
+> +#define log2_to_max_int(a_lg2) log2_to_max_int_t(pt_vaddr_t, a_lg2)
+> +#define log2_div(a, b_lg2) log2_div_t(pt_vaddr_t, a, b_lg2)
+> +#define log2_div_eq(a, b, c_lg2) log2_div_eq_t(pt_vaddr_t, a, b, c_lg2)
+> +#define log2_mod(a, b_lg2) log2_mod_t(pt_vaddr_t, a, b_lg2)
+> +#define log2_mod_eq_max(a, b_lg2) log2_mod_eq_max_t(pt_vaddr_t, a,
+> b_lg2)
+> +#define log2_set_mod(a, val, b_lg2) log2_set_mod_t(pt_vaddr_t, a, val,
+> b_lg2)
+> +#define log2_set_mod_max(a, b_lg2) log2_set_mod_max_t(pt_vaddr_t, a,
+> b_lg2)
+> +#define log2_mul(a, b_lg2) log2_mul_t(pt_vaddr_t, a, b_lg2)
+> +#define log2_ffs(a) log2_ffs_t(pt_vaddr_t, a)
+> +#define log2_fls(a) log2_fls_t(pt_vaddr_t, a)
+> +#define log2_ffz(a) log2_ffz_t(pt_vaddr_t, a)
+
+above three are not related to log2
+
+> +
+> +/* If not supplied by the format then contiguous pages are not supported=
+ */
+> +#ifndef pt_entry_num_contig_lg2
+> +static inline unsigned int pt_entry_num_contig_lg2(const struct pt_state
+> *pts)
+> +{
+> +	return ilog2(1);
+> +}
+> +
+> +static inline unsigned short pt_contig_count_lg2(const struct pt_state *=
+pts)
+> +{
+> +	return ilog2(1);
+> +}
+
+what is the difference between above two helpers?
+
+It's currently not implemented by any driver so will have the default versi=
+on
+returning 0. and it is only used by default pt_possible_sizes(), which then
+returns only one page size accordingly.
+
+I kind of think it's useless and we could simply move pt_possible_sizes()
+here and simplify it to return only one size explicitly, assuming a format
+should implement both pt_entry_num_contig_lg2() and pt_possible_sizes().
+
+> +#ifndef pt_pgsz_lg2_to_level
+> +static inline unsigned int pt_pgsz_lg2_to_level(struct pt_common *common=
+,
+> +						unsigned int pgsize_lg2)
+> +{
+> +	return (pgsize_lg2 - PT_GRANULE_LG2SZ) /
+> +	       (PT_TABLEMEM_LG2SZ - ilog2(PT_ITEM_WORD_SIZE));
+> +	return 0;
+> +}
+> +#endif
+
+remove the 2nd 'return'
+
+> +
+> +/* If not supplied by the format then dirty tracking is not supported */
+> +#ifndef pt_entry_write_is_dirty
+> +static inline bool pt_entry_write_is_dirty(const struct pt_state *pts)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline void pt_entry_set_write_clean(struct pt_state *pts)
+> +{
+> +}
+> +
+> +static inline bool pt_dirty_supported(struct pt_common *common)
+> +{
+> +	return true;
+
+should return false here.
+
+> +
+> +/*
+> + * Format supplies either:
+> + *   pt_entry_oa - OA is at the start of a contiguous entry
+> + * or
+> + *   pt_item_oa  - OA is correct for every item in a contiguous entry
+
+what is the meaning of 'correct'?
+
+> + *
+> + * Build the missing one
+> + */
+> +#ifdef pt_entry_oa
+> +static inline pt_oaddr_t pt_item_oa(const struct pt_state *pts)
+> +{
+> +	return pt_entry_oa(pts) |
+> +	       log2_mul(pts->index, pt_table_item_lg2sz(pts));
+> +}
+> +#define _pt_entry_oa_fast pt_entry_oa
+> +#endif
+> +
+> +#ifdef pt_item_oa
+> +static inline pt_oaddr_t pt_entry_oa(const struct pt_state *pts)
+> +{
+> +	return log2_set_mod(pt_item_oa(pts), 0,
+> +			    pt_entry_num_contig_lg2(pts) +
+> +				    pt_table_item_lg2sz(pts));
+> +}
+> +#define _pt_entry_oa_fast pt_item_oa
+> +#endif
+
+I have a problem understanding _pt_entry_oa_fast() here.
+
+Obviously pt_entry_oa/pt_item_oa generates different oa for
+a given pts, based on the aligned size. why is it ok to alias
+a common macro to either of them? looks the assumption
+is that the caller doesn't care about the offset within the
+entry range e.g. will do its own masking. Probably some comment
+is welcomed to clarify it.
+
+> +
+> +/*
+> + * If not supplied by the format then use the constant
+> + * PT_MAX_OUTPUT_ADDRESS_LG2.
+> + */
+> +#ifndef pt_max_output_address_lg2
+> +static inline unsigned int
+> +pt_max_output_address_lg2(const struct pt_common *common)
+> +{
+> +	return PT_MAX_OUTPUT_ADDRESS_LG2;
+> +}
+> +#endif
+> +
+> +#ifndef pt_has_system_page
+> +static inline bool pt_has_system_page(const struct pt_common *common)
+> +{
+> +	return PT_GRANULE_LG2SZ =3D=3D PAGE_SHIFT;
+> +}
+> +#endif
+
+will there be a implementation supporting system page size while breaking
+above check? if not it could be moved to pt_common.h
+
+> +
+> +/**
+> + * pt_item_fully_covered() - Check if the item or entry is entirely cont=
+ained
+> + *                           within pts->range
+
+when using pts it's more accurate to call it pt_entry_fully_covered()
+
+> + *
+> + * The system is divided into three logical levels:
+> + *
+> + *  - The page table format and its manipulation functions
+> + *  - Generic helpers to give a consistent API regardless of underlying =
+format
+> + *  - An algorithm implementation (e.g. IOMMU/DRM/KVM/MM)
+> + *
+> + * Multiple implementations are supported. The intention is to have the
+> generic
+> + * format code be re-usable for whatever specalized implementation is
+
+s/ specalized/specialized
+
+> required.
+> + * The generic code is solely about the format of the radix tree; it doe=
+s not
+> + * include memory allocation or higher level decisions that are left for=
+ the
+> + * implementation.
+> + *
+> + * The generic framework supports a superset of functions across many HW
+> + * implementations:
+> + *
+> + *  - Entries comprised of contiguous blocks of IO PTEs for larger page =
+sizes
+> + *  - Multi-level tables, up to 6 levels. Runtime selected top level
+> + *  - Runtime variable table level size (ARM's concatenated tables)
+> + *  - Expandable top level allowing dynamic sizing of table levels
+> + *  - Optional leaf entries at any level
+> + *  - 32-bit/64-bit virtual and output addresses, using every address bi=
+t
+> + *  - Dirty tracking Sign extended addressing
+
+and "Sign extended addressing "
+
+> +	/**
+> +	 * @PT_FEAT_FLUSH_RANGE: IOTLB maintenance is done by flushing
+> IOVA
+> +	 * ranges which will clean out any walk cache or any IOPTE fully
+> +	 * contained by the range. The optimization objective is to minimize
+> the
+> +	 * number of flushes even if ranges include IOVA gaps that do not
+> need
+> +	 * to be flushed.
+> +	 */
+> +	PT_FEAT_FLUSH_RANGE,
+> +	/**
+> +	 * @PT_FEAT_FLUSH_RANGE_NO_GAPS: Like PT_FEAT_FLUSH_RANGE
+> except that
+> +	 * the optimization objective is to only flush IOVA that has been
+> +	 * changed. This mode is suitable for cases like hypervisor shadowing
+> +	 * where flushing unchanged ranges may cause the hypervisor to
+> reparse
+> +	 * significant amount of page table.
+> +	 */
+> +	PT_FEAT_FLUSH_RANGE_NO_GAPS,
+
+FLUSH_RANGE and FLUSH_RANGE_NO_GAPS are mutually exclusive but
+one format must select one? then we could just keep one flag (NO_GAP)
+then feature off means FLUSH_RANGE.
+
