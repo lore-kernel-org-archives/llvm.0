@@ -1,130 +1,100 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B25F248F75
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 16:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7792459CF;
+	Thu, 18 Sep 2025 17:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758214339; cv=none; b=RYxMnHiDUheub/ytXI0GK/gvUA6MpgKm8JwYYlt/9SWdfZ8ojhaJEwADv3PWnFDskr32VVuNPcSCFdt48MMB2FhyvkpSWSzexMgEGGUBAADGnsAPk/BJecQK4Gzb77CO7p3ONm0eIb9IK3RPAgNijHjvohGjcFfOVIbDSOvay6s=
+	t=1758217569; cv=none; b=d20HE+H2OoF3+mZC/WJyIG+iCIWlj5qwTgt8GyWAL3zEASxUkG1tLVGHBAjEC4OWFCoSSDApC7SIyF68jwhcVGdnuRG+e/ExQcU/PMHFIIZeMg1rKZT49COJaxdRmjVYnIsAeLpA9Kx92MOox7uMN6TtSI0/iWlb6ZAKdYckFA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758214339; c=relaxed/simple;
-	bh=NgCjO59Os/Sr8MqCsK4g2N32xP1NJEHkMj2uQtOcwzM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=AAoaj66VNIJ72REsrSowywa3UBvdqffVpH++Ne1Tby4Zo9UBrP7P+aIj9ijWUjsxDofI74r8j4QWt0SShTOKwMZoRAu+dChwUrCOAMTmXX8Jp4Enc4hpVslhRCpSRTV0AIcpu14RkQ3uG2ZetcaNjFRZHQq/b1EEa2h05L5R/Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AKeVsmAM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758217569; c=relaxed/simple;
+	bh=ZNTo/Y9EyxZmz/6UCc4XPFi8e1W38Mv8YYcq4WlZegE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dN5BlQwWq+yJ6icdhqmDLNLiu9vxKwpYFc1gxHeliavwFjnh/FCAIzd+FkGq7jC8sYdTTY4gTE6fBaQkwB6jH2s3uObXKUouK6BNoDW7bmFAtGua+HZAtLFufnDdKN13HyIMGNGcf9rKdJEbchbBGpHutizw7TiPKFvvkd55mCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i6Kqz0C2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AKeVsmAM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758214336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=h1f71RzeYFge7Ndu5LIL+By0FNJML9PYN1R8cjBgxgs=;
-	b=AKeVsmAMRQmwkPImEbB9W38+zXXpjhekwo6Au5MzDyiQ6qfEPiD3BCCZkTxlQP/7t75kXy
-	gXennRuyCysjlwwadFrhFjlkw/rqHmtrqmFf79SIR7D9pciSRu64cZTgI3XSNRhfdtCBJe
-	0dJdW5nhbfsPLdBat4TkzES18DMWBCU=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-595-t_EA_LbQP7-ycDqvM8sk4A-1; Thu,
- 18 Sep 2025 12:52:14 -0400
-X-MC-Unique: t_EA_LbQP7-ycDqvM8sk4A-1
-X-Mimecast-MFC-AGG-ID: t_EA_LbQP7-ycDqvM8sk4A_1758214333
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BBDDF195608E
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 16:52:13 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6A720180035E;
-	Thu, 18 Sep 2025 16:52:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc6,
- upstream-mainline, 8b789f2b)
-Date: Thu, 18 Sep 2025 16:52:13 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i6Kqz0C2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C0AC4CEE7;
+	Thu, 18 Sep 2025 17:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758217568;
+	bh=ZNTo/Y9EyxZmz/6UCc4XPFi8e1W38Mv8YYcq4WlZegE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i6Kqz0C2bMyTxFSdnUrmZXomQZUKN6PrE+wxZtJczj7QbrNhByTVlq1eR7IvDe3Jy
+	 Rb0EVjsKlu7+xQR8iunNSXY3VfqUgyGCab6xsnZgBZl67tyBH/axKezDiuJ1cjPL/B
+	 9kfaRoWNLZ5V3wySAKqhDPOxfQhGSa1lzggNioVkRAcTy+hqrrr0X7H9JoiHVLVFUo
+	 mnNYoLhoteQ9EMMAi0FpYEfUzAKGMHcgiX/jB/qz83MmJDJnFzCuWf1/aH0MsAzimV
+	 sIMfY4OB0F6qYHUWlI8mz6IPqJvhYJpjwfv9gUvj1AZPTM7hciQh+uiQLZarv96/8X
+	 3zcI3CRc9uH8g==
+Date: Thu, 18 Sep 2025 10:45:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Bill Wendling <morbo@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ian Rogers <irogers@google.com>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, kasan-dev@googlegroups.com,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
+	rcu@vger.kernel.org
+Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
+Message-ID: <20250918174555.GA3366400@ax162>
+References: <20250918140451.1289454-1-elver@google.com>
+ <20250918141511.GA30263@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <28106.125091812521401777@us-mta-595.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: JxJ7-8t8hX8DOdKN9c2h7dKUWzM-98USHPRAp2xo3Dk_1758214333
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250918141511.GA30263@lst.de>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Sep 18, 2025 at 04:15:11PM +0200, Christoph Hellwig wrote:
+> On Thu, Sep 18, 2025 at 03:59:11PM +0200, Marco Elver wrote:
+> > A Clang version that supports `-Wthread-safety-pointer` and the new
+> > alias-analysis of capability pointers is required (from this version
+> > onwards):
+> > 
+> > 	https://github.com/llvm/llvm-project/commit/b4c98fcbe1504841203e610c351a3227f36c92a4 [3]
+> 
+> There's no chance to make say x86 pre-built binaries for that available?
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I can use my existing kernel.org LLVM [1] build infrastructure to
+generate prebuilt x86 binaries. Just give me a bit to build and upload
+them. You may not be the only developer or maintainer who may want to
+play with this.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[1]: https://kernel.org/pub/tools/llvm/
 
-Kernel information:
-    Commit message: Merge tag 'mm-hotfixes-stable-2025-09-17-21-10' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2046430859
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
