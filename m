@@ -1,126 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8089E1607AC;
-	Thu, 18 Sep 2025 15:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20516314D3A
+	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 15:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758208058; cv=none; b=vC/fq12ScbsdzSJ9sLs0vIzguqZsjsZ8jJERLzhV+uP3I950VSWRLkfq90kjAtO2IbcEq3u+JTP8ZxwIo/2D/iaxJLyswab9mFoFfYgDQdfjgviVKXe+jq/LdZEGP/mllUoyxMjNT8bR7T/skq9jMAoG06WW6Km4Ldm7AwGHC2I=
+	t=1758210770; cv=none; b=SxHZDWw8lHLxh3LW6H0P9qOYBrjdx0hq64pmru1tcROISP2qGO4XFq7FTU4/8vRGbT6S1afEFOW/dwq17DU/hF/rAZeEGs5r9TamlfmiyNAjkgebNGM0VFKdhqyEyS4yBuIDit3Pbk90GpquFFFYcunqrl1AFIYpPI0XaMXN4Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758208058; c=relaxed/simple;
-	bh=sW/npsoqVvH2jZ1iYFeywDG41QnbgIzfrJf90iHIx94=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eYNuEjCN9+jJskTHbs4XDGmPeKXXXaiW5hh2KJ8LgwellK4VtkyC+P96X+4e8gA4bH0Dja1NqyfhvBApY4kvVMCw69FXZ9n/BP3//g0EPlBvILyyQ8lkp/bnQY+AI1FmOJ3YxlZ0gwRTeAHecT4o1J1HNjqSdz+7Qkn/ktQ0z08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kwZnl0bg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758210770; c=relaxed/simple;
+	bh=1ThK/rR645nYnWoPl5AGIZzEq0hrX0mKYDFiJ7pgpwQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hPYUWh9psD+dTynTlgiB6pxKR4vVfjSI65vfpm4Br3jQExxhZzC/XreLkK5LVIrg04JuFTdbu1AgiJNfuuKExmt4ysH7pdpSCX/sZQ+wsR4z9nDgK95E+LbZr2ixO8/6eQsaycAPYaXCuyLrNNhP6/nI3AgL5qrqCx9JY+NpzmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=enBn3UKo; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kwZnl0bg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD3CC4CEEB;
-	Thu, 18 Sep 2025 15:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758208057;
-	bh=sW/npsoqVvH2jZ1iYFeywDG41QnbgIzfrJf90iHIx94=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kwZnl0bgzIv5G9GpaNIDQbuvO9HddfBAxifrvDjM5Ugs42X76RrBv51TpbdZm5Y1L
-	 mHQv8IAwm4Xd7QqDtWeChSyd0hXizLPuB2fIG09/9z0/ttqtVToJnG0xDvM7xZQN0y
-	 m2pRwIJx1HdEaHaPQRUPdlZi+AeKJfLhgt5uRqabPJ95o3Ib7FYa3KR/mz++sX1Lka
-	 ouGGsFcEH95nRzAxLtCilfOwp6ls1KG4xphq5ucvhDweyDOeUjwEszovJaqSF1pTVe
-	 1JVb1CKf7Cti5yxGTvJENeZRlV2K3Kjermk5ncw0x/qepBF3oLDwfHUQsk+YORmcjv
-	 fkxEbB7s/6Ojg==
-Date: Thu, 18 Sep 2025 16:07:27 +0100
-From: Simon Horman <horms@kernel.org>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
-	netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Michael Guralnik <michaelgur@nvidia.com>,
-	Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Patrisious Haddad <phaddad@nvidia.com>
-Subject: Re: [PATCH net-next V3] net/mlx5: Improve write-combining test
- reliability for ARM64 Grace CPUs
-Message-ID: <20250918150727.GX394836@horms.kernel.org>
-References: <1758178883-648295-1-git-send-email-tariqt@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enBn3UKo"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45de4ebe79eso1504765e9.0
+        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 08:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758210767; x=1758815567; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b4tOEHafOTi5CrXOSO1m8dEnNyNggHvPpDClq9ufaB4=;
+        b=enBn3UKomm01Yuoj5S1+Q2+Sc31+Psgdw55S0EI5iKFQfugkV2fs8lO7I0YMIfT9tl
+         8KEHVSQWxwqA+4ctSlp1InaOplQoGerFdy7YyTnt8gp/7w4UwE25+eUO9d4WrRdqKkeP
+         EGU3T1X3J1cttK6HdTU/oUNSIv40Ucjomr9rhZ+A/M+BGAMmPNa1JpH3Wbgu+wZn+PzO
+         AYbuoPmUaq1ATgb66AyHzScyLiyyWj3Xia7nt+9ffhv/b8pTMP25gkIl2nxFADI4jWj2
+         +30l9BMl8m8hJEWQ9BCl+mJ44V7kMvQw7yaCgmNdN59W61tSDSxSewaBRx9ZMEUq+6OD
+         3vgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758210767; x=1758815567;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b4tOEHafOTi5CrXOSO1m8dEnNyNggHvPpDClq9ufaB4=;
+        b=tkAlrWqohJa1fzqKCVPyTL+GbOVbG3qtbhWKhzEer4lGLugV1geeG94zGFk4p9y7sk
+         dfbcaFwfTa8TYVaaa5GuGF2n2B+cmDfqr1jSTFj35d8niG1xZxVod2XXzWq/b7PPjYdk
+         +dXPFYe8Hheh7JiTvJRL8x1R0d7rn6ZkSkLf44wCPVZWuHZvFhZReCtpr2EcDsm8h280
+         j4EuSvC99u/Nx7HwxaclQ9Bp+3yDSOmBtfUN9pLJ2ckwZdKcf6zIwdeKQVfMRHJZBFjO
+         6Aa1okfYndw2+z86J9OHPj486v00wvorO4AbciRipNOQmfe3SpUDI1eOfrNKldGn1VPi
+         uyTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWPj2HuMw91T5z7DwyIxdHyikgYnW8KTWYHUvRyW9kNV5eu/lZhk3u3haTNzJVEGpGKGD1Y@lists.linux.dev
+X-Gm-Message-State: AOJu0YwvvkllbABVnUOGw2W37vT8MDuEj0StpB9XQktc9B+OOHaVYQD4
+	1nXUYmxmPXiwTi0H4e2glUMdgbmVWiQs+FI4f/ZEGWqLSZ6jDRB+mdf2
+X-Gm-Gg: ASbGnctPs0cAvI8JVrjQsXjUV3myTyGGuzkqCWu7QpG4q8wWBV6fFSNZlwJXCn1AUte
+	tEexW+tqmabVPPRUOz6rgL7X93q3YN1d7NhUBONHcrNRZbZQUMSax55B2eFo6H0b1MFwkOSSja0
+	gUEQpCcB2EeDTGBiolDPifcy1K2NSE+JfiCR8y2yFa5Dbq2Twvob7m1eoDjEQXAI9yEqpqk0zGy
+	YGU0rEeIX5Vht0oPUq/YBd63CzxtK2cz7N4IQKGliW9Mpv5pDC7tFk+oReovNi+7GrXu4ynP5q0
+	o4KMJKuzV+6sTQc1miFMq+kFQ9R/M936tRz+oWaIjp7BYCfvfVBQXK2dBnpWbyretMfCIHSHYb6
+	hdFmUGRRfvmM0tC6C8if6IpifeWsQ5DGjZ6x6L/7eAap/liY=
+X-Google-Smtp-Source: AGHT+IG0MfbY3dY99xKFXmJfWWQhOAQTGGYXwxyEVK9fIcFhqDqMdo/IcROmJKmQtggm9VagY37U2w==
+X-Received: by 2002:a05:600c:6308:b0:45c:b6d8:d82a with SMTP id 5b1f17b1804b1-46206283dd3mr33695135e9.6.1758210767067;
+        Thu, 18 Sep 2025 08:52:47 -0700 (PDT)
+Received: from [10.214.98.247] ([80.93.240.68])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46138695223sm87677465e9.5.2025.09.18.08.52.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Sep 2025 08:52:46 -0700 (PDT)
+Message-ID: <60b9d835-b164-4775-b9b4-64a523c98879@gmail.com>
+Date: Thu, 18 Sep 2025 17:52:39 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1758178883-648295-1-git-send-email-tariqt@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 04/19] x86: Add arch specific kasan functions
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+ sohil.mehta@intel.com, baohua@kernel.org, david@redhat.com,
+ kbingham@kernel.org, weixugc@google.com, Liam.Howlett@oracle.com,
+ alexandre.chartre@oracle.com, kas@kernel.org, mark.rutland@arm.com,
+ trintaeoitogc@gmail.com, axelrasmussen@google.com, yuanchu@google.com,
+ joey.gouly@arm.com, samitolvanen@google.com, joel.granados@kernel.org,
+ graf@amazon.com, vincenzo.frascino@arm.com, kees@kernel.org,
+ ardb@kernel.org, thiago.bauermann@linaro.org, glider@google.com,
+ thuth@redhat.com, kuan-ying.lee@canonical.com, pasha.tatashin@soleen.com,
+ nick.desaulniers+lkml@gmail.com, vbabka@suse.cz, kaleshsingh@google.com,
+ justinstitt@google.com, catalin.marinas@arm.com,
+ alexander.shishkin@linux.intel.com, samuel.holland@sifive.com,
+ dave.hansen@linux.intel.com, corbet@lwn.net, xin@zytor.com,
+ dvyukov@google.com, tglx@linutronix.de, scott@os.amperecomputing.com,
+ jason.andryuk@amd.com, morbo@google.com, nathan@kernel.org,
+ lorenzo.stoakes@oracle.com, mingo@redhat.com, brgerst@gmail.com,
+ kristina.martsenko@arm.com, bigeasy@linutronix.de, luto@kernel.org,
+ jgross@suse.com, jpoimboe@kernel.org, urezki@gmail.com, mhocko@suse.com,
+ ada.coupriediaz@arm.com, hpa@zytor.com, leitao@debian.org,
+ peterz@infradead.org, wangkefeng.wang@huawei.com, surenb@google.com,
+ ziy@nvidia.com, smostafa@google.com, ubizjak@gmail.com, jbohac@suse.cz,
+ broonie@kernel.org, akpm@linux-foundation.org, guoweikang.kernel@gmail.com,
+ rppt@kernel.org, pcc@google.com, jan.kiszka@siemens.com,
+ nicolas.schier@linux.dev, will@kernel.org, andreyknvl@gmail.com,
+ jhubbard@nvidia.com, bp@alien8.de
+Cc: x86@kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org,
+ llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <cover.1756151769.git.maciej.wieczor-retman@intel.com>
+ <7cb9edae06aeaf8c69013a89f1fd13a9e1531d54.1756151769.git.maciej.wieczor-retman@intel.com>
+Content-Language: en-US
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <7cb9edae06aeaf8c69013a89f1fd13a9e1531d54.1756151769.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 18, 2025 at 10:01:23AM +0300, Tariq Toukan wrote:
-> From: Patrisious Haddad <phaddad@nvidia.com>
-> 
-> Write combining is an optimization feature in CPUs that is frequently
-> used by modern devices to generate 32 or 64 byte TLPs at the PCIe level.
-> These large TLPs allow certain optimizations in the driver to HW
-> communication that improve performance. As WC is unpredictable and
-> optional the HW designs all tolerate cases where combining doesn't
-> happen and simply experience a performance degradation.
 
-...
+On 8/25/25 10:24 PM, Maciej Wieczor-Retman wrote:
 
-> Signed-off-by: Patrisious Haddad <phaddad@nvidia.com>
-> Reviewed-by: Michael Guralnik <michaelgur@nvidia.com>
-> Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/wc.c | 28 ++++++++++++++++++--
->  1 file changed, 26 insertions(+), 2 deletions(-)
-> 
-> Find V2 here:
-> https://lore.kernel.org/all/1757925308-614943-1-git-send-email-tariqt@nvidia.com/
-> 
-> V3:
-> - Move the new copy assembly code to be inline, within the same file it
->   is used.
-> - Use ".arch_extension simd;\n\t" to avoid the need for separate file
->   and special compilation flags.
+> +static inline void *__tag_set(const void *__addr, u8 tag)
+> +{
+> +	u64 addr = (u64)__addr;
+> +
+> +	addr &= ~__tag_shifted(KASAN_TAG_MASK);
+> +	addr |= __tag_shifted(tag);
+> +
+> +	return (void *)addr;
+> +}
+> +
 
-Hi Tariq, Patrisious, all,
 
-This is not a full review - although I've been following this patch with
-much interest, I don't feel qualified to provide one.
+This requires some ifdef magic to avoid getting this into vdso32 image build process,
+otherwise we'll get this warning:
 
-But what I can do is be the poor soul to report that unfortunately
-the patch doesn't compile against net-next. So at some point it will
-need to be rebased and reposted.
+CC      arch/x86/entry/vdso/vdso32/vclock_gettime.o
+In file included from ../arch/x86/include/asm/page.h:10,
+                 from ../arch/x86/include/asm/processor.h:20,
+                 from ../arch/x86/include/asm/timex.h:5,
+                 from ../include/linux/timex.h:67,
+                 from ../include/linux/time32.h:13,
+                 from ../include/linux/time.h:60,
+                 from ../arch/x86/entry/vdso/vdso32/../vclock_gettime.c:11,
+                 from ../arch/x86/entry/vdso/vdso32/vclock_gettime.c:4:
+../arch/x86/include/asm/kasan.h: In function ‘__tag_set’:
+../arch/x86/include/asm/kasan.h:81:20: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+   81 |         u64 addr = (u64)__addr;
+      |                    ^
+../arch/x86/include/asm/kasan.h:86:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+   86 |         return (void *)addr;
+      |                ^
 
-Thanks for your persistence on working on this, it is indeed a nettlesome issue.
 
--- 
-pw-bot: changes-requested
