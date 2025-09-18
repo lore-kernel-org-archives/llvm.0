@@ -1,188 +1,177 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012018.outbound.protection.outlook.com [40.107.200.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FF92DCC03
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 19:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758224490; cv=none; b=LFjoGIrqZ7ITzjeK0oH3tNpoDWWSTorWsSLnaimWIUSk/aKO5L0IESCSbGb0aqx8/wd1jlhkYkaV2ORX/yr49VH7IzNFHGxyi2k1VkSjKzIJW5tN8GjY51JXb9auMlOxt8Lj+ym6NbvOdP3Jr5slisBttjiMZoC3WeeAaVcY3rE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758224490; c=relaxed/simple;
-	bh=T/vMTlrI2wJvYyocljij2z38BbG6i8y7B8tVboZ9r2c=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=MNf3qeRxhmiqdCy4mrJNXYo8VoY0+DcMJ7dH9rRrmIXEp3roUVj5vzKzVVOawj3m42FRGWsomvPwJzFNdo9a5K5t5fFi0KBUL20pF2f40PLzu3649IwusdGVG5z8AYqCuihyrfgdsy0qVDKl9OlSLyW8WlCNwzkFChiidFZS3bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-889b8d8b6b7so228367239f.1
-        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 12:41:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758224487; x=1758829287;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jFuQa+Y4FpaQQeM/M6InReVDIhcGmsMw+atLDwBDLk8=;
-        b=mgRhdxdZZcafAjjXEUFPml9ye9+qJf7JpCtpNP6Pb3vAPNZtyuATYsIKvJLliER7gK
-         28ZS7jr4grkib+ckv6dPMGp+qAcXlkqpR7bFRXpTcMZYaBFIGo9gcK3ZMHdEBeZUFGYS
-         OAZJ6hONi/mllMnqvncDbyczco+Banu7QW9rer2g6Ynud4xKiWM6K5cPIyaChNEky2F1
-         JuvjNRUDFqHzPoRiYp4pPMkvA7Ldjcy1SomPmGZpwh0VRgH0PuUW7o+gCxQUQgonP3Un
-         iKXtcNcF0mHqmlyzgPxDg7mhF0Ioi7e6IAl/ijsvqQiy48EaFIy3eSIaIbOm+uu1QLjD
-         yuhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVw0wObM0sEv7l9ptrPTGhneAnqcDmsD+wDXHN6KEgXy1Ol3kHn3zzzVhCUlXQ3HGiJWMSZ@lists.linux.dev
-X-Gm-Message-State: AOJu0YxjJXiyoKubPkCaIjzHx688ysVKaf//8vBtsLeYLHJIdekbaNrm
-	2aAY7FaHAfErVpyO8FKu/NuwuuqCAO3aYfL5OOJEu0cAYEIRmPDDNelyuNMW8AeGEBefvE6VXic
-	WwhHRp+RalCRtYZzMwjvw/ECmSMD5SpLn1ND4rRyBoNQ8hjyMJP7XC84LEBM=
-X-Google-Smtp-Source: AGHT+IHp+WmIL2IJ68tyFld/0nIXw957th39hMRbu6ab9TAjY+iGCLjCAkmJaJtBL9BpNCxThFERyAxXTWPP+JGSPca9tDNIDuO7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AAF2E1EFD;
+	Thu, 18 Sep 2025 19:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758224621; cv=fail; b=hTkiiswtJ1yjvrufr7K7Ilqe4x7Zd+9pgMGcCwSV2HTedU0ajZpChnPMzFNifoKt3kN0xxH+xYdGRH/X5jgH0KZMzt1Ix6nosi7GjLldpGJx7edD1jPm1lKt4bj8YL5b/DppbhEGwbVKVPIV/oxC3KkJXZAfTiYaOgoTz3g8Ls8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758224621; c=relaxed/simple;
+	bh=CsbhLUCO5oEQAPPVycQmhmX34TICrqN9JwC82teJy7k=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qFiPVDwvMKS1noaRwpbJ9DKfpBdLjC9mzEvbnvMp8liMf1DeCisOfQmju/MiPWlYJr3dWYSv0j6sdFV3t+RuLUq1v4v9sa6NwbdS1uV91M1RVWLuMO39IZ1p9/2S9b6ps03bEgTUmnP+ril5DdOnt0dxP6/CLc3WzvT7f/4a2KI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IqRqQn+V; arc=fail smtp.client-ip=40.107.200.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IqRqQn+V"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DmSZZcxzDKnjt986oHPkLh6IuVO85rKtRha7IlonFjhajcBeAY3w7a4HgONUtBgRS3bGDfB+/eU5WdWj5ohkPIbXlJfnQZ1r4dnQsyqJ12SOO0NvI+VTmZojdkZFjpM4AfDXCm1vX5nwHrUb/BUPt+WNXrZba1Z2kzbV+g0y1LFkBEghvmj1OcF5vlmqvsROYxd1eP4qYCKO7gsW6rPtJi80HWP9ydhwg6j2ifydA9Az0J57KchmoMgUOnau4ke8RmwE5E8rjysemKTvLT76BhcOTQZMvUavsksiNo0t6FJQyGXxAf7Cgl3AqXQefkRCtpDE2FsHQl776CgJ+kKFfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HN8DhfP0wIT5lNR3f0xCrbMTuIOqEphYAvskRmP+HCk=;
+ b=pHPR+Ejy3l7oJi4w/d2YbBuInbuOdJUneVWIrbcgdB60V4r99I370YXEd1wp0+eCMcTzPIaDuujEGSDQ2zgzWpyXsxj18s8ojjWgcivu/gdMuzB+EMNv63cWHQt4s4BH4cWK1PkQoUx6w/2oDT4I3ISiLvMJaBhWlLmHeMpadzS5DvSi0YkCIHTvdM8Hr1BPxwxTmjUqjZYAXY+qjYG2zkMvXh9xZWLFkWQdIgLEUvluHQQGC11k98BVNRNguw4nfbOuMcRO5ZM4YYI8fD9Lrq04sxCkJDEhgzD9I3xwktJnLJc9GRxMZ0POGZyLePnoqP+LStjg/RVpOxWYrRKmxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HN8DhfP0wIT5lNR3f0xCrbMTuIOqEphYAvskRmP+HCk=;
+ b=IqRqQn+VDMYczu33PMOeQYc2wkFrZb3gEMXbyFhFxm2VV+G1zt2rDBINZIlhCNXIsjL6EU+ADptdwpdyd+Fk0Ui07IV5Y1BJ9akadYQ3pNkjB9IjcI23/QB+Au2V/gSMCJ+G10WV8SiTiqUYAFN1OPWuGWAL9UFESMj+1yTaiSvdBHaQm3mQirjC7xNmFxJDuKQg78FSS5JGbuG7P14FTao07oGTgwOIp1RPW50OThiG3GFSVQrwEP3KC4MwTOx/tl5Wshj7DVhFdJgICOLuSfcO8cvVbu6nQ5+Cr8+mh5cV+csk5fus5X0NKfPdgDdXKaj8dqTwzGDB+jWvj2VG0A==
+Received: from BY5PR04CA0004.namprd04.prod.outlook.com (2603:10b6:a03:1d0::14)
+ by PH7PR12MB7453.namprd12.prod.outlook.com (2603:10b6:510:20a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.22; Thu, 18 Sep
+ 2025 19:43:35 +0000
+Received: from CO1PEPF000075EF.namprd03.prod.outlook.com
+ (2603:10b6:a03:1d0:cafe::e7) by BY5PR04CA0004.outlook.office365.com
+ (2603:10b6:a03:1d0::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.14 via Frontend Transport; Thu,
+ 18 Sep 2025 19:43:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CO1PEPF000075EF.mail.protection.outlook.com (10.167.249.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9137.12 via Frontend Transport; Thu, 18 Sep 2025 19:43:34 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 18 Sep
+ 2025 12:43:15 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Thu, 18 Sep 2025 12:43:15 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.182)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Thu, 18 Sep 2025 12:43:14 -0700
+Date: Thu, 18 Sep 2025 12:43:13 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Jonathan Corbet <corbet@lwn.net>, <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, Kevin Tian
+	<kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>, Bill Wendling
+	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, "Suravee
+ Suthikulpanit" <suravee.suthikulpanit@amd.com>, Will Deacon
+	<will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
+	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
+ Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+	<patches@lists.linux.dev>
+Subject: Re: [PATCH v5 01/15] genpt: Generic Page Table base API
+Message-ID: <aMxg0bulOYF8HBJo@Asurada-Nvidia>
+References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <1-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <aMDzLC9nV47Xvud9@nvidia.com>
+ <20250915155152.GC1057776@nvidia.com>
+ <aMuxUzvxQLvouG3c@Asurada-Nvidia>
+ <20250918144943.GP1391379@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:184d:b0:40c:cf06:ea2a with SMTP id
- e9e14a558f8ab-424816f2c45mr17310755ab.2.1758224487064; Thu, 18 Sep 2025
- 12:41:27 -0700 (PDT)
-Date: Thu, 18 Sep 2025 12:41:27 -0700
-In-Reply-To: <20250918140451.1289454-1-elver@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
-Subject: [syzbot ci] Re: Compiler-Based Capability- and Locking-Analysis
-From: syzbot ci <syzbot+ciac51bb7578ba7c59@syzkaller.appspotmail.com>
-To: arnd@arndb.de, boqun.feng@gmail.com, bvanassche@acm.org, corbet@lwn.net, 
-	davem@davemloft.net, dvyukov@google.com, edumazet@google.com, 
-	elver@google.com, frederic@kernel.org, glider@google.com, 
-	gregkh@linuxfoundation.org, hch@lst.de, herbert@gondor.apana.org.au, 
-	irogers@google.com, jannh@google.com, joelagnelf@nvidia.com, 
-	josh@joshtriplett.org, justinstitt@google.com, kasan-dev@googlegroups.com, 
-	kees@kernel.org, linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, llvm@lists.linux.dev, longman@redhat.com, 
-	luc.vanoostenryck@gmail.com, lukas.bulwahn@gmail.com, mark.rutland@arm.com, 
-	mathieu.desnoyers@efficios.com, mingo@kernel.org, mingo@redhat.com, 
-	morbo@google.com, nathan@kernel.org, neeraj.upadhyay@kernel.org, 
-	nick.desaulniers@gmail.com, ojeda@kernel.org, paulmck@kernel.org, 
-	penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org, rcu@vger.kernel.org, 
-	rostedt@goodmis.org, takedakn@nttdata.co.jp, tglx@linutronix.de, 
-	tgraf@suug.ch, urezki@gmail.com, will@kernel.org
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250918144943.GP1391379@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000075EF:EE_|PH7PR12MB7453:EE_
+X-MS-Office365-Filtering-Correlation-Id: 162e5e26-c93c-4e95-c0a1-08ddf6eba7df
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ieFqYqReNECdSp8mKXBuqxv4RfVNkBKTwwD5QCbKw1BKmypih6S0FK2ImcZy?=
+ =?us-ascii?Q?MrVrxslJH9Q2w4raFtkNkcWUzJD3CTF768nS+e+4nEgnbJVWc2H1ZJk0fCZo?=
+ =?us-ascii?Q?QQXPplvesoZNtSRPitvQoN0vIkoebUqZSSnr1nIIXGz3I5xqdL6rwqnbegsO?=
+ =?us-ascii?Q?BLlN0XLelHLoniVsH3iqgvwhybXJX8yHAHyXwx2GuArjsqTsIc2UO+iysywT?=
+ =?us-ascii?Q?gjnxYk0FSD4EJ6zkSTs87TG88d3U5lvJKvI8herD3C+fcI62y8yROZTXKafl?=
+ =?us-ascii?Q?LQGLANa8EUGer0HwccWCnfCWNwB0SMluSaW/qkXWAAQ3YEhE5IvSJ6KiNorh?=
+ =?us-ascii?Q?fyonUqD70ZGWDufPeWyj3PhDEYqQ+f2vVA29ehxsWajv3AhxI5JtKBGQGipg?=
+ =?us-ascii?Q?8tJDoYiuS7epoBbmqe+mSWC2sR3efo6YUkP6gifA1K/RoAEt3N5duorpiroD?=
+ =?us-ascii?Q?sM8y+KIBUzjuUatPGMcssufa9MQqp9KID1WHpl8TYw5W2mOnofHWDSODhRiC?=
+ =?us-ascii?Q?j4fWsvSGdw3M4DASOP4GiZtNmKgBnevg9nh5XeSyWkpF1+8YrvfT9bg0x4ll?=
+ =?us-ascii?Q?EsZjqwl7XVuloJiwNt4LFG7SHtVSV5rhi7MpVORVb/ieDtn3LXKhzB0Q4CKm?=
+ =?us-ascii?Q?j23roJTIG4bpltsRVxpfCl2Ec3BLsoSTv0tX1bb0GxvHpshkM5+mPUosH8Jw?=
+ =?us-ascii?Q?ZVio0+3O40orJ7AXl/Yl2TC+YCyFpdKCn2JsDJQLVF31xSycEYTaneKa0c1N?=
+ =?us-ascii?Q?xZndoFlinRoLJkBLZleTnJ/V//21mabemvsyLGjHwU7eH6MXxSDttt7Sedxi?=
+ =?us-ascii?Q?FXYU8owrv8M0Rjjzmf/4+BHHNsAcfANWCEww72aCrT1v1WQJ9NN5JttxO7i4?=
+ =?us-ascii?Q?Vap+Tb+O3JlxeTPLGW2/ejyexQZkJOJ3CzRJEnqXLcNR/tOpvi3PIMgaSmc/?=
+ =?us-ascii?Q?r3zHBxIYfp/Vfz1qm4gVpMEoMJLCIVpJ7sisPbQnWbzfsxZQ6FSqH4X3vd7K?=
+ =?us-ascii?Q?HjVZJ6FCMjcLyINwc69J2/XC/kv7T6WJ9Hp3detffM/mw/b4xB0vd9kW8syB?=
+ =?us-ascii?Q?GcgSYy2d28zYK1GERl6i9U3oxg4Xs41rW6rro6QFuqKdIRPHnjwLncIzdPrr?=
+ =?us-ascii?Q?qk+dDymdmrwIX2wORXUVNPtywf04jn+1i/4B04WC3kuoJ2qp2SuM/LHEJqGO?=
+ =?us-ascii?Q?ZW9w+Z7QGe5j35zhEAzsGaCHCNs3Xe+5BAOR1tNVUT/8eZ92OoLv5yPqvxhf?=
+ =?us-ascii?Q?e6vMBZPkYRRMJ1swiDpqM94/f0TqyP+aSshzzpXrPvnepCvjW/ap27kWwUx4?=
+ =?us-ascii?Q?cvdgGTsA8Xyoc3DpEW8oW5MLIcLl4oUOAiKqP+OAHRMNN9JDDe1gmC7gKjgQ?=
+ =?us-ascii?Q?DPv7kmno9jrzaFdoKMNcUJs4huYKFbGzdD/3zXiCu56YTfT5Ow4JOcRofm9v?=
+ =?us-ascii?Q?XvrnqUE8I54i+zatJGp0G/BmzLWhk19gxu2VqOjLj1QTj50kv0kGL3BhGMFv?=
+ =?us-ascii?Q?YnKnszwlf2Ev1CseM+s+g5lhpRevUuu69Ddt?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2025 19:43:34.9748
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 162e5e26-c93c-4e95-c0a1-08ddf6eba7df
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000075EF.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7453
 
-syzbot ci has tested the following series
+On Thu, Sep 18, 2025 at 11:49:43AM -0300, Jason Gunthorpe wrote:
+> On Thu, Sep 18, 2025 at 12:14:27AM -0700, Nicolin Chen wrote:
+> > > > Then, the "entry" sounds like a physical (v.s. "logical") table
+> > > > entry, e.g. a PTE that we usually say?
+> > > 
+> > > I choose entry because it is related to PTE and in most cases you want
+> > > to work on the entries. The replication of entry to item is somewhat
+> > > hidden.
+> > > 
+> > > From a HW perspective the TLB should be loading entries.
+> > 
+> > In that case, "entry" should be a single "physical" element v.s.
+> > "logical", right? Because that's what HW/TLB physically loads.
+> 
+> I would say HW/TLB loads logical entries when it supports
+> contiguity. It read a single table item and expand it to the larger
+> TLB "entry".
 
-[v3] Compiler-Based Capability- and Locking-Analysis
-https://lore.kernel.org/all/20250918140451.1289454-1-elver@google.com
-* [PATCH v3 01/35] compiler_types: Move lock checking attributes to compiler-capability-analysis.h
-* [PATCH v3 02/35] compiler-capability-analysis: Add infrastructure for Clang's capability analysis
-* [PATCH v3 03/35] compiler-capability-analysis: Add test stub
-* [PATCH v3 04/35] Documentation: Add documentation for Compiler-Based Capability Analysis
-* [PATCH v3 05/35] checkpatch: Warn about capability_unsafe() without comment
-* [PATCH v3 06/35] cleanup: Basic compatibility with capability analysis
-* [PATCH v3 07/35] lockdep: Annotate lockdep assertions for capability analysis
-* [PATCH v3 08/35] locking/rwlock, spinlock: Support Clang's capability analysis
-* [PATCH v3 09/35] compiler-capability-analysis: Change __cond_acquires to take return value
-* [PATCH v3 10/35] locking/mutex: Support Clang's capability analysis
-* [PATCH v3 11/35] locking/seqlock: Support Clang's capability analysis
-* [PATCH v3 12/35] bit_spinlock: Include missing <asm/processor.h>
-* [PATCH v3 13/35] bit_spinlock: Support Clang's capability analysis
-* [PATCH v3 14/35] rcu: Support Clang's capability analysis
-* [PATCH v3 15/35] srcu: Support Clang's capability analysis
-* [PATCH v3 16/35] kref: Add capability-analysis annotations
-* [PATCH v3 17/35] locking/rwsem: Support Clang's capability analysis
-* [PATCH v3 18/35] locking/local_lock: Include missing headers
-* [PATCH v3 19/35] locking/local_lock: Support Clang's capability analysis
-* [PATCH v3 20/35] locking/ww_mutex: Support Clang's capability analysis
-* [PATCH v3 21/35] debugfs: Make debugfs_cancellation a capability struct
-* [PATCH v3 22/35] compiler-capability-analysis: Remove Sparse support
-* [PATCH v3 23/35] compiler-capability-analysis: Remove __cond_lock() function-like helper
-* [PATCH v3 24/35] compiler-capability-analysis: Introduce header suppressions
-* [PATCH v3 25/35] compiler: Let data_race() imply disabled capability analysis
-* [PATCH v3 26/35] MAINTAINERS: Add entry for Capability Analysis
-* [PATCH v3 27/35] kfence: Enable capability analysis
-* [PATCH v3 28/35] kcov: Enable capability analysis
-* [PATCH v3 29/35] kcsan: Enable capability analysis
-* [PATCH v3 30/35] stackdepot: Enable capability analysis
-* [PATCH v3 31/35] rhashtable: Enable capability analysis
-* [PATCH v3 32/35] printk: Move locking annotation to printk.c
-* [PATCH v3 33/35] security/tomoyo: Enable capability analysis
-* [PATCH v3 34/35] crypto: Enable capability analysis
-* [PATCH v3 35/35] sched: Enable capability analysis for core.c and fair.c
+Oh, I got wrong. Thanks for elaborating.
 
-and found the following issue:
-general protection fault in validate_page_before_insert
+"item" is a PTE and "entry" is a group of items/PTEs that set the
+CONTIG bit. TLB loads all those items/PTEs and combines them into
+a single TLB "entry".
 
-Full report is available here:
-https://ci.syzbot.org/series/81182522-74c0-4494-bcf8-976133df7dc7
+It seems difficult to define which one is physical or logical, as
+both "item" and "entry" physically exist in page table and in TLB
+respectively.
 
-***
-
-general protection fault in validate_page_before_insert
-
-tree:      torvalds
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux
-base:      f83ec76bf285bea5727f478a68b894f5543ca76e
-arch:      amd64
-compiler:  Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-config:    https://ci.syzbot.org/builds/8f7ff868-4cf7-40da-b62b-45ebfec4e994/config
-
-cgroup: Unknown subsys name 'net'
-cgroup: Unknown subsys name 'cpuset'
-cgroup: Unknown subsys name 'rlimit'
-Oops: general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 UID: 0 PID: 5775 Comm: syz-executor Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:validate_page_before_insert+0x2a/0x300
-Code: 55 41 57 41 56 41 55 41 54 53 48 89 f3 49 89 fe 49 bd 00 00 00 00 00 fc ff df e8 f1 3f b3 ff 4c 8d 7b 08 4c 89 f8 48 c1 e8 03 <42> 80 3c 28 00 74 08 4c 89 ff e8 17 b3 16 00 4d 8b 3f 4c 89 fe 48
-RSP: 0018:ffffc90002a5f608 EFLAGS: 00010202
-RAX: 0000000000000001 RBX: 0000000000000000 RCX: ffff888022891cc0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888028c71200
-RBP: ffffc90002a5f720 R08: 0000000000000000 R09: 1ffff11021cf81e0
-R10: dffffc0000000000 R11: ffffed1021cf81e1 R12: dffffc0000000000
-R13: dffffc0000000000 R14: ffff888028c71200 R15: 0000000000000008
-FS:  00005555815ad500(0000) GS:ffff8880b8615000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1788fd20b8 CR3: 000000010d8a4000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- insert_page+0x90/0x2c0
- kcov_mmap+0xc3/0x130
- mmap_region+0x18ae/0x20c0
- do_mmap+0xc45/0x10d0
- vm_mmap_pgoff+0x2a6/0x4d0
- ksys_mmap_pgoff+0x51f/0x760
- do_syscall_64+0xfa/0x3b0
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f1788d8ebe3
-Code: f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 41 89 ca 41 f7 c1 ff 0f 00 00 75 14 b8 09 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 25 c3 0f 1f 40 00 48 c7 c0 a8 ff ff ff 64 c7
-RSP: 002b:00007ffc8a37e638 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
-RAX: ffffffffffffffda RBX: 00007ffc8a37e670 RCX: 00007f1788d8ebe3
-RDX: 0000000000000003 RSI: 0000000000400000 RDI: 00007f17867ff000
-RBP: 00007ffc8a37e940 R08: 00000000000000d8 R09: 0000000000000000
-R10: 0000000000000011 R11: 0000000000000246 R12: 0000000000000003
-R13: 0000000000000000 R14: 00007f1788fa11c0 R15: 00007f1788e2e478
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:validate_page_before_insert+0x2a/0x300
-Code: 55 41 57 41 56 41 55 41 54 53 48 89 f3 49 89 fe 49 bd 00 00 00 00 00 fc ff df e8 f1 3f b3 ff 4c 8d 7b 08 4c 89 f8 48 c1 e8 03 <42> 80 3c 28 00 74 08 4c 89 ff e8 17 b3 16 00 4d 8b 3f 4c 89 fe 48
-RSP: 0018:ffffc90002a5f608 EFLAGS: 00010202
-RAX: 0000000000000001 RBX: 0000000000000000 RCX: ffff888022891cc0
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888028c71200
-RBP: ffffc90002a5f720 R08: 0000000000000000 R09: 1ffff11021cf81e0
-R10: dffffc0000000000 R11: ffffed1021cf81e1 R12: dffffc0000000000
-R13: dffffc0000000000 R14: ffff888028c71200 R15: 0000000000000008
-FS:  00005555815ad500(0000) GS:ffff8880b8615000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1788fd20b8 CR3: 000000010d8a4000 CR4: 00000000000006f0
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+Nicolin
