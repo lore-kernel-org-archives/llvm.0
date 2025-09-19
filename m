@@ -1,134 +1,130 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC312C027D
-	for <llvm@lists.linux.dev>; Fri, 19 Sep 2025 07:06:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2572C029C
+	for <llvm@lists.linux.dev>; Fri, 19 Sep 2025 07:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758265567; cv=none; b=Iy8EgbCDCHZeQHwp3DIJO1QSa0GogigeRq8Tjf5Op6VGIE2xeyPsHdLBg+k4gH7TzgCpVkKzUR5SPdTMFlt9sjDq4WL4ccWV9SswJwWn+MULSnLLXnPh6VYBQzMyUc7t5/PvD8+oxmN04vgZJO+zyoX/HWR3M6ZkIV97huXeJik=
+	t=1758267799; cv=none; b=jqaJitJcdiR5fN9Qdy+bRTOzxmfI970pFqmof+UmCjx9JaQ0aumOKiINBs6o+y0EXs3bA8xHSgHPUjDcA1x75mwmcF9KBqklZWGiCsRlJhZNF5i+y7G3ASCcNq/21v8IFxlwdphrrolj50NUQ6CoV+pVDx45SGGktJM7CYoeqmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758265567; c=relaxed/simple;
-	bh=ItZKaGQl9It/js9gzPNXCsAEXczA+CYbzua9BHh+ovk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gFxppYKBVuaqrFjNOM1Z/tfl49iSEwJY31yTktCq56jdEuwpi/pwfViLuPEwbl+z0yvrM3beBTYQZf9kImjl3UvURSI/mK65HtF/4AzAr+nw2e8UuhEyvfJXUAmxBAIdx2rTu116JZ5nYHVAZVLxG93hPd9Iwo8wtttM3AenUEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AE4+VVtL; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1758267799; c=relaxed/simple;
+	bh=HaiLtwYPe7yTHenOD6V4bq3T/ECRy7kv3tGizQbZEE8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=plTNlyi0wxDtvPJm7oV9/56qoQfvs6UXe431UzLgeMWctfjKFx/7SAV6HBwdGqXpxKfvPQZRhn/gK5b435ViFi7keTC44xY7dlJ1X2P3Vxq359JHh6j9SIi38Yo+Dr6Pb2urtWSzzkVOX3wNTI7WwEN8OGFomnu4BcNZoW8qWwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i8WSsazI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AE4+VVtL"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ee12807d97so1291527f8f.0
-        for <llvm@lists.linux.dev>; Fri, 19 Sep 2025 00:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758265564; x=1758870364; darn=lists.linux.dev;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Klo+L3KBBL4ssbFZ2YOqJt7BcxJ8M+dYCfYzeUYYBY=;
-        b=AE4+VVtLgpatTSTUzspGOTpIYM909p/UpznHttQjQ6K9WHvPPsIjLf5s7st0io5iIE
-         gixFHTcdI9ytsIyg7rrHH0LwTX/d7NUzgEfZFz1uS7n5E/I/QEecrlFpsl4UJ77I3giP
-         ADCq/DN4ASrzIS3IVuPY1YpgnXtobWkCynZVyJJrfa/phWZgzFziJc4voR7ixxwCdO04
-         W/L3Lvl6t9RQGYgPKpKqhhD2BbJw+BB+V8476uQtReZp7DSs1tQestwAdDklAWC91Cu/
-         woXDiqhM44s+tmds2RzdjtbOZL0DvXVV9+pDRRHI9VYB40mKFQYTEC+CUBGzgJbIF8VQ
-         +pJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758265564; x=1758870364;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Klo+L3KBBL4ssbFZ2YOqJt7BcxJ8M+dYCfYzeUYYBY=;
-        b=Qgoyt9XnNJup9eSUHoDCgWxkmRH7gp2M7jWX07J0wAaIvdrAtN7OrRJEfPEqnABHZT
-         gL/iOsizn9mXuXWMauMJw4wHdbvQ8w0I5DpmGl88S4njqPGGXAkDagK6blTHR7LDXtVy
-         edT9+FHfUggifzOJ8K3PL5PcHk5nzBjHLiz3RegeJ2NAmQgmliZafBQh6a2lQfXT5lNq
-         iOHfMnS39UBsgHqDb6FUiEdtn5Kohx78AnMybyW6wDFKDk/U/VOombgVsK/UpLAPLHyC
-         rnWhNNtnVHNdChYaes5UZEZkrllrNY0FcIvubAgmn/AIooJtDVSe2Smsd9ioD+3PrZUR
-         /EDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6L9iVpyH0JgRx4WX+bn3mEiw1J0ZeCgiGRjkRBqX/5XgKD64zbDbv7p/I754mHT44g9tB@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx8IFRvl2hXfzgNegpVNFVaJyMghiEj6CX+TVUwaxl85dfrMvTD
-	X0Dr4gZQ8ey2Ye3cSqSri92H2482SCy5EVku13Cdw95U7qD20G49WbMKUjhRcyQWmw==
-X-Gm-Gg: ASbGncsZSSxE0lRttXiohVQ6omrEh9/dCLB0oiTzphQv/l1r8eHvCiND+ZvpdBPdOvi
-	VK/kEVqZGiEB2tsk3bzX42hibBB2yVMhw50WHV4jAQofCN5S4Ixc4TA6JnWojqT9VxoD8rioUSS
-	FqLHPIoRnlzAGGjV3wdYOuzGUBEdRudg98rztNjRQvzXsQGTLcjpPdSEKQdyzNksYB2I44yAWHI
-	PqKo47M4CGDIGu377eKpv9zOwlKCFeAsSXF8LRIG9+9ypgUrHgdqsGxicJrVQYLOz1ryYp53C7o
-	S9aCpwEKD5QxSz8sAMVjUydexfFUqXY9YdCdFTsU1CqeHz0vnZ4yRIVZpkjGAXUBa9hUnbxkHk+
-	vzPdzOfeQ8xzgw1dGTvsabD/tVGNL88IPeyU49/r3AWzIdrMbI6+B18n2Eb8=
-X-Google-Smtp-Source: AGHT+IHPi1pgPaxjy0qFYAQQyA+9c6RpQAFZf3vA/UzVRkHTrs+JR5MqjC9zARfGu5kWXbLyHGkoeg==
-X-Received: by 2002:a05:6000:2c0b:b0:3ea:6680:8fcd with SMTP id ffacd0b85a97d-3ee7c925245mr1570227f8f.13.1758265563176;
-        Fri, 19 Sep 2025 00:06:03 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:2834:9:1f7a:8520:7568:dac6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee0fbf1d35sm7200088f8f.55.2025.09.19.00.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Sep 2025 00:06:02 -0700 (PDT)
-Date: Fri, 19 Sep 2025 09:05:54 +0200
-From: Marco Elver <elver@google.com>
-To: syzbot ci <syzbot+ciac51bb7578ba7c59@syzkaller.appspotmail.com>
-Cc: arnd@arndb.de, boqun.feng@gmail.com, bvanassche@acm.org, corbet@lwn.net,
-	davem@davemloft.net, dvyukov@google.com, edumazet@google.com,
-	frederic@kernel.org, glider@google.com, gregkh@linuxfoundation.org,
-	hch@lst.de, herbert@gondor.apana.org.au, irogers@google.com,
-	jannh@google.com, joelagnelf@nvidia.com, josh@joshtriplett.org,
-	justinstitt@google.com, kasan-dev@googlegroups.com, kees@kernel.org,
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
-	longman@redhat.com, luc.vanoostenryck@gmail.com,
-	lukas.bulwahn@gmail.com, mark.rutland@arm.com,
-	mathieu.desnoyers@efficios.com, mingo@kernel.org, mingo@redhat.com,
-	morbo@google.com, nathan@kernel.org, neeraj.upadhyay@kernel.org,
-	nick.desaulniers@gmail.com, ojeda@kernel.org, paulmck@kernel.org,
-	penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
-	rcu@vger.kernel.org, rostedt@goodmis.org, takedakn@nttdata.co.jp,
-	tglx@linutronix.de, tgraf@suug.ch, urezki@gmail.com,
-	will@kernel.org, syzbot@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot ci] Re: Compiler-Based Capability- and Locking-Analysis
-Message-ID: <aM0A0p4-3lwLeAWF@elver.google.com>
-References: <20250918140451.1289454-1-elver@google.com>
- <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i8WSsazI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758267795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e4bgI7YB2j9kttNK9Kz99EmgzGoi17MV0EuHti7FW5A=;
+	b=i8WSsazI9YQFJuZICeRyTWxeZR4RA+gGV4Cwxdrvia3iIvFnPLxW6DGVaSnEKgTX6nTCe3
+	CmQjqjcSjhKVIaxOQZV8UAQ6b4qpFmkLUZ+lxvbukwLxEOmS9mXbGX/GUwTckxVqrZq/De
+	6DNxxemReTBTtGEE1SqRvJUa5ApUC90=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-177-wFYb4DA0Mz6_2Ik63X_UOw-1; Fri,
+ 19 Sep 2025 03:43:12 -0400
+X-MC-Unique: wFYb4DA0Mz6_2Ik63X_UOw-1
+X-Mimecast-MFC-AGG-ID: wFYb4DA0Mz6_2Ik63X_UOw_1758267791
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7CBE419560B1
+	for <llvm@lists.linux.dev>; Fri, 19 Sep 2025 07:43:11 +0000 (UTC)
+Received: from [172.20.26.51] (unknown [10.30.44.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 256551800446;
+	Fri, 19 Sep 2025 07:43:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc6,
+ upstream-mainline, cbf658dd)
+Date: Fri, 19 Sep 2025 07:43:10 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <43067.125091903431200409@us-mta-177.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: FmeosGb7QqkemVF5nC5RcOBMKJydGCK8p6REKJCXJiM_1758267791
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 18, 2025 at 12:41PM -0700, syzbot ci wrote:
-> syzbot ci has tested the following series
-> 
-> [v3] Compiler-Based Capability- and Locking-Analysis
-[...]
-> and found the following issue:
-> general protection fault in validate_page_before_insert
-> 
-> Full report is available here:
-> https://ci.syzbot.org/series/81182522-74c0-4494-bcf8-976133df7dc7
-> 
-> ***
-> 
-> general protection fault in validate_page_before_insert
+Hi, we tested your kernel and here are the results:
 
-Thanks, syzbot ci!
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-I messed up the type when moving kcov->area access inside the critical
-section. This is the fix:
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'net-6.17-rc7' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2048063873
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
 
 
-    fixup! kcov: Enable capability analysis
 
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 1897c8ca6209..e81e3c0d01c6 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -497,7 +497,7 @@ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
- 	unsigned long size, off;
- 	struct page *page;
- 	unsigned long flags;
--	unsigned long *area;
-+	void *area;
- 
- 	spin_lock_irqsave(&kcov->lock, flags);
- 	size = kcov->size * sizeof(unsigned long);
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
