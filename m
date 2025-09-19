@@ -1,39 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5B025229C;
-	Fri, 19 Sep 2025 20:50:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6965D21578F;
+	Fri, 19 Sep 2025 20:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758315004; cv=none; b=i1dRycyRa6ZvVLtt1dt9DuM2H+490RNBm05ov6lwofDfVQeiU+W0bYYuOVImCHo1FEG7JCuziRcIFmFWcQtVESMXHRTsnmHoIMsVTK9vdU5zsFq2gOMn+i3EoWIQy9yinY1KWGA+ot3GGxPbq+AL8KIfhK+o3Kru6B2YeGRFYIA=
+	t=1758315092; cv=none; b=OqLw6ZRkFlZ9faw3Qiwz74HQiYPMN+zvQnvsLCB+8ryXY5DZZsOipEXWAzXMPLWIdcL/0pleQen+amDnDAFw3LWmIFg2/2kyDu1GBtjMGMWnd67bm1msOVzFwm0sxpT1hDCzlYn+L29yp4w4Nn9KBgzyrEXQzu0URDd0GjvWGQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758315004; c=relaxed/simple;
-	bh=zzJw7pmJ5r1oZArS8Z65VrSfN5iLTKr3vdLMSM15J2k=;
+	s=arc-20240116; t=1758315092; c=relaxed/simple;
+	bh=WT/AtW2xlYNnS+78n8UELvwDofVsJ6EkkO2i5EOJ8R8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mXFUuaLi8f7XgBS9f7IM1et8lkGw3Jj/3Qr6JwSRv598505zrAbqAKz5qMaRBrqtm3IjkImT1BoR++Nujw/hv6zXeDuKeYN/WrrhDjeVgK6fh0WN/f57nsv/zH294LmpM7skcB4hsa0GKuqL9LQctVbDcqWF1wLvwGg0VgEwtIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lRT3IyGW; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=qyyhHyTWrsyRMWUzDhkhBToy8IqIoMd8CZZTwl3Wlr41M59g1N1f/N/kQfpACBzAOJiTFI6JmNbinPhKiu+BJ6JJMvt7pW+3WczLUzzZmjYpyEXbKiIP+LTHGkfSzJWEFL/h6DLKW/dLVr9dit1wpLuwzk2hQqgCZtV5Lcf0Bno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AEw63Uh+; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRT3IyGW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D444BC4CEF0;
-	Fri, 19 Sep 2025 20:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758315004;
-	bh=zzJw7pmJ5r1oZArS8Z65VrSfN5iLTKr3vdLMSM15J2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lRT3IyGWsE9ofB2VCtvgrwGfR3+507HoEzvgpKQTkkfYAm8UbgxdIwWgmYefO9KvY
-	 1Rn4NVbnzjDUttCqz0ebmAb0pf1k7dwI2bSDVSyIYz/ts2VqCmIASMAbGT+JzMo1yz
-	 9N1mn4caUDLDTVdw4nMPW7CgrkB67tfYZaSHcLhIEbDjqYNtHLkuJSmI8a4yXXxZJP
-	 VrMhLBo+NJyYDBAQL+2ePbP9wIbDHKvtWpw6Dnwvci6xGAaXq4gpDx9zEtsX3W8CJv
-	 9cNKOE/eEvipAFkF7XbRxr1ZwUISPlZw5vUdUgmL+hPSpCgZ8Ta5nFLHn/OJjE7e66
-	 vVYWudTba9jDg==
-Date: Fri, 19 Sep 2025 13:50:01 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [linux-next:master 10394/11136] arch/riscv/Kconfig:67: syntax
- error
-Message-ID: <20250919205001.GA3249395@ax162>
-References: <202509200414.Q0j4r2Pc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AEw63Uh+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758315090; x=1789851090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WT/AtW2xlYNnS+78n8UELvwDofVsJ6EkkO2i5EOJ8R8=;
+  b=AEw63Uh+gdvP8TBnHl1KmtGek+0aYVhxjw+pxhqAY03igZaKu0VQdI08
+   ZZzvzxWyfQb9H3ewefaKarkH0YmUB1jjrqQLjd3hDJGsnGkPQifphP+M/
+   N2vJunhgNfOs78LId1GkRhx4qWmm8PuMa/yiOcl+t+82gvMa0WMpUsR6/
+   3RmZMvqiXJ7rCdCnFQ8C//Mg7ijtbiNyoXtjnR5iekDikPL+8xtndMxqZ
+   ZosUeaNTO+cH1Y9ZJY8ojAaM0j4sHbVLeYihGvcvapYYtEdaqQP70rZFa
+   eRyEu4Dz1y5HvjWdIsFjQytvW/8mjubBGqkI9RYRgYgho2ehwFo66s6GK
+   g==;
+X-CSE-ConnectionGUID: 8jbsrBwcSXOglppp5cQ+XQ==
+X-CSE-MsgGUID: pHbCVcg3QgaXp9YxW7K0JA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64469595"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="64469595"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 13:51:29 -0700
+X-CSE-ConnectionGUID: XwD47sDGR+igIFw7EOnX+A==
+X-CSE-MsgGUID: mlNyeTdkTUyEuCqKl1bt8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,279,1751266800"; 
+   d="scan'208";a="175847193"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 19 Sep 2025 13:51:27 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzi4i-0004nP-3C;
+	Fri, 19 Sep 2025 20:51:24 +0000
+Date: Sat, 20 Sep 2025 04:50:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Berg <benjamin@sipsolutions.net>, linux-um@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-kselftest@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Benjamin Berg <benjamin.berg@intel.com>
+Subject: Re: [PATCH v2 11/11] um: switch ptrace FP register access to nolibc
+Message-ID: <202509200433.l6pWDPhh-lkp@intel.com>
+References: <20250919153420.727385-12-benjamin@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,31 +68,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202509200414.Q0j4r2Pc-lkp@intel.com>
+In-Reply-To: <20250919153420.727385-12-benjamin@sipsolutions.net>
 
-On Sat, Sep 20, 2025 at 04:29:50AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   846bd2225ec3cfa8be046655e02b9457ed41973e
-> commit: df4c83704cac9531e91cd161dd8a2b0857b8bb2d [10394/11136] Merge 6.17-rc6 into kbuild-next
-> config: riscv-randconfig-002-20250920 (attached as .config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509200414.Q0j4r2Pc-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509200414.Q0j4r2Pc-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/riscv/Kconfig:67: syntax error
->    arch/riscv/Kconfig:67: invalid statement
+Hi Benjamin,
 
-That's embarrassing :/
+kernel test robot noticed the following build errors:
 
-Fixed in kbuild-next now, thanks for the report!
+[auto build test ERROR on uml/next]
+[also build test ERROR on uml/fixes shuah-kselftest/next shuah-kselftest/fixes linus/master v6.17-rc6 next-20250919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git/commit/arch/riscv/Kconfig?id=95ee3364b29313a7587b7d1e42a9d043aaf7e592
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/tools-compiler-h-fix-__used-definition/20250919-233959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux next
+patch link:    https://lore.kernel.org/r/20250919153420.727385-12-benjamin%40sipsolutions.net
+patch subject: [PATCH v2 11/11] um: switch ptrace FP register access to nolibc
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20250920/202509200433.l6pWDPhh-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509200433.l6pWDPhh-lkp@intel.com/reproduce)
 
-Cheers,
-Nathan
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509200433.l6pWDPhh-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> arch/x86/um/os-Linux/registers.c:11:10: fatal error: 'sys/user.h' file not found
+      11 | #include <sys/user.h>
+         |          ^~~~~~~~~~~~
+   1 error generated.
+--
+>> clang: warning: no such include directory: './arch/um/include/shared' [-Wmissing-include-dirs]
+
+
+vim +11 arch/x86/um/os-Linux/registers.c
+
+14c8a77e1bbd69 arch/um/os-Linux/sys-i386/registers.c Jeff Dike          2008-06-12 @11  #include <sys/user.h>
+38b64aed786d59 arch/x86/um/os-Linux/registers.c      Richard Weinberger 2011-08-18  12  #endif
+37185b33240870 arch/x86/um/os-Linux/registers.c      Al Viro            2012-10-08  13  #include <longjmp.h>
+37185b33240870 arch/x86/um/os-Linux/registers.c      Al Viro            2012-10-08  14  #include <sysdep/ptrace_user.h>
+a78ff1112263fd arch/x86/um/os-Linux/registers.c      Eli Cooper         2016-03-20  15  #include <sys/uio.h>
+a78ff1112263fd arch/x86/um/os-Linux/registers.c      Eli Cooper         2016-03-20  16  #include <asm/sigcontext.h>
+a78ff1112263fd arch/x86/um/os-Linux/registers.c      Eli Cooper         2016-03-20  17  #include <linux/elf.h>
+dbba7f704aa0c3 arch/x86/um/os-Linux/registers.c      Al Viro            2021-09-20  18  #include <registers.h>
+3f17fed2149192 arch/x86/um/os-Linux/registers.c      Benjamin Berg      2024-10-23  19  #include <sys/mman.h>
+^1da177e4c3f41 arch/um/os-Linux/sys-i386/registers.c Linus Torvalds     2005-04-16  20  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
