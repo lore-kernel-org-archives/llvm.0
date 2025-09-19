@@ -1,180 +1,156 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010030.outbound.protection.outlook.com [40.93.198.30])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1320211A28;
-	Fri, 19 Sep 2025 18:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758306926; cv=fail; b=aP9dkvi1oFbCBIygfIm4lXV7s8fSpikQtnmiyFhGxpyy/qOc87aY3wCYdGfbAdRFLkyUQRQWCKR5PZdmCWSu6p/zwTWaPkZPAjMvNH34tc3Ui7sTGNb6f5xV9o+PkSURCVZ+JNSdHnbr6PlRXycF7pkTpazWcMxcbGOf97MS/+A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758306926; c=relaxed/simple;
-	bh=2Wsjp1TqCpy/N2OdRn1JIOHVLdQDF3IkBC1pgj8+uPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=uZp1m7w2W3e4gX/JNwKIqDZHu8SHp1xK2FxA4W96nh29pt7Xm39q3u/Op+JbS80exJ6pdsLFl2gQZLdJ/WW6ccKBJ1m82RKe/3r7EmKiDDwPS+8khIxrChUyxu9uvzkVhKIGifyIyGMFISy+aa5Hj6ESSsEjYLYc5gv+dMv27kM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OysI1JDp; arc=fail smtp.client-ip=40.93.198.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F58F26159E;
+	Fri, 19 Sep 2025 19:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758308841; cv=none; b=D0BQzPO37n9mAg8WrU68faZfqvp0tSa7agJI10sUN9tDdzQuLSD2s+oW0Ok+lDwVySTtqnLHT+ejfh3W3o363iz+fhTH+8mT01i0KnfuyZeEjaipkivCLUayPyduZbA0Q1bJ/mrsOf6kTgUB2Up5iuR3ZYUtYG6mCJOf//PMVlM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758308841; c=relaxed/simple;
+	bh=LW48S4uyqsP2anVFl9ThZDkyI7bm02DxcWz8y9TYf0I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ePILnZNPWeTSJmVbwYGd/WAfAYD/7uNZTZ5q96IZy+RNXGx7xUygv46h2dX9sZzJd5cSvnkf4IoiGk6mcQ5wEg075RGU2WLmNo9MGpuFZmHALJMTZhsjxrsuVox9DjXLOVkYgLu+0ye9gFfy/GTsOCZ8Fqm/+7E90lWnBunSOrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gGpjJzkV; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OysI1JDp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=E9ucins5JyyCfhpASSXob6/JYPeQZvUnMpiaz2/N9oo0bBURmjm0qwSuL1puSC+t1XfGAcCJCaeZkNL9tiU5ltkJiy/SzL29+LRpZiyMhKSp8XwbCEw5EfYjX7mpRpGMbtEo9+QzBp2jdCeLT0be8ed0F638YFNj32qPChDTAWe+3jPyyKcClNSNfsKjvXov3ROD8BGZwpQL1qJe/bNCEazqNxiZ/pz+rw2e6jyCNtC7DD2MnCeJ5hrFK3RWmE8smNIToocvXSlSvMz41VG96wyANnGdwlhKzGIKUyN2KllKnwrKfThkNriGnSLx2cU3/WRwvt9tmGLcgF50GyQ08Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JGK2bkQbHWBeFYHfttbwIL14yyWSFaBi/+O9OPL4ZaY=;
- b=ulBRilqwuNEaQf5ExNKPo+Ro34MJ054Vc+szy1hwKeEiOuwSL5hHBhNZPm2Qk+S3DCtAmlzKp0vNXEmNVsA72HBvhzAYFCppaWNfU25hw2CJJHCVTmTDH4axAEO3E7+YxqndqGrsf3bVfNIH0NDrc78lNZCXgc8oxn4qxd97jlQwIYrD2fCo7gVNs7JJ8LQ2GYApCl1w79w7e/AwPjuXri2oD5xLC0ZHPtPueMYbDyKaQkiV15/gT3r7x1jL+lmRpPC90WS4iv/gew26x8FqTmu35El57Nz+k1q7IuxomYw06UqGn/+AMoiO2tLk1e1esCAxFlZU7GVMJx3onTqVvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JGK2bkQbHWBeFYHfttbwIL14yyWSFaBi/+O9OPL4ZaY=;
- b=OysI1JDpTiDVoJeHlD3Rrytu3IHbNmeMbN42WbH1/A5rMLeoHABSjxdVT+s/R94YPQONZ4xKrVyc1TabWLazXZuaIHL+fwy8zxcVUTQCllk3iq5spP66e4N83gGBWpi/0GTTwV+wVMXGhNOQRDrsk126rfHhvx1XiTebSXDrNduR46LD+udzlncW1itRkAGaui2UhoNSyx1s5Cl2Z/t+VfsVRmH05JyJ1ugSf6PujLtcQLkgs37bzT64n3zI6oa4RvUcNyGwb/hf/dRjAsKXy7SMDv+eei/MkJpXkbxADbzp9Z5WiM7LcyBgfYl9PtqaYNVi72lqAflQIDG1YrNo1w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
- by CY3PR12MB9654.namprd12.prod.outlook.com (2603:10b6:930:ff::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Fri, 19 Sep
- 2025 18:35:21 +0000
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9137.012; Fri, 19 Sep 2025
- 18:35:21 +0000
-Date: Fri, 19 Sep 2025 15:35:18 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v5 05/15] iommupt: Add iova_to_phys op
-Message-ID: <20250919183518.GG2132010@nvidia.com>
-References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <5-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <BN9PR11MB5276A792314370662660E5098C16A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276A792314370662660E5098C16A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: DS7PR03CA0285.namprd03.prod.outlook.com
- (2603:10b6:5:3ad::20) To PH7PR12MB5757.namprd12.prod.outlook.com
- (2603:10b6:510:1d0::13)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gGpjJzkV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758308839; x=1789844839;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LW48S4uyqsP2anVFl9ThZDkyI7bm02DxcWz8y9TYf0I=;
+  b=gGpjJzkVM5rgrqEQHoVIyDVG9jglmzV2pITP6nGW6F8cbtZfYBlUb+8X
+   9gDs0Yhibgobc3n2bKw26ak6q7fmVAzMgaUf6LMDZG8SJs/RqBlbxOk5F
+   ugFx9/na7SIcGXmUGLkkInAbhcjOezowv/i0IQME9D4tOWtWdokTEMGcp
+   AV3UJ08Igk5n2/QDPRzgbHugyOrsYlcCH5WhElD2oH5QamAIsS5e50XLM
+   ni44c4JT7qvCXKcPoC4oxSMEO9KNVuIOE6PSNgaHd3CqKSLFEjfd6w02P
+   yrXlS8g0dnEBkuv6ZXxapuB01zypVuRw/WKoTR0Exrd7Tf8EC/PIycUQy
+   w==;
+X-CSE-ConnectionGUID: eSP4PqYLRtq/Go6T5GCgyA==
+X-CSE-MsgGUID: 8VaBf0UVRae+HfgTsx1lNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11558"; a="60722928"
+X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
+   d="scan'208";a="60722928"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 12:07:18 -0700
+X-CSE-ConnectionGUID: jyrNteZXSmaGWOvZngKJVw==
+X-CSE-MsgGUID: JWokkk6RR12oTUjqURTc2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
+   d="scan'208";a="206655343"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 19 Sep 2025 12:07:17 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzgRu-0004in-2a;
+	Fri, 19 Sep 2025 19:07:14 +0000
+Date: Sat, 20 Sep 2025 03:06:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:ethos-v3 3/3] drivers/accel/ethosu/ethosu_job.c:288:15:
+ warning: variable 'cmdaddr' is uninitialized when used here
+Message-ID: <202509200336.qVmS3UG9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|CY3PR12MB9654:EE_
-X-MS-Office365-Filtering-Correlation-Id: 251bb0c8-c9eb-4923-d564-08ddf7ab49f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|7416014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TkqKNyZ/r0p7hiltWkGZBuTmQ9Ct2KNgQDxIcs7RapTfkweYd1MIwM0dV4Vk?=
- =?us-ascii?Q?8YeObP4RLIgufHI6bW2Jqim8ufKsSNdLM/QgILbxjApzEwhrIPYcxnv/Qiwq?=
- =?us-ascii?Q?QWEGJad2yoTMlpmaI2QgNXXd2F3KrM5P5BOH3b9UNiqPV3zYCNCX5XNDGUBz?=
- =?us-ascii?Q?pLe5DK5qreQbjLzBH2krhYw/O03vJowcA2OuSJiY2wNFYiIU6AZ1aVg0xOOD?=
- =?us-ascii?Q?aWwLFpCaBvMLumOJau6CCQ4tu9dQxJeKz+rNn/HseKXrHdN57qkX5BiHcTDn?=
- =?us-ascii?Q?kqnvfoUbNlE6u6m22g1NxxiFauIva7WSSdTXUDagiN9H6+X81lK/kTsQ3E2q?=
- =?us-ascii?Q?bN+sAWTjTNQbNCKfQKQ1bs1niQU3GyBeXw6WX21PPjK6WbQwJgStx67JbrWZ?=
- =?us-ascii?Q?Ljhxs6sFabWImpvNBvMvCXD43yd3Eh8SEeMgBrNGBwJo8US859neDAbfjlLM?=
- =?us-ascii?Q?fN6oeO5I0tJil0PUqbe/cVkl94MmDBpJYJShl1X+8C55ws3uOPwzxow5Vs9t?=
- =?us-ascii?Q?IOrUSROU0u/nx5L079MS3iU6mb/eozWdeqXla12bMdwhS+qZIqVRbgx0YtjC?=
- =?us-ascii?Q?LScCqX+dHyCaD6TAlQaQXKgm1HRslVC3AiP1kqcxnxPolFbVem877tiwVRY9?=
- =?us-ascii?Q?OPyF8pjRoChejY86l8g4qHll5eF4DN03BwIzAjJ0NpRAJS6F0iy2Bq0mpMMp?=
- =?us-ascii?Q?CWCPSa5ZxNOsRwLZu8F9CzfYODoRm3ZzImildlzC/ABiUKHYTebkDq6kVWNm?=
- =?us-ascii?Q?URWE9/LhjiU5FBnkAhzgKb022E1NVlqDpkjpwyrC0wd4mkUa0975YzjX+fAs?=
- =?us-ascii?Q?7m4bzT2YjQhoxmQwyR/L5wWvUyAPl2+kx9gg1nKiO6TAFLBmKcEhjcNkqxEy?=
- =?us-ascii?Q?X6Sho/BFSQybHgwGsCWEHBE+gn0F3f60uXZfwH/eYmJekAASIiJvCqUbxjjc?=
- =?us-ascii?Q?VxZO9aQr/jaI/zmTDXi0y/1zQAhmo84oNGzb4uDosyyg/5bVfX3BftNseOSi?=
- =?us-ascii?Q?a/CwQKscu15bd2p1F7KMcauR/ZfFCsTvCoDltObS1QkoXNj5H1lx1IyqyapM?=
- =?us-ascii?Q?4I7enKttuDMbYwWmkLwzOdQ9UoACbypa7tOQeERiO2F3MOXrdafaIY93fDPN?=
- =?us-ascii?Q?BpeS/B4i1NiyKKNhpkDbA+NLSrug7k2oqGFKNUWDhwPVwyYDN3tdb4GRMKgl?=
- =?us-ascii?Q?O895BVQs3s7RyM2E8kgbWqCoG/my0EhiCGeHYY+YiKgrw5mwCiIBw9uw3G7g?=
- =?us-ascii?Q?5MfzsyxjbYJ4c269Od8AiGMv3ztJHudsU5VdLgu6RbDwlYbReGay+aOchbp9?=
- =?us-ascii?Q?TbDzX7LSMkdUcMORmgR5ZHLvhh11KmbIJbV60+AO4LfkLL0HAE1lYQgW4hgC?=
- =?us-ascii?Q?MojuEGMasg9Xnn/2c7iKWrahWNP4b6obxcJdQxicgPPKQ2pt7Q32NpjYHjeF?=
- =?us-ascii?Q?dYHae5edWK8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BsUQWJCpqDMqtHnaNtd9w3wIqTeYNOmXGp8VAewSRb/o4HoP0aA4V86dljIa?=
- =?us-ascii?Q?NUpSMIGzcvHqW7EohEEDJIdpBkxL24+QuQpcjNDfboERdrJ+MEHe8h9OJJpr?=
- =?us-ascii?Q?bPqjYwsWBsJo/rA/J2PNf+P1uNDLXxiQpYUxvCDMdPA7CaQeMcMdyEMOi8bP?=
- =?us-ascii?Q?eBcP2fyKaYeYvHTU9rU6YVn0hvkg3OLVJ851MEhLFfV0+FOCX1FJ1jm9mjdv?=
- =?us-ascii?Q?WTtSxV0e2iLQOlj64Pvs+yOafS0kEEAzC6skFpq2t5hSw4TfwYCz3PEEtwrP?=
- =?us-ascii?Q?ss9oKSj8RY0EuTnNB0i+kftQ1jTwZdgCbM70CpFbHUmdzS7/L9NZW5TkRTcW?=
- =?us-ascii?Q?gOfxA8fHufjtbfgI1dTPEa3lD4BrenNu6H3cPBAd/L7ekAWcrNN1vV5/XGf4?=
- =?us-ascii?Q?GLQuc7vJ8GiSrp94h8gIgbZuFgDAc44/5SDyVItYnWefKIzi8egYgtpWWzoY?=
- =?us-ascii?Q?t7ZNs/3lXNE6v4E5TrzjRLH3Sim7RjbKa7PLtdbX88CBrJqfPhRruza+ZXM/?=
- =?us-ascii?Q?ps6RjGYgEx54AiwiHQC9JqSUldkW5hrcIE4NZ4XAPrBnkSpy3uRZNTmBNlIP?=
- =?us-ascii?Q?styEUnkf/AKH2H0cKOo7QTXmFJXjFYbG8+xwZVQZeQ/QQjCjQU3QkYDhrkTu?=
- =?us-ascii?Q?tDde8wXqd4k4J0YnozIN8BdOkn+LHbmyCoiJDPrjSdPUtFvArpvEHAr8+bIp?=
- =?us-ascii?Q?tFdZt0QXD6/zQjrwujk0id1cgrIrwJCstwI9/TBJ+fhznBtymFhtyrGaT48F?=
- =?us-ascii?Q?ixnnpGTjcjIZ0Zqb835tx30GccZYLiNIjHEMVDsMvhlVpNU69U7ooXwwL9zF?=
- =?us-ascii?Q?DvhwBLTQqLsPGUmRbfq2swetSvpskWUko9okEjQajNlw2l6jK2fvvlpYNLss?=
- =?us-ascii?Q?y9vzHrGqIIXdWY+EfvkMuGlis0StRgqw/I3MF8IwVx5SSpzY5x0hrz+4+781?=
- =?us-ascii?Q?8HeZ8w4NNXvD5g8xJfgXFYdvQdrCDFLkbID6sFie0hv9DqpyNZMh56nXMGFe?=
- =?us-ascii?Q?XJsHmUUdUfioovdGeLwA1z7Wlb4rtBv8YBUKDoHh59AkW+lqKmftJLXVCvOC?=
- =?us-ascii?Q?/mVVSLzIbELXg5i7EoHKiJaaRCWobuEl1OT90fF4XRQHK4b6sWQMBH15IK16?=
- =?us-ascii?Q?b1wvouAbY6MhNdmLdLs38dV2TI4Ai4wBh14ZJ17ZdAUNphucpHlZ44BqsBn5?=
- =?us-ascii?Q?Fkrez7PPWWnPzK7InEmwoCmVq93sI3LzNxICDzz209nkjNA/nhHjRfDQ0IIk?=
- =?us-ascii?Q?INxr6TK/VlhLO78/I4qh7B8v1ZDwmsxTfI9ybY7V52nqKiZcesYFBJMV4wAg?=
- =?us-ascii?Q?T3AmbQiXSWmE1lJCLF/PUJ95WIcyVinJsdoioYe1J9m1htW8Yj1RUd8gh6Ou?=
- =?us-ascii?Q?9ZczqKi2xMpwFedQsIZ1Ax1y0otx8TFa/GCdO9ed/QUhkjsB7Rf40tJFMXjB?=
- =?us-ascii?Q?Tm4CM3R5ob40UP+QoONbS6JpvrWdJwWb2jemuhUNnHhx0i9mH8pBU73hdLWP?=
- =?us-ascii?Q?QFjmcBF+7TI3nRjHGAb8A3jrEFqRlHHfYU1SQ3f+eZdY3Cf3h4eZbt6o1jvv?=
- =?us-ascii?Q?Y1Y/LAkRlH2uvj7KQeKu62Fx34dKGpeA2FFBOKdc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 251bb0c8-c9eb-4923-d564-08ddf7ab49f8
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2025 18:35:21.0471
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W9TNc78b5fWmiSMcTEcyV8pJYMIQH/BPUj+rhYPuMMVthMkWOUdtMgvQkgdQ0OJN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY3PR12MB9654
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Sep 18, 2025 at 07:08:39AM +0000, Tian, Kevin wrote:
-> > +/*
-> > + * Some APIs use unsigned long some use dma_addr_t as the type. Dispatch
-> > to the
-> > + * correct validation based on the type.
-> 
-> "Some APIs use unsigned long, while others use..."
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git ethos-v3
+head:   6bafb6b0701a741e75c9f159f3b6e8cf07d48b55
+commit: 6bafb6b0701a741e75c9f159f3b6e8cf07d48b55 [3/3] accel: Add Arm Ethos-U NPU driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250920/202509200336.qVmS3UG9-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509200336.qVmS3UG9-lkp@intel.com/reproduce)
 
-OK
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509200336.qVmS3UG9-lkp@intel.com/
 
-> > +#define PT_IOMMU_CHECK_DOMAIN(s, pt_iommu_memb, domain_memb)
-> > \
-> > +	static_assert(offsetof(s, pt_iommu_memb.domain) ==   \
-> > +		      offsetof(s, domain_memb))
-> > 
-> 
-> not belong to this patch
+All warnings (new ones prefixed by >>):
 
-I moved it to patch 3 "basic structure"
+>> drivers/accel/ethosu/ethosu_job.c:288:15: warning: variable 'cmdaddr' is uninitialized when used here [-Wuninitialized]
+     288 |                                                  reg != cmdaddr,
+         |                                                         ^~~~~~~
+   include/linux/iopoll.h:194:47: note: expanded from macro 'readl_relaxed_poll_timeout'
+     194 |         readx_poll_timeout(readl_relaxed, addr, val, cond, delay_us, timeout_us)
+         |                                                      ^~~~
+   include/linux/iopoll.h:135:29: note: expanded from macro 'readx_poll_timeout'
+     135 |         read_poll_timeout(op, val, cond, sleep_us, timeout_us, false, addr)
+         |                                    ^~~~
+   include/linux/iopoll.h:47:7: note: expanded from macro 'read_poll_timeout'
+      47 |                 if (cond) \
+         |                     ^~~~
+   drivers/accel/ethosu/ethosu_job.c:279:13: note: initialize the variable 'cmdaddr' to silence this warning
+     279 |         u32 cmdaddr;
+         |                    ^
+         |                     = 0
+   1 warning generated.
 
-Thanks,
-Jason
+
+vim +/cmdaddr +288 drivers/accel/ethosu/ethosu_job.c
+
+   272	
+   273	static enum drm_gpu_sched_stat ethosu_job_timedout(struct drm_sched_job *bad)
+   274	{
+   275		struct ethosu_job *job = to_ethosu_job(bad);
+   276		struct ethosu_device *dev = job->dev;
+   277		bool running;
+   278		u32 *bocmds = to_drm_gem_dma_obj(job->cmd_bo)->vaddr;
+   279		u32 cmdaddr;
+   280	
+   281		running = FIELD_GET(STATUS_STATE_RUNNING, readl_relaxed(dev->regs + NPU_REG_STATUS));
+   282		if (running) {
+   283			int ret;
+   284			u32 reg = readl_relaxed(dev->regs + NPU_REG_QREAD);
+   285	
+   286			ret = readl_relaxed_poll_timeout(dev->regs + NPU_REG_QREAD,
+   287							 reg,
+ > 288							 reg != cmdaddr,
+   289							 USEC_PER_MSEC, 100 * USEC_PER_MSEC);
+   290	
+   291			/* If still running and progress is being made, just return */
+   292			if (!ret)
+   293				return DRM_GPU_SCHED_STAT_NO_HANG;
+   294		}
+   295	
+   296		cmdaddr = readl_relaxed(dev->regs + NPU_REG_QREAD);
+   297		dev_err(dev->base.dev, "NPU sched timed out: NPU %s, cmdstream offset 0x%x: 0x%x\n",
+   298			running ? "running" : "stopped",
+   299			cmdaddr, bocmds[cmdaddr / 4]);
+   300	
+   301		drm_sched_stop(&dev->sched, bad);
+   302	
+   303		/*
+   304		 * Remaining interrupts have been handled, but we might still have
+   305		 * stuck jobs. Let's make sure the PM counters stay balanced by
+   306		 * manually calling pm_runtime_put_noidle().
+   307		 */
+   308		scoped_guard(mutex, &dev->job_lock) {
+   309			if (dev->in_flight_job)
+   310				pm_runtime_put_noidle(dev->base.dev);
+   311	
+   312			dev->in_flight_job = NULL;
+   313		}
+   314	
+   315		/* Proceed with reset now. */
+   316		pm_runtime_force_suspend(dev->base.dev);
+   317		pm_runtime_force_resume(dev->base.dev);
+   318	
+   319		/* Restart the scheduler */
+   320		drm_sched_start(&dev->sched, 0);
+   321	
+   322		return DRM_GPU_SCHED_STAT_RESET;
+   323	}
+   324	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
