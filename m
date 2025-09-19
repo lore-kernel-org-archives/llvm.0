@@ -1,64 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3ED11C5F10;
-	Fri, 19 Sep 2025 06:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC312C027D
+	for <llvm@lists.linux.dev>; Fri, 19 Sep 2025 07:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758263342; cv=none; b=akczHuoRIJHGDcVicwwaH9pK6gBg8Eb9qQojkxdQzo0htYqMlEdbNIAlQ4pZ1EI+Ay4t/neC7YTmuUE6DG33flC9xZB+PTX2UNcH51wVN0VNi99Be4RX2fyIppSwhJvgJGR1GfsQYO4jpq3wXvmvGrjYW1+m8GGrEZ9PLu02QRE=
+	t=1758265567; cv=none; b=Iy8EgbCDCHZeQHwp3DIJO1QSa0GogigeRq8Tjf5Op6VGIE2xeyPsHdLBg+k4gH7TzgCpVkKzUR5SPdTMFlt9sjDq4WL4ccWV9SswJwWn+MULSnLLXnPh6VYBQzMyUc7t5/PvD8+oxmN04vgZJO+zyoX/HWR3M6ZkIV97huXeJik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758263342; c=relaxed/simple;
-	bh=1dA4LqMD015yw3IbVxtUS6ilnL+cRVcNULs8C7ckGjM=;
+	s=arc-20240116; t=1758265567; c=relaxed/simple;
+	bh=ItZKaGQl9It/js9gzPNXCsAEXczA+CYbzua9BHh+ovk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gkUfb/2TmmfxDwoTIKFHJU8zlJFCymyFmXYGdJfOM+hK7+vZBZAcX7jg483u/9hUSCTJOaNAKyjvZP4EMj2vKpGIz3YQ8roOqCDt9VGnd41s0nKvnZqgKV49Ai4rM3M7ksyssTnvjUQvnMtzGo+kAGaXs3gZAOBQxyhrB5UvR1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+NIu5x0; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gFxppYKBVuaqrFjNOM1Z/tfl49iSEwJY31yTktCq56jdEuwpi/pwfViLuPEwbl+z0yvrM3beBTYQZf9kImjl3UvURSI/mK65HtF/4AzAr+nw2e8UuhEyvfJXUAmxBAIdx2rTu116JZ5nYHVAZVLxG93hPd9Iwo8wtttM3AenUEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AE4+VVtL; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+NIu5x0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758263341; x=1789799341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1dA4LqMD015yw3IbVxtUS6ilnL+cRVcNULs8C7ckGjM=;
-  b=i+NIu5x0ibzSRneEPk7+KQMvCb9Kdlhs3zzkFraXBkbRPqudGa7UFwvw
-   nhU2kWMppw0tUqMS6ibz6CT7DEpMoi4xxvOlbAY0QQEBsJ4Sob1nWDgOD
-   SF0ZgWHzuRkhx68NgqBZ/t3pMkL1EILtaLRvPFHd7sMqonSDBeskT85Bw
-   d36wyI7/NGId92jcxxH1hAQENUK4eXEqHpdF6yAXQa1mc0RRiEwd2IxKx
-   hK4YjvrlVLZr+03DMPRGIAC8RVPfARJ/HAB/p1Kdq5aHoE7dUtyeMHFut
-   g1IV8ERu/vtXN27sO8XKy1LDaO47HPg1aPtj4I/PVn06Glh34q67xPXe5
-   A==;
-X-CSE-ConnectionGUID: yzCIPL/NRFygYWwg4k/5Jw==
-X-CSE-MsgGUID: KQnov4cXR2avyvkRnX6zzA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="63238510"
-X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="63238510"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 23:28:59 -0700
-X-CSE-ConnectionGUID: zx6p22r+QaSNoXCTHFyF4g==
-X-CSE-MsgGUID: VNIjzq8mSLST2STe4v+vPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
-   d="scan'208";a="206698556"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Sep 2025 23:28:56 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzUc1-00042B-21;
-	Fri, 19 Sep 2025 06:28:53 +0000
-Date: Fri, 19 Sep 2025 14:27:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: victor.duicu@microchip.com, jic23@kernel.org, dlechner@baylibre.com,
-	nuno.sa@analog.com, andy@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, marius.cristea@microchip.com,
-	victor.duicu@microchip.com
-Subject: Re: [PATCH v5 2/2] iio: temperature: add support for MCP998X
-Message-ID: <202509191423.1OvJW2X1-lkp@intel.com>
-References: <20250918111937.5150-3-victor.duicu@microchip.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AE4+VVtL"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3ee12807d97so1291527f8f.0
+        for <llvm@lists.linux.dev>; Fri, 19 Sep 2025 00:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758265564; x=1758870364; darn=lists.linux.dev;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Klo+L3KBBL4ssbFZ2YOqJt7BcxJ8M+dYCfYzeUYYBY=;
+        b=AE4+VVtLgpatTSTUzspGOTpIYM909p/UpznHttQjQ6K9WHvPPsIjLf5s7st0io5iIE
+         gixFHTcdI9ytsIyg7rrHH0LwTX/d7NUzgEfZFz1uS7n5E/I/QEecrlFpsl4UJ77I3giP
+         ADCq/DN4ASrzIS3IVuPY1YpgnXtobWkCynZVyJJrfa/phWZgzFziJc4voR7ixxwCdO04
+         W/L3Lvl6t9RQGYgPKpKqhhD2BbJw+BB+V8476uQtReZp7DSs1tQestwAdDklAWC91Cu/
+         woXDiqhM44s+tmds2RzdjtbOZL0DvXVV9+pDRRHI9VYB40mKFQYTEC+CUBGzgJbIF8VQ
+         +pJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758265564; x=1758870364;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/Klo+L3KBBL4ssbFZ2YOqJt7BcxJ8M+dYCfYzeUYYBY=;
+        b=Qgoyt9XnNJup9eSUHoDCgWxkmRH7gp2M7jWX07J0wAaIvdrAtN7OrRJEfPEqnABHZT
+         gL/iOsizn9mXuXWMauMJw4wHdbvQ8w0I5DpmGl88S4njqPGGXAkDagK6blTHR7LDXtVy
+         edT9+FHfUggifzOJ8K3PL5PcHk5nzBjHLiz3RegeJ2NAmQgmliZafBQh6a2lQfXT5lNq
+         iOHfMnS39UBsgHqDb6FUiEdtn5Kohx78AnMybyW6wDFKDk/U/VOombgVsK/UpLAPLHyC
+         rnWhNNtnVHNdChYaes5UZEZkrllrNY0FcIvubAgmn/AIooJtDVSe2Smsd9ioD+3PrZUR
+         /EDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX6L9iVpyH0JgRx4WX+bn3mEiw1J0ZeCgiGRjkRBqX/5XgKD64zbDbv7p/I754mHT44g9tB@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx8IFRvl2hXfzgNegpVNFVaJyMghiEj6CX+TVUwaxl85dfrMvTD
+	X0Dr4gZQ8ey2Ye3cSqSri92H2482SCy5EVku13Cdw95U7qD20G49WbMKUjhRcyQWmw==
+X-Gm-Gg: ASbGncsZSSxE0lRttXiohVQ6omrEh9/dCLB0oiTzphQv/l1r8eHvCiND+ZvpdBPdOvi
+	VK/kEVqZGiEB2tsk3bzX42hibBB2yVMhw50WHV4jAQofCN5S4Ixc4TA6JnWojqT9VxoD8rioUSS
+	FqLHPIoRnlzAGGjV3wdYOuzGUBEdRudg98rztNjRQvzXsQGTLcjpPdSEKQdyzNksYB2I44yAWHI
+	PqKo47M4CGDIGu377eKpv9zOwlKCFeAsSXF8LRIG9+9ypgUrHgdqsGxicJrVQYLOz1ryYp53C7o
+	S9aCpwEKD5QxSz8sAMVjUydexfFUqXY9YdCdFTsU1CqeHz0vnZ4yRIVZpkjGAXUBa9hUnbxkHk+
+	vzPdzOfeQ8xzgw1dGTvsabD/tVGNL88IPeyU49/r3AWzIdrMbI6+B18n2Eb8=
+X-Google-Smtp-Source: AGHT+IHPi1pgPaxjy0qFYAQQyA+9c6RpQAFZf3vA/UzVRkHTrs+JR5MqjC9zARfGu5kWXbLyHGkoeg==
+X-Received: by 2002:a05:6000:2c0b:b0:3ea:6680:8fcd with SMTP id ffacd0b85a97d-3ee7c925245mr1570227f8f.13.1758265563176;
+        Fri, 19 Sep 2025 00:06:03 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:2834:9:1f7a:8520:7568:dac6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee0fbf1d35sm7200088f8f.55.2025.09.19.00.06.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 00:06:02 -0700 (PDT)
+Date: Fri, 19 Sep 2025 09:05:54 +0200
+From: Marco Elver <elver@google.com>
+To: syzbot ci <syzbot+ciac51bb7578ba7c59@syzkaller.appspotmail.com>
+Cc: arnd@arndb.de, boqun.feng@gmail.com, bvanassche@acm.org, corbet@lwn.net,
+	davem@davemloft.net, dvyukov@google.com, edumazet@google.com,
+	frederic@kernel.org, glider@google.com, gregkh@linuxfoundation.org,
+	hch@lst.de, herbert@gondor.apana.org.au, irogers@google.com,
+	jannh@google.com, joelagnelf@nvidia.com, josh@joshtriplett.org,
+	justinstitt@google.com, kasan-dev@googlegroups.com, kees@kernel.org,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
+	longman@redhat.com, luc.vanoostenryck@gmail.com,
+	lukas.bulwahn@gmail.com, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com, mingo@kernel.org, mingo@redhat.com,
+	morbo@google.com, nathan@kernel.org, neeraj.upadhyay@kernel.org,
+	nick.desaulniers@gmail.com, ojeda@kernel.org, paulmck@kernel.org,
+	penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
+	rcu@vger.kernel.org, rostedt@goodmis.org, takedakn@nttdata.co.jp,
+	tglx@linutronix.de, tgraf@suug.ch, urezki@gmail.com,
+	will@kernel.org, syzbot@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot ci] Re: Compiler-Based Capability- and Locking-Analysis
+Message-ID: <aM0A0p4-3lwLeAWF@elver.google.com>
+References: <20250918140451.1289454-1-elver@google.com>
+ <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,163 +93,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250918111937.5150-3-victor.duicu@microchip.com>
+In-Reply-To: <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-Hi,
+On Thu, Sep 18, 2025 at 12:41PM -0700, syzbot ci wrote:
+> syzbot ci has tested the following series
+> 
+> [v3] Compiler-Based Capability- and Locking-Analysis
+[...]
+> and found the following issue:
+> general protection fault in validate_page_before_insert
+> 
+> Full report is available here:
+> https://ci.syzbot.org/series/81182522-74c0-4494-bcf8-976133df7dc7
+> 
+> ***
+> 
+> general protection fault in validate_page_before_insert
 
-kernel test robot noticed the following build errors:
+Thanks, syzbot ci!
 
-[auto build test ERROR on 671b9b6d7f4fe17a174c410397e72253877ca64e]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/victor-duicu-microchip-com/dt-bindings-iio-temperature-add-support-for-MCP998X/20250918-192457
-base:   671b9b6d7f4fe17a174c410397e72253877ca64e
-patch link:    https://lore.kernel.org/r/20250918111937.5150-3-victor.duicu%40microchip.com
-patch subject: [PATCH v5 2/2] iio: temperature: add support for MCP998X
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250919/202509191423.1OvJW2X1-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509191423.1OvJW2X1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509191423.1OvJW2X1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/temperature/mcp9982.c:470:3: error: expected expression
-     470 |                 u8 bulk_read[3];
-         |                 ^
->> drivers/iio/temperature/mcp9982.c:473:31: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
-     473 |                                        &bulk_read, sizeof(bulk_read));
-         |                                                           ^~~~~~~~~
-         |                                                           up_read
-   include/linux/rwsem.h:246:13: note: 'up_read' declared here
-     246 | extern void up_read(struct rw_semaphore *sem);
-         |             ^
-   drivers/iio/temperature/mcp9982.c:473:13: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
-     473 |                                        &bulk_read, sizeof(bulk_read));
-         |                                         ^~~~~~~~~
-         |                                         up_read
-   include/linux/rwsem.h:246:13: note: 'up_read' declared here
-     246 | extern void up_read(struct rw_semaphore *sem);
-         |             ^
-   drivers/iio/temperature/mcp9982.c:477:11: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
-     477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
-         |                         ^~~~~~~~~
-         |                         up_read
-   include/linux/rwsem.h:246:13: note: 'up_read' declared here
-     246 | extern void up_read(struct rw_semaphore *sem);
-         |             ^
->> drivers/iio/temperature/mcp9982.c:477:11: error: subscript of pointer to function type 'void (struct rw_semaphore *)'
-     477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
-         |                         ^~~~~~~~~
-   drivers/iio/temperature/mcp9982.c:477:33: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
-     477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
-         |                                               ^~~~~~~~~
-         |                                               up_read
-   include/linux/rwsem.h:246:13: note: 'up_read' declared here
-     246 | extern void up_read(struct rw_semaphore *sem);
-         |             ^
-   drivers/iio/temperature/mcp9982.c:477:33: error: subscript of pointer to function type 'void (struct rw_semaphore *)'
-     477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
-         |                                               ^~~~~~~~~
-   drivers/iio/temperature/mcp9982.c:488:3: error: expected expression
-     488 |                 unsigned long *src;
-         |                 ^
->> drivers/iio/temperature/mcp9982.c:493:4: error: use of undeclared identifier 'src'
-     493 |                 *src = tmp_reg;
-         |                  ^
-   drivers/iio/temperature/mcp9982.c:494:68: error: use of undeclared identifier 'src'
-     494 |                 *val = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][0];
-         |                                                                                  ^
-   drivers/iio/temperature/mcp9982.c:495:69: error: use of undeclared identifier 'src'
-     495 |                 *val2 = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][1];
-         |                                                                                   ^
-   11 errors generated.
+I messed up the type when moving kcov->area access inside the critical
+section. This is the fix:
 
 
-vim +470 drivers/iio/temperature/mcp9982.c
+    fixup! kcov: Enable capability analysis
 
-   426	
-   427	static int mcp9982_read_raw(struct iio_dev *indio_dev,
-   428				    struct iio_chan_spec const *chan, int *val,
-   429				    int *val2, long mask)
-   430	{
-   431		unsigned int tmp_reg, reg_status;
-   432		struct mcp9982_priv *priv = iio_priv(indio_dev);
-   433		int ret;
-   434	
-   435		if (test_bit(RUN_STATE, &priv->bit_flags)) {
-   436			/*
-   437			 * When working in Run mode, after modifying a parameter (like sampling
-   438			 * frequency) we have to wait a delay before reading the new values.
-   439			 * We can't determine when the conversion is done based on the BUSY bit.
-   440			 */
-   441			if (test_bit(WAIT_BEFORE_READ, &priv->bit_flags)) {
-   442				if (!time_after(jiffies, priv->time_limit))
-   443					mdelay(jiffies_to_msecs(priv->time_limit - jiffies));
-   444				clear_bit(WAIT_BEFORE_READ, &priv->bit_flags);
-   445			}
-   446		} else {
-   447			ret = regmap_write(priv->regmap, MCP9982_ONE_SHOT_ADDR, 1);
-   448			if (ret)
-   449				return ret;
-   450			/*
-   451			 * In Standby state after writing in OneShot register wait for
-   452			 * the start of conversion and then poll the BUSY bit.
-   453			 */
-   454			mdelay(125);
-   455			ret = regmap_read_poll_timeout(priv->regmap, MCP9982_STATUS_ADDR,
-   456						       reg_status, !(reg_status & MCP9982_STATUS_BUSY),
-   457						       mcp9982_delay_ms[priv->sampl_idx] * USEC_PER_MSEC,
-   458						       0);
-   459			if (ret)
-   460				return ret;
-   461		}
-   462		guard(mutex)(&priv->lock);
-   463	
-   464		switch (mask) {
-   465		case IIO_CHAN_INFO_RAW:
-   466			/*
-   467			 * The Block Read Protocol first returns the number of user readable
-   468			 * bytes, held in bulk_read[0], followed by the data.
-   469			 */
- > 470			u8 bulk_read[3];
-   471	
-   472			ret = regmap_bulk_read(priv->regmap, MCP9982_TEMP_MEM_BLOCK_ADDR(chan->channel),
- > 473					       &bulk_read, sizeof(bulk_read));
-   474			if (ret)
-   475				return ret;
-   476	
- > 477			*val = (bulk_read[1] << 8) + (bulk_read[2]);
-   478			return IIO_VAL_INT;
-   479		case IIO_CHAN_INFO_SCALE:
-   480			*val = 0;
-   481			*val2 = MCP9982_SCALE;
-   482			return IIO_VAL_INT_PLUS_NANO;
-   483		case IIO_CHAN_INFO_SAMP_FREQ:
-   484			*val = mcp9982_conv_rate[priv->sampl_idx][0];
-   485			*val2 = mcp9982_conv_rate[priv->sampl_idx][1];
-   486			return IIO_VAL_INT_PLUS_MICRO;
-   487		case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
-   488			unsigned long *src;
-   489	
-   490			ret = regmap_read(priv->regmap, MCP9982_RUNNING_AVG_ADDR, &tmp_reg);
-   491			if (ret)
-   492				return ret;
- > 493			*src = tmp_reg;
-   494			*val = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][0];
-   495			*val2 = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][1];
-   496			return IIO_VAL_INT_PLUS_MICRO;
-   497		case IIO_CHAN_INFO_OFFSET:
-   498			*val = MCP9982_OFFSET;
-   499			return IIO_VAL_INT;
-   500		default:
-   501			return -EINVAL;
-   502		}
-   503	}
-   504	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index 1897c8ca6209..e81e3c0d01c6 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -497,7 +497,7 @@ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
+ 	unsigned long size, off;
+ 	struct page *page;
+ 	unsigned long flags;
+-	unsigned long *area;
++	void *area;
+ 
+ 	spin_lock_irqsave(&kcov->lock, flags);
+ 	size = kcov->size * sizeof(unsigned long);
