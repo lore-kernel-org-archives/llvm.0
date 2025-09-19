@@ -1,156 +1,152 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846822222B4
-	for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 21:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2DF1BEF7E;
+	Fri, 19 Sep 2025 01:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758232469; cv=none; b=BCf0Mz5vmD0XW/yBOBiENFz9vqz+umyAU27uNIOPCZkm9IzaBLd5HHxgWAvA7m5cefBgU8AorpEqgu4z5I80zWh3NbAYdgaDnWsmzqSt6dvr+9KJV9XvzsJ6BHVW0rezBvHSVd7841yIbJu+sW/jgd+2uz01Z1DIhLxTMwl8/zk=
+	t=1758246033; cv=none; b=lTaeAL+Nc9mEo353eyt/CK70G4ypG9DekH/NXUbr62IIGLWAuaxPV9RoAkRJKAj1oFpqf5MejMRyWgtHQojRiRRnnjj5Sv6Fe8XjANRNLMVTZb2JDI7ZGs3N5uvig1cEW2lbARrSGIy4Q/D31IszsiOmXlCPfa1DJOy6bI6KyDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758232469; c=relaxed/simple;
-	bh=OBdCMGeWv7G/tkOmZiDbcUQKLH/CnWF06gVEbnVu89c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f7KAwEN1oHxthjy5DP2gsLyHFz7KzYNtWbNWShHx+fx4zPv8pO8JEx+j1yWa4Q6mGvZZLusZpJIAaxO69B0kVr/mbU3QTFWYXwYgNnrd0KjFGSN9ZuSfSSqh9s9/drU7VyckdFlNeZusRBviKsfiqwbrqQBQ37zlY2NOuK/GN+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=IT0wB6kV; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1758246033; c=relaxed/simple;
+	bh=itbhvlGa/67NE/x0tLhEoVen0fCwr+8EnXPRMpPCprc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uhm7x6xATR+hAtL4Pv2Ogu1Y4l35YgLkaUUlhxjfq49zT85fGFW3cdokN2LQql93335RGMSsIN4CWPJPLq7bK0mVjZyVK2LRVHof9g/YedFjOykTtbnZpGEbvhXJX/izQyX0kbSMQpMobUdtuXCSNX5H/Xj5o6cXKFdIBBY4NiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fkY2ZNDx; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="IT0wB6kV"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5607a240c75so1525387e87.2
-        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1758232465; x=1758837265; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mLiszfQw8YctXWgw7Rv1CzeIAYsEhv/enJDimwborHo=;
-        b=IT0wB6kVkKmmiGgtgxMqz9TSSI0Yj9g272nfdB0VEFGgwPhmbEYHI2eh+xBDzI+aET
-         qXxCtFJllPVLSaqJdznk1m79SMGrhSsLH3q3H9v5HAuw87XDQXdMWe3rP9faipEMJk0c
-         N0DeE/ETQ4QeMv2V78fAUeIaecR3EfB6F/1/s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758232465; x=1758837265;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mLiszfQw8YctXWgw7Rv1CzeIAYsEhv/enJDimwborHo=;
-        b=Ly1T65uWrlrPinwTau2IKR2M94vqXomB94m8qZksU3S2ckN3bNZtcGJWV0DgKzMZtN
-         9TubHmc2cTVfVF5ImVpOS9LiiA2dFoJyzz547BUWfQihjSIGuOG56OoiS7GSqtEI51IS
-         64iLjLKzs68PiADAa/OEF0tELXU76q0899sn6DZDks24AdBYQIfzfVwRIRjIqvWFdcuy
-         X2EHuqm/F+u8xyeAMi6yHWD0MniGpXcyw9ggMG1UJAg8wrD3lNm6NNdpQkNG6WlXSfNT
-         SXl5giK2jqTbuzz76rG5UJPWtmZWTrMKod3mCd8ajDeecGJtogfduRCP/OhcTIan+yJz
-         PwAw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0xVChiSyRr/mMeQDBunJ1qe5W9Kd2pkED7z/wA5/n6bLyd+Jc8QGWD3nvFHCUbR8OzGRs@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywu+HTWRmrzKGaC/mo2uLyoEMNKlgfdgfhsVWDSjuJcO/6eC/37
-	jJ83BFTa64qsITlaP0LGhjjM4te6W/RfOd5dEaVNrP0W11GQjayp/k/rFthNyvSr1ep9KdfYCC6
-	NF/BSTjSZ9g==
-X-Gm-Gg: ASbGncsKX0/038EfZka154oaDJolpbKlYSjkneDiaGG9ilKjX00TkSxmxAHBEt1y6BC
-	I1mcn5+cONyrdjCoEKfyt1LU6YQoM+QWDOLs+3rL62/QNdm1rd1saRgJT5Yruu7gwUAAPSPmEHm
-	HnKWli3PmMEpNzs4zDh9uCGU9f9oXbQwh7NOdssaFwIG5WOj5prscn8k5RCbXTE1HZluyE1Cph9
-	sWO5u3//5m8oS7rI0lz8G0rScW97SVMOYrxE23vc5GioZ/OpCaTE9i/rKkGnjNtleUEyMtrSQjl
-	5IrpEQmzuuqEiu3qmuMe3IE8lRo/Xot0GDjHBtGjunmnkaUrR67U/epzkiNZeHvX6X2w/EgBPG1
-	6BrQnw4pooBdBIOljM/mKttW/Z5XrCBflzJbXx+aNMNqO5TnqvQJDOeRd686OVkeCD5FhMRR+MX
-	ohQma3Gc9NlOFnhjE=
-X-Google-Smtp-Source: AGHT+IHVg7F6SnQMJG5Oqdri4hhirivZjV/3APnrA7izNys5sXyYICSIRRI5uiHaGsUsYnqd9BmxpA==
-X-Received: by 2002:a05:6512:1295:b0:55f:44b8:1ecf with SMTP id 2adb3069b0e04-579dfcc8921mr383249e87.9.1758232465340;
-        Thu, 18 Sep 2025 14:54:25 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-578a65070d2sm944464e87.37.2025.09.18.14.54.24
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 14:54:24 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55f7039aa1eso1638488e87.1
-        for <llvm@lists.linux.dev>; Thu, 18 Sep 2025 14:54:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWw/E6pp5DKfvA5ZWWeN9uoGOdG4dZxhdCuZ84SWFlCvk1A7FcSELEbnYrYFurMMyoklc/g@lists.linux.dev
-X-Received: by 2002:a17:906:dc89:b0:b0f:a22a:4c30 with SMTP id
- a640c23a62f3a-b24f5685fdemr62738866b.47.1758232077501; Thu, 18 Sep 2025
- 14:47:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fkY2ZNDx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758246032; x=1789782032;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=itbhvlGa/67NE/x0tLhEoVen0fCwr+8EnXPRMpPCprc=;
+  b=fkY2ZNDxyx5pgjoZj3NO2XqMHN83IT7Jpfq3svVAhcX1MExqVJivxWu6
+   ylNO+Pa1tmJrpI3b4WL0NNnAv2gBVE1hNRxJhQ9EHhOexVFl6XnRkGKOD
+   /7hxVgmO/CCAyRzJfHaJLwXQhi8kuEDFkwunptk8c70WX1IFdD0XM5cPq
+   8VQ+Gx97rVsaPftz6Q8I2GPwS3W+HB4prSZMPuJmSMMgSHHZAfRXz/g2z
+   OC3tje23tGNqXHDIY0VXY3aX6tWU5729MKWHy1c0KrCIedaHM+p6oBgBt
+   1WHJpaXUsTc9GsXmaK1L1Mzn6H/xaKC7KfrgPeoxNWLciYuF2BcCxYbr1
+   w==;
+X-CSE-ConnectionGUID: hGLCZCxFQ9CVpTOklPkMVg==
+X-CSE-MsgGUID: AZ7i3NbFQym6FnaJGBnqvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="64410828"
+X-IronPort-AV: E=Sophos;i="6.18,276,1751266800"; 
+   d="scan'208";a="64410828"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2025 18:40:31 -0700
+X-CSE-ConnectionGUID: 0XL0fEMrSzW+woQKr4uqsg==
+X-CSE-MsgGUID: d5JDo9e8QVGzdgMYHpuebQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,276,1751266800"; 
+   d="scan'208";a="175624749"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 18 Sep 2025 18:40:27 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzQ6r-0003t5-0z;
+	Fri, 19 Sep 2025 01:40:25 +0000
+Date: Fri, 19 Sep 2025 09:40:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kefeng Wang <wangkefeng.wang@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Muchun Song <muchun.song@linux.dev>, Zi Yan <ziy@nvidia.com>,
+	Matthew Wilcox <willy@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	sidhartha.kumar@oracle.com, jane.chu@oracle.com,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 1/8] mm: page_alloc: optimize pfn_range_valid_contig()
+Message-ID: <202509190917.wgDdVYHL-lkp@intel.com>
+References: <20250918132000.1951232-2-wangkefeng.wang@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250918140451.1289454-1-elver@google.com> <CAHk-=wgd-Wcp0GpYaQnU7S9ci+FvFmaNw1gm75mzf0ZWdNLxvw@mail.gmail.com>
- <aMx4-B_WAtX2aiKx@elver.google.com>
-In-Reply-To: <aMx4-B_WAtX2aiKx@elver.google.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 18 Sep 2025 14:47:41 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgQO7c0zc8_VwaVSzG3fEVFFcjWzVBKM4jYjv8UiD2dkg@mail.gmail.com>
-X-Gm-Features: AS18NWBxHuMwwtU-EoNbPFA3uJ1YRJkAKqdurj12n-PWNJgH6ecKwZ8QZrX3P28
-Message-ID: <CAHk-=wgQO7c0zc8_VwaVSzG3fEVFFcjWzVBKM4jYjv8UiD2dkg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
-To: Marco Elver <elver@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Christoph Hellwig <hch@lst.de>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
-	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
-	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
-	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	llvm@lists.linux.dev, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250918132000.1951232-2-wangkefeng.wang@huawei.com>
 
-On Thu, 18 Sept 2025 at 14:26, Marco Elver <elver@google.com> wrote:
->
-> Fair points. "Context Analysis" makes sense, but it makes the thing
-> (e.g. lock) used to establish that context a little awkward to refer to
-> -- see half-baked attempt at reworking the documentation below.
+Hi Kefeng,
 
-Yeah, I agree that some of that reads more than a bit oddly.
+kernel test robot noticed the following build warnings:
 
-I wonder if we could talk about "context analysis", but then when
-discussing what is *held* for a particular context, call that a
-"context token" or something like that?
+[auto build test WARNING on akpm-mm/mm-everything]
 
-But I don't mind your "Context guard" notion either. I'm not loving
-it, but it's not offensive to me either.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-page_alloc-optimize-pfn_range_valid_contig/20250918-212431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250918132000.1951232-2-wangkefeng.wang%40huawei.com
+patch subject: [PATCH v2 1/8] mm: page_alloc: optimize pfn_range_valid_contig()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250919/202509190917.wgDdVYHL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509190917.wgDdVYHL-lkp@intel.com/reproduce)
 
-Then the language would be feel fairly straightforward,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509190917.wgDdVYHL-lkp@intel.com/
 
-Eg:
+All warnings (new ones prefixed by >>):
 
-> +Context analysis is a way to specify permissibility of operations to depend on
-> +contexts being held (or not held).
+>> mm/page_alloc.c:7033:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+    7033 |                 if (folio_test_pgtable(folio) | folio_test_stack(folio))
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                               ||
+   mm/page_alloc.c:7033:7: note: cast one or both operands to int to silence this warning
+   1 warning generated.
 
-That "contexts being held" sounds odd, but talking about "context
-markers", or "context tokens" would seem natural.
 
-An alternative would be to not talk about markers / tokens / guards at
-all, but simply about a context being *active*.
+vim +7033 mm/page_alloc.c
 
-IOW, instead of wording it like this:
+  7009	
+  7010	static bool pfn_range_valid_contig(struct zone *z, unsigned long start_pfn,
+  7011					   unsigned long nr_pages)
+  7012	{
+  7013		unsigned long i, end_pfn = start_pfn + nr_pages;
+  7014		struct page *page;
+  7015		struct folio *folio;
+  7016	
+  7017		for (i = start_pfn; i < end_pfn; i++) {
+  7018			page = pfn_to_online_page(i);
+  7019			if (!page)
+  7020				return false;
+  7021	
+  7022			if (page_zone(page) != z)
+  7023				return false;
+  7024	
+  7025			folio = page_folio(page);
+  7026			if (folio_test_reserved(folio))
+  7027				return false;
+  7028	
+  7029			if (folio_test_hugetlb(folio))
+  7030				return false;
+  7031	
+  7032			/* The following type of folios aren't migrated */
+> 7033			if (folio_test_pgtable(folio) | folio_test_stack(folio))
+  7034				return false;
+  7035	
+  7036			/*
+  7037			 * For compound pages such as THP and non-compound high
+  7038			 * order buddy pages, save potentially a lot of iterations
+  7039			 * if we can skip them at once.
+  7040			 */
+  7041			if (PageCompound(page))
+  7042				i += (1UL << compound_order(page)) - 1;
+  7043			else if (PageBuddy(page))
+  7044				i += (1UL << buddy_order(page)) - 1;
+  7045		}
+  7046		return true;
+  7047	}
+  7048	
 
-> +The set of contexts that are actually held by a given thread at a given point
-> +in program execution is a run-time concept.
-
-that talks about "being held", you could just state it in the sense of
-the "set of contexts being active", and that immediately reads fairly
-naturally, doesn't it?
-
-Because a context is a *state* you are in, it's not something you hold on to.
-
-The tokens - or whatever - would be only some internal implementation
-detail of how the compiler keeps track of which state is active, not
-the conceptual idea itself.
-
-So you name states, and you have functions to mark those context
-states as being entered or exited, but you don't really even have to
-talk about "holding" anything.
-
-No?
-
-               Linus
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
