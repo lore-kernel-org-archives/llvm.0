@@ -1,294 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012018.outbound.protection.outlook.com [40.107.209.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6945F24DCEB;
-	Fri, 19 Sep 2025 14:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758292968; cv=none; b=R0clsDP5l5cfqbBl6NGgemS118oTR90Mvx48Q/kXTcsD9O/F+rnGzcpqhMRgMMjTXhRS+PWIhzOF3b/3uVpLZVvQz9+uw2B+aoZkwpZhawTcJ2DG1w8BfvHg5oxQT4nkUyZicgTqUzcLoXhpZtKG7u5RBPZjk+h3skxPs7LbujY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758292968; c=relaxed/simple;
-	bh=+/LjB8SK3DpDKa13CqktxPN9HGVmTW0yw3Yn0xjgIIg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+taCOUoXJdPceTpNhoBeqe9NmdyWx7yK9IekWp77B4XgrWJh/3eTo5txK7kHq7P3PqHzXu/Pf78evuOTN4YBCRbwC/d5Ty+l+FQXPszhihnD0WVgsbp6FiQX+myfkwyQFm/AO8evfwk8xCil4nVIjR0Ig1kUP4ZpL8FnjC8/mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HEjaz0me; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2448A30FF08;
+	Fri, 19 Sep 2025 15:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758295596; cv=fail; b=V1Fp6qVkUfXQDSSXaz6Yyeedk1gNYssdz5GV8Ry17DGbEkQV6Dmqpf3kl0QGMpd441jLvSeFzIp1pIYtby6TsUZ8DyVRdzhP9atA39uUM23urQ+Z7JWbnnADEz6ukvapqbvHGdQV10BJ4zg+k83/Y4gk025GmgFflYWqrUS3bzg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758295596; c=relaxed/simple;
+	bh=8nsgDTI3jtH2J9u5R6mzCIBwMqubXnNNevbupHLbGmU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=V4vwbokvGAQEBSog47DBQGFUgY+cy8NhUEH3I3H0xsg9v9Qdt3GKeTVbePMqXa9oD/P0d4sP1R5wrKko8p9hSDMtwRz8Beu9QhRURd0qITWZAvbgYnnmeTaaQgptSXTb1xCw4/w2uzSiKF9RKqYQASDIcaP8zHfjfqFHfCDTDac=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hEtk/CJY; arc=fail smtp.client-ip=40.107.209.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HEjaz0me"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758292966; x=1789828966;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+/LjB8SK3DpDKa13CqktxPN9HGVmTW0yw3Yn0xjgIIg=;
-  b=HEjaz0meZHZ2SRrnnuFBqqPXHzDGkqwS1pNtjuRxHaLFZD/7z5f1nHZh
-   SxKRnIFfEud4VFpuaH2ZmsL7FOX8Os5XJWGmZu7QtWJwrvt3DGrUsUN2S
-   8U8eb4CpQw/ZFkTO5hSslXtAEEeba3/CaIEY5zuPxo2fm7WDGuGGjXVaX
-   rprjPdRlQGG4EGdIzkF3bxuiwtxgfRqbFFolS4/i858MJ2JJNNNOrGSLn
-   TpgD6NNimJFypnwgLp6MhiVsHCNB1x0ma+9vsipA+hwh+0VNP+xfTuei3
-   H+sPIjTwC17eIEoI218pcCSK7h2B6ScSBdygBHL38mXyFOHXxq6e1y1BO
-   Q==;
-X-CSE-ConnectionGUID: MHffBfgCTs+5j8Jv2L5sxg==
-X-CSE-MsgGUID: lPzJtRNTQpiJuMigFS1D+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="63272150"
-X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
-   d="scan'208";a="63272150"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 07:42:45 -0700
-X-CSE-ConnectionGUID: pu1M48hpSpOskjFA3sSomQ==
-X-CSE-MsgGUID: +Uq4WyUHTIyCJza3j29dBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
-   d="scan'208";a="175103070"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 19 Sep 2025 07:42:43 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzcJs-0004N5-1p;
-	Fri, 19 Sep 2025 14:42:40 +0000
-Date: Fri, 19 Sep 2025 22:42:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ryan.Wanner@microchip.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 25/31] clk: at91: sama5d4: switch to parent_hw and
- parent_data
-Message-ID: <202509192225.r2Bnob9N-lkp@intel.com>
-References: <9fcc028fd62aa2f1a79b0d6bc4fb08c3637c1646.1758226719.git.Ryan.Wanner@microchip.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hEtk/CJY"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mnYqkCeHahRGxD8o8d6ul4NUaXYSvOtKasmWeuIX0U9E37xK066hPwbDqxSRwuPOhzMd4C7oZeXS9xhzONyAHdq6DomAiFcvUFyL/9v0EfoVfuWXznsH6iUIn+PnolSDehz3W/rcEzFjqHvrvEG88KyvUOL6pyh/h8XwWFat2YP+dS1KeXLQbL+i5kqJ1vrlOK0eGZGIuW1fNeB9mTcoiL23mbItV83vEXbzRGxwdZxetkEmbxlVlXCxYe3GvMBFP6S1a5FJFFkmUraJBYD6DbWeJDyYn1NPgcfaXPHZHmWLV/EWcidPX6NCZK62KESXUKVNHHx8l99VUI2k801U+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LaKaEc9auKokaYKlWipbRLNY65zE+0MoZ8sgc/UJwF4=;
+ b=yJxMLrxxvdx9X+PC8i74DqmWzFNIJRAxqPmhY2gsY2SqhQNCywY9FrNSOHU9ib5opfl+jtTh89+s9EF6R6Gxai/P9X3ndivtXJ9WrcvB3deFk8YaDtFH/iB5x5/L9y3wbQENvy1kr5OESD1vxm5PerroHUSxi3JZJOOja50apREneH8VSQFEBZpRsRwtVOkeR4n23jAhz66fmOP0edajE+6K7hPrmQJA6xZs1l/W6BJIf/ZdvjKHiFidCI9eU+ChBfM2I23EERaKsFSc7xY2SwqqC7chnOhtxNpzHkQRpGjfCR3efB+3NJ1pC5AAdTa+l9eaB9LIDfTKg/J3qNX5sQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LaKaEc9auKokaYKlWipbRLNY65zE+0MoZ8sgc/UJwF4=;
+ b=hEtk/CJYiv6nEe89c3BAlAn5iM5O0sRNe7RPDCz5TpHZM+2xlVrrUnEar5M+UxxQRH502ifkM7W8rwWIJ0isGD0GpWggz+dFhGkdmK8WOJrjvoPylFprrFrJZI+rikaiPjiT6joZvTkpiLdD+wkNvyJc/60tUaZxTTD7IsjO7Y+2WjfCeI4R+v0Dm4MJchgVzLCGose0GJBnLtLQ+1xLHkCkKfUa+wl036FvjphKPY83FhnY546SM4HqgZNLhgzw/5fvWVl1OXqxeS5HDK8mRBbgiWnMZECDB2OBuXsDyXux5UEV5Hx8ZuzvfoUWZMQauqptJeZ+rXYWQDcF1xzBQQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
+ by CY8PR12MB7634.namprd12.prod.outlook.com (2603:10b6:930:9d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Fri, 19 Sep
+ 2025 15:26:30 +0000
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9137.012; Fri, 19 Sep 2025
+ 15:26:29 +0000
+Date: Fri, 19 Sep 2025 12:26:27 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH v5 03/15] iommupt: Add the basic structure of the iommu
+ implementation
+Message-ID: <20250919152627.GE2132010@nvidia.com>
+References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <3-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <BN9PR11MB5276DB96BCDDFC2DB68FAE178C16A@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276DB96BCDDFC2DB68FAE178C16A@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL1PR13CA0197.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::22) To PH7PR12MB5757.namprd12.prod.outlook.com
+ (2603:10b6:510:1d0::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9fcc028fd62aa2f1a79b0d6bc4fb08c3637c1646.1758226719.git.Ryan.Wanner@microchip.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|CY8PR12MB7634:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ccda12f-9005-4a60-6bbd-08ddf790e7ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?z5DxJNiTWaPyKxox0hwuNdFVIjJBSNH4ScYQzaYEVSykD6mOujjB83sMKg4a?=
+ =?us-ascii?Q?gHEwdmyzyhtr2gJb5XJiZwyDTVaCW+4hrNPsxHnrBLqWY91l1R72SA2deQj0?=
+ =?us-ascii?Q?LOMZjm/gnLiV4ztYCDOwSA/wTO6FgtFM6GAsLNdqXsPfNMqg7Yjb9uazugxu?=
+ =?us-ascii?Q?Fb2XZUzrgJ/cY+Ie+WNibtDK8xgvxnGjOSpXxGJZ28G78M33P5zrIooTLCgR?=
+ =?us-ascii?Q?zRWmoitG3LXlqRa83Mr53jubsOKpxxBbX1OrWjk79Fvyfh0fSShJnFdPjbw9?=
+ =?us-ascii?Q?hPoHe6s1e3Z6HXBRQAyuKxv7/5sODM7aiA/LuFD7TOUXbR/Uxy+1CTlzbe5y?=
+ =?us-ascii?Q?TSQ0kEqJ7E9rw0Md+OxshsHHjDkUEI/qKg1g3eHXQ7N3yMAeyEGnOGkRHciu?=
+ =?us-ascii?Q?tdbVAhFECIJGQId333QUZIAfpFFIbFCk6o0fQSsKA3TEE3Ly8bjNXa2KTIWc?=
+ =?us-ascii?Q?ZH0/aqlYR434GrJapSGxxstnjQvoMv470fakoKgt/dLx8xpz0EvKxT9spXYS?=
+ =?us-ascii?Q?3iYW+nwwR3HcplC9zkDxWaVPk2qULpk1tv5ex0ksHvwBBUPS1AawmxJanX2m?=
+ =?us-ascii?Q?tVlPAiydQZ4evmum4W9vFCCbTofJXoFA4FZzpFG3Tu+LCsulu7wK/q/NG8z0?=
+ =?us-ascii?Q?TYIVJ2RigGO8GfLLbHwD/ZRBvmfD9dZsNDLeVY8zBPFbt0VelkYj4UVX3JW/?=
+ =?us-ascii?Q?v/M1JmQ9LYceQ5zUzTPQGR7QJnr9XzUGU4TqdNaBJE8+KCqTIF9jdv5f2CSK?=
+ =?us-ascii?Q?kXk6XON1fGE5qkOl2uvSMLbz8ZXVWZ+KzBOK33llSqSC6+8Y7N7iGOavXvrW?=
+ =?us-ascii?Q?XwMFUcY6Y2QUit84z4zCC6behSEnqNQB0v+UXb/pcT8SMUGF0SjCoSeSfv9D?=
+ =?us-ascii?Q?limeWh9jjbZCKX91P3Q5apyzwGoUwokKKt8UgZyxuKu3SdBmLEE1keISdfSi?=
+ =?us-ascii?Q?oG3MWnrS3fIbTqOwWpin8QDEJo2yrSfnc0QsesZ2JDOaj3PpJ2w9/Ry+5/u4?=
+ =?us-ascii?Q?dNxJJhMGHojpiSSjGa1BhfGpCp+FII5f0tYftXYEaNWbkcl3NzE9bs5+NcTn?=
+ =?us-ascii?Q?hKlAl9a8u+e2fZsGHcvZIRvI05jOkggqQkUOwQyYXOfrPo8Vr8IOxJ8caNtz?=
+ =?us-ascii?Q?bDWCSuKjWIiBakPkDjQrwpAC0SYHb6SsZOswyh1MKI3WOhQuzsZN9+F3exQY?=
+ =?us-ascii?Q?uS+8zGZl31TxqhsriXF+3Z8bEg2WR6rJ9S0gZJWb3s1Bp8BNW2AXEW0wmwJX?=
+ =?us-ascii?Q?cOEMhcw7m0J/300h+O8tGmtXaU7NRoWP4+8k2h0JmtxgsNmQ4MVSpiQfCzLV?=
+ =?us-ascii?Q?vsQ4ia+QZ39MTLpG0Je7k/su3Mfw+kP/2mbVBEvM94YokhWQpDQPaQ6a62Sd?=
+ =?us-ascii?Q?oJRsPbAnZi7khguySQHBwfome/anNnhUeAMolL0IjZ6y2vEFlKasx0mHmk46?=
+ =?us-ascii?Q?e0vv2lpduGs=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Rz3vSjUkiZoz4KRG5mZt1oRtVtTxkD3+2aKs6ODk3ebqIvf4WKjdLs1YrYec?=
+ =?us-ascii?Q?4FjS1gtpmmtKDfFMLWAtpu3HVLNVVze63qHHx1kt1xZWLxRXPezG+sUtYSwA?=
+ =?us-ascii?Q?scEwEv+xIWAqp9wqWkANv3+3xJSqxA9D+zOSFtLMRu+LcuplNOkkJjGkfqAJ?=
+ =?us-ascii?Q?R2hIFWXzwegdth7Jm3l9/Uz7nkM/TeLeoOQ1QghBL9Jh11A5+wVKc6TNpPR3?=
+ =?us-ascii?Q?X9TuUS/fG9lwpW0jS3bvTvR43LSC4owr3DfwSh4MmbG55S3LiQuylJUAOhYo?=
+ =?us-ascii?Q?J/+r2WR/6anX0danxq452eBv/2PzCdBWSzwMQgN/IDoXvmgY5OV+S7WuG7xx?=
+ =?us-ascii?Q?i3T1ivnRU3hPwkg8UUVoXvnZYI3Ky5wKAJ3TK/iGVusyflkN4jqbJ8q2KA4T?=
+ =?us-ascii?Q?LjqI3SvjZ5hWimfdWkb7Vu5ZsEqyJwqRDZ6+37XT1s5SeOvvEZn7L2jYujMw?=
+ =?us-ascii?Q?4MxHxowF8MWppbYlOXYmdD/AW9kk8+u9MTHfptdvC/qxanJ6/W15UJ0J/wMN?=
+ =?us-ascii?Q?nDpItsBpU3PYtaCwmlUXbUOgO3wkh6ttgOSe+6rdodDHtaMwiEDOXZ+ucxZR?=
+ =?us-ascii?Q?ugdTk6fxmls+kvREPTU5czAvqbN5m1ugy8ah1JyFMSQdJWMsdCW7QrvhaNkl?=
+ =?us-ascii?Q?xDDF4VtW+anLu7BDMf/h8/I3xayeez2bBFV7/XRjvkk5X0rYcQPZM/IOw2wy?=
+ =?us-ascii?Q?p/H2+i765RX3Bn/H7gZJGBhTPzAPlGwenpXEHW3aA6XK2tSR0f5kKBjJwhWc?=
+ =?us-ascii?Q?adr6aM9XHnEmzZcL1yJfmNUtdhRX7yDcQhyHKjElQyLwTz7yp8luCbhZ5NHm?=
+ =?us-ascii?Q?hSU9g/5DOoV4NMHlM49D3g+6zWyY2PrX0pXrrWGNGhXR9EfKXvbFV/duK+aN?=
+ =?us-ascii?Q?nqqqp2kspFF1Q78VL6eEbv9oXjugpWvuQ3iesHyTeY9MAtBlX8GqQzVzRxNX?=
+ =?us-ascii?Q?YcPHhdEa9Km1OnIFsoZgwDsKl3AkXsA0cmhJHHnd2qok2ll3/OCVEs37r7W6?=
+ =?us-ascii?Q?2Q+iNsiSpisv6jUVPWExvPq7sJcbgOF3ZFzHKeruC1eKSV3AWJ1Vq+YD9bby?=
+ =?us-ascii?Q?BJ6HwLLWdPIVWxITcpn41oGDlcbNFaG7BYkvKyGNl9L2IyQ3GxMaRU1An23V?=
+ =?us-ascii?Q?Dq8FY8gynhfRuKR6gsUnae6HYSn/19uFme3gP5ZsT5iZycmKwKsu7KqzrejR?=
+ =?us-ascii?Q?7TPBBn8MljzN56verYnGR3HqUxLDpiwWOvg+4yUYXWsQJH5/7+jmLFhmIrkl?=
+ =?us-ascii?Q?cM/+X4Ysk7qSjH/vDKJ2gofY8xYvvLuVIFtBR3G12PjAIVGcYNJqr1oka2R0?=
+ =?us-ascii?Q?n9dHRG6XMfxYzNZ6DqQzHxDPrVEoAX77+QtFcIcTR65LRBpYABL0n+EJzHMq?=
+ =?us-ascii?Q?P6wuX6jPu8q/s2RI73BA2980VrfWL+cTru9L0S3XVzqzrxpMjMHEAyyXGRSC?=
+ =?us-ascii?Q?xy7oQggfIgLybYfn+VPeiOqeH3nzQ2aK0M6xeMnR20EnVPt7aX9/q5H4n66V?=
+ =?us-ascii?Q?67/agl9CbuxVfVW328C9bIIDYcaJReiiLoieHcx04Q5kxN3smMnkngonVbhQ?=
+ =?us-ascii?Q?tnoIJTuk3/XwBDfSzusnkea6QV3PCt02QAf7ntdG?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ccda12f-9005-4a60-6bbd-08ddf790e7ff
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2025 15:26:29.8547
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Afu8VaKt/O6rpYgw1RrmJi/59Fx3ycdtWxtMQBsDIKDaZ2MbbQQI2vV4QPxBlWef
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7634
 
-Hi,
+On Thu, Sep 18, 2025 at 06:58:04AM +0000, Tian, Kevin wrote:
 
-kernel test robot noticed the following build warnings:
+> I don't quite understand the purpose of ignore_mapped here. Could you
+> mind elaborating it? the only caller always sets it now...
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on linus/master v6.17-rc6 next-20250918]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+And I'll move it to the map patch that uses it:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Wanner-microchip-com/clk-at91-pmc-add-macros-for-clk_parent_data/20250919-052314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/9fcc028fd62aa2f1a79b0d6bc4fb08c3637c1646.1758226719.git.Ryan.Wanner%40microchip.com
-patch subject: [PATCH v4 25/31] clk: at91: sama5d4: switch to parent_hw and parent_data
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20250919/202509192225.r2Bnob9N-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509192225.r2Bnob9N-lkp@intel.com/reproduce)
++       struct pt_iommu_collect_args collect = {};
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509192225.r2Bnob9N-lkp@intel.com/
+And invert the sense:
 
-All warnings (new ones prefixed by >>):
+	/* Fail if any OAs are within the range */
+	u8 check_mapped : 1;
 
->> drivers/clk/at91/sama5d4.c:177:13: warning: variable 'hw' is uninitialized when used here [-Wuninitialized]
-     177 |         if (IS_ERR(hw))
-         |                    ^~
-   drivers/clk/at91/sama5d4.c:133:41: note: initialize the variable 'hw' to silence this warning
-     133 |         struct clk_hw *smdck_hw, *usbck_hw, *hw;
-         |                                                ^
-         |                                                 = NULL
-   1 warning generated.
+Its purpose is to micro optimize deinit, we don't need to check every
+leaf table to see what is in it during deinit. 
 
+When processing map() it is not allowed to overmap something that is
+already mapped, so the extra checking is needed.
 
-vim +/hw +177 drivers/clk/at91/sama5d4.c
+Thanks,
+Jason
 
-084b696bb509d5 Alexandre Belloni 2018-10-16  128  
-084b696bb509d5 Alexandre Belloni 2018-10-16  129  static void __init sama5d4_pmc_setup(struct device_node *np)
-084b696bb509d5 Alexandre Belloni 2018-10-16  130  {
-f6ef3768385be3 Claudiu Beznea    2025-09-18  131  	struct clk_hw *main_rc_hw, *main_osc_hw, *mainck_hw;
-f6ef3768385be3 Claudiu Beznea    2025-09-18  132  	const char *slow_clk_name, *main_xtal_name;
-f6ef3768385be3 Claudiu Beznea    2025-09-18  133  	struct clk_hw *smdck_hw, *usbck_hw, *hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  134  	struct clk_range range = CLK_RANGE(0, 0);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  135  	struct clk_parent_data parent_data[5];
-084b696bb509d5 Alexandre Belloni 2018-10-16  136  	struct pmc_data *sama5d4_pmc;
-084b696bb509d5 Alexandre Belloni 2018-10-16  137  	struct regmap *regmap;
-084b696bb509d5 Alexandre Belloni 2018-10-16  138  	int i;
-084b696bb509d5 Alexandre Belloni 2018-10-16  139  	bool bypass;
-084b696bb509d5 Alexandre Belloni 2018-10-16  140  
-084b696bb509d5 Alexandre Belloni 2018-10-16  141  	i = of_property_match_string(np, "clock-names", "slow_clk");
-084b696bb509d5 Alexandre Belloni 2018-10-16  142  	if (i < 0)
-084b696bb509d5 Alexandre Belloni 2018-10-16  143  		return;
-084b696bb509d5 Alexandre Belloni 2018-10-16  144  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  145  	slow_clk_name = of_clk_get_parent_name(np, i);
-084b696bb509d5 Alexandre Belloni 2018-10-16  146  
-084b696bb509d5 Alexandre Belloni 2018-10-16  147  	i = of_property_match_string(np, "clock-names", "main_xtal");
-084b696bb509d5 Alexandre Belloni 2018-10-16  148  	if (i < 0)
-084b696bb509d5 Alexandre Belloni 2018-10-16  149  		return;
-f6ef3768385be3 Claudiu Beznea    2025-09-18  150  	main_xtal_name = of_clk_get_parent_name(np, i);
-084b696bb509d5 Alexandre Belloni 2018-10-16  151  
-6956eb33abb5de Alexandre Belloni 2019-11-28  152  	regmap = device_node_to_regmap(np);
-084b696bb509d5 Alexandre Belloni 2018-10-16  153  	if (IS_ERR(regmap))
-084b696bb509d5 Alexandre Belloni 2018-10-16  154  		return;
-084b696bb509d5 Alexandre Belloni 2018-10-16  155  
-03a1ee1dad0e39 Michał Mirosław   2020-05-05  156  	sama5d4_pmc = pmc_data_allocate(PMC_PLLACK + 1,
-084b696bb509d5 Alexandre Belloni 2018-10-16  157  					nck(sama5d4_systemck),
-99767cd4406fd6 Michał Mirosław   2020-05-05  158  					nck(sama5d4_periph32ck), 0, 3);
-084b696bb509d5 Alexandre Belloni 2018-10-16  159  	if (!sama5d4_pmc)
-084b696bb509d5 Alexandre Belloni 2018-10-16  160  		return;
-084b696bb509d5 Alexandre Belloni 2018-10-16  161  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  162  	main_rc_hw = at91_clk_register_main_rc_osc(regmap, "main_rc_osc", 12000000,
-084b696bb509d5 Alexandre Belloni 2018-10-16  163  						   100000000);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  164  	if (IS_ERR(main_rc_hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  165  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  166  
-084b696bb509d5 Alexandre Belloni 2018-10-16  167  	bypass = of_property_read_bool(np, "atmel,osc-bypass");
-084b696bb509d5 Alexandre Belloni 2018-10-16  168  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  169  	main_osc_hw = at91_clk_register_main_osc(regmap, "main_osc", NULL,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  170  						 &AT91_CLK_PD_NAME(main_xtal_name), bypass);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  171  	if (IS_ERR(main_osc_hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  172  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  173  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  174  	parent_data[0] = AT91_CLK_PD_HW(main_rc_hw);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  175  	parent_data[1] = AT91_CLK_PD_HW(main_osc_hw);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  176  	mainck_hw = at91_clk_register_sam9x5_main(regmap, "mainck", NULL, parent_data, 2);
-084b696bb509d5 Alexandre Belloni 2018-10-16 @177  	if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  178  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  179  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  180  	hw = at91_clk_register_pll(regmap, "pllack", NULL, &AT91_CLK_PD_HW(mainck_hw), 0,
-084b696bb509d5 Alexandre Belloni 2018-10-16  181  				   &sama5d3_pll_layout, &plla_characteristics);
-084b696bb509d5 Alexandre Belloni 2018-10-16  182  	if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  183  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  184  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  185  	hw = at91_clk_register_plldiv(regmap, "plladivck", NULL, &AT91_CLK_PD_HW(hw));
-084b696bb509d5 Alexandre Belloni 2018-10-16  186  	if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  187  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  188  
-03a1ee1dad0e39 Michał Mirosław   2020-05-05  189  	sama5d4_pmc->chws[PMC_PLLACK] = hw;
-03a1ee1dad0e39 Michał Mirosław   2020-05-05  190  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  191  	hw = at91_clk_register_utmi(regmap, NULL, "utmick", NULL, &AT91_CLK_PD_HW(mainck_hw));
-084b696bb509d5 Alexandre Belloni 2018-10-16  192  	if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  193  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  194  
-084b696bb509d5 Alexandre Belloni 2018-10-16  195  	sama5d4_pmc->chws[PMC_UTMI] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  196  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  197  	parent_data[0] = AT91_CLK_PD_NAME(slow_clk_name);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  198  	parent_data[1] = AT91_CLK_PD_HW(mainck_hw);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  199  	parent_data[2] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_PLLACK]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  200  	parent_data[3] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_UTMI]);
-7a110b9107ed8f Claudiu Beznea    2020-11-19  201  	hw = at91_clk_register_master_pres(regmap, "masterck_pres", 4,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  202  					   NULL, parent_data,
-7a110b9107ed8f Claudiu Beznea    2020-11-19  203  					   &at91sam9x5_master_layout,
-8e842f02af7e2f Claudiu Beznea    2022-02-03  204  					   &mck_characteristics, &mck_lock);
-7a110b9107ed8f Claudiu Beznea    2020-11-19  205  	if (IS_ERR(hw))
-7a110b9107ed8f Claudiu Beznea    2020-11-19  206  		goto err_free;
-7a110b9107ed8f Claudiu Beznea    2020-11-19  207  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  208  	hw = at91_clk_register_master_div(regmap, "masterck_div", NULL, &AT91_CLK_PD_HW(hw),
-084b696bb509d5 Alexandre Belloni 2018-10-16  209  					  &at91sam9x5_master_layout,
-7a110b9107ed8f Claudiu Beznea    2020-11-19  210  					  &mck_characteristics, &mck_lock,
-7029db09b2025f Claudiu Beznea    2021-10-11  211  					  CLK_SET_RATE_GATE, 0);
-084b696bb509d5 Alexandre Belloni 2018-10-16  212  	if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  213  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  214  
-084b696bb509d5 Alexandre Belloni 2018-10-16  215  	sama5d4_pmc->chws[PMC_MCK] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  216  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  217  	hw = at91_clk_register_h32mx(regmap, "h32mxck", NULL,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  218  				     &AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_MCK]));
-084b696bb509d5 Alexandre Belloni 2018-10-16  219  	if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  220  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  221  
-084b696bb509d5 Alexandre Belloni 2018-10-16  222  	sama5d4_pmc->chws[PMC_MCK2] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  223  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  224  	parent_data[0] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_PLLACK]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  225  	parent_data[1] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_UTMI]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  226  	usbck_hw = at91sam9x5_clk_register_usb(regmap, "usbck", NULL, parent_data, 2);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  227  	if (IS_ERR(usbck_hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  228  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  229  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  230  	parent_data[0] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_PLLACK]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  231  	parent_data[1] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_UTMI]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  232  	smdck_hw = at91sam9x5_clk_register_smd(regmap, "smdclk", NULL, parent_data, 2);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  233  	if (IS_ERR(smdck_hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  234  		goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  235  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  236  	parent_data[0] = AT91_CLK_PD_NAME(slow_clk_name);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  237  	parent_data[1] = AT91_CLK_PD_HW(mainck_hw);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  238  	parent_data[2] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_PLLACK]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  239  	parent_data[3] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_UTMI]);
-f6ef3768385be3 Claudiu Beznea    2025-09-18  240  	parent_data[4] = AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_MCK]);
-084b696bb509d5 Alexandre Belloni 2018-10-16  241  	for (i = 0; i < 3; i++) {
-084b696bb509d5 Alexandre Belloni 2018-10-16  242  		char name[6];
-084b696bb509d5 Alexandre Belloni 2018-10-16  243  
-084b696bb509d5 Alexandre Belloni 2018-10-16  244  		snprintf(name, sizeof(name), "prog%d", i);
-084b696bb509d5 Alexandre Belloni 2018-10-16  245  
-084b696bb509d5 Alexandre Belloni 2018-10-16  246  		hw = at91_clk_register_programmable(regmap, name,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  247  						    NULL, parent_data, 5, i,
-c57aaaa28cf1a1 Claudiu Beznea    2020-07-22  248  						    &at91sam9x5_programmable_layout,
-c57aaaa28cf1a1 Claudiu Beznea    2020-07-22  249  						    NULL);
-084b696bb509d5 Alexandre Belloni 2018-10-16  250  		if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  251  			goto err_free;
-99767cd4406fd6 Michał Mirosław   2020-05-05  252  
-99767cd4406fd6 Michał Mirosław   2020-05-05  253  		sama5d4_pmc->pchws[i] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  254  	}
-084b696bb509d5 Alexandre Belloni 2018-10-16  255  
-f6ef3768385be3 Claudiu Beznea    2025-09-18  256  	/* Set systemck parent hws. */
-f6ef3768385be3 Claudiu Beznea    2025-09-18  257  	sama5d4_systemck[0].parent_hw = sama5d4_pmc->chws[PMC_MCK];
-f6ef3768385be3 Claudiu Beznea    2025-09-18  258  	sama5d4_systemck[1].parent_hw = sama5d4_pmc->chws[PMC_MCK];
-f6ef3768385be3 Claudiu Beznea    2025-09-18  259  	sama5d4_systemck[2].parent_hw = smdck_hw;
-f6ef3768385be3 Claudiu Beznea    2025-09-18  260  	sama5d4_systemck[3].parent_hw = usbck_hw;
-f6ef3768385be3 Claudiu Beznea    2025-09-18  261  	sama5d4_systemck[4].parent_hw = usbck_hw;
-f6ef3768385be3 Claudiu Beznea    2025-09-18  262  	sama5d4_systemck[5].parent_hw = sama5d4_pmc->pchws[0];
-f6ef3768385be3 Claudiu Beznea    2025-09-18  263  	sama5d4_systemck[6].parent_hw = sama5d4_pmc->pchws[1];
-f6ef3768385be3 Claudiu Beznea    2025-09-18  264  	sama5d4_systemck[7].parent_hw = sama5d4_pmc->pchws[2];
-084b696bb509d5 Alexandre Belloni 2018-10-16  265  	for (i = 0; i < ARRAY_SIZE(sama5d4_systemck); i++) {
-f6ef3768385be3 Claudiu Beznea    2025-09-18  266  		hw = at91_clk_register_system(regmap, sama5d4_systemck[i].n, NULL,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  267  					      &AT91_CLK_PD_HW(sama5d4_systemck[i].parent_hw),
-68b3b6f1773d2d Claudiu Beznea    2022-12-08  268  					      sama5d4_systemck[i].id,
-68b3b6f1773d2d Claudiu Beznea    2022-12-08  269  					      sama5d4_systemck[i].flags);
-084b696bb509d5 Alexandre Belloni 2018-10-16  270  		if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  271  			goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  272  
-084b696bb509d5 Alexandre Belloni 2018-10-16  273  		sama5d4_pmc->shws[sama5d4_systemck[i].id] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  274  	}
-084b696bb509d5 Alexandre Belloni 2018-10-16  275  
-084b696bb509d5 Alexandre Belloni 2018-10-16  276  	for (i = 0; i < ARRAY_SIZE(sama5d4_periphck); i++) {
-084b696bb509d5 Alexandre Belloni 2018-10-16  277  		hw = at91_clk_register_sam9x5_peripheral(regmap, &pmc_pcr_lock,
-cb4f4949b1c76f Alexandre Belloni 2019-04-02  278  							 &sama5d4_pcr_layout,
-084b696bb509d5 Alexandre Belloni 2018-10-16  279  							 sama5d4_periphck[i].n,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  280  							 NULL,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  281  							 &AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_MCK]),
-084b696bb509d5 Alexandre Belloni 2018-10-16  282  							 sama5d4_periphck[i].id,
-68b3b6f1773d2d Claudiu Beznea    2022-12-08  283  							 &range, INT_MIN,
-68b3b6f1773d2d Claudiu Beznea    2022-12-08  284  							 sama5d4_periphck[i].flags);
-084b696bb509d5 Alexandre Belloni 2018-10-16  285  		if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  286  			goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  287  
-084b696bb509d5 Alexandre Belloni 2018-10-16  288  		sama5d4_pmc->phws[sama5d4_periphck[i].id] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  289  	}
-084b696bb509d5 Alexandre Belloni 2018-10-16  290  
-084b696bb509d5 Alexandre Belloni 2018-10-16  291  	for (i = 0; i < ARRAY_SIZE(sama5d4_periph32ck); i++) {
-084b696bb509d5 Alexandre Belloni 2018-10-16  292  		hw = at91_clk_register_sam9x5_peripheral(regmap, &pmc_pcr_lock,
-cb4f4949b1c76f Alexandre Belloni 2019-04-02  293  							 &sama5d4_pcr_layout,
-084b696bb509d5 Alexandre Belloni 2018-10-16  294  							 sama5d4_periph32ck[i].n,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  295  							 NULL,
-f6ef3768385be3 Claudiu Beznea    2025-09-18  296  							 &AT91_CLK_PD_HW(sama5d4_pmc->chws[PMC_MCK2]),
-084b696bb509d5 Alexandre Belloni 2018-10-16  297  							 sama5d4_periph32ck[i].id,
-68b3b6f1773d2d Claudiu Beznea    2022-12-08  298  							 &range, INT_MIN, 0);
-084b696bb509d5 Alexandre Belloni 2018-10-16  299  		if (IS_ERR(hw))
-084b696bb509d5 Alexandre Belloni 2018-10-16  300  			goto err_free;
-084b696bb509d5 Alexandre Belloni 2018-10-16  301  
-084b696bb509d5 Alexandre Belloni 2018-10-16  302  		sama5d4_pmc->phws[sama5d4_periph32ck[i].id] = hw;
-084b696bb509d5 Alexandre Belloni 2018-10-16  303  	}
-084b696bb509d5 Alexandre Belloni 2018-10-16  304  
-084b696bb509d5 Alexandre Belloni 2018-10-16  305  	of_clk_add_hw_provider(np, of_clk_hw_pmc_get, sama5d4_pmc);
-084b696bb509d5 Alexandre Belloni 2018-10-16  306  
-084b696bb509d5 Alexandre Belloni 2018-10-16  307  	return;
-084b696bb509d5 Alexandre Belloni 2018-10-16  308  
-084b696bb509d5 Alexandre Belloni 2018-10-16  309  err_free:
-7425f246f725e5 Michał Mirosław   2020-05-05  310  	kfree(sama5d4_pmc);
-084b696bb509d5 Alexandre Belloni 2018-10-16  311  }
-428d97e18594bc Tudor Ambarus     2021-02-03  312  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
