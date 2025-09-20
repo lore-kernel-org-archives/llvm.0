@@ -1,97 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AABD1D416E;
-	Sat, 20 Sep 2025 10:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13711DDC5;
+	Sat, 20 Sep 2025 10:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758363165; cv=none; b=MymITQW6IrU2/Xl0CYkO5D3uYFkhkRe0HN7f/gNYdjwr15wLGk6mMYnzNBhSXFP8VL+LZJ4W0TGoxEK20U/r0FN80lBfy9h0qruaR4UTKGpuG8YVNKAr98Z99M20ApQ7T1PJ4bHsBfJ1iEfpPiejzJBT5dhFXjENl2cX+pXXu8E=
+	t=1758363743; cv=none; b=tzlBmA/3JiZ8PNfn3O7+7UsLAAQ88BNfyub091Aqq1YvRF+1Z3FQXwCtNnvjzjRdwvwHpUcBSRs/naVHIEgYcOCDMO8zV9XxPBEeWFuEnrQ6cChu6RFvPMZQFeA/oJRPGlLpurLXPP/PrXHFSnkmJxHbu5aj263hPltc8xs0ANU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758363165; c=relaxed/simple;
-	bh=Slq1OqfREod0qUrep6lG9Ifqsr+62JezuU5BDmOdsn8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HA+NHIyJCCQWvMV2/7A3EzZx14q2PFV54Tg8Ab17qmfrtUTHKbwGwk3YrMNrXECa84v1JjjDKcjbv7xnWMLnwqdiuIoHbv7lLgfGPQCA0mUwbE5cTv9mZCdi+/a5+NEItEJiP1W3Tri+I4vOkBv5gfiA7FTw5YJWVv4O5c1tnmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n3EtkvD7; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n3EtkvD7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758363163; x=1789899163;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Slq1OqfREod0qUrep6lG9Ifqsr+62JezuU5BDmOdsn8=;
-  b=n3EtkvD7Wib8PxC56vKPBbKVelSFiArLsnMhHrRcE9xhVng2c/LeYsR1
-   /ygqLEqvvpfvLEMD4G2HuhIK9+2LlfX7NmVeFJK5GI0B1hwbwgoukLn54
-   t3NE5uaaaxZWJhK+XHJTru5QijJTqaqly9XR0F80MHn3EkllpfjurQf+N
-   b6VRTzp/CgBAypx96AWfBlrBoaLly//P5cW7ucHPANYeed7BRsyHRTYHR
-   nec8os0i6fX2nzQFxKeL5dHNasZM5ELZSHgSyC7E8QEASYjCindy4AWjP
-   ZqXf+kVywYCT38M/qI9zobL+yJbw8LURIt3zkUdhZgdgj33ZsItPVITC3
-   g==;
-X-CSE-ConnectionGUID: Oc7v8gdYTuuvnkbJHBo2AQ==
-X-CSE-MsgGUID: C1uWPVOtShafHsFqQEPmAg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11558"; a="78302671"
-X-IronPort-AV: E=Sophos;i="6.18,280,1751266800"; 
-   d="scan'208";a="78302671"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 03:12:42 -0700
-X-CSE-ConnectionGUID: tpr3mw+QQiGpiwEbeOLiVw==
-X-CSE-MsgGUID: ylcvbokjRJixLAq+XdFAdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,280,1751266800"; 
-   d="scan'208";a="199760583"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Sep 2025 03:12:41 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzua7-0005Df-1J;
-	Sat, 20 Sep 2025 10:12:39 +0000
-Date: Sat, 20 Sep 2025 18:12:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miklos Szeredi <mszeredi@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] namei: fix revalidate vs. rename race
-Message-ID: <202509201712.p8sGr76y-lkp@intel.com>
-References: <20250919081843.522786-1-mszeredi@redhat.com>
+	s=arc-20240116; t=1758363743; c=relaxed/simple;
+	bh=AMr0dm6XYmM343FpYxFM70WEL37BjWwZQn2RFC6QeBM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FOlPvjDdgLQ6dzjCTEpS/IrPCYX/gAntZeZTDumUi6F/9rQoZG6h6vCsv3UHrCJ5B0dH4rtLgU7o7t5D2E4BewkIE/NQHgwzxvGjfqKZOqW2hnmTL4PkafecJHC7UkyUYAKfOQmHqxRGnQSgKnkMF7uEt5fmJb0XvfWxCtA7I/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [117.22.84.112])
+	by gateway (Coremail) with SMTP id _____8Dx_tJWgM5oeYoMAA--.27002S3;
+	Sat, 20 Sep 2025 18:22:14 +0800 (CST)
+Received: from [192.168.0.111] (unknown [117.22.84.112])
+	by front1 (Coremail) with SMTP id qMiowJCxH8JSgM5oE0+hAA--.1490S3;
+	Sat, 20 Sep 2025 18:22:10 +0800 (CST)
+Message-ID: <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
+Date: Sat, 20 Sep 2025 18:22:11 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250919081843.522786-1-mszeredi@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
+Content-Language: en-US
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, WANG Rui <wangrui@loongson.cn>,
+ rust-for-linux@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
+ <20250909092707.3127-2-yangtiezhu@loongson.cn>
+ <20250920061536.GA1460394@ax162>
+ <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
+ <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
+In-Reply-To: <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxH8JSgM5oE0+hAA--.1490S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxKw1fXrW7uF1fWw4rWr43twc_yoW7Xr1Dpw
+	s7CFyDKrWrJr4ktr9rtw45XFy5tr4Dtw1xXF1UtF18AFsFvr1Yqr18Xr1qgFykJws7JrWI
+	qryrGFy7ZF4UAwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUU
+	U
 
-Hi Miklos,
+On 9/20/25 17:19, Tiezhu Yang wrote:
+> On 9/20/25 16:23, Huacai Chen wrote:
+>> On Sat, Sep 20, 2025 at 2:15 PM Nathan Chancellor <nathan@kernel.org> 
+>> wrote:
+>>>
+>>> Hi Tiezhu,
+>>>
+>>> On Tue, Sep 09, 2025 at 05:27:06PM +0800, Tiezhu Yang wrote:
+>>>> LTO is not only used for Clang, it maybe used for Rust, make LTO 
+>>>> case out
+>>>> of CONFIG_CC_HAS_ANNOTATE_TABLEJUMP in Makefile.
+>>>>
+>>>> This is preparation for later patch, no function changes.
+>>>>
+>>>> Suggested-by: WANG Rui <wangrui@loongson.cn>
+>>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>>> ---
+>>>>   arch/loongarch/Makefile | 10 +++++-----
+>>>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>>>> index a3a9759414f4..9d80af7f75c8 100644
+>>>> --- a/arch/loongarch/Makefile
+>>>> +++ b/arch/loongarch/Makefile
+>>>> @@ -102,16 +102,16 @@ KBUILD_CFLAGS                   += $(call 
+>>>> cc-option,-mthin-add-sub) $(call cc-option,-Wa$(comma)
+>>>>
+>>>>   ifdef CONFIG_OBJTOOL
+>>>>   ifdef CONFIG_CC_HAS_ANNOTATE_TABLEJUMP
+>>>> +KBUILD_CFLAGS                        += -mannotate-tablejump
+>>>> +else
+>>>> +KBUILD_CFLAGS                        += -fno-jump-tables # keep 
+>>>> compatibility with older compilers
+>>>> +endif
+>>>> +ifdef CONFIG_LTO_CLANG
+>>>>   # The annotate-tablejump option can not be passed to LLVM backend 
+>>>> when LTO is enabled.
+>>>>   # Ensure it is aware of linker with LTO, 
+>>>> '--loongarch-annotate-tablejump' also needs to
+>>>>   # be passed via '-mllvm' to ld.lld.
+>>>> -KBUILD_CFLAGS                        += -mannotate-tablejump
+>>>> -ifdef CONFIG_LTO_CLANG
+>>>>   KBUILD_LDFLAGS                       += -mllvm 
+>>>> --loongarch-annotate-tablejump
+>>>>   endif
+>>>> -else
+>>>> -KBUILD_CFLAGS                        += -fno-jump-tables # keep 
+>>>> compatibility with older compilers
+>>>> -endif
+>>>>   endif
+>>>>
+>>>>   KBUILD_RUSTFLAGS             += 
+>>>> --target=loongarch64-unknown-none-softfloat -Ccode-model=small
+>>>> -- 
+>>>> 2.42.0
+>>>>
+>>>
+>>> This change is now in -next as commit b15212824a01 ("LoongArch: Make LTO
+>>> case independent in Makefile"), where it breaks the build for clang-18,
+>>> as '--loongarch-annotate-tablejump' is unimplemented there but there is
+>>> no version check before using it.
+>>>
+>>>    $ make -skj"$(nproc)" ARCH=loongarch LLVM=1 mrproper defconfig
+>>>
+>>>    $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
+>>>
+>>>    $ make -skj"$(nproc)" ARCH=loongarch LLVM=1 olddefconfig vmlinuz.efi
+>>>    ld.lld: error: -mllvm: ld.lld: Unknown command line argument 
+>>> '--loongarch-annotate-tablejump'.
+>>>    ...
+>>>
+>>>    $ scripts/config -s CC_HAS_ANNOTATE_TABLEJUMP
+>>>    undef
+>> Hmm, maybe we need this?
+>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>> index ae419e32f22e..fcfa793f9bb0 100644
+>> --- a/arch/loongarch/Makefile
+>> +++ b/arch/loongarch/Makefile
+>> @@ -115,7 +115,7 @@ ifdef CONFIG_LTO_CLANG
+>>   # The annotate-tablejump option can not be passed to LLVM backend
+>> when LTO is enabled.
+>>   # Ensure it is aware of linker with LTO,
+>> '--loongarch-annotate-tablejump' also needs to
+>>   # be passed via '-mllvm' to ld.lld.
+>> -KBUILD_LDFLAGS                 += -mllvm
+>> --loongarch-annotate-tablejump
+>> +KBUILD_LDFLAGS                 += $(call ld-option,-mllvm
+>> --loongarch-annotate-tablejump)
+>>   endif
+>>   endif
+> 
+> We need to handle the other case to use -fno-jump-tables if llvm does
+> not support -loongarch-annotate-tablejump.
+> 
+> So, it is better to update the minimal version of llvm to 20, which
+> includes the following two important commits:
+> 
+> [LoongArch] Add options for annotate tablejump
+> https://github.com/llvm/llvm-project/commit/4c2c17756739
+> 
+> [LoongArch] Avoid indirect branch jumps using the ra register
+> https://github.com/llvm/llvm-project/commit/21ef17c62645
+> 
+> If you are OK, I will send a patch to modify the following file:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/min-tool-version.sh#n29 
+> 
+> 
+> and keep arch/loongarch/Makefile as is.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+The other way is to keep scripts/min-tool-version.sh as is, and only
+modify arch/loongarch/Makefile, something like this (not tested):
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on viro-vfs/for-next linus/master v6.17-rc6 next-20250919]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+config LLD_HAS_ANNOTATE_TABLEJUMP
+	def_bool LLD_VERSION >= 200000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Miklos-Szeredi/namei-fix-revalidate-vs-rename-race/20250919-162113
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250919081843.522786-1-mszeredi%40redhat.com
-patch subject: [RFC PATCH] namei: fix revalidate vs. rename race
-config: x86_64-buildonly-randconfig-003-20250920 (https://download.01.org/0day-ci/archive/20250920/202509201712.p8sGr76y-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509201712.p8sGr76y-lkp@intel.com/reproduce)
+ifdef CONFIG_LTO_CLANG
+ifdef CONFIG_LLD_HAS_ANNOTATE_TABLEJUMP
+KBUILD_LDFLAGS			+= -mllvm --loongarch-annotate-tablejump
+else
+KBUILD_LDFLAGS			+= -mllvm --no-jump-tables
+endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509201712.p8sGr76y-lkp@intel.com/
+Update the minimal llvm version or change Makefile to compat various
+llvm versions, which one do you prefer? Pease let me know.
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Tiezhu
 
->> Warning: fs/dcache.c:2403 function parameter 'seq' not described in '__d_lookup'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
