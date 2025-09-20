@@ -1,147 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6B2262A6;
-	Sat, 20 Sep 2025 01:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A39B1D63FB
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 02:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758332338; cv=none; b=nvbN2w7vGQ9+XLUTUvRPBK5y4b0+2Y2SRELmxllND8AX2ZB2/sxHkEw6rjuqZT7/CGqrleUIZtQ9gmc/LYhsS2RZEbeAXyVHpFk+7X8s4OAI4J8MVyuNGWkmKgjFKKdRNhqKEK5VN5oqrv0BE3LJECp8W+AjCB91m+yptmuPmI8=
+	t=1758336141; cv=none; b=iyXimATy3KTsAFcCCRyZOw9+FUaAwSK93GufSezTjwEZ7cXefeQZ8+2VcPwjvLMkFtEzx/55MIZfAdzTCAbwQfFvzudmedPjeKg786pcEVIRTau64DXBEBuzXXZG0RC/LfHXnb8kLJxILW6ux7x1Wm1EflAYrUq1oKNubf9RMRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758332338; c=relaxed/simple;
-	bh=0eoP9lTL22QFCpaEYjyGQCU7y0cT4seEWfVHb9AzdOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TCHJrG8Cnsn/KkuKcD67021df9Nj709U1M3FGNT22cezAcMAEqwjZiCJ57Bd9Xt6p7A7YVsNgwFSAUJI0wTexX776bWWKaoW02LZEj3/4DjloSgKULlWlx3HAdYuoKAcKt4sWneSl4IzjkANjV7pfzt9U4wFHXnzLZC+zHNA8NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nlf1J4xe; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758336141; c=relaxed/simple;
+	bh=vK+L/lUeVJgT3ZGJepR1rQlrtgTMHhuHmo1wD8+AE/A=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CSdtnbl50LC8836KOa4iqZiqGMoK9eYCibdiaMZrH3K53ckmTOHDBhsggkGiNH6HBmVx9IwaJl0lrFS4KlcPhGokzvsKyUdCTzhYNUuhNHqFbZtUHxN7PTsdOU7R/pWOuuHl14GtHkgZTAp4EsMqIMN7wBn0VMlZpUQFzd5lFCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bIAv3Fgi; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nlf1J4xe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758332335; x=1789868335;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0eoP9lTL22QFCpaEYjyGQCU7y0cT4seEWfVHb9AzdOA=;
-  b=Nlf1J4xeRlb/W6n97Vb4bo+JYZVDjhKmSkEn6ZTQaIho8AR1f5oZKV+6
-   C6q9gpkHD2aESRRAWkSDoyC1Kd+juXdjxSC+BOODUTdZ7fcKPyT9/383R
-   obf2proEKrIXfPWMHtLi5cjwGGprFGT9P77OWIr6e95rQ+jFVuVKY3hex
-   l4hAlUeVwLr+cpZ+HJKXkjtJKqKVLC/IpPiQjjUes37PJEk0xO6A/fXj/
-   5LiyhbczHjbyFhGyISgSIOxtD9xG5zxA2OiZ381sbjnUlGaKwF8T0CSrA
-   8RDJ4hkLZCSnNd/i+Gmb9tFTUk/IF81wHFf8wPCCd6UoPAWz/3Va2zVe0
-   A==;
-X-CSE-ConnectionGUID: 0nze9yEmQC2WvNDM53Ikkg==
-X-CSE-MsgGUID: y4lZNt77QxateJ5RpozHZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11558"; a="71307998"
-X-IronPort-AV: E=Sophos;i="6.18,279,1751266800"; 
-   d="scan'208";a="71307998"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 18:38:54 -0700
-X-CSE-ConnectionGUID: Y0wSdOavQbaKY4+4NaI7lg==
-X-CSE-MsgGUID: DszBOhVeToWnoMFFhqnguA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,279,1751266800"; 
-   d="scan'208";a="206918438"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Sep 2025 18:38:52 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzmYs-0004wt-05;
-	Sat, 20 Sep 2025 01:38:50 +0000
-Date: Sat, 20 Sep 2025 09:38:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: doubled <doubled@leap-io-kernel.com>,
-	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: leapraid: Add new scsi driver
-Message-ID: <202509200958.X8eUlp0N-lkp@intel.com>
-References: <20250919100032.3931476-1-doubled@leap-io-kernel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bIAv3Fgi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758336138;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bOIHpTYuIMxuTihN1j4WVwjMrQGsGQEe/PaIG9h9FKI=;
+	b=bIAv3Fgih5bRanQizP2mr8BAPbhau6iIuOYiv9sCJDYXbj40u9U1JXHpW2THpV4wnxhdBH
+	kNeSQMeRGX8WR8rz76HsQ78DAwbkvK0FLyk2dTtSm4bddmDtuvSg1HyWc2N3y49NKkaPk3
+	ZUUI9CqNTMiJUB5OF/tCwtb++QNAeQs=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-569-gsqapJ1fPhy6jWukb6m2lg-1; Fri,
+ 19 Sep 2025 22:42:16 -0400
+X-MC-Unique: gsqapJ1fPhy6jWukb6m2lg-1
+X-Mimecast-MFC-AGG-ID: gsqapJ1fPhy6jWukb6m2lg_1758336135
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5B7DE195608F
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 02:42:15 +0000 (UTC)
+Received: from [172.20.26.51] (unknown [10.30.44.116])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D3B161955F21;
+	Sat, 20 Sep 2025 02:42:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc6,
+ upstream-mainline, e8442d5b)
+Date: Sat, 20 Sep 2025 02:42:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250919100032.3931476-1-doubled@leap-io-kernel.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <32225.125091922421600347@us-mta-569.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: iFXTkJsiEnXIqqHfPfRCFRAnVs-JldMVD9tWw1YqyeY_1758336135
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi doubled,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master v6.17-rc6 next-20250919]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/doubled/scsi-leapraid-Add-new-scsi-driver/20250919-202535
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20250919100032.3931476-1-doubled%40leap-io-kernel.com
-patch subject: [PATCH] scsi: leapraid: Add new scsi driver
-config: i386-randconfig-002-20250920 (https://download.01.org/0day-ci/archive/20250920/202509200958.X8eUlp0N-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509200958.X8eUlp0N-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'sound-6.17-rc7' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/tiwai/sound
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509200958.X8eUlp0N-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2050408354
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
->> drivers/scsi/leapraid/leapraid_func.c:7478:6: warning: variable 'adapter_state' set but not used [-Wunused-but-set-variable]
-    7478 |         u32 adapter_state;
-         |             ^
-   drivers/scsi/leapraid/leapraid_func.c:93:1: warning: unused function 'leapraid_writeq' [-Wunused-function]
-      93 | leapraid_writeq(__u64 info, void __iomem *addr,
-         | ^~~~~~~~~~~~~~~
-   2 warnings generated.
---
->> Warning: drivers/scsi/leapraid/leapraid_app.c:112 struct member 'r0' not described in 'leapraid_ioctl_adapter_info'
->> Warning: drivers/scsi/leapraid/leapraid_app.c:112 struct member 'r1' not described in 'leapraid_ioctl_adapter_info'
->> Warning: drivers/scsi/leapraid/leapraid_app.c:112 struct member 'r2' not described in 'leapraid_ioctl_adapter_info'
 
 
-vim +/adapter_state +7478 drivers/scsi/leapraid/leapraid_func.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  7473	
-  7474	static int
-  7475	leapraid_adapter_unit_reset(
-  7476		struct leapraid_adapter *adapter)
-  7477	{
-> 7478		u32 adapter_state;
-  7479		unsigned long flags;
-  7480		int rc = 0;
-  7481	
-  7482		if (!(adapter->adapter_attr.features.adapter_caps &
-  7483			 LEAPRAID_ADAPTER_FEATURES_CAP_EVENT_REPLAY))
-  7484			return -EFAULT;
-  7485	
-  7486		dev_info(&adapter->pdev->dev, "fire unit reset\n");
-  7487		writel(LEAPRAID_FUNC_ADAPTER_UNIT_RESET << LEAPRAID_DB_FUNC_SHIFT,
-  7488			 &adapter->iomem_base->db);
-  7489		if (leapraid_db_wait_ack_and_clear_int(adapter))
-  7490			rc = -EFAULT;
-  7491	
-  7492		adapter_state = leapraid_get_adapter_state(adapter);
-  7493		spin_lock_irqsave(&adapter->reset_desc.adapter_reset_lock,
-  7494			 flags);
-  7495		spin_unlock_irqrestore(&adapter->reset_desc.adapter_reset_lock,
-  7496			 flags);
-  7497	
-  7498		if (!leapraid_wait_adapter_ready(adapter)) {
-  7499			rc = -EFAULT;
-  7500			goto out;
-  7501		}
-  7502	out:
-  7503		dev_info(&adapter->pdev->dev, "unit reset: %s\n",
-  7504			 ((rc == 0) ? "SUCCESS" : "FAILED"));
-  7505		return rc;
-  7506	}
-  7507	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
