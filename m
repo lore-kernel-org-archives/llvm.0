@@ -1,129 +1,134 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40DA6FC3;
-	Sat, 20 Sep 2025 12:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682B122A7E6;
+	Sat, 20 Sep 2025 14:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758372854; cv=none; b=kqLkgnwXl7SNLTgG9q+w0pg2tqsiV+gUP1I25JaUliUp6/2KFeTDVD4znPvcraeJtGdj/V0ZCsbganbzUNjQudM6g/zZnhqujHzmruyJswDJghGM7JhU0UKeN2TPUV+pHoUPBjGEYt+bdaSwiP04QdDLZoeiV7XyiPgUCllqTo4=
+	t=1758379331; cv=none; b=oLP70aMh9HN7ZoXZvMeOZ5LH9duzzDOaM/Y/0XfqGqvHZgQPdrxeewfgyUgTnIHOo6DsNYtXCy4shtUDNPeXW0PgU0VzncX0382kzOmfqHq5JOahKfhTUP1u+12r5Pwv+HjmlGOTTGcW9Bt3DzBlNnbR0FvYK5viGWzvlCg4xyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758372854; c=relaxed/simple;
-	bh=XFWF31OaEaIu/EFDwQs+yCVJV+x8UGU0em54WwiiiUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mQspVpoNpY5q33kzmx/vkZuIQ7M4jtuO3GIonqYJjjRPpompb7lmENhloP2VlCAfHbIMg4Hqa7incfMEeRTsWKb8X6EOu608CHGvgU9c7EMufqw+QbITpEbQfi9OhRC6rLbmYs1Y/sihxiOvhrtyvGY82nCQO/Z2UEx/4+l/oe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [117.22.84.112])
-	by gateway (Coremail) with SMTP id _____8Cx77+no85o3Y8MAA--.25612S3;
-	Sat, 20 Sep 2025 20:52:56 +0800 (CST)
-Received: from [192.168.0.111] (unknown [117.22.84.112])
-	by front1 (Coremail) with SMTP id qMiowJCxG8Geo85o6IOhAA--.19002S3;
-	Sat, 20 Sep 2025 20:52:51 +0800 (CST)
-Message-ID: <750c907d-cc95-5116-4507-52dd48927cec@loongson.cn>
-Date: Sat, 20 Sep 2025 20:52:47 +0800
+	s=arc-20240116; t=1758379331; c=relaxed/simple;
+	bh=8ESeYby+VBnGxoL4sKU6AzMNuckA9rBZYz1Tl2yfc9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=L8wwzDF41Vh53V32KQ/2TWfvNcggCwz2xxgcOAtkdumn6hpu5Ziez9XuZ54LXnqyZsKIkzQjuzWIqZf4mJNOw7UCj3VBMh+NI65RKxhGINphdie+FKSMbFbshCezUoPRdNvDIG5mQFoZz5pyHEKYtWL2BNOvh/ryI1b3VTfPrAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TTLnSCxM; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TTLnSCxM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758379330; x=1789915330;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8ESeYby+VBnGxoL4sKU6AzMNuckA9rBZYz1Tl2yfc9U=;
+  b=TTLnSCxM84vn0/65jAmAefENm3MqBtw8as1BhaF1W2VW8vPu4SMMvBrd
+   4U8g9rheW/FI8TDk01aYHrbpFZiO0uBM/Z+ZjKn3GRcirv0LYVjy+aqT7
+   CPjiyA86tysxl8oaftxjG8KUibnenfU+VURPFl9dVhInK9A/Ki+SIADMr
+   DpzYaqSYOZuyP014nKS0fsGsTRdqZVa+SUqaoVzkK0cStXIDft5U0Ec0w
+   Cr9FYedTX4jJ1zlK/fgTI58dTTxympKN+DgdIS4aip52z4jPPUp6CyxQF
+   o4pwcKKxRIAIxR9JcCyLyvDzU+zvn697t7WX6de6/s9QAzHb5BvlGpjMw
+   w==;
+X-CSE-ConnectionGUID: h9F+l9dhSUqi8IRJjX5F5A==
+X-CSE-MsgGUID: whWPWh+ISrS4bEIIfpy1tw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="60645901"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="60645901"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 07:42:10 -0700
+X-CSE-ConnectionGUID: oLTEyd53SQGIys1VP2VHIA==
+X-CSE-MsgGUID: 8S919d3NRSSML7Z5SxHNpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,281,1751266800"; 
+   d="scan'208";a="206832999"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 20 Sep 2025 07:42:08 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzymq-0005O7-15;
+	Sat, 20 Sep 2025 14:42:04 +0000
+Date: Sat, 20 Sep 2025 22:41:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+	netdev@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [mst-vhost:vhost 41/44] drivers/vdpa/pds/vdpa_dev.c:590:19: error:
+ incompatible function pointer types initializing 's64 (*)(struct vdpa_device
+ *, u16)' (aka 'long long (*)(struct vdpa_device *, unsigned short)') with an
+ expression of type 'u32 (struct vdpa_device *, u16)' (aka ...
+Message-ID: <202509202256.zVt4MifB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
-Content-Language: en-US
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- WANG Rui <wangrui@loongson.cn>, rust-for-linux@vger.kernel.org,
- loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
- <20250909092707.3127-2-yangtiezhu@loongson.cn>
- <20250920061536.GA1460394@ax162>
- <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
- <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
- <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
- <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-In-Reply-To: <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowJCxG8Geo85o6IOhAA--.19002S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ur1xurWDAF1UZr15Zr17CFX_yoW8tr4rpF
-	WkCFykKrs5Jr4kt3sFya18KF45Krs3Ar12q3W5Jr1kZF1qvrZaqw4fGr98WasrAr9rtrW2
-	vFyrKw17WF4UJagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
-	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
-	vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU8VwZ7UUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 9/20/25 19:41, Huacai Chen wrote:
-...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git vhost
+head:   877102ca14b3ee9b5343d71f6420f036baf8a9fc
+commit: 2951c77700c3944ecd991ede7ee77e31f47f24ab [41/44] vduse: add vq group support
+config: loongarch-randconfig-001-20250920 (https://download.01.org/0day-ci/archive/20250920/202509202256.zVt4MifB-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509202256.zVt4MifB-lkp@intel.com/reproduce)
 
->>> We need to handle the other case to use -fno-jump-tables if llvm does
->>> not support -loongarch-annotate-tablejump.
->>>
->>> So, it is better to update the minimal version of llvm to 20, which
->>> includes the following two important commits:
->>>
->>> [LoongArch] Add options for annotate tablejump
->>> https://github.com/llvm/llvm-project/commit/4c2c17756739
->>>
->>> [LoongArch] Avoid indirect branch jumps using the ra register
->>> https://github.com/llvm/llvm-project/commit/21ef17c62645
->>>
->>> If you are OK, I will send a patch to modify the following file:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/min-tool-version.sh#n29
->>>
->>>
->>> and keep arch/loongarch/Makefile as is.
->>
->> The other way is to keep scripts/min-tool-version.sh as is, and only
->> modify arch/loongarch/Makefile, something like this (not tested):
->>
->> config LLD_HAS_ANNOTATE_TABLEJUMP
->>          def_bool LLD_VERSION >= 200000
->>
->> ifdef CONFIG_LTO_CLANG
->> ifdef CONFIG_LLD_HAS_ANNOTATE_TABLEJUMP
->> KBUILD_LDFLAGS                  += -mllvm --loongarch-annotate-tablejump
->> else
->> KBUILD_LDFLAGS                  += -mllvm --no-jump-tables
->> endif
-> So complicated?
-> 
-> I think below is enough, no?
-> ifdef CONFIG_LTO_CLANG
-> # The annotate-tablejump option can not be passed to LLVM backend when
-> LTO is enabled.
-> # Ensure it is aware of linker with LTO,
-> '--loongarch-annotate-tablejump' also needs to
-> # be passed via '-mllvm' to ld.lld.
-> KBUILD_LDFLAGS                  += $(call ld-option,-mllvm
-> --loongarch-annotate-tablejump,-mllvm --no-jump-tables)
-> endif
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509202256.zVt4MifB-lkp@intel.com/
 
-I do not know whether this is valid, you can test it with llvm 18
-and llvm 20 if you think it is a proper way.
+All errors (new ones prefixed by >>):
 
-But IIRC, there is objtool warning with llvm 18, I reported to llvm
-developer Wang Lei and he fixed it as the following commit:
+>> drivers/vdpa/pds/vdpa_dev.c:590:19: error: incompatible function pointer types initializing 's64 (*)(struct vdpa_device *, u16)' (aka 'long long (*)(struct vdpa_device *, unsigned short)') with an expression of type 'u32 (struct vdpa_device *, u16)' (aka 'unsigned int (struct vdpa_device *, unsigned short)') [-Wincompatible-function-pointer-types]
+     590 |         .get_vq_group           = pds_vdpa_get_vq_group,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-[LoongArch] Avoid indirect branch jumps using the ra register
-https://github.com/llvm/llvm-project/commit/21ef17c62645
 
-Actually, the above commit solved a performance issue of llvm compiler,
-so I prefer to update the minimal llvm version to 20 for LoongArch.
+vim +590 drivers/vdpa/pds/vdpa_dev.c
 
-Thanks,
-Tiezhu
+151cc834f3ddafe Shannon Nelson 2023-05-19  577  
+151cc834f3ddafe Shannon Nelson 2023-05-19  578  static const struct vdpa_config_ops pds_vdpa_ops = {
+151cc834f3ddafe Shannon Nelson 2023-05-19  579  	.set_vq_address		= pds_vdpa_set_vq_address,
+151cc834f3ddafe Shannon Nelson 2023-05-19  580  	.set_vq_num		= pds_vdpa_set_vq_num,
+151cc834f3ddafe Shannon Nelson 2023-05-19  581  	.kick_vq		= pds_vdpa_kick_vq,
+151cc834f3ddafe Shannon Nelson 2023-05-19  582  	.set_vq_cb		= pds_vdpa_set_vq_cb,
+151cc834f3ddafe Shannon Nelson 2023-05-19  583  	.set_vq_ready		= pds_vdpa_set_vq_ready,
+151cc834f3ddafe Shannon Nelson 2023-05-19  584  	.get_vq_ready		= pds_vdpa_get_vq_ready,
+151cc834f3ddafe Shannon Nelson 2023-05-19  585  	.set_vq_state		= pds_vdpa_set_vq_state,
+151cc834f3ddafe Shannon Nelson 2023-05-19  586  	.get_vq_state		= pds_vdpa_get_vq_state,
+151cc834f3ddafe Shannon Nelson 2023-05-19  587  	.get_vq_notification	= pds_vdpa_get_vq_notification,
+151cc834f3ddafe Shannon Nelson 2023-05-19  588  	.get_vq_irq		= pds_vdpa_get_vq_irq,
+151cc834f3ddafe Shannon Nelson 2023-05-19  589  	.get_vq_align		= pds_vdpa_get_vq_align,
+151cc834f3ddafe Shannon Nelson 2023-05-19 @590  	.get_vq_group		= pds_vdpa_get_vq_group,
+151cc834f3ddafe Shannon Nelson 2023-05-19  591  
+151cc834f3ddafe Shannon Nelson 2023-05-19  592  	.get_device_features	= pds_vdpa_get_device_features,
+151cc834f3ddafe Shannon Nelson 2023-05-19  593  	.set_driver_features	= pds_vdpa_set_driver_features,
+151cc834f3ddafe Shannon Nelson 2023-05-19  594  	.get_driver_features	= pds_vdpa_get_driver_features,
+151cc834f3ddafe Shannon Nelson 2023-05-19  595  	.set_config_cb		= pds_vdpa_set_config_cb,
+151cc834f3ddafe Shannon Nelson 2023-05-19  596  	.get_vq_num_max		= pds_vdpa_get_vq_num_max,
+151cc834f3ddafe Shannon Nelson 2023-05-19  597  	.get_device_id		= pds_vdpa_get_device_id,
+151cc834f3ddafe Shannon Nelson 2023-05-19  598  	.get_vendor_id		= pds_vdpa_get_vendor_id,
+151cc834f3ddafe Shannon Nelson 2023-05-19  599  	.get_status		= pds_vdpa_get_status,
+151cc834f3ddafe Shannon Nelson 2023-05-19  600  	.set_status		= pds_vdpa_set_status,
+151cc834f3ddafe Shannon Nelson 2023-05-19  601  	.reset			= pds_vdpa_reset,
+151cc834f3ddafe Shannon Nelson 2023-05-19  602  	.get_config_size	= pds_vdpa_get_config_size,
+151cc834f3ddafe Shannon Nelson 2023-05-19  603  	.get_config		= pds_vdpa_get_config,
+151cc834f3ddafe Shannon Nelson 2023-05-19  604  	.set_config		= pds_vdpa_set_config,
+151cc834f3ddafe Shannon Nelson 2023-05-19  605  };
+25d1270b6e9ea89 Shannon Nelson 2023-05-19  606  static struct virtio_device_id pds_vdpa_id_table[] = {
+25d1270b6e9ea89 Shannon Nelson 2023-05-19  607  	{VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID},
+25d1270b6e9ea89 Shannon Nelson 2023-05-19  608  	{0},
+25d1270b6e9ea89 Shannon Nelson 2023-05-19  609  };
+25d1270b6e9ea89 Shannon Nelson 2023-05-19  610  
 
+:::::: The code at line 590 was first introduced by commit
+:::::: 151cc834f3ddafec869269fe48036460d920d08a pds_vdpa: add support for vdpa and vdpamgmt interfaces
+
+:::::: TO: Shannon Nelson <shannon.nelson@amd.com>
+:::::: CC: Michael S. Tsirkin <mst@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
