@@ -1,144 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699382629D
-	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 06:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1812D2F872;
+	Sat, 20 Sep 2025 06:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758348197; cv=none; b=W0P0cdx0qi2uP9/0Tq5lwdo41D959oW6ceU9edCm/YMlZrqpmDIJuQzM5BX1L2/oU+8SARdObCUWOHtnYVvqQLEWbKQA7HTK8b9vAHA6RP0upQtqOoRn6h8m+dqZkS4mnzHmpqU1b1V+D56391HZW0/ENiaDta9ZtQF7WEHfdfg=
+	t=1758348942; cv=none; b=rQ6/wx7iGejXNSjG46O+xba2HR0xAr7NYzymFoZqrzDnakKuv5UGqNZPlYumS6QvByID6GqIn2DTeHYYkQOg5Vgc42ov63hDQF4l0qsJ/2xH0V23XTR0FL14lq44p+yp641bLI0vMQgDmJsErEIdg8OZRWn79P1cdN/uTIsmyYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758348197; c=relaxed/simple;
-	bh=jYJC1HqWHhC59kyafmZmLm82y0TDGz+SM36dY1kEI/k=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XYfqpuoBkp2gVnpa9df4cWCTedHd4SIy8L/PDd+WKjSYaA+ANIV3Lh+rilhl0M+9TUcDTp9RCI4k3CQPjyRTyNg4IjabOewmw6JhrNY78KxNw19JSW0eQP2y+8lfbU7VKBOL/RTsPbcTGSCHDOcpYGKMZ8oxQGcLek+8rjyUO9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B42I9KF6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758348942; c=relaxed/simple;
+	bh=ztsE8IAVQOOAW1FSbXZvhh4tzVJWmEepEQOu4J5iAbs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XkbeFqIZFPcQ24rBORaSGeW4h8oHljmJrL3f/fjonURFnuEOQGiLiX8iuFewAw+y4GJGFmjPH+Rf8pQJKBcacEGuXdcRKfLCxGKwq0DXcka4Z1beEHd/xvMwAy4YWHHhz4/KmaMYnQextyEvDuI/XvyMJXCUT8xNB7AtDcDyR68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tyBcnN11; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B42I9KF6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758348194;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3fRwqGk/v6/sv59/6gBSSIR+Ib1GpRdJCRD46VWbP3M=;
-	b=B42I9KF6tDvZ06wiBXpqQtG8nzIr0yeZD2Lv97gUhXpoe1MCl4t18pFw8O1pUPWAIujwVr
-	q7mL/EicP+tO+C2Ax+aXiZIUCiR+afLvEsTmQMavTf1vNsxdbRReZQpf/uf/kGSSBAVTCO
-	AxHoCL19Id8wm/XqT2EhMwXuaQsQYxA=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-663-uM2uhspIMZO1y8DqBwhiPg-1; Sat,
- 20 Sep 2025 02:03:12 -0400
-X-MC-Unique: uM2uhspIMZO1y8DqBwhiPg-1
-X-Mimecast-MFC-AGG-ID: uM2uhspIMZO1y8DqBwhiPg_1758348192
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA2361956089
-	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 06:03:11 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DD4C818004A3;
-	Sat, 20 Sep 2025 06:03:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc6,
- upstream-mainline, 1522b530)
-Date: Sat, 20 Sep 2025 06:03:10 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tyBcnN11"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB01C4CEEB;
+	Sat, 20 Sep 2025 06:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758348941;
+	bh=ztsE8IAVQOOAW1FSbXZvhh4tzVJWmEepEQOu4J5iAbs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tyBcnN114pbec9dW9rWOF2xu2MiqweDbYS1MkVGnjmDUmY6XfGweniU3o1s7MDNh7
+	 5o2cUgdl0lugdCw8SXtiVEuGdk9/O+I4zj4jYG36aWX+nqAkBYX2mFmhV0lqvcoG9X
+	 lXgKc6tLwmMkLE/ItmEHTff/bef+dPDcih2Uk/W3nn3S10OrBZQsnDpfoHRe0q+ZdI
+	 RIWzcb5rS0RBaIkQuAoct2TTRAKQrvzg3Y9TFDCP/OwGyHUL9r/Fi/ELTo9JmBDc/5
+	 UCOkds7ukw0aEA+crddDNAvPhuthcGCPntzEucC29UIieXzY3X/T8ufNEcGvN0tmTT
+	 RjW50vvCv5iUw==
+Date: Fri, 19 Sep 2025 23:15:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	WANG Rui <wangrui@loongson.cn>, rust-for-linux@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
+Message-ID: <20250920061536.GA1460394@ax162>
+References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
+ <20250909092707.3127-2-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <76645.125092002031200980@us-mta-663.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: bqT2S_LJmKSCcd1c2RnU36To8xGFmhM7e4XFa9utr7Y_1758348192
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250909092707.3127-2-yangtiezhu@loongson.cn>
 
-Hi, we tested your kernel and here are the results:
+Hi Tiezhu,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Tue, Sep 09, 2025 at 05:27:06PM +0800, Tiezhu Yang wrote:
+> LTO is not only used for Clang, it maybe used for Rust, make LTO case out
+> of CONFIG_CC_HAS_ANNOTATE_TABLEJUMP in Makefile.
+> 
+> This is preparation for later patch, no function changes.
+> 
+> Suggested-by: WANG Rui <wangrui@loongson.cn>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/loongarch/Makefile | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index a3a9759414f4..9d80af7f75c8 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -102,16 +102,16 @@ KBUILD_CFLAGS			+= $(call cc-option,-mthin-add-sub) $(call cc-option,-Wa$(comma)
+>  
+>  ifdef CONFIG_OBJTOOL
+>  ifdef CONFIG_CC_HAS_ANNOTATE_TABLEJUMP
+> +KBUILD_CFLAGS			+= -mannotate-tablejump
+> +else
+> +KBUILD_CFLAGS			+= -fno-jump-tables # keep compatibility with older compilers
+> +endif
+> +ifdef CONFIG_LTO_CLANG
+>  # The annotate-tablejump option can not be passed to LLVM backend when LTO is enabled.
+>  # Ensure it is aware of linker with LTO, '--loongarch-annotate-tablejump' also needs to
+>  # be passed via '-mllvm' to ld.lld.
+> -KBUILD_CFLAGS			+= -mannotate-tablejump
+> -ifdef CONFIG_LTO_CLANG
+>  KBUILD_LDFLAGS			+= -mllvm --loongarch-annotate-tablejump
+>  endif
+> -else
+> -KBUILD_CFLAGS			+= -fno-jump-tables # keep compatibility with older compilers
+> -endif
+>  endif
+>  
+>  KBUILD_RUSTFLAGS		+= --target=loongarch64-unknown-none-softfloat -Ccode-model=small
+> -- 
+> 2.42.0
+> 
 
+This change is now in -next as commit b15212824a01 ("LoongArch: Make LTO
+case independent in Makefile"), where it breaks the build for clang-18,
+as '--loongarch-annotate-tablejump' is unimplemented there but there is
+no version check before using it.
 
-Kernel information:
-    Commit message: Merge tag 'block-6.17-20250918' of git://git.kernel.dk/=
-linux
+  $ make -skj"$(nproc)" ARCH=loongarch LLVM=1 mrproper defconfig
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2050804307
+  $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2050804307_x86_64_kernel-debug_kcidb_tool_19615762_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2050804307_x86_64_kernel-debug_kcidb_tool_19615762_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+  $ make -skj"$(nproc)" ARCH=loongarch LLVM=1 olddefconfig vmlinuz.efi
+  ld.lld: error: -mllvm: ld.lld: Unknown command line argument '--loongarch-annotate-tablejump'.
+  ...
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+  $ scripts/config -s CC_HAS_ANNOTATE_TABLEJUMP
+  undef
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
