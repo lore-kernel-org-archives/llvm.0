@@ -1,144 +1,129 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AC31D5CD4
-	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 12:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40DA6FC3;
+	Sat, 20 Sep 2025 12:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758372332; cv=none; b=JrZIErhdgZ2uyg4IB0eCUGChJiD8PJQ/wkAEQR0XBfRmKZP4sl5D4VlVrIb5od8ymQua8tA7DIzcHvJQLX9yElreusbwB5CVKoRfKmYcFGmo54r/2mBWAoT9cMNrIb26DciD5NkQPy2PfRT6AVp+wG5hhixlVKndOmtYivtelV4=
+	t=1758372854; cv=none; b=kqLkgnwXl7SNLTgG9q+w0pg2tqsiV+gUP1I25JaUliUp6/2KFeTDVD4znPvcraeJtGdj/V0ZCsbganbzUNjQudM6g/zZnhqujHzmruyJswDJghGM7JhU0UKeN2TPUV+pHoUPBjGEYt+bdaSwiP04QdDLZoeiV7XyiPgUCllqTo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758372332; c=relaxed/simple;
-	bh=B2pdUGVo1hxX37az6KU5TDG01liBl6FvTa355/7VdK4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u3cukmuDEuI4lAQl8jj21xsFjAH7F9ajL3pBt1IXW/IBitlSriemNMSB/8i5/6WasiyBdezYhsPT9eii6cHw8PQFowQhAXP8Js2DK5cFF4S63CQGQ5zWscEyq5SfoBLpskQsI2Yk6Sp6sVuPVi4T6xGNVJJVodgQsRdDaZcrlUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CFkC38EZ; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CFkC38EZ"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2681660d604so27805785ad.0
-        for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 05:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758372329; x=1758977129; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P2Xt5dxImFQDNB+zIOSzEq8xo9rsZmb+jmetH2dJjzs=;
-        b=CFkC38EZwsApJh/Zs5VML72tIxgOti/KSkDL3UfU8WmDXgYbIFCCkRjt4ydwY5pE+B
-         3mm2WgJkE90YFpTFXPhUSkQrpm2+1WtCWlEMuEYgYBpItNp5vpTXWGMM5Hsf/FvsCav5
-         y7rSFtAHVylv1nsyt/m0OXcPTvhLuHrPUDy2DuXOvSOMitBIe1o9k5Hl6gDFPDsMx8bl
-         3JYBTbrBujhWUndzqkKFj/F8RaTQ8NR2Nf7ePytQYUSgwmNkvu43girMyjNYp7+6MOqY
-         Udb/W5xVbZ4l3dU3T2X35BAM6DVZG3tmXDwhHsZHES6hvoV+JJ6AxWjthbuHPvi+4GRb
-         NdRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758372329; x=1758977129;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P2Xt5dxImFQDNB+zIOSzEq8xo9rsZmb+jmetH2dJjzs=;
-        b=Nmno2JulpdmaH/PYerLH5TzDe1tcDKL/JqXao3Z2+F8KdmdOP7R56VYCPbwt7fGXKe
-         ECOcEFNqn4RGyhorjhiAUh5yPhyD9gLl0ZdZ+iCW99iIBMR+cQcHyy3OW6RQ2HzwyxmH
-         t9hkRuQwf3u9OPkGAdN0CCsFzk9Fj8x7XWZa5yJUcyLEzFcV7vWjhrhUE0rDRn9fZyyJ
-         7sOn8aSFG7TF7glh7bqGcvVKs69z4Y93NpWo2udKXiMllAehxHZmVgFhp7LJ7x2yBMZM
-         b2o6oHzGBYiu0JWuR5YrQNwlpVMB/Sjmjq4AkICop+9xRP4w/+SsS5Y7D9UgIA6ORYVA
-         dWZg==
-X-Forwarded-Encrypted: i=1; AJvYcCXDCUy57TimX4My3iufRmKQ1YW1fwd+eGoTb/EfpNnvyknyb/Kr+GYeXJ41VzyUfUye6wZD@lists.linux.dev
-X-Gm-Message-State: AOJu0YxyWSS0r5mcOsffRDOaIlt7Ln7vGgkFSaSySTAb2GaUOyU/nG5m
-	LHJeHY6f00DnaiDeCkDjaLbQYYBUC/Ge7S1WjIeEjcwpmZbQ84QYilqUc6zJGgf3QHubbC6cvgV
-	Q3O+XhU4cQxuf2/pkwZ0pQDgJaqwYgrg+qZup1nQZ
-X-Gm-Gg: ASbGncsOxOgnhi+EqnDOAJ7x0wSK18LjRmkvtOMmMlzuXPpiPYuLGuz/ngazHjcYKtP
-	xmlBGPRVbeRy8Pqo+i88zHj1/+3Oo/qhy/AfztmVao1gjA2YyUQZKcGRMbqKjtNMhaiE5RHAXQp
-	6jkDHFA0drG8Z1otf8XCRnKr4hWckEIQjZRUEdzqMt8kQfQXuTnIEDxHs6Z+GHwwu+0xADi9Th2
-	Fsd0H8cMQZpOOJOZn+W2v74rgxmU/b+L5ha8yPdos16Smhk
-X-Google-Smtp-Source: AGHT+IGp/N/ayplQqKKBxnGs6WOfyKUH/iITNGJNC3m56lH0ddprjnIe5eKw57ece8B9TDbj2UEYyt+VdKNzNYtu5ro=
-X-Received: by 2002:a17:902:ccc9:b0:267:b2fc:8a2 with SMTP id
- d9443c01a7336-269ba46f141mr83309515ad.23.1758372328847; Sat, 20 Sep 2025
- 05:45:28 -0700 (PDT)
+	s=arc-20240116; t=1758372854; c=relaxed/simple;
+	bh=XFWF31OaEaIu/EFDwQs+yCVJV+x8UGU0em54WwiiiUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mQspVpoNpY5q33kzmx/vkZuIQ7M4jtuO3GIonqYJjjRPpompb7lmENhloP2VlCAfHbIMg4Hqa7incfMEeRTsWKb8X6EOu608CHGvgU9c7EMufqw+QbITpEbQfi9OhRC6rLbmYs1Y/sihxiOvhrtyvGY82nCQO/Z2UEx/4+l/oe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [117.22.84.112])
+	by gateway (Coremail) with SMTP id _____8Cx77+no85o3Y8MAA--.25612S3;
+	Sat, 20 Sep 2025 20:52:56 +0800 (CST)
+Received: from [192.168.0.111] (unknown [117.22.84.112])
+	by front1 (Coremail) with SMTP id qMiowJCxG8Geo85o6IOhAA--.19002S3;
+	Sat, 20 Sep 2025 20:52:51 +0800 (CST)
+Message-ID: <750c907d-cc95-5116-4507-52dd48927cec@loongson.cn>
+Date: Sat, 20 Sep 2025 20:52:47 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250918140451.1289454-1-elver@google.com> <20250918141511.GA30263@lst.de>
- <20250918174555.GA3366400@ax162> <20250919140803.GA23745@lst.de> <CANpmjNO2b_3Q56kFLN3fAwxj0=pQo0K4CjwMJ9_gHj4c3bVVsg@mail.gmail.com>
-In-Reply-To: <CANpmjNO2b_3Q56kFLN3fAwxj0=pQo0K4CjwMJ9_gHj4c3bVVsg@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Sat, 20 Sep 2025 14:44:52 +0200
-X-Gm-Features: AS18NWBli1y9TeOySCtz0PRORw8H0Rr8apw4LW7wblD60qoNXqS9BvtJEM0Stlo
-Message-ID: <CANpmjNNkRQmt1Ea-EsSOVcA94kPqH_WntdT-NGnTjRocT25tFA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
-To: Christoph Hellwig <hch@lst.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
-	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
-	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
-	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	llvm@lists.linux.dev, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
+Content-Language: en-US
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ WANG Rui <wangrui@loongson.cn>, rust-for-linux@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
+ <20250909092707.3127-2-yangtiezhu@loongson.cn>
+ <20250920061536.GA1460394@ax162>
+ <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
+ <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
+ <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
+ <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJCxG8Geo85o6IOhAA--.19002S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ur1xurWDAF1UZr15Zr17CFX_yoW8tr4rpF
+	WkCFykKrs5Jr4kt3sFya18KF45Krs3Ar12q3W5Jr1kZF1qvrZaqw4fGr98WasrAr9rtrW2
+	vFyrKw17WF4UJagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU8VwZ7UUUUU==
 
-On Sat, 20 Sept 2025 at 12:23, Marco Elver <elver@google.com> wrote:
->
-> On Fri, 19 Sept 2025 at 16:08, Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > On Thu, Sep 18, 2025 at 10:45:55AM -0700, Nathan Chancellor wrote:
-> > > On Thu, Sep 18, 2025 at 04:15:11PM +0200, Christoph Hellwig wrote:
-> > > > On Thu, Sep 18, 2025 at 03:59:11PM +0200, Marco Elver wrote:
-> > > > > A Clang version that supports `-Wthread-safety-pointer` and the new
-> > > > > alias-analysis of capability pointers is required (from this version
-> > > > > onwards):
-> > > > >
-> > > > >   https://github.com/llvm/llvm-project/commit/b4c98fcbe1504841203e610c351a3227f36c92a4 [3]
-> > > >
-> > > > There's no chance to make say x86 pre-built binaries for that available?
-> > >
-> > > I can use my existing kernel.org LLVM [1] build infrastructure to
-> > > generate prebuilt x86 binaries. Just give me a bit to build and upload
-> > > them. You may not be the only developer or maintainer who may want to
-> > > play with this.
-> >
-> > That did work, thanks.
-> >
-> > I started to play around with that.  For the nvme code adding the
-> > annotations was very simply, and I also started adding trivial
-> > __guarded_by which instantly found issues.
-> >
-> > For XFS it was a lot more work and I still see tons of compiler
-> > warnings, which I'm not entirely sure how to address.  Right now I
-> > see three major classes:
-> >
-> > 1) locks held over loop iterations like:
-> >
-> > fs/xfs/xfs_extent_busy.c:573:26: warning: expecting spinlock 'xfs_group_hold(busyp->group)..xg_busy_extents->eb_lock' to be held at start of each loop [-Wthread-safety-analysis]
-> >   573 |                 struct xfs_group        *xg = xfs_group_hold(busyp->group);
-> >       |                                               ^
-> > fs/xfs/xfs_extent_busy.c:577:3: note: spinlock acquired here
-> >   577 |                 spin_lock(&eb->eb_lock);
-> >       |                 ^
-> >
-> > This is perfectly find code and needs some annotations, but I can't find
-> > any good example.
->
-> This is an interesting one, and might be a bug in the alias analysis I
-> recently implemented in Clang. I'll try to figure out a fix.
+On 9/20/25 19:41, Huacai Chen wrote:
+...
 
-This fixes the problem: https://github.com/llvm/llvm-project/pull/159921
+>>> We need to handle the other case to use -fno-jump-tables if llvm does
+>>> not support -loongarch-annotate-tablejump.
+>>>
+>>> So, it is better to update the minimal version of llvm to 20, which
+>>> includes the following two important commits:
+>>>
+>>> [LoongArch] Add options for annotate tablejump
+>>> https://github.com/llvm/llvm-project/commit/4c2c17756739
+>>>
+>>> [LoongArch] Avoid indirect branch jumps using the ra register
+>>> https://github.com/llvm/llvm-project/commit/21ef17c62645
+>>>
+>>> If you are OK, I will send a patch to modify the following file:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/min-tool-version.sh#n29
+>>>
+>>>
+>>> and keep arch/loongarch/Makefile as is.
+>>
+>> The other way is to keep scripts/min-tool-version.sh as is, and only
+>> modify arch/loongarch/Makefile, something like this (not tested):
+>>
+>> config LLD_HAS_ANNOTATE_TABLEJUMP
+>>          def_bool LLD_VERSION >= 200000
+>>
+>> ifdef CONFIG_LTO_CLANG
+>> ifdef CONFIG_LLD_HAS_ANNOTATE_TABLEJUMP
+>> KBUILD_LDFLAGS                  += -mllvm --loongarch-annotate-tablejump
+>> else
+>> KBUILD_LDFLAGS                  += -mllvm --no-jump-tables
+>> endif
+> So complicated?
+> 
+> I think below is enough, no?
+> ifdef CONFIG_LTO_CLANG
+> # The annotate-tablejump option can not be passed to LLVM backend when
+> LTO is enabled.
+> # Ensure it is aware of linker with LTO,
+> '--loongarch-annotate-tablejump' also needs to
+> # be passed via '-mllvm' to ld.lld.
+> KBUILD_LDFLAGS                  += $(call ld-option,-mllvm
+> --loongarch-annotate-tablejump,-mllvm --no-jump-tables)
+> endif
 
-I guess I have to update the base Clang commit hash for v4 again. :-)
+I do not know whether this is valid, you can test it with llvm 18
+and llvm 20 if you think it is a proper way.
 
-And thanks for testing!
+But IIRC, there is objtool warning with llvm 18, I reported to llvm
+developer Wang Lei and he fixed it as the following commit:
+
+[LoongArch] Avoid indirect branch jumps using the ra register
+https://github.com/llvm/llvm-project/commit/21ef17c62645
+
+Actually, the above commit solved a performance issue of llvm compiler,
+so I prefer to update the minimal llvm version to 20 for LoongArch.
+
+Thanks,
+Tiezhu
+
