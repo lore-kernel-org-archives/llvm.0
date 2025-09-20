@@ -1,144 +1,144 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C327E1FC104
-	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 12:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AC31D5CD4
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 12:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758370339; cv=none; b=ZUff7FRTfRCzK45e/qdwC1QPxmgh7XnauTbbcVfURkV2bldSrSBTRD/UW2rmdKxbPOzh3nByBRgHyzh2fUDeF3yp3EDDo1ZDhopLDAoC0k0HU5nYalQ9oQYjvswcHLYFcaVEgSSGzZfqwA5hoiJyVksVgAKn5zsk04ohVobCjsw=
+	t=1758372332; cv=none; b=JrZIErhdgZ2uyg4IB0eCUGChJiD8PJQ/wkAEQR0XBfRmKZP4sl5D4VlVrIb5od8ymQua8tA7DIzcHvJQLX9yElreusbwB5CVKoRfKmYcFGmo54r/2mBWAoT9cMNrIb26DciD5NkQPy2PfRT6AVp+wG5hhixlVKndOmtYivtelV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758370339; c=relaxed/simple;
-	bh=MIKMu94FJajJmoJeLHQYm7fIoEaATqC7hlAuRTDyYQE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QeauVQzoSjJwF5Dj+Vr6q6KZXS6AUQeBQofMBg4rXnJRJyzobAq8rQtqDfvACkZ1mMCt98RZnyIVsRSX+qzzFEaf+7PVqT5vyWiFpM8nPXV5jN10mQ/uiduSk66DaqgsNr4wQAwBl1O2mitnK0zErswaMi5gko4Ou93LuAndKdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NVedwyPf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758372332; c=relaxed/simple;
+	bh=B2pdUGVo1hxX37az6KU5TDG01liBl6FvTa355/7VdK4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u3cukmuDEuI4lAQl8jj21xsFjAH7F9ajL3pBt1IXW/IBitlSriemNMSB/8i5/6WasiyBdezYhsPT9eii6cHw8PQFowQhAXP8Js2DK5cFF4S63CQGQ5zWscEyq5SfoBLpskQsI2Yk6Sp6sVuPVi4T6xGNVJJVodgQsRdDaZcrlUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CFkC38EZ; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NVedwyPf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758370336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oN/A87bLlw2gnAiSyOvN1rLc2xD8uUjGNzxxpxpnRNo=;
-	b=NVedwyPfENdaJHNKJnH/CG9K52pu6juREfgfMPgEceZLlVt7oXl9i4Q4B26sejU7EVHd+3
-	O9pK+yZBUindLLqLG9WUIL6aMDl78INssj93fEClvu7yK2QbQsWKqvboVwOk9gcX2YRL8k
-	qvh/YNz4jZmlKOmTW8RVKz+m1I9Mdo0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-211-QneK8EcjNq-eu-0Qw9YwsQ-1; Sat,
- 20 Sep 2025 08:12:14 -0400
-X-MC-Unique: QneK8EcjNq-eu-0Qw9YwsQ-1
-X-Mimecast-MFC-AGG-ID: QneK8EcjNq-eu-0Qw9YwsQ_1758370334
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25FE51800451
-	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 12:12:14 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3820919560BB;
-	Sat, 20 Sep 2025 12:12:13 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc6,
- upstream-mainline, cd89d487)
-Date: Sat, 20 Sep 2025 12:12:13 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CFkC38EZ"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2681660d604so27805785ad.0
+        for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 05:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758372329; x=1758977129; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P2Xt5dxImFQDNB+zIOSzEq8xo9rsZmb+jmetH2dJjzs=;
+        b=CFkC38EZwsApJh/Zs5VML72tIxgOti/KSkDL3UfU8WmDXgYbIFCCkRjt4ydwY5pE+B
+         3mm2WgJkE90YFpTFXPhUSkQrpm2+1WtCWlEMuEYgYBpItNp5vpTXWGMM5Hsf/FvsCav5
+         y7rSFtAHVylv1nsyt/m0OXcPTvhLuHrPUDy2DuXOvSOMitBIe1o9k5Hl6gDFPDsMx8bl
+         3JYBTbrBujhWUndzqkKFj/F8RaTQ8NR2Nf7ePytQYUSgwmNkvu43girMyjNYp7+6MOqY
+         Udb/W5xVbZ4l3dU3T2X35BAM6DVZG3tmXDwhHsZHES6hvoV+JJ6AxWjthbuHPvi+4GRb
+         NdRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758372329; x=1758977129;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P2Xt5dxImFQDNB+zIOSzEq8xo9rsZmb+jmetH2dJjzs=;
+        b=Nmno2JulpdmaH/PYerLH5TzDe1tcDKL/JqXao3Z2+F8KdmdOP7R56VYCPbwt7fGXKe
+         ECOcEFNqn4RGyhorjhiAUh5yPhyD9gLl0ZdZ+iCW99iIBMR+cQcHyy3OW6RQ2HzwyxmH
+         t9hkRuQwf3u9OPkGAdN0CCsFzk9Fj8x7XWZa5yJUcyLEzFcV7vWjhrhUE0rDRn9fZyyJ
+         7sOn8aSFG7TF7glh7bqGcvVKs69z4Y93NpWo2udKXiMllAehxHZmVgFhp7LJ7x2yBMZM
+         b2o6oHzGBYiu0JWuR5YrQNwlpVMB/Sjmjq4AkICop+9xRP4w/+SsS5Y7D9UgIA6ORYVA
+         dWZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXDCUy57TimX4My3iufRmKQ1YW1fwd+eGoTb/EfpNnvyknyb/Kr+GYeXJ41VzyUfUye6wZD@lists.linux.dev
+X-Gm-Message-State: AOJu0YxyWSS0r5mcOsffRDOaIlt7Ln7vGgkFSaSySTAb2GaUOyU/nG5m
+	LHJeHY6f00DnaiDeCkDjaLbQYYBUC/Ge7S1WjIeEjcwpmZbQ84QYilqUc6zJGgf3QHubbC6cvgV
+	Q3O+XhU4cQxuf2/pkwZ0pQDgJaqwYgrg+qZup1nQZ
+X-Gm-Gg: ASbGncsOxOgnhi+EqnDOAJ7x0wSK18LjRmkvtOMmMlzuXPpiPYuLGuz/ngazHjcYKtP
+	xmlBGPRVbeRy8Pqo+i88zHj1/+3Oo/qhy/AfztmVao1gjA2YyUQZKcGRMbqKjtNMhaiE5RHAXQp
+	6jkDHFA0drG8Z1otf8XCRnKr4hWckEIQjZRUEdzqMt8kQfQXuTnIEDxHs6Z+GHwwu+0xADi9Th2
+	Fsd0H8cMQZpOOJOZn+W2v74rgxmU/b+L5ha8yPdos16Smhk
+X-Google-Smtp-Source: AGHT+IGp/N/ayplQqKKBxnGs6WOfyKUH/iITNGJNC3m56lH0ddprjnIe5eKw57ece8B9TDbj2UEYyt+VdKNzNYtu5ro=
+X-Received: by 2002:a17:902:ccc9:b0:267:b2fc:8a2 with SMTP id
+ d9443c01a7336-269ba46f141mr83309515ad.23.1758372328847; Sat, 20 Sep 2025
+ 05:45:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <21382.125092008121500165@us-mta-211.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: tg3O6z4uKzYmW3i6D8Zy4Tf99pjFiqTxt7mbS9-LimU_1758370334
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20250918140451.1289454-1-elver@google.com> <20250918141511.GA30263@lst.de>
+ <20250918174555.GA3366400@ax162> <20250919140803.GA23745@lst.de> <CANpmjNO2b_3Q56kFLN3fAwxj0=pQo0K4CjwMJ9_gHj4c3bVVsg@mail.gmail.com>
+In-Reply-To: <CANpmjNO2b_3Q56kFLN3fAwxj0=pQo0K4CjwMJ9_gHj4c3bVVsg@mail.gmail.com>
+From: Marco Elver <elver@google.com>
+Date: Sat, 20 Sep 2025 14:44:52 +0200
+X-Gm-Features: AS18NWBli1y9TeOySCtz0PRORw8H0Rr8apw4LW7wblD60qoNXqS9BvtJEM0Stlo
+Message-ID: <CANpmjNNkRQmt1Ea-EsSOVcA94kPqH_WntdT-NGnTjRocT25tFA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] Compiler-Based Capability- and Locking-Analysis
+To: Christoph Hellwig <hch@lst.de>
+Cc: Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Kentaro Takeda <takedakn@nttdata.co.jp>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Sat, 20 Sept 2025 at 12:23, Marco Elver <elver@google.com> wrote:
+>
+> On Fri, 19 Sept 2025 at 16:08, Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > On Thu, Sep 18, 2025 at 10:45:55AM -0700, Nathan Chancellor wrote:
+> > > On Thu, Sep 18, 2025 at 04:15:11PM +0200, Christoph Hellwig wrote:
+> > > > On Thu, Sep 18, 2025 at 03:59:11PM +0200, Marco Elver wrote:
+> > > > > A Clang version that supports `-Wthread-safety-pointer` and the new
+> > > > > alias-analysis of capability pointers is required (from this version
+> > > > > onwards):
+> > > > >
+> > > > >   https://github.com/llvm/llvm-project/commit/b4c98fcbe1504841203e610c351a3227f36c92a4 [3]
+> > > >
+> > > > There's no chance to make say x86 pre-built binaries for that available?
+> > >
+> > > I can use my existing kernel.org LLVM [1] build infrastructure to
+> > > generate prebuilt x86 binaries. Just give me a bit to build and upload
+> > > them. You may not be the only developer or maintainer who may want to
+> > > play with this.
+> >
+> > That did work, thanks.
+> >
+> > I started to play around with that.  For the nvme code adding the
+> > annotations was very simply, and I also started adding trivial
+> > __guarded_by which instantly found issues.
+> >
+> > For XFS it was a lot more work and I still see tons of compiler
+> > warnings, which I'm not entirely sure how to address.  Right now I
+> > see three major classes:
+> >
+> > 1) locks held over loop iterations like:
+> >
+> > fs/xfs/xfs_extent_busy.c:573:26: warning: expecting spinlock 'xfs_group_hold(busyp->group)..xg_busy_extents->eb_lock' to be held at start of each loop [-Wthread-safety-analysis]
+> >   573 |                 struct xfs_group        *xg = xfs_group_hold(busyp->group);
+> >       |                                               ^
+> > fs/xfs/xfs_extent_busy.c:577:3: note: spinlock acquired here
+> >   577 |                 spin_lock(&eb->eb_lock);
+> >       |                 ^
+> >
+> > This is perfectly find code and needs some annotations, but I can't find
+> > any good example.
+>
+> This is an interesting one, and might be a bug in the alias analysis I
+> recently implemented in Clang. I'll try to figure out a fix.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+This fixes the problem: https://github.com/llvm/llvm-project/pull/159921
 
+I guess I have to update the base Clang commit hash for v4 again. :-)
 
-Kernel information:
-    Commit message: Merge tag '6.17-rc6-smb3-client-fixes' of git://git.sam=
-ba.org/sfrench/cifs-2.6
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2050963635
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2050963635_x86_64_kernel-debug_kcidb_tool_19616282_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2050963635_x86_64_kernel-debug_kcidb_tool_19616282_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+And thanks for testing!
