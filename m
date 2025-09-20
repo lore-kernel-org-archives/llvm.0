@@ -1,214 +1,214 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16556189;
-	Sat, 20 Sep 2025 10:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3023A2FD7DE
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 11:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758364763; cv=none; b=CIqWFqPKeSg2QmWzArMZhwhRs4Ri+SJvWSsJQWwp+ZZmrn8k2R9sF5RDrvU2p/+Hs3i1fSzeqa+pKf+6pKC+oJCvexZSl6Em4boEm9jCeUCpdmsniZuuTFuZWddtNQWaJargbyWndPVWrYk8Cr6fbwk8s04DjjZf4jJgvqLs6N8=
+	t=1758368481; cv=none; b=mp4lYRWKWLO0q/0uLsf/I5iUWuKja7W8hqk0NA3KcKY8C5a3uBUf1+6HFwsVNVC15J74OsjG6XU2EePBZot8HrDLnyMlA9PqNj9gKx6tgfrV1TNMbyOCzOHDmYcWSngl4HX/XfYuwVkwMjRQI4/mIyM/C30JpKFWmB7pca+7+h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758364763; c=relaxed/simple;
-	bh=NbaiKfR6aFAGP2tva7t9DmpZ6JZhGbufhxVfXG0gl6Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rhicswYBO2QVev5TbUAW/Fj9xDb1+YlYxJ6zP+woQx987LoXQixojZZnMjxcqXXnkB67DWNLagoh3AoRc4VNbMqM2a3dRJol57k89whHf1yZwbbol9DKAXdhgFZqIkIBlfxFQwCEEcUsUGnC6OHzGMqWbh/x/fApG0b4U5X9uEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rMxh+NVF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758368481; c=relaxed/simple;
+	bh=wRo0YLaw8DyQub6BzFo7m0B5qda32As3YYQaoqnwGqk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IQTHN1wpA4+w+6UeDhmsyhohkbK2awKalHraUsfESFZNBU7vJcoidb9er1DEPc/Fl5opfcVqa9ADffBJjBITRDQlo+rD5v21oHBPwwQvsFWnMFbazEVnc8eBmrtjw0hzitifZaWyXrFEJVrq8s9Uo7m5WoeHd3sFr+Ff/94TLTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEML+i9L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMxh+NVF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0468C4CEEB;
-	Sat, 20 Sep 2025 10:39:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEML+i9L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADB1C116C6
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 11:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758364762;
-	bh=NbaiKfR6aFAGP2tva7t9DmpZ6JZhGbufhxVfXG0gl6Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rMxh+NVFNvyHvz0kiyx5L9SPIys4JGZv+yrCwcJgGSOEOY8OMWbjIywd/YsCoKXfD
-	 17Da9wfdSU6r9VZlH55NS0ObiL5ccQS7JisgWPvNhZIuPxx11+KMpXPwrctqRwBWC6
-	 ZK4XsO34sNWVZV2M190QFJyIdDLxtHtXvx8f2fjKj71KOVHvLjFnjdWAxdsIG1Unbi
-	 pSc2Z8fKbzFC4uVYu7uQYgI5J0qgOl7rBIQ/BVB8ZOWKuMzCAYz58zV2Q4iyde8oWV
-	 RrIGknweNc3Ww22Jzxb+p+XAzHRZCfUOT/jsjUDRQ8SyPl4Q9CnnykS3HE/RaRp/lE
-	 HIPitRJCzCvSw==
-Date: Sat, 20 Sep 2025 11:39:12 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: victor.duicu@microchip.com, dlechner@baylibre.com, nuno.sa@analog.com,
- andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, marius.cristea@microchip.com
-Subject: Re: [PATCH v5 2/2] iio: temperature: add support for MCP998X
-Message-ID: <20250920113912.5c52b1a5@jic23-huawei>
-In-Reply-To: <202509191423.1OvJW2X1-lkp@intel.com>
-References: <20250918111937.5150-3-victor.duicu@microchip.com>
-	<202509191423.1OvJW2X1-lkp@intel.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-pc-linux-gnu)
+	s=k20201202; t=1758368480;
+	bh=wRo0YLaw8DyQub6BzFo7m0B5qda32As3YYQaoqnwGqk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZEML+i9LJ8WSQqXcDjWGAEKlNnPfsYWxZ2Zjcm3/fm0RxKUbMNePRtZCguOufgIeU
+	 W9UxlwKcHhfMDdeX6EcQ7OFFF8gpwej6Iw56cmOtm3GIL5oFTkzWsqyoVSG1syfOoW
+	 3q17vT+VIBoNBFXhpbxjmzsZhZXIz8PbEveSOtjcx/HLh3/BtSkTQE8EurkwmCpeDS
+	 jdGlpE1i3Gza06+ZA/mnGqPL9/JPJ4e4ZFoG8i1P0+7/iFH/fZ2T7u9eFSbZZDXyC8
+	 F4jYv8mluAeVm1DNY+yxK0HhaHwVPY7joIR3xHrQotZw512lUPp/fCxzoOjmPYXx3q
+	 JyxCwTz7UWERw==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-62fa8d732daso4300020a12.3
+        for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 04:41:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWJXBSmyqegwL7TF/WxdisQWYKDZxDBaf+Wm0Tg+yOKKZ4fNGcJLBgBdHnjTHOo6zcgJwc7@lists.linux.dev
+X-Gm-Message-State: AOJu0YyJA1pwDBjY7lS3gE8XkiH0gjAlLRUXZYyE9A82+BCr2miS8Wsj
+	4pg6VGm1z/8Q0CR+YGC9miUAr1Xo1+pojloblI+lCsx4F/rm4fCC9O9YwaGQclAVaYlMfQJpfcQ
+	LbZlqfE/SxM9zLppBNuzUwZL+lSnsErE=
+X-Google-Smtp-Source: AGHT+IFZzHAyQ1PhqneBePuVKq1gxKghmUHATguF6ZPm4CtfFp3f4mVb6XLErzMCUoIWIkpOEn0J/WcwRy7at4Yq6iI=
+X-Received: by 2002:a17:907:7292:b0:afe:a83a:87ce with SMTP id
+ a640c23a62f3a-b24ee6ef584mr767720966b.2.1758368479046; Sat, 20 Sep 2025
+ 04:41:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250909092707.3127-1-yangtiezhu@loongson.cn> <20250909092707.3127-2-yangtiezhu@loongson.cn>
+ <20250920061536.GA1460394@ax162> <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
+ <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn> <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
+In-Reply-To: <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 20 Sep 2025 19:41:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
+X-Gm-Features: AS18NWDT4qeGtVwPk4bf2a0_rM3HNkQd7evhHdSpldq9OK81OM-K1U_xJkU-KhY
+Message-ID: <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, WANG Rui <wangrui@loongson.cn>, 
+	rust-for-linux@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 19 Sep 2025 14:27:55 +0800
-kernel test robot <lkp@intel.com> wrote:
+On Sat, Sep 20, 2025 at 6:22=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> On 9/20/25 17:19, Tiezhu Yang wrote:
+> > On 9/20/25 16:23, Huacai Chen wrote:
+> >> On Sat, Sep 20, 2025 at 2:15=E2=80=AFPM Nathan Chancellor <nathan@kern=
+el.org>
+> >> wrote:
+> >>>
+> >>> Hi Tiezhu,
+> >>>
+> >>> On Tue, Sep 09, 2025 at 05:27:06PM +0800, Tiezhu Yang wrote:
+> >>>> LTO is not only used for Clang, it maybe used for Rust, make LTO
+> >>>> case out
+> >>>> of CONFIG_CC_HAS_ANNOTATE_TABLEJUMP in Makefile.
+> >>>>
+> >>>> This is preparation for later patch, no function changes.
+> >>>>
+> >>>> Suggested-by: WANG Rui <wangrui@loongson.cn>
+> >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> >>>> ---
+> >>>>   arch/loongarch/Makefile | 10 +++++-----
+> >>>>   1 file changed, 5 insertions(+), 5 deletions(-)
+> >>>>
+> >>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> >>>> index a3a9759414f4..9d80af7f75c8 100644
+> >>>> --- a/arch/loongarch/Makefile
+> >>>> +++ b/arch/loongarch/Makefile
+> >>>> @@ -102,16 +102,16 @@ KBUILD_CFLAGS                   +=3D $(call
+> >>>> cc-option,-mthin-add-sub) $(call cc-option,-Wa$(comma)
+> >>>>
+> >>>>   ifdef CONFIG_OBJTOOL
+> >>>>   ifdef CONFIG_CC_HAS_ANNOTATE_TABLEJUMP
+> >>>> +KBUILD_CFLAGS                        +=3D -mannotate-tablejump
+> >>>> +else
+> >>>> +KBUILD_CFLAGS                        +=3D -fno-jump-tables # keep
+> >>>> compatibility with older compilers
+> >>>> +endif
+> >>>> +ifdef CONFIG_LTO_CLANG
+> >>>>   # The annotate-tablejump option can not be passed to LLVM backend
+> >>>> when LTO is enabled.
+> >>>>   # Ensure it is aware of linker with LTO,
+> >>>> '--loongarch-annotate-tablejump' also needs to
+> >>>>   # be passed via '-mllvm' to ld.lld.
+> >>>> -KBUILD_CFLAGS                        +=3D -mannotate-tablejump
+> >>>> -ifdef CONFIG_LTO_CLANG
+> >>>>   KBUILD_LDFLAGS                       +=3D -mllvm
+> >>>> --loongarch-annotate-tablejump
+> >>>>   endif
+> >>>> -else
+> >>>> -KBUILD_CFLAGS                        +=3D -fno-jump-tables # keep
+> >>>> compatibility with older compilers
+> >>>> -endif
+> >>>>   endif
+> >>>>
+> >>>>   KBUILD_RUSTFLAGS             +=3D
+> >>>> --target=3Dloongarch64-unknown-none-softfloat -Ccode-model=3Dsmall
+> >>>> --
+> >>>> 2.42.0
+> >>>>
+> >>>
+> >>> This change is now in -next as commit b15212824a01 ("LoongArch: Make =
+LTO
+> >>> case independent in Makefile"), where it breaks the build for clang-1=
+8,
+> >>> as '--loongarch-annotate-tablejump' is unimplemented there but there =
+is
+> >>> no version check before using it.
+> >>>
+> >>>    $ make -skj"$(nproc)" ARCH=3Dloongarch LLVM=3D1 mrproper defconfig
+> >>>
+> >>>    $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
+> >>>
+> >>>    $ make -skj"$(nproc)" ARCH=3Dloongarch LLVM=3D1 olddefconfig vmlin=
+uz.efi
+> >>>    ld.lld: error: -mllvm: ld.lld: Unknown command line argument
+> >>> '--loongarch-annotate-tablejump'.
+> >>>    ...
+> >>>
+> >>>    $ scripts/config -s CC_HAS_ANNOTATE_TABLEJUMP
+> >>>    undef
+> >> Hmm, maybe we need this?
+> >> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> >> index ae419e32f22e..fcfa793f9bb0 100644
+> >> --- a/arch/loongarch/Makefile
+> >> +++ b/arch/loongarch/Makefile
+> >> @@ -115,7 +115,7 @@ ifdef CONFIG_LTO_CLANG
+> >>   # The annotate-tablejump option can not be passed to LLVM backend
+> >> when LTO is enabled.
+> >>   # Ensure it is aware of linker with LTO,
+> >> '--loongarch-annotate-tablejump' also needs to
+> >>   # be passed via '-mllvm' to ld.lld.
+> >> -KBUILD_LDFLAGS                 +=3D -mllvm
+> >> --loongarch-annotate-tablejump
+> >> +KBUILD_LDFLAGS                 +=3D $(call ld-option,-mllvm
+> >> --loongarch-annotate-tablejump)
+> >>   endif
+> >>   endif
+> >
+> > We need to handle the other case to use -fno-jump-tables if llvm does
+> > not support -loongarch-annotate-tablejump.
+> >
+> > So, it is better to update the minimal version of llvm to 20, which
+> > includes the following two important commits:
+> >
+> > [LoongArch] Add options for annotate tablejump
+> > https://github.com/llvm/llvm-project/commit/4c2c17756739
+> >
+> > [LoongArch] Avoid indirect branch jumps using the ra register
+> > https://github.com/llvm/llvm-project/commit/21ef17c62645
+> >
+> > If you are OK, I will send a patch to modify the following file:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/scripts/min-tool-version.sh#n29
+> >
+> >
+> > and keep arch/loongarch/Makefile as is.
+>
+> The other way is to keep scripts/min-tool-version.sh as is, and only
+> modify arch/loongarch/Makefile, something like this (not tested):
+>
+> config LLD_HAS_ANNOTATE_TABLEJUMP
+>         def_bool LLD_VERSION >=3D 200000
+>
+> ifdef CONFIG_LTO_CLANG
+> ifdef CONFIG_LLD_HAS_ANNOTATE_TABLEJUMP
+> KBUILD_LDFLAGS                  +=3D -mllvm --loongarch-annotate-tablejum=
+p
+> else
+> KBUILD_LDFLAGS                  +=3D -mllvm --no-jump-tables
+> endif
+So complicated?
 
-> Hi,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on 671b9b6d7f4fe17a174c410397e72253877ca64e]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/victor-duicu-microchip-com/dt-bindings-iio-temperature-add-support-for-MCP998X/20250918-192457
-> base:   671b9b6d7f4fe17a174c410397e72253877ca64e
-> patch link:    https://lore.kernel.org/r/20250918111937.5150-3-victor.duicu%40microchip.com
-> patch subject: [PATCH v5 2/2] iio: temperature: add support for MCP998X
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250919/202509191423.1OvJW2X1-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509191423.1OvJW2X1-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509191423.1OvJW2X1-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/iio/temperature/mcp9982.c:470:3: error: expected expression  
->      470 |                 u8 bulk_read[3];
+I think below is enough, no?
+ifdef CONFIG_LTO_CLANG
+# The annotate-tablejump option can not be passed to LLVM backend when
+LTO is enabled.
+# Ensure it is aware of linker with LTO,
+'--loongarch-annotate-tablejump' also needs to
+# be passed via '-mllvm' to ld.lld.
+KBUILD_LDFLAGS                  +=3D $(call ld-option,-mllvm
+--loongarch-annotate-tablejump,-mllvm --no-jump-tables)
+endif
 
-I guess you may have figured this out by now.  It's a scope issue.  Needs {}
-around these blocks of code.
-
->          |                 ^
-> >> drivers/iio/temperature/mcp9982.c:473:31: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?  
->      473 |                                        &bulk_read, sizeof(bulk_read));
->          |                                                           ^~~~~~~~~
->          |                                                           up_read
->    include/linux/rwsem.h:246:13: note: 'up_read' declared here
->      246 | extern void up_read(struct rw_semaphore *sem);
->          |             ^
->    drivers/iio/temperature/mcp9982.c:473:13: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
->      473 |                                        &bulk_read, sizeof(bulk_read));
->          |                                         ^~~~~~~~~
->          |                                         up_read
->    include/linux/rwsem.h:246:13: note: 'up_read' declared here
->      246 | extern void up_read(struct rw_semaphore *sem);
->          |             ^
->    drivers/iio/temperature/mcp9982.c:477:11: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
->      477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
->          |                         ^~~~~~~~~
->          |                         up_read
->    include/linux/rwsem.h:246:13: note: 'up_read' declared here
->      246 | extern void up_read(struct rw_semaphore *sem);
->          |             ^
-> >> drivers/iio/temperature/mcp9982.c:477:11: error: subscript of pointer to function type 'void (struct rw_semaphore *)'  
->      477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
->          |                         ^~~~~~~~~
->    drivers/iio/temperature/mcp9982.c:477:33: error: use of undeclared identifier 'bulk_read'; did you mean 'up_read'?
->      477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
->          |                                               ^~~~~~~~~
->          |                                               up_read
->    include/linux/rwsem.h:246:13: note: 'up_read' declared here
->      246 | extern void up_read(struct rw_semaphore *sem);
->          |             ^
->    drivers/iio/temperature/mcp9982.c:477:33: error: subscript of pointer to function type 'void (struct rw_semaphore *)'
->      477 |                 *val = (bulk_read[1] << 8) + (bulk_read[2]);
->          |                                               ^~~~~~~~~
->    drivers/iio/temperature/mcp9982.c:488:3: error: expected expression
->      488 |                 unsigned long *src;
->          |                 ^
-> >> drivers/iio/temperature/mcp9982.c:493:4: error: use of undeclared identifier 'src'  
->      493 |                 *src = tmp_reg;
->          |                  ^
->    drivers/iio/temperature/mcp9982.c:494:68: error: use of undeclared identifier 'src'
->      494 |                 *val = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][0];
->          |                                                                                  ^
->    drivers/iio/temperature/mcp9982.c:495:69: error: use of undeclared identifier 'src'
->      495 |                 *val2 = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][1];
->          |                                                                                   ^
->    11 errors generated.
-> 
-> 
-> vim +470 drivers/iio/temperature/mcp9982.c
-> 
->    426	
->    427	static int mcp9982_read_raw(struct iio_dev *indio_dev,
->    428				    struct iio_chan_spec const *chan, int *val,
->    429				    int *val2, long mask)
->    430	{
->    431		unsigned int tmp_reg, reg_status;
->    432		struct mcp9982_priv *priv = iio_priv(indio_dev);
->    433		int ret;
->    434	
->    435		if (test_bit(RUN_STATE, &priv->bit_flags)) {
->    436			/*
->    437			 * When working in Run mode, after modifying a parameter (like sampling
->    438			 * frequency) we have to wait a delay before reading the new values.
->    439			 * We can't determine when the conversion is done based on the BUSY bit.
->    440			 */
->    441			if (test_bit(WAIT_BEFORE_READ, &priv->bit_flags)) {
->    442				if (!time_after(jiffies, priv->time_limit))
->    443					mdelay(jiffies_to_msecs(priv->time_limit - jiffies));
->    444				clear_bit(WAIT_BEFORE_READ, &priv->bit_flags);
->    445			}
->    446		} else {
->    447			ret = regmap_write(priv->regmap, MCP9982_ONE_SHOT_ADDR, 1);
->    448			if (ret)
->    449				return ret;
->    450			/*
->    451			 * In Standby state after writing in OneShot register wait for
->    452			 * the start of conversion and then poll the BUSY bit.
->    453			 */
->    454			mdelay(125);
->    455			ret = regmap_read_poll_timeout(priv->regmap, MCP9982_STATUS_ADDR,
->    456						       reg_status, !(reg_status & MCP9982_STATUS_BUSY),
->    457						       mcp9982_delay_ms[priv->sampl_idx] * USEC_PER_MSEC,
->    458						       0);
->    459			if (ret)
->    460				return ret;
->    461		}
->    462		guard(mutex)(&priv->lock);
->    463	
->    464		switch (mask) {
->    465		case IIO_CHAN_INFO_RAW:
->    466			/*
->    467			 * The Block Read Protocol first returns the number of user readable
->    468			 * bytes, held in bulk_read[0], followed by the data.
->    469			 */
->  > 470			u8 bulk_read[3];  
->    471	
->    472			ret = regmap_bulk_read(priv->regmap, MCP9982_TEMP_MEM_BLOCK_ADDR(chan->channel),
->  > 473					       &bulk_read, sizeof(bulk_read));  
->    474			if (ret)
->    475				return ret;
->    476	
->  > 477			*val = (bulk_read[1] << 8) + (bulk_read[2]);  
->    478			return IIO_VAL_INT;
->    479		case IIO_CHAN_INFO_SCALE:
->    480			*val = 0;
->    481			*val2 = MCP9982_SCALE;
->    482			return IIO_VAL_INT_PLUS_NANO;
->    483		case IIO_CHAN_INFO_SAMP_FREQ:
->    484			*val = mcp9982_conv_rate[priv->sampl_idx][0];
->    485			*val2 = mcp9982_conv_rate[priv->sampl_idx][1];
->    486			return IIO_VAL_INT_PLUS_MICRO;
->    487		case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
->    488			unsigned long *src;
->    489	
->    490			ret = regmap_read(priv->regmap, MCP9982_RUNNING_AVG_ADDR, &tmp_reg);
->    491			if (ret)
->    492				return ret;
->  > 493			*src = tmp_reg;  
->    494			*val = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][0];
->    495			*val2 = mcp9982_3db_values_map_tbl[priv->sampl_idx][bitmap_weight(src, 2)][1];
->    496			return IIO_VAL_INT_PLUS_MICRO;
->    497		case IIO_CHAN_INFO_OFFSET:
->    498			*val = MCP9982_OFFSET;
->    499			return IIO_VAL_INT;
->    500		default:
->    501			return -EINVAL;
->    502		}
->    503	}
->    504	
-> 
-
+Huacai
+>
+> Update the minimal llvm version or change Makefile to compat various
+> llvm versions, which one do you prefer? Pease let me know.
+>
+> Thanks,
+> Tiezhu
+>
