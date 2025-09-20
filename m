@@ -1,175 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92AE2750E3;
-	Sat, 20 Sep 2025 08:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 177111F09A5;
+	Sat, 20 Sep 2025 09:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758357457; cv=none; b=DBnhdoTtqmDsyoYIbYtUoAqHLfZBjfBFEKJs+aqoYBhY2JyHyyXPYE/0v1SX8+VzPCW1thcNVBSQ0XUKnswU1W4GbRcKhbWQyutCXcIE405I3S45/ntgfvGRP/sY5dibOU6ZYK8gZNvWbQUBBNJoanaTExp/5s81QA3+dw6NxzU=
+	t=1758359957; cv=none; b=qgncHGBUdULBu22vaaQV4OCzDttg17As3jNMp5viejgetpYGFCJAoYASPT1/OTzFEp7gwaK0CcBrOUgRYEVA4s4A1DSPrvaf1Mhvj4ih9DtQKTYPi46BghCW3lH1+9o030dh8XiZXwvEjW/dcfU31kAnsfMCokc+xHxzDyYBVgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758357457; c=relaxed/simple;
-	bh=LlzRi6bk10r8Z/aQ0b6CxVImRK79Ze9lOeWEQTrLmNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GVZUGkZ2UwpvgOptsXjYEy/yA3qZets2jwGK7YZddlRl5w2wY5FdINFtolQxkCnmKo8qFa+o9Xfxx5zZFqh7I7twKwPMdq+kmIl0gXZUUaWxG4238D/f5oBOJE8qTeXyboeBH3lG9pYwSG1bev288vMCvY7q8aJGkMz+ZnqIP6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fBjQ1R9+; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fBjQ1R9+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758357456; x=1789893456;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LlzRi6bk10r8Z/aQ0b6CxVImRK79Ze9lOeWEQTrLmNI=;
-  b=fBjQ1R9+xXwGDSgKI3o7YRZXkUb8daO23gYX/AbtT4rnZVTpFWP47R4G
-   oTdHlsqMUozE7NPIEU4ykSD6uB/RWyHREd+3a4tRNqSQEyCf0j7h57APi
-   r+9Ol9UUxEXbOZnPnmq967TCvhGcQTgeaN5WvGEK6wl+WZhfOaddhuq6C
-   6+GbHAsrdGrOQ0O8oSagVQPXvkqViX2/TCBIz/zsjfNr6sXlT6oKyndw1
-   lfQ5l+LzKhgR8MpqewfzcY1chrN9RAOWd5rypGEbW1pSyIgfNY5mjfls8
-   /sHGkVApN+hWfDNec/20OYrT4dBQcs82kod9jcx0Qcz4HSLzcAMZDQck2
-   Q==;
-X-CSE-ConnectionGUID: jZ9d+EtgS7OipZ9vCK7LPg==
-X-CSE-MsgGUID: gOy8dKI8T3elD/mZt9c1wQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11558"; a="64512820"
-X-IronPort-AV: E=Sophos;i="6.18,280,1751266800"; 
-   d="scan'208";a="64512820"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2025 01:37:35 -0700
-X-CSE-ConnectionGUID: Dfw/SjHRRkqqAwhq4X36bA==
-X-CSE-MsgGUID: 9VeOsDXBTFy6vTS6xHtZHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,280,1751266800"; 
-   d="scan'208";a="199748111"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Sep 2025 01:37:33 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzt63-0005B1-0s;
-	Sat, 20 Sep 2025 08:37:31 +0000
-Date: Sat, 20 Sep 2025 16:37:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: DeepanshuPratik <deepanshu.pratik@gmail.com>, andy@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org,
-	DeepanshuPratik <deepanshu.pratik@gmail.com>
-Subject: Re: [PATCH] staging: fbtft: fix macro usage and style warnings
-Message-ID: <202509201601.hTKUjeIe-lkp@intel.com>
-References: <20250919212938.822374-1-deepanshu.pratik@gmail.com>
+	s=arc-20240116; t=1758359957; c=relaxed/simple;
+	bh=JM/uyBholIygfdOwgZZsVxmoJA4UBigh39/6CljrjDg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Bx9m4RxZ8wR2Tj70Sq8GkLUcw7Iq+SH91ckeoujrUasPThUW+Q8uXvCvEmhgIW9C+EyR37cDUCcdcn/ecwOPzk48g2he3l0nEmbhOSXuf5ifK1FmYeEOd3iMcV4dp4xpa9crqDxmX0BKI/oPhTTuQ1R2insEljqZ96EPMKsoOBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [117.22.84.112])
+	by gateway (Coremail) with SMTP id _____8Cx6tGHcc5oHIgMAA--.27231S3;
+	Sat, 20 Sep 2025 17:19:03 +0800 (CST)
+Received: from [192.168.0.111] (unknown [117.22.84.112])
+	by front1 (Coremail) with SMTP id qMiowJAxfcGDcc5oiTKhAA--.1523S3;
+	Sat, 20 Sep 2025 17:19:01 +0800 (CST)
+Message-ID: <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
+Date: Sat, 20 Sep 2025 17:19:00 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250919212938.822374-1-deepanshu.pratik@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
+Content-Language: en-US
+To: Huacai Chen <chenhuacai@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, WANG Rui <wangrui@loongson.cn>,
+ rust-for-linux@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
+ <20250909092707.3127-2-yangtiezhu@loongson.cn>
+ <20250920061536.GA1460394@ax162>
+ <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxfcGDcc5oiTKhAA--.1523S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXw1kWw4fZr1kAF1UXr4rCrX_yoWrGw4Upw
+	s7CF4qgFs5WrWktr92y3y5Wrn8trsrtr12gF13try8uFsFqw1xWr48JryDWFyDZwn7J3yI
+	qryfKa43XF4UA3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU70PfDUUU
+	U
 
-Hi DeepanshuPratik,
+On 9/20/25 16:23, Huacai Chen wrote:
+> On Sat, Sep 20, 2025 at 2:15 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> Hi Tiezhu,
+>>
+>> On Tue, Sep 09, 2025 at 05:27:06PM +0800, Tiezhu Yang wrote:
+>>> LTO is not only used for Clang, it maybe used for Rust, make LTO case out
+>>> of CONFIG_CC_HAS_ANNOTATE_TABLEJUMP in Makefile.
+>>>
+>>> This is preparation for later patch, no function changes.
+>>>
+>>> Suggested-by: WANG Rui <wangrui@loongson.cn>
+>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>> ---
+>>>   arch/loongarch/Makefile | 10 +++++-----
+>>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>>> index a3a9759414f4..9d80af7f75c8 100644
+>>> --- a/arch/loongarch/Makefile
+>>> +++ b/arch/loongarch/Makefile
+>>> @@ -102,16 +102,16 @@ KBUILD_CFLAGS                   += $(call cc-option,-mthin-add-sub) $(call cc-option,-Wa$(comma)
+>>>
+>>>   ifdef CONFIG_OBJTOOL
+>>>   ifdef CONFIG_CC_HAS_ANNOTATE_TABLEJUMP
+>>> +KBUILD_CFLAGS                        += -mannotate-tablejump
+>>> +else
+>>> +KBUILD_CFLAGS                        += -fno-jump-tables # keep compatibility with older compilers
+>>> +endif
+>>> +ifdef CONFIG_LTO_CLANG
+>>>   # The annotate-tablejump option can not be passed to LLVM backend when LTO is enabled.
+>>>   # Ensure it is aware of linker with LTO, '--loongarch-annotate-tablejump' also needs to
+>>>   # be passed via '-mllvm' to ld.lld.
+>>> -KBUILD_CFLAGS                        += -mannotate-tablejump
+>>> -ifdef CONFIG_LTO_CLANG
+>>>   KBUILD_LDFLAGS                       += -mllvm --loongarch-annotate-tablejump
+>>>   endif
+>>> -else
+>>> -KBUILD_CFLAGS                        += -fno-jump-tables # keep compatibility with older compilers
+>>> -endif
+>>>   endif
+>>>
+>>>   KBUILD_RUSTFLAGS             += --target=loongarch64-unknown-none-softfloat -Ccode-model=small
+>>> --
+>>> 2.42.0
+>>>
+>>
+>> This change is now in -next as commit b15212824a01 ("LoongArch: Make LTO
+>> case independent in Makefile"), where it breaks the build for clang-18,
+>> as '--loongarch-annotate-tablejump' is unimplemented there but there is
+>> no version check before using it.
+>>
+>>    $ make -skj"$(nproc)" ARCH=loongarch LLVM=1 mrproper defconfig
+>>
+>>    $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
+>>
+>>    $ make -skj"$(nproc)" ARCH=loongarch LLVM=1 olddefconfig vmlinuz.efi
+>>    ld.lld: error: -mllvm: ld.lld: Unknown command line argument '--loongarch-annotate-tablejump'.
+>>    ...
+>>
+>>    $ scripts/config -s CC_HAS_ANNOTATE_TABLEJUMP
+>>    undef
+> Hmm, maybe we need this?
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index ae419e32f22e..fcfa793f9bb0 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -115,7 +115,7 @@ ifdef CONFIG_LTO_CLANG
+>   # The annotate-tablejump option can not be passed to LLVM backend
+> when LTO is enabled.
+>   # Ensure it is aware of linker with LTO,
+> '--loongarch-annotate-tablejump' also needs to
+>   # be passed via '-mllvm' to ld.lld.
+> -KBUILD_LDFLAGS                 += -mllvm
+> --loongarch-annotate-tablejump
+> +KBUILD_LDFLAGS                 += $(call ld-option,-mllvm
+> --loongarch-annotate-tablejump)
+>   endif
+>   endif
 
-kernel test robot noticed the following build errors:
+We need to handle the other case to use -fno-jump-tables if llvm does
+not support -loongarch-annotate-tablejump.
 
-[auto build test ERROR on staging/staging-testing]
+So, it is better to update the minimal version of llvm to 20, which
+includes the following two important commits:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/DeepanshuPratik/staging-fbtft-fix-macro-usage-and-style-warnings/20250920-053248
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250919212938.822374-1-deepanshu.pratik%40gmail.com
-patch subject: [PATCH] staging: fbtft: fix macro usage and style warnings
-config: x86_64-buildonly-randconfig-002-20250920 (https://download.01.org/0day-ci/archive/20250920/202509201601.hTKUjeIe-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509201601.hTKUjeIe-lkp@intel.com/reproduce)
+[LoongArch] Add options for annotate tablejump
+https://github.com/llvm/llvm-project/commit/4c2c17756739
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509201601.hTKUjeIe-lkp@intel.com/
+[LoongArch] Avoid indirect branch jumps using the ra register
+https://github.com/llvm/llvm-project/commit/21ef17c62645
 
-All errors (new ones prefixed by >>):
+If you are OK, I will send a patch to modify the following file:
 
->> drivers/staging/fbtft/fbtft-bus.c:15:2: error: '#' is not followed by a macro parameter
-      15 | #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
-         |  ^
->> drivers/staging/fbtft/fbtft-bus.c:66:47: error: unexpected type name 'u8': expected identifier
-      66 | define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8, NOOP)
-         |                                               ^
-   drivers/staging/fbtft/fbtft-bus.c:66:51: error: unexpected type name 'u8': expected identifier
-      66 | define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8, NOOP)
-         |                                                   ^
->> drivers/staging/fbtft/fbtft-bus.c:66:51: error: redefinition of parameter 'u8'
->> drivers/staging/fbtft/fbtft-bus.c:67:1: error: expected function body after function declarator
-      67 | define_fbtft_write_reg(fbtft_write_reg16_bus8, __be16, u16, cpu_to_be16)
-         | ^
-   5 errors generated.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/min-tool-version.sh#n29
 
+and keep arch/loongarch/Makefile as is.
 
-vim +15 drivers/staging/fbtft/fbtft-bus.c
+Thanks,
+Tiezhu
 
-c296d5f9957c039 Thomas Petazzoni   2014-12-31   7  
-c296d5f9957c039 Thomas Petazzoni   2014-12-31   8  /*****************************************************************************
-c296d5f9957c039 Thomas Petazzoni   2014-12-31   9   *
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  10   *   void (*write_reg)(struct fbtft_par *par, int len, ...);
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  11   *
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  12   *****************************************************************************/
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  13  
-49f31092c55579e DeepanshuPratik    2025-09-20  14  #define NOOP(x) (x)                                                           \
-8d8825b420ffb37 Alfonso Lima Astor 2017-10-17 @15  #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  16  void func(struct fbtft_par *par, int len, ...)                                \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  17  {                                                                             \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  18  	va_list args;                                                         \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  19  	int i, ret;                                                           \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  20  	int offset = 0;                                                       \
-8d8825b420ffb37 Alfonso Lima Astor 2017-10-17  21  	buffer_type *buf = (buffer_type *)par->buf;                           \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  22  									      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  23  	if (unlikely(par->debug & DEBUG_WRITE_REGISTER)) {                    \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  24  		va_start(args, len);                                          \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  25  		for (i = 0; i < len; i++) {                                   \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  26  			buf[i] = modifier((data_type)va_arg(args,             \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  27  							    unsigned int));   \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  28  		}                                                             \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  29  		va_end(args);                                                 \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  30  		fbtft_par_dbg_hex(DEBUG_WRITE_REGISTER, par,                  \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  31  				  par->info->device, buffer_type, buf, len,   \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  32  				  "%s: ", __func__);                          \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  33  	}                                                                     \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  34  									      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  35  	va_start(args, len);                                                  \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  36  									      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  37  	if (par->startbyte) {                                                 \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  38  		*(u8 *)par->buf = par->startbyte;                             \
-8d8825b420ffb37 Alfonso Lima Astor 2017-10-17  39  		buf = (buffer_type *)(par->buf + 1);                          \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  40  		offset = 1;                                                   \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  41  	}                                                                     \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  42  									      \
-8d8825b420ffb37 Alfonso Lima Astor 2017-10-17  43  	*buf = modifier((data_type)va_arg(args, unsigned int));               \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  44  	ret = fbtft_write_buf_dc(par, par->buf, sizeof(data_type) + offset,   \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  45  				 0);                                          \
-e70065fdc11d86f Heiner Kallweit    2017-03-02  46  	if (ret < 0)							      \
-e70065fdc11d86f Heiner Kallweit    2017-03-02  47  		goto out;						      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  48  	len--;                                                                \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  49  									      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  50  	if (par->startbyte)                                                   \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  51  		*(u8 *)par->buf = par->startbyte | 0x2;                       \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  52  									      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  53  	if (len) {                                                            \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  54  		i = len;                                                      \
-e70065fdc11d86f Heiner Kallweit    2017-03-02  55  		while (i--)						      \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  56  			*buf++ = modifier((data_type)va_arg(args,             \
-cc1c0eea8527bd2 Renato Soma        2018-04-17  57  							    unsigned int));   \
-e70065fdc11d86f Heiner Kallweit    2017-03-02  58  		fbtft_write_buf_dc(par, par->buf,			      \
-8d8825b420ffb37 Alfonso Lima Astor 2017-10-17  59  				   len * (sizeof(data_type) + offset), 1);    \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  60  	}                                                                     \
-e70065fdc11d86f Heiner Kallweit    2017-03-02  61  out:									      \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  62  	va_end(args);                                                         \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  63  }                                                                             \
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  64  EXPORT_SYMBOL(func);
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  65  
-49f31092c55579e DeepanshuPratik    2025-09-20 @66  define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8, NOOP)
-8d8825b420ffb37 Alfonso Lima Astor 2017-10-17 @67  define_fbtft_write_reg(fbtft_write_reg16_bus8, __be16, u16, cpu_to_be16)
-49f31092c55579e DeepanshuPratik    2025-09-20  68  define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16, NOOP)
-c296d5f9957c039 Thomas Petazzoni   2014-12-31  69  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
