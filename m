@@ -1,42 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2E82D6604;
-	Fri, 19 Sep 2025 22:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6B2262A6;
+	Sat, 20 Sep 2025 01:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758321508; cv=none; b=T9w4gcAQ3QecuXLcDnCWB4mT6AwJ+bETm78ZZchetAO47dmp28cExzq+COyS0tcxRD4xblEmNn0cpoavUn9hGqK/ZW6MiXG9xuLVyLtZ3K6iRyU0e7YVF/pUR1xYjRd74Uo9RsycE7MyrCMBh0Mz8DTbfKDh6q7wheGWiA9QG/8=
+	t=1758332338; cv=none; b=nvbN2w7vGQ9+XLUTUvRPBK5y4b0+2Y2SRELmxllND8AX2ZB2/sxHkEw6rjuqZT7/CGqrleUIZtQ9gmc/LYhsS2RZEbeAXyVHpFk+7X8s4OAI4J8MVyuNGWkmKgjFKKdRNhqKEK5VN5oqrv0BE3LJECp8W+AjCB91m+yptmuPmI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758321508; c=relaxed/simple;
-	bh=qXTh3BJzOx7yM6C9BuVBrmJsuTDg6Gyb6cDsLk1ZSVY=;
+	s=arc-20240116; t=1758332338; c=relaxed/simple;
+	bh=0eoP9lTL22QFCpaEYjyGQCU7y0cT4seEWfVHb9AzdOA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ISzWK6Gcr6Cl+FlAGFF6iXqKcgsisEO9RQbvM9EuWFsNDFlxuuQelvUBLhhHkBgFp5n2mOf9twHacpiKM3jd/BaRP79cpboTDE8RRQppxc6agi7dNzUh6t3pyAqAk0nM/df5aW3XlHO0yky1xGS4VBiHxjevzPWyzDJORLUcGBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rfcGEevD; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TCHJrG8Cnsn/KkuKcD67021df9Nj709U1M3FGNT22cezAcMAEqwjZiCJ57Bd9Xt6p7A7YVsNgwFSAUJI0wTexX776bWWKaoW02LZEj3/4DjloSgKULlWlx3HAdYuoKAcKt4sWneSl4IzjkANjV7pfzt9U4wFHXnzLZC+zHNA8NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nlf1J4xe; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rfcGEevD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C083C4CEF0;
-	Fri, 19 Sep 2025 22:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758321507;
-	bh=qXTh3BJzOx7yM6C9BuVBrmJsuTDg6Gyb6cDsLk1ZSVY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rfcGEevDKTP9JQQXsNv6MeNtA2FBHmaqga4getAfgvtrKKuel6KSB8Ef9knSeKmTa
-	 zThFjH+BE9+A74cdOm6VqMV9RGx9CYrmqhl7os6t2kJm0rag7XQ6HcG39gIfX055aw
-	 m4bq47if1Q8rNKBBiWiYl6PiqOeSXGev8pJkgvdki9JzYvMx1vFKTXB/dSKZ7TM7nY
-	 s25GixOGZSWCLeZ8Jk6udawy1X4Uj/p1DXakMwb29IQzGaQXiazOdGqeKt0jxNs08v
-	 NJqF72B3ujDug6eKYOPWcbnB84fcK3hREWzrw6+bg/CF+h7TPaMqAbiMzwTCPwZIVu
-	 EoWXkKdTc6/GA==
-Date: Fri, 19 Sep 2025 15:38:23 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: Re: [linux-next:master 9765/10654]
- drivers/gpu/drm/xe/tests/xe_pci.c:214:2: error: initializer element is not a
- compile-time constant
-Message-ID: <20250919223823.GB44805@ax162>
-References: <202509192041.tQwdE4DS-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nlf1J4xe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758332335; x=1789868335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0eoP9lTL22QFCpaEYjyGQCU7y0cT4seEWfVHb9AzdOA=;
+  b=Nlf1J4xeRlb/W6n97Vb4bo+JYZVDjhKmSkEn6ZTQaIho8AR1f5oZKV+6
+   C6q9gpkHD2aESRRAWkSDoyC1Kd+juXdjxSC+BOODUTdZ7fcKPyT9/383R
+   obf2proEKrIXfPWMHtLi5cjwGGprFGT9P77OWIr6e95rQ+jFVuVKY3hex
+   l4hAlUeVwLr+cpZ+HJKXkjtJKqKVLC/IpPiQjjUes37PJEk0xO6A/fXj/
+   5LiyhbczHjbyFhGyISgSIOxtD9xG5zxA2OiZ381sbjnUlGaKwF8T0CSrA
+   8RDJ4hkLZCSnNd/i+Gmb9tFTUk/IF81wHFf8wPCCd6UoPAWz/3Va2zVe0
+   A==;
+X-CSE-ConnectionGUID: 0nze9yEmQC2WvNDM53Ikkg==
+X-CSE-MsgGUID: y4lZNt77QxateJ5RpozHZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11558"; a="71307998"
+X-IronPort-AV: E=Sophos;i="6.18,279,1751266800"; 
+   d="scan'208";a="71307998"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 18:38:54 -0700
+X-CSE-ConnectionGUID: Y0wSdOavQbaKY4+4NaI7lg==
+X-CSE-MsgGUID: DszBOhVeToWnoMFFhqnguA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,279,1751266800"; 
+   d="scan'208";a="206918438"
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 19 Sep 2025 18:38:52 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzmYs-0004wt-05;
+	Sat, 20 Sep 2025 01:38:50 +0000
+Date: Sat, 20 Sep 2025 09:38:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: doubled <doubled@leap-io-kernel.com>,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: leapraid: Add new scsi driver
+Message-ID: <202509200958.X8eUlp0N-lkp@intel.com>
+References: <20250919100032.3931476-1-doubled@leap-io-kernel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,65 +64,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202509192041.tQwdE4DS-lkp@intel.com>
+In-Reply-To: <20250919100032.3931476-1-doubled@leap-io-kernel.com>
 
-On Fri, Sep 19, 2025 at 08:46:43PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   8f7f8b1b3f4c613dd886f53f768f82816b41eaa3
-> commit: 5bb5258e357eb79719d1c998731b932c945cb52c [9765/10654] drm/xe/tests: Add pre-GMDID IP descriptors to param generators
-> config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20250919/202509192041.tQwdE4DS-lkp@intel.com/config)
-> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+Hi doubled,
 
-                          ^ key info
+kernel test robot noticed the following build warnings:
 
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509192041.tQwdE4DS-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509192041.tQwdE4DS-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/gpu/drm/xe/xe_pci.c:1104:
-> >> drivers/gpu/drm/xe/tests/xe_pci.c:214:2: error: initializer element is not a compile-time constant
->            graphics_ip_xelp,
->            ^~~~~~~~~~~~~~~~
->    drivers/gpu/drm/xe/tests/xe_pci.c:221:2: error: initializer element is not a compile-time constant
->            media_ip_xem,
->            ^~~~~~~~~~~~
->    2 errors generated.
-> 
-> 
-> vim +214 drivers/gpu/drm/xe/tests/xe_pci.c
-> 
->    206	
->    207	/*
->    208	 * Pre-GMDID Graphics and Media IPs definitions.
->    209	 *
->    210	 * Mimic the way GMDID IPs are declared so the same
->    211	 * param generator can be used for both
->    212	 */
->    213	static const struct xe_ip pre_gmdid_graphics_ips[] = {
->  > 214		graphics_ip_xelp,
->    215		graphics_ip_xelpp,
->    216		graphics_ip_xehpg,
->    217		graphics_ip_xehpc,
->    218	};
->    219	
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next linus/master v6.17-rc6 next-20250919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Prior to Clang 17 (and GCC 8 but that's not as much of a concern now
-that this is the minimum supported version for building the kernel),
-these structures would not be considered constant:
+url:    https://github.com/intel-lab-lkp/linux/commits/doubled/scsi-leapraid-Add-new-scsi-driver/20250919-202535
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20250919100032.3931476-1-doubled%40leap-io-kernel.com
+patch subject: [PATCH] scsi: leapraid: Add new scsi driver
+config: i386-randconfig-002-20250920 (https://download.01.org/0day-ci/archive/20250920/202509200958.X8eUlp0N-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509200958.X8eUlp0N-lkp@intel.com/reproduce)
 
-https://github.com/llvm/llvm-project/issues/44502
-https://github.com/llvm/llvm-project/commit/0b2d5b967d98375793897295d651f58f6fbd3034
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509200958.X8eUlp0N-lkp@intel.com/
 
-If this code cannot be modified to use pointers in a similar vein to
-commit 17d49b7e47a1 ("power: supply: bq24190_charger: Fix "initializer
-element is not constant" error"), this should probably be wrapped in
+All warnings (new ones prefixed by >>):
 
-  #if !defined(CONFIG_CC_IS_CLANG) || CONFIG_CLANG_VERSION >= 170000
+>> drivers/scsi/leapraid/leapraid_func.c:7478:6: warning: variable 'adapter_state' set but not used [-Wunused-but-set-variable]
+    7478 |         u32 adapter_state;
+         |             ^
+   drivers/scsi/leapraid/leapraid_func.c:93:1: warning: unused function 'leapraid_writeq' [-Wunused-function]
+      93 | leapraid_writeq(__u64 info, void __iomem *addr,
+         | ^~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+>> Warning: drivers/scsi/leapraid/leapraid_app.c:112 struct member 'r0' not described in 'leapraid_ioctl_adapter_info'
+>> Warning: drivers/scsi/leapraid/leapraid_app.c:112 struct member 'r1' not described in 'leapraid_ioctl_adapter_info'
+>> Warning: drivers/scsi/leapraid/leapraid_app.c:112 struct member 'r2' not described in 'leapraid_ioctl_adapter_info'
 
-Cheers,
-Nathan
+
+vim +/adapter_state +7478 drivers/scsi/leapraid/leapraid_func.c
+
+  7473	
+  7474	static int
+  7475	leapraid_adapter_unit_reset(
+  7476		struct leapraid_adapter *adapter)
+  7477	{
+> 7478		u32 adapter_state;
+  7479		unsigned long flags;
+  7480		int rc = 0;
+  7481	
+  7482		if (!(adapter->adapter_attr.features.adapter_caps &
+  7483			 LEAPRAID_ADAPTER_FEATURES_CAP_EVENT_REPLAY))
+  7484			return -EFAULT;
+  7485	
+  7486		dev_info(&adapter->pdev->dev, "fire unit reset\n");
+  7487		writel(LEAPRAID_FUNC_ADAPTER_UNIT_RESET << LEAPRAID_DB_FUNC_SHIFT,
+  7488			 &adapter->iomem_base->db);
+  7489		if (leapraid_db_wait_ack_and_clear_int(adapter))
+  7490			rc = -EFAULT;
+  7491	
+  7492		adapter_state = leapraid_get_adapter_state(adapter);
+  7493		spin_lock_irqsave(&adapter->reset_desc.adapter_reset_lock,
+  7494			 flags);
+  7495		spin_unlock_irqrestore(&adapter->reset_desc.adapter_reset_lock,
+  7496			 flags);
+  7497	
+  7498		if (!leapraid_wait_adapter_ready(adapter)) {
+  7499			rc = -EFAULT;
+  7500			goto out;
+  7501		}
+  7502	out:
+  7503		dev_info(&adapter->pdev->dev, "unit reset: %s\n",
+  7504			 ((rc == 0) ? "SUCCESS" : "FAILED"));
+  7505		return rc;
+  7506	}
+  7507	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
