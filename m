@@ -1,103 +1,144 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6ED3770B;
-	Sat, 20 Sep 2025 05:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699382629D
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 06:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758347059; cv=none; b=orEDPkqee8tQoqvW64NS2ofLrPUQ2XLwHZH8ojThJTJj1eSaym9mDMyvXkPuRtyvWPYYgJFMm19o8DVXJ4wHiGHbD+p38WRPrTsxro3oiQkhMuRFS30DPOsYTgAfCMxoA4RjLdErYXG6CtFsM/8kJLetG524P2kVYiGieHpkygY=
+	t=1758348197; cv=none; b=W0P0cdx0qi2uP9/0Tq5lwdo41D959oW6ceU9edCm/YMlZrqpmDIJuQzM5BX1L2/oU+8SARdObCUWOHtnYVvqQLEWbKQA7HTK8b9vAHA6RP0upQtqOoRn6h8m+dqZkS4mnzHmpqU1b1V+D56391HZW0/ENiaDta9ZtQF7WEHfdfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758347059; c=relaxed/simple;
-	bh=GF3gdAN8hkTnVx5Wspbbs4FlRADR3141bV+ii0KdOs8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=liHwIspdTg8nXWG03sfabtwpGH/pDN9gfMiDiKHo1/7E16+Oci5aykqRdemOtKZWp/r3yfjbLPJ3EqUiKoRXrboJRm03r5NfYYs27FrnhzkS6GpmyQwr95mXRypBRiMLhSgefBR8A0Qqg5d8t162jRH1CPBN2rdOVtbDSK5eqxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O5O8GhzJ; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758348197; c=relaxed/simple;
+	bh=jYJC1HqWHhC59kyafmZmLm82y0TDGz+SM36dY1kEI/k=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XYfqpuoBkp2gVnpa9df4cWCTedHd4SIy8L/PDd+WKjSYaA+ANIV3Lh+rilhl0M+9TUcDTp9RCI4k3CQPjyRTyNg4IjabOewmw6JhrNY78KxNw19JSW0eQP2y+8lfbU7VKBOL/RTsPbcTGSCHDOcpYGKMZ8oxQGcLek+8rjyUO9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B42I9KF6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O5O8GhzJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758347058; x=1789883058;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GF3gdAN8hkTnVx5Wspbbs4FlRADR3141bV+ii0KdOs8=;
-  b=O5O8GhzJo7YQTCzvnFKRbNeYmsDYlP2CXifWqQIFRvEIN51EZlXk1mRo
-   WnKyTtF34ijiK6tXDG8p7YSdqnetDaL6r660GS6LrR6G6qiDLbPTPhUNM
-   GDivMtybZm4GKMIzGisxaBgqJTVaRi+03DmwrnatnLWgSvig9UP10xGls
-   OoK3o5mdtSp6RT5dPAdkZjyTl06MbUL5HzIW3PZjVUqKD5L0fkVVq0n+S
-   dE9QrS2jfHQnzwrlOVW+N7zIBHiIIKp5n18SZwTAjQvHZIXuTDp7YyPP5
-   WX6gvcC/3OrPxLa6gpioBy1JW0z0cB50niBcUqY5TQHlZSoaUZCtGY+tx
-   A==;
-X-CSE-ConnectionGUID: rGfcAKHlSF6Hf+l5GpwYuQ==
-X-CSE-MsgGUID: SBJzZoIZSTKXuWzZ33NFHQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11558"; a="59728367"
-X-IronPort-AV: E=Sophos;i="6.18,280,1751266800"; 
-   d="scan'208";a="59728367"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 22:44:17 -0700
-X-CSE-ConnectionGUID: Lr2I9FIOTHKFNW8OvkVerQ==
-X-CSE-MsgGUID: zon/iQGeRXK2HMpvfrtikg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,280,1751266800"; 
-   d="scan'208";a="206756475"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 19 Sep 2025 22:44:15 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uzqOK-000555-2G;
-	Sat, 20 Sep 2025 05:44:12 +0000
-Date: Sat, 20 Sep 2025 13:43:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-github:work.namespace.ns_common 4/11]
- kernel/nscommon.c:10:9: error: call to undeclared function
- 'proc_alloc_inum'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202509201323.9WxeTUNX-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B42I9KF6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758348194;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3fRwqGk/v6/sv59/6gBSSIR+Ib1GpRdJCRD46VWbP3M=;
+	b=B42I9KF6tDvZ06wiBXpqQtG8nzIr0yeZD2Lv97gUhXpoe1MCl4t18pFw8O1pUPWAIujwVr
+	q7mL/EicP+tO+C2Ax+aXiZIUCiR+afLvEsTmQMavTf1vNsxdbRReZQpf/uf/kGSSBAVTCO
+	AxHoCL19Id8wm/XqT2EhMwXuaQsQYxA=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-663-uM2uhspIMZO1y8DqBwhiPg-1; Sat,
+ 20 Sep 2025 02:03:12 -0400
+X-MC-Unique: uM2uhspIMZO1y8DqBwhiPg-1
+X-Mimecast-MFC-AGG-ID: uM2uhspIMZO1y8DqBwhiPg_1758348192
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA2361956089
+	for <llvm@lists.linux.dev>; Sat, 20 Sep 2025 06:03:11 +0000 (UTC)
+Received: from [172.20.26.51] (unknown [10.30.44.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DD4C818004A3;
+	Sat, 20 Sep 2025 06:03:10 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc6,
+ upstream-mainline, 1522b530)
+Date: Sat, 20 Sep 2025 06:03:10 -0000
+To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <76645.125092002031200980@us-mta-663.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: bqT2S_LJmKSCcd1c2RnU36To8xGFmhM7e4XFa9utr7Y_1758348192
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/brauner/linux.git work.namespace.ns_common
-head:   6f18c6b33f6beb4b50add5a46274534b2cf091b3
-commit: 309de0163ea00ffb59634ebc4e538655cde0c21e [4/11] nscommon: move to separate file
-config: x86_64-randconfig-072-20250919 (https://download.01.org/0day-ci/archive/20250920/202509201323.9WxeTUNX-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509201323.9WxeTUNX-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509201323.9WxeTUNX-lkp@intel.com/
-
-Note: the brauner-github/work.namespace.ns_common HEAD 6f18c6b33f6beb4b50add5a46274534b2cf091b3 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
->> kernel/nscommon.c:10:9: error: call to undeclared function 'proc_alloc_inum'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      10 |                 ret = proc_alloc_inum(&ns->inum);
-         |                       ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/proc_alloc_inum +10 kernel/nscommon.c
+Kernel information:
+    Commit message: Merge tag 'block-6.17-20250918' of git://git.kernel.dk/=
+linux
 
-     4	
-     5	int ns_common_init(struct ns_common *ns, const struct proc_ns_operations *ops,
-     6			   bool alloc_inum)
-     7	{
-     8		if (alloc_inum) {
-     9			int ret;
-  > 10			ret = proc_alloc_inum(&ns->inum);
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2050804307
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2050804307_x86_64_kernel-debug_kcidb_tool_19615762_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2050804307_x86_64_kernel-debug_kcidb_tool_19615762_12
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
