@@ -1,127 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027861C84DF;
-	Sun, 21 Sep 2025 15:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67CABE49
+	for <llvm@lists.linux.dev>; Sun, 21 Sep 2025 19:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758470090; cv=none; b=aCerw1KgBllvS95QGqJPz+OEHxp1cYjyMNXZ6i9Be//UOMol2k24i3Xw64fXZYEmMWvMhZAe0ES8p/BZ0tA7Fce5qolu6KL9M90/oFnDOXro+Fw8S4sq1KcHpW6LYJuNBSm/IxADYZ57crENPzgJ7hUHFJyrwvfRBo+MRSOHJt4=
+	t=1758483225; cv=none; b=pjrPiRo8Jzua/5S3K051O+ofNddk/a8Bwar5Qs5hPVwnO2ZUJ5xP614Mkt7Mxf0LyLY3Nd4kC4UUb4MkR+5/8XghhxtZSTJHPRon1M3yguguF/Qqemx7oVfh7Im2nIYcw+orGDHZf41bcOqdpSqo6TbjmaTKyXCSOH7t+5BoXaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758470090; c=relaxed/simple;
-	bh=hdYxpzmIqmFR29Nz/t5tOX9nYOCvZnrcLn3k1UTVoiU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t1LQ6HjKPs4x9rLPaAH33OLCFSEmi+efEvf4HOyFhZR+eX0E5w6shrYnQqAMk8eSMqxgfbZndX2WlCHVBfL9Bqi6EnHjKmfkXdH4cYXG+5GuVe3pqLakyvJFneJtbv/pnZCsNIvDGq2pHm9OeS8hpP2c+rdTzP2KjCcIurDJPB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AOCMQn3f; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758483225; c=relaxed/simple;
+	bh=2m+X/nfuv9HOhbheWVXsceeU1oB9iRe5Dx2bNoWj8Nk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DEW5/XYhM7E9watQ4BwhWP3sLWLekhd5XCBHGoHrNEW+UxmuMGDYhYqrikqxUPkguZt78yN9wcPd7etCgCdKPvo6v0Gx9oKFoe4WkzqyGMsH2YEbabHw0S6M1ERzjpHyRVrVN24YOHbSazvyeZ5+DLakIgpgSLWmm/mQxSOl3rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B5uRRkmZ; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AOCMQn3f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758470089; x=1790006089;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hdYxpzmIqmFR29Nz/t5tOX9nYOCvZnrcLn3k1UTVoiU=;
-  b=AOCMQn3fsoAAW+8DMZMRdzPlZr8kp9fUekUDj9oti8jEatII6Os9sprR
-   8gWa1UDAcmR9Z6RByPb1wv6LPNMT+Suq4vPLd52ReHyyVs8bN+1HqFV+8
-   NgOdhNqUWMa4VMhl50f1Xmq0mD2WcYFtn5HuqPCfg2mh0CB1Ifmb5byS2
-   lw7/b8VSOGOjVQcho5c4fcTRoBe0/S2D6tBEPnLbKplndeuQy4bB4uJWy
-   k/GXYfPY6AZmzW26r8aQepG31FshsbcD96ZI8Vqp6MwaRtbkxZppn6/1Q
-   kZ8+Q0FyzSwIyfys30Jf7xJgZlZvnRcL09tTCBCsdetSe6fbPVbgPRYsI
-   A==;
-X-CSE-ConnectionGUID: LjRBLVunQnuD6Aj1Qvk2SA==
-X-CSE-MsgGUID: EpEAxgHtTDW+ImPyo+892g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="60675657"
-X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
-   d="scan'208";a="60675657"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2025 08:54:46 -0700
-X-CSE-ConnectionGUID: WmTwX7ZCQeGtsj5QllX2bg==
-X-CSE-MsgGUID: VDet6q7FSmKwZTWsKkzvTQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
-   d="scan'208";a="177084496"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 21 Sep 2025 08:54:45 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v0MOh-0000q9-04;
-	Sun, 21 Sep 2025 15:54:43 +0000
-Date: Sun, 21 Sep 2025 23:54:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Frank Li <Frank.Li@nxp.com>
-Subject: drivers/i3c/internals.h:54:9: error: passing 'const void *' to
- parameter of type 'void *' discards qualifiers
-Message-ID: <202509212320.yCuqvnVn-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B5uRRkmZ"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b5509894ee9so265294a12.2
+        for <llvm@lists.linux.dev>; Sun, 21 Sep 2025 12:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758483223; x=1759088023; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2m+X/nfuv9HOhbheWVXsceeU1oB9iRe5Dx2bNoWj8Nk=;
+        b=B5uRRkmZy7rlQpnp843fgRutTRy+T643UZmsbC+mXQ9WNRAloDFYvrokUh0YMSqOha
+         laUbk8RUicQCI7qq6VjEVR7w3/vNJ5ka3Qz5vJJAdrkqOUDqLtayR0m7l//PYn5kBQ7f
+         zf9BkJsI3W2vEELGaXlcL8DaARl4+Mb9K2+e7k9SNN9IaxtGnQzuNGFuoAvkyZh7JzY7
+         jsKQ1qa+p7PBpKaeDRYiPloL7hCXw1aypDtdm/HW3+uM8u8LrB2SZX2nd2GQBUky8JaZ
+         0osuwrUtLZqVyN/EOkk/CbEFFNufeaZvmpVOneyAG8Rh59gKIt/scpJkdDrwwIzygoaH
+         /Lqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758483223; x=1759088023;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2m+X/nfuv9HOhbheWVXsceeU1oB9iRe5Dx2bNoWj8Nk=;
+        b=b8h9p5rSbirCc8aYpyXzfAIC4xsDteemS834QxIoojsdBYdx8D5CuPo1rba8omYbSq
+         BvAqkU0pg0P6iNd7ubzR/vZumGg7TKo5LnnfVPUN7m+TiBnGYAPVaE9C/dM3I7WqIBh2
+         ktO9Ct+5gudmp2ie5KMpXV/P4v8O1qChSyXKRq+pnT/G8PXfh7OncNdiyvw53H1+VO6F
+         VYx5GY5GvK0W6ulRCoFDdVb0vNFz8SZUdRxRYk2eQ+xwZ0zxwDGuY48acdvwylWVS9K4
+         4loblgKtmB6YKwHCA9UbC1SJcth/Y73OKUG95jeM8WvR7jRao3mTQ9qPg0DFckx9dsY6
+         /W2A==
+X-Forwarded-Encrypted: i=1; AJvYcCX2dXI/n/ipBXis5wzKJTZ6wpo9TcJrBt6y82S7cmmwTGm5zq+C+NrbEPbAQ93ekZdag7OD@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywfbfhh5ZA9zTt5PA1RN+HwfB2yOV7TEpcxi6iF9TcCLcPBnBPs
+	OBhGYfZZ/b7hauZpmPzJ9OhAiFRpgtip6b3eXW5qwb7EunqEpQQrm8UHatccmbyH0IZWIsdI6ps
+	SN3ct4DvDiu77sZ0qX8xh5eczWGXkpt0=
+X-Gm-Gg: ASbGncvLucku0cBx9wnjoO6m0tornvuux5skDrX/VoeZTZtgvsaMTDS4vrQSkT0+rIt
+	cGXiUgPDU9SOkZJYxwCxqsvnvTRxGs3DI+VBfTcwJC63/b9QyNIkg/iM95yvus7Ng9Rr4gFKxvz
+	48J5ZAVuDenJG/k6RW9l0RJk4oVvIL8z1SIdMfvO/qd05WOg8FMcRc5gtz2tT14j50DMBoWHT+Q
+	SnXwQX2B/F6TcGU8KhA1pmIs6rf69tUFoY7aBRY+jJcdWJ2w9xHjh2WzJA0YsG37813+YkHrFps
+	cHH9qcHD8ricNMlB9lxpYqyW3A==
+X-Google-Smtp-Source: AGHT+IG4kRzeiPGLm59ZZQszVAWsNaDqqCH2KI2Z0y+NJALvZL1xRg5SeR7LL082wuOV46ofwPf8NpR+imqiZxjX0Qk=
+X-Received: by 2002:a17:902:f68e:b0:269:96d2:9c96 with SMTP id
+ d9443c01a7336-269ba2611c1mr76464005ad.0.1758483223077; Sun, 21 Sep 2025
+ 12:33:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250914-gcc-rust-v3-v3-1-34d4d5864144@gmail.com> <73d55231-d1e5-400d-9446-1914a78c0db8@iscas.ac.cn>
+In-Reply-To: <73d55231-d1e5-400d-9446-1914a78c0db8@iscas.ac.cn>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 21 Sep 2025 21:33:30 +0200
+X-Gm-Features: AS18NWAcFs0MDi_Dw6rCzaLkE9gp-FV3yn7YymzJYRPsBMfxvetkj0p00jJxboU
+Message-ID: <CANiq72n6_JdbgBiZHHiTg4vqnFHdfQhHcV2JpyQ0pz2J+KBSDw@mail.gmail.com>
+Subject: Re: [PATCH v3] RISC-V: re-enable gcc + rust builds
+To: Vivian Wang <wangruikang@iscas.ac.cn>
+Cc: Asuna Yang <spriteovo@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Han Gao <rabenda.cn@gmail.com>, Jason Montleon <jmontleo@redhat.com>, 
+	Conor Dooley <conor@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wolfram,
+On Fri, Sep 19, 2025 at 7:21=E2=80=AFAM Vivian Wang <wangruikang@iscas.ac.c=
+n> wrote:
+>
+> Is this necessary? Maybe this can go in a separate patch, or even
+> submitted separately entirely - it's unrelated to "RISC-V: re-enable gcc
+> + rust builds" and would be weird to see in git blame.
 
-FYI, the error/warning still remains.
+Agreed, I mentioned the same in a previous version of the patch.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f975f08c2e899ae2484407d7bba6bb7f8b6d9d40
-commit: 3b661ca549b9e5bb11d0bc97ada6110aac3282d2 i3c: add missing include to internal header
-date:   8 weeks ago
-config: sparc64-randconfig-001-20250921 (https://download.01.org/0day-ci/archive/20250921/202509212320.yCuqvnVn-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250921/202509212320.yCuqvnVn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509212320.yCuqvnVn-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/i3c/master.c:21:
->> drivers/i3c/internals.h:54:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      54 |         readsl(addr, buf, nbytes / 4);
-         |                ^~~~
-   arch/sparc/include/asm/io_64.h:265:41: note: passing argument to parameter 'port' here
-     265 | static inline void readsl(void __iomem *port, void *buf, unsigned long count)
-         |                                         ^
-   1 error generated.
-
-
-vim +54 drivers/i3c/internals.h
-
-733b439375b494 Jorge Marques 2025-06-24  44  
-733b439375b494 Jorge Marques 2025-06-24  45  /**
-733b439375b494 Jorge Marques 2025-06-24  46   * i3c_readl_fifo - Read data buffer from 32bit FIFO
-733b439375b494 Jorge Marques 2025-06-24  47   * @addr: FIFO Address to read from
-733b439375b494 Jorge Marques 2025-06-24  48   * @buf: Pointer to the buffer to store read bytes
-733b439375b494 Jorge Marques 2025-06-24  49   * @nbytes: Number of bytes to read
-733b439375b494 Jorge Marques 2025-06-24  50   */
-733b439375b494 Jorge Marques 2025-06-24  51  static inline void i3c_readl_fifo(const void __iomem *addr, void *buf,
-733b439375b494 Jorge Marques 2025-06-24  52  				  int nbytes)
-733b439375b494 Jorge Marques 2025-06-24  53  {
-733b439375b494 Jorge Marques 2025-06-24 @54  	readsl(addr, buf, nbytes / 4);
-733b439375b494 Jorge Marques 2025-06-24  55  	if (nbytes & 3) {
-733b439375b494 Jorge Marques 2025-06-24  56  		u32 tmp;
-733b439375b494 Jorge Marques 2025-06-24  57  
-733b439375b494 Jorge Marques 2025-06-24  58  		tmp = readl(addr);
-733b439375b494 Jorge Marques 2025-06-24  59  		memcpy(buf + (nbytes & ~3), &tmp, nbytes & 3);
-733b439375b494 Jorge Marques 2025-06-24  60  	}
-733b439375b494 Jorge Marques 2025-06-24  61  }
-733b439375b494 Jorge Marques 2025-06-24  62  
-
-:::::: The code at line 54 was first introduced by commit
-:::::: 733b439375b494e8a6950ab47d18a4b615b73cb3 i3c: master: Add inline i3c_readl_fifo() and i3c_writel_fifo()
-
-:::::: TO: Jorge Marques <jorge.marques@analog.com>
-:::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
