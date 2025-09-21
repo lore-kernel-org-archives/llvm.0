@@ -1,64 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A55B229B38;
-	Sun, 21 Sep 2025 20:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E498217A5BE;
+	Sun, 21 Sep 2025 20:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758485062; cv=none; b=KfLkcrgOP4T97uynh7avtaN83EIA7YuGtGdyvR1xRdJnoTWrT1NfFnsS92heXNBXBtL+mmg6cpl6aG2F1XTw0tSWrjFAB2yvKGRYUnXFU103mZQ0tJQObL23+bvqX1KBPd+Iu4EVjH9rcsbsuZvOinKjl7zA000p0geo1Kdmb9g=
+	t=1758488230; cv=none; b=fxNDm1NJEDo5yMfp0kw74cR+uuUM7G9c5z3ORDHUTwjbtz8bgbKLNMWjGkDx/r/nRpt7/0xNhrpKh5RiEWO/Riq3ETXPvd0QbikJCpnc8m45d26Z1XKcDQHDo3nGvRdBKvevKw9sbVrPNzvotDpKm9xjG6ryZWbrxj+dOO8c2Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758485062; c=relaxed/simple;
-	bh=oK6PNMhjBQuguBf6ZyCDvGmGsPBZFWxojb6mTU595d4=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=AaRp6PBxilph9v1Uvhr1LOETbN1w7tT9hWUoBmM6DBY+lZzqWufW3TIY7TMee/JE9tOKMsJzwVfCL6DWne9g4Rthqwq1sRtnvshjSiPUPDH7kRZXxOu2aJ4qKVOHE2un1cF9kDy4f5iZtuH1HSpT9mjfoBdqDJZIWg7LTVM0BEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCTBvx1y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758488230; c=relaxed/simple;
+	bh=i09wc8NXq6PotjxqjMuSQHv+u6f7Q0gcxiSIZOBbbYo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m+cZ7rfVFnrlXUnPGZViNp12xIP/XqcOAKFgg2MgznBrBK17QQwl9rjMbTXtJ0Ofw5BJfxuNO08ReZQ+laBlSG3AEIqCJWuayGQdMS1djot7nocrrdMH1vz+wec9kVtAYEnO+A4ZPDA8QP9tairkfRfSLGFIwmp6GDSKt6DeLg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CHwo8BXl; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCTBvx1y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A835C4CEE7;
-	Sun, 21 Sep 2025 20:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758485061;
-	bh=oK6PNMhjBQuguBf6ZyCDvGmGsPBZFWxojb6mTU595d4=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=iCTBvx1ycWtFaxbFJjKnE8lmTRV6YKBljeoNPWr3O0f9KOI2wK+gY/chvSLppb2iw
-	 nKDM1jLs/kX3EvgUACM5BKR1e32v5rVmusbFg6REu8gh8nHtL4KnpR4cztPIEWYsyn
-	 85sV5ZWf8I2axh1P00A55pSPIoljTkKeShL0Yo6iD75KN1B4tcxd0MZkgqGmYUT1mQ
-	 IpOfY2l2pbjRNsgwxsBcIB9YfzgZxcgmX2t0tM84PDIkYUJsgjzu0i/zQZHS16n4gv
-	 WrApdIyoKSa91FOKnNUjwHaVFh7bF8WfL1saxL8xffSMJav7UkpqNUB9WhDh8//gHr
-	 V8yFvFNiMSeTQ==
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CHwo8BXl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758488228; x=1790024228;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i09wc8NXq6PotjxqjMuSQHv+u6f7Q0gcxiSIZOBbbYo=;
+  b=CHwo8BXlwV60NE9/jDBqrPfaps6ZrltqWe9EgxymdsjsgBX73VNNETdi
+   tU+nUeQAMTo+jHtZs1xnCJb8m7Lgv4qTKE6hMZf7ySpxFS0Qnjl4oOjDY
+   Isv5dIPCNZWfRQ+zrm7P6b8bvxKR/GWfpB4jG5k2hWWfM7g6z6U7ltBTD
+   KjQJBgcBqywL4OF4sAMr0Uj+7MjzMhjyMP+nd/h/ykwi9Fp074MK43P04
+   yx5EqSapsVK6uILlF1PH8N/8mxvbr1THuXfU5GOCRjmcUjKH3T29acaBh
+   0PwS9DIlJq0q6//pYljX1CeB4g/d+Opd6cn6jTe9C3uSp9kBQO6FLKmdn
+   w==;
+X-CSE-ConnectionGUID: R+FPAGd2SKiIrY/9uI0+hw==
+X-CSE-MsgGUID: KIlw9YLtSZ+4MoDUXVqQgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="60643311"
+X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
+   d="scan'208";a="60643311"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2025 13:57:07 -0700
+X-CSE-ConnectionGUID: IW0SUcRoSWqvrIzykSVpHA==
+X-CSE-MsgGUID: U9+NSOYjT/m1JIabRKXizw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
+   d="scan'208";a="175914597"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 21 Sep 2025 13:57:03 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0R7E-000109-2l;
+	Sun, 21 Sep 2025 20:57:00 +0000
+Date: Mon, 22 Sep 2025 04:56:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>, linux-kernel@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	acourbot@nvidia.com, Alistair Popple <apopple@nvidia.com>,
+	Timur Tabi <ttabi@nvidia.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH] rust: print: Fix issue with rust_build_error
+Message-ID: <202509220423.4d1foVAO-lkp@intel.com>
+References: <20250920161958.2079105-1-joelagnelf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
-References: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com> <20250623-byeword-update-v2-19-cf1fc08a2e1f@collabora.com>
-Subject: Re: [PATCH v2 19/20] clk: sp7021: switch to FIELD_PREP_WM16 macro
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org, linux-sound@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-To: Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andy.yan@rock-chips.com>, Bill Wendling <morbo@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, David Airlie <airlied@gmail.com>, David S. Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Heiko Stuebner <heiko@sntech.de>, Jaehoon Chung <jh80.chung@samsung.com>, Jakub Kicinski <kuba@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Justin Stitt <justinstitt@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof =?utf-8?q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, Liam Girdwood <lgirdwood@gmail.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Manivannan Sadhasivam <mani@kernel.org>, Mark Brown <broonie@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <mturquette@baylibre.com>, MyungJoo Ham <myungjoo.ham@samsung.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Paolo Abeni <pabeni@redhat.com>, Qin Jian <qinjian@cqplus1.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, Rob Herring <robh@kernel.org>, Sandy Huang <hjc@rock-chips.com>, Shawn Lin <shawn.lin@rock-chips.com>, Shreeya Patel <shreeya.patel@collabora.com>, Simona Vetter <simona@ffwll.ch>, Takashi Iwai <tiwai@suse.com>, Thomas Zimmermann <tzimmermann@suse.de>, Ulf Hansson <ulf.hansson@linaro.org>, Vinod Koul <vkoul@kernel.org>, Yury Norov <yury.norov@gmail.com>
-Date: Sun, 21 Sep 2025 13:04:19 -0700
-Message-ID: <175848505982.4354.2243738737036950081@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250920161958.2079105-1-joelagnelf@nvidia.com>
 
-Quoting Nicolas Frattaroli (2025-06-23 09:05:47)
-> The sp7021 clock driver has its own shifted high word mask macro,
-> similar to the ones many Rockchip drivers have.
->=20
-> Remove it, and replace instances of it with hw_bitfield.h's
-> FIELD_PREP_WM16 macro, which does the same thing except in a common
-> macro that also does compile-time error checking.
->=20
-> This was compile-tested with 32-bit ARM with Clang, no runtime tests
-> were performed as I lack the hardware. However, I verified that fix
-> commit 5c667d5a5a3e ("clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()=
-")
-> is not regressed. No warning is produced.
->=20
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
+Hi Joel,
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on linus/master v6.17-rc6 next-20250919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joel-Fernandes/rust-print-Fix-issue-with-rust_build_error/20250921-002215
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20250920161958.2079105-1-joelagnelf%40nvidia.com
+patch subject: [PATCH] rust: print: Fix issue with rust_build_error
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250922/202509220423.4d1foVAO-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250922/202509220423.4d1foVAO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509220423.4d1foVAO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0277]: the `?` operator can only be used in a closure that returns `Result` or `Option` (or another type that implements `FromResidual`)
+   --> rust/doctests_kernel_generated.rs:3446:70
+   |
+   3446 |     pr_info!("The frequency at index 0 is: {:?}n", table.freq(index)?);
+   |     -----------------------------------------------------------------^-
+   |     |                                                                |
+   |     |                                                                cannot use the `?` operator in a closure that returns `()`
+   |     this function should return `Result` or `Option` to accept `?`
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
