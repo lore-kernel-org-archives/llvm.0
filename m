@@ -1,130 +1,127 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD2934BA28
-	for <llvm@lists.linux.dev>; Sun, 21 Sep 2025 14:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027861C84DF;
+	Sun, 21 Sep 2025 15:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758466395; cv=none; b=qzA0D/aBBJytulptxyKcHYBcqX2GXgHWuH8xYhoeMzjbXqd18B2ulVSgME9ywlNIlb/o6z5C/7smC6teiBCffKasvhHEG78YzvuTk32UDfNzvbNHMrBD7jxkLJ9LIBwDbTU0PF7NDX7BJgNkWm0LN+9CCFZdY5mtSz0hB+1HGQw=
+	t=1758470090; cv=none; b=aCerw1KgBllvS95QGqJPz+OEHxp1cYjyMNXZ6i9Be//UOMol2k24i3Xw64fXZYEmMWvMhZAe0ES8p/BZ0tA7Fce5qolu6KL9M90/oFnDOXro+Fw8S4sq1KcHpW6LYJuNBSm/IxADYZ57crENPzgJ7hUHFJyrwvfRBo+MRSOHJt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758466395; c=relaxed/simple;
-	bh=61cSvquqPqFV5yemkDOrD91cDbl4yTDYjb2AYaylTD8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YMFg9Itb+nEL0KnWejqCd4rWlBTHt+eq3Y5h0gLEdzkBBlA4o3rQhsTRDWs+kYGoNRTLf4tkIxFwdL75UwcVYOVpNCmkd6hzZGXGNmh3Ju2i5hD5rcrnXrtupC5o9Ws0SyS4b4bAvxP035zeLIfad2UnFw0QMzueb/hiCxn1OG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C8C7JEft; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758470090; c=relaxed/simple;
+	bh=hdYxpzmIqmFR29Nz/t5tOX9nYOCvZnrcLn3k1UTVoiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=t1LQ6HjKPs4x9rLPaAH33OLCFSEmi+efEvf4HOyFhZR+eX0E5w6shrYnQqAMk8eSMqxgfbZndX2WlCHVBfL9Bqi6EnHjKmfkXdH4cYXG+5GuVe3pqLakyvJFneJtbv/pnZCsNIvDGq2pHm9OeS8hpP2c+rdTzP2KjCcIurDJPB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AOCMQn3f; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C8C7JEft"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758466391;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=k5fYylsQDnlMs0Zg7tu2GW/9LCb9efewyXmmkRS8Ihg=;
-	b=C8C7JEftPa+to1EQ2qvpbwf5ZfkBySlq28/MAe2Fk1CB7UH1Jxx5tdViKGVjIjnQ5BmRzo
-	eP+OqTMhVzmRD5jtehG6+ZJcCUvvj0AkUp6sMDjMisn+yXNUxk1j3Zdh288ckt8sBUhWZq
-	cx+AKrjZSJbIPMFvxcy0g9sgCsKFKsU=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-199-Y0fOUzcbMQmypAHJsdIB6Q-1; Sun,
- 21 Sep 2025 10:53:10 -0400
-X-MC-Unique: Y0fOUzcbMQmypAHJsdIB6Q-1
-X-Mimecast-MFC-AGG-ID: Y0fOUzcbMQmypAHJsdIB6Q_1758466389
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 45ABE18004D8
-	for <llvm@lists.linux.dev>; Sun, 21 Sep 2025 14:53:09 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A865D19560BB;
-	Sun, 21 Sep 2025 14:53:08 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc6,
- upstream-mainline, fce24200)
-Date: Sun, 21 Sep 2025 14:53:08 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AOCMQn3f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758470089; x=1790006089;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hdYxpzmIqmFR29Nz/t5tOX9nYOCvZnrcLn3k1UTVoiU=;
+  b=AOCMQn3fsoAAW+8DMZMRdzPlZr8kp9fUekUDj9oti8jEatII6Os9sprR
+   8gWa1UDAcmR9Z6RByPb1wv6LPNMT+Suq4vPLd52ReHyyVs8bN+1HqFV+8
+   NgOdhNqUWMa4VMhl50f1Xmq0mD2WcYFtn5HuqPCfg2mh0CB1Ifmb5byS2
+   lw7/b8VSOGOjVQcho5c4fcTRoBe0/S2D6tBEPnLbKplndeuQy4bB4uJWy
+   k/GXYfPY6AZmzW26r8aQepG31FshsbcD96ZI8Vqp6MwaRtbkxZppn6/1Q
+   kZ8+Q0FyzSwIyfys30Jf7xJgZlZvnRcL09tTCBCsdetSe6fbPVbgPRYsI
+   A==;
+X-CSE-ConnectionGUID: LjRBLVunQnuD6Aj1Qvk2SA==
+X-CSE-MsgGUID: EpEAxgHtTDW+ImPyo+892g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="60675657"
+X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
+   d="scan'208";a="60675657"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2025 08:54:46 -0700
+X-CSE-ConnectionGUID: WmTwX7ZCQeGtsj5QllX2bg==
+X-CSE-MsgGUID: VDet6q7FSmKwZTWsKkzvTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,283,1751266800"; 
+   d="scan'208";a="177084496"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 21 Sep 2025 08:54:45 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0MOh-0000q9-04;
+	Sun, 21 Sep 2025 15:54:43 +0000
+Date: Sun, 21 Sep 2025 23:54:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Frank Li <Frank.Li@nxp.com>
+Subject: drivers/i3c/internals.h:54:9: error: passing 'const void *' to
+ parameter of type 'void *' discards qualifiers
+Message-ID: <202509212320.yCuqvnVn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <35769.125092110531000343@us-mta-199.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ztczNFcoLfWxHNsugUgokLRkvCwqBopAxXRuzQwGB6E_1758466389
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Wolfram,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+FYI, the error/warning still remains.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f975f08c2e899ae2484407d7bba6bb7f8b6d9d40
+commit: 3b661ca549b9e5bb11d0bc97ada6110aac3282d2 i3c: add missing include to internal header
+date:   8 weeks ago
+config: sparc64-randconfig-001-20250921 (https://download.01.org/0day-ci/archive/20250921/202509212320.yCuqvnVn-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250921/202509212320.yCuqvnVn-lkp@intel.com/reproduce)
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509212320.yCuqvnVn-lkp@intel.com/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2051871215
+All errors (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+   In file included from drivers/i3c/master.c:21:
+>> drivers/i3c/internals.h:54:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+      54 |         readsl(addr, buf, nbytes / 4);
+         |                ^~~~
+   arch/sparc/include/asm/io_64.h:265:41: note: passing argument to parameter 'port' here
+     265 | static inline void readsl(void __iomem *port, void *buf, unsigned long count)
+         |                                         ^
+   1 error generated.
 
 
+vim +54 drivers/i3c/internals.h
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+733b439375b494 Jorge Marques 2025-06-24  44  
+733b439375b494 Jorge Marques 2025-06-24  45  /**
+733b439375b494 Jorge Marques 2025-06-24  46   * i3c_readl_fifo - Read data buffer from 32bit FIFO
+733b439375b494 Jorge Marques 2025-06-24  47   * @addr: FIFO Address to read from
+733b439375b494 Jorge Marques 2025-06-24  48   * @buf: Pointer to the buffer to store read bytes
+733b439375b494 Jorge Marques 2025-06-24  49   * @nbytes: Number of bytes to read
+733b439375b494 Jorge Marques 2025-06-24  50   */
+733b439375b494 Jorge Marques 2025-06-24  51  static inline void i3c_readl_fifo(const void __iomem *addr, void *buf,
+733b439375b494 Jorge Marques 2025-06-24  52  				  int nbytes)
+733b439375b494 Jorge Marques 2025-06-24  53  {
+733b439375b494 Jorge Marques 2025-06-24 @54  	readsl(addr, buf, nbytes / 4);
+733b439375b494 Jorge Marques 2025-06-24  55  	if (nbytes & 3) {
+733b439375b494 Jorge Marques 2025-06-24  56  		u32 tmp;
+733b439375b494 Jorge Marques 2025-06-24  57  
+733b439375b494 Jorge Marques 2025-06-24  58  		tmp = readl(addr);
+733b439375b494 Jorge Marques 2025-06-24  59  		memcpy(buf + (nbytes & ~3), &tmp, nbytes & 3);
+733b439375b494 Jorge Marques 2025-06-24  60  	}
+733b439375b494 Jorge Marques 2025-06-24  61  }
+733b439375b494 Jorge Marques 2025-06-24  62  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 54 was first introduced by commit
+:::::: 733b439375b494e8a6950ab47d18a4b615b73cb3 i3c: master: Add inline i3c_readl_fifo() and i3c_writel_fifo()
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Jorge Marques <jorge.marques@analog.com>
+:::::: CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
