@@ -1,163 +1,127 @@
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013007.outbound.protection.outlook.com [40.93.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A19F316196;
-	Mon, 22 Sep 2025 17:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758563342; cv=fail; b=jx5OlcHefKidwswAXH9+rWNUMgj3NTLJMzpPM9mXpwFU2Pb0MBK7l9EUzewR4S/qsLpr5KMyzPPa3P9U7PSP97qMt1yi8MCIMyOBmKvpeCN7rjFVasLKteMvs+DsqxIX7XokxY6WmBCrXwv0jUThfKuIYsb0ZCWovpsG0puYRMQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758563342; c=relaxed/simple;
-	bh=tZF9Bh5hYnH02u7GlZVYLIIASDgxmCRlo6mQAaQ2A9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=op3uttArCQesox/Gn52TWSNOOWh2lALkb0WMXRVZXT2qN0zA4R53KkClKcUjZMFtufOAqs3qN9rHO7y3F71ybp3iFD1RroONOt+Z6Vgd7UoQC0mA1DDc08QUapuNfXIGKtxCIuxTYrpjclPiwKC/bNqB/HHTkfqLihoxyCiwQmA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JWT1oMyD; arc=fail smtp.client-ip=40.93.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F98317703
+	for <llvm@lists.linux.dev>; Mon, 22 Sep 2025 18:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758564009; cv=none; b=OQP2ZHJ2lY9b+uvqrAe02ge9nEnakjewkfAALH9DCMQGTaHPuHKKZksXE43IEH2oAYfSYwX4u/mzvvXA4NvxODPYvKWJ/egb0uz685b/kwpvAGjjCJLhQ9EXmjTsATkIN6qHNdJo4LYIoyaxtpeKCJf1xgpdJlgxdWqzR6Ek56U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758564009; c=relaxed/simple;
+	bh=LyFQcvfyyUbzuum2T68G+X8Y3wIlSo94RVd3tQx/fGM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ljscv89xT/7pGlpCV0BGgRVHf1TKU7omDDFHtXCzEGrVNkwuxueRqEOR0+25vlp2aQ/JFyBl1PLhQK6A836/nzPNK6ztCaz+rN1NJfvj3LZmikpx+AmFeZUNGcBIx3EyC7uGAQ4DoYJKOklrvFt00+wLhXpDe/XktA2Js7vQER4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L7rcPIvi; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JWT1oMyD"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vNKBWy3u8nLO0izvHaL/9XeVLPNGxmBvzLwxNlCLHqosOL8Sb15FEZhFOgCqhIuCp11yeiusNMy7h7DpdOKiBwaWKV5IsZdBXPwVAE5ZlkEymvTFyRAbtyl9XlpqaMYh8ggZAgkT1/MOroql+s10iUyU1Ffo98GxkmNvAZ7M9Vm9O/HH+N/gtMO1rk3o/cpSpgK/DwEdqYTQJCfL0xNHNqmzxwdclW+e2updlaDhlXKYNy4u19BXCKSyHr7LKWQ8eTPpqhBgR9GMmpumxyNhOck4Sa4Ic1+LJOLwb8pRNWAnLuXtS+s4GuoQMeM+WOcQbn+DiFNVVNUGtR3buuLrbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ncXDWwRyDLCUsZoI4irnSjJn9rmFrlW9jCFdhUA8oFg=;
- b=SMaKuN36idiq8hEMcCrKMSLaQw+oGwceRI51/8Ex+zwvJVrg7pTSndW+8hC2a485vAHyb1rhGhkKIDicvJbXr394g2zvPcDZfDjM74ptcdMaXAVBE7UPhwjINE7xk6AqPJy+AYYVEhnWSryBDB39+5WDcPqRNkL2Fe5aQJ8ZZbLesT0OrYqBd/+9OG6Esw+o29TctTDrsXRIDeGr1gLf+irn2sDMG1HIEiVsZBZUa4L2o8px6O8f3HhNDJ2THI+dJp2yYCefsMXwFFmRmOtuDmZjMhbtu/UEJnMKC9Hggb6JFLCwRL4CGltTxd5J73/pgqXT0qSX1nzLbRPvNs9uUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ncXDWwRyDLCUsZoI4irnSjJn9rmFrlW9jCFdhUA8oFg=;
- b=JWT1oMyDaWrOuGEJoq1ovoSZZIqP7yCcRZPMD5gkkWrzvDwJQVAcDBZ/GY28csDfDQxeBel/FvA9wHsf7iBcUpPCJhKIiIlu5PP1iNKDMKi1jUVPx4HUiIBhYpl4QZLF0OeBuZEU1jNpfNqSrCUluiALLNyKv8UtAnyMnb7+yUenPDuESnv70iBNhux/a7heoSJl4xldUDPVHX5EsS+Q39QObRWz0BQNrzOmfix4z9luSPE3TntQR1OWryRKzVPm99TuzHv8E8VA+wQHrKaU1a6ncTOrL3lBc4Weo87I+1kfb5EmtI+1viSx5A7eLEeIcS6dbCsMBa7rm19aS2vjtQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
- by DS7PR12MB9552.namprd12.prod.outlook.com (2603:10b6:8:24f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Mon, 22 Sep
- 2025 17:48:58 +0000
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9137.018; Mon, 22 Sep 2025
- 17:48:58 +0000
-Date: Mon, 22 Sep 2025 14:05:53 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: ALOK TIWARI <alok.a.tiwari@oracle.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
-Subject: Re: [External] : [PATCH v5 01/15] genpt: Generic Page Table base API
-Message-ID: <20250922170553.GI2132010@nvidia.com>
-References: <1-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <11743f88-7cc0-416f-acb5-807c9b9aa1db@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11743f88-7cc0-416f-acb5-807c9b9aa1db@oracle.com>
-X-ClientProxiedBy: SA1P222CA0112.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:3c5::25) To PH7PR12MB5757.namprd12.prod.outlook.com
- (2603:10b6:510:1d0::13)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L7rcPIvi"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2697899a202so32140745ad.0
+        for <llvm@lists.linux.dev>; Mon, 22 Sep 2025 11:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758564007; x=1759168807; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3tEHA5BGFi0qZLtSrmyzVuEmtCHCJP0b4IMQl2NugYg=;
+        b=L7rcPIviSyF84nE8+AU54rumpArZSM1lN94BgxfXiQn4bpJUmLqJ3W7MkYklSXSZ9T
+         Sz0A5w5zAqU1SpFSgnlyFMqXsHqkNBs7tGCyfj5FrgVtha8VQUM0vDjVcUttePi89WVx
+         esuRtkf2BDKKnX0nI9Yi+tB4G4clcbIO8aIOpxZHCcP3DKwKSH2XI13IwVE6Z+iL+iBg
+         +PqGhJwPaOzYgCGDIzovKjWEW2sZQ6Wj8tMSz0IQK6wJNlSENhUzFSsOCmNm6kwx4YSJ
+         hNa2PJDZYxC4XSLHOsTlS/PUviwB1ogaxXaHOXzOxv8QrHThuvI+YKV0ML4+woDr+XmX
+         5lng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758564007; x=1759168807;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3tEHA5BGFi0qZLtSrmyzVuEmtCHCJP0b4IMQl2NugYg=;
+        b=MDlpyB0/JULLFMuJFZ23oI8Zly3wfdaoEHV7cr2hIQRhP44AFb3jqaZecsawoYzgI8
+         qjYurcjY2g/E0hSxa8aD81Yeeo0xdJlSo/mKnYa4SftzbKf9A0AWv7ySfp+gexyUDgUg
+         5GoqdFJcL9vHMeULXHyFmmb60RkLjxJiPKqYYN4tmPEN+FXbmQF+sjp52WT8iy38dypA
+         b/GgZ380LAWR7ed79xM7T21t8gq/13FRKA+JtG/yYp2X3aEc+lpdp825o0+rleoab4Nv
+         /Wg4ZED9KDywaTXCIWUX3gT8y0W5DzA5pX6Iwloiwg9LHxsfz0BhFLhmnAP6QYuH1udE
+         IywA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQf6ekwfn4a0YpZCDCTSKyxu+ft7RUWKjy3bgNm7qBzw+8lVIOpiTWxtLDqUrVeuKPzZep@lists.linux.dev
+X-Gm-Message-State: AOJu0YxxtYdw64Q9zLzh7+ivSMvFOpRnErTn/hy0L0dSqi0We6uy884B
+	YSeFCJi670mTjb8vLlI5PMXOX+Xn02+SAozFAl5myjTTdRFXGazJUHarFor3QpV1hxUkTQ8fMwF
+	lff35oUs9teGITyP3Bbr9Gg1+2LrGeib++sn3e+Vxmw==
+X-Gm-Gg: ASbGncvw2d2yWuR1pYkd8N34cNzJ9pJ1wChwYQRUSNpOmtRJYBqupAGtzphpdeT68rD
+	stRlL1BfwG5t7uc7b0FxAxwb9rbALLTcWyHBO3Jxc7nuic/VJ5dPpzHXURcMPmBGq0oGoapIbpk
+	jK/jkv3i0ex5/c0ESwybesZrGvHoYg1iaJ8hZr5dq3x/HkINWS4NGC0c0qEWB4SnDmloi4oZKig
+	D+Pkh8NLTGuWAIEynJk5F4fF5NjNjYvFf3Yitl/
+X-Google-Smtp-Source: AGHT+IHnq0rLb8m5TMIAGXGLN0gHFwtTPEoJOMo0Qxa07UPXisa8PfZthBdHiar633sbMLp+TiDunSqrb9HsyhZzMag=
+X-Received: by 2002:a17:903:98d:b0:272:a227:245b with SMTP id
+ d9443c01a7336-272a2274fc9mr102985765ad.17.1758564006785; Mon, 22 Sep 2025
+ 11:00:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|DS7PR12MB9552:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69e24e00-7fe1-4444-2b37-08ddfa004e79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Ief9zGC9zw6HkdyM+z5RYszCVDO4S2ARNU2+FLtmeIYoEzgPqOVvPdZMUTt/?=
- =?us-ascii?Q?Ycum8YXQQ8Ey3TycH8L/V/1wrMkQ5zcsnjihgGtWk3QNJhEJgNs7SAcRn/Ks?=
- =?us-ascii?Q?6VhFkfZq2leCRcrMfbATQh4DOWO/VM1xkECqTBNWUQsl7zMIL7UVIKkx9WGh?=
- =?us-ascii?Q?PR+vi3lUbZ5P9+W1nOSkHJz0JZcKS1ogXIgsmc7gFZaSXsa/9XihvwruTMaU?=
- =?us-ascii?Q?LsrfWpDWvpEplWkVZ/Y92nfVFPWlFrUGdsnWcZUflixEUrlWe6JVOrAjKwNZ?=
- =?us-ascii?Q?exq0mH2WX+F42HoCdqBiE9mfaaswBX4brInvEGUAH8twsRvfr4ssY42AhLzC?=
- =?us-ascii?Q?dMTweLR9bNvGuJ2DQPDHHFXZbF39If4PsD1akfwOJ3wP6rh4ouU17RUmSYqR?=
- =?us-ascii?Q?s9t139Qr/JeRCqL2Cmr1aCByYbTsuuzKJl0p1r8a/30bvZRpO3HQ7X3W+KDY?=
- =?us-ascii?Q?iE3qXVjrLpQslsh+XBQNEP1NUdZFtCzRci4cDPv6xFk43tIAYc+wwntg4MgI?=
- =?us-ascii?Q?2Qo5sODXjUDqKtThqn9VLrXYq7C1jhsg5afhZLWGGUX5Jq9H4S13RnumGLls?=
- =?us-ascii?Q?hZ7mSDYLjyvxKGodI1hWRWRGO3pNutdDodtCjgCsWl+dvYkjNoC5qbDfbU+q?=
- =?us-ascii?Q?FhiVniEGEcKXL2chb9aP2miZ/oBrHA+w9eLkUb97MKiqnEbPR3i8YsdIZ0dx?=
- =?us-ascii?Q?+qR3v6qo6Wp4+5vfhZoZR4DmaO0Q4Lk/kA8NSdnbST5vBPBWXZsYYluBpIsu?=
- =?us-ascii?Q?HcfNDTl2oKNUXV4C5UGWTGVgWj3hMj/hSdSxLQdbYFFPWbHa/SZaJKA1RU8e?=
- =?us-ascii?Q?YqT3IUCc6RzALwveFY15mDyyl952I7JHGA/ug+abBlkuFgSoWx73uNRzZLH8?=
- =?us-ascii?Q?TIPspphLEYxvd3J98gDmLZvxa5ugqDdXaAxFdgkHnLW0H+fx5ZF+5E2wqNTk?=
- =?us-ascii?Q?UnfQLr2aCH/ws0Ji1hmcd19wXE6y/i83T2aOZJSsHpJERp7ngzrtTeE58jIl?=
- =?us-ascii?Q?JA747ZYUNqIkgU1iv4QHD7YEU+wHszAYotFrNCm83S7mEiuna1u/ukQB1ghz?=
- =?us-ascii?Q?kJicdWltm90e6lK5dSGFgTvUA0CCOXiBvPrGkSHYEO1RBRCpsYw7zQYY5V6g?=
- =?us-ascii?Q?jWo8evAcDA/vI8gZyODtDQOHdgG8oDR6Kew7mrT3xqFGRY8t3N2tVoH12V5e?=
- =?us-ascii?Q?frYNzZymtOBBqX1V0m2xEeFSSSE+R1YTW67HaFDIRefs9KzqQYPdg8ggX9+h?=
- =?us-ascii?Q?SSJXKQBYx8LDQyDTYNgI8ofOKJ6gqXJ+sIoAnirGqd2EbKJu2UHd68fH8lx3?=
- =?us-ascii?Q?hpqQ1NapLEhagP6KhaKiBaJ7FFTjUqS7Ml1uB7jNgmZyt8IQYtUd6PVCM0Fi?=
- =?us-ascii?Q?2E1XwcqJpQ3KjqF3rZYULKKomgVQ1VUiKjgeV2x6K7qtvDgAMXTzEaONVcQZ?=
- =?us-ascii?Q?dL8Px07Dr6I=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NTmepQJYIh0oNYZUVus+0w4ZV5KvU03Uf94E6BJagd5zEz7q4KZY5AwP7y/P?=
- =?us-ascii?Q?Xg3Jkv9UVH3c9ezygg82ZAReIn6CNYw3H2ef9SDPr63kdqvbaYCQ1WPq0DBY?=
- =?us-ascii?Q?QY1EuGetOUfIOiX+6okDqPaNI2MK88icx4ZoBFcwxCSjSDpCs0Uee+AjCYV6?=
- =?us-ascii?Q?yWfLshPfwuPwASK8POAvBgArHlN53qz7suIEYyV+7LWhjXShasrGngu25oRs?=
- =?us-ascii?Q?9z5II+pYpTn4TuJZG+P4LtqtYYXC5YwrkYAbAvk0eLa0V09NxNNXByAyKLmj?=
- =?us-ascii?Q?aARyDD2mjjNX9YkUe90GRs/19+2wBX7za/PgsHZF/HqucMcCuNPH4Nl9JFlW?=
- =?us-ascii?Q?wrJAmm+galXRIj7qKpIcEkeJg7O+xA+x0VO6Qj3GbG40fYGdCz3xlVxQ7D0/?=
- =?us-ascii?Q?L5zh7Uqh6rYI9O19ePr+EZ94GY/YIQdLibCPrPg6vmT8DzLSNoeH8gfI3jZB?=
- =?us-ascii?Q?2pPFo0nahnqWaXRWwpRGTgJzfsxK+70g+gfWEt5Sk4De4mdtu5sEZgyR7IXv?=
- =?us-ascii?Q?0iODoNKPrLmLzDLhR/vKpCwUQ8nKIUCWuKe7heBfGe5E2rdNjFE1+9TSeUVq?=
- =?us-ascii?Q?gRtro/SEpy1ZCMmxSsZP8EAOuk4yQacoabtH/rjyPSQLAt+ZfW+LCyW1ovZj?=
- =?us-ascii?Q?DoeOXDqSH65II5ptVT/8sJRiroXwQl3P3MJanF5wHlEW7c0TL4HOK1kZBuX+?=
- =?us-ascii?Q?wr9V+tkoO0ndmo2U0aUKKgJVgzHVSG7afP+DuxrMe0mDfmbqejDpWRKZPlu1?=
- =?us-ascii?Q?9T1dY3U6FRpismo6FHylmUM9Wcyl+UyGb0Lkn4qrImuwPrPsXEAd7FmBfgA7?=
- =?us-ascii?Q?Rk1K/THYtIUcW1jxeL8TL7Cr24GV2ChZY+dFk2XSybXF053o8oEAGVeTCSkT?=
- =?us-ascii?Q?bGU0Tgwir+SufBIgOdaMcskK+5R88dc8YFGXhOD2dxEpwGi6eo3fvAG2tosg?=
- =?us-ascii?Q?X7UXGEV3eONCwAh5VmBVqeTsEHklLukcGxJyuZS17z7l9sAUKf0G2Nb1g5jC?=
- =?us-ascii?Q?IfCSwIELTQqFyAQOv+NzrwwrXTJVjtXqMdLjWDNKGBr0OTaFG8vK4ExTf5Dg?=
- =?us-ascii?Q?LV1stHO/ZKYBEsz0fBLdwgvbq45MgNwM+R0sy8SbTJsT0vv4zJswsORZakpg?=
- =?us-ascii?Q?80tjTyOAYMzlXlx+j9a7HmEoJb1H62fgHqSYFIfXXY4DyIozSQZsr1Gog5ZQ?=
- =?us-ascii?Q?yMvLK+2+clpIFhYZcwCcihJkH55QR/+GSJV5k0PBsQgIJGRkIk0Zd0EfyiCA?=
- =?us-ascii?Q?0PKB0E1F8P2qHl/KQM7Wc2c5RVzx9Np9UurNdeWo548kOna74PHbFm+ONv4U?=
- =?us-ascii?Q?EN5DGlQ5tuwze28WRvTesTcRoB1ybmGkUccOwSSVOo2u9zqH/oo9fRlE1jc7?=
- =?us-ascii?Q?NYtE4rq1v+S2sdpdeRhkE58JqoY3EcSqBp3+TK1rOnTAKkrbqhIHO4Y8OKPI?=
- =?us-ascii?Q?qtA50ie5uclydik1tZqT3/K2VwAG83UCOSgLFPc8rWK8Ue1iJSYWHG79XtRy?=
- =?us-ascii?Q?IVlCR7B0jPvobIO0brhmDDHoR+vuCeztQazf0NE9U2ehqbFwab8F+U3geTFZ?=
- =?us-ascii?Q?03340Ww4qRPxslr2PqLNBAijJtmLlYu2m+eCIhGs?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69e24e00-7fe1-4444-2b37-08ddfa004e79
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2025 17:48:58.1378
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TE8jwJSbNrhCvUdyErak5gIWTk68ckdooAtwZBpv6bV2Hqp23M0SZOsgzNpS/qFK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB9552
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 22 Sep 2025 23:29:53 +0530
+X-Gm-Features: AS18NWDZwi1AO6kqN91ksL9x8G8Q2hcf5hfKdURyXPsi-NfZZp3RQHelXSAMyc8
+Message-ID: <CA+G9fYvq732po6A=X=1Bm_zLZMAK50y+8sEToWVm38uQfOke1Q@mail.gmail.com>
+Subject: next-20250922: arm riscv32 flexfilelayout.c:685:2: error:
+ incompatible pointer types passing 'u32 *'
+To: linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>
+Cc: Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Anna Schumaker <anna.schumaker@oracle.com>, Jonathan Curley <jcurley@purestorage.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Ben Copeland <benjamin.copeland@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 22, 2025 at 08:15:45PM +0530, ALOK TIWARI wrote:
-> > +	/* Choose the higest bit <= best_pgsz_lg2 */
-> 
-> higest -> highest
+The arm and riscv32 builds failed on the Linux next-20250922 tag build due
+to following build warnings / errors with clang toolchain.
+
+First seen on next-20250922
+Good: next-20250919
+Bad: next-20250922
+
+Regression Analysis:
+- New regression? yes
+- Reproducibility? yes
+
+Test regression: next-20250922: arm riscv32 flexfilelayout.c:685:2:
+error: incompatible pointer types passing 'u32 *'
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build error
+
+fs/nfs/flexfilelayout/flexfilelayout.c:685:2: error: incompatible
+pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of
+type 'uint64_t *' (aka 'unsigned long long *')
+[-Wincompatible-pointer-types]
+  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/asm-generic/div64.h:199:22: note: expanded from macro 'do_div'
+  199 |                 __rem = __div64_32(&(n), __base);       \
+      |                                    ^~~~
+arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+      |                                             ^
 
 
-Got all of these, thanks
+## Source
+* Kernel version: 6.17.0-rc7
+* Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+* Git describe: 6.17.0-rc6-next-20250922
+* Git commit: bf2602a3cb2381fb1a04bf1c39a290518d2538d1
+* Architectures: arm riscv32
+* Toolchains: Debian clang version 20.1.8
+* Kconfigs: lkftconfigs
 
-Jason
+## Build
+* Build log: https://qa-reports.linaro.org/api/testruns/29967175/log_file/
+* Build details:
+https://regressions.linaro.org/lkft/linux-next-master/next-20250922/log-parser-build-clang/clang-compiler-fs_nfs_flexfilelayout_flexfilelayout_c-error-incompatible-pointer-types-passing-u-aka-unsigned-int-to-parameter-of-type-uint_t-aka-unsigned-long-long/
+* Build plan: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/333IdxAGk8S0TDZQ0YbgzNOtKgs
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/333IdxAGk8S0TDZQ0YbgzNOtKgs/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/333IdxAGk8S0TDZQ0YbgzNOtKgs/config
+
+--
+Linaro LKFT
