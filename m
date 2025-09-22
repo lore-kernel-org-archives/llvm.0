@@ -1,124 +1,167 @@
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99DC2236E5
-	for <llvm@lists.linux.dev>; Mon, 22 Sep 2025 06:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BD078F59;
+	Mon, 22 Sep 2025 07:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758522724; cv=none; b=g6vgsnAVqOnGN5PehzNraPtpzBgCef2qNzmASq5Xcw8T/IsIwk4WB0xM7wA+qwFywoEPQFDLB+lNYJn6nhE4KJmEnQRCgohGfAJF5BSykoQQzyllKjF3plboO97/bxian9cmUXVRI56/UCms75P5PfzHH0ozL5KyYt/9LEaKyug=
+	t=1758527120; cv=none; b=SKySCclZGHmvG8TVB0jHn5H0Bt+E59mn1Fad1MQNS0sn1CN3hjTs2HUeWoR0v5YxB50RStflzNmdjvMk/hZDyehDsm7HYZ8Yrf7HJCnbyYq9hbyDEZepLVNtjEW7oKpkgPLV1GBHoyY5yXVVjfQFgiR4Sy6EBqPhnggZQ0yiODU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758522724; c=relaxed/simple;
-	bh=GcxGZtlcvANM4ISN0vX5FgQ46FyXpsKP4aF2UdyoWm4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XmBNc8itQK4Uu/sZnULbSueFLEgUpbfTAhqq1ZFbkG3/cfVHw9Etn7Vk7/2mZX8PyaZkzKfPFYM/fMpfD2pjZZnRlioJ+suIbgbqZh1X6oUjdaD5+VD+2BW0d41Bc0ZHLukT0T+lNYA5F1eI0Ygz1ISPKVxzJ3nN8+YrN1OBhQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-51d14932f27so1208295137.2
-        for <llvm@lists.linux.dev>; Sun, 21 Sep 2025 23:32:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758522722; x=1759127522;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s9Xa9qt87OWMrii0JP5Zzn4osjNDUYE7qcLRx8KQ3iQ=;
-        b=iteThV8uQ/j3T3DCdD45GKVM1klWXLBtA3ScI47l4rWX4IuulSbIR0kE0LARQs+/we
-         Bsj3ag8PUXx5Oq2/28SB/8eXdB/Rdbzijw2sQpSyiN0hB3UcM24AAT27FkLz4USAJul3
-         eMzDknU86FSWgGQ99Q5/MP5DRgQ0PGATlEMWi1Q8JzEfkQ388Rq1KIGmQFwyExOs91pd
-         B7wzPqjNDhtZfd0tp7qvtJRsddriEXyl2TeYpxOHFmc5ybF4X/PV0aOG8bFrYISysdGh
-         brY1jdqpINx7jRDNGCaEwogwE+el4NPTUqApJSLlULA22xXn2IrAyJwaS2JKyHDQM370
-         7n3g==
-X-Forwarded-Encrypted: i=1; AJvYcCWpFETFG6yXcB0AIAg9q2gtdjtmW68lPzU7D0PPDusTc6YW7HIO1P6YGuxktOFn3GyNptAL@lists.linux.dev
-X-Gm-Message-State: AOJu0YwQg2JPOl4ztmkvR16zwQjYkAU5TPHno8AVhNWodk9+Wx8GxAna
-	x+Mp1hMkZzhy/fsfTjiLskdtYRBKDOiKOzfzONTLdP+rRNc85g5DPLazTGGlRLvH
-X-Gm-Gg: ASbGncsH1hMJOrfw0z58s52QuNJVoxTbInFeLoND0e8/F+x90CPMIi3F7WhqJJMafJw
-	M5QOj3+UiGnmrCxdrID40WV9F+e3aiK3xZDH7EmdLl6zA3qiPXUchFrrFv2GXj58eDR9Or077hZ
-	nLIJN/JdhsCsYSBhjtedkLDUitaIulobDU9fr0tKvqg2M8oCGr2cqjpH2BL3M2SB9zzIA1VYdio
-	Ja7LbTk2XueGiP0u7NKi32LosGcfCWGhwrRkQ0Lk94VF8EU6xzeWYNcXz7QMRp8zd86QA40oLMd
-	XsFPSF7lJ1aMkbw9SGgSc6xeuf3MwQjcpaq4ichtzfU1oqouI5ETHHYYOQbvrFgUatn9Lkewo7y
-	xaLA7/IqF3/U8eTnp4z/i2CP/7NlDMaE83h5OT8Wj4YFYWZKJsSR0snS/bwmG
-X-Google-Smtp-Source: AGHT+IH9feUmAbgOKmVRVsCSlNXsUBgxhb1k3IuyQ4P1w9QnlKFQpGz9jNIhlXcN1+sssCDOMtludw==
-X-Received: by 2002:a05:6102:d8c:b0:524:89c1:7788 with SMTP id ada2fe7eead31-588d96903dfmr3187021137.7.1758522721548;
-        Sun, 21 Sep 2025 23:32:01 -0700 (PDT)
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-8e3e58e81d8sm1963680241.4.2025.09.21.23.32.00
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Sep 2025 23:32:00 -0700 (PDT)
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-8a967f3a873so1548511241.0
-        for <llvm@lists.linux.dev>; Sun, 21 Sep 2025 23:32:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWDiZgUjiV6bbPK1oR8e/vb2HqtBrb6C1jSf+fq34a3rEx5YzjOtuUwdPOs+19fBucX4mdr@lists.linux.dev
-X-Received: by 2002:a05:6102:449a:b0:59d:6be4:5b87 with SMTP id
- ada2fe7eead31-59d6be45e33mr1180465137.12.1758522720412; Sun, 21 Sep 2025
- 23:32:00 -0700 (PDT)
+	s=arc-20240116; t=1758527120; c=relaxed/simple;
+	bh=H1RyaGQe908wgP+9DtCfGX//XxA1/HxhCRdfcWfFnz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDbws+FQH/DQ5cPNw4Nqeiruet82jx9Ctnoo8+UIxlvW4GlcskIut531Rgco50WICSAtSmsBlY2etyvEVTLyDlLMW6DrBDM1lL4+NzKC5taY2gqG/eMKgSD1FXbGSyY3nZ9n3MkgSS7jPFUaxz3FJ2p8iTR9SqOMuxwf4TYkf9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fYkVa7vr; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fYkVa7vr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758527120; x=1790063120;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H1RyaGQe908wgP+9DtCfGX//XxA1/HxhCRdfcWfFnz4=;
+  b=fYkVa7vr2GGEbJfEFsfcOIrvUaFBw6nSD1prLtP5u0+sytar615BsP6g
+   xOgPSut/HEYAxDjvwp19/n+CWjb80H+hG1SMxijGOtkJgrm/WWI1EXG2a
+   TolX1H3myh8IBYrMvWjyvGSjKeRPTQl26cB7I6Qfg6GPpi08gkkHn1su/
+   xAkdPrXaGN4xXT06/uj33KbOTPUp3Jfb3rI+NV4K4n7NUfFqbcU/m2fUc
+   OLiMvRqB8nqrBlB0PTuzq0AmUXFQ5AjP75V3BeiUCMUuHc2lkDSCcI/f/
+   GhWc5oEHP5Psqber+rYtYuo+wfxZ9pUaS18i8qyEjyMUO4AwtiyoP2Tgi
+   Q==;
+X-CSE-ConnectionGUID: NW1zzhEYSSqeVGvrSXQSXw==
+X-CSE-MsgGUID: hyWekH8NTUyQXuC/VmXvjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11560"; a="78224480"
+X-IronPort-AV: E=Sophos;i="6.18,284,1751266800"; 
+   d="scan'208";a="78224480"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 00:45:19 -0700
+X-CSE-ConnectionGUID: h9HCINiUTMCizWZCP4GPqw==
+X-CSE-MsgGUID: /oSvEyXuS/2s/wbNz4RHQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,284,1751266800"; 
+   d="scan'208";a="207149858"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 22 Sep 2025 00:45:16 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0bEV-0001QP-0U;
+	Mon, 22 Sep 2025 07:45:11 +0000
+Date: Mon, 22 Sep 2025 15:45:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ma Ke <make24@iscas.ac.cn>, srini@kernel.org, lgirdwood@gmail.com,
+	broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+	pierre-louis.bossart@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-sound@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+	Ma Ke <make24@iscas.ac.cn>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] ASoC: wcd934x: fix error handling in
+ wcd934x_codec_parse_data()
+Message-ID: <202509221535.es8PWacQ-lkp@intel.com>
+References: <20250922013507.558-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202509212320.yCuqvnVn-lkp@intel.com> <202509212148052be5ea9d@mail.local>
- <aNCVl06r95XVn80G@rli9-mobl>
-In-Reply-To: <aNCVl06r95XVn80G@rli9-mobl>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 22 Sep 2025 08:31:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXD_pBmMXB9AtBKXYzpvSwedCx=rQ45BN3J7EHB8aw=jQ@mail.gmail.com>
-X-Gm-Features: AS18NWDJ1T0UMfydU9Ibm_gReDWXEJQCvT6Rk0CJxMCHwZSA2VY1VEA5R2-Wtso
-Message-ID: <CAMuHMdXD_pBmMXB9AtBKXYzpvSwedCx=rQ45BN3J7EHB8aw=jQ@mail.gmail.com>
-Subject: Re: drivers/i3c/internals.h:54:9: error: passing 'const void *' to
- parameter of type 'void *' discards qualifiers
-To: Philip Li <philip.li@intel.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, kernel test robot <lkp@intel.com>, 
-	Wolfram Sang <wsa-dev@sang-engineering.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Frank Li <Frank.Li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250922013507.558-1-make24@iscas.ac.cn>
 
-On Mon, 22 Sept 2025 at 02:17, Philip Li <philip.li@intel.com> wrote:
-> On Sun, Sep 21, 2025 at 11:48:05PM +0200, Alexandre Belloni wrote:
-> > On 21/09/2025 23:54:32+0800, kernel test robot wrote:
-> > > FYI, the error/warning still remains.
-> >
-> > As replied multiple times, the error is in the sparc64 code, not i3c.
->
-> Sorry about this, the bot will be configured to ignore this issue to
-> avoid further reports.
+Hi Ma,
 
-It is expected to be fixed shortly:
-https://lore.kernel.org/all/fbb1a96c-d913-4bdf-b40c-c8981601bbf9@gaisler.com/
+kernel test robot noticed the following build warnings:
 
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   f975f08c2e899ae2484407d7bba6bb7f8b6d9d40
-> > > commit: 3b661ca549b9e5bb11d0bc97ada6110aac3282d2 i3c: add missing include to internal header
-> > > date:   8 weeks ago
-> > > config: sparc64-randconfig-001-20250921 (https://download.01.org/0day-ci/archive/20250921/202509212320.yCuqvnVn-lkp@intel.com/config)
-> > > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250921/202509212320.yCuqvnVn-lkp@intel.com/reproduce)
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202509212320.yCuqvnVn-lkp@intel.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > >    In file included from drivers/i3c/master.c:21:
-> > > >> drivers/i3c/internals.h:54:9: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-> > >       54 |         readsl(addr, buf, nbytes / 4);
-> > >          |                ^~~~
-> > >    arch/sparc/include/asm/io_64.h:265:41: note: passing argument to parameter 'port' here
-> > >      265 | static inline void readsl(void __iomem *port, void *buf, unsigned long count)
-> > >          |                                         ^
-> > >    1 error generated.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.17-rc7 next-20250919]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/ASoC-wcd934x-fix-error-handling-in-wcd934x_codec_parse_data/20250922-094038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20250922013507.558-1-make24%40iscas.ac.cn
+patch subject: [PATCH v2] ASoC: wcd934x: fix error handling in wcd934x_codec_parse_data()
+config: i386-buildonly-randconfig-005-20250922 (https://download.01.org/0day-ci/archive/20250922/202509221535.es8PWacQ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250922/202509221535.es8PWacQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509221535.es8PWacQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/wcd934x.c:5862:38: warning: cast from 'void (*)(struct device *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+    5862 |         ret = devm_add_action_or_reset(dev, (void (*)(void *))put_device, &wcd->sidev->dev);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/devres.h:166:34: note: expanded from macro 'devm_add_action_or_reset'
+     166 |         __devm_add_action_or_reset(dev, action, data, #action)
+         |                                         ^~~~~~
+   1 warning generated.
 
 
-Gr{oetje,eeting}s,
+vim +5862 sound/soc/codecs/wcd934x.c
 
-                        Geert
+  5837	
+  5838	static int wcd934x_codec_probe(struct platform_device *pdev)
+  5839	{
+  5840		struct device *dev = &pdev->dev;
+  5841		struct wcd934x_ddata *data = dev_get_drvdata(dev->parent);
+  5842		struct wcd934x_codec *wcd;
+  5843		int ret, irq;
+  5844	
+  5845		wcd = devm_kzalloc(dev, sizeof(*wcd), GFP_KERNEL);
+  5846		if (!wcd)
+  5847			return -ENOMEM;
+  5848	
+  5849		wcd->dev = dev;
+  5850		wcd->regmap = data->regmap;
+  5851		wcd->extclk = data->extclk;
+  5852		wcd->sdev = to_slim_device(data->dev);
+  5853		mutex_init(&wcd->sysclk_mutex);
+  5854		mutex_init(&wcd->micb_lock);
+  5855		wcd->common.dev = dev->parent;
+  5856		wcd->common.max_bias = 4;
+  5857	
+  5858		ret = wcd934x_codec_parse_data(wcd);
+  5859		if (ret)
+  5860			return ret;
+  5861	
+> 5862		ret = devm_add_action_or_reset(dev, (void (*)(void *))put_device, &wcd->sidev->dev);
+  5863		if (ret)
+  5864			return ret;
+  5865	
+  5866		/* set default rate 9P6MHz */
+  5867		regmap_update_bits(wcd->regmap, WCD934X_CODEC_RPM_CLK_MCLK_CFG,
+  5868				   WCD934X_CODEC_RPM_CLK_MCLK_CFG_MCLK_MASK,
+  5869				   WCD934X_CODEC_RPM_CLK_MCLK_CFG_9P6MHZ);
+  5870		memcpy(wcd->rx_chs, wcd934x_rx_chs, sizeof(wcd934x_rx_chs));
+  5871		memcpy(wcd->tx_chs, wcd934x_tx_chs, sizeof(wcd934x_tx_chs));
+  5872	
+  5873		irq = regmap_irq_get_virq(data->irq_data, WCD934X_IRQ_SLIMBUS);
+  5874		if (irq < 0)
+  5875			return dev_err_probe(wcd->dev, irq, "Failed to get SLIM IRQ\n");
+  5876	
+  5877		ret = devm_request_threaded_irq(dev, irq, NULL,
+  5878						wcd934x_slim_irq_handler,
+  5879						IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+  5880						"slim", wcd);
+  5881		if (ret)
+  5882			return dev_err_probe(dev, ret, "Failed to request slimbus irq\n");
+  5883	
+  5884		wcd934x_register_mclk_output(wcd);
+  5885		platform_set_drvdata(pdev, wcd);
+  5886	
+  5887		return devm_snd_soc_register_component(dev, &wcd934x_component_drv,
+  5888						       wcd934x_slim_dais,
+  5889						       ARRAY_SIZE(wcd934x_slim_dais));
+  5890	}
+  5891	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
