@@ -1,114 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A2D242D83;
-	Tue, 23 Sep 2025 02:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E348524468B;
+	Tue, 23 Sep 2025 03:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758594770; cv=none; b=cn3iUFK9xlCstPB8CXdPbBa8GMIkZGWtqmt1MBbDvYxTZAY5/Q3Fp6SSesygu8pxPQCJUs//9dq5CJ7rlbQbs9Hgpf4y+U3qD1AfAfwkqHn6VB/tBwa6WWXIHOGM3awRV06DfdOBjqr0UTMl59Npg+3ViXUEEYWq1U6ED5ZlkxI=
+	t=1758597250; cv=none; b=O3y7bmU90Irt7WR2X8R8MdWewpK7nSZjDccfckH7/7r3hfpjZdJtIVy+paq24LVAkbAJDbFfXvDS2KQsKv0KW+mywHXBLPpZkbroq0yvXqtJFM+GjKmx0vEYJFgLdPDHVE15WvkYpiXCHkfGOw8pAyI4O7PeutJl3Vii+rDLf5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758594770; c=relaxed/simple;
-	bh=s6xE7TdEQAnRwaTxux4s/PGfcxwqJAxkDLccQUgUC3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SxYS4fM6W1RB/EAoxk0OtUeHuoxlqM9IrBsNVWIVxjMPzf6AFkwA+B7dFNJqgrTcuHt3MzMesAPunJmCKBJ+6gAJZunW+UdHiXb511gymeSSmo81DR6CdLvf4nTuY+RwKWIaUqwhA1nue3hEhVyeo/8HJilQyPsgbrpkTx02gTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JAFgLpih; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JAFgLpih"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758594769; x=1790130769;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s6xE7TdEQAnRwaTxux4s/PGfcxwqJAxkDLccQUgUC3s=;
-  b=JAFgLpihh4G2aOte4dpPPoYsXXDvp6jNigJYIS8rndfhi21TCWSmGU9f
-   Q8qDnjKFvbMtRC1V0CG12bvgT4ZsOfo3XR2f6aaQ8hj3/fZaS+mFhv41s
-   IWoI3P5vm3xObMQJrIUagnMwkFC4//PiySugC37uIu0h4knPz3rY08fYQ
-   s6XidxVjswB2dqgi0iTqYBpdDlbkmLaVmD2rxLmh9AhJzv0Uw+78X5/I8
-   dIXPBPgjU4fM9WE7FwNsv63xuxl/2GlA5UFURgMbEhnxzkW+R4LUYBa/b
-   1/uZtuCbZnyvcLxxG3FliIaw2ZS6OO0BrvfJ8lVFvrZItG6zXFh0gBZEp
-   Q==;
-X-CSE-ConnectionGUID: NdJrSmgNTf2GTnXuyD+XFA==
-X-CSE-MsgGUID: HUFFcJFvQnu3LTaF3Fv50Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="86303370"
-X-IronPort-AV: E=Sophos;i="6.18,286,1751266800"; 
-   d="scan'208";a="86303370"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 19:32:48 -0700
-X-CSE-ConnectionGUID: nZ5wvhotQ66/ujLtceuvMw==
-X-CSE-MsgGUID: MLzt1+KRTpyAz8r4CNGICQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,286,1751266800"; 
-   d="scan'208";a="175919634"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 22 Sep 2025 19:32:44 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v0spd-0002g7-0u;
-	Tue, 23 Sep 2025 02:32:41 +0000
-Date: Tue, 23 Sep 2025 10:32:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bo Liu <liubo03@inspur.com>, xiang@kernel.org, chao@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	Bo Liu <liubo03@inspur.com>
-Subject: Re: [PATCH v4] erofs: Add support for FS_IOC_GETFSLABEL
-Message-ID: <202509231033.ADjNYvqL-lkp@intel.com>
-References: <20250922092937.2055-1-liubo03@inspur.com>
+	s=arc-20240116; t=1758597250; c=relaxed/simple;
+	bh=ZrlGg5+T9abifBw/iJ/AfUiU2mX4DnhZuR3Zd+vV5XE=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=VBiwlgyJVtTgNPYaOiWFQiRtLZqnvJ+IpixxWnDQkEuBW8vK0zd93rvLqJQkFNjWLDPJ6c/UMcFfebL4MlKJYo0BlNq6DrQMLpgiCPIQLOXFmujFdtNxTbvB4i5rLMPzyqVxvXTDubJkmMufpWNrdOGzQrKQu+z/2+Jd+rqtKX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Cx7792ENJowH0NAA--.27435S3;
+	Tue, 23 Sep 2025 11:13:58 +0800 (CST)
+Received: from [10.130.10.66] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJAxVOR1ENJorgqnAA--.10350S3;
+	Tue, 23 Sep 2025 11:13:58 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ WANG Rui <wangrui@loongson.cn>, rust-for-linux@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
+ <20250909092707.3127-2-yangtiezhu@loongson.cn>
+ <20250920061536.GA1460394@ax162>
+ <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
+ <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
+ <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
+ <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
+ <750c907d-cc95-5116-4507-52dd48927cec@loongson.cn>
+ <20250923011057.GA3980504@ax162>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <a04cc3e2-d8d9-8ac4-d919-705babf4ccd8@loongson.cn>
+Date: Tue, 23 Sep 2025 11:13:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250922092937.2055-1-liubo03@inspur.com>
+In-Reply-To: <20250923011057.GA3980504@ax162>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxVOR1ENJorgqnAA--.10350S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Aw13Xry8tF13JFyfXw15KFX_yoW8CrW7pa
+	ykWFy3Krs8JF4Iy39Fvw4UKFZ8KrsxGFy8Xr1rtr1kZr1DZrWIgrWxtrZ3XasrZr9rJFW2
+	qFW8t3s8AF4UZ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
+	CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j0FALU
+	UUUU=
 
-Hi Bo,
+On 2025/9/23 上午9:10, Nathan Chancellor wrote:
+>>>> ifdef CONFIG_LTO_CLANG
+>>>> ifdef CONFIG_LLD_HAS_ANNOTATE_TABLEJUMP
+>>>> KBUILD_LDFLAGS                  += -mllvm --loongarch-annotate-tablejump
+>>>> else
+>>>> KBUILD_LDFLAGS                  += -mllvm --no-jump-tables
+>>>> endif
+> 
+> There is no '--no-jump-tables' LLVM option so this will not work.
+> Shouldn't -fno-jump-tables and -Zno-jump-tables take care of generating
+> jump tables?
+> 
+>> I do not know whether this is valid, you can test it with llvm 18
+>> and llvm 20 if you think it is a proper way.
+> 
+> For what it's worth, Huacai's original suggestion of
+> 
+>      KBUILD_LDFLAGS += $(call ld-option,-mllvm --loongarch-annotate-tablejump)
+> 
+> appears to work for me and I do not see any objtool warnings with LTO
+> enabled but I might be missing something.
 
-kernel test robot noticed the following build errors:
+As discussed offline, Huacai will test this change and submit a patch
+later.
 
-[auto build test ERROR on xiang-erofs/dev-test]
-[also build test ERROR on xiang-erofs/dev xiang-erofs/fixes linus/master v6.17-rc7 next-20250922]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>> But IIRC, there is objtool warning with llvm 18, I reported to llvm
+>> developer Wang Lei and he fixed it as the following commit:
+>>
+>> [LoongArch] Avoid indirect branch jumps using the ra register
+>> https://github.com/llvm/llvm-project/commit/21ef17c62645
+>>
+>> Actually, the above commit solved a performance issue of llvm compiler,
+>> so I prefer to update the minimal llvm version to 20 for LoongArch.
+> 
+> I tend to let architecture maintainers make the call around minimum
+> supported versions of compilers, so if that is how you would like to
+> proceed, I am fine with that. I will say LLVM 20 is pretty new (released
+> on March 4th, 2025) but I expect most of your users to probably be using
+> bleeding edge tools for all the changes you make in the compiler and
+> lower level libraries?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Liu/erofs-Add-support-for-FS_IOC_GETFSLABEL/20250922-173127
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-patch link:    https://lore.kernel.org/r/20250922092937.2055-1-liubo03%40inspur.com
-patch subject: [PATCH v4] erofs: Add support for FS_IOC_GETFSLABEL
-config: sparc64-randconfig-001-20250923 (https://download.01.org/0day-ci/archive/20250923/202509231033.ADjNYvqL-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cafc064fc7a96b3979a023ddae1da2b499d6c954)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250923/202509231033.ADjNYvqL-lkp@intel.com/reproduce)
+Usually, I like to use the latest LLVM upstream version to test the
+kernel, but maybe somebody only uses the lower version, so keep the
+minimal version as is.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509231033.ADjNYvqL-lkp@intel.com/
+Thanks,
+Tiezhu
 
-All errors (new ones prefixed by >>):
-
->> fs/erofs/inode.c:372:47: error: call to undeclared function 'compat_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     372 |         return erofs_ioctl(filp, cmd, (unsigned long)compat_ptr(arg));
-         |                                                      ^
-   1 error generated.
-
-
-vim +/compat_ptr +372 fs/erofs/inode.c
-
-   367	
-   368	#ifdef CONFIG_COMPAT
-   369	long erofs_compat_ioctl(struct file *filp, unsigned int cmd,
-   370				unsigned long arg)
-   371	{
- > 372		return erofs_ioctl(filp, cmd, (unsigned long)compat_ptr(arg));
-   373	}
-   374	#endif
-   375	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
