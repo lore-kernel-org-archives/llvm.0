@@ -1,43 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0557630FC3D;
-	Tue, 23 Sep 2025 13:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED5022655B;
+	Tue, 23 Sep 2025 14:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758632663; cv=none; b=iyubNHKnCZH/esjXg7cvsT5Ol/j/K+Atu85J3FJgPKALbvGtAPPp+osqTPuok1e5hBc57cit0laQdN7yQQomksE/7pxnSvW8sCMBhNEnK3s8BReXxtFflrBV67JOTLHqsZaS6/DXGVwl6x+0oh4u9T6SVzp6r+u/L4LJVZUigQg=
+	t=1758636889; cv=none; b=TM3xNs9x3PLOP5/1Vg/gaE1b9C6KdJsfSc/TDXiITz2VXNMcv7NPh9GSSErQrjCbJmYAnwYeS6jEIX0ZyXa48/4FFhoUkUNmYg25AYgnyxSjjrakSp2cPsnHyibr3ytfWT1d+31pWG9xPU1k+Fh5qcZUIz1DwfDAlHxJs5nsorU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758632663; c=relaxed/simple;
-	bh=yhOpYhydXFOTnVyJEJ9WLdHPFnfzH5DQIG3kHF9WFQo=;
+	s=arc-20240116; t=1758636889; c=relaxed/simple;
+	bh=+H9zJ9ZnJh5XdjSEpBwdWNCOzZuIf/K/RLNBOxUxrx0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gAl0E6Gjef2NFUtk+zbLFWN2GfeI4l/jq40ea34KT9mMBxnc4h90KkukyYuJoYqa1WX78b5ZvN2fL3a5Wfrd7jrmvrkyIdWuuM/StbFS3cRW0TkuIOcHohrOywtIr9xtbgyk8fZfXPMvYjihVODEYn5Gzuysix73CrOft+iWwxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u3YgpIsS; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=PGjOK7qBEUQmL/d7lEfcENrLE3qLzFvAIgU8SACxlf9OTTwJpAtfoXR7hAoM04T3VjjllRhn3xFRrA4wNydOFcSRj5zwVCFL0wlbRlpqVy3yfY49pK6GCECHk63ZsVETE6g6Z76Xf9pX+THIcmFBT52nWv626sCGT4dYmAQ1BJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d85YoT02; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u3YgpIsS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CCB5C4CEF5;
-	Tue, 23 Sep 2025 13:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758632662;
-	bh=yhOpYhydXFOTnVyJEJ9WLdHPFnfzH5DQIG3kHF9WFQo=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=u3YgpIsSAzRs7gbGciWsT76CbHblYIJASZ1shE1TjqCcWPLyEbA15JGORKPzvEXT+
-	 m02RpuKakAHjnfcH68v+foy9qD6o7ptAg8py/aNtIjMJeYSnh1rLlEaRzNorsKffqF
-	 4QqXB/lsl6YgLfFSxSpI5wFSiUh6UgsZzHV/XiWgtLvOW3upkjroP9vGaNReaLLSWB
-	 Qc5S3Q1Ms27ZRDR3QTqZeBl3Cx7Mcau+bAoMcL9ABVwWRmUyTiFBB3TlQYP3D7Rn2P
-	 4lSQxlgGnSePiHsuZj7whbhrZ1uTfqUK0CyXomKCn8eB/Wk7u6Ojze5rlHZyh7tlOi
-	 7WcLGSYIY4ORw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 00684CE0E5A; Tue, 23 Sep 2025 06:01:52 -0700 (PDT)
-Date: Tue, 23 Sep 2025 06:01:52 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d85YoT02"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758636888; x=1790172888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+H9zJ9ZnJh5XdjSEpBwdWNCOzZuIf/K/RLNBOxUxrx0=;
+  b=d85YoT02i3mEpfgiZBwZwIKEKdpmDoY08+8WggDX1ZBnnntu/R9o5Vvc
+   jPUTR+EAJHnSu46MNbqnet4vwz0XWdkGSMo0KwfdEl8teMjIyPzuxrqo7
+   hfmLpA9dAyB6i50kW29soBfjKo4hVByupzUAMzl2jMLHBBwEbNNJHP9XQ
+   mCWwaZIlxeR8HoLBd4qNTi1CIBTACpOFCD8ZZGuvknfHXdjnYsAO0422j
+   9N99MRvOSCT9fL80CObgHKgXoB7LNyGKXnY1otevkFgp/gcs9aMe/MdZo
+   n516y7pQc1d0yU+GBOAN+0KuAMfX6qliodiTY/Os2ueBoMZXt9VWq6h53
+   g==;
+X-CSE-ConnectionGUID: vIKmuXq9TQSsaoVyzNUNBg==
+X-CSE-MsgGUID: 0PlinG7RTNqYDtkKtsiyuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="86353230"
+X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
+   d="scan'208";a="86353230"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2025 07:14:21 -0700
+X-CSE-ConnectionGUID: hi4LmZPgTA2uLR2Pk1F+Zg==
+X-CSE-MsgGUID: h4fxs8c9Q++r6fENoG5wpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
+   d="scan'208";a="176369709"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 23 Sep 2025 07:14:18 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v13ma-0003Av-0n;
+	Tue, 23 Sep 2025 14:14:16 +0000
+Date: Tue, 23 Sep 2025 22:14:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Simon Schippers <simon.schippers@tu-dortmund.de>,
+	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+	mst@redhat.com, eperezma@redhat.com, stephen@networkplumber.org,
+	leiyang@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+	kvm@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [paulmck-rcu:dev.2025.09.15a 45/45] ERROR: modpost:
- "init_srcu_struct_fast" [kernel/rcu/rcutorture.ko] undefined!
-Message-ID: <0e09e4cb-058d-40fb-aa8d-9da68fb86a24@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202509201519.udl3bu3X-lkp@intel.com>
+	Simon Schippers <simon.schippers@tu-dortmund.de>,
+	Tim Gebauer <tim.gebauer@tu-dortmund.de>
+Subject: Re: [PATCH net-next v5 8/8] vhost_net: Replace rx_ring with calls of
+ TUN/TAP wrappers
+Message-ID: <202509232113.Z0qRJQHs-lkp@intel.com>
+References: <20250922221553.47802-9-simon.schippers@tu-dortmund.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,75 +70,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202509201519.udl3bu3X-lkp@intel.com>
+In-Reply-To: <20250922221553.47802-9-simon.schippers@tu-dortmund.de>
 
-On Sat, Sep 20, 2025 at 03:10:55PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2025.09.15a
-> head:   f81c21ec3fca688bfcb6fa0abaf70404655765dc
-> commit: f81c21ec3fca688bfcb6fa0abaf70404655765dc [45/45] rcutorture: Exercise DEFINE_STATIC_SRCU_FAST() and init_srcu_struct_fast()
-> config: arm-randconfig-003-20250920 (https://download.01.org/0day-ci/archive/20250920/202509201519.udl3bu3X-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 7c861bcedf61607b6c087380ac711eb7ff918ca6)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250920/202509201519.udl3bu3X-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509201519.udl3bu3X-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> ERROR: modpost: "init_srcu_struct_fast" [kernel/rcu/rcutorture.ko] undefined!
+Hi Simon,
 
-I believe that this is fixed in current -rcu by the replacement commits
-headed by the following commit:
+kernel test robot noticed the following build errors:
 
-bd3acc50cf8c ("rcutorture: Exercise DEFINE_STATIC_SRCU_FAST() and init_srcu_struct_fast()")
+[auto build test ERROR on net-next/main]
 
-Please see below for the diff that should fix the commit in which
-you found the failure.
+url:    https://github.com/intel-lab-lkp/linux/commits/Simon-Schippers/__ptr_ring_full_next-Returns-if-ring-will-be-full-after-next-insertion/20250923-062130
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250922221553.47802-9-simon.schippers%40tu-dortmund.de
+patch subject: [PATCH net-next v5 8/8] vhost_net: Replace rx_ring with calls of TUN/TAP wrappers
+config: i386-buildonly-randconfig-003-20250923 (https://download.01.org/0day-ci/archive/20250923/202509232113.Z0qRJQHs-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250923/202509232113.Z0qRJQHs-lkp@intel.com/reproduce)
 
-And thank you for your testing efforts!!!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509232113.Z0qRJQHs-lkp@intel.com/
 
-							Thanx, Paul
+All errors (new ones prefixed by >>):
 
-------------------------------------------------------------------------
+>> drivers/vhost/net.c:197:3: error: expected expression
+     197 |                 WARN_ON_ONCE();
+         |                 ^
+   include/asm-generic/bug.h:111:34: note: expanded from macro 'WARN_ON_ONCE'
+     111 |         int __ret_warn_on = !!(condition);                      \
+         |                                         ^
+   1 error generated.
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index c81d5dfaf73753..26de47820c58cd 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -48,7 +48,9 @@ int __init_srcu_struct_fast(struct srcu_struct *ssp, const char *name, struct lo
- #else /* #ifdef CONFIG_DEBUG_LOCK_ALLOC */
- 
- int init_srcu_struct(struct srcu_struct *ssp);
-+#ifndef CONFIG_TINY_SRCU
- int init_srcu_struct_fast(struct srcu_struct *ssp);
-+#endif // #ifndef CONFIG_TINY_SRCU
- 
- #define __SRCU_DEP_MAP_INIT(srcu_name)
- #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
-diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
-index 4c2f2802393062..92e6ab53398fc0 100644
---- a/include/linux/srcutiny.h
-+++ b/include/linux/srcutiny.h
-@@ -45,9 +45,9 @@ void srcu_drive_gp(struct work_struct *wp);
-  */
- #define DEFINE_SRCU(name) \
- 	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name, name)
--#define DEFINE_SRCU_FAST(name) DEFINE_SRCU(name)
- #define DEFINE_STATIC_SRCU(name) \
- 	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name, name)
-+#define DEFINE_SRCU_FAST(name) DEFINE_SRCU(name)
- #define DEFINE_STATIC_SRCU_FAST(name) \
- 	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name, name)
- 
-@@ -55,6 +55,9 @@ void srcu_drive_gp(struct work_struct *wp);
- struct srcu_usage { };
- #define __SRCU_USAGE_INIT(name) { }
- #define __init_srcu_struct_fast __init_srcu_struct
-+#ifndef CONFIG_DEBUG_LOCK_ALLOC
-+#define init_srcu_struct_fast init_srcu_struct
-+#endif // #ifndef CONFIG_DEBUG_LOCK_ALLOC
- 
- void synchronize_srcu(struct srcu_struct *ssp);
- 
+
+vim +197 drivers/vhost/net.c
+
+   178	
+   179	static int vhost_net_buf_produce(struct vhost_net_virtqueue *nvq,
+   180			struct sock *sk)
+   181	{
+   182		struct file *file = sk->sk_socket->file;
+   183		struct vhost_net_buf *rxq = &nvq->rxq;
+   184	
+   185		rxq->head = 0;
+   186	
+   187		switch (nvq->type) {
+   188		case TUN:
+   189			rxq->tail = tun_ring_consume_batched(file,
+   190					rxq->queue, VHOST_NET_BATCH);
+   191			break;
+   192		case TAP:
+   193			rxq->tail = tap_ring_consume_batched(file,
+   194					rxq->queue, VHOST_NET_BATCH);
+   195			break;
+   196		case IF_NONE:
+ > 197			WARN_ON_ONCE();
+   198		}
+   199	
+   200		return rxq->tail;
+   201	}
+   202	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
