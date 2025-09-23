@@ -1,166 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866DD260590;
-	Tue, 23 Sep 2025 17:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886482BEFFD
+	for <llvm@lists.linux.dev>; Tue, 23 Sep 2025 17:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.155.198.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758648969; cv=none; b=LK2Bx4ka0osrLeaKhFFXQ0lQaypS806xYGFzDk8n+OnJeSRbi2+3eElh9vuTXyNPocl8vP8BIwLskfENIFDi0piaYnmPS9jgHMFeYKEDJJX+lBszJ1EnMMbdMe3xenx3TM8bq+X685FI2NlFUfn7LJPLhIDPZuwFd/bFDH79CaI=
+	t=1758649861; cv=none; b=ZTpUNskbrz0RpzcSEAsIB6TFU7bO/dwnpS03Ua4zKxsjIgzGJ99P/T8LC1ZDO8ETPXAuZh88AiGhpwyniNExGk7zU0oTAEJMTsSsUnA2J4hmJglHG5Fz8dvBQK2/HbGLKhU0vNJ373pyzYV1tHuaIL/2gosCCYA/m8wxsSs7/PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758648969; c=relaxed/simple;
-	bh=UO2O51VzC78DSwnhfdoePqLlffRPw7JsQtk2TxHv3IM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P8PdQztIkksvTiIOl48isqgF/iMtBZZrlOmDgQDFdn21hfUSoDETbGKKKUVzoBdjmuKNFcKynKXueOsB6HVaUj+M2yb8kvyFG83OX8lFm0Cnh79E3A+bDWIgvKeaYM4aZn1mE33RTIlmw4n7Jg3pBqCmK6GvbTKsaW94rFRSpsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cAN4upMG; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758649861; c=relaxed/simple;
+	bh=hcoGFZNJkreCDeYr6BpJKXMGFNUt6arRLg1n277LcfQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M0Ig81L/zQ8WilRe80eGZ9fMTAO8tBxSBK+XODPUXLev6G942yGsNxkYuDMfJ0TQy/iqrTgj9yMZuCESuzLFuQ8m8uBIfR51YjRzxm0kAulkv8mWaY0jA5OyNLMuQIJsxU73Ilt3pU8KMRqO8439Q4zL1NalRgST5k3mEk3SGgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ETATS6bU; arc=none smtp.client-ip=35.155.198.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cAN4upMG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758648968; x=1790184968;
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ETATS6bU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1758649859; x=1790185859;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UO2O51VzC78DSwnhfdoePqLlffRPw7JsQtk2TxHv3IM=;
-  b=cAN4upMGN0mLp4Hxsg5dzxrC+K+q5kOXMymHs/g7OgOFW15OSL+dWG4g
-   SI40OYSib8oJpzjcKiNfrSd1Ppv32+LPVSHhmZe0AkznZmfrKrz5E4MgI
-   Wdyz5lUEuyyRgQvJGs1pUkF3qxLOA1ClJI/Ykqqw2KoFreFZg03rXZlWD
-   VhBx26+LpeTyuZWywIRt3TemniKzXbq7Sz+GbtxQaFOSgNUv32Ena3H2r
-   M2rUSezkF2G9YhRhfxh9g53DlVJ02IfishUT5uMzPEsXidCTYLE0eH633
-   JLX8CcXiiMjoLKqbFn3y4OFajtV5FtoxmCtM9+LdkDY6OLTPUlJ8A2pom
+  bh=X3tx+fZ731hStR3QwB8Vwr+fatNxOU7DCvOysaUDqs0=;
+  b=ETATS6bUzRIn+4spVw2wdJdvInGV0isllpkaPNNLvNjmesI1HyFSjBuU
+   IRprsA0PPtEsL/U1gYtibuI13BW3h8dzcR7K4apD5NLb13/LWpeTwH/Yg
+   Z18xv6Z5oFmoG7yoT5Gz/a7KWxX0iBhOmV5LtzvFGf5urbBFT/HnwIEk4
+   dO9VavlgfOlX1qBqvL/IiRxWsOws0YL3sIbHe2aS9tAdqqGL0rLNSG++G
+   j29XbiP1vJQG2mb6+23otJRjSh3oDzAJ3LXs01+mzasE1uD2CEJjKVXY9
+   TH4waPSIsAIhGve+v/ZcHEnWOOAu+ZjnxLrNw7CZaaCTqLtK/v1ukempC
    Q==;
-X-CSE-ConnectionGUID: 2ZpuK7sWTOGADFRTZKC2yQ==
-X-CSE-MsgGUID: wLh8OrqDSv2H4A539B3iFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="60637901"
-X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
-   d="scan'208";a="60637901"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2025 10:36:07 -0700
-X-CSE-ConnectionGUID: zeCWYP7RRuqxfU0nURwVhg==
-X-CSE-MsgGUID: yvx2pBrOT+K/zO2LlHrCjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,288,1751266800"; 
-   d="scan'208";a="176419047"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 23 Sep 2025 10:36:04 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v16vp-0003Nh-2B;
-	Tue, 23 Sep 2025 17:36:01 +0000
-Date: Wed, 24 Sep 2025 01:35:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sherry Sun <sherry.sun@nxp.com>, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, shenwei.wang@nxp.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev
-Subject: Re: [PATCH 2/2] tty: serial: imx: Add missing wakeup event reporting
-Message-ID: <202509240146.aj950Liu-lkp@intel.com>
-References: <20250923031613.2448073-3-sherry.sun@nxp.com>
+X-CSE-ConnectionGUID: lwCl1RWXT+aKK2oadLaBiA==
+X-CSE-MsgGUID: 475HWfd+TQehZxD0e1rLsQ==
+X-IronPort-AV: E=Sophos;i="6.18,288,1751241600"; 
+   d="scan'208";a="3480840"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2025 17:50:59 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.38.20:47695]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.38.121:2525] with esmtp (Farcaster)
+ id 3a68c820-3ea0-4f05-bb30-09be8ba4b876; Tue, 23 Sep 2025 17:50:58 +0000 (UTC)
+X-Farcaster-Flow-ID: 3a68c820-3ea0-4f05-bb30-09be8ba4b876
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Tue, 23 Sep 2025 17:50:58 +0000
+Received: from 80a9970eed1e (10.106.101.9) by EX19D001UWA001.ant.amazon.com
+ (10.13.138.214) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Tue, 23 Sep 2025
+ 17:50:57 +0000
+Date: Tue, 23 Sep 2025 10:50:55 -0700
+From: Justinien Bouron <jbouron@amazon.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Andrew Morton <akpm@linux-foundation.org>, Baoquan He
+	<bhe@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, "Justin
+ Stitt" <justinstitt@google.com>, Justinien Bouron <jbouron@amazon.com>
+Subject: Re: [resend, PATCH v2 1/1] kexec: Remove unused code in
+ kimage_load_cma_segment()
+Message-ID: <aNLd_6CO6YMvm2MN@80a9970eed1e>
+References: <20250916125124.3094021-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20250923031613.2448073-3-sherry.sun@nxp.com>
+In-Reply-To: <20250916125124.3094021-2-andriy.shevchenko@linux.intel.com>
+X-Editor: VIM - Vi IMproved 9.1
+X-ClientProxiedBy: EX19D045UWA004.ant.amazon.com (10.13.139.91) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Hi Sherry,
+On Tue, Sep 16, 2025 at 02:51:09PM +0200, Andy Shevchenko wrote:
+> clang is not happy about set but unused variable:
+> 
+> kernel/kexec_core.c:745:16: error: variable 'maddr' set but not used [-Werror,-Wunused-but-set-variable]
+>   745 |         unsigned long maddr;
+>       |                       ^
+> 1 error generated.
+> 
+> Fix the compilation breakage (`make W=1` build) by removing unused variable.
+> 
+> As Nathan noted, GCC 16 produces the similar warning;
+> 
+> Fixes: f4fecb50d6e1 ("kexec_core: remove superfluous page offset handling in segment loading")
+FYI the commit this patch is fixing (i.e. f4fecb50d6e1) is going to need a
+second revision as well (I haven't submitted it yet, still working on it), this
+means that your "Fixes:" tag will need to be changed again, requiring a 3rd
+revision.
 
-kernel test robot noticed the following build errors:
+I am not sure what is the proper way forward here. Should I:
+    - Send my v2, without fixing the unused variable and then you send your v3
+      with the updated "Fixes:" tag pointing to my v2.
+    - OR fixing the unused variable in my v2 (i.e. "absorb" this patch in my
+      v2).
+In the latter case, I am not sure how I am supposed to credit the work in this
+case? Do I need to add another "Signed-off-by: Andy Shevchenko" besides mine?
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.17-rc7 next-20250922]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'm still learning the ropes on how to contribute through the mailing list so I
+would be grateful if you could share your input on what's the proper way forward
+here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sherry-Sun/tty-serial-imx-Only-configure-the-wake-register-when-device-is-set-as-wakeup-source/20250923-111951
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250923031613.2448073-3-sherry.sun%40nxp.com
-patch subject: [PATCH 2/2] tty: serial: imx: Add missing wakeup event reporting
-config: x86_64-buildonly-randconfig-004-20250923 (https://download.01.org/0day-ci/archive/20250924/202509240146.aj950Liu-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250924/202509240146.aj950Liu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509240146.aj950Liu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/tty/serial/imx.c:2742:21: error: call to undeclared function 'irqd_is_wakeup_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2742 |         if (wake_active && irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq)))
-         |                            ^
->> drivers/tty/serial/imx.c:2742:40: error: call to undeclared function 'irq_get_irq_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2742 |         if (wake_active && irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq)))
-         |                                               ^
-   drivers/tty/serial/imx.c:2742:40: note: did you mean 'irq_set_irq_wake'?
-   include/linux/interrupt.h:481:12: note: 'irq_set_irq_wake' declared here
-     481 | extern int irq_set_irq_wake(unsigned int irq, unsigned int on);
-         |            ^
-   2 errors generated.
-
-
-vim +/irqd_is_wakeup_set +2742 drivers/tty/serial/imx.c
-
-  2696	
-  2697	/* called with irq off */
-  2698	static void imx_uart_enable_wakeup(struct imx_port *sport, bool on)
-  2699	{
-  2700		struct tty_port *port = &sport->port.state->port;
-  2701		struct tty_struct *tty;
-  2702		struct device *tty_dev;
-  2703		u32 ucr3, usr1;
-  2704		bool may_wake, wake_active;
-  2705	
-  2706		tty = tty_port_tty_get(port);
-  2707		if (tty) {
-  2708			tty_dev = tty->dev;
-  2709			may_wake = tty_dev && device_may_wakeup(tty_dev);
-  2710			tty_kref_put(tty);
-  2711		}
-  2712	
-  2713		/* only configure the wake register when device set as wakeup source */
-  2714		if (!may_wake)
-  2715			return;
-  2716	
-  2717		uart_port_lock_irq(&sport->port);
-  2718	
-  2719		usr1 = imx_uart_readl(sport, USR1);
-  2720		ucr3 = imx_uart_readl(sport, UCR3);
-  2721		if (on) {
-  2722			imx_uart_writel(sport, USR1_AWAKE, USR1);
-  2723			ucr3 |= UCR3_AWAKEN;
-  2724		} else {
-  2725			ucr3 &= ~UCR3_AWAKEN;
-  2726			wake_active = usr1 & USR1_AWAKE;
-  2727		}
-  2728		imx_uart_writel(sport, ucr3, UCR3);
-  2729	
-  2730		if (sport->have_rtscts) {
-  2731			u32 ucr1 = imx_uart_readl(sport, UCR1);
-  2732			if (on) {
-  2733				imx_uart_writel(sport, USR1_RTSD, USR1);
-  2734				ucr1 |= UCR1_RTSDEN;
-  2735			} else {
-  2736				ucr1 &= ~UCR1_RTSDEN;
-  2737				wake_active |= usr1 & USR1_RTSD;
-  2738			}
-  2739			imx_uart_writel(sport, ucr1, UCR1);
-  2740		}
-  2741	
-> 2742		if (wake_active && irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq)))
-  2743			pm_wakeup_event(tty_port_tty_get(port)->dev, 0);
-  2744	
-  2745		uart_port_unlock_irq(&sport->port);
-  2746	}
-  2747	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best,
+Justinien
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> 
+> v2: fixed Fixes (Nathan), added a note about GCC (Nathan), added tag (Nathan)
+> 
+>  kernel/kexec_core.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 5357ed39e9d1..32722926bc7e 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -742,7 +742,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
+>  	struct kexec_segment *segment = &image->segment[idx];
+>  	struct page *cma = image->segment_cma[idx];
+>  	char *ptr = page_address(cma);
+> -	unsigned long maddr;
+>  	size_t ubytes, mbytes;
+>  	int result = 0;
+>  	unsigned char __user *buf = NULL;
+> @@ -754,7 +753,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
+>  		buf = segment->buf;
+>  	ubytes = segment->bufsz;
+>  	mbytes = segment->memsz;
+> -	maddr = segment->mem;
+>  
+>  	/* Then copy from source buffer to the CMA one */
+>  	while (mbytes) {
+> @@ -782,7 +780,6 @@ static int kimage_load_cma_segment(struct kimage *image, int idx)
+>  		}
+>  
+>  		ptr    += mchunk;
+> -		maddr  += mchunk;
+>  		mbytes -= mchunk;
+>  
+>  		cond_resched();
+> -- 
+> 2.50.1
+> 
