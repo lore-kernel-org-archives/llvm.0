@@ -1,117 +1,138 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E348524468B;
-	Tue, 23 Sep 2025 03:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0451F261595;
+	Tue, 23 Sep 2025 04:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758597250; cv=none; b=O3y7bmU90Irt7WR2X8R8MdWewpK7nSZjDccfckH7/7r3hfpjZdJtIVy+paq24LVAkbAJDbFfXvDS2KQsKv0KW+mywHXBLPpZkbroq0yvXqtJFM+GjKmx0vEYJFgLdPDHVE15WvkYpiXCHkfGOw8pAyI4O7PeutJl3Vii+rDLf5M=
+	t=1758600401; cv=none; b=WrWPgGYKpMdaVCrjPlLUwojB77juzcq9Jp9xoqD1Y/fe3b8P0cfyJKJXs8quz8UeemkRio6g7Rmkxxo5hxSnh+Sd9Gm179nE63PcENcuwZbTkkW/fca/VlIiahgG6jK7MTcJ8m3jyUpxmyzO8/TNmXkCUDqB/A2zlCKcSPdhr8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758597250; c=relaxed/simple;
-	bh=ZrlGg5+T9abifBw/iJ/AfUiU2mX4DnhZuR3Zd+vV5XE=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=VBiwlgyJVtTgNPYaOiWFQiRtLZqnvJ+IpixxWnDQkEuBW8vK0zd93rvLqJQkFNjWLDPJ6c/UMcFfebL4MlKJYo0BlNq6DrQMLpgiCPIQLOXFmujFdtNxTbvB4i5rLMPzyqVxvXTDubJkmMufpWNrdOGzQrKQu+z/2+Jd+rqtKX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx7792ENJowH0NAA--.27435S3;
-	Tue, 23 Sep 2025 11:13:58 +0800 (CST)
-Received: from [10.130.10.66] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAxVOR1ENJorgqnAA--.10350S3;
-	Tue, 23 Sep 2025 11:13:58 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] LoongArch: Make LTO case independent in Makefile
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- WANG Rui <wangrui@loongson.cn>, rust-for-linux@vger.kernel.org,
- loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20250909092707.3127-1-yangtiezhu@loongson.cn>
- <20250909092707.3127-2-yangtiezhu@loongson.cn>
- <20250920061536.GA1460394@ax162>
- <CAAhV-H5=w82CDx=1=PZjf4FVW_dGWe_e__QazwDTwE3kKXtPLQ@mail.gmail.com>
- <c9c4c0e6-946d-95de-9c03-a4b8e1636b81@loongson.cn>
- <7eafa4a6-55bf-2fcb-19ef-b18bd51bfd39@loongson.cn>
- <CAAhV-H4xx-C28-a8H7yJTK30+r90zL9XTSAb87Jr4zLc5ShBoA@mail.gmail.com>
- <750c907d-cc95-5116-4507-52dd48927cec@loongson.cn>
- <20250923011057.GA3980504@ax162>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <a04cc3e2-d8d9-8ac4-d919-705babf4ccd8@loongson.cn>
-Date: Tue, 23 Sep 2025 11:13:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1758600401; c=relaxed/simple;
+	bh=VZX0azsj2Y+I4tix4/GQPEAlzuuwnGYKkwOGjH+jPEM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VSHHS7upziXcoNHhaDVNbTdZxQF45blRWJwnzwq/WbIGMLkZDZeWpScKsRBf76CtehQHa6aTdbfTNwsMLVskAViSCg6nodWRBahM0kXHlf53RoLD9gIBK1caywAm3PItkfm2XiPjIXQ1OUzzPWHXp/FTyZqjcL0IzD9wcdbRE7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k5glPcMZ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k5glPcMZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758600400; x=1790136400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VZX0azsj2Y+I4tix4/GQPEAlzuuwnGYKkwOGjH+jPEM=;
+  b=k5glPcMZ/eeAqPtIrSFuBDMrj7AceTtSHPscwmQu0VxuE5vDL/UW3AR8
+   PEq92ZFaxsW32/dr6V/VcG6mmw7+OVsUw13/xbuNJItfesKQN9ZtIcAp9
+   BK64JbUBCpPDyKrTll4/hQz4ENZTJMAytp+4ROfROsZ9/WVNAdOCqNwWH
+   csP+t9dl0ZTzo7+ytp7p5pffp47n/LKjpVxN0ENXPoXtv50HIy7fsQMVK
+   tPA+ZCSlfeW/T+DdD+FfI8uEFOxB24XPLRcIeTerJwxYsNZQKxLQ5zENG
+   y/XqF66eE0lnz1xRxLeYUbzj/LoQ3nyLyhVA1xkth0GYhai1VqwhtO+WE
+   A==;
+X-CSE-ConnectionGUID: U0bHBsW1Q5aniRvX/pJ5EA==
+X-CSE-MsgGUID: v3fuF1iLQ/W4HYFgBjD5Lg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="86307514"
+X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
+   d="scan'208";a="86307514"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 21:06:39 -0700
+X-CSE-ConnectionGUID: cX+GWRf6Tu2t5gJnCXlABw==
+X-CSE-MsgGUID: Es1S0oWbQ6miuIDWmPNphw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
+   d="scan'208";a="177030369"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 22 Sep 2025 21:06:35 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0uIQ-0002jV-2y;
+	Tue, 23 Sep 2025 04:06:31 +0000
+Date: Tue, 23 Sep 2025 12:06:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+	Moshe Shemesh <moshe@nvidia.com>
+Subject: Re: [PATCH net-next 7/7] net/mlx5e: Use extack in set rxfh callback
+Message-ID: <202509231125.Tsan9Qny-lkp@intel.com>
+References: <1758531671-819655-8-git-send-email-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250923011057.GA3980504@ax162>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxVOR1ENJorgqnAA--.10350S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Aw13Xry8tF13JFyfXw15KFX_yoW8CrW7pa
-	ykWFy3Krs8JF4Iy39Fvw4UKFZ8KrsxGFy8Xr1rtr1kZr1DZrWIgrWxtrZ3XasrZr9rJFW2
-	qFW8t3s8AF4UZ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
-	CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j0FALU
-	UUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1758531671-819655-8-git-send-email-tariqt@nvidia.com>
 
-On 2025/9/23 上午9:10, Nathan Chancellor wrote:
->>>> ifdef CONFIG_LTO_CLANG
->>>> ifdef CONFIG_LLD_HAS_ANNOTATE_TABLEJUMP
->>>> KBUILD_LDFLAGS                  += -mllvm --loongarch-annotate-tablejump
->>>> else
->>>> KBUILD_LDFLAGS                  += -mllvm --no-jump-tables
->>>> endif
-> 
-> There is no '--no-jump-tables' LLVM option so this will not work.
-> Shouldn't -fno-jump-tables and -Zno-jump-tables take care of generating
-> jump tables?
-> 
->> I do not know whether this is valid, you can test it with llvm 18
->> and llvm 20 if you think it is a proper way.
-> 
-> For what it's worth, Huacai's original suggestion of
-> 
->      KBUILD_LDFLAGS += $(call ld-option,-mllvm --loongarch-annotate-tablejump)
-> 
-> appears to work for me and I do not see any objtool warnings with LTO
-> enabled but I might be missing something.
+Hi Tariq,
 
-As discussed offline, Huacai will test this change and submit a patch
-later.
+kernel test robot noticed the following build warnings:
 
->> But IIRC, there is objtool warning with llvm 18, I reported to llvm
->> developer Wang Lei and he fixed it as the following commit:
->>
->> [LoongArch] Avoid indirect branch jumps using the ra register
->> https://github.com/llvm/llvm-project/commit/21ef17c62645
->>
->> Actually, the above commit solved a performance issue of llvm compiler,
->> so I prefer to update the minimal llvm version to 20 for LoongArch.
-> 
-> I tend to let architecture maintainers make the call around minimum
-> supported versions of compilers, so if that is how you would like to
-> proceed, I am fine with that. I will say LLVM 20 is pretty new (released
-> on March 4th, 2025) but I expect most of your users to probably be using
-> bleeding edge tools for all the changes you make in the compiler and
-> lower level libraries?
+[auto build test WARNING on 312e6f7676e63bbb9b81e5c68e580a9f776cc6f0]
 
-Usually, I like to use the latest LLVM upstream version to test the
-kernel, but maybe somebody only uses the lower version, so keep the
-minimal version as is.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/net-mlx5-HWS-Generalize-complex-matchers/20250922-170716
+base:   312e6f7676e63bbb9b81e5c68e580a9f776cc6f0
+patch link:    https://lore.kernel.org/r/1758531671-819655-8-git-send-email-tariqt%40nvidia.com
+patch subject: [PATCH net-next 7/7] net/mlx5e: Use extack in set rxfh callback
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250923/202509231125.Tsan9Qny-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250923/202509231125.Tsan9Qny-lkp@intel.com/reproduce)
 
-Thanks,
-Tiezhu
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509231125.Tsan9Qny-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c:1508:4: warning: 'snprintf' will always be truncated; specified size is 80, but format string expands to at least 131 [-Wformat-truncation]
+    1508 |                         NL_SET_ERR_MSG_FMT_MOD(
+         |                         ^
+   include/linux/netlink.h:131:2: note: expanded from macro 'NL_SET_ERR_MSG_FMT_MOD'
+     131 |         NL_SET_ERR_MSG_FMT((extack), KBUILD_MODNAME ": " fmt, ##args)
+         |         ^
+   include/linux/netlink.h:116:6: note: expanded from macro 'NL_SET_ERR_MSG_FMT'
+     116 |         if (snprintf(__extack->_msg_buf, NETLINK_MAX_FMTMSG_LEN,               \
+         |             ^
+   1 warning generated.
+
+
+vim +/snprintf +1508 drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
+
+  1495	
+  1496	static int mlx5e_rxfh_hfunc_check(struct mlx5e_priv *priv,
+  1497					  const struct ethtool_rxfh_param *rxfh,
+  1498					  struct netlink_ext_ack *extack)
+  1499	{
+  1500		unsigned int count;
+  1501	
+  1502		count = priv->channels.params.num_channels;
+  1503	
+  1504		if (rxfh->hfunc == ETH_RSS_HASH_XOR) {
+  1505			unsigned int xor8_max_channels = mlx5e_rqt_max_num_channels_allowed_for_xor8();
+  1506	
+  1507			if (count > xor8_max_channels) {
+> 1508				NL_SET_ERR_MSG_FMT_MOD(
+  1509					extack,
+  1510					"Cannot set RSS hash function to XOR, current number of channels (%d) exceeds the maximum allowed for XOR8 RSS hfunc (%d)\n",
+  1511					count, xor8_max_channels);
+  1512				return -EINVAL;
+  1513			}
+  1514		}
+  1515	
+  1516		return 0;
+  1517	}
+  1518	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
