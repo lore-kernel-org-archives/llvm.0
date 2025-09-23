@@ -1,130 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28112571C7
-	for <llvm@lists.linux.dev>; Tue, 23 Sep 2025 05:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC5A1990A7;
+	Tue, 23 Sep 2025 06:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758606796; cv=none; b=ls9oGET1DjHqr9gilRPXAK2d4DS5QRPx7R8gyAWZ0mylX7ue/CVJW8sBqFqaasJOc+n40HgVAn8ZydcyjRQh5CcJeKpdXHd5fN86oflG/KU3dkbLQp47kb/y+MVOJAnueKB0g9zeLHldoZeCAeLO/qYNEOv82H98DXfoq+H3rfI=
+	t=1758607583; cv=none; b=QfuLu/EzsK2anxk5BKcUkwbqCrnP/J+1inrM28XbtTFsgVq9tRG6HjrUjvzLXWiupqxURVvWCHG9nqnMYfeDCm+Up+CERrSWwGK5YYOcyvLO4nfdU6SWo2GFHvlnqeX0l3T522Po3skeBb3h2TphauTQZJTYJpLcQDQTcjLk/XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758606796; c=relaxed/simple;
-	bh=WgKRMjx0ADLi4wSgegfbFyurNhZIbpOe7ktuWjffylc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=L0PDcCsBV+O2bDFp1x4jRnKCWlB73riCdmdWHCqLUZBdU5Lp+D6Gg6QRom0jGdkSTvpW4+i9FFNuMtMpn+/BRg1OYMmaAyGSZgjKQL9BHzk8xQRtJ4MVH7C1ud3ckLSMXWrNHIJWR80oQ3GuQh4OhL4l+wuV+IaSQPqr7gPUt8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L6G6PGfH; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1758607583; c=relaxed/simple;
+	bh=/Va+wb9am0t3b0ri4zxojtTDyBaof4jyFNU6bskn7oE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=icZRDNXee61VqMQOFD/QAaJipQUDPYzfM3rSdwkBVY6yXF4le7zcBhKSZJk/7+xu0jL5DoqyJugdvIrKbXT9b0aRfDkbMtVtNG0MD8NhwdDwNw4sAvceF3+na4zMSiSgt2D9bNY+Eko6chDA/CKp7mMxiuLbLK54Y4Ia1s6Zq9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SnvPFGR0; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L6G6PGfH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758606792;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NSC/AhUjh3AbVZr3laW2c7rk4HfXUWbJGkAGuU75geY=;
-	b=L6G6PGfH9Jp+FRLjE5CWh+nT6mdGPRE14eBbYyMYaRoNOeKv78ohI1SZXLBh5FlaZZooXG
-	MDt9CeEBPXXnQtYc/JJ7h465pNnJUzAWC+vZUvWFxDNEEUraU7OmyEGbIcXHZE6LcEjKTV
-	+t/D3eGnja75vy4pQKupC4cLnG6Eg8U=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-49-aJdS74ZGPCCbNjUCodIKhg-1; Tue,
- 23 Sep 2025 01:53:10 -0400
-X-MC-Unique: aJdS74ZGPCCbNjUCodIKhg-1
-X-Mimecast-MFC-AGG-ID: aJdS74ZGPCCbNjUCodIKhg_1758606789
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A2AC21800365
-	for <llvm@lists.linux.dev>; Tue, 23 Sep 2025 05:53:09 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 368DE1800451;
-	Tue, 23 Sep 2025 05:53:08 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc7,
- upstream-mainline, d4c7fccf)
-Date: Tue, 23 Sep 2025 05:53:08 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SnvPFGR0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758607582; x=1790143582;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/Va+wb9am0t3b0ri4zxojtTDyBaof4jyFNU6bskn7oE=;
+  b=SnvPFGR0ZDuZVimOFiRnKdPX6WXcaMbwo5at7Ekd1/zJ5CzhGItN5iM7
+   xV8RlEylJDUksYWzwMsBXkHaVOf+wNzXg3PIJcH3C1fh7IswAT6+0xTeF
+   5epy//glKnPz7+ho6HXDgbgbFN5IgUkaJMJRtiXz8EPlByRr2/C3OZw9J
+   jkp54ycbjKNbXeKLUUcNhyZ5K1glCx2eLvB2vxYDBC9sBN4lup1AXAe1W
+   zMsyiaAk8GcMU23MKJ8q702QIt9KPUXolOmh0n3IWpIvD2mFkQ6mVCg8Z
+   o0ft6Oty08h2hAM8AzL2Y54ReIz2XOfoc8M+dJ1YlsYg2ohdpc+oIGDd+
+   Q==;
+X-CSE-ConnectionGUID: LFVyQPFHR5exISXjitXdGg==
+X-CSE-MsgGUID: WNqSG3MDSImhfBFDBHEbbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="86314234"
+X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
+   d="scan'208";a="86314234"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 23:06:21 -0700
+X-CSE-ConnectionGUID: MEsv++RXQiyeG6bl5VvMhA==
+X-CSE-MsgGUID: URoYeKUzRqGXjbkV1hNLmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,287,1751266800"; 
+   d="scan'208";a="200376732"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 22 Sep 2025 23:06:19 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v0wAL-0002nl-0y;
+	Tue, 23 Sep 2025 06:06:17 +0000
+Date: Tue, 23 Sep 2025 14:05:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexandr Sapozhnkiov <alsp705@gmail.com>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
+	dm-devel@redhat.com, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexandr Sapozhnikov <alsp705@gmail.com>,
+	linux-media@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH 5.10] md: fix NULL pointer dereference at
+ reregister_snapshot()
+Message-ID: <202509231318.YYdqPhnu-lkp@intel.com>
+References: <20250922144239.11-1-alsp705@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <11707.125092301531000253@us-mta-49.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: x-x4iZM5X0qDAtcqVwt62G3zg4kzzH1DyUAfKR4M0HY_1758606789
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250922144239.11-1-alsp705@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Alexandr,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build warnings:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on device-mapper-dm/for-next]
+[also build test WARNING on linus/master v6.17-rc7 next-20250922]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-iommufd' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/jgg/iommufd
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexandr-Sapozhnkiov/md-fix-NULL-pointer-dereference-at-reregister_snapshot/20250922-224522
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+patch link:    https://lore.kernel.org/r/20250922144239.11-1-alsp705%40gmail.com
+patch subject: [PATCH 5.10] md: fix NULL pointer dereference at reregister_snapshot()
+config: s390-randconfig-002-20250923 (https://download.01.org/0day-ci/archive/20250923/202509231318.YYdqPhnu-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cafc064fc7a96b3979a023ddae1da2b499d6c954)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250923/202509231318.YYdqPhnu-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2055846402
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509231318.YYdqPhnu-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
+All warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:3:
+   In file included from include/linux/compiler_types.h:171:
+   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
+      28 | #define __SANITIZE_ADDRESS__
+         |         ^
+   <built-in>:369:9: note: previous definition is here
+     369 | #define __SANITIZE_ADDRESS__ 1
+         |         ^
+>> drivers/md/dm-snap.c:597:23: warning: unused variable 'bdev' [-Wunused-variable]
+     597 |         struct block_device *bdev = s->origin->bdev;
+         |                              ^~~~
+   2 warnings generated.
 
 
+vim +/bdev +597 drivers/md/dm-snap.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  590  
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  591  /*
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  592   * Move snapshot to correct place in list according to chunk size.
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  593   */
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  594  static void reregister_snapshot(struct dm_snapshot *s)
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  595  {
+8125cedd7aa81d Alexandr Sapozhnikov 2025-09-22  596  	struct origin *o;
+c1f0c183f6acc6 Mike Snitzer         2009-12-10 @597  	struct block_device *bdev = s->origin->bdev;
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  598  
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  599  	down_write(&_origins_lock);
+8125cedd7aa81d Alexandr Sapozhnikov 2025-09-22  600  	o = __lookup_origin(s->origin->bdev);
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  601  
+c1f0c183f6acc6 Mike Snitzer         2009-12-10  602  	list_del(&s->list);
+8125cedd7aa81d Alexandr Sapozhnikov 2025-09-22  603  	if (o)
+8125cedd7aa81d Alexandr Sapozhnikov 2025-09-22  604  		__insert_snapshot(o, s);
+^1da177e4c3f41 Linus Torvalds       2005-04-16  605  
+^1da177e4c3f41 Linus Torvalds       2005-04-16  606  	up_write(&_origins_lock);
+^1da177e4c3f41 Linus Torvalds       2005-04-16  607  }
+^1da177e4c3f41 Linus Torvalds       2005-04-16  608  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
