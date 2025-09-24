@@ -1,182 +1,289 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3630F328578;
-	Wed, 24 Sep 2025 20:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D62313D891
+	for <llvm@lists.linux.dev>; Wed, 24 Sep 2025 20:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758745469; cv=none; b=WatRO2V5GnnVYemJ4UYKQyxNRX2BWBYlKoF/bwpUUgQoqGAD6PFNJPhxqtI2MwZm6V9Q3abAN+9OAOn7NQJNPhuw4eU3hvZggXZ1iTVXgCVR6aDOzz4bugKJ/09at+my1odt1uMAjXhuuAo0CJo9SiDXERKZBGDFopR4VqOL994=
+	t=1758746731; cv=none; b=AQcvtFECpOkwCPZufyCrqDGD2qmYhYat7cGZj2NgO56C4O5cZbQkI/AHMjcZCJUoEPI1MzX7bTzoL7uW8jLXpPXQQEsernHWYkRn01FKWXf49ntAj/hQf2io51bMXCl4MSPW8kFbpFV5/Yd5L376JLO0YsMBxBAmE1RpfJPEU+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758745469; c=relaxed/simple;
-	bh=flBUgqrKNOGEwefIdPvBIvMyWglR7WH2qJmCa8QRdw8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BKIBjXs5FstBuOJhA33rfhqlZiniYGtwIqpT3b6t7CbgMjMG+xtR258fNzDo9UkjQ5BIf1jElHCQDdLso8nJtfWwQwjFy96JmuYPXI73/XTGTavYTbG3oxqgw7hQfXnjI1AafuQVwVyV2GQee9AO+ISrzk3pqpzbcOQwZ1+troQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FmSSsEaF; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758746731; c=relaxed/simple;
+	bh=dMmVqrBoJBy9oTGr/bRGNHBVw2Ky8S8Wn5lKYFL39Vw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ixGF/gLWarLQhL8NtLvGn1tONZparmHyQtGwJc+ieeE+4ieFEOSV4FUdtCOsyoLnrCKjHaAB+qM740vwKuDigs1xzUGen01hprYo/ZS/9O2yIYwTHTZcwuANBdz2bwW8Pn602l4y2BTtfQaV6JWkoAGThuLdkL5sMa9rm3Zn+RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GcfqeKJd; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FmSSsEaF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758745467; x=1790281467;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=flBUgqrKNOGEwefIdPvBIvMyWglR7WH2qJmCa8QRdw8=;
-  b=FmSSsEaF+sv3CEcp73tXPWocBp1JdMuUAhD+k5SBPVH2lRjlClhQA6wG
-   +duk5Y7Tl9RNoYK8T8NfzgvlHnjPIz3Kb8uDKVN2ZS+VkWcuRkXowc3bL
-   /QJb06iycOyt4eIuQ1Gnp6B834vKMi6C8QBQnax+awrmrcBpVpvU3UIHA
-   cIJ4pKXiXVAjudJ7dq+gKeXnCCst57cHpy1NHXSQFWjeaZzuDeeDh8SrX
-   yhpO6ERsigXx1NflEMNZ4ke7j7LtfofClyZLFUAcYy3Ob4V/1HOXelAOL
-   uzAFbWmvUcLm4MYlLbBlXm9wDFaTm3QwdBS8HDSfiO8vLzD5okX9pW77v
-   A==;
-X-CSE-ConnectionGUID: mc2mVWdDRVOGMG75pr6GDw==
-X-CSE-MsgGUID: c6Z756AXQDi8y6CZ6v+psA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="61106234"
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="61106234"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 13:24:26 -0700
-X-CSE-ConnectionGUID: DYPbMESTS2ykDgHn600lmg==
-X-CSE-MsgGUID: YWobIhYnSjGNsATY751hdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="181403805"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 24 Sep 2025 13:24:21 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1W2E-0004Xd-2J;
-	Wed, 24 Sep 2025 20:24:18 +0000
-Date: Thu, 25 Sep 2025 04:23:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
-	michael.hennerich@analog.com, nuno.sa@analog.com,
-	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	corbet@lwn.net, marcelo.schmitt1@gmail.com,
-	Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
-	Trevor Gamblin <tgamblin@baylibre.com>,
-	Axel Haslam <ahaslam@baylibre.com>
-Subject: Re: [PATCH v2 6/8] iio: adc: ad4030: Add SPI offload support
-Message-ID: <202509250425.p1Sm9XA1-lkp@intel.com>
-References: <da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt@analog.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GcfqeKJd"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77f7da24397so309632b3a.2
+        for <llvm@lists.linux.dev>; Wed, 24 Sep 2025 13:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758746729; x=1759351529; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1mp7LI1ysXg3EhsS9eEgLmna2zUSv012OjKVUUaPuY=;
+        b=GcfqeKJdH1C2dhwDTLSXZDu3ubRJoIC3VKTud92SFRf1hfD8UeqUuRitZNL3GLNvzx
+         S2idXrUFcwaHvmesCQ8RcAdtJW6CZkNi2udK1hgBDAYi4BDq+fsbVtg94q684cQlOPNb
+         1qFXusIcaAXKfR8nQnwY0h/sdT/Sxe3VjKNgt6T4np9rb5LknjjAKZIpjk0qAr9DD5go
+         Sti+9w5UI/Wekz3XlkovHgVcbWBacLySueYdPhM2J+we0/KY85KtIWltlx/7R5ImfdkM
+         QUl1fMCrfmEuvKG5CoPRuO7sgNTEiNGDzP2VSGFhM2bjFB++UiILB47B+Dojp70jikau
+         q6bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758746729; x=1759351529;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w1mp7LI1ysXg3EhsS9eEgLmna2zUSv012OjKVUUaPuY=;
+        b=rHpn8jrnlLyEWZQpEB+W56LpJA6RSt4xQ2N+qsq8NZJ6TTlnKZ9Wn2etfcfYBUOEvM
+         HP1GUdlju4Ofq4iIZrV5jGxzhEphZGylidqTHB3BC1D8TCJJCIeC6qT/T1bRt/b/YylL
+         c8tvDgRy6i5OdKsfZU3Z6ZMsP9wD7YqjMA6fcZDXoSOcmT/nzSMp84SmK7xVjl3ckxbN
+         rZCMv2vSpzqm/jxo8VJwJaFVeIaoCEeTZUTBGDj92cnQr8VaVxkb/yXd9aNRU9FCnL9R
+         HhQRMocM0m9E+cPQMqYgdEd917eYRYJ3GF1I45Mx81J2+xTsjJqC5FfMPlfm9it568+9
+         WQpA==
+X-Forwarded-Encrypted: i=1; AJvYcCWl6wLcPNO1tUPfGwWtaAhgdQxwTLiQ9nDcCPF3XHK2IMLCEVupkZgmTla9K9reIvgnYR7R@lists.linux.dev
+X-Gm-Message-State: AOJu0YxAAX5qH/p/cFQmFKlgipA1/yx3VJlhjtipTI4u8Mu7IixcQ+Us
+	Cp4fIgJ/ul4j/slAEotA99hAcXwTOtZGfrRfyPV3UNIa1FiQBF1MtnJL0Nk5upO8j2R6UYRAbBp
+	o2vbBkL/TOpFEARXkYeV+lFh2Q25BgPJRw3kC7KdO
+X-Gm-Gg: ASbGncseBUqNLXlx1glZnrUzJ2xXDHNGCzLOkRx6YhCc+EM8wpSBWspc7vO9drkOHIs
+	QjH9NT8C3q11ELQyAkJOIELtTDIALYJmAzmoJrBV4P/0ixLeeB0EAXUDTx5e/xBwQci/e03kGz3
+	s+919D7h4P9KNZgalYqfI2rdTJ3wdt3Xz90rSFEah4ycT0EbGoXffe9YKvvfpea1DBXjSH5oQVM
+	ttsPH29KW/za6j+j0Uirg2yN2F7W/41W/8NkRhT/xouUKVCao2vxtQ=
+X-Google-Smtp-Source: AGHT+IG5FWt7iq/CV/zlunKOA9NXinKsoKdyEfBdiOZJ0QuQFE99G9zMO7C0YiiJ5ESmkgWunqzf9iW2ydB6TJVee/I=
+X-Received: by 2002:a17:90b:2249:b0:32e:9da9:3e6c with SMTP id
+ 98e67ed59e1d1-3342a2f9230mr918488a91.23.1758746727946; Wed, 24 Sep 2025
+ 13:45:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt@analog.com>
+References: <20250924115124.194940-1-wangjinchao600@gmail.com>
+ <20250924115931.197077-1-wangjinchao600@gmail.com> <20250924115931.197077-2-wangjinchao600@gmail.com>
+In-Reply-To: <20250924115931.197077-2-wangjinchao600@gmail.com>
+From: Marco Elver <elver@google.com>
+Date: Wed, 24 Sep 2025 22:44:50 +0200
+X-Gm-Features: AS18NWALn8StkZt7OAMLGvWBoEjnvi0uixTT5lbJc-ZUHb99wQUtu6-AQu7N2zA
+Message-ID: <CANpmjNNnVx3=dQsoHL+T-95Z_iprCd3FXeYpnHdmi4d06X-x_g@mail.gmail.com>
+Subject: Re: [PATCH v5 17/23] mm/ksw: add test module
+To: Jinchao Wang <wangjinchao600@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mike Rapoport <rppt@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	"Liang, Kan" <kan.liang@linux.intel.com>, David Hildenbrand <david@redhat.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Rong Xu <xur@google.com>, 
+	Naveen N Rao <naveen@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>, 
+	Nam Cao <namcao@linutronix.de>, workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	kasan-dev@googlegroups.com, "David S. Miller" <davem@davemloft.net>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Marcelo,
+On Wed, 24 Sept 2025 at 14:00, Jinchao Wang <wangjinchao600@gmail.com> wrote:
+>
+> Introduce a separate test module to validate functionality in controlled
+> scenarios.
+>
+> The module provides a proc interface (/proc/kstackwatch_test) that allows
+> triggering specific test cases via simple commands:
+>
+>   echo test0 > /proc/kstackwatch_test
 
-kernel test robot noticed the following build errors:
+This should not be in /proc/ - if anything, it should go into debugfs.
 
-[auto build test ERROR on 561285d048053fec8a3d6d1e3ddc60df11c393a0]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/iio-adc-ad4030-Fix-_scale-value-for-common-mode-channels/20250919-014323
-base:   561285d048053fec8a3d6d1e3ddc60df11c393a0
-patch link:    https://lore.kernel.org/r/da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt%40analog.com
-patch subject: [PATCH v2 6/8] iio: adc: ad4030: Add SPI offload support
-config: x86_64-randconfig-077-20250922 (https://download.01.org/0day-ci/archive/20250925/202509250425.p1Sm9XA1-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509250425.p1Sm9XA1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509250425.p1Sm9XA1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/adc/ad4030.c:561:20: error: no member named 'offset_ns' in 'struct spi_offload_trigger_periodic'
-     561 |                 config->periodic.offset_ns = offload_offset_ns;
-         |                 ~~~~~~~~~~~~~~~~ ^
-   drivers/iio/adc/ad4030.c:566:28: error: no member named 'offset_ns' in 'struct spi_offload_trigger_periodic'
-     566 |         } while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS);
-         |                  ~~~~~~~~~~~~~~~~ ^
-   2 errors generated.
-
-
-vim +561 drivers/iio/adc/ad4030.c
-
-   502	
-   503	static int __ad4030_set_sampling_freq(struct ad4030_state *st,
-   504					      unsigned int freq, unsigned int avg_log2)
-   505	{
-   506		struct spi_offload_trigger_config *config = &st->offload_trigger_config;
-   507		struct pwm_waveform cnv_wf = { };
-   508		u64 target = AD4030_TCNVH_NS;
-   509		u64 offload_period_ns;
-   510		u64 offload_offset_ns;
-   511		int ret;
-   512	
-   513		/*
-   514		 * When averaging/oversampling over N samples, we fire the offload
-   515		 * trigger once at every N pulses of the CNV signal. Conversely, the CNV
-   516		 * signal needs to be N times faster than the offload trigger. Take that
-   517		 * into account to correctly re-evaluate both the PWM waveform connected
-   518		 * to CNV and the SPI offload trigger.
-   519		 */
-   520		if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
-   521			freq <<= avg_log2;
-   522	
-   523		cnv_wf.period_length_ns = DIV_ROUND_CLOSEST(NSEC_PER_SEC, freq);
-   524		/*
-   525		 * The datasheet lists a minimum time of 9.8 ns, but no maximum. If the
-   526		 * rounded PWM's value is less than 10, increase the target value by 10
-   527		 * and attempt to round the waveform again, until the value is at least
-   528		 * 10 ns. Use a separate variable to represent the target in case the
-   529		 * rounding is severe enough to keep putting the first few results under
-   530		 * the minimum 10ns condition checked by the while loop.
-   531		 */
-   532		do {
-   533			cnv_wf.duty_length_ns = target;
-   534			ret = pwm_round_waveform_might_sleep(st->cnv_trigger, &cnv_wf);
-   535			if (ret)
-   536				return ret;
-   537			target += AD4030_TCNVH_NS;
-   538		} while (cnv_wf.duty_length_ns < AD4030_TCNVH_NS);
-   539	
-   540		if (!in_range(cnv_wf.period_length_ns, AD4030_TCYC_NS, INT_MAX))
-   541			return -EINVAL;
-   542	
-   543		offload_period_ns = cnv_wf.period_length_ns;
-   544		if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
-   545			offload_period_ns <<= avg_log2;
-   546	
-   547		config->periodic.frequency_hz =  DIV_ROUND_UP_ULL(NSEC_PER_SEC,
-   548								  offload_period_ns);
-   549	
-   550		/*
-   551		 * The hardware does the capture on zone 2 (when SPI trigger PWM
-   552		 * is used). This means that the SPI trigger signal should happen at
-   553		 * tsync + tquiet_con_delay being tsync the conversion signal period
-   554		 * and tquiet_con_delay 9.8ns. Hence set the PWM phase accordingly.
-   555		 *
-   556		 * The PWM waveform API only supports nanosecond resolution right now,
-   557		 * so round this setting to the closest available value.
-   558		 */
-   559		offload_offset_ns = AD4030_TQUIET_CNV_DELAY_NS;
-   560		do {
- > 561			config->periodic.offset_ns = offload_offset_ns;
-   562			ret = spi_offload_trigger_validate(st->offload_trigger, config);
-   563			if (ret)
-   564				return ret;
-   565			offload_offset_ns += AD4030_TQUIET_CNV_DELAY_NS;
-   566		} while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS);
-   567	
-   568		st->cnv_wf = cnv_wf;
-   569	
-   570		return 0;
-   571	}
-   572	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Test module is built with optimizations disabled to ensure predictable
+> behavior.
+>
+> Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
+> ---
+>  mm/Kconfig.debug        |  10 ++++
+>  mm/kstackwatch/Makefile |   6 ++
+>  mm/kstackwatch/test.c   | 122 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 138 insertions(+)
+>  create mode 100644 mm/kstackwatch/test.c
+>
+> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+> index 89be351c0be5..291dd8a78b98 100644
+> --- a/mm/Kconfig.debug
+> +++ b/mm/Kconfig.debug
+> @@ -317,3 +317,13 @@ config KSTACK_WATCH
+>           A lightweight real-time debugging tool to detect stack corrupting.
+>
+>           If unsure, say N.
+> +
+> +config KSTACK_WATCH_TEST
+> +       tristate "KStackWatch Test Module"
+> +       depends on KSTACK_WATCH
+> +       help
+> +         This module provides controlled stack corruption scenarios to verify
+> +         the functionality of KStackWatch. It is useful for development and
+> +         validation of KStackWatch mechanism.
+> +
+> +         If unsure, say N.
+> diff --git a/mm/kstackwatch/Makefile b/mm/kstackwatch/Makefile
+> index 84a46cb9a766..d007b8dcd1c6 100644
+> --- a/mm/kstackwatch/Makefile
+> +++ b/mm/kstackwatch/Makefile
+> @@ -1,2 +1,8 @@
+>  obj-$(CONFIG_KSTACK_WATCH)     += kstackwatch.o
+>  kstackwatch-y := kernel.o stack.o watch.o
+> +
+> +obj-$(CONFIG_KSTACK_WATCH_TEST)        += kstackwatch_test.o
+> +kstackwatch_test-y := test.o
+> +CFLAGS_test.o := -fno-inline \
+> +               -fno-optimize-sibling-calls \
+> +               -fno-pic -fno-pie -O0 -Og
+> diff --git a/mm/kstackwatch/test.c b/mm/kstackwatch/test.c
+> new file mode 100644
+> index 000000000000..1ed98931cc51
+> --- /dev/null
+> +++ b/mm/kstackwatch/test.c
+> @@ -0,0 +1,122 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/delay.h>
+> +#include <linux/kthread.h>
+> +#include <linux/list.h>
+> +#include <linux/module.h>
+> +#include <linux/prandom.h>
+> +#include <linux/printk.h>
+> +#include <linux/proc_fs.h>
+> +#include <linux/random.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/string.h>
+> +#include <linux/uaccess.h>
+> +
+> +#include "kstackwatch.h"
+> +
+> +static struct proc_dir_entry *test_proc;
+> +
+> +#define BUFFER_SIZE 16
+> +#define MAX_DEPTH 6
+> +
+> +struct work_node {
+> +       ulong *ptr;
+> +       struct completion done;
+> +       struct list_head list;
+> +};
+> +
+> +static DECLARE_COMPLETION(work_res);
+> +static DEFINE_MUTEX(work_mutex);
+> +static LIST_HEAD(work_list);
+> +
+> +static void test_watch_fire(void)
+> +{
+> +       u64 buffer[BUFFER_SIZE] = { 0 };
+> +
+> +       pr_info("entry of %s\n", __func__);
+> +       ksw_watch_show();
+> +       ksw_watch_fire();
+> +       pr_info("buf[0]:%lld\n", buffer[0]);
+> +
+> +       barrier_data(buffer);
+> +       pr_info("exit of %s\n", __func__);
+> +}
+> +
+> +
+> +static ssize_t test_proc_write(struct file *file, const char __user *buffer,
+> +                              size_t count, loff_t *pos)
+> +{
+> +       char cmd[256];
+> +       int test_num;
+> +
+> +       if (count >= sizeof(cmd))
+> +               return -EINVAL;
+> +
+> +       if (copy_from_user(cmd, buffer, count))
+> +               return -EFAULT;
+> +
+> +       cmd[count] = '\0';
+> +       strim(cmd);
+> +
+> +       pr_info("received command: %s\n", cmd);
+> +
+> +       if (sscanf(cmd, "test%d", &test_num) == 1) {
+> +               switch (test_num) {
+> +               case 0:
+> +                       test_watch_fire();
+> +                       break;
+> +               default:
+> +                       pr_err("Unknown test number %d\n", test_num);
+> +                       return -EINVAL;
+> +               }
+> +       } else {
+> +               pr_err("invalid command format. Use 'testN'.\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       return count;
+> +}
+> +
+> +static ssize_t test_proc_read(struct file *file, char __user *buffer,
+> +                             size_t count, loff_t *pos)
+> +{
+> +       static const char usage[] = "KStackWatch Simplified Test Module\n"
+> +                                   "============ usage ==============\n"
+> +                                   "Usage:\n"
+> +                                   "echo test{i} > /proc/kstackwatch_test\n"
+> +                                   " test0 - test watch fire\n";
+> +
+> +       return simple_read_from_buffer(buffer, count, pos, usage,
+> +                                      strlen(usage));
+> +}
+> +
+> +static const struct proc_ops test_proc_ops = {
+> +       .proc_read = test_proc_read,
+> +       .proc_write = test_proc_write,
+> +};
+> +
+> +static int __init kstackwatch_test_init(void)
+> +{
+> +       test_proc = proc_create("kstackwatch_test", 0600, NULL, &test_proc_ops);
+> +       if (!test_proc) {
+> +               pr_err("Failed to create proc entry\n");
+> +               return -ENOMEM;
+> +       }
+> +       pr_info("module loaded\n");
+> +       return 0;
+> +}
+> +
+> +static void __exit kstackwatch_test_exit(void)
+> +{
+> +       if (test_proc)
+> +               remove_proc_entry("kstackwatch_test", NULL);
+> +       pr_info("module unloaded\n");
+> +}
+> +
+> +module_init(kstackwatch_test_init);
+> +module_exit(kstackwatch_test_exit);
+> +
+> +MODULE_AUTHOR("Jinchao Wang");
+> +MODULE_DESCRIPTION("Simple KStackWatch Test Module");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.43.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion visit https://groups.google.com/d/msgid/kasan-dev/20250924115931.197077-2-wangjinchao600%40gmail.com.
