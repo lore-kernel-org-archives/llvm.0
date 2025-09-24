@@ -1,174 +1,286 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012019.outbound.protection.outlook.com [52.101.43.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE7C2DFA48;
-	Wed, 24 Sep 2025 12:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758716625; cv=fail; b=IUovk2Bc5RSHVeGRRU1PF93OZhg6PU1RLrh62kVPz6vx3gUTy8Lp0s4kmCyz5EkFCW0J9NGN6ZHWeLodnh5jlQwWl965QZhdU/vSWeuf/Xg2kptxKU3UET9J+O90sFIcQtlok0lond4b6dIYkG+efh+MA1ogMJEzIsmPgavEvZg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758716625; c=relaxed/simple;
-	bh=RuNnYomZBMz3Jwa2TVM4zDxuOaK+32p2TtuEYqyIeAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=om0T/488pOcThO14e8+GtasaKJwPAl3mWs4RlpbokkbvxQUiIOsFCJq5Ziu8hZCsx5nZhKhVpz8hAGPWTcPxg0NcttBLfVOz5jKzwSCixynlIuZzTZmb8oRsVBK6bXF6q5G1sernaITwxDePfYML3b1AHmsca+azei+Y3t2sblc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=N+6mPlWk; arc=fail smtp.client-ip=52.101.43.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6A43002C2
+	for <llvm@lists.linux.dev>; Wed, 24 Sep 2025 12:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758716707; cv=none; b=m6XQAS1kzb2Z3G4/106vpThQe6yksFt42WaUy2KTVE5jzlt/uU+lQxMosZkCGB4+zn71CJv83sQSA075EwFGRp4qyELoKG02jJ8hjrzSH829LUhsASPJ6c7F83TPn0mJP5Sz6G92EhJfhFp92fhTuVJQ3TmGezRAg9go/aiL+EY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758716707; c=relaxed/simple;
+	bh=nvDFxA5+kzzGy254IQd/07joD3bGnycuza2xxZ+JqIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EmS3J+iXXKWUfbpnQWmsf21zJxGDEHhIh2ooy2YXjcPtgc6wrYSHrptaapoNhORwbib9jVC/2GrI/Vd+EA2nn5jONsMEMgeAHntoX2fMu6xnSfgX73YFQcoqIXsCOlnBJF64bFSwtnznPNPEiUClp1Q/CSwd+easG/2DAQeuQH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxfPjPdj; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="N+6mPlWk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dAkNGHG5OSJyakmpwvmda8FwLsGKB4jZSW8RjTaSGJyenymWBdtNFZglQ3qpKuztoULL81vwQhWz9IASXlkKlUSD29EmmXZed/q7/DHM2anFQIrnI5aoh/oWG+N4KmGDqx2y0lGICBElQ430o33OeVjhu+0XpcJ61dQEIeFz9aiRrxN01SC0EL9iXAVB6UXL0AxIoy01Z7xdhwk+TXfD2N4JGMV40B6KeYZKK8p5xn13Jhan/KKrHVLCRcjVlapv91LoZUolqElBmYMQntQMvXTPm41UAQjf0D0MN1c8r9zfoLepQwFQoICqt48vvWtkg7l7+18XxMEQ/YosFxhuSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2vdUu1Wklr1IqH3zxph+s0bzS1TS5JtKq0s62Wf2mDg=;
- b=CxkH45hMKlaWvpDXUBBYL8tMJGxUfcNrPJRAOANhQsBSDWq1JYe3ALwNJJ2ToazVYJDkA9uBD/JDX8xpnazOB8pqbgFqpMAXSWSeMhcK5vE5qlXpTNwpDYc0bQ7eYO0oxoPSE1cff+XEJ1h66VXCtYgeZBqpZD6F3DGfsZ6ZKJoCIYlma30CR1Zy5uTFTNygtl1gEd/+c5l5zcjwAmtEwmMTWDWwni0UceYcvoumG1lt0wje7pywWTXdSi0rgDdR522oMWBMdfpFlNpU2BcSozBWrKu9wTWstkfEtNGj7Ui+kzPuDx0WnmpK0HrLQmy7qGgpBf96lCAFBFRlUOxP+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2vdUu1Wklr1IqH3zxph+s0bzS1TS5JtKq0s62Wf2mDg=;
- b=N+6mPlWkik0u1kdWzJPoKOw29d05IwLFa8F7j632D0fb7ddEuJJeaUucZVMkvBnKbVQh3e4PD11iCVsIL9++rHH36DQ2JDEs358KzJ5yGMKA3XxfpXLkSvr96zoJwQnk3d+7yyqGJvtqcXZwxqt/BTdGuqcuN+c0ct8QYZcRAMAlpOCR+7AE2N0uJmkCuoef0qlt2mPQKDmnXhbnmL8XMrHs4+7AnEuNdeauuCZm05b7d8FkpTBeqvWMQABYxH3RWthxwViXsJ0cb5QHaPVd+1nOXqfkThdxmZu4c3rFGORQDvVQ8+R9jEPz005R77w+UZUCkxho9AclFJzIbsA5bw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
- by PH7PR12MB6764.namprd12.prod.outlook.com (2603:10b6:510:1ae::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Wed, 24 Sep
- 2025 12:23:40 +0000
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9137.021; Wed, 24 Sep 2025
- 12:23:39 +0000
-Date: Wed, 24 Sep 2025 09:23:38 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Bill Wendling <morbo@google.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxfPjPdj"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3322e6360bbso3894028a91.0
+        for <llvm@lists.linux.dev>; Wed, 24 Sep 2025 05:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758716704; x=1759321504; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5NW3rnfkFZjd7Zh69vJKiLybxjQ5f/0P49rVAWgM4UU=;
+        b=PxfPjPdjivhTOvXQfbfkrAuO3Upyu97Hu0YfL4qjrAHMIgAKDvexEth1RzyHiVqOPi
+         Rxo1zGYr5PmEucQaRlCYR/H/4Dd+1CBUZ8AnBMAY7fqoCer6NSs6co26DBk6GJNb1mup
+         TeyDVt8/s+7MTrzp4cM/tQcL8ryAa5RzJ81WSZmO+xkZkcsK07IfQz8IimRz7Pi8wEJt
+         G04ZrjbWjHVs2nsweTX5nUE5isEs2++AvxeTNUNz0AnCmneBdC/0e/gr5LquI0oPnPNN
+         xF7WkE2ME4vv6SXXfgcRtLhN8APmhJvRnYsN0QIy9T0yW+ATEeCWcuYPx3rvc/Ix8gB1
+         pEIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758716704; x=1759321504;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5NW3rnfkFZjd7Zh69vJKiLybxjQ5f/0P49rVAWgM4UU=;
+        b=WlqyMFHJxD1nayIpGOR1ZtSkDCcYci0vEx9rSynGr7BUur3B9eeHzbKmofGDBdtTru
+         +t8GL4NylmbKWt1Ppk6PPPcBlx/mOkSmKFdvrWBqVlMtYw9DunV6NgHKYXxC3nQdu+Lj
+         DCMiJFsc6N3CRTmZKS4zvHl83hxKMvJMsQi70nl6YiZKfd16OMfK4JH9JBPPn+YsdaaT
+         37sodmOypVcMOK8USCymb2nj08e23/eBb0T7+CmXq7TCMm1papcGXOuTlNpxcKAhnOoY
+         LXJP1YBo31+UFxjZ5XsopbMwL8pV0ror2/M1YqvwooA1+T40HlvOX1kG7jYZoc4oGmjo
+         7NSA==
+X-Forwarded-Encrypted: i=1; AJvYcCWyYFrTJ2qDyM+D2deeV/aG2+XkWFoz6gXBzpHRF208e1t/NWdz2OrDeGYP6Eyn27VEZGvG@lists.linux.dev
+X-Gm-Message-State: AOJu0YwiB8dF2yZ9KqPTB8gRBsTpnZ7hP6KZcMHIh6YoAtqdEC6AUHBY
+	DxGzdroZ79Cp+KD1RchHNA8M5tFey0AtT7qvxISqU1Bu4gG6cEWCpOsA
+X-Gm-Gg: ASbGncv1QR1cT2J8sPgHk4YShdfCMX2rXmhObl1+T+RJq9hnOtB2H1cx5uKM2I80hVP
+	3u2105bkRxXbRz2A0M6x6oDD7Dn5ZbeeTTvfWQB1FtG7JBR/R7rkW6JTeoGFGBkqLjhfhOpKzhH
+	dUkqPIhzo3KKdQ07ChE8MP6WgwPQ+pV9m8hx3iRiGmu9x2pSXFwDsYkMYg91OiZLYS+SeNf7FIv
+	vmRpGiPJhH/bDlUvO0jfJ73Qsj62hu5e33q1sfHIGDa9zm7lWKjT+3F02xP6E11Z7Bh5ar2qp7s
+	TcAqoYNT35Z1XhC0rJ+38Cy2jLpR0qkDjwPtLlDtTSL7YyU/Eg+6vHGCpmRq6L19488zINCLkA1
+	58GcSWMzeATeYU4VxpFRWNqL4xzYZIV58vQ==
+X-Google-Smtp-Source: AGHT+IEamBzCLObwkiGLLGjo5JGU8d4itd/AyRlsHyvnDLGXoFlCi/QE16Hobk/uQUsVbow0Br5ksA==
+X-Received: by 2002:a17:90b:380e:b0:32e:d600:4fdb with SMTP id 98e67ed59e1d1-332a95c804cmr7926585a91.18.1758716702994;
+        Wed, 24 Sep 2025 05:25:02 -0700 (PDT)
+Received: from localhost ([103.88.46.62])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3341bdd63c1sm2285996a91.26.2025.09.24.05.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 05:25:02 -0700 (PDT)
+From: Jinchao Wang <wangjinchao600@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v5 06/15] iommupt: Add unmap_pages op
-Message-ID: <20250924122338.GJ2132010@nvidia.com>
-References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <6-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
- <BN9PR11MB5276277E4171547C0B5F247D8C1CA@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276277E4171547C0B5F247D8C1CA@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BLAP220CA0005.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::10) To PH7PR12MB5757.namprd12.prod.outlook.com
- (2603:10b6:510:1d0::13)
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Rong Xu <xur@google.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Nam Cao <namcao@linutronix.de>,
+	workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	kasan-dev@googlegroups.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org
+Cc: Jinchao Wang <wangjinchao600@gmail.com>
+Subject: [PATCH v5 07/23] mm/ksw: add HWBP pre-allocation
+Date: Wed, 24 Sep 2025 20:24:40 +0800
+Message-ID: <20250924122448.9101-1-wangjinchao600@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250924115124.194940-1-wangjinchao600@gmail.com>
+References: <20250924115124.194940-1-wangjinchao600@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|PH7PR12MB6764:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca53d86d-0736-4e96-2980-08ddfb653171
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?bJa/Y7R0WuigLeInIWwPWFh9imkiA+riaraAg1AeYQtOck5hCYB6O4bRCllI?=
- =?us-ascii?Q?SugPJCIzoFuJBoVCRWqje0oIsAltIWgelVZDfK3BFv4pVX4UmhLTDTKEzYrF?=
- =?us-ascii?Q?Ga59HyGn/f8souf0ro64sYfHawwtonmUTHWDcXB3XwU1qo/j1xPVG0Qxe3X/?=
- =?us-ascii?Q?sHyQE8rtjMbptDgP8NtNuSsxx1HIUsz4MwZpL4iGdp/f7zeE0zu04iYgdyVA?=
- =?us-ascii?Q?NBgoFrjlqCYlI0PxfLMTUIl1hJDaz0bi7E40ql1fW1l1axA7fQ6QSeOS4Hd1?=
- =?us-ascii?Q?QHpszKM5Vco52l+H12zpJlT7fR8LKMkR2BJdtscMvXWnNtTXBEtCEavulvkz?=
- =?us-ascii?Q?qLFyGIDyDpG+YHM8MFTNxzF7YPr6XjSmPpPi37W5HWOWBQRhJ1VvETueR29L?=
- =?us-ascii?Q?hl6l5G52dgqeC6hgFssrepLHijzjK5HGMyI401bOGyDZD6TWKU5AsiUCNUzV?=
- =?us-ascii?Q?RndLTLb8q71jZau6HLU3LQdtPAoSdsB+T5Nrpm9ISUo/XGGomm7b1GYuCQCZ?=
- =?us-ascii?Q?VIiQk5eRTXG34a3LsGXIJEDc6nwEtpiPVUOUL3yeL/mVjSAQCF0zIUERQxsU?=
- =?us-ascii?Q?Yfeqn5Gc/2NcN9fP4Bo2F/QdXGmyHsHsZDCTjm350NR+y1C0dSwJf7/uy/v+?=
- =?us-ascii?Q?T9p3bBWKXHrKx3L3/MhMXoDIseGbpO9PGz6Tgqc6DVGqZ/wmaWpQYRWwck8X?=
- =?us-ascii?Q?sdx2X8fq+qHof2yfmzqy7+PfVC0xan6kJBAjgRvuSpg0cJ+Lu2Y7APnTX1DX?=
- =?us-ascii?Q?BJVo5sVVWJBPg+0Nl4RhQZs7EBs7msyxsnqzbETHbEj9yVe/OB+jt5Cd8pG1?=
- =?us-ascii?Q?LSj2v2dU30zzXRVajciQ/chX3tTLWu08l61sV0k2JllhaWCg2klGdZOg49/W?=
- =?us-ascii?Q?EaaAdIGVTfxxopqhOqFVYZDk77wTKALQrvrbC3lXBatAIKQUDElXfTVoFjlU?=
- =?us-ascii?Q?iUc38vh4cLAKsVlx5wBMuw1kViDxbUYK5kIloh0JeuR6nWlv44/H16G1Y4PS?=
- =?us-ascii?Q?OikfMefCRZO3QlgNwMwyutMiuzb0d/xvsrn6CkT/BifDbybHU4HUKR4OeVe7?=
- =?us-ascii?Q?oGXNHkYZYJqLt4olahMAeXr1YVTuXupeQCCBl00Qjbp7bItk51qo1dFXWwbt?=
- =?us-ascii?Q?n10+LN6XCND+6SqEaJuv5YEOsElnn8sLJwqwnWuxg5cIPcQFx2yU/AmeaOT+?=
- =?us-ascii?Q?0qGBG7WwCzznMlWukcasNetGK2XMun7mTiM1QeZTVMLqULEi9o/pa99WmafO?=
- =?us-ascii?Q?hddlza557BI9avp0ye8So3YNPZurAvuOANuo+gESGM0nDWBn3TnaTQEUKEHf?=
- =?us-ascii?Q?E3oZOFazWO+s7ltNanIsyQWVuwkV7EiU7BcJ9o3pfdcsUIDQhvCRQK09yN1V?=
- =?us-ascii?Q?wB04pEOmdidJMJdPyarLzaDjVeTiBzd268GeM1UoMs6jo4O7K9s7FTcTi2vC?=
- =?us-ascii?Q?LknnDLubwB8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PEVnwSks4gubGiFZVQEspJ7QVZYp+wp61bQRF/Pesys27zP8gHu29F548XrV?=
- =?us-ascii?Q?2PmCJ52zD8Seja7euKhVl48iVMhLIKDsdAhH/uI38pbL5bw+EMjVt4M2Ma9v?=
- =?us-ascii?Q?8SEuzxNWWN00AknBYz4dSq/WNfGgfE3q+kt+jFY/NIlMS8XYtQ2dqS+0/u2Y?=
- =?us-ascii?Q?XCnW5HH+z2UBVOE38UYDF3SWOgW7dVfb79P6lPC/bvAiD4Afm3Nffbc0j6V5?=
- =?us-ascii?Q?Umw/5gqVcGi2Qqbjg6C4Xwg1nLNDqE9Yh6zdbHOE617uKt+VjbNCXZDlv04K?=
- =?us-ascii?Q?CKE3v7LLhSvL57dg8F7nDsCoAohkSzWF9ySrZzfMjkEGSBBygmxQtiShuJIf?=
- =?us-ascii?Q?3OM63kPO5rVY/GE9qzJStyQJhyDLa/r209/IwDqEFd52+vyw12PdMEaa9Uzj?=
- =?us-ascii?Q?ATuaWyQvute0yfz5Xim5hhL45Yeh70jbZU0dM3KtOH3rvHvsik44qkSBS8Iu?=
- =?us-ascii?Q?K0opcEHJt9xeIAe4WgTG48XIQw742UiwXGa4AzCrnBSEokXeTNrE6rSH9hdx?=
- =?us-ascii?Q?tCCTjelVz8KUilo2nBWB5vv2bw+uPpdoMrUYnpI4u6dwN4jOGA3w3XdptgA0?=
- =?us-ascii?Q?TLCY4qUtJ78YZEThXaC+TDZhpjlVRnl1m484u+mx0JMoAfKmIwnOJ9y+jYYI?=
- =?us-ascii?Q?6aGLLUU9/Mm1tV+LO/tCSum2gcjfTjZckadnsVt4/2j3dNEJXQQrrOO2oXVT?=
- =?us-ascii?Q?VMLt61wRWrt+P0nTvgnCP5FErzM8uLEzyHdiH0Oj7XLTceGnLP6pjxJvlNpe?=
- =?us-ascii?Q?G+KU8Hy4DIX/XaPj68m/XRN4XTHLxjnxugjR4xxMIwHsSwcpCuHyfS1igEfs?=
- =?us-ascii?Q?e9nb/e2EjpqHsJzbDDAFUyo5ZtZi9/w5sLHR9as5SVrSe35J6QGjTjzXSC/1?=
- =?us-ascii?Q?p+c0fGegi9OLS9ZsleD410CN3Hg56Rq63M+r7Zll5UyYZUxIh9cdAQoJSSBz?=
- =?us-ascii?Q?n41FLVqxCexlKqj+grgnDDviYeIGe6uT60kwf+C1TRlxhNtcAJ2stjcG+Txp?=
- =?us-ascii?Q?uEmZMHspxm92mCYO4hObHJzqRVTkib9O+DA1IEE+Zu95tcw4nlTtXkENrf0n?=
- =?us-ascii?Q?UHKZur8DtMVuKBP9j4c1xqJ5FoIuau3XufJ6mM4NVl+K6shVrsdAXaJDDjJW?=
- =?us-ascii?Q?Yb7DYj8xnQsZ/m3PhcyvqQPG45HBPum8QSzxV4DhptZCY7GaoDbsEBAL/TxY?=
- =?us-ascii?Q?LnxEOt2J1sItH0gX2tZ0zaJiSdrgN/OhdmwDjvrA1SA4Squ/0WCTk0gpeEUo?=
- =?us-ascii?Q?Ik2ClzyWOsi16Yp+Z8chKbDp4kp02lPK9XeNBZzZtyqc/gYUX/XM+lNN+aA+?=
- =?us-ascii?Q?6QTaBUrrz55d8NQCF8iWFA3a5lWacoYFr1sTPOeCc/AhbDPjq8E2bDsPOXI8?=
- =?us-ascii?Q?JdjfbAz3asmY79duyaJH4MTM61GVfGG6A1B93x8+lVdVt0TXKDZlPLPJwTXL?=
- =?us-ascii?Q?tPVRNGJm50K3WPlJ0aX6wBFMajydJ9Zws76wrgq0a7c4BgiDzJfX5PeECyQ9?=
- =?us-ascii?Q?Cjhy533PO/pkXcOgBVV+Whk7W2XxVNeSNclFgmCr2HMmKz2cvbPpEaS0avsA?=
- =?us-ascii?Q?505J6V4YO5ueN5FoDefbozws9x9cvKJODXYGFX0Q?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca53d86d-0736-4e96-2980-08ddfb653171
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2025 12:23:39.7703
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JjrQYSpQpaDlSSWThH0hcR550EHU+MlBfbrZwCzDySYqGrQxjw1rn757DEQUFId0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6764
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 24, 2025 at 09:28:12AM +0000, Tian, Kevin wrote:
-> > +	if (pts.type == PT_ENTRY_OA) {
-> > +		if (log2_mod(range->va, pt_entry_oa_lg2sz(&pts)))
-> > +			return -EINVAL;
-> > +		goto start_oa;
-> > +	}
-> 
-> it's not typical goto a location inside a loop.
-> 
-> Actually even w/o that goto, the flow will continue to...
+Pre-allocate per-CPU hardware breakpoints at init with a place holder
+address, which will be retargeted dynamically in kprobe handler.
+This avoids allocation in atomic context.
 
-Yes, but this is a micro optimization, can actually measure it in the
-benchmarks :\
+At most max_watch breakpoints are allocated (0 means no limit).
 
-Thanks,
-Jason
+Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
+---
+ mm/kstackwatch/kstackwatch.h | 13 +++++
+ mm/kstackwatch/watch.c       | 97 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 110 insertions(+)
+
+diff --git a/mm/kstackwatch/kstackwatch.h b/mm/kstackwatch/kstackwatch.h
+index 983125d5cf18..4eac1be3b325 100644
+--- a/mm/kstackwatch/kstackwatch.h
++++ b/mm/kstackwatch/kstackwatch.h
+@@ -2,6 +2,9 @@
+ #ifndef _KSTACKWATCH_H
+ #define _KSTACKWATCH_H
+ 
++#include <linux/llist.h>
++#include <linux/percpu.h>
++#include <linux/perf_event.h>
+ #include <linux/types.h>
+ 
+ #define MAX_CONFIG_STR_LEN 128
+@@ -32,4 +35,14 @@ struct ksw_config {
+ // singleton, only modified in kernel.c
+ const struct ksw_config *ksw_get_config(void);
+ 
++/* watch management */
++struct ksw_watchpoint {
++	struct perf_event *__percpu *event;
++	struct perf_event_attr attr;
++	struct llist_node node; // for atomic watch_on and off
++	struct list_head list; // for cpu online and offline
++};
++int ksw_watch_init(void);
++void ksw_watch_exit(void);
++
+ #endif /* _KSTACKWATCH_H */
+diff --git a/mm/kstackwatch/watch.c b/mm/kstackwatch/watch.c
+index cec594032515..1d8e24fede54 100644
+--- a/mm/kstackwatch/watch.c
++++ b/mm/kstackwatch/watch.c
+@@ -1 +1,98 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/cpuhotplug.h>
++#include <linux/hw_breakpoint.h>
++#include <linux/irqflags.h>
++#include <linux/mutex.h>
++#include <linux/printk.h>
++
++#include "kstackwatch.h"
++
++static LLIST_HEAD(free_wp_list);
++static LIST_HEAD(all_wp_list);
++static DEFINE_MUTEX(all_wp_mutex);
++
++static ulong holder;
++bool panic_on_catch;
++module_param(panic_on_catch, bool, 0644);
++MODULE_PARM_DESC(panic_on_catch, "panic immediately on corruption catch");
++
++static void ksw_watch_handler(struct perf_event *bp,
++			      struct perf_sample_data *data,
++			      struct pt_regs *regs)
++{
++	pr_err("========== KStackWatch: Caught stack corruption =======\n");
++	pr_err("config %s\n", ksw_get_config()->user_input);
++	dump_stack();
++	pr_err("=================== KStackWatch End ===================\n");
++
++	if (panic_on_catch)
++		panic("Stack corruption detected");
++}
++
++static int ksw_watch_alloc(void)
++{
++	int max_watch = ksw_get_config()->max_watch;
++	struct ksw_watchpoint *wp;
++	int success = 0;
++	int ret;
++
++	init_llist_head(&free_wp_list);
++
++	//max_watch=0 means at most
++	while (!max_watch || success < max_watch) {
++		wp = kzalloc(sizeof(*wp), GFP_KERNEL);
++		if (!wp)
++			return success > 0 ? success : -EINVAL;
++
++		hw_breakpoint_init(&wp->attr);
++		wp->attr.bp_addr = (ulong)&holder;
++		wp->attr.bp_len = sizeof(ulong);
++		wp->attr.bp_type = HW_BREAKPOINT_W;
++		wp->event = register_wide_hw_breakpoint(&wp->attr,
++							ksw_watch_handler, wp);
++		if (IS_ERR((void *)wp->event)) {
++			ret = PTR_ERR((void *)wp->event);
++			kfree(wp);
++			return success > 0 ? success : ret;
++		}
++		llist_add(&wp->node, &free_wp_list);
++		mutex_lock(&all_wp_mutex);
++		list_add(&wp->list, &all_wp_list);
++		mutex_unlock(&all_wp_mutex);
++		success++;
++	}
++
++	return success;
++}
++
++static void ksw_watch_free(void)
++{
++	struct ksw_watchpoint *wp, *tmp;
++
++	mutex_lock(&all_wp_mutex);
++	list_for_each_entry_safe(wp, tmp, &all_wp_list, list) {
++		list_del(&wp->list);
++		unregister_wide_hw_breakpoint(wp->event);
++		kfree(wp);
++	}
++	mutex_unlock(&all_wp_mutex);
++}
++
++int ksw_watch_init(void)
++{
++	int ret;
++
++	ret = ksw_watch_alloc();
++	if (ret <= 0)
++		return -EBUSY;
++
++
++	return 0;
++}
++
++void ksw_watch_exit(void)
++{
++	ksw_watch_free();
++}
+-- 
+2.43.0
+
