@@ -1,66 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3AB3126D6;
-	Wed, 24 Sep 2025 17:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3630F328578;
+	Wed, 24 Sep 2025 20:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758733739; cv=none; b=i5FSYZO/0shTlC6M1fWFdDj8YZXdPB0D2JRzw+TRzZuNgkye/gYcL3eiAlkfNaFyIk3LjD1p9TnUxBVoe6OsGDJbLcrbtx6Ps6tX4B1UKihIT2WU/cX3d18JZc1Y8xHUFyvzFPZT3kTlAuWS306tDvVD8faqyuCVFcN5me7HEGA=
+	t=1758745469; cv=none; b=WatRO2V5GnnVYemJ4UYKQyxNRX2BWBYlKoF/bwpUUgQoqGAD6PFNJPhxqtI2MwZm6V9Q3abAN+9OAOn7NQJNPhuw4eU3hvZggXZ1iTVXgCVR6aDOzz4bugKJ/09at+my1odt1uMAjXhuuAo0CJo9SiDXERKZBGDFopR4VqOL994=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758733739; c=relaxed/simple;
-	bh=/FSO6/ipB0cJtJTFavrv+ZfHe+XpgrP21tHroZy25rk=;
+	s=arc-20240116; t=1758745469; c=relaxed/simple;
+	bh=flBUgqrKNOGEwefIdPvBIvMyWglR7WH2qJmCa8QRdw8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rqZ79AN0UD67aBAHCa43URnpxMkCBpnC3MpczVC9COiFPesWodhGNEFRDrXl3dWU8eSmhaVvK98hDfmR2shnkYF5SYeKxJScNQ4gJtr6g4+pHVFVLeANiwwdB+fHzmS4J1msxHqh5RMfkNRhDnZ7BJkEDFn3XNJjiQQ7Jq1YCg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RryYs2tt; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=BKIBjXs5FstBuOJhA33rfhqlZiniYGtwIqpT3b6t7CbgMjMG+xtR258fNzDo9UkjQ5BIf1jElHCQDdLso8nJtfWwQwjFy96JmuYPXI73/XTGTavYTbG3oxqgw7hQfXnjI1AafuQVwVyV2GQee9AO+ISrzk3pqpzbcOQwZ1+troQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FmSSsEaF; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RryYs2tt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FmSSsEaF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758733737; x=1790269737;
+  t=1758745467; x=1790281467;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/FSO6/ipB0cJtJTFavrv+ZfHe+XpgrP21tHroZy25rk=;
-  b=RryYs2ttkvJAo+KDoNhBahovLvrLqSX8aR8f3upUrw08DzobGAOF66I6
-   U8SS9M3iHo1Sr7Sf4gUl76db5HOGPqIF3AP+EFzugruASBIIj2ThnIJNB
-   HLlIYxgDAb2Vqkp9bf0qTaXv5L9rhlv/l/s6nhr+/R75L1VVddyRiCb8f
-   ufUn5JkDrM8Ss4XchdyAb1xTaQYif7AyLqAT9ymHTNr7UXZONffxCTMvt
-   BGbBnHIpj6gLp+mgcv9vzPRA/uDqm3d6asryEAadQWZO2QSJ6d/j9afE9
-   tBAscUO862s1uO2b31vxaVNGUDYCHAR0RXXqOxqCJ99QpDkBXMWzLXUiz
-   Q==;
-X-CSE-ConnectionGUID: efl2xMrFQS+y5fhO/gwLFA==
-X-CSE-MsgGUID: Y0lcAKBHTk6Okp7bIOc4FQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="83643413"
+  bh=flBUgqrKNOGEwefIdPvBIvMyWglR7WH2qJmCa8QRdw8=;
+  b=FmSSsEaF+sv3CEcp73tXPWocBp1JdMuUAhD+k5SBPVH2lRjlClhQA6wG
+   +duk5Y7Tl9RNoYK8T8NfzgvlHnjPIz3Kb8uDKVN2ZS+VkWcuRkXowc3bL
+   /QJb06iycOyt4eIuQ1Gnp6B834vKMi6C8QBQnax+awrmrcBpVpvU3UIHA
+   cIJ4pKXiXVAjudJ7dq+gKeXnCCst57cHpy1NHXSQFWjeaZzuDeeDh8SrX
+   yhpO6ERsigXx1NflEMNZ4ke7j7LtfofClyZLFUAcYy3Ob4V/1HOXelAOL
+   uzAFbWmvUcLm4MYlLbBlXm9wDFaTm3QwdBS8HDSfiO8vLzD5okX9pW77v
+   A==;
+X-CSE-ConnectionGUID: mc2mVWdDRVOGMG75pr6GDw==
+X-CSE-MsgGUID: c6Z756AXQDi8y6CZ6v+psA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="61106234"
 X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="83643413"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 10:08:45 -0700
-X-CSE-ConnectionGUID: FqUjPxVWQ3myxASj/onOeA==
-X-CSE-MsgGUID: wBuOCrR5R/y2hpXIKC5Y4Q==
+   d="scan'208";a="61106234"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 13:24:26 -0700
+X-CSE-ConnectionGUID: DYPbMESTS2ykDgHn600lmg==
+X-CSE-MsgGUID: YWobIhYnSjGNsATY751hdw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="181473382"
+   d="scan'208";a="181403805"
 Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 24 Sep 2025 10:08:40 -0700
+  by orviesa004.jf.intel.com with ESMTP; 24 Sep 2025 13:24:21 -0700
 Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v1Sys-0004ND-0b;
-	Wed, 24 Sep 2025 17:08:38 +0000
-Date: Thu, 25 Sep 2025 01:07:46 +0800
+	id 1v1W2E-0004Xd-2J;
+	Wed, 24 Sep 2025 20:24:18 +0000
+Date: Thu, 25 Sep 2025 04:23:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mukesh Rathor <mrathor@linux.microsoft.com>,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	arnd@arndb.de
-Subject: Re: [PATCH v2 6/6] x86/hyperv: Enable build of hypervisor crashdump
- collection files
-Message-ID: <202509250034.2hNDVmj0-lkp@intel.com>
-References: <20250923214609.4101554-7-mrathor@linux.microsoft.com>
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
+	michael.hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	corbet@lwn.net, marcelo.schmitt1@gmail.com,
+	Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
+	Trevor Gamblin <tgamblin@baylibre.com>,
+	Axel Haslam <ahaslam@baylibre.com>
+Subject: Re: [PATCH v2 6/8] iio: adc: ad4030: Add SPI offload support
+Message-ID: <202509250425.p1Sm9XA1-lkp@intel.com>
+References: <da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,101 +71,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250923214609.4101554-7-mrathor@linux.microsoft.com>
+In-Reply-To: <da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt@analog.com>
 
-Hi Mukesh,
+Hi Marcelo,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on next-20250923]
-[also build test ERROR on v6.17-rc7]
-[cannot apply to tip/x86/core linus/master v6.17-rc7 v6.17-rc6 v6.17-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 561285d048053fec8a3d6d1e3ddc60df11c393a0]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Rathor/x86-hyperv-Rename-guest-crash-shutdown-function/20250924-054910
-base:   next-20250923
-patch link:    https://lore.kernel.org/r/20250923214609.4101554-7-mrathor%40linux.microsoft.com
-patch subject: [PATCH v2 6/6] x86/hyperv: Enable build of hypervisor crashdump collection files
-config: x86_64-randconfig-004-20250924 (https://download.01.org/0day-ci/archive/20250925/202509250034.2hNDVmj0-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/iio-adc-ad4030-Fix-_scale-value-for-common-mode-channels/20250919-014323
+base:   561285d048053fec8a3d6d1e3ddc60df11c393a0
+patch link:    https://lore.kernel.org/r/da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt%40analog.com
+patch subject: [PATCH v2 6/8] iio: adc: ad4030: Add SPI offload support
+config: x86_64-randconfig-077-20250922 (https://download.01.org/0day-ci/archive/20250925/202509250425.p1Sm9XA1-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509250034.2hNDVmj0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509250425.p1Sm9XA1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509250034.2hNDVmj0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509250425.p1Sm9XA1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   arch/x86/hyperv/hv_crash.c:282:6: warning: variable 'status' set but not used [-Wunused-but-set-variable]
-     282 |         u64 status;
-         |             ^
->> arch/x86/hyperv/hv_crash.c:631:2: error: must use 'struct' tag to refer to type 'smp_ops'
-     631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
-         |         ^
-         |         struct 
->> arch/x86/hyperv/hv_crash.c:631:9: error: expected identifier or '('
-     631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
-         |                ^
-   1 warning and 2 errors generated.
+>> drivers/iio/adc/ad4030.c:561:20: error: no member named 'offset_ns' in 'struct spi_offload_trigger_periodic'
+     561 |                 config->periodic.offset_ns = offload_offset_ns;
+         |                 ~~~~~~~~~~~~~~~~ ^
+   drivers/iio/adc/ad4030.c:566:28: error: no member named 'offset_ns' in 'struct spi_offload_trigger_periodic'
+     566 |         } while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS);
+         |                  ~~~~~~~~~~~~~~~~ ^
+   2 errors generated.
 
 
-vim +631 arch/x86/hyperv/hv_crash.c
+vim +561 drivers/iio/adc/ad4030.c
 
-c619422e77519d Mukesh Rathor 2025-09-23  580  
-c619422e77519d Mukesh Rathor 2025-09-23  581  /* Setup for kdump kexec to collect hypervisor RAM when running as root/dom0 */
-c619422e77519d Mukesh Rathor 2025-09-23  582  void hv_root_crash_init(void)
-c619422e77519d Mukesh Rathor 2025-09-23  583  {
-c619422e77519d Mukesh Rathor 2025-09-23  584  	int rc;
-c619422e77519d Mukesh Rathor 2025-09-23  585  	struct hv_input_get_system_property *input;
-c619422e77519d Mukesh Rathor 2025-09-23  586  	struct hv_output_get_system_property *output;
-c619422e77519d Mukesh Rathor 2025-09-23  587  	unsigned long flags;
-c619422e77519d Mukesh Rathor 2025-09-23  588  	u64 status;
-c619422e77519d Mukesh Rathor 2025-09-23  589  	union hv_pfn_range cda_info;
-c619422e77519d Mukesh Rathor 2025-09-23  590  
-c619422e77519d Mukesh Rathor 2025-09-23  591  	if (pgtable_l5_enabled()) {
-c619422e77519d Mukesh Rathor 2025-09-23  592  		pr_err("Hyper-V: crash dump not yet supported on 5level PTs\n");
-c619422e77519d Mukesh Rathor 2025-09-23  593  		return;
-c619422e77519d Mukesh Rathor 2025-09-23  594  	}
-c619422e77519d Mukesh Rathor 2025-09-23  595  
-c619422e77519d Mukesh Rathor 2025-09-23  596  	rc = register_nmi_handler(NMI_LOCAL, hv_crash_nmi_local, NMI_FLAG_FIRST,
-c619422e77519d Mukesh Rathor 2025-09-23  597  				  "hv_crash_nmi");
-c619422e77519d Mukesh Rathor 2025-09-23  598  	if (rc) {
-c619422e77519d Mukesh Rathor 2025-09-23  599  		pr_err("Hyper-V: failed to register crash nmi handler\n");
-c619422e77519d Mukesh Rathor 2025-09-23  600  		return;
-c619422e77519d Mukesh Rathor 2025-09-23  601  	}
-c619422e77519d Mukesh Rathor 2025-09-23  602  
-c619422e77519d Mukesh Rathor 2025-09-23  603  	local_irq_save(flags);
-c619422e77519d Mukesh Rathor 2025-09-23  604  	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-c619422e77519d Mukesh Rathor 2025-09-23  605  	output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-c619422e77519d Mukesh Rathor 2025-09-23  606  
-c619422e77519d Mukesh Rathor 2025-09-23  607  	memset(input, 0, sizeof(*input));
-c619422e77519d Mukesh Rathor 2025-09-23  608  	input->property_id = HV_SYSTEM_PROPERTY_CRASHDUMPAREA;
-c619422e77519d Mukesh Rathor 2025-09-23  609  
-c619422e77519d Mukesh Rathor 2025-09-23  610  	status = hv_do_hypercall(HVCALL_GET_SYSTEM_PROPERTY, input, output);
-c619422e77519d Mukesh Rathor 2025-09-23  611  	cda_info.as_uint64 = output->hv_cda_info.as_uint64;
-c619422e77519d Mukesh Rathor 2025-09-23  612  	local_irq_restore(flags);
-c619422e77519d Mukesh Rathor 2025-09-23  613  
-c619422e77519d Mukesh Rathor 2025-09-23  614  	if (!hv_result_success(status)) {
-c619422e77519d Mukesh Rathor 2025-09-23  615  		pr_err("Hyper-V: %s: property:%d %s\n", __func__,
-c619422e77519d Mukesh Rathor 2025-09-23  616  		       input->property_id, hv_result_to_string(status));
-c619422e77519d Mukesh Rathor 2025-09-23  617  		goto err_out;
-c619422e77519d Mukesh Rathor 2025-09-23  618  	}
-c619422e77519d Mukesh Rathor 2025-09-23  619  
-c619422e77519d Mukesh Rathor 2025-09-23  620  	if (cda_info.base_pfn == 0) {
-c619422e77519d Mukesh Rathor 2025-09-23  621  		pr_err("Hyper-V: hypervisor crash dump area pfn is 0\n");
-c619422e77519d Mukesh Rathor 2025-09-23  622  		goto err_out;
-c619422e77519d Mukesh Rathor 2025-09-23  623  	}
-c619422e77519d Mukesh Rathor 2025-09-23  624  
-c619422e77519d Mukesh Rathor 2025-09-23  625  	hv_cda = phys_to_virt(cda_info.base_pfn << HV_HYP_PAGE_SHIFT);
-c619422e77519d Mukesh Rathor 2025-09-23  626  
-c619422e77519d Mukesh Rathor 2025-09-23  627  	rc = hv_crash_trampoline_setup();
-c619422e77519d Mukesh Rathor 2025-09-23  628  	if (rc)
-c619422e77519d Mukesh Rathor 2025-09-23  629  		goto err_out;
-c619422e77519d Mukesh Rathor 2025-09-23  630  
-c619422e77519d Mukesh Rathor 2025-09-23 @631  	smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+   502	
+   503	static int __ad4030_set_sampling_freq(struct ad4030_state *st,
+   504					      unsigned int freq, unsigned int avg_log2)
+   505	{
+   506		struct spi_offload_trigger_config *config = &st->offload_trigger_config;
+   507		struct pwm_waveform cnv_wf = { };
+   508		u64 target = AD4030_TCNVH_NS;
+   509		u64 offload_period_ns;
+   510		u64 offload_offset_ns;
+   511		int ret;
+   512	
+   513		/*
+   514		 * When averaging/oversampling over N samples, we fire the offload
+   515		 * trigger once at every N pulses of the CNV signal. Conversely, the CNV
+   516		 * signal needs to be N times faster than the offload trigger. Take that
+   517		 * into account to correctly re-evaluate both the PWM waveform connected
+   518		 * to CNV and the SPI offload trigger.
+   519		 */
+   520		if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
+   521			freq <<= avg_log2;
+   522	
+   523		cnv_wf.period_length_ns = DIV_ROUND_CLOSEST(NSEC_PER_SEC, freq);
+   524		/*
+   525		 * The datasheet lists a minimum time of 9.8 ns, but no maximum. If the
+   526		 * rounded PWM's value is less than 10, increase the target value by 10
+   527		 * and attempt to round the waveform again, until the value is at least
+   528		 * 10 ns. Use a separate variable to represent the target in case the
+   529		 * rounding is severe enough to keep putting the first few results under
+   530		 * the minimum 10ns condition checked by the while loop.
+   531		 */
+   532		do {
+   533			cnv_wf.duty_length_ns = target;
+   534			ret = pwm_round_waveform_might_sleep(st->cnv_trigger, &cnv_wf);
+   535			if (ret)
+   536				return ret;
+   537			target += AD4030_TCNVH_NS;
+   538		} while (cnv_wf.duty_length_ns < AD4030_TCNVH_NS);
+   539	
+   540		if (!in_range(cnv_wf.period_length_ns, AD4030_TCYC_NS, INT_MAX))
+   541			return -EINVAL;
+   542	
+   543		offload_period_ns = cnv_wf.period_length_ns;
+   544		if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
+   545			offload_period_ns <<= avg_log2;
+   546	
+   547		config->periodic.frequency_hz =  DIV_ROUND_UP_ULL(NSEC_PER_SEC,
+   548								  offload_period_ns);
+   549	
+   550		/*
+   551		 * The hardware does the capture on zone 2 (when SPI trigger PWM
+   552		 * is used). This means that the SPI trigger signal should happen at
+   553		 * tsync + tquiet_con_delay being tsync the conversion signal period
+   554		 * and tquiet_con_delay 9.8ns. Hence set the PWM phase accordingly.
+   555		 *
+   556		 * The PWM waveform API only supports nanosecond resolution right now,
+   557		 * so round this setting to the closest available value.
+   558		 */
+   559		offload_offset_ns = AD4030_TQUIET_CNV_DELAY_NS;
+   560		do {
+ > 561			config->periodic.offset_ns = offload_offset_ns;
+   562			ret = spi_offload_trigger_validate(st->offload_trigger, config);
+   563			if (ret)
+   564				return ret;
+   565			offload_offset_ns += AD4030_TQUIET_CNV_DELAY_NS;
+   566		} while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS);
+   567	
+   568		st->cnv_wf = cnv_wf;
+   569	
+   570		return 0;
+   571	}
+   572	
 
 -- 
 0-DAY CI Kernel Test Service
