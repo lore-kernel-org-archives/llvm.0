@@ -1,232 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477831D63CD;
-	Thu, 25 Sep 2025 15:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F1831E0EB
+	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 19:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758814288; cv=none; b=O7f/q78ttKJ0h9oONfgcbKDA6iBNqwsaVaZOVjw9miLvud7UuE23s5BGMGyohLyZ7WzjKl54lmU3yWXLRkFzauvM4qXQ06QnWlka3Db1QEsvIRbIEfiCOTWoRB4FeorevW1iGRYLlTBKkHgV5QK2J0a9S+XfhNkHgUhU3ORmCX4=
+	t=1758829130; cv=none; b=A7XWQjtSTEx+t3mFSS0XRcF6LOLCAGowWVcRvXF+pYySL8rT8HnlSlCgZe18E8OFeR5Cwx9M/v7i0789t1QN6frKvq1WKb36smj5ojMxYFkf04cb6gUTRn8somsRQiK9ObwOvTNby1w1STRtccmD3A3AvqViAg71U5feQzAJBjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758814288; c=relaxed/simple;
-	bh=JnZFUklpcUUd7vma9QDHXmuHxHggkDvopDY+JB7yBGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MsHwD88bPdtxkzLOoxW3xtc4YLcqTmfLC1Pe5a6JyRo+9hPB2W9ulhlAieV3rxWy9HASHMqN+ozVg/5s7+OJ5FKZCLk81sx1ZKM+8J1wjy80yPqZKtEZCevjE2215Wu0HKyxsUAnfjQmtT7rl24z+SKfqG5MyNADglFfMvzLTEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQfeGkGi; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758829130; c=relaxed/simple;
+	bh=MdI2AHIvRAIXfAa0D0cIiFe+/emKPsfH4wCzSWvwGLE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qAsOy5tAh1VxLd1QEkQln2ftMkBb3f7YJkI1ZrRFGfAFIzw9/axdD9wl+3qx+SlWaDmBgCIbcsyYPkL5qjmKpQ1fB638RQ9Y8dSqWERFwsAt26DEiw5XSonkDIbYUuU2OoPW7KXg88WekEEhAY7gYRI9sybuagBsj4grb7vli2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YGrJ8Fso; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQfeGkGi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758814287; x=1790350287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JnZFUklpcUUd7vma9QDHXmuHxHggkDvopDY+JB7yBGk=;
-  b=cQfeGkGi3IyOy7oIgTc/hndzAWwGQscxYmBuFu6veJEVLDu9aqRJ4eCf
-   HkS8U1I2jmuRDxWej91WK3Y0684SYp+rVNzaOY7dAr/msxkVsx1tx08sZ
-   f/TlkNw9hZOLF+5hXQF4N0ujbIOTN9RpPuDc1lr0G9KTrOzzKCCp2WBxu
-   B3A5iRm3NkzQ/lwnUq+9c3uYY39NYqTdhuoU0Fijf1Bia8chmNjXhZ3Rm
-   72sEq4gmc5p+Ti3Mdo9RYJHhRr037aK3bMvirR+/KEj/ShVuwfu1/fEtt
-   SZ5uihGqdyKALvxt5iZPo7d2VEPGsb4qH3oZeU40K/NSzURNZRBxECoZq
-   g==;
-X-CSE-ConnectionGUID: 4ObF0vgDTHizCnui3QRYgw==
-X-CSE-MsgGUID: +OQpkyUPS/63sRQTmhVYjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="78572497"
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="78572497"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 08:31:27 -0700
-X-CSE-ConnectionGUID: rwxYC4quQiaj7tiM5osL6A==
-X-CSE-MsgGUID: nK+V9+GJRQC52LoK+4eRvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="214492461"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 25 Sep 2025 08:31:25 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1nwC-0005Ld-1h;
-	Thu, 25 Sep 2025 15:31:18 +0000
-Date: Thu, 25 Sep 2025 23:30:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Samuel Zhang <guoqing.zhang@amd.com>, amd-gfx@lists.freedesktop.org,
-	"(open list:HIBERNATION (aka Software Suspend, aka swsusp))" <linux-pm@vger.kernel.org>,
-	"aka swsusp)), Mario Limonciello" <superm1@kernel.org>,
-	Ionut Nechita <ionut_n2001@yahoo.com>
-Subject: Re: [PATCH 1/3] PM: hibernate: Fix hybrid-sleep
-Message-ID: <202509252323.KEdz98a4-lkp@intel.com>
-References: <20250924205211.1059571-2-superm1@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGrJ8Fso"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2681645b7b6so3385ad.1
+        for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 12:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758829128; x=1759433928; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pmXLeoRNYxQ/q9eeZjkA7V0DrLfH4gyiTpN84frRQQg=;
+        b=YGrJ8Fso7TNoTeiDaqszBNwSdWbC9D+ZooFXv9p122STku7Fhkq8bywdQxvHNOTF5f
+         Yo9ScKcIFOrW07AbazMBVJJCuiIxAE58vAdOYtHj8ddq910E858N/oEyv8wPWBfby/ho
+         2vpfHxJTQXg51zowTW7hd925vDFJRkCVuu3WmPRcN95dvLk/L0DVcHqI976cLwQzZN9D
+         0HqCFT1adLm567c1H0WUhYbtPVYq1jpYK/rbiHkJFuWQhSjQeulMudMOeAvOnJuYOyKj
+         9nmL99d5y7K74UZ5t7OQe6Q+NCb8DWYm5JkjeHObbJCXnfAo/atfTXBBK1lzCVicYhJr
+         L12w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758829128; x=1759433928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pmXLeoRNYxQ/q9eeZjkA7V0DrLfH4gyiTpN84frRQQg=;
+        b=ZEC99Y5IXNU4I67uasSnnMs5yS8fQB8JpdXWuGRyLVpvGVEkN59nhQFd0bAyWxmBpB
+         Ny4CL1qNSSDiMwHIxuOEj+owN9Y44yjKIhR4o4bDgbo1Czp9fRgFXJjwpA8terTwOWjb
+         b45MQrSFzeSjE1/J2CPPJw2rzN6zqDfvvM1EqQGGUk1eE3pezQkTYWFpl9p/aukWBSP2
+         qsmNte31Qcdlelg9eGT1PPZ/x40hma6ArR9hRtlIBwku9pd2hclSOr5wanFaRslOuicR
+         SQ2TCJuZdjHzRcK8D1m+Vx4ELZkfrbZO6zqGmC8/vI3IwlYoYONnG2osZqDAmLAN+BkX
+         r36A==
+X-Forwarded-Encrypted: i=1; AJvYcCUGLLAGnVEHDmIix5shl1QvAQg0Dz6Ka5OScRq1/8qoVG4VIGQH3Z1f92FT/TsEDnsMRRsR@lists.linux.dev
+X-Gm-Message-State: AOJu0YwMRSm05GAVz+q1Z8oeW4IhGxbyuI13LWlkmll2snxAA7uDM84P
+	/xRC46b6BmxIVTrL8L6mLRqBu2LtlwwhCjXp4c0Rbd0lN3JZ0BPkbnQjs2iDHeDXKzdnMsCWdTS
+	4tkT13qRSjTjPUXPnuVBbXV0Cgi1v8p73kzj5KbkO
+X-Gm-Gg: ASbGncuLY5OLAhhQKR6T/Ywqm3PuXW7J66qYyFW2K6Dwfc6ixc2zs3+4uSy4odfG9nd
+	7zizywWA/hX0egYg9Td3LXrwzhxYRSg9KpTbmq3bnmXPv+bLjtSCs9u77VZpafTyKhk7JXYC5L8
+	Q6IRrMPmgZOJP7iW7WSZ74hrumLg3+BnrylVlqH1jaexi0rSmhm208GerFGYGuXOXZr5b40Wqcq
+	DERkq0fi97afrn7wobhc7oGnlfckI/pw/rl9oYwyA==
+X-Google-Smtp-Source: AGHT+IHlWDsv5W+Cnz3QpzSjCLsjC6JqkFfJnw0PQrGoFuGfCPLIcdnOMx84aEiFui77lbyr4nxAshVX71wahiIYeqA=
+X-Received: by 2002:a17:903:4b46:b0:274:1a09:9553 with SMTP id
+ d9443c01a7336-27eecd5abf5mr876475ad.6.1758829127934; Thu, 25 Sep 2025
+ 12:38:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250924205211.1059571-2-superm1@kernel.org>
+References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com> <20250925-perf_build_android_ndk-v1-4-8b35aadde3dc@arm.com>
+In-Reply-To: <20250925-perf_build_android_ndk-v1-4-8b35aadde3dc@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 25 Sep 2025 12:38:36 -0700
+X-Gm-Features: AS18NWArHaslRBdqbnMECGDnT24X9gvQ1wcAN-wPei7OArHIVhWE7ff1fDEiDAU
+Message-ID: <CAP-5=fWGKgXV52_9E7n9yDX1uNLF8qWT9XTFK8eKtc_LRCW5wg@mail.gmail.com>
+Subject: Re: [PATCH 4/8] perf test coresight: Dismiss clang warning for memcpy thread
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Quentin Monnet <qmo@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+On Thu, Sep 25, 2025 at 3:26=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+>
+> clang-18.1.3 on Ubuntu 24.04.2 reports warning:
+>
+>   memcpy_thread.c:30:1: warning: non-void function does not return a valu=
+e in all control paths [-Wreturn-type]
+>      30 | }
+>         | ^
+>
+> Dismiss the warning with returning NULL from the thread function.
+>
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-kernel test robot noticed the following build errors:
+lgtm, should this be moved into being a perf test workload as in
+tools/perf/tests/workloads/ ?
+There doesn't seem to be anything overly arch specific in the test and
+being a workload avoids a cc dependency in the test, as well as
+meaning we test with our usual compiler flags, etc.
 
-[auto build test ERROR on amd-pstate/linux-next]
-[also build test ERROR on amd-pstate/bleeding-edge linus/master v6.17-rc7 next-20250924]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello-AMD/PM-hibernate-Fix-hybrid-sleep/20250925-045432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20250924205211.1059571-2-superm1%40kernel.org
-patch subject: [PATCH 1/3] PM: hibernate: Fix hybrid-sleep
-config: i386-randconfig-014-20250925 (https://download.01.org/0day-ci/archive/20250925/202509252323.KEdz98a4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509252323.KEdz98a4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509252323.KEdz98a4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/power/hibernate.c:866:27: error: use of undeclared identifier 'HIBERNATION_SUSPEND'
-     866 |                 if (hibernation_mode != HIBERNATION_SUSPEND)
-         |                                         ^
-   1 error generated.
-
-
-vim +/HIBERNATION_SUSPEND +866 kernel/power/hibernate.c
-
-   776	
-   777	/**
-   778	 * hibernate - Carry out system hibernation, including saving the image.
-   779	 */
-   780	int hibernate(void)
-   781	{
-   782		bool snapshot_test = false;
-   783		unsigned int sleep_flags;
-   784		int error;
-   785	
-   786		if (!hibernation_available()) {
-   787			pm_pr_dbg("Hibernation not available.\n");
-   788			return -EPERM;
-   789		}
-   790	
-   791		/*
-   792		 * Query for the compression algorithm support if compression is enabled.
-   793		 */
-   794		if (!nocompress) {
-   795			strscpy(hib_comp_algo, hibernate_compressor);
-   796			if (!crypto_has_acomp(hib_comp_algo, 0, CRYPTO_ALG_ASYNC)) {
-   797				pr_err("%s compression is not available\n", hib_comp_algo);
-   798				return -EOPNOTSUPP;
-   799			}
-   800		}
-   801	
-   802		sleep_flags = lock_system_sleep();
-   803		/* The snapshot device should not be opened while we're running */
-   804		if (!hibernate_acquire()) {
-   805			error = -EBUSY;
-   806			goto Unlock;
-   807		}
-   808	
-   809		pr_info("hibernation entry\n");
-   810		pm_prepare_console();
-   811		error = pm_notifier_call_chain_robust(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
-   812		if (error)
-   813			goto Restore;
-   814	
-   815		ksys_sync_helper();
-   816		if (filesystem_freeze_enabled)
-   817			filesystems_freeze();
-   818	
-   819		error = freeze_processes();
-   820		if (error)
-   821			goto Exit;
-   822	
-   823		lock_device_hotplug();
-   824		/* Allocate memory management structures */
-   825		error = create_basic_memory_bitmaps();
-   826		if (error)
-   827			goto Thaw;
-   828	
-   829		error = hibernation_snapshot(hibernation_mode == HIBERNATION_PLATFORM);
-   830		if (error || freezer_test_done)
-   831			goto Free_bitmaps;
-   832	
-   833		if (in_suspend) {
-   834			unsigned int flags = 0;
-   835	
-   836			if (hibernation_mode == HIBERNATION_PLATFORM)
-   837				flags |= SF_PLATFORM_MODE;
-   838			if (nocompress) {
-   839				flags |= SF_NOCOMPRESS_MODE;
-   840			} else {
-   841			        flags |= SF_CRC32_MODE;
-   842	
-   843				/*
-   844				 * By default, LZO compression is enabled. Use SF_COMPRESSION_ALG_LZ4
-   845				 * to override this behaviour and use LZ4.
-   846				 *
-   847				 * Refer kernel/power/power.h for more details
-   848				 */
-   849	
-   850				if (!strcmp(hib_comp_algo, COMPRESSION_ALGO_LZ4))
-   851					flags |= SF_COMPRESSION_ALG_LZ4;
-   852				else
-   853					flags |= SF_COMPRESSION_ALG_LZO;
-   854			}
-   855	
-   856			pm_pr_dbg("Writing hibernation image.\n");
-   857			error = swsusp_write(flags);
-   858			swsusp_free();
-   859			if (!error) {
-   860				if (hibernation_mode == HIBERNATION_TEST_RESUME)
-   861					snapshot_test = true;
-   862				else
-   863					power_down();
-   864			}
-   865			in_suspend = 0;
- > 866			if (hibernation_mode != HIBERNATION_SUSPEND)
-   867				pm_restore_gfp_mask();
-   868		} else {
-   869			pm_pr_dbg("Hibernation image restored successfully.\n");
-   870		}
-   871	
-   872	 Free_bitmaps:
-   873		free_basic_memory_bitmaps();
-   874	 Thaw:
-   875		unlock_device_hotplug();
-   876		if (snapshot_test) {
-   877			pm_pr_dbg("Checking hibernation image\n");
-   878			error = swsusp_check(false);
-   879			if (!error)
-   880				error = load_image_and_restore();
-   881		}
-   882		thaw_processes();
-   883	
-   884		/* Don't bother checking whether freezer_test_done is true */
-   885		freezer_test_done = false;
-   886	 Exit:
-   887		filesystems_thaw();
-   888		pm_notifier_call_chain(PM_POST_HIBERNATION);
-   889	 Restore:
-   890		pm_restore_console();
-   891		hibernate_release();
-   892	 Unlock:
-   893		unlock_system_sleep(sleep_flags);
-   894		pr_info("hibernation exit\n");
-   895	
-   896		return error;
-   897	}
-   898	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread=
+.c b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+> index 5f886cd09e6b3a62b5690dade94f1f8cae3279d2..7e879217be30a86431989dbf1=
+f36d2134ef259cc 100644
+> --- a/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+> +++ b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+> @@ -27,6 +27,8 @@ static void *thrfn(void *arg)
+>         }
+>         for (i =3D 0; i < len; i++)
+>                 memcpy(dst, src, a->size * 1024);
+> +
+> +       return NULL;
+>  }
+>
+>  static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
+>
+> --
+> 2.34.1
+>
