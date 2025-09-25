@@ -1,289 +1,166 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C367A2E11BC
-	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 02:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E146FC3;
+	Thu, 25 Sep 2025 06:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758766052; cv=none; b=IYV0aGO8QzuH2xPIihPjT+1AOR4Q3ohY6tSXcc7WHUZKLYObATSWqWh3Fx8X9aDclZ2QQE7NskKwPfH14SOixHfqIPcXz4EcQBdVaULYWN0drqXZ93wdaAz0lhBIe0WRjlKuHnBMQDj2nxdGn9gHCayIoYb3k0TpC7CxwVHk9HY=
+	t=1758780237; cv=none; b=r8RxY6nzpONIJYAk3gUVLzgyAwpOj6zsIZpjp7BfNSfNPGxkAqetFjuMZKdEJPsFu2cxWQXbEeTUcnXVutyPY73KuN2pRFGOZ3v8yo7UxJgwHFKlmIbh9NohyRkJsr826oGDgmwti3NCzeeibOtMG6bnFBor0MxkF5IV9UGgCFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758766052; c=relaxed/simple;
-	bh=COJ0vkNmeocbk8Pusq+tkqxDVCs9BpOKYM5zjdAFf64=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TqkY9/0onfUnw4Y8cGS7DiH+mI/fpjCkz+OMPHvZqGVkVzZk06feR+6hT+ipGPOJJTQQmekI9stM6qqcptSy04yFBK1U3/SwTGUJpDEWBIVTLEdyhDlgUpvw3SwXuDTRZNIXULRCC6Wddy5zg8LtlxBrBf4mIoW727YVzUm8JVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kpNyZb1G; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758780237; c=relaxed/simple;
+	bh=6eqPjgbHpHt7trPigvZyx6AuNxP0y7NzOUE+tDZddn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GHbB/SsOf4iYMF9GdvRoqJBdDxHm/4oio40g+uGkFVKl1rGTI+mzqH/0/HZpN7o35ADJEv16+N1QvPY2EnbBKSUoE/c6TI6pH6ntLENbSI8yAh7fV5bt623gb6XTjBrbKLN/vDU0uPgVA3xcKt9UvGA2wv9gdsg55PrlwhwSRdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M1AdT0m9; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kpNyZb1G"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b5526b7c54eso291346a12.0
-        for <llvm@lists.linux.dev>; Wed, 24 Sep 2025 19:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758766050; x=1759370850; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3v0KAw/a5VLZK8q/426U2Svx1Ly/zqTFJD1qMEvdMs=;
-        b=kpNyZb1GnX/vt6JzZ3FcXHhnDFzRNoqcanWU8guFW5Xof6QvNhAkSxDrfSh16ffPqU
-         T4+mo07mDwksoerBx9W35c4Rqk/tknH5b9Ai45zup9UaBw3xH3pf8xqsPv1Kmmms++Sx
-         F/Jg3Yy1+zIM0TE6zZvIPdp6MwXX+07EfY7K/7/lI31Mryf1l+rF+QV2BHUfLFwvpZ8z
-         fHd9o8ohQz6XLvocUzUXh4rMZ5vkvkQw9uG/zuFvbf5yvCUKGKtrtfP5UWkjuIAjEfdZ
-         QSiEBo3weZy0sVgWaIwrlpOAeDrjYIRCY/ezrUxL8oVlEk5SG25x0IwZzne7+yQV1WtL
-         oTMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758766050; x=1759370850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z3v0KAw/a5VLZK8q/426U2Svx1Ly/zqTFJD1qMEvdMs=;
-        b=OnYhWAG0Y+KQEJjtucu46hQOvoD1ErNVYNq3K32/R/K4opkmp/r0QYzX/V/lCQjb0T
-         hKT8RuuEnjO8T6H3PsrwOwK2Mvuj9bM71nnX/KOLy0QXJvpEnThp83sligdtoqdZucgy
-         lkgdpEMufDVugRVoW3H5U2WzRX6b5eoEqSZgkZcbINlkDIIsiKYEt7sCsb03B39SEhvY
-         Sop/G+/Php/CRMZKTwdGDBb35EtEb8e3W+K0sosU2yHOq8tTIwObJLNh2bIR3FjTrohP
-         sDKzJmmmkSr7uzGLPXP+hwkJ3U7bEwJU/8GAH1xMDOo0Y/FuTsTPvc/QhzXZCU13YLD1
-         aweA==
-X-Forwarded-Encrypted: i=1; AJvYcCVPwOCJIzEdW+xo1mzLrxKfqn3jj+pmq+dZnvKarqpfEPvnqBCn3x9BIy6o/592KBRcnFwP@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzvcm1HvMsbXBw9tjSuxbyjJf0zBx973EajoyaUG+429ymU03QW
-	AadjFd2zEbF18adTfSWGudluAH3xB2z4hmosvbRT71yVSMtb6uFiTrQI
-X-Gm-Gg: ASbGnctwBl3CTk+VTnebuYt9LYuWz3ZYwsJSRV0XaPlHyLnp2ZsAan/juRR3NDoRzf/
-	xKyVBBoU7v8oGZuNXyII+AtwWTOJHFOFYvzLkBKoVuC53hU8DYhUvrDSS1+vN/ZgwUFh9sy1wSL
-	aDk7eOhsKjy5FCas5e4IsbraHDJnOvKMgKm5ombg5cfiqw3/9I4wTFbXpUZRHD3q3TWNEIfJXbL
-	IoxByunCNoQN8UJPqIkxvVsBixjTYvIOdgCDMT88fmz0ufWW0Y0POfuik8ay4A1YYSiqlPqvxNu
-	9GZ1CgN/nrjiMrham/RZQ81eQieyfzm3Tq2lMt8RZ064M7CeOQW+4bSdqLbNaMvZzVdA6/vMPoB
-	++/bAMK0593zQKna8nt9Wn8MO/1fWBuYosw==
-X-Google-Smtp-Source: AGHT+IHZwY+E9Zl/mOnS/wW2XcXo5Et3bKXZYRlw/VXukF+oo1CmX+XrzU+9/LJydGwruFBdmu625g==
-X-Received: by 2002:a17:902:fccf:b0:273:31fb:a872 with SMTP id d9443c01a7336-27ed4a06cefmr13125795ad.6.1758766049602;
-        Wed, 24 Sep 2025 19:07:29 -0700 (PDT)
-Received: from localhost ([103.88.46.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6abff9fsm6469775ad.133.2025.09.24.19.07.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 19:07:28 -0700 (PDT)
-Date: Thu, 25 Sep 2025 10:07:26 +0800
-From: Jinchao Wang <wangjinchao600@gmail.com>
-To: Marco Elver <elver@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>, Rong Xu <xur@google.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Jinjie Ruan <ruanjinjie@huawei.com>, Nam Cao <namcao@linutronix.de>,
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	linux-mm@kvack.org, llvm@lists.linux.dev,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	kasan-dev@googlegroups.com, "David S. Miller" <davem@davemloft.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 06/23] mm/ksw: add singleton /proc/kstackwatch
- interface
-Message-ID: <aNSj3j1P9O-XWbRE@mdev>
-References: <20250924115124.194940-1-wangjinchao600@gmail.com>
- <20250924115124.194940-7-wangjinchao600@gmail.com>
- <CANpmjNOuA3q3BweB9kTUpAX4CX1U25Pqa0Hiyt__=7zio81=Uw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M1AdT0m9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758780234; x=1790316234;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6eqPjgbHpHt7trPigvZyx6AuNxP0y7NzOUE+tDZddn0=;
+  b=M1AdT0m9xb2whDafFDxXJD2MasrLnqdEHE+JP6j6B2pQMzIPJld9v1tF
+   szlrojUWHXGFH3/jegVSbyhthd1tt6eUaN4hk9U1xB8/ibB6WeRhHfR0Q
+   K9WXJt3cOhpX7WEC/VKmlwCEUMwmsBOj+pHerjzOX4U7gbvkEUv+/ozsW
+   wbLcfxp4vJVQtsISOMT0WAenvC65jN65sT+ArCsqVsqTV26eJCqPHCWFS
+   ehoZBYTeyFv44d/ih48p8DcTLp82+oLd/jKX94T2jj8jIPK3IBUxy5IB7
+   js5WtcnSwvYBLxuNczVXfEd8sU/1+x1MeBFhRrWf1rGtwEfzpBS55kcqt
+   Q==;
+X-CSE-ConnectionGUID: bQSTqMLSS1ieU49d8dPllw==
+X-CSE-MsgGUID: 3xmu4vVSQoSdmuVCi8M/Eg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="63715798"
+X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
+   d="scan'208";a="63715798"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 23:03:53 -0700
+X-CSE-ConnectionGUID: 6oyHcJi5TD2e657Wi9XEag==
+X-CSE-MsgGUID: xJWfe8QbR2u6eWTKDBtqFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
+   d="scan'208";a="177079069"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 24 Sep 2025 23:03:52 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v1f53-0004xX-21;
+	Thu, 25 Sep 2025 06:03:49 +0000
+Date: Thu, 25 Sep 2025 14:03:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wensheng Wang <wenswang@yeah.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 79/87]
+ drivers/hwmon/pmbus/mp2925.c:159:11: warning: variable 'ret' is
+ uninitialized when used here
+Message-ID: <202509251422.Cnmuh8EH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANpmjNOuA3q3BweB9kTUpAX4CX1U25Pqa0Hiyt__=7zio81=Uw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 24, 2025 at 10:49:35PM +0200, Marco Elver wrote:
-> On Wed, 24 Sept 2025 at 13:51, Jinchao Wang <wangjinchao600@gmail.com> wrote:
-> >
-> > Provide the /proc/kstackwatch file to read or update the configuration.
-> > Only a single process can open this file at a time, enforced using atomic
-> > config_file_busy, to prevent concurrent access.
-> 
-> Why is this in /proc and not debugfs?
-Thanks, will fix in next version.
-> 
-> > ksw_get_config() exposes the configuration pointer as const.
-> >
-> > Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
-> > ---
-> >  mm/kstackwatch/kernel.c      | 77 +++++++++++++++++++++++++++++++++++-
-> >  mm/kstackwatch/kstackwatch.h |  3 ++
-> >  2 files changed, 79 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/kstackwatch/kernel.c b/mm/kstackwatch/kernel.c
-> > index 3b7009033dd4..4a06ddadd9c7 100644
-> > --- a/mm/kstackwatch/kernel.c
-> > +++ b/mm/kstackwatch/kernel.c
-> > @@ -3,11 +3,15 @@
-> >
-> >  #include <linux/kstrtox.h>
-> >  #include <linux/module.h>
-> > +#include <linux/proc_fs.h>
-> > +#include <linux/seq_file.h>
-> >  #include <linux/string.h>
-> > +#include <linux/uaccess.h>
-> >
-> >  #include "kstackwatch.h"
-> >
-> >  static struct ksw_config *ksw_config;
-> > +static atomic_t config_file_busy = ATOMIC_INIT(0);
-> >
-> >  struct param_map {
-> >         const char *name;       /* long name */
-> > @@ -74,7 +78,7 @@ static int ksw_parse_param(struct ksw_config *config, const char *key,
-> >   * - sp_offset  |so (u16) : offset from stack pointer at func_offset
-> >   * - watch_len  |wl (u16) : watch length (1,2,4,8)
-> >   */
-> > -static int __maybe_unused ksw_parse_config(char *buf, struct ksw_config *config)
-> > +static int ksw_parse_config(char *buf, struct ksw_config *config)
-> >  {
-> >         char *part, *key, *val;
-> >         int ret;
-> > @@ -109,18 +113,89 @@ static int __maybe_unused ksw_parse_config(char *buf, struct ksw_config *config)
-> >         return 0;
-> >  }
-> >
-> > +static ssize_t kstackwatch_proc_write(struct file *file,
-> > +                                     const char __user *buffer, size_t count,
-> > +                                     loff_t *pos)
-> > +{
-> > +       char input[MAX_CONFIG_STR_LEN];
-> > +       int ret;
-> > +
-> > +       if (count == 0 || count >= sizeof(input))
-> > +               return -EINVAL;
-> > +
-> > +       if (copy_from_user(input, buffer, count))
-> > +               return -EFAULT;
-> > +
-> > +       input[count] = '\0';
-> > +       strim(input);
-> > +
-> > +       if (!strlen(input)) {
-> > +               pr_info("config cleared\n");
-> > +               return count;
-> > +       }
-> > +
-> > +       ret = ksw_parse_config(input, ksw_config);
-> > +       if (ret) {
-> > +               pr_err("Failed to parse config %d\n", ret);
-> > +               return ret;
-> > +       }
-> > +
-> > +       return count;
-> > +}
-> > +
-> > +static int kstackwatch_proc_show(struct seq_file *m, void *v)
-> > +{
-> > +       seq_printf(m, "%s\n", ksw_config->user_input);
-> > +       return 0;
-> > +}
-> > +
-> > +static int kstackwatch_proc_open(struct inode *inode, struct file *file)
-> > +{
-> > +       if (atomic_cmpxchg(&config_file_busy, 0, 1))
-> > +               return -EBUSY;
-> > +
-> > +       return single_open(file, kstackwatch_proc_show, NULL);
-> > +}
-> > +
-> > +static int kstackwatch_proc_release(struct inode *inode, struct file *file)
-> > +{
-> > +       atomic_set(&config_file_busy, 0);
-> > +       return single_release(inode, file);
-> > +}
-> > +
-> > +static const struct proc_ops kstackwatch_proc_ops = {
-> > +       .proc_open = kstackwatch_proc_open,
-> > +       .proc_read = seq_read,
-> > +       .proc_write = kstackwatch_proc_write,
-> > +       .proc_lseek = seq_lseek,
-> > +       .proc_release = kstackwatch_proc_release,
-> > +};
-> > +
-> > +const struct ksw_config *ksw_get_config(void)
-> > +{
-> > +       return ksw_config;
-> > +}
-> >  static int __init kstackwatch_init(void)
-> >  {
-> >         ksw_config = kzalloc(sizeof(*ksw_config), GFP_KERNEL);
-> >         if (!ksw_config)
-> >                 return -ENOMEM;
-> >
-> > +       if (!proc_create("kstackwatch", 0600, NULL, &kstackwatch_proc_ops)) {
-> > +               pr_err("create proc kstackwatch fail");
-> > +               kfree(ksw_config);
-> > +               return -ENOMEM;
-> > +       }
-> > +
-> >         pr_info("module loaded\n");
-> >         return 0;
-> >  }
-> >
-> >  static void __exit kstackwatch_exit(void)
-> >  {
-> > +       remove_proc_entry("kstackwatch", NULL);
-> > +       kfree(ksw_config->func_name);
-> > +       kfree(ksw_config->user_input);
-> >         kfree(ksw_config);
-> >
-> >         pr_info("module unloaded\n");
-> > diff --git a/mm/kstackwatch/kstackwatch.h b/mm/kstackwatch/kstackwatch.h
-> > index a7bad207f863..983125d5cf18 100644
-> > --- a/mm/kstackwatch/kstackwatch.h
-> > +++ b/mm/kstackwatch/kstackwatch.h
-> > @@ -29,4 +29,7 @@ struct ksw_config {
-> >         char *user_input;
-> >  };
-> >
-> > +// singleton, only modified in kernel.c
-> > +const struct ksw_config *ksw_get_config(void);
-> > +
-> >  #endif /* _KSTACKWATCH_H */
-> > --
-> > 2.43.0
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> > To view this discussion visit https://groups.google.com/d/msgid/kasan-dev/20250924115124.194940-7-wangjinchao600%40gmail.com.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   5f6722c971aa9d5b9736701926c3fdd1928db272
+commit: b3a4efc88601cb5fc97b4ae23c478700a60302da [79/87] hwmon: add MP2925 and MP2929 driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250925/202509251422.Cnmuh8EH-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509251422.Cnmuh8EH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509251422.Cnmuh8EH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/mp2925.c:159:11: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     159 |                                             (ret & ~GENMASK(11, 0)) |
+         |                                              ^~~
+   drivers/hwmon/pmbus/mp2925.c:137:9: note: initialize the variable 'ret' to silence this warning
+     137 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +/ret +159 drivers/hwmon/pmbus/mp2925.c
+
+   133	
+   134	static int mp2925_write_word_data(struct i2c_client *client, int page, int reg,
+   135					  u16 word)
+   136	{
+   137		int ret;
+   138	
+   139		switch (reg) {
+   140		case PMBUS_VIN_OV_FAULT_LIMIT:
+   141		case PMBUS_VIN_OV_WARN_LIMIT:
+   142		case PMBUS_VIN_UV_WARN_LIMIT:
+   143		case PMBUS_VIN_UV_FAULT_LIMIT:
+   144			/*
+   145			 * The PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_OV_WARN_LIMIT,
+   146			 * PMBUS_VIN_UV_WARN_LIMIT and PMBUS_VIN_UV_FAULT_LIMIT
+   147			 * of MP2925 is linear11 format, and the exponent is a
+   148			 * constant value(5'b11100)， so the exponent of word
+   149			 * parameter should be converted to 5'b11100(0x1C).
+   150			 */
+   151			ret = pmbus_write_word_data(client, page, reg,
+   152						    mp2925_linear_exp_transfer(word, 0x1C));
+   153			if (ret < 0)
+   154				return ret;
+   155			break;
+   156		case PMBUS_VOUT_OV_FAULT_LIMIT:
+   157		case PMBUS_VOUT_UV_FAULT_LIMIT:
+   158			ret = pmbus_write_word_data(client, page, reg,
+ > 159						    (ret & ~GENMASK(11, 0)) |
+   160					FIELD_PREP(GENMASK(11, 0),
+   161						   DIV_ROUND_CLOSEST(word * MP2925_VOUT_OVUV_DIV,
+   162								     MP2925_VOUT_OVUV_UINT)));
+   163			break;
+   164		case PMBUS_OT_FAULT_LIMIT:
+   165		case PMBUS_OT_WARN_LIMIT:
+   166			/*
+   167			 * The PMBUS_OT_FAULT_LIMIT and PMBUS_OT_WARN_LIMIT of
+   168			 * MP2925 is linear11 format, and the exponent is a
+   169			 * constant value(5'b00000), so the exponent of word
+   170			 * parameter should be converted to 5'b00000.
+   171			 */
+   172			ret = pmbus_write_word_data(client, page, reg,
+   173						    mp2925_linear_exp_transfer(word, 0x00));
+   174			if (ret < 0)
+   175				return ret;
+   176			break;
+   177		case PMBUS_IOUT_OC_FAULT_LIMIT:
+   178		case PMBUS_IOUT_OC_WARN_LIMIT:
+   179			/*
+   180			 * The PMBUS_IOUT_OC_FAULT_LIMIT and PMBUS_IOUT_OC_WARN_LIMIT
+   181			 * of MP2925 is linear11 format, and the exponent is a
+   182			 * can not be changed.
+   183			 */
+   184			ret = pmbus_read_word_data(client, page, 0xff, reg);
+   185			if (ret < 0)
+   186				return ret;
+   187	
+   188			ret = pmbus_write_word_data(client, page, reg,
+   189						    mp2925_linear_exp_transfer(word,
+   190									       FIELD_GET(GENMASK(15, 11),
+   191											 ret)));
+   192			break;
+   193		default:
+   194			ret = -EINVAL;
+   195			break;
+   196		}
+   197	
+   198		return ret;
+   199	}
+   200	
 
 -- 
-Jinchao
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
