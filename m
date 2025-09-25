@@ -1,167 +1,170 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C50215B135
-	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 12:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B2B38DEC;
+	Thu, 25 Sep 2025 13:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758804203; cv=none; b=YBjRGn6mxAtq45pY7CajCQ3sfZm7musc+h7mNa4xYlKeEKQqZnp1JCseR9b9vFYxxOUscUW04Hd1Yn39A6nJdYHZYfdAyCILHeuUhRvzLsx2WtI6ZdzdQPgA+N1gyMh44GA7st5ncRUR1HmeVV1t7fxrk0/zUNzThwKPjbCfitk=
+	t=1758805587; cv=none; b=ASSIepC2o9gv5mZ2Ski2K3ILPcuQtcwHdpEsfKdXEquR3ifnc0JmfPYnAYYr/XWMTubDluRn8gVL4MXkj1QjBdqmvfNpt3rRjHR3BN2kpqFYJgjU9ElvEtaabGvEzTDspbsErZvIBBXhhoEgenPKm5tkMm3Lo8rZXkF9aV0SVMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758804203; c=relaxed/simple;
-	bh=gcHZwcDMSIGu3KYmFLAtCFzPUJCXH64+5aDEv1Ci6FY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nXABcU8zwaFcKWfQh6nHopx5Pzq0yTDNd11f4CQGSvSmHie3SffK3/w4W/AW+WUPFH2ay21sKZmm7mxb0AkAwMfCjWWnwgh6vUuANZg/0TrHCgP5HvNRvHMLvqRpPQ0EhlSAG9PyvhUc8Uy/lvdf9ohEiZRJX1qo3FZpUBgBi5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DAD91692;
-	Thu, 25 Sep 2025 05:43:10 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0841B3F694;
-	Thu, 25 Sep 2025 05:43:18 -0700 (PDT)
-Date: Thu, 25 Sep 2025 13:43:16 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, James Clark <james.clark@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH 3/8] bpftool: Conditionally add -Wformat-signedness flag
-Message-ID: <20250925124316.GA7985@e132581.arm.com>
-References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com>
- <20250925-perf_build_android_ndk-v1-3-8b35aadde3dc@arm.com>
- <52fe87ef-0797-4cf1-9e70-dc218f904e77@kernel.org>
+	s=arc-20240116; t=1758805587; c=relaxed/simple;
+	bh=q4ye3IXiZsxvGSYcC9c9EM/q62U5jr861gIEvwgcJ4k=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oJ/oErxF/+rlFePfHyEsYdvdepwh6tbTUyefqFvT+rH27tWbvEStCEmb1f4UPscp1q1f5xO5S1wwlg/XcogCX8uZt7tp6rN/5E58kVJ/Ji8F50Tk1dCTdw1gQLQyv9D2FeXbYs/d61bruD6j7MpR6+bcae13V2x+H3u6Ec0keHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=2sy9lRm+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YDFbe+E+; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="2sy9lRm+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YDFbe+E+"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id CBE32138017F;
+	Thu, 25 Sep 2025 09:06:24 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 09:06:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1758805584;
+	 x=1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=
+	2sy9lRm+gAWZynhTnnCoQXRW35ce44lRrHZk/Cj9ytb440KmET5Ee2VrjZ2i4vfw
+	MMA5DLOA52iz5f+9Tk9cDJENLM2M9dqv/A2AtWJebWPMhYT+pGAk0Po6sF8u6F2P
+	GvPDxasy8rYihjkIMnRv2WHO63/xYwIR1an9t+8GSFbDmpZTRV0lnpt03KhmvY7A
+	7a5QzHCsz4u3rYwdfsAHjHE9sHNjWIeoBQ1uhn9mT/D1myooWR8bf0aAycnO+pMP
+	HnVzVB7J8xNhoB5ORSk7ILbqFkB2z3O93fjhBfnmNPLKOAsq/3IpuL9l4nVG8g4N
+	mkrIfUjiAm8MHu4xzK2JGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758805584; x=
+	1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=Y
+	DFbe+E+QUPnk8ohwlw+7+tCt2thZQDd39kOlIwkrNBEU7Co/agHx0rWkKjcOjA4I
+	UxezTrOOu8BXHzRgSapyFYfG9SX1kIl/WGWgr/Hfp6GIqR7/HMSXj7UQOEatrk/5
+	DYrufeME9R6pr2M8lcqPnU6gX0GrkJCdHskdDkmWzcb9zfiBMS+s0WlLS/oW+Fji
+	rolpwCYMrC24e8wBaRGrus/OOdlsyf7EYszqmc8M32TORASYA+2gMpkkmKd7FE8f
+	U/wa81NqjBlZM0fqPAQa3NUPT4FZNk3k8m626tF6kSBG3D0qMQbHLltDHBgwa3QR
+	eRtVlFB9twL0AnwY0Z01Q==
+X-ME-Sender: <xms:Tz7VaOuN1fHT7_CJ1M6Gnkl8KMZjSvhMKV9e7dIZabjJhgMnpIIGPA>
+    <xme:Tz7VaORioU__2iKdwpL9HoErjM3EvudsXvEupsPo3pA1NxFV5V1QU7XN8Wib-zp_S
+    16KYYY4OGNVTs2zP_NC6uWHukZ9PRhBi-DiKYylxhwmAU-XX15Cudc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeiieehiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtoheptggrthgrlhhinh
+    drmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
+    ugesrghrmhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
+    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsg
+    hosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivghrshesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghird
+    gtohhm
+X-ME-Proxy: <xmx:Tz7VaLONgGDZn_yzUUvrXVOl0hfFzMUiEkhzxoWqQOi-PcUPFwP-pg>
+    <xmx:Tz7VaMhnVxcbYGiNq_WRkNKihp9YFbK9lF2FWAxrC1U7-1vSgIYB3g>
+    <xmx:Tz7VaHcMXgUMVAMUHYoZfREurZSQ8d1L55qd6WjCburksshl5MIoFg>
+    <xmx:Tz7VaBwaJ4XBSeHmatUTHuC0iN8fiuQ4V0Fp0oXEq2VXGUQBPl5GsQ>
+    <xmx:UD7VaJv9R6PSAHhGKSRFTmjzH4H84iAYseEmAQRQ9mtcsAYdejym4Av0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E579E70006D; Thu, 25 Sep 2025 09:06:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52fe87ef-0797-4cf1-9e70-dc218f904e77@kernel.org>
+X-ThreadId: AiLhtS-R-ASF
+Date: Thu, 25 Sep 2025 15:05:52 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jason Gunthorpe" <jgg@nvidia.com>,
+ "Patrisious Haddad" <phaddad@nvidia.com>
+Cc: "Tariq Toukan" <tariqt@nvidia.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Leon Romanovsky" <leon@kernel.org>, "Mark Bloch" <mbloch@nvidia.com>,
+ Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Gal Pressman" <gal@nvidia.com>,
+ "Leon Romanovsky" <leonro@nvidia.com>,
+ "Michael Guralnik" <michaelgur@nvidia.com>,
+ "Moshe Shemesh" <moshe@nvidia.com>, "Will Deacon" <will@kernel.org>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Justin Stitt" <justinstitt@google.com>, linux-s390@vger.kernel.org,
+ llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Salil Mehta" <salil.mehta@huawei.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
+ "Yisen Zhuang" <yisen.zhuang@huawei.com>,
+ "Leon Romanovsky" <leonro@mellanox.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Jijie Shao" <shaojijie@huawei.com>, "Simon Horman" <horms@kernel.org>
+Message-Id: <13c5072c-dc93-477c-b72e-02156a0ecc2e@app.fastmail.com>
+In-Reply-To: <20250925122139.GW2617119@nvidia.com>
+References: <1758800913-830383-1-git-send-email-tariqt@nvidia.com>
+ <20250925115433.GU2617119@nvidia.com>
+ <d548b14e-ae28-4807-9b29-9961543ea549@nvidia.com>
+ <20250925122139.GW2617119@nvidia.com>
+Subject: Re: [PATCH net-next V5] net/mlx5: Improve write-combining test reliability for
+ ARM64 Grace CPUs
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 25, 2025 at 11:42:39AM +0100, Quentin Monnet wrote:
-> 2025-09-25 11:26 UTC+0100 ~ Leo Yan <leo.yan@arm.com>
-> > clang-18.1.3 on Ubuntu 24.04.2 reports warning:
-> > 
-> >   warning: unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]
-> > 
-> > Conditionally add the option only when it is supported by compiler.
-> > 
-> > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> 
-> 
-> Hi, how annoying is this warning?
+On Thu, Sep 25, 2025, at 14:21, Jason Gunthorpe wrote:
+> On Thu, Sep 25, 2025 at 03:15:46PM +0300, Patrisious Haddad wrote:
+>> 
+>> On 9/25/2025 2:54 PM, Jason Gunthorpe wrote:
+>> > On Thu, Sep 25, 2025 at 02:48:33PM +0300, Tariq Toukan wrote:
+>> > > +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
+>> > > +				size_t mmio_wqe_size, unsigned int offset)
+>> > > +{
+>> > > +#if defined(CONFIG_KERNEL_MODE_NEON) && defined(CONFIG_ARM64)
+>> > IS_ENABLED() not defined()
+>> I just wonder why, Is there a preference in the driver from like
+>> aesthetic/convention point of view?
+>> Since here it technically doesnt matter - IS_ENABLED have no functional
+>> difference from defined since these are boolean configs not *tristate*ones
+>> (cant be loaded as module).
+>
+> I think it is an aesthetic convention to avoid defined(CONFIG_*) as
+> the reasoning it is not tristate is a bit tricky.
 
-Not too bad, it prints out 5~6 times warnings (see the build log below).
-Though the warnings are a bit noisy, they does not break the build.
+In my impression there is no general agreement on this, I would
+probably have picked defined() here myself but don't mind the
+IS_ENABLED() variant either.
 
-> I'm asking because as far as I
-> understand, the option has been introduced in LLVM 19.1.0 [0] - the
-> latest being 21.1.0 already - so we won't need this check once distros
-> have transitioned, and I'm a bit reluctant to add it.
+On the other hand, I would in general strongly prefer
 
-I agree the warning likely won't affect distros, as package maintainers
-will hide it. But it can annoy _paranoid_ developers in day-to-day
-builds ;)
+     if (IS_ENABLED(CONFIG_FOO)) {
+            ...
+     }
 
-As the warning doesn't block anything, so I am fine with not merging
-this patch.
+over any of the preprocessor conditionals, both for readability
+and for improving compile-time coverage of the conditional code.
 
-Thanks,
-Leo
+Unfortunately that does not work here because kernel_neon_begin()
+etc are only defined on Arm.
 
-> [0]
-> https://github.com/llvm/llvm-project/commit/ea92b1f9d0fc31f1fd97ad04eb0412003a37cb0d
-
-
----8<---
-
-Auto-detecting system features:
-...                         clang-bpf-co-re: [ on  ]
-...                                    llvm: [ OFF ]
-...                                  libcap: [ on  ]
-...                                  libbfd: [ OFF ]
-...                          libbfd-liberty: [ OFF ]
-...                        libbfd-liberty-z: [ OFF ]
-...                  disassembler-four-args: [ OFF ]
-...                disassembler-init-styled: [ OFF ]
-...                             libelf-zstd: [ o
-  MKDIR   /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf
-  MKDIR   /build/util/bpf_skel/.tmp/bootstrap/libbpf/
-  MKDIR   /build/util/bpf_skel/.tmp/bootstrap/
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/hashmap.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/relo_core.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_internal.h
-warning: unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]
-1 warning generated.
-  GEN     /build/util/bpf_skel/.tmp/bootstrap/libbpf/bpf_helper_defs.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_legacy.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/btf.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_helpers.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_common.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_tracing.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_core_read.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_endian.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_version.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/skel_internal.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/usdt.bpf.h
-  INSTALL /build/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_helper_defs.h
-  INSTALL libbpf_headers
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/bpf.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/nlattr.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf_errno.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/str_error.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/netlink.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/bpf_prog_linfo.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf_probes.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/hashmap.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_dump.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/ringbuf.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/strset.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/gen_loader.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/relo_core.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/linker.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/usdt.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/zip.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/elf.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/features.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_iter.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_relocate.o
-  LD      /build/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf-in.o
-  LINK    /build/util/bpf_skel/.tmp/bootstrap/libbpf/libbpf.a
-  CC      /build/util/bpf_skel/.tmp/bootstrap/main.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/common.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/json_writer.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/gen.o
-  CC      /build/util/bpf_skel/.tmp/bootstrap/btf.o
-warning: unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]
-warning: unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]
-warning: unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]warning:
-unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]
-warning: unknown warning option '-Wformat-signedness' [-Wunknown-warning-option]
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-  LINK    /build/util/bpf_skel/.tmp/bootstrap/bpftool
+     Arnd
