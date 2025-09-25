@@ -1,144 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0222EA47E
-	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 09:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C1A62E9756
+	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 10:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758792797; cv=none; b=sCCFskZIfdXn3BJXv8X+K1/w2Fd7I5H7YikbWiJtVjQtAZpD8D45+saJpFfTvUKaMPPwp2TzXlwOidILybXNm2JKJyUMOEETsW7vANkEsm7MOTfGsOgGM9J3dJ3aOQETFadl3CZyOA53ZJs73W6MtAtyUQLpwDKicGJKwGoTShE=
+	t=1758795999; cv=none; b=iuJaGOveoQc1kwgZ/sGGlxdUCqHzvLtp0Id0dtoXMJm6rpShudg7FcpY3THAhI5Xh0yhOH9y7CVtQkea0JdoZyKFRmAD9iyqnK4wjS0PzqioymErjGm81Mk7x0ZMiTP0heqQoxZFmUGORfVNDdhzTz83YgS/7fDrvxwWOeUa+NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758792797; c=relaxed/simple;
-	bh=Y0xicYHM2cgUzXWpvdq1D3m89FySrtzAjOcUTWbLzZU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=hDbJ+ibXl5xRl/Da1BQfuBodmlMqQg08nE7XuntqjZOItb2wthmIQPRztDGyA1wQdn+JzsaSdKg6K/16wlPuJkEtTPCZJAZnjaxWK+JUNhxDfEWBtbNYr09xBhDQB7GlDkCxeb19diWLFdc60Au5x7428rD91ywinzKTDK0AXE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JPSFeaJt; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JPSFeaJt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758792794;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FE/+nQ983DELshM7vo+UYhXH87i+8dAwDUQcNP/ekG0=;
-	b=JPSFeaJtsk4lm2+Xjtppg/YzPTZtnS7K8+d3+DdyvuRJpu4rbsLPSAsB6pUdz5k7ITZa2V
-	VvjSwwHuIGQpgtXjmztGLu+DoN7kcDu3gQu6SL0SYNZhZTtA0rHuKBIj8Nd5ybsggCUF/i
-	etkW/ZNuFQ4BrkVSLD5DbsNGpDEUgoo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-418-xWq1nbP4PPmPJIsfGKrWtA-1; Thu,
- 25 Sep 2025 05:33:13 -0400
-X-MC-Unique: xWq1nbP4PPmPJIsfGKrWtA-1
-X-Mimecast-MFC-AGG-ID: xWq1nbP4PPmPJIsfGKrWtA_1758792792
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 37512195609F
-	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 09:33:12 +0000 (UTC)
-Received: from [172.20.26.51] (unknown [10.30.44.116])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DA0541955F24;
-	Thu, 25 Sep 2025 09:33:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.17.0-rc7,
- upstream-mainline, 4ea5af08)
-Date: Thu, 25 Sep 2025 09:33:10 -0000
-To: bgoncalv@redhat.com, ftjahjad@redhat.com, llvm@lists.linux.dev
+	s=arc-20240116; t=1758795999; c=relaxed/simple;
+	bh=XU+JsDm+NACkjK6KgkBIoEW0aBxNnr3czBMcHn+kAFw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=osx6aEwxNCSO4nFdayykN2d6es31xJVyEaqf4/V6x+059sO1rkShErxfeMTFGUQCgJEdQRqeu2omlJ6p55AyRJUlihBOPk7C7o7kjjrzyjMnJJ1kD7CKGC+53vd0B6W1vu01Gq4kA9iZAqvLlwQz2pAMxzzF0Duob7P1ljwogj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38F8F1692;
+	Thu, 25 Sep 2025 03:26:27 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C61A93F694;
+	Thu, 25 Sep 2025 03:26:31 -0700 (PDT)
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH 0/8] perf build: Support building with Clang
+Date: Thu, 25 Sep 2025 11:26:24 +0100
+Message-Id: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <84678.125092505331300280@us-mta-418.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 5X0A7lXHuguE_QpiqmSyoLgDCSOkOpgdOYVUpWNL9Ls_1758792792
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANAY1WgC/x3MQQqEMAxA0atI1lOoSkC9yjCU1kQNDlVSFKF4d
+ 4vLt/g/Q2IVTjBUGZRPSbLFgvpTwbj4OLMRKobGNmj7Gs3OOrlwyJ+cj6SbkIu0GrQ2YBvYdz1
+ CiXflSa53/P3d9wOY32O2aAAAAA==
+X-Change-ID: 20250915-perf_build_android_ndk-500b53bea895
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+ Quentin Monnet <qmo@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ James Clark <james.clark@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, Leo Yan <leo.yan@arm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758795991; l=2161;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=XU+JsDm+NACkjK6KgkBIoEW0aBxNnr3czBMcHn+kAFw=;
+ b=VaDG4JssfwIwKfVis2IGMb3HXC/byRBlxX87NQBY9L6PLPT9dhDxgMh51YLs9KIYrXvqTwL3n
+ FKBnLR7EDZ2BFkIHJi1P+0LLnQTCwKIVweN//eHuFHJ/ocslDjdWEVh
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Hi, we tested your kernel and here are the results:
+This series adds support for building perf with Clang, following the
+discussion in [1]. Because the Android NDK uses Clang by default,
+enabling Clang builds naturally covers Android as well.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+The series is organized as follows:
 
+  - Patches 1–2: Fix two bugs found with Clang.
+  - Patches 3–6: Address Clang build warnings. Because these warnings
+    do not break the build, no Fixes tag is added to avoid backporting.
+  - Patches 7–8: Enable Clang in the Makefile and update the
+    documentation.
 
-Kernel information:
-    Commit message: Merge tag 'pm-6.17-rc8' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/rafael/linux-pm
+Testing:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2060851673
+  - Clang 15.0.7 on Ubuntu 22.04.5: native and cross-compiling (aarch64)
+  - Clang 18.1.3 on Ubuntu 24.04.2: native and cross-compiling (aarch64)
+  - Android NDK r27d (latest LTS): cross-compiling (aarch64)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2060851673_x86_64_kernel-debug_kcidb_tool_19640766_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2060851673_x86_64_kernel-debug_kcidb_tool_19640766_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+[1] https://lore.kernel.org/linux-perf-users/20240715143342.52236-1-leo.yan@arm.com/
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Leo Yan (8):
+      tools build: Align warning options with perf
+      perf python: split Clang options when invoking Popen
+      bpftool: Conditionally add -Wformat-signedness flag
+      perf test coresight: Dismiss clang warning for memcpy thread
+      perf test coresight: Dismiss clang warning for thread loop
+      perf test coresight: Dismiss clang warning for unroll loop thread
+      perf build: Support build with clang
+      perf docs: Document building with Clang
 
+ tools/bpf/bpftool/Makefile                         | 12 +++-
+ tools/build/feature/Makefile                       |  4 +-
+ tools/perf/Documentation/Build.txt                 | 18 +++++
+ tools/perf/Documentation/android.txt               | 82 +++-------------------
+ tools/perf/Makefile.config                         | 32 ++++++++-
+ .../shell/coresight/memcpy_thread/memcpy_thread.c  |  2 +
+ .../shell/coresight/thread_loop/thread_loop.c      |  4 +-
+ .../unroll_loop_thread/unroll_loop_thread.c        |  4 +-
+ tools/perf/util/setup.py                           |  5 +-
+ 9 files changed, 81 insertions(+), 82 deletions(-)
+---
+base-commit: c17dda8013495d8132c976cbf349be9949d0fbd1
+change-id: 20250915-perf_build_android_ndk-500b53bea895
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Leo Yan <leo.yan@arm.com>
 
