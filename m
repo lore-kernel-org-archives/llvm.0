@@ -1,72 +1,72 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F1831E0EB
-	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 19:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEF331D751
+	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 19:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758829130; cv=none; b=A7XWQjtSTEx+t3mFSS0XRcF6LOLCAGowWVcRvXF+pYySL8rT8HnlSlCgZe18E8OFeR5Cwx9M/v7i0789t1QN6frKvq1WKb36smj5ojMxYFkf04cb6gUTRn8somsRQiK9ObwOvTNby1w1STRtccmD3A3AvqViAg71U5feQzAJBjs=
+	t=1758829450; cv=none; b=AHUR2ROvAmvTpjHodDRCezCu9V9lqExrGW9FRvu1XgBeebavh9PLlBoR5UAI2NmDWeM5eUSRZ8BdoMkirsJPXQRGfZ6ArnxSlcfqvnX6doYTML0hEcBUO8nYuTbJ1+gXJONdJNLBITqMGRUfyWBHV62ztWCTW7Rx7XWit+ykal0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758829130; c=relaxed/simple;
-	bh=MdI2AHIvRAIXfAa0D0cIiFe+/emKPsfH4wCzSWvwGLE=;
+	s=arc-20240116; t=1758829450; c=relaxed/simple;
+	bh=pjWJxaDm5i7+W2bvMI0+orl3tlEoItTaV2bGShqdtrA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qAsOy5tAh1VxLd1QEkQln2ftMkBb3f7YJkI1ZrRFGfAFIzw9/axdD9wl+3qx+SlWaDmBgCIbcsyYPkL5qjmKpQ1fB638RQ9Y8dSqWERFwsAt26DEiw5XSonkDIbYUuU2OoPW7KXg88WekEEhAY7gYRI9sybuagBsj4grb7vli2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YGrJ8Fso; arc=none smtp.client-ip=209.85.214.173
+	 To:Cc:Content-Type; b=nO9SGdTdTGaoFiiUKf2Apzq7MPVVbcINqYWPsK+omqfU0xS149SYnX5mzYTDShjXUya+dgCIqZJIgGmPTsRx8/gQ89MiRVvh8snmTF/2IKV/t1hBpheRmhgW2mfyHU5Ftv+smDtRoNURgWJL99UiKwA/sLdlBfU+PDetA6baKB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3Uj6Ro/U; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGrJ8Fso"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2681645b7b6so3385ad.1
-        for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 12:38:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3Uj6Ro/U"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2731ff54949so4095ad.1
+        for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 12:44:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758829128; x=1759433928; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1758829447; x=1759434247; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pmXLeoRNYxQ/q9eeZjkA7V0DrLfH4gyiTpN84frRQQg=;
-        b=YGrJ8Fso7TNoTeiDaqszBNwSdWbC9D+ZooFXv9p122STku7Fhkq8bywdQxvHNOTF5f
-         Yo9ScKcIFOrW07AbazMBVJJCuiIxAE58vAdOYtHj8ddq910E858N/oEyv8wPWBfby/ho
-         2vpfHxJTQXg51zowTW7hd925vDFJRkCVuu3WmPRcN95dvLk/L0DVcHqI976cLwQzZN9D
-         0HqCFT1adLm567c1H0WUhYbtPVYq1jpYK/rbiHkJFuWQhSjQeulMudMOeAvOnJuYOyKj
-         9nmL99d5y7K74UZ5t7OQe6Q+NCb8DWYm5JkjeHObbJCXnfAo/atfTXBBK1lzCVicYhJr
-         L12w==
+        bh=EWIVbuiBuwrZgK3Twemi+KiTjZ5ODWZWrr9NFDHeWqg=;
+        b=3Uj6Ro/UxLh4wKZ+yFZMr8eDcCCXx10kv96nDZTHrZhQQBZUfOMZp+CFcukgP2g1/J
+         r0wR5L2N8jqs5tG5ortV+qkNNtyrHCfsiqCR7Qy6+QgHzw+i4A86c9RNsPfp2p3dZ0Xy
+         Fb8OALyM1BNT69/UaJecX2vaowAitUWm/ghus9lUVpSMhojKkCnsAtWqDbFQHtE7u0vL
+         DBCWiYpe1zn592+YuZ3jZOk0JnME4bk1+xLi5dDBrjeeysKfYklXcOMKsqCux+sEoo2A
+         sdnM+xc02+9p7RC9u0eigOkZA/rBQ8M5b4F/f7F59j67bnwwAzjlaq6KlI4SlvnQDlr9
+         TRAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758829128; x=1759433928;
+        d=1e100.net; s=20230601; t=1758829447; x=1759434247;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pmXLeoRNYxQ/q9eeZjkA7V0DrLfH4gyiTpN84frRQQg=;
-        b=ZEC99Y5IXNU4I67uasSnnMs5yS8fQB8JpdXWuGRyLVpvGVEkN59nhQFd0bAyWxmBpB
-         Ny4CL1qNSSDiMwHIxuOEj+owN9Y44yjKIhR4o4bDgbo1Czp9fRgFXJjwpA8terTwOWjb
-         b45MQrSFzeSjE1/J2CPPJw2rzN6zqDfvvM1EqQGGUk1eE3pezQkTYWFpl9p/aukWBSP2
-         qsmNte31Qcdlelg9eGT1PPZ/x40hma6ArR9hRtlIBwku9pd2hclSOr5wanFaRslOuicR
-         SQ2TCJuZdjHzRcK8D1m+Vx4ELZkfrbZO6zqGmC8/vI3IwlYoYONnG2osZqDAmLAN+BkX
-         r36A==
-X-Forwarded-Encrypted: i=1; AJvYcCUGLLAGnVEHDmIix5shl1QvAQg0Dz6Ka5OScRq1/8qoVG4VIGQH3Z1f92FT/TsEDnsMRRsR@lists.linux.dev
-X-Gm-Message-State: AOJu0YwMRSm05GAVz+q1Z8oeW4IhGxbyuI13LWlkmll2snxAA7uDM84P
-	/xRC46b6BmxIVTrL8L6mLRqBu2LtlwwhCjXp4c0Rbd0lN3JZ0BPkbnQjs2iDHeDXKzdnMsCWdTS
-	4tkT13qRSjTjPUXPnuVBbXV0Cgi1v8p73kzj5KbkO
-X-Gm-Gg: ASbGncuLY5OLAhhQKR6T/Ywqm3PuXW7J66qYyFW2K6Dwfc6ixc2zs3+4uSy4odfG9nd
-	7zizywWA/hX0egYg9Td3LXrwzhxYRSg9KpTbmq3bnmXPv+bLjtSCs9u77VZpafTyKhk7JXYC5L8
-	Q6IRrMPmgZOJP7iW7WSZ74hrumLg3+BnrylVlqH1jaexi0rSmhm208GerFGYGuXOXZr5b40Wqcq
-	DERkq0fi97afrn7wobhc7oGnlfckI/pw/rl9oYwyA==
-X-Google-Smtp-Source: AGHT+IHlWDsv5W+Cnz3QpzSjCLsjC6JqkFfJnw0PQrGoFuGfCPLIcdnOMx84aEiFui77lbyr4nxAshVX71wahiIYeqA=
-X-Received: by 2002:a17:903:4b46:b0:274:1a09:9553 with SMTP id
- d9443c01a7336-27eecd5abf5mr876475ad.6.1758829127934; Thu, 25 Sep 2025
- 12:38:47 -0700 (PDT)
+        bh=EWIVbuiBuwrZgK3Twemi+KiTjZ5ODWZWrr9NFDHeWqg=;
+        b=ssMwsDH77p8lMB8a4snQvbv3cXc13tjDWv+4mJgY6oSkA8ulNpG3VE8n20cuP4tSRI
+         /6lwgPtsrCVqnSepH0I0xrp7Ki9fjkEIpt+2bOVQKsoGGKPp04bs033rWophic/6BjZD
+         KR/DZ5icg9E4j7KztaMwjh7xqhhtQpyFjY5cEf20MjmKspS5mLZGJ9UdRhiECWd01mJ3
+         kNseD/tSf5PIv+YsSSAI4IjgQk5FNPReBcvCpNvJ5a+M2Q4HPCyF6aOYHeuVQDML+Nnb
+         QwUMBdnyuEmodBVPAo5kd7/plFHUkx02aYt/jqb2QiYHq905bOHSOsgnYIy0AvykUohO
+         y8LQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWM8sRuubas/vL/cjYfu6X8slz0qAPq5G6Xgu62bgI41D310X1Ppfhbfu36H1DtAo/uPvIA@lists.linux.dev
+X-Gm-Message-State: AOJu0YzjE+TUQqxDI40P0O24gvUxSgjjgqhGP5b6wHXCQOu0F9aQ1hBG
+	oxQ81esLHI650uLWXgA/NUGeE+Vzn6q5bdFy/K0ItzNp8sbFYvc8OYQVhZhsmOk57EsCVU8QmmI
+	15pUi9nTn5hClunxlPJIfEtMv9AepyCedtiQcN1ew
+X-Gm-Gg: ASbGnctejU1DX39ekU/UO9LaX6myurEf2Rp1Zq22SdSNymBOCMA+viWxR1qc9G7iEtr
+	jn1E0RLz3mHIhcA8IubV1voXRGyxrcSlnXJGl2tokwRY2zjcWEk1pRAhPsdrjsCaKcrGYJqoTAY
+	yJF7uk3rHvLzCPOUhXWGHjCjo5hAzM01cPCmQT6F2sOAeBg7k4Wfork7VQs71e6i+TLevNEx00B
+	Z53zkiep0mEcqzEcE9X+W/mX4zsy1PnMC6ERwasMA==
+X-Google-Smtp-Source: AGHT+IEUyAVjqPX29ofytiPs9/vT5tWzpQXe+AgtwNfhcQZ1fspmy16qFs8VgNTSSJwUxGbfDch9a94qyUKDSBMfn+g=
+X-Received: by 2002:a17:902:d48b:b0:265:e66:6c10 with SMTP id
+ d9443c01a7336-27eec9da82amr1083625ad.4.1758829446064; Thu, 25 Sep 2025
+ 12:44:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com> <20250925-perf_build_android_ndk-v1-4-8b35aadde3dc@arm.com>
-In-Reply-To: <20250925-perf_build_android_ndk-v1-4-8b35aadde3dc@arm.com>
+References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com> <20250925-perf_build_android_ndk-v1-8-8b35aadde3dc@arm.com>
+In-Reply-To: <20250925-perf_build_android_ndk-v1-8-8b35aadde3dc@arm.com>
 From: Ian Rogers <irogers@google.com>
-Date: Thu, 25 Sep 2025 12:38:36 -0700
-X-Gm-Features: AS18NWArHaslRBdqbnMECGDnT24X9gvQ1wcAN-wPei7OArHIVhWE7ff1fDEiDAU
-Message-ID: <CAP-5=fWGKgXV52_9E7n9yDX1uNLF8qWT9XTFK8eKtc_LRCW5wg@mail.gmail.com>
-Subject: Re: [PATCH 4/8] perf test coresight: Dismiss clang warning for memcpy thread
+Date: Thu, 25 Sep 2025 12:43:55 -0700
+X-Gm-Features: AS18NWBRqTNACmFmffSTOBpsayhFYwgysTlFqWMT9G5XiIoGQQ5fG2mtSFmvcWI
+Message-ID: <CAP-5=fV45npmMUVGakzpB0XDMJ+WudiHoanBXzJtrX2442k-YA@mail.gmail.com>
+Subject: Re: [PATCH 8/8] perf docs: Document building with Clang
 To: Leo Yan <leo.yan@arm.com>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
 	Adrian Hunter <adrian.hunter@intel.com>, Quentin Monnet <qmo@kernel.org>, 
@@ -82,47 +82,175 @@ Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.or
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 25, 2025 at 3:26=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+On Thu, Sep 25, 2025 at 3:27=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
 >
-> clang-18.1.3 on Ubuntu 24.04.2 reports warning:
+> Add example commands for building perf with Clang.
 >
->   memcpy_thread.c:30:1: warning: non-void function does not return a valu=
-e in all control paths [-Wreturn-type]
->      30 | }
->         | ^
->
-> Dismiss the warning with returning NULL from the thread function.
+> Since recent Android NDK releases use Clang as the default compiler, a
+> separate Android specific document is no longer needed; point to the
+> general build documentation instead.
 >
 > Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/perf/Documentation/Build.txt   | 18 ++++++++
+>  tools/perf/Documentation/android.txt | 82 ++++--------------------------=
+------
+>  2 files changed, 26 insertions(+), 74 deletions(-)
+>
+> diff --git a/tools/perf/Documentation/Build.txt b/tools/perf/Documentatio=
+n/Build.txt
+> index 83dc87c662b63ecc17553a15cc15a6b8d6f01d83..3e4104e605ac0d7d30b4408ef=
+413cf1f90b034c1 100644
+> --- a/tools/perf/Documentation/Build.txt
+> +++ b/tools/perf/Documentation/Build.txt
+> @@ -99,3 +99,21 @@ configuration paths for cross building:
+>  In this case, the variable PKG_CONFIG_SYSROOT_DIR can be used alongside =
+the
+>  variable PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH to prepend the sysroot pat=
+h to
+>  the library paths for cross compilation.
+> +
+> +5) Build with clang
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +By default, the makefile uses GCC as compiler. With specifying environme=
+nt
+> +variables HOSTCC, CC and CXX, it allows to build perf with clang.
+> +
+> +Using clang for native build:
+> +
+> +  $ HOSTCC=3Dclang CC=3Dclang CXX=3Dclang++ make -C tools/perf
+> +
+> +Using clang for cross compilation:
+> +
+> +  $ HOSTCC=3Dclang CC=3Dclang CXX=3Dclang++ \
+> +    make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/perf \
+> +    NO_LIBELF=3D1 NO_LIBTRACEEVENT=3D1 NO_JEVENTS=3D1
 
-lgtm, should this be moved into being a perf test workload as in
-tools/perf/tests/workloads/ ?
-There doesn't seem to be anything overly arch specific in the test and
-being a workload avoids a cc dependency in the test, as well as
-meaning we test with our usual compiler flags, etc.
+The three NO_-s here are going to cripple the build quite a lot, I
+wonder if we can list package dependencies to install and failing that
+use the NO_-s.
 
-Thanks,
+> +
+> +In the example above, due to lack libelf, python and libtraceevent for
+> +cross comiplation, disable the features accordingly.
+
+nit: s/comiplation/compilation/
+
+> diff --git a/tools/perf/Documentation/android.txt b/tools/perf/Documentat=
+ion/android.txt
+> index 24a59998fc91e814ad96f658d3481d88d798b60c..e65204cf2921f6bd8a7987578=
+4c5b3d5487ce05d 100644
+> --- a/tools/perf/Documentation/android.txt
+> +++ b/tools/perf/Documentation/android.txt
+> @@ -1,78 +1,12 @@
+>  How to compile perf for Android
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+>
+> -I. Set the Android NDK environment
+> -------------------------------------------------
+> +There have two ways to build perf and run it on Android.
+
+nit: s/There have/There are/
+
+Thanks for doing this series!
 Ian
 
-> ---
->  tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c | 2 ++
->  1 file changed, 2 insertions(+)
 >
-> diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread=
-.c b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
-> index 5f886cd09e6b3a62b5690dade94f1f8cae3279d2..7e879217be30a86431989dbf1=
-f36d2134ef259cc 100644
-> --- a/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
-> +++ b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
-> @@ -27,6 +27,8 @@ static void *thrfn(void *arg)
->         }
->         for (i =3D 0; i < len; i++)
->                 memcpy(dst, src, a->size * 1024);
-> +
-> +       return NULL;
->  }
+> -(a). Use the Android NDK
+> -------------------------------------------------
+> -1. You need to download and install the Android Native Development Kit (=
+NDK).
+> -Set the NDK variable to point to the path where you installed the NDK:
+> -  export NDK=3D/path/to/android-ndk
+> +- The first method is to build perf with static linking, please refer to
+> +  Build.txt, section "4) Cross compilation" for how to build a static
+> +  perf binary.
 >
->  static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
+> -2. Set cross-compiling environment variables for NDK toolchain and sysro=
+ot.
+> -For arm:
+> -  export NDK_TOOLCHAIN=3D${NDK}/toolchains/arm-linux-androideabi-4.9/pre=
+built/linux-x86_64/bin/arm-linux-androideabi-
+> -  export NDK_SYSROOT=3D${NDK}/platforms/android-24/arch-arm
+> -For x86:
+> -  export NDK_TOOLCHAIN=3D${NDK}/toolchains/x86-4.9/prebuilt/linux-x86_64=
+/bin/i686-linux-android-
+> -  export NDK_SYSROOT=3D${NDK}/platforms/android-24/arch-x86
+> -
+> -This method is only tested for Android NDK versions Revision 11b and lat=
+er.
+> -perf uses some bionic enhancements that are not included in prior NDK ve=
+rsions.
+> -You can use method (b) described below instead.
+> -
+> -(b). Use the Android source tree
+> ------------------------------------------------
+> -1. Download the master branch of the Android source tree.
+> -Set the environment for the target you want using:
+> -  source build/envsetup.sh
+> -  lunch
+> -
+> -2. Build your own NDK sysroot to contain latest bionic changes and set t=
+he
+> -NDK sysroot environment variable.
+> -  cd ${ANDROID_BUILD_TOP}/ndk
+> -For arm:
+> -  ./build/tools/build-ndk-sysroot.sh --abi=3Darm
+> -  export NDK_SYSROOT=3D${ANDROID_BUILD_TOP}/ndk/build/platforms/android-=
+3/arch-arm
+> -For x86:
+> -  ./build/tools/build-ndk-sysroot.sh --abi=3Dx86
+> -  export NDK_SYSROOT=3D${ANDROID_BUILD_TOP}/ndk/build/platforms/android-=
+3/arch-x86
+> -
+> -3. Set the NDK toolchain environment variable.
+> -For arm:
+> -  export NDK_TOOLCHAIN=3D${ANDROID_TOOLCHAIN}/arm-linux-androideabi-
+> -For x86:
+> -  export NDK_TOOLCHAIN=3D${ANDROID_TOOLCHAIN}/i686-linux-android-
+> -
+> -II. Compile perf for Android
+> -------------------------------------------------
+> -You need to run make with the NDK toolchain and sysroot defined above:
+> -For arm:
+> -  make WERROR=3D0 ARCH=3Darm CROSS_COMPILE=3D${NDK_TOOLCHAIN} EXTRA_CFLA=
+GS=3D"-pie --sysroot=3D${NDK_SYSROOT}"
+> -For x86:
+> -  make WERROR=3D0 ARCH=3Dx86 CROSS_COMPILE=3D${NDK_TOOLCHAIN} EXTRA_CFLA=
+GS=3D"-pie --sysroot=3D${NDK_SYSROOT}"
+> -
+> -III. Install perf
+> ------------------------------------------------
+> -You need to connect to your Android device/emulator using adb.
+> -Install perf using:
+> -  adb push perf /data/perf
+> -
+> -If you also want to use perf-archive you need busybox tools for Android.
+> -For installing perf-archive, you first need to replace #!/bin/bash with =
+#!/system/bin/sh:
+> -  sed 's/#!\/bin\/bash/#!\/system\/bin\/sh/g' perf-archive >> /tmp/perf-=
+archive
+> -  chmod +x /tmp/perf-archive
+> -  adb push /tmp/perf-archive /data/perf-archive
+> -
+> -IV. Environment settings for running perf
+> -------------------------------------------------
+> -Some perf features need environment variables to run properly.
+> -You need to set these before running perf on the target:
+> -  adb shell
+> -  # PERF_PAGER=3Dcat
+> -
+> -IV. Run perf
+> -------------------------------------------------
+> -Run perf on your device/emulator to which you previously connected using=
+ adb:
+> -  # ./data/perf
+> +- The second method is to download Android NDK, then use the contained
+> +  clang compiler for building perf. Please refer to Build.txt, section
+> +  "5) Build with clang" for details.
 >
 > --
 > 2.34.1
