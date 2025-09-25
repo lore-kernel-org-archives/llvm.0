@@ -1,257 +1,105 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEF331D751
-	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 19:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BD84204E;
+	Thu, 25 Sep 2025 20:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758829450; cv=none; b=AHUR2ROvAmvTpjHodDRCezCu9V9lqExrGW9FRvu1XgBeebavh9PLlBoR5UAI2NmDWeM5eUSRZ8BdoMkirsJPXQRGfZ6ArnxSlcfqvnX6doYTML0hEcBUO8nYuTbJ1+gXJONdJNLBITqMGRUfyWBHV62ztWCTW7Rx7XWit+ykal0=
+	t=1758832258; cv=none; b=VIIa8TU9Gyz2SMkWvJ3RUmMdI2PvOgE93/fGzJiQSdsunNGxtlAO7AoWef2qxYjSB+5Q54UAvwtzNLiTBq6RO+EKc4JzAMUviKfggiOpiuZRwQHIIi3bZ6CzLjloN2+xAVGNdbn2BT5KpZnJpL7H1wdPcY6ADGtW5r3vDR/D1No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758829450; c=relaxed/simple;
-	bh=pjWJxaDm5i7+W2bvMI0+orl3tlEoItTaV2bGShqdtrA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nO9SGdTdTGaoFiiUKf2Apzq7MPVVbcINqYWPsK+omqfU0xS149SYnX5mzYTDShjXUya+dgCIqZJIgGmPTsRx8/gQ89MiRVvh8snmTF/2IKV/t1hBpheRmhgW2mfyHU5Ftv+smDtRoNURgWJL99UiKwA/sLdlBfU+PDetA6baKB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3Uj6Ro/U; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1758832258; c=relaxed/simple;
+	bh=SB7VFFS497fVqOtw/xEspRqIe+JuY6wZmouhpT9nChM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XmJjEZYNvhRRn2lfjVyCcd4VDxDuGuTAYY8+uoNE6K86ysEnWzBEza/XWJvTpdug0dWNviViaFzp0nzVxvWgYYcXdnWQYKlsgVCC51NqqT3N41jogl3rOvuQcCLID/Md8LEUAt0t69j74KywjBXXxo6bKdbA3cLUT2mUObSEbK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oG2Nik8g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3Uj6Ro/U"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2731ff54949so4095ad.1
-        for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 12:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758829447; x=1759434247; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWIVbuiBuwrZgK3Twemi+KiTjZ5ODWZWrr9NFDHeWqg=;
-        b=3Uj6Ro/UxLh4wKZ+yFZMr8eDcCCXx10kv96nDZTHrZhQQBZUfOMZp+CFcukgP2g1/J
-         r0wR5L2N8jqs5tG5ortV+qkNNtyrHCfsiqCR7Qy6+QgHzw+i4A86c9RNsPfp2p3dZ0Xy
-         Fb8OALyM1BNT69/UaJecX2vaowAitUWm/ghus9lUVpSMhojKkCnsAtWqDbFQHtE7u0vL
-         DBCWiYpe1zn592+YuZ3jZOk0JnME4bk1+xLi5dDBrjeeysKfYklXcOMKsqCux+sEoo2A
-         sdnM+xc02+9p7RC9u0eigOkZA/rBQ8M5b4F/f7F59j67bnwwAzjlaq6KlI4SlvnQDlr9
-         TRAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758829447; x=1759434247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EWIVbuiBuwrZgK3Twemi+KiTjZ5ODWZWrr9NFDHeWqg=;
-        b=ssMwsDH77p8lMB8a4snQvbv3cXc13tjDWv+4mJgY6oSkA8ulNpG3VE8n20cuP4tSRI
-         /6lwgPtsrCVqnSepH0I0xrp7Ki9fjkEIpt+2bOVQKsoGGKPp04bs033rWophic/6BjZD
-         KR/DZ5icg9E4j7KztaMwjh7xqhhtQpyFjY5cEf20MjmKspS5mLZGJ9UdRhiECWd01mJ3
-         kNseD/tSf5PIv+YsSSAI4IjgQk5FNPReBcvCpNvJ5a+M2Q4HPCyF6aOYHeuVQDML+Nnb
-         QwUMBdnyuEmodBVPAo5kd7/plFHUkx02aYt/jqb2QiYHq905bOHSOsgnYIy0AvykUohO
-         y8LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWM8sRuubas/vL/cjYfu6X8slz0qAPq5G6Xgu62bgI41D310X1Ppfhbfu36H1DtAo/uPvIA@lists.linux.dev
-X-Gm-Message-State: AOJu0YzjE+TUQqxDI40P0O24gvUxSgjjgqhGP5b6wHXCQOu0F9aQ1hBG
-	oxQ81esLHI650uLWXgA/NUGeE+Vzn6q5bdFy/K0ItzNp8sbFYvc8OYQVhZhsmOk57EsCVU8QmmI
-	15pUi9nTn5hClunxlPJIfEtMv9AepyCedtiQcN1ew
-X-Gm-Gg: ASbGnctejU1DX39ekU/UO9LaX6myurEf2Rp1Zq22SdSNymBOCMA+viWxR1qc9G7iEtr
-	jn1E0RLz3mHIhcA8IubV1voXRGyxrcSlnXJGl2tokwRY2zjcWEk1pRAhPsdrjsCaKcrGYJqoTAY
-	yJF7uk3rHvLzCPOUhXWGHjCjo5hAzM01cPCmQT6F2sOAeBg7k4Wfork7VQs71e6i+TLevNEx00B
-	Z53zkiep0mEcqzEcE9X+W/mX4zsy1PnMC6ERwasMA==
-X-Google-Smtp-Source: AGHT+IEUyAVjqPX29ofytiPs9/vT5tWzpQXe+AgtwNfhcQZ1fspmy16qFs8VgNTSSJwUxGbfDch9a94qyUKDSBMfn+g=
-X-Received: by 2002:a17:902:d48b:b0:265:e66:6c10 with SMTP id
- d9443c01a7336-27eec9da82amr1083625ad.4.1758829446064; Thu, 25 Sep 2025
- 12:44:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oG2Nik8g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C23C4CEF7;
+	Thu, 25 Sep 2025 20:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758832258;
+	bh=SB7VFFS497fVqOtw/xEspRqIe+JuY6wZmouhpT9nChM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oG2Nik8gzsWZh4y8F/lhqAYk70kCj3etLu0UGMrA3eCDJxAuVemwc+TzmdzEQBjHj
+	 szCeNajFGVSbmWl0E5fE2bfTT4cojKEiGrB8uXKYhC6jrcfOcLnHEPr08n3HJoRIeb
+	 xs6y50qus7EtCoTO2axKKvR2V+7hnnT4Jpye1ubwF5dQQkEthyW4VS9MQQsxADG1Z8
+	 SLNn1xX5M0kJB1UMOxRdinekft352a5qQwDP3kGNJz0OLXKFWnxNmAbi5mGBhK2w6U
+	 Fs5gUTiXssFLJ3H5ccv/xjrxK6P0VRVFykGtqwstFdgh6Le+MDfMDlQMsczF8w2IG3
+	 MoLr8DuugM0Dw==
+Date: Thu, 25 Sep 2025 16:30:46 -0400
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Jason Gunthorpe <jgg@nvidia.com>,
+	Patrisious Haddad <phaddad@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+	Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Michael Guralnik <michaelgur@nvidia.com>,
+	Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Leon Romanovsky <leonro@mellanox.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>, Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next V5] net/mlx5: Improve write-combining test
+ reliability for ARM64 Grace CPUs
+Message-ID: <20250925203046.GA491548@ax162>
+References: <1758800913-830383-1-git-send-email-tariqt@nvidia.com>
+ <20250925115433.GU2617119@nvidia.com>
+ <d548b14e-ae28-4807-9b29-9961543ea549@nvidia.com>
+ <20250925122139.GW2617119@nvidia.com>
+ <13c5072c-dc93-477c-b72e-02156a0ecc2e@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com> <20250925-perf_build_android_ndk-v1-8-8b35aadde3dc@arm.com>
-In-Reply-To: <20250925-perf_build_android_ndk-v1-8-8b35aadde3dc@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 25 Sep 2025 12:43:55 -0700
-X-Gm-Features: AS18NWBRqTNACmFmffSTOBpsayhFYwgysTlFqWMT9G5XiIoGQQ5fG2mtSFmvcWI
-Message-ID: <CAP-5=fV45npmMUVGakzpB0XDMJ+WudiHoanBXzJtrX2442k-YA@mail.gmail.com>
-Subject: Re: [PATCH 8/8] perf docs: Document building with Clang
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Quentin Monnet <qmo@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13c5072c-dc93-477c-b72e-02156a0ecc2e@app.fastmail.com>
 
-On Thu, Sep 25, 2025 at 3:27=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> Add example commands for building perf with Clang.
->
-> Since recent Android NDK releases use Clang as the default compiler, a
-> separate Android specific document is no longer needed; point to the
-> general build documentation instead.
->
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/perf/Documentation/Build.txt   | 18 ++++++++
->  tools/perf/Documentation/android.txt | 82 ++++--------------------------=
-------
->  2 files changed, 26 insertions(+), 74 deletions(-)
->
-> diff --git a/tools/perf/Documentation/Build.txt b/tools/perf/Documentatio=
-n/Build.txt
-> index 83dc87c662b63ecc17553a15cc15a6b8d6f01d83..3e4104e605ac0d7d30b4408ef=
-413cf1f90b034c1 100644
-> --- a/tools/perf/Documentation/Build.txt
-> +++ b/tools/perf/Documentation/Build.txt
-> @@ -99,3 +99,21 @@ configuration paths for cross building:
->  In this case, the variable PKG_CONFIG_SYSROOT_DIR can be used alongside =
-the
->  variable PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH to prepend the sysroot pat=
-h to
->  the library paths for cross compilation.
-> +
-> +5) Build with clang
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +By default, the makefile uses GCC as compiler. With specifying environme=
-nt
-> +variables HOSTCC, CC and CXX, it allows to build perf with clang.
-> +
-> +Using clang for native build:
-> +
-> +  $ HOSTCC=3Dclang CC=3Dclang CXX=3Dclang++ make -C tools/perf
-> +
-> +Using clang for cross compilation:
-> +
-> +  $ HOSTCC=3Dclang CC=3Dclang CXX=3Dclang++ \
-> +    make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/perf \
-> +    NO_LIBELF=3D1 NO_LIBTRACEEVENT=3D1 NO_JEVENTS=3D1
+On Thu, Sep 25, 2025 at 03:05:52PM +0200, Arnd Bergmann wrote:
+> On the other hand, I would in general strongly prefer
+> 
+>      if (IS_ENABLED(CONFIG_FOO)) {
+>             ...
+>      }
+> 
+> over any of the preprocessor conditionals, both for readability
+> and for improving compile-time coverage of the conditional code.
+> 
+> Unfortunately that does not work here because kernel_neon_begin()
+> etc are only defined on Arm.
 
-The three NO_-s here are going to cripple the build quite a lot, I
-wonder if we can list package dependencies to install and failing that
-use the NO_-s.
-
-> +
-> +In the example above, due to lack libelf, python and libtraceevent for
-> +cross comiplation, disable the features accordingly.
-
-nit: s/comiplation/compilation/
-
-> diff --git a/tools/perf/Documentation/android.txt b/tools/perf/Documentat=
-ion/android.txt
-> index 24a59998fc91e814ad96f658d3481d88d798b60c..e65204cf2921f6bd8a7987578=
-4c5b3d5487ce05d 100644
-> --- a/tools/perf/Documentation/android.txt
-> +++ b/tools/perf/Documentation/android.txt
-> @@ -1,78 +1,12 @@
->  How to compile perf for Android
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
->
-> -I. Set the Android NDK environment
-> -------------------------------------------------
-> +There have two ways to build perf and run it on Android.
-
-nit: s/There have/There are/
-
-Thanks for doing this series!
-Ian
-
->
-> -(a). Use the Android NDK
-> -------------------------------------------------
-> -1. You need to download and install the Android Native Development Kit (=
-NDK).
-> -Set the NDK variable to point to the path where you installed the NDK:
-> -  export NDK=3D/path/to/android-ndk
-> +- The first method is to build perf with static linking, please refer to
-> +  Build.txt, section "4) Cross compilation" for how to build a static
-> +  perf binary.
->
-> -2. Set cross-compiling environment variables for NDK toolchain and sysro=
-ot.
-> -For arm:
-> -  export NDK_TOOLCHAIN=3D${NDK}/toolchains/arm-linux-androideabi-4.9/pre=
-built/linux-x86_64/bin/arm-linux-androideabi-
-> -  export NDK_SYSROOT=3D${NDK}/platforms/android-24/arch-arm
-> -For x86:
-> -  export NDK_TOOLCHAIN=3D${NDK}/toolchains/x86-4.9/prebuilt/linux-x86_64=
-/bin/i686-linux-android-
-> -  export NDK_SYSROOT=3D${NDK}/platforms/android-24/arch-x86
-> -
-> -This method is only tested for Android NDK versions Revision 11b and lat=
-er.
-> -perf uses some bionic enhancements that are not included in prior NDK ve=
-rsions.
-> -You can use method (b) described below instead.
-> -
-> -(b). Use the Android source tree
-> ------------------------------------------------
-> -1. Download the master branch of the Android source tree.
-> -Set the environment for the target you want using:
-> -  source build/envsetup.sh
-> -  lunch
-> -
-> -2. Build your own NDK sysroot to contain latest bionic changes and set t=
-he
-> -NDK sysroot environment variable.
-> -  cd ${ANDROID_BUILD_TOP}/ndk
-> -For arm:
-> -  ./build/tools/build-ndk-sysroot.sh --abi=3Darm
-> -  export NDK_SYSROOT=3D${ANDROID_BUILD_TOP}/ndk/build/platforms/android-=
-3/arch-arm
-> -For x86:
-> -  ./build/tools/build-ndk-sysroot.sh --abi=3Dx86
-> -  export NDK_SYSROOT=3D${ANDROID_BUILD_TOP}/ndk/build/platforms/android-=
-3/arch-x86
-> -
-> -3. Set the NDK toolchain environment variable.
-> -For arm:
-> -  export NDK_TOOLCHAIN=3D${ANDROID_TOOLCHAIN}/arm-linux-androideabi-
-> -For x86:
-> -  export NDK_TOOLCHAIN=3D${ANDROID_TOOLCHAIN}/i686-linux-android-
-> -
-> -II. Compile perf for Android
-> -------------------------------------------------
-> -You need to run make with the NDK toolchain and sysroot defined above:
-> -For arm:
-> -  make WERROR=3D0 ARCH=3Darm CROSS_COMPILE=3D${NDK_TOOLCHAIN} EXTRA_CFLA=
-GS=3D"-pie --sysroot=3D${NDK_SYSROOT}"
-> -For x86:
-> -  make WERROR=3D0 ARCH=3Dx86 CROSS_COMPILE=3D${NDK_TOOLCHAIN} EXTRA_CFLA=
-GS=3D"-pie --sysroot=3D${NDK_SYSROOT}"
-> -
-> -III. Install perf
-> ------------------------------------------------
-> -You need to connect to your Android device/emulator using adb.
-> -Install perf using:
-> -  adb push perf /data/perf
-> -
-> -If you also want to use perf-archive you need busybox tools for Android.
-> -For installing perf-archive, you first need to replace #!/bin/bash with =
-#!/system/bin/sh:
-> -  sed 's/#!\/bin\/bash/#!\/system\/bin\/sh/g' perf-archive >> /tmp/perf-=
-archive
-> -  chmod +x /tmp/perf-archive
-> -  adb push /tmp/perf-archive /data/perf-archive
-> -
-> -IV. Environment settings for running perf
-> -------------------------------------------------
-> -Some perf features need environment variables to run properly.
-> -You need to set these before running perf on the target:
-> -  adb shell
-> -  # PERF_PAGER=3Dcat
-> -
-> -IV. Run perf
-> -------------------------------------------------
-> -Run perf on your device/emulator to which you previously connected using=
- adb:
-> -  # ./data/perf
-> +- The second method is to download Android NDK, then use the contained
-> +  clang compiler for building perf. Please refer to Build.txt, section
-> +  "5) Build with clang" for details.
->
-> --
-> 2.34.1
->
+Even if the neon macros/functions were to be dummy defined, I suspect
+clang may complain about the vector register clobbers on architectures
+other than arm64, since it will validate some inline assembly even in
+dead code.
