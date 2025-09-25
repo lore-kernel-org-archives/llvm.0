@@ -1,170 +1,231 @@
-Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B2B38DEC;
-	Thu, 25 Sep 2025 13:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7696A1D5CDE;
+	Thu, 25 Sep 2025 13:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758805587; cv=none; b=ASSIepC2o9gv5mZ2Ski2K3ILPcuQtcwHdpEsfKdXEquR3ifnc0JmfPYnAYYr/XWMTubDluRn8gVL4MXkj1QjBdqmvfNpt3rRjHR3BN2kpqFYJgjU9ElvEtaabGvEzTDspbsErZvIBBXhhoEgenPKm5tkMm3Lo8rZXkF9aV0SVMg=
+	t=1758806153; cv=none; b=ElTpm8D8w2Us+DbaFKhsjFPT6++tsah5ebKu6v2TDZeZBypQzPNL5Y69J0x82iokb19NUw8d1B3FSkJ3UsEHjhJntN9O9tTESdwV0xQz3Mt7ftKR8anKejSA/5XOEoyGtF9mKLmWrnunqedL4G7RKGD37HeF3Z5qYrRpuHLOWeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758805587; c=relaxed/simple;
-	bh=q4ye3IXiZsxvGSYcC9c9EM/q62U5jr861gIEvwgcJ4k=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=oJ/oErxF/+rlFePfHyEsYdvdepwh6tbTUyefqFvT+rH27tWbvEStCEmb1f4UPscp1q1f5xO5S1wwlg/XcogCX8uZt7tp6rN/5E58kVJ/Ji8F50Tk1dCTdw1gQLQyv9D2FeXbYs/d61bruD6j7MpR6+bcae13V2x+H3u6Ec0keHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=2sy9lRm+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YDFbe+E+; arc=none smtp.client-ip=103.168.172.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1758806153; c=relaxed/simple;
+	bh=kMx3O1w40yOeQReQlt831IU30eN0/QVbXAiRTp2LOKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbhaQnmf5fsL+GnjItopHkjwrVBj0zQgaFiVuDbprpwuIwPvbYfC5A5N8bfcN+yGCyUghQj96iZx0aDtXj1lcxtMYcSTCjZ8kGqfTitlGy1XnokY2roqOdOHbZhN3Sd6vN/cTZdil+X+FmOvujBbGAdPuYYQSydZcv3vHbbEH1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HfRh23RW; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="2sy9lRm+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YDFbe+E+"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id CBE32138017F;
-	Thu, 25 Sep 2025 09:06:24 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 09:06:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758805584;
-	 x=1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=
-	2sy9lRm+gAWZynhTnnCoQXRW35ce44lRrHZk/Cj9ytb440KmET5Ee2VrjZ2i4vfw
-	MMA5DLOA52iz5f+9Tk9cDJENLM2M9dqv/A2AtWJebWPMhYT+pGAk0Po6sF8u6F2P
-	GvPDxasy8rYihjkIMnRv2WHO63/xYwIR1an9t+8GSFbDmpZTRV0lnpt03KhmvY7A
-	7a5QzHCsz4u3rYwdfsAHjHE9sHNjWIeoBQ1uhn9mT/D1myooWR8bf0aAycnO+pMP
-	HnVzVB7J8xNhoB5ORSk7ILbqFkB2z3O93fjhBfnmNPLKOAsq/3IpuL9l4nVG8g4N
-	mkrIfUjiAm8MHu4xzK2JGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758805584; x=
-	1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=Y
-	DFbe+E+QUPnk8ohwlw+7+tCt2thZQDd39kOlIwkrNBEU7Co/agHx0rWkKjcOjA4I
-	UxezTrOOu8BXHzRgSapyFYfG9SX1kIl/WGWgr/Hfp6GIqR7/HMSXj7UQOEatrk/5
-	DYrufeME9R6pr2M8lcqPnU6gX0GrkJCdHskdDkmWzcb9zfiBMS+s0WlLS/oW+Fji
-	rolpwCYMrC24e8wBaRGrus/OOdlsyf7EYszqmc8M32TORASYA+2gMpkkmKd7FE8f
-	U/wa81NqjBlZM0fqPAQa3NUPT4FZNk3k8m626tF6kSBG3D0qMQbHLltDHBgwa3QR
-	eRtVlFB9twL0AnwY0Z01Q==
-X-ME-Sender: <xms:Tz7VaOuN1fHT7_CJ1M6Gnkl8KMZjSvhMKV9e7dIZabjJhgMnpIIGPA>
-    <xme:Tz7VaORioU__2iKdwpL9HoErjM3EvudsXvEupsPo3pA1NxFV5V1QU7XN8Wib-zp_S
-    16KYYY4OGNVTs2zP_NC6uWHukZ9PRhBi-DiKYylxhwmAU-XX15Cudc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeiieehiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtoheptggrthgrlhhinh
-    drmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
-    ugesrghrmhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
-    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
-    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsg
-    hosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivghrshesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghird
-    gtohhm
-X-ME-Proxy: <xmx:Tz7VaLONgGDZn_yzUUvrXVOl0hfFzMUiEkhzxoWqQOi-PcUPFwP-pg>
-    <xmx:Tz7VaMhnVxcbYGiNq_WRkNKihp9YFbK9lF2FWAxrC1U7-1vSgIYB3g>
-    <xmx:Tz7VaHcMXgUMVAMUHYoZfREurZSQ8d1L55qd6WjCburksshl5MIoFg>
-    <xmx:Tz7VaBwaJ4XBSeHmatUTHuC0iN8fiuQ4V0Fp0oXEq2VXGUQBPl5GsQ>
-    <xmx:UD7VaJv9R6PSAHhGKSRFTmjzH4H84iAYseEmAQRQ9mtcsAYdejym4Av0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E579E70006D; Thu, 25 Sep 2025 09:06:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HfRh23RW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758806151; x=1790342151;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kMx3O1w40yOeQReQlt831IU30eN0/QVbXAiRTp2LOKk=;
+  b=HfRh23RW+RFBf5sCUiRSwvBenvYkGSWDU8CXTKQzkNhKHoKKK0T/HZUl
+   n5gNrz1YHMXWlixG4oRwQRa8W+9WbmLD6sey9NOpvKXNvgV/I+oTx/+mK
+   OlYgvtgw/MoAj70JlqwTj6kBLBXPfr8mma5cOIn1kHvzAO0VN6jvXmfiH
+   hqfj9xUY1wFJotb3bDuMRZOMNJ7N7MFwvTHHONzT6UVzlo2XKnUYDyDNO
+   1E76WrzEOSkgb16CrvCMS6uGewaDHoaMi7oCppNERGVz/nmpkfO1AHYcI
+   MYEZ/oS6UjHktdJgJMr/UkRwcmhadYVS1CZPgZJXblt090iJtoH8wSww9
+   g==;
+X-CSE-ConnectionGUID: ZwBIkPRJSrG4lSFYr6xwGQ==
+X-CSE-MsgGUID: ZVmmavWwRTmrDZTfNIbkLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="86568031"
+X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
+   d="scan'208";a="86568031"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 06:15:50 -0700
+X-CSE-ConnectionGUID: qTgriWMkTjOhbLMgBGam6Q==
+X-CSE-MsgGUID: ffU6NF5xSM2kcjLDra7sWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
+   d="scan'208";a="181614505"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 25 Sep 2025 06:15:43 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v1lov-0005FF-0n;
+	Thu, 25 Sep 2025 13:15:40 +0000
+Date: Thu, 25 Sep 2025 21:15:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brendan Jackman <jackmanb@google.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
+	mingo@redhat.com, tglx@linutronix.de, akpm@linux-foundation.org,
+	david@redhat.com, derkling@google.com, junaids@google.com,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, reijiw@google.com,
+	rientjes@google.com, rppt@kernel.org, vbabka@suse.cz,
+	x86@kernel.org, yosry.ahmed@linux.dev
+Subject: Re: [PATCH 11/21] mm: introduce freetype_t
+Message-ID: <202509252109.X3oqS16b-lkp@intel.com>
+References: <20250924-b4-asi-page-alloc-v1-11-2d861768041f@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AiLhtS-R-ASF
-Date: Thu, 25 Sep 2025 15:05:52 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jason Gunthorpe" <jgg@nvidia.com>,
- "Patrisious Haddad" <phaddad@nvidia.com>
-Cc: "Tariq Toukan" <tariqt@nvidia.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Saeed Mahameed" <saeedm@nvidia.com>,
- "Leon Romanovsky" <leon@kernel.org>, "Mark Bloch" <mbloch@nvidia.com>,
- Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Gal Pressman" <gal@nvidia.com>,
- "Leon Romanovsky" <leonro@nvidia.com>,
- "Michael Guralnik" <michaelgur@nvidia.com>,
- "Moshe Shemesh" <moshe@nvidia.com>, "Will Deacon" <will@kernel.org>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
- "Justin Stitt" <justinstitt@google.com>, linux-s390@vger.kernel.org,
- llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
- "Bill Wendling" <morbo@google.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Salil Mehta" <salil.mehta@huawei.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
- "Yisen Zhuang" <yisen.zhuang@huawei.com>,
- "Leon Romanovsky" <leonro@mellanox.com>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
- "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Jijie Shao" <shaojijie@huawei.com>, "Simon Horman" <horms@kernel.org>
-Message-Id: <13c5072c-dc93-477c-b72e-02156a0ecc2e@app.fastmail.com>
-In-Reply-To: <20250925122139.GW2617119@nvidia.com>
-References: <1758800913-830383-1-git-send-email-tariqt@nvidia.com>
- <20250925115433.GU2617119@nvidia.com>
- <d548b14e-ae28-4807-9b29-9961543ea549@nvidia.com>
- <20250925122139.GW2617119@nvidia.com>
-Subject: Re: [PATCH net-next V5] net/mlx5: Improve write-combining test reliability for
- ARM64 Grace CPUs
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250924-b4-asi-page-alloc-v1-11-2d861768041f@google.com>
 
-On Thu, Sep 25, 2025, at 14:21, Jason Gunthorpe wrote:
-> On Thu, Sep 25, 2025 at 03:15:46PM +0300, Patrisious Haddad wrote:
->> 
->> On 9/25/2025 2:54 PM, Jason Gunthorpe wrote:
->> > On Thu, Sep 25, 2025 at 02:48:33PM +0300, Tariq Toukan wrote:
->> > > +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
->> > > +				size_t mmio_wqe_size, unsigned int offset)
->> > > +{
->> > > +#if defined(CONFIG_KERNEL_MODE_NEON) && defined(CONFIG_ARM64)
->> > IS_ENABLED() not defined()
->> I just wonder why, Is there a preference in the driver from like
->> aesthetic/convention point of view?
->> Since here it technically doesnt matter - IS_ENABLED have no functional
->> difference from defined since these are boolean configs not *tristate*ones
->> (cant be loaded as module).
->
-> I think it is an aesthetic convention to avoid defined(CONFIG_*) as
-> the reasoning it is not tristate is a bit tricky.
+Hi Brendan,
 
-In my impression there is no general agreement on this, I would
-probably have picked defined() here myself but don't mind the
-IS_ENABLED() variant either.
+kernel test robot noticed the following build errors:
 
-On the other hand, I would in general strongly prefer
+[auto build test ERROR on bf2602a3cb2381fb1a04bf1c39a290518d2538d1]
 
-     if (IS_ENABLED(CONFIG_FOO)) {
-            ...
-     }
+url:    https://github.com/intel-lab-lkp/linux/commits/Brendan-Jackman/x86-mm-asi-Add-CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION/20250924-230633
+base:   bf2602a3cb2381fb1a04bf1c39a290518d2538d1
+patch link:    https://lore.kernel.org/r/20250924-b4-asi-page-alloc-v1-11-2d861768041f%40google.com
+patch subject: [PATCH 11/21] mm: introduce freetype_t
+config: i386-buildonly-randconfig-001-20250925 (https://download.01.org/0day-ci/archive/20250925/202509252109.X3oqS16b-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509252109.X3oqS16b-lkp@intel.com/reproduce)
 
-over any of the preprocessor conditionals, both for readability
-and for improving compile-time coverage of the conditional code.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509252109.X3oqS16b-lkp@intel.com/
 
-Unfortunately that does not work here because kernel_neon_begin()
-etc are only defined on Arm.
+All errors (new ones prefixed by >>):
 
-     Arnd
+>> mm/compaction.c:2319:7: error: use of undeclared identifier 'migratetype'; did you mean 'migrate_pfn'?
+    2319 |                 if (migratetype == MIGRATE_MOVABLE &&
+         |                     ^~~~~~~~~~~
+         |                     migrate_pfn
+   include/linux/migrate.h:137:29: note: 'migrate_pfn' declared here
+     137 | static inline unsigned long migrate_pfn(unsigned long pfn)
+         |                             ^
+   1 error generated.
+
+
+vim +2319 mm/compaction.c
+
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2234  
+40cacbcb3240362 Mel Gorman         2019-03-05  2235  static enum compact_result __compact_finished(struct compact_control *cc)
+748446bb6b5a939 Mel Gorman         2010-05-24  2236  {
+8fb74b9fb2b182d Mel Gorman         2013-01-11  2237  	unsigned int order;
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2238  	const freetype_t freetype = cc->freetype;
+cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2239  	int ret;
+748446bb6b5a939 Mel Gorman         2010-05-24  2240  
+753341a4b85ff33 Mel Gorman         2012-10-08  2241  	/* Compaction run completes if the migrate and free scanner meet */
+f2849aa09d4fbc4 Vlastimil Babka    2015-09-08  2242  	if (compact_scanners_met(cc)) {
+55b7c4c99f6a448 Vlastimil Babka    2014-01-21  2243  		/* Let the next compaction start anew. */
+40cacbcb3240362 Mel Gorman         2019-03-05  2244  		reset_cached_positions(cc->zone);
+55b7c4c99f6a448 Vlastimil Babka    2014-01-21  2245  
+62997027ca5b3d4 Mel Gorman         2012-10-08  2246  		/*
+62997027ca5b3d4 Mel Gorman         2012-10-08  2247  		 * Mark that the PG_migrate_skip information should be cleared
+accf62422b3a67f Vlastimil Babka    2016-03-17  2248  		 * by kswapd when it goes to sleep. kcompactd does not set the
+62997027ca5b3d4 Mel Gorman         2012-10-08  2249  		 * flag itself as the decision to be clear should be directly
+62997027ca5b3d4 Mel Gorman         2012-10-08  2250  		 * based on an allocation request.
+62997027ca5b3d4 Mel Gorman         2012-10-08  2251  		 */
+accf62422b3a67f Vlastimil Babka    2016-03-17  2252  		if (cc->direct_compaction)
+40cacbcb3240362 Mel Gorman         2019-03-05  2253  			cc->zone->compact_blockskip_flush = true;
+62997027ca5b3d4 Mel Gorman         2012-10-08  2254  
+c8f7de0bfae36e8 Michal Hocko       2016-05-20  2255  		if (cc->whole_zone)
+748446bb6b5a939 Mel Gorman         2010-05-24  2256  			return COMPACT_COMPLETE;
+c8f7de0bfae36e8 Michal Hocko       2016-05-20  2257  		else
+c8f7de0bfae36e8 Michal Hocko       2016-05-20  2258  			return COMPACT_PARTIAL_SKIPPED;
+bb13ffeb9f6bfeb Mel Gorman         2012-10-08  2259  	}
+748446bb6b5a939 Mel Gorman         2010-05-24  2260  
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2261  	if (cc->proactive_compaction) {
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2262  		int score, wmark_low;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2263  		pg_data_t *pgdat;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2264  
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2265  		pgdat = cc->zone->zone_pgdat;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2266  		if (kswapd_is_running(pgdat))
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2267  			return COMPACT_PARTIAL_SKIPPED;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2268  
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2269  		score = fragmentation_score_zone(cc->zone);
+8fbb92bd10be26d Kemeng Shi         2023-08-09  2270  		wmark_low = fragmentation_score_wmark(true);
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2271  
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2272  		if (score > wmark_low)
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2273  			ret = COMPACT_CONTINUE;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2274  		else
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2275  			ret = COMPACT_SUCCESS;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2276  
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2277  		goto out;
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2278  	}
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2279  
+21c527a3cba07f9 Yaowei Bai         2015-11-05  2280  	if (is_via_compact_memory(cc->order))
+56de7263fcf3eb1 Mel Gorman         2010-05-24  2281  		return COMPACT_CONTINUE;
+56de7263fcf3eb1 Mel Gorman         2010-05-24  2282  
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2283  	/*
+efe771c7603bc52 Mel Gorman         2019-03-05  2284  	 * Always finish scanning a pageblock to reduce the possibility of
+efe771c7603bc52 Mel Gorman         2019-03-05  2285  	 * fallbacks in the future. This is particularly important when
+efe771c7603bc52 Mel Gorman         2019-03-05  2286  	 * migration source is unmovable/reclaimable but it's not worth
+efe771c7603bc52 Mel Gorman         2019-03-05  2287  	 * special casing.
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2288  	 */
+ee0913c47196102 Kefeng Wang        2022-09-07  2289  	if (!pageblock_aligned(cc->migrate_pfn))
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2290  		return COMPACT_CONTINUE;
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2291  
+a211c6550efcc87 Johannes Weiner    2025-03-13  2292  	/*
+a211c6550efcc87 Johannes Weiner    2025-03-13  2293  	 * When defrag_mode is enabled, make kcompactd target
+a211c6550efcc87 Johannes Weiner    2025-03-13  2294  	 * watermarks in whole pageblocks. Because they can be stolen
+a211c6550efcc87 Johannes Weiner    2025-03-13  2295  	 * without polluting, no further fallback checks are needed.
+a211c6550efcc87 Johannes Weiner    2025-03-13  2296  	 */
+a211c6550efcc87 Johannes Weiner    2025-03-13  2297  	if (defrag_mode && !cc->direct_compaction) {
+a211c6550efcc87 Johannes Weiner    2025-03-13  2298  		if (__zone_watermark_ok(cc->zone, cc->order,
+a211c6550efcc87 Johannes Weiner    2025-03-13  2299  					high_wmark_pages(cc->zone),
+a211c6550efcc87 Johannes Weiner    2025-03-13  2300  					cc->highest_zoneidx, cc->alloc_flags,
+a211c6550efcc87 Johannes Weiner    2025-03-13  2301  					zone_page_state(cc->zone,
+a211c6550efcc87 Johannes Weiner    2025-03-13  2302  							NR_FREE_PAGES_BLOCKS)))
+a211c6550efcc87 Johannes Weiner    2025-03-13  2303  			return COMPACT_SUCCESS;
+a211c6550efcc87 Johannes Weiner    2025-03-13  2304  
+a211c6550efcc87 Johannes Weiner    2025-03-13  2305  		return COMPACT_CONTINUE;
+a211c6550efcc87 Johannes Weiner    2025-03-13  2306  	}
+a211c6550efcc87 Johannes Weiner    2025-03-13  2307  
+56de7263fcf3eb1 Mel Gorman         2010-05-24  2308  	/* Direct compactor: Is a suitable page free? */
+cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2309  	ret = COMPACT_NO_SUITABLE_PAGE;
+fd37721803c6e73 Kirill A. Shutemov 2023-12-28  2310  	for (order = cc->order; order < NR_PAGE_ORDERS; order++) {
+40cacbcb3240362 Mel Gorman         2019-03-05  2311  		struct free_area *area = &cc->zone->free_area[order];
+8fb74b9fb2b182d Mel Gorman         2013-01-11  2312  
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2313  		/* Job done if page is free of the right freetype */
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2314  		if (!free_area_empty(area, freetype))
+cf378319d335663 Vlastimil Babka    2016-10-07  2315  			return COMPACT_SUCCESS;
+56de7263fcf3eb1 Mel Gorman         2010-05-24  2316  
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2317  #ifdef CONFIG_CMA
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2318  		/* MIGRATE_MOVABLE can fallback on MIGRATE_CMA */
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14 @2319  		if (migratetype == MIGRATE_MOVABLE &&
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2320  		    !free_areas_empty(area, MIGRATE_CMA))
+cf378319d335663 Vlastimil Babka    2016-10-07  2321  			return COMPACT_SUCCESS;
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2322  #endif
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2323  		/*
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2324  		 * Job done if allocation would steal freepages from
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2325  		 * other freetype buddy lists.
+2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2326  		 */
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2327  		if (find_suitable_fallback(area, order, freetype, true) >= 0)
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2328  			/*
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2329  			 * Movable pages are OK in any pageblock of the right
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2330  			 * sensitivity. If we are * stealing for a
+fb432f7fe43d9fb Brendan Jackman    2025-09-24  2331  			 * non-movable allocation, make sure
+fa599c44987df43 Miaohe Lin         2022-04-28  2332  			 * we finish compacting the current pageblock first
+fa599c44987df43 Miaohe Lin         2022-04-28  2333  			 * (which is assured by the above migrate_pfn align
+fa599c44987df43 Miaohe Lin         2022-04-28  2334  			 * check) so it is as free as possible and we won't
+fa599c44987df43 Miaohe Lin         2022-04-28  2335  			 * have to steal another one soon.
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2336  			 */
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2337  			return COMPACT_SUCCESS;
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2338  	}
+baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2339  
+facdaa917c4d5a3 Nitin Gupta        2020-08-11  2340  out:
+cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2341  	if (cc->contended || fatal_signal_pending(current))
+cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2342  		ret = COMPACT_CONTENDED;
+cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2343  
+cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2344  	return ret;
+837d026d560c5ef Joonsoo Kim        2015-02-11  2345  }
+837d026d560c5ef Joonsoo Kim        2015-02-11  2346  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
