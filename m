@@ -1,231 +1,269 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7696A1D5CDE;
-	Thu, 25 Sep 2025 13:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A411271A94
+	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 13:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758806153; cv=none; b=ElTpm8D8w2Us+DbaFKhsjFPT6++tsah5ebKu6v2TDZeZBypQzPNL5Y69J0x82iokb19NUw8d1B3FSkJ3UsEHjhJntN9O9tTESdwV0xQz3Mt7ftKR8anKejSA/5XOEoyGtF9mKLmWrnunqedL4G7RKGD37HeF3Z5qYrRpuHLOWeE=
+	t=1758807781; cv=none; b=Lf8IU2eTMdd1aaCH25sUXXreovy7/7GyZ1MeE4QigiBfNOVhzeddolRfeGY5iagOguBXkMJA6hFPJwmYN6kzAx+43/UwEyq2RloOHTSy1xBPjBtIfVdMzAvqWFABHxdHgLJ+mYs9iJohtbE6nyIuoTNcRvXNMr3nCLLo4bj0U44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758806153; c=relaxed/simple;
-	bh=kMx3O1w40yOeQReQlt831IU30eN0/QVbXAiRTp2LOKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JbhaQnmf5fsL+GnjItopHkjwrVBj0zQgaFiVuDbprpwuIwPvbYfC5A5N8bfcN+yGCyUghQj96iZx0aDtXj1lcxtMYcSTCjZ8kGqfTitlGy1XnokY2roqOdOHbZhN3Sd6vN/cTZdil+X+FmOvujBbGAdPuYYQSydZcv3vHbbEH1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HfRh23RW; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758807781; c=relaxed/simple;
+	bh=AjPmM/pHX+h/hQUMZDyfnxxXsUMwDVAu0atf3xdL/Kw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hPvZ2xFjKdt3q790P/Ql9Kv9uookeLs0g14k0J1A0IQzYNE0OuKnGRXUNS2snZFAON/UhXrs2d1MqmQGxIbhYtYOvGT4zegqslTqBeipWWxc/yhuDIMMELMMpSh6oLQDBfWHUSaslirlpEUGpHrjAST/+iCMVhRd0NEXo05Lef0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aDj86mTw; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HfRh23RW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758806151; x=1790342151;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kMx3O1w40yOeQReQlt831IU30eN0/QVbXAiRTp2LOKk=;
-  b=HfRh23RW+RFBf5sCUiRSwvBenvYkGSWDU8CXTKQzkNhKHoKKK0T/HZUl
-   n5gNrz1YHMXWlixG4oRwQRa8W+9WbmLD6sey9NOpvKXNvgV/I+oTx/+mK
-   OlYgvtgw/MoAj70JlqwTj6kBLBXPfr8mma5cOIn1kHvzAO0VN6jvXmfiH
-   hqfj9xUY1wFJotb3bDuMRZOMNJ7N7MFwvTHHONzT6UVzlo2XKnUYDyDNO
-   1E76WrzEOSkgb16CrvCMS6uGewaDHoaMi7oCppNERGVz/nmpkfO1AHYcI
-   MYEZ/oS6UjHktdJgJMr/UkRwcmhadYVS1CZPgZJXblt090iJtoH8wSww9
-   g==;
-X-CSE-ConnectionGUID: ZwBIkPRJSrG4lSFYr6xwGQ==
-X-CSE-MsgGUID: ZVmmavWwRTmrDZTfNIbkLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="86568031"
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="86568031"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 06:15:50 -0700
-X-CSE-ConnectionGUID: qTgriWMkTjOhbLMgBGam6Q==
-X-CSE-MsgGUID: ffU6NF5xSM2kcjLDra7sWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="181614505"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 25 Sep 2025 06:15:43 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1lov-0005FF-0n;
-	Thu, 25 Sep 2025 13:15:40 +0000
-Date: Thu, 25 Sep 2025 21:15:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Brendan Jackman <jackmanb@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
-	mingo@redhat.com, tglx@linutronix.de, akpm@linux-foundation.org,
-	david@redhat.com, derkling@google.com, junaids@google.com,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, reijiw@google.com,
-	rientjes@google.com, rppt@kernel.org, vbabka@suse.cz,
-	x86@kernel.org, yosry.ahmed@linux.dev
-Subject: Re: [PATCH 11/21] mm: introduce freetype_t
-Message-ID: <202509252109.X3oqS16b-lkp@intel.com>
-References: <20250924-b4-asi-page-alloc-v1-11-2d861768041f@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDj86mTw"
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-78ea15d3489so7008866d6.3
+        for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 06:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758807779; x=1759412579; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NOg8apmzpeDQqSa/Dd8F6OxOIBmGa/u84P5Smsxjlh0=;
+        b=aDj86mTwsQDzdiLhRmnTCIHZQTbQ/9l3zsqGXrQAGPvs+dgkgKMADaFGtnIY+FTBhF
+         CYUzU8m1mAwPAaIsYedD7eGN63hwfT16JlA3TbytQeuqwOMbCWSwJgip2x1P+S0v0MXS
+         pGGh4B25bqGmRLlccvUhqk/2hrqFsTRgxCP5lbQn0lx28EYBOw6IixZzhsXjcNHJ1KuY
+         7QyKe6jWXSVch5NB8eBfViE8WZ40qDQ8PGmBzOdXbEnaFjwql/9mYNJwdUqWZupTjm/k
+         fTpm3qiPsnra8kdZ6uUpUA1l5v9HXZxiFBkSNz7Xcj8b6etCroFoZzm2RJPFEY6+taUR
+         o+4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758807779; x=1759412579;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NOg8apmzpeDQqSa/Dd8F6OxOIBmGa/u84P5Smsxjlh0=;
+        b=Cxqcsdgr+EvFCcWYdyvw5qVJzUeOllSeyfNwqbe+Zgc8V4BU+pvT43erRPLx3AP80r
+         qq42i5TqDPMvpOeykyr+PsXazyUZwGftkrhDiiGJomd3vM7ua80b7n7vpvNVV0WkEZ2c
+         iWQBShlAnkVcXsBpB0DUhekPqblbWgpDwFxC7RfoKhofjzlUaxTLRZFr8/l/96+nm4Vv
+         wXOh7dALA72JQu2vi7JjM0zrMAMaBAe46P7dALooDPyVC0YqPJ6WQ9gOdTbMPiBbIuDe
+         p3Du8m0J4VmqQd3VsUyL3Tu4n5NtI9jHX0gbNWgAWGElLW8/iMoWMnKO7IqdzVXr+UPT
+         Fblg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMEzjvkGr/qKOkuNodxKURmjViPjJit9zGwzNiBp/i3wUjhE1tzwfZNOk/WjvIK2WvyZPV@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz/WuJeMo2I+WddYswEP5R1jAT94f/DPYS4i4zmKXuQbu8U9CT0
+	rFINQxqtl4a83HlrJB4KmTHWSeIEEpgxa1nqWITYa7QP52pCYSPM4Igt
+X-Gm-Gg: ASbGnctMrhT2qd0SEV9s7/mo/lrjYwxVf8shEWkN970QrU+w5/vTe07PEO3o4yT9x0s
+	sM97Pq7N8xn1oVxmJHBkiOyoXyiBqPYHBUJHi6zOYla8Yi1cOIxjPUCs9y8VKzpUSbaxFSZJCCb
+	c3AegJZ72lTK0BmnLGNOhdIafQ4yk2VMbaolU5sfjghbfAIx+8/MuFe1Gdng5bfawfaIxJCZ1ss
+	5zUcGVyfEDBsaeIjvOdmI68Ih3aTdH0mFkdl0Ht++ZHjpg/gVenIT/IJPDxPXYzGY+FE4523gZG
+	Od04AptBU2dxdt17qAP6sltmQqit8k7JZIzLi6oTGVX+ErsWido9qR+geEthY1LwbRTQb3d5DCN
+	s6BrN/z14nHQ4gKpbK6MokN6MZFhoHei6Kd8gLvejzdUyIUwMvHOMvllBukgLC5CDQGTJdwACWT
+	qoRZ/qB0tu1SIvr5g94V9d0hrble3XX3nYMnYvWvSbp/t2hJpjreGMSVj4YX6xp8irvzbk
+X-Google-Smtp-Source: AGHT+IExdU72Eod/dU9rvr4b53QJKFOsJtt7i1o6560BU4l1shliOTP11G8m0f0laH/knism0B6wyQ==
+X-Received: by 2002:ad4:5deb:0:b0:765:44f5:6fa9 with SMTP id 6a1803df08f44-7fc3ca0be75mr52461066d6.37.1758807778596;
+        Thu, 25 Sep 2025 06:42:58 -0700 (PDT)
+Received: from 137.1.168.192.in-addr.arpa ([2600:4808:6353:5c00:7c:b286:dba3:5ba8])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-800fa5f6dd7sm11852546d6.0.2025.09.25.06.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Sep 2025 06:42:57 -0700 (PDT)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v16 0/3] rust: replace kernel::str::CStr w/ core::ffi::CStr
+Date: Thu, 25 Sep 2025 09:42:51 -0400
+Message-Id: <20250925-cstr-core-v16-0-5cdcb3470ec2@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250924-b4-asi-page-alloc-v1-11-2d861768041f@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANxG1WgC/3XSTU7DMBAF4KugrHE1M/5n1XsgFo7t0AhaFydEV
+ FXvjlMoSRqxdOzv5cmec9XF3Maueno4VzkObdemQ1mgenyo/M4dXiNrQ/lQEZAEAmS+6zPzKUc
+ WRG1rZZHAN1U5f8yxab+uYc8vZd3ktGf9Lkd3SxBg0KLkSqoNGQOaERtcSDkN3dtpe8ypT4e9a
+ 983Pu3HyF3b9SmfrvUGNQbfitCsyKAYMCOU9UEFsk3Yvv6FjEUG/a/URQaHpmwRCG7upZlLPpe
+ mSF/zhlTURhl1L+0kOeq5tEVKDMp7SdQoupcIE5Uk5hShWCWQnBXBBi1XFmeWw8Li2DhYD772t
+ YX1f2myCu3C0njD4K3XtZAWYGX5ZPViSspWseVVdOCxttqtbgrFzOKysxg7Ox3BO0PerDvLyRp
+ cPBDK0WpOwRLxRsS5vfzMa44fn2Xm+9+hvVy+AapJCxQRAwAA
+X-Change-ID: 20250201-cstr-core-d4b9b69120cf
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openssh-sha256; t=1758807774; l=6972;
+ i=tamird@gmail.com; h=from:subject:message-id;
+ bh=AjPmM/pHX+h/hQUMZDyfnxxXsUMwDVAu0atf3xdL/Kw=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
+ MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QAdxlTupRVKg8Eba4pcHKMHx2RXPutys8afIdrm3UkljcyR2ySheNrAGBHqOJ/BGyyCcHRvfwBY
+ tiGT+DR6Z6wo=
+X-Developer-Key: i=tamird@gmail.com; a=openssh;
+ fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-Hi Brendan,
+This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+have omitted Co-authored tags, as the end result is quite different.
 
-kernel test robot noticed the following build errors:
+This series is intended to be taken through rust-next. The final patch
+in the series requires some other subsystems' `Acked-by`s:
+- rust/kernel/device.rs: driver-core. Already acked by gregkh.
+- rust/kernel/firmware.rs: driver-core. Danilo, could you take a look?
+- rust/kernel/seq_file.rs: vfs. Christian, could you take a look?
+- rust/kernel/sync/*: locking-core. Boqun, could you take a look?
 
-[auto build test ERROR on bf2602a3cb2381fb1a04bf1c39a290518d2538d1]
+Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+Closes: https://github.com/Rust-for-Linux/linux/issues/1075
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Brendan-Jackman/x86-mm-asi-Add-CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION/20250924-230633
-base:   bf2602a3cb2381fb1a04bf1c39a290518d2538d1
-patch link:    https://lore.kernel.org/r/20250924-b4-asi-page-alloc-v1-11-2d861768041f%40google.com
-patch subject: [PATCH 11/21] mm: introduce freetype_t
-config: i386-buildonly-randconfig-001-20250925 (https://download.01.org/0day-ci/archive/20250925/202509252109.X3oqS16b-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509252109.X3oqS16b-lkp@intel.com/reproduce)
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v16:
+- Rebase on rust-next.
+- Link to v15: https://lore.kernel.org/r/20250813-cstr-core-v15-0-c732d9223f4e@gmail.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509252109.X3oqS16b-lkp@intel.com/
+Changes in v15:
+- Seal `CStrExt`. (Benno Lossin)
+- Add patch to remove trailing commas from
+  samples/rust/rust_driver_platform.rs.
+- Link to v14: https://lore.kernel.org/r/20250710-cstr-core-v14-0-ca7e0ca82c82@gmail.com
 
-All errors (new ones prefixed by >>):
+Changes in v14:
+- Break the change into multiple series.
+- Move `CStr` reexport to `kernel::ffi`. (Alice Ryhl)
+- `pub use core::fmt::{....}` in `kernel/fmt.rs`. (Benno Lossin)
+- Avoid unnecessary binding to `first_lit` in `fmt!`. (Benno Lossin)
+- Add comment to `identifier`-extracting loop. (Benno Lossin)
+- Change `quote_spanned!` formatting. (Benno Lossin)
+- Link to v13: https://lore.kernel.org/r/20250701-cstr-core-v13-0-29f7d3eb97a6@gmail.com
 
->> mm/compaction.c:2319:7: error: use of undeclared identifier 'migratetype'; did you mean 'migrate_pfn'?
-    2319 |                 if (migratetype == MIGRATE_MOVABLE &&
-         |                     ^~~~~~~~~~~
-         |                     migrate_pfn
-   include/linux/migrate.h:137:29: note: 'migrate_pfn' declared here
-     137 | static inline unsigned long migrate_pfn(unsigned long pfn)
-         |                             ^
-   1 error generated.
+Changes in v13:
+- Rebase on v6.16-rc4.
+- Link to v12: https://lore.kernel.org/r/20250619-cstr-core-v12-0-80c9c7b45900@gmail.com
 
+Changes in v12:
+- Introduce `kernel::fmt::Display` to allow implementations on foreign
+  types.
+- Tidy up doc comment on `str_to_cstr`. (Alice Ryhl).
+- Link to v11: https://lore.kernel.org/r/20250530-cstr-core-v11-0-cd9c0cbcb902@gmail.com
 
-vim +2319 mm/compaction.c
+Changes in v11:
+- Use `quote_spanned!` to avoid `use<'a, T>` and generally reduce manual
+  token construction.
+- Add a commit to simplify `quote_spanned!`.
+- Drop first commit in favor of
+  https://lore.kernel.org/rust-for-linux/20240906164448.2268368-1-paddymills@proton.me/.
+  (Miguel Ojeda)
+- Correctly handle expressions such as `pr_info!("{a}", a = a = a)`.
+  (Benno Lossin)
+- Avoid dealing with `}}` escapes, which is not needed. (Benno Lossin)
+- Revert some unnecessary changes. (Benno Lossin)
+- Rename `c_str_avoid_literals!` to `str_to_cstr!`. (Benno Lossin &
+  Alice Ryhl).
+- Link to v10: https://lore.kernel.org/r/20250524-cstr-core-v10-0-6412a94d9d75@gmail.com
 
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2234  
-40cacbcb3240362 Mel Gorman         2019-03-05  2235  static enum compact_result __compact_finished(struct compact_control *cc)
-748446bb6b5a939 Mel Gorman         2010-05-24  2236  {
-8fb74b9fb2b182d Mel Gorman         2013-01-11  2237  	unsigned int order;
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2238  	const freetype_t freetype = cc->freetype;
-cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2239  	int ret;
-748446bb6b5a939 Mel Gorman         2010-05-24  2240  
-753341a4b85ff33 Mel Gorman         2012-10-08  2241  	/* Compaction run completes if the migrate and free scanner meet */
-f2849aa09d4fbc4 Vlastimil Babka    2015-09-08  2242  	if (compact_scanners_met(cc)) {
-55b7c4c99f6a448 Vlastimil Babka    2014-01-21  2243  		/* Let the next compaction start anew. */
-40cacbcb3240362 Mel Gorman         2019-03-05  2244  		reset_cached_positions(cc->zone);
-55b7c4c99f6a448 Vlastimil Babka    2014-01-21  2245  
-62997027ca5b3d4 Mel Gorman         2012-10-08  2246  		/*
-62997027ca5b3d4 Mel Gorman         2012-10-08  2247  		 * Mark that the PG_migrate_skip information should be cleared
-accf62422b3a67f Vlastimil Babka    2016-03-17  2248  		 * by kswapd when it goes to sleep. kcompactd does not set the
-62997027ca5b3d4 Mel Gorman         2012-10-08  2249  		 * flag itself as the decision to be clear should be directly
-62997027ca5b3d4 Mel Gorman         2012-10-08  2250  		 * based on an allocation request.
-62997027ca5b3d4 Mel Gorman         2012-10-08  2251  		 */
-accf62422b3a67f Vlastimil Babka    2016-03-17  2252  		if (cc->direct_compaction)
-40cacbcb3240362 Mel Gorman         2019-03-05  2253  			cc->zone->compact_blockskip_flush = true;
-62997027ca5b3d4 Mel Gorman         2012-10-08  2254  
-c8f7de0bfae36e8 Michal Hocko       2016-05-20  2255  		if (cc->whole_zone)
-748446bb6b5a939 Mel Gorman         2010-05-24  2256  			return COMPACT_COMPLETE;
-c8f7de0bfae36e8 Michal Hocko       2016-05-20  2257  		else
-c8f7de0bfae36e8 Michal Hocko       2016-05-20  2258  			return COMPACT_PARTIAL_SKIPPED;
-bb13ffeb9f6bfeb Mel Gorman         2012-10-08  2259  	}
-748446bb6b5a939 Mel Gorman         2010-05-24  2260  
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2261  	if (cc->proactive_compaction) {
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2262  		int score, wmark_low;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2263  		pg_data_t *pgdat;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2264  
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2265  		pgdat = cc->zone->zone_pgdat;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2266  		if (kswapd_is_running(pgdat))
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2267  			return COMPACT_PARTIAL_SKIPPED;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2268  
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2269  		score = fragmentation_score_zone(cc->zone);
-8fbb92bd10be26d Kemeng Shi         2023-08-09  2270  		wmark_low = fragmentation_score_wmark(true);
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2271  
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2272  		if (score > wmark_low)
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2273  			ret = COMPACT_CONTINUE;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2274  		else
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2275  			ret = COMPACT_SUCCESS;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2276  
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2277  		goto out;
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2278  	}
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2279  
-21c527a3cba07f9 Yaowei Bai         2015-11-05  2280  	if (is_via_compact_memory(cc->order))
-56de7263fcf3eb1 Mel Gorman         2010-05-24  2281  		return COMPACT_CONTINUE;
-56de7263fcf3eb1 Mel Gorman         2010-05-24  2282  
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2283  	/*
-efe771c7603bc52 Mel Gorman         2019-03-05  2284  	 * Always finish scanning a pageblock to reduce the possibility of
-efe771c7603bc52 Mel Gorman         2019-03-05  2285  	 * fallbacks in the future. This is particularly important when
-efe771c7603bc52 Mel Gorman         2019-03-05  2286  	 * migration source is unmovable/reclaimable but it's not worth
-efe771c7603bc52 Mel Gorman         2019-03-05  2287  	 * special casing.
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2288  	 */
-ee0913c47196102 Kefeng Wang        2022-09-07  2289  	if (!pageblock_aligned(cc->migrate_pfn))
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2290  		return COMPACT_CONTINUE;
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2291  
-a211c6550efcc87 Johannes Weiner    2025-03-13  2292  	/*
-a211c6550efcc87 Johannes Weiner    2025-03-13  2293  	 * When defrag_mode is enabled, make kcompactd target
-a211c6550efcc87 Johannes Weiner    2025-03-13  2294  	 * watermarks in whole pageblocks. Because they can be stolen
-a211c6550efcc87 Johannes Weiner    2025-03-13  2295  	 * without polluting, no further fallback checks are needed.
-a211c6550efcc87 Johannes Weiner    2025-03-13  2296  	 */
-a211c6550efcc87 Johannes Weiner    2025-03-13  2297  	if (defrag_mode && !cc->direct_compaction) {
-a211c6550efcc87 Johannes Weiner    2025-03-13  2298  		if (__zone_watermark_ok(cc->zone, cc->order,
-a211c6550efcc87 Johannes Weiner    2025-03-13  2299  					high_wmark_pages(cc->zone),
-a211c6550efcc87 Johannes Weiner    2025-03-13  2300  					cc->highest_zoneidx, cc->alloc_flags,
-a211c6550efcc87 Johannes Weiner    2025-03-13  2301  					zone_page_state(cc->zone,
-a211c6550efcc87 Johannes Weiner    2025-03-13  2302  							NR_FREE_PAGES_BLOCKS)))
-a211c6550efcc87 Johannes Weiner    2025-03-13  2303  			return COMPACT_SUCCESS;
-a211c6550efcc87 Johannes Weiner    2025-03-13  2304  
-a211c6550efcc87 Johannes Weiner    2025-03-13  2305  		return COMPACT_CONTINUE;
-a211c6550efcc87 Johannes Weiner    2025-03-13  2306  	}
-a211c6550efcc87 Johannes Weiner    2025-03-13  2307  
-56de7263fcf3eb1 Mel Gorman         2010-05-24  2308  	/* Direct compactor: Is a suitable page free? */
-cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2309  	ret = COMPACT_NO_SUITABLE_PAGE;
-fd37721803c6e73 Kirill A. Shutemov 2023-12-28  2310  	for (order = cc->order; order < NR_PAGE_ORDERS; order++) {
-40cacbcb3240362 Mel Gorman         2019-03-05  2311  		struct free_area *area = &cc->zone->free_area[order];
-8fb74b9fb2b182d Mel Gorman         2013-01-11  2312  
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2313  		/* Job done if page is free of the right freetype */
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2314  		if (!free_area_empty(area, freetype))
-cf378319d335663 Vlastimil Babka    2016-10-07  2315  			return COMPACT_SUCCESS;
-56de7263fcf3eb1 Mel Gorman         2010-05-24  2316  
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2317  #ifdef CONFIG_CMA
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2318  		/* MIGRATE_MOVABLE can fallback on MIGRATE_CMA */
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14 @2319  		if (migratetype == MIGRATE_MOVABLE &&
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2320  		    !free_areas_empty(area, MIGRATE_CMA))
-cf378319d335663 Vlastimil Babka    2016-10-07  2321  			return COMPACT_SUCCESS;
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2322  #endif
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2323  		/*
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2324  		 * Job done if allocation would steal freepages from
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2325  		 * other freetype buddy lists.
-2149cdaef6c0eb5 Joonsoo Kim        2015-04-14  2326  		 */
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2327  		if (find_suitable_fallback(area, order, freetype, true) >= 0)
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2328  			/*
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2329  			 * Movable pages are OK in any pageblock of the right
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2330  			 * sensitivity. If we are * stealing for a
-fb432f7fe43d9fb Brendan Jackman    2025-09-24  2331  			 * non-movable allocation, make sure
-fa599c44987df43 Miaohe Lin         2022-04-28  2332  			 * we finish compacting the current pageblock first
-fa599c44987df43 Miaohe Lin         2022-04-28  2333  			 * (which is assured by the above migrate_pfn align
-fa599c44987df43 Miaohe Lin         2022-04-28  2334  			 * check) so it is as free as possible and we won't
-fa599c44987df43 Miaohe Lin         2022-04-28  2335  			 * have to steal another one soon.
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2336  			 */
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2337  			return COMPACT_SUCCESS;
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2338  	}
-baf6a9a1db5a40e Vlastimil Babka    2017-05-08  2339  
-facdaa917c4d5a3 Nitin Gupta        2020-08-11  2340  out:
-cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2341  	if (cc->contended || fatal_signal_pending(current))
-cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2342  		ret = COMPACT_CONTENDED;
-cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2343  
-cb2dcaf023c2cf1 Mel Gorman         2019-03-05  2344  	return ret;
-837d026d560c5ef Joonsoo Kim        2015-02-11  2345  }
-837d026d560c5ef Joonsoo Kim        2015-02-11  2346  
+Changes in v10:
+- Rebase on cbeaa41dfe26b72639141e87183cb23e00d4b0dd.
+- Implement Alice's suggestion to use a proc macro to work around orphan
+  rules otherwise preventing `core::ffi::CStr` to be directly printed
+  with `{}`.
+- Link to v9: https://lore.kernel.org/r/20250317-cstr-core-v9-0-51d6cc522f62@gmail.com
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changes in v9:
+- Rebase on rust-next.
+- Restore `impl Display for BStr` which exists upstream[1].
+- Link: https://doc.rust-lang.org/nightly/std/bstr/struct.ByteStr.html#impl-Display-for-ByteStr [1]
+- Link to v8: https://lore.kernel.org/r/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com
+
+Changes in v8:
+- Move `{from,as}_char_ptr` back to `CStrExt`. This reduces the diff
+  some.
+- Restore `from_bytes_with_nul_unchecked_mut`, `to_cstring`.
+- Link to v7: https://lore.kernel.org/r/20250202-cstr-core-v7-0-da1802520438@gmail.com
+
+Changes in v7:
+- Rebased on mainline.
+- Restore functionality added in commit a321f3ad0a5d ("rust: str: add
+  {make,to}_{upper,lower}case() to CString").
+- Used `diff.algorithm patience` to improve diff readability.
+- Link to v6: https://lore.kernel.org/r/20250202-cstr-core-v6-0-8469cd6d29fd@gmail.com
+
+Changes in v6:
+- Split the work into several commits for ease of review.
+- Restore `{from,as}_char_ptr` to allow building on ARM (see commit
+  message).
+- Add `CStrExt` to `kernel::prelude`. (Alice Ryhl)
+- Remove `CStrExt::from_bytes_with_nul_unchecked_mut` and restore
+  `DerefMut for CString`. (Alice Ryhl)
+- Rename and hide `kernel::c_str!` to encourage use of C-String
+  literals.
+- Drop implementation and invocation changes in kunit.rs. (Trevor Gross)
+- Drop docs on `Display` impl. (Trevor Gross)
+- Rewrite docs in the style of the standard library.
+- Restore the `test_cstr_debug` unit tests to demonstrate that the
+  implementation has changed.
+
+Changes in v5:
+- Keep the `test_cstr_display*` unit tests.
+
+Changes in v4:
+- Provide the `CStrExt` trait with `display()` method, which returns a
+   `CStrDisplay` wrapper with `Display` implementation. This addresses
+   the lack of `Display` implementation for `core::ffi::CStr`.
+- Provide `from_bytes_with_nul_unchecked_mut()` method in `CStrExt`,
+   which might be useful and is going to prevent manual, unsafe casts.
+- Fix a typo (s/preffered/prefered/).
+
+Changes in v3:
+- Fix the commit message.
+- Remove redundant braces in `use`, when only one item is imported.
+
+Changes in v2:
+- Do not remove `c_str` macro. While it's preferred to use C-string
+   literals, there are two cases where `c_str` is helpful:
+   - When working with macros, which already return a Rust string literal
+     (e.g. `stringify!`).
+   - When building macros, where we want to take a Rust string literal as an
+     argument (for caller's convenience), but still use it as a C-string
+     internally.
+- Use Rust literals as arguments in macros (`new_mutex`, `new_condvar`,
+   `new_mutex`). Use the `c_str` macro to convert these literals to C-string
+   literals.
+- Use `c_str` in kunit.rs for converting the output of `stringify!` to a
+   `CStr`.
+- Remove `DerefMut` implementation for `CString`.
+
+---
+Tamir Duberstein (3):
+      samples: rust: platform: remove trailing commas
+      rust: support formatting of foreign types
+      rust: replace `CStr` with `core::ffi::CStr`
+
+ rust/ffi.rs                          |   2 +
+ rust/kernel/device.rs                |   1 +
+ rust/kernel/error.rs                 |   2 +
+ rust/kernel/firmware.rs              |   9 +-
+ rust/kernel/fmt.rs                   |  87 +++++++-
+ rust/kernel/prelude.rs               |   7 +-
+ rust/kernel/seq_file.rs              |   2 +-
+ rust/kernel/str.rs                   | 395 ++++++++---------------------------
+ rust/kernel/sync/condvar.rs          |   2 +-
+ rust/kernel/sync/lock.rs             |   2 +-
+ rust/kernel/sync/lock/global.rs      |   2 +-
+ rust/macros/fmt.rs                   |  94 +++++++++
+ rust/macros/lib.rs                   |  19 ++
+ rust/macros/quote.rs                 |   7 +
+ samples/rust/rust_driver_platform.rs |   4 +-
+ 15 files changed, 318 insertions(+), 317 deletions(-)
+---
+base-commit: f3f6b3664302e16ef1c6b91034a72df5564d6b8a
+change-id: 20250201-cstr-core-d4b9b69120cf
+
+Best regards,
+--  
+Tamir Duberstein <tamird@gmail.com>
+
