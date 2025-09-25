@@ -1,173 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29712287258;
-	Thu, 25 Sep 2025 06:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480DA52F88
+	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 07:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758780249; cv=none; b=QyQRaYlg2JPwb2Tl+qqrG+3OXBVqzRLk7JFmanhcXBFTSsGeqWFlfCSTjE7Rjxv+N8RzcxsGHzCVtk4sFmB8k0i5h8LRRE3u51ldwFQO2NIzzjUgrx7DD/rQuKbX43pqT51x1gPNoxTfxwoRHZ7Y6A2gxq70hd9k7DphD7LQBik=
+	t=1758784942; cv=none; b=Ib+nO7wSDfz45AdPgTaLvp2hx/g6GtvRipzkNOu2dF8GFwwvG473aNVlhswWvnCqR/Q4lpV9NTzNxZkg23MzesXCheqrbhbJCuSfQGYDZwalJxfEUuuvDorkf2szrYL/o2JXePGb5Zv7MTOzo7wRRjN8KrBJqEEDRwBNKBKQoh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758780249; c=relaxed/simple;
-	bh=9AovDj4POpGD4NoA6Wyfmp+E+TOIY0KiPUs1Xo8Dwx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BoxTohruIkau0/nFVPtbcu3pFvagW3jZCBGQRqNShu2zrTIOIsFoXbW3pXkTG+ohF11m3il7MVk+Geejax1futkbeYkY4RmhzttMKAZfcPyILESZjNixuPx9tnWUmBs+cDEIeoOFIK72fT2k1EjVvL/f3MwHzy+EEK93W2BnJZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNkSsCts; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758784942; c=relaxed/simple;
+	bh=rmuifHd8Q0YwyJIi3ALQhbjYLfYlCSbyMGHHkrcYD+g=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BiyJZfanxL7di2x9N13I9fqGUyoUhuXrU1bUtJLCJFlJ+7g1daKzd16DdMo5UAfYVZDZ/1HYJqeIGFAavpjG6sZhLNKhGM9Jop3bupbUiClwDsSGE2++YVX0kL9sMp0HX8wywS/FktvS+BRg9h9W6IUDhD8NzaH7dqC8J43b+WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MXFXv2JF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNkSsCts"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758780247; x=1790316247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9AovDj4POpGD4NoA6Wyfmp+E+TOIY0KiPUs1Xo8Dwx8=;
-  b=mNkSsCtsdILQ4TTxM+CeMkSuQNnUpsQPU904OvPWcrczpocAkfUaSz5F
-   ZBbY6HINfHQoe6IUxQCxhjD1NpJLTwhppQcLH9byodoIoOcynw9Mg8W8W
-   /aeDkCJBkOJ61YHsydqc/1OlOu7ktgX/JItdIkk0V4IY/Jh0l64P++6Fb
-   HzU+jYL68zjbC0blA/UGol2cwM4lZxC/5bnsykvMtvWysZ+0pcWX2hRkw
-   YERmnaSGv+bqrVBgK/ah+t5A0Vb3PD4p+PzESd9hj5ee25z6bVdKYur1s
-   be9hWfvqYc8r2CtcYSG1rCOpBHoJ3ST162nFRf91zHimiD4v7B7Q+Wyfp
-   A==;
-X-CSE-ConnectionGUID: LD1NvyOZRze29C0LiF3zXQ==
-X-CSE-MsgGUID: 9YCwcBj9RQe2zilykKxISQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="64727229"
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="64727229"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 23:03:54 -0700
-X-CSE-ConnectionGUID: smpQletMR/SbonHQoq1TZA==
-X-CSE-MsgGUID: QeC6jsjxQXam48uCCLmjgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="214371757"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 24 Sep 2025 23:03:52 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1f53-0004xV-1x;
-	Thu, 25 Sep 2025 06:03:49 +0000
-Date: Thu, 25 Sep 2025 14:03:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org, srini@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, heiko@sntech.de
-Subject: Re: [PATCH v2 1/2] nvmem: Add driver for the eeprom in qnap-mcu
- controllers
-Message-ID: <202509251340.DSObePVn-lkp@intel.com>
-References: <20250923131815.1898332-2-heiko@sntech.de>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MXFXv2JF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758784938;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=b2MRKs/ClgdbLT8/hj2sWin1+qy3zcU3K57TTDFxLec=;
+	b=MXFXv2JFqv4yq893mJSj3aQAd58Cc+6SXl3imjEri1fh6fbDeVKHagz/ZGqEGQg8SV4OXe
+	+f+veqB3HtRYIgpsQEF+XVRusviHtH17mhRC9MAzjs08pVuvBWDdwy91K8Evgh05i1t9H8
+	fqG9Xb/mmmPWinFkCcFhEhkc1IYmQho=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-624-VK5YWKH7NfOVtfEwY1heQg-1; Thu,
+ 25 Sep 2025 03:22:15 -0400
+X-MC-Unique: VK5YWKH7NfOVtfEwY1heQg-1
+X-Mimecast-MFC-AGG-ID: VK5YWKH7NfOVtfEwY1heQg_1758784935
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E141A195609E
+	for <llvm@lists.linux.dev>; Thu, 25 Sep 2025 07:22:14 +0000 (UTC)
+Received: from [172.20.26.51] (unknown [10.30.44.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 705FE300021A;
+	Thu, 25 Sep 2025 07:22:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc7,
+ upstream-mainline, d0ca0df1)
+Date: Thu, 25 Sep 2025 07:22:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250923131815.1898332-2-heiko@sntech.de>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <18742.125092503221502129@us-mta-624.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vVk2gRYizqTl8kOWrFoHMZcMWCOdQwAI1WIODvi1Gx8_1758784935
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Heiko,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on lee-leds/for-leds-next]
-[also build test ERROR on lee-mfd/for-mfd-next linus/master lee-mfd/for-mfd-fixes v6.17-rc7 next-20250924]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/nvmem-Add-driver-for-the-eeprom-in-qnap-mcu-controllers/20250923-212052
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20250923131815.1898332-2-heiko%40sntech.de
-patch subject: [PATCH v2 1/2] nvmem: Add driver for the eeprom in qnap-mcu controllers
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250925/202509251340.DSObePVn-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cafc064fc7a96b3979a023ddae1da2b499d6c954)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509251340.DSObePVn-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: crypto: af_alg - Fix incorrect boolean values in af_alg=
+_ctx
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509251340.DSObePVn-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2061020178
 
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:3:
-   In file included from include/linux/compiler_types.h:171:
-   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
-      28 | #define __SANITIZE_ADDRESS__
-         |         ^
-   <built-in>:352:9: note: previous definition is here
-     352 | #define __SANITIZE_ADDRESS__ 1
-         |         ^
-   In file included from drivers/nvmem/qnap-mcu-eeprom.c:12:
-   include/linux/mfd/qnap-mcu.h:13:2: error: unknown type name 'u32'
-      13 |         u32 baud_rate;
-         |         ^
-   include/linux/mfd/qnap-mcu.h:17:2: error: unknown type name 'bool'
-      17 |         bool usb_led;
-         |         ^
-   include/linux/mfd/qnap-mcu.h:21:11: error: unknown type name 'u8'
-      21 |                   const u8 *cmd_data, size_t cmd_data_size,
-         |                         ^
-   include/linux/mfd/qnap-mcu.h:21:25: error: unknown type name 'size_t'
-      21 |                   const u8 *cmd_data, size_t cmd_data_size,
-         |                                       ^
-   include/linux/mfd/qnap-mcu.h:22:5: error: unknown type name 'u8'
-      22 |                   u8 *reply_data, size_t reply_data_size);
-         |                   ^
-   include/linux/mfd/qnap-mcu.h:22:21: error: unknown type name 'size_t'
-      22 |                   u8 *reply_data, size_t reply_data_size);
-         |                                   ^
-   include/linux/mfd/qnap-mcu.h:24:13: error: unknown type name 'u8'
-      24 |                            const u8 *cmd_data, size_t cmd_data_size);
-         |                                  ^
-   include/linux/mfd/qnap-mcu.h:24:27: error: unknown type name 'size_t'
-      24 |                            const u8 *cmd_data, size_t cmd_data_size);
-         |                                                ^
->> drivers/nvmem/qnap-mcu-eeprom.c:28:10: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      28 |         reply = kzalloc(bytes + sizeof(cmd), GFP_KERNEL);
-         |                 ^
->> drivers/nvmem/qnap-mcu-eeprom.c:28:8: error: incompatible integer to pointer conversion assigning to 'u8 *' (aka 'unsigned char *') from 'int' [-Wint-conversion]
-      28 |         reply = kzalloc(bytes + sizeof(cmd), GFP_KERNEL);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/nvmem/qnap-mcu-eeprom.c:45:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      45 |         kfree(reply);
-         |         ^
-   1 warning and 11 errors generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
 
 
-vim +/kzalloc +28 drivers/nvmem/qnap-mcu-eeprom.c
 
-    20	
-    21	static int qnap_mcu_eeprom_read_block(struct qnap_mcu *mcu, unsigned int offset,
-    22					      void *val, size_t bytes)
-    23	{
-    24		const u8 cmd[] = { 0xf7, 0xa1, offset, bytes };
-    25		u8 *reply;
-    26		int ret = 0;
-    27	
-  > 28		reply = kzalloc(bytes + sizeof(cmd), GFP_KERNEL);
-    29		if (!reply)
-    30			return -ENOMEM;
-    31	
-    32		ret = qnap_mcu_exec(mcu, cmd, sizeof(cmd), reply, bytes + sizeof(cmd));
-    33		if (ret)
-    34			goto out;
-    35	
-    36		/* First bytes must mirror the sent command */
-    37		if (memcmp(cmd, reply, sizeof(cmd))) {
-    38			ret = -EIO;
-    39			goto out;
-    40		}
-    41	
-    42		memcpy(val, reply + sizeof(cmd), bytes);
-    43	
-    44	out:
-  > 45		kfree(reply);
-    46		return ret;
-    47	}
-    48	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
