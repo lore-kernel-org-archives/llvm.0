@@ -1,94 +1,100 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1452459F7
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 16:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7518B15B0FE;
+	Fri, 26 Sep 2025 17:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758903585; cv=none; b=QoQ/0BJaCWVChiFRuL54lPX6Buic/iHQkpxsaDjKle8N8Hc6m13dn5bpIZxZncgVESFtoaHbnxwe3ePLsT0BldMF/bvHh3zA9EeCPa/mFQ1njdi0be1F6RPn2twF2Bw9VzwBs7hYVVRL8nDwA32+EvdYcDB/pZR718iC9EFeA7o=
+	t=1758908351; cv=none; b=ux+myC6+EZMADH6NKfoEJU1wJeH3dDhZmK+p27Wx5wjIArNcbx3XApA5/lTi1V9yW7MrnK99ffjkwhE4jyktFkAjGjcAmjS4CcVf89uDhDZKr3mjZgYN+SfwZMzI19ScjNuoCizLZau1nLhe+pXwsVbZcJBQgZcxcFCCCAVPUgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758903585; c=relaxed/simple;
-	bh=g3N28JsRJOyCJChjvaPlbQw8NwaDKl6p9+ZI6M+/NMo=;
+	s=arc-20240116; t=1758908351; c=relaxed/simple;
+	bh=X39IoOvaEEzAejj66YITLm4C1zTy42HigLrlKu3SseE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kiIhf5aZoTg5BuYedXWI+poUi+M22QQjZW/YDh2howvWIEhk3tBCnzh/HnnOxStWyWQejHl0vGQerFTHChUGfITJak68MjCuHIg1bF7lz+bpi80LADg7Qsd54t9MNEt5AMLztRUcoJSRS7nihRfCAZk86Evnb3WiTbCc8anVcfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 598C8168F;
-	Fri, 26 Sep 2025 09:19:35 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F1D13F5A1;
-	Fri, 26 Sep 2025 09:19:43 -0700 (PDT)
-Date: Fri, 26 Sep 2025 17:19:41 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, James Clark <james.clark@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH 4/8] perf test coresight: Dismiss clang warning for
- memcpy thread
-Message-ID: <20250926161941.GG7985@e132581.arm.com>
-References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com>
- <20250925-perf_build_android_ndk-v1-4-8b35aadde3dc@arm.com>
- <CAP-5=fWGKgXV52_9E7n9yDX1uNLF8qWT9XTFK8eKtc_LRCW5wg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=O+o9W1SCfzufEi198xJaXIFTu6JVo8dmjiwJQwMkeu1A0idoywicRxemjHEVgOLdBXrsXtXBRcLhGoYJ7vTLl9CyzXgoCiosWkDe9ymlnC8v69sG12e0wcd5Gj5KL/LK9lX1BTnILkroVYAWKBe6Jl/jEqJ04a1JsNyBvweU8iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g6w5O0Xp; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g6w5O0Xp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758908350; x=1790444350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X39IoOvaEEzAejj66YITLm4C1zTy42HigLrlKu3SseE=;
+  b=g6w5O0XplRgEct8qOxjeppKyCKf8euEhzLJyJURRSq3RRaJyul89C2Kv
+   xMPmbbbI5fJh6LBHJJS0pVfhYTGYRsHnU6thyLZLBtu3rZhhDBV21ylML
+   UGN05K30LjpyRL4wjYZt0ho5cx1iGxOOROAFNG2RlIHD8qCi7KAaO00m0
+   HyjARVU3MmcwtxfnYSRPSgIPj1JHMzj5rVZ86Ou1d6G7h+HLXvdqAmlEl
+   OqUyXdFCS6H1Vst3VLN4sPm0rrumHAehSDbvLfISl35D2YOacbnOkbo9D
+   2nL2WN9rUG221HjVbVHTz95/ii4VpBLR8wrq3T0I5rmuXKI82paOJ/bjN
+   w==;
+X-CSE-ConnectionGUID: YiBnb00gTmOgzdiuJ9xzaQ==
+X-CSE-MsgGUID: 1qYEej2IR8CQqqssqJ5K7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="78888814"
+X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
+   d="scan'208";a="78888814"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 10:39:09 -0700
+X-CSE-ConnectionGUID: 4tT18fXLTGGitV++G3TjIA==
+X-CSE-MsgGUID: lQkOmgqlRtq3WAN8qSAnkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
+   d="scan'208";a="182950121"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 26 Sep 2025 10:39:08 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v2CPR-0006TX-2c;
+	Fri, 26 Sep 2025 17:39:05 +0000
+Date: Sat, 27 Sep 2025 01:38:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frank van der Linden <fvdl@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 10/12] mm/hugetlb: do explicit CMA balancing
+Message-ID: <202509270126.MXOaMSXO-lkp@intel.com>
+References: <20250915195153.462039-11-fvdl@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fWGKgXV52_9E7n9yDX1uNLF8qWT9XTFK8eKtc_LRCW5wg@mail.gmail.com>
+In-Reply-To: <20250915195153.462039-11-fvdl@google.com>
 
-On Thu, Sep 25, 2025 at 12:38:36PM -0700, Ian Rogers wrote:
-> On Thu, Sep 25, 2025 at 3:26 AM Leo Yan <leo.yan@arm.com> wrote:
-> >
-> > clang-18.1.3 on Ubuntu 24.04.2 reports warning:
-> >
-> >   memcpy_thread.c:30:1: warning: non-void function does not return a value in all control paths [-Wreturn-type]
-> >      30 | }
-> >         | ^
-> >
-> > Dismiss the warning with returning NULL from the thread function.
-> >
-> > Signed-off-by: Leo Yan <leo.yan@arm.com>
-> 
-> lgtm, should this be moved into being a perf test workload as in
-> tools/perf/tests/workloads/ ?
+Hi Frank,
 
-Now we have four programs under shell folder:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-  $ cd linux/tools/perf/tests/shell
-  $ find ./ -name *.c -o -name *.S
-  ./coresight/unroll_loop_thread/unroll_loop_thread.c
-  ./coresight/asm_pure_loop/asm_pure_loop.S
-  ./coresight/thread_loop/thread_loop.c
-  ./coresight/memcpy_thread/memcpy_thread.c
- 
-If really do this, can move all programs into folders?
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on powerpc/fixes powerpc/topic/ppc-kvm s390/features trace/for-next linus/master v6.17-rc7 next-20250926]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  tools/perf/tests/workloads/       - Common programs
-  tools/perf/tests/workloads/arm64  - Arch specific programs
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-van-der-Linden/mm-cma-add-tunable-for-CMA-fallback-limit/20250926-101411
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/20250915195153.462039-11-fvdl%40google.com
+patch subject: [RFC PATCH 10/12] mm/hugetlb: do explicit CMA balancing
+config: x86_64-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250927/202509270126.MXOaMSXO-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509270126.MXOaMSXO-lkp@intel.com/reproduce)
 
-Anyway, this should be a separate series to avoid complexity for
-enabling Clang build.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509270126.MXOaMSXO-lkp@intel.com/
 
-Thanks,
-Leo
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: balance_node_cma
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(hugetlb_cma_balance)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
