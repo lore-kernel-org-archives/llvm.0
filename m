@@ -1,73 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FF21FCFEF;
-	Fri, 26 Sep 2025 05:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223EE35950;
+	Fri, 26 Sep 2025 05:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758865036; cv=none; b=gbsxvZ9LiQFrkyI7zmHAPQH5eIj7M1ROiEw+4PypC844+sslQtklQn9XLUgk1k7AOslVJx0OA95hyBVjmDropJKIUyJ16tCE2UD2Yu74Ldl3qRQ/n+9wLDYutVMrHC0v8/hk5k0/9Cm9QXfjXK1vGGTHY6Oiph/EFgsCA3x1qWg=
+	t=1758865715; cv=none; b=OZHN+8ntQIIrmKFFN/8KyGmqlJUs42+/HzDmq7sqIsB3/YQMfOcgLONO9HxokMtkQyHFvtgEkX644QGXe8si7oygOXu3nOOQ7dTjtoN0nw8Jsb7RcE1bVD5xgexvHWOQUeFvqLc7Y15PmUX2jOCk576bnTRGrNKhCKcazoVJoOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758865036; c=relaxed/simple;
-	bh=XBtpFSVJKzXQ0qNjtHFKFElOPIss1lIui+FxMIA0hqQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rDg3i9zOEhpxhDzh1vtepmPbVUyswcGnr5D9M9MjAMesCrFQx3cJznKJt1+sed7D+Ox78misXXBhSC/Y12HshvGNgh/xBDHqe/g3lbDDNGvWqTyolcxXmNjU/AUHioyP8FYqg+RaIahurNhDyxmOV2l4xCNIIj7Gr7SThaLpxYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jchZUabM; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1758865715; c=relaxed/simple;
+	bh=kGtUHGS91msd+xLGpw+kv13UN9tVyD2geDfwaYQDc9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GMzOsf0jV6DW4ceY9u6HViA1NJfGwcfBtMr1S33ZHNawmHhJ75jQDgt2X3j+71dTDJBz2APVbCvzhIR8PlwJPEeoaw8RUTGNK/UQla7Ncog4pi5vgHcZdPy3fIZC0zVydbVBYLUxbOtc0f4FIyafZq/geyCg4WGBoFsEqBYTB18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EGrT5i1E; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jchZUabM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EGrT5i1E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758865035; x=1790401035;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XBtpFSVJKzXQ0qNjtHFKFElOPIss1lIui+FxMIA0hqQ=;
-  b=jchZUabMWD8x5Fd2kt3W7agxUT93nVXGBVVyZmtYRSc2CH5p32IDItFn
-   odoNUNQ1raSG03BgENdPK2k8WSwOkDEGydNY8OIOXnB5RCROj+q31azuv
-   rIFVji25SVntFHUYvtMEmxWejm2piRwMKgXlk1Fhevm3fBXjSi3oLNSce
-   wCpdG1VCwY4vunIin1OPDraP67i7Am8eEwLxextZLHnnLcxmTqExeZrpj
-   MzsTJUSeLGzyLcqnM4BDYfFNH/BzWHG3+gSJp35TFtIwlqSLEGTv4iizp
-   TnnrclQSDVZPo4JTGZ5T4tOdxtIUa5z7ckpNMhVAHtYDFZcILKv4dMnlS
-   Q==;
-X-CSE-ConnectionGUID: w7c5Q6NlQ5ekxSYbwEke+A==
-X-CSE-MsgGUID: U72sjyQcSnWi/5BsmqeJMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="60403411"
+  t=1758865714; x=1790401714;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kGtUHGS91msd+xLGpw+kv13UN9tVyD2geDfwaYQDc9U=;
+  b=EGrT5i1E/xH0Q9NlNbhymyfO6VE6T8+R1LBVJAWYgIIjIZUr+iDKtOSs
+   314i97o204xuDXfTKBTQD1q1TL3K6vxCzuCLTyKgSsF95eNr6JW4ehCxm
+   M9610kTN1iTD0ez9/r4hQz7mYhwaEAHl2U6jmaevQPdXTptwHr7V62V8e
+   oUe+7N6kVh4G8IJZ1zQouDScFlUn5Yy1kDD0PJ17YHEEXFXMiHijiVhLS
+   Ljc70RRolmMrVIz/babIcaouLxyEf8pTsHn/XA1sj92oNZD5zlw6XHhZV
+   QEtgCJHJA9DFHq5m08AO/AfIfzu1dodOpROlE+R26N4cUVyQNUbHths3/
+   w==;
+X-CSE-ConnectionGUID: luhuctHsQ/2yp3WlrPNjCQ==
+X-CSE-MsgGUID: qgXJXIQAQwKJ6w7z9U0lcA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="78628558"
 X-IronPort-AV: E=Sophos;i="6.18,294,1751266800"; 
-   d="scan'208";a="60403411"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 22:37:14 -0700
-X-CSE-ConnectionGUID: Imc5zKtpRRirvIUv7DWMbQ==
-X-CSE-MsgGUID: 7PrIWsRhSZuKlBo2LpuEIA==
+   d="scan'208";a="78628558"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2025 22:48:34 -0700
+X-CSE-ConnectionGUID: atAcMg20TKSvdVnD+6yM5A==
+X-CSE-MsgGUID: njBjIm1RSn2TYerxhAMNIQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,294,1751266800"; 
-   d="scan'208";a="176795862"
+   d="scan'208";a="176642508"
 Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 25 Sep 2025 22:37:10 -0700
+  by orviesa006.jf.intel.com with ESMTP; 25 Sep 2025 22:48:33 -0700
 Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v218l-0005w5-0v;
-	Fri, 26 Sep 2025 05:37:07 +0000
-Date: Fri, 26 Sep 2025 13:36:24 +0800
+	id 1v21Jm-0005wf-02;
+	Fri, 26 Sep 2025 05:48:30 +0000
+Date: Fri, 26 Sep 2025 13:48:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Rao Mandadapu <quic_srivasam@quicinc.com>
+To: Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
-	trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
-	linux-sound@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>
-Subject: Re: [PATCH 1/5] ASoC: codecs: va-macro: Rework version checking
-Message-ID: <202509261315.O9CiiXjb-lkp@intel.com>
-References: <20250924-knp-audio-v1-1-5afa926b567c@oss.qualcomm.com>
+	Chao Yu <chao@kernel.org>
+Subject: [chao:cleanup 2/2] fs/f2fs/data.c:332:39: error: expression cannot
+ be followed by a postfix '->' operator; add parentheses
+Message-ID: <202509261311.c1JiZZxU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,97 +62,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250924-knp-audio-v1-1-5afa926b567c@oss.qualcomm.com>
 
-Hi Jingyi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on ae2d20002576d2893ecaff25db3d7ef9190ac0b6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jingyi-Wang/ASoC-codecs-va-macro-Rework-version-checking/20250925-080338
-base:   ae2d20002576d2893ecaff25db3d7ef9190ac0b6
-patch link:    https://lore.kernel.org/r/20250924-knp-audio-v1-1-5afa926b567c%40oss.qualcomm.com
-patch subject: [PATCH 1/5] ASoC: codecs: va-macro: Rework version checking
-config: i386-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509261315.O9CiiXjb-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git cleanup
+head:   ea458a3f3d672b53286ed7058ba33a95c0713cac
+commit: ea458a3f3d672b53286ed7058ba33a95c0713cac [2/2] f2fs: use fscrypt_finalize_bounce_page() for cleanup
+config: x86_64-buildonly-randconfig-002-20250926 (https://download.01.org/0day-ci/archive/20250926/202509261311.c1JiZZxU-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509261315.O9CiiXjb-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509261311.c1JiZZxU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509261315.O9CiiXjb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509261311.c1JiZZxU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/lpass-va-macro.c:1479:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1479 |         maj = FIELD_GET(CORE_ID_0_REV_MAJ, val);
-         |               ^
-   1 error generated.
+>> fs/f2fs/data.c:332:39: error: expression cannot be followed by a postfix '->' operator; add parentheses
+     332 |                 fscrypt_finalize_bounce_page(&&folio->page);
+         |                                              ~~~~~~~^
+         |                                              (      )
+>> fs/f2fs/data.c:332:39: error: member reference base type 'void' is not a structure or union
+     332 |                 fscrypt_finalize_bounce_page(&&folio->page);
+         |                                              ~~~~~~~^ ~~~~
+>> fs/f2fs/data.c:332:34: error: use of undeclared label 'folio'
+     332 |                 fscrypt_finalize_bounce_page(&&folio->page);
+         |                                                ^
+   3 errors generated.
 
 
-vim +/FIELD_GET +1479 sound/soc/codecs/lpass-va-macro.c
+vim +332 fs/f2fs/data.c
 
-  1471	
-  1472	static int va_macro_set_lpass_codec_version(struct va_macro *va)
-  1473	{
-  1474		int version = LPASS_CODEC_VERSION_UNKNOWN;
-  1475		u32 maj, min, step;
-  1476		u32 val;
-  1477	
-  1478		regmap_read(va->regmap, CDC_VA_TOP_CSR_CORE_ID_0, &val);
-> 1479		maj = FIELD_GET(CORE_ID_0_REV_MAJ, val);
-  1480	
-  1481		regmap_read(va->regmap, CDC_VA_TOP_CSR_CORE_ID_1, &val);
-  1482		if (!FIELD_GET(CORE_ID_1_HAS_VAMACRO, val)) {
-  1483			dev_err(va->dev, "This is not a VA macro instance\n");
-  1484			return -ENODEV;
-  1485		}
-  1486	
-  1487		regmap_read(va->regmap, CDC_VA_TOP_CSR_CORE_ID_2, &val);
-  1488		min = FIELD_GET(CORE_ID_2_REV_MIN, val);
-  1489		step = FIELD_GET(CORE_ID_2_REV_STEP, val);
-  1490	
-  1491		if (maj == 1) {
-  1492			version = LPASS_CODEC_VERSION_2_0;
-  1493		} else if (maj == 2) {
-  1494			switch (min) {
-  1495			case 0:
-  1496				version = LPASS_CODEC_VERSION_2_0;
-  1497				break;
-  1498			case 5:
-  1499				version = LPASS_CODEC_VERSION_2_5;
-  1500				break;
-  1501			case 6:
-  1502				version = LPASS_CODEC_VERSION_2_6;
-  1503				break;
-  1504			case 7:
-  1505				version = LPASS_CODEC_VERSION_2_7;
-  1506				break;
-  1507			case 8:
-  1508				version = LPASS_CODEC_VERSION_2_8;
-  1509				break;
-  1510			case 9:
-  1511				version = LPASS_CODEC_VERSION_2_9;
-  1512				break;
-  1513			default:
-  1514				break;
-  1515			}
-  1516		}
-  1517	
-  1518		if (version == LPASS_CODEC_VERSION_UNKNOWN) {
-  1519			dev_err(va->dev, "VA Macro v%u.%u.%u is not supported\n",
-  1520				maj, min, step);
-  1521			return -EOPNOTSUPP;
-  1522		}
-  1523	
-  1524		lpass_macro_set_codec_version(version);
-  1525	
-  1526		dev_dbg(va->dev, "LPASS Codec Version %s\n", lpass_macro_get_codec_version_string(version));
-  1527	
-  1528		return 0;
-  1529	}
-  1530	
+   316	
+   317	static void f2fs_write_end_io(struct bio *bio)
+   318	{
+   319		struct f2fs_sb_info *sbi;
+   320		struct folio_iter fi;
+   321	
+   322		iostat_update_and_unbind_ctx(bio);
+   323		sbi = bio->bi_private;
+   324	
+   325		if (time_to_inject(sbi, FAULT_WRITE_IO))
+   326			bio->bi_status = BLK_STS_IOERR;
+   327	
+   328		bio_for_each_folio_all(fi, bio) {
+   329			struct folio *folio = fi.folio;
+   330			enum count_type type;
+   331	
+ > 332			fscrypt_finalize_bounce_page(&&folio->page);
+   333	
 
 -- 
 0-DAY CI Kernel Test Service
