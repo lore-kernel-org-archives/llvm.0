@@ -1,163 +1,153 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B0725DAFF
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA1029B778
+	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758876504; cv=none; b=dRHHDOgsqdDdBLaZ1j3mAO5kwy608xYCM+mYwyEt3TvgXiFpwjoT9JJWr4DZxnAeeXDiFjLGdr/MfSEcA0P/RKTEazxPwoog52AQZ16AghnAzlamsOpdB87Imk18Q5tD1BkNYBFH7a+hOCvpSxqpSkZ7W6NrrEumgFYMLCeEBOU=
+	t=1758876620; cv=none; b=eTh6hmdd3E1ViIvMPKL4Ra+yBbhu8/Pu+Vf3HqBm27RollAjA1tDp40ZByJGS9xRkyyc4cB6XiJ9ehA/WVI9WWsBoNa+mfOTxT865FNl1+67HV8yoV9b36xugcoC4aP8us69700Cv6P/9voRWaD5fowtS/3RQG81M/vl/pfXfis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758876504; c=relaxed/simple;
-	bh=7De3nQZm4PVTdWyp59mYSwiaxDz6Qyhn9LYb89sbxxg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Lo322fKVlEoHP/l5T1kKsBe89E/Y1r7sxh3Q+JWNS424c4N0cnXnyBZNIHb62S6bPSdeXSSnKPoWWu39HeDZ49sIY35YIvjWdHgKQoTElEyWMTlV8VIyBVQ05zkqGW1yBxYvHdl5iReKtWrTCQNvGzY0PTdpcliIYDR43Nxfn2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=oewmB4a8; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1758876620; c=relaxed/simple;
+	bh=DW5PR20rrpRjozhjmQF7SX9wg6GFQc9bhuXeEh/lm7E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tNdYrzEAipbWDDAkYBiGxAhMMqp7u6Wx48UFBLWM0AkILrhCdrktNam6rf/xGnviXAz9bcMXbzC9dKFMyTcA3i3bfICHZtVgNmdkS74FaMesGjJQ2vrf1zDUCWIYVBhy2sxUl1BZ/UA4C81CVPtf7ixT6kLgvJDqKHmBSZy42mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KQeg2Vsp; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="oewmB4a8"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4cY44243YHz9st3;
-	Fri, 26 Sep 2025 10:48:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1758876498; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7De3nQZm4PVTdWyp59mYSwiaxDz6Qyhn9LYb89sbxxg=;
-	b=oewmB4a8fvEjTKbGN/DAs/n7MBgg9RL9DiXgxDoYuwrY9a6lV0LDNw6hF3+0nR9hXA+6je
-	cIvS2p05i6RvXBKFYs0lbZSaRNAiwuQXBdDzYQieJtLK+G1hVZSc3mwBekxUfjGsAKc/gO
-	gBYbiN5IhJjZcx1BHnbtZxChkf6rG6VfoNmz6YgzIRPRLnSG1GWtzolVcvfeBNxEtLmEti
-	bAwIebXzzwxtIljpNiA/zhyDL+Kmghl8qlMpO+SdCd0Jej/4NjaEV1wOo8kXJ8a8CXBDMw
-	aozeNUa8SAm0VHmRzk/Rom5JKxPnlq/MGxCrCSGKG4mk64KC5xilz9uhtTqPBg==
-Message-ID: <12c09de235023c99a8a864b17b2f797c7339bb7b.camel@mailbox.org>
-Subject: Re: [RFC PATCH] rust: sync: Add dma_fence abstractions
-From: Philipp Stanner <phasta@mailbox.org>
-Reply-To: phasta@kernel.org
-To: Boqun Feng <boqun.feng@gmail.com>, Philipp Stanner <phasta@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Gary Guo <gary@garyguo.net>, =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  Benno Lossin <lossin@kernel.org>, Andreas
- Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>,  Ingo Molnar <mingo@redhat.com>, Will
- Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,  Viresh Kumar
- <viresh.kumar@linaro.org>, Asahi Lina <lina+kernel@asahilina.net>, Daniel
- Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
- <tamird@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, FUJITA
- Tomonori <fujita.tomonori@gmail.com>, Krishna Ketan Rai
- <prafulrai522@gmail.com>, Lyude Paul <lyude@redhat.com>, Mitchell Levy
- <levymitchell0@gmail.com>, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
- dri-devel@lists.freedesktop.org
-Date: Fri, 26 Sep 2025 10:48:06 +0200
-In-Reply-To: <aMwOoYe1xGDBg0Zv@tardis-2.local>
-References: <20250918123100.124738-2-phasta@kernel.org>
-	 <aMwOoYe1xGDBg0Zv@tardis-2.local>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KQeg2Vsp"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58Q6w5Ye014305
+	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:50:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	hAvJmzrwoSb3evK5QrOHasbm0i6ySDURtAIAeME4WEE=; b=KQeg2Vsp8pY7kAkX
+	m6rMUbmJSMEIKwgoIERa7LulLjSLELt8hiu1+IYMv00GPc5ieNf3NAF40MP3wS7w
+	dTFRo4CgdmzXsaN/3r68cQKzeMyrViYEqU69TrIrqEfIVUDA2OAk9PvPSV75/YRC
+	js4NLs2Wi36DbK7EtFjIBXupnVnxtU8IQYHl38HwRIw7hdltPcaksqAF7ahiRnCi
+	EPee4tLw52eu2eNitIONh6+DOvniIs5W/h75KjX5gpG5M48EDuJhD6DgXuOwz9qI
+	7emCJKiJNJ7AllZQPh2QgkIEm+OEcpYWj/Mw8OXl9VgTZ2Nf8iDDHcAYpx9M3uXD
+	KVLVdg==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49db0rj5e9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:50:17 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4dd729008d7so186931cf.1
+        for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 01:50:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758876606; x=1759481406;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hAvJmzrwoSb3evK5QrOHasbm0i6ySDURtAIAeME4WEE=;
+        b=AvRnb31pnmTWOFThIJTHDJSaZwq4z0+1HYVPdyfkvyqpyubzZc66v8IdlFgysRkmV6
+         zegJ1hTf6sjDd4iAgAIEu33RtZcnbHF5XLAoe+mttdQg3G2IFZVbO+bSoYc6aLrH5e4a
+         mlCYTMm0AK4XgWvsX84Dx59HxIaXaJ5fupuEFc/efHjOBG6HLiVn+8iSia2SRReU5ui4
+         fVBeXO1B0pSX/SPeFwniCQkBKPf7Vg3FvQVikNjS9MuS2bCvcn5EVyWVt+w0szmecOl/
+         oGmTtsX0WJuTNni4VFUFQvgnbDeRI2S2BQoaG3OmddfzslEQNPVvx8uBep7l56P/hK4P
+         igzQ==
+X-Gm-Message-State: AOJu0YwOoXA/ARQnljMTfBuDc7za71Yd85HzbSrrIkOllq1Vgaj3km+t
+	CPZ1s8f6wiVJom860qiDw+DdwEA2i2ooY2pR5PIMK0B7esqyhcL8diJoMbI90pvrj2ZQrUFvkJC
+	qUi5sBU5PFl8k0Zhm5JL+muCkzGSTfWDmtSVEAQnnePQQAlGR0t+l8LJg
+X-Gm-Gg: ASbGncvKH7/s3Vb2UrdUeWvRzdLQ/O4mCiD31YsnKQ0jGs3KTriE31KcSMe/aG+TRcU
+	IuW5wE5+NkPT6OV07SQbobAkIfiohmkRIPCpgzN5bSR6rdxnFNPn/JjPPHZ3pyKv4ZRu54u1j3h
+	3F6FzbNVDMxo00k+LBWbS52UiFnauS/r+jApfmf2lwdWYwmNOgwuMAIAJOrAvAb9T6qvfux6v0+
+	WAte9ok/gdmt3tpYf0oepXCAoCDe1jYaxMiHFZJInoD214verJRsOkrxeiIzVmwJZpe0HuJlDY7
+	2sc3Om4sumUzY7JMnoEz4uo/JK+/heN7BW+0DC2i+/fAlrQmdmTEJurkTuKAPIWzO8MwfmMhJq6
+	RcGSC6vM/vkR2KkPpfanhaA==
+X-Received: by 2002:a05:622a:1101:b0:4dc:fc58:c50c with SMTP id d75a77b69052e-4dcfc58c83bmr20483351cf.5.1758876606319;
+        Fri, 26 Sep 2025 01:50:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEEiWvsH3XhfOSeK3PolvaeTD1lJD0k/Gm0XDb40I/xEqlYRxnruYGzyeye0H22WTBm31aZrg==
+X-Received: by 2002:a05:622a:1101:b0:4dc:fc58:c50c with SMTP id d75a77b69052e-4dcfc58c83bmr20483151cf.5.1758876605736;
+        Fri, 26 Sep 2025 01:50:05 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b35446f79besm326034066b.69.2025.09.26.01.50.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Sep 2025 01:50:05 -0700 (PDT)
+Message-ID: <e7843f88-71d5-4f7e-9f99-df06630e02fa@oss.qualcomm.com>
+Date: Fri, 26 Sep 2025 10:50:01 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MBO-RS-ID: dcc294d54bd9f90528a
-X-MBO-RS-META: c53m4ic87syjzwty5tfmxisedsq4b4ff
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] ASoC: codecs: va-macro: Rework version checking
+To: kernel test robot <lkp@intel.com>,
+        Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+        Srinivas Kandagatla <srini@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+        trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
+        linux-sound@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>
+References: <20250924-knp-audio-v1-1-5afa926b567c@oss.qualcomm.com>
+ <202509261315.O9CiiXjb-lkp@intel.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <202509261315.O9CiiXjb-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=dP+rWeZb c=1 sm=1 tr=0 ts=68d653c9 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=i3X5FwGiAAAA:8 a=QyXUC8HyAAAA:8 a=zXO_E9iLSFoZqPovHQIA:9
+ a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=mmqRlSCDY2ywfjPLJ4af:22
+X-Proofpoint-ORIG-GUID: vQqlxpppo_YOUqF-wgyG4Ma9sRv8wtvW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI1MDE3MSBTYWx0ZWRfX55TE9YgoXQr0
+ QU+kL7uMonPHzQj71MQUf0ZeBHba1Ugwg3Qw499zsJSvJ8bHey9Kxasg/8OG38wDPlN2YS/ftsH
+ yN+hUgoHvFITmW2XkyqHE4YETf3s323+76lINCq8sRkOvXvRCwRvlKVkyaoAeKLe9dSPgVMeaLf
+ PVcjj44rYe7Qqp3OZ6mFgPIuL8SZ3AhoZ72a4ytIPF6fUvEYh1+Ycl7A3GbzRw57pBJ8M6iq21E
+ 5DbslvO7ExvIRUuhMk+apQsAE4LKTwxyyx0sdKJL3z3tdl/2ij5Gtu9FZbqppGmt7D/AF3fPb2k
+ BcHmazWO/0nBHqsQRwromJIDcvIh+chrzypqJZ4ULOSXj6nvemykTrACb2xydl7CooSsDDBjoaa
+ vjm50sJ8/6IZti7BDovxrQady8Zkvg==
+X-Proofpoint-GUID: vQqlxpppo_YOUqF-wgyG4Ma9sRv8wtvW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-26_02,2025-09-26_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1011 priorityscore=1501
+ impostorscore=0 suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509250171
 
-On Thu, 2025-09-18 at 15:52 +0200, Boqun Feng wrote:
-> On Thu, Sep 18, 2025 at 02:30:59PM +0200, Philipp Stanner wrote:
-> [...]
-> > ---
-> > So. =C2=A1Hola!
-> >=20
-> > This is a highly WIP RFC. It's obviously at many places not yet
-> > conforming very well to Rust's standards.
-> >=20
-> > Nevertheless, it has progressed enough that I want to request comments
-> > from the community.
-> >=20
-> > There are a number of TODOs in the code to which I need input.
-> >=20
-> > Notably, it seems (half-)illegal to use a shared static reference to an
-> > Atomic, which I currently use for the dma_fence unit test / docstring
->=20
-> The `CHECKER` static you mean? If so, it should be a `static CHECKER`
-> instead of `static mut CHECKER`, also for future versions please use
-> LKMM (Linux Kernel Memory Model) atomics [1] instead of Rust native
-> atomics (you probably need to define `CHECKER` as `Atomic<i32>` because
-> AtomicBool is not supported by LKMM and potentially sub-optimial in some
-> cases).
+On 9/26/25 7:36 AM, kernel test robot wrote:
+> Hi Jingyi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on ae2d20002576d2893ecaff25db3d7ef9190ac0b6]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jingyi-Wang/ASoC-codecs-va-macro-Rework-version-checking/20250925-080338
+> base:   ae2d20002576d2893ecaff25db3d7ef9190ac0b6
+> patch link:    https://lore.kernel.org/r/20250924-knp-audio-v1-1-5afa926b567c%40oss.qualcomm.com
+> patch subject: [PATCH 1/5] ASoC: codecs: va-macro: Rework version checking
+> config: i386-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509261315.O9CiiXjb-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509261315.O9CiiXjb-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202509261315.O9CiiXjb-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> sound/soc/codecs/lpass-va-macro.c:1479:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     1479 |         maj = FIELD_GET(CORE_ID_0_REV_MAJ, val);
 
-Thanks.
+Jingyi, could you please add:
 
-Thinking about it I realized that for that example code I don't even
-need atomics. So I'll drop them for now.
+#include <linux/bitfield.h>
 
->=20
-> > test. I'm willing to rework that if someone suggests how.
-> > (Still, shouldn't changing a global Atomic always be legal? It can race=
-,
-> > of course. But that's kind of the point of an atomic)
-> >=20
-> > What I want comments on the most is the design of the callbacks. I thin=
-k
-> > it's a great opportunity to provide Rust drivers with rust-only
-> > callbacks, so that they don't have to bother about the C functions.
-> >=20
-> > dma_fence wise, only the most basic callbacks currently get implemented=
-.
-> > For Nova, AFAICS, we don't need much more than signalling fences and
-> > registering callbacks.
-> >=20
-> >=20
-> > Another, solvable, issue I'm having is designing the
-> > dma_fence_begin_signallin() abstractions. There are TODOs about that in
-> > the code. That should ideally be robust and not racy. So we might want
-> > some sort of synchronized (locked?) way for using that abstraction.
-> >=20
-> >=20
-> > Regarding the manually created spinlock of mine: I so far never need
-> > that spinlock anywhere in Rust and wasn't sure what's then the best way
-> > to pass a "raw" spinlock to C.
-> >=20
->=20
-> You can use `SpinLock<()>` for this purpose, no need to add new
-> bindings.
+when resending?
 
-The dma_fence C backend needs a spinlock pointer, given to it by the
-driver (so Rust code).
-
-How do I pass a SpinLock<()> to a C function? AFAICS SpinLock doesn't
-implement as_raw(), so I'd have to implement it, wouldn't I?
-
-Or rather, as it looks, I'd have to implement it for SpinLockBackend?
-
-
-P.
-
->=20
-> [1]: https://lore.kernel.org/rust-for-linux/20250905044141.77868-1-boqun.=
-feng@gmail.com/
->=20
-> Regards,
-> Boqun
->=20
-> >=20
-> > So much from my side. Hope to hear from you.
-> >=20
-> > (I've compiled and tested this with the unit test on the current -rc3)
-> >=20
-> > Philipp
-> > ---
-> [...]
-
+Konrad
