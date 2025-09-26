@@ -1,70 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691C51E7C2E;
-	Fri, 26 Sep 2025 15:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D521B217722
+	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 15:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758898956; cv=none; b=Kg7jYcXDkNrlVi3+QNfLNUq0qUp/jBCrF2Yd1Tnb8Zay5nsKM2hSO1PmW68UvwDBDB2GJYPbnI2bJFZKqCceiYlkfd6Y7jIZyJ3wGJN4yBf8QTw9QpWqfseVxglz40Im9m8BgPynkq4IoG+yuUy+e6nQjhy1AjtqrATnmRzEw1w=
+	t=1758901302; cv=none; b=uQdqf9A51ke8lYJuEM36zeQdG11cYFR7ZnrWqnk+JhZ0Oi3XQs7Ok3qNtZByBBV9wd1SM7PHyci8TRL+dBeGrnxjedZwXLoPWgV+RFt/JQ6SW0D5EOzkN9tBUfiSNMQE2+ahr8teSk8rFrnuK1SptXZfSsXV2mpiM9z9q26sxBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758898956; c=relaxed/simple;
-	bh=Ga4EFSKFDnAp35hTckCUWbH8Huu5AT0Xny1M6QQUPMg=;
+	s=arc-20240116; t=1758901302; c=relaxed/simple;
+	bh=8kE59LS+3I081Ra628/WHl3xrBDQHSFblc54GpQcwys=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m9J8OrG4zBI4N+aYKlLr1DWDE84BxoLIlGHbqA0an2ugaZ8YG4wCb77Otuad7/HAtHQGBvIN8UzmUZahKPcr5FlHpI30AacuTQ+vJ7UUf30uRZZPeHeeVfBCkT4CDgmE3ufVM/DptaypT/rkJWV5pJdsEqLmkn0KHj2AFUOSFRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QszQ/dXw; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QszQ/dXw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758898955; x=1790434955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ga4EFSKFDnAp35hTckCUWbH8Huu5AT0Xny1M6QQUPMg=;
-  b=QszQ/dXwcjNcIjq/s4AZ1QQxG8hJmQxXfgbrmkIzEGiBJkDY6WLi2Es4
-   UGhFbf/9oI5L+5wROYlVuUhRBxhWxAQgMXq02ntxQ6A3zAlY7euVwJQQd
-   cdEzDLVM41sGt6yD8WxuzHVgWLz49gLpbLwgwwiM1Yy2UIx37Bd75EwER
-   DPJH1YwOVjObA1KN17VYtQyR9SMST0pvyT7mbBHD1sp8oStlATtG2d20v
-   tBOgQn4vmNP0YwmaVm3pduYk02djRwHVfmOhdpoejBYs1v0y0LhPY5Xqq
-   fus9JL7Fcm4TzAON5mUwthwxOZxcMlMXlc81KxsJ5+xS1WvESdbJKxsRP
-   Q==;
-X-CSE-ConnectionGUID: goFzQui9SHOriwkJNYbAPQ==
-X-CSE-MsgGUID: ikT2YtdsScySSi/wFm/u3w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="60933704"
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="60933704"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 08:02:33 -0700
-X-CSE-ConnectionGUID: jCmqE4f8RoSf2AdUpdshOA==
-X-CSE-MsgGUID: x3/ZrHUYT56f+Pu8eFSbqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="177563999"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 26 Sep 2025 08:02:27 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v29xh-0006Kx-06;
-	Fri, 26 Sep 2025 15:02:20 +0000
-Date: Fri, 26 Sep 2025 23:01:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Terry Bowman <terry.bowman@amd.com>, dave@stgolabs.net,
-	jonathan.cameron@huawei.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, dan.j.williams@intel.com,
-	bhelgaas@google.com, shiju.jose@huawei.com, ming.li@zohomail.com,
-	Smita.KoralahalliChannabasappa@amd.com, rrichter@amd.com,
-	dan.carpenter@linaro.org, PradeepVineshReddy.Kodamati@amd.com,
-	lukas@wunner.de, Benjamin.Cheatham@amd.com,
-	sathyanarayanan.kuppuswamy@linux.intel.com,
-	linux-cxl@vger.kernel.org, alucerop@amd.com, ira.weiny@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	terry.bowman@amd.com
-Subject: Re: [PATCH v12 22/25] CXL/PCI: Export and rename merge_result() to
- pci_ers_merge_result()
-Message-ID: <202509262230.gXBVTVxW-lkp@intel.com>
-References: <20250925223440.3539069-23-terry.bowman@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8av4cPiZFGyU6wMgruioT1P/vLySMNJPD9fgw1QwQa7/a4rHYSnYklCqjd20e12KHH3gLuocva1RCj9Z+5RjWop9h3c1KZi+0aIG21Q5mVu+JCXDrQFl8UPVkv/79kOLD7gYE+z1/UQvUwX8jDW222XRk6KJ6QCNF6dQ0AUuqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14DAC168F;
+	Fri, 26 Sep 2025 08:41:32 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0E863F66E;
+	Fri, 26 Sep 2025 08:41:39 -0700 (PDT)
+Date: Fri, 26 Sep 2025 16:41:37 +0100
+From: Leo Yan <leo.yan@arm.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, James Clark <james.clark@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH 8/8] perf docs: Document building with Clang
+Message-ID: <20250926154137.GF7985@e132581.arm.com>
+References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com>
+ <20250925-perf_build_android_ndk-v1-8-8b35aadde3dc@arm.com>
+ <CAP-5=fV45npmMUVGakzpB0XDMJ+WudiHoanBXzJtrX2442k-YA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,50 +53,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250925223440.3539069-23-terry.bowman@amd.com>
+In-Reply-To: <CAP-5=fV45npmMUVGakzpB0XDMJ+WudiHoanBXzJtrX2442k-YA@mail.gmail.com>
 
-Hi Terry,
+Hi Ian,
 
-kernel test robot noticed the following build errors:
+On Thu, Sep 25, 2025 at 12:43:55PM -0700, Ian Rogers wrote:
 
-[auto build test ERROR on 46037455cbb748c5e85071c95f2244e81986eb58]
+[...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-pci-Remove-unnecessary-CXL-Endpoint-handling-helper-functions/20250926-064816
-base:   46037455cbb748c5e85071c95f2244e81986eb58
-patch link:    https://lore.kernel.org/r/20250925223440.3539069-23-terry.bowman%40amd.com
-patch subject: [PATCH v12 22/25] CXL/PCI: Export and rename merge_result() to pci_ers_merge_result()
-config: powerpc64-randconfig-002-20250926 (https://download.01.org/0day-ci/archive/20250926/202509262230.gXBVTVxW-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262230.gXBVTVxW-lkp@intel.com/reproduce)
+> > +5) Build with clang
+> > +===================
+> > +By default, the makefile uses GCC as compiler. With specifying environment
+> > +variables HOSTCC, CC and CXX, it allows to build perf with clang.
+> > +
+> > +Using clang for native build:
+> > +
+> > +  $ HOSTCC=clang CC=clang CXX=clang++ make -C tools/perf
+> > +
+> > +Using clang for cross compilation:
+> > +
+> > +  $ HOSTCC=clang CC=clang CXX=clang++ \
+> > +    make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C tools/perf \
+> > +    NO_LIBELF=1 NO_LIBTRACEEVENT=1 NO_JEVENTS=1
+> 
+> The three NO_-s here are going to cripple the build quite a lot, I
+> wonder if we can list package dependencies to install and failing that
+> use the NO_-s.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509262230.gXBVTVxW-lkp@intel.com/
+In the next version, I will drop NO_ options to avoid confusing.
 
-All errors (new ones prefixed by >>):
+Missing libraries can occur in both native build and cross build, so
+this is not a specific issue for cross build. OTOH, the build logs
+already provide clear reminders, here no need to bother readers for
+these NO_ options.
 
->> arch/powerpc/kernel/eeh_driver.c:68:28: error: static declaration of 'pci_ers_merge_result' follows non-static declaration
-   static enum pci_ers_result pci_ers_merge_result(enum pci_ers_result old,
-                              ^
-   include/linux/pci.h:1897:18: note: previous declaration is here
-   pci_ers_result_t pci_ers_merge_result(enum pci_ers_result orig,
-                    ^
-   1 error generated.
+> > +
+> > +In the example above, due to lack libelf, python and libtraceevent for
+> > +cross comiplation, disable the features accordingly.
+> 
+> nit: s/comiplation/compilation/
+> 
+> > diff --git a/tools/perf/Documentation/android.txt b/tools/perf/Documentation/android.txt
+> > index 24a59998fc91e814ad96f658d3481d88d798b60c..e65204cf2921f6bd8a79875784c5b3d5487ce05d 100644
+> > --- a/tools/perf/Documentation/android.txt
+> > +++ b/tools/perf/Documentation/android.txt
+> > @@ -1,78 +1,12 @@
+> >  How to compile perf for Android
+> > -=========================================
+> > +===============================
+> >
+> > -I. Set the Android NDK environment
+> > -------------------------------------------------
+> > +There have two ways to build perf and run it on Android.
+> 
+> nit: s/There have/There are/
 
+Will do.  Thanks a lot for review!
 
-vim +/pci_ers_merge_result +68 arch/powerpc/kernel/eeh_driver.c
-
-20b344971433da Sam Bobroff 2018-05-25  67  
-30424e386a30d1 Sam Bobroff 2018-05-25 @68  static enum pci_ers_result pci_ers_merge_result(enum pci_ers_result old,
-30424e386a30d1 Sam Bobroff 2018-05-25  69  						enum pci_ers_result new)
-30424e386a30d1 Sam Bobroff 2018-05-25  70  {
-30424e386a30d1 Sam Bobroff 2018-05-25  71  	if (eeh_result_priority(new) > eeh_result_priority(old))
-30424e386a30d1 Sam Bobroff 2018-05-25  72  		return new;
-30424e386a30d1 Sam Bobroff 2018-05-25  73  	return old;
-30424e386a30d1 Sam Bobroff 2018-05-25  74  }
-30424e386a30d1 Sam Bobroff 2018-05-25  75  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Leo
