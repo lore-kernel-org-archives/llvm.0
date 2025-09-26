@@ -1,153 +1,199 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA1029B778
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948C02DCBF1;
+	Fri, 26 Sep 2025 12:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758876620; cv=none; b=eTh6hmdd3E1ViIvMPKL4Ra+yBbhu8/Pu+Vf3HqBm27RollAjA1tDp40ZByJGS9xRkyyc4cB6XiJ9ehA/WVI9WWsBoNa+mfOTxT865FNl1+67HV8yoV9b36xugcoC4aP8us69700Cv6P/9voRWaD5fowtS/3RQG81M/vl/pfXfis=
+	t=1758890670; cv=none; b=ERSIyRvzrC65AkUt8X7ZM/hhCZPlVkeDxSXd1nFS5zwp5bgLg082mJ5rpVE/Ut9G3k34+Jk4x5PhtjtR1z1dr+HkdwBsMdx5GjSrR8P9xJ2YgDracpqZjMacLm/X49ZcfcwtM3tukGi91vdQs++N3u3wEkdOMb/9wRG/O4PBQOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758876620; c=relaxed/simple;
-	bh=DW5PR20rrpRjozhjmQF7SX9wg6GFQc9bhuXeEh/lm7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tNdYrzEAipbWDDAkYBiGxAhMMqp7u6Wx48UFBLWM0AkILrhCdrktNam6rf/xGnviXAz9bcMXbzC9dKFMyTcA3i3bfICHZtVgNmdkS74FaMesGjJQ2vrf1zDUCWIYVBhy2sxUl1BZ/UA4C81CVPtf7ixT6kLgvJDqKHmBSZy42mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KQeg2Vsp; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1758890670; c=relaxed/simple;
+	bh=YOV8kARbSyHERIV3BOJ0NkrVjbQ35l4jpMmPcR4lpwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RgrecXTx3eIHlVRgCZPptKDnQzg3/6bZ2ZfUw2JXD6ji3AbM1Zt7GX/N89fPAZ72Vru+TaPFhqpTcl4J8ro9zS0Hc8IjYmRKgpzz+aE3jYy4yAtW15ycre+RCHP0os8IhujQCWohu4DJ3ykwgTEsSgIACtNO9OgBgBMHjU/tvMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kpLbGLiB; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KQeg2Vsp"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58Q6w5Ye014305
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:50:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hAvJmzrwoSb3evK5QrOHasbm0i6ySDURtAIAeME4WEE=; b=KQeg2Vsp8pY7kAkX
-	m6rMUbmJSMEIKwgoIERa7LulLjSLELt8hiu1+IYMv00GPc5ieNf3NAF40MP3wS7w
-	dTFRo4CgdmzXsaN/3r68cQKzeMyrViYEqU69TrIrqEfIVUDA2OAk9PvPSV75/YRC
-	js4NLs2Wi36DbK7EtFjIBXupnVnxtU8IQYHl38HwRIw7hdltPcaksqAF7ahiRnCi
-	EPee4tLw52eu2eNitIONh6+DOvniIs5W/h75KjX5gpG5M48EDuJhD6DgXuOwz9qI
-	7emCJKiJNJ7AllZQPh2QgkIEm+OEcpYWj/Mw8OXl9VgTZ2Nf8iDDHcAYpx9M3uXD
-	KVLVdg==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49db0rj5e9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:50:17 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4dd729008d7so186931cf.1
-        for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 01:50:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758876606; x=1759481406;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hAvJmzrwoSb3evK5QrOHasbm0i6ySDURtAIAeME4WEE=;
-        b=AvRnb31pnmTWOFThIJTHDJSaZwq4z0+1HYVPdyfkvyqpyubzZc66v8IdlFgysRkmV6
-         zegJ1hTf6sjDd4iAgAIEu33RtZcnbHF5XLAoe+mttdQg3G2IFZVbO+bSoYc6aLrH5e4a
-         mlCYTMm0AK4XgWvsX84Dx59HxIaXaJ5fupuEFc/efHjOBG6HLiVn+8iSia2SRReU5ui4
-         fVBeXO1B0pSX/SPeFwniCQkBKPf7Vg3FvQVikNjS9MuS2bCvcn5EVyWVt+w0szmecOl/
-         oGmTtsX0WJuTNni4VFUFQvgnbDeRI2S2BQoaG3OmddfzslEQNPVvx8uBep7l56P/hK4P
-         igzQ==
-X-Gm-Message-State: AOJu0YwOoXA/ARQnljMTfBuDc7za71Yd85HzbSrrIkOllq1Vgaj3km+t
-	CPZ1s8f6wiVJom860qiDw+DdwEA2i2ooY2pR5PIMK0B7esqyhcL8diJoMbI90pvrj2ZQrUFvkJC
-	qUi5sBU5PFl8k0Zhm5JL+muCkzGSTfWDmtSVEAQnnePQQAlGR0t+l8LJg
-X-Gm-Gg: ASbGncvKH7/s3Vb2UrdUeWvRzdLQ/O4mCiD31YsnKQ0jGs3KTriE31KcSMe/aG+TRcU
-	IuW5wE5+NkPT6OV07SQbobAkIfiohmkRIPCpgzN5bSR6rdxnFNPn/JjPPHZ3pyKv4ZRu54u1j3h
-	3F6FzbNVDMxo00k+LBWbS52UiFnauS/r+jApfmf2lwdWYwmNOgwuMAIAJOrAvAb9T6qvfux6v0+
-	WAte9ok/gdmt3tpYf0oepXCAoCDe1jYaxMiHFZJInoD214verJRsOkrxeiIzVmwJZpe0HuJlDY7
-	2sc3Om4sumUzY7JMnoEz4uo/JK+/heN7BW+0DC2i+/fAlrQmdmTEJurkTuKAPIWzO8MwfmMhJq6
-	RcGSC6vM/vkR2KkPpfanhaA==
-X-Received: by 2002:a05:622a:1101:b0:4dc:fc58:c50c with SMTP id d75a77b69052e-4dcfc58c83bmr20483351cf.5.1758876606319;
-        Fri, 26 Sep 2025 01:50:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEEiWvsH3XhfOSeK3PolvaeTD1lJD0k/Gm0XDb40I/xEqlYRxnruYGzyeye0H22WTBm31aZrg==
-X-Received: by 2002:a05:622a:1101:b0:4dc:fc58:c50c with SMTP id d75a77b69052e-4dcfc58c83bmr20483151cf.5.1758876605736;
-        Fri, 26 Sep 2025 01:50:05 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b35446f79besm326034066b.69.2025.09.26.01.50.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Sep 2025 01:50:05 -0700 (PDT)
-Message-ID: <e7843f88-71d5-4f7e-9f99-df06630e02fa@oss.qualcomm.com>
-Date: Fri, 26 Sep 2025 10:50:01 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kpLbGLiB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758890668; x=1790426668;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YOV8kARbSyHERIV3BOJ0NkrVjbQ35l4jpMmPcR4lpwI=;
+  b=kpLbGLiBOvuTNJTHJCclm9PtfrwHJUhLcN7JJ+EcDkwF416JHLFGMFoi
+   x7MStDgi3mNYw95X+JB23DhzHiiEmpfuPc5ASMrUMXkIWucfgMI3EpRaz
+   ZSfQMD7IgbFEfajrlhSIP5hw5bkrg+7cW33uB4AKXB6Mkm+oOetZk36lS
+   gN09Y2vim6zRlF/KAOeLWYHtmkcsehe7QtDKn5NjzWesdE/VELhO5mFpS
+   hidO8lS3UAMefFlN/Nl0DKTDyEgxvfcSSwxebOX7qWE+ECy91p5MgKMzC
+   Ov9eS1v4JDJ7dd/WLuZXdC2JDIpAqflgZDVDnuWeYP9A71/+GhE8gQgkU
+   A==;
+X-CSE-ConnectionGUID: FLQwoMApQM+RaYd+nL8RQw==
+X-CSE-MsgGUID: U0amcLbLRhaA/rKEhcZtfQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11564"; a="61331492"
+X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
+   d="scan'208";a="61331492"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 05:44:27 -0700
+X-CSE-ConnectionGUID: Okz+aTvERQW9YtuQA0189g==
+X-CSE-MsgGUID: ElUcopUYT82x8T5Me6b3lQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
+   d="scan'208";a="181910463"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 26 Sep 2025 05:44:22 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v27oB-0006Dp-0l;
+	Fri, 26 Sep 2025 12:44:19 +0000
+Date: Fri, 26 Sep 2025 20:43:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Antoni Pokusinski <apokusinski01@gmail.com>, jic23@kernel.org,
+	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux@roeck-us.net,
+	rodrigo.gobbi.7@gmail.com, naresh.solanki@9elements.com,
+	michal.simek@amd.com, grantpeltier93@gmail.com,
+	farouk.bouabid@cherry.de, marcelo.schmitt1@gmail.com,
+	Antoni Pokusinski <apokusinski01@gmail.com>
+Subject: Re: [PATCH v2 4/4] iio: mpl3115: add support for sampling frequency
+Message-ID: <202509262005.y59poUS9-lkp@intel.com>
+References: <20250925204538.63723-5-apokusinski01@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] ASoC: codecs: va-macro: Rework version checking
-To: kernel test robot <lkp@intel.com>,
-        Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
-        trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
-        linux-sound@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Prasad Kumpatla <prasad.kumpatla@oss.qualcomm.com>
-References: <20250924-knp-audio-v1-1-5afa926b567c@oss.qualcomm.com>
- <202509261315.O9CiiXjb-lkp@intel.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <202509261315.O9CiiXjb-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=dP+rWeZb c=1 sm=1 tr=0 ts=68d653c9 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
- a=EUspDBNiAAAA:8 a=i3X5FwGiAAAA:8 a=QyXUC8HyAAAA:8 a=zXO_E9iLSFoZqPovHQIA:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=mmqRlSCDY2ywfjPLJ4af:22
-X-Proofpoint-ORIG-GUID: vQqlxpppo_YOUqF-wgyG4Ma9sRv8wtvW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI1MDE3MSBTYWx0ZWRfX55TE9YgoXQr0
- QU+kL7uMonPHzQj71MQUf0ZeBHba1Ugwg3Qw499zsJSvJ8bHey9Kxasg/8OG38wDPlN2YS/ftsH
- yN+hUgoHvFITmW2XkyqHE4YETf3s323+76lINCq8sRkOvXvRCwRvlKVkyaoAeKLe9dSPgVMeaLf
- PVcjj44rYe7Qqp3OZ6mFgPIuL8SZ3AhoZ72a4ytIPF6fUvEYh1+Ycl7A3GbzRw57pBJ8M6iq21E
- 5DbslvO7ExvIRUuhMk+apQsAE4LKTwxyyx0sdKJL3z3tdl/2ij5Gtu9FZbqppGmt7D/AF3fPb2k
- BcHmazWO/0nBHqsQRwromJIDcvIh+chrzypqJZ4ULOSXj6nvemykTrACb2xydl7CooSsDDBjoaa
- vjm50sJ8/6IZti7BDovxrQady8Zkvg==
-X-Proofpoint-GUID: vQqlxpppo_YOUqF-wgyG4Ma9sRv8wtvW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-26_02,2025-09-26_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1011 priorityscore=1501
- impostorscore=0 suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509250171
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250925204538.63723-5-apokusinski01@gmail.com>
 
-On 9/26/25 7:36 AM, kernel test robot wrote:
-> Hi Jingyi,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on ae2d20002576d2893ecaff25db3d7ef9190ac0b6]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jingyi-Wang/ASoC-codecs-va-macro-Rework-version-checking/20250925-080338
-> base:   ae2d20002576d2893ecaff25db3d7ef9190ac0b6
-> patch link:    https://lore.kernel.org/r/20250924-knp-audio-v1-1-5afa926b567c%40oss.qualcomm.com
-> patch subject: [PATCH 1/5] ASoC: codecs: va-macro: Rework version checking
-> config: i386-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509261315.O9CiiXjb-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509261315.O9CiiXjb-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202509261315.O9CiiXjb-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> sound/soc/codecs/lpass-va-macro.c:1479:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->     1479 |         maj = FIELD_GET(CORE_ID_0_REV_MAJ, val);
+Hi Antoni,
 
-Jingyi, could you please add:
+kernel test robot noticed the following build errors:
 
-#include <linux/bitfield.h>
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on robh/for-next linus/master v6.17-rc7 next-20250925]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-when resending?
+url:    https://github.com/intel-lab-lkp/linux/commits/Antoni-Pokusinski/dt-bindings-iio-pressure-add-binding-for-mpl3115/20250926-044905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20250925204538.63723-5-apokusinski01%40gmail.com
+patch subject: [PATCH v2 4/4] iio: mpl3115: add support for sampling frequency
+config: i386-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509262005.y59poUS9-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262005.y59poUS9-lkp@intel.com/reproduce)
 
-Konrad
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509262005.y59poUS9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iio/pressure/mpl3115.c:204:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     204 |                 ret = FIELD_GET(MPL3115_CTRL2_ST, ret);
+         |                       ^
+>> drivers/iio/pressure/mpl3115.c:249:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     249 |                                         FIELD_PREP(MPL3115_CTRL2_ST, i));
+         |                                         ^
+   2 errors generated.
+
+
+vim +/FIELD_GET +204 drivers/iio/pressure/mpl3115.c
+
+   169	
+   170	static int mpl3115_read_raw(struct iio_dev *indio_dev,
+   171				    struct iio_chan_spec const *chan,
+   172				    int *val, int *val2, long mask)
+   173	{
+   174		struct mpl3115_data *data = iio_priv(indio_dev);
+   175		int ret;
+   176	
+   177		switch (mask) {
+   178		case IIO_CHAN_INFO_RAW:
+   179			if (!iio_device_claim_direct(indio_dev))
+   180				return -EBUSY;
+   181	
+   182			ret = mpl3115_read_info_raw(data, chan, val);
+   183			iio_device_release_direct(indio_dev);
+   184			return ret;
+   185	
+   186		case IIO_CHAN_INFO_SCALE:
+   187			switch (chan->type) {
+   188			case IIO_PRESSURE:
+   189				*val = 0;
+   190				*val2 = 250; /* want kilopascal */
+   191				return IIO_VAL_INT_PLUS_MICRO;
+   192			case IIO_TEMP:
+   193				*val = 0;
+   194				*val2 = 62500;
+   195				return IIO_VAL_INT_PLUS_MICRO;
+   196			default:
+   197				return -EINVAL;
+   198			}
+   199		case IIO_CHAN_INFO_SAMP_FREQ:
+   200			ret = i2c_smbus_read_byte_data(data->client, MPL3115_CTRL_REG2);
+   201			if (ret < 0)
+   202				return ret;
+   203	
+ > 204			ret = FIELD_GET(MPL3115_CTRL2_ST, ret);
+   205	
+   206			*val = mpl3115_samp_freq_table[ret][0];
+   207			*val2 = mpl3115_samp_freq_table[ret][1];
+   208			return IIO_VAL_INT_PLUS_MICRO;
+   209		}
+   210		return -EINVAL;
+   211	}
+   212	
+   213	static int mpl3115_read_avail(struct iio_dev *indio_dev,
+   214				      struct iio_chan_spec const *chan,
+   215				      const int **vals, int *type, int *length,
+   216				      long mask)
+   217	{
+   218		if (mask != IIO_CHAN_INFO_SAMP_FREQ)
+   219			return -EINVAL;
+   220	
+   221		*type = IIO_VAL_INT_PLUS_MICRO;
+   222		*length = ARRAY_SIZE(mpl3115_samp_freq_table) * 2;
+   223		*vals = (int *)mpl3115_samp_freq_table;
+   224		return IIO_AVAIL_LIST;
+   225	}
+   226	
+   227	static int mpl3115_write_raw(struct iio_dev *indio_dev,
+   228				     const struct iio_chan_spec *chan,
+   229				     int val, int val2, long mask)
+   230	{
+   231		struct mpl3115_data *data = iio_priv(indio_dev);
+   232		int i, ret;
+   233	
+   234		if (mask != IIO_CHAN_INFO_SAMP_FREQ)
+   235			return -EINVAL;
+   236	
+   237		for (i = 0; i < ARRAY_SIZE(mpl3115_samp_freq_table); i++)
+   238			if (val == mpl3115_samp_freq_table[i][0] &&
+   239			    val2 == mpl3115_samp_freq_table[i][1])
+   240				break;
+   241	
+   242		if (i == ARRAY_SIZE(mpl3115_samp_freq_table))
+   243			return -EINVAL;
+   244	
+   245		if (!iio_device_claim_direct(indio_dev))
+   246			return -EBUSY;
+   247	
+   248		ret = i2c_smbus_write_byte_data(data->client, MPL3115_CTRL_REG2,
+ > 249						FIELD_PREP(MPL3115_CTRL2_ST, i));
+   250		iio_device_release_direct(indio_dev);
+   251		return ret;
+   252	}
+   253	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
