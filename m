@@ -1,63 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660810FD;
-	Fri, 26 Sep 2025 15:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D7C21CC79
+	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 15:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758901444; cv=none; b=OiS3UIiGrzEOMoH6qD0UyaUFfF0p+ExLVU2KRb9jdjXc3qHImS3M3HMPqbPQzC+Q4SDJcb386aA+1cuu3FOl3kkIIkIZ54VpDbPNRQUP5v/ShUi8ZFFluk6iiI8543zkDl+TY1tkVtiKRCHBlLM1GksdGEtdx/dV3OC1R1DRt7I=
+	t=1758901490; cv=none; b=j8vyL2xhUuZuLYhcgyROcTau5Uv5VmanittSHZHm4cQ0yiufGFqE4UtgZ4R1XemGv3wntKR7qP2IEOHmqT/VcNU6dYXBEC6OZZUTacqEfGrcdLrwQa4lxG5w9v+06wH5C8o56GBpn1/0jz0PggrNh/Ay/1ZxNLLUTxBs9jznV1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758901444; c=relaxed/simple;
-	bh=KrFHYS000e/atb+UXTsqQIPzMGvQL/wJ1Q0Fg5BR+eI=;
+	s=arc-20240116; t=1758901490; c=relaxed/simple;
+	bh=gw8GlEm/pMe/T6lV132M5o7O/nbVio5JrXJlGluzWjI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NqxUl++zQbQTJR0S/MCXX6FAWjzJDlWI7tIEtE7tHY38alF9w6AbduFgUECrHUBMXfrOkv0UjsLSePYaZ0NmHE/8utPb2h7aKMciS/ubh9FlI0+Zn4wvDPRM/Bxfrz5ppBEPoEckDkszIctHQVnPAyMD+hugYRx7CqIbplidUhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FeqtM1Fz; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hzZHFe7+FnKPBO2waGdqllwhKGwTYi4XogYzdg+VorAyk8z157Urm4hmgIs0fnGtyM+tli5K9bAFJg68yhxfJoI/fjucGzLfZ++5gxY63zfjwSeD4nPoRRSErnvEJT2oZ0+W16f4N+eCMksrDs2t9fqFTcYETqWPmbAcxndKwkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqLKArCo; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FeqtM1Fz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758901442; x=1790437442;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KrFHYS000e/atb+UXTsqQIPzMGvQL/wJ1Q0Fg5BR+eI=;
-  b=FeqtM1FzAxXOOKD3G9pVr6hX4rzorvuICLOvxA/r0RWwKk1hyi3fW6cT
-   5gPQ64GggLnUSZm0IUZTbC2hBnisgyK5LihFN0hu5849xDAjNkPVRKnrE
-   QZFURCbrhP9884hDVDj8g3y2rPZ+GUayzt4LWydYFw6QWCzeBxJBql1YY
-   E/eHsB+b4v3Kywx912GVQcty/614TLdDqwqqjqDNFiLll0ZZokcLVcHfB
-   ompRkwWrP4uBcyzGD1+rtBPWFzswnANwpX7Buo74r+dFGFhBMwFx4VTLX
-   +kmoqSTRkaIX7DDx4zZElsax2vNVkk1DJvOJQaY/vFt/7BoSWv8nxtyDO
-   w==;
-X-CSE-ConnectionGUID: /aZgKV50RRyZalvWS8qM6w==
-X-CSE-MsgGUID: PQQwWfoKS5mtnUCwvfYMWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="60274914"
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="60274914"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 08:44:01 -0700
-X-CSE-ConnectionGUID: 1h3MiBORRjGUmn+o96KvzQ==
-X-CSE-MsgGUID: W6xLYoPkRlKK+WBc1iknuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="182047538"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Sep 2025 08:43:59 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v2Abj-0006NL-0h;
-	Fri, 26 Sep 2025 15:43:42 +0000
-Date: Fri, 26 Sep 2025 23:43:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neilb@ownmail.net>, Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 09/11] VFS/ovl/smb: introduce start_renaming_dentry()
-Message-ID: <202509262345.LLJy17UN-lkp@intel.com>
-References: <20250926025015.1747294-10-neilb@ownmail.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqLKArCo"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-81fdd5d7b59so6182006d6.3
+        for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758901488; x=1759506288; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1mcGhhHjp2eXgOL7P5TYM8JSLgVlfC9igU21PobzEN4=;
+        b=IqLKArCoAjhKKpxcsDZcjvbsPEseIZbXZmWATDecO55zAe/paE+tW1eDb3zMAyOPFr
+         agpz+J/vkmQ36xFNNNNYTADu+th0s4Y4PQiTxfHXcEV8bY8rkRxYj73wjERYvEVN8lAq
+         ydKeGzngsF9d/kFxTGhVnDLqmaJ+250WjftfksyWafb/fImxkWKGRWvnM9PwuaNJ2eJJ
+         FTn2nd3El1VACowM+rJWMrC7XerAiPPHXQDLIGhTbIhF1BDlaOQ8jhHRGmeUymebCxQ1
+         ApwXl5E7Ezs7Jfa8n5szXY6ETuRjKOrLsLkFzRa9Oz/RM+berkiF3WycjH8e/EL7iYpn
+         rjGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758901488; x=1759506288;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1mcGhhHjp2eXgOL7P5TYM8JSLgVlfC9igU21PobzEN4=;
+        b=r4Ur0NgPgaANNP1emtFAn1OkLhD1bKWr13c3YoJIZRhG/JalCmtLaz5Tl8LBQJ71MO
+         UMNs/4r1EvFBypOjIN4D3LbKKj/rLp3Faszm2fsos3a5MPIOl7CGnPaS9AikgVGh1BAq
+         Cup1bhqZxq+N18EZpKAcNhSmck+r7my7t4S9o4U7zaDPdB8OTDPJgDLkl11+AXROUerw
+         z9xRCcbEAvkFAhW8IKmpt84HgQDBWhcGjS3cmQ/BlBL7D/1lmIWeLYkSwwSYaxymbTJi
+         Who3H7liA44xXoyvflroHsbNpSf7I+5Ncfa+BPGQm520X+xUurnJkN52QQ0PBn5TMTGd
+         E9qg==
+X-Forwarded-Encrypted: i=1; AJvYcCXDWj6lujNZgb8jASGL2QlCaKE5omFoNZigMOh87RaI4b4nJvRyCDC+WP83jNPrnRA+FOX2@lists.linux.dev
+X-Gm-Message-State: AOJu0YwTquDRMEcaaWE6zxN+2kHn/t5+GPQfZlSFjS4L2NCZgrz5FNjf
+	YDuZdt0sNzNsU2kwYj49zwldZfIum+oKvHUqqEQCetaLEzuT6Q8eJ5Ys
+X-Gm-Gg: ASbGnctFXK8ir/oMAzgJMPT0eEfsgbeq0Lb3B2H6AhDs3kr+sgp1wk/Vy73MraEmoUE
+	kryvt4ynrRrM26Q871mdh1wcOhkluXxZEq+0Q6xI3N3SwYhphivRG4ATjP+/UxrW5N2Es6/IOLZ
+	Dw3ls6HOHNKJgq8gLB5ZudXqof/9RjkXZNpV/9jlDrO5/mDpvOanPlIO4WR8TUVyENWoTzbmhUk
+	RXd1I9lr1Ka+HXe/UHAn5g9m/DUFbEG9VCRmd2ojglddxw4UQyPFshvuscgzBLU2H9hfX1vRfvo
+	kiXgmns5EN5+l8+Wv6bsWrYkvZYWS6opYHH2X/JThCQ2252nqTq7u9Ze2JC8zdYlZgzoBCFVjlj
+	3amkFi+SxWUpndwBpH8ruV1H5f0+hgmHk+cJPZgFZ0ZKsNT2OzGzNByCMfDMdJZv4TsE9NpU63V
+	RWc8D21XUZm/n1WFvx+LpKMg3S4Xb/LMXRrA==
+X-Google-Smtp-Source: AGHT+IF4wq9zktArSY6pgVpnyiaBJyrWrNThCHzoU9ocyuGVqekUKxsMvPATedxtbT74AR7HQqtngw==
+X-Received: by 2002:a05:6214:1c84:b0:731:e432:888c with SMTP id 6a1803df08f44-7fc386ed8ccmr41407516d6.35.1758901487586;
+        Fri, 26 Sep 2025 08:44:47 -0700 (PDT)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-80143053d1esm28046766d6.32.2025.09.26.08.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Sep 2025 08:44:47 -0700 (PDT)
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 25925F4007B;
+	Fri, 26 Sep 2025 11:44:46 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Fri, 26 Sep 2025 11:44:46 -0400
+X-ME-Sender: <xms:7bTWaD8GaXpVPbrps4d7E9n_bjzzRhZyG3UvDqjG81DMRYYMxzL2Tw>
+    <xme:7bTWaP5evZu5Jr9rE7T_zoz5mMUoC-9VM42W6g_142QkRYuEIfMVqWZSfur5_keVF
+    Uw-YrVo3i0uiyx6K7a6e2wombFiL7v2-MhxjU2qTfgBZcmuDcrq7Q>
+X-ME-Received: <xmr:7bTWaDoLBZ1TjkSNsGNG9Isnd9Z5-o_3v-_n8RrKeYiNEoS79BAnCtlDLX9I7E3_Y2ICHPCmx3NsOJ4kQRgHwE2mfk-CRmS9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeileejiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeegvddvhedt
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
+    feehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehphhgrshhtrgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhi
+    esghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothho
+    nhhmrghilhdrtghomhdprhgtphhtthhopehlohhsshhinheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pegrlhhitggvrhihhhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopehtmhhgrhhosh
+    hssehumhhitghhrdgvughu
+X-ME-Proxy: <xmx:7rTWaLDaM191edQ-YKFNpdeiSbvBtv0cpOhQkc4eQR5XyuNUhps9_g>
+    <xmx:7rTWaMMxsC4UmqKLuFihps-FBk1oH04IIIOSgN3xQpOaRyNBxu4Q1w>
+    <xmx:7rTWaKnkSMn9Z8haCh4AUBredHO5C0g2OqlHlwk31tIpgC2aEKfb9A>
+    <xmx:7rTWaOd94ceZ9RNOFgxiSxh7w7N-BU8xivt9AOWwAFKni64LYzL32Q>
+    <xmx:7rTWaPCKNLmxIZnmFKhOcWjFMyzLQM-dpSYZbCkdoHOB8J79vxdCuKbB>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 26 Sep 2025 11:44:45 -0400 (EDT)
+Date: Fri, 26 Sep 2025 08:44:43 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: phasta@kernel.org
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,	Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>,	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Asahi Lina <lina+kernel@asahilina.net>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Krishna Ketan Rai <prafulrai522@gmail.com>,
+	Lyude Paul <lyude@redhat.com>,	Mitchell Levy <levymitchell0@gmail.com>,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH] rust: sync: Add dma_fence abstractions
+Message-ID: <aNa069wZv1cn8VGh@tardis.local>
+References: <20250918123100.124738-2-phasta@kernel.org>
+ <aMwOoYe1xGDBg0Zv@tardis-2.local>
+ <12c09de235023c99a8a864b17b2f797c7339bb7b.camel@mailbox.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,111 +135,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250926025015.1747294-10-neilb@ownmail.net>
+In-Reply-To: <12c09de235023c99a8a864b17b2f797c7339bb7b.camel@mailbox.org>
 
-Hi NeilBrown,
+On Fri, Sep 26, 2025 at 10:48:06AM +0200, Philipp Stanner wrote:
+[..]
+> > > 
+> > > Regarding the manually created spinlock of mine: I so far never need
+> > > that spinlock anywhere in Rust and wasn't sure what's then the best way
+> > > to pass a "raw" spinlock to C.
+> > > 
+> > 
+> > You can use `SpinLock<()>` for this purpose, no need to add new
+> > bindings.
+> 
+> The dma_fence C backend needs a spinlock pointer, given to it by the
+> driver (so Rust code).
+> 
+> How do I pass a SpinLock<()> to a C function? AFAICS SpinLock doesn't
+> implement as_raw(), so I'd have to implement it, wouldn't I?
+> 
 
-kernel test robot noticed the following build warnings:
+Technically you can use a `&raw` to get the address of the spinlock and
+just use it, since `SpinLock<()>` is `repr(C)`, so it's transparent to a 
+spinlock_t. So you don't have to ;-)
 
-[auto build test WARNING on brauner-vfs/vfs.all]
-[also build test WARNING on next-20250925]
-[cannot apply to driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus viro-vfs/for-next linus/master v6.17-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, while we are at it, it makes sense that we do it right.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/debugfs-rename-end_creating-to-debugfs_end_creating/20250926-105302
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250926025015.1747294-10-neilb%40ownmail.net
-patch subject: [PATCH 09/11] VFS/ovl/smb: introduce start_renaming_dentry()
-config: x86_64-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509262345.LLJy17UN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262345.LLJy17UN-lkp@intel.com/reproduce)
+> Or rather, as it looks, I'd have to implement it for SpinLockBackend?
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509262345.LLJy17UN-lkp@intel.com/
+I think the below should work, we already have a special from_raw() for
+Lock<()>, it makes sense to have a special as_raw() as well.
 
-All warnings (new ones prefixed by >>):
+Let me know if you want me to send a proper patch, or feel free to add
+one in your patchset ;-)
 
->> fs/overlayfs/super.c:609:7: warning: variable 'dest' is uninitialized when used here [-Wuninitialized]
-     609 |         dput(dest);
-         |              ^~~~
-   fs/overlayfs/super.c:559:21: note: initialize the variable 'dest' to silence this warning
-     559 |         struct dentry *dest;
-         |                            ^
-         |                             = NULL
-   1 warning generated.
+diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+index 27202beef90c..78f3287a1372 100644
+--- a/rust/kernel/sync/lock.rs
++++ b/rust/kernel/sync/lock.rs
+@@ -160,6 +160,13 @@ pub unsafe fn from_raw<'a>(ptr: *mut B::State) -> &'a Self {
+         //   `B::State`.
+         unsafe { &*ptr.cast() }
+     }
++
++    /// Obtains the raw pointer from a [`Lock`].
++    ///
++    /// This can be useful for working with a lock user outside Rust.
++    pub fn as_raw(&self) -> *mut B::State {
++        self.state.get()
++    }
+ }
+
+ impl<T: ?Sized, B: Backend> Lock<T, B> {
 
 
-vim +/dest +609 fs/overlayfs/super.c
+Regards,
+Boqun
 
-6ee8acf0f72b89 Miklos Szeredi    2017-11-09  550  
-cad218ab332078 Amir Goldstein    2020-02-20  551  /*
-cad218ab332078 Amir Goldstein    2020-02-20  552   * Returns 1 if RENAME_WHITEOUT is supported, 0 if not supported and
-cad218ab332078 Amir Goldstein    2020-02-20  553   * negative values if error is encountered.
-cad218ab332078 Amir Goldstein    2020-02-20  554   */
-576bb263450bbb Christian Brauner 2022-04-04  555  static int ovl_check_rename_whiteout(struct ovl_fs *ofs)
-cad218ab332078 Amir Goldstein    2020-02-20  556  {
-576bb263450bbb Christian Brauner 2022-04-04  557  	struct dentry *workdir = ofs->workdir;
-cad218ab332078 Amir Goldstein    2020-02-20  558  	struct dentry *temp;
-cad218ab332078 Amir Goldstein    2020-02-20  559  	struct dentry *dest;
-cad218ab332078 Amir Goldstein    2020-02-20  560  	struct dentry *whiteout;
-cad218ab332078 Amir Goldstein    2020-02-20  561  	struct name_snapshot name;
-18cc48cabac8b0 NeilBrown         2025-09-26  562  	struct renamedata rd = {};
-18cc48cabac8b0 NeilBrown         2025-09-26  563  	char name2[OVL_TEMPNAME_SIZE];
-cad218ab332078 Amir Goldstein    2020-02-20  564  	int err;
-cad218ab332078 Amir Goldstein    2020-02-20  565  
-576bb263450bbb Christian Brauner 2022-04-04  566  	temp = ovl_create_temp(ofs, workdir, OVL_CATTR(S_IFREG | 0));
-cad218ab332078 Amir Goldstein    2020-02-20  567  	err = PTR_ERR(temp);
-cad218ab332078 Amir Goldstein    2020-02-20  568  	if (IS_ERR(temp))
-d2c995581c7c5d NeilBrown         2025-07-16  569  		return err;
-cad218ab332078 Amir Goldstein    2020-02-20  570  
-18cc48cabac8b0 NeilBrown         2025-09-26  571  	rd.mnt_idmap = ovl_upper_mnt_idmap(ofs);
-18cc48cabac8b0 NeilBrown         2025-09-26  572  	rd.old_parent = workdir;
-18cc48cabac8b0 NeilBrown         2025-09-26  573  	rd.new_parent = workdir;
-18cc48cabac8b0 NeilBrown         2025-09-26  574  	rd.flags = RENAME_WHITEOUT;
-18cc48cabac8b0 NeilBrown         2025-09-26  575  	ovl_tempname(name2);
-18cc48cabac8b0 NeilBrown         2025-09-26  576  	err = start_renaming_dentry(&rd, 0, temp, &QSTR(name2));
-d2c995581c7c5d NeilBrown         2025-07-16  577  	if (err) {
-d2c995581c7c5d NeilBrown         2025-07-16  578  		dput(temp);
-d2c995581c7c5d NeilBrown         2025-07-16  579  		return err;
-d2c995581c7c5d NeilBrown         2025-07-16  580  	}
-cad218ab332078 Amir Goldstein    2020-02-20  581  
-cad218ab332078 Amir Goldstein    2020-02-20  582  	/* Name is inline and stable - using snapshot as a copy helper */
-cad218ab332078 Amir Goldstein    2020-02-20  583  	take_dentry_name_snapshot(&name, temp);
-18cc48cabac8b0 NeilBrown         2025-09-26  584  	err = ovl_do_rename_rd(&rd);
-18cc48cabac8b0 NeilBrown         2025-09-26  585  	end_renaming(&rd);
-cad218ab332078 Amir Goldstein    2020-02-20  586  	if (err) {
-cad218ab332078 Amir Goldstein    2020-02-20  587  		if (err == -EINVAL)
-cad218ab332078 Amir Goldstein    2020-02-20  588  			err = 0;
-cad218ab332078 Amir Goldstein    2020-02-20  589  		goto cleanup_temp;
-cad218ab332078 Amir Goldstein    2020-02-20  590  	}
-cad218ab332078 Amir Goldstein    2020-02-20  591  
-09d56cc88c2470 NeilBrown         2025-07-16  592  	whiteout = ovl_lookup_upper_unlocked(ofs, name.name.name,
-09d56cc88c2470 NeilBrown         2025-07-16  593  					     workdir, name.name.len);
-cad218ab332078 Amir Goldstein    2020-02-20  594  	err = PTR_ERR(whiteout);
-cad218ab332078 Amir Goldstein    2020-02-20  595  	if (IS_ERR(whiteout))
-cad218ab332078 Amir Goldstein    2020-02-20  596  		goto cleanup_temp;
-cad218ab332078 Amir Goldstein    2020-02-20  597  
-bc8df7a3dc0359 Alexander Larsson 2023-08-23  598  	err = ovl_upper_is_whiteout(ofs, whiteout);
-cad218ab332078 Amir Goldstein    2020-02-20  599  
-cad218ab332078 Amir Goldstein    2020-02-20  600  	/* Best effort cleanup of whiteout and temp file */
-cad218ab332078 Amir Goldstein    2020-02-20  601  	if (err)
-fe4d3360f9cbb5 NeilBrown         2025-07-16  602  		ovl_cleanup(ofs, workdir, whiteout);
-cad218ab332078 Amir Goldstein    2020-02-20  603  	dput(whiteout);
-cad218ab332078 Amir Goldstein    2020-02-20  604  
-cad218ab332078 Amir Goldstein    2020-02-20  605  cleanup_temp:
-fe4d3360f9cbb5 NeilBrown         2025-07-16  606  	ovl_cleanup(ofs, workdir, temp);
-cad218ab332078 Amir Goldstein    2020-02-20  607  	release_dentry_name_snapshot(&name);
-cad218ab332078 Amir Goldstein    2020-02-20  608  	dput(temp);
-cad218ab332078 Amir Goldstein    2020-02-20 @609  	dput(dest);
-cad218ab332078 Amir Goldstein    2020-02-20  610  
-cad218ab332078 Amir Goldstein    2020-02-20  611  	return err;
-cad218ab332078 Amir Goldstein    2020-02-20  612  }
-cad218ab332078 Amir Goldstein    2020-02-20  613  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> P.
+> 
+> > 
+> > [1]: https://lore.kernel.org/rust-for-linux/20250905044141.77868-1-boqun.feng@gmail.com/
+> > 
+> > Regards,
+> > Boqun
+> > 
+> > > 
+> > > So much from my side. Hope to hear from you.
+> > > 
+> > > (I've compiled and tested this with the unit test on the current -rc3)
+> > > 
+> > > Philipp
+> > > ---
+> > [...]
+> 
