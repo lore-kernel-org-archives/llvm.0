@@ -1,50 +1,63 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D521B217722
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 15:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660810FD;
+	Fri, 26 Sep 2025 15:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758901302; cv=none; b=uQdqf9A51ke8lYJuEM36zeQdG11cYFR7ZnrWqnk+JhZ0Oi3XQs7Ok3qNtZByBBV9wd1SM7PHyci8TRL+dBeGrnxjedZwXLoPWgV+RFt/JQ6SW0D5EOzkN9tBUfiSNMQE2+ahr8teSk8rFrnuK1SptXZfSsXV2mpiM9z9q26sxBE=
+	t=1758901444; cv=none; b=OiS3UIiGrzEOMoH6qD0UyaUFfF0p+ExLVU2KRb9jdjXc3qHImS3M3HMPqbPQzC+Q4SDJcb386aA+1cuu3FOl3kkIIkIZ54VpDbPNRQUP5v/ShUi8ZFFluk6iiI8543zkDl+TY1tkVtiKRCHBlLM1GksdGEtdx/dV3OC1R1DRt7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758901302; c=relaxed/simple;
-	bh=8kE59LS+3I081Ra628/WHl3xrBDQHSFblc54GpQcwys=;
+	s=arc-20240116; t=1758901444; c=relaxed/simple;
+	bh=KrFHYS000e/atb+UXTsqQIPzMGvQL/wJ1Q0Fg5BR+eI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8av4cPiZFGyU6wMgruioT1P/vLySMNJPD9fgw1QwQa7/a4rHYSnYklCqjd20e12KHH3gLuocva1RCj9Z+5RjWop9h3c1KZi+0aIG21Q5mVu+JCXDrQFl8UPVkv/79kOLD7gYE+z1/UQvUwX8jDW222XRk6KJ6QCNF6dQ0AUuqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14DAC168F;
-	Fri, 26 Sep 2025 08:41:32 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0E863F66E;
-	Fri, 26 Sep 2025 08:41:39 -0700 (PDT)
-Date: Fri, 26 Sep 2025 16:41:37 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, James Clark <james.clark@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH 8/8] perf docs: Document building with Clang
-Message-ID: <20250926154137.GF7985@e132581.arm.com>
-References: <20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com>
- <20250925-perf_build_android_ndk-v1-8-8b35aadde3dc@arm.com>
- <CAP-5=fV45npmMUVGakzpB0XDMJ+WudiHoanBXzJtrX2442k-YA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NqxUl++zQbQTJR0S/MCXX6FAWjzJDlWI7tIEtE7tHY38alF9w6AbduFgUECrHUBMXfrOkv0UjsLSePYaZ0NmHE/8utPb2h7aKMciS/ubh9FlI0+Zn4wvDPRM/Bxfrz5ppBEPoEckDkszIctHQVnPAyMD+hugYRx7CqIbplidUhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FeqtM1Fz; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FeqtM1Fz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758901442; x=1790437442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KrFHYS000e/atb+UXTsqQIPzMGvQL/wJ1Q0Fg5BR+eI=;
+  b=FeqtM1FzAxXOOKD3G9pVr6hX4rzorvuICLOvxA/r0RWwKk1hyi3fW6cT
+   5gPQ64GggLnUSZm0IUZTbC2hBnisgyK5LihFN0hu5849xDAjNkPVRKnrE
+   QZFURCbrhP9884hDVDj8g3y2rPZ+GUayzt4LWydYFw6QWCzeBxJBql1YY
+   E/eHsB+b4v3Kywx912GVQcty/614TLdDqwqqjqDNFiLll0ZZokcLVcHfB
+   ompRkwWrP4uBcyzGD1+rtBPWFzswnANwpX7Buo74r+dFGFhBMwFx4VTLX
+   +kmoqSTRkaIX7DDx4zZElsax2vNVkk1DJvOJQaY/vFt/7BoSWv8nxtyDO
+   w==;
+X-CSE-ConnectionGUID: /aZgKV50RRyZalvWS8qM6w==
+X-CSE-MsgGUID: PQQwWfoKS5mtnUCwvfYMWA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="60274914"
+X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
+   d="scan'208";a="60274914"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 08:44:01 -0700
+X-CSE-ConnectionGUID: 1h3MiBORRjGUmn+o96KvzQ==
+X-CSE-MsgGUID: W6xLYoPkRlKK+WBc1iknuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
+   d="scan'208";a="182047538"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 26 Sep 2025 08:43:59 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v2Abj-0006NL-0h;
+	Fri, 26 Sep 2025 15:43:42 +0000
+Date: Fri, 26 Sep 2025 23:43:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: NeilBrown <neilb@ownmail.net>, Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 09/11] VFS/ovl/smb: introduce start_renaming_dentry()
+Message-ID: <202509262345.LLJy17UN-lkp@intel.com>
+References: <20250926025015.1747294-10-neilb@ownmail.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,61 +66,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fV45npmMUVGakzpB0XDMJ+WudiHoanBXzJtrX2442k-YA@mail.gmail.com>
+In-Reply-To: <20250926025015.1747294-10-neilb@ownmail.net>
 
-Hi Ian,
+Hi NeilBrown,
 
-On Thu, Sep 25, 2025 at 12:43:55PM -0700, Ian Rogers wrote:
+kernel test robot noticed the following build warnings:
 
-[...]
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on next-20250925]
+[cannot apply to driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus viro-vfs/for-next linus/master v6.17-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > +5) Build with clang
-> > +===================
-> > +By default, the makefile uses GCC as compiler. With specifying environment
-> > +variables HOSTCC, CC and CXX, it allows to build perf with clang.
-> > +
-> > +Using clang for native build:
-> > +
-> > +  $ HOSTCC=clang CC=clang CXX=clang++ make -C tools/perf
-> > +
-> > +Using clang for cross compilation:
-> > +
-> > +  $ HOSTCC=clang CC=clang CXX=clang++ \
-> > +    make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C tools/perf \
-> > +    NO_LIBELF=1 NO_LIBTRACEEVENT=1 NO_JEVENTS=1
-> 
-> The three NO_-s here are going to cripple the build quite a lot, I
-> wonder if we can list package dependencies to install and failing that
-> use the NO_-s.
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/debugfs-rename-end_creating-to-debugfs_end_creating/20250926-105302
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250926025015.1747294-10-neilb%40ownmail.net
+patch subject: [PATCH 09/11] VFS/ovl/smb: introduce start_renaming_dentry()
+config: x86_64-buildonly-randconfig-001-20250926 (https://download.01.org/0day-ci/archive/20250926/202509262345.LLJy17UN-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262345.LLJy17UN-lkp@intel.com/reproduce)
 
-In the next version, I will drop NO_ options to avoid confusing.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509262345.LLJy17UN-lkp@intel.com/
 
-Missing libraries can occur in both native build and cross build, so
-this is not a specific issue for cross build. OTOH, the build logs
-already provide clear reminders, here no need to bother readers for
-these NO_ options.
+All warnings (new ones prefixed by >>):
 
-> > +
-> > +In the example above, due to lack libelf, python and libtraceevent for
-> > +cross comiplation, disable the features accordingly.
-> 
-> nit: s/comiplation/compilation/
-> 
-> > diff --git a/tools/perf/Documentation/android.txt b/tools/perf/Documentation/android.txt
-> > index 24a59998fc91e814ad96f658d3481d88d798b60c..e65204cf2921f6bd8a79875784c5b3d5487ce05d 100644
-> > --- a/tools/perf/Documentation/android.txt
-> > +++ b/tools/perf/Documentation/android.txt
-> > @@ -1,78 +1,12 @@
-> >  How to compile perf for Android
-> > -=========================================
-> > +===============================
-> >
-> > -I. Set the Android NDK environment
-> > -------------------------------------------------
-> > +There have two ways to build perf and run it on Android.
-> 
-> nit: s/There have/There are/
+>> fs/overlayfs/super.c:609:7: warning: variable 'dest' is uninitialized when used here [-Wuninitialized]
+     609 |         dput(dest);
+         |              ^~~~
+   fs/overlayfs/super.c:559:21: note: initialize the variable 'dest' to silence this warning
+     559 |         struct dentry *dest;
+         |                            ^
+         |                             = NULL
+   1 warning generated.
 
-Will do.  Thanks a lot for review!
 
-Leo
+vim +/dest +609 fs/overlayfs/super.c
+
+6ee8acf0f72b89 Miklos Szeredi    2017-11-09  550  
+cad218ab332078 Amir Goldstein    2020-02-20  551  /*
+cad218ab332078 Amir Goldstein    2020-02-20  552   * Returns 1 if RENAME_WHITEOUT is supported, 0 if not supported and
+cad218ab332078 Amir Goldstein    2020-02-20  553   * negative values if error is encountered.
+cad218ab332078 Amir Goldstein    2020-02-20  554   */
+576bb263450bbb Christian Brauner 2022-04-04  555  static int ovl_check_rename_whiteout(struct ovl_fs *ofs)
+cad218ab332078 Amir Goldstein    2020-02-20  556  {
+576bb263450bbb Christian Brauner 2022-04-04  557  	struct dentry *workdir = ofs->workdir;
+cad218ab332078 Amir Goldstein    2020-02-20  558  	struct dentry *temp;
+cad218ab332078 Amir Goldstein    2020-02-20  559  	struct dentry *dest;
+cad218ab332078 Amir Goldstein    2020-02-20  560  	struct dentry *whiteout;
+cad218ab332078 Amir Goldstein    2020-02-20  561  	struct name_snapshot name;
+18cc48cabac8b0 NeilBrown         2025-09-26  562  	struct renamedata rd = {};
+18cc48cabac8b0 NeilBrown         2025-09-26  563  	char name2[OVL_TEMPNAME_SIZE];
+cad218ab332078 Amir Goldstein    2020-02-20  564  	int err;
+cad218ab332078 Amir Goldstein    2020-02-20  565  
+576bb263450bbb Christian Brauner 2022-04-04  566  	temp = ovl_create_temp(ofs, workdir, OVL_CATTR(S_IFREG | 0));
+cad218ab332078 Amir Goldstein    2020-02-20  567  	err = PTR_ERR(temp);
+cad218ab332078 Amir Goldstein    2020-02-20  568  	if (IS_ERR(temp))
+d2c995581c7c5d NeilBrown         2025-07-16  569  		return err;
+cad218ab332078 Amir Goldstein    2020-02-20  570  
+18cc48cabac8b0 NeilBrown         2025-09-26  571  	rd.mnt_idmap = ovl_upper_mnt_idmap(ofs);
+18cc48cabac8b0 NeilBrown         2025-09-26  572  	rd.old_parent = workdir;
+18cc48cabac8b0 NeilBrown         2025-09-26  573  	rd.new_parent = workdir;
+18cc48cabac8b0 NeilBrown         2025-09-26  574  	rd.flags = RENAME_WHITEOUT;
+18cc48cabac8b0 NeilBrown         2025-09-26  575  	ovl_tempname(name2);
+18cc48cabac8b0 NeilBrown         2025-09-26  576  	err = start_renaming_dentry(&rd, 0, temp, &QSTR(name2));
+d2c995581c7c5d NeilBrown         2025-07-16  577  	if (err) {
+d2c995581c7c5d NeilBrown         2025-07-16  578  		dput(temp);
+d2c995581c7c5d NeilBrown         2025-07-16  579  		return err;
+d2c995581c7c5d NeilBrown         2025-07-16  580  	}
+cad218ab332078 Amir Goldstein    2020-02-20  581  
+cad218ab332078 Amir Goldstein    2020-02-20  582  	/* Name is inline and stable - using snapshot as a copy helper */
+cad218ab332078 Amir Goldstein    2020-02-20  583  	take_dentry_name_snapshot(&name, temp);
+18cc48cabac8b0 NeilBrown         2025-09-26  584  	err = ovl_do_rename_rd(&rd);
+18cc48cabac8b0 NeilBrown         2025-09-26  585  	end_renaming(&rd);
+cad218ab332078 Amir Goldstein    2020-02-20  586  	if (err) {
+cad218ab332078 Amir Goldstein    2020-02-20  587  		if (err == -EINVAL)
+cad218ab332078 Amir Goldstein    2020-02-20  588  			err = 0;
+cad218ab332078 Amir Goldstein    2020-02-20  589  		goto cleanup_temp;
+cad218ab332078 Amir Goldstein    2020-02-20  590  	}
+cad218ab332078 Amir Goldstein    2020-02-20  591  
+09d56cc88c2470 NeilBrown         2025-07-16  592  	whiteout = ovl_lookup_upper_unlocked(ofs, name.name.name,
+09d56cc88c2470 NeilBrown         2025-07-16  593  					     workdir, name.name.len);
+cad218ab332078 Amir Goldstein    2020-02-20  594  	err = PTR_ERR(whiteout);
+cad218ab332078 Amir Goldstein    2020-02-20  595  	if (IS_ERR(whiteout))
+cad218ab332078 Amir Goldstein    2020-02-20  596  		goto cleanup_temp;
+cad218ab332078 Amir Goldstein    2020-02-20  597  
+bc8df7a3dc0359 Alexander Larsson 2023-08-23  598  	err = ovl_upper_is_whiteout(ofs, whiteout);
+cad218ab332078 Amir Goldstein    2020-02-20  599  
+cad218ab332078 Amir Goldstein    2020-02-20  600  	/* Best effort cleanup of whiteout and temp file */
+cad218ab332078 Amir Goldstein    2020-02-20  601  	if (err)
+fe4d3360f9cbb5 NeilBrown         2025-07-16  602  		ovl_cleanup(ofs, workdir, whiteout);
+cad218ab332078 Amir Goldstein    2020-02-20  603  	dput(whiteout);
+cad218ab332078 Amir Goldstein    2020-02-20  604  
+cad218ab332078 Amir Goldstein    2020-02-20  605  cleanup_temp:
+fe4d3360f9cbb5 NeilBrown         2025-07-16  606  	ovl_cleanup(ofs, workdir, temp);
+cad218ab332078 Amir Goldstein    2020-02-20  607  	release_dentry_name_snapshot(&name);
+cad218ab332078 Amir Goldstein    2020-02-20  608  	dput(temp);
+cad218ab332078 Amir Goldstein    2020-02-20 @609  	dput(dest);
+cad218ab332078 Amir Goldstein    2020-02-20  610  
+cad218ab332078 Amir Goldstein    2020-02-20  611  	return err;
+cad218ab332078 Amir Goldstein    2020-02-20  612  }
+cad218ab332078 Amir Goldstein    2020-02-20  613  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
