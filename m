@@ -1,102 +1,102 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D7C21CC79
-	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 15:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BD5237172
+	for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 16:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758901490; cv=none; b=j8vyL2xhUuZuLYhcgyROcTau5Uv5VmanittSHZHm4cQ0yiufGFqE4UtgZ4R1XemGv3wntKR7qP2IEOHmqT/VcNU6dYXBEC6OZZUTacqEfGrcdLrwQa4lxG5w9v+06wH5C8o56GBpn1/0jz0PggrNh/Ay/1ZxNLLUTxBs9jznV1o=
+	t=1758903050; cv=none; b=Qp3pYlVowJxzcq62OZsg+YctmMutJR6oM3tOR+uoOtW/8Qwi5PRLdYvNlACZIDUQvhfM2p5p4MtyrTbafT4mGQm0HROj2a1iq7jzHL3gYjCQiaGH6z1SQ9vhUEYYka19JRzBWUt8NhgJN5tYhakAffCECDttZoowzqpadXO4dpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758901490; c=relaxed/simple;
-	bh=gw8GlEm/pMe/T6lV132M5o7O/nbVio5JrXJlGluzWjI=;
+	s=arc-20240116; t=1758903050; c=relaxed/simple;
+	bh=V7kexhXSChwKrummz/CzaqELcFXuUj4bgGCNqOOCO1g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hzZHFe7+FnKPBO2waGdqllwhKGwTYi4XogYzdg+VorAyk8z157Urm4hmgIs0fnGtyM+tli5K9bAFJg68yhxfJoI/fjucGzLfZ++5gxY63zfjwSeD4nPoRRSErnvEJT2oZ0+W16f4N+eCMksrDs2t9fqFTcYETqWPmbAcxndKwkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqLKArCo; arc=none smtp.client-ip=209.85.219.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=UaJkk0v5NDgpxjxYYw/EeCk++MUXLQFlHT5dWm3O+a/x05rTLoX0HKU3I/zv6psR/XY9HPzlzMgXw5sLV2zAQTtdXWrU4kPF+FfnOsIcAtNFyrcxDAaYsZyv6XwfuG0ySC/v5c/bVMFtt+T2DnX576S0xLyx2+iEi/WznFIRNIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OsK3g1w6; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqLKArCo"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-81fdd5d7b59so6182006d6.3
-        for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 08:44:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OsK3g1w6"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-7f7835f4478so15014216d6.1
+        for <llvm@lists.linux.dev>; Fri, 26 Sep 2025 09:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758901488; x=1759506288; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1mcGhhHjp2eXgOL7P5TYM8JSLgVlfC9igU21PobzEN4=;
-        b=IqLKArCoAjhKKpxcsDZcjvbsPEseIZbXZmWATDecO55zAe/paE+tW1eDb3zMAyOPFr
-         agpz+J/vkmQ36xFNNNNYTADu+th0s4Y4PQiTxfHXcEV8bY8rkRxYj73wjERYvEVN8lAq
-         ydKeGzngsF9d/kFxTGhVnDLqmaJ+250WjftfksyWafb/fImxkWKGRWvnM9PwuaNJ2eJJ
-         FTn2nd3El1VACowM+rJWMrC7XerAiPPHXQDLIGhTbIhF1BDlaOQ8jhHRGmeUymebCxQ1
-         ApwXl5E7Ezs7Jfa8n5szXY6ETuRjKOrLsLkFzRa9Oz/RM+berkiF3WycjH8e/EL7iYpn
-         rjGg==
+        d=gmail.com; s=20230601; t=1758903047; x=1759507847; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iS2jH8joxnDE0/hOPwBCvRREi5onrG6qq8QmOEtOYZk=;
+        b=OsK3g1w6Qs0EgoYPRGrBKMozvuNJ/w7eXuWyH+TWKounTwCPIoLoLJgeK8WSosSHyI
+         78Kz2BYcgyf17N3ubJGHATviFwXjEoUcwHmSNTyjf/yEFGwgAa1WhG8Jro7lYAy91gkS
+         XCluNEzhFO/seKHCv3WNgHoRaPF051v0G2x0Ppae8N4rdkmS/Y3SwbxD9j0tibsYRpyp
+         1K2paxDBmb8u98PYAjTDzSUp+KS4DKQGuiiWKhPKPot1/YX3kmNeYDHiMHxbQW4TWO8F
+         dwl5bpdVkTevSCzJvc6cZC5y+KY1nVxyF0K1qEA453pO4ZP9cWfcztyCoPWNID6K/erl
+         H5/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758901488; x=1759506288;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1mcGhhHjp2eXgOL7P5TYM8JSLgVlfC9igU21PobzEN4=;
-        b=r4Ur0NgPgaANNP1emtFAn1OkLhD1bKWr13c3YoJIZRhG/JalCmtLaz5Tl8LBQJ71MO
-         UMNs/4r1EvFBypOjIN4D3LbKKj/rLp3Faszm2fsos3a5MPIOl7CGnPaS9AikgVGh1BAq
-         Cup1bhqZxq+N18EZpKAcNhSmck+r7my7t4S9o4U7zaDPdB8OTDPJgDLkl11+AXROUerw
-         z9xRCcbEAvkFAhW8IKmpt84HgQDBWhcGjS3cmQ/BlBL7D/1lmIWeLYkSwwSYaxymbTJi
-         Who3H7liA44xXoyvflroHsbNpSf7I+5Ncfa+BPGQm520X+xUurnJkN52QQ0PBn5TMTGd
-         E9qg==
-X-Forwarded-Encrypted: i=1; AJvYcCXDWj6lujNZgb8jASGL2QlCaKE5omFoNZigMOh87RaI4b4nJvRyCDC+WP83jNPrnRA+FOX2@lists.linux.dev
-X-Gm-Message-State: AOJu0YwTquDRMEcaaWE6zxN+2kHn/t5+GPQfZlSFjS4L2NCZgrz5FNjf
-	YDuZdt0sNzNsU2kwYj49zwldZfIum+oKvHUqqEQCetaLEzuT6Q8eJ5Ys
-X-Gm-Gg: ASbGnctFXK8ir/oMAzgJMPT0eEfsgbeq0Lb3B2H6AhDs3kr+sgp1wk/Vy73MraEmoUE
-	kryvt4ynrRrM26Q871mdh1wcOhkluXxZEq+0Q6xI3N3SwYhphivRG4ATjP+/UxrW5N2Es6/IOLZ
-	Dw3ls6HOHNKJgq8gLB5ZudXqof/9RjkXZNpV/9jlDrO5/mDpvOanPlIO4WR8TUVyENWoTzbmhUk
-	RXd1I9lr1Ka+HXe/UHAn5g9m/DUFbEG9VCRmd2ojglddxw4UQyPFshvuscgzBLU2H9hfX1vRfvo
-	kiXgmns5EN5+l8+Wv6bsWrYkvZYWS6opYHH2X/JThCQ2252nqTq7u9Ze2JC8zdYlZgzoBCFVjlj
-	3amkFi+SxWUpndwBpH8ruV1H5f0+hgmHk+cJPZgFZ0ZKsNT2OzGzNByCMfDMdJZv4TsE9NpU63V
-	RWc8D21XUZm/n1WFvx+LpKMg3S4Xb/LMXRrA==
-X-Google-Smtp-Source: AGHT+IF4wq9zktArSY6pgVpnyiaBJyrWrNThCHzoU9ocyuGVqekUKxsMvPATedxtbT74AR7HQqtngw==
-X-Received: by 2002:a05:6214:1c84:b0:731:e432:888c with SMTP id 6a1803df08f44-7fc386ed8ccmr41407516d6.35.1758901487586;
-        Fri, 26 Sep 2025 08:44:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758903047; x=1759507847;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iS2jH8joxnDE0/hOPwBCvRREi5onrG6qq8QmOEtOYZk=;
+        b=mS6ykccouY/2vX7c9T8xNTY0y19z1b0HoQKgsqy3iQHPPW79FcqOJ7yV9VrVFdq9EI
+         A7KCA4ByKk1S5I3PixzLjzMBVF0g21LevGi7umir03qQvfNltVPiTisxesaJtWztwD88
+         XI2xMywNk1fZUxk21yTpZwxXaSJp+mvFPXSpshJDSdmtrZR1x9uKRmI40xeEIUksqTm/
+         6jO/6zV5VJlTGyKRkwpYz5CJlFdfhW1qEwT6TOvF+u2t6aG7euYctIauO48sU64+6V8p
+         38GZ4JYelnGl8E7bZ1H7CH+MOcZV+v7m/PFs9dsEu4S/ULV3GUgCO+2BUCR4acV4uraS
+         at9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUNM/f53s5CX/PZxNQlM69a444yFEES6JEk80ZsGHMy12J0jo4XFJBL34DO5Yq65C0OmKEe@lists.linux.dev
+X-Gm-Message-State: AOJu0YzzjmdCn18wCWpGBmJYhr1iyCEZZtd5epmThVuJQuEgqeU77mCf
+	FDOo89yBGQzEFmSPPkUiUWgzi2/V6QoLEMk7TUezlQRi19Iu+vGjP895
+X-Gm-Gg: ASbGnct0KZxmR9KLYvuJwCbCCbUT/crJ6l7QoaW3KB9e3fUzjG5wqVtZlkezxH675Zz
+	DkPN14xCY8HICoKwLyqNYn4InqokR2G70fjtiSxIgzCy33wSCsH8SorJ5zs5zel3XvB+L3YIDID
+	04mkd/BRaSCERHjn43wAMejH8ky4Y003eVtUHh9ZkuLaqaknEZc7U7uT3O9LcaNA3Qm7wSxhqKQ
+	5rm2Vf5pKJ9K3Ew4roMNDuLnI24ygXMsZAWnA1fkZ3vFDcie/6rH34feSFp64XHOrYATFVSMdeM
+	/S0yc94ENG9dM/PB9EJkrG1Gz1bE8y+89oNSGnegvVtbfb4reInaeUsqWMZUXQ+6MGXnSen16Mn
+	3CJ7x9sMuMe14o+zfEQeI+BamxOYNxzJwNwPkn4HweyGdS50Kz/y8z3fMDLfU3S3Edzl0CNLiFU
+	edjJzy52DPjCgf+AFA8SkYiho=
+X-Google-Smtp-Source: AGHT+IEJzR6PCrUgJkNWH9fQSw/nY/s4Zu4U9QY66TsXFNh3e/NVRbzSY9nlbLgfJ09gjwgG9YTkEw==
+X-Received: by 2002:ad4:5fc7:0:b0:78e:7a30:4d62 with SMTP id 6a1803df08f44-7fc28075665mr116691516d6.4.1758903047160;
+        Fri, 26 Sep 2025 09:10:47 -0700 (PDT)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-80143053d1esm28046766d6.32.2025.09.26.08.44.46
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8013cdf424asm28671636d6.26.2025.09.26.09.10.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Sep 2025 08:44:47 -0700 (PDT)
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 25925F4007B;
-	Fri, 26 Sep 2025 11:44:46 -0400 (EDT)
+        Fri, 26 Sep 2025 09:10:46 -0700 (PDT)
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfauth.phl.internal (Postfix) with ESMTP id CABA3F4006A;
+	Fri, 26 Sep 2025 12:10:45 -0400 (EDT)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Fri, 26 Sep 2025 11:44:46 -0400
-X-ME-Sender: <xms:7bTWaD8GaXpVPbrps4d7E9n_bjzzRhZyG3UvDqjG81DMRYYMxzL2Tw>
-    <xme:7bTWaP5evZu5Jr9rE7T_zoz5mMUoC-9VM42W6g_142QkRYuEIfMVqWZSfur5_keVF
-    Uw-YrVo3i0uiyx6K7a6e2wombFiL7v2-MhxjU2qTfgBZcmuDcrq7Q>
-X-ME-Received: <xmr:7bTWaDoLBZ1TjkSNsGNG9Isnd9Z5-o_3v-_n8RrKeYiNEoS79BAnCtlDLX9I7E3_Y2ICHPCmx3NsOJ4kQRgHwE2mfk-CRmS9>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeileejiecutefuodetggdotefrod
+  by phl-compute-03.internal (MEProxy); Fri, 26 Sep 2025 12:10:45 -0400
+X-ME-Sender: <xms:BbvWaHVuXDP3iMjjPX1m7M90D-RNquoCqG1-esnmJoBZQAkpEpd3Tw>
+    <xme:BbvWaPxByfBQ4KDba0u_gP05hEOPa2GwGVSFrFwj1ZDKwheQ9tzEHMjiMvO3m94Vo
+    pw-fILu9wwFJpcKDTvrzb3_leAhSUzCccxhFghI2B1PHu1ckeOI>
+X-ME-Received: <xmr:BbvWaGDlLAeh4zRnhHena0ITcMn-iqQroSYWAFMBj-lzXqd2AuLRdGK5ZpFtYnRPSMHgfmsK5w20xWICBdHyLygKoVFrB1a0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeileekudcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
-    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeegvddvhedt
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
-    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
-    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
-    feehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehphhgrshhtrgeskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhi
-    esghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothho
-    nhhmrghilhdrtghomhdprhgtphhtthhopehlohhsshhinheskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pegrlhhitggvrhihhhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopehtmhhgrhhosh
-    hssehumhhitghhrdgvughu
-X-ME-Proxy: <xmx:7rTWaLDaM191edQ-YKFNpdeiSbvBtv0cpOhQkc4eQR5XyuNUhps9_g>
-    <xmx:7rTWaMMxsC4UmqKLuFihps-FBk1oH04IIIOSgN3xQpOaRyNBxu4Q1w>
-    <xmx:7rTWaKnkSMn9Z8haCh4AUBredHO5C0g2OqlHlwk31tIpgC2aEKfb9A>
-    <xmx:7rTWaOd94ceZ9RNOFgxiSxh7w7N-BU8xivt9AOWwAFKni64LYzL32Q>
-    <xmx:7rTWaPCKNLmxIZnmFKhOcWjFMyzLQM-dpSYZbCkdoHOB8J79vxdCuKbB>
+    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedtgeehleevffdujeffgedvlefghffhleekieeifeegveetjedvgeevueffieeh
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvgdpnhgspghrtghpthhtohepfeehpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehphhgrshhtrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurg
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghi
+    lhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtth
+    hopegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopehl
+    ohhsshhinheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprgdrhhhinhgusghorhhgse
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhhitggvrhihhhhlsehgohhoghhlvgdr
+    tghomhdprhgtphhtthhopehtmhhgrhhoshhssehumhhitghhrdgvughu
+X-ME-Proxy: <xmx:BbvWaN7gMW_uJOXoaGTJ9xSlmxs7n2SOoVL41AmneFiFZsrDOjL-tA>
+    <xmx:BbvWaFknzs2z_PNwzZBGvsA40uAsb8YUJYaM6UCaDKjxqxRM7WbG3g>
+    <xmx:BbvWaIc59-2Me0P7VNO45_KkiB0ShlA5xzw4G9hvwC7kfQ5kEfECMQ>
+    <xmx:BbvWaG0UA8e0wvyM67dznKC7x3DNyCxCfifsnDms3P5cfKMviV4BKA>
+    <xmx:BbvWaP4FRn_SWivUuOoKR9rfZR6a0P0Y3ZFVUjm5c2oZS7M15ACO598b>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 26 Sep 2025 11:44:45 -0400 (EDT)
-Date: Fri, 26 Sep 2025 08:44:43 -0700
+ 26 Sep 2025 12:10:44 -0400 (EDT)
+Date: Fri, 26 Sep 2025 09:10:44 -0700
 From: Boqun Feng <boqun.feng@gmail.com>
-To: phasta@kernel.org
+To: Philipp Stanner <phasta@kernel.org>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
 	Gary Guo <gary@garyguo.net>,
 	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
@@ -123,91 +123,113 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
 	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org
 Subject: Re: [RFC PATCH] rust: sync: Add dma_fence abstractions
-Message-ID: <aNa069wZv1cn8VGh@tardis.local>
+Message-ID: <aNa7BDpKS2KA__4M@tardis.local>
 References: <20250918123100.124738-2-phasta@kernel.org>
- <aMwOoYe1xGDBg0Zv@tardis-2.local>
- <12c09de235023c99a8a864b17b2f797c7339bb7b.camel@mailbox.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <12c09de235023c99a8a864b17b2f797c7339bb7b.camel@mailbox.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250918123100.124738-2-phasta@kernel.org>
 
-On Fri, Sep 26, 2025 at 10:48:06AM +0200, Philipp Stanner wrote:
-[..]
-> > > 
-> > > Regarding the manually created spinlock of mine: I so far never need
-> > > that spinlock anywhere in Rust and wasn't sure what's then the best way
-> > > to pass a "raw" spinlock to C.
-> > > 
-> > 
-> > You can use `SpinLock<()>` for this purpose, no need to add new
-> > bindings.
+On Thu, Sep 18, 2025 at 02:30:59PM +0200, Philipp Stanner wrote:
+> dma_fence is a synchronization mechanism which is needed by virtually
+> all GPU drivers.
 > 
-> The dma_fence C backend needs a spinlock pointer, given to it by the
-> driver (so Rust code).
+> A dma_fence offers many features, among which the most important ones
+> are registering callbacks (for example to kick off a work item) which
+> get executed once a fence gets signalled.
 > 
-> How do I pass a SpinLock<()> to a C function? AFAICS SpinLock doesn't
-> implement as_raw(), so I'd have to implement it, wouldn't I?
+> dma_fence has a number of callbacks. Only the two most basic ones
+> (get_driver_name(), get_timeline_name() are abstracted since they are
+> enough to enable the basic functionality.
 > 
-
-Technically you can use a `&raw` to get the address of the spinlock and
-just use it, since `SpinLock<()>` is `repr(C)`, so it's transparent to a 
-spinlock_t. So you don't have to ;-)
-
-However, while we are at it, it makes sense that we do it right.
-
-> Or rather, as it looks, I'd have to implement it for SpinLockBackend?
+> Callbacks in Rust are registered by passing driver data which implements
+> the Rust callback trait, whose function will be called by the C backend.
 > 
+> dma_fence's are always refcounted, so implement AlwaysRefcounted for
+> them. Once a reference drops to zero, the C backend calls a release
+> function, where we implement drop_in_place() to conveniently marry that
+> C-cleanup mechanism with Rust's ownership concepts.
+> 
+> This patch provides basic functionality, but is still missing:
+>   - An implementation of PinInit<T, Error> for all driver data.
+>   - A clever implementation for working dma_fence_begin_signalling()
+>     guards. See the corresponding TODO in the code.
+>   - Additional useful helper functions such as dma_fence_is_signaled().
+>     These _should_ be relatively trivial to implement, though.
+> 
+> Signed-off-by: Philipp Stanner <phasta@kernel.org>
+> ---
+> So. ¡Hola!
+> 
+> This is a highly WIP RFC. It's obviously at many places not yet
+> conforming very well to Rust's standards.
+> 
+> Nevertheless, it has progressed enough that I want to request comments
+> from the community.
+> 
+> There are a number of TODOs in the code to which I need input.
+> 
+> Notably, it seems (half-)illegal to use a shared static reference to an
+> Atomic, which I currently use for the dma_fence unit test / docstring
+> test. I'm willing to rework that if someone suggests how.
+> (Still, shouldn't changing a global Atomic always be legal? It can race,
+> of course. But that's kind of the point of an atomic)
+> 
+> What I want comments on the most is the design of the callbacks. I think
+> it's a great opportunity to provide Rust drivers with rust-only
+> callbacks, so that they don't have to bother about the C functions.
+> 
+> dma_fence wise, only the most basic callbacks currently get implemented.
+> For Nova, AFAICS, we don't need much more than signalling fences and
+> registering callbacks.
+> 
+> 
+> Another, solvable, issue I'm having is designing the
+> dma_fence_begin_signallin() abstractions. There are TODOs about that in
+> the code. That should ideally be robust and not racy. So we might want
+> some sort of synchronized (locked?) way for using that abstraction.
+> 
+> 
+> Regarding the manually created spinlock of mine: I so far never need
+> that spinlock anywhere in Rust and wasn't sure what's then the best way
+> to pass a "raw" spinlock to C.
+> 
+> 
+> So much from my side. Hope to hear from you.
+> 
+> (I've compiled and tested this with the unit test on the current -rc3)
+> 
+> Philipp
+> ---
+>  rust/bindings/bindings_helper.h |   1 +
+>  rust/helpers/dma_fence.c        |  23 ++
+>  rust/helpers/helpers.c          |   1 +
+>  rust/helpers/spinlock.c         |   5 +
+>  rust/kernel/sync.rs             |   2 +
+>  rust/kernel/sync/dma_fence.rs   | 388 ++++++++++++++++++++++++++++++++
 
-I think the below should work, we already have a special from_raw() for
-Lock<()>, it makes sense to have a special as_raw() as well.
+I missed this part, and I don't think kernel::sync is where dma_fence
+should be, as kernel::sync is mostly for the basic synchronization
+between threads/irqs. dma_fence is probably better to be grouped with
+dma-buf and other dma related primitives. Maybe in kernel::dma? Like:
 
-Let me know if you want me to send a proper patch, or feel free to add
-one in your patchset ;-)
+rust/kernel/dma.rs
+rust/kernel/dma/dma_buf.rs
+rust/kernel/dma/dma_fence.rs
 
-diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-index 27202beef90c..78f3287a1372 100644
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@ -160,6 +160,13 @@ pub unsafe fn from_raw<'a>(ptr: *mut B::State) -> &'a Self {
-         //   `B::State`.
-         unsafe { &*ptr.cast() }
-     }
-+
-+    /// Obtains the raw pointer from a [`Lock`].
-+    ///
-+    /// This can be useful for working with a lock user outside Rust.
-+    pub fn as_raw(&self) -> *mut B::State {
-+        self.state.get()
-+    }
- }
-
- impl<T: ?Sized, B: Backend> Lock<T, B> {
-
+Thoughts? Miguel, Greg, Danilo and Lyude, any idea or suggestion?
 
 Regards,
 Boqun
 
+>  6 files changed, 420 insertions(+)
+>  create mode 100644 rust/helpers/dma_fence.c
+>  create mode 100644 rust/kernel/sync/dma_fence.rs
 > 
-> P.
-> 
-> > 
-> > [1]: https://lore.kernel.org/rust-for-linux/20250905044141.77868-1-boqun.feng@gmail.com/
-> > 
-> > Regards,
-> > Boqun
-> > 
-> > > 
-> > > So much from my side. Hope to hear from you.
-> > > 
-> > > (I've compiled and tested this with the unit test on the current -rc3)
-> > > 
-> > > Philipp
-> > > ---
-> > [...]
-> 
+[...]
