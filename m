@@ -1,71 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828871A5BB4;
-	Sat, 27 Sep 2025 17:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3DB42AA6;
+	Sat, 27 Sep 2025 19:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758993322; cv=none; b=XSJxl5MF7XKkHQBvmigqumwZ0WQDSvjyRMVjRzbzsI3UWmbPuaOWVrXTh7TU4o/TiaNEwvq4eFYA5yqWVVjTrDPnErDW2ydwdfPjyPTgGX/HEXNuthfPokV7VhXDVNFVtInDoHMCCIMHUmIkRqpGMKRPogXphqbbHXZYnIJ/NNw=
+	t=1759001410; cv=none; b=qBT9N50XrZJlARhwhdbxEqriY1T2cc4SUDMhWq0fzsno5i6+FIbfNIIp7NWXheq9XEDBdDsV7ydOLzgqhCaW/mK1rYa6jAlBKY5fZbfArErVf5zPXmiEa2g3sUvPhv2eHleLVJdKDGr7Zd1uxZi6zaP/KL2XVCrFl1PscitV6vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758993322; c=relaxed/simple;
-	bh=EirxfAdYtb+idmVV2ek0+dgQhvpkG6voZOoMYEXUy+w=;
+	s=arc-20240116; t=1759001410; c=relaxed/simple;
+	bh=ZmqKSfvKG8Sl31zQDeeEeXhIAVgZkEJsrGTFgAnGr9Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNXuEckVJt+S7QXXxWKXce/5ZEP4HDZ3m+CrBjnvt1X/BpG4cZ3KYAi7YXIakDilGKmC1AYUCbH6VKPMQI0090+MEw0QfeiCLBDjXCNiKmlJvbmQkf4fplUU/t2lRTSsZa0ERmlEO6ecmyjleKuYCDiEPDQ8xxNH7hCIS6EqUBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M7uhH/gC; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=PK0EUV14TAgMDVikd1Qu1DsrImkPthO7ZLBGhJRXs2aDztuoj/dCgVK6F94OotHz0enlwwRBKbNtt6UnEMQHgqRtyto8GlrTQDons2KuXjF5PJv2t8kHOksY8LSylWagBiJiLUYSz/3zBcqTvk+vTuZIq6VKX8+HXYU9Bwgtc70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCrEnyQS; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M7uhH/gC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCrEnyQS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758993320; x=1790529320;
+  t=1759001408; x=1790537408;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=EirxfAdYtb+idmVV2ek0+dgQhvpkG6voZOoMYEXUy+w=;
-  b=M7uhH/gCgWKp38CjiOXVR+AS728C6FEljuVxMipMt6bCiFKfDcbFEw65
-   wXemyikttv1M0dRH67gSr/Hu/3b6lF1pegKeY0+6TVgqu8fRT1cfqeAYV
-   lwMYNgz3wZRAyDtZ3fRPsFag4DCLJiI83mFxKWxbqS2pNlnEIRL4AaYLQ
-   J3Mn6j3czt4EOZwWzg6dsiZzyYBqNjmH1SZOQh0s1bLRrgXXKH/4PbXWk
-   OC3ick1/SYtzSALO/cIuKhkJxo8PcwEOqEbduodxf5uF63LCOJkj7BToF
-   /T8zDI0lCVaw2RiiUIrfegFqY3BkoSxPrj0b/CQyG92bcN+3ivLHvJBHO
-   w==;
-X-CSE-ConnectionGUID: 0bUnUwgXQ0iQ64BMHlP/Kw==
-X-CSE-MsgGUID: vZs7EHCvSLuZ2PBgWApjtQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11566"; a="63929776"
+  bh=ZmqKSfvKG8Sl31zQDeeEeXhIAVgZkEJsrGTFgAnGr9Q=;
+  b=NCrEnyQSjrOTEdIQiQYp6KpgAUOKuzPNtEB2UAeBRzSCMb13mlMMxuLk
+   h21Vb4+YX7zlUXeIsZuk2L6POPvRLZ0l4LiQNB+abl0Y7TraVhoYv9SHa
+   iS+MT/52Wss8mYw0vTkvwm/1q/hIDVHLo309ctIgaRgXAFKf4jtI4MCrt
+   IN3UaXz396ewJ7gEIydGOzdXpQbqZk1ycOyahb8h0DRghIzbUCx0ZRKWD
+   OLCM9F3CIA91KY3JZNzJ+jc/trYn+3jez0OGDcfFFAyOUaLqTjJvgDd35
+   GEBD1Q29lP8IVaexz+a+p/uS89t6lzNfpH/Wum5/Xd9oNcFFeV6HL2R2I
+   Q==;
+X-CSE-ConnectionGUID: DCllCjWLQGGlaaLDSQgi/g==
+X-CSE-MsgGUID: tpjvtncgQButNxvYWXuraA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11566"; a="48862117"
 X-IronPort-AV: E=Sophos;i="6.18,298,1751266800"; 
-   d="scan'208";a="63929776"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 10:15:19 -0700
-X-CSE-ConnectionGUID: ncsgsvn7SmKqpvpiEywQJg==
-X-CSE-MsgGUID: jATeppt5SRSMXxU7/3U17w==
+   d="scan'208";a="48862117"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 12:30:07 -0700
+X-CSE-ConnectionGUID: sGeoqd44RgymTRqe2XoVgg==
+X-CSE-MsgGUID: R+Dp0UylSICLl5YeQhgHnQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,298,1751266800"; 
-   d="scan'208";a="176994667"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 27 Sep 2025 10:15:16 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+   d="scan'208";a="182175568"
+Received: from igk-lkp-server01.igk.intel.com (HELO 0e586ad5e7f7) ([10.91.175.65])
+  by orviesa004.jf.intel.com with ESMTP; 27 Sep 2025 12:30:00 -0700
+Received: from kbuild by 0e586ad5e7f7 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1v2YVo-0007EJ-1E;
-	Sat, 27 Sep 2025 17:15:09 +0000
-Date: Sun, 28 Sep 2025 01:14:56 +0800
+	id 1v2acH-000000005YD-3TdQ;
+	Sat, 27 Sep 2025 19:29:57 +0000
+Date: Sat, 27 Sep 2025 21:29:35 +0200
 From: kernel test robot <lkp@intel.com>
-To: Gautam Gala <ggala@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org
-Subject: Re: [PATCH] KVM: s390: Fix to clear PTE when discarding a swapped
- page
-Message-ID: <202509280003.NWFBhwme-lkp@intel.com>
-References: <20250924121707.145350-1-ggala@linux.ibm.com>
+To: Brendan Jackman <jackmanb@google.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bp@alien8.de,
+	dave.hansen@linux.intel.com, mingo@redhat.com, tglx@linutronix.de,
+	akpm@linux-foundation.org, david@redhat.com, derkling@google.com,
+	junaids@google.com, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, reijiw@google.com, rientjes@google.com,
+	rppt@kernel.org, vbabka@suse.cz, x86@kernel.org,
+	yosry.ahmed@linux.dev
+Subject: Re: [PATCH 03/21] x86/mm: factor out phys_pgd_init()
+Message-ID: <202509272136.N4ELb64u-lkp@intel.com>
+References: <20250924-b4-asi-page-alloc-v1-3-2d861768041f@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,72 +77,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250924121707.145350-1-ggala@linux.ibm.com>
+In-Reply-To: <20250924-b4-asi-page-alloc-v1-3-2d861768041f@google.com>
 
-Hi Gautam,
+Hi Brendan,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on s390/features]
-[also build test WARNING on linus/master v6.17-rc7 next-20250926]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on bf2602a3cb2381fb1a04bf1c39a290518d2538d1]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gautam-Gala/KVM-s390-Fix-to-clear-PTE-when-discarding-a-swapped-page/20250924-201847
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
-patch link:    https://lore.kernel.org/r/20250924121707.145350-1-ggala%40linux.ibm.com
-patch subject: [PATCH] KVM: s390: Fix to clear PTE when discarding a swapped page
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20250928/202509280003.NWFBhwme-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cafc064fc7a96b3979a023ddae1da2b499d6c954)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250928/202509280003.NWFBhwme-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Brendan-Jackman/x86-mm-asi-Add-CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION/20250924-230633
+base:   bf2602a3cb2381fb1a04bf1c39a290518d2538d1
+patch link:    https://lore.kernel.org/r/20250924-b4-asi-page-alloc-v1-3-2d861768041f%40google.com
+patch subject: [PATCH 03/21] x86/mm: factor out phys_pgd_init()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250927/202509272136.N4ELb64u-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509272136.N4ELb64u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509280003.NWFBhwme-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509272136.N4ELb64u-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/s390/boot/als.c:9:
-   In file included from arch/s390/include/asm/sclp.h:26:
-   In file included from arch/s390/include/asm/chpid.h:10:
-   In file included from arch/s390/include/asm/cio.h:10:
-   In file included from arch/s390/include/asm/dma-types.h:7:
-   In file included from include/linux/io.h:12:
-   In file included from arch/s390/include/asm/io.h:15:
->> arch/s390/include/asm/pgtable.h:2065:48: warning: passing 'unsigned long *' to parameter of type 'long *' converts between pointers to integer types with different sign [-Wpointer-sign]
-    2065 |                 value = __atomic64_or_barrier(PGSTE_PCL_BIT, ptr);
-         |                                                              ^~~
-   arch/s390/include/asm/atomic_ops.h:161:1: note: passing argument to parameter 'ptr' here
-     161 | __ATOMIC64_OPS(__atomic64_or,  "ogr")
-         | ^
-   arch/s390/include/asm/atomic_ops.h:157:2: note: expanded from macro '__ATOMIC64_OPS'
-     157 |         __ATOMIC64_OP(op_name##_barrier, op_string)
-         |         ^
-   arch/s390/include/asm/atomic_ops.h:141:53: note: expanded from macro '__ATOMIC64_OP'
-     141 | static __always_inline long op_name(long val, long *ptr)                \
-         |                                                     ^
+>> arch/x86/mm/init_64.c:747:23: warning: variable 'vaddr_start' set but not used [-Wunused-but-set-variable]
+     747 |         unsigned long vaddr, vaddr_start, vaddr_end, vaddr_next, paddr_last;
+         |                              ^
    1 warning generated.
 
 
-vim +2065 arch/s390/include/asm/pgtable.h
+vim +/vaddr_start +747 arch/x86/mm/init_64.c
 
-  2057	
-  2058	static inline pgste_t pgste_get_lock(pte_t *ptep)
-  2059	{
-  2060		unsigned long value = 0;
-  2061	#ifdef CONFIG_PGSTE
-  2062		unsigned long *ptr = (unsigned long *)(ptep + PTRS_PER_PTE);
-  2063	
-  2064		do {
-> 2065			value = __atomic64_or_barrier(PGSTE_PCL_BIT, ptr);
-  2066		} while (value & PGSTE_PCL_BIT);
-  2067		value |= PGSTE_PCL_BIT;
-  2068	#endif
-  2069		return __pgste(value);
-  2070	}
-  2071	
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  742  
+eccd906484d1cd arch/x86/mm/init_64.c Brijesh Singh       2019-04-17  743  static unsigned long __meminit
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  744  phys_pgd_init(pgd_t *pgd_page, unsigned long paddr_start, unsigned long paddr_end,
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  745  	      unsigned long page_size_mask, pgprot_t prot, bool init, bool *pgd_changed)
+^1da177e4c3f41 arch/x86_64/mm/init.c Linus Torvalds      2005-04-16  746  {
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21 @747  	unsigned long vaddr, vaddr_start, vaddr_end, vaddr_next, paddr_last;
+^1da177e4c3f41 arch/x86_64/mm/init.c Linus Torvalds      2005-04-16  748  
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  749  	*pgd_changed = false;
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  750  
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  751  	paddr_last = paddr_end;
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  752  	vaddr = (unsigned long)__va(paddr_start);
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  753  	vaddr_end = (unsigned long)__va(paddr_end);
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  754  	vaddr_start = vaddr;
+^1da177e4c3f41 arch/x86_64/mm/init.c Linus Torvalds      2005-04-16  755  
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  756  	for (; vaddr < vaddr_end; vaddr = vaddr_next) {
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  757  		pgd_t *pgd = pgd_offset_pgd(pgd_page, vaddr);
+f2a6a7050109e0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-03-17  758  		p4d_t *p4d;
+44df75e629106e arch/x86_64/mm/init.c Matt Tolentino      2006-01-17  759  
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  760  		vaddr_next = (vaddr & PGDIR_MASK) + PGDIR_SIZE;
+4f9c11dd49fb73 arch/x86/mm/init_64.c Jeremy Fitzhardinge 2008-06-25  761  
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  762  		if (pgd_val(*pgd)) {
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  763  			p4d = (p4d_t *)pgd_page_vaddr(*pgd);
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  764  			paddr_last = phys_p4d_init(p4d, __pa(vaddr),
+59b3d0206d74a7 arch/x86/mm/init_64.c Thomas Garnier      2016-06-21  765  						   __pa(vaddr_end),
+eccd906484d1cd arch/x86/mm/init_64.c Brijesh Singh       2019-04-17  766  						   page_size_mask,
+c164fbb40c43f8 arch/x86/mm/init_64.c Logan Gunthorpe     2020-04-10  767  						   prot, init);
+4f9c11dd49fb73 arch/x86/mm/init_64.c Jeremy Fitzhardinge 2008-06-25  768  			continue;
+4f9c11dd49fb73 arch/x86/mm/init_64.c Jeremy Fitzhardinge 2008-06-25  769  		}
+4f9c11dd49fb73 arch/x86/mm/init_64.c Jeremy Fitzhardinge 2008-06-25  770  
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  771  		p4d = alloc_low_page();
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  772  		paddr_last = phys_p4d_init(p4d, __pa(vaddr), __pa(vaddr_end),
+c164fbb40c43f8 arch/x86/mm/init_64.c Logan Gunthorpe     2020-04-10  773  					   page_size_mask, prot, init);
+8ae3a5a8dff2c9 arch/x86/mm/init_64.c Jan Beulich         2008-08-21  774  
+8ae3a5a8dff2c9 arch/x86/mm/init_64.c Jan Beulich         2008-08-21  775  		spin_lock(&init_mm.page_table_lock);
+ed7588d5dc6f5e arch/x86/mm/init_64.c Kirill A. Shutemov  2018-05-18  776  		if (pgtable_l5_enabled())
+eccd906484d1cd arch/x86/mm/init_64.c Brijesh Singh       2019-04-17  777  			pgd_populate_init(&init_mm, pgd, p4d, init);
+7e82ea946ae4d0 arch/x86/mm/init_64.c Kirill A. Shutemov  2017-06-06  778  		else
+eccd906484d1cd arch/x86/mm/init_64.c Brijesh Singh       2019-04-17  779  			p4d_populate_init(&init_mm, p4d_offset(pgd, vaddr),
+eccd906484d1cd arch/x86/mm/init_64.c Brijesh Singh       2019-04-17  780  					  (pud_t *) p4d, init);
+eccd906484d1cd arch/x86/mm/init_64.c Brijesh Singh       2019-04-17  781  
+8ae3a5a8dff2c9 arch/x86/mm/init_64.c Jan Beulich         2008-08-21  782  		spin_unlock(&init_mm.page_table_lock);
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  783  		*pgd_changed = true;
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  784  	}
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  785  
+46b7f8ebabd0a2 arch/x86/mm/init_64.c Brendan Jackman     2025-09-24  786  	return paddr_last;
+^1da177e4c3f41 arch/x86_64/mm/init.c Linus Torvalds      2005-04-16  787  }
+9b861528a8012e arch/x86/mm/init_64.c Haicheng Li         2010-08-20  788  
 
 -- 
 0-DAY CI Kernel Test Service
