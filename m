@@ -1,177 +1,162 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E7B2E22B5
-	for <llvm@lists.linux.dev>; Sat, 27 Sep 2025 14:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C602920010C;
+	Sat, 27 Sep 2025 16:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758981825; cv=none; b=l1cHPN/NfEllVjpfmP/o1W+UKlSq9M8nbPV3vx3JbQMLBEAgtQp7QfKr9D6SkIawFZbUADKQ46Sb5WznK+cWZJqSTVuZiTE7+cbpoDBAoLaRMWNFKzktZGUE9heAwwYpB8dvdMIXELDMR4UAFeWdvJNRCzUz7FLiXEtckrx8Ox0=
+	t=1758989583; cv=none; b=pR4cle0SGXyCkrY1ynmdmb2OPGgVcNEbGiKDKHIpaEBuurBcSbOQMINmRDREVIYwM5jSwGMKrqxobzKcSf0TQ5Sr2PB5boLARn5zDWexSZdcr1lK/P1HvtZPQstsxzbE4lplSSRtD/eCNVEak6GAdBjm0q39EDIiYuDo1cCJBFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758981825; c=relaxed/simple;
-	bh=iZIouQAWI0nC2znsT3y23S97+/Gt8E8XVf9A0+wMI68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A1K35VDNPQtSoe2jNdNdNRIb6xKIyw9T4yeUPUv7Fo+1q/+GzJl/rYJOpC7rgNwlvjXF+dFNFC+DfthpnUvkHsgDb0iOcEu6FBXS0yytbsVCS/BSfWurNdfjoY3gsfiR1hFsGnnNbTGVyDCu84/Ya6oZtz1rBL7sMJ+ekapd20c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XqlufdGV; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758989583; c=relaxed/simple;
+	bh=RaymteuOKZEUhnbAncVV9vODp6Z0lvg1PkDxLDJB1Y4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BS9RuctELnizahdzaTgmRORntcGH2H8UtP3BLFnqWrximvIinf/Jz0x2oRj/FTnfgWKSHxlQAMZbK08ScC8xB7wxGp7wnt65Pq+sBvyDJKRQN7ftsYifO29ooBw99xDmSCTkVTIKSFiY0b8AduXtR28nhSdyFaEZstTPWL4V5vU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ShzUpli8; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XqlufdGV"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-858183680b4so409564585a.2
-        for <llvm@lists.linux.dev>; Sat, 27 Sep 2025 07:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758981823; x=1759586623; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RowTgROwHl16yIt+/YH6L82gef48dxD9rHygNzwZv8=;
-        b=XqlufdGVi90vgOMcvfi1hV4DBv5eMB4uLyPSxGv9d9nVbzkPucY1ZJ8cskbsvqtQK7
-         wR6PdEBRAEOTZP2jGqOdld6GioPlaF5qBt9uYCtT96XJ784HzoxueRJpH/gZWXxbkjyP
-         EM55E4huYU1qyy2s9gTJdIMzxr+DkxM6k0wNi24UJDw6lq5IVmB1Ne5n+2eEry05PxYe
-         AUJzUm8bkPCWWGbdoL/j/1kOKfJVmgJQTlayQl9rSJB/aWrCS34JOe6rxaMZIR0EAy76
-         ndkvVQnodWFDERqAJH+yc0OwUpsT3taYYIGgiUbiixEdILSRLJU+EiaTxyiGsfJ8m629
-         wnxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758981823; x=1759586623;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1RowTgROwHl16yIt+/YH6L82gef48dxD9rHygNzwZv8=;
-        b=S1eoGxyScf/mWMDsPRkuVXFlb6yGk9Th8/g+xq07Ef/mvZOTkbaRqcmeV4GfF6ayzt
-         xY5Ps9wW1UypFZmBEVBulbVGG9KXBoiKnH9I4/ZI3mgHyaHQz1RMhHbDlGvvEuBTK4WZ
-         lqcV1Svj/OEGZu4KpcW5UAeRnaOaS+0l6z88pgf+qnZEfJV9f9i4eC7IiTVOhuuA/Jrx
-         LQAKpYXWC1oEEra++QKn1NAeSR+KKp//OsVSuWjthqpT91G6ZAZaNGdcp0AG//xdCoAz
-         hralnK089IjvEQfJYGKEmOi+ebU/EkyORIqrAI85EAeJY2EUUJ4UbK8A5P+/9pIlTO38
-         HF5A==
-X-Forwarded-Encrypted: i=1; AJvYcCX/f9qnNXItW+joXxG1hiXjOPzNoO8U/hcnh5FOCgTi4PIj3Wg/7lhB0JQHgB/skhc7W9gu@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywk32XQbQX/cRMELGAKZ/tHBE97a0YnXUL4yJ70HoRHZdQtVgSm
-	g+2OnnJTkhmOhXenYm17hG+eUI5rw5D6+JIUNQXlSpKNRbpQwNfr/jbA
-X-Gm-Gg: ASbGncsyf436ySvQ2xVNgYbtc+WK59teXFMXz7gvWapdAigIP0Zu4eYH1bvpgJQWrnw
-	EMjz7qS/JlKjFA9RDPQv1yJ5+Y7PFgbhEV9RNer39RobTGxEETfFQ+Pvyh4vFH6qUo3qLSJD+SZ
-	1QzXEpMoU9tvNOpqx1Bp3TKfE9WR6+fSaCfW23NUjL3SLDshOzo2E2TTSscP9tKownp2DgKuPBK
-	yqefMJDVWH8RsSnm9FiQbemK3DSihgFfuceUVM6074JoNZAkx+QWHQI6Kuj6Q8Up+7r3ymWSJct
-	oDwP96f1WhDkrJUn75uTI2qtgjFoHKVwXMCWIpuD4ZULvZLx2jLHXIYPlg8ndHDyXRStr3m16qz
-	169Ba07FjPsGDFiCosYNVhQjr+86RH0lw6PKXd4aGiEETDdRkoR/f2i8sqjAdZGMd98wIHOTwEE
-	Yx3Gs2+uti2W5Ajjv8ec/aidlFW5pEHylIhTAiRqrRwNej
-X-Google-Smtp-Source: AGHT+IEjsLJZDcVKW7VjD94SJTTQGuy7D2CuSP0XnP5QiF1Og6sVMZnEnghTHukI4UHYi90JuQhxLA==
-X-Received: by 2002:a05:620a:2681:b0:862:79a9:eae9 with SMTP id af79cd13be357-86279a9ed9bmr629769085a.85.1758981821539;
-        Sat, 27 Sep 2025 07:03:41 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-85c3218ed08sm441368585a.50.2025.09.27.07.03.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Sep 2025 07:03:41 -0700 (PDT)
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 32CA4F40068;
-	Sat, 27 Sep 2025 10:03:40 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Sat, 27 Sep 2025 10:03:40 -0400
-X-ME-Sender: <xms:vO7XaOkakHRJvsqWLHFtsaCue-4lER0uhhpEdVDiyTQvM-clt7JAqA>
-    <xme:vO7XaMowdZoBt1ZvjERssLFIFryVG6xQlckUYy7sujr3aDmGX-PYQHGF_hsK0c2Eo
-    Uf2Ova8XFCQsgJX-tw5Pi7_C00N46SUWNM8sWlOBezUOL3bv9Px4g>
-X-ME-Received: <xmr:vO7XaFnYgBEE1kaYfoB7fpYi3AmmkijMgLG346jOoVPulJcBdMp3lcmUy8uvHHgxYgCXjKLneOcKzE4rmXrE-KkgUEMVrpF5>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdejvdegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekrodttddtjeenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeffleekfedutefhkefhheekhfelvdejgfegvdejjeffudelkedtffeiveejteet
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvgdpnhgspghrtghpthhtohepfeeipdhmohguvgepshhmthhpohhuthdprhgt
-    phhtthhopehmihhguhgvlhdrohhjvggurgdrshgrnhguohhnihhssehgmhgrihhlrdgtoh
-    hmpdhrtghpthhtohepphhhrghsthgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeho
-    jhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgvgidrghgrhihnohhrse
-    hgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhr
-    tghpthhtohepsghjohhrnhefpghghhesphhrohhtohhnmhgrihhlrdgtohhmpdhrtghpth
-    htoheplhhoshhsihhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrrdhhihhnuggs
-    ohhrgheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlihgtvghrhihhlhesghhooh
-    hglhgvrdgtohhm
-X-ME-Proxy: <xmx:vO7XaFbfSe5rN_-sdK1GxSVnOKVKQrMFGfq8HBxu5s7_wZIGPoqLrw>
-    <xmx:vO7XaBHfE2uJGEmOZHTQaFl02_Nu9BhbWcr63y4RVIA07jBGfwUAgA>
-    <xmx:vO7XaIOoeTYs7_ZW_lDvrSrb4vXqP73TEUrfIfWq1jCcuhcOx4YGkQ>
-    <xmx:vO7XaHyutnwLGGZJM2FwjIsFy6LBiPy67EPfnCl-UBGlO2ywf0aDhQ>
-    <xmx:vO7XaFn7RDDlFLjCS5q9t1KCy6953tiUDCyGEEqgOuXe_UslZGYeGqpK>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 27 Sep 2025 10:03:39 -0400 (EDT)
-Date: Sat, 27 Sep 2025 07:03:38 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Philipp Stanner <phasta@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,	Ingo Molnar <mingo@redhat.com>,
- Will Deacon <will@kernel.org>,	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Asahi Lina <lina+kernel@asahilina.net>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Krishna Ketan Rai <prafulrai522@gmail.com>,
-	Lyude Paul <lyude@redhat.com>,	Mitchell Levy <levymitchell0@gmail.com>,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH] rust: sync: Add dma_fence abstractions
-Message-ID: <aNfuulKIiLfjHRma@tardis.local>
-References: <20250918123100.124738-2-phasta@kernel.org>
- <aNa7BDpKS2KA__4M@tardis.local>
- <CANiq72=6pGtKKr3XeZXLVrJTNMv7YbGzbezSUrZ7A43MJQLwJg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ShzUpli8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758989582; x=1790525582;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RaymteuOKZEUhnbAncVV9vODp6Z0lvg1PkDxLDJB1Y4=;
+  b=ShzUpli8S65I7QN9aUY+3Q/AUNlxRnavvsAd+/OUNicuSvwH8Tz0Mxvc
+   TXD8KMKqz9y3Pv+PfhGQbQYdgUsP+1q9Co4qFaWWss6Od/3AyGddM4skl
+   gVT9DCR+pyhuOd/xTAuX5U+6QtlDk+FZCdw1yGU+JrXoJcp2nptfmS8BR
+   ncJTW0UMCyQkRj+dC9Nxh+PNkM8qUMugVsozN4WDoU1P+ua2wfokjARtU
+   iq7fjaX2GnV/oSd4RrYS85Xm1lPB72jJRlGaDLWPersnxqQa/KiXykp/a
+   +njOr7eIFN/ni1t/kbJsbaOOwBbnr7YGdf7WCSrmL+oWEKC3suKybCuNI
+   A==;
+X-CSE-ConnectionGUID: 54g54qsvQuyJCnt7RN3PBw==
+X-CSE-MsgGUID: YQ9ZgmVESVq2nKDHdcavgQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11566"; a="63928294"
+X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
+   d="scan'208";a="63928294"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 09:13:01 -0700
+X-CSE-ConnectionGUID: dsPeYiV6QpyX/Liw6LWgeQ==
+X-CSE-MsgGUID: YdtbPlm3QMCnBSqmPtAGYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
+   d="scan'208";a="208591697"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 27 Sep 2025 09:12:59 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v2XXd-0007B3-0H;
+	Sat, 27 Sep 2025 16:12:57 +0000
+Date: Sun, 28 Sep 2025 00:12:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 209/212] drivers/acpi/battery.c:1267:2:
+ warning: label followed by a declaration is a C23 extension
+Message-ID: <202509280052.07wgnjdw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=6pGtKKr3XeZXLVrJTNMv7YbGzbezSUrZ7A43MJQLwJg@mail.gmail.com>
 
-On Sat, Sep 27, 2025 at 02:14:22PM +0200, Miguel Ojeda wrote:
-> On Fri, Sep 26, 2025 at 6:10 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Thoughts? Miguel, Greg, Danilo and Lyude, any idea or suggestion?
-> 
-> Either way sounds OK.
-> 
-> More generally, one thing to consider nowadays is whether we will want
-> something to eventually live in its own crate etc., but for this I
-> don't think it applies and being in the `kernel` crate is fine.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   95b83771c9f38207ff42311ccc4739db76d19f33
+commit: ef688d5100e8f263ae94a2c86260e7231d600c84 [209/212] ACPI: battery: Add synchronization between interface updates
+config: loongarch-randconfig-002-20250927 (https://download.01.org/0day-ci/archive/20250928/202509280052.07wgnjdw-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250928/202509280052.07wgnjdw-lkp@intel.com/reproduce)
 
-Being in the `kernel` crate is fine to me as well assuming dma-buf is
-also in the `kernel` crate, but I think it's not fine to put it in
-kernel::sync (see my reply to Philipp) as it is.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509280052.07wgnjdw-lkp@intel.com/
 
-IMO, we have a few other issues of file hierarchy as well, so I'm trying
-to avoid more.
+All warnings (new ones prefixed by >>):
 
-For example:
+>> drivers/acpi/battery.c:1267:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+    1267 |         guard(mutex)(&battery->update_lock);
+         |         ^
+   include/linux/cleanup.h:401:2: note: expanded from macro 'guard'
+     401 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:290:2: note: expanded from macro 'CLASS'
+     290 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+         |         ^
+   <scratch space>:77:1: note: expanded from here
+      77 | class_mutex_t
+         | ^
+   1 warning generated.
 
-- It may actually make more sense to revocable.rs in kernel::sync.
-- device_id.rs and devres.rs may be better in kernel::device?
-- maybe we should create a kernel::bus and put auxiliary.rs, faux.rs,
-  pci.rs and platform.rs into it?
-- cpumask.rs could be in kernel::cpu?
 
-Regards,
-Boqun
+vim +1267 drivers/acpi/battery.c
 
-> By the way, should Gustavo and -media be Cc'd?
-> 
-> Thanks!
-> 
-> Cheers,
-> Miguel
+  1212	
+  1213	static int acpi_battery_add(struct acpi_device *device)
+  1214	{
+  1215		int result = 0;
+  1216		struct acpi_battery *battery;
+  1217	
+  1218		if (!device)
+  1219			return -EINVAL;
+  1220	
+  1221		if (device->dep_unmet)
+  1222			return -EPROBE_DEFER;
+  1223	
+  1224		battery = devm_kzalloc(&device->dev, sizeof(*battery), GFP_KERNEL);
+  1225		if (!battery)
+  1226			return -ENOMEM;
+  1227		battery->device = device;
+  1228		strscpy(acpi_device_name(device), ACPI_BATTERY_DEVICE_NAME);
+  1229		strscpy(acpi_device_class(device), ACPI_BATTERY_CLASS);
+  1230		device->driver_data = battery;
+  1231		result = devm_mutex_init(&device->dev, &battery->lock);
+  1232		if (result)
+  1233			return result;
+  1234	
+  1235		result = devm_mutex_init(&device->dev, &battery->update_lock);
+  1236		if (result)
+  1237			return result;
+  1238	
+  1239		if (acpi_has_method(battery->device->handle, "_BIX"))
+  1240			set_bit(ACPI_BATTERY_XINFO_PRESENT, &battery->flags);
+  1241	
+  1242		result = acpi_battery_update_retry(battery);
+  1243		if (result)
+  1244			goto fail;
+  1245	
+  1246		pr_info("Slot [%s] (battery %s)\n", acpi_device_bid(device),
+  1247			device->status.battery_present ? "present" : "absent");
+  1248	
+  1249		battery->pm_nb.notifier_call = battery_notify;
+  1250		result = register_pm_notifier(&battery->pm_nb);
+  1251		if (result)
+  1252			goto fail;
+  1253	
+  1254		device_init_wakeup(&device->dev, 1);
+  1255	
+  1256		result = acpi_dev_install_notify_handler(device, ACPI_ALL_NOTIFY,
+  1257							 acpi_battery_notify, device);
+  1258		if (result)
+  1259			goto fail_pm;
+  1260	
+  1261		return 0;
+  1262	
+  1263	fail_pm:
+  1264		device_init_wakeup(&device->dev, 0);
+  1265		unregister_pm_notifier(&battery->pm_nb);
+  1266	fail:
+> 1267		guard(mutex)(&battery->update_lock);
+  1268	
+  1269		sysfs_remove_battery(battery);
+  1270	
+  1271		return result;
+  1272	}
+  1273	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
