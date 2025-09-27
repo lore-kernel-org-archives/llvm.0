@@ -1,145 +1,197 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC8E1A238F;
-	Sat, 27 Sep 2025 12:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9774C2C17B4
+	for <llvm@lists.linux.dev>; Sat, 27 Sep 2025 13:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758977327; cv=none; b=lCzfsWVxl1UBHqfYc3SQZ+tHh/49kprsltp3iL9eg/7Bo6Ye/QBz7L6bt/m9LmhfoEXCwiXg4M5mtBEnPljOBeu2J51ilhIX2s/77eK6y6CwoeMrS9W3rLer3pFI5eYA5KA6O6TVr43VRiDMLlo+ts9DktHCgRHvFfTmO0r5y50=
+	t=1758979994; cv=none; b=S5yx0Awv673T5Vnew/vdAsmfEv/LHuBIvVIiX9HIGbKs+i4FOVNsYF3QaYAAJ4PIHEnF26b3bCbUC5l22DvgBWiWp8hy8McnJ5HDde2iWbmQm7JzCQjWyzh9DZBqeCVRoFPwAdo5bVs7ZP44TcvmPwYafyflwScfAJCopStP3AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758977327; c=relaxed/simple;
-	bh=0W45DesrwvOL7dwAbK4Wk7k7PmMheNSI1z8Zd+4XNIw=;
+	s=arc-20240116; t=1758979994; c=relaxed/simple;
+	bh=U7jLK9g7Yw/WoRuxeBbXjiHDDRSKGS09wBhJ1bF0+CA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WrxOQheYqTqpweM0/HoAF2WxXluFcaXZJ/bjmOqeGbNUngly/Z+/rpwdZxk5nTnc1hknO4lHoGIwaV4IsUv081YYdR4WD46EbBq44LIA5WZLkNloCNuPe7JW5BIOIlKgJQJe+NXJ0GuVIFRQmj9SywkNv7ikerJ+iXzUlMHpUzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gqOj/vhM; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rP2DLcmOVadF3I7S8mISglIK7OlWb/Hh1wSw3DNEwx7EYYq48H21wvDFWGYbSh+pkRr/v52esVmNbYE8fONng4UUxUTmcWu0pagpcrroZXgen0fKP+DUPRCM/O1OJscYwckFaIBcXn8LnHBokCLQUBX3tOg//1OLOhYL/0l0VZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgK8B6XU; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gqOj/vhM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758977326; x=1790513326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0W45DesrwvOL7dwAbK4Wk7k7PmMheNSI1z8Zd+4XNIw=;
-  b=gqOj/vhMaq2Bpp8r2n75owTTNezZp9WAsc+xIGYA2S4SdGveR/XomhJh
-   tmWqSNYxgHWgTNGFPKWKS/RaLnrpp370wl6p9oV2rd5mAEVzKh/Gs/28d
-   LJgAq2GSo9Qwz2jxzOhnAE7pM1pT3IF3blNtoFlA5E2j85XnUNje6HXXs
-   Z/wJHnl7IzDolr/oegQyuy/RyoR53ZBL4pgrW/LbQNc4cqFK9EGNS3qHw
-   wFg4zVa6OtgNKd6ab6cpJ3bIbkHLV5msXOz9iY5d9+3AlFfXHccs3ODtP
-   8OyJ8g+boIy3bzxI6WSl4ZMpeseo7+OJBlqcHi4w9MIyBno2RGaN+7NVj
-   A==;
-X-CSE-ConnectionGUID: e10vwJm1QQayvfTFfyw9ow==
-X-CSE-MsgGUID: k2lcVLqlSye96w+LQsGQQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="86734722"
-X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
-   d="scan'208";a="86734722"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 05:48:45 -0700
-X-CSE-ConnectionGUID: EtxiiekZTFm3ZEexcFIrlg==
-X-CSE-MsgGUID: PAlpPQWsRdGdV4Lp7P0oNQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
-   d="scan'208";a="208568713"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 27 Sep 2025 05:48:38 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v2ULr-00073X-2Y;
-	Sat, 27 Sep 2025 12:48:35 +0000
-Date: Sat, 27 Sep 2025 20:48:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <lumag@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Liu Ying <victor.liu@nxp.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Andy Yan <andy.yan@rock-chips.com>, Chen-Yu Tsai <wens@csie.org>,
-	Samuel Holland <samuel@sholland.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/9] drm/display: hdmi-state-helpers: warn on unsupported
- InfoFrame types
-Message-ID: <202509272013.GAc17rsa-lkp@intel.com>
-References: <20250927-limit-infoframes-2-v1-1-697511bd050b@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgK8B6XU"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-7e3148a8928so22783276d6.2
+        for <llvm@lists.linux.dev>; Sat, 27 Sep 2025 06:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758979990; x=1759584790; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=jAJz2iZlVqH7fub6DPlrBF+dlNC7fGvqpAeWouU/7VM=;
+        b=OgK8B6XUmN06x2s5F3uciSv3kaFOHbtfC+hWcKmeJuEG2tZ8RLx3wHFwXqLBykDsKJ
+         Y4c1Z/3VUO8sUm+zisgLbPvJnUAiBgo666EQyq1Ws/n5C/3vlnWJUJEKc6OxmjR2AC/4
+         0VrTJt/XEOYVA6tCxAdl/Hct/lQMDvOcMMVoSYj9UJ/loZC9Kll3OiAEEYjAjwiMP2vx
+         3qqG6fcjyIwpnZb8BK8/R6tqlG2IccQWxjfZ496RTSLunDx7VxAO+3wVbM4BHdkwqG9y
+         Y4lp4R4vPad08vJI0S3v71JZ9SLk4k/pb11GVuZbliYqqEW/PwgJ5kSiZk0B2I9ZmeVY
+         Qvvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758979990; x=1759584790;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jAJz2iZlVqH7fub6DPlrBF+dlNC7fGvqpAeWouU/7VM=;
+        b=Uk/AmxFAP3Q2gxivCjh1Yi6CyGR/Mfq8Aq88hh/E/fNT3CYtMZkhxVJs/3LX0xnQaR
+         nALp/FQGSwwmpSqR6BwmqtXMydDPZLyFxxsoZRo7GybuUgAc8FQy1KfJfN4/bd67nsMJ
+         dPiP4yystO1um8EJITDP4SUThw8YVUA3T2Y/94Vc1ep18NJbmA06l+ZWsemxNmY7004r
+         0wPKoQY7lpUx/5MctxoeiAoAU9SAae+2yYuTqUBwVl8gg7HEh856JOEg0Dmg/l2I3gB9
+         IPbeeoAFDyxnJ9ZImKEa1JoseP1WPlxSXwBnDy1nocTo8ChjQtSYK1crpCoIYVGvHX+r
+         DINw==
+X-Forwarded-Encrypted: i=1; AJvYcCWvbVQ2LmpKHuEG3OSKGgIfejh8q032wl0NIjU1dNirlurniqNq9OMhtTeSKOXTogc5oqRj@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywhgiywwh/7dGV6BYMsZTe5NP/f2icAFvIzAFJt3RbOwNArtGvn
+	FBHjrdLlK4qbPM2GFpgjZkVLA2CXCtwtppewx/Qb3c2o0IXS2d4FVUR9
+X-Gm-Gg: ASbGnculn8DTvjgBPymnp1ryevBWLPk9HPUGkcnL+DYI7vts+n/WivdSVqmws3WeuvX
+	PCucI4fLVn6AI8wYkyja1E5Mz2pBYVozsHCSMZMrRAE+CAwHS5TpT6iam2lDpGwd00PfsWWWhN7
+	ZoqmHuH/ISs8xXg4lZMATdFpEZ3qh3z1mEv6tDw6LMVYzd2eO2uS2bYAAcFg0si+lanLLO+2Z1m
+	pzZAVEsSRkn1doZqcBWa1Ly3lLGv78FrRTRngk2fNUXtwHa6tIJsL5RyLTlfRQYNcsbX/0qRowG
+	goHcBZpGJNkuCo3FJnBkTflYR3W3I6aRvIlbI3EezD9A6DDa5CK0qF2vNFsz7etDgvtqCcyNWmV
+	NqT5luqPJmd15tIb72ea7uunQ6qw6J8nyWFcKkXRbENJ91FnqQ3DE91dCwbjl4+C1u49/2JlMY0
+	/gJh9bn7SnImsLxSddV+6JZJvaE0i+BXuFXg==
+X-Google-Smtp-Source: AGHT+IGH5UGkTv252dC01JpSDkaJcJ8KfFAosg2KR2cHgR/gkXTKN8Ezxd2HpK6jf4Aw75VWq5kbPQ==
+X-Received: by 2002:a05:6214:1301:b0:79a:5e61:b6e7 with SMTP id 6a1803df08f44-7fc2bc2f235mr148121586d6.17.1758979990313;
+        Sat, 27 Sep 2025 06:33:10 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4db11fc7e33sm41268141cf.51.2025.09.27.06.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Sep 2025 06:33:09 -0700 (PDT)
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id E0E02F40066;
+	Sat, 27 Sep 2025 09:33:08 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Sat, 27 Sep 2025 09:33:08 -0400
+X-ME-Sender: <xms:lOfXaK-F5kwgMw7tlcjOR660qWhqCLrWrAZEe7epHUwd9o-JfImhfQ>
+    <xme:lOfXaJeKeS3Xn5-Akgf5PnQayfL0UCcRj32akuvmHJrsFVIOi6RoXygEImaCEDIDs
+    FodizH3rP8OG9AiW8mo21ldnIliy9zWjHGum-JJePd4NLv7IVo7>
+X-ME-Received: <xmr:lOfXaEmj95r0yOYn4h5v7ABWtbr87idcTFHf5aZzJcHSW2oJnmLCcIBGTulB3ceINcf1FxPwdVPDxPn2_NQAntzVNQpHx5Dc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdejvdefkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtugfgjgesthekrodttddtudenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedtvefhfeetveeiueethefhhedvieelveeuffetudevueevueekveduheehieff
+    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvgdpnhgspghrtghpthhtohepfeehpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehphhgrshhtrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurg
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghi
+    lhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtth
+    hopegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopehl
+    ohhsshhinheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprgdrhhhinhgusghorhhgse
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhhitggvrhihhhhlsehgohhoghhlvgdr
+    tghomhdprhgtphhtthhopehtmhhgrhhoshhssehumhhitghhrdgvughu
+X-ME-Proxy: <xmx:lOfXaOgQUiKGJ76g8NZ3aKhHZKRXR7xf4qy4eWoMhRhJJcbnDuEnNg>
+    <xmx:lOfXaGolzL_423YlYH3OllI9b70btOBalabRJPBlP9aNbpqsYXS1rA>
+    <xmx:lOfXaBR23bkhC3zmGaCIYkInVEKP6yWKxQEt16HtkdLcLxC61_QuUw>
+    <xmx:lOfXaBmk8fFkFier3uut9Rv3MypIL-z6K2i5_I21X4JLUoAXwJIKSA>
+    <xmx:lOfXaPzq6u9J9Oep9xQ1JEINrLFC0m-OW4emMKoTX6g68CsOPyX8PaPg>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 27 Sep 2025 09:33:08 -0400 (EDT)
+Date: Sat, 27 Sep 2025 06:33:06 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: phasta@kernel.org
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,	Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>,	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Asahi Lina <lina+kernel@asahilina.net>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Krishna Ketan Rai <prafulrai522@gmail.com>,
+	Lyude Paul <lyude@redhat.com>,	Mitchell Levy <levymitchell0@gmail.com>,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev, dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH] rust: sync: Add dma_fence abstractions
+Message-ID: <aNfnkhXnnxqdfPYz@tardis.local>
+References: <20250918123100.124738-2-phasta@kernel.org>
+ <aNa7BDpKS2KA__4M@tardis.local>
+ <2aa5150d913fcd4d321db52bc6bad1770f68e778.camel@mailbox.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250927-limit-infoframes-2-v1-1-697511bd050b@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2aa5150d913fcd4d321db52bc6bad1770f68e778.camel@mailbox.org>
 
-Hi Dmitry,
+On Sat, Sep 27, 2025 at 11:01:38AM +0200, Philipp Stanner wrote:
+[..]
+> > > ---
+> > >  rust/bindings/bindings_helper.h |   1 +
+> > >  rust/helpers/dma_fence.c        |  23 ++
+> > >  rust/helpers/helpers.c          |   1 +
+> > >  rust/helpers/spinlock.c         |   5 +
+> > >  rust/kernel/sync.rs             |   2 +
+> > >  rust/kernel/sync/dma_fence.rs   | 388 ++++++++++++++++++++++++++++++++
+> > 
+> > I missed this part, and I don't think kernel::sync is where dma_fence
+> > should be, as kernel::sync is mostly for the basic synchronization
+> > between threads/irqs. dma_fence is probably better to be grouped with
+> > dma-buf and other dma related primitives. Maybe in kernel::dma? Like:
+> > 
+> > rust/kernel/dma.rs
+> > rust/kernel/dma/dma_buf.rs
+> > rust/kernel/dma/dma_fence.rs
+> > 
+> > Thoughts? Miguel, Greg, Danilo and Lyude, any idea or suggestion?
+> 
+> @Christian König's opinion would be valuable, too.
+> 
+> I'm not super convinced of that because dma_fence has not really much
+> to do with DMA. They're not very different from completions and are a
+> mechanism to synchronize consumers and producers.
+> 
+> Actually, before f54d1867005c3 they were just called "fence" and then
+> renamed to "dma_fence" because someone wanted that name.
+> 
 
-kernel test robot noticed the following build errors:
+Well, dma-fence.c lives in drivers/dma-buf/, and IIUC it will only be
+built in CONFIG_DMA_SHARED_BUFFER is selected. They are enough evidences
+to show that dma_fence is not considered as a general fence. Of course,
+the implementation of dma_fence may not be tied to any DMA
+functionality, but before we make it a general fence in Rust, we need to
+at least change it in C as well.
 
-[auto build test ERROR on bf2602a3cb2381fb1a04bf1c39a290518d2538d1]
+Regards,
+Boqun
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-display-hdmi-state-helpers-warn-on-unsupported-InfoFrame-types/20250927-090630
-base:   bf2602a3cb2381fb1a04bf1c39a290518d2538d1
-patch link:    https://lore.kernel.org/r/20250927-limit-infoframes-2-v1-1-697511bd050b%40oss.qualcomm.com
-patch subject: [PATCH 1/9] drm/display: hdmi-state-helpers: warn on unsupported InfoFrame types
-config: x86_64-buildonly-randconfig-002-20250927 (https://download.01.org/0day-ci/archive/20250927/202509272013.GAc17rsa-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509272013.GAc17rsa-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509272013.GAc17rsa-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/display/drm_hdmi_state_helper.c:924:17: error: use of undeclared identifier 'it'
-     924 |                 dev_warn_once(it->dev, "unsupported HDMI infoframe 0x%x\n", frame->any.type);
-         |                               ^
->> drivers/gpu/drm/display/drm_hdmi_state_helper.c:924:63: error: use of undeclared identifier 'frame'
-     924 |                 dev_warn_once(it->dev, "unsupported HDMI infoframe 0x%x\n", frame->any.type);
-         |                                                                             ^
-   drivers/gpu/drm/display/drm_hdmi_state_helper.c:953:17: error: use of undeclared identifier 'it'
-     953 |                 dev_warn_once(it->dev, "unsupported HDMI infoframe 0x%x\n", frame->any.type);
-         |                               ^
-   3 errors generated.
-
-
-vim +/it +924 drivers/gpu/drm/display/drm_hdmi_state_helper.c
-
-   916	
-   917	static int clear_infoframe(struct drm_connector *connector,
-   918				   struct drm_connector_hdmi_infoframe *old_frame)
-   919	{
-   920		int ret;
-   921	
-   922		ret = clear_device_infoframe(connector, old_frame->data.any.type);
-   923		if (ret == -EOPNOTSUPP)
- > 924			dev_warn_once(it->dev, "unsupported HDMI infoframe 0x%x\n", frame->any.type);
-   925		if (ret)
-   926			return ret;
-   927	
-   928		return 0;
-   929	}
-   930	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Anyways, I don't have strong objections and mostly care about having
+> them available somewhere.
+> 
+> P.
+> 
+> > 
+> > Regards,
+> > Boqun
+> > 
+> > >  6 files changed, 420 insertions(+)
+> > >  create mode 100644 rust/helpers/dma_fence.c
+> > >  create mode 100644 rust/kernel/sync/dma_fence.rs
+> > > 
+> > [...]
+> 
