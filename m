@@ -1,286 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE99725A34F;
-	Sat, 27 Sep 2025 06:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE5A288502
+	for <llvm@lists.linux.dev>; Sat, 27 Sep 2025 07:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758953558; cv=none; b=em7wEPTfVwGbuoAhGyFxeWJaED97Lxb4lzyRtj4XkHTS4C9TDDfZFhMJ2j3KUhgM7vI+rbeh3b1jMhOnodME8w4nF7wgmzzbH5gQwjQio/6VjlKrog1bB2mRjIzP9sGI9yymH87cIF+d7S8ZtvNCqnNn/PcYNk3WLnjvYZxnH/E=
+	t=1758957198; cv=none; b=fYaBSJvmbYB1cZG4YTpOWI7PQXXH9GY80T0QjxSnQv0s6qedYcZO5QiS1zYBHob0OQdXf54JYBwV75yPGylcnC/nb2SKr9VcQim1noWnLPVzYhNKe6J3bcgNw7+IotmrQ3cUw+B4Fb94BeGPkLqpEqIrOBAfxNKfC2Nc03Mm7L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758953558; c=relaxed/simple;
-	bh=jDGdeYRSR6G+nLEbsl+K8rRUHVY0iapVzO1DkGOIYOU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NWhd2fzd5lvikJteW/dylos9MiGqypn9+wf7P4vTfvMf4sW4TcR0W44L4pil96WBuCWeQLGFYwlcJzfw72eygDzZqENtV5X8vtG02myd9lZhC82kFZiPB4pL9tVLsUlyd2gwW9Zz5MkzKA1JSCECiiE4j4culxK6XcF/eVjRDZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W/90IypL; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758957198; c=relaxed/simple;
+	bh=XsXOBTRkSVSto3yE52WeWx/CnX/R0KERCok2z+v8Nfw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iqy+UbXi0SYMVDWqM5SqJV4Akqxy71IjkprQ4IsNYoLxKPgBaHxINZeOck4gNBc4oIsg0UnqcYRORdEAHpdwp7paCJCzuzd28HUhlTZvA5G4uhnEEk2N3eK9iH1LNFmj3d09dw1JbnSkaFp44+k0APreXrS1H7hSBURd+fowhQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J/psgCSE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W/90IypL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758953556; x=1790489556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jDGdeYRSR6G+nLEbsl+K8rRUHVY0iapVzO1DkGOIYOU=;
-  b=W/90IypL5to9YAnxas1xoDHb3g3uSblt1aue+cxwKJVFgunlLoiICLOr
-   sA/bMtRWJ7vKHLrr7HSAjZdQsLkqkKfkd6CBA6cyIOX+A4MnRv6vBSr/5
-   7O7qBSY7uIaR4pXu3j7cwFbhx5CrYqqDi2T1OgCqxyI4CvyqUDbnXlN98
-   myJzd5XRH4omMinaGCjVRRCF5NXvrWtKxlhFAdyLR1C8szpKC+E0oIDHO
-   lmNyJ5bugNmZ82vtxd1lXxFjedZOgL6xNqnEtgEZlnS1CSFqzKKTe63Yv
-   nTxIL4/DkAbRlOjdSg9zlKQmyqV4jEGUd8PxOWEHhR5Md4FTKiK7Vfo1/
-   w==;
-X-CSE-ConnectionGUID: EusKf0RKQDCCO28365BxUg==
-X-CSE-MsgGUID: KVYQKgl3Qum1WSwaHT+u+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="61326429"
-X-IronPort-AV: E=Sophos;i="6.18,296,1751266800"; 
-   d="scan'208";a="61326429"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 23:12:35 -0700
-X-CSE-ConnectionGUID: rc5yUXXeTD+tNAqKdvR8/w==
-X-CSE-MsgGUID: dOX0QDuTTaiySpgWbb5dPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,296,1751266800"; 
-   d="scan'208";a="177715622"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 26 Sep 2025 23:12:28 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v2OAU-0006pX-0c;
-	Sat, 27 Sep 2025 06:12:26 +0000
-Date: Sat, 27 Sep 2025 14:12:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>, git@amd.com,
-	michal.simek@amd.com, alexandre.belloni@bootlin.com,
-	Frank.Li@nxp.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, pgaj@cadence.com,
-	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
-	arnd@arndb.de, quic_msavaliy@quicinc.com, Shyam-sundar.S-k@amd.com,
-	sakari.ailus@linux.intel.com, billy_tsai@aspeedtech.com,
-	kees@kernel.org, gustavoars@kernel.org,
-	jarkko.nikula@linux.intel.com, jorge.marques@analog.com,
-	linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	radhey.shyam.pandey@amd.com, srinivas.goud@amd.com,
-	shubhrajyoti.datta@amd.com, manion05gk@gmail.com,
-	Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Subject: Re: [PATCH V8 2/5] asm-generic/io.h: Add big-endian MMIO accessors
-Message-ID: <202509271308.NHfa8qUq-lkp@intel.com>
-References: <20250926105349.2932952-3-manikanta.guntupalli@amd.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J/psgCSE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758957194;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xf5Dkd5FoLr7rKxsgvGVr1nY9wcthrq8tj+TSzQuWJE=;
+	b=J/psgCSEEA1Ds/QhcVqwfMdPBOQ5ke5rocavZrqnIT4VynE//U//1oa98O572ByUcfMNvZ
+	FLQnwpAonhWKtJ9Qa6VRTijx5tCrjQVNStxp0UBNKPc5rT3KwVR5CFfQiy+UKsB/MV8l4m
+	GMI+KUrO7hyUom8yklizL7v2ATtCnaY=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-30-4JLUJ9rNMTulBI3iIvVISw-1; Sat,
+ 27 Sep 2025 03:13:12 -0400
+X-MC-Unique: 4JLUJ9rNMTulBI3iIvVISw-1
+X-Mimecast-MFC-AGG-ID: 4JLUJ9rNMTulBI3iIvVISw_1758957192
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0ACED1800366
+	for <llvm@lists.linux.dev>; Sat, 27 Sep 2025 07:13:12 +0000 (UTC)
+Received: from [172.20.26.51] (unknown [10.30.44.116])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9D56119560A2;
+	Sat, 27 Sep 2025 07:13:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.17.0-rc7,
+ upstream-mainline, 083fc6d7)
+Date: Sat, 27 Sep 2025 07:13:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250926105349.2932952-3-manikanta.guntupalli@amd.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <96528.125092703131300117@us-mta-30.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: t8aKMYlH7cXt4z1AVk8T4IN5x5MxK8T4jhYM9sxBjw4_1758957192
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Manikanta,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on arnd-asm-generic/master linus/master v6.17-rc7 next-20250926]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manikanta-Guntupalli/dt-bindings-i3c-Add-AMD-I3C-master-controller-support/20250926-190033
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250926105349.2932952-3-manikanta.guntupalli%40amd.com
-patch subject: [PATCH V8 2/5] asm-generic/io.h: Add big-endian MMIO accessors
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20250927/202509271308.NHfa8qUq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509271308.NHfa8qUq-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'sched-urgent-2025-09-26' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/tip/tip
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509271308.NHfa8qUq-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2066214038
 
-All warnings (new ones prefixed by >>):
-
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-      19 |         (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:787:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     787 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-     119 |         ___constant_swab32(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-      20 |         (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:787:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     787 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-     119 |         ___constant_swab32(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-      21 |         (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:787:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     787 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-     119 |         ___constant_swab32(x) :                 \
-         |                            ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-      22 |         (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:787:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     787 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-     120 |         __fswab32(x))
-         |                   ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
-   In file included from arch/sparc/include/asm/io.h:7:
-   In file included from arch/sparc/include/asm/io_32.h:21:
-   include/asm-generic/io.h:803:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     803 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:818:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     818 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:833:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     833 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:926:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     926 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:939:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     939 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:952:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     952 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:966:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     966 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:980:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     980 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:994:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     994 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:1377:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1377 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
->> arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' macro redefined [-Wmacro-redefined]
-      16 | #define readw_be(__addr)        __raw_readw(__addr)
-         |         ^
-   include/asm-generic/io.h:304:9: note: previous definition is here
-     304 | #define readw_be readw_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
->> arch/sparc/include/asm/io.h:17:9: warning: 'readl_be' macro redefined [-Wmacro-redefined]
-      17 | #define readl_be(__addr)        __raw_readl(__addr)
-         |         ^
-   include/asm-generic/io.h:319:9: note: previous definition is here
-     319 | #define readl_be readl_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
->> arch/sparc/include/asm/io.h:19:9: warning: 'writel_be' macro redefined [-Wmacro-redefined]
-      19 | #define writel_be(__w, __addr)  __raw_writel(__w, __addr)
-         |         ^
-   include/asm-generic/io.h:363:9: note: previous definition is here
-     363 | #define writel_be writel_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   In file included from arch/sparc/vdso/vdso32/../vclock_gettime.c:18:
->> arch/sparc/include/asm/io.h:20:9: warning: 'writew_be' macro redefined [-Wmacro-redefined]
-      20 | #define writew_be(__l, __addr)  __raw_writew(__l, __addr)
-         |         ^
-   include/asm-generic/io.h:351:9: note: previous definition is here
-     351 | #define writew_be writew_be
-         |         ^
-   In file included from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:274:1: warning: no previous prototype for function '__vdso_clock_gettime' [-Wmissing-prototypes]
-     274 | __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec *ts)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:273:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     273 | notrace int
-         |         ^
-         |         static 
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:302:1: warning: no previous prototype for function '__vdso_clock_gettime_stick' [-Wmissing-prototypes]
-     302 | __vdso_clock_gettime_stick(clockid_t clock, struct __kernel_old_timespec *ts)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:301:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     301 | notrace int
-         |         ^
-         |         static 
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:327:1: warning: no previous prototype for function '__vdso_gettimeofday' [-Wmissing-prototypes]
-     327 | __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:326:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     326 | notrace int
-         |         ^
-         |         static 
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:363:1: warning: no previous prototype for function '__vdso_gettimeofday_stick' [-Wmissing-prototypes]
-     363 | __vdso_gettimeofday_stick(struct __kernel_old_timeval *tv, struct timezone *tz)
-         | ^
-   arch/sparc/vdso/vdso32/../vclock_gettime.c:362:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     362 | notrace int
-         |         ^
-         |         static 
-   29 warnings generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-vim +/readw_be +16 arch/sparc/include/asm/io.h
 
-21dccddf45aae2 Jan Andersson 2011-05-10   9  
-21dccddf45aae2 Jan Andersson 2011-05-10  10  /*
-21dccddf45aae2 Jan Andersson 2011-05-10  11   * Defines used for both SPARC32 and SPARC64
-21dccddf45aae2 Jan Andersson 2011-05-10  12   */
-21dccddf45aae2 Jan Andersson 2011-05-10  13  
-21dccddf45aae2 Jan Andersson 2011-05-10  14  /* Big endian versions of memory read/write routines */
-21dccddf45aae2 Jan Andersson 2011-05-10  15  #define readb_be(__addr)	__raw_readb(__addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @16  #define readw_be(__addr)	__raw_readw(__addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @17  #define readl_be(__addr)	__raw_readl(__addr)
-21dccddf45aae2 Jan Andersson 2011-05-10  18  #define writeb_be(__b, __addr)	__raw_writeb(__b, __addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @19  #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @20  #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
-21dccddf45aae2 Jan Andersson 2011-05-10  21  
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
