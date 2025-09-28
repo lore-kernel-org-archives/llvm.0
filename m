@@ -1,77 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CC722154F;
-	Sat, 27 Sep 2025 19:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8DC246BAA;
+	Sun, 28 Sep 2025 05:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759001881; cv=none; b=Za7YaRSPULjbKv/Bq5DCk/Y1eC3LQOqtzT65AkDk7pxg176yBzkRSwtrl2PGmJhL3hLXlOb1YpezEeDRNuOXpBIrY0I7RQbGMFMYEV3Q2JvB9/RqUrrVt/X6klgkBfcQ5o6rnH5Gify+cU0P7hG/wJ1mZ9SwlV+RVIbIYGbskU8=
+	t=1759037664; cv=none; b=ayl4VpbBtc5G114xuVnbOO0LinNt+KYsJfVMALBjOrV6qedUKsX95AwIIG5PTK9xwKILvumCiI0Lg4N2jnQv7o+gxB20weq1v04WyM9mua6gzA7BXXU/BazG4D+8DQymaOOf9y7QCdjurVaXFCNIol04+kvHp8naeOpGRrR/jsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759001881; c=relaxed/simple;
-	bh=v4tYuKq23IFkP5pTX5xVWeK6wNj4TsUt3W+E4QEibj8=;
+	s=arc-20240116; t=1759037664; c=relaxed/simple;
+	bh=xakyuO/1hDdekWWshDWBVaa367ilvRNGjQcMO4Ul1w4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UwSVBYAjYbExZ7pxno192NVt+yiXkseAat94BWCG8Kkv3tTV+z5QgGBxYwTi6NZPILC97NBGOR763UZxOycf/nZrqnVm6aHY5ykA61kiAue2RNjjbntOe4oIbD29iCy6ThWd6IzpG90TprD4Q1mHBWOzMnPHvztkPc67c8oefS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UB4OS5rq; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=iozmYRRLMwPuyFCuP+KdcEC5DIPsgvDJraoY2rInjnb9Caj0jHU2s/bIE94dpA+oHN3TFN+B8m0ccahVGVekgr+zskWo06ROk0T//NBh2dstQARmdZm8MsiwfTX4PxlUa0h2z8rclyqa3BpIQIHOP+rH8CTHoy3xFV7xt9Y4n3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n8AeE8Vk; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UB4OS5rq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n8AeE8Vk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759001880; x=1790537880;
+  t=1759037663; x=1790573663;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=v4tYuKq23IFkP5pTX5xVWeK6wNj4TsUt3W+E4QEibj8=;
-  b=UB4OS5rqC9UKfOfsmDTbDCxhsexNF+DlbV9RyulG0ApDkt3HgOymBl5w
-   ZLu++sat8F7QFS1Yc9Uj+CrpU9lQrgHhuPD9CT3Y+/R7oRzEGnUwb0ytK
-   it/K8fHRHDhiEERXPEH+u7yLVHl6FOz/dx1dhk5k1ujHRDZ6p3NJYK2Kw
-   xKfWEXM1fZRMXkJe2Zo776BezLJffN3x1DEyOorvgnQGNuCUJnENri3Mh
-   GRNb9hiJfI1d6a0sCEo5g+9WoCYYYEhGgedGS4GWElEKS88N9AiliCMdT
-   k4IEEwwHrOVlVTwijLkw0jlWFvs6yyz2F2Z7tyz78MaSw6he0HrqHzy4a
-   g==;
-X-CSE-ConnectionGUID: wOFbzKTuQ5OFUCa+Sr+Erw==
-X-CSE-MsgGUID: jTYdK+pVQZSveRBG+JJazQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11566"; a="83908957"
+  bh=xakyuO/1hDdekWWshDWBVaa367ilvRNGjQcMO4Ul1w4=;
+  b=n8AeE8VkNkehRpuDeTQnpp0NZ/a6VDzjIp2QgtchZze3RTKI3vHsw9ze
+   9eJT4ksRnLwIScD4F/mG/j2gqV/ecQCmCeBsOOPksmn4+2vDj+qYi9Z4Z
+   ho3AP+epg0yu9ffm94Ej41uOm5CLyaA9awuxKEzE6U9RvlpTIU03XwFJo
+   /HtgCi714aN/pnC+zNRxSV99l1EVOumxcnk4YcjMm05geNE7LrtFOvVbl
+   kzhpG9QAEUCRpxnBBfCfo78Vv/p5nZdZ6R9P5bdbeiyNhcUlqf7JrHC+4
+   oWq7JzXgpiDEV3V6UR1S78fz2auA0G2qtHPYFGLAoMOj4i4RQgBNZMF74
+   A==;
+X-CSE-ConnectionGUID: 4ERXqbB/RnO4DFlcsNUzEA==
+X-CSE-MsgGUID: FCKjCtoTTlaGRNVsr6ZOaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11566"; a="71561436"
 X-IronPort-AV: E=Sophos;i="6.18,298,1751266800"; 
-   d="scan'208";a="83908957"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 12:37:59 -0700
-X-CSE-ConnectionGUID: FJxBiAB5RyqbSrOb7oISQg==
-X-CSE-MsgGUID: T0kuUb2QSoG4qQMy8NQM9A==
+   d="scan'208";a="71561436"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 22:34:23 -0700
+X-CSE-ConnectionGUID: PVChTyzrSFauydPISQQPkA==
+X-CSE-MsgGUID: v9k4s4GlTayhLAk+KsPTXA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,298,1751266800"; 
-   d="scan'208";a="208615280"
+   d="scan'208";a="215083808"
 Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 27 Sep 2025 12:37:54 -0700
+  by orviesa001.jf.intel.com with ESMTP; 27 Sep 2025 22:34:21 -0700
 Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v2ajv-0007IB-1o;
-	Sat, 27 Sep 2025 19:37:51 +0000
-Date: Sun, 28 Sep 2025 03:37:50 +0800
+	id 1v2k37-0007a7-1O;
+	Sun, 28 Sep 2025 05:34:17 +0000
+Date: Sun, 28 Sep 2025 13:34:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Heidelberg via B4 Relay <devnull+david.ixit.cz@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Casey Connolly <casey.connolly@linaro.org>
+To: Ma Ke <make24@iscas.ac.cn>, syniurge@gmail.com,
+	shyam-sundar.s-k@amd.com, andi.shyti@kernel.org, wsa@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	phone-devel@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH 8/8] drm/panel: Add Samsung S6E3FC2X01 DDIC with AMS641RW
- panel
-Message-ID: <202509280303.sWeQi4ks-lkp@intel.com>
-References: <20250925-s6e3fc2x01-v1-8-9293016768f7@ixit.cz>
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org, Ma Ke <make24@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: fix reference leak in MP2 PCI device
+Message-ID: <202509281317.3OLDoUnB-lkp@intel.com>
+References: <20250927105729.19164-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,107 +66,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250925-s6e3fc2x01-v1-8-9293016768f7@ixit.cz>
+In-Reply-To: <20250927105729.19164-1-make24@iscas.ac.cn>
 
-Hi David,
+Hi Ma,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on ce7f1a983b074f6cf8609068088ca3182c569ee4]
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on linus/master v6.17-rc7 next-20250926]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Heidelberg-via-B4-Relay/dt-bindings-panel-Add-Samsung-S6E3FC2X01-DDIC-with-panel/20250925-171444
-base:   ce7f1a983b074f6cf8609068088ca3182c569ee4
-patch link:    https://lore.kernel.org/r/20250925-s6e3fc2x01-v1-8-9293016768f7%40ixit.cz
-patch subject: [PATCH 8/8] drm/panel: Add Samsung S6E3FC2X01 DDIC with AMS641RW panel
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250928/202509280303.sWeQi4ks-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250928/202509280303.sWeQi4ks-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/i2c-fix-reference-leak-in-MP2-PCI-device/20250927-190047
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250927105729.19164-1-make24%40iscas.ac.cn
+patch subject: [PATCH] i2c: fix reference leak in MP2 PCI device
+config: i386-randconfig-011-20250928 (https://download.01.org/0day-ci/archive/20250928/202509281317.3OLDoUnB-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250928/202509281317.3OLDoUnB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509280303.sWeQi4ks-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509281317.3OLDoUnB-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/panel/panel-samsung-s6e3fc2x01.c:210:17: warning: unused variable 'dev' [-Wunused-variable]
-     210 |         struct device *dev = &ctx->dsi->dev;
-         |                        ^~~
->> drivers/gpu/drm/panel/panel-samsung-s6e3fc2x01.c:256:29: warning: unused variable 'ctx' [-Wunused-variable]
-     256 |         struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
-         |                                    ^~~
-   2 warnings generated.
+>> drivers/i2c/busses/i2c-amd-mp2-pci.c:467:2: error: use of undeclared identifier 'mp2_dev'
+     467 |         mp2_dev = (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
+         |         ^
+   drivers/i2c/busses/i2c-amd-mp2-pci.c:469:9: error: use of undeclared identifier 'mp2_dev'; did you mean 'pci_dev'?
+     469 |         return mp2_dev;
+         |                ^~~~~~~
+         |                pci_dev
+   drivers/i2c/busses/i2c-amd-mp2-pci.c:460:18: note: 'pci_dev' declared here
+     460 |         struct pci_dev *pci_dev;
+         |                         ^
+>> drivers/i2c/busses/i2c-amd-mp2-pci.c:469:9: error: incompatible pointer types returning 'struct pci_dev *' from a function with result type 'struct amd_mp2_dev *' [-Werror,-Wincompatible-pointer-types]
+     469 |         return mp2_dev;
+         |                ^~~~~~~
+   3 errors generated.
 
 
-vim +/dev +210 drivers/gpu/drm/panel/panel-samsung-s6e3fc2x01.c
+vim +/mp2_dev +467 drivers/i2c/busses/i2c-amd-mp2-pci.c
 
-   206	
-   207	static int s6e3fc2x01_prepare(struct drm_panel *panel)
-   208	{
-   209		struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
- > 210		struct device *dev = &ctx->dsi->dev;
-   211		int ret;
-   212	
-   213		ret = regulator_bulk_enable(ARRAY_SIZE(s6e3fc2x01_supplies), ctx->supplies);
-   214		if (ret < 0)
-   215			return ret;
-   216	
-   217		s6e3fc2x01_reset(ctx);
-   218	
-   219		ret = s6e3fc2x01_on(ctx);
-   220		if (ret < 0) {
-   221			gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-   222			regulator_bulk_disable(ARRAY_SIZE(s6e3fc2x01_supplies), ctx->supplies);
-   223			return ret;
-   224		}
-   225	
-   226		return 0;
-   227	}
-   228	
-   229	static int s6e3fc2x01_unprepare(struct drm_panel *panel)
-   230	{
-   231		struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
-   232	
-   233		gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-   234		regulator_bulk_disable(ARRAY_SIZE(s6e3fc2x01_supplies), ctx->supplies);
-   235	
-   236		return 0;
-   237	}
-   238	
-   239	static const struct drm_display_mode ams641rw_mode = {
-   240		.clock = (1080 + 72 + 16 + 36) * (2340 + 32 + 4 + 18) * 60 / 1000,
-   241		.hdisplay = 1080,
-   242		.hsync_start = 1080 + 72,
-   243		.hsync_end = 1080 + 72 + 16,
-   244		.htotal = 1080 + 72 + 16 + 36,
-   245		.vdisplay = 2340,
-   246		.vsync_start = 2340 + 32,
-   247		.vsync_end = 2340 + 32 + 4,
-   248		.vtotal = 2340 + 32 + 4 + 18,
-   249		.width_mm = 68,
-   250		.height_mm = 145,
-   251	};
-   252	
-   253	static int s6e3fc2x01_get_modes(struct drm_panel *panel,
-   254						struct drm_connector *connector)
-   255	{
- > 256		struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
-   257		struct drm_display_mode *mode;
-   258	
-   259		mode = drm_mode_duplicate(connector->dev, &ams641rw_mode);
-   260		if (!mode)
-   261			return -ENOMEM;
-   262	
-   263		drm_mode_set_name(mode);
-   264	
-   265		mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-   266		connector->display_info.width_mm = mode->width_mm;
-   267		connector->display_info.height_mm = mode->height_mm;
-   268		drm_mode_probed_add(connector, mode);
-   269	
-   270		return 1;
-   271	}
-   272	
+   456	
+   457	struct amd_mp2_dev *amd_mp2_find_device(void)
+   458	{
+   459		struct device *dev;
+   460		struct pci_dev *pci_dev;
+   461	
+   462		dev = driver_find_next_device(&amd_mp2_pci_driver.driver, NULL);
+   463		if (!dev)
+   464			return NULL;
+   465	
+   466		pci_dev = to_pci_dev(dev);
+ > 467		mp2_dev = (struct amd_mp2_dev *)pci_get_drvdata(pci_dev);
+   468		put_device(dev);
+ > 469		return mp2_dev;
+   470	}
+   471	EXPORT_SYMBOL_GPL(amd_mp2_find_device);
+   472	
 
 -- 
 0-DAY CI Kernel Test Service
