@@ -1,208 +1,613 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E94021D5AF
-	for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 17:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6009BA3F;
+	Mon, 29 Sep 2025 18:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759168687; cv=none; b=OQ9e4G8iWSKb6ozkTcrxAwWM3HjN0HY7yLbtzqXg+Nd1EdKWsXxoDY3X5m86xgLHRegcvv38Iq06t+xVgNrYWJbfYygiZNzj6d6IgDgpJ35ttrUpz+TfwDO23bIFQpxtCZaq94/XcdXXfXfias+m4naElqTbz5vvK3YpT7Yd8j4=
+	t=1759171809; cv=none; b=f7kyrgss1ZAfPh8XCDthAkWZU5lwUq1rjdwAG4N5HDcmiHhHXyN5cIijaFNblhDq0gUbYwjqAWL1kZapbslaY5/tTVV+GG+/oMId3jThNp5lWso1g1LaANSdISV5gd6XR1aOfbReG0m9YeweWx0xI/soJ4JZIUUIny5mRHaL1jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759168687; c=relaxed/simple;
-	bh=IHNM4NzgxnMmFEI01G6PNqPKsxoRpwq01Yb96j8WtNY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=snIP0DgI+odNxPiHPYbLAF0OFkb/8g2xoZS4g30WZ9D0ENjK2XPkDUosZj4+VmBLIYcxLnR+lbH+qceZZ5IzncAVnjaJsRrcorsuG8YyL5JoEKkYDy/9lzS3kd3u/Mb4tStKsD6u6SIq5veGxvW4RFZaqeUrrq6u2I1nuMC2aBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D5wB9LlK; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759171809; c=relaxed/simple;
+	bh=ztkCs3RvNQ6iem5fiz0Y5ACVpjXfX3YUx/3qw8kZOo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQ7HYdPAzdTYsWPai/iiO+MYhYXdyqaabXc+ldOpEU5t4SwLnHfaJ6zUI5YzmEMo/6qO5nT2IodCfnbtQRWIwivYbmqz5VL82MT2fe0izDbPDplIe4xMJjAbVHFwZqnY2ouNAGmN8AG2HpGjxU1X55vy66QhG4MR0mtVC/FEq8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nqr0p8SW; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D5wB9LlK"
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-54a8f6a2d80so1777486e0c.3
-        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 10:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759168684; x=1759773484; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E908RI2gAqiHDeoOAT4Wxeq827Q7LIlIthXPPeqIu0Y=;
-        b=D5wB9LlKaEqnk4jJJ9iMdx+BnGggWzLA7aJqXHU709g1Cb7BFnQwbpjJppYOl0ByvM
-         zyIHFtweTRUIwsKUW9PK8BQpvpFZ8gqeRXHSsbHnJs/FAk8tabYKwXNJUcVyU2Ufeq+P
-         nwLPKKAJp1WSKEVQdTP1WRibc6KNGoFQqJUDsx97hxuGHmvW3ymBTn2E+eaHijZiWmoe
-         +YpNQeNAiYfZwWodC7kmSA/DAG2XB9Z0M2cQf01EjtFelnazeplcvdH3U4FJpq/IOLiY
-         +NqTEzDkqmjJC0iYr3DF0bUOVeZANDpyosZTrurCZOljxJRUA13pIYcVNKTayRF5e3ql
-         atfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759168684; x=1759773484;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E908RI2gAqiHDeoOAT4Wxeq827Q7LIlIthXPPeqIu0Y=;
-        b=Ub0/hCSGjkCFdYo2kSE3QShlbawqZpV2JYUAnHqDfcL6nuiCqnc5bgkzUeYb12vADg
-         AluzhjwakImioYi/8EsfjEO8yTLK5rPFWeDCNyhWyJoTDiqg5uujO6ZIrggeXF9cObLK
-         n2nBwT2S/ECNNRT7EoNuJpfA71AB0SPuBoPS6QfNzIXeJw6FCwhebo6ZsuYbQAPVzZES
-         LKkByH2hARzPo50B78KqOdHnnYjHsX7ord4AEWr9CJ3HKC57tD5s4OLL8PwcA61Au+4j
-         Su6f1IfijCmlndp47zHZoQ5GLSDXf6ay/g2+Kl5u+iTYOlD8hRw3F8mdZH0NGbgtMcSF
-         vZQA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqyPyJHRvjEFvJyEm2RmhD4XWyzMSoXCjckfHZVufx2eCN5vvwyRT8S5oBYoxRQKUiMZ/D@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw2cgaiDbBX+n/J1Qhvkic6YjRA4jg3o8E9YyIGbRbKs7fkQOMX
-	vhE6FdHEBiZtFXdyOVZFl57wSAs7KeUOYM/eODMUkjJayFjFM59jcY2V
-X-Gm-Gg: ASbGncuCgrfLphcOmwkKXe76xZvjEI1xF84krSN4V+1SoHLvUsmH++Rnaf3BJNSaoiy
-	cEPNx1Y9iPdbxzDv6DsAqwnZu4nqeLsNb+myLYRCnAdq3YXDsMmwwX8LUY2ZUOrUfwMr2GfT5JG
-	ZdqviGt/Tz/RNWUUDWVKaVcb6NMjtogkgBTvk5+dqMNCEEEvveVnnnQebS1IkRwWzqmP/bL+b2b
-	a35m48TrOjfS7oqsOiubwhMQzAs6UHJUpsNYfC9B59LAmItuXWaEGZ3ntmpZI5FBNrkFzzUkGyk
-	ggu5IjQs8aYevTlSnQ0ZN6rC/bbX4e7edjpygoHKEq5T0bXFz/QkXmzD+yYfekF++z3k3oN9bz4
-	L9mTYPEAHL2uE5alE5fmBbz/9QMU4/BDohHLPC0e2klA4AHBQpDxZK673ePYv505qf11tCm9S0u
-	AcUBwT
-X-Google-Smtp-Source: AGHT+IGafwY5OqbBwbdedlnM684zSTSo0B+nKhBzZY2UTklcPWu1hk4PiOcg/kKTTuj5OpcgO90zPg==
-X-Received: by 2002:a05:6122:c95:b0:53c:6d68:1cdc with SMTP id 71dfb90a1353d-54bea1f5fcemr6937065e0c.14.1759168684281;
-        Mon, 29 Sep 2025 10:58:04 -0700 (PDT)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id a1e0cc1a2514c-916db3be313sm2499211241.20.2025.09.29.10.58.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 10:58:03 -0700 (PDT)
-Date: Mon, 29 Sep 2025 13:58:02 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Sidharth Seela <sidharthseela@gmail.com>, 
- antonio@openvpn.net, 
- sd@queasysnail.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- horms@kernel.org, 
- shuah@kernel.org, 
- willemdebruijn.kernel@gmail.com, 
- kernelxing@tencent.com, 
- nathan@kernel.org, 
- nick.desaulniers+lkml@gmail.com, 
- morbo@google.com, 
- justinstitt@google.com
-Cc: netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, 
- david.hunter.linux@gmail.com, 
- Sidharth Seela <sidharthseela@gmail.com>
-Message-ID: <willemdebruijn.kernel.321e70874e73c@gmail.com>
-In-Reply-To: <20250929160230.36941-2-sidharthseela@gmail.com>
-References: <20250929160230.36941-2-sidharthseela@gmail.com>
-Subject: Re: [PATCH v2] net: Fix uninit character pointer and return values
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nqr0p8SW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759171807; x=1790707807;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ztkCs3RvNQ6iem5fiz0Y5ACVpjXfX3YUx/3qw8kZOo4=;
+  b=Nqr0p8SWZFEmmAqW5pZXmMnlHXwl9YX25Rx9mvUO1Z838Z1DJ+vJSS5g
+   lklmlLn15PzNPmZTzZpP4wcaKfLgx972Inxm0S6/ZPwlS8Lfgr4qlj1Sv
+   hwieMJUCDmKGfhEJf1NSVO9Phxwu8QlcFAm1UxIKHtO8C0lTQdX5ZRxyL
+   MbIHNIxmObKWAi/EBy/s8CFasfbeN8lN0DHuPErcaIFFqKD6JCoIp6lRi
+   wkhCh1qQMbkQQwVxIeXlK0pT/ZoVtG3xoVjZpgx1LzsSLu1bHf8KHssLL
+   GbltJcgaPiy0JnJdYEHmfGcPIBHBpSrO/Oz4NdIJAq/Yxu1e1XNtFnnY/
+   w==;
+X-CSE-ConnectionGUID: cUT7pMOERt2hdB2pdB7Dsg==
+X-CSE-MsgGUID: F6TcUReWQumuRRZv+N8l9A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11568"; a="72849482"
+X-IronPort-AV: E=Sophos;i="6.18,302,1751266800"; 
+   d="scan'208";a="72849482"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2025 11:50:06 -0700
+X-CSE-ConnectionGUID: zbwKcr9NSkGocUkWvBokrQ==
+X-CSE-MsgGUID: KL9bqGoAQ7yEWtrduZL4/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,302,1751266800"; 
+   d="scan'208";a="179071764"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 29 Sep 2025 11:50:02 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v3Iwh-0000Zf-1L;
+	Mon, 29 Sep 2025 18:49:59 +0000
+Date: Tue, 30 Sep 2025 02:48:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] accel: Add Arm Ethos-U NPU driver
+Message-ID: <202509300224.9SZfHWDI-lkp@intel.com>
+References: <20250926-ethos-v3-2-6bd24373e4f5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250926-ethos-v3-2-6bd24373e4f5@kernel.org>
 
-Reminder: use the net prefix: [PATCH net v2]
+Hi Rob,
 
-Sidharth Seela wrote:
-> Fix uninitialized character pointer, and functions that return
-> undefined values. These issues were caught by running clang using LLVM=1
-> option; and are as follows:
-> --
-> ovpn-cli.c:1587:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->  1587 |         if (!sock) {
->       |             ^~~~~
-> ovpn-cli.c:1635:9: note: uninitialized use occurs here
->  1635 |         return ret;
->       |                ^~~
-> ovpn-cli.c:1587:2: note: remove the 'if' if its condition is always false
->  1587 |         if (!sock) {
->       |         ^~~~~~~~~~~~
->  1588 |                 fprintf(stderr, "cannot allocate netlink socket\n");
->       |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  1589 |                 goto err_free;
->       |                 ~~~~~~~~~~~~~~
->  1590 |         }
->       |         ~
-> ovpn-cli.c:1584:15: note: initialize the variable 'ret' to silence this warning
->  1584 |         int mcid, ret;
->       |                      ^
->       |                       = 0
-> ovpn-cli.c:2107:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->  2107 |         case CMD_INVALID:
->       |              ^~~~~~~~~~~
-> ovpn-cli.c:2111:9: note: uninitialized use occurs here
->  2111 |         return ret;
->       |                ^~~
-> ovpn-cli.c:1939:12: note: initialize the variable 'ret' to silence this warning
->  1939 |         int n, ret;
->       |                   ^
->       |
-> --
-> so_txtime.c:210:3: warning: variable 'reason' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->   210 |                 default:
->       |                 ^~~~~~~
-> so_txtime.c:219:27: note: uninitialized use occurs here
->   219 |                         data[ret - 1], tstamp, reason);
->       |                                                ^~~~~~
-> so_txtime.c:177:21: note: initialize the variable 'reason' to silence this warning
->   177 |                 const char *reason;
->       |                                   ^
->       |
+kernel test robot noticed the following build errors:
 
-My previous response accidentally left a state comment. The main
-feedback still held:
+[auto build test ERROR on 8f5ae30d69d7543eee0d70083daf4de8fe15d585]
 
-This default case calls error() and exits the program, so this cannot
-happen.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Herring-Arm/dt-bindings-npu-Add-Arm-Ethos-U65-U85/20250927-040244
+base:   8f5ae30d69d7543eee0d70083daf4de8fe15d585
+patch link:    https://lore.kernel.org/r/20250926-ethos-v3-2-6bd24373e4f5%40kernel.org
+patch subject: [PATCH v3 2/2] accel: Add Arm Ethos-U NPU driver
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20250930/202509300224.9SZfHWDI-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250930/202509300224.9SZfHWDI-lkp@intel.com/reproduce)
 
-> --
-> Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
-> ovpn module")
-> Fixes: ca8826095e4d4 ("selftests/net: report etf errors correctly")
-> 
-> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
-> 
-> v2:
-> 	- Use subsystem name "net".
-> 	- Add fixes tags.
-> 	- Remove txtimestamp fix as default case calls error.
-> 	- Assign constant error string instead of NULL.
-> --
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509300224.9SZfHWDI-lkp@intel.com/
 
-End the commit with the Signed-off-by block. Either move changelog
-above that, or below three (not two) dashes.
- 
-> diff --git a/tools/testing/selftests/net/ovpn/ovpn-cli.c b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> index 9201f2905f2c..20d00378f34a 100644
-> --- a/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> +++ b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> @@ -1581,7 +1581,7 @@ static int ovpn_listen_mcast(void)
->  {
->  	struct nl_sock *sock;
->  	struct nl_cb *cb;
-> -	int mcid, ret;
-> +	int mcid, ret = -1;
->  
->  	sock = nl_socket_alloc();
->  	if (!sock) {
-> @@ -1936,7 +1936,7 @@ static int ovpn_run_cmd(struct ovpn_ctx *ovpn)
->  {
->  	char peer_id[10], vpnip[INET6_ADDRSTRLEN], laddr[128], lport[10];
->  	char raddr[128], rport[10];
-> -	int n, ret;
-> +	int n, ret = -1;
->  	FILE *fp;
->  
->  	switch (ovpn->cmd) {
-> diff --git a/tools/testing/selftests/net/so_txtime.c b/tools/testing/selftests/net/so_txtime.c
-> index 8457b7ccbc09..5bf3c483069b 100644
-> --- a/tools/testing/selftests/net/so_txtime.c
-> +++ b/tools/testing/selftests/net/so_txtime.c
-> @@ -174,7 +174,7 @@ static int do_recv_errqueue_timeout(int fdt)
->  	msg.msg_controllen = sizeof(control);
->  
->  	while (1) {
-> -		const char *reason;
-> +		const char *reason = "unknown errno";
->  
->  		ret = recvmsg(fdt, &msg, MSG_ERRQUEUE);
->  		if (ret == -1 && errno == EAGAIN)
-> -- 
-> 2.47.3
-> 
+All errors (new ones prefixed by >>):
+
+>> drivers/accel/ethosu/ethosu_gem.c:222:3: error: expected expression
+                   u32 element_size = BIT((fm->precision >> 1) & 0x3);
+                   ^
+>> drivers/accel/ethosu/ethosu_gem.c:224:60: error: use of undeclared identifier 'element_size'
+                   addr += (c / 16) * fm->stride_c + (16 * x + (c & 0xf)) * element_size;
+                                                                            ^
+   drivers/accel/ethosu/ethosu_gem.c:393:4: error: expected expression
+                           u64 srclen = dma_length(info, &st.dma, &st.dma.src);
+                           ^
+>> drivers/accel/ethosu/ethosu_gem.c:399:43: error: use of undeclared identifier 'srclen'; did you mean 'strlen'?
+                                   st.dma.src.region, st.dma.src.offset, srclen,
+                                                                         ^~~~~~
+                                                                         strlen
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                ^
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                          ^
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+           _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+                                                                    ^
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+           __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+                                                                          ^
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+                   func(&id, ##__VA_ARGS__);                       \
+                               ^
+   include/linux/string.h:201:24: note: 'strlen' declared here
+   extern __kernel_size_t strlen(const char *);
+                          ^
+   4 errors generated.
 
 
+vim +222 drivers/accel/ethosu/ethosu_gem.c
+
+   180	
+   181	static u64 feat_matrix_length(struct ethosu_validated_cmdstream_info *info,
+   182				      struct feat_matrix *fm,
+   183				      u32 x, u32 y, u32 c)
+   184	{
+   185		int storage = fm->precision >> 14;
+   186		int tile = 0;
+   187	
+   188		if (fm->region < 0)
+   189			return U64_MAX;
+   190	
+   191		switch (storage) {
+   192		case 0:
+   193			if (x >= fm->width0 + 1) {
+   194				x -= fm->width0 + 1;
+   195				tile += 1;
+   196			}
+   197			if (y >= fm->height[tile] + 1) {
+   198				y -= fm->height[tile] + 1;
+   199				tile += 2;
+   200			}
+   201			break;
+   202		case 1:
+   203			if (y >= fm->height[1] + 1) {
+   204				y -= fm->height[1] + 1;
+   205				tile = 2;
+   206			} else if (y >= fm->height[0] + 1) {
+   207				y -= fm->height[0] + 1;
+   208				tile = 1;
+   209			}
+   210			break;
+   211		}
+   212		if (fm->base[tile] == U64_MAX)
+   213			return U64_MAX;
+   214	
+   215		u64 addr = fm->base[tile] + y * fm->stride_y;
+   216	
+   217		switch ((fm->precision >> 6) & 0x3) { // format
+   218		case 0: //nhwc:
+   219			addr += x * fm->stride_x + c;
+   220			break;
+   221		case 1: //nhcwb16:
+ > 222			u32 element_size = BIT((fm->precision >> 1) & 0x3);
+   223	
+ > 224			addr += (c / 16) * fm->stride_c + (16 * x + (c & 0xf)) * element_size;
+   225			break;
+   226		}
+   227	
+   228		info->region_size[fm->region] = max(info->region_size[fm->region], addr + 1);
+   229	
+   230		return addr;
+   231	}
+   232	
+   233	static int calc_sizes(struct drm_device *ddev,
+   234			      struct ethosu_validated_cmdstream_info *info,
+   235			      u16 op, struct cmd_state *st,
+   236			      bool ifm, bool ifm2, bool weight, bool scale)
+   237	{
+   238		u64 len;
+   239	
+   240		if (ifm) {
+   241			if (st->ifm.stride_kernel == U16_MAX)
+   242				return -EINVAL;
+   243			u32 stride_y = ((st->ifm.stride_kernel >> 8) & 0x2) +
+   244				((st->ifm.stride_kernel >> 1) & 0x1) + 1;
+   245			u32 stride_x = ((st->ifm.stride_kernel >> 5) & 0x2) +
+   246				(st->ifm.stride_kernel & 0x1) + 1;
+   247			u32 ifm_height = st->ofm.height[2] * stride_y +
+   248				st->ifm.height[2] - (st->ifm.pad_top + st->ifm.pad_bottom);
+   249			u32 ifm_width  = st->ofm.width * stride_x +
+   250				st->ifm.width - (st->ifm.pad_left + st->ifm.pad_right);
+   251	
+   252			len = feat_matrix_length(info, &st->ifm, ifm_width,
+   253						 ifm_height, st->ifm.depth);
+   254			dev_dbg(ddev->dev, "op %d: IFM:%d:0x%llx-0x%llx\n",
+   255				op, st->ifm.region, st->ifm.base[0], len);
+   256			if (len == U64_MAX)
+   257				return -EINVAL;
+   258		}
+   259	
+   260		if (ifm2) {
+   261			len = feat_matrix_length(info, &st->ifm2, st->ifm.depth,
+   262						 0, st->ofm.depth);
+   263			dev_dbg(ddev->dev, "op %d: IFM2:%d:0x%llx-0x%llx\n",
+   264				op, st->ifm2.region, st->ifm2.base[0], len);
+   265			if (len == U64_MAX)
+   266				return -EINVAL;
+   267		}
+   268	
+   269		if (weight) {
+   270			dev_dbg(ddev->dev, "op %d: W:%d:0x%llx-0x%llx\n",
+   271				op, st->weight[0].region, st->weight[0].base,
+   272				st->weight[0].base + st->weight[0].length - 1);
+   273			if (st->weight[0].region < 0 || st->weight[0].base == U64_MAX ||
+   274			    st->weight[0].length == U32_MAX)
+   275				return -EINVAL;
+   276			info->region_size[st->weight[0].region] =
+   277				max(info->region_size[st->weight[0].region],
+   278				    st->weight[0].base + st->weight[0].length);
+   279		}
+   280	
+   281		if (scale) {
+   282			dev_dbg(ddev->dev, "op %d: S:%d:0x%llx-0x%llx\n",
+   283				op, st->scale[0].region, st->scale[0].base,
+   284				st->scale[0].base + st->scale[0].length - 1);
+   285			if (st->scale[0].region < 0 || st->scale[0].base == U64_MAX ||
+   286			    st->scale[0].length == U32_MAX)
+   287				return -EINVAL;
+   288			info->region_size[st->scale[0].region] =
+   289				max(info->region_size[st->scale[0].region],
+   290				    st->scale[0].base + st->scale[0].length);
+   291		}
+   292	
+   293		len = feat_matrix_length(info, &st->ofm, st->ofm.width,
+   294					 st->ofm.height[2], st->ofm.depth);
+   295		dev_dbg(ddev->dev, "op %d: OFM:%d:0x%llx-0x%llx\n",
+   296			op, st->ofm.region, st->ofm.base[0], len);
+   297		if (len == U64_MAX)
+   298			return -EINVAL;
+   299		info->output_region[st->ofm.region] = true;
+   300	
+   301		return 0;
+   302	}
+   303	
+   304	static int calc_sizes_elemwise(struct drm_device *ddev,
+   305				       struct ethosu_validated_cmdstream_info *info,
+   306				       u16 op, struct cmd_state *st,
+   307				       bool ifm, bool ifm2)
+   308	{
+   309		u32 height, width, depth;
+   310		u64 len;
+   311	
+   312		if (ifm) {
+   313			height = st->ifm.broadcast & 0x1 ? 0 : st->ofm.height[2];
+   314			width = st->ifm.broadcast & 0x2 ? 0 : st->ofm.width;
+   315			depth = st->ifm.broadcast & 0x4 ? 0 : st->ofm.depth;
+   316	
+   317			len = feat_matrix_length(info, &st->ifm, width,
+   318						 height, depth);
+   319			dev_dbg(ddev->dev, "op %d: IFM:%d:0x%llx-0x%llx\n",
+   320				op, st->ifm.region, st->ifm.base[0], len);
+   321			if (len == U64_MAX)
+   322				return -EINVAL;
+   323		}
+   324	
+   325		if (ifm2) {
+   326			height = st->ifm2.broadcast & 0x1 ? 0 : st->ofm.height[2];
+   327			width = st->ifm2.broadcast & 0x2 ? 0 : st->ofm.width;
+   328			depth = st->ifm2.broadcast & 0x4 ? 0 : st->ofm.depth;
+   329	
+   330			len = feat_matrix_length(info, &st->ifm2, width,
+   331						 height, depth);
+   332			dev_dbg(ddev->dev, "op %d: IFM2:%d:0x%llx-0x%llx\n",
+   333				op, st->ifm2.region, st->ifm2.base[0], len);
+   334			if (len == U64_MAX)
+   335				return -EINVAL;
+   336		}
+   337	
+   338		len = feat_matrix_length(info, &st->ofm, st->ofm.width,
+   339					 st->ofm.height[2], st->ofm.depth);
+   340		dev_dbg(ddev->dev, "op %d: OFM:%d:0x%llx-0x%llx\n",
+   341			op, st->ofm.region, st->ofm.base[0], len);
+   342		if (len == U64_MAX)
+   343			return -EINVAL;
+   344		info->output_region[st->ofm.region] = true;
+   345	
+   346		return 0;
+   347	}
+   348	
+   349	static int ethosu_gem_cmdstream_copy_and_validate(struct drm_device *ddev,
+   350							 u32 __user *ucmds,
+   351							 struct ethosu_gem_object *bo,
+   352							 u32 size)
+   353	{
+   354		struct ethosu_validated_cmdstream_info *info;
+   355		u32 *bocmds = bo->base.vaddr;
+   356		struct cmd_state st;
+   357		int i, ret;
+   358	
+   359		cmd_state_init(&st);
+   360	
+   361		info = kzalloc(sizeof(*info), GFP_KERNEL);
+   362		if (!info)
+   363			return -ENOMEM;
+   364		info->cmd_size = size;
+   365	
+   366		for (i = 0; i < size/4; i++) {
+   367			bool use_ifm, use_ifm2, use_scale;
+   368			u16 cmd, param;
+   369			u32 cmds[2];
+   370			u64 addr;
+   371	
+   372			if (get_user(cmds[0], ucmds++)) {
+   373				ret = -EFAULT;
+   374				goto fault;
+   375			}
+   376			bocmds[i] = cmds[0];
+   377	
+   378			cmd = cmds[0];
+   379			param = cmds[0] >> 16;
+   380	
+   381			if (cmd & 0x4000) {
+   382				if (get_user(cmds[1], ucmds++)) {
+   383					ret = -EFAULT;
+   384					goto fault;
+   385				}
+   386				i++;
+   387				bocmds[i] = cmds[1];
+   388				addr = cmd_to_addr(cmds);
+   389			}
+   390	
+   391			switch (cmd) {
+   392			case NPU_OP_DMA_START:
+   393				u64 srclen = dma_length(info, &st.dma, &st.dma.src);
+   394				u64 dstlen = dma_length(info, &st.dma, &st.dma.dst);
+   395	
+   396				if (st.dma.dst.region >= 0)
+   397					info->output_region[st.dma.dst.region] = true;
+   398				dev_dbg(ddev->dev, "cmd: DMA SRC:%d:0x%llx+0x%llx DST:%d:0x%llx+0x%llx\n",
+ > 399					st.dma.src.region, st.dma.src.offset, srclen,
+   400					st.dma.dst.region, st.dma.dst.offset, dstlen);
+   401				break;
+   402			case NPU_OP_CONV:
+   403			case NPU_OP_DEPTHWISE:
+   404				use_ifm2 = param & 0x1;  // weights_ifm2
+   405				use_scale = !(st.ofm.precision & 0x100);
+   406				ret = calc_sizes(ddev, info, cmd, &st, true, use_ifm2,
+   407						 !use_ifm2, use_scale);
+   408				if (ret)
+   409					goto fault;
+   410				break;
+   411			case NPU_OP_POOL:
+   412				use_ifm = param != 0x4;  // pooling mode
+   413				use_scale = !(st.ofm.precision & 0x100);
+   414				ret = calc_sizes(ddev, info, cmd, &st, use_ifm, false,
+   415						 false, use_scale);
+   416				if (ret)
+   417					goto fault;
+   418				break;
+   419			case NPU_OP_ELEMENTWISE:
+   420				use_ifm2 = !((st.ifm2.broadcast == 8) || (param == 5) ||
+   421					(param == 6) || (param == 7) || (param == 0x24));
+   422				use_ifm = st.ifm.broadcast != 8;
+   423				ret = calc_sizes_elemwise(ddev, info, cmd, &st, use_ifm, use_ifm2);
+   424				if (ret)
+   425					goto fault;
+   426				break;
+   427			case NPU_OP_RESIZE: // U85 only
+   428				WARN_ON(1); // TODO
+   429				break;
+   430			case NPU_SET_KERNEL_WIDTH_M1:
+   431				st.ifm.width = param;
+   432				break;
+   433			case NPU_SET_KERNEL_HEIGHT_M1:
+   434				st.ifm.height[2] = param;
+   435				break;
+   436			case NPU_SET_KERNEL_STRIDE:
+   437				st.ifm.stride_kernel = param;
+   438				break;
+   439			case NPU_SET_IFM_PAD_TOP:
+   440				st.ifm.pad_top = param & 0x7f;
+   441				break;
+   442			case NPU_SET_IFM_PAD_LEFT:
+   443				st.ifm.pad_left = param & 0x7f;
+   444				break;
+   445			case NPU_SET_IFM_PAD_RIGHT:
+   446				st.ifm.pad_right = param & 0xff;
+   447				break;
+   448			case NPU_SET_IFM_PAD_BOTTOM:
+   449				st.ifm.pad_bottom = param & 0xff;
+   450				break;
+   451			case NPU_SET_IFM_DEPTH_M1:
+   452				st.ifm.depth = param;
+   453				break;
+   454			case NPU_SET_IFM_PRECISION:
+   455				st.ifm.precision = param;
+   456				break;
+   457			case NPU_SET_IFM_BROADCAST:
+   458				st.ifm.broadcast = param;
+   459				break;
+   460			case NPU_SET_IFM_REGION:
+   461				st.ifm.region = param & 0x7f;
+   462				break;
+   463			case NPU_SET_IFM_WIDTH0_M1:
+   464				st.ifm.width0 = param;
+   465				break;
+   466			case NPU_SET_IFM_HEIGHT0_M1:
+   467				st.ifm.height[0] = param;
+   468				break;
+   469			case NPU_SET_IFM_HEIGHT1_M1:
+   470				st.ifm.height[1] = param;
+   471				break;
+   472			case NPU_SET_IFM_BASE0:
+   473			case NPU_SET_IFM_BASE1:
+   474			case NPU_SET_IFM_BASE2:
+   475			case NPU_SET_IFM_BASE3:
+   476				st.ifm.base[cmd & 0x3] = addr;
+   477				break;
+   478			case NPU_SET_IFM_STRIDE_X:
+   479				st.ifm.stride_x = addr;
+   480				break;
+   481			case NPU_SET_IFM_STRIDE_Y:
+   482				st.ifm.stride_y = addr;
+   483				break;
+   484			case NPU_SET_IFM_STRIDE_C:
+   485				st.ifm.stride_c = addr;
+   486				break;
+   487	
+   488			case NPU_SET_OFM_WIDTH_M1:
+   489				st.ofm.width = param;
+   490				break;
+   491			case NPU_SET_OFM_HEIGHT_M1:
+   492				st.ofm.height[2] = param;
+   493				break;
+   494			case NPU_SET_OFM_DEPTH_M1:
+   495				st.ofm.depth = param;
+   496				break;
+   497			case NPU_SET_OFM_PRECISION:
+   498				st.ofm.precision = param;
+   499				break;
+   500			case NPU_SET_OFM_REGION:
+   501				st.ofm.region = param & 0x7;
+   502				break;
+   503			case NPU_SET_OFM_WIDTH0_M1:
+   504				st.ofm.width0 = param;
+   505				break;
+   506			case NPU_SET_OFM_HEIGHT0_M1:
+   507				st.ofm.height[0] = param;
+   508				break;
+   509			case NPU_SET_OFM_HEIGHT1_M1:
+   510				st.ofm.height[1] = param;
+   511				break;
+   512			case NPU_SET_OFM_BASE0:
+   513			case NPU_SET_OFM_BASE1:
+   514			case NPU_SET_OFM_BASE2:
+   515			case NPU_SET_OFM_BASE3:
+   516				st.ofm.base[cmd & 0x3] = addr;
+   517				break;
+   518			case NPU_SET_OFM_STRIDE_X:
+   519				st.ofm.stride_x = addr;
+   520				break;
+   521			case NPU_SET_OFM_STRIDE_Y:
+   522				st.ofm.stride_y = addr;
+   523				break;
+   524			case NPU_SET_OFM_STRIDE_C:
+   525				st.ofm.stride_c = addr;
+   526				break;
+   527	
+   528			case NPU_SET_IFM2_BROADCAST:
+   529				st.ifm2.broadcast = param;
+   530				break;
+   531			case NPU_SET_IFM2_PRECISION:
+   532				st.ifm2.precision = param;
+   533				break;
+   534			case NPU_SET_IFM2_REGION:
+   535				st.ifm2.region = param & 0x7;
+   536				break;
+   537			case NPU_SET_IFM2_WIDTH0_M1:
+   538				st.ifm2.width0 = param;
+   539				break;
+   540			case NPU_SET_IFM2_HEIGHT0_M1:
+   541				st.ifm2.height[0] = param;
+   542				break;
+   543			case NPU_SET_IFM2_HEIGHT1_M1:
+   544				st.ifm2.height[1] = param;
+   545				break;
+   546			case NPU_SET_IFM2_BASE0:
+   547			case NPU_SET_IFM2_BASE1:
+   548			case NPU_SET_IFM2_BASE2:
+   549			case NPU_SET_IFM2_BASE3:
+   550				st.ifm2.base[cmd & 0x3] = addr;
+   551				break;
+   552			case NPU_SET_IFM2_STRIDE_X:
+   553				st.ifm2.stride_x = addr;
+   554				break;
+   555			case NPU_SET_IFM2_STRIDE_Y:
+   556				st.ifm2.stride_y = addr;
+   557				break;
+   558			case NPU_SET_IFM2_STRIDE_C:
+   559				st.ifm2.stride_c = addr;
+   560				break;
+   561	
+   562			case NPU_SET_WEIGHT_REGION:
+   563				st.weight[0].region = param & 0x7;
+   564				break;
+   565			case NPU_SET_SCALE_REGION:
+   566				st.scale[0].region = param & 0x7;
+   567				break;
+   568			case NPU_SET_WEIGHT_BASE:
+   569				st.weight[0].base = addr;
+   570				break;
+   571			case NPU_SET_WEIGHT_LENGTH:
+   572				st.weight[0].length = cmds[1];
+   573				break;
+   574			case NPU_SET_SCALE_BASE:
+   575				st.scale[0].base = addr;
+   576				break;
+   577			case NPU_SET_SCALE_LENGTH:
+   578				st.scale[0].length = cmds[1];
+   579				break;
+   580			case NPU_SET_WEIGHT1_BASE:
+   581				st.weight[1].base = addr;
+   582				break;
+   583			case NPU_SET_WEIGHT1_LENGTH:
+   584				st.weight[1].length = cmds[1];
+   585				break;
+   586			case NPU_SET_SCALE1_BASE: // NPU_SET_WEIGHT2_BASE (U85)
+   587				if (0 /*U85*/)
+   588					st.weight[2].base = addr;
+   589				else
+   590					st.scale[1].base = addr;
+   591				break;
+   592			case NPU_SET_SCALE1_LENGTH: // NPU_SET_WEIGHT2_LENGTH (U85)
+   593				if (0 /*U85*/)
+   594					st.weight[1].length = cmds[1];
+   595				else
+   596					st.scale[1].length = cmds[1];
+   597				break;
+   598			case NPU_SET_WEIGHT3_BASE:
+   599				st.weight[3].base = addr;
+   600				break;
+   601			case NPU_SET_WEIGHT3_LENGTH:
+   602				st.weight[3].length = cmds[1];
+   603				break;
+   604	
+   605			case NPU_SET_DMA0_SRC_REGION:
+   606				if (param & 0x100)
+   607					st.dma.src.region = -1;
+   608				else
+   609					st.dma.src.region = param & 0x7;
+   610				st.dma.mode = (param >> 9) & 0x3;
+   611				break;
+   612			case NPU_SET_DMA0_DST_REGION:
+   613				if (param & 0x100)
+   614					st.dma.dst.region = -1;
+   615				else
+   616					st.dma.dst.region = param & 0x7;
+   617				break;
+   618			case NPU_SET_DMA0_SIZE0:
+   619				st.dma.size0 = param;
+   620				break;
+   621			case NPU_SET_DMA0_SIZE1:
+   622				st.dma.size1 = param;
+   623				break;
+   624			case NPU_SET_DMA0_SRC_STRIDE0:
+   625				st.dma.src.stride[0] = ((s64)addr << 24) >> 24;
+   626				break;
+   627			case NPU_SET_DMA0_SRC_STRIDE1:
+   628				st.dma.src.stride[1] = ((s64)addr << 24) >> 24;
+   629				break;
+   630			case NPU_SET_DMA0_DST_STRIDE0:
+   631				st.dma.dst.stride[0] = ((s64)addr << 24) >> 24;
+   632				break;
+   633			case NPU_SET_DMA0_DST_STRIDE1:
+   634				st.dma.dst.stride[1] = ((s64)addr << 24) >> 24;
+   635				break;
+   636			case NPU_SET_DMA0_SRC:
+   637				st.dma.src.offset = addr;
+   638				break;
+   639			case NPU_SET_DMA0_DST:
+   640				st.dma.dst.offset = addr;
+   641				break;
+   642			case NPU_SET_DMA0_LEN:
+   643				st.dma.src.len = st.dma.dst.len = addr;
+   644				break;
+   645			default:
+   646				break;
+   647			}
+   648	
+   649		}
+   650	
+   651		for (i = 0; i < NPU_BASEP_REGION_MAX; i++) {
+   652			if (!info->region_size[i])
+   653				continue;
+   654			dev_dbg(ddev->dev, "region %d max size: 0x%llx\n",
+   655				i, info->region_size[i]);
+   656		}
+   657	
+   658		bo->info = info;
+   659		return 0;
+   660	
+   661	fault:
+   662		kfree(info);
+   663		return ret;
+   664	}
+   665	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
