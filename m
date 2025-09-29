@@ -1,63 +1,66 @@
 Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F57A23D7E9
-	for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 19:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D2D246788
+	for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 19:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759172905; cv=none; b=BMp2EAV9X7E39qm2tSUESnphw/l0yLfhDJoGahGm0n6Aw960mZd1UBZbJB3/kLz6hRf2LLNnpoGjBNhZhbhKU/7bB2UCAVmR0WGxVWvqDOH3sCbAAmhjqsG4Lt/2N7SENrWYKmrvc7wNJzEWQhwV2NuWYr54zZEpKdZsDzPyPoM=
+	t=1759172910; cv=none; b=G7tlP8C5b1hUoklwSCt2fztaD8lo0ThCmJcOG9AWx36qhg7qqJvYNiEBkfue2HoHe8w0k5aPaBhN6Kl0PPCDsHUscwy7ZLlDkA3Jv3niwqzIOAbbrPWPUEzThua0fZdpsA/DxIWoR5NKeLDwWDZ4SUxsFYBlxxfPE5yw7/oM9DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759172905; c=relaxed/simple;
-	bh=7qrHmbfGn2aKzzxiGGx0dQNxryrNWvLvsBasM7skIBk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=jmW21YkQ1GB6a/3qgSlc5A3UhpTXqu28iMYQvRKylIPdV3lM29S7b2ZJkHsZmnICw0kx/zCX8lWjDM1XCEl+sj7E3v8QI/ZkKaoaqxfcFnInRHWitlKYK8xzH4k7CId+BY0rAKABcbSgeVvUE0fCreH1dmbVkCg2/sE3+FWp7UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YaCVGhJ8; arc=none smtp.client-ip=209.85.214.201
+	s=arc-20240116; t=1759172910; c=relaxed/simple;
+	bh=jts437rB1GIJacBrxxx4epa/L3BnkDASSEk1qV6a9yg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=kUfYoTPeI4LmxvKyCLNzqnEz9FZwcv8In1zhOzbTDoCfPdPmko9FDP7c3Wabg9PJyrWByNxadB2qZmE/JXOcOdOLvEPBjfBq4Lc6fLNUQ1dgE46KYnTV/4P9RTppncT0iksK4US3RbnM2HVO/YhOZH7kvUGdJHnWQQZfoSFQMk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s3M4Ftag; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YaCVGhJ8"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-286a252bfbfso42672985ad.3
-        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 12:08:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s3M4Ftag"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2699ebc0319so50679655ad.3
+        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 12:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759172903; x=1759777703; darn=lists.linux.dev;
-        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Njxey7G3aTuTqShbTBIMUulJ1i1nTX1TYxL9UTCOTos=;
-        b=YaCVGhJ8ccC/f12YNmCny8Su03SNGxcGarOnASWNZF2Z8ySqsrzcLtGy/+dndWWH9L
-         zOXOAL5lXnvfisNFUdHrjjVIUNbG7ow6JHAzaSVGK0woZf5fxuzPe66eiEjSRbQLjNwF
-         hUM4xrki7SaNgQb1dabCkx3XkcltbCTVndBoVUseWA7ftqMrlPjJrXSPq99jfR+QZomY
-         qKwJbfWHPycEoS7X1sjEG2rqedBP84oVrKftxxCOF9UoNBGCuDyoTkLTdp67yNHZ6WxX
-         b7JKi/d6LLiwC0flQjxl+849yEku0LwepL2KtVz3tNCR2b7yMD88DI8LlseTiwTIDYex
-         EPBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759172903; x=1759777703;
-        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=google.com; s=20230601; t=1759172908; x=1759777708; darn=lists.linux.dev;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Njxey7G3aTuTqShbTBIMUulJ1i1nTX1TYxL9UTCOTos=;
-        b=NfUGX/kJRE+Eq72c5JuMBdXCJWFE0ldiektBFciQ10XlLtQUL3Qs7J3CtaUjEiGHWa
-         eCtsfSSnjkZpzn1xnz3+YTe/XAfsf2apTgLV0e70LvxQ+BbbggBzyIPUNoxghCBKNJ2f
-         SZeW7ozqz+5GyFaEfWFzIEtdizY5YHOFvtm2/9d3Q2v1jqNeR2dS8Jr6xQwt6+uh1Adn
-         Z+61fCTBCwekHGY7zgms751YdiiWmFCC26no0v0toGocmj+H6YpXj7OUzV/vffksGdqM
-         EP/av/Er+V3U1jucXg5KK+aMVJ+oraKF2siutw+MX1RJgK3Gj+DQZ2OqiqcCPlw53mNT
-         4a0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUW0Yk0X68fatfoLFNvOTm5BSv/ZpM7ECyGidnOJjIS8mTHuBGFvzxIcI+IwZPWzy4c0r5K@lists.linux.dev
-X-Gm-Message-State: AOJu0YxaVagpmF1OTSacp/j5nzTfgdUVEu5p5DIIY1tqajsvAkak9HQn
-	lJp6ZS7puYyCQxRIqhdI/H8rYFUdWOqpuXWvi3HAiBVZkDst2ofiOinUXGxWB0Ugn/jNoU89IUH
-	3NMzo0pESAQ==
-X-Google-Smtp-Source: AGHT+IFmUFAVW2JIwu+mAzAudh/QlJTnKWL5DHbA3zxjJEAoKO8ELdvqM7NM2IO10H5OHVK9s9MPkQxl47Lj
-X-Received: from plhs13.prod.google.com ([2002:a17:903:320d:b0:268:4e0:9c09])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:db04:b0:265:9878:4852
- with SMTP id d9443c01a7336-27ed49ddab3mr226842215ad.15.1759172902750; Mon, 29
- Sep 2025 12:08:22 -0700 (PDT)
-Date: Mon, 29 Sep 2025 12:07:50 -0700
+        bh=cCPSZa95CLjIX1ekaMXSBPwEqC8hhuYwGZNsoeQYOdI=;
+        b=s3M4Ftagi23ofpN7F7mYpXuo8N1hxBT+ajV2nySp9RJLawIzYsPfbx/5NkOZcSUOG6
+         Lp9BBXe50QtcJTpNSWlHUQD6KeUS1NEPiY9BS2sB9Qk2IONO4YvqMgSJovHavGyTpOi0
+         Jy24OTbuH82I6H2UTmtOrIuJWVAs578Yy/N++DEyA9v8UCk7c5iKj3qlY+YHjXumJXVw
+         RLNwpVIJTk12gviu3qQRF4Ou/cqhR314jzTXsnuQl9xeWld9BWPzVCkhVr/md8AwoV51
+         R10D2MToILib7iiphNHFNjlJ8a5kq2McaHIAe4s4c15owVbROEP3Ybda3z9T4dDRE9wO
+         xj5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759172908; x=1759777708;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cCPSZa95CLjIX1ekaMXSBPwEqC8hhuYwGZNsoeQYOdI=;
+        b=spmYerGP8By3fG//CqwoLWB8sh7Uk1voWySUXayY7yqjU5e92xngKf9WGZ8Q57KBfd
+         Vl5ang174W6Ni5kDNZm3Cc+vGQA9Qr7HaJHY8a0SXvs5KAjB0gXk2IcgVHHLTkn+j7sv
+         LfDmTgB5oozjQOkJ38GDRf2saZ5rUAN2bJTZgNB3kGNvnPDHQPcn7PAQZ8VTvXWu9qPY
+         0fpgazdCgkg2pkkBCHXh7chKt02xSul9kGAEinMOHrj5GZW5FP/JIhwRoQc73ib1DupL
+         vQuzirrYP9OO9zepo+v1K7uw5RQIfJ7CWOsFN0q1COP1VaDHkpOyAcBfzMI4FvXK3cVe
+         y75Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXwPvCfLZ9XG+eEYXmZDjkvikr3NZJ6X7ZDzTdnxU9hEkO17iHmaBsURU+3b1nC/gEz/pmM@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywa8XAGlCLawRlyoCZfwizux77Nf304QihGxaZOuVJMVNZhC7Uk
+	NNWP/Gx/U8OxmUDHMFCtpEfkQXisxjTjaMyOxtYHyuTdE9/GMdzdWFjzlTUJKiGfnxZy2FD9kkL
+	IGQTRdmydNQ==
+X-Google-Smtp-Source: AGHT+IHRqf99uJlVCyIDD61PqSw9guLbG8f2axDFVLPxmfvJQ46Ggtr9CTWOji6+cSZrHK7d8OcAI0/g0sj4
+X-Received: from pjbfh12.prod.google.com ([2002:a17:90b:34c:b0:32f:46d:993b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ecca:b0:269:8d16:42d1
+ with SMTP id d9443c01a7336-27ed4aac32cmr171706855ad.50.1759172908198; Mon, 29
+ Sep 2025 12:08:28 -0700 (PDT)
+Date: Mon, 29 Sep 2025 12:07:51 -0700
+In-Reply-To: <20250929190805.201446-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20250929190805.201446-1-irogers@google.com>
 X-Mailer: git-send-email 2.51.0.570.gb178f27e6d-goog
-Message-ID: <20250929190805.201446-1-irogers@google.com>
-Subject: [PATCH v6 00/15] Support dynamic opening of capstone/llvm
+Message-ID: <20250929190805.201446-2-irogers@google.com>
+Subject: [PATCH v6 01/15] perf map: Constify objdump offset/address conversion APIs
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -77,109 +80,95 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Song Liu <song@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Linking against libcapstone and libLLVM can be a significant increase
-in dependencies and file size if building statically. For something
-like `perf record` the disassembler and addr2line functionality won't
-be used. Support dynamically loading these libraries using dlopen and
-then calling the appropriate functions found using dlsym.
+Make the map argument const as the conversion act won't modify the map
+and this allows other callers to use a const struct map.
 
-The patch series:
-1) moves the capstone, LLVM and libbfd code to their own C files,
-2) simplifies a little the capstone code;
-3) adds perf_ variants of the functions that will either directly call
-   the function or use dlsym to discover it;
-4) adds BPF JIT disassembly support to in memory disassemblers (LLVM
-   and capstone) by just directing them at the BPF info linear JIT
-   instructions (note this doesn't support source lines);
-5) adds fallback to srcline's addr2line so that llvm_addr2line is
-   tried first, then the deprecated libbfd and then the forked command
-   tried next, moving the code for forking out of the main srcline.c
-   file in the process.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/map.c | 19 +++++++++++++++----
+ tools/perf/util/map.h |  6 +++---
+ 2 files changed, 18 insertions(+), 7 deletions(-)
 
-The addr2line LLVM functionality is written in C++. To avoid linking
-against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
-the C++ code with the libLLVM dependency will be built into a
-libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
-would extend their C API to avoid this.
-
-v6: Refactor the libbfd along with capstone and LLVM, previous patch
-    series had tried to avoid this by just removing the deprecated
-    BUILD_NONDISTRO code. Remove the libtracefs removal into its own
-    patch.
-v5: Rebase and comment typo fix.
-v4: Rebase and addition of a patch removing an unused struct variable.
-v3: Add srcline addr2line fallback trying LLVM first then forking a
-    process. This came up in conversation with Steinar Gunderson
-    <sesse@google.com>.
-    Tweak the cover letter message to try to address Andi Kleen's
-    <ak@linux.intel.com> feedback that the series doesn't really
-    achieve anything.
-v2: Add mangling of the function names in libperf-llvm.so to avoid
-    potential infinite recursion. Add BPF JIT disassembly support to
-    LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
-    series from:
-    https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
-    Some other minor additional clean up.
-
-Ian Rogers (15):
-  perf map: Constify objdump offset/address conversion APIs
-  perf capstone: Move capstone functionality into its own file
-  perf llvm: Move llvm functionality into its own file
-  perf libbfd: Move libbfd functionality to its own file
-  perf capstone: Remove open_capstone_handle
-  perf capstone: Support for dlopen-ing libcapstone.so
-  perf llvm: Support for dlopen-ing libLLVM.so
-  perf llvm: Mangle libperf-llvm.so function names
-  perf dso: Move read_symbol from llvm/capstone to dso
-  perf dso: Support BPF programs in dso__read_symbol
-  perf llvm: Disassemble cleanup
-  perf dso: Clean up read_symbol error handling
-  perf disasm: Make ins__scnprintf and ins__is_nop static
-  perf srcline: Fallback between addr2line implementations
-  perf disasm: Remove unused evsel from annotate_args
-
- tools/perf/Makefile.config         |  14 +
- tools/perf/Makefile.perf           |  24 +-
- tools/perf/builtin-script.c        |   2 -
- tools/perf/tests/make              |   2 +
- tools/perf/util/Build              |   7 +-
- tools/perf/util/addr2line.c        | 439 ++++++++++++++++
- tools/perf/util/addr2line.h        |  20 +
- tools/perf/util/annotate.c         |   1 -
- tools/perf/util/capstone.c         | 682 +++++++++++++++++++++++++
- tools/perf/util/capstone.h         |  24 +
- tools/perf/util/config.c           |   2 +-
- tools/perf/util/disasm.c           | 645 ++----------------------
- tools/perf/util/disasm.h           |   6 +-
- tools/perf/util/disasm_bpf.c       | 195 --------
- tools/perf/util/disasm_bpf.h       |  12 -
- tools/perf/util/dso.c              | 112 +++++
- tools/perf/util/dso.h              |   4 +
- tools/perf/util/libbfd.c           | 600 ++++++++++++++++++++++
- tools/perf/util/libbfd.h           |  83 ++++
- tools/perf/util/llvm-c-helpers.cpp | 120 ++++-
- tools/perf/util/llvm-c-helpers.h   |  24 +-
- tools/perf/util/llvm.c             | 484 ++++++++++++++++++
- tools/perf/util/llvm.h             |  21 +
- tools/perf/util/map.c              |  19 +-
- tools/perf/util/map.h              |   6 +-
- tools/perf/util/print_insn.c       | 117 +----
- tools/perf/util/srcline.c          | 772 ++---------------------------
- tools/perf/util/srcline.h          |   9 +-
- tools/perf/util/symbol-elf.c       | 100 +---
- tools/perf/util/symbol.c           | 131 -----
- 30 files changed, 2745 insertions(+), 1932 deletions(-)
- create mode 100644 tools/perf/util/addr2line.c
- create mode 100644 tools/perf/util/addr2line.h
- create mode 100644 tools/perf/util/capstone.c
- create mode 100644 tools/perf/util/capstone.h
- delete mode 100644 tools/perf/util/disasm_bpf.c
- delete mode 100644 tools/perf/util/disasm_bpf.h
- create mode 100644 tools/perf/util/libbfd.c
- create mode 100644 tools/perf/util/libbfd.h
- create mode 100644 tools/perf/util/llvm.c
- create mode 100644 tools/perf/util/llvm.h
-
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index b46c68c24d1c..41cdddc987ee 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -513,6 +513,8 @@ void srccode_state_free(struct srccode_state *state)
+ 	state->line = 0;
+ }
+ 
++static const struct kmap *__map__const_kmap(const struct map *map);
++
+ /**
+  * map__rip_2objdump - convert symbol start address to objdump address.
+  * @map: memory map
+@@ -524,9 +526,9 @@ void srccode_state_free(struct srccode_state *state)
+  *
+  * Return: Address suitable for passing to "objdump --start-address="
+  */
+-u64 map__rip_2objdump(struct map *map, u64 rip)
++u64 map__rip_2objdump(const struct map *map, u64 rip)
+ {
+-	struct kmap *kmap = __map__kmap(map);
++	const struct kmap *kmap = __map__const_kmap(map);
+ 	const struct dso *dso = map__dso(map);
+ 
+ 	/*
+@@ -569,7 +571,7 @@ u64 map__rip_2objdump(struct map *map, u64 rip)
+  *
+  * Return: Memory address.
+  */
+-u64 map__objdump_2mem(struct map *map, u64 ip)
++u64 map__objdump_2mem(const struct map *map, u64 ip)
+ {
+ 	const struct dso *dso = map__dso(map);
+ 
+@@ -586,7 +588,7 @@ u64 map__objdump_2mem(struct map *map, u64 ip)
+ }
+ 
+ /* convert objdump address to relative address.  (To be removed) */
+-u64 map__objdump_2rip(struct map *map, u64 ip)
++u64 map__objdump_2rip(const struct map *map, u64 ip)
+ {
+ 	const struct dso *dso = map__dso(map);
+ 
+@@ -618,6 +620,15 @@ struct kmap *__map__kmap(struct map *map)
+ 	return (struct kmap *)(&RC_CHK_ACCESS(map)[1]);
+ }
+ 
++static const struct kmap *__map__const_kmap(const struct map *map)
++{
++	const struct dso *dso = map__dso(map);
++
++	if (!dso || !dso__kernel(dso))
++		return NULL;
++	return (struct kmap *)(&RC_CHK_ACCESS(map)[1]);
++}
++
+ struct kmap *map__kmap(struct map *map)
+ {
+ 	struct kmap *kmap = __map__kmap(map);
+diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
+index 9cadf533a561..979b3e11b9bc 100644
+--- a/tools/perf/util/map.h
++++ b/tools/perf/util/map.h
+@@ -133,13 +133,13 @@ static inline u64 map__unmap_ip(const struct map *map, u64 ip_or_rip)
+ }
+ 
+ /* rip/ip <-> addr suitable for passing to `objdump --start-address=` */
+-u64 map__rip_2objdump(struct map *map, u64 rip);
++u64 map__rip_2objdump(const struct map *map, u64 rip);
+ 
+ /* objdump address -> memory address */
+-u64 map__objdump_2mem(struct map *map, u64 ip);
++u64 map__objdump_2mem(const struct map *map, u64 ip);
+ 
+ /* objdump address -> rip */
+-u64 map__objdump_2rip(struct map *map, u64 ip);
++u64 map__objdump_2rip(const struct map *map, u64 ip);
+ 
+ struct symbol;
+ struct thread;
 -- 
 2.51.0.570.gb178f27e6d-goog
 
