@@ -1,186 +1,178 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010054.outbound.protection.outlook.com [52.101.201.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EE930C62E
-	for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 16:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759161795; cv=none; b=W/CxmFbXJIvvW96Y3SweHKPv++r3C2GEQ9EUtSZYxlAuyDqGtyYcetoQu/TGO1AGScagKO2WCR7kSWFuReck0QUPOuipuufUaXMDdCJzmRIYbo97kYeHQ05enRVJWI8/vKw5zxKC8XKClMwt1cK5RS+Gy88/qWHsvZrPxlAyxgw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759161795; c=relaxed/simple;
-	bh=1jkw+7EvuIa/Han8qcxFLmMTXaJYMq7ZJC5YxwM3xL0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HvjU8ZKBCmj5wJG7uxMKy+aCgeABsh8WfmAAlNX9jp8Dl3Xc61g+nMn//BETugg+JUElFbsDb1OnYJCtys6KdTZF2AhMgW9Hx5RDmztOFAY2HAHMcNBrfoIhEkKf4Chw8To/+Dtxz8YIwR+3tFi6wLcyZDZcRjCZaf2rYwDjD5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=THWWUgaT; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964C52EB5AF;
+	Mon, 29 Sep 2025 16:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759162651; cv=fail; b=XRDjra858a3IK+1jFv/jQzNI7ykZWP6uZH88r/i7Dv2EQkpXyiSFGtDFstVSTzoUHPDJh2nHpZWU9WhtI5MLF+d2Qji3l6KP0yTZ/eEY5v+tMP5P1z7Y5EzugwhMu1pe9rN6unPvCrdRcicszmXFdk9DVwe0xnOg4NtJlDkhAE0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759162651; c=relaxed/simple;
+	bh=+XVDpvP0q6MTlIwFj0jC48/q0aMrgnSbQQZFLon3yXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=LDsl6Yski5vVh3qTEnKMmxgJJxQHT4L1nReSnqc96w8p23y+cVxd/5MDyuWz+IFVJQJbTLDLjvWWMUPc66BHBJJI4H84jsSUmqOqy2ZBT+1KySYQeNTkAZULpnQHxxjAIrK5G1UudLZvksbv7NulnhJTJgBEy1w/IjARRlFISmw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nBHW0OO+; arc=fail smtp.client-ip=52.101.201.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THWWUgaT"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7800ff158d5so3118388b3a.1
-        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 09:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759161793; x=1759766593; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KefHEpASHlImKTlDtTejqsu/vtIp51mWF2HZGf1Fkyo=;
-        b=THWWUgaTbYmaMZ+QedwhYR4s8LRBLWUu6ETYmjPfxwtFZPvgSGPQN8rGAt19Phezvk
-         usWzZ6mbf8opUHoqgmnv5SjlKoo4tFh/dKVq5Cv9Gy8IRfBo7iQpJaad0GO2wJE1CN5b
-         /pYXMf23vgWfCFiuduGNgEeHeKFGGkXHJjq/AXzaBOz4QAsdCGq+aOwW4pQdwlS2uDva
-         XzX/CQbr3a5Znt42XCA4iJ9omydkoREXEEpa/rfvkV9dks0iK4Es7HpJ5mpxELQrds/j
-         NrmRz1Rw+jcphi/8tiuDKg45XHR93JRlYLk2nzEXWDskVU80Ts216ba4aYDYVwmkBryS
-         GnCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759161793; x=1759766593;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KefHEpASHlImKTlDtTejqsu/vtIp51mWF2HZGf1Fkyo=;
-        b=wr7leyjcetnBK6eGDcYzvUJwnRgSAR46uPj+9uqaJf9JFPJiJJ5pWG5+gx9iX8KJbp
-         YvlLbRiy+DxXwRXII4RUY+dDbhszI4sYGtcwdf8fXSI5N1wJJQQQkiMvxMOgPXYzNiXj
-         HaPf099tbAs2MDOO3SSZ2ADmoDL2QYMCZv5GTKaniG9Vzkf8onwRNyGZhBHNpQBHuzHn
-         57SXuEZpnGphgyAd0WxQpJOuQckgsqwygHoKc9lW/yepmfmiaEkustoUM1+ykaW5VH64
-         1qTpFR1yCqZiUeloWfV6fy3/DhbkhvUQl8loHbaFjQKIlaRaoq4D8gYoa/bdkaP183oo
-         b0mA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGto4EUCdUbeiBIrOSr9lIyLTqlxac59SMyX78G/9Dit2dHe0bgydQ+bYOqkWY5qKymzqL@lists.linux.dev
-X-Gm-Message-State: AOJu0YwW09/l14+vq07aruAEqmZ6vYWHWgatsTn7OLl0GAL2JToTTKWs
-	W11WdL8PU0DjEW+7NQ1NJGD8qrUy2K07qWR0GP+ZIL+NjLaIp0tkoWSp
-X-Gm-Gg: ASbGncsvzNaI7wASD9zdK00SPD/iE4FLFjeJHyVwveKrwApW86vq2r2/bWUiBG39L7D
-	Q/SSqD/Cm8cVoLvtMLEZ8aN9k3qIcUEMNWot8it92uPRoYvt5Muzt7aJs/cUlWCh0uTzN0C5D/f
-	D1SOTFZzAWUxysUszUSLcgKvxm6sugmYuYPZu9OoRJprv55FbwN0TnWt1h/PH8eber/ZoIch4CR
-	36e2VfGkfuSSU34id9XB+4Bd5haiLawFthFPZmuRVCSK5KIMR+YA+fWZxKyhYL6RbcIDPpaaFOT
-	HRv7+sDjNPQbrkKo4J+Wz0nXEbFb/kr1uz+ldZgCqmlqwASi+00F6lLnPUjWVpZErRscqkzhSHU
-	tp8gS0bfxYiC2Uqj1Wkckhh8KQVzC
-X-Google-Smtp-Source: AGHT+IFLs3m9GZxE68Q18gbvy+0afYHaST+CDXcgc2TlSHRuYVzEECyokcNZHk3sUQVFmBJDY053zw==
-X-Received: by 2002:a05:6a20:9150:b0:248:4d59:93d5 with SMTP id adf61e73a8af0-2e7d72637famr22343288637.55.1759161792642;
-        Mon, 29 Sep 2025 09:03:12 -0700 (PDT)
-Received: from y740.local ([2401:4900:1f30:25ff:36cb:10ee:ba03:839f])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c55a0ca2sm11504525a12.42.2025.09.29.09.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 09:03:12 -0700 (PDT)
-From: Sidharth Seela <sidharthseela@gmail.com>
-To: antonio@openvpn.net,
-	sd@queasysnail.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	kernelxing@tencent.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	david.hunter.linux@gmail.com,
-	Sidharth Seela <sidharthseela@gmail.com>
-Subject: [PATCH v2] net: Fix uninit character pointer and return values
-Date: Mon, 29 Sep 2025 21:32:31 +0530
-Message-ID: <20250929160230.36941-2-sidharthseela@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nBHW0OO+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ACAaXrZS+kxm5iyp/g8NzQ8LtxJk3eHrRcSPLAnGXGroLBUzQeuF4TOenFRM3enAXV6L0ZNcufip2jOd7e/d8RntdPqMO2R6dOuC9XqsvliK9NEbzGkYG8Nfv+NCPYUxiXnd6hvHb+lQU3lcDYSBvwy/FqeX6uwGY4WO7oeR+zpH0tsyEVOtnwaPDDEm+4mVC5wLM97f3LBheBTLxqgf7HY9ctZEgrJVZ9BDGM3hAP5DU/ZkVkghTADCfXnS3RZl1W25BBYiQG9XadcPQ2/QhQ2Wq7ZGi5vG05VSWfgBIQhWACSFqPqXJ7vLl5UDPDPAR2x7HHPyZtLJOA8nmo3xSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5GGp2i0cTYCw4QvjwqPedUb8S3YtB2vonV2WRcsnC60=;
+ b=quONlZpSzPJcloK/fhJ2Q8h/FrB++LHtIErYeOy9pHLXclVQX4hSAOXNruPHdG+TxY9uJetb0J1OkNDkPlxrbutYZrqcLYqRKz376rc1rje4J4UJGCKdya+tF9afnGhRSAHtkNMukm3QuHxVqPfUUlic4DXcJ0w0WJGDQ9PylvbVeSgAMFZS0DFWBNoRhYpcAQ+GTF3SKnv8eNpLTfTBinveMnCbAswhu/5SMl/QL8+UxKZMHcHZo6xD1ugJegLn3UTznRnNnnOobPdKdIQ7vH6ggvbjOyez0GTpWuzHnuKntrghlC50zT/Go89DRrEYSmNNnn2v20qFoxg1i+aOMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5GGp2i0cTYCw4QvjwqPedUb8S3YtB2vonV2WRcsnC60=;
+ b=nBHW0OO+y/WPrqemaayF32CfqHD9MB3UpX8oaM1cGgsKOa+JpGYwvPHokGy0USj5vOcz+pEVYshcE6DQHhZjxN93OlCuUG3S+anPs/VrY48v+a/BM0qm2CqN42IP/5B/g5wydthIY+QcBRqDc/8dwLSgHCSUBSlH4O+zKi27vL/ewiMa5qE3bBQj7wM+2eFzDcyqKNDcpHbGGMhnJ+qDBZ9s1J8uRr6tL5h2xu9WyAZxe92x2bfj+mio52NNMcfSuyshULjZgJofoj4QCHolMQfA0AlLC4LEc80s6uxdIJTTGCb4q6fJcRresCJ1JbLk3qlyEtp0eqacu27CXrPLBQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
+ by CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.16; Mon, 29 Sep
+ 2025 16:17:25 +0000
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9160.014; Mon, 29 Sep 2025
+ 16:17:24 +0000
+Date: Mon, 29 Sep 2025 13:17:21 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH v5 12/15] iommupt: Add the x86 64 bit page table format
+Message-ID: <20250929161721.GB2942991@nvidia.com>
+References: <0-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <12-v5-116c4948af3d+68091-iommu_pt_jgg@nvidia.com>
+ <BN9PR11MB527644A664DC4EE3352D1C6A8C1EA@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB527644A664DC4EE3352D1C6A8C1EA@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: SJ0PR13CA0174.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c7::29) To PH7PR12MB5757.namprd12.prod.outlook.com
+ (2603:10b6:510:1d0::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|CY8PR12MB8300:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38cc996d-7e7d-4743-b335-08ddff73accd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?PDpDnx+h9rQJSiVrBAF04BEvrBjfjoPKsjLrSRfOi+ElNHdaioH8pQJ0C9jQ?=
+ =?us-ascii?Q?CWQjYIT4Qn4FTe1GB72V5/xRt3IkfSG5RdFksYcldTU8FxAnCAmf1wwhlu+w?=
+ =?us-ascii?Q?xojPk0b3Tbql9EFxKQsCJ4Icb31GePHsJ8/uu0Hx37MQP7y7xVZ52O2OZprK?=
+ =?us-ascii?Q?p9vLltaGy7wirwq+Y7m2D2bgCYjEksD552+7+l8FinoHxeLhmf4HLOYk2irW?=
+ =?us-ascii?Q?Xjs/nSkyIuCxREGfUiF1UducEt12rYq/Xm/IoDzRkf7+VTK99i44gOydA9uA?=
+ =?us-ascii?Q?IjtyTz6N2egob86/VmMRUKcePhDusJPIuy2Ct1hEkXScmF2TkeKNuA4AIXiE?=
+ =?us-ascii?Q?cyZB7e+UCO+dYtXjS7IqOnXgwiVCKZ9rVHhQuuBGtiUspX2ILWKPHj1sksbt?=
+ =?us-ascii?Q?1Tf/TMJkg6yo/YeYYO++nIQy0vWZxPq04Ebs+LC0D/Fc/jOF39fY9zPr4RKV?=
+ =?us-ascii?Q?vCyVJZoB9MINYX5j+Cb+h6dTOow5NnUSwpph9L8khSrPnYl0A19DTtBXfMoo?=
+ =?us-ascii?Q?Zr2sP5vR53vbbQGc3rASppszkbApJ6cgGI+CMSqLugGSw9fQfDJimQnp6PPe?=
+ =?us-ascii?Q?yDd/sW8EkbPMsLyYG1uN0b7Jf5hCo3xUCdgVDQ3WGejbpW52MfWzl0srl+rZ?=
+ =?us-ascii?Q?/Bw6z4EhOzoExKdCgckPUTGBYrC4RtcuVhnaTDBZa/OQsuwjamhJ+BeTDQGu?=
+ =?us-ascii?Q?6ygvQaUUBjdVqZNAzCRJ++kXipZlj8L7zbVEu4gQpS8fwGv1/JvR+s6vOiJW?=
+ =?us-ascii?Q?kKxDTe3QmxLEG5Dxav75ATaEhL9ywUHJqOqLboVOO6d8gdvxhnUaQrGPhc3m?=
+ =?us-ascii?Q?k9cZ4cdAWSmPgkInuoSmB67PH477ns2EimmNsUpNLpeQBWXQa07m/rtDhjCv?=
+ =?us-ascii?Q?agCizA0/sjuA4cOOV/8Px9SPVrceLYz+MdxGrUtbfBgoiloP0VUBMKdZgQKf?=
+ =?us-ascii?Q?pPLF13oYaMXH4vGR3lU0Q0KgLm/RwLtSTCC5qnBhIT/zw1VWPmn0pal1Fy/F?=
+ =?us-ascii?Q?45VC+SeCK8Y9IpoKK2ipAkQRLIsdxcn4tWVPnk9W9IGgrGMA/1NfTw4Ttjri?=
+ =?us-ascii?Q?m5HobTmOYcOsFuoUvPz3NkhH1+YpnyGGgZqqQQQCPn/3HFQ5qKIa1nMfggL6?=
+ =?us-ascii?Q?eO7daOgCQPZBTxeAMr1RgWYIyRlTViMERRQp0gSnrIkbwOYkEbko1gm7Cles?=
+ =?us-ascii?Q?1hQr3ZObnLL0yd8Kem8MrYLcPZyjbL92y+RIwNxHEMxdoDg5uw/1fM/yhCVE?=
+ =?us-ascii?Q?By1V67BJdy67IQ56Lj2nqtv9sqwuGM12OnRZ7TZsDRLUunnpMFLYsNHkBXXl?=
+ =?us-ascii?Q?9cuWcuEFesMEjHOxVeE3H2/fXDuxgc30V0kxRVS27dE5VaWkcPwgNsnnApJL?=
+ =?us-ascii?Q?1x5KejrkPSO8lRVdpLCIzEhkU56QzuUo6j4EypTBkuWPqZL2dKCbCqaeP3p1?=
+ =?us-ascii?Q?5fTl8SXSaWJF4nWJ05ljebkGB3w6ejAF?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ux2CfrxYdiiDtsr/CLRNPQTMRovZAaYYoexRYgZX8RQ2UE0n6oeqUTO8gHmw?=
+ =?us-ascii?Q?hi3tLmtOWFop7LuMdOjj5U7PS3yRedxIYfg3JGqsCrraz6PrTiNjm3Fb3K3Z?=
+ =?us-ascii?Q?tKiwgNcJe/kRbG8T/v2K1NH7Zc9Zs/T6cpO9SC1tFO0R1SOiqVxwUgL88516?=
+ =?us-ascii?Q?/u8AbshuUDT9mpgGOw02+pak6lhjcKJnu3qZIouYT6LWxnS/DZZ7wNfR5lg8?=
+ =?us-ascii?Q?gOVtJ4MJGRTkTFALLuPC1cx3juXof0lrWrr0OZHMcsGQhhmDXv8fXA8F2/c/?=
+ =?us-ascii?Q?CZEq4Tz8xSKKq0CSCT1LyGuNa/ApeBUpulAcvYZOBO203Pdodwtba7jK4X3C?=
+ =?us-ascii?Q?giJbWck6kpGliYuzrjSzVti+bHE+eBDKjQO/p3ZtLSiV3VGiowEUfi8jEDw6?=
+ =?us-ascii?Q?eOY3SwJFIOT/mbDKbFi6/cX1Tl916oTgKcfE0IOWMBvTsV7ca7oUaedQFm6u?=
+ =?us-ascii?Q?fnea2BSDVqcfOpDKYLLoq6fJBK2qTQpqlnN4DPNn5kwwz2fEF6pE/jub57hK?=
+ =?us-ascii?Q?NtOcZFFVBk12mY4kJSNePnRgoOW7LXAloo/Bu5wKWawJg+jdLVGRZ3rJx7TW?=
+ =?us-ascii?Q?OYUfaWbgMRFLFOzPK4kSjMx9G+auFCI5odwOpI6UNVT6GUyRi3PUEY8WadHy?=
+ =?us-ascii?Q?+FnCwJFdJX1mKOuF0E96JXQUJfL5+CLxI1l80GK6MY/YlPYdGVJ+Bx0zti9D?=
+ =?us-ascii?Q?AlzXtlQgw9mXh29mAZFN5Ram21GBD/TMZhUp63da5x4bfuaGtx1eQ6v3LTW8?=
+ =?us-ascii?Q?2D32cPrCq3FA7navXQlT05MOdkl3Tp+0YUxPTnTFUFNzgRPblQSsjR1SVcIH?=
+ =?us-ascii?Q?dXTskcGEmbPCJ653vnL090cb1XXdotUyymvK+S6beVGhUw4vBCDXEAllZXIi?=
+ =?us-ascii?Q?UJiqv75JrOLAQ6l5DHuUnz63J+IGHl/xqv5sK3FhVnLbh/sZdJrZ4RjfaK6O?=
+ =?us-ascii?Q?Z1zXVyzNq384CCIMOuzU1JpdnmKahPrqwP3O85O7NOZJZroQp66eywgrTwOs?=
+ =?us-ascii?Q?gpPYHGstOvyjal1MkU8FrRS0itQ7ioIPBEoyrgxWo3FtZFuulSJELdWQSx0k?=
+ =?us-ascii?Q?HaxnNNAYl8cb4s5xGUv8/P/B1Jl0vwYIfe8FK+u4Z5aIYlcqOyzUe0vOuPu5?=
+ =?us-ascii?Q?VyP4q+iGxM0fDxbzMGyvQEOS+ndNZ3GWBESGOhp7wXbwA7HqoW9R01DiMxGy?=
+ =?us-ascii?Q?eFs+wx3ruex6QTIlhuOZhecVAhGQVOPR3TG3TyxX1tWMEdLBBCuGX6R1ORxr?=
+ =?us-ascii?Q?AzLq0x9zu9phun7Nbryh1kA2+0sojNPTH7Myp+ZIDagf8CB7tousqOf4A+Ok?=
+ =?us-ascii?Q?/Zu9KLU0rl/Cp4N0ltSEt13Zpqc7XLu5x1n1gPoSfpsSqO6QshVKS8q9pNe0?=
+ =?us-ascii?Q?M4PZ1RvjcvUHFt5PqGt+9NPpnBAjbPBnecN7W4DdK1z2chD27cb2ZmoCnT70?=
+ =?us-ascii?Q?7br0x4FzuymUqk/J+SsFBYw0ddHWaEU8iLYMi4GtRQcXgbP/TvH5oaPl8UmC?=
+ =?us-ascii?Q?x6BjZs/+cKKEnXfEK/PdGNJJS403p/83wb9UmHrQi6ifZPXXiapgbUJCdEuS?=
+ =?us-ascii?Q?XXcMyBWB61J7P/0iTl289NGzV93rrkZdJn2ArB2u?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38cc996d-7e7d-4743-b335-08ddff73accd
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2025 16:17:24.4671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IWx/bJVhvSV3worekrG2zeiVpVG10+Y+9xcCX7l0EzXMFTRoi9aIapGW9CgVA7p7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8300
 
-Fix uninitialized character pointer, and functions that return
-undefined values. These issues were caught by running clang using LLVM=1
-option; and are as follows:
---
-ovpn-cli.c:1587:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
- 1587 |         if (!sock) {
-      |             ^~~~~
-ovpn-cli.c:1635:9: note: uninitialized use occurs here
- 1635 |         return ret;
-      |                ^~~
-ovpn-cli.c:1587:2: note: remove the 'if' if its condition is always false
- 1587 |         if (!sock) {
-      |         ^~~~~~~~~~~~
- 1588 |                 fprintf(stderr, "cannot allocate netlink socket\n");
-      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 1589 |                 goto err_free;
-      |                 ~~~~~~~~~~~~~~
- 1590 |         }
-      |         ~
-ovpn-cli.c:1584:15: note: initialize the variable 'ret' to silence this warning
- 1584 |         int mcid, ret;
-      |                      ^
-      |                       = 0
-ovpn-cli.c:2107:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
- 2107 |         case CMD_INVALID:
-      |              ^~~~~~~~~~~
-ovpn-cli.c:2111:9: note: uninitialized use occurs here
- 2111 |         return ret;
-      |                ^~~
-ovpn-cli.c:1939:12: note: initialize the variable 'ret' to silence this warning
- 1939 |         int n, ret;
-      |                   ^
-      |
---
-so_txtime.c:210:3: warning: variable 'reason' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-  210 |                 default:
-      |                 ^~~~~~~
-so_txtime.c:219:27: note: uninitialized use occurs here
-  219 |                         data[ret - 1], tstamp, reason);
-      |                                                ^~~~~~
-so_txtime.c:177:21: note: initialize the variable 'reason' to silence this warning
-  177 |                 const char *reason;
-      |                                   ^
-      |
---
-Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
-ovpn module")
-Fixes: ca8826095e4d4 ("selftests/net: report etf errors correctly")
+On Fri, Sep 26, 2025 at 07:57:07AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Thursday, September 4, 2025 1:47 AM
+> >
+> > +#define PT_FMT x86_64
+> > +#define PT_SUPPORTED_FEATURES                                  \
+> > +	(BIT(PT_FEAT_SIGN_EXTEND) | BIT(PT_FEAT_FLUSH_RANGE) | \
+> > +	 BIT(PT_FEAT_FLUSH_RANGE_NO_GAPS) |                    \
+> > +	 BIT(PT_FEAT_X86_64_AMD_ENCRYPT_TABLES))
+> > +
+> 
+> iirc we discussed that FLUSH_RANGE and FLUSH_RANGE_NO_GAPS are
+> mutually exclusive. so it's a typo to set both of them here?
 
-Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+They cannot be enabled together, but this is SUPPORTED_FEATURES, so
+the built .ko can support using both. In the case of VTD the instance
+cap drives which of FLUSH_RANGE / NO_GAPS is selected for the entire
+instance.
 
-v2:
-	- Use subsystem name "net".
-	- Add fixes tags.
-	- Remove txtimestamp fix as default case calls error.
-	- Assign constant error string instead of NULL.
---
-
-diff --git a/tools/testing/selftests/net/ovpn/ovpn-cli.c b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-index 9201f2905f2c..20d00378f34a 100644
---- a/tools/testing/selftests/net/ovpn/ovpn-cli.c
-+++ b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-@@ -1581,7 +1581,7 @@ static int ovpn_listen_mcast(void)
- {
- 	struct nl_sock *sock;
- 	struct nl_cb *cb;
--	int mcid, ret;
-+	int mcid, ret = -1;
- 
- 	sock = nl_socket_alloc();
- 	if (!sock) {
-@@ -1936,7 +1936,7 @@ static int ovpn_run_cmd(struct ovpn_ctx *ovpn)
- {
- 	char peer_id[10], vpnip[INET6_ADDRSTRLEN], laddr[128], lport[10];
- 	char raddr[128], rport[10];
--	int n, ret;
-+	int n, ret = -1;
- 	FILE *fp;
- 
- 	switch (ovpn->cmd) {
-diff --git a/tools/testing/selftests/net/so_txtime.c b/tools/testing/selftests/net/so_txtime.c
-index 8457b7ccbc09..5bf3c483069b 100644
---- a/tools/testing/selftests/net/so_txtime.c
-+++ b/tools/testing/selftests/net/so_txtime.c
-@@ -174,7 +174,7 @@ static int do_recv_errqueue_timeout(int fdt)
- 	msg.msg_controllen = sizeof(control);
- 
- 	while (1) {
--		const char *reason;
-+		const char *reason = "unknown errno";
- 
- 		ret = recvmsg(fdt, &msg, MSG_ERRQUEUE);
- 		if (ret == -1 && errno == EAGAIN)
--- 
-2.47.3
-
+Jason
