@@ -1,147 +1,114 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229A226E6EB
-	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 18:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D101F35949;
+	Tue, 30 Sep 2025 19:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759256084; cv=none; b=SIgesX4I3uiWz7qHKNIEH1UwdswWKUB2c+2wbFrhn5VVSgykpFoUFcuAGC769whb4GPwNewonwQPktiPgneRm2kdIB8asw0V6u5s+uZX3CeNYW/sYR8TzRCunUFuIeVgGjQWDjQao1/wTOSmDPC5wv5lmSdkYj8vSqdnHkISqC0=
+	t=1759260043; cv=none; b=kUhWBzVghMK0oHn09pk6U653wW2fFAsgXecUUzcPz8odRCoP4r53BC1aZBqStha3mewqH37eLT0NlRY/+T+PZosYYkZ2Hq+59bVdgkI1bmE/K5nivqfFdHLnz/r7CUEUPbYd1gZ0hqBSVKihPhpDo4UX6stWhZf25mto0MRz3+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759256084; c=relaxed/simple;
-	bh=YzBT4QfCAMuUeKIwP1bi+4/6lvol7Da7Md1BMJ+VHY8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z4RCoNnc3cRKAN9lS687uECt/PcypWON0QNEu1GiWbQOFjOhrcaPa6NU6/JmLiCRlT4XMkmgKkDkqSUI2i729KSp05eg9Ed/o+dxdoSprL+pwnsskcppiYN/a53ha08HtKRhvF+AESUSY5cjFn9CponCAtTdsr1vw9gSS0SRgNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mk9NcjUv; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1759260043; c=relaxed/simple;
+	bh=SvJ8S7Nw/fPta0kTc9ASSeJSDJulLZWtqNWEtdEqeps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FZ30aCDXXm71T0+PMo9D/UnTUf4QJwKoZD/fwYcc5Pd1D4mn+poA12C1C+H9dKFilqgh1Jl4imccpZlnJmfpib9Gmnz/eF5aGZXpGmznNdH2DxHfu+6im9Mu0mXRqBRepJjQd3+yC9m0UlYRMm7qMQ1v05UL4ok5W+RMkGuwGns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=KmHeNLZj; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mk9NcjUv"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-27d67abd215so28625ad.0
-        for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 11:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759256082; x=1759860882; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JhHQw6uDnIpZGqNLt8rg/euuDEf1NIeByJWbMKA7f0=;
-        b=Mk9NcjUvakz/HZkrZe58YuMFGaFZ8KzYx+PPbsTBunAzSn4NgZUMgH7FrFLahQV1Vf
-         o9L3vjWoxmga1HKvD8Tzuj2NbE+yxqJ66Z/osIv3HbS+cHmWCT8WxkRNG8QIM/kMzIx/
-         vIyu27Lze7nJXjBgKh87Ey8n9kB8SSo5smnqRRtYYY4Z2l3dAqhenqBPu2fcCIHxlb4k
-         im92wtmAQu980T2McAL/CilPxS+jI2A7rhw3LrZgauZOYG6QTtMV/2mAP8fN9AMHID9r
-         YeONHkEz1WkFbqIK8zABqKlA2I6PjJA+RaPvNMJimdPsJ7sCtwUnH8cPi6ycuV4ym4Af
-         b/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759256082; x=1759860882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1JhHQw6uDnIpZGqNLt8rg/euuDEf1NIeByJWbMKA7f0=;
-        b=dbBCiq/6CU2vfpFIW7z5ULeaBZJL9rBLPtomReqsEEmjs4TP33vljt8IXe1nRdqNUs
-         N9T0ldohIsXTWc3/TPdC5/gXjAKkOTUsZ6PAbfj+Btoqv0kowA9kbQlNyuiKxrC1PFpQ
-         SRx721DurKZF30jxcEypWmw2mv/rcG3D+tNmee+y+JX4+ZospRTAwArXe0bpmSIZ3wIL
-         B68FPJSFfnBoRiy5GG7nKzNV2uA0HvvwbbdQWjedXlRKBlLjY2Dw+YCmInyFPvJ+BfG+
-         UZ1NXPkyQe8wHGdY+Bf6rP5nFmMIU3smqiQZaQo1TFaaN52YBDaTALjiCOHDenM8mUoG
-         b+IA==
-X-Forwarded-Encrypted: i=1; AJvYcCWbJowqGgIp4LUktOx9dTE/er/LDQEvAsnOjT8qSFsBR/Lf0RVQchQZOSM/SKB3j4TqpNwd@lists.linux.dev
-X-Gm-Message-State: AOJu0YznfEJGVkaWtNXAubZz18cz5xMJ2KuWwGEXyBo6333dO/UQU16X
-	9fWJmx6N+e+DsrXEId8GSg1U8BE1T4YgNbXAH5tXCUQTdhjIUOmbhQ3XtWUfXYh52HOe31MVai7
-	zFHEQTT9pghboJhLcFkgrdqApVdnH7+Wj2OzoU3sp
-X-Gm-Gg: ASbGncsHpghfHCwzWuXDnjM+tJwbjRp4Egq89knh1TsfGOhzCp3DdiyuqXJwKDZchBH
-	ciMBG+lHBdDHHMzypwoO6ArCnf1o4+LzVQrYxR8F2CQFC6C1cWIRrg7nDrZAeAcKL4YzxcHc6gO
-	alzKztXgDO9O8lWy9146uSDm/x9fUvhbwTDY+BfOwXppmToyR33C4TUujuAJGq9Dcerv+PEyU6b
-	ZlDyRTq58v7759xCq13Nmeg04SGRhMqquyMzB2ABid9q6ms9qktn1yRLWvWefSXIFlGgNIZRxim
-	5+Q=
-X-Google-Smtp-Source: AGHT+IEhDpKOzk1V76VOHcN+llC8N2LBlKYGHUrdZNNKDJH5D89iF4L3nfYy1fwm1qWHrVShZ3D5tqaGnLS187GjSew=
-X-Received: by 2002:a17:902:ce07:b0:266:b8a2:f5d8 with SMTP id
- d9443c01a7336-28e80054fc2mr385095ad.14.1759256081883; Tue, 30 Sep 2025
- 11:14:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="KmHeNLZj"
+Received: from [IPV6:2601:646:8081:9484:3373:e8bd:aaa4:7c23] ([IPv6:2601:646:8081:9484:3373:e8bd:aaa4:7c23])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 58UJJc0q376069
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 30 Sep 2025 12:19:38 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 58UJJc0q376069
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025092201; t=1759259981;
+	bh=5jKsWr8QEv1dE0BHGjK4jG5jy4dVCkN+HP+b8pZLYWY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KmHeNLZj/n0P3Bx95LFzhVuxLXrHMsWLMMJ2Gm4H8FNamSlw/ykdibwr0KiTsB1Hx
+	 kimmmjaE4PQNu82809DGZ+bXQB5PtFK+1BIkP2kit+wX/G9oZjCTGQQ4NBn3eyeroN
+	 igAJ5wylIhFE9616RLBxQ4fa1M/81mz3016d0y5QrZzka0FJXVai2ABAi7s6qurIZU
+	 UCt7L6g9U8v2bHT5kR3usV/nGI4JUG2MRe34f5yvbCfc1Wc8a+J7TpEqXyLIfbRGUg
+	 AzbRtlbso5/anwJIMETPoxFJcMs4aRnGHHmG/oIvBJHSwcgPCKq+EsfPpQlRB7rZB1
+	 WCrrEfyQwfYwQ==
+Message-ID: <1412c7a5-8961-4949-b09e-7b9d080ce9bf@zytor.com>
+Date: Tue, 30 Sep 2025 12:19:33 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250930-perf_build_android_ndk-v2-0-2ea440b7ef01@arm.com>
-In-Reply-To: <20250930-perf_build_android_ndk-v2-0-2ea440b7ef01@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 30 Sep 2025 11:14:30 -0700
-X-Gm-Features: AS18NWBjMfrHGB5lKU8Vu2vvk7TM7-6lS4GVzlRhAcGcul5zXgxYKOUicYvXdBY
-Message-ID: <CAP-5=fUdk-EEDz2p__UJAcmkO=bA143dOUpGRcnW7_5FhZT71Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] perf build: Support building with Clang
-To: Leo Yan <leo.yan@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/12] x86/msr: Inline rdmsr/wrmsr instructions
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-coco@lists.linux.dev, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+        llvm@lists.linux.dev
+Cc: xin@zytor.com, "Kirill A. Shutemov" <kas@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Ajay Kaher <ajay.kaher@broadcom.com>,
+        Alexey Makhalov <alexey.makhalov@broadcom.com>,
+        Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor
+ <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+References: <20250930070356.30695-1-jgross@suse.com>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20250930070356.30695-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 30, 2025 at 9:55=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> This series adds support for building perf with Clang, following the
-> discussion in [1]. Because the Android NDK uses Clang by default,
-> enabling Clang builds naturally covers Android as well.
->
-> The series is organized as follows:
->
->   - Patches 1=E2=80=932: Fix two bugs found with Clang.
->   - Patches 3=E2=80=936: Correct CROSS_ARCH and dismiss Clang build warni=
-ngs.
->   - Patches 7=E2=80=938: Enable Clang in the Makefile and update the
->     documentation.
->
-> Testing:
->
->   - Clang 15.0.7 on Ubuntu 22.04.5: native and cross-compiling (aarch64)
->   - Clang 18.1.3 on Ubuntu 24.04.2: native and cross-compiling (aarch64)
->   - Android NDK r27d (latest LTS): cross-compiling (aarch64)
->
-> [1] https://lore.kernel.org/linux-perf-users/20240715143342.52236-1-leo.y=
-an@arm.com/
->
-> ---
-> Changes in v2:
-> - Dropped the patch for dismissing warning in bpftool.
-> - Refined the document. (Ian)
-> - Link to v1: https://lore.kernel.org/r/20250925-perf_build_android_ndk-v=
-1-0-8b35aadde3dc@arm.com
+On 2025-09-30 00:03, Juergen Gross wrote:
+> When building a kernel with CONFIG_PARAVIRT_XXL the paravirt
+> infrastructure will always use functions for reading or writing MSRs,
+> even when running on bare metal.
+> 
+> Switch to inline RDMSR/WRMSR instructions in this case, reducing the
+> paravirt overhead.
+> 
+> In order to make this less intrusive, some further reorganization of
+> the MSR access helpers is done in the first 5 patches.
+> 
+> The next 5 patches are converting the non-paravirt case to use direct
+> inlining of the MSR access instructions, including the WRMSRNS
+> instruction and the immediate variants of RDMSR and WRMSR if possible.
+> 
+> Patch 11 removes the PV hooks for MSR accesses and implements the
+> Xen PV cases via calls depending on X86_FEATURE_XENPV, which results
+> in runtime patching those calls away for the non-XenPV case.
+> 
+> Patch 12 is a final little cleanup patch.
+> 
+> This series has been tested to work with Xen PV and on bare metal.
+> 
+> This series is inspired by Xin Li, who used a similar approach, but
+> (in my opinion) with some flaws. Originally I thought it should be
+> possible to use the paravirt infrastructure, but this turned out to be
+> rather complicated, especially for the Xen PV case in the *_safe()
+> variants of the MSR access functions.
+> 
 
-Reviewed-by: Ian Rogers <irogers@google.com>
+Looks good to me.
 
-Thanks,
-Ian
+(I'm not at all surprised that paravirt_ops didn't do the job. Both I and Xin
+had come to the same conclusion.)
 
-> ---
-> Leo Yan (8):
->       tools build: Align warning options with perf
->       perf python: split Clang options when invoking Popen
->       perf: build: Correct CROSS_ARCH for clang
->       perf test coresight: Dismiss clang warning for memcpy thread
->       perf test coresight: Dismiss clang warning for thread loop
->       perf test coresight: Dismiss clang warning for unroll loop thread
->       perf build: Support build with clang
->       perf docs: Document building with Clang
->
->  tools/build/feature/Makefile                       |  6 +-
->  tools/perf/Documentation/Build.txt                 | 15 ++++
->  tools/perf/Documentation/android.txt               | 80 ++--------------=
-------
->  tools/perf/Makefile.config                         | 32 ++++++++-
->  tools/perf/Makefile.perf                           |  2 +-
->  .../shell/coresight/memcpy_thread/memcpy_thread.c  |  2 +
->  .../shell/coresight/thread_loop/thread_loop.c      |  4 +-
->  .../unroll_loop_thread/unroll_loop_thread.c        |  4 +-
->  tools/perf/util/setup.py                           |  5 +-
->  9 files changed, 67 insertions(+), 83 deletions(-)
-> ---
-> base-commit: c17dda8013495d8132c976cbf349be9949d0fbd1
-> change-id: 20250915-perf_build_android_ndk-500b53bea895
->
-> Best regards,
-> --
-> Leo Yan <leo.yan@arm.com>
->
+
+Reviewed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
