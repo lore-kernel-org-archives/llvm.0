@@ -1,114 +1,108 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D101F35949;
-	Tue, 30 Sep 2025 19:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D97283FF1;
+	Tue, 30 Sep 2025 20:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759260043; cv=none; b=kUhWBzVghMK0oHn09pk6U653wW2fFAsgXecUUzcPz8odRCoP4r53BC1aZBqStha3mewqH37eLT0NlRY/+T+PZosYYkZ2Hq+59bVdgkI1bmE/K5nivqfFdHLnz/r7CUEUPbYd1gZ0hqBSVKihPhpDo4UX6stWhZf25mto0MRz3+U=
+	t=1759264601; cv=none; b=EQSyb0wn7t/4GdXNjnpbMPumHbJNmjQmgNlQ1Disy+EPxNMUk9E5XkiE2l6EtdExCYIBg9+thi4s958vn7KDOS0U0bq8hjhJ2L2Hy3O8jEpsfKQ+imABc/Lpe8UJYty/jyFpwWvK5wzzHVeV0aZA2v4XeCaVzExJNXqDzKRcHGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759260043; c=relaxed/simple;
-	bh=SvJ8S7Nw/fPta0kTc9ASSeJSDJulLZWtqNWEtdEqeps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FZ30aCDXXm71T0+PMo9D/UnTUf4QJwKoZD/fwYcc5Pd1D4mn+poA12C1C+H9dKFilqgh1Jl4imccpZlnJmfpib9Gmnz/eF5aGZXpGmznNdH2DxHfu+6im9Mu0mXRqBRepJjQd3+yC9m0UlYRMm7qMQ1v05UL4ok5W+RMkGuwGns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=KmHeNLZj; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1759264601; c=relaxed/simple;
+	bh=57SjqRtU8zsQMebYTlCwu4Olnzupds+OK54BUKDJeQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rB+W0XSMMmz0A/BvH/jv6FzkHDPVjmVJ414vI8GVdullamT/ornEV6sNYC9kQHjsAQRxN8Gkw69rDQIzZxvMZEfkKJAxT1QMAIPrdJX7SwnL8KWc6Hw20sbZS48Y0N9DbBshc8j2pBQ66F4Mi+lx3cJrO+/zToyXww5Rb9NZ3Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b5sSIt+Z; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="KmHeNLZj"
-Received: from [IPV6:2601:646:8081:9484:3373:e8bd:aaa4:7c23] ([IPv6:2601:646:8081:9484:3373:e8bd:aaa4:7c23])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 58UJJc0q376069
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 30 Sep 2025 12:19:38 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 58UJJc0q376069
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025092201; t=1759259981;
-	bh=5jKsWr8QEv1dE0BHGjK4jG5jy4dVCkN+HP+b8pZLYWY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KmHeNLZj/n0P3Bx95LFzhVuxLXrHMsWLMMJ2Gm4H8FNamSlw/ykdibwr0KiTsB1Hx
-	 kimmmjaE4PQNu82809DGZ+bXQB5PtFK+1BIkP2kit+wX/G9oZjCTGQQ4NBn3eyeroN
-	 igAJ5wylIhFE9616RLBxQ4fa1M/81mz3016d0y5QrZzka0FJXVai2ABAi7s6qurIZU
-	 UCt7L6g9U8v2bHT5kR3usV/nGI4JUG2MRe34f5yvbCfc1Wc8a+J7TpEqXyLIfbRGUg
-	 AzbRtlbso5/anwJIMETPoxFJcMs4aRnGHHmG/oIvBJHSwcgPCKq+EsfPpQlRB7rZB1
-	 WCrrEfyQwfYwQ==
-Message-ID: <1412c7a5-8961-4949-b09e-7b9d080ce9bf@zytor.com>
-Date: Tue, 30 Sep 2025 12:19:33 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b5sSIt+Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759264599; x=1790800599;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=57SjqRtU8zsQMebYTlCwu4Olnzupds+OK54BUKDJeQU=;
+  b=b5sSIt+ZIbJpmYmJauTcrY/0SrLnFIlbY5gjOwKUuiDavmqryLsEVMv8
+   c2Ofyc+AVNlxo2r9SxVeG4/+lMb9VM4Ka6l70tFfqhGCaj13ZMgpdBTIc
+   JrGMaIwnXfPadLqnAquOHcDVHU89I5pAoYAjWiJ9wyH+zYt7Lg2bT1oIk
+   UDRj1i4goMbo80LQW5AZZuhNNwmzAWLLoskXtGu/hxu7OknemN2Nn8law
+   wrIo5KFVIQ1kYl88+q7t+SZ8QRCzjYtqjGZ3M49uFeI3lyHiX4VKdV7a2
+   ILjRHkDXWAZiB24+4vYBwQh+5GNcDkuQGXEv+4pWx0QN8SW0lFnHH1geR
+   Q==;
+X-CSE-ConnectionGUID: 8MaOIxyEQVeCjI8q5lF2UA==
+X-CSE-MsgGUID: ZInixDZGSXi/3JvLugf8xQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11569"; a="72892531"
+X-IronPort-AV: E=Sophos;i="6.18,305,1751266800"; 
+   d="scan'208";a="72892531"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2025 13:36:39 -0700
+X-CSE-ConnectionGUID: u7TMxt/tRuu1m/FvlCrp8Q==
+X-CSE-MsgGUID: x7ZZANBkQK+dJx6Xu1L3sA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Sep 2025 13:36:38 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v3h5Q-0002Tb-09;
+	Tue, 30 Sep 2025 20:36:36 +0000
+Date: Wed, 1 Oct 2025 04:35:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Russell King <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [rmk-arm:cex7 170/173] drivers/net/phy/qsfp.c:1229:3: warning:
+ misleading indentation; statement is not part of the previous 'if'
+Message-ID: <202510010457.FGDu3A6h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/12] x86/msr: Inline rdmsr/wrmsr instructions
-To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-coco@lists.linux.dev, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        llvm@lists.linux.dev
-Cc: xin@zytor.com, "Kirill A. Shutemov" <kas@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, Ajay Kaher <ajay.kaher@broadcom.com>,
-        Alexey Makhalov <alexey.makhalov@broadcom.com>,
-        Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor
- <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-References: <20250930070356.30695-1-jgross@suse.com>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20250930070356.30695-1-jgross@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2025-09-30 00:03, Juergen Gross wrote:
-> When building a kernel with CONFIG_PARAVIRT_XXL the paravirt
-> infrastructure will always use functions for reading or writing MSRs,
-> even when running on bare metal.
-> 
-> Switch to inline RDMSR/WRMSR instructions in this case, reducing the
-> paravirt overhead.
-> 
-> In order to make this less intrusive, some further reorganization of
-> the MSR access helpers is done in the first 5 patches.
-> 
-> The next 5 patches are converting the non-paravirt case to use direct
-> inlining of the MSR access instructions, including the WRMSRNS
-> instruction and the immediate variants of RDMSR and WRMSR if possible.
-> 
-> Patch 11 removes the PV hooks for MSR accesses and implements the
-> Xen PV cases via calls depending on X86_FEATURE_XENPV, which results
-> in runtime patching those calls away for the non-XenPV case.
-> 
-> Patch 12 is a final little cleanup patch.
-> 
-> This series has been tested to work with Xen PV and on bare metal.
-> 
-> This series is inspired by Xin Li, who used a similar approach, but
-> (in my opinion) with some flaws. Originally I thought it should be
-> possible to use the paravirt infrastructure, but this turned out to be
-> rather complicated, especially for the Xen PV case in the *_safe()
-> variants of the MSR access functions.
-> 
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm cex7
+head:   2371f18181318a9492b01d8b312a9ee85f47e8c2
+commit: f958ddacf4e1c4aa03ad01b6abef03501217da1c [170/173] net: add qsfp support                              [*experimental*]
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251001/202510010457.FGDu3A6h-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251001/202510010457.FGDu3A6h-lkp@intel.com/reproduce)
 
-Looks good to me.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510010457.FGDu3A6h-lkp@intel.com/
 
-(I'm not at all surprised that paravirt_ops didn't do the job. Both I and Xin
-had come to the same conclusion.)
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/qsfp.c:1229:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+    1229 |                 qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
+         |                 ^
+   drivers/net/phy/qsfp.c:1222:2: note: previous statement is here
+    1222 |         if (!qsfp->gpio_irq[GPIO_INTL])
+         |         ^
+   1 warning generated.
 
 
-Reviewed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+vim +/if +1229 drivers/net/phy/qsfp.c
+
+  1215	
+  1216		if (qsfp->sm_dev_state == SFP_DEV_DETACHED) {
+  1217			qsfp_sm_ins_next(qsfp, SFP_MOD_WATTACH, 0);
+  1218			return;
+  1219		}
+  1220	
+  1221		// Start the poller if there is no interrupt support if not running
+  1222		if (!qsfp->gpio_irq[GPIO_INTL])
+  1223			queue_delayed_work(system_wq, &qsfp->poll, poll_jiffies);
+  1224	
+  1225	//	ret = sfp_module_insert(qsfp->sfp_bus, &id);
+  1226	//	if (ret < 0)
+  1227	//		qsfp_sm_ins_next(qsfp, SFP_MOD_ERROR, 0);
+  1228	//	else
+> 1229			qsfp_sm_ins_next(qsfp, SFP_MOD_PRESENT, 0);
+  1230	}
+  1231	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
