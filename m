@@ -1,190 +1,235 @@
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4551F30146C
-	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 12:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E972B2AE90;
+	Tue, 30 Sep 2025 12:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759236606; cv=none; b=klpkkc3Iu5btN08I7hEqt6QRbOY91SF3wwvSOarJ5VIyebLEPZk4mx2+DmnO8r0leK+iJjX5fQMVDuCc7SRlkGkbepEDTW+WW3/u4Wmczf/2ewpuBBjeRWZu478PBNzptrSeO928sr7/5OFSJCAYnoz8BT6GNczJ3kEW30X8QaE=
+	t=1759236729; cv=none; b=jkEfi/J3RQV5PDoCu9ZOGJf5f+IBGeB3m/mwM/gPCqWJX+BWEs83crZIkG5k4H2xk78VaoW2+TTIO06ksXR00BNzXnw2oYuxgv1oUwiWx7jCkI8+lHcFW/1lP1aCTSoSIPKIusKNtMMoF9rhWuhA7SK2HO7CbQCeAaqEiXYj5cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759236606; c=relaxed/simple;
-	bh=CXTHR3+ruv4b2NmSi2QyXZZoVB+RVVvtqzPGciNVlhQ=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sete1dNqQuRTk0lSRW5efrWv5HfUp8eVffaf0+mEbTuRhryljUevwVfVQFao3MaxigJh5SSvEp2dxtzEwObaOvsuQ3aHisKUmYz080O/12QDmmZoj8kQTf59rxtPjbYwvPe/9VtxvJNE3VVLwS4PfeWw1HCmUsrptXhDDXRrVdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m3KabmSU; arc=none smtp.client-ip=209.85.217.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759236729; c=relaxed/simple;
+	bh=NBzs5D4uuWJUjPCHsfP6knc6Q/gyHDcuVmc8t+peMmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MzgsySyQoaMUF3Zss9YToOicMX5ojob/UAfRUgOg9gG0GHzcSeYGrvkiB1bY8zyIwCJyZlocvalVtOPkDIL1mdg8T0Kkm5cCiOzhbHPNKTJvCl0n3bf1vSvzuIu2w/tDHcVp/NpiRkEETk4GA/cyH9GaEKRZFd898IAVjX5mzg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YgP4wE0q; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m3KabmSU"
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-59eb88955d8so2473931137.2
-        for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 05:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759236602; x=1759841402; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/DIF8xxMKs45jgicXUY8+fOYkrHvhQ+64uTG3AYNzDU=;
-        b=m3KabmSUZDO1cXgxIjFUNjEQqWRhK9/axPFBHMb98fOiJpVdG6hnQen0JPga3Z7IcM
-         khuue8pqAPcgnHoqoRTV4inXBBxtv7VoXfnkAU0Xq/1JibdQiJ8NujLp6itjvLwTs0D+
-         /yZPr+L8SjcjxizhI3j7G3RpW8iqrlvd5dc/sdFBlK45SUTdvfEECcrsE4MxtDigJTVR
-         rOugUYoTnnQXMYUtHIKPMgLB1GFRzNY7caR7eUenoSymtp2k8113T74xSkRqJfMLf6g5
-         2dPVw5bgaPKMMGHzo4c/+w5npwziT3PmPT85OxjFnmE4213iloaLcpy+NPpicOWhibcg
-         Wmfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759236602; x=1759841402;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/DIF8xxMKs45jgicXUY8+fOYkrHvhQ+64uTG3AYNzDU=;
-        b=ukwEbU8BGnMgR2PbhmGI6r+0h+GgPDcop+I0+3AxgX1unQl4RUH/8tkI3JQk4pIczt
-         N968EWqdfnizDXH1Ye2/grzZexK2dUBedDafod9YkjzpbV/Z7Be9wzdZ3nrwh6wtVmmB
-         U/JMylHSF/ZRny7FyqZPYCn4u38hPdfJuNxV/f5vH4T6bnpoXWAD2waarYPsispG06LB
-         pKsjtY7j98cljxsAlcXg8sYMvDVIht32OWEv+oPODsmrzt6fsa7vaCsFETKOcf32OJSi
-         ygwTGmIziO0ZzSWpIKHzRcIY/H+e2AW6pKItf5UU09QUNuYFE5GDw476tVMbKVRZQP5R
-         UVqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkQxnagosWGJUsnfNnoA/Nymla5FqHDQ3uxscgLjtXS3qKUrZgF1jjotntsyakVEX8UvB8@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy67ZBT5Uo9vDgCbXDm8qgnMFM/RJzBxFZc1AwgzZ25ausKvngC
-	KXX4UmzmIsF0Ba5a9IYwTANw9x4HfxkwSpgk5TUaIcLFfMzdBLQE2xq0
-X-Gm-Gg: ASbGnctNhHYEoqm4lGuGQ5s/yeVJmuRX0N7TxrzaQJD+khKzO4NalX1nFKZpDxy6W+k
-	ffN5Y10lnjEcdwXNK+gfTSwrvljDBSZ2vbesDQst+E5ot4ALQs0lkGIGliWHNwSKc/Fh35RhmmM
-	59oi2ORrGkGO/Wc75cjazzrscgEtZwMbvMaoRm+KIaVRnYBi6kxotWeza/hVBCW2Fa6023ejnd+
-	5R+IAnF8NXHNbtUW6AlwANeBwcjmK2laUEymqANGQMqLgD06rJDZmRTzVJoc6eihPGCShOAoy5Q
-	tqjBs4zNmp+GZgyKDdVEwFXhU49lA5paIXCGFUR+TxbufVMIqkqnEQT04xOkZwwHFsPk9ccJgyF
-	tyA0XhwOudD3xu/cz3FoA/LPsKwzCraCpLbe0B7wCUxQmQ1tvuKIfg9BHQwQ4+64Q1VBh4llIld
-	b2SsKH8fbI/9PL71MwWIWnwGUUntnVtfgvHDlROls=
-X-Google-Smtp-Source: AGHT+IF3jXqpSXTJaRkGEMK7WKJd7LDbG8wy3D5EeY7LmVpdZLbKNSI6KpFy0rL2Q30+2atZz2NZEA==
-X-Received: by 2002:a05:6102:3906:b0:4fb:f6ea:cf88 with SMTP id ada2fe7eead31-5acc6240067mr7922871137.10.1759236601986;
-        Tue, 30 Sep 2025 05:50:01 -0700 (PDT)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id ada2fe7eead31-5ae389dd1fesm4532961137.12.2025.09.30.05.50.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Sep 2025 05:50:01 -0700 (PDT)
-Date: Tue, 30 Sep 2025 08:50:00 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Sidharth Seela <sidharthseela@gmail.com>, 
- antonio@openvpn.net, 
- sd@queasysnail.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- horms@kernel.org, 
- shuah@kernel.org, 
- willemdebruijn.kernel@gmail.com, 
- kernelxing@tencent.com, 
- nathan@kernel.org, 
- nick.desaulniers+lkml@gmail.com, 
- morbo@google.com, 
- justinstitt@google.com
-Cc: netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, 
- david.hunter.linux@gmail.com, 
- Sidharth Seela <sidharthseela@gmail.com>
-Message-ID: <willemdebruijn.kernel.30a447f86eaaa@gmail.com>
-In-Reply-To: <20250930120028.390405-1-sidharthseela@gmail.com>
-References: <20250930120028.390405-1-sidharthseela@gmail.com>
-Subject: Re: [PATCH net v5] selftest:net: Fix uninit return values
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YgP4wE0q"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=1J//rl64lw04ODF0oGXCCZsjqrxoJKz9lbEG9Hm9I+U=; b=YgP4wE0qqX3ifnlrg0BFrYJAtL
+	mGbxN4ktg1xjYBoNO1aJrnzkLQlbIAvQgOUiafQ1I1Wk7iHbx2b/FlwfXd/cl3QQ3rnHkVZWRVXqU
+	UzrY1LIsIND+2QuSXVXyU8hzmEpZcm+e5lWCv+Jegj4oMWxT4i1b9+tIvjQikOp2FVJnCUn8gjvEg
+	/oHf0R71xww7cSPJbGLxbctdozyPj3w10zaC2JxXPE9hIpjiWelxegtIFKGK7neJNOxT9fvrQKDmL
+	ycLwMA+/Y17U8NPGGUc8sobLLnZVb64iN9e+wO+gmBaApkpCxG3h6NWoyD3ZfmwtAufavR357hQgl
+	VShkrpLA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v3Zpl-0000000Cq3s-2JQ3;
+	Tue, 30 Sep 2025 12:51:57 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9A26F300220; Tue, 30 Sep 2025 14:51:56 +0200 (CEST)
+Date: Tue, 30 Sep 2025 14:51:56 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: =?iso-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev,
+	xin@zytor.com, "H. Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v2 09/12] x86/msr: Use the alternatives mechanism for
+ WRMSR
+Message-ID: <20250930125156.GK1386988@noisy.programming.kicks-ass.net>
+References: <20250930070356.30695-1-jgross@suse.com>
+ <20250930070356.30695-10-jgross@suse.com>
+ <20250930083137.GH3245006@noisy.programming.kicks-ass.net>
+ <2df26cc0-53bc-499c-8c78-bc24fd8bf882@suse.com>
+ <20250930085044.GK3245006@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250930085044.GK3245006@noisy.programming.kicks-ass.net>
 
-Since it's now only to ovpn, better prefix, which matches other
-patches in that directory, is "selftest/net/ovpn:"
+On Tue, Sep 30, 2025 at 10:50:44AM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 30, 2025 at 10:46:23AM +0200, Jürgen Groß wrote:
 
-Btw, review the posting rules. Leave 24 hours between reposts:
+> > > 	asm_inline volatile goto(
+> > > 		"1:\n"
+> > > 		ALTERNATIVE(PREPARE_RCX_RDX_FOR_WRMSR
+> > > 			    "2:\n"
+> > > 			    ALTERNATIVE("ds wrmsr",
+> > > 			                ASM_WRMSRNS, X86_FEATURE_WRMSRNS),
+> > > 			    ASM_WRMSRNS_IMM, X86_FEATURE_MSR_IMM);
+> > > 		_ASM_EXTABLE_TYPE(1b, %l[badmsr], %c[type])	/* For WRMSRNS immediate */
+> > > 		_ASM_EXTABLE_TYPE(2b, %l[badmsr], %c[type])	/* For WRMSR(NS) */
+> > > 
+> > > 		:
+> > > 		: [val] "a" (val), [msr] "i" (msr), [type] "i" (type)
+> > > 		: "memory", "ecx", "rdx"
+> > > 		: badmsr);
+> > > 
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+> Oh well, lets forget about this :-)
 
-
-Sidharth Seela wrote:
-> Fix functions that return undefined values. These issues were caught by
-> running clang using LLVM=1 option.
-> 
-> Clang warnings are as follows:
-> ovpn-cli.c:1587:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->  1587 |         if (!sock) {
->       |             ^~~~~
-> ovpn-cli.c:1635:9: note: uninitialized use occurs here
->  1635 |         return ret;
->       |                ^~~
-> ovpn-cli.c:1587:2: note: remove the 'if' if its condition is always false
->  1587 |         if (!sock) {
->       |         ^~~~~~~~~~~~
->  1588 |                 fprintf(stderr, "cannot allocate netlink socket\n");
->       |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  1589 |                 goto err_free;
->       |                 ~~~~~~~~~~~~~~
->  1590 |         }
->       |         ~
-> ovpn-cli.c:1584:15: note: initialize the variable 'ret' to silence this warning
->  1584 |         int mcid, ret;
->       |                      ^
->       |                       = 0
-> ovpn-cli.c:2107:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->  2107 |         case CMD_INVALID:
->       |              ^~~~~~~~~~~
-> ovpn-cli.c:2111:9: note: uninitialized use occurs here
->  2111 |         return ret;
->       |                ^~~
-> ovpn-cli.c:1939:12: note: initialize the variable 'ret' to silence this warning
->  1939 |         int n, ret;
->       |                   ^
->       |
-> 
-> Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
-> ovpn module")
-
-stray line
-
-> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
-> ---
-> 
-> v5:
-> 	- Assign -ENOMEM to ret inside if block.
-> 	- Assign -EINVAL to ret inside case block.
-> v4:
-> 	- Move changelog below sign-off.
-> 	- Remove double-hyphens in commit description.
-> v3:
-> 	- Use prefix net.
-> 	- Remove so_txtime fix as default case calls error().
-> 	- Changelog before sign-off.
-> 	- Three dashes after sign-off
-> v2:
-> 	- Use subsystem name "net".
-> 	- Add fixes tags.
-> 	- Remove txtimestamp fix as default case calls error.
-> 	- Assign constant error string instead of NULL.
-> 
-> diff --git a/tools/testing/selftests/net/ovpn/ovpn-cli.c b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> index 9201f2905f2c..8d0f2f61923c 100644
-> --- a/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> +++ b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-> @@ -1586,6 +1586,7 @@ static int ovpn_listen_mcast(void)
->  	sock = nl_socket_alloc();
->  	if (!sock) {
->  		fprintf(stderr, "cannot allocate netlink socket\n");
-> +		ret = -ENOMEM;
->  		goto err_free;
->  	}
->  
-> @@ -2105,6 +2106,7 @@ static int ovpn_run_cmd(struct ovpn_ctx *ovpn)
->  		ret = ovpn_listen_mcast();
->  		break;
->  	case CMD_INVALID:
-> +		ret = -EINVAL;
->  		break;
->  	}
->  
-> -- 
-> 2.47.3
-> 
+So I couldn't. I tried the below, which when building a .i generates the
+following:
 
 
+static inline __attribute__((__gnu_inline__)) __attribute__((__unused__)) __attribute__((no_instrument_function)) void clear_page(void *page)
+{
+
+ kmsan_unpoison_memory(page, ((1UL) << 12));
+ asm __inline volatile(
+ 	"# ALT: oldinstr\n"
+	"__UNIQUE_ID_altinstr_9" "_begin:\n\t" 
+
+		"# ALT: oldinstr\n"
+		"__UNIQUE_ID_altinstr_8" "_begin:\n\t"
+		"call %c[old]" "\n"
+		"__UNIQUE_ID_altinstr_8" "_pad:\n"
+		"# ALT: padding\n"
+		".skip -(((" "__UNIQUE_ID_altinstr_8" "_alt_end - " "__UNIQUE_ID_altinstr_8" "_alt_begin" ")-(" "__UNIQUE_ID_altinstr_8" "_pad - " "__UNIQUE_ID_altinstr_8" "_begin" ")) > 0) * " 
+		"((" "__UNIQUE_ID_altinstr_8" "_alt_end - " "__UNIQUE_ID_altinstr_8" "_alt_begin" ")-(" "__UNIQUE_ID_altinstr_8" "_pad - " "__UNIQUE_ID_altinstr_8" "_begin" ")),0x90\n" 
+		"__UNIQUE_ID_altinstr_8" "_end:\n"
+		".pushsection .altinstructions,\"a\"\n"
+		" .long " "__UNIQUE_ID_altinstr_8" "_begin - .\n"
+		" .long " "__UNIQUE_ID_altinstr_8" "_alt_begin - .\n" 
+		" .4byte " "( 3*32+16)" "\n" 
+		" .byte " "__UNIQUE_ID_altinstr_8" "_end - " "__UNIQUE_ID_altinstr_8" "_begin" "\n" 
+		" .byte " "__UNIQUE_ID_altinstr_8" "_alt_end - " "__UNIQUE_ID_altinstr_8" "_alt_begin" "\n" 
+		".popsection\n" 
+		".pushsection .altinstr_replacement, \"ax\"\n" 
+		"# ALT: replacement\n" 
+		"__UNIQUE_ID_altinstr_8" "_alt_begin:\n\t" 
+		"call %c[new1]" "\n" 
+		"__UNIQUE_ID_altinstr_8" "_alt_end:\n" 
+		".popsection\n"
+		"\n" 
+
+	"__UNIQUE_ID_altinstr_9" "_pad:\n" 
+	"# ALT: padding\n" 
+	".skip -(((" "__UNIQUE_ID_altinstr_9" "_alt_end - " "__UNIQUE_ID_altinstr_9" "_alt_begin" ")-(" "__UNIQUE_ID_altinstr_9" "_pad - " "__UNIQUE_ID_altinstr_9" "_begin" ")) > 0) * "
+	"((" "__UNIQUE_ID_altinstr_9" "_alt_end - " "__UNIQUE_ID_altinstr_9" "_alt_begin" ")-(" "__UNIQUE_ID_altinstr_9" "_pad - " "__UNIQUE_ID_altinstr_9" "_begin" ")),0x90\n" 
+	"__UNIQUE_ID_altinstr_9" "_end:\n" 
+	".pushsection .altinstructions,\"a\"\n" 
+	" .long " "__UNIQUE_ID_altinstr_9" "_begin - .\n"
+	" .long " "__UNIQUE_ID_altinstr_9" "_alt_begin - .\n" 
+	" .4byte " "( 9*32+ 9)" "\n" 
+	" .byte " "__UNIQUE_ID_altinstr_9" "_end - " "__UNIQUE_ID_altinstr_9" "_begin" "\n"
+	" .byte " "__UNIQUE_ID_altinstr_9" "_alt_end - " "__UNIQUE_ID_altinstr_9" "_alt_begin" "\n"
+	".popsection\n" 
+	".pushsection .altinstr_replacement, \"ax\"\n" 
+	"# ALT: replacement\n" 
+	"__UNIQUE_ID_altinstr_9" "_alt_begin:\n\t" 
+	"call %c[new2]" "\n" 
+	"__UNIQUE_ID_altinstr_9" "_alt_end:\n" 
+	".popsection\n" 
+	: "+r" (current_stack_pointer), "=D" (page) 
+	: [old] "i" (clear_page_orig), [new1] "i" (clear_page_rep), [new2] "i" (clear_page_erms) , "D" (page) 
+	: "cc", "memory", "rax", "rcx")
+
+                                   ;
+}
+
+Which looks right, but utterly fails to build :(
+
+
+diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+index 15bc07a5ebb3..12a93982457a 100644
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -5,6 +5,7 @@
+ #include <linux/types.h>
+ #include <linux/stringify.h>
+ #include <linux/objtool.h>
++#include <linux/compiler.h>
+ #include <asm/asm.h>
+ #include <asm/bug.h>
+ 
+@@ -184,38 +185,41 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 
+ #define ALT_CALL_INSTR		"call BUG_func"
+ 
+-#define alt_slen		"772b-771b"
+-#define alt_total_slen		"773b-771b"
+-#define alt_rlen		"775f-774f"
++#define alt_slen(pfx)		#pfx "_pad - " #pfx "_begin"
++#define alt_total_slen(pfx)	#pfx "_end - " #pfx "_begin"
++#define alt_rlen(pfx)		#pfx "_alt_end - " #pfx "_alt_begin"
+ 
+-#define OLDINSTR(oldinstr)						\
++#define OLDINSTR(oldinstr, pfx)						\
+ 	"# ALT: oldinstr\n"						\
+-	"771:\n\t" oldinstr "\n772:\n"					\
++	#pfx "_begin:\n\t" oldinstr "\n" #pfx "_pad:\n"			\
+ 	"# ALT: padding\n"						\
+-	".skip -(((" alt_rlen ")-(" alt_slen ")) > 0) * "		\
+-		"((" alt_rlen ")-(" alt_slen ")),0x90\n"		\
+-	"773:\n"
++	".skip -(((" alt_rlen(pfx) ")-(" alt_slen(pfx) ")) > 0) * "	\
++		"((" alt_rlen(pfx) ")-(" alt_slen(pfx) ")),0x90\n"	\
++	#pfx "_end:\n"
+ 
+-#define ALTINSTR_ENTRY(ft_flags)					      \
++#define ALTINSTR_ENTRY(ft_flags, pfx)					      \
+ 	".pushsection .altinstructions,\"a\"\n"				      \
+-	" .long 771b - .\n"				/* label           */ \
+-	" .long 774f - .\n"				/* new instruction */ \
++	" .long " #pfx "_begin - .\n"			/* label           */ \
++	" .long " #pfx "_alt_begin - .\n"			/* new instruction */ \
+ 	" .4byte " __stringify(ft_flags) "\n"		/* feature + flags */ \
+-	" .byte " alt_total_slen "\n"			/* source len      */ \
+-	" .byte " alt_rlen "\n"				/* replacement len */ \
++	" .byte " alt_total_slen(pfx) "\n"		/* source len      */ \
++	" .byte " alt_rlen(pfx) "\n"			/* replacement len */ \
+ 	".popsection\n"
+ 
+-#define ALTINSTR_REPLACEMENT(newinstr)		/* replacement */	\
++#define ALTINSTR_REPLACEMENT(newinstr, pfx)	/* replacement */	\
+ 	".pushsection .altinstr_replacement, \"ax\"\n"			\
+ 	"# ALT: replacement\n"						\
+-	"774:\n\t" newinstr "\n775:\n"					\
++	#pfx "_alt_begin:\n\t" newinstr "\n" #pfx "_alt_end:\n"			\
+ 	".popsection\n"
+ 
+ /* alternative assembly primitive: */
+-#define ALTERNATIVE(oldinstr, newinstr, ft_flags)			\
+-	OLDINSTR(oldinstr)						\
+-	ALTINSTR_ENTRY(ft_flags)					\
+-	ALTINSTR_REPLACEMENT(newinstr)
++#define __ALTERNATIVE(oldinstr, newinstr, ft_flags, pfx)		\
++	OLDINSTR(oldinstr, pfx)						\
++	ALTINSTR_ENTRY(ft_flags, pfx)					\
++	ALTINSTR_REPLACEMENT(newinstr, pfx)
++
++#define ALTERNATIVE(oldinstr, newinstr, feat)				\
++	__ALTERNATIVE(oldinstr, newinstr, feat, __UNIQUE_ID(altinstr))
+ 
+ #define ALTERNATIVE_2(oldinstr, newinstr1, ft_flags1, newinstr2, ft_flags2) \
+ 	ALTERNATIVE(ALTERNATIVE(oldinstr, newinstr1, ft_flags1), newinstr2, ft_flags2)
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 64ff73c533e5..d79552a61fda 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -163,7 +163,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 	__asm__ ("" : "=r" (var) : "0" (var))
+ #endif
+ 
+-#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
++#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__PASTE(__UNIQUE_ID_, prefix), _), __COUNTER__)
+ 
+ /**
+  * data_race - mark an expression as containing intentional data races
