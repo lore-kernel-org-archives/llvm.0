@@ -1,64 +1,64 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C01255F22
-	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 02:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC0D238C3B
+	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 02:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759200318; cv=none; b=A4/tmZEdOWZRl71AkQwjgfLkuKdVUMEu+qM6OQjAs7KyLBAg1IPrUkvxIjImoS87UbCpIZiGzFq9gj6nEqd9kpQB4nmwBw4o0grSr/fRRWAVUHd+tiREPqO77c8LIMv7JZscwQZKv6PhzF1xj8rl+ABvVNvllWe0ToljNZoUg5M=
+	t=1759200326; cv=none; b=WiHoTmXihTkpzgx66xUEvowtwTxCz6JabQN7fJtY/eQrPVh8ZR5O6y29ErXFEyZGHQcyaUXujIbdIWmhRRYJeEqIoSA6dUWboFJTkrq45VLIhBN90FSElwqaxRqvfqwFo9b1xceWQcKSlWJOKPDwIHu1ZiTKSk5jnI7Oyac/jM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759200318; c=relaxed/simple;
-	bh=wmwmRtcPH4ST6Dm0G2/AFHsMnlz3q9k9yRWhyo1wI/Y=;
+	s=arc-20240116; t=1759200326; c=relaxed/simple;
+	bh=fgMlahiCQseGsOMwUDeQip37398eJhQex5YpJdEa4RY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wz4SbHKJn1xyDDVHhZbXYSW0z/RmMvG0KAp1mdMlmV/05W4NAxvKwLM7Jym42c2zkfn/CzdtUUHfZbJ+T1g7hKi+WIV4IeSoBPIuvSRQcN6TNNphk5rOHTf0PoV3GDThQ8btri8Q0TxSQwThXyMYPZDk+k2vi//NtjFiFGlfhqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gJenogr4; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=F5j+hcNDirHvJVmjgdV/ujqWFTssuGfO7iJDWaPk4OvQk9IWVSSnbvtqkuJBEGVj30Vx/JO+FKCvevuO8O8GbtsCiLRBVO+V6taSaCWL/WSQqu7vrYSy+rTtKbiDets1V06RjUH6uEl4EI50VTSU4YBLqRfMQzZevl7PCjMtoGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UMJE06sR; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gJenogr4"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so4737532b3a.1
-        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 19:45:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UMJE06sR"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b5565f0488bso3690023a12.2
+        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 19:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759200316; x=1759805116; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1759200324; x=1759805124; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E4BKEfc9ax2ksTKKBAwbjubQHvBiDjA54WMJGQTptLg=;
-        b=gJenogr4ylu8daZT4KeN8y/mAeE6qnXoUWaWfuxFARWahwinw+Wvp6ikhm3suUVPiM
-         Rh8LgZlfsDoivnR+HVX+0Kn8dE52FqpurriChj0Q8DJ08ABxQ4LGZAQ7u+8XkCgWekVA
-         g0m9wHt/iDLwfc3Vf5x2dRjSA/KUL65zvBZpg1jo1g7QDb5k/vRV6FHo/5xQ4nz5qR0e
-         weeBsZLxJFM35EJzOme04Xm2atH1dPge7RCggOg3D9uDa2I/OjhHo+nxlfOo0dVTp305
-         DFuPwjhE0Prpse21YJLZjqzJV3cs8G/aYkOly+uoDOXYHlWHs5Gfm1Xytn7u1NZEOY2W
-         yxZw==
+        bh=Zjvk/jwcgtCF9TRiT6Fv94jzQiYOsdOhmjAblUevyNs=;
+        b=UMJE06sRwP+s3c07oJ//HVcOD2kvccN7PS5aSLfaEi5sGmVntDFZgiam9bqyH6sLX1
+         UPPmnCXLeAI+PcNpVHTHfP47ern/ogsQYkpM3dNt4t8dIEGF3B/0i8Ugetjqiy7VZ294
+         3znIcAlA4EX9vggVHtGOFSO5x/zAFQhK7CsrkyhcPvmmgsE++uxG3IHUL8A3WpdfBD/a
+         LjPLIxrymsuKO5ABoNLBP8QCAffBnaCM9RUy/pjS0Szu/eQ0h2FjWyw2KUuNPgD5pYYo
+         OYq9PKRJkxytBOJ08qJRWP/rjDC1g132n8c1bvytvfJkartXcG4MWAaGjwURK1cjcru3
+         jDPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759200316; x=1759805116;
+        d=1e100.net; s=20230601; t=1759200324; x=1759805124;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E4BKEfc9ax2ksTKKBAwbjubQHvBiDjA54WMJGQTptLg=;
-        b=UjggENG11nj6m1cT9F5IkVO4c6EoNkYaqwteuytNSsVNc3QgXiHT8xfblnxncyMqKY
-         dcAG7fxYkwSiTiFBApo4EKMOfwY/dtRb0/HJk13TQ/W38IRHFMRGuaJRRC2cJTHDOnMv
-         JXOSv/ltbjxX7iVra/fc3V7NMzDlwKjaagI9wCYYcN3lcBP/D2Co30ELrB5Dbea+s9h3
-         GVN/TJD1dvh4RwD+etB2eL9W4c4BqULLLEe+3G7G/oX95V4xSsLBeXkEKz58d9XQEoP1
-         gNCsO4fbK1PUs9ixpxNf737LE/AX3o0Dj17eM5OAqA93P+PAWmsFtJaAcVcK1E4IFpI4
-         W2ug==
-X-Forwarded-Encrypted: i=1; AJvYcCVDF7b4Cg2RifWFBsBQKAYZWbg0+pi5cyPL5QvFD9dRV5x1GmDRMPMguNXIZcllqkfL7OS+@lists.linux.dev
-X-Gm-Message-State: AOJu0YzBr9cF6EkiyKFQGkfjznW8H+28wWX9cHco3imW+0kzbqlWUnqn
-	KJ6ai72nETNBAsPYqjeeA9k8UeeTvyivv+aWPKXAEOJBk9BkCkfQD9Z+
-X-Gm-Gg: ASbGncv8Q+G3VetQ7kw+9SPspQCqD4YQjat5lq4YNWIgMzg4jj26wQ+In2kxAhY+AP+
-	dHj+xNMEVHmscwp3gbyXQ9mUL9UxsoqlhTpsCpViBc7MhWu8mPgenujMytRBDINX/Ma1fucPyyx
-	EH5xoVxgBQbGlhOD3iksTWV4dVuxmlr4mKEhGkgP1tkj3wrgF5OzL8GCOrShHmg28tDJ+ItOHcz
-	2p8NmtfePxwYTJ7wvnNj4Nbqzxc1f46uQVPRNAklsAdP9ksF87hfOrSUADdVzV3hBJbsLvBxIS2
-	9GD7zFIMVfTIiGfO9IppraOmlSVMjn+q/LvcgWhkCUAcTT2FwgHodDIjwjU6PbBV6zc6pypy+Px
-	lGp0oIKWwhg0UnowRzenddileQxdfD01gRtpNmGnN+BLsSMNsqO655Lln6BLtIwTl5t059wy+0K
-	jifGNjAUbfNdk=
-X-Google-Smtp-Source: AGHT+IEQuyQ0WfSSzPcc+c258KMZgmg4lZ9MhFnyLGeSTv6phqmEXsURuXiHXbyU/qbGHk1KY6eV1g==
-X-Received: by 2002:a05:6a21:3296:b0:2b5:9c2:c584 with SMTP id adf61e73a8af0-31772a179dcmr3208370637.26.1759200315810;
-        Mon, 29 Sep 2025 19:45:15 -0700 (PDT)
+        bh=Zjvk/jwcgtCF9TRiT6Fv94jzQiYOsdOhmjAblUevyNs=;
+        b=lHTpaVd0Te5S9z2sPeGrxzlmvMZJTWbOLdTJYr5EoNTu3uPWOYAi/myv5eXbxfABkt
+         qGwwqERPu8esT62pqPiQwwFNRvvndRqyrEareH8p4v6rHh57Oo32QmhI0h8iLsu2yKXl
+         bMQu9YKoSwVkYajPHnVe/gU8iBDehTP2ZGX13AUYfEu7B3K5gh0GRTx++rxBM4htXmxT
+         4g7ZyBWgGgm0BHCUEapVCtUzKzKm/Qz4dYIIZbSof7J6Lgxu4oVz0lQCfGY9jyMcqe3u
+         VrVYTdbasAkqp2XDYUMZdp5fk5xekOE8gpW+rLTTS8J89qTQB5hqtngIEhDyDMtER0gO
+         zUkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrq5lOke7Yv547cCvesA0PE1Ydf5A3rjinzza9kmxaT7IenaZZjiycqyLMkrHSlIsRndcP@lists.linux.dev
+X-Gm-Message-State: AOJu0YyeEuXPo/rPO0ZAM/kMH/no/qA+3IUohOko1d9UAPFPolsuyWA/
+	bJfsiOnD/D1jw6OkwJ6ewpOIuqS/S+7DwSkWVdKS7U8zcuWFl9pUX5bZ
+X-Gm-Gg: ASbGncs+Hc9H+XpqNTt8MPwhhmW4fZQtjKfHRkj8vYAPvYZkeBPSYeczaiDdcOme/Es
+	JFKXqFForfQdzgwZrSwuf3gWNfrX28u8DzMC8PYNUJz2O9zhqBcpjljC6zuxl6XJL8MAChMtZT/
+	tsjhrAsK8Qs3XD7/EhfVWAQjWLilol0fD2HZoLB4e27mBTm3wgMPpdlzpTkGmcRBuFkKy27MAmG
+	2cuO8MJr4Yhi4iE5eukGL8H98OTJmZmHfEWY7+mWf/hHZVKyzx8wvaozkx81tY1tk9J9hJ8MtYq
+	K+NZ1JmFMpfBDpVgI5Gg889pjLIK14/iljXV/3uikTpjVycM0oziY2vQ65RTL3/5M4RcU8ne9bm
+	hAl80Qm0AAesIY/I28vw9tEy7NLLCV+LkpaFkZ62MsKtHUryDrRSoDQ3uT2iWdHyPO0vu755sJI
+	Qe
+X-Google-Smtp-Source: AGHT+IFfp8YXgNuQukwwqsnxDRX708PqLBqQKd9UC8iSffGPe0+X00XIAI7NxbzgZKbYcTueKMe0YQ==
+X-Received: by 2002:a17:903:3bc5:b0:27d:6777:2833 with SMTP id d9443c01a7336-27ed4a986c5mr179688865ad.47.1759200323854;
+        Mon, 29 Sep 2025 19:45:23 -0700 (PDT)
 Received: from localhost ([45.142.167.196])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c557418csm12399859a12.30.2025.09.29.19.45.14
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed68821d3sm145446045ad.83.2025.09.29.19.45.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 19:45:15 -0700 (PDT)
+        Mon, 29 Sep 2025 19:45:23 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -125,9 +125,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-trace-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v6 11/23] sched: add per-task context
-Date: Tue, 30 Sep 2025 10:43:32 +0800
-Message-ID: <20250930024402.1043776-12-wangjinchao600@gmail.com>
+Subject: [PATCH v6 12/23] mm/ksw: add entry kprobe and exit fprobe management
+Date: Tue, 30 Sep 2025 10:43:33 +0800
+Message-ID: <20250930024402.1043776-13-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250930024402.1043776-1-wangjinchao600@gmail.com>
 References: <20250930024402.1043776-1-wangjinchao600@gmail.com>
@@ -139,60 +139,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce struct ksw_ctx to enable lockless per-task state
-tracking. This is required because KStackWatch operates in NMI context
-(via kprobe handler) where traditional locking is unsafe.
+Provide ksw_stack_init() and ksw_stack_exit() to manage entry and exit
+probes for the target function from ksw_get_config().
 
 Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 ---
- include/linux/kstackwatch_types.h | 14 ++++++++++++++
- include/linux/sched.h             |  5 +++++
- 2 files changed, 19 insertions(+)
- create mode 100644 include/linux/kstackwatch_types.h
+ mm/kstackwatch/kstackwatch.h |   4 ++
+ mm/kstackwatch/stack.c       | 101 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 105 insertions(+)
 
-diff --git a/include/linux/kstackwatch_types.h b/include/linux/kstackwatch_types.h
-new file mode 100644
-index 000000000000..2b515c06a918
---- /dev/null
-+++ b/include/linux/kstackwatch_types.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_KSTACK_WATCH_TYPES_H
-+#define _LINUX_KSTACK_WATCH_TYPES_H
-+#include <linux/types.h>
-+
-+struct ksw_watchpoint;
-+struct ksw_ctx {
-+	struct ksw_watchpoint *wp;
-+	ulong sp;
-+	u16 depth;
-+	u16 generation;
-+};
-+
-+#endif /* _LINUX_KSTACK_WATCH_TYPES_H */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index f8188b833350..6935ee51f855 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -22,6 +22,7 @@
- #include <linux/sem_types.h>
- #include <linux/shm.h>
- #include <linux/kmsan_types.h>
-+#include <linux/kstackwatch_types.h>
- #include <linux/mutex_types.h>
- #include <linux/plist_types.h>
- #include <linux/hrtimer_types.h>
-@@ -1481,6 +1482,10 @@ struct task_struct {
- 	struct kmsan_ctx		kmsan_ctx;
- #endif
+diff --git a/mm/kstackwatch/kstackwatch.h b/mm/kstackwatch/kstackwatch.h
+index 850fc2b18a9c..4045890e5652 100644
+--- a/mm/kstackwatch/kstackwatch.h
++++ b/mm/kstackwatch/kstackwatch.h
+@@ -35,6 +35,10 @@ struct ksw_config {
+ // singleton, only modified in kernel.c
+ const struct ksw_config *ksw_get_config(void);
  
-+#if IS_ENABLED(CONFIG_KSTACK_WATCH)
-+	struct ksw_ctx		ksw_ctx;
-+#endif
++/* stack management */
++int ksw_stack_init(void);
++void ksw_stack_exit(void);
 +
- #if IS_ENABLED(CONFIG_KUNIT)
- 	struct kunit			*kunit_test;
- #endif
+ /* watch management */
+ struct ksw_watchpoint {
+ 	struct perf_event *__percpu *event;
+diff --git a/mm/kstackwatch/stack.c b/mm/kstackwatch/stack.c
+index cec594032515..9f59f41d954c 100644
+--- a/mm/kstackwatch/stack.c
++++ b/mm/kstackwatch/stack.c
+@@ -1 +1,102 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/atomic.h>
++#include <linux/fprobe.h>
++#include <linux/kprobes.h>
++#include <linux/kstackwatch_types.h>
++#include <linux/printk.h>
++
++#include "kstackwatch.h"
++
++static struct kprobe entry_probe;
++static struct fprobe exit_probe;
++
++static int ksw_stack_prepare_watch(struct pt_regs *regs,
++				   const struct ksw_config *config,
++				   ulong *watch_addr, u16 *watch_len)
++{
++	/* implement logic will be added in following patches */
++	*watch_addr = 0;
++	*watch_len = 0;
++	return 0;
++}
++
++static void ksw_stack_entry_handler(struct kprobe *p, struct pt_regs *regs,
++				    unsigned long flags)
++{
++	struct ksw_ctx *ctx = &current->ksw_ctx;
++	ulong watch_addr;
++	u16 watch_len;
++	int ret;
++
++	ret = ksw_watch_get(&ctx->wp);
++	if (ret)
++		return;
++
++	ret = ksw_stack_prepare_watch(regs, ksw_get_config(), &watch_addr,
++				      &watch_len);
++	if (ret) {
++		ksw_watch_off(ctx->wp);
++		ctx->wp = NULL;
++		pr_err("failed to prepare watch target: %d\n", ret);
++		return;
++	}
++
++	ret = ksw_watch_on(ctx->wp, watch_addr, watch_len);
++	if (ret) {
++		pr_err("failed to watch on depth:%d addr:0x%lx len:%u %d\n",
++		       ksw_get_config()->depth, watch_addr, watch_len, ret);
++		return;
++	}
++
++}
++
++static void ksw_stack_exit_handler(struct fprobe *fp, unsigned long ip,
++				   unsigned long ret_ip,
++				   struct ftrace_regs *regs, void *data)
++{
++	struct ksw_ctx *ctx = &current->ksw_ctx;
++
++
++	if (ctx->wp) {
++		ksw_watch_off(ctx->wp);
++		ctx->wp = NULL;
++		ctx->sp = 0;
++	}
++}
++
++int ksw_stack_init(void)
++{
++	int ret;
++	char *symbuf = NULL;
++
++	memset(&entry_probe, 0, sizeof(entry_probe));
++	entry_probe.symbol_name = ksw_get_config()->func_name;
++	entry_probe.offset = ksw_get_config()->func_offset;
++	entry_probe.post_handler = ksw_stack_entry_handler;
++	ret = register_kprobe(&entry_probe);
++	if (ret) {
++		pr_err("failed to register kprobe ret %d\n", ret);
++		return ret;
++	}
++
++	memset(&exit_probe, 0, sizeof(exit_probe));
++	exit_probe.exit_handler = ksw_stack_exit_handler;
++	symbuf = (char *)ksw_get_config()->func_name;
++
++	ret = register_fprobe_syms(&exit_probe, (const char **)&symbuf, 1);
++	if (ret < 0) {
++		pr_err("failed to register fprobe ret %d\n", ret);
++		unregister_kprobe(&entry_probe);
++		return ret;
++	}
++
++	return 0;
++}
++
++void ksw_stack_exit(void)
++{
++	unregister_fprobe(&exit_probe);
++	unregister_kprobe(&entry_probe);
++}
 -- 
 2.43.0
 
