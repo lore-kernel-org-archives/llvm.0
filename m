@@ -1,63 +1,64 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA4D24BD04
-	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 02:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C210724E4BD
+	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 02:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759200309; cv=none; b=FSISKFCEeG5Ptjlw97l0L+JIDWXu4x0WGiKw06g2iM6yiUr+EH0y+/q6p7VhjVEX/Vvl+S97Qxyd1+MVP5KaDMV7PGWZfZ9bbLprtCdplaesd8xwDQJfK/m6l56wERjiId/5dhqJ7VtIHFFisV/V20NcG6zXmNte7MEZluMRny8=
+	t=1759200312; cv=none; b=rTK9rvailuDjoOLzkS9rEnWuXuAsKpDnEr/jW2IzgSJ87bqT/2Ug56qVtLcUgdUokoij+lZ9z0dj8UUz90pbqaGUai6XISJ39LdoNI0aP0zqd26BYtYxb83rp57aUWZwk02bgRWc/Uh0VOwaBbTRMjTC1ltuxi3TduumpJA7Kls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759200309; c=relaxed/simple;
-	bh=0RaB9b3mDxARpzNAU+b9+OM/53UguV9OX02ut00avNs=;
+	s=arc-20240116; t=1759200312; c=relaxed/simple;
+	bh=EtuMaKP8CWfi9pjY9FcQGV9HEHi4WtiOKMPT566R1T4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VZmOU8aBDmOTxFfl8FV89I2rCtNvxvtIbhRI6GPieW9NVDg8ZOaDe5Fv50C++zynNsCFN+yCUHaDUJIQJYueW6lRwxHLPEGgKNtq706wwH5qMghHPQrhPF3xfZ7DI38YCw7c53h3wpt8R/Cwu0JUtfzZcvkDe00eYn+xCLIAidk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DO2s0BDN; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=pIKaTveVQHZhkhuGubzphPF3178kqrvrwBYNnXrTnApUVO+/jFoNCHgqqrBxL62whyu3FAX4Zc6x/mdmqsnh8Kv7dMt8p/AD6VQPJVOqVDQhG4DatxarxWF07QLQLz5sRghHpzEotcb9bf+Tes4suE0HmIodGR5vp+rcs0W9qFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y9IZARYG; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DO2s0BDN"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7841da939deso1841377b3a.2
-        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 19:45:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9IZARYG"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-78100be28easo3958637b3a.1
+        for <llvm@lists.linux.dev>; Mon, 29 Sep 2025 19:45:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759200305; x=1759805105; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1759200310; x=1759805110; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8p2Xfne7CGpLjN/MkaU3Ee28S3aCNgQ2oxnJpFebIbs=;
-        b=DO2s0BDNaOKfE/EywzU/eqfcUL5yJ8MIIjtuAO7XqtpanRkw7g6b3dtL0IIGqwAfm8
-         oXRidKPXaXH5W1lxvOL3YN3w6WLmrB2lnOmJBDrXt0pCTgjLtn4h74xU8DuKsfo9iaS+
-         Rnm+UKelvP2qM/2ntzgclgf39YKzrqAfbheBJ56UZkqRAdAHJA2CcueeIg1FRRm1Fmsd
-         Q6iEyADBjWBokBzHpuNLGfHF/Oc3wyaouhd51z5kxhaVsH/MX+QVni/FK1lUmnTPjFVn
-         bglnCavaAFAPtUOXFvWZ2KdzYb5LAuHPLpmS0FtfLPXi3I0H/KnQ5V6eEEnPejOVc2Ua
-         x0ag==
+        bh=VplC5p74+BCL3Xjzqw2UL/AL1hevTQUKrGPaYOT40mY=;
+        b=Y9IZARYGtGwcjkF7JiRh6HgkLvuo4aPJUlMmb2OTfB2RxvJgkduf/7Q/Za6lc9D5se
+         4MuHVfREuG6yyaDMXoRIHvyPvA4avWkJmntTcn7uDlOulkzl/yCg0vfcqePv1pWCYNqR
+         4dQwpRVJFAD6cgJdeLz0Iels/FdybesXCV4jemyGy2ru8rL5G4AZaSe64CmevId5t2SH
+         KpAvyOONJ/yzDEbo7MGCqeDKHOWJFaLJy30YlyIN21lR69unO3lzWb0g++Pp7G21/p4H
+         IC/uv+/AGe1qpFLEg2C3WL3i1n/q/5ZmtcajfvJwdjccLGJUM34IWSyaNsSg+NkpTDjE
+         TyLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759200305; x=1759805105;
+        d=1e100.net; s=20230601; t=1759200310; x=1759805110;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8p2Xfne7CGpLjN/MkaU3Ee28S3aCNgQ2oxnJpFebIbs=;
-        b=mQtU4/APUhn/2ZMmZ2FI8JS04QQ7JQPCbLNumioiRkT3Kjr91ZF1wevRFLH3dAsPsU
-         BMBB2cv9ZZ9F0AMekBEyRGq2aPdKUJYrk5hkM2l9ukSaWUBCLHLCsiNHG86TK0n+SJuM
-         v0G58HZbnT+oin+hBFLlWes2T3eKjc/0u6zmUXkDWeYuVuPXTixeSw9yqLMI91wrSf+S
-         eMji4L7yDdjjulMLL2NOc/ffXDY3FnUjqit+v6HTEatkLKTDptc+xgauhiOZD09xH8NP
-         DkuzGEBsVynuIAKMxGMpVP9kjuA/c2qw/0fMtgVX8nJ0Ss5hvxD1unLucLt7icvEQ29f
-         Rcug==
-X-Forwarded-Encrypted: i=1; AJvYcCWcPxKFRu9g2Fo72mNaHFBJtcUDuNIIeuZJWiWdXX4pTaecDT1TCeoR+8oXJRYqJptt8dbW@lists.linux.dev
-X-Gm-Message-State: AOJu0YzsRBtQOlUsuXeCo/ppnkqYAQivm+bpu+MB9BLFhrSdkrj3k/u5
-	aYQXPs0fh++txi8f5Ye78TFSTc0xfB9VgOoWgaY55Uf+xvafxrNjdGYn
-X-Gm-Gg: ASbGncufq0tDWfiyV2OfQaFix1P5K03rn3deVT1UUNhujyU10Dt+wVMVej53gChCHwk
-	Rv5nCAiE2SLQwTnrhgSnydW+FzyeA48rmyVLKnfz+HY0NDApNyhNrwnNW2WKm2E4wnAI9PxyJdw
-	+7TNnkZ++yXCcmJ4pnDfcONFXbGF+j40PtP+y58qL3V8CKNTqdQcHA7aYAua5OiHwxliCHmnpXS
-	DAaiYbzYDvFemamr1BRggV3uIy2bZjUfs+KpyX99QJIMc9705UiGhv2mZWK+zI9OxqoiYxPOPPl
-	ht7jAtnNBylASkQvx8ysFXibpWWAn87TlZ+6lCpz+nq0ubPJFsbJvwRgafZn43t/7dzemdyDBdR
-	t63pQrmRLb3qN2jDI+YGrzaaXdcoqNrRMOnwW/9Us8yZHlXPddHvmq/IKUpiCqSTjoA==
-X-Google-Smtp-Source: AGHT+IGPdLJDAcFgGXBMapnRTLkbwOuAH98GZaW3SdGH9OxArUIFVK7BxMIb+p319lKI1/5kl2O6lQ==
-X-Received: by 2002:a05:6a00:1404:b0:782:d4b6:f5e5 with SMTP id d2e1a72fcca58-782d4b6f88amr8934209b3a.13.1759200305238;
-        Mon, 29 Sep 2025 19:45:05 -0700 (PDT)
+        bh=VplC5p74+BCL3Xjzqw2UL/AL1hevTQUKrGPaYOT40mY=;
+        b=B4OyKartlXrKL0apFDgVzYIJSv5ALFvoU6KRvXHYyCJk+Lcr/Yk1gqotzPsh27VQMN
+         ldYnXNtLwEI6xdrNJewoeXIsYmlZyK9vtT+8plLaAD6a08A8WYl59BUW0VR+G1DvQy/Q
+         HRlkCTT3KMDc9aCxDNsMA8HFmzUoSd0QeibJa36s6wCaxxAxeTJsIhtib5UIDKRHWs/1
+         KR9EPTxn0DzmJlSIhxUYDGbilrWGBf6tqXnCJpj0Ww28mdZ3cRGi4J6uUGLIuR4EFpTy
+         j5Ih4KYasoU39CH09Lr4xUbN7YaE7j1LXVwFpvsM60C523D1z02FSbSmv3Dyyfi+p6Iy
+         HcIA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7bLMe2EGeQQhMa97houk/fmwdgDNlo3grEVSeW7VA2wUx/jnyoFI43MUSag2N8yrLKj0k@lists.linux.dev
+X-Gm-Message-State: AOJu0YyLKLKWuSxckzQzfs1IiqMackRMa3zqgnBTT7AcTRovReJ2hAv/
+	DNcP8aUcFWKG2LpqZ9OE6W0VBrq15++BjAo+J4vPhqfRLmyWg7YJc3Cu
+X-Gm-Gg: ASbGncvZ4amTh4mnc7nI9js0y3Sd4qqUfgNL47UciG6q8DQ2/BrDWk4kIdgFAu2n1QC
+	CvlCnuUpy3lXZF8u6F9Dja+NMFeNLurbh4jURa4xtwGqQwbkK3E/b8/h7iDEMuppiWbndhdW3sK
+	KFX8IF0yoU8AlWNqM9+gYWz0wB8KzueVNgygkUOUUBa3t5yrfsiNHoG4f3sgLyk/R10efOy53Ar
+	sd24j6JdvwaSwwp5xTopZms7UQtg0wVeNxv5+Ea2xSuGjuWnrVff3MiB8aXqr/jZjvyo7/pC5e1
+	DNV1d6nZWfj/lhSTptZbCyg3IllxdEfmG99axr7W/88Msoy0ejV7saIyrkyk+UYFhKLwynVXDOi
+	aSBhQOCCTH5UwmGlF8JC3apiAb5aNnuYiwhmsmJcG7xCrLhm8Ec8cUqJjlTA0RiWkkk2SNvReI6
+	9Q
+X-Google-Smtp-Source: AGHT+IFzdUzonqFGpCtXDfhyMuXTs8sxTYcPas1DIEDImQCxbrq0zIYK9+c7MQCk4izaUyzaG6ziGA==
+X-Received: by 2002:a05:6a21:e098:b0:250:f80d:b355 with SMTP id adf61e73a8af0-2e7cdd9ffe2mr5395317637.33.1759200309894;
+        Mon, 29 Sep 2025 19:45:09 -0700 (PDT)
 Received: from localhost ([45.142.167.196])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7822f628080sm6431314b3a.89.2025.09.29.19.45.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78102b23206sm12485889b3a.58.2025.09.29.19.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 19:45:04 -0700 (PDT)
+        Mon, 29 Sep 2025 19:45:09 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -124,9 +125,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-trace-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v6 09/23] mm/ksw: ignore false positives from exit trampolines
-Date: Tue, 30 Sep 2025 10:43:30 +0800
-Message-ID: <20250930024402.1043776-10-wangjinchao600@gmail.com>
+Subject: [PATCH v6 10/23] mm/ksw: support CPU hotplug
+Date: Tue, 30 Sep 2025 10:43:31 +0800
+Message-ID: <20250930024402.1043776-11-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250930024402.1043776-1-wangjinchao600@gmail.com>
 References: <20250930024402.1043776-1-wangjinchao600@gmail.com>
@@ -138,86 +139,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Because trampolines run after the watched function returns but before the
-exit_handler is called, and in the original stack frame, so the trampoline
-code may overwrite the watched stack address.
+Register CPU online/offline callbacks via cpuhp_setup_state_nocalls()
+so stack watches are installed/removed dynamically as CPUs come online
+or go offline.
 
-These false positives should be ignored. is_ftrace_trampoline() does
-not cover all trampolines, so add a local check to handle the remaining
-cases.
+When a new CPU comes online, register a hardware breakpoint for the holder,
+avoiding races with watch_on()/watch_off() that may run on another CPU. The
+watch address will be updated the next time watch_on() is called.
 
 Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 ---
- mm/kstackwatch/watch.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ mm/kstackwatch/watch.c | 52 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/mm/kstackwatch/watch.c b/mm/kstackwatch/watch.c
-index 887cc13292dc..722ffd9fda7c 100644
+index 722ffd9fda7c..f32b1e46168c 100644
 --- a/mm/kstackwatch/watch.c
 +++ b/mm/kstackwatch/watch.c
-@@ -2,6 +2,7 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+@@ -89,6 +89,48 @@ static void ksw_watch_on_local_cpu(void *info)
+ 	WARN(ret, "fail to reinstall HWBP on CPU%d ret %d", cpu, ret);
+ }
  
- #include <linux/cpuhotplug.h>
-+#include <linux/ftrace.h>
- #include <linux/hw_breakpoint.h>
- #include <linux/irqflags.h>
- #include <linux/mutex.h>
-@@ -18,10 +19,46 @@ bool panic_on_catch;
- module_param(panic_on_catch, bool, 0644);
- MODULE_PARM_DESC(panic_on_catch, "panic immediately on corruption catch");
- 
-+#define TRAMPOLINE_NAME "return_to_handler"
-+#define TRAMPOLINE_DEPTH 16
-+
-+/* Resolved once, then reused */
-+static unsigned long tramp_start, tramp_end;
-+
-+static void ksw_watch_resolve_trampoline(void)
++static int ksw_watch_cpu_online(unsigned int cpu)
 +{
-+	unsigned long sz, off;
++	struct perf_event_attr attr;
++	struct ksw_watchpoint *wp;
++	call_single_data_t *csd;
++	struct perf_event *bp;
 +
-+	if (likely(tramp_start && tramp_end))
-+		return;
++	mutex_lock(&all_wp_mutex);
++	list_for_each_entry(wp, &all_wp_list, list) {
++		attr = wp->attr;
++		attr.bp_addr = (u64)&holder;
++		bp = perf_event_create_kernel_counter(&attr, cpu, NULL,
++						      ksw_watch_handler, wp);
++		if (IS_ERR(bp)) {
++			pr_warn("%s failed to create watch on CPU %d: %ld\n",
++				__func__, cpu, PTR_ERR(bp));
++			continue;
++		}
 +
-+	tramp_start = kallsyms_lookup_name(TRAMPOLINE_NAME);
-+	if (tramp_start && kallsyms_lookup_size_offset(tramp_start, &sz, &off))
-+		tramp_end = tramp_start + sz;
-+}
-+
-+static bool ksw_watch_in_trampoline(unsigned long ip)
-+{
-+	if (tramp_start && tramp_end && ip >= tramp_start && ip < tramp_end)
-+		return true;
-+	return false;
-+}
- static void ksw_watch_handler(struct perf_event *bp,
- 			      struct perf_sample_data *data,
- 			      struct pt_regs *regs)
- {
-+	unsigned long entries[TRAMPOLINE_DEPTH];
-+	int i, nr = 0;
-+
-+	nr = stack_trace_save_regs(regs, entries, TRAMPOLINE_DEPTH, 0);
-+	for (i = 0; i < nr; i++) {
-+		//ignore trampoline
-+		if (is_ftrace_trampoline(entries[i]))
-+			return;
-+		if (ksw_watch_in_trampoline(entries[i]))
-+			return;
++		per_cpu(*wp->event, cpu) = bp;
++		csd = per_cpu_ptr(wp->csd, cpu);
++		INIT_CSD(csd, ksw_watch_on_local_cpu, wp);
 +	}
++	mutex_unlock(&all_wp_mutex);
++	return 0;
++}
 +
- 	pr_err("========== KStackWatch: Caught stack corruption =======\n");
- 	pr_err("config %s\n", ksw_get_config()->user_input);
- 	dump_stack();
-@@ -168,6 +205,7 @@ int ksw_watch_init(void)
++static int ksw_watch_cpu_offline(unsigned int cpu)
++{
++	struct ksw_watchpoint *wp;
++	struct perf_event *bp;
++
++	mutex_lock(&all_wp_mutex);
++	list_for_each_entry(wp, &all_wp_list, list) {
++		bp = per_cpu(*wp->event, cpu);
++		if (bp)
++			unregister_hw_breakpoint(bp);
++	}
++	mutex_unlock(&all_wp_mutex);
++	return 0;
++}
++
+ static void ksw_watch_update(struct ksw_watchpoint *wp, ulong addr, u16 len)
  {
- 	int ret;
- 
-+	ksw_watch_resolve_trampoline();
- 	ret = ksw_watch_alloc();
+ 	call_single_data_t *csd;
+@@ -210,6 +252,16 @@ int ksw_watch_init(void)
  	if (ret <= 0)
  		return -EBUSY;
+ 
++	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
++					"kstackwatch:online",
++					ksw_watch_cpu_online,
++					ksw_watch_cpu_offline);
++	if (ret < 0) {
++		ksw_watch_free();
++		pr_err("Failed to register CPU hotplug notifier\n");
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
