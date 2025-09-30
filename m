@@ -1,173 +1,170 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC051EDA02;
-	Tue, 30 Sep 2025 09:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8AE261B9E
+	for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 09:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759223744; cv=none; b=i0iaRn2pMEiOBay4oONf2tAvPVHqfjaKaJIq2dtWnof0TJFEckBL1kkhdF1/C40TFLqm600ToSe2Fwj8Q2TrOi2IxvDbQbj+wZuN2wmdz4p7YheJkrp9KOAxOFtk96ktjm2ffJJselGnvX2vAQWKGW225tBXU3BHJy34vBRZDZM=
+	t=1759225640; cv=none; b=MWzvwxSnI+zH9YaPwgeMHDgvGBe2/Z1sRzpTD4n+cCDJoWJtrs472w5DMc86rQMp92kJOs/lL4rpI5spEX41n1+yL/xNECO7OVI7Q3lfu31Tjj2P31Iyt1nUHZ4X8xFTJ7y2/H1/zKZaSf8cXgvCB5GIRN3vq8X5EOAq+GDcP44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759223744; c=relaxed/simple;
-	bh=4u6qPEoom1yzsgPG/RiuqPrapQHxzaEyZJYu/J36gVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mdKd08pzo1mu0bBMA4hHCellDv8LmnX1lQh6pINvKEz4OOZgnIUXg9WUECOUgsi24jJ7wemhuv68qvVNX5vhq0MtdD3zFF2yOecmCcmepRdlEvYgQxa8TXgv9oKweaHi4x8MzMENEGl+BRdxWg/HKFvumIHzPDILazP0GqSNSY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YsWpFlo+; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759225640; c=relaxed/simple;
+	bh=R5eUE/k7fr9cPxgmyCPHZN28u/hmGz9eGDjEvMGrQ/M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cOA4Lrw/GpbzUMVsIS0it/g+nm6t8tjzMieFqP5W28a+Uxv0hUfiwpGqEpRUVB97A8d1zOuG+Gqm08JtSoKciTqS8aJ2kRlR0AOfOEHkuJz5LXj2dPV4pj1wSM8yRrVJELpOBRVInZBL5UrrM7aofQZxKp0d/VMeX9iFw/ft5ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D72PFj8j; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YsWpFlo+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759223739; x=1790759739;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4u6qPEoom1yzsgPG/RiuqPrapQHxzaEyZJYu/J36gVs=;
-  b=YsWpFlo+QmtmwfZKjNOwE+zdT5KiIIkifAtwf5TB0VpQp8+4JaCYGkJZ
-   7o1t+th/7IfLCET2v1x9NR7cU7EfQ5HwfNZzSG6BZB/wGvyVwrazmYvs2
-   iwwX8tLYTJIDljK5iMow5itmZ51LZ9bdsVCo0iiJSl0cYJIf1ViJYQC6D
-   LgTsUZWECA1swltCwuMT6uEDHWRmteKLu/nyzIehdOeoox91ZdBbLh7as
-   zNAJ6xWNvhJSR5aRoB5cUvKkPHyvzHuiSqvUtXgIQUWyYAVpFOfSCgvnc
-   NYHAD4xccGXkVtTLuBcWXkwoo4je9W4GJaTFOI6NQ3rrgSprWZw725nhS
-   Q==;
-X-CSE-ConnectionGUID: EcNEPp6tRgKd3LzOpJBVeQ==
-X-CSE-MsgGUID: tbmooJHCTZG9c/t/gq2UhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65296923"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="65296923"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2025 02:15:38 -0700
-X-CSE-ConnectionGUID: h3lsygxZT8yC8rzVkS8v2Q==
-X-CSE-MsgGUID: t5LwEXYPSNCNRRntXuKYNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,304,1751266800"; 
-   d="scan'208";a="178880006"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 30 Sep 2025 02:15:34 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v3WSK-00015t-1L;
-	Tue, 30 Sep 2025 09:15:32 +0000
-Date: Tue, 30 Sep 2025 17:15:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Armin Wolf <W_Armin@gmx.de>, ilpo.jarvinen@linux.intel.com,
-	hdegoede@redhat.com, chumuzero@gmail.com, corbet@lwn.net,
-	cs@tuxedo.de, wse@tuxedocomputers.com, ggo@tuxedocomputers.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, rdunlap@infradead.org,
-	alok.a.tiwari@oracle.com, linux-leds@vger.kernel.org,
-	lee@kernel.org, pobrn@protonmail.com
-Subject: Re: [PATCH v4 1/2] platform/x86: Add Uniwill laptop driver
-Message-ID: <202509301709.jGxwZmZX-lkp@intel.com>
-References: <20250928013253.10869-2-W_Armin@gmx.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D72PFj8j"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-62f24b7be4fso10168632a12.0
+        for <llvm@lists.linux.dev>; Tue, 30 Sep 2025 02:47:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759225635; x=1759830435; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PECcxxgPrslWjdZF9hdrPJ/fNitPu9//arKK4RLmCMk=;
+        b=D72PFj8jxcla6ArlQ7gfgCgkJyCdNWCwj0yV+Y73FgIyCOYH5wd7VbZ2bJf/ZPBC/U
+         kZ+1Ew3Ri8KiygdqPxtXbOA9qPLld+VUt+q1tOxJ9vOf3mo4617FDyLb6z7hcScKehZF
+         zffnzJBHncqXUVxxQmd0pviUdM0tZanXS6oIOft6eXdt1vNwDj2yaVXjAMGaIXkN3Oyo
+         47gjs0f/ONqkFHyZQs2caHBm2cYMLAI5XXiP7wgZMwIWPy+LGS2zqn5aoU//bEJCqdAB
+         qc1bni1LBY4p2E6yUckSDU3GzEn65hzNmRXOy/d9nqVVJFqjg/F3B4JnmGk2dA8BeN9Y
+         lL7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759225635; x=1759830435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PECcxxgPrslWjdZF9hdrPJ/fNitPu9//arKK4RLmCMk=;
+        b=LUK+VMqxxASDBRsDqYzISDhlbi6+pyXDTWqHy7qzF76RMhAzFlkGPXfvbLaqeesU78
+         mfrnWlxuMoXbQzZz3oRQO2+v4CDU3JOZBfC6X8XQ6bX7+kr7neBqP/FVPE/+vQ9HtWdC
+         qf5bgeSsf6OcRiW/ts8v98Jd+xjfjCkX7Am4ooh11Js8+QTCKE7YNgjXNEefkUy6tukJ
+         0Jov2ot8WwjmVfsKigq4j4Gh63hLeSg5TyZisYgZlerQY+pIqz0pHKbfQ5ftopBAuBRc
+         T2pSUKGxH4amLOP8/VPhvUCmLj5KdyqSwxbYnlFLhgeWqsCCO1AYHsnWrF26bxg1BOng
+         Zmeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWaxlt8sTKbbUhamUUejMcy8YoHpJcmMZ6uqeXbloglrk26sSmiEmIB9pYjEKu9GH/L32pH@lists.linux.dev
+X-Gm-Message-State: AOJu0YwjztZXVj4OPuKIxHS1Pwm52ppW8lQpTrOshZMsHK46fCd1kOZ0
+	NJ9mLUnM5FbD6QGXMfLRLnDTFzCp5irWQa/pIU2Nvltql5UhwBP/c6wf71o2k5cZ1d6wi1XP5Eh
+	34JD9xccSD6Kh9PGrYeiiYSeuo+lBpZY=
+X-Gm-Gg: ASbGnculHQf4domYuh+XNYPJ5p7Yt7Ls+y5ptnnk0PpT9WmDldvPdq1mXq3kthxsaqz
+	1/qv0cgjkei5HPqDgBVTRcKbaUUSXzkOCfPWQXfo8J6QEAhTl9rorpUsEX/Kbl9J8E/1lEJ1C4r
+	z41OtaQJr0di5cuFag/Hi9sSlad0ZqLSrmHc7FNiOSViVeE4YVXUH/cqZFE0qhnXsw6EgCeNg7L
+	DnhdXJS+MD5x1K+eMSM8U3rQ/YEBxZRCAqHEpEzdvtSbV1q51oeDaILUHnrGPk=
+X-Google-Smtp-Source: AGHT+IHgrTWmNMFFHnfd0lj5oNhgsomsQpL15DJSD0/eU20JCLwROv8mnCSGOX61iu8gWXio0owIt1z4w1bbdeC1XZM=
+X-Received: by 2002:a17:906:730c:b0:b41:27ca:6701 with SMTP id
+ a640c23a62f3a-b4127d9aeccmr487703866b.24.1759225635179; Tue, 30 Sep 2025
+ 02:47:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250928013253.10869-2-W_Armin@gmx.de>
+References: <20250929211241.55701-2-sidharthseela@gmail.com> <aNueLn3Wy-2X_GeE@horms.kernel.org>
+In-Reply-To: <aNueLn3Wy-2X_GeE@horms.kernel.org>
+From: Sidharth Seela <sidharthseela@gmail.com>
+Date: Tue, 30 Sep 2025 15:17:02 +0530
+X-Gm-Features: AS18NWCrQTE6adq-xMOBGkCFzYdqRGqDir_x8mhokUn4KGXncQ46nLQvKyPQ23k
+Message-ID: <CAJE-K+AeEYkAN8wX3FbBCbQMGTDsueA-YiC4w_qi+TZgUzkS-w@mail.gmail.com>
+Subject: Re: [PATCH net v3] selftest:net: Fix uninit return values
+To: Simon Horman <horms@kernel.org>
+Cc: antonio@openvpn.net, sd@queasysnail.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, 
+	willemdebruijn.kernel@gmail.com, kernelxing@tencent.com, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Armin,
+On Tue, Sep 30, 2025 at 2:39=E2=80=AFPM Simon Horman <horms@kernel.org> wro=
+te:
+> Hi,
+>
+> I don't want to block progress.
+> But there are some format problems with the commit message.
+>
+> Locally, git truncates the commit message at the line above ('--').
+> Which, omits a lot of useful information.
+> Most critically your Signed-off-by line.
+>
+> There is also another '--' below. Just above the fixes tag.
+> Which would cause a similar problem.
+>
+> And the v2/v3 information should go below the scissors ('---'),
+> below your signed-off by line.
+>
+> Maybe the maintainers can fix this when applying,
+> given how close we are to the pull for v6.18-rc1.
+> And that I believe there has already been some
+> discussion of this patch with the maintainers.
+>
+> > ovpn-cli.c:1587:6: warning: variable 'ret' is used uninitialized whenev=
+er 'if' condition is true [-Wsometimes-uninitialized]
+> >  1587 |         if (!sock) {
+> >       |             ^~~~~
+> > ovpn-cli.c:1635:9: note: uninitialized use occurs here
+> >  1635 |         return ret;
+> >       |                ^~~
+> > ovpn-cli.c:1587:2: note: remove the 'if' if its condition is always fal=
+se
+> >  1587 |         if (!sock) {
+> >       |         ^~~~~~~~~~~~
+> >  1588 |                 fprintf(stderr, "cannot allocate netlink socket=
+\n");
+> >       |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~
+> >  1589 |                 goto err_free;
+> >       |                 ~~~~~~~~~~~~~~
+> >  1590 |         }
+> >       |         ~
+> > ovpn-cli.c:1584:15: note: initialize the variable 'ret' to silence this=
+ warning
+> >  1584 |         int mcid, ret;
+> >       |                      ^
+> >       |                       =3D 0
+> > ovpn-cli.c:2107:7: warning: variable 'ret' is used uninitialized whenev=
+er switch case is taken [-Wsometimes-uninitialized]
+> >  2107 |         case CMD_INVALID:
+> >       |              ^~~~~~~~~~~
+> > ovpn-cli.c:2111:9: note: uninitialized use occurs here
+> >  2111 |         return ret;
+> >       |                ^~~
+> > ovpn-cli.c:1939:12: note: initialize the variable 'ret' to silence this=
+ warning
+> >  1939 |         int n, ret;
+> >       |                   ^
+> >       |
+> > --
+> > Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for =
+ovpn module")
+> > ovpn module")
+> >
+> > v3:
+> >       - Use prefix net.
+> >       - Remove so_txtime fix as default case calls error().
+> >       - Changelog before sign-off.
+> >       - Three dashes after sign-off
+> >
+> > v2:
+> >       - Use subsystem name "net".
+> >       - Add fixes tags.
+> >       - Remove txtimestamp fix as default case calls error.
+> >       - Assign constant error string instead of NULL.
+> >
+> > Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+> > ---
+> >
+>
+> This is where the v2/v3 information should go.
+>
+> ...
 
-kernel test robot noticed the following build errors:
+Thankyou Simon, I didn't know that double hyphen would cause
+an issue. Although I need a logical separator between commit message
+and warning log, may I ask what could be used instead?
 
-[auto build test ERROR on lwn/docs-next]
-[also build test ERROR on linus/master v6.17 next-20250929]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/platform-x86-Add-Uniwill-laptop-driver/20250928-093543
-base:   git://git.lwn.net/linux.git docs-next
-patch link:    https://lore.kernel.org/r/20250928013253.10869-2-W_Armin%40gmx.de
-patch subject: [PATCH v4 1/2] platform/x86: Add Uniwill laptop driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250930/202509301709.jGxwZmZX-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250930/202509301709.jGxwZmZX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509301709.jGxwZmZX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/platform/x86/uniwill/uniwill-acpi.c:1243:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    1243 |                 guard(mutex)(&data->battery_lock);
-         |                 ^
-   include/linux/cleanup.h:401:2: note: expanded from macro 'guard'
-     401 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:290:2: note: expanded from macro 'CLASS'
-     290 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
-         |         ^
-   <scratch space>:49:1: note: expanded from here
-      49 | class_mutex_t
-         | ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:1250:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    1250 |                 guard(mutex)(&data->input_lock);
-         |                 ^
-   include/linux/cleanup.h:401:2: note: expanded from macro 'guard'
-     401 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:290:2: note: expanded from macro 'CLASS'
-     290 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
-         |         ^
-   <scratch space>:60:1: note: expanded from here
-      60 | class_mutex_t
-         | ^
->> drivers/platform/x86/uniwill/uniwill-acpi.c:1249:2: error: cannot jump from switch statement to this case label
-    1249 |         default:
-         |         ^
-   drivers/platform/x86/uniwill/uniwill-acpi.c:1243:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1243 |                 guard(mutex)(&data->battery_lock);
-         |                 ^
-   include/linux/cleanup.h:401:15: note: expanded from macro 'guard'
-     401 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:47:1: note: expanded from here
-      47 | __UNIQUE_ID_guard1072
-         | ^
-   2 warnings and 1 error generated.
-
-
-vim +1249 drivers/platform/x86/uniwill/uniwill-acpi.c
-
-  1235	
-  1236	static int uniwill_notifier_call(struct notifier_block *nb, unsigned long action, void *dummy)
-  1237	{
-  1238		struct uniwill_data *data = container_of(nb, struct uniwill_data, nb);
-  1239		struct uniwill_battery_entry *entry;
-  1240	
-  1241		switch (action) {
-  1242		case UNIWILL_OSD_BATTERY_ALERT:
-  1243			guard(mutex)(&data->battery_lock);
-  1244			list_for_each_entry(entry, &data->batteries, head) {
-  1245				power_supply_changed(entry->battery);
-  1246			}
-  1247	
-  1248			return NOTIFY_OK;
-> 1249		default:
-  1250			guard(mutex)(&data->input_lock);
-  1251			sparse_keymap_report_event(data->input_device, action, 1, true);
-  1252	
-  1253			return NOTIFY_OK;
-  1254		}
-  1255	}
-  1256	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+Sidharth Seela
+www.realtimedesign.org
