@@ -1,91 +1,92 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AE72EA491
-	for <llvm@lists.linux.dev>; Wed,  1 Oct 2025 12:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020C52FBDFA;
+	Wed,  1 Oct 2025 13:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759321565; cv=none; b=MyMW9yQbMnwntlCpqkoc34X0iJnNvAu8bt4hk4vJdFe59XpYahZddzN3GPRsEKoVT2fGN8tpW0mCxzC0QG2c3nVexogoXI2M/Ztt1ceuNH8PA/fmbzOBpsBG173V+WYbnQOs8gvLciKV5i8D/vptozSkaZTJAvebiN3sLyhtX9I=
+	t=1759326343; cv=none; b=siq/8CKcWQ8uRpp9KNSHWLt0JaKfwTdSve9QfkgRRo2p1O219XT9els25/sfdRdYfTyYFk3kwoquxCicsr1gL1rSd6nTYBQpyRdrBCP8MsysMdgVqv6QDJh+moTYwBAihFUifyz5/DnANNBa9GtOH8jFbTBTsfcmk089ZMZy4dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759321565; c=relaxed/simple;
-	bh=3ayNbCgEBpgJcWx7QrG/+sfX9FPJmaUZWIZVJumsQGU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=WW+hZEUiBUc0jmbaGze2eEWOR71wf8aPPrU3a9YbLZiwGQ4tfE8EKSb/5UpYIJDAz0ePrvGM8Mz6vQClEGeJjq8QCtjN5KdvYy1E3EqRyuCnFh2VoI2DBiyIvOC3FJHmmIuASoLJt0c9xoFbrYxq19NWoo1sTiRhesuFnQZCl8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cdwjhsa/; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+	s=arc-20240116; t=1759326343; c=relaxed/simple;
+	bh=X3hm9ss/SXCZSvIwShr72ovUiAR+OHYiSbSTP2qjzCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b6A7zrA9+bDp9GBA8ts4gUJhTPQxOYa2kZe64BeOxrrye2jHViMsPDT2L9rzDx0l9ggTo0JAn8coXZdRE48e6X9fPSNgoCEajsMlJc88hYC8T8WwiGik2tB1tGSCqjRTIwsYnK2QaRlAdz2m54dbpFL2FTFGBBkm+u4AM/w4Dz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMswArJp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cdwjhsa/"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-46e4d34ff05so19874665e9.2
-        for <llvm@lists.linux.dev>; Wed, 01 Oct 2025 05:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759321562; x=1759926362; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ayNbCgEBpgJcWx7QrG/+sfX9FPJmaUZWIZVJumsQGU=;
-        b=cdwjhsa/7hCTzEaU9hgOktTyKwybvxhr53kyq7FuxfIYh+LxsXPHmTgNutrwQVK1hi
-         TqkzHkXmgEJONDvgXXM4clK4HNgIG5f9+b6KA+GZHfUalXExn5RVrOCEIYxbSPwlrM11
-         +WGopDrvDu8sMyq/AndnHq2pyr+Fv9ch6vltSksOBlR9uHP2cecWzTqVV8hz6vhZGtTa
-         Ekox+XJk4gM8VZ2UIoYKraXHG4HV8aRra41zIkz2bAW1xu5qjacxVYTI/gBthlACZene
-         hg5j2/yRSdXR6mzWaO5Nh/xLMy6BFY1VXIqYp7eeaIce15qf7QTy+wlVune8SGkP2CSz
-         jytw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759321562; x=1759926362;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ayNbCgEBpgJcWx7QrG/+sfX9FPJmaUZWIZVJumsQGU=;
-        b=myeEmBb3DDRgDfurzGEdKE+Mq/4mhpWUquoVdNdMAJdr2GdgZDk4DKr6Pc9kCmJWuO
-         1rh2TFP5MKRg8q4qp1jrQScK8NXzQMr7Ok4hLamL8gUQTU1FF2LaASI1WoUskVkEDly3
-         fY2Rrwll0KkSr74CsO3RNPgglAPuFfKyEBvkYf8iK2YuIFCW3zNO4cz7iEvDMPYZXGWv
-         YTG5o8LFrW88BvMpXPtIEt+eXy+Ma9gpsb4ZeRMpTfELYnjinTPFwkuA+uX7XyAA0TB9
-         HGrYKxCO/X6U6aY9MnGGA2ceDd0VnWmiz85Iep5w1fNJPsJvrjc9FJtFeFBszb3R6gb3
-         WBSw==
-X-Gm-Message-State: AOJu0YwiS9PitWZJWEX3CTWiZ/DQ0pABh0m2yetOMTtb/VjH4WikMcFe
-	rw003l6cDtCz7f+ZhyU+hGYpWoBOEWEYJUh7xx0FAvfPMYaX+fqCK04vJF7Bxi7b2anRPDzVSRR
-	HzmOttOpMfH5piQ==
-X-Google-Smtp-Source: AGHT+IHhvLWUAOpfrdTW7oF5fo1iHNdyUu7ve/F2YpxM44Rj8ywwvuvN6K0k8Lfbtju5XwvYHXm0pqfTKrxDrQ==
-X-Received: from wmbgx21.prod.google.com ([2002:a05:600c:8595:b0:45d:e2f3:c626])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:37cc:b0:46e:4e6d:79f4 with SMTP id 5b1f17b1804b1-46e6121ba13mr29447395e9.15.1759321561760;
- Wed, 01 Oct 2025 05:26:01 -0700 (PDT)
-Date: Wed, 01 Oct 2025 12:26:00 +0000
-In-Reply-To: <202509272136.N4ELb64u-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMswArJp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32BADC116C6;
+	Wed,  1 Oct 2025 13:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759326341;
+	bh=X3hm9ss/SXCZSvIwShr72ovUiAR+OHYiSbSTP2qjzCw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lMswArJpZ2ezk3pXV7PL2vbdMCSZMqRybljaqOG5JHPfyZd0qfWvhvegFlyZup6cO
+	 RccnvOha1DIgjRim0XBcJV+5HNTTG3C+kuLeHP2/rnbp2peUKJPQbRBMmnKHAx/NCz
+	 Xox8GEzVSc8ddGmcKGCUXTA2qQAd8eC+AR7/Aif4qAFnS3Qp+jo+5RDYo6NpQWHeLs
+	 3HQoPzQEh2og89gDXmaMRAZJuYh/7osk6e4C9AcrHvLmOGf/qTyIO6yflNIW3x0tsZ
+	 aB7rIr08HxhUlCOVw+Bubn2g+M6Q+OlXciHnG12nevCDoovY/OndAqPXz4Qfy15qpl
+	 Ofkn+K1jFYlOg==
+Date: Wed, 1 Oct 2025 10:45:38 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Leo Yan <leo.yan@arm.com>, Namhyung Kim <namhyung@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 0/8] perf build: Support building with Clang
+Message-ID: <aN0wgvAsKh0n4sL4@x1>
+References: <20250930-perf_build_android_ndk-v2-0-2ea440b7ef01@arm.com>
+ <CAP-5=fUdk-EEDz2p__UJAcmkO=bA143dOUpGRcnW7_5FhZT71Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250924-b4-asi-page-alloc-v1-3-2d861768041f@google.com> <202509272136.N4ELb64u-lkp@intel.com>
-X-Mailer: aerc 0.21.0
-Message-ID: <DD6ZFZGBMSLA.7BSBIIJN0SLP@google.com>
-Subject: Re: [PATCH 03/21] x86/mm: factor out phys_pgd_init()
-From: Brendan Jackman <jackmanb@google.com>
-To: kernel test robot <lkp@intel.com>, Brendan Jackman <jackmanb@google.com>, 
-	Andy Lutomirski <luto@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>
-Cc: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, <bp@alien8.de>, 
-	<dave.hansen@linux.intel.com>, <mingo@redhat.com>, <tglx@linutronix.de>, 
-	<akpm@linux-foundation.org>, <david@redhat.com>, <derkling@google.com>, 
-	<junaids@google.com>, <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, 
-	<reijiw@google.com>, <rientjes@google.com>, <rppt@kernel.org>, 
-	<vbabka@suse.cz>, <x86@kernel.org>, <yosry.ahmed@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fUdk-EEDz2p__UJAcmkO=bA143dOUpGRcnW7_5FhZT71Q@mail.gmail.com>
 
-On Sat Sep 27, 2025 at 7:29 PM UTC, kernel test robot wrote:
-> Hi Brendan,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on bf2602a3cb2381fb1a04bf1c39a290518d2538d1]
+On Tue, Sep 30, 2025 at 11:14:30AM -0700, Ian Rogers wrote:
+> On Tue, Sep 30, 2025 at 9:55 AM Leo Yan <leo.yan@arm.com> wrote:
+> >
+> > This series adds support for building perf with Clang, following the
+> > discussion in [1]. Because the Android NDK uses Clang by default,
+> > enabling Clang builds naturally covers Android as well.
+> >
+> > The series is organized as follows:
+> >
+> >   - Patches 1–2: Fix two bugs found with Clang.
+> >   - Patches 3–6: Correct CROSS_ARCH and dismiss Clang build warnings.
+> >   - Patches 7–8: Enable Clang in the Makefile and update the
+> >     documentation.
+> >
+> > Testing:
+> >
+> >   - Clang 15.0.7 on Ubuntu 22.04.5: native and cross-compiling (aarch64)
+> >   - Clang 18.1.3 on Ubuntu 24.04.2: native and cross-compiling (aarch64)
+> >   - Android NDK r27d (latest LTS): cross-compiling (aarch64)
+> >
+> > [1] https://lore.kernel.org/linux-perf-users/20240715143342.52236-1-leo.yan@arm.com/
+> >
+> > ---
+> > Changes in v2:
+> > - Dropped the patch for dismissing warning in bpftool.
+> > - Refined the document. (Ian)
+> > - Link to v1: https://lore.kernel.org/r/20250925-perf_build_android_ndk-v1-0-8b35aadde3dc@arm.com
+> 
+> Reviewed-by: Ian Rogers <irogers@google.com>
 
-I've fixed this and the others in my WIP branch but I will wait a bit
-longer before sending a v2..
+Thanks, applied to perf-tools-next,
 
-They're all real issues - one of them confirms I have not exercised the
-CMA with this code (by demonstrating that I did not even compile with
-CONFIG_CMA=y). This one is just a benign bug that only shows up with
-W=1.
+- Arnaldo
