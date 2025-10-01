@@ -1,93 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577C01DF25C;
-	Wed,  1 Oct 2025 00:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759278626; cv=none; b=JMZenIK4Lm2hd26t1owvZNk1AlzIpNduHSkAmkS/k5hZFh3gibjoKLjyT9xQbFw0/VH1KhbrHDu3XmJRajZ30RROj0o2kkczHrWCGcElEOmD0FNr0wVL2ADn8ZXM4/pqxjzCHMu+VwAK+yvT1t985cOyTswqXN9v0vBDrDxTx24=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759278626; c=relaxed/simple;
-	bh=0fQVWwUWkMLw33UpF2OAmId1Q2Rfqf5COyBi7cgwMjk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BV6urRKehuCUb5qmS6PhCmCjGkIYjEwrJ94hNbKlzlCpHUbg3XKy7j9QErQUK5Zg1Xlrg9OyVGqVVaJeTzZSGQGz2AAoUOjl+LoRDwzM8YHxuYvKBJQnAmsllkF+JkoVRNp3r4tGPkckluRLIgVvyBXvcvwdPqkPYcHrzLAwwvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggMZxZvA; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176A27F16C
+	for <llvm@lists.linux.dev>; Wed,  1 Oct 2025 02:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759285315; cv=pass; b=ZYnkSjc9QpQrk07Q548L2RDsp3zRmh+6v5SY7dtsds7hecOFIXByNtqIKG6sGpL7qmz2NqDMdrBuOc3a3KsCvgTdIwawrkuXbxOPjgZUPFyJjWrUk8wF3/l1He+VmCijDpJ4LHY8x2T9vIi93Z7Y6K90zvrBVc9yGaykA9jhRXE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759285315; c=relaxed/simple;
+	bh=uhW78c9WYmd7qmGnyc5byd9/WeK8N8eGipEG9Me9lJ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QeADuRcDzDNPcWFc7NolBMnuzsiSM9Bd23cNksWPm7/oAjCMLzJDp8VVIo9GNghgn2VAft3jP4cqncwqFZS19t8O04MdK6+f2YuR5zyDtTf+qMOCMN9LL1oyCy7BQQbNXzdx+xX5gczDHKb4FUvmpvCnuW4Txu56HFiVXIHiI0o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=NwkfWIAi; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggMZxZvA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D725DC116C6;
-	Wed,  1 Oct 2025 00:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759278625;
-	bh=0fQVWwUWkMLw33UpF2OAmId1Q2Rfqf5COyBi7cgwMjk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ggMZxZvAdqGwXcKzbUBeVmq6kYQUo6N6wv4YaBXSVcZkd0PWTE7TFXLcN41hQ5u62
-	 eIbMgt8c6zAH0elSzu62Yr7Re+vHbOzVk4ABqKmbyuvdnIvPwEf9BWx6AtJeobox1m
-	 C+L2GM3/rh2zzwmY/Avrl5o4a8njn8Ymvl7GBKPY5qQWdXHOXbDQJOrrEvebLZjR1o
-	 VYj8KTa/+28xLsMy4gYmcFG4HdE+bqYMC+LJq+GD5x6aVLlI55gzJhnJuXht3rtc7q
-	 BGtdsQZoXifnHkeGnT6QLk1Ol0aI4ZpERr5X379G5hQEzWM18+8MCugodLaKBw7eMy
-	 iGXPwOfa0jxHw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACAB39D0C1A;
-	Wed,  1 Oct 2025 00:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="NwkfWIAi"
+ARC-Seal: i=1; a=rsa-sha256; t=1759285302; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=JhTERvBUTXjmkjH2n9keKzfz5zRtZyxf9hFJhi+09ywQuIsWi0PdqwjPNcyyVC3/Vtk2pEVR/MnskAz3VkjWcT4fyXSOVLxeZ7Ba08dV7RhswcBN08y6ekrudH44cqeVugdhoL706Xs81FRU8qz/i4LWyDesFLKWAMHpxMhDRoY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1759285302; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=/DuCVIo25xMaaA0q76PJtVL+EmE9+q7pgG4XQRIF+dw=; 
+	b=PURW5+NKmnqM/sN22m8mXJcoX4dgjUf76ZhX4tG9sINKPsIuY3f3gNEoSHhHFsVCW0NAq3TXHUkKdplX87/5vvdqI5yx8h6E3bSTL5k7rV+Lfb9sA2LEfUkllL8cSSgtGehyYraWDqqKawSprchPQMCzqpnR9LkYDjjYjRXnDPg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
+	dmarc=pass header.from=<adrian.larumbe@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1759285302;
+	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=/DuCVIo25xMaaA0q76PJtVL+EmE9+q7pgG4XQRIF+dw=;
+	b=NwkfWIAiJYJgeDwy+x64GlMFsVoVBfB2TYxf7SrSCSn/ZlEoBc0LZ4q5xf9exUbJ
+	y+bKEZnnLvkl96QPfnji8GMnMUOM468c52tw2MfBbpPiZGCZL5CAcaRJgNJJFHGZgK3
+	Ee8yKHabhPWXySCpi4GS5EWGyAPVa3NSwL+bSeHw=
+Received: by mx.zohomail.com with SMTPS id 1759285300196913.1802621807027;
+	Tue, 30 Sep 2025 19:21:40 -0700 (PDT)
+From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org,
+	Steven Price <steven.price@arm.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	kernel@collabora.com,
+	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v4 08/10] drm/panfrost: Add forward declaration and types header
+Date: Wed,  1 Oct 2025 03:20:29 +0100
+Message-ID: <20251001022039.1215976-9-adrian.larumbe@collabora.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251001022039.1215976-1-adrian.larumbe@collabora.com>
+References: <20251001022039.1215976-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next V6] net/mlx5: Improve write-combining test
- reliability for ARM64 Grace CPUs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175927861849.2249992.11585338388238905826.git-patchwork-notify@kernel.org>
-Date: Wed, 01 Oct 2025 00:30:18 +0000
-References: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
-In-Reply-To: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: catalin.marinas@arm.com, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- saeedm@nvidia.com, leon@kernel.org, mbloch@nvidia.com,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, gal@nvidia.com, leonro@nvidia.com,
- jgg@nvidia.com, michaelgur@nvidia.com, moshe@nvidia.com, will@kernel.org,
- agordeev@linux.ibm.com, akpm@linux-foundation.org, borntraeger@linux.ibm.com,
- bp@alien8.de, dave.hansen@linux.intel.com, gerald.schaefer@linux.ibm.com,
- gor@linux.ibm.com, hca@linux.ibm.com, hpa@zytor.com, justinstitt@google.com,
- linux-s390@vger.kernel.org, llvm@lists.linux.dev, mingo@redhat.com,
- morbo@google.com, nathan@kernel.org, ndesaulniers@google.com,
- salil.mehta@huawei.com, svens@linux.ibm.com, tglx@linutronix.de,
- x86@kernel.org, yisen.zhuang@huawei.com, arnd@arndb.de, leonro@mellanox.com,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- mark.rutland@arm.com, michaelgur@mellanox.com, patches@lists.linux.dev,
- schnelle@linux.ibm.com, shaojijie@huawei.com, horms@kernel.org,
- phaddad@nvidia.com
 
-Hello:
+This is to make LLVM syntactic analysers happy.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
+---
+ drivers/gpu/drm/panfrost/panfrost_mmu.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Mon, 29 Sep 2025 00:08:08 +0300 you wrote:
-> From: Patrisious Haddad <phaddad@nvidia.com>
-> 
-> Write combining is an optimization feature in CPUs that is frequently
-> used by modern devices to generate 32 or 64 byte TLPs at the PCIe level.
-> These large TLPs allow certain optimizations in the driver to HW
-> communication that improve performance. As WC is unpredictable and
-> optional the HW designs all tolerate cases where combining doesn't
-> happen and simply experience a performance degradation.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,V6] net/mlx5: Improve write-combining test reliability for ARM64 Grace CPUs
-    https://git.kernel.org/netdev/net-next/c/fd8c8216648c
-
-You are awesome, thank you!
+diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.h b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+index e6e6966a0cca..27c3c65ed074 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_mmu.h
++++ b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+@@ -4,6 +4,7 @@
+ #ifndef __PANFROST_MMU_H__
+ #define __PANFROST_MMU_H__
+ 
++struct panfrost_device;
+ struct panfrost_gem_mapping;
+ struct panfrost_file_priv;
+ struct panfrost_mmu;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.51.0
 
