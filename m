@@ -1,162 +1,230 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65193283FEE
-	for <llvm@lists.linux.dev>; Wed,  1 Oct 2025 09:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C62A35977;
+	Wed,  1 Oct 2025 09:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759310899; cv=none; b=kOcM6ZOMWmkdiTWEfHo1SyYdpBvS2BymcvY+7j0yaXOCdc60d5huGN4il7SqdCskiayT2dFJk9m8l2g7jZzRX3CL19wP+9tXLppIkq3vKHZoixM2K9Ff4htA1m9k4bVmZaFszIcKfZp+H5aWJ3oig6U5BzT/hI5rn6zLlKGASVc=
+	t=1759311347; cv=none; b=f6NHJuWS0+qlAC2OWVM2Oul/WpQpoUBpZWM3tIZ8CtdZE3Li7V8xRIKJfgxnnxNDLnznLZsM/DBtiCKsEKf0PUBrPDSzzN676A4NuShxGNhxvRStGKeEPV7rYrnD+YQfUUjkaZFZCcTR+m8W36BrsoWG9zhlAlEFbvxWuNJFdvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759310899; c=relaxed/simple;
-	bh=u8Q/puU00m1+Ma30hn2PbTN/YeCwD3+SnWOZqn5KRRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KoLhmj4dTDZC4Gg4oDXO85QAX3wI42vvzscn4T+iGtYL+cHviLTpMA4VV7tFsBrcUQPrM2qhgQKTL77DUwCog9WhXrnlX+aCVoR3IiSAKPliS6if2LyUpq8AzInVH/wa9PLKEV3JayNExhDjcx0rVOV/5ItoIhNm3GgoAhwSjOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BHKMtLub; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1759311347; c=relaxed/simple;
+	bh=0Cm9BtFz3hGv542uyhD/dUaWxOasSWCZ6bIwzvIGJLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EPmyhx1Z5scdqzhLf1qcXwjPCBICjH0auBoD2ph2roE9hRbsZaV4mW75PFmesf4sFtx1w1h1aB/dYRQvir9ydeMAPJQDgWWayS2g4wp46j2xB7OkNxkjmHp1/Pb9wB36vihCksh2fsFUpMNdT/gb8JPu47DMjl962eDZxk+oQ7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YxQJ8f5M; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BHKMtLub"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759310896;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ybtVMUpvDW3U/F2Zx0MRGWKL6mjqpdZhKS9ovQqZCJg=;
-	b=BHKMtLubZVnUb3kgB8l8GqsQOgsRsfJQJORgdf1eigTzkrvrcMBtWwXXK7JK45Gcw8Q6aR
-	DLMdlexDdwY70oyFUA059g04mpYC6ew0fNiD55sKAkoeE0Gy1K+I4VXBrY3sVzbjTOJMQC
-	i+NHFO2+xR92ZRiQRCz9b0OuIXQrQnk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-67--EK1xQ3cP0aWzY997mdn_g-1; Wed, 01 Oct 2025 05:28:15 -0400
-X-MC-Unique: -EK1xQ3cP0aWzY997mdn_g-1
-X-Mimecast-MFC-AGG-ID: -EK1xQ3cP0aWzY997mdn_g_1759310894
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3f384f10762so4313755f8f.3
-        for <llvm@lists.linux.dev>; Wed, 01 Oct 2025 02:28:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759310894; x=1759915694;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ybtVMUpvDW3U/F2Zx0MRGWKL6mjqpdZhKS9ovQqZCJg=;
-        b=sRU4HZkAVOhQYMxWhmCU8ilcaFbBTpDUmy5q3wGRU55DY9LfvcCM5EjraF+WsbgYzq
-         n2s266MvvU13CX0jAmyOhF1SaAjoAe63nKd6lqtp0oNjrSo8E0MNZopC52Bk0kjQScBy
-         cm9SWxFzAkkF5c4hwc9aOcnQ2pqZ4rkeROAn0BnbWq5WPgzO92JeVDnmUdB4Hrw1GjmU
-         l+P21DA4A754YiO49DIdnDmhv7Sk6O9x+BQBYCYfG/uGg4YcRoYSlzjiWLmyI9c8YwBu
-         bho0tqA2Y+/KnZZZpjxxRQ22J4bPUGLrAo8woM06jt+l6HnaRN09q60mHjzJapktSLGM
-         EFCw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1OPtnty/ve4HyLi/k06V5s4+ZGUXyUzoan5nJA5GrCFttMvWq0RPRFBUbKjT4Kiu0IbHb@lists.linux.dev
-X-Gm-Message-State: AOJu0YxlqLOtJrvh/yYkceHXLxQHwtBgWaF/SdJuJ7+drrV89QIXoU7u
-	P4BOKr68BwsBF1vWa5J0tRy0TDyAK++V3ImWv/fpyGFd/ZNB/RzBZNpg2dYkrFULv1/8DcsK9Zn
-	HN4mf0wnSNVXECh0rXkDq5GDW6Xf4TUbk8L9Qyc91YCMfw6fM+sbe7u0=
-X-Gm-Gg: ASbGncvBAgGLni8FP1JPirr/XpCvNdA9nVSgZUaeKrIcJyRQgV8YKcYgBZQYT1u/9ub
-	lvt5YT/1/PMNg/g/78wcqVPSWS1Jw7E8ZaBaHUypto3WHiU5gxu3l7mzv+6x1rhDHojGk61fdH0
-	IkU1dCzNpTgqgLAaYoTcuV2ZIsWLalurVo36EiW0+hTg3LWp3valOSKd19xDvtDwvFm/080jIAx
-	BGnBdkVlPJ792EIuQurPUFG+r+3Jam7LSPmhnisA5BkthmWf3alzdP8JOSTmPrto8EtRNJD/rAM
-	PWilY4WxjBwujOVPGtVUS2P5zchsE9Y3s+uJ3GY8X3R/QtmnZdOXaESYqLLBlU+svpvucyvu83+
-	jzw+MKWarezONWcgOVw==
-X-Received: by 2002:a5d:588a:0:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-425578183aamr2084070f8f.48.1759310893687;
-        Wed, 01 Oct 2025 02:28:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH2jGX49TGzAee2RWy6ApUBj/jwFn2OVqWsFJymuz8OiVF8ehgSB3/azRECWeXusX/4XaZBCg==
-X-Received: by 2002:a5d:588a:0:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-425578183aamr2084020f8f.48.1759310893212;
-        Wed, 01 Oct 2025 02:28:13 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fac4a5e41sm28042341f8f.0.2025.10.01.02.28.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Oct 2025 02:28:12 -0700 (PDT)
-Message-ID: <651ee9fe-706e-4471-a71b-e7a12b42cc3e@redhat.com>
-Date: Wed, 1 Oct 2025 11:28:09 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YxQJ8f5M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759311345; x=1790847345;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0Cm9BtFz3hGv542uyhD/dUaWxOasSWCZ6bIwzvIGJLY=;
+  b=YxQJ8f5MFQlEXWfgT9p3HJKXHNHQWm3hBhz1a3WEF88YJTX3P0U+z6Y1
+   pBHD1/34mcF+EQEx7XnAYZwT9UauMYE7fjjtvycyyiokCXReYVRhBwjCL
+   YiaY7nxVlboiXDd5UZCVjHFgCyRCdLcnHx+1l58ZA+mpYkzpQ77ZiVpPf
+   0AQubJMZAmCpnqKtHr+VF3dWz8kmkN8qWCBfDmmPPsP0qv1rATZwkR5E5
+   L8i39WuEiJhwCrXkGTUrZbZ6Qpg1jKAyc6l82OdqKma8fFLqAo3d7COW0
+   aoaMH/NVar5TjnxzSlrVM4irzibfj4N+XbihFdfoAVGogrsRWDFW4hdVy
+   Q==;
+X-CSE-ConnectionGUID: pV5Bp754TuuQV3hV9e7xvw==
+X-CSE-MsgGUID: YdV5BJBWQBeSJQQla1I+6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11569"; a="79231688"
+X-IronPort-AV: E=Sophos;i="6.18,306,1751266800"; 
+   d="scan'208";a="79231688"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2025 02:35:44 -0700
+X-CSE-ConnectionGUID: PNukmB5bQJCjXF2Y4R7GXQ==
+X-CSE-MsgGUID: bfCaMSbJTFyMfSJ+W52kdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,306,1751266800"; 
+   d="scan'208";a="178795122"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 01 Oct 2025 02:35:42 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v3tFL-0002sN-1f;
+	Wed, 01 Oct 2025 09:35:39 +0000
+Date: Wed, 1 Oct 2025 17:35:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:vfio_get_region_info_op 23/28]
+ drivers/gpu/drm/i915/gvt/kvmgt.c:1235:34: error: incompatible pointer types
+ passing 'struct vfio_info_cap **' to parameter of type 'struct vfio_info_cap
+ *'; remove &
+Message-ID: <202510011720.Gy8hWYxq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next V6] net/mlx5: Improve write-combining test
- reliability for ARM64 Grace CPUs
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Mark Bloch <mbloch@nvidia.com>, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
- Jason Gunthorpe <jgg@nvidia.com>, Michael Guralnik <michaelgur@nvidia.com>,
- Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt <justinstitt@google.com>,
- linux-s390@vger.kernel.org, llvm@lists.linux.dev,
- Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Salil Mehta <salil.mehta@huawei.com>, Sven Schnelle <svens@linux.ibm.com>,
- Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
- Yisen Zhuang <yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
- Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>,
- Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
- Niklas Schnelle <schnelle@linux.ibm.com>, Jijie Shao <shaojijie@huawei.com>,
- Simon Horman <horms@kernel.org>, Patrisious Haddad <phaddad@nvidia.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Jakub Kicinski <kuba@kernel.org>,
- "David S. Miller" <davem@davemloft.net>
-References: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Xu3m6Rez4gKOIysLGYJEQEifQOIL6GAP-gdY9g6TKAc_1759310894
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi,
+tree:   https://github.com/jgunthorpe/linux vfio_get_region_info_op
+head:   efea69dc6e5be19ed7b37490c863b00b304a3cb0
+commit: da16ef5849c0c3eff92ead1c944776a7af4ddf3b [23/28] vfio/gvt: Convert to get_region_info_caps
+config: x86_64-buildonly-randconfig-005-20251001 (https://download.01.org/0day-ci/archive/20251001/202510011720.Gy8hWYxq-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251001/202510011720.Gy8hWYxq-lkp@intel.com/reproduce)
 
-On 9/28/25 11:08 PM, Tariq Toukan wrote:
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/wc.c b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
-> index 999d6216648a..c281153bd411 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/wc.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
-> @@ -7,6 +7,10 @@
->  #include "mlx5_core.h"
->  #include "wq.h"
->  
-> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
-> +#include <asm/neon.h>
-> +#endif
-> +
->  #define TEST_WC_NUM_WQES 255
->  #define TEST_WC_LOG_CQ_SZ (order_base_2(TEST_WC_NUM_WQES))
->  #define TEST_WC_SQ_LOG_WQ_SZ TEST_WC_LOG_CQ_SZ
-> @@ -255,6 +259,27 @@ static void mlx5_wc_destroy_sq(struct mlx5_wc_sq *sq)
->  	mlx5_wq_destroy(&sq->wq_ctrl);
->  }
->  
-> +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
-> +				size_t mmio_wqe_size, unsigned int offset)
-> +{
-> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
-> +	if (cpu_has_neon()) {
-> +		kernel_neon_begin();
-> +		asm volatile
-> +		(".arch_extension simd;\n\t"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510011720.Gy8hWYxq-lkp@intel.com/
 
-Here I'm observing build errors with aarch64-linux-gnu-gcc 12.1.1
-20220507 (Red Hat Cross 12.1.1-1):
+All errors (new ones prefixed by >>):
 
-/tmp/cchqHdeI.s: Assembler messages:
-/tmp/cchqHdeI.s:746: Error: unknown architectural extension `simd;'
+   In file included from drivers/gpu/drm/i915/gvt/kvmgt.c:54:
+   In file included from drivers/gpu/drm/i915/gvt/gvt.h:37:
+   include/linux/vfio.h:139:13: warning: declaration of 'struct vfio_info_cap' will not be visible outside of this function [-Wvisibility]
+     139 |                                         struct vfio_info_cap *caps);
+         |                                                ^
+>> drivers/gpu/drm/i915/gvt/kvmgt.c:1235:34: error: incompatible pointer types passing 'struct vfio_info_cap **' to parameter of type 'struct vfio_info_cap *'; remove & [-Werror,-Wincompatible-pointer-types]
+    1235 |                 ret = vfio_info_add_capability(&caps, &cap_type.header,
+         |                                                ^~~~~
+   include/linux/vfio.h:363:52: note: passing argument to parameter 'caps' here
+     363 | int vfio_info_add_capability(struct vfio_info_cap *caps,
+         |                                                    ^
+   drivers/gpu/drm/i915/gvt/kvmgt.c:1447:26: error: incompatible function pointer types initializing 'int (*)(struct vfio_device *, struct vfio_region_info *, struct vfio_info_cap *)' with an expression of type 'int (struct vfio_device *, struct vfio_region_info *, struct vfio_info_cap *)' [-Wincompatible-function-pointer-types]
+    1447 |         .get_region_info_caps = intel_vgpu_get_region_info,
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
-I can't reproduce the error on any recent compiler version via
-godbolt.org, so I *think* this should not block/be reverted for the MR,
-but could you please have a look soonish?
 
-Thanks,
+vim +1235 drivers/gpu/drm/i915/gvt/kvmgt.c
 
-Paolo
+659643f7d81432 Jike Song           2016-12-08  1142  
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1143  static int intel_vgpu_get_region_info(struct vfio_device *vfio_dev,
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1144  				      struct vfio_region_info *info,
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1145  				      struct vfio_info_cap *caps)
+659643f7d81432 Jike Song           2016-12-08  1146  {
+659643f7d81432 Jike Song           2016-12-08  1147  	struct vfio_region_info_cap_sparse_mmap *sparse = NULL;
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1148  	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+659643f7d81432 Jike Song           2016-12-08  1149  	int nr_areas = 1;
+659643f7d81432 Jike Song           2016-12-08  1150  	int cap_type_id;
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1151  	unsigned int i;
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1152  	int ret;
+659643f7d81432 Jike Song           2016-12-08  1153  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1154  	switch (info->index) {
+659643f7d81432 Jike Song           2016-12-08  1155  	case VFIO_PCI_CONFIG_REGION_INDEX:
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1156  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1157  		info->size = vgpu->gvt->device_info.cfg_space_size;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1158  		info->flags = VFIO_REGION_INFO_FLAG_READ |
+659643f7d81432 Jike Song           2016-12-08  1159  			      VFIO_REGION_INFO_FLAG_WRITE;
+659643f7d81432 Jike Song           2016-12-08  1160  		break;
+659643f7d81432 Jike Song           2016-12-08  1161  	case VFIO_PCI_BAR0_REGION_INDEX:
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1162  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1163  		info->size = vgpu->cfg_space.bar[info->index].size;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1164  		if (!info->size) {
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1165  			info->flags = 0;
+659643f7d81432 Jike Song           2016-12-08  1166  			break;
+659643f7d81432 Jike Song           2016-12-08  1167  		}
+659643f7d81432 Jike Song           2016-12-08  1168  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1169  		info->flags = VFIO_REGION_INFO_FLAG_READ |
+659643f7d81432 Jike Song           2016-12-08  1170  			      VFIO_REGION_INFO_FLAG_WRITE;
+659643f7d81432 Jike Song           2016-12-08  1171  		break;
+659643f7d81432 Jike Song           2016-12-08  1172  	case VFIO_PCI_BAR1_REGION_INDEX:
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1173  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1174  		info->size = 0;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1175  		info->flags = 0;
+659643f7d81432 Jike Song           2016-12-08  1176  		break;
+659643f7d81432 Jike Song           2016-12-08  1177  	case VFIO_PCI_BAR2_REGION_INDEX:
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1178  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1179  		info->flags = VFIO_REGION_INFO_FLAG_CAPS |
+659643f7d81432 Jike Song           2016-12-08  1180  			      VFIO_REGION_INFO_FLAG_MMAP |
+659643f7d81432 Jike Song           2016-12-08  1181  			      VFIO_REGION_INFO_FLAG_READ |
+659643f7d81432 Jike Song           2016-12-08  1182  			      VFIO_REGION_INFO_FLAG_WRITE;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1183  		info->size = gvt_aperture_sz(vgpu->gvt);
+659643f7d81432 Jike Song           2016-12-08  1184  
+cd3e05836fc665 Gustavo A. R. Silva 2019-05-24  1185  		sparse = kzalloc(struct_size(sparse, areas, nr_areas),
+cd3e05836fc665 Gustavo A. R. Silva 2019-05-24  1186  				 GFP_KERNEL);
+659643f7d81432 Jike Song           2016-12-08  1187  		if (!sparse)
+659643f7d81432 Jike Song           2016-12-08  1188  			return -ENOMEM;
+659643f7d81432 Jike Song           2016-12-08  1189  
+dda01f787df9f9 Alex Williamson     2017-12-12  1190  		sparse->header.id = VFIO_REGION_INFO_CAP_SPARSE_MMAP;
+dda01f787df9f9 Alex Williamson     2017-12-12  1191  		sparse->header.version = 1;
+659643f7d81432 Jike Song           2016-12-08  1192  		sparse->nr_areas = nr_areas;
+659643f7d81432 Jike Song           2016-12-08  1193  		cap_type_id = VFIO_REGION_INFO_CAP_SPARSE_MMAP;
+659643f7d81432 Jike Song           2016-12-08  1194  		sparse->areas[0].offset =
+659643f7d81432 Jike Song           2016-12-08  1195  			PAGE_ALIGN(vgpu_aperture_offset(vgpu));
+659643f7d81432 Jike Song           2016-12-08  1196  		sparse->areas[0].size = vgpu_aperture_sz(vgpu);
+659643f7d81432 Jike Song           2016-12-08  1197  		break;
+659643f7d81432 Jike Song           2016-12-08  1198  
+659643f7d81432 Jike Song           2016-12-08  1199  	case VFIO_PCI_BAR3_REGION_INDEX ... VFIO_PCI_BAR5_REGION_INDEX:
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1200  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1201  		info->size = 0;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1202  		info->flags = 0;
+072ec93d50fd4c Pei Zhang           2017-12-08  1203  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1204  		gvt_dbg_core("get region info bar:%d\n", info->index);
+659643f7d81432 Jike Song           2016-12-08  1205  		break;
+659643f7d81432 Jike Song           2016-12-08  1206  
+659643f7d81432 Jike Song           2016-12-08  1207  	case VFIO_PCI_ROM_REGION_INDEX:
+659643f7d81432 Jike Song           2016-12-08  1208  	case VFIO_PCI_VGA_REGION_INDEX:
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1209  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1210  		info->size = 0;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1211  		info->flags = 0;
+072ec93d50fd4c Pei Zhang           2017-12-08  1212  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1213  		gvt_dbg_core("get region info index:%d\n", info->index);
+659643f7d81432 Jike Song           2016-12-08  1214  		break;
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1215  	default: {
+dda01f787df9f9 Alex Williamson     2017-12-12  1216  		struct vfio_region_info_cap_type cap_type = {
+dda01f787df9f9 Alex Williamson     2017-12-12  1217  			.header.id = VFIO_REGION_INFO_CAP_TYPE,
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1218  			.header.version = 1
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1219  		};
+659643f7d81432 Jike Song           2016-12-08  1220  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1221  		if (info->index >= VFIO_PCI_NUM_REGIONS + vgpu->num_regions)
+659643f7d81432 Jike Song           2016-12-08  1222  			return -EINVAL;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1223  		info->index = array_index_nospec(
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1224  			info->index, VFIO_PCI_NUM_REGIONS + vgpu->num_regions);
+659643f7d81432 Jike Song           2016-12-08  1225  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1226  		i = info->index - VFIO_PCI_NUM_REGIONS;
+659643f7d81432 Jike Song           2016-12-08  1227  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1228  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1229  		info->size = vgpu->region[i].size;
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1230  		info->flags = vgpu->region[i].flags;
+659643f7d81432 Jike Song           2016-12-08  1231  
+62980cacc37f58 Christoph Hellwig   2022-04-11  1232  		cap_type.type = vgpu->region[i].type;
+62980cacc37f58 Christoph Hellwig   2022-04-11  1233  		cap_type.subtype = vgpu->region[i].subtype;
+659643f7d81432 Jike Song           2016-12-08  1234  
+dccd2c351c3792 Jason Gunthorpe     2025-09-30 @1235  		ret = vfio_info_add_capability(&caps, &cap_type.header,
+dda01f787df9f9 Alex Williamson     2017-12-12  1236  					       sizeof(cap_type));
+659643f7d81432 Jike Song           2016-12-08  1237  		if (ret)
+659643f7d81432 Jike Song           2016-12-08  1238  			return ret;
+659643f7d81432 Jike Song           2016-12-08  1239  	}
+659643f7d81432 Jike Song           2016-12-08  1240  	}
+659643f7d81432 Jike Song           2016-12-08  1241  
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1242  	if ((info->flags & VFIO_REGION_INFO_FLAG_CAPS) && sparse) {
+659643f7d81432 Jike Song           2016-12-08  1243  		switch (cap_type_id) {
+659643f7d81432 Jike Song           2016-12-08  1244  		case VFIO_REGION_INFO_CAP_SPARSE_MMAP:
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1245  			ret = vfio_info_add_capability(
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1246  				caps, &sparse->header,
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1247  				struct_size(sparse, areas, sparse->nr_areas));
+7590ebb8b45646 Yi Wang             2018-08-08  1248  			if (ret) {
+659643f7d81432 Jike Song           2016-12-08  1249  				kfree(sparse);
+659643f7d81432 Jike Song           2016-12-08  1250  				return ret;
+7590ebb8b45646 Yi Wang             2018-08-08  1251  			}
+659643f7d81432 Jike Song           2016-12-08  1252  			break;
+659643f7d81432 Jike Song           2016-12-08  1253  		default:
+7590ebb8b45646 Yi Wang             2018-08-08  1254  			kfree(sparse);
+659643f7d81432 Jike Song           2016-12-08  1255  			return -EINVAL;
+659643f7d81432 Jike Song           2016-12-08  1256  		}
+659643f7d81432 Jike Song           2016-12-08  1257  	}
+659643f7d81432 Jike Song           2016-12-08  1258  
+7590ebb8b45646 Yi Wang             2018-08-08  1259  	kfree(sparse);
+da16ef5849c0c3 Jason Gunthorpe     2025-09-30  1260  	return 0;
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1261  }
+dccd2c351c3792 Jason Gunthorpe     2025-09-30  1262  
 
+:::::: The code at line 1235 was first introduced by commit
+:::::: dccd2c351c379223261e8d9626214590dfa42c61 vfio/gvt: Provide a get_region_info op
+
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
