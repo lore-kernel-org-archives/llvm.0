@@ -1,68 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E5227F749;
-	Wed,  1 Oct 2025 16:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817E927F749;
+	Wed,  1 Oct 2025 16:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759336588; cv=none; b=B8a9hivZ+qS0PZHCoPGtfrtMa3sfcc9hqYHqgqTTp+dEuWS2N/1UPspKLWDSzRB4D1ktizjmXfw6DevQADHBro+x/bFh187lSPXKgONYPtimkUuhuKhH0LwKbV9XfHezpU7RUnUPgOJO1V9Kal+HtoalnxW1OpHnW7in0tiNhoI=
+	t=1759336627; cv=none; b=JNZA5LDER2muScGdIHqpatJJ7llqmlplpmdcZxa17KeBwb8wRGm/y/i7v6wgaeQJXbpoyPzvRR39LsM14ZOphWnja7BTMEApU14XbCk2i/en+BrGIM4Dlb2gUaXW3Ldme1PJ1S9a/rhAFLNPVHYpEtjBEasKfMt8aIXIPC8DRU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759336588; c=relaxed/simple;
-	bh=HSLm25QXTpkKM7aT1hm4htROq4qR0UuimjxRvDGXd0s=;
+	s=arc-20240116; t=1759336627; c=relaxed/simple;
+	bh=Z2NyxMKwcPeMXXKKAv2xDnR4oJ5LczuNNOFthCmdrr0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ucsDIsehNJLkmtNe/wIAUoaM9boAn2iPjkbdG/7ze3RRuXALzI8pw2ERZVMmIfvZq6i6iDAJmYygYehjVy6JthAch1WK7JNad13axmZr7QMODkwMOM6ZqRXVUhcSG7XJ2PmmTmUeufTwWGK2dw3StAk9nv/f9yF4iF+Jfa/TP+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MW8rz7qD; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GnPoc+ZHdVQFLGw+uuzWvO5dIkIkSasT1rrn2YdUUkY/pNhY0uwuJ06hG7zbGPmxjTWwv/Wfcm8BVUJLTYoC6WNmOIEbntRKxdx30Kt8OgU9kZ7gw5EDIBo/s9LBLUArpZiVROmo1+JCU+x0zS5/LK+4BwzTFhc8FZfoajWMkpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pdEs2skq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MW8rz7qD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759336586; x=1790872586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HSLm25QXTpkKM7aT1hm4htROq4qR0UuimjxRvDGXd0s=;
-  b=MW8rz7qDm9Cmsfsoy9lN2n3eZV/HF8khNLMhbYRPIb+5CFmWoXVYU2ZI
-   GDq6ojjBrOZ/bJQSjYtDtq9rfElqlC8QDAWq/yOhV5oHrqIs1pdMlfqZ3
-   o5olV1G41YMzjEsHsLteQJ2OsRJN6u1BcI4AjghvkOQGm4IwuuTmAkZNw
-   sVpJ6N71yvb/f/2D3ubBk2ScUVpYF+YtMyD4wg4eWp4wlMi1Ry+NGGDKI
-   WqRjHVLGoZxa+5Nln0woXJ+V+gV8bld0nFa38X7GgrdYxEZ06xqUsUx8I
-   X71agy5Jr/QTxrAjV3t9knyGLPvmc18A1Le+NBcFF8yp5N4KKrg7ZsCpb
-   Q==;
-X-CSE-ConnectionGUID: +nVP2nLyRUSupJE94B8wsg==
-X-CSE-MsgGUID: PS++W1pnSQu+Y3TICH7GEA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11569"; a="61506574"
-X-IronPort-AV: E=Sophos;i="6.18,307,1751266800"; 
-   d="scan'208";a="61506574"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2025 09:36:26 -0700
-X-CSE-ConnectionGUID: TwRkw5L8S9qMFlhUI5AWtQ==
-X-CSE-MsgGUID: OPt0fZOnSpGgCizH7DihNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,307,1751266800"; 
-   d="scan'208";a="183116776"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 01 Oct 2025 09:36:22 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v3zoR-0003B5-26;
-	Wed, 01 Oct 2025 16:36:19 +0000
-Date: Thu, 2 Oct 2025 00:35:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Miu <jasonmiu@google.com>, Alexander Graf <graf@amazon.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pdEs2skq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9119C4CEF1;
+	Wed,  1 Oct 2025 16:36:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759336627;
+	bh=Z2NyxMKwcPeMXXKKAv2xDnR4oJ5LczuNNOFthCmdrr0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pdEs2skqGh70Zo1YI7DOoy0aHJ4HyFogdGtdCIGleVtLKrtCn2RVAk0weWaPfpVaR
+	 QsjhbNwWzsEPIy3c6ubYWjwAvf+W12ZWE0sj4KXEuAj/6x+hItzGtqAzrsg6HH9uh1
+	 tpwtJLVaLW9Gf3jMWeI1mgiOvjvntUQIlshpktbKoefzm2aDnjPWnR+1t/36brucD+
+	 kJlZ7n6esgshltyonSUnbDHGsLosx1fPpraYDnKjRb8+thXVO+HWaKoFbcOCUjKHt/
+	 KvDNqiz28a8Etu79fFmX+l8kL9EE39VtJvMA8AJXVBNg4dqMumlorzFCtiRqAirXW5
+	 OlOUSv2m92lnA==
+Date: Wed, 1 Oct 2025 09:36:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, Tariq Toukan <tariqt@nvidia.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Michael Guralnik <michaelgur@nvidia.com>,
+	Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>, Changyuan Lyu <changyuanl@google.com>,
-	David Matlack <dmatlack@google.com>,
-	David Rientjes <rientjes@google.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, Mike Rapoport <rppt@kernel.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>, kexec@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v1 2/3] memblock: Remove KHO notifier usage
-Message-ID: <202510020000.IIPFcxsW-lkp@intel.com>
-References: <20251001011941.1513050-3-jasonmiu@google.com>
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Justin Stitt <justinstitt@google.com>, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Jijie Shao <shaojijie@huawei.com>, Simon Horman <horms@kernel.org>,
+	Patrisious Haddad <phaddad@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next V6] net/mlx5: Improve write-combining test
+ reliability for ARM64 Grace CPUs
+Message-ID: <20251001163655.GA370262@ax162>
+References: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
+ <651ee9fe-706e-4471-a71b-e7a12b42cc3e@redhat.com>
+ <20251001145514.GC3024065@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,70 +81,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251001011941.1513050-3-jasonmiu@google.com>
+In-Reply-To: <20251001145514.GC3024065@nvidia.com>
 
-Hi Jason,
+On Wed, Oct 01, 2025 at 11:55:14AM -0300, Jason Gunthorpe wrote:
+> On Wed, Oct 01, 2025 at 11:28:09AM +0200, Paolo Abeni wrote:
+> 
+> > > +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
+> > > +				size_t mmio_wqe_size, unsigned int offset)
+> > > +{
+> > > +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
+> > > +	if (cpu_has_neon()) {
+> > > +		kernel_neon_begin();
+> > > +		asm volatile
+> > > +		(".arch_extension simd;\n\t"
+> > 
+> > Here I'm observing build errors with aarch64-linux-gnu-gcc 12.1.1
+> > 20220507 (Red Hat Cross 12.1.1-1):
+> 
+> > /tmp/cchqHdeI.s: Assembler messages:
+> > /tmp/cchqHdeI.s:746: Error: unknown architectural extension `simd;'
+> 
+> This is a binutils error not gcc.. What is the binutils version?
 
-kernel test robot noticed the following build errors:
+I can reproduce this with at least binutils 2.36.1, which is in the
+kernel.org GCC 8.5.0 toolchain.
 
-[auto build test ERROR on rppt-memblock/for-next]
-[also build test ERROR on linus/master v6.17]
-[cannot apply to rppt-memblock/fixes akpm-mm/mm-everything next-20250929]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Removing the semicolon resolves the issue for me and matches the format
+of .arch_extension in the rest of the kernel. I am guessing binutils
+became less strict with parsing at some point.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Miu/kho-Adopt-KHO-radix-tree-data-structures/20251001-092230
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock.git for-next
-patch link:    https://lore.kernel.org/r/20251001011941.1513050-3-jasonmiu%40google.com
-patch subject: [PATCH v1 2/3] memblock: Remove KHO notifier usage
-config: x86_64-randconfig-003-20251001 (https://download.01.org/0day-ci/archive/20251002/202510020000.IIPFcxsW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251002/202510020000.IIPFcxsW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510020000.IIPFcxsW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> lib/test_kho.c:59:44: error: too many arguments to function call, expected 2, have 3
-      59 |         err |= kho_add_subtree(ser, KHO_TEST_FDT, folio_address(state->fdt));
-         |                ~~~~~~~~~~~~~~~                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kexec_handover.h:30:5: note: 'kho_add_subtree' declared here
-      30 | int kho_add_subtree(const char *name, void *fdt);
-         |     ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +59 lib/test_kho.c
-
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  40) 
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  41) static int kho_test_notifier(struct notifier_block *self, unsigned long cmd,
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  42) 			     void *v)
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  43) {
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  44) 	struct kho_test_state *state = &kho_test_state;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  45) 	struct kho_serialization *ser = v;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  46) 	int err = 0;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  47) 
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  48) 	switch (cmd) {
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  49) 	case KEXEC_KHO_ABORT:
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  50) 		return NOTIFY_DONE;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  51) 	case KEXEC_KHO_FINALIZE:
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  52) 		/* Handled below */
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  53) 		break;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  54) 	default:
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  55) 		return NOTIFY_BAD;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  56) 	}
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  57) 
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  58) 	err |= kho_preserve_folio(state->fdt);
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27 @59) 	err |= kho_add_subtree(ser, KHO_TEST_FDT, folio_address(state->fdt));
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  60) 
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  61) 	return err ? NOTIFY_BAD : NOTIFY_DONE;
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  62) }
-b753522bed0b7e Mike Rapoport (Microsoft  2025-07-27  63) 
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
