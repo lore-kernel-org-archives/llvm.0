@@ -1,66 +1,72 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE555239E67
-	for <llvm@lists.linux.dev>; Wed,  1 Oct 2025 09:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65193283FEE
+	for <llvm@lists.linux.dev>; Wed,  1 Oct 2025 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759310005; cv=none; b=p/HzpJCQLbV18WJYTpQ2de6L5GsAP0mAGFKG3FTCrSvl8KEY9zOFs50VoR3FlNtj7B2p4tzatEafptCm6mzx2cy83vjbPwme6w59qDipvsz/rhpuKT/dpBmkoDw7wAzWg7ahMQXkYyyYL+cwm55Oaxcte5eL3ETdAkEO+Z9nzUs=
+	t=1759310899; cv=none; b=kOcM6ZOMWmkdiTWEfHo1SyYdpBvS2BymcvY+7j0yaXOCdc60d5huGN4il7SqdCskiayT2dFJk9m8l2g7jZzRX3CL19wP+9tXLppIkq3vKHZoixM2K9Ff4htA1m9k4bVmZaFszIcKfZp+H5aWJ3oig6U5BzT/hI5rn6zLlKGASVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759310005; c=relaxed/simple;
-	bh=akruguUlMk4PCTOgTyjiWg/kpbuAfV7wGO7BxGg3Y7U=;
+	s=arc-20240116; t=1759310899; c=relaxed/simple;
+	bh=u8Q/puU00m1+Ma30hn2PbTN/YeCwD3+SnWOZqn5KRRE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tzHuCSZRFY/T2Dkp6hGuQzA0Ugi1JRF36NYCnHjoE6hSYbB7Bg6cOqTQ7FGjfn2SzSkd51Sidz838jI3XJdCO3PnXMkJHuFdNcyA6Z+KlYjTinTLYTQv1Z8V5MiPwpsvAg1xpwPr6WRJLkSQ5bRLKpoAuog1tzcxQt4RFrjywE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dDPiM1LK; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 In-Reply-To:Content-Type; b=KoLhmj4dTDZC4Gg4oDXO85QAX3wI42vvzscn4T+iGtYL+cHviLTpMA4VV7tFsBrcUQPrM2qhgQKTL77DUwCog9WhXrnlX+aCVoR3IiSAKPliS6if2LyUpq8AzInVH/wa9PLKEV3JayNExhDjcx0rVOV/5ItoIhNm3GgoAhwSjOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BHKMtLub; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dDPiM1LK"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-46e501a9034so22016495e9.3
-        for <llvm@lists.linux.dev>; Wed, 01 Oct 2025 02:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759310001; x=1759914801; darn=lists.linux.dev;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=akruguUlMk4PCTOgTyjiWg/kpbuAfV7wGO7BxGg3Y7U=;
-        b=dDPiM1LKRtCdJ+IPgp33V/UR8SXzFVuY7WhVOjxl4p8JmGmNXoDUGhO73uDrThIO4/
-         HPboPvdMS/LZSs1qzDHB50R0CEn+QFJJBrhr3xKYN62I0QwhsMWfjryEW2npx/YS/LJc
-         ObE8HciiebtdySWuy+zL44llDCbdA/t3YxeppUVEX9OVBKcm//PlSXHPC+aztbkd5oTp
-         ctBWsFGCoX9Iwn+XtrMQu0awJsNKPq7xSWX0QsH/uahjvsY0gNeDjOUW5jv9YlhDb6hs
-         W4d64l9vqdfksSf6AmUjlYVromlr2UtY5eGUemO8hFlYaS6FHs9E82c+jrNsNDZfg7AD
-         T8Bg==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BHKMtLub"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759310896;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ybtVMUpvDW3U/F2Zx0MRGWKL6mjqpdZhKS9ovQqZCJg=;
+	b=BHKMtLubZVnUb3kgB8l8GqsQOgsRsfJQJORgdf1eigTzkrvrcMBtWwXXK7JK45Gcw8Q6aR
+	DLMdlexDdwY70oyFUA059g04mpYC6ew0fNiD55sKAkoeE0Gy1K+I4VXBrY3sVzbjTOJMQC
+	i+NHFO2+xR92ZRiQRCz9b0OuIXQrQnk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-67--EK1xQ3cP0aWzY997mdn_g-1; Wed, 01 Oct 2025 05:28:15 -0400
+X-MC-Unique: -EK1xQ3cP0aWzY997mdn_g-1
+X-Mimecast-MFC-AGG-ID: -EK1xQ3cP0aWzY997mdn_g_1759310894
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3f384f10762so4313755f8f.3
+        for <llvm@lists.linux.dev>; Wed, 01 Oct 2025 02:28:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759310001; x=1759914801;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=akruguUlMk4PCTOgTyjiWg/kpbuAfV7wGO7BxGg3Y7U=;
-        b=BPzOe+yCPyw49pahpVucogmgMw+6p47zVgVlkIWqe+CRhCPCE6HGANeHroB/HNHtw/
-         Uby61KhSyvtfATjnv1BrSu0Kd+tbu1aCLaGcmuLHaaoE8TfHwg6benq2Oi6wH2kQaT5q
-         HeOiHRY8qa710MpP7CrWFvEO3z7v3H28EGZ2ywuAoQIyEAZ4SBOd0ccibcN5eAgLc5Y2
-         e0an+nk/w9zh1ZOLtSRPtY7vAxaOlq3rsGT50VBTUZ9bIbJWMotSnVs3ryVk869cPmsG
-         zC39xs4LJ/V1mutmlTFlm6qoStFaqw2LPtIkO83FfqFn1A3IcFcsZbim7h9LErWX6Vtb
-         3tzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOu8NNCiN5yUUBtoiRdSdDcNYEPNF0+rfRxW4QTJ905jK8DuDURK0915SbNDSrPpdtgeDs@lists.linux.dev
-X-Gm-Message-State: AOJu0YwLifwb1svWCTMAD7pYT1CnZrUJ4VvZvhSRfXKnG7F5QCl9GrdK
-	bZ06Sp1PZQoF6ZhsrYYA0hf/BusJACYEAumxtiD26etMGefLAJlCaK+m2nuPDBcGAC8=
-X-Gm-Gg: ASbGncsMkgbVh4YMIk9zWhR8yyn8S00QCdKWzbgxGI85B8GmqMrn4V9hK6GnxW869y+
-	zI64fE/S/+IFmu/fRLPnaMLpRxd/K9M+s/PYxZrUeGW8ZEllPRwNbCFxK6uigc43HuegoUwQYFh
-	VTaUN7zNHGj2GjFtEBYHjx60OiAcuXrb2BozUPI1cr9r5/fi5JBm57wEbho5M8Ki34wWoHU/VIw
-	RHXJ3wKxZDt413JjTlM5MCYsOqug0iIPz4TCJYjZxvZ+sz0Z5ZcVpF0PX5ntLC/GtBFkV8aK3nZ
-	ZnOy98P2vxdS1h19Fz1hxQOtMS0mfXDcnYYvcpFM4oK8vOWm96Zxe3JUDwfBL0srXy8Ir2ixOUf
-	CF7zVjJfzsYu8nLbKsBjtzIyGiKcJ+XKoUU92F1WSB+YIDLxxKHDkN5nCenxGky+CIAue52xEgg
-	zk3ZOTsTjvhUdu0SDWQysJkOPnQ52LuTmx91NK89Sj/jSAyT0PPEeHuPlMWOqtZ6GoouWL
-X-Google-Smtp-Source: AGHT+IFmWtHmtuJTY/pPssZKgyeRTwhhcwi0O9A8a4YoPc9vbgb8+dTjBI7NWy3cHtO7HmMUVCFPpA==
-X-Received: by 2002:a05:600c:3150:b0:46e:4246:c90d with SMTP id 5b1f17b1804b1-46e61219faamr22578695e9.11.1759310001142;
-        Wed, 01 Oct 2025 02:13:21 -0700 (PDT)
-Received: from ?IPV6:2003:e5:873f:400:7b4f:e512:a417:5a86? (p200300e5873f04007b4fe512a4175a86.dip0.t-ipconnect.de. [2003:e5:873f:400:7b4f:e512:a417:5a86])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e619c3b75sm29623905e9.7.2025.10.01.02.13.20
+        d=1e100.net; s=20230601; t=1759310894; x=1759915694;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ybtVMUpvDW3U/F2Zx0MRGWKL6mjqpdZhKS9ovQqZCJg=;
+        b=sRU4HZkAVOhQYMxWhmCU8ilcaFbBTpDUmy5q3wGRU55DY9LfvcCM5EjraF+WsbgYzq
+         n2s266MvvU13CX0jAmyOhF1SaAjoAe63nKd6lqtp0oNjrSo8E0MNZopC52Bk0kjQScBy
+         cm9SWxFzAkkF5c4hwc9aOcnQ2pqZ4rkeROAn0BnbWq5WPgzO92JeVDnmUdB4Hrw1GjmU
+         l+P21DA4A754YiO49DIdnDmhv7Sk6O9x+BQBYCYfG/uGg4YcRoYSlzjiWLmyI9c8YwBu
+         bho0tqA2Y+/KnZZZpjxxRQ22J4bPUGLrAo8woM06jt+l6HnaRN09q60mHjzJapktSLGM
+         EFCw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1OPtnty/ve4HyLi/k06V5s4+ZGUXyUzoan5nJA5GrCFttMvWq0RPRFBUbKjT4Kiu0IbHb@lists.linux.dev
+X-Gm-Message-State: AOJu0YxlqLOtJrvh/yYkceHXLxQHwtBgWaF/SdJuJ7+drrV89QIXoU7u
+	P4BOKr68BwsBF1vWa5J0tRy0TDyAK++V3ImWv/fpyGFd/ZNB/RzBZNpg2dYkrFULv1/8DcsK9Zn
+	HN4mf0wnSNVXECh0rXkDq5GDW6Xf4TUbk8L9Qyc91YCMfw6fM+sbe7u0=
+X-Gm-Gg: ASbGncvBAgGLni8FP1JPirr/XpCvNdA9nVSgZUaeKrIcJyRQgV8YKcYgBZQYT1u/9ub
+	lvt5YT/1/PMNg/g/78wcqVPSWS1Jw7E8ZaBaHUypto3WHiU5gxu3l7mzv+6x1rhDHojGk61fdH0
+	IkU1dCzNpTgqgLAaYoTcuV2ZIsWLalurVo36EiW0+hTg3LWp3valOSKd19xDvtDwvFm/080jIAx
+	BGnBdkVlPJ792EIuQurPUFG+r+3Jam7LSPmhnisA5BkthmWf3alzdP8JOSTmPrto8EtRNJD/rAM
+	PWilY4WxjBwujOVPGtVUS2P5zchsE9Y3s+uJ3GY8X3R/QtmnZdOXaESYqLLBlU+svpvucyvu83+
+	jzw+MKWarezONWcgOVw==
+X-Received: by 2002:a5d:588a:0:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-425578183aamr2084070f8f.48.1759310893687;
+        Wed, 01 Oct 2025 02:28:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH2jGX49TGzAee2RWy6ApUBj/jwFn2OVqWsFJymuz8OiVF8ehgSB3/azRECWeXusX/4XaZBCg==
+X-Received: by 2002:a5d:588a:0:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-425578183aamr2084020f8f.48.1759310893212;
+        Wed, 01 Oct 2025 02:28:13 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fac4a5e41sm28042341f8f.0.2025.10.01.02.28.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Oct 2025 02:13:20 -0700 (PDT)
-Message-ID: <fd98944e-52e4-4521-ae15-07f167b5dfbf@suse.com>
-Date: Wed, 1 Oct 2025 11:13:19 +0200
+        Wed, 01 Oct 2025 02:28:12 -0700 (PDT)
+Message-ID: <651ee9fe-706e-4471-a71b-e7a12b42cc3e@redhat.com>
+Date: Wed, 1 Oct 2025 11:28:09 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,190 +74,89 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/12] x86/msr: Use the alternatives mechanism for
- WRMSR
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev,
- xin@zytor.com, "H. Peter Anvin" <hpa@zytor.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+Subject: Re: [PATCH net-next V6] net/mlx5: Improve write-combining test
+ reliability for ARM64 Grace CPUs
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Mark Bloch <mbloch@nvidia.com>, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Michael Guralnik <michaelgur@nvidia.com>,
+ Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
  Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt <justinstitt@google.com>,
+ linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+ Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
  Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20250930070356.30695-1-jgross@suse.com>
- <20250930070356.30695-10-jgross@suse.com> <aNv-kJbDXYJpievg@google.com>
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Salil Mehta <salil.mehta@huawei.com>, Sven Schnelle <svens@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+ Yisen Zhuang <yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
+ Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>,
+ Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ Niklas Schnelle <schnelle@linux.ibm.com>, Jijie Shao <shaojijie@huawei.com>,
+ Simon Horman <horms@kernel.org>, Patrisious Haddad <phaddad@nvidia.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Jakub Kicinski <kuba@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>
+References: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Xu3m6Rez4gKOIysLGYJEQEifQOIL6GAP-gdY9g6TKAc_1759310894
+X-Mimecast-Originator: redhat.com
 Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <aNv-kJbDXYJpievg@google.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------4NdA3Y0ivVEa007mP1hrOaWH"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------4NdA3Y0ivVEa007mP1hrOaWH
-Content-Type: multipart/mixed; boundary="------------0KBQjINNJXNkhZ3AwbKqEaDf";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev,
- xin@zytor.com, "H. Peter Anvin" <hpa@zytor.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Message-ID: <fd98944e-52e4-4521-ae15-07f167b5dfbf@suse.com>
-Subject: Re: [PATCH v2 09/12] x86/msr: Use the alternatives mechanism for
- WRMSR
-References: <20250930070356.30695-1-jgross@suse.com>
- <20250930070356.30695-10-jgross@suse.com> <aNv-kJbDXYJpievg@google.com>
-In-Reply-To: <aNv-kJbDXYJpievg@google.com>
+Hi,
 
---------------0KBQjINNJXNkhZ3AwbKqEaDf
-Content-Type: multipart/mixed; boundary="------------UW5EcluXxZS9wHFRe79bLUV0"
+On 9/28/25 11:08 PM, Tariq Toukan wrote:
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/wc.c b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> index 999d6216648a..c281153bd411 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> @@ -7,6 +7,10 @@
+>  #include "mlx5_core.h"
+>  #include "wq.h"
+>  
+> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
+> +#include <asm/neon.h>
+> +#endif
+> +
+>  #define TEST_WC_NUM_WQES 255
+>  #define TEST_WC_LOG_CQ_SZ (order_base_2(TEST_WC_NUM_WQES))
+>  #define TEST_WC_SQ_LOG_WQ_SZ TEST_WC_LOG_CQ_SZ
+> @@ -255,6 +259,27 @@ static void mlx5_wc_destroy_sq(struct mlx5_wc_sq *sq)
+>  	mlx5_wq_destroy(&sq->wq_ctrl);
+>  }
+>  
+> +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
+> +				size_t mmio_wqe_size, unsigned int offset)
+> +{
+> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
+> +	if (cpu_has_neon()) {
+> +		kernel_neon_begin();
+> +		asm volatile
+> +		(".arch_extension simd;\n\t"
 
---------------UW5EcluXxZS9wHFRe79bLUV0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Here I'm observing build errors with aarch64-linux-gnu-gcc 12.1.1
+20220507 (Red Hat Cross 12.1.1-1):
 
-T24gMzAuMDkuMjUgMTg6MDAsIFNlYW4gQ2hyaXN0b3BoZXJzb24gd3JvdGU6DQo+IE9uIFR1
-ZSwgU2VwIDMwLCAyMDI1LCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4gV2hlbiBhdmFpbGFi
-bGUgdXNlIG9uZSBvZiB0aGUgbm9uLXNlcmlhbGl6aW5nIFdSTVNSIHZhcmlhbnRzIChXUk1T
-Uk5TDQo+PiB3aXRoIG9yIHdpdGhvdXQgYW4gaW1tZWRpYXRlIG9wZXJhbmQgc3BlY2lmeWlu
-ZyB0aGUgTVNSIHJlZ2lzdGVyKSBpbg0KPj4gX193cm1zcnEoKS4NCj4+DQo+PiBGb3IgdGhl
-IHNhZmUvdW5zYWZlIHZhcmlhbnRzIG1ha2UgX193cm1zcnEoKSB0byBiZSBhIGNvbW1vbiBi
-YXNlDQo+PiBmdW5jdGlvbiBpbnN0ZWFkIG9mIGR1cGxpY2F0aW5nIHRoZSBBTFRFUk5BVElW
-RSooKSBtYWNyb3MuIFRoaXMNCj4+IHJlcXVpcmVzIHRvIGxldCBuYXRpdmVfd3Jtc3IoKSB1
-c2UgbmF0aXZlX3dybXNycSgpIGluc3RlYWQgb2YNCj4+IF9fd3Jtc3JxKCkuIFdoaWxlIGNo
-YW5naW5nIHRoaXMsIGNvbnZlcnQgbmF0aXZlX3dybXNyKCkgaW50byBhbiBpbmxpbmUNCj4+
-IGZ1bmN0aW9uLg0KPj4NCj4+IFJlcGxhY2UgdGhlIG9ubHkgY2FsbCBvZiB3c3Jtc3Jucygp
-IHdpdGggdGhlIG5vdyBlcXVpdmFsZW50IGNhbGwgdG8NCj4+IG5hdGl2ZV93cm1zcnEoKSBh
-bmQgcmVtb3ZlIHdzcm1zcm5zKCkuDQo+Pg0KPj4gVGhlIHBhcmF2aXJ0IGNhc2Ugd2lsbCBi
-ZSBoYW5kbGVkIGxhdGVyLg0KPiANCj4gLi4uDQo+IA0KPj4gQEAgLTI2OCwyMSArMzU3LDYg
-QEAgc3RhdGljIGlubGluZSBpbnQgd3Jtc3JxX3NhZmUodTMyIG1zciwgdTY0IHZhbCkNCj4+
-ICAgCXJldHVybiBlcnI7DQo+PiAgIH0NCj4+ICAgDQo+PiAtLyogSW5zdHJ1Y3Rpb24gb3Bj
-b2RlIGZvciBXUk1TUk5TIHN1cHBvcnRlZCBpbiBiaW51dGlscyA+PSAyLjQwICovDQo+PiAt
-I2RlZmluZSBBU01fV1JNU1JOUyBfQVNNX0JZVEVTKDB4MGYsMHgwMSwweGM2KQ0KPj4gLQ0K
-Pj4gLS8qIE5vbi1zZXJpYWxpemluZyBXUk1TUiwgd2hlbiBhdmFpbGFibGUuICBGYWxscyBi
-YWNrIHRvIGEgc2VyaWFsaXppbmcgV1JNU1IuICovDQo+PiAtc3RhdGljIF9fYWx3YXlzX2lu
-bGluZSB2b2lkIHdybXNybnModTMyIG1zciwgdTY0IHZhbCkNCj4gDQo+IEZZSSwgYSB1c2Ug
-b2Ygd3Jtc3JucygpIGlzIGxpa2VseSBjb21pbmcgaW4gdGhyb3VnaCB0aGUgS1ZNICh4ODYp
-IHRyZWUsIGNvbW1pdA0KPiA2NTM5MWZlYjA0MmIgKCJLVk06IFZNWDogQWRkIGhvc3QgTVNS
-IHJlYWQvd3JpdGUgaGVscGVycyB0byBjb25zb2xpZGF0ZSBwcmVlbXB0aW9uDQo+IGhhbmRs
-aW5nIikuDQoNClRoYW5rcyBmb3IgdGhlIGhlYWRzIHVwIQ0KDQo+IA0KPiBQcm9iYWJseSBt
-YWtlcyBzZW5zZSB0byBzcGluIHYzIGFmdGVyIHRoZSBtZXJnZSB3aW5kb3c/ICBPciBvbiBs
-aW51eC1uZXh0PyAoSQ0KPiBjYW4ndCB0ZWxsIHdoYXQgd2FzIHVzZWQgYXMgdGhlIGJhc2Us
-IGFuZCBJIGRvdWJsZS1jaGVja2VkIHRoYXQgdGhlIGFib3ZlIGNvbW1pdA0KPiBpcyBpbiBs
-aW51eC1uZXh0KS4NCg0KSSdsbCBmaW5kIGEgcHJvcGVyIHNvbHV0aW9uLiA6LSkNCg0KDQpK
-dWVyZ2VuDQo=
---------------UW5EcluXxZS9wHFRe79bLUV0
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+/tmp/cchqHdeI.s: Assembler messages:
+/tmp/cchqHdeI.s:746: Error: unknown architectural extension `simd;'
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+I can't reproduce the error on any recent compiler version via
+godbolt.org, so I *think* this should not block/be reverted for the MR,
+but could you please have a look soonish?
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+Thanks,
 
---------------UW5EcluXxZS9wHFRe79bLUV0--
+Paolo
 
---------------0KBQjINNJXNkhZ3AwbKqEaDf--
-
---------------4NdA3Y0ivVEa007mP1hrOaWH
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmjc8K8FAwAAAAAACgkQsN6d1ii/Ey+W
-oQf/Tlcx+hnflBEo7Nn5o7np17qk0I0N8Xr0pexu7UEQ/D0qTFOPwE93Gh85TYaljbv85+BWMWKn
-dPrY/8w+EDFUMUwl1tmP1xbt0gJ+t8iyco8uWI8FYychx+Wto7SyYYRauM+B0Oh3qYCz3dw+3xJB
-tOUr5YzP/IaXtnBdD6uYTdtUxvMxO9qvdRUDpsYqEspy3drDiyEcyLw07WF+V+IzSo+vDtjW6J1p
-Q9vrbpgWHg6rI2CY+HL0GNIrrmjDcGL4S2EMXaY3oNz1Vvbt48aCQ8z1/Ix2LT/kYWy3WOK9dFQg
-yL4QPZz18hvl7/pJ432L0lcoB8y8xow2vlLc4LkuEA==
-=PUL6
------END PGP SIGNATURE-----
-
---------------4NdA3Y0ivVEa007mP1hrOaWH--
