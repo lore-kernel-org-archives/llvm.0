@@ -1,110 +1,207 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B25B188A0C
-	for <llvm@lists.linux.dev>; Thu,  2 Oct 2025 23:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E36E254B1B;
+	Thu,  2 Oct 2025 23:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759446998; cv=none; b=IkLgle/f0jzKsT7saokMM7wGCAo0zhVbP7+oXOBVSxXBmmpH8N7rPj5399RcXkAHB+nx3XCgb/BXJe7VtiLvA3wIKYGJOuJGS4LGDmrfqqOpfaFxD3OD+LKQW2jREIKmlLraGHDollYXBGH8FmgGEHR63t+zGmZIqpNUK5Pne2M=
+	t=1759448194; cv=none; b=bP8puZt3N4pvYLI0ZOSY0PPsxMVFHz5yWXiqlTO2vXdJvaijRRpJjFSC5eLedUX2eRP89cvvfxPLygjrJEbEpft7aHZ0XGSUczu5euVV4mrY5Hvh28wJhxTkvXbewv8b/gEhoqfRifoC9GuUC6QY4AZ1MySi2yYjCuYibYb9YZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759446998; c=relaxed/simple;
-	bh=6ce+k7Xq/4AJMLhlBBhOEuJaox3vRmQx5u9antQuDgo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=blzeEaPemybYP4LyOUmGW6MuCwo1cGNYtuocKvcPj75lfc4fdCEsOY0E9uFxszd8uSWM9rHt2VXeaxQpGoFa6532SOov1/3cszKxNl4hEiZx8SOrhcYCqRnuKaVPZFe0KenS3UXMQskyN8NdkrIoLiizSGByA3HiZXG/oVrOxP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OibUZaL5; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759448194; c=relaxed/simple;
+	bh=CEbRtWPBQw7JVTWw+FlDva3KxertbeH1B9CTjxieDeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ARenRL4gJbiHkCaugwtN4DmYYA8LbO9ntyU99n3J6ysIzAiHLYxCZ1BK0eCJ0t2CS4IHtkRKXg3dUdC93FOu3+LQp+cdyzvnB4w+tf/NK1m0+9tkoYwecdJ1lEa1VJDrrdhvb2AGfk+4XbUb6h3GC7RvbYToeLr2shWdia00kA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i5AetzD5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OibUZaL5"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2697051902fso2064095ad.1
-        for <llvm@lists.linux.dev>; Thu, 02 Oct 2025 16:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759446996; x=1760051796; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ja9Bn6P2KMK2i3cPP4zfsONf+zHduNfLue2PhQDsu4M=;
-        b=OibUZaL5TT2D0YQ2mW+Sg1HefG8Y35+SvysYA5HJqJGglqKqeMwNJ6LogRZQYd5r+o
-         tpoSUDbKxVRQTC7VWRQvXOXPmIk7OMOaO4L1lAzQzrV8UXJFrZtFxA32JMyX4NDNxZRv
-         ApSnjgSkVSDoGGjTDZBLFyp6bL59Yzjcbwvw8TaXf5c6ZdHxr0B2nKkpmDmWEDnO9c4U
-         T2dW+PiOGn9L5QoxEYFQKkXxerN4gD3ZGOOP9ifu/5VTYNroGGlWjMuVIsaKTXl4Ra3p
-         ksQLvH10Gd5sEMDtes5jX7SxPUFzbn6tZKGxExRHWfNJj4NBTxIj7fD0bmkq3OmkrzVZ
-         /WHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759446996; x=1760051796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ja9Bn6P2KMK2i3cPP4zfsONf+zHduNfLue2PhQDsu4M=;
-        b=vL37WVMTuZ42fpoZ5DBKz1eT/jWkCOUTV8HC1BsQEJZNt2vbVH83coxB3TQ1FeGEND
-         6JhG40ZFBb4Hv9NUYohu2/DY0wgQlj1Ikq1l+JFC5fHQuO/9ZBzlgwKJSmWnrNiC3zg5
-         k0A870taedKgjLK8zMvHZkXgbfjerUNXZBiWNPXgg6lTzgwszjLa2Vx1/Pxm6kq8149P
-         /Ml1VcbqkjeJIYA6Kn4opo4ktX02QCGoSuZl3U3yBDcJOosL9Ih94meb1KyIBi9bZxKN
-         oBmxh96wBWUnduk/GCYfZAK7XjjOmzwefWtZ1uOwvbgZVlWpjdRXAFN7ZhC3k6fR1K7Y
-         W3zQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUNpi9sXGj9sWtFP72hqq+PTbPZFD935VGsJM0pjXgzA35i/lOcsdwXLnu3eH1/y+AJuc3s@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyae/m3mjZ1f/vusuETJTTSWWouma+OOlvw37ZpyoMqaeVRXBp6
-	Q6CH4KrIjpBB0IdUx7YwnDa8Jt9WnsG3ITkkziVmoG5/dIT3ssFWmJF5Oqm5BrSsqNvr/vCrk+1
-	CxpZFcxVaDzJ5ijLBCMtWBqSrOjbABAo=
-X-Gm-Gg: ASbGncuK1EV0JVrx/6iE7Nez2rDdpvYe8W5byTB/Ri3Th1JDAAiohKsQ/Eap0fTwmhm
-	XFcbiyHqSIukpa9zuvKOXAVd8UPT0gEzSSyZOd7MDIZ2IGJifJa9BanHroXXEbYEJh3DWSi3Qky
-	R7myXi7m2XkHHmeA404QXQ7QBR9SaRryHgHP7sZlfsduTgfO2InBAP8yLLX8Ew2Kz2P5HgRT0Dl
-	A18xpk9yN+ABfVGcuqsamDiFw7bY9jeGGfr0/CA5rvgQZvnddEz8S6817jl/7ynFvcC6/3q3rVg
-	JlQzTr3F9hc0EV+V+G3m9LuwF8nY0utkTsWNrEOXbF6zLlfHjg==
-X-Google-Smtp-Source: AGHT+IG1jLZozgPgBjz8il0nnl06KAhRwEmfM28KR42HSA5o1aegNp29hlxSwQoCLtlUe5qlKk2pHpNiYMz9bK5H3V4=
-X-Received: by 2002:a17:902:e743:b0:274:944f:9d84 with SMTP id
- d9443c01a7336-28e9a7b381fmr5957375ad.11.1759446996485; Thu, 02 Oct 2025
- 16:16:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i5AetzD5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B5BC4CEF4;
+	Thu,  2 Oct 2025 23:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759448193;
+	bh=CEbRtWPBQw7JVTWw+FlDva3KxertbeH1B9CTjxieDeM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i5AetzD5ovQTdk0lHoCmueZNdQDYuMa+bcXRbOhEVGJyFC72roSaMmMu840bJZGvq
+	 CfpWjfCU4ULVanQueinCMgQNkufB3uNZCE6+xPK4zoqVMHOm6/3v15PnkNmKYZiKit
+	 sQuX9bdUdHXmYsD1h8Q61yMLUD7Az4MXvikQ9tLrYeULFTABLdU2Rpw2yuFanr/AoF
+	 1t8yGrblI75tkUQy1tvt4XroslhXSWZNaH2GaDzmAln0HnOXngzSSgA9fPYwC2smR3
+	 G7OLWwNwblV0JUqfFLfVJJYUg15nUrjR2oTnSHJMIf7wIvCPdpAuhiGx60cMiWwVir
+	 Z+Rn0Ba4mXwYg==
+Date: Thu, 2 Oct 2025 16:36:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: kernel test robot <lkp@intel.com>, ilpo.jarvinen@linux.intel.com,
+	hdegoede@redhat.com, chumuzero@gmail.com, corbet@lwn.net,
+	cs@tuxedo.de, wse@tuxedocomputers.com, ggo@tuxedocomputers.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, rdunlap@infradead.org,
+	alok.a.tiwari@oracle.com, linux-leds@vger.kernel.org,
+	lee@kernel.org, pobrn@protonmail.com
+Subject: Re: [PATCH v4 1/2] platform/x86: Add Uniwill laptop driver
+Message-ID: <20251002233627.GA3978676@ax162>
+References: <20250928013253.10869-2-W_Armin@gmx.de>
+ <202509290415.uez00SgW-lkp@intel.com>
+ <6146d57b-f855-40b1-a644-3af6b28ceea4@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202510030449.VfSaAjvd-lkp@intel.com> <20251002141925.ab86656b1d50f6e27f216209@linux-foundation.org>
- <CANiq72kOhRdGtQe2UVYmDLdbw6VNkiMtdFzkQizsfQV0gLY1Hg@mail.gmail.com>
- <20251002152753.c756678dfdcf739e2fbf74f7@linux-foundation.org>
- <CANiq72kWWPAZ3gq2ktMpVeMKpWOU1nAmYi-4d-BgbuDti77ggg@mail.gmail.com> <20251002154323.ca15e98421255ae2978e8d6b@linux-foundation.org>
-In-Reply-To: <20251002154323.ca15e98421255ae2978e8d6b@linux-foundation.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 3 Oct 2025 01:16:24 +0200
-X-Gm-Features: AS18NWDlCUFdClL2tm6c6Fg5XnZ_OVsyL104Y971QPgVO4IBNtdGQLs-NKBaHY8
-Message-ID: <CANiq72=u2Zm+MtArPML9EhQyjB1u-OLKe_NRf-dHv25EKA+qEQ@mail.gmail.com>
-Subject: Re: [linux-next:master 13069/13300] error[E0425]: cannot find value
- `VM_MERGEABLE` in crate `bindings`
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, Jakub Acs <acsjakub@amazon.de>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6146d57b-f855-40b1-a644-3af6b28ceea4@gmx.de>
 
-On Fri, Oct 3, 2025 at 12:43=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> Thanks.  As mentioned, today's linux-next is where the problem is being
-> observed.
+Hi Armin,
 
-You're welcome -- yeah, I see it in my one of my CIs (the
-rust.docs.kernel.org that runs more often), but really, I think we
-should help you enable the Rust build -- you take patches for many
-things across the tree, so that would be very useful...
+On Thu, Oct 02, 2025 at 08:41:19PM +0200, Armin Wolf wrote:
+> i think this is a problem inside the clang compiler. I did not encounter this warning when
+> build for x86-64 using gcc.
 
-Nowadays it should be fairly easy to enable, i.e. even the packages
-from some distros work.
+Clang is actually saving you from yourself, it is a bug in GCC that it
+does not warn for this:
 
-I have build-tested the patch on top of mm-hotfixes-unstable now too
-(since I don't see it applied yet), so please feel free to pick tags
-like:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+> > vim +1243 drivers/platform/x86/uniwill/uniwill-acpi.c
+> > 
+> >    1235	
+> >    1236	static int uniwill_notifier_call(struct notifier_block *nb, unsigned long action, void *dummy)
+> >    1237	{
+> >    1238		struct uniwill_data *data = container_of(nb, struct uniwill_data, nb);
+> >    1239		struct uniwill_battery_entry *entry;
+> >    1240	
+> >    1241		switch (action) {
+> >    1242		case UNIWILL_OSD_BATTERY_ALERT:
+> > > 1243			guard(mutex)(&data->battery_lock);
 
-Or even:
+mutex_unlock() will be called on &data->battery_lock even when the
+default case is taken, as demonstrated by the following test case.
 
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> >    1244			list_for_each_entry(entry, &data->batteries, head) {
+> >    1245				power_supply_changed(entry->battery);
+> >    1246			}
+> >    1247	
+> >    1248			return NOTIFY_OK;
+> >    1249		default:
+> >    1250			guard(mutex)(&data->input_lock);
+> >    1251			sparse_keymap_report_event(data->input_device, action, 1, true);
+> >    1252	
+> >    1253			return NOTIFY_OK;
+> >    1254		}
+> >    1255	}
+> >    1256	
+> > 
+> 
 
-I test every day -next, so I will see this in my 20251002 run and will
-notice if it doesn't go away.
+$ cat test.c
+#include <stdio.h>
+
+void cleanup_1(int *a) { printf("+ %s(%p)\n", __func__, a); }
+void cleanup_2(int *a) { printf("+ %s(%p)\n", __func__, a); }
+void cleanup_3(int *a) { printf("+ %s(%p)\n", __func__, a); }
+
+void no_scopes(int a)
+{
+    printf("%s(%d)\n", __func__, a);
+    switch (a) {
+    case 1:
+        int case_1 __attribute__((cleanup(cleanup_1)));
+        return;
+    case 2:
+        int case_2 __attribute__((cleanup(cleanup_2)));
+        return;
+    default:
+        int case_default __attribute__((cleanup(cleanup_3)));
+        return;
+    }
+}
+
+void with_scopes(int a)
+{
+    printf("%s(%d)\n", __func__, a);
+    switch (a) {
+    case 1: {
+        int case_1 __attribute__((cleanup(cleanup_1)));
+        return;
+    }
+    case 2: {
+        int case_2 __attribute__((cleanup(cleanup_2)));
+        return;
+    }
+    default: {
+        int case_default __attribute__((cleanup(cleanup_3)));
+        return;
+    }
+    }
+}
+
+int main(void)
+{
+    no_scopes(1); printf("\n");
+    no_scopes(2); printf("\n");
+    no_scopes(3); printf("\n");
+
+    with_scopes(1); printf("\n");
+    with_scopes(2); printf("\n");
+    with_scopes(3);
+}
+
+$ gcc -O2 test.c
+
+$ ./a.out
+no_scopes(1)
++ cleanup_1(0x7ffea3450c0c)
+
+no_scopes(2)
++ cleanup_2(0x7ffea3450c10)
++ cleanup_1(0x7ffea3450c0c)
+
+no_scopes(3)
++ cleanup_3(0x7ffea3450c14)
++ cleanup_2(0x7ffea3450c10)
++ cleanup_1(0x7ffea3450c0c)
+
+with_scopes(1)
++ cleanup_1(0x7ffea3450c14)
+
+with_scopes(2)
++ cleanup_2(0x7ffea3450c14)
+
+with_scopes(3)
++ cleanup_3(0x7ffea3450c14)
+
+$ clang -O2 test.c
+test.c:12:9: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+   12 |         int case_1 __attribute__((cleanup(cleanup_1)));
+      |         ^
+test.c:15:9: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+   15 |         int case_2 __attribute__((cleanup(cleanup_2)));
+      |         ^
+test.c:18:9: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+   18 |         int case_default __attribute__((cleanup(cleanup_3)));
+      |         ^
+test.c:17:5: error: cannot jump from switch statement to this case label
+   17 |     default:
+      |     ^
+test.c:15:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   15 |         int case_2 __attribute__((cleanup(cleanup_2)));
+      |             ^
+test.c:12:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   12 |         int case_1 __attribute__((cleanup(cleanup_1)));
+      |             ^
+test.c:14:5: error: cannot jump from switch statement to this case label
+   14 |     case 2:
+      |     ^
+test.c:12:13: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   12 |         int case_1 __attribute__((cleanup(cleanup_1)));
+      |             ^
+3 warnings and 2 errors generated.
+
+https://godbolt.org/z/1Tx7Gj1xf
+
+I would add the scoping to the case labels or use scoped_guard() to
+avoid this, which would also avoid the instances of -Wc23-extensions.
 
 Cheers,
-Miguel
+Nathan
