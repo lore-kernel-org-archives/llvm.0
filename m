@@ -1,268 +1,179 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B940310652
-	for <llvm@lists.linux.dev>; Thu,  2 Oct 2025 13:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71087156230;
+	Thu,  2 Oct 2025 15:24:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759412081; cv=none; b=aWD+EGKQ97Cm4KrAoiubAQp2+06BtEtxLk0sOsuIkenmQnhD4oQJGxfW66gATA9RdZqumpAipI0luvt31sSfARmZuqqWuoTyHpsl03tpNRBHegYxllzI+LaNvIg5rzcXwn2XtQ09qfrgYixU5H+FG0xYe0Qn3cTbNYEcoJx4V0I=
+	t=1759418662; cv=none; b=ZbETnRzB/yXncMX/zqCobPxfzyWFShL9VoFcBMHfBNf2i/NPXOSIjMTFtMh/eyx/RNFRd8MA/CSSsKT86PmKMHYn22+ocXH7QbENgJiCvg6UwiIkSh9KYaNejLDeylmJJf4mc5ygdjLwNMGJtdvLO1kmBA+Wlx492cuhAeljyQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759412081; c=relaxed/simple;
-	bh=nnPGC+IldHzkbqTUWen4TzWJyqmVdUT5DVUmRQOo6TA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sBEB9tbKZfkQCkwQbAKIr+Av7HGC+RKkzBTOTSGurO8M488QzDGCv2ujBq/XJStcv0T8oBUtHOeHUn/eTOMDx4AXm6+AmyMR4JvYVYgNXXr2w/6ReN5rFuv1IDed27AqtstH+yzAzP96aTold8bYkQ8lbGtS9aGcaq1UaSwIARo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UqlqTD0K; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759418662; c=relaxed/simple;
+	bh=KTW3ZnSUOwjzPpITRy4BCvcebORZReQ0eliDIO1mQvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UYy4LQ0G8YCiipQ9PCc+e4xkUcTa7McZMoOknVitWPtGcI1YExs01sLIJnoijtaKPLbllQYu5OxkMGlNz4sw/jANrG+iIUer2jMtMfJr+3J3jfUXLnmIz+OGuqyItq2mymgE7QP3lxmt8R6z18Du0gJZVuud16Ppii1FiuDFrVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dzYh/Cet; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UqlqTD0K"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-637a2543127so1775225a12.1
-        for <llvm@lists.linux.dev>; Thu, 02 Oct 2025 06:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759412077; x=1760016877; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nnPGC+IldHzkbqTUWen4TzWJyqmVdUT5DVUmRQOo6TA=;
-        b=UqlqTD0KgJFz1u0KYR36bDVVXdf6P4YfUQdNRx+JAk3OHcK07v/TctWhgM/ffTseRb
-         T2cJtd+Y7oIeN1l81OJWPZB1mDIHvU78P+fXhTGzFryuY+c73vG5H6PeiRYzklkbi95u
-         n9g0NVLnDA2MAdGWGtFQyhryLGhaBcl5L6JaDcXSQgxFZbCxCD8hzBUhGDRK2pG8pa3o
-         6JeTQNnbQLRFaJnGjK/tfyXkJDnMEqKnA5nV0PkqeE2IXURzaxv3oDGVOiGhapPSPaW0
-         7Rte4EHch9PQNQ7ilTAXuzhowJFdf638Gy9fDdCoppEIVLEnYYjF1oT2cSD3Q6UHcAcN
-         TJ1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759412077; x=1760016877;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nnPGC+IldHzkbqTUWen4TzWJyqmVdUT5DVUmRQOo6TA=;
-        b=ZmAAlUTEg4uNk9uryB3XAm1xcBcIVGGq++E0LUCYLvQsGvMx6Uju/HS/6n0OI+UCwn
-         xaar3/o62ynVh9NfWLkBnSDC9GWUinlz9x20kBTc0tPQdOpQrkPVXzKtgHBuP089qoct
-         Bexb2UoS5bW7X5/gInjXhmek/Hsn1++EMXIMd6Yw9G5QpDq6Ot84MjYAuQaSAmgaz0B3
-         1kgTCrZDMKn1MuvPM7Uhutu7olmqTqPm9y14sIxRFLgI669PStwxg6AlsH0SirBzumNU
-         hd/EV4NLJFQp3D4Jmq4E+Ju5f0YqA+5sUHXttBUpd81672TkanBeCQHYimr/dwaQ1kMw
-         orUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUEB1y4HLPdNep60BnaMboenM8UWPi7YAKdpu2enseMNaOhJ8rMxHIMaGfk7gJvkkdZmT5d@lists.linux.dev
-X-Gm-Message-State: AOJu0YyO4TYra3Ct6JfdL3mFnnwr8aPdhJUCkq5GTSK5GSeyoVC3stmC
-	zgz6Yh86G1vROPUX+Gn/8DxoxGY8w7fYLAukZ0popKfgIfufld3abeTPF7n+cwyC0VZfBewRLzB
-	RCCggSHaltRkJ7OPu4loRgoMMsAL95xE=
-X-Gm-Gg: ASbGncth+hCBxDHbQueBlSZbdox5SPMUEdVcqvhoobb4F6j65vQs7Ho7lj2JN778qMw
-	0DdJhS0ZBMqX0i/XEjTDzKjYIjywjVA/ZE9lidFCrilGHNJ54eOFx8Pz1jVCVg1Jxxs1PdyQ0Um
-	LM3V3QmIaM7V0zpiEDPbPAziP+O+bUoDc8jaDOpCSDsw79qRbqfzZU+qiQPLH+rkfqc+h74ZvqN
-	EGAu7KhnMKxIENEjRGV3i8npKiyDkg=
-X-Google-Smtp-Source: AGHT+IGmzd9CQ/VM6I2A0HOxYWCsQy3Rprh9EYekm+GrrjnFCuK2zijXUFoUCWl6rXd52JRSyfpYEGOUY43BddWN8B0=
-X-Received: by 2002:a17:907:d24:b0:b3a:a801:5245 with SMTP id
- a640c23a62f3a-b46e60321a3mr1043739966b.32.1759412077277; Thu, 02 Oct 2025
- 06:34:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dzYh/Cet"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759418661; x=1790954661;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KTW3ZnSUOwjzPpITRy4BCvcebORZReQ0eliDIO1mQvA=;
+  b=dzYh/CetM8Cj5WOrlz1NZgE1wlYak7U6SKArnzA6qeS0P12ipZ/zjRDv
+   ozmXmwgXdoDkb3+ZOHm+PSERawkqba4YxEETyP72IcLKhBvXkipOCl3I2
+   hC5nmyS4Q9tVb7sfFXfpAf4gEWZczMRRLTvXDG6TKGaVLz+Yhrtij273i
+   MqH1pYzbO5ODLld3NjVf/0R6wJtxcVNQkLr26wTH/3geuNG9Y8kR/i+W2
+   oj9D0n1lYtm8pPu3I9qSnNYRB0WhhXKsDU1QSdCBnXtN6WOVo5f5O7fVd
+   YDNJaW7jJlhOjyvN58E3ltjJhW2h37a8aLOpovv6hUbApFiu2vSQcmCGB
+   A==;
+X-CSE-ConnectionGUID: zlsd5rN9QjWbdR4M+q2LKA==
+X-CSE-MsgGUID: pX2cXbOGRPmJ+6nE/MD7pA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="61415847"
+X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
+   d="scan'208";a="61415847"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 08:24:20 -0700
+X-CSE-ConnectionGUID: HUFcQhV0RjeDEAWhH/N+xg==
+X-CSE-MsgGUID: 1WEBNXCWQSCY/YEeOP3HfQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
+   d="scan'208";a="210029743"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 02 Oct 2025 08:24:19 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v4LAG-0003tT-16;
+	Thu, 02 Oct 2025 15:24:16 +0000
+Date: Thu, 2 Oct 2025 23:24:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:iommu-fwspec 4/14] drivers/iommu/riscv/iommu.c:1483:29:
+ error: redefinition of 'iommu' with a different type: 'struct
+ riscv_iommu_device *' vs 'struct iommu_device *'
+Message-ID: <202510022323.BvXzi3Uv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250929163531.376092-1-benx.guo@gmail.com>
-In-Reply-To: <20250929163531.376092-1-benx.guo@gmail.com>
-From: Alex Shi <seakeel@gmail.com>
-Date: Thu, 2 Oct 2025 21:33:59 +0800
-X-Gm-Features: AS18NWANBx790LwUgtQWYd202WIkA-xopIXIFnTenjWVOH3RzVuDpxiS0uYQKlM
-Message-ID: <CAJy-Am=pC07CAWgRSTJ6WLaBdYeg8LQbVDCJp4PYoHaikFJ4Bw@mail.gmail.com>
-Subject: Re: [PATCH] docs/zh_CN: Add translation of rust/testing.rst
-To: Ben Guo <benx.guo@gmail.com>
-Cc: Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, 
-	Dongliang Mu <dzm91@hust.edu.cn>, Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, hust-os-kernel-patches@googlegroups.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-SSBjYW4ndCBhcHBseSBpdCBhZnRlciB5b3VyIHByZXZpb3VzIHJ1c3QgcGF0Y2guIENvdWxkIHlv
-dSByZWJhc2UgdGhpcw0KcGF0Y2ggb24gbXkgdHJlZT8NCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcv
-cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2FsZXhzL2xpbnV4LmdpdC8NCg0KVGhhbmtzDQoNCkJl
-biBHdW8gPGJlbnguZ3VvQGdtYWlsLmNvbT4g5LqOMjAyNeW5tDnmnIgzMOaXpeWRqOS6jCAwMDoz
-NeWGmemBk++8mg0KPg0KPiBDb21wbGV0ZSB0aGUgdHJhbnNsYXRpb24gb2YgcnVzdC90ZXN0aW5n
-LnJzdCBhbmQgYWRkIHRoZSB0ZXN0aW5nIFRPQyBlbnRyeQ0KPiB0byBydXN0L2luZGV4LnJzdC4N
-Cj4NCj4gQWRkIHRoZSB0cmFuc2xhdGlvbiBiYXNlZCBvbiBjb21taXQgYTNiMjM0NzM0M2UwDQo+
-ICgiRG9jdW1lbnRhdGlvbjogcnVzdDogdGVzdGluZzogYWRkIGRvY3Mgb24gdGhlIG5ldyBLVW5p
-dCBgI1t0ZXN0XWAgdGVzdHMiKS4NCj4NCj4gU2lnbmVkLW9mZi1ieTogQmVuIEd1byA8YmVueC5n
-dW9AZ21haWwuY29tPg0KPiAtLS0NCj4gIC4uLi90cmFuc2xhdGlvbnMvemhfQ04vcnVzdC9pbmRl
-eC5yc3QgICAgICAgICB8ICAgMSArDQo+ICAuLi4vdHJhbnNsYXRpb25zL3poX0NOL3J1c3QvdGVz
-dGluZy5yc3QgICAgICAgfCAyMTUgKysrKysrKysrKysrKysrKysrDQo+ICAyIGZpbGVzIGNoYW5n
-ZWQsIDIxNiBpbnNlcnRpb25zKCspDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlv
-bi90cmFuc2xhdGlvbnMvemhfQ04vcnVzdC90ZXN0aW5nLnJzdA0KPg0KPiBkaWZmIC0tZ2l0IGEv
-RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vcnVzdC9pbmRleC5yc3QgYi9Eb2N1bWVu
-dGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9ydXN0L2luZGV4LnJzdA0KPiBpbmRleCBiMDFmODg3
-ZTcxNjcuLmVmYzIxMjZmNjMwNyAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi90cmFuc2xh
-dGlvbnMvemhfQ04vcnVzdC9pbmRleC5yc3QNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi90cmFuc2xh
-dGlvbnMvemhfQ04vcnVzdC9pbmRleC5yc3QNCj4gQEAgLTE5LDYgKzE5LDcgQEAgUnVzdA0KPiAg
-ICAgIGdlbmVyYWwtaW5mb3JtYXRpb24NCj4gICAgICBjb2RpbmctZ3VpZGVsaW5lcw0KPiAgICAg
-IGFyY2gtc3VwcG9ydA0KPiArICAgIHRlc3RpbmcNCj4NCj4gIC4uIG9ubHk6OiAgc3VicHJvamVj
-dCBhbmQgaHRtbA0KPg0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMv
-emhfQ04vcnVzdC90ZXN0aW5nLnJzdCBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NO
-L3J1c3QvdGVzdGluZy5yc3QNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAw
-MDAwMDAwLi5jYTgxZjFjZWY2ZWINCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9Eb2N1bWVudGF0
-aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9ydXN0L3Rlc3RpbmcucnN0DQo+IEBAIC0wLDAgKzEsMjE1
-IEBADQo+ICsuLiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiArLi4gaW5jbHVk
-ZTo6IC4uL2Rpc2NsYWltZXItemhfQ04ucnN0DQo+ICsNCj4gKzpPcmlnaW5hbDogRG9jdW1lbnRh
-dGlvbi9ydXN0L3Rlc3RpbmcucnN0DQo+ICsNCj4gKzrnv7vor5E6DQo+ICsNCj4gKyDpg63mnbAg
-QmVuIEd1byA8YmVueC5ndW9AZ21haWwuY29tPg0KPiArDQo+ICvmtYvor5UNCj4gKz09PT0NCj4g
-Kw0KPiAr5pys5paH5LuL57uN5LqG5aaC5L2V5Zyo5YaF5qC45Lit5rWL6K+VIFJ1c3Qg5Luj56CB
-44CCDQo+ICsNCj4gK+acieS4ieenjea1i+ivleexu+Wei++8mg0KPiArDQo+ICstIEtVbml0IOa1
-i+ivlQ0KPiArLSBgYCNbdGVzdF1gYCDmtYvor5UNCj4gKy0gS3NlbGZ0ZXN0cw0KPiArDQo+ICtL
-VW5pdCDmtYvor5UNCj4gKy0tLS0tLS0tLS0NCj4gKw0KPiAr6L+Z5Lqb5rWL6K+V5p2l6IeqIFJ1
-c3Qg5paH5qGj5Lit55qE56S65L6L44CC5a6D5Lus5Lya6KKr6L2s5o2i5Li6IEtVbml0IOa1i+iv
-leOAgg0KPiArDQo+ICvkvb/nlKgNCj4gKyoqKioNCj4gKw0KPiAr6L+Z5Lqb5rWL6K+V5Y+v5Lul
-6YCa6L+HIEtVbml0IOi/kOihjOOAguS+i+Wmgu+8jOWcqOWRveS7pOihjOS4reS9v+eUqCBgYGt1
-bml0X3Rvb2xgYCDvvIggYGBrdW5pdC5weWBgIO+8iTo6DQo+ICsNCj4gKyAgICAgICAuL3Rvb2xz
-L3Rlc3Rpbmcva3VuaXQva3VuaXQucHkgcnVuIC0tbWFrZV9vcHRpb25zIExMVk09MSAtLWFyY2gg
-eDg2XzY0IC0ta2NvbmZpZ19hZGQgQ09ORklHX1JVU1Q9eQ0KPiArDQo+ICvmiJbogIXvvIxLVW5p
-dCDkuZ/lj6/ku6XlnKjlhoXmoLjlkK/liqjml7bku6XlhoXnva7mlrnlvI/ov5DooYzjgILojrfl
-j5bmm7TlpJogS1VuaXQg5L+h5oGv77yM6K+35Y+C6ZiFDQo+ICtEb2N1bWVudGF0aW9uL2Rldi10
-b29scy9rdW5pdC9pbmRleC5yc3TjgIINCj4gK+WFs+S6juWGheaguOWGhee9ruS4juWRveS7pOih
-jOa1i+ivleeahOivpue7huS/oeaBr++8jOivt+WPgumYhSBEb2N1bWVudGF0aW9uL2Rldi10b29s
-cy9rdW5pdC9hcmNoaXRlY3R1cmUucnN044CCDQo+ICsNCj4gK+imgeS9v+eUqOi/meS6myBLVW5p
-dCDmlofmoaPmtYvor5XvvIzpnIDopoHlnKjlhoXmoLjphY3nva7kuK3lkK/nlKjku6XkuIvpgInp
-obk6Og0KPiArDQo+ICsgICAgICAgQ09ORklHX0tVTklUDQo+ICsgICAgICAgICAgS2VybmVsIGhh
-Y2tpbmcgLT4gS2VybmVsIFRlc3RpbmcgYW5kIENvdmVyYWdlIC0+IEtVbml0IC0gRW5hYmxlIHN1
-cHBvcnQgZm9yIHVuaXQgdGVzdHMNCj4gKyAgICAgICBDT05GSUdfUlVTVF9LRVJORUxfRE9DVEVT
-VFMNCj4gKyAgICAgICAgICBLZXJuZWwgaGFja2luZyAtPiBSdXN0IGhhY2tpbmcgLT4gRG9jdGVz
-dHMgZm9yIHRoZSBga2VybmVsYCBjcmF0ZQ0KPiArDQo+ICtLVW5pdCDmtYvor5XljbPmlofmoaPm
-tYvor5UNCj4gKyoqKioqKioqKioqKioqKioqKioqDQo+ICsNCj4gK+aWh+aho+a1i+ivle+8iCAq
-ZG9jdGVzdHMqIO+8ieS4gOiIrOeUqOS6juWxleekuuWHveaVsOOAgee7k+aehOS9k+aIluaooeWd
-l+etieeahOS9v+eUqOaWueazleOAgg0KPiArDQo+ICvlroPku6zpnZ7luLjmlrnkvr/vvIzlm6Dk
-uLrlroPku6zlsLHlhpnlnKjmlofmoaPml4HovrnjgILkvovlpoLvvJoNCj4gKw0KPiArLi4gY29k
-ZS1ibG9jazo6IHJ1c3QNCj4gKw0KPiArICAgICAgIC8vLyDmsYLlkozkuKTkuKrmlbDlrZfjgIIN
-Cj4gKyAgICAgICAvLy8NCj4gKyAgICAgICAvLy8gYGBgDQo+ICsgICAgICAgLy8vIGFzc2VydF9l
-cSEobXltb2Q6OmYoMTAsIDIwKSwgMzApOw0KPiArICAgICAgIC8vLyBgYGANCj4gKyAgICAgICBw
-dWIgZm4gZihhOiBpMzIsIGI6IGkzMikgLT4gaTMyIHsNCj4gKyAgICAgICAgICAgYSArIGINCj4g
-KyAgICAgICB9DQo+ICsNCj4gK+WcqOeUqOaIt+epuumXtOS4re+8jOi/meS6m+a1i+ivleeUsSBg
-YHJ1c3Rkb2NgYCDotJ/otKPmlLbpm4blubbov5DooYzjgILljZXni6zkvb/nlKjov5nkuKrlt6Xl
-hbflt7Lnu4/lvojmnInku7flgLzvvIwNCj4gK+WboOS4uuWug+WPr+S7pemqjOivgeekuuS+i+iD
-veWQpuaIkOWKn+e8luivke+8iOehruS/neWSjOS7o+eggeS/neaMgeWQjOatpe+8ie+8jA0KPiAr
-5ZCM5pe26L+Y5Y+v5Lul6L+Q6KGM6YKj5Lqb5LiN5L6d6LWW5YaF5qC4IEFQSSDnmoTnpLrkvovj
-gIINCj4gKw0KPiAr54S26ICM77yM5Zyo5YaF5qC45Lit77yM6L+Z5Lqb5rWL6K+V5Lya6L2s5o2i
-5oiQIEtVbml0IOa1i+ivleWll+S7tuOAgg0KPiAr6L+Z5oSP5ZGz552A5paH5qGj5rWL6K+V5Lya
-6KKr57yW6K+R5oiQIFJ1c3Qg5YaF5qC45a+56LGh77yM5LuO6ICM5Y+v5Lul5Zyo5p6E5bu655qE
-5YaF5qC4546v5aKD5Lit6L+Q6KGM44CCDQo+ICsNCj4gK+mAmui/h+S4jiBLVW5pdCDpm4bmiJDv
-vIxSdXN0IOeahOaWh+aho+a1i+ivleWPr+S7peWkjeeUqOWGheaguOeOsOacieeahOa1i+ivleiu
-vuaWveOAgg0KPiAr5L6L5aaC77yM5YaF5qC45pel5b+X5Lya5pi+56S6OjoNCj4gKw0KPiArICAg
-ICAgIEtUQVAgdmVyc2lvbiAxDQo+ICsgICAgICAgMS4uMQ0KPiArICAgICAgICAgICBLVEFQIHZl
-cnNpb24gMQ0KPiArICAgICAgICAgICAjIFN1YnRlc3Q6IHJ1c3RfZG9jdGVzdHNfa2VybmVsDQo+
-ICsgICAgICAgICAgIDEuLjU5DQo+ICsgICAgICAgICAgICMgcnVzdF9kb2N0ZXN0X2tlcm5lbF9i
-dWlsZF9hc3NlcnRfcnNfMC5sb2NhdGlvbjogcnVzdC9rZXJuZWwvYnVpbGRfYXNzZXJ0LnJzOjEz
-DQo+ICsgICAgICAgICAgIG9rIDEgcnVzdF9kb2N0ZXN0X2tlcm5lbF9idWlsZF9hc3NlcnRfcnNf
-MA0KPiArICAgICAgICAgICAjIHJ1c3RfZG9jdGVzdF9rZXJuZWxfYnVpbGRfYXNzZXJ0X3JzXzEu
-bG9jYXRpb246IHJ1c3Qva2VybmVsL2J1aWxkX2Fzc2VydC5yczo1Ng0KPiArICAgICAgICAgICBv
-ayAyIHJ1c3RfZG9jdGVzdF9rZXJuZWxfYnVpbGRfYXNzZXJ0X3JzXzENCj4gKyAgICAgICAgICAg
-IyBydXN0X2RvY3Rlc3Rfa2VybmVsX2luaXRfcnNfMC5sb2NhdGlvbjogcnVzdC9rZXJuZWwvaW5p
-dC5yczoxMjINCj4gKyAgICAgICAgICAgb2sgMyBydXN0X2RvY3Rlc3Rfa2VybmVsX2luaXRfcnNf
-MA0KPiArICAgICAgICAgICAuLi4NCj4gKyAgICAgICAgICAgIyBydXN0X2RvY3Rlc3Rfa2VybmVs
-X3R5cGVzX3JzXzIubG9jYXRpb246IHJ1c3Qva2VybmVsL3R5cGVzLnJzOjE1MA0KPiArICAgICAg
-ICAgICBvayA1OSBydXN0X2RvY3Rlc3Rfa2VybmVsX3R5cGVzX3JzXzINCj4gKyAgICAgICAjIHJ1
-c3RfZG9jdGVzdHNfa2VybmVsOiBwYXNzOjU5IGZhaWw6MCBza2lwOjAgdG90YWw6NTkNCj4gKyAg
-ICAgICAjIFRvdGFsczogcGFzczo1OSBmYWlsOjAgc2tpcDowIHRvdGFsOjU5DQo+ICsgICAgICAg
-b2sgMSBydXN0X2RvY3Rlc3RzX2tlcm5lbA0KPiArDQo+ICvmlofmoaPmtYvor5XkuK3vvIzkuZ/l
-j6/ku6XmraPluLjkvb/nlKggYD8gPGh0dHBzOi8vZG9jLnJ1c3QtbGFuZy5vcmcvcmVmZXJlbmNl
-L2V4cHJlc3Npb25zL29wZXJhdG9yLWV4cHIuaHRtbCN0aGUtcXVlc3Rpb24tbWFyay1vcGVyYXRv
-cj5gXyDov5DnrpfnrKbvvIzkvovlpoLvvJoNCj4gKw0KPiArLi4gY29kZS1ibG9jazo6IHJ1c3QN
-Cj4gKw0KPiArICAgICAgIC8vLyBgYGANCj4gKyAgICAgICAvLy8gIyB1c2Uga2VybmVsOjp7c3Bh
-d25fd29ya19pdGVtLCB3b3JrcXVldWV9Ow0KPiArICAgICAgIC8vLyBzcGF3bl93b3JrX2l0ZW0h
-KHdvcmtxdWV1ZTo6c3lzdGVtKCksIHx8IHByX2luZm8hKCJ4XG4iKSk/Ow0KPiArICAgICAgIC8v
-LyAjIE9rOjo8KCksIEVycm9yPigoKSkNCj4gKyAgICAgICAvLy8gYGBgDQo+ICsNCj4gK+i/meS6
-m+a1i+ivleWSjOaZrumAmuS7o+eggeS4gOagt++8jOS5n+WPr+S7peWcqCBgYENMSVBQWT0xYGAg
-5p2h5Lu25LiL6YCa6L+HIENsaXBweSDov5vooYznvJbor5HvvIwNCj4gK+WboOatpOWPr+S7peS7
-jumineWklueahCBsaW50IOajgOafpeS4reiOt+ebiuOAgg0KPiArDQo+ICvkuLrkuobkvr/kuo7l
-vIDlj5HogIXlrprkvY3mlofmoaPmtYvor5Xlh7rplJnnmoTlhbfkvZPooYzlj7fvvIzml6Xlv5fk
-vJrovpPlh7rkuIDmnaEgS1RBUCDor4rmlq3kv6Hmga/jgIINCj4gK+WFtuS4reagh+aYjuS6huWO
-n+Wni+a1i+ivleeahOaWh+S7tuWSjOihjOWPt++8iOS4jeaYryBgYHJ1c3Rkb2NgYCDnlJ/miJDn
-moTkuLTml7YgUnVzdCDmlofku7bkvY3nva7vvIk6Og0KPiArDQo+ICsgICAgICAgIyBydXN0X2Rv
-Y3Rlc3Rfa2VybmVsX3R5cGVzX3JzXzIubG9jYXRpb246IHJ1c3Qva2VybmVsL3R5cGVzLnJzOjE1
-MA0KPiArDQo+ICtSdXN0IOa1i+ivleS4reW4uOeUqOeahOaWreiogOWuj+aYr+adpeiHqiBSdXN0
-IOagh+WHhuW6k++8iCBgYGNvcmVgYCDvvInkuK3nmoQgYGBhc3NlcnQhYGAg5ZKMIGBgYXNzZXJ0
-X2VxIWBgIOWuj+OAgg0KPiAr5YaF5qC45o+Q5L6b5LqG5LiA5Liq5a6a5Yi254mI5pys77yM6L+Z
-5Lqb5a6P55qE6LCD55So5Lya6KKr6L2s5Y+R5YiwIEtVbml044CCDQo+ICvlkowgS1VuaXQg5rWL
-6K+V5LiN5ZCM55qE5piv77yM6L+Z5Lqb5a6P5LiN6ZyA6KaB5Lyg6YCS5LiK5LiL5paH5Y+C5pWw
-77yIIGBgc3RydWN0IGt1bml0ICpgYCDvvInjgIINCj4gK+i/meS9v+W+l+Wug+S7rOabtOaYk+S6
-juS9v+eUqO+8jOWQjOaXtuaWh+aho+eahOivu+iAheaXoOmcgOWFs+W/g+W6leWxgueUqOeahOaY
-r+S7gOS5iOa1i+ivleahhuaetuOAgg0KPiAr5q2k5aSW77yM6L+Z56eN5pa55byP5pyq5p2l5Lmf
-6K645Y+v5Lul6K6p5oiR5Lus5pu05a655piT5rWL6K+V56ys5LiJ5pa55Luj56CB44CCDQo+ICsN
-Cj4gK+W9k+WJjeacieS4gOS4qumZkOWItu+8mktVbml0IOS4jeaUr+aMgeWcqOWFtuS7luS7u+WK
-oeS4reaJp+ihjOaWreiogOOAgg0KPiAr5Zug5q2k77yM5aaC5p6c5pat6KiA55yf55qE5aSx6LSl
-5LqG77yM5oiR5Lus5Y+q5piv566A5Y2V5Zyw5oqK6ZSZ6K+v5omT5Y2w5Yiw5YaF5qC45pel5b+X
-6YeM44CCDQo+ICvlj6blpJbvvIzmlofmoaPmtYvor5XkuI3pgILnlKjkuo7pnZ7lhazlvIDnmoTl
-h73mlbDjgIINCj4gKw0KPiAr5L2c5Li65paH5qGj5Lit55qE5rWL6K+V56S65L6L77yM5bqU5b2T
-5YOPIOKAnOWunumZheS7o+eggeKAnSDkuIDmoLfnvJblhpnjgIINCj4gK+S+i+Wmgu+8muS4jeim
-geS9v+eUqCBgYHVud3JhcCgpYGAg5oiWIGBgZXhwZWN0KClgYO+8jOivt+S9v+eUqCBgPyA8aHR0
-cHM6Ly9kb2MucnVzdC1sYW5nLm9yZy9yZWZlcmVuY2UvZXhwcmVzc2lvbnMvb3BlcmF0b3ItZXhw
-ci5odG1sI3RoZS1xdWVzdGlvbi1tYXJrLW9wZXJhdG9yPmBfIOi/kOeul+espuOAgg0KPiAr5pu0
-5aSa6IOM5pmv5L+h5oGv77yM6K+35Y+C6ZiF77yaDQo+ICsNCj4gKyAgICAgICBodHRwczovL3J1
-c3QuZG9jcy5rZXJuZWwub3JnL2tlcm5lbC9lcnJvci90eXBlLlJlc3VsdC5odG1sI2Vycm9yLWNv
-ZGVzLWluLWMtYW5kLXJ1c3QNCj4gKw0KPiArYGAjW3Rlc3RdYGAg5rWL6K+VDQo+ICstLS0tLS0t
-LS0tLS0tLS0tDQo+ICsNCj4gK+atpOWklu+8jOi/mOaciSBgYCNbdGVzdF1gYCDmtYvor5XjgILk
-uI7mlofmoaPmtYvor5XnsbvkvLzvvIzov5nkupvmtYvor5XkuI7nlKjmiLfnqbrpl7TkuK3nmoTm
-tYvor5XmlrnlvI/kuZ/pnZ7luLjnm7jov5HvvIzlubbkuJTlkIzmoLfkvJrmmKDlsITliLAgS1Vu
-aXTjgIINCj4gKw0KPiAr6L+Z5Lqb5rWL6K+V6YCa6L+HIGBga3VuaXRfdGVzdHNgYCDov4fnqIvl
-ro/lvJXlhaXvvIzor6Xlro/lsIbmtYvor5XlpZfku7bnmoTlkI3np7DkvZzkuLrlj4LmlbDjgIIN
-Cj4gKw0KPiAr5L6L5aaC77yM5YGH6K6+5oOz6KaB5rWL6K+V5YmN6Z2i5paH5qGj5rWL6K+V56S6
-5L6L5Lit55qE5Ye95pWwIGBgZmBg77yM5oiR5Lus5Y+v5Lul5Zyo5a6a5LmJ6K+l5Ye95pWw55qE
-5ZCM5LiA5paH5Lu25Lit57yW5YaZ77yaDQo+ICsNCj4gKy4uIGNvZGUtYmxvY2s6OiBydXN0DQo+
-ICsNCj4gKyAgICAgICAjW2t1bml0X3Rlc3RzKHJ1c3Rfa2VybmVsX215bW9kKV0NCj4gKyAgICAg
-ICBtb2QgdGVzdHMgew0KPiArICAgICAgICAgICB1c2Ugc3VwZXI6Oio7DQo+ICsNCj4gKyAgICAg
-ICAgICAgI1t0ZXN0XQ0KPiArICAgICAgICAgICBmbiB0ZXN0X2YoKSB7DQo+ICsgICAgICAgICAg
-ICAgICBhc3NlcnRfZXEhKGYoMTAsIDIwKSwgMzApOw0KPiArICAgICAgICAgICB9DQo+ICsgICAg
-ICAgfQ0KPiArDQo+ICvlpoLmnpzmiJHku6zmiafooYzov5nmrrXku6PnoIHvvIzlhoXmoLjml6Xl
-v5fkvJrmmL7npLo6Og0KPiArDQo+ICsgICAgICAgICAgIEtUQVAgdmVyc2lvbiAxDQo+ICsgICAg
-ICAgICAgICMgU3VidGVzdDogcnVzdF9rZXJuZWxfbXltb2QNCj4gKyAgICAgICAgICAgIyBzcGVl
-ZDogbm9ybWFsDQo+ICsgICAgICAgICAgIDEuLjENCj4gKyAgICAgICAgICAgIyB0ZXN0X2Yuc3Bl
-ZWQ6IG5vcm1hbA0KPiArICAgICAgICAgICBvayAxIHRlc3RfZg0KPiArICAgICAgIG9rIDEgcnVz
-dF9rZXJuZWxfbXltb2QNCj4gKw0KPiAr5LiO5paH5qGj5rWL6K+V57G75Ly877yMIGBgYXNzZXJ0
-IWBgIOWSjCBgYGFzc2VydF9lcSFgYCDlro/ooqvmmKDlsITlm54gS1VuaXQg5bm25LiU5LiN5Lya
-5Y+R55SfIHBhbmlj44CCDQo+ICvlkIzmoLfvvIzmlK/mjIEgYD8gPGh0dHBzOi8vZG9jLnJ1c3Qt
-bGFuZy5vcmcvcmVmZXJlbmNlL2V4cHJlc3Npb25zL29wZXJhdG9yLWV4cHIuaHRtbCN0aGUtcXVl
-c3Rpb24tbWFyay1vcGVyYXRvcj5gXyDov5DnrpfnrKbvvIwNCj4gK+a1i+ivleWHveaVsOWPr+S7
-peS7gOS5iOmDveS4jei/lOWbnu+8iOWNleWFg+exu+WeiyBgYCgpYGDvvInmiJYgYGBSZXN1bHRg
-YCDvvIjku7vkvZUgYGBSZXN1bHQ8VCwgRT5gYO+8ieOAguS+i+Wmgu+8mg0KPiArDQo+ICsuLiBj
-b2RlLWJsb2NrOjogcnVzdA0KPiArDQo+ICsgICAgICAgI1trdW5pdF90ZXN0cyhydXN0X2tlcm5l
-bF9teW1vZCldDQo+ICsgICAgICAgbW9kIHRlc3RzIHsNCj4gKyAgICAgICAgICAgdXNlIHN1cGVy
-OjoqOw0KPiArDQo+ICsgICAgICAgICAgICNbdGVzdF0NCj4gKyAgICAgICAgICAgZm4gdGVzdF9n
-KCkgLT4gUmVzdWx0IHsNCj4gKyAgICAgICAgICAgICAgIGxldCB4ID0gZygpPzsNCj4gKyAgICAg
-ICAgICAgICAgIGFzc2VydF9lcSEoeCwgMzApOw0KPiArICAgICAgICAgICAgICAgT2soKCkpDQo+
-ICsgICAgICAgICAgIH0NCj4gKyAgICAgICB9DQo+ICsNCj4gK+WmguaenOaIkeS7rOi/kOihjOa1
-i+ivleW5tuS4lOiwg+eUqCBgYGdgYCDlpLHotKXvvIzpgqPkuYjlhoXmoLjml6Xlv5fkvJrmmL7n
-pLo6Og0KPiArDQo+ICsgICAgICAgICAgIEtUQVAgdmVyc2lvbiAxDQo+ICsgICAgICAgICAgICMg
-U3VidGVzdDogcnVzdF9rZXJuZWxfbXltb2QNCj4gKyAgICAgICAgICAgIyBzcGVlZDogbm9ybWFs
-DQo+ICsgICAgICAgICAgIDEuLjENCj4gKyAgICAgICAgICAgIyB0ZXN0X2c6IEFTU0VSVElPTiBG
-QUlMRUQgYXQgcnVzdC9rZXJuZWwvbGliLnJzOjMzNQ0KPiArICAgICAgICAgICBFeHBlY3RlZCBp
-c190ZXN0X3Jlc3VsdF9vayh0ZXN0X2coKSkgdG8gYmUgdHJ1ZSwgYnV0IGlzIGZhbHNlDQo+ICsg
-ICAgICAgICAgICMgdGVzdF9nLnNwZWVkOiBub3JtYWwNCj4gKyAgICAgICAgICAgbm90IG9rIDEg
-dGVzdF9nDQo+ICsgICAgICAgbm90IG9rIDEgcnVzdF9rZXJuZWxfbXltb2QNCj4gKw0KPiAr5aaC
-5p6cIGBgI1t0ZXN0XWBgIOa1i+ivleWPr+S7peWvueeUqOaIt+i1t+WIsOekuuS+i+S9nOeUqO+8
-jOmCo+WwseW6lOivpeaUueeUqOaWh+aho+a1i+ivleOAgg0KPiAr5Y2z5L2/5pivIEFQSSDnmoTo
-vrnnlYzmg4XlhrXvvIzkvovlpoLplJnor6/miJbovrnnlYzpl67popjvvIzmlL7lnKjnpLrkvovk
-uK3lsZXnpLrkuZ/lkIzmoLfmnInku7flgLzjgIINCj4gKw0KPiArYGBydXN0dGVzdGBgIOWuv+S4
-u+acuua1i+ivlQ0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gKw0KPiAr6L+Z57G75rWL
-6K+V6L+Q6KGM5Zyo55So5oi356m66Ze077yM5Y+v5Lul6YCa6L+HIGBgcnVzdHRlc3RgYCDnm67m
-oIflnKjmnoTlu7rlhoXmoLjnmoTlrr/kuLvmnLrkuK3nvJbor5Hlubbov5DooYw6Og0KPiArDQo+
-ICsgICAgICAgbWFrZSBMTFZNPTEgcnVzdHRlc3QNCj4gKw0KPiAr5b2T5YmN5pON5L2c6ZyA6KaB
-5YaF5qC4IGBgLmNvbmZpZ2Bg44CCDQo+ICsNCj4gK+ebruWJje+8jOWug+S7rOS4u+imgeeUqOS6
-jua1i+ivlSBgYG1hY3Jvc2BgIGNyYXRlIOeahOekuuS+i+OAgg0KPiArDQo+ICtLc2VsZnRlc3Rz
-DQo+ICstLS0tLS0tLS0tDQo+ICsNCj4gK0tzZWxmdGVzdHMg5Y+v5Lul5ZyoIGBgdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvcnVzdGBgIOaWh+S7tuWkueS4reaJvuWIsOOAgg0KPiArDQo+ICvmtYvo
-r5XmiYDpnIDnmoTlhoXmoLjphY3nva7pgInpobnliJflnKggYGB0b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9ydXN0L2NvbmZpZ2BgIOaWh+S7tuS4re+8jA0KPiAr5Y+v5Lul5YCf5YqpIGBgbWVyZ2Vf
-Y29uZmlnLnNoYGAg6ISa5pys5ZCI5bm25Yiw546w5pyJ6YWN572u5LitOjoNCj4gKw0KPiArICAg
-ICAgIC4vc2NyaXB0cy9rY29uZmlnL21lcmdlX2NvbmZpZy5zaCAuY29uZmlnIHRvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL3J1c3QvY29uZmlnDQo+ICsNCj4gK0tzZWxmdGVzdHMg5Lya5Zyo5YaF5qC4
-5rqQ56CB5qCR5Lit5p6E5bu677yM5Lul5L6/5Zyo6L+Q6KGM55u45ZCM54mI5pys5YaF5qC455qE
-57O757uf5LiK5omn6KGM5rWL6K+V44CCDQo+ICsNCj4gK+S4gOaXpuWuieijheW5tuWQr+WKqOS6
-huS4jua6kOeggeagkeWMuemFjeeahOWGheaguO+8jOa1i+ivleWNs+WPr+mAmui/h+S7peS4i+WR
-veS7pOe8luivkeW5tuaJp+ihjDo6DQo+ICsNCj4gKyAgICAgICBtYWtlIFRBUkdFVFM9InJ1c3Qi
-IGtzZWxmdGVzdA0KPiArDQo+ICvor7flj4LpmIUgRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3Nl
-bGZ0ZXN0LnJzdCDmlofmoaPku6Xojrflj5bmm7TlpJrkv6Hmga/jgIINCj4gLS0NCj4gMi40My4w
-DQo+DQo=
+tree:   https://github.com/jgunthorpe/linux iommu-fwspec
+head:   670b33a8cfd32984040c12e995134b9cb4cdf0a5
+commit: db8ec1fd99f998cb3daefa01d8eadffbbb9aa439 [4/14] iommu/riscv: Use probe_device_fwspec()
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251002/202510022323.BvXzi3Uv-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251002/202510022323.BvXzi3Uv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510022323.BvXzi3Uv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iommu/riscv/iommu.c:1483:29: error: redefinition of 'iommu' with a different type: 'struct riscv_iommu_device *' vs 'struct iommu_device *'
+    1483 |         struct riscv_iommu_device *iommu =
+         |                                    ^
+   drivers/iommu/riscv/iommu.c:1479:65: note: previous definition is here
+    1479 | static int riscv_iommu_probe_device_fwspec(struct iommu_device *iommu,
+         |                                                                 ^
+>> drivers/iommu/riscv/iommu.c:1484:44: error: no member named 'iommu' in 'struct iommu_device'
+    1484 |                 container_of(iommu, struct iommu_device, iommu);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/linux/container_of.h:21:49: note: expanded from macro 'container_of'
+      21 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+      22 |                       __same_type(*(ptr), void),                        \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      23 |                       "pointer type mismatch in container_of()");       \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:507:74: note: expanded from macro '__same_type'
+     507 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+>> drivers/iommu/riscv/iommu.c:1484:3: error: no member named 'iommu' in 'iommu_device'
+    1484 |                 container_of(iommu, struct iommu_device, iommu);
+         |                 ^                                        ~~~~~
+   include/linux/container_of.h:24:21: note: expanded from macro 'container_of'
+      24 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^              ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                        ~~~~~~
+>> drivers/iommu/riscv/iommu.c:1494:13: error: no member named 'ddt_mode' in 'struct iommu_device'
+    1494 |         if (iommu->ddt_mode <= RISCV_IOMMU_DDTP_IOMMU_MODE_BARE)
+         |             ~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1505:13: error: no member named 'caps' in 'struct iommu_device'
+    1505 |         if (iommu->caps & RISCV_IOMMU_CAPABILITIES_AMO_HWAD)
+         |             ~~~~~  ^
+>> drivers/iommu/riscv/iommu.c:1508:27: error: incompatible pointer types passing 'struct iommu_device *' to parameter of type 'struct riscv_iommu_device *' [-Wincompatible-pointer-types]
+    1508 |                 dc = riscv_iommu_get_dc(iommu, fwspec->ids[i]);
+         |                                         ^~~~~
+   drivers/iommu/riscv/iommu.c:561:77: note: passing argument to parameter 'iommu' here
+     561 | static struct riscv_iommu_dc *riscv_iommu_get_dc(struct riscv_iommu_device *iommu,
+         |                                                                             ^
+   6 errors generated.
+
+
+vim +1483 drivers/iommu/riscv/iommu.c
+
+  1478	
+  1479	static int riscv_iommu_probe_device_fwspec(struct iommu_device *iommu,
+  1480						   struct device *dev)
+  1481	{
+  1482		struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+> 1483		struct riscv_iommu_device *iommu =
+> 1484			container_of(iommu, struct iommu_device, iommu);
+  1485		struct riscv_iommu_info *info;
+  1486		struct riscv_iommu_dc *dc;
+  1487		u64 tc;
+  1488		int i;
+  1489	
+  1490		/*
+  1491		 * IOMMU hardware operating in fail-over BARE mode will provide
+  1492		 * identity translation for all connected devices anyway...
+  1493		 */
+> 1494		if (iommu->ddt_mode <= RISCV_IOMMU_DDTP_IOMMU_MODE_BARE)
+  1495			return -ENODEV;
+  1496	
+  1497		info = kzalloc(sizeof(*info), GFP_KERNEL);
+  1498		if (!info)
+  1499			return -ENOMEM;
+  1500		/*
+  1501		 * Allocate and pre-configure device context entries in
+  1502		 * the device directory. Do not mark the context valid yet.
+  1503		 */
+  1504		tc = 0;
+> 1505		if (iommu->caps & RISCV_IOMMU_CAPABILITIES_AMO_HWAD)
+  1506			tc |= RISCV_IOMMU_DC_TC_SADE;
+  1507		for (i = 0; i < fwspec->num_ids; i++) {
+> 1508			dc = riscv_iommu_get_dc(iommu, fwspec->ids[i]);
+  1509			if (!dc) {
+  1510				kfree(info);
+  1511				return -ENODEV;
+  1512			}
+  1513			if (READ_ONCE(dc->tc) & RISCV_IOMMU_DC_TC_V)
+  1514				dev_warn(dev, "already attached to IOMMU device directory\n");
+  1515			WRITE_ONCE(dc->tc, tc);
+  1516		}
+  1517	
+  1518		dev_iommu_priv_set(dev, info);
+  1519	
+  1520		return 0;
+  1521	}
+  1522	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
