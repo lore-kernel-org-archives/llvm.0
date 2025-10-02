@@ -1,120 +1,84 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029DB2248B8
-	for <llvm@lists.linux.dev>; Thu,  2 Oct 2025 22:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D94D29A2;
+	Thu,  2 Oct 2025 22:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759443120; cv=none; b=onf+tG9SegftnVigGCu9bNSYrSxEZsAwtWWJQ8e+/tcZyvZR0Dv+jckMao1071tPfMLD0kiHHdlRzeuQyOPijymMiMKs+9MtxJMke3MzFnpDMrTPA0QROLXDopHjoZJO8xUCrk1R3+liw2u+VRbExa/2Y8UJgnxre7PnfIQlp8A=
+	t=1759443419; cv=none; b=rjQNnl4IfnJck0dxGsJ6RQ39hxhOjqNN3CZg/m7JTQfNXy2zdzeRDEGfsU+ZDbGXpcVYr+S/Qv5MVd5c8IK4MwisUYMk2MfL9wrZiknrC6WjvL98thkK1sWQfflpf6ONaSrfb1n4Z1CVclm/OpC2rDux4dv92ma0EKmMm9xmrJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759443120; c=relaxed/simple;
-	bh=lraP0hz23/2MXfOmQ8ZprXbjkp5lv6pLnFTmwv/0En4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ulnIKaVsrvV7immsVnKRoH0GNHO0VF16nvQWiEnBFq+7/swnT783o5rTPYYklcNjzfy4SiYD2nnHFMq0A7vSvgLvbiVUngj5e+SWEQbdVSm46pSR0avflT7hi2w7E5EqtZFEDxiHnHLtgeolZs5I+3/NLd9Q0wGsorl3ISxc1Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIKeflyf; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759443419; c=relaxed/simple;
+	bh=k3Hae/V9zV/uZyyYuMhwMt9YvZyWv8GoP358PTCI95k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hq0e9W7cIXno8Us1IGLbHx0rPTsJhW5CzbueVRE4Zd245lc3Iyzm2hRDvdtIp3hxrkee2qzB+FVajLi5pxrIu1LSWLml7ABr2qKgezL5w92sZq5BryG/gaPyyEZPwPMHyoSwRbjg+eK/3xHG0aVLb/bmwC/+YGvt76hWZpECsTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dFYge2nO; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIKeflyf"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-267fa729a63so2506515ad.3
-        for <llvm@lists.linux.dev>; Thu, 02 Oct 2025 15:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759443117; x=1760047917; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bu6T7CVwhfawMHtvRlEfFhPE/85D7sRoHUpa1kduIKg=;
-        b=hIKeflyfvfoAZ5VYgyw6gU7eMA4y1MYVF5BgIOploTLshzbTx8jdDc46bgc4NOmcvS
-         oBqCbSM9H0UZ0UEqejvtprKbUQgbDpibXepCfMbytlLChrz2W3kqh0MQ4qYnq9Tdqx94
-         dQMH4APNZ1veOAYSHpIyMCS8yUz4xOL+NpRceCzuniw+IcCKPofQfLhFtfZbmQ8151Uc
-         8pwtcHWK6dwLnxsqQvgYKsFXTexRWhjwDfjKRooQ85drKnFnokIncqYuwatc/Hizscii
-         9wghKiG21q7ZarKw9Ow4qTJX6VjYxXutiNjPAH9eTJHnCuwkq7+0h3abPcG8PVkaphVH
-         3mXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759443117; x=1760047917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bu6T7CVwhfawMHtvRlEfFhPE/85D7sRoHUpa1kduIKg=;
-        b=RiN0WsbiW1sJEZ1eWH3YSCzHVPURZitZ8SsqEjQljo8+6oJHwyHmkdUG6E5fQMsM51
-         TK+Br46lbfyRHc2IW5IRLMGLzM/5KdaBq5FEGUwdj4CFc/ze67/g9KLn1z3RPGAIArwX
-         ZmBuU7gEUDARy/u5nNCZFHzSL5ocjjx3vBP5+lagjlyO0btpitBKM9/Skvld2wyj+NjN
-         7OSAtdtVySfrCnjYIgjDcppRcNINZgWDjG6MAuZZZGcOKSz0twP+cLVBXy2MXs0/rKqa
-         ubwUSSPnRQTvJb3fjPni+CUopwdj1df98T+dv6912NuyUxJ48Dr6il7BfgSAAOrUo9h9
-         4LcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVFZp5PXeqEEVYeqGvDFet/4xHwJMSZAGjj/ZWY0TR8hUxUH+9XVAs48bze8MJrmJygDZP8@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx1E5iGvlGcn0IS+ctW55W/mx9XTwxZuQ8s0nScSRlNpq7GxNHj
-	inuaIV7v9OZ2jsAzpggPJ+9Yp7IMgYlN5c5VPCkpyzACGi64yntpVxnuvoPIcXXjHg4cLZHuhuU
-	yfUbDz4cId8KpNiyxlclNtiU/jnoA0eA=
-X-Gm-Gg: ASbGncs4cKqsEY70qPvbewF2VANDEg/+3wneESRo6CM3nML60JS4v3EHaQwFkkL4F54
-	i4fSVTSqkChw+7bFi31eMIfDckMn/TAgIr3ZxDI5g9SpRSb1o+oNjCh0/YyjdJpKiEwI3OkGzOY
-	+wwwxfCCw9zcPZUa1fnEH2aCo7RWhnPIfqaSJ6CS1E3CkvSQrqFnNQ/kEu5BUNmztjVL/DKOVeF
-	NSTr3gI+zO6JaKD1qdvvzCfOHXzytCDAr8GOyNS3mNR+cL8pT7I+ewYlfrbe+e3oLJLaULGz1nP
-	X+qm6dV15Hx+nWA41ibZdghMFoUcvEybg9QYfIgI+4hpOrFkAw==
-X-Google-Smtp-Source: AGHT+IGwKnqSVieJ3MfyTgFFO/O9vpr8rro3ogT4lM4nX7G7iGhsfj8Tx0MNi0UQc58JqTsdSFoH8GBJjyKfBVPnZAY=
-X-Received: by 2002:a17:902:b196:b0:266:914a:2e7a with SMTP id
- d9443c01a7336-28e9a665b6emr3287285ad.6.1759443117189; Thu, 02 Oct 2025
- 15:11:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dFYge2nO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759443417; x=1790979417;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=k3Hae/V9zV/uZyyYuMhwMt9YvZyWv8GoP358PTCI95k=;
+  b=dFYge2nOSwAuCxk++96k9hABnEpEo5YhBUuJYOt5429hljJV+/AJl3jc
+   Fm8C7Gz3Mi+NMl3s4ZhQwOnxtm9pItIb6xZ0vhCW4SdIkyrXm4QQAty51
+   fmIlwVCowTs3h2nIOSQ6DVbH6TNcrKy+Tfi3agjvzDG9nzktj8few9v3t
+   6DgOxtLmVs0WplmxPt+UjjtP5BLI6VGjiPgPzVbi/7ak5eSmYq5nkMtA7
+   nKzHUi2LvtNoAq2g5/uk4g4KSyamim1Ea96sVO1H4kJNvhJ1CRN8M97Nb
+   bsUa+zBvOQ8yj2Sd0GJxkXLvl3MpuUucRzlL/Wgs2H+o97pu0nd00GrvD
+   g==;
+X-CSE-ConnectionGUID: rXKNE3t3S9WLXomspnwimQ==
+X-CSE-MsgGUID: DtHASMqUT6yFanpNpp032g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="72411334"
+X-IronPort-AV: E=Sophos;i="6.18,310,1751266800"; 
+   d="scan'208";a="72411334"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 15:16:56 -0700
+X-CSE-ConnectionGUID: my8NznnrRFyUsndP+62A0A==
+X-CSE-MsgGUID: mebeAvHPSYqILViA1fUkRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,310,1751266800"; 
+   d="scan'208";a="179093840"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 02 Oct 2025 15:16:55 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v4RbZ-00049V-22;
+	Thu, 02 Oct 2025 22:16:53 +0000
+Date: Fri, 3 Oct 2025 06:16:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [trace:unwind/sframe-test 10/14] kernel/unwind/sframe.o: error:
+ objtool: sframe_find+0x381: call to __asan_memset() with UACCESS enabled
+Message-ID: <202510030619.2bWpgQ34-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202510030449.VfSaAjvd-lkp@intel.com> <20251002141925.ab86656b1d50f6e27f216209@linux-foundation.org>
- <CANiq72kOhRdGtQe2UVYmDLdbw6VNkiMtdFzkQizsfQV0gLY1Hg@mail.gmail.com> <5467d9cc-54c3-415c-9ddd-a1ff1026f29e@nvidia.com>
-In-Reply-To: <5467d9cc-54c3-415c-9ddd-a1ff1026f29e@nvidia.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 3 Oct 2025 00:11:44 +0200
-X-Gm-Features: AS18NWDnPckM1PfneojmzdbCoOjMOJM9kMDMDSDk4r7YVa59EgpddvEXF-NHdJI
-Message-ID: <CANiq72nE2gAuK_ym2=As3yXRDoNFbKuSa4oac7abhpjy45ZQGA@mail.gmail.com>
-Subject: Re: [linux-next:master 13069/13300] error[E0425]: cannot find value
- `VM_MERGEABLE` in crate `bindings`
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, kernel test robot <lkp@intel.com>, 
-	Jakub Acs <acsjakub@amazon.de>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, rust-for-linux@vger.kernel.org, 
-	John Baublitz <john.m.baublitz@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Oct 2, 2025 at 11:52=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> =
-wrote:
->
-> It seems like bindgen's --clang-macro-fallback argument can avoid the
-> entire class of problems, is there some reason Rust for Linux has avoided
-> that option?
->
-> Although, in order to make it work with fixdep, additional somewhat compl=
-ex
-> build system changes are required. I've got it to almost work locally jus=
-t
-> now... :)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace unwind/sframe-test
+head:   d6d0be1c9daa56454204449f43054df8337cc7fe
+commit: 1805faa8f6c99382fa6c9d17d45c0d8137b7fc3d [10/14] unwind_user/sframe/x86: Enable sframe unwinding on x86
+config: x86_64-randconfig-075-20251003 (https://download.01.org/0day-ci/archive/20251003/202510030619.2bWpgQ34-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251003/202510030619.2bWpgQ34-lkp@intel.com/reproduce)
 
-I am glad you ask! ;)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510030619.2bWpgQ34-lkp@intel.com/
 
-We were the ones pushing for the option -- John implemented a
-workaround that I suggested, with optimizations on performance:
+All errors (new ones prefixed by >>):
 
-     https://github.com/rust-lang/rust-bindgen/issues/753#issuecomment-1674=
-833380
-    https://github.com/rust-lang/rust-bindgen/pull/2779
+>> kernel/unwind/sframe.o: error: objtool: sframe_find+0x381: call to __asan_memset() with UACCESS enabled
 
-I think the last time I tried it was early this year -- here is the
-test patch I had:
-
-    https://lore.kernel.org/rust-for-linux/CANiq72m20pom+B9EmWO+91E8fjbMEob=
-3JmvHRQ6UaXe_JmatfA@mail.gmail.com/
-
-It is in my backlog to go back to the option, test it again and so on.
-In any case, note that we will need to increase the minimum, so it may
-take some time.
-
-Further context at:
-
-    https://github.com/Rust-for-Linux/linux/issues/353
-
-I hope that clarifies.
-
-Cheers,
-Miguel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
