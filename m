@@ -1,205 +1,124 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A381E29D266
-	for <llvm@lists.linux.dev>; Thu,  2 Oct 2025 06:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C919299A9E;
+	Thu,  2 Oct 2025 06:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759387944; cv=none; b=bComNTKYYKBcDQKpbuZfs644sCkzUUXiNyEkB3Jg1Pv8Vq8yMKHYjQnbwMsno1nZE8tTdGv6kNIJ9ukSe0b8LzUkgeyqMqC9J3VTPzzoosKd01lU/GxwBSH3l86zrFWGgCXgp92X5Vh+REMsIMrl7LtFpLcsn9suRJEoGAUxV1I=
+	t=1759387957; cv=none; b=YvumQHpVxwRU9Qhz7vEsQ9O18p/V48FIAInoNyosSkNBObyJXQ3Hnyx4rkW5iXK/A9XDUzmBTCV5180b+gPM5bkEW+i+YfbArzjJrDXWDmK8vDDPsxnBW8ZNLmfys0dbhkE2StMjBxkJGia0QDakLOXPvzVRSXwyP3LWajFPWFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759387944; c=relaxed/simple;
-	bh=vBtjUYfL5XawyKktYeASRIFujrDGiGAVw08JYbW6ye0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AklbKyriYdJxxKeMu6bTPBTorndphYsy9bT5fpAU/K1QqTCPA9xABJ5KitpZh4zbxpT4G78nKH2Sdv6BTqOSNvBD7HSBxM57HkqkFD4IoOmvBlQrVq9RLxUuivnl7JNjAtN87Mj405Avmz2q2OqubvRiO7h7yYgGglgJrlueKdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gq3aGnqm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7l3JkK7g; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gq3aGnqm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7l3JkK7g; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1759387957; c=relaxed/simple;
+	bh=bVXeDuXy8yqaxbuc88f/OC4/J8nDq8GVJSRtwvlZynk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=b0+9R9Df2kAlDnB1tTuC/TBMd3eB0L2IYtkWzqg6HT3v0rlc6c8dBKIM+3A87jE0RGL1z0AtbTBiAHspcFmH6HLw7OwBratCyccQq22urIy7kLYW2vghaS+r/ANFcKEzrK+ua3DUBpe03t3HL86y8ot7qywUOIKgacaJuPJaWok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J207nz4L; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gq3aGnqm";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7l3JkK7g";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gq3aGnqm";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7l3JkK7g"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 4B59E1F441;
-	Thu,  2 Oct 2025 06:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1759387938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=l+ZTQ1bmTapXB3Hii4bhClrslIo1fiFAaICxXgyG7wU=;
-	b=gq3aGnqm/qdYCtgHNzdM9ETWuUxei1byGHI2fsIF25XXx16FKmxI8l2ab9FlIs8A06QHxs
-	qD/2Gh8p9RsGWM1P1jdPMMXwdj0FCcdgg6362pXJzUldpqSBvyuA/mZfKLZQo+24EmnYBJ
-	189CFL2vIcvH7TNvzPrIqJL9ho976aw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1759387938;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=l+ZTQ1bmTapXB3Hii4bhClrslIo1fiFAaICxXgyG7wU=;
-	b=7l3JkK7gGlqf3vheWFT9idRnUsckBcP6efEI918L4rU1sHQVAWmGd/aKp01vO0Y+ePPt+N
-	67ydMFokKrfDiTAA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=gq3aGnqm;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=7l3JkK7g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1759387938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=l+ZTQ1bmTapXB3Hii4bhClrslIo1fiFAaICxXgyG7wU=;
-	b=gq3aGnqm/qdYCtgHNzdM9ETWuUxei1byGHI2fsIF25XXx16FKmxI8l2ab9FlIs8A06QHxs
-	qD/2Gh8p9RsGWM1P1jdPMMXwdj0FCcdgg6362pXJzUldpqSBvyuA/mZfKLZQo+24EmnYBJ
-	189CFL2vIcvH7TNvzPrIqJL9ho976aw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1759387938;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=l+ZTQ1bmTapXB3Hii4bhClrslIo1fiFAaICxXgyG7wU=;
-	b=7l3JkK7gGlqf3vheWFT9idRnUsckBcP6efEI918L4rU1sHQVAWmGd/aKp01vO0Y+ePPt+N
-	67ydMFokKrfDiTAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CFDAC13990;
-	Thu,  2 Oct 2025 06:52:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id U6kBMSEh3mjvNQAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Thu, 02 Oct 2025 06:52:17 +0000
-Message-ID: <41ef536d-2399-43f8-8041-c6b0e642aba2@suse.de>
-Date: Thu, 2 Oct 2025 08:52:17 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J207nz4L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759387956; x=1790923956;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bVXeDuXy8yqaxbuc88f/OC4/J8nDq8GVJSRtwvlZynk=;
+  b=J207nz4LaE1KWBzpafFIAwaoWZXqNq8lzOQt3K+vzUtanRhIezxXIXgm
+   rwPn9Z1zjjIbOChwfrMED2cQKVGj3dMApNnEGRxwHLF9zj5KZfiQ71lUW
+   Mg4Cjr6UNX6RwFP26/SW+n8x+u2wrDLA6iA36L04QkMmP6LfS4IgdnmeZ
+   002tCOGl/k9FOhoz6exUn7QqDuJSf/FXfJk3Q53hCW877hgENzJfD6dIQ
+   AXssYK1BDC5FZHHxmKZU8CxQ+3oZ9C06uuKm1LbrUzx3FMkgjv1GvmcFp
+   lInb/9Mhs6qe3mxrxaM53aU4ZctMxFurhk6/P0ouPUqoNbRod3OQxXbzw
+   A==;
+X-CSE-ConnectionGUID: TSsj0k8eQKCdwJ4K8gZVmA==
+X-CSE-MsgGUID: NuB3MhGbQHyQzmwcHKpeiA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="61627840"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="61627840"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2025 23:52:35 -0700
+X-CSE-ConnectionGUID: 9mn1e2/US+yF7nt54xWgbA==
+X-CSE-MsgGUID: Vb5Md+5CQAqBhddbvxyZgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,308,1751266800"; 
+   d="scan'208";a="179005275"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 01 Oct 2025 23:52:34 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v4DB1-0003cV-0y;
+	Thu, 02 Oct 2025 06:52:31 +0000
+Date: Thu, 2 Oct 2025 14:52:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:arm64-fpsimd-on-stack2 19/19] lib/test_fpu_glue.c:28:2: error:
+ too few arguments to function call, expected 1, have 0
+Message-ID: <202510021400.SOpdrxp9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fbdev: udlfb: make CONFIG_FB_DEVICE optional
-To: Helge Deller <deller@gmx.de>, sukrut heroorkar <hsukrut3@gmail.com>,
- David Hunter <david.hunter.linux@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, Bernie Thompson <bernie@plugable.com>,
- Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Zsolt Kajtar <soci@c64.rulez.org>,
- Gonzalo Silvalde Blanco <gonzalo.silvalde@gmail.com>,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, skhan@linuxfoundation.org
-References: <20250924175743.6790-1-hsukrut3@gmail.com>
- <202509272320.3K8kdDCw-lkp@intel.com>
- <bb9d90ca-aa4d-4168-bdc5-543109c74493@gmail.com>
- <CAHCkknrZ-ieNKeg-aj3-NVqgGSk770jJpUpCvn_SuffkPu+ZrQ@mail.gmail.com>
- <edccab86-321b-4e6e-998f-3ce320ee0193@gmx.de>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <edccab86-321b-4e6e-998f-3ce320ee0193@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmx.de,gmail.com];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	FREEMAIL_CC(0.00)[intel.com,plugable.com,arndb.de,infradead.org,linaro.org,c64.rulez.org,gmail.com,vger.kernel.org,lists.freedesktop.org,lists.linux.dev,linuxfoundation.org];
-	RCVD_COUNT_TWO(0.00)[2];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:mid,suse.de:dkim]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 4B59E1F441
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-fpsimd-on-stack2
+head:   b5e76712d12bee6396a6232e659ea7f10758e48b
+commit: b5e76712d12bee6396a6232e659ea7f10758e48b [19/19] arm64/fpsimd: Allocate kernel mode FP/SIMD buffers on the stack
+config: arm64-randconfig-002-20251002 (https://download.01.org/0day-ci/archive/20251002/202510021400.SOpdrxp9-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251002/202510021400.SOpdrxp9-lkp@intel.com/reproduce)
 
-Am 02.10.25 um 08:41 schrieb Helge Deller:
->>>> kernel test robot noticed the following build errors:
->>>
->>> Did you compile and test this code before submitting this patch?
->>
->> Yes, I had compiled & loaded the udlfb module with no errors. Please
->> let me know how to proceed in this case.
->
-> Look at the reported build error, which seems to happen in dev_dbg().
-> So, maybe in your testing you did not have debugging enabled?
-> The report contains the .config file with which you can test.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510021400.SOpdrxp9-lkp@intel.com/
 
-Can we rather make an effort to remove the udlfb driver entirely? A few 
-years back, there was one user who was still using it because of some 
-problems with the DRM udl driver. But I think we've addressed them. The 
-discussion is at [1].
+All errors (new ones prefixed by >>):
 
-[1] 
-https://lore.kernel.org/dri-devel/20201130125200.10416-1-tzimmermann@suse.de/
+>> lib/test_fpu_glue.c:28:2: error: too few arguments to function call, expected 1, have 0
+      28 |         kernel_fpu_begin();
+         |         ^~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/fpu.h:12:46: note: expanded from macro 'kernel_fpu_begin'
+      12 | #define kernel_fpu_begin()      kernel_neon_begin()
+         |                                 ~~~~~~~~~~~~~~~~~ ^
+   arch/arm64/include/asm/neon.h:16:6: note: 'kernel_neon_begin' declared here
+      16 | void kernel_neon_begin(struct user_fpsimd_state *);
+         |      ^                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/test_fpu_glue.c:30:2: error: too few arguments to function call, expected 1, have 0
+      30 |         kernel_fpu_end();
+         |         ^~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/fpu.h:13:42: note: expanded from macro 'kernel_fpu_end'
+      13 | #define kernel_fpu_end()        kernel_neon_end()
+         |                                 ~~~~~~~~~~~~~~~ ^
+   arch/arm64/include/asm/neon.h:17:6: note: 'kernel_neon_end' declared here
+      17 | void kernel_neon_end(struct user_fpsimd_state *);
+         |      ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-Best regards
-Thomas
 
->
-> Helge
+vim +28 lib/test_fpu_glue.c
+
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  23  
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  24  static int test_fpu_get(void *data, u64 *val)
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  25  {
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  26  	int status = -EINVAL;
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  27  
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18 @28  	kernel_fpu_begin();
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  29  	status = test_fpu();
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  30  	kernel_fpu_end();
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  31  
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  32  	*val = 1;
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  33  	return status;
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  34  }
+4185b3b92792ea lib/test_fpu.c Petteri Aimonen 2020-06-18  35  
+
+:::::: The code at line 28 was first introduced by commit
+:::::: 4185b3b92792eaec5869266e594338343421ffb0 selftests/fpu: Add an FPU selftest
+
+:::::: TO: Petteri Aimonen <jpa@git.mail.kapsi.fi>
+:::::: CC: Borislav Petkov <bp@suse.de>
 
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
