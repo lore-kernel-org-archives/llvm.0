@@ -1,124 +1,80 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965F9286D5C;
-	Fri,  3 Oct 2025 15:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C812D7806
+	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 16:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759505429; cv=none; b=jj4SKOVzMl/sbiX7eEkDK4juLN2HccW0G+EuzKUNhjng2OO+hLh2fRKIpFaNZSNR/GaTAUAMiZM/0ZEHvM7xWDPh8uko0dai69R99YUgWmErYpvfyT2/BsqWqMqV3EyFanrsfNmVVzelW+4mFDfTUp5YqC4N8bUnOOY7ymMXzzE=
+	t=1759510470; cv=none; b=cslnzdq3nCE5QktVXGLi1pvQQuBOhPTuTo38F6R6d3K0bSbAooF7o7xMXiinfwvBHhuYWiwTscRViWgkCdLz9OzlYI/tZAuVVFEnQa16SXX60xCv5vDcc3alPnizGo8IyEQngkztBbb4T5efI2RS23o9iNjRvZUWlSiGDzpWi9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759505429; c=relaxed/simple;
-	bh=q/9Xu2YYVG+OUUPaY0oOhfiQYqYmkFvJm1jxGPXbccQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=j9alaOfosxaIn6BJYrdt3a2faB1VrKNq9By9Yh/+zXhA13ZT55iti5vmOgrwkE+FjwLMDwBMEFGDmQnXJuL7YrDIHZgpoItDPtTwn/oACwZaWc82D2b/QOOULKEOO4L3ATRExTRNMlM7K41thQTdj1XhgnESW5kgr4iNFEnGk6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QvamK2Hk; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759510470; c=relaxed/simple;
+	bh=39MheYmLUlrL9wszDwc2Pd2eHARvVZ7Tha1c9C3VNyc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=lBs4pl3ZaYhVXBbarwgpzTJsg0VUWe0HcBjp/AqUyPr4FAS2v2SzNi89hih9VWUDoLWE5NJFquPeAzf/rpvgWXlOs9fEANWMAgWCJVfBHgN7xv3Qc+JOOKkEY8/ySh82NpqAz3mEjqY+KmslyohqUBtwT6dCMBGPwYCfbRBsmfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=BabNHPDS; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QvamK2Hk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759505428; x=1791041428;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=q/9Xu2YYVG+OUUPaY0oOhfiQYqYmkFvJm1jxGPXbccQ=;
-  b=QvamK2Hkj+qU4qqyfEQJOO1bsXhFjR4JpfFQjtxwkTwLDsOA7Y3e7gtc
-   cggT4KI85HIfF6KZ49jFUL1z3nRcCSLLuoIQ7Vl6I+5UIUkUT8+ym20dv
-   8U2+vO6esydE5uLpGInp4J6lQLKLG9E2QStxvqU0frxNrgQ4ZQl2zsQY5
-   ywf1Pin62+SFn1qHz4U9JkmnaG+oZKNQcbdsV7j7sKe90nO5ehlzfLXVq
-   gVMzyNZBXme0CDaCsTbjc4zHjdiL6V+cbdi0c0+Ee+nHUOprlp5SxrDTW
-   EOovcV1F2HzLdU4pw4+7c50IVhvDG3RZs/nNrZyDU/Y1fKsOXkyBBLuYU
-   w==;
-X-CSE-ConnectionGUID: ihF0HE5FTueVITbwWex3pA==
-X-CSE-MsgGUID: olHoZa5/Tseh8/fxAbOP2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11571"; a="60826083"
-X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
-   d="scan'208";a="60826083"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 08:30:27 -0700
-X-CSE-ConnectionGUID: BDdaxFHARMmz3JkgtkXyTg==
-X-CSE-MsgGUID: KR53dd6NS0C+e6sSWxZPiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
-   d="scan'208";a="184505759"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 03 Oct 2025 08:30:25 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4hjj-0004cc-1E;
-	Fri, 03 Oct 2025 15:30:23 +0000
-Date: Fri, 3 Oct 2025 23:29:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [cilium:pr/netkit-iouring2 16/17] net/xdp/xsk.c:129:44: error: too
- few arguments to function call, expected 3, have 2
-Message-ID: <202510032323.xc2oFL3L-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="BabNHPDS"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 593GrPXh1724782
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 3 Oct 2025 09:53:26 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 593GrPXh1724782
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025092201; t=1759510407;
+	bh=39MheYmLUlrL9wszDwc2Pd2eHARvVZ7Tha1c9C3VNyc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=BabNHPDSCLA+dWiY0eVXAqN9kpmuO23fvNJ5MSgcG8eZYdiI7KDM7D0Ick5JABQ90
+	 6jECfEctX7k/fG03yTZsmzRWNBzZPT0r5Zt4YwVvsC8pd5BX3P8pHlqdAXXZpJjVSW
+	 ognRo3aJKrInR2ZhcZuq585HXGDDbAYVk1O9tbWPXZyYDZuBKsc5KXb+jKcY7JA6bX
+	 I1PsHjegQnIG6Y324BRgGEJtAsqLun/QcClickLiD6awbjJqqWI5lerrd4l0COGgu8
+	 8eWnSf1z+vhcgxx1Ii3lkAnv3VDAcPTFvUQ+9WegD0RNjzHHVDGAWWyJbbcl4IBKTM
+	 oVQuKbuwqmMEg==
+Date: Fri, 03 Oct 2025 09:53:24 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Dave Hansen <dave.hansen@intel.com>, Peter Zijlstra <peterz@infradead.org>,
+        =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>
+CC: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev,
+        xin@zytor.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_09/12=5D_x86/msr=3A_Use_t?=
+ =?US-ASCII?Q?he_alternatives_mechanism_for_WRMSR?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <4c4cce9f-3219-48f0-8606-6573339b8794@intel.com>
+References: <20250930070356.30695-1-jgross@suse.com> <20250930070356.30695-10-jgross@suse.com> <20250930083137.GH3245006@noisy.programming.kicks-ass.net> <2df26cc0-53bc-499c-8c78-bc24fd8bf882@suse.com> <20250930085044.GK3245006@noisy.programming.kicks-ass.net> <20250930125156.GK1386988@noisy.programming.kicks-ass.net> <2ad137cb-ed38-42f6-ac0a-a81569051779@suse.com> <20251001064339.GL4067720@noisy.programming.kicks-ass.net> <20251001072340.GM3245006@noisy.programming.kicks-ass.net> <4c4cce9f-3219-48f0-8606-6573339b8794@intel.com>
+Message-ID: <C595599E-0BF9-462E-A79B-E7F6C9D5F587@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/cilium/linux.git pr/netkit-iouring2
-head:   8f75591c849f4deeaa81c54aa15f111c1db0d47e
-commit: b1267b3c6afc658b47021929dc9ae44acef2c68f [16/17] errata: mp open/close conversion
-config: hexagon-randconfig-001-20251003 (https://download.01.org/0day-ci/archive/20251003/202510032323.xc2oFL3L-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251003/202510032323.xc2oFL3L-lkp@intel.com/reproduce)
+On October 3, 2025 7:23:29 AM PDT, Dave Hansen <dave=2Ehansen@intel=2Ecom> =
+wrote:
+>On 10/1/25 00:23, Peter Zijlstra wrote:
+>> On Wed, Oct 01, 2025 at 08:43:39AM +0200, Peter Zijlstra wrote:
+>>> Let me see how terrible it all ends up when using as macros
+>> Argh, as macros are differently painful=2E I hate computers :/
+>
+>ALTERNATIVES are fun and all, but is there a good reason we're pulling
+>out our hair to use them here?
+>
+>Normal WRMSR is slooooooooooow=2E The ones that aren't slow don't need
+>WRMSRNS in the first place=2E
+>
+>Would an out-of-line wrmsr() with an if() in it be so bad? Or a
+>static_call()? Having WRMSR be inlined in a laudable goal, but I'm
+>really asking if it's worth it=2E
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510032323.xc2oFL3L-lkp@intel.com/
-
-Note: the cilium/pr/netkit-iouring2 HEAD 8f75591c849f4deeaa81c54aa15f111c1db0d47e builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
->> net/xdp/xsk.c:129:44: error: too few arguments to function call, expected 3, have 2
-     129 |                 __netif_get_rx_queue_peer(&dev, &queue_id);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~                ^
-   include/net/netdev_rx_queue.h:96:1: note: '__netif_get_rx_queue_peer' declared here
-      96 | __netif_get_rx_queue_peer(struct net_device **dev, unsigned int *rxq_idx,
-         | ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      97 |                           bool virt_to_phys_only);
-         |                           ~~~~~~~~~~~~~~~~~~~~~~
-   net/xdp/xsk.c:150:44: error: too few arguments to function call, expected 3, have 2
-     150 |                 __netif_get_rx_queue_peer(&dev, &queue_id);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~                ^
-   include/net/netdev_rx_queue.h:96:1: note: '__netif_get_rx_queue_peer' declared here
-      96 | __netif_get_rx_queue_peer(struct net_device **dev, unsigned int *rxq_idx,
-         | ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      97 |                           bool virt_to_phys_only);
-         |                           ~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +129 net/xdp/xsk.c
-
-1c1efc2af15886 Magnus Karlsson    2020-08-28  125  
-c835a0c7c90035 Daniel Borkmann    2025-09-03  126  void xsk_clear_pool_at_qid(struct net_device *dev, unsigned int queue_id)
-1c1efc2af15886 Magnus Karlsson    2020-08-28  127  {
-c835a0c7c90035 Daniel Borkmann    2025-09-03  128  	if (queue_id < dev->real_num_rx_queues)
-c835a0c7c90035 Daniel Borkmann    2025-09-03 @129  		__netif_get_rx_queue_peer(&dev, &queue_id);
-b425e24a934e21 Maxim Mikityanskiy 2021-01-18  130  	if (queue_id < dev->num_rx_queues)
-1c1efc2af15886 Magnus Karlsson    2020-08-28  131  		dev->_rx[queue_id].pool = NULL;
-b425e24a934e21 Maxim Mikityanskiy 2021-01-18  132  	if (queue_id < dev->num_tx_queues)
-1c1efc2af15886 Magnus Karlsson    2020-08-28  133  		dev->_tx[queue_id].pool = NULL;
-1c1efc2af15886 Magnus Karlsson    2020-08-28  134  }
-1c1efc2af15886 Magnus Karlsson    2020-08-28  135  
-
-:::::: The code at line 129 was first introduced by commit
-:::::: c835a0c7c90035db3e1ca49bdb371bdd62ffa6bd xsk: Proxy pool management for mapped queues
-
-:::::: TO: Daniel Borkmann <daniel@iogearbox.net>
-:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+We need them to use wrmsrns immediate=2E
