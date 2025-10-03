@@ -1,112 +1,294 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EE31D54D8
-	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 05:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722441C6FEC;
+	Fri,  3 Oct 2025 05:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759469366; cv=none; b=ZVnvcubrErT+4m4iQWDcs1Yc9HJvWvJZpNDWtlbB+UFYpS4PFfsQi9tD6Jm69KJU+y7gLeb05NWCu8SMutnJp0Pn6OzCAb2rd0hLR9EwnYIiupSThdvZ/5N05zTADlagl6N3TqLy59jmSP7LDcqeZHtH1FeYHXjAgsdbP4yR0w4=
+	t=1759471058; cv=none; b=qKoka4BsVBLNny7KR/qAHT7zhjlpaCRM/MRwLNktdP6Z9L2QZhp71llciUz+FZo0vVBXIKhJR2zuOewHvBmDoQQU3lk8bsPyWZ7Jnx52kYzAOa2bK+/hojOygmIrVGZWjb5mhlaXv1Uzd05GFptPieTHT6qc9ZrbeL/qFX4Er2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759469366; c=relaxed/simple;
-	bh=FAecbVfIu/2KfpMJLz5+NVIRF8lakTzCsR7c7STt1QQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nR62ZwCO/X0Rr/xQvg7MYUVwf5CnyLn2Po50kc//vl8R451HuT7hrS/E9JxsHgnwtXaxM8+3djER96kf6/GRHmU+k2VCEigZeXHZ4qdpRqX1U4MeZpvQc6NNPXb4/BR142KnPKRcMRWvCEt1d9+Xg8cJAGYVSxK5DcrIWWLr/40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gKxjYhJX; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759471058; c=relaxed/simple;
+	bh=0oNC759He1lTOqr7QDNZ5tB39O1bmD82xDV4bqLXrTI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m9PzPquydO7SzV1IN6/ChFxAgE5AyMcG7N4i43bcu2LJettvp+ONoIonHECv6FSjUXsQPnRTEKy5oj7vm0iiQYF+/3FH2zzmgYCRyqcgecA9Y5voTBlLBADLdv1j/eYITHR1cUfBQSN8a19ZOOYygU5UVmpTsrFbozN2PAq3tog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBM3Iuiy; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gKxjYhJX"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-26e81c17d60so2829535ad.0
-        for <llvm@lists.linux.dev>; Thu, 02 Oct 2025 22:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759469364; x=1760074164; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FAecbVfIu/2KfpMJLz5+NVIRF8lakTzCsR7c7STt1QQ=;
-        b=gKxjYhJXo8tYG38qEwJPtYKckIq30ivrj9I44L4qBzyQfYqvA3JWcyw/B/piXFdf9B
-         vcM33Fu5zuGbhKeGGU792A5XU/gLYRf5uPMSZSERYfQoDxy2SAq99Mc9INYqSuN3ElDi
-         g3uVxLs+GZEcUwLbBf7/sX3aRicWNLGMc2OrZqsw6paq20u6cafU9wMYs8sQt4+9Ym5D
-         z4H0aw/AysoJ9RcL+7GDu8rBr9Nf4NAEcnrlwo8aVuDdgedKajIU7UQgi+3p7Gtr4X8I
-         yRM9I4YtKAHAg0453pQT1VugDcYk+owWy8MeQebRE3ZA0xfyl1OmXm6Qvn7bgGWjtScj
-         eQBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759469364; x=1760074164;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FAecbVfIu/2KfpMJLz5+NVIRF8lakTzCsR7c7STt1QQ=;
-        b=IecuC+bBTlZ6DEtz9Sa3J2uqyFTA+IW0N5XVrmLPLpmBpgaNfoepFuqri5sJBZ5+3z
-         99cl44CaxWFY5KkToMUF7i00YbauVT6INhV5AzJscjPOqRvKCEiu8xtbI1IjNkJYz/9Q
-         /TRiFBcgNxkTYpGnz1WR2vlVizXLClN4GAGJyunAcHt87HsrMSHDEDEEQy4TE9tNaUdR
-         AfPFa0XeX9jXw4GEAb77wJj9FS0tp24exU7UqTMG1P4TfG5eHu/mQO4Ji9TOcWMCyFJZ
-         qshwXMIR3lpMmN3vpvkeSgJZD0bJMedtY5hjjs3hmNeHGEyIW+y50nhO+1hCjpCfe6n8
-         uaKA==
-X-Forwarded-Encrypted: i=1; AJvYcCXOBq5mDRZtavfH9NZ6gV7BI9o4bl8oTGdvadzcDRSJucQDF1KLlKx2MqYpy5OJGJYqoq0h@lists.linux.dev
-X-Gm-Message-State: AOJu0YxYktV8rPm+U+wUkiALyQ4m4wawUeslRXaXturTi5ZRgO1UGru6
-	1CESbvClbvQp+tpMYQmjA5D4C6MONIgqAim4aJcPaI2wypinf1hfRT7B
-X-Gm-Gg: ASbGnctD9/2FOQEnJobqkXGFaJNEs1QnlMtFtlCG2Ejiob5Vy1bKGBo6hC6f0Kq6kKl
-	iXOUkzW4d4XEfbA6om3QzrgxsEXRqrtDOb9XFXASC1gGzt4UIkx8UUblo4wEtTuzLb22TmUCwR6
-	9pAoqjiDUR7NtFobfGQE5cNqorQqe/xHsLIMOGp2UHQadvemQMypaICaB7Bd0o5DqIvisKccvnZ
-	mvcbpuC+HOXM4kc4K3W1R4Cl505bw4OJLov8AiW/iyuBhDlIn46i8Tyvpwwflr8C0ZC98kC7EMG
-	svnoHnpVEWR5d7/15qcqWYy0YqSA3JwO43GQKe/Q1zvRl5zuQ01TDu1Ne+wSf5ZSnfndTJsTbC3
-	QbuNoe+VBfGLS7x8fCVIWdTGVp0J9EXKL+x47PfLg7ZE=
-X-Google-Smtp-Source: AGHT+IEsmDDtxcH34zrU6yCLvoUnpVNeQpXjkmSiB1AE5fWsJSBu1loqYdfz+O0NGkUT3RQ1Vtyeiw==
-X-Received: by 2002:a17:902:c403:b0:27e:f02a:b280 with SMTP id d9443c01a7336-28e9a65bd1cmr12557885ad.5.1759469363957;
-        Thu, 02 Oct 2025 22:29:23 -0700 (PDT)
-Received: from localhost ([104.249.174.141])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1108b8sm37676925ad.26.2025.10.02.22.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 22:29:23 -0700 (PDT)
-From: Ben Guo <benx.guo@gmail.com>
-To: seakeel@gmail.com
-Cc: a.hindborg@kernel.org,
-	alex.gaynor@gmail.com,
-	alexs@kernel.org,
-	aliceryhl@google.com,
-	benx.guo@gmail.com,
-	bjorn3_gh@protonmail.com,
-	boqun.feng@gmail.com,
-	corbet@lwn.net,
-	dakr@kernel.org,
-	dzm91@hust.edu.cn,
-	gary@garyguo.net,
-	hust-os-kernel-patches@googlegroups.com,
-	justinstitt@google.com,
-	linux-doc@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBM3Iuiy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759471056; x=1791007056;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0oNC759He1lTOqr7QDNZ5tB39O1bmD82xDV4bqLXrTI=;
+  b=nBM3IuiymrhctJ6e3KlVUlvPdp4HBt8ehY9yj+RNBJvOZSI62m1QE8/1
+   TRk8IO/UTMSNJhjwU4cnDacGKnAtwomtarwxajhxXW1Ji/hGCJwb+Gf2Y
+   tJuMQspUMnE0ktQCZ21Fg3WBDzs9XwbymkMhmr10kvPkENKLtOGEj/1Mk
+   y/A16V9F4wkuilNhAxt3BiuCzRf+NxO8Vf1YoN5uSb2TtIX382NQUXFSs
+   xiK5xULQ7qgj7w21wPLQULPrPzR6WUjvv5i68DAPf5QfRkFjfJHeGfPqZ
+   94sZ5l27tLR3dGl1czvG2UBnrxVXhS4YZtmFsX94EPu1J38e9zmLYlK6m
+   w==;
+X-CSE-ConnectionGUID: ZzqYiYQ4SDSNq4E6PWfyQw==
+X-CSE-MsgGUID: sbr/ot8bTiact0kmzORWWA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="61464668"
+X-IronPort-AV: E=Sophos;i="6.18,311,1751266800"; 
+   d="scan'208";a="61464668"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 22:57:36 -0700
+X-CSE-ConnectionGUID: LZOy1VUVRR2AOhKRFoMQcA==
+X-CSE-MsgGUID: 4Ml5LMX3QWuehhaZ2XbJQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,311,1751266800"; 
+   d="scan'208";a="202960643"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 02 Oct 2025 22:57:32 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v4YnK-0004MF-06;
+	Fri, 03 Oct 2025 05:57:30 +0000
+Date: Fri, 3 Oct 2025 13:56:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	lossin@kernel.org,
-	morbo@google.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	ojeda@kernel.org,
-	rust-for-linux@vger.kernel.org,
-	si.yanteng@linux.dev,
-	tmgross@umich.edu
-Subject: Re: [PATCH] docs/zh_CN: Add translation of rust/testing.rst
-Date: Fri,  3 Oct 2025 05:18:49 +0000
-Message-ID: <20251003052826.454550-1-benx.guo@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAJy-Am=pC07CAWgRSTJ6WLaBdYeg8LQbVDCJp4PYoHaikFJ4Bw@mail.gmail.com>
-References: <CAJy-Am=pC07CAWgRSTJ6WLaBdYeg8LQbVDCJp4PYoHaikFJ4Bw@mail.gmail.com>
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Subject: Re: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
+ state
+Message-ID: <202510031333.zZYEFOH0-lkp@intel.com>
+References: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
 
-On Thu, 2 Oct 2025 21:33:59 +0800, Alex Shi <seakeel@gmail.com> wrote:
-> I can't apply it after your previous rust patch. Could you rebase this
-> patch on my tree?
-> https://git.kernel.org/pub/scm/linux/kernel/git/alexs/linux.git/
+Hi Krishna,
 
-> Thanks
+kernel test robot noticed the following build errors:
 
-Thanks for the feedback.
-I will rebase the patch on your tree and resend as v2.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next krzk-dt/for-next linus/master v6.17 next-20251002]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Ben Guo
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/dt-bindings-usb-ti-hd3ss3220-Add-support-for-VBUS-based-on-ID-state/20251003-012933
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20251002172539.586538-3-krishna.kurapati%40oss.qualcomm.com
+patch subject: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin state
+config: x86_64-buildonly-randconfig-001-20251003 (https://download.01.org/0day-ci/archive/20251003/202510031333.zZYEFOH0-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251003/202510031333.zZYEFOH0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510031333.zZYEFOH0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/typec/hd3ss3220.c:336:29: error: call to undeclared function 'gpiod_get_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     336 |         id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
+         |                                    ^
+>> drivers/usb/typec/hd3ss3220.c:384:24: error: call to undeclared function 'devm_gpiod_get_optional'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     384 |         hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
+         |                               ^
+   drivers/usb/typec/hd3ss3220.c:384:24: note: did you mean 'devm_regulator_get_optional'?
+   include/linux/regulator/consumer.h:163:32: note: 'devm_regulator_get_optional' declared here
+     163 | struct regulator *__must_check devm_regulator_get_optional(struct device *dev,
+         |                                ^
+>> drivers/usb/typec/hd3ss3220.c:384:70: error: use of undeclared identifier 'GPIOD_IN'
+     384 |         hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
+         |                                                                             ^
+>> drivers/usb/typec/hd3ss3220.c:389:23: error: call to undeclared function 'gpiod_to_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     389 |                 hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
+         |                                     ^
+   4 errors generated.
+
+
+vim +/gpiod_get_value_cansleep +336 drivers/usb/typec/hd3ss3220.c
+
+   326	
+   327	static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
+   328	{
+   329		struct hd3ss3220 *hd3ss3220 = dev_id;
+   330		int ret;
+   331		int id;
+   332	
+   333		if (IS_ERR_OR_NULL(hd3ss3220->vbus))
+   334			return IRQ_HANDLED;
+   335	
+ > 336		id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
+   337	
+   338		if (!id) {
+   339			ret = regulator_enable(hd3ss3220->vbus);
+   340			if (ret)
+   341				dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
+   342		} else {
+   343			regulator_disable(hd3ss3220->vbus);
+   344		}
+   345	
+   346		return IRQ_HANDLED;
+   347	}
+   348	
+   349	static int hd3ss3220_probe(struct i2c_client *client)
+   350	{
+   351		struct typec_capability typec_cap = { };
+   352		struct hd3ss3220 *hd3ss3220;
+   353		struct fwnode_handle *connector, *ep;
+   354		int ret;
+   355		unsigned int data;
+   356	
+   357		hd3ss3220 = devm_kzalloc(&client->dev, sizeof(struct hd3ss3220),
+   358					 GFP_KERNEL);
+   359		if (!hd3ss3220)
+   360			return -ENOMEM;
+   361	
+   362		i2c_set_clientdata(client, hd3ss3220);
+   363	
+   364		hd3ss3220->dev = &client->dev;
+   365		hd3ss3220->regmap = devm_regmap_init_i2c(client, &config);
+   366		if (IS_ERR(hd3ss3220->regmap))
+   367			return PTR_ERR(hd3ss3220->regmap);
+   368	
+   369		/* For backward compatibility check the connector child node first */
+   370		connector = device_get_named_child_node(hd3ss3220->dev, "connector");
+   371		if (connector) {
+   372			hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
+   373		} else {
+   374			ep = fwnode_graph_get_next_endpoint(dev_fwnode(hd3ss3220->dev), NULL);
+   375			if (!ep)
+   376				return -ENODEV;
+   377			connector = fwnode_graph_get_remote_port_parent(ep);
+   378			fwnode_handle_put(ep);
+   379			if (!connector)
+   380				return -ENODEV;
+   381			hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
+   382		}
+   383	
+ > 384		hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
+   385		if (IS_ERR(hd3ss3220->id_gpiod))
+   386			return PTR_ERR(hd3ss3220->id_gpiod);
+   387	
+   388		if (hd3ss3220->id_gpiod) {
+ > 389			hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
+   390			if (hd3ss3220->id_irq < 0) {
+   391				dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
+   392				return hd3ss3220->id_irq;
+   393			}
+   394	
+   395			ret = devm_request_threaded_irq(hd3ss3220->dev,
+   396							hd3ss3220->id_irq, NULL,
+   397							hd3ss3220_id_isr,
+   398							IRQF_TRIGGER_RISING |
+   399							IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+   400							dev_name(hd3ss3220->dev), hd3ss3220);
+   401			if (ret < 0) {
+   402				dev_err(hd3ss3220->dev, "failed to get id irq\n");
+   403				return ret;
+   404			}
+   405		}
+   406	
+   407		hd3ss3220->vbus = devm_regulator_get_optional(hd3ss3220->dev, "vbus");
+   408		if (PTR_ERR(hd3ss3220->vbus) == -ENODEV)
+   409			hd3ss3220->vbus = NULL;
+   410	
+   411		if (IS_ERR(hd3ss3220->vbus))
+   412			return dev_err_probe(hd3ss3220->dev,
+   413					     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
+   414	
+   415		if (IS_ERR(hd3ss3220->role_sw)) {
+   416			ret = PTR_ERR(hd3ss3220->role_sw);
+   417			goto err_put_fwnode;
+   418		}
+   419	
+   420		typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+   421		typec_cap.driver_data = hd3ss3220;
+   422		typec_cap.type = TYPEC_PORT_DRP;
+   423		typec_cap.data = TYPEC_PORT_DRD;
+   424		typec_cap.ops = &hd3ss3220_ops;
+   425		typec_cap.fwnode = connector;
+   426	
+   427		ret = hd3ss3220_configure_source_pref(hd3ss3220, connector, &typec_cap);
+   428		if (ret < 0)
+   429			goto err_put_role;
+   430	
+   431		ret = hd3ss3220_configure_port_type(hd3ss3220, connector, &typec_cap);
+   432		if (ret < 0)
+   433			goto err_put_role;
+   434	
+   435		hd3ss3220->port = typec_register_port(&client->dev, &typec_cap);
+   436		if (IS_ERR(hd3ss3220->port)) {
+   437			ret = PTR_ERR(hd3ss3220->port);
+   438			goto err_put_role;
+   439		}
+   440	
+   441		ret = hd3ss3220_configure_power_opmode(hd3ss3220, connector);
+   442		if (ret < 0)
+   443			goto err_unreg_port;
+   444	
+   445		hd3ss3220_set_role(hd3ss3220);
+   446		ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+   447		if (ret < 0)
+   448			goto err_unreg_port;
+   449	
+   450		if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
+   451			ret = regmap_write(hd3ss3220->regmap,
+   452					HD3SS3220_REG_CN_STAT_CTRL,
+   453					data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
+   454			if (ret < 0)
+   455				goto err_unreg_port;
+   456		}
+   457	
+   458		if (client->irq > 0) {
+   459			ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+   460						hd3ss3220_irq_handler,
+   461						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+   462						"hd3ss3220", &client->dev);
+   463			if (ret)
+   464				goto err_unreg_port;
+   465		} else {
+   466			INIT_DELAYED_WORK(&hd3ss3220->output_poll_work, output_poll_execute);
+   467			hd3ss3220->poll = true;
+   468		}
+   469	
+   470		ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
+   471		if (ret < 0)
+   472			goto err_unreg_port;
+   473	
+   474		fwnode_handle_put(connector);
+   475	
+   476		if (hd3ss3220->poll)
+   477			schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
+   478	
+   479		dev_info(&client->dev, "probed revision=0x%x\n", ret);
+   480	
+   481		return 0;
+   482	err_unreg_port:
+   483		typec_unregister_port(hd3ss3220->port);
+   484	err_put_role:
+   485		usb_role_switch_put(hd3ss3220->role_sw);
+   486	err_put_fwnode:
+   487		fwnode_handle_put(connector);
+   488	
+   489		return ret;
+   490	}
+   491	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
