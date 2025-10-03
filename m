@@ -1,87 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9552DCF71;
-	Fri,  3 Oct 2025 18:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2412DAFB4
+	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 18:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759515529; cv=none; b=F3gt/Uh0qksOiGru4iT6CLw9dg3PM14FM0IiypsHIU6sRubGL6Ou7h5zbnJeOcwJuOqgpOjT2r8Smnry8MjCTAQoijI8eXokbVcxMkXwClNK87JYGCzRbX0bzLHJe2XkC7DqCAyA+FDhv0pH7qpT/jklMZTdk5aMk8HVumnZMi0=
+	t=1759517055; cv=none; b=ueTkNqz1tp1W2j9wTi4IyYE4k7GMP4yCrmlVGwI/1j3w6bKK3U1Gsi1PibKoHX5L/2kXCVR3DPrkDVGKpFznPkOhOaKFc1PrgUapwncdMDlTZZ8u+wYgVDpbHlp7okZna+qU7vDhCM3uT9VmAo1cQSGoWycOG4y1DA7LHB/rPcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759515529; c=relaxed/simple;
-	bh=SkYvizMIRTdhuaoXOlwjCevmQ50EQaMRMoPxBQ8I+EA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AZAz0vkIs1YplEZo56cIUY882f5hTH3VQD/ANY9hOE6wFw6sT367nZYH+HoTWhK90XiRf3Lkz4389zNVf4mP0hYN+//PGE57YTN7dSEZ3SInzJETyHOzcBjjAAEQy76t1UIHppFS18klpZsf7JLYDJUBuJwXJrRqYFuwMQEU9wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kjsli9cX; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759517055; c=relaxed/simple;
+	bh=xyuE14DxlDz2HfrhfyleFTggC3yW/RUkLxL0tsrQ6XA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Noexfu/LHBa7I4xoYHeFdM8O37cNt9fiCaqkDmxWZ3+diJj/nRISyMii8sDYSN5D2/UIRmDDYDkivJcK2O8Th83GALpskBS+/zsmXgnuBaEP9CpZxj1oVe3viLLnepx0c11OaKH2FBz67c6Iy2rfjvlddzRndLtoZ2ElJD1Q9sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAx1fL9P; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kjsli9cX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759515528; x=1791051528;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SkYvizMIRTdhuaoXOlwjCevmQ50EQaMRMoPxBQ8I+EA=;
-  b=kjsli9cXNd9fUf3LGKz2in/zAM5Qpa1GARvIzJEMjAjwwfoeA5ilYdFt
-   fES4DduzWmfBpln+1dhJQjg4nFUlo7VnyOzdZ+HGu+BinxHWhkbWA5uV8
-   lfI2BaGulqrR61oXYunZEAjrjPl0n8W1w0yHyd+q/sUVzO19hfy63tXD9
-   kW7ba0hfU6ADM9AEXxUaKUEG6ZTprkB9wO9kgeROvbBSX+15bDbFVUX6G
-   Va+WnuXMAEYBxH9TDdYv9IiUMJywHEme3I3lRl2kkzI7Jmr3Gp/5XINAv
-   XI4c2Iaxja3HdlJWE47Qu4LGdavMijAvAVF8aFHXksdPOZrC2BdV8RyJ4
-   Q==;
-X-CSE-ConnectionGUID: imLYm+u6TPqj9ECB60Pncg==
-X-CSE-MsgGUID: lV3juPVYTlaINEQUDYh8fA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11571"; a="72478178"
-X-IronPort-AV: E=Sophos;i="6.18,313,1751266800"; 
-   d="scan'208";a="72478178"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 11:18:47 -0700
-X-CSE-ConnectionGUID: ionRyOXpQgyh+DUd9lGsBg==
-X-CSE-MsgGUID: 8RZYAoeATlOLYAf9iBGTmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,313,1751266800"; 
-   d="scan'208";a="179149043"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 03 Oct 2025 11:18:46 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4kMd-0004o9-2V;
-	Fri, 03 Oct 2025 18:18:43 +0000
-Date: Sat, 4 Oct 2025 02:17:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/gmem_inplace 31/45] ld.lld: error: undefined symbol:
- __SCT____kvm_get_memory_attributes
-Message-ID: <202510040252.3c7i2bTf-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAx1fL9P"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5797c8612b4so3322159e87.2
+        for <llvm@lists.linux.dev>; Fri, 03 Oct 2025 11:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759517052; x=1760121852; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyuE14DxlDz2HfrhfyleFTggC3yW/RUkLxL0tsrQ6XA=;
+        b=TAx1fL9P14dgpVrRH0EaLzCSZN1vozgqqtzrYo/CkgEegEw+F3YJkH7zJVMe5zvHKj
+         GclnUUeBuiQ/dfTyM3ziehAXsvkZGHi3bfm6j5H1tOxU8kRllNeYCXmgjYmOo4TBmXHi
+         +pI7gNSbXcTGxyeD864rHRaODpplC7H6HnXCcHMc7tafs+uZXUG3za+33qEC1b3NNn9T
+         zWnfB4WapSBVTlnRzm4EKavhhXxKUG9ofSFriLnLmeI2DhK8OdWCEL4FNOHRCq2D9kw2
+         IZjvUgidYGm2zVgohItztzF80vj7s7E0MlPWGo7O8T8s6W2Xy1+6XrtO+7biiqztHPri
+         mHqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759517052; x=1760121852;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xyuE14DxlDz2HfrhfyleFTggC3yW/RUkLxL0tsrQ6XA=;
+        b=lrJZ6S/9HlM732s8OKakt6B5PBV7Y56A7YbpMbJ3nTiBILhfCLqIFHM2JBdoOJjtZo
+         xZgOThJkg2pYIZyRYWWDPSrpfe4RJkTh8/Ph512O4SVf09RWrWVBUhm2+tfS5gZpMdUm
+         YZYdgYZD5BiMxdd/7GA3gkORdELl6MUoGtwziMzj+Hel8NqYbGkW28CP3AT2+Jcu+paM
+         ZOqaxHX2tt9vNhLvc6NB13YR3vvmcJ/OpNB+Aj7QedykCMnOe4jbpZoFZ+SUejbox7pB
+         TRZt/iuWHB63FhguUY6NpqQGfUB9Dc0CbTjaMmNdZbN97o2L7sagLUfWRvEatRoMw6zP
+         hflw==
+X-Forwarded-Encrypted: i=1; AJvYcCXjUy5fSnmJPB4hgloBGdcLnRefXyzexiClZG+WOumjQl9jumkwu8AlpVR2EszcA600pisd@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw7+3yuw8G4bWYe5bmuRyTgPl7DgF0Z/1UcHjCL12QXTCsEr/Ys
+	KxAyi5WmryvOcEYRGG2Rr/2f7/lqwaHyrGeHNkcRGp1I8dV0d0e7ldvTpsMDmVPdyYKh7LHwmGZ
+	P9TSSSMtTEEY0O9OZzYzNcXSzUwjuxy8=
+X-Gm-Gg: ASbGncupmDloW3ncofKpWzOu6pOF2WBSdukhAKfG0Zuj7cOFCqA1gPb82NIgQMJGfgq
+	rEroAN8yYBCyzjt2WPtiSFHaMfedZDUnyYdqzBwqiIeN4iXi22U8k2mtbB2m7NA0VQ7s4C2RHLc
+	9noR/fSsCZVvAwHkatd3qM5XU7E9+TpOqAJxmo9djoBopzhm+c3yJ/a9jT3Wt1DDTGU9BS/mfDG
+	tsk3+U0xkS/M1Gk7ihY4HDpn+sOL19Sp4uOpVQoIE3SQzk4toGwEUtTQwMl/niOBrD1t0Dif3Ti
+X-Google-Smtp-Source: AGHT+IFGjI23yu+zZGYIIYp5GAvADK1Td8K5f92lbt6d4punv+uO2Xi2qzgSwr+Eyr8h+dgbxKZKruLqIS6Oqk0H0Go=
+X-Received: by 2002:a05:6512:1245:b0:560:9993:f154 with SMTP id
+ 2adb3069b0e04-58cbbdd8224mr1238522e87.35.1759517051928; Fri, 03 Oct 2025
+ 11:44:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250924175743.6790-1-hsukrut3@gmail.com> <202509272320.3K8kdDCw-lkp@intel.com>
+ <bb9d90ca-aa4d-4168-bdc5-543109c74493@gmail.com> <CAHCkknrZ-ieNKeg-aj3-NVqgGSk770jJpUpCvn_SuffkPu+ZrQ@mail.gmail.com>
+ <edccab86-321b-4e6e-998f-3ce320ee0193@gmx.de> <41ef536d-2399-43f8-8041-c6b0e642aba2@suse.de>
+In-Reply-To: <41ef536d-2399-43f8-8041-c6b0e642aba2@suse.de>
+From: sukrut heroorkar <hsukrut3@gmail.com>
+Date: Fri, 3 Oct 2025 20:43:59 +0200
+X-Gm-Features: AS18NWCgP_BX7ybrXY0sJ6ucNdQs1TMwDO0SWiLqnHgEzd_63diU8v-qea2nPRE
+Message-ID: <CAHCkknrAKGxzAYE-R3QX20W4faR9Wfjgn37peyHRJcZ6PRLENA@mail.gmail.com>
+Subject: Re: [PATCH] fbdev: udlfb: make CONFIG_FB_DEVICE optional
+To: Thomas Zimmermann <tzimmermann@suse.de>, Helge Deller <deller@gmx.de>
+Cc: David Hunter <david.hunter.linux@gmail.com>, kernel test robot <lkp@intel.com>, 
+	Bernie Thompson <bernie@plugable.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Randy Dunlap <rdunlap@infradead.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Zsolt Kajtar <soci@c64.rulez.org>, 
+	Gonzalo Silvalde Blanco <gonzalo.silvalde@gmail.com>, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/sean-jc/linux x86/gmem_inplace
-head:   98035af87378177ca9fd4801b4edc653a68a38ff
-commit: 0f7a514e7f39832e662a9761001e1cbd97bea813 [31/45] KVM: Stub in read-only module param to control per-VM memory attribute tracking
-config: arm64-randconfig-002-20251003 (https://download.01.org/0day-ci/archive/20251004/202510040252.3c7i2bTf-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251004/202510040252.3c7i2bTf-lkp@intel.com/reproduce)
+Hi
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510040252.3c7i2bTf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: __SCT____kvm_get_memory_attributes
-   >>> referenced by .vmlinux.export.c
-   >>>               .vmlinux.export.o:(___ksymtab_gpl+__SCT____kvm_get_memory_attributes+0x0)
-   >>> did you mean: __SCK____kvm_get_memory_attributes
-   >>> defined in: vmlinux.a(virt/kvm/kvm_main.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Thu, Oct 2, 2025 at 8:52=E2=80=AFAM Thomas Zimmermann <tzimmermann@suse.=
+de> wrote:
+>
+> Hi
+>
+> Am 02.10.25 um 08:41 schrieb Helge Deller:
+> >>>> kernel test robot noticed the following build errors:
+> >>>
+> >>> Did you compile and test this code before submitting this patch?
+> >>
+> >> Yes, I had compiled & loaded the udlfb module with no errors. Please
+> >> let me know how to proceed in this case.
+> >
+> > Look at the reported build error, which seems to happen in dev_dbg().
+> > So, maybe in your testing you did not have debugging enabled?
+> > The report contains the .config file with which you can test.
+>
+> Can we rather make an effort to remove the udlfb driver entirely? A few
+> years back, there was one user who was still using it because of some
+> problems with the DRM udl driver. But I think we've addressed them. The
+> discussion is at [1].
+Should I send a patch series to completely remove udlfb, since [1] echoed t=
+hat
+DRM udl driver is good enough?
+>
+> [1]
+> https://lore.kernel.org/dri-devel/20201130125200.10416-1-tzimmermann@suse=
+.de/
+>
+> Best regards
+> Thomas
+>
+> >
+> > Helge
+>
+> --
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Frankenstrasse 146, 90461 Nuernberg, Germany
+> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+> HRB 36809 (AG Nuernberg)
+>
+>
