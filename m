@@ -1,181 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C5928507C;
-	Fri,  3 Oct 2025 15:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965F9286D5C;
+	Fri,  3 Oct 2025 15:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759505068; cv=none; b=BqHGfwULOcobtX1m1GkWM+Lr5hLZ80yFpnIqrAb23xnXyTkWw33p+oBFJh3eXjKXOgSmG9bXtFtIJfWtVTayFwX1PMEp/fpBb2oohgNkeKUThc99AbWw+loK6X2qAmp62VKu/TDb7d+lVKLM1K+XAC1PMzcvKi6tXt/nRThDJTs=
+	t=1759505429; cv=none; b=jj4SKOVzMl/sbiX7eEkDK4juLN2HccW0G+EuzKUNhjng2OO+hLh2fRKIpFaNZSNR/GaTAUAMiZM/0ZEHvM7xWDPh8uko0dai69R99YUgWmErYpvfyT2/BsqWqMqV3EyFanrsfNmVVzelW+4mFDfTUp5YqC4N8bUnOOY7ymMXzzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759505068; c=relaxed/simple;
-	bh=DQbc540c3F4b2scI1GiUAhd/lmG2n6h9j6Q7f/kL6PA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PF/aSVtIx95bm4U8p8jeB0LRXFJXaM3Bze7fgs4+JX+DOecaUUPnYlDx/tCfryYEWXM1RhmJEllVcDQ2Aj7TABPD4U/xIJKTGAmnJKZo2V+HyTWHYLIaDKNmXsXlydgZpiPR+ZGaLSYoJjyQIt/qH/AkRIkVekaDNckMHQ01l+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uScpE9gw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759505429; c=relaxed/simple;
+	bh=q/9Xu2YYVG+OUUPaY0oOhfiQYqYmkFvJm1jxGPXbccQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=j9alaOfosxaIn6BJYrdt3a2faB1VrKNq9By9Yh/+zXhA13ZT55iti5vmOgrwkE+FjwLMDwBMEFGDmQnXJuL7YrDIHZgpoItDPtTwn/oACwZaWc82D2b/QOOULKEOO4L3ATRExTRNMlM7K41thQTdj1XhgnESW5kgr4iNFEnGk6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QvamK2Hk; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uScpE9gw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08774C4CEF5;
-	Fri,  3 Oct 2025 15:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759505067;
-	bh=DQbc540c3F4b2scI1GiUAhd/lmG2n6h9j6Q7f/kL6PA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=uScpE9gwKBXzfsOqJsm8nsTLuyY8dsZmu4CVbMgtH7C3okBfq1cziyx+eSwvIfGU0
-	 DjYjQF8St5imJ7he/JHa1lANjODwgVgnyiimp9BC9HfVZ+99bD8xLq+CaxXYhHSnI/
-	 e7AJg0YNd1EDn8rwhRLpyPRHYWwnup4Sg8sXdBIKMBbACWlz+lb1XtHdIwmf+UamFE
-	 7Nk6XFlkxVGXcbL/km/QdRNVGiRQz9RxUGqprrTede8gGP6x5iw1d5ZpPmb1D4QzCV
-	 uuZ2wrLr6fazv7XN8GUph1QAHMc0YfGxBBjqa8GwmYt54C/yaXOOFQa05igBKZLEti
-	 2ISx/BcmVFI/Q==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 03 Oct 2025 17:24:17 +0200
-Subject: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
- errors
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QvamK2Hk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759505428; x=1791041428;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=q/9Xu2YYVG+OUUPaY0oOhfiQYqYmkFvJm1jxGPXbccQ=;
+  b=QvamK2Hkj+qU4qqyfEQJOO1bsXhFjR4JpfFQjtxwkTwLDsOA7Y3e7gtc
+   cggT4KI85HIfF6KZ49jFUL1z3nRcCSLLuoIQ7Vl6I+5UIUkUT8+ym20dv
+   8U2+vO6esydE5uLpGInp4J6lQLKLG9E2QStxvqU0frxNrgQ4ZQl2zsQY5
+   ywf1Pin62+SFn1qHz4U9JkmnaG+oZKNQcbdsV7j7sKe90nO5ehlzfLXVq
+   gVMzyNZBXme0CDaCsTbjc4zHjdiL6V+cbdi0c0+Ee+nHUOprlp5SxrDTW
+   EOovcV1F2HzLdU4pw4+7c50IVhvDG3RZs/nNrZyDU/Y1fKsOXkyBBLuYU
+   w==;
+X-CSE-ConnectionGUID: ihF0HE5FTueVITbwWex3pA==
+X-CSE-MsgGUID: olHoZa5/Tseh8/fxAbOP2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11571"; a="60826083"
+X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
+   d="scan'208";a="60826083"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 08:30:27 -0700
+X-CSE-ConnectionGUID: BDdaxFHARMmz3JkgtkXyTg==
+X-CSE-MsgGUID: KR53dd6NS0C+e6sSWxZPiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
+   d="scan'208";a="184505759"
+Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 03 Oct 2025 08:30:25 -0700
+Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v4hjj-0004cc-1E;
+	Fri, 03 Oct 2025 15:30:23 +0000
+Date: Fri, 3 Oct 2025 23:29:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [cilium:pr/netkit-iouring2 16/17] net/xdp/xsk.c:129:44: error: too
+ few arguments to function call, expected 3, have 2
+Message-ID: <202510032323.xc2oFL3L-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKDq32gC/x2MwQqDQAwFf0Vy7oPsahfpr5QeVs3WgFjJtqUg/
- nuDx4GZ2amKqVS6NTuZfLXqa3UIl4bGOa9PgU7OFDleA3OLYSuo5Y2iPwwfXSaIGRJCj5S7kdt
- YUs+ZfLCZuHXO7+QdPY7jD0VWMm9xAAAA
-X-Change-ID: 20251003-bpf-sft-fix-build-err-6-18-6a4c032f680a
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6355; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=DQbc540c3F4b2scI1GiUAhd/lmG2n6h9j6Q7f/kL6PA=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLuv1oe9TQgbcvhc1tWTA27r1zjXS04JeVS00qtaYw2O
- 30ZPNXaO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACayP5rhv9Pj04ERzaufnPq+
- xW/FnIyQ1U41sRqdAnVvfyxlivh4lY2RYbFWa0DUrrCz/70U1vnunjk3sm2BUU32XUUGv5XvPgS
- XswMA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When trying to build the latest BPF selftests, with a debug kernel
-config, Pahole 1.30 and CLang 20.1.8 (and GCC 15.2), I got these errors:
+tree:   https://github.com/cilium/linux.git pr/netkit-iouring2
+head:   8f75591c849f4deeaa81c54aa15f111c1db0d47e
+commit: b1267b3c6afc658b47021929dc9ae44acef2c68f [16/17] errata: mp open/close conversion
+config: hexagon-randconfig-001-20251003 (https://download.01.org/0day-ci/archive/20251003/202510032323.xc2oFL3L-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251003/202510032323.xc2oFL3L-lkp@intel.com/reproduce)
 
-  progs/dynptr_success.c:579:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
-        |                ^
-  progs/dynptr_success.c:579:9: note: did you mean 'bpf_dynptr_size'?
-  .virtme/build-debug-btf//tools/include/vmlinux.h:120280:14: note: 'bpf_dynptr_size' declared here
-   120280 | extern __u32 bpf_dynptr_size(const struct bpf_dynptr *p) __weak __ksym;
-          |              ^
-  progs/dynptr_success.c:579:7: error: incompatible integer to pointer conversion assigning to '__u64 *' (aka 'unsigned long long *') from 'int' [-Wint-conversion]
-    579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
-        |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  progs/dynptr_success.c:596:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
-        |                ^
-  progs/dynptr_success.c:596:7: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
-    596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
-        |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510032323.xc2oFL3L-lkp@intel.com/
 
-I don't have these errors without the debug kernel config from
-kernel/configs/debug.config. With the debug kernel, bpf_dynptr_slice()
-is not declared in vmlinux.h. It is declared there without debug.config.
+Note: the cilium/pr/netkit-iouring2 HEAD 8f75591c849f4deeaa81c54aa15f111c1db0d47e builds fine.
+      It only hurts bisectability.
 
-The fix is similar to what is done in dynptr_fail.c which is also using
-bpf_dynptr_slice(): bpf_kfuncs.h is now included.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-Notes:
- - This patch looks wrong, I guess bpf_dynptr_slice() should be in
-   vmlinux.h even with a "debug" kernel, but it is not:
-   $ grep -cw bpf_dynptr_slice .virtme/build-debug-btf/tools/include/vmlinux.h
-   0
-   $ grep -w bpf_dynptr_slice .virtme/build-btf/tools/include/vmlinux.h
-   extern void *bpf_dynptr_slice(...) __weak __ksym;
- - This is on top of bpf/master: commit 63d2247e2e37, tag bpf-fixes.
- - I only see this error when using kernel/configs/debug.config.
- - Because this has not been spot by the BPF CI, I wonder if I'm
-   building the BPF selftests properly... Here is what I did:
-   $ virtme-configkernel --arch x86_64 --defconfig \
-     --custom tools/testing/selftests/net/mptcp/config \
-     --custom kernel/configs/debug.config \
-     --custom tools/testing/selftests/bpf/config \
-     O=${PWD}/.virtme/build-debug-btf
-   $ ./scripts/config --file ${PWD}/.virtme/build-debug-btf/.config \
-     -e NET_NS_REFCNT_TRACKER -d SLUB_DEBUG_ON \
-     -d DEBUG_KMEMLEAK_AUTO_SCAN -e PANIC_ON_OOPS \
-     -e SOFTLOCKUP_DETECTOR -e BOOTPARAM_SOFTLOCKUP_PANIC \
-     -e HARDLOCKUP_DETECTOR -e BOOTPARAM_HUNG_TASK_PANIC \
-     -e DETECT_HUNG_TASK -e BOOTPARAM_HUNG_TASK_PANIC -e DEBUG_INFO \
-     -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT -e GDB_SCRIPTS \
-     -e DEBUG_INFO_DWARF4 -e DEBUG_INFO_COMPRESSED \
-     -e DEBUG_INFO_COMPRESSED_ZLIB -e DEBUG_INFO_BTF_MODULES \
-     -e MODULE_ALLOW_BTF_MISMATCH -d IA32_EMULATION -e DYNAMIC_DEBUG \
-     --set-val CONSOLE_LOGLEVEL_DEFAULT 8 -e FTRACE -e FUNCTION_TRACER \
-     -e DYNAMIC_FTRACE -e FTRACE_SYSCALLS -e HIST_TRIGGERS -e DEBUG_NET \
-     -m KUNIT -e KUNIT_DEBUGFS -d KUNIT_ALL_TESTS -m MPTCP_KUNIT_TEST \
-     -e BPF_JIT -e BPF_SYSCALL -e TUN -e CRYPTO_USER_API_HASH \
-     -e CRYPTO_SHA1 -e NET_SCH_TBF -e BRIDGE -d RETPOLINE -d PCCARD \
-     -d MACINTOSH_DRIVERS -d SOUND -d USB_SUPPORT -d NEW_LEDS -d SCSI \
-     -d SURFACE_PLATFORMS -d DRM -d FB -d ATA -d MISC_FILESYSTEMS
-     # sorry, long list used by the MPTCP CI to accelerate builds, etc.
-   $ make O=${PWD}/.virtme/build-debug-btf olddefconfig
-   $ make O=${PWD}/.virtme/build-debug-btf -j$(nproc) -l$(nproc)
-   $ make O=${PWD}/.virtme/build-debug-btf headers_install \
-     INSTALL_HDR_PATH=${PWD}/.virtme/headers
-   $ make O=${PWD}/.virtme/build-debug-btf \
-     KHDR_INCLUDES=-I${PWD}/.virtme/headers/includes \
-     -C tools/testing/selftests/bpf
- - The errors I got should be reproducible using:
-   $ docker run -v "${PWD}:${PWD}:rw" -w "${PWD}" --privileged --rm -it \
-     -e INPUT_EXTRA_ENV=INPUT_RUN_TESTS_ONLY=bpftest_all \
-     --pull always mptcp/mptcp-upstream-virtme-docker:latest \
-     auto-btf-debug
- - These issues were originally spot by our MPTCP CI:
-   https://github.com/multipath-tcp/mptcp_net-next/actions/runs/18222911614/job/51886811332
- - No errors without kernel/configs/debug.config on the CI and on my side
- - This CI got different issues, and I had to declare more kfuncs there:
-   https://github.com/multipath-tcp/mptcp_net-next/commit/4435d4da9f4f
-   but this CI is currently on top of 'net', with Jiri's patches from
-   https://lore.kernel.org/20251001122223.170830-1-jolsa@kernel.org
- - The builds have been done from a clean build directory each time.
- - Do you think the issue is on my side? Dependences? How the selftests
-   are built? I didn't change the way the BPF selftests are built for a
-   while. I had other issues with pahole 1.29, but fixed with 1.30.
- - Feel free to discard this patch for a better solution (if any).
- - I don't know which Fixes tag adding, but I doubt this patch is valid.
----
- tools/testing/selftests/bpf/progs/dynptr_success.c | 1 +
- 1 file changed, 1 insertion(+)
+>> net/xdp/xsk.c:129:44: error: too few arguments to function call, expected 3, have 2
+     129 |                 __netif_get_rx_queue_peer(&dev, &queue_id);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~                ^
+   include/net/netdev_rx_queue.h:96:1: note: '__netif_get_rx_queue_peer' declared here
+      96 | __netif_get_rx_queue_peer(struct net_device **dev, unsigned int *rxq_idx,
+         | ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      97 |                           bool virt_to_phys_only);
+         |                           ~~~~~~~~~~~~~~~~~~~~~~
+   net/xdp/xsk.c:150:44: error: too few arguments to function call, expected 3, have 2
+     150 |                 __netif_get_rx_queue_peer(&dev, &queue_id);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~                ^
+   include/net/netdev_rx_queue.h:96:1: note: '__netif_get_rx_queue_peer' declared here
+      96 | __netif_get_rx_queue_peer(struct net_device **dev, unsigned int *rxq_idx,
+         | ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      97 |                           bool virt_to_phys_only);
+         |                           ~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index 127dea342e5a67dda33e0a39e84d135206d2f3f1..60daf5ce8eb283d8c8bf2d7853eda6313df4fa87 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -6,6 +6,7 @@
- #include <stdbool.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include "bpf_kfuncs.h"
- #include "bpf_misc.h"
- #include "errno.h"
- 
 
----
-base-commit: 63d2247e2e37d9c589a0a26aa4e684f736a45e29
-change-id: 20251003-bpf-sft-fix-build-err-6-18-6a4c032f680a
+vim +129 net/xdp/xsk.c
 
-Best regards,
+1c1efc2af15886 Magnus Karlsson    2020-08-28  125  
+c835a0c7c90035 Daniel Borkmann    2025-09-03  126  void xsk_clear_pool_at_qid(struct net_device *dev, unsigned int queue_id)
+1c1efc2af15886 Magnus Karlsson    2020-08-28  127  {
+c835a0c7c90035 Daniel Borkmann    2025-09-03  128  	if (queue_id < dev->real_num_rx_queues)
+c835a0c7c90035 Daniel Borkmann    2025-09-03 @129  		__netif_get_rx_queue_peer(&dev, &queue_id);
+b425e24a934e21 Maxim Mikityanskiy 2021-01-18  130  	if (queue_id < dev->num_rx_queues)
+1c1efc2af15886 Magnus Karlsson    2020-08-28  131  		dev->_rx[queue_id].pool = NULL;
+b425e24a934e21 Maxim Mikityanskiy 2021-01-18  132  	if (queue_id < dev->num_tx_queues)
+1c1efc2af15886 Magnus Karlsson    2020-08-28  133  		dev->_tx[queue_id].pool = NULL;
+1c1efc2af15886 Magnus Karlsson    2020-08-28  134  }
+1c1efc2af15886 Magnus Karlsson    2020-08-28  135  
+
+:::::: The code at line 129 was first introduced by commit
+:::::: c835a0c7c90035db3e1ca49bdb371bdd62ffa6bd xsk: Proxy pool management for mapped queues
+
+:::::: TO: Daniel Borkmann <daniel@iogearbox.net>
+:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
+
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
