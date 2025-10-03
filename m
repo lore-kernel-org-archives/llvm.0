@@ -1,137 +1,181 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F2411CA9
-	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 14:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C5928507C;
+	Fri,  3 Oct 2025 15:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759501413; cv=none; b=hxs92kATWl3ccvdfskXHfmJYWOa57zNqQuXd6Jp9a1ThYlfUaMOfKgv8P6D9FMAh17QG4+85WCLvzRb3SHn1hVHW+VpMw+aNpTcr9iUHMCcMHllUIgyO8x9Lkzp48wTV8tI8uV/F23gobTnNkLkBQCTeyo7LMrbODaI4Er7W+tQ=
+	t=1759505068; cv=none; b=BqHGfwULOcobtX1m1GkWM+Lr5hLZ80yFpnIqrAb23xnXyTkWw33p+oBFJh3eXjKXOgSmG9bXtFtIJfWtVTayFwX1PMEp/fpBb2oohgNkeKUThc99AbWw+loK6X2qAmp62VKu/TDb7d+lVKLM1K+XAC1PMzcvKi6tXt/nRThDJTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759501413; c=relaxed/simple;
-	bh=L6AZPSu7PL9w770aj4OpkCLzKed0TTIBd5csy7OERWs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GRG4nxTjSDOI6aeKlnsElO6xml8Pk2fneskxGh0PcEntaFFLBZ/gk27zOXIKZKiAucxdac6GLWxfq1F9URCP0WO7SmN8rbQduKrhaeYLMNWXprD2LEg6Vv8myuY2Q08nznPbl6be0eBbwF0dRrvzjQnYKAMJ/eJlhI3JmOg0PPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WGrL+k3F; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759505068; c=relaxed/simple;
+	bh=DQbc540c3F4b2scI1GiUAhd/lmG2n6h9j6Q7f/kL6PA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PF/aSVtIx95bm4U8p8jeB0LRXFJXaM3Bze7fgs4+JX+DOecaUUPnYlDx/tCfryYEWXM1RhmJEllVcDQ2Aj7TABPD4U/xIJKTGAmnJKZo2V+HyTWHYLIaDKNmXsXlydgZpiPR+ZGaLSYoJjyQIt/qH/AkRIkVekaDNckMHQ01l+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uScpE9gw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WGrL+k3F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759501412; x=1791037412;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=L6AZPSu7PL9w770aj4OpkCLzKed0TTIBd5csy7OERWs=;
-  b=WGrL+k3FadEp/UV0B57szUQkRjxOvA2m7GXslxVmh9PxPMBqCVmhLNyc
-   LhoBA35QW+jzLJlOAT7qteRCQlFoRd6VWqR0QF8m6/aXmz7AWL6sFnzAk
-   yTYmQSkpq2P5boxRoN3mmEygfL47Xe3zfzAp/p/1TyaWqCziFfv8Gm5hx
-   KArGYynfFgi68c7pJ2I642YjGC9A3c9Bwk9wyt5SKqfMn9LBhgV190XSA
-   k7Pp0l9N5G4QFQn4xeK9cS1udgs8DD2fRaknC//I89jMb+0JS28vmzUUu
-   rQRm//HqbGcjgZ6nZJPXsfV87hRS577sWv4VmBuIlwcwS68wpE5FZVxer
-   Q==;
-X-CSE-ConnectionGUID: iM+kmCBtS0yksDlOl0WtrA==
-X-CSE-MsgGUID: sdslFQ5LTBKrb3mUGefQdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11571"; a="87240238"
-X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
-   d="scan'208";a="87240238"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 07:23:31 -0700
-X-CSE-ConnectionGUID: F40sYTK/RAyYy9pK/uKOKg==
-X-CSE-MsgGUID: iFEgYZvzS9uxIm+qUSMcIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
-   d="scan'208";a="203044547"
-Received: from cmdeoliv-mobl4.amr.corp.intel.com (HELO [10.125.110.34]) ([10.125.110.34])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 07:23:30 -0700
-Message-ID: <4c4cce9f-3219-48f0-8606-6573339b8794@intel.com>
-Date: Fri, 3 Oct 2025 07:23:29 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uScpE9gw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08774C4CEF5;
+	Fri,  3 Oct 2025 15:24:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759505067;
+	bh=DQbc540c3F4b2scI1GiUAhd/lmG2n6h9j6Q7f/kL6PA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=uScpE9gwKBXzfsOqJsm8nsTLuyY8dsZmu4CVbMgtH7C3okBfq1cziyx+eSwvIfGU0
+	 DjYjQF8St5imJ7he/JHa1lANjODwgVgnyiimp9BC9HfVZ+99bD8xLq+CaxXYhHSnI/
+	 e7AJg0YNd1EDn8rwhRLpyPRHYWwnup4Sg8sXdBIKMBbACWlz+lb1XtHdIwmf+UamFE
+	 7Nk6XFlkxVGXcbL/km/QdRNVGiRQz9RxUGqprrTede8gGP6x5iw1d5ZpPmb1D4QzCV
+	 uuZ2wrLr6fazv7XN8GUph1QAHMc0YfGxBBjqa8GwmYt54C/yaXOOFQa05igBKZLEti
+	 2ISx/BcmVFI/Q==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Fri, 03 Oct 2025 17:24:17 +0200
+Subject: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
+ errors
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/12] x86/msr: Use the alternatives mechanism for
- WRMSR
-To: Peter Zijlstra <peterz@infradead.org>, =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?=
- <jgross@suse.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev,
- xin@zytor.com, "H. Peter Anvin" <hpa@zytor.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20250930070356.30695-1-jgross@suse.com>
- <20250930070356.30695-10-jgross@suse.com>
- <20250930083137.GH3245006@noisy.programming.kicks-ass.net>
- <2df26cc0-53bc-499c-8c78-bc24fd8bf882@suse.com>
- <20250930085044.GK3245006@noisy.programming.kicks-ass.net>
- <20250930125156.GK1386988@noisy.programming.kicks-ass.net>
- <2ad137cb-ed38-42f6-ac0a-a81569051779@suse.com>
- <20251001064339.GL4067720@noisy.programming.kicks-ass.net>
- <20251001072340.GM3245006@noisy.programming.kicks-ass.net>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20251001072340.GM3245006@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKDq32gC/x2MwQqDQAwFf0Vy7oPsahfpr5QeVs3WgFjJtqUg/
+ nuDx4GZ2amKqVS6NTuZfLXqa3UIl4bGOa9PgU7OFDleA3OLYSuo5Y2iPwwfXSaIGRJCj5S7kdt
+ YUs+ZfLCZuHXO7+QdPY7jD0VWMm9xAAAA
+X-Change-ID: 20251003-bpf-sft-fix-build-err-6-18-6a4c032f680a
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6355; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=DQbc540c3F4b2scI1GiUAhd/lmG2n6h9j6Q7f/kL6PA=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLuv1oe9TQgbcvhc1tWTA27r1zjXS04JeVS00qtaYw2O
+ 30ZPNXaO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACayP5rhv9Pj04ERzaufnPq+
+ xW/FnIyQ1U41sRqdAnVvfyxlivh4lY2RYbFWa0DUrrCz/70U1vnunjk3sm2BUU32XUUGv5XvPgS
+ XswMA
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On 10/1/25 00:23, Peter Zijlstra wrote:
-> On Wed, Oct 01, 2025 at 08:43:39AM +0200, Peter Zijlstra wrote:
->> Let me see how terrible it all ends up when using as macros
-> Argh, as macros are differently painful. I hate computers :/
+When trying to build the latest BPF selftests, with a debug kernel
+config, Pahole 1.30 and CLang 20.1.8 (and GCC 15.2), I got these errors:
 
-ALTERNATIVES are fun and all, but is there a good reason we're pulling
-out our hair to use them here?
+  progs/dynptr_success.c:579:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
+        |                ^
+  progs/dynptr_success.c:579:9: note: did you mean 'bpf_dynptr_size'?
+  .virtme/build-debug-btf//tools/include/vmlinux.h:120280:14: note: 'bpf_dynptr_size' declared here
+   120280 | extern __u32 bpf_dynptr_size(const struct bpf_dynptr *p) __weak __ksym;
+          |              ^
+  progs/dynptr_success.c:579:7: error: incompatible integer to pointer conversion assigning to '__u64 *' (aka 'unsigned long long *') from 'int' [-Wint-conversion]
+    579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
+        |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  progs/dynptr_success.c:596:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
+        |                ^
+  progs/dynptr_success.c:596:7: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+    596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
+        |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Normal WRMSR is slooooooooooow. The ones that aren't slow don't need
-WRMSRNS in the first place.
+I don't have these errors without the debug kernel config from
+kernel/configs/debug.config. With the debug kernel, bpf_dynptr_slice()
+is not declared in vmlinux.h. It is declared there without debug.config.
 
-Would an out-of-line wrmsr() with an if() in it be so bad? Or a
-static_call()? Having WRMSR be inlined in a laudable goal, but I'm
-really asking if it's worth it.
+The fix is similar to what is done in dynptr_fail.c which is also using
+bpf_dynptr_slice(): bpf_kfuncs.h is now included.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Notes:
+ - This patch looks wrong, I guess bpf_dynptr_slice() should be in
+   vmlinux.h even with a "debug" kernel, but it is not:
+   $ grep -cw bpf_dynptr_slice .virtme/build-debug-btf/tools/include/vmlinux.h
+   0
+   $ grep -w bpf_dynptr_slice .virtme/build-btf/tools/include/vmlinux.h
+   extern void *bpf_dynptr_slice(...) __weak __ksym;
+ - This is on top of bpf/master: commit 63d2247e2e37, tag bpf-fixes.
+ - I only see this error when using kernel/configs/debug.config.
+ - Because this has not been spot by the BPF CI, I wonder if I'm
+   building the BPF selftests properly... Here is what I did:
+   $ virtme-configkernel --arch x86_64 --defconfig \
+     --custom tools/testing/selftests/net/mptcp/config \
+     --custom kernel/configs/debug.config \
+     --custom tools/testing/selftests/bpf/config \
+     O=${PWD}/.virtme/build-debug-btf
+   $ ./scripts/config --file ${PWD}/.virtme/build-debug-btf/.config \
+     -e NET_NS_REFCNT_TRACKER -d SLUB_DEBUG_ON \
+     -d DEBUG_KMEMLEAK_AUTO_SCAN -e PANIC_ON_OOPS \
+     -e SOFTLOCKUP_DETECTOR -e BOOTPARAM_SOFTLOCKUP_PANIC \
+     -e HARDLOCKUP_DETECTOR -e BOOTPARAM_HUNG_TASK_PANIC \
+     -e DETECT_HUNG_TASK -e BOOTPARAM_HUNG_TASK_PANIC -e DEBUG_INFO \
+     -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT -e GDB_SCRIPTS \
+     -e DEBUG_INFO_DWARF4 -e DEBUG_INFO_COMPRESSED \
+     -e DEBUG_INFO_COMPRESSED_ZLIB -e DEBUG_INFO_BTF_MODULES \
+     -e MODULE_ALLOW_BTF_MISMATCH -d IA32_EMULATION -e DYNAMIC_DEBUG \
+     --set-val CONSOLE_LOGLEVEL_DEFAULT 8 -e FTRACE -e FUNCTION_TRACER \
+     -e DYNAMIC_FTRACE -e FTRACE_SYSCALLS -e HIST_TRIGGERS -e DEBUG_NET \
+     -m KUNIT -e KUNIT_DEBUGFS -d KUNIT_ALL_TESTS -m MPTCP_KUNIT_TEST \
+     -e BPF_JIT -e BPF_SYSCALL -e TUN -e CRYPTO_USER_API_HASH \
+     -e CRYPTO_SHA1 -e NET_SCH_TBF -e BRIDGE -d RETPOLINE -d PCCARD \
+     -d MACINTOSH_DRIVERS -d SOUND -d USB_SUPPORT -d NEW_LEDS -d SCSI \
+     -d SURFACE_PLATFORMS -d DRM -d FB -d ATA -d MISC_FILESYSTEMS
+     # sorry, long list used by the MPTCP CI to accelerate builds, etc.
+   $ make O=${PWD}/.virtme/build-debug-btf olddefconfig
+   $ make O=${PWD}/.virtme/build-debug-btf -j$(nproc) -l$(nproc)
+   $ make O=${PWD}/.virtme/build-debug-btf headers_install \
+     INSTALL_HDR_PATH=${PWD}/.virtme/headers
+   $ make O=${PWD}/.virtme/build-debug-btf \
+     KHDR_INCLUDES=-I${PWD}/.virtme/headers/includes \
+     -C tools/testing/selftests/bpf
+ - The errors I got should be reproducible using:
+   $ docker run -v "${PWD}:${PWD}:rw" -w "${PWD}" --privileged --rm -it \
+     -e INPUT_EXTRA_ENV=INPUT_RUN_TESTS_ONLY=bpftest_all \
+     --pull always mptcp/mptcp-upstream-virtme-docker:latest \
+     auto-btf-debug
+ - These issues were originally spot by our MPTCP CI:
+   https://github.com/multipath-tcp/mptcp_net-next/actions/runs/18222911614/job/51886811332
+ - No errors without kernel/configs/debug.config on the CI and on my side
+ - This CI got different issues, and I had to declare more kfuncs there:
+   https://github.com/multipath-tcp/mptcp_net-next/commit/4435d4da9f4f
+   but this CI is currently on top of 'net', with Jiri's patches from
+   https://lore.kernel.org/20251001122223.170830-1-jolsa@kernel.org
+ - The builds have been done from a clean build directory each time.
+ - Do you think the issue is on my side? Dependences? How the selftests
+   are built? I didn't change the way the BPF selftests are built for a
+   while. I had other issues with pahole 1.29, but fixed with 1.30.
+ - Feel free to discard this patch for a better solution (if any).
+ - I don't know which Fixes tag adding, but I doubt this patch is valid.
+---
+ tools/testing/selftests/bpf/progs/dynptr_success.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index 127dea342e5a67dda33e0a39e84d135206d2f3f1..60daf5ce8eb283d8c8bf2d7853eda6313df4fa87 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -6,6 +6,7 @@
+ #include <stdbool.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include "bpf_kfuncs.h"
+ #include "bpf_misc.h"
+ #include "errno.h"
+ 
+
+---
+base-commit: 63d2247e2e37d9c589a0a26aa4e684f736a45e29
+change-id: 20251003-bpf-sft-fix-build-err-6-18-6a4c032f680a
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
