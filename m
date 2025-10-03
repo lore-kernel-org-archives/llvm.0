@@ -1,351 +1,137 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62619228CA9
-	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 08:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F2411CA9
+	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 14:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759479461; cv=none; b=FvLwf7bOSrztbJkt60h1JBLLjCtFVQRAVA478bYtnPZfqWziG1q6pnOWsu0cPGCwdSiqhsJd6XoDoxAXe66Ws5IIXLI55kd5xqiG5UqsQPdGP9r+ReRbOXtACGequRmgiQtryNhg5gsh6DbyY3o0dJzB0u/jWltIBiJdOvtcA2o=
+	t=1759501413; cv=none; b=hxs92kATWl3ccvdfskXHfmJYWOa57zNqQuXd6Jp9a1ThYlfUaMOfKgv8P6D9FMAh17QG4+85WCLvzRb3SHn1hVHW+VpMw+aNpTcr9iUHMCcMHllUIgyO8x9Lkzp48wTV8tI8uV/F23gobTnNkLkBQCTeyo7LMrbODaI4Er7W+tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759479461; c=relaxed/simple;
-	bh=5BkvkCFUMzpxNbnbmS4iY+2bApT2216VKdCZB7my7iY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CpZDtdNePokV7w57h0iN7LhuA8Uw/qmzipzBZKck3j4sp8OFY9Pm/9GM2HV5+0cyK2BA1LOaLZjFjz5loXQmSoEb6kaEd9gwblqJcq8sZzckyE/j9l/AHPlF3CaM09X9qpd2nin4gkSQvNsPZjuUCaVlWmK37AwIYLlhqIWc6Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AgzLuRsu; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759501413; c=relaxed/simple;
+	bh=L6AZPSu7PL9w770aj4OpkCLzKed0TTIBd5csy7OERWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GRG4nxTjSDOI6aeKlnsElO6xml8Pk2fneskxGh0PcEntaFFLBZ/gk27zOXIKZKiAucxdac6GLWxfq1F9URCP0WO7SmN8rbQduKrhaeYLMNWXprD2LEg6Vv8myuY2Q08nznPbl6be0eBbwF0dRrvzjQnYKAMJ/eJlhI3JmOg0PPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WGrL+k3F; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AgzLuRsu"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7811d363caaso318593b3a.3
-        for <llvm@lists.linux.dev>; Fri, 03 Oct 2025 01:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759479458; x=1760084258; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gQyim0BqtsW2qzMbM8Vy6YA3JarxLqj3KoXPKijITYk=;
-        b=AgzLuRsucicZAlr8HZVbWlJVKfbEi+cu3sDkmmpfkHTJ6gI+bPZhERu6FqMsHhh6LX
-         RgeL3OPWA30M2nKWcpkSgQznLxBIWZI8bhY6Qou6NFOgQNcpQP9wnH6yMkqnSwgZEIwt
-         0tqn8deyoLiijjd2hsl3w1aikojltG7Ua2v3Ju7kgvxnh0lVB+qpGZuRFCZx0YrVyPfW
-         wwIOK0k5VEXc0rJFrDGeL37nojqzmRySr0RWxbsN0ri2OooDXWIyzuXnMcP6/hWaorQj
-         evaQ/OxqwvUs8POHe0IsgCrOdoCc8XQi6bBSrzssXQkMPkfWXmOIyKHzOLInTu45smFW
-         k+eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759479458; x=1760084258;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gQyim0BqtsW2qzMbM8Vy6YA3JarxLqj3KoXPKijITYk=;
-        b=dke6S87OaLoA9h7JycifqO7ku9Pqh7o2P55LT23/Q17yaEN6FARYjZpS7Uv/DEChb7
-         WJIcH4/aq16ddTjcshMT01PcNVLMeEmdXNj8nLkWiNZ4R/AVHfo14Paz9FMChhsoEOn7
-         efuz6poasgBUUFzgkCpgBAao1gv9mA1jo+ZJSkQbOQyP4xNt4+NdigOc3aI9Po3KAq3s
-         3jwhIoblxje5KiJU6ckDWvL10NRcR6wloXz3arJRj3qMv+KT88VgBh1/yuIl+pYh/Ww7
-         VH1TK7WLXx6XQjOC6FFLCnypDeffWJHNP8tyGJkESs7zbhVdjyjbyup1QP+zBZbj2did
-         mWOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkTitGhwE4XWoP6pdRVPiv1k/g9GHx74ShzMDf5+nKDiSeI7SjLwSmcN5ahfQqcx6HqkIx@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw6iGrM8INb2I17T757hzPU+CQLBfLHvdWN5lzSH/RLThROMoPh
-	fRNtuPLyJQnTA2sWJKfD4q03Ks+kpHLZj6JkeVl/90TM+CukbVzUcTrH
-X-Gm-Gg: ASbGncsKpjRp0lhi4HTGAvVI4Ap78/4cKaREquKeP/P1waKeMWP5l42wDwgdneMIxjz
-	wTQDU4EmkbBjfv4nVUXlwDhYcrTqyfVxmXdLX5ypUvdi29aQBGDHxq2+ownFeNg8huigNg/zH8Z
-	sAGC0FFRbpeDcFc0esAVeukUvvpNAjvxOBVLCEf1E/Hi53kRRRD9viD2GAOAWixC1+oUAvnEoFf
-	bQ4yvX0jNxl7vlOeQMXvvZTP/OBrD9ERiIuQ986cBePzHBsbnAUSyGoYeOyyNTfxKAy79Kvp0xo
-	zWmWnUTKUAq008qZxoJfExhQeNt+Dyfs+/vZUHZoDP1pPLD7uso3qDKDqZZ3ydy2LMpSs49rLs3
-	WgdhKM5uq1nPt4fycut6voDFTsOt0fgCarb/w3HzTcG8=
-X-Google-Smtp-Source: AGHT+IE3p6e2C4Ro1pBpKf0cXzsgikP8V0zCUAAB/T9g/wIoYga6Xkv+dPr5KmQQbGDGSH9Rz7Xgew==
-X-Received: by 2002:a05:6a21:114d:b0:2d6:9a15:138f with SMTP id adf61e73a8af0-32b620b1298mr1450380637.3.1759479458188;
-        Fri, 03 Oct 2025 01:17:38 -0700 (PDT)
-Received: from localhost ([104.249.174.141])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b0206e6ccsm4168102b3a.63.2025.10.03.01.17.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Oct 2025 01:17:37 -0700 (PDT)
-From: Ben Guo <benx.guo@gmail.com>
-To: Alex Shi <alexs@kernel.org>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] docs/zh_CN: Add translation of rust/testing.rst
-Date: Fri,  3 Oct 2025 07:48:57 +0000
-Message-ID: <20251003074939.465517-1-benx.guo@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250929163531.376092-1-benx.guo@gmail.com>
-References: <20250929163531.376092-1-benx.guo@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WGrL+k3F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759501412; x=1791037412;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=L6AZPSu7PL9w770aj4OpkCLzKed0TTIBd5csy7OERWs=;
+  b=WGrL+k3FadEp/UV0B57szUQkRjxOvA2m7GXslxVmh9PxPMBqCVmhLNyc
+   LhoBA35QW+jzLJlOAT7qteRCQlFoRd6VWqR0QF8m6/aXmz7AWL6sFnzAk
+   yTYmQSkpq2P5boxRoN3mmEygfL47Xe3zfzAp/p/1TyaWqCziFfv8Gm5hx
+   KArGYynfFgi68c7pJ2I642YjGC9A3c9Bwk9wyt5SKqfMn9LBhgV190XSA
+   k7Pp0l9N5G4QFQn4xeK9cS1udgs8DD2fRaknC//I89jMb+0JS28vmzUUu
+   rQRm//HqbGcjgZ6nZJPXsfV87hRS577sWv4VmBuIlwcwS68wpE5FZVxer
+   Q==;
+X-CSE-ConnectionGUID: iM+kmCBtS0yksDlOl0WtrA==
+X-CSE-MsgGUID: sdslFQ5LTBKrb3mUGefQdw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11571"; a="87240238"
+X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
+   d="scan'208";a="87240238"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 07:23:31 -0700
+X-CSE-ConnectionGUID: F40sYTK/RAyYy9pK/uKOKg==
+X-CSE-MsgGUID: iFEgYZvzS9uxIm+qUSMcIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,312,1751266800"; 
+   d="scan'208";a="203044547"
+Received: from cmdeoliv-mobl4.amr.corp.intel.com (HELO [10.125.110.34]) ([10.125.110.34])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 07:23:30 -0700
+Message-ID: <4c4cce9f-3219-48f0-8606-6573339b8794@intel.com>
+Date: Fri, 3 Oct 2025 07:23:29 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/12] x86/msr: Use the alternatives mechanism for
+ WRMSR
+To: Peter Zijlstra <peterz@infradead.org>, =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?=
+ <jgross@suse.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev,
+ xin@zytor.com, "H. Peter Anvin" <hpa@zytor.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20250930070356.30695-1-jgross@suse.com>
+ <20250930070356.30695-10-jgross@suse.com>
+ <20250930083137.GH3245006@noisy.programming.kicks-ass.net>
+ <2df26cc0-53bc-499c-8c78-bc24fd8bf882@suse.com>
+ <20250930085044.GK3245006@noisy.programming.kicks-ass.net>
+ <20250930125156.GK1386988@noisy.programming.kicks-ass.net>
+ <2ad137cb-ed38-42f6-ac0a-a81569051779@suse.com>
+ <20251001064339.GL4067720@noisy.programming.kicks-ass.net>
+ <20251001072340.GM3245006@noisy.programming.kicks-ass.net>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20251001072340.GM3245006@noisy.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Complete the translation of rust/testing.rst and add the testing TOC entry
-to rust/index.rst.
+On 10/1/25 00:23, Peter Zijlstra wrote:
+> On Wed, Oct 01, 2025 at 08:43:39AM +0200, Peter Zijlstra wrote:
+>> Let me see how terrible it all ends up when using as macros
+> Argh, as macros are differently painful. I hate computers :/
 
-Add the translation based on commit a3b2347343e0
-("Documentation: rust: testing: add docs on the new KUnit `#[test]` tests").
+ALTERNATIVES are fun and all, but is there a good reason we're pulling
+out our hair to use them here?
 
-Signed-off-by: Ben Guo <benx.guo@gmail.com>
----
-v1->v2: Rebased onto docs-next (no code changes).
- .../translations/zh_CN/rust/index.rst         |   1 +
- .../translations/zh_CN/rust/testing.rst       | 215 ++++++++++++++++++
- 2 files changed, 216 insertions(+)
- create mode 100644 Documentation/translations/zh_CN/rust/testing.rst
+Normal WRMSR is slooooooooooow. The ones that aren't slow don't need
+WRMSRNS in the first place.
 
-diff --git a/Documentation/translations/zh_CN/rust/index.rst b/Documentation/translations/zh_CN/rust/index.rst
-index 10413b0c17c0..5347d4729588 100644
---- a/Documentation/translations/zh_CN/rust/index.rst
-+++ b/Documentation/translations/zh_CN/rust/index.rst
-@@ -47,6 +47,7 @@ Rust 支持在 v6.1 版本中合并到主线，以帮助确定 Rust 作为一种
-     general-information
-     coding-guidelines
-     arch-support
-+    testing
- 
- 你还可以在 :doc:`../../../process/kernel-docs` 中找到 Rust 的学习材料。
- 
-diff --git a/Documentation/translations/zh_CN/rust/testing.rst b/Documentation/translations/zh_CN/rust/testing.rst
-new file mode 100644
-index 000000000000..ca81f1cef6eb
---- /dev/null
-+++ b/Documentation/translations/zh_CN/rust/testing.rst
-@@ -0,0 +1,215 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/rust/testing.rst
-+
-+:翻译:
-+
-+ 郭杰 Ben Guo <benx.guo@gmail.com>
-+
-+测试
-+====
-+
-+本文介绍了如何在内核中测试 Rust 代码。
-+
-+有三种测试类型：
-+
-+- KUnit 测试
-+- ``#[test]`` 测试
-+- Kselftests
-+
-+KUnit 测试
-+----------
-+
-+这些测试来自 Rust 文档中的示例。它们会被转换为 KUnit 测试。
-+
-+使用
-+****
-+
-+这些测试可以通过 KUnit 运行。例如，在命令行中使用 ``kunit_tool`` （ ``kunit.py`` ）::
-+
-+	./tools/testing/kunit/kunit.py run --make_options LLVM=1 --arch x86_64 --kconfig_add CONFIG_RUST=y
-+
-+或者，KUnit 也可以在内核启动时以内置方式运行。获取更多 KUnit 信息，请参阅
-+Documentation/dev-tools/kunit/index.rst。
-+关于内核内置与命令行测试的详细信息，请参阅 Documentation/dev-tools/kunit/architecture.rst。
-+
-+要使用这些 KUnit 文档测试，需要在内核配置中启用以下选项::
-+
-+	CONFIG_KUNIT
-+	   Kernel hacking -> Kernel Testing and Coverage -> KUnit - Enable support for unit tests
-+	CONFIG_RUST_KERNEL_DOCTESTS
-+	   Kernel hacking -> Rust hacking -> Doctests for the `kernel` crate
-+
-+KUnit 测试即文档测试
-+********************
-+
-+文档测试（ *doctests* ）一般用于展示函数、结构体或模块等的使用方法。
-+
-+它们非常方便，因为它们就写在文档旁边。例如：
-+
-+.. code-block:: rust
-+
-+	/// 求和两个数字。
-+	///
-+	/// ```
-+	/// assert_eq!(mymod::f(10, 20), 30);
-+	/// ```
-+	pub fn f(a: i32, b: i32) -> i32 {
-+	    a + b
-+	}
-+
-+在用户空间中，这些测试由 ``rustdoc`` 负责收集并运行。单独使用这个工具已经很有价值，
-+因为它可以验证示例能否成功编译（确保和代码保持同步），
-+同时还可以运行那些不依赖内核 API 的示例。
-+
-+然而，在内核中，这些测试会转换成 KUnit 测试套件。
-+这意味着文档测试会被编译成 Rust 内核对象，从而可以在构建的内核环境中运行。
-+
-+通过与 KUnit 集成，Rust 的文档测试可以复用内核现有的测试设施。
-+例如，内核日志会显示::
-+
-+	KTAP version 1
-+	1..1
-+	    KTAP version 1
-+	    # Subtest: rust_doctests_kernel
-+	    1..59
-+	    # rust_doctest_kernel_build_assert_rs_0.location: rust/kernel/build_assert.rs:13
-+	    ok 1 rust_doctest_kernel_build_assert_rs_0
-+	    # rust_doctest_kernel_build_assert_rs_1.location: rust/kernel/build_assert.rs:56
-+	    ok 2 rust_doctest_kernel_build_assert_rs_1
-+	    # rust_doctest_kernel_init_rs_0.location: rust/kernel/init.rs:122
-+	    ok 3 rust_doctest_kernel_init_rs_0
-+	    ...
-+	    # rust_doctest_kernel_types_rs_2.location: rust/kernel/types.rs:150
-+	    ok 59 rust_doctest_kernel_types_rs_2
-+	# rust_doctests_kernel: pass:59 fail:0 skip:0 total:59
-+	# Totals: pass:59 fail:0 skip:0 total:59
-+	ok 1 rust_doctests_kernel
-+
-+文档测试中，也可以正常使用 `? <https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator>`_ 运算符，例如：
-+
-+.. code-block:: rust
-+
-+	/// ```
-+	/// # use kernel::{spawn_work_item, workqueue};
-+	/// spawn_work_item!(workqueue::system(), || pr_info!("x\n"))?;
-+	/// # Ok::<(), Error>(())
-+	/// ```
-+
-+这些测试和普通代码一样，也可以在 ``CLIPPY=1`` 条件下通过 Clippy 进行编译，
-+因此可以从额外的 lint 检查中获益。
-+
-+为了便于开发者定位文档测试出错的具体行号，日志会输出一条 KTAP 诊断信息。
-+其中标明了原始测试的文件和行号（不是 ``rustdoc`` 生成的临时 Rust 文件位置）::
-+
-+	# rust_doctest_kernel_types_rs_2.location: rust/kernel/types.rs:150
-+
-+Rust 测试中常用的断言宏是来自 Rust 标准库（ ``core`` ）中的 ``assert!`` 和 ``assert_eq!`` 宏。
-+内核提供了一个定制版本，这些宏的调用会被转发到 KUnit。
-+和 KUnit 测试不同的是，这些宏不需要传递上下文参数（ ``struct kunit *`` ）。
-+这使得它们更易于使用，同时文档的读者无需关心底层用的是什么测试框架。
-+此外，这种方式未来也许可以让我们更容易测试第三方代码。
-+
-+当前有一个限制：KUnit 不支持在其他任务中执行断言。
-+因此，如果断言真的失败了，我们只是简单地把错误打印到内核日志里。
-+另外，文档测试不适用于非公开的函数。
-+
-+作为文档中的测试示例，应当像 “实际代码” 一样编写。
-+例如：不要使用 ``unwrap()`` 或 ``expect()``，请使用 `? <https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator>`_ 运算符。
-+更多背景信息，请参阅：
-+
-+	https://rust.docs.kernel.org/kernel/error/type.Result.html#error-codes-in-c-and-rust
-+
-+``#[test]`` 测试
-+----------------
-+
-+此外，还有 ``#[test]`` 测试。与文档测试类似，这些测试与用户空间中的测试方式也非常相近，并且同样会映射到 KUnit。
-+
-+这些测试通过 ``kunit_tests`` 过程宏引入，该宏将测试套件的名称作为参数。
-+
-+例如，假设想要测试前面文档测试示例中的函数 ``f``，我们可以在定义该函数的同一文件中编写：
-+
-+.. code-block:: rust
-+
-+	#[kunit_tests(rust_kernel_mymod)]
-+	mod tests {
-+	    use super::*;
-+
-+	    #[test]
-+	    fn test_f() {
-+	        assert_eq!(f(10, 20), 30);
-+	    }
-+	}
-+
-+如果我们执行这段代码，内核日志会显示::
-+
-+	    KTAP version 1
-+	    # Subtest: rust_kernel_mymod
-+	    # speed: normal
-+	    1..1
-+	    # test_f.speed: normal
-+	    ok 1 test_f
-+	ok 1 rust_kernel_mymod
-+
-+与文档测试类似， ``assert!`` 和 ``assert_eq!`` 宏被映射回 KUnit 并且不会发生 panic。
-+同样，支持 `? <https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator>`_ 运算符，
-+测试函数可以什么都不返回（单元类型 ``()``）或 ``Result`` （任何 ``Result<T, E>``）。例如：
-+
-+.. code-block:: rust
-+
-+	#[kunit_tests(rust_kernel_mymod)]
-+	mod tests {
-+	    use super::*;
-+
-+	    #[test]
-+	    fn test_g() -> Result {
-+	        let x = g()?;
-+	        assert_eq!(x, 30);
-+	        Ok(())
-+	    }
-+	}
-+
-+如果我们运行测试并且调用 ``g`` 失败，那么内核日志会显示::
-+
-+	    KTAP version 1
-+	    # Subtest: rust_kernel_mymod
-+	    # speed: normal
-+	    1..1
-+	    # test_g: ASSERTION FAILED at rust/kernel/lib.rs:335
-+	    Expected is_test_result_ok(test_g()) to be true, but is false
-+	    # test_g.speed: normal
-+	    not ok 1 test_g
-+	not ok 1 rust_kernel_mymod
-+
-+如果 ``#[test]`` 测试可以对用户起到示例作用，那就应该改用文档测试。
-+即使是 API 的边界情况，例如错误或边界问题，放在示例中展示也同样有价值。
-+
-+``rusttest`` 宿主机测试
-+-----------------------
-+
-+这类测试运行在用户空间，可以通过 ``rusttest`` 目标在构建内核的宿主机中编译并运行::
-+
-+	make LLVM=1 rusttest
-+
-+当前操作需要内核 ``.config``。
-+
-+目前，它们主要用于测试 ``macros`` crate 的示例。
-+
-+Kselftests
-+----------
-+
-+Kselftests 可以在 ``tools/testing/selftests/rust`` 文件夹中找到。
-+
-+测试所需的内核配置选项列在 ``tools/testing/selftests/rust/config`` 文件中，
-+可以借助 ``merge_config.sh`` 脚本合并到现有配置中::
-+
-+	./scripts/kconfig/merge_config.sh .config tools/testing/selftests/rust/config
-+
-+Kselftests 会在内核源码树中构建，以便在运行相同版本内核的系统上执行测试。
-+
-+一旦安装并启动了与源码树匹配的内核，测试即可通过以下命令编译并执行::
-+
-+	make TARGETS="rust" kselftest
-+
-+请参阅 Documentation/dev-tools/kselftest.rst 文档以获取更多信息。
-
-base-commit: 344657696e9aa7bf89e48e1848fe0ce551bd1f4a
--- 
-2.43.0
-
+Would an out-of-line wrmsr() with an if() in it be so bad? Or a
+static_call()? Having WRMSR be inlined in a laudable goal, but I'm
+really asking if it's worth it.
