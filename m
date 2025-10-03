@@ -1,294 +1,351 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722441C6FEC;
-	Fri,  3 Oct 2025 05:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62619228CA9
+	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 08:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759471058; cv=none; b=qKoka4BsVBLNny7KR/qAHT7zhjlpaCRM/MRwLNktdP6Z9L2QZhp71llciUz+FZo0vVBXIKhJR2zuOewHvBmDoQQU3lk8bsPyWZ7Jnx52kYzAOa2bK+/hojOygmIrVGZWjb5mhlaXv1Uzd05GFptPieTHT6qc9ZrbeL/qFX4Er2U=
+	t=1759479461; cv=none; b=FvLwf7bOSrztbJkt60h1JBLLjCtFVQRAVA478bYtnPZfqWziG1q6pnOWsu0cPGCwdSiqhsJd6XoDoxAXe66Ws5IIXLI55kd5xqiG5UqsQPdGP9r+ReRbOXtACGequRmgiQtryNhg5gsh6DbyY3o0dJzB0u/jWltIBiJdOvtcA2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759471058; c=relaxed/simple;
-	bh=0oNC759He1lTOqr7QDNZ5tB39O1bmD82xDV4bqLXrTI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m9PzPquydO7SzV1IN6/ChFxAgE5AyMcG7N4i43bcu2LJettvp+ONoIonHECv6FSjUXsQPnRTEKy5oj7vm0iiQYF+/3FH2zzmgYCRyqcgecA9Y5voTBlLBADLdv1j/eYITHR1cUfBQSN8a19ZOOYygU5UVmpTsrFbozN2PAq3tog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBM3Iuiy; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759479461; c=relaxed/simple;
+	bh=5BkvkCFUMzpxNbnbmS4iY+2bApT2216VKdCZB7my7iY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CpZDtdNePokV7w57h0iN7LhuA8Uw/qmzipzBZKck3j4sp8OFY9Pm/9GM2HV5+0cyK2BA1LOaLZjFjz5loXQmSoEb6kaEd9gwblqJcq8sZzckyE/j9l/AHPlF3CaM09X9qpd2nin4gkSQvNsPZjuUCaVlWmK37AwIYLlhqIWc6Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AgzLuRsu; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBM3Iuiy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759471056; x=1791007056;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0oNC759He1lTOqr7QDNZ5tB39O1bmD82xDV4bqLXrTI=;
-  b=nBM3IuiymrhctJ6e3KlVUlvPdp4HBt8ehY9yj+RNBJvOZSI62m1QE8/1
-   TRk8IO/UTMSNJhjwU4cnDacGKnAtwomtarwxajhxXW1Ji/hGCJwb+Gf2Y
-   tJuMQspUMnE0ktQCZ21Fg3WBDzs9XwbymkMhmr10kvPkENKLtOGEj/1Mk
-   y/A16V9F4wkuilNhAxt3BiuCzRf+NxO8Vf1YoN5uSb2TtIX382NQUXFSs
-   xiK5xULQ7qgj7w21wPLQULPrPzR6WUjvv5i68DAPf5QfRkFjfJHeGfPqZ
-   94sZ5l27tLR3dGl1czvG2UBnrxVXhS4YZtmFsX94EPu1J38e9zmLYlK6m
-   w==;
-X-CSE-ConnectionGUID: ZzqYiYQ4SDSNq4E6PWfyQw==
-X-CSE-MsgGUID: sbr/ot8bTiact0kmzORWWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="61464668"
-X-IronPort-AV: E=Sophos;i="6.18,311,1751266800"; 
-   d="scan'208";a="61464668"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 22:57:36 -0700
-X-CSE-ConnectionGUID: LZOy1VUVRR2AOhKRFoMQcA==
-X-CSE-MsgGUID: 4Ml5LMX3QWuehhaZ2XbJQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,311,1751266800"; 
-   d="scan'208";a="202960643"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Oct 2025 22:57:32 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4YnK-0004MF-06;
-	Fri, 03 Oct 2025 05:57:30 +0000
-Date: Fri, 3 Oct 2025 13:56:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AgzLuRsu"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7811d363caaso318593b3a.3
+        for <llvm@lists.linux.dev>; Fri, 03 Oct 2025 01:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759479458; x=1760084258; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gQyim0BqtsW2qzMbM8Vy6YA3JarxLqj3KoXPKijITYk=;
+        b=AgzLuRsucicZAlr8HZVbWlJVKfbEi+cu3sDkmmpfkHTJ6gI+bPZhERu6FqMsHhh6LX
+         RgeL3OPWA30M2nKWcpkSgQznLxBIWZI8bhY6Qou6NFOgQNcpQP9wnH6yMkqnSwgZEIwt
+         0tqn8deyoLiijjd2hsl3w1aikojltG7Ua2v3Ju7kgvxnh0lVB+qpGZuRFCZx0YrVyPfW
+         wwIOK0k5VEXc0rJFrDGeL37nojqzmRySr0RWxbsN0ri2OooDXWIyzuXnMcP6/hWaorQj
+         evaQ/OxqwvUs8POHe0IsgCrOdoCc8XQi6bBSrzssXQkMPkfWXmOIyKHzOLInTu45smFW
+         k+eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759479458; x=1760084258;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gQyim0BqtsW2qzMbM8Vy6YA3JarxLqj3KoXPKijITYk=;
+        b=dke6S87OaLoA9h7JycifqO7ku9Pqh7o2P55LT23/Q17yaEN6FARYjZpS7Uv/DEChb7
+         WJIcH4/aq16ddTjcshMT01PcNVLMeEmdXNj8nLkWiNZ4R/AVHfo14Paz9FMChhsoEOn7
+         efuz6poasgBUUFzgkCpgBAao1gv9mA1jo+ZJSkQbOQyP4xNt4+NdigOc3aI9Po3KAq3s
+         3jwhIoblxje5KiJU6ckDWvL10NRcR6wloXz3arJRj3qMv+KT88VgBh1/yuIl+pYh/Ww7
+         VH1TK7WLXx6XQjOC6FFLCnypDeffWJHNP8tyGJkESs7zbhVdjyjbyup1QP+zBZbj2did
+         mWOw==
+X-Forwarded-Encrypted: i=1; AJvYcCVkTitGhwE4XWoP6pdRVPiv1k/g9GHx74ShzMDf5+nKDiSeI7SjLwSmcN5ahfQqcx6HqkIx@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw6iGrM8INb2I17T757hzPU+CQLBfLHvdWN5lzSH/RLThROMoPh
+	fRNtuPLyJQnTA2sWJKfD4q03Ks+kpHLZj6JkeVl/90TM+CukbVzUcTrH
+X-Gm-Gg: ASbGncsKpjRp0lhi4HTGAvVI4Ap78/4cKaREquKeP/P1waKeMWP5l42wDwgdneMIxjz
+	wTQDU4EmkbBjfv4nVUXlwDhYcrTqyfVxmXdLX5ypUvdi29aQBGDHxq2+ownFeNg8huigNg/zH8Z
+	sAGC0FFRbpeDcFc0esAVeukUvvpNAjvxOBVLCEf1E/Hi53kRRRD9viD2GAOAWixC1+oUAvnEoFf
+	bQ4yvX0jNxl7vlOeQMXvvZTP/OBrD9ERiIuQ986cBePzHBsbnAUSyGoYeOyyNTfxKAy79Kvp0xo
+	zWmWnUTKUAq008qZxoJfExhQeNt+Dyfs+/vZUHZoDP1pPLD7uso3qDKDqZZ3ydy2LMpSs49rLs3
+	WgdhKM5uq1nPt4fycut6voDFTsOt0fgCarb/w3HzTcG8=
+X-Google-Smtp-Source: AGHT+IE3p6e2C4Ro1pBpKf0cXzsgikP8V0zCUAAB/T9g/wIoYga6Xkv+dPr5KmQQbGDGSH9Rz7Xgew==
+X-Received: by 2002:a05:6a21:114d:b0:2d6:9a15:138f with SMTP id adf61e73a8af0-32b620b1298mr1450380637.3.1759479458188;
+        Fri, 03 Oct 2025 01:17:38 -0700 (PDT)
+Received: from localhost ([104.249.174.141])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b0206e6ccsm4168102b3a.63.2025.10.03.01.17.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Oct 2025 01:17:37 -0700 (PDT)
+From: Ben Guo <benx.guo@gmail.com>
+To: Alex Shi <alexs@kernel.org>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-Subject: Re: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin
- state
-Message-ID: <202510031333.zZYEFOH0-lkp@intel.com>
-References: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] docs/zh_CN: Add translation of rust/testing.rst
+Date: Fri,  3 Oct 2025 07:48:57 +0000
+Message-ID: <20251003074939.465517-1-benx.guo@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250929163531.376092-1-benx.guo@gmail.com>
+References: <20250929163531.376092-1-benx.guo@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251002172539.586538-3-krishna.kurapati@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Krishna,
+Complete the translation of rust/testing.rst and add the testing TOC entry
+to rust/index.rst.
 
-kernel test robot noticed the following build errors:
+Add the translation based on commit a3b2347343e0
+("Documentation: rust: testing: add docs on the new KUnit `#[test]` tests").
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next krzk-dt/for-next linus/master v6.17 next-20251002]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Ben Guo <benx.guo@gmail.com>
+---
+v1->v2: Rebased onto docs-next (no code changes).
+ .../translations/zh_CN/rust/index.rst         |   1 +
+ .../translations/zh_CN/rust/testing.rst       | 215 ++++++++++++++++++
+ 2 files changed, 216 insertions(+)
+ create mode 100644 Documentation/translations/zh_CN/rust/testing.rst
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/dt-bindings-usb-ti-hd3ss3220-Add-support-for-VBUS-based-on-ID-state/20251003-012933
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251002172539.586538-3-krishna.kurapati%40oss.qualcomm.com
-patch subject: [PATCH 2/2] usb: typec: hd3ss3220: Enable VBUS based on ID pin state
-config: x86_64-buildonly-randconfig-001-20251003 (https://download.01.org/0day-ci/archive/20251003/202510031333.zZYEFOH0-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251003/202510031333.zZYEFOH0-lkp@intel.com/reproduce)
+diff --git a/Documentation/translations/zh_CN/rust/index.rst b/Documentation/translations/zh_CN/rust/index.rst
+index 10413b0c17c0..5347d4729588 100644
+--- a/Documentation/translations/zh_CN/rust/index.rst
++++ b/Documentation/translations/zh_CN/rust/index.rst
+@@ -47,6 +47,7 @@ Rust 支持在 v6.1 版本中合并到主线，以帮助确定 Rust 作为一种
+     general-information
+     coding-guidelines
+     arch-support
++    testing
+ 
+ 你还可以在 :doc:`../../../process/kernel-docs` 中找到 Rust 的学习材料。
+ 
+diff --git a/Documentation/translations/zh_CN/rust/testing.rst b/Documentation/translations/zh_CN/rust/testing.rst
+new file mode 100644
+index 000000000000..ca81f1cef6eb
+--- /dev/null
++++ b/Documentation/translations/zh_CN/rust/testing.rst
+@@ -0,0 +1,215 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/rust/testing.rst
++
++:翻译:
++
++ 郭杰 Ben Guo <benx.guo@gmail.com>
++
++测试
++====
++
++本文介绍了如何在内核中测试 Rust 代码。
++
++有三种测试类型：
++
++- KUnit 测试
++- ``#[test]`` 测试
++- Kselftests
++
++KUnit 测试
++----------
++
++这些测试来自 Rust 文档中的示例。它们会被转换为 KUnit 测试。
++
++使用
++****
++
++这些测试可以通过 KUnit 运行。例如，在命令行中使用 ``kunit_tool`` （ ``kunit.py`` ）::
++
++	./tools/testing/kunit/kunit.py run --make_options LLVM=1 --arch x86_64 --kconfig_add CONFIG_RUST=y
++
++或者，KUnit 也可以在内核启动时以内置方式运行。获取更多 KUnit 信息，请参阅
++Documentation/dev-tools/kunit/index.rst。
++关于内核内置与命令行测试的详细信息，请参阅 Documentation/dev-tools/kunit/architecture.rst。
++
++要使用这些 KUnit 文档测试，需要在内核配置中启用以下选项::
++
++	CONFIG_KUNIT
++	   Kernel hacking -> Kernel Testing and Coverage -> KUnit - Enable support for unit tests
++	CONFIG_RUST_KERNEL_DOCTESTS
++	   Kernel hacking -> Rust hacking -> Doctests for the `kernel` crate
++
++KUnit 测试即文档测试
++********************
++
++文档测试（ *doctests* ）一般用于展示函数、结构体或模块等的使用方法。
++
++它们非常方便，因为它们就写在文档旁边。例如：
++
++.. code-block:: rust
++
++	/// 求和两个数字。
++	///
++	/// ```
++	/// assert_eq!(mymod::f(10, 20), 30);
++	/// ```
++	pub fn f(a: i32, b: i32) -> i32 {
++	    a + b
++	}
++
++在用户空间中，这些测试由 ``rustdoc`` 负责收集并运行。单独使用这个工具已经很有价值，
++因为它可以验证示例能否成功编译（确保和代码保持同步），
++同时还可以运行那些不依赖内核 API 的示例。
++
++然而，在内核中，这些测试会转换成 KUnit 测试套件。
++这意味着文档测试会被编译成 Rust 内核对象，从而可以在构建的内核环境中运行。
++
++通过与 KUnit 集成，Rust 的文档测试可以复用内核现有的测试设施。
++例如，内核日志会显示::
++
++	KTAP version 1
++	1..1
++	    KTAP version 1
++	    # Subtest: rust_doctests_kernel
++	    1..59
++	    # rust_doctest_kernel_build_assert_rs_0.location: rust/kernel/build_assert.rs:13
++	    ok 1 rust_doctest_kernel_build_assert_rs_0
++	    # rust_doctest_kernel_build_assert_rs_1.location: rust/kernel/build_assert.rs:56
++	    ok 2 rust_doctest_kernel_build_assert_rs_1
++	    # rust_doctest_kernel_init_rs_0.location: rust/kernel/init.rs:122
++	    ok 3 rust_doctest_kernel_init_rs_0
++	    ...
++	    # rust_doctest_kernel_types_rs_2.location: rust/kernel/types.rs:150
++	    ok 59 rust_doctest_kernel_types_rs_2
++	# rust_doctests_kernel: pass:59 fail:0 skip:0 total:59
++	# Totals: pass:59 fail:0 skip:0 total:59
++	ok 1 rust_doctests_kernel
++
++文档测试中，也可以正常使用 `? <https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator>`_ 运算符，例如：
++
++.. code-block:: rust
++
++	/// ```
++	/// # use kernel::{spawn_work_item, workqueue};
++	/// spawn_work_item!(workqueue::system(), || pr_info!("x\n"))?;
++	/// # Ok::<(), Error>(())
++	/// ```
++
++这些测试和普通代码一样，也可以在 ``CLIPPY=1`` 条件下通过 Clippy 进行编译，
++因此可以从额外的 lint 检查中获益。
++
++为了便于开发者定位文档测试出错的具体行号，日志会输出一条 KTAP 诊断信息。
++其中标明了原始测试的文件和行号（不是 ``rustdoc`` 生成的临时 Rust 文件位置）::
++
++	# rust_doctest_kernel_types_rs_2.location: rust/kernel/types.rs:150
++
++Rust 测试中常用的断言宏是来自 Rust 标准库（ ``core`` ）中的 ``assert!`` 和 ``assert_eq!`` 宏。
++内核提供了一个定制版本，这些宏的调用会被转发到 KUnit。
++和 KUnit 测试不同的是，这些宏不需要传递上下文参数（ ``struct kunit *`` ）。
++这使得它们更易于使用，同时文档的读者无需关心底层用的是什么测试框架。
++此外，这种方式未来也许可以让我们更容易测试第三方代码。
++
++当前有一个限制：KUnit 不支持在其他任务中执行断言。
++因此，如果断言真的失败了，我们只是简单地把错误打印到内核日志里。
++另外，文档测试不适用于非公开的函数。
++
++作为文档中的测试示例，应当像 “实际代码” 一样编写。
++例如：不要使用 ``unwrap()`` 或 ``expect()``，请使用 `? <https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator>`_ 运算符。
++更多背景信息，请参阅：
++
++	https://rust.docs.kernel.org/kernel/error/type.Result.html#error-codes-in-c-and-rust
++
++``#[test]`` 测试
++----------------
++
++此外，还有 ``#[test]`` 测试。与文档测试类似，这些测试与用户空间中的测试方式也非常相近，并且同样会映射到 KUnit。
++
++这些测试通过 ``kunit_tests`` 过程宏引入，该宏将测试套件的名称作为参数。
++
++例如，假设想要测试前面文档测试示例中的函数 ``f``，我们可以在定义该函数的同一文件中编写：
++
++.. code-block:: rust
++
++	#[kunit_tests(rust_kernel_mymod)]
++	mod tests {
++	    use super::*;
++
++	    #[test]
++	    fn test_f() {
++	        assert_eq!(f(10, 20), 30);
++	    }
++	}
++
++如果我们执行这段代码，内核日志会显示::
++
++	    KTAP version 1
++	    # Subtest: rust_kernel_mymod
++	    # speed: normal
++	    1..1
++	    # test_f.speed: normal
++	    ok 1 test_f
++	ok 1 rust_kernel_mymod
++
++与文档测试类似， ``assert!`` 和 ``assert_eq!`` 宏被映射回 KUnit 并且不会发生 panic。
++同样，支持 `? <https://doc.rust-lang.org/reference/expressions/operator-expr.html#the-question-mark-operator>`_ 运算符，
++测试函数可以什么都不返回（单元类型 ``()``）或 ``Result`` （任何 ``Result<T, E>``）。例如：
++
++.. code-block:: rust
++
++	#[kunit_tests(rust_kernel_mymod)]
++	mod tests {
++	    use super::*;
++
++	    #[test]
++	    fn test_g() -> Result {
++	        let x = g()?;
++	        assert_eq!(x, 30);
++	        Ok(())
++	    }
++	}
++
++如果我们运行测试并且调用 ``g`` 失败，那么内核日志会显示::
++
++	    KTAP version 1
++	    # Subtest: rust_kernel_mymod
++	    # speed: normal
++	    1..1
++	    # test_g: ASSERTION FAILED at rust/kernel/lib.rs:335
++	    Expected is_test_result_ok(test_g()) to be true, but is false
++	    # test_g.speed: normal
++	    not ok 1 test_g
++	not ok 1 rust_kernel_mymod
++
++如果 ``#[test]`` 测试可以对用户起到示例作用，那就应该改用文档测试。
++即使是 API 的边界情况，例如错误或边界问题，放在示例中展示也同样有价值。
++
++``rusttest`` 宿主机测试
++-----------------------
++
++这类测试运行在用户空间，可以通过 ``rusttest`` 目标在构建内核的宿主机中编译并运行::
++
++	make LLVM=1 rusttest
++
++当前操作需要内核 ``.config``。
++
++目前，它们主要用于测试 ``macros`` crate 的示例。
++
++Kselftests
++----------
++
++Kselftests 可以在 ``tools/testing/selftests/rust`` 文件夹中找到。
++
++测试所需的内核配置选项列在 ``tools/testing/selftests/rust/config`` 文件中，
++可以借助 ``merge_config.sh`` 脚本合并到现有配置中::
++
++	./scripts/kconfig/merge_config.sh .config tools/testing/selftests/rust/config
++
++Kselftests 会在内核源码树中构建，以便在运行相同版本内核的系统上执行测试。
++
++一旦安装并启动了与源码树匹配的内核，测试即可通过以下命令编译并执行::
++
++	make TARGETS="rust" kselftest
++
++请参阅 Documentation/dev-tools/kselftest.rst 文档以获取更多信息。
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510031333.zZYEFOH0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/typec/hd3ss3220.c:336:29: error: call to undeclared function 'gpiod_get_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     336 |         id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-         |                                    ^
->> drivers/usb/typec/hd3ss3220.c:384:24: error: call to undeclared function 'devm_gpiod_get_optional'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     384 |         hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-         |                               ^
-   drivers/usb/typec/hd3ss3220.c:384:24: note: did you mean 'devm_regulator_get_optional'?
-   include/linux/regulator/consumer.h:163:32: note: 'devm_regulator_get_optional' declared here
-     163 | struct regulator *__must_check devm_regulator_get_optional(struct device *dev,
-         |                                ^
->> drivers/usb/typec/hd3ss3220.c:384:70: error: use of undeclared identifier 'GPIOD_IN'
-     384 |         hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-         |                                                                             ^
->> drivers/usb/typec/hd3ss3220.c:389:23: error: call to undeclared function 'gpiod_to_irq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     389 |                 hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
-         |                                     ^
-   4 errors generated.
-
-
-vim +/gpiod_get_value_cansleep +336 drivers/usb/typec/hd3ss3220.c
-
-   326	
-   327	static irqreturn_t hd3ss3220_id_isr(int irq, void *dev_id)
-   328	{
-   329		struct hd3ss3220 *hd3ss3220 = dev_id;
-   330		int ret;
-   331		int id;
-   332	
-   333		if (IS_ERR_OR_NULL(hd3ss3220->vbus))
-   334			return IRQ_HANDLED;
-   335	
- > 336		id = hd3ss3220->id_gpiod ? gpiod_get_value_cansleep(hd3ss3220->id_gpiod) : 1;
-   337	
-   338		if (!id) {
-   339			ret = regulator_enable(hd3ss3220->vbus);
-   340			if (ret)
-   341				dev_err(hd3ss3220->dev, "enable vbus regulator failed\n");
-   342		} else {
-   343			regulator_disable(hd3ss3220->vbus);
-   344		}
-   345	
-   346		return IRQ_HANDLED;
-   347	}
-   348	
-   349	static int hd3ss3220_probe(struct i2c_client *client)
-   350	{
-   351		struct typec_capability typec_cap = { };
-   352		struct hd3ss3220 *hd3ss3220;
-   353		struct fwnode_handle *connector, *ep;
-   354		int ret;
-   355		unsigned int data;
-   356	
-   357		hd3ss3220 = devm_kzalloc(&client->dev, sizeof(struct hd3ss3220),
-   358					 GFP_KERNEL);
-   359		if (!hd3ss3220)
-   360			return -ENOMEM;
-   361	
-   362		i2c_set_clientdata(client, hd3ss3220);
-   363	
-   364		hd3ss3220->dev = &client->dev;
-   365		hd3ss3220->regmap = devm_regmap_init_i2c(client, &config);
-   366		if (IS_ERR(hd3ss3220->regmap))
-   367			return PTR_ERR(hd3ss3220->regmap);
-   368	
-   369		/* For backward compatibility check the connector child node first */
-   370		connector = device_get_named_child_node(hd3ss3220->dev, "connector");
-   371		if (connector) {
-   372			hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
-   373		} else {
-   374			ep = fwnode_graph_get_next_endpoint(dev_fwnode(hd3ss3220->dev), NULL);
-   375			if (!ep)
-   376				return -ENODEV;
-   377			connector = fwnode_graph_get_remote_port_parent(ep);
-   378			fwnode_handle_put(ep);
-   379			if (!connector)
-   380				return -ENODEV;
-   381			hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
-   382		}
-   383	
- > 384		hd3ss3220->id_gpiod = devm_gpiod_get_optional(hd3ss3220->dev, "id", GPIOD_IN);
-   385		if (IS_ERR(hd3ss3220->id_gpiod))
-   386			return PTR_ERR(hd3ss3220->id_gpiod);
-   387	
-   388		if (hd3ss3220->id_gpiod) {
- > 389			hd3ss3220->id_irq = gpiod_to_irq(hd3ss3220->id_gpiod);
-   390			if (hd3ss3220->id_irq < 0) {
-   391				dev_err(hd3ss3220->dev, "failed to get ID IRQ\n");
-   392				return hd3ss3220->id_irq;
-   393			}
-   394	
-   395			ret = devm_request_threaded_irq(hd3ss3220->dev,
-   396							hd3ss3220->id_irq, NULL,
-   397							hd3ss3220_id_isr,
-   398							IRQF_TRIGGER_RISING |
-   399							IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-   400							dev_name(hd3ss3220->dev), hd3ss3220);
-   401			if (ret < 0) {
-   402				dev_err(hd3ss3220->dev, "failed to get id irq\n");
-   403				return ret;
-   404			}
-   405		}
-   406	
-   407		hd3ss3220->vbus = devm_regulator_get_optional(hd3ss3220->dev, "vbus");
-   408		if (PTR_ERR(hd3ss3220->vbus) == -ENODEV)
-   409			hd3ss3220->vbus = NULL;
-   410	
-   411		if (IS_ERR(hd3ss3220->vbus))
-   412			return dev_err_probe(hd3ss3220->dev,
-   413					     PTR_ERR(hd3ss3220->vbus), "failed to get vbus\n");
-   414	
-   415		if (IS_ERR(hd3ss3220->role_sw)) {
-   416			ret = PTR_ERR(hd3ss3220->role_sw);
-   417			goto err_put_fwnode;
-   418		}
-   419	
-   420		typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
-   421		typec_cap.driver_data = hd3ss3220;
-   422		typec_cap.type = TYPEC_PORT_DRP;
-   423		typec_cap.data = TYPEC_PORT_DRD;
-   424		typec_cap.ops = &hd3ss3220_ops;
-   425		typec_cap.fwnode = connector;
-   426	
-   427		ret = hd3ss3220_configure_source_pref(hd3ss3220, connector, &typec_cap);
-   428		if (ret < 0)
-   429			goto err_put_role;
-   430	
-   431		ret = hd3ss3220_configure_port_type(hd3ss3220, connector, &typec_cap);
-   432		if (ret < 0)
-   433			goto err_put_role;
-   434	
-   435		hd3ss3220->port = typec_register_port(&client->dev, &typec_cap);
-   436		if (IS_ERR(hd3ss3220->port)) {
-   437			ret = PTR_ERR(hd3ss3220->port);
-   438			goto err_put_role;
-   439		}
-   440	
-   441		ret = hd3ss3220_configure_power_opmode(hd3ss3220, connector);
-   442		if (ret < 0)
-   443			goto err_unreg_port;
-   444	
-   445		hd3ss3220_set_role(hd3ss3220);
-   446		ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
-   447		if (ret < 0)
-   448			goto err_unreg_port;
-   449	
-   450		if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
-   451			ret = regmap_write(hd3ss3220->regmap,
-   452					HD3SS3220_REG_CN_STAT_CTRL,
-   453					data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
-   454			if (ret < 0)
-   455				goto err_unreg_port;
-   456		}
-   457	
-   458		if (client->irq > 0) {
-   459			ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-   460						hd3ss3220_irq_handler,
-   461						IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-   462						"hd3ss3220", &client->dev);
-   463			if (ret)
-   464				goto err_unreg_port;
-   465		} else {
-   466			INIT_DELAYED_WORK(&hd3ss3220->output_poll_work, output_poll_execute);
-   467			hd3ss3220->poll = true;
-   468		}
-   469	
-   470		ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
-   471		if (ret < 0)
-   472			goto err_unreg_port;
-   473	
-   474		fwnode_handle_put(connector);
-   475	
-   476		if (hd3ss3220->poll)
-   477			schedule_delayed_work(&hd3ss3220->output_poll_work, HZ);
-   478	
-   479		dev_info(&client->dev, "probed revision=0x%x\n", ret);
-   480	
-   481		return 0;
-   482	err_unreg_port:
-   483		typec_unregister_port(hd3ss3220->port);
-   484	err_put_role:
-   485		usb_role_switch_put(hd3ss3220->role_sw);
-   486	err_put_fwnode:
-   487		fwnode_handle_put(connector);
-   488	
-   489		return ret;
-   490	}
-   491	
-
+base-commit: 344657696e9aa7bf89e48e1848fe0ce551bd1f4a
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
