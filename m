@@ -1,126 +1,150 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFCB253B40;
-	Fri,  3 Oct 2025 20:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B4C263C8E
+	for <llvm@lists.linux.dev>; Fri,  3 Oct 2025 23:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759524666; cv=none; b=ihjNQWrNKjhHS2PEqT+nJXA+18HL67c64WfueG1/r7SxXCWW/cwPpHc3uleIlse8/vVAfXgK+CvvG5C8f+fsaOzqvcKCH4if/1OktBpzW89+/rq5MOtC9RfkqBQKupbwWhiZJYXEGDg8he1tZhnrzxQE4RuoNXvBjayVEdZGt7c=
+	t=1759534657; cv=none; b=iH3+jAjPubW3Lu/CURR7+40+yI6pS3rKpIJY2hZMMhkl+PMgK5AM/q04bzL/Utm7YX0AUJ9veKbWIPgaZGLztBQwoxXklfmqZZP8F5A4W3ZbQbO3rKjUB0+kG5OIE0OvX73VzcEP6fJhiXCfAqBiOYFbEd3E7ymuhtOcRsGO6ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759524666; c=relaxed/simple;
-	bh=bZr+Lvkb5M6Ufx0akrIYv+VR8dkYeZRAOvoeF3RPvsg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ArnWUhXLUdvRaJOD1J2q2n6uL+3EDuWDBk3lcB4ZdorhZv5xvImhhD+vK1Cr7o60sGAv9gqlIHwuHWKOchkNqVDUHY+ZhddyGtxZZgraHq0kMrEUYFb9JDr5SP2o5JIEN+B1cRLV4FCNiysNQYEoZKz6XrwC5NAr3TzsuKoO0q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Lrx+Opa8; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1759534657; c=relaxed/simple;
+	bh=GNFmT2VxEaPkh32hnm7rrBTVz4auBq5soR9sb5kDJTs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RCWX8XXDP1FejQQhJ+CoBPJD4tPzPWsiX0capt9Cp+YKLw7Fb61EClcCnSjw2fcoRyE+gsB8kI933wdBWDhcJCIHAaUmeC5EELeP9htq7NgYE5u+rireZhYiryy/141TSuP2otiX++IxSyHnWVP6NPW2WtnNFKWvvL3H726SeVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yh8fvLFF; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Lrx+Opa8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-	bh=oIs3ppVLk6gw/qZXypZLZcOfa+yCn//X21VZFkDaLYU=; b=Lrx+Opa8kAlfEXuyu8nZrskDYS
-	RMEVW1K3EtHWtp/TNPMDl4+TZidS8rII6LOpnPv0qEvXnZn1PtaWNoVRLLHkzUnhbCR3Tfh1MpEHf
-	ZkZd/NEu3t0eSIf0IaCZTwNSp4G961ZaVD/mJjLljb3ViiQ31g8H8jJABJOEx687ZtuOQgxZ+AsqI
-	LmC9fUttLZOzjyJF2FAdnCTKBCeWjOa6Rmq3x9FU9+hZojGWXCUyKadvy1un7W8qu/DrpcU76pUyT
-	OX6o9m0+7SucZJP87UviQ0UOsMWHeilEIIYasmiArPjulk9Jci/3QFC7WnJj9QL3uPYwy+SzCuC2Q
-	D0kAwH9A==;
-Received: from [50.53.25.54] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v4mjl-0000000D7bQ-0Z25;
-	Fri, 03 Oct 2025 20:50:45 +0000
-Message-ID: <3913273d-12e2-426f-aec7-263b7f49008a@infradead.org>
-Date: Fri, 3 Oct 2025 13:50:43 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yh8fvLFF"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-77f68fae1a8so3800333b3a.1
+        for <llvm@lists.linux.dev>; Fri, 03 Oct 2025 16:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759534655; x=1760139455; darn=lists.linux.dev;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8opnbw/m2Z8T5yDXIhCeyupu0RmNSEU/h2Gk1+QmiW8=;
+        b=Yh8fvLFFx0gMujnYVsiZIkTXZKQU/1BoL5ETzPB36o9+HHOYiO9nNF1Ai26sdyYQqi
+         YL1EsULU6ZRUux23y5LqlfVAHcLY00+wroL1Oj4+hApxW4l2X8+uuHWudCGi8jWDG844
+         Rb10dxsNTbH6243JgqdUc0plDHhtTkNHUOmRUuv3YR9wqrzEqkkTPStChHk/9eFkXOrI
+         +3147QIaBytXPQbllni/O/i1PhCcV5Eh5KVKMXRzokbGqyoSH2/NgYTKVPscP7Q2noNY
+         B0Ll/Q5FSgWrvOKxAo24D4VjL3ArC3whghdCG0tnre1tQAgksw1g2PhEATOcwpzncDeH
+         rlaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759534655; x=1760139455;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8opnbw/m2Z8T5yDXIhCeyupu0RmNSEU/h2Gk1+QmiW8=;
+        b=ZikpG2+dUq0mMnKpwSv5Hzso8yVqxB++QRNuA8Y61JTakDz9d8jj0bnkdXfMlx67pL
+         G7oNdx8hwoJCk7r740seCqDaDzlA7wB5uCxP+lIBS5Hun93Sl8ZCe2tshZ8vXDdqhzpg
+         uhFPlPzNBxSUNFRkOMAATplRZEUufuGG9JklkAeV4M5saJj2RsW9CVG1AIBOI4xgNkFy
+         6w1+9Fuh7dpsY5tbV2Y+glr7Jpg3cQxIcyeAflHTO0995nB96j71Gk697XxwutTXICh6
+         wOYa6sjhbZYCuPfCRdojEhJnorGkApSrK+F+e+LWp0E7N4s6ZnGfVp/YZAryM7BLy6cw
+         KZlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXcfdH0OcA+o0e/VzUIOq3etXy9Bd3ohHB+yEtK7jAMqUZBdpvnCa/c9QjGTC/cKYwORx3T@lists.linux.dev
+X-Gm-Message-State: AOJu0YzLOh55TngLAHi8QbayDV2BMfaqPbw10Kr07tHhE3+hgo84cDPE
+	I1Qe/b9m24v4UFXH1D8Lym7PwHra4NrO2+/uwfoK0QFaCTmekB1o+wPm
+X-Gm-Gg: ASbGncs2uhbeoI56cJAsH0oj2n54yAL5l+AbbuXr8YUL8mbHa/URnS/Jcw+Qc/hEQCl
+	jeTH1yfG+CoRpDOo4Ns83X/xsVRoxZhxm3S5XC1Nih3sNHSOW8xWUib+q7r/NramBfzOalH9CSx
+	4Z8w2+HJYmE+AysAqm7NPgjm2t93J4HAWNG7rqvZHwtFY3iqpoIqnHT2uVZHoGJ9gD1bvJsdRRA
+	O99wVxwWT1no9w35IF8Am5cvTZLZ+w+Z75MgV5pdir+lN4hvu79zHNRkrqfs8bnrOzaulW1U9GB
+	3u1mEqQNE0BQSXSppzGTVtPUZnwOIdTgn7QWcVZZhnpYnk40LphNyFRxEoqAEzg9ZnZktx1vTVh
+	slXKhJQW/A8U5ysww/vvF4ecHaFoDF4qdTLDg+c+tAwXk+ivszOb5N1o3rDkMXcx9niSZwwv5
+X-Google-Smtp-Source: AGHT+IHwNn3pqjoWotecuXY2Bk382T7KlekPldLWjd7xtyWnaXq++HkfhSeL9JeF/XIh23fgTqEc8A==
+X-Received: by 2002:a05:6a00:22c4:b0:781:1b4c:75fb with SMTP id d2e1a72fcca58-78c98dd945emr5793503b3a.18.1759534654703;
+        Fri, 03 Oct 2025 16:37:34 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:2a3b:74c8:31da:d808? ([2620:10d:c090:500::4:e149])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01f9ac7esm6083494b3a.7.2025.10.03.16.37.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Oct 2025 16:37:34 -0700 (PDT)
+Message-ID: <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
+ errors
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, ihor.solodrai@linux.dev, 
+	alan.maguire@oracle.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Andrii Nakryiko	
+ <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
+ <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu	
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Shuah Khan <shuah@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers	 <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Date: Fri, 03 Oct 2025 16:37:32 -0700
+In-Reply-To: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
+References: 
+	<20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 23/23] MAINTAINERS: add entry for KStackWatch
-To: Jinchao Wang <wangjinchao600@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Mike Rapoport <rppt@kernel.org>,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Rong Xu <xur@google.com>,
- Naveen N Rao <naveen@kernel.org>, David Kaplan <david.kaplan@amd.com>,
- Andrii Nakryiko <andrii@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
- Nam Cao <namcao@linutronix.de>, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, kasan-dev@googlegroups.com,
- "David S. Miller" <davem@davemloft.net>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org
-References: <20250930024402.1043776-1-wangjinchao600@gmail.com>
- <20250930024402.1043776-24-wangjinchao600@gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250930024402.1043776-24-wangjinchao600@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On 9/29/25 7:43 PM, Jinchao Wang wrote:
-> Add a maintainer entry for Kernel Stack Watch.
-> 
-> Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
+On Fri, 2025-10-03 at 17:24 +0200, Matthieu Baerts (NGI0) wrote:
+> When trying to build the latest BPF selftests, with a debug kernel
+> config, Pahole 1.30 and CLang 20.1.8 (and GCC 15.2), I got these errors:
+>=20
+>   progs/dynptr_success.c:579:9: error: call to undeclared function 'bpf_d=
+ynptr_slice'; ISO C99 and later do not support implicit function declaratio=
+ns [-Wimplicit-function-declaration]
+>     579 |         data =3D bpf_dynptr_slice(&ptr, 0, NULL, 1);
+>         |                ^
+>   progs/dynptr_success.c:579:9: note: did you mean 'bpf_dynptr_size'?
+>   .virtme/build-debug-btf//tools/include/vmlinux.h:120280:14: note: 'bpf_=
+dynptr_size' declared here
+>    120280 | extern __u32 bpf_dynptr_size(const struct bpf_dynptr *p) __we=
+ak __ksym;
+>           |              ^
+>   progs/dynptr_success.c:579:7: error: incompatible integer to pointer co=
+nversion assigning to '__u64 *' (aka 'unsigned long long *') from 'int' [-W=
+int-conversion]
+>     579 |         data =3D bpf_dynptr_slice(&ptr, 0, NULL, 1);
+>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   progs/dynptr_success.c:596:9: error: call to undeclared function 'bpf_d=
+ynptr_slice'; ISO C99 and later do not support implicit function declaratio=
+ns [-Wimplicit-function-declaration]
+>     596 |         data =3D bpf_dynptr_slice(&ptr, 0, NULL, 10);
+>         |                ^
+>   progs/dynptr_success.c:596:7: error: incompatible integer to pointer co=
+nversion assigning to 'char *' from 'int' [-Wint-conversion]
+>     596 |         data =3D bpf_dynptr_slice(&ptr, 0, NULL, 10);
+>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> I don't have these errors without the debug kernel config from
+> kernel/configs/debug.config. With the debug kernel, bpf_dynptr_slice()
+> is not declared in vmlinux.h. It is declared there without debug.config.
+>=20
+> The fix is similar to what is done in dynptr_fail.c which is also using
+> bpf_dynptr_slice(): bpf_kfuncs.h is now included.
+>=20
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 > ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 520fb4e379a3..3d4811ff3631 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13362,6 +13362,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
->  F:	Documentation/dev-tools/kselftest*
->  F:	tools/testing/selftests/
->  
-> +KERNEL STACK WATCH
-> +M:	Jinchao Wang <wangjinchao600@gmail.com>
-> +S:	Maintained
-> +F:	Documentation/dev-tools/kstackwatch.rst
-> +F:	include/linux/kstackwatch_types.h
-> +F:	mm/kstackwatch/
-> +F:	tools/kstackwatch/
-> +
 
-Add entries in alphabetical order, please.
+I can reproduce similar issue when including
+kernel/configs/debug.config with my regular dev config, but for
+different functions: bpf_rcu_read_{un,}lock().
 
->  KERNEL SMB3 SERVER (KSMBD)
->  M:	Namjae Jeon <linkinjeon@kernel.org>
->  M:	Namjae Jeon <linkinjeon@samba.org>
+However, this is not a way to fix this.
+Kfuncs are not supposed to just disappear from DWARF.
 
--- 
-~Randy
+Running pahole in verbose mode I see the following output:
 
+  $ pahole -V \
+      --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,opti=
+mized_func,consistent_func,decl_tag_kfuncs \
+      --btf_features=3Dattributes \
+      --lang_exclude=3Drust \
+      --btf_encode_detached=3D/dev/null vmlinux
+  ...
+  matched function 'bpf_rcu_read_lock' with 'bpf_rcu_read_lock.cold'
+  ...
+
+Alan, Ihor, does this sound familiar?
