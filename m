@@ -1,115 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6155550276;
-	Sat,  4 Oct 2025 08:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BFC1EA7FF;
+	Sat,  4 Oct 2025 08:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759565398; cv=none; b=BApFKdaNHQiIA27msiKUV0i5sM+PLI8ryEMisF9fETzzXjORY7RfSuM1KrU+YLwpnO9VN2eoMUMNE3/6bCuj+NwbVH2dwhQf+hK0TU5PFm3rarVIonky8GOxaaIXR8uIgUOitO9+GKPDKHy5DC52uFdRSG8Wsva/D65hgp2Y8yU=
+	t=1759567907; cv=none; b=ImGKD3Q/vNtESYH9af8+jdfrGYTtyxdsDboTdtbyENLg6RYfm8f8bz3Xc8C66bsHC2mGuOTKrZrrZ8yfjKGEfQWQWM31S/w7r/8UZN0xrX7/DaQtOPRtMMVs8L/WjvPoSOCYy3koEapVKRfEKrbHd4lOXV3r0qJk8l52Q01dSpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759565398; c=relaxed/simple;
-	bh=B96OmDeOmMDIhrgUpXpMInr1UGo5k+vzJaFEQqQ3TuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ApDrLB4gv1N350LXOvs8VbhAMkPfl8adp+IKobp2CNJZXb5BU6NR49lMWIjoWe6e9bN36sUl0lkc0mFOl7T5QFsHCyD5QWJfqjrCTCXQvO9SlPT+NKnf7duJBvTTx9/aUeNfCQnMdHKfTUBeXjkKSSoTD8nqik4ArpgNOxMxN7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=budMKm4/; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759567907; c=relaxed/simple;
+	bh=/IB8ujFWe6EWSDPEJq2XqSK0nAWZ0LrB0KZJrYSGi/U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hKfT0MdcwtnV6R6E3PA6rXX231a7PUsNfqzVktElHXG9eGYcKXPagqQ4iWHfIEqUOpgJGy1GGivei0fSuHD5L46ji8/40POKxvwvpv2LWdZBPphzOPmbXMLV2QcQ3gY2AQt0XFRhDGk+R+8vpdIfRGVCfNePJ1kWRPFcYp1zk/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FgJ+ExF2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="budMKm4/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759565397; x=1791101397;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B96OmDeOmMDIhrgUpXpMInr1UGo5k+vzJaFEQqQ3TuI=;
-  b=budMKm4/o7s0x4EwmiA52HJoor5Uxznqd95y0GGrIW4H8Jt+thdYo0e7
-   v76AfsDOkmKpCL9iMvNgI5hWtlCcXl/KBC2SNte2fGfkUApocnM/QJATb
-   TZWtPR8QOdCoDhAdTaoAUAt6/DM+AVGoPHoad3XkXZQ2bHCaAIq271VXG
-   dlbgxxoyDkWdA6ipMqUHoUiEToHSoIKDuOg0Ub7l5GFG3ufXPFC5Rr5Wn
-   832Fp/gJX4cx5IC4U9ykRXrW8E/mF+X2A2+zeOTdCaY1dRIs2Doxj0ELr
-   cogF8fgqvDbfca6VXbHcusBqQcFHdb0kwNmOVm0lsAoSwEBzJs6JpgAck
-   Q==;
-X-CSE-ConnectionGUID: TCL5aeiUR06AvAXMFZdqPQ==
-X-CSE-MsgGUID: mCOC2V6bQvWwiuVEeTZz3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="61749217"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="61749217"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2025 01:09:57 -0700
-X-CSE-ConnectionGUID: fL8QGjcqTXm1u6X0ZSdpdw==
-X-CSE-MsgGUID: 5v6lvpaFSeeHqo6qgEPQVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,314,1751266800"; 
-   d="scan'208";a="183855351"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Oct 2025 01:09:51 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4xKu-00059b-1f;
-	Sat, 04 Oct 2025 08:09:48 +0000
-Date: Sat, 4 Oct 2025 16:09:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de, bp@alien8.de,
-	corbet@lwn.net, dave.hansen@linux.intel.com, decui@microsoft.com,
-	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
-	mikelley@microsoft.com, mingo@redhat.com, tglx@linutronix.de,
-	Tianyu.Lan@microsoft.com, wei.liu@kernel.org, x86@kernel.org,
-	linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	benhill@microsoft.com, bperkins@microsoft.com,
-	sunilmut@microsoft.com, romank@linux.microsoft.com
-Subject: Re: [PATCH hyperv-next v6 05/17] arch/x86: mshyperv: Trap on access
- for some synthetic MSRs
-Message-ID: <202510041544.zPic8ogA-lkp@intel.com>
-References: <20251003222710.6257-6-romank@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FgJ+ExF2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE98DC4CEF1;
+	Sat,  4 Oct 2025 08:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759567906;
+	bh=/IB8ujFWe6EWSDPEJq2XqSK0nAWZ0LrB0KZJrYSGi/U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FgJ+ExF2Fvcgfnb8bgsANiVdaAauxX/DFvwDKucflo/ZyQDcBhmvZZRGOMQ25u3vG
+	 48SH8I6Z/0GMFrOQ55Rbq5YOJGGuOAfupXoEQBuvjM6XpslL6WC1q/0VPb1Uzn0a0g
+	 UMIXxnkesdOSVa0+dvpLNjrIfUIyiReYdHJcXLbmjQNUeUUr/e6cmV6HDdGwoDQnXo
+	 3NQMK3PWCirg6AG6nk8Sa7ECe8WhvQvZiR/+5TVE2bHnWOI7L7cLsDPZpO3U2EsADt
+	 r0ByAmxQBONbT/KL+urq4sU+ztZa2kWWLSMDdk8MR3MIv2oLR/ZOAAvlm0dFesWnuT
+	 lyr2lq+WuO3lA==
+Message-ID: <8b49ca48-ff6b-40ed-8322-e0c9791d1d17@kernel.org>
+Date: Sat, 4 Oct 2025 10:51:36 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251003222710.6257-6-romank@linux.microsoft.com>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
+ errors
+Content-Language: en-GB, fr-BE
+To: Eduard Zingerman <eddyz87@gmail.com>, ihor.solodrai@linux.dev,
+ alan.maguire@oracle.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
+ <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Roman,
+Hi Eduard,
 
-kernel test robot noticed the following build warnings:
+On 04/10/2025 01:37, Eduard Zingerman wrote:
+> On Fri, 2025-10-03 at 17:24 +0200, Matthieu Baerts (NGI0) wrote:
+>> When trying to build the latest BPF selftests, with a debug kernel
+>> config, Pahole 1.30 and CLang 20.1.8 (and GCC 15.2), I got these errors:
+>>
+>>   progs/dynptr_success.c:579:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>>     579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
+>>         |                ^
+>>   progs/dynptr_success.c:579:9: note: did you mean 'bpf_dynptr_size'?
+>>   .virtme/build-debug-btf//tools/include/vmlinux.h:120280:14: note: 'bpf_dynptr_size' declared here
+>>    120280 | extern __u32 bpf_dynptr_size(const struct bpf_dynptr *p) __weak __ksym;
+>>           |              ^
+>>   progs/dynptr_success.c:579:7: error: incompatible integer to pointer conversion assigning to '__u64 *' (aka 'unsigned long long *') from 'int' [-Wint-conversion]
+>>     579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
+>>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>   progs/dynptr_success.c:596:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>>     596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
+>>         |                ^
+>>   progs/dynptr_success.c:596:7: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+>>     596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
+>>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> I don't have these errors without the debug kernel config from
+>> kernel/configs/debug.config. With the debug kernel, bpf_dynptr_slice()
+>> is not declared in vmlinux.h. It is declared there without debug.config.
+>>
+>> The fix is similar to what is done in dynptr_fail.c which is also using
+>> bpf_dynptr_slice(): bpf_kfuncs.h is now included.
+>>
+>> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+>> ---
+> 
+> I can reproduce similar issue when including
+> kernel/configs/debug.config with my regular dev config, but for
+> different functions: bpf_rcu_read_{un,}lock().
 
-[auto build test WARNING on b595edcb24727e7f93e7962c3f6f971cc16dd29e]
+Thank you for having checked! I also had issues with these functions on
+my side, when testing on top of 'net'.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/Documentation-hyperv-Confidential-VMBus/20251004-063158
-base:   b595edcb24727e7f93e7962c3f6f971cc16dd29e
-patch link:    https://lore.kernel.org/r/20251003222710.6257-6-romank%40linux.microsoft.com
-patch subject: [PATCH hyperv-next v6 05/17] arch/x86: mshyperv: Trap on access for some synthetic MSRs
-config: i386-buildonly-randconfig-003-20251004 (https://download.01.org/0day-ci/archive/20251004/202510041544.zPic8ogA-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251004/202510041544.zPic8ogA-lkp@intel.com/reproduce)
+> However, this is not a way to fix this.
+> Kfuncs are not supposed to just disappear from DWARF.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510041544.zPic8ogA-lkp@intel.com/
+Indeed. But strange it was fine before. Or fine without debug.config.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/cpu/mshyperv.c:46:13: warning: unused variable 'hv_para_sint_proxy' [-Wunused-variable]
-      46 | static bool hv_para_sint_proxy;
-         |             ^~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/hv_para_sint_proxy +46 arch/x86/kernel/cpu/mshyperv.c
-
-    41	
-    42	/*
-    43	 * When running with the paravisor, controls proxying the synthetic interrupts
-    44	 * from the host
-    45	 */
-  > 46	static bool hv_para_sint_proxy;
-    47	
-
+Cheers,
+Matt
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sponsored by the NGI0 Core fund.
+
