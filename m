@@ -1,33 +1,33 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E23541C71
-	for <llvm@lists.linux.dev>; Sat,  4 Oct 2025 03:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F8C1A9F90
+	for <llvm@lists.linux.dev>; Sat,  4 Oct 2025 03:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759547336; cv=none; b=M0a+rYTfCQ+qmhOzB0gtpPT+PSlpAtZniNdiKH+/lqAuQNUTKh2ubPhMXEjwLGc4z5TjNdbJHv5rKCEBzUP5fmqemDn0Uw18ei3odizs7lhyZsi47IOq9v54wSPMdlvm8RbmBwYJHPTm8X4zOpkVK++wkduWcQ3b3f466yZxtRg=
+	t=1759547980; cv=none; b=U8QvsFyJbiYCXPfi4WmC5GUqromYuvGdAbx405w/6nwUuCka3YplxNpGl4IVzNyGje/8bJDV+1TWZTjdx6Dimp9RJ0LKxApctiN3XtkIOzDtd7UXtDp0RFqFjPmw3BVGM+x9PahBo3To9s4jIe0ElpCZS2J7peAydSffYFNRJsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759547336; c=relaxed/simple;
-	bh=SA0GQY/BUXdQlPfp3N1GJWXZvhF2ZRNt7QOm5VUjtSo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n3Agp8Ly9kWF4qOSwADqanUrjZ+B3IoYakROJjOZN7oeju0UJdNaps2lL1PpZouR3PHJDn2ccvWugr7M9JSmvMArTG6I8X09qlAr4hnNtvwmsA37kCztyPchqHPTkeDHtUCN7IaoBlBcvZiFJSjtnE0XqyZjUxTZ311L5x/jxFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z+6Lp6AJ; arc=none smtp.client-ip=95.215.58.180
+	s=arc-20240116; t=1759547980; c=relaxed/simple;
+	bh=lcA3ei/1g1NUuiXoe+MFQ5C0lbbnCbV0iTNJIOEUjvE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CR4VdRRTQZyNi5UcrPaSYDVXtoF4B6Mt5dmpVC5SBIp2P2YB/FEUnzU/upL32oeOV0/fVDbhi63CJuK+0YDgusb4+Bs9PjEC433rwXN6fzJp/U50z7KvPD2zrfsQSI2y17siVwzt5KPcn/tIGMv7i6I8z1C2aiTjFu8APieb3as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PsA3FS3c; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z+6Lp6AJ"
-Message-ID: <43eebdf1-5ea9-4991-88c3-f0780d7c42c6@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PsA3FS3c"
+Message-ID: <c8b609ef-2d46-46b3-89ac-5ae84122cb93@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1759547331;
+	t=1759547965;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Zn+pcM7PQPj2tE8YHaK7fwhWUvFKFy4bznwVXHweHVY=;
-	b=Z+6Lp6AJQO+Zr74dHglZWtWNzr+SiYMEOYvM1NBytfEaRtdZk+9vh5xO6BrGJT7K+ripU8
-	k2Lei0zV0flgdgHrgFezD7ItwSjz7jIC00eS0NcU1EWRQ8tQRnpXkLYn2bqAmhp0S2BwWg
-	rFdNwQEBOODNFwRPFky0yyUYKz4b4Bo=
-Date: Fri, 3 Oct 2025 20:08:40 -0700
+	bh=jHdcb3Anj/Cb6FBjokLh/jDD4Onb5Um4LvaFZMJsSPU=;
+	b=PsA3FS3cwr3vZdNo9yDQIxPqw3dYCWv/KfXwvM26U6OfENbdLCjGJUFx/2+ahYSomEXTZS
+	9UloR5fCPULk0Crzy0Qz+L1814Dvu68bEEjFkvcmGlLg4m9xTE+GTyevB7DUWLKTkyGiGG
+	glKLer6f8wwNptIo5NKuwwQFVijpvqA=
+Date: Fri, 3 Oct 2025 20:19:17 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,6 +36,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Subject: Re: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
  errors
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Eduard Zingerman <eddyz87@gmail.com>,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, alan.maguire@oracle.com
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -52,69 +54,33 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
 References: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
  <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+ <43eebdf1-5ea9-4991-88c3-f0780d7c42c6@linux.dev>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+In-Reply-To: <43eebdf1-5ea9-4991-88c3-f0780d7c42c6@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 10/3/25 4:37 PM, Eduard Zingerman wrote:
-> On Fri, 2025-10-03 at 17:24 +0200, Matthieu Baerts (NGI0) wrote:
->> When trying to build the latest BPF selftests, with a debug kernel
->> config, Pahole 1.30 and CLang 20.1.8 (and GCC 15.2), I got these errors:
+On 10/3/25 8:08 PM, Ihor Solodrai wrote:
+> 
+> 
+> On 10/3/25 4:37 PM, Eduard Zingerman wrote:
+>> On Fri, 2025-10-03 at 17:24 +0200, Matthieu Baerts (NGI0) wrote:
+>> [...]
 >>
->>   progs/dynptr_success.c:579:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>     579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
->>         |                ^
->>   progs/dynptr_success.c:579:9: note: did you mean 'bpf_dynptr_size'?
->>   .virtme/build-debug-btf//tools/include/vmlinux.h:120280:14: note: 'bpf_dynptr_size' declared here
->>    120280 | extern __u32 bpf_dynptr_size(const struct bpf_dynptr *p) __weak __ksym;
->>           |              ^
->>   progs/dynptr_success.c:579:7: error: incompatible integer to pointer conversion assigning to '__u64 *' (aka 'unsigned long long *') from 'int' [-Wint-conversion]
->>     579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
->>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>   progs/dynptr_success.c:596:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->>     596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
->>         |                ^
->>   progs/dynptr_success.c:596:7: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
->>     596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
->>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> I don't have these errors without the debug kernel config from
->> kernel/configs/debug.config. With the debug kernel, bpf_dynptr_slice()
->> is not declared in vmlinux.h. It is declared there without debug.config.
->>
->> The fix is similar to what is done in dynptr_fail.c which is also using
->> bpf_dynptr_slice(): bpf_kfuncs.h is now included.
->>
->> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
->> ---
+>> Alan, Ihor, does this sound familiar?
 > 
-> I can reproduce similar issue when including
-> kernel/configs/debug.config with my regular dev config, but for
-> different functions: bpf_rcu_read_{un,}lock().
+> This is most likely the issue addressed in this patch:
+> https://lore.kernel.org/dwarves/f7553b3f-5827-4f50-81a9-9bd0802734b9@linux.dev/
 > 
-> However, this is not a way to fix this.
-> Kfuncs are not supposed to just disappear from DWARF.
-> 
-> Running pahole in verbose mode I see the following output:
-> 
->   $ pahole -V \
->       --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs \
->       --btf_features=attributes \
->       --lang_exclude=rust \
->       --btf_encode_detached=/dev/null vmlinux
->   ...
->   matched function 'bpf_rcu_read_lock' with 'bpf_rcu_read_lock.cold'
->   ...
-> 
-> Alan, Ihor, does this sound familiar?
+> There wasn't a new pahole release with it yet.
 
-This is most likely the issue addressed in this patch:
-https://lore.kernel.org/dwarves/f7553b3f-5827-4f50-81a9-9bd0802734b9@linux.dev/
+Not the best link, sorry. That patch wasn't picked up by lore, only
+discussion remains.
 
-There wasn't a new pahole release with it yet.
+Here is the commit pushed to pahole/next:
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=09c1e9c924da02dc02bba0a3e59490e64449df96
+
+
