@@ -1,117 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762CE282F1;
-	Sat,  4 Oct 2025 01:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E23541C71
+	for <llvm@lists.linux.dev>; Sat,  4 Oct 2025 03:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759540766; cv=none; b=UE9/GFcjTdoNzo6G4poTRSmI2rgECWGqhu1Nb8C5sDjwYOCEHCRtXj23HNQ6cBZZwG4AUBHy3aUJLfqOVypcshRYiu6ci5ZHlnvoMRUb5pJszpMp4h9RGEILfGyfKorkMxtbLIg7FbNQK1MzsrF3dZp+hI7NowFssYB7VGlBSG4=
+	t=1759547336; cv=none; b=M0a+rYTfCQ+qmhOzB0gtpPT+PSlpAtZniNdiKH+/lqAuQNUTKh2ubPhMXEjwLGc4z5TjNdbJHv5rKCEBzUP5fmqemDn0Uw18ei3odizs7lhyZsi47IOq9v54wSPMdlvm8RbmBwYJHPTm8X4zOpkVK++wkduWcQ3b3f466yZxtRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759540766; c=relaxed/simple;
-	bh=fNfRYHZRZciYP1VNcc5BID8iEUccG3YVhkfMXauiGIc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C6LXa0LXyLsLhPr2Dht1tTgXzmScjlk0O1DlLry5J1OZmSy4QuKSzn8NZBjd+wPE6myKvABQ79tk9wBS8t9zCV7YHo3hPComRGi5gc+iLlbIg0od77QpmtJqFIxWpevc2op/zkCRFjqIqNllq5EfiRCk2N5PFcr73pZHWsSgdZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ktCZCCQr; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1759547336; c=relaxed/simple;
+	bh=SA0GQY/BUXdQlPfp3N1GJWXZvhF2ZRNt7QOm5VUjtSo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n3Agp8Ly9kWF4qOSwADqanUrjZ+B3IoYakROJjOZN7oeju0UJdNaps2lL1PpZouR3PHJDn2ccvWugr7M9JSmvMArTG6I8X09qlAr4hnNtvwmsA37kCztyPchqHPTkeDHtUCN7IaoBlBcvZiFJSjtnE0XqyZjUxTZ311L5x/jxFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z+6Lp6AJ; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ktCZCCQr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759540764; x=1791076764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fNfRYHZRZciYP1VNcc5BID8iEUccG3YVhkfMXauiGIc=;
-  b=ktCZCCQrnFGXis9AaiZLIevQVceogQxjQi+0XxrtVQbGex2Z8aaBwp+g
-   bJfAXOnBk7INmyALnYLesShpPbWsPouITS+Hfb+nKperkxxueKSFQGIRR
-   WwnliC3xQHclCw9//kw1Fz2UFebSaQ0u7CJHsDZbKoktWQoExHBzjoGLG
-   ApO+wh8F52Y2lyTLO9p3hDxS0Xt+CcsAT1YMa2UVZgd9F86OgmBuPPPMk
-   AwsaR5l/jxBpgwlSZ91q9Hi0FqlDUhJ0eiFG9+wm2OAikEebf/mpQyc9O
-   ZoLVbWIr4K0y29EDUijeBUtWHzrF8gUsGzzd/8RcG8NmAsJvEiedYx3Kx
-   A==;
-X-CSE-ConnectionGUID: njsX3TzaQTWF1f8mjPJajg==
-X-CSE-MsgGUID: wPEybkGlRk6Qj/X6zr80Tg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11571"; a="61988901"
-X-IronPort-AV: E=Sophos;i="6.18,314,1751266800"; 
-   d="scan'208";a="61988901"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2025 18:19:23 -0700
-X-CSE-ConnectionGUID: 7KqFVGjMReazrN229o0DBA==
-X-CSE-MsgGUID: qNiyH4HgSxOJmfJN43zV6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,314,1751266800"; 
-   d="scan'208";a="179840945"
-Received: from lkp-server01.sh.intel.com (HELO 2f2a1232a4e4) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 03 Oct 2025 18:19:20 -0700
-Received: from kbuild by 2f2a1232a4e4 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v4qvd-00050h-1N;
-	Sat, 04 Oct 2025 01:19:17 +0000
-Date: Sat, 4 Oct 2025 09:18:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pavitrakumar Managutte <pavitrakumarm@vayavyalabs.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, herbert@gondor.apana.org.au,
-	robh@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, krzk+dt@kernel.org,
-	conor+dt@kernel.org, Ruud.Derwig@synopsys.com,
-	manjunath.hadli@vayavyalabs.com, adityak@vayavyalabs.com,
-	Pavitrakumar Managutte <pavitrakumarm@vayavyalabs.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 4/4] Add SPAcc Kconfig and Makefile
-Message-ID: <202510040852.qK4TiL4k-lkp@intel.com>
-References: <20250929074334.118413-5-pavitrakumarm@vayavyalabs.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z+6Lp6AJ"
+Message-ID: <43eebdf1-5ea9-4991-88c3-f0780d7c42c6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1759547331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Zn+pcM7PQPj2tE8YHaK7fwhWUvFKFy4bznwVXHweHVY=;
+	b=Z+6Lp6AJQO+Zr74dHglZWtWNzr+SiYMEOYvM1NBytfEaRtdZk+9vh5xO6BrGJT7K+ripU8
+	k2Lei0zV0flgdgHrgFezD7ItwSjz7jIC00eS0NcU1EWRQ8tQRnpXkLYn2bqAmhp0S2BwWg
+	rFdNwQEBOODNFwRPFky0yyUYKz4b4Bo=
+Date: Fri, 3 Oct 2025 20:08:40 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250929074334.118413-5-pavitrakumarm@vayavyalabs.com>
+Subject: Re: [PATCH bpf] selftests/bpf: fix implicit-function-declaration
+ errors
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, alan.maguire@oracle.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20251003-bpf-sft-fix-build-err-6-18-v1-1-2a71170861ef@kernel.org>
+ <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <d108d59be611a63c73303347d07fe0ba5f2b74b7.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Pavitrakumar,
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 166c83f7789ed02dc1f25bc7bed4a1beb25343aa]
+On 10/3/25 4:37 PM, Eduard Zingerman wrote:
+> On Fri, 2025-10-03 at 17:24 +0200, Matthieu Baerts (NGI0) wrote:
+>> When trying to build the latest BPF selftests, with a debug kernel
+>> config, Pahole 1.30 and CLang 20.1.8 (and GCC 15.2), I got these errors:
+>>
+>>   progs/dynptr_success.c:579:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>>     579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
+>>         |                ^
+>>   progs/dynptr_success.c:579:9: note: did you mean 'bpf_dynptr_size'?
+>>   .virtme/build-debug-btf//tools/include/vmlinux.h:120280:14: note: 'bpf_dynptr_size' declared here
+>>    120280 | extern __u32 bpf_dynptr_size(const struct bpf_dynptr *p) __weak __ksym;
+>>           |              ^
+>>   progs/dynptr_success.c:579:7: error: incompatible integer to pointer conversion assigning to '__u64 *' (aka 'unsigned long long *') from 'int' [-Wint-conversion]
+>>     579 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 1);
+>>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>   progs/dynptr_success.c:596:9: error: call to undeclared function 'bpf_dynptr_slice'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>>     596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
+>>         |                ^
+>>   progs/dynptr_success.c:596:7: error: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+>>     596 |         data = bpf_dynptr_slice(&ptr, 0, NULL, 10);
+>>         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> I don't have these errors without the debug kernel config from
+>> kernel/configs/debug.config. With the debug kernel, bpf_dynptr_slice()
+>> is not declared in vmlinux.h. It is declared there without debug.config.
+>>
+>> The fix is similar to what is done in dynptr_fail.c which is also using
+>> bpf_dynptr_slice(): bpf_kfuncs.h is now included.
+>>
+>> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+>> ---
+> 
+> I can reproduce similar issue when including
+> kernel/configs/debug.config with my regular dev config, but for
+> different functions: bpf_rcu_read_{un,}lock().
+> 
+> However, this is not a way to fix this.
+> Kfuncs are not supposed to just disappear from DWARF.
+> 
+> Running pahole in verbose mode I see the following output:
+> 
+>   $ pahole -V \
+>       --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs \
+>       --btf_features=attributes \
+>       --lang_exclude=rust \
+>       --btf_encode_detached=/dev/null vmlinux
+>   ...
+>   matched function 'bpf_rcu_read_lock' with 'bpf_rcu_read_lock.cold'
+>   ...
+> 
+> Alan, Ihor, does this sound familiar?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavitrakumar-Managutte/dt-bindings-crypto-Document-support-for-SPAcc/20250929-155434
-base:   166c83f7789ed02dc1f25bc7bed4a1beb25343aa
-patch link:    https://lore.kernel.org/r/20250929074334.118413-5-pavitrakumarm%40vayavyalabs.com
-patch subject: [PATCH v6 4/4] Add SPAcc Kconfig and Makefile
-config: i386-randconfig-013-20251004 (https://download.01.org/0day-ci/archive/20251004/202510040852.qK4TiL4k-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251004/202510040852.qK4TiL4k-lkp@intel.com/reproduce)
+This is most likely the issue addressed in this patch:
+https://lore.kernel.org/dwarves/f7553b3f-5827-4f50-81a9-9bd0802734b9@linux.dev/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510040852.qK4TiL4k-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: crypto_engine_alloc_init
-   >>> referenced by spacc_device.c:88 (drivers/crypto/dwc-spacc/spacc_device.c:88)
-   >>>               drivers/crypto/dwc-spacc/spacc_device.o:(spacc_crypto_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: crypto_engine_start
-   >>> referenced by spacc_device.c:95 (drivers/crypto/dwc-spacc/spacc_device.c:95)
-   >>>               drivers/crypto/dwc-spacc/spacc_device.o:(spacc_crypto_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: crypto_engine_stop
-   >>> referenced by spacc_device.c:203 (drivers/crypto/dwc-spacc/spacc_device.c:203)
-   >>>               drivers/crypto/dwc-spacc/spacc_device.o:(spacc_crypto_probe) in archive vmlinux.a
-   >>> referenced by spacc_device.c:250 (drivers/crypto/dwc-spacc/spacc_device.c:250)
-   >>>               drivers/crypto/dwc-spacc/spacc_device.o:(spacc_crypto_remove) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: crypto_engine_exit
-   >>> referenced by spacc_device.c:206 (drivers/crypto/dwc-spacc/spacc_device.c:206)
-   >>>               drivers/crypto/dwc-spacc/spacc_device.o:(spacc_crypto_probe) in archive vmlinux.a
-   >>> referenced by spacc_device.c:251 (drivers/crypto/dwc-spacc/spacc_device.c:251)
-   >>>               drivers/crypto/dwc-spacc/spacc_device.o:(spacc_crypto_remove) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+There wasn't a new pahole release with it yet.
