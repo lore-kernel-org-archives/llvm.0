@@ -1,55 +1,55 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7107D2BE05E
-	for <llvm@lists.linux.dev>; Sun,  5 Oct 2025 21:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC30E2BEFFD
+	for <llvm@lists.linux.dev>; Sun,  5 Oct 2025 21:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759699348; cv=none; b=Qu1b5v2IWrKeVXxmHFszoHsXnzWrLtFbn1xdvrnqJ6rs92u5ZLNAiMkSxs//+OitvZhdJmICOQnOg6Ed5cDQ0yLBisinQOACfRUIJaXfQLTMgVc3XOylEXOAIMCCLlXG/TKXXMjEa2JA9SmeRErcfqDEevRg2j+Zil/yYiIMHOY=
+	t=1759699349; cv=none; b=dVmoAS0xqjE7VHUDqz6+2p93iytqJQcBHAZdFURcEMwcrsxU6aL/4oLKmWTV1V2zDidhyQiONNVwnLfwHw4lqQ/9XXkqYnRPBfEvmnusHR/hfFgX8Hsr/Ww8oJWeLWMcaj5fPt3a9SLy7dJURKizTf5rfyAZNqtIDo7EVh2ohns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759699348; c=relaxed/simple;
-	bh=jjogxjWTo8LEEeITCvVJ5lej7lh2270zJAspkUYjJfk=;
+	s=arc-20240116; t=1759699349; c=relaxed/simple;
+	bh=1AcAVTJaNRek7hoOhiMLQ+rsKXs+qNDcn0xrSWd0d40=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=QiN4kaGSTmYXlkrBT8sz8Y3us5/6xGxYxlUQKMhfprRKIJrcP6RypkuaT1e/r6dcSEZUepYiCOkKXe5Dd86TmeTEKZvH+5EvkOHu98n8xEuNbP62bSgzuwTy60XelxEWcP/9XtAnK6D4f5cc+yxFWf6JXHN9oXH4NtewgMrE7cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4OfTTMdB; arc=none smtp.client-ip=209.85.214.202
+	 To:Content-Type; b=TNAz/sTstjBeGBQ8PNj97ek4E9PVoTYwmWXImpYmfY74M0TV6EdsABhoHhFmRoY6UyHuVJ+8LSmDKhJ+wOzdDq0XQkLSjbxR+gRUam3TLyAU6/xIKzuf917e491yj3+/TC8pW9i2Vt8ZnG743ewaAFiZR/Qf5Glkl9bbodUI7Pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OHXOdKn+; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4OfTTMdB"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-267fa90a2fbso56916745ad.1
-        for <llvm@lists.linux.dev>; Sun, 05 Oct 2025 14:22:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OHXOdKn+"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-26983c4d708so34168395ad.3
+        for <llvm@lists.linux.dev>; Sun, 05 Oct 2025 14:22:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759699345; x=1760304145; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1759699347; x=1760304147; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zr9vg9+dbl377j7bj7cPlJqbhOg0YG22m54UFPy9WZs=;
-        b=4OfTTMdBppzMsFnX/KPBudBAugEhACCpnoWL0HwaiWGojw58cihzOyvYHz3jtsVI3z
-         OqV4RkN/AlI2F2b9KX9aOtBxwWAvaHE//9qKAF/ZPXzi3q88DdDwoin5wAvKUimZdgK0
-         Ot6o1Xi8QzXCHkWWR2xoCynEBQ2M2kO4id4q/jrEYtVpAChdPjwt32aVA09ADBBgKR5p
-         kSQsfNeOELDEe27joE/BX+IO5OCLPWZsRO/hKjrTxA6Ywoa+ehxhFyNslfnv0gwXQzs+
-         yviCIZdyyaTC4vKuUUl0Ar9aXHEJzc3pBk/uqOeGKkLGPFWSz/BtItMbx+HpUHnUb75T
-         dRpw==
+        bh=O+l/WGm8eAK1INkc4qzoRNUwkFMn5H1vWu1UxQ6sXUY=;
+        b=OHXOdKn+cXhpADEXdPwu+M+RxusFM/rrvNzj1vkwk2fQklVuj2+i+MHcSvKSsFoSvM
+         i4Ful07AMjPKy5SVBrWOLrfjLgspfqS2QVEvWXqZBfb9whNgE/ofkQFoBK6UqB/mjo/n
+         pTwPKyQNw459Izv70vjkOuEf9DSsVq22iH//kIRGD6QDb6JkdpkAWL7dNhzoZTyYiIyG
+         4Xdv0VGtYeMgC+xzAVnYUj3T5o5dvwUtLv5piFVPjvjwcXmqHSjLT2Bg8mCk8ttP+K1q
+         TO40+xtgv4/zwMNWjdg9jxGPuxYa66JjcX0B+JSEkCVIi+egxsJNTnVLPED7JJMlLZW9
+         yWuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759699345; x=1760304145;
+        d=1e100.net; s=20230601; t=1759699347; x=1760304147;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zr9vg9+dbl377j7bj7cPlJqbhOg0YG22m54UFPy9WZs=;
-        b=EY0Ie1DEIAbqMCtHzP6ET/kBb+wMGdkjYjPT3mu+HWzQrSi/79DQAsNlqfoHS+Jq6S
-         noZ2fGYvnztGzRsU27d3GrMrHo4O3bfBJY/YY0lG0T7VC9E9b+jYUw1KUJIhaftYw1dq
-         nJXGPuE7+ubI5/u9BdprqZ7GyE8SR6gPKc0j6/JvKLk6AEjA7q+gAv8zu7Se6xtf+2F/
-         HKVkSeBmnLWlfa/GCzVg1//mXW3znDsyvlxqJx3rGFymgflQzLYcvUAjJ2XjCFLdUxyT
-         7SgT4h8ZYsbIBbjb49dfulQ7cJWVN/EjHawg/0Z/Yg1imvfgAmnYUWXxhgJjEofmUvz7
-         ZAQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUx5FfnogSjePjTJlR98DyIxswLtITWNQt+YQksVu5ke0UvXtUtvLgggUfPrrIcdILan327@lists.linux.dev
-X-Gm-Message-State: AOJu0Yywwf23WlYW9K60bTrkqz54AJ9SmGuRANVnV2xe1Sh21IIMyINm
-	AwWdMUidg60kDndSTSmLyfVmusN1sAKJMJFzs9FNlelQWIkfegi1P8ARxqxepOI+sfXAxL8+33E
-	ucowQmXVutw==
-X-Google-Smtp-Source: AGHT+IFEaM+mFQzGCobgqNknXJ7y1TlfovFXjd/cXa5mwCMiuAzlKf2cDvpg0Dz2Z/gtCSnKr3ofcMi/Sj1q
-X-Received: from pjbqo8.prod.google.com ([2002:a17:90b:3dc8:b0:32e:e06a:4668])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2c0e:b0:27e:f03e:c6b7
- with SMTP id d9443c01a7336-28e8d038b9cmr181830185ad.10.1759699344812; Sun, 05
- Oct 2025 14:22:24 -0700 (PDT)
-Date: Sun,  5 Oct 2025 14:22:03 -0700
+        bh=O+l/WGm8eAK1INkc4qzoRNUwkFMn5H1vWu1UxQ6sXUY=;
+        b=mtKmOgw9EPSXchMptk6A6WaMRp2wbXAwriNjlofUzVwS2QOq5kKZXRnfFBvJWSzb7Q
+         zBI7cFpXq1LHEK7VGbYk+Sc2Jy8E/TIFgTKPEW0lhylDoOfSLh8GaZqtiKPcnBHPoycZ
+         Vii/KBox7NhCKdhyy6fJUt5gzVWY35se3aya82O8XEyr1UhpQ3HByaBWmW1zJ+hQ2h1K
+         NUtQGHcoLYnRiGWFD4IZFUr24FCgCOP1rYxyy2XOmEKvBY9+IxVGyjo3DQQruVX/V9d/
+         9knLkjBl/wUw+GVyKgVLoinks5HZFJi938BFxNkw0hrYWn2NmXlWyK3AkiV5MVumB853
+         f77g==
+X-Forwarded-Encrypted: i=1; AJvYcCUz0gKgCIKiOdp2N7wt+mfO8TjFTFNf8vW1Bb/wOy5qdIC7QoblfDakJcYcGiaGywMFKbpi@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz7OfeB/W7Kv+7zjSC23BxrNuPsMYgEdWhuCUMAHTEMSV0jMVB+
+	gpl7Yb84T23Od0RIIrk4JpKtMhYjnLcO05C6dj14dy2gceQa2Z6a9KIqTns8iiWoPpvn0Tyo47u
+	eG+q4X0a6Hg==
+X-Google-Smtp-Source: AGHT+IFu3ifLGHl9t/SXSR8xeghMcMlScLbRJvVQc0sMzH1px7fbKrot0jtLZYXkZgynu4Xl7VItdjoJR39p
+X-Received: from pldb2.prod.google.com ([2002:a17:902:ed02:b0:269:6a61:3d1a])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2c7:b0:269:96ee:17d3
+ with SMTP id d9443c01a7336-28e9a6fd7c4mr106405305ad.51.1759699347119; Sun, 05
+ Oct 2025 14:22:27 -0700 (PDT)
+Date: Sun,  5 Oct 2025 14:22:04 -0700
 In-Reply-To: <20251005212212.2892175-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251005212212.2892175-1-irogers@google.com>
 X-Mailer: git-send-email 2.51.0.618.g983fd99d29-goog
-Message-ID: <20251005212212.2892175-3-irogers@google.com>
-Subject: [PATCH v7 02/11] perf llvm: Reduce LLVM initialization
+Message-ID: <20251005212212.2892175-4-irogers@google.com>
+Subject: [PATCH v7 03/11] perf dso: Move read_symbol from llvm/capstone to dso
 From: Ian Rogers <irogers@google.com>
 To: Arnaldo Carvalho de Melo <acme@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>, 
@@ -79,82 +79,355 @@ To: Arnaldo Carvalho de Melo <acme@kernel.org>, Peter Zijlstra <peterz@infradead
 	Song Liu <song@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Move the 3 LLVM initialization routines to be called in a single
-init_llvm function that has its own bool to avoid repeated
-initialization. Reduce the scope of triplet and avoid copying strings
-for x86.
+Move the read_symbol function to dso.h, make the return type const and
+add a mutable out_buf out parameter. In future changes this will allow
+a code pointer to be returned without necessary allocating memory.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/llvm.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+ tools/perf/util/capstone.c | 66 +++++-----------------------
+ tools/perf/util/dso.c      | 67 +++++++++++++++++++++++++++++
+ tools/perf/util/dso.h      |  4 ++
+ tools/perf/util/llvm.c     | 88 +++++++-------------------------------
+ 4 files changed, 97 insertions(+), 128 deletions(-)
 
-diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
-index ddc737194692..2356778955fe 100644
---- a/tools/perf/util/llvm.c
-+++ b/tools/perf/util/llvm.c
-@@ -74,6 +74,17 @@ void dso__free_a2l_llvm(struct dso *dso __maybe_unused)
- 	/* Nothing to free. */
+diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+index 01e47d5c8e3e..c23df911e91c 100644
+--- a/tools/perf/util/capstone.c
++++ b/tools/perf/util/capstone.c
+@@ -215,55 +215,6 @@ static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
  }
+ #endif
  
-+static void init_llvm(void)
-+{
-+	static bool init;
-+
-+	if (!init) {
-+		LLVMInitializeAllTargetInfos();
-+		LLVMInitializeAllTargetMCs();
-+		LLVMInitializeAllDisassemblers();
-+		init = true;
-+	}
-+}
- 
- #if defined(HAVE_LIBLLVM_SUPPORT)
- struct find_file_offset_data {
-@@ -184,7 +195,6 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
- 	u64 len;
- 	u64 pc;
- 	bool is_64bit;
--	char triplet[64];
- 	char disasm_buf[2048];
- 	size_t disasm_len;
- 	struct disasm_line *dl;
-@@ -197,26 +207,25 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+-#ifdef HAVE_LIBCAPSTONE_SUPPORT
+-static u8 *
+-read_symbol(const char *filename, struct map *map, struct symbol *sym,
+-	    u64 *len, bool *is_64bit)
+-{
+-	struct dso *dso = map__dso(map);
+-	struct nscookie nsc;
+-	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 end = map__rip_2objdump(map, sym->end);
+-	int fd, count;
+-	u8 *buf = NULL;
+-	struct find_file_offset_data data = {
+-		.ip = start,
+-	};
+-
+-	*is_64bit = false;
+-
+-	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
+-	fd = open(filename, O_RDONLY);
+-	nsinfo__mountns_exit(&nsc);
+-	if (fd < 0)
+-		return NULL;
+-
+-	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
+-			    is_64bit) == 0)
+-		goto err;
+-
+-	*len = end - start;
+-	buf = malloc(*len);
+-	if (buf == NULL)
+-		goto err;
+-
+-	count = pread(fd, buf, *len, data.offset);
+-	close(fd);
+-	fd = -1;
+-
+-	if ((u64)count != *len)
+-		goto err;
+-
+-	return buf;
+-
+-err:
+-	if (fd >= 0)
+-		close(fd);
+-	free(buf);
+-	return NULL;
+-}
+-#endif
+-
+ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 				 struct symbol *sym __maybe_unused,
+ 				 struct annotate_args *args __maybe_unused)
+@@ -271,13 +222,17 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ #ifdef HAVE_LIBCAPSTONE_SUPPORT
+ 	struct annotation *notes = symbol__annotation(sym);
+ 	struct map *map = args->ms.map;
++	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 len;
+ 	u64 offset;
+ 	int i, count, free_count;
+ 	bool is_64bit = false;
+ 	bool needs_cs_close = false;
+-	u8 *buf = NULL;
++	/* Malloc-ed buffer containing instructions read from disk. */
++	u8 *code_buf = NULL;
++	/* Pointer to code to be disassembled. */
++	const u8 *buf;
++	u64 buf_len;
+ 	csh handle;
+ 	cs_insn *insn = NULL;
+ 	char disasm_buf[512];
+@@ -287,7 +242,8 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
  	if (args->options->objdump_path)
  		return -1;
  
--	LLVMInitializeAllTargetInfos();
--	LLVMInitializeAllTargetMCs();
--	LLVMInitializeAllDisassemblers();
--
- 	buf = read_symbol(filename, map, sym, &len, &is_64bit);
+-	buf = read_symbol(filename, map, sym, &len, &is_64bit);
++	buf = dso__read_symbol(dso, filename, map, sym,
++			       &code_buf, &buf_len, &is_64bit);
  	if (buf == NULL)
  		return -1;
  
-+	init_llvm();
- 	if (arch__is(args->arch, "x86")) {
--		if (is_64bit)
--			scnprintf(triplet, sizeof(triplet), "x86_64-pc-linux");
--		else
--			scnprintf(triplet, sizeof(triplet), "i686-pc-linux");
-+		const char *triplet = is_64bit ? "x86_64-pc-linux" : "i686-pc-linux";
-+
-+		disasm = LLVMCreateDisasm(triplet, &storage, /*tag_type=*/0,
-+					  /*get_op_info=*/NULL, symbol_lookup_callback);
- 	} else {
-+		char triplet[64];
-+
- 		scnprintf(triplet, sizeof(triplet), "%s-linux-gnu",
- 			  args->arch->name);
-+		disasm = LLVMCreateDisasm(triplet, &storage, /*tag_type=*/0,
-+					  /*get_op_info=*/NULL, symbol_lookup_callback);
+@@ -316,7 +272,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 
+ 	needs_cs_close = true;
+ 
+-	free_count = count = cs_disasm(handle, buf, len, start, len, &insn);
++	free_count = count = cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
+ 	for (i = 0, offset = 0; i < count; i++) {
+ 		int printed;
+ 
+@@ -340,7 +296,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
  	}
  
--	disasm = LLVMCreateDisasm(triplet, &storage, 0, NULL,
--				  symbol_lookup_callback);
- 	if (disasm == NULL)
- 		goto err;
+ 	/* It failed in the middle: probably due to unknown instructions */
+-	if (offset != len) {
++	if (offset != buf_len) {
+ 		struct list_head *list = &notes->src->source;
  
+ 		/* Discard all lines and fallback to objdump */
+@@ -359,7 +315,7 @@ int symbol__disassemble_capstone(const char *filename __maybe_unused,
+ 		if (free_count > 0)
+ 			cs_free(insn, free_count);
+ 	}
+-	free(buf);
++	free(code_buf);
+ 	return count < 0 ? count : 0;
+ 
+ err:
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index 282e3af85d5a..87d075942de6 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -1798,3 +1798,70 @@ bool is_perf_pid_map_name(const char *dso_name)
+ 
+ 	return perf_pid_map_tid(dso_name, &tid);
+ }
++
++struct find_file_offset_data {
++	u64 ip;
++	u64 offset;
++};
++
++/* This will be called for each PHDR in an ELF binary */
++static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
++{
++	struct find_file_offset_data *data = arg;
++
++	if (start <= data->ip && data->ip < start + len) {
++		data->offset = pgoff + data->ip - start;
++		return 1;
++	}
++	return 0;
++}
++
++const u8 *dso__read_symbol(struct dso *dso, const char *symfs_filename,
++			   const struct map *map, const struct symbol *sym,
++			   u8 **out_buf, u64 *out_buf_len, bool *is_64bit)
++{
++	struct nscookie nsc;
++	u64 start = map__rip_2objdump(map, sym->start);
++	u64 end = map__rip_2objdump(map, sym->end);
++	int fd, count;
++	u8 *buf = NULL;
++	size_t len;
++	struct find_file_offset_data data = {
++		.ip = start,
++	};
++
++	*out_buf = NULL;
++	*out_buf_len = 0;
++	*is_64bit = false;
++
++	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
++	fd = open(symfs_filename, O_RDONLY);
++	nsinfo__mountns_exit(&nsc);
++	if (fd < 0)
++		return NULL;
++
++	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data, is_64bit) == 0)
++		goto err;
++
++	len = end - start;
++	buf = malloc(len);
++	if (buf == NULL)
++		goto err;
++
++	count = pread(fd, buf, len, data.offset);
++	close(fd);
++	fd = -1;
++
++	if ((u64)count != len)
++		goto err;
++
++	*out_buf = buf;
++	*out_buf_len = len;
++	return buf;
++
++err:
++	if (fd >= 0)
++		close(fd);
++	free(buf);
++	return NULL;
++}
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index fd8e95de77f7..f8ccb9816b89 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -924,4 +924,8 @@ static inline struct debuginfo *dso__debuginfo(struct dso *dso)
+ 	return debuginfo__new(dso__long_name(dso));
+ }
+ 
++const u8 *dso__read_symbol(struct dso *dso, const char *symfs_filename,
++			   const struct map *map, const struct symbol *sym,
++			   u8 **out_buf, u64 *out_buf_len, bool *is_64bit);
++
+ #endif /* __PERF_DSO */
+diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+index 2356778955fe..0369f3adcdb6 100644
+--- a/tools/perf/util/llvm.c
++++ b/tools/perf/util/llvm.c
+@@ -86,72 +86,6 @@ static void init_llvm(void)
+ 	}
+ }
+ 
+-#if defined(HAVE_LIBLLVM_SUPPORT)
+-struct find_file_offset_data {
+-	u64 ip;
+-	u64 offset;
+-};
+-
+-/* This will be called for each PHDR in an ELF binary */
+-static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
+-{
+-	struct find_file_offset_data *data = arg;
+-
+-	if (start <= data->ip && data->ip < start + len) {
+-		data->offset = pgoff + data->ip - start;
+-		return 1;
+-	}
+-	return 0;
+-}
+-
+-static u8 *
+-read_symbol(const char *filename, struct map *map, struct symbol *sym,
+-	    u64 *len, bool *is_64bit)
+-{
+-	struct dso *dso = map__dso(map);
+-	struct nscookie nsc;
+-	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 end = map__rip_2objdump(map, sym->end);
+-	int fd, count;
+-	u8 *buf = NULL;
+-	struct find_file_offset_data data = {
+-		.ip = start,
+-	};
+-
+-	*is_64bit = false;
+-
+-	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
+-	fd = open(filename, O_RDONLY);
+-	nsinfo__mountns_exit(&nsc);
+-	if (fd < 0)
+-		return NULL;
+-
+-	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
+-			    is_64bit) == 0)
+-		goto err;
+-
+-	*len = end - start;
+-	buf = malloc(*len);
+-	if (buf == NULL)
+-		goto err;
+-
+-	count = pread(fd, buf, *len, data.offset);
+-	close(fd);
+-	fd = -1;
+-
+-	if ((u64)count != *len)
+-		goto err;
+-
+-	return buf;
+-
+-err:
+-	if (fd >= 0)
+-		close(fd);
+-	free(buf);
+-	return NULL;
+-}
+-#endif
+-
+ /*
+  * Whenever LLVM wants to resolve an address into a symbol, it calls this
+  * callback. We don't ever actually _return_ anything (in particular, because
+@@ -191,8 +125,11 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	struct map *map = args->ms.map;
+ 	struct dso *dso = map__dso(map);
+ 	u64 start = map__rip_2objdump(map, sym->start);
+-	u8 *buf;
+-	u64 len;
++	/* Malloc-ed buffer containing instructions read from disk. */
++	u8 *code_buf = NULL;
++	/* Pointer to code to be disassembled. */
++	const u8 *buf;
++	u64 buf_len;
+ 	u64 pc;
+ 	bool is_64bit;
+ 	char disasm_buf[2048];
+@@ -207,7 +144,8 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	if (args->options->objdump_path)
+ 		return -1;
+ 
+-	buf = read_symbol(filename, map, sym, &len, &is_64bit);
++	buf = dso__read_symbol(dso, filename, map, sym,
++			       &code_buf, &buf_len, &is_64bit);
+ 	if (buf == NULL)
+ 		return -1;
+ 
+@@ -259,14 +197,18 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 	annotation_line__add(&dl->al, &notes->src->source);
+ 
+ 	pc = start;
+-	for (u64 offset = 0; offset < len; ) {
++	for (u64 offset = 0; offset < buf_len; ) {
+ 		unsigned int ins_len;
+ 
+ 		storage.branch_addr = 0;
+ 		storage.pcrel_load_addr = 0;
+ 
+-		ins_len = LLVMDisasmInstruction(disasm, buf + offset,
+-						len - offset, pc,
++		/*
++		 * LLVM's API has the code be disassembled as non-const, cast
++		 * here as we may be disassembling from mapped read-only memory.
++		 */
++		ins_len = LLVMDisasmInstruction(disasm, (u8 *)(buf + offset),
++						buf_len - offset, pc,
+ 						disasm_buf, sizeof(disasm_buf));
+ 		if (ins_len == 0)
+ 			goto err;
+@@ -324,7 +266,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 
+ err:
+ 	LLVMDisasmDispose(disasm);
+-	free(buf);
++	free(code_buf);
+ 	free(line_storage);
+ 	return ret;
+ #else // HAVE_LIBLLVM_SUPPORT
 -- 
 2.51.0.618.g983fd99d29-goog
 
