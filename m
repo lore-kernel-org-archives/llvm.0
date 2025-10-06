@@ -1,49 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02061D61A3;
-	Mon,  6 Oct 2025 19:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4656E23D283;
+	Mon,  6 Oct 2025 19:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759777706; cv=none; b=ZlE6mvjrqMW8l0X0JbL6pGtmekn0jEv4TY/egC+i0xqaORBvNbQW4xvk6mHCRgHM0vaKoVBl/PdiLRTPXg9rH8GW1OJlncypvFjplIj8jz/uGi1VOCVPjiOWM9313/bk9etO53B42Sd0emmRjoHfcEpKd0Udv2286dxmRBK7TA0=
+	t=1759780214; cv=none; b=cTpxnah/vPW70HtOOGPk6ljJMLGUDyD8iatJvqOgrkaYTqZAvdS3vZzBPs2OZ2COUeb/gwiNx4EuVvysnHyvYiOMZ4mR8DZyn1aQ6FMQgYs6B1dI8TbbpSzMnn/RRaY+GIye4KNlIhkmIXscZbtHLNyl6NxDXaij7Ztuu7rsQY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759777706; c=relaxed/simple;
-	bh=y7eB5Aq5t61EIBq8FizZqyAOn5r9BRoMjG9Gdpz6Tzo=;
+	s=arc-20240116; t=1759780214; c=relaxed/simple;
+	bh=1iSszkCi0lUsH8176NlUocZ21Z72m+lJn69XxPCJEoI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vh3isF4Yv3iGI3vZ07VmtjLteKX6M/sEhSr5V/C7b2gs3H6nh4G7XV6aapuuOrtab9Ps8Mq0uce8dmpqATDtdfdzFUGsA8x2b+CWlNDb6aVPOWHjZh1UbLIGs80xEN316jrpmsFcHeMyr/ZJyTnMattvo96djDEYmt8Ag6sh3f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uD8hJPWF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZD3Brqo9/TUqUWtUwxBr50X5ziX/u4G+K1UPLzr9rUxad14qYk+7q6bt9FTM77ukmpmwvxs8PEXIQ13Kg8IitrYaOyTcx2qQUVfPEPb/tc4BnGUrSJKWacbWHq/A/NCtVlQUEde4Gl4Q95SH77VUqpamuy0hHDL2s9oimMGX+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OWMID7o4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uD8hJPWF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD38C4CEF5;
-	Mon,  6 Oct 2025 19:08:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OWMID7o4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45027C4CEF5;
+	Mon,  6 Oct 2025 19:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759777705;
-	bh=y7eB5Aq5t61EIBq8FizZqyAOn5r9BRoMjG9Gdpz6Tzo=;
+	s=k20201202; t=1759780213;
+	bh=1iSszkCi0lUsH8176NlUocZ21Z72m+lJn69XxPCJEoI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uD8hJPWFbKLdWtulj5XUIgCrgpIcXYfvHT3M5zcTUwJx1jEWY9+hLIGQtBcBkAUmw
-	 aw6NdNg7CAlhFc2cpBwi7dDlXnRBv6CeW0mahR9pAxsbLsG6z/uQvR2nBsDicZgIhc
-	 Wp7PA+XsGZG4KcPFfEFda/4JIgRQsRyorjpZOI1MeAFcgefs+fuBvBxe0YFFHwicea
-	 ETsv4DZwn81arKsESHcZ9H4om40CElC0vToQ9HpDxiqOBFw6xz1Nl9IxwwStJkn2E3
-	 JCUoblTAm/VMMN75XQyLiCL81CvjUtiRxD0Axr83xKYZHe8/kreEvJR27D6hnhZNY3
-	 L2JuBxXk++h2Q==
-Date: Mon, 6 Oct 2025 12:08:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: kernel test robot <lkp@intel.com>, ilpo.jarvinen@linux.intel.com,
-	hdegoede@redhat.com, chumuzero@gmail.com, corbet@lwn.net,
-	cs@tuxedo.de, wse@tuxedocomputers.com, ggo@tuxedocomputers.com,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, rdunlap@infradead.org,
-	alok.a.tiwari@oracle.com, linux-leds@vger.kernel.org,
-	lee@kernel.org, pobrn@protonmail.com
-Subject: Re: [PATCH v4 1/2] platform/x86: Add Uniwill laptop driver
-Message-ID: <20251006190819.GA2406882@ax162>
-References: <20250928013253.10869-2-W_Armin@gmx.de>
- <202509290415.uez00SgW-lkp@intel.com>
- <6146d57b-f855-40b1-a644-3af6b28ceea4@gmx.de>
- <20251002233627.GA3978676@ax162>
- <402f254d-7217-43e8-867f-66daab3ead86@gmx.de>
+	b=OWMID7o46St1R1+e0u5oT4umgvC68KNxBuravp+B8wpfonMdKXT9qBusGxzqwlPOk
+	 exl+2XlaU3lO+3s/J87tm9rI/ekPmtjbl9mXvQ6niADFoK22h4ERHExmRJaZZhXPkE
+	 swG1I4XLzsvJANxJbMv/GQIKR1M/IRkOKaTjcX3SGGZbCm5TJZHo/1qRG0JcLj7ShR
+	 EBmo2MbKxcXj1EOZfMZJQwxdPLkGjzjxgfuwAZ5BLdV+azPs3aMABvzRHujRQxTVc6
+	 FA5BqB4f/5jYRRppMA8Xvq300ALFyeOP4LpgxD0N3L1drNd/5ILSfFSSZDU779YW5o
+	 +GbqkomIyBBaA==
+Date: Mon, 6 Oct 2025 16:50:10 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/9] perf build: Support building with Clang
+Message-ID: <aOQdcvW6jURCV8pF@x1>
+References: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,27 +53,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <402f254d-7217-43e8-867f-66daab3ead86@gmx.de>
+In-Reply-To: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
 
-On Sun, Oct 05, 2025 at 08:06:57PM +0200, Armin Wolf wrote:
-> Am 03.10.25 um 01:36 schrieb Nathan Chancellor:
+On Mon, Oct 06, 2025 at 05:21:22PM +0100, Leo Yan wrote:
+> This series adds support for building perf with Clang, following the
+> discussion in [1]. Because the Android NDK uses Clang by default,
+> enabling Clang builds naturally covers Android as well.
 > 
-> > Hi Armin,
-> > 
-> > On Thu, Oct 02, 2025 at 08:41:19PM +0200, Armin Wolf wrote:
-> > > i think this is a problem inside the clang compiler. I did not encounter this warning when
-> > > build for x86-64 using gcc.
-> > Clang is actually saving you from yourself, it is a bug in GCC that it
-> > does not warn for this:
-> > 
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
+> The series is organized as follows:
 > 
-> Oh my, i didn't expect that. Thank you for explaining this issue to to me,
-> it seems that i still have much to learn.
+>   - Patches 1~2: Fix two bugs found with Clang.
+>   - Patches 3~7: Correct CROSS_ARCH, Disable thread safety analysis for
+>                  perl header, and dismiss Clang build warnings.
+>   - Patches 8~9: Enable Clang in the Makefile and update the
+>                  documentation.
+> 
+> Testing:
+> 
+> Tested with linux-tools-container-builds [2], which based on Arnaldo's
+> build test container but with several fixes for cross building with
+> Clang:
+> 
+>   - All clang native builds on x86_64 have passed.
+>   - The cross builds for arm64/mips/mips64/mipsel/riscv64 have passed.
+> 
+> Only a pity thing is I cannot build successfully with clang for
+> ubuntu:20.04-x-powerpc64el (in below log, it only builds with GCC).
+> The cross config does not work well on Ubuntu 20.04 due to failure
+> "No gnu/libc-version.h found, please install glibc-dev[el]". I confirmed
+> that powerpc64el cross build can make success on Ubuntu 24.04, the
+> failure on Ubuntu 20.04 should not be caused by perf build.
 
-In your defense, it is quite a subtle interaction. It is probably worth
-throwing something in the documentation that explicitly calls this out,
-though I am not immediately sure of where...
+Thaanks, applied, testing it.
 
-Cheers,
-Nathan
+- Arnaldo
