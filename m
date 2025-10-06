@@ -1,206 +1,229 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3B6B661;
-	Mon,  6 Oct 2025 18:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0CC418DF89;
+	Mon,  6 Oct 2025 18:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759774719; cv=none; b=ogefgl+wQGwhFP57m1aAkN2cRo9R9lNaCGSJN0DqcV/CvDoUIO7FEQ4Lm95s7oYf47BqnT+V7rK9bSVy0tD78nMVbhaoEF2SV8dfo7g9A7jJdC6q2LdoFUcemXIFF+gw/2zZq9YvQVnf6NM6Rxs20qOCSYNzW4tnL8vQZZAotGI=
+	t=1759775954; cv=none; b=VcKvqygXFjhJRNanqH9bCYa6zqQkfeyqUOs+b+Yf9Z3Lxk8sWgWJ+n6g7yxtyv3me5QOC3HGrz+p2MZblAMCgwODm64zypDf+Ua8Xng6VaXSfjNbOQIE3OR3BTyfr8UVpWDN2BEVn43te0Ymwy+6xx4h0WLKjGHW1vTIPgD3RLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759774719; c=relaxed/simple;
-	bh=R1mnFJVtirenhdP0X3we1THI4lBu0uptnlr13foqCDM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=clqfpMeJ1PAX58fM4DbQIet8ErRrul+0rNVFX+lPFHCRpHiI9kMwFevewjNoeRgssruRtXCfLoTPynCn/BD4sF95Gn/JSmOJ0A29yu7O4JRrdS1IKOIbOLxfQuLRyNH8PSJOqj1R3QjaLIMPDOF3qik4sxLLM9bBEmwwgZ1sVTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNaEequq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759775954; c=relaxed/simple;
+	bh=ZYBGbMiAvRmmZykI4RviAOYJTMl4sMmYDh/NDlSP5v4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lY9WCYi2CFteH1sQ5g4GQOWH8iEAQJM3+NO6QQluwQtVcQIGp5qtawfR8al+RaqrARDFj6xpd5Zm1e1y4KGgWGaXNwT+YzPwpwAjyByUxRHA9oIGegdlvhMhhxaIR+rWNxaSJ4C6QPYOO7lR+ClPSiZfb7v5s9f28ZCWN1xLzDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YzHuEdSi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNaEequq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE2AC4CEF5;
-	Mon,  6 Oct 2025 18:18:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YzHuEdSi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01326C4CEF5;
+	Mon,  6 Oct 2025 18:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759774718;
-	bh=R1mnFJVtirenhdP0X3we1THI4lBu0uptnlr13foqCDM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZNaEequq2D2ioKzjjSX7bUj37yiPmvXpvCGGcdC3D12R+4l73kYNQ6EhLAJ/QVe7V
-	 xAY2WEvF8XoHAc+oq8yVOZ67gBrNzilojtJtv4vvTXu2gyqkxc06rYrEwLUC1esE7m
-	 D4F1yYnY8F+f8bU5A+4xsQsw5Zk2S2C/H0gsFYqXrlZerB3zVRBw9XjgtwDI5P0PrI
-	 aT05szO8qhQvlBZw0xC9Dmj2JFN1aRcw8IpO9AnPHAiSHtzPzjCL4dUiP/LWr8kqJr
-	 NmjDJX9sHYSnFGAok6TX6nmVwYPwue+dNw80WmRaF0wj0/S5gqmM2OaV8zfyldN5PE
-	 WXDjEIQ+al6EQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Sasha Levin <sashal@kernel.org>,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.17-5.4] x86/build: Remove cc-option from stack alignment flags
-Date: Mon,  6 Oct 2025 14:17:33 -0400
-Message-ID: <20251006181835.1919496-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	s=k20201202; t=1759775953;
+	bh=ZYBGbMiAvRmmZykI4RviAOYJTMl4sMmYDh/NDlSP5v4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YzHuEdSitbPTGtmCA65o2wQDu+REURCt5h4LPkEvkXD5P4NhaqWSkHCNJwl+hMjeV
+	 WNyaLAHLHD9/datVmp5o/TDHkgOAZcx8uObwGR8tGBMSS7/1ncCJwTOObiE1EcKwel
+	 qsA3bxRSnsA0In8+tUZAocRvq5ZNK1I/A+cAYXiJMzkpVta9xTp0O27LoamAEJq4mv
+	 qfUZ7f9zArShyb6oLloRDR9+WWMMGhXmMKg/5Panwz3Iz7CGUoMTBfU8Pcgd3HFTof
+	 ZltJxPpsnax8JAS/XSzAenZGgZ7uGzD7b/Aqn71Fqw3BVUwJgkgN+2g3XPl18zyP7J
+	 DyFKsxkIyqP4w==
+Date: Mon, 6 Oct 2025 15:39:10 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Collin Funk <collin.funk1@gmail.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Athira Rajeev <atrajeev@linux.ibm.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Haibo Xu <haibo1.xu@intel.com>, Andi Kleen <ak@linux.intel.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Song Liu <song@kernel.org>
+Subject: Re: [PATCH v7 00/11] Capstone/llvm improvements + dlopen support
+Message-ID: <aOQMzhBqoL8qs5t2@x1>
+References: <20251005212212.2892175-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.17.1
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251005212212.2892175-1-irogers@google.com>
 
-From: Nathan Chancellor <nathan@kernel.org>
+On Sun, Oct 05, 2025 at 02:22:01PM -0700, Ian Rogers wrote:
+> Linking against libcapstone and libLLVM can be a significant increase
+> in dependencies and file size if building statically. For something
+> like `perf record` the disassembler and addr2line functionality won't
+> be used. Support dynamically loading these libraries using dlopen and
+> then calling the appropriate functions found using dlsym.
+> 
+> The patch series:
+> 1) feature check libLLVM support and avoid always reinitializing the
+>    disassembler.
+> 2) adds BPF JIT disassembly support to in memory disassemblers (LLVM
+>    and capstone) by just directing them at the BPF info linear JIT
+>    instructions (note this doesn't support source lines);
+> 3) adds fallback to srcline's addr2line so that llvm_addr2line is
+>    tried first, then the deprecated libbfd and then the forked command
+>    tried next, moving the code for forking out of the main srcline.c
+>    file in the process.
+> 4) adds perf_ variants of the capstone/llvm functions that will either
+>    directly call the function or use dlsym to discover it;
+> 
+> The addr2line LLVM functionality is written in C++. To avoid linking
+> against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
+> the C++ code with the libLLVM dependency will be built into a
+> libperf-llvm.so and that dlsym-ed and called against. Ideally LLVM
+> would extend their C API to avoid this.
+> 
+> v7: Refactor now the first 5 patches, that largely moved code around,
+>     have landed. Move the dlopen code to the end of the series so that
+>     the first 8 patches can be picked improving capstone/LLVM support
 
-[ Upstream commit d87208128a3330c0eab18301ab39bdb419647730 ]
+So I tentatively picked the first 8 patches, will test it now, hopefully
+we can go with it to have BPF annotation...
 
-'-mpreferred-stack-boundary' (the GCC option) and '-mstack-alignment'
-(the clang option) have been supported in their respective compilers for
-some time, so it is unnecessary to check for support for them via
-cc-option. '-mpreferred-stack-boundary=3' had a restriction on
-'-mno-sse' until GCC 7.1 but that is irrelevant for most of the kernel,
-which includes '-mno-sse'.
+Wait, will try to fix this one:
 
-Move to simple Kconfig checks to avoid querying the compiler for the
-flags that it supports.
+⬢ [acme@toolbx perf-tools-next]$ git log --oneline -1 ; time make -C tools/perf build-test
+                 make_static: cd . && make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 NO_LIBTRACEEVENT=1 NO_LIBELF=1 -j32  DESTDIR=/tmp/tmp.w26bDGykTM
+cd . && make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 NO_LIBTRACEEVENT=1 NO_LIBELF=1 -j32 DESTDIR=/tmp/tmp.w26bDGykTM
+  BUILD:   Doing 'make -j32' parallel build
+<SNIP>
+Auto-detecting system features:
+...                                   libdw: [ OFF ]
+...                                   glibc: [ on  ]
+...                                  libelf: [ OFF ]
+...                                 libnuma: [ OFF ]
+...                  numa_num_possible_cpus: [ OFF ]
+...                               libpython: [ OFF ]
+...                             libcapstone: [ OFF ]
+...                               llvm-perf: [ OFF ]
+...                                    zlib: [ OFF ]
+...                                    lzma: [ OFF ]
+...                               get_cpuid: [ on  ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ OFF ]
+<SNIP>
+ CC      tests/api-io.o
+  CC      util/sha1.o
+  CC      util/smt.o
+  LD      util/intel-pt-decoder/perf-util-in.o
+  CC      tests/demangle-java-test.o
+  CC      util/strbuf.o
+  CC      util/string.o
+  CC      tests/demangle-ocaml-test.o
+  CC      util/strlist.o
+  CC      tests/demangle-rust-v0-test.o
+  CC      tests/pfm.o
+  CC      tests/parse-metric.o
+  CC      util/strfilter.o
+  CC      tests/pe-file-parsing.o
+util/llvm.c: In function ‘init_llvm’:
+util/llvm.c:78:17: error: implicit declaration of function ‘LLVMInitializeAllTargetInfos’ [-Wimplicit-function-declaration]
+   78 |                 LLVMInitializeAllTargetInfos();
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+util/llvm.c:79:17: error: implicit declaration of function ‘LLVMInitializeAllTargetMCs’ [-Wimplicit-function-declaration]
+   79 |                 LLVMInitializeAllTargetMCs();
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+util/llvm.c:80:17: error: implicit declaration of function ‘LLVMInitializeAllDisassemblers’ [-Wimplicit-function-declaration]
+   80 |                 LLVMInitializeAllDisassemblers();
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+util/llvm.c: At top level:
+util/llvm.c:73:13: error: ‘init_llvm’ defined but not used [-Werror=unused-function]
+   73 | static void init_llvm(void)
+      |             ^~~~~~~~~
+cc1: all warnings being treated as errors
+  CC      tests/expand-cgroup.o
+  CC      util/top.o
+  CC      tests/perf-time-to-tsc.o
+  CC      util/usage.o
+make[6]: *** [/home/acme/git/perf-tools-next/tools/build/Makefile.build:86: util/llvm.o] Error 1
+make[6]: *** Waiting for unfinished jobs....
+  CC      tests/dlfilter-test.o
+  CC      tests/sigtrap.o
+  CC      tests/event_groups.o
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/20250814-x86-min-ver-cleanups-v1-2-ff7f19457523@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
 
-LLM Generated explanations, may be completely bogus:
-
-Based on my comprehensive analysis of this commit, here is my
-determination:
-
-## Backport Status: NO
-
-### Extensive Analysis
-
-**Commit Context:**
-- Upstream commit: d87208128a3330c0eab18301ab39bdb419647730 (August 14,
-  2025)
-- Author: Nathan Chancellor
-- Part of patch series: "x86-min-ver-cleanups-v1"
-- Already backported to 6.17 stable as 8be33f616f1c4 via AUTOSEL
-  (Automatic Stable Election)
-- Target tree: linux-autosel-6.17 (kernel 6.17)
-
-**What the Commit Does:**
-The commit removes runtime compiler capability checks (`cc-option`) for
-stack alignment flags and replaces them with build-time Kconfig checks:
-- For GCC: Uses `CONFIG_CC_IS_GCC` to unconditionally set `-mpreferred-
-  stack-boundary=2/3`
-- For Clang: Uses `CONFIG_CC_IS_CLANG` to unconditionally set `-mstack-
-  alignment=4/8`
-
-**Code Changes Analysis:**
-```makefile
-# OLD: Runtime check if compiler supports the flags
--ifneq ($(call cc-option, -mpreferred-stack-boundary=4),)
-+ifdef CONFIG_CC_IS_GCC
-       cc_stack_align4 := -mpreferred-stack-boundary=2
-       cc_stack_align8 := -mpreferred-stack-boundary=3
--else ifneq ($(call cc-option, -mstack-alignment=16),)
-+endif
-+ifdef CONFIG_CC_IS_CLANG
-       cc_stack_align4 := -mstack-alignment=4
-       cc_stack_align8 := -mstack-alignment=8
- endif
-```
-
-**Dependency Analysis:**
-- Requires minimum GCC 8.1 for x86 (introduced in v6.15 via commit
-  a3e8fe814ad1)
-- Requires minimum Clang 15.0.0 for x86 (commit 7861640aac52b)
-- Both requirements are satisfied in 6.17 stable tree (verified via
-  scripts/min-tool-version.sh)
-- GCC 7.1+ supports `-mpreferred-stack-boundary=3` with `-msse` (per GCC
-  commit 34fac449e121)
-
-**Evaluation Against Stable Kernel Rules:**
-
-According to Documentation/process/stable-kernel-rules.rst, stable
-patches must:
-
-1. ✅ **Already exist in mainline**: YES -
-   d87208128a3330c0eab18301ab39bdb419647730
-2. ✅ **Obviously correct and tested**: YES - simple Makefile change, no
-   issues found
-3. ✅ **Not bigger than 100 lines**: YES - only 5 lines changed (3
-   insertions, 2 deletions)
-4. ✅ **Follow submitting-patches.rst rules**: YES
-5. ❌ **Fix a real bug or add device ID**: **NO - This is the critical
-   failure**
-
-The rules explicitly state (lines 15-31 of stable-kernel-rules.rst):
-> "It must either fix a real bug that bothers people or just add a
-device ID."
-
-This commit:
-- Does **NOT** fix a bug (no oops, hang, data corruption, security
-  issue, build error, etc.)
-- Is a **cleanup/optimization** to improve build performance
-- Provides **no user-visible bug fix**
-- Falls under "trivial fixes without benefit for users" category (rule
-  line 30-31)
-- The original author did **NOT** tag it with `Cc:
-  stable@vger.kernel.org`
-
-**Search for Issues/Regressions:**
-- Searched Linux kernel mailing lists: No issues found
-- Searched for reverts: None found
-- Searched for build failures: None reported
-- Part of systematic cleanup series with no reported problems
-
-**Risk Assessment:**
-- **Technical risk**: Very low - simple change, dependencies satisfied
-- **Regression risk**: Very low - no functionality change, just build
-  system optimization
-- **Policy compliance**: **Does not meet stable kernel criteria**
-
-### Conclusion
-
-While this commit is technically safe and provides a marginal build-time
-performance improvement by eliminating unnecessary runtime compiler
-checks, **it does not meet the fundamental requirement for stable kernel
-backporting**: it does not fix a bug that affects users.
-
-The commit is purely a cleanup that removes obsolete code after compiler
-minimum version requirements were raised. Such cleanups belong in
-mainline development, not stable trees, which should focus exclusively
-on fixing bugs that impact users.
-
-The fact that it was auto-selected by AUTOSEL does not override the
-documented stable kernel rules. This commit should be **rejected** from
-stable backporting or **reverted** if already applied.
-
- arch/x86/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 1913d342969ba..7cfc1b31f17e1 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -37,10 +37,11 @@ export RETPOLINE_VDSO_CFLAGS
- 
- # For gcc stack alignment is specified with -mpreferred-stack-boundary,
- # clang has the option -mstack-alignment for that purpose.
--ifneq ($(call cc-option, -mpreferred-stack-boundary=4),)
-+ifdef CONFIG_CC_IS_GCC
-       cc_stack_align4 := -mpreferred-stack-boundary=2
-       cc_stack_align8 := -mpreferred-stack-boundary=3
--else ifneq ($(call cc-option, -mstack-alignment=16),)
-+endif
-+ifdef CONFIG_CC_IS_CLANG
-       cc_stack_align4 := -mstack-alignment=4
-       cc_stack_align8 := -mstack-alignment=8
- endif
--- 
-2.51.0
-
+>     without adding the dlopen code. Rename the cover letter and
+>     disassembler cleanup patches.
+> v6: Refactor the libbfd along with capstone and LLVM, previous patch
+>     series had tried to avoid this by just removing the deprecated
+>     BUILD_NONDISTRO code. Remove the libtracefs removal into its own
+>     patch.
+> v5: Rebase and comment typo fix.
+> v4: Rebase and addition of a patch removing an unused struct variable.
+> v3: Add srcline addr2line fallback trying LLVM first then forking a
+>     process. This came up in conversation with Steinar Gunderson
+>     <sesse@google.com>.
+>     Tweak the cover letter message to try to address Andi Kleen's
+>     <ak@linux.intel.com> feedback that the series doesn't really
+>     achieve anything.
+> v2: Add mangling of the function names in libperf-llvm.so to avoid
+>     potential infinite recursion. Add BPF JIT disassembly support to
+>     LLVM and capstone. Add/rebase the BUILD_NONDISTRO cleanup onto the
+>     series from:
+>     https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
+>     Some other minor additional clean up.
+> 
+> Ian Rogers (11):
+>   perf check: Add libLLVM feature
+>   perf llvm: Reduce LLVM initialization
+>   perf dso: Move read_symbol from llvm/capstone to dso
+>   perf dso: Support BPF programs in dso__read_symbol
+>   perf dso: Clean up read_symbol error handling
+>   perf disasm: Make ins__scnprintf and ins__is_nop static
+>   perf srcline: Fallback between addr2line implementations
+>   perf disasm: Remove unused evsel from annotate_args
+>   perf capstone: Support for dlopen-ing libcapstone.so
+>   perf llvm: Support for dlopen-ing libLLVM.so
+>   perf llvm: Mangle libperf-llvm.so function names
+> 
+>  tools/perf/Documentation/perf-check.txt |   1 +
+>  tools/perf/Makefile.config              |  13 +
+>  tools/perf/Makefile.perf                |  24 +-
+>  tools/perf/builtin-check.c              |   1 +
+>  tools/perf/tests/make                   |   2 +
+>  tools/perf/util/Build                   |   3 +-
+>  tools/perf/util/addr2line.c             | 439 +++++++++++++++++++++
+>  tools/perf/util/addr2line.h             |  20 +
+>  tools/perf/util/annotate.c              |   1 -
+>  tools/perf/util/capstone.c              | 352 ++++++++++++-----
+>  tools/perf/util/config.c                |   2 +-
+>  tools/perf/util/disasm.c                |  18 +-
+>  tools/perf/util/disasm.h                |   4 -
+>  tools/perf/util/dso.c                   | 112 ++++++
+>  tools/perf/util/dso.h                   |   4 +
+>  tools/perf/util/libbfd.c                |   4 +-
+>  tools/perf/util/libbfd.h                |   6 +-
+>  tools/perf/util/llvm-c-helpers.cpp      | 120 +++++-
+>  tools/perf/util/llvm-c-helpers.h        |  24 +-
+>  tools/perf/util/llvm.c                  | 374 +++++++++++++-----
+>  tools/perf/util/llvm.h                  |   3 -
+>  tools/perf/util/srcline.c               | 495 ++----------------------
+>  tools/perf/util/srcline.h               |   1 -
+>  23 files changed, 1314 insertions(+), 709 deletions(-)
+>  create mode 100644 tools/perf/util/addr2line.c
+>  create mode 100644 tools/perf/util/addr2line.h
+> 
+> -- 
+> 2.51.0.618.g983fd99d29-goog
+> 
