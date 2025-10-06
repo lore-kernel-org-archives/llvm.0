@@ -1,107 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FB615667D;
-	Mon,  6 Oct 2025 23:13:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528E52747B
+	for <llvm@lists.linux.dev>; Mon,  6 Oct 2025 23:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759792424; cv=none; b=gpazi+8AyE4ZchmZyz2N9TsloKwQ/XCeUjoagNiVLw59Dt0YIjvrJpoKsbpXmbAGb87bnWiXY4eRkXFUDYvAq6kTEfTDBP4rGrx2Ag5F2UHVQvMbXQiVRlnengBjolUOdTpGqX1PfLYaLO82GWFKYD+06Oj8elYUmfNm65yN/ro=
+	t=1759793993; cv=none; b=MRHycv/ru8YTSKRfBL1sJVSsmX2KdhFsYr90h/+KcDJvjjHQ51ITeFMrkQLBdNoulwT9Jpwn0yiXOe4mFkV9A7i97s5tEX44/V4elZ/QLZnC/RDzkBiQZqKl0jCu2Dg5VNswkGklLDRtDa8wRzRYehMefI9MlLMQ/ODibQgBEcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759792424; c=relaxed/simple;
-	bh=tLxUDT8VxXFPFnuT+CrckMnld9Zv9Ckx1PPsCInUXNw=;
+	s=arc-20240116; t=1759793993; c=relaxed/simple;
+	bh=Gns+VlYyW80ZkP3KAJMY8rFbhbpsU6HpY4D7cIcI7Ho=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a8c7aeP92caA+1FKc0SjjcgNQAhBXYGL4rn8MqHkEsYCG09jCp+H2VC85QDt2nftwo4EzRMB0gdahZna0jKQx1vP1cC2G9V3zsXH9CDI3CZgas3KJ4iVSDEgnRr1qBYTegEwTAHd6q7k095e4W0LLLyviTImW1w8/UIYWAKNXTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ANrGMgQU; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TbPNIY1QkxL0tJSCTHPT1GHH8EhgG4EgqTk8wTCd7gREMny4l0Dz3H3wPfy0LeMUoaBafPuJcAuYrxGtJFz5SZvw+ihw5Tgl23S1UiEaDoCAucgHAMO2pLDPpcVuGxMrNg2SO2W2hUpCNVdwWOYcW98Ql0Vm+2x974gF5u3bq00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=avDEjVjU; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ANrGMgQU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4797AC4CEF5;
-	Mon,  6 Oct 2025 23:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759792423;
-	bh=tLxUDT8VxXFPFnuT+CrckMnld9Zv9Ckx1PPsCInUXNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ANrGMgQUebt+vnoKrOkHX9a8pceog9ly8XuX9PtfTyjMk0YSnKnlde22xzVYIp6/v
-	 JB5y2YpQdveQSUOEb/nwuwXXKXw3DywiOGVLW9oTv3RfR/nRYbuFW1gDrzdrs+PxTD
-	 sXb0qwOD5YjT90IFApp0q8tjbnWQrtixEAlrHj8o62CdF7M7V6MIryU/QHSAE4R+WE
-	 TXQJWyhRQPOe3SHCabis8w5W7Mk3y3iFm5xDjh7O6zqp9VAlbFr1BS8cqAixQk+wjO
-	 Dz2CKHfy8gAC8+RJxz+NxSqlwu2Hr97AxJ+NBPaR8wHHyn1djSVdA42XTP8LqCMoW2
-	 ahr2/YVOldHNw==
-Date: Mon, 6 Oct 2025 19:13:39 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: patches@lists.linux.dev, stable@vger.kernel.org,
-	"Borislav Petkov (AMD)" <bp@alien8.de>, tglx@linutronix.de,
-	mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 6.17-5.4] x86/build: Remove cc-option from stack
- alignment flags
-Message-ID: <aORNI3nnm5PRvNuT@laps>
-References: <20251006181835.1919496-1-sashal@kernel.org>
- <20251006215505.GB3234160@ax162>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="avDEjVjU"
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-930cfdfabb3so287987839f.1
+        for <llvm@lists.linux.dev>; Mon, 06 Oct 2025 16:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1759793991; x=1760398791; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I9TZOyB/EMo09OKq3vpFLrmNzk6bmCMZmlPS+l7lrX4=;
+        b=avDEjVjUrRh9h4BXjSdjxcJKI/vRSSQI1NoyzBFwAOVYmreH3YB19HjxU3TGqVQkvb
+         vUFbu5Yy00ikHXPz0KFbCJDmuC3aqa++d1n6rWh2mFjTc/NIWnzBCcTOs07b8FeR/mgw
+         4+9MhbQCoYX0qIU6LqSiZwt7DgfjZ5slVnizRD2c2vwzWPXGQUrssfqwP5dO3aIdGv/0
+         DBXIR0zrx0lLYfPktL7Gxq1N/x+IAcKSOV7jansFMfLPC26SNhGFhP0gXUWjjIa7Wc0I
+         wsquYPDioXLrJAYpCvOjg6Ia1r7xf3ETM1VJ3RvvjRZd19qILLBhGbWUFSIXu9lKSwTA
+         s2xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759793991; x=1760398791;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I9TZOyB/EMo09OKq3vpFLrmNzk6bmCMZmlPS+l7lrX4=;
+        b=mHEBHGiG+uiJHkdXOeNuOqSlK42vpyl9ISUnxswyYK365coxLcI+XElLd33TB8CgCM
+         4jAT7CL8UUJMADWjos3QjrkYfXFSxMXmgu3Xlyz/fcSR/wTrjyumfE3Gdovh/hRztY1l
+         1z1wTxJPnUG4rHPCjIUUHCdzgqlVTiDZTFlhOCYcbRQNqW7XFAd/5ilKXH+OKErBNI3W
+         swHAui4fMwHUojCzZu2ZyZE0aw680ro+50QZumQmWG7IWjyya4l/uGzsyk4toAtIQ5PO
+         geS9PpWsK3R9KfC7AhRIkqwKbs5GL11ym9EcsAC/WtxfQP11zF84yN1/2Z5jAt1Bk5Pp
+         K6iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVOeQQneh/iYZxlFtHSy3pscxJZXrWNykjgse5l/7qTJyiXdZIIcoSNrDH47jPt0pmDHrwJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YylAfpcg8QC+zT9kjM2PoS5OM6Aprae9TY4fqCFvq/PBkxINmC+
+	2ENGwD73mQ23tG6lWIrYy7lMqk9b9kpBDJgo/G1eWmZYvtckabwDfNbpSRik31/DZg==
+X-Gm-Gg: ASbGncsofPj63b/ee8tsy0Yb1A/XDdET46pqMmXapX+49lrWoWEDpnVvQI+hZKuh0jg
+	gBt1FXB75nVWr0vIEP2UNueiemwZOajswiNbgaTOuL/WSp2wlMuZfdQiWPswnVOxSwoDcem3IS1
+	UloTwS2ccEEAQtXH7gdA4VKG6rGsrmqFHW803zn25YtuzXDp3cseY8VlLiIo2q9CPh9BOWeXsAB
+	94ou35Zh5x+BFhOx3rOqRuOL712jGA2NYa+NCAf7BVcQAf4F2NOowdWtBTeH1en+HRoy7vQ1f3k
+	2gRyc6KwcwVRIZ4ua/mhTaFuCD4w0m5FI70T9B8tOfRREGjZX7Nl03EKcXrf3uDKR8sW4ziVqTB
+	tfMIVOn51bIuhkf2k7v9CEUOKWtdS5nRVbW3WQlf3zcT7bQF1CSw4zeIT70XJ5M7SLzz4NcuAzb
+	/xsEDfR6xaVRbjfWDirtU=
+X-Google-Smtp-Source: AGHT+IFiW5uuUfThNCAE5E5ZFgpL6m05j9sNEBA5KdXE7U5W1B+ttFi3OD7gOKI+vJdjrDuPcWhiyg==
+X-Received: by 2002:a05:6e02:17cb:b0:425:8134:bcaa with SMTP id e9e14a558f8ab-42f7c2d49a8mr17910315ab.0.1759793991149;
+        Mon, 06 Oct 2025 16:39:51 -0700 (PDT)
+Received: from google.com (138.243.29.34.bc.googleusercontent.com. [34.29.243.138])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-42d8b1f4f0asm57563385ab.2.2025.10.06.16.39.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Oct 2025 16:39:50 -0700 (PDT)
+Date: Mon, 6 Oct 2025 16:39:45 -0700
+From: Justin Stitt <justinstitt@google.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1] perf build: Don't leave a.out file when building with
+ clang
+Message-ID: <csrtenswfduvfgyalcydxudcwjo7ezt5vuvfxkkrbpza6o3cls@t55uhpt4363z>
+References: <20251006222116.3335193-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251006215505.GB3234160@ax162>
+In-Reply-To: <20251006222116.3335193-1-irogers@google.com>
 
-On Mon, Oct 06, 2025 at 02:55:05PM -0700, Nathan Chancellor wrote:
->On Mon, Oct 06, 2025 at 02:17:33PM -0400, Sasha Levin wrote:
->> From: Nathan Chancellor <nathan@kernel.org>
->>
->> [ Upstream commit d87208128a3330c0eab18301ab39bdb419647730 ]
->>
->> '-mpreferred-stack-boundary' (the GCC option) and '-mstack-alignment'
->> (the clang option) have been supported in their respective compilers for
->> some time, so it is unnecessary to check for support for them via
->> cc-option. '-mpreferred-stack-boundary=3' had a restriction on
->> '-mno-sse' until GCC 7.1 but that is irrelevant for most of the kernel,
->> which includes '-mno-sse'.
->>
->> Move to simple Kconfig checks to avoid querying the compiler for the
->> flags that it supports.
->>
->> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
->> Link: https://lore.kernel.org/20250814-x86-min-ver-cleanups-v1-2-ff7f19457523@kernel.org
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->...
->> ## Backport Status: NO
->...
->> **Dependency Analysis:**
->> - Requires minimum GCC 8.1 for x86 (introduced in v6.15 via commit
->>   a3e8fe814ad1)
->> - Requires minimum Clang 15.0.0 for x86 (commit 7861640aac52b)
->> - Both requirements are satisfied in 6.17 stable tree (verified via
->>   scripts/min-tool-version.sh)
->> - GCC 7.1+ supports `-mpreferred-stack-boundary=3` with `-msse` (per GCC
->>   commit 34fac449e121)
->...
->> ### Conclusion
->>
->> While this commit is technically safe and provides a marginal build-time
->> performance improvement by eliminating unnecessary runtime compiler
->> checks, **it does not meet the fundamental requirement for stable kernel
->> backporting**: it does not fix a bug that affects users.
->>
->> The commit is purely a cleanup that removes obsolete code after compiler
->> minimum version requirements were raised. Such cleanups belong in
->> mainline development, not stable trees, which should focus exclusively
->> on fixing bugs that impact users.
->>
->> The fact that it was auto-selected by AUTOSEL does not override the
->> documented stable kernel rules. This commit should be **rejected** from
->> stable backporting or **reverted** if already applied.
+Hi,
+
+On Mon, Oct 06, 2025 at 03:21:16PM -0700, Ian Rogers wrote:
+> Testing clang features doesn't specify a "-o" option so an a.out file
+> is created and left in the make directory (not the output). Fix this
+> by specifying a "-o" of "/dev/null". Reorganize the code a little to
+> help with readability.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+Tested-by: Justin Stitt <justinstitt@google.com>
+
+> ---
+>  tools/perf/util/setup.py | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> index dd289d15acfd..6caf2126b1cd 100644
+> --- a/tools/perf/util/setup.py
+> +++ b/tools/perf/util/setup.py
+> @@ -22,8 +22,16 @@ assert srctree, "Environment variable srctree, for the Linux sources, not set"
+>  src_feature_tests  = f'{srctree}/tools/build/feature'
+>  
+>  def clang_has_option(option):
+> -    cc_output = Popen([cc, cc_options + option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
+> -    return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o) or (b"unknown warning option" in o))] == [ ]
+> +    error_substrings = (
+> +        b"unknown argument",
+> +        b"is not supported",
+> +        b"unknown warning option"
+> +    )
+> +    clang_command = [cc, cc_options + option,
+> +                     "-o", "/dev/null",
+> +                     path.join(src_feature_tests, "test-hello.c") ]
+> +    cc_output = Popen(clang_command, stderr=PIPE).stderr.readlines()
+> +    return not any(any(error in line for error in error_substrings) for line in cc_output)
+>  
+>  if cc_is_clang:
+>      from sysconfig import get_config_vars
+> -- 
+> 2.51.0.618.g983fd99d29-goog
+> 
 >
->Based on all of this, I would agree that it is not really suitable for
->backporting (at least not beyond 6.15, whereas the subject says back to
->5.4), so why was this still sent for review?
 
-Sorry for the noise, I thought I dropped this one :(
-
--- 
-Thanks,
-Sasha
+Thanks
+Justin
