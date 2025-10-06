@@ -1,238 +1,115 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1222C324F
-	for <llvm@lists.linux.dev>; Sun,  5 Oct 2025 21:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3445527FD56
+	for <llvm@lists.linux.dev>; Mon,  6 Oct 2025 12:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759699366; cv=none; b=hxt5wXndfDmHOf+SAfK0L6/8koT6M+M7tOn6DgVj4M3X88o0m76iqN3c0Eko855jctmhCUgD9bEj0RHef9+02OPZsL4BA/srhfA5Y7ej74xcJPeP+9IcsPZ8EPD4ZzGRfhxL2Y+Y0tG3Wm5WJXC39gIga3rqEnGM8t1KEccBJEc=
+	t=1759754473; cv=none; b=Sj2sQbultDm8HGhtGJ12vtBWkb3sW5CgFq73T0OrvtXZrzjaoJ0t0v2tXuc2qkmjtslKshfbjSprDrfn/TWC5/irfKl49bwDTAdpUzxBFOfTB0didy4SeL9fJ1JmEoUNNudSejAYS4DZfUdhkaR3rf4VvqfR/km5awWeRy9BilY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759699366; c=relaxed/simple;
-	bh=JtyVHmPL3jUJI/IzEWGwXRcaHoNXfDEMzuW51+hNtlE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=P79DoaD4blZvRhlpARUHWpNKz49YJPSdUQ6f6o8yM4c9N6IDEWHJVfEeYrMrw8Hb1DNU9dkRcIGKm4Mxz+a5/33orRg9cQ+vY0AZoXiVKau6e9MgX+IL0MzZM1sQjIA68FQ+d3C+3YuyCzlWES3kq0fg+WxWMgG58Ac+OarDbW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BydfC4Ye; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1759754473; c=relaxed/simple;
+	bh=1q+VIFZwiIkYLeXafY/FJdneXiBfYWG4ku3gvwDgztM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fh5mNU9YguzjHuD02HhBpHP5x4w2YXaw6FOWipBf77WRUde6AB6+h7whFFdzMIVWIvKve8OhOMlGNEOkUKhKtyX4garLlIcsoCygdeYlY3osNzx1CNNFNkTpvgrxQ92/wgPTYzVcloAtYdGKw3Lop0Jp+OILEuD7IgrU6wHoCQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VSCp/2Z9; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BydfC4Ye"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-268149e1c28so44345185ad.1
-        for <llvm@lists.linux.dev>; Sun, 05 Oct 2025 14:22:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VSCp/2Z9"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-27ee41e0798so73747005ad.1
+        for <llvm@lists.linux.dev>; Mon, 06 Oct 2025 05:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759699364; x=1760304164; darn=lists.linux.dev;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FmItgy1P9WGpafk8XeDqIHVArviA1RcMS4iYivsr3B4=;
-        b=BydfC4Yes5yZwcVYtZd73slLWJbN0TGlecxvoRWHc2rLhqvixm/a7jy3j4ZtadCNEZ
-         VHm2MqU+aKkLHUZfrr4XN+CrtMehMuOhnxn8Ikn0S3u7TWxRUKJU+LQE+KIk8NonCoxN
-         IglDKX7Lb3u/Hps7BhhPJragOcWyUZ9PJD27pbA88rKoVp/WlPZc+ZBxnTTdCk7GLwhv
-         Co6sPf2ZAY0jMu3a+6EqiAbV/qUp1GXVP1Scp7+WSoz/Iyx8vVYwvxNBquKiCatznZ1h
-         bf+jO+qR6+BXowOQNQhq1a1ic+b+ZxbJZaW4JS9ETh5dwOUbeu1dL0aVBijWmFLHFtG6
-         TksQ==
+        d=linaro.org; s=google; t=1759754471; x=1760359271; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1q+VIFZwiIkYLeXafY/FJdneXiBfYWG4ku3gvwDgztM=;
+        b=VSCp/2Z9J8g1+qUYbiH0ZiJHezUemsy3PFzY0BzGQFsA02bGgCXF0f1xgyBKWO0Uvv
+         UtAA42YSufvMdMVTLOfsrtlKALnkknSA92hhEYNFY6IvCz7V+3HxNt/Nn3U/KpNcjdqV
+         0RDkcweb+RnIQNj+J57h62j09ecEqMLA37ixJXuMA2uJgl6xEfXqCuoCFscndHxtr2T3
+         n9ar8aZjLzLCs3iBO2qtfPTfhCKyv1m1gYCR7om7Qg1HZoGsppBwe/wmTQ393hZwjMty
+         taj7V45+XT9JJS06BbF30nQNFxNdJlkJEvrWNudg2/4PK04aMiF7LBG8nVAvEC9fcNr0
+         4vdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759699364; x=1760304164;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FmItgy1P9WGpafk8XeDqIHVArviA1RcMS4iYivsr3B4=;
-        b=cNnduN5CfynszuSbtDPz8oVGzlzmQj06QMeWV3DHCdyIsOWCKrHcGa1nWtuerfuDcC
-         6qJ8pdqWG4f5eO0+5iGLlT5YMyBXFLaH3yhpz2LrUH9je+QmtsSraqQW3GBxkG5jMK2N
-         ZQIrihmL/Bj80TS7gxX2h05kSNXrWZH8rzGw8Fe5JW7Pej1LnmHpJwn4XAGiMzoVm6LN
-         LR3jkw2PUOGN8s5gA9o11m8NaALbpS+mRvIJJkiNHk6rVoLFD6crU/dMeGMfa8+r+Pac
-         zcX1bDlBPJOFnf8BQ6dAHTlpfrVvapRAR33Ul1YP0b63xwoPOvGXx4oZtPO2Iv9EA8SK
-         j8Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCXVET/BJWQphOltzFxkmvPN9Tfapf4T0JepeiYBgm4RcqlSBCfNADcYuXpRA1izZpsoSsnd@lists.linux.dev
-X-Gm-Message-State: AOJu0YyYEYNpyRESklAAaXafexBajTmC9SACkRRAA5p8lDcjyKYG1Uqg
-	pTq2UtK9hJwvupU+0eiHw8Slybqd94jkzl+J40Idrl8EmTPw1pUseB0Mano0x/zgMGHfeP3wFmJ
-	3LEYhXp7e0A==
-X-Google-Smtp-Source: AGHT+IGsMqltbHKfLWsnUZm01yGw+1d1vWu8rl8Y/QDO7Xhs/2xgL98a4kKts2uqZh0Bfj3O8zJRQnJnRXI3
-X-Received: from plwg11.prod.google.com ([2002:a17:902:f74b:b0:25c:22e5:1a27])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2b0f:b0:258:c13d:9b1a
- with SMTP id d9443c01a7336-28e9a61ab55mr111861225ad.41.1759699363859; Sun, 05
- Oct 2025 14:22:43 -0700 (PDT)
-Date: Sun,  5 Oct 2025 14:22:12 -0700
-In-Reply-To: <20251005212212.2892175-1-irogers@google.com>
+        d=1e100.net; s=20230601; t=1759754471; x=1760359271;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1q+VIFZwiIkYLeXafY/FJdneXiBfYWG4ku3gvwDgztM=;
+        b=c9nOmNQYx3LEKrG4p1lzfSSilaoRZERzVtHRVc/K5LJZ/3O1rjbH5xzV+f2qNcpa7b
+         oXb9ik+AVw7rrxWGJz0ckJ4wJSZBnVWNtxmwglykL3QZC54wZ9ASBcj3MrkY2qUYVMbc
+         hC2AUTSgWtcbRdhVETia4pfW3XvLOu5UzhdyKBNIku4UfbXBEbApGDljnvf0EsVr8y33
+         bMrxKmYY6X6dVgut5UwtVhf0+WZc8fPL/EvQKBgLNxwUXbBeIIoGWvy2zbW5Z686kfQu
+         iSzFvq/FLtP/+2OXXoxZytFTjqOjooQriyre/F+bRIhYQcDbRn6Y04OOwBLoa7bVxp8u
+         2BOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXo0zphJ03NBorK406CvnestLFMeBQms7l8zQ/D14IASQHSIwmh9poT555QamLyBQbjAXg1@lists.linux.dev
+X-Gm-Message-State: AOJu0YygCVqyT3PDBbgdD65g70OtNlKsZK3DLlEtFVIY73bYZbqCS0vT
+	RlZtU74U3l6atCzov9MfLiQVwOpM9Jo6w/ye5ErxO1X/OeUFmsOD1fOVKwHggzFUhP6YG+DjURf
+	ejgr+HXMLpDRFfDs6mM9xiFTjB6b3z/jnY9dAnmr7vQ==
+X-Gm-Gg: ASbGnctFcg5rZQAV6ydFgbJABvqmNu3DctC/7rcMX0uHnmConhOQ/c9+8Jd6x2uxI0Y
+	3QN9gpE1jMHOnEjwOIJv6i3VVtuJqen+SrqgFtnDqceyFhPTgliYEHZJIwTaARgZUIFiyVcXL00
+	QirooaMZKA+mCQ4GqG3WYLaWQeaCVoAzsnqToJ4MQl9dkBsujuFgZiJ02E2YsXnM8rkENRxCQgn
+	cCzPsgYpdlRi4Y2UElLTQumJ7SkCx+NCLyAaVicOhFrmS9w3OsuFXou8gcsjdJZueLG+JcPn5T2
+	7I1QwOaAMI61xmT4Fx3TX8gR
+X-Google-Smtp-Source: AGHT+IGsLKBTasVAqEZ4v4KXBEfDfTM9A9ENdzksSzZ7BVLlJItKpXfKx4hZJPWcb6hfrOA5/IrXwYs5mVLZOS99Jts=
+X-Received: by 2002:a17:903:238a:b0:28e:873d:91 with SMTP id
+ d9443c01a7336-28e9a6563f0mr137927955ad.29.1759754471396; Mon, 06 Oct 2025
+ 05:41:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251005212212.2892175-1-irogers@google.com>
-X-Mailer: git-send-email 2.51.0.618.g983fd99d29-goog
-Message-ID: <20251005212212.2892175-12-irogers@google.com>
-Subject: [PATCH v7 11/11] perf llvm: Mangle libperf-llvm.so function names
-From: Ian Rogers <irogers@google.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Eric Biggers <ebiggers@kernel.org>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Collin Funk <collin.funk1@gmail.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
-	Li Huafei <lihuafei1@huawei.com>, Athira Rajeev <atrajeev@linux.ibm.com>, 
-	Stephen Brennan <stephen.s.brennan@oracle.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Haibo Xu <haibo1.xu@intel.com>, 
-	Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	Song Liu <song@kernel.org>
+MIME-Version: 1.0
+References: <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
+In-Reply-To: <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 6 Oct 2025 18:11:00 +0530
+X-Gm-Features: AS18NWASLNw80j6ptJPPHIfrc8HYOqH-1LzEniT9J7aBBeWXoMD5tLZ1N6aS2Wg
+Message-ID: <CA+G9fYsTz6WTetGeWn=NX0fyX_j6qRR9XA_ETmJiYWDfCwyHWg@mail.gmail.com>
+Subject: Re: [PATCH] dmaengine: mmp_pdma: fix DMA mask handling
+To: Guodong Xu <guodong@riscstar.com>
+Cc: Vinod Koul <vkoul@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Yixun Lan <dlan@gentoo.org>, dmaengine@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, elder@riscstar.com, 
+	Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 
-For a function like llvm_addr2line having the libperf-llvm.so exported
-symbol named llvm_addr2line meant that the perf llvm_addr2line could
-sometimes erroneously be returned. This led to infinite recursion and
-eventual stack overflow. To avoid this conflict add a new
-BUILDING_PERF_LLVMSO when libperf-llvm.so is being built and use it to
-alter the behavior of MANGLE_PERF_LLVM_API, a macro that prefixes the
-name when libperf-llvm.so is being built. The prefixed named avoids
-the name collision.
+On Thu, 18 Sept 2025 at 19:57, Guodong Xu <guodong@riscstar.com> wrote:
+>
+> The driver's existing logic for setting the DMA mask for "marvell,pdma-1.0"
+> was flawed. It incorrectly relied on pdev->dev->coherent_dma_mask instead
+> of declaring the hardware's fixed addressing capability. A cleaner and
+> more correct approach is to define the mask directly based on the hardware
+> limitations.
+>
+> The MMP/PXA PDMA controller is a 32-bit DMA engine. This is supported by
+> datasheets and various dtsi files for PXA25x, PXA27x, PXA3xx, and MMP2,
+> all of which are 32-bit systems.
+>
+> This patch simplifies the driver's logic by replacing the 'u64 dma_mask'
+> field with a simpler 'u32 dma_width' to store the addressing capability
+> in bits. The complex if/else block in probe() is then replaced with a
+> single, clear call to dma_set_mask_and_coherent(). This sets a fixed
+> 32-bit DMA mask for "marvell,pdma-1.0" and a 64-bit mask for
+> "spacemit,k1-pdma," matching each device's hardware capabilities.
+>
+> Finally, this change also works around a specific build error encountered
+> with clang-20 on x86_64 allyesconfig. The shift-count-overflow error is
+> caused by a known clang compiler issue where the DMA_BIT_MASK(n) macro's
+> ternary operator is not correctly evaluated in static initializers. By
+> moving the macro's evaluation into the probe() function, the driver avoids
+> this compiler bug.
+>
+> Fixes: 5cfe585d8624 ("dmaengine: mmp_pdma: Add SpacemiT K1 PDMA support with 64-bit addressing")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Closes: https://lore.kernel.org/lkml/CA+G9fYsPcMfW-e_0_TRqu4cnwqOqYF3aJOeKUYk6Z4qRStdFvg@mail.gmail.com
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Guodong Xu <guodong@riscstar.com>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf           |  3 ++-
- tools/perf/util/llvm-c-helpers.cpp | 29 ++++++++++++++++++-----------
- tools/perf/util/llvm-c-helpers.h   | 24 ++++++++++++++++--------
- 3 files changed, 36 insertions(+), 20 deletions(-)
+Patch applied on top of Linux next-20251003 tag and build test pass.
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index fb888702bace..7e6054072cf1 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -1002,7 +1002,8 @@ $(LIBSYMBOL)-clean:
- 	$(Q)$(RM) -r -- $(LIBSYMBOL_OUTPUT)
- 
- ifdef LIBLLVM_DYNAMIC
--LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS)) -DHAVE_LIBLLVM_SUPPORT
-+LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS))
-+LIBPERF_LLVM_CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT -DBUILDING_PERF_LLVMSO
- LIBPERF_LLVM_LIBS = -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM) -lstdc++
- 
- $(OUTPUT)$(LIBPERF_LLVM): util/llvm-c-helpers.cpp
-diff --git a/tools/perf/util/llvm-c-helpers.cpp b/tools/perf/util/llvm-c-helpers.cpp
-index 5a6f76e6b705..8cea380be5c2 100644
---- a/tools/perf/util/llvm-c-helpers.cpp
-+++ b/tools/perf/util/llvm-c-helpers.cpp
-@@ -99,10 +99,12 @@ static int extract_file_and_line(const DILineInfo &line_info, char **file,
- #endif
- 
- extern "C"
--int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
--		   char **file __maybe_unused, unsigned int *line __maybe_unused,
--		   bool unwind_inlines __maybe_unused,
--		   llvm_a2l_frame **inline_frames __maybe_unused)
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name __maybe_unused,
-+                                         u64 addr __maybe_unused,
-+                                         char **file __maybe_unused,
-+                                         unsigned int *line __maybe_unused,
-+                                         bool unwind_inlines __maybe_unused,
-+                                         llvm_a2l_frame **inline_frames __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -177,7 +179,8 @@ int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
- 		if (!handle)
- 			return 0;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_addr2line"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_addr2line)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_addr2line\n");
- 		fn_init = true;
-@@ -215,8 +218,9 @@ make_symbol_relative_string(struct dso *dso, const char *sym_name,
- #endif
- 
- extern "C"
--char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -242,7 +246,8 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_code"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_code)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_code\n");
- 		fn_init = true;
-@@ -256,8 +261,9 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- }
- 
- extern "C"
--char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -283,7 +289,8 @@ char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_data"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_data)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_data\n");
- 		fn_init = true;
-diff --git a/tools/perf/util/llvm-c-helpers.h b/tools/perf/util/llvm-c-helpers.h
-index d2b99637a28a..cfcfd540cdae 100644
---- a/tools/perf/util/llvm-c-helpers.h
-+++ b/tools/perf/util/llvm-c-helpers.h
-@@ -13,6 +13,14 @@
- extern "C" {
- #endif
- 
-+/* Support name mangling so that libperf_llvm.so's names don't match those in perf. */
-+#ifdef BUILDING_PERF_LLVMSO
-+#define MANGLE_PERF_LLVM_API(x) PERF_LLVM_SO_ ## x
-+#else
-+#define MANGLE_PERF_LLVM_API(x) x
-+#endif
-+#define MANGLE_PERF_LLVM_API_STR(x) "PERF_LLVM_SO_" #x
-+
- struct dso;
- 
- struct llvm_a2l_frame {
-@@ -37,12 +45,12 @@ struct llvm_a2l_frame {
-  * a newly allocated array with that length. The caller is then responsible
-  * for freeing both the strings and the array itself.
-  */
--int llvm_addr2line(const char* dso_name,
--                   u64 addr,
--                   char** file,
--                   unsigned int* line,
--                   bool unwind_inlines,
--                   struct llvm_a2l_frame** inline_frames);
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name,
-+					 u64 addr,
-+					 char **file,
-+					 unsigned int *line,
-+					 bool unwind_inlines,
-+					 struct llvm_a2l_frame **inline_frames);
- 
- /*
-  * Simple symbolizers for addresses; will convert something like
-@@ -50,8 +58,8 @@ int llvm_addr2line(const char* dso_name,
-  *
-  * The returned value must be freed by the caller, with free().
-  */
--char *llvm_name_for_code(struct dso *dso, const char *dso_name, u64 addr);
--char *llvm_name_for_data(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso, const char *dso_name, u64 addr);
- 
- #ifdef __cplusplus
- }
--- 
-2.51.0.618.g983fd99d29-goog
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
+- Naresh
