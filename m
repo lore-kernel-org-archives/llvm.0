@@ -1,183 +1,184 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135EF2DECCD
-	for <llvm@lists.linux.dev>; Mon,  6 Oct 2025 16:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0170026058D
+	for <llvm@lists.linux.dev>; Mon,  6 Oct 2025 17:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759767726; cv=none; b=VCFQwb5p3aM4MGeUQzMfGiTUDhyO7RBpO+hwOQnQClEQcHzswFa3A1yuTNVndJ0AaJAn4u521nnMJnygaEpYxz4VWYS8enUIiDF8BmScBXxMUHYee0cnTUdkMO1gMrvQ0iY4wHlT2osDhr7SsLNsTEcKFvNMEYVR5wrRT0LRoVw=
+	t=1759773417; cv=none; b=skn0BwCOAf7ZP5vCSODHRgecDwjqNAaINr/ZnmaKaW0hKdAJPvLcquD6Ur/X5zpr9KFx+t6gE9LVgrmkD3TFBzSTpLgdicGZzkgUPo0CdP5DhFt50sNhYVsDhji1LJtoKfnMQZJEPSKIfeyCdNrb+ZXhApfgDcYM7ey1kuDgpp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759767726; c=relaxed/simple;
-	bh=yLdtJoXXg2ZofvQ3tks4npYZRXDJBWfYweloxYQbePU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RQQHgA2ZI2juPZ/f0fKTxcgfrD/5STqsu0iXDXbo9A3GDPVoRk2dCXRW9MwOvfDarA89Tfr/TmBICl1hPZYPOfoEL32bT+WD9mVRqMXUPPSVAJU3C3NzPtKehSyr3D/TNbw/bjOO75futYsdLGWugyHMrebdKVl0EDC4E1xrkv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B47821515;
-	Mon,  6 Oct 2025 09:21:56 -0700 (PDT)
-Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E0EA3F738;
-	Mon,  6 Oct 2025 09:22:02 -0700 (PDT)
-From: Leo Yan <leo.yan@arm.com>
-Date: Mon, 06 Oct 2025 17:21:31 +0100
-Subject: [PATCH v3 9/9] perf docs: Document building with Clang
+	s=arc-20240116; t=1759773417; c=relaxed/simple;
+	bh=U9ffjV7BL0HXoD5lEUkf+VHuGrAOPXko+Tm91qRV1X0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e81McXhBmOUqhKZCu1+gqfgp1eMjFv8XXBteKEoOWQu1QFRGU04Q4dsd6WM/0fRKe0yursECPgKWdYiLrG3zeB0akiaWs6jHF14vhOLbVNaVJgYbR6ch+0A0KkTuYuC1lEt6gEUib6FPRPlXTWBWM5fc8Ddkq3+pONoVk/l1V4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oBrsBJM0; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oBrsBJM0"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2681645b7b6so16995ad.1
+        for <llvm@lists.linux.dev>; Mon, 06 Oct 2025 10:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1759773415; x=1760378215; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KgNIO/Vg03wOgHjezxsvevp0MBXeQPhEmL6wrOMft2c=;
+        b=oBrsBJM0BQ2PJT2XUQh9FVrUz5HyqcBI2Ggu/AU5wr30FAINeafuJ4Fujhc1/CzeJg
+         pcQxz05Fqv+9KWmGVehznqNi7jQzpvIjgzqMrjAU7vZLgWm5QZjTGOZCpBpfw4M7rMdn
+         IiKIZc8S6KY0lyt8Fy2ylUvdIwIWAO75MY7DbldRddfjBjQwaIdm2wQ2IndZkTOvQtoi
+         kA8GdD9UUXdVn1y94Y+WTi2EoTYj4vdM+KuhUqpsUYq74Nq9rfMp+SJgAoTgP4gz3zql
+         8QJHDOrNNOKhHuXmwAri9QiP99cZLsVZ0TVIH+tZNYDOfZbfb0ay3TfiqmrdTLA97MC9
+         683g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759773415; x=1760378215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KgNIO/Vg03wOgHjezxsvevp0MBXeQPhEmL6wrOMft2c=;
+        b=kjyy+9iI13sNIxnsbN0c77dmdHhyvKy1FA8lp1d07fgn+UzW7T57n0dnW77G5v/aar
+         f0wdFMKm9mvr5rHJcKPRQWgbAWOawAoKG8o58Bg9Do2jxsUDBxFs56bI8yEkR+UyZb1q
+         dkQUgqwLf7B4wGV1KV+MBCAbC22vQQfa/fk1QrMWwRr1jHcXS8oACujyv/NL/2lYNsvG
+         6OiSD3JRsrLnKLg/WQyZrSFBOAw7ozwpyNXB3hhUGSVmMktvrHJDFjXfFvPiUBo5kzsw
+         qRt1MvuqpnSo7EDDYi9bpuvrbkvxgE+ofMSTnA76fSFNWnkkp695DtRuIEIFE0GUD+X5
+         kHVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWByLd7YDbHRERaO54vS5s8BDtb0zIbw6jFOHj+uOOsMpJra/0XjabdLh10Q4D9WyNk7XoR@lists.linux.dev
+X-Gm-Message-State: AOJu0YwX+DvqbDEoGRpvzHaZVyAD9808X7SHRi8xBn6L72xy5jL99e7F
+	CxKYMRZJ915sWTKPwzQ3aG2+IAOAM+tpE+Raa/Vz83hV7+4i4Axl0jcyl143rUONMBG+IAO2bXw
+	g1rnHWIwAdLxzPKrp29iw2QQNehoB1YQU3olVZ0sQ
+X-Gm-Gg: ASbGncv8zPl9QvaQhjewr7ENj9fQGvpa6gAzxDSDzxYeHjXcc+nOGj85lkGh+7HQGsR
+	0+fe3brICiSAmM3wiewE7G9EE+fJNRrR+NTqB/95ik7Pq2F8Cb5rov/F8QX70imY1bkmNW0akpA
+	/rc6czs76ziXyi8VPrRfPsiWEhmJvfHE3CVEUYyYbLHALf+x1MjgDZeeaD5JRN23IvqZyPQaFY7
+	sLTQkEDb+Ea6pafG3TC7xDAEAYkzytj8QAJZzzdagMFW8tr6WvfI/fsu73ftlr8mHAI0F7H2eIX
+	reQ=
+X-Google-Smtp-Source: AGHT+IEc0OvHtFH5e8JUnvIJenLMDF0rFXPhnKj1FxC7gkK5Xn2psBR9dBkn9cD2lkoGGsFgB9c6AUjOaYgzf5qGaJo=
+X-Received: by 2002:a17:903:3d07:b0:268:cc5:5e3c with SMTP id
+ d9443c01a7336-28eca40ef40mr356805ad.10.1759773414620; Mon, 06 Oct 2025
+ 10:56:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251006-perf_build_android_ndk-v3-9-4305590795b2@arm.com>
-References: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
-In-Reply-To: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, James Clark <james.clark@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org, 
- Leo Yan <leo.yan@arm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1759767696; l=5456;
- i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
- bh=yLdtJoXXg2ZofvQ3tks4npYZRXDJBWfYweloxYQbePU=;
- b=iOckLph1iYJ9s0sP+7wDulOCeNPGoUWbOyJCvZQabdA+mLUluT6/cAYOwIPh8MUXieOr7dQU6
- as19EERlH8HBRcaFZMy35EzfKzaHWd+0dTajOdGQzKBnLH5E8RyD1wr
-X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
- pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
+References: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com> <20251006-perf_build_android_ndk-v3-4-4305590795b2@arm.com>
+In-Reply-To: <20251006-perf_build_android_ndk-v3-4-4305590795b2@arm.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 6 Oct 2025 10:56:43 -0700
+X-Gm-Features: AS18NWBYM4S-kQkaLa4kp8LfC_m-pnaoulSPmNbf8CExHNpB0ol_xCKKyPKhVEQ
+Message-ID: <CAP-5=fUVs8Dn+kQDgPW08SNC=W5ZQKMFEETjjqkOJ_Mvbv22dw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/9] perf build: Disable thread safety analysis for
+ perl header
+To: Leo Yan <leo.yan@arm.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add example commands for building perf with Clang.
+On Mon, Oct 6, 2025 at 9:21=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
+>
+> When build with perl5, it reports error:
+>
+>     In file included from /usr/lib/perl5/5.42.0/x86_64-linux-thread-multi=
+/CORE/perl.h:7933:
+>     /usr/lib/perl5/5.42.0/x86_64-linux-thread-multi/CORE/inline.h:298:5: =
+error:
+>           mutex 'PL_env_mutex.lock' is not held on every path through
+>           here [-Werror,-Wthread-safety-analysis]
+>       298 |     ENV_UNLOCK;
+>           |     ^
+>     /usr/lib/perl5/5.42.0/x86_64-linux-thread-multi/CORE/perl.h:7091:31: =
+note:
+>           expanded from macro 'ENV_UNLOCK'
+>      7091 | #  define ENV_UNLOCK          PERL_REENTRANT_UNLOCK("env"...
+>           |                               ^
+>     /usr/lib/perl5/5.42.0/x86_64-linux-thread-multi/CORE/perl.h:6465:7: n=
+ote:
+>           expanded from macro 'PERL_REENTRANT_UNLOCK'
+>      6465 |     } STMT_END
+>           |       ^
+>     /usr/lib/perl5/5.42.0/x86_64-linux-thread-multi/CORE/perl.h:865:28: n=
+ote:
+>           expanded from macro 'STMT_END'
+>       865 | #   define STMT_END     while (0)
+>           |                                ^
+>
+> The error is caused by perl header but not perf code, disable thread
+> safety analysis if including the header.
+>
+> Though GCC does not support the thread safety analysis option, this
+> negative warning flag is silently ignored by it.
+>
+> Signed-off-by: Leo Yan <leo.yan@arm.com>
+> ---
+>  tools/perf/scripts/perl/Perf-Trace-Util/Build | 2 +-
+>  tools/perf/util/scripting-engines/Build       | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/scripts/perl/Perf-Trace-Util/Build b/tools/perf/s=
+cripts/perl/Perf-Trace-Util/Build
+> index 9b0e5a8b5070f1a1640518fae75557f824ef21ee..01a1a0ed51aefd721b4bc7eba=
+728c29a8ffcd551 100644
+> --- a/tools/perf/scripts/perl/Perf-Trace-Util/Build
+> +++ b/tools/perf/scripts/perl/Perf-Trace-Util/Build
+> @@ -2,7 +2,7 @@ perf-util-y +=3D Context.o
+>
+>  CFLAGS_Context.o +=3D $(PERL_EMBED_CCOPTS) -Wno-redundant-decls -Wno-str=
+ict-prototypes -Wno-bad-function-cast -Wno-declaration-after-statement -Wno=
+-switch-enum
+>  CFLAGS_Context.o +=3D -Wno-unused-parameter -Wno-nested-externs -Wno-und=
+ef
+> -CFLAGS_Context.o +=3D -Wno-switch-default -Wno-shadow
+> +CFLAGS_Context.o +=3D -Wno-switch-default -Wno-shadow -Wno-thread-safety=
+-analysis
 
-Since recent Android NDK releases use Clang as the default compiler, a
-separate Android specific document is no longer needed; point to the
-general build documentation instead.
+I wasn't able to reproduce this on Debian with perf-tools-next and:
+make -C tools/perf O=3D/tmp/perf DEBUG=3D1 CC=3Dclang CXX=3Dclang++
+HOSTCC=3Dclang LIBPERL=3D1 clean all
+but my libperl is 5.40. I'm a little concerned that the warning may
+cause an unrecognized compiler option warning/error with GCC given
+progress on thread-safety-analysis has ended there. Anyway, these
+aren't blockers.
 
-Signed-off-by: Leo Yan <leo.yan@arm.com>
----
- tools/perf/Documentation/Build.txt   | 15 +++++++
- tools/perf/Documentation/android.txt | 80 +++---------------------------------
- 2 files changed, 21 insertions(+), 74 deletions(-)
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-diff --git a/tools/perf/Documentation/Build.txt b/tools/perf/Documentation/Build.txt
-index 83dc87c662b63ecc17553a15cc15a6b8d6f01d83..57b226e7fc2f8e849dfe58b3af31891f58dfd0af 100644
---- a/tools/perf/Documentation/Build.txt
-+++ b/tools/perf/Documentation/Build.txt
-@@ -99,3 +99,18 @@ configuration paths for cross building:
- In this case, the variable PKG_CONFIG_SYSROOT_DIR can be used alongside the
- variable PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH to prepend the sysroot path to
- the library paths for cross compilation.
-+
-+5) Build with Clang
-+===================
-+By default, the makefile uses GCC as compiler. With specifying environment
-+variables HOSTCC, CC and CXX, it allows to build perf with Clang.
-+
-+Using Clang for a native build:
-+
-+  $ HOSTCC=clang CC=clang CXX=clang++ make -C tools/perf
-+
-+Specifying ARCH and CROSS_COMPILE for cross compilation:
-+
-+  $ HOSTCC=clang CC=clang CXX=clang++ \
-+    ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
-+    make -C tools/perf
-diff --git a/tools/perf/Documentation/android.txt b/tools/perf/Documentation/android.txt
-index 24a59998fc91e814ad96f658d3481d88d798b60c..3f3cc7ac3d139c5517ec9458f13c06249c701429 100644
---- a/tools/perf/Documentation/android.txt
-+++ b/tools/perf/Documentation/android.txt
-@@ -1,78 +1,10 @@
- How to compile perf for Android
--=========================================
-+===============================
- 
--I. Set the Android NDK environment
--------------------------------------------------
-+There are two ways to build perf and run it on Android:
- 
--(a). Use the Android NDK
--------------------------------------------------
--1. You need to download and install the Android Native Development Kit (NDK).
--Set the NDK variable to point to the path where you installed the NDK:
--  export NDK=/path/to/android-ndk
-+- Method 1: Build perf with static linking. See Build.txt, section
-+  "4) Cross compilation" for how to build a static perf binary.
- 
--2. Set cross-compiling environment variables for NDK toolchain and sysroot.
--For arm:
--  export NDK_TOOLCHAIN=${NDK}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-
--  export NDK_SYSROOT=${NDK}/platforms/android-24/arch-arm
--For x86:
--  export NDK_TOOLCHAIN=${NDK}/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-
--  export NDK_SYSROOT=${NDK}/platforms/android-24/arch-x86
--
--This method is only tested for Android NDK versions Revision 11b and later.
--perf uses some bionic enhancements that are not included in prior NDK versions.
--You can use method (b) described below instead.
--
--(b). Use the Android source tree
-------------------------------------------------
--1. Download the master branch of the Android source tree.
--Set the environment for the target you want using:
--  source build/envsetup.sh
--  lunch
--
--2. Build your own NDK sysroot to contain latest bionic changes and set the
--NDK sysroot environment variable.
--  cd ${ANDROID_BUILD_TOP}/ndk
--For arm:
--  ./build/tools/build-ndk-sysroot.sh --abi=arm
--  export NDK_SYSROOT=${ANDROID_BUILD_TOP}/ndk/build/platforms/android-3/arch-arm
--For x86:
--  ./build/tools/build-ndk-sysroot.sh --abi=x86
--  export NDK_SYSROOT=${ANDROID_BUILD_TOP}/ndk/build/platforms/android-3/arch-x86
--
--3. Set the NDK toolchain environment variable.
--For arm:
--  export NDK_TOOLCHAIN=${ANDROID_TOOLCHAIN}/arm-linux-androideabi-
--For x86:
--  export NDK_TOOLCHAIN=${ANDROID_TOOLCHAIN}/i686-linux-android-
--
--II. Compile perf for Android
--------------------------------------------------
--You need to run make with the NDK toolchain and sysroot defined above:
--For arm:
--  make WERROR=0 ARCH=arm CROSS_COMPILE=${NDK_TOOLCHAIN} EXTRA_CFLAGS="-pie --sysroot=${NDK_SYSROOT}"
--For x86:
--  make WERROR=0 ARCH=x86 CROSS_COMPILE=${NDK_TOOLCHAIN} EXTRA_CFLAGS="-pie --sysroot=${NDK_SYSROOT}"
--
--III. Install perf
-------------------------------------------------
--You need to connect to your Android device/emulator using adb.
--Install perf using:
--  adb push perf /data/perf
--
--If you also want to use perf-archive you need busybox tools for Android.
--For installing perf-archive, you first need to replace #!/bin/bash with #!/system/bin/sh:
--  sed 's/#!\/bin\/bash/#!\/system\/bin\/sh/g' perf-archive >> /tmp/perf-archive
--  chmod +x /tmp/perf-archive
--  adb push /tmp/perf-archive /data/perf-archive
--
--IV. Environment settings for running perf
--------------------------------------------------
--Some perf features need environment variables to run properly.
--You need to set these before running perf on the target:
--  adb shell
--  # PERF_PAGER=cat
--
--IV. Run perf
--------------------------------------------------
--Run perf on your device/emulator to which you previously connected using adb:
--  # ./data/perf
-+- Method 2: Download the Android NDK and use the bundled Clang to
-+  build perf. See Build.txt, section "5) Build with clang" for details.
+Thanks,
+Ian
 
--- 
-2.34.1
-
+>
+>  ifeq ($(CC_NO_CLANG), 1)
+>    CFLAGS_Context.o +=3D -Wno-unused-command-line-argument
+> diff --git a/tools/perf/util/scripting-engines/Build b/tools/perf/util/sc=
+ripting-engines/Build
+> index 2282fe3772f3bdc35056cb5e66efb3462dc1c2e3..24f087b0cd11b3e06a338c394=
+dc2c650bc2c60b1 100644
+> --- a/tools/perf/util/scripting-engines/Build
+> +++ b/tools/perf/util/scripting-engines/Build
+> @@ -3,7 +3,7 @@ ifeq ($(CONFIG_LIBTRACEEVENT),y)
+>  endif
+>  perf-util-$(CONFIG_LIBPYTHON) +=3D trace-event-python.o
+>
+> -CFLAGS_trace-event-perl.o +=3D $(PERL_EMBED_CCOPTS) -Wno-redundant-decls=
+ -Wno-strict-prototypes -Wno-unused-parameter -Wno-shadow -Wno-nested-exter=
+ns -Wno-undef -Wno-switch-default -Wno-bad-function-cast -Wno-declaration-a=
+fter-statement -Wno-switch-enum
+> +CFLAGS_trace-event-perl.o +=3D $(PERL_EMBED_CCOPTS) -Wno-redundant-decls=
+ -Wno-strict-prototypes -Wno-unused-parameter -Wno-shadow -Wno-nested-exter=
+ns -Wno-undef -Wno-switch-default -Wno-bad-function-cast -Wno-declaration-a=
+fter-statement -Wno-switch-enum -Wno-thread-safety-analysis
+>
+>  # -Wno-declaration-after-statement: The python headers have mixed code w=
+ith declarations (decls after asserts, for instance)
+>  CFLAGS_trace-event-python.o +=3D $(PYTHON_EMBED_CCOPTS) -Wno-redundant-d=
+ecls -Wno-strict-prototypes -Wno-unused-parameter -Wno-shadow -Wno-deprecat=
+ed-declarations -Wno-switch-enum -Wno-declaration-after-statement
+>
+> --
+> 2.34.1
+>
