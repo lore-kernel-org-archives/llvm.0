@@ -1,151 +1,257 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DF834BA34;
-	Tue,  7 Oct 2025 17:17:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4936D16F288
+	for <llvm@lists.linux.dev>; Tue,  7 Oct 2025 17:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759857459; cv=none; b=bVu2TicCaDZZcuLDbCkUfaZLKgBQ6AjS2XA/XFGuh2IOY5iTkXm+oCIXWmjnEjOCz1zOgg2G5w6NmhpVpV8AqMcPoO8P8FrvILby5STrdyuiu/pVd/hNNwZ44k4Y6NHaMvta7aN3fgWy9lh/AwZ+kgLqA3XWxIsK6+EAJPfbakQ=
+	t=1759859136; cv=none; b=gGmocz3rpzwWnpNkc8CO1C7UXnFsOittPSa5biSCiWNr0DGujEB5+gZAiOQtkw5b3XV5nQCQLpskpf+0iLUvEx2k62RPUEvdVF+bvpmJfz3BqrRbpkoZYAjc9TnACw9G6ChqYeShMFNCBX2DDLCcLkr9j5Xn23Dx7fLx+3X9U54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759857459; c=relaxed/simple;
-	bh=DAFgXC6SxWdL/cD7ojk7LsHsHwahqWWObauM/TTqz9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A1FVWPO/0Q1+26WyvwktMwoEq8NDS0RCgqr/sCCC0cXOh01MXpi/Be0m2Z/XqcVBKBR5KYWbvH35aHH9jswTIwA7Jm1uyjAQ9tlNftm0H9BxIbNdMv/0yUeHDnCaM6MN+IjJwDLmamVCD5Lp3JKyHaGfMN/VYrHDwz4c6gPwwlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSh73hti; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759859136; c=relaxed/simple;
+	bh=A9ePXX71Y+LsTLae1xp4zR0f461PjyxprdjUgwTk7fM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vFQkNBrPEl3La3nP91YkeNVAQfPeTBcvxPYjgMRUVz8HtoF/GvdrSyr8WApIcVTvYBs0GJAM7lMfFQnAIjyi6vqEMZlZXm34vckg9+fRHZiFl7cJstfzpVghXyGrtbfXg9WgbuhYu2wsDAQRN89Y834uIovMBL8vSfBjrAn71sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=BV8hsTJz; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSh73hti"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C66C4CEF1;
-	Tue,  7 Oct 2025 17:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759857458;
-	bh=DAFgXC6SxWdL/cD7ojk7LsHsHwahqWWObauM/TTqz9A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iSh73htibwbHo797aqyy0ATyVZ1v0pN8Yur3u3gy/4KFT7w4a+bkPaNjov2hdmA0/
-	 u8CaPUMV/QxXXeGWwUV2+RjmJzTxT1z20lKVtPGj7hrKe7mJpxepagf5Wfec89hrwe
-	 fv21GZ9GJR409dSph3W9pQDUIuGm2A0JeFHeyQrG9k6VfubpS+5BtMRf89QoBUT/mi
-	 mzCSAfdpcXMAKf2It86JU6JFMb43A7tMMcpqxBhe1SS0lYsdHswS/uy07jr27NmEuc
-	 PL0/ciQMuav2n19IxbfFAWo6vTud4fAd4veAji50d4My7Rh0N1pgu4fAIB0oqVBn0D
-	 PS8Ayw2IHr7Rw==
-Date: Tue, 7 Oct 2025 10:17:38 -0700
-From: Kees Cook <kees@kernel.org>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] slab: Introduce kmalloc_obj() and family
-Message-ID: <202510071001.11497F6708@keescook>
-References: <20250315025852.it.568-kees@kernel.org>
- <20250315031550.473587-2-kees@kernel.org>
- <aOR15Xb6DfolYM0z@casper.infradead.org>
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="BV8hsTJz"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4de659d5a06so37841071cf.3
+        for <llvm@lists.linux.dev>; Tue, 07 Oct 2025 10:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1759859132; x=1760463932; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pg8Ok5I2xXMgGAu/MYDoh42vS3DGGi3CdtYED5anodk=;
+        b=BV8hsTJzs8jXGzkf5BbXWV6wlF50R8pgb2VbNLCuwXJhQ795+wsr8F8oivwufcWQnx
+         scB5XG6v8gzmUzG+xybJT1KJJuMIw0Zz4rApZ8eq75LX1zSr4bqU6niD2e9n3WMNRpgT
+         11Koikm3qRpUYAXHplsygj7dY7zQ58b63CI3KpwDlrqb4LKzdXbPLPHkn2Gv2K7p6MNG
+         ArWmoxZ/K180nYXNxqga03SICHJ/oShYFReqnZ6B6wyvivv6DoMN4JLUzS7dMDoRVlxP
+         8DGFAGs4Ke1/MYCjdfJ6ip7w4GbrkSBqyhH57yiP6KkSt8nYDhCd7FAHrWWdJr3+OKTs
+         xDkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759859132; x=1760463932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pg8Ok5I2xXMgGAu/MYDoh42vS3DGGi3CdtYED5anodk=;
+        b=LYPMzdak8cCr0L4QKCxRF0+oOF5VNW5fJLg/PHzAkXDLmDrgquXrwJ22+HGJYdSKrB
+         CQRFcN2gubs8aaC1Nsz8ALt8JbfX92zC7CJcJ18XK6tyD0cT2WIGOQOTcaUb1XWTcjzB
+         Ub2skEMH1jk3W/ZErM65zIfn1VoQXQ9Fu+gi/ESVwE2I/NVaganCTBfi6SNGC0IGGPv3
+         ULeR0ZkAxTKVRb/EcytSL2OFt7oINzzhqIC4duoHt1a7s0ESwpzpZRZPk+H4A8PCdZis
+         gbKOonCsarqev8nCGd33wzeP4301xZvI7n5MOTojwWVAD1npdB/f1HlaB1Dl/2nhpaf0
+         c7Mg==
+X-Forwarded-Encrypted: i=1; AJvYcCUm1FAk6DG+PNDhEGcSsMbrXGw1WwMKzcz+cV410dtMMCjdnCS0K4ka8oFKV+bE7WbRQ7Me@lists.linux.dev
+X-Gm-Message-State: AOJu0YwPBMsY8GViS7agK3Xg7uXpELJY9JY+YwEXdF8fRElANt2bg5rc
+	vtY3NkML4PLWDRFVekicZU2Tly5x7azszJO5Xmq2mxphr4UBYrSVIUEt8jJm9ygcqUYaOHEw4zd
+	f7P73cnDUQfWFaL5KuC1lp8E7xtudTgrrcw+MgOHm7Q==
+X-Gm-Gg: ASbGncu4gxJTOWLk7cMstaPw0dV9Wm3apVCQicSNGwJQYVosq9B0Ue/rDgsDdwig0TH
+	zviLY3pX+c3HCzN5Gqyv0sH+m7tJs3vFP/ORcG3SovVIaSQaZSxcKJnz6dYFCNON0rB2Tne3Gpe
+	Kj9SOJiD4KsDH5EpCRsE+64GEaoKKb8+6Ge6hF1JjWdX36jEphVkljWQp4ZfmJCweIivMKqSzZ3
+	mnV0ezbXMNmf7qvCiYpLtTLNRYM
+X-Google-Smtp-Source: AGHT+IHNjzqpOMzH8y9LtPxqns/WAVziX7arXy0dAsX1RKPk6LIPf4fgO+HjB3KbrVxZePVT+qHVLaK+4PsanmQvw4Y=
+X-Received: by 2002:a05:622a:5984:b0:4cb:57b4:4d6c with SMTP id
+ d75a77b69052e-4e6eaccc73cmr6198371cf.12.1759859131884; Tue, 07 Oct 2025
+ 10:45:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOR15Xb6DfolYM0z@casper.infradead.org>
+References: <0-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <0-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Tue, 7 Oct 2025 13:44:54 -0400
+X-Gm-Features: AS18NWDVmKIn_CzJQvh8opoEabYMKh9EbkUyk4WKvUuBQpzLn_UekMBEkXUqjwM
+Message-ID: <CA+CK2bBT80np3hZbSu=dRH8UOKT9RruHF3jtaXyTJUmNe8UfFQ@mail.gmail.com>
+Subject: Re: [PATCH v6 00/15] Consolidate iommu page table implementations (AMD)
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>, 
+	Justin Stitt <justinstitt@google.com>, Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>, 
+	Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez <alejandro.j.jimenez@oracle.com>, 
+	James Gowans <jgowans@amazon.com>, Michael Roth <michael.roth@amd.com>, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 07, 2025 at 03:07:33AM +0100, Matthew Wilcox wrote:
-> On Fri, Mar 14, 2025 at 08:15:45PM -0700, Kees Cook wrote:
-> > +Performing open-coded kmalloc()-family allocation assignments prevents
-> > +the kernel (and compiler) from being able to examine the type of the
-> > +variable being assigned, which limits any related introspection that
-> > +may help with alignment, wrap-around, or additional hardening. The
-> > +kmalloc_obj()-family of macros provide this introspection, which can be
-> > +used for the common code patterns for single, array, and flexible object
-> > +allocations. For example, these open coded assignments::
-> > +
-> > +	ptr = kmalloc(sizeof(*ptr), gfp);
-> > +	ptr = kmalloc(sizeof(struct the_type_of_ptr_obj), gfp);
-> > +	ptr = kzalloc(sizeof(*ptr), gfp);
-> > +	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
-> > +	ptr = kcalloc(count, sizeof(*ptr), gfp);
-> > +	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
-> > +
-> > +become, respectively::
-> > +
-> > +	kmalloc_obj(ptr, gfp);
-> > +	kzalloc_obj(ptr, gfp);
-> > +	kmalloc_objs(ptr, count, gfp);
-> > +	kzalloc_objs(ptr, count, gfp);
-> > +	kmalloc_flex(ptr, flex_member, count, gfp);
-> 
-> I'd like to propose a different approach for consideration.
-> 
-> The first two are obvious.  If we now believe that object type is the
-> important thing, well we have an API for that:
-> 
-> struct buffer_head { ... };
-> 
-> 	bh_cache = KMEM_CACHE(buffer_head, SLAB_RECLAIM_ACCOUNT);
-> ...
-> 	ptr = kmem_cache_alloc(bh_cache, GFP_KERNEL);
-> 
-> It's a little more verbose than what you're suggesting, but it does give
-> us the chance to specify SLAB_ flags.  It already does the alignment
-> optimisation you're suggesting.  Maybe we can use some macro sugar to
-> simplify this.
+On Tue, Oct 7, 2025 at 12:12=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> [All the precursor patches are merged now and AMD/RISCV/VTD conversions
+> are written]
+>
+> Currently each of the iommu page table formats duplicates all of the logi=
+c
+> to maintain the page table and perform map/unmap/etc operations. There ar=
+e
+> several different versions of the algorithms between all the different
+> formats. The io-pgtable system provides an interface to help isolate the
+> page table code from the iommu driver, but doesn't provide tools to
+> implement the common algorithms.
+>
+> This makes it very hard to improve the state of the pagetable code under
+> the iommu domains as any proposed improvement needs to alter a large
+> number of different driver code paths. Combined with a lack of software
+> based testing this makes improvement in this area very hard.
+>
+> iommufd wants several new page table operations:
+>  - More efficient map/unmap operations, using iommufd's batching logic
+>  - unmap that returns the physical addresses into a batch as it progresse=
+s
+>  - cut that allows splitting areas so large pages can have holes
+>    poked in them dynamically (ie guestmemfd hitless shared/private
+>    transitions)
+>  - More agressive freeing of table memory to avoid waste
+>  - Fragmenting large pages so that dirty tracking can be more granular
+>  - Reassembling large pages so that VMs can run at full IO performance
+>    in migration/dirty tracking error flows
+>  - KHO integration for kernel live upgrade
+>
+> Together these are algorithmically complex enough to be a very significan=
+t
+> task to go and implement in all the page table formats we support. Just
+> the "server" focused drivers use almost all the formats (ARMv8 S1&S2 / x8=
+6
+> PAE / AMDv1 / VT-D SS / RISCV)
+>
+> Instead of doing the duplicated work, this series takes the first step to
+> consolidate the algorithms into one places. In spirit it is similar to th=
+e
+> work Christoph did a few years back to pull the redundant get_user_pages(=
+)
+> implementations out of the arch code into core MM. This unlocked a great
+> deal of improvement in that space in the following years. I would like to
+> see the same benefit in iommu as well.
+>
+> My first RFC showed a bigger picture with all most all formats and more
+> algorithms. This series reorganizes that to be narrowly focused on just
+> enough to convert the AMD driver to use the new mechanism.
+>
+> kunit tests are provided that allow good testing of the algorithms and al=
+l
+> formats on x86, nothing is arch specific.
+>
+> AMD is one of the simpler options as the HW is quite uniform with few
+> different options/bugs while still requiring the complicated contiguous
+> pages support. The HW also has a very simple range based invalidation
+> approach that is easy to implement.
+>
+> The AMD v1 and AMD v2 page table formats are implemented bit for bit
+> identical to the current code, tested using a compare kunit test that
+> checks against the io-pgtable version (on github, see below).
+>
+> Updating the AMD driver to replace the io-pgtable layer with the new stuf=
+f
+> is fairly straightforward now. The layering is fixed up in the new versio=
+n
+> so that all the invalidation goes through function pointers.
+>
+> Several small fixing patches have come out of this as I've been fixing th=
+e
+> problems that the test suite uncovers in the current code, and
+> implementing the fixed version in iommupt.
+>
+> On performance, there is a quite wide variety of implementation designs
+> across all the drivers. Looking at some key performance across
+> the main formats:
+>
+> iommu_map():
+>    pgsz  ,avg new,old ns, min new,old ns  , min % (+ve is better)
+>      2^12,     53,66    ,      51,63      ,  19.19 (AMDV1)
+>  256*2^12,    386,1909  ,     367,1795    ,  79.79
+>  256*2^21,    362,1633  ,     355,1556    ,  77.77
+>
+>      2^12,     56,62    ,      52,59      ,  11.11 (AMDv2)
+>  256*2^12,    405,1355  ,     357,1292    ,  72.72
+>  256*2^21,    393,1160  ,     358,1114    ,  67.67
+>
+>      2^12,     55,65    ,      53,62      ,  14.14 (VTD second stage)
+>  256*2^12,    391,518   ,     332,512     ,  35.35
+>  256*2^21,    383,635   ,     336,624     ,  46.46
+>
+>      2^12,     57,65    ,      55,63      ,  12.12 (ARM 64 bit)
+>  256*2^12,    380,389   ,     361,369     ,   2.02
+>  256*2^21,    358,419   ,     345,400     ,  13.13
+>
+> iommu_unmap():
+>    pgsz  ,avg new,old ns, min new,old ns  , min % (+ve is better)
+>      2^12,     69,88    ,      65,85      ,  23.23 (AMDv1)
+>  256*2^12,    353,6498  ,     331,6029    ,  94.94
+>  256*2^21,    373,6014  ,     360,5706    ,  93.93
+>
+>      2^12,     71,72    ,      66,69      ,   4.04 (AMDv2)
+>  256*2^12,    228,891   ,     206,871     ,  76.76
+>  256*2^21,    254,721   ,     245,711     ,  65.65
+>
+>      2^12,     69,87    ,      65,82      ,  20.20 (VTD second stage)
+>  256*2^12,    210,321   ,     200,315     ,  36.36
+>  256*2^21,    255,349   ,     238,342     ,  30.30
+>
+>      2^12,     72,77    ,      68,74      ,   8.08 (ARM 64 bit)
+>  256*2^12,    521,357   ,     447,346     , -29.29
+>  256*2^21,    489,358   ,     433,345     , -25.25
+>
+>   * Above numbers include additional patches to remove the iommu_pgsize()
+>     overheads. gcc 13.3.0, i7-12700
+>
+> This version provides fairly consistent performance across formats. ARM
+> unmap performance is quite different because this version supports
+> contiguous pages and uses a very different algorithm for unmapping. Thoug=
+h
+> why it is so worse compared to AMDv1 I haven't figured out yet.
+>
+> The per-format commits include a more detailed chart.
+>
+> There is a second branch:
+>    https://github.com/jgunthorpe/linux/commits/iommu_pt_all
+>
+> Containing supporting work and future steps:
+>  - ARM short descriptor (32 bit), ARM long descriptor (64 bit) formats
+>  - RISCV format and RISCV conversion
+>     https://github.com/jgunthorpe/linux/commits/iommu_pt_riscv
+>  - Support for a DMA incoherent HW page table walker
+>  - VT-D second stage format and VT-D conversion
+>     https://github.com/jgunthorpe/linux/commits/iommu_pt_vtd
+>  - DART v1 & v2 format
+>  - Draft of a iommufd 'cut' operation to break down huge pages
+>  - A compare test that checks the iommupt formats against the iopgtable
+>    interface, including updating AMD to have a working iopgtable and patc=
+hes
+>    to make VT-D have an iopgtable for testing.
+>  - A performance test to micro-benchmark map and unmap against iogptable
+>
+> My strategy is to go one by one for the drivers:
+>  - AMD driver conversion
+>  - RISCV page table and driver
+>  - Intel VT-D driver and VTDSS page table
+>  - Flushing improvements for RISCV
+>  - ARM SMMUv3
+>
+> And concurrently work on the algorithm side:
+>  - debugfs content dump, like VT-D has
+>  - Cut support
+>  - Increase/Decrease page size support
+>  - map/unmap batching
+>  - KHO
 
-I just don't think this is remotely feasible. We have tens of thousands
-of kmalloc callers in the kernel and that's just not going to work. Also
-it's wildly redundant given that the type info is present already in
-the proposed series -- the point is ot make this something the allocator
-can use (if it wants to) and not depend on the user to do it.
-kmem_cache_alloc is just too inflexible.
+I'm wondering if this work could be used in the future to expand
+page_table_check to support IOMMU page tables. For instance, every
+time a PTE is inserted or removed, an external state machine could
+check for false sharing or improper logic. This approach could
+significantly help with preventing and detecting memory corruption
+early.
 
-Doing the mechanical transformation of these callsites is also largely
-done already via a Coccinelle script I mentioned in earlier threads:
-https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_objs.cocci
+The main requirement would be to define a common logic for all IOMMU
+page tables. For the existing page_table_check, we use double-mapping
+detection logic [1]. If we were to implement something similar for the
+IOMMU, what kind of logic could we apply?
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=dev/v6.14-rc2/alloc_obj/v4-treewide&id=106fd376feea1699868859e82416d5b7c50866ee
-7568 files changed, 16342 insertions, 18580 deletions
+Pasha
 
-> The array ones are a little tougher.  Let's set them aside for the
-> moment and tackle the really hard one; kmalloc_flex.
-> 
-> Slab is fundamentally built on all objects in the slab being the same
-> size.  But maybe someone sufficiently enterprising could build a
-> "variable sized" slab variant?  If we're saying that object type is
-> more important a discriminator than object size, then perhaps grouping
-> objects of the same size together isn't nearly as useful as grouping
-> objects of the same type together, even if they're different sizes.
-> 
-> Might be a good GSoC/outreachy project?
-
-I already did this (see kmem_buckets_create()) and expanded on it
-with the per-call-site series I proposed:
-https://lore.kernel.org/all/20240809073309.2134488-1-kees@kernel.org/
-https://lore.kernel.org/all/20240809073309.2134488-5-kees@kernel.org/
-
-But all of that is orthogonal to just _having_ the type info available.
-
--Kees
-
--- 
-Kees Cook
+[1] https://docs.kernel.org/mm/page_table_check.html
