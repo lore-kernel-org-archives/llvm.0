@@ -1,67 +1,108 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE66F45C0B
-	for <llvm@lists.linux.dev>; Tue,  7 Oct 2025 18:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4822321859A
+	for <llvm@lists.linux.dev>; Tue,  7 Oct 2025 18:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759860400; cv=none; b=NT+QGUQnNIBM8nqcWUATE2ZKZQJZKteqwm7ladNcbpbSShB4br2evtSREY6ZziYx6Hf9ZEfH451b3RvapY4vgaZAr5YtaJ6LwQTeFjSreWFHgQWGC4Rr78JVuPDs1/md17E3V5Q5SPCFIncVv0G0o1CJD9eRMq35Asfw5UOE3xA=
+	t=1759861147; cv=none; b=PEdvLJ2FDpSLPy2YyjzfeVu99RZJHxMun6qr6LgGiiCnxQbEhRlJlmyenZtk4MHSoU2BPN2nH0rcVTCqn8zLlXz/6VQb/qEUb6wN71ue2HNOKlO4xwOfoaBfAyeLDT47sBne7e9Blj9Nnb8myML1bWMu1ies2N/36Mh55zeU+yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759860400; c=relaxed/simple;
-	bh=T5eFI0cCUTX1tL5pFhdww2ZbEwXDTbJPOJ7jpuorc+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pgZWg8EcYoRnX+SLQzePmT6yOpfYXSZusSpgSx7c1GX2XhMYddPSIFu6G16T+u7ayumTgrYy7b3KW4ycT+KKzj1Yc9w1kceUqwHAvaSSxsi1fITqp9YaGhyD30vP5JSlOAJ2xNafasjOhyaJtUdTBSBbtgQFhYCNKkqhMXneCOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED742106F;
-	Tue,  7 Oct 2025 11:06:29 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A8823F738;
-	Tue,  7 Oct 2025 11:06:37 -0700 (PDT)
-Date: Tue, 7 Oct 2025 19:06:35 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 0/9] perf build: Support building with Clang
-Message-ID: <20251007180635.GB77665@e132581.arm.com>
-References: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
- <aOQPeqqFn0yxgC4h@x1>
+	s=arc-20240116; t=1759861147; c=relaxed/simple;
+	bh=1NYA5NXCfUNHGAMPIDINqsi5FPnYmleHEw4ndZr/cwc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ba5d/2xyHLPpFu3Bgn3aWfpsa7uHVGiOzotpE43rwa5/MZroKNHMnS5GLLyWMSTC8u/EQ/xSWrskDW+TzGmzoFUXVRJgX8iayrvMOKRmDQ4/S5DrGFk8zWl75F7F7jE+NZxbn0DcELFChAT7gCUptQ+u3QlViCtVFPVJ83xb8cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U4X1OhNI; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U4X1OhNI"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2681660d604so69485065ad.0
+        for <llvm@lists.linux.dev>; Tue, 07 Oct 2025 11:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1759861145; x=1760465945; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1NYA5NXCfUNHGAMPIDINqsi5FPnYmleHEw4ndZr/cwc=;
+        b=U4X1OhNIvu7qkAjqqGVflcd5mWsYHhe9GTcPW0Bz3Cvm+MnSxydVKfKnvguqdyqP73
+         8Z3bVabgdnPxmwJASh1L1lp93D6vHMpHWooQospH1BaMx0GE7Ye90FTJEoBzmiuF0WDH
+         mLthCGD0Gll5REXU/TTL4RPjCJPZzDhjNAIj02k+7cf1La545N+ILNHktJbLZMfh4f/i
+         +UnsOvbYCoK6zL6hxRePG14LCqRDiTMmPO1kDDmJfVw5pydzVNDX5TBb8fFhK7OhJt6o
+         TvBUQsw6Hk3twQAujXsNWnM3XDyQWtt2oCWkDfBAxKYZx4X7SEiRVQYfnswZmx4umSUA
+         31hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759861145; x=1760465945;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1NYA5NXCfUNHGAMPIDINqsi5FPnYmleHEw4ndZr/cwc=;
+        b=V6Ozick4cAG0eTJZjXPKlaQ0CTOtieM509LLz+02vkypVcvtALrAtttdo+95nRiKMq
+         2PqlgTppMH53cvQpccmyBk1yDs/rTleRrJI/dy9iy/CNOP/u0wRDRTKqyrjVWvkHf/9W
+         LC4DXgLOIBuZ++Jj0lrS/A8xApJt1VSXwnlp70bse46pHe8sbcwbLYFU1/R99RP5IGoc
+         idxVjvagPrupvmpo130NIOkQwiRL1TbveMcGLxTKeigdkkF+dy4vzwlqhKMnBwqFZteG
+         g6yVfwE3dw8kHwD3BcH5rIL5YLy9mCZ0DPl2BbpaYcByH46ocSX7at1feczdDT/A5UsN
+         DGng==
+X-Forwarded-Encrypted: i=1; AJvYcCXewRvwQ4WhG3y8VlL6D1ZI3NHXwsnPyBZAmx7Dq1BmRfpDFllJwPuo07IYaU6p9TmHFmgz@lists.linux.dev
+X-Gm-Message-State: AOJu0YxlRhWQlgekMn001Vi70C5aMmIc3/4LivJNtVX5SggygqwwvrxD
+	UXycADZ6rFuZNiltMBUukXKnWW1KHIYQoVWycca850T/XZHNLeaCqk5W9hwvomI+FNKbnQW3jvG
+	JYBBGIAtppB0vboqeD+BcMRhba1jGnGsDj5QwBUgK
+X-Gm-Gg: ASbGncuEA3D8vm/HXKxS4Awnx2VlQkAQ9MEgDMPDY4jFYXVcDZ8vWG5M2Vb/RJ+tIDu
+	wq6jMww9AyFzhq5B/Droh/e+OY2dqHZzD4gHJhIhA5664fic5DhPxwqY0GFlyWVYbyiBmoW8/Zb
+	XGyXG8W1BAW2+PswGGI6NfH6QUzAx7iLV9Bo4Ffaib5ITxjb0a+FOvEQvZtM8hzRAwrbDF9tGo6
+	TbnAtidF+aE8bi1vKY1zwrtrfJ4jT3q69Wm4Uag+1Cqr1HJ5ayygQbLbXv9aCil/TqSbskObrRS
+	bxU=
+X-Google-Smtp-Source: AGHT+IHw6dFIKAHzPTv9mVtUGHjBlx7WlkdXf8MR1ZgGcxSTfN3zEfUpxsIIe3xlxd6CYLBEcLBlT5+Vp1Gkw1TXYKQ=
+X-Received: by 2002:a17:903:2343:b0:28e:7f50:5d80 with SMTP id
+ d9443c01a7336-2902721336cmr7056975ad.7.1759861145158; Tue, 07 Oct 2025
+ 11:19:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOQPeqqFn0yxgC4h@x1>
+References: <20250315025852.it.568-kees@kernel.org> <20250315031550.473587-2-kees@kernel.org>
+ <aOR15Xb6DfolYM0z@casper.infradead.org> <202510071001.11497F6708@keescook> <e019c59a-ba8b-ec04-dc5b-923cf9dd9d9c@gentwo.org>
+In-Reply-To: <e019c59a-ba8b-ec04-dc5b-923cf9dd9d9c@gentwo.org>
+From: Marco Elver <elver@google.com>
+Date: Tue, 7 Oct 2025 20:18:28 +0200
+X-Gm-Features: AS18NWCHLWcuBl7emRjgyAd7xCJevIo8qneqm5GOzEKlmO2F3nZsj3gxx6OmYQU
+Message-ID: <CANpmjNMsSGY+QEn=GV8S2sXuuQsioikPR+OhGa3+6EoTqYPkHQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] slab: Introduce kmalloc_obj() and family
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Kees Cook <kees@kernel.org>, Matthew Wilcox <willy@infradead.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, Pekka Enberg <penberg@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>, "Gustavo A . R . Silva" <gustavoars@kernel.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>, Yafang Shao <laoar.shao@gmail.com>, 
+	Tony Ambardar <tony.ambardar@gmail.com>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
+	Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Potapenko <glider@google.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
+	llvm@lists.linux.dev, Matteo Rizzo <matteorizzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 06, 2025 at 03:50:34PM -0300, Arnaldo Carvalho de Melo wrote:
+On Tue, 7 Oct 2025 at 19:47, Christoph Lameter (Ampere) <cl@gentwo.org> wrote:
+>
+> On Tue, 7 Oct 2025, Kees Cook wrote:
+>
+> > But all of that is orthogonal to just _having_ the type info available.
+>
+> iOS did go the path of creating basically one slab cache for each
+> "type" of kmalloc for security reasons.
+>
+> See https://security.apple.com/blog/towards-the-next-generation-of-xnu-memory-safety/
 
-[...]
-
-> I shed a tear ;-)
-> 
-> And thanks for fixing the ubuntu cross builds, I'll apply those patches
-> you made available thru github,
-> 
-> Thanks a lot!
-
-You are very welcome! And very appreciate you shared build container
-scripts, this would be a big benefit for CI test! (I have enabled the
-test on my local machine and works pretty well).
-
-Thanks,
-Leo
+We can get something similar to that with:
+https://lore.kernel.org/all/20250825154505.1558444-1-elver@google.com/
+Pending compiler support which is going to become available in a few
+months (probably).
+That version used the existing RANDOM_KMALLOC_CACHES choice of 16 slab
+caches, but there's no fundamental limitation to go higher.
+Note, this mitigation is likely not as strong as we'd like to without
+SLAB_VIRTUAL (or so I'm told): https://lwn.net/Articles/944647/
