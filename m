@@ -1,128 +1,160 @@
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4B135959;
-	Tue,  7 Oct 2025 07:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4221BC41
+	for <llvm@lists.linux.dev>; Tue,  7 Oct 2025 07:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759820846; cv=none; b=gxo1WwH3Ao/79wU44UUWtIgQvOC8QO8BED8aHqKBhNFAVrrURJf0bQHKkDu9b8xDIskmKqNYgYjf4dECrZdzpLPNPS9LFgNoPeZYk5TAdbxSBB6wLmGOeWENTn6qQV2PGLzh76EkWHagrijtE9aO8DcVfD0BXTUL76MMno/OV3U=
+	t=1759821355; cv=none; b=RTjaA6CHOuS4HM6fCcCpD9HLAr8kO662Wc3HKXYtrv9WaCBCXkByrMj6HdrD3NWsw+S/ozIW3/zNDT/ptHk2UEYUIRsrAx2L+fMkn4M2a2ZkteIeLGMDJX8zx2ohtyou31aeQNI7dHax8nW269hHQsrUivgFI/c2kpWxHjti5Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759820846; c=relaxed/simple;
-	bh=PRhaLNGyZU7w5yRcM/FXYdLrSM4H89YmLx4vMGpLR80=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ul++W7gK8lAGtws8Ss3Nz3ROyOpLFUHSyo4d5CPOdQ7Ff6ff8D8XhkWJyYpnsBlhS8GXVBgltzAWOYOOrqi6ERpWFwgn7YsfQc8kh+99tJR3iNFghUbWD7uAAOxcRguoKjG+kKPqUwOnnJ60UtNUzNSxixqtpjMVMgIKJZen6PU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=bcr8EaXr; arc=none smtp.client-ip=52.12.53.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+	s=arc-20240116; t=1759821355; c=relaxed/simple;
+	bh=z9ZXgLsIETBZdYU+Z0pJbtRnOe6ikC0HYb6Bt41W6xU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GNp1s2aCHYIwFK5YyA7yCxpE8PWP17Gq2PmzQn8ZM5bIyqvB2UsKSUAGSFwc8Qt8QVO2BhUuBKtxMfb+270GB8XjNtZUcmFldVlz4BIOM5mOhiOSPDrrY1EQRwxA44KYYC2+N9NgN1LjYgvhyr4j5nQ7+/AIw57mDC6XxOX0CkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0w9W+jJg; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="bcr8EaXr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0w9W+jJg"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-46e2c3b6d4cso47339795e9.3
+        for <llvm@lists.linux.dev>; Tue, 07 Oct 2025 00:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1759820841; x=1791356841;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=PRhaLNGyZU7w5yRcM/FXYdLrSM4H89YmLx4vMGpLR80=;
-  b=bcr8EaXraDk1v1NXYAqOadA/qRHYYU+MPAaYg92Xl15g2S448WBihGoj
-   dIG9bOov+hKF65DJlQ80Es4z7U1C0bnv2kCFAYYu2dSXukwpn3uQsmPZ+
-   q3KRH71cpoUv82S++uJ5aNahF7G1Ayi56g+ctv3+ALRo6PhrBvZi4OTUy
-   uksvA1NqdDDQXwfHCcHJSmXWTA9IIwUeiSU7iFmSpaxIUe7drOwZxSIcs
-   kKjKwgfhG8GCtwY+9aH37w/yJ6omDqRytpMi1qK7pRsoxyOoZ2MbSEyLv
-   JoDLaVme8RhUkWzVqHD0Dxv/TCR/OyIvliLFzu339rjMgBohPs7/l4jiU
-   g==;
-X-CSE-ConnectionGUID: cPL34nEPQyC4pIgpm4tsig==
-X-CSE-MsgGUID: 7S4WtF34QK6dV8dXaOE8Yw==
-X-IronPort-AV: E=Sophos;i="6.18,321,1751241600"; 
-   d="scan'208";a="4313107"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2025 07:07:19 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.38.20:63969]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.35.225:2525] with esmtp (Farcaster)
- id 99f6e941-b7d0-4ce2-94cd-e7e14d176133; Tue, 7 Oct 2025 07:07:19 +0000 (UTC)
-X-Farcaster-Flow-ID: 99f6e941-b7d0-4ce2-94cd-e7e14d176133
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Tue, 7 Oct 2025 07:07:18 +0000
-Received: from dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com
- (172.19.75.107) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Tue, 7 Oct 2025
- 07:07:17 +0000
-Date: Tue, 7 Oct 2025 07:07:14 +0000
-From: Jakub Acs <acsjakub@amazon.de>
-To: John Hubbard <jhubbard@nvidia.com>
-CC: Andrew Morton <akpm@linux-foundation.org>, Miguel Ojeda
-	<miguel.ojeda.sandonis@gmail.com>, kernel test robot <lkp@intel.com>,
-	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, "Linux Memory
- Management List" <linux-mm@kvack.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [linux-next:master 13069/13300] error[E0425]: cannot find value
- `VM_MERGEABLE` in crate `bindings`
-Message-ID: <20251007070611.GA88971@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
-References: <202510030449.VfSaAjvd-lkp@intel.com>
- <20251002141925.ab86656b1d50f6e27f216209@linux-foundation.org>
- <CANiq72kOhRdGtQe2UVYmDLdbw6VNkiMtdFzkQizsfQV0gLY1Hg@mail.gmail.com>
- <20251002152753.c756678dfdcf739e2fbf74f7@linux-foundation.org>
- <CANiq72kWWPAZ3gq2ktMpVeMKpWOU1nAmYi-4d-BgbuDti77ggg@mail.gmail.com>
- <20251002154323.ca15e98421255ae2978e8d6b@linux-foundation.org>
- <cd2ea7d4-6b12-4933-b1ae-cd4db18d3671@nvidia.com>
+        d=google.com; s=20230601; t=1759821350; x=1760426150; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lEDZ0FsctXTT25PdUb7+D7imSwt4Fuc+97g/5BQFmmw=;
+        b=0w9W+jJgXX8uQToQnRIT+orpQdtY03eb0y6vKKlmmrdjEQm7ZSS2SnHE8fMF6nCwPh
+         MUsrFKy7wf2V02xrdv60RB9Wb5hmKXT9Oc1xOhx82GA232FHVc9571eOAWENZhTlsyz6
+         3nN+qu+TR4kazAa2BpA3naOvzPGpbiYYGMeQwl+J5sGyjWdhrODT4R7pOoFaB24u7ShP
+         nK2Ct5aJbB5ofWIzAfllf85XcbleF+3aUiumi4oMkyNAjmd2AnAnMsCaL4otEdIlMm4/
+         8r1A3eSjQatoIl5j9Sot6ZsBDSkV9lR67XqtPVeKk4UJnMyDg77k1dKn+N60oxIc3Q7x
+         itxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759821350; x=1760426150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lEDZ0FsctXTT25PdUb7+D7imSwt4Fuc+97g/5BQFmmw=;
+        b=Xh/InwEpb3XPomLFfzsc6kzNlwZz7Uklv5cFhdf6vYBlzX6lRwQRz6h/DlMuwyz6J4
+         couY4LlZy6+Pb8ypLLyGgiL0SBVIp0WnKrbvrZyr8/ohMc0AK6bbFZUG8mXTrf6xdNrn
+         dsYXSX9ypVN2ECWk1aQmrclpt+o6hAiEXvIuIYuh8l8ckMV0QhzUgtaYgkgLZs9+tB6/
+         uPdKCBq6L8S7HHUwjisiaMfnUoSqjyqGcoO7WYTB75VS8fAqbTTbNBhIpoWliXi8Rc48
+         hZVtbryRcGtx7m4YAXOxowVnK8dLC1KWz3mY8AKvbOh9EONM4J+POy82f/TxJLK4UkVh
+         o5eA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVb1HKgp+13USx1eMdi3dIl3+G1wr3AMY5n1afjzeQf+iAks0e7+Rrz6Dw8oG2/3kPP8Np@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzuc5xt++A5N056Xkt0GYsiJBwe1lwe4u36Owac0Z3OsiS0tlXJ
+	NTiiEv67ZpA5/q7l2kjzCHILxpZfJt3sPn3g8JZk8cVsvRr9WdgO7iTcawqZuDYfrZfTs2z8r91
+	dkuYFEmmx7eZ5GGq6/RESYzPw+q0f3U6makFkeifD
+X-Gm-Gg: ASbGncsXKG5MLmZ6tEi7Adz1jXziN/RFm0N/V4T/k+apLD//ejrfVfrXAH52GNhZ9pt
+	dUYtJtvwIBJ9QQcgQtRiWth5umSEyduaW1YsV03QeFd4R8AsDHyLFEznVwoFZMsUiIpU3CbhVvf
+	TFWRvu1KKXXadQa+njC3X2Q7wdMSQk7oQNNl92FYGtXULGRhRCuMSPy6BwLlAFHYqj7X+s4aQUa
+	6gDjnUbwl5LO9OB6eui+iZHDhKbVNqJ4BzcBlZmYcv4NDZfI12SDtnYS6aYJ/5ddo/fMxdxnTyz
+	Uw==
+X-Google-Smtp-Source: AGHT+IHN82I6u9PV3m3T4AyeGxqQDcrMtP+2C7gcRrU3bk8X8rWbSiECp23jl+rfoqveFg745pQlgqV3AFCycsCdTp4=
+X-Received: by 2002:a05:600c:1f8d:b0:46e:4581:6634 with SMTP id
+ 5b1f17b1804b1-46e7114684bmr95963215e9.29.1759821350287; Tue, 07 Oct 2025
+ 00:15:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <cd2ea7d4-6b12-4933-b1ae-cd4db18d3671@nvidia.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-ClientProxiedBy: EX19D039UWA002.ant.amazon.com (10.13.139.32) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-Content-Transfer-Encoding: base64
+References: <202510030449.VfSaAjvd-lkp@intel.com> <20251002141925.ab86656b1d50f6e27f216209@linux-foundation.org>
+ <CANiq72kOhRdGtQe2UVYmDLdbw6VNkiMtdFzkQizsfQV0gLY1Hg@mail.gmail.com>
+ <20251002152753.c756678dfdcf739e2fbf74f7@linux-foundation.org>
+ <CANiq72kWWPAZ3gq2ktMpVeMKpWOU1nAmYi-4d-BgbuDti77ggg@mail.gmail.com>
+ <20251002154323.ca15e98421255ae2978e8d6b@linux-foundation.org>
+ <cd2ea7d4-6b12-4933-b1ae-cd4db18d3671@nvidia.com> <20251007070611.GA88971@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
+In-Reply-To: <20251007070611.GA88971@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Tue, 7 Oct 2025 09:15:37 +0200
+X-Gm-Features: AS18NWAypYnO3FSMvWWPHzph4WyVFTzlcHH5O53Vehnkv-a0YVg6GpPRGHeldOA
+Message-ID: <CAH5fLghTu-Zcm9e3Hy07nNtvB_-hRjojAWDoq-hhBYGE7LPEbQ@mail.gmail.com>
+Subject: Re: [linux-next:master 13069/13300] error[E0425]: cannot find value
+ `VM_MERGEABLE` in crate `bindings`
+To: Jakub Acs <acsjakub@amazon.de>
+Cc: John Hubbard <jhubbard@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gVGh1LCBPY3QgMDIsIDIwMjUgYXQgMDU6MjQ6NDhQTSAtMDcwMCwgSm9obiBIdWJiYXJkIHdy
-b3RlOgo+IE9uIDEwLzIvMjUgMzo0MyBQTSwgQW5kcmV3IE1vcnRvbiB3cm90ZToKPiA+IE9uIEZy
-aSwgMyBPY3QgMjAyNSAwMDozOToxNiArMDIwMCBNaWd1ZWwgT2plZGEgPG1pZ3VlbC5vamVkYS5z
-YW5kb25pc0BnbWFpbC5jb20+IHdyb3RlOgo+ID4+IE9uIEZyaSwgT2N0IDMsIDIwMjUgYXQgMTI6
-MjfigK9BTSBBbmRyZXcgTW9ydG9uIDxha3BtQGxpbnV4LWZvdW5kYXRpb24ub3JnPiB3cm90ZToK
-PiAuLi4KPiA+IEZyb206IEFuZHJldyBNb3J0b24gPGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmc+
-Cj4gPiBTdWJqZWN0OiBtbS1rc20tZml4LWZsYWctZHJvcHBpbmctYmVoYXZpb3ItaW4ta3NtX21h
-ZHZpc2UtZml4Cj4gPiBEYXRlOiBUaHUgT2N0ICAyIDAzOjM3OjQ3IFBNIFBEVCAyMDI1Cj4gPiAK
-PiA+IFJ1c3QgYmluZGdlbiB3YXNuJ3QgYWJsZSB0byBoYW5kbGUgdGhlIEJJVCgpIG1hY3JvLiAg
-QWRkIGEgaGVscGVyIChmcm9tCj4gPiBNaWd1ZWwpIHRvIGZpeCB0aGlzLgo+ID4gCj4gPiBSZXBv
-cnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+Cj4gPiBDbG9zZXM6IGh0
-dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyNTEwMDMwNDQ5LlZmU2FBanZk
-LWxrcEBpbnRlbC5jb20vCj4gPiBDYzogQXhlbCBSYXNtdXNzZW4gPGF4ZWxyYXNtdXNzZW5AZ29v
-Z2xlLmNvbT4KPiA+IENjOiBDaGVuZ21pbmcgWmhvdSA8Y2hlbmdtaW5nLnpob3VAbGludXguZGV2
-Pgo+ID4gQ2M6IERhdmlkIEhpbGRlbmJyYW5kIDxkYXZpZEByZWRoYXQuY29tPgo+ID4gQ2M6IEph
-a3ViIEFjcyA8YWNzamFrdWJAYW1hem9uLmRlPgo+ID4gQ2M6IFBldGVyIFh1IDxwZXRlcnhAcmVk
-aGF0LmNvbT4KPiA+IENjOiBTZW9uZ0phZSBQYXJrIDxzakBrZXJuZWwub3JnPgo+ID4gQ2M6IFh1
-IFhpbiA8eHUueGluMTZAenRlLmNvbS5jbj4KPiA+IENjOiBNaWd1ZWwgT2plZGEgPG1pZ3VlbC5v
-amVkYS5zYW5kb25pc0BnbWFpbC5jb20+Cj4gPiBDYzogQWxpY2UgUnlobCA8YWxpY2VyeWhsQGdv
-b2dsZS5jb20+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBBbmRyZXcgTW9ydG9uIDxha3BtQGxpbnV4LWZv
-dW5kYXRpb24ub3JnPgo+ID4gLS0tCj4gPiAKPiA+ICBydXN0L2JpbmRpbmdzL2JpbmRpbmdzX2hl
-bHBlci5oIHwgICAgMSArCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gPiAK
-PiA+IC0tLSBhL3J1c3QvYmluZGluZ3MvYmluZGluZ3NfaGVscGVyLmh+bW0ta3NtLWZpeC1mbGFn
-LWRyb3BwaW5nLWJlaGF2aW9yLWluLWtzbV9tYWR2aXNlLWZpeAo+ID4gKysrIGEvcnVzdC9iaW5k
-aW5ncy9iaW5kaW5nc19oZWxwZXIuaAo+ID4gQEAgLTk5LDMgKzk5LDQgQEAgY29uc3QgeGFfbWFy
-a190IFJVU1RfQ09OU1RfSEVMUEVSX1hBX1BSRQo+ID4gIAo+ID4gIGNvbnN0IGdmcF90IFJVU1Rf
-Q09OU1RfSEVMUEVSX1hBX0ZMQUdTX0FMTE9DID0gWEFfRkxBR1NfQUxMT0M7Cj4gPiAgY29uc3Qg
-Z2ZwX3QgUlVTVF9DT05TVF9IRUxQRVJfWEFfRkxBR1NfQUxMT0MxID0gWEFfRkxBR1NfQUxMT0Mx
-Owo+ID4gK2NvbnN0IHZtX2ZsYWdzX3QgUlVTVF9DT05TVF9IRUxQRVJfVk1fTUVSR0VBQkxFID0g
-Vk1fTUVSR0VBQkxFOwo+ID4gXwo+IAo+IFllcywgdGhpcyBmaXhlcyB0aGUgYnVpbGQgb24gbXkg
-c3lzdGVtIHRvbywgc286Cj4gCj4gVGVzdGVkLWJ5OiBKb2huIEh1YmJhcmQgPGpodWJiYXJkQG52
-aWRpYS5jb20+Cj4gCj4gLi4ub2YgY291cnNlLCB3ZSdsbCBoYXZlIHRvIHVuZG8gdGhpcyBsYXRl
-ciwgYXMgcGFydCBvZiB0aGUgZml4Cj4gZm9yIHRoZSBSdXN0IGZvciBMaW51eCBidWlsZCBzeXN0
-ZW0sIHRvIGhhbmRsZSBCSVQoKSBhbmQgc2ltaWxhcgo+IG1hY3JvcyBpbiBiaW5kZ2VuLgo+IAoK
-SGksIAoKc29ycnkgZm9yIHRoZSBpc3N1ZXMgdGhpcyBoYXMgY2F1c2VkLiBXZSdyZSBhbHNvIGNo
-YW5naW5nIHRoZSBvdGhlcgpkZWZpbmVzIHRvIEJJVCgpIGZvciBjb25zaXN0ZW5jeSwgaXQgd2Fz
-IGFwcGxpZWQgdG8gbW0tbmV3IGluIFsxXS4gSQphc3N1bWUgdGhpcyB3aWxsIGhhdmUgdGhlIHNh
-bWUgYnJlYWtpbmcgZWZmZWN0LiBOb3Qgc3VyZSB3aGF0IGlzIHRoZQpzb2x1dGlvbiAtIHdoZXRo
-ZXIgdG8gd2FpdCBmb3IgdGhlIGZpeCBtZW50aW9uZWQgYnkgSm9obiBvciBhZGQgc2ltaWxhcgpk
-ZWZpbnRpb25zIHRvIGEvcnVzdC9iaW5kaW5ncy9iaW5kaW5nc19oZWxwZXIuaCBmb3IgYWxsIGNv
-bnN0cz8KClsxXTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjUxMDAyMjAyMTEyLkMy
-MjkzQzRDRUY0QHNtdHAua2VybmVsLm9yZy8KCktpbmQgUmVnYXJkcywKSmFrdWIKCgoKQW1hem9u
-IFdlYiBTZXJ2aWNlcyBEZXZlbG9wbWVudCBDZW50ZXIgR2VybWFueSBHbWJIClRhbWFyYS1EYW56
-LVN0ci4gMTMKMTAyNDMgQmVybGluCkdlc2NoYWVmdHNmdWVocnVuZzogQ2hyaXN0aWFuIFNjaGxh
-ZWdlcgpFaW5nZXRyYWdlbiBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVyZyB1bnRlciBIUkIg
-MjU3NzY0IEIKU2l0ejogQmVybGluClVzdC1JRDogREUgMzY1IDUzOCA1OTcK
+On Tue, Oct 7, 2025 at 9:07=E2=80=AFAM Jakub Acs <acsjakub@amazon.de> wrote=
+:
+>
+> On Thu, Oct 02, 2025 at 05:24:48PM -0700, John Hubbard wrote:
+> > On 10/2/25 3:43 PM, Andrew Morton wrote:
+> > > On Fri, 3 Oct 2025 00:39:16 +0200 Miguel Ojeda <miguel.ojeda.sandonis=
+@gmail.com> wrote:
+> > >> On Fri, Oct 3, 2025 at 12:27=E2=80=AFAM Andrew Morton <akpm@linux-fo=
+undation.org> wrote:
+> > ...
+> > > From: Andrew Morton <akpm@linux-foundation.org>
+> > > Subject: mm-ksm-fix-flag-dropping-behavior-in-ksm_madvise-fix
+> > > Date: Thu Oct  2 03:37:47 PM PDT 2025
+> > >
+> > > Rust bindgen wasn't able to handle the BIT() macro.  Add a helper (fr=
+om
+> > > Miguel) to fix this.
+> > >
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202510030449.VfSaAjvd-l=
+kp@intel.com/
+> > > Cc: Axel Rasmussen <axelrasmussen@google.com>
+> > > Cc: Chengming Zhou <chengming.zhou@linux.dev>
+> > > Cc: David Hildenbrand <david@redhat.com>
+> > > Cc: Jakub Acs <acsjakub@amazon.de>
+> > > Cc: Peter Xu <peterx@redhat.com>
+> > > Cc: SeongJae Park <sj@kernel.org>
+> > > Cc: Xu Xin <xu.xin16@zte.com.cn>
+> > > Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+> > > Cc: Alice Ryhl <aliceryhl@google.com>
+> > > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> > > ---
+> > >
+> > >  rust/bindings/bindings_helper.h |    1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > --- a/rust/bindings/bindings_helper.h~mm-ksm-fix-flag-dropping-behavi=
+or-in-ksm_madvise-fix
+> > > +++ a/rust/bindings/bindings_helper.h
+> > > @@ -99,3 +99,4 @@ const xa_mark_t RUST_CONST_HELPER_XA_PRE
+> > >
+> > >  const gfp_t RUST_CONST_HELPER_XA_FLAGS_ALLOC =3D XA_FLAGS_ALLOC;
+> > >  const gfp_t RUST_CONST_HELPER_XA_FLAGS_ALLOC1 =3D XA_FLAGS_ALLOC1;
+> > > +const vm_flags_t RUST_CONST_HELPER_VM_MERGEABLE =3D VM_MERGEABLE;
+> > > _
+> >
+> > Yes, this fixes the build on my system too, so:
+> >
+> > Tested-by: John Hubbard <jhubbard@nvidia.com>
+> >
+> > ...of course, we'll have to undo this later, as part of the fix
+> > for the Rust for Linux build system, to handle BIT() and similar
+> > macros in bindgen.
+> >
+>
+> Hi,
+>
+> sorry for the issues this has caused. We're also changing the other
+> defines to BIT() for consistency, it was applied to mm-new in [1]. I
+> assume this will have the same breaking effect. Not sure what is the
+> solution - whether to wait for the fix mentioned by John or add similar
+> defintions to a/rust/bindings/bindings_helper.h for all consts?
+>
+> [1]: https://lore.kernel.org/all/20251002202112.C2293C4CEF4@smtp.kernel.o=
+rg/
 
+You have two options: either add all of the constants to
+bindings_helper.h, or use an enum similar to commit 3634783be125
+("binder: use enum for binder ioctls").
+
+Regarding John's mention, don't expect that for a while. It requires
+support in bindgen, which is shipped by your distribution, not Linux.
+Therefore, it takes time for improvements to become available to
+everyone.
+
+Alice
