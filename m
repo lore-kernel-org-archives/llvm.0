@@ -1,233 +1,151 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A511DF759
-	for <llvm@lists.linux.dev>; Tue,  7 Oct 2025 16:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DF834BA34;
+	Tue,  7 Oct 2025 17:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759855134; cv=none; b=ZmoRRsN5wDfM8/IDE60dgccMcCNKhpQ+rWX0fi0bQwuiOSe+i2oedYFYReleEwSnW9NogdSQqCUfx31bskJdnVPIVt161F73LI+xAZQ5iajWn/XKI3p7/REht5q3ScHo0GmX2Ul/YDPLlJv4b9GUXjGOPxIyEP0KAk35dDp6syw=
+	t=1759857459; cv=none; b=bVu2TicCaDZZcuLDbCkUfaZLKgBQ6AjS2XA/XFGuh2IOY5iTkXm+oCIXWmjnEjOCz1zOgg2G5w6NmhpVpV8AqMcPoO8P8FrvILby5STrdyuiu/pVd/hNNwZ44k4Y6NHaMvta7aN3fgWy9lh/AwZ+kgLqA3XWxIsK6+EAJPfbakQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759855134; c=relaxed/simple;
-	bh=J5OnNEzn8FxV3p2/qpRDm8coFVWni8NbtwUQ85iMavo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=qwWUg1JftJQ0o/QmPP/GH/KH3fJ2/eymYWnYPf9DzV8miSpmVKn0eAOALDasmJO4LnKl0ee1pvuA67FV/s0fk1+sXlTqZ5IWmMH4S26PfKDCb+VhNcBFW31E2ic/zp7dA3cXGpEi3iDO+gh2GBPi0j7rNenbHmwfsTv0RLz+VJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OP1ov4pO; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1759857459; c=relaxed/simple;
+	bh=DAFgXC6SxWdL/cD7ojk7LsHsHwahqWWObauM/TTqz9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A1FVWPO/0Q1+26WyvwktMwoEq8NDS0RCgqr/sCCC0cXOh01MXpi/Be0m2Z/XqcVBKBR5KYWbvH35aHH9jswTIwA7Jm1uyjAQ9tlNftm0H9BxIbNdMv/0yUeHDnCaM6MN+IjJwDLmamVCD5Lp3JKyHaGfMN/VYrHDwz4c6gPwwlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSh73hti; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OP1ov4pO"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-336b9f3b5b0so7204907a91.3
-        for <llvm@lists.linux.dev>; Tue, 07 Oct 2025 09:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759855131; x=1760459931; darn=lists.linux.dev;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rTd45WT1hazNfUJVaL/KMB7fCbNJILM67n3Zo28aclc=;
-        b=OP1ov4pORK/+i0A2k62N1ebOEqkpNVhhXn/O/sQFEzCorcEoYA++pEeI0UW2EOBwV9
-         Hs5bUOr0TB75+mXZnsOkXvqDQu712yS1QZZklfQ5p354HjsPuQAwGAoX3S5un1G2TXEH
-         Z1uxvumyF437BHptEqmeeLP8zEsyMV/6q0GbTMZ/zjnhs/AcselOLw+T1oi9zB5paehj
-         HAVbcFqwg//zmUxhauGGIIWb7uCQIKR5eh2ipTS7VtdKwLwgeLjUXG7CoOk3IP32mgfm
-         1lTTtY50fb10WwSPUHM/nwujGQoMxx+wHT9LSowqplXp0dJl3hGDF2ZY6AQ0L69XDmK7
-         lOCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759855131; x=1760459931;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rTd45WT1hazNfUJVaL/KMB7fCbNJILM67n3Zo28aclc=;
-        b=C5AFbBYLrnFWK4hY77WnGKf2JpGjEJeMi/HtMWklxlvxlnWYcmUabUTFYoEQrtB21r
-         Sca5hTvR7iCUqGpucUTwipPOmn/ekx60xiokbbLqFaSTYQlltppIc8mov5taUwkcMlnP
-         LrXuVXRJFPfnX6XhD+BYUvaL9arz3cIv6w4QvpZwEMc8v0MTLGT/DQdp+l4H/kDcNX/S
-         u+sPKUj1njx6J+vh9BlYf3qSZktJDdyU2D6hZvMtuA2hHAHpsZash5/j0TAFxA1UO8oY
-         AZxAukHB00h8o3BjgNKHLco4NSo9ETLzTnC4h0xkMplMWJs2wENbPRcEd04y90SPVjKE
-         71Sg==
-X-Forwarded-Encrypted: i=1; AJvYcCVpEwcrHe7HFB4TF7hzHzdMeuGe0bWuwYepTXPruXopHAhK/Ws6ElO8mim8VO5e5UrTbm8x@lists.linux.dev
-X-Gm-Message-State: AOJu0YzLnnxPWq/Ct/0r555R4QHqv5jnfw/oqE7lMPIpzs0RhtBJEhUf
-	YfAof2Xa/rfWh9tQ07TpREmf509LnPcZtI5Fkz+JMAZZpH8izjWq1iK5pSev4O/C8YvZlak33k5
-	ZdXp8iB8/bQ==
-X-Google-Smtp-Source: AGHT+IFWjQRqoY123n5OoDFLt1JXfuf4UgFlneo/oBha+yK82zI6dtPBt5TfeBYt2shRvWr9ap3xNR0pcmk1
-X-Received: from plnx7.prod.google.com ([2002:a17:902:8207:b0:267:fa7d:b637])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1b0d:b0:27e:ee83:fc80
- with SMTP id d9443c01a7336-2902741f56fmr4292255ad.57.1759855131331; Tue, 07
- Oct 2025 09:38:51 -0700 (PDT)
-Date: Tue,  7 Oct 2025 09:38:35 -0700
-In-Reply-To: <20251007163835.3152881-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSh73hti"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C66C4CEF1;
+	Tue,  7 Oct 2025 17:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759857458;
+	bh=DAFgXC6SxWdL/cD7ojk7LsHsHwahqWWObauM/TTqz9A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iSh73htibwbHo797aqyy0ATyVZ1v0pN8Yur3u3gy/4KFT7w4a+bkPaNjov2hdmA0/
+	 u8CaPUMV/QxXXeGWwUV2+RjmJzTxT1z20lKVtPGj7hrKe7mJpxepagf5Wfec89hrwe
+	 fv21GZ9GJR409dSph3W9pQDUIuGm2A0JeFHeyQrG9k6VfubpS+5BtMRf89QoBUT/mi
+	 mzCSAfdpcXMAKf2It86JU6JFMb43A7tMMcpqxBhe1SS0lYsdHswS/uy07jr27NmEuc
+	 PL0/ciQMuav2n19IxbfFAWo6vTud4fAd4veAji50d4My7Rh0N1pgu4fAIB0oqVBn0D
+	 PS8Ayw2IHr7Rw==
+Date: Tue, 7 Oct 2025 10:17:38 -0700
+From: Kees Cook <kees@kernel.org>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marco Elver <elver@google.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] slab: Introduce kmalloc_obj() and family
+Message-ID: <202510071001.11497F6708@keescook>
+References: <20250315025852.it.568-kees@kernel.org>
+ <20250315031550.473587-2-kees@kernel.org>
+ <aOR15Xb6DfolYM0z@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251007163835.3152881-1-irogers@google.com>
-X-Mailer: git-send-email 2.51.0.618.g983fd99d29-goog
-Message-ID: <20251007163835.3152881-4-irogers@google.com>
-Subject: [PATCH v8 3/3] perf llvm: Mangle libperf-llvm.so function names
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Collin Funk <collin.funk1@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aOR15Xb6DfolYM0z@casper.infradead.org>
 
-For a function like llvm_addr2line having the libperf-llvm.so exported
-symbol named llvm_addr2line meant that the perf llvm_addr2line could
-sometimes erroneously be returned. This led to infinite recursion and
-eventual stack overflow. To avoid this conflict add a new
-BUILDING_PERF_LLVMSO when libperf-llvm.so is being built and use it to
-alter the behavior of MANGLE_PERF_LLVM_API, a macro that prefixes the
-name when libperf-llvm.so is being built. The prefixed named avoids
-the name collision.
+On Tue, Oct 07, 2025 at 03:07:33AM +0100, Matthew Wilcox wrote:
+> On Fri, Mar 14, 2025 at 08:15:45PM -0700, Kees Cook wrote:
+> > +Performing open-coded kmalloc()-family allocation assignments prevents
+> > +the kernel (and compiler) from being able to examine the type of the
+> > +variable being assigned, which limits any related introspection that
+> > +may help with alignment, wrap-around, or additional hardening. The
+> > +kmalloc_obj()-family of macros provide this introspection, which can be
+> > +used for the common code patterns for single, array, and flexible object
+> > +allocations. For example, these open coded assignments::
+> > +
+> > +	ptr = kmalloc(sizeof(*ptr), gfp);
+> > +	ptr = kmalloc(sizeof(struct the_type_of_ptr_obj), gfp);
+> > +	ptr = kzalloc(sizeof(*ptr), gfp);
+> > +	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
+> > +	ptr = kcalloc(count, sizeof(*ptr), gfp);
+> > +	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
+> > +
+> > +become, respectively::
+> > +
+> > +	kmalloc_obj(ptr, gfp);
+> > +	kzalloc_obj(ptr, gfp);
+> > +	kmalloc_objs(ptr, count, gfp);
+> > +	kzalloc_objs(ptr, count, gfp);
+> > +	kmalloc_flex(ptr, flex_member, count, gfp);
+> 
+> I'd like to propose a different approach for consideration.
+> 
+> The first two are obvious.  If we now believe that object type is the
+> important thing, well we have an API for that:
+> 
+> struct buffer_head { ... };
+> 
+> 	bh_cache = KMEM_CACHE(buffer_head, SLAB_RECLAIM_ACCOUNT);
+> ...
+> 	ptr = kmem_cache_alloc(bh_cache, GFP_KERNEL);
+> 
+> It's a little more verbose than what you're suggesting, but it does give
+> us the chance to specify SLAB_ flags.  It already does the alignment
+> optimisation you're suggesting.  Maybe we can use some macro sugar to
+> simplify this.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.perf           |  3 ++-
- tools/perf/util/llvm-c-helpers.cpp | 29 ++++++++++++++++++-----------
- tools/perf/util/llvm-c-helpers.h   | 24 ++++++++++++++++--------
- 3 files changed, 36 insertions(+), 20 deletions(-)
+I just don't think this is remotely feasible. We have tens of thousands
+of kmalloc callers in the kernel and that's just not going to work. Also
+it's wildly redundant given that the type info is present already in
+the proposed series -- the point is ot make this something the allocator
+can use (if it wants to) and not depend on the user to do it.
+kmem_cache_alloc is just too inflexible.
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 4f0c14c19c99..836dd0c25541 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -1002,7 +1002,8 @@ $(LIBSYMBOL)-clean:
- 	$(Q)$(RM) -r -- $(LIBSYMBOL_OUTPUT)
- 
- ifdef LIBLLVM_DYNAMIC
--LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS)) -DHAVE_LIBLLVM_SUPPORT
-+LIBPERF_LLVM_CXXFLAGS := $(call filter-out,-DHAVE_LIBLLVM_DYNAMIC,$(CXXFLAGS))
-+LIBPERF_LLVM_CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT -DBUILDING_PERF_LLVMSO
- LIBPERF_LLVM_LIBS = -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM) -lstdc++
- 
- $(OUTPUT)$(LIBPERF_LLVM): util/llvm-c-helpers.cpp
-diff --git a/tools/perf/util/llvm-c-helpers.cpp b/tools/perf/util/llvm-c-helpers.cpp
-index 5a6f76e6b705..8cea380be5c2 100644
---- a/tools/perf/util/llvm-c-helpers.cpp
-+++ b/tools/perf/util/llvm-c-helpers.cpp
-@@ -99,10 +99,12 @@ static int extract_file_and_line(const DILineInfo &line_info, char **file,
- #endif
- 
- extern "C"
--int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
--		   char **file __maybe_unused, unsigned int *line __maybe_unused,
--		   bool unwind_inlines __maybe_unused,
--		   llvm_a2l_frame **inline_frames __maybe_unused)
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name __maybe_unused,
-+                                         u64 addr __maybe_unused,
-+                                         char **file __maybe_unused,
-+                                         unsigned int *line __maybe_unused,
-+                                         bool unwind_inlines __maybe_unused,
-+                                         llvm_a2l_frame **inline_frames __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -177,7 +179,8 @@ int llvm_addr2line(const char *dso_name __maybe_unused, u64 addr __maybe_unused,
- 		if (!handle)
- 			return 0;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_addr2line"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_addr2line)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_addr2line\n");
- 		fn_init = true;
-@@ -215,8 +218,9 @@ make_symbol_relative_string(struct dso *dso, const char *sym_name,
- #endif
- 
- extern "C"
--char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -242,7 +246,8 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_code"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_code)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_code\n");
- 		fn_init = true;
-@@ -256,8 +261,9 @@ char *llvm_name_for_code(struct dso *dso __maybe_unused, const char *dso_name __
- }
- 
- extern "C"
--char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __maybe_unused,
--			 u64 addr __maybe_unused)
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso __maybe_unused,
-+					       const char *dso_name __maybe_unused,
-+					       u64 addr __maybe_unused)
- {
- #if defined(HAVE_LIBLLVM_SUPPORT) && !defined(HAVE_LIBLLVM_DYNAMIC)
- 	LLVMSymbolizer *symbolizer = get_symbolizer();
-@@ -283,7 +289,8 @@ char *llvm_name_for_data(struct dso *dso __maybe_unused, const char *dso_name __
- 		if (!handle)
- 			return NULL;
- 
--		fn = reinterpret_cast<decltype(fn)>(dlsym(handle, "llvm_name_for_data"));
-+		fn = reinterpret_cast<decltype(fn)>(
-+			dlsym(handle, MANGLE_PERF_LLVM_API_STR(llvm_name_for_data)));
- 		if (!fn)
- 			pr_debug("dlsym failed for llvm_name_for_data\n");
- 		fn_init = true;
-diff --git a/tools/perf/util/llvm-c-helpers.h b/tools/perf/util/llvm-c-helpers.h
-index d2b99637a28a..cfcfd540cdae 100644
---- a/tools/perf/util/llvm-c-helpers.h
-+++ b/tools/perf/util/llvm-c-helpers.h
-@@ -13,6 +13,14 @@
- extern "C" {
- #endif
- 
-+/* Support name mangling so that libperf_llvm.so's names don't match those in perf. */
-+#ifdef BUILDING_PERF_LLVMSO
-+#define MANGLE_PERF_LLVM_API(x) PERF_LLVM_SO_ ## x
-+#else
-+#define MANGLE_PERF_LLVM_API(x) x
-+#endif
-+#define MANGLE_PERF_LLVM_API_STR(x) "PERF_LLVM_SO_" #x
-+
- struct dso;
- 
- struct llvm_a2l_frame {
-@@ -37,12 +45,12 @@ struct llvm_a2l_frame {
-  * a newly allocated array with that length. The caller is then responsible
-  * for freeing both the strings and the array itself.
-  */
--int llvm_addr2line(const char* dso_name,
--                   u64 addr,
--                   char** file,
--                   unsigned int* line,
--                   bool unwind_inlines,
--                   struct llvm_a2l_frame** inline_frames);
-+int MANGLE_PERF_LLVM_API(llvm_addr2line)(const char *dso_name,
-+					 u64 addr,
-+					 char **file,
-+					 unsigned int *line,
-+					 bool unwind_inlines,
-+					 struct llvm_a2l_frame **inline_frames);
- 
- /*
-  * Simple symbolizers for addresses; will convert something like
-@@ -50,8 +58,8 @@ int llvm_addr2line(const char* dso_name,
-  *
-  * The returned value must be freed by the caller, with free().
-  */
--char *llvm_name_for_code(struct dso *dso, const char *dso_name, u64 addr);
--char *llvm_name_for_data(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_code)(struct dso *dso, const char *dso_name, u64 addr);
-+char *MANGLE_PERF_LLVM_API(llvm_name_for_data)(struct dso *dso, const char *dso_name, u64 addr);
- 
- #ifdef __cplusplus
- }
+Doing the mechanical transformation of these callsites is also largely
+done already via a Coccinelle script I mentioned in earlier threads:
+https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_objs.cocci
+
+https://web.git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=dev/v6.14-rc2/alloc_obj/v4-treewide&id=106fd376feea1699868859e82416d5b7c50866ee
+7568 files changed, 16342 insertions, 18580 deletions
+
+> The array ones are a little tougher.  Let's set them aside for the
+> moment and tackle the really hard one; kmalloc_flex.
+> 
+> Slab is fundamentally built on all objects in the slab being the same
+> size.  But maybe someone sufficiently enterprising could build a
+> "variable sized" slab variant?  If we're saying that object type is
+> more important a discriminator than object size, then perhaps grouping
+> objects of the same size together isn't nearly as useful as grouping
+> objects of the same type together, even if they're different sizes.
+> 
+> Might be a good GSoC/outreachy project?
+
+I already did this (see kmem_buckets_create()) and expanded on it
+with the per-call-site series I proposed:
+https://lore.kernel.org/all/20240809073309.2134488-1-kees@kernel.org/
+https://lore.kernel.org/all/20240809073309.2134488-5-kees@kernel.org/
+
+But all of that is orthogonal to just _having_ the type info available.
+
+-Kees
+
 -- 
-2.51.0.618.g983fd99d29-goog
-
+Kees Cook
