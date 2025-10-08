@@ -1,334 +1,55 @@
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B7E19CC0C
-	for <llvm@lists.linux.dev>; Tue,  7 Oct 2025 19:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E5C2110;
+	Wed,  8 Oct 2025 00:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759867189; cv=none; b=sNiQzeap1N7lBEbq4YHYNIJ00m9gvRCvGTzxU+FQNT8wTtkKFsn6cs2ZhT/ChJ1HomfcARK0/bp/RlKLXotcUhAN01OKRTsWVMz77FwLTvNg68i8pbgiL0ahprDwvcFwNJZtaaSaGkYFGiLHaWDBsktbFAQf+kTJUG1eEjBDyEw=
+	t=1759882103; cv=none; b=k7veGde2U2RTo7niZCW6wo5TSQ3IlctFLv5GBwxbCs15Cj5pE88jg60NjIh7/DriY75n2/4hPbP9gLyu3pOBszKKNUoubxnylF9BK6LDvDsXz1LMUem6VTyCKJOdhxusP8odO1KrSArlyr/eo2ViRKAMCMttlrUJEwkBd5F8nGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759867189; c=relaxed/simple;
-	bh=rk1Kb3CPtSyeXbHkCdcgWIJGlpngMZ+yO4pxRdE07WU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MmzBDt6XLAvEsHnVsJAldDYGxYPK6E9+BECamX0rMBD6xsNBeU92Hag87f1dHJPQgH74Y6JwgYsyWQgLjd+y94Jsps2H7B8ut72LQTZ9D24QfDpsT4EjCmywVj9qwhB1CtqYqEiDacasTDE4bofHUI9oeMFwfaS8w69CRwcZkGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pA+XUyRy; arc=none smtp.client-ip=209.85.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1759882103; c=relaxed/simple;
+	bh=zwzuDUqs2zW/KGFmmY0CnbIDRBr/A48Fdn4lYnyq4g4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IGtXOs2C8//rYhVfGBs194xmwC2VbL1U2BBueXpyOTcEAI5gBT/82b4iFLKUFoIONi+lZL3WkUEWEQ+uveUC4FAuGcjzxg+KbxhRnmXr5uSxsciBAVuV7aMo4gXdRPe9NHeOCJzqSY2SVClldMQsNXlIkFOlGzU19LoMJbTv/hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQRKuo/D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pA+XUyRy"
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-554a7e98e19so1209590e0c.3
-        for <llvm@lists.linux.dev>; Tue, 07 Oct 2025 12:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1759867187; x=1760471987; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gKAL20SuYyk1RCMv+7lcgOY/WApc/8rEx2dB4DPPLbc=;
-        b=pA+XUyRy8duze/Dbk/P39vpFrCNi2snbjc6PvgB96hsAEsaaU4YEumepxtVpOwsBBz
-         vgTvPtU2LDIFdvRA+Xbc17a77QaZ3canPuEWiw1MoXTqSxr1pELUzX7gSmeSlslGRqsE
-         aNhK8nTO1dN04wKPqi3nQ6Jar1nkvnNv8wqpp2yp5WfQHnMVX6FZBHigVbr8eu81aVhD
-         HmocXTXCIBeXKIw0kLfmt3XcxflyclA44mgwV30jmu1v2g3qqzDJ+wIQDr1OVEFKlXxh
-         hUmdY20nVZLYxw1mmIpajokGbvY296OqySslrQs2SuEDaXW4cbR81D4zvJr/+GcBEwOH
-         8aRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759867187; x=1760471987;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gKAL20SuYyk1RCMv+7lcgOY/WApc/8rEx2dB4DPPLbc=;
-        b=iP8Zu7PZoseCtjCGJVniUrl7XQU5NCoP7ZxYgGMf+2SQkskHNbI3M1jJ0n0BNOHrkE
-         D82HQIWRxT1zmZ1ItWK/46Wm9GelgdkVqtLGUM+F1T8+qu0+EorYgo5CaTc51yzxVF7t
-         M7QWYyOJz7GkeSLp/Q83CZEFXi2LvzsGwLkOyIdB6TLt+FVlaPXE94torFlRq+oweMOQ
-         GxXwSqBqfKUzhVqjXYpv/G8YreNYjrndlYBYTJgM9AEserC6oSZQYvxRmQ+CJ59RPZsE
-         M6nYZFYwknWL0WyJM/TBSHmONI8oZVHp1SlVPUquBP2NVD3OVnVEm1JNc1Z7Qrg9pADz
-         7dUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW16J4EWuQ80Kkqnuj4lyk/tF7p1OtRWNPW3JypyabrB03d5vK+VBE+n7srcSjkq20PbSOv@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz/nJP3KfMevA33xZwy3CVC018uu017TJUSqOzePALpv5oLbUHH
-	adg7joNRkFGqsdnzT5LJgl2Z9/paFlaykZS5ArPgw9TrYi0vrxTHpSW+EJDc5wba5sLTuyYmdel
-	LaODhreM8z5g06rFePKOa0/0cUvyOO17u6W9RSi0E
-X-Gm-Gg: ASbGnctMCVWf4kdWjqr4RPSeQJVfBguyvM9YMNXfHMgecnvOb4nvrbUEdAu3BwKLcVQ
-	YzevIh3NrPZsC4xn5A5V2RJ7Dt8w0eXrjbIftDdxoGv/xIuoUWK3g+Jty2UGgZmL606YlBLU+gY
-	EO86ThEp8IgeKl7StmtIo9W7HiULI33/zVApxMNKxB3CV8sxCSETyq+TRYvr1pAm0eevJLizthk
-	qCwREXsiF8lm8DdEtNiuFK/x6xLWJ9ltGw8u20Q/QSr8LT7D7w7TM7jcldfDG8Otl5gJidkK9Uv
-	kQ==
-X-Google-Smtp-Source: AGHT+IF6YwRb1B8achDa0fRUKkP6Z81GBRMaD7rwLgsvvOwW9BLQEwZ79OsWqR4oe8nrdA4pGoirFbVy43yd2aDbFG0=
-X-Received: by 2002:a05:6122:20a3:b0:543:e262:ade2 with SMTP id
- 71dfb90a1353d-554b8bdee12mr453098e0c.12.1759867186474; Tue, 07 Oct 2025
- 12:59:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQRKuo/D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7F5C4CEF1;
+	Wed,  8 Oct 2025 00:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759882101;
+	bh=zwzuDUqs2zW/KGFmmY0CnbIDRBr/A48Fdn4lYnyq4g4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=oQRKuo/DuYUvwmyCIixJqfGsZiYXA2ou3ww2vRCCQhurjEsfkUkAXhJnYanDgBPqA
+	 KQ3KotwVdlE8eLbyV9E9OkHpP4XeXUwJFzLevCikAgsdVw/AKFcarlVZ0GLrbbgyG5
+	 T4WCUwavD0Gm5Ftw4j43VgRCZtDp+IWZH6rGWD62eng6ldhZ/+F7M29D88XF57/Odv
+	 iWEA3PFKAhqzcG+8Ut3Dv6FZwfUr2a///kc7r35Moebwl6EqPo7sRTfUyjLqYmX9Kw
+	 wLrTxBFNKFxPmanyNWmUq5ZwmUbAxaDjusVYAq/kEFHJ7NM/9rPOGEvhbNvnebtnEG
+	 PFWy4/MTE8A8g==
+Date: Tue, 7 Oct 2025 17:08:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 21.1.3 uploaded
+Message-ID: <20251008000816.GA1856596@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251007024527.1439747-1-patso@likewhatevs.io> <be6kxu36uphlnhedsi7gsayhuetmqixil4dv2lxe4plvgyqewx@jecdpummb52l>
-In-Reply-To: <be6kxu36uphlnhedsi7gsayhuetmqixil4dv2lxe4plvgyqewx@jecdpummb52l>
-From: Justin Stitt <justinstitt@google.com>
-Date: Tue, 7 Oct 2025 12:59:34 -0700
-X-Gm-Features: AS18NWBJd7rY2qG2exN7NwwFc5oLXYLDbh9LGcL9vMHlkSU3-5jP4hsQGfwMDDc
-Message-ID: <CAFhGd8quQ3i9wEGOJNxy5s_MuD=WdxwqL15qB1i=KY8fW1Cf_Q@mail.gmail.com>
-Subject: Re: [PATCH] scripts/clang-tools: Handle included .c files in gen_compile_commands
-To: Pat Somaru <patso@likewhatevs.io>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org, 
-	Nicolas Schier <nsc@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I seem to have dropped some folks from the CC list somehow (probably
-wrong mutt keybind).
+Hi all,
 
-I've self-quoted myself below to preserve context.
+I have built and uploaded LLVM 21.1.3 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-On Tue, Oct 7, 2025 at 12:55=E2=80=AFPM Justin Stitt <justinstitt@google.co=
-m> wrote:
->
-> Hi,
->
-> On Mon, Oct 06, 2025 at 10:45:27PM -0400, Pat Somaru wrote:
-> > The gen_compile_commands.py script currently only creates entries for t=
-he
-> > primary source files found in .cmd files, but some kernel source files
-> > text-include others (i.e. kernel/sched/build_policy.c).
-> >
-> > This prevents tools like clangd from working properly on text-included =
-c
-> > files, such as kernel/sched/ext.c because the generated compile_command=
-s.json
-> > does not have entries for them.
-> >
-> > Extend process_line() to detect when a source file includes .c files, a=
-nd
-> > generate additional compile_commands.json entries for them. For include=
-d c
-> > files, use the same compile flags as their parent and add their parents=
- headers.
-> >
-> > This enables lsp tools like clangd to work properly on files like
-> > kernel/sched/ext.c
-> >
-> > Signed-off-by: Pat Somaru <patso@likewhatevs.io>
->
-> FWIW, I tested this out and my clangd was much happier dealing with
-> kernel/sched/ext.c. Nathan's points are still valid, I'm just giving
-> user feedback.
->
-> After benchmarking the script itself, I saw some performance hits:
->
-> pre-patch, 5x run average: 0.590 seconds
-> post-patch, 5x run average: 2.164 seconds
->
-> With this simple invocation:
->
->   ./scripts/clang-tools/gen_compile_commands.py -d build-master -o $TMP/c=
-ompile_commands.json
->
-> I realize this script is not ran often but maybe there is some heurstic
-> or speedup that can be made to the regex.
->
-> Tested-by: Justin Stitt <justinstitt@google.com>
->
-> > ---
-> >  scripts/clang-tools/gen_compile_commands.py | 126 +++++++++++++++++++-
-> >  1 file changed, 121 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clan=
-g-tools/gen_compile_commands.py
-> > index 96e6e46ad1a70..02791efdc06d0 100755
-> > --- a/scripts/clang-tools/gen_compile_commands.py
-> > +++ b/scripts/clang-tools/gen_compile_commands.py
-> > @@ -149,8 +149,87 @@ def cmdfiles_for_modorder(modorder):
-> >                      yield to_cmdfile(mod_line.rstrip())
-> >
-> >
-> > +def extract_includes_from_file(source_file, root_directory):
-> > +    """Extract #include statements from a C file.
-> > +
-> > +    Args:
-> > +        source_file: Path to the source .c file to analyze
-> > +        root_directory: Root directory for resolving relative paths
-> > +
-> > +    Returns:
-> > +        List of header files that should be included (without quotes/b=
-rackets)
-> > +    """
-> > +    includes =3D []
-> > +    if not os.path.exists(source_file):
-> > +        return includes
-> > +
-> > +    try:
-> > +        with open(source_file, 'r') as f:
-> > +            for line in f:
-> > +                line =3D line.strip()
-> > +                # Look for #include statements.
-> > +                # Match both #include "header.h" and #include <header.=
-h>.
-> > +                match =3D re.match(r'^\s*#\s*include\s*[<"]([^>"]*)[>"=
-]', line)
-> > +                if match:
-> > +                    header =3D match.group(1)
-> > +                    # Skip including other .c files to avoid circular =
-includes.
-> > +                    if not header.endswith('.c'):
-> > +                        # For relative includes (quoted), resolve path=
- relative to source file.
-> > +                        if '"' in line:
-> > +                            src_dir =3D os.path.dirname(source_file)
-> > +                            header_path =3D os.path.join(src_dir, head=
-er)
-> > +                            if os.path.exists(header_path):
-> > +                                rel_header =3D os.path.relpath(header_=
-path, root_directory)
-> > +                                includes.append(rel_header)
-> > +                            else:
-> > +                                includes.append(header)
-> > +                        else:
-> > +                            # System include like <linux/sched.h>.
-> > +                            includes.append(header)
-> > +    except IOError:
-> > +        pass
-> > +
-> > +    return includes
-> > +
-> > +
-> > +def find_included_c_files(source_file, root_directory):
-> > +    """Find .c files that are included by the given source file.
-> > +
-> > +    Args:
-> > +        source_file: Path to the source .c file
-> > +        root_directory: Root directory for resolving relative paths
-> > +
-> > +    Yields:
-> > +        Full paths to included .c files
-> > +    """
-> > +    if not os.path.exists(source_file):
-> > +        return
-> > +
-> > +    try:
-> > +        with open(source_file, 'r') as f:
-> > +            for line in f:
-> > +                line =3D line.strip()
-> > +                # Look for #include "*.c" patterns.
-> > +                match =3D re.match(r'^\s*#\s*include\s*"([^"]*\.c)"\s*=
-$', line)
-> > +                if match:
-> > +                    included_file =3D match.group(1)
-> > +                    # Handle relative paths.
-> > +                    if not os.path.isabs(included_file):
-> > +                        src_dir =3D os.path.dirname(source_file)
-> > +                        included_file =3D os.path.join(src_dir, includ=
-ed_file)
-> > +
-> > +                    # Normalize the path.
-> > +                    included_file =3D os.path.normpath(included_file)
-> > +
-> > +                    # Check if the file exists.
-> > +                    if os.path.exists(included_file):
-> > +                        yield included_file
-> > +    except IOError:
-> > +        pass
-> > +
-> > +
-> >  def process_line(root_directory, command_prefix, file_path):
-> > -    """Extracts information from a .cmd line and creates an entry from=
- it.
-> > +    """Extracts information from a .cmd line and creates entries from =
-it.
-> >
-> >      Args:
-> >          root_directory: The directory that was searched for .cmd files=
-. Usually
-> > @@ -160,7 +239,8 @@ def process_line(root_directory, command_prefix, fi=
-le_path):
-> >              Usually relative to root_directory, but sometimes absolute=
-.
-> >
-> >      Returns:
-> > -        An entry to append to compile_commands.
-> > +        A list of entries to append to compile_commands (may include m=
-ultiple
-> > +        entries if the source file includes other .c files).
-> >
-> >      Raises:
-> >          ValueError: Could not find the extracted file based on file_pa=
-th and
-> > @@ -176,11 +256,47 @@ def process_line(root_directory, command_prefix, =
-file_path):
-> >      abs_path =3D os.path.realpath(os.path.join(root_directory, file_pa=
-th))
-> >      if not os.path.exists(abs_path):
-> >          raise ValueError('File %s not found' % abs_path)
-> > -    return {
-> > +
-> > +    entries =3D []
-> > +
-> > +    # Create entry for the main source file.
-> > +    main_entry =3D {
-> >          'directory': root_directory,
-> >          'file': abs_path,
-> >          'command': prefix + file_path,
-> >      }
-> > +    entries.append(main_entry)
-> > +
-> > +    # Find and create entries for included .c files.
-> > +    for included_c_file in find_included_c_files(abs_path, root_direct=
-ory):
-> > +        # For included .c files, create a compilation command that:
-> > +        # 1. Uses the same compilation flags as the parent file
-> > +        # 2. But compiles the included file directly (not the parent)
-> > +        # 3. Includes necessary headers from the parent file for prope=
-r macro resolution
-> > +
-> > +        # Convert absolute path to relative for the command.
-> > +        rel_path =3D os.path.relpath(included_c_file, root_directory)
-> > +
-> > +        # Extract includes from the parent file to provide proper comp=
-ilation context.
-> > +        extra_includes =3D ''
-> > +        try:
-> > +            parent_includes =3D extract_includes_from_file(abs_path, r=
-oot_directory)
-> > +            if parent_includes:
-> > +                extra_includes =3D ' ' + ' '.join('-include ' + inc fo=
-r inc in parent_includes)
-> > +        except IOError:
-> > +            pass
-> > +
-> > +        included_entry =3D {
-> > +            'directory': root_directory,
-> > +            'file': included_c_file,
-> > +            # Use the same compilation prefix but target the included =
-file directly.
-> > +            # Add extra headers for proper macro resolution.
-> > +            'command': prefix + extra_includes + ' ' + rel_path,
-> > +        }
-> > +        entries.append(included_entry)
-> > +        logging.debug('Added entry for included file: %s', included_c_=
-file)
-> > +
-> > +    return entries
-> >
-> >
-> >  def main():
-> > @@ -213,9 +329,9 @@ def main():
-> >                  result =3D line_matcher.match(f.readline())
-> >                  if result:
-> >                      try:
-> > -                        entry =3D process_line(directory, result.group=
-('command_prefix'),
-> > +                        entries =3D process_line(directory, result.gro=
-up('command_prefix'),
-> >                                               result.group('file_path')=
-)
-> > -                        compile_commands.append(entry)
-> > +                        compile_commands.extend(entries)
-> >                      except ValueError as err:
-> >                          logging.info('Could not add line from %s: %s',
-> >                                       cmdfile, err)
-> > --
-> > 2.51.0
-> >
-> >
->
-> Thanks
-> Justin
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 21.x
+series is no longer supported.
+
+Cheers,
+Nathan
