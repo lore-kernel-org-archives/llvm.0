@@ -1,55 +1,439 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E5C2110;
-	Wed,  8 Oct 2025 00:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63D01426C
+	for <llvm@lists.linux.dev>; Wed,  8 Oct 2025 00:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759882103; cv=none; b=k7veGde2U2RTo7niZCW6wo5TSQ3IlctFLv5GBwxbCs15Cj5pE88jg60NjIh7/DriY75n2/4hPbP9gLyu3pOBszKKNUoubxnylF9BK6LDvDsXz1LMUem6VTyCKJOdhxusP8odO1KrSArlyr/eo2ViRKAMCMttlrUJEwkBd5F8nGc=
+	t=1759882205; cv=none; b=k75WGgIDxdtXQYkMbDs9NKko18KOlEBhFziZsZaXVngZqq3PDddkCs4LM2/ygC8eGXhlCYbDwY5sSDk+gSI1JytDqF3MCwXbwgOP4gxvoA2lifQ7UNMs+xAic9b8jCuOWFKHO04JXcsmCR9SY3zJT5v0t/AuI1ECyGMX13w+UpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759882103; c=relaxed/simple;
-	bh=zwzuDUqs2zW/KGFmmY0CnbIDRBr/A48Fdn4lYnyq4g4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IGtXOs2C8//rYhVfGBs194xmwC2VbL1U2BBueXpyOTcEAI5gBT/82b4iFLKUFoIONi+lZL3WkUEWEQ+uveUC4FAuGcjzxg+KbxhRnmXr5uSxsciBAVuV7aMo4gXdRPe9NHeOCJzqSY2SVClldMQsNXlIkFOlGzU19LoMJbTv/hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQRKuo/D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759882205; c=relaxed/simple;
+	bh=3t+pTwaL8eeeP8H7hr9rZgiVh0KbjnAtYJ8nC5OKPd8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=uOvFoitH/GHU6ooQfyQ1tHlsl4NU1MmIPGCwKEOOpCZelmYgRtoKW1n3MwFj2yXfaMQI6jVhkhLIC/zIdEs+Xst00GR1rhQ7orOSzkEdPqvGPoUcuCooJXBEpngi6IFRqPHfy1cuP44L9gkww4Q0o/wzS4a6JXC43d3HycX76Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=likewhatevs.io; spf=pass smtp.mailfrom=likewhatevs.io; dkim=pass (2048-bit key) header.d=likewhatevs.io header.i=@likewhatevs.io header.b=OXvyU3fx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EAeIgmv3; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=likewhatevs.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=likewhatevs.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQRKuo/D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7F5C4CEF1;
-	Wed,  8 Oct 2025 00:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759882101;
-	bh=zwzuDUqs2zW/KGFmmY0CnbIDRBr/A48Fdn4lYnyq4g4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=oQRKuo/DuYUvwmyCIixJqfGsZiYXA2ou3ww2vRCCQhurjEsfkUkAXhJnYanDgBPqA
-	 KQ3KotwVdlE8eLbyV9E9OkHpP4XeXUwJFzLevCikAgsdVw/AKFcarlVZ0GLrbbgyG5
-	 T4WCUwavD0Gm5Ftw4j43VgRCZtDp+IWZH6rGWD62eng6ldhZ/+F7M29D88XF57/Odv
-	 iWEA3PFKAhqzcG+8Ut3Dv6FZwfUr2a///kc7r35Moebwl6EqPo7sRTfUyjLqYmX9Kw
-	 wLrTxBFNKFxPmanyNWmUq5ZwmUbAxaDjusVYAq/kEFHJ7NM/9rPOGEvhbNvnebtnEG
-	 PFWy4/MTE8A8g==
-Date: Tue, 7 Oct 2025 17:08:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: ojeda@kernel.org
-Subject: Prebuilt LLVM 21.1.3 uploaded
-Message-ID: <20251008000816.GA1856596@ax162>
+	dkim=pass (2048-bit key) header.d=likewhatevs.io header.i=@likewhatevs.io header.b="OXvyU3fx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EAeIgmv3"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 9B821EC0607;
+	Tue,  7 Oct 2025 20:09:58 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Tue, 07 Oct 2025 20:09:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=likewhatevs.io;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
+	 t=1759882198; x=1759968598; bh=mXDEJn01f7B8rxb8SYhgor+nwynZ7V9Z
+	0AAlofedTMo=; b=OXvyU3fxySdSJJtsxUIhXhvi9zCLUvzuMHB7C2dbratosWXE
+	QY+2Z5F+zEB/Ck2+Ujd7IjAk5dAlVTXqCsxP2PDLxz+QyuzmQ3mzfwVgv2BT8wcj
+	7NEYouh3aIdRtY03KJo/8fJyu3bUHXYmdtLsxS3P35P2kNSubZ88EFNkYxD1m3y0
+	4Gf38CBdurGauQWq9WVzMtds2gmBiJsHYFUhEYAaEjVeau1kNj0K/JqmwJ6zXNaX
+	ZM+v5IxAMUPsyxLcbaAF6GAQDu/GVxUYvHcipwoTROZ7YH2yUvW5RERiRSvd/OBp
+	7sm9nU05mvbDH7xU+5MOdV8yahQpigc7Ub6qvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759882198; x=
+	1759968598; bh=mXDEJn01f7B8rxb8SYhgor+nwynZ7V9Z0AAlofedTMo=; b=E
+	AeIgmv3P6chjjM+ovc5jNtMKv3qOcZJvgw8CN8MdW/Jtuf4j42z4K8OV6u3HgcWp
+	R/9boOkfgcSQS4ZvfcLnKfWoEAfCtE6HsZdJOdma0nwhsLEVJ3+aUupn8q415YEV
+	IjYPZt0+/Z+r3dCaJ08y5tSXHX7iiJl1we6XlX+CBZi3pRFFcM2cZUNuVj7dmvGI
+	njLH+BkjpOG+mY6CXGgJBLbJRIukkVntyDS8kmmjsi3fwO4J5vBgGhqIlnVItNpc
+	vg0UlB13f3bIqpqGrQQEHdwI7zJ1Vk2S9kBvyjThVjmzfybPXBesrv89lBwhDlk+
+	NM5zUwDLxHYTPIunLQz7Q==
+X-ME-Sender: <xms:1qvlaJZ2YqNbu9UAyozVgY7acSDwdXfVXGnOPyrYjM1i9ETGTnHFQA>
+    <xme:1qvlaBGwbvyMDQ633jSHFoOgq6UMbmyefJOGTQGuPIhJrGaRev1DIW6nhRgyPJ_Au
+    AEsyuziaJnU5pi6KEve_qxuN6U7yJcKX10B--pvaxnWBzq0m85eGL4>
+X-ME-Received: <xmr:1qvlaKIRsUJ0MWs-kscDq5UUdwIYdeNbWA6K0kC4IQuTPdXyDAX6fa2j1ZY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddutddukedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepggfgtgffkfevuffhvffofhgjsehtqhertdertdejnecuhfhrohhmpedfrfgrthcu
+    ufhomhgrrhhufdcuoehprghtshhosehlihhkvgifhhgrthgvvhhsrdhioheqnecuggftrf
+    grthhtvghrnhepveffieeugeehleehjeekleekiedtiedvledvveehheegueeiveffkeev
+    heefffffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epphgrthhsoheslhhikhgvfihhrghtvghvshdrihhopdhnsggprhgtphhtthhopeejpdhm
+    ohguvgepshhmthhpohhuthdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhogh
+    hlvgdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtoheplhhinhhugidqkhgsuhhilhgusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepnhhstgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhorhgsohesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepnhhitghkrdguvghsrghulhhnihgvrhhsodhlkh
+    hmlhesghhmrghilhdrtghomhdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhu
+    gidruggvvh
+X-ME-Proxy: <xmx:1qvlaMNt4YrXixP1ewuAU8cjY_3hAT7UmXlCTJuFb6fleUkCnV2fpw>
+    <xmx:1qvlaKlJN2h1ncI9Pu7CPruoYd-B9PjsmZS473TphhUWgOcSZ5FenQ>
+    <xmx:1qvlaA4u7Q-R8796VKHDIdR_bjh1EAooA6jDb8K3MwZBy_w_AHU2kQ>
+    <xmx:1qvlaO3t0QvDtPrSOgzthLqUb8gbVpICn6J6C-poOvbR63pspWOWaQ>
+    <xmx:1qvlaF90E9kmXlWrZQB6K3J_xexG9SkGvTG-tsaON1H-_3Md3PqrMjTO>
+Feedback-ID: i7f194913:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 7 Oct 2025 20:09:58 -0400 (EDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 07 Oct 2025 20:09:57 -0400
+Message-Id: <DDCI68JLD5RP.1WAN6YKP7WWNU@likewhatevs.io>
+Cc: "Nathan Chancellor" <nathan@kernel.org>, <linux-kbuild@vger.kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>, "Bill Wendling" <morbo@google.com>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "clang-built-linux"
+ <llvm@lists.linux.dev>
+Subject: Re: [PATCH] scripts/clang-tools: Handle included .c files in
+ gen_compile_commands
+From: "Pat Somaru" <patso@likewhatevs.io>
+To: "Justin Stitt" <justinstitt@google.com>
+X-Mailer: aerc 0.20.1
+References: <20251007024527.1439747-1-patso@likewhatevs.io>
+ <be6kxu36uphlnhedsi7gsayhuetmqixil4dv2lxe4plvgyqewx@jecdpummb52l>
+ <CAFhGd8quQ3i9wEGOJNxy5s_MuD=WdxwqL15qB1i=KY8fW1Cf_Q@mail.gmail.com>
+In-Reply-To: <CAFhGd8quQ3i9wEGOJNxy5s_MuD=WdxwqL15qB1i=KY8fW1Cf_Q@mail.gmail.com>
 
-Hi all,
+Hi folks,
 
-I have built and uploaded LLVM 21.1.3 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+Thanks for the feedback so far!
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-opportunity to get them fixed in main and backported before the 21.x
-series is no longer supported.
+>> I realize this script is not ran often but maybe there is some heurstic
+>> or speedup that can be made to the regex.
 
-Cheers,
-Nathan
+I'll send a revision with this in a bit, thank you for the idea and
+noticing this! On my machine, v1 of this patch runs in ~900ms, v2 runs
+in 500ms and no patch runs in 400ms. I also confirmed v2 outputs an
+identical json to that v1 does.
+
+>>> However, my initial gut reaction is that I do not like this additional
+>>> complexity.=20
+
+I don't see other ways to get LSP working, but admittedly, this is my first=
+=20
+foray into kernel stuff. I kinda see a way to enable making LSP work via=20
+ifdef's, but I doubt folks would be OK with that at all. I can try differen=
+t=20
+ideas if folks have any.
+
+>>> I do see a number of files that include .c files so it may be worth=20
+>>> supporting this still but it feels like this heuristic could be
+>>> fragile, especially since aside from clangd, we have no real way to
+>>> validate that these files actually build correctly in the way that
+>>> compile_commands.json describes.
+
+I think the following helps with this, I ran cppcheck (i.e., not clangd)
+against my local checkout with both pre-patch and post-patch=20
+compile_commands.json to get some signal on this:
+
+=3D=3D=3D=3D
+$ cppcheck --project=3D../old_compile_commands.json 2>&1 | tail
+...
+Checking virt/lib/irqbypass.c ...
+2668/2668 files checked 100% done
+$ cppcheck --project=3D../old_compile_commands.json 2>&1 | grep -E 'error:|=
+warning:' | wc -l
+5
+$ cppcheck --project=3D../new_compile_commands.json 2>&1 | tail
+...
+Checking virt/lib/irqbypass.c ...
+2821/2821 files checked 100% done
+$ cppcheck --project=3D../new_compile_commands.json 2>&1 | grep -E 'error:|=
+warning:' | wc -l
+7
+=3D=3D=3D=3D
+
+Additionally, I wrapped clangd in a script and collected some data on how
+it performs with the various compile_commands.json to help illustrate the=
+=20
+properties of this patch:
+
+=3D=3D=3D=3D
+script output with newly included files and old compile_commands.json (i.e.=
+ what folks encounter working on these files now):
+files: 2820
+clangd errors: 58452
+clangd fatal_too_many_errors: 195
+clangd timeouts: 36
+
+script output with new compile_commands.json:
+files: 2820
+clangd errors: 58763
+clangd fatal_too_many_errors: 164
+clangd timeouts: 39
+
+script output with old compile_commands.json:
+files: 2667
+clangd errors: 55995
+clangd fatal_too_many_errors: 118
+clangd timeouts: 36
+=3D=3D=3D=3D
+
+Thank you for the feedback so far and for maintaining this wonderful
+script. LSP makes kernel stuff like 10x more accessible!
+
+
+On Tue Oct 7, 2025 at 3:59 PM EDT, Justin Stitt wrote:
+> I seem to have dropped some folks from the CC list somehow (probably
+> wrong mutt keybind).
+>
+> I've self-quoted myself below to preserve context.
+>
+> On Tue, Oct 7, 2025 at 12:55=E2=80=AFPM Justin Stitt <justinstitt@google.=
+com> wrote:
+>>
+>> Hi,
+>>
+>> On Mon, Oct 06, 2025 at 10:45:27PM -0400, Pat Somaru wrote:
+>> > The gen_compile_commands.py script currently only creates entries for =
+the
+>> > primary source files found in .cmd files, but some kernel source files
+>> > text-include others (i.e. kernel/sched/build_policy.c).
+>> >
+>> > This prevents tools like clangd from working properly on text-included=
+ c
+>> > files, such as kernel/sched/ext.c because the generated compile_comman=
+ds.json
+>> > does not have entries for them.
+>> >
+>> > Extend process_line() to detect when a source file includes .c files, =
+and
+>> > generate additional compile_commands.json entries for them. For includ=
+ed c
+>> > files, use the same compile flags as their parent and add their parent=
+s headers.
+>> >
+>> > This enables lsp tools like clangd to work properly on files like
+>> > kernel/sched/ext.c
+>> >
+>> > Signed-off-by: Pat Somaru <patso@likewhatevs.io>
+>>
+>> FWIW, I tested this out and my clangd was much happier dealing with
+>> kernel/sched/ext.c. Nathan's points are still valid, I'm just giving
+>> user feedback.
+>>
+>> After benchmarking the script itself, I saw some performance hits:
+>>
+>> pre-patch, 5x run average: 0.590 seconds
+>> post-patch, 5x run average: 2.164 seconds
+>>
+>> With this simple invocation:
+>>
+>>   ./scripts/clang-tools/gen_compile_commands.py -d build-master -o $TMP/=
+compile_commands.json
+>>
+>> I realize this script is not ran often but maybe there is some heurstic
+>> or speedup that can be made to the regex.
+>>
+>> Tested-by: Justin Stitt <justinstitt@google.com>
+>>
+>> > ---
+>> >  scripts/clang-tools/gen_compile_commands.py | 126 +++++++++++++++++++=
+-
+>> >  1 file changed, 121 insertions(+), 5 deletions(-)
+>> >
+>> > diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/cla=
+ng-tools/gen_compile_commands.py
+>> > index 96e6e46ad1a70..02791efdc06d0 100755
+>> > --- a/scripts/clang-tools/gen_compile_commands.py
+>> > +++ b/scripts/clang-tools/gen_compile_commands.py
+>> > @@ -149,8 +149,87 @@ def cmdfiles_for_modorder(modorder):
+>> >                      yield to_cmdfile(mod_line.rstrip())
+>> >
+>> >
+>> > +def extract_includes_from_file(source_file, root_directory):
+>> > +    """Extract #include statements from a C file.
+>> > +
+>> > +    Args:
+>> > +        source_file: Path to the source .c file to analyze
+>> > +        root_directory: Root directory for resolving relative paths
+>> > +
+>> > +    Returns:
+>> > +        List of header files that should be included (without quotes/=
+brackets)
+>> > +    """
+>> > +    includes =3D []
+>> > +    if not os.path.exists(source_file):
+>> > +        return includes
+>> > +
+>> > +    try:
+>> > +        with open(source_file, 'r') as f:
+>> > +            for line in f:
+>> > +                line =3D line.strip()
+>> > +                # Look for #include statements.
+>> > +                # Match both #include "header.h" and #include <header=
+.h>.
+>> > +                match =3D re.match(r'^\s*#\s*include\s*[<"]([^>"]*)[>=
+"]', line)
+>> > +                if match:
+>> > +                    header =3D match.group(1)
+>> > +                    # Skip including other .c files to avoid circular=
+ includes.
+>> > +                    if not header.endswith('.c'):
+>> > +                        # For relative includes (quoted), resolve pat=
+h relative to source file.
+>> > +                        if '"' in line:
+>> > +                            src_dir =3D os.path.dirname(source_file)
+>> > +                            header_path =3D os.path.join(src_dir, hea=
+der)
+>> > +                            if os.path.exists(header_path):
+>> > +                                rel_header =3D os.path.relpath(header=
+_path, root_directory)
+>> > +                                includes.append(rel_header)
+>> > +                            else:
+>> > +                                includes.append(header)
+>> > +                        else:
+>> > +                            # System include like <linux/sched.h>.
+>> > +                            includes.append(header)
+>> > +    except IOError:
+>> > +        pass
+>> > +
+>> > +    return includes
+>> > +
+>> > +
+>> > +def find_included_c_files(source_file, root_directory):
+>> > +    """Find .c files that are included by the given source file.
+>> > +
+>> > +    Args:
+>> > +        source_file: Path to the source .c file
+>> > +        root_directory: Root directory for resolving relative paths
+>> > +
+>> > +    Yields:
+>> > +        Full paths to included .c files
+>> > +    """
+>> > +    if not os.path.exists(source_file):
+>> > +        return
+>> > +
+>> > +    try:
+>> > +        with open(source_file, 'r') as f:
+>> > +            for line in f:
+>> > +                line =3D line.strip()
+>> > +                # Look for #include "*.c" patterns.
+>> > +                match =3D re.match(r'^\s*#\s*include\s*"([^"]*\.c)"\s=
+*$', line)
+>> > +                if match:
+>> > +                    included_file =3D match.group(1)
+>> > +                    # Handle relative paths.
+>> > +                    if not os.path.isabs(included_file):
+>> > +                        src_dir =3D os.path.dirname(source_file)
+>> > +                        included_file =3D os.path.join(src_dir, inclu=
+ded_file)
+>> > +
+>> > +                    # Normalize the path.
+>> > +                    included_file =3D os.path.normpath(included_file)
+>> > +
+>> > +                    # Check if the file exists.
+>> > +                    if os.path.exists(included_file):
+>> > +                        yield included_file
+>> > +    except IOError:
+>> > +        pass
+>> > +
+>> > +
+>> >  def process_line(root_directory, command_prefix, file_path):
+>> > -    """Extracts information from a .cmd line and creates an entry fro=
+m it.
+>> > +    """Extracts information from a .cmd line and creates entries from=
+ it.
+>> >
+>> >      Args:
+>> >          root_directory: The directory that was searched for .cmd file=
+s. Usually
+>> > @@ -160,7 +239,8 @@ def process_line(root_directory, command_prefix, f=
+ile_path):
+>> >              Usually relative to root_directory, but sometimes absolut=
+e.
+>> >
+>> >      Returns:
+>> > -        An entry to append to compile_commands.
+>> > +        A list of entries to append to compile_commands (may include =
+multiple
+>> > +        entries if the source file includes other .c files).
+>> >
+>> >      Raises:
+>> >          ValueError: Could not find the extracted file based on file_p=
+ath and
+>> > @@ -176,11 +256,47 @@ def process_line(root_directory, command_prefix,=
+ file_path):
+>> >      abs_path =3D os.path.realpath(os.path.join(root_directory, file_p=
+ath))
+>> >      if not os.path.exists(abs_path):
+>> >          raise ValueError('File %s not found' % abs_path)
+>> > -    return {
+>> > +
+>> > +    entries =3D []
+>> > +
+>> > +    # Create entry for the main source file.
+>> > +    main_entry =3D {
+>> >          'directory': root_directory,
+>> >          'file': abs_path,
+>> >          'command': prefix + file_path,
+>> >      }
+>> > +    entries.append(main_entry)
+>> > +
+>> > +    # Find and create entries for included .c files.
+>> > +    for included_c_file in find_included_c_files(abs_path, root_direc=
+tory):
+>> > +        # For included .c files, create a compilation command that:
+>> > +        # 1. Uses the same compilation flags as the parent file
+>> > +        # 2. But compiles the included file directly (not the parent)
+>> > +        # 3. Includes necessary headers from the parent file for prop=
+er macro resolution
+>> > +
+>> > +        # Convert absolute path to relative for the command.
+>> > +        rel_path =3D os.path.relpath(included_c_file, root_directory)
+>> > +
+>> > +        # Extract includes from the parent file to provide proper com=
+pilation context.
+>> > +        extra_includes =3D ''
+>> > +        try:
+>> > +            parent_includes =3D extract_includes_from_file(abs_path, =
+root_directory)
+>> > +            if parent_includes:
+>> > +                extra_includes =3D ' ' + ' '.join('-include ' + inc f=
+or inc in parent_includes)
+>> > +        except IOError:
+>> > +            pass
+>> > +
+>> > +        included_entry =3D {
+>> > +            'directory': root_directory,
+>> > +            'file': included_c_file,
+>> > +            # Use the same compilation prefix but target the included=
+ file directly.
+>> > +            # Add extra headers for proper macro resolution.
+>> > +            'command': prefix + extra_includes + ' ' + rel_path,
+>> > +        }
+>> > +        entries.append(included_entry)
+>> > +        logging.debug('Added entry for included file: %s', included_c=
+_file)
+>> > +
+>> > +    return entries
+>> >
+>> >
+>> >  def main():
+>> > @@ -213,9 +329,9 @@ def main():
+>> >                  result =3D line_matcher.match(f.readline())
+>> >                  if result:
+>> >                      try:
+>> > -                        entry =3D process_line(directory, result.grou=
+p('command_prefix'),
+>> > +                        entries =3D process_line(directory, result.gr=
+oup('command_prefix'),
+>> >                                               result.group('file_path'=
+))
+>> > -                        compile_commands.append(entry)
+>> > +                        compile_commands.extend(entries)
+>> >                      except ValueError as err:
+>> >                          logging.info('Could not add line from %s: %s'=
+,
+>> >                                       cmdfile, err)
+>> > --
+>> > 2.51.0
+>> >
+>> >
+>>
+>> Thanks
+>> Justin
+
