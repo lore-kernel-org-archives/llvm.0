@@ -1,175 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206DA35949;
-	Thu,  9 Oct 2025 16:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5E419E967;
+	Thu,  9 Oct 2025 16:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760025616; cv=none; b=E9CJm61+2xqhmTCFkGunj9N3lLxzsFC2ZQqTFtIBUBiHcZa0mXTAP1nh79KfFQjEc/Q2G/pNCdun6mRCvl3t0rZr8a4oo9HrBN17/oQU/5hOsUoK8GOy/2u4a1djfhRBy54S7jXt+4f6ZySzz5XO018TfivpGsup0W83RigOaWQ=
+	t=1760026558; cv=none; b=oiBqy7Umn7zH0FdkEj3Mru6modbIVSvc4bS819LetwjvptHUqhbElHfOYEwRRFKNmhOTxf22X3RFlqL0KiYR03szwzvCsQW4UoycciMZihb8pSm2+ovPyugyuIuNlTvwqa7qqnRrMjO6cIIRKLlAwX3Pjb54iG+LfmIiIMeGJ/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760025616; c=relaxed/simple;
-	bh=v6Obz/APuabChahRaoUjFnlFmuZpIaMN+l88laEf0jI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F+OZ85tjhnCAe01JKmzhriLG+dayoWnXfZZb5UpAPHX4Hny3JCiVS/tOXPt1eFCdPSg+Cc+iIBUuLPlKqlYy4P8UJJuk0ZTCdonJgsaPBZe1aAeUfY5Kq5+QPZwAuh4rAiKi7s2kpfYrUc8RDe6Y8p90yN9gYYjIHd6+Bk8OYPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODfvDC/a; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760026558; c=relaxed/simple;
+	bh=GW2GbcN//l5fCMJCAmqKOLs19cMOj4ey0L2cyj1vlKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EDwoNwSwe9GFTzs1UeHIsTEHDJ4DpTh0AQL7N2d9NhC13xqkyXt7+67vBg0MSwFILEYYUOrz04uqRWyIA6he1gs33nM/Z/DSPs7kLrdzh4VoXq6wDUQepaTWArcqkQBfx/1CYwKuB3Sdr1GUoCIiFMi3SDvNCMuBZjDxXVJcEY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VuvCudFh; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODfvDC/a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767CDC116B1;
-	Thu,  9 Oct 2025 16:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760025615;
-	bh=v6Obz/APuabChahRaoUjFnlFmuZpIaMN+l88laEf0jI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ODfvDC/al6rUFNEeSOcSpqsq/gxw6rxXEoM3VdCgwVPLSLaiY7SnKzurEqqkQxXs8
-	 1TjTeYn5nPXhIzpRPDFkICzkKpOY5yrkfVcUmAvsirAH1yUu98ZMQqJXI0ID+qj0ch
-	 CWzSlOqHeCgNRa7bLU5NDG505Xknb0loF6tGkifxg5Ll4N6YSfR+seKexYWY9U9oFI
-	 FZTT/JZ7CiO55ZYih8/2zv0M24tMeh0j2h02vHSPu5XJJsPMd6c8fEHzChvEFWa9dV
-	 5RzaVHItYDylLgdBED/CVnTkGCo73mXowtaCM7H/nbxrpuWTBjUTQxzRhvfkQwOwfO
-	 oMEOlo8BQBq6g==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Lee Jones <lee@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	ckeepax@opensource.cirrus.com,
-	nathan@kernel.org,
-	linux-sound@vger.kernel.org,
-	patches@opensource.cirrus.com,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.17-5.4] mfd: madera: Work around false-positive -Wininitialized warning
-Date: Thu,  9 Oct 2025 11:55:42 -0400
-Message-ID: <20251009155752.773732-76-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251009155752.773732-1-sashal@kernel.org>
-References: <20251009155752.773732-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VuvCudFh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760026557; x=1791562557;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GW2GbcN//l5fCMJCAmqKOLs19cMOj4ey0L2cyj1vlKo=;
+  b=VuvCudFhBZQotqGjSUlizgoN4SXZnQrTQAsWyX29/fBY63QVhX/DWmlE
+   dZnSdvlUimXUZM+LtJCjMPTYMQZbRsl8I+Nd5xO7eFigfY4XAAaayNUtj
+   bbJw/sG3uABpJkB7KXiEx+0npaCNCyVBGi2NsiniSJO/gg1s91tUOlnCi
+   nycU7VCspw5XtcKLOwQ5y5NaSrzRZDZ+/HR4/XzltRnHwgIJeh2R/CV+E
+   aTReyvCrfJcR/CB6Lex7QmRfyrnkBzK5vkUS9nA/a7a8c5/vXydZp+N6b
+   mAoIQJjBrRXSE/SsO62EX54N4VkwDcy8FTg1h2iJ2Tk1AH6pLvUPpz9qW
+   A==;
+X-CSE-ConnectionGUID: 6v/TYAMmTea1ELL/nxE86A==
+X-CSE-MsgGUID: 7UsdsysYQrW3zS0NH36ISA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="73346882"
+X-IronPort-AV: E=Sophos;i="6.19,216,1754982000"; 
+   d="scan'208";a="73346882"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 09:15:56 -0700
+X-CSE-ConnectionGUID: 31OC3+NXSLWk2EneASn0Lg==
+X-CSE-MsgGUID: oXNHlQTTR960XEbEhJpplg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,216,1754982000"; 
+   d="scan'208";a="179864807"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 09 Oct 2025 09:15:55 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v6tJ2-0000zB-1o;
+	Thu, 09 Oct 2025 16:15:52 +0000
+Date: Fri, 10 Oct 2025 00:15:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:always-kfence 1/1] mm/slub.c:4207:10: error: call to
+ undeclared function '__kfence_alloc'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202510100013.FEFGC7Qg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.17.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git always-kfence
+head:   90a1fd620f839dfd87e82ec5482b27e364b1b5b9
+commit: 90a1fd620f839dfd87e82ec5482b27e364b1b5b9 [1/1] mm: add a way to always do a kfence allocation in a slabcache
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251010/202510100013.FEFGC7Qg-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510100013.FEFGC7Qg-lkp@intel.com/reproduce)
 
-[ Upstream commit 364752aa0c6ab0a06a2d5bfdb362c1ca407f1a30 ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510100013.FEFGC7Qg-lkp@intel.com/
 
-clang-21 warns about one uninitialized variable getting dereferenced
-in madera_dev_init:
+All errors (new ones prefixed by >>):
 
-drivers/mfd/madera-core.c:739:10: error: variable 'mfd_devs' is uninitialized when used here [-Werror,-Wuninitialized]
-  739 |                               mfd_devs, n_devs,
-      |                               ^~~~~~~~
-drivers/mfd/madera-core.c:459:33: note: initialize the variable 'mfd_devs' to silence this warning
-  459 |         const struct mfd_cell *mfd_devs;
-      |                                        ^
-      |                                         = NULL
+>> mm/slub.c:4207:10: error: call to undeclared function '__kfence_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4207 |                 return __kfence_alloc(s, orig_size, gfpflags);
+         |                        ^
+   mm/slub.c:4207:10: note: did you mean 'kfence_alloc'?
+   include/linux/kfence.h:232:21: note: 'kfence_alloc' declared here
+     232 | static inline void *kfence_alloc(struct kmem_cache *s, size_t size, gfp_t flags) { return NULL; }
+         |                     ^
+>> mm/slub.c:4207:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
+    4207 |                 return __kfence_alloc(s, orig_size, gfpflags);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-The code is actually correct here because n_devs is only nonzero
-when mfd_devs is a valid pointer, but this is impossible for the
-compiler to see reliably.
 
-Change the logic to check for the pointer as well, to make this easier
-for the compiler to follow.
+vim +/__kfence_alloc +4207 mm/slub.c
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20250807071932.4085458-1-arnd@kernel.org
-Signed-off-by: Lee Jones <lee@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+  4203	
+  4204	static void *slab_kfence_alloc(struct kmem_cache *s, size_t orig_size, gfp_t gfpflags)
+  4205	{
+  4206		if (s->flags & SLAB_ALWAYS_KFENCE)
+> 4207			return __kfence_alloc(s, orig_size, gfpflags);
+  4208		return kfence_alloc(s, orig_size, gfpflags);
+  4209	}
+  4210	
 
-LLM Generated explanations, may be completely bogus:
-
-YES
-
-- What changed
-  - Initializes `mfd_devs` to a known value to placate clang-21’s
-    -Wuninitialized:
-    - drivers/mfd/madera-core.c:459 initializes `const struct mfd_cell
-      *mfd_devs = NULL;`
-  - Hardens the validity check before use:
-    - drivers/mfd/madera-core.c:673 expands the guard from `if
-      (!n_devs)` to `if (!n_devs || !mfd_devs)`
-  - The pointer is later passed to `mfd_add_devices()`:
-    - drivers/mfd/madera-core.c:739 uses `mfd_devs, n_devs`
-
-- Why it matters
-  - Fixes a real build failure with newer toolchains: clang-21 flags the
-    potential uninitialized use as an error (`-Werror,-Wuninitialized`)
-    when passing `mfd_devs` to `mfd_add_devices()` (as described in the
-    commit message and evidenced by the code at drivers/mfd/madera-
-    core.c:739 and the declaration at drivers/mfd/madera-core.c:459).
-  - The code’s intended invariant is that `n_devs` is set nonzero iff
-    `mfd_devs` points to a valid array; this is enforced by setting them
-    together in each supported device case, e.g.:
-    - drivers/mfd/madera-core.c:603/604 (`cs47l15` case)
-    - drivers/mfd/madera-core.c:616/617 (`cs47l35` case)
-    - drivers/mfd/madera-core.c:630/631 (`cs47l85`/`WM1840` case)
-    - drivers/mfd/madera-core.c:644/645 (`cs47l90`/`CS47L91` case)
-    - drivers/mfd/madera-core.c:659/660 (`cs42l92`/`cs47l92`/`cs47l93`
-      case)
-  - Compilers cannot always see this invariant, leading to the false
-    positive. Initializing the pointer and checking it explicitly makes
-    the intent obvious and restores buildability with strict warning-as-
-    error configurations.
-
-- Stability and risk
-  - Minimal, localized change confined to MFD madera core; no
-    architectural changes.
-  - No functional behavior change in the valid paths: when any supported
-    device is matched, both `mfd_devs` and `n_devs` are set together
-    (see examples above), so the new check behaves identically to the
-    old one.
-  - If an unexpected code path ever sets `n_devs` without a valid
-    `mfd_devs`, the new guard fails fast with `-ENODEV` rather than
-    risking undefined behavior at `mfd_add_devices()`—arguably safer.
-  - Does not introduce new features; purely a correctness/build fix for
-    newer compilers.
-
-- Stable backport criteria
-  - Fixes a user-affecting bug: builds with newer clang (and with
-    `CONFIG_WERROR=y` or similar settings) break; this unblocks those
-    builds.
-  - The fix is small, contained, and low risk.
-  - No cross-subsystem or architectural changes.
-  - While there’s no explicit “Cc: stable” tag, stable trees routinely
-    accept trivial, obviously-correct build fixes for widely used
-    toolchains.
-
-Given the above, this is a good candidate for stable backporting.
-
- drivers/mfd/madera-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mfd/madera-core.c b/drivers/mfd/madera-core.c
-index bdbd5bfc97145..2f74a8c644a32 100644
---- a/drivers/mfd/madera-core.c
-+++ b/drivers/mfd/madera-core.c
-@@ -456,7 +456,7 @@ int madera_dev_init(struct madera *madera)
- 	struct device *dev = madera->dev;
- 	unsigned int hwid;
- 	int (*patch_fn)(struct madera *) = NULL;
--	const struct mfd_cell *mfd_devs;
-+	const struct mfd_cell *mfd_devs = NULL;
- 	int n_devs = 0;
- 	int i, ret;
- 
-@@ -670,7 +670,7 @@ int madera_dev_init(struct madera *madera)
- 		goto err_reset;
- 	}
- 
--	if (!n_devs) {
-+	if (!n_devs || !mfd_devs) {
- 		dev_err(madera->dev, "Device ID 0x%x not a %s\n", hwid,
- 			madera->type_name);
- 		ret = -ENODEV;
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
