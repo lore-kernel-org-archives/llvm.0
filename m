@@ -1,105 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5E419E967;
-	Thu,  9 Oct 2025 16:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024CE1DEFE8;
+	Thu,  9 Oct 2025 17:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760026558; cv=none; b=oiBqy7Umn7zH0FdkEj3Mru6modbIVSvc4bS819LetwjvptHUqhbElHfOYEwRRFKNmhOTxf22X3RFlqL0KiYR03szwzvCsQW4UoycciMZihb8pSm2+ovPyugyuIuNlTvwqa7qqnRrMjO6cIIRKLlAwX3Pjb54iG+LfmIiIMeGJ/s=
+	t=1760029210; cv=none; b=m8dP524idfPDajAl4MZZ/7Y4p2A7cC+rQ/hU18NL6u0R3N5PpO3HwaGiN4AY6KVYgMEfNEm97+hpRWBezwoIdD61+ZDOLxdSBkaL24/MzxlHu/YnsljV5Sp8veq0THSmkCq2NoQnUjWrGvegsx/p6f/orwtrU+quoSVhPB9pV9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760026558; c=relaxed/simple;
-	bh=GW2GbcN//l5fCMJCAmqKOLs19cMOj4ey0L2cyj1vlKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EDwoNwSwe9GFTzs1UeHIsTEHDJ4DpTh0AQL7N2d9NhC13xqkyXt7+67vBg0MSwFILEYYUOrz04uqRWyIA6he1gs33nM/Z/DSPs7kLrdzh4VoXq6wDUQepaTWArcqkQBfx/1CYwKuB3Sdr1GUoCIiFMi3SDvNCMuBZjDxXVJcEY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VuvCudFh; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1760029210; c=relaxed/simple;
+	bh=qHALCCO4zmc9O+5R1DF2w4wAbmTKhq0ny40dvtb3LSo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRp0I3uvtcjDd//rpEKrFi1Z6lLbjqR5sZ7HZtrskN/o+wWDFQ3buprn5s0whXtbCAdDSk6EcrXFf8y7/NwpcoHVnhBaa+6IQd6U60w9npnotGG24YbRo2kifpIpbAPXarz97l9Q6Qxop7PEiGZIthBklK/F/6bn0mkf0DLv8gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqECiipY; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VuvCudFh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqECiipY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760026557; x=1791562557;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GW2GbcN//l5fCMJCAmqKOLs19cMOj4ey0L2cyj1vlKo=;
-  b=VuvCudFhBZQotqGjSUlizgoN4SXZnQrTQAsWyX29/fBY63QVhX/DWmlE
-   dZnSdvlUimXUZM+LtJCjMPTYMQZbRsl8I+Nd5xO7eFigfY4XAAaayNUtj
-   bbJw/sG3uABpJkB7KXiEx+0npaCNCyVBGi2NsiniSJO/gg1s91tUOlnCi
-   nycU7VCspw5XtcKLOwQ5y5NaSrzRZDZ+/HR4/XzltRnHwgIJeh2R/CV+E
-   aTReyvCrfJcR/CB6Lex7QmRfyrnkBzK5vkUS9nA/a7a8c5/vXydZp+N6b
-   mAoIQJjBrRXSE/SsO62EX54N4VkwDcy8FTg1h2iJ2Tk1AH6pLvUPpz9qW
-   A==;
-X-CSE-ConnectionGUID: 6v/TYAMmTea1ELL/nxE86A==
-X-CSE-MsgGUID: 7UsdsysYQrW3zS0NH36ISA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="73346882"
-X-IronPort-AV: E=Sophos;i="6.19,216,1754982000"; 
-   d="scan'208";a="73346882"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 09:15:56 -0700
-X-CSE-ConnectionGUID: 31OC3+NXSLWk2EneASn0Lg==
-X-CSE-MsgGUID: oXNHlQTTR960XEbEhJpplg==
+  t=1760029208; x=1791565208;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=qHALCCO4zmc9O+5R1DF2w4wAbmTKhq0ny40dvtb3LSo=;
+  b=hqECiipY6X67mcjtHUN+TpZvF9cX4E+U5zNpC/WkslUmAfm/rhSRBUbY
+   PZPkvNrxyuT3pu4L+swSFejPYgsnS0hb8hcbk6MxJ9eocq2W8qtZqU0MS
+   jilpCgFk513HIhW/WNPOv0DHhyskE93TeaBiM0Sqc8gtzABD84pucAUIQ
+   z1qr50iPYIZjCkbCxmS7E+g6I/g4tgzC8UB+51QCzLv1BdbEArYfnfCPf
+   ZzxBK2RDCtac/j44ZUxUSeyvfEYXEFP3w1s7mJOHDkQlFl1SNBaaQKfTa
+   EnTUIjkwnw1fEbp7FvA7HvgDweKFUzFrpr2NXz5ig1whxvByXqvrYkSRM
+   g==;
+X-CSE-ConnectionGUID: oapcQO6VQoqziQAXek8l9g==
+X-CSE-MsgGUID: a8beVjJTSAWD3a2RlQ4wEA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="79686800"
+X-IronPort-AV: E=Sophos;i="6.19,217,1754982000"; 
+   d="scan'208";a="79686800"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 10:00:07 -0700
+X-CSE-ConnectionGUID: YkTPKiieR0ySgBqMi7CC3g==
+X-CSE-MsgGUID: 6raujUmnReSDGMNgLlA4Ew==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,216,1754982000"; 
-   d="scan'208";a="179864807"
+X-IronPort-AV: E=Sophos;i="6.19,217,1754982000"; 
+   d="scan'208";a="180359215"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 09 Oct 2025 09:15:55 -0700
+  by orviesa009.jf.intel.com with ESMTP; 09 Oct 2025 10:00:05 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v6tJ2-0000zB-1o;
-	Thu, 09 Oct 2025 16:15:52 +0000
-Date: Fri, 10 Oct 2025 00:15:13 +0800
+	id 1v6tzm-00013P-2U;
+	Thu, 09 Oct 2025 17:00:02 +0000
+Date: Fri, 10 Oct 2025 00:59:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:always-kfence 1/1] mm/slub.c:4207:10: error: call to
- undeclared function '__kfence_alloc'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202510100013.FEFGC7Qg-lkp@intel.com>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-xe@lists.freedesktop.org
+Subject: Re: [PATCH 06/20] drm/i915/cdclk: Extract dg2_power_well_count()
+Message-ID: <202510100011.UWvFqHK3-lkp@intel.com>
+References: <20250923171943.7319-7-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250923171943.7319-7-ville.syrjala@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git always-kfence
-head:   90a1fd620f839dfd87e82ec5482b27e364b1b5b9
-commit: 90a1fd620f839dfd87e82ec5482b27e364b1b5b9 [1/1] mm: add a way to always do a kfence allocation in a slabcache
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251010/202510100013.FEFGC7Qg-lkp@intel.com/config)
+Hi Ville,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.17 next-20251009]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-i915-Introduce-intel_crtc_enable_changed-and-intel_any_crtc_enable_changed/20250926-204211
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20250923171943.7319-7-ville.syrjala%40linux.intel.com
+patch subject: [PATCH 06/20] drm/i915/cdclk: Extract dg2_power_well_count()
+config: i386-randconfig-011-20251009 (https://download.01.org/0day-ci/archive/20251010/202510100011.UWvFqHK3-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510100013.FEFGC7Qg-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510100011.UWvFqHK3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510100013.FEFGC7Qg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510100011.UWvFqHK3-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/slub.c:4207:10: error: call to undeclared function '__kfence_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    4207 |                 return __kfence_alloc(s, orig_size, gfpflags);
-         |                        ^
-   mm/slub.c:4207:10: note: did you mean 'kfence_alloc'?
-   include/linux/kfence.h:232:21: note: 'kfence_alloc' declared here
-     232 | static inline void *kfence_alloc(struct kmem_cache *s, size_t size, gfp_t flags) { return NULL; }
-         |                     ^
->> mm/slub.c:4207:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
-    4207 |                 return __kfence_alloc(s, orig_size, gfpflags);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/i915/display/intel_cdclk.c:2619:6: error: variable 'voltage_level' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    2619 |         if (!intel_cdclk_changed(&old_cdclk_state->actual,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2620 |                                  &new_cdclk_state->actual) &&
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2621 |             dg2_power_well_count(display, old_cdclk_state) ==
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2622 |             dg2_power_well_count(display, old_cdclk_state))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cdclk.c:2649:30: note: uninitialized use occurs here
+    2649 |         intel_pcode_notify(display, voltage_level, num_active_pipes, cdclk,
+         |                                     ^~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cdclk.c:2619:2: note: remove the 'if' if its condition is always true
+    2619 |         if (!intel_cdclk_changed(&old_cdclk_state->actual,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2620 |                                  &new_cdclk_state->actual) &&
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2621 |             dg2_power_well_count(display, old_cdclk_state) ==
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2622 |             dg2_power_well_count(display, old_cdclk_state))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2623 | 
+    2624 |         /* According to "Sequence Before Frequency Change", voltage level set to 0x3 */
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2625 |         voltage_level = DISPLAY_TO_PCODE_VOLTAGE_MAX;
+>> drivers/gpu/drm/i915/display/intel_cdclk.c:2619:6: error: variable 'voltage_level' is used uninitialized whenever '&&' condition is false [-Werror,-Wsometimes-uninitialized]
+    2619 |         if (!intel_cdclk_changed(&old_cdclk_state->actual,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2620 |                                  &new_cdclk_state->actual) &&
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cdclk.c:2649:30: note: uninitialized use occurs here
+    2649 |         intel_pcode_notify(display, voltage_level, num_active_pipes, cdclk,
+         |                                     ^~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cdclk.c:2619:6: note: remove the '&&' if its condition is always true
+    2619 |         if (!intel_cdclk_changed(&old_cdclk_state->actual,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2620 |                                  &new_cdclk_state->actual) &&
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cdclk.c:2616:42: note: initialize the variable 'voltage_level' to silence this warning
+    2616 |         unsigned int cdclk = 0; u8 voltage_level, num_active_pipes = 0;
+         |                                                 ^
+         |                                                  = '\0'
    2 errors generated.
 
 
-vim +/__kfence_alloc +4207 mm/slub.c
+vim +2619 drivers/gpu/drm/i915/display/intel_cdclk.c
 
-  4203	
-  4204	static void *slab_kfence_alloc(struct kmem_cache *s, size_t orig_size, gfp_t gfpflags)
-  4205	{
-  4206		if (s->flags & SLAB_ALWAYS_KFENCE)
-> 4207			return __kfence_alloc(s, orig_size, gfpflags);
-  4208		return kfence_alloc(s, orig_size, gfpflags);
-  4209	}
-  4210	
+aaf1b5cf5e779df Ville Syrjälä       2025-09-23  2608  
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2609  static void intel_cdclk_pcode_pre_notify(struct intel_atomic_state *state)
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2610  {
+d34927acff91501 Ville Syrjälä       2024-09-06  2611  	struct intel_display *display = to_intel_display(state);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2612  	const struct intel_cdclk_state *old_cdclk_state =
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2613  		intel_atomic_get_old_cdclk_state(state);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2614  	const struct intel_cdclk_state *new_cdclk_state =
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2615  		intel_atomic_get_new_cdclk_state(state);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2616  	unsigned int cdclk = 0; u8 voltage_level, num_active_pipes = 0;
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2617  	bool change_cdclk, update_pipe_count;
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2618  
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04 @2619  	if (!intel_cdclk_changed(&old_cdclk_state->actual,
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2620  				 &new_cdclk_state->actual) &&
+aaf1b5cf5e779df Ville Syrjälä       2025-09-23  2621  	    dg2_power_well_count(display, old_cdclk_state) ==
+aaf1b5cf5e779df Ville Syrjälä       2025-09-23  2622  	    dg2_power_well_count(display, old_cdclk_state))
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2623  
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2624  	/* According to "Sequence Before Frequency Change", voltage level set to 0x3 */
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2625  	voltage_level = DISPLAY_TO_PCODE_VOLTAGE_MAX;
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2626  
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2627  	change_cdclk = new_cdclk_state->actual.cdclk != old_cdclk_state->actual.cdclk;
+aaf1b5cf5e779df Ville Syrjälä       2025-09-23  2628  	update_pipe_count = dg2_power_well_count(display, new_cdclk_state) >
+aaf1b5cf5e779df Ville Syrjälä       2025-09-23  2629  		dg2_power_well_count(display, old_cdclk_state);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2630  
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2631  	/*
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2632  	 * According to "Sequence Before Frequency Change",
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2633  	 * if CDCLK is increasing, set bits 25:16 to upcoming CDCLK,
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2634  	 * if CDCLK is decreasing or not changing, set bits 25:16 to current CDCLK,
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2635  	 * which basically means we choose the maximum of old and new CDCLK, if we know both
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2636  	 */
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2637  	if (change_cdclk)
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2638  		cdclk = max(new_cdclk_state->actual.cdclk, old_cdclk_state->actual.cdclk);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2639  
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2640  	/*
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2641  	 * According to "Sequence For Pipe Count Change",
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2642  	 * if pipe count is increasing, set bits 25:16 to upcoming pipe count
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2643  	 * (power well is enabled)
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2644  	 * no action if it is decreasing, before the change
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2645  	 */
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2646  	if (update_pipe_count)
+aaf1b5cf5e779df Ville Syrjälä       2025-09-23  2647  		num_active_pipes = dg2_power_well_count(display, new_cdclk_state);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2648  
+d34927acff91501 Ville Syrjälä       2024-09-06  2649  	intel_pcode_notify(display, voltage_level, num_active_pipes, cdclk,
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2650  			   change_cdclk, update_pipe_count);
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2651  }
+ceb0cc3b428825f Stanislav Lisovskiy 2023-05-04  2652  
 
 -- 
 0-DAY CI Kernel Test Service
