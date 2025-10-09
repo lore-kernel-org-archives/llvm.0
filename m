@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225351E1DE5;
-	Thu,  9 Oct 2025 19:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D4725782A;
+	Thu,  9 Oct 2025 19:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760038239; cv=none; b=LaejTM+W2RGJ2jZGX2ukx+kbKmTDdsieRes6v/Zp6R1TewIBlsQH+LtqHMdbFow5hs5nTOiBUP7/6sbR7kvnZQsNAKUzvVdWmLpQvCe88STCB4FbWxyRk4FKp7T3Z5GV/6ZVGXBp+11EB1C65Y1t0ZxGbldylLTfTOfNpQG/XUM=
+	t=1760038837; cv=none; b=B2jEdWicO8wK6/cWaOSbj0yi7Ho6KHuW6cYw7ZTrpVziOHs95/5YRv9761BB/jucFtoENNSR+JSClZaVFB8pnpUEVO7rPTtiwTjIjhNwX3W4S44OiCCpfnOt943Gka3C5MCNaRjb2FXAwHa4iElEIHS1pesXXfw1yBetRCIKUD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760038239; c=relaxed/simple;
-	bh=wTRw5dAJte414ociQsKmjOaMUKC9Dh55NIyY0qGunpE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NbkTD/lF+XCgitK+si1NM5E6RjdPopDQib2hpV9cr7SomlrVyqczZ15Ks+OeVVw20NtRqYl9GupWqzAZpe+oVLB+WKd7qElePJcxN/EG8evGJv1Qt48DZvUPUMCx46KGKjF4wtA6dBve1Z9hpuTLbnAGf4EUl6MXFv/9RPK/ct8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YXY4QLAk; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1760038837; c=relaxed/simple;
+	bh=s9+Yrni+QqOzxGduaFuMdR1jUz13vxS1Vd6ubw1Ixhw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptkGMQsdJiV0j0xskZBwi4Uv9sDFiZdLHuWbr3EfXndFSx6g6X2C6FVPapQJOQJMznVFpDVxqowkdUDy5Ts5yei+1lxD+ONoaPjRilD4Fz+//lpuRKHEEqEkFN/fmEyAyipRWOpA851+QEVo+kWrMq5h7XpbK3d3jib7Yc+K0MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKeExOQ+; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YXY4QLAk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKeExOQ+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760038234; x=1791574234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wTRw5dAJte414ociQsKmjOaMUKC9Dh55NIyY0qGunpE=;
-  b=YXY4QLAkUV0JN2rbEqJ7hQ2Cun0+Vja/ByiNFe/jJ77HAgzsdhYUC7mX
-   JLPosYtTorBP8xjFuD4lVbCRpuZ1G5AMzc3Z8UhdLIZNgLa+94jdZdyRY
-   zY5D2+PwdwJn9yyy98UZcPPSemw2OMxY78VJrW2dIX0+sBiAWTw6VQOl/
-   Tyy43cogMkWxDwYGh8fOhZA5bsRfNrgRpJZdgE/MmKW1Pqus/vvdNJJZZ
-   Rv0Vq4WnxU+cVjhv4bJUSehz2OfmhJ32OI21gstPr/KWnYWWYujVF96qr
-   IrOMifLZt47NMANtsvJ3xIAEZASpWMIt1l5yoZYAU/fwdSlfLtnwgOJHn
+  t=1760038836; x=1791574836;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s9+Yrni+QqOzxGduaFuMdR1jUz13vxS1Vd6ubw1Ixhw=;
+  b=oKeExOQ+L37BYzSJcZLt6fHBPyiPzv1g8TG2SNeTD9WfsljswLTPq9kU
+   0f1McRU3en3u5izCp1hIGwpHC+D+ahtuEpBETvtxjqZGVE9t1BqPSslUy
+   9s4wJxepIHh0oLdlzG5i2h+JTVefx3XKP2yjKzWfAUjVBpYF2KOauXk/O
+   Zc4myaNbWMi6b30zMB9IiUEU4qLK4eGvgRIJu8i8wClKvABcCuY9fbcbw
+   cOHhuZW9xAKJHJEHeaxysmt7gaGQ64CjsosojKy4ctPK7Td34dvqbVZR3
+   qQzewQ2MHFrb7J6DMHy+AW9rzSselFfR0GuWW7tzd9dFNOElBbxeYUV3I
    w==;
-X-CSE-ConnectionGUID: QzvVvndHTgyvlSn4WIuENQ==
-X-CSE-MsgGUID: cTEuJg7BRCuu5WFsIf2JoA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="87718593"
+X-CSE-ConnectionGUID: nOm5MPtYToKE0elL7Alv7Q==
+X-CSE-MsgGUID: ccpGdjNCSEWBWqikUqDv8w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="66114411"
 X-IronPort-AV: E=Sophos;i="6.19,217,1754982000"; 
-   d="scan'208";a="87718593"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 12:30:33 -0700
-X-CSE-ConnectionGUID: B7h12RneRSuV5iMc5Ov8UQ==
-X-CSE-MsgGUID: IZa++u7gRYuzR0M2B0SiHw==
+   d="scan'208";a="66114411"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 12:40:36 -0700
+X-CSE-ConnectionGUID: g7n3pGkOTR+meJ82k4WEUg==
+X-CSE-MsgGUID: Ehccs8cHReuk5eO1PxwHAQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,217,1754982000"; 
-   d="scan'208";a="211442276"
+   d="scan'208";a="185179416"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 09 Oct 2025 12:30:32 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 09 Oct 2025 12:40:33 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v6wLN-0001Ix-2n;
-	Thu, 09 Oct 2025 19:30:29 +0000
-Date: Fri, 10 Oct 2025 03:30:06 +0800
+	id 1v6wV5-0001KF-29;
+	Thu, 09 Oct 2025 19:40:31 +0000
+Date: Fri, 10 Oct 2025 03:40:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Keith Busch <kbusch@kernel.org>
-Subject: [leon-rdma:dmabuf-vfio 3/27] block/blk-mq-dma.c:199:2: warning:
- unannotated fall-through between switch labels
-Message-ID: <202510100336.KqcGJyix-lkp@intel.com>
+To: Aaron Tomlin <atomlin@atomlin.com>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, dakr@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, riel@surriel.com,
+	frederic@kernel.org, atomlin@atomlin.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tick/nohz: avoid showing '(null)' if nohz_full= not set
+Message-ID: <202510100304.IpfE7EKh-lkp@intel.com>
+References: <20251006005824.76187-1-atomlin@atomlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,86 +65,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251006005824.76187-1-atomlin@atomlin.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dmabuf-vfio
-head:   f7fc6a9789d546e210a6a6098617785b1c5994a6
-commit: 9844a76c1fd47c3f0698731b528eb9a35e62fde6 [3/27] block-dma: properly take MMIO path
-config: s390-randconfig-002-20251010 (https://download.01.org/0day-ci/archive/20251010/202510100336.KqcGJyix-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510100336.KqcGJyix-lkp@intel.com/reproduce)
+Hi Aaron,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.17 next-20251009]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/tick-nohz-avoid-showing-null-if-nohz_full-not-set/20251009-142404
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20251006005824.76187-1-atomlin%40atomlin.com
+patch subject: [PATCH] tick/nohz: avoid showing '(null)' if nohz_full= not set
+config: x86_64-randconfig-078-20251009 (https://download.01.org/0day-ci/archive/20251010/202510100304.IpfE7EKh-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510100304.IpfE7EKh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510100336.KqcGJyix-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510100304.IpfE7EKh-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> block/blk-mq-dma.c:199:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     199 |         case PCI_P2PDMA_MAP_NONE:
-         |         ^
-   block/blk-mq-dma.c:199:2: note: insert 'break;' to avoid fall-through
-     199 |         case PCI_P2PDMA_MAP_NONE:
-         |         ^
-         |         break; 
+>> drivers/base/cpu.c:307:10: warning: address of array 'tick_nohz_full_mask' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     307 |         return !tick_nohz_full_mask ?
+         |                ~^~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +199 block/blk-mq-dma.c
+vim +307 drivers/base/cpu.c
 
-dae75dead2359e Keith Busch       2025-08-13  165  
-e2be2ba6d27d5c Keith Busch       2025-08-13  166  static bool blk_dma_map_iter_start(struct request *req, struct device *dma_dev,
-e2be2ba6d27d5c Keith Busch       2025-08-13  167  		struct dma_iova_state *state, struct blk_dma_iter *iter,
-e2be2ba6d27d5c Keith Busch       2025-08-13  168  		unsigned int total_len)
-858299dc616036 Christoph Hellwig 2025-06-25  169  {
-858299dc616036 Christoph Hellwig 2025-06-25  170  	struct phys_vec vec;
-858299dc616036 Christoph Hellwig 2025-06-25  171  
-858299dc616036 Christoph Hellwig 2025-06-25  172  	memset(&iter->p2pdma, 0, sizeof(iter->p2pdma));
-858299dc616036 Christoph Hellwig 2025-06-25  173  	iter->status = BLK_STS_OK;
-858299dc616036 Christoph Hellwig 2025-06-25  174  
-858299dc616036 Christoph Hellwig 2025-06-25  175  	/*
-858299dc616036 Christoph Hellwig 2025-06-25  176  	 * Grab the first segment ASAP because we'll need it to check for P2P
-858299dc616036 Christoph Hellwig 2025-06-25  177  	 * transfers.
-858299dc616036 Christoph Hellwig 2025-06-25  178  	 */
-858299dc616036 Christoph Hellwig 2025-06-25  179  	if (!blk_map_iter_next(req, &iter->iter, &vec))
-858299dc616036 Christoph Hellwig 2025-06-25  180  		return false;
-858299dc616036 Christoph Hellwig 2025-06-25  181  
-858299dc616036 Christoph Hellwig 2025-06-25  182  	switch (pci_p2pdma_state(&iter->p2pdma, dma_dev,
-858299dc616036 Christoph Hellwig 2025-06-25  183  				 phys_to_page(vec.paddr))) {
-858299dc616036 Christoph Hellwig 2025-06-25  184  	case PCI_P2PDMA_MAP_BUS_ADDR:
-d57447ffb5fadf Keith Busch       2025-09-03  185  		if (iter->iter.is_integrity)
-d57447ffb5fadf Keith Busch       2025-09-03  186  			bio_integrity(req->bio)->bip_flags |= BIP_P2P_DMA;
-d57447ffb5fadf Keith Busch       2025-09-03  187  		else
-d57447ffb5fadf Keith Busch       2025-09-03  188  			req->cmd_flags |= REQ_P2PDMA;
-858299dc616036 Christoph Hellwig 2025-06-25  189  		return blk_dma_map_bus(iter, &vec);
-858299dc616036 Christoph Hellwig 2025-06-25  190  	case PCI_P2PDMA_MAP_THRU_HOST_BRIDGE:
-858299dc616036 Christoph Hellwig 2025-06-25  191  		/*
-858299dc616036 Christoph Hellwig 2025-06-25  192  		 * P2P transfers through the host bridge are treated the
-858299dc616036 Christoph Hellwig 2025-06-25  193  		 * same as non-P2P transfers below and during unmap.
-858299dc616036 Christoph Hellwig 2025-06-25  194  		 */
-9844a76c1fd47c Leon Romanovsky   2025-08-03  195  		if (iter->iter.is_integrity)
-9844a76c1fd47c Leon Romanovsky   2025-08-03  196  			bio_integrity(req->bio)->bip_flags |= BIP_MMIO;
-9844a76c1fd47c Leon Romanovsky   2025-08-03  197  		else
-9844a76c1fd47c Leon Romanovsky   2025-08-03  198  			req->cmd_flags |= REQ_MMIO;
-7092639031a1bd Keith Busch       2025-08-13 @199  	case PCI_P2PDMA_MAP_NONE:
-858299dc616036 Christoph Hellwig 2025-06-25  200  		break;
-858299dc616036 Christoph Hellwig 2025-06-25  201  	default:
-858299dc616036 Christoph Hellwig 2025-06-25  202  		iter->status = BLK_STS_INVAL;
-858299dc616036 Christoph Hellwig 2025-06-25  203  		return false;
-858299dc616036 Christoph Hellwig 2025-06-25  204  	}
-858299dc616036 Christoph Hellwig 2025-06-25  205  
-858299dc616036 Christoph Hellwig 2025-06-25  206  	if (blk_can_dma_map_iova(req, dma_dev) &&
-858299dc616036 Christoph Hellwig 2025-06-25  207  	    dma_iova_try_alloc(dma_dev, state, vec.paddr, total_len))
-858299dc616036 Christoph Hellwig 2025-06-25  208  		return blk_rq_dma_map_iova(req, dma_dev, state, iter, &vec);
-858299dc616036 Christoph Hellwig 2025-06-25  209  	return blk_dma_map_direct(req, dma_dev, iter, &vec);
-858299dc616036 Christoph Hellwig 2025-06-25  210  }
-e2be2ba6d27d5c Keith Busch       2025-08-13  211  
-
-:::::: The code at line 199 was first introduced by commit
-:::::: 7092639031a1bd5320ab827e8f665350f332b7ce blk-mq: remove REQ_P2PDMA flag
-
-:::::: TO: Keith Busch <kbusch@kernel.org>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+   302	
+   303	#ifdef CONFIG_NO_HZ_FULL
+   304	static ssize_t print_cpus_nohz_full(struct device *dev,
+   305					    struct device_attribute *attr, char *buf)
+   306	{
+ > 307		return !tick_nohz_full_mask ?
+   308			sysfs_emit(buf, "\n") :
+   309			sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(tick_nohz_full_mask));
+   310	}
+   311	static DEVICE_ATTR(nohz_full, 0444, print_cpus_nohz_full, NULL);
+   312	#endif
+   313	
 
 -- 
 0-DAY CI Kernel Test Service
