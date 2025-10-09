@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0B42EF64C;
-	Thu,  9 Oct 2025 15:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206DA35949;
+	Thu,  9 Oct 2025 16:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760025515; cv=none; b=XJorkoIbgGP5OznXd6KrHZckO3TwS0x3ak3AVzTWC+VwY44Ukv+y9UVpHzZOTBJki9BMw2Zv2mGh8G7+Tma9aA8LuZsd6hmznDA9OKsMh542UXgZMtm7UNB1gHntncYWZ2UOmtZPRxD0OKrbgu3fYidPs5c507oR1xfpcmc5tHY=
+	t=1760025616; cv=none; b=E9CJm61+2xqhmTCFkGunj9N3lLxzsFC2ZQqTFtIBUBiHcZa0mXTAP1nh79KfFQjEc/Q2G/pNCdun6mRCvl3t0rZr8a4oo9HrBN17/oQU/5hOsUoK8GOy/2u4a1djfhRBy54S7jXt+4f6ZySzz5XO018TfivpGsup0W83RigOaWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760025515; c=relaxed/simple;
-	bh=1iRDjH71Xort7nzuEJ/Yj6ipa0Fw7mhO9+8jp/KYEQM=;
+	s=arc-20240116; t=1760025616; c=relaxed/simple;
+	bh=v6Obz/APuabChahRaoUjFnlFmuZpIaMN+l88laEf0jI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fhs7a5WsJKLGmQCbtqcDUj+e5TMEWIeKZKeWdpdh+JitiqXVTOZGdC/8OWIC4dYGxfsdW0sV2GZMkVY3xLLtd0tiqUPBi/iuFdQKRbEe9P1NvTPIP27oITsKzFlx4iWZL+uG3eTgmEXRfFA0yhYJn+6A9G+cxDSXf9r9X2iBKO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RCKWNiRJ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=F+OZ85tjhnCAe01JKmzhriLG+dayoWnXfZZb5UpAPHX4Hny3JCiVS/tOXPt1eFCdPSg+Cc+iIBUuLPlKqlYy4P8UJJuk0ZTCdonJgsaPBZe1aAeUfY5Kq5+QPZwAuh4rAiKi7s2kpfYrUc8RDe6Y8p90yN9gYYjIHd6+Bk8OYPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODfvDC/a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCKWNiRJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65E7C4CEF7;
-	Thu,  9 Oct 2025 15:58:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODfvDC/a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767CDC116B1;
+	Thu,  9 Oct 2025 16:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760025515;
-	bh=1iRDjH71Xort7nzuEJ/Yj6ipa0Fw7mhO9+8jp/KYEQM=;
+	s=k20201202; t=1760025615;
+	bh=v6Obz/APuabChahRaoUjFnlFmuZpIaMN+l88laEf0jI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RCKWNiRJENLlbumPe7yr1G0RGPArbzW3csd8f7F0pVj3VqJIKTH+ZgRUDBPPUZiyV
-	 q6xSZj8/XoDDEkvYKvq8YYkyCGCF0r3D8Tz22ZuKD2RTJFnn37ZtWVuaxE0ANI5WZu
-	 uM00EMya8K51lRv+QTjimtwnwc0Eoh3OKB80hNgXGB4Q2x5GALt0Qo2V3tlhoOqOMe
-	 wjdL21LUTlHdlXU1W5qjTenTLPA/hqsjcqfUcaCtgN+YhQp6ozECicAM+vj+QEbILf
-	 T1TeaPH9NpqhVyQA5VheNIVt85/vOF8gLVDkYZXXWgDEIzEAaVl+KgilUP0HZYxkzg
-	 fTdJRxKLDfx+w==
+	b=ODfvDC/al6rUFNEeSOcSpqsq/gxw6rxXEoM3VdCgwVPLSLaiY7SnKzurEqqkQxXs8
+	 1TjTeYn5nPXhIzpRPDFkICzkKpOY5yrkfVcUmAvsirAH1yUu98ZMQqJXI0ID+qj0ch
+	 CWzSlOqHeCgNRa7bLU5NDG505Xknb0loF6tGkifxg5Ll4N6YSfR+seKexYWY9U9oFI
+	 FZTT/JZ7CiO55ZYih8/2zv0M24tMeh0j2h02vHSPu5XJJsPMd6c8fEHzChvEFWa9dV
+	 5RzaVHItYDylLgdBED/CVnTkGCo73mXowtaCM7H/nbxrpuWTBjUTQxzRhvfkQwOwfO
+	 oMEOlo8BQBq6g==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Lee Jones <lee@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	ckeepax@opensource.cirrus.com,
 	nathan@kernel.org,
-	memxor@gmail.com,
-	andrii@kernel.org,
-	emil@etsalapatis.com,
-	bpf@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	patches@opensource.cirrus.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.17-6.12] selftests/bpf: Fix selftest verifier_arena_large failure
-Date: Thu,  9 Oct 2025 11:54:50 -0400
-Message-ID: <20251009155752.773732-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.17-5.4] mfd: madera: Work around false-positive -Wininitialized warning
+Date: Thu,  9 Oct 2025 11:55:42 -0400
+Message-ID: <20251009155752.773732-76-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251009155752.773732-1-sashal@kernel.org>
 References: <20251009155752.773732-1-sashal@kernel.org>
@@ -57,64 +56,32 @@ X-stable-base: Linux 6.17.1
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Yonghong Song <yonghong.song@linux.dev>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 5a427fddec5e76360725a0f03df3a2a003efbe2e ]
+[ Upstream commit 364752aa0c6ab0a06a2d5bfdb362c1ca407f1a30 ]
 
-With latest llvm22, I got the following verification failure:
+clang-21 warns about one uninitialized variable getting dereferenced
+in madera_dev_init:
 
-  ...
-  ; int big_alloc2(void *ctx) @ verifier_arena_large.c:207
-  0: (b4) w6 = 1                        ; R6_w=1
-  ...
-  ; if (err) @ verifier_arena_large.c:233
-  53: (56) if w6 != 0x0 goto pc+62      ; R6=0
-  54: (b7) r7 = -4                      ; R7_w=-4
-  55: (18) r8 = 0x7f4000000000          ; R8_w=scalar()
-  57: (bf) r9 = addr_space_cast(r8, 0, 1)       ; R8_w=scalar() R9_w=arena
-  58: (b4) w6 = 5                       ; R6_w=5
-  ; pg = page[i]; @ verifier_arena_large.c:238
-  59: (bf) r1 = r7                      ; R1_w=-4 R7_w=-4
-  60: (07) r1 += 4                      ; R1_w=0
-  61: (79) r2 = *(u64 *)(r9 +0)         ; R2_w=scalar() R9_w=arena
-  ; if (*pg != i) @ verifier_arena_large.c:239
-  62: (bf) r3 = addr_space_cast(r2, 0, 1)       ; R2_w=scalar() R3_w=arena
-  63: (71) r3 = *(u8 *)(r3 +0)          ; R3_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff))
-  64: (5d) if r1 != r3 goto pc+51       ; R1_w=0 R3_w=0
-  ; bpf_arena_free_pages(&arena, (void __arena *)pg, 2); @ verifier_arena_large.c:241
-  65: (18) r1 = 0xff11000114548000      ; R1_w=map_ptr(map=arena,ks=0,vs=0)
-  67: (b4) w3 = 2                       ; R3_w=2
-  68: (85) call bpf_arena_free_pages#72675      ;
-  69: (b7) r1 = 0                       ; R1_w=0
-  ; page[i + 1] = NULL; @ verifier_arena_large.c:243
-  70: (7b) *(u64 *)(r8 +8) = r1
-  R8 invalid mem access 'scalar'
-  processed 61 insns (limit 1000000) max_states_per_insn 0 total_states 6 peak_states 6 mark_read 2
-  =============
-  #489/5   verifier_arena_large/big_alloc2:FAIL
+drivers/mfd/madera-core.c:739:10: error: variable 'mfd_devs' is uninitialized when used here [-Werror,-Wuninitialized]
+  739 |                               mfd_devs, n_devs,
+      |                               ^~~~~~~~
+drivers/mfd/madera-core.c:459:33: note: initialize the variable 'mfd_devs' to silence this warning
+  459 |         const struct mfd_cell *mfd_devs;
+      |                                        ^
+      |                                         = NULL
 
-The main reason is that 'r8' in insn '70' is not an arena pointer.
-Further debugging at llvm side shows that llvm commit ([1]) caused
-the failure. For the original code:
-  page[i] = NULL;
-  page[i + 1] = NULL;
-the llvm transformed it to something like below at source level:
-  __builtin_memset(&page[i], 0, 16)
-Such transformation prevents llvm BPFCheckAndAdjustIR pass from
-generating proper addr_space_cast insns ([2]).
+The code is actually correct here because n_devs is only nonzero
+when mfd_devs is a valid pointer, but this is impossible for the
+compiler to see reliably.
 
-Adding support in llvm BPFCheckAndAdjustIR pass should work, but
-not sure that such a pattern exists or not in real applications.
-At the same time, simply adding a memory barrier between two 'page'
-assignment can fix the issue.
+Change the logic to check for the pointer as well, to make this easier
+for the compiler to follow.
 
-  [1] https://github.com/llvm/llvm-project/pull/155415
-  [2] https://github.com/llvm/llvm-project/pull/84410
-
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-Link: https://lore.kernel.org/r/20250920045805.3288551-1-yonghong.song@linux.dev
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20250807071932.4085458-1-arnd@kernel.org
+Signed-off-by: Lee Jones <lee@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
@@ -122,97 +89,87 @@ LLM Generated explanations, may be completely bogus:
 
 YES
 
-**Why this matters**
-- Fixes a real, reproducible selftest failure with LLVM 22 where two
-  adjacent pointer stores get optimized into a memset, breaking BPF
-  verifier expectations and causing “R8 invalid mem access 'scalar'”
-  during big_alloc2.
-- Keeps BPF selftests reliable across toolchains without changing
-  kernel/runtime behavior.
+- What changed
+  - Initializes `mfd_devs` to a known value to placate clang-21’s
+    -Wuninitialized:
+    - drivers/mfd/madera-core.c:459 initializes `const struct mfd_cell
+      *mfd_devs = NULL;`
+  - Hardens the validity check before use:
+    - drivers/mfd/madera-core.c:673 expands the guard from `if
+      (!n_devs)` to `if (!n_devs || !mfd_devs)`
+  - The pointer is later passed to `mfd_add_devices()`:
+    - drivers/mfd/madera-core.c:739 uses `mfd_devs, n_devs`
 
-**What changed**
-- Adds a single compiler barrier between two consecutive NULL
-  assignments to break LLVM’s store-combining optimization:
-  - Before: `page[i] = NULL;` immediately followed by `page[i + 1] =
-    NULL;`
-  - After: inserts `barrier();` between them to prevent transformation
-    into `__builtin_memset(...)`.
-- Location in tree:
-  `tools/testing/selftests/bpf/progs/verifier_arena_large.c`
-  - In the “Free pairs of pages” loop: after freeing 2 pages
-    (`bpf_arena_free_pages`), the code does:
-    - `page[i] = NULL;` at
-      tools/testing/selftests/bpf/progs/verifier_arena_large.c:242
-    - [PATCH] `barrier();` added between the two stores
-    - `page[i + 1] = NULL;` at
-      tools/testing/selftests/bpf/progs/verifier_arena_large.c:243
-- The barrier macro is available via the already-included
-  `bpf/bpf_helpers.h` (`barrier()` is defined as an empty inline asm
-  memory clobber), used elsewhere in BPF selftests, and is safe for BPF.
+- Why it matters
+  - Fixes a real build failure with newer toolchains: clang-21 flags the
+    potential uninitialized use as an error (`-Werror,-Wuninitialized`)
+    when passing `mfd_devs` to `mfd_add_devices()` (as described in the
+    commit message and evidenced by the code at drivers/mfd/madera-
+    core.c:739 and the declaration at drivers/mfd/madera-core.c:459).
+  - The code’s intended invariant is that `n_devs` is set nonzero iff
+    `mfd_devs` points to a valid array; this is enforced by setting them
+    together in each supported device case, e.g.:
+    - drivers/mfd/madera-core.c:603/604 (`cs47l15` case)
+    - drivers/mfd/madera-core.c:616/617 (`cs47l35` case)
+    - drivers/mfd/madera-core.c:630/631 (`cs47l85`/`WM1840` case)
+    - drivers/mfd/madera-core.c:644/645 (`cs47l90`/`CS47L91` case)
+    - drivers/mfd/madera-core.c:659/660 (`cs42l92`/`cs47l92`/`cs47l93`
+      case)
+  - Compilers cannot always see this invariant, leading to the false
+    positive. Initializing the pointer and checking it explicitly makes
+    the intent obvious and restores buildability with strict warning-as-
+    error configurations.
 
-**Root cause and effect**
-- LLVM 22 transforms two adjacent stores into a 16-byte memset when it
-  sees:
-  - `page[i] = NULL;`
-  - `page[i + 1] = NULL;`
-- This prevents LLVM’s BPFCheckAndAdjustIR pass from inserting necessary
-  `addr_space_cast` for arena pointers, leading to the verifier seeing a
-  scalar pointer (R8) on the subsequent store and rejecting the program.
-- The inserted `barrier()` prevents that transformation, ensuring LLVM
-  keeps separate stores and the IR pass emits `addr_space_cast`, fixing
-  the verifier error.
+- Stability and risk
+  - Minimal, localized change confined to MFD madera core; no
+    architectural changes.
+  - No functional behavior change in the valid paths: when any supported
+    device is matched, both `mfd_devs` and `n_devs` are set together
+    (see examples above), so the new check behaves identically to the
+    old one.
+  - If an unexpected code path ever sets `n_devs` without a valid
+    `mfd_devs`, the new guard fails fast with `-ENODEV` rather than
+    risking undefined behavior at `mfd_add_devices()`—arguably safer.
+  - Does not introduce new features; purely a correctness/build fix for
+    newer compilers.
 
-**Risk and scope**
-- Minimal risk:
-  - Single-line change in a selftest program.
-  - No ABI changes, no functional changes to kernel subsystems.
-  - Barrier only affects compiler optimization; runtime semantics remain
-    identical.
-- Selftest-only change:
-  - Does not affect production kernel behavior.
-  - Improves test robustness across compilers.
+- Stable backport criteria
+  - Fixes a user-affecting bug: builds with newer clang (and with
+    `CONFIG_WERROR=y` or similar settings) break; this unblocks those
+    builds.
+  - The fix is small, contained, and low risk.
+  - No cross-subsystem or architectural changes.
+  - While there’s no explicit “Cc: stable” tag, stable trees routinely
+    accept trivial, obviously-correct build fixes for widely used
+    toolchains.
 
-**Stable criteria fit**
-- Important bugfix: prevents a deterministic selftest failure with a
-  widely used toolchain (LLVM 22).
-- Small and contained: one-line addition in a single selftest file.
-- No architectural changes and no cross-subsystem impact.
-- No side effects beyond keeping IR and verifier expectations aligned
-  for this test.
-- Even without an explicit “Cc: stable”, selftest fixes like this are
-  commonly accepted to keep CI and developer workflows healthy across
-  toolchains.
+Given the above, this is a good candidate for stable backporting.
 
-**Dependencies and compatibility**
-- The code path is guarded by `__BPF_FEATURE_ADDR_SPACE_CAST` (see block
-  starting at
-  tools/testing/selftests/bpf/progs/verifier_arena_large.c:168), so it
-  only builds where the feature is available, reducing risk on older
-  compilers.
-- `barrier()` is already defined for BPF programs via `bpf_helpers.h`,
-  which is included at
-  tools/testing/selftests/bpf/progs/verifier_arena_large.c:6, ensuring
-  portability across supported clang versions.
+ drivers/mfd/madera-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Given the above, this is a low-risk, self-contained fix for a real
-breakage in selftests caused by a compiler change. It should be
-backported to stable trees that contain this selftest.
-
- tools/testing/selftests/bpf/progs/verifier_arena_large.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-index 9dbdf123542d3..f19e15400b3e1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-@@ -240,6 +240,7 @@ int big_alloc2(void *ctx)
- 			return 5;
- 		bpf_arena_free_pages(&arena, (void __arena *)pg, 2);
- 		page[i] = NULL;
-+		barrier();
- 		page[i + 1] = NULL;
- 		cond_break;
+diff --git a/drivers/mfd/madera-core.c b/drivers/mfd/madera-core.c
+index bdbd5bfc97145..2f74a8c644a32 100644
+--- a/drivers/mfd/madera-core.c
++++ b/drivers/mfd/madera-core.c
+@@ -456,7 +456,7 @@ int madera_dev_init(struct madera *madera)
+ 	struct device *dev = madera->dev;
+ 	unsigned int hwid;
+ 	int (*patch_fn)(struct madera *) = NULL;
+-	const struct mfd_cell *mfd_devs;
++	const struct mfd_cell *mfd_devs = NULL;
+ 	int n_devs = 0;
+ 	int i, ret;
+ 
+@@ -670,7 +670,7 @@ int madera_dev_init(struct madera *madera)
+ 		goto err_reset;
  	}
+ 
+-	if (!n_devs) {
++	if (!n_devs || !mfd_devs) {
+ 		dev_err(madera->dev, "Device ID 0x%x not a %s\n", hwid,
+ 			madera->type_name);
+ 		ret = -ENODEV;
 -- 
 2.51.0
 
