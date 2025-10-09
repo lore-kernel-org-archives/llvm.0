@@ -1,63 +1,63 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5F92EB848
-	for <llvm@lists.linux.dev>; Thu,  9 Oct 2025 10:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39522E3360
+	for <llvm@lists.linux.dev>; Thu,  9 Oct 2025 10:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760007513; cv=none; b=U8t6eFOrPIUcQsdfHUbXNTuf711YHLyR7pKOoIbSg27ZgRFBNfhRVz+IO1MWJvcwxb5QI0+i+pEWxh8nGLYkBdi5h+yToLxUoQwyWkZ5gy5BblCZUZpD80+AFZT1I+DylRuWXJ/IjqRPbyKFFVMm7uV3xm1Sbp4AuTiZLuNzGrM=
+	t=1760007518; cv=none; b=L4XYrVfSXmbpolyT7OeKEYyFdORD1D8Ywa4lY+TWz8TlbAW2pMVKkCqHjl3mjGTTkhhiJeU1fXu167QIJ5AX7eVG/k+MTf5dmNjRue4gFQ2S4VEpy217JuIPsZH8RuUf/BqESbsaAUwQMa7qiRePrMGfjD05YFRCvs8ZyYk2oRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760007513; c=relaxed/simple;
-	bh=fx5MM9mgeadn4AlECL2EeIytilVmfLOb03DEtE9qwqg=;
+	s=arc-20240116; t=1760007518; c=relaxed/simple;
+	bh=10ctyktjmXKMQmk5k00rLRapyNy5j0hy9v8s13phBxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GcBcugoU+tUKZg4ruZVFenAQ9jDAQRaLOd7hoZSLNXc6iTC9Cp3NwkCP0PTr+idy55kvRz4VyNVtb/YgVX7zYTyuym8+QKLiYoKpYK1ZyjzJ4WxtFcVaEdOdTfliYWeHEGu+ONiHI3+qpY1h1BnHI0MOMAK6hooBMaLcFY8oGUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LvtctDMr; arc=none smtp.client-ip=209.85.216.47
+	 MIME-Version; b=Y2+LLrRP3qeF3NycEK14yRreHenuHNtD5EY3ujUsrwzuVBqWGH4jiMEapKq3vvjwgSOW+gWghf3U0ACp1oXgC1Oy9IxS1AXLKEwOlnov8ZUenJc7tOSn/QmxouXiVsXv/nWQzWErwJVLmM5ykZMovgNV/0dx0CnJt/BGcYuQif8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LABvb1hB; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LvtctDMr"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-330a4d4359bso719962a91.2
-        for <llvm@lists.linux.dev>; Thu, 09 Oct 2025 03:58:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LABvb1hB"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-32eb45ab7a0so945217a91.0
+        for <llvm@lists.linux.dev>; Thu, 09 Oct 2025 03:58:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760007511; x=1760612311; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1760007515; x=1760612315; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PODRMG2Z8bUUhx/yC1VRhywhZMIHoJSOmQZCJHqYhJ8=;
-        b=LvtctDMr4bTiSH6caOysubW8QZgQU9xcRfvMEUZ3C6qN3zx64DgcAarBulZyFH1W5t
-         qz1DlmUgH/Z/UA28l5su3TWsmMf+iup73j6Wzd4iH++BIf507BnPbfmjfTHELZwpokPs
-         swN8K9ZbWBhq/ntlWrVElvvHukIn1HAc1VhBDWBeHfjIde9pah8vGI5/XxyeUp3L9sb7
-         7cbYSp08GhFS+PgX1BQgMrOw4FOnvAYPLFDlCScfW1u56+Pusa8i0/lPAwpxz0mIUf66
-         GuXQLpUfwnDic4Ojo6RYK1QFiz3BPY3HvNJzRlm+mJ5bXHbWJ4wZXTYpaNzj/lMk2vMH
-         n8Vg==
+        bh=MHX66Jd+3Yh++JPnWDFijz0g48Ucrj2eGMYxXoS5syE=;
+        b=LABvb1hBNzfvypWMv5GN76sC9FhubLVvsYCzYeoWaV3FfeoOPx8DkICFEo2WlHqF2V
+         /gjPwVKXEw4H00adXU6cw6tEiP2jWgZSyNcgeI2sfg87iSkRXXR62Iamn1DdKsstd+4V
+         JxaUUmlPNa7Un9s32pZUosblGra3iaBUF6ZpLi0R3lwOPn36xCdnUgmEKZBqljKSDW0Y
+         oUGeNYm0/qKsR2m/oNtkS+L+ZOeChd8jagyMUtKCQp7QAziyMcyt4rRhXGUQuSB2hshc
+         K/HCCRlTWPc7RBBho1VZ53rWAlJ3JTrOuysV9XA9qrv1Ca6x3/PjfEMWSFlaLpLgP/Ot
+         vdkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760007511; x=1760612311;
+        d=1e100.net; s=20230601; t=1760007515; x=1760612315;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PODRMG2Z8bUUhx/yC1VRhywhZMIHoJSOmQZCJHqYhJ8=;
-        b=i4981khbpUdYmWmt8DItZiV2x7Bv0m/DtL1LsYjaGt6x8uu94OWsKOlfuonArx8VyQ
-         nbbxaZPVE7eUQBFFkHU4H7D8gU7zIbkTpLJRuPYJWjnhjByZgSSYiO40GgUfY9UfcWtB
-         mC0QRigme4VOc6WMAcXwsdCKlnaNUCzFX8MqWm8nnun1cgmesUxhhIIV1c1+DSgtatP+
-         2mLjwBd5r98h1o6SYZlCKCt4pdHk544LVYIfhYntLkjSY8+n0GnYp84R4TzTfp5habFT
-         JcGKDeW2aNyitzhQtWfWZEM+5MtAA9TAVnWIzBlaCK//0taJyptLzivjX58/TsxSE/vO
-         cUBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVb43jGB5A6flK7l27WZ0HDbqkYVNIwjtJX7gjEUxOeHXRKgV5e0cc30sqzuhnRDI80yN/G@lists.linux.dev
-X-Gm-Message-State: AOJu0YzyAAuUaqQ2HrcaL8mDD6Ej42ZcgPhBtQm90ChcNUmfkQ23tmhR
-	hqfw/YmYYWNeONyxCfTg17qqxOI5ERIRb/aP203e4DKreZdLkxGLqWZK
-X-Gm-Gg: ASbGncsUVPHYR71S0MLhXDunez1C9pGpTuqOnI5vt2OF5WdxLux5ZBNPhehtVLt08T3
-	SrOR3MbU/AjxWZnK+M1aeDcX+Y4zA9TYBXcinIiQdPJOX+QYTydCk9AK9VUdb47OXHSpsBtpzE4
-	KmutC39adQXmFZuFcG6MqClo/CEa5voNEbZgYGRtv5Oz65SndvEyZuk5dyF5amwoVEHM4nVhpEJ
-	uRj2iX93ikN618UHFe+0jV9xYppvIvhlJiCJtkoMXXS5tSKxUSzEqgxLvXMwvJwx51tABQR1ASd
-	ssziKaVNhZCEgAwB7oiLmG6IoHvk4ZyuZvGxXKdPMgp3bk7w/KP6KtE5maUPdxEjeAzc0SFcYKT
-	bumXrrrgLYc81Xq4rDd09KGsszET7mKb85A46e1kyQmckMuOYmj+86hGXLSHm
-X-Google-Smtp-Source: AGHT+IF84UQdi8SdjzjP27Uzxv11ATZ55/94M/TwFF9mJGTJWLkmx5AoAZTRAV1cVi0ppq51LJs5Aw==
-X-Received: by 2002:a17:90b:38cc:b0:329:e2b1:def3 with SMTP id 98e67ed59e1d1-33b51168d95mr9160007a91.10.1760007510612;
-        Thu, 09 Oct 2025 03:58:30 -0700 (PDT)
+        bh=MHX66Jd+3Yh++JPnWDFijz0g48Ucrj2eGMYxXoS5syE=;
+        b=WiCxiJ01Nw3sr2aKXi2J/gLhszA6DJEAHI9ldDvHTTFfsVhnf1dyT2PcounBd4ioFq
+         GJnq2W25n8CtxF9oBjehmsHRrfxbYQm14c7Tu/K/Nu8prClKNMf44eu2e7g33QPhe8i/
+         wvA8Mep7Qdq7NXjPzbtda813aSyS52xNO+nhqASoa8n7ha3npq5vLDEejj5Z4BBMoLZF
+         nGODr5CcPh3sg8xNMn4ojLha5FmIprFi2sjJXDERfbnxGxG9wlkXRGFRGz9BpboIhgvx
+         V019xPGSrCuBn2GgjRu85d1EmxQkZaSXSMskYhspkHTIcKcvx+q2IrCPGS4D8hI/vuBm
+         JUqA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtYUromVTM13RtK7F08JanbjH1skE38kv+bVMkY2Li5kfRbVqaoOLhg2KsGH/ZLUt+9Ylo@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0X+aDWC8IQNCpVfpXrrMQG8ZmrabMLU8o56+XRMpRwKWROVHP
+	opl+aCUg/umbwHjnH72mxDDbkzujV/MvR52OFLXobJHE+0jxVaJr70hV
+X-Gm-Gg: ASbGncvMV2sFE2TE+oIA47SrX8kNLag+Y0OLS1c4yGv1R/YVJUyrzlJWhYvaV5rnfcx
+	LAzJTm7mi2jiwwyO0xfzTxR33zKgYcjuueipdkElL2YrCeIU7SBOfy/B8dcNleZTBViLjglykX7
+	PvcVY/TJjomGPg5si+MZASp10IuWltoEio5UbVDzl/ugwE5nzhEMUaMIJEZiYhcDwX42JE5SHk0
+	vtsHGyS3iedirncBBrVIB0/EjzO/KLbYhgxp2dk2iOlY/nJTNdNBvmtjMP1ks9D2bxcmYwSeB6n
+	Wv70fncvRZu1mWA/LI+FGOKJy0qF+eARAXb6yLWTPjWvmQmFnYjL5fMa+5hUXF+q7ZkjFScaNbS
+	PI+NZArSGHZ9owG5RIDguCF/47ffNPvqyM5iAiFxp4z96vsz6j8u8WPVG46G4
+X-Google-Smtp-Source: AGHT+IGsqw0uykPtpgLyH7gkilPZ9Rm/6qpf7Cg6vBU/3gJc9DluDeLS8WzKHz68boHMLssba8B2eQ==
+X-Received: by 2002:a17:90b:1d85:b0:32e:749d:fcb7 with SMTP id 98e67ed59e1d1-33b51168e4amr8734225a91.13.1760007515308;
+        Thu, 09 Oct 2025 03:58:35 -0700 (PDT)
 Received: from localhost ([45.142.165.62])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b510e91d4sm6644930a91.1.2025.10.09.03.58.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b5293f4dcsm2568515a91.1.2025.10.09.03.58.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Oct 2025 03:58:30 -0700 (PDT)
+        Thu, 09 Oct 2025 03:58:34 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -124,9 +124,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-trace-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v7 21/23] tools/ksw: add test script
-Date: Thu,  9 Oct 2025 18:55:57 +0800
-Message-ID: <20251009105650.168917-22-wangjinchao600@gmail.com>
+Subject: [PATCH v7 22/23] docs: add KStackWatch document
+Date: Thu,  9 Oct 2025 18:55:58 +0800
+Message-ID: <20251009105650.168917-23-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251009105650.168917-1-wangjinchao600@gmail.com>
 References: <20251009105650.168917-1-wangjinchao600@gmail.com>
@@ -138,72 +138,351 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Provide a shell script to trigger test cases.
+Add documentation for KStackWatch under Documentation/.
+
+It provides an overview, main features, usage details, configuration
+parameters, and example scenarios with test cases. The document also
+explains how to locate function offsets and interpret logs.
 
 Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 ---
- tools/kstackwatch/kstackwatch_test.sh | 52 +++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100755 tools/kstackwatch/kstackwatch_test.sh
+ Documentation/dev-tools/index.rst       |   1 +
+ Documentation/dev-tools/kstackwatch.rst | 314 ++++++++++++++++++++++++
+ 2 files changed, 315 insertions(+)
+ create mode 100644 Documentation/dev-tools/kstackwatch.rst
 
-diff --git a/tools/kstackwatch/kstackwatch_test.sh b/tools/kstackwatch/kstackwatch_test.sh
-new file mode 100755
-index 000000000000..35cad036ecee
+diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
+index 4b8425e348ab..272ae9b76863 100644
+--- a/Documentation/dev-tools/index.rst
++++ b/Documentation/dev-tools/index.rst
+@@ -32,6 +32,7 @@ Documentation/process/debugging/index.rst
+    lkmm/index
+    kfence
+    kselftest
++   kstackwatch
+    kunit/index
+    ktap
+    checkuapi
+diff --git a/Documentation/dev-tools/kstackwatch.rst b/Documentation/dev-tools/kstackwatch.rst
+new file mode 100644
+index 000000000000..7100248bc130
 --- /dev/null
-+++ b/tools/kstackwatch/kstackwatch_test.sh
-@@ -0,0 +1,52 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/dev-tools/kstackwatch.rst
+@@ -0,0 +1,314 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+echo "IMPORTANT: Before running, make sure you have updated the config values!"
++=================================
++Kernel Stack Watch (KStackWatch)
++=================================
 +
-+usage() {
-+	echo "Usage: $0 [0-5]"
-+	echo "  0  - test watch fire"
-+	echo "  1  - test canary overflow"
-+	echo "  2  - test recursive depth"
-+	echo "  3  - test silent corruption"
-+	echo "  4  - test multi-threaded silent corruption"
-+	echo "  5  - test multi-threaded overflow"
-+}
++Overview
++========
 +
-+run_test() {
-+	local test_num=$1
-+	case "$test_num" in
-+	0) echo fn=test_watch_fire fo=0x29 wl=8 >/sys/kernel/debug/kstackwatch/config
-+	   echo test0 > /sys/kernel/debug/kstackwatch/test
-+	   ;;
-+	1) echo fn=test_canary_overflow fo=0x14 >/sys/kernel/debug/kstackwatch/config
-+	   echo test1 >/sys/kernel/debug/kstackwatch/test
-+	   ;;
-+	2) echo fn=test_recursive_depth fo=0x2f dp=3 wl=8 so=0 >/sys/kernel/debug/kstackwatch/config
-+	   echo test2 >/sys/kernel/debug/kstackwatch/test
-+	   ;;
-+	3) echo fn=test_mthread_victim fo=0x4c so=64 wl=8 >/sys/kernel/debug/kstackwatch/config
-+	   echo test3 >/sys/kernel/debug/kstackwatch/test
-+	   ;;
-+	4) echo fn=test_mthread_victim fo=0x4c so=64 wl=8 >/sys/kernel/debug/kstackwatch/config
-+	   echo test4 >/sys/kernel/debug/kstackwatch/test
-+	   ;;
-+	5) echo fn=test_mthread_buggy fo=0x16 so=0x100 wl=8 >/sys/kernel/debug/kstackwatch/config
-+	   echo test5 >/sys/kernel/debug/kstackwatch/test
-+	   ;;
-+	*) usage
-+	   exit 1 ;;
-+	esac
-+	# Reset watch after test
-+	echo >/sys/kernel/debug/kstackwatch/config
-+}
++KStackWatch is a lightweight debugging tool designed to detect kernel stack
++corruption in real time. It installs a hardware breakpoint (watchpoint) at a
++function's specified offset using *kprobe.post_handler* and removes it in
++*fprobe.exit_handler*. This covers the full execution window and reports
++corruption immediately with time, location, and call stack.
 +
-+# Check root and module
-+[ "$EUID" -ne 0 ] && echo "Run as root" && exit 1
-+for f in /sys/kernel/debug/kstackwatch/config /sys/kernel/debug/kstackwatch/test; do
-+	[ ! -f "$f" ] && echo "$f not found" && exit 1
-+done
++Main features:
 +
-+# Run
-+[ -z "$1" ] && { usage; exit 0; }
-+run_test "$1"
++* Immediate and precise detection
++* Supports concurrent calls to the watched function
++* Lockless design, usable in any context
++* Depth filter for recursive calls
++* Minimal impact on reproducibility
++* Flexible configuration with key=val syntax
++
++Usage
++=====
++
++KStackWatch is configured through */sys/kernel/debug/kstackwatch/config* using a
++key=value format. Both long and short forms are supported. Writing an empty
++string disables the watch.
++
++.. code-block:: bash
++
++	# long form
++	echo func_name=? func_offset=? ... > /sys/kernel/debug/kstackwatch/config
++
++	# short form
++	echo fn=? fo=? ... > /sys/kernel/debug/kstackwatch/config
++
++	# disable
++	echo > /sys/kernel/debug/kstackwatch/config
++
++The func_name and the func_offset where the watchpoint should be placed must be
++known. This information can be obtained from *objdump* or other tools.
++
++Required parameters
++--------------------
++
+++--------------+--------+-----------------------------------------+
++| Parameter    | Short  | Description                             |
+++==============+========+=========================================+
++| func_name    | fn     | Name of the target function             |
+++--------------+--------+-----------------------------------------+
++| func_offset  | fo     | Instruction pointer offset              |
+++--------------+--------+-----------------------------------------+
++
++Optional parameters
++--------------------
++
++Default 0 and can be omitted.
++Both decimal and hexadecimal are supported.
++
+++--------------+--------+------------------------------------------------+
++| Parameter    | Short  | Description                                    |
+++==============+========+================================================+
++| depth        | dp     | Recursion depth filter                         |
+++--------------+--------+------------------------------------------------+
++| max_watch    | mw     | Maximum number of concurrent watchpoints       |
++|              |        | (default 0, capped by available hardware       |
++|              |        | breakpoints)                                   |
+++--------------+--------+------------------------------------------------+
++| sp_offset    | so     | Watching addr offset from stack pointer        |
+++--------------+--------+------------------------------------------------+
++| watch_len    | wl     | Watch length in bytes (1, 2, 4, 8, or 0),      |
++|              |        | 0 means automatically watch the stack canary   |
++|              |        | and ignore the sp_offset parameter             |
+++--------------+--------+------------------------------------------------+
++
++Workflow Example
++================
++
++Silent corruption
++-----------------
++
++Consider *test3* in *kstackwatch_test.sh*. Run it directly:
++
++.. code-block:: bash
++
++	echo test3 >/sys/kernel/debug/kstackwatch/test
++
++Sometimes, *test_mthread_victim()* may report as unhappy:
++
++.. code-block:: bash
++
++	[    7.807082] kstackwatch_test: victim[0][11]: unhappy buf[8]=0xabcdabcd
++
++Its source code is:
++
++.. code-block:: c
++
++	static void test_mthread_victim(int thread_id, int seq_id, u64 start_ns)
++	{
++		ulong buf[BUFFER_SIZE];
++
++		for (int j = 0; j < BUFFER_SIZE; j++)
++			buf[j] = 0xdeadbeef + seq_id;
++
++		if (start_ns)
++			silent_wait_us(start_ns, VICTIM_MINIOR_WAIT_NS);
++
++		for (int j = 0; j < BUFFER_SIZE; j++) {
++			if (buf[j] != (0xdeadbeef + seq_id)) {
++				pr_warn("victim[%d][%d]: unhappy buf[%d]=0x%lx\n",
++					thread_id, seq_id, j, buf[j]);
++				return;
++			}
++		}
++
++		pr_info("victim[%d][%d]: happy\n", thread_id, seq_id);
++	}
++
++From the source code, the report indicates buf[8] was unexpectedly modified,
++a case of silent corruption.
++
++Configuration
++-------------
++
++Since buf[8] is the corrupted variable, the following configuration shows
++how to use KStackWatch to detect its corruption.
++
++func_name
++~~~~~~~~~~~
++
++As seen, buf[8] is initialized and modified in *test_mthread_victim*\(\) ,
++which sets *func_name*.
++
++func_offset & sp_offset
++~~~~~~~~~~~~~~~~~~~~~~~~~
++The watchpoint should be set after the assignment and as close as
++possible, which sets *func_offset*.
++
++The watchpoint should be set to watch buf[8], which sets *sp_offset*.
++
++Use the objdump output to disassemble the function:
++
++.. code-block:: bash
++
++	objdump -S --disassemble=test_mthread_victim vmlinux
++
++A shortened output is:
++
++.. code-block:: text
++
++	static void test_mthread_victim(int thread_id, int seq_id, u64 start_ns)
++	{
++	ffffffff815cb4e0:       e8 5b 9b ca ff          call   ffffffff81275040 <__fentry__>
++	ffffffff815cb4e5:       55                      push   %rbp
++	ffffffff815cb4e6:       53                      push   %rbx
++	ffffffff815cb4e7:       48 81 ec 08 01 00 00    sub    $0x108,%rsp
++	ffffffff815cb4ee:       89 fd                   mov    %edi,%ebp
++	ffffffff815cb4f0:       89 f3                   mov    %esi,%ebx
++	ffffffff815cb4f2:       49 89 d0                mov    %rdx,%r8
++	ffffffff815cb4f5:       65 48 8b 05 0b cb 80    mov    %gs:0x280cb0b(%rip),%rax        # ffffffff83dd8008 <__stack_chk_guard>
++	ffffffff815cb4fc:       02
++	ffffffff815cb4fd:       48 89 84 24 00 01 00    mov    %rax,0x100(%rsp)
++	ffffffff815cb504:       00
++	ffffffff815cb505:       31 c0                   xor    %eax,%eax
++		ulong buf[BUFFER_SIZE];
++	ffffffff815cb507:       48 89 e2                mov    %rsp,%rdx
++	ffffffff815cb50a:       b9 20 00 00 00          mov    $0x20,%ecx
++	ffffffff815cb50f:       48 89 d7                mov    %rdx,%rdi
++	ffffffff815cb512:       f3 48 ab                rep stos %rax,%es:(%rdi)
++
++		for (int j = 0; j < BUFFER_SIZE; j++)
++	ffffffff815cb515:       eb 10                   jmp    ffffffff815cb527 <test_mthread_victim+0x47>
++			buf[j] = 0xdeadbeef + seq_id;
++	ffffffff815cb517:       8d 93 ef be ad de       lea    -0x21524111(%rbx),%edx
++	ffffffff815cb51d:       48 63 c8                movslq %eax,%rcx
++	ffffffff815cb520:       48 89 14 cc             mov    %rdx,(%rsp,%rcx,8)
++	ffffffff815cb524:       83 c0 01                add    $0x1,%eax
++	ffffffff815cb527:       83 f8 1f                cmp    $0x1f,%eax
++	ffffffff815cb52a:       7e eb                   jle    ffffffff815cb517 <test_mthread_victim+0x37>
++		if (start_ns)
++	ffffffff815cb52c:       4d 85 c0                test   %r8,%r8
++	ffffffff815cb52f:       75 21                   jne    ffffffff815cb552 <test_mthread_victim+0x72>
++			silent_wait_us(start_ns, VICTIM_MINIOR_WAIT_NS);
++	...
++	ffffffff815cb571:       48 8b 84 24 00 01 00    mov    0x100(%rsp),%rax
++	ffffffff815cb579:       65 48 2b 05 87 ca 80    sub    %gs:0x280ca87(%rip),%rax        # ffffffff83dd8008 <__stack_chk_guard>
++	...
++	ffffffff815cb5a1:       eb ce                   jmp    ffffffff815cb571 <test_mthread_victim+0x91>
++	}
++	ffffffff815cb5a3:       e8 d8 86 f1 00          call   ffffffff824e3c80 <__stack_chk_fail>
++
++
++func_offset
++^^^^^^^^^^^
++
++The function begins at ffffffff815cb4e0. The *buf* array is initialized in a loop.
++The instruction storing values into the array is at ffffffff815cb520, and the
++first instruction after the loop is at ffffffff815cb52c.
++
++Because KStackWatch uses *kprobe.post_handler*, the watchpoint can be
++set right after ffffffff815cb520. However, this will cause false positive
++because the watchpoint is active before buf[8] is assigned.
++
++An alternative is to place the watchpoint at ffffffff815cb52c, right
++after the loop. This avoids false positives but leaves a small window
++for false negatives.
++
++In this document, ffffffff815cb52c is chosen for cleaner logs. If false
++negatives are suspected, repeat the test to catch the corruption.
++
++The required offset is calculated from the function start:
++
++*func_offset* is 0x4c (ffffffff815cb52c - ffffffff815cb4e0).
++
++sp_offset
++^^^^^^^^^^^
++
++From the disassembly, the buf array is at the top of the stack,
++meaning buf == rsp. Therefore, buf[8] sits at rsp + 8 * sizeof(ulong) =
++rsp + 64. Thus, *sp_offset* is 64.
++
++Other parameters
++~~~~~~~~~~~~~~~~~~
++
++* *depth* is 0, as test_mthread_victim is not recursive
++* *max_watch* is 0 to use all available hwbps
++* *watch_len* is 8, the size of a ulong on x86_64
++
++Parameters with a value of 0 can be omitted as defaults.
++
++Configure the watch:
++
++.. code-block:: bash
++
++	echo "fn=test_mthread_victim fo=0x4c so=64 wl=8" > /sys/kernel/debug/kstackwatch/config
++
++Now rerun the test:
++
++.. code-block:: bash
++
++	echo test3 >/sys/kernel/debug/kstackwatch/test
++
++The dmesg log shows:
++
++.. code-block:: text
++
++	[    7.607074] kstackwatch: ========== KStackWatch: Caught stack corruption =======
++	[    7.607077] kstackwatch: config fn=test_mthread_victim fo=0x4c so=64 wl=8
++	[    7.607080] CPU: 2 UID: 0 PID: 347 Comm: corrupting Not tainted 6.17.0-rc7-00022-g90270f3db80a-dirty #509 PREEMPT(voluntary)
++	[    7.607083] Call Trace:
++	[    7.607084]  <#DB>
++	[    7.607085]  dump_stack_lvl+0x66/0xa0
++	[    7.607091]  ksw_watch_handler.part.0+0x2b/0x60
++	[    7.607094]  ksw_watch_handler+0xba/0xd0
++	[    7.607095]  ? test_mthread_corrupting+0x48/0xd0
++	[    7.607097]  ? kthread+0x10d/0x210
++	[    7.607099]  ? ret_from_fork+0x187/0x1e0
++	[    7.607102]  ? ret_from_fork_asm+0x1a/0x30
++	[    7.607105]  __perf_event_overflow+0x154/0x570
++	[    7.607108]  perf_bp_event+0xb4/0xc0
++	[    7.607112]  ? look_up_lock_class+0x59/0x150
++	[    7.607115]  hw_breakpoint_exceptions_notify+0xf7/0x110
++	[    7.607117]  notifier_call_chain+0x44/0x110
++	[    7.607119]  atomic_notifier_call_chain+0x5f/0x110
++	[    7.607121]  notify_die+0x4c/0xb0
++	[    7.607123]  exc_debug_kernel+0xaf/0x170
++	[    7.607126]  asm_exc_debug+0x1e/0x40
++	[    7.607127] RIP: 0010:test_mthread_corrupting+0x48/0xd0
++	[    7.607129] Code: c7 80 0a 24 83 e8 48 f1 f1 00 48 85 c0 74 dd eb 30 bb 00 00 00 00 eb 59 48 63 c2 48 c1 e0 03 48 03 03 be cd ab cd ab 48 89 30 <83> c2 01 b8 20 00 00 00 29 c8 39 d0 7f e0 48 8d 7b 10 e8 d1 86 d4
++	[    7.607130] RSP: 0018:ffffc90000acfee0 EFLAGS: 00000286
++	[    7.607132] RAX: ffffc90000a13de8 RBX: ffff888102d57580 RCX: 0000000000000008
++	[    7.607132] RDX: 0000000000000008 RSI: 00000000abcdabcd RDI: ffffc90000acfe00
++	[    7.607133] RBP: ffff8881085bc800 R08: 0000000000000001 R09: 0000000000000000
++	[    7.607133] R10: 0000000000000001 R11: 0000000000000000 R12: ffff888105398000
++	[    7.607134] R13: ffff8881085bc800 R14: ffffffff815cb660 R15: 0000000000000000
++	[    7.607134]  ? __pfx_test_mthread_corrupting+0x10/0x10
++	[    7.607137]  </#DB>
++	[    7.607138]  <TASK>
++	[    7.607138]  kthread+0x10d/0x210
++	[    7.607140]  ? __pfx_kthread+0x10/0x10
++	[    7.607141]  ret_from_fork+0x187/0x1e0
++	[    7.607143]  ? __pfx_kthread+0x10/0x10
++	[    7.607144]  ret_from_fork_asm+0x1a/0x30
++	[    7.607147]  </TASK>
++	[    7.607147] kstackwatch: =================== KStackWatch End ===================
++	[    7.807082] kstackwatch_test: victim[0][11]: unhappy buf[8]=0xabcdabcd
++
++The line ``RIP: 0010:test_mthread_corrupting+0x48/0xd0`` shows the exact
++location where the corruption occurred. Now that the ``corrupting()`` function has
++been identified, it is straightforward to trace back to ``buggy()`` and fix the bug.
++
++
++More usage examples and corruption scenarios are provided in
++``kstackwatch_test.sh`` and ``mm/kstackwatch/test.c``.
++
++Limitations
++===========
++
++* Limited by available hardware breakpoints
++* Only one function can be watched at a time
++* Canary search limited to 128 * sizeof(ulong) from the current stack
++  pointer. This is sufficient for most cases, but has three limitations:
++
++  - If the stack frame is larger, the search may fail.
++  - If the function does not have a canary, the search may fail.
++  - If stack memory occasionally contains the same value as the canary,
++    it may be incorrectly matched.
++
++  In these cases, the user can provide the canary location using
++  ``sp_offset``, or treat any memory in the function prologue
++  as the canary.
 -- 
 2.43.0
 
