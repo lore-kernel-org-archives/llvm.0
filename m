@@ -1,37 +1,62 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1013019DE;
-	Fri, 10 Oct 2025 20:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E46730171B
+	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 20:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760126547; cv=none; b=PllwvtcNv3FVm0O/4XyNlu+ofVE3Ze/LQRMRtKnk/NO+Kd7QGCwzSDW0moEEy/hn+OC2dwIcpHD0YtaBrQiEcVtSaYgm9U42MaFRf3myKvodBPaHA+Muv0Nj3u5E76f2lrobhC8QeDEYgNZXLkU1ZtnwrwdCNDosfAn5cRtua2Q=
+	t=1760126833; cv=none; b=guAQGa24IBis/9cio+WDihKnu4xNKWDTfVZWBhZcVWbv78VlhQunJZnN4/eDEa5YJLCXz7q5vcJbBKSynya6e3XTrCCCfDOUm05TOsyGLthjq+DFKCJjqVUnj823ExnPHaK6RSkYjQ9P6kxmhZtPCsynRai+6lnBXNGAgX/8Seo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760126547; c=relaxed/simple;
-	bh=Gq8iru9xAslZ95vTaUJQXj6P7gEo738ViH0eAmET2Mc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=EOoMcc7uTZTIHQWFcR3D9mx5m/RmaLGNMB3C5VdaHmUhSmnkznsnSYwGFGwEf/BBDMRiPUBxtlYa72RRFpDH4Sbn8a90FDkTuN0Ihvl9VQNC8jaFJQqHLD8APPBGoD45FbCWMr+H6r5LMipFjdiUoYdd6EzyXe2LgTW3MCL2te8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Avo+7IaE; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1760126833; c=relaxed/simple;
+	bh=qJNQginXw33OCL6otz/mio9dtPI95vuO0c28D6VMtAs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jlQlVdFPTFZ0MdkNUeZZgmKC8HwKVkbkN3U0MihV5lrzB4eVmJV03jBuI/cv/MhoTA80wVEdC1eWYmgN+AMedqINJq3rcvv6GMCM5KLCZTc6hFaDJKRU1C+w6IUNRGYNVdCTU4xknvtrP9I2JdRn7wrPRv8WdAqj3TkC0Z3ygMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=h9ckVc1u; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Avo+7IaE"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-	bh=1uOItTL0KBTFqu9SxT/ohOMw6976arZ30lgBj7Y1/To=; b=Avo+7IaE91NLFjM4HOJOUnOGLL
-	579y9RDwAw7L205S678TugPGGJueV/XNuSmkwxei4bF6/2W5x2VWUnbbqFLsBbXbeTAzX9Oa1uZld
-	YjIbaZKfyuJOSs6+hja6mjaZfDPm2qk03Q/mtIgTM5vmnNklwo2byLo4ZYWpP4RF/H3JN7TSM/ka6
-	2/InTtiMWRIs2bw+SE9iTahmLMs0c3T5iEQBBcJb9OjV5XJ4kyNWfuOf5SvoqqoBlyD4unvQNTRFh
-	JFzLZKTphPb+Fw+WCUpW9lU986SZmFhw0U+sXf8mBU7+ecoo6KsCLQLI679yMaPn254rqJRJz6AZc
-	y7T7E4/A==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v7JJb-00000009HMt-11L2;
-	Fri, 10 Oct 2025 20:02:11 +0000
-Message-ID: <c1b2ec8c-0c09-4356-819c-7d2ee28b47f2@infradead.org>
-Date: Fri, 10 Oct 2025 13:02:09 -0700
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="h9ckVc1u"
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-912d4135379so100334239f.1
+        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 13:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1760126830; x=1760731630; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1C9TGYFUXxVemAwR89Ulh9sGzSp7qA+8XlrADAfHgVc=;
+        b=h9ckVc1uaK9ldX3TDFZqMAqQw92ohwt2RYRDilEZCZpUZvhMS5yhdvU+jB/fn6NTew
+         NDKDjgw9XjP9RujSy9iZYkcDYqg0mZ0+6bSLcfkEbrWrSEYkrGGBykAS0ohg6CEhN+Xy
+         VHahfLXu3OMnwE2HhPH1n2fxVmgyg8kP9O2m4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760126830; x=1760731630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1C9TGYFUXxVemAwR89Ulh9sGzSp7qA+8XlrADAfHgVc=;
+        b=KVcW7X/1fTZ51a2znn8GWHgow/9CnwjzoRJQYKfP/iMKzgbTK7vhzi8WBouczqDGDi
+         KpCyN87mIkv7lQLT51nap9iYgg5Q7/n2a3alIPj2lNxY9SQmrVRvuWIpWme7xXNg0c3O
+         gBXJIeF2ASMoDfnAKHqEerSLSp8He+rQHF0+VL/JPPJi6UhhQSWRElcZzcZ7aQsvE/AN
+         gjjTCnQEn48Dexb9hPbbL9DDpxhtetC7VC/gl4mS8492a6vAmWz3oWgJPk/jSOjYhSRh
+         QnYv2yPnKLdSpUq20nV9BAqtAtgo9xWD6lGeSDM170I+E01LzrvTGlJ3DSQjLzoG/3OA
+         DCYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXd/f7XLrmfYgyuWFhQKzNdiKhFk7i5/nxnbKTl9IX5SQU928KANwZLR6ygKRfevTtr5/iU@lists.linux.dev
+X-Gm-Message-State: AOJu0YytZCD4HzC4oqIBBjNurTut54FOS4LSPMnKqOeZjxKu+EuvXbxI
+	UdtrstY3w095XYYs37Pb9wvbnYaOPJp9HHnw20ZxP5jfBSq+lDq+NJY+OowcbUxsuCE=
+X-Gm-Gg: ASbGncvluty0f0z+sL0GJ1Ny7YwB6NyPZQ+D2DLlSyr5wHSLWkk2EDOmiqCtKCYKx6G
+	ZgxZBSPHlHbM8Pp13Ah/H/eFaDEUONuQAnPlNwLSEgyI/qCkvocA+IU5ZVuFuZQPeKgrAMTWnkx
+	0QbrRKi3avP4Lc2lrzTniktnDrbVrjPLqq8CGCwLLeZWLIefg4idVF7SDItl7HE+TYEWq3WDAX8
+	SP6fR9pJYkFe1U3/xQwGtNihxzEvOMl6xc4u0cMvzckVl1kD47isxXpOimwltdcvsCnb4r/5rSn
+	cFysRHi6y1zFvPcSTwG2qcSJ7bBlTqDYRAq/jRvz9RJdc7Bpd5vdhYmA9o8qBhXsfiwTQ/ADPx6
+	hbpXaEdvrCRLjcvQQhFbx7a5UiA08w02OuZcdegU737Ytp0IH9pGvTA==
+X-Google-Smtp-Source: AGHT+IF47OBorJnDZLxogs92bg9DbP41Re55bcWPxH2LtcWYwZh2W54OFZb8SOadJVjAyPp0dDz4Zg==
+X-Received: by 2002:a05:6e02:2186:b0:42e:6e45:e0a3 with SMTP id e9e14a558f8ab-42f873544bfmr138691105ab.2.1760126829993;
+        Fri, 10 Oct 2025 13:07:09 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-42f9036cee5sm23494755ab.32.2025.10.10.13.07.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Oct 2025 13:07:09 -0700 (PDT)
+Message-ID: <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
+Date: Fri, 10 Oct 2025 14:07:08 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -39,75 +64,46 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 22/23] docs: add KStackWatch document
-To: Jinchao Wang <wangjinchao600@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Mike Rapoport <rppt@kernel.org>,
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
- Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Rong Xu <xur@google.com>,
- Naveen N Rao <naveen@kernel.org>, David Kaplan <david.kaplan@amd.com>,
- Andrii Nakryiko <andrii@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
- Nam Cao <namcao@linutronix.de>, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, kasan-dev@googlegroups.com,
- "David S. Miller" <davem@davemloft.net>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org
-References: <20251009105650.168917-1-wangjinchao600@gmail.com>
- <20251009105650.168917-23-wangjinchao600@gmail.com>
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under
+ label
+To: hannes@cmpxchg.org, nphamcs@gmail.com
+Cc: nathan@kernel.org, shuah@kernel.org, morbo@google.com,
+ justinstitt@google.com, nick.desaulniers+lkml@gmail.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, david.hunter.linux@gmail.com,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Sidharth Seela <sidharthseela@gmail.com>, SeongJae Park <sj@kernel.org>
+References: <20250929172724.75108-1-sj@kernel.org>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251009105650.168917-23-wangjinchao600@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250929172724.75108-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 10/9/25 3:55 AM, Jinchao Wang wrote:
-> Add documentation for KStackWatch under Documentation/.
+On 9/29/25 11:27, SeongJae Park wrote:
+> On Mon, 29 Sep 2025 17:24:06 +0530 Sidharth Seela <sidharthseela@gmail.com> wrote:
 > 
-> It provides an overview, main features, usage details, configuration
-> parameters, and example scenarios with test cases. The document also
-> explains how to locate function offsets and interpret logs.
+>> Fix warning caused from declaration under a case label. The proper way
+>> is to declare variable at the beginning of the function. The warning
+>> came from running clang using LLVM=1; and is as follows:
+>> --
+>> -test_cachestat.c:260:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+>>    260 |                 char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
+>>        |
+>>
+>> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
 > 
-> Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
-> ---
->  Documentation/dev-tools/index.rst       |   1 +
->  Documentation/dev-tools/kstackwatch.rst | 314 ++++++++++++++++++++++++
->  2 files changed, 315 insertions(+)
->  create mode 100644 Documentation/dev-tools/kstackwatch.rst
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> 
 > 
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Johannes and Nhat,
 
-Thanks.
+Assuming this will go through cachestat tree
 
--- 
-~Randy
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Let me know if you would like me to take this through my tree.
+
+thanks,
+-- Shuah
