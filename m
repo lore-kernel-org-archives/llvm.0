@@ -1,54 +1,54 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C077A2F6569
-	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 21:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CD2302170
+	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 21:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760130106; cv=none; b=nboQho4PpoCvEe80JpPcJpbG1wkdTrMFesd0r/R4PypNYeFdFgmtxyAYso6k7XAfMOgsTqPXkAr212F3qF+TmkQFaPTNqVxBkyxKF4YsClm4i2s7wRTqhcIU7BUhrRhx7sAt90q+tJRIMWgTyXl45DLYSm/JeDD9UKdzi1IVnE4=
+	t=1760130108; cv=none; b=BZu3KFCD39f+uhwMBy8PDx6xHZntsIsVgCVILbNKCwFYJrzhW+Tg7qQQQM70Rjg9LM9TXA/GfHTa/EazdUHXS6zmCblvwt8E/d3yUsaNYiCvVcq0vDbOTilngrlBQoDK+FICHsLiggzCby6bi7JvfUoGFmt5EKflaUG2BzeMlFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760130106; c=relaxed/simple;
-	bh=q2WVUyCG5tHc5o5qJP5O0XCzNOqQPweayFUQN6bek4Y=;
+	s=arc-20240116; t=1760130108; c=relaxed/simple;
+	bh=1tNnIlZv+wCE3kcdtXTHXlfMZ0yGaIOe9oMVqOUMQOg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=IONbHk6rFHgCVKNEMgpb+pXsgP85p9V3adtzlYKAjIpR0sfmRh2GmDfe9X+3pscJLTodNome/XQ/sFahIym+MqJoLW/TR6NQrFkOxiYPv+AFC5wsgl+c3nohHF0w4clyfiHTJZMFEW6IqeGpJQmyImZh05xJ3OoRcxKISSh4pL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Waxn+NVj; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=Ypy6GVOUZ5rq1E8G6c3Z7feQWFvBsZSU5CQti12Ti+476rWG9YlWdfHx4xNI7l6aax6zyzSMtflzyhQizooRnPCNzpAR3FMI+FvreAGPZcrRBDBNWheuK4PR7/pvqUsdk7gcKE9O0oRW7gqwWC9rDtWRWfGgUTYV/TD2uK0R9w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2Vt6EQcq; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Waxn+NVj"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-269af520712so56723845ad.2
-        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 14:01:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2Vt6EQcq"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3305c08d975so5557209a91.3
+        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 14:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760130104; x=1760734904; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1760130106; x=1760734906; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q/wDnyhqkiKRqW0IjdCp0H/hnRPnE56SCwkMuf1SQlY=;
-        b=Waxn+NVjBvEu9agP3WHFomHkwQNRtK5NI14sM7iOoNCQ2QKM4/oMP2helLDsl7Nu2L
-         PExp13cyT3wN6DiXyxEgNsKjNklBqXXWmhH3XQd+3vJnyXuWR2Dd09gzg99q0p1HENjN
-         ojlmjCYgFf864GEzsql3tDDYg9oR7TlW7EK0HUsvjDYUO0ALe1kMw2UtoR4xEeB7zvnG
-         7cnO8zgJ5aLAE1FmpKhaHn5h8TfFsDL3BBBo+Xe1duY4g8Wt5Ap4iMZGcAyeVjRaj7Jh
-         W5RCU8tUG7kowB+T6Qlm8DDFGKMvTe9C73envJ/M8+F6TxaEFf9p2va1jMDboH0ZxsJa
-         apOw==
+        bh=HXUz0ruU1YA2Qg4rcZrXatiuVPj0CSzoMucbvJcULP4=;
+        b=2Vt6EQcqN2NAUkWC97B/8voNYf02uK1l4L7Oz5m2fcWCZb+arqcfnJ0S106CGL6o/7
+         O8peo/WTdB2e1gXio0/DrHT0qoFbFX9nszl2l/bE0omkFHk8rsVVxlUqKjw/d2UDKTd+
+         xymraV1JVNRwPjQa50etgyFp4OTs5tImN9tPEld7PcTnLqO3iQCcY595Wh5zsnF7EbSM
+         NpKPpbVd+KX1HWvyYdwRFYCbhmyYUewXDEJrxF/5nrO6ycFwfF3gPw/LufHCXXKdcMVs
+         kwTj1hZ5rtuy6nIaJeADXyeLJj0e03Y8nSyLMIRrqSePkcvGRSmJBpXvca0fLjnFiz0T
+         OMHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760130104; x=1760734904;
+        d=1e100.net; s=20230601; t=1760130106; x=1760734906;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q/wDnyhqkiKRqW0IjdCp0H/hnRPnE56SCwkMuf1SQlY=;
-        b=e9rrJml0ECh5yGrFEhOTVLGB5fjcJtmajbo4IUC+EQUYgzBkhQ3iFV6YpbiiuCYxHE
-         u7o1SI1H/S0UweSBxe3wt88ATR5i1HO+CeiSRVBEA3Z3vTAKUjq3U9sCykAkDyVU5X4/
-         rGsWDxv2HN15dQKyUMNMWKD5/Q5NxAqC/t/BzUZ6sLh1DZOvJI2dPZC/SAQcEUmIcpxy
-         yHqzpcRtQXiH3zDZcZ/MzTwyy19NDQGFKRFysTxoX9m+mZDX8LgaDwAyS9v5YxhhXc+E
-         xyyJaMYTh3ZZIQUgEb2QKn9MbXWNMegp3wWCQpgP4hOXcbDvd4qhfbUGeUy2wVPYIn2I
-         Ptcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXpFFwdUcGuZ1RIweDj/IsAlAh2tX1R+VFgU3LMx34KnKi4SHKS4uwLqxJ5PF7nY8T7x8G2@lists.linux.dev
-X-Gm-Message-State: AOJu0YxkMPgGBlS/dlPeuOXEDqG0zB5Eepmn2aXWc+XgOjfH/tIcg+gm
-	Iw6RtMrpMhGgpmQ7I4ZO+vM0jQ/kfkDenmVkN6Bp0P/GPnx6FQJmOI0UwdYmrnP2997/Xg==
-X-Google-Smtp-Source: AGHT+IH7+DQHEYaFa4vkW04Ba4BYGyws7ixpIQqYpHEmAr7KOX0ZVzNnotiWDd8X62vdONAhobou7zg=
-X-Received: from pld16.prod.google.com ([2002:a17:903:3550:b0:290:28e2:ce62])
- (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ce87:b0:250:6d0e:1e40
- with SMTP id d9443c01a7336-29027356a6emr202791475ad.7.1760130103552; Fri, 10
- Oct 2025 14:01:43 -0700 (PDT)
-Date: Fri, 10 Oct 2025 21:01:32 +0000
+        bh=HXUz0ruU1YA2Qg4rcZrXatiuVPj0CSzoMucbvJcULP4=;
+        b=OqwcsoJ4FlUpqehb/3NiRpaWmBMAdbiXHrrXk53VjL6ZijKGy/2ioal5uc4ctEmRqf
+         JYekiDb/1phm5sYDEC3rrcgW7bGUSuFbVjd0GCnOPJr/EgkT0M1/7zd3S1FEJleXsDQy
+         F1lXTJ3HJZi2CMI6lYd/EUnwShLo0On/AVqQBTWYmCCUzHHpxLiI30I35B5peze7ZZ03
+         ECgbTiu+DaRApxLUZ4vnmxbUrxNFSfO6U6wC72WOJTIUvmktdQMabocruQ+UkpHwu8f4
+         fkA85bcfmBTI0t/1n92tO9DwmZDUsiaA3E4k+KjPFMrvNlzwYIjo7I+GsoUgm0VcqCNm
+         Chuw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpCb63WFUCbHZf5cTxYSwoH2PIt7lNr6cpNbiwoS1TNHsk8P/bjuFJtPxn0YqU6kxqp205@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz6jm2Nn1jAtmElnteOHFZ8VZX3fIG9CBeRw1LySjm5QZ81asLY
+	1w11GKY80wVqWwFOhJ5Pwp0dNtQawNyNeofNCj30KYO8XLqvWXXrUWmzzADHdL+4BC4Pvg==
+X-Google-Smtp-Source: AGHT+IEL18I3C/IsW+RSJN6mqkTxkt6ylMjhVG9XKQ6e/h83iNo20YGDVvCHYqnvKVi3lRioj4PMQpE=
+X-Received: from plat12.prod.google.com ([2002:a17:902:e1cc:b0:267:fa7d:b637])
+ (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3148:b0:327:e59d:2cc2
+ with SMTP id 98e67ed59e1d1-33b51148bcbmr17641763a91.10.1760130105796; Fri, 10
+ Oct 2025 14:01:45 -0700 (PDT)
+Date: Fri, 10 Oct 2025 21:01:33 +0000
 In-Reply-To: <20251010210134.2066321-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251010210134.2066321-1-xur@google.com>
 X-Mailer: git-send-email 2.51.0.740.g6adb054d12-goog
-Message-ID: <20251010210134.2066321-2-xur@google.com>
-Subject: [PATCH 2/4] kbuild: Disable AutoFDO and Propeller flags for kernel modules
+Message-ID: <20251010210134.2066321-3-xur@google.com>
+Subject: [PATCH 3/4] kbuild: Remove MFS flags from Propeller profile generate builds
 From: xur@google.com
 To: Alexey Gladkov <legion@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
 	Ard Biesheuvel <ardb@kernel.org>, Bill Wendling <morbo@google.com>, Han Shen <shenhan@google.com>, 
@@ -78,146 +78,42 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rong Xu <xur@google.com>
 
-AutoFDO and Propeller build currently does not support kernel modules,
-but the corresponding build flags are still being set.
-
-This change suppresses these build flags for modules. These flags can
-be re-enabled once Propeller support for kernel modules is added.
+Propeller profile generation requires Machine Function Splitter (MFS)
+to be disabled.
 
 Signed-off-by: Rong Xu <xur@google.com>
 ---
- Makefile                   |  9 +++++----
- scripts/Makefile.autofdo   |  9 ++++++---
- scripts/Makefile.lib       |  9 ++++++---
- scripts/Makefile.propeller | 12 ++++++++----
- scripts/Makefile.vmlinux_o |  2 +-
- 5 files changed, 26 insertions(+), 15 deletions(-)
+ scripts/Makefile.propeller | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 6f88b1d3b40d9..f40bee23d5536 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1230,14 +1230,15 @@ PHONY += vmlinux
- # not for decompressors. LDFLAGS_vmlinux in arch/*/boot/compressed/Makefile is
- # unrelated; the decompressors just happen to have the same base name,
- # arch/*/boot/compressed/vmlinux.
--# Export LDFLAGS_vmlinux only to scripts/Makefile.vmlinux.
-+# Export LDFLAGS_vmlinux only to scripts/Makefile.vmlinux, and
-+# scripts/Makefile.vmlinux_o.
- #
- # _LDFLAGS_vmlinux is a workaround for the 'private export' bug:
- #   https://savannah.gnu.org/bugs/?61463
- # For Make > 4.4, the following simple code will work:
--#  vmlinux: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
--vmlinux: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
--vmlinux: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
-+#  vmlinux vmlinux_o: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-+vmlinux vmlinux_o: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-+vmlinux vmlinux_o: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
- vmlinux: vmlinux.o $(KBUILD_LDS) modpost
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux
- 
-diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-index 1caf2457e585c..5bcfcef273745 100644
---- a/scripts/Makefile.autofdo
-+++ b/scripts/Makefile.autofdo
-@@ -14,11 +14,14 @@ ifdef CLANG_AUTOFDO_PROFILE
- endif
- 
- ifdef CONFIG_LTO_CLANG_THIN
-+  _ldflags_autofdo := --mllvm=-enable-fs-discriminator=true --mllvm=-improved-fs-discriminator=true -plugin-opt=thinlto
-+  _ldflags_autofdo += -plugin-opt=-split-machine-functions
-   ifdef CLANG_AUTOFDO_PROFILE
--    KBUILD_LDFLAGS += --lto-sample-profile=$(CLANG_AUTOFDO_PROFILE)
-+    _ldflags_autofdo += --lto-sample-profile=$(CLANG_AUTOFDO_PROFILE)
-   endif
--  KBUILD_LDFLAGS += --mllvm=-enable-fs-discriminator=true --mllvm=-improved-fs-discriminator=true -plugin-opt=thinlto
--  KBUILD_LDFLAGS += -plugin-opt=-split-machine-functions
-+  # TODO: change LDFLAGS_vmlinux to KBUILD_LDFLAGS when kernel modules
-+  # are supported.
-+  LDFLAGS_vmlinux += $(_ldflags_autofdo)
- endif
- 
- export CFLAGS_AUTOFDO_CLANG
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 53c02fc3b348a..0f6874e8d584d 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -108,20 +108,23 @@ endif
- #
- # Enable AutoFDO build flags except some files or directories we don't want to
- # enable (depends on variables AUTOFDO_PROFILE_obj.o and AUTOFDO_PROFILE).
--#
-+# TODO: change '$(part-of-builtin)' to '$(is-kernel-object)' when the AutoFDO
-+# build supports modules.
- ifeq ($(CONFIG_AUTOFDO_CLANG),y)
- _c_flags += $(if $(patsubst n%,, \
--	$(AUTOFDO_PROFILE_$(target-stem).o)$(AUTOFDO_PROFILE)$(is-kernel-object)), \
-+	$(AUTOFDO_PROFILE_$(target-stem).o)$(AUTOFDO_PROFILE)$(part-of-builtin)), \
- 	$(CFLAGS_AUTOFDO_CLANG))
- endif
- 
- #
- # Enable Propeller build flags except some files or directories we don't want to
- # enable (depends on variables AUTOFDO_PROPELLER_obj.o and PROPELLER_PROFILE).
-+# TODO: change '$(part-of-builtin)' to '$(is-kernel-object)' when the Propeller
-+# build supports modules.
- #
- ifdef CONFIG_PROPELLER_CLANG
- _c_flags += $(if $(patsubst n%,, \
--	$(PROPELLER_PROFILE_$(target-stem).o)$(PROPELLER_PROFILE)$(is-kernel-object)), \
-+	$(PROPELLER_PROFILE_$(target-stem).o)$(PROPELLER_PROFILE)$(part-of-builtin)), \
- 	$(CFLAGS_PROPELLER_CLANG))
- endif
- 
 diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-index 48a660128e256..fa018098506b8 100644
+index fa018098506b8..8c3e514dbcc04 100644
 --- a/scripts/Makefile.propeller
 +++ b/scripts/Makefile.propeller
-@@ -3,7 +3,7 @@
- # Enable available and selected Clang Propeller features.
- ifdef CLANG_PROPELLER_PROFILE_PREFIX
-   CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
--  KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
-+  _ldflags_propeller := --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
- else
-   # Starting with Clang v20, the '-fbasic-block-sections=labels' option is
-   # deprecated. Use the recommended '-fbasic-block-address-map' option.
-@@ -26,14 +26,18 @@ endif
- 
- ifdef CONFIG_LTO_CLANG_THIN
-   ifdef CLANG_PROPELLER_PROFILE_PREFIX
--    KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
-+    _ldflags_propeller += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
+@@ -13,8 +13,14 @@ else
    else
-     ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
--       KBUILD_LDFLAGS += --lto-basic-block-address-map
-+       _ldflags_propeller += --lto-basic-block-address-map
+     CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
+   endif
++  # Disable Machine Function Splitter for Propeller.
++  # Propeller profile generation requires Machine Function Splitter to be disabled.
++  # We use -fno-split-machine-functions to override any prior AutoFDO/PGO flags
++  #(in Makefile.lib), assuming Propeller options are applied afterward.
++  CFLAGS_PROPELLER_CLANG += -fno-split-machine-functions
+ endif
+ 
++
+ # Propeller requires debug information to embed module names in the profiles.
+ # If CONFIG_DEBUG_INFO is not enabled, set -gmlt option. Skip this for AutoFDO,
+ # as the option should already be set.
+@@ -33,6 +39,8 @@ ifdef CONFIG_LTO_CLANG_THIN
      else
--       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-+       _ldflags_propeller += --lto-basic-block-sections=labels
+        _ldflags_propeller += --lto-basic-block-sections=labels
      endif
++    # Again, we need to disable Machine Function Splitter.
++    LDFLAGS_vmlinux := $(filter-out -plugin-opt=-split-machine-functions, $(LDFLAGS_vmlinux))
    endif
  endif
  
-+# TODO: change LDFLAGS_vmlinux to KBUILD_LDFLAGS when kernel modules
-+# are supported.
-+LDFLAGS_vmlinux += $(_ldflags_propeller)
-+
- export CFLAGS_PROPELLER_CLANG
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 23c8751285d79..9c4f0841e5c5d 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -56,7 +56,7 @@ vmlinux-o-ld-args-$(CONFIG_BUILTIN_MODULE_RANGES)	+= -Map=$@.map
- 
- quiet_cmd_ld_vmlinux.o = LD      $@
-       cmd_ld_vmlinux.o = \
--	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
-+	$(LD) $(KBUILD_LDFLAGS) $(LDFLAGS_vmlinux) -r -o $@ \
- 	$(vmlinux-o-ld-args-y) \
- 	$(addprefix -T , $(initcalls-lds)) \
- 	--whole-archive vmlinux.a --no-whole-archive \
 -- 
 2.51.0.740.g6adb054d12-goog
 
