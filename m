@@ -1,130 +1,119 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE9A2F6569
-	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 21:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB691E32B9;
+	Fri, 10 Oct 2025 21:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760130109; cv=none; b=H9VWL9k13srvlvMdrUpQnQM39PuznEJEyAABbnOuk2T9Bc4Ofa/MLqRPWcbWkAFi8/326kOP94ZYNDLvPEiiSLhCr0kx5x7aI/01Ng7QBg62N0VZgS9blp9128rmdUmk8/Ouwy6BLsfApaXa8gFEr+UakQo9XO9JuakMFOxVN/4=
+	t=1760131116; cv=none; b=tDINQ8nVJFBtuZL628UZQ3WXe8q6wpAnMlzwTcesHs0sXYkL/cy2iV3SAc9czg0agkjB2jYxaiCtWQVqAyFtkxI6qjXjHGRHHqxg3vMnRUFQrbd8fr7mtUAtNZUztxdC0YtEsQMk45CaDQGw7mR8r5fxLRZMvtGfsT7mOW3w5j0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760130109; c=relaxed/simple;
-	bh=A36UU5cjawCFn9zg3EVWTgnlfdvC+WA6eTuKIyjz598=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tw51C6moJ7e0xWrrTdLNC8ah+A/iV3eJHhJ/ujqK6hIAr2N0/oo7xcG+0qeg2h+t7GVgTjEfM9vrRJnuckpWBevSRWCbL8F9wQWmm/VHKCA+ah0WoZcC3fqNx2os0FHzvcWtfK669vrFT5QlwGsiMEs2T66qho9b3RRFCRY3NlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M4hXaFWz; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
+	s=arc-20240116; t=1760131116; c=relaxed/simple;
+	bh=GN7rcJAiHiN13Nol7hN0X++FKuoiO/51+O8PBd+pOZc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E4Jp0UcTnAuvmg0eXjUZ+grmojJKJkIo0h7ttfNIyUL2EoF9ZC0MH/F8m4MgrS5N69VezgJvjx/udAHEG4OF+DlGSaKlqD4axWJyjNw4fy0Q3dTg2YZGqRRthP5kBb2RZcCY8G4o3LoGFjsjXzSUQ+ROhNUMVlby1FgNHmi9JBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nuv5sTZI; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M4hXaFWz"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-781171fe1c5so4737051b3a.0
-        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 14:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760130108; x=1760734908; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4/DIS19FEQXbD2as28eCi3gphWED48d1Ubr/xwVaHs=;
-        b=M4hXaFWzZG3u2KHZpNM6rRvyPW2FlZMRvMj9zpvYMgLnK25t/pleaMv0qB5UL4fCU9
-         tkrJDbw5DFCNW0ylVE1+6EwTrjAs0U4MVUD2avQ+wlCUxwrhlIQxwBlvJp15L77o8pkX
-         73tWKx34FMOkCzCz6m44wBhCJ8Gb6ZImkhemUOT2smobFEEBnKWUYf3/DczMVXRlclLz
-         GGI8PX59mb+Ysv4Yr42sqc3ji4l1KnQKZfU2viyVgANl91yOUrfT0PEpB8+FZ/gfvmbW
-         VCcOVgWI4UHTtIEbsd/QTKCP5tUCAXFbmRRZPorknGO1fk7lTWkW7Hx1kam2pTJDc7B3
-         mD6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760130108; x=1760734908;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4/DIS19FEQXbD2as28eCi3gphWED48d1Ubr/xwVaHs=;
-        b=GQHbQz587z813AxrMRW38cpP3abMK2O2j8GCp9t4Eaq6xYDzuVa/JDhwk/VCvSu9BU
-         Es1oAqOEdfJ0f2Pf9auhny6/ErCBveggWRWtqn8feuSjyT25+ZSt77F34FvmHBxYWk3K
-         md+2sXzfuVwKu5vMDPZXKe+RQP55ORoSaBZfZdD5A8YIdaZdoYLMBkWTYuaFGovzHGiz
-         XJStf8zLjmTHp3X7OlTQeaC24Dwe8SU0xkyZ9QCNB6uk/HhpR1JwwvLH7nQAZQS4fBW5
-         80GwO70KLVvIUUVMV3U2p0n2moOgUEez/r130MuAR/8qVgNoq/BC784XRlbmxnMXUXtL
-         6lDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdLMVLP5479PVM3Y3M3ZamXGm821grd7qjuSsPBSSRI+ZGKxvsT2IBSFsvCl3awvQD9boT@lists.linux.dev
-X-Gm-Message-State: AOJu0YzyHFMcedkWo/tfKAUv7pOmGJH/BXLkFUISevKcfuNaCQ+MLZJq
-	o7l3IcaXj7LjGMqDzMXNjI+6kbIeJsaTNkBzGXVjx7/MTygy3j45TYGpmhiYV4s7ff6eMw==
-X-Google-Smtp-Source: AGHT+IEtMBLg0Ov+r6OYaa4ihcCMD48GJCeyOSHqGaacD/e1SfaXFjuFV7CxscQBzB2FYKZBslyQNH4=
-X-Received: from pge21.prod.google.com ([2002:a05:6a02:2d15:b0:b55:a4b:fe47])
- (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:3386:b0:251:43f5:cad4
- with SMTP id adf61e73a8af0-32da80bb8f5mr17111428637.10.1760130107536; Fri, 10
- Oct 2025 14:01:47 -0700 (PDT)
-Date: Fri, 10 Oct 2025 21:01:34 +0000
-In-Reply-To: <20251010210134.2066321-1-xur@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nuv5sTZI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760131114; x=1791667114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GN7rcJAiHiN13Nol7hN0X++FKuoiO/51+O8PBd+pOZc=;
+  b=nuv5sTZIGZvBGqX2+OpUZiH8iOb/XJzi2IEdDP+8KNFk0NzJydabMhPP
+   F8iz2T9gCHAuxDpsRsNNkMvYHw1t3miONt4ehrVb1Z09hztdNMUyzhs7o
+   7te4q2v6ZN7p1RAkcS3teRyopZ2sri4cP4OLJuhozXUADmtiFSHtsia1X
+   llSyPXuKG9v6hX+eMMCFwl8AW6vyC9xQ2GxzgNAD833V/hrQjzXGmRLts
+   F3kb+DEmeCjz96Qq7JF7XCjp+NVWZ2CQKbAhC03ailgKrqf6MFj4O4m8a
+   ID3ykUJl1D6cHFhJoInl5vnHmismIUnCJjRmAH0oheXZmPQiEi71Trpb5
+   A==;
+X-CSE-ConnectionGUID: B7hbRbDZTZG5NofheZJ8oA==
+X-CSE-MsgGUID: xAUd6R3yQcOmMaHHcDwk0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62386917"
+X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
+   d="scan'208";a="62386917"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 14:18:33 -0700
+X-CSE-ConnectionGUID: JObruKedS+20xN/RXkZcDQ==
+X-CSE-MsgGUID: UCTRP3WUQ8esTkwdSkvYUA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
+   d="scan'208";a="180653183"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 10 Oct 2025 14:18:26 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v7KVM-0003B9-13;
+	Fri, 10 Oct 2025 21:18:24 +0000
+Date: Sat, 11 Oct 2025 05:17:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, david@redhat.com,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	alexandru.elisei@arm.com, peterx@redhat.com, sj@kernel.org,
+	rppt@kernel.org, mhocko@suse.com, corbet@lwn.net, axboe@kernel.dk,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, hch@infradead.org,
+	jack@suse.cz, willy@infradead.org, m.szyprowski@samsung.com,
+	robin.murphy@arm.com, hannes@cmpxchg.org,
+	zhengqi.arch@bytedance.com, shakeel.butt@linux.dev,
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com,
+	minchan@kernel.org, surenb@google.com, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] mm: implement cleancache
+Message-ID: <202510110501.92Srmvgx-lkp@intel.com>
+References: <20251010011951.2136980-2-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251010210134.2066321-1-xur@google.com>
-X-Mailer: git-send-email 2.51.0.740.g6adb054d12-goog
-Message-ID: <20251010210134.2066321-4-xur@google.com>
-Subject: [PATCH 4/4] kbuild: Add config to assert profile accuracy for
- aggressive optimization
-From: xur@google.com
-To: Alexey Gladkov <legion@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Bill Wendling <morbo@google.com>, Han Shen <shenhan@google.com>, 
-	Ingo Molnar <mingo@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Peter Zijlstra <peterz@infradead.org>, Tamir Duberstein <tamird@gmail.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, 
-	"=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, Yabin Cui <yabinc@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Rong Xu <xur@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251010011951.2136980-2-surenb@google.com>
 
-From: Rong Xu <xur@google.com>
+Hi Suren,
 
-Adds a build config to AutoFDO to assert that the generated profile
-accurately represents the intended workload. This enables Clang to
-perform more aggressive optimizations.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Rong Xu <xur@google.com>
----
- arch/Kconfig             | 11 +++++++++++
- scripts/Makefile.autofdo |  3 +++
- 2 files changed, 14 insertions(+)
+[auto build test ERROR on 70478cb9da6fc4e7b987219173ba1681d5f7dd3d]
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index ebe08b9186adc..6fdc676cb0fe4 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -886,6 +886,17 @@ config AUTOFDO_CLANG
- 
- 	  If unsure, say N.
- 
-+config AUTOFDO_PROFILE_ACCURATE
-+	bool "Assert AutoFDO profile is accurate (EXPERIMENTAL)"
-+	depends on AUTOFDO_CLANG
-+	help
-+	  This option asserts that the AutoFDO profile (specified
-+	  in CLANG_AUTOFDO_PROFILE) is collected from a representative
-+	  workload, allowing the Clang compiler to perform more
-+	  aggressive optimizations.
-+
-+	  If unsure, say N.
-+
- config ARCH_SUPPORTS_PROPELLER_CLANG
- 	bool
- 
-diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-index 5bcfcef273745..36abeae2accdc 100644
---- a/scripts/Makefile.autofdo
-+++ b/scripts/Makefile.autofdo
-@@ -11,6 +11,9 @@ endif
- ifdef CLANG_AUTOFDO_PROFILE
-   CFLAGS_AUTOFDO_CLANG += -fprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -ffunction-sections
-   CFLAGS_AUTOFDO_CLANG += -fsplit-machine-functions
-+ifdef CONFIG_AUTOFDO_PROFILE_ACCURATE
-+  CFLAGS_AUTOFDO_CLANG += -fprofile-sample-accurate
-+endif
- endif
- 
- ifdef CONFIG_LTO_CLANG_THIN
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-implement-cleancache/20251010-134501
+base:   70478cb9da6fc4e7b987219173ba1681d5f7dd3d
+patch link:    https://lore.kernel.org/r/20251010011951.2136980-2-surenb%40google.com
+patch subject: [PATCH 1/8] mm: implement cleancache
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251011/202510110501.92Srmvgx-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110501.92Srmvgx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510110501.92Srmvgx-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/cleancache.c:119:13: error: casting from randomized structure pointer type 'struct address_space *' to 'struct cleancache_inode *'
+     119 |         *ccinode = (struct cleancache_inode *)folio->mapping;
+         |                    ^
+   1 error generated.
+
+
+vim +119 mm/cleancache.c
+
+   113	
+   114	static void folio_attachment(struct folio *folio, struct cleancache_inode **ccinode,
+   115				     unsigned long *offset)
+   116	{
+   117		lockdep_assert_held(&(folio_pool(folio)->lock));
+   118	
+ > 119		*ccinode = (struct cleancache_inode *)folio->mapping;
+   120		*offset = folio->index;
+   121	}
+   122	
+
 -- 
-2.51.0.740.g6adb054d12-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
