@@ -1,63 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546B82FC88A;
-	Fri, 10 Oct 2025 16:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC565218580;
+	Fri, 10 Oct 2025 17:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760115427; cv=none; b=LuKF75/FvMUBg+80h9Xsddm0nfGlwI2cAPi/MeSCi3Q5+7OGLvdKjqvfPGSgcv83vgYVK1h9lReVkBJacHnIY09CnHf12X6RKnOFmf7H6hlkwN1JtvMun8ILyV6Ix84sZxSZBFXA+DxJIP9GKCp7TEZtlDoSCbTRohW3N4uFe6A=
+	t=1760118553; cv=none; b=XtRPGGJXiuPC2xBjeJlI5itkqCvnsGe8iSpPpufX3PW+USvPVRYzP/QFWdy61Q18dvDuuoZftaIBRkZlXEl/nvEfW9xZ0G68bVpB59yOzPKQY7bbeErIt8KoiqIo6ThXGF5ZMSaiFQC2jPpIE0k1MbkznJ0kpRyZXRz1o9vq0NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760115427; c=relaxed/simple;
-	bh=l0fiWZYVG+wfmCw7kScmyAYvT0108Un2WDvxgohMa4o=;
+	s=arc-20240116; t=1760118553; c=relaxed/simple;
+	bh=jB96dFec28WttUWT3FydnbC7l8PWKIZqF/cFBSnSRhQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gtjl90VypMHfVq5NAEyo6kSDemLK7UumJspVFAU8zbLJVW87FTo7iDe1/hjqeX+eIksJ64Lhdj1brYryJyfC2KTuDFcxDeKhP5s9Au4qmnA1IhkRqQe9xVv7xC8tA2cN5VIhRkNQ3x/E3JoV74bHxvdmAcEQ0Pcjiidh+v09cSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HgT/Sc9t; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryenNy4jj5qt5aHoQobeTc0XOcb8kUhxSq9YeyYt3kNbb8l0y0PbMGzxBwfiAYcwPhieFdNZcG7H5Jho0t+Knp387wiNFuj4X3l5Yl5fvaEJQ5Ayk2TN2ceXO++kU9ViL9AYUmzicmRqe8rF+PqvubfpnlPIxYWzbbhMFclf3pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L65kBg9t; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HgT/Sc9t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L65kBg9t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760115427; x=1791651427;
+  t=1760118552; x=1791654552;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=l0fiWZYVG+wfmCw7kScmyAYvT0108Un2WDvxgohMa4o=;
-  b=HgT/Sc9tahvTNo7kr5vdJbizsE96Z5VpR3wGSuZo7W7CvYQfi+jJ2ihz
-   7aLKzrBnETTzXjFdwe2wKb86+BM9z2kL4yChnA8Sp3Z5OAb6LTY+Y8PQ3
-   c93HiCxmDuW9V6kqH0E+b0YDj4QjPrUjBIk0KjXZBjUrCm18K1Nuqzfjw
-   Dt2885L75NZQ9DIBebxZB73IoXDADa7wPAHgoqyGAcZ6p8rSKvqHTFoed
-   dCBMgTjJ3yKhGWhV3FG8xY9vRDXmygub3tpGeyUte00ymTQqewqbCy7Ga
-   9s9tZ6HX8CMFnXvGOKU+vQLN3RMnzfmx5pEQb5s6YyM31PeAkKNWKFaY0
+  bh=jB96dFec28WttUWT3FydnbC7l8PWKIZqF/cFBSnSRhQ=;
+  b=L65kBg9tcQ8UxAKi00K9cyGZXWhDB5E5uB2RKsHL+fFdH5BFjossrjZd
+   89K22z5TrxS+vND8DE+Wvkynf1TVwsv7h+99aIv4j6UwJ70PE22j/jFHN
+   YQDj/BN9Nssp2AQuFb57P8HoWFbrFBkxY5N/4c9os3DSxkCqCFMaa4JRt
+   DE+Yl/FsfhF21eo8KDuJfbBcKPEWF9sEDa4/xgIhnIEkPRLJHXXa4ycOt
+   lHqBVeoimSVsQJADtImrcpDLbB/bRMTNAnEl0MV9GpfEENUaAJhflAnfo
+   SY/eMsZYGjP7sNTyo0RCTznQCdib32ARvZZcAyCtAqitHqiruAVkF7yNO
    g==;
-X-CSE-ConnectionGUID: jGS+lSlIQ+yeT3dXOSDUhg==
-X-CSE-MsgGUID: AxVWtvCjRsqkmHK0fHgjsQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62367666"
+X-CSE-ConnectionGUID: wiM+HfYCRuazxL5Jg+8Yfw==
+X-CSE-MsgGUID: eHYFQMTOQkqrbGuHICgD5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="84966872"
 X-IronPort-AV: E=Sophos;i="6.19,219,1754982000"; 
-   d="scan'208";a="62367666"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 09:57:04 -0700
-X-CSE-ConnectionGUID: jgY5epT1SJWEgpZleUaRIA==
-X-CSE-MsgGUID: aoCx4benQO2MyTbhCbqfeA==
+   d="scan'208";a="84966872"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 10:49:10 -0700
+X-CSE-ConnectionGUID: jbFMM9y+Tq6PDv7R2R2lFQ==
+X-CSE-MsgGUID: 8/lLxlpUSH+LiY0FGuR4qg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,219,1754982000"; 
-   d="scan'208";a="180703370"
+   d="scan'208";a="204716167"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Oct 2025 09:57:01 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 10 Oct 2025 10:49:07 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v7GQN-0002yl-2V;
-	Fri, 10 Oct 2025 16:56:59 +0000
-Date: Sat, 11 Oct 2025 00:56:12 +0800
+	id 1v7HEn-00031v-11;
+	Fri, 10 Oct 2025 17:49:05 +0000
+Date: Sat, 11 Oct 2025 01:48:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joshua Watt <jpewhacker@gmail.com>, linux-nfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Joshua Watt <jpewhacker@gmail.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>
-Subject: Re: [PATCH] NFS: Fix state renewals missing after boot
-Message-ID: <202510110046.sj3dc5HD-lkp@intel.com>
-References: <20251008230935.738405-1-JPEWhacker@gmail.com>
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] Drivers: hv: Add support for movable memory
+ regions
+Message-ID: <202510110134.RmOV83Fz-lkp@intel.com>
+References: <175976319844.16834.4747024333732752980.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,86 +66,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251008230935.738405-1-JPEWhacker@gmail.com>
+In-Reply-To: <175976319844.16834.4747024333732752980.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 
-Hi Joshua,
+Hi Stanislav,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on linus/master v6.17 next-20251010]
+[auto build test WARNING on linus/master]
+[also build test WARNING on next-20251010]
+[cannot apply to v6.17]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Watt/NFS-Fix-state-renewals-missing-after-boot/20251010-103708
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20251008230935.738405-1-JPEWhacker%40gmail.com
-patch subject: [PATCH] NFS: Fix state renewals missing after boot
-config: mips-ip32_defconfig (https://download.01.org/0day-ci/archive/20251011/202510110046.sj3dc5HD-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110046.sj3dc5HD-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Kinsburskii/Drivers-hv-Refactor-and-rename-memory-region-handling-functions/20251010-111917
+base:   linus/master
+patch link:    https://lore.kernel.org/r/175976319844.16834.4747024333732752980.stgit%40skinsburskii-cloud-desktop.internal.cloudapp.net
+patch subject: [PATCH v4 5/5] Drivers: hv: Add support for movable memory regions
+config: x86_64-randconfig-006-20251010 (https://download.01.org/0day-ci/archive/20251011/202510110134.RmOV83Fz-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110134.RmOV83Fz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510110046.sj3dc5HD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510110134.RmOV83Fz-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/nfs/client.c:184:7: error: no member named 'cl_last_renewal' in 'struct nfs_client'
-     184 |         clp->cl_last_renewal = jiffies;
-         |         ~~~  ^
-   1 error generated.
+>> drivers/hv/mshv_root_main.c:1410:11: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1410 |         else if (!mutex_trylock(&region->mutex))
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hv/mshv_root_main.c:1434:12: note: uninitialized use occurs here
+    1434 |         WARN_ONCE(ret,
+         |                   ^~~
+   include/asm-generic/bug.h:152:18: note: expanded from macro 'WARN_ONCE'
+     152 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
+         |                         ^~~~~~~~~
+   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
+      28 |                 bool __ret_do_once = !!(condition);                     \
+         |                                         ^~~~~~~~~
+   drivers/hv/mshv_root_main.c:1410:7: note: remove the 'if' if its condition is always false
+    1410 |         else if (!mutex_trylock(&region->mutex))
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1411 |                 goto out_fail;
+         |                 ~~~~~~~~~~~~~
+   drivers/hv/mshv_root_main.c:1406:9: note: initialize the variable 'ret' to silence this warning
+    1406 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +184 fs/nfs/client.c
+vim +1410 drivers/hv/mshv_root_main.c
 
-   141	
-   142	/*
-   143	 * Allocate a shared client record
-   144	 *
-   145	 * Since these are allocated/deallocated very rarely, we don't
-   146	 * bother putting them in a slab cache...
-   147	 */
-   148	struct nfs_client *nfs_alloc_client(const struct nfs_client_initdata *cl_init)
-   149	{
-   150		struct nfs_client *clp;
-   151		int err = -ENOMEM;
-   152	
-   153		if ((clp = kzalloc(sizeof(*clp), GFP_KERNEL)) == NULL)
-   154			goto error_0;
-   155	
-   156		clp->cl_minorversion = cl_init->minorversion;
-   157		clp->cl_nfs_mod = cl_init->nfs_mod;
-   158		if (!get_nfs_version(clp->cl_nfs_mod))
-   159			goto error_dealloc;
-   160	
-   161		clp->rpc_ops = clp->cl_nfs_mod->rpc_ops;
-   162	
-   163		refcount_set(&clp->cl_count, 1);
-   164		clp->cl_cons_state = NFS_CS_INITING;
-   165	
-   166		memcpy(&clp->cl_addr, cl_init->addr, cl_init->addrlen);
-   167		clp->cl_addrlen = cl_init->addrlen;
-   168	
-   169		if (cl_init->hostname) {
-   170			err = -ENOMEM;
-   171			clp->cl_hostname = kstrdup(cl_init->hostname, GFP_KERNEL);
-   172			if (!clp->cl_hostname)
-   173				goto error_cleanup;
-   174		}
-   175	
-   176		INIT_LIST_HEAD(&clp->cl_superblocks);
-   177		clp->cl_rpcclient = ERR_PTR(-EINVAL);
-   178	
-   179		clp->cl_flags = cl_init->init_flags;
-   180		clp->cl_proto = cl_init->proto;
-   181		clp->cl_nconnect = cl_init->nconnect;
-   182		clp->cl_max_connect = cl_init->max_connect ? cl_init->max_connect : 1;
-   183		clp->cl_net = get_net_track(cl_init->net, &clp->cl_ns_tracker, GFP_KERNEL);
- > 184		clp->cl_last_renewal = jiffies;
-   185	
+  1377	
+  1378	/**
+  1379	 * mshv_region_interval_invalidate - Invalidate a range of memory region
+  1380	 * @mni: Pointer to the mmu_interval_notifier structure
+  1381	 * @range: Pointer to the mmu_notifier_range structure
+  1382	 * @cur_seq: Current sequence number for the interval notifier
+  1383	 *
+  1384	 * This function invalidates a memory region by remapping its pages with
+  1385	 * no access permissions. It locks the region's mutex to ensure thread safety
+  1386	 * and updates the sequence number for the interval notifier. If the range
+  1387	 * is blockable, it uses a blocking lock; otherwise, it attempts a non-blocking
+  1388	 * lock and returns false if unsuccessful.
+  1389	 *
+  1390	 * NOTE: Failure to invalidate a region is a serious error, as the pages will
+  1391	 * be considered freed while they are still mapped by the hypervisor.
+  1392	 * Any attempt to access such pages will likely crash the system.
+  1393	 *
+  1394	 * Return: true if the region was successfully invalidated, false otherwise.
+  1395	 */
+  1396	static bool
+  1397	mshv_region_interval_invalidate(struct mmu_interval_notifier *mni,
+  1398					const struct mmu_notifier_range *range,
+  1399					unsigned long cur_seq)
+  1400	{
+  1401		struct mshv_mem_region *region = container_of(mni,
+  1402							struct mshv_mem_region,
+  1403							mni);
+  1404		u64 page_offset, page_count;
+  1405		unsigned long mstart, mend;
+  1406		int ret;
+  1407	
+  1408		if (mmu_notifier_range_blockable(range))
+  1409			mutex_lock(&region->mutex);
+> 1410		else if (!mutex_trylock(&region->mutex))
+  1411			goto out_fail;
+  1412	
+  1413		mmu_interval_set_seq(mni, cur_seq);
+  1414	
+  1415		mstart = max(range->start, region->start_uaddr);
+  1416		mend = min(range->end, region->start_uaddr +
+  1417			   (region->nr_pages << HV_HYP_PAGE_SHIFT));
+  1418	
+  1419		page_offset = HVPFN_DOWN(mstart - region->start_uaddr);
+  1420		page_count = HVPFN_DOWN(mend - mstart);
+  1421	
+  1422		ret = mshv_region_remap_pages(region, HV_MAP_GPA_NO_ACCESS,
+  1423					      page_offset, page_count);
+  1424		if (ret)
+  1425			goto out_fail;
+  1426	
+  1427		mshv_region_invalidate_pages(region, page_offset, page_count);
+  1428	
+  1429		mutex_unlock(&region->mutex);
+  1430	
+  1431		return true;
+  1432	
+  1433	out_fail:
+  1434		WARN_ONCE(ret,
+  1435			  "Failed to invalidate region %#llx-%#llx (range %#lx-%#lx, event: %u, pages %#llx-%#llx, mm: %#llx): %d\n",
+  1436			  region->start_uaddr,
+  1437			  region->start_uaddr + (region->nr_pages << HV_HYP_PAGE_SHIFT),
+  1438			  range->start, range->end, range->event,
+  1439			  page_offset, page_offset + page_count - 1, (u64)range->mm, ret);
+  1440		return false;
+  1441	}
+  1442	
 
 -- 
 0-DAY CI Kernel Test Service
