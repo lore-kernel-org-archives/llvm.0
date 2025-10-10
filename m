@@ -1,63 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC565218580;
-	Fri, 10 Oct 2025 17:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C811A2545;
+	Fri, 10 Oct 2025 18:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760118553; cv=none; b=XtRPGGJXiuPC2xBjeJlI5itkqCvnsGe8iSpPpufX3PW+USvPVRYzP/QFWdy61Q18dvDuuoZftaIBRkZlXEl/nvEfW9xZ0G68bVpB59yOzPKQY7bbeErIt8KoiqIo6ThXGF5ZMSaiFQC2jPpIE0k1MbkznJ0kpRyZXRz1o9vq0NE=
+	t=1760119812; cv=none; b=B1MlCRn8pFRSGyhontze+9sWw+VmsbdperXkR4UwZJK1NkDvgoLBramPK+b6fVCtO+0WXbKC1qqBp6IFac628m8thTeXtdErbLVSU65Q6G6LUBYO/0X/c9aXFrJ4LMkMWfH3c8Og12UTQCSRqAC+c3221liJBkpPHRgSs8Fxhdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760118553; c=relaxed/simple;
-	bh=jB96dFec28WttUWT3FydnbC7l8PWKIZqF/cFBSnSRhQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ryenNy4jj5qt5aHoQobeTc0XOcb8kUhxSq9YeyYt3kNbb8l0y0PbMGzxBwfiAYcwPhieFdNZcG7H5Jho0t+Knp387wiNFuj4X3l5Yl5fvaEJQ5Ayk2TN2ceXO++kU9ViL9AYUmzicmRqe8rF+PqvubfpnlPIxYWzbbhMFclf3pY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L65kBg9t; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1760119812; c=relaxed/simple;
+	bh=JlcCr0PF7cGWvN2qa7WndLacCdewJ05dCfz0cvdHq40=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SHXU3w7iSOfIjnuNKZzL5XBVpLq58uFuA1rDoq8ncj0slw6lXC+F/1C4qrkr2dDzJdXKjUV+yOMDCwTv06sVgBCN8aODs0xVCqkM7ollXORGSlO7mGiMgWwVW3OFTAiiJXICArPPwR6PAj7j1ACM9paCFWxXVu2S6/j5lOGqzhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BT5V+Fcj; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L65kBg9t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BT5V+Fcj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760118552; x=1791654552;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jB96dFec28WttUWT3FydnbC7l8PWKIZqF/cFBSnSRhQ=;
-  b=L65kBg9tcQ8UxAKi00K9cyGZXWhDB5E5uB2RKsHL+fFdH5BFjossrjZd
-   89K22z5TrxS+vND8DE+Wvkynf1TVwsv7h+99aIv4j6UwJ70PE22j/jFHN
-   YQDj/BN9Nssp2AQuFb57P8HoWFbrFBkxY5N/4c9os3DSxkCqCFMaa4JRt
-   DE+Yl/FsfhF21eo8KDuJfbBcKPEWF9sEDa4/xgIhnIEkPRLJHXXa4ycOt
-   lHqBVeoimSVsQJADtImrcpDLbB/bRMTNAnEl0MV9GpfEENUaAJhflAnfo
-   SY/eMsZYGjP7sNTyo0RCTznQCdib32ARvZZcAyCtAqitHqiruAVkF7yNO
+  t=1760119811; x=1791655811;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JlcCr0PF7cGWvN2qa7WndLacCdewJ05dCfz0cvdHq40=;
+  b=BT5V+Fcjh/t2iJJHUqhVhx9vNdDWzFp+5rAB8nfK07MXoK88KdxwU/v4
+   U9ftxjdap+YwhfcYMRNTiMoRFHzGaJnZc0byZ8fbRcTU8iN58ykoJUmyn
+   BKtdtDj4OXD5RUxUxUwlTym0NUvd8Gli3ZeGZ2+bACh3vg9hTF0rGmjFm
+   EHZKSPVpIh2l5MiCA5EuI9TcxoI4fM+XyMt6HYqhesaOF4oMghcVEitAJ
+   NeKQzXfFviANLLiH+sOC2d42/T9nr2dsH2+lEOsmDD9JekMl2b0g5KMuB
+   LZe/o3qt/nGyQLjY9NjvDiuSCsFCQNtF8kVQJIkTYoLRSgcscYp+VxJUL
    g==;
-X-CSE-ConnectionGUID: wiM+HfYCRuazxL5Jg+8Yfw==
-X-CSE-MsgGUID: eHYFQMTOQkqrbGuHICgD5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="84966872"
-X-IronPort-AV: E=Sophos;i="6.19,219,1754982000"; 
-   d="scan'208";a="84966872"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 10:49:10 -0700
-X-CSE-ConnectionGUID: jbFMM9y+Tq6PDv7R2R2lFQ==
-X-CSE-MsgGUID: 8/lLxlpUSH+LiY0FGuR4qg==
+X-CSE-ConnectionGUID: Fp1ZvKnzSE6vtA3+WyPazA==
+X-CSE-MsgGUID: jGRcQCrYSdShA6yDdOiLrQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="62286757"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="62286757"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 11:10:10 -0700
+X-CSE-ConnectionGUID: g5pmrMPeQTWW4DFux2haeA==
+X-CSE-MsgGUID: LTfuxCgyQO2aFwX9N88+XA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,219,1754982000"; 
-   d="scan'208";a="204716167"
+   d="scan'208";a="180283163"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Oct 2025 10:49:07 -0700
+  by orviesa010.jf.intel.com with ESMTP; 10 Oct 2025 11:10:09 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v7HEn-00031v-11;
-	Fri, 10 Oct 2025 17:49:05 +0000
-Date: Sat, 11 Oct 2025 01:48:34 +0800
+	id 1v7HZ9-00032z-0m;
+	Fri, 10 Oct 2025 18:10:07 +0000
+Date: Sat, 11 Oct 2025 02:09:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
-	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] Drivers: hv: Add support for movable memory
- regions
-Message-ID: <202510110134.RmOV83Fz-lkp@intel.com>
-References: <175976319844.16834.4747024333732752980.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/rv-reactor-signal 1/9]
+ /usr/include/bits/floatn.h:97:9: error: __float128 is not supported on this
+ target
+Message-ID: <202510110213.qhlbcrwQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,126 +62,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <175976319844.16834.4747024333732752980.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 
-Hi Stanislav,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on next-20251010]
-[cannot apply to v6.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Kinsburskii/Drivers-hv-Refactor-and-rename-memory-region-handling-functions/20251010-111917
-base:   linus/master
-patch link:    https://lore.kernel.org/r/175976319844.16834.4747024333732752980.stgit%40skinsburskii-cloud-desktop.internal.cloudapp.net
-patch subject: [PATCH v4 5/5] Drivers: hv: Add support for movable memory regions
-config: x86_64-randconfig-006-20251010 (https://download.01.org/0day-ci/archive/20251011/202510110134.RmOV83Fz-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110134.RmOV83Fz-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/rv-reactor-signal
+head:   5f1e83d0ead9b8fc09102bea3ac5c9c87daeb8a9
+commit: 677a5fe53cf89d36773e93ebbbb1473fb66592d7 [1/9] test
+config: riscv-randconfig-001-20251010 (https://download.01.org/0day-ci/archive/20251011/202510110213.qhlbcrwQ-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110213.qhlbcrwQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510110134.RmOV83Fz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510110213.qhlbcrwQ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hv/mshv_root_main.c:1410:11: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1410 |         else if (!mutex_trylock(&region->mutex))
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hv/mshv_root_main.c:1434:12: note: uninitialized use occurs here
-    1434 |         WARN_ONCE(ret,
-         |                   ^~~
-   include/asm-generic/bug.h:152:18: note: expanded from macro 'WARN_ONCE'
-     152 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
-         |                         ^~~~~~~~~
-   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
-      28 |                 bool __ret_do_once = !!(condition);                     \
-         |                                         ^~~~~~~~~
-   drivers/hv/mshv_root_main.c:1410:7: note: remove the 'if' if its condition is always false
-    1410 |         else if (!mutex_trylock(&region->mutex))
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1411 |                 goto out_fail;
-         |                 ~~~~~~~~~~~~~
-   drivers/hv/mshv_root_main.c:1406:9: note: initialize the variable 'ret' to silence this warning
-    1406 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+   In file included from kernel/trace/rv/monitors/rtapp/tests/pthread_test.c:1:
+   In file included from kernel/trace/rv/monitors/rtapp/tests/../../../../../../tools/testing/selftests/kselftest.h:54:
+   In file included from /usr/include/stdlib.h:56:
+>> /usr/include/bits/floatn.h:97:9: error: __float128 is not supported on this target
+      97 | typedef __float128 _Float128;
+         |         ^
+   1 error generated.
 
-
-vim +1410 drivers/hv/mshv_root_main.c
-
-  1377	
-  1378	/**
-  1379	 * mshv_region_interval_invalidate - Invalidate a range of memory region
-  1380	 * @mni: Pointer to the mmu_interval_notifier structure
-  1381	 * @range: Pointer to the mmu_notifier_range structure
-  1382	 * @cur_seq: Current sequence number for the interval notifier
-  1383	 *
-  1384	 * This function invalidates a memory region by remapping its pages with
-  1385	 * no access permissions. It locks the region's mutex to ensure thread safety
-  1386	 * and updates the sequence number for the interval notifier. If the range
-  1387	 * is blockable, it uses a blocking lock; otherwise, it attempts a non-blocking
-  1388	 * lock and returns false if unsuccessful.
-  1389	 *
-  1390	 * NOTE: Failure to invalidate a region is a serious error, as the pages will
-  1391	 * be considered freed while they are still mapped by the hypervisor.
-  1392	 * Any attempt to access such pages will likely crash the system.
-  1393	 *
-  1394	 * Return: true if the region was successfully invalidated, false otherwise.
-  1395	 */
-  1396	static bool
-  1397	mshv_region_interval_invalidate(struct mmu_interval_notifier *mni,
-  1398					const struct mmu_notifier_range *range,
-  1399					unsigned long cur_seq)
-  1400	{
-  1401		struct mshv_mem_region *region = container_of(mni,
-  1402							struct mshv_mem_region,
-  1403							mni);
-  1404		u64 page_offset, page_count;
-  1405		unsigned long mstart, mend;
-  1406		int ret;
-  1407	
-  1408		if (mmu_notifier_range_blockable(range))
-  1409			mutex_lock(&region->mutex);
-> 1410		else if (!mutex_trylock(&region->mutex))
-  1411			goto out_fail;
-  1412	
-  1413		mmu_interval_set_seq(mni, cur_seq);
-  1414	
-  1415		mstart = max(range->start, region->start_uaddr);
-  1416		mend = min(range->end, region->start_uaddr +
-  1417			   (region->nr_pages << HV_HYP_PAGE_SHIFT));
-  1418	
-  1419		page_offset = HVPFN_DOWN(mstart - region->start_uaddr);
-  1420		page_count = HVPFN_DOWN(mend - mstart);
-  1421	
-  1422		ret = mshv_region_remap_pages(region, HV_MAP_GPA_NO_ACCESS,
-  1423					      page_offset, page_count);
-  1424		if (ret)
-  1425			goto out_fail;
-  1426	
-  1427		mshv_region_invalidate_pages(region, page_offset, page_count);
-  1428	
-  1429		mutex_unlock(&region->mutex);
-  1430	
-  1431		return true;
-  1432	
-  1433	out_fail:
-  1434		WARN_ONCE(ret,
-  1435			  "Failed to invalidate region %#llx-%#llx (range %#lx-%#lx, event: %u, pages %#llx-%#llx, mm: %#llx): %d\n",
-  1436			  region->start_uaddr,
-  1437			  region->start_uaddr + (region->nr_pages << HV_HYP_PAGE_SHIFT),
-  1438			  range->start, range->end, range->event,
-  1439			  page_offset, page_offset + page_count - 1, (u64)range->mm, ret);
-  1440		return false;
-  1441	}
-  1442	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ARCH_HAS_ELF_CORE_EFLAGS
+   Depends on [n]: BINFMT_ELF [=n] && ELF_CORE [=y]
+   Selected by [y]:
+   - RISCV [=y]
 
 -- 
 0-DAY CI Kernel Test Service
