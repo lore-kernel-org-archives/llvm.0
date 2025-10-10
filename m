@@ -1,101 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAD022F16E;
-	Fri, 10 Oct 2025 02:27:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7B514F9FB;
+	Fri, 10 Oct 2025 03:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760063250; cv=none; b=h7cCT7j8A7EVm1YFTakNwAl4qs1Eisv7OWkQakKigXO/RiwA/pLOPIiR9jT9KHMo6JmbCMaK0Mb/08Vcn4E5qoAvXR1FHDy4yVzsrlItFHU4mDVa9Sf9pXySWtxEDhBt0wEM7pQ22d5xVozDCQyW2jsMmMzmjrN1ONrWYaLOBQU=
+	t=1760066406; cv=none; b=aHkAkFMY76GzE5rgWX5rnYxwMEM0SwqyZCOi/Pqnbci2XnQF9xSJlRNy7nXvB7fzYOLd+zt6CC7ENEl6f1OyMeNjaxZbPqRCfdKi8zgEGerRa/iCbnGb51ZHptlXzNv1t6eBqLuCII+QmMrIYsjxmd+6BLNsKTb+3Uprw7vM+ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760063250; c=relaxed/simple;
-	bh=ac4VtTda8SJRSe7ya6qERv9chI6J5rNgon5I14QHQy0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Pv9QroEVjAtZ5ql6w5+LRTxyNN3VT4kKQZV3/U//4OH04RwH4ZDo/B7ONYyEzzBykzSODaHdkc91MKJytiHwFmeLZoaeFoz+MBmAKCa+dUkyAXCnyPP1NYf53GM6HynqAWhmX6giWamb3Yo8ucAU3PT7Ma16veGFeLH46YtlBCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WNX0xmHv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760066406; c=relaxed/simple;
+	bh=K+F1pLnxoBoyIplVOpQMk5c4heAtuuz9g32a2ybP/r4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TPN44humllVxiw/aIn7zcnfgnuNC3F/bdVoFGJH6gpJFEd6ceH0Uyq27bDNem7dZuhw3NJ18bae03fihtlGrtxH3cw38dYCwK33rdnk6bckVN+reuNx/2o/S+UUoyrHqDPg3oxKGMTZiNsSeeCs7V/PY6CrLTnfseC3SbWRiXuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jg+iax1x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WNX0xmHv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF31C4CEE7;
-	Fri, 10 Oct 2025 02:27:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jg+iax1x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E25C4CEE7;
+	Fri, 10 Oct 2025 03:20:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760063250;
-	bh=ac4VtTda8SJRSe7ya6qERv9chI6J5rNgon5I14QHQy0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WNX0xmHvBiFXxv4mqNdaXwfKcAosh5PPPpszwfbWljExYKQ7ylm65jrdqKFPAfARV
-	 WM9X/9nWqGrxDcDCPKBpkE3xWWjPAezq18hjJOOKfimQ8ePlsdOO/FKTz6Ye9EaiLn
-	 uw+mnHVAnUogKtYbbi/WGlWSKdLR/MQD7JN/rzXsccDpd0w3U3gqwKLRvHr9+9Tv9j
-	 rOJ6wTM6G9FYWM0+ZYTA8O7xWieWYWSr694a9UYw9MQ2Cj9qPUw9K544EZkaKfD8tW
-	 RG3PiLSsUteZ/HPfrn0wkKake8vRSb6bMLAbdIfY9IH4923Lc2riE3YTEBUoNXNe3V
-	 i/hRDi5gBaU9w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33E633A55FB5;
-	Fri, 10 Oct 2025 02:27:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1760066406;
+	bh=K+F1pLnxoBoyIplVOpQMk5c4heAtuuz9g32a2ybP/r4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jg+iax1xUhqENho73khMqgAvOGP8V2aFjuHXWu4X7C/raqwrP6V6qFwCTZQgohpjN
+	 L7VEwphYuSW2a/XcJAILIzwXXvknVzvGRWG3AuMqutC0ZgzdBaALAMQhGrYApyl1qz
+	 MCEsSAS2QV2VcjxkdoMeQnGheM456k3HEmGo7cNfKPmv8PB4/1TjE3eaDbffEAMkVy
+	 Bkz8TRE9WDR98tdHOPdspixz+CufjXss1C8BLfbc8ujqejo+ggU6OlKbVauU+8HVLh
+	 QSnKKif/WaKOJgzGLrUNLFo1BAcmyrNY5pBwooRHOJEyVr5jEBIXTOKkD/LNQXAvdl
+	 n/Y6DM+pWOFFw==
+Date: Thu, 9 Oct 2025 20:20:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>, Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [tip:x86/core 1/1] vmlinux.o: warning: objtool:
+ rcar_pcie_probe+0x13e: no-cfi indirect call!
+Message-ID: <20251010032001.GA3741500@ax162>
+References: <202510092124.O2IX0Jek-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/9] perf build: Support building with Clang
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <176006323800.354358.6110592426551858799.git-patchwork-notify@kernel.org>
-Date: Fri, 10 Oct 2025 02:27:18 +0000
-References: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
-In-Reply-To: <20251006-perf_build_android_ndk-v3-0-4305590795b2@arm.com>
-To: Leo Yan <leo.yan@arm.com>
-Cc: linux-riscv@lists.infradead.org, acme@kernel.org, namhyung@kernel.org,
- jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
- nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, james.clark@linaro.org,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202510092124.O2IX0Jek-lkp@intel.com>
 
-Hello:
+Hi Peter,
 
-This series was applied to riscv/linux.git (fixes)
-by Arnaldo Carvalho de Melo <acme@redhat.com>:
+On Thu, Oct 09, 2025 at 09:07:02PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+> head:   6c6e6a5416471498d8aafc050110bec9467e4da7
+> commit: 6c6e6a5416471498d8aafc050110bec9467e4da7 [1/1] Merge branch 'linus' into x86/core, to resolve conflicts
 
-On Mon, 06 Oct 2025 17:21:22 +0100 you wrote:
-> This series adds support for building perf with Clang, following the
-> discussion in [1]. Because the Android NDK uses Clang by default,
-> enabling Clang builds naturally covers Android as well.
+It appears that this got bisected to the merge because the configuration
+has CONFIG_CFI=y, which needs the rename that is in Linus's tree. This
+is reproducible with just commit 894af4a1cde6 ("objtool: Validate kCFI
+calls") cherry-picked onto 6.17 and CONFIG_CFI_CLANG=y in the config
+provided at the link below.
+
+> config: x86_64-buildonly-randconfig-001-20251009 (https://download.01.org/0day-ci/archive/20251009/202510092124.O2IX0Jek-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251009/202510092124.O2IX0Jek-lkp@intel.com/reproduce)
 > 
-> The series is organized as follows:
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510092124.O2IX0Jek-lkp@intel.com/
 > 
->   - Patches 1~2: Fix two bugs found with Clang.
->   - Patches 3~7: Correct CROSS_ARCH, Disable thread safety analysis for
->                  perl header, and dismiss Clang build warnings.
->   - Patches 8~9: Enable Clang in the Makefile and update the
->                  documentation.
+> All warnings (new ones prefixed by >>):
 > 
-> [...]
+> >> vmlinux.o: warning: objtool: rcar_pcie_probe+0x13e: no-cfi indirect call!
 
-Here is the summary with links:
-  - [v3,1/9] tools build: Align warning options with perf
-    https://git.kernel.org/riscv/c/53d067feb8c4
-  - [v3,2/9] perf python: split Clang options when invoking Popen
-    https://git.kernel.org/riscv/c/c6a43bc3e8f6
-  - [v3,3/9] perf build: Correct CROSS_ARCH for clang
-    https://git.kernel.org/riscv/c/ed33e5e43c1e
-  - [v3,4/9] perf build: Disable thread safety analysis for perl header
-    https://git.kernel.org/riscv/c/e7e86d7697c6
-  - [v3,5/9] perf test coresight: Dismiss clang warning for memcpy thread
-    https://git.kernel.org/riscv/c/50b7e7082a3d
-  - [v3,6/9] perf test coresight: Dismiss clang warning for thread loop
-    https://git.kernel.org/riscv/c/244a1ac76a67
-  - [v3,7/9] perf test coresight: Dismiss clang warning for unroll loop thread
-    https://git.kernel.org/riscv/c/9ec46fc93803
-  - [v3,8/9] perf build: Support build with clang
-    https://git.kernel.org/riscv/c/4772e66cb45e
-  - [v3,9/9] perf docs: Document building with Clang
-    https://git.kernel.org/riscv/c/0a75ba3e842c
+I do see an indirect call in rcar_pcie_probe() with ->host_init_fn() but
+rcar_pcie_probe() is not __nocfi... +0x13e is 0x8d9d7e in this build.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+    8d9d6f: 31 c0                         xorl    %eax, %eax
+    8d9d71: 49 89 86 58 06 00 00          movq    %rax, 0x658(%r14)
+    8d9d78: 4c 89 ff                      movq    %r15, %rdi
+    8d9d7b: 45 31 db                      xorl    %r11d, %r11d
+    8d9d7e: 2e e8 00 00 00 00             callq   0x8d9d84 <rcar_pcie_probe+0x144>
+                  00000000008d9d80:  R_X86_64_PLT32       __x86_indirect_thunk_r11-0x4
 
+Is this an issue with the objtool check or is clang not generating the
+right code?
 
+Cheers,
+Nathan
