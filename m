@@ -1,250 +1,228 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B01423ED5B;
-	Fri, 10 Oct 2025 07:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC4F2749F2
+	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 07:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760082555; cv=none; b=kloqmCxj7/lsbRq9Y2KhkUqofrb8uaeexmOzj8eTH7u7ls5X4A/BfVnCo5xg7TJKQ4D6H8l+xvMztHp70+fvWm7+QWtb8Z8k4ETtAFCG/moa9zawZhe1Llx03X6kgba/U8LboNGfmlRKWF78gcaLa7vZsoQP9BeuvMZqHxbH3iA=
+	t=1760083093; cv=none; b=tG/Ql7W2oKP5cwBQDHhylHcID+hgDv3NFNXlyeVP+00ypdpqA1/fk1wMQ+Xj18G8rZ3N6eWjJZfSrmIBog3q02xbDmB1q8+Wxr21yoa0XSlfPZodnaHa0rLoOYQCzFQIWoD/StDgbnhKOeKIm1Mq1/NvHik/77PtTaKuiVIgUwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760082555; c=relaxed/simple;
-	bh=WITPA9UX0mo7jnNcZhH/peun2UL7jtO3QDe+jYYMhxE=;
+	s=arc-20240116; t=1760083093; c=relaxed/simple;
+	bh=/EqQHNRDCS2YqzBq0RkItK1pvs5vi0KLmvOMTFqnmTo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eKB5qz2viPedgsS4QrOYSsfosgVSoytahLgflSOcLs80XQxhU/WFsDD/HWjGFS9RzB04bezuBF1hu1oD7C7WqeUzgjM0b/dMsRtmQeWMefA9ghUrNwa4fEh/3iPXpRGYPxdY35jqAhOnLyxBAP4j6V0ZmD5/sSMofS0qj3dbUH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nti1l7lc; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fzL+xLt/tl8sT9UAo9VBAl4K2jKWoXdVgWbOT1itYUxCA96Zkn5xX+UP0ptzEwGepPhSf1aTUaZc/qRrZ2HtlEHJEwjecPFT+BGdGH9+0FZMvv2eOmY54p2IM94Tib97IegAaPDdJjyu/WoVJaoF4FyYVmsUcEsRPiTO/ShWDIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mdgagE4i; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nti1l7lc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760082554; x=1791618554;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=WITPA9UX0mo7jnNcZhH/peun2UL7jtO3QDe+jYYMhxE=;
-  b=nti1l7lcrtLm1p0eHIn5WRfeM+C16pNu6oR4F9zVaE9a2MXcVZJFfiiJ
-   xxLvwseYjSIz6HzNEBu0NyNRgxj3sYaC2uEZOX3AjtEzXkRjuJ5YwkKZv
-   ym9MtL543kpTl5idwmNrvM6h5R3oz7XaeTqXDla66z9JRUxmRseH4mb5U
-   3+9Ln/qW/Doy8FLpfZXYsY1VBRLUmP9P1XG5CfCZwDeBgJ5tcirzpggSG
-   93sBfaXtbZ2yto4LXK6N63mJTBq2+E0Zz15TbWbt2lV/AY4QijRzr+Ix+
-   15Gqc/GP7uP6Am911k9yjVqOn8OZbqnwZRlsNxboHRGeqzYOZZtY6JWsK
-   A==;
-X-CSE-ConnectionGUID: kQFh7RmVRGqRDjn4PjD1LQ==
-X-CSE-MsgGUID: ZzwwCWVRS8SHjcqbjPLUNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="64921807"
-X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
-   d="scan'208";a="64921807"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 00:49:12 -0700
-X-CSE-ConnectionGUID: mXA4EAEiTXqigEW2vYLEcw==
-X-CSE-MsgGUID: PgyogO0/TP2+AFnJYA+RAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
-   d="scan'208";a="185304299"
-Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 10 Oct 2025 00:49:05 -0700
-Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v77s6-0002Ql-34;
-	Fri, 10 Oct 2025 07:49:02 +0000
-Date: Fri, 10 Oct 2025 15:48:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Lo=EFc?= Molinari <loic.molinari@collabora.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>, Melissa Wen <mwen@igalia.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Nitin Gote <nitin.r.gote@intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Christopher Healy <healych@amazon.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, kernel@collabora.com
-Subject: Re: [PATCH v3 02/10] drm/gem: Introduce drm_gem_get_unmapped_area()
- fop
-Message-ID: <202510101507.UiRzhiAP-lkp@intel.com>
-References: <20251004093054.21388-3-loic.molinari@collabora.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mdgagE4i"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-28a5b8b12a1so17038315ad.0
+        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 00:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760083091; x=1760687891; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2Nucw4E7LkwzxjCbFb3F737DKijbeBN9zMwZ0PDOoZQ=;
+        b=mdgagE4iA7goKEiJVFrTkOXHkjFDuM9oOCJ77BMSFcZHSGEQf7CfjjPXCQgq37aihM
+         tkVBooj7jKDSa99zjVdPH6nKJXiEFuqLB3a2T5k7TJBX6czCwqkT7KqKQN4MJaj0ReV8
+         ViHxEwd65TZF0P/MG2ECoBWp4idQRy4HXEMwiM3CKbqJ9iYdrykfyNfB+78mCLUmLSAN
+         GHAbVbyzkcZAlIbPsBDUhA8zME4OO045pH9MqtDMf2RYaIbSF97gkQCty7B+vfo4GGPs
+         hjV63kgJGzeGYcfV5qMNEJ4lFK5nTZ2kNGklNgz/oU2R3Xu5cW5psh++WxNZwPlEvjMI
+         7vRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760083091; x=1760687891;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Nucw4E7LkwzxjCbFb3F737DKijbeBN9zMwZ0PDOoZQ=;
+        b=vTLHH7zUimL3CUu3p/CbS9F89dHyd8KTnaW0IZS8Zq6qqe1ckHHoo2PnuYoiIPLWAI
+         nfs9U4sdjz1yFBGkA0BMkFae7aHYA9a0/3hBsBt6EEP8oP+15yCwpMH6c73tAQKkhWIg
+         3LzhGl6KeCUlmK0DSq4mTT+/H6nr1slN/PLPHzUGMOXDWTUQTKmFhzbLGS79A0C5fMiz
+         XAMHdBueMUjzy9ETz1z7IGAcE5cFxneynStiIHiFy+qcIDWeHvf/llBHZKEs50jDXwaj
+         bKTvMSV6yf80aB/RgjS6fU7xzF6Uhu0ixhlJ4sdpRsrbsSAsJ5QhR5NDjMC6bC53QWBF
+         JuaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5tUuiYGw8zDbh4urSoebyF86JBRtNyNvW5a+9TfwZGH8x7GHz6HtO9hBuJj8IVA6DyiT9@lists.linux.dev
+X-Gm-Message-State: AOJu0YwRcwQNOc9QZxSXouN6XUmLYDEx2+VzS9VwRAtV+nD2xsBWWOcQ
+	68mgcJ0YKScv6HbB7mxeaeOA2atjCQj05V9ZRBxbiMbwRgFtPWMRFHLT
+X-Gm-Gg: ASbGnctGJO8LBC1uCt8MTh8Vol51QszDeW4ME6VXCNQ8Y7QGrVkymmmz9ZGbGAs62e4
+	Cwp0LF3oDZnrkrfdUjNd3GrI+dGoAoemMdfG+DHXUUDsAEfWEYjaj6ASzwjnh2bJVfLxbN14TL+
+	hauONoIm2iOy7HWvTs3ETNX2pFiWNSjHxdUkXJ05fNxkMSIQjFVFK3959u5eCsxx0XrQU08tZoJ
+	OgreEwFzsQuD8FeDwnQvcQrE5rgfm7l4UDD437WIV7jnH7gKf4nbzQJWItna0I+0AL33C1DByCt
+	OzyBcl4/p/w+RFhqiNl/9hQq1hsMz+Ly1DAlmKjevHlL8tt0lEhCil+d6KlW3YPH9G5rhpPIQMk
+	w+MUvGqJsYTS3H7X8OBpIG8Dc78hXHnqQB8jvm+xKT1IAjhy6DfUCEzU1rMHU/9O3//o=
+X-Google-Smtp-Source: AGHT+IFeywA6gB4/SQbmJGvT2KY5YTMhXWywBtcaIqaAsauF4r7EzLqcGRXLsSas3aRqscvIRrL6Qg==
+X-Received: by 2002:a17:903:298e:b0:28e:756c:7082 with SMTP id d9443c01a7336-29027374b38mr134966335ad.15.1760083090502;
+        Fri, 10 Oct 2025 00:58:10 -0700 (PDT)
+Received: from localhost ([103.121.208.62])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f070ecsm49587725ad.60.2025.10.10.00.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Oct 2025 00:58:09 -0700 (PDT)
+Date: Fri, 10 Oct 2025 15:58:03 +0800
+From: Jinchao Wang <wangjinchao600@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Marco Elver <elver@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, Rong Xu <xur@google.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Jinjie Ruan <ruanjinjie@huawei.com>, Nam Cao <namcao@linutronix.de>,
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-mm@kvack.org, llvm@lists.linux.dev,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	kasan-dev@googlegroups.com, "David S. Miller" <davem@davemloft.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 00/23] mm/ksw: Introduce real-time KStackWatch
+ debugging tool
+Message-ID: <aOi8i1Y0decaamaX@mdev>
+References: <20251009105650.168917-1-wangjinchao600@gmail.com>
+ <20251009175107.ee07228e3253afca5b487316@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251004093054.21388-3-loic.molinari@collabora.com>
+In-Reply-To: <20251009175107.ee07228e3253afca5b487316@linux-foundation.org>
 
-Hi Lo�c,
+On Thu, Oct 09, 2025 at 05:51:07PM -0700, Andrew Morton wrote:
+> On Thu,  9 Oct 2025 18:55:36 +0800 Jinchao Wang <wangjinchao600@gmail.com> wrote:
+> 
+> > This patch series introduces KStackWatch, a lightweight debugging tool to detect
+> > kernel stack corruption in real time. It installs a hardware breakpoint
+> > (watchpoint) at a function's specified offset using `kprobe.post_handler` and
+> > removes it in `fprobe.exit_handler`. This covers the full execution window and
+> > reports corruption immediately with time, location, and a call stack.
+> > 
+> > The motivation comes from scenarios where corruption occurs silently in one
+> > function but manifests later in another, without a direct call trace linking
+> > the two. Such bugs are often extremely hard to debug with existing tools.
+> > These scenarios are demonstrated in test 3–5 (silent corruption test, patch 20).
+> > 
+> > ...
+> >
+> >  20 files changed, 1809 insertions(+), 62 deletions(-)
+> 
+> It's obviously a substantial project.  We need to decide whether to add
+> this to Linux.
+> 
+> There are some really important [0/N] changelog details which I'm not
+> immediately seeing:
 
-kernel test robot noticed the following build errors:
+Thanks for the review and questions.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.17 next-20251009]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> Am I correct in thinking that it's x86-only?  If so, what's involved in
+> enabling other architectures?  Is there any such work in progress?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lo-c-Molinari/drm-shmem-helper-Add-huge-page-fault-handler/20251004-173347
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20251004093054.21388-3-loic.molinari%40collabora.com
-patch subject: [PATCH v3 02/10] drm/gem: Introduce drm_gem_get_unmapped_area() fop
-config: riscv-randconfig-001-20251010 (https://download.01.org/0day-ci/archive/20251010/202510101507.UiRzhiAP-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510101507.UiRzhiAP-lkp@intel.com/reproduce)
+Currently yes.
+There are two architecture-specific dependencies:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510101507.UiRzhiAP-lkp@intel.com/
+- Hardware breakpoint (HWPB) modification in atomic context.
+  This has been implemented for x86 in patches 1–3.
+  I think it is not a big problem for other architectures.
 
-All errors (new ones prefixed by >>):
+- Stack canary locating mechanism, which does not work on parisc:
+  - Automatic canary discovery scans from the stack base to high memory.
+  - This feature is optional; a stack offset address can be provided instead.
 
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     804 |         insb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     812 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     820 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     829 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     838 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     847 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/drm_gem.c:28:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:12:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/drm_gem.c:1271:10: error: call to undeclared function 'mm_get_unmapped_area'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1271 |                 return mm_get_unmapped_area(current->mm, filp, uaddr, len, 0,
-         |                        ^
-   drivers/gpu/drm/drm_gem.c:1271:10: note: did you mean '__get_unmapped_area'?
-   include/linux/mm.h:3337:1: note: '__get_unmapped_area' declared here
-    3337 | __get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
-         | ^
-   7 warnings and 1 error generated.
+Future work could include enabling support for other architectures such
+as arm64 and riscv once their hardware breakpoint implementations allow
+safe modification in atomic context. I do not currently have the
+environment to test those architectures, but the framework was designed
+to be generic and can be extended by contributors familiar with them.
 
+> What motivated the work?  Was there some particular class of failures
+> which you were persistently seeing and wished to fix more efficiently?
+> 
+> Has this code (or something like it) been used in production systems? 
+> If so, by whom and with what results?
 
-vim +/mm_get_unmapped_area +1271 drivers/gpu/drm/drm_gem.c
+The motivation came from silent stack corruption issues. They occur
+rarely but are extremely difficult to debug. I personally encountered
+two such bugs which each took weeks to isolate, and I know similar
+issues exist in other environments. KStackWatch was developed as a
+result of those debugging efforts. It has been used mainly in my own
+debugging environment and verified with controlled test cases
+(patches 17–21). If it had existed earlier, similar bugs could have
+been resolved much faster.
 
-  1239	
-  1240	/**
-  1241	 * drm_gem_get_unmapped_area - get memory mapping region routine for GEM objects
-  1242	 * @filp: DRM file pointer
-  1243	 * @uaddr: User address hint
-  1244	 * @len: Mapping length
-  1245	 * @pgoff: Offset (in pages)
-  1246	 * @flags: Mapping flags
-  1247	 *
-  1248	 * If a driver supports GEM object mapping, before ending up in drm_gem_mmap(),
-  1249	 * mmap calls on the DRM file descriptor will first try to find a free linear
-  1250	 * address space large enough for a mapping. Since GEM objects are backed by
-  1251	 * shmem buffers, this should preferably be handled by the shmem virtual memory
-  1252	 * filesystem which can appropriately align addresses to huge page sizes when
-  1253	 * needed.
-  1254	 *
-  1255	 * Look up the GEM object based on the offset passed in (vma->vm_pgoff will
-  1256	 * contain the fake offset we created) and call shmem_get_unmapped_area() with
-  1257	 * the right file pointer.
-  1258	 *
-  1259	 * If a GEM object is not available at the given offset or if the caller is not
-  1260	 * granted access to it, fall back to mm_get_unmapped_area().
-  1261	 */
-  1262	unsigned long drm_gem_get_unmapped_area(struct file *filp, unsigned long uaddr,
-  1263						unsigned long len, unsigned long pgoff,
-  1264						unsigned long flags)
-  1265	{
-  1266		struct drm_gem_object *obj;
-  1267		unsigned long ret;
-  1268	
-  1269		obj = drm_gem_object_lookup_from_offset(filp, pgoff, len >> PAGE_SHIFT);
-  1270		if (IS_ERR(obj))
-> 1271			return mm_get_unmapped_area(current->mm, filp, uaddr, len, 0,
-  1272						    flags);
-  1273	
-  1274		ret = shmem_get_unmapped_area(obj->filp, uaddr, len, 0, flags);
-  1275	
-  1276		drm_gem_object_put(obj);
-  1277	
-  1278		return ret;
-  1279	}
-  1280	EXPORT_SYMBOL(drm_gem_get_unmapped_area);
-  1281	
+> 
+> Has it actually found some kernel bugs yet?  If so, details please.
+
+It was designed to help diagnose bugs whose existence was already known
+but whose root cause was difficult to locate. So far it has been used
+in my personal environment and can be validated with controlled test
+cases in patches 17–21.
+
+> 
+> Can this be enabled on production systems?  If so, what is the
+> measured runtime overhead?
+
+I believe it can.  The overhead is summarized below.
+
+Without watching:
+  - Per-task context: 2 * sizeof(ulong) + 4 bytes (≈20 bytes on x86_64)
+
+With watching:
+  - Same per-task context as above
+  - One or more preallocated HWBPs (configurable, at least one)
+  - Small additional memory for managing HWBP and context state
+  - Runtime overhead (measured on x86_64):
+
+       Type                 |   Time (ns)  |  Cycles
+       -----------------------------------------------
+       entry with watch     |     10892    |   32620
+       entry without watch  |       159    |     466
+       exit  with watch     |     12541    |   37556
+       exit  without watch  |       124    |     369
+
+Would you prefer that I include the measurement code (used to collect the
+timing and cycle statistics shown above) in the next version of the patch
+set, or submit it separately as an additional patch?
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jinchao
