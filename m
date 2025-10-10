@@ -1,60 +1,60 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971FF279334
-	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 08:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DAA24291E
+	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 08:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760083999; cv=none; b=Rteko+FVAKAwTYRbkEcfKPRijyl5MKVwteXocaXg0Bse9l9TvP7fraUNPxE6M5Ys3jkyIWV5YBz4rrI6QYV24FqeWFILkG9cWnUG6QU+lPTtGNtwjmZjQLP3X/2xQ4/iuPm//Jcrvi0vdF8mscWGyj9SAHYNqq0pEt5k6d1S9kA=
+	t=1760084391; cv=none; b=bpfz0Ofa1WIDV7PA+BLxWWT9OW1gfyViSyN9++OAfQ5OOZQBw9+f3/3Zb1ukfP5cky8QDU3AL4VeM1n+mvqN2GuV9dpHyo8VrZ4abrogjFzAsFZFOJOcLAclmKWq28ugOr/57UmMD3LbF+gN8tIkj4GR/+wDRQXfbu5RKYbn2ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760083999; c=relaxed/simple;
-	bh=Kibn+V5CQV02MW3VmtCIWKOR5kSgeJ6N3BdER4N5TcI=;
+	s=arc-20240116; t=1760084391; c=relaxed/simple;
+	bh=Cq5sJ7aSsShFxc17IH78w46REgBf/R4daQQ88MHxHWQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hFuMR09kDtq4cTQsdeHEVA2lPuTWSP8G/CiUkn+Nu8CBien8M39MGuhaOeN9PUVl0OKOtaZ5Pr4unjzyy8boIxfegUk2gk1x/npFPiN0LpUHI3hEzSi78fVAfqbeFMcuXF4IRMO+wIjWm50c04vu9T4x06W2oU1zT19wv2BV8Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwuiCskY; arc=none smtp.client-ip=209.85.214.177
+	 To:Cc:Content-Type; b=sGmz6tt1Staw8QVbO/VkHSUXLi0FLxpO1iHPTJA+R9OjuN0cOCPHI8Swzfcy1MgTS/03mr00LN4GDbn6gk59mAXhwrOhGgI5SRSo8SHlUo//YtGWTHiZ1b3ZpLEg5hd6dAjWkq8q3ri37YMhXMK6BbUZoZwUScYAXfzKYvN8PoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JAQASiMm; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwuiCskY"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-26e81c17d60so3254655ad.0
-        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 01:13:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JAQASiMm"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2699ef1b4e3so2767975ad.0
+        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 01:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760083997; x=1760688797; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1760084389; x=1760689189; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+wM+C8meSFUf89iBos4e9b9ElmXv19ZrqBcY5kPeD/U=;
-        b=AwuiCskYHEdduGN1CG4HZaZrHPIuoM+WvxFX+m+dCzCSYpP3frtO60nIZoOAbU6xxV
-         SdSd3FgrO6UQMNjqGikMaElQCySHH/gjIS76/x5OHVEvum9GAYumVmNDMsz7lTp+8z8i
-         1fH0UMedsHoruL14b6ZujxCaKfjfo3keFLxjCARDmjsJpuO7liK5q72T7iwQD64phsNx
-         F1UYJcKhhQ/Zd92D9H56CgSrJjT+OdfEAFfBUWau/mnYDMudjAiS35TqqFLJHLJHh6xy
-         StjZtVH2f5ksv68VXjWvO2yxCu9zusS9piVk7dejmpD/H4LJsuU6KNh2EeerB8vwHxbF
-         dR/A==
+        bh=Cq5sJ7aSsShFxc17IH78w46REgBf/R4daQQ88MHxHWQ=;
+        b=JAQASiMmzndZRplvCMenaEIybktdxfW1NZPZ1cL3Tb9z/aOKTO2mTCPC6ime1MF8Zr
+         63dMo6oOIHwCVxp+bu3yhWK3u7ckauP9wyyzshhmAWEu0v5ApbZwzFKazlQg3vQs2a28
+         5AWPt+bEq8E8JkJ4PHyE+uP/Vf4pGeKMiMQi4siJ8QxByqCU1gqu3qbXCx9ApmQr35nj
+         oL28m6gaFPrRmsV8+ayraXdmrfy2CKCP0o8a30cTjqV/R40G4dyax1wqbVxwtoREOHaW
+         Qp67gOEsOnXNp2croC2LBTxDqVqsm4un5yxEnh3utEVhSUdUTCBpay+itHxr4dDUBnWs
+         BTmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760083997; x=1760688797;
+        d=1e100.net; s=20230601; t=1760084389; x=1760689189;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+wM+C8meSFUf89iBos4e9b9ElmXv19ZrqBcY5kPeD/U=;
-        b=V+8pCAmOcyUlXY0GPJRLkdzrCpd0fL1INtvCrT9cOpQOVuWRxzyQC/1FJ0arPgRmQV
-         /WpL+/uasPF5lSkHFZJj2uXASNHPBA3hEyEj5TG8hawnq/px1XBq3dCR6fY+1xKUI9Uu
-         JLAKBpRwagLbm3pvWOBYTnriWg7Nd2CeNzBRJWlEJtzHTwcKHTTWaybbpPpexm0Q/fcW
-         Z0C0IUqfPdDm2veGmDayaOFvtbacSM4JTuGrp9JIIvFgfRbF8HQQK9Uu6c8ltZ9m44xd
-         uyYWmkkq/6SKPXx2+KtBQsFVCo5YA5iu4hkZofhjTZm0eZ701b96ftuvpmEt0OZSoPTn
-         EZFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9hcXBMb5G1qzZa67eyehRfi720V8H/52RkfwL1BL3W4T6fn+34DcTe7NDS80Nh0bXBlZc@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz9k8NthYzOc/d0a1D/wbenzZhAbX3NpgH8l109g5edYyWaX9lw
-	YGAV9JFL8ZtT61oKo1R2LMY62nyoKWMlWP7KhHUve0fK62IUbxxNgAu5YsPiP8w03+C97cPF2sX
-	XrCYfo/A/X0Tqa+R1VeRV44n9w9L3gLr1TW1d0tg=
-X-Gm-Gg: ASbGncv3Ck6n1THaTM3SpDJPPKrKpn2esK8++FlIjxuAhkxy8ONWjqrLT630DjgItmf
-	9QJbAiKgSHJE76AVeEfjks2WBpCWt9eKD2vYwFUUPAu2EGRtq3cP7gEUqlKkwiRapS4W3UgaV19
-	ZrwkRqmpUdPeTq3YUTeTBCcYE7mFa3IU6EzRwg7DIx/9gevFgYR8teN04iTJWa5vcfhWvNxzdE9
-	eStuKY2tZymBcAGjupRke99m8AjDFv8204SodVK0KW+YVSkFN9S1z8wysccJxYD6Nlgs+8x0q8D
-	nr2osnN89XoiGJS9mjdncDKOOYk6kQIx507hzbebh+Nx
-X-Google-Smtp-Source: AGHT+IFdkga+t+zjNZdz4Z2XPhEtJNUAlFk/vUhhv9BDFlxUqeNhsotPLJ09GEKkawpw/ItDjLsilTqPl3STcyuQYOU=
-X-Received: by 2002:a17:902:d4d2:b0:25c:9c28:b425 with SMTP id
- d9443c01a7336-2902745c0a2mr89160145ad.11.1760083996696; Fri, 10 Oct 2025
- 01:13:16 -0700 (PDT)
+        bh=Cq5sJ7aSsShFxc17IH78w46REgBf/R4daQQ88MHxHWQ=;
+        b=PO6sq4s5KcAFsRQaRo+f3fKV16ttV0MQa0xGrlzBV8nSXJVPVbxXk6JigTZevLIobq
+         39CokE3oiHSjTbbQkW3VbIkNloygMh9sDdyu+MlFWMk6SOEzOGnw1IcCVZDESqbhnUi0
+         b0gVAMOSyBsZHUXWfTFHapm1gNAY7CMqQCUtsPiRYr7kbWK875bP8BbIz28A1cTvetny
+         BMCb7fBNLuc9LP3Hade9yQZwWB5ZcjMxJeGy3u0lil25kHIdV2CEK52d1rvrOzOHqtJG
+         bRonq9QY5nUPX0TiY2XZPJ1HdCeTeev23vuj52heqdIbsBi3JyjvaX6V5xJ/DIOPkzIF
+         FYzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXVvibDKNu8BtBHBc6AfSgIsV0R4IgY7RCEExzmp2BAVy3HF0Aojctv6wxtYbXvjiXFYHUS@lists.linux.dev
+X-Gm-Message-State: AOJu0YxTB2w/ix8JXXVsmI6KkDbYCI2UYE9RuKR6bcS1vA3V7rBG5CPl
+	OhTKSkdkaqBWDlI2biiqur5qZ2EcUi/3LT2v8gdZy0D/if2Ce0aC0wDX4KtWCq4jzk5YeiRs+YI
+	mp9/i0+8UZrDeNXRRAg/nQLpq50KoRrg=
+X-Gm-Gg: ASbGncujN2k4/X/hyJnGmhKFIrti7XoODAMRIiKPf+9Yj/O+uV+SAdQQ21bsK+uGNUI
+	W0zwsxxSTEiMRJAus5gEv8z7zkYRagm2PkVWmcWpnClUEuqwJYrBiFDfOH9az0akSUGkmla/aQA
+	hHvRom7DyviQ49O8M2cZYfwxwni9YHsEwCEoZaV/fDkhEeyhwnaZzpZ737+JwYnJmyFifrQHTVr
+	rrkIlY07MPYWW/nPYFSpTw06QP+IAp0IMAr9d3+4XQH8rUYUSSc1MliX6ZBxhaK4NUgszasdBmm
+	/JbVh2cRYsPLsnnL0BnovRbXmxZ1m1AMxUMbFZT7MgLA
+X-Google-Smtp-Source: AGHT+IHsGqk0VxZVnRC6qblIgP8WmMkDMtg7G1rQix4D/f/fNxV3LDfDLnO6Fj2/zAlwLN0dYCpWL+UWmTlPxiqHxts=
+X-Received: by 2002:a17:903:18c:b0:27a:186f:53ec with SMTP id
+ d9443c01a7336-290273040acmr83793555ad.9.1760084389280; Fri, 10 Oct 2025
+ 01:19:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,12 +64,13 @@ MIME-Version: 1.0
 References: <202510100127.yuqhg8uo-lkp@intel.com> <20251009110555.29a67af19f5cc4d40e66713c@linux-foundation.org>
  <CANiq72kKSz=UK+O4tnV0Kmw_HmJhJJ+KNZnUBWtOWqanrG+7Vg@mail.gmail.com>
  <20251010060618.GA80465@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
- <CANiq72kndiqwEm-OZLd6JumAaBy7KrzYf_rDjwhtw5Uh4vdTCg@mail.gmail.com> <20251010074458.GA91144@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
-In-Reply-To: <20251010074458.GA91144@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
+ <CANiq72kndiqwEm-OZLd6JumAaBy7KrzYf_rDjwhtw5Uh4vdTCg@mail.gmail.com>
+ <20251010074458.GA91144@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com> <CANiq72mzrJNTe6aw5zJ_vyhXO1jDR96hmvQEXPkqFj=dnwSnSA@mail.gmail.com>
+In-Reply-To: <CANiq72mzrJNTe6aw5zJ_vyhXO1jDR96hmvQEXPkqFj=dnwSnSA@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 10 Oct 2025 10:13:03 +0200
-X-Gm-Features: AS18NWCKK8TWzVbSWJUkTcYGK_N5_ArO41xibbqihc9xfH2UWC9bF9H18mvQyqc
-Message-ID: <CANiq72mzrJNTe6aw5zJ_vyhXO1jDR96hmvQEXPkqFj=dnwSnSA@mail.gmail.com>
+Date: Fri, 10 Oct 2025 10:19:37 +0200
+X-Gm-Features: AS18NWCOn0jUQlOTDgY6ZmGAYLoWjP7H_Q3V1N2lr7McmrZCKjd0e-TiKap1ODw
+Message-ID: <CANiq72nkvd0UApjCYUcYu19nv+Ow2irz8WEPahiAf=6N5RZiyg@mail.gmail.com>
 Subject: Re: [akpm-mm:mm-new 36/102] error[E0425]: cannot find value `VM_READ`
  in crate `bindings`
 To: Jakub Acs <acsjakub@amazon.de>
@@ -79,76 +80,17 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 10, 2025 at 9:45=E2=80=AFAM Jakub Acs <acsjakub@amazon.de> wrot=
-e:
+On Fri, Oct 10, 2025 at 10:13=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> This is a tricky one - VM_MERGEABLE being `unsigned int` is only an issue
-> if there are flags using any of the upper 32 bits. And if that is the
-> case, CONFIG_ARCH_USES_HIGH_VMA_FLAGS has to be 'y', -> thus the enum
-> will also have BIT(33), BIT(34), and so on. So from that perspective
-> we're ok (checked by running a reproducer).
+> Otherwise, for the moment we can go with [1]. It is just a single `#ifdef=
+`.
 
-Ah, good, that simplifies things, yeah. A comment about the fact that
-we rely on higher ones existing on the enum may make sense to add.
-
-Or, even better, an static assert testing the type of `VM_MERGEABLE`.
-
-> This ofc remains true, I'm not yet sure how to test that complication.
-
-If we keep the macros, then I was thinking we can avoid replicating a
-bit of conditional compilation elsewhere by blackboxing the zeros,
-e.g.
-
-    # define VM_SOFTDIRTY  BINDGEN_BLACKBOX(0)
-
-That way we can keep dummier lists on the Rust helpers. But it does
-look a bit out of place (though it is a smaller change than the whole
-`enum` thing).
-
-Otherwise, for the moment we can go with [1]. It is just a single `#ifdef`.
+And if this becomes a bigger deal before we can start applying
+`bindgen`'s feature for this, we can always look into imitating
+`bindgen` to fetch the values on our own, i.e. with an extra step in
+the build or similar. It wouldn't be the first time we do things like
+that...
 
 Cheers,
 Miguel
-
-[1]
-
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helpe=
-r.h
-index 2e43c66635a2..3c3a03051060 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -108,6 +108,33 @@ const xa_mark_t RUST_CONST_HELPER_XA_PRESENT =3D XA_PR=
-ESENT;
-
- const gfp_t RUST_CONST_HELPER_XA_FLAGS_ALLOC =3D XA_FLAGS_ALLOC;
- const gfp_t RUST_CONST_HELPER_XA_FLAGS_ALLOC1 =3D XA_FLAGS_ALLOC1;
-+
-+const vm_flags_t RUST_CONST_HELPER_VM_READ =3D VM_READ;
-+const vm_flags_t RUST_CONST_HELPER_VM_WRITE =3D VM_WRITE;
-+const vm_flags_t RUST_CONST_HELPER_VM_EXEC =3D VM_EXEC;
-+const vm_flags_t RUST_CONST_HELPER_VM_SHARED =3D VM_SHARED;
-+const vm_flags_t RUST_CONST_HELPER_VM_MAYREAD =3D VM_MAYREAD;
-+const vm_flags_t RUST_CONST_HELPER_VM_MAYWRITE =3D VM_MAYWRITE;
-+const vm_flags_t RUST_CONST_HELPER_VM_MAYEXEC =3D VM_MAYEXEC;
-+const vm_flags_t RUST_CONST_HELPER_VM_MAYSHARE =3D VM_MAYSHARE;
-+const vm_flags_t RUST_CONST_HELPER_VM_PFNMAP =3D VM_PFNMAP;
-+const vm_flags_t RUST_CONST_HELPER_VM_IO =3D VM_IO;
-+const vm_flags_t RUST_CONST_HELPER_VM_DONTCOPY =3D VM_DONTCOPY;
-+const vm_flags_t RUST_CONST_HELPER_VM_DONTEXPAND =3D VM_DONTEXPAND;
-+const vm_flags_t RUST_CONST_HELPER_VM_LOCKONFAULT =3D VM_LOCKONFAULT;
-+const vm_flags_t RUST_CONST_HELPER_VM_ACCOUNT =3D VM_ACCOUNT;
-+const vm_flags_t RUST_CONST_HELPER_VM_NORESERVE =3D VM_NORESERVE;
-+const vm_flags_t RUST_CONST_HELPER_VM_HUGETLB =3D VM_HUGETLB;
-+const vm_flags_t RUST_CONST_HELPER_VM_SYNC =3D VM_SYNC;
-+const vm_flags_t RUST_CONST_HELPER_VM_ARCH_1 =3D VM_ARCH_1;
-+const vm_flags_t RUST_CONST_HELPER_VM_WIPEONFORK =3D VM_WIPEONFORK;
-+const vm_flags_t RUST_CONST_HELPER_VM_DONTDUMP =3D VM_DONTDUMP;
-+#ifdef CONFIG_MEM_SOFT_DIRTY
-+const vm_flags_t RUST_CONST_HELPER_VM_SOFTDIRTY =3D VM_SOFTDIRTY;
-+#endif
-+const vm_flags_t RUST_CONST_HELPER_VM_MIXEDMAP =3D VM_MIXEDMAP;
-+const vm_flags_t RUST_CONST_HELPER_VM_HUGEPAGE =3D VM_HUGEPAGE;
-+const vm_flags_t RUST_CONST_HELPER_VM_NOHUGEPAGE =3D VM_NOHUGEPAGE;
- const vm_flags_t RUST_CONST_HELPER_VM_MERGEABLE =3D VM_MERGEABLE;
-
- #if IS_ENABLED(CONFIG_ANDROID_BINDER_IPC_RUST)
