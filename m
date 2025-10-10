@@ -1,196 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AE8285060;
-	Fri, 10 Oct 2025 10:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2723222587;
+	Fri, 10 Oct 2025 10:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760091566; cv=none; b=BfiRR2V4WEfKR4umWm6zHPzYpaw1LcwAdu2SRdxtkhH3DKIp7k1XdsyP0gi7NL8aKsTF1wiQVQfKjUQ9S7LtTAqWgsKhS0bDJmmwXwffwG23XdZu+8rwTdGKkgRqZgKgw1G7CWMI5vPefc0hV7kpGLge6X20slxt5scbo/l9BlU=
+	t=1760091741; cv=none; b=uXOrFOGYsPCWvfMR4F0Gep2ROZIR9BnNF1ga5pbmuaUiry08zIqAFIo9Ohz+DJZBgJL1GGSIwOm1ugs8gyAkqEk2GwCpGq8l2PngTnFoDL0lDT64oYmWYtXJLba0z8XhDWCBEMrH7xWjH3fUsSKQqZpxaDkkfF4i5ySFT47KaqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760091566; c=relaxed/simple;
-	bh=wQIlBG9sQs89jP/0wVDIgDa58MqypRn8Qhj4FpYx1Jc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=crglVC8h8ZhsKb7lUKgNibseR6s11kwfGs9v49Q2jNdRPkHcv7npFxlpxeGByHrn2xP9KkiNkYeXe85QC9GpkWbJMKVC1yX+AUnMduUmOCAR+zsydXCZH01/dAAff0raIVvem89jmssFJ2d/CfhVjRmTqIzhwJzYKAYEpzh8kx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j8fmp9Bb; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760091741; c=relaxed/simple;
+	bh=FrLhaPsLzubi37yzBJl2DYS1K5cr6ECub9fTk5JTBqE=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=rWXEjsFqjlkYNb9OgT+mEjskVg9wjF0xDXUALldX5QeV21g0eEECfYVDK1URwxl5Y5f/IQXB7WQMj2OVd4Vb/Qf/AJVNl990Mkev0vQH4K+TZk+FNIQScp0o7XNRmtpCduG+1vfPv1n0ZBguPxbrhuKYqeicrVqSW4LNpR8yvm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ohG2iXdV; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j8fmp9Bb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760091564; x=1791627564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wQIlBG9sQs89jP/0wVDIgDa58MqypRn8Qhj4FpYx1Jc=;
-  b=j8fmp9BbfEIWMW7D1Y/e6PWyIyL+vUao2GreHnv61rIdbOJVZC9ApbMG
-   Tdl/Cpmbk5yW0NRTYlm3TNZeIWE4xEcsQHRkqYdLqaEBVyrz99eMQMF3e
-   Prp5teOETmRLuo1ElBs7PF2iwkxGKRmdd8A7ZODpCXtifBdyvaI6lW9K3
-   DU+/vXNHzMJkxwsNZ++d45LD9GY1y3Kd4p/cwEUzBURGGtQiw/DHiwClG
-   jEPMSBLJS6ZI7ucCykYAm6qlNfuC9kQ/rPbi9jSy4qQPu3vMsM5nsOBuL
-   Ya3/JYpAw06bpYkwkH36tnxcRQOZfUq1i5PzxgT320qsw8IZixUd+3mT/
-   w==;
-X-CSE-ConnectionGUID: mILDCM0TQ5islj8WIwkjQw==
-X-CSE-MsgGUID: 0Cll6UcYQHeuN67CNMfMMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="73411857"
-X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
-   d="scan'208";a="73411857"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 03:19:22 -0700
-X-CSE-ConnectionGUID: TJpItxSwQN2cElvRuabkaA==
-X-CSE-MsgGUID: Uj8D8BTcQmytnIyQvo6ZAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
-   d="scan'208";a="184977482"
-Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 10 Oct 2025 03:19:20 -0700
-Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v7ADV-0002Xr-1d;
-	Fri, 10 Oct 2025 10:19:17 +0000
-Date: Fri, 10 Oct 2025 18:18:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>, rafael@kernel.org,
-	lenb@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: Re: [PATCH] ACPI: video: Replace backlight_device_register() with
- devm variant
-Message-ID: <202510101817.Xkl2fc9D-lkp@intel.com>
-References: <20251007030730.3192901-1-kaushlendra.kumar@intel.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ohG2iXdV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1760091733; x=1760696533; i=markus.elfring@web.de;
+	bh=3mrkFhmX9z+2w+BR1ZDZcTlIWVicgMCwi03CX6H14l4=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ohG2iXdVa/iJ7pfcIvFrOmXYDW3fDfxzeVspOpildIsLhSqaMu8iWB1e1S+HUkhP
+	 nzAY0lto1WcNt+Smb9CcGS46jHZWl/HZT05wINtGSTO+MbT8vCt7MdHJnNGxw9x9e
+	 2a2H2J8f5S2GDjX3T8dAh099NrC0C4Wko7IEsOqE0HiV0E+y0MjeDhqL4AHV8upw0
+	 L9PkH1H+hKb/IroAPTIbHxRUxjSR6RwVDBhmq2Da2aZfWzQS53aGgS3UiQQcgwW6d
+	 UnxE8pmE/7jbHUkXub8TQzVIgt8ya+b/X2zArDmPTc3QvezsWB814xU9wEc8qj0Yt
+	 Zn1mZBQ8O797EXhCKQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.184]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Madzi-1uWAYR37Qw-00cSJH; Fri, 10
+ Oct 2025 12:22:13 +0200
+Message-ID: <b42cffc0-8996-42be-95a4-be4f8556aa3b@web.de>
+Date: Fri, 10 Oct 2025 12:22:12 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251007030730.3192901-1-kaushlendra.kumar@intel.com>
+User-Agent: Mozilla Thunderbird
+To: lkp@intel.com, Steve French <stfrench@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <202510092253.kjfjscfD-lkp@intel.com>
+Subject: Re: [linux-next:master 13403/13588] fs/smb/client/smb2ops.c:3128:3:
+ warning: variable 'rc' is uninitialized when used here
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <202510092253.kjfjscfD-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:mLF5L75Mehi65jTukJ7JuiOXHmLIKDEb7yjgft96fYHj/7lXyMK
+ j6D5a1rvvVisZs8gcwddb7Dp6lmRj36PbjPjbCXq+FVtqZmWPGf0aVSUtY/9altdTAffJ6d
+ KZOmZO47LeJTJCHpOBeqx50xtUEG/18TKsMbLWE2FFJ5i2Z+ahCvQyTNJk3Q3uBvH8MxVcI
+ 6ly3omf49qpul6m0MryIA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:yKMImwjG0ac=;bOsXvHvoxbp3y1f3rt4a3yPqwuj
+ kjNT6ZHVezfqcO++y6JtY8fCRz1bQTMQP1OYDXRa857iMdZkXMsN73b+aKnzcTUEaGmwhHCHG
+ 7soO81A0BEKS7qfIQaaKDUMIwE7Xy7DEVVWVD+9I9+IIRWvlXnkhvhSgOXFAqX+U/hHl9yUK+
+ 4eEdplLv9P6cl8zVDDSzuQDZFEAmwawWcfb+2h3kGR+sSSO/txGsov20SUvGEsbiAtXO0SvJl
+ 98JLYLU0835Ij12yuSg+k59J9gtHSRrXDJFW3ZxaQ4ArgwOp5t0VSDKwpzIo7lEhq3AJ7gBVm
+ KaZdat7vEV++/biqAb2DKaeMuq+NQJgyFLqunJdWyzXmVxEPZy959arCy5oc0eZE2eZxkQQNd
+ C+Exa8yK3qsxzwkA1cp5Aj3XGOonsNJfH424ZitgF+tWan9VOoyJiyHagNJGGFxZXvX35Vl8k
+ Q0TyGIZXhLtvG1/Pr8lzJfWdN2VepcIo6B0P8m2TdFFvqpQHoKyUfXcSs4+cdFp2KJMwmBegF
+ sTI9ZgHOFjS2I0fqZfZL3N+fIFtl7zTJQvaBR9kIb3JA6khPYbFEgwFxv8A1tmh9WXYXEH/I/
+ FQ8XPr+9wdGmUFilPjtXuswu/1jPp2NAJKoxszTcarLTN8tekBZvUNDdK9VCe5cBWrVGgH+P1
+ nATAQj+wcFblR+qbXcwKd+pLXpKwd+Vm4UkPl7tV1bmGFRYR6PevziGDuLvtXfStS6lsdy2LY
+ 9ZHKORLcwuGMc8YZkSCNmmdhjAVcwxySzjG7dQJn3O6atsTP6fSdkdp2itSxhQ37/JnpHTWO7
+ mCQFu5ZMflQqyxc8nlQ1zN9fqNe0OTnbqWEKKS2Fy0OeSLTsEMUfGAdFWMgFRIZ3T2CqKeB7e
+ 9p7FOcwwybBOzNlelUMhFX6OZNeEubusZC1zNxrHmfjWyUkMOV1qMs8AQPr2XTwm68zafp5pW
+ YLyCoWMbW1y/Q4SiT4xi90Cfi+Zqphow5lRKnZl26FczjBZtjKo/nHOCtV0CmOea29MrDsXs8
+ PY/2wjA5Y2iGF4u/EGegmMihSrWgkgrkIeP0asCJQiRp1blBwA2jNwr94dKGNHbv/ZU4L+6UP
+ mT3jlrNe+ixBm3gknhCSektAERh65jguZdyFoJScSLL1Yslvy1Y1iPN9YfpDSelr+1W8iVj4Q
+ EXOmfWyttmZ07eNlZe4ScBkqHI5I4SOIEaHeNLt3fcqZ3UiKIAqnTu0T9NdxQ+f9GYanivx/g
+ hWbBgL2d141okrxwBGE3N77L3DUCIwB14qjUncMSaSmCYbrMYNMGAGxAgVq+akJ5Oq5KIoCHQ
+ Luhval62XdAUW8VinjZEv0qf6doQZI15dWN+ev2egCsHn/VrEuurQNRtstxAlL90ChGCsfQVV
+ O1FN57ByQCC24OPbNQkuk85qUrQ9B8N1kBbtsckcAuS/2gddM2tcEArASGrkQAjDGlryRgOFy
+ VYAeiid5eOmTytybVjSq+UAPfcwt9N7SUvYqbu8ohTyRS1iQAr2axsYhG4nXg3aqrz2E717c/
+ jc7GarrTZBx+cUZdxXEyn54scTSAwTwODjmR8CDN4PrvOjm/AzPBeYfx0l5AxpZV/QbEemCg0
+ L7JgfKIKryJ2fyFvlP1Q0hKVD4pEOCByiU+sv45gN5IfnyCLQ1ARt8QDSxveKK5sEYyhvHKEf
+ uJYlJUyPydkSfnYceGcDxmrtOcZhSW/8TsynmQT/4GiFo77yKVfl+Xv4EZ58vNIUhjTND4k62
+ wSz0z4Nl5EQIpj2og2gWxyOpDDJyLrfaGaIEh8nscEAYD41pyOVgERV1rBxEUEn217uY0r5vh
+ VADSCQQw+tTZ/s8FfQ7JfNBNScw7jcQ0O1zv6OT69yEeG7zm1ct5FhPGVrl/uAcZ/DWvYVvEK
+ RVU2BA07peX0CLzORo+s0OMsLe7q90LBKQ5UpzTsY5do6Yl99arJie5bnFQbEoLvnQE5P5F/A
+ 9bfKafzIz+ZY70C4hmluxsGlrcDyJaICL19+u5800MEA3t95Gi9pFhC7sXvsqMbZ3aThPnbES
+ EVUSMAZwKfSZH7S8qo3TaqwSz43eKHgm6WFHYfnUXJzbrqoz1n4XKp22IKFb3CkADoM8biu/3
+ 2xeJQZdVNsav6xxyI+ND9Qzl3LITkP7e9MQciIRIIMxIL/rqsNqycy6HomsXF9ANx6z5rHSnl
+ SR1cG1922gaOS2xP0/n54btdx8PjPQkFizjCwTWu/zZap/Cqke4rIPpAhgmRtYJHvoU4bKlru
+ /kNNse8mgmDf7aUKuUkbz+GnNCuEv7inPcpvl203QRD0drg4lsxNxf4LZ863D0wSHtknKcLTI
+ B1UnpVR/T5X89n5RWnw2oWG7YnhF9++JsQ7u33due12rDXtv318vpn83FxYic525Na3suwIj5
+ MPqieMqfOD5PcvnkGwKGmxPtLZz5qZkHoVO6yEHylcQ5tGUiS7tbK2Fa4d4iSFpl2t4jpFkWg
+ bW05affHmRy6QaZJgDRpzaouPaQQ+Zxp0xquk5NthJUd80uRJnJ9OHUnuXdZKUwIy13iiHPQu
+ kpQ9sXz1axYMiqnSHS3qbWO9GQaoE1wF5dEbq/WebOhciOuYqgAoFGYU7UkC1/dbPZQ9ojH+H
+ dqihkkgTGFdd/8tEJTupVQEgFVBcLiKwi4PAgOHaSWAeLDblMubyJdyY4btAz3gFK31+qEPKt
+ sA6t+uHvs2pDQc57lHEM3OFwIBNoO6WTuhOFrYwGoRdR3/HxADJYiSXj8dCpwTKS9SZ9gxFdx
+ dHSvIpanjn+rj+APpRcTfZZQuiT9caozRi6u5tALsee3m01b1Fuqm8u9IMZQGv7wKWOLGTSME
+ FShV6tJqGyB8kRUTqALQk9LECC5wDBrQJzs4YbphWaywRoCtCT9kwfov4UEjlENOZD2xlAdcm
+ vu182u43hhq/QoPjc0s2XgdGrHopd2deUZBJX700qORfGsNaCh+TA4qbH1TmVx2OWW/i4OCO2
+ tQ1i+pAb0LfBnwexENKRCK2YRIliT3Hv4EjGyDQG2j0kgpYCdq3kd9U6nR4ecqqZJL1Lj3vGy
+ YuXKW021UThCCIpnRSad7rOtnrWYoUX4l/j1Zjxgeiv+MohUfsryCLUnDSGZMjO1rR+g6EVY7
+ ehH5VqSag0AAwGgw0YPT/WODjbsJBjbtW0Dc445dg4+AUvcXOVDyeJBMwLFJiEgx6Dbvui89B
+ jlqGyX06ixpMAYWg/BxF9tCNZ37YWQ8Ku9sG903gKLtTOLgfY68TodqAEGyHc1eklzi5TByQh
+ OUK0WzCde5urtlwxfz0ZV16TwHt64A3XCOMUrwGlVc6/hAnTMnxqZEfWnzS33SJH5Dvu6j6rL
+ h2A1dRSV7XGqM7KCm2sntTgH2chqHWYyZu0/qjnSyHxyiJ2QII1XHNspFfbjrDel41EKpLxc9
+ tA9AfsdoevECDfA0KACDFGCiiN5k5zZ/NLskMHARPlfXvUXKDG2KPVFuqwQNnwY0QOnJ9s1pB
+ JNyLoxLuA1TBIT2Ff1votow0LQVZJE/t/D2p46VDnAygsx3q8Rn3mPDw6OwuVcrHXPByfQOqA
+ fOI8HZFJSuSJMCvv0tcayxGEK7+AMkLnwBnEl8reTmnuSguSn7S9DcfySeCBhjx/ZF+rif8+P
+ ZmD2VgY5BGefvR4cR6hQCDEvpKXHvP+x5Gk8CmifYSqsEO4XUkt4bt8jsLdfV3w3y6YK/lMOT
+ /cEqdq2z1tARhp5IcDNMICfE4TZkekWxjc59Fc/fxkYvmPLoekVgjdT9LoBEvEEi6SFpY+tGp
+ y0SEvDUH/Xoe5XXqQ18QuIplDP34z+7MUit03FnvT19OLVLD9L7v80ax7aoyNfezfBeAt7OLP
+ 5odn6iDSKRKRXLzQqGzjJhCWLldauwC0lFtn36H9vFXp35g0C8A4WQeXhzAZmgbCAJZskw4CM
+ 23A7fBBSqE6xpEhru/thvsmlAOLFzzxG3/AN3/EnyVykNOC4rQ8L/orHp8DojXCXKo8EuHJ6e
+ wk/kNcJM3PN7ifycJps56SE3dVyNhkT8nA4OeExqz+J7gUUxkB3Df/4dcG106wgMyGiJATKbA
+ YNwrRwMrSFQXsEbqmbaOiBgZSS5Gbi1DaqZi0XpOYdpZPNaORXGCaWrHstvQbPHiluFmW/efb
+ Jt0xwegQAY0V5IUqQG50DrOv75RONqAmSxZ5wfZj+2nmQjniPhHQ/FoyTNk7kcycjNLXVoKIH
+ 89Zig/eRy7xIiNXJhT0AxwM0dAttSM9wQS4HKh4RS7+td5hzlsyudwAzPJGhltCllv7BbvSbd
+ YDYHOpnp4kIWM3OeoGxTuY6CtfjlGEkQC6IxQhHNlxJjkrI9sp2dH98crcCt1ZCmGP5wmCpYl
+ 7osZ22jeLzBy7eYQYNsWQ4eBnxWxJCOqSMFoBO7mS/LRdFPGzvomWmBX1d12+34NP1vcAq/DQ
+ rckCpGfH5Z5/iyRkTlFS1XYDqTZPKFzHWPdsuYwBLdkxUypBK6sC9FOZfK8mW1DjDI7ZErgaK
+ 5Hh0AFge/XYzSuutCvBGQUQYQ4hM5+8I5oh7lDPFBNuKr2N0WHyXkk40ci7rT731YTeHg0qYi
+ ujGCMBR56AeKWRYaOzrudyVtjnPhN394h3+Flb1xJDQZqDfAkOa4EJSpAbH3yKIuwh7y6E6mb
+ r3A2h4ypsEWxrW3xl1jiCUeO1L2iix/cLvJ7jpnY4uvVTCn2i03kMi18p2P8cRscgdh7DAo21
+ pX5Z2cayJPr6VNUA/nitKucvm8JQTXqzwvSr8Y/7w8geHaniRzc6fY2qwZXj1KN5XwTWb1KtN
+ MJlBAoP5lKwZ9y29byLior6+EwVPp/Ihq5XZkGjHsmJ9tq3YqSrbIoAacZ/juqYj67ZmXU4Fw
+ s8HThSlmB4MwWWwgxmhtmksb/zi6ixg7KR3JyZ5jsfHuLPohbRAKVvFk4GPRHWq0FT6IL/cX3
+ YDG/yBlzUqbE8A7SGEtBg6oqtblKhygSnNUqbB62aoQD8qhDfhMzviWkUpKm6dEV5E17I5YdL
+ txt9rUKGyOZkQFg4pofo0eE9kvW0kAbT92G7jNS6NgEtg7q+J23UVC2oWJqlFmNrwzQUly3JX
+ lFMJ7wDXJd2u9py+hkauXKN/w9VXN1Dc/t0k4v9CN7rS2v2kkkdTxo3pamZ+BnINuuKyA==
 
-Hi Kaushlendra,
+> >> fs/smb/client/smb2ops.c:3128:3: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+>                    free_xid(xid);
+>                    ^~~~~~~~~~~~~
+>    fs/smb/client/cifsproto.h:54:6: note: expanded from macro 'free_xid'
 
-kernel test robot noticed the following build warnings:
+I am curious if this implementation detail will evolve further
+also according to the involved handling of return values.
+https://elixir.bootlin.com/linux/v6.17.1/source/fs/smb/client/cifsproto.h#L49-L58
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.17 next-20251009]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+See also:
+https://lore.kernel.org/linux-cifs/CAH2r5mvg=kqPyA2nYF=Nhjr3vkt4dT1R4p-Bk_MBQtddjx_EhA@mail.gmail.com/
+https://lkml.org/lkml/2025/10/9/974
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kaushlendra-Kumar/ACPI-video-Replace-backlight_device_register-with-devm-variant/20251010-133230
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20251007030730.3192901-1-kaushlendra.kumar%40intel.com
-patch subject: [PATCH] ACPI: video: Replace backlight_device_register() with devm variant
-config: i386-buildonly-randconfig-002-20251010 (https://download.01.org/0day-ci/archive/20251010/202510101817.Xkl2fc9D-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510101817.Xkl2fc9D-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510101817.Xkl2fc9D-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/acpi_video.c:1732:6: warning: variable 'pdev' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1732 |         if (ACPI_SUCCESS(acpi_get_parent(device->dev->handle, &acpi_parent))) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/acpi/acexcep.h:57:41: note: expanded from macro 'ACPI_SUCCESS'
-      57 | #define ACPI_SUCCESS(a)                 (!(a))
-         |                                         ^~~~~~
-   drivers/acpi/acpi_video.c:1744:54: note: uninitialized use occurs here
-    1744 |         device->backlight = devm_backlight_device_register(&pdev->dev,
-         |                                                             ^~~~
-   drivers/acpi/acpi_video.c:1732:2: note: remove the 'if' if its condition is always true
-    1732 |         if (ACPI_SUCCESS(acpi_get_parent(device->dev->handle, &acpi_parent))) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpi_video.c:1716:22: note: initialize the variable 'pdev' to silence this warning
-    1716 |         struct pci_dev *pdev;
-         |                             ^
-         |                              = NULL
-   1 warning generated.
-
-
-vim +1732 drivers/acpi/acpi_video.c
-
-c504f8cb68eb0d drivers/acpi/video.c      Zhang Rui         2009-12-30  1712  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1713  static void acpi_video_dev_register_backlight(struct acpi_video_device *device)
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1714  {
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1715  	struct backlight_properties props;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1716  	struct pci_dev *pdev;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1717  	acpi_handle acpi_parent;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1718  	struct device *parent = NULL;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1719  	int result;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1720  	static int count;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1721  	char *name;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1722  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1723  	result = acpi_video_init_brightness(device);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1724  	if (result)
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1725  		return;
-654a182d8562d5 drivers/acpi/video.c      Hans de Goede     2015-06-09  1726  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1727  	name = kasprintf(GFP_KERNEL, "acpi_video%d", count);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1728  	if (!name)
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1729  		return;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1730  	count++;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1731  
-ccd45faf497374 drivers/acpi/acpi_video.c Nikita Kiryushin  2023-11-09 @1732  	if (ACPI_SUCCESS(acpi_get_parent(device->dev->handle, &acpi_parent))) {
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1733  		pdev = acpi_get_pci_dev(acpi_parent);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1734  		if (pdev) {
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1735  			parent = &pdev->dev;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1736  			pci_dev_put(pdev);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1737  		}
-ccd45faf497374 drivers/acpi/acpi_video.c Nikita Kiryushin  2023-11-09  1738  	}
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1739  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1740  	memset(&props, 0, sizeof(struct backlight_properties));
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1741  	props.type = BACKLIGHT_FIRMWARE;
-d485ef43072e54 drivers/acpi/acpi_video.c Dmitry Frank      2017-04-19  1742  	props.max_brightness =
-d485ef43072e54 drivers/acpi/acpi_video.c Dmitry Frank      2017-04-19  1743  		device->brightness->count - ACPI_VIDEO_FIRST_LEVEL - 1;
-ef5cc540f10200 drivers/acpi/acpi_video.c Kaushlendra Kumar 2025-10-07  1744  	device->backlight = devm_backlight_device_register(&pdev->dev,
-ef5cc540f10200 drivers/acpi/acpi_video.c Kaushlendra Kumar 2025-10-07  1745  							  name,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1746  							  parent,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1747  							  device,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1748  							  &acpi_backlight_ops,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1749  							  &props);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1750  	kfree(name);
-ef5cc540f10200 drivers/acpi/acpi_video.c Kaushlendra Kumar 2025-10-07  1751  	if (IS_ERR(device->backlight))
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1752  		return;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1753  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1754  	/*
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1755  	 * Save current brightness level in case we have to restore it
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1756  	 * before acpi_video_device_lcd_set_level() is called next time.
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1757  	 */
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1758  	device->backlight->props.brightness =
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1759  			acpi_video_get_brightness(device->backlight);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1760  
-172c48caed91a9 drivers/acpi/acpi_video.c Hans de Goede     2023-11-27  1761  	device->cooling_dev = thermal_cooling_device_register("LCD", device,
-172c48caed91a9 drivers/acpi/acpi_video.c Hans de Goede     2023-11-27  1762  							      &video_cooling_ops);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1763  	if (IS_ERR(device->cooling_dev)) {
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1764  		/*
-99678ed73a50d2 drivers/acpi/video.c      Hans de Goede     2014-05-15  1765  		 * Set cooling_dev to NULL so we don't crash trying to free it.
-99678ed73a50d2 drivers/acpi/video.c      Hans de Goede     2014-05-15  1766  		 * Also, why the hell we are returning early and not attempt to
-99678ed73a50d2 drivers/acpi/video.c      Hans de Goede     2014-05-15  1767  		 * register video output if cooling device registration failed?
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1768  		 * -- dtor
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1769  		 */
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1770  		device->cooling_dev = NULL;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1771  		return;
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1772  	}
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1773  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1774  	dev_info(&device->dev->dev, "registered as cooling_device%d\n",
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1775  		 device->cooling_dev->id);
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1776  	result = sysfs_create_link(&device->dev->dev.kobj,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1777  			&device->cooling_dev->device.kobj,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1778  			"thermal_cooling");
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1779  	if (result)
-2924d2f837788b drivers/acpi/acpi_video.c Rafael J. Wysocki 2021-02-03  1780  		pr_info("sysfs link creation failed\n");
-2924d2f837788b drivers/acpi/acpi_video.c Rafael J. Wysocki 2021-02-03  1781  
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1782  	result = sysfs_create_link(&device->cooling_dev->device.kobj,
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1783  			&device->dev->dev.kobj, "device");
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1784  	if (result)
-2924d2f837788b drivers/acpi/acpi_video.c Rafael J. Wysocki 2021-02-03  1785  		pr_info("Reverse sysfs link creation failed\n");
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1786  }
-67b662e189f469 drivers/acpi/video.c      Aaron Lu          2013-10-11  1787  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Markus
