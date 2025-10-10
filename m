@@ -1,107 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1A01F4C99;
-	Fri, 10 Oct 2025 04:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050B61DF26E;
+	Fri, 10 Oct 2025 06:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.83.148.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760070123; cv=none; b=p+FyzFBL/dFJPZHS9dA1Z6XrZJUKTkigURe5XV84AScYVVanYLaepBgS9np8psUQaTzRc6yKyE9otKfxezlMmGFzSDetddQllYtdFXDS7VLa5cDtwrqbvb0Xnz4h0O0z6cHB8oSNaH7M2WT3ldZHJMHz4IaTFKIoScPpNjc9SB0=
+	t=1760076436; cv=none; b=B5veY1PafNKPlETMP7fVGPG1vSiRAWjwQfyVpI7L8AY9a+ch42jJ/+PKBSO5IEhCduRnR441CUH9yExiMt06GnKkQSozS37C8zMwPUwK08suD8g/bZp6q75SSXMe+lyjvPuYskrSXPMDtv6IvrrwBH5sQpqTyFSGiGPLdrv9ZQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760070123; c=relaxed/simple;
-	bh=V8lVhg40i6i3dzj7FEuSEzfEDeikzBVx4RlBJVsKO+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aWnrUKvgK0D5DJmsgwBIXwFLrUu+MPfc/u2GuJ2Bllc9Ls5EVHUQeGqg74LoYHp921tymTKJW0G5baGLaOCcNvi9XwNmqbA5KFSTB46b4zRW+xDipR/yrCoTdJ/7SRoKv2hZg9SxZw8K2D4BRUvU2NcVciE9Fq5JExzyIhw8VxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c57DB32K; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760076436; c=relaxed/simple;
+	bh=WJdYbEdswEL2qtCJ2STUf7ntn6Iq6i8d56dp1sDUz3Q=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2By76P9WlbxGyEgDrwlmdenvc/hzxijJkeFChSkCZEdax8b8qBthRnOU28pBvS+i2Serv1K9CrJAvbntWfmpGh6YCXRAi8u1rU/MEg6gRq8j+SzIp2wQzVJ3vX/keAGFyepSGpDrtm2xyIPHA7A6nwhWxeaonH5fc/joYtODVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=ivy9RZH2; arc=none smtp.client-ip=35.83.148.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c57DB32K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760070122; x=1791606122;
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="ivy9RZH2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1760076435; x=1791612435;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V8lVhg40i6i3dzj7FEuSEzfEDeikzBVx4RlBJVsKO+g=;
-  b=c57DB32KSOf0zK988eamVPjR3OfcjjlGWIs61efAOxZM+XlmcAVKFzNt
-   07ino3Lxnyd+mBqCZJ0yI+WiShmCoMhNYOEu/C8JNX6kWvbZTM1b4545q
-   RtTwxlzS0iMGHQdQSInJTn3R3GiHJUGaFPsZ7a4Ey2bY1Ad5f2j3u+Rpz
-   KuHjth36z8QdAo0V7hgUc1tGgasIJ7/Q3K72ohsbk0Ol/yUaZC45hjYOo
-   +HciHOXmsIrZA/+VmbU/OCwJ6R2HqpHO4aKpzJ5lsnvpMhM9XYY3wpK+M
-   BAxg+dHjDA9j0yR2mxRgVQWO0TvsqxqUiIEoPRKTLow14Nchk8ifcE212
-   g==;
-X-CSE-ConnectionGUID: M0eyd99kS9OOt5pHmQQAxA==
-X-CSE-MsgGUID: Kj0p8onJRjq0stUOW02HwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11577"; a="79931634"
-X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
-   d="scan'208";a="79931634"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2025 21:22:00 -0700
-X-CSE-ConnectionGUID: 7bOHdkV+SSOVseicgkDGvw==
-X-CSE-MsgGUID: Ilpw6yfLTLq+oUU9z57IIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,218,1754982000"; 
-   d="scan'208";a="180572606"
-Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 09 Oct 2025 21:21:56 -0700
-Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v74dd-00028h-2m;
-	Fri, 10 Oct 2025 04:21:53 +0000
-Date: Fri, 10 Oct 2025 12:21:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Chuan Liu <chuan.liu@amlogic.com>
-Subject: Re: [PATCH 11/19] arm64: dts: amlogic: A4: Add peripherals clock
- controller node
-Message-ID: <202510101124.3xwn3STp-lkp@intel.com>
-References: <20250930-a4_a5_add_clock_driver-v1-11-a9acf7951589@amlogic.com>
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=WJdYbEdswEL2qtCJ2STUf7ntn6Iq6i8d56dp1sDUz3Q=;
+  b=ivy9RZH2srAKXKhggr1xe6Jv0yaaO2BUIcZG6+MGIyWOLGJbVD/dTi5l
+   TWY6+8BSgEUSusdzgUXfR5MQguV692yWz6UESafBjmog4SmZphTSUikDo
+   qzLUt49+Fn/WzvLpoelm2lALTrR2KA212MBSZEQ+SGp7UfnaXJboLr2KE
+   VxrjtPNtYsGmTK3+9OzcLBC4nw8hxYdIEBpVLzMOkCDGiMYoTZCydkPBo
+   u91IH+a5+eafzkAwJrSVlO6QNgotIiGyOYWVKZSUbvztlY1Tw2H+S/xdr
+   wDmlw1r5ezrkEDIRkoH7zuSTVe94yo/+dzScqKY+y5QMVyRZ0uG1MA75T
+   Q==;
+X-CSE-ConnectionGUID: +GroEsTKQluxlXnMqrVBhA==
+X-CSE-MsgGUID: mAboILn4T3iTSWY6Z0Jzvg==
+X-IronPort-AV: E=Sophos;i="6.19,218,1754956800"; 
+   d="scan'208";a="4447007"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 06:07:12 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [10.0.7.35:42599]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.15.171:2525] with esmtp (Farcaster)
+ id bd58cc9d-fc6e-4c2e-8deb-efc1ee480171; Fri, 10 Oct 2025 06:07:12 +0000 (UTC)
+X-Farcaster-Flow-ID: bd58cc9d-fc6e-4c2e-8deb-efc1ee480171
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Fri, 10 Oct 2025 06:07:12 +0000
+Received: from dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com
+ (172.19.75.107) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 10 Oct 2025
+ 06:07:10 +0000
+Date: Fri, 10 Oct 2025 06:07:08 +0000
+From: Jakub Acs <acsjakub@amazon.de>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+CC: Andrew Morton <akpm@linux-foundation.org>, kernel test robot
+	<lkp@intel.com>, <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	Linux Memory Management List <linux-mm@kvack.org>, Miguel Ojeda
+	<ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: [akpm-mm:mm-new 36/102] error[E0425]: cannot find value
+ `VM_READ` in crate `bindings`
+Message-ID: <20251010060618.GA80465@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
+References: <202510100127.yuqhg8uo-lkp@intel.com>
+ <20251009110555.29a67af19f5cc4d40e66713c@linux-foundation.org>
+ <CANiq72kKSz=UK+O4tnV0Kmw_HmJhJJ+KNZnUBWtOWqanrG+7Vg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20250930-a4_a5_add_clock_driver-v1-11-a9acf7951589@amlogic.com>
+In-Reply-To: <CANiq72kKSz=UK+O4tnV0Kmw_HmJhJJ+KNZnUBWtOWqanrG+7Vg@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-ClientProxiedBy: EX19D046UWA002.ant.amazon.com (10.13.139.39) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Transfer-Encoding: base64
 
-Hi Chuan,
+T24gVGh1LCBPY3QgMDksIDIwMjUgYXQgMDg6MTQ6MDFQTSArMDIwMCwgTWlndWVsIE9qZWRhIHdy
+b3RlOgo+IE9uIFRodSwgT2N0IDksIDIwMjUgYXQgODowNeKAr1BNIEFuZHJldyBNb3J0b24gPGFr
+cG1AbGludXgtZm91bmRhdGlvbi5vcmc+IHdyb3RlOgo+ID4KPiA+IEFsaWNlLCBNaWd1ZWwsIHBs
+ZWFzZSByZW1pbmQgd2hhdCB0byBkbyBhYm91dCB0aGlzPwo+IAo+IFdlIGNhbiBlaXRoZXIgZGVm
+aW5lIGhlbHBlciBjb25zdGFudHMgaW4KPiBgcnVzdC9iaW5kaW5ncy9iaW5kaW5nc19oZWxwZXIu
+aGAgZm9yIHRoZSBvbmVzIHRoYXQgdGhlIFJ1c3Qgc2lkZSBpcwo+IGFscmVhZHkgdXNpbmcgKGxp
+a2UgbGFzdCB0aW1lKSBvciB1c2UgYGVudW1gcyBvbiB0aGUgQyBoZWFkZXIuCgpGV0lXIEFsaWNl
+IHN1Z2dlc3RlZCB0aGUgZW51bSB2ZXJzaW9uIGFuZCB3ZSBkaXNjdXNzZWQgYWRqdXN0bWVudCB0
+byB0aGUKcGF0Y2ggaW4gdGhyZWFkIFsxXS4gSSB3YXMgZ29pbmcgdG8gc2VuZCBuZXcgdmVyc2lv
+biBvZiB0aGUgcGF0Y2ggYXMKc29vbiBhcyBJIGZpZ3VyZSBvdXQgaG93IHRvIHRlc3QgZm9yIHRo
+ZSBpc3N1ZSBwb2ludGVkIG91dCBieSBEZXJyaWNrIGluClsyXS4KClBsZWFzZSBsZXQgbWUga25v
+dyBpZiB0aGF0IGlzIGRlc2lyZWQgb3Igd2hldGhlciB5b3UncmUgdGFraW5nIGNhcmUgb2YKaXQg
+aGVyZS4gQW5kL29yIGhvdyBlbHNlIEkgY2FuIGhlbHAuCgoKWzFdOiBodHRwczovL2xvcmUua2Vy
+bmVsLm9yZy9hbGwvMjAyNTEwMDgxMjU0MjcuNjg3MzUtMS1hY3NqYWt1YkBhbWF6b24uZGUvClsy
+XTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjUxMDA3MTcwMTU2LkdRMTU4NzkxNUBm
+cm9nc2Zyb2dzZnJvZ3MvCgpUaGFua3MsCkpha3ViCgoKCkFtYXpvbiBXZWIgU2VydmljZXMgRGV2
+ZWxvcG1lbnQgQ2VudGVyIEdlcm1hbnkgR21iSApUYW1hcmEtRGFuei1TdHIuIDEzCjEwMjQzIEJl
+cmxpbgpHZXNjaGFlZnRzZnVlaHJ1bmc6IENocmlzdGlhbiBTY2hsYWVnZXIKRWluZ2V0cmFnZW4g
+YW0gQW10c2dlcmljaHQgQ2hhcmxvdHRlbmJ1cmcgdW50ZXIgSFJCIDI1Nzc2NCBCClNpdHo6IEJl
+cmxpbgpVc3QtSUQ6IERFIDM2NSA1MzggNTk3Cg==
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 01f3a6d1d59b8e25a6de243b0d73075cf0415eaf]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chuan-Liu-via-B4-Relay/dt-bindings-clock-Add-Amlogic-A4-SCMI-clock-controller/20250930-174011
-base:   01f3a6d1d59b8e25a6de243b0d73075cf0415eaf
-patch link:    https://lore.kernel.org/r/20250930-a4_a5_add_clock_driver-v1-11-a9acf7951589%40amlogic.com
-patch subject: [PATCH 11/19] arm64: dts: amlogic: A4: Add peripherals clock controller node
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251010/202510101124.3xwn3STp-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510101124.3xwn3STp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510101124.3xwn3STp-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   Error: arch/arm64/boot/dts/amlogic/amlogic-a4.dtsi:119.19-20 syntax error
->> FATAL ERROR: Unable to parse input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
