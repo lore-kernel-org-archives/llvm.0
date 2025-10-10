@@ -1,96 +1,176 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DAA24291E
-	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 08:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C62258EE0
+	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 08:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760084391; cv=none; b=bpfz0Ofa1WIDV7PA+BLxWWT9OW1gfyViSyN9++OAfQ5OOZQBw9+f3/3Zb1ukfP5cky8QDU3AL4VeM1n+mvqN2GuV9dpHyo8VrZ4abrogjFzAsFZFOJOcLAclmKWq28ugOr/57UmMD3LbF+gN8tIkj4GR/+wDRQXfbu5RKYbn2ig=
+	t=1760084508; cv=none; b=QDI3pPjxe/lQWo7ZVSuEd2zlw3aG8jYQtxWGSoYI+9wdCY7lcP3PqFm3Bwqg1yDO27Q4VtpAwDhYi43RW2aoQXeUwzuc54zqnUPfBka9R/qB1xae3ZO26lhSct7UbR4JQP5pZGoz7VCUZpnduPGrN5HuwoPGw3DnMFIdpjADBKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760084391; c=relaxed/simple;
-	bh=Cq5sJ7aSsShFxc17IH78w46REgBf/R4daQQ88MHxHWQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sGmz6tt1Staw8QVbO/VkHSUXLi0FLxpO1iHPTJA+R9OjuN0cOCPHI8Swzfcy1MgTS/03mr00LN4GDbn6gk59mAXhwrOhGgI5SRSo8SHlUo//YtGWTHiZ1b3ZpLEg5hd6dAjWkq8q3ri37YMhXMK6BbUZoZwUScYAXfzKYvN8PoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JAQASiMm; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760084508; c=relaxed/simple;
+	bh=7n9x7QTrcndxlg+tUsPE5c3XWRfvOWdk/79MKsk4w/I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=ABYln6dQGZNE1DiPxtK5vd7OPTJGyhZPHkm0wfEFg3e+oBao6j9fJ/n/HcqTa536KhbLvCqdB/wlxgQpzlH3mDqDt4mdu4MK/uYLIbfKFuR2yGylhbCDs0cyRCA1Q4UBJrNRSAQBeULLVBZGGhgQaM4XHlYZ4UBLdhOUyCm5rVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BHTwpR6e; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JAQASiMm"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2699ef1b4e3so2767975ad.0
-        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 01:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760084389; x=1760689189; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cq5sJ7aSsShFxc17IH78w46REgBf/R4daQQ88MHxHWQ=;
-        b=JAQASiMmzndZRplvCMenaEIybktdxfW1NZPZ1cL3Tb9z/aOKTO2mTCPC6ime1MF8Zr
-         63dMo6oOIHwCVxp+bu3yhWK3u7ckauP9wyyzshhmAWEu0v5ApbZwzFKazlQg3vQs2a28
-         5AWPt+bEq8E8JkJ4PHyE+uP/Vf4pGeKMiMQi4siJ8QxByqCU1gqu3qbXCx9ApmQr35nj
-         oL28m6gaFPrRmsV8+ayraXdmrfy2CKCP0o8a30cTjqV/R40G4dyax1wqbVxwtoREOHaW
-         Qp67gOEsOnXNp2croC2LBTxDqVqsm4un5yxEnh3utEVhSUdUTCBpay+itHxr4dDUBnWs
-         BTmA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BHTwpR6e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760084505;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NbJMedQSgMeF1x17YjO/qLNJsjbtU/nMqdfEt6aFy9Y=;
+	b=BHTwpR6e7wr4ErpXXeyOzQaa3+JiU8c2M+FWKXv7kVdTRl5GD2g5sLQCotbnGJGsYhjKch
+	p1SN+tAGF+Wmas4ZUTDTjVGYihQG+uBoUmyRGrksu7rcAbksuJlC2K7lIpWvb0XY7UUZrK
+	cDmAogVCXuqAJA6c/SvPUhfsRkFmtZI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-408-lW4jmlMrNb2r8wenDgmDtg-1; Fri, 10 Oct 2025 04:21:44 -0400
+X-MC-Unique: lW4jmlMrNb2r8wenDgmDtg-1
+X-Mimecast-MFC-AGG-ID: lW4jmlMrNb2r8wenDgmDtg_1760084503
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3f384f10762so1356725f8f.3
+        for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 01:21:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760084389; x=1760689189;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cq5sJ7aSsShFxc17IH78w46REgBf/R4daQQ88MHxHWQ=;
-        b=PO6sq4s5KcAFsRQaRo+f3fKV16ttV0MQa0xGrlzBV8nSXJVPVbxXk6JigTZevLIobq
-         39CokE3oiHSjTbbQkW3VbIkNloygMh9sDdyu+MlFWMk6SOEzOGnw1IcCVZDESqbhnUi0
-         b0gVAMOSyBsZHUXWfTFHapm1gNAY7CMqQCUtsPiRYr7kbWK875bP8BbIz28A1cTvetny
-         BMCb7fBNLuc9LP3Hade9yQZwWB5ZcjMxJeGy3u0lil25kHIdV2CEK52d1rvrOzOHqtJG
-         bRonq9QY5nUPX0TiY2XZPJ1HdCeTeev23vuj52heqdIbsBi3JyjvaX6V5xJ/DIOPkzIF
-         FYzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXVvibDKNu8BtBHBc6AfSgIsV0R4IgY7RCEExzmp2BAVy3HF0Aojctv6wxtYbXvjiXFYHUS@lists.linux.dev
-X-Gm-Message-State: AOJu0YxTB2w/ix8JXXVsmI6KkDbYCI2UYE9RuKR6bcS1vA3V7rBG5CPl
-	OhTKSkdkaqBWDlI2biiqur5qZ2EcUi/3LT2v8gdZy0D/if2Ce0aC0wDX4KtWCq4jzk5YeiRs+YI
-	mp9/i0+8UZrDeNXRRAg/nQLpq50KoRrg=
-X-Gm-Gg: ASbGncujN2k4/X/hyJnGmhKFIrti7XoODAMRIiKPf+9Yj/O+uV+SAdQQ21bsK+uGNUI
-	W0zwsxxSTEiMRJAus5gEv8z7zkYRagm2PkVWmcWpnClUEuqwJYrBiFDfOH9az0akSUGkmla/aQA
-	hHvRom7DyviQ49O8M2cZYfwxwni9YHsEwCEoZaV/fDkhEeyhwnaZzpZ737+JwYnJmyFifrQHTVr
-	rrkIlY07MPYWW/nPYFSpTw06QP+IAp0IMAr9d3+4XQH8rUYUSSc1MliX6ZBxhaK4NUgszasdBmm
-	/JbVh2cRYsPLsnnL0BnovRbXmxZ1m1AMxUMbFZT7MgLA
-X-Google-Smtp-Source: AGHT+IHsGqk0VxZVnRC6qblIgP8WmMkDMtg7G1rQix4D/f/fNxV3LDfDLnO6Fj2/zAlwLN0dYCpWL+UWmTlPxiqHxts=
-X-Received: by 2002:a17:903:18c:b0:27a:186f:53ec with SMTP id
- d9443c01a7336-290273040acmr83793555ad.9.1760084389280; Fri, 10 Oct 2025
- 01:19:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760084503; x=1760689303;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NbJMedQSgMeF1x17YjO/qLNJsjbtU/nMqdfEt6aFy9Y=;
+        b=WpZi8lADXo0trDJFdEit6AA9TxTsf6rd98+/XTYNfAIU4+b7+5hEZ63nGMUNLIcpVP
+         5lOWAU3qcK5Dz0YlWrXMvepD+e0n6VgFLH/HkGG04ohvdNu/z7DazXjFCPVDhiWEDRsC
+         Nm+7/naoF+Ach6qvbz9nK4H4DTwGJZ+VzKeJsOo8/K+EA/4uGPGSWgOd4c19uHdaYqdt
+         p6YYnd9kEBvhQpksCM4QUiXptNpZKjUza3OYgQTh2lH3yLiMKq9gbrYfrImbw+x/bdaF
+         14gLlCMVqlhz++RegedQGg2w51N4R0vC4cPtruLZG1uD/xj+NkWpqkawFtTJzm7xd4Xo
+         RiQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjAfY/JWvsBg0+V4l0gnTdIE6GQxTkZhHBkCgMnOm1U5JIJAiilqTxoLqjGBerjm1Nxxd7@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx2a+qt9lty77RZv8+hmbJRkg6SwWhM1FtySMOj8K67xdZeW637
+	UwIkDGqWuOpHR7mAGtllDnYxG4uwTJEL9K3z/9ZAY7DT5TuUg3kZj8BPivzv6rzIN4/xAUgwzRb
+	Qmz3J3mmIg+Zdj6H6k23c3r89Es8nPDGfCZwPqO7+RiwFzRsgrPj2HdU=
+X-Gm-Gg: ASbGncubZfTUioDA6fK0pPipR/mLzobBuHy2KF7nBlo3rHNu9+f6DLe7uet5fU7iaQt
+	3pzasRt+Zpq+zSlPlR/efm8Cj9OafAlg0RzxKE11G8oTCABVDDX4FGVyH6E+RYV5TI+lQx97G99
+	C/eIVjfeIgIZ9GzA1PtLVFTXdGvRkGuYVUG88yr1vCI+SdYH41/tKSYmssGgp13EZ30VJRGhgLL
+	ddssTXWoXQxyrfONUIIHhs+J2/79XjA0kup8vYHTiyOpLf+ZCmsbqy0zseJxxhu9VsA0FYZydaT
+	0EUgEqDPSSUDREkGKhXmSmFPc9VpD2pE//HMWGJQEi/OLBh/XqVWg0/riUaoop+R/v9yW9dLS/T
+	zKXJJBJpAKQJXsA==
+X-Received: by 2002:a05:6000:2910:b0:405:3028:1bf2 with SMTP id ffacd0b85a97d-4266e8db2abmr6017874f8f.62.1760084502778;
+        Fri, 10 Oct 2025 01:21:42 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEtaiyaP4ciHOEVEUj0fw2KNuY3ZMQkjybKrv/92syV0a+JBFL/CPIzPSOnaTNXUhiK7HidDA==
+X-Received: by 2002:a05:6000:2910:b0:405:3028:1bf2 with SMTP id ffacd0b85a97d-4266e8db2abmr6017864f8f.62.1760084502351;
+        Fri, 10 Oct 2025 01:21:42 -0700 (PDT)
+Received: from lbulwahn-thinkpadx1carbongen12.rmtde.csb ([2a02:810d:7e01:ef00:ff56:9b88:c93b:ed43])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426ce583424sm2946970f8f.21.2025.10.10.01.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Oct 2025 01:21:41 -0700 (PDT)
+From: Lukas Bulwahn <lbulwahn@redhat.com>
+X-Google-Original-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: [PATCH] treewide: drop outdated compiler version remarks in Kconfig help texts
+Date: Fri, 10 Oct 2025 10:21:38 +0200
+Message-ID: <20251010082138.185752-1-lukas.bulwahn@redhat.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202510100127.yuqhg8uo-lkp@intel.com> <20251009110555.29a67af19f5cc4d40e66713c@linux-foundation.org>
- <CANiq72kKSz=UK+O4tnV0Kmw_HmJhJJ+KNZnUBWtOWqanrG+7Vg@mail.gmail.com>
- <20251010060618.GA80465@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com>
- <CANiq72kndiqwEm-OZLd6JumAaBy7KrzYf_rDjwhtw5Uh4vdTCg@mail.gmail.com>
- <20251010074458.GA91144@dev-dsk-acsjakub-1b-6f9934e2.eu-west-1.amazon.com> <CANiq72mzrJNTe6aw5zJ_vyhXO1jDR96hmvQEXPkqFj=dnwSnSA@mail.gmail.com>
-In-Reply-To: <CANiq72mzrJNTe6aw5zJ_vyhXO1jDR96hmvQEXPkqFj=dnwSnSA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 10 Oct 2025 10:19:37 +0200
-X-Gm-Features: AS18NWCOn0jUQlOTDgY6ZmGAYLoWjP7H_Q3V1N2lr7McmrZCKjd0e-TiKap1ODw
-Message-ID: <CANiq72nkvd0UApjCYUcYu19nv+Ow2irz8WEPahiAf=6N5RZiyg@mail.gmail.com>
-Subject: Re: [akpm-mm:mm-new 36/102] error[E0425]: cannot find value `VM_READ`
- in crate `bindings`
-To: Jakub Acs <acsjakub@amazon.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: bGSJyYAPX8LsSTsAi1cBS0ZACMkjwy-pPvP68BpArSQ_1760084503
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-On Fri, Oct 10, 2025 at 10:13=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Otherwise, for the moment we can go with [1]. It is just a single `#ifdef=
-`.
+From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
-And if this becomes a bigger deal before we can start applying
-`bindgen`'s feature for this, we can always look into imitating
-`bindgen` to fetch the values on our own, i.e. with an extra step in
-the build or similar. It wouldn't be the first time we do things like
-that...
+As of writing, Documentation/Changes states the minimal versions of GNU C
+being 8.1, Clang being 15.0.0 and binutils being 2.30. A few Kconfig help
+texts are pointing out that specific GCC and Clang versions are needed, but
+by now, those pointers to versions, such later than 4.0, later than 4.4, or
+clang later than 5.0, are obsolete and unlikely to be found by users
+configuring their kernel builds anyway.
 
-Cheers,
-Miguel
+Drop these outdated remarks in Kconfig help texts referring to older
+compiler and binutils versions. No functional change.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+---
+Andrew, please pick this quick tree-wide help text clean-up patch.
+Thanks.
+
+ arch/Kconfig      | 19 ++++++++-----------
+ arch/arm/Kconfig  |  2 --
+ lib/Kconfig.debug |  3 +--
+ 3 files changed, 9 insertions(+), 15 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 74ff01133532..602ede49daf9 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -232,17 +232,14 @@ config HAVE_EFFICIENT_UNALIGNED_ACCESS
+ config ARCH_USE_BUILTIN_BSWAP
+ 	bool
+ 	help
+-	  Modern versions of GCC (since 4.4) have builtin functions
+-	  for handling byte-swapping. Using these, instead of the old
+-	  inline assembler that the architecture code provides in the
+-	  __arch_bswapXX() macros, allows the compiler to see what's
+-	  happening and offers more opportunity for optimisation. In
+-	  particular, the compiler will be able to combine the byteswap
+-	  with a nearby load or store and use load-and-swap or
+-	  store-and-swap instructions if the architecture has them. It
+-	  should almost *never* result in code which is worse than the
+-	  hand-coded assembler in <asm/swab.h>.  But just in case it
+-	  does, the use of the builtins is optional.
++	  GCC and Clang have builtin functions for handling byte-swapping.
++	  Using these allows the compiler to see what's happening and
++	  offers more opportunity for optimisation. In particular, the
++	  compiler will be able to combine the byteswap with a nearby load
++	  or store and use load-and-swap or store-and-swap instructions if
++	  the architecture has them. It should almost *never* result in code
++	  which is worse than the hand-coded assembler in <asm/swab.h>.
++	  But just in case it does, the use of the builtins is optional.
+ 
+ 	  Any architecture with load-and-swap or store-and-swap
+ 	  instructions should set this. And it shouldn't hurt to set it
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 2e3f93b690f4..9b4024b277d4 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1159,8 +1159,6 @@ config AEABI
+ 	  disambiguate both ABIs and allow for backward compatibility support
+ 	  (selected with CONFIG_OABI_COMPAT).
+ 
+-	  To use this you need GCC version 4.0.0 or later.
+-
+ config OABI_COMPAT
+ 	bool "Allow old ABI binaries to run with this kernel (EXPERIMENTAL)"
+ 	depends on AEABI && !THUMB2_KERNEL
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 8aaaf72ec4f7..29e11893c873 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -342,8 +342,7 @@ config DEBUG_INFO_COMPRESSED_ZLIB
+ 	depends on $(cc-option,-gz=zlib)
+ 	depends on $(ld-option,--compress-debug-sections=zlib)
+ 	help
+-	  Compress the debug information using zlib.  Requires GCC 5.0+ or Clang
+-	  5.0+, binutils 2.26+, and zlib.
++	  Compress the debug information using zlib.
+ 
+ 	  Users of dpkg-deb via debian/rules may find an increase in
+ 	  size of their debug .deb packages with this config set, due to the
+-- 
+2.51.0
+
