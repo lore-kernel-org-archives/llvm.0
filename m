@@ -1,123 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243E92F8BD5
-	for <llvm@lists.linux.dev>; Fri, 10 Oct 2025 15:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC3B2571A5;
+	Fri, 10 Oct 2025 15:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760109136; cv=none; b=Z5y4rSBqzAydALZPSAQ836gN9izj0nYLYd9Yfjnz9PinKnJ1MuP2cACMqOqDug5MNH6TuGnegd8ngZnfeZSNfzPvRJWWWsIkqfshJTCaPnUKT0+v87tzR210X4iPwQwWQ0AupzDQPqK7/vei4pxw3V8o25C0ikGpQjlYzVwZ6Ng=
+	t=1760111580; cv=none; b=WipVusYoQ5lD53GiiOLRyyCPd3gqgB6r++EQwyhHdUrsPgm3BJju+SrEYFoUAZvIi2Q8OflwTcFcjLS0mXuxKvALb0TWKiWgvLTI6LRYMUzo+IHIVAbORH5tvgBPdJ8XEoSwQLVDcJpsrums3xRYaFL6ENpHFsxodzyNGnWSHDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760109136; c=relaxed/simple;
-	bh=WIkXLM1r7Q1O7LPVjMvifve9AQ66MNpnx4ZqY/8T61M=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sWq/qCcJ61bEVI0TX2+AxScaRPjeD1k3mwiJ0pxKtP9iW/+/O41Naak6wdJl67gT47wbXTPoEQFYG1xZ5f1dGLDOYKF1FrghZUe4N+lEyQC445+Wudf9ou4opwlvZUPa1ZRuIDfZ3OfYVtmAKL6rZ5ZiVhVpALdW5UCaSSpyBH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cFmfx6l/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1760111580; c=relaxed/simple;
+	bh=bmLy073nPbVMhndhj/eanakmMRASnKS5w4Glykb/caE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sUYH646YOoRNfSNfn2a40a8I+3caQoLlQp2ZlLlESfhGAXdqcub1RA69JoNAjewREd6zvSIOe5C1azZwCLLs6yuinZFrNG56ylil9v5CF5fS3Lry9zB+EKOLMpPJ91JZQRarImPDk0frxC9wQ8WSsahNuDbi568x/+GBoz9UQKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mtktIV8A; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cFmfx6l/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760109134;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qHCdZi6C7ELhvkHmBE99ONw5f0wTBtemnyHf1SDAuNY=;
-	b=cFmfx6l/i1Fcw5f3n0/hrwzJX9TuU48HaICi3YHICMghUljjnLU6LITitnrKgssmwogD7Q
-	UYD6HMDXILKgvHX4JJKIVQpO/927zC0lVes5HrQd/vdH7qrxvd/PGOsM8PyGzHdSZGde0L
-	bRYHDsXg9Aj1pxBqpBuzfNbg81kjqa4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-266-5gxgZ7HqORGcbXAp1Yrqxg-1; Fri,
- 10 Oct 2025 11:12:07 -0400
-X-MC-Unique: 5gxgZ7HqORGcbXAp1Yrqxg-1
-X-Mimecast-MFC-AGG-ID: 5gxgZ7HqORGcbXAp1Yrqxg_1760109125
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B964918005BF;
-	Fri, 10 Oct 2025 15:12:03 +0000 (UTC)
-Received: from [10.45.224.32] (unknown [10.45.224.32])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E0D821955F42;
-	Fri, 10 Oct 2025 15:11:56 +0000 (UTC)
-Date: Fri, 10 Oct 2025 17:11:49 +0200 (CEST)
-From: Mikulas Patocka <mpatocka@redhat.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-cc: Helge Deller <deller@gmx.de>, sukrut heroorkar <hsukrut3@gmail.com>, 
-    David Hunter <david.hunter.linux@gmail.com>, 
-    kernel test robot <lkp@intel.com>, Bernie Thompson <bernie@plugable.com>, 
-    Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>, 
-    Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-    Zsolt Kajtar <soci@c64.rulez.org>, 
-    Gonzalo Silvalde Blanco <gonzalo.silvalde@gmail.com>, 
-    linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-    oe-kbuild-all@lists.linux.dev, skhan@linuxfoundation.org
-Subject: Re: [PATCH] fbdev: udlfb: make CONFIG_FB_DEVICE optional
-In-Reply-To: <6b1f8366-7ec8-4c1f-9563-29e06a8060e2@suse.de>
-Message-ID: <b8472f68-982b-c00b-55cc-547c72bef34c@redhat.com>
-References: <20250924175743.6790-1-hsukrut3@gmail.com> <202509272320.3K8kdDCw-lkp@intel.com> <bb9d90ca-aa4d-4168-bdc5-543109c74493@gmail.com> <CAHCkknrZ-ieNKeg-aj3-NVqgGSk770jJpUpCvn_SuffkPu+ZrQ@mail.gmail.com> <edccab86-321b-4e6e-998f-3ce320ee0193@gmx.de>
- <41ef536d-2399-43f8-8041-c6b0e642aba2@suse.de> <CAHCkknrAKGxzAYE-R3QX20W4faR9Wfjgn37peyHRJcZ6PRLENA@mail.gmail.com> <c1d86274-44e2-4ceb-b887-5c4af45d8b37@gmx.de> <6b1f8366-7ec8-4c1f-9563-29e06a8060e2@suse.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mtktIV8A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760111579; x=1791647579;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bmLy073nPbVMhndhj/eanakmMRASnKS5w4Glykb/caE=;
+  b=mtktIV8A/BhydcZHtVdRPhbJ1BY/D9izzbRgVFnA44mHvQZKmVF1vRV0
+   zuxlZ8TkFTgTfjvC3LvUwQHHhVuro3bUaSbqEpkhDinvBfVekJH+XjasW
+   C5Wnj8kIsjaf1UIzt66K5MRIxVa4fXc7DYMMmBc9xky39XBNuh85EiZJj
+   bdyZmwhaUHeApS8CXygZ7Q0pMv9T2vkY03WDavoe5NeYwiymX5wbtBlwv
+   eOkYtFuZx2z+3Qai2iPEu2lrZJKK6A+L9Q+nazvCgZ4c/z9OKNykX/dg/
+   wsGyZDJrn/RzzSpcO3shYDupDb+IP5efW35Yb10SayDhC4uJhEuPAXFXW
+   A==;
+X-CSE-ConnectionGUID: 8q864Qx/QbiJYKB9aTAgvw==
+X-CSE-MsgGUID: XTBxIMFuQ/eWrPL31hl3/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="65986446"
+X-IronPort-AV: E=Sophos;i="6.19,219,1754982000"; 
+   d="scan'208";a="65986446"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 08:52:58 -0700
+X-CSE-ConnectionGUID: LBHphJwtT5azFcq7AB4Gnw==
+X-CSE-MsgGUID: v7V31KnmT7+3m+qR8Fg9qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,219,1754982000"; 
+   d="scan'208";a="186143529"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 10 Oct 2025 08:52:55 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v7FQL-0002vX-1U;
+	Fri, 10 Oct 2025 15:52:53 +0000
+Date: Fri, 10 Oct 2025 23:52:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Markus Probst <markus.probst@posteo.de>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Markus Probst <markus.probst@posteo.de>
+Subject: Re: [PATCH v2 2/2] ata: Use ACPI methods to power on ata ports
+Message-ID: <202510102322.yF4HEkAc-lkp@intel.com>
+References: <20251009112433.108643-3-markus.probst@posteo.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="-1463811712-636264779-1760108298=:3315052"
-Content-ID: <b28657e4-9db0-51fc-5872-290b4927a66a@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251009112433.108643-3-markus.probst@posteo.de>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Markus,
 
----1463811712-636264779-1760108298=:3315052
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <77da2ba4-763b-3169-d87c-f655b00b6162@redhat.com>
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next linus/master v6.17 next-20251009]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Probst/scsi-sd-Add-manage_restart-device-attribute-to-scsi_disk/20251010-111134
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20251009112433.108643-3-markus.probst%40posteo.de
+patch subject: [PATCH v2 2/2] ata: Use ACPI methods to power on ata ports
+config: x86_64-randconfig-071-20251010 (https://download.01.org/0day-ci/archive/20251010/202510102322.yF4HEkAc-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251010/202510102322.yF4HEkAc-lkp@intel.com/reproduce)
 
-On Tue, 7 Oct 2025, Thomas Zimmermann wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510102322.yF4HEkAc-lkp@intel.com/
 
-> Hi
-> 
-> Am 03.10.25 um 21:50 schrieb Helge Deller:
-> > On 10/3/25 20:43, sukrut heroorkar wrote:
-> > > On Thu, Oct 2, 2025 at 8:52 AM Thomas Zimmermann <tzimmermann@suse.de>
-> > > wrote:
-> > > > Am 02.10.25 um 08:41 schrieb Helge Deller:
-> > > > > > > > kernel test robot noticed the following build errors:
-> > > > > > > 
-> > > > > > > Did you compile and test this code before submitting this patch?
-> > > > > > 
-> > > > > > Yes, I had compiled & loaded the udlfb module with no errors. Please
-> > > > > > let me know how to proceed in this case.
-> > > > > 
-> > > > > Look at the reported build error, which seems to happen in dev_dbg().
-> > > > > So, maybe in your testing you did not have debugging enabled?
-> > > > > The report contains the .config file with which you can test.
-> > > > 
-> > > > Can we rather make an effort to remove the udlfb driver entirely? A few
-> > > > years back, there was one user who was still using it because of some
-> > > > problems with the DRM udl driver. But I think we've addressed them. The
-> > > > discussion is at [1].
+All warnings (new ones prefixed by >>):
 
-It was me - and I am still using it on an ARM64 MacchiatoBIN board because 
-the board doesn't have graphics output.
+>> Warning: drivers/ata/libata-acpi.c:277 function parameter 'enable' not described in 'ata_acpi_port_set_power_state'
 
-The problems with the UDL DRM driver were:
-
-* crashes with full-screen framebuffer applications, such as "links2 -g", 
-"fbi" or "fbgs". On UDLFB, there are no crashes.
-
-* worse performance - the UDL DRM driver updates everything in a given 
-rectangle, while the UDLFB driver keeps back-buffer and front-buffer and 
-updates only differences between them.
-
-* crash when you unplug the card while Xorg was running (already fixed)
-
-Mikulas
----1463811712-636264779-1760108298=:3315052--
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
