@@ -1,59 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1BD265632;
-	Sat, 11 Oct 2025 12:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDB31E480;
+	Sat, 11 Oct 2025 15:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760185863; cv=none; b=bCdZve3Zw3mGhg6HHjNxs1whUw/ihD5rfoI/UTaRUHo1KWc6G3kdPvwRzu4woWUERgUzyP7tMC9Kfzn51IMszPH1QKjc9WLb78HMqmPsZozAh2noNnFCcUXRM/5DQz2UexGpz2pg90vkSwJWHxtDnRdrirvkjTnnBFlvj6wDSb8=
+	t=1760196493; cv=none; b=qoAlteT1Y3y0bc24FXsq1szXzUyjmvOEzI3hVoKiNBElzNfWvpN53iRM9ttnnsm/3YvX/hBYuIJPUXZhv7t+4mpSRqb+2nJ4nY1C7RKcw4mRdUTxu94wC4A0+JezkWAqc/RCeynxR+R02Zk1yC8U0V3bzUnbn9XtinSGxRC7ZK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760185863; c=relaxed/simple;
-	bh=+5QbXJmrqOQWnNS40XIOD6gLT2026MGFYlD4O21zUGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UZmeyWIU91Jimef9vDfP6Kz28VO7MoYU07vkqDzCeKqT4aZirxgFjj7to7+SzXZtLCBvwtzTnt15y2Dml5HkfJ1PJQDIpuLcF3BahIH4w2qEheeJ2rqRSd5Jn990OYr/tbcpKPkYGhmkRsRHCCEESBKICGYg6lmRF30nAdf/hR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=meaK4HYk; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1760196493; c=relaxed/simple;
+	bh=usBYVE1eZfyEMfHqr2yt6OEMuGPOwPvlMQfsDnwCZTQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G26zwbHH3/Ymzau8mX5IL1tj+aDAIKMUCwQoN4bZUANuIq4TY5zOvQK4LOUvMHiZCaj446cRMh6Jl4KVTwQaKqJzpfTVck9BvEgoSsLRoyerteXJnyusBp5EwonBQtLdqvLr2rAv8jqhZU/YDY6SV0OSh6SEVdqNm6ObYVL8BDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XdkhUp9i; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="meaK4HYk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XdkhUp9i"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760185858; x=1791721858;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+5QbXJmrqOQWnNS40XIOD6gLT2026MGFYlD4O21zUGw=;
-  b=meaK4HYkKLdFnqTlwUAaCLMoIPAi38bFnCLhqzq/dHK4eZMiDw5Hr09C
-   c3e2KidxPrTnIp6ENSgFmBfB1fUdkb4I8KnntDfbqn3BXB2dovd++9OvR
-   aZF6E9bfZ6h/tBn9cHGMGH1VFvDr+CCZC5lwWYhrxErGCmizqTDuG1bdA
-   vcTti5nK2gc28bmdUVDWnEF0r4vGvfTjAU2S2juiTWpECa2wm8lMxFS9y
-   J2Xr/1u5LwfkO88tt0zdRYLQZ+lypOMaNFhdO0FAGFTNE0Rv2ZDHzgoau
-   XQIs3SPh58P0zcEXzTQp1fyasOJzppSmu5OUEs/rMED4Red/7sV56gdcp
-   g==;
-X-CSE-ConnectionGUID: BH5vsHr0S/2chgx5neHm2A==
-X-CSE-MsgGUID: T/drKHMHQdqCZsfAhtgD+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11579"; a="61418155"
+  t=1760196491; x=1791732491;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=usBYVE1eZfyEMfHqr2yt6OEMuGPOwPvlMQfsDnwCZTQ=;
+  b=XdkhUp9iuR4d2v00WgX5dH+5vd+rC+cHFfZK5OsWYzkaDNYf6r8tRc5A
+   EeaVlAX22vZ2JoXDEvTUF02CNoaFjIeVxbxl0XdZ5kIbrEsn1Q5JcIIqL
+   V4KhE1MYhjt+JFL800HqLgDs+Vm7pcGWmKQRg+h3X2qzj0q0vF6gW2ckI
+   GWhuO/5ccv6JmpQBCpZMGsBnV6iIuqMZM6R+Fiwiwk3I4jwIgJBvEub4u
+   0CG+Uq8Ht0iyqtMEq2HzhcLaedp1gHjmU8kaB/MEzFH9zwaakDOz/1ReH
+   cu+IrY06ugtAw+1iiHV8JHtTBh/ZCGi4wHAE3ImkYtjO1xNZqNNKTvGYL
+   w==;
+X-CSE-ConnectionGUID: WPVS3GH5SFm9sdunyYQzaw==
+X-CSE-MsgGUID: /GqMqoTiSwapucbxkrU8ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11579"; a="62274598"
 X-IronPort-AV: E=Sophos;i="6.19,221,1754982000"; 
-   d="scan'208";a="61418155"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 05:30:53 -0700
-X-CSE-ConnectionGUID: dMQ+HE9YRrSjSm34ASJdIQ==
-X-CSE-MsgGUID: oG/tLOyHTha7Xb8Df8SeEw==
+   d="scan'208";a="62274598"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 08:28:11 -0700
+X-CSE-ConnectionGUID: ImVrFSK0SdyMf7mwIE/Jfg==
+X-CSE-MsgGUID: BrYeQkKdSQq6l+eImZFbBQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,221,1754982000"; 
-   d="scan'208";a="181957155"
+   d="scan'208";a="185465265"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 11 Oct 2025 05:30:51 -0700
+  by orviesa004.jf.intel.com with ESMTP; 11 Oct 2025 08:28:06 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v7YkL-0003lS-1k;
-	Sat, 11 Oct 2025 12:30:49 +0000
-Date: Sat, 11 Oct 2025 20:30:02 +0800
+	id 1v7bVr-0003ph-2D;
+	Sat, 11 Oct 2025 15:28:03 +0000
+Date: Sat, 11 Oct 2025 23:27:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/rv-reactor-signal 3/9]
- kernel/trace/rv/monitors/sleep/sleep.c:219:26: error: static declaration of
- 'rv_sleep' follows non-static declaration
-Message-ID: <202510112012.OM38qh6e-lkp@intel.com>
+To: Tianyang Zhang <zhangtianyang@loongson.cn>, chenhuacai@kernel.org,
+	kernel@xen0n.name, corbet@lwn.net, alexs@kernel.org,
+	si.yanteng@linux.dev, tglx@linutronix.de, jiaxun.yang@flygoat.com,
+	peterz@infradead.org, wangliupu@loongson.cn, lvjianmin@loongson.cn,
+	maobibo@loongson.cn, siyanteng@cqsoftware.com.cn,
+	gaosong@loongson.cn, yangtiezhu@loongson.cn
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	loongarch@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tianyang Zhang <zhangtianyang@loongson.cn>
+Subject: Re: [PATCH v5 2/2] irqchip/irq-loongarch-ir:Add Redirect irqchip
+ support
+Message-ID: <202510112232.3mPdCFd1-lkp@intel.com>
+References: <20251010022845.140234-3-zhangtianyang@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,58 +71,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251010022845.140234-3-zhangtianyang@loongson.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/rv-reactor-signal
-head:   5f1e83d0ead9b8fc09102bea3ac5c9c87daeb8a9
-commit: 2efa5e94593e45e512dfc2e6429f93c98e69479b [3/9] rv: Pass va_list to reactors
-config: x86_64-randconfig-008-20251011 (https://download.01.org/0day-ci/archive/20251011/202510112012.OM38qh6e-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510112012.OM38qh6e-lkp@intel.com/reproduce)
+Hi Tianyang,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tip/irq/core]
+[also build test WARNING on linus/master v6.17 next-20251010]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tianyang-Zhang/Docs-LoongArch-Add-Advanced-Extended-Redirect-IRQ-model-description/20251010-131542
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20251010022845.140234-3-zhangtianyang%40loongson.cn
+patch subject: [PATCH v5 2/2] irqchip/irq-loongarch-ir:Add Redirect irqchip support
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251011/202510112232.3mPdCFd1-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510112232.3mPdCFd1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510112012.OM38qh6e-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510112232.3mPdCFd1-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/trace/rv/monitors/sleep/sleep.c:219:26: error: static declaration of 'rv_sleep' follows non-static declaration
-     219 | static struct rv_monitor rv_sleep = {
-         |                          ^
-   include/rv/ltl_monitor.h:24:26: note: previous declaration is here
-      24 | extern struct rv_monitor RV_MONITOR_NAME;
-         |                          ^
-   include/rv/ltl_monitor.h:19:25: note: expanded from macro 'RV_MONITOR_NAME'
-      19 | #define RV_MONITOR_NAME CONCATENATE(rv_, MONITOR_NAME)
-         |                         ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:94:1: note: expanded from here
-      94 | rv_sleep
-         | ^
-   1 error generated.
+>> drivers/irqchip/irq-loongarch-ir.c:498:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     498 |         if (!redirect_domain) {
+         |             ^~~~~~~~~~~~~~~~
+   drivers/irqchip/irq-loongarch-ir.c:525:9: note: uninitialized use occurs here
+     525 |         return ret;
+         |                ^~~
+   drivers/irqchip/irq-loongarch-ir.c:498:2: note: remove the 'if' if its condition is always false
+     498 |         if (!redirect_domain) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+     499 |                 pr_err("Unable to alloc redirect domain\n");
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     500 |                 goto out_free_fwnode;
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+     501 |         }
+         |         ~
+   drivers/irqchip/irq-loongarch-ir.c:491:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     491 |         if (!fwnode) {
+         |             ^~~~~~~
+   drivers/irqchip/irq-loongarch-ir.c:525:9: note: uninitialized use occurs here
+     525 |         return ret;
+         |                ^~~
+   drivers/irqchip/irq-loongarch-ir.c:491:2: note: remove the 'if' if its condition is always false
+     491 |         if (!fwnode) {
+         |         ^~~~~~~~~~~~~~
+     492 |                 pr_err("Unable to alloc redirect domain handle\n");
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |                 goto fail;
+         |                 ~~~~~~~~~~
+     494 |         }
+         |         ~
+   drivers/irqchip/irq-loongarch-ir.c:488:9: note: initialize the variable 'ret' to silence this warning
+     488 |         int ret, node;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +/rv_sleep +219 kernel/trace/rv/monitors/sleep/sleep.c
+vim +498 drivers/irqchip/irq-loongarch-ir.c
 
-f74f8bb246cf22 Nam Cao 2025-07-09  218  
-f74f8bb246cf22 Nam Cao 2025-07-09 @219  static struct rv_monitor rv_sleep = {
-f74f8bb246cf22 Nam Cao 2025-07-09  220  	.name = "sleep",
-f74f8bb246cf22 Nam Cao 2025-07-09  221  	.description = "Monitor that RT tasks do not undesirably sleep",
-f74f8bb246cf22 Nam Cao 2025-07-09  222  	.enable = enable_sleep,
-f74f8bb246cf22 Nam Cao 2025-07-09  223  	.disable = disable_sleep,
-f74f8bb246cf22 Nam Cao 2025-07-09  224  };
-f74f8bb246cf22 Nam Cao 2025-07-09  225  
-
-:::::: The code at line 219 was first introduced by commit
-:::::: f74f8bb246cf22f27752977da62079cb615f55b2 rv: Add rtapp_sleep monitor
-
-:::::: TO: Nam Cao <namcao@linutronix.de>
-:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+   484	
+   485	int __init redirect_acpi_init(struct irq_domain *parent)
+   486	{
+   487		struct fwnode_handle *fwnode;
+   488		int ret, node;
+   489	
+   490		fwnode = irq_domain_alloc_named_fwnode("redirect");
+   491		if (!fwnode) {
+   492			pr_err("Unable to alloc redirect domain handle\n");
+   493			goto fail;
+   494		}
+   495	
+   496		redirect_domain = irq_domain_create_hierarchy(parent, 0, IRD_ENTRIES, fwnode,
+   497							      &redirect_domain_ops, irde_descs);
+ > 498		if (!redirect_domain) {
 
 -- 
 0-DAY CI Kernel Test Service
