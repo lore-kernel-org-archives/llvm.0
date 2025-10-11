@@ -1,69 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9633D6F;
-	Sat, 11 Oct 2025 05:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52FF221F00;
+	Sat, 11 Oct 2025 11:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760160803; cv=none; b=pGzFQBKQu9ILqiEy1i8eVbuyVZ/Oegxvoj6URKU/QoZ/WF8YtAV3hJTDzB0k1PMKkBdfHxhoOgPYbH9dbFBpuUDAqDCtcwxbxGbmpEVVBrD8u+F8kk2qkZHM69ZN9zex/n1QfJ/OpLemCF3mMh86M6XjjT6a0U0jMyA12vlLFO4=
+	t=1760182555; cv=none; b=WsVA1+JlWLdzDlXgNcPcCvOVlHlMjLWyY4TzpqdR9/jN15A0iqRhaFHAYLC85oyER1ychj1QV8KxuJs0CiLBFG1UoWC4UnV91u+scHeyeUN03T1Is9xC1p2gq9/NjEU/1bd2+ZirlR/IADs78gdetuXlKJgq5ujBUH7YUY+Carc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760160803; c=relaxed/simple;
-	bh=tICeZKtlPTGn6MN+AocuuzSNU12FNBC7lzLtzqfGuwQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jxzAQmnp8gETRqWHeNY4pt++TDGJToMDKcJLMBrK9Ey+fpWGHDL0RONS6MqrQe2islMV/ZneppT/h7LyitSXOCS3xayTED2uZqle3Ur0uJKt4j8ukXxwsDPqPKclFASdNT52Q1I6XE6O7aUfdg0lFIw/y/nwa4sOr8Fwq+SFvgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vk+03wve; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1760182555; c=relaxed/simple;
+	bh=Qwx9nE59ChClGj+2o6/qydJnGr/6bfEvsCpmFoxC8fA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KC9A8O4aUMStmoMjAEikXE57E8D6GzzHF+xvN+yey2p/N71V7L18eRR4JXeXKa+DT9pRqfiueOrZLApS6jKhaxQ6SoDtPXKQycJdT6XYMaoKo2CnM7bP2LaVWo4VL/ylkZPtnpMlE2wRI/E8nnLJP3yDXiiBAK2SudeF9I+NGaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hgFjQ26r; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vk+03wve"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgFjQ26r"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760160801; x=1791696801;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tICeZKtlPTGn6MN+AocuuzSNU12FNBC7lzLtzqfGuwQ=;
-  b=Vk+03wvenVJslzJufj+yYpmkYn0JVZ/nEPuJbKUbJK3Z0fKdgb48oLKJ
-   /T1HpInqBmky9zJf+zAUItkquPt4cwOi/fc2OsRHiJkdl/14SCGZnmbUH
-   8ag9SYYDk6STR3Wguy7Ok+uXvLZf+X5ILO++TC95G0OAcA62bhBcIbFg7
-   FHjfklxaU88v+414PYatXXsuIe/i6GsZM0QsVV2rEmmhxroMDWAeZNkr/
-   R5OLCmec5J42zYVkvQGZtzBps1AjLUVnk70Y3P9gt1UuXKke6OTS1o6Hb
-   MgGQa5umARsOep/s34WF+QSKEUQ5xjV1lbdhBesBAJ438O67OXDKTWo/n
-   Q==;
-X-CSE-ConnectionGUID: LV6mUlL5QIynUGo1GMp5nQ==
-X-CSE-MsgGUID: uIs1AGvNQqKrEJmIQ6a94A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62416213"
+  t=1760182549; x=1791718549;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Qwx9nE59ChClGj+2o6/qydJnGr/6bfEvsCpmFoxC8fA=;
+  b=hgFjQ26rYAjq6B8yipWWHARZJrCtOXqdQk0ukYlJ6x5sufhEMMiQArpY
+   K05ldDIOQosfF7rHRT3vcaYH5F73TYrI+gBK3DzmbKFaQSawmCqgAcPnt
+   ISf54y+LJgqD5Mli7U7tbs6HDcudjQm5rDpC446fg29Yk6gXN0JHeXjCw
+   I7nTdXVEajepffRiNvsYbPvaQnQOtojV2ONhqVrAJthc4hI1SoI8V3erO
+   r2oQ/gR6dMgjWlh1GDz8xJft42HKOCMqLH4uo4oplZ5w+9y8gI8jK7DAI
+   1rW1Qyc9NVRyRvFjQz5dWi75wuFCJ2olh1Df42CxCPQml8aO+9/rcAqZY
+   A==;
+X-CSE-ConnectionGUID: K9iR1QcoQyKtX/zLxoC1Fg==
+X-CSE-MsgGUID: 0XApFSZ+QAq45DVgUqOSlg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62087004"
 X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="62416213"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 22:33:20 -0700
-X-CSE-ConnectionGUID: IPZXp56TS/iOLDMQYGX7lQ==
-X-CSE-MsgGUID: C0av3SMDRfSz2cMTpx53hg==
+   d="scan'208";a="62087004"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 04:35:48 -0700
+X-CSE-ConnectionGUID: /TYwJ5OUTm2ImCH7+6gbCQ==
+X-CSE-MsgGUID: QY8AQaa3QDynOSJmVw0YQw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="212094623"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 10 Oct 2025 22:33:16 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 11 Oct 2025 04:35:47 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v7SEE-0003Xj-04;
-	Sat, 11 Oct 2025 05:33:14 +0000
-Date: Sat, 11 Oct 2025 13:32:51 +0800
+	id 1v7Xt3-0003jh-0V;
+	Sat, 11 Oct 2025 11:35:45 +0000
+Date: Sat, 11 Oct 2025 19:35:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sven =?iso-8859-1?Q?P=FCschel?= <s.pueschel@pengutronix.de>,
-	Jacob Chen <jacob-chen@iotwrt.com>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Brendan Jackman <jackmanb@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kernel@pengutronix.de,
-	Sven =?iso-8859-1?Q?P=FCschel?= <s.pueschel@pengutronix.de>
-Subject: Re: [PATCH 16/16] media: rockchip: rga: add rga3 support
-Message-ID: <202510111354.QeqIltfU-lkp@intel.com>
-References: <20251007-spu-rga3-v1-16-36ad85570402@pengutronix.de>
+	Junaid Shahid <junaids@google.com>,
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: [bjackman:asi/next 35/50] arch/x86/mm/tlb.c:1811:20: warning:
+ function 'cr3_matches_current_mm' is not needed and will not be emitted
+Message-ID: <202510111941.S3eziun0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,83 +61,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251007-spu-rga3-v1-16-36ad85570402@pengutronix.de>
 
-Hi Sven,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on afb100a5ea7a13d7e6937dcd3b36b19dc6cc9328]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sven-P-schel/media-rockchip-rga-use-clk_bulk-api/20251010-104411
-base:   afb100a5ea7a13d7e6937dcd3b36b19dc6cc9328
-patch link:    https://lore.kernel.org/r/20251007-spu-rga3-v1-16-36ad85570402%40pengutronix.de
-patch subject: [PATCH 16/16] media: rockchip: rga: add rga3 support
-config: riscv-randconfig-002-20251011 (https://download.01.org/0day-ci/archive/20251011/202510111354.QeqIltfU-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510111354.QeqIltfU-lkp@intel.com/reproduce)
+tree:   https://github.com/bjackman/linux asi/next
+head:   a6190e0f5b9d575cc97ef8289a7a6c5b0106fc4b
+commit: b81276f766968738ddea77183e5b16043384ee81 [35/50] mm: asi: Avoid warning from NMI userspace accesses in ASI context
+config: i386-buildonly-randconfig-002-20251011 (https://download.01.org/0day-ci/archive/20251011/202510111941.S3eziun0-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510111941.S3eziun0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510111354.QeqIltfU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510111941.S3eziun0-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/rockchip/rga/rga3-hw.c:144:15: warning: variable 'src_h' set but not used [-Wunused-but-set-variable]
-     144 |         unsigned int src_h, src_w, dst_h, dst_w;
-         |                      ^
->> drivers/media/platform/rockchip/rga/rga3-hw.c:144:22: warning: variable 'src_w' set but not used [-Wunused-but-set-variable]
-     144 |         unsigned int src_h, src_w, dst_h, dst_w;
-         |                             ^
->> drivers/media/platform/rockchip/rga/rga3-hw.c:144:29: warning: variable 'dst_h' set but not used [-Wunused-but-set-variable]
-     144 |         unsigned int src_h, src_w, dst_h, dst_w;
-         |                                    ^
->> drivers/media/platform/rockchip/rga/rga3-hw.c:144:36: warning: variable 'dst_w' set but not used [-Wunused-but-set-variable]
-     144 |         unsigned int src_h, src_w, dst_h, dst_w;
-         |                                           ^
-   4 warnings generated.
+>> arch/x86/mm/tlb.c:1811:20: warning: function 'cr3_matches_current_mm' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+    1811 | static inline bool cr3_matches_current_mm(void)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/src_h +144 drivers/media/platform/rockchip/rga/rga3-hw.c
+vim +/cr3_matches_current_mm +1811 arch/x86/mm/tlb.c
 
-   137	
-   138	static void rga3_cmd_set_win0_format(struct rga_ctx *ctx)
-   139	{
-   140		u32 *cmd = ctx->rga->cmdbuf_virt;
-   141		const struct rga3_fmt *in = ctx->in.fmt;
-   142		const struct rga3_fmt *out = ctx->out.fmt;
-   143		const struct v4l2_format_info *in_fmt, *out_fmt;
- > 144		unsigned int src_h, src_w, dst_h, dst_w;
-   145		bool r2y, y2r;
-   146		u8 rd_format;
-   147		unsigned int reg;
-   148	
-   149		src_h = ctx->in.crop.height;
-   150		src_w = ctx->in.crop.width;
-   151		dst_h = ctx->out.crop.height;
-   152		dst_w = ctx->out.crop.width;
-   153	
-   154		in_fmt = v4l2_format_info(in->fourcc);
-   155		out_fmt = v4l2_format_info(out->fourcc);
-   156		r2y = v4l2_is_format_rgb(in_fmt) && v4l2_is_format_yuv(out_fmt);
-   157		y2r = v4l2_is_format_yuv(in_fmt) && v4l2_is_format_rgb(out_fmt);
-   158	
-   159		if (in->semi_planar)
-   160			rd_format = RGA3_RDWR_FORMAT_SEMI_PLANAR;
-   161		else
-   162			rd_format = RGA3_RDWR_FORMAT_INTERLEAVED;
-   163	
-   164		reg = RGA3_WIN0_RD_CTRL - RGA3_FIRST_CMD_REG;
-   165		cmd[reg >> 2] |= FIELD_PREP(RGA3_WIN_PIC_FORMAT, in->hw_format)
-   166			      |  FIELD_PREP(RGA3_WIN_YC_SWAP, in->yc_swap)
-   167			      |  FIELD_PREP(RGA3_WIN_RBUV_SWAP, in->rbuv_swap)
-   168			      |  FIELD_PREP(RGA3_WIN_RD_FORMAT, rd_format)
-   169			      |  FIELD_PREP(RGA3_WIN_R2Y, r2y)
-   170			      |  FIELD_PREP(RGA3_WIN_Y2R, y2r)
-   171			      |  FIELD_PREP(RGA3_WIN_CSC_MODE, RGA3_WIN_CSC_MODE_BT601_F);
-   172	}
-   173	
+  1810	
+> 1811	static inline bool cr3_matches_current_mm(void)
+  1812	{
+  1813		struct asi *asi = asi_get_current();
+  1814		unsigned long pgd_asi = __pa(asi_pgd(asi));
+  1815		unsigned long pgd_cr3;
+  1816	
+  1817		/*
+  1818		 * Prevent read_cr3_pa -> [NMI, asi_exit] -> asi_get_current,
+  1819		 * otherwise we might find CR3 pointing to the ASI PGD but not
+  1820		 * find a current ASI domain.
+  1821		 */
+  1822		barrier();
+  1823		pgd_cr3 = read_cr3_pa();
+  1824		return pgd_cr3 == __pa(current->mm->pgd) || pgd_cr3 == pgd_asi;
+  1825	}
+  1826	
 
 -- 
 0-DAY CI Kernel Test Service
