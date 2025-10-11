@@ -1,58 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD20FC1D;
-	Sat, 11 Oct 2025 02:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FBCFC1D;
+	Sat, 11 Oct 2025 02:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760151485; cv=none; b=GjEn1FOSkRFiOXwR4v88qsArYSJbEdXCmK7fBFIWMxRs38qGx7uXTPJwMItHz5+AWnhr+wiRdSFttmPt4pYmJPKwguc2XEvbp4nDg9IPYHJzNP7i1UcXXyXRG/fwcSCZg6WAooegRba1x0c1rM+xAOIcnbsyp5/iHkz8JB453Xg=
+	t=1760151490; cv=none; b=g2OVHIjd7sQHSiGiS1FuG8E1p3EydzdPLCM8uYfvoEptY2twe5Ah3u4VtvzvT0iUFoOAb797k5kVpR1QtDznoSqf/dvTIor8eqFP6ZXa9IbGGKI/jC5JyR1aKKIur0mDNM4TYJEFJpbYQKO001aEYFeZWnA9VpCNOSua+rSDGs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760151485; c=relaxed/simple;
-	bh=mj86n2v/OForwGuqblsavUcP5koDEkJxj8E3q2tFfQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hrL9uhUZimLZ7Lw0OC23UABifiiKSVBF1mPh6d48j+pcEfWF3tNM/R+iYHX4gufGHK4Rz2739NYMjKX+5S87KwogT4QsLtUxBVnQTbWPYrn7zUFv+Vw2aSLIRuzjv3CA8+dnlk4EqihYnzpaP2SFsNxaiP+GwXvT1WEXOViwCbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TFRsX+5c; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1760151490; c=relaxed/simple;
+	bh=n3Cf2XbDxUMzoSgHrQU9R6SSN64Mq364sx/VyZ4IhmQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LCq0A0JsSTS5KchuuI8DlIemdBUj7LpKiRBDVEvbVgjrenfSzBudl3oyhkdS79mYN5JvxBJz6qHSyS65NgpVG1jKAHr6RPecHi3gPwvnHCMUMkktcvYiLwM1czPEtr7PEYgGbvpI5iRVIGFwlJ+8CEzymgrw/l9qdvWKmKrEvhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h5ZwjEFg; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TFRsX+5c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h5ZwjEFg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760151484; x=1791687484;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mj86n2v/OForwGuqblsavUcP5koDEkJxj8E3q2tFfQY=;
-  b=TFRsX+5cmx4bTNj92DUANXAe4bXeh5tI684sW1lLH/jaMgMULONWjXiY
-   1VWq5CzXMEEs13JsrV1gLRppjZq3c9LcgGUHTqtqsO8phM6+qyL5v/WLc
-   HhxgG5VOfOu7nxWdl6vkf4ZCzWmj9cxpCE246iK7HGlDBKzdnWd0ltOmm
-   YtgIV//pR3xP4RdiozpLm5fJca/oWTTz92iXfTojyYp+584OkUTyU5zk0
-   r5qBZ7urVa2Ygnbh1d4lzNm9SaQTPjuYgWEmnwxRj/NiJJng5MZvn319p
-   jPiy+CPJu91ku+6qSxV+niFsTo1zxBWNddXm565Y7WXvXu/HolQFZ8oX3
-   w==;
-X-CSE-ConnectionGUID: A04gwqUETuaO/zrR7JYbAw==
-X-CSE-MsgGUID: JKJXO/R9RRa6ARcX7THu+w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62466499"
+  t=1760151488; x=1791687488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n3Cf2XbDxUMzoSgHrQU9R6SSN64Mq364sx/VyZ4IhmQ=;
+  b=h5ZwjEFg4v885bhFR6KzxZj/fVVo0QmQYEBCj4x8S71fEJFdI1dASU06
+   zFzIpOTjNqmpxQm2g7TidzOJQA5uPLo2+4KZ1U/KM1K46mUqCYHy+dcg9
+   dSKHe+6GL98nfSb0Y9gtaTHEzfkvvYQFEPU0DUOQ7qMGRP8tz+FtLKEC4
+   YLldkWSZB+rc7FKW4SRs3eNFXkNyaVibW6WLLRLMs74bDpzzsf5zClGAk
+   V7WdzVE1OLrpd8K5vkh46HKyiE9X3FqRKQmVzoQWNGiU7b20OQLdmNH6T
+   Ff3J681rZ8fHoYcaTotchlpOzB7DB4MD2P6nwgWss5XFkGYQO7R1Ai5EW
+   g==;
+X-CSE-ConnectionGUID: 6xiYmb/oSrSxoDA7+2k37Q==
+X-CSE-MsgGUID: kZn4UH8ORtGN6khhAyHwww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62267673"
 X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="62466499"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 19:58:03 -0700
-X-CSE-ConnectionGUID: ENttCb7rRqy9283u5NBjeQ==
-X-CSE-MsgGUID: zUQtuHkSTLu7kGLruYc18g==
+   d="scan'208";a="62267673"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 19:58:07 -0700
+X-CSE-ConnectionGUID: YrfVI3RNRcqF0tl0N/g1FA==
+X-CSE-MsgGUID: kzR2Jx+RQBOJsvHCexOGmw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="180232778"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2025 19:58:02 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 10 Oct 2025 19:58:01 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v7Pny-0003S9-2L;
+	id 1v7Pny-0003S7-2G;
 	Sat, 11 Oct 2025 02:57:58 +0000
-Date: Sat, 11 Oct 2025 10:57:23 +0800
+Date: Sat, 11 Oct 2025 10:57:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:tmp 70/70] drivers/misc/lkdtm/perms.c:93:1: error: too few
- arguments provided to function-like macro invocation
-Message-ID: <202510111008.vwipraaS-lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, david@redhat.com,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	alexandru.elisei@arm.com, peterx@redhat.com, sj@kernel.org,
+	rppt@kernel.org, mhocko@suse.com, corbet@lwn.net, axboe@kernel.dk,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, hch@infradead.org,
+	jack@suse.cz, willy@infradead.org, m.szyprowski@samsung.com,
+	robin.murphy@arm.com, hannes@cmpxchg.org,
+	zhengqi.arch@bytedance.com, shakeel.butt@linux.dev,
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com,
+	minchan@kernel.org, surenb@google.com, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] mm/tests: add cleancache kunit test
+Message-ID: <202510111059.aKceYLLH-lkp@intel.com>
+References: <20251010011951.2136980-6-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,71 +70,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251010011951.2136980-6-surenb@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git tmp
-head:   49a325e76670a179209c1e93e63e70e74b73c230
-commit: 49a325e76670a179209c1e93e63e70e74b73c230 [70/70] Merge branch 'objtool/core' into x86/core
-config: x86_64-buildonly-randconfig-002-20251011 (https://download.01.org/0day-ci/archive/20251011/202510111008.vwipraaS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510111008.vwipraaS-lkp@intel.com/reproduce)
+Hi Suren,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 70478cb9da6fc4e7b987219173ba1681d5f7dd3d]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-implement-cleancache/20251010-134501
+base:   70478cb9da6fc4e7b987219173ba1681d5f7dd3d
+patch link:    https://lore.kernel.org/r/20251010011951.2136980-6-surenb%40google.com
+patch subject: [PATCH 5/8] mm/tests: add cleancache kunit test
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251011/202510111059.aKceYLLH-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510111059.aKceYLLH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510111008.vwipraaS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510111059.aKceYLLH-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/misc/lkdtm/perms.c:93:1: error: too few arguments provided to function-like macro invocation
-      93 | ANNOTATE_NOCFI_SYM(execute_location);
-         | ^
-   include/linux/annotate.h:113:72: note: expanded from macro 'ANNOTATE_NOCFI_SYM'
-     113 | #define ANNOTATE_NOCFI_SYM(sym)         asm(__ASM_ANNOTATE(sym, ANNOTYPE_NOCFI))
-         |                                                                               ^
-   include/linux/annotate.h:11:9: note: macro '__ASM_ANNOTATE' defined here
-      11 | #define __ASM_ANNOTATE(section, label, type)                            \
-         |         ^
-   drivers/misc/lkdtm/perms.c:93:1: error: expected string literal in 'asm'
-      93 | ANNOTATE_NOCFI_SYM(execute_location);
-         | ^
-   include/linux/annotate.h:113:38: note: expanded from macro 'ANNOTATE_NOCFI_SYM'
-     113 | #define ANNOTATE_NOCFI_SYM(sym)         asm(__ASM_ANNOTATE(sym, ANNOTYPE_NOCFI))
-         |                                             ^
-   2 errors generated.
+>> mm/tests/cleancache_kunit.c:358:6: warning: variable 'unused' set but not used [-Wunused-but-set-variable]
+     358 |         int unused = 0;
+         |             ^
+   1 warning generated.
 
 
-vim +93 drivers/misc/lkdtm/perms.c
+vim +/unused +358 mm/tests/cleancache_kunit.c
 
-72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  71  
-fb28a8862dc4b5 drivers/misc/lkdtm/perms.c Kees Cook        2024-04-30  72  static noinline __nocfi void execute_location(void *dst, bool write)
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  73  {
-72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  74  	void (*func)(void);
-72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  75  	func_desc_t fdesc;
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  76  
-05026ea01e95ff drivers/misc/lkdtm/perms.c Josh Poimboeuf   2025-03-24  77  	pr_info("attempting ok execution at %px\n", do_nothing_ptr);
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  78  	do_nothing();
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  79  
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  80  	if (write == CODE_WRITE) {
-05026ea01e95ff drivers/misc/lkdtm/perms.c Josh Poimboeuf   2025-03-24  81  		memcpy(dst, do_nothing_ptr, EXEC_SIZE);
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  82  		flush_icache_range((unsigned long)dst,
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  83  				   (unsigned long)dst + EXEC_SIZE);
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  84  	}
-72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  85  	pr_info("attempting bad execution at %px\n", dst);
-72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  86  	func = setup_function_descriptor(&fdesc, dst);
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  87  	func();
-464e86b4abadfc drivers/misc/lkdtm/perms.c Kees Cook        2020-06-25  88  	pr_err("FAIL: func returned\n");
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  89  }
-894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12  90  /*
-894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12  91   * Explicitly doing the wrong thing for testing.
-894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12  92   */
-894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12 @93  ANNOTATE_NOCFI_SYM(execute_location);
-0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  94  
-
-:::::: The code at line 93 was first introduced by commit
-:::::: 894af4a1cde61c3401f237184fb770f72ff12df8 objtool: Validate kCFI calls
-
-:::::: TO: Peter Zijlstra <peterz@infradead.org>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
+   353	
+   354	static void cleancache_backend_api_test(struct kunit *test)
+   355	{
+   356		struct folio *folio;
+   357		LIST_HEAD(folios);
+ > 358		int unused = 0;
+   359		int used = 0;
+   360	
+   361		/* Store inode folios into cleancache */
+   362		fill_cleancache(test);
+   363	
+   364		/* Get all donated folios back */
+   365		for (int fidx = 0; fidx < FOLIO_COUNT; fidx++) {
+   366			KUNIT_EXPECT_EQ(test, cleancache_backend_get_folio(test_data.pool_id,
+   367							test_data.pool_folios[fidx]),  0);
+   368			set_page_refcounted(&test_data.pool_folios[fidx]->page);
+   369		}
+   370	
+   371		/* Try putting a refcounted folio */
+   372		KUNIT_EXPECT_NE(test, cleancache_backend_put_folio(test_data.pool_id,
+   373						test_data.pool_folios[0]), 0);
+   374	
+   375		/* Put some of the folios back into cleancache */
+   376		for (int fidx = 0; fidx < FOLIOS_PER_INODE; fidx++) {
+   377			folio_ref_freeze(test_data.pool_folios[fidx], 1);
+   378			KUNIT_EXPECT_EQ(test, cleancache_backend_put_folio(test_data.pool_id,
+   379							test_data.pool_folios[fidx]), 0);
+   380		}
+   381	
+   382		/* Put the rest back into cleancache but keep half of folios still refcounted */
+   383		for (int fidx = FOLIOS_PER_INODE; fidx < FOLIO_COUNT; fidx++) {
+   384			if (fidx % 2) {
+   385				folio_ref_freeze(test_data.pool_folios[fidx], 1);
+   386				unused++;
+   387			} else {
+   388				used++;
+   389			}
+   390			list_add(&test_data.pool_folios[fidx]->lru, &folios);
+   391		}
+   392		KUNIT_EXPECT_NE(test, cleancache_backend_put_folios(test_data.pool_id,
+   393						&folios), 0);
+   394		/* Used folios should be still in the list */
+   395		KUNIT_EXPECT_EQ(test, list_count_nodes(&folios), used);
+   396	
+   397		/* Release refcounts and put the remaining folios into cleancache */
+   398		list_for_each_entry(folio, &folios, lru)
+   399			folio_ref_freeze(folio, 1);
+   400		KUNIT_EXPECT_EQ(test, cleancache_backend_put_folios(test_data.pool_id,
+   401						&folios), 0);
+   402		KUNIT_EXPECT_TRUE(test, list_empty(&folios));
+   403	}
+   404	
 
 -- 
 0-DAY CI Kernel Test Service
