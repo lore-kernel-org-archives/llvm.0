@@ -1,157 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCF9381AF;
-	Sat, 11 Oct 2025 01:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD20FC1D;
+	Sat, 11 Oct 2025 02:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760145174; cv=none; b=sra/NpDIFob/l2oF2x1eBCwtjtLmEL7JBjRtRw3GsN7LKCnYsIaraamiXDQLSms7Jz5jp6zSPNxbp56DMMMMk22DAXC6lhq0zMvB5UMQBmgnZC7FLyusrs7oF2yGkZ4FoWRzPX9fOLF7SneKkqZUaxx4zAtEEFtiBVixfxWmCV8=
+	t=1760151485; cv=none; b=GjEn1FOSkRFiOXwR4v88qsArYSJbEdXCmK7fBFIWMxRs38qGx7uXTPJwMItHz5+AWnhr+wiRdSFttmPt4pYmJPKwguc2XEvbp4nDg9IPYHJzNP7i1UcXXyXRG/fwcSCZg6WAooegRba1x0c1rM+xAOIcnbsyp5/iHkz8JB453Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760145174; c=relaxed/simple;
-	bh=2yr4MNhJ2DynXk5xGVrSco7oWPHvtBHXmPYgMBX2uoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c50WVMLfvUp4wKgMmrzkgTLd2f73yROoVKer/Q9YTC/O+O89o8roHrrwdWWAFlqDgWfqX1QK58Vw0RA+QmeRYURf1HUK+oGjrCHqtHVf7VbGay7X+U3VYl4XucLJqAFbwD7Jfo/Y5qV/YyjTMv1qmz56Fb964QUcABQz/gXWoas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=feGZXzzh; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1760151485; c=relaxed/simple;
+	bh=mj86n2v/OForwGuqblsavUcP5koDEkJxj8E3q2tFfQY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hrL9uhUZimLZ7Lw0OC23UABifiiKSVBF1mPh6d48j+pcEfWF3tNM/R+iYHX4gufGHK4Rz2739NYMjKX+5S87KwogT4QsLtUxBVnQTbWPYrn7zUFv+Vw2aSLIRuzjv3CA8+dnlk4EqihYnzpaP2SFsNxaiP+GwXvT1WEXOViwCbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TFRsX+5c; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="feGZXzzh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TFRsX+5c"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760145173; x=1791681173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2yr4MNhJ2DynXk5xGVrSco7oWPHvtBHXmPYgMBX2uoQ=;
-  b=feGZXzzh84IFy8Hua8CXL7LJ9g9eEZgh0fNSM0pd4Jy9LYnnPWZU9nCn
-   pvGjv1Al2IEsTDm99GrlZwItgvtJrhaALh2i03KQonAzbdFHV5BgFOi0t
-   31Himo8XHX33zwg0eDoM5Z83Qp+da2VNJ0itc5Q6Ia9vyerKUWPasMV5p
-   AVWzp5contqCtgPBTiBWubVHTjqJtjl1j5roGREKVweN+TEwjXCQBrxVj
-   JlkEjfgMZStjy91RB7RuT1DHZqNQppcf3ijqcaZbwWsd7TM2xs/vwUSqB
-   LTZDTZ4OaE48q3FbjUmFpdb/sOWS/W9982qj8rLJuvS0H3TtG529ZlWvG
-   g==;
-X-CSE-ConnectionGUID: 2NFdMxhBTYOsunAHZ3JDOA==
-X-CSE-MsgGUID: FnrwojYdQsKndSvW43RK4g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="66220395"
+  t=1760151484; x=1791687484;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mj86n2v/OForwGuqblsavUcP5koDEkJxj8E3q2tFfQY=;
+  b=TFRsX+5cmx4bTNj92DUANXAe4bXeh5tI684sW1lLH/jaMgMULONWjXiY
+   1VWq5CzXMEEs13JsrV1gLRppjZq3c9LcgGUHTqtqsO8phM6+qyL5v/WLc
+   HhxgG5VOfOu7nxWdl6vkf4ZCzWmj9cxpCE246iK7HGlDBKzdnWd0ltOmm
+   YtgIV//pR3xP4RdiozpLm5fJca/oWTTz92iXfTojyYp+584OkUTyU5zk0
+   r5qBZ7urVa2Ygnbh1d4lzNm9SaQTPjuYgWEmnwxRj/NiJJng5MZvn319p
+   jPiy+CPJu91ku+6qSxV+niFsTo1zxBWNddXm565Y7WXvXu/HolQFZ8oX3
+   w==;
+X-CSE-ConnectionGUID: A04gwqUETuaO/zrR7JYbAw==
+X-CSE-MsgGUID: JKJXO/R9RRa6ARcX7THu+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="62466499"
 X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="66220395"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 18:12:53 -0700
-X-CSE-ConnectionGUID: Q4dkzTb3TSyEga/NA6ryLw==
-X-CSE-MsgGUID: nAR+8PPyQLGUmxA+UFQIdA==
+   d="scan'208";a="62466499"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 19:58:03 -0700
+X-CSE-ConnectionGUID: ENttCb7rRqy9283u5NBjeQ==
+X-CSE-MsgGUID: zUQtuHkSTLu7kGLruYc18g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="204783188"
+   d="scan'208";a="180232778"
 Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Oct 2025 18:12:50 -0700
+  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2025 19:58:02 -0700
 Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v7OAC-0003Mt-0x;
-	Sat, 11 Oct 2025 01:12:48 +0000
-Date: Sat, 11 Oct 2025 09:12:24 +0800
+	id 1v7Pny-0003S9-2L;
+	Sat, 11 Oct 2025 02:57:58 +0000
+Date: Sat, 11 Oct 2025 10:57:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
-	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] Drivers: hv: Add support for movable memory
- regions
-Message-ID: <202510110819.km2ehSaB-lkp@intel.com>
-References: <175976319844.16834.4747024333732752980.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:tmp 70/70] drivers/misc/lkdtm/perms.c:93:1: error: too few
+ arguments provided to function-like macro invocation
+Message-ID: <202510111008.vwipraaS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <175976319844.16834.4747024333732752980.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 
-Hi Stanislav,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on next-20251010]
-[cannot apply to v6.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Kinsburskii/Drivers-hv-Refactor-and-rename-memory-region-handling-functions/20251010-111917
-base:   linus/master
-patch link:    https://lore.kernel.org/r/175976319844.16834.4747024333732752980.stgit%40skinsburskii-cloud-desktop.internal.cloudapp.net
-patch subject: [PATCH v4 5/5] Drivers: hv: Add support for movable memory regions
-config: x86_64-buildonly-randconfig-001-20251011 (https://download.01.org/0day-ci/archive/20251011/202510110819.km2ehSaB-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git tmp
+head:   49a325e76670a179209c1e93e63e70e74b73c230
+commit: 49a325e76670a179209c1e93e63e70e74b73c230 [70/70] Merge branch 'objtool/core' into x86/core
+config: x86_64-buildonly-randconfig-002-20251011 (https://download.01.org/0day-ci/archive/20251011/202510111008.vwipraaS-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110819.km2ehSaB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510111008.vwipraaS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510110819.km2ehSaB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510111008.vwipraaS-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/hmm.c:667:7: error: call to undeclared function 'mmu_interval_check_retry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     667 |                 if (mmu_interval_check_retry(range->notifier,
-         |                     ^
-   1 error generated.
+>> drivers/misc/lkdtm/perms.c:93:1: error: too few arguments provided to function-like macro invocation
+      93 | ANNOTATE_NOCFI_SYM(execute_location);
+         | ^
+   include/linux/annotate.h:113:72: note: expanded from macro 'ANNOTATE_NOCFI_SYM'
+     113 | #define ANNOTATE_NOCFI_SYM(sym)         asm(__ASM_ANNOTATE(sym, ANNOTYPE_NOCFI))
+         |                                                                               ^
+   include/linux/annotate.h:11:9: note: macro '__ASM_ANNOTATE' defined here
+      11 | #define __ASM_ANNOTATE(section, label, type)                            \
+         |         ^
+   drivers/misc/lkdtm/perms.c:93:1: error: expected string literal in 'asm'
+      93 | ANNOTATE_NOCFI_SYM(execute_location);
+         | ^
+   include/linux/annotate.h:113:38: note: expanded from macro 'ANNOTATE_NOCFI_SYM'
+     113 | #define ANNOTATE_NOCFI_SYM(sym)         asm(__ASM_ANNOTATE(sym, ANNOTYPE_NOCFI))
+         |                                             ^
+   2 errors generated.
 
 
-vim +/mmu_interval_check_retry +667 mm/hmm.c
+vim +93 drivers/misc/lkdtm/perms.c
 
-7b86ac3371b70c3 Christoph Hellwig 2019-08-28  634  
-9a4903e49e495bf Christoph Hellwig 2019-07-25  635  /**
-9a4903e49e495bf Christoph Hellwig 2019-07-25  636   * hmm_range_fault - try to fault some address in a virtual address range
-f970b977e068aa5 Jason Gunthorpe   2020-03-27  637   * @range:	argument structure
-9a4903e49e495bf Christoph Hellwig 2019-07-25  638   *
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  639   * Returns 0 on success or one of the following error codes:
-73231612dc7c907 Jérôme Glisse     2019-05-13  640   *
-9a4903e49e495bf Christoph Hellwig 2019-07-25  641   * -EINVAL:	Invalid arguments or mm or virtual address is in an invalid vma
-9a4903e49e495bf Christoph Hellwig 2019-07-25  642   *		(e.g., device file vma).
-73231612dc7c907 Jérôme Glisse     2019-05-13  643   * -ENOMEM:	Out of memory.
-9a4903e49e495bf Christoph Hellwig 2019-07-25  644   * -EPERM:	Invalid permission (e.g., asking for write and range is read
-9a4903e49e495bf Christoph Hellwig 2019-07-25  645   *		only).
-9a4903e49e495bf Christoph Hellwig 2019-07-25  646   * -EBUSY:	The range has been invalidated and the caller needs to wait for
-9a4903e49e495bf Christoph Hellwig 2019-07-25  647   *		the invalidation to finish.
-f970b977e068aa5 Jason Gunthorpe   2020-03-27  648   * -EFAULT:     A page was requested to be valid and could not be made valid
-f970b977e068aa5 Jason Gunthorpe   2020-03-27  649   *              ie it has no backing VMA or it is illegal to access
-74eee180b935fcb Jérôme Glisse     2017-09-08  650   *
-f970b977e068aa5 Jason Gunthorpe   2020-03-27  651   * This is similar to get_user_pages(), except that it can read the page tables
-f970b977e068aa5 Jason Gunthorpe   2020-03-27  652   * without mutating them (ie causing faults).
-74eee180b935fcb Jérôme Glisse     2017-09-08  653   */
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  654  int hmm_range_fault(struct hmm_range *range)
-74eee180b935fcb Jérôme Glisse     2017-09-08  655  {
-d28c2c9a487708b Ralph Campbell    2019-11-04  656  	struct hmm_vma_walk hmm_vma_walk = {
-d28c2c9a487708b Ralph Campbell    2019-11-04  657  		.range = range,
-d28c2c9a487708b Ralph Campbell    2019-11-04  658  		.last = range->start,
-d28c2c9a487708b Ralph Campbell    2019-11-04  659  	};
-a22dd506400d0f4 Jason Gunthorpe   2019-11-12  660  	struct mm_struct *mm = range->notifier->mm;
-74eee180b935fcb Jérôme Glisse     2017-09-08  661  	int ret;
-74eee180b935fcb Jérôme Glisse     2017-09-08  662  
-42fc541404f2497 Michel Lespinasse 2020-06-08  663  	mmap_assert_locked(mm);
-74eee180b935fcb Jérôme Glisse     2017-09-08  664  
-a3e0d41c2b1f86b Jérôme Glisse     2019-05-13  665  	do {
-a3e0d41c2b1f86b Jérôme Glisse     2019-05-13  666  		/* If range is no longer valid force retry. */
-a22dd506400d0f4 Jason Gunthorpe   2019-11-12 @667  		if (mmu_interval_check_retry(range->notifier,
-a22dd506400d0f4 Jason Gunthorpe   2019-11-12  668  					     range->notifier_seq))
-2bcbeaefde2f038 Christoph Hellwig 2019-07-24  669  			return -EBUSY;
-d28c2c9a487708b Ralph Campbell    2019-11-04  670  		ret = walk_page_range(mm, hmm_vma_walk.last, range->end,
-7b86ac3371b70c3 Christoph Hellwig 2019-08-28  671  				      &hmm_walk_ops, &hmm_vma_walk);
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  672  		/*
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  673  		 * When -EBUSY is returned the loop restarts with
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  674  		 * hmm_vma_walk.last set to an address that has not been stored
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  675  		 * in pfns. All entries < last in the pfn array are set to their
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  676  		 * output, and all >= are still at their input values.
-be957c886d92aa9 Jason Gunthorpe   2020-05-01  677  		 */
-d28c2c9a487708b Ralph Campbell    2019-11-04  678  	} while (ret == -EBUSY);
-73231612dc7c907 Jérôme Glisse     2019-05-13  679  	return ret;
-74eee180b935fcb Jérôme Glisse     2017-09-08  680  }
-73231612dc7c907 Jérôme Glisse     2019-05-13  681  EXPORT_SYMBOL(hmm_range_fault);
-8cad47130566123 Leon Romanovsky   2025-04-28  682  
+72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  71  
+fb28a8862dc4b5 drivers/misc/lkdtm/perms.c Kees Cook        2024-04-30  72  static noinline __nocfi void execute_location(void *dst, bool write)
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  73  {
+72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  74  	void (*func)(void);
+72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  75  	func_desc_t fdesc;
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  76  
+05026ea01e95ff drivers/misc/lkdtm/perms.c Josh Poimboeuf   2025-03-24  77  	pr_info("attempting ok execution at %px\n", do_nothing_ptr);
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  78  	do_nothing();
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  79  
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  80  	if (write == CODE_WRITE) {
+05026ea01e95ff drivers/misc/lkdtm/perms.c Josh Poimboeuf   2025-03-24  81  		memcpy(dst, do_nothing_ptr, EXEC_SIZE);
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  82  		flush_icache_range((unsigned long)dst,
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  83  				   (unsigned long)dst + EXEC_SIZE);
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  84  	}
+72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  85  	pr_info("attempting bad execution at %px\n", dst);
+72a86433049dcf drivers/misc/lkdtm/perms.c Christophe Leroy 2022-02-15  86  	func = setup_function_descriptor(&fdesc, dst);
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  87  	func();
+464e86b4abadfc drivers/misc/lkdtm/perms.c Kees Cook        2020-06-25  88  	pr_err("FAIL: func returned\n");
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  89  }
+894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12  90  /*
+894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12  91   * Explicitly doing the wrong thing for testing.
+894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12  92   */
+894af4a1cde61c drivers/misc/lkdtm/perms.c Peter Zijlstra   2025-04-12 @93  ANNOTATE_NOCFI_SYM(execute_location);
+0d9eb29b13f0e3 drivers/misc/lkdtm_perms.c Kees Cook        2016-06-26  94  
+
+:::::: The code at line 93 was first introduced by commit
+:::::: 894af4a1cde61c3401f237184fb770f72ff12df8 objtool: Validate kCFI calls
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
 -- 
 0-DAY CI Kernel Test Service
