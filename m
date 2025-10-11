@@ -1,196 +1,119 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA6E202F65
-	for <llvm@lists.linux.dev>; Sat, 11 Oct 2025 21:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD2E188580;
+	Sat, 11 Oct 2025 22:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760219258; cv=none; b=lAO9rdmVgZ1LXmLXtICyxPpcYVgXhILkxV8kbVi0uosB3gooVub7CRfweLMQpWYjj8gdpd/k2PPEqv0B59+2uxsPkRQbKRXj1fGMHHCbB5oaI1rYab57Jo/7/k7KcFiw+dV8yB7Sh0iMcKGWHksmf1tsKDECKUsvvgiUGlwCLFQ=
+	t=1760221787; cv=none; b=hOeQGs1DpYzNjVcYuH8bFtCcIj3LAD7N7uWQuffBorpHMTXajCoAr+BUTzSHWGwCtHyyHDXgN/xFHkygzD76+mZd89KI0dWaDt0NhXBN4s6XqHrVi6ls3jg/l9MjPga5nmPLrY8PraZoIsfZGuQRv4YyG+G5gAmONA62H+prkj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760219258; c=relaxed/simple;
-	bh=k3isVL9WAak5fCunvMYwDOeBvT+ja7+ZdbuXDmgU/9M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o541YCFPGd5vQjBR2gALUzzWo9dYmNnF83E/D7abV/r/4P2YW7s2SiuBzcvqYOnymEiDiwx4x7/4GCRuV/KHRUpnoG30ANx07ZwryGC31jj+LmCoiW2LvxGWWKsu6D3zk/9EIBwMGTrlrmT33Akjv67+FENoCyJp2mbHJxiJWEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mo6mhW/3; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1760221787; c=relaxed/simple;
+	bh=9ftHdqHrokZcQXhNcrNBSsyfRb38s2MdEhcqUsS5UxA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SSs3Ib9Tlydz3N1W/R4pzdscOfbT8PZ3OdrC/ilVNiYv2izRJG24FrpUZC644yrRxIkk3y2cHjOrrFpo6/im0twIj99gR8Xd+LzyoPuFhMyx278ZrmVH4rV4vIpsP8eVmxB0voTKmuyh6vRE12elSVuvZECRx5HYsGQTUbq3AoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iEH1qPYD; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mo6mhW/3"
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-4308afd43f0so418245ab.0
-        for <llvm@lists.linux.dev>; Sat, 11 Oct 2025 14:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760219256; x=1760824056; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=edG0NGbrr85u0FtLnw6wkiSc/A0YKw/98Yub9scsGaw=;
-        b=Mo6mhW/3O5V3ytn4K5kQmbdrgljxlFeEWns7TKtQM4A84VtYd85sV2wWIR5/dCqggE
-         fQhe6dHI2szOpWAT3ABci9/wN7GRx/7wQuIGIx3xDYXutMpXiobSmdG+Iefs07lDWaOt
-         Tl8PQe4vqmlE2tA5WybP8/KeR7MocX4mJXdJ10va/LEpcJ8/JJjvNNGdTB6xit88qaJG
-         VCq72pRhgJlLv/KjTWwzzBmaiEmGuGhoXInM3c2WZQlnIyxMhJ8NfWovnviUGgN/8Xdr
-         b3mB8ivqPwA86F7WkTMTPkkGyQC+Z7Rfj0Z5RGRr9zP0bFK2fY0dpzc500mJI6rtYbPI
-         P/jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760219256; x=1760824056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=edG0NGbrr85u0FtLnw6wkiSc/A0YKw/98Yub9scsGaw=;
-        b=LcylzfatYcdAfQZ46KqmFA8oM/u4DOlGdtdmUnRw9hHxQ/JAwoBiS266wLWrUypLwF
-         63mPY+8xW2sq+9JYUck2YhYK8qbZp+srz/4Q63SPJZbmrsGaxk9sZToEhtEm8xFAxMkF
-         nRB0yP1EKSmJkmvji0g9183Y5zluK3CJ7emjTqX8RMzY0y440RhcQ06rfuCvkoApI3j2
-         aVy3vA7YbiNVI/4QqWgKFCVlVxsJ4Winq8VbWfUJXcLrUrkxHF+kb7f5mdWs0NXJX/fp
-         ClPmf9i5gs9C5L5lC/aPB1FuqTiuRtlizq7XUZLwJe9npWnCaiI9ayXSnxQ/9B8PBBtS
-         i3Ng==
-X-Forwarded-Encrypted: i=1; AJvYcCU8XOmkLoC4XMfh3mVmTLw8R5QCktF0Xr1EquTlNXdKAhvW0B7t44HbUNkiUJDGRKWnihSJ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzda2Goykb4hBHfwIaRVKWPNIJjoKIcRsS2VZsJRhd8Z9K1tNNr
-	8RgJZcSeRAnPW5Gcprg4Al6MWjeXrjLWP+WZw7j/BNqxF8DwEkzywL8vFtfeEurT/VY24gJDg0V
-	3N/Ab3bYcu4enOcAWtB0I3WAnMp3nGs1ShWVRfvgU
-X-Gm-Gg: ASbGncuwbbfQ1Vq3BFoVK78Psm3bj0Pm6rxLEa4AGj4jkI31+hB5+qQi9w5mniR+Ldk
-	9fXGY5pj5otUxvyfgOAqNMb0kDOM54Wz1goF8ahaSYPb/kU0DlJMGUKAWTC6m0K10CvtL811KR+
-	7A03KRePREZAtJ9kNlxuEj1WHWxYxI2nrEGZ3P+PzeYn4xudelNWWknBXE1uHUqRlgJsQBIVHmd
-	SCOBTTfg2UjMV+B0epBlEVYlUvXwrQ=
-X-Google-Smtp-Source: AGHT+IFFaqWGr6zppAMQlQaEOPe0SaZYdxA84DzbcLcqHShRGwrEbPejok43SDIXTETu3rLoVc/dTHFUc/Jq0m7QB2s=
-X-Received: by 2002:a05:622a:808d:b0:4e6:eaea:af3f with SMTP id
- d75a77b69052e-4e6eaeaaf5dmr21268691cf.3.1760219255521; Sat, 11 Oct 2025
- 14:47:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEH1qPYD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760221786; x=1791757786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9ftHdqHrokZcQXhNcrNBSsyfRb38s2MdEhcqUsS5UxA=;
+  b=iEH1qPYDh+bttozWoB9budNuMO0KxcnYiyunQLEeFZeFyekztSmHT8xi
+   s77AKp9Ksu31UT15gaGTmSU6u8xFJ6fhXC35lW8l9OPsIMv7AFslgMZYy
+   wZl6SNOLPCkIDvkFw7HOOByPlKh9dXQFXeZpIRn1ohMTWlFsShv43bYMo
+   PIdcvvWmuF2icDwoFnZ6iUucqTkb4Jq8u095V4rhINp6cqVvV+Iw98ezm
+   38TGqsYBwF8oU5F9bqdfozKjQgmza7Sr3zjzvocCEFBqPFC/ZR0MJcgXh
+   GMAMsHZxUeKr8WmYgLCpcTcuh5PyI1V7ENITU47+QQC7rnWo8qgJZk8DX
+   A==;
+X-CSE-ConnectionGUID: AZG4Fta7SEeEM9RrUpF+lg==
+X-CSE-MsgGUID: zgnLYbHiQ2yGWFLR+5S3Pw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11579"; a="72660431"
+X-IronPort-AV: E=Sophos;i="6.19,221,1754982000"; 
+   d="scan'208";a="72660431"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 15:29:45 -0700
+X-CSE-ConnectionGUID: 6aRIkqUKSgqrljdR0Y68Gg==
+X-CSE-MsgGUID: VJALYLfTRNSHXLaG4Pa2/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,221,1754982000"; 
+   d="scan'208";a="181682031"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 11 Oct 2025 15:29:40 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v7i5p-00041T-2l;
+	Sat, 11 Oct 2025 22:29:37 +0000
+Date: Sun, 12 Oct 2025 06:28:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Yishai Hadas <yishaih@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	Matthew Brost <matthew.brost@intel.com>,
+	Michal Wajdeczko <michal.wajdeczko@intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Lukasz Laguna <lukasz.laguna@intel.com>,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+Subject: Re: [PATCH 07/26] drm/xe/pf: Add support for encap/decap of
+ bitstream to/from packet
+Message-ID: <202510120631.vW6dpp07-lkp@intel.com>
+References: <20251011193847.1836454-8-michal.winiarski@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251010011951.2136980-6-surenb@google.com> <202510111059.aKceYLLH-lkp@intel.com>
-In-Reply-To: <202510111059.aKceYLLH-lkp@intel.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Sat, 11 Oct 2025 14:47:24 -0700
-X-Gm-Features: AS18NWDufVi4cEGnv1sKGIKBBNV8Et6IGfR8sPmz2Ei8b77bsJTwPJgzvhpHvVI
-Message-ID: <CAJuCfpHKr392MiS=gnjpomwdzTnesgBpXSkVk5h87wLJwo7qVQ@mail.gmail.com>
-Subject: Re: [PATCH 5/8] mm/tests: add cleancache kunit test
-To: kernel test robot <lkp@intel.com>
-Cc: akpm@linux-foundation.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, david@redhat.com, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, vbabka@suse.cz, alexandru.elisei@arm.com, 
-	peterx@redhat.com, sj@kernel.org, rppt@kernel.org, mhocko@suse.com, 
-	corbet@lwn.net, axboe@kernel.dk, viro@zeniv.linux.org.uk, brauner@kernel.org, 
-	hch@infradead.org, jack@suse.cz, willy@infradead.org, 
-	m.szyprowski@samsung.com, robin.murphy@arm.com, hannes@cmpxchg.org, 
-	zhengqi.arch@bytedance.com, shakeel.butt@linux.dev, axelrasmussen@google.com, 
-	yuanchu@google.com, weixugc@google.com, minchan@kernel.org, 
-	linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251011193847.1836454-8-michal.winiarski@intel.com>
 
-On Fri, Oct 10, 2025 at 7:58=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Suren,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on 70478cb9da6fc4e7b987219173ba1681d5f7dd3d]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan=
-/mm-implement-cleancache/20251010-134501
-> base:   70478cb9da6fc4e7b987219173ba1681d5f7dd3d
-> patch link:    https://lore.kernel.org/r/20251010011951.2136980-6-surenb%=
-40google.com
-> patch subject: [PATCH 5/8] mm/tests: add cleancache kunit test
-> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/2=
-0251011/202510111059.aKceYLLH-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd70=
-8029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251011/202510111059.aKceYLLH-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202510111059.aKceYLLH-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> mm/tests/cleancache_kunit.c:358:6: warning: variable 'unused' set but =
-not used [-Wunused-but-set-variable]
->      358 |         int unused =3D 0;
->          |             ^
->    1 warning generated.
+Hi Michał,
 
-Right, I'll remove it.
+kernel test robot noticed the following build warnings:
 
->
->
-> vim +/unused +358 mm/tests/cleancache_kunit.c
->
->    353
->    354  static void cleancache_backend_api_test(struct kunit *test)
->    355  {
->    356          struct folio *folio;
->    357          LIST_HEAD(folios);
->  > 358          int unused =3D 0;
->    359          int used =3D 0;
->    360
->    361          /* Store inode folios into cleancache */
->    362          fill_cleancache(test);
->    363
->    364          /* Get all donated folios back */
->    365          for (int fidx =3D 0; fidx < FOLIO_COUNT; fidx++) {
->    366                  KUNIT_EXPECT_EQ(test, cleancache_backend_get_foli=
-o(test_data.pool_id,
->    367                                                  test_data.pool_fo=
-lios[fidx]),  0);
->    368                  set_page_refcounted(&test_data.pool_folios[fidx]-=
->page);
->    369          }
->    370
->    371          /* Try putting a refcounted folio */
->    372          KUNIT_EXPECT_NE(test, cleancache_backend_put_folio(test_d=
-ata.pool_id,
->    373                                          test_data.pool_folios[0])=
-, 0);
->    374
->    375          /* Put some of the folios back into cleancache */
->    376          for (int fidx =3D 0; fidx < FOLIOS_PER_INODE; fidx++) {
->    377                  folio_ref_freeze(test_data.pool_folios[fidx], 1);
->    378                  KUNIT_EXPECT_EQ(test, cleancache_backend_put_foli=
-o(test_data.pool_id,
->    379                                                  test_data.pool_fo=
-lios[fidx]), 0);
->    380          }
->    381
->    382          /* Put the rest back into cleancache but keep half of fol=
-ios still refcounted */
->    383          for (int fidx =3D FOLIOS_PER_INODE; fidx < FOLIO_COUNT; f=
-idx++) {
->    384                  if (fidx % 2) {
->    385                          folio_ref_freeze(test_data.pool_folios[fi=
-dx], 1);
->    386                          unused++;
->    387                  } else {
->    388                          used++;
->    389                  }
->    390                  list_add(&test_data.pool_folios[fidx]->lru, &foli=
-os);
->    391          }
->    392          KUNIT_EXPECT_NE(test, cleancache_backend_put_folios(test_=
-data.pool_id,
->    393                                          &folios), 0);
->    394          /* Used folios should be still in the list */
->    395          KUNIT_EXPECT_EQ(test, list_count_nodes(&folios), used);
->    396
->    397          /* Release refcounts and put the remaining folios into cl=
-eancache */
->    398          list_for_each_entry(folio, &folios, lru)
->    399                  folio_ref_freeze(folio, 1);
->    400          KUNIT_EXPECT_EQ(test, cleancache_backend_put_folios(test_=
-data.pool_id,
->    401                                          &folios), 0);
->    402          KUNIT_EXPECT_TRUE(test, list_empty(&folios));
->    403  }
->    404
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on next-20251010]
+[cannot apply to awilliam-vfio/next drm-i915/for-linux-next drm-i915/for-linux-next-fixes linus/master awilliam-vfio/for-linus v6.17]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Winiarski/drm-xe-pf-Remove-GuC-version-check-for-migration-support/20251012-034301
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20251011193847.1836454-8-michal.winiarski%40intel.com
+patch subject: [PATCH 07/26] drm/xe/pf: Add support for encap/decap of bitstream to/from packet
+config: riscv-randconfig-002-20251012 (https://download.01.org/0day-ci/archive/20251012/202510120631.vW6dpp07-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251012/202510120631.vW6dpp07-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510120631.vW6dpp07-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: drivers/gpu/drm/xe/xe_sriov_pf_migration_data.c:272 function parameter 'xe' not described in 'xe_sriov_pf_migration_data_read'
+>> Warning: drivers/gpu/drm/xe/xe_sriov_pf_migration_data.c:382 function parameter 'xe' not described in 'xe_sriov_pf_migration_data_write'
+>> Warning: drivers/gpu/drm/xe/xe_sriov_pf_migration_data.c:467 function parameter 'xe' not described in 'xe_sriov_pf_migration_data_save_init'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
