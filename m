@@ -1,215 +1,188 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C081A2C04;
-	Sun, 12 Oct 2025 02:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760235257; cv=fail; b=rqOxNYwtmNue16m/TtpWG7Mje4uc66Iw7pyubmEpaYgP9oJsVAZwUx7yhapzwg2++SJIjALUaQzoLm5kkovRXN8uZTR0a9IZC+hZL/atENkGYeuqywX9XUEy9ZPWnAKDVAC8YJMmcQtrvIP5rIJMOsC/3ZPCuWgsFJ7tt2zAVoQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760235257; c=relaxed/simple;
-	bh=VrKTHJ8o/CRNG13HUlixDTPeSq64DoLsyHgxvmFXtGc=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=t0vHUPMRbaLsa4zjs3z6dbqwhy4ZwFUsALV7/klpWmKLEcZqYn3ZJyk2UIWY5HUjgNVe7Zpt9Xd7ujhDGY4wG1hzSxGJ1EbKAhG0wAyNtMwKwJgyAh+5JQLs9WtZLrCs0oQQTJHWJ4bVz5mE9d7yrvm7rk3oP1Lpeq0cOJVqc5o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HdrZJlGY; arc=fail smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E8D2B2D7;
+	Sun, 12 Oct 2025 03:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760238790; cv=none; b=gHvyi6PJalkpDCY6/1zoUeRPGoEWWxqjYi3GvkZyFzv7K8gp3JUEXZeuW6FmSEASwnKYnTuSmlDoPjZGt+ov7TnPXa/h0e0IiU18IWKPdsyKSHtamBmu+4TDaCPx3QlgoozoiiA3JfqF/S01cwGKQRPfmkpEKqZTWrrEzS9QRQQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760238790; c=relaxed/simple;
+	bh=LgCBazIKENUMWDtTVXVJ1949c/UQTOe/HuPTUIj7gzU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c1UVfxm4xrYrAf2pZlRe22WUATJvC4HeBajRZS+6MtKJ5M+8K41I8in/bA+Zj3oXeioo5JiOe+z0jA0eF8vThWMb0UBJA1Z4mmhrdwXx845Ee+uwjwHu9ELTodg+UO+VtZHNqUXo+a6+3qJ7Bn+OeOs9TzJWwWRw/bwXCGQA7lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cp74K/rB; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HdrZJlGY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cp74K/rB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760235256; x=1791771256;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   mime-version;
-  bh=VrKTHJ8o/CRNG13HUlixDTPeSq64DoLsyHgxvmFXtGc=;
-  b=HdrZJlGYyaSAsu9awRRdXHf9jCLyAk3Cp+wrYQGmGm6Q1eoF08TX/B1H
-   6aeJhsSSDE3FZuuu1Q/3/F7g5H4SJzAdd/8dwyOmNVjAPUW8Ja7JJM0+1
-   8f55LqcQNWHEEukCL+JMBRdVbb27mvDs6mjhUBIgCcknrasKQ5lVc4NXF
-   TdHlKBjIGmHeI1YgEVZxw8kH/JHnVjJdbjXJS6VKDZngbz+VM0TjIzwbo
-   6/rc2vUM6HI6nzdH14OJvBKwsNu3EQA7ATy1yxyrmXNwZzpWVP5O5cjrr
-   jI/+5z4BealRtbsXXRAhrd6R3kJyaZYKLhodlTpmHn/4sKQh0NgxVDcO3
-   g==;
-X-CSE-ConnectionGUID: iO7CcDHST0isk+SP4W5gfw==
-X-CSE-MsgGUID: Oz/L5zQMTXeQenrN2wIhUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11579"; a="72666447"
+  t=1760238789; x=1791774789;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LgCBazIKENUMWDtTVXVJ1949c/UQTOe/HuPTUIj7gzU=;
+  b=cp74K/rB8bINCGi8m0gcGQ5KqijxFPZC0w86YJ+OsHUBA4SczlC0LAv3
+   qmqPo+IUGp73tIwQml19KhfSG/bCRWg4Roo0EYMbwjZCl712d6Gdj5qeO
+   p+vVdqThFgnnGFOeBdvx0NeJ6qkRZ6qjBKFzkLxXg3dBG8X3L70Ao+vfe
+   0+yXQkeL8YEu4w/fDim5U4w9OyfBcaQMr0RBQ+ZoHEKYDSrj9GosoBkA+
+   D4wk/NozAAf/2PQ1SsAVyahA1Cb753D6QOdjLB28WoX6WdhMw/DV/eNOl
+   1Nodfw1/bCxNKaW4a7LHQ0RPA7ZkmEV7bzkMZHuPwX1LXYcOHZLWXxaXN
+   w==;
+X-CSE-ConnectionGUID: zNATSHXWTUeJZigRkouEIw==
+X-CSE-MsgGUID: CmI3aUmZQH+iibxlOaDojQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11579"; a="62510333"
 X-IronPort-AV: E=Sophos;i="6.19,222,1754982000"; 
-   d="scan'208";a="72666447"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 19:14:16 -0700
-X-CSE-ConnectionGUID: AYRGlBRFT2eJlxeByHN5lg==
-X-CSE-MsgGUID: H2BHDYi7QdiHV7aher7e8g==
+   d="scan'208";a="62510333"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 20:13:07 -0700
+X-CSE-ConnectionGUID: QdHrMtJ9SPmASB0zARVHzA==
+X-CSE-MsgGUID: mgmTFntXSbm6mXD79aJaQg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,222,1754982000"; 
-   d="scan'208";a="181240788"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2025 19:14:15 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Sat, 11 Oct 2025 19:14:14 -0700
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Sat, 11 Oct 2025 19:14:14 -0700
-Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.44) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Sat, 11 Oct 2025 19:14:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ccBg2+HJnd45VCI1X24WBFP8Dn1u00D7nC9TzIaDn2zcr31I2HGXusYWCUjs2JxalwpiDxyHs6D01TqqR7RDDp6m0Cub2td7w+oY0AqGPCbl/SQHylPgkBhj+7xpAxV7DCTu1CxIIV2TFxXzelupS/IODwapJpzFPPZmRObK2unQXXbdnz7plRKTEr1+D9LqOOGIX/IAfWcJ+aIUDWrSZa8PqhrtTLVth7tO+h9y3hagAri9ej1UuI4oIb13T2xdvfrUUvqYOM9+UrqhDFyE7mP8CDdXzLKhEbXUFdM/aIvF+7ROWl/TCecwXgSBpnDXY3M0ADGGijWH9Ta5zMX5IQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vGBel2hCjF1ZawHai/6r4uXCahVRyHqD7JgFny28E9A=;
- b=btBlZoKQ21nFcwXifzUw88PBMfxZMBf/8RZ96aAqE7jEmbRTb3yNsN1xygEn/0SkF2I27DMlbLfBZezMTuPaQ5lgAetBScbcVPg4ftLn5W+YhZaS/l/AMlHqzAklZnfqCC28IV+BDqfyKNoM2rxQl1lrSdJ6lDPiTDUB7/17vzlICRaKQmLuRuTwdU0GyIm31+ESlLS5n9ojxgapCTAqImuTYPa0qMxIxTGTJPCMlR75GAujr8RjXYRigxOkaWExa2gYJnJgp81FhagVbTWB8rB7h4zdYO4u6S0NaI3jCHiYtE5Q2ey8JyutsvKhK40EIBMk6VgHvjhWIrOjsSjC1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26)
- by SJ0PR11MB7153.namprd11.prod.outlook.com (2603:10b6:a03:48d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.10; Sun, 12 Oct
- 2025 02:14:12 +0000
-Received: from BY5PR11MB4165.namprd11.prod.outlook.com
- ([fe80::d9f7:7a66:b261:8891]) by BY5PR11MB4165.namprd11.prod.outlook.com
- ([fe80::d9f7:7a66:b261:8891%7]) with mapi id 15.20.9203.009; Sun, 12 Oct 2025
- 02:14:12 +0000
-Date: Sun, 12 Oct 2025 10:13:58 +0800
+   d="scan'208";a="186583057"
+Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 11 Oct 2025 20:13:03 -0700
+Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v7mW5-0004AR-0j;
+	Sun, 12 Oct 2025 03:13:01 +0000
+Date: Sun, 12 Oct 2025 11:12:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: <xur@google.com>, Alexey Gladkov <legion@kernel.org>, Alice Ryhl
-	<aliceryhl@google.com>, Ard Biesheuvel <ardb@kernel.org>, Bill Wendling
-	<morbo@google.com>, Han Shen <shenhan@google.com>, Ingo Molnar
-	<mingo@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Justin Stitt
-	<justinstitt@google.com>, Kees Cook <kees@kernel.org>, Linus Walleij
-	<linus.walleij@linaro.org>, Masahiro Yamada <masahiroy@kernel.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, "Nick
- Desaulniers" <nick.desaulniers+lkml@gmail.com>, Nicolas Schier
-	<nicolas.schier@linux.dev>, Peter Zijlstra <peterz@infradead.org>, "Tamir
- Duberstein" <tamird@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Thomas
- =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>, Yabin Cui
-	<yabinc@google.com>, Sriraman Tallam <tmsriram@google.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Rong Xu
-	<xur@google.com>
-Subject: Re: [PATCH 2/4] kbuild: Disable AutoFDO and Propeller flags for
- kernel modules
-Message-ID: <aOsO5gO+5/OkZXVn@rli9-mobl>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20251010210134.2066321-2-xur@google.com>
-X-ClientProxiedBy: SG2PR04CA0161.apcprd04.prod.outlook.com (2603:1096:4::23)
- To BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26)
+To: Alok Tiwari <alok.a.tiwari@oracle.com>, michael.riesch@wolfvision.net,
+	robh@kernel.org, s.hauer@pengutronix.de,
+	dri-devel@lists.freedesktop.org, simona@ffwll.ch, airlied@gmail.com,
+	tzimmermann@suse.de, mripard@kernel.org, hjc@rock-chips.com,
+	heiko@sntech.de, andy.yan@rock-chips.com,
+	maarten.lankhorst@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alok.a.tiwari@oracle.com, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] drm/rockchip: vop2: use correct destination rectangle
+ height check
+Message-ID: <202510121013.tqU2DAEC-lkp@intel.com>
+References: <20251011130450.123444-1-alok.a.tiwari@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR11MB4165:EE_|SJ0PR11MB7153:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52c4acf0-ae48-41e3-ef21-08de093508c6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?HixAtG2oDbQZRnj4yI8so0TguuuxQm8pE5xTFRSz1IEX4xuisVJWK2TeoVD1?=
- =?us-ascii?Q?YjMrQpc7BxLLlgaYzWBlto4Tr4ttvI0WShFdAkHOIAFhU4hf4zBXWcqSQcmN?=
- =?us-ascii?Q?d9El4OvfKvr1k3suIuW5GvmQWI6wzibgRVBPcEeDffabjdmiXLhXot+dTcSs?=
- =?us-ascii?Q?R3t/XWM/9q20vqirmkRKBZEohSYxMLwNeCAgQf63WRyZm0hK6aPJoXBN8TC+?=
- =?us-ascii?Q?vPQrsRYS5Wm16eLLcn17i/pFCkaVWWStUt5Pmb8CI0yRyWIFSF3HPLVfRU2l?=
- =?us-ascii?Q?o9QB11rXRY+l2ZJyc1xMrnwPI7nMGmhFxoYu0mZwZDc7ubUE59VK8t7VEjez?=
- =?us-ascii?Q?VQJF/SxM2xUfaBF5P04hSDjG3tYAVCZPLKXfPnYj2fC78p8Pq0bpzEDEGuRD?=
- =?us-ascii?Q?/O/cE8SP5JnjxIBRH69UV8gBB9ZNHAUNwvx5Y2TFaIBHTvl99cKLeScqTYiE?=
- =?us-ascii?Q?mJ2mFqGn2n59WVk9x9MCW/se8Yscyo+x9N1SGOZ/S//7WlGn9KEUkkreIKj9?=
- =?us-ascii?Q?Hu0EYf7ZaCIyC5BsP6axK4RhvxmkyI2m303pmcfH8ojDO0O0M0GrCqEvivX1?=
- =?us-ascii?Q?6T1AOK9eraUHZ+xhQP2U6s85d7+miS+Xf7A5NrJMfujA2yiE6/JYVv30DLcs?=
- =?us-ascii?Q?FXDbUbdVFPJRrordppDMX0EiRVOofsyIgQKxyky6dR2Uu28if8XiTGMa1TnH?=
- =?us-ascii?Q?Bg6DbwASKR1UXP1qb0M3XslNs9F9CIuBQ+JbpzeppmioVJa0iX6Lfg9WTwjV?=
- =?us-ascii?Q?Pf0E4I4p7WzJ6v8jtgLGi/3Sow5ZVW1Fci0U/Qyz4+ZbQymuY0N0ovVCZlUs?=
- =?us-ascii?Q?kiILgsnazQ2pLwld/aa6X/6NAOpwLR1sDYViXC9BkfLhA6LB73iGtkRzDKQa?=
- =?us-ascii?Q?PTH5skOIrjbIzArvBk8k6cBxZBf5h+20SzWoZTnrM/tEPq7KFSabwz3GHjhF?=
- =?us-ascii?Q?Ip8QRvm0D5tHp/MDalWPzG60JY7dqrtvlMHY2dBJYm1OGFML1ILj4dMAvaDC?=
- =?us-ascii?Q?KoOic2E2gY/BVtawA272f8Ad47L6+RvC0nLX3VT/T43vQIKd6JTuAjymCBw1?=
- =?us-ascii?Q?I0mJExRN0EYA5tK4vKMjRaIQ5QUA8NdMDR8W7jV5YbVct/NPVlgFTtU22y+P?=
- =?us-ascii?Q?Ty5gT7oagISUAdoM39Ep/5PGEFrjP5BpoxNJingT7rm5BBQMaw3AsagEIE7G?=
- =?us-ascii?Q?0l9ZhOZ44NP/Cgh4x+tLs7aJCR6EflJxPaY34HYpQTf08ocYf+Avb2BgzURW?=
- =?us-ascii?Q?3yPxgGe3grbZE4wQ+w5I4ZE5+ExLS6E0r33wbVqxloW8hYfianaaWplIh8Gi?=
- =?us-ascii?Q?dZrOSYriMgGrrJNHRj3g3E8DXxX0TcfAhO6u3ZOfgexEXQEgqLcxnJonG6O8?=
- =?us-ascii?Q?iqoClBSaNqedLJMnOrEOoe8ytniVzo9ehXg3GgoSxPib/Z2FFX3FQl4l0dHU?=
- =?us-ascii?Q?kGL2c1KPRUll/UD7D2gjyrmvcLhKrlAb?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4165.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/eRCb32yQtCJYfCz+wRevT5RwLqhY0V9bIvg8rbHNIt9tRDL6bnFUTpViD/y?=
- =?us-ascii?Q?3KOEChXYBHhDWTqQWwGk30hgJAD49qc1O9ByHH3pEoGOYxFA7GgxkwUR9454?=
- =?us-ascii?Q?7/xk1+rulTeURs7Lb5myzObUpAj+W9QQC/bnD//z5C6HCzETqczWlRr9jPA4?=
- =?us-ascii?Q?bay7WNs3v/zjpWD0jrvlPW/jJI3iydxP9twMAEZd7+Ll6MzhwHjlfozWJpCp?=
- =?us-ascii?Q?PXZLjoNWscnQqizYGR6ciCeWbKhHxeTyCMOp8RRGuHJL/klWX9rQO40HtjTy?=
- =?us-ascii?Q?uIqVSZyO7ZJly8BG3Y76Ey3Dewvj8tnffp+TNax+vbEnoT7s3uWN3iKqcIZq?=
- =?us-ascii?Q?ZbnImiZjquGiVcg+TD5ZWAS5XIyuZ73knde7rjK+HXT3PwjzqLcSlbxOgHSN?=
- =?us-ascii?Q?QLYjHLTo8hTdkeV1FDrKvJbTX2Lb6mbgxPJqukmtY299zVIIYPeYBxpPogIp?=
- =?us-ascii?Q?UAD/PriqcroRzMq/hC1Gu0akWANTvjKbMLuMOcPRuXPXPy85pr3PnfZBDsHK?=
- =?us-ascii?Q?2R1XeF6xlguIvK2ijHZD57Ovo8HpZVEHP59Ve+tEfSiC4OWsZ833SBYd1HEz?=
- =?us-ascii?Q?46duCv82SaGb6sFmHlDDZuRVU3BVHlErvVl77RjQOd5fQYxX4f3Ee1cG+h4f?=
- =?us-ascii?Q?H2/xP73cDQKtkBzOkVh0WqY2djHJQuVe1R7xtLfJ0Xipk8gZw5ss8DFuVTrB?=
- =?us-ascii?Q?k82zKHGBnovU+VsdVzX14RWRPTWLZrBr4ZozgfEGDJbfxCBg7ErjYIBpDPlG?=
- =?us-ascii?Q?0eXcumOwQGecu+PkEfrG5Ubr/TusT542a90TfI9h79QRa6m1UYDeDQugV98E?=
- =?us-ascii?Q?0OoQph2ObcLeGPYWDb2ZMBY8wAPIKNVKWiYigD2XtT3A+DxgWbviFzvbe1TH?=
- =?us-ascii?Q?7aIzFUde3dIY108fWc5TN9YcXwNc2r2mjbdPDS2t+Li32grfkptekNmrj8FD?=
- =?us-ascii?Q?n0b4wEi0jdJYwgBcS7E8+C3RJil2I7usYZ6nYqu+vti4I7Eiv3THH0XuohHi?=
- =?us-ascii?Q?Lsuc60nA03SlT13bvSz3DwFfT3HljOtWTJwqphU0hKd13a7MnItDstF5WK9u?=
- =?us-ascii?Q?fVACzINIGaceDjYOEkBZ54Q9f8Vyedk+LQgfOX+IPOPRip2YBkeDQODXafLW?=
- =?us-ascii?Q?9DmG0WgFIaZ+WKVSoyEAUrDQF15CtxdsHxNPqRydnnvGNoItIrpLcVQOszQj?=
- =?us-ascii?Q?I/fn0lZ74A1XQwddfbdThrqUbMr4ZasSk3ReTT09dESq0rohFZpxW/qAr7ir?=
- =?us-ascii?Q?57eG1zk0ox+xk515PPTmVChebm809iKg0UM1irr1FXaTbKNlmiFHgga7ksbw?=
- =?us-ascii?Q?ku37SGU8+9ig4RUtPtcyaAYOt3Kr+dNs9QvA6TuNok0poFeb0juLR2hXf6E5?=
- =?us-ascii?Q?X6aOjbQa4z/v2nM9EnDxTbaYeZafGXjYi0BipzBFvcXcXOYZnL55YuzsubwF?=
- =?us-ascii?Q?3o9oEYDZ11JwyEyForPLZuTKhAC7+Akwrfcr9KZRRAbKpAvjj4YsvyOcLraF?=
- =?us-ascii?Q?rbET4dr9GZqRDiL+KoN3VRN7In6QZH9PcjK+vai/WucgvTDOuGewVVFsnPtM?=
- =?us-ascii?Q?cikvJGvGt+gDHwYdN8i57OhlaiavO7M1G1Vx/Yih?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52c4acf0-ae48-41e3-ef21-08de093508c6
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4165.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2025 02:14:12.0839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 95xJtHX1IHXUr13MTfmxRbYZK8phDQl0ssuBb0wQZ28cGwN97d+JdDNzb5haWRmV1qlcUFqdzltVWdo1NnLSbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB7153
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251011130450.123444-1-alok.a.tiwari@oracle.com>
 
-Hi,
+Hi Alok,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on kees/for-next/kspp]
-[also build test ERROR on linus/master kees/for-next/pstore v6.17 next-20251010]
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on linus/master v6.17 next-20251010]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xur-google-com/kbuild-Disable-AutoFDO-and-Propeller-flags-for-kernel-modules/20251011-050345
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
-patch link:    https://lore.kernel.org/r/20251010210134.2066321-2-xur%40google.com
-patch subject: [PATCH 2/4] kbuild: Disable AutoFDO and Propeller flags for kernel modules
-:::::: branch date: 26 hours ago
-:::::: commit date: 26 hours ago
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20251012/202510120709.Wx3q4Ppg-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251012/202510120709.Wx3q4Ppg-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alok-Tiwari/drm-rockchip-vop2-use-correct-destination-rectangle-height-check/20251011-210653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/20251011130450.123444-1-alok.a.tiwari%40oracle.com
+patch subject: [PATCH] drm/rockchip: vop2: use correct destination rectangle height check
+config: sparc64-randconfig-001-20251012 (https://download.01.org/0day-ci/archive/20251012/202510121013.tqU2DAEC-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251012/202510121013.tqU2DAEC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/r/202510120709.Wx3q4Ppg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510121013.tqU2DAEC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: -r and -pie may not be used together
+>> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:1034:34: error: call to undeclared function 'drm_rect_heigh'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1034 |             drm_rect_width(dest) < 4 || drm_rect_heigh(dest) < 4) {
+         |                                         ^
+   drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:1034:34: note: did you mean 'drm_rect_height'?
+   include/drm/drm_rect.h:196:19: note: 'drm_rect_height' declared here
+     196 | static inline int drm_rect_height(const struct drm_rect *r)
+         |                   ^
+   1 error generated.
+
+
+vim +/drm_rect_heigh +1034 drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+
+   991	
+   992	static int vop2_plane_atomic_check(struct drm_plane *plane,
+   993					   struct drm_atomic_state *astate)
+   994	{
+   995		struct drm_plane_state *pstate = drm_atomic_get_new_plane_state(astate, plane);
+   996		struct drm_framebuffer *fb = pstate->fb;
+   997		struct drm_crtc *crtc = pstate->crtc;
+   998		struct drm_crtc_state *cstate;
+   999		struct vop2_video_port *vp;
+  1000		struct vop2 *vop2;
+  1001		const struct vop2_data *vop2_data;
+  1002		struct drm_rect *dest = &pstate->dst;
+  1003		struct drm_rect *src = &pstate->src;
+  1004		int min_scale = FRAC_16_16(1, 8);
+  1005		int max_scale = FRAC_16_16(8, 1);
+  1006		int format;
+  1007		int ret;
+  1008	
+  1009		if (!crtc)
+  1010			return 0;
+  1011	
+  1012		vp = to_vop2_video_port(crtc);
+  1013		vop2 = vp->vop2;
+  1014		vop2_data = vop2->data;
+  1015	
+  1016		cstate = drm_atomic_get_existing_crtc_state(pstate->state, crtc);
+  1017		if (WARN_ON(!cstate))
+  1018			return -EINVAL;
+  1019	
+  1020		ret = drm_atomic_helper_check_plane_state(pstate, cstate,
+  1021							  min_scale, max_scale,
+  1022							  true, true);
+  1023		if (ret)
+  1024			return ret;
+  1025	
+  1026		if (!pstate->visible)
+  1027			return 0;
+  1028	
+  1029		format = vop2_convert_format(fb->format->format);
+  1030		if (format < 0)
+  1031			return format;
+  1032	
+  1033		if (drm_rect_width(src) >> 16 < 4 || drm_rect_height(src) >> 16 < 4 ||
+> 1034		    drm_rect_width(dest) < 4 || drm_rect_heigh(dest) < 4) {
+  1035			drm_err(vop2->drm, "Invalid size: %dx%d->%dx%d, min size is 4x4\n",
+  1036				drm_rect_width(src) >> 16, drm_rect_height(src) >> 16,
+  1037				drm_rect_width(dest), drm_rect_height(dest));
+  1038			pstate->visible = false;
+  1039			return 0;
+  1040		}
+  1041	
+  1042		if (drm_rect_width(src) >> 16 > vop2_data->max_input.width ||
+  1043		    drm_rect_height(src) >> 16 > vop2_data->max_input.height) {
+  1044			drm_err(vop2->drm, "Invalid source: %dx%d. max input: %dx%d\n",
+  1045				drm_rect_width(src) >> 16,
+  1046				drm_rect_height(src) >> 16,
+  1047				vop2_data->max_input.width,
+  1048				vop2_data->max_input.height);
+  1049			return -EINVAL;
+  1050		}
+  1051	
+  1052		/*
+  1053		 * Src.x1 can be odd when do clip, but yuv plane start point
+  1054		 * need align with 2 pixel.
+  1055		 */
+  1056		if (fb->format->is_yuv && ((pstate->src.x1 >> 16) % 2)) {
+  1057			drm_err(vop2->drm, "Invalid Source: Yuv format not support odd xpos\n");
+  1058			return -EINVAL;
+  1059		}
+  1060	
+  1061		return 0;
+  1062	}
+  1063	
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
-
