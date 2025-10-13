@@ -1,129 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA52D739B;
-	Mon, 13 Oct 2025 18:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6042C3242;
+	Mon, 13 Oct 2025 18:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760379962; cv=none; b=Vv4uITvxxA5MjmFPgO8F/d35Rq1tm6ULXPvMhR0W5bmPL+c8h/2tBL1uimNFDEsy8W3FTqwWDHsIs7qawdxFlEfeII4HcatrxuwXOt0vDq24bUgVYxxLSh4GXBLqr7X0Axb9afxeggS2ApdZdL9iiJJGxxdUodz14woPUxmOzQk=
+	t=1760380267; cv=none; b=DB32UTDNz1ud51Zb8ARVzear121EqvpQUolHzuLVNhN9U2CxhXS/S/kszeq49yGK5+ZkMO9gDyhNHGT2EJk8Lw13OpLrEns5INqC15iRTU1HIhi40gYSkGPbshHizn8NU946Pw9aNQ3wMHZq2kN8YDnBR2/5UXNR8uxPkev7VeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760379962; c=relaxed/simple;
-	bh=IbjallnL0fhMN27dTZKt3qvk8uPiXVxAt0Oai4AKDlc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QbD/uLIGY0SXzwbfmnHcNivTw7rHXxeCgSH2wlHl7qgaRt2gU7QnATy3pA9E3wwYCoQBBPm6ZfSzgT8IfXmaCNvIgF6qUCGuu0vwXLUeNf5phKNj/E5OS+3WQn1zwZAJjn/lZzn3ChX1zIEnIo/3mKPi7koN+zT3VYSC6M45HUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XbVRqVIj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760380267; c=relaxed/simple;
+	bh=j/kKOAp35xzzbw0pVVrPMAIWdzl0bSnm+VK2iAP7TR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KNAgWe2nEj8u6YE2os6FSvJs4SZRhmEBqyhh/JSeGcUUxBjnQYyDXgvDhk/sPzIrxmKerFHnsveeCNpc+3RgAmJQXc4+NBnG2pLz1tyhqBI3ut4IIDq3yK34Llf63/pecu6C19uHRaze8GhRkMGHfOHoZUPXw2AH08WpJw/+K5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hc7dRP1E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XbVRqVIj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A51C4CEFE;
-	Mon, 13 Oct 2025 18:25:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hc7dRP1E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46703C4CEE7;
+	Mon, 13 Oct 2025 18:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760379960;
-	bh=IbjallnL0fhMN27dTZKt3qvk8uPiXVxAt0Oai4AKDlc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=XbVRqVIj1R+XjbRcPyE8KocV8FRTmweUiKiM5eAVGsUn+sAZU0h1rxxQXzFG1AtGZ
-	 A32o8HVkr0YsOdW11lZMxhcyVNT519jdAFiizkoMUbP5bqZuzFXpK3w44BZZvRcfi+
-	 FcF5+OFUHCrmzkJeBxmye9kFnGvMU39D6Z+MoUnQJYBhlfi41Nrq6WnxrBYntP9LEG
-	 n3dgOK+DVIF1fj+Xos7QqW9SLHV+IJGSzWDbg9mD/osAU+ZBaL7Z6rfczXNHnoztLp
-	 B1bmCafDP3t87IvfKV/U74pIE4J3KJ/qRv0XmOc6bXS5cfPTPf8544UxBZNrG0ByLJ
-	 8gRqh4j1EpUSA==
+	s=k20201202; t=1760380264;
+	bh=j/kKOAp35xzzbw0pVVrPMAIWdzl0bSnm+VK2iAP7TR8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hc7dRP1E31eJYSUPpgceC/zxrPCpJq+0Ng8inHl+wiKcYMx1YVLA5cAkiVOyx9MoG
+	 9dNzWZ2tiWcYBpvpnErzALdUJ7pKWGVpVV4Z6ztGqjly1Bcu4LdSCPQdDxc3nwFqx1
+	 LO/qLYNMfipt1bkPoh/XyXCI8UzzTXP4pCjUiudpOI5Idqdm5HWcgetNTdFI1XAJuB
+	 GcawhXYwxyHEkDVpbxec5KMlDQdqMtaua+7jgM/OCs9m3gyedDud8b2KYmMZQeWA51
+	 4DmRSGHufVHEHbQBu9Lkql19/iwRwC1/gT/BfI+FaklaZZDhMaSHDloMTVRPsROz6N
+	 7v1Co6+/FZXPw==
+Date: Mon, 13 Oct 2025 11:30:59 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 13 Oct 2025 11:25:49 -0700
-Subject: [PATCH] PCI: rcar-host: Avoid objtool no-cfi warning in
- rcar_pcie_probe()
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>, Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [tip:x86/core 1/1] vmlinux.o: warning: objtool:
+ rcar_pcie_probe+0x13e: no-cfi indirect call!
+Message-ID: <20251013183059.GA690226@ax162>
+References: <202510092124.O2IX0Jek-lkp@intel.com>
+ <20251010032001.GA3741500@ax162>
+ <20251010071032.GE4067720@noisy.programming.kicks-ass.net>
+ <20251010074446.GE4068168@noisy.programming.kicks-ass.net>
+ <20251010223012.GA3597090@ax162>
+ <20251013082629.GH4067720@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org>
-X-B4-Tracking: v=1; b=H4sIACxE7WgC/x3NQQrCQAxA0auUrA10Kq3oVURKJk1rRCZDplSh9
- O4OLt/m/x2KuEqBW7ODy6ZFLVWEUwP8pLQI6lQNXdv1oQ1ndCYfM6uM2S0K0mY6YTKeFS2+VrM
- 3fsiTpgUDXS89McchDlCL2WXW7/92fxzHD6VNN7B9AAAA
-X-Change-ID: 20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-1a975accb6b6
-To: Marek Vasut <marek.vasut+renesas@gmail.com>, 
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org, 
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Kees Cook <kees@kernel.org>, 
- "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2296; i=nathan@kernel.org;
- h=from:subject:message-id; bh=IbjallnL0fhMN27dTZKt3qvk8uPiXVxAt0Oai4AKDlc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBlvXUzCPO57T+w/2/jdp4qLQ67OoJnPQU7atO+ZWL/st
- Yruq/s7SlkYxLgYZMUUWaofqx43NJxzlvHGqUkwc1iZQIYwcHEKwEQC+xgZzvqWTez0PJiZKiC0
- LoBL7uGRau647FkXmGJOynHZddoZMDLMuruKec+DXoOPbp4HVnR2CN4TF7z/dnX7EoYD53KqvHZ
- zAAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251013082629.GH4067720@noisy.programming.kicks-ass.net>
 
-After commit 894af4a1cde6 ("objtool: Validate kCFI calls"), compile
-testing pcie-rcar-host.c with CONFIG_FINEIBT=y and CONFIG_OF=n results
-in a no-cfi objtool warning in rcar_pcie_probe():
+On Mon, Oct 13, 2025 at 10:26:29AM +0200, Peter Zijlstra wrote:
+> On Fri, Oct 10, 2025 at 03:30:12PM -0700, Nathan Chancellor wrote:
+> > which does somewhat make sense because what's the point of setting up
+> > the CFI call if you know nothing can actually make use of it since we
+> > will crash when trying to indirectly call a NULL pointer?
+> 
+> As Sami says, it would be really nice if clang would at least WARN about
+> emitting an unconditional NULL call like that. I mean, it *knows* its
+> going to crash and burn at that point, right?
 
-  $ cat allno.config
-  CONFIG_CFI=y
-  CONFIG_COMPILE_TEST=y
-  CONFIG_CPU_MITIGATIONS=y
-  CONFIG_GENERIC_PHY=y
-  CONFIG_MITIGATION_RETPOLINE=y
-  CONFIG_MODULES=y
-  CONFIG_PCI=y
-  CONFIG_PCI_MSI=y
-  CONFIG_PCIE_RCAR_HOST=y
-  CONFIG_X86_KERNEL_IBT=y
+Yeah, I agree. It would have to happen after optimizations and the
+infrastructure for reporting those instances back up to the frontend
+is... not great IIRC but I will see if I can file something upstream.
 
-  $ make -skj"$(nproc)" ARCH=x86_64 KCONFIG_ALLCONFIG=1 LLVM=1 clean allnoconfig vmlinux
-  vmlinux.o: warning: objtool: rcar_pcie_probe+0x191: no-cfi indirect call!
+Is there any way for objtool to detect these instances and emit a
+slightly differently worded message? Figured it was worth asking ;)
 
-When CONFIG_OF is unset, of_device_get_match_data() returns NULL, so
-LLVM knows this indirect call has no valid destination and drops the
-kCFI setup before the call, triggering the objtool check that makes sure
-all indirect calls have kCFI setup.
+> > Something like this would avoid this issue then.
+> 
+> Yes, this seems reasonable -- even if the driver should perhaps
+> mandate/depend on CONFIG_OF, making sure to behave when NULL does get
+> returned is definitely a good thing!.
+> 
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Check that host->phy_init_fn is not NULL before calling it to avoid the
-warning.
+Thanks, I have sent this for review with your tag and Kees's:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202510092124.O2IX0Jek-lkp@intel.com/
-Reviewed-by: Kees Cook <kees@kernel.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Another alternative is to make this driver depend on CONFIG_OF since it
-clearly requires it but that would restrict compile testing so I went
-with this first.
----
- drivers/pci/controller/pcie-rcar-host.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://lore.kernel.org/20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org/
 
-diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-index 213028052aa5..15514c9c1927 100644
---- a/drivers/pci/controller/pcie-rcar-host.c
-+++ b/drivers/pci/controller/pcie-rcar-host.c
-@@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
- 		goto err_clk_disable;
- 
- 	host->phy_init_fn = of_device_get_match_data(dev);
--	err = host->phy_init_fn(host);
-+	err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
- 	if (err) {
- 		dev_err(dev, "failed to init PCIe PHY\n");
- 		goto err_clk_disable;
-
----
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-change-id: 20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-1a975accb6b6
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Nathan
