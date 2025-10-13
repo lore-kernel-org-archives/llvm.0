@@ -1,62 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98996270553;
-	Mon, 13 Oct 2025 12:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EF3270576;
+	Mon, 13 Oct 2025 12:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760358446; cv=none; b=csW04tS/lrODqHyoJXAkeZrFGuNSk3KJzeIxIOdpatm8VFCM5j3ppXYZIRo0xsbPvRm+FuE6x+h1ww+DxZWe1rTOMrENswpfFsmTzECrp7wS/52uzrw3UUxEMwocV21g0NDZQHZfU+aKIQCgrcRK7imh4g/FAVL7D/oN8HvCMlA=
+	t=1760358503; cv=none; b=RvNZvEvVkpGza1xZOiWRT+DRBMzgO0ONKng+nBibvm0685pTTXDY1npMoPoOpqM0LeicZ4bf1bsL4oj+60QFGaA/kRpidgzFhU4Nh3tKHNGRu5CB0zPywgo2pk1o34kL6KW87SwCUqAY7LCtoB7Yy4GKvxAE9Dox0CkvPv/4LMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760358446; c=relaxed/simple;
-	bh=nx3ufwTUgiNEVquPhVF0BzjK3raz7mJ8M8zxQnVW5Q4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QdiWRPePchsJlL2PRj7BfK+o/LBK6xXybepRe6OaGQOn0fX0hoisTwIXxn6AJu5sWoefJRPsL+RxZ7p2aO8p+TrkEQVrwk3NeBTOWdF8Vwy9Z5v33+dER9PF33zMRgBvTZPJeX6tngL9vaDkq5LGOGqqv/ylj/yQ3mXx0Rv9lRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ggb32g6W; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1760358503; c=relaxed/simple;
+	bh=062beN90GWCCZdiCP0fTDtp5gYxwQtheCLAnof9Ihbs=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tpN/4jP1dNJ1qnOoVIwIg08A0IuVFG7gOEwzlYh5LxncNlvbEhoKfVeaZ+0nAF0nzmGJrTavWQ2FKe1y28nmPge03mrtebb64oDNgyPex+ne4vs8tDTg0zTThZghqlBKiS1/OB407bgOFzMXHhcZvX9ezWB1lGRBkB1oHOnW1Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jb+NHj2q; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ggb32g6W"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jb+NHj2q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760358444; x=1791894444;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nx3ufwTUgiNEVquPhVF0BzjK3raz7mJ8M8zxQnVW5Q4=;
-  b=Ggb32g6WRcmYpkvG9aQw5Pk9G+6oxv9/OmLRLOwmnnPCBVNw8P7CPAX8
-   Dx0sXoJEIS9diYOIhQZS7arFLkKN1r0KyH0umoqnejK8RNFYndNQfKLb8
-   ZrINP1e5c0tSSVXO8gJpCTgEBWosNoXeGOiWr3fdCA9nxkjDceTKGxWLR
-   nQgFgNmehvNux2sp4Dqqp9+Vayo7XZeQbGH9ohgBpowIem7DBbG81XeTC
-   8oQD5iyk4xvgRXgs1kzukQTl7xiDUfZSLhw0xEPv/E3c60prePrVTq91S
-   QWWeWvpl3kcIiISF3+waMxn/xtaRnsdLrcikWgc290crnYoBtFJV/MvgR
+  t=1760358502; x=1791894502;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=062beN90GWCCZdiCP0fTDtp5gYxwQtheCLAnof9Ihbs=;
+  b=jb+NHj2qCKD9luVrnB2353qMhx/tDe0OE6yyFkzF+9nZszFAA3B8X6dA
+   dsSJEYW7vnYAfg7lu/hbrzMhYGLhtltlOJMdO8IZU5qFX9PJoYsZvKuv3
+   vUeIRVu5lWAW1XIHftEx11LaD8LNlHX1wxTSFpPZW3xkKyttGOpWbsU3T
+   qk1ZsRC6DnFymHtzTy8B5EOXcB4gfI6Z2LUi+RfRGWCgCpcuxodQrjqev
+   Rgj+KurEsVCcailHPXxnMOzfN5iglUyNcNxr6bFoscSuSgkBPnaQ64SVW
+   uXNdWigzLYo84NudYvt/Nk8dpw7TTcy7bi71QnQD7/1ZkW67VxnC4qnPu
    Q==;
-X-CSE-ConnectionGUID: I/518B2ZQeuh2JIcokAXyA==
-X-CSE-MsgGUID: GQdth3VzRJu0DMAULlSYNA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="62528681"
+X-CSE-ConnectionGUID: qoVThwOORFykABIEbYF3zQ==
+X-CSE-MsgGUID: cvptwfb1RQ6xL3HRdPQ3YA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="73840273"
 X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="62528681"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 05:27:20 -0700
-X-CSE-ConnectionGUID: /d7zNtv+S5qZCAdWy4nXdg==
-X-CSE-MsgGUID: M1m676uCT2Cmo0NqooPl1w==
+   d="scan'208";a="73840273"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 05:28:20 -0700
+X-CSE-ConnectionGUID: 4EQwnOmmSQ2xuh+b1ZiVMg==
+X-CSE-MsgGUID: Z07tOXdFR4+9UXpDxr4yNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="186001672"
+   d="scan'208";a="212209652"
 Received: from igk-lkp-server01.igk.intel.com (HELO 0e586ad5e7f7) ([10.91.175.65])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Oct 2025 05:27:18 -0700
+  by orviesa002.jf.intel.com with ESMTP; 13 Oct 2025 05:28:19 -0700
 Received: from kbuild by 0e586ad5e7f7 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1v8He0-000000008sC-1uB3;
-	Mon, 13 Oct 2025 12:27:16 +0000
-Date: Mon, 13 Oct 2025 14:26:46 +0200
+	id 1v8Hey-000000008sb-2R5a;
+	Mon, 13 Oct 2025 12:28:16 +0000
+Date: Mon, 13 Oct 2025 14:27:18 +0200
 From: kernel test robot <lkp@intel.com>
-To: Shivank Garg <shivankg@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Hildenbrand <david@redhat.com>,
-	Sean Christopherson <seanjc@google.com>
-Subject: [davidhildenbrand:guestmemfd-preview 18/26]
- arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:10: error: call to
- undeclared function '__filemap_get_folio_mpol'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202510120020.Yna3VUaz-lkp@intel.com>
+	Jeff Layton <jlayton@kernel.org>
+Subject: [jlayton:kdevops 1/3] fs/nfsd/nfsfh.c:699:16: warning: unused
+ variable 'inode'
+Message-ID: <202510112203.B1ZqlPPr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,73 +62,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/davidhildenbrand/linux guestmemfd-preview
-head:   0c301bf7489a928d4839f3ee7477966a681543a2
-commit: 0214cede5073bcc0f7cd671ca0c3ec99ef4eb164 [18/26] KVM: guest_memfd: Enforce NUMA mempolicy using shared policy
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251012/202510120020.Yna3VUaz-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   111666a803b9733b5c590aec6312443ad3dac2f5
+commit: 177818f176ef904fb18d237d1dbba00c2643aaf2 [1/3] Merge branch 'mrchuck/nfsd-next'
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251011/202510112203.B1ZqlPPr-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251012/202510120020.Yna3VUaz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510112203.B1ZqlPPr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510120020.Yna3VUaz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510112203.B1ZqlPPr-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:10: error: call to undeclared function '__filemap_get_folio_mpol'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     155 |         folio = __filemap_get_folio_mpol(inode->i_mapping, index,
-         |                 ^
-   arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:10: note: did you mean '__filemap_get_folio'?
-   include/linux/pagemap.h:748:15: note: '__filemap_get_folio' declared here
-     748 | struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
-         |               ^
->> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:8: error: incompatible integer to pointer conversion assigning to 'struct folio *' from 'int' [-Wint-conversion]
-     155 |         folio = __filemap_get_folio_mpol(inode->i_mapping, index,
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     156 |                                          FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
-         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     157 |                                          mapping_gfp_mask(inode->i_mapping), policy);
-         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> fs/nfsd/nfsfh.c:699:16: warning: unused variable 'inode' [-Wunused-variable]
+     699 |         struct inode *inode = d_inode(p.dentry);
+         |                       ^~~~~
+   1 warning generated.
 
 
-vim +/__filemap_get_folio_mpol +155 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
+vim +/inode +699 fs/nfsd/nfsfh.c
 
-   129	
-   130	/*
-   131	 * Returns a locked folio on success.  The caller is responsible for
-   132	 * setting the up-to-date flag before the memory is mapped into the guest.
-   133	 * There is no backing storage for the memory, so the folio will remain
-   134	 * up-to-date until it's removed.
-   135	 *
-   136	 * Ignore accessed, referenced, and dirty flags.  The memory is
-   137	 * unevictable and there is no storage to write back to.
-   138	 */
-   139	static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
-   140	{
-   141		/* TODO: Support huge pages. */
-   142		struct mempolicy *policy;
-   143		struct folio *folio;
-   144	
-   145		/*
-   146		 * Fast-path: See if folio is already present in mapping to avoid
-   147		 * policy_lookup.
-   148		 */
-   149		folio = __filemap_get_folio(inode->i_mapping, index,
-   150					    FGP_LOCK | FGP_ACCESSED, 0);
-   151		if (!IS_ERR(folio))
-   152			return folio;
-   153	
-   154		policy = kvm_gmem_get_folio_policy(GMEM_I(inode), index);
- > 155		folio = __filemap_get_folio_mpol(inode->i_mapping, index,
-   156						 FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
-   157						 mapping_gfp_mask(inode->i_mapping), policy);
-   158		mpol_cond_put(policy);
-   159	
-   160		return folio;
-   161	}
-   162	
+^1da177e4c3f41 Linus Torvalds 2005-04-16  684  
+c1f203e46c55ac Chuck Lever    2025-07-02  685  /**
+c1f203e46c55ac Chuck Lever    2025-07-02  686   * fh_getattr - Retrieve attributes on a local file
+c1f203e46c55ac Chuck Lever    2025-07-02  687   * @fhp: File handle of target file
+c1f203e46c55ac Chuck Lever    2025-07-02  688   * @stat: Caller-supplied kstat buffer to be filled in
+c1f203e46c55ac Chuck Lever    2025-07-02  689   *
+c1f203e46c55ac Chuck Lever    2025-07-02  690   * Returns nfs_ok on success, otherwise an NFS status code is
+c1f203e46c55ac Chuck Lever    2025-07-02  691   * returned.
+c1f203e46c55ac Chuck Lever    2025-07-02  692   */
+c1f203e46c55ac Chuck Lever    2025-07-02  693  __be32 fh_getattr(const struct svc_fh *fhp, struct kstat *stat)
+c1f203e46c55ac Chuck Lever    2025-07-02  694  {
+c1f203e46c55ac Chuck Lever    2025-07-02  695  	struct path p = {
+c1f203e46c55ac Chuck Lever    2025-07-02  696  		.mnt		= fhp->fh_export->ex_path.mnt,
+c1f203e46c55ac Chuck Lever    2025-07-02  697  		.dentry		= fhp->fh_dentry,
+c1f203e46c55ac Chuck Lever    2025-07-02  698  	};
+81538c8e42806e Linus Torvalds 2025-10-06 @699  	struct inode *inode = d_inode(p.dentry);
+c1f203e46c55ac Chuck Lever    2025-07-02  700  	u32 request_mask = STATX_BASIC_STATS;
+c1f203e46c55ac Chuck Lever    2025-07-02  701  
+737a72eed2e505 Chuck Lever    2025-09-29  702  	if (d_is_reg(p.dentry))
+6f322e6110a628 Mike Snitzer   2025-09-29  703  		request_mask |= (STATX_DIOALIGN | STATX_DIO_READ_ALIGN);
+6f322e6110a628 Mike Snitzer   2025-09-29  704  
+c1f203e46c55ac Chuck Lever    2025-07-02  705  	if (fhp->fh_maxsize == NFS4_FHSIZE)
+c1f203e46c55ac Chuck Lever    2025-07-02  706  		request_mask |= (STATX_BTIME | STATX_CHANGE_COOKIE);
+c1f203e46c55ac Chuck Lever    2025-07-02  707  
+c1f203e46c55ac Chuck Lever    2025-07-02  708  	return nfserrno(vfs_getattr(&p, stat, request_mask,
+c1f203e46c55ac Chuck Lever    2025-07-02  709  				    AT_STATX_SYNC_AS_STAT));
+c1f203e46c55ac Chuck Lever    2025-07-02  710  }
+c1f203e46c55ac Chuck Lever    2025-07-02  711  
+
+:::::: The code at line 699 was first introduced by commit
+:::::: 81538c8e42806eed71ce125723877a7c2307370c Merge tag 'nfsd-6.18' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+
+:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
