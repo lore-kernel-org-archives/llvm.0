@@ -1,58 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EF3270576;
-	Mon, 13 Oct 2025 12:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB602296BBA;
+	Mon, 13 Oct 2025 17:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760358503; cv=none; b=RvNZvEvVkpGza1xZOiWRT+DRBMzgO0ONKng+nBibvm0685pTTXDY1npMoPoOpqM0LeicZ4bf1bsL4oj+60QFGaA/kRpidgzFhU4Nh3tKHNGRu5CB0zPywgo2pk1o34kL6KW87SwCUqAY7LCtoB7Yy4GKvxAE9Dox0CkvPv/4LMo=
+	t=1760374862; cv=none; b=EH+PIS4250gzRGXDoeMBR43b/Di6bqkJ9RwZ7hNUfV291fShfbZOYoZdPNaajKpSehzCCnb4lMOfwT8oyTLficPBh9q2WLW4n7GbMz3ExgRZRpLeA2F4wkTjyP75V/96BIVyXQfbsdcHd6uwAtCaNKXWH8clqvPP2Dhp7HBpdjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760358503; c=relaxed/simple;
-	bh=062beN90GWCCZdiCP0fTDtp5gYxwQtheCLAnof9Ihbs=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tpN/4jP1dNJ1qnOoVIwIg08A0IuVFG7gOEwzlYh5LxncNlvbEhoKfVeaZ+0nAF0nzmGJrTavWQ2FKe1y28nmPge03mrtebb64oDNgyPex+ne4vs8tDTg0zTThZghqlBKiS1/OB407bgOFzMXHhcZvX9ezWB1lGRBkB1oHOnW1Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jb+NHj2q; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760374862; c=relaxed/simple;
+	bh=4MFSAeuVpBQvqmqSjyK0yJwFQ/ROFaatrCdCEs5ayzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uxeJPjUZQUY+EgXE0/b2269LsROnsCxtnkKQc1j7zFB86Bc53muwV3I+tm3unhC3jBvN+xqK/NBJWdSQsQihEQ1OqgNlYG+O1JWuHVX9dLyp7i/TkdMYEaATeKehHJMdro6RJ+30Wss1eNh2JN/0wWW3kPp3yJa/25Rqfw+QP5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gohuTDct; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jb+NHj2q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760358502; x=1791894502;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=062beN90GWCCZdiCP0fTDtp5gYxwQtheCLAnof9Ihbs=;
-  b=jb+NHj2qCKD9luVrnB2353qMhx/tDe0OE6yyFkzF+9nZszFAA3B8X6dA
-   dsSJEYW7vnYAfg7lu/hbrzMhYGLhtltlOJMdO8IZU5qFX9PJoYsZvKuv3
-   vUeIRVu5lWAW1XIHftEx11LaD8LNlHX1wxTSFpPZW3xkKyttGOpWbsU3T
-   qk1ZsRC6DnFymHtzTy8B5EOXcB4gfI6Z2LUi+RfRGWCgCpcuxodQrjqev
-   Rgj+KurEsVCcailHPXxnMOzfN5iglUyNcNxr6bFoscSuSgkBPnaQ64SVW
-   uXNdWigzLYo84NudYvt/Nk8dpw7TTcy7bi71QnQD7/1ZkW67VxnC4qnPu
-   Q==;
-X-CSE-ConnectionGUID: qoVThwOORFykABIEbYF3zQ==
-X-CSE-MsgGUID: cvptwfb1RQ6xL3HRdPQ3YA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="73840273"
-X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="73840273"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 05:28:20 -0700
-X-CSE-ConnectionGUID: 4EQwnOmmSQ2xuh+b1ZiVMg==
-X-CSE-MsgGUID: Z07tOXdFR4+9UXpDxr4yNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="212209652"
-Received: from igk-lkp-server01.igk.intel.com (HELO 0e586ad5e7f7) ([10.91.175.65])
-  by orviesa002.jf.intel.com with ESMTP; 13 Oct 2025 05:28:19 -0700
-Received: from kbuild by 0e586ad5e7f7 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1v8Hey-000000008sb-2R5a;
-	Mon, 13 Oct 2025 12:28:16 +0000
-Date: Mon, 13 Oct 2025 14:27:18 +0200
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jeff Layton <jlayton@kernel.org>
-Subject: [jlayton:kdevops 1/3] fs/nfsd/nfsfh.c:699:16: warning: unused
- variable 'inode'
-Message-ID: <202510112203.B1ZqlPPr-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gohuTDct"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE13CC4CEE7;
+	Mon, 13 Oct 2025 17:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760374861;
+	bh=4MFSAeuVpBQvqmqSjyK0yJwFQ/ROFaatrCdCEs5ayzQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gohuTDctP/tRfmO3/xVb5WLeKnExyL5x1G4z8tKesogZC8d4hdxZOxFdM3cisefKt
+	 vuFy4URynmScK2I3YKULu+SyXWuni0UiHUVIb4AYDxdiTeh77KfNrJLztNYuozvdic
+	 XorxEJxxuoWF5RH3CI6IQrlUjn1Dp1HGPiCrJZlMUbSZ5e0aPDwTVpPIbb4FYW/oLy
+	 e+m4MrLz/8oMtb5f+zCEjKavwylklTtKXg/cz0NMIGXSdenHO+OIsAfNK6IGgTu/WA
+	 yC8jNan0AlVc551WRYrLXhrfL75zzx5R8z0zMVHrNVjV+zBq7C8gHQWbm22idgQSb0
+	 SI0Ys/E8n6F5A==
+Date: Mon, 13 Oct 2025 10:00:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Vinod Koul <vkoul@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Yixun Lan <dlan@gentoo.org>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, elder@riscstar.com,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Guodong Xu <guodong@riscstar.com>
+Subject: Re: [PATCH] dmaengine: mmp_pdma: fix DMA mask handling
+Message-ID: <20251013170055.GA3968340@ax162>
+References: <20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com>
+ <20250930221001.GA66006@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,64 +49,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250930221001.GA66006@ax162>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
-head:   111666a803b9733b5c590aec6312443ad3dac2f5
-commit: 177818f176ef904fb18d237d1dbba00c2643aaf2 [1/3] Merge branch 'mrchuck/nfsd-next'
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251011/202510112203.B1ZqlPPr-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510112203.B1ZqlPPr-lkp@intel.com/reproduce)
+Hi Vinod,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510112203.B1ZqlPPr-lkp@intel.com/
+On Tue, Sep 30, 2025 at 03:10:01PM -0700, Nathan Chancellor wrote:
+> On Thu, Sep 18, 2025 at 10:27:27PM +0800, Guodong Xu wrote:
+> > The driver's existing logic for setting the DMA mask for "marvell,pdma-1.0"
+> > was flawed. It incorrectly relied on pdev->dev->coherent_dma_mask instead
+> > of declaring the hardware's fixed addressing capability. A cleaner and
+> > more correct approach is to define the mask directly based on the hardware
+> > limitations.
+> > 
+> > The MMP/PXA PDMA controller is a 32-bit DMA engine. This is supported by
+> > datasheets and various dtsi files for PXA25x, PXA27x, PXA3xx, and MMP2,
+> > all of which are 32-bit systems.
+> > 
+> > This patch simplifies the driver's logic by replacing the 'u64 dma_mask'
+> > field with a simpler 'u32 dma_width' to store the addressing capability
+> > in bits. The complex if/else block in probe() is then replaced with a
+> > single, clear call to dma_set_mask_and_coherent(). This sets a fixed
+> > 32-bit DMA mask for "marvell,pdma-1.0" and a 64-bit mask for
+> > "spacemit,k1-pdma," matching each device's hardware capabilities.
+> > 
+> > Finally, this change also works around a specific build error encountered
+> > with clang-20 on x86_64 allyesconfig. The shift-count-overflow error is
+> > caused by a known clang compiler issue where the DMA_BIT_MASK(n) macro's
+> > ternary operator is not correctly evaluated in static initializers. By
+> > moving the macro's evaluation into the probe() function, the driver avoids
+> > this compiler bug.
+> > 
+> > Fixes: 5cfe585d8624 ("dmaengine: mmp_pdma: Add SpacemiT K1 PDMA support with 64-bit addressing")
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Closes: https://lore.kernel.org/lkml/CA+G9fYsPcMfW-e_0_TRqu4cnwqOqYF3aJOeKUYk6Z4qRStdFvg@mail.gmail.com
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Guodong Xu <guodong@riscstar.com>
+> 
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+> 
+> It would be great if this could be picked up before the 6.18 DMA pull
+> request so that I do not have to patch our CI to avoid this issue.
 
-All warnings (new ones prefixed by >>):
+This patch resolves a (bogus) clang warning that breaks the build with
+-Werror. Can you please queue this for a future DMA fixes pull request?
+This has been available for almost a month and really should have made
+the original 6.18 pull request but I dropped the ball on pinging again
+before it went out since I was dealing with Kbuild this cycle.
 
->> fs/nfsd/nfsfh.c:699:16: warning: unused variable 'inode' [-Wunused-variable]
-     699 |         struct inode *inode = d_inode(p.dentry);
-         |                       ^~~~~
-   1 warning generated.
-
-
-vim +/inode +699 fs/nfsd/nfsfh.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  684  
-c1f203e46c55ac Chuck Lever    2025-07-02  685  /**
-c1f203e46c55ac Chuck Lever    2025-07-02  686   * fh_getattr - Retrieve attributes on a local file
-c1f203e46c55ac Chuck Lever    2025-07-02  687   * @fhp: File handle of target file
-c1f203e46c55ac Chuck Lever    2025-07-02  688   * @stat: Caller-supplied kstat buffer to be filled in
-c1f203e46c55ac Chuck Lever    2025-07-02  689   *
-c1f203e46c55ac Chuck Lever    2025-07-02  690   * Returns nfs_ok on success, otherwise an NFS status code is
-c1f203e46c55ac Chuck Lever    2025-07-02  691   * returned.
-c1f203e46c55ac Chuck Lever    2025-07-02  692   */
-c1f203e46c55ac Chuck Lever    2025-07-02  693  __be32 fh_getattr(const struct svc_fh *fhp, struct kstat *stat)
-c1f203e46c55ac Chuck Lever    2025-07-02  694  {
-c1f203e46c55ac Chuck Lever    2025-07-02  695  	struct path p = {
-c1f203e46c55ac Chuck Lever    2025-07-02  696  		.mnt		= fhp->fh_export->ex_path.mnt,
-c1f203e46c55ac Chuck Lever    2025-07-02  697  		.dentry		= fhp->fh_dentry,
-c1f203e46c55ac Chuck Lever    2025-07-02  698  	};
-81538c8e42806e Linus Torvalds 2025-10-06 @699  	struct inode *inode = d_inode(p.dentry);
-c1f203e46c55ac Chuck Lever    2025-07-02  700  	u32 request_mask = STATX_BASIC_STATS;
-c1f203e46c55ac Chuck Lever    2025-07-02  701  
-737a72eed2e505 Chuck Lever    2025-09-29  702  	if (d_is_reg(p.dentry))
-6f322e6110a628 Mike Snitzer   2025-09-29  703  		request_mask |= (STATX_DIOALIGN | STATX_DIO_READ_ALIGN);
-6f322e6110a628 Mike Snitzer   2025-09-29  704  
-c1f203e46c55ac Chuck Lever    2025-07-02  705  	if (fhp->fh_maxsize == NFS4_FHSIZE)
-c1f203e46c55ac Chuck Lever    2025-07-02  706  		request_mask |= (STATX_BTIME | STATX_CHANGE_COOKIE);
-c1f203e46c55ac Chuck Lever    2025-07-02  707  
-c1f203e46c55ac Chuck Lever    2025-07-02  708  	return nfserrno(vfs_getattr(&p, stat, request_mask,
-c1f203e46c55ac Chuck Lever    2025-07-02  709  				    AT_STATX_SYNC_AS_STAT));
-c1f203e46c55ac Chuck Lever    2025-07-02  710  }
-c1f203e46c55ac Chuck Lever    2025-07-02  711  
-
-:::::: The code at line 699 was first introduced by commit
-:::::: 81538c8e42806eed71ce125723877a7c2307370c Merge tag 'nfsd-6.18' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-
-:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
