@@ -1,141 +1,125 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367752E7192
-	for <llvm@lists.linux.dev>; Mon, 13 Oct 2025 07:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C112EACF7;
+	Mon, 13 Oct 2025 08:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760340444; cv=none; b=R+3GHUDsHOt6K14ysi/WmtJMHX02mFoBMjpIfJYuEIRgZgIW5ayDDi/xZFYeFEOsQ0Pdb7Kx+fGzY0YHFQ2TYrFIxdZfDLZiHsqB4XDVEylHHHuWBpZxvnN8No2sPLGE2JH0Dc3/M7IEzEjGl+vUk+CSv7kMZ8t9lRpO/qMqUo8=
+	t=1760343995; cv=none; b=C81j6Ej0rURADYYHzk83mIxqdFbM/J4GaF4fQr0VWfdl7EFHEmaURp/vnbPMPyrysgLLLHdgWo2+aH6hBfJhHTGz96fqHwwUIoAKIVKdMHrtb12mzLMKjBfnL/gBayxxaF9Q18AH3BJlYBc0oCqJxYo9jHE8Y62cOnXGx8oEo+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760340444; c=relaxed/simple;
-	bh=4pYwMMjLxKjKxW07zzwySt1Wyqgpj7uiNUdODjN8rMQ=;
+	s=arc-20240116; t=1760343995; c=relaxed/simple;
+	bh=mhYbMUqo6ZsY2xdUH3I9/u+IkGuSpwABWXvCjwa48yk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AdY2GMhitYoEIFV5K9Jb/cJAUcggzsHIKIc2D3eszJLrB1Z/s2xza1+Q4I5t1hyjq4pXTx2zj8/+0Gv13zKGsztm14/d+chmCr3wojnyuhBMCzBsYxDvVe9i7Jpjx7DPDxLzi4VndXPyJ/t6UzadUQkI0JJ793AE9PVZPbvSru8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CktaWn0j; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jasmdKiM3IO+IdWHmSNyDgIP84wO1RG9oFAg7FJrM3DV2NhpZbAx8mQoeO8Qq7nZuVjGL3B8vf/bISEHM83DIc5Maln+RSU+OLLLksoPchxAv+0/v00qMN7XELk7iLsQHHAeKEuP4sWHZW9eciwu8OcmfLtT6VW51q5RmMxh6X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=P1jrCx+u; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CktaWn0j"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59D1H0mg016744;
-	Mon, 13 Oct 2025 07:27:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=bTiF+B
-	WsP+sAuwRYEFqVZgkw/cidH8/ZLJVrg0nDFQo=; b=CktaWn0jx6la+uEI8TTx9e
-	MUjU+gy66aapApShNo6+p+tXGn4lsfqNzFUOAtmHwwYViQVM5rCL72TrJu6xP9bs
-	duiFsnKeAu4FqkyaHZPD/KZqGeBJSm+T6F5y6WFXQ4kNLDdDvPGMiozkKp2uKupg
-	x4E0efOkoabB2a7SxL2oBNfmFSAT/RaSRVvfVHk7EFS03Ms4BeFXlw5kvgIQ/3V0
-	GJVQ2dVrkkNgVDfHhu8pDw0kKmsjJmEJzIHf8EVuazTXVR8fN0vAndBrlb+N/a4G
-	PgktbKeEAAV5EAs+GF7IMWquMg5fd1rSKUOsa8nhYaf8td2pk4u3TifCn+IekODw
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49qey8fjkx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Oct 2025 07:27:11 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59D6R46d016705;
-	Mon, 13 Oct 2025 07:27:10 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 49r32jmk0h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Oct 2025 07:27:10 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59D7R8ZP54723032
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 13 Oct 2025 07:27:08 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6005620074;
-	Mon, 13 Oct 2025 07:27:07 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6A9662006E;
-	Mon, 13 Oct 2025 07:27:05 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.39.21.93])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 13 Oct 2025 07:27:05 +0000 (GMT)
-Date: Mon, 13 Oct 2025 12:57:00 +0530
-From: Vishal Chourasia <vishalc@linux.ibm.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: maddy@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] arch/powerpc: Remove .interp section in vmlinux
-Message-ID: <aOypxKMzsLR5tAtv@linux.ibm.com>
-References: <eeaf8fd6628a75d19872ab31cf7e7179e2baef5e.1751366959.git.christophe.leroy@csgroup.eu>
- <20251013040148.560439-1-vishalc@linux.ibm.com>
- <2b4a3215-1620-40c9-a00c-ca833ebbb7b6@csgroup.eu>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="P1jrCx+u"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=2onQY5FvSXunJQp4XQbpmjw1bmWMDR7bKnWkiVs65Vs=; b=P1jrCx+uheHj/hJbkIbTIzHL7H
+	I6udKigyAEQLZTwd8MN28N6NsWzWXhmA5ZbVjtuyRNKl3bxrmkVAYFLgW/U2u675HyAneoft1dEuL
+	alxOCO24vFUepC7YJHE0kI4R5yzxiwmXf1LyZXJ8VGxWF1g13hX48IeDZAXu9VjHHzofcdfYERFui
+	qYSEPJlP4sncOP7WVVMUEc8I0MfL7g1aBPAHGD76XwXoe/FiwQuE1ZIw2Qjsf1QnLIA473kBynCRs
+	9M8hEyKjW1X1nFTgeIQK5YAvIi3hTBuqjmXctQFGpL7bpRLmNTa392/lI7K16xQiCJTJWqhzYelzj
+	R1UeeJ1g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v8Dsz-000000026Gw-11YD;
+	Mon, 13 Oct 2025 08:26:30 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4733C300212; Mon, 13 Oct 2025 10:26:29 +0200 (CEST)
+Date: Mon, 13 Oct 2025 10:26:29 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>, Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [tip:x86/core 1/1] vmlinux.o: warning: objtool:
+ rcar_pcie_probe+0x13e: no-cfi indirect call!
+Message-ID: <20251013082629.GH4067720@noisy.programming.kicks-ass.net>
+References: <202510092124.O2IX0Jek-lkp@intel.com>
+ <20251010032001.GA3741500@ax162>
+ <20251010071032.GE4067720@noisy.programming.kicks-ass.net>
+ <20251010074446.GE4068168@noisy.programming.kicks-ass.net>
+ <20251010223012.GA3597090@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2b4a3215-1620-40c9-a00c-ca833ebbb7b6@csgroup.eu>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Bp2bZu6f2BQTPTG9kZ1gxrm11KIT41L7
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxMSBTYWx0ZWRfX8vblzQT9rLVU
- 7mdtFcJ4Dx4yJkBKI564BPd1idWly6W/VdNzzylF/RLy1OPPrLggdD+vVaxC4H9625dUJonK41d
- BWkUAjmNV1pm9kTXzMx+sHYKWg5gWtljrDeVCHtKRg+Yy+h19gOfVf5jsOOr5I2qSCwcvFzEszk
- 61w/aV4MPaugCS923hzffW9Dpvt3itGElkHKWzvvzOfzF1pAUBOnTXePJo8WlM4QoE8TnwbB7nx
- Q6OW/w12EjKWUdlGWi4lk2XLKxNDUiO5d09HKfNWKr3AMsmPYYoNg6y+qXq2DV4BySKCL7qGmMz
- /AxJpddzhwIKP60h4nivBJUPdLUmS600+WogX2ZEljWi7ID8GaTnNAkafYw+FKDL41vEd2pPzso
- 7AcI6uK6kkMRplOhngvceTIaWu25pg==
-X-Proofpoint-GUID: Bp2bZu6f2BQTPTG9kZ1gxrm11KIT41L7
-X-Authority-Analysis: v=2.4 cv=QZ5rf8bv c=1 sm=1 tr=0 ts=68eca9cf cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=NEAV23lmAAAA:8 a=CCpqsmhAAAAA:8
- a=-ktxzAwryNFT6qpDX-UA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=ul9cdbp4aOFLsgKbc677:22 a=cPQSjfK2_nFv0Q5t_7PE:22 a=HhbK4dLum7pmb74im6QT:22
- a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-13_03,2025-10-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0
- spamscore=0 malwarescore=0 impostorscore=0 clxscore=1011 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510110011
+In-Reply-To: <20251010223012.GA3597090@ax162>
 
-On Mon, Oct 13, 2025 at 08:46:48AM +0200, Christophe Leroy wrote:
-> +CLANG ppl
-> 
-> Hi,
-> 
-> Le 13/10/2025 à 06:01, Vishal Chourasia a écrit :
-> > While debugging a ppc64le QEMU guest on an x86_64 host, I observed GDB crashes
-> > when attempting to attach to the remote target:
+On Fri, Oct 10, 2025 at 03:30:12PM -0700, Nathan Chancellor wrote:
+> On Fri, Oct 10, 2025 at 09:44:46AM +0200, Peter Zijlstra wrote:
+> > That's here... and that is indeed broken. Also note how it zeros r11
+> > right before calling it.
 > > 
-> > (gdb) target remote :1234
+> > AFAICT this is:
 > > 
-> > Investigation revealed that cross-compiling the Linux kernel for ppc64le on an
-> > x86_64 host using Clang produces a vmlinux binary containing an empty .interp
-> > section. This empty .interp section is responsible for the GDB crashes.
+> >         host->phy_init_fn = of_device_get_match_data(dev);
+> >         err = host->phy_init_fn(host);
+> > 
+> > Where it has decided that of_device_get_match_data() *will* return NULL
+> > and then helpfully emits (*NULL)(); or something like that. And then
 > 
-> Which version of CLANG is it ?
-(i) ❯ clang --version
-clang version 21.0.0git (https://github.com/llvm/llvm-project.git a80bccc6847be104948f46d313f03ac6b9ccb292)
+> Oh duh because it will :)
+> 
+>   $ rg '^(# )?CONFIG_OF' .config
+>   1528:# CONFIG_OF is not set
+> 
+> which means that of_device_get_match_data() is always NULL:
+> 
+>   static inline const void *of_device_get_match_data(const struct device *dev)
+>   {
+>       return NULL;
+>   }
+> 
+> > forgets to add CFI bits on for extra fun and games.
+> 
+> which means this is another instance of what Sami mentioned happening on
+> another report of a similar issue
+> 
+>   https://lore.kernel.org/CABCJKue1wCB6jBLYUc-fAEzpyQWHXwbk8R5GBaZCkCao0EQZPA@mail.gmail.com/
 
-> 
-> > 
-> > This issue does not occur when:
-> > - Building for ppc64le target using GCC on x86_64 host
-> > - Building for ppc64le target using Clang on ppc64le host
-> 
-> Is it the same CLANG version ?
-# clang --version
-clang version 22.0.0git (https://github.com/llvm/llvm-project.git 2f755c543ab357bd83235592fcee37fa391cdd9d)
+Ah yes -- I had missed that :/
 
-> 
-> > - Building for ppc64le target using GCC on ppc64le host
-> > 
-> > For details refer [1]
-> > 
-> > [1] https://sourceware.org/bugzilla/show_bug.cgi?id=33481
-> 
+> which does somewhat make sense because what's the point of setting up
+> the CFI call if you know nothing can actually make use of it since we
+> will crash when trying to indirectly call a NULL pointer?
 
-vishalc
+As Sami says, it would be really nice if clang would at least WARN about
+emitting an unconditional NULL call like that. I mean, it *knows* its
+going to crash and burn at that point, right?
 
+> Something like this would avoid this issue then.
+
+Yes, this seems reasonable -- even if the driver should perhaps
+mandate/depend on CONFIG_OF, making sure to behave when NULL does get
+returned is definitely a good thing!.
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+> Cheers,
+> Nathan
+> 
+> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+> index 213028052aa5..15514c9c1927 100644
+> --- a/drivers/pci/controller/pcie-rcar-host.c
+> +++ b/drivers/pci/controller/pcie-rcar-host.c
+> @@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+>  		goto err_clk_disable;
+>  
+>  	host->phy_init_fn = of_device_get_match_data(dev);
+> -	err = host->phy_init_fn(host);
+> +	err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
+>  	if (err) {
+>  		dev_err(dev, "failed to init PCIe PHY\n");
+>  		goto err_clk_disable;
