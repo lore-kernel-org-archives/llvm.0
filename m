@@ -1,103 +1,232 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151101EBA19
-	for <llvm@lists.linux.dev>; Mon, 13 Oct 2025 09:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD33C2E7F2D;
+	Mon, 13 Oct 2025 10:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760348754; cv=none; b=bGUDEomIyzBHFyoeg73mkQYvuc3xJGReEixsF/Am+3prCljRPqF1VM/x089VIKjaMNb2biD1XWGnJBFm6r5ahRLjk+HGdQo41QTr3+OGABRutfLZYO8XVkbaWzcwbRAVS+fs3d61IU+XHan3zsnEH+bQqlE954GjNr6sFMLQFAQ=
+	t=1760350345; cv=none; b=XOPGc7xVYvI8NOUKchTZ04618XAwxS8CfUP1TeWofdOjR/CfJBBW0sGFOWS2/JOb57m0MKkWO51SH7ZkVXuceGuQIbm0zIc8+AZAgMO2A4oA+tAom7Xzpl/4SEcsn4KBgJX4dnnAXURH65+RU3ixyU1+a13/byQJJF/gTV/YcCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760348754; c=relaxed/simple;
-	bh=f5S5EzRGvuz/r4X9fJ+a+VGxsMoAlj8KpasOUBJh7Iw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hnwioi+YlNf76YACnJtsFRkMbExZoUSJYYUTDaqzuTH7kRredwytXP+Qzaa7MPP3bHek0rJg7EFI0WhklVg2XNR/JGW8Gu2p95/VbSBciert3TThxrviXcMNLaJs4aUPg01rIi3MbvZZDrOnQagHrNsTs/m4AngCX82dBXJKzY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qUGXd4tN; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qUGXd4tN"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-46e384dfde0so41053655e9.2
-        for <llvm@lists.linux.dev>; Mon, 13 Oct 2025 02:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760348751; x=1760953551; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oVu1hEkIf44NHHLfFJPgY+f91pjliiXRGzufnhZn7d8=;
-        b=qUGXd4tNJ6zPQKudDlf7Kl+KbKyU8aHv6y4OrfxqXrUc9ZBP8FCBqX7IUfXwJDuWbM
-         jjmPdPNXa3a5RPgu8sRosz5ZGaaJE9lghe335HEIb9zhZmFerbFK462XjlcdKa0Vx08I
-         +18GI2Srk5ksIKpUzGxgKjAKKCA5zUG0QA8CpvWFfIQG3B2SFXZogOv7SNaG7jp8KaYT
-         SUNY/17CeEa7WbeAKc5em0eUwMXL0nMR2p9bxf5kQSzOhBEd0gtzrMNmUyTCh8jQ/oRo
-         rOfuXf3XYt7FdrZEwhRf7eCHcP22Za4TmmKCD0jQLP22Lbqm9BIvBItXOKWfk4GXPE8e
-         /jyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760348751; x=1760953551;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oVu1hEkIf44NHHLfFJPgY+f91pjliiXRGzufnhZn7d8=;
-        b=BDS6shNxHMlZsnhGO6pirirplnbeVR7U7Mnk5tsq//p1DzExGwJxpC0hOs974RFLOl
-         2jmHPgWlunWc1h2kEcn0tspkIEezDmmE5GHLBHrlfIDqGLufortooEh0Ljy9N5kKj+8O
-         NfmO5BTFVhsZRqmqTRm3xDPUZjqsPOuPIcAHYFrLkiK4YPGrKU9a0RJhoUixCKrr4n0z
-         twXGG906GttTUhHs2EfDzMyzHVXY2BLS251BOaWhOUqhFntHFWOiuU7N0a9R9BnAUd1/
-         3swdI8vO1hCMKRv7xZlqjZWB8ty3Yxz9nfMX/ZVZxkQz04Af6G5mMZHqJIGOlul0/2nY
-         lF1g==
-X-Forwarded-Encrypted: i=1; AJvYcCV3ue3cS7SoR7G52z2f++dA8bR2eHkAmpXhfPCwu9vtzayFPb5xFzOIXRvHLMIwzsRmOhvg@lists.linux.dev
-X-Gm-Message-State: AOJu0YxjyD9FJD2XLHklIXDsCKPrOI9+iyB1ArOxFbd+R+aOwk9tQA+k
-	lPlhIrilFIKto8OX8EhlL6ilbxPDUfKER1K4+UIyKyHH+H1Az00C5oJzQUSPy3uYF0CpMUhen0y
-	9PsCzFGdfsjwWYJFJTabNRkAMzr21MG7cnsFA7O3d
-X-Gm-Gg: ASbGncuhQbrIrc8FbHiU25nvZO+gba/tJ1X8ubb5SinlQktGCzdtIOjMrXO6OT5je5b
-	0G5AX0o1+jzbWAsOjA5YAya64J7Gu2QMkLmHbXaFFBTxdnkNjaGsBKfAecyBYolZsLAMrwIgJpk
-	OcJ3dDTYDGIdutjW0QaWGln1HadkxRW/lzlQdHXbsgmox5p/e5S0LN9UNGpSTN/uMxQagIFb7lo
-	SZgDZNB+A+6GyFJnXToAcrqou0qEcqDlgmqesrYkQ/bJFb3OnEts/hFpTKKkuVh+PPzNCb8
-X-Google-Smtp-Source: AGHT+IFqaBixRi77uwFxD0KO5fWa70Oa0mflVhXrjLFcAwKyNCUyus7ehKoAqeSTAbzAk4ZDHyQpfzilqQdd3qFUiUs=
-X-Received: by 2002:a05:600c:502c:b0:46e:3d41:5fe6 with SMTP id
- 5b1f17b1804b1-46fa9a9ebb8mr133351055e9.9.1760348751245; Mon, 13 Oct 2025
- 02:45:51 -0700 (PDT)
+	s=arc-20240116; t=1760350345; c=relaxed/simple;
+	bh=M//0ZCpz189T49x8KTjz9fAgIFaivSmQ1xCVbz7Xlx4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fu1pGgRvaN1B1PWi/X3MWkp7rjHdlQ3rmtA2b84L7k6071hGjNnXEEnR0+mWm2mwlagZfgZkiVcGDpZBPwR+WwSIjxwE21tBF44s8uyRHLwkpM292rt7keAdXuk+nranKUUeg0ArIUcpCel+xvlAecIQ9H1/1KpE+8aY7Om81mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4clY3r0xsCz6L5L3;
+	Mon, 13 Oct 2025 18:09:28 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id C14771402FD;
+	Mon, 13 Oct 2025 18:12:14 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 13 Oct
+ 2025 11:12:14 +0100
+Date: Mon, 13 Oct 2025 11:12:12 +0100
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: kernel test robot <lkp@intel.com>
+CC: Petre Rodan <petre.rodan@subdimension.ro>, <llvm@lists.linux.dev>,
+	<oe-kbuild-all@lists.linux.dev>
+Subject: Re: [jic23-iio:testing 151/155]
+ drivers/iio/accel/bma220_core.c:23:10: fatal error: 'bma220.h' file not
+ found
+Message-ID: <20251013111212.00004cf4@huawei.com>
+In-Reply-To: <202510130200.xmZGt5tr-lkp@intel.com>
+References: <202510130200.xmZGt5tr-lkp@intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251003074939.465517-1-benx.guo@gmail.com> <20251013043812.13186-1-benx.guo@gmail.com>
-In-Reply-To: <20251013043812.13186-1-benx.guo@gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Mon, 13 Oct 2025 11:45:39 +0200
-X-Gm-Features: AS18NWC7zd8zRon9s3XEh0rKZRaVm37ojpo0BrRNHaKslRzb8eH_XUzUW9LbRAU
-Message-ID: <CAH5fLgi4C454xG67vN-T5rRV1X4-rAGEj_ftnHqTOoN61wtcKw@mail.gmail.com>
-Subject: Re: [PATCH v2] docs/zh_CN: Add translation of rust/testing.rst
-To: Ben Guo <benx.guo@gmail.com>
-Cc: si.yanteng@linux.dev, a.hindborg@kernel.org, alex.gaynor@gmail.com, 
-	alexs@kernel.org, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
-	corbet@lwn.net, dakr@kernel.org, dzm91@hust.edu.cn, gary@garyguo.net, 
-	hust-os-kernel-patches@googlegroups.com, justinstitt@google.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	lossin@kernel.org, morbo@google.com, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
-	rust-for-linux@vger.kernel.org, tmgross@umich.edu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Mon, Oct 13, 2025 at 6:38=E2=80=AFAM Ben Guo <benx.guo@gmail.com> wrote:
->
-> Hi Yanteng,
->
-> I=E2=80=99d like to confirm the expected use of the In-Reply-To header fo=
-r versioned patches.
->
-> In my case:
->   [PATCH]    ->  Message-ID: <20250929163531.376092-1-benx.guo@gmail.com>
->   [PATCH v2] ->  Message-ID: <20251003074939.465517-1-benx.guo@gmail.com>
->   [PATCH v2] -> In-Reply-To: <20250929163531.376092-1-benx.guo@gmail.com>
->
-> That means the v2 patch points back to the v1 message ID.
->
-> Could you please confirm whether I should start a new thread for [PATCH v=
-2], or if there=E2=80=99s something wrong with how I used the In-Reply-To h=
-eader?
-> Thanks for helping clarify this.
+On Mon, 13 Oct 2025 02:21:57 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-When posting a new version, you should start a new thread.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+> head:   680b1fb5d2d9b3ed6644e85f6115972d8ade01aa
+> commit: b85080e8ba03eca25678f77539193ab2c25193d4 [151/155] iio: accel: bma220: split original driver
+> config: riscv-randconfig-002-20251013 (https://download.01.org/0day-ci/archive/20251013/202510130200.xmZGt5tr-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251013/202510130200.xmZGt5tr-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510130200.xmZGt5tr-lkp@intel.com/
 
-Alice
+For the file not found.
+
+I messed up whilst applying Petre's set yesterday.
+
+I think this is a report from the stale tree I pushed out before realizing
+my mistake.
+
+So hopefully gone already.
+Thanks,
+
+Jonathan
+
+
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      804 |         insb(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+>      104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+>          |                                          ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      812 |         insw(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+>      105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+>          |                                          ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      820 |         insl(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+>      106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+>          |                                          ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      829 |         outsb(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+>      118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+>          |                                            ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      838 |         outsw(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+>      119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+>          |                                            ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      847 |         outsl(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+>      120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+>          |                                            ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_core.c:15:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>     1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+>          |                                                   ~~~~~~~~~~ ^
+> >> drivers/iio/accel/bma220_core.c:23:10: fatal error: 'bma220.h' file not found  
+>       23 | #include "bma220.h"
+>          |          ^~~~~~~~~~
+>    7 warnings and 1 error generated.
+> --
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      804 |         insb(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+>      104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+>          |                                          ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      812 |         insw(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+>      105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+>          |                                          ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      820 |         insl(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+>      106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+>          |                                          ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      829 |         outsb(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+>      118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+>          |                                            ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      838 |         outsw(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+>      119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+>          |                                            ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      847 |         outsl(addr, buffer, count);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+>      120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+>          |                                            ~~~~~~~~~~ ^
+>    In file included from drivers/iio/accel/bma220_spi.c:11:
+>    In file included from include/linux/spi/spi.h:17:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/riscv/include/asm/io.h:136:
+>    include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>     1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+>          |                                                   ~~~~~~~~~~ ^
+> >> drivers/iio/accel/bma220_spi.c:13:10: fatal error: 'bma220.h' file not found  
+>       13 | #include "bma220.h"
+>          |          ^~~~~~~~~~
+>    7 warnings and 1 error generated.
+> 
+> 
+> vim +23 drivers/iio/accel/bma220_core.c
+> 
+>     22	
+>   > 23	#include "bma220.h"  
+>     24	
+> 
+
