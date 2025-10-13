@@ -1,125 +1,103 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C112EACF7;
-	Mon, 13 Oct 2025 08:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151101EBA19
+	for <llvm@lists.linux.dev>; Mon, 13 Oct 2025 09:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760343995; cv=none; b=C81j6Ej0rURADYYHzk83mIxqdFbM/J4GaF4fQr0VWfdl7EFHEmaURp/vnbPMPyrysgLLLHdgWo2+aH6hBfJhHTGz96fqHwwUIoAKIVKdMHrtb12mzLMKjBfnL/gBayxxaF9Q18AH3BJlYBc0oCqJxYo9jHE8Y62cOnXGx8oEo+Q=
+	t=1760348754; cv=none; b=bGUDEomIyzBHFyoeg73mkQYvuc3xJGReEixsF/Am+3prCljRPqF1VM/x089VIKjaMNb2biD1XWGnJBFm6r5ahRLjk+HGdQo41QTr3+OGABRutfLZYO8XVkbaWzcwbRAVS+fs3d61IU+XHan3zsnEH+bQqlE954GjNr6sFMLQFAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760343995; c=relaxed/simple;
-	bh=mhYbMUqo6ZsY2xdUH3I9/u+IkGuSpwABWXvCjwa48yk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jasmdKiM3IO+IdWHmSNyDgIP84wO1RG9oFAg7FJrM3DV2NhpZbAx8mQoeO8Qq7nZuVjGL3B8vf/bISEHM83DIc5Maln+RSU+OLLLksoPchxAv+0/v00qMN7XELk7iLsQHHAeKEuP4sWHZW9eciwu8OcmfLtT6VW51q5RmMxh6X8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=P1jrCx+u; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1760348754; c=relaxed/simple;
+	bh=f5S5EzRGvuz/r4X9fJ+a+VGxsMoAlj8KpasOUBJh7Iw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hnwioi+YlNf76YACnJtsFRkMbExZoUSJYYUTDaqzuTH7kRredwytXP+Qzaa7MPP3bHek0rJg7EFI0WhklVg2XNR/JGW8Gu2p95/VbSBciert3TThxrviXcMNLaJs4aUPg01rIi3MbvZZDrOnQagHrNsTs/m4AngCX82dBXJKzY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qUGXd4tN; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="P1jrCx+u"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=2onQY5FvSXunJQp4XQbpmjw1bmWMDR7bKnWkiVs65Vs=; b=P1jrCx+uheHj/hJbkIbTIzHL7H
-	I6udKigyAEQLZTwd8MN28N6NsWzWXhmA5ZbVjtuyRNKl3bxrmkVAYFLgW/U2u675HyAneoft1dEuL
-	alxOCO24vFUepC7YJHE0kI4R5yzxiwmXf1LyZXJ8VGxWF1g13hX48IeDZAXu9VjHHzofcdfYERFui
-	qYSEPJlP4sncOP7WVVMUEc8I0MfL7g1aBPAHGD76XwXoe/FiwQuE1ZIw2Qjsf1QnLIA473kBynCRs
-	9M8hEyKjW1X1nFTgeIQK5YAvIi3hTBuqjmXctQFGpL7bpRLmNTa392/lI7K16xQiCJTJWqhzYelzj
-	R1UeeJ1g==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v8Dsz-000000026Gw-11YD;
-	Mon, 13 Oct 2025 08:26:30 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4733C300212; Mon, 13 Oct 2025 10:26:29 +0200 (CEST)
-Date: Mon, 13 Oct 2025 10:26:29 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Ingo Molnar <mingo@kernel.org>, Kees Cook <kees@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [tip:x86/core 1/1] vmlinux.o: warning: objtool:
- rcar_pcie_probe+0x13e: no-cfi indirect call!
-Message-ID: <20251013082629.GH4067720@noisy.programming.kicks-ass.net>
-References: <202510092124.O2IX0Jek-lkp@intel.com>
- <20251010032001.GA3741500@ax162>
- <20251010071032.GE4067720@noisy.programming.kicks-ass.net>
- <20251010074446.GE4068168@noisy.programming.kicks-ass.net>
- <20251010223012.GA3597090@ax162>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qUGXd4tN"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-46e384dfde0so41053655e9.2
+        for <llvm@lists.linux.dev>; Mon, 13 Oct 2025 02:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760348751; x=1760953551; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oVu1hEkIf44NHHLfFJPgY+f91pjliiXRGzufnhZn7d8=;
+        b=qUGXd4tNJ6zPQKudDlf7Kl+KbKyU8aHv6y4OrfxqXrUc9ZBP8FCBqX7IUfXwJDuWbM
+         jjmPdPNXa3a5RPgu8sRosz5ZGaaJE9lghe335HEIb9zhZmFerbFK462XjlcdKa0Vx08I
+         +18GI2Srk5ksIKpUzGxgKjAKKCA5zUG0QA8CpvWFfIQG3B2SFXZogOv7SNaG7jp8KaYT
+         SUNY/17CeEa7WbeAKc5em0eUwMXL0nMR2p9bxf5kQSzOhBEd0gtzrMNmUyTCh8jQ/oRo
+         rOfuXf3XYt7FdrZEwhRf7eCHcP22Za4TmmKCD0jQLP22Lbqm9BIvBItXOKWfk4GXPE8e
+         /jyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760348751; x=1760953551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oVu1hEkIf44NHHLfFJPgY+f91pjliiXRGzufnhZn7d8=;
+        b=BDS6shNxHMlZsnhGO6pirirplnbeVR7U7Mnk5tsq//p1DzExGwJxpC0hOs974RFLOl
+         2jmHPgWlunWc1h2kEcn0tspkIEezDmmE5GHLBHrlfIDqGLufortooEh0Ljy9N5kKj+8O
+         NfmO5BTFVhsZRqmqTRm3xDPUZjqsPOuPIcAHYFrLkiK4YPGrKU9a0RJhoUixCKrr4n0z
+         twXGG906GttTUhHs2EfDzMyzHVXY2BLS251BOaWhOUqhFntHFWOiuU7N0a9R9BnAUd1/
+         3swdI8vO1hCMKRv7xZlqjZWB8ty3Yxz9nfMX/ZVZxkQz04Af6G5mMZHqJIGOlul0/2nY
+         lF1g==
+X-Forwarded-Encrypted: i=1; AJvYcCV3ue3cS7SoR7G52z2f++dA8bR2eHkAmpXhfPCwu9vtzayFPb5xFzOIXRvHLMIwzsRmOhvg@lists.linux.dev
+X-Gm-Message-State: AOJu0YxjyD9FJD2XLHklIXDsCKPrOI9+iyB1ArOxFbd+R+aOwk9tQA+k
+	lPlhIrilFIKto8OX8EhlL6ilbxPDUfKER1K4+UIyKyHH+H1Az00C5oJzQUSPy3uYF0CpMUhen0y
+	9PsCzFGdfsjwWYJFJTabNRkAMzr21MG7cnsFA7O3d
+X-Gm-Gg: ASbGncuhQbrIrc8FbHiU25nvZO+gba/tJ1X8ubb5SinlQktGCzdtIOjMrXO6OT5je5b
+	0G5AX0o1+jzbWAsOjA5YAya64J7Gu2QMkLmHbXaFFBTxdnkNjaGsBKfAecyBYolZsLAMrwIgJpk
+	OcJ3dDTYDGIdutjW0QaWGln1HadkxRW/lzlQdHXbsgmox5p/e5S0LN9UNGpSTN/uMxQagIFb7lo
+	SZgDZNB+A+6GyFJnXToAcrqou0qEcqDlgmqesrYkQ/bJFb3OnEts/hFpTKKkuVh+PPzNCb8
+X-Google-Smtp-Source: AGHT+IFqaBixRi77uwFxD0KO5fWa70Oa0mflVhXrjLFcAwKyNCUyus7ehKoAqeSTAbzAk4ZDHyQpfzilqQdd3qFUiUs=
+X-Received: by 2002:a05:600c:502c:b0:46e:3d41:5fe6 with SMTP id
+ 5b1f17b1804b1-46fa9a9ebb8mr133351055e9.9.1760348751245; Mon, 13 Oct 2025
+ 02:45:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251010223012.GA3597090@ax162>
+References: <20251003074939.465517-1-benx.guo@gmail.com> <20251013043812.13186-1-benx.guo@gmail.com>
+In-Reply-To: <20251013043812.13186-1-benx.guo@gmail.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Mon, 13 Oct 2025 11:45:39 +0200
+X-Gm-Features: AS18NWC7zd8zRon9s3XEh0rKZRaVm37ojpo0BrRNHaKslRzb8eH_XUzUW9LbRAU
+Message-ID: <CAH5fLgi4C454xG67vN-T5rRV1X4-rAGEj_ftnHqTOoN61wtcKw@mail.gmail.com>
+Subject: Re: [PATCH v2] docs/zh_CN: Add translation of rust/testing.rst
+To: Ben Guo <benx.guo@gmail.com>
+Cc: si.yanteng@linux.dev, a.hindborg@kernel.org, alex.gaynor@gmail.com, 
+	alexs@kernel.org, bjorn3_gh@protonmail.com, boqun.feng@gmail.com, 
+	corbet@lwn.net, dakr@kernel.org, dzm91@hust.edu.cn, gary@garyguo.net, 
+	hust-os-kernel-patches@googlegroups.com, justinstitt@google.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	lossin@kernel.org, morbo@google.com, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
+	rust-for-linux@vger.kernel.org, tmgross@umich.edu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 10, 2025 at 03:30:12PM -0700, Nathan Chancellor wrote:
-> On Fri, Oct 10, 2025 at 09:44:46AM +0200, Peter Zijlstra wrote:
-> > That's here... and that is indeed broken. Also note how it zeros r11
-> > right before calling it.
-> > 
-> > AFAICT this is:
-> > 
-> >         host->phy_init_fn = of_device_get_match_data(dev);
-> >         err = host->phy_init_fn(host);
-> > 
-> > Where it has decided that of_device_get_match_data() *will* return NULL
-> > and then helpfully emits (*NULL)(); or something like that. And then
-> 
-> Oh duh because it will :)
-> 
->   $ rg '^(# )?CONFIG_OF' .config
->   1528:# CONFIG_OF is not set
-> 
-> which means that of_device_get_match_data() is always NULL:
-> 
->   static inline const void *of_device_get_match_data(const struct device *dev)
->   {
->       return NULL;
->   }
-> 
-> > forgets to add CFI bits on for extra fun and games.
-> 
-> which means this is another instance of what Sami mentioned happening on
-> another report of a similar issue
-> 
->   https://lore.kernel.org/CABCJKue1wCB6jBLYUc-fAEzpyQWHXwbk8R5GBaZCkCao0EQZPA@mail.gmail.com/
+On Mon, Oct 13, 2025 at 6:38=E2=80=AFAM Ben Guo <benx.guo@gmail.com> wrote:
+>
+> Hi Yanteng,
+>
+> I=E2=80=99d like to confirm the expected use of the In-Reply-To header fo=
+r versioned patches.
+>
+> In my case:
+>   [PATCH]    ->  Message-ID: <20250929163531.376092-1-benx.guo@gmail.com>
+>   [PATCH v2] ->  Message-ID: <20251003074939.465517-1-benx.guo@gmail.com>
+>   [PATCH v2] -> In-Reply-To: <20250929163531.376092-1-benx.guo@gmail.com>
+>
+> That means the v2 patch points back to the v1 message ID.
+>
+> Could you please confirm whether I should start a new thread for [PATCH v=
+2], or if there=E2=80=99s something wrong with how I used the In-Reply-To h=
+eader?
+> Thanks for helping clarify this.
 
-Ah yes -- I had missed that :/
+When posting a new version, you should start a new thread.
 
-> which does somewhat make sense because what's the point of setting up
-> the CFI call if you know nothing can actually make use of it since we
-> will crash when trying to indirectly call a NULL pointer?
-
-As Sami says, it would be really nice if clang would at least WARN about
-emitting an unconditional NULL call like that. I mean, it *knows* its
-going to crash and burn at that point, right?
-
-> Something like this would avoid this issue then.
-
-Yes, this seems reasonable -- even if the driver should perhaps
-mandate/depend on CONFIG_OF, making sure to behave when NULL does get
-returned is definitely a good thing!.
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-> Cheers,
-> Nathan
-> 
-> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-> index 213028052aa5..15514c9c1927 100644
-> --- a/drivers/pci/controller/pcie-rcar-host.c
-> +++ b/drivers/pci/controller/pcie-rcar-host.c
-> @@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
->  		goto err_clk_disable;
->  
->  	host->phy_init_fn = of_device_get_match_data(dev);
-> -	err = host->phy_init_fn(host);
-> +	err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
->  	if (err) {
->  		dev_err(dev, "failed to init PCIe PHY\n");
->  		goto err_clk_disable;
+Alice
