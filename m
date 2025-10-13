@@ -1,58 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B3C2701CC;
-	Mon, 13 Oct 2025 12:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98996270553;
+	Mon, 13 Oct 2025 12:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760358444; cv=none; b=Xb6ZJwkaFXoL8C+JBkp2jIycFRNj3s2qzH/0yFZ6prah66oxfhwee1yYh96UzYAIgoBS5GF8IXYpjwwT0T9V582I+mvkSC5DsNO8VXiMpinXY+dORnq0UHPM1MoSCKXX8w9Wxf6aTJfDF3EJnL2/rYTOHMhfkzgxi3ONunVHwEA=
+	t=1760358446; cv=none; b=csW04tS/lrODqHyoJXAkeZrFGuNSk3KJzeIxIOdpatm8VFCM5j3ppXYZIRo0xsbPvRm+FuE6x+h1ww+DxZWe1rTOMrENswpfFsmTzECrp7wS/52uzrw3UUxEMwocV21g0NDZQHZfU+aKIQCgrcRK7imh4g/FAVL7D/oN8HvCMlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760358444; c=relaxed/simple;
-	bh=f4i4kgLx91USSgrSS+pKbeuayuqHZ1/EVFNhJN42mTo=;
+	s=arc-20240116; t=1760358446; c=relaxed/simple;
+	bh=nx3ufwTUgiNEVquPhVF0BzjK3raz7mJ8M8zxQnVW5Q4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Els44ttCk9KaRgoA4uQmToJBp4HzxrrNDU28J29nlN4vclObekn8w6DpJ2we2IM5a04/UT1ZBg4Sqi6lzScNWeuRCFLhmvLj+ik0nv0iXh/7VAAp0JnrK0HWqJ/5CvxzAZfq/9Gkq9Waw36OQoenY/QRg4nCvmOimcfOi0qKFx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jH8JgKlV; arc=none smtp.client-ip=198.175.65.19
+	 Content-Disposition; b=QdiWRPePchsJlL2PRj7BfK+o/LBK6xXybepRe6OaGQOn0fX0hoisTwIXxn6AJu5sWoefJRPsL+RxZ7p2aO8p+TrkEQVrwk3NeBTOWdF8Vwy9Z5v33+dER9PF33zMRgBvTZPJeX6tngL9vaDkq5LGOGqqv/ylj/yQ3mXx0Rv9lRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ggb32g6W; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jH8JgKlV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ggb32g6W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760358442; x=1791894442;
+  t=1760358444; x=1791894444;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f4i4kgLx91USSgrSS+pKbeuayuqHZ1/EVFNhJN42mTo=;
-  b=jH8JgKlVN4uTHVpptP61qwZ71l36FevVR7w2KZAATsWtKuWnbzttKf+2
-   NRkknMq0enjLnRCpr0cqhpEQD3X1v50eFsbEhXmyYf4tyu/E2WLKVg9Qr
-   bXnAgPSegNPxq4Uap9fyjyx4uHaJUXOmMN6719iu1rlRO2Ha+aKCrY8Tg
-   r5UNK4vrkDMkG43lVuUsj/I4rAmHS3xuGD97eI3M634crEQdGIPavQ0lV
-   CW5RG7+2gk4oQQrwAL6EmGNrbOXPOb+oL7N+v+KfhUgy+jORLcRdNN6iH
-   eKbDj1+Fj1zRZePuzHG4RH860xvXX4NRvTNhmC7kKVpO855yG03dBpSXr
-   g==;
-X-CSE-ConnectionGUID: G3zSds2GQXCmEDBm3MM+Ag==
-X-CSE-MsgGUID: svFYz3TYTU6HZoCfpyc+MQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="62384054"
+  bh=nx3ufwTUgiNEVquPhVF0BzjK3raz7mJ8M8zxQnVW5Q4=;
+  b=Ggb32g6WRcmYpkvG9aQw5Pk9G+6oxv9/OmLRLOwmnnPCBVNw8P7CPAX8
+   Dx0sXoJEIS9diYOIhQZS7arFLkKN1r0KyH0umoqnejK8RNFYndNQfKLb8
+   ZrINP1e5c0tSSVXO8gJpCTgEBWosNoXeGOiWr3fdCA9nxkjDceTKGxWLR
+   nQgFgNmehvNux2sp4Dqqp9+Vayo7XZeQbGH9ohgBpowIem7DBbG81XeTC
+   8oQD5iyk4xvgRXgs1kzukQTl7xiDUfZSLhw0xEPv/E3c60prePrVTq91S
+   QWWeWvpl3kcIiISF3+waMxn/xtaRnsdLrcikWgc290crnYoBtFJV/MvgR
+   Q==;
+X-CSE-ConnectionGUID: I/518B2ZQeuh2JIcokAXyA==
+X-CSE-MsgGUID: GQdth3VzRJu0DMAULlSYNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11580"; a="62528681"
 X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="62384054"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 05:27:20 -0700
-X-CSE-ConnectionGUID: fUuFLJ/rR8yuqYYPloprWA==
-X-CSE-MsgGUID: 5HTn8yBETQSvZqI00J2xbg==
+   d="scan'208";a="62528681"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 05:27:20 -0700
+X-CSE-ConnectionGUID: /d7zNtv+S5qZCAdWy4nXdg==
+X-CSE-MsgGUID: M1m676uCT2Cmo0NqooPl1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="185849826"
+   d="scan'208";a="186001672"
 Received: from igk-lkp-server01.igk.intel.com (HELO 0e586ad5e7f7) ([10.91.175.65])
-  by orviesa004.jf.intel.com with ESMTP; 13 Oct 2025 05:27:18 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 13 Oct 2025 05:27:18 -0700
 Received: from kbuild by 0e586ad5e7f7 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1v8He0-000000008sO-2JIM;
+	id 1v8He0-000000008sC-1uB3;
 	Mon, 13 Oct 2025 12:27:16 +0000
-Date: Mon, 13 Oct 2025 14:26:47 +0200
+Date: Mon, 13 Oct 2025 14:26:46 +0200
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [trace:faultable-syscalls 6/10] kernel/trace/trace.c:11430:32:
- error: use of undeclared identifier 'CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT'
-Message-ID: <202510120515.CJNYu2FQ-lkp@intel.com>
+To: Shivank Garg <shivankg@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	David Hildenbrand <david@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Subject: [davidhildenbrand:guestmemfd-preview 18/26]
+ arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:10: error: call to
+ undeclared function '__filemap_get_folio_mpol'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202510120020.Yna3VUaz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,76 +66,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace faultable-syscalls
-head:   66d20821bfc64b78f00866e06d9b297c9c616413
-commit: 6834549be2989daee79e249f4cd481ea0b657dc7 [6/10] tracing: Add syscall_user_buf_size to limit amount written
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251012/202510120515.CJNYu2FQ-lkp@intel.com/config)
+tree:   https://github.com/davidhildenbrand/linux guestmemfd-preview
+head:   0c301bf7489a928d4839f3ee7477966a681543a2
+commit: 0214cede5073bcc0f7cd671ca0c3ec99ef4eb164 [18/26] KVM: guest_memfd: Enforce NUMA mempolicy using shared policy
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251012/202510120020.Yna3VUaz-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251012/202510120515.CJNYu2FQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251012/202510120020.Yna3VUaz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510120515.CJNYu2FQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510120020.Yna3VUaz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/trace.c:11430:32: error: use of undeclared identifier 'CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT'
-    11430 |         global_trace.syscall_buf_sz = CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT;
-          |                                       ^
-   1 error generated.
+>> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:10: error: call to undeclared function '__filemap_get_folio_mpol'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     155 |         folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+         |                 ^
+   arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:10: note: did you mean '__filemap_get_folio'?
+   include/linux/pagemap.h:748:15: note: '__filemap_get_folio' declared here
+     748 | struct folio *__filemap_get_folio(struct address_space *mapping, pgoff_t index,
+         |               ^
+>> arch/x86/kvm/../../../virt/kvm/guest_memfd.c:155:8: error: incompatible integer to pointer conversion assigning to 'struct folio *' from 'int' [-Wint-conversion]
+     155 |         folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     156 |                                          FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     157 |                                          mapping_gfp_mask(inode->i_mapping), policy);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +/CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT +11430 kernel/trace/trace.c
+vim +/__filemap_get_folio_mpol +155 arch/x86/kvm/../../../virt/kvm/guest_memfd.c
 
- 11412	
- 11413		init_trace_flags_index(&global_trace);
- 11414	
- 11415		register_tracer(&nop_trace);
- 11416	
- 11417		/* Function tracing may start here (via kernel command line) */
- 11418		init_function_trace();
- 11419	
- 11420		/* All seems OK, enable tracing */
- 11421		tracing_disabled = 0;
- 11422	
- 11423		atomic_notifier_chain_register(&panic_notifier_list,
- 11424					       &trace_panic_notifier);
- 11425	
- 11426		register_die_notifier(&trace_die_notifier);
- 11427	
- 11428		global_trace.flags = TRACE_ARRAY_FL_GLOBAL;
- 11429	
- 11430		global_trace.syscall_buf_sz = CONFIG_TRACE_SYSCALL_BUF_SIZE_DEFAULT;
- 11431	
- 11432		INIT_LIST_HEAD(&global_trace.systems);
- 11433		INIT_LIST_HEAD(&global_trace.events);
- 11434		INIT_LIST_HEAD(&global_trace.hist_vars);
- 11435		INIT_LIST_HEAD(&global_trace.err_log);
- 11436		list_add(&global_trace.marker_list, &marker_copies);
- 11437		list_add(&global_trace.list, &ftrace_trace_arrays);
- 11438	
- 11439		apply_trace_boot_options();
- 11440	
- 11441		register_snapshot_cmd();
- 11442	
- 11443		return 0;
- 11444	
- 11445	out_free_pipe_cpumask:
- 11446		free_cpumask_var(global_trace.pipe_cpumask);
- 11447	out_free_savedcmd:
- 11448		trace_free_saved_cmdlines_buffer();
- 11449	out_free_temp_buffer:
- 11450		ring_buffer_free(temp_buffer);
- 11451	out_rm_hp_state:
- 11452		cpuhp_remove_multi_state(CPUHP_TRACE_RB_PREPARE);
- 11453	out_free_cpumask:
- 11454		free_cpumask_var(global_trace.tracing_cpumask);
- 11455	out_free_buffer_mask:
- 11456		free_cpumask_var(tracing_buffer_mask);
- 11457		return ret;
- 11458	}
- 11459	
+   129	
+   130	/*
+   131	 * Returns a locked folio on success.  The caller is responsible for
+   132	 * setting the up-to-date flag before the memory is mapped into the guest.
+   133	 * There is no backing storage for the memory, so the folio will remain
+   134	 * up-to-date until it's removed.
+   135	 *
+   136	 * Ignore accessed, referenced, and dirty flags.  The memory is
+   137	 * unevictable and there is no storage to write back to.
+   138	 */
+   139	static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+   140	{
+   141		/* TODO: Support huge pages. */
+   142		struct mempolicy *policy;
+   143		struct folio *folio;
+   144	
+   145		/*
+   146		 * Fast-path: See if folio is already present in mapping to avoid
+   147		 * policy_lookup.
+   148		 */
+   149		folio = __filemap_get_folio(inode->i_mapping, index,
+   150					    FGP_LOCK | FGP_ACCESSED, 0);
+   151		if (!IS_ERR(folio))
+   152			return folio;
+   153	
+   154		policy = kvm_gmem_get_folio_policy(GMEM_I(inode), index);
+ > 155		folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+   156						 FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
+   157						 mapping_gfp_mask(inode->i_mapping), policy);
+   158		mpol_cond_put(policy);
+   159	
+   160		return folio;
+   161	}
+   162	
 
 -- 
 0-DAY CI Kernel Test Service
