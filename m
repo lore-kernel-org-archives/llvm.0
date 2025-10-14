@@ -1,48 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA612BE7A6;
-	Tue, 14 Oct 2025 19:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479CB2D239A;
+	Tue, 14 Oct 2025 19:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760469212; cv=none; b=hTsWl5tlqyXvWrnduf4nf7SdDsr7HKF5StKEgAwyYhvEcqxiq9690RcUIMQPJrb3DJFPRmZl0B6Dj1SEldX6Zs0vAf7p37wmTcry9Kav/jX0yHkRUTqd4p90D8ikR6xWmf1Gdg892Gsk9Z65bdfwtEKeHKnXMNvD5C9Nzjchkm0=
+	t=1760470984; cv=none; b=BzbsvVjbVFr6glMslpPjvRka6232f6PI7alLQFU9x+3FcdTbMHZQIJrtJ1U62sT/K1XFaRNY5ErY/A/e9dvmQOLXhjiS4S/AIq50E/HksH9+XeMLzLj7eprenjmlpfzXVEajTTdRKamRz7ppW3SOAdDG8YZ4HDpneFedxPaLAx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760469212; c=relaxed/simple;
-	bh=VeQgHIyvUFeBDOXS6P2izT3xDp9jOMmhgF0q1loUIqQ=;
+	s=arc-20240116; t=1760470984; c=relaxed/simple;
+	bh=EWgw3GLR6oRJ1kHguVBl4EyHjggRRJZVdezRBUpJWNY=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Edk2k7L7qike1+d3ki1BV/4f0EQWGVFiU36giGJeKkt/2nPeAih60GmtIKnHXSi034TIP+ezOAaj8PyVcm2JXiPAQt/kx5ou6LV9JnyxRUUIAd1LeGun/PHYa93S7hm+1dcxZraBOvw8H0Za+zx3UO4BuJzUqKu4kmkMtsO0GkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQfNSLMc; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=eY8AxNgNFsMwalt1xwjiMG3WEqaJhOsnWfTMFRzssqmKUCKLPaOyFU1mBgZLYQmYLm+TvUVWNAOurTJhKBVzuQ6rUSr8QNeWOp4JxhxMIVpt2I41KaabSI0uEUYAm7seX5GmoXFGgZNLSmlzm5BE+3ApkifV7GFfzDmr+41LuCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VlefJFjQ; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQfNSLMc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24428C4CEE7;
-	Tue, 14 Oct 2025 19:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760469212;
-	bh=VeQgHIyvUFeBDOXS6P2izT3xDp9jOMmhgF0q1loUIqQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=CQfNSLMcWllvP4XtgkrBezgM3iRNGCyeKHBos3S3qa4N1X+3aEqm7qoex1o/DWiHu
-	 Yaz5ZLyWoXTC34ZpeMV8JzWCin3oeYT43/Nz5I53XoaKJL6xrnlUNkIsjbxQsFpj4x
-	 XrDB8FbFJ2XfYkay4HeuyItd468Dchp1gxdPRh9oHqcV4RB/Yqhzf+f31yKnw/SJjP
-	 3OIGyLc5xXh0IkS5UfkOLTckUIQCRavAwnEjY0wy3VmUqaMag7tlAODjWXBJJ94D2k
-	 2HGte1SMbgW2nODLKC26lCixwhZsOg/ElWKH1epxu24IImyN5upkf1DhDTUXR4gabt
-	 fPfbWlujJWXlg==
-Date: Tue, 14 Oct 2025 14:13:30 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Marek Vasut <marek.vasut+renesas@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, Kees Cook <kees@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] PCI: rcar-host: Add OF Kconfig dependency to avoid
- objtool no-cfi warning
-Message-ID: <20251014191330.GA899677@bhelgaas>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VlefJFjQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760470982; x=1792006982;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EWgw3GLR6oRJ1kHguVBl4EyHjggRRJZVdezRBUpJWNY=;
+  b=VlefJFjQZ11KYKueeTGWWBdU4AtaZGogcuFfSmDB8Jd2egEiUnRItt2H
+   4kUO0yUfuLxsCyUriONEW/xD7O94oLhCSqaIo1Tsw9ifS5W/+qBEoRN2d
+   4LPq9U+NmJCXcL3g2IFv2xO6rAtEjMACVfwThpKiS6hSTcC+JcQ7TeKbv
+   bdQ5wCVUQ17/HauBbdVWaR7NvMbUhsXTEpfqX3a0tIF8zY4rpopbJ8wtS
+   xoKjAX/AInH+TXgdOt5d88JTtpRVEcArmAuaksv59l67FnftIhUqiKBeE
+   /1HI7PHn1BrYLgg8GmxFs3ULqm/RzMEdIG4pf/msAm/sB/zovvYLseqJE
+   A==;
+X-CSE-ConnectionGUID: nGc9ChKZSZiwhXS6qmm8Ew==
+X-CSE-MsgGUID: fos1/Ra1TVOoKpL/NzHDVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="61847602"
+X-IronPort-AV: E=Sophos;i="6.19,229,1754982000"; 
+   d="scan'208";a="61847602"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 12:42:54 -0700
+X-CSE-ConnectionGUID: aXu6CnSrSEiPfneed3k1XQ==
+X-CSE-MsgGUID: ItSb2ZoMS0ma9rcCgTTF+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,229,1754982000"; 
+   d="scan'208";a="182751611"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 14 Oct 2025 12:42:51 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8kv3-00037r-1x;
+	Tue, 14 Oct 2025 19:42:49 +0000
+Date: Wed, 15 Oct 2025 03:42:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:x86/vmxon_sucks 17/19] arch/x86/virt/hw.c:302:9: error:
+ assigning to 'int' from incompatible type 'void'
+Message-ID: <202510150357.nbUFdnh8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,69 +61,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251014-rcar_pcie_probe-avoid-nocfi-objtool-warning-v2-1-6e0204b002c6@kernel.org>
 
-On Tue, Oct 14, 2025 at 11:20:27AM -0700, Nathan Chancellor wrote:
-> After commit 894af4a1cde6 ("objtool: Validate kCFI calls"), compile
-> testing pcie-rcar-host.c with CONFIG_FINEIBT=y and CONFIG_OF=n results
-> in a no-cfi objtool warning in rcar_pcie_probe():
-> 
->   $ cat allno.config
->   CONFIG_CFI=y
->   CONFIG_COMPILE_TEST=y
->   CONFIG_CPU_MITIGATIONS=y
->   CONFIG_GENERIC_PHY=y
->   CONFIG_MITIGATION_RETPOLINE=y
->   CONFIG_MODULES=y
->   CONFIG_PCI=y
->   CONFIG_PCI_MSI=y
->   CONFIG_PCIE_RCAR_HOST=y
->   CONFIG_X86_KERNEL_IBT=y
-> 
->   $ make -skj"$(nproc)" ARCH=x86_64 KCONFIG_ALLCONFIG=1 LLVM=1 clean allnoconfig vmlinux
->   vmlinux.o: warning: objtool: rcar_pcie_probe+0x191: no-cfi indirect call!
-> 
-> When CONFIG_OF is unset, of_device_get_match_data() returns NULL, so
-> LLVM knows this indirect call has no valid destination and drops the
-> kCFI setup before the call, triggering the objtool check that makes sure
-> all indirect calls have kCFI setup.
-> 
-> This driver depends on OF for probing with non-NULL data for every match
-> so this call will never be NULL in practice. Add a hard Kconfig
-> dependency on OF to avoid the warning.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202510092124.O2IX0Jek-lkp@intel.com/
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2134
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> Changes in v2:
-> - Switch from NULL check to avoiding CONFIG_OF=n case altogether (Mani,
->   Geert).
-> - Drop Peter and Kees's reviews, as solution is not the same.
-> - Link to v1: https://patch.msgid.link/20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org
-> ---
->  drivers/pci/controller/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 41748d083b93..d8688abc5b27 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -243,6 +243,7 @@ config PCI_TEGRA
->  config PCIE_RCAR_HOST
->  	bool "Renesas R-Car PCIe controller (host mode)"
->  	depends on ARCH_RENESAS || COMPILE_TEST
-> +	depends on OF
+tree:   https://github.com/sean-jc/linux x86/vmxon_sucks
+head:   24e9ac2db43ec73d19dc6896a507de1ff078c2bc
+commit: 72541a6245fb93cdc3c8aa8140b20dd1701c0e63 [17/19] KVM: x86: Extract VMXON and EFER.SVME enablement to kernel
+config: x86_64-buildonly-randconfig-004-20251015 (https://download.01.org/0day-ci/archive/20251015/202510150357.nbUFdnh8-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510150357.nbUFdnh8-lkp@intel.com/reproduce)
 
-Ugh.  This might be the best solution, but it's a bit problematic
-without a hint about why "depends on OF" is here.  Theoretically there
-are stubs for everything to make COMPILE_TEST work, so I think we're
-about to drop all the dependencies on OF.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510150357.nbUFdnh8-lkp@intel.com/
 
-This dependency to avoid a no-cfi warning looks like the kind of thing
-that could someday go away if the tools get smarter.  Maybe we can add
-a Kconfig comment here, but I don't really know enough to write one.
-Something like this?
+All errors (new ones prefixed by >>):
 
-  depends on OF   # avoid no-cfi warning https://lore.kernel.org/r/202510092124.O2IX0Jek-lkp@intel.com/
+>> arch/x86/virt/hw.c:302:9: error: assigning to 'int' from incompatible type 'void'
+     302 |         BUG_ON(x86_virt_call(put_cpu) && !virt_rebooting);
+         |         ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/virt/hw.c:269:7: note: expanded from macro 'x86_virt_call'
+     269 |                 __r = x86_svm_##fn();                   \
+         |                     ^
+   include/asm-generic/bug.h:71:45: note: expanded from macro 'BUG_ON'
+      71 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+         |                                    ~~~~~~~~~^~~~~~~~~~
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+>> arch/x86/virt/hw.c:324:8: error: call to undeclared function 'x86_svm_emergency_disable_virtualization_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     324 |         (void)x86_virt_call(emergency_disable_virtualization_cpu);
+         |               ^
+   arch/x86/virt/hw.c:269:9: note: expanded from macro 'x86_virt_call'
+     269 |                 __r = x86_svm_##fn();                   \
+         |                       ^
+   <scratch space>:209:1: note: expanded from here
+     209 | x86_svm_emergency_disable_virtualization_cpu
+         | ^
+   arch/x86/virt/hw.c:324:8: note: did you mean 'x86_vmx_emergency_disable_virtualization_cpu'?
+   arch/x86/virt/hw.c:269:9: note: expanded from macro 'x86_virt_call'
+     269 |                 __r = x86_svm_##fn();                   \
+         |                       ^
+   <scratch space>:209:1: note: expanded from here
+     209 | x86_svm_emergency_disable_virtualization_cpu
+         | ^
+   arch/x86/virt/hw.c:121:12: note: 'x86_vmx_emergency_disable_virtualization_cpu' declared here
+     121 | static int x86_vmx_emergency_disable_virtualization_cpu(void)
+         |            ^
+   2 errors generated.
+--
+>> arch/x86/kernel/crash.c:114:2: error: call to undeclared function 'x86_virt_emergency_disable_virtualization_cpu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     114 |         x86_virt_emergency_disable_virtualization_cpu();
+         |         ^
+   1 error generated.
+
+
+vim +302 arch/x86/virt/hw.c
+
+   293	
+   294	void x86_virt_put_cpu(int feat)
+   295	{
+   296		if (WARN_ON_ONCE(!this_cpu_read(virtualization_nr_users)))
+   297			return;
+   298	
+   299		if (this_cpu_dec_return(virtualization_nr_users) && !virt_rebooting)
+   300			return;
+   301	
+ > 302		BUG_ON(x86_virt_call(put_cpu) && !virt_rebooting);
+   303	}
+   304	EXPORT_SYMBOL_GPL(x86_virt_put_cpu);
+   305	
+   306	/*
+   307	 * Disable virtualization, i.e. VMX or SVM, to ensure INIT is recognized during
+   308	 * reboot.  VMX blocks INIT if the CPU is post-VMXON, and SVM blocks INIT if
+   309	 * GIF=0, i.e. if the crash occurred between CLGI and STGI.
+   310	 */
+   311	int x86_virt_emergency_disable_virtualization_cpu(void)
+   312	{
+   313		/*
+   314		 * IRQs must be disabled as virtualization is enabled in hardware via
+   315		 * function call IPIs, i.e. IRQs need to be disabled to guarantee
+   316		 * virtualization stays disabled.
+   317		 */
+   318		lockdep_assert_irqs_disabled();
+   319	
+   320		/*
+   321		 * TODO: Track whether or not virtualization might be enabled on other
+   322		 *	 CPUs?  May not be worth avoiding the NMI shootdown...
+   323		 */
+ > 324		(void)x86_virt_call(emergency_disable_virtualization_cpu);
+   325		return 0;
+   326	}
+   327	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
