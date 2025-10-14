@@ -1,130 +1,119 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C442C2353
-	for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 19:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA612BE7A6;
+	Tue, 14 Oct 2025 19:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760469128; cv=none; b=PWaVzCBmqW1k3VAilgSPxEvQKgbjJNwIcYLsjyofHRFNJ9VS9YaX3ZRK80eqbZahO1SXz4xToJtHsm5uxcA6tnh7kozKdzbekTGJc7RZmyxxxPv9Lx4ZFZBEiVujoxG/fa/uGCD7RXnKvuyF8Fb/0tCc9rO87tT04ydGalX/U/0=
+	t=1760469212; cv=none; b=hTsWl5tlqyXvWrnduf4nf7SdDsr7HKF5StKEgAwyYhvEcqxiq9690RcUIMQPJrb3DJFPRmZl0B6Dj1SEldX6Zs0vAf7p37wmTcry9Kav/jX0yHkRUTqd4p90D8ikR6xWmf1Gdg892Gsk9Z65bdfwtEKeHKnXMNvD5C9Nzjchkm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760469128; c=relaxed/simple;
-	bh=cx36TyRZQRd8d2KdjPrZq7eNjP57j04LkvW74Zdo8sQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=m/FQ10lkVsCY7hT2XDrWmF+g5spAMRK3mqW2Y2l26s2yw4H26/Aph5O0yS+lHZYKmhVMbc227BRk+MtznHBfNKCBIkT4RCzLHXXXbPloytYGcaxk9Su6zUyfLUFcMrM0EAk8C9E+zHRf3NB5u1Q+tF5loM10ZaljV1foOlWf0YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bvIpiOhr; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
+	s=arc-20240116; t=1760469212; c=relaxed/simple;
+	bh=VeQgHIyvUFeBDOXS6P2izT3xDp9jOMmhgF0q1loUIqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Edk2k7L7qike1+d3ki1BV/4f0EQWGVFiU36giGJeKkt/2nPeAih60GmtIKnHXSi034TIP+ezOAaj8PyVcm2JXiPAQt/kx5ou6LV9JnyxRUUIAd1LeGun/PHYa93S7hm+1dcxZraBOvw8H0Za+zx3UO4BuJzUqKu4kmkMtsO0GkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQfNSLMc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bvIpiOhr"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32ee4998c50so9844408a91.3
-        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 12:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760469126; x=1761073926; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBllpB0ePNMOVbkElWmvNsFG+oJS+DPSsTH9YVldxTc=;
-        b=bvIpiOhrcPB15PiXh8QNzPGo3r87WOH24+3HRl9aZV81j9BmAAsNtaxpUQEMyMNO/2
-         Z7OYI1YrIcASBCTNylaE5gLCciAp/hbSMPoylp4mnFQkBwlIJqBRse1BF7uVKM7kVfJr
-         SjFA+Bv0VMzfxdypeLk81ePS/bAqNnrpX+tAfHvv/jO5oBAHVyrYayBCpx+R0YqA+coU
-         rD1pyuzDyhGhRQdIJXXrmF/6Ftv3WJ95WwNmGu2/ssIgD8TDVdcB2Ah9/3aLoobZkndu
-         2hyLM/rKYHHRTXDHtBsDYw2nBB/PbZ13HaA5hvwIJ0V2Vg98L1ERzkC8hRcqWyB+22i0
-         yNUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760469126; x=1761073926;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBllpB0ePNMOVbkElWmvNsFG+oJS+DPSsTH9YVldxTc=;
-        b=p0ww/f6Nl9Z+sJdE+DI9jN8cP1D9shG+jI8L/b01pDjtzJxSAj+VXA3E51J8hfgcYq
-         6c6VoAjJYmasMbgNUVrVeo674FVDXTUUFsGaCQf7Mwyhtt6fqpoKBHYYHho4D47PnKvo
-         t54hvWyVMzsHZr37xEZ7qB7Vq1p0P+1fnx++yDvSfgSTTrDnoSwQeAjLY2/YO7lC0ty2
-         VinKA2vO4wRpK9qjLw986FyBVqBm6gLRpnQpgEeF3PkhnKsOrH8wH02RPg43M0B6kNs7
-         Onyz88O65PAz5kVS+WCmYMJjUT7hVcRq6OQ3IfYVQ535h+4xvQ5irLrDVom4QukAou3m
-         N48g==
-X-Forwarded-Encrypted: i=1; AJvYcCVCVz95GFC3bf6Z26JTz1LBbQr0icRIXgSQ7tPQEv0myrDZoS20ThEZAWYQmkjIU97Fz91D@lists.linux.dev
-X-Gm-Message-State: AOJu0YzfF27/HV8h2hPx8KDBEPj+fJUGmYge9tcCBg3u6Bzf90Y6wRN3
-	6uSGdRJlzyEBQP7Igw4JY0U3dHTh1op4dObO5PgknMkgokWXnLpQwK9Sib8ttuGAtnDClA==
-X-Google-Smtp-Source: AGHT+IF7GZo6/ROXKJlnWT1JhTqmzbjvSVDgDSvfujyxO4MGyLwSW7azfV21spAGRwjheSwdbs4i9m4=
-X-Received: from pjbgv24.prod.google.com ([2002:a17:90b:11d8:b0:329:ec3d:72ad])
- (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c89:b0:32b:df0e:9283
- with SMTP id 98e67ed59e1d1-33b51399970mr33646704a91.34.1760469125986; Tue, 14
- Oct 2025 12:12:05 -0700 (PDT)
-Date: Tue, 14 Oct 2025 19:11:56 +0000
-In-Reply-To: <20251014191156.3836703-1-xur@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQfNSLMc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24428C4CEE7;
+	Tue, 14 Oct 2025 19:13:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760469212;
+	bh=VeQgHIyvUFeBDOXS6P2izT3xDp9jOMmhgF0q1loUIqQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=CQfNSLMcWllvP4XtgkrBezgM3iRNGCyeKHBos3S3qa4N1X+3aEqm7qoex1o/DWiHu
+	 Yaz5ZLyWoXTC34ZpeMV8JzWCin3oeYT43/Nz5I53XoaKJL6xrnlUNkIsjbxQsFpj4x
+	 XrDB8FbFJ2XfYkay4HeuyItd468Dchp1gxdPRh9oHqcV4RB/Yqhzf+f31yKnw/SJjP
+	 3OIGyLc5xXh0IkS5UfkOLTckUIQCRavAwnEjY0wy3VmUqaMag7tlAODjWXBJJ94D2k
+	 2HGte1SMbgW2nODLKC26lCixwhZsOg/ElWKH1epxu24IImyN5upkf1DhDTUXR4gabt
+	 fPfbWlujJWXlg==
+Date: Tue, 14 Oct 2025 14:13:30 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Marek Vasut <marek.vasut+renesas@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] PCI: rcar-host: Add OF Kconfig dependency to avoid
+ objtool no-cfi warning
+Message-ID: <20251014191330.GA899677@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20251014191156.3836703-1-xur@google.com>
-X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
-Message-ID: <20251014191156.3836703-5-xur@google.com>
-Subject: [PATCH v2 4/4] kbuild: Add config to assert profile accuracy for
- aggressive optimization
-From: xur@google.com
-To: Alexey Gladkov <legion@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Bill Wendling <morbo@google.com>, Han Shen <shenhan@google.com>, 
-	Ingo Molnar <mingo@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Peter Zijlstra <peterz@infradead.org>, Tamir Duberstein <tamird@gmail.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, 
-	"=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, Yabin Cui <yabinc@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Rong Xu <xur@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014-rcar_pcie_probe-avoid-nocfi-objtool-warning-v2-1-6e0204b002c6@kernel.org>
 
-From: Rong Xu <xur@google.com>
+On Tue, Oct 14, 2025 at 11:20:27AM -0700, Nathan Chancellor wrote:
+> After commit 894af4a1cde6 ("objtool: Validate kCFI calls"), compile
+> testing pcie-rcar-host.c with CONFIG_FINEIBT=y and CONFIG_OF=n results
+> in a no-cfi objtool warning in rcar_pcie_probe():
+> 
+>   $ cat allno.config
+>   CONFIG_CFI=y
+>   CONFIG_COMPILE_TEST=y
+>   CONFIG_CPU_MITIGATIONS=y
+>   CONFIG_GENERIC_PHY=y
+>   CONFIG_MITIGATION_RETPOLINE=y
+>   CONFIG_MODULES=y
+>   CONFIG_PCI=y
+>   CONFIG_PCI_MSI=y
+>   CONFIG_PCIE_RCAR_HOST=y
+>   CONFIG_X86_KERNEL_IBT=y
+> 
+>   $ make -skj"$(nproc)" ARCH=x86_64 KCONFIG_ALLCONFIG=1 LLVM=1 clean allnoconfig vmlinux
+>   vmlinux.o: warning: objtool: rcar_pcie_probe+0x191: no-cfi indirect call!
+> 
+> When CONFIG_OF is unset, of_device_get_match_data() returns NULL, so
+> LLVM knows this indirect call has no valid destination and drops the
+> kCFI setup before the call, triggering the objtool check that makes sure
+> all indirect calls have kCFI setup.
+> 
+> This driver depends on OF for probing with non-NULL data for every match
+> so this call will never be NULL in practice. Add a hard Kconfig
+> dependency on OF to avoid the warning.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202510092124.O2IX0Jek-lkp@intel.com/
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2134
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Changes in v2:
+> - Switch from NULL check to avoiding CONFIG_OF=n case altogether (Mani,
+>   Geert).
+> - Drop Peter and Kees's reviews, as solution is not the same.
+> - Link to v1: https://patch.msgid.link/20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org
+> ---
+>  drivers/pci/controller/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+> index 41748d083b93..d8688abc5b27 100644
+> --- a/drivers/pci/controller/Kconfig
+> +++ b/drivers/pci/controller/Kconfig
+> @@ -243,6 +243,7 @@ config PCI_TEGRA
+>  config PCIE_RCAR_HOST
+>  	bool "Renesas R-Car PCIe controller (host mode)"
+>  	depends on ARCH_RENESAS || COMPILE_TEST
+> +	depends on OF
 
-Adds a build config to AutoFDO to assert that the generated profile
-accurately represents the intended workload. This enables Clang to
-perform more aggressive optimizations.
+Ugh.  This might be the best solution, but it's a bit problematic
+without a hint about why "depends on OF" is here.  Theoretically there
+are stubs for everything to make COMPILE_TEST work, so I think we're
+about to drop all the dependencies on OF.
 
-Signed-off-by: Rong Xu <xur@google.com>
----
- arch/Kconfig             | 11 +++++++++++
- scripts/Makefile.autofdo |  3 +++
- 2 files changed, 14 insertions(+)
+This dependency to avoid a no-cfi warning looks like the kind of thing
+that could someday go away if the tools get smarter.  Maybe we can add
+a Kconfig comment here, but I don't really know enough to write one.
+Something like this?
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index ebe08b9186adc..6fdc676cb0fe4 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -886,6 +886,17 @@ config AUTOFDO_CLANG
- 
- 	  If unsure, say N.
- 
-+config AUTOFDO_PROFILE_ACCURATE
-+	bool "Assert AutoFDO profile is accurate (EXPERIMENTAL)"
-+	depends on AUTOFDO_CLANG
-+	help
-+	  This option asserts that the AutoFDO profile (specified
-+	  in CLANG_AUTOFDO_PROFILE) is collected from a representative
-+	  workload, allowing the Clang compiler to perform more
-+	  aggressive optimizations.
-+
-+	  If unsure, say N.
-+
- config ARCH_SUPPORTS_PROPELLER_CLANG
- 	bool
- 
-diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-index 5bcfcef273745..36abeae2accdc 100644
---- a/scripts/Makefile.autofdo
-+++ b/scripts/Makefile.autofdo
-@@ -11,6 +11,9 @@ endif
- ifdef CLANG_AUTOFDO_PROFILE
-   CFLAGS_AUTOFDO_CLANG += -fprofile-sample-use=$(CLANG_AUTOFDO_PROFILE) -ffunction-sections
-   CFLAGS_AUTOFDO_CLANG += -fsplit-machine-functions
-+ifdef CONFIG_AUTOFDO_PROFILE_ACCURATE
-+  CFLAGS_AUTOFDO_CLANG += -fprofile-sample-accurate
-+endif
- endif
- 
- ifdef CONFIG_LTO_CLANG_THIN
--- 
-2.51.0.788.g6d19910ace-goog
-
+  depends on OF   # avoid no-cfi warning https://lore.kernel.org/r/202510092124.O2IX0Jek-lkp@intel.com/
