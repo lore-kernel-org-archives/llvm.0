@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9FA10942;
-	Tue, 14 Oct 2025 06:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AA317A2FB;
+	Tue, 14 Oct 2025 07:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760423615; cv=none; b=T1AgPsWSqL2LzJZHbi9Y8GWQBPg+JFXTmglcqiBmYdk3LtA+Jny4ZbP1PssjZ8Bb6CCeSw799Fiw/6CXf+qG9PfDYhROXQrK8VpgiXjdlI+yysTX7+kilh/qwvV0jx8Z0I1E1QtromEF4GhAs8c1CW0uNborrw1ItFH8bAwEm1M=
+	t=1760425513; cv=none; b=R/ZsVjQV5ZUyd1CWQ4pogcmply22Fbcup9yWFWsL2VJOW4Tr1g9Mj5YZi3qMXEN0FAGBRvl2G62Bwi5gWrTAz+QTFBK3JsHHGQx/BcBH8cDMAXqowo0bR2C121Uw7oK5veIkQZZ7UguPPZxv0HESopRbGpCSQbrlYm5hOli6RPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760423615; c=relaxed/simple;
-	bh=bItmwAuM1kJCIqmjLQgrg55Hiv1GTpbgngNNX+tPC80=;
+	s=arc-20240116; t=1760425513; c=relaxed/simple;
+	bh=cTS3kltvXa9vuH/ZPoAtdRrh6V8hozTmr0+a02pB0xI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qnPsfC8HwCXshL5/yb2n7iCDooCOiqpDfSqD+cnLvUKIvpzpf8nHWt2ZSpMo6gNEsFELlitaKnjfRsESFZWPtispeNpfMAgwnTwtUYHgWg7WE5s6FQz4NxTffiTrwbgvFd8HsoZ6nkbr0J2PjsHvbWz0QRw3Pvva/qLTVu0iAz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mqBjH/Kn; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=UEKsNXmJNkb1MV7vT1xgmc+pjHyJ8/ZfKLrAkHuG6bHZg9JpuxtdfXtZGOMCF35wR/cATTAjufexhpU3hs+NqgG8C20iHlrTwBXdg+PUaUCQG2BzN/yaMm3hwmUSPynCImEtf9IbLmMTPSWM9JftC8clcD6SC+JDJZzcx/yf7fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DuY3hCJF; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqBjH/Kn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DuY3hCJF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760423614; x=1791959614;
+  t=1760425512; x=1791961512;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bItmwAuM1kJCIqmjLQgrg55Hiv1GTpbgngNNX+tPC80=;
-  b=mqBjH/KniBNUu0+duBXV06HQ/DeS+5vVTGp9VnL2Jxqj0nO6IqcQD8wC
-   Lx6HsS15najqsY76VtvbPPDLjTfH5nW018PObxKGINxL8lUaTyeY+x3zv
-   RVgoeOwyc/pGESfMFOiZDDou6idj7nVMlXqyxXfckqwMxk2HDNQENXY1N
-   JGs2c5WUq7miu7PYQrYDpOR9i0j9T3uml3+qZDfz4pwNr75+a3oVmJ4Dj
-   /6zcEWGTjCgQZYOO8iXwa4e3p59r8VfNf7JwbgcvQjLTPe2iCzOMOxdxI
-   dSMuC1+VreWaXTp+Hut/SUm8QHPuYFUXj/u7vozpt0Q4W6fO6jltGrXhT
-   A==;
-X-CSE-ConnectionGUID: TbOA4bbCR/q/o/iXOHR5sA==
-X-CSE-MsgGUID: DKviQ7urT3ySyPysU711vQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="73678257"
+  bh=cTS3kltvXa9vuH/ZPoAtdRrh6V8hozTmr0+a02pB0xI=;
+  b=DuY3hCJF16S/lc2+zv148cZwNXRN0uei4Iwg80qWp588fZEpg4djnRHl
+   2wm+jzZSjfyB20tDNx/hE9THTK8pcpsh8A3qDmhLFedWfFB08DF11J7g8
+   4msCElrTGx+Edn3zp8TrBwrzSXooBoBWLt+Qg45HoefUbHaa3m2ftEub9
+   aeQsoMade8YOkFgLdY2yWG4fvF8y7RJxivp57zK8kHZOZzX62KRgrRE9/
+   AzwBuOnyc1WfTtRQtCRu4E95oZUsqNukIFrtpiSjB4rUYHEYJKmg9gPa3
+   Qnau2qlduA7IMZFRf4gQpKEeiGezOdshZEbzsayjx5d8IKY31bC8jpNIO
+   Q==;
+X-CSE-ConnectionGUID: Q3wOgdMaRXqKWaJH28eGqQ==
+X-CSE-MsgGUID: I2US5FDgSlCjxJehWM+i8A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="74025360"
 X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="73678257"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 23:33:33 -0700
-X-CSE-ConnectionGUID: 6EuriOAgTJuvDYz/dmx8Pw==
-X-CSE-MsgGUID: cVO5Mr4bTZKkNcO4avyV8w==
+   d="scan'208";a="74025360"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:05:11 -0700
+X-CSE-ConnectionGUID: WcM7V1zjTdKxrl3caqohVw==
+X-CSE-MsgGUID: 3bnlC+fmRfOlz/9DRmfxgw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="181756438"
+   d="scan'208";a="185828237"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 13 Oct 2025 23:33:26 -0700
+  by orviesa003.jf.intel.com with ESMTP; 14 Oct 2025 00:05:06 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v8Yb0-0002Tb-1V;
-	Tue, 14 Oct 2025 06:33:19 +0000
-Date: Tue, 14 Oct 2025 14:32:52 +0800
+	id 1v8Z5R-0002V1-2g;
+	Tue, 14 Oct 2025 07:04:54 +0000
+Date: Tue, 14 Oct 2025 15:04:09 +0800
 From: kernel test robot <lkp@intel.com>
 To: Daniel Jurgens <danielj@nvidia.com>, netdev@vger.kernel.org,
 	mst@redhat.com, jasowang@redhat.com, alex.williamson@redhat.com,
@@ -59,10 +59,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	jgg@ziepe.ca, kevin.tian@intel.com, kuba@kernel.org,
 	andrew+netdev@lunn.ch, edumazet@google.com,
 	Daniel Jurgens <danielj@nvidia.com>
-Subject: Re: [PATCH net-next v4 05/12] virtio_net: Query and set flow filter
- caps
-Message-ID: <202510141423.IeIhJgQG-lkp@intel.com>
-References: <20251013152742.619423-6-danielj@nvidia.com>
+Subject: Re: [PATCH net-next v4 01/12] virtio_pci: Remove supported_cap size
+ build assert
+Message-ID: <202510141404.P5SMiruH-lkp@intel.com>
+References: <20251013152742.619423-2-danielj@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251013152742.619423-6-danielj@nvidia.com>
+In-Reply-To: <20251013152742.619423-2-danielj@nvidia.com>
 
 Hi Daniel,
 
@@ -81,146 +81,60 @@ kernel test robot noticed the following build errors:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Jurgens/virtio_pci-Remove-supported_cap-size-build-assert/20251014-004146
 base:   net-next/main
-patch link:    https://lore.kernel.org/r/20251013152742.619423-6-danielj%40nvidia.com
-patch subject: [PATCH net-next v4 05/12] virtio_net: Query and set flow filter caps
-config: i386-buildonly-randconfig-003-20251014 (https://download.01.org/0day-ci/archive/20251014/202510141423.IeIhJgQG-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141423.IeIhJgQG-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20251013152742.619423-2-danielj%40nvidia.com
+patch subject: [PATCH net-next v4 01/12] virtio_pci: Remove supported_cap size build assert
+config: s390-randconfig-001-20251014 (https://download.01.org/0day-ci/archive/20251014/202510141404.P5SMiruH-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141404.P5SMiruH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510141423.IeIhJgQG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510141404.P5SMiruH-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/virtio_net.c:6868:32: error: called object type 'unsigned int' is not a function or function pointer
-    6868 |                 if (sel->length > MAX_SEL_LEN()) {
-         |                                   ~~~~~~~~~~~^
+>> drivers/virtio/virtio_pci_modern.c:326:26: error: no member named 'support_caps' in 'struct virtio_admin_cmd_query_cap_id_result'
+     326 |         if (!(le64_to_cpu(data->support_caps[0]) & (1 << VIRTIO_DEV_PARTS_CAP)))
+         |                           ~~~~  ^
+   include/linux/byteorder/generic.h:87:21: note: expanded from macro 'le64_to_cpu'
+      87 | #define le64_to_cpu __le64_to_cpu
+         |                     ^
    1 error generated.
 
 
-vim +6868 drivers/net/virtio_net.c
+vim +326 drivers/virtio/virtio_pci_modern.c
 
-  6788	
-  6789	static void virtnet_ff_init(struct virtnet_ff *ff, struct virtio_device *vdev)
-  6790	{
-  6791		size_t ff_mask_size = sizeof(struct virtio_net_ff_cap_mask_data) +
-  6792				      sizeof(struct virtio_net_ff_selector) *
-  6793				      VIRTIO_NET_FF_MASK_TYPE_MAX;
-  6794		struct virtio_admin_cmd_query_cap_id_result *cap_id_list;
-  6795		struct virtio_net_ff_selector *sel;
-  6796		int err;
-  6797		int i;
-  6798	
-  6799		cap_id_list = kzalloc(sizeof(*cap_id_list), GFP_KERNEL);
-  6800		if (!cap_id_list)
-  6801			return;
-  6802	
-  6803		err = virtio_admin_cap_id_list_query(vdev, cap_id_list);
-  6804		if (err)
-  6805			goto err_cap_list;
-  6806	
-  6807		if (!(VIRTIO_CAP_IN_LIST(cap_id_list,
-  6808					 VIRTIO_NET_FF_RESOURCE_CAP) &&
-  6809		      VIRTIO_CAP_IN_LIST(cap_id_list,
-  6810					 VIRTIO_NET_FF_SELECTOR_CAP) &&
-  6811		      VIRTIO_CAP_IN_LIST(cap_id_list,
-  6812					 VIRTIO_NET_FF_ACTION_CAP)))
-  6813			goto err_cap_list;
-  6814	
-  6815		ff->ff_caps = kzalloc(sizeof(*ff->ff_caps), GFP_KERNEL);
-  6816		if (!ff->ff_caps)
-  6817			goto err_cap_list;
-  6818	
-  6819		err = virtio_admin_cap_get(vdev,
-  6820					   VIRTIO_NET_FF_RESOURCE_CAP,
-  6821					   ff->ff_caps,
-  6822					   sizeof(*ff->ff_caps));
-  6823	
-  6824		if (err)
-  6825			goto err_ff;
-  6826	
-  6827		/* VIRTIO_NET_FF_MASK_TYPE start at 1 */
-  6828		for (i = 1; i <= VIRTIO_NET_FF_MASK_TYPE_MAX; i++)
-  6829			ff_mask_size += get_mask_size(i);
-  6830	
-  6831		ff->ff_mask = kzalloc(ff_mask_size, GFP_KERNEL);
-  6832		if (!ff->ff_mask)
-  6833			goto err_ff;
-  6834	
-  6835		err = virtio_admin_cap_get(vdev,
-  6836					   VIRTIO_NET_FF_SELECTOR_CAP,
-  6837					   ff->ff_mask,
-  6838					   ff_mask_size);
-  6839	
-  6840		if (err)
-  6841			goto err_ff_mask;
-  6842	
-  6843		ff->ff_actions = kzalloc(sizeof(*ff->ff_actions) +
-  6844						VIRTIO_NET_FF_ACTION_MAX,
-  6845						GFP_KERNEL);
-  6846		if (!ff->ff_actions)
-  6847			goto err_ff_mask;
-  6848	
-  6849		err = virtio_admin_cap_get(vdev,
-  6850					   VIRTIO_NET_FF_ACTION_CAP,
-  6851					   ff->ff_actions,
-  6852					   sizeof(*ff->ff_actions) + VIRTIO_NET_FF_ACTION_MAX);
-  6853	
-  6854		if (err)
-  6855			goto err_ff_action;
-  6856	
-  6857		err = virtio_admin_cap_set(vdev,
-  6858					   VIRTIO_NET_FF_RESOURCE_CAP,
-  6859					   ff->ff_caps,
-  6860					   sizeof(*ff->ff_caps));
-  6861		if (err)
-  6862			goto err_ff_action;
-  6863	
-  6864		ff_mask_size = sizeof(struct virtio_net_ff_cap_mask_data);
-  6865		sel = &ff->ff_mask->selectors[0];
-  6866	
-  6867		for (i = 0; i < ff->ff_mask->count; i++) {
-> 6868			if (sel->length > MAX_SEL_LEN()) {
-  6869				err = -EINVAL;
-  6870				goto err_ff_action;
-  6871			}
-  6872			ff_mask_size += sizeof(struct virtio_net_ff_selector) + sel->length;
-  6873			sel = (void *)sel + sizeof(*sel) + sel->length;
-  6874		}
-  6875	
-  6876		err = virtio_admin_cap_set(vdev,
-  6877					   VIRTIO_NET_FF_SELECTOR_CAP,
-  6878					   ff->ff_mask,
-  6879					   ff_mask_size);
-  6880		if (err)
-  6881			goto err_ff_action;
-  6882	
-  6883		err = virtio_admin_cap_set(vdev,
-  6884					   VIRTIO_NET_FF_ACTION_CAP,
-  6885					   ff->ff_actions,
-  6886					   sizeof(*ff->ff_actions) + VIRTIO_NET_FF_ACTION_MAX);
-  6887		if (err)
-  6888			goto err_ff_action;
-  6889	
-  6890		ff->vdev = vdev;
-  6891		ff->ff_supported = true;
-  6892	
-  6893		kfree(cap_id_list);
-  6894	
-  6895		return;
-  6896	
-  6897	err_ff_action:
-  6898		kfree(ff->ff_actions);
-  6899	err_ff_mask:
-  6900		kfree(ff->ff_mask);
-  6901	err_ff:
-  6902		kfree(ff->ff_caps);
-  6903	err_cap_list:
-  6904		kfree(cap_id_list);
-  6905	}
-  6906	
+   304	
+   305	static void virtio_pci_admin_cmd_cap_init(struct virtio_device *virtio_dev)
+   306	{
+   307		struct virtio_pci_device *vp_dev = to_vp_device(virtio_dev);
+   308		struct virtio_admin_cmd_query_cap_id_result *data;
+   309		struct virtio_admin_cmd cmd = {};
+   310		struct scatterlist result_sg;
+   311		int ret;
+   312	
+   313		data = kzalloc(sizeof(*data), GFP_KERNEL);
+   314		if (!data)
+   315			return;
+   316	
+   317		sg_init_one(&result_sg, data, sizeof(*data));
+   318		cmd.opcode = cpu_to_le16(VIRTIO_ADMIN_CMD_CAP_ID_LIST_QUERY);
+   319		cmd.group_type = cpu_to_le16(VIRTIO_ADMIN_GROUP_TYPE_SELF);
+   320		cmd.result_sg = &result_sg;
+   321	
+   322		ret = vp_modern_admin_cmd_exec(virtio_dev, &cmd);
+   323		if (ret)
+   324			goto end;
+   325	
+ > 326		if (!(le64_to_cpu(data->support_caps[0]) & (1 << VIRTIO_DEV_PARTS_CAP)))
+   327			goto end;
+   328	
+   329		virtio_pci_admin_cmd_dev_parts_objects_enable(virtio_dev);
+   330	end:
+   331		kfree(data);
+   332	}
+   333	
 
 -- 
 0-DAY CI Kernel Test Service
