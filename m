@@ -1,59 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8DD2F5B;
-	Tue, 14 Oct 2025 06:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9FA10942;
+	Tue, 14 Oct 2025 06:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760422988; cv=none; b=UWt8YqVCKgDFwybNlP1t3U4ZoiQydGyRJAqGWmxW+gJHSUyE03KwWPFc9Y1lIsrM2xsEqBJgyQ1lkpxTviwr7R5OMh6eTcNX2vSMFYQzp9lgIiaXxcbEceo6fvUm3VkuJGwF8bkva4Th7ftf5zXq1PaEsKUcc4Bv0Ok8qbFY800=
+	t=1760423615; cv=none; b=T1AgPsWSqL2LzJZHbi9Y8GWQBPg+JFXTmglcqiBmYdk3LtA+Jny4ZbP1PssjZ8Bb6CCeSw799Fiw/6CXf+qG9PfDYhROXQrK8VpgiXjdlI+yysTX7+kilh/qwvV0jx8Z0I1E1QtromEF4GhAs8c1CW0uNborrw1ItFH8bAwEm1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760422988; c=relaxed/simple;
-	bh=spEB/JZzmHRISZA5+DzeisY5WNvPanwayUFvcSqKhCE=;
+	s=arc-20240116; t=1760423615; c=relaxed/simple;
+	bh=bItmwAuM1kJCIqmjLQgrg55Hiv1GTpbgngNNX+tPC80=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kj+qDdgMhRkfcqR0KspWodVaENaho+oBP2AkKRK7kIi7M+vYprYSI6o3MtUbByk4LNOC/og6zRVSCvFrG5CIGe0EnN+fOu1hVv7JWAzyeu7xrHnH/73hby2c89Kp5UWxfzIV0PJr0aeAu/Fc4kKS76JPX6iYCvXyQeMUnkAFW1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SygXpIYl; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=qnPsfC8HwCXshL5/yb2n7iCDooCOiqpDfSqD+cnLvUKIvpzpf8nHWt2ZSpMo6gNEsFELlitaKnjfRsESFZWPtispeNpfMAgwnTwtUYHgWg7WE5s6FQz4NxTffiTrwbgvFd8HsoZ6nkbr0J2PjsHvbWz0QRw3Pvva/qLTVu0iAz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mqBjH/Kn; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SygXpIYl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqBjH/Kn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760422986; x=1791958986;
+  t=1760423614; x=1791959614;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=spEB/JZzmHRISZA5+DzeisY5WNvPanwayUFvcSqKhCE=;
-  b=SygXpIYlnNlfayOoyp8rKUkSkACJ4sG1fQBpjCz/csgH4Fy31mNJi7Vq
-   OpXxfqy46gilXJhrBgjVJWlCc13bvS/9dfmf3VfUmMC5dD1xoKnpS6npv
-   hMGRME/2bep2J9APEkVCYbLUKRAP/CAZ349We1LOiP8LcW/yROecA344N
-   nrL+qD17D9iNwy/bdP5ksths1mJjeot8tOUKH6I0kWFBL34Ma14SfiDS/
-   lkLSigVP2rtOBdf313l6TqnXp7RaeWDi7a3hyd3vJ4SGxoK5xkKG2Z19h
-   1sm0+QpLObHdFP5+MdafFsFs0acn21znrT40FpvzCzhB7AiCDVAwL37lw
-   g==;
-X-CSE-ConnectionGUID: g9f2iz1FQW2JQ9CTYD5zYA==
-X-CSE-MsgGUID: 4D8q2ndFR2WfqTjsnsH8jw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="73177472"
+  bh=bItmwAuM1kJCIqmjLQgrg55Hiv1GTpbgngNNX+tPC80=;
+  b=mqBjH/KniBNUu0+duBXV06HQ/DeS+5vVTGp9VnL2Jxqj0nO6IqcQD8wC
+   Lx6HsS15najqsY76VtvbPPDLjTfH5nW018PObxKGINxL8lUaTyeY+x3zv
+   RVgoeOwyc/pGESfMFOiZDDou6idj7nVMlXqyxXfckqwMxk2HDNQENXY1N
+   JGs2c5WUq7miu7PYQrYDpOR9i0j9T3uml3+qZDfz4pwNr75+a3oVmJ4Dj
+   /6zcEWGTjCgQZYOO8iXwa4e3p59r8VfNf7JwbgcvQjLTPe2iCzOMOxdxI
+   dSMuC1+VreWaXTp+Hut/SUm8QHPuYFUXj/u7vozpt0Q4W6fO6jltGrXhT
+   A==;
+X-CSE-ConnectionGUID: TbOA4bbCR/q/o/iXOHR5sA==
+X-CSE-MsgGUID: DKviQ7urT3ySyPysU711vQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="73678257"
 X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="73177472"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 23:23:05 -0700
-X-CSE-ConnectionGUID: hJDGKLnsRO2TlxJXCQ73cw==
-X-CSE-MsgGUID: wV9pJmOrSTivKsIapCSF4w==
+   d="scan'208";a="73678257"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 23:33:33 -0700
+X-CSE-ConnectionGUID: 6EuriOAgTJuvDYz/dmx8Pw==
+X-CSE-MsgGUID: cVO5Mr4bTZKkNcO4avyV8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="187098682"
+   d="scan'208";a="181756438"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 13 Oct 2025 23:23:04 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 13 Oct 2025 23:33:26 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v8YQz-0002Sh-2J;
-	Tue, 14 Oct 2025 06:22:59 +0000
-Date: Tue, 14 Oct 2025 14:22:15 +0800
+	id 1v8Yb0-0002Tb-1V;
+	Tue, 14 Oct 2025 06:33:19 +0000
+Date: Tue, 14 Oct 2025 14:32:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eugene Korenevsky <ekorenevsky@aliyun.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] cifs: parse_dfs_referrals: prevent oob on malformed input
-Message-ID: <202510141458.JVIIgm7M-lkp@intel.com>
-References: <aO1HYr97mEwWZWkB@localhost.localdomain>
+To: Daniel Jurgens <danielj@nvidia.com>, netdev@vger.kernel.org,
+	mst@redhat.com, jasowang@redhat.com, alex.williamson@redhat.com,
+	pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	virtualization@lists.linux.dev, parav@nvidia.com,
+	shshitrit@nvidia.com, yohadt@nvidia.com, xuanzhuo@linux.alibaba.com,
+	eperezma@redhat.com, shameerali.kolothum.thodi@huawei.com,
+	jgg@ziepe.ca, kevin.tian@intel.com, kuba@kernel.org,
+	andrew+netdev@lunn.ch, edumazet@google.com,
+	Daniel Jurgens <danielj@nvidia.com>
+Subject: Re: [PATCH net-next v4 05/12] virtio_net: Query and set flow filter
+ caps
+Message-ID: <202510141423.IeIhJgQG-lkp@intel.com>
+References: <20251013152742.619423-6-danielj@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,370 +71,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aO1HYr97mEwWZWkB@localhost.localdomain>
+In-Reply-To: <20251013152742.619423-6-danielj@nvidia.com>
 
-Hi Eugene,
+Hi Daniel,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on cifs/for-next]
-[also build test WARNING on linus/master v6.18-rc1 next-20251013]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eugene-Korenevsky/cifs-parse_dfs_referrals-prevent-oob-on-malformed-input/20251014-024102
-base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-patch link:    https://lore.kernel.org/r/aO1HYr97mEwWZWkB%40localhost.localdomain
-patch subject: [PATCH] cifs: parse_dfs_referrals: prevent oob on malformed input
-config: i386-randconfig-011-20251014 (https://download.01.org/0day-ci/archive/20251014/202510141458.JVIIgm7M-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Jurgens/virtio_pci-Remove-supported_cap-size-build-assert/20251014-004146
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20251013152742.619423-6-danielj%40nvidia.com
+patch subject: [PATCH net-next v4 05/12] virtio_net: Query and set flow filter caps
+config: i386-buildonly-randconfig-003-20251014 (https://download.01.org/0day-ci/archive/20251014/202510141423.IeIhJgQG-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141458.JVIIgm7M-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141423.IeIhJgQG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510141458.JVIIgm7M-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510141423.IeIhJgQG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/smb/client/misc.c:922:25: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     921 |                          "%s: header is malformed (size is %u, must be %lu)\n",
-         |                                                                        ~~~
-         |                                                                        %u
-     922 |                          __func__, rsp_size, sizeof(*rsp));
-         |                                              ^~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                                           ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:66:23: note: expanded from macro 'cifs_dbg_func'
-      65 |                 pr_debug_ ## ratefunc("%s: " fmt,                       \
-         |                                              ~~~
-      66 |                                       __FILE__, ##__VA_ARGS__);         \
-         |                                                   ^~~~~~~~~~~
-   include/linux/printk.h:691:38: note: expanded from macro 'pr_debug_once'
-     691 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:135:18: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ~~~    ^~~~~~~~~~~
->> fs/smb/client/misc.c:922:25: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     921 |                          "%s: header is malformed (size is %u, must be %lu)\n",
-         |                                                                        ~~~
-         |                                                                        %u
-     922 |                          __func__, rsp_size, sizeof(*rsp));
-         |                                              ^~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                                           ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:68:38: note: expanded from macro 'cifs_dbg_func'
-      68 |                 pr_err_ ## ratefunc("VFS: " fmt, ##__VA_ARGS__);        \
-         |                                             ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:668:38: note: expanded from macro 'pr_err_once'
-     668 |         printk_once(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/once_lite.h:31:9: note: expanded from macro 'DO_ONCE_LITE_IF'
-      31 |                         func(__VA_ARGS__);                              \
-         |                              ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
->> fs/smb/client/misc.c:922:25: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     921 |                          "%s: header is malformed (size is %u, must be %lu)\n",
-         |                                                                        ~~~
-         |                                                                        %u
-     922 |                          __func__, rsp_size, sizeof(*rsp));
-         |                                              ^~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                                           ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:70:32: note: expanded from macro 'cifs_dbg_func'
-      70 |                 pr_debug_ ## ratefunc(fmt, ##__VA_ARGS__);              \
-         |                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:691:38: note: expanded from macro 'pr_debug_once'
-     691 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:135:18: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ~~~    ^~~~~~~~~~~
->> fs/smb/client/misc.c:922:25: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     921 |                          "%s: header is malformed (size is %u, must be %lu)\n",
-         |                                                                        ~~~
-         |                                                                        %u
-     922 |                          __func__, rsp_size, sizeof(*rsp));
-         |                                              ^~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:79:43: note: expanded from macro 'cifs_dbg'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                                                  ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:66:23: note: expanded from macro 'cifs_dbg_func'
-      65 |                 pr_debug_ ## ratefunc("%s: " fmt,                       \
-         |                                              ~~~
-      66 |                                       __FILE__, ##__VA_ARGS__);         \
-         |                                                   ^~~~~~~~~~~
-   include/linux/printk.h:756:38: note: expanded from macro 'pr_debug_ratelimited'
-     756 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:135:18: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ~~~    ^~~~~~~~~~~
->> fs/smb/client/misc.c:922:25: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     921 |                          "%s: header is malformed (size is %u, must be %lu)\n",
-         |                                                                        ~~~
-         |                                                                        %u
-     922 |                          __func__, rsp_size, sizeof(*rsp));
-         |                                              ^~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:79:43: note: expanded from macro 'cifs_dbg'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                                                  ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:68:38: note: expanded from macro 'cifs_dbg_func'
-      68 |                 pr_err_ ## ratefunc("VFS: " fmt, ##__VA_ARGS__);        \
-         |                                             ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:720:45: note: expanded from macro 'pr_err_ratelimited'
-     720 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:706:17: note: expanded from macro 'printk_ratelimited'
-     706 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
->> fs/smb/client/misc.c:922:25: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     921 |                          "%s: header is malformed (size is %u, must be %lu)\n",
-         |                                                                        ~~~
-         |                                                                        %u
-     922 |                          __func__, rsp_size, sizeof(*rsp));
-         |                                              ^~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:79:43: note: expanded from macro 'cifs_dbg'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                                                  ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:70:32: note: expanded from macro 'cifs_dbg_func'
-      70 |                 pr_debug_ ## ratefunc(fmt, ##__VA_ARGS__);              \
-         |                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:756:38: note: expanded from macro 'pr_debug_ratelimited'
-     756 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:135:18: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ~~~    ^~~~~~~~~~~
-   fs/smb/client/misc.c:940:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     938 |                          "%s: malformed buffer (size is %u, must be at least %lu)\n",
-         |                                                                              ~~~
-         |                                                                              %u
-     939 |                          __func__, rsp_size,
-     940 |                          sizeof(*rsp) + *num_of_nodes * sizeof(REFERRAL3));
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                                           ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:66:23: note: expanded from macro 'cifs_dbg_func'
-      65 |                 pr_debug_ ## ratefunc("%s: " fmt,                       \
-         |                                              ~~~
-      66 |                                       __FILE__, ##__VA_ARGS__);         \
-         |                                                   ^~~~~~~~~~~
-   include/linux/printk.h:691:38: note: expanded from macro 'pr_debug_once'
-     691 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:135:18: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ~~~    ^~~~~~~~~~~
-   fs/smb/client/misc.c:940:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     938 |                          "%s: malformed buffer (size is %u, must be at least %lu)\n",
-         |                                                                              ~~~
-         |                                                                              %u
-     939 |                          __func__, rsp_size,
-     940 |                          sizeof(*rsp) + *num_of_nodes * sizeof(REFERRAL3));
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                                           ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:68:38: note: expanded from macro 'cifs_dbg_func'
-      68 |                 pr_err_ ## ratefunc("VFS: " fmt, ##__VA_ARGS__);        \
-         |                                             ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:668:38: note: expanded from macro 'pr_err_once'
-     668 |         printk_once(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/once_lite.h:31:9: note: expanded from macro 'DO_ONCE_LITE_IF'
-      31 |                         func(__VA_ARGS__);                              \
-         |                              ^~~~~~~~~~~
-   include/linux/printk.h:512:60: note: expanded from macro 'printk'
-     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
-     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   fs/smb/client/misc.c:940:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     938 |                          "%s: malformed buffer (size is %u, must be at least %lu)\n",
-         |                                                                              ~~~
-         |                                                                              %u
-     939 |                          __func__, rsp_size,
-     940 |                          sizeof(*rsp) + *num_of_nodes * sizeof(REFERRAL3));
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:77:36: note: expanded from macro 'cifs_dbg'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                                           ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:70:32: note: expanded from macro 'cifs_dbg_func'
-      70 |                 pr_debug_ ## ratefunc(fmt, ##__VA_ARGS__);              \
-         |                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:691:38: note: expanded from macro 'pr_debug_once'
-     691 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:135:18: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ~~~    ^~~~~~~~~~~
-   fs/smb/client/misc.c:940:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     938 |                          "%s: malformed buffer (size is %u, must be at least %lu)\n",
-         |                                                                              ~~~
-         |                                                                              %u
-     939 |                          __func__, rsp_size,
-     940 |                          sizeof(*rsp) + *num_of_nodes * sizeof(REFERRAL3));
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:79:43: note: expanded from macro 'cifs_dbg'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                                                  ~~~    ^~~~~~~~~~~
-   fs/smb/client/cifs_debug.h:66:23: note: expanded from macro 'cifs_dbg_func'
-      65 |                 pr_debug_ ## ratefunc("%s: " fmt,                       \
-         |                                              ~~~
-      66 |                                       __FILE__, ##__VA_ARGS__);         \
-         |                                                   ^~~~~~~~~~~
-   include/linux/printk.h:756:38: note: expanded from macro 'pr_debug_ratelimited'
-     756 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+>> drivers/net/virtio_net.c:6868:32: error: called object type 'unsigned int' is not a function or function pointer
+    6868 |                 if (sel->length > MAX_SEL_LEN()) {
+         |                                   ~~~~~~~~~~~^
+   1 error generated.
 
 
-vim +922 fs/smb/client/misc.c
+vim +6868 drivers/net/virtio_net.c
 
-   901	
-   902	/* parses DFS referral V3 structure
-   903	 * caller is responsible for freeing target_nodes
-   904	 * returns:
-   905	 * - on success - 0
-   906	 * - on failure - errno
-   907	 */
-   908	int
-   909	parse_dfs_referrals(struct get_dfs_referral_rsp *rsp, u32 rsp_size,
-   910			    unsigned int *num_of_nodes,
-   911			    struct dfs_info3_param **target_nodes,
-   912			    const struct nls_table *nls_codepage, int remap,
-   913			    const char *searchName, bool is_unicode)
-   914	{
-   915		int i, rc = 0;
-   916		char *data_end;
-   917		struct dfs_referral_level_3 *ref;
-   918	
-   919		if (rsp_size < sizeof(*rsp)) {
-   920			cifs_dbg(VFS | ONCE,
-   921				 "%s: header is malformed (size is %u, must be %lu)\n",
- > 922				 __func__, rsp_size, sizeof(*rsp));
-   923			rc = -EINVAL;
-   924			goto parse_DFS_referrals_exit;
-   925		}
-   926	
-   927		*num_of_nodes = le16_to_cpu(rsp->NumberOfReferrals);
-   928	
-   929		if (*num_of_nodes < 1) {
-   930			cifs_dbg(VFS | ONCE, "%s: [path=%s] num_referrals must be at least > 0, but we got %d\n",
-   931				 __func__, searchName, *num_of_nodes);
-   932			rc = -ENOENT;
-   933			goto parse_DFS_referrals_exit;
-   934		}
-   935	
-   936		if (sizeof(*rsp) + *num_of_nodes * sizeof(REFERRAL3) > rsp_size) {
-   937			cifs_dbg(VFS | ONCE,
-   938				 "%s: malformed buffer (size is %u, must be at least %lu)\n",
-   939				 __func__, rsp_size,
-   940				 sizeof(*rsp) + *num_of_nodes * sizeof(REFERRAL3));
-   941			rc = -EINVAL;
-   942			goto parse_DFS_referrals_exit;
-   943		}
-   944	
-   945		ref = (struct dfs_referral_level_3 *) &(rsp->referrals);
-   946		if (ref->VersionNumber != cpu_to_le16(3)) {
-   947			cifs_dbg(VFS, "Referrals of V%d version are not supported, should be V3\n",
-   948				 le16_to_cpu(ref->VersionNumber));
-   949			rc = -EINVAL;
-   950			goto parse_DFS_referrals_exit;
-   951		}
-   952	
-   953		/* get the upper boundary of the resp buffer */
-   954		data_end = (char *)rsp + rsp_size;
-   955	
-   956		cifs_dbg(FYI, "num_referrals: %d dfs flags: 0x%x ...\n",
-   957			 *num_of_nodes, le32_to_cpu(rsp->DFSFlags));
-   958	
-   959		*target_nodes = kcalloc(*num_of_nodes, sizeof(struct dfs_info3_param),
-   960					GFP_KERNEL);
-   961		if (*target_nodes == NULL) {
-   962			rc = -ENOMEM;
-   963			goto parse_DFS_referrals_exit;
-   964		}
-   965	
-   966		/* collect necessary data from referrals */
-   967		for (i = 0; i < *num_of_nodes; i++) {
-   968			char *temp;
-   969			int max_len;
-   970			struct dfs_info3_param *node = (*target_nodes)+i;
-   971	
-   972			node->flags = le32_to_cpu(rsp->DFSFlags);
-   973			if (is_unicode) {
-   974				__le16 *tmp = kmalloc(strlen(searchName)*2 + 2,
-   975							GFP_KERNEL);
-   976				if (tmp == NULL) {
-   977					rc = -ENOMEM;
-   978					goto parse_DFS_referrals_exit;
-   979				}
-   980				cifsConvertToUTF16((__le16 *) tmp, searchName,
-   981						   PATH_MAX, nls_codepage, remap);
-   982				node->path_consumed = cifs_utf16_bytes(tmp,
-   983						le16_to_cpu(rsp->PathConsumed),
-   984						nls_codepage);
-   985				kfree(tmp);
-   986			} else
-   987				node->path_consumed = le16_to_cpu(rsp->PathConsumed);
-   988	
-   989			node->server_type = le16_to_cpu(ref->ServerType);
-   990			node->ref_flag = le16_to_cpu(ref->ReferralEntryFlags);
-   991	
-   992			/* copy DfsPath */
-   993			temp = (char *)ref + le16_to_cpu(ref->DfsPathOffset);
-   994			max_len = data_end - temp;
-   995			node->path_name = cifs_strndup_from_utf16(temp, max_len,
-   996							is_unicode, nls_codepage);
-   997			if (!node->path_name) {
-   998				rc = -ENOMEM;
-   999				goto parse_DFS_referrals_exit;
-  1000			}
-  1001	
-  1002			/* copy link target UNC */
-  1003			temp = (char *)ref + le16_to_cpu(ref->NetworkAddressOffset);
-  1004			max_len = data_end - temp;
-  1005			node->node_name = cifs_strndup_from_utf16(temp, max_len,
-  1006							is_unicode, nls_codepage);
-  1007			if (!node->node_name) {
-  1008				rc = -ENOMEM;
-  1009				goto parse_DFS_referrals_exit;
-  1010			}
-  1011	
-  1012			node->ttl = le32_to_cpu(ref->TimeToLive);
-  1013	
-  1014			ref++;
-  1015		}
-  1016	
-  1017	parse_DFS_referrals_exit:
-  1018		if (rc) {
-  1019			free_dfs_info_array(*target_nodes, *num_of_nodes);
-  1020			*target_nodes = NULL;
-  1021			*num_of_nodes = 0;
-  1022		}
-  1023		return rc;
-  1024	}
-  1025	
+  6788	
+  6789	static void virtnet_ff_init(struct virtnet_ff *ff, struct virtio_device *vdev)
+  6790	{
+  6791		size_t ff_mask_size = sizeof(struct virtio_net_ff_cap_mask_data) +
+  6792				      sizeof(struct virtio_net_ff_selector) *
+  6793				      VIRTIO_NET_FF_MASK_TYPE_MAX;
+  6794		struct virtio_admin_cmd_query_cap_id_result *cap_id_list;
+  6795		struct virtio_net_ff_selector *sel;
+  6796		int err;
+  6797		int i;
+  6798	
+  6799		cap_id_list = kzalloc(sizeof(*cap_id_list), GFP_KERNEL);
+  6800		if (!cap_id_list)
+  6801			return;
+  6802	
+  6803		err = virtio_admin_cap_id_list_query(vdev, cap_id_list);
+  6804		if (err)
+  6805			goto err_cap_list;
+  6806	
+  6807		if (!(VIRTIO_CAP_IN_LIST(cap_id_list,
+  6808					 VIRTIO_NET_FF_RESOURCE_CAP) &&
+  6809		      VIRTIO_CAP_IN_LIST(cap_id_list,
+  6810					 VIRTIO_NET_FF_SELECTOR_CAP) &&
+  6811		      VIRTIO_CAP_IN_LIST(cap_id_list,
+  6812					 VIRTIO_NET_FF_ACTION_CAP)))
+  6813			goto err_cap_list;
+  6814	
+  6815		ff->ff_caps = kzalloc(sizeof(*ff->ff_caps), GFP_KERNEL);
+  6816		if (!ff->ff_caps)
+  6817			goto err_cap_list;
+  6818	
+  6819		err = virtio_admin_cap_get(vdev,
+  6820					   VIRTIO_NET_FF_RESOURCE_CAP,
+  6821					   ff->ff_caps,
+  6822					   sizeof(*ff->ff_caps));
+  6823	
+  6824		if (err)
+  6825			goto err_ff;
+  6826	
+  6827		/* VIRTIO_NET_FF_MASK_TYPE start at 1 */
+  6828		for (i = 1; i <= VIRTIO_NET_FF_MASK_TYPE_MAX; i++)
+  6829			ff_mask_size += get_mask_size(i);
+  6830	
+  6831		ff->ff_mask = kzalloc(ff_mask_size, GFP_KERNEL);
+  6832		if (!ff->ff_mask)
+  6833			goto err_ff;
+  6834	
+  6835		err = virtio_admin_cap_get(vdev,
+  6836					   VIRTIO_NET_FF_SELECTOR_CAP,
+  6837					   ff->ff_mask,
+  6838					   ff_mask_size);
+  6839	
+  6840		if (err)
+  6841			goto err_ff_mask;
+  6842	
+  6843		ff->ff_actions = kzalloc(sizeof(*ff->ff_actions) +
+  6844						VIRTIO_NET_FF_ACTION_MAX,
+  6845						GFP_KERNEL);
+  6846		if (!ff->ff_actions)
+  6847			goto err_ff_mask;
+  6848	
+  6849		err = virtio_admin_cap_get(vdev,
+  6850					   VIRTIO_NET_FF_ACTION_CAP,
+  6851					   ff->ff_actions,
+  6852					   sizeof(*ff->ff_actions) + VIRTIO_NET_FF_ACTION_MAX);
+  6853	
+  6854		if (err)
+  6855			goto err_ff_action;
+  6856	
+  6857		err = virtio_admin_cap_set(vdev,
+  6858					   VIRTIO_NET_FF_RESOURCE_CAP,
+  6859					   ff->ff_caps,
+  6860					   sizeof(*ff->ff_caps));
+  6861		if (err)
+  6862			goto err_ff_action;
+  6863	
+  6864		ff_mask_size = sizeof(struct virtio_net_ff_cap_mask_data);
+  6865		sel = &ff->ff_mask->selectors[0];
+  6866	
+  6867		for (i = 0; i < ff->ff_mask->count; i++) {
+> 6868			if (sel->length > MAX_SEL_LEN()) {
+  6869				err = -EINVAL;
+  6870				goto err_ff_action;
+  6871			}
+  6872			ff_mask_size += sizeof(struct virtio_net_ff_selector) + sel->length;
+  6873			sel = (void *)sel + sizeof(*sel) + sel->length;
+  6874		}
+  6875	
+  6876		err = virtio_admin_cap_set(vdev,
+  6877					   VIRTIO_NET_FF_SELECTOR_CAP,
+  6878					   ff->ff_mask,
+  6879					   ff_mask_size);
+  6880		if (err)
+  6881			goto err_ff_action;
+  6882	
+  6883		err = virtio_admin_cap_set(vdev,
+  6884					   VIRTIO_NET_FF_ACTION_CAP,
+  6885					   ff->ff_actions,
+  6886					   sizeof(*ff->ff_actions) + VIRTIO_NET_FF_ACTION_MAX);
+  6887		if (err)
+  6888			goto err_ff_action;
+  6889	
+  6890		ff->vdev = vdev;
+  6891		ff->ff_supported = true;
+  6892	
+  6893		kfree(cap_id_list);
+  6894	
+  6895		return;
+  6896	
+  6897	err_ff_action:
+  6898		kfree(ff->ff_actions);
+  6899	err_ff_mask:
+  6900		kfree(ff->ff_mask);
+  6901	err_ff:
+  6902		kfree(ff->ff_caps);
+  6903	err_cap_list:
+  6904		kfree(cap_id_list);
+  6905	}
+  6906	
 
 -- 
 0-DAY CI Kernel Test Service
