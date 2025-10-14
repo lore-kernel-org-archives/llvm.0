@@ -1,85 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AD92D46D8;
-	Tue, 14 Oct 2025 09:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B249D2EF64F
+	for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 09:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760434212; cv=none; b=g/gXXqxnZGSS6eulXD7oCgYcJZLQ1khlFQZ6MU7x58tMcWSTx/UduACFQO5aJ10vMTvQWS9k0hLPolcvMe91SDJKWXYrbL8AbF0LpdmwGl2fYdx6Q0fLheBAS7q02JSrWFr/UXz0tWFe+ngsZ+dvmF+jorLX2/M6dyeGYYnBAFc=
+	t=1760435128; cv=none; b=GhjmraJZ4EUAZ1O6KUX3+UL0EUNU2H2LRZpUyhrkzHbkE9SJPesJUy6tBg5GR5/PIQIjG7TU3GSydDqfWLOaa1EQuFXccjL/5hIozOU4EPuqtW0KGKZX9YX7xVBqrOh92kZx8KpvLr+k9r/0NbzkV1M1RjlnJWQRpKePVsjU210=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760434212; c=relaxed/simple;
-	bh=G8qIOGpZDmFjcVl+BG1v3H5em0d95hsDsI1brGLfCjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p9YMysP7sqnfp+p7+1hMGa1R2cI7JLH6q9tDn+x/Xc8V/wDgKFqDNrGf3m1jHcPoaGQ2sUI6Is1o/+fuE9CyOT96LHYaqGkE5lHpQUuGYPprRx4XpTL/Cwivnn8OLY9YUmlVkZ7XlBjvHxhNZCjJNN/Mr4EIGVdnux3u+cWIAUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aE7wQ02u; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760435128; c=relaxed/simple;
+	bh=eh4ANO2d3smDKZZwIDnxm/MQXjsXiFsIqghETlox01s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o/S3wMNEAmgwpIW1wKHqQ0mQJ/vcRzV835DPh26HC8BIo/q03+0fE5LBwEuX2+xBY8DNNdbt4i+Ue4DmIC1qyZoU/ZPOetMZWo8G7jxw+bW3gac5e+eAxeZl35q/gXORJN87biwdz55IUiPtgRTHzdW+cTceJ4cWn5AFUIZdwKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=J/rwQA1O; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aE7wQ02u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760434210; x=1791970210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G8qIOGpZDmFjcVl+BG1v3H5em0d95hsDsI1brGLfCjw=;
-  b=aE7wQ02uBaLT8p5ahyj6/tp/AvUif8x6MeMvUWwq3HlijEPK2zQnKa75
-   +ruppiuiT+GP3/t8Y1ANZWqHVjotvHN2sK6QV9qI6GlGouexgLHMFRof5
-   oRqHGRdCyBAvgk2/qT06Ie+A8rTLK7d3n6UAgwOf62k1M5bedH4g4iOng
-   HCwat2W5Hdl1y2FZ8Jy6y5GP1o3aLIKXesg6EaYCA5FrfD2hJYqwgwx/L
-   15sYHmTScPZyhEPydTtXos/AZil78J8YC6/u3FLxjWnSK5Ok+qm6Ds3F4
-   ktDjjJBBrTux+KzOls4Tr6IC+Vq1vWUk1AfHg2JeYeQHnu2nVJy9fXBaj
-   w==;
-X-CSE-ConnectionGUID: Rb8NyNgxQpemiCchZZ6iEQ==
-X-CSE-MsgGUID: 9oUzi0IsTK+LY+QnHnq5xw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="62624391"
-X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="62624391"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 02:30:09 -0700
-X-CSE-ConnectionGUID: cLpoLbhwTKqR+aex1Nyuiw==
-X-CSE-MsgGUID: Q4lWz0eOT5iw2fbMYIeYoQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="186091298"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 14 Oct 2025 02:30:08 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v8bM5-0002bT-0q;
-	Tue, 14 Oct 2025 09:30:05 +0000
-Date: Tue, 14 Oct 2025 17:29:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Deucher <alexander.deucher@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Subject: [agd5f:drm-next 8/19] Warning:
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:761 function parameter 'af' not
- described in 'amdgpu_fence_driver_guilty_force_completion'
-Message-ID: <202510141727.kRy8dSnL-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="J/rwQA1O"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0FC321F745;
+	Tue, 14 Oct 2025 09:45:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1760435118;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vSi4m7GHZ1XhKbCHDk6/gXFjTYG4yzDfHQT53TiQIyI=;
+	b=J/rwQA1O6X/jO0+uRiWzutma2o99jVSY7lRhRdo3jBJc0LIZOPEY/8ra0n7s+g2mg3NRSv
+	h6MOE/HsbTJjJ6Cyj3QxtiNepOJ8Eyzs4iDe9i+UBrx0IznNASZPLfLfK0EdSq23chGNST
+	cmh5eRZ12iQGl9TxAQtLI4KyMHQDOM6J5/DUvWpNPgfo4NQeKmPsZ5deb6eLJjKROEubKu
+	9648ElaWCgGJDIYM7uV8KQ91G8JaDKs9+R5Q7RxrLXpFKDsiJV029Y/7Xn3/O8pm+Egown
+	oa6f+Zvdw2pHaZnFMVVgrGIyQrr/pDBbfXfKlBdjLzM7hkwEAUMZLt8G9rfzzw==
+From: Guillaume Tucker <gtucker@gtucker.io>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>
+Cc: Guillaume Tucker <gtucker@gtucker.io>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	rust-for-linux@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	workflows@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH 0/1] kbuild: introduce containerized builds
+Date: Tue, 14 Oct 2025 11:45:10 +0200
+Message-ID: <20251014094511.627258-1-gtucker@gtucker.io>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: gtucker@gtucker.io
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   079ae5118e1f0dcf5b1ab68ffdb5760b06ed79a2
-commit: ff780f4f80323148d43198f2052c14160c8428d3 [8/19] drm/amdgpu: set an error on all fences from a bad context
-config: s390-randconfig-002-20251014 (https://download.01.org/0day-ci/archive/20251014/202510141727.kRy8dSnL-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141727.kRy8dSnL-lkp@intel.com/reproduce)
+This proposal emerged from an email discussion and a talk at Plumbers
+last year:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510141727.kRy8dSnL-lkp@intel.com/
+    https://lore.kernel.org/all/affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io/
 
-All warnings (new ones prefixed by >>):
+The aim is to facilitate reproducing builds for CI bots as well as
+developers using containers.  It's achieved by providing a wrapper
+around `make` in a separate Makefile.  Here's an illustrative example
+with a kernel.org toolchain in a Docker image from tuxmake:
 
->> Warning: drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:761 function parameter 'af' not described in 'amdgpu_fence_driver_guilty_force_completion'
+    $ make -f scripts/Makefile.container CONTAINER=tuxmake/korg-clang-21 LLVM=1 defconfig
+    Running in docker tuxmake/korg-clang-21
+      HOSTCC  scripts/basic/fixdep
+      HOSTCC  scripts/kconfig/conf.o
+    [...]
+      HOSTCC  scripts/kconfig/util.o
+      HOSTLD  scripts/kconfig/conf
+    *** Default configuration is based on 'x86_64_defconfig'
+    #
+    # configuration written to .config
+    #
+
+    $ make -f scripts/Makefile.container CONTAINER=tuxmake/korg-clang-21 LLVM=1 -j8
+    Running in docker tuxmake/korg-clang-21
+    make: warning: -j8 forced in submake: resetting jobserver mode.
+      SYNC    include/config/auto.conf
+      GEN     arch/x86/include/generated/asm/orc_hash.h
+      WRAP    arch/x86/include/generated/uapi/asm/bpf_perf_event.h
+      WRAP    arch/x86/include/generated/uapi/asm/errno.h
+    [...]
+      LD      arch/x86/boot/setup.elf
+      OBJCOPY arch/x86/boot/setup.bin
+      BUILD   arch/x86/boot/bzImage
+    Kernel: arch/x86/boot/bzImage is ready  (#1)
+
+The initial idea was to add an if-else block for when $(CONTAINER)
+was defined directly in the top-level Makefile but this seemed too
+intrusive, hence the approach here with a separate file.  It's easy
+enough to create an alias for development purposes if needed.
+
+While the example above uses a tuxmake image, I've also started
+preparing reference container images with kernel.org toolchains and
+no third-party dependencies other than the base Debian distro:
+
+    https://gitlab.com/gtucker/korg-containers
+
+These are convenient for exercising this feature but any arbitrary
+image may be used of course.
+
+Guillaume Tucker (1):
+  kbuild: add Makefile.container with CONTAINER option
+
+ scripts/Makefile.container | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 scripts/Makefile.container
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.3
+
