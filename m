@@ -1,52 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4273081DC;
-	Tue, 14 Oct 2025 22:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED00726FA6E;
+	Tue, 14 Oct 2025 22:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760480730; cv=none; b=K21/qt7ZVRnlptZrJHGSLuTyQNuNaJXysgbZN1lMHZKe5AmHXwgKQNsYT1r2TXEw8hRCCqiw6Fp+Rl1aOD8Juuo/Fng3oT5nPLDGVdtdFV3IBfgu3ibvSLn93v5pelwpaGf9iMbESEAxax/+V1u71DIFUmSJ7lBYM9JTGSVM4eQ=
+	t=1760481601; cv=none; b=YV+/D6FMGJ1pq/VH+E7pa9gM1efGMCGXX764Li1WhzhxRir7X6dTBro4FT3BvJaAoc2GVhYMGbmpNe35SfZu8GvYvfTx1MobJimlNTLSJYUKiBbH/McH6EULtUvTLoH2XFF87qwL082BwkLt66XmVHLgw+d7QnVFK8vUuQfrz80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760480730; c=relaxed/simple;
-	bh=Bk6tOAIjGpqsinKNke8LjcxZyyMelB7HsuLcZ9QiFLY=;
+	s=arc-20240116; t=1760481601; c=relaxed/simple;
+	bh=HJV7o9IeEuxcVHIHjK/81wR3IFGTE46/eu2K02OIGzo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fdl7AJbguhf2v+D5naFlYcEglvNwkhDnQlJCO6b/LU70ihiZ3aOyHuM9Im7Km+6fVvWUpkTptegklmjcMC7UQQK8cy2HYdlAP8s0d/TrwuPGWduTnTqxGX7TpDnxDxtERJSS8ug16NntBqSnQxusTV94oEz+P4CEEVuqVtD1YD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=liNf9T2K; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ax2LS3CNhttuz7dhAdc550Hd+GNRceEQOdcX0x/KxCzdvMpEtj9JTAHP1cqg1NYFfp3pk7aFb4IcOVDO+0uV2JeU4GC2Kq7fjwOYLhizE9iHqTV/cMt8/CXG2jE4fOU2WDaw7pb++23ciNf0UFL2qWN17u/jhUWYdHbENA8rwKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VeOfEO3z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="liNf9T2K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86892C4CEE7;
-	Tue, 14 Oct 2025 22:25:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VeOfEO3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55A6C4CEF1;
+	Tue, 14 Oct 2025 22:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760480729;
-	bh=Bk6tOAIjGpqsinKNke8LjcxZyyMelB7HsuLcZ9QiFLY=;
+	s=k20201202; t=1760481600;
+	bh=HJV7o9IeEuxcVHIHjK/81wR3IFGTE46/eu2K02OIGzo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=liNf9T2KgDoTlDWPXHp4RjShC+K3DUZ+0h4AqtoTd5a53VZ7d5YZsQ2xbliHSWX/H
-	 AVZ2IY44zySEwbu1omBXNYZLH3hUhe8RRfB39VKCokTuCCpYc0d8X02zjxX39tUJdm
-	 hgyif4WSm0OFWdEZGKoCakhz3nMqpit0SfXdsKF9xRyyqcyvlh00LD+8ncN3i9odYu
-	 dkVbGv31nI9iBdSvy7vdV6MLmC6dTL+Q9s1qEu8o6uEKcz1lSwBVd7a1Svb2mF+atm
-	 BXSXWAKUrLOtE4IViy4GK0RO9pud1srhd9PoYGgtAov5ET0ycGndYzdr/b7HMYM26w
-	 TayD5VD/3V7+A==
-Date: Tue, 14 Oct 2025 15:25:24 -0700
+	b=VeOfEO3zkLaE/wbHB0d8eBT8oW+M3Pl40vI0bq0aglmQyS1kYaElZ5Xi+Hj2jwWgR
+	 VSkZ9ng+Meczq0a5S/VDZdtTLp7mksu5khgcWjJ8jWA9T9HTTrSFJoErFI6MrUsdCN
+	 XRuP2dPH3v/MIus2WAqbfu9ahKbuSiTwzuXpJCV2GyDoGkKqy1YXOiXvgdxv47tJn4
+	 kDKN4Jqgn7sK8VnrhqXfS+ycDB5fhSjRNud6QraIipeqYF3FtblfUBleEWuGcAA3yw
+	 RMoyhm0mvcnpZ9al1aKiPMQDjF+BQJ9Xayq3QKgcivG1rGUmmZcRCWEs8KwMn8m4Mn
+	 BK4W2/yRbiHXQ==
+Date: Tue, 14 Oct 2025 15:39:55 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: Marek Vasut <marek.vasut+renesas@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof Wilczy??ski <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, Kees Cook <kees@kernel.org>,
-	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] PCI: rcar-host: Add OF Kconfig dependency to avoid
- objtool no-cfi warning
-Message-ID: <20251014222524.GA3575477@ax162>
-References: <20251014-rcar_pcie_probe-avoid-nocfi-objtool-warning-v2-1-6e0204b002c6@kernel.org>
- <20251014191330.GA899677@bhelgaas>
- <20251014194728.GD1206438@noisy.programming.kicks-ass.net>
+To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
+Cc: Bjorn Helgaas <helgaas@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: designware: Remove i2c_dw_remove_lock_support()
+Message-ID: <20251014223955.GB3575477@ax162>
+References: <20251014203305.GA904692@bhelgaas>
+ <3f4ee683-4fdb-4183-8f99-f931f853d9ae@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,47 +50,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251014194728.GD1206438@noisy.programming.kicks-ass.net>
+In-Reply-To: <3f4ee683-4fdb-4183-8f99-f931f853d9ae@kernel.org>
 
-On Tue, Oct 14, 2025 at 09:47:28PM +0200, Peter Zijlstra wrote:
-> On Tue, Oct 14, 2025 at 02:13:30PM -0500, Bjorn Helgaas wrote:
+On Tue, Oct 14, 2025 at 04:58:56PM -0500, Mario Limonciello (AMD) (kernel.org) wrote:
+> On 10/14/2025 3:33 PM, Bjorn Helgaas wrote:
+> > I'm totally fine with the patch itself, but I think the commit log
+> > could be trimmed to something like the following with no loss:
+> > 
+> >    Remove struct i2c_dw_semaphore_callbacks.remove() and
+> >    i2c_dw_remove_lock_support().
+> > 
+> >    440da737cf8d ("i2c: designware: Use PCI PSP driver for
+> >    communication") removed the last place that set
+> >    i2c_dw_semaphore_callbacks.remove(), which made
+> >    i2c_dw_remove_lock_support() a no-op.
+> > 
+> >    This has the side effect of avoiding this kCFI warning (see Link):
+> > 
+> >      dw_i2c_plat_remove+0x3c: no-cfi indirect call!
+> > 
+> >    Link: https://lore.kernel.org/r/20251013-dw_i2c_plat_remove-avoid-objtool-no-cfi-warning-v1-1-8cc4842967bf@kernel.org
+> > 
+> > FWIW,
+> > Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> > Ugh.  This might be the best solution, but it's a bit problematic
-> > without a hint about why "depends on OF" is here.  Theoretically there
-> > are stubs for everything to make COMPILE_TEST work, so I think we're
-> > about to drop all the dependencies on OF.
+> I echo Bjorn's comments on the lengthy commit message.
+> Code change looks fine.
 > 
-> Its those stubs are exactly the problem.
+> Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
 
-Yeah and I had thought about changing of_device_get_match_data() to use
-something like ERR_PTR() in the !OF case but that does not fix the issue
-since the call destination is still going to be invalid. To me, this is
-just one of the sharp edges of compile testing: you give up some code or
-configuration cleanliness/expectations for the flexibility of build
-testing.
-
-> > This dependency to avoid a no-cfi warning looks like the kind of thing
-> > that could someday go away if the tools get smarter.  Maybe we can add
-> > a Kconfig comment here, but I don't really know enough to write one.
-> > Something like this?
-> 
-> Its not a CFI warning per-se, the compiler is hitting known UB
-> (unconditional NULL deref) and is currently emitting a NULL pointer
-> indirect call, but given how aggressive clang has been on encountering
-> UB it might just stop code-gen entirely and generate fall-through
-> warnings (been there done that).
-> 
-> Smarter compiler here is only going to make this worse.
-
-Yeah, we are lucky that this is all LLVM does with this code.
-
-For what it's worth, there is plenty of "depends on OF" that appears
-across the tree and I see exactly one instance that has a comment above
-it (none with the comment on the same line). Perhaps these are all
-historical if there was a point where stubs were not provided for !OF. I
-do not mind adding a comment if really so desired but this driver does
-not do anything without CONFIG_OF so it feels like the dependency is
-natural anyways.
+I have no objections to trimming the commit message if so desired but I
+think the solution (removing unused code) is more tangential to the
+problem (potentially accessing an array out of bounds). I am sometimes
+looking at changes from ten years ago where something was done to avoid
+a problem but the problem was never mentioned in the message but may
+have been elsewhere. Maybe nobody ever needs .remove() again but what if
+new IP comes out that necessitates it and they go to revert this change
+without avoiding this problem? I could try to make the analysis shorter
+if that would help.
 
 Cheers,
 Nathan
