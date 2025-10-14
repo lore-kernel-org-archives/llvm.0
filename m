@@ -1,161 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C70313540;
-	Tue, 14 Oct 2025 13:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CAC270541;
+	Tue, 14 Oct 2025 13:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760446991; cv=none; b=smiQCcmOYc0DudJ5+Zfc11P04NLKkgT+u3z328aM5Amv4E19dnAG+pAhl2nZLDat1+PIf5wrrySDvvGrN/MThPjWrPIx1l3j4B2YQ90K4ClqfguSC+Qc38XqNhXjdVKrdUrHhQAlsznEd6BTwUsbaKWyX6sbFzwsd/vNiGsCvFY=
+	t=1760447713; cv=none; b=ip4mOE/MnO6xvbgd8ilzQVeEAWcM838QQfQJGYSq/cQFYZptHF5H9mccSmr4pshuyhR+ECXMGV9BJNKJfH4u4hS0qADZ5VghBvAXqSYEKqWBspKdYvPKxsCpIWWzS+oFihYyGIzuFJg1JnianYDTb98zgT/H1sX5KsMrAqD12hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760446991; c=relaxed/simple;
-	bh=0v37jZyYyYbs1da6KxGG2cFegI9umxnQEvbsHhkFM28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lt0V9yKlN96fi9fZt3MNdkR4NzChxkmwKwgBO+wLPEBH62w5Vy7yXyRrdlpjRmEYUEFSAJ+Ciq3r+Opijq+WbjrCHUcEb5AU7yiSbSZEhwEPGXiTLSslnApQMd6OIkdWMPKjh07Ted+dNjKUUTafgLGC8cko2XSJbKXwLZ8D+Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUwjqM/S; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760447713; c=relaxed/simple;
+	bh=RVxyDLDsvQl3mNNnwSdeGLk9okv7OAXOAm+myzxHqLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bDYPZqHTBZd1qL0K/LVCA2gebbjEU/Q73bbedDm4nQ1v7h1xbljW5LMULCellLFPuVXXuW1v0DvE97jX9HvihkskWZpilnKLhEm8iZKJ2n/vVTqVySq+pa3H+3xr7FUChNSqJXAy1KzJ9rSl7PC2AUzuroMK9sXc61zxaxj5YpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PjI97fCx; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUwjqM/S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B06C113D0;
-	Tue, 14 Oct 2025 13:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760446989;
-	bh=0v37jZyYyYbs1da6KxGG2cFegI9umxnQEvbsHhkFM28=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gUwjqM/Sp7OkEWnxQ5EJqSzP//ahSQwGJ/3PIjk6jR+DkLYwOzYfX/z5GFKsvASfA
-	 nAQB75EFZ3pqVL5V1s0cRCTPZf994kcLHYtcjtxtgCsLdYCi0WKYZbEyRICnLGBmbS
-	 RSzd3zqn2NJfBH1MAoGqwh8tSjd4cnmlPTk06dv0i94pFfAOtYX1hLvUiSg8yEB+oq
-	 5KQamKGczN9IpOXVNd1BEVwDrTYJzmqAp8fGFiaYBBSPY5PlQIQxMYKUxqZU7d3unU
-	 vRyi1QMSY4bUicB5hLQSA/mYL5rTPKn7JsevbDqdUlklpDVB4bIB64/yEeCVLwX6sF
-	 JJM0cdAuM1Q6Q==
-Date: Tue, 14 Oct 2025 18:32:59 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Marek Vasut <marek.vasut+renesas@gmail.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>, Kees Cook <kees@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: [PATCH] PCI: rcar-host: Avoid objtool no-cfi warning in
- rcar_pcie_probe()
-Message-ID: <uebexl7d5gfjopb26gstftahu2ouab3ekonw4dzgegw3on5cwr@vqc2zmxiluvt>
-References: <20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org>
- <CAMuHMdXZvoTyWcgRp6TnkybnKY4ekfO9aB33iumPVaR7wvEXkw@mail.gmail.com>
- <20251014083209.GA2696801@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PjI97fCx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760447711; x=1791983711;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RVxyDLDsvQl3mNNnwSdeGLk9okv7OAXOAm+myzxHqLs=;
+  b=PjI97fCx6+DToA5PVTXxS8LkAp1W0eCBPyn30zL/+++ExHkFUFWbvMRh
+   ZjDE8PQLp5YqFUAD7+G1QK9bF9UlwyrKFkdI7AmA5FatY3lSJPLm+QXQg
+   Mg/mdZpGrLh5p3R+9Nzrfwi+9NXPjI0zB2bkguD50NwIlwx53Q2lAvF1h
+   TXA9TzmtfT/9ARI9KJ1V3KHi6mzNLetMSsIV6GamjrqOcWeET+lRZU01K
+   09jfxJDmRVtleBd5HXuZdT9velm7qd9iWCgg2TyFImUDu1L495L6MGNMG
+   Piw6dEsHi02xFu23PlxKF6mQvWW4GW8RrRngVs+HTqzWSdlJrXJnEzSau
+   w==;
+X-CSE-ConnectionGUID: JVSEkmwbSsyGTqvsOqkoTA==
+X-CSE-MsgGUID: vFLrixEAQMi6CLaDjKRvSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="65228804"
+X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
+   d="scan'208";a="65228804"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 06:15:11 -0700
+X-CSE-ConnectionGUID: qugJx/msRcaLZufU42xqMQ==
+X-CSE-MsgGUID: dSjrT5xpSUKViXgfwOiylQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
+   d="scan'208";a="182342035"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 14 Oct 2025 06:15:09 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8err-0002p5-11;
+	Tue, 14 Oct 2025 13:15:07 +0000
+Date: Tue, 14 Oct 2025 21:14:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: YiPeng Chai <YiPeng.Chai@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Infrastructure <z1.linuxinfra@amd.com>,
+	Tao Zhou <tao.zhou1@amd.com>, Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: [agd5f:amd-staging-drm-next 1/12] Warning:
+ drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:214 function
+ parameter 'ras_core' not described in '__eeprom_xfer'
+Message-ID: <202510142114.VmLloJ5S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251014083209.GA2696801@ax162>
 
-On Tue, Oct 14, 2025 at 01:32:09AM -0700, Nathan Chancellor wrote:
-> Hi Geert,
-> 
-> On Tue, Oct 14, 2025 at 09:16:58AM +0200, Geert Uytterhoeven wrote:
-> > On Mon, 13 Oct 2025 at 20:26, Nathan Chancellor <nathan@kernel.org> wrote:
-> > > ---
-> > > Another alternative is to make this driver depend on CONFIG_OF since it
-> > > clearly requires it but that would restrict compile testing so I went
-> > > with this first.
-> > > ---
-> > >  drivers/pci/controller/pcie-rcar-host.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-> > > index 213028052aa5..15514c9c1927 100644
-> > > --- a/drivers/pci/controller/pcie-rcar-host.c
-> > > +++ b/drivers/pci/controller/pcie-rcar-host.c
-> > > @@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
-> > >                 goto err_clk_disable;
-> > >
-> > >         host->phy_init_fn = of_device_get_match_data(dev);
-> > > -       err = host->phy_init_fn(host);
-> > > +       err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
-> > >         if (err) {
-> > >                 dev_err(dev, "failed to init PCIe PHY\n");
-> > >                 goto err_clk_disable;
-> > 
-> > I am afraid you're playing a big game of whack-a-mole, since we tend
-> > to remove these checks, as they can never happen in practice (driver
-> > is probed from DT only, and all entries in rcar_pcie_of_match[] have
-> > a non-NULL .data member)...
-> 
-> Thanks for the input! Yeah, that is fair, as I alluded to in the scissor
-> area. We could just do
-> 
-> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> index 41748d083b93..d8688abc5b27 100644
-> --- a/drivers/pci/controller/Kconfig
-> +++ b/drivers/pci/controller/Kconfig
-> @@ -243,6 +243,7 @@ config PCI_TEGRA
->  config PCIE_RCAR_HOST
->  	bool "Renesas R-Car PCIe controller (host mode)"
->  	depends on ARCH_RENESAS || COMPILE_TEST
-> +	depends on OF
->  	depends on PCI_MSI
->  	select IRQ_MSI_LIB
->  	help
-> 
-> since it is required for the driver to function. Another alternative
-> would be something like either:
-> 
-> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-> index 213028052aa5..c237e04392e6 100644
-> --- a/drivers/pci/controller/pcie-rcar-host.c
-> +++ b/drivers/pci/controller/pcie-rcar-host.c
-> @@ -941,6 +941,9 @@ static int rcar_pcie_probe(struct platform_device *pdev)
->  	u32 data;
->  	int err;
->  
-> +	if (!IS_ENABLED(CONFIG_OF))
-> +		return -ENODEV;
-> +
->  	bridge = devm_pci_alloc_host_bridge(dev, sizeof(*host));
->  	if (!bridge)
->  		return -ENOMEM;
-> 
-> or
-> 
-> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-> index 213028052aa5..2aee2e0d9a1d 100644
-> --- a/drivers/pci/controller/pcie-rcar-host.c
-> +++ b/drivers/pci/controller/pcie-rcar-host.c
-> @@ -980,8 +980,12 @@ static int rcar_pcie_probe(struct platform_device *pdev)
->  	if (err)
->  		goto err_clk_disable;
->  
-> -	host->phy_init_fn = of_device_get_match_data(dev);
-> -	err = host->phy_init_fn(host);
-> +	if (IS_ENABLED(CONFIG_OF)) {
-> +		host->phy_init_fn = of_device_get_match_data(dev);
-> +		err = host->phy_init_fn(host);
-> +	} else {
-> +		err = -ENODEV;
-> +	}
->  	if (err) {
->  		dev_err(dev, "failed to init PCIe PHY\n");
->  		goto err_clk_disable;
-> 
-> to keep the ability to compile test the driver without CONFIG_OF while
-> having no impact on the final object code and avoiding the NULL call. I
-> am open to other thoughts and ideas as well.
-> 
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
+head:   bf23da0a89873c8144f93cc6ac9a36ad615100b6
+commit: a4299d6c4879390acc1ad074b4bc0eeef51a6cc8 [1/12] drm/amdgpu: Add ras module files into amdgpu
+config: s390-randconfig-002-20251014 (https://download.01.org/0day-ci/archive/20251014/202510142114.VmLloJ5S-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510142114.VmLloJ5S-lkp@intel.com/reproduce)
 
-TBH, I hate both of these CONFIG_OF checks as most of the controller drivers
-are just OF drivers. If we were to sprinkle CONFIG_OF check, then it has to be
-done in almost all controller drivers (except VMD, Hyper-V).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510142114.VmLloJ5S-lkp@intel.com/
 
-If compiler is getting smart enough to detect these NULL invocations, then it
-may start to trigger the same issue for other OF APIs as well. So I'd prefer to
-have the OF dependency in Kconfig, sacrificing COMPILE_TEST on non-OF configs.
+All warnings (new ones prefixed by >>):
 
-- Mani
+>> Warning: drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:214 function parameter 'ras_core' not described in '__eeprom_xfer'
+>> Warning: drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:214 Excess function parameter 'i2c_adap' description in '__eeprom_xfer'
+>> Warning: drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:464 function parameter 'ras_core' not described in 'ras_eeprom_reset_table'
+>> Warning: drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:464 Excess function parameter 'control' description in 'ras_eeprom_reset_table'
+>> Warning: drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:943 function parameter 'ras_core' not described in 'ras_eeprom_read'
+>> Warning: drivers/gpu/drm/amd/amdgpu/../ras/rascore/ras_eeprom.c:943 Excess function parameter 'control' description in 'ras_eeprom_read'
 
 -- 
-மணிவண்ணன் சதாசிவம்
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
