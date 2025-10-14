@@ -1,175 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9BC2877F4;
-	Tue, 14 Oct 2025 14:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BFA3009D9
+	for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 15:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760453607; cv=none; b=B9Wh03Oi9Oj593d8xnfYmuZ+e7hXvdIK8QIaSJHgqH4nwlgw74fz9CFkNCVGswm6EN8tIx0aHvIsVhrgAULjuVRPBcHCjePw38AK8L6OoT3JYpJlFh/JZMo6KM8KOIV647u+mnGu8mUY+DRsy0l3uuQ5PnxHBrxOsKbKYe02PHE=
+	t=1760456583; cv=none; b=J7l8PdwZsWm3kSRjIXyWypIs2XxgtcHMVURyNc9yxIvGtSwuaQMFfKpuzHdq6SZ9+lSfXDj6WcQskM96QPD0pqMEmvDpWGcbKTUcUJJKkg2/CXLmNYZh5A+SUuSvofuVIXRBVa34TGaZOVwX7qEVvCQqSrjwX2ejZcgQveurki8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760453607; c=relaxed/simple;
-	bh=z6qNyT2/oj6cU0ryqpoJ0qcaj3pCu/T9Mq36j0ZaZyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uldew71d/Ljc2YLkwv0P3RtZ4oeCySr2pB69QtqkAmBPB8u6k+nfAp1/6/HI3qSFNuN+M3HbQ9X96tjFSh9MPnkJI2B8xaMxQu9rE6J9W+D7ArirK+3fK+H40x3qWTmc3Zx6LVRNWIyiKLBlR8ZRqFbwowb1mqKi+DV46qlduYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D1MfV+5E; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760456583; c=relaxed/simple;
+	bh=IOXA3e/PDxwKtBuHJSVeF2wtx7tvydH9ilKWTo1uicY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=upeEd6djoZ0y1tyDuno0YhSxZUpqj0vr4sKCAzeq5nGww2kgPAMWQXoWUQEwbS2ob3HYU4IlRPZdUh0YYZ8eZ/XPb3ujS9Ic8dBacaafMrH+1XRAXaPTK2Ji43iVVXtO4NctvRAfbhWxIX52MM490V+uzyxj1nxS2nFc5Rckh3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzbZ+EBO; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D1MfV+5E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760453606; x=1791989606;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z6qNyT2/oj6cU0ryqpoJ0qcaj3pCu/T9Mq36j0ZaZyo=;
-  b=D1MfV+5E19xGZQ+fEZF0H94XJ/8Avhoi/dc6+/9GsSbXKm9wJPcZ1hqZ
-   Vbbxr6/h6il7uRQkUT29YEGLzk3XDjHmrTUZBkTiaWzA4xaKbH2WFzriP
-   EK6s+J4j7sqY3JDyTjxPebO100ooGCvMSSEBoro8sVI8Os3Un5tVfEILu
-   SK1qyFp4wcalKw+LSpkq7PBOhm81baYYNAHsSraYuNRcUV3Xq1d98yQTD
-   Fy0McQ4KxW6emxa1KJ7XkCJ8EPwja2NVZ2AOoHq5Q++/zYBsYYWnMl1S2
-   hmy5mQwSZK3N8eyeWOu9coH3yia4Ak1eRY7txsVv4J+My2qGwFrSHpo6k
-   Q==;
-X-CSE-ConnectionGUID: ISUFwiWXQ9mFKfC3Sh/fFw==
-X-CSE-MsgGUID: ZSgp1GmrTbawbRuO7cw98w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="73215497"
-X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
-   d="scan'208";a="73215497"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 07:53:24 -0700
-X-CSE-ConnectionGUID: poiBxSkoQCCEVEGLJGVzdw==
-X-CSE-MsgGUID: 8lac8hSAQea4DlnmA1UaEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,228,1754982000"; 
-   d="scan'208";a="219043783"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 14 Oct 2025 07:53:14 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v8gNb-0002tJ-14;
-	Tue, 14 Oct 2025 14:52:23 +0000
-Date: Tue, 14 Oct 2025 22:46:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Griffin <peter.griffin@linaro.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Will McVicker <willmcvicker@google.com>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, kernel-team@android.com,
-	Peter Griffin <peter.griffin@linaro.org>
-Subject: Re: [PATCH 7/9] clk: samsung: Implement automatic clock gating mode
- for CMUs
-Message-ID: <202510142228.IQJSNIFa-lkp@intel.com>
-References: <20251013-automatic-clocks-v1-7-72851ee00300@linaro.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzbZ+EBO"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-26816246a0aso11215225ad.2
+        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 08:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760456580; x=1761061380; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yYGjzSlUY1ujV4XJxs44Nj4rVMv7fyzJ9xw4OWViBdY=;
+        b=PzbZ+EBOK1rvlHy2TbgB+sadU1lOtMS2IkBZJA+CjMeBPwB/J3hyqdI4PmXyyd0/Rx
+         oAC4BCxVd863bUdgtX3QjF61bOYsJiLYDC5x4L5puppdt7q16C3tyu/Jq8F/pBvGBl/i
+         BLyz2SDM8uAbwnu7WgGdlN5AOHrQFdZyE3SlxTN8nRuvLIA3go1guJJCc1DrXaBiVtus
+         6c0p0XXQbtEHzTIpOu+Ozo0NfkDTrClm5qmVK9AmuFgNY1b5OWpmWB/5yRgf9rb0kqBk
+         wO8uAlzJzu1D35SZ2/9Vsuz6jaJelPZRDoz2tAaD78Xdpd7N4FW2NKD/M6Hb8k7k2U5w
+         PwVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760456580; x=1761061380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yYGjzSlUY1ujV4XJxs44Nj4rVMv7fyzJ9xw4OWViBdY=;
+        b=HhdiSv5HtE26VX0bHl5AtHmMSQWwW3jUjk8swZf24ZPncs6pdhwhpjO/JyRGC1IG+j
+         Ykw+b4PBmy+dYm0+4BQry1+gz7q83ZJ6jHBDvBXohHhui5uROW/aYdYHebToXLIzpalE
+         rdMR1OpBrrGPqEddCoZXi0EetwxT7OJaw86jBTwaYjgnX/V8R+Y6iJYWAc3+uQg7o5nJ
+         hJCSfh/0gnOPjkvtth5qVmtJS1NkHf7hGzLRqdifuGB4thqHW4ahwFvlfMGV0NbjkAKf
+         adeHXzCs62tUd4VEkBvGGOrneg3QRzSOsPVOvAFRZyZsbE9DmkrstItKnJLz+Wi03RsZ
+         G9WA==
+X-Forwarded-Encrypted: i=1; AJvYcCXCm0CVcAsPc37niw4JdiNyj/TPNGC4Puj0FAVgoOSf0XrbHcjXQ60SJMhKXloK9C2Fd4AR@lists.linux.dev
+X-Gm-Message-State: AOJu0YzQznJOin/Be5GX44Ygk9WZr7Y60bz61PeA65RphLuhJMOPIDMT
+	XUESqA5fGd2IMVguHqWGzb8Kv/GDE/tLeGjuqh1yf30cm2QMMuUPQsizE+RIYpHm9QNAYQtwCSM
+	xBEjSmdUsXPs4z4Chye1AmnkTka/SSLs=
+X-Gm-Gg: ASbGnctD/YMQ1EGPz27CS4KwqiLqkB6IB0aKlabDOavyWezq9SKMVC8asEWZ1a2qKlN
+	RwhhA7gE//40otRfMjxRDhxNj26bbKDD4X0h1KwJqUleA7c/DsWJWIqeeQ+cktQxH9j9yl0JeZ8
+	ZJM55bsnBQUPQzatCaVofhxao4xXcinUT9SdsdUhgGZYIUpadgVCs+U5IlwqGdHJHIigPdzTGwG
+	uPbN0HO7cVE9ed/8o3zIZ5ZtJNWu6hfTJ7O20YRXnwwfdxpA05ca0Qonj4BuHYpd3xS1usuOCw1
+	d/n50hGQmgwG2PeAHzp0VB+qYeYV/y66ACoVeRKYuNEAcIoZG1XkzyA=
+X-Google-Smtp-Source: AGHT+IHdmYpg3wJ6be58RKxCOo6in3Fuo+5g91PKk58rXhf3xgTcwnJDb2Ds8EFLQGYTf/b7850DkE7uVldiW6rM2ew=
+X-Received: by 2002:a17:903:18b:b0:27d:6f24:ceb9 with SMTP id
+ d9443c01a7336-290273e17b2mr176408215ad.3.1760456580016; Tue, 14 Oct 2025
+ 08:43:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251013-automatic-clocks-v1-7-72851ee00300@linaro.org>
+References: <20251014094511.627258-1-gtucker@gtucker.io> <20251014094511.627258-2-gtucker@gtucker.io>
+ <CANiq72nVxPY8xB9xEnkZ=zNFh0EfQvaMAPH4ygRr-yEwpK=OWg@mail.gmail.com> <fe53ad80-6eeb-495a-a870-9c42b71f9887@gtucker.io>
+In-Reply-To: <fe53ad80-6eeb-495a-a870-9c42b71f9887@gtucker.io>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 14 Oct 2025 17:42:45 +0200
+X-Gm-Features: AS18NWCSQqZ2k7klTl6uHaYshU7c7i07coesJc6h6yK0Ke4SUtcLPlKDjwbeVfg
+Message-ID: <CANiq72m1EKmNM4QQ_A08vC2w-4QbHhO5UEG4F68tRGKEgZ9p6g@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] kbuild: add Makefile.container with CONTAINER option
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	automated-testing@lists.yoctoproject.org, Arnd Bergmann <arnd@arndb.de>, 
+	workflows@vger.kernel.org, llvm@lists.linux.dev, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Peter,
+On Tue, Oct 14, 2025 at 4:31=E2=80=AFPM Guillaume Tucker <gtucker@gtucker.i=
+o> wrote:
+>
+> This is what the CONTAINER_COMMAND variable is for.  You can easily
+> set it in the environment e.g. `export CONTAINER_COMMAND=3Dpodman` or
+> anything and be done with it.  The default is set to `docker`.
 
-kernel test robot noticed the following build errors:
+Yeah, that is what I mean, i.e. you have to more variables to make it
+do what you want.
 
-[auto build test ERROR on 4a71531471926e3c391665ee9c42f4e0295a4585]
+At that point, a user could also equally set up an alias or a quick
+one liner script to call the real command with whatever setup they
+need. That would be more flexible too with essentially the same
+complexity on their side.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-soc-samsung-exynos-sysreg-add-gs101-hsi0-and-misc-compatibles/20251014-045559
-base:   4a71531471926e3c391665ee9c42f4e0295a4585
-patch link:    https://lore.kernel.org/r/20251013-automatic-clocks-v1-7-72851ee00300%40linaro.org
-patch subject: [PATCH 7/9] clk: samsung: Implement automatic clock gating mode for CMUs
-config: loongarch-randconfig-001-20251014 (https://download.01.org/0day-ci/archive/20251014/202510142228.IQJSNIFa-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510142228.IQJSNIFa-lkp@intel.com/reproduce)
+> As
+> far as I know, there's no need for anything else than the container
+> command and image name.  So it's not more hard-coded than say, the
+> default $(CC) executable.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510142228.IQJSNIFa-lkp@intel.com/
+There is the `src` path there, no? e.g. I use upstream distro images
+to test some builds.
 
-All error/warnings (new ones prefixed by >>):
+> Then I was only suggesting using a minimalist alias e.g.:
+>
+>      alias kmake=3D'make -f scripts/Makefile.container'
 
->> drivers/clk/samsung/clk.c:481:13: error: too many arguments to function call, expected 5, have 6
-     478 |                 samsung_clk_extended_sleep_init(NULL, ctx->sysreg,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     479 |                                                 cmu->sysreg_clk_regs,
-     480 |                                                 cmu->nr_sysreg_clk_regs,
-     481 |                                                 NULL, 0);
-         |                                                       ^
-   drivers/clk/samsung/clk.h:453:20: note: 'samsung_clk_extended_sleep_init' declared here
-     453 | static inline void samsung_clk_extended_sleep_init(void __iomem *reg_base,
-         |                    ^                               ~~~~~~~~~~~~~~~~~~~~~~~
-     454 |                         const unsigned long *rdump,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     455 |                         unsigned long nr_rdump,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~
-     456 |                         const struct samsung_clk_reg_dump *rsuspend,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     457 |                         unsigned long nr_rsuspend) {}
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/clk/samsung/clk.c:511:23: error: too many arguments to function call, expected 5, have 6
-     509 |                 samsung_clk_extended_sleep_init(reg_base, NULL,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     510 |                         cmu->clk_regs, cmu->nr_clk_regs,
-     511 |                         cmu->suspend_regs, cmu->nr_suspend_regs);
-         |                                            ^~~~~~~~~~~~~~~~~~~~
-   drivers/clk/samsung/clk.h:453:20: note: 'samsung_clk_extended_sleep_init' declared here
-     453 | static inline void samsung_clk_extended_sleep_init(void __iomem *reg_base,
-         |                    ^                               ~~~~~~~~~~~~~~~~~~~~~~~
-     454 |                         const unsigned long *rdump,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     455 |                         unsigned long nr_rdump,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~
-     456 |                         const struct samsung_clk_reg_dump *rsuspend,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     457 |                         unsigned long nr_rsuspend) {}
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
->> Warning: drivers/clk/samsung/clk-exynos-arm64.c:249 function parameter 'init_clk_regs' not described in 'exynos_arm64_register_cmu_pm'
+Yeah, what I was trying to say is that, at that point, you can just
+have an alias (or a one liner script etc.) for the real command.
 
+The user still needs to know how to use Docker/Podman/... anyway, i.e.
+I would see the benefit if somehow this was the only command they
+would need or if this handled some extra logic.
 
-vim +481 drivers/clk/samsung/clk.c
+> hand with a volume and then run make inside.  It reduces the scope
+> for differences and makes builds more reproducible, for example you
+> can just share your command line and others will be using the exact
+> same toolchain and build environment as you.  This is also to enable
+> developers to easily reproduce builds from CI bots.  It's been one of
+> the driving principles behind tuxmake except I'm looking at it from a
+> neutral point of view here.  In other words, it's a step towards
+> increasing quality control upstream.
 
-   462	
-   463	/* Enable Dynamic Root Clock Gating of bus components*/
-   464	void samsung_en_dyn_root_clk_gating(struct device_node *np,
-   465					    struct samsung_clk_provider *ctx,
-   466					    const struct samsung_cmu_info *cmu)
-   467	{
-   468		if (ctx && !ctx->auto_clock_gate)
-   469			return;
-   470	
-   471		ctx->sysreg = syscon_regmap_lookup_by_phandle(np, "samsung,sysreg");
-   472		if (!IS_ERR_OR_NULL(ctx->sysreg)) {
-   473			regmap_write(ctx->sysreg, ctx->drcg_offset, 0xffffffff);
-   474			/* not every sysreg controller has memclk reg*/
-   475			if (ctx->memclk_offset)
-   476				regmap_write_bits(ctx->sysreg, ctx->memclk_offset, 0x1, 0x0);
-   477	
-   478			samsung_clk_extended_sleep_init(NULL, ctx->sysreg,
-   479							cmu->sysreg_clk_regs,
-   480							cmu->nr_sysreg_clk_regs,
- > 481							NULL, 0);
-   482		} else {
-   483			pr_warn("%pOF: Unable to get CMU sysreg\n", np);
-   484			ctx->sysreg = NULL;
-   485		}
-   486	}
-   487	
+Definitely, I am not saying containers are a bad idea (I use them
+myself), i.e. I am only talking about what is the best way to provide
+this (e.g. documentation, a script, this new file, directly in the
+main `Makefile`...).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> A related topic which was covered at Plumbers is to have first-party
+> container images, with Containerfiles maintained upstream to
+> facilitate using the kernel.org toolchains.  It's not a requirement
+> for this patch but both ideas enhance each other.
+
+kernel.org images would be nice, indeed.
+
+> Yes, I did think of writing a documentation page alongside this patch
+> but eventually made the RFC with a cover letter instead to keep it
+> more as an open discussion.  Any solution to run containerized builds
+> would need to be documented, even if they're trivial to use.  I think
+> the Makefile approach is the most elegant one but if others aren't
+> convinced by it then starting with just some documentation might help
+> getting to the bottom of this and decide what to do next.
+
+Yeah, docs would be nice regardless of the way of wrapping it.
+
+> Right but then I think we would have to deal with the variables
+> handled by `make` which can be passed either via the environment or
+> on the command line, so that's similar to the issues with an alias.
+
+The script may be more involved, i.e. similar to the KUnit one, but
+then you also gain the ability to provide more functionality/logic.
+
+Say, for instance, the ability to test with a set of container images
+that you define in the config file, to run certain things with the
+built kernel (possibly in another container), and so on and so forth.
+
+> We could do something like with Android builds (build/envsetup.sh)
+> with a file to source:
+>
+>      . scripts/containerize
+>      m CONTAINER=3Dkorg-clang:21 defconfig
+>
+> where `m` is just an arbitrary alias name obviously :)
+
+Personally, for a new script, I would use a normal `--flags` like
+interface, and leave the Make-like one if one wants to pass the actual
+Make ones. I would also allow the user to define a default image too
+in their config file too, and things like that.
+
+In other words, the idea is that you can actually easily use it
+without typing a lot, e.g.
+
+    scripts/container b defconfig
+
+(Possibly aliasing `scripts/container` itself to something shorter locally)
+
+Or even more high-level operations like the "build with my set of
+toolchain images", "build patch by patch this range of commits inside
+the container", etc.
+
+But I know this may be way out of scope :) After all, it gets into the
+realm of essentially a lot of the custom tooling/scripts that
+different subsystems build for themselves over time.
+
+In fact, another possibility to think about is generalizing the
+existing KUnit one to support containers.
+
+> Thank you for your feedback.  I can spend some time investigating
+> alternative approaches if they seem worthwhile.  I'd be interested to
+> know what others think of this too.
+
+You're welcome! I hope that helped at least.
+
+Cc'ing David/Rae/Shuah as well for the KUnit bits.
+
+Cheers,
+Miguel
