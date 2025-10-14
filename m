@@ -1,122 +1,161 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46EE930C344
-	for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 11:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C70313540;
+	Tue, 14 Oct 2025 13:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760443105; cv=none; b=Frd+owJy6tk4pB+PHCS44XYTAk8DCcCyia3zGlutDcum7uX4TK5j18tbdsUvB8d9kz9MxXHnmkRIyZcTO70qB7mlkEFZkVyKwl5RKBjJoPt64EXFg7IJtsih73ydKScRejVz/CtGnmIxV7oz7CtRpoYvEMvzV1c9iTLyGddYH7s=
+	t=1760446991; cv=none; b=smiQCcmOYc0DudJ5+Zfc11P04NLKkgT+u3z328aM5Amv4E19dnAG+pAhl2nZLDat1+PIf5wrrySDvvGrN/MThPjWrPIx1l3j4B2YQ90K4ClqfguSC+Qc38XqNhXjdVKrdUrHhQAlsznEd6BTwUsbaKWyX6sbFzwsd/vNiGsCvFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760443105; c=relaxed/simple;
-	bh=DQcppO9zbJMHem9XFygkT9zl07JxR8H/tW98+lITK5Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WMCjpUMnaKRtVySBTYOKKeOGtgz5438jkhJPAjIXAm0/EIA7yiBABEAOD6k8KarKHjxvpAx+seU2vvOHcgmEImXzG537WNMdDED5QGVASQ8FtkSYpmpCBj5FAcZ4zItNBqkN+1Kl2RmPgW+1pNQDktu/kl0aw3wqSL5i2RiejqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fi/nrYx8; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760446991; c=relaxed/simple;
+	bh=0v37jZyYyYbs1da6KxGG2cFegI9umxnQEvbsHhkFM28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lt0V9yKlN96fi9fZt3MNdkR4NzChxkmwKwgBO+wLPEBH62w5Vy7yXyRrdlpjRmEYUEFSAJ+Ciq3r+Opijq+WbjrCHUcEb5AU7yiSbSZEhwEPGXiTLSslnApQMd6OIkdWMPKjh07Ted+dNjKUUTafgLGC8cko2XSJbKXwLZ8D+Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUwjqM/S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fi/nrYx8"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-27eda3a38ceso11210405ad.3
-        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 04:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760443103; x=1761047903; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RTrmlwTskkr/kKbtRF4NeJMF7KiXf++loWOpKi8ycAY=;
-        b=Fi/nrYx8GaWup3st0FRXf1pYjotdc9r4MMJsSqBxX9z8vjyVvIzWWlkfDD42+HFcy+
-         cnzfA8juXVkED1VnP9Y9RETisV1cCm4ujBRROYNdANzD6yB5wk0RwcSoWjjKnugvyYJn
-         pJ9cVFyf8b/+D4+iPeFPKyq7i8iyGLhvPTVewxM/un4RDRV0Y7uu7K7NK8DkEW5Y6IRq
-         3fcj8qFYgpuMLPXpP4q1EAfxY2V0zwTUdmv7Et8Iu0Jy7pLaINZ/Qw2Y2LzlzuERgT4Q
-         vi1eNO/BjfFdqvcC47QU/OT/KbP/JBXH+YB+UA2Z/cJXd62xzlvfp88lhebe3E14kLFa
-         rXvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760443103; x=1761047903;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RTrmlwTskkr/kKbtRF4NeJMF7KiXf++loWOpKi8ycAY=;
-        b=vBU7XjKsLiNeaqNJ5ebsZScB7R7w9ks6W1AjBhWm9rTomJ3KZL5wN8lXGToMfhTpxF
-         JAIRuW0jSg1r97Mizexaeh7HFVgdBYY07PB1iBhibF2nRmmb5P6CGb8PlVsiTkr43Um7
-         IgDfZakIdaUygJVXhY/it4bqjCtlZeBJk+xilwTE7ZLQgCezCARCEcdc5h61iKfvtAQg
-         /grnHkag8FM5S//4c44/DKk9SkCs4BNIKTGraj/VRtAn4bVGK624GfxS7BuSv6gq8PO3
-         DSs5C/aWe0XqP1brKafe013tv6vPDkptYkK/E0Oby6w0e9F44LL4fCnogcmXIfN3xTcf
-         XYtw==
-X-Forwarded-Encrypted: i=1; AJvYcCVWvTY+giYNvlBY//wCJkBTz1S6lCWWVX6fV0vQOQwuhsed4v8zQ34tgLoQVri1K3UdKj2P@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzq1+FAmwnTc4Fgy0zWy29nCc9et27EzagWbM2APyOEp7TNGkg5
-	9A/vdN8LK0XdFqEB73YtXhiwcTikQpdUP8PQAPgmelgCn6HJvNZMVfdekLM6xoWSP+IV1Xu15oV
-	of7qOWwncGqil0WOgZjMlgMPaQ8PeJlc=
-X-Gm-Gg: ASbGncscAIx7SBZ0o94FANlOuQnNhyH7RxR99P7PTXaoHNPuonL7VtGYbkoU4RnoVOE
-	N8839WxCwYcB5NpWjK+d4+XZFRtDoNWfAVhgyt9q7k2Ioxsqc7CLhdwb3Gni9XhfhMaVrXnK+3b
-	zK9oxZWYxKMViJKQshWIwxuc3DUFlUVmZYCT+HBZ96kKM/neNKr4Byxi+ihEJvqyT0wykOkoofu
-	ZfJ/aRPgWGlGNLrlWd6VXrSKe/cS8jHRUi1Rx4Q5p0PQ+1k7mQ58kGvlhmGdEeuBai82Ln0CFty
-	8I3xwbgoFVaB3TrqcSs9MqyfzocegXZv/V+iaVP7WWO2OlBhgu7oMHM=
-X-Google-Smtp-Source: AGHT+IE5mD/OqZwnZKBsKCjL4XqIp9LWIF2r4C8a99CzvazlBr1ZWoDhjbQJXYRKSAmFGV4Ksc8hZ5kDX58X7OqE8yE=
-X-Received: by 2002:a17:902:e849:b0:27e:e96a:4bf with SMTP id
- d9443c01a7336-290273c6246mr201519995ad.2.1760443103387; Tue, 14 Oct 2025
- 04:58:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUwjqM/S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B06C113D0;
+	Tue, 14 Oct 2025 13:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760446989;
+	bh=0v37jZyYyYbs1da6KxGG2cFegI9umxnQEvbsHhkFM28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gUwjqM/Sp7OkEWnxQ5EJqSzP//ahSQwGJ/3PIjk6jR+DkLYwOzYfX/z5GFKsvASfA
+	 nAQB75EFZ3pqVL5V1s0cRCTPZf994kcLHYtcjtxtgCsLdYCi0WKYZbEyRICnLGBmbS
+	 RSzd3zqn2NJfBH1MAoGqwh8tSjd4cnmlPTk06dv0i94pFfAOtYX1hLvUiSg8yEB+oq
+	 5KQamKGczN9IpOXVNd1BEVwDrTYJzmqAp8fGFiaYBBSPY5PlQIQxMYKUxqZU7d3unU
+	 vRyi1QMSY4bUicB5hLQSA/mYL5rTPKn7JsevbDqdUlklpDVB4bIB64/yEeCVLwX6sF
+	 JJM0cdAuM1Q6Q==
+Date: Tue, 14 Oct 2025 18:32:59 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Marek Vasut <marek.vasut+renesas@gmail.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel test robot <lkp@intel.com>, Kees Cook <kees@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: Re: [PATCH] PCI: rcar-host: Avoid objtool no-cfi warning in
+ rcar_pcie_probe()
+Message-ID: <uebexl7d5gfjopb26gstftahu2ouab3ekonw4dzgegw3on5cwr@vqc2zmxiluvt>
+References: <20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org>
+ <CAMuHMdXZvoTyWcgRp6TnkybnKY4ekfO9aB33iumPVaR7wvEXkw@mail.gmail.com>
+ <20251014083209.GA2696801@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251014094511.627258-1-gtucker@gtucker.io> <20251014094511.627258-2-gtucker@gtucker.io>
-In-Reply-To: <20251014094511.627258-2-gtucker@gtucker.io>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 14 Oct 2025 13:58:10 +0200
-X-Gm-Features: AS18NWDBj5affi_lUiES-5b_WCz6GVsApMNcuTw9-KEiFct1NPsDYKVQGOwC3Bg
-Message-ID: <CANiq72nVxPY8xB9xEnkZ=zNFh0EfQvaMAPH4ygRr-yEwpK=OWg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] kbuild: add Makefile.container with CONTAINER option
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	automated-testing@lists.yoctoproject.org, Arnd Bergmann <arnd@arndb.de>, 
-	workflows@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251014083209.GA2696801@ax162>
 
-On Tue, Oct 14, 2025 at 11:45=E2=80=AFAM Guillaume Tucker <gtucker@gtucker.=
-io> wrote:
->
-> Add scripts/Makefile.container to wrap the make command in a container
-> using the CONTAINER=3D variable to specify the image name.  For example:
->
->     make -f scripts/Makefile.container CONTAINER=3Dkorg-gcc defconfig
->
-> The container image name is entirely arbitrary and the container tool
-> may be Docker, Podman or any other compatible alternative specified by
-> the CONTAINER_COMMAND variable.  The default is set to docker for now.
+On Tue, Oct 14, 2025 at 01:32:09AM -0700, Nathan Chancellor wrote:
+> Hi Geert,
+> 
+> On Tue, Oct 14, 2025 at 09:16:58AM +0200, Geert Uytterhoeven wrote:
+> > On Mon, 13 Oct 2025 at 20:26, Nathan Chancellor <nathan@kernel.org> wrote:
+> > > ---
+> > > Another alternative is to make this driver depend on CONFIG_OF since it
+> > > clearly requires it but that would restrict compile testing so I went
+> > > with this first.
+> > > ---
+> > >  drivers/pci/controller/pcie-rcar-host.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+> > > index 213028052aa5..15514c9c1927 100644
+> > > --- a/drivers/pci/controller/pcie-rcar-host.c
+> > > +++ b/drivers/pci/controller/pcie-rcar-host.c
+> > > @@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+> > >                 goto err_clk_disable;
+> > >
+> > >         host->phy_init_fn = of_device_get_match_data(dev);
+> > > -       err = host->phy_init_fn(host);
+> > > +       err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
+> > >         if (err) {
+> > >                 dev_err(dev, "failed to init PCIe PHY\n");
+> > >                 goto err_clk_disable;
+> > 
+> > I am afraid you're playing a big game of whack-a-mole, since we tend
+> > to remove these checks, as they can never happen in practice (driver
+> > is probed from DT only, and all entries in rcar_pcie_of_match[] have
+> > a non-NULL .data member)...
+> 
+> Thanks for the input! Yeah, that is fair, as I alluded to in the scissor
+> area. We could just do
+> 
+> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+> index 41748d083b93..d8688abc5b27 100644
+> --- a/drivers/pci/controller/Kconfig
+> +++ b/drivers/pci/controller/Kconfig
+> @@ -243,6 +243,7 @@ config PCI_TEGRA
+>  config PCIE_RCAR_HOST
+>  	bool "Renesas R-Car PCIe controller (host mode)"
+>  	depends on ARCH_RENESAS || COMPILE_TEST
+> +	depends on OF
+>  	depends on PCI_MSI
+>  	select IRQ_MSI_LIB
+>  	help
+> 
+> since it is required for the driver to function. Another alternative
+> would be something like either:
+> 
+> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+> index 213028052aa5..c237e04392e6 100644
+> --- a/drivers/pci/controller/pcie-rcar-host.c
+> +++ b/drivers/pci/controller/pcie-rcar-host.c
+> @@ -941,6 +941,9 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+>  	u32 data;
+>  	int err;
+>  
+> +	if (!IS_ENABLED(CONFIG_OF))
+> +		return -ENODEV;
+> +
+>  	bridge = devm_pci_alloc_host_bridge(dev, sizeof(*host));
+>  	if (!bridge)
+>  		return -ENOMEM;
+> 
+> or
+> 
+> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+> index 213028052aa5..2aee2e0d9a1d 100644
+> --- a/drivers/pci/controller/pcie-rcar-host.c
+> +++ b/drivers/pci/controller/pcie-rcar-host.c
+> @@ -980,8 +980,12 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+>  	if (err)
+>  		goto err_clk_disable;
+>  
+> -	host->phy_init_fn = of_device_get_match_data(dev);
+> -	err = host->phy_init_fn(host);
+> +	if (IS_ENABLED(CONFIG_OF)) {
+> +		host->phy_init_fn = of_device_get_match_data(dev);
+> +		err = host->phy_init_fn(host);
+> +	} else {
+> +		err = -ENODEV;
+> +	}
+>  	if (err) {
+>  		dev_err(dev, "failed to init PCIe PHY\n");
+>  		goto err_clk_disable;
+> 
+> to keep the ability to compile test the driver without CONFIG_OF while
+> having no impact on the final object code and avoiding the NULL call. I
+> am open to other thoughts and ideas as well.
+> 
 
-IIUC, this wraps reruns `make` inside the container, but it means
-hardcoding a particular tool and path, right? (unless one sets even
-more variables)
+TBH, I hate both of these CONFIG_OF checks as most of the controller drivers
+are just OF drivers. If we were to sprinkle CONFIG_OF check, then it has to be
+done in almost all controller drivers (except VMD, Hyper-V).
 
-The cover letter says one can create an alias for this, but one could
-also do that for the underlying call anyway, unless I am missing
-something. And if we do this, then I would prefer one doesn't need to
-type `-f ...`.
+If compiler is getting smart enough to detect these NULL invocations, then it
+may start to trigger the same issue for other OF APIs as well. So I'd prefer to
+have the OF dependency in Kconfig, sacrificing COMPILE_TEST on non-OF configs.
 
-Put another way, for a user, what is the benefit of having this extra
-way of running in a container? For instance, I could see the benefit
-if different tools had different flags or it was a complicated
-procedure, but I think at least `podman` shares the flags used here.
+- Mani
 
-Should this instead be a document inside `Documentation/` somewhere
-that explains how to do this, pitfalls, advanced options, etc. and
-give example command lines for different tools?
-
-If we do end up with `CONTAINER=3D`, then I think it should make it work
-without having to pass `-f ...`, to make it easier. Or, even better,
-like the KUnit script, we could have a script that does the right
-thing and reads a config from the user, so that one can just type
-something like, picking whatever tooling the user configured (e.g.
-Docker vs. Podman, default image, etc.):
-
-    scripts/container.py defconfig
-
-Thanks!
-
-Cheers,
-Miguel
+-- 
+மணிவண்ணன் சதாசிவம்
