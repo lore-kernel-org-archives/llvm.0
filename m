@@ -1,135 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3792E7BC0;
-	Tue, 14 Oct 2025 23:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482532E5B11;
+	Tue, 14 Oct 2025 23:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760484442; cv=none; b=iUIxyECWSx3hi5WIHFtG1DbQFfy+oQTuhA7uCM/I4aOxG2ptKx3oYw0kv2uE6QgR0dlLvAz3fT4ZAevuaz1m9VjSB7ZiPnYD1ifJpa5+iypJGKBWE9XVeIgS3YyReE21Q5KEiIdPcpwsuX9rBFwkU4NicugoOi4gfill5/evK04=
+	t=1760485113; cv=none; b=JeTwX88PeRdNXSTJZQQdEyPrvD856TUI48e07SAHB5TFxKJNj20GVMU2PNrh8FNpgeNOy5fPI6ZGJDnvuvv0yg+e9N0ZgDIm2/DCHfteJpqoRbsyx/eUNKf22AtbVKENBRCLNiAajMr19n+7ualVZFzgEwU7Htcpj1QF1W6EL+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760484442; c=relaxed/simple;
-	bh=1TpApqFhm/8zdJyy1fMGH2+/kuKom2S6e7bMBlVrzaI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VHQMBMBys+JzM9Jv7Ekc5dMLjjQKNYQu2LY6OkfZmxxYGEYdtkyVkr/hOfFGC2sEhZyWC886TH7H7P9MAMXdj2/SCU227AzUp8EvxvNg29W9qLuOe+GSdMNh85h5kjZyebWm+8J8xHYne0/VDusVrRiB+n1iZK5mMN7TteTiQM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MJhaVLVT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760485113; c=relaxed/simple;
+	bh=RBa+ARWZImq2jN4SP1FuMQo3XNtxMHV4AIx03WOCftg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=R8VkWx3MaCcEV5xSrPARGZi25Z/fSNWmrJ+dWzZbde+sVKw7LNVomAXz5wCGce4ClBIkwaOVYpsWNbMLoDABo/0NNXdE/JP+CnCejF/tPkMy4oyGz1Mig0P+phPcoYzz7jXjAFp0YbD9YxZSl/ijEFV8X9HJ0JwXPe0Ote5ntKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2F54D4c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MJhaVLVT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA00FC2BC9E;
-	Tue, 14 Oct 2025 23:27:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2F54D4c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BC7C4CEE7;
+	Tue, 14 Oct 2025 23:38:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760484441;
-	bh=1TpApqFhm/8zdJyy1fMGH2+/kuKom2S6e7bMBlVrzaI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MJhaVLVTpMS4DhVN7xy3hEHyuXzk6r43Kn+AEBSzU4LXGX5jF4QabLgDvRkZUOKH8
-	 VFZxTTtQcb11/rIXUHJtJr+al0C307wX0VVOKSZg4oLtkQAEqIgWf7Ale4uJTxzLro
-	 rtMyu3zruLexE+RU6YBjkWHr59gAB48cmJxSxWjpPE5JNxjffZGX+zfU7WWJHg4WR2
-	 /U9nAL9NZcc8MvoBcG41B0tz1oz6SyABCYR5QmcwJHl0LG2AuADxSeXZ2ZhHA0/4gK
-	 JZtRxO5EDXwMN97Dz8fuGlvmFVZ/ie8Mtmp5ZddzB8hF+nmbYd6y7PM3Qn+sqPnKbJ
-	 z0eAFrjQwzmWg==
-From: Sasha Levin <sashal@kernel.org>
-To: nathan@kernel.org
-Cc: Matt.Kelly2@boeing.com,
-	akpm@linux-foundation.org,
-	andrew.j.oppelt@boeing.com,
-	anton.ivanov@cambridgegreys.com,
-	ardb@kernel.org,
-	arnd@arndb.de,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	chuck.wolber@boeing.com,
-	dave.hansen@linux.intel.com,
-	dvyukov@google.com,
-	hpa@zytor.com,
-	jinghao7@illinois.edu,
-	johannes@sipsolutions.net,
-	jpoimboe@kernel.org,
-	justinstitt@google.com,
-	kees@kernel.org,
-	kent.overstreet@linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	llvm@lists.linux.dev,
-	luto@kernel.org,
-	marinov@illinois.edu,
-	masahiroy@kernel.org,
-	maskray@google.com,
-	mathieu.desnoyers@efficios.com,
-	matthew.l.weber3@boeing.com,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	morbo@google.com,
-	ndesaulniers@google.com,
-	oberpar@linux.ibm.com,
-	paulmck@kernel.org,
-	peterz@infradead.org,
-	richard@nod.at,
-	rostedt@goodmis.org,
-	samitolvanen@google.com,
-	samuel.sarkisian@boeing.com,
-	sashal@kernel.org,
-	steven.h.vanderleest@boeing.com,
-	tglx@linutronix.de,
-	tingxur@illinois.edu,
-	tyxu@illinois.edu,
-	wentaoz5@illinois.edu,
-	x86@kernel.org
-Subject: [RFC PATCH 4/4] x86: enable llvm-cov support
-Date: Tue, 14 Oct 2025 19:26:39 -0400
-Message-ID: <20251014232639.673260-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251014232639.673260-1-sashal@kernel.org>
-References: <20250829181007.GA468030@ax162>
- <20251014232639.673260-1-sashal@kernel.org>
+	s=k20201202; t=1760485112;
+	bh=RBa+ARWZImq2jN4SP1FuMQo3XNtxMHV4AIx03WOCftg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=p2F54D4caq5AZx1ZCsne/etc1qBn3tT7XlFn+nog15NmZhgKEGoiNZ6AuC7FlTVZ/
+	 LtKFqQfXUESG/Msno53DuzheCFl+xwIH9pbG9Aemesn8P5+AsymdP2ghkD9rnu6q5P
+	 /F7fWds/Js8AfSlGI7wuh7A1+I4nSwk0BCW8vX9i1Jgp0O5M6iozMQZLgeYNFyUsxi
+	 gV5tpsf8pp7bfMQq3Zy8g3Rb4w6Po28YRZtJmVlgScD01GJaGJEAeHQKr/+F/z117B
+	 egeAQCozpbjuIqcivtf9duN8eALWGBLn95Vv7cWofweuzCKC1KFnHsRT43nVuhxWyB
+	 fBGJgxNXdbCFg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 14 Oct 2025 16:38:19 -0700
+Subject: [PATCH] usb: uhci: Work around bogus clang shift overflow warning
+ from DMA_BIT_MASK(64)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251014-usb-uhci-avoid-bogus-clang-shift-warning-v1-1-826585eed055@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOre7mgC/x3N0QrCMAyF4VcZuTbQljrFVxEvsi5bA9JKY6cw9
+ u4GLz/4OWcH5SascBt2aLyJSi0GfxogZSoro8xmCC6cvfMRu07YcxKkrcqMU127YnpaippleeO
+ HWhETXZ0fRwoxXgLY3KvxIt//1f1xHD84K9qJegAAAA==
+X-Change-ID: 20251014-usb-uhci-avoid-bogus-clang-shift-warning-a80166a24472
+To: Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3323; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=RBa+ARWZImq2jN4SP1FuMQo3XNtxMHV4AIx03WOCftg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnv7n17K7Yhcxv33muLp17iXrwxtT/qaso2gx1Gjd/TG
+ JV3TdFm7ChlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATCdzI8M/+qfb3N53cq47n
+ Bky5LvLw/4HkxYG+j69X3VB44/bwc74wI8M/K6vGOtWpr0XbcuIynHb35FhorFxa/JOLS8xI/OE
+ 8Uy4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Wentao Zhang <wentaoz5@illinois.edu>
+After commit 18a9ec886d32 ("usb: uhci: Add Aspeed AST2700 support"),
+clang incorrectly warns:
 
-Set ARCH_HAS_* options to "y" in kconfig and include section description in
-linker script.
+  In file included from drivers/usb/host/uhci-hcd.c:855:
+  drivers/usb/host/uhci-platform.c:69:32: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+     69 | static const u64 dma_mask_64 = DMA_BIT_MASK(64);
+        |                                ^~~~~~~~~~~~~~~~
+  include/linux/dma-mapping.h:93:54: note: expanded from macro 'DMA_BIT_MASK'
+     93 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+        |                                                      ^ ~~~
 
-Signed-off-by: Wentao Zhang <wentaoz5@illinois.edu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+clang has a long outstanding and complicated problem [1] with generating
+a proper control flow graph at global scope, resulting in it being
+unable to understand that this shift can never happen due to the
+'n == 64' check.
+
+Restructure the code to do the DMA_BIT_MASK() assignments within
+uhci_hcd_platform_probe() (i.e., function scope) to avoid this global
+scope issue.
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2136
+Link: https://github.com/ClangBuiltLinux/linux/issues/92 [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- arch/x86/Kconfig              | 2 ++
- arch/x86/kernel/vmlinux.lds.S | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/usb/host/uhci-platform.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index fa3b616af03a2..7764562df838b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -90,6 +90,8 @@ config X86
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_KCOV			if X86_64
-+	select ARCH_HAS_LLVM_COV		if X86_64
-+	select ARCH_HAS_LLVM_COV_PROFILE_ALL	if X86_64
- 	select ARCH_HAS_KERNEL_FPU_SUPPORT
- 	select ARCH_HAS_MEM_ENCRYPT
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index d7af4a64c211b..d2caff2a1abff 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -203,6 +203,8 @@ SECTIONS
+diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+index 37607f985cc0..f532d3a0acbf 100644
+--- a/drivers/usb/host/uhci-platform.c
++++ b/drivers/usb/host/uhci-platform.c
+@@ -65,16 +65,16 @@ static const struct hc_driver uhci_platform_hc_driver = {
+ 	.hub_control =		uhci_hub_control,
+ };
  
- 	BUG_TABLE
+-static const u64 dma_mask_32 = DMA_BIT_MASK(32);
+-static const u64 dma_mask_64 = DMA_BIT_MASK(64);
++static const bool use_dma_mask_64 = true;
  
-+	LLVM_COV_DATA
-+
- 	ORC_UNWIND_TABLE
+ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+-	const u64 *dma_mask_ptr;
++	u64 dma_mask = DMA_BIT_MASK(32);
+ 	struct usb_hcd *hcd;
+ 	struct uhci_hcd	*uhci;
+ 	struct resource *res;
++	const bool *of_data;
+ 	int ret;
  
- 	/* Init code and data - will be freed after init */
--- 
-2.51.0
+ 	if (usb_disabled())
+@@ -85,11 +85,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ 	 * Since shared usb code relies on it, set it here for now.
+ 	 * Once we have dma capability bindings this can go away.
+ 	 */
+-	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
+-	if (!dma_mask_ptr)
+-		dma_mask_ptr = &dma_mask_32;
++	of_data = of_device_get_match_data(&pdev->dev);
++	if (of_data && *of_data == use_dma_mask_64)
++		dma_mask = DMA_BIT_MASK(64);
+ 
+-	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
++	ret = dma_coerce_mask_and_coherent(&pdev->dev, dma_mask);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -200,7 +200,7 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
+ static const struct of_device_id platform_uhci_ids[] = {
+ 	{ .compatible = "generic-uhci", },
+ 	{ .compatible = "platform-uhci", },
+-	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
++	{ .compatible = "aspeed,ast2700-uhci", .data = &use_dma_mask_64 },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, platform_uhci_ids);
+
+---
+base-commit: 877c80dfbf788e57a3338627899033b7007037ee
+change-id: 20251014-usb-uhci-avoid-bogus-clang-shift-warning-a80166a24472
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
 
