@@ -1,64 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6F319CCF5;
-	Tue, 14 Oct 2025 07:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3C916F265;
+	Tue, 14 Oct 2025 08:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760427365; cv=none; b=LkG3h2zsRij9ecFLaWLZ1WpeZzk6sE6SgbMEfmGQVpnu7IDSMfbyAj2WtFJRqfsm2Kw2GLMxh0N7sfx//M1bZH6OimNm7Bmhk5R7cSBFyPs5QnWP4N+O09wy0hfWRvX1p5it6Eyvqns2+rr5BUelIvliPbjq1rpTKVdHN/OuCis=
+	t=1760430736; cv=none; b=BbiQvwzXxb/1QmuibsfKAyN1vgk9iDlBW0Vfniq3dR83mj3Xw2nme7cm6TIgFVR6A34mzjaa3XY4oiJeHx3Rda46/VGOM/iGvno42rWUsLfCiq+PYT/tH5IXTk7IuTdqShMqrYNvlo2IJMm3JoefYlR7uMqTcbqhcNK0P3IigkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760427365; c=relaxed/simple;
-	bh=2284CvY5KmX5EI9TFoaFTarD8eR3jMtTJMBg6GQjNRU=;
+	s=arc-20240116; t=1760430736; c=relaxed/simple;
+	bh=79Z8WAUQAlqHzUnTiERxYcnCSSAkZtyqlEAok9nIYMo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tx+EYKHy+haPZ7ganPIQ4rZ4pOdqD8gOOkMV440TQAGALFbcar23hC/mczXi/7ULJvcytZ8p4kQjnFtoLZrZOTqrZ1aLiT/ctpG/zUVfSZucZVxLcS6OcwUxAy3WR9KcNAch7pVCe2XIYwlAez0QDQtBRNsTnOUV1oRtn70ja7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NeETP5mB; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BvLi1Cv0orER606hQNW5EuDxRFzMrQptYECHYZTPZEAX6DGK+t75NAzYuLispif+JgIPFB1fdmX7nbyesLpLFjvieEjjYpA5FnIOCBQC7wU7D6svBo/JHhO4eHA8Se7ufazwYiZIcTzQWCyIjXqcLSCoy8z8GfYM5XLeED3NQp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rI/lA1AX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NeETP5mB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760427362; x=1791963362;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2284CvY5KmX5EI9TFoaFTarD8eR3jMtTJMBg6GQjNRU=;
-  b=NeETP5mBo5TBVX8A2D1tqSu8bWV8LrJXJLMLl7rZ6tx563C2NLy6rObi
-   8MEorqkaUXb/y1VdbyEDwZPkDDl2bC10hXfqwcPPgD4tQlLbzHx8nZ1Er
-   mtwNC6IExHoAumaQIYe/XHUrPp9rp63bhbPikqpuBSea971Dzh11/F3dG
-   bCxuSiTEF0NaD1kr4Ot8dygByRmtZAjt97wrjrbW05fObZiGZuy6VxMaC
-   nrmjXqEIQCBb+GARrTQCFWdPnC7aoSSnjs2vX69SaWNvJ5b/kWqWJAQ2y
-   0x+eZXu7CcRpno+xK+MPrmVuPswaMuQoQp1ckQxALP6itU228qn+X0B76
-   A==;
-X-CSE-ConnectionGUID: HGpT+uJMSwS8FKkRQTmFIQ==
-X-CSE-MsgGUID: 9OygJkUwR4GvkvvvfnjRWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="62676438"
-X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="62676438"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:36:01 -0700
-X-CSE-ConnectionGUID: gTATWPGlTfSS0LfoG70TaA==
-X-CSE-MsgGUID: mhAv5gGKRSmK6SgdH2mMkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="205508506"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 14 Oct 2025 00:35:58 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v8ZZT-0002Vz-2H;
-	Tue, 14 Oct 2025 07:35:49 +0000
-Date: Tue, 14 Oct 2025 15:34:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Siddharth Nayyar <sidnayyar@google.com>, petr.pavlu@suse.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
-	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev,
-	samitolvanen@google.com, sidnayyar@google.com, maennich@google.com,
-	gprocida@google.com
-Subject: Re: [PATCH v2 10/10] module loader: enforce symbol import protection
-Message-ID: <202510141538.VZqnRzHh-lkp@intel.com>
-References: <20251013153918.2206045-11-sidnayyar@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rI/lA1AX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE77C4CEE7;
+	Tue, 14 Oct 2025 08:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760430735;
+	bh=79Z8WAUQAlqHzUnTiERxYcnCSSAkZtyqlEAok9nIYMo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rI/lA1AXn1hCQJhcNCyjkW6MrbFzQpLG/WieRsxB3RryypZMk0rg8ehuoUNNU/cVT
+	 z/uoM6yqvb+aXmPBFY/uGJXxxHFFTQqn+U3UwllHJcOgtYga61iGqbaItiDSaQpg6p
+	 mcs/hTyRceLNhu1nh1vYS3oX6BjoSbvtrpIR4U7Npsf4nRVXLsfW1A2oullTcm7aHG
+	 Wge1rcRAMbRPt5h87r2Dy3GRDnlC1Ve+o6XRrR5M80qYjZhXUr2mqMzIY6t4nkzrGh
+	 0Cykwzn3STulKiQTj97e25y7FPPQ/hauvlrwcIkjZQOoWEUAsmxWv8vHuChFUGUswA
+	 X5BRd7pqSBqtg==
+Date: Tue, 14 Oct 2025 01:32:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Marek Vasut <marek.vasut+renesas@gmail.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
+	Kees Cook <kees@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: Re: [PATCH] PCI: rcar-host: Avoid objtool no-cfi warning in
+ rcar_pcie_probe()
+Message-ID: <20251014083209.GA2696801@ax162>
+References: <20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org>
+ <CAMuHMdXZvoTyWcgRp6TnkybnKY4ekfO9aB33iumPVaR7wvEXkw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,107 +54,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251013153918.2206045-11-sidnayyar@google.com>
+In-Reply-To: <CAMuHMdXZvoTyWcgRp6TnkybnKY4ekfO9aB33iumPVaR7wvEXkw@mail.gmail.com>
 
-Hi Siddharth,
+Hi Geert,
 
-kernel test robot noticed the following build errors:
+On Tue, Oct 14, 2025 at 09:16:58AM +0200, Geert Uytterhoeven wrote:
+> On Mon, 13 Oct 2025 at 20:26, Nathan Chancellor <nathan@kernel.org> wrote:
+> > ---
+> > Another alternative is to make this driver depend on CONFIG_OF since it
+> > clearly requires it but that would restrict compile testing so I went
+> > with this first.
+> > ---
+> >  drivers/pci/controller/pcie-rcar-host.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+> > index 213028052aa5..15514c9c1927 100644
+> > --- a/drivers/pci/controller/pcie-rcar-host.c
+> > +++ b/drivers/pci/controller/pcie-rcar-host.c
+> > @@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+> >                 goto err_clk_disable;
+> >
+> >         host->phy_init_fn = of_device_get_match_data(dev);
+> > -       err = host->phy_init_fn(host);
+> > +       err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
+> >         if (err) {
+> >                 dev_err(dev, "failed to init PCIe PHY\n");
+> >                 goto err_clk_disable;
+> 
+> I am afraid you're playing a big game of whack-a-mole, since we tend
+> to remove these checks, as they can never happen in practice (driver
+> is probed from DT only, and all entries in rcar_pcie_of_match[] have
+> a non-NULL .data member)...
 
-[auto build test ERROR on arnd-asm-generic/master]
-[also build test ERROR on soc/for-next linus/master v6.18-rc1 next-20251013]
-[cannot apply to mcgrof/modules-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the input! Yeah, that is fair, as I alluded to in the scissor
+area. We could just do
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Siddharth-Nayyar/define-kernel-symbol-flags/20251014-005305
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-patch link:    https://lore.kernel.org/r/20251013153918.2206045-11-sidnayyar%40google.com
-patch subject: [PATCH v2 10/10] module loader: enforce symbol import protection
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/reproduce)
+diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+index 41748d083b93..d8688abc5b27 100644
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@ -243,6 +243,7 @@ config PCI_TEGRA
+ config PCIE_RCAR_HOST
+ 	bool "Renesas R-Car PCIe controller (host mode)"
+ 	depends on ARCH_RENESAS || COMPILE_TEST
++	depends on OF
+ 	depends on PCI_MSI
+ 	select IRQ_MSI_LIB
+ 	help
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510141538.VZqnRzHh-lkp@intel.com/
+since it is required for the driver to function. Another alternative
+would be something like either:
 
-All errors (new ones prefixed by >>):
+diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+index 213028052aa5..c237e04392e6 100644
+--- a/drivers/pci/controller/pcie-rcar-host.c
++++ b/drivers/pci/controller/pcie-rcar-host.c
+@@ -941,6 +941,9 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+ 	u32 data;
+ 	int err;
+ 
++	if (!IS_ENABLED(CONFIG_OF))
++		return -ENODEV;
++
+ 	bridge = devm_pci_alloc_host_bridge(dev, sizeof(*host));
+ 	if (!bridge)
+ 		return -ENOMEM;
 
->> kernel/module/main.c:1271:32: error: no member named 'sig_ok' in 'struct module'
-    1271 |         if (fsa.is_protected && !mod->sig_ok) {
-         |                                  ~~~  ^
-   1 error generated.
+or
 
+diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+index 213028052aa5..2aee2e0d9a1d 100644
+--- a/drivers/pci/controller/pcie-rcar-host.c
++++ b/drivers/pci/controller/pcie-rcar-host.c
+@@ -980,8 +980,12 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto err_clk_disable;
+ 
+-	host->phy_init_fn = of_device_get_match_data(dev);
+-	err = host->phy_init_fn(host);
++	if (IS_ENABLED(CONFIG_OF)) {
++		host->phy_init_fn = of_device_get_match_data(dev);
++		err = host->phy_init_fn(host);
++	} else {
++		err = -ENODEV;
++	}
+ 	if (err) {
+ 		dev_err(dev, "failed to init PCIe PHY\n");
+ 		goto err_clk_disable;
 
-vim +1271 kernel/module/main.c
+to keep the ability to compile test the driver without CONFIG_OF while
+having no impact on the final object code and avoiding the NULL call. I
+am open to other thoughts and ideas as well.
 
-  1228	
-  1229	/* Resolve a symbol for this module.  I.e. if we find one, record usage. */
-  1230	static const struct kernel_symbol *resolve_symbol(struct module *mod,
-  1231							  const struct load_info *info,
-  1232							  const char *name,
-  1233							  char ownername[])
-  1234	{
-  1235		struct find_symbol_arg fsa = {
-  1236			.name	= name,
-  1237			.gplok	= !(mod->taints & (1 << TAINT_PROPRIETARY_MODULE)),
-  1238			.warn	= true,
-  1239		};
-  1240		int err;
-  1241	
-  1242		/*
-  1243		 * The module_mutex should not be a heavily contended lock;
-  1244		 * if we get the occasional sleep here, we'll go an extra iteration
-  1245		 * in the wait_event_interruptible(), which is harmless.
-  1246		 */
-  1247		sched_annotate_sleep();
-  1248		mutex_lock(&module_mutex);
-  1249		if (!find_symbol(&fsa))
-  1250			goto unlock;
-  1251	
-  1252		if (fsa.license == GPL_ONLY)
-  1253			mod->using_gplonly_symbols = true;
-  1254	
-  1255		if (!inherit_taint(mod, fsa.owner, name)) {
-  1256			fsa.sym = NULL;
-  1257			goto getname;
-  1258		}
-  1259	
-  1260		if (!check_version(info, name, mod, fsa.crc)) {
-  1261			fsa.sym = ERR_PTR(-EINVAL);
-  1262			goto getname;
-  1263		}
-  1264	
-  1265		err = verify_namespace_is_imported(info, fsa.sym, mod);
-  1266		if (err) {
-  1267			fsa.sym = ERR_PTR(err);
-  1268			goto getname;
-  1269		}
-  1270	
-> 1271		if (fsa.is_protected && !mod->sig_ok) {
-  1272			pr_warn("%s: Cannot use protected symbol %s\n",
-  1273				mod->name, name);
-  1274			fsa.sym = ERR_PTR(-EACCES);
-  1275			goto getname;
-  1276		}
-  1277	
-  1278		err = ref_module(mod, fsa.owner);
-  1279		if (err) {
-  1280			fsa.sym = ERR_PTR(err);
-  1281			goto getname;
-  1282		}
-  1283	
-  1284	getname:
-  1285		/* We must make copy under the lock if we failed to get ref. */
-  1286		strscpy(ownername, module_name(fsa.owner), MODULE_NAME_LEN);
-  1287	unlock:
-  1288		mutex_unlock(&module_mutex);
-  1289		return fsa.sym;
-  1290	}
-  1291	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
