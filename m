@@ -1,130 +1,382 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93A124DCEF;
-	Tue, 14 Oct 2025 18:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6304423D7D9
+	for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 19:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760466041; cv=none; b=ruoVZqluduQ71nDBVH4bAWouvWikoVf0Xtcp2AkDWnynPmtWE/denUCxiEnaMoeDhOaNKjZid6RIRdijV7hqRLskc8jwO78WzkxmqSPGV4/IiooPFmMcOEs80wDpH+S4nv34loxB7qzZcIZwH5qFMSqp22ArMWX6UTD+qt0+VcI=
+	t=1760468555; cv=none; b=fuVFo2bCYPTQ876lmap/CGaIzRIAkiUQktstLae0P44Eyh+/NNQ3LVd4xVhyUupukGqkaNXrzbprcz7rC0JuYHoaBR921KV5Qj3jYHVO9wUfF5MygB0ZiMPtxZCpmbFLitcO16JIYFqe7hJUw4rDEPlUCSKRDuf3Genq79KCUM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760466041; c=relaxed/simple;
-	bh=vhrUh0btdlfm1Rn7+IWBcAWYcgyJkAEWuMqo9pzE76g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XPSeifnxguFtWLiE3v/1QmdxQBTzp19pfq6wxoR4P66QeuRzzfVLPnXowo+8RKTZHIKsGJcMi6F7sIh101EvkJ14lieqC7ue0m9nR172wiVUtVgAoh295Ih2LWTfjcKPkwgErEGTSxES1YDddQKXg+8WBuUOGP/VihQz0VaB3VM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nd/HPIjL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760468555; c=relaxed/simple;
+	bh=u2gDif44Df5DLrSL7h1xngXRQxV2eqMZembPsXROzFo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nn0OJnatkOpIwEC8x0fQGgN+YccZCCLbEd9gsDPVdvaAvOKF390l6Jd1ZMxP0hCCfrltP+Ox85C+2+hLym8uGWl4qWMz0qYVa5lfM1YUArieCWp6UvDM0lOTkwygHyFpCqDf9CfG8i7yi5aszyuPsDe75ygNJ9LJncv0PNFC89I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zgeTynto; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nd/HPIjL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D328DC4CEE7;
-	Tue, 14 Oct 2025 18:20:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760466041;
-	bh=vhrUh0btdlfm1Rn7+IWBcAWYcgyJkAEWuMqo9pzE76g=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Nd/HPIjLaY9fzCI/JHtpdMSggma7txWn0D2HAisC3MyL5XOmJGUie/TapyUqPpLMO
-	 GpUh1OYC8Fev5kIPO4CUFfjnI2blZxjGD+/pE6zMTihuEqVv62jLHHqKh8x/lKSP0z
-	 9ixApxR15Fl8NYwdXvLJSxP+wbozCjbrNppfklKPLrYuohn1bjQBXI5+9zA0FvEp3u
-	 tb9v/svNZRoU4ETsbT4ctym6TKzdv1U8x/ZwA/ymZRnLPo/Zne1IMoIE/kCLsYQH2f
-	 Rq3WgEDfsSt2n5qnac7zR1Bn8DuTvTOtMRZjvrGSgTidR2cAGh/P6TfQP1mjL9zYWs
-	 VxjPZh0Tl0cug==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 14 Oct 2025 11:20:27 -0700
-Subject: [PATCH v2] PCI: rcar-host: Add OF Kconfig dependency to avoid
- objtool no-cfi warning
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zgeTynto"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-42f8e736ecaso121175ab.0
+        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 12:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760468552; x=1761073352; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e+0VBQjB/Y/umPNjaSCDtCDnZ/a1hFSIuSC3lykWc04=;
+        b=zgeTyntorMNyfZ9vmIBjmQza5LaYMT+gUbaGhMcBOLySTn8T2ztBoBhjZy4Jdbz5Nz
+         JWK0kbPYHjrtQ04mTs53aLNnj5T3jqGiskNHQvGXAVVz1zTA7KlQspJcs3DrhU5zEhBl
+         hNV43r8rQzWIkuNTybk6PZph6EcqrZnqrVjcotpvshN5gYfvYtNCXoIDuaK2uO4NWhtN
+         nyDljm/sOpUYOMY34hemsCvyhla9qZ+sH2Fxp0gU3LDjybYPVXw3UhTKmNg/KUU9e3Mc
+         cds5e4WP0dqXCxvdu8yiteo+TjcSpxYTTAXkBlN/9ymRIime2EMUggIp9bNpYynn1h6x
+         5Tpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760468552; x=1761073352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e+0VBQjB/Y/umPNjaSCDtCDnZ/a1hFSIuSC3lykWc04=;
+        b=hGjyaUTj55Cgzwxue5ux6ONsorKvvvdVeyfYRWL9zHXXRP6E1oQX+kQQwY8ghCcayP
+         qwZX6zh1/QmPCOWUhf8h4WQtJJTmDadjqJvqRopKMu8UfKgTvu6i3DCtCNU4lCev7Yli
+         e5Mck4Ug3xh/uHHL5WM4R/Xay8M5ohGEZAm/Z6pDtUtxATzvbEYpftH4DZnuwxJBok6i
+         ATXhPZMtxpg2jAjdJwDyP1DoFWipxuonq2Rj6sJQPVRnpBqCrRp+M9Lx+cPT5DiAeGAb
+         lQpswNejndAGNT0vb43n0F2fCPnDVL8uNXUs+izPbjFDWyRvu0+jkkOkuWU4DK2UaDcN
+         xSwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhNWeUbfwJNTiy5yW7EYMYzS1scTHtq1KrugtHuKt2ChATZXdL4c9xJoWF2ILZM7vMjhFh@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyc4T6LHM9prQJct3Nt+JIAtMG9Ab13vKitTe7bPJNPqRwHJ4IF
+	nqKczP3KJxpXCDIA0hD/EZPVsDsJyjTFWK/jxy7aXdq+OehkKjKYB8Icx17jSL2SlQgLHVQOaeF
+	Ga3TXL2T6PR7WgBb8IV7r5UGE2gNYZeb02oXlCljd
+X-Gm-Gg: ASbGnct0zxC1bBhEXcNLaElJrkR/RITE/rykcinXQDzTEbr7cneNhDqOjmG0ILKRiNq
+	K0pMKlnbpmRh20NRNmPi1LRmnwzOmANjwlex5xwZKDw9xfYIk8RQLnhr5yCu1zYV1fig3ZNZmyr
+	45G9QgeuK3AeFkRqdYnBbtbO6Ej8yltNU/6EXHKg9poPphGSObxjujNl6c0BrPYwEvLp7vSQFis
+	4OI1lqVZzYw5Lz23FKFyXWaOKa/2ObDuQP7ju/daQhClce6JZ4JJarJZsA+9AnbmVp3VJYGLQ==
+X-Google-Smtp-Source: AGHT+IEUnstB8sZX0JOXzoER7Tbrl36eDkG2+ANOE5b0GFme/ecO+Kt2I36cAn6tEhvwrOSVSyGRsoNTdA/Kl7ZBG2g=
+X-Received: by 2002:a05:622a:1e86:b0:4e5:7832:45b9 with SMTP id
+ d75a77b69052e-4e8830bc344mr213371cf.9.1760468551644; Tue, 14 Oct 2025
+ 12:02:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251014-rcar_pcie_probe-avoid-nocfi-objtool-warning-v2-1-6e0204b002c6@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGqU7mgC/53NQQ6CMBCF4auYrh1DkYK48h6GkLYMMEo6ZCCoI
- dzdyhFc/m/xvlVNKISTuh5WJbjQRBxipMeD8r0NHQI1sVWapEYn+gzirdSjJ6xHYYdgF6YGAvu
- WgN1jZh7gZSVQ6EDbsjDWe5e7XMXHUbCl967dq9g9TTPLZ8cX/Vv/cxYNGoxJL0XuyqxNstsTJ
- eBwYulUtW3bF1F8TKnnAAAA
-X-Change-ID: 20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-1a975accb6b6
-To: Marek Vasut <marek.vasut+renesas@gmail.com>, 
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, Kees Cook <kees@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, linux-pci@vger.kernel.org, 
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2297; i=nathan@kernel.org;
- h=from:subject:message-id; bh=vhrUh0btdlfm1Rn7+IWBcAWYcgyJkAEWuMqo9pzE76g=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBnvppTqhJxlO/hk04K/4jbf3jRLapxanbeD6V+9U5LOg
- eofsvbrO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBE/JcyMszfPj/x8mrujrly
- Putjd3xadc/3WWm3g6+26v2z/H/lbBgZGY4l9P7POd94OPzbNuHAUnO2q/+vPWp5VLgtkS1qIdP
- zhYwA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20251010210134.2066321-2-xur@google.com> <aOsOyf3HHzTy23+b@rli9-mobl>
+In-Reply-To: <aOsOyf3HHzTy23+b@rli9-mobl>
+From: Rong Xu <xur@google.com>
+Date: Tue, 14 Oct 2025 12:02:19 -0700
+X-Gm-Features: AS18NWD7EPq_DfBbzf6-L2iKu6NA5tQZvgCFEqNW3zDUgwkmUpW71hzrYnwMQRk
+Message-ID: <CAF1bQ=T3hMROdSqGOZ7W_=iThtJHEoxNF+sfdAnGS2npecgRyw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kbuild: Disable AutoFDO and Propeller flags for
+ kernel modules
+To: kernel test robot <lkp@intel.com>
+Cc: Alexey Gladkov <legion@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Bill Wendling <morbo@google.com>, Han Shen <shenhan@google.com>, 
+	Ingo Molnar <mingo@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Peter Zijlstra <peterz@infradead.org>, Tamir Duberstein <tamird@gmail.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	Yabin Cui <yabinc@google.com>, Sriraman Tallam <tmsriram@google.com>, oe-kbuild-all@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-After commit 894af4a1cde6 ("objtool: Validate kCFI calls"), compile
-testing pcie-rcar-host.c with CONFIG_FINEIBT=y and CONFIG_OF=n results
-in a no-cfi objtool warning in rcar_pcie_probe():
+These new warnings are legit. We now pass LDFLAGS_vmlinux to the
+linker with the orphan-handling option set to the appropriate warning
+level. These warnings are similar to other existing warnings in the
+buildlog and they are legit.
 
-  $ cat allno.config
-  CONFIG_CFI=y
-  CONFIG_COMPILE_TEST=y
-  CONFIG_CPU_MITIGATIONS=y
-  CONFIG_GENERIC_PHY=y
-  CONFIG_MITIGATION_RETPOLINE=y
-  CONFIG_MODULES=y
-  CONFIG_PCI=y
-  CONFIG_PCI_MSI=y
-  CONFIG_PCIE_RCAR_HOST=y
-  CONFIG_X86_KERNEL_IBT=y
+-Rong
 
-  $ make -skj"$(nproc)" ARCH=x86_64 KCONFIG_ALLCONFIG=1 LLVM=1 clean allnoconfig vmlinux
-  vmlinux.o: warning: objtool: rcar_pcie_probe+0x191: no-cfi indirect call!
 
-When CONFIG_OF is unset, of_device_get_match_data() returns NULL, so
-LLVM knows this indirect call has no valid destination and drops the
-kCFI setup before the call, triggering the objtool check that makes sure
-all indirect calls have kCFI setup.
-
-This driver depends on OF for probing with non-NULL data for every match
-so this call will never be NULL in practice. Add a hard Kconfig
-dependency on OF to avoid the warning.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202510092124.O2IX0Jek-lkp@intel.com/
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2134
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Switch from NULL check to avoiding CONFIG_OF=n case altogether (Mani,
-  Geert).
-- Drop Peter and Kees's reviews, as solution is not the same.
-- Link to v1: https://patch.msgid.link/20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org
----
- drivers/pci/controller/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index 41748d083b93..d8688abc5b27 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -243,6 +243,7 @@ config PCI_TEGRA
- config PCIE_RCAR_HOST
- 	bool "Renesas R-Car PCIe controller (host mode)"
- 	depends on ARCH_RENESAS || COMPILE_TEST
-+	depends on OF
- 	depends on PCI_MSI
- 	select IRQ_MSI_LIB
- 	help
-
----
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-change-id: 20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-1a975accb6b6
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+On Sat, Oct 11, 2025 at 7:13=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on kees/for-next/kspp]
+> [also build test WARNING on linus/master v6.17 next-20251010]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/xur-google-com/kbu=
+ild-Disable-AutoFDO-and-Propeller-flags-for-kernel-modules/20251011-050345
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git fo=
+r-next/kspp
+> patch link:    https://lore.kernel.org/r/20251010210134.2066321-2-xur%40g=
+oogle.com
+> patch subject: [PATCH 2/4] kbuild: Disable AutoFDO and Propeller flags fo=
+r kernel modules
+> :::::: branch date: 26 hours ago
+> :::::: commit date: 26 hours ago
+> config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/2025=
+1012/202510120641.H3SMaB6Q-lkp@intel.com/config)
+> compiler: powerpc-linux-gcc (GCC) 15.1.0
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251012/202510120641.H3SMaB6Q-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/r/202510120641.H3SMaB6Q-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> powerpc-linux-ld: warning: orphan section `.head.text' from `arch/powe=
+rpc/kernel/head_book3s_32.o' being placed in section `.head.text'
+> >> powerpc-linux-ld: warning: orphan section `__ftr_alt_97' from `arch/po=
+werpc/kernel/head_book3s_32.o' being placed in section `__ftr_alt_97'
+> >> powerpc-linux-ld: warning: orphan section `__mmu_ftr_fixup' from `arch=
+/powerpc/kernel/head_book3s_32.o' being placed in section `__mmu_ftr_fixup'
+> >> powerpc-linux-ld: warning: orphan section `__ftr_fixup' from `arch/pow=
+erpc/kernel/head_book3s_32.o' being placed in section `__ftr_fixup'
+> >> powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/fpu.o' being placed in section `.export_symbol'
+> >> powerpc-linux-ld: warning: orphan section `.export_symbol' from `init/=
+main.o' being placed in section `.export_symbol'
+> >> powerpc-linux-ld: warning: orphan section `.init.text' from `init/main=
+.o' being placed in section `.init.text'
+> >> powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `init/=
+main.o' being placed in section `.rodata.str1.4'
+> >> powerpc-linux-ld: warning: orphan section `__bug_table' from `init/mai=
+n.o' being placed in section `__bug_table'
+> >> powerpc-linux-ld: warning: orphan section `.ref.text' from `init/main.=
+o' being placed in section `.ref.text'
+> >> powerpc-linux-ld: warning: orphan section `.text.unlikely' from `init/=
+main.o' being placed in section `.text.unlikely'
+> >> powerpc-linux-ld: warning: orphan section `.data..read_mostly' from `i=
+nit/main.o' being placed in section `.data..read_mostly'
+> >> powerpc-linux-ld: warning: orphan section `.data..ro_after_init' from =
+`init/main.o' being placed in section `.data..ro_after_init'
+> >> powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`init/main.o' being placed in section `.discard.addressable'
+> >> powerpc-linux-ld: warning: orphan section `.init.data' from `init/main=
+.o' being placed in section `.init.data'
+> >> powerpc-linux-ld: warning: orphan section `.init.rodata' from `init/ma=
+in.o' being placed in section `.init.rodata'
+> >> powerpc-linux-ld: warning: orphan section `.init.setup' from `init/mai=
+n.o' being placed in section `.init.setup'
+> >> powerpc-linux-ld: warning: orphan section `__param' from `init/main.o'=
+ being placed in section `__param'
+> >> powerpc-linux-ld: warning: orphan section `.export_symbol' from `init/=
+version.o' being placed in section `.export_symbol'
+> >> powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `init/=
+version.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `init/vers=
+ion.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`init/version.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.init.rodata' from `init/ve=
+rsion.o' being placed in section `.init.rodata'
+>    powerpc-linux-ld: warning: orphan section `.init.setup' from `init/ver=
+sion.o' being placed in section `.init.setup'
+>    powerpc-linux-ld: warning: orphan section `.note.Linux' from `init/ver=
+sion.o' being placed in section `.note.Linux'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `init/do_m=
+ounts.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `init/=
+do_mounts.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.text.unlikely' from `init/=
+do_mounts.o' being placed in section `.text.unlikely'
+>    powerpc-linux-ld: warning: orphan section `.init.data' from `init/do_m=
+ounts.o' being placed in section `.init.data'
+>    powerpc-linux-ld: warning: orphan section `.init.rodata' from `init/do=
+_mounts.o' being placed in section `.init.rodata'
+>    powerpc-linux-ld: warning: orphan section `.init.setup' from `init/do_=
+mounts.o' being placed in section `.init.setup'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `init/=
+noinitramfs.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `init/noin=
+itramfs.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.initcallrootfs.init' from =
+`init/noinitramfs.o' being placed in section `.initcallrootfs.init'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `init/=
+init_task.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`init/init_task.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/cputable.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/cputable.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/cputable.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/cputable.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.data..ro_after_init' from =
+`arch/powerpc/kernel/cputable.o' being placed in section `.data..ro_after_i=
+nit'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/cputable.o' being placed in section `.discard.addressa=
+ble'
+>    powerpc-linux-ld: warning: orphan section `.init.data' from `arch/powe=
+rpc/kernel/cputable.o' being placed in section `.init.data'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/irq.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/irq.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/irq.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/irq.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.data..read_mostly' from `a=
+rch/powerpc/kernel/irq.o' being placed in section `.data..read_mostly'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/irq.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.static_call_sites' from `a=
+rch/powerpc/kernel/irq.o' being placed in section `.static_call_sites'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/align.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__ex_table' from `arch/powe=
+rpc/kernel/align.o' being placed in section `__ex_table'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/align.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `__ex_table' from `arch/powe=
+rpc/kernel/signal_32.o' being placed in section `__ex_table'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/signal_32.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/pmc.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/pmc.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/pmc.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/pmc.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/vdso.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/vdso.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/vdso.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.data..ro_after_init' from =
+`arch/powerpc/kernel/vdso.o' being placed in section `.data..ro_after_init'
+>    powerpc-linux-ld: warning: orphan section `.initcall3.init' from `arch=
+/powerpc/kernel/vdso.o' being placed in section `.initcall3.init'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/process.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/process.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/process.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.text.unlikely' from `arch/=
+powerpc/kernel/process.o' being placed in section `.text.unlikely'
+>    powerpc-linux-ld: warning: orphan section `__ftr_alt_97' from `arch/po=
+werpc/kernel/process.o' being placed in section `__ftr_alt_97'
+>    powerpc-linux-ld: warning: orphan section `__ftr_fixup' from `arch/pow=
+erpc/kernel/process.o' being placed in section `__ftr_fixup'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/process.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `__ex_table' from `arch/powe=
+rpc/kernel/process.o' being placed in section `__ex_table'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/process.o' being placed in section `.discard.addressab=
+le'
+>    powerpc-linux-ld: warning: orphan section `.init.rodata' from `arch/po=
+werpc/kernel/process.o' being placed in section `.init.rodata'
+>    powerpc-linux-ld: warning: orphan section `.init.setup' from `arch/pow=
+erpc/kernel/process.o' being placed in section `.init.setup'
+>    powerpc-linux-ld: warning: orphan section `.initcallearly.init' from `=
+arch/powerpc/kernel/process.o' being placed in section `.initcallearly.init=
+'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/idle.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/idle.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/idle.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/idle.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.init.rodata' from `arch/po=
+werpc/kernel/idle.o' being placed in section `.init.rodata'
+>    powerpc-linux-ld: warning: orphan section `.init.setup' from `arch/pow=
+erpc/kernel/idle.o' being placed in section `.init.setup'
+>    powerpc-linux-ld: warning: orphan section `.initcall6.init' from `arch=
+/powerpc/kernel/idle.o' being placed in section `.initcall6.init'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/signal.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/signal.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/sysfs.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/sysfs.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/sysfs.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/sysfs.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/sysfs.o' being placed in section `.discard.addressable=
+'
+>    powerpc-linux-ld: warning: orphan section `.initcall4.init' from `arch=
+/powerpc/kernel/sysfs.o' being placed in section `.initcall4.init'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/cacheinfo.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/cacheinfo.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.data..once' from `arch/pow=
+erpc/kernel/cacheinfo.o' being placed in section `.data..once'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/time.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/time.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/time.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.data..once' from `arch/pow=
+erpc/kernel/time.o' being placed in section `.data..once'
+>    powerpc-linux-ld: warning: orphan section `.data..read_mostly' from `a=
+rch/powerpc/kernel/time.o' being placed in section `.data..read_mostly'
+>    powerpc-linux-ld: warning: orphan section `.data..ro_after_init' from =
+`arch/powerpc/kernel/time.o' being placed in section `.data..ro_after_init'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/time.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/prom.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/prom.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/prom.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/prom.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/prom.o' being placed in section `.discard.addressable'
+>    powerpc-linux-ld: warning: orphan section `.init.data' from `arch/powe=
+rpc/kernel/prom.o' being placed in section `.init.data'
+>    powerpc-linux-ld: warning: orphan section `.init.rodata' from `arch/po=
+werpc/kernel/prom.o' being placed in section `.init.rodata'
+>    powerpc-linux-ld: warning: orphan section `.init.setup' from `arch/pow=
+erpc/kernel/prom.o' being placed in section `.init.setup'
+>    powerpc-linux-ld: warning: orphan section `__ex_table' from `arch/powe=
+rpc/kernel/traps.o' being placed in section `__ex_table'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/traps.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `__bug_table' from `arch/pow=
+erpc/kernel/traps.o' being placed in section `__bug_table'
+>    powerpc-linux-ld: warning: orphan section `.noinstr.text' from `arch/p=
+owerpc/kernel/traps.o' being placed in section `.noinstr.text'
+>    powerpc-linux-ld: warning: orphan section `.text.unlikely' from `arch/=
+powerpc/kernel/traps.o' being placed in section `.text.unlikely'
+>    powerpc-linux-ld: warning: orphan section `.export_symbol' from `arch/=
+powerpc/kernel/setup-common.o' being placed in section `.export_symbol'
+>    powerpc-linux-ld: warning: orphan section `.rodata.str1.4' from `arch/=
+powerpc/kernel/setup-common.o' being placed in section `.rodata.str1.4'
+>    powerpc-linux-ld: warning: orphan section `.text.unlikely' from `arch/=
+powerpc/kernel/setup-common.o' being placed in section `.text.unlikely'
+>    powerpc-linux-ld: warning: orphan section `.init.text' from `arch/powe=
+rpc/kernel/setup-common.o' being placed in section `.init.text'
+>    powerpc-linux-ld: warning: orphan section `.discard.addressable' from =
+`arch/powerpc/kernel/setup-common.o' being placed in section `.discard.addr=
+essable'
+>    powerpc-linux-ld: warning: orphan section `.init.data' from `arch/powe=
+rpc/kernel/setup-common.o' being placed in section `.init.data'
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>
