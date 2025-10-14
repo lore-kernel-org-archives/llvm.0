@@ -1,155 +1,173 @@
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A0B2D73BF
-	for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 07:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6F319CCF5;
+	Tue, 14 Oct 2025 07:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760426234; cv=none; b=uIB/PGjaGHcGdHKvEhiG79nc2s6kFGyndnOidN8+Gm8m8nThPk1N4L8jzxnQMw6Vm37vmF9w6N/xYttTV6DYm+nPpCqz0IaHShXJv7bCEU8bf6KNj1IGBSsDuew6zJ68K11U8hT2flt2qWiMwI3HC+WVMp6wdTeyQxhJIGKNxA4=
+	t=1760427365; cv=none; b=LkG3h2zsRij9ecFLaWLZ1WpeZzk6sE6SgbMEfmGQVpnu7IDSMfbyAj2WtFJRqfsm2Kw2GLMxh0N7sfx//M1bZH6OimNm7Bmhk5R7cSBFyPs5QnWP4N+O09wy0hfWRvX1p5it6Eyvqns2+rr5BUelIvliPbjq1rpTKVdHN/OuCis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760426234; c=relaxed/simple;
-	bh=qcHTUS0wo1f43VFStYszqJZcg60j4r28QkB5kGixAXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gxN/44al7toxCrE/yiPDZC59TKiB8mlkvhU1betfbnEFpuilidd+xj6sfzmbYLadAeJR1SvhyjZ0EnuUQjIpsQehkLx/Mw/oW5M1lPU8XRwtrMLMjQVIUmDXz+yyYdsJSNjLSO86Oi85bavJ5L/MMI/iWcH6rQR6PWNmQPkRhPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5b62ab6687dso4989487137.0
-        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 00:17:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760426230; x=1761031030;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1LJPJfcpv0pJD66G650kRDT3CGUnlnJtrjGpdse2lj8=;
-        b=n2kNjZLO9y7jkahtnerqQ2m7AxSpDghDrxYB7u8aRshek0z/PNIlCXaP/Kbvjgo+NN
-         PZQmt68XzCRlhRa86UZJlbqrOfAayhHApv8+0/iV4s9utd+G3paBc+9Apn4dNCuaEoqc
-         xraC2X+PeT9OSr2plc8Et40avUzpmGuTIdEMKWEYHhnojgVxwv1hmlXArSANmY2kW8qJ
-         cel5eVpvPS8MN767LJLdLBR7EMWkd0wxjs2KjpASkPcZRaR2N3E94RM6QvzssSaY762h
-         yA6wEaT6AhiiduJ/I5YCyiUpxwAQkr2jYYG2pz7bgv628lXx3K8NY3vLas38t6lhQMgR
-         0fTg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCA3p4khOseYoBOCCh8CbLQQEttw5Tmg3jgrnrLDaG+nc6ur25MTRqC/FGejQP8FtWjKpq@lists.linux.dev
-X-Gm-Message-State: AOJu0YzUqAliE4ELf3opzr+5WZAEBeyqdeyxznVO1zFb1fy7DycFTgef
-	X4ImLNSWxW7p9LynWSJYKKqzfGhoACJlrptpnOs881B/IKIm3AYl5A/QSgorXVIV
-X-Gm-Gg: ASbGnct0rGCUG9jS+7/4nszADGaUGNeXiExNnhpTTcnWx/d++4G9iZSoDNBV6vpmgjV
-	RMnilYCQZXPgYCXnqQ1t27D0EjcfHlnu8661se7YIiwTdcvTYuqpCuP1qAFfvUwR+wQ6CvxiDu2
-	XC8oQeqTs0rNFCElS9fdazfhZgb5YZO5d6ZVIMOoxjpAOTzHsrElD8t7QpAxQJUe0QkSurAPA2X
-	+N9gWb2ETY2FLDwaQSCOt82R7hi0SCo/jASzoPYRSfqnUbM+Wmo0qzE1TfIywIfQOnLTwB+8AyN
-	qOxtKyakghIA8bJEp3Bi9DIMBvOV0NrT12Ihe7pDO3f8yBzQgUZoSzsoZyGiwkiB0osCVwyhdrh
-	ij6oQNAqSb5XtlJrDhcxFf4q59xuba85uno0IlCO08fjkxhdNfhseNt+RHFMSeUqCvojLXNAsEW
-	McE4tVIXB05BA7kQ==
-X-Google-Smtp-Source: AGHT+IFl5PmCwLPUh3vz9Ren2IJziJrjW+OhzkV7SnEc+gqRg9bJTCF1ORcqwMSbOkd+RtzOmmyWaw==
-X-Received: by 2002:a05:6102:4187:b0:5d3:fef5:8724 with SMTP id ada2fe7eead31-5d5e2352439mr9454318137.26.1760426230130;
-        Tue, 14 Oct 2025 00:17:10 -0700 (PDT)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5d5fc8f0a48sm4099799137.12.2025.10.14.00.17.09
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Oct 2025 00:17:09 -0700 (PDT)
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-904d71faab6so3879581241.1
-        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 00:17:09 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWM377Jv4wirZJmjYJOCSaa7xQ1riJXgPEAqdCBh9PtID88XDapk4EPkLT1AL9Il8PPbjtj@lists.linux.dev
-X-Received: by 2002:a05:6102:3c8e:b0:4fa:25a2:5804 with SMTP id
- ada2fe7eead31-5d5e220420bmr8840762137.10.1760426229660; Tue, 14 Oct 2025
- 00:17:09 -0700 (PDT)
+	s=arc-20240116; t=1760427365; c=relaxed/simple;
+	bh=2284CvY5KmX5EI9TFoaFTarD8eR3jMtTJMBg6GQjNRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tx+EYKHy+haPZ7ganPIQ4rZ4pOdqD8gOOkMV440TQAGALFbcar23hC/mczXi/7ULJvcytZ8p4kQjnFtoLZrZOTqrZ1aLiT/ctpG/zUVfSZucZVxLcS6OcwUxAy3WR9KcNAch7pVCe2XIYwlAez0QDQtBRNsTnOUV1oRtn70ja7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NeETP5mB; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NeETP5mB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760427362; x=1791963362;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2284CvY5KmX5EI9TFoaFTarD8eR3jMtTJMBg6GQjNRU=;
+  b=NeETP5mBo5TBVX8A2D1tqSu8bWV8LrJXJLMLl7rZ6tx563C2NLy6rObi
+   8MEorqkaUXb/y1VdbyEDwZPkDDl2bC10hXfqwcPPgD4tQlLbzHx8nZ1Er
+   mtwNC6IExHoAumaQIYe/XHUrPp9rp63bhbPikqpuBSea971Dzh11/F3dG
+   bCxuSiTEF0NaD1kr4Ot8dygByRmtZAjt97wrjrbW05fObZiGZuy6VxMaC
+   nrmjXqEIQCBb+GARrTQCFWdPnC7aoSSnjs2vX69SaWNvJ5b/kWqWJAQ2y
+   0x+eZXu7CcRpno+xK+MPrmVuPswaMuQoQp1ckQxALP6itU228qn+X0B76
+   A==;
+X-CSE-ConnectionGUID: HGpT+uJMSwS8FKkRQTmFIQ==
+X-CSE-MsgGUID: 9OygJkUwR4GvkvvvfnjRWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="62676438"
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="62676438"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:36:01 -0700
+X-CSE-ConnectionGUID: gTATWPGlTfSS0LfoG70TaA==
+X-CSE-MsgGUID: mhAv5gGKRSmK6SgdH2mMkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="205508506"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Oct 2025 00:35:58 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8ZZT-0002Vz-2H;
+	Tue, 14 Oct 2025 07:35:49 +0000
+Date: Tue, 14 Oct 2025 15:34:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Siddharth Nayyar <sidnayyar@google.com>, petr.pavlu@suse.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
+	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev,
+	samitolvanen@google.com, sidnayyar@google.com, maennich@google.com,
+	gprocida@google.com
+Subject: Re: [PATCH v2 10/10] module loader: enforce symbol import protection
+Message-ID: <202510141538.VZqnRzHh-lkp@intel.com>
+References: <20251013153918.2206045-11-sidnayyar@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org>
-In-Reply-To: <20251013-rcar_pcie_probe-avoid-nocfi-objtool-warning-v1-1-552876b94f04@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 14 Oct 2025 09:16:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXZvoTyWcgRp6TnkybnKY4ekfO9aB33iumPVaR7wvEXkw@mail.gmail.com>
-X-Gm-Features: AS18NWBECJtooFXj8wIhcLw2_n3BPi6xXTVAMYxpuf1MNXW6QPz_d-TTeadxeIw
-Message-ID: <CAMuHMdXZvoTyWcgRp6TnkybnKY4ekfO9aB33iumPVaR7wvEXkw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: rcar-host: Avoid objtool no-cfi warning in rcar_pcie_probe()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Marek Vasut <marek.vasut+renesas@gmail.com>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>, Kees Cook <kees@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251013153918.2206045-11-sidnayyar@google.com>
 
-Hi Nathan,
+Hi Siddharth,
 
-On Mon, 13 Oct 2025 at 20:26, Nathan Chancellor <nathan@kernel.org> wrote:
-> After commit 894af4a1cde6 ("objtool: Validate kCFI calls"), compile
-> testing pcie-rcar-host.c with CONFIG_FINEIBT=y and CONFIG_OF=n results
-> in a no-cfi objtool warning in rcar_pcie_probe():
->
->   $ cat allno.config
->   CONFIG_CFI=y
->   CONFIG_COMPILE_TEST=y
->   CONFIG_CPU_MITIGATIONS=y
->   CONFIG_GENERIC_PHY=y
->   CONFIG_MITIGATION_RETPOLINE=y
->   CONFIG_MODULES=y
->   CONFIG_PCI=y
->   CONFIG_PCI_MSI=y
->   CONFIG_PCIE_RCAR_HOST=y
->   CONFIG_X86_KERNEL_IBT=y
->
->   $ make -skj"$(nproc)" ARCH=x86_64 KCONFIG_ALLCONFIG=1 LLVM=1 clean allnoconfig vmlinux
->   vmlinux.o: warning: objtool: rcar_pcie_probe+0x191: no-cfi indirect call!
->
-> When CONFIG_OF is unset, of_device_get_match_data() returns NULL, so
-> LLVM knows this indirect call has no valid destination and drops the
-> kCFI setup before the call, triggering the objtool check that makes sure
-> all indirect calls have kCFI setup.
->
-> Check that host->phy_init_fn is not NULL before calling it to avoid the
-> warning.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202510092124.O2IX0Jek-lkp@intel.com/
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+kernel test robot noticed the following build errors:
 
-Thanks for your patch!
+[auto build test ERROR on arnd-asm-generic/master]
+[also build test ERROR on soc/for-next linus/master v6.18-rc1 next-20251013]
+[cannot apply to mcgrof/modules-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
-> Another alternative is to make this driver depend on CONFIG_OF since it
-> clearly requires it but that would restrict compile testing so I went
-> with this first.
-> ---
->  drivers/pci/controller/pcie-rcar-host.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-> index 213028052aa5..15514c9c1927 100644
-> --- a/drivers/pci/controller/pcie-rcar-host.c
-> +++ b/drivers/pci/controller/pcie-rcar-host.c
-> @@ -981,7 +981,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
->                 goto err_clk_disable;
->
->         host->phy_init_fn = of_device_get_match_data(dev);
-> -       err = host->phy_init_fn(host);
-> +       err = host->phy_init_fn ? host->phy_init_fn(host) : -ENODEV;
->         if (err) {
->                 dev_err(dev, "failed to init PCIe PHY\n");
->                 goto err_clk_disable;
+url:    https://github.com/intel-lab-lkp/linux/commits/Siddharth-Nayyar/define-kernel-symbol-flags/20251014-005305
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20251013153918.2206045-11-sidnayyar%40google.com
+patch subject: [PATCH v2 10/10] module loader: enforce symbol import protection
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/reproduce)
 
-I am afraid you're playing a big game of whack-a-mole, since we tend
-to remove these checks, as they can never happen in practice (driver
-is probed from DT only, and all entries in rcar_pcie_of_match[] have
-a non-NULL .data member)...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510141538.VZqnRzHh-lkp@intel.com/
 
-Gr{oetje,eeting}s,
+All errors (new ones prefixed by >>):
 
-                        Geert
+>> kernel/module/main.c:1271:32: error: no member named 'sig_ok' in 'struct module'
+    1271 |         if (fsa.is_protected && !mod->sig_ok) {
+         |                                  ~~~  ^
+   1 error generated.
+
+
+vim +1271 kernel/module/main.c
+
+  1228	
+  1229	/* Resolve a symbol for this module.  I.e. if we find one, record usage. */
+  1230	static const struct kernel_symbol *resolve_symbol(struct module *mod,
+  1231							  const struct load_info *info,
+  1232							  const char *name,
+  1233							  char ownername[])
+  1234	{
+  1235		struct find_symbol_arg fsa = {
+  1236			.name	= name,
+  1237			.gplok	= !(mod->taints & (1 << TAINT_PROPRIETARY_MODULE)),
+  1238			.warn	= true,
+  1239		};
+  1240		int err;
+  1241	
+  1242		/*
+  1243		 * The module_mutex should not be a heavily contended lock;
+  1244		 * if we get the occasional sleep here, we'll go an extra iteration
+  1245		 * in the wait_event_interruptible(), which is harmless.
+  1246		 */
+  1247		sched_annotate_sleep();
+  1248		mutex_lock(&module_mutex);
+  1249		if (!find_symbol(&fsa))
+  1250			goto unlock;
+  1251	
+  1252		if (fsa.license == GPL_ONLY)
+  1253			mod->using_gplonly_symbols = true;
+  1254	
+  1255		if (!inherit_taint(mod, fsa.owner, name)) {
+  1256			fsa.sym = NULL;
+  1257			goto getname;
+  1258		}
+  1259	
+  1260		if (!check_version(info, name, mod, fsa.crc)) {
+  1261			fsa.sym = ERR_PTR(-EINVAL);
+  1262			goto getname;
+  1263		}
+  1264	
+  1265		err = verify_namespace_is_imported(info, fsa.sym, mod);
+  1266		if (err) {
+  1267			fsa.sym = ERR_PTR(err);
+  1268			goto getname;
+  1269		}
+  1270	
+> 1271		if (fsa.is_protected && !mod->sig_ok) {
+  1272			pr_warn("%s: Cannot use protected symbol %s\n",
+  1273				mod->name, name);
+  1274			fsa.sym = ERR_PTR(-EACCES);
+  1275			goto getname;
+  1276		}
+  1277	
+  1278		err = ref_module(mod, fsa.owner);
+  1279		if (err) {
+  1280			fsa.sym = ERR_PTR(err);
+  1281			goto getname;
+  1282		}
+  1283	
+  1284	getname:
+  1285		/* We must make copy under the lock if we failed to get ref. */
+  1286		strscpy(ownername, module_name(fsa.owner), MODULE_NAME_LEN);
+  1287	unlock:
+  1288		mutex_unlock(&module_mutex);
+  1289		return fsa.sym;
+  1290	}
+  1291	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
