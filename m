@@ -1,93 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B89A31B81E
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 10:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D38A2D46C6;
+	Wed, 15 Oct 2025 10:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760524329; cv=none; b=Y6dDaKwZLvfmLRQ3oZBCYoD9US2LmpKCu10VQinQuRsezDVPtr0g/Oe8udxhO1cLF6HRo8r0dTl7gHpdrwK+Tl/3duAzwI/VsEIXy7U/Rk8f8f2gxfA/jgYrHELyxHM60U/8U4eRc97TSW5En/+GBBA9rWAqpiaPJ7gy8o/oRHE=
+	t=1760525177; cv=none; b=LJDEgkF8mowHGPRvktDo/JSO+02La5H7oV5x/+AVI3TltYUrQGrLyTmcrng6A88hhBvqIxCeYCAPN575+sAPczrM/dU+a3pNWXHfjHlT+cg5XnHjTelc/y82m6IpCpCBv1ZBfax3c2M2s1G0p6XWq1+nLN7XJnMPNjel7/CZXJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760524329; c=relaxed/simple;
-	bh=XnVyysyLvP1k2Hag45q9Dzv50TEW/Txkjea2iOLo95Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C/rCNeuSqABDFgHJ9KLlFcMKL94iT+t3BM9jChOplSVmJiTQSEqZyzzoNI2N2guGt8QL2+203WIKcfYFtju2DrREdNegAn7ExWAAcIctsWnykyCYIuxmON1EG/H1e+ahZH8dJ3wa906kRepwzCq0i/zHsZgvJU+vHnYBQ77rKIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYtwL/TV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760525177; c=relaxed/simple;
+	bh=rFh+h2Gw19dKUeywWzo2iMO61XM6xOPU3z9oWLVsNWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MoAVOykhHn5j3kspPl7f5Wfc847aG42vapnaHVXLT2HBC8UZ98r/Yk161jz4vbM7KT2xjFYNcoyDkVzpaR7WGXMrIRyj1InwvlrqoGkadlobLkLOF8JS6tz+2MrdTW8eMsvxAjzsb4nJJxlLdTcUhKCmrpAioyuC1ugFYKbWrjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nAHso32S; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYtwL/TV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8262C2BCAF
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 10:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760524328;
-	bh=XnVyysyLvP1k2Hag45q9Dzv50TEW/Txkjea2iOLo95Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iYtwL/TVDy0Rt8BW4eYIJkeWkxsE6tN9UdHbo4XWzOIJfn7qlnDcPsuB9grO5h2zP
-	 XgE9oByHqWkceakqlv0Eq9J2IPV1Tn6DPDMuxDn6LBWutVbD8s9L+fV9hcg6GlV5le
-	 ulSOANxTNGkZG4i7mNynvxFe8znEV7i9i68qICBi1cPARcSm/L7sYWxsSLtcY26gdH
-	 PvGYQ0JJpLdJ0uGLwjMHbtzZpuLmYD1zquyUfkvlCulOTAn9T3O+6OyMk/059Ppj1g
-	 tvHHlvabgZSTKtLDEzI2H4dZiNALyvXDPvcjzz7+rkoSzu2mKuW4lEnedCQom+BcW2
-	 2DCpkW2J3hG7w==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6318855a83fso14318335a12.2
-        for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 03:32:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVfJsULgVOTgWzVWu3giJ16QiSmSic5B3S0+bgbHT23tPiGrzj9QxutT8OzalXE80C/qahk@lists.linux.dev
-X-Gm-Message-State: AOJu0YytDz1qd4zHh2LL1jJ2G9Nr1pDAR466b0EUQbMSUYVyCrbfkor1
-	xGJA0Nxtyg1FhcGDfR0yjc8E3bitZZ73E6nPVigJNlY6P13iG1KAYYXsKxx2L9t/VdxmnyA0IZx
-	SBhGS2NX7Q7bCD/YPaQ3oZ6JhYkoNkMo=
-X-Google-Smtp-Source: AGHT+IGoA/d5yhGrNUYlE45ck1RVZwOONyMj9xEP0O9ihtkTRuTRU0iB18owFQ5wHS2pOSIJrR8N9/DmGQJKXoFsmag=
-X-Received: by 2002:a05:6402:254f:b0:637:e4d1:aeff with SMTP id
- 4fb4d7f45d1cf-639d5c3ebc3mr28694096a12.19.1760524327124; Wed, 15 Oct 2025
- 03:32:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nAHso32S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760525176; x=1792061176;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rFh+h2Gw19dKUeywWzo2iMO61XM6xOPU3z9oWLVsNWY=;
+  b=nAHso32SG11XdSwXuuht07J0URNoU2AWhO0rKT5cpoJtWlzAwzzOH2Mp
+   OJ51TN5WCXxqFWOs0FkTfjuERFYD7j1Ksf56PqwrFhWAIsy8M/zAYLFXY
+   PyD+DilOlqLD7xKyyLuy8qnCl7qfRsVqZQbXfKdsss9aI9daAL6dvosCV
+   Fo3K4L+Tbjjnxc9biXX/CnErYCtRB8th0zk54W5zbew9iAtzfs3IexJH/
+   XMLcCIS09PRoHH61k05ijOf/l51FZQVPMPyfKBk9j+c7kDXfgq68Ekgcf
+   PSmQvMSF7R3S7HOV3lUZ4+Wrr2JyYffB0DDhZ3d54SjYc/U/WJJp3UVOY
+   Q==;
+X-CSE-ConnectionGUID: HUy70wwKQUK2F0TMoRZVcA==
+X-CSE-MsgGUID: BFtgxBx9TaKxW2ycUgXxOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="72970271"
+X-IronPort-AV: E=Sophos;i="6.19,231,1754982000"; 
+   d="scan'208";a="72970271"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 03:46:15 -0700
+X-CSE-ConnectionGUID: dfakOIJBQqKdeVC7BljyhQ==
+X-CSE-MsgGUID: TqkAaNuXSS6Qj74U8zqrOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,231,1754982000"; 
+   d="scan'208";a="181272108"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 15 Oct 2025 03:46:14 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8z1G-0003kF-2c;
+	Wed, 15 Oct 2025 10:46:10 +0000
+Date: Wed, 15 Oct 2025 18:45:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans de Goede <hansg@kernel.org>, Bingbu Cao <bingbu.cao@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hans de Goede <hansg@kernel.org>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 25/25] media: i2c: ov01a10: Register tweaks for ov01a1s
+ model
+Message-ID: <202510151822.TJUD8C7K-lkp@intel.com>
+References: <20251014174033.20534-26-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251015022037.14535-2-xry111@xry111.site> <CANiq72mvZy+X2ko_sxVCn-2cnsR29boAzPDrYn=S-Tp0xSvvHw@mail.gmail.com>
-In-Reply-To: <CANiq72mvZy+X2ko_sxVCn-2cnsR29boAzPDrYn=S-Tp0xSvvHw@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 15 Oct 2025 18:31:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H55FMdfPwXbJKT0UkmJ_6KT=o4FQwuWb3iJwYQwj13cBw@mail.gmail.com>
-X-Gm-Features: AS18NWAnFzjUGbY0swZ8OT6uicP-yLzslkwfwIMvtdyG7-njmiNtH6w-d27pTVQ
-Message-ID: <CAAhV-H55FMdfPwXbJKT0UkmJ_6KT=o4FQwuWb3iJwYQwj13cBw@mail.gmail.com>
-Subject: Re: [PATCH] rust: Add -fno-isolate-erroneous-paths-dereference to bindgen_skip_c_flags
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>, loongarch@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, "open list:RUST" <rust-for-linux@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014174033.20534-26-hansg@kernel.org>
 
-On Wed, Oct 15, 2025 at 6:20=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Wed, Oct 15, 2025 at 4:21=E2=80=AFAM Xi Ruoyao <xry111@xry111.site> wr=
-ote:
-> >
-> > It's used to work around an objtool issue since commit abb2a5572264
-> > ("LoongArch: Add cflag -fno-isolate-erroneous-paths-dereference"), but
-> > it's then passed to bindgen and cause an error because Clang does not
-> > have this option.
-> >
-> > Fixes: abb2a5572264 ("LoongArch: Add cflag -fno-isolate-erroneous-paths=
--dereference")
-> > Signed-off-by: Xi Ruoyao <xry111@xry111.site>
->
-> Seems OK -- if you are taking it through LoongArch:
->
-> Acked-by: Miguel Ojeda <ojeda@kernel.org>
-Queued, thanks.
+Hi Hans,
 
-Huacai
->
-> Thanks!
->
-> Cheers,
-> Miguel
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.18-rc1 next-20251014]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/media-i2c-ov01a10-Fix-the-horizontal-flip-control/20251015-014349
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20251014174033.20534-26-hansg%40kernel.org
+patch subject: [PATCH 25/25] media: i2c: ov01a10: Register tweaks for ov01a1s model
+config: um-randconfig-001-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151822.TJUD8C7K-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151822.TJUD8C7K-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510151822.TJUD8C7K-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/i2c/ov01a10.c:13:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/media/i2c/ov01a10.c:204:34: warning: unused variable 'ov01a10_regs' [-Wunused-const-variable]
+     204 | static const struct reg_sequence ov01a10_regs[] = {
+         |                                  ^~~~~~~~~~~~
+>> drivers/media/i2c/ov01a10.c:209:34: warning: unused variable 'ov01a1s_regs' [-Wunused-const-variable]
+     209 | static const struct reg_sequence ov01a1s_regs[] = {
+         |                                  ^~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +/ov01a10_regs +204 drivers/media/i2c/ov01a10.c
+
+   203	
+ > 204	static const struct reg_sequence ov01a10_regs[] = {
+   205		{0x3822, 0x13},
+   206		{0x4837, 0x11},
+   207	};
+   208	
+ > 209	static const struct reg_sequence ov01a1s_regs[] = {
+   210		{0x3822, 0x03},
+   211		{0x4837, 0x14},
+   212		{0x373d, 0x24},
+   213	};
+   214	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
