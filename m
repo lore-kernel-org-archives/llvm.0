@@ -1,158 +1,144 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A151724BBE4
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 03:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692172E9EDF;
+	Wed, 15 Oct 2025 04:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760499531; cv=none; b=Pg3czDU5/RTolL0HlQGjARkWT5awHBIF7B+tH0o55ELS/PpzRGfhj/g3MSkJh6qJHKwTsksnb1dcutbkigfdLT7YmRVjmANOASgTJc1szggoCWIfbWZSVJkLcespIioH14ckRouzh6mqnyr4ZydNUa8+EPdFJX1BO42pL6i670Y=
+	t=1760501841; cv=none; b=ELW2TCdH6AtdxSAAZq/RhG8lc+GwHCzl8YiyW221++xSsOWFP9mtHd0EmKtqvhGchzpuaH6dBHwWMNoEmwE6CRpdYbTDciXmdbbolqfO9VrSqM5FkLkVIkm3RHZWdxTYdbQF1i412G01+Yj/jbvVoy/6sXTRYi2LQfg09zf3lOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760499531; c=relaxed/simple;
-	bh=4wJt+gpoa406fX3ntwa3yiMH3j+kDH0t4mBuoWTLNIw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hOXOSK64/CN3hzCOFK1vK0XXZKU8Qk1uwkRLJntVtEOv4c3va7iUESsKorDwnWWuL1+LIcpM8hQJHWbMY4Noe/wcY/t63yRS9wwjL9jiiYUdKq+7GTOZQyIibCIG5IN/5ijTC2C8rTJR8DDvEhdzmJFQ4UoiyV7ndFmlWIYEsPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AEsumNgH; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1760501841; c=relaxed/simple;
+	bh=ovqQe7GOvD0OcEx7/AkCnQHKdx2amFS8fzjSEwxqnMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7aI+OWwd4MxQ0cVvExaGxgILiSrMryqKGVpNUrOO9eX8eUBzjyL+J9SPMHz4J0EzOn+LzdZgDhSMbHh6H/VfZIaHeP4a2iF7a0cH0EHTMIAAHshCZ2v2ST3q86VRTvVKJ5IJBXOOn5rxh+9YIbcguPxNElw8BHkYaEMehTALCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VqyBiZYZ; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AEsumNgH"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3f2ae6fadb4so6726925f8f.1
-        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 20:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760499528; x=1761104328; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qCkYlbRToLYdFFXJcENf2IQzzKVCQ6jcGYcB48CaRYU=;
-        b=AEsumNgHxpl/FTljEJqsrbTckcBqa+wP9hQxsUxmnn5bia/kUfr3+TDNzwcpXwoITb
-         KbkdpXNwQ7ReIe457ljwBGforPPCJNmlWAcWXpgNr9eMbG/G6B1+EP/Zp04/JkptbAe1
-         IkqqL2FFvJdbgi8l+G8kaIgznoM5nguSbsups8KZHAMEWvNxNjSNm4OeKD1X05W3ikd7
-         xBvIDX62dKWTMFh4oo8KR7jHD0I/p6rFSYp6o1kuStdb80uSTVXJk0TNTK45PmzRgVu1
-         lpsZ6SpqnM34scOBgqP7Il2Bu0pjb+GcQuG+WxZMN9OXu0bMR1jyzA3Cu5KrqgLPmrt4
-         W69g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760499528; x=1761104328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qCkYlbRToLYdFFXJcENf2IQzzKVCQ6jcGYcB48CaRYU=;
-        b=iE+o+u1bTt92fxzFfvSJHlOM8rqDJyFKqyzUYvsSjfZBr8sNSaULpqTB/7gsiAQKQY
-         TZ1PFF+GEXOBTWHlbmCg1l6jxODJq4qLn184OxDitNeqCfXeoUfybjcX4OsgDcS/ZMwV
-         YmAfgTmQy+GHAwJQ7CXEUehi/gX4lZROIwd6AXpeOODg6LvZa52fuHIraNMb0+bngl74
-         HswoYFPjxOcKQuO9mCH6BZPfi1bnSY2iDvTFpVe2at9uQSrgQPFEoNunqu7qQEjTmLIS
-         9N2TDXf4O+Sf90KdtiqeB9f/NXJLv3qah32Oepu/Pgm5VRMvLkuVje643OkUhV4lBoRq
-         3ssA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAynxacH/Wcg7n5SW3SitP9Eha8WO+edZqldqJzgNJ/R2aU4BbH539ZMVkhIaLyncZAajD@lists.linux.dev
-X-Gm-Message-State: AOJu0YxBrHlDiBsL5sHacHTlpgBUc/+ogUtHD+ImI/KXbyRdAId8cbW7
-	xi+gHma2ju8YY0TKd22T3CbCn/9OHPha7q4+x8fUnmxzXiCHZFG8VFNYT9LfIciLr4FOH8NJ0vI
-	jIsP6A4P84KmgOuKiooiXnsBwiJYSTvTbAh0UcpcD
-X-Gm-Gg: ASbGncuqcks11oiESlKvMlYRm5KDZ4y6eggdz/An2bGmrhOcw7qqJ+RIeJWu0njZ+W8
-	HptD2f2qn+OqJUS8eyaibvpqvCoQu4NfIqq6LPZfeF8E/tTh9zx3cwSBtPzg5T4sszGlhe52HFa
-	s8D0uTpDCLv0K/3o7/YoAdO3/ctTZy1zec6MZ0EdnLEDrRQvcqk3OSLNJFkWB82C93x/1oag5y0
-	gN4qUKdXOzBE/tTEkwPzM/Zis50b04d88kNNq7Q3rU=
-X-Google-Smtp-Source: AGHT+IEXqrUaXr8DHCM+aI/npfJJzTlagvjXjvafVzIGuFHFtOvaU6LGphM/lgPuvpr67IHJYligctKwRWzsmwrMOL8=
-X-Received: by 2002:a05:6000:3111:b0:425:825d:15d1 with SMTP id
- ffacd0b85a97d-4266e8db601mr19071351f8f.44.1760499527730; Tue, 14 Oct 2025
- 20:38:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VqyBiZYZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760501840; x=1792037840;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ovqQe7GOvD0OcEx7/AkCnQHKdx2amFS8fzjSEwxqnMY=;
+  b=VqyBiZYZ3HZbeBTmZRxnFNmqclPuI6Zktqhsgu0bSjt4Iz26/dPW9wDh
+   gkkVOo3EX9lGrIojwWyTlNz4y1SyRX6v8w2QPfNn6evYt3M34oQkOfIi7
+   5f1wnq1IEzpKDNPkPvvPzr6vUKCyFsYGnAVItGBBQnoJQn9JWYsq15/pl
+   nTAtxo6X2qIW79OunYNHtzXgjyqaszf6OKtqD2rU4+ZmYj8CdlpiKhgnL
+   rs5BlRV4R/7S1P06hyFiOBif2iqtp4HD0JdXf0DLUCVmh1ZhxwbUJhYfK
+   EuILFLiA72E88QSgN35gRGyncqQnsi9i3lAkmTrNt7Kl6ssBX90Rqncny
+   Q==;
+X-CSE-ConnectionGUID: YfkGzuC8TFC22uQNj7poMw==
+X-CSE-MsgGUID: 13UPm/uzTky0+JvlCMORfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="62376354"
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="62376354"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 21:17:19 -0700
+X-CSE-ConnectionGUID: lp6rFhTRQyKawdXxI3Y7wA==
+X-CSE-MsgGUID: bmvJ/X1rS+iEHMBm+SThKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="186067579"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 14 Oct 2025 21:17:15 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8swr-0003RM-11;
+	Wed, 15 Oct 2025 04:17:13 +0000
+Date: Wed, 15 Oct 2025 12:16:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Changwoo Min <changwoo@igalia.com>, lukasz.luba@arm.com,
+	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	christian.loehle@arm.com, tj@kernel.org, kernel-dev@igalia.com,
+	linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Changwoo Min <changwoo@igalia.com>
+Subject: Re: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
+Message-ID: <202510151223.THlBK6QR-lkp@intel.com>
+References: <20251014001055.772422-9-changwoo@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251014191156.3836703-1-xur@google.com> <20251014191156.3836703-5-xur@google.com>
-In-Reply-To: <20251014191156.3836703-5-xur@google.com>
-From: Han Shen <shenhan@google.com>
-Date: Tue, 14 Oct 2025 20:38:34 -0700
-X-Gm-Features: AS18NWAAoTZwilsHeALUNIPooAM-rlbEq_tGr0S8vEjTAZ0hT02nDM65-kCnNvQ
-Message-ID: <CACkGtrgWRJw2+KX_=Xww773ovYkjq-Bf4Sygo=Hgn86TM7VjLA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] kbuild: Add config to assert profile accuracy for
- aggressive optimization
-To: xur@google.com
-Cc: Alexey Gladkov <legion@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Bill Wendling <morbo@google.com>, Ingo Molnar <mingo@kernel.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <kees@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
-	Tamir Duberstein <tamird@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Yabin Cui <yabinc@google.com>, Sriraman Tallam <tmsriram@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014001055.772422-9-changwoo@igalia.com>
 
-I've verified patches 1-4, with the following configuration on X86_64 syste=
-ms:
+Hi Changwoo,
 
-1. autofdo without profile (nothinlto)
-2. autofdo with profile (nothinlto)
-3. propeller only (noautofdo no thinlto) annotated
-4. propeller only optimized (noautofdo nothinlto)
+kernel test robot noticed the following build warnings:
 
-All the kernels boot up successfully.
+[auto build test WARNING on amd-pstate/linux-next]
+[also build test WARNING on amd-pstate/bleeding-edge linus/master v6.18-rc1 next-20251014]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Han
+url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM-Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
+patch link:    https://lore.kernel.org/r/20251014001055.772422-9-changwoo%40igalia.com
+patch subject: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
+config: i386-buildonly-randconfig-004-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510151223.THlBK6QR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/power/em_netlink.c:228:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     228 |         int ret = -EMSGSIZE;
+         |             ^
+   1 warning generated.
 
 
+vim +/ret +228 kernel/power/em_netlink.c
 
-On Tue, Oct 14, 2025 at 12:12=E2=80=AFPM <xur@google.com> wrote:
->
-> From: Rong Xu <xur@google.com>
->
-> Adds a build config to AutoFDO to assert that the generated profile
-> accurately represents the intended workload. This enables Clang to
-> perform more aggressive optimizations.
->
-> Signed-off-by: Rong Xu <xur@google.com>
-> ---
->  arch/Kconfig             | 11 +++++++++++
->  scripts/Makefile.autofdo |  3 +++
->  2 files changed, 14 insertions(+)
->
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index ebe08b9186adc..6fdc676cb0fe4 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -886,6 +886,17 @@ config AUTOFDO_CLANG
->
->           If unsure, say N.
->
-> +config AUTOFDO_PROFILE_ACCURATE
-> +       bool "Assert AutoFDO profile is accurate (EXPERIMENTAL)"
-> +       depends on AUTOFDO_CLANG
-> +       help
-> +         This option asserts that the AutoFDO profile (specified
-> +         in CLANG_AUTOFDO_PROFILE) is collected from a representative
-> +         workload, allowing the Clang compiler to perform more
-> +         aggressive optimizations.
-> +
-> +         If unsure, say N.
-> +
->  config ARCH_SUPPORTS_PROPELLER_CLANG
->         bool
->
-> diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
-> index 5bcfcef273745..36abeae2accdc 100644
-> --- a/scripts/Makefile.autofdo
-> +++ b/scripts/Makefile.autofdo
-> @@ -11,6 +11,9 @@ endif
->  ifdef CLANG_AUTOFDO_PROFILE
->    CFLAGS_AUTOFDO_CLANG +=3D -fprofile-sample-use=3D$(CLANG_AUTOFDO_PROFI=
-LE) -ffunction-sections
->    CFLAGS_AUTOFDO_CLANG +=3D -fsplit-machine-functions
-> +ifdef CONFIG_AUTOFDO_PROFILE_ACCURATE
-> +  CFLAGS_AUTOFDO_CLANG +=3D -fprofile-sample-accurate
-> +endif
->  endif
->
->  ifdef CONFIG_LTO_CLANG_THIN
-> --
-> 2.51.0.788.g6d19910ace-goog
->
+   224	
+   225	void em_notify_pd_deleted(const struct em_perf_domain *pd)
+   226	{
+   227		struct sk_buff *msg;
+ > 228		int ret = -EMSGSIZE;
+   229		void *hdr;
+   230		int msg_sz;
+   231	
+   232		if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGRP_EVENT))
+   233			return;
+   234	
+   235		msg_sz = __em_notify_pd_deleted_size(pd);
+   236	
+   237		msg = genlmsg_new(msg_sz, GFP_KERNEL);
+   238		if (!msg)
+   239			return;
+   240	
+   241		hdr = genlmsg_put(msg, 0, 0, &em_nl_family, 0, EM_CMD_PD_DELETED);
+   242		if (!hdr)
+   243			goto out_free_msg;
+   244	
+   245		if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
+   246			ret = -EMSGSIZE;
+   247			goto out_free_msg;
+   248		}
+   249	
+   250		genlmsg_end(msg, hdr);
+   251	
+   252		genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, GFP_KERNEL);
+   253	
+   254		return;
+   255	
+   256	out_free_msg:
+   257		nlmsg_free(msg);
+   258		return;
+   259	}
+   260	
 
-
---
-Han Shen |  Software Engineer |  shenhan@google.com |  Sunnyvale California
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
