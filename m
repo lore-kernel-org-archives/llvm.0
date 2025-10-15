@@ -1,133 +1,126 @@
-Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B15B149C6F;
-	Wed, 15 Oct 2025 03:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.35.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD3F251793
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 03:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760498427; cv=none; b=JlyWJTXqT12U5vW4Wj88tmRZD5eaJWCCF4NuZ+KfOXlRegPHxkydvE8+KYWp3jxjseahlwG5eTcF90X8MuDszCdLNC1jIFChjxmBDqa7DKBMe2phdzdv6L+M+Y6RP8FOnkE6YgMFgTbPL6jMPoXtDw1+uAXEWmn/xF3v5l7/3eA=
+	t=1760499493; cv=none; b=ss8+Kfe8qll0BL9ZcqT9zgTzQ+8iKjqnUwOmpyYEvICPJ2tBk/ER5p/FR6IJxuqQC8vo3vQxleYf9AugtlZwFjAqBTlWX4YctPQIOtDOU9phOVNFC18qBtb9svodHVXThM65TJbtZjrjWi3y3cmlhFwq1zR/1Xz2DPmS+XQjp0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760498427; c=relaxed/simple;
-	bh=fFWtcqbYqwSuAfaIbZBKUxXweqQB3D5s5ZgdU0zniP0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YBusmoQs1W1pELNQC5H18JS4WOtunu9J0dK45XRhCa6xMicNgt6ND8D8DK5//RhsTaQW23dbIEziWhCmxpDRtmef0uVygDlN92B0uh4ZD3qoG7ISZVtF+XyfOT49DOHznq/D16jHOLB31zwvr9/MFu9yjz/TXeFakMQRRcs4mbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=qWqRPe6t; arc=none smtp.client-ip=51.81.35.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
+	s=arc-20240116; t=1760499493; c=relaxed/simple;
+	bh=pEonomj0fLSNJmTz+pI0qR2KMrsnM0wkX9R9oldfo04=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQhJQY9RM2Viawe9IorLMx1XVYJV02vzE1s04P/oel+2D1837H1pQa1LXbSQZ+p+NJbM734KNi9rBtNu+BRbTaSavdmAAACAW4LJ+It6s9WJeDgzywOwuOBxvte8AhyElhUqhx+ls1z8sq+PfmojO3ZjDS4X0IzMVcZDnzdAoJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=c6R36xCe; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="qWqRPe6t"
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-	by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 9E6D22248D;
-	Wed, 15 Oct 2025 03:20:24 +0000 (UTC)
-Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.66.162])
-	by relay5.mymailcheap.com (Postfix) with ESMTPS id 3B97326369;
-	Wed, 15 Oct 2025 03:20:16 +0000 (UTC)
-Received: from nf2.mymailcheap.com (nf2.mymailcheap.com [54.39.180.165])
-	by relay2.mymailcheap.com (Postfix) with ESMTPS id 932D03E88F;
-	Wed, 15 Oct 2025 03:20:08 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-	by nf2.mymailcheap.com (Postfix) with ESMTPSA id 3EFE740099;
-	Wed, 15 Oct 2025 03:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-	t=1760498406; bh=fFWtcqbYqwSuAfaIbZBKUxXweqQB3D5s5ZgdU0zniP0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qWqRPe6tMkyVt24L4TQxEokd9xxbIlS5nPQZHmqN93YdMm9uG4Vyi2MOpEzAAC5fU
-	 yms65895aXhnWBAYzlOyX4+QA5sNOUa+RQ/LRLgLIQuCS7z85svNozjlpvdOT/++T1
-	 edWLKoXTE5kAyCqm105Hi4a6rBlFhUWANv7W4VcY=
-Received: from [198.18.0.1] (unknown [223.76.243.206])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 40A7440D62;
-	Wed, 15 Oct 2025 03:20:00 +0000 (UTC)
-Message-ID: <7ead454c-8807-4e50-800c-5a646d88fa25@aosc.io>
-Date: Wed, 15 Oct 2025 11:19:52 +0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="c6R36xCe"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59EHlvuK021187;
+	Wed, 15 Oct 2025 03:38:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=JhcohmxMF8CEt4uB5tXm35fRtqDNhH
+	zChbRDG+yKgEA=; b=c6R36xCelyC067BnkUlWO9WUPasN1rRpy0/oXe6OWcShL1
+	7BeHYsikJWfmwSL8AxKl+kkZB0HNO+CoPGOOcLaSFpKIcN2EdCMmY47xhgRCZa7i
+	9bcvRfZWvVMRtKFWnybI78tLiAnuk2R4eLc4F+t0JtWWlkPwhRKX021w2HYpKunC
+	fFGaiJFWtAWRjHLIDZYjrgaen0awSYPJMP6rIlMERyq/Uv0O8zvlSIxl1Hy2Vn7f
+	pzivfhgqNXJsgarfmBTa1WZ4MxP2U37EM9QP5My8OUudr85ZZpdJcGwYa96yfYFB
+	ogV08GNV0fW7Z1QCIRW8RrvAFBz7pT7WHcmMeKgQ==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49qey8t8j4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Oct 2025 03:38:04 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59EN1jDU018372;
+	Wed, 15 Oct 2025 03:38:03 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 49s3rf7vqs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Oct 2025 03:38:03 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59F3c1p553281032
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 15 Oct 2025 03:38:01 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8BC7B200EB;
+	Wed, 15 Oct 2025 03:38:01 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 82CF3200EE;
+	Wed, 15 Oct 2025 03:37:58 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.39.24.169])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 15 Oct 2025 03:37:58 +0000 (GMT)
+Date: Wed, 15 Oct 2025 09:07:54 +0530
+From: Vishal Chourasia <vishalc@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, maddy@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] arch/powerpc: Remove .interp section in vmlinux
+Message-ID: <aO8XEhMdT19UOPlp@linux.ibm.com>
+References: <eeaf8fd6628a75d19872ab31cf7e7179e2baef5e.1751366959.git.christophe.leroy@csgroup.eu>
+ <20251013040148.560439-1-vishalc@linux.ibm.com>
+ <2b4a3215-1620-40c9-a00c-ca833ebbb7b6@csgroup.eu>
+ <aOypxKMzsLR5tAtv@linux.ibm.com>
+ <20251015002154.GA2300901@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rust: Add -fno-isolate-erroneous-paths-dereference to
- bindgen_skip_c_flags
-To: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>
-Cc: loongarch@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Huacai Chen <chenhuacai@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- "open list:RUST" <rust-for-linux@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
- <llvm@lists.linux.dev>
-References: <20251015022037.14535-2-xry111@xry111.site>
-Content-Language: en-US
-From: Mingcong Bai <jeffbai@aosc.io>
-In-Reply-To: <20251015022037.14535-2-xry111@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 3EFE740099
-X-Rspamd-Server: nf2.mymailcheap.com
-X-Spamd-Result: default: False [1.40 / 10.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_ONE(0.00)[1];
-	ASN(0.00)[asn:16276, ipnet:51.83.0.0/16, country:FR];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[lkml];
-	MID_RHS_MATCH_FROM(0.00)[];
-	SPFBL_URIBL_EMAIL_FAIL(0.00)[jeffbai.aosc.io:server fail,xry111.xry111.site:server fail];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,protonmail.com];
-	FREEMAIL_CC(0.00)[lists.linux.dev,kernel.org,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,loongson.cn,vger.kernel.org];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Action: no action
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015002154.GA2300901@ax162>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UlRR5dnw_0Bhrnv_jkvBzNgkZQJE8_KD
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxMSBTYWx0ZWRfXz5JUHGeoVQns
+ a+L09qm1y4zdDG2vGYL7SyGLxbGVhGyTnzE4zf2jYGQCkbIghhj1FxHEdkxiGdoEgIrsSeYyics
+ Yg3ClyE/ZP5nGgpoUKMIKH/JDE2Z0E/MeGQzlYUclF3JkW+i/BvyazUHeTFOvxC98W6pHE8YUmw
+ vZInIZtSVhAyEcQAOIuWsojg7R2Ig1XnF6plPv1Ae9NpmitrBQIIDnS1XddLGew9Y6bK13zE+8n
+ gNN0An5e+8YPvd4dSnhM6jt4K9IgHzy+7Pg/o89Hxqs3ko7oolzKu5Na+309G47MXaR1nXmWBCI
+ YWwh1B5P4wN5nTunzmHTU05kmvIwvLBRvspvhLsPVEe/lNNvN9+y1Imt8q0BEY1ulVy6E8lRs/W
+ di3FzZ2WsUisYWIuuY6xgVPu3zuv9w==
+X-Proofpoint-GUID: UlRR5dnw_0Bhrnv_jkvBzNgkZQJE8_KD
+X-Authority-Analysis: v=2.4 cv=QZ5rf8bv c=1 sm=1 tr=0 ts=68ef171c cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=kj9zAlcOel0A:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NEAV23lmAAAA:8 a=nk_3v9Mxg0vDHs7q2dAA:9 a=CjuIK1q_8ugA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-15_01,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0
+ spamscore=0 malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510110011
 
-Hi Ruoyao,
+Hello Nathan,
 
-在 2025/10/15 10:20, Xi Ruoyao 写道:
-> It's used to work around an objtool issue since commit abb2a5572264
-> ("LoongArch: Add cflag -fno-isolate-erroneous-paths-dereference"), but
-> it's then passed to bindgen and cause an error because Clang does not
-> have this option.
-> 
-> Fixes: abb2a5572264 ("LoongArch: Add cflag -fno-isolate-erroneous-paths-dereference")
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
-> ---
->   rust/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 23c7ae905bd2..0676b1194a62 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -289,7 +289,7 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
->   	-fno-inline-functions-called-once -fsanitize=bounds-strict \
->   	-fstrict-flex-arrays=% -fmin-function-alignment=% \
->   	-fzero-init-padding-bits=% -mno-fdpic \
-> -	--param=% --param asan-%
-> +	--param=% --param asan-% -fno-isolate-erroneous-paths-dereference
->   
->   # Derived from `scripts/Makefile.clang`.
->   BINDGEN_TARGET_x86	:= x86_64-linux-gnu
+On Tue, Oct 14, 2025 at 05:21:54PM -0700, Nathan Chancellor wrote:
+> In this bug report, you mention using LLVM=1. Does the issue happen if
+> you use GNU ld (ld.bfd) via LD (i.e., LD=powerpc64le-linux-gnu-ld or
+> equivalent) over ld.lld from LLVM=1? This sounds more likely to be a
+> linker difference rather than a compiler difference.
 
-Tested good applied atop v6.18-rc1, which includes the aforementioned 
-abb2a5572264.
+Thank you for the insight.
 
-Tested-by: Mingcong Bai <jeffbai@aosc.io>
+Yes, when using powerpc64le-linux-gnu-ld linker .interp section is not
+emitted.
 
-Best Regards,
-Mingcong Bai
+Command:
+$ make LLVM=1 ARCH=powerpc LD=powerpc64le-linux-gnu-ld -j 8 zImage
+$ llvm-readelf -p .comment vmlinux
 
+String dump of section '.comment':
+[     0] clang version 22.0.0git (https://github.com/llvm/llvm-project.git 7314565281ec28b745502c3f429fd431e16673eb)
+
+$ llvm-readelf -p .interp vmlinux                                                                                    
+llvm-readelf: warning: 'vmlinux': could not find section '.interp'
+
+
+vishalc
