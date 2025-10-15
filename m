@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227F02D061B;
-	Wed, 15 Oct 2025 20:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6681F2F90C4;
+	Wed, 15 Oct 2025 21:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760561934; cv=none; b=qyEbn3ohezw5VrrLcefetUtdzyELBWUByWbjjNh4/wHPtCwYAiFZYGLSLmG9Tt8oijUuMBYMXOATGo0uSqhja2JbAVOAM0xafRkkSZHbweA5VJtXP5k5NSnAlJkrxSLD/3oVc7Q9Q9trAVQMmhxKfppEgOgKY5ysOqFWSai0sdU=
+	t=1760563793; cv=none; b=nxhJJBUmzJUMF3AoiAUMA53UqowfAZxbv7bADqfYUygDXFkv+ljjona+KmZN9OrFjNifFwROA0/zFpsvWHTBm3TAnq/2+q4WLZHpFOR8zGxGqPXesTn34mLtKGo8MImXVeyaNQW+yiuWI8nrEFe31MGCLuQjexmFFbz4uyfH1Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760561934; c=relaxed/simple;
-	bh=j7tLpJkQ2403J44PFm0M0xioWFYXeloLWMOvyjHAZ9w=;
+	s=arc-20240116; t=1760563793; c=relaxed/simple;
+	bh=Nkmo1RoC9dEgwJBIlTnvRz7B3zyertWUN6+Wcb6BTRw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bpM5UlKxMl9Q11aJtySKNyrvhbPKa48+giLbwGcyu3oh4nhH/MF9CrugQ+iheCGqurrhXaUVajvv8detR9n5HN7tTAE/IiOrTNSwdt3+1Yoc7cucNAD3U4y6+cK1gSmi+X6/I5P/42MolsbDKYkKXsnGBoUFZ62hfq24Mz5kjcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lf7tXXL4; arc=none smtp.client-ip=192.198.163.11
+	 Content-Disposition; b=XxRgG5nccjE50yvfieSa8akF41QRjK1gWUIeLWu5AD4Li9VhwttW+czFVdnTS14Q/RcS1j85i1sKqIEzW190gc6vlKJej1UEYuECDE6+8K6RFlM+no6hiHcjYRHbViqFEKJGLYgQUxhRriokk9GdfBQLgIySzJNkXwLxfEvlgVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EMb6AeVK; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lf7tXXL4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EMb6AeVK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760561932; x=1792097932;
+  t=1760563792; x=1792099792;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j7tLpJkQ2403J44PFm0M0xioWFYXeloLWMOvyjHAZ9w=;
-  b=Lf7tXXL4mH496A1UirgnVMp7s3dyHbM5HVwFxOkfnrsCjW4J1WHFDFQG
-   yi5YJgXgMG5/p/r9ArcU6G7MLxe7q5T3mTKKcpMsBlEMM58KyoD5gTX1h
-   HymdmBr+Hf72EUtXaBTFZ+f9H8c3J14QllBZM6d/j1UDljinXESkYwT0D
-   S0hM/DUQbzsqLhQTwK6HSYhoyHY3YihgOHaDS3mXJ90KoOLkpDFRC46IB
-   lwckRuwaiN8IlZME7ft5W1OgEpmlHk3YidxWXq7K1yjB6Df28uBh1R7J1
-   KMMdUp+CljAVUHGpWNuKQgtp7BShnrEyeLYs0YseBzDw8n0dr1l1LDHB+
+  bh=Nkmo1RoC9dEgwJBIlTnvRz7B3zyertWUN6+Wcb6BTRw=;
+  b=EMb6AeVKjks/loygfTpk+BQ3zk0EthSnqV9//sg4cpl0Z7sAcJ+K4TuE
+   E8SwURHGqBgHZGZJVnWxV5O68szW8Z7sMIt8D1jOGLAZ0MP8tCH2llgrJ
+   Q8JEf4x59RjNdXjGMORtqKx1n3I+7rvr8O60L4DXCh1xPKzwZxVf6syOv
+   p2wW6rwbNuvO8lEhXl91ILhcLtjZBzNTwiaOtnXaw1FeYUxi/ciHZ8PW3
+   reUFdrRa4RK+m/6tq0FkvrPIm7SCoXpFtVos94+PWvjF+EFYJewRjmZii
+   lYMh03euI/BtConluhE9b1hCbhmx324qmlszfe3IEIFpJxNRvPEPwdQrl
    g==;
-X-CSE-ConnectionGUID: 7ZRDDMV+SVu+aXltm8ml1w==
-X-CSE-MsgGUID: HzxsMn41T8mfYKsMDTK3TA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="73348569"
+X-CSE-ConnectionGUID: OIRg7AxzSOe8oTtrYhTyyQ==
+X-CSE-MsgGUID: /e53bVNgQ0OorF+mmc8xhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="80190417"
 X-IronPort-AV: E=Sophos;i="6.19,232,1754982000"; 
-   d="scan'208";a="73348569"
+   d="scan'208";a="80190417"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 13:58:51 -0700
-X-CSE-ConnectionGUID: ERi2th30SZOnxLhMJ8rSUg==
-X-CSE-MsgGUID: 0mg+24sRSNKXvPQCVKwVYQ==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 14:29:51 -0700
+X-CSE-ConnectionGUID: dSsrKI4DT9i3XqTB4IMMEA==
+X-CSE-MsgGUID: 3CgWN4CZQqyC0oB5lymRLw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,232,1754982000"; 
-   d="scan'208";a="182260199"
+   d="scan'208";a="182267178"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 15 Oct 2025 13:58:49 -0700
+  by orviesa008.jf.intel.com with ESMTP; 15 Oct 2025 14:29:49 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v98a6-0004Dz-1u;
-	Wed, 15 Oct 2025 20:58:46 +0000
-Date: Thu, 16 Oct 2025 04:57:58 +0800
+	id 1v9947-0004F9-0v;
+	Wed, 15 Oct 2025 21:29:47 +0000
+Date: Thu, 16 Oct 2025 05:29:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>
+To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jeff Kirsher <jeff.kirsher@gmail.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [jkirsher-net-queue:master 4/4]
- arch/arm64/net/bpf_jit_comp.c:2258:6: warning: no previous prototype for
- function 'bpf_jit_supports_private_stack'
-Message-ID: <202510160449.pcIYMJSz-lkp@intel.com>
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:master /575] fs/bcachefs/sb/io.c:238:23: error: call to
+ undeclared function 'bio_inline_vecs'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202510160526.gaQGq4Nb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,51 +64,118 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jkirsher/net-queue.git master
-head:   c9a8544415241209a476e56cc98a09ab074e29a8
-commit: c9a8544415241209a476e56cc98a09ab074e29a8 [4/4] bpf: Add support for certain atomics in bpf_arena to x86 JIT
-config: arm64-randconfig-004-20251016 (https://download.01.org/0day-ci/archive/20251016/202510160449.pcIYMJSz-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510160449.pcIYMJSz-lkp@intel.com/reproduce)
+tree:   https://evilpiepirate.org/git/bcachefs.git master
+head:   bb35ade3e8bb7af67734b746f416598002822df8
+commit: caffe5f36f39ef62d58383b77dfdce931104f8c2 [/575] bcachefs: Compatibility with v6.18
+config: x86_64-buildonly-randconfig-001-20251016 (https://download.01.org/0day-ci/archive/20251016/202510160526.gaQGq4Nb-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510160526.gaQGq4Nb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510160449.pcIYMJSz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510160526.gaQGq4Nb-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the bcachefs/master HEAD bb35ade3e8bb7af67734b746f416598002822df8 builds fine.
+      It only hurts bisectability.
 
->> arch/arm64/net/bpf_jit_comp.c:2258:6: warning: no previous prototype for function 'bpf_jit_supports_private_stack' [-Wmissing-prototypes]
-    2258 | bool bpf_jit_supports_private_stack(void)
-         |      ^
-   arch/arm64/net/bpf_jit_comp.c:2258:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2258 | bool bpf_jit_supports_private_stack(void)
-         | ^
-         | static 
->> arch/arm64/net/bpf_jit_comp.c:3096:6: warning: no previous prototype for function 'bpf_jit_supports_timed_may_goto' [-Wmissing-prototypes]
-    3096 | bool bpf_jit_supports_timed_may_goto(void)
-         |      ^
-   arch/arm64/net/bpf_jit_comp.c:3096:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3096 | bool bpf_jit_supports_timed_may_goto(void)
-         | ^
-         | static 
-   2 warnings generated.
+All errors (new ones prefixed by >>):
+
+>> fs/bcachefs/sb/io.c:238:23: error: call to undeclared function 'bio_inline_vecs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     238 |                 bio_init(bio, NULL, bio_inline_vecs(bio), nr_bvecs, 0);
+         |                                     ^
+>> fs/bcachefs/sb/io.c:238:23: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct bio_vec *' [-Wint-conversion]
+     238 |                 bio_init(bio, NULL, bio_inline_vecs(bio), nr_bvecs, 0);
+         |                                     ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bio.h:406:75: note: passing argument to parameter 'table' here
+     406 | void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+         |                                                                           ^
+   2 errors generated.
+--
+>> fs/bcachefs/journal/read.c:1083:36: error: call to undeclared function 'bio_inline_vecs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1083 |                         bio_init(bio, ca->disk_sb.bdev, bio_inline_vecs(bio), nr_bvecs, REQ_OP_READ);
+         |                                                         ^
+>> fs/bcachefs/journal/read.c:1083:36: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct bio_vec *' [-Wint-conversion]
+    1083 |                         bio_init(bio, ca->disk_sb.bdev, bio_inline_vecs(bio), nr_bvecs, REQ_OP_READ);
+         |                                                         ^~~~~~~~~~~~~~~~~~~~
+   include/linux/bio.h:406:75: note: passing argument to parameter 'table' here
+     406 | void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+         |                                                                           ^
+   2 errors generated.
+--
+>> fs/bcachefs/journal/init.c:543:36: error: call to undeclared function 'bio_inline_vecs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     543 |                 bio_init(&ja->bio[i]->bio, NULL, bio_inline_vecs(&ja->bio[i]->bio), nr_bvecs, 0);
+         |                                                  ^
+>> fs/bcachefs/journal/init.c:543:36: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct bio_vec *' [-Wint-conversion]
+     543 |                 bio_init(&ja->bio[i]->bio, NULL, bio_inline_vecs(&ja->bio[i]->bio), nr_bvecs, 0);
+         |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bio.h:406:75: note: passing argument to parameter 'table' here
+     406 | void bio_init(struct bio *bio, struct block_device *bdev, struct bio_vec *table,
+         |                                                                           ^
+   2 errors generated.
 
 
-vim +/bpf_jit_supports_private_stack +2258 arch/arm64/net/bpf_jit_comp.c
+vim +/bio_inline_vecs +238 fs/bcachefs/sb/io.c
 
-91fc957c9b1d6c5 Ard Biesheuvel 2018-11-23  2257  
-6c17a882d3804dc Puranjay Mohan 2025-07-24 @2258  bool bpf_jit_supports_private_stack(void)
-6c17a882d3804dc Puranjay Mohan 2025-07-24  2259  {
-6c17a882d3804dc Puranjay Mohan 2025-07-24  2260  	return true;
-6c17a882d3804dc Puranjay Mohan 2025-07-24  2261  }
-6c17a882d3804dc Puranjay Mohan 2025-07-24  2262  
-
-:::::: The code at line 2258 was first introduced by commit
-:::::: 6c17a882d3804dce1c66e1fec25f96d39a184067 bpf, arm64: JIT support for private stack
-
-:::::: TO: Puranjay Mohan <puranjay@kernel.org>
-:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
+   190	
+   191	int bch2_sb_realloc(struct bch_sb_handle *sb, unsigned u64s)
+   192	{
+   193		size_t new_bytes = __vstruct_bytes(struct bch_sb, u64s);
+   194		size_t new_buffer_size;
+   195		struct bch_sb *new_sb;
+   196		struct bio *bio;
+   197	
+   198		if (sb->bdev)
+   199			new_bytes = max_t(size_t, new_bytes, bdev_logical_block_size(sb->bdev));
+   200	
+   201		new_buffer_size = roundup_pow_of_two(new_bytes);
+   202	
+   203		if (sb->sb && sb->buffer_size >= new_buffer_size)
+   204			return 0;
+   205	
+   206		if (sb->sb && sb->have_layout) {
+   207			u64 max_bytes = 512 << sb->sb->layout.sb_max_size_bits;
+   208	
+   209			if (new_bytes > max_bytes) {
+   210				CLASS(printbuf, buf)();
+   211	
+   212				prt_bdevname(&buf, sb->bdev);
+   213				prt_printf(&buf, ": superblock too big: want %zu but have %llu", new_bytes, max_bytes);
+   214				pr_err("%s", buf.buf);
+   215				return -BCH_ERR_ENOSPC_sb;
+   216			}
+   217		}
+   218	
+   219		if (sb->buffer_size >= new_buffer_size && sb->sb)
+   220			return 0;
+   221	
+   222		if (dynamic_fault("bcachefs:add:super_realloc"))
+   223			return -BCH_ERR_ENOMEM_sb_realloc_injected;
+   224	
+   225		new_sb = krealloc(sb->sb, new_buffer_size, GFP_NOFS|__GFP_ZERO);
+   226		if (!new_sb)
+   227			return -BCH_ERR_ENOMEM_sb_buf_realloc;
+   228	
+   229		sb->sb = new_sb;
+   230	
+   231		if (sb->have_bio) {
+   232			unsigned nr_bvecs = buf_pages(sb->sb, new_buffer_size);
+   233	
+   234			bio = bio_kmalloc(nr_bvecs, GFP_KERNEL);
+   235			if (!bio)
+   236				return -BCH_ERR_ENOMEM_sb_bio_realloc;
+   237	
+ > 238			bio_init(bio, NULL, bio_inline_vecs(bio), nr_bvecs, 0);
+   239	
+   240			kfree(sb->bio);
+   241			sb->bio = bio;
+   242		}
+   243	
+   244		sb->buffer_size = new_buffer_size;
+   245	
+   246		return 0;
+   247	}
+   248	
 
 -- 
 0-DAY CI Kernel Test Service
