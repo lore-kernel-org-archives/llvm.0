@@ -1,86 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F33B2046BA;
-	Wed, 15 Oct 2025 15:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA2D33A027;
+	Wed, 15 Oct 2025 16:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760540702; cv=none; b=QCOr22Dt9Gu8fyC2a+Vop28Ik5KmbWKnj21A1Al691Gi+2L0qZhBTZGSOR6K99Qv/RPovZueVPJfI/JpwyU922xANs+MC0BFBc2DLguLR8gJh1RT3HRM9deh6bmvCsXSkRELo1LFYREf/8aR/BOHTIRh+BJJEXeRL1NcZmA60fg=
+	t=1760547035; cv=none; b=LV6yDcDh6trazWKMSsrGBm0JA7xoeg4fkUcDbHUg768gdNBI6UR8IyDbew93gXeWeg5wVw7gEXi3Lynd0wIsTilv/5V9gjbUE74WjfghmSnm/O9v2n1fBaVi9wz30AzNUkgLhEDmMjQrOys11XmPxbf25Ak7l6G9EvstBAS3PVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760540702; c=relaxed/simple;
-	bh=Wdbu91UHG7NXXe6k08cBk3T/+pvUqlyl9VvW3phwgNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZcUN7JG+uA06W536WkbobNGVp6FD9q4dMVetKp+WFbc4Sju1Uk++AadgP5iCrr9JjpmofIakMi3sg4cP1hkHAG130FfveH710CmflnkfzVlZQFB+isHGvml5CxgRMHNCMVSkABCsEYxBVyFBdueHgnYBHVq/huvIQRAM2QvOXTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYGsImU3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760547035; c=relaxed/simple;
+	bh=nvQqfRcL8pdS2FlTrtIHWykQKgr4h1ePS5qdoIB8BKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bobZO6nqeTwzfaqnjjpiZ7GboVzFi42k0JS0o3/sUWY2aM4en/sEp8yYTXkGVRLG/Tqr1SZnoV6WAb+f2a02qOD+jAANwhbWF5R72N5ctYBJOozoc5fNjAghmppSVv/UtTgpVEJDDuKqiseMR9h18cgfq0v/NjrDyJs0ltJyK3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRXFDcyh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYGsImU3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842CFC4CEF8;
-	Wed, 15 Oct 2025 15:05:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRXFDcyh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF4FC4CEF8;
+	Wed, 15 Oct 2025 16:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760540701;
-	bh=Wdbu91UHG7NXXe6k08cBk3T/+pvUqlyl9VvW3phwgNc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aYGsImU3Per5JLsRWKEDgSU53GVias3oxkv3lcMOJyTF2/c5lzyw2mtJxaYSCavuH
-	 wbaCEkmbUtHKcgzV8+Rd9HkAU542mDJJNLVv7ZLIwh7hHX65uxF02j6/qf+HBCWCr5
-	 a3SDnYLcIaJLj3CG8shPVh1uDD9PGHxB0uwfo6dsz01FKRPCdWlYOJ5Fr2Ur+oEy8m
-	 HzxrY4ov7Z1kbMBdW2sPJBcEDJVajDnhRpxhR69uKn2pllOAh6ktBWAQvIYb8QmygG
-	 i9hUEjmhdzalFSGO5bNoADPFDFBTlJjew3xdACovDj0EokV3my/h3MUgQn0EZN/yiO
-	 mzmbfLOBm1LVw==
-Date: Wed, 15 Oct 2025 08:04:59 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?0K/QvdCwINCR0LDRiNC70YvQutC+0LLQsA==?= <yana2bsh@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-riscv@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- lvc-project@linuxtesting.org
-Subject: Re: [PATCH 6.1 00/15] genetlink: Test Netlink subsystem of Linux
- v6.1
-Message-ID: <20251015080459.6e681582@kernel.org>
-In-Reply-To: <CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
-References: <20250912195339.20635-1-yana2bsh@gmail.com>
-	<20250912131722.74658ec0@kernel.org>
-	<CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
+	s=k20201202; t=1760547035;
+	bh=nvQqfRcL8pdS2FlTrtIHWykQKgr4h1ePS5qdoIB8BKY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sRXFDcyhMdvYZG8WoV7wCp4CXdcPAvLUZkf+8gO1Yv9kvxN07ngfHSyaKSYM32Atu
+	 8lZbhK8bUVzKVobBXF/qLqFQvgGGLuat8YRsfDja0c8qGC3eK/PINuOEm2esFOPxJb
+	 sWQP/YFM+4B8J1t8ae1kVm8NLOtHgHy1QmDTX9nRCuz+ZR0Ic6la1L2kYEVIcI39fp
+	 tktnkHxlzue64vwOtVg+TAJZzi8Efdnym+WYEQeb1UVKJTlEUV+HTsmgsdUGRBqi2V
+	 QeZzTWjauIBUsxht3vTUVu/37d8ISaMqk7AMi7RqQt9muJC6qeEoNocdcHm4xmSFxA
+	 eOv/18V/+Ku2w==
+Date: Wed, 15 Oct 2025 09:50:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: clang 15 build error
+Message-ID: <20251015165031.GA1465138@ax162>
+References: <20251015143312.GBaO-wqLdOtyEQkd1U@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015143312.GBaO-wqLdOtyEQkd1U@fat_crate.local>
 
-On Wed, 15 Oct 2025 17:49:22 +0300 =D0=AF=D0=BD=D0=B0 =D0=91=D0=B0=D1=88=D0=
-=BB=D1=8B=D0=BA=D0=BE=D0=B2=D0=B0 wrote:
-> The motivation for this work is to improve the test coverage and
-> reliability of the Netlink subsystem, specifically for the core
-> af_netlink.c and genetlink.c components. While the subsystem is
-> critical for kernel-userspace communication, its coverage by the
-> existing selftests is quite limited.
->=20
-> To quantify the improvement, these new selftests achieve the following
-> line coverage (as measured by gcov):
-> - net/netlink/af_netlink.c: 84.0%
-> - net/netlink/genetlink.c: 88.8%
+Hey Boris,
 
-For what it's worth syzbot has:
+On Wed, Oct 15, 2025 at 04:33:12PM +0200, Borislav Petkov wrote:
+> before I go dig into this, any ideas? The likelyhood that you know what the
+> issue is, is high: :-P
+> 
+> That's 32-bit allnoconfig of latest Linus master with Ubuntu clang version
+> 15.0.7:
+> 
+> mm/maccess.c:41:3: error: invalid output size for constraint '=a'
+>                 copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
+>                 ^
+> mm/maccess.c:22:3: note: expanded from macro 'copy_from_kernel_nofault_loop'
+>                 __get_kernel_nofault(dst, src, type, err_label);        \
+>                 ^
+> ./arch/x86/include/asm/uaccess.h:629:18: note: expanded from macro '__get_kernel_nofault'
+>         __get_user_size(*((type *)(dst)), (__force type __user *)(src), \
+>                         ^
+> mm/maccess.c:41:3: error: invalid output size for constraint '=a'
+> mm/maccess.c:22:3: note: expanded from macro 'copy_from_kernel_nofault_loop'
+>                 __get_kernel_nofault(dst, src, type, err_label);        \
+>                 ^
+> ./arch/x86/include/asm/uaccess.h:629:18: note: expanded from macro '__get_kernel_nofault'
+>         __get_user_size(*((type *)(dst)), (__force type __user *)(src), \
+>                         ^
+> 2 errors generated.
 
-    af_netlink.c  91%
-    genetlink.c   68%
+Heh, I am aware of it but I have not had a chance to actually dig into
+see what is going wrong here :/
 
-Without a line of code added to the kernel. Of course it's not
-functional testing.
+https://github.com/ClangBuiltLinux/linux/issues/2121
 
-> Integrating these tests into the upstream suite will provide long-term
-> stability and make it safer to refactor or add new features to the
-> Netlink core in the future.
+I guess that LLVM is unhappy about a 64-bit variable being passed into
+the constraint for eax on 32-bit?
 
-Happy to hear from others if they disagree but what kernel tests get
-merged into the tree is pretty subjective. Do we have a lot of bugs=20
-in genetlink? Are you planning to do major development in this area
-and want to catch regressions? If the answers to both of those questions
-is "no" IMHO this 7kLoC is not worth carrying in the tree.
+https://github.com/llvm/llvm-project/blob/ce60a03573a4d9f28dd6de42f61f0a3c4b0f2be9/clang/test/CodeGen/X86/x86_32-inline-asm.c#L50
+https://github.com/llvm/llvm-project/commit/974131ea8825041673a8c8dda7c42f9a9376eb17
+
+Cheers,
+Nathan
