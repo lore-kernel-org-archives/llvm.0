@@ -1,95 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBFD3254AC;
-	Wed, 15 Oct 2025 18:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38AF1325496;
+	Wed, 15 Oct 2025 18:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760552879; cv=none; b=Ft9Vol1uZStV4pl/+nMpONdQhBHtsyyIVHsaTvEbZTnZPpKWarCUTMT5DcaoY8UYQCZWJeyew/iFxSJDGsDkzZHcabL6ZUS42tACSYzx/6Kf7+PyVTe/DpNhyjthwRd995v47njjwxlEPGLnuFt4pecOmRB53CP1Vp/oXzaqGmM=
+	t=1760553814; cv=none; b=kVHZcfrNcUR6gClrtPDiCUgj9OBAnDvo7XLMpv2DapmLOxVe3N1wzLVR18KXoZYt4v4QZiMdIrU+spO9ZRbwIC66qvR3OVpfbGsOG4kXxqI3lRM9exGGkirleuhZjf1cNp/ADE+l/0GDVJ+gnrXxIVF0tha6P3gJA/3raHJa8TE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760552879; c=relaxed/simple;
-	bh=rySxjUJGg5L0aeZfKHHZ0liCV/P4tKXtl04chJYFmac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oPiaXku/8pxKIv28Zjxng0W27k2xDLG7LYnRiVXwQL6eRp7afX/BTv/NSNbBX4wRAYIAuX9mXB/OGC/F1yOO5PL/vVMVDiyErr4WpJ3jYScvvrcQ/o6tOqtGRtbKYpremHrGyvjFP/wWyj4V2qriG5Akez+DieLLbBBceg5xOw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tvsXYo3t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760553814; c=relaxed/simple;
+	bh=SaNi7inb5n1alCq1NeyBjCg+fDtGlGrmovk6Zw2Bbgk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rjGD5G3pGZRKlV26PdeMoaRCR9FXiYxQPQbm/ck57znG9hNn6qj4MDJ/TGuIjyVhl83BXLVNj+n5XEnsfp2oW1obCS9/vSz8k3i18xflo05aDY9rMPoFsDUFxW0TBVMIZSXIZPZ4jjHspGHvsIBvvQ34tPIRjQS/E7y6Mbmnyfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tIxdogEm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tvsXYo3t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D958C4CEF8;
-	Wed, 15 Oct 2025 18:27:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tIxdogEm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BDDC4CEFB;
+	Wed, 15 Oct 2025 18:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760552878;
-	bh=rySxjUJGg5L0aeZfKHHZ0liCV/P4tKXtl04chJYFmac=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tvsXYo3tNsSSd1Bz9TDhzLY1SF60Zj/zoVNkVcI9gooMMrugG/vEvL3ZQmZVTEddb
-	 nphzg6XcABe8gl9eMhGNC9/aJsyz/wBDpNJC4SO8A0glFGnAv2L7JiZjy/Ov/6xHZW
-	 3dJj5m5opzwG6VWnATLPfb1MiUBPb3rK2LDLMJtNeGqPj8JwvuMiw1Bipx7KdVgnCT
-	 1meUG04vCBWam7Q+YQwf5nBrmvoBDhqvUyz1I1cPVqRwo4hodMQqTj3AEfpFqiBFfn
-	 /Qk6cX7PKw1xUqzQPEVJaAYtMFkPlKvrENokbCFdql3cXXcBT7z8hn2RtAarg90WOZ
-	 19Efg6D7mTxyg==
-Date: Wed, 15 Oct 2025 11:27:54 -0700
+	s=k20201202; t=1760553812;
+	bh=SaNi7inb5n1alCq1NeyBjCg+fDtGlGrmovk6Zw2Bbgk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=tIxdogEmn8lLwpjIFacTtw8t8i3wvzHYqefvtog8fBWpvop00Y5VXl9rKpcT1+cxH
+	 83TNP0YQlY4RcU32+dgDYr7tHizugc0CJA4kmb78ZD5F+mV2sNjJwjrCQz1YPBYRRc
+	 OYQq9Nsm8Wbj0Lgn0I2bgbNkmDFc96hApO9RM5SHNdwc12iuIfwoHSlBOJYouIcyAw
+	 xm7fFAh92bN0FZoQ/qis+i9E3rlfL0QHgjxehB8tY61yC+nbLef9ofqLZQmlbmQCtA
+	 qq21AvV0f0arIWcxsTW5ZU56OaQlAOiMxdWx3BVwneEalwJeTuLNpqBH+UQQBMMBLE
+	 3fZ4iL9t0S9iQ==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Vishal Chourasia <vishalc@linux.ibm.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, maddy@linux.ibm.com,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	clang-built-linux@googlegroups.com,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] arch/powerpc: Remove .interp section in vmlinux
-Message-ID: <20251015182754.GA1055324@ax162>
-References: <eeaf8fd6628a75d19872ab31cf7e7179e2baef5e.1751366959.git.christophe.leroy@csgroup.eu>
- <20251013040148.560439-1-vishalc@linux.ibm.com>
- <2b4a3215-1620-40c9-a00c-ca833ebbb7b6@csgroup.eu>
- <aOypxKMzsLR5tAtv@linux.ibm.com>
- <20251015002154.GA2300901@ax162>
- <aO8XEhMdT19UOPlp@linux.ibm.com>
+Date: Wed, 15 Oct 2025 11:43:09 -0700
+Subject: [PATCH v2] usb: uhci: Work around bogus clang shift overflow
+ warning from DMA_BIT_MASK(64)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aO8XEhMdT19UOPlp@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251015-usb-uhci-avoid-bogus-clang-shift-warning-v2-1-68532d2f6114@kernel.org>
+X-B4-Tracking: v=1; b=H4sIADzr72gC/53NQQ6CMBCF4auQrh3TNhSJK+9hWBQY6ETSmg6tG
+ sLdrRzB5TeZvH8TjJGQxbXaRMRMTMEX6FMlBmf9jEBjsdBSGyVVDYl7SG4gsDnQCH2YE8OwlFd
+ gR9MKLxs9FdlWqqaxuq4vWpS5Z8SJ3kfq3hU74jXEz1HO6nf9I5IVKGh1Y1qDOEpjbg+MHpdzi
+ LPo9n3/AjeFfp7hAAAA
+X-Change-ID: 20251014-usb-uhci-avoid-bogus-clang-shift-warning-a80166a24472
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Ryan Chen <ryan_chen@aspeedtech.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3632; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=SaNi7inb5n1alCq1NeyBjCg+fDtGlGrmovk6Zw2Bbgk=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnvXwdN1FWSfSr/xeC/0ua0/tfGfbtmB1140b2wY3FQk
+ 6iTxbvMjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRd7sY/tmsZ9toneix+MPy
+ XvGzHmpt/RnHdVYKn146eY75d4aY1W4Mv5hSfquXsx3doB0t0HCs9OhNh1nrAnUkl+oknV5Urz7
+ tMT8A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, Oct 15, 2025 at 09:07:54AM +0530, Vishal Chourasia wrote:
-> Hello Nathan,
-> 
-> On Tue, Oct 14, 2025 at 05:21:54PM -0700, Nathan Chancellor wrote:
-> > In this bug report, you mention using LLVM=1. Does the issue happen if
-> > you use GNU ld (ld.bfd) via LD (i.e., LD=powerpc64le-linux-gnu-ld or
-> > equivalent) over ld.lld from LLVM=1? This sounds more likely to be a
-> > linker difference rather than a compiler difference.
-> 
-> Thank you for the insight.
-> 
-> Yes, when using powerpc64le-linux-gnu-ld linker .interp section is not
-> emitted.
-> 
-> Command:
-> $ make LLVM=1 ARCH=powerpc LD=powerpc64le-linux-gnu-ld -j 8 zImage
-> $ llvm-readelf -p .comment vmlinux
-> 
-> String dump of section '.comment':
-> [     0] clang version 22.0.0git (https://github.com/llvm/llvm-project.git 7314565281ec28b745502c3f429fd431e16673eb)
-> 
-> $ llvm-readelf -p .interp vmlinux                                                                                    
-> llvm-readelf: warning: 'vmlinux': could not find section '.interp'
+After commit 18a9ec886d32 ("usb: uhci: Add Aspeed AST2700 support"),
+clang incorrectly warns:
 
-Thanks for confirming. Does this fix the issue for you? It appears to
-work for me.
+  In file included from drivers/usb/host/uhci-hcd.c:855:
+  drivers/usb/host/uhci-platform.c:69:32: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
+     69 | static const u64 dma_mask_64 = DMA_BIT_MASK(64);
+        |                                ^~~~~~~~~~~~~~~~
+  include/linux/dma-mapping.h:93:54: note: expanded from macro 'DMA_BIT_MASK'
+     93 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+        |                                                      ^ ~~~
 
-Cheers,
-Nathan
+clang has a long outstanding and complicated problem [1] with generating
+a proper control flow graph at global scope, resulting in it being
+unable to understand that this shift can never happen due to the
+'n == 64' check.
 
-diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
-index de6ee7d35cff..15850296c0a9 100644
---- a/arch/powerpc/kernel/vmlinux.lds.S
-+++ b/arch/powerpc/kernel/vmlinux.lds.S
-@@ -330,7 +330,6 @@ SECTIONS
- 	}
- 	.hash : AT(ADDR(.hash) - LOAD_OFFSET) { *(.hash) }
- 	.gnu.hash : AT(ADDR(.gnu.hash) - LOAD_OFFSET) { *(.gnu.hash) }
--	.interp : AT(ADDR(.interp) - LOAD_OFFSET) { *(.interp) }
- 	.rela.dyn : AT(ADDR(.rela.dyn) - LOAD_OFFSET)
- 	{
- 		__rela_dyn_start = .;
+Restructure the code to only use DMA_BIT_MASK() within
+uhci_hcd_platform_probe() (i.e., function scope) to avoid this global
+scope issue, similar to the approach of commit 274f2232a94f ("usb: ehci:
+Add Aspeed AST2700 support").
+
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2136
+Link: https://github.com/ClangBuiltLinux/linux/issues/92 [1]
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v2:
+- Slightly rework solution to follow commit 274f2232a94f ("usb: ehci:
+  Add Aspeed AST2700 support") (Alan)
+- Adjust message to match
+- Apply Alan's Reviewed-by from v1
+- Link to v1: https://patch.msgid.link/20251014-usb-uhci-avoid-bogus-clang-shift-warning-v1-1-826585eed055@kernel.org
+---
+ drivers/usb/host/uhci-platform.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+index 37607f985cc0..5e02f2ceafb6 100644
+--- a/drivers/usb/host/uhci-platform.c
++++ b/drivers/usb/host/uhci-platform.c
+@@ -65,13 +65,10 @@ static const struct hc_driver uhci_platform_hc_driver = {
+ 	.hub_control =		uhci_hub_control,
+ };
+ 
+-static const u64 dma_mask_32 = DMA_BIT_MASK(32);
+-static const u64 dma_mask_64 = DMA_BIT_MASK(64);
+-
+ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+-	const u64 *dma_mask_ptr;
++	bool dma_mask_64 = false;
+ 	struct usb_hcd *hcd;
+ 	struct uhci_hcd	*uhci;
+ 	struct resource *res;
+@@ -85,11 +82,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ 	 * Since shared usb code relies on it, set it here for now.
+ 	 * Once we have dma capability bindings this can go away.
+ 	 */
+-	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
+-	if (!dma_mask_ptr)
+-		dma_mask_ptr = &dma_mask_32;
++	if (of_device_get_match_data(&pdev->dev))
++		dma_mask_64 = true;
+ 
+-	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
++	ret = dma_coerce_mask_and_coherent(&pdev->dev,
++		dma_mask_64 ? DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -200,7 +197,7 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
+ static const struct of_device_id platform_uhci_ids[] = {
+ 	{ .compatible = "generic-uhci", },
+ 	{ .compatible = "platform-uhci", },
+-	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
++	{ .compatible = "aspeed,ast2700-uhci", .data = (void *)1 },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, platform_uhci_ids);
+
+---
+base-commit: 877c80dfbf788e57a3338627899033b7007037ee
+change-id: 20251014-usb-uhci-avoid-bogus-clang-shift-warning-a80166a24472
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
