@@ -1,153 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE442E9EDF
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 04:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274B92494ED;
+	Wed, 15 Oct 2025 05:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760502193; cv=none; b=S+H5fLg5Kd8JuTu40k7BRmbUkdZnyZRBWlzlDwfdwNQqnmQ8LdO/ws58zPUVqZX5UtDC8R04MPhJYhzbY8Wxy5BdP7hvCYuya8MGizjY+IecL2xNtYWcQSGlFNAtUDGKXG7B266cBukX9aKkREerrT5Xhb9rEEuwD86jzdwQHi8=
+	t=1760506261; cv=none; b=WP+YHc4qSGpZnSHjyLs8juEdWm9dhyhx2Waed1Dojr4PR2/J+YbfAkg++jxMn0qvqG8tdGwvwC3CKLL5gmcnViGidr6pPz+2LW5p30fsVBZ5RFRkA7RNE4c53oebccBtItOtM1IFCYp4/bivXQy1GbszGHic4QvJcrh8UQyJkpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760502193; c=relaxed/simple;
-	bh=OZ0mt5I07aqCmtMoJKACLdccn/un3hIrPc/1DLzA388=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jE5aqW9no602xdwxEnGAar4an85OSnaCooWvgFRVCsv9Sbt+xfYljU++DhvwJ2nQRSRdZ+AfRN+wh0HTEHDTNRVexAJtoAqcjNCuGysfAOmr1gbGpbNtpUZ6HcOLsieXKvUXvQ5BxH2xuC0OGKT2XAsXZX/TGLkOX/r8NIYcNok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G33eXCNo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1760506261; c=relaxed/simple;
+	bh=UdFVOB8YwL0d1UrDbtT+D6OMH5FrPX5LdCbM/cY0tvg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UW1EkuAEm+YKq9wurEGgNWDMANOe9B49QNAgLjkPCssOdLPte4VmoWJDN9WVGo0IP1lLcm76iVSRxaTxgN+hOPvuT2QmEH0a4z4BDWeGWqWMlDqVgoOqA+VIvM5moEqJkDdLM50XQStSH3FrcsiX0222JtKpWq1XseMJ4oeVE2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BrCmE8kR; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G33eXCNo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760502186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TFbvtB6vOA7pbWNQBeuNMle5JEbn/d067ZyZ0EKtXDo=;
-	b=G33eXCNoNZZwVqmSxkhdLBQqwXxEeczEbnqAEouCXZJX0r/W/9qHD6Pkji5Qb+bfYQxc4I
-	vy9sm8KqRZzVJevMDpmL9U+U73hYT5LKDF3nmhhL9/Av0byCHQG7r1Sb5AaSWWCL1u720F
-	bWKa8AskfYUCAps9Ujtw+YNzBG+nCw4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-368-Tn2lqwI7PIOQoWtpKcnc9g-1; Wed,
- 15 Oct 2025 00:23:05 -0400
-X-MC-Unique: Tn2lqwI7PIOQoWtpKcnc9g-1
-X-Mimecast-MFC-AGG-ID: Tn2lqwI7PIOQoWtpKcnc9g_1760502184
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3B2AD1808985
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 04:23:04 +0000 (UTC)
-Received: from [172.20.150.82] (unknown [10.30.45.111])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 28B7C1800446;
-	Wed, 15 Oct 2025 04:23:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 4 of 137): Test report for master
- (6.18.0-rc1, upstream-mainline, 9b332cec)
-Date: Wed, 15 Oct 2025 04:23:02 -0000
-To: haliu@redhat.com, llvm@lists.linux.dev, mmalik@redhat.com,
- omosnace@redhat.com, fmaurer@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BrCmE8kR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760506260; x=1792042260;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UdFVOB8YwL0d1UrDbtT+D6OMH5FrPX5LdCbM/cY0tvg=;
+  b=BrCmE8kRM88mitizmAAxZbW+0zASVL4Xkt5U2TWS2zRdKiC6mAkMbVLG
+   JaWJkR1XpzmxL07SXMtx1hy2CFhucSGsdGqA8snfDPcyJIxX65LhrOaMK
+   vXHZF7Eaji+WCzzhHqKgCBbcmiQ2VZ6w7N1L33cZx+BPvmJTbW4EXuRGh
+   4BUem/y2FGGiTX6fI/oOs8XDk2hHxWqidHpouKQRCk6nIj4yAG99QnEwp
+   AnR6vA5kwegoPaoBydY2coNKcYYT7p9c7t+Ga/xnnivzhpAumGm9ZmrHu
+   DyxUsRAXlK5aw/Fw9/fivXLqvk8Y3M9/F2WnCF+xAd6XMvJBJPzLZK+xK
+   A==;
+X-CSE-ConnectionGUID: txI9IcHKSEqS6njqJlRyJg==
+X-CSE-MsgGUID: 02S/cgvGTg+Ia5NzwAtufA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="73274124"
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="73274124"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 22:30:59 -0700
+X-CSE-ConnectionGUID: uGf6XeUXTMCo8JDM4txokg==
+X-CSE-MsgGUID: /dOghRkNQGyfgjw0vbzMjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="181206716"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 14 Oct 2025 22:30:55 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8u5D-0003Tl-26;
+	Wed, 15 Oct 2025 05:30:02 +0000
+Date: Wed, 15 Oct 2025 13:23:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Praveen K Paladugu <prapal@linux.microsoft.com>, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	tglx@linutronix.de, mingo@redhat.com, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	arnd@arndb.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	anbelski@linux.microsoft.com, prapal@linux.microsoft.com,
+	easwar.hariharan@linux.microsoft.com,
+	nunodasneves@linux.microsoft.com, skinsburskii@linux.microsoft.com
+Subject: Re: [PATCH v2 2/2] hyperv: Enable clean shutdown for root partition
+ with MSHV
+Message-ID: <202510151359.vRXcys2P-lkp@intel.com>
+References: <20251014164150.6935-3-prapal@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <81132.125101500230500300@us-mta-368.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: t4vlj8pjtZoIiYrFtBayJAq_IE69A-CXlTcO8GQgjbI_1760502184
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014164150.6935-3-prapal@linux.microsoft.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Praveen,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on linus/master v6.18-rc1 next-20251014]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.18-1' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/cel/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-K-Paladugu/hyperv-Add-definitions-for-MSHV-sleep-state-configuration/20251015-004650
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20251014164150.6935-3-prapal%40linux.microsoft.com
+patch subject: [PATCH v2 2/2] hyperv: Enable clean shutdown for root partition with MSHV
+config: i386-randconfig-006-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151359.vRXcys2P-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151359.vRXcys2P-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2099249630
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510151359.vRXcys2P-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        kselftest build - bpf
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2099249630_x86_64_kernel-debug_selftest_bpf
-        selinux-policy: serge-testsuite
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2099249630_x86_64_kernel_kcidb_tool_19767585_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic: kernel BUG at mm/slub.c:634!
-                       =E2=9A=A1 ERROR Warn: External Watchdog Expired
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2099249630_s390x_kernel_kcidb_tool_19767579_7
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic: kernel BUG at mm/slub.c:634!
-                       =E2=9A=A1 ERROR Warn: External Watchdog Expired
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: selinux-policy: serge-testsuite: fatal: unable to access 'ht=
-tps://src.fedoraproject.org/tests/selinux.git/': The requested URL returned=
- error: 503
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/3565986
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - bpf_test_progs [x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> drivers/hv/hv_common.c:944:5: warning: no previous prototype for function 'hv_sleep_notifiers_register' [-Wmissing-prototypes]
+     944 | int hv_sleep_notifiers_register(void)
+         |     ^
+   drivers/hv/hv_common.c:944:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     944 | int hv_sleep_notifiers_register(void)
+         | ^
+         | static 
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/command [s390x, x86_64]
-    Reboot test [s390x, x86_64]
+vim +/hv_sleep_notifiers_register +944 drivers/hv/hv_common.c
 
+   943	
+ > 944	int hv_sleep_notifiers_register(void)
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
