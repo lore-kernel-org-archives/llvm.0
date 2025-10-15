@@ -1,144 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692172E9EDF;
-	Wed, 15 Oct 2025 04:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE442E9EDF
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 04:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760501841; cv=none; b=ELW2TCdH6AtdxSAAZq/RhG8lc+GwHCzl8YiyW221++xSsOWFP9mtHd0EmKtqvhGchzpuaH6dBHwWMNoEmwE6CRpdYbTDciXmdbbolqfO9VrSqM5FkLkVIkm3RHZWdxTYdbQF1i412G01+Yj/jbvVoy/6sXTRYi2LQfg09zf3lOk=
+	t=1760502193; cv=none; b=S+H5fLg5Kd8JuTu40k7BRmbUkdZnyZRBWlzlDwfdwNQqnmQ8LdO/ws58zPUVqZX5UtDC8R04MPhJYhzbY8Wxy5BdP7hvCYuya8MGizjY+IecL2xNtYWcQSGlFNAtUDGKXG7B266cBukX9aKkREerrT5Xhb9rEEuwD86jzdwQHi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760501841; c=relaxed/simple;
-	bh=ovqQe7GOvD0OcEx7/AkCnQHKdx2amFS8fzjSEwxqnMY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o7aI+OWwd4MxQ0cVvExaGxgILiSrMryqKGVpNUrOO9eX8eUBzjyL+J9SPMHz4J0EzOn+LzdZgDhSMbHh6H/VfZIaHeP4a2iF7a0cH0EHTMIAAHshCZ2v2ST3q86VRTvVKJ5IJBXOOn5rxh+9YIbcguPxNElw8BHkYaEMehTALCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VqyBiZYZ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760502193; c=relaxed/simple;
+	bh=OZ0mt5I07aqCmtMoJKACLdccn/un3hIrPc/1DLzA388=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jE5aqW9no602xdwxEnGAar4an85OSnaCooWvgFRVCsv9Sbt+xfYljU++DhvwJ2nQRSRdZ+AfRN+wh0HTEHDTNRVexAJtoAqcjNCuGysfAOmr1gbGpbNtpUZ6HcOLsieXKvUXvQ5BxH2xuC0OGKT2XAsXZX/TGLkOX/r8NIYcNok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G33eXCNo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VqyBiZYZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760501840; x=1792037840;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ovqQe7GOvD0OcEx7/AkCnQHKdx2amFS8fzjSEwxqnMY=;
-  b=VqyBiZYZ3HZbeBTmZRxnFNmqclPuI6Zktqhsgu0bSjt4Iz26/dPW9wDh
-   gkkVOo3EX9lGrIojwWyTlNz4y1SyRX6v8w2QPfNn6evYt3M34oQkOfIi7
-   5f1wnq1IEzpKDNPkPvvPzr6vUKCyFsYGnAVItGBBQnoJQn9JWYsq15/pl
-   nTAtxo6X2qIW79OunYNHtzXgjyqaszf6OKtqD2rU4+ZmYj8CdlpiKhgnL
-   rs5BlRV4R/7S1P06hyFiOBif2iqtp4HD0JdXf0DLUCVmh1ZhxwbUJhYfK
-   EuILFLiA72E88QSgN35gRGyncqQnsi9i3lAkmTrNt7Kl6ssBX90Rqncny
-   Q==;
-X-CSE-ConnectionGUID: YfkGzuC8TFC22uQNj7poMw==
-X-CSE-MsgGUID: 13UPm/uzTky0+JvlCMORfg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="62376354"
-X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
-   d="scan'208";a="62376354"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 21:17:19 -0700
-X-CSE-ConnectionGUID: lp6rFhTRQyKawdXxI3Y7wA==
-X-CSE-MsgGUID: bmvJ/X1rS+iEHMBm+SThKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
-   d="scan'208";a="186067579"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 14 Oct 2025 21:17:15 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v8swr-0003RM-11;
-	Wed, 15 Oct 2025 04:17:13 +0000
-Date: Wed, 15 Oct 2025 12:16:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Changwoo Min <changwoo@igalia.com>, lukasz.luba@arm.com,
-	rafael@kernel.org, len.brown@intel.com, pavel@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	christian.loehle@arm.com, tj@kernel.org, kernel-dev@igalia.com,
-	linux-pm@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Changwoo Min <changwoo@igalia.com>
-Subject: Re: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
-Message-ID: <202510151223.THlBK6QR-lkp@intel.com>
-References: <20251014001055.772422-9-changwoo@igalia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G33eXCNo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760502186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TFbvtB6vOA7pbWNQBeuNMle5JEbn/d067ZyZ0EKtXDo=;
+	b=G33eXCNoNZZwVqmSxkhdLBQqwXxEeczEbnqAEouCXZJX0r/W/9qHD6Pkji5Qb+bfYQxc4I
+	vy9sm8KqRZzVJevMDpmL9U+U73hYT5LKDF3nmhhL9/Av0byCHQG7r1Sb5AaSWWCL1u720F
+	bWKa8AskfYUCAps9Ujtw+YNzBG+nCw4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-368-Tn2lqwI7PIOQoWtpKcnc9g-1; Wed,
+ 15 Oct 2025 00:23:05 -0400
+X-MC-Unique: Tn2lqwI7PIOQoWtpKcnc9g-1
+X-Mimecast-MFC-AGG-ID: Tn2lqwI7PIOQoWtpKcnc9g_1760502184
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3B2AD1808985
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 04:23:04 +0000 (UTC)
+Received: from [172.20.150.82] (unknown [10.30.45.111])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 28B7C1800446;
+	Wed, 15 Oct 2025 04:23:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 4 of 137): Test report for master
+ (6.18.0-rc1, upstream-mainline, 9b332cec)
+Date: Wed, 15 Oct 2025 04:23:02 -0000
+To: haliu@redhat.com, llvm@lists.linux.dev, mmalik@redhat.com,
+ omosnace@redhat.com, fmaurer@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014001055.772422-9-changwoo@igalia.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <81132.125101500230500300@us-mta-368.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: t4vlj8pjtZoIiYrFtBayJAq_IE69A-CXlTcO8GQgjbI_1760502184
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Changwoo,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on amd-pstate/linux-next]
-[also build test WARNING on amd-pstate/bleeding-edge linus/master v6.18-rc1 next-20251014]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM-Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20251014001055.772422-9-changwoo%40igalia.com
-patch subject: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
-config: i386-buildonly-randconfig-004-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510151223.THlBK6QR-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/power/em_netlink.c:228:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     228 |         int ret = -EMSGSIZE;
-         |             ^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/ret +228 kernel/power/em_netlink.c
+Kernel information:
+    Commit message: Merge tag 'nfsd-6.18-1' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/cel/linux
 
-   224	
-   225	void em_notify_pd_deleted(const struct em_perf_domain *pd)
-   226	{
-   227		struct sk_buff *msg;
- > 228		int ret = -EMSGSIZE;
-   229		void *hdr;
-   230		int msg_sz;
-   231	
-   232		if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGRP_EVENT))
-   233			return;
-   234	
-   235		msg_sz = __em_notify_pd_deleted_size(pd);
-   236	
-   237		msg = genlmsg_new(msg_sz, GFP_KERNEL);
-   238		if (!msg)
-   239			return;
-   240	
-   241		hdr = genlmsg_put(msg, 0, 0, &em_nl_family, 0, EM_CMD_PD_DELETED);
-   242		if (!hdr)
-   243			goto out_free_msg;
-   244	
-   245		if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
-   246			ret = -EMSGSIZE;
-   247			goto out_free_msg;
-   248		}
-   249	
-   250		genlmsg_end(msg, hdr);
-   251	
-   252		genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, GFP_KERNEL);
-   253	
-   254		return;
-   255	
-   256	out_free_msg:
-   257		nlmsg_free(msg);
-   258		return;
-   259	}
-   260	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2099249630
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        kselftest build - bpf
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2099249630_x86_64_kernel-debug_selftest_bpf
+        selinux-policy: serge-testsuite
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2099249630_x86_64_kernel_kcidb_tool_19767585_7
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic: kernel BUG at mm/slub.c:634!
+                       =E2=9A=A1 ERROR Warn: External Watchdog Expired
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2099249630_s390x_kernel_kcidb_tool_19767579_7
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic: kernel BUG at mm/slub.c:634!
+                       =E2=9A=A1 ERROR Warn: External Watchdog Expired
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: selinux-policy: serge-testsuite: fatal: unable to access 'ht=
+tps://src.fedoraproject.org/tests/selinux.git/': The requested URL returned=
+ error: 503
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/3565986
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/command [s390x, x86_64]
+    Reboot test [s390x, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
