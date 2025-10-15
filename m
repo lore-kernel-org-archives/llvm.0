@@ -1,188 +1,86 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61362D061E
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 14:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F33B2046BA;
+	Wed, 15 Oct 2025 15:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760539884; cv=none; b=EbCdN4q7VWsPPeRErkpRGn2J9Vbi9mMhBpO+2YotjSj7g310oIGx2Xd+Msmd7l6LTmXnTylhmqZeT5g3qbkgeeNlMb4irF9ZWGcWafkfkPwtmeDg/5RHqYPB9xtId6RVd2Wgki2dKyxWb7nPYS6XR9KMU5GgWFSMLCFmSN7ctwY=
+	t=1760540702; cv=none; b=QCOr22Dt9Gu8fyC2a+Vop28Ik5KmbWKnj21A1Al691Gi+2L0qZhBTZGSOR6K99Qv/RPovZueVPJfI/JpwyU922xANs+MC0BFBc2DLguLR8gJh1RT3HRM9deh6bmvCsXSkRELo1LFYREf/8aR/BOHTIRh+BJJEXeRL1NcZmA60fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760539884; c=relaxed/simple;
-	bh=hrGvM3Qk7r7tukv0tdWGtDReqUMPUw8ee1FwVTWSb+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K7FLwg6HjbsIqp7QyrdZnazXoNxi4KRQSaYoBQdRUK/Iqhh1G7BpIMkgrtaNipq44qBvYD9DElIu/TFEB3o5PjoBAdKhXPq+TrfBY6hhsY7lgfQ4NVlcco5tyH8q3whGBQM1fCsYxNgBr9sY/glnNEx+VQSw4/DkCdlit+TQNUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=m59ayehg; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+	s=arc-20240116; t=1760540702; c=relaxed/simple;
+	bh=Wdbu91UHG7NXXe6k08cBk3T/+pvUqlyl9VvW3phwgNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZcUN7JG+uA06W536WkbobNGVp6FD9q4dMVetKp+WFbc4Sju1Uk++AadgP5iCrr9JjpmofIakMi3sg4cP1hkHAG130FfveH710CmflnkfzVlZQFB+isHGvml5CxgRMHNCMVSkABCsEYxBVyFBdueHgnYBHVq/huvIQRAM2QvOXTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYGsImU3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="m59ayehg"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-799572d92b0so88980746d6.3
-        for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 07:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1760539880; x=1761144680; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Adpa7m8fOG05p6QgITi5PnCHwpZCCsUy3a+V0Uam0mo=;
-        b=m59ayehgdEELdzdxlAxW5cDkYf0anat7AQSIHt7584RLWboWy/OpAA5okL6C5otk8S
-         sHDdlzQvS6vN9AhBKMdxV+VEHpE9/+VPQowVDKXILfA2J+eed4i5UPUChLOKNMDei8O3
-         +JU8tcqSAde1psUKFJ3stSKKFnAudWj2vz7Gw7aMudsNai1GRmPPeT6pEN34SLsp32Uh
-         RdWCSDF/nlGjw8oHgwSgyy9UnAvYf4XSY8A7YZw61HYKxbApXm++EBBITWhVRnb/LCPW
-         K2i7kJfifEjznt0+PguxAfD/PvsabbndaWKoCjET3QPklsAodMojlhZvbbg6bStvywzb
-         f/sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760539880; x=1761144680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Adpa7m8fOG05p6QgITi5PnCHwpZCCsUy3a+V0Uam0mo=;
-        b=gq2YhQKuFfeb1XivpgUtGlhhMu/hMHNByr+GuEDkcHNPZionz4Rg3aTn+GizYin351
-         eKsOu3KXiMq61AXCUT0e6OWNPNGjU1sUuer8bAeGdePnKcGPYKMqeN7A9dnA8lcnHI+a
-         1MBK40GthWWrFxfYSXu0QwEAEuSS0lSovCZgj1UMn1wcqAYGEFNuU7bEqYYJGYF/3MRI
-         ikw2WPltx0jXLbLwvSbfV7gdLaqGgVvJdrL2o29YJ5kJtBlvPYhYBV39j2m6gWjEJZU5
-         mRdh1Uv2OOKkZV71UWNveC0q2W7idNCYAlhdbKMVs+YdZs1EGb5h10yUTs6tdv3kpEpI
-         Dh/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXOkonXL2mG4kV1oYE0yoXZx7lZwYX4wZPZRfrSu4ovJyzTO5mUCRVTM6O9jHJQ2iLmIJ3q@lists.linux.dev
-X-Gm-Message-State: AOJu0YxUKIXrqxVoVrG8RK3CGDTU/ZeCUY/QNPXWnKWY97fWWe61TgrO
-	Ja8dHeVjEDKUMAtd/eGcfdZCARZT56Utn/Lx2bo8YiXjgO9KIFpM7LfSjxdVuwJ+bA==
-X-Gm-Gg: ASbGnctIyLC2Al7weUoKtVvYDdNaDXAPixRkQNFXp2bX8YvSq0MCJdBUbhHVmRdIG8L
-	yWFvcyO4+wYD+wiRixMBZRmYYwAIMs3++bDWCrzsB5l9FQHTzG82vRGOkOCVtiyMtYhaAKT7A5O
-	Jq4manPqou00JkuQwV6q5JtMeYrSp9GhPzZ8mae53kyw8mGScZ9ME+lGwCELJLJkvhCtx3EBcI3
-	uz0WR9JBC8yeqHU7jN9DGbpeb+b+8L46y1yHw1CDbf630EeXfbPjD17VpXNO8Nvlzl9xKcgaYpO
-	gQWuV2/3NXWQ4paBivIhHT0o6KeczCsUV44w63SS/XL+fFgfu1SESoxCLHnJlHWsN89TgzalE2n
-	W5jIT7nQUV6CR2+WxsOAVa8siTH0KLpL1DDYRT/FBbZ3liSToGRJmbk+9QpExFopp1SH1bYW2ow
-	GJUA==
-X-Google-Smtp-Source: AGHT+IHgATM+vpR/CxE89ZGkxxcoAPFDIHN26iOy/FjOgPnA6lzy6iUTWGNa3baX21y+yQJqVKxzZg==
-X-Received: by 2002:a05:6214:5083:b0:783:cc80:1770 with SMTP id 6a1803df08f44-87b2106d967mr418771056d6.25.1760539880497;
-        Wed, 15 Oct 2025 07:51:20 -0700 (PDT)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87c012a79f9sm19380516d6.53.2025.10.15.07.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 07:51:19 -0700 (PDT)
-Date: Wed, 15 Oct 2025 10:51:17 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ryan Chen <ryan_chen@aspeedtech.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] usb: uhci: Work around bogus clang shift overflow
- warning from DMA_BIT_MASK(64)
-Message-ID: <a34eeced-c4f0-48de-8f9e-d78b50378101@rowland.harvard.edu>
-References: <20251014-usb-uhci-avoid-bogus-clang-shift-warning-v1-1-826585eed055@kernel.org>
- <c0d1dc65-6f55-40b9-bbfa-09e8639a28e0@rowland.harvard.edu>
- <20251015031952.GA2975353@ax162>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYGsImU3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842CFC4CEF8;
+	Wed, 15 Oct 2025 15:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760540701;
+	bh=Wdbu91UHG7NXXe6k08cBk3T/+pvUqlyl9VvW3phwgNc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=aYGsImU3Per5JLsRWKEDgSU53GVias3oxkv3lcMOJyTF2/c5lzyw2mtJxaYSCavuH
+	 wbaCEkmbUtHKcgzV8+Rd9HkAU542mDJJNLVv7ZLIwh7hHX65uxF02j6/qf+HBCWCr5
+	 a3SDnYLcIaJLj3CG8shPVh1uDD9PGHxB0uwfo6dsz01FKRPCdWlYOJ5Fr2Ur+oEy8m
+	 HzxrY4ov7Z1kbMBdW2sPJBcEDJVajDnhRpxhR69uKn2pllOAh6ktBWAQvIYb8QmygG
+	 i9hUEjmhdzalFSGO5bNoADPFDFBTlJjew3xdACovDj0EokV3my/h3MUgQn0EZN/yiO
+	 mzmbfLOBm1LVw==
+Date: Wed, 15 Oct 2025 08:04:59 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?0K/QvdCwINCR0LDRiNC70YvQutC+0LLQsA==?= <yana2bsh@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+ lvc-project@linuxtesting.org
+Subject: Re: [PATCH 6.1 00/15] genetlink: Test Netlink subsystem of Linux
+ v6.1
+Message-ID: <20251015080459.6e681582@kernel.org>
+In-Reply-To: <CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
+References: <20250912195339.20635-1-yana2bsh@gmail.com>
+	<20250912131722.74658ec0@kernel.org>
+	<CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251015031952.GA2975353@ax162>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 14, 2025 at 08:19:52PM -0700, Nathan Chancellor wrote:
-> On Tue, Oct 14, 2025 at 11:07:27PM -0400, Alan Stern wrote:
-> > On Tue, Oct 14, 2025 at 04:38:19PM -0700, Nathan Chancellor wrote:
-> > > After commit 18a9ec886d32 ("usb: uhci: Add Aspeed AST2700 support"),
-> > > clang incorrectly warns:
-> > > 
-> > >   In file included from drivers/usb/host/uhci-hcd.c:855:
-> > >   drivers/usb/host/uhci-platform.c:69:32: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-> > >      69 | static const u64 dma_mask_64 = DMA_BIT_MASK(64);
-> > >         |                                ^~~~~~~~~~~~~~~~
-> > >   include/linux/dma-mapping.h:93:54: note: expanded from macro 'DMA_BIT_MASK'
-> > >      93 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-> > >         |                                                      ^ ~~~
-> > > 
-> > > clang has a long outstanding and complicated problem [1] with generating
-> > > a proper control flow graph at global scope, resulting in it being
-> > > unable to understand that this shift can never happen due to the
-> > > 'n == 64' check.
-> > > 
-> > > Restructure the code to do the DMA_BIT_MASK() assignments within
-> > > uhci_hcd_platform_probe() (i.e., function scope) to avoid this global
-> > > scope issue.
-> > > 
-> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/2136
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/92 [1]
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > 
-> > Do you think you could instead copy the approach used in:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=274f2232a94f6ca626d60288044e13d9a58c7612
-> > 
-> > IMO it is cleaner, and it also moves the DMA_BIT_MASK() computations 
-> > into a function scope.
-> 
-> Sure, would something like this be what you had in mind?
-> 
-> diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-> index 37607f985cc0..5e02f2ceafb6 100644
-> --- a/drivers/usb/host/uhci-platform.c
-> +++ b/drivers/usb/host/uhci-platform.c
-> @@ -65,13 +65,10 @@ static const struct hc_driver uhci_platform_hc_driver = {
->  	.hub_control =		uhci_hub_control,
->  };
->  
-> -static const u64 dma_mask_32 = DMA_BIT_MASK(32);
-> -static const u64 dma_mask_64 = DMA_BIT_MASK(64);
-> -
->  static int uhci_hcd_platform_probe(struct platform_device *pdev)
->  {
->  	struct device_node *np = pdev->dev.of_node;
-> -	const u64 *dma_mask_ptr;
-> +	bool dma_mask_64 = false;
->  	struct usb_hcd *hcd;
->  	struct uhci_hcd	*uhci;
->  	struct resource *res;
-> @@ -85,11 +82,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
->  	 * Since shared usb code relies on it, set it here for now.
->  	 * Once we have dma capability bindings this can go away.
->  	 */
-> -	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
-> -	if (!dma_mask_ptr)
-> -		dma_mask_ptr = &dma_mask_32;
-> +	if (of_device_get_match_data(&pdev->dev))
-> +		dma_mask_64 = true;
->  
-> -	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
-> +	ret = dma_coerce_mask_and_coherent(&pdev->dev,
-> +		dma_mask_64 ? DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
->  	if (ret)
->  		return ret;
->  
-> @@ -200,7 +197,7 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
->  static const struct of_device_id platform_uhci_ids[] = {
->  	{ .compatible = "generic-uhci", },
->  	{ .compatible = "platform-uhci", },
-> -	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
-> +	{ .compatible = "aspeed,ast2700-uhci", .data = (void *)1 },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, platform_uhci_ids);
-> 
-> The
-> 
->   const struct of_device_id *match;
-> 
->   match = of_match_device(dev->dev.driver->of_match_table, &dev->dev);
->   if (match && match->data)
-> 
-> part of the change you linked to is equivalent to
-> 
->   if (of_device_get_match_data(&dev->dev))
-> 
-> if someone wanted to do a further clean up.
+On Wed, 15 Oct 2025 17:49:22 +0300 =D0=AF=D0=BD=D0=B0 =D0=91=D0=B0=D1=88=D0=
+=BB=D1=8B=D0=BA=D0=BE=D0=B2=D0=B0 wrote:
+> The motivation for this work is to improve the test coverage and
+> reliability of the Netlink subsystem, specifically for the core
+> af_netlink.c and genetlink.c components. While the subsystem is
+> critical for kernel-userspace communication, its coverage by the
+> existing selftests is quite limited.
+>=20
+> To quantify the improvement, these new selftests achieve the following
+> line coverage (as measured by gcov):
+> - net/netlink/af_netlink.c: 84.0%
+> - net/netlink/genetlink.c: 88.8%
 
-That's a small enough matter, we don't need to worry about it.
+For what it's worth syzbot has:
 
-At any rate, yes, this is what I had in mind, thanks.  When you submit 
-it, you may add:
+    af_netlink.c  91%
+    genetlink.c   68%
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Without a line of code added to the kernel. Of course it's not
+functional testing.
 
-Alan Stern
+> Integrating these tests into the upstream suite will provide long-term
+> stability and make it safer to refactor or add new features to the
+> Netlink core in the future.
+
+Happy to hear from others if they disagree but what kernel tests get
+merged into the tree is pretty subjective. Do we have a lot of bugs=20
+in genetlink? Are you planning to do major development in this area
+and want to catch regressions? If the answers to both of those questions
+is "no" IMHO this 7kLoC is not worth carrying in the tree.
