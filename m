@@ -1,146 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482532E5B11;
-	Tue, 14 Oct 2025 23:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760485113; cv=none; b=JeTwX88PeRdNXSTJZQQdEyPrvD856TUI48e07SAHB5TFxKJNj20GVMU2PNrh8FNpgeNOy5fPI6ZGJDnvuvv0yg+e9N0ZgDIm2/DCHfteJpqoRbsyx/eUNKf22AtbVKENBRCLNiAajMr19n+7ualVZFzgEwU7Htcpj1QF1W6EL+k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760485113; c=relaxed/simple;
-	bh=RBa+ARWZImq2jN4SP1FuMQo3XNtxMHV4AIx03WOCftg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=R8VkWx3MaCcEV5xSrPARGZi25Z/fSNWmrJ+dWzZbde+sVKw7LNVomAXz5wCGce4ClBIkwaOVYpsWNbMLoDABo/0NNXdE/JP+CnCejF/tPkMy4oyGz1Mig0P+phPcoYzz7jXjAFp0YbD9YxZSl/ijEFV8X9HJ0JwXPe0Ote5ntKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2F54D4c; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88030156236
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 00:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760487058; cv=pass; b=BSEjn+pXN5JzG2ePhwsusUVg9Ug9EXE6b4FI4HGZkHKSbgwWlKcofhyOrcebCRi9VLTTb4evoTyUkTLEvzkmlFYjzZDWBGt+2m22Yhu7ncwl7gdQwNhXvggTax6FbEHSY1Dq7Mrw10oMkLTAWhP+/Fs7VvRmtGeQyL7W4XlcTYQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760487058; c=relaxed/simple;
+	bh=kqS+jpslvSWHNcx8cj5raGHh/eUCXYfbroGVJ9fDhR8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dHlxFOUqrwJr21ueLACY9sQhYQnH0GgoX7k2nDWfK5jRr1+ikMKSRT/Ui9rF810Y85vb4dgruATK4VhQgvnoSyB0Nj2NQkKQfURgTuGH8XXj+6pYpqky7JaioN1VEm8jQKD+jwTiIx85iCWy4cGBR3VbvTF1WjDklcdcGVlAGes=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=W4+29a/9; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2F54D4c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BC7C4CEE7;
-	Tue, 14 Oct 2025 23:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760485112;
-	bh=RBa+ARWZImq2jN4SP1FuMQo3XNtxMHV4AIx03WOCftg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=p2F54D4caq5AZx1ZCsne/etc1qBn3tT7XlFn+nog15NmZhgKEGoiNZ6AuC7FlTVZ/
-	 LtKFqQfXUESG/Msno53DuzheCFl+xwIH9pbG9Aemesn8P5+AsymdP2ghkD9rnu6q5P
-	 /F7fWds/Js8AfSlGI7wuh7A1+I4nSwk0BCW8vX9i1Jgp0O5M6iozMQZLgeYNFyUsxi
-	 gV5tpsf8pp7bfMQq3Zy8g3Rb4w6Po28YRZtJmVlgScD01GJaGJEAeHQKr/+F/z117B
-	 egeAQCozpbjuIqcivtf9duN8eALWGBLn95Vv7cWofweuzCKC1KFnHsRT43nVuhxWyB
-	 fBGJgxNXdbCFg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 14 Oct 2025 16:38:19 -0700
-Subject: [PATCH] usb: uhci: Work around bogus clang shift overflow warning
- from DMA_BIT_MASK(64)
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="W4+29a/9"
+ARC-Seal: i=1; a=rsa-sha256; t=1760487045; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ee6NoUSl9qb4jfPLyFxdgTcOUot4aF5gY8EjLB2NF/vUI7Qhuv/1z+m8x9dbZ9Ln/vog+pwabFCAxOIo/6Ay1vlWTHgdQ+HMUD5FrmGQAyFzLQUpnOauubST+FHO7cEu9oAfEXDArNh5/WTDKNa8X7Ss/+49/FF3/r1wQmUCdT0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1760487045; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=1bFw6B/0UFL8CxqPxFS3U9dvgzamyRZ5iQeTYr1PoBA=; 
+	b=RXqgslipOL/TLpAH026W8lPrBEorJTwFTnzd90RZjEwyVURcJmhyLmVxe24R1Yl6zBW35oz4FcxsT39lnhd2UipO4v5NSRVD0lsiHG+4CDgNeP0vcSJ+ipZ1nlzghT74Gu0+U24Op8NSTrMPgYmwkkIanhpkmJe/kx/wBLMe4D4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
+	dmarc=pass header.from=<adrian.larumbe@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760487045;
+	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=1bFw6B/0UFL8CxqPxFS3U9dvgzamyRZ5iQeTYr1PoBA=;
+	b=W4+29a/96qMyGjphhEeNKTBx7Z8KJubuqUIXCNcGTCqhFIcAf+M5hxpDkhJEGWIp
+	Sj5xtb3HzRmT7Ocfw5W7pC07bSBUF9oNVyxH6SG+AcAcxYa4D31yyKjjF+UtiFCokIo
+	qkHbPdaBl9/wNbara7GptL0aRh0LnRr+gK+BTNXI=
+Received: by mx.zohomail.com with SMTPS id 1760487043364221.83519109424833;
+	Tue, 14 Oct 2025 17:10:43 -0700 (PDT)
+From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org,
+	Steven Price <steven.price@arm.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	kernel@collabora.com,
+	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v6 09/12] drm/panfrost: Add forward declaration and types header
+Date: Wed, 15 Oct 2025 01:09:15 +0100
+Message-ID: <20251015000930.356073-10-adrian.larumbe@collabora.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251015000930.356073-1-adrian.larumbe@collabora.com>
+References: <20251015000930.356073-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251014-usb-uhci-avoid-bogus-clang-shift-warning-v1-1-826585eed055@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOre7mgC/x3N0QrCMAyF4VcZuTbQljrFVxEvsi5bA9JKY6cw9
- u4GLz/4OWcH5SascBt2aLyJSi0GfxogZSoro8xmCC6cvfMRu07YcxKkrcqMU127YnpaippleeO
- HWhETXZ0fRwoxXgLY3KvxIt//1f1xHD84K9qJegAAAA==
-X-Change-ID: 20251014-usb-uhci-avoid-bogus-clang-shift-warning-a80166a24472
-To: Alan Stern <stern@rowland.harvard.edu>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3323; i=nathan@kernel.org;
- h=from:subject:message-id; bh=RBa+ARWZImq2jN4SP1FuMQo3XNtxMHV4AIx03WOCftg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBnv7n17K7Yhcxv33muLp17iXrwxtT/qaso2gx1Gjd/TG
- JV3TdFm7ChlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATCdzI8M/+qfb3N53cq47n
- Bky5LvLw/4HkxYG+j69X3VB44/bwc74wI8M/K6vGOtWpr0XbcuIynHb35FhorFxa/JOLS8xI/OE
- 8Uy4A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-After commit 18a9ec886d32 ("usb: uhci: Add Aspeed AST2700 support"),
-clang incorrectly warns:
+This is to make LLVM syntactic analysers happy.
 
-  In file included from drivers/usb/host/uhci-hcd.c:855:
-  drivers/usb/host/uhci-platform.c:69:32: error: shift count >= width of type [-Werror,-Wshift-count-overflow]
-     69 | static const u64 dma_mask_64 = DMA_BIT_MASK(64);
-        |                                ^~~~~~~~~~~~~~~~
-  include/linux/dma-mapping.h:93:54: note: expanded from macro 'DMA_BIT_MASK'
-     93 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-        |                                                      ^ ~~~
-
-clang has a long outstanding and complicated problem [1] with generating
-a proper control flow graph at global scope, resulting in it being
-unable to understand that this shift can never happen due to the
-'n == 64' check.
-
-Restructure the code to do the DMA_BIT_MASK() assignments within
-uhci_hcd_platform_probe() (i.e., function scope) to avoid this global
-scope issue.
-
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2136
-Link: https://github.com/ClangBuiltLinux/linux/issues/92 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Steven Price <steven.price@arm.com>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
 ---
- drivers/usb/host/uhci-platform.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/panfrost/panfrost_mmu.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-index 37607f985cc0..f532d3a0acbf 100644
---- a/drivers/usb/host/uhci-platform.c
-+++ b/drivers/usb/host/uhci-platform.c
-@@ -65,16 +65,16 @@ static const struct hc_driver uhci_platform_hc_driver = {
- 	.hub_control =		uhci_hub_control,
- };
+diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.h b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+index e6e6966a0cca..27c3c65ed074 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_mmu.h
++++ b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+@@ -4,6 +4,7 @@
+ #ifndef __PANFROST_MMU_H__
+ #define __PANFROST_MMU_H__
  
--static const u64 dma_mask_32 = DMA_BIT_MASK(32);
--static const u64 dma_mask_64 = DMA_BIT_MASK(64);
-+static const bool use_dma_mask_64 = true;
- 
- static int uhci_hcd_platform_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
--	const u64 *dma_mask_ptr;
-+	u64 dma_mask = DMA_BIT_MASK(32);
- 	struct usb_hcd *hcd;
- 	struct uhci_hcd	*uhci;
- 	struct resource *res;
-+	const bool *of_data;
- 	int ret;
- 
- 	if (usb_disabled())
-@@ -85,11 +85,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 	 * Since shared usb code relies on it, set it here for now.
- 	 * Once we have dma capability bindings this can go away.
- 	 */
--	dma_mask_ptr = (u64 *)of_device_get_match_data(&pdev->dev);
--	if (!dma_mask_ptr)
--		dma_mask_ptr = &dma_mask_32;
-+	of_data = of_device_get_match_data(&pdev->dev);
-+	if (of_data && *of_data == use_dma_mask_64)
-+		dma_mask = DMA_BIT_MASK(64);
- 
--	ret = dma_coerce_mask_and_coherent(&pdev->dev, *dma_mask_ptr);
-+	ret = dma_coerce_mask_and_coherent(&pdev->dev, dma_mask);
- 	if (ret)
- 		return ret;
- 
-@@ -200,7 +200,7 @@ static void uhci_hcd_platform_shutdown(struct platform_device *op)
- static const struct of_device_id platform_uhci_ids[] = {
- 	{ .compatible = "generic-uhci", },
- 	{ .compatible = "platform-uhci", },
--	{ .compatible = "aspeed,ast2700-uhci", .data = &dma_mask_64},
-+	{ .compatible = "aspeed,ast2700-uhci", .data = &use_dma_mask_64 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, platform_uhci_ids);
-
----
-base-commit: 877c80dfbf788e57a3338627899033b7007037ee
-change-id: 20251014-usb-uhci-avoid-bogus-clang-shift-warning-a80166a24472
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
++struct panfrost_device;
+ struct panfrost_gem_mapping;
+ struct panfrost_file_priv;
+ struct panfrost_mmu;
+-- 
+2.51.0
 
