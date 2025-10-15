@@ -1,235 +1,109 @@
-Received: from flow-a5-smtp.messagingengine.com (flow-a5-smtp.messagingengine.com [103.168.172.140])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822EC2ECD0E
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 08:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6CD30BF54
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 09:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760516816; cv=none; b=BPRuDJquvEhKiDV3Y9Jz2gkHF3sIrIfJ6Qz41aYeNygIMn16zY80yuFB0kWMeDnFfm58f+IjWmQZfLzDxmMUV2OIauxS3zjKeljpjIRZFHnoL/ZrE6N64D6ML4U2onkRRhvORHtlHNnUObS9Y53r5HqeUyY1IY+c5W/pk7iG1tE=
+	t=1760520008; cv=none; b=OM91sB4bnT8wKoCCoattfc+iDxMIxb/ryHOiTDEydhTRzPDLuP0XZhnywNquSEHc19tKXIBoIBxI/ryevMgnE4KZCNwdar7VRECw782LjflHN40ppl3lHdyijyv3HCYmwrpqAxGUAK9zdpop5O2mfmvKD63OA6ppjjMk5xKEyV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760516816; c=relaxed/simple;
-	bh=tErLpBVJjnu0MQU/D9jXT3uMXRJkN/y+btNY5pxe+lU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=Smf0rKbvX6H9YP+dMRyzXI3WbeL0U0PNzOZzyLGwSnQjimwwoqbhBZ05mS59GFwHL7dFStoBToAFbAZs3Q4OHsR0A1VtcOmsQp8nFbCX4QvtdQbfief4/Y1A8OJhbLv41uzx8n9Sa6/3Pmo5g2lOnhhiK0Ci/n+XOwBhMon1mus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net; spf=pass smtp.mailfrom=wolber.net; dkim=pass (2048-bit key) header.d=wolber.net header.i=@wolber.net header.b=Gd5NeiJZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=slVqLMoM; arc=none smtp.client-ip=103.168.172.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolber.net
+	s=arc-20240116; t=1760520008; c=relaxed/simple;
+	bh=KFLBr9oHLUDWKHkYETCDph/T5w/KuYX51hvKqwOIrDU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oh8kiip42jDUzsj/CtJzAm1kqrSbT/ryaq7J0ZvYWcsAUZIH4oc7DCBrDcLlim7r5qYgG9yCZlVfGw9Jg+1hqP0CEM14FJa6sMmyyyAe9zPLDda4F9XHg1QUbI4Ii4a+9+AbSA3mOL3aPbJ3noXcmCrL3EVod9+wyiZBgoFH8LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BvYFwl6s; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wolber.net header.i=@wolber.net header.b="Gd5NeiJZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="slVqLMoM"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id 9BBEE13800A9;
-	Wed, 15 Oct 2025 04:26:53 -0400 (EDT)
-Received: from phl-imap-03 ([10.202.2.93])
-  by phl-compute-02.internal (MEProxy); Wed, 15 Oct 2025 04:26:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolber.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1760516813;
-	 x=1760524013; bh=t5nJJ2CgRu6lm+HZXXoNQXnHJygS4YGR2lcUURAIT6U=; b=
-	Gd5NeiJZJnXq59Lbe+HDax/gkj3d9zlfofnCdcXpaXjwnpV8DKvxwo0r3eQIMgIF
-	r4C9S+b6Amt3tumpZ2x7tGP4WK3Ss34L1o8FbYk28cQ639q5iZ8F7ZHLwL5DNWuQ
-	zb5ZMeXyeWYsWlNULdvQ2EL2Kckn4aWUhIKjCCBgN/Of3Kh4MmCJg15VVo1MKq80
-	u6Qi5XuFkRIjgI1dLljT6JINSEhdPN0v1L9ME1Evo4G80OflccZ3IXVQm8MKe/Zp
-	Ix5r61uzqYNbSpEJXLArwUNQmpSwp1g9YUTrQCRMCeO0gnnWMn+NqYTJbAShaMBd
-	LyfuahOvwobaoV9iedCosQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1760516813; x=
-	1760524013; bh=t5nJJ2CgRu6lm+HZXXoNQXnHJygS4YGR2lcUURAIT6U=; b=s
-	lVqLMoMQwoArypuRWQHBYR4UNUxJVViWJF/QAB8BDOoZ0rkuYy51oLamjfyxFONw
-	bCpYpk9bs1hcs1R4qK7emmEDhoKFp7APFDdtyPWvgVkQ4XNdebQ0ZtDgI0I0mXcH
-	7FNL2DyL5C5998zXAQ9sC0l8yLUTMuBx+748u1DUjKW3EJQU2kI3KsGEtedkjUJL
-	oUHcp2GokZJ3y2I8DcN7jbC696R9qX4i8i4CYN3BsHodOPTWqygx/1u6/YqdFEAj
-	Y31CU3eCfSsZrC9C0AcLTw5/bmgMGdWKRLP6fN1VZgfCDGJesS1BGyAE35s0l1DF
-	Vhbtp/PT/RPM5CT/L/CeQ==
-X-ME-Sender: <xms:y1rvaCDqsRMKROR0N_cZx5Xpx6j3dJ_022ISU3jkIlNRiO7_IUwyVg>
-    <xme:y1rvaHVDKKwbAOGfyyEJJcwasTlxvmFCGLeO5xo9A6MWeDHwlR5tiHLTs9FT-ztm0
-    K7eQQ-U2blgzDrRtEHqCTw42aB7SxSKpEd3iSJ251YOuxEY9bOdGA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvddvleefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofgggfgtfffkuffhvfevofhfjgesthhqredtredtjeenucfhrhhomhepfdevhhhu
-    tghkucghohhlsggvrhdfuceotghhuhgtkhesfiholhgsvghrrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeevudduteduieegvdelvedugedtfeegjeegteevgfelgeetueetuedvtedt
-    vdeuieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheptghhuhgtkhesfiholhgsvghrrdhnvght
-    pdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsg
-    hpsegrlhhivghnkedruggvpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgt
-    phhtthhopehmrghtthdrkhgvlhhlhidvsegsohgvihhnghdrtghomhdprhgtphhtthhope
-    grnhgurhgvfidrjhdrohhpphgvlhhtsegsohgvihhnghdrtghomhdprhgtphhtthhopegt
-    hhhutghkrdifohhlsggvrhessghovghinhhgrdgtohhmpdhrtghpthhtohepmhgrthhthh
-    gvfidrlhdrfigvsggvrhefsegsohgvihhnghdrtghomhdprhgtphhtthhopehsrghmuhgv
-    lhdrshgrrhhkihhsihgrnhessghovghinhhgrdgtohhmpdhrtghpthhtohepshhtvghvvg
-    hnrdhhrdhvrghnuggvrhhlvggvshhtsegsohgvihhnghdrtghomhdprhgtphhtthhopegr
-    nhhtohhnrdhivhgrnhhovhestggrmhgsrhhiughgvghgrhgvhihsrdgtohhm
-X-ME-Proxy: <xmx:y1rvaOYJlMD8DHKGrnv6rhDc3RTrkWoOZC-i7EIiqNKs-vBNGYY7jA>
-    <xmx:y1rvaDZiYZOM4hjcm13H7w3UEARIoGgIa0uj0uzPcJzFYICN5ZQK6Q>
-    <xmx:y1rvaNQJtk4pthMkt-tCyJ9iG-MLlHeKUWmW3NL-7bD-w1uzNFdDHA>
-    <xmx:y1rvaI3Dqhl9l4nYXMT1TbpmBVLh1Plq2X__JCJ0Gn-4GJ-dXXU9ng>
-    <xmx:zVrvaCz3CLUWWXRj_ZMqZVOaIMLmXf8FqrY9YtloQg9nbnG_TW2UrMFj>
-Feedback-ID: i5cf64821:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E888718E0054; Wed, 15 Oct 2025 04:26:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BvYFwl6s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760520006; x=1792056006;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KFLBr9oHLUDWKHkYETCDph/T5w/KuYX51hvKqwOIrDU=;
+  b=BvYFwl6sglUepCeadxmmUHaU02RLR3JS/a2GPFobH+3p4bupxtWsFppL
+   kYigFv69bl7qQ6GPnJynqEkV+DlJUgUYUzGf5Hy4qOlstB9CY8klJVS3p
+   VKQo2kxIdXXZ+dfUMze2bLnZZZdbp8YTk/mi7WG/5+JjHscWYsziK4n6U
+   QK9O8C75k5dp/C+KxBJLIIEuDT/oXd3KtzlBx3mentw809gmn5EC3XXgk
+   pMfW1UWMde8eYKsVnWP2MoSn247grfDjCZioF+ufkbl2MCH5zJqtmPHwz
+   gKBGTIwuNLPEchLNKNHFZemb6NQOtRkKaR6WFJkKoZafSDthvd1ipDJjZ
+   Q==;
+X-CSE-ConnectionGUID: 0PRq49NJT0iCzjXdgbSIjg==
+X-CSE-MsgGUID: 7nhEilXUT6+ghJfqBrMkDQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="66517396"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="66517396"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 02:20:00 -0700
+X-CSE-ConnectionGUID: PRlNHBlhSCyOPFqKWiFkLA==
+X-CSE-MsgGUID: uhH72m9vTv+MPEyaG8jCMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
+   d="scan'208";a="213066488"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa001.fm.intel.com with ESMTP; 15 Oct 2025 02:19:56 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 163DB96; Wed, 15 Oct 2025 11:19:55 +0200 (CEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] sched: Remove never used code in mm_cid_get()
+Date: Wed, 15 Oct 2025 11:19:34 +0200
+Message-ID: <20251015091935.2977229-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Oct 2025 08:26:50 +0000
-Message-Id: <DDIR4HE5C74G.1U5TA0KDN9O5J@wolber.net>
-Subject: Re: [RFC PATCH 0/4] Enable Clang's Source-based Code Coverage and
- MC/DC for x86-64
-From: "Chuck Wolber" <chuck@wolber.net>
-To: "Peter Zijlstra" <peterz@infradead.org>, "Sasha Levin"
- <sashal@kernel.org>
-Cc: <nathan@kernel.org>, <Matt.Kelly2@boeing.com>,
- <akpm@linux-foundation.org>, <andrew.j.oppelt@boeing.com>,
- <anton.ivanov@cambridgegreys.com>, <ardb@kernel.org>, <arnd@arndb.de>,
- <bhelgaas@google.com>, <bp@alien8.de>, <chuck.wolber@boeing.com>,
- <dave.hansen@linux.intel.com>, <dvyukov@google.com>, <hpa@zytor.com>,
- <jinghao7@illinois.edu>, <johannes@sipsolutions.net>,
- <jpoimboe@kernel.org>, <justinstitt@google.com>, <kees@kernel.org>,
- <kent.overstreet@linux.dev>, <linux-arch@vger.kernel.org>,
- <linux-efi@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-um@lists.infradead.org>, <llvm@lists.linux.dev>,
- <luto@kernel.org>, <marinov@illinois.edu>, <masahiroy@kernel.org>,
- <maskray@google.com>, <mathieu.desnoyers@efficios.com>,
- <matthew.l.weber3@boeing.com>, <mhiramat@kernel.org>, <mingo@redhat.com>,
- <morbo@google.com>, <ndesaulniers@google.com>, <oberpar@linux.ibm.com>,
- <paulmck@kernel.org>, <richard@nod.at>, <rostedt@goodmis.org>,
- <samitolvanen@google.com>, <samuel.sarkisian@boeing.com>,
- <steven.h.vanderleest@boeing.com>, <tglx@linutronix.de>,
- <tingxur@illinois.edu>, <tyxu@illinois.edu>, <wentaoz5@illinois.edu>,
- <x86@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20250829181007.GA468030@ax162>
- <20251014232639.673260-1-sashal@kernel.org>
- <20251015073701.GZ3419281@noisy.programming.kicks-ass.net>
-In-Reply-To: <20251015073701.GZ3419281@noisy.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Oct 15, 2025 at 7:41 AM UTC, Peter Zijlstra wrote:
-> On Tue, Oct 14, 2025 at 07:26:35PM -0400, Sasha Levin wrote:
->> This series adds support for Clang's Source-based Code Coverage to the
->> Linux kernel, enabling more accurate coverage measurement at the source
->> level compared to gcov. This is particularly valuable for safety-critica=
-l
->> use cases (automotive, medical, aerospace) where MC/DC coverage is requi=
-red
->> for certification.
->>=20
->> Changes since previous patchset [1]:
->> - Rebased on v6.18-rc1
->> - Adapted to lib/crypto reorganization (curve25519 exclusion moved to
->>   lib/crypto/Makefile)
->> - Minor correctness fixes throughout the codebase
->>=20
->> The implementation has been tested with a kernel build using Clang 18+ a=
-nd
->> boots successfully in a KVM environment with instrumentation enabled.
->>=20
->> [1] https://lore.kernel.org/all/20240905043245.1389509-1-wentaoz5@illino=
-is.edu/
->>=20
->> Wentao Zhang (4):
->>   llvm-cov: add Clang's Source-based Code Coverage support
->>   llvm-cov: add Clang's MC/DC support
->>   x86: disable llvm-cov instrumentation
->>   x86: enable llvm-cov support
->>=20
->>  Makefile                          |   9 ++
->>  arch/Kconfig                      |   1 +
->>  arch/x86/Kconfig                  |   2 +
->>  arch/x86/crypto/Makefile          |   1 +
->>  arch/x86/kernel/vmlinux.lds.S     |   2 +
->>  include/asm-generic/vmlinux.lds.h |  36 +++++
->>  kernel/Makefile                   |   1 +
->>  kernel/llvm-cov/Kconfig           | 121 ++++++++++++++
->>  kernel/llvm-cov/Makefile          |   8 +
->>  kernel/llvm-cov/fs.c              | 253 ++++++++++++++++++++++++++++++
->>  kernel/llvm-cov/llvm-cov.h        | 157 ++++++++++++++++++
->>  lib/crypto/Makefile               |   3 +-
->>  scripts/Makefile.lib              |  23 +++
->>  scripts/mod/modpost.c             |   2 +
->
-> I'm thinking I'm going to NAK this based on the fact that I'm not
-> interested in playing file based games. As long as this thing doesn't
-> honour noinstr I don't want this near x86.
+Clang is not happy with set but unused variable (this is visible
+with `make W=1` build:
 
-I am working on a noinstr patchset that will precede this pachset. As it tu=
-rns
-out there are several areas of the kernel (128 that I have found so far) th=
-at
-are missing the noinstr attribute macro.
+kernel/sched/sched.h:3744:18: error: variable 'cpumask' set but not used [-Werror,-Wunused-but-set-variable]
 
-Example:
+It seems like the variable was never be used along with the assignment that
+does not have side effects as far as I can see. Remove those altogether.
 
-kernel/locking/lockdep.c:
-	void noinstr lockdep_hardirqs_off(unsigned long ip)
-include/linux/irqflags.h:
-	static inline void lockdep_hardirqs_off(unsigned long ip) { }
+Fixes: 223baf9d17f2 ("sched: Fix performance regression introduced by mm_cid")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ kernel/sched/sched.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-The latter version is intended to be optimized out if the kernel is not
-configured to use this feature. However when the kernel is instrumented for
-profiling, the stub is not optimized out and ends up in the .text section
-rather than the .noinstr.text section.
-
-
-> And we have kcov support, and gcov and now llvm-cov, surely 3 coverage
-> solutions is like 2 too many?
-
-Optimization makes it nearly impossible to correlate GCov results back to
-actual lines of source. llvm-cov instruments at the AST level which enables
-precise mapping back to source code regardless of optimization level.
-
-
-A detailed rundown on this issue can be found here[1], with the most releva=
-nt
-excerpt reproduced here:
-
-> In the following gcov example from drivers/firmware/dmi_scan.c, an
-> expression with four conditions is reported to have six branch outcomes,
-> which is not ideally informative in many safety related use cases, such a=
-s
-> automotive, medical, and aerospace.
->=20
->         5: 1068:	if (s =3D=3D e || *e !=3D '/' || !month || month > 12) {
-> branch  0 taken 5 (fallthrough)
-> branch  1 taken 0
-> branch  2 taken 5 (fallthrough)
-> branch  3 taken 0
-> branch  4 taken 0 (fallthrough)
-> branch  5 taken 5
->=20
-> On the other hand, Clang's Source-based Code Coverage instruments at the
-> compiler frontend which maintains an accurate mapping from coverage
-> measurement to source code location. Coverage reports reflect exactly how
-> the code is written regardless of optimization and can present advanced
-> metrics like branch coverage and MC/DC in a clearer way. Coverage report
-> for the same snippet by llvm-cov would look as follows:
->=20
->  1068|      5|	if (s =3D=3D e || *e !=3D '/' || !month || month > 12) {
->   ------------------
->   |  Branch (1068:6): [True: 0, False: 5]
->   |  Branch (1068:16): [True: 0, False: 5]
->   |  Branch (1068:29): [True: 0, False: 5]
->   |  Branch (1068:39): [True: 0, False: 5]
->   ------------------
-
-
-..Ch:W..
-
-
-
-[1] https://lore.kernel.org/llvm/20240905043245.1389509-1-wentaoz5@illinois=
-.edu/
-
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 1f5d07067f60..361f9101cef9 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -3740,11 +3740,9 @@ static inline int mm_cid_get(struct rq *rq, struct task_struct *t,
+ 			     struct mm_struct *mm)
+ {
+ 	struct mm_cid __percpu *pcpu_cid = mm->pcpu_cid;
+-	struct cpumask *cpumask;
+ 	int cid;
+ 
+ 	lockdep_assert_rq_held(rq);
+-	cpumask = mm_cidmask(mm);
+ 	cid = __this_cpu_read(pcpu_cid->cid);
+ 	if (mm_cid_is_valid(cid)) {
+ 		mm_cid_snapshot_time(rq, mm);
+-- 
+2.50.1
 
