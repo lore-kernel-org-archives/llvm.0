@@ -1,139 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D38A2D46C6;
-	Wed, 15 Oct 2025 10:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C242C21F4
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 14:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760525177; cv=none; b=LJDEgkF8mowHGPRvktDo/JSO+02La5H7oV5x/+AVI3TltYUrQGrLyTmcrng6A88hhBvqIxCeYCAPN575+sAPczrM/dU+a3pNWXHfjHlT+cg5XnHjTelc/y82m6IpCpCBv1ZBfax3c2M2s1G0p6XWq1+nLN7XJnMPNjel7/CZXJs=
+	t=1760539777; cv=none; b=bCGxUEC5uQHiBJxrMh2KkEt5E07oYvY/fWJIYxYg/o/nVSnsEdZNBN9pnqAGXg6vx1iqCTct/dVvhczHpSiOeoX2jgPWNuoQDRQu+NqStVNdaSNbj1OPojli064CcrlIMbjk0a413HVnuEGr8oGB1Ml/e5XdtOe5+bxBEMIM8OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760525177; c=relaxed/simple;
-	bh=rFh+h2Gw19dKUeywWzo2iMO61XM6xOPU3z9oWLVsNWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoAVOykhHn5j3kspPl7f5Wfc847aG42vapnaHVXLT2HBC8UZ98r/Yk161jz4vbM7KT2xjFYNcoyDkVzpaR7WGXMrIRyj1InwvlrqoGkadlobLkLOF8JS6tz+2MrdTW8eMsvxAjzsb4nJJxlLdTcUhKCmrpAioyuC1ugFYKbWrjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nAHso32S; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760539777; c=relaxed/simple;
+	bh=Ugr7IgQEch7CkBgCAdZs0bbGqpAGoYyvZ+rvrv51b08=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q9WeX3geRxJt3L8xWbWEUGOqkhvJXYpgHoEJBTUssK8CHPNkQgHBd8SsAs5f7Bxd1YlQNu+xaehAIjlczPV/W8VKoVx+SiZCo5WNzuwYE2r17pcB76eebq518VTstDdaWmWNTL9gtU+B5KR2Oy1oZNgE6CO+bOqGjPXVse0p86Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bvu1Hrp3; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nAHso32S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760525176; x=1792061176;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rFh+h2Gw19dKUeywWzo2iMO61XM6xOPU3z9oWLVsNWY=;
-  b=nAHso32SG11XdSwXuuht07J0URNoU2AWhO0rKT5cpoJtWlzAwzzOH2Mp
-   OJ51TN5WCXxqFWOs0FkTfjuERFYD7j1Ksf56PqwrFhWAIsy8M/zAYLFXY
-   PyD+DilOlqLD7xKyyLuy8qnCl7qfRsVqZQbXfKdsss9aI9daAL6dvosCV
-   Fo3K4L+Tbjjnxc9biXX/CnErYCtRB8th0zk54W5zbew9iAtzfs3IexJH/
-   XMLcCIS09PRoHH61k05ijOf/l51FZQVPMPyfKBk9j+c7kDXfgq68Ekgcf
-   PSmQvMSF7R3S7HOV3lUZ4+Wrr2JyYffB0DDhZ3d54SjYc/U/WJJp3UVOY
-   Q==;
-X-CSE-ConnectionGUID: HUy70wwKQUK2F0TMoRZVcA==
-X-CSE-MsgGUID: BFtgxBx9TaKxW2ycUgXxOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="72970271"
-X-IronPort-AV: E=Sophos;i="6.19,231,1754982000"; 
-   d="scan'208";a="72970271"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 03:46:15 -0700
-X-CSE-ConnectionGUID: dfakOIJBQqKdeVC7BljyhQ==
-X-CSE-MsgGUID: TqkAaNuXSS6Qj74U8zqrOA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,231,1754982000"; 
-   d="scan'208";a="181272108"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 15 Oct 2025 03:46:14 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v8z1G-0003kF-2c;
-	Wed, 15 Oct 2025 10:46:10 +0000
-Date: Wed, 15 Oct 2025 18:45:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hansg@kernel.org>, Bingbu Cao <bingbu.cao@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hans de Goede <hansg@kernel.org>, linux-media@vger.kernel.org
-Subject: Re: [PATCH 25/25] media: i2c: ov01a10: Register tweaks for ov01a1s
- model
-Message-ID: <202510151822.TJUD8C7K-lkp@intel.com>
-References: <20251014174033.20534-26-hansg@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bvu1Hrp3"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-33b9e574734so74096a91.3
+        for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 07:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760539775; x=1761144575; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ugr7IgQEch7CkBgCAdZs0bbGqpAGoYyvZ+rvrv51b08=;
+        b=Bvu1Hrp3oCub7rqGqyD5mX2I0IB1fY/XJ8JL2RVVLloQMWghyynw1Ap4TZjI6QzrWq
+         QN5op46mcEEN3xhm/rRuA/eh2BoCvrbityvfiPxh3Sesw4YSfilSV6hPTLA+h1YhE/a7
+         rm2BrhnLuUbkCrICB9ya+NBQj7+ADzyzXihutHnwCZVEIa8g7II+32bxECnAm7jV+srS
+         kohhOnwJirdyDRRBqkACIf9MTdqwRFkbqtz9hc/pguybdxmRe44l0vSsLDbEyBQtVSIb
+         Rs7VbvnEuiI9sFC8HMjX6pWYjKcTcvCKlBMm3tSJnYlPHpvUcl2j8n5hdMvd3uolMvLg
+         3tAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760539775; x=1761144575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ugr7IgQEch7CkBgCAdZs0bbGqpAGoYyvZ+rvrv51b08=;
+        b=fZ3fKSX3BENPiEwPgw5ZLDKRTuU/y12UI3Sm7EviSoW3hDCNypE0pNmNu3AgHaUlNT
+         EebjDo8mu8Y1y4gTq4TQP3PpsX0Zelgmh/4zIEJnuOiderSMKKzN6Nq9hiEEZCRnazQj
+         PReuzFtxm46edg7r0bV4iDyoWG+VfcRCOzKS+hlTueKJD4cMWymtk9hKPpAUJVNBnXJ3
+         tKutenWYZbqGKMRVIqTbEoM43uf2sceghw85KkAj28e1cMQyXux24H8yDtjud1LA4o1+
+         62t3YdODqHdvRGI+KufLuZE0Ta2BQDjhS1eQs18UokvnxJYaPXvWlJ9wskVO/EBi3OWc
+         hHHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXUTERm8WOy542z+1DhnhuJ4OtDedOaloifhg9ORucCsML334ROr9XcgTnSa0/WPbI8YNnV@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxp+LTAp0/I3XX/RAIgRymT+Q29fg68/bXN/L7yE6T7EuU+eXCx
+	CA1SPrTRwEm17XBt7uX897S54ZBN86zB1tnkpIju/1WFmpgz4ynoO4DB2+vhfDxbuOHV7YDI9SO
+	zlm84Dv89KsN4OIGktO7F4f1r5RW7LB0=
+X-Gm-Gg: ASbGncviGm3f8QMSczKg/27GyTT7luCU/DK/A3wIWHO6dnLedN29e3sskR++R+jjcNH
+	BsU45ULDW3FP81pgLhwUsIN/MOHJjh9PEdMADqUOI2uZmhP96ZxFbxsABgGbZ4pdTv9rVwHCxF9
+	u+Uvbpjjc6CJQm5YzeapUFQR/vQFvQe+mUK+qvU6QEB0Xs2KIdXBefz7QDvObZw3MNKo74ijDSn
+	eXXeGVfBA8+53m5egdTSrVYRng79Fe8OQ2Plg==
+X-Google-Smtp-Source: AGHT+IE69LKH/NE6WW9KYSfgI5K8eXDRrZSpNwn7Zg+fzj0drMI9U+jkzmrowvG1UrutOgnm3kdrLWQIhWCejBy9GBI=
+X-Received: by 2002:a17:90b:3ec5:b0:334:29f0:a7e4 with SMTP id
+ 98e67ed59e1d1-33b5138e32cmr36496555a91.21.1760539775424; Wed, 15 Oct 2025
+ 07:49:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014174033.20534-26-hansg@kernel.org>
+References: <20250912195339.20635-1-yana2bsh@gmail.com> <20250912131722.74658ec0@kernel.org>
+In-Reply-To: <20250912131722.74658ec0@kernel.org>
+From: =?UTF-8?B?0K/QvdCwINCR0LDRiNC70YvQutC+0LLQsA==?= <yana2bsh@gmail.com>
+Date: Wed, 15 Oct 2025 17:49:22 +0300
+X-Gm-Features: AS18NWC8jphTpk8XmfrNi0U2OyQEvZMStTycvFUqIt8mxiSBHWFeGjYnyBqSIBA
+Message-ID: <CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/15] genetlink: Test Netlink subsystem of Linux v6.1
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	lvc-project@linuxtesting.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hans,
+The motivation for this work is to improve the test coverage and
+reliability of the Netlink subsystem, specifically for the core
+af_netlink.c and genetlink.c components. While the subsystem is
+critical for kernel-userspace communication, its coverage by the
+existing selftests is quite limited.
 
-kernel test robot noticed the following build warnings:
+To quantify the improvement, these new selftests achieve the following
+line coverage (as measured by gcov):
+- net/netlink/af_netlink.c: 84.0%
+- net/netlink/genetlink.c: 88.8%
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.18-rc1 next-20251014]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Integrating these tests into the upstream suite will provide long-term
+stability and make it safer to refactor or add new features to the
+Netlink core in the future.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/media-i2c-ov01a10-Fix-the-horizontal-flip-control/20251015-014349
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251014174033.20534-26-hansg%40kernel.org
-patch subject: [PATCH 25/25] media: i2c: ov01a10: Register tweaks for ov01a1s model
-config: um-randconfig-001-20251015 (https://download.01.org/0day-ci/archive/20251015/202510151822.TJUD8C7K-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251015/202510151822.TJUD8C7K-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510151822.TJUD8C7K-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/media/i2c/ov01a10.c:13:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/media/i2c/ov01a10.c:204:34: warning: unused variable 'ov01a10_regs' [-Wunused-const-variable]
-     204 | static const struct reg_sequence ov01a10_regs[] = {
-         |                                  ^~~~~~~~~~~~
->> drivers/media/i2c/ov01a10.c:209:34: warning: unused variable 'ov01a1s_regs' [-Wunused-const-variable]
-     209 | static const struct reg_sequence ov01a1s_regs[] = {
-         |                                  ^~~~~~~~~~~~
-   3 warnings generated.
+=D0=BF=D1=82, 12 =D1=81=D0=B5=D0=BD=D1=82. 2025=E2=80=AF=D0=B3. =D0=B2 23:1=
+7, Jakub Kicinski <kuba@kernel.org>:
 
 
-vim +/ov01a10_regs +204 drivers/media/i2c/ov01a10.c
-
-   203	
- > 204	static const struct reg_sequence ov01a10_regs[] = {
-   205		{0x3822, 0x13},
-   206		{0x4837, 0x11},
-   207	};
-   208	
- > 209	static const struct reg_sequence ov01a1s_regs[] = {
-   210		{0x3822, 0x03},
-   211		{0x4837, 0x14},
-   212		{0x373d, 0x24},
-   213	};
-   214	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+=D0=BF=D1=82, 12 =D1=81=D0=B5=D0=BD=D1=82. 2025=E2=80=AF=D0=B3. =D0=B2 23:1=
+7, Jakub Kicinski <kuba@kernel.org>:
+>
+> On Fri, 12 Sep 2025 22:53:23 +0300 Yana Bashlykova wrote:
+> > This series adds comprehensive testing infrastructure for Netlink
+> > and Generic Netlink
+> >
+> > The implementation includes both kernel module and userspace tests to
+> > verify correct Generic Netlink and Netlink behaviors under
+> > various conditions.
+>
+> What is the motivation for this work?
