@@ -1,126 +1,158 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD3F251793
-	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 03:38:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A151724BBE4
+	for <llvm@lists.linux.dev>; Wed, 15 Oct 2025 03:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760499493; cv=none; b=ss8+Kfe8qll0BL9ZcqT9zgTzQ+8iKjqnUwOmpyYEvICPJ2tBk/ER5p/FR6IJxuqQC8vo3vQxleYf9AugtlZwFjAqBTlWX4YctPQIOtDOU9phOVNFC18qBtb9svodHVXThM65TJbtZjrjWi3y3cmlhFwq1zR/1Xz2DPmS+XQjp0c=
+	t=1760499531; cv=none; b=Pg3czDU5/RTolL0HlQGjARkWT5awHBIF7B+tH0o55ELS/PpzRGfhj/g3MSkJh6qJHKwTsksnb1dcutbkigfdLT7YmRVjmANOASgTJc1szggoCWIfbWZSVJkLcespIioH14ckRouzh6mqnyr4ZydNUa8+EPdFJX1BO42pL6i670Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760499493; c=relaxed/simple;
-	bh=pEonomj0fLSNJmTz+pI0qR2KMrsnM0wkX9R9oldfo04=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQhJQY9RM2Viawe9IorLMx1XVYJV02vzE1s04P/oel+2D1837H1pQa1LXbSQZ+p+NJbM734KNi9rBtNu+BRbTaSavdmAAACAW4LJ+It6s9WJeDgzywOwuOBxvte8AhyElhUqhx+ls1z8sq+PfmojO3ZjDS4X0IzMVcZDnzdAoJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=c6R36xCe; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1760499531; c=relaxed/simple;
+	bh=4wJt+gpoa406fX3ntwa3yiMH3j+kDH0t4mBuoWTLNIw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hOXOSK64/CN3hzCOFK1vK0XXZKU8Qk1uwkRLJntVtEOv4c3va7iUESsKorDwnWWuL1+LIcpM8hQJHWbMY4Noe/wcY/t63yRS9wwjL9jiiYUdKq+7GTOZQyIibCIG5IN/5ijTC2C8rTJR8DDvEhdzmJFQ4UoiyV7ndFmlWIYEsPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AEsumNgH; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="c6R36xCe"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59EHlvuK021187;
-	Wed, 15 Oct 2025 03:38:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=JhcohmxMF8CEt4uB5tXm35fRtqDNhH
-	zChbRDG+yKgEA=; b=c6R36xCelyC067BnkUlWO9WUPasN1rRpy0/oXe6OWcShL1
-	7BeHYsikJWfmwSL8AxKl+kkZB0HNO+CoPGOOcLaSFpKIcN2EdCMmY47xhgRCZa7i
-	9bcvRfZWvVMRtKFWnybI78tLiAnuk2R4eLc4F+t0JtWWlkPwhRKX021w2HYpKunC
-	fFGaiJFWtAWRjHLIDZYjrgaen0awSYPJMP6rIlMERyq/Uv0O8zvlSIxl1Hy2Vn7f
-	pzivfhgqNXJsgarfmBTa1WZ4MxP2U37EM9QP5My8OUudr85ZZpdJcGwYa96yfYFB
-	ogV08GNV0fW7Z1QCIRW8RrvAFBz7pT7WHcmMeKgQ==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49qey8t8j4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 15 Oct 2025 03:38:04 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59EN1jDU018372;
-	Wed, 15 Oct 2025 03:38:03 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 49s3rf7vqs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 15 Oct 2025 03:38:03 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59F3c1p553281032
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 15 Oct 2025 03:38:01 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8BC7B200EB;
-	Wed, 15 Oct 2025 03:38:01 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 82CF3200EE;
-	Wed, 15 Oct 2025 03:37:58 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.39.24.169])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 15 Oct 2025 03:37:58 +0000 (GMT)
-Date: Wed, 15 Oct 2025 09:07:54 +0530
-From: Vishal Chourasia <vishalc@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, maddy@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] arch/powerpc: Remove .interp section in vmlinux
-Message-ID: <aO8XEhMdT19UOPlp@linux.ibm.com>
-References: <eeaf8fd6628a75d19872ab31cf7e7179e2baef5e.1751366959.git.christophe.leroy@csgroup.eu>
- <20251013040148.560439-1-vishalc@linux.ibm.com>
- <2b4a3215-1620-40c9-a00c-ca833ebbb7b6@csgroup.eu>
- <aOypxKMzsLR5tAtv@linux.ibm.com>
- <20251015002154.GA2300901@ax162>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AEsumNgH"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3f2ae6fadb4so6726925f8f.1
+        for <llvm@lists.linux.dev>; Tue, 14 Oct 2025 20:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760499528; x=1761104328; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qCkYlbRToLYdFFXJcENf2IQzzKVCQ6jcGYcB48CaRYU=;
+        b=AEsumNgHxpl/FTljEJqsrbTckcBqa+wP9hQxsUxmnn5bia/kUfr3+TDNzwcpXwoITb
+         KbkdpXNwQ7ReIe457ljwBGforPPCJNmlWAcWXpgNr9eMbG/G6B1+EP/Zp04/JkptbAe1
+         IkqqL2FFvJdbgi8l+G8kaIgznoM5nguSbsups8KZHAMEWvNxNjSNm4OeKD1X05W3ikd7
+         xBvIDX62dKWTMFh4oo8KR7jHD0I/p6rFSYp6o1kuStdb80uSTVXJk0TNTK45PmzRgVu1
+         lpsZ6SpqnM34scOBgqP7Il2Bu0pjb+GcQuG+WxZMN9OXu0bMR1jyzA3Cu5KrqgLPmrt4
+         W69g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760499528; x=1761104328;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qCkYlbRToLYdFFXJcENf2IQzzKVCQ6jcGYcB48CaRYU=;
+        b=iE+o+u1bTt92fxzFfvSJHlOM8rqDJyFKqyzUYvsSjfZBr8sNSaULpqTB/7gsiAQKQY
+         TZ1PFF+GEXOBTWHlbmCg1l6jxODJq4qLn184OxDitNeqCfXeoUfybjcX4OsgDcS/ZMwV
+         YmAfgTmQy+GHAwJQ7CXEUehi/gX4lZROIwd6AXpeOODg6LvZa52fuHIraNMb0+bngl74
+         HswoYFPjxOcKQuO9mCH6BZPfi1bnSY2iDvTFpVe2at9uQSrgQPFEoNunqu7qQEjTmLIS
+         9N2TDXf4O+Sf90KdtiqeB9f/NXJLv3qah32Oepu/Pgm5VRMvLkuVje643OkUhV4lBoRq
+         3ssA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAynxacH/Wcg7n5SW3SitP9Eha8WO+edZqldqJzgNJ/R2aU4BbH539ZMVkhIaLyncZAajD@lists.linux.dev
+X-Gm-Message-State: AOJu0YxBrHlDiBsL5sHacHTlpgBUc/+ogUtHD+ImI/KXbyRdAId8cbW7
+	xi+gHma2ju8YY0TKd22T3CbCn/9OHPha7q4+x8fUnmxzXiCHZFG8VFNYT9LfIciLr4FOH8NJ0vI
+	jIsP6A4P84KmgOuKiooiXnsBwiJYSTvTbAh0UcpcD
+X-Gm-Gg: ASbGncuqcks11oiESlKvMlYRm5KDZ4y6eggdz/An2bGmrhOcw7qqJ+RIeJWu0njZ+W8
+	HptD2f2qn+OqJUS8eyaibvpqvCoQu4NfIqq6LPZfeF8E/tTh9zx3cwSBtPzg5T4sszGlhe52HFa
+	s8D0uTpDCLv0K/3o7/YoAdO3/ctTZy1zec6MZ0EdnLEDrRQvcqk3OSLNJFkWB82C93x/1oag5y0
+	gN4qUKdXOzBE/tTEkwPzM/Zis50b04d88kNNq7Q3rU=
+X-Google-Smtp-Source: AGHT+IEXqrUaXr8DHCM+aI/npfJJzTlagvjXjvafVzIGuFHFtOvaU6LGphM/lgPuvpr67IHJYligctKwRWzsmwrMOL8=
+X-Received: by 2002:a05:6000:3111:b0:425:825d:15d1 with SMTP id
+ ffacd0b85a97d-4266e8db601mr19071351f8f.44.1760499527730; Tue, 14 Oct 2025
+ 20:38:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251015002154.GA2300901@ax162>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UlRR5dnw_0Bhrnv_jkvBzNgkZQJE8_KD
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxMSBTYWx0ZWRfXz5JUHGeoVQns
- a+L09qm1y4zdDG2vGYL7SyGLxbGVhGyTnzE4zf2jYGQCkbIghhj1FxHEdkxiGdoEgIrsSeYyics
- Yg3ClyE/ZP5nGgpoUKMIKH/JDE2Z0E/MeGQzlYUclF3JkW+i/BvyazUHeTFOvxC98W6pHE8YUmw
- vZInIZtSVhAyEcQAOIuWsojg7R2Ig1XnF6plPv1Ae9NpmitrBQIIDnS1XddLGew9Y6bK13zE+8n
- gNN0An5e+8YPvd4dSnhM6jt4K9IgHzy+7Pg/o89Hxqs3ko7oolzKu5Na+309G47MXaR1nXmWBCI
- YWwh1B5P4wN5nTunzmHTU05kmvIwvLBRvspvhLsPVEe/lNNvN9+y1Imt8q0BEY1ulVy6E8lRs/W
- di3FzZ2WsUisYWIuuY6xgVPu3zuv9w==
-X-Proofpoint-GUID: UlRR5dnw_0Bhrnv_jkvBzNgkZQJE8_KD
-X-Authority-Analysis: v=2.4 cv=QZ5rf8bv c=1 sm=1 tr=0 ts=68ef171c cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=kj9zAlcOel0A:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NEAV23lmAAAA:8 a=nk_3v9Mxg0vDHs7q2dAA:9 a=CjuIK1q_8ugA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-15_01,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0
- spamscore=0 malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510110011
+References: <20251014191156.3836703-1-xur@google.com> <20251014191156.3836703-5-xur@google.com>
+In-Reply-To: <20251014191156.3836703-5-xur@google.com>
+From: Han Shen <shenhan@google.com>
+Date: Tue, 14 Oct 2025 20:38:34 -0700
+X-Gm-Features: AS18NWAAoTZwilsHeALUNIPooAM-rlbEq_tGr0S8vEjTAZ0hT02nDM65-kCnNvQ
+Message-ID: <CACkGtrgWRJw2+KX_=Xww773ovYkjq-Bf4Sygo=Hgn86TM7VjLA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] kbuild: Add config to assert profile accuracy for
+ aggressive optimization
+To: xur@google.com
+Cc: Alexey Gladkov <legion@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Bill Wendling <morbo@google.com>, Ingo Molnar <mingo@kernel.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
+	Tamir Duberstein <tamird@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	Yabin Cui <yabinc@google.com>, Sriraman Tallam <tmsriram@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Nathan,
+I've verified patches 1-4, with the following configuration on X86_64 syste=
+ms:
 
-On Tue, Oct 14, 2025 at 05:21:54PM -0700, Nathan Chancellor wrote:
-> In this bug report, you mention using LLVM=1. Does the issue happen if
-> you use GNU ld (ld.bfd) via LD (i.e., LD=powerpc64le-linux-gnu-ld or
-> equivalent) over ld.lld from LLVM=1? This sounds more likely to be a
-> linker difference rather than a compiler difference.
+1. autofdo without profile (nothinlto)
+2. autofdo with profile (nothinlto)
+3. propeller only (noautofdo no thinlto) annotated
+4. propeller only optimized (noautofdo nothinlto)
 
-Thank you for the insight.
+All the kernels boot up successfully.
 
-Yes, when using powerpc64le-linux-gnu-ld linker .interp section is not
-emitted.
-
-Command:
-$ make LLVM=1 ARCH=powerpc LD=powerpc64le-linux-gnu-ld -j 8 zImage
-$ llvm-readelf -p .comment vmlinux
-
-String dump of section '.comment':
-[     0] clang version 22.0.0git (https://github.com/llvm/llvm-project.git 7314565281ec28b745502c3f429fd431e16673eb)
-
-$ llvm-readelf -p .interp vmlinux                                                                                    
-llvm-readelf: warning: 'vmlinux': could not find section '.interp'
+Thanks,
+Han
 
 
-vishalc
+
+On Tue, Oct 14, 2025 at 12:12=E2=80=AFPM <xur@google.com> wrote:
+>
+> From: Rong Xu <xur@google.com>
+>
+> Adds a build config to AutoFDO to assert that the generated profile
+> accurately represents the intended workload. This enables Clang to
+> perform more aggressive optimizations.
+>
+> Signed-off-by: Rong Xu <xur@google.com>
+> ---
+>  arch/Kconfig             | 11 +++++++++++
+>  scripts/Makefile.autofdo |  3 +++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index ebe08b9186adc..6fdc676cb0fe4 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -886,6 +886,17 @@ config AUTOFDO_CLANG
+>
+>           If unsure, say N.
+>
+> +config AUTOFDO_PROFILE_ACCURATE
+> +       bool "Assert AutoFDO profile is accurate (EXPERIMENTAL)"
+> +       depends on AUTOFDO_CLANG
+> +       help
+> +         This option asserts that the AutoFDO profile (specified
+> +         in CLANG_AUTOFDO_PROFILE) is collected from a representative
+> +         workload, allowing the Clang compiler to perform more
+> +         aggressive optimizations.
+> +
+> +         If unsure, say N.
+> +
+>  config ARCH_SUPPORTS_PROPELLER_CLANG
+>         bool
+>
+> diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
+> index 5bcfcef273745..36abeae2accdc 100644
+> --- a/scripts/Makefile.autofdo
+> +++ b/scripts/Makefile.autofdo
+> @@ -11,6 +11,9 @@ endif
+>  ifdef CLANG_AUTOFDO_PROFILE
+>    CFLAGS_AUTOFDO_CLANG +=3D -fprofile-sample-use=3D$(CLANG_AUTOFDO_PROFI=
+LE) -ffunction-sections
+>    CFLAGS_AUTOFDO_CLANG +=3D -fsplit-machine-functions
+> +ifdef CONFIG_AUTOFDO_PROFILE_ACCURATE
+> +  CFLAGS_AUTOFDO_CLANG +=3D -fprofile-sample-accurate
+> +endif
+>  endif
+>
+>  ifdef CONFIG_LTO_CLANG_THIN
+> --
+> 2.51.0.788.g6d19910ace-goog
+>
+
+
+--
+Han Shen |  Software Engineer |  shenhan@google.com |  Sunnyvale California
