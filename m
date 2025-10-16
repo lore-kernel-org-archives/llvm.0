@@ -1,66 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF98229B12;
-	Thu, 16 Oct 2025 05:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0B6FC0A;
+	Thu, 16 Oct 2025 05:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760592078; cv=none; b=brVHObWyUSqaUbzWpnrv9+6FU0N7F9FxdN0HqBzmHl04Ubf/4AoziAHsSjYhBdNTRCv2w7NYagAhXKhgcHrtVdCzeeAG4AKf8lPT89JXMo+ADntK1R1A3btU8ijChnvmqvoMRxyHvnaz7BAuyhiHPFMeXzyEx3GwAQuJdGni2cY=
+	t=1760592741; cv=none; b=T/nhVg87FxcozUGtQ07OQyGxcXPLzvJ0mS1qA4BOwRF873ry1RIaxNfWOGjEiNABV9ZQAcQD9i0qG0jwatWWBwRjM8SMm6650+IxOopSlohEmNKgBWA1TCC1NpC+FqreJgMWRwDfDU3o/yRKNKq6UsJKYIQAb65tFyCgAMF2nkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760592078; c=relaxed/simple;
-	bh=A5/NfebLVy4IGMGuPkdkDW55FyxpvHYdJJaOthRXXoc=;
+	s=arc-20240116; t=1760592741; c=relaxed/simple;
+	bh=TBbpxuU3ACNBQDvKO3TXR8fbPiyLMy+JmMmNGMrbv4s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jtUM1DyhHEKAdR1ovc885kgJ0iWys8BCtMg1pqbY5O/a4zJSc5C/rH7KLYXQHRS4kfS7ilnJaH9jmMvYe8G5qQ1oBMxweFS8beMKphACpDf1P9gsBkbeUceQBGxf4VOB1RNUe4lFbu5zdGsOr4p4EEG0FKdJqXsE5lQckSyVbyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KV4EPqM+; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQUK7bf+NHXrtqKxDroyfu6gSGTg0QTCjyRR46f63+iYDk0+xNmN1OjrSm3VnOgqRSTJaXrsImgAsKNVFBl5fLTmNJKFPCm97zWVD3wUBmSkAOtq3ha/QmlaLWVqHKqOtEUdxi1cPJ4fS33k1Z1gPVClhRadyUuxpFFK41FnCWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CXFWKT0K; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KV4EPqM+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CXFWKT0K"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760592075; x=1792128075;
+  t=1760592740; x=1792128740;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=A5/NfebLVy4IGMGuPkdkDW55FyxpvHYdJJaOthRXXoc=;
-  b=KV4EPqM+ndqV/jx+S0ZIVX58iLBRv+EINqOxryv0LSWD569ii2B+vkym
-   rDvCOQ0GM6/fUvQj7CYIZ+kf3rKIqXVJMzMOLbMNsAQ5F2EC6+nbT1AmJ
-   gKoyY6zN4kMiPuMhAK22fMI84tQl+0OS6/n9t94ty6IQ550CXAOFRJJKK
-   oH3eE7rSL431jS/6AD0v13iEvCHvtiZKXl0kGzb8yImCeBvGkK+ofSdEb
-   2OC/WDUcSF9uxdNOSbnSsNqAMb6Q73l5UVyRGa4w1FJaGkVV8IVLHPVeF
-   lL14gMMxnn4kjWqBcMlhmiNLAZZ20Zq4Lf0x67ICxWU3FEtnapPIPNizj
+  bh=TBbpxuU3ACNBQDvKO3TXR8fbPiyLMy+JmMmNGMrbv4s=;
+  b=CXFWKT0KbLoMdrRGF1xn24bD0ofUtAp1Hg/Ts7C1WXtYMw6PUlDKPj/b
+   orWuG21GqiUMSR1gGIa49C0+UDM8Dr51aFLTBsHGStZmMi/bT7DH1feQl
+   6vcCClSGNEQwp8hLiIthTBSxn2/nfDAHPCq6xW1dRroZgEtE42TAtpgeW
+   hAjSv9coNYWlwRg0T5anG3Aq/TnxI4XLL6ynTum6qPDfb/UGeeTLsuLP1
+   HDD0X+4VZpiVKcLilV4RlfPVCvQIUAAgvL7rnkE4Ng7IjifbmtLqUvAyN
+   ar1x9iH/hv2EadaK1aNu6oBBDsecI4g4jL1VsPxj0wvV8Sv+XyuEFYU3V
    A==;
-X-CSE-ConnectionGUID: l/REoFRHSwCDLSRtejdlgw==
-X-CSE-MsgGUID: s50o8JfBToCcs9CzLot1Ww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="62924844"
+X-CSE-ConnectionGUID: sAmYq0pLSzOoauX08dnSFg==
+X-CSE-MsgGUID: V8URlgdMSz2nLYgzykX5ng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="50342467"
 X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="62924844"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 22:21:14 -0700
-X-CSE-ConnectionGUID: IP3cuvibS+CCJccqMBQeCg==
-X-CSE-MsgGUID: p/7nVWqaTMGmK0NbxwP28Q==
+   d="scan'208";a="50342467"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 22:32:20 -0700
+X-CSE-ConnectionGUID: zteQvLb8QV249gk9yds1OA==
+X-CSE-MsgGUID: uQ4vq3GFRPeFopW52oQmQQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="206062697"
+   d="scan'208";a="187451974"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Oct 2025 22:21:10 -0700
+  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2025 22:32:16 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v9GQD-0004TT-0E;
-	Thu, 16 Oct 2025 05:21:05 +0000
-Date: Thu, 16 Oct 2025 13:20:54 +0800
+	id 1v9Gax-0004Tn-1U;
+	Thu, 16 Oct 2025 05:32:12 +0000
+Date: Thu, 16 Oct 2025 13:31:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Elaine Zhang <zhangqing@rock-chips.com>, mturquette@baylibre.com,
-	sboyd@kernel.org, sugar.zhang@rock-chips.com, heiko@sntech.de,
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org
+To: Ariana Lazar <ariana.lazar@microchip.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org, huangtao@rock-chips.com
-Subject: Re: [PATCH v1 3/5] clk: rockchip: Add clock controller for the
- RV1126B
-Message-ID: <202510161254.tQekPr3V-lkp@intel.com>
-References: <20251015091325.71333-4-zhangqing@rock-chips.com>
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ariana Lazar <ariana.lazar@microchip.com>
+Subject: Re: [PATCH 2/2] iio: adc: adding support for PAC1711
+Message-ID: <202510161332.ntymBLFJ-lkp@intel.com>
+References: <20251015-pac1711-v1-2-976949e36367@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,105 +71,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251015091325.71333-4-zhangqing@rock-chips.com>
+In-Reply-To: <20251015-pac1711-v1-2-976949e36367@microchip.com>
 
-Hi Elaine,
+Hi Ariana,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on rockchip/for-next]
-[also build test WARNING on clk/clk-next pza/reset/next linus/master v6.18-rc1 next-20251015]
-[cannot apply to pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 19272b37aa4f83ca52bdf9c16d5d81bdd1354494]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elaine-Zhang/clk-rockchip-Implement-rockchip_clk_register_armclk_v2/20251015-175108
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-patch link:    https://lore.kernel.org/r/20251015091325.71333-4-zhangqing%40rock-chips.com
-patch subject: [PATCH v1 3/5] clk: rockchip: Add clock controller for the RV1126B
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20251016/202510161254.tQekPr3V-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510161254.tQekPr3V-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ariana-Lazar/dt-bindings-iio-adc-adding-support-for-PAC1711/20251016-002337
+base:   19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+patch link:    https://lore.kernel.org/r/20251015-pac1711-v1-2-976949e36367%40microchip.com
+patch subject: [PATCH 2/2] iio: adc: adding support for PAC1711
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251016/202510161332.ntymBLFJ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510161332.ntymBLFJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510161254.tQekPr3V-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510161332.ntymBLFJ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clk/rockchip/clk-rv1126b.c:146:7: warning: unused variable 'mux_ddrphy_p' [-Wunused-const-variable]
-     146 | PNAME(mux_ddrphy_p)                     = { "dpll", "aclk_sysmem" };
-         |       ^~~~~~~~~~~~
-   1 warning generated.
+>> drivers/iio/adc/pac1711.c:459:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     459 |         if (time_after(jiffies, info->chip_reg_data.jiffies_tstamp +
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     460 |                         msecs_to_jiffies(PAC1711_MIN_POLLING_TIME_MS))) {
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/jiffies.h:128:2: note: expanded from macro 'time_after'
+     128 |         (typecheck(unsigned long, a) && \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     129 |          typecheck(unsigned long, b) && \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     130 |          ((long)((b) - (a)) < 0))
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/pac1711.c:473:9: note: uninitialized use occurs here
+     473 |         return ret;
+         |                ^~~
+   drivers/iio/adc/pac1711.c:459:2: note: remove the 'if' if its condition is always true
+     459 |         if (time_after(jiffies, info->chip_reg_data.jiffies_tstamp +
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     460 |                         msecs_to_jiffies(PAC1711_MIN_POLLING_TIME_MS))) {
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/pac1711.c:453:9: note: initialize the variable 'ret' to silence this warning
+     453 |         int ret;
+         |                ^
+         |                 = 0
+>> drivers/iio/adc/pac1711.c:1124:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1124 |                 return dev_err_probe(dev, ret, "shunt-resistor property does not exist\n");
+         |                                           ^~~
+   drivers/iio/adc/pac1711.c:1116:9: note: initialize the variable 'ret' to silence this warning
+    1116 |         int ret, temp;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +/mux_ddrphy_p +146 drivers/clk/rockchip/clk-rv1126b.c
+vim +459 drivers/iio/adc/pac1711.c
 
-    86	
-    87	PNAME(mux_pll_p)			= { "xin24m" };
-    88	PNAME(mux_gpll_cpll_p)			= { "gpll", "cpll" };
-    89	PNAME(mux_gpll_aupll_p)			= { "gpll", "aupll" };
-    90	PNAME(mux_gpll_aupll_cpll_p)		= { "gpll", "aupll", "cpll" };
-    91	PNAME(mux_gpll_cpll_24m_p)		= { "gpll", "cpll", "xin24m" };
-    92	PNAME(mux_cpll_24m_p)			= { "cpll", "xin24m" };
-    93	PNAME(mux_24m_gpll_aupll_cpll_p)	= { "xin24m", "gpll", "aupll", "cpll" };
-    94	PNAME(mux_24m_gpll_cpll_p)		= { "xin24m", "gpll", "cpll" };
-    95	PNAME(mux_24m_gpll_aupll_p)		= { "xin24m", "gpll", "aupll" };
-    96	PNAME(mux_sclk_uart_src_p)		= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2",
-    97						    "clk_uart_frac0", "clk_uart_frac1" };
-    98	PNAME(mclk_sai0_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2",
-    99						    "clk_audio_frac0", "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai0_from_io" };
-   100	PNAME(mclk_sai1_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2", "clk_audio_frac0",
-   101						    "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai1_from_io" };
-   102	PNAME(mclk_sai2_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2", "clk_audio_frac0",
-   103						    "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai2_from_io" };
-   104	PNAME(mux_sai_src_p)			= { "xin24m", "clk_cm_frac0", "clk_cm_frac1", "clk_cm_frac2", "clk_audio_frac0",
-   105						    "clk_audio_frac1", "clk_audio_int0", "clk_audio_int1", "mclk_sai0_from_io",
-   106						    "mclk_sai1_from_io", "mclk_sai2_from_io"};
-   107	PNAME(mux_100m_24m_p)			= { "clk_cpll_div10", "xin24m" };
-   108	PNAME(mux_200m_24m_p)			= { "clk_gpll_div6", "xin24m" };
-   109	PNAME(mux_500m_400m_200m_p)		= { "clk_cpll_div2", "clk_gpll_div3", "clk_gpll_div6" };
-   110	PNAME(mux_300m_200m_p)			= { "clk_gpll_div4", "clk_gpll_div6" };
-   111	PNAME(mux_500m_400m_300m_p)		= { "clk_cpll_div2", "clk_gpll_div3", "clk_gpll_div4" };
-   112	PNAME(mux_333m_200m_p)			= { "clk_cpll_div3", "clk_gpll_div6" };
-   113	PNAME(mux_600m_400m_200m_p)		= { "clk_gpll_div2", "clk_gpll_div3", "clk_gpll_div6" };
-   114	PNAME(mux_400m_300m_200m_p)		= { "clk_gpll_div3", "clk_gpll_div4", "clk_gpll_div6" };
-   115	PNAME(mux_200m_100m_p)			= { "clk_gpll_div6", "clk_cpll_div10" };
-   116	PNAME(mux_200m_100m_50m_24m_p)		= { "clk_gpll_div6", "clk_cpll_div10", "clk_cpll_div20", "xin24m" };
-   117	PNAME(mux_600m_24m_p)			= { "clk_gpll_div2", "xin24m" };
-   118	PNAME(mux_armclk_p)			= { "clk_core_pll", "clk_core_pvtpll" };
-   119	PNAME(aclk_npu_root_p)			= { "clk_npu_pll", "clk_npu_pvtpll" };
-   120	PNAME(clk_saradc0_p)			= { "clk_saradc0_src", "clk_saradc0_rcosc_io" };
-   121	PNAME(clk_core_vepu_p)			= { "clk_vepu_pll", "clk_vepu_pvtpll" };
-   122	PNAME(clk_core_fec_p)			= { "clk_core_fec_src", "clk_vcp_pvtpll" };
-   123	PNAME(clk_core_aisp_p)			= { "clk_aisp_pll", "clk_vcp_pvtpll" };
-   124	PNAME(clk_core_isp_root_p)		= { "clk_isp_pll", "clk_isp_pvtpll" };
-   125	PNAME(clk_gmac_ptp_ref_p)		= { "clk_gmac_ptp_ref_src", "clk_gmac_ptp_from_io" };
-   126	PNAME(clk_saradc1_p)			= { "clk_saradc1_src", "clk_saradc1_rcosc_io" };
-   127	PNAME(clk_saradc2_p)			= { "clk_saradc2_src", "clk_saradc2_rcosc_io" };
-   128	PNAME(clk_rcosc_src_p)			= { "xin24m", "clk_rcosc", "clk_rcosc_div2", "clk_rcosc_div3", "clk_rcosc_div4" };
-   129	PNAME(busclk_pmu_mux_p)			= { "clk_cpll_div10", "clk_rcosc_src" };
-   130	PNAME(clk_xin_rc_div_p)			= { "xin24m", "clk_rcosc_src" };
-   131	PNAME(clk_32k_p)			= { "clk_xin_rc_div", "clk_32k_rtc", "clk_32k_io" };
-   132	PNAME(mux_24m_32k_p)			= { "xin24m", "clk_32k" };
-   133	PNAME(mux_24m_rcosc_buspmu_p)		= { "xin24m", "clk_rcosc_src", "busclk_pmu_src" };
-   134	PNAME(mux_24m_rcosc_buspmu_32k_p)	= { "xin24m", "clk_rcosc_src", "busclk_pmu_src", "clk_32k" };
-   135	PNAME(sclk_uart0_p)			= { "sclk_uart0_src", "xin24m", "clk_rcosc_src" };
-   136	PNAME(clk_osc_rcosc_ctrl_p)		= { "clk_rcosc_src", "clk_testout_out" };
-   137	PNAME(lrck_src_asrc_p)			= { "mclk_asrc0", "mclk_asrc1", "mclk_asrc2", "mclk_asrc3",
-   138						    "fs_inter_from_sai0", "fs_inter_from_sai1", "fs_inter_from_sai2", "clkout_pdm"};
-   139	PNAME(clk_ref_pipephy_p)		= { "clk_ref_pipephy_cpll_src", "xin24m" };
-   140	PNAME(clk_timer0_parents_p)		= { "clk_timer_root", "mclk_sai0_from_io", "sclk_sai0_from_io" };
-   141	PNAME(clk_timer1_parents_p)		= { "clk_timer_root", "mclk_sai1_from_io", "sclk_sai1_from_io" };
-   142	PNAME(clk_timer2_parents_p)		= { "clk_timer_root", "mclk_sai2_from_io", "sclk_sai2_from_io" };
-   143	PNAME(clk_timer3_parents_p)		= { "clk_timer_root", "mclk_asrc0", "mclk_asrc1" };
-   144	PNAME(clk_timer4_parents_p)		= { "clk_timer_root", "mclk_asrc2", "mclk_asrc3" };
-   145	PNAME(clk_macphy_p)			= { "xin24m", "clk_cpll_div20" };
- > 146	PNAME(mux_ddrphy_p)			= { "dpll", "aclk_sysmem" };
-   147	PNAME(clk_cpll_div10_p)			= { "gpll", "clk_aisp_pll_src" };
-   148	
+   449	
+   450	static int pac1711_retrieve_data(struct pac1711_chip_info *info,
+   451					 u32 wait_time)
+   452	{
+   453		int ret;
+   454	
+   455		/*
+   456		 * check if the minimal elapsed time has passed and if so,
+   457		 * re-read the chip, otherwise the cached info is just fine
+   458		 */
+ > 459		if (time_after(jiffies, info->chip_reg_data.jiffies_tstamp +
+   460				msecs_to_jiffies(PAC1711_MIN_POLLING_TIME_MS))) {
+   461			ret = pac1711_reg_snapshot(info, true, PAC1711_REFRESH_REG_ADDR,
+   462						   wait_time);
+   463	
+   464			/*
+   465			 * Re-schedule the work for the read registers timeout
+   466			 * (to prevent chip regs saturation)
+   467			 */
+   468			cancel_delayed_work_sync(&info->work_chip_rfsh);
+   469			schedule_delayed_work(&info->work_chip_rfsh,
+   470					      msecs_to_jiffies(PAC1711_MAX_RFSH_LIMIT_MS));
+   471		}
+   472	
+   473		return ret;
+   474	}
+   475	
 
 -- 
 0-DAY CI Kernel Test Service
