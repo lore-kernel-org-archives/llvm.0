@@ -1,156 +1,126 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA842AD3D
-	for <llvm@lists.linux.dev>; Thu, 16 Oct 2025 08:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202623081CF;
+	Thu, 16 Oct 2025 09:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760604517; cv=none; b=KnKrsGgNZJRRVSo9ogZw03yOpylYb9hEZ6iA1+avxDawAGbDQd/PqCg88gQrh8jI/GjTI5mBEQI7VV9NMp9n56Taq/S/wX+gJ9Vdwzy/w/9j/Yr6ijHLiktlqTwMdpmPCeIcb77ck8cr+pXYHgv1KwIiwae7wUb5dgob31GM0tM=
+	t=1760605240; cv=none; b=O5R+b29UoqXTRQQMYvJ8s5Rg5YmPlraH5TY7po8cc48oRcl0xggQWJSHLSh6XMY4fTR7TnBPbUOJ0YMG3QDeIopUEBE1ki2pk2g4ef6NdFvCC1wj+gwIa8SCOtnv4uQcWFO0zdXNyyTIFUV5kMORsd/aCuzd46gDPHcno7uz3EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760604517; c=relaxed/simple;
-	bh=kkrnDxMYNrznAE3Hee5XF8MX8bDoYkPgWg1IrtAOtqc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jCg7S9+YFP/Qt8IFMNCmK9hMZ87W90fF5qtHEpD7nzBaNufyVZ7q1PMjo1hgvdViWJg0b5G3pqR9oWyF4iklF5FY1PaE7xpjMoxSB6G/ISa0ItY4Pzh6Jfmy+TRgwhswlIzDjz1H8f7oCi/HIbSvXeELAZls1kQBxWTvHixXHHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hO51urWq; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760605240; c=relaxed/simple;
+	bh=AW7nB6IN76ipnUXef9ZFBUX9Cq6m129avw212mcs+6E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RL2PR6qcVYU8DhOHBYo5wh3efn/knrfQwKdjk+L41LKQKWbZK8GP4l8H8NTVIfepGWNwNPPgDUSUqufol6ANfMyOiXe4g7dxFx8WhvVn0qvGP1t4HnSQEzY4ZBvTvhAeKFeKh/06BQhsO4ojHlX/3fTeykqFtURgBZ86dKkxIE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cTw+2o82; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hO51urWq"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ed20bdfdffso483605f8f.2
-        for <llvm@lists.linux.dev>; Thu, 16 Oct 2025 01:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760604513; x=1761209313; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AVEUrQi9cWOpaDRyBLGip7wyDUSKU6wiRqunzh1l3BU=;
-        b=hO51urWqEPBz+QTpUaLt+2Uc+xhoOWNtgwxybsP8NYLLRuixU6JajwCSJhl7bBWRGA
-         bPimi66UU7ks4sFFCIShre9j4kWTgRAnJj7ih8MWTS1+apzPLjq1+idthm5RR3hV766s
-         i8SM7CbirFZdU+tfE4X4q6w0Z4IDmHdebkU+5468Av2GjPyosixm3udU87ecLV0ElBZs
-         MVv+71OxNyK+UWxjWVXKFaAyEPazBt8hv387uXiQ26LrbQY8ZP1WLimI8msnG/R5OIAV
-         xYnG9+j8HXrrwCs8nUKXsz47nw9Jc8ihvMWU3sVK0YECkc3gJrkjO6AdE7wzJh7saEzK
-         7qbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760604513; x=1761209313;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVEUrQi9cWOpaDRyBLGip7wyDUSKU6wiRqunzh1l3BU=;
-        b=BYLzm798rFoJ91giAo1vyc7PCxnziFJOlg0GBWj3jEc19rXtSgoEKWMsmB5k8S29GE
-         eO1rHcy7lFy5sbCorDR9lYVMmey8Zz+fXzhK2Hi5pnRSmCZPVVzPJAyhyvPImXttgVJX
-         4827H0LFGDC6sJDmI9opkWcZWJFjblgc7XHhXD9weS+9NNZowmK7ucSq4Cydv5w0pmD5
-         M1BqXZRingcodtXO/WTV/K+DzPpA4+iNy0cufrUPkoeWgIjyGBgHpyCULSa25Zas+BXa
-         eLjkRsUkSn65LpxSEqd2uJDhkyf6BQ4RvmA0DbQ8JcEtjgU90qPJIJUTeoUNM9lxDbES
-         oTeg==
-X-Forwarded-Encrypted: i=1; AJvYcCUpfpAsziw9Ob2s+EF1HxUHvc9BxfYZbXhiemuL5FaO+boMQrani8PqlpwQzJ7POwXEFOMv@lists.linux.dev
-X-Gm-Message-State: AOJu0YyJ6hONo2kbAdKHqMagNRgDKo6UIn0hJDdRZ4dgkob36df8JL1U
-	OITAGHAoWzq/rYXR+RoG5KqWlMkAJWUCr/TukyZ4F5o8vJZjSx/6lVJw
-X-Gm-Gg: ASbGnctKrSGoqf3mhDJ6od3ODPhfnirpI1hozwBpiiL84S0CB3p9iotV9wcegTNyfya
-	vQra3zq61aZHugHvd9L5FT5+1yOgh77cPzAFLWiygHRstCzW5ncsNzA0y2OcSwTRfZBMrg/hTu9
-	XJ3PjPKGArsRT1tmkNR4UYdiIsWRjiX/hAU+WwlLI1L2s6j4BFDPxJTdaOteJqSpJXTHBHS98i+
-	yn4rbibTXW8sPAgoFuq+818ckn89VIioYhwLenFPd8zSBct9FOC6fdT4OrK0SUUGb/+9zP0fy75
-	NmTuXbNB5arrVcq9gbwvHQ7YtKW67GKGn/ud1jWaOM3Mcho+mg0MEfjTd8rhPH56O/6pmEuDDQK
-	H2i2ewHK/MXH3/Ai+7Um2/wgBNEtPYr9/nz3utd9Kb4qBzUaiDJFP4n+ZJ68uQF+WPq/TQmF5sP
-	8/oEiDTaKEy6Yirut5ogNpt+Pa5OP5LG1ijX4=
-X-Google-Smtp-Source: AGHT+IFcjkeuZRpv+IRzVM4XciTTJue0s3dCI3MiZ144Kh9FyQmKyef1x1llDDTMWlEp/vC66d5XcA==
-X-Received: by 2002:a05:6000:2010:b0:402:4142:c7a7 with SMTP id ffacd0b85a97d-42666ac6f35mr23068224f8f.16.1760604512220;
-        Thu, 16 Oct 2025 01:48:32 -0700 (PDT)
-Received: from [10.221.203.215] ([165.85.126.96])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42704141cdfsm42311f8f.4.2025.10.16.01.48.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Oct 2025 01:48:31 -0700 (PDT)
-Message-ID: <abe2f4c3-086e-4023-911d-f2ecbdff24cd@gmail.com>
-Date: Thu, 16 Oct 2025 11:48:30 +0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cTw+2o82"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760605239; x=1792141239;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AW7nB6IN76ipnUXef9ZFBUX9Cq6m129avw212mcs+6E=;
+  b=cTw+2o82QzIBHykapzUw4zfdofhJJhsNAXP4Y0WAye9s5bqHFt4/Ex3/
+   ekUn7YlxSP/7d4ymXXxvmQc5qya8sSMJJnCG6Eq5A6/qVE67exYyUYVVq
+   /ebCP4pWPsHheAFyG9ZrMVsjHksMwFpBtvB5qXQEypM5rV6aHg//gkOx5
+   sTgIlU1OBXn3N5qRQH+UpZNFmLCHT7lUaJsZ5X3AY0NTj+zUIS106GyA9
+   IHvhPA9I96CLYChFOiQ7NauaRrSFilZWIHUxKRZ5UAj6fMl68fbrFDqFo
+   ul3jaFnhvuSDcUM/Y1qvHGkQQDTdYZerlvYMaq2OWCDApSkqnnaNXf3gz
+   Q==;
+X-CSE-ConnectionGUID: myHWUw74RWGph/SCNOC0XQ==
+X-CSE-MsgGUID: FdGiXeqiRLCXkd7n5KNCVA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="62886222"
+X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
+   d="scan'208";a="62886222"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 02:00:37 -0700
+X-CSE-ConnectionGUID: ZFx0uxHXTvqKR8uM02vRpw==
+X-CSE-MsgGUID: 8ygwFBOBSIahmV6x2k007g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
+   d="scan'208";a="183200150"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 16 Oct 2025 02:00:34 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v9JqZ-0004cB-32;
+	Thu, 16 Oct 2025 09:00:31 +0000
+Date: Thu, 16 Oct 2025 16:59:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brendan Jackman <jackmanb@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	Brendan Jackman <jackmanb@google.com>
+Subject: Re: [PATCH v2] KVM: x86: Unify L1TF flushing under per-CPU variable
+Message-ID: <202510161648.7Ere0Lfz-lkp@intel.com>
+References: <20251015-b4-l1tf-percpu-v2-1-6d7a8d3d40e9@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] net/mlx5e: Return 1 instead of 0 in invalid case in
- mlx5e_mpwrq_umr_entry_size()
-To: Nathan Chancellor <nathan@kernel.org>, Saeed Mahameed
- <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org, patches@lists.linux.dev,
- llvm@lists.linux.dev
-References: <20251014-mlx5e-avoid-zero-div-from-mlx5e_mpwrq_umr_entry_size-v1-1-dc186b8819ef@kernel.org>
-Content-Language: en-US
-From: Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20251014-mlx5e-avoid-zero-div-from-mlx5e_mpwrq_umr_entry_size-v1-1-dc186b8819ef@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015-b4-l1tf-percpu-v2-1-6d7a8d3d40e9@google.com>
+
+Hi Brendan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 6b36119b94d0b2bb8cea9d512017efafd461d6ac]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Brendan-Jackman/KVM-x86-Unify-L1TF-flushing-under-per-CPU-variable/20251016-011539
+base:   6b36119b94d0b2bb8cea9d512017efafd461d6ac
+patch link:    https://lore.kernel.org/r/20251015-b4-l1tf-percpu-v2-1-6d7a8d3d40e9%40google.com
+patch subject: [PATCH v2] KVM: x86: Unify L1TF flushing under per-CPU variable
+config: i386-buildonly-randconfig-005-20251016 (https://download.01.org/0day-ci/archive/20251016/202510161648.7Ere0Lfz-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510161648.7Ere0Lfz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510161648.7Ere0Lfz-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kvm/x86.c:8003:2: error: call to undeclared function 'kvm_set_cpu_l1tf_flush_l1d_raw'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    8003 |         kvm_set_cpu_l1tf_flush_l1d_raw();
+         |         ^
+   arch/x86/kvm/x86.c:8003:2: note: did you mean 'kvm_set_cpu_l1tf_flush_l1d'?
+   arch/x86/include/asm/hardirq.h:97:29: note: 'kvm_set_cpu_l1tf_flush_l1d' declared here
+      97 | static __always_inline void kvm_set_cpu_l1tf_flush_l1d(void) { }
+         |                             ^
+   arch/x86/kvm/x86.c:9399:2: error: call to undeclared function 'kvm_set_cpu_l1tf_flush_l1d_raw'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    9399 |         kvm_set_cpu_l1tf_flush_l1d_raw();
+         |         ^
+   2 errors generated.
 
 
+vim +/kvm_set_cpu_l1tf_flush_l1d_raw +8003 arch/x86/kvm/x86.c
 
-On 14/10/2025 23:46, Nathan Chancellor wrote:
-> When building with Clang 20 or newer, there are some objtool warnings
-> from unexpected fallthroughs to other functions:
-> 
->    vmlinux.o: warning: objtool: mlx5e_mpwrq_mtts_per_wqe() falls through to next function mlx5e_mpwrq_max_num_entries()
->    vmlinux.o: warning: objtool: mlx5e_mpwrq_max_log_rq_size() falls through to next function mlx5e_get_linear_rq_headroom()
-> 
-> LLVM 20 contains an (admittedly problematic [1]) optimization [2] to
-> convert divide by zero into the equivalent of __builtin_unreachable(),
-> which invokes undefined behavior and destroys code generation when it is
-> encountered in a control flow graph.
-> 
-> mlx5e_mpwrq_umr_entry_size() returns 0 in the default case of an
-> unrecognized mlx5e_mpwrq_umr_mode value. mlx5e_mpwrq_mtts_per_wqe(),
-> which is inlined into mlx5e_mpwrq_max_log_rq_size(), uses the result of
-> mlx5e_mpwrq_umr_entry_size() in a divide operation without checking for
-> zero, so LLVM is able to infer there will be a divide by zero in this
-> case and invokes undefined behavior. While there is some proposed work
-> to isolate this undefined behavior and avoid the destructive code
-> generation that results in these objtool warnings, code should still be
-> defensive against divide by zero.
-> 
-> As the WARN_ONCE() implies that an invalid value should be handled
-> gracefully, return 1 instead of 0 in the default case so that the
-> results of this division operation is always valid.
-> 
-> Fixes: 168723c1f8d6 ("net/mlx5e: xsk: Use umr_mode to calculate striding RQ parameters")
-> Link: https://lore.kernel.org/CAGG=3QUk8-Ak7YKnRziO4=0z=1C_7+4jF+6ZeDQ9yF+kuTOHOQ@mail.gmail.com/ [1]
-> Link: https://github.com/llvm/llvm-project/commit/37932643abab699e8bb1def08b7eb4eae7ff1448 [2]
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2131
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2132
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/net/ethernet/mellanox/mlx5/core/en/params.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-> index 3692298e10f2..c9bdee9a8b30 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-> @@ -100,7 +100,7 @@ u8 mlx5e_mpwrq_umr_entry_size(enum mlx5e_mpwrq_umr_mode mode)
->   		return sizeof(struct mlx5_ksm) * 4;
->   	}
->   	WARN_ONCE(1, "MPWRQ UMR mode %d is not known\n", mode);
-> -	return 0;
-> +	return 1;
->   }
->   
->   u8 mlx5e_mpwrq_log_wqe_sz(struct mlx5_core_dev *mdev, u8 page_shift,
-> 
-> ---
-> base-commit: 4f86eb0a38bc719ba966f155071a6f0594327f34
-> change-id: 20251014-mlx5e-avoid-zero-div-from-mlx5e_mpwrq_umr_entry_size-e6d49c18a43f
-> 
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
-> 
-> 
+  7998	
+  7999	int kvm_write_guest_virt_system(struct kvm_vcpu *vcpu, gva_t addr, void *val,
+  8000					unsigned int bytes, struct x86_exception *exception)
+  8001	{
+  8002		/* kvm_write_guest_virt_system can pull in tons of pages. */
+> 8003		kvm_set_cpu_l1tf_flush_l1d_raw();
+  8004	
+  8005		return kvm_write_guest_virt_helper(addr, val, bytes, vcpu,
+  8006						   PFERR_WRITE_MASK, exception);
+  8007	}
+  8008	EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_write_guest_virt_system);
+  8009	
 
-Thanks for your patch.
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
