@@ -1,172 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E3722B8AB;
-	Thu, 16 Oct 2025 06:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4AE14F125
+	for <llvm@lists.linux.dev>; Thu, 16 Oct 2025 06:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760594618; cv=none; b=HkP+6gLuUsZb84YKTvDyjyBAVLB0zdoZ1VLDxpAmGpjc0mckYPbgS32pIwY0iLXnodKwLeabeEAnBLpbHVMR3iL/sy6uFPbiVheGqDKmklUttvn5hZAsMh0zs6qc7eT1vy8lZHW7UsDa2rC0HTeILH0UdZa3qK9QdhWSfnv4ZRs=
+	t=1760594798; cv=none; b=ZiZiO3ReVejNqRO97DdxyJACOrSZ1CGGGaFEM/2UEEYoHwSsAKGfIb0r58KKGkzGhRF0XOqMDdteYN7lCh8dzth6x/QKJ2HKI1rKyHPywlpd6KRwrJ0f7vZZcX9Cw6sDTkZpxzOGAm2L8SDY+aPS3bsPcWeFSwCLz5W1BTBbaT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760594618; c=relaxed/simple;
-	bh=MDfx2xYi9fokxBFaK7pKEBxVX5joY6//H/JfirZFKEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KlO07seLO0IL1Nsz7zhN/UIFfOkCAYkf/mT+5xSrWCfcUNjn6j3GNoECBcMEh7qPWh/dIzx9Ec3kusxOgqIhf/a4rP7gphEgTj/sRy1mj8EXMWDZVmaZW+Gb/KVhRPhR/O4Kms0JpDuOTRBQ+WjzA4RhXh5noaWI6ODg8/XE5+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YHEjxJwg; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760594798; c=relaxed/simple;
+	bh=tljkTNowknMzKXEvIQB4lhu1urm3F6ZbijcJidiBms4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JMQl0k1BDYGYINJvuet+99iqihMbNm0QDMXtyVc1a1UW9PcA3fWY9t8RhF4ZFCcfz+kxkRkepsSzY+ylDeDth07vQs/SNlOH9Agtl3gp17w+sochzoYJcqkeLBhO9uHsHAUvOJvP/5lxEiglPeloIvfV1uP29j1oOklxB0hr0W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OJ5JqKey; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YHEjxJwg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760594616; x=1792130616;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MDfx2xYi9fokxBFaK7pKEBxVX5joY6//H/JfirZFKEc=;
-  b=YHEjxJwgScvCnsuZNKz+akvfRTM3n+xFI7xSy1vKtdlmdDIIbdQRSNCM
-   XPu+qfegvLM3AsqzmGfovuX9sPMoZ9k7f2YNl4MiQC4CeeHjy/74E1tOB
-   G/63Y7rlPNW+AYcMW7jSb5KZ5hi43rzDJbY7iRsAR2duzUPVe/q+27CYB
-   BHye0N1uY5HbQMu02AKfkxLA7+fP3sSxOlEeYQIJIQjBVDMs+Q9BhQ3vZ
-   zBdXupyOyP/s+YdF03kYlbi7DtfBzn1HenP4qg91A7kGyKIJMy7wFLIjV
-   2zyqov0TsMAuHUam3KcXdO8qgJlV7w6vnbVDCGK3MKOL3gsAicoQl0cHt
-   Q==;
-X-CSE-ConnectionGUID: sowJ+Q0+RNWiyH3ovwq1ag==
-X-CSE-MsgGUID: pFFRRI0XRnOJF19EsWR6nA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="66640897"
-X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="66640897"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 23:03:36 -0700
-X-CSE-ConnectionGUID: mQMBQLW8TQ2Ytug/ex8aGg==
-X-CSE-MsgGUID: OHKQko//RASnIJIm4O/a1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="206070446"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Oct 2025 23:03:34 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9H5I-0004W2-1d;
-	Thu, 16 Oct 2025 06:03:32 +0000
-Date: Thu, 16 Oct 2025 14:03:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Ogness <john.ogness@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jonhunter:tegra/next-fixes 3/3] kernel/printk/internal.h:248:36:
- error: use of undeclared identifier 'console_offload_blocked'
-Message-ID: <202510161454.Pf7XCiPQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OJ5JqKey"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59G0xTrD021081;
+	Thu, 16 Oct 2025 06:06:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=23BFo5
+	NLUkzmzCmHHTtExAib8hTG4oYZFh0n5xDzJSE=; b=OJ5JqKey7JZhTdthd4Q4cf
+	/nJza+emHbNeAs3XTw3IEj7HvDZcYVpW39WP+700xXL4WKORjLvDA/ajdbkoCslv
+	szxBboXcNTepkbn7Z4sjb1nFDvPfPqQQsfH0PSyIQZrF7Z+2mAqnKmA/hftMIWhJ
+	cBHtIvCW3ULc4AQAjxvA2YhbClyIwFxpoxlWQhIDN8qctER3TKvK0MqWIzEX5JqM
+	To74UJJcAZJXdQZr05VEVw5MKCz0h0HniQW4r8CT1SdFux4XylfzqWqXCd1ALcvw
+	8HPh9OwxNnXD5jHVOBjto6UaMgJEiooKz4lL4/Vy/MT012t5qmCxo3NkMDmEpDSQ
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49qew07pun-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Oct 2025 06:06:22 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59G2mFo3015010;
+	Thu, 16 Oct 2025 06:06:21 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 49r3sjkyt9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Oct 2025 06:06:21 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59G66KO262587366
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 16 Oct 2025 06:06:20 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0AD6E20043;
+	Thu, 16 Oct 2025 06:06:20 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 51F5820040;
+	Thu, 16 Oct 2025 06:06:18 +0000 (GMT)
+Received: from [9.39.26.252] (unknown [9.39.26.252])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 16 Oct 2025 06:06:18 +0000 (GMT)
+Message-ID: <df656b31-d06f-4216-9e34-094e6e54b89b@linux.ibm.com>
+Date: Thu, 16 Oct 2025 11:36:16 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arch/powerpc: Remove .interp section in vmlinux
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, maddy@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <eeaf8fd6628a75d19872ab31cf7e7179e2baef5e.1751366959.git.christophe.leroy@csgroup.eu>
+ <20251013040148.560439-1-vishalc@linux.ibm.com>
+ <2b4a3215-1620-40c9-a00c-ca833ebbb7b6@csgroup.eu>
+ <aOypxKMzsLR5tAtv@linux.ibm.com> <20251015002154.GA2300901@ax162>
+ <aO8XEhMdT19UOPlp@linux.ibm.com> <20251015182754.GA1055324@ax162>
+Content-Language: en-US, en-IN
+From: Vishal Chourasia <vishalc@linux.ibm.com>
+In-Reply-To: <20251015182754.GA1055324@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: w04b11U9kwOQz219026f-f5VIsSaAmVG
+X-Authority-Analysis: v=2.4 cv=eJkeTXp1 c=1 sm=1 tr=0 ts=68f08b5e cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NEAV23lmAAAA:8 a=FSImCwsN6pc2FdypRLQA:9 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDExMDAxNCBTYWx0ZWRfX8gEKrMcTbn0Y
+ ba1Ajrou5+Je5z5BZ2kMT+XgHaUeaOzqHRan/Xhs1pMDsth63S6Y3UBPWWXYpJWYfRtxRm1cStr
+ BMqMnVRcdr2IyHhnYpGXcwCSJN8qV7xIzQbnwWVfk/4mEAJBXEXCrwFtZ96VLnma81+YzHua0Zv
+ J0T/l/cjPF5dSyY2QuLMDKEnp2gOScV4wesJ1KURpl+3p78Nhx+eNU51CGsIkeOYwc4hugDZ5lM
+ 7gVwS24rnlEjrk+ndcMJx2ctv2WyyCmXq38nm/h3i2JemKhZdJuXzvc1qt1RcVMUACYmZd7kNgx
+ kNwLJAuLtdLrq9mu/P4s2TbO3Oem7BKE/JKsQ1vUBfDTSodVQCR3wFKeX9mGioZPZLfRTnXxz9u
+ UHk4V3nopURoGbQdJjeiV9j8+NInNQ==
+X-Proofpoint-GUID: w04b11U9kwOQz219026f-f5VIsSaAmVG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-15_07,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ phishscore=0 malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510110014
 
-tree:   https://github.com/jonhunter/linux tegra/next-fixes
-head:   ae173249d9028ef159fba040bdab260d80dda43f
-commit: ae173249d9028ef159fba040bdab260d80dda43f [3/3] printk: Avoid scheduling irq_work and kthreads on suspend
-config: i386-buildonly-randconfig-003-20251016 (https://download.01.org/0day-ci/archive/20251016/202510161454.Pf7XCiPQ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510161454.Pf7XCiPQ-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510161454.Pf7XCiPQ-lkp@intel.com/
+On 15/10/25 23:57, Nathan Chancellor wrote:
+> On Wed, Oct 15, 2025 at 09:07:54AM +0530, Vishal Chourasia wrote:
+>> Hello Nathan,
+>>
+>> On Tue, Oct 14, 2025 at 05:21:54PM -0700, Nathan Chancellor wrote:
+>>> In this bug report, you mention using LLVM=1. Does the issue happen if
+>>> you use GNU ld (ld.bfd) via LD (i.e., LD=powerpc64le-linux-gnu-ld or
+>>> equivalent) over ld.lld from LLVM=1? This sounds more likely to be a
+>>> linker difference rather than a compiler difference.
+>> Thank you for the insight.
+>>
+>> Yes, when using powerpc64le-linux-gnu-ld linker .interp section is not
+>> emitted.
+>>
+>> Command:
+>> $ make LLVM=1 ARCH=powerpc LD=powerpc64le-linux-gnu-ld -j 8 zImage
+>> $ llvm-readelf -p .comment vmlinux
+>>
+>> String dump of section '.comment':
+>> [     0] clang version 22.0.0git (https://github.com/llvm/llvm-project.git 7314565281ec28b745502c3f429fd431e16673eb)
+>>
+>> $ llvm-readelf -p .interp vmlinux
+>> llvm-readelf: warning: 'vmlinux': could not find section '.interp'
+> Thanks for confirming. Does this fix the issue for you? It appears to
+> work for me.
+>
+> Cheers,
+> Nathan
+>
+> diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
+> index de6ee7d35cff..15850296c0a9 100644
+> --- a/arch/powerpc/kernel/vmlinux.lds.S
+> +++ b/arch/powerpc/kernel/vmlinux.lds.S
+> @@ -330,7 +330,6 @@ SECTIONS
+>   	}
+>   	.hash : AT(ADDR(.hash) - LOAD_OFFSET) { *(.hash) }
+>   	.gnu.hash : AT(ADDR(.gnu.hash) - LOAD_OFFSET) { *(.gnu.hash) }
+> -	.interp : AT(ADDR(.interp) - LOAD_OFFSET) { *(.interp) }
+>   	.rela.dyn : AT(ADDR(.rela.dyn) - LOAD_OFFSET)
+>   	{
+>   		__rela_dyn_start = .;
 
-All errors (new ones prefixed by >>):
+Hello Nathan,
 
-   In file included from kernel/printk/printk.c:62:
->> kernel/printk/internal.h:248:36: error: use of undeclared identifier 'console_offload_blocked'
-     248 |                         if (printk_kthreads_running && !console_offload_blocked)
-         |                                                         ^
-   kernel/printk/internal.h:258:14: error: use of undeclared identifier 'console_offload_blocked'
-     258 |                         else if (!console_offload_blocked)
-         |                                   ^
-   kernel/printk/internal.h:271:14: error: use of undeclared identifier 'console_offload_blocked'
-     271 |                         else if (!console_offload_blocked)
-         |                                   ^
-   3 errors generated.
+It does solve the problem, but with GNU linker it would work even
+without this change.
 
+regards,
+vishalc
 
-vim +/console_offload_blocked +248 kernel/printk/internal.h
-
-   236	
-   237	/*
-   238	 * Identify which console flushing methods should be used in the context of
-   239	 * the caller.
-   240	 */
-   241	static inline void printk_get_console_flush_type(struct console_flush_type *ft)
-   242	{
-   243		memset(ft, 0, sizeof(*ft));
-   244	
-   245		switch (nbcon_get_default_prio()) {
-   246		case NBCON_PRIO_NORMAL:
-   247			if (have_nbcon_console && !have_boot_console) {
- > 248				if (printk_kthreads_running && !console_offload_blocked)
-   249					ft->nbcon_offload = true;
-   250				else
-   251					ft->nbcon_atomic = true;
-   252			}
-   253	
-   254			/* Legacy consoles are flushed directly when possible. */
-   255			if (have_legacy_console || have_boot_console) {
-   256				if (!is_printk_legacy_deferred())
-   257					ft->legacy_direct = true;
-   258				else if (!console_offload_blocked)
-   259					ft->legacy_offload = true;
-   260			}
-   261			break;
-   262	
-   263		case NBCON_PRIO_EMERGENCY:
-   264			if (have_nbcon_console && !have_boot_console)
-   265				ft->nbcon_atomic = true;
-   266	
-   267			/* Legacy consoles are flushed directly when possible. */
-   268			if (have_legacy_console || have_boot_console) {
-   269				if (!is_printk_legacy_deferred())
-   270					ft->legacy_direct = true;
-   271				else if (!console_offload_blocked)
-   272					ft->legacy_offload = true;
-   273			}
-   274			break;
-   275	
-   276		case NBCON_PRIO_PANIC:
-   277			/*
-   278			 * In panic, the nbcon consoles will directly print. But
-   279			 * only allowed if there are no boot consoles.
-   280			 */
-   281			if (have_nbcon_console && !have_boot_console)
-   282				ft->nbcon_atomic = true;
-   283	
-   284			if (have_legacy_console || have_boot_console) {
-   285				/*
-   286				 * This is the same decision as NBCON_PRIO_NORMAL
-   287				 * except that offloading never occurs in panic.
-   288				 *
-   289				 * Note that console_flush_on_panic() will flush
-   290				 * legacy consoles anyway, even if unsafe.
-   291				 */
-   292				if (!is_printk_legacy_deferred())
-   293					ft->legacy_direct = true;
-   294	
-   295				/*
-   296				 * In panic, if nbcon atomic printing occurs,
-   297				 * the legacy consoles must remain silent until
-   298				 * explicitly allowed.
-   299				 */
-   300				if (ft->nbcon_atomic && !legacy_allow_panic_sync)
-   301					ft->legacy_direct = false;
-   302			}
-   303			break;
-   304	
-   305		default:
-   306			WARN_ON_ONCE(1);
-   307			break;
-   308		}
-   309	}
-   310	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
