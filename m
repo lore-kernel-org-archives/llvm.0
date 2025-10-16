@@ -1,105 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521F91CAA7B;
-	Thu, 16 Oct 2025 03:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DAA1DDF7
+	for <llvm@lists.linux.dev>; Thu, 16 Oct 2025 03:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760584819; cv=none; b=QVzfzs/JMOGPU7kVVGH3IDD2N16MCcnca4auIs0VV15uj3vmMfZ9NbVB2X6UMEkFhsh7r2u0a+PTiTPEkKJVvVrCiTtPHHLYcStUxBitrF3Sbu3n619HES3v2fCgwspSHyCepmw3nj+eHSxLoO3VA7hInEgzmYz356dVTvZbW0U=
+	t=1760584997; cv=none; b=uxnCECoDrS5Sg24QTgHf8G0w2pkC5dv97vj1NJQRKOG/F/IhEIeKcMn+N+5mu4HwCIaGu8gYAKfx+cNu2HReUb42kktGU/P6/2jyfZD2EV8WLqzNeTmBu35Gg2olcplVtYjPewTJQz6jNvlI6ZtvY53wTTYlDVUvZNdSAlLh2IY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760584819; c=relaxed/simple;
-	bh=oJedM1hfflEhgwLqf5S3MX4Pn/jZeroyYU1P+4AZNqc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D3mP8AO4m68e+G3lQOfSLEGjfgYm1VkJ+8KedD0r52QrnBXGqZSY2LXjbq5pcg6C9Up/aI39MB36M3UcOf9foz2LhYmnblv9P9U3BBEiTaWoPuPH+WRk4RjGMsXtjx0SSG3myyY1JtgFBqbXAz81GZyYhDYp1U6DIFOgkv1bipA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MkfBDlLV; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760584997; c=relaxed/simple;
+	bh=91MBWov8IeeN5CJnyO76bFdm1FIO6PoCiF54LIwmjOg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=muaug4DV3IjABg8hPTYeSWOzthzpugPr7Lz4nfyp/Hi88vJGsGHjuX2VqSgzLE9B+ebyHr3CMmJ+3mg25lmMbTNIEuMRVUj4OlNeW72S2YPEFiHyVMP7fCmkQkc+9u3kNZ02MBIqPHLJ1cRvZ7ikrboMAJAEi76lW+1JYSmhus4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eWNrxO8p; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MkfBDlLV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760584818; x=1792120818;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oJedM1hfflEhgwLqf5S3MX4Pn/jZeroyYU1P+4AZNqc=;
-  b=MkfBDlLVvByLZe8fnyQpPL6U4C84NW15jDUQY5sUbib8IBEwo0DdMpMy
-   CT6PbLoFbsKinHk9MsCfVbNOwqPDpRak4fWZADq5T0/B5hXRDWAtzzIQ/
-   FuRrnrEsgGiCNV1C+1a8OCGdJNK6MNxvjlwLeIy8OQQDGMl5mnRCkT1ws
-   koLHgnxNSF4w4Bk7yTwC31b1v/2pP8IVARZ0hoFwx4wqHQlZX+V/+oWdN
-   ZfA+ckGKb8pM4BMTGFwRv6DetBQpF0ePota+WneOEUFVLUVjwFL4x5P74
-   LDvto6JKxjw4J8VTpbgsqADjbGoV0x5/cDRzcFGByLHSzrViOTAuCF6QA
-   g==;
-X-CSE-ConnectionGUID: TfcHjYeTRyKzDwj6xuRs0g==
-X-CSE-MsgGUID: W1k69R5wQHm7Wj0uTEi0sg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="61975918"
-X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="61975918"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 20:20:12 -0700
-X-CSE-ConnectionGUID: JL9FhEcsTBm7GRTC6cDx6w==
-X-CSE-MsgGUID: AiVFevBAQIGYUNZ1OFLBKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="181470823"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 15 Oct 2025 20:20:08 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9EUl-0004Pv-1C;
-	Thu, 16 Oct 2025 03:18:34 +0000
-Date: Thu, 16 Oct 2025 11:14:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yuan Tan <tanyuan@tinylab.org>, arnd@arndb.de, masahiroy@kernel.org,
-	nathan@kernel.org, palmer@dabbelt.com, linux-kbuild@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	i@maskray.me, tanyuan@tinylab.org, falcon@tinylab.org,
-	ronbogo@outlook.com, z1652074432@gmail.com, lx24@stu.ynu.edu.cn
-Subject: Re: [PATCH v2 6/8] compiler.h: introduce PUSHSECTION macro to
- establish proper references
-Message-ID: <202510161119.Qau82x7Z-lkp@intel.com>
-References: <40854460DE090346+c30007da67d26ae0e8651732f32a8ede4926db14.1760463245.git.tanyuan@tinylab.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eWNrxO8p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760584994;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9P+T4BbWod90G+QUfMiwmpN7NjGmDnGG4+AFNv/heXw=;
+	b=eWNrxO8pTDHm/3Y4w7J71l5veNHhqv6ItsJMKyuDtH4MsNJr1wcZboBrg/EVKVcBuALTKX
+	aZ2NJ//28WiBzn/cJJaSKe29UTy2BW740aKgRsz3wEp/NvDiBtnuXtW810yL5i3aapPNYO
+	X47DBze4uzNFPTNTQegdNGdGXvQ0MPE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-74-KjOJLghsMwO2evyjdZwa4Q-1; Wed,
+ 15 Oct 2025 23:23:12 -0400
+X-MC-Unique: KjOJLghsMwO2evyjdZwa4Q-1
+X-Mimecast-MFC-AGG-ID: KjOJLghsMwO2evyjdZwa4Q_1760584992
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D5AB21800245
+	for <llvm@lists.linux.dev>; Thu, 16 Oct 2025 03:23:11 +0000 (UTC)
+Received: from [172.20.150.82] (unknown [10.30.45.111])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 684F6180057A;
+	Thu, 16 Oct 2025 03:23:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 26 of 137): Test report for master
+ (6.18.0-rc1, upstream-mainline, 5a6f65d1)
+Date: Thu, 16 Oct 2025 03:23:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40854460DE090346+c30007da67d26ae0e8651732f32a8ede4926db14.1760463245.git.tanyuan@tinylab.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <44708.125101523231200675@us-mta-74.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: n5nKe78X4rmSwKevWcUfgog9B8-E5YyPVeiim2VlpPk_1760584992
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yuan,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on arnd-asm-generic/master linus/master v6.18-rc1 next-20251015]
-[cannot apply to masahiroy-kbuild/for-next masahiroy-kbuild/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuan-Tan/scripts-syscalltbl-sh-add-optional-used-syscalls-argument-for-syscall-trimming/20251015-181934
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/40854460DE090346%2Bc30007da67d26ae0e8651732f32a8ede4926db14.1760463245.git.tanyuan%40tinylab.org
-patch subject: [PATCH v2 6/8] compiler.h: introduce PUSHSECTION macro to establish proper references
-config: arm-randconfig-001-20251016 (https://download.01.org/0day-ci/archive/20251016/202510161119.Qau82x7Z-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 39f292ffa13d7ca0d1edff27ac8fd55024bb4d19)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510161119.Qau82x7Z-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'bitmap-for-v6.18-rc2' of https://github.com/=
+norov/linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510161119.Qau82x7Z-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2101604236
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
 
->> ld.lld: error: ./arch/arm/kernel/vmlinux.lds:1: unknown directive: .macro
-   >>> .macro _PUSHSECTION label:req, section:req, args:vararg
-   >>> ^
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, x86_64]
+    /distribution/command [aarch64, x86_64]
+    /test/misc/machineinfo [aarch64, x86_64]
+    Boot test [aarch64, x86_64]
+    CKI/restraint [aarch64, x86_64]
+    Reboot test [aarch64, x86_64]
+    SELinux Custom Module Setup [aarch64, x86_64]
+    selinux-policy: serge-testsuite [x86_64]
+    Storage - blktests - throtl [aarch64]
+    Storage - blktests - ublk [aarch64]
+    stress: stress-ng - cpu-cache [aarch64]
+    stress: stress-ng - memory [aarch64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
