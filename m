@@ -1,111 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtps.ntu.edu.tw (smtps.ntu.edu.tw [140.112.2.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5318E345722;
-	Thu, 16 Oct 2025 14:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205B61A5BB4
+	for <llvm@lists.linux.dev>; Thu, 16 Oct 2025 15:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.112.2.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760626766; cv=none; b=WA+8yPSl9Asr9lk5vGNoHaA2yHDH8X8kBK6MUvIk5UPNKgkc2UZusfXJW1Etx8WsT+tpe6oHg687cZLWGgmk9QDkStEtJ3mHnej2fxi/SMYI+HvMry9GZ6gMHL4MsUKGFgZjHyDozMtKD069eqDFNN9Lc0hTZ6nHC0+DQ+CVyEg=
+	t=1760629556; cv=none; b=VUjS7ENwyfDhkziC76ZWCGtXZCXl1He+EArrSVpYipxWrpNvsWxDtOzlh1tjY3VOh1tP4J+8fCA+Pv8CGWWSEJzFWdaTtXBWizHysNqVUgJlFla0mBdM8cU6Uf8FUkMbUE52KQcDsiOkI0JIRcqaDrHzwDoFb/DlkyXScGYx+FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760626766; c=relaxed/simple;
-	bh=dz3MewSgWHCphMS4dpC0S69SCdi+UPMKOnXlykr7jUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tlLROKErLMC9Wu9CAFAzJKnXOuL3ddwMUOWpTc4tyaT+HuiVMjW3fQQ+G/1Ks7pSmAvvE1dDLOZqMrLOE5wrH5HAR/jm0CAFB9lRTfQKT3KULSCqKe3AUz+GTms/lZ8SvFlh1U6dFA9/XYm4mvA3npNUIPyrUMpz9WKQUN0133E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OrT0bf9P; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OrT0bf9P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760626765; x=1792162765;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dz3MewSgWHCphMS4dpC0S69SCdi+UPMKOnXlykr7jUo=;
-  b=OrT0bf9PIBqUbtFXPUvfXhVCC+++h5oFQfu84+Ng0+W1/M8DIFOTYBEQ
-   t6Cyw58QRwYwz/bjFWOyO5W6PQLhbbhIFGmyrDgWOf+7Oe6DyOSReJxx5
-   DmEQsv+wU9T3HLqFQoSJDYZjNp0/yhPKNdOhuZwFfh+C/5bVLUOs6+txM
-   rdwl0zfstnmwU0/+ovdWmVv9GRFFijcuuIEs7xvYIOkrgI7cvUPz+81wX
-   QpkztDreKMo1fvNB1gc6WpwsjwlTDO7yeEwHwRJ4nnN5HviObxQRewUdn
-   SYzRIzl/Z/RBvMcqU5qodxEAQ1PTrGTBHdShhwlDEVXw6NkT3BmiLe9H9
-   w==;
-X-CSE-ConnectionGUID: 9t3GW2y/QXOONqlaD1KurA==
-X-CSE-MsgGUID: hwr+y+UJRjyj13IwqN7iVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="62721872"
-X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="62721872"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 07:59:24 -0700
-X-CSE-ConnectionGUID: N66yCT/tRLKuHBINi1WGOA==
-X-CSE-MsgGUID: uVSe5penQB+x3PqQQ10YBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="183275465"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Oct 2025 07:59:22 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9PRn-0004wH-1R;
-	Thu, 16 Oct 2025 14:59:19 +0000
-Date: Thu, 16 Oct 2025 22:58:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: [tip:irq/drivers 11/18] drivers/irqchip/irq-imx-mu-msi.c:419:9:
- error: call to undeclared function 'imx_mu_probe'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202510162256.hpgem8Ii-lkp@intel.com>
+	s=arc-20240116; t=1760629556; c=relaxed/simple;
+	bh=c3ekHxUxcfAall2QGhItOG5oe4aKXyz4LshibRVXomU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gwKTIcuMuNYxY2Ow5H/oEIA9JwBgszjtO+bpBgHbMvPZmTukvnZfsSu9S0hwJtgxP7fcCs02TTh77ObiOxNFu7HmwpIy9svJjJg+wDZZx0cfYJ4DkjxTNo0D0Ewpv94NNhYtYd9ZnS+lY/k4AtcOAs/JnEG6IwYF5Ok3buZyCsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ntu.edu.tw; spf=pass smtp.mailfrom=ntu.edu.tw; arc=none smtp.client-ip=140.112.2.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ntu.edu.tw
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ntu.edu.tw
+Received: from x415ea.. (unknown [49.214.10.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtps.ntu.edu.tw (Postfix) with ESMTPSA id C9EDB32A79;
+	Thu, 16 Oct 2025 23:45:49 +0800 (CST)
+From: Bill Tsui <b10902118@ntu.edu.tw>
+To: oleg@redhat.com,
+	catalin.marinas@arm.com,
+	will@kernel.org
+Cc: nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Bill Tsui <b10902118@ntu.edu.tw>
+Subject: [PATCH v3 1/1] arm64: ptrace: fix hw_break_set() to set addr and ctrl together
+Date: Thu, 16 Oct 2025 23:44:01 +0800
+Message-ID: <20251016154401.35799-2-b10902118@ntu.edu.tw>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251016154401.35799-1-b10902118@ntu.edu.tw>
+References: <20250827014113.5852-1-b10902118@ntu.edu.tw>
+ <20251016154401.35799-1-b10902118@ntu.edu.tw>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/drivers
-head:   45f8fdcfbf4e49075172cf1a3fd812b90160e903
-commit: 4265aed28d7de2a643b8e441bc25344f421f2f78 [11/18] irqchip: Pass platform device to platform drivers
-config: arm-randconfig-003-20251016 (https://download.01.org/0day-ci/archive/20251016/202510162256.hpgem8Ii-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 754ebc6ebb9fb9fbee7aef33478c74ea74949853)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251016/202510162256.hpgem8Ii-lkp@intel.com/reproduce)
+This patch fixes the failure of PTRACE_SETREGSET when setting a hardware
+breakpoint on a non-4-byte aligned address with a valid control to a
+32-bit tracee. The issue was discovered while testing LLDB.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510162256.hpgem8Ii-lkp@intel.com/
+Link: https://github.com/llvm/llvm-project/pull/152284
 
-All errors (new ones prefixed by >>):
+The failure happens because hw_break_set() checks and sets the breakpoint
+address and control separately. This can result in an check failure when
+it first validates the address to be set with old control.
 
->> drivers/irqchip/irq-imx-mu-msi.c:419:9: error: call to undeclared function 'imx_mu_probe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     419 |         return imx_mu_probe(pdev, parent, &imx_mu_cfg_imx7ulp);
-         |                ^
-   drivers/irqchip/irq-imx-mu-msi.c:419:9: note: did you mean 'imx_mu_write'?
-   drivers/irqchip/irq-imx-mu-msi.c:73:13: note: 'imx_mu_write' declared here
-      73 | static void imx_mu_write(struct imx_mu_msi *msi_data, u32 val, u32 offs)
-         |             ^
-   drivers/irqchip/irq-imx-mu-msi.c:424:9: error: call to undeclared function 'imx_mu_probe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     424 |         return imx_mu_probe(pdev, parent, &imx_mu_cfg_imx6sx);
-         |                ^
-   drivers/irqchip/irq-imx-mu-msi.c:429:9: error: call to undeclared function 'imx_mu_probe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     429 |         return imx_mu_probe(pdev, parent, &imx_mu_cfg_imx8ulp);
-         |                ^
-   3 errors generated.
+For example, the control are initialized with breakpoint length of 4.
+Combining with a non-4-byte aligned address would cross a 4-byte boundary,
+which is invalid. However, the user-provided control may actually specify a
+length of 1, which should be valid.
 
+The fix is to set the address and control together. This is supported
+by modify_user_hw_breakpoint(), the function that sets and checks
+breakpoints. The original implementation wrap this function to
+ptrace_hbp_set_addr() and ptrace_hbp_set_ctrl() for 32-bit API
+PTRACE_SETHBPREGS simply because it can only modify one register (address
+or control) per call. For the 64-bit PTRACE_SETREGSET API, this
+restriction does not apply, so a new helper function ptrace_hbp_set() was
+added to set both in a single call to modify_user_hw_breakpoint().
 
-vim +/imx_mu_probe +419 drivers/irqchip/irq-imx-mu-msi.c
+For reference, the check is in
+	arch/arm64/kernel/hw_breakpoint.c:hw_breakpoint_arch_parse()
+which is called via:
+	modify_user_hw_breakpoint()
+	-> modify_user_hw_breakpoint_check()
+	-> hw_breakpoint_parse()
+	-> hw_breakpoint_arch_parse()
 
-   416	
-   417	static int imx_mu_imx7ulp_probe(struct platform_device *pdev, struct device_node *parent)
-   418	{
- > 419		return imx_mu_probe(pdev, parent, &imx_mu_cfg_imx7ulp);
-   420	}
-   421	
+Signed-off-by: Bill Tsui <b10902118@ntu.edu.tw>
+---
+ arch/arm64/kernel/ptrace.c | 36 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 4b001121c..8963f40ba 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -467,6 +467,34 @@ static int ptrace_hbp_set_addr(unsigned int note_type,
+ 	return err;
+ }
+ 
++/* Set the address and control together for non-compat ptrace */
++static int ptrace_hbp_set(unsigned int note_type,
++				   struct task_struct *tsk,
++				   unsigned long idx,
++				   u64 addr, u32 uctrl)
++{
++	int err;
++	struct perf_event *bp;
++	struct perf_event_attr attr;
++	struct arch_hw_breakpoint_ctrl ctrl;
++
++	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
++	if (IS_ERR(bp)) {
++		err = PTR_ERR(bp);
++		return err;
++	}
++
++	attr = bp->attr;
++	attr.bp_addr = addr;
++
++	decode_ctrl_reg(uctrl, &ctrl);
++	err = ptrace_hbp_fill_attr_ctrl(note_type, ctrl, &attr);
++	if (err)
++		return err;
++
++	return modify_user_hw_breakpoint(bp, &attr);
++}
++
+ #define PTRACE_HBP_ADDR_SZ	sizeof(u64)
+ #define PTRACE_HBP_CTRL_SZ	sizeof(u32)
+ #define PTRACE_HBP_PAD_SZ	sizeof(u32)
+@@ -524,9 +552,6 @@ static int hw_break_set(struct task_struct *target,
+ 			return -EINVAL;
+ 		ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &addr,
+ 					 offset, offset + PTRACE_HBP_ADDR_SZ);
+-		if (ret)
+-			return ret;
+-		ret = ptrace_hbp_set_addr(note_type, target, idx, addr);
+ 		if (ret)
+ 			return ret;
+ 		offset += PTRACE_HBP_ADDR_SZ;
+@@ -537,10 +562,11 @@ static int hw_break_set(struct task_struct *target,
+ 					 offset, offset + PTRACE_HBP_CTRL_SZ);
+ 		if (ret)
+ 			return ret;
+-		ret = ptrace_hbp_set_ctrl(note_type, target, idx, ctrl);
++		offset += PTRACE_HBP_CTRL_SZ;
++
++		ret = ptrace_hbp_set(note_type, target, idx, addr, ctrl);
+ 		if (ret)
+ 			return ret;
+-		offset += PTRACE_HBP_CTRL_SZ;
+ 
+ 		user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
+ 					  offset, offset + PTRACE_HBP_PAD_SZ);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
