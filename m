@@ -1,150 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C945246773;
-	Fri, 17 Oct 2025 03:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B643A1C84BC
+	for <llvm@lists.linux.dev>; Fri, 17 Oct 2025 03:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760670611; cv=none; b=LLwsE/G19aPrrqMc0xMXnt3jpzrtzaVoNYpljdcoanj8GVW6GjRBgcI9PZmEWMxMfgpwnx/waRy0L6/Z5+jbU8ApaRoWsdYbgpu/b0Yh9T97XfozSFbpjvqqGtqmHkdUjsjQ4KcmvXkwal2OsLHMgTM9BEpTz2QjezikM9c8I/w=
+	t=1760672595; cv=none; b=dUQot4QMB/qmLoW+IZ2YAMHqs8JFbCj77ghu/0ELFwnhvtHP5JC0WE4mprjGIK4pLhf/KMb2LH/2/fN8c8ZAEgVSUlPkX0VMkMrL5yVcNVFNEhNF7RPKS/bip3TGZ1lh+uL7+mslpAgwmRt/vs6bw01PPHIYwIddl5x2tEaFXLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760670611; c=relaxed/simple;
-	bh=/+LxSluv7aDw/AI/2fm6dlIfW0gbQe7klAqez1nbV6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BOhrzNJYZO2FfTAC+j9B1rMUi6zsjiBXaIkUNg5N5dgpkXwoTQAq22XUFBkxjF0QGsZp6CwAAE3t+d5W5Cau2zTMtJkM4ZHr/+/Bfx+dC+dwuh3/iGh/12B8ca++TMQcHQ3Gt4+lrqQtSEOVty2q80w3YqIrpTnWNR+oeHMczik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BaFQ+l3W; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760672595; c=relaxed/simple;
+	bh=h4zFoxetFLei28a0Qcw4VzXrgGBp82el+MOUljYkyQw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Pweo6O4et2bMez0E/54fVAEZgq2cvbzMaKNxPe84T7YbHUp0mSqQFQDJxa3T+rWtRYJBkT/OLXRhIoSDBKVSJQvYQ6mPIhCgrJnpCdsPh/N1C4K3NvRxqWfYpvnoHwxMLAk7Xvr1B0+m66SM7mGN5ejvel8/JQl7S5TBh+097eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KyYGJQZG; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BaFQ+l3W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760670610; x=1792206610;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/+LxSluv7aDw/AI/2fm6dlIfW0gbQe7klAqez1nbV6E=;
-  b=BaFQ+l3WmqR4daOPhzrelXH3VLEvEkdjb6QLkweSrO5gTCNcsImGZt16
-   Cqan/ly/U7ccGNTtveVJkxHsfZUU03aUe5qlvzhjbZiYIAmH0PqeXeRqU
-   OOykE03/uPQSVAGyb3gNPA3VEVg5bvJS+Vldx6/KgbbxPH6W8KdWgipxv
-   AxvhwCGPDNdam6tkJYRYyrbECWC1wMT1NEXEf2On2LDtYojUwTu2tsHbK
-   CM0ePUoj0vFAfRFfJ+A01wB5J6bhajHlaRAPQ73IMZUUa42oLFXACHn6v
-   nENa84VlwzeiwlnPfJUtAxS0wYqG2HvJgOO8YkJt2m54SZKuLRXjnxUUg
-   g==;
-X-CSE-ConnectionGUID: JsiH9jhwRVWqr+fGD3cG0Q==
-X-CSE-MsgGUID: nMk+mAMRS42a5//+CXMcQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="62922602"
-X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="62922602"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 20:10:08 -0700
-X-CSE-ConnectionGUID: Xgxzd1jNR9eqCP7aaJr8zg==
-X-CSE-MsgGUID: znK5Y+kFS/WADBCN5mannw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="213203965"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 16 Oct 2025 20:10:04 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9aqv-0005Tv-2m;
-	Fri, 17 Oct 2025 03:10:01 +0000
-Date: Fri, 17 Oct 2025 11:09:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Longlong Xia <xialonglong2025@163.com>, linmiaohe@huawei.com,
-	david@redhat.com, lance.yang@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	markus.elfring@web.de, nao.horiguchi@gmail.com,
-	akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-	qiuxu.zhuo@intel.com, xu.xin16@zte.com.cn,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	Longlong Xia <xialonglong@kylinos.cn>
-Subject: Re: [PATCH v2 1/1] mm/ksm: recover from memory failure on KSM page
- by migrating to healthy duplicate
-Message-ID: <202510171017.wBXHozQb-lkp@intel.com>
-References: <20251016101813.484565-2-xialonglong2025@163.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KyYGJQZG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760672590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=V2HRz1v5WlEAWXwyFTL1NpVsUTWv6GYB5xdW6wHLeTk=;
+	b=KyYGJQZGnYBR9xCJgbRH1+xIq1QcDZLukfqFKQgOJ3poHEECK19LC2tT24miKxTU6Y7J3G
+	z15uRATV2dE0yS/VoRb5mGVj6eMdiCpBsVUfRGD9EXrhqlC0zeOb3h32d5Oodp3gMP7NIv
+	O/EHMxdefRRB+UYvJVJY110Xez43yVY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-139-Ub6WsfUMPY64INhh6cqcwQ-1; Thu,
+ 16 Oct 2025 23:43:07 -0400
+X-MC-Unique: Ub6WsfUMPY64INhh6cqcwQ-1
+X-Mimecast-MFC-AGG-ID: Ub6WsfUMPY64INhh6cqcwQ_1760672587
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 198581956089
+	for <llvm@lists.linux.dev>; Fri, 17 Oct 2025 03:43:07 +0000 (UTC)
+Received: from [172.20.84.201] (unknown [10.30.45.119])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D4B551800452;
+	Fri, 17 Oct 2025 03:43:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 137): Test report for master
+ (6.18.0-rc1, upstream-mainline, 98ac9cc4)
+Date: Fri, 17 Oct 2025 03:43:05 -0000
+To: llvm@lists.linux.dev, yoyang@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251016101813.484565-2-xialonglong2025@163.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <77688.125101623430800161@us-mta-139.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 6rZwnRtxPhd5UoCS9nOwh5ZMdQgT5i1MZNjAaLnn4L0_1760672587
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Longlong,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.18-rc1 next-20251016]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Longlong-Xia/mm-ksm-recover-from-memory-failure-on-KSM-page-by-migrating-to-healthy-duplicate/20251016-182115
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20251016101813.484565-2-xialonglong2025%40163.com
-patch subject: [PATCH v2 1/1] mm/ksm: recover from memory failure on KSM page by migrating to healthy duplicate
-config: x86_64-buildonly-randconfig-003-20251017 (https://download.01.org/0day-ci/archive/20251017/202510171017.wBXHozQb-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510171017.wBXHozQb-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510171017.wBXHozQb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> mm/ksm.c:3160:6: warning: variable 'nid' set but not used [-Wunused-but-set-variable]
-    3160 |         int nid;
-         |             ^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/nid +3160 mm/ksm.c
+Kernel information:
+    Commit message: Merge tag 'f2fs-fix-6.18-rc2' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/jaegeuk/f2fs
 
-  3155	
-  3156	static struct page *create_new_stable_node_dup(struct ksm_stable_node *chain_head,
-  3157			struct folio *healthy_folio,
-  3158			struct ksm_stable_node **new_stable_node)
-  3159	{
-> 3160		int nid;
-  3161		unsigned long kpfn;
-  3162		struct page *new_page = NULL;
-  3163	
-  3164		if (!is_stable_node_chain(chain_head))
-  3165			return NULL;
-  3166	
-  3167		new_page = alloc_page(GFP_HIGHUSER_MOVABLE | __GFP_ZERO);
-  3168		if (!new_page)
-  3169			return NULL;
-  3170	
-  3171		copy_highpage(new_page, folio_page(healthy_folio, 0));
-  3172	
-  3173		*new_stable_node = alloc_stable_node();
-  3174		if (!*new_stable_node) {
-  3175			__free_page(new_page);
-  3176			return NULL;
-  3177		}
-  3178	
-  3179		INIT_HLIST_HEAD(&(*new_stable_node)->hlist);
-  3180		kpfn = page_to_pfn(new_page);
-  3181		(*new_stable_node)->kpfn = kpfn;
-  3182		nid = get_kpfn_nid(kpfn);
-  3183		DO_NUMA((*new_stable_node)->nid = nid);
-  3184		(*new_stable_node)->rmap_hlist_len = 0;
-  3185	
-  3186		(*new_stable_node)->head = STABLE_NODE_DUP_HEAD;
-  3187		hlist_add_head(&(*new_stable_node)->hlist_dup, &chain_head->hlist);
-  3188		ksm_stable_node_dups++;
-  3189		folio_set_stable_node(page_folio(new_page), *new_stable_node);
-  3190		folio_add_lru(page_folio(new_page));
-  3191	
-  3192		return new_page;
-  3193	}
-  3194	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2104300224
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - nfsv4.2
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2104300224_x86_64_kernel-debug_kcidb_tool_19788000_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/446
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
