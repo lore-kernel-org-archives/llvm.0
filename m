@@ -1,59 +1,37 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5F723278D;
-	Fri, 17 Oct 2025 04:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCAE30C61F;
+	Fri, 17 Oct 2025 07:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760676912; cv=none; b=Igtz5dXopYtw6hhcsknPYpSnmmPxBg/a+/liRwu1zDJHtlFgiAqddBuy+cABsmnv70GaG3WBK6MpWbqO+imFjNk6nfWAaPmHqnIhLsiQYHUdzeeUBETyxNo2Kz0Zx3f/nApJvV7wjqv+iHXPHNoIKAcII3IYSfuFhHJ84HA1jno=
+	t=1760684977; cv=none; b=A0VaHctKARulc8r5reH5q2sJyK62OmXwRkr1qF12x3mq+8IhVvoZmqn8WyzUVn5ocNhlel+GYwBy5KSRelV9KJL1S8GgQ2XVyNWdWzqsgWjj/pFleAkejrThafoRqNqlWTqc3Z8nwEa0gj89qSQJZgwzcFWfbfnLVVTsgAaYDis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760676912; c=relaxed/simple;
-	bh=fn8NpPJ2f9VxDdJUQ2bR9bOX0u2vLeDNJA6tQajjX4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sQc3YmLbB1CnhlQsvJnoAAhbHRlKZLYh55wU5jN8U7HVE89LzN3BG349/2rA838zqbtY/bG627IkiZOAN6PCjYVXhKG5gVZIUPCrX1JaFOys35MNnHOFgeso7oqTC6j7RTzEfNqbwTc4ofZoxWwGaCbG3odpy2e53Dc2ZZmjX/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ma8lkv2K; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760684977; c=relaxed/simple;
+	bh=jV+TUIskuSaW4PqPLIhhgcZ+dMmdnbPKzrkpZD9Ujmw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fNwXPTBZAopnrV07hZyByKMQfueYRzfSiDcRaIjtIjZs18ZfveDCnRgWMlvhpAfqKpvPJxCBse7Avi6J9yLMTK7B2ChKDkcqL5djb/G3FBB9tnAq5fHfy1Yj7PwTOqIyhm3ptIo2HPYCwSaUoVAoDpSsqZmKOEWh8Jp2aSCmuec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uWwyv5cW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ma8lkv2K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760676911; x=1792212911;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fn8NpPJ2f9VxDdJUQ2bR9bOX0u2vLeDNJA6tQajjX4A=;
-  b=Ma8lkv2KBAnsQ+V2fnWNA97mjD1jESle3qVgAG87rDAqBgFDHxZs61TK
-   ogvsn+C1vonJX8ZSio7XMF81EU1zNvhGqTEmO9F0Qpfs1UmtBcuoj5zio
-   Y9rCVeTdQlnngsBp3UlMCAosGF46ZJ4XIWDMFyuzw4il3x3E3LSp5YkAu
-   kRXmdgf5FludjE0uH//kf50lC54mDjYWT1/xRed1h3R1XRYeBbz09EDUv
-   KWwljbXab1iFTUh3kiI8okyRZeQSy6eNhmqZPL8n01hLgFYJ7OqD5OP01
-   9bNebQsl4mDnmzE+HXDHoNtEOFbaci+tvqpw4ZWqViHqQWhD7Vj9vA/qY
-   Q==;
-X-CSE-ConnectionGUID: E2NWqf2XRcSULpmUpY0ZNA==
-X-CSE-MsgGUID: bCtVYVg+TaOHnbf5dFIEbA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="62928201"
-X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="62928201"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 21:55:10 -0700
-X-CSE-ConnectionGUID: 0fn64XxWRVC7PLLf2jzQtA==
-X-CSE-MsgGUID: U60XfcmsSR6sKL6108NZPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="181836214"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 16 Oct 2025 21:55:08 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9cUb-0005Xl-2I;
-	Fri, 17 Oct 2025 04:55:05 +0000
-Date: Fri, 17 Oct 2025 12:54:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/l1tf_mitigation_mitigation 4/5]
- arch/x86/kvm/vmx/vmx.c:313:29: error: too many arguments to function call,
- expected 0, have 1
-Message-ID: <202510171237.1TqLZkoc-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uWwyv5cW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF20FC4CEFE;
+	Fri, 17 Oct 2025 07:09:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760684977;
+	bh=jV+TUIskuSaW4PqPLIhhgcZ+dMmdnbPKzrkpZD9Ujmw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uWwyv5cWRtSUZESQHsSxt0/MxePRymFTASYKjv5ennh9et2DqUSl5g3Fb2Oks1dM7
+	 ZIKajvWjbwvIZz6vSk7puZUH456bgWf+4vsYPH5O+Gjqd4krvN7YpunM9vqJkxBkNw
+	 pcVHhZXXiuux19HFZI/u6ajs1VA1OsxrpM8Sx92k=
+Date: Fri, 17 Oct 2025 09:09:34 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: Apply 2f13daee2a72 ("lib/crypto/curve25519-hacl64: Disable KASAN
+ with clang-17 and older") to 6.12
+Message-ID: <2025101729-squatting-resale-9042@gregkh>
+References: <20251015003231.GA2336835@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,44 +40,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251015003231.GA2336835@ax162>
 
-tree:   https://github.com/sean-jc/linux x86/l1tf_mitigation_mitigation
-head:   6b03b37c78d0bdc369aa93991cfa0f209cf20964
-commit: 111c111ee261f0d902f2a33b0193cb68c687b8e9 [4/5] KVM: VMX: Disable L1TF L1 data cache flush if CONFIG_CPU_MITIGATIONS=n
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251017/202510171237.1TqLZkoc-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510171237.1TqLZkoc-lkp@intel.com/reproduce)
+On Tue, Oct 14, 2025 at 05:32:31PM -0700, Nathan Chancellor wrote:
+> Hi stable folks,
+> 
+> Please apply commit 2f13daee2a72 ("lib/crypto/curve25519-hacl64: Disable
+> KASAN with clang-17 and older") to 6.12 (and possibly 6.6), as upstream
+> commit 6f110a5e4f99 ("Disable SLUB_TINY for build testing") was
+> backported to those trees, introducing the warning for at least 6.12. It
+> applies cleanly for me. If there are any issues, please let me know.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510171237.1TqLZkoc-lkp@intel.com/
+Now queued up, thanks.
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/vmx/vmx.c:313:29: error: too many arguments to function call, expected 0, have 1
-     313 |         return vmx_setup_l1d_flush(vmentry_l1d_flush_param);
-         |                ~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/vmx.c:306:12: note: 'vmx_setup_l1d_flush' declared here
-     306 | static int vmx_setup_l1d_flush(void)
-         |            ^
-   1 error generated.
-
-
-vim +313 arch/x86/kvm/vmx/vmx.c
-
-   305	
-   306	static int vmx_setup_l1d_flush(void)
-   307	{
-   308		/*
-   309		 * Hand the parameter mitigation value in which was stored in the pre
-   310		 * module init parser. If no parameter was given, it will contain
-   311		 * 'auto' which will be turned into the default 'cond' mitigation mode.
-   312		 */
- > 313		return vmx_setup_l1d_flush(vmentry_l1d_flush_param);
-   314	}
-   315	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+greg k-h
