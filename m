@@ -1,85 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8F68834;
-	Thu, 16 Oct 2025 22:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01367C120;
+	Fri, 17 Oct 2025 01:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760655025; cv=none; b=hzwdZmipE2+FKL2fh9R7b4mfWbAzgWOe4opUdFaP/485hYZdtlsl6/UMZWtlR4jyiF/Q3X/DYhGSzWDW3IU7233j+X1rwKZyXBDNO5v1y3aXRTyHG4lmQgNqGNVY9hcRt15UEQk254iALhyJap2XtN6M5uKfxRxpS51gb00N8Lw=
+	t=1760664986; cv=none; b=W+bp6ja07kQc/2ZLWKbiwMHkCwW5XUFV1iAKxlt4EfHG4S1T6YdvHyLoWIXiR8/vsINiw860H6BDJb9HnDyb5pEmxmZ7lMOFStUDWR33wDp2AXArhC73v01gZycPVTceKbuyxNArofko2iI9N8t5bWWcRhQXALhULuNPL44ab5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760655025; c=relaxed/simple;
-	bh=Y30PzYE3tUSFUAGRL8A2xsJQQQGFkteVQIJrABahShY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=IHZA25Hu8yjJGlqCZH/YrgyL8PUYiKlaXg1o/HqKrgD29qqhRxjsxe2vqqMxb9z2kC2Lg86XWQ3tqmiO3c25xLC8952osDMJIQq+Ev9DhhFLGSpLwe7Vap4WaE7JIY1jIqslpetJ+emYjcro3Ez4vL8qMeoNjqUnzGZM/COoe8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fBUuZHG8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760664986; c=relaxed/simple;
+	bh=hGa/4Qhqm5+/YdjPpgl9O1WQnWazpGpJdQO3Pyr2qHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ux/RJBFXGpy0sTz5xi2m34xLH1HUBP1+phOFzSfqj0IKxnoO9k/bVBcPRn5FNJXJrC9gYGFZ8v0pFRR5TZalXhUanB7ntFivY3dVipT9APgqK8LVLZG7DsjGg3Ewy9WTdwYeTm2aB5DWOJedIWz1iGHYo0H0BQnw9EXdXdbFEYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UYgUpVD/; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fBUuZHG8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAF7C4CEF1;
-	Thu, 16 Oct 2025 22:50:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760655024;
-	bh=Y30PzYE3tUSFUAGRL8A2xsJQQQGFkteVQIJrABahShY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=fBUuZHG8oEtGqKj/57cBfTX2IgUdSoEVFMQaqG1E3bPDFxrwLuGF9Uigv9Bg4ol2P
-	 fROxHibKmrPvt6y+0V/CCs5jdN3fc9jVvX7lNfvMOTzFi2RQmo3l5obKTU3kCActbi
-	 WnfkZlagN0vBkD6wPyg/K05CaHM7Fl1i0BbQF7L7Pe46wkXWQbh0E1Aq+RcLagQrqP
-	 D/pPkdGW7KfMDy+aGml9sSttrZ0Df9fgXVOhnAJ8ggv2ZlMY5p4Hy2OoasLZ7wqLfl
-	 qL9OxxPw9zlujHv6+qIQv3M4GhqbnGI11bzFuRh8iuDcCFz1Qq2hAv9hLfgB++IfUn
-	 /rb0STeAW+xfA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB06839D0C23;
-	Thu, 16 Oct 2025 22:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UYgUpVD/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760664985; x=1792200985;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hGa/4Qhqm5+/YdjPpgl9O1WQnWazpGpJdQO3Pyr2qHc=;
+  b=UYgUpVD/+z7WgAKiZfPoWoTm3QNfobw4YVd7tBKDh8sr4+Zl8bQHtUCL
+   4N3/C1NxVQsQVgaS7xDZuH+6zaRu7zBJzkH/dw3Cai+jbUE719UdDTbfU
+   tlrfSz2/iPRJMcuF8ckBKjvNLj4cxyoA8UpdnGU1JF/geHKqIq8r5AF33
+   BvohzucemZ2D00ON7MFlROEqfDhkq10t/Y9zEFM6+IREVt690Ys84SuYp
+   k7I4Cnnvs1P3b1fpRU9G+LFFFpR/lw8sqt0JyUcI99xcv39TCQKuzBeUE
+   x7irGr5zswVR23bwpE1RgCaM4I4CcjOq5BW7ikAVCWb9E07Iu1I7dOrR7
+   g==;
+X-CSE-ConnectionGUID: 6KPB6yXVT2iTLwxXkwvXtw==
+X-CSE-MsgGUID: FAuVSwSZQH+eZM/NDsk6Aw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="66517862"
+X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
+   d="scan'208";a="66517862"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 18:36:25 -0700
+X-CSE-ConnectionGUID: b1idJrdPR3apl8MQDLXsEw==
+X-CSE-MsgGUID: +9ZaDnjMSveYBHfCt0r9LA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
+   d="scan'208";a="182405787"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 16 Oct 2025 18:36:23 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v9ZOG-0005PL-30;
+	Fri, 17 Oct 2025 01:36:20 +0000
+Date: Fri, 17 Oct 2025 09:36:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: [sudeep-holla:acpi_scmi_telemetry 5/15]
+ ./usr/include/linux/scmi.h:43:1: error: // comments are not allowed in this
+ language
+Message-ID: <202510170925.PJ54bBoO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net/mlx5e: Return 1 instead of 0 in invalid case in
- mlx5e_mpwrq_umr_entry_size()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176065500875.1934842.18128333206683438556.git-patchwork-notify@kernel.org>
-Date: Thu, 16 Oct 2025 22:50:08 +0000
-References: 
- <20251014-mlx5e-avoid-zero-div-from-mlx5e_mpwrq_umr_entry_size-v1-1-dc186b8819ef@kernel.org>
-In-Reply-To: 
- <20251014-mlx5e-avoid-zero-div-from-mlx5e_mpwrq_umr_entry_size-v1-1-dc186b8819ef@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, patches@lists.linux.dev, llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git acpi_scmi_telemetry
+head:   872204541d0c298cab365d5dcd343d9cdb749d31
+commit: 0720599b99004ad0ec5e0839fcbefe4bdca6b1af [5/15] uapi: Add ARM SCMI definitions
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20251017/202510170925.PJ54bBoO-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510170925.PJ54bBoO-lkp@intel.com/reproduce)
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510170925.PJ54bBoO-lkp@intel.com/
 
-On Tue, 14 Oct 2025 13:46:49 -0700 you wrote:
-> When building with Clang 20 or newer, there are some objtool warnings
-> from unexpected fallthroughs to other functions:
-> 
->   vmlinux.o: warning: objtool: mlx5e_mpwrq_mtts_per_wqe() falls through to next function mlx5e_mpwrq_max_num_entries()
->   vmlinux.o: warning: objtool: mlx5e_mpwrq_max_log_rq_size() falls through to next function mlx5e_get_linear_rq_headroom()
-> 
-> LLVM 20 contains an (admittedly problematic [1]) optimization [2] to
-> convert divide by zero into the equivalent of __builtin_unreachable(),
-> which invokes undefined behavior and destroys code generation when it is
-> encountered in a control flow graph.
-> 
-> [...]
+All errors (new ones prefixed by >>):
 
-Here is the summary with links:
-  - [net] net/mlx5e: Return 1 instead of 0 in invalid case in mlx5e_mpwrq_umr_entry_size()
-    https://git.kernel.org/netdev/net/c/aaf043a56881
+   In file included from <built-in>:1:
+>> ./usr/include/linux/scmi.h:43:1: error: // comments are not allowed in this language [-Werror,-Wcomment]
+      43 | ///TODO more flags
+         | ^
+   1 error generated.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
