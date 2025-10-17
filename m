@@ -1,81 +1,59 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A857531197A
-	for <llvm@lists.linux.dev>; Fri, 17 Oct 2025 10:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9FA8334688;
+	Fri, 17 Oct 2025 11:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760695941; cv=none; b=AGwevuFZ3J+7OM5LVvfwJ4148I3ear0W78iOtghn3XveEjcvCgFdthBvVPtPd7q/GeUVdY/VwZXFJfeB2ft9KEMpgPl/HcexURpGAPEVthuEImIBkuJjRcnhQ02LJSGwZVrTIB3UJHUZj2WzEl2JayvFxI78/Mj5iqYumL7Z/iI=
+	t=1760700631; cv=none; b=E3GuZiRetbIPNwO/YQ40va7rudunfta1KMCCaPJzYsSb13sSKJHC9HsI4JAVIdGzE1Qy4e/9LTFPDrAIJMx87Y+RHD8xg/VPOuhLQ59np2knJcOjwkQW8YKvkepWoK2JkA8z8e1dpCdCpWqyyNamdN1ogILdy+ISxMhexi7z37U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760695941; c=relaxed/simple;
-	bh=LxfKf1rMuw5rL6S+6Rg17frkQTovaCXaZTfO70TM6oQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hV5UhhOpzyYYIcwNNLShG78STJlZ0gvjKHipnqp0paeCAce053s+xHNVOBcE56/b+j5ph53dytnDHvGz6jjBJcDCIEsWbWWWk6AnPE0wz1Dx9W/tRHfRpdCkFg63fLnPfKYy6Mj7nC/lkRIWCljPtkzqM1bxJBfD2qAyJQms52s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=abK1j6dB; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1760700631; c=relaxed/simple;
+	bh=UOxG6FVbX7f5Kbj68ywdJSmTJvsUDynkaT+bUwkerwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QhB/ZLwQZjXCEAgnJvgBE3qHD4M8MHI5bY9H9N5oih12qNvTJjNAW3nrFEIQ5uKlTKu4LXnKAYO4AFu62+qnSAgoz1MRfhUyqojJQT8Ak+nD64nAu90ASKzgY21xcH17uwDxAba8CGEkbPIqU6Hf8+NNWigDxxrQzkscAIMONA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nIg4LhJF; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="abK1j6dB"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-46b303f755aso17704925e9.1
-        for <llvm@lists.linux.dev>; Fri, 17 Oct 2025 03:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1760695938; x=1761300738; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IcAE9gTZ+/oZemSW/gjSvTAcO1JCiHDPx7fInOY/f2o=;
-        b=abK1j6dBgh7c15j/nQudG4rZmewWTGqkhsTdra0hj/1HP/XcrwVcmmDcheNuydIGrV
-         3eqo8cyA8AThz3S5rwkG2jzdheETPnENmb0difrI5oMuvFOcb6zwXUBplcCkBhQAX8uI
-         EY7XcbTbMINYrtzQpQoqUKppsRxwFpzyYFVeWP4KOk6H5pCbVH8FqyXXDEGg0ZwOW/Hn
-         1zy1ljzIsXW6v9YTOuoWVGXkm+FxVQtJyJ+GqbV6VDVxLgioHYiGmKXn2S+aqsZT+xVn
-         T5RPh29m69Fz3hDq5x9GpksJm9nWbqJB5Wen+Dbe3n52EVS8uoz/DrbGneC37rXrrnXl
-         Ak3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760695938; x=1761300738;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IcAE9gTZ+/oZemSW/gjSvTAcO1JCiHDPx7fInOY/f2o=;
-        b=DQ9s4WUEycNX68tzHYwalBvaGp3zRLOsITg3I4V1sFdfes0WBd1x/eBR7/q3cIfrog
-         qTHqpSMXbbO6KaBJ3r34Ml90C1ZyeToNSOTl/2BhTplN1DwNtmbjhXGJ09fehYyiegGV
-         l1r1cU6ijWF2iXdI0eNygJCTrajBlcMU2gv5w2FvVv5sBy2F4IuyRyPeGfRIvooFkreJ
-         NyTUe/YUe3jNm1cQ1dLknOqPbXrQv04H54MltNCQPN9YXZCY6wSoxXJzxWh7VoVzsJrz
-         pFlr0BrSrlLZKXrC7/yXYGSgnywixQIFugSYSLC3zf+n/oT3wsaHd37JrGTJQMFFWW6o
-         8MIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXf6DXwT/Na23UfKOL596mms8X6nNfYpEEbkQCo9dezcwWQkYb1oP81477xNNi7pGArmxGC@lists.linux.dev
-X-Gm-Message-State: AOJu0YzrltQIAWYV9HyPSkNpsCvgo/XwP/SCRr6COR/6emHx+TerjkZD
-	JxpN8zkIFNYebwdmCz8m9oRwkx4zTHvsuEH5FCsKm7gsxmPrKkuob4Il+x2uYgvXrYA=
-X-Gm-Gg: ASbGncuXAP77ieFWpwa/FIIYzqV1OraYHA/trZ14mGgFbiU1hj1W4Ca3GJjuTozsilU
-	QeIUJfXICLektWo75u8HYW/GWw7Ub/WDF7S41W/Xs6swYJnj66iostjTssy9aSX1Tjx4gRLReTy
-	cGL0cru+vXwtL6H3fmPxOEUUi4+9ksm503vfy7ItQ18L+GrX5Sq82EEG1Oqg1/nvMkPLV0QjI31
-	Usq2Ts3QNO6p1E8ISbl5X8v7aWtWq+OAABoqA6mJU7vXYeFNB2BWdP1H2DjKM7ZakcLnR4pT422
-	zSo/l+E3y5jw1fRQc79fdZHXlvkcHGbnPIkfd5o2qxN5Dex1TWz0Cdg45n0MdM+VTfg3DZRjaug
-	kqBmMBVQqRTlSh9AuKKStk58nRhODGucSBaBT46hWaFAP9rGmIA97Rxzq9YnVyphP5rIyvoJj1L
-	6pad9mt9I92M9vbw==
-X-Google-Smtp-Source: AGHT+IFPljBKrOVB/66ijJCXVaRvUIH/JjXGzjIhcC63OF8E63IkVl0Uh+QOhjfWccM7pXPnZ0iuRA==
-X-Received: by 2002:a05:600c:3145:b0:45d:e6b6:55fe with SMTP id 5b1f17b1804b1-4711791e7a4mr29591645e9.34.1760695937835;
-        Fri, 17 Oct 2025 03:12:17 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4270665efaesm3215957f8f.27.2025.10.17.03.12.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 03:12:17 -0700 (PDT)
-Date: Fri, 17 Oct 2025 12:12:14 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Jason Wessel <jason.wessel@windriver.com>,
-	Daniel Thompson <danielt@kernel.org>,
-	Douglas Anderson <dianders@chromium.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	kgdb-bugreport@lists.sourceforge.net
-Subject: Re: [PATCH v6 5/5] kdb: Adapt kdb_msg_write to work with NBCON
- consoles
-Message-ID: <aPIWfjBhFPjOmESL@pathway.suse.cz>
-References: <20251016-nbcon-kgdboc-v6-5-866aac60a80e@suse.com>
- <202510171023.YREXxhMK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nIg4LhJF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760700629; x=1792236629;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UOxG6FVbX7f5Kbj68ywdJSmTJvsUDynkaT+bUwkerwk=;
+  b=nIg4LhJFfGyV5io/W0J8ylp+o7nwcRLoGJ6qDUU7wrDzpq8wy/t1CFK7
+   smNf4htnTUc1OksxWRehMPpGgLUgfkKIUboHzyWFq3YzXEAL6jWfaP5D+
+   7cdMUvlRRe+IFwmchDVaC525muwGGfr098fBuq57uJfEGrixBnaD3vVSq
+   YlaUx8GAIQHLNurw/gM570pfrazmmdDREcao8a7ncKzWlN9fOkRGE1X/8
+   RCl9Wk310ck4bfAinMsJW/FB53/kzdFkuPpfJJtwy5iPBwSrw0AUnNycD
+   Aoq9dgMDtYwTCAA27VwQRw/juY5OhsDuJ/q0EHO+OGnmGEi2RaQqsZUFX
+   w==;
+X-CSE-ConnectionGUID: 1822UjOZT3m5pwYku1w/0w==
+X-CSE-MsgGUID: VZgh0/KHQViAK/yzqFmYaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="73513899"
+X-IronPort-AV: E=Sophos;i="6.19,236,1754982000"; 
+   d="scan'208";a="73513899"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 04:30:28 -0700
+X-CSE-ConnectionGUID: xnMpFlO0SgGkDH4lV+eaTw==
+X-CSE-MsgGUID: i64J7G0pRMWyJxAvQqM+CQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,236,1754982000"; 
+   d="scan'208";a="182412893"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 17 Oct 2025 04:30:27 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v9ifA-0005uo-2Q;
+	Fri, 17 Oct 2025 11:30:24 +0000
+Date: Fri, 17 Oct 2025 19:29:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:rseq/cid-v2 31/62] include/linux/rseq_entry.h:183:3:
+ error: cannot jump from this asm goto statement to one of its possible
+ targets
+Message-ID: <202510171954.NcoH4NY0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,41 +62,325 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202510171023.YREXxhMK-lkp@intel.com>
 
-On Fri 2025-10-17 10:17:37, kernel test robot wrote:
-> Hi Marcos,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on 3a8660878839faadb4f1a6dd72c3179c1df56787]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Marcos-Paulo-de-Souza/printk-nbcon-Export-console_is_usable/20251016-225503
-> base:   3a8660878839faadb4f1a6dd72c3179c1df56787
-> patch link:    https://lore.kernel.org/r/20251016-nbcon-kgdboc-v6-5-866aac60a80e%40suse.com
-> patch subject: [PATCH v6 5/5] kdb: Adapt kdb_msg_write to work with NBCON consoles
-> config: i386-buildonly-randconfig-006-20251017 (https://download.01.org/0day-ci/archive/20251017/202510171023.YREXxhMK-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510171023.YREXxhMK-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202510171023.YREXxhMK-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/debug/kdb/kdb_io.c:612:22: error: incompatible pointer types passing 'struct nbcon_write_context *' to parameter of type 'struct console *' [-Werror,-Wincompatible-pointer-types]
->      612 |                         nbcon_kdb_release(&wctxt);
->          |                                           ^~~~~~
->    include/linux/console.h:667:54: note: passing argument to parameter 'con' here
->      667 | static inline void nbcon_kdb_release(struct console *con) { }
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/cid-v2
+head:   64baaab00f25781e1449f942fee472a2575cb5bf
+commit: 8706210bce8c0cd08f3e86572d4121e7d67ff07b [31/62] rseq: Provide and use rseq_update_user_cs()
+config: arm64-randconfig-004-20251017 (https://download.01.org/0day-ci/archive/20251017/202510171954.NcoH4NY0-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 754ebc6ebb9fb9fbee7aef33478c74ea74949853)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510171954.NcoH4NY0-lkp@intel.com/reproduce)
 
-This should be:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510171954.NcoH4NY0-lkp@intel.com/
 
-static inline void nbcon_kdb_release(struct nbcon_write_context *wctxt) { }
+All errors (new ones prefixed by >>):
 
-Again, no need for v7. I could fix this when committing the patch.
+   In file included from kernel/rseq.c:75:
+>> include/linux/rseq_entry.h:183:3: error: cannot jump from this asm goto statement to one of its possible targets
+     183 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:318:3: note: expanded from macro '__raw_put_mem'
+     318 |                 __put_mem_asm(str, "%x", __pu_val, (ptr), label, type);         \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
+         |         ^
+   include/linux/uaccess.h:831:2: note: expanded from macro 'scoped_masked_user_rw_access'
+     831 |         scoped_masked_user_rw_access_size((_uptr), sizeof(*(_uptr)), _elbl)
+         |         ^
+   include/linux/uaccess.h:819:2: note: expanded from macro 'scoped_masked_user_rw_access_size'
+     819 |         __scoped_masked_user_access(rw, (_uptr), (_size), _elbl)
+         |         ^
+   include/linux/uaccess.h:751:44: note: expanded from macro '__scoped_masked_user_access'
+     751 |                 for (CLASS(masked_user_##_mode##_access, scope) (_tmpptr); !____stop;           \
+         |                                                          ^
+   In file included from kernel/rseq.c:75:
+>> include/linux/rseq_entry.h:183:3: error: cannot jump from this asm goto statement to one of its possible targets
+     183 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:315:3: note: expanded from macro '__raw_put_mem'
+     315 |                 __put_mem_asm(str, "%w", __pu_val, (ptr), label, type);         \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
+         |         ^
+   include/linux/uaccess.h:831:2: note: expanded from macro 'scoped_masked_user_rw_access'
+     831 |         scoped_masked_user_rw_access_size((_uptr), sizeof(*(_uptr)), _elbl)
+         |         ^
+   include/linux/uaccess.h:819:2: note: expanded from macro 'scoped_masked_user_rw_access_size'
+     819 |         __scoped_masked_user_access(rw, (_uptr), (_size), _elbl)
+         |         ^
+   include/linux/uaccess.h:751:44: note: expanded from macro '__scoped_masked_user_access'
+     751 |                 for (CLASS(masked_user_##_mode##_access, scope) (_tmpptr); !____stop;           \
+         |                                                          ^
+   In file included from kernel/rseq.c:75:
+>> include/linux/rseq_entry.h:183:3: error: cannot jump from this asm goto statement to one of its possible targets
+     183 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:312:3: note: expanded from macro '__raw_put_mem'
+     312 |                 __put_mem_asm(str "h", "%w", __pu_val, (ptr), label, type);     \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
+         |         ^
+   include/linux/uaccess.h:831:2: note: expanded from macro 'scoped_masked_user_rw_access'
+     831 |         scoped_masked_user_rw_access_size((_uptr), sizeof(*(_uptr)), _elbl)
+         |         ^
+   include/linux/uaccess.h:819:2: note: expanded from macro 'scoped_masked_user_rw_access_size'
+     819 |         __scoped_masked_user_access(rw, (_uptr), (_size), _elbl)
+         |         ^
+   include/linux/uaccess.h:751:44: note: expanded from macro '__scoped_masked_user_access'
+     751 |                 for (CLASS(masked_user_##_mode##_access, scope) (_tmpptr); !____stop;           \
+         |                                                          ^
+   In file included from kernel/rseq.c:75:
+>> include/linux/rseq_entry.h:183:3: error: cannot jump from this asm goto statement to one of its possible targets
+     183 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:309:3: note: expanded from macro '__raw_put_mem'
+     309 |                 __put_mem_asm(str "b", "%w", __pu_val, (ptr), label, type);     \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
+         |         ^
+   include/linux/uaccess.h:831:2: note: expanded from macro 'scoped_masked_user_rw_access'
+     831 |         scoped_masked_user_rw_access_size((_uptr), sizeof(*(_uptr)), _elbl)
+         |         ^
+   include/linux/uaccess.h:819:2: note: expanded from macro 'scoped_masked_user_rw_access_size'
+     819 |         __scoped_masked_user_access(rw, (_uptr), (_size), _elbl)
+         |         ^
+   include/linux/uaccess.h:751:44: note: expanded from macro '__scoped_masked_user_access'
+     751 |                 for (CLASS(masked_user_##_mode##_access, scope) (_tmpptr); !____stop;           \
+         |                                                          ^
+   In file included from kernel/rseq.c:75:
+   include/linux/rseq_entry.h:178:3: error: cannot jump from this asm goto statement to one of its possible targets
+     178 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:318:3: note: expanded from macro '__raw_put_mem'
+     318 |                 __put_mem_asm(str, "%x", __pu_val, (ptr), label, type);         \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
+         |         ^
+   include/linux/uaccess.h:831:2: note: expanded from macro 'scoped_masked_user_rw_access'
+     831 |         scoped_masked_user_rw_access_size((_uptr), sizeof(*(_uptr)), _elbl)
+         |         ^
+   include/linux/uaccess.h:819:2: note: expanded from macro 'scoped_masked_user_rw_access_size'
+     819 |         __scoped_masked_user_access(rw, (_uptr), (_size), _elbl)
+         |         ^
+   include/linux/uaccess.h:751:44: note: expanded from macro '__scoped_masked_user_access'
+     751 |                 for (CLASS(masked_user_##_mode##_access, scope) (_tmpptr); !____stop;           \
+         |                                                          ^
+   In file included from kernel/rseq.c:75:
+   include/linux/rseq_entry.h:178:3: error: cannot jump from this asm goto statement to one of its possible targets
+     178 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:315:3: note: expanded from macro '__raw_put_mem'
+     315 |                 __put_mem_asm(str, "%w", __pu_val, (ptr), label, type);         \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
+         |         ^
+   include/linux/uaccess.h:831:2: note: expanded from macro 'scoped_masked_user_rw_access'
+     831 |         scoped_masked_user_rw_access_size((_uptr), sizeof(*(_uptr)), _elbl)
+         |         ^
+   include/linux/uaccess.h:819:2: note: expanded from macro 'scoped_masked_user_rw_access_size'
+     819 |         __scoped_masked_user_access(rw, (_uptr), (_size), _elbl)
+         |         ^
+   include/linux/uaccess.h:751:44: note: expanded from macro '__scoped_masked_user_access'
+     751 |                 for (CLASS(masked_user_##_mode##_access, scope) (_tmpptr); !____stop;           \
+         |                                                          ^
+   In file included from kernel/rseq.c:75:
+   include/linux/rseq_entry.h:178:3: error: cannot jump from this asm goto statement to one of its possible targets
+     178 |                 unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:426:2: note: expanded from macro 'unsafe_put_user'
+     426 |         __raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
+         |         ^
+   arch/arm64/include/asm/uaccess.h:312:3: note: expanded from macro '__raw_put_mem'
+     312 |                 __put_mem_asm(str "h", "%w", __pu_val, (ptr), label, type);     \
+         |                 ^
+   arch/arm64/include/asm/uaccess.h:298:2: note: expanded from macro '__put_mem_asm'
+     298 |         asm goto(                                                       \
+         |         ^
+   include/linux/rseq_entry.h:193:1: note: possible target of asm goto statement
+     193 | efault:
+         | ^
+   include/linux/rseq_entry.h:127:2: note: jump exits scope of variable with __attribute__((cleanup))
+     127 |         scoped_masked_user_rw_access(ucs, efault) {
 
-Best Regards,
-Petr
+
+vim +183 include/linux/rseq_entry.h
+
+    84	
+    85	/*
+    86	 * Check whether there is a valid critical section and whether the
+    87	 * instruction pointer in @regs is inside the critical section.
+    88	 *
+    89	 *  - If the critical section is invalid, terminate the task.
+    90	 *
+    91	 *  - If valid and the instruction pointer is inside, set it to the abort IP
+    92	 *
+    93	 *  - If valid and the instruction pointer is outside, clear the critical
+    94	 *    section address.
+    95	 *
+    96	 * Returns true, if the section was valid and either fixup or clear was
+    97	 * done, false otherwise.
+    98	 *
+    99	 * In the failure case task::rseq_event::fatal is set when a invalid
+   100	 * section was found. It's clear when the failure was an unresolved page
+   101	 * fault.
+   102	 *
+   103	 * If inlined into the exit to user path with interrupts disabled, the
+   104	 * caller has to protect against page faults with pagefault_disable().
+   105	 *
+   106	 * In preemptible task context this would be counterproductive as the page
+   107	 * faults could not be fully resolved. As a consequence unresolved page
+   108	 * faults in task context are fatal too.
+   109	 */
+   110	
+   111	#ifdef RSEQ_BUILD_SLOW_PATH
+   112	/*
+   113	 * The debug version is put out of line, but kept here so the code stays
+   114	 * together.
+   115	 *
+   116	 * @csaddr has already been checked by the caller to be in user space
+   117	 */
+   118	bool rseq_debug_update_user_cs(struct task_struct *t, struct pt_regs *regs,
+   119				       unsigned long csaddr)
+   120	{
+   121		struct rseq_cs __user *ucs = (struct rseq_cs __user *)(unsigned long)csaddr;
+   122		u64 start_ip, abort_ip, offset, cs_end, head, tasksize = TASK_SIZE;
+   123		unsigned long ip = instruction_pointer(regs);
+   124		u64 __user *uc_head = (u64 __user *) ucs;
+   125		u32 usig, __user *uc_sig;
+   126	
+   127		scoped_masked_user_rw_access(ucs, efault) {
+   128			/*
+   129			 * Evaluate the user pile and exit if one of the conditions
+   130			 * is not fulfilled.
+   131			 */
+   132			unsafe_get_user(start_ip, &ucs->start_ip, efault);
+   133			if (unlikely(start_ip >= tasksize))
+   134				goto die;
+   135			/* If outside, just clear the critical section. */
+   136			if (ip < start_ip)
+   137				goto clear;
+   138	
+   139			unsafe_get_user(offset, &ucs->post_commit_offset, efault);
+   140			cs_end = start_ip + offset;
+   141			/* Check for overflow and wraparound */
+   142			if (unlikely(cs_end >= tasksize || cs_end < start_ip))
+   143				goto die;
+   144	
+   145			/* If not inside, clear it. */
+   146			if (ip >= cs_end)
+   147				goto clear;
+   148	
+   149			unsafe_get_user(abort_ip, &ucs->abort_ip, efault);
+   150			/* Ensure it's "valid" */
+   151			if (unlikely(abort_ip >= tasksize || abort_ip < sizeof(*uc_sig)))
+   152				goto die;
+   153			/* Validate that the abort IP is not in the critical section */
+   154			if (unlikely(abort_ip - start_ip < offset))
+   155				goto die;
+   156	
+   157			/*
+   158			 * Check version and flags for 0. No point in emitting
+   159			 * deprecated warnings before dying. That could be done in
+   160			 * the slow path eventually, but *shrug*.
+   161			 */
+   162			unsafe_get_user(head, uc_head, efault);
+   163			if (unlikely(head))
+   164				goto die;
+   165	
+   166			/* abort_ip - 4 is >= 0. See abort_ip check above */
+   167			uc_sig = (u32 __user *)(unsigned long)(abort_ip - sizeof(*uc_sig));
+   168			unsafe_get_user(usig, uc_sig, efault);
+   169			if (unlikely(usig != t->rseq.sig))
+   170				goto die;
+   171	
+   172			/* rseq_event.user_irq is only valid if CONFIG_GENERIC_IRQ_ENTRY=y */
+   173			if (IS_ENABLED(CONFIG_GENERIC_IRQ_ENTRY)) {
+   174				/* If not in interrupt from user context, let it die */
+   175				if (unlikely(!t->rseq.event.user_irq))
+   176					goto die;
+   177			}
+   178			unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+   179			instruction_pointer_set(regs, (unsigned long)abort_ip);
+   180			rseq_stat_inc(rseq_stats.fixup);
+   181			break;
+   182		clear:
+ > 183			unsafe_put_user(0ULL, &t->rseq.usrptr->rseq_cs, efault);
+   184			rseq_stat_inc(rseq_stats.clear);
+   185			abort_ip = 0ULL;
+   186		}
+   187	
+   188		if (unlikely(abort_ip))
+   189			rseq_trace_ip_fixup(ip, start_ip, offset, abort_ip);
+   190		return true;
+   191	die:
+   192		t->rseq.event.fatal = true;
+   193	efault:
+   194		return false;
+   195	}
+   196	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
