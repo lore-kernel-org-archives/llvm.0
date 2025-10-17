@@ -1,162 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212173396FE;
-	Fri, 17 Oct 2025 14:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EDC3370FB;
+	Fri, 17 Oct 2025 14:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760710746; cv=none; b=ZskXosZvmi5Sr+9T77jcrHeNvaW4dGD8W20ggQHkmTeqFQUgZfg6F/YiYdFJ4PgURzBBeaaUeARbakVPwpkkxQWAL7M1ZHQ9JPs/qFp4yRsEiHuyuhseaseIdqyXWezuB8QChUIXXAyJOh4Kl4AT4cdKDIe6MxX7BTkdcy2MjPc=
+	t=1760713071; cv=none; b=aB0llvgewPSp0raBrOeXt0vrPu6bF89D4a5lr0nxmkhv6tAL+uX2uxUYtSsXJ+mafD8Dzi5+ECh9iLWUymUrGRtTqKuLUeNprNpDun5wsOks0ROPjcWlU8ky3C98Oo6WJdeJJQijoiRrQT4aH1jJrn1qCp5cEFh0FXV4o7RlQBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760710746; c=relaxed/simple;
-	bh=dS3H2BszcPyjXxTOMoARMa6IIdLRr87QG3FqfTPUkWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZtpD277LgbGas9J5+enEyisC6Wgd9F8oPcM6uoidPyZAojx6e4Ha3UoeWflnBE9TSUh4GywaDYvLsIFNiwbkQMVeB50PN4x7aD1GBEp2lhcVbpP+s0T5Kg/yEdJERQyYf3cNT76Q9jcsXqBr+195MDx02a5VW1ZlzBcE1LFCOn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NVk30zMH; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760713071; c=relaxed/simple;
+	bh=yyXdbqmVBwCJBAnDFJ6uojdAFVjK3BND7ZL/z25OXiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KGycjbHmGir7K1wlk/h6uzRBiWLLExMN+uKFazO18PDhx/14MwGPH5JczmX8pimU9Ynp3ww+fgZawyZ7/EG/AsHOaNxVzRE269vzg4ijSl+ZloV123O2Je+qIEXb2IpSGmoseITmw1ZYwWhbGz+W+J1oLsjPoWpRO2hhOCvd4gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KlAO6bDX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVk30zMH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760710743; x=1792246743;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dS3H2BszcPyjXxTOMoARMa6IIdLRr87QG3FqfTPUkWg=;
-  b=NVk30zMHv9uY+lfhWmNtS5SJ70npokA/H1FsQBNziioBJYywXq39MTfo
-   CJRy44QL0cxfv1bxa/FdQOBKwpXYvAHv8Im4SKGGU1qqAcQXvn4urhhDb
-   HiCwRzOm1DRdKekb5tG18pLPkvGJHJquoO8TFJ39Wmm/Hjzg0M3w5CX57
-   ASa1oRsbLUgFgHgAwxAye7OLqJqgcX9a+8ynSz+kRgFuYqpJeEpuytJsN
-   iGXb9ovqqYe/BqVaG7bEq6DVdbTJ8IBBpK/KUF/L+Jsf+uks8HJhcoXc2
-   ME/7YaM/yUy32m1eRDO1jMAeaHPLtV7bkVW6Sa8TeNPTjdBEZdrQ//dDX
-   g==;
-X-CSE-ConnectionGUID: AWRYx96FTZ2zcQGecFzaLA==
-X-CSE-MsgGUID: g/2fkM/6QlaXl/tzlPHb9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11585"; a="63068251"
-X-IronPort-AV: E=Sophos;i="6.19,236,1754982000"; 
-   d="scan'208";a="63068251"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 07:18:53 -0700
-X-CSE-ConnectionGUID: E7MZLNxZQAGtX0NAsL7lhA==
-X-CSE-MsgGUID: jriKbGgcQJK1fPAkCyr7dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,236,1754982000"; 
-   d="scan'208";a="187003969"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 17 Oct 2025 07:18:49 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9lI7-00063n-0X;
-	Fri, 17 Oct 2025 14:18:47 +0000
-Date: Fri, 17 Oct 2025 22:18:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
-	andrii@kernel.org, daniel@iogearbox.net, tj@kernel.org,
-	martin.lau@kernel.org, ameryhung@gmail.com, kernel-team@meta.com
-Subject: Re: [PATCH v2 bpf-next 2/4] bpf: Support associating BPF program
- with struct_ops
-Message-ID: <202510172107.6Yh2tFCb-lkp@intel.com>
-References: <20251016204503.3203690-3-ameryhung@gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KlAO6bDX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B84C4CEE7;
+	Fri, 17 Oct 2025 14:57:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760713071;
+	bh=yyXdbqmVBwCJBAnDFJ6uojdAFVjK3BND7ZL/z25OXiw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KlAO6bDXr0YEqUbd3vX7IqaM68TdJ5EHbXO1NaZf6BBEbusVCGtxyY9rO1BSqYdE5
+	 BWRw53ySzQ7x3gYfiEc/Q/0kRewETZyJ6FTMoff2Gd/4Osgp1QAIBuyNuSMyoH1NBB
+	 x9R3jRIFBDTr0A1q20lgTD3NzBMisr+KrKOb7+eM=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Leo Yan <leo.yan@arm.com>,
+	Ian Rogers <irogers@google.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.1 037/168] tools build: Align warning options with perf
+Date: Fri, 17 Oct 2025 16:51:56 +0200
+Message-ID: <20251017145130.385519209@linuxfoundation.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251017145129.000176255@linuxfoundation.org>
+References: <20251017145129.000176255@linuxfoundation.org>
+User-Agent: quilt/0.69
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251016204503.3203690-3-ameryhung@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Amery,
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
-kernel test robot noticed the following build warnings:
+------------------
 
-[auto build test WARNING on bpf-next/master]
+From: Leo Yan <leo.yan@arm.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Allow-verifier-to-fixup-kernel-module-kfuncs/20251017-044703
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20251016204503.3203690-3-ameryhung%40gmail.com
-patch subject: [PATCH v2 bpf-next 2/4] bpf: Support associating BPF program with struct_ops
-config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20251017/202510172107.6Yh2tFCb-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510172107.6Yh2tFCb-lkp@intel.com/reproduce)
+[ Upstream commit 53d067feb8c4f16d1f24ce3f4df4450bb18c555f ]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510172107.6Yh2tFCb-lkp@intel.com/
+The feature test programs are built without enabling '-Wall -Werror'
+options. As a result, a feature may appear to be available, but later
+building in perf can fail with stricter checks.
 
-All warnings (new ones prefixed by >>):
+Make the feature test program use the same warning options as perf.
 
-   kernel/bpf/core.c:2881:3: error: call to undeclared function 'bpf_struct_ops_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2881 |                 bpf_struct_ops_put(aux->st_ops_assoc);
-         |                 ^
-   kernel/bpf/core.c:2881:3: note: did you mean 'bpf_struct_ops_find'?
-   include/linux/btf.h:538:49: note: 'bpf_struct_ops_find' declared here
-     538 | static inline const struct bpf_struct_ops_desc *bpf_struct_ops_find(struct btf *btf, u32 type_id)
-         |                                                 ^
-   In file included from kernel/bpf/core.c:3240:
-   In file included from include/linux/bpf_trace.h:5:
-   In file included from include/trace/events/xdp.h:384:
-   In file included from include/trace/define_trace.h:132:
-   In file included from include/trace/trace_events.h:21:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:7:
->> include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
-     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-         |                                         ^~~~~~~~~
-   include/linux/poll.h:132:32: note: expanded from macro 'M'
-     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
-     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-         |                                                          ^ ~~~~~~~~~
-   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
-     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-         |                                                     ^~~~~~~~~
-   include/linux/poll.h:132:32: note: expanded from macro 'M'
-     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
-     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-         |                                                          ^ ~~~~~~~~~
-   include/linux/poll.h:135:12: warning: division by zero is undefined [-Wdivision-by-zero]
-     135 |                 M(HUP) | M(RDHUP) | M(MSG);
-         |                          ^~~~~~~~
-   include/linux/poll.h:132:32: note: expanded from macro 'M'
-     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
-     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-         |                                                          ^ ~~~~~~~~~
-   include/linux/poll.h:135:23: warning: division by zero is undefined [-Wdivision-by-zero]
-     135 |                 M(HUP) | M(RDHUP) | M(MSG);
-         |                                     ^~~~~~
-   include/linux/poll.h:132:32: note: expanded from macro 'M'
-     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
-     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-         |                                                          ^ ~~~~~~~~~
-   4 warnings and 1 error generated.
+Fixes: 1925459b4d92 ("tools build: Fix feature Makefile issues with 'O='")
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+Reviewed-by: Ian Rogers <irogers@google.com>
+Link: https://lore.kernel.org/r/20251006-perf_build_android_ndk-v3-1-4305590795b2@arm.com
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: James Clark <james.clark@linaro.org>
+Cc: linux-riscv@lists.infradead.org
+Cc: llvm@lists.linux.dev
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-perf-users@vger.kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/build/feature/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-vim +134 include/linux/poll.h
-
-7a163b2195cda0c Al Viro 2018-02-01  129  
-7a163b2195cda0c Al Viro 2018-02-01  130  static inline __poll_t demangle_poll(u16 val)
-7a163b2195cda0c Al Viro 2018-02-01  131  {
-7a163b2195cda0c Al Viro 2018-02-01  132  #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-7a163b2195cda0c Al Viro 2018-02-01  133  	return M(IN) | M(OUT) | M(PRI) | M(ERR) | M(NVAL) |
-7a163b2195cda0c Al Viro 2018-02-01 @134  		M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-7a163b2195cda0c Al Viro 2018-02-01  135  		M(HUP) | M(RDHUP) | M(MSG);
-7a163b2195cda0c Al Viro 2018-02-01  136  #undef M
-7a163b2195cda0c Al Viro 2018-02-01  137  }
-7a163b2195cda0c Al Viro 2018-02-01  138  #undef __MAP
-7a163b2195cda0c Al Viro 2018-02-01  139  
-7a163b2195cda0c Al Viro 2018-02-01  140  
-
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 690fe97be1904..1b7886cbbb65a 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -282,10 +282,10 @@ $(OUTPUT)test-libbabeltrace.bin:
+ 	$(BUILD) # -lbabeltrace provided by $(FEATURE_CHECK_LDFLAGS-libbabeltrace)
+ 
+ $(OUTPUT)test-compile-32.bin:
+-	$(CC) -m32 -o $@ test-compile.c
++	$(CC) -m32 -Wall -Werror -o $@ test-compile.c
+ 
+ $(OUTPUT)test-compile-x32.bin:
+-	$(CC) -mx32 -o $@ test-compile.c
++	$(CC) -mx32 -Wall -Werror -o $@ test-compile.c
+ 
+ $(OUTPUT)test-zlib.bin:
+ 	$(BUILD) -lz
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
+
+
