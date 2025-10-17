@@ -1,69 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14C523C39A;
-	Fri, 17 Oct 2025 02:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD73624E4A8;
+	Fri, 17 Oct 2025 02:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760667481; cv=none; b=nLB56DLdboYOr4OxdNHW9QjahaxHKujG0nV+sUww4P4iNQyZ1fZ+ASDHaXXcb/1CLflv9pHhL/1a8r8vW85v6Qbce+KPNz5IDHi4T2fgtXD1DRE5b/xWJ26UxZbju9sQhdPPJJQbvxiT8F1ocTu5QReLZbNi6EiIBTMG2Tsa860=
+	t=1760669346; cv=none; b=KZsEKW+N/9iopcO9Q55Nv1z5Z0n1AzgaOl8X2ziysY+mtJ7wG3cfeZnajIsy8kwQy0Dhy3jeS1HNmha+UhI79FqKzCY3zLUccdewh+NI95hooMH6MfRkVYDeqlugDCvsOc78XaCQmozUawE6ia3r25VZTTXBWd3zt9QJROHZObc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760667481; c=relaxed/simple;
-	bh=8PzPXACkbtO7c8cK21V9ojH9y1teqhhQdQlEzC9/NG4=;
+	s=arc-20240116; t=1760669346; c=relaxed/simple;
+	bh=WD99PenCbzrrdBMQst12wTBmtrxm7bzCsWLZa4lreN8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uFNadxqwRfBoF8MhrPh+nRg6pP1eOX49Z/0oJL2knMnZX3f5k+kzgQn7aWhnfOLTJBdEduGOe6tW3XSQc290C6GzzicToBnCcsoYhlYSEhyaZ+bvsahJfuP+Yh7Y1t7+usSk6dBK3TXZMaM+Xk9BEir3kW07TIKUQKsTDGpTx0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O9XVPsk0; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=oawpDvglF+esQer7yDc5MvMeE7qnHTmSiAJvbJdSb3qfe0hvEXyLyRj1IZ+i34gHF7fst+9sZBvGoaDxkRR7tc1Nld2I3gvXM8JSPqgoBVQFrJDIvFvllENEDx3IsNFpoICKmafeF5CUKQLnLPfkng1Z2oXg4+e8AGt+9i8mka0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OtIrTB7M; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O9XVPsk0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OtIrTB7M"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760667480; x=1792203480;
+  t=1760669345; x=1792205345;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8PzPXACkbtO7c8cK21V9ojH9y1teqhhQdQlEzC9/NG4=;
-  b=O9XVPsk0IsIuPc0NB7wrYz0rZ3U0PsBxmAieE9B/o/DZnoDZ99E0JOtw
-   LOmBrNdOUXzHEo6IPxR1obikxh+OCs1Cm0HGMmh1eNQ6MikJkTmlb2b8d
-   2qVkwzUozlmd6RO8uUI1OxNG9rOZYkoMZcF2N4wU0xo4oEYdwCnw+TNGg
-   +E7CBMFupIH4dIcr7XOK2IYWpY+70UX8difGIMMx0dhX1RDePuv5LIhUz
-   GgFiNxkQgrsf+NTqmmBjLDmB5p6pnvthCGu8P9jwjr0YgaUBa07K7suxi
-   ZSbsYFIln2UsuZ7wIz8Sc9LUGGXMcK40MIHLhBigDybsHLAxuEREDal+u
+  bh=WD99PenCbzrrdBMQst12wTBmtrxm7bzCsWLZa4lreN8=;
+  b=OtIrTB7MxzaA+cSlEkZPxiHUgXxUKdJRELo5IEBlDVwpoDUKeEpkpM0n
+   nd94VRMbSECUewxEZygiDUcG/ZXiuVl0C0Kv1LiRSIkLHFqeLZavIS05a
+   t3h45wPh+UatGTYOQR11p5nqhaIYG6WWxMuv24m3STQN5w3B8aQHL7Qnb
+   7wM/j4xeHm78E4IGNkJsodcrcwHUsnq2/NESolkguO2k3BDNROzUv31wT
+   rFAz7aOJd4OpQw8uzDZNcI4E4ObnDrfKBNeNoE5V6gm5z2lj10zghst7I
+   D1/edryTY9RYVLpcIkQhRn690kZwoNUFX75FEpscM7CiiwaMVxuApUCyd
    A==;
-X-CSE-ConnectionGUID: vlGmZYt7Rf+ZxHaY0X+rzA==
-X-CSE-MsgGUID: +8C9JaaKSfu84HTC1ofS3Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="63020192"
+X-CSE-ConnectionGUID: f5kUscgYRK+OCwXCx/ad4A==
+X-CSE-MsgGUID: M+RHW5d4Sfaq2U8Ya7JqXg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11584"; a="73990658"
 X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="63020192"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 19:17:56 -0700
-X-CSE-ConnectionGUID: 0mtAfkURTLOoqn3irNz/mw==
-X-CSE-MsgGUID: S0WVeFLBSICVKSaDZr9oVg==
+   d="scan'208";a="73990658"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 19:49:04 -0700
+X-CSE-ConnectionGUID: Zks3OUlQRCWlhyDxg9fuAw==
+X-CSE-MsgGUID: yEhwY69UT/aiJNc1yol2GA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,234,1754982000"; 
-   d="scan'208";a="182549462"
+   d="scan'208";a="186877105"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 16 Oct 2025 19:17:53 -0700
+  by orviesa004.jf.intel.com with ESMTP; 16 Oct 2025 19:49:02 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v9a2Q-0005Ry-2u;
-	Fri, 17 Oct 2025 02:17:50 +0000
-Date: Fri, 17 Oct 2025 10:17:36 +0800
+	id 1v9aWU-0005T5-0A;
+	Fri, 17 Oct 2025 02:48:55 +0000
+Date: Fri, 17 Oct 2025 10:48:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pingfan Liu <piliu@redhat.com>, linux-kernel@vger.kernel.org
+To: Shi Hao <i.shihao.999@gmail.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pingfan Liu <piliu@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Pierre Gondois <pierre.gondois@arm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCHv2] sched/deadline: Walk up cpuset hierarchy to decide
- root domain when hot-unplug
-Message-ID: <202510170932.nTEduJGM-lkp@intel.com>
-References: <20251016120041.17990-1-piliu@redhat.com>
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, Shi Hao <i.shihao.999@gmail.com>
+Subject: Re: [PATCH] net :ethernet : replace cleanup_module with __exit()
+Message-ID: <202510171007.xaD8Yz39-lkp@intel.com>
+References: <20251016115113.43986-1-i.shihao.999@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,52 +64,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251016120041.17990-1-piliu@redhat.com>
+In-Reply-To: <20251016115113.43986-1-i.shihao.999@gmail.com>
 
-Hi Pingfan,
+Hi Shi,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tj-cgroup/for-next]
-[also build test ERROR on tip/sched/core tip/master linus/master v6.18-rc1 next-20251016]
-[cannot apply to tip/auto-latest]
+[auto build test ERROR on linus/master]
+[also build test ERROR on horms-ipvs/master v6.18-rc1 next-20251016]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pingfan-Liu/sched-deadline-Walk-up-cpuset-hierarchy-to-decide-root-domain-when-hot-unplug/20251016-200452
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-patch link:    https://lore.kernel.org/r/20251016120041.17990-1-piliu%40redhat.com
-patch subject: [PATCHv2] sched/deadline: Walk up cpuset hierarchy to decide root domain when hot-unplug
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20251017/202510170932.nTEduJGM-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 754ebc6ebb9fb9fbee7aef33478c74ea74949853)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510170932.nTEduJGM-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shi-Hao/net-ethernet-replace-cleanup_module-with-__exit/20251016-195352
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20251016115113.43986-1-i.shihao.999%40gmail.com
+patch subject: [PATCH] net :ethernet : replace cleanup_module with __exit()
+config: i386-randconfig-002-20251017 (https://download.01.org/0day-ci/archive/20251017/202510171007.xaD8Yz39-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251017/202510171007.xaD8Yz39-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510170932.nTEduJGM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510171007.xaD8Yz39-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from init/main.c:53:
->> include/linux/cpuset.h:282:9: error: returning 'const struct cpumask *' from a function with result type 'struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     282 |         return cpu_active_mask;
-         |                ^~~~~~~~~~~~~~~
-   include/linux/cpumask.h:125:27: note: expanded from macro 'cpu_active_mask'
-     125 | #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   drivers/net/ethernet/3com/3c515.c:478:13: warning: variable 'pnp_cards' set but not used [-Wunused-but-set-variable]
+     478 |         static int pnp_cards;
+         |                    ^
+>> drivers/net/ethernet/3com/3c515.c:1552:22: error: use of undeclared identifier 'root_corkscrew_dev'
+    1552 |         while (!list_empty(&root_corkscrew_dev)) {
+         |                             ^
+   drivers/net/ethernet/3com/3c515.c:1556:19: error: use of undeclared identifier 'root_corkscrew_dev'
+    1556 |                 vp = list_entry(root_corkscrew_dev.next,
+         |                                 ^
+   drivers/net/ethernet/3com/3c515.c:1556:19: error: use of undeclared identifier 'root_corkscrew_dev'
+   drivers/net/ethernet/3com/3c515.c:1556:19: error: use of undeclared identifier 'root_corkscrew_dev'
+   1 warning and 4 errors generated.
 
 
-vim +282 include/linux/cpuset.h
+vim +/root_corkscrew_dev +1552 drivers/net/ethernet/3com/3c515.c
 
-   279	
-   280	static inline struct cpumask *cpuset_task_rd_effective_cpus(struct task_struct *p)
-   281	{
- > 282		return cpu_active_mask;
-   283	}
-   284	
+^1da177e4c3f415 drivers/net/3c515.c               Linus Torvalds 2005-04-16  1549  
+c244e2488b92ba8 drivers/net/ethernet/3com/3c515.c Shi Hao        2025-10-16  1550  static void __exit corkscrew_exit_module(void)
+^1da177e4c3f415 drivers/net/3c515.c               Linus Torvalds 2005-04-16  1551  {
+^1da177e4c3f415 drivers/net/3c515.c               Linus Torvalds 2005-04-16 @1552  	while (!list_empty(&root_corkscrew_dev)) {
 
 -- 
 0-DAY CI Kernel Test Service
