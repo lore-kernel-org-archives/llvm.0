@@ -1,385 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DA82EB5C8;
-	Fri, 17 Oct 2025 17:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56BB2FC02A;
+	Fri, 17 Oct 2025 17:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760721428; cv=none; b=BZ4m11drlucjvWBbVXc0RdmM1etJLRjVl2AUuDQdh6buBjEun9/pLMJhQFa7NPK+R2H1t5MkXYjtogczXc2+PnzNU9zuvSk4cneAuCfkmCvS6s17bKZJ29libqQCzmVyVBoH5FmvyjPssL+9R2aPpomcN9E4Yklj6ygem0DQJ1k=
+	t=1760721611; cv=none; b=HEFpXrq2jU0NY6rOQAR85nNu59vxb1suHj9yubgaW7NTw+YrmknnDA9wRDF4qx5SXssqhTzbi+n7m3R/s5OHt75TtQVXok+JEpt2AzB8k/XNj3eQJ5Wo2Ntc+e7lp6RjyPXpLx0QTUzmSlfnSkaheDA6yRL9elvWCNubAKq2ViM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760721428; c=relaxed/simple;
-	bh=5HWbqOWYvfmFoiG9fvtGtU8661QNVQm7OM6kuBUg2po=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gKwlRShG8jS4SOJ5bx+jRklZN2wHzmpKzn24CTY09e6wByqWPAlHxVOY20VkpR3+p3c2oAsrRGoHXMuwT6bFxNfWRtQ136uqadU/5smG/kAV/uhmd+rdJ3rnnNW/M2ilnHHYygxMYdyaBfglH308bu23Ws1aKZw9gMKszi0EYqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PYiHBG0g; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760721611; c=relaxed/simple;
+	bh=7eU7v/gSC0RzDIzvKfvaFqAYhZNli1o2i++9MEqwsx8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OueKm8bfiQ+S+EbhwChv1J+wxO/O/j0oP11X39ysyFK9yi345KsjowDorvnHw9d5bYKqxajYvXm8Awn9jbqdP3Ko2SCeryqiffzvtK04vT9A7iMIbxJTwe/99cNXuOXt48Y/uSe31i2csOjGvfjxmcd3yFgY42JiNhQU9KD4meM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Zj0wxQXN; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PYiHBG0g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760721426; x=1792257426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5HWbqOWYvfmFoiG9fvtGtU8661QNVQm7OM6kuBUg2po=;
-  b=PYiHBG0gZfj2Y4F1+dOjDQsEmuo79JHmMMcDW+tiqyZrz1//Z2dxG5gd
-   BCAwGwWGguO5Ku7oU62G9qscsM1M3pW2lLJRG0l1b21gmamvgcPp/OBTN
-   hdPT4/xzWixISkLMZ72CSo5h6DGvFPRd7RLDV4GBKMqeegXpUi7Y3TPgC
-   +azu2VtVwiIhljK7fd3q17lGwA1QK+Nr6QdgFEmQn6bXIaJ9WXKcWpYsE
-   JB+xACUJ2s4L+2PmVQjlGIxSqRwyR0T3LVsPDJKze+nH9OeQkmanBWfLm
-   6szA72Ix4sL4zs2VOSMebk0xEvembTgcBYAzBRHDPswzaFinYdTE15LqH
-   Q==;
-X-CSE-ConnectionGUID: QQST+MKQTyaOlAlOP7B3rQ==
-X-CSE-MsgGUID: fsPJBlriRQiWVwFRkop01g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11585"; a="62984900"
-X-IronPort-AV: E=Sophos;i="6.19,237,1754982000"; 
-   d="scan'208";a="62984900"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 10:17:05 -0700
-X-CSE-ConnectionGUID: e0YFpg1DTJ6ZU84CZtiGig==
-X-CSE-MsgGUID: C+dZUDN6RhW+z4W8B8yqbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,237,1754982000"; 
-   d="scan'208";a="187878775"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 17 Oct 2025 10:17:01 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v9o4Y-0007bX-2d;
-	Fri, 17 Oct 2025 17:16:58 +0000
-Date: Sat, 18 Oct 2025 01:16:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rohan G Thomas via B4 Relay <devnull+rohan.g.thomas.altera.com@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <Jose.Abreu@synopsys.com>,
-	Rohan G Thomas <rohan.g.thomas@intel.com>,
-	Boon Khai Ng <boon.khai.ng@altera.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Matthew Gerlach <matthew.gerlach@altera.com>
-Subject: Re: [PATCH net v3 2/3] net: stmmac: Consider Tx VLAN offload tag
- length for maxSDU
-Message-ID: <202510180039.zqD7oO26-lkp@intel.com>
-References: <20251017-qbv-fixes-v3-2-d3a42e32646a@altera.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Zj0wxQXN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1760721594; x=1761326394; i=w_armin@gmx.de;
+	bh=7eU7v/gSC0RzDIzvKfvaFqAYhZNli1o2i++9MEqwsx8=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Zj0wxQXNNdqjZCTpsdow9yVms4KFeFOAGc50xiaYuByALRsj6Colh7iOhLH3XMU5
+	 LEA0St2OybTBBpNvvtqbb3IqKgXJP+G7q5j0PQDu8eZ+UtO6eG88wrhf5LLYXcOvm
+	 vjzphkV6J3HD4TsEZtpCpdzdlEsqMpCowa1ZP664xu5IBkQIrq+Awv0ykotGcrv05
+	 JlB2qyVtKad2CnrrX1cYgwZ43H35iM8SNVlBaHDBPHsVG23xUA72KgI75Ad8LcPk5
+	 sic7kAw6cOwrhSCMgpO0BcIBv1VyTtfs1B74zv+XYSFOCw/1htAYg7jc8BnPcN0MT
+	 weNsKeq3IGue4Dmiug==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MvK0X-1uJM5b1Z57-00s3Qg; Fri, 17
+ Oct 2025 19:19:54 +0200
+Message-ID: <9e63e9de-b9af-478d-90ad-d7fca59aaea8@gmx.de>
+Date: Fri, 17 Oct 2025 19:19:50 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251017-qbv-fixes-v3-2-d3a42e32646a@altera.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] platform/x86: Add Uniwill laptop driver
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, ilpo.jarvinen@linux.intel.com,
+ hdegoede@redhat.com, chumuzero@gmail.com, corbet@lwn.net, cs@tuxedo.de,
+ wse@tuxedocomputers.com, ggo@tuxedocomputers.com, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ rdunlap@infradead.org, alok.a.tiwari@oracle.com, linux-leds@vger.kernel.org,
+ lee@kernel.org, pobrn@protonmail.com
+References: <20250928013253.10869-2-W_Armin@gmx.de>
+ <202509290415.uez00SgW-lkp@intel.com>
+ <6146d57b-f855-40b1-a644-3af6b28ceea4@gmx.de>
+ <20251002233627.GA3978676@ax162>
+ <402f254d-7217-43e8-867f-66daab3ead86@gmx.de>
+ <20251006190819.GA2406882@ax162>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20251006190819.GA2406882@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:jCSIiP7A6/WJzpkIJUGLnWIYZcVxQ9zb8ydRgCPk+KAJhj21Bv2
+ EAmRmKRWIhyIjuXJO1lK+h874W8vKgW86aa1+da4H/uROVBGO64TQ87XW2oT9D7PgV5EXub
+ 3NmbZlA7Xamb6zV6a+CaAYQmdWS7m2D8tyN+3/oZdx04tAs90l0NHzJOYMfLoDvmpeB4hJ/
+ 3xfRDB0ekigEWsB7Ps5tg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:7yuLrp7jHU4=;htu/TOWIHCm/XbqooOOdUQU0HS3
+ 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
+ ybqGNhTrDQNBfLiyib/JoIaDALit7rKmPU4=
 
-Hi Rohan,
+Am 06.10.25 um 21:08 schrieb Nathan Chancellor:
 
-kernel test robot noticed the following build warnings:
+> On Sun, Oct 05, 2025 at 08:06:57PM +0200, Armin Wolf wrote:
+>> Am 03.10.25 um 01:36 schrieb Nathan Chancellor:
+>>
+>>> Hi Armin,
+>>>
+>>> On Thu, Oct 02, 2025 at 08:41:19PM +0200, Armin Wolf wrote:
+>>>> i think this is a problem inside the clang compiler. I did not encounter this warning when
+>>>> build for x86-64 using gcc.
+>>> Clang is actually saving you from yourself, it is a bug in GCC that it
+>>> does not warn for this:
+>>>
+>>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
+>> Oh my, i didn't expect that. Thank you for explaining this issue to to me,
+>> it seems that i still have much to learn.
+> In your defense, it is quite a subtle interaction. It is probably worth
+> throwing something in the documentation that explicitly calls this out,
+> though I am not immediately sure of where...
+>
+> Cheers,
+> Nathan
+>
+Maybe Documentation/core-api/cleanup.rst would be a suitable place for warning
+people about this.
 
-[auto build test WARNING on cb85ca4c0a349e246cd35161088aa3689ae5c580]
+Thanks,
+Armin Wolf
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rohan-G-Thomas-via-B4-Relay/net-stmmac-vlan-Disable-802-1AD-tag-insertion-offload/20251017-144104
-base:   cb85ca4c0a349e246cd35161088aa3689ae5c580
-patch link:    https://lore.kernel.org/r/20251017-qbv-fixes-v3-2-d3a42e32646a%40altera.com
-patch subject: [PATCH net v3 2/3] net: stmmac: Consider Tx VLAN offload tag length for maxSDU
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251018/202510180039.zqD7oO26-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251018/202510180039.zqD7oO26-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510180039.zqD7oO26-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:4503:6: warning: variable 'sdu_len' set but not used [-Wunused-but-set-variable]
-    4503 |         u32 sdu_len;
-         |             ^
-   1 warning generated.
-
-
-vim +/sdu_len +4503 drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-  4478	
-  4479	/**
-  4480	 *  stmmac_xmit - Tx entry point of the driver
-  4481	 *  @skb : the socket buffer
-  4482	 *  @dev : device pointer
-  4483	 *  Description : this is the tx entry point of the driver.
-  4484	 *  It programs the chain or the ring and supports oversized frames
-  4485	 *  and SG feature.
-  4486	 */
-  4487	static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
-  4488	{
-  4489		unsigned int first_entry, tx_packets, enh_desc;
-  4490		struct stmmac_priv *priv = netdev_priv(dev);
-  4491		unsigned int nopaged_len = skb_headlen(skb);
-  4492		int i, csum_insertion = 0, is_jumbo = 0;
-  4493		u32 queue = skb_get_queue_mapping(skb);
-  4494		int nfrags = skb_shinfo(skb)->nr_frags;
-  4495		int gso = skb_shinfo(skb)->gso_type;
-  4496		struct stmmac_txq_stats *txq_stats;
-  4497		struct dma_edesc *tbs_desc = NULL;
-  4498		struct dma_desc *desc, *first;
-  4499		struct stmmac_tx_queue *tx_q;
-  4500		bool has_vlan, set_ic;
-  4501		int entry, first_tx;
-  4502		dma_addr_t des;
-> 4503		u32 sdu_len;
-  4504	
-  4505		tx_q = &priv->dma_conf.tx_queue[queue];
-  4506		txq_stats = &priv->xstats.txq_stats[queue];
-  4507		first_tx = tx_q->cur_tx;
-  4508	
-  4509		if (priv->tx_path_in_lpi_mode && priv->eee_sw_timer_en)
-  4510			stmmac_stop_sw_lpi(priv);
-  4511	
-  4512		/* Manage oversized TCP frames for GMAC4 device */
-  4513		if (skb_is_gso(skb) && priv->tso) {
-  4514			if (gso & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))
-  4515				return stmmac_tso_xmit(skb, dev);
-  4516			if (priv->plat->has_gmac4 && (gso & SKB_GSO_UDP_L4))
-  4517				return stmmac_tso_xmit(skb, dev);
-  4518		}
-  4519	
-  4520		if (unlikely(stmmac_tx_avail(priv, queue) < nfrags + 1)) {
-  4521			if (!netif_tx_queue_stopped(netdev_get_tx_queue(dev, queue))) {
-  4522				netif_tx_stop_queue(netdev_get_tx_queue(priv->dev,
-  4523									queue));
-  4524				/* This is a hard error, log it. */
-  4525				netdev_err(priv->dev,
-  4526					   "%s: Tx Ring full when queue awake\n",
-  4527					   __func__);
-  4528			}
-  4529			return NETDEV_TX_BUSY;
-  4530		}
-  4531	
-  4532		sdu_len = skb->len;
-  4533		/* Check if VLAN can be inserted by HW */
-  4534		has_vlan = stmmac_vlan_insert(priv, skb, tx_q);
-  4535		if (has_vlan)
-  4536			sdu_len += VLAN_HLEN;
-  4537	
-  4538		if (priv->est && priv->est->enable &&
-  4539		    priv->est->max_sdu[queue] &&
-  4540		    skb->len > priv->est->max_sdu[queue]){
-  4541			priv->xstats.max_sdu_txq_drop[queue]++;
-  4542			goto max_sdu_err;
-  4543		}
-  4544	
-  4545		entry = tx_q->cur_tx;
-  4546		first_entry = entry;
-  4547		WARN_ON(tx_q->tx_skbuff[first_entry]);
-  4548	
-  4549		csum_insertion = (skb->ip_summed == CHECKSUM_PARTIAL);
-  4550		/* DWMAC IPs can be synthesized to support tx coe only for a few tx
-  4551		 * queues. In that case, checksum offloading for those queues that don't
-  4552		 * support tx coe needs to fallback to software checksum calculation.
-  4553		 *
-  4554		 * Packets that won't trigger the COE e.g. most DSA-tagged packets will
-  4555		 * also have to be checksummed in software.
-  4556		 */
-  4557		if (csum_insertion &&
-  4558		    (priv->plat->tx_queues_cfg[queue].coe_unsupported ||
-  4559		     !stmmac_has_ip_ethertype(skb))) {
-  4560			if (unlikely(skb_checksum_help(skb)))
-  4561				goto dma_map_err;
-  4562			csum_insertion = !csum_insertion;
-  4563		}
-  4564	
-  4565		if (likely(priv->extend_desc))
-  4566			desc = (struct dma_desc *)(tx_q->dma_etx + entry);
-  4567		else if (tx_q->tbs & STMMAC_TBS_AVAIL)
-  4568			desc = &tx_q->dma_entx[entry].basic;
-  4569		else
-  4570			desc = tx_q->dma_tx + entry;
-  4571	
-  4572		first = desc;
-  4573	
-  4574		if (has_vlan)
-  4575			stmmac_set_desc_vlan(priv, first, STMMAC_VLAN_INSERT);
-  4576	
-  4577		enh_desc = priv->plat->enh_desc;
-  4578		/* To program the descriptors according to the size of the frame */
-  4579		if (enh_desc)
-  4580			is_jumbo = stmmac_is_jumbo_frm(priv, skb->len, enh_desc);
-  4581	
-  4582		if (unlikely(is_jumbo)) {
-  4583			entry = stmmac_jumbo_frm(priv, tx_q, skb, csum_insertion);
-  4584			if (unlikely(entry < 0) && (entry != -EINVAL))
-  4585				goto dma_map_err;
-  4586		}
-  4587	
-  4588		for (i = 0; i < nfrags; i++) {
-  4589			const skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-  4590			int len = skb_frag_size(frag);
-  4591			bool last_segment = (i == (nfrags - 1));
-  4592	
-  4593			entry = STMMAC_GET_ENTRY(entry, priv->dma_conf.dma_tx_size);
-  4594			WARN_ON(tx_q->tx_skbuff[entry]);
-  4595	
-  4596			if (likely(priv->extend_desc))
-  4597				desc = (struct dma_desc *)(tx_q->dma_etx + entry);
-  4598			else if (tx_q->tbs & STMMAC_TBS_AVAIL)
-  4599				desc = &tx_q->dma_entx[entry].basic;
-  4600			else
-  4601				desc = tx_q->dma_tx + entry;
-  4602	
-  4603			des = skb_frag_dma_map(priv->device, frag, 0, len,
-  4604					       DMA_TO_DEVICE);
-  4605			if (dma_mapping_error(priv->device, des))
-  4606				goto dma_map_err; /* should reuse desc w/o issues */
-  4607	
-  4608			tx_q->tx_skbuff_dma[entry].buf = des;
-  4609	
-  4610			stmmac_set_desc_addr(priv, desc, des);
-  4611	
-  4612			tx_q->tx_skbuff_dma[entry].map_as_page = true;
-  4613			tx_q->tx_skbuff_dma[entry].len = len;
-  4614			tx_q->tx_skbuff_dma[entry].last_segment = last_segment;
-  4615			tx_q->tx_skbuff_dma[entry].buf_type = STMMAC_TXBUF_T_SKB;
-  4616	
-  4617			/* Prepare the descriptor and set the own bit too */
-  4618			stmmac_prepare_tx_desc(priv, desc, 0, len, csum_insertion,
-  4619					priv->mode, 1, last_segment, skb->len);
-  4620		}
-  4621	
-  4622		/* Only the last descriptor gets to point to the skb. */
-  4623		tx_q->tx_skbuff[entry] = skb;
-  4624		tx_q->tx_skbuff_dma[entry].buf_type = STMMAC_TXBUF_T_SKB;
-  4625	
-  4626		/* According to the coalesce parameter the IC bit for the latest
-  4627		 * segment is reset and the timer re-started to clean the tx status.
-  4628		 * This approach takes care about the fragments: desc is the first
-  4629		 * element in case of no SG.
-  4630		 */
-  4631		tx_packets = (entry + 1) - first_tx;
-  4632		tx_q->tx_count_frames += tx_packets;
-  4633	
-  4634		if ((skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) && priv->hwts_tx_en)
-  4635			set_ic = true;
-  4636		else if (!priv->tx_coal_frames[queue])
-  4637			set_ic = false;
-  4638		else if (tx_packets > priv->tx_coal_frames[queue])
-  4639			set_ic = true;
-  4640		else if ((tx_q->tx_count_frames %
-  4641			  priv->tx_coal_frames[queue]) < tx_packets)
-  4642			set_ic = true;
-  4643		else
-  4644			set_ic = false;
-  4645	
-  4646		if (set_ic) {
-  4647			if (likely(priv->extend_desc))
-  4648				desc = &tx_q->dma_etx[entry].basic;
-  4649			else if (tx_q->tbs & STMMAC_TBS_AVAIL)
-  4650				desc = &tx_q->dma_entx[entry].basic;
-  4651			else
-  4652				desc = &tx_q->dma_tx[entry];
-  4653	
-  4654			tx_q->tx_count_frames = 0;
-  4655			stmmac_set_tx_ic(priv, desc);
-  4656		}
-  4657	
-  4658		/* We've used all descriptors we need for this skb, however,
-  4659		 * advance cur_tx so that it references a fresh descriptor.
-  4660		 * ndo_start_xmit will fill this descriptor the next time it's
-  4661		 * called and stmmac_tx_clean may clean up to this descriptor.
-  4662		 */
-  4663		entry = STMMAC_GET_ENTRY(entry, priv->dma_conf.dma_tx_size);
-  4664		tx_q->cur_tx = entry;
-  4665	
-  4666		if (netif_msg_pktdata(priv)) {
-  4667			netdev_dbg(priv->dev,
-  4668				   "%s: curr=%d dirty=%d f=%d, e=%d, first=%p, nfrags=%d",
-  4669				   __func__, tx_q->cur_tx, tx_q->dirty_tx, first_entry,
-  4670				   entry, first, nfrags);
-  4671	
-  4672			netdev_dbg(priv->dev, ">>> frame to be transmitted: ");
-  4673			print_pkt(skb->data, skb->len);
-  4674		}
-  4675	
-  4676		if (unlikely(stmmac_tx_avail(priv, queue) <= (MAX_SKB_FRAGS + 1))) {
-  4677			netif_dbg(priv, hw, priv->dev, "%s: stop transmitted packets\n",
-  4678				  __func__);
-  4679			netif_tx_stop_queue(netdev_get_tx_queue(priv->dev, queue));
-  4680		}
-  4681	
-  4682		u64_stats_update_begin(&txq_stats->q_syncp);
-  4683		u64_stats_add(&txq_stats->q.tx_bytes, skb->len);
-  4684		if (set_ic)
-  4685			u64_stats_inc(&txq_stats->q.tx_set_ic_bit);
-  4686		u64_stats_update_end(&txq_stats->q_syncp);
-  4687	
-  4688		if (priv->sarc_type)
-  4689			stmmac_set_desc_sarc(priv, first, priv->sarc_type);
-  4690	
-  4691		/* Ready to fill the first descriptor and set the OWN bit w/o any
-  4692		 * problems because all the descriptors are actually ready to be
-  4693		 * passed to the DMA engine.
-  4694		 */
-  4695		if (likely(!is_jumbo)) {
-  4696			bool last_segment = (nfrags == 0);
-  4697	
-  4698			des = dma_map_single(priv->device, skb->data,
-  4699					     nopaged_len, DMA_TO_DEVICE);
-  4700			if (dma_mapping_error(priv->device, des))
-  4701				goto dma_map_err;
-  4702	
-  4703			tx_q->tx_skbuff_dma[first_entry].buf = des;
-  4704			tx_q->tx_skbuff_dma[first_entry].buf_type = STMMAC_TXBUF_T_SKB;
-  4705			tx_q->tx_skbuff_dma[first_entry].map_as_page = false;
-  4706	
-  4707			stmmac_set_desc_addr(priv, first, des);
-  4708	
-  4709			tx_q->tx_skbuff_dma[first_entry].len = nopaged_len;
-  4710			tx_q->tx_skbuff_dma[first_entry].last_segment = last_segment;
-  4711	
-  4712			if (unlikely((skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) &&
-  4713				     priv->hwts_tx_en)) {
-  4714				/* declare that device is doing timestamping */
-  4715				skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
-  4716				stmmac_enable_tx_timestamp(priv, first);
-  4717			}
-  4718	
-  4719			/* Prepare the first descriptor setting the OWN bit too */
-  4720			stmmac_prepare_tx_desc(priv, first, 1, nopaged_len,
-  4721					csum_insertion, priv->mode, 0, last_segment,
-  4722					skb->len);
-  4723		}
-  4724	
-  4725		if (tx_q->tbs & STMMAC_TBS_EN) {
-  4726			struct timespec64 ts = ns_to_timespec64(skb->tstamp);
-  4727	
-  4728			tbs_desc = &tx_q->dma_entx[first_entry];
-  4729			stmmac_set_desc_tbs(priv, tbs_desc, ts.tv_sec, ts.tv_nsec);
-  4730		}
-  4731	
-  4732		stmmac_set_tx_owner(priv, first);
-  4733	
-  4734		netdev_tx_sent_queue(netdev_get_tx_queue(dev, queue), skb->len);
-  4735	
-  4736		stmmac_enable_dma_transmission(priv, priv->ioaddr, queue);
-  4737		skb_tx_timestamp(skb);
-  4738		stmmac_flush_tx_descriptors(priv, queue);
-  4739		stmmac_tx_timer_arm(priv, queue);
-  4740	
-  4741		return NETDEV_TX_OK;
-  4742	
-  4743	dma_map_err:
-  4744		netdev_err(priv->dev, "Tx DMA map failed\n");
-  4745	max_sdu_err:
-  4746		dev_kfree_skb(skb);
-  4747		priv->xstats.tx_dropped++;
-  4748		return NETDEV_TX_OK;
-  4749	}
-  4750	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
