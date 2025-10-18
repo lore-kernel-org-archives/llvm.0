@@ -1,129 +1,114 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A591280CE5
-	for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 19:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6916A258CD7
+	for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 19:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760815507; cv=none; b=DdJ2osyIgM7M2CJt8kfhDvRJFcA4LV1g+gSvQFqWp8DbOV/a2ucQGMFMeAIuAl9gEraJgksLCg1kpdzV0/Wft0jBTnThoWa5h65V9qzhnAR+i8Xmp3LtpSNPw3I3rzXSHDHYHhTtsSAuVroXDBJav7BlHl/aCNi+2hXmKvZMd/U=
+	t=1760816656; cv=none; b=o8ap+Eu3XRK9v5A7CZK+IrMNoeoo2/xGd1U4ZwRh2CPw5wLFhwLvWERdp+6ckolBFvI6ulVAIl284Nrhv6NP4i6iP7Rq47CistL4vqmqsFZoTSI4tHOPU4T4R2van1rjgKBJVdR61i/60nU181kX4lJJ3m8qg98mZVTotKpwqbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760815507; c=relaxed/simple;
-	bh=rnUc1sSIJcJcXtlU0rQc91rWE99Qu6t+C8m+svSvM9s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=puK3vkZthAPFs88T77zN6n0luLYTYratSVQEPvxcVkE9DlL+UvvNoK0bzCJTWk/LVqAypzelTkPh+SNK57jN3HoruoMnCi2retB9oDADFYGmwbf+b5hFzQRps8ButufirdfGSrhJhqr0FrKGZGLkDhtFoGvoIJZu8t5lVzUYvMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHMFRZj/; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760816656; c=relaxed/simple;
+	bh=IxGbQ+0oog6MEU2YUYCjRLsGaSp8M46wL1EyN+tTuJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lfdJ/gFyE+iYlg9LD7gzP6lbu+l1IPuODKyJ6XdJby3lavYdH0y6XJGCCo5mycxOdKuWHceA6h603Y5EJNXjzrBoFgqc/eBIEO91KyLRUM2y9r6j/1vWrUPiQADWPDGYjOmELsebKuBF0hJ3tGV/L4IBUELZWdbu3sop0OVuAF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D0RTNVoh; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHMFRZj/"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-26816246a0aso4728535ad.2
-        for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 12:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760815505; x=1761420305; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PXwxLtFHklVqMldstrW5nXmaQWoQkEu+q+HBHCmmMZA=;
-        b=dHMFRZj/AHAUT0wT5RclLujiW3/kN4d5sqH1XdPfPy4lHcEoChCJ5070hg/3rBT16i
-         vt8fTqjhel50mPY0IuEGjuiIySwCydyLAFkDvhFTdyQEOcBOG7moHzYmVTBVC8gNz7Fc
-         MqbjIozAE11gPIjeo3Uno9NpzkmmH1ULcn16bt1KRc89Q1HrKpjeqMWippjBfc3Z8AcQ
-         vQdrLdrhhkVpua8krRN4AhftGcP4m6L0YX0xzw9DIeDMv/hiOhjf97b4XzFSmW3IJ2wg
-         7UcRuTqzjoZRRI1YwxPk3gipGfW5pux5lg6OOj7NHb1yLrx1nQjHIcY8m+7rzHqqwBfC
-         pk+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760815505; x=1761420305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PXwxLtFHklVqMldstrW5nXmaQWoQkEu+q+HBHCmmMZA=;
-        b=istTBRUCIDCpfnxEJnaY+cXDFlOcGING/t7XkS0ttIFjRbHACISWBLoHNtjMX7VKI4
-         OevWOGsZNr9W/OZ+Uu+pGQ7tj4mVVfGPS92QDLugL5zwtdV7vU0TlEFP1+De55b9EU8b
-         mXfkWo7U5+/SmUf4oEL848kNsruo1kVzBHj4BYjMzur5aunJVRBsdpHtNE1k6Fz3MbKM
-         fA6Jvdkfhgx6qh5rT/znoZNMfS6unRx7FnAekYxQ6Lr9gxtlbRs/yi/PXSohbujs/xzq
-         ad8J6bPRKse+s5Ofls0ftsfzALwtacOpQrI+ghFtFLtmQ14xR5zw9zQFmMNoP8jKdUQ6
-         z/KA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRYK0Dtwh7xzp8/gC9fcu0GI15mNoA3GtmH08DeA1JoCEIQa/PJsdMccJjFc5c5jaN+WE/@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxt0n3tbaJW0pBzHCGF/JNUuduTbrVUGhcCrNeee3gUnmtxrr76
-	f/1p4MjeU9jA9JVxZM0ZRVzB8RoLTLwfktg7mtS8lQ65T0j+mep2cGu9af9/h4wuSB/1P2M7m32
-	hL38AqNQZ428x6VCeVFbfCg++ze//An4=
-X-Gm-Gg: ASbGncv/szO8wMkU2QPm3ErZmdmDl1v7xeIvH3LOBoO6ihS8cXf77Axv2uqA6vILSrG
-	ZxSzU6hjReiaZwuwDQroyFSlME6hzT0v6sVO94MXo8IJLTDVa1kvBLxs/hJYr1ESvvqO2ZIbjib
-	oy4ElaKlx57IUAO75pzbHD9hSNQiX6x69Y/UuydDJWHd9UX0PPLHf1FNYATRLybm+reWhIV6uIZ
-	SZmsrUimlYYDI2/k6BGKE1k5mTGoIXvaPAD4vVhcBee2pRVV56oU9galBxXRaN+MBTphIoKtmxm
-	CmiDKm94HJgD/k3FJRr9qwxNMML9TmcadJGlI9XPmFyJioK0tj9kpoE02gUKTxHRxpDmCtaJMy0
-	SUkM=
-X-Google-Smtp-Source: AGHT+IFynbxdq4PbDoeu2y7E7pruyAv8MSoOFKgcS5qR5uKUe2l/9/1aikoejnUdjk1VE9ieyNLSjxDynifGmomPS5w=
-X-Received: by 2002:a17:902:f550:b0:274:506d:7fe5 with SMTP id
- d9443c01a7336-290c9cfec04mr58829965ad.4.1760815505098; Sat, 18 Oct 2025
- 12:25:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D0RTNVoh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760816655; x=1792352655;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IxGbQ+0oog6MEU2YUYCjRLsGaSp8M46wL1EyN+tTuJA=;
+  b=D0RTNVohoabOBH8grshm8XHWr+Wh/eijoev/nJwu3XKfGJbh5RIXCuFk
+   8ybD2XSRMChw5cL+sg0qdiqe0s9C1vgu5qGAiaNCb6xJEcDaLtGVLtlHk
+   TCuIElB0nhfAG/SGQOYeREorsTejoVwibQycDrMIXqKcIxTbDZMH5dawn
+   +96I7r7SxFuRpKi0YYtY7Ia6wHBPskFh8435m/nF6QSM3URCjYdcb8fL+
+   pLqM02uVoQjQKb5BJCML2jGDzHdaZUMOerk/Mo1du03/BLKKMW6zw8Saw
+   uqqu286hkddnMY2PdxHq9whO8Wxcr9AI5/5txtDqlhqasDLEEryfOmFNK
+   Q==;
+X-CSE-ConnectionGUID: Bnq9A6CNTy+wSjJMzeWCWA==
+X-CSE-MsgGUID: V993L49lSy+Xa3vCSPg2ng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74114573"
+X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
+   d="scan'208";a="74114573"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 12:44:14 -0700
+X-CSE-ConnectionGUID: apqLdoj/Qaaf0a/9rbmSSw==
+X-CSE-MsgGUID: NUNJhOViRPG7nCoGuDZXSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
+   d="scan'208";a="182192273"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.194])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 12:44:12 -0700
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vACqW-00000000xjT-2jcB;
+	Sat, 18 Oct 2025 22:44:08 +0300
+Date: Sat, 18 Oct 2025 22:44:08 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Justinien Bouron <jbouron@amazon.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [resend, PATCH v2 1/1] kexec: Remove unused code in
+ kimage_load_cma_segment()
+Message-ID: <aPPuCIyL3yuxGQMR@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com>
-In-Reply-To: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 18 Oct 2025 21:24:52 +0200
-X-Gm-Features: AS18NWDWZ6CTzqAcsRkSpKjdzes4UGFhB9PPk5gEXsERGZ6zM8JBbanNnhdHiYY
-Message-ID: <CANiq72n8m0JKjJMZ8Nk8B=GG5kcsSuc2YKp4=r2XJJgREoZZkw@mail.gmail.com>
-Subject: Re: [RESEND PATCH v18 00/16] rust: replace kernel::str::CStr w/ core::ffi::CStr
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	=?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Christian Brauner <brauner@kernel.org>, 
-	Carlos Llamas <cmllamas@google.com>, Suren Baghdasaryan <surenb@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Waiman Long <longman@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev, 
-	Tamir Duberstein <tamird@gmail.com>, Matthew Maurer <mmaurer@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Sat, Oct 18, 2025 at 9:16=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
-> wrote:
->
-> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-> have omitted Co-authored tags, as the end result is quite different.
->
-> This series is intended to be taken through rust-next. The final patch
-> in the series requires some other subsystems' `Acked-by`s:
-> - drivers/android/binder/stats.rs: rust_binder. Alice, could you take a
->   look?
-> - rust/kernel/device.rs: driver-core. Already acked by gregkh.
-> - rust/kernel/firmware.rs: driver-core. Danilo, could you take a look?
-> - rust/kernel/seq_file.rs: vfs. Christian, could you take a look?
-> - rust/kernel/sync/*: locking-core. Boqun, could you take a look?
->
-> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vador=
-ovsky@protonmail.com/t/#u [0]
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
->
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Thanks for trying the kernel.org account -- it seems it worked!
+On Tue, Sep 23, 2025 at 10:50:55AM -0700, Justinien Bouron wrote:
+> On Tue, Sep 16, 2025 at 02:51:09PM +0200, Andy Shevchenko wrote:
+> > clang is not happy about set but unused variable:
+> > 
+> > kernel/kexec_core.c:745:16: error: variable 'maddr' set but not used [-Werror,-Wunused-but-set-variable]
+> >   745 |         unsigned long maddr;
+> >       |                       ^
+> > 1 error generated.
+> > 
+> > Fix the compilation breakage (`make W=1` build) by removing unused variable.
+> > 
+> > As Nathan noted, GCC 16 produces the similar warning;
+> > 
+> > Fixes: f4fecb50d6e1 ("kexec_core: remove superfluous page offset handling in segment loading")
+> FYI the commit this patch is fixing (i.e. f4fecb50d6e1) is going to need a
+> second revision as well (I haven't submitted it yet, still working on it), this
+> means that your "Fixes:" tag will need to be changed again, requiring a 3rd
+> revision.
+> 
+> I am not sure what is the proper way forward here. Should I:
+>     - Send my v2, without fixing the unused variable and then you send your v3
+>       with the updated "Fixes:" tag pointing to my v2.
+>     - OR fixing the unused variable in my v2 (i.e. "absorb" this patch in my
+>       v2).
 
-No more throttling to deal with anymore :)
+Second is the best (integrate this fix into yours v2).
 
-Cheers,
-Miguel
+> In the latter case, I am not sure how I am supposed to credit the work in this
+> case? Do I need to add another "Signed-off-by: Andy Shevchenko" besides mine?
+
+Just in the comment block (after the cutter '---' line and before the diff) in
+a free words. No need for any special tags for this in such a case.
+
+> I'm still learning the ropes on how to contribute through the mailing list so I
+> would be grateful if you could share your input on what's the proper way forward
+> here.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
