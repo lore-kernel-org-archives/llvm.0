@@ -1,55 +1,55 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82512741A6
-	for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 18:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7B927B327
+	for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 18:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760810604; cv=none; b=I5DYUJb9HLVWRhoV2sKq9kV94PzulCqOd0NGJ/tOUmjLwarkLs1hnJt3hzZw4z7kkdtvl18mY02NoiXOp7kNnTmXiNDdrXC0h/xoQkWzrT7vmC4a3QFi6Ru66uJHDI5OmZXO5sIBZ/UV9LxEpydc+fom0VJpg4MQ9QlesbPQWCM=
+	t=1760810612; cv=none; b=egCh7UUFeE4EOdhMnNEcp2pg2lDE5dd4f+Ph6ymvd31tNQ8YAH41epUgNvUjsTP3R/IUPA0WKjdrxh8dlKYYUjvbzaFaMT6ACvCMngL2f3OtTwO6PXTjGyMJXXU3Udmj0Q94GfX1QiIXpfgWxFFGivKzwHQzjkW9aY2QBdhDzGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760810604; c=relaxed/simple;
-	bh=JRHxs/B/lllx/mRYTbX4X0zoBVdGGTRzzB4qSksz3BQ=;
+	s=arc-20240116; t=1760810612; c=relaxed/simple;
+	bh=sGhtag8qWZn35dcfXoa8gr9jZ+96UIwtNQKYHPYg/UQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RZ2N6akmULNF22cmfoRsbNiy4tuqQry7RcvAGijQrGyPPfHMc4JUvBndjN3dY06PW7k/KWTHh3nJ+j3Cj8GaRBHLLqGpzhfKup+vmYbcjhbXXFmTcjqNpDZJrkMg6vpMOfJBzKbuJPURNYX+5Ln21x59eHiSUhOqK+Pg1q+ot78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JwQ9ioY+; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=tkRmDtNbfwVfjl4TH5wL6SoWF4VDhJauePxukiagu5YhvX3k1CDld/NJeQdwal+dTwCZ+/rjptR1KOK4UkXZPc00QV1rPJX67ncihlbIaBsTOkhbSAQZ7wvylOSKnaRVchfdqv9Afq5A/Cy/F7PGq15xxMwwfGK6CZHxf/w4w3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TdHajYIO; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JwQ9ioY+"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-470fd59d325so15421755e9.0
-        for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 11:03:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TdHajYIO"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-426d3ee72f5so2423136f8f.2
+        for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 11:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760810601; x=1761415401; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1760810609; x=1761415409; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sRx+IA31rk7VSUz5v3RyOo4nJpXSH+QxySZDi0dx43E=;
-        b=JwQ9ioY+v8jNWMG5yvk2EencYyNFc+/Acldej3h/3XXWnVHLyMGzko0YLZi6M0UcDj
-         cptPD26Kpl3aegRyexfc6S3EZS0dJ1P+vx+zBtWMXCMU2+t1QNJFbDgYTcoBO2pxMSpR
-         vSwhP7YYgeWHusva/yHBq4Ixj/h6UShHwz6FNpxZqlzJQ5vbIpAaCSGhUKrnKqOqXUwX
-         vfMdWr9c4ZuCQRtwrpG2Za/7yhp199XywYb8xjeerxQhmSvL9n3DIGW4lHj0KNzHmNy7
-         WBpvCSn13b/XX/Ctk2d+Mur8fH1koZ9I/+UeOdrMEBU1/7uhBsCbfsfF+foX3H5q0OrY
-         ZQvA==
+        bh=3hGW9wvWmko0jOtTzcTf0josI14Rm4dKhBHFVI9qV6E=;
+        b=TdHajYIOWCQtKzf7MfpiBBKSOH6gj9JGJ3cXkd3+UAtrVPCFRYb+AnkUpz7ZXTkgPa
+         XMt9J1vuhak2Azm9FdnRF+EzDhOpsNQJwg/Rq8dFRaZnSbcRjONwDthtBhkxPJ+iCBqv
+         gk+cE2+KBfKhI1AueyrMWv0cXAc6HGjLMknsb5sehYcm1z40FGYYxVdSOZRJLNXjDhbZ
+         dj6/DGZCAPMGK/3+gLN5t32ylyXgSSvHX8wTVtppYnDOzjCiEkivfMFX9GHRaH9bVCM4
+         AwbiO4WuFlBDgIwF3E4J32tf+GnvnunTLlp3MvK3a+OiRK2vD263tOhg2lvLLB9qQiNq
+         uneg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760810601; x=1761415401;
+        d=1e100.net; s=20230601; t=1760810609; x=1761415409;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sRx+IA31rk7VSUz5v3RyOo4nJpXSH+QxySZDi0dx43E=;
-        b=hKTmTy9pY1qzzJ9FjzCfMhnkyQ9uomEmpbdhlSuMP6hpRFQ4baZ3uMq09YAqKU11j2
-         ssbiyF9IMABGUMAsu8un/ShKRaqK8+JBZ8AAnWFs0KJbPirqE2gBmI19wUml9PfHASmF
-         6LcTVZGUgqRvtety3XGI4MADgJ6lV83n2v5T/Vu7Ntz71D8du29jvtH26/c6gzosn2mp
-         hKCAAEew07gXGXlbWpqZupg5rO5eRNlZtxUzZKn4timqaKDCbe9K1x/nxki1vWqGh/1C
-         LSXDoROYClxS/MCxZrr3TaHFIPw2xYeqVcatlhN08YUqnxcrIt9CWUEppQTTG3g6NJ9g
-         rMPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVeDyy8pIFLfD6ksO8EXn0F0lhPnZJQKFqeCZtSLI+IadoONTIYEDtsRep4d16SkOg7ZTDq@lists.linux.dev
-X-Gm-Message-State: AOJu0YyWjcJaeUI8Euet1U7J+QEoCkNzjoDLDBWw+3JjVkrPOaK962Az
-	NeP7NMfGGBZbgWu1E2gxAx7DlsBPdnGALXey2EfBvbfA0vrCXEi/Fei7AtdThMMovwyE90H+5yT
-	4nIQp6Wi5HpvxElGO1A==
-X-Google-Smtp-Source: AGHT+IF6AVT5n9fyZmX8HKRXXzv3logzsSjOnhKpBAjpd1CKVhXkGu1U0u6LIuqBRDGiqbuatyc4kakbkHTbQVE=
-X-Received: from wmna7.prod.google.com ([2002:a05:600c:687:b0:46f:b153:bfb7])
+        bh=3hGW9wvWmko0jOtTzcTf0josI14Rm4dKhBHFVI9qV6E=;
+        b=IORIyek30wElOB3SOrpfnVjPPQYENFPhRqT2ahetST526cpXV4kQMrAhjlg6HmxGFW
+         1PIetj0XGRL61CN8WYvuAJV34Nxa/ANFJW/HUXX6CMHUnGsfChTX+Sh6TP94C/KZyLJG
+         YbsZzRLUMjarrF6T48sGWeJPBGecTgMVbXKSYh/5wTTOPGUMLwUy5CAN83G2+FIvQL3J
+         VYFYuYrS6PKnS0/zWlLEVkz4WadGZ6zsTY/oXkF+pcpqc9XlZ1JcCjrIWyv6JhiGy3mR
+         oaJbeTASb0nAKYQN4hu8FxvJCg8fz36i6F7r1u/WE4yNxpxhynbNYmPzvbbHjZC8/Ku4
+         EU2g==
+X-Forwarded-Encrypted: i=1; AJvYcCVcZY3m0dxp2SjMrIbajt3Oihr1zFhE4BEEsrNXy5KiLQgtgkYlNfDYUiKsAKMv5R152QxF@lists.linux.dev
+X-Gm-Message-State: AOJu0YzoAvJPBMUWx1HnTez15Bi2fkX9QJ8aXtM2BH3qMtkuW0HPjKsl
+	fkNUg//ulpYh6+sz9zy1qz+7dODrj1gxINl8jC9L/BTbw4M4brG23BifTuWYqDOQlu2z0ObY6lr
+	cwUU9zHV3t2ADHHSgDw==
+X-Google-Smtp-Source: AGHT+IG/FO8rWAikeqs5tUzrpiqkR4TRQ79qTSq2oIl/eJyJd7c6RbaDK56qoNSuHSIOJYj5yw9+qSnEpYh3S50=
+X-Received: from wmcn1.prod.google.com ([2002:a05:600c:c0c1:b0:46e:1ae9:749a])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:5029:b0:46f:b32e:4af3 with SMTP id 5b1f17b1804b1-471178784efmr48534695e9.1.1760810601266;
- Sat, 18 Oct 2025 11:03:21 -0700 (PDT)
-Date: Sat, 18 Oct 2025 18:03:19 +0000
+ 2002:a05:6000:40da:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-42704e02b12mr4695190f8f.48.1760810608392;
+ Sat, 18 Oct 2025 11:03:28 -0700 (PDT)
+Date: Sat, 18 Oct 2025 18:03:26 +0000
 In-Reply-To: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
 X-Mailer: git-send-email 2.51.0.915.g61a8936c21-goog
-Message-ID: <20251018180319.3615829-1-aliceryhl@google.com>
-Subject: [PATCH v18 14/16] rust: clk: use `CStr::as_char_ptr`
+Message-ID: <20251018180326.3616043-1-aliceryhl@google.com>
+Subject: [PATCH v18 15/16] rust: support formatting of foreign types
 From: Alice Ryhl <aliceryhl@google.com>
 To: tamird@gmail.com
 Cc: Liam.Howlett@oracle.com, a.hindborg@kernel.org, airlied@gmail.com, 
@@ -86,39 +86,307 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Tamir Duberstein <tamird@gmail.com>
 
-Replace the use of `as_ptr` which works through `<CStr as
-Deref<Target=&[u8]>::deref()` in preparation for replacing
-`kernel::str::CStr` with `core::ffi::CStr` as the latter does not
-implement `Deref<Target=&[u8]>`.
+Introduce a `fmt!` macro which wraps all arguments in
+`kernel::fmt::Adapter` and a `kernel::fmt::Display` trait. This enables
+formatting of foreign types (like `core::ffi::CStr`) that do not
+implement `core::fmt::Display` due to concerns around lossy conversions
+which do not apply in the kernel.
 
+Suggested-by: Alice Ryhl <aliceryhl@google.com>
+Link: https://rust-for-linux.zulipchat.com/#narrow/channel/288089-General/topic/Custom.20formatting/with/516476467
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Acked-by: Danilo Krummrich <dakr@kernel.org>
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 ---
- rust/kernel/clk.rs | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ rust/kernel/fmt.rs     | 87 +++++++++++++++++++++++++++++++++++++-
+ rust/kernel/prelude.rs |  3 +-
+ rust/macros/fmt.rs     | 94 ++++++++++++++++++++++++++++++++++++++++++
+ rust/macros/lib.rs     | 19 +++++++++
+ rust/macros/quote.rs   |  7 ++++
+ 5 files changed, 207 insertions(+), 3 deletions(-)
+ create mode 100644 rust/macros/fmt.rs
 
-diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
-index 1e6c8c42fb3a..c1cfaeaa36a2 100644
---- a/rust/kernel/clk.rs
-+++ b/rust/kernel/clk.rs
-@@ -136,7 +136,7 @@ impl Clk {
-         ///
-         /// [`clk_get`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_get
-         pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
--            let con_id = name.map_or(ptr::null(), |n| n.as_ptr());
-+            let con_id = name.map_or(ptr::null(), |n| n.as_char_ptr());
+diff --git a/rust/kernel/fmt.rs b/rust/kernel/fmt.rs
+index 0306e8388968..84d634201d90 100644
+--- a/rust/kernel/fmt.rs
++++ b/rust/kernel/fmt.rs
+@@ -4,4 +4,89 @@
+ //!
+ //! This module is intended to be used in place of `core::fmt` in kernel code.
  
-             // SAFETY: It is safe to call [`clk_get`] for a valid device pointer.
-             //
-@@ -304,7 +304,7 @@ impl OptionalClk {
-         /// [`clk_get_optional`]:
-         /// https://docs.kernel.org/core-api/kernel-api.html#c.clk_get_optional
-         pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
--            let con_id = name.map_or(ptr::null(), |n| n.as_ptr());
-+            let con_id = name.map_or(ptr::null(), |n| n.as_char_ptr());
+-pub use core::fmt::{Arguments, Debug, Display, Error, Formatter, Result, Write};
++pub use core::fmt::{Arguments, Debug, Error, Formatter, Result, Write};
++
++/// Internal adapter used to route allow implementations of formatting traits for foreign types.
++///
++/// It is inserted automatically by the [`fmt!`] macro and is not meant to be used directly.
++///
++/// [`fmt!`]: crate::prelude::fmt!
++#[doc(hidden)]
++pub struct Adapter<T>(pub T);
++
++macro_rules! impl_fmt_adapter_forward {
++    ($($trait:ident),* $(,)?) => {
++        $(
++            impl<T: $trait> $trait for Adapter<T> {
++                fn fmt(&self, f: &mut Formatter<'_>) -> Result {
++                    let Self(t) = self;
++                    $trait::fmt(t, f)
++                }
++            }
++        )*
++    };
++}
++
++use core::fmt::{Binary, LowerExp, LowerHex, Octal, Pointer, UpperExp, UpperHex};
++impl_fmt_adapter_forward!(Debug, LowerHex, UpperHex, Octal, Binary, Pointer, LowerExp, UpperExp);
++
++/// A copy of [`core::fmt::Display`] that allows us to implement it for foreign types.
++///
++/// Types should implement this trait rather than [`core::fmt::Display`]. Together with the
++/// [`Adapter`] type and [`fmt!`] macro, it allows for formatting foreign types (e.g. types from
++/// core) which do not implement [`core::fmt::Display`] directly.
++///
++/// [`fmt!`]: crate::prelude::fmt!
++pub trait Display {
++    /// Same as [`core::fmt::Display::fmt`].
++    fn fmt(&self, f: &mut Formatter<'_>) -> Result;
++}
++
++impl<T: ?Sized + Display> Display for &T {
++    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
++        Display::fmt(*self, f)
++    }
++}
++
++impl<T: ?Sized + Display> core::fmt::Display for Adapter<&T> {
++    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
++        let Self(t) = self;
++        Display::fmt(t, f)
++    }
++}
++
++macro_rules! impl_display_forward {
++    ($(
++        $( { $($generics:tt)* } )? $ty:ty $( { where $($where:tt)* } )?
++    ),* $(,)?) => {
++        $(
++            impl$($($generics)*)? Display for $ty $(where $($where)*)? {
++                fn fmt(&self, f: &mut Formatter<'_>) -> Result {
++                    core::fmt::Display::fmt(self, f)
++                }
++            }
++        )*
++    };
++}
++
++impl_display_forward!(
++    bool,
++    char,
++    core::panic::PanicInfo<'_>,
++    Arguments<'_>,
++    i128,
++    i16,
++    i32,
++    i64,
++    i8,
++    isize,
++    str,
++    u128,
++    u16,
++    u32,
++    u64,
++    u8,
++    usize,
++    {<T: ?Sized>} crate::sync::Arc<T> {where crate::sync::Arc<T>: core::fmt::Display},
++    {<T: ?Sized>} crate::sync::UniqueArc<T> {where crate::sync::UniqueArc<T>: core::fmt::Display},
++);
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index 198d09a31449..26424ad7e989 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -25,7 +25,7 @@
+ pub use crate::alloc::{flags::*, Box, KBox, KVBox, KVVec, KVec, VBox, VVec, Vec};
  
-             // SAFETY: It is safe to call [`clk_get_optional`] for a valid device pointer.
-             //
+ #[doc(no_inline)]
+-pub use macros::{export, kunit_tests, module, vtable};
++pub use macros::{export, fmt, kunit_tests, module, vtable};
+ 
+ pub use pin_init::{init, pin_data, pin_init, pinned_drop, InPlaceWrite, Init, PinInit, Zeroable};
+ 
+@@ -36,7 +36,6 @@
+ pub use super::dbg;
+ pub use super::{dev_alert, dev_crit, dev_dbg, dev_emerg, dev_err, dev_info, dev_notice, dev_warn};
+ pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr_notice, pr_warn};
+-pub use core::format_args as fmt;
+ 
+ pub use super::{try_init, try_pin_init};
+ 
+diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
+new file mode 100644
+index 000000000000..2f4b9f6e2211
+--- /dev/null
++++ b/rust/macros/fmt.rs
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++
++use proc_macro::{Ident, TokenStream, TokenTree};
++use std::collections::BTreeSet;
++
++/// Please see [`crate::fmt`] for documentation.
++pub(crate) fn fmt(input: TokenStream) -> TokenStream {
++    let mut input = input.into_iter();
++
++    let first_opt = input.next();
++    let first_owned_str;
++    let mut names = BTreeSet::new();
++    let first_span = {
++        let Some((mut first_str, first_span)) = (match first_opt.as_ref() {
++            Some(TokenTree::Literal(first_lit)) => {
++                first_owned_str = first_lit.to_string();
++                Some(first_owned_str.as_str()).and_then(|first| {
++                    let first = first.strip_prefix('"')?;
++                    let first = first.strip_suffix('"')?;
++                    Some((first, first_lit.span()))
++                })
++            }
++            _ => None,
++        }) else {
++            return first_opt.into_iter().chain(input).collect();
++        };
++
++        // Parse `identifier`s from the format string.
++        //
++        // See https://doc.rust-lang.org/std/fmt/index.html#syntax.
++        while let Some((_, rest)) = first_str.split_once('{') {
++            first_str = rest;
++            if let Some(rest) = first_str.strip_prefix('{') {
++                first_str = rest;
++                continue;
++            }
++            if let Some((name, rest)) = first_str.split_once('}') {
++                first_str = rest;
++                let name = name.split_once(':').map_or(name, |(name, _)| name);
++                if !name.is_empty() && !name.chars().all(|c| c.is_ascii_digit()) {
++                    names.insert(name);
++                }
++            }
++        }
++        first_span
++    };
++
++    let adapter = quote_spanned!(first_span => ::kernel::fmt::Adapter);
++
++    let mut args = TokenStream::from_iter(first_opt);
++    {
++        let mut flush = |args: &mut TokenStream, current: &mut TokenStream| {
++            let current = std::mem::take(current);
++            if !current.is_empty() {
++                let (lhs, rhs) = (|| {
++                    let mut current = current.into_iter();
++                    let mut acc = TokenStream::new();
++                    while let Some(tt) = current.next() {
++                        // Split on `=` only once to handle cases like `a = b = c`.
++                        if matches!(&tt, TokenTree::Punct(p) if p.as_char() == '=') {
++                            names.remove(acc.to_string().as_str());
++                            // Include the `=` itself to keep the handling below uniform.
++                            acc.extend([tt]);
++                            return (Some(acc), current.collect::<TokenStream>());
++                        }
++                        acc.extend([tt]);
++                    }
++                    (None, acc)
++                })();
++                args.extend(quote_spanned!(first_span => #lhs #adapter(&#rhs)));
++            }
++        };
++
++        let mut current = TokenStream::new();
++        for tt in input {
++            match &tt {
++                TokenTree::Punct(p) if p.as_char() == ',' => {
++                    flush(&mut args, &mut current);
++                    &mut args
++                }
++                _ => &mut current,
++            }
++            .extend([tt]);
++        }
++        flush(&mut args, &mut current);
++    }
++
++    for name in names {
++        let name = Ident::new(name, first_span);
++        args.extend(quote_spanned!(first_span => , #name = #adapter(&#name)));
++    }
++
++    quote_spanned!(first_span => ::core::format_args!(#args))
++}
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index fa847cf3a9b5..793f712dbf7c 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -15,6 +15,7 @@
+ mod quote;
+ mod concat_idents;
+ mod export;
++mod fmt;
+ mod helpers;
+ mod kunit;
+ mod module;
+@@ -201,6 +202,24 @@ pub fn export(attr: TokenStream, ts: TokenStream) -> TokenStream {
+     export::export(attr, ts)
+ }
+ 
++/// Like [`core::format_args!`], but automatically wraps arguments in [`kernel::fmt::Adapter`].
++///
++/// This macro allows generating `fmt::Arguments` while ensuring that each argument is wrapped with
++/// `::kernel::fmt::Adapter`, which customizes formatting behavior for kernel logging.
++///
++/// Named arguments used in the format string (e.g. `{foo}`) are detected and resolved from local
++/// bindings. All positional and named arguments are automatically wrapped.
++///
++/// This macro is an implementation detail of other kernel logging macros like [`pr_info!`] and
++/// should not typically be used directly.
++///
++/// [`kernel::fmt::Adapter`]: ../kernel/fmt/struct.Adapter.html
++/// [`pr_info!`]: ../kernel/macro.pr_info.html
++#[proc_macro]
++pub fn fmt(input: TokenStream) -> TokenStream {
++    fmt::fmt(input)
++}
++
+ /// Concatenate two identifiers.
+ ///
+ /// This is useful in macros that need to declare or reference items with names
+diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+index acc140c18653..ddfc21577539 100644
+--- a/rust/macros/quote.rs
++++ b/rust/macros/quote.rs
+@@ -48,6 +48,7 @@ macro_rules! quote_spanned {
+     ($span:expr => $($tt:tt)*) => {{
+         let mut tokens = ::proc_macro::TokenStream::new();
+         {
++            #[allow(unused_variables)]
+             let span = $span;
+             quote_spanned!(@proc tokens span $($tt)*);
+         }
+@@ -146,6 +147,12 @@ macro_rules! quote_spanned {
+         )]);
+         quote_spanned!(@proc $v $span $($tt)*);
+     };
++    (@proc $v:ident $span:ident & $($tt:tt)*) => {
++        $v.extend([::proc_macro::TokenTree::Punct(
++            ::proc_macro::Punct::new('&', ::proc_macro::Spacing::Alone),
++        )]);
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
+     (@proc $v:ident $span:ident _ $($tt:tt)*) => {
+         $v.extend([::proc_macro::TokenTree::Ident(
+             ::proc_macro::Ident::new("_", $span),
 -- 
 2.51.0.915.g61a8936c21-goog
 
