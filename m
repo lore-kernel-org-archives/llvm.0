@@ -1,112 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1652609E3;
-	Sat, 18 Oct 2025 17:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA6923BCFD;
+	Sat, 18 Oct 2025 17:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760809836; cv=none; b=fYOc74lj2/hSTHOHrEA0ZoFCrR3gpE7bDdfCwgsNvo4ok9nEvAOW55cgTdx5pB1Ktex+gLzhFpdDV1ntY/ko0OEUgTXxs9cPB+6F25gu+RAaPpN60GDdby8CWZ5pG/u23xY5K3wg86U6OALPVPw/upu2qxarl7MZF0NDry8ZcDY=
+	t=1760809970; cv=none; b=d+z8P1lqvQZg04zb6TnNjgxWxm10q9dBE83GboxqVr0cjUlmRrpJWZg2WZ/wkwP93pBi+zZ46prlO4Qcn48XvrDAdBxbSyhP5l9yMwhUNUUlVBR7kFPX44h89HcRPZfvSvOpEcVhwjG451PDyyktnYD+Xp4Q1Fmp8XJIrbHNk4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760809836; c=relaxed/simple;
-	bh=T9T0aGwGpJFomYrCr761NWwRCsx+l6USp6yiGsw6wtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dyCez83hB72jFgyhTdxVJPVvHri4kbQ9V48+lNLoh++iHp52bmD+orG/e3gONhdurbNgPaRGuF7MORe1P/ERZbTB/8nr4aSKi8QHAErBkevoDnsUfIHOx5r/sb4EG4M6tgE3R4otjIwAs1OWq1lc7qOOqSc+YBziyPNP5ara4aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EWkSlmsv; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760809970; c=relaxed/simple;
+	bh=1cU9a8sYkJdXpA+th5ZVtswTz4K/NZYD/UAAtbUYJ+U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=boTa2T90y0mgy7sNU8ojg7zcpQYhy4BWsP5qtyqgqXkEUM+xMYaRZZcrbGfT9fiUuGxMrTTEUrnVCHmh7wuvVCHixWzNu+biGE0ILRyzrqXYceJT5X2iBN/XTGhmQZEZK29mwuZ4gdHO5j5E5k2chK+OxRURIyol2j/5jjC/or4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SpDZTuSP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EWkSlmsv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760809835; x=1792345835;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T9T0aGwGpJFomYrCr761NWwRCsx+l6USp6yiGsw6wtQ=;
-  b=EWkSlmsvOyUgG8s+U8rGyrvKfwMbX8fK8B2dL3xZuG5FSKl7cflcYC4k
-   AtUvXkgvnhAjCy6xblVFM2FYmGk8VNugJpw5EDa0uxTei6Z7QZfUFIZoY
-   bfXm/vIxGWx3VIzOpAEyOT4S4TK2IGvNPZRWgmtlyUzifYJgFp+NLvW1m
-   SCazdOUCj4eCZsbCxcjgz4PozCebAShH4jgyN+UNVbi3RhmXPoGScUk3i
-   scpNZco/tOe+Z/YEvfMbBWHK1GRvtO6vSQSR9zREEFcx0YME98DKgOyXG
-   z/48Kpgpd0JNKb7D+xWeWLz5rcKa4ZmvKeYUHsy0dsau4vcLW/C8lCS6Y
-   g==;
-X-CSE-ConnectionGUID: b6MpNsyaQOOPxGjrq5xSpA==
-X-CSE-MsgGUID: 2Lq2hEdpTfm9TW/6oA0UjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62029847"
-X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
-   d="scan'208";a="62029847"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 10:50:35 -0700
-X-CSE-ConnectionGUID: LsH4BTCFQeKO6WsViGmWLQ==
-X-CSE-MsgGUID: JYnQOR9XTOiqoIjTI4krOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
-   d="scan'208";a="182180327"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 18 Oct 2025 10:50:33 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vAB4Y-0008U9-22;
-	Sat, 18 Oct 2025 17:50:30 +0000
-Date: Sun, 19 Oct 2025 01:50:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhang Lixu <lixu.zhang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>
-Subject: [hid:for-6.19/intel-ish-v2 1/7]
- drivers/hid/intel-ish-hid/ipc/ipc.c:944:36: warning: cast from 'void
- (*)(struct workqueue_struct *)' to 'void (*)(void *)' converts to
- incompatible function type
-Message-ID: <202510190103.qTZvfdjj-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SpDZTuSP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB00FC4CEF8;
+	Sat, 18 Oct 2025 17:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760809968;
+	bh=1cU9a8sYkJdXpA+th5ZVtswTz4K/NZYD/UAAtbUYJ+U=;
+	h=From:Date:Subject:To:Cc:From;
+	b=SpDZTuSP+5pSrV+mlBUpCRSnHMT8ygs4j7P+OAVfcrOdYhrJTaUsQJrUeQ63lEOvL
+	 rTMPW0oivx51UJE1h05t3viz87Ugc8Bx+CgxnHSroY55WqTIZRLHPoNiwCNHxn2irt
+	 HM2URobfxl6UbEMpvAU820qO3EGfen+lxjZxcMY5kO0MTJUNRlPXea3oiKrpC+6m2B
+	 YvAg3iTsqZFhPsolw5FLaqlJuwCaSEfoFM3XK2EuoLkYPOfMxoezAfkHLmoAZoY4eK
+	 cT8mTGhsCO+xUbav3WRKnD1JFNJZiRHr0/hEdVt6chPdWs+XSBQhogiuceaxdl+waG
+	 jL+tFXSNrjLOw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Sat, 18 Oct 2025 18:52:40 +0100
+Subject: [PATCH] powerpc/vmlinux.lds: Drop .interp description
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251018-ppc-fix-lld-interp-v1-1-a083de6dccc9@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOfT82gC/x2MWwqAIBAArxL73YJrT7pK9CG61UKYaEQQ3j3pc
+ 2BmXkgchRNM1QuRb0ly+gJUV2B34zdGcYVBK92RohFDsLjKg8fhUPzFMSCZYbRNT9a1GkoYIhf
+ jn85Lzh/fNNbHZAAAAA==
+X-Change-ID: 20251018-ppc-fix-lld-interp-1a78c361cd42
+To: Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Vishal Chourasia <vishalc@linux.ibm.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1957; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=1cU9a8sYkJdXpA+th5ZVtswTz4K/NZYD/UAAtbUYJ+U=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBmfL7+9rfyrYIeMV1LFeq7Hez26xN0KX/1/aJe6wy/Vv
+ iVNq+ZzRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI76uMDO/d6zX5PimpfVPM
+ vtyn8Wqxi/aZkgXp3nVcfzd09ksttGD4Z2h5svVzodO6T3eXcT5pjDxVbDxZRerHXuY3SyXcJD3
+ LmQA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-6.19/intel-ish-v2
-head:   5677aa6a08c1df8bc1ec71516fe1ced9b7cb545f
-commit: 0d30dae38fe01cd1de358c6039a0b1184689fe51 [1/7] HID: intel-ish-hid: Use dedicated unbound workqueues to prevent resume blocking
-config: x86_64-randconfig-002-20251018 (https://download.01.org/0day-ci/archive/20251019/202510190103.qTZvfdjj-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251019/202510190103.qTZvfdjj-lkp@intel.com/reproduce)
+Commit da30705c4621 ("arch/powerpc: Remove .interp section in vmlinux")
+intended to drop the .interp section from vmlinux but even with this
+change, relocatable kernels linked with ld.lld contain an empty .interp
+section, which ends up causing crashes in GDB [1].
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510190103.qTZvfdjj-lkp@intel.com/
+  $ make -skj"$(nproc)" ARCH=powerpc LLVM=1 clean pseries_le_defconfig vmlinux
 
-All warnings (new ones prefixed by >>):
+  $ llvm-readelf -S vmlinux | grep interp
+    [44] .interp           PROGBITS        c0000000021ddb34 21edb34 000000 00   A  0   0  1
 
->> drivers/hid/intel-ish-hid/ipc/ipc.c:944:36: warning: cast from 'void (*)(struct workqueue_struct *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-     944 |         if (devm_add_action_or_reset(dev, (void (*)(void *))destroy_workqueue,
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device/devres.h:168:34: note: expanded from macro 'devm_add_action_or_reset'
-     168 |         __devm_add_action_or_reset(dev, action, data, #action)
-         |                                         ^~~~~~
-   1 warning generated.
+There appears to be a subtle difference between GNU ld and ld.lld when
+it comes to discarding sections that specify load addresses [2].
 
+Since '--no-dynamic-linker' prevents emission of the .interp section,
+there is no need to describe it in the output sections of the vmlinux
+linker script. Drop the .interp section description from vmlinux.lds.S
+to avoid this issue altogether.
 
-vim +944 drivers/hid/intel-ish-hid/ipc/ipc.c
+Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33481 [1]
+Link: https://github.com/ClangBuiltLinux/linux/issues/2137 [2]
+Reported-by: Vishal Chourasia <vishalc@linux.ibm.com>
+Closes: https://lore.kernel.org/20251013040148.560439-1-vishalc@linux.ibm.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/powerpc/kernel/vmlinux.lds.S | 1 -
+ 1 file changed, 1 deletion(-)
 
-   935	
-   936	static struct workqueue_struct *devm_ishtp_alloc_workqueue(struct device *dev)
-   937	{
-   938		struct workqueue_struct *wq;
-   939	
-   940		wq = alloc_workqueue("ishtp_unbound_%d", WQ_UNBOUND, 0, dev->id);
-   941		if (!wq)
-   942			return NULL;
-   943	
- > 944		if (devm_add_action_or_reset(dev, (void (*)(void *))destroy_workqueue,
-   945					     wq))
-   946			return NULL;
-   947	
-   948		return wq;
-   949	}
-   950	
+diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
+index de6ee7d35cff..15850296c0a9 100644
+--- a/arch/powerpc/kernel/vmlinux.lds.S
++++ b/arch/powerpc/kernel/vmlinux.lds.S
+@@ -330,7 +330,6 @@ SECTIONS
+ 	}
+ 	.hash : AT(ADDR(.hash) - LOAD_OFFSET) { *(.hash) }
+ 	.gnu.hash : AT(ADDR(.gnu.hash) - LOAD_OFFSET) { *(.gnu.hash) }
+-	.interp : AT(ADDR(.interp) - LOAD_OFFSET) { *(.interp) }
+ 	.rela.dyn : AT(ADDR(.rela.dyn) - LOAD_OFFSET)
+ 	{
+ 		__rela_dyn_start = .;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251018-ppc-fix-lld-interp-1a78c361cd42
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
