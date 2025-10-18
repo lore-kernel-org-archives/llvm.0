@@ -1,240 +1,191 @@
-Received: from smtps.ntu.edu.tw (smtps.ntu.edu.tw [140.112.2.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F85419F12D
-	for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 13:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.112.2.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AB823D28B
+	for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 17:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760794701; cv=none; b=bfQu9aV/hxBP2LLOTJRBLBahXCeX32F50i2Tozdo2YV4nCYJ6yjiufiQXe5Q22vwl95D1+ARDJw3z9mkv3XMwRpa+y9A3DFh3ImuCZulFOLfAg2jA/fcE8ewh87ObV/BIJh30XVBe/Mpf1CxhR8qUFD0bf1D425+tN7t0lfW51g=
+	t=1760806963; cv=none; b=Y6f2SFpFrVxdNKQdntq/UlKoXP972zCDEx6IUtig/Jkau/rzUfjkwIiaeQzDKsgRfdyuGtRzZ5hC3zg6eosgmQmYfC+2CkFUcnmTbqK0AMbRFFiDKWQLPK26DrLLPYiIlcePtl/lEzNOikhvzul/jf56/KQrqiiCIJZTaHRiu88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760794701; c=relaxed/simple;
-	bh=MoKzB1vv5bboPLAXL+wOillAA6bpS7SYdS28c/mlde4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EFRpPSQAv96BYzj5FX6gxWDrSYTUIoqa6c4qZ0gKXS/4QXRQ8Sba9UktONFDlELRpSGvVZUmTWm/rYsJ50tvH39WR6QefYcHukxbYCfGc0X6mx/f1tQmZVR+BrmgrQZ0Qkru7+6RiIeR+eVwVRJ339g0v18cKDuRRKGDFCye7hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ntu.edu.tw; spf=pass smtp.mailfrom=ntu.edu.tw; arc=none smtp.client-ip=140.112.2.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ntu.edu.tw
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ntu.edu.tw
-Received: from x415ea.. (unknown [101.14.4.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtps.ntu.edu.tw (Postfix) with ESMTPSA id 8B5EE34F4C;
-	Sat, 18 Oct 2025 21:38:07 +0800 (CST)
-From: Bill Tsui <b10902118@ntu.edu.tw>
-To: oleg@redhat.com,
-	catalin.marinas@arm.com,
-	will@kernel.org
-Cc: nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Bill Tsui <b10902118@ntu.edu.tw>
-Subject: [PATCH v4 1/1] arm64: ptrace: fix hw_break_set() to set addr and ctrl together
-Date: Sat, 18 Oct 2025 21:37:31 +0800
-Message-ID: <20251018133731.42505-2-b10902118@ntu.edu.tw>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251018133731.42505-1-b10902118@ntu.edu.tw>
-References: <20251016154401.35799-1-b10902118@ntu.edu.tw>
- <20251018133731.42505-1-b10902118@ntu.edu.tw>
+	s=arc-20240116; t=1760806963; c=relaxed/simple;
+	bh=K56Is2wx7UmVl17dRBrxY8Gx8J2Mj6XdngEuoaXN7is=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=csKQFKSCri90qfxM33TIKvIAAj9w5Evy81Zx1DKs0hKkbgwgA7DnW0aKP6CgCWKC0UxIpIsgiio33gHtft7o3k/vXvegBhkC2OOp0MpqGpmYMt3j/76eJBhOA5dQkgHWbRIFNkfvzJzvG2Q9v+EHvCXRx3C4TJTz9T+2uZfZeLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v0RoKJ0x; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v0RoKJ0x"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-471125c8bc1so33881825e9.3
+        for <llvm@lists.linux.dev>; Sat, 18 Oct 2025 10:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760806960; x=1761411760; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QcEJMCPQNzNn4Sg/+enW3pY+1OtQDQh0FQ7gWamWR/8=;
+        b=v0RoKJ0xlMggkrpgdZV8sJ+1WdBAHQTUItd+H0Cee0mRvn8j81/jUm21zJ+y6FTMX9
+         g2k6ecV7nbQEg2CHi7YHdu2NjgK4exWkNpuhCsK5MdmiwJV2ws20bskBD9yGV2G1yxvi
+         I3It3Fjkncf0tr6lJQEYD5nKw0gh1FwjIPydM/s4RLDIJ22nV7xBEmYdoh6O9hsuhVp0
+         GTG0OaP8hs/iZDOYVaAyOz885YLHqk9hfUFpaFc4lTbP7iWv7bo3WlrZvCYflMm2r9cQ
+         KDfqYhUTl9OjQAoM+9/IweG3fTnYzu5TCcBSsfnrqM03IasQBW3Ke073v/ZzJ9Ebaz81
+         mKfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760806960; x=1761411760;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QcEJMCPQNzNn4Sg/+enW3pY+1OtQDQh0FQ7gWamWR/8=;
+        b=j28nQM2vgazp4s/XnCPPt4EIMZtH//tYGkRyGUS//pJQTQxKl3pUYoYwhfJ0RmRzc2
+         mC0v7T/j6vNpsz8MpujdOZ0Lf4kaPl7I32NzrVfREgKssu19hcCZSqxiyLUkno1IRyDl
+         1r140mHlmo4u/J0cXXSpEcfalCcZxgKzGR7ZsMrbreEvLyLzKwIb1h7HUwJQ206kfJsA
+         rJBnZJiwo5ZppvqyQP/0A45SjVnnGANvshY75l1l2Vvp3+915xYWOHeqb4uQdQTRXiGh
+         pcljBLuRGUqytPhQ5v5c2m2Ot4xP0IP5jLQvx+iqFya+3sL9sJ5lAvAAslvCvENw9s66
+         vyHw==
+X-Forwarded-Encrypted: i=1; AJvYcCVOM6pdOAyADeY/nKot83f7b9wqBelCVgZ/NYeK8saFWARPJ0tkybCC+Lg1J19hpe5uuvFk@lists.linux.dev
+X-Gm-Message-State: AOJu0YyRGmnAayosV1TKQm9GQjpb26vulucEnVbPjq/d3/rrSNCj0bMz
+	oTlyK2dDan+bq7K5wWxzAhQryQYnsziiR+HF8g8m9G2nOa+xWNwRXYyuWwXZnF2lQmjM8JNUuhD
+	HZtziQnCKAgv0zl/hOg==
+X-Google-Smtp-Source: AGHT+IG+XONBGTsyrZA2w5nXoym2WOeMmXEjzuALKqECWR/nae42PSy1vCNDSBfzkw7eA04iBiPKoZnTCFnDy3g=
+X-Received: from wmwo28.prod.google.com ([2002:a05:600d:439c:b0:46e:6605:3ac2])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600d:6357:b0:46e:1a07:7bd5 with SMTP id 5b1f17b1804b1-47160987501mr15825585e9.29.1760806960228;
+ Sat, 18 Oct 2025 10:02:40 -0700 (PDT)
+Date: Sat, 18 Oct 2025 17:02:39 +0000
+In-Reply-To: <20251015-cstr-core-v17-0-dc5e7aec870d@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20251015-cstr-core-v17-0-dc5e7aec870d@gmail.com>
+Message-ID: <aPPIL6dl8aYHZr8B@google.com>
+Subject: Re: [PATCH v17 00/11] rust: replace kernel::str::CStr w/ core::ffi::CStr
+From: Alice Ryhl <aliceryhl@google.com>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Carlos Llamas <cmllamas@google.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, 
+	"Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=" <kwilczynski@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-This patch fixes the failure of PTRACE_SETREGSET when setting a hardware
-breakpoint on a non-4-byte aligned address with a valid control to a
-32-bit tracee. The issue was discovered while testing LLDB.
+On Wed, Oct 15, 2025 at 03:24:30PM -0400, Tamir Duberstein wrote:
+> This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
+> have omitted Co-authored tags, as the end result is quite different.
+> 
+> This series is intended to be taken through rust-next. The final patch
+> in the series requires some other subsystems' `Acked-by`s:
+> - drivers/android/binder/stats.rs: rust_binder. Alice, could you take a
+>   look?
+> - rust/kernel/device.rs: driver-core. Already acked by gregkh.
+> - rust/kernel/firmware.rs: driver-core. Danilo, could you take a look?
+> - rust/kernel/seq_file.rs: vfs. Christian, could you take a look?
+> - rust/kernel/sync/*: locking-core. Boqun, could you take a look?
+> 
+> Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+> 
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Link: https://github.com/llvm/llvm-project/pull/152284
+You need a few more changes:
 
-The failure happens because hw_break_set() checks and sets the breakpoint
-address and control separately. This can result in an check failure when
-it first validates the address to be set with old control.
-
-For example, the control are initialized with breakpoint length of 4.
-Combining with a non-4-byte aligned address would cross a 4-byte boundary,
-which is invalid. However, the user-provided control may actually specify a
-length of 1, which should be valid.
-
-The fix is to set the address and control together. This is supported
-by modify_user_hw_breakpoint(), the function that sets and checks
-breakpoints. The original implementation wrap this function to
-ptrace_hbp_set_addr() and ptrace_hbp_set_ctrl() for 32-bit API
-PTRACE_SETHBPREGS simply because it can only modify one register (address
-or control) per call. For the 64-bit PTRACE_SETREGSET API, this
-restriction does not apply, so a new helper function ptrace_hbp_set() was
-added to set both in a single call to modify_user_hw_breakpoint().
-
-Then ptrace_hbp_set_addr() and ptrace_hbp_set_ctrl() are only used by
-compat_ptrace_hbp_set(), so moved into CONFIG_COMPAT block and renamed
-with prefix compat_.
-
-For reference, the check is in
-	arch/arm64/kernel/hw_breakpoint.c:hw_breakpoint_arch_parse()
-which is called via:
-	modify_user_hw_breakpoint()
-	-> modify_user_hw_breakpoint_check()
-	-> hw_breakpoint_parse()
-	-> hw_breakpoint_arch_parse()
-
-Signed-off-by: Bill Tsui <b10902118@ntu.edu.tw>
----
- arch/arm64/kernel/ptrace.c | 90 ++++++++++++++++++++++++--------------
- 1 file changed, 58 insertions(+), 32 deletions(-)
-
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 4b001121c72d..c8caf4e0805e 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -421,10 +421,11 @@ static struct perf_event *ptrace_hbp_get_initialised_bp(unsigned int note_type,
- 	return bp;
+diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
+index 1e6c8c42fb3a..c1cfaeaa36a2 100644
+--- a/rust/kernel/clk.rs
++++ b/rust/kernel/clk.rs
+@@ -136,7 +136,7 @@ impl Clk {
+         ///
+         /// [`clk_get`]: https://docs.kernel.org/core-api/kernel-api.html#c.clk_get
+         pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
+-            let con_id = name.map_or(ptr::null(), |n| n.as_ptr());
++            let con_id = name.map_or(ptr::null(), |n| n.as_char_ptr());
+ 
+             // SAFETY: It is safe to call [`clk_get`] for a valid device pointer.
+             //
+@@ -304,7 +304,7 @@ impl OptionalClk {
+         /// [`clk_get_optional`]:
+         /// https://docs.kernel.org/core-api/kernel-api.html#c.clk_get_optional
+         pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
+-            let con_id = name.map_or(ptr::null(), |n| n.as_ptr());
++            let con_id = name.map_or(ptr::null(), |n| n.as_char_ptr());
+ 
+             // SAFETY: It is safe to call [`clk_get_optional`] for a valid device pointer.
+             //
+diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
+index 10f1547ca9f1..466fb7f40762 100644
+--- a/rust/kernel/configfs.rs
++++ b/rust/kernel/configfs.rs
+@@ -157,7 +157,7 @@ pub fn new(
+                     unsafe {
+                         bindings::config_group_init_type_name(
+                             &mut (*place.get()).su_group,
+-                            name.as_ptr(),
++                            name.as_char_ptr(),
+                             item_type.as_ptr(),
+                         )
+                     };
+diff --git a/rust/kernel/debugfs/entry.rs b/rust/kernel/debugfs/entry.rs
+index f99402cd3ba0..5de0ebc27198 100644
+--- a/rust/kernel/debugfs/entry.rs
++++ b/rust/kernel/debugfs/entry.rs
+@@ -2,8 +2,7 @@
+ // Copyright (C) 2025 Google LLC.
+ 
+ use crate::debugfs::file_ops::FileOps;
+-use crate::ffi::c_void;
+-use crate::str::CStr;
++use crate::prelude::*;
+ use crate::sync::Arc;
+ use core::marker::PhantomData;
+ 
+diff --git a/rust/kernel/regulator.rs b/rust/kernel/regulator.rs
+index b55a201e5029..65a4eb096cae 100644
+--- a/rust/kernel/regulator.rs
++++ b/rust/kernel/regulator.rs
+@@ -84,7 +84,7 @@ pub struct Error<State: RegulatorState> {
+ pub fn devm_enable(dev: &Device<Bound>, name: &CStr) -> Result {
+     // SAFETY: `dev` is a valid and bound device, while `name` is a valid C
+     // string.
+-    to_result(unsafe { bindings::devm_regulator_get_enable(dev.as_raw(), name.as_ptr()) })
++    to_result(unsafe { bindings::devm_regulator_get_enable(dev.as_raw(), name.as_char_ptr()) })
  }
  
--static int ptrace_hbp_set_ctrl(unsigned int note_type,
--			       struct task_struct *tsk,
--			       unsigned long idx,
--			       u32 uctrl)
-+/* Set the address and control together for non-compat ptrace */
-+static int ptrace_hbp_set(unsigned int note_type,
-+				   struct task_struct *tsk,
-+				   unsigned long idx,
-+				   u64 addr, u32 uctrl)
- {
- 	int err;
- 	struct perf_event *bp;
-@@ -438,6 +439,8 @@ static int ptrace_hbp_set_ctrl(unsigned int note_type,
- 	}
- 
- 	attr = bp->attr;
-+	attr.bp_addr = addr;
-+
- 	decode_ctrl_reg(uctrl, &ctrl);
- 	err = ptrace_hbp_fill_attr_ctrl(note_type, ctrl, &attr);
- 	if (err)
-@@ -446,27 +449,6 @@ static int ptrace_hbp_set_ctrl(unsigned int note_type,
- 	return modify_user_hw_breakpoint(bp, &attr);
+ /// Same as [`devm_enable`], but calls `devm_regulator_get_enable_optional`
+@@ -102,7 +102,9 @@ pub fn devm_enable(dev: &Device<Bound>, name: &CStr) -> Result {
+ pub fn devm_enable_optional(dev: &Device<Bound>, name: &CStr) -> Result {
+     // SAFETY: `dev` is a valid and bound device, while `name` is a valid C
+     // string.
+-    to_result(unsafe { bindings::devm_regulator_get_enable_optional(dev.as_raw(), name.as_ptr()) })
++    to_result(unsafe {
++        bindings::devm_regulator_get_enable_optional(dev.as_raw(), name.as_char_ptr())
++    })
  }
  
--static int ptrace_hbp_set_addr(unsigned int note_type,
--			       struct task_struct *tsk,
--			       unsigned long idx,
--			       u64 addr)
--{
--	int err;
--	struct perf_event *bp;
--	struct perf_event_attr attr;
--
--	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
--	if (IS_ERR(bp)) {
--		err = PTR_ERR(bp);
--		return err;
--	}
--
--	attr = bp->attr;
--	attr.bp_addr = addr;
--	err = modify_user_hw_breakpoint(bp, &attr);
--	return err;
--}
--
- #define PTRACE_HBP_ADDR_SZ	sizeof(u64)
- #define PTRACE_HBP_CTRL_SZ	sizeof(u32)
- #define PTRACE_HBP_PAD_SZ	sizeof(u32)
-@@ -524,9 +506,6 @@ static int hw_break_set(struct task_struct *target,
- 			return -EINVAL;
- 		ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &addr,
- 					 offset, offset + PTRACE_HBP_ADDR_SZ);
--		if (ret)
--			return ret;
--		ret = ptrace_hbp_set_addr(note_type, target, idx, addr);
- 		if (ret)
- 			return ret;
- 		offset += PTRACE_HBP_ADDR_SZ;
-@@ -537,10 +516,11 @@ static int hw_break_set(struct task_struct *target,
- 					 offset, offset + PTRACE_HBP_CTRL_SZ);
- 		if (ret)
- 			return ret;
--		ret = ptrace_hbp_set_ctrl(note_type, target, idx, ctrl);
-+		offset += PTRACE_HBP_CTRL_SZ;
-+
-+		ret = ptrace_hbp_set(note_type, target, idx, addr, ctrl);
- 		if (ret)
- 			return ret;
--		offset += PTRACE_HBP_CTRL_SZ;
+ /// A `struct regulator` abstraction.
+@@ -268,7 +270,8 @@ pub fn get_voltage(&self) -> Result<Voltage> {
+     fn get_internal(dev: &Device, name: &CStr) -> Result<Regulator<T>> {
+         // SAFETY: It is safe to call `regulator_get()`, on a device pointer
+         // received from the C code.
+-        let inner = from_err_ptr(unsafe { bindings::regulator_get(dev.as_raw(), name.as_ptr()) })?;
++        let inner =
++            from_err_ptr(unsafe { bindings::regulator_get(dev.as_raw(), name.as_char_ptr()) })?;
  
- 		user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
- 					  offset, offset + PTRACE_HBP_PAD_SZ);
-@@ -2139,6 +2119,52 @@ static int compat_ptrace_hbp_get(unsigned int note_type,
- 	return err;
- }
- 
-+static int compat_ptrace_hbp_set_ctrl(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u32 uctrl)
-+{
-+	int err;
-+	struct perf_event *bp;
-+	struct perf_event_attr attr;
-+	struct arch_hw_breakpoint_ctrl ctrl;
-+
-+	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
-+	if (IS_ERR(bp)) {
-+		err = PTR_ERR(bp);
-+		return err;
-+	}
-+
-+	attr = bp->attr;
-+	decode_ctrl_reg(uctrl, &ctrl);
-+	err = ptrace_hbp_fill_attr_ctrl(note_type, ctrl, &attr);
-+	if (err)
-+		return err;
-+
-+	return modify_user_hw_breakpoint(bp, &attr);
-+}
-+
-+static int compat_ptrace_hbp_set_addr(unsigned int note_type,
-+			       struct task_struct *tsk,
-+			       unsigned long idx,
-+			       u64 addr)
-+{
-+	int err;
-+	struct perf_event *bp;
-+	struct perf_event_attr attr;
-+
-+	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
-+	if (IS_ERR(bp)) {
-+		err = PTR_ERR(bp);
-+		return err;
-+	}
-+
-+	attr = bp->attr;
-+	attr.bp_addr = addr;
-+	err = modify_user_hw_breakpoint(bp, &attr);
-+	return err;
-+}
-+
- static int compat_ptrace_hbp_set(unsigned int note_type,
- 				 struct task_struct *tsk,
- 				 compat_long_t num,
-@@ -2151,10 +2177,10 @@ static int compat_ptrace_hbp_set(unsigned int note_type,
- 
- 	if (num & 1) {
- 		addr = *kdata;
--		err = ptrace_hbp_set_addr(note_type, tsk, idx, addr);
-+		err = compat_ptrace_hbp_set_addr(note_type, tsk, idx, addr);
- 	} else {
- 		ctrl = *kdata;
--		err = ptrace_hbp_set_ctrl(note_type, tsk, idx, ctrl);
-+		err = compat_ptrace_hbp_set_ctrl(note_type, tsk, idx, ctrl);
- 	}
- 
- 	return err;
+         // SAFETY: We can safely trust `inner` to be a pointer to a valid
+         // regulator if `ERR_PTR` was not returned.
 -- 
-2.51.0
-
