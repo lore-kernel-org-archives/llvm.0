@@ -1,97 +1,241 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1782EC0B5
-	for <llvm@lists.linux.dev>; Sun, 19 Oct 2025 14:53:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760885608; cv=pass; b=O9y2Pme+PDl496sqEKsUCKySkF9Syps8p09lZ2/8mlPt/aMoV7wJg4rLfOxKpO7yPdrjoFp3gkPqwVRGjEsItgSmAkTdyELxAoVFc1pGGxhdEzb3KlYegv8JJg2LBFMWEw2aJE6LQKu7F3MDgLjQNFI5tJxo4cAdKO4Cr+n9fLc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760885608; c=relaxed/simple;
-	bh=DpevFMeJDzjsulkccLMz850NvtRiBQZhK/YdeXqOmzQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dIu03k/F4AH0F3RQC3adfPgZEAlP1QYYN/9X4aCzJ+EzotKQ4P5DetoTnFiHgMZxoqLf80e+3WEYB8YrrqJ57eNuspd1EqNi5m3/lqsVSW1Be9WMFG6oysuVs755eNSdg0cHP3JYmhXQuRy7MjJ9RC4f/8fVoB4lJKfHcbVgpKo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=iqJ/0P0G; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45F9209F5A;
+	Sun, 19 Oct 2025 15:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760886098; cv=none; b=VgjnAmktbXxh5CP1Z336JTzTRzviJkyP1W7Hc6jaFNiglq8d524NmPpga5Swt8QWffCXH5MhtA0GE0p50xHGBi17phdkZa33ttm4braHoBWlouD3uYWoX0ZfbNAy+k5+nBqmceMPeAW3vSwASOlM7iyUEG7fewR2pqdG/bjDW2g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760886098; c=relaxed/simple;
+	bh=42bhJz7VQMy6SK4y9iDxiZJ0g8kqxEfRJBJZk/Cqxhg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ea+eAogPb6l+rVrHJYpZxf00tpuk4lSgJp9ywjVKHpgt+cr4CyJnqIm6sVnjKNT9LeZHysugKXGuGlWmWrZ4QXJYui7R6g9SSK+1A6izohaAU7Ox7WcLQUPwOu8ko1RqA54sudu3Hbx1muNh+r/XEQs4Wu7kwCfmbt+COFmddME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=co+N6dnf; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="iqJ/0P0G"
-ARC-Seal: i=1; a=rsa-sha256; t=1760885594; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=NClnHMOf2Z0i5wBZOA5su3g3FGY2ujSrUNWJNfLsMDM9YXbOAjhTJX1SqUwUJVE8qOsHWfyV4wkEXY/TDVdY/m8YnmSEwBjQj6qJS2n00Q6XRGh8A3psFO63fcznm1J7hbavXpeM+ssQ6ASDDFb4jNQem8/hZ4KvZpjszwrwo7s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760885594; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=jcGhi4cFQeguLmYhlD5ydo3KQYoOuKjZFsRfbK7t5UU=; 
-	b=JTyVHR0uO0Xj/PyWeI5vzVKBmCGaXMwoALZkHGYVhlraI+qN83ML3BxrLA2wocg9+sdd6wcbNTVraVGwqsyp1n/br6upW9zKmfdgY7mnUP2evTp9EubSD+CXmuTX5ZXxw7SBIAs6EIMAgTJeOFQ+Il7Zxh7iNsI84xGh66VMHq4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
-	dmarc=pass header.from=<adrian.larumbe@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760885594;
-	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=jcGhi4cFQeguLmYhlD5ydo3KQYoOuKjZFsRfbK7t5UU=;
-	b=iqJ/0P0GC8hDIpKVPeAX8Ekd9pXm4CjnTnyN69/35wKbiVZiwoBuGlQrSmHkki3m
-	qa9bkQmJQe30Kb+zfL6BXsm63RAxyRwqOxKWD9o7pNRY0hKYV4uBZyApQcUi5Exbm8l
-	NOe4ho59ryaAB/Tbltam0LCbnJxQQPnjy3CBT+v8=
-Received: by mx.zohomail.com with SMTPS id 1760885593456572.9210544100706;
-	Sun, 19 Oct 2025 07:53:13 -0700 (PDT)
-From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
-To: linux-kernel@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org,
-	Steven Price <steven.price@arm.com>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	kernel@collabora.com,
-	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Rob Herring <robh@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH v7 09/12] drm/panfrost: Add forward declaration and types header
-Date: Sun, 19 Oct 2025 15:52:14 +0100
-Message-ID: <20251019145225.3621989-10-adrian.larumbe@collabora.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251019145225.3621989-1-adrian.larumbe@collabora.com>
-References: <20251019145225.3621989-1-adrian.larumbe@collabora.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="co+N6dnf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760886096; x=1792422096;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=42bhJz7VQMy6SK4y9iDxiZJ0g8kqxEfRJBJZk/Cqxhg=;
+  b=co+N6dnfcaE0gGZ5HXpoTovMTTeb9EzfHa5xQc5HY1NpAG1IG5NguF22
+   NpngSSB+/s2MHZayR2WYXWilWb8F8Nho9JMItxxSyOud0hRi/qbE7AW8H
+   ATIHc92L0/iB/ta1BmMbJcmF8h0lnBZbu/8QQ4QQ8r1VPVjHdD+M5ODNH
+   XulCfaS7r0dawLsbL7Uf1mOO/7TcDkVAK3sQ7j3XVM5p2J80Crm7Qg7Qq
+   UKlqb/C2R+O2o3uKvo/t6HHrH2iz34nKft1BbNPIK7HVrVy61GgcIQ1zl
+   gVAYA0Snp6OSsldBK8yvgLSy6DNhrqdyqMolxDPGJmUvyrlqrJM1eYMdt
+   g==;
+X-CSE-ConnectionGUID: TNHc/EAIQ1KQ4l89l00++g==
+X-CSE-MsgGUID: /1DGFCGiSOiC8kn2Urhnfg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="50599601"
+X-IronPort-AV: E=Sophos;i="6.19,241,1754982000"; 
+   d="scan'208";a="50599601"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2025 08:01:35 -0700
+X-CSE-ConnectionGUID: OxWZ1KYqQDimPOajtoJ7nQ==
+X-CSE-MsgGUID: iL4Qh2GhR/WqyOaaJY9eJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,241,1754982000"; 
+   d="scan'208";a="187400763"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 19 Oct 2025 08:01:35 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vAUua-00098V-01;
+	Sun, 19 Oct 2025 15:01:32 +0000
+Date: Sun, 19 Oct 2025 23:00:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mukesh Rathor <mrathor@linux.microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Wei Liu <wei.liu@kernel.org>
+Subject: [hyperv:hyperv-next 34/34] arch/x86/hyperv/hv_init.c:558:3: error:
+ call to undeclared function 'hv_root_crash_init'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202510192254.i0JZ2e8S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is to make LLVM syntactic analysers happy.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-next
+head:   60116744be534090c62686f441dc16f36dd7e42e
+commit: 60116744be534090c62686f441dc16f36dd7e42e [34/34] x86/hyperv: Enable build of hypervisor crashdump collection files
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251019/202510192254.i0JZ2e8S-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251019/202510192254.i0JZ2e8S-lkp@intel.com/reproduce)
 
-Reviewed-by: Steven Price <steven.price@arm.com>
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
----
- drivers/gpu/drm/panfrost/panfrost_mmu.h | 1 +
- 1 file changed, 1 insertion(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510192254.i0JZ2e8S-lkp@intel.com/
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.h b/drivers/gpu/drm/panfrost/panfrost_mmu.h
-index e6e6966a0cca..27c3c65ed074 100644
---- a/drivers/gpu/drm/panfrost/panfrost_mmu.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_mmu.h
-@@ -4,6 +4,7 @@
- #ifndef __PANFROST_MMU_H__
- #define __PANFROST_MMU_H__
- 
-+struct panfrost_device;
- struct panfrost_gem_mapping;
- struct panfrost_file_priv;
- struct panfrost_mmu;
+All errors (new ones prefixed by >>):
+
+>> arch/x86/hyperv/hv_init.c:558:3: error: call to undeclared function 'hv_root_crash_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     558 |                 hv_root_crash_init();
+         |                 ^
+   1 error generated.
+
+
+vim +/hv_root_crash_init +558 arch/x86/hyperv/hv_init.c
+
+   438	
+   439	/*
+   440	 * This function is to be invoked early in the boot sequence after the
+   441	 * hypervisor has been detected.
+   442	 *
+   443	 * 1. Setup the hypercall page.
+   444	 * 2. Register Hyper-V specific clocksource.
+   445	 * 3. Setup Hyper-V specific APIC entry points.
+   446	 */
+   447	void __init hyperv_init(void)
+   448	{
+   449		u64 guest_id;
+   450		union hv_x64_msr_hypercall_contents hypercall_msr;
+   451		int cpuhp;
+   452	
+   453		if (x86_hyper_type != X86_HYPER_MS_HYPERV)
+   454			return;
+   455	
+   456		if (hv_common_init())
+   457			return;
+   458	
+   459		/*
+   460		 * The VP assist page is useless to a TDX guest: the only use we
+   461		 * would have for it is lazy EOI, which can not be used with TDX.
+   462		 */
+   463		if (hv_isolation_type_tdx())
+   464			hv_vp_assist_page = NULL;
+   465		else
+   466			hv_vp_assist_page = kcalloc(nr_cpu_ids,
+   467						    sizeof(*hv_vp_assist_page),
+   468						    GFP_KERNEL);
+   469		if (!hv_vp_assist_page) {
+   470			ms_hyperv.hints &= ~HV_X64_ENLIGHTENED_VMCS_RECOMMENDED;
+   471	
+   472			if (!hv_isolation_type_tdx())
+   473				goto common_free;
+   474		}
+   475	
+   476		if (ms_hyperv.paravisor_present && hv_isolation_type_snp()) {
+   477			/* Negotiate GHCB Version. */
+   478			if (!hv_ghcb_negotiate_protocol())
+   479				hv_ghcb_terminate(SEV_TERM_SET_GEN,
+   480						  GHCB_SEV_ES_PROT_UNSUPPORTED);
+   481	
+   482			hv_ghcb_pg = alloc_percpu(union hv_ghcb *);
+   483			if (!hv_ghcb_pg)
+   484				goto free_vp_assist_page;
+   485		}
+   486	
+   487		cpuhp = cpuhp_setup_state(CPUHP_AP_HYPERV_ONLINE, "x86/hyperv_init:online",
+   488					  hv_cpu_init, hv_cpu_die);
+   489		if (cpuhp < 0)
+   490			goto free_ghcb_page;
+   491	
+   492		/*
+   493		 * Setup the hypercall page and enable hypercalls.
+   494		 * 1. Register the guest ID
+   495		 * 2. Enable the hypercall and register the hypercall page
+   496		 *
+   497		 * A TDX VM with no paravisor only uses TDX GHCI rather than hv_hypercall_pg:
+   498		 * when the hypercall input is a page, such a VM must pass a decrypted
+   499		 * page to Hyper-V, e.g. hv_post_message() uses the per-CPU page
+   500		 * hyperv_pcpu_input_arg, which is decrypted if no paravisor is present.
+   501		 *
+   502		 * A TDX VM with the paravisor uses hv_hypercall_pg for most hypercalls,
+   503		 * which are handled by the paravisor and the VM must use an encrypted
+   504		 * input page: in such a VM, the hyperv_pcpu_input_arg is encrypted and
+   505		 * used in the hypercalls, e.g. see hv_mark_gpa_visibility() and
+   506		 * hv_arch_irq_unmask(). Such a VM uses TDX GHCI for two hypercalls:
+   507		 * 1. HVCALL_SIGNAL_EVENT: see vmbus_set_event() and _hv_do_fast_hypercall8().
+   508		 * 2. HVCALL_POST_MESSAGE: the input page must be a decrypted page, i.e.
+   509		 * hv_post_message() in such a VM can't use the encrypted hyperv_pcpu_input_arg;
+   510		 * instead, hv_post_message() uses the post_msg_page, which is decrypted
+   511		 * in such a VM and is only used in such a VM.
+   512		 */
+   513		guest_id = hv_generate_guest_id(LINUX_VERSION_CODE);
+   514		wrmsrq(HV_X64_MSR_GUEST_OS_ID, guest_id);
+   515	
+   516		/* With the paravisor, the VM must also write the ID via GHCB/GHCI */
+   517		hv_ivm_msr_write(HV_X64_MSR_GUEST_OS_ID, guest_id);
+   518	
+   519		/* A TDX VM with no paravisor only uses TDX GHCI rather than hv_hypercall_pg */
+   520		if (hv_isolation_type_tdx() && !ms_hyperv.paravisor_present)
+   521			goto skip_hypercall_pg_init;
+   522	
+   523		hv_hypercall_pg = __vmalloc_node_range(PAGE_SIZE, 1, MODULES_VADDR,
+   524				MODULES_END, GFP_KERNEL, PAGE_KERNEL_ROX,
+   525				VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+   526				__builtin_return_address(0));
+   527		if (hv_hypercall_pg == NULL)
+   528			goto clean_guest_os_id;
+   529	
+   530		rdmsrq(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+   531		hypercall_msr.enable = 1;
+   532	
+   533		if (hv_root_partition()) {
+   534			struct page *pg;
+   535			void *src;
+   536	
+   537			/*
+   538			 * For the root partition, the hypervisor will set up its
+   539			 * hypercall page. The hypervisor guarantees it will not show
+   540			 * up in the root's address space. The root can't change the
+   541			 * location of the hypercall page.
+   542			 *
+   543			 * Order is important here. We must enable the hypercall page
+   544			 * so it is populated with code, then copy the code to an
+   545			 * executable page.
+   546			 */
+   547			wrmsrq(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+   548	
+   549			pg = vmalloc_to_page(hv_hypercall_pg);
+   550			src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
+   551					MEMREMAP_WB);
+   552			BUG_ON(!src);
+   553			memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
+   554			memunmap(src);
+   555	
+   556			hv_remap_tsc_clocksource();
+   557	#ifdef CONFIG_X86_64
+ > 558			hv_root_crash_init();
+   559	#endif
+   560		} else {
+   561			hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
+   562			wrmsrq(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+   563		}
+   564	
+   565		hv_set_hypercall_pg(hv_hypercall_pg);
+   566	
+   567	skip_hypercall_pg_init:
+   568		/*
+   569		 * hyperv_init() is called before LAPIC is initialized: see
+   570		 * apic_intr_mode_init() -> x86_platform.apic_post_init() and
+   571		 * apic_bsp_setup() -> setup_local_APIC(). The direct-mode STIMER
+   572		 * depends on LAPIC, so hv_stimer_alloc() should be called from
+   573		 * x86_init.timers.setup_percpu_clockev.
+   574		 */
+   575		old_setup_percpu_clockev = x86_init.timers.setup_percpu_clockev;
+   576		x86_init.timers.setup_percpu_clockev = hv_stimer_setup_percpu_clockev;
+   577	
+   578		hv_apic_init();
+   579	
+   580		x86_init.pci.arch_init = hv_pci_init;
+   581	
+   582		register_syscore_ops(&hv_syscore_ops);
+   583	
+   584		if (ms_hyperv.priv_high & HV_ACCESS_PARTITION_ID)
+   585			hv_get_partition_id();
+   586	
+
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
