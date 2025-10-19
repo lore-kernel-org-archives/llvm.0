@@ -1,74 +1,74 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603DB221F2F
-	for <llvm@lists.linux.dev>; Sun, 19 Oct 2025 21:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1A119D074
+	for <llvm@lists.linux.dev>; Sun, 19 Oct 2025 21:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760909170; cv=none; b=WLSDLTMi2izFUvfx/arjAmDt5M0gCcN6VVuVFhiO4VsNw7c/gXkjGLVJOmkVijevHah8aYh7vGeYQttzgPt9hSBlj+BbsoAleMW1Ghy3mtr6fk7F2POkdZlRbCSaDqApz7HK9FcrMeXZUAp+fiGkLmwnV6J+JhBp9PuCuwx0ZfI=
+	t=1760909237; cv=none; b=scJMVRviosJ5oOi5+zConn+p7QO0WFfuhoKZqNT/KnSDyEE6Nk/vPRAkDHb8Bu7QWhN5qMXi/bhry5+lzGqr9oURI1E0ubYOqwS0zDaBVxZZXdqKALWeRcWfbKxctEDkYZS3r5JWBWoEu0oN8t1/YGyzBE+ip+9b4YBQCiSAy9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760909170; c=relaxed/simple;
-	bh=i+LGfQKWIvVBT05pMeCKog85n15IAvxhMtSIzthF5hw=;
+	s=arc-20240116; t=1760909237; c=relaxed/simple;
+	bh=7QXi4ECa31zhkm3BeJtv7O0uJSmHaXRwVyarc11pYYg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q8a/2Gq/KTf+2fo87Sk2nh34W/wSTGEZYXFNjkeg6Y28JaFwo+Nmo1rPA4sJZIRPtPcvHsuWe7cMZuvTTjfRFO2hJ8j+U/8h+F9WG0EryHUEgMGDd+ipDkOAWYviuWKp3xCTV+sqQ2DK52gC17Acqx5Xupd1NiVq3jz32ii4mM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GJ4Oq0uH; arc=none smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=h9BL08mVr/q8l2xx9QGt4Xd+fCpf9i/cAkISyuE0b6Ly1CjonHa/vGWrEqa1coL40mGvPXgDzpQBvfZX41XiCq96UGoMw1Swl10/SpD/3dhpTfW48xk6S5B9rMcV0dP2QhNqd4T2iWs4kWQgJE2BgU/VYWpWBgzwLJRRTrrHMQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1gpGsVu; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GJ4Oq0uH"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-33bb66c96a1so1048986a91.1
-        for <llvm@lists.linux.dev>; Sun, 19 Oct 2025 14:26:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1gpGsVu"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-33badfbd87aso900162a91.0
+        for <llvm@lists.linux.dev>; Sun, 19 Oct 2025 14:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760909168; x=1761513968; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1760909235; x=1761514035; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i+LGfQKWIvVBT05pMeCKog85n15IAvxhMtSIzthF5hw=;
-        b=GJ4Oq0uH9qYJ1MhhDNSbx1/gAlNrm3bnCnaNwuOh7EVa86NDHEy2vQLgljiY1OB5We
-         OZrLWMaR+rPrS/E1UUUPkkSgki5aWLatfRasbpDYH2n1CNatT5ob8h62kIOdG5hO9gGs
-         Bs/8LBYkw0gbIaSiFCZbPVJtbHt3QGlJcoyQQyjmdG0NQC5lk+OeBoiXvJ6Xmgrc1Yo6
-         DhZVhg3aWVIGkQaDbnFS60wHLk84y0Lp5pBDrfHcmReSsqWsiHgOgpeapK8zpb42ErwF
-         YyJ9/feSLAtc6vuoEdV8RO0EmRC/GarpZtLPLzh/K9/bRJZyfLeP1zJfN20lXMGsBrWR
-         qp0g==
+        bh=7QXi4ECa31zhkm3BeJtv7O0uJSmHaXRwVyarc11pYYg=;
+        b=g1gpGsVus6gjntyRyJvqQOn2uMenTwwRBjz6VfT643CI5Djoszqji8O+8km/GF4LkJ
+         YCvOoqha8awyyXzoWHVfAnS3BsiSBOFbulYQ0R1aj4wbAkRfDBH2apldSXguW0QcSoLZ
+         eWm6gMgttL+qZxw65bv+65gB5fPYphwX5hs01rAOoCj1RcclITYZ/WUSqUZ4UaQ2oTMs
+         p8j7EHfIIfLrz1Le8qHK5yIEunkdGw5E2ctluPtXSLgV/CFeoe30U6DD/SZcWuZG5BTx
+         PfTnmwVr/CN7gawsXkfF8hAHAYQETVf+fFj3Ccv5WXQeiEsE2FpBj049GRJgvRqfnUjT
+         W2Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760909168; x=1761513968;
+        d=1e100.net; s=20230601; t=1760909235; x=1761514035;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i+LGfQKWIvVBT05pMeCKog85n15IAvxhMtSIzthF5hw=;
-        b=LeP7UFMiWM/WrUt76zCf2rPD5FoiZuju3nq/6jRuyfzK9ZVym+m0HvZxxf311aekw+
-         zCHj2AG4WEoj4NcRgSF+z6UwuHTQ+uwjRI9T7hIgTDBqCbXm47BewtB5wN1J1dPrxJWl
-         L9vhk1oJB4Rxc8OiyPij9aTYRCBQfMStrq0QeG6jGq5fejkZwivE+s3ej3s9JtR2yju7
-         ZSIzpV9gJ3IR6WxtykTtPtvY3XVWqFYBZyU+ncPItXUyNpmHjE0CF0rHQtRlTnzW79Id
-         A1mSXG3z1VHCp6J4O/IAn6EYTrm+14agPvaDHHYNInJ6kcAQLJepDecfSqaWMFCf/nN9
-         w5tw==
-X-Forwarded-Encrypted: i=1; AJvYcCX659Y5jhuUCRC72C3yAj4TM3usXAHaV+bQRATL63DXxWDD3ZjIoy5dxK8VXPFvt8NhZxKi@lists.linux.dev
-X-Gm-Message-State: AOJu0YyZ9QKwQsr5PvR2nfz/6oQUUvmhksUubQXEzOdy8yk3y4VQDqw+
-	pSIAEs23U6Vh2QNaqw6HQnEn2grM0KuXi/bYYg79U9R6fL1Vu+tYDptCXcCUCRNWm9tmfLQT+WE
-	Ikt98lJUbjYiy3fmW08gftHJkPprDA74=
-X-Gm-Gg: ASbGncsKn/B0yiNnudpqSK/32NIXbn11xLFRPB1l/TahIb/tS+F5uPpBUVr6P3t/vED
-	LDUzYD7o/lR6FE1rMXrOYRhMP5J1jCPcyPQBY1LiVCMr7CHz0ORy3wpjzIprQpMc4jN/6DiT2Tx
-	pGyHwGw3UIF2L9ToXi/wIW9992Rp/V4+0PsCvtdqCGltiE+lKJzNox38dNkQ3WiI+/X/E0mTUT4
-	3Zfni40uRfDVrTO6NzwShRyl52xukp/M8ZDR7xZxMIpwZZHh/RU2hQKqe46Rf/ktSrmEyNUJCiA
-	pkRsFEYrsiIWHwJt6bADkMs1DO3NVMXTeBIhQhzUNxNuLsVqVc6vy9M32Sv8bstNm+6rTIgxHmn
-	SJVo=
-X-Google-Smtp-Source: AGHT+IEwx4nwwBhH/hNxoUVwvTs3X2bARut2TDi7HRPmGCV4tokc0LBHgVVevC+PQZA8tTr6XyTnNa7XyeNocxVrSx4=
-X-Received: by 2002:a17:903:b8b:b0:290:c5c5:57eb with SMTP id
- d9443c01a7336-290c9d2dd08mr73269955ad.3.1760909167598; Sun, 19 Oct 2025
- 14:26:07 -0700 (PDT)
+        bh=7QXi4ECa31zhkm3BeJtv7O0uJSmHaXRwVyarc11pYYg=;
+        b=BzbroTlSY8OGa0OEt7sY1MCv9vBn3XtJeZU0f4WsP1ELYXhKRwoQIEXyf9HPgyCRQt
+         +JCK3kFkZ506oOg/icpq6SvzZxEr47Ga9h5RjjUK9sawXaN/CCYQc5cnt6hPwkdPlwHS
+         uDuCCA3aEaemeaTwG1adDVjM8Xb6S5hfELLMF5w7UY4dDkbxVNqI/VXqK8X0AZqcBOvD
+         j4UE4LXnWXHTHWO1U1w0UofzUo/x+6zYeZHx+Sb8w4rcWqJRP255ktGFrLsjWh4J/GFI
+         GUhS4QAr5AcPf/N/4mLUASwGvBXEXSFiOtCjbFqVHzG9/KhEzjiR5OxitK0WZqHbfAlb
+         mrug==
+X-Forwarded-Encrypted: i=1; AJvYcCX+OTbisbR4pRCsxBvGWrkBZYjn2gcW8lm1x/k26AtXVm8ru2Ku4JVvtVl1PBJ8tkZ3Sh9s@lists.linux.dev
+X-Gm-Message-State: AOJu0YyfuegMXB6tuVeATYITPWSt2p8iX8WhiZLfaeEDXcP1LZiSAKQe
+	48/pB0VOJiXfaCCCburCmM4myQyWjX0FouxJVdL9+kQSKMzfVNUbl2phRtOxqtb5/cAQF9sSXEY
+	KGTHpZAnUsCQZhUjA+OOYPw921y0R4hk=
+X-Gm-Gg: ASbGncv3Ox3NQEH3o6639nrpx4qDgxfKNtwwdZ/Tf2iXWVz6L5LgDO5/GzD2CQfSigW
+	P6ZiU5QH05eguAaQnvVBInsB+SvYzb+Ie30nDFdUqpZ8wntG/ExuIbLnxjCEeM2Ta/ZdVKShCjs
+	e5CVj4C5oXmdsGMXw0FK6y+2pramiTGk71/jqALXrBV4RB7dnk6qPHohLRLl8X2h0zHCIyik2X/
+	L5weBu3WM+LWHuNHCkjOzAedwfA0bnv9HbZFHCfHOU9rPxXz5tUU/p3Uvja+29mu8HZnDNDVkz8
+	cW4OOLaOMtI8ZDMC4I5IyD5MUXqHLfVm1zdTUlhVoQZn5bB6aiuaiR4aRlk4U1OuWl+eoB6aFo1
+	cb9hxYWXNPbT4mg==
+X-Google-Smtp-Source: AGHT+IF1VFFJwy8ygSX6eoBXAmkQpi5ZSm3xG9mAwnAEV9eBFnYF+NCv7z0G4tbtRrIxdCU8CTeu9qRXC9i913/SiXw=
+X-Received: by 2002:a17:903:2f87:b0:290:af0d:9381 with SMTP id
+ d9443c01a7336-290cba4effcmr71823605ad.7.1760909234948; Sun, 19 Oct 2025
+ 14:27:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com> <20251018-cstr-core-v18-11-9378a54385f8@gmail.com>
-In-Reply-To: <20251018-cstr-core-v18-11-9378a54385f8@gmail.com>
+References: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com> <20251018-cstr-core-v18-10-9378a54385f8@gmail.com>
+In-Reply-To: <20251018-cstr-core-v18-10-9378a54385f8@gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 19 Oct 2025 23:25:55 +0200
-X-Gm-Features: AS18NWDjBjMG5pR4bntjwqt3T7EHDFAllndAmj435I7b4c65f3XvqG9PcKa-Qb8
-Message-ID: <CANiq72==SKsYkogrQhKTzCXwxeYfbL3V5jOiQKiunwzLta5=Pw@mail.gmail.com>
-Subject: Re: [RESEND PATCH v18 11/16] rust: opp: fix broken rustdoc link
+Date: Sun, 19 Oct 2025 23:27:02 +0200
+X-Gm-Features: AS18NWD3K-E_pn_Z0H-XvvQwoMFJQoy6QnxlKg55_WYP1vw1bB7QYmn04Fruiws
+Message-ID: <CANiq72nTRAW17RRKHjdfmy-HQk+31vEHyksOs8XGZZKBY=54EQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v18 10/16] rust: opp: use `CStr::as_char_ptr`
 To: Tamir Duberstein <tamird@kernel.org>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
 	Stephen Boyd <sboyd@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -105,18 +105,18 @@ On Sat, Oct 18, 2025 at 9:17=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
 >
 > From: Tamir Duberstein <tamird@gmail.com>
 >
-> Correct the spelling of "CString" to make the link work.
+> Replace the use of `as_ptr` which works through `<CStr as
+> Deref<Target=3D&[u8]>::deref()` in preparation for replacing
+> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
+> implement `Deref<Target=3D&[u8]>`.
 >
 > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-It is private, but it is good to have this done so that eventually we
-can potentially enable a runtime toggle for private docs.
+Viresh, Nishanth, Stephen: I will apply this since it would be nice to
+try to get the flag day patch in this series finally done -- please
+shout if you have a problem with this.
 
-However, this is independent of the series, so I would suggest that
-Viresh et al. apply it independently.
-
-Fixes: ce32e2d47ce6 ("rust: opp: Add abstractions for the
-configuration options")
+An Acked-by would be very appreciated, thanks!
 
 Cheers,
 Miguel
