@@ -1,258 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802181CEADB;
-	Sun, 19 Oct 2025 13:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760880544; cv=none; b=hOEpwFLypFVL8DDg8ZLxGEjKmkvvTGbQJmkwBRaGEhu/emD3gJ3buQdEeAj9TSSSDqQ0+DAv3AK1EChw6zOjTTJrlEdE4/NKdqGbmnCVIzCfKzXyhWNsmr/yUaulcuT5qVoDPCDOhpLE0G9fyqVXRQ59v7BBKw7Wt9N+X94i71g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760880544; c=relaxed/simple;
-	bh=qbs3tLdkcGRTqjHT2PtXxvoi1t+zZQckJoSb+3WgIbs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UfF3CCS8WdZ5cvV/e0xZsNRU0di/Rk17+sFj69fGfTiZRGRp95Tnes4bkTENAZfG2gzrKMjHS8JdCS8bUKRspCLRD0N0wqTx7ydt0kxk3m1eECDaZuTCPX0RDow1OSGKC4c6MIgGgUpooQMp07K4wr9jCQTjrWXuAWvpYkP483M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d3euWb4J; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1782EC0B5
+	for <llvm@lists.linux.dev>; Sun, 19 Oct 2025 14:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760885608; cv=pass; b=O9y2Pme+PDl496sqEKsUCKySkF9Syps8p09lZ2/8mlPt/aMoV7wJg4rLfOxKpO7yPdrjoFp3gkPqwVRGjEsItgSmAkTdyELxAoVFc1pGGxhdEzb3KlYegv8JJg2LBFMWEw2aJE6LQKu7F3MDgLjQNFI5tJxo4cAdKO4Cr+n9fLc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760885608; c=relaxed/simple;
+	bh=DpevFMeJDzjsulkccLMz850NvtRiBQZhK/YdeXqOmzQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dIu03k/F4AH0F3RQC3adfPgZEAlP1QYYN/9X4aCzJ+EzotKQ4P5DetoTnFiHgMZxoqLf80e+3WEYB8YrrqJ57eNuspd1EqNi5m3/lqsVSW1Be9WMFG6oysuVs755eNSdg0cHP3JYmhXQuRy7MjJ9RC4f/8fVoB4lJKfHcbVgpKo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=iqJ/0P0G; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d3euWb4J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760880542; x=1792416542;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qbs3tLdkcGRTqjHT2PtXxvoi1t+zZQckJoSb+3WgIbs=;
-  b=d3euWb4JYR+hf4IdjvODI0Ga30v9BG+K1QMM/88IUqz22DCocG5KDd4S
-   G/FfmuoMu3VBuYcp3V3sqz1VnB0oq6LfeOmwTKdSNhetc2Y1UVko+DCWJ
-   eF5eHsn0G3kYTI5GvmrvY/Hi+HcuUQbOkuTW5La3fDkZdTW2v7O0MfioX
-   g+e2akTJb0BLuXM4M/HuaMQBT74O6rYl0xMmZA5XA8pf6FCXIujou6jD8
-   84dnCFdqQn+2MSC7I8Xaj9KSKtqEhYNofLgml6xU3d/Fejv4q5golYgXy
-   x7lDBHbjITqAeo1i2/vTj27GSLPihNEBXdBN2gznHC6D95IzK5vpQtI3R
-   Q==;
-X-CSE-ConnectionGUID: r3+FUEfERKagP2RBKkobpg==
-X-CSE-MsgGUID: areu006RScGzQQqA/kvNRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11587"; a="74146535"
-X-IronPort-AV: E=Sophos;i="6.19,240,1754982000"; 
-   d="scan'208";a="74146535"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2025 06:29:02 -0700
-X-CSE-ConnectionGUID: rxNnOZchSEGIur3y4ihmYw==
-X-CSE-MsgGUID: FvEixj3ZQLyqGHWZebZWmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,240,1754982000"; 
-   d="scan'208";a="187550589"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 19 Oct 2025 06:28:59 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vATSz-00096b-2p;
-	Sun, 19 Oct 2025 13:28:57 +0000
-Date: Sun, 19 Oct 2025 21:28:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
-	"linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] jbd2: assign different lock_class_key for different
- filesystem
-Message-ID: <202510192128.u69Bbmpz-lkp@intel.com>
-References: <e42f1471-a88a-4938-8743-1d5b171c47ec@I-love.SAKURA.ne.jp>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="iqJ/0P0G"
+ARC-Seal: i=1; a=rsa-sha256; t=1760885594; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=NClnHMOf2Z0i5wBZOA5su3g3FGY2ujSrUNWJNfLsMDM9YXbOAjhTJX1SqUwUJVE8qOsHWfyV4wkEXY/TDVdY/m8YnmSEwBjQj6qJS2n00Q6XRGh8A3psFO63fcznm1J7hbavXpeM+ssQ6ASDDFb4jNQem8/hZ4KvZpjszwrwo7s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1760885594; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=jcGhi4cFQeguLmYhlD5ydo3KQYoOuKjZFsRfbK7t5UU=; 
+	b=JTyVHR0uO0Xj/PyWeI5vzVKBmCGaXMwoALZkHGYVhlraI+qN83ML3BxrLA2wocg9+sdd6wcbNTVraVGwqsyp1n/br6upW9zKmfdgY7mnUP2evTp9EubSD+CXmuTX5ZXxw7SBIAs6EIMAgTJeOFQ+Il7Zxh7iNsI84xGh66VMHq4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
+	dmarc=pass header.from=<adrian.larumbe@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760885594;
+	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=jcGhi4cFQeguLmYhlD5ydo3KQYoOuKjZFsRfbK7t5UU=;
+	b=iqJ/0P0GC8hDIpKVPeAX8Ekd9pXm4CjnTnyN69/35wKbiVZiwoBuGlQrSmHkki3m
+	qa9bkQmJQe30Kb+zfL6BXsm63RAxyRwqOxKWD9o7pNRY0hKYV4uBZyApQcUi5Exbm8l
+	NOe4ho59ryaAB/Tbltam0LCbnJxQQPnjy3CBT+v8=
+Received: by mx.zohomail.com with SMTPS id 1760885593456572.9210544100706;
+	Sun, 19 Oct 2025 07:53:13 -0700 (PDT)
+From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org,
+	Steven Price <steven.price@arm.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	kernel@collabora.com,
+	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v7 09/12] drm/panfrost: Add forward declaration and types header
+Date: Sun, 19 Oct 2025 15:52:14 +0100
+Message-ID: <20251019145225.3621989-10-adrian.larumbe@collabora.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251019145225.3621989-1-adrian.larumbe@collabora.com>
+References: <20251019145225.3621989-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e42f1471-a88a-4938-8743-1d5b171c47ec@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Tetsuo,
+This is to make LLVM syntactic analysers happy.
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Steven Price <steven.price@arm.com>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
+---
+ drivers/gpu/drm/panfrost/panfrost_mmu.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master brauner-vfs/vfs.all v6.18-rc1 next-20251017]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tetsuo-Handa/jbd2-assign-different-lock_class_key-for-different-filesystem/20251019-185450
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/e42f1471-a88a-4938-8743-1d5b171c47ec%40I-love.SAKURA.ne.jp
-patch subject: [PATCH] jbd2: assign different lock_class_key for different filesystem
-config: x86_64-buildonly-randconfig-001-20251019 (https://download.01.org/0day-ci/archive/20251019/202510192128.u69Bbmpz-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251019/202510192128.u69Bbmpz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510192128.u69Bbmpz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/jbd2/journal.c:1553:17: error: use of undeclared identifier 'EXT4_SUPER_MAGIC'
-    1553 |             fsmagic == EXT4_SUPER_MAGIC) {
-         |                        ^
->> fs/jbd2/journal.c:1562:17: error: use of undeclared identifier 'OCFS2_SUPER_MAGIC'
-    1562 |                    fsmagic == OCFS2_SUPER_MAGIC) {
-         |                               ^
-   fs/jbd2/journal.c:1585:17: error: use of undeclared identifier 'EXT4_SUPER_MAGIC'
-    1585 |             fsmagic == EXT4_SUPER_MAGIC)
-         |                        ^
-   fs/jbd2/journal.c:1589:15: error: use of undeclared identifier 'OCFS2_SUPER_MAGIC'
-    1589 |                  fsmagic == OCFS2_SUPER_MAGIC)
-         |                             ^
-   4 errors generated.
-
-
-vim +/EXT4_SUPER_MAGIC +1553 fs/jbd2/journal.c
-
-  1508	
-  1509	
-  1510	/*
-  1511	 * Management for journal control blocks: functions to create and
-  1512	 * destroy journal_t structures, and to initialise and read existing
-  1513	 * journal blocks from disk.  */
-  1514	
-  1515	/* The journal_init_common() function creates and fills a journal_t object
-  1516	 * in memory. It calls journal_load_superblock() to load the on-disk journal
-  1517	 * superblock and initialize the journal_t object.
-  1518	 */
-  1519	
-  1520	static journal_t *journal_init_common(struct block_device *bdev, struct block_device *fs_dev,
-  1521					      unsigned long long start, int len, int blocksize,
-  1522					      unsigned long fsmagic)
-  1523	{
-  1524		static struct lock_class_key jbd2_trans_commit_key_ext4;
-  1525		static struct lock_class_key jbd2_trans_commit_key_ocfs2;
-  1526		static struct lock_class_key jbd2_trans_commit_key_unknown;
-  1527		journal_t *journal;
-  1528		int err;
-  1529		int n;
-  1530	
-  1531		journal = kzalloc(sizeof(*journal), GFP_KERNEL);
-  1532		if (!journal)
-  1533			return ERR_PTR(-ENOMEM);
-  1534	
-  1535		journal->j_blocksize = blocksize;
-  1536		journal->j_dev = bdev;
-  1537		journal->j_fs_dev = fs_dev;
-  1538		journal->j_blk_offset = start;
-  1539		journal->j_total_len = len;
-  1540		jbd2_init_fs_dev_write_error(journal);
-  1541	
-  1542		err = journal_load_superblock(journal);
-  1543		if (err)
-  1544			goto err_cleanup;
-  1545	
-  1546		init_waitqueue_head(&journal->j_wait_transaction_locked);
-  1547		init_waitqueue_head(&journal->j_wait_done_commit);
-  1548		init_waitqueue_head(&journal->j_wait_commit);
-  1549		init_waitqueue_head(&journal->j_wait_updates);
-  1550		init_waitqueue_head(&journal->j_wait_reserved);
-  1551		init_waitqueue_head(&journal->j_fc_wait);
-  1552		if (IS_ENABLED(CONFIG_LOCKDEP) && IS_ENABLED(CONFIG_EXT4_FS) &&
-> 1553		    fsmagic == EXT4_SUPER_MAGIC) {
-  1554			mutex_init(&journal->j_abort_mutex);
-  1555			mutex_init(&journal->j_barrier);
-  1556			mutex_init(&journal->j_checkpoint_mutex);
-  1557			spin_lock_init(&journal->j_revoke_lock);
-  1558			spin_lock_init(&journal->j_list_lock);
-  1559			spin_lock_init(&journal->j_history_lock);
-  1560			rwlock_init(&journal->j_state_lock);
-  1561		} else if (IS_ENABLED(CONFIG_LOCKDEP) && IS_ENABLED(CONFIG_OCFS2_FS) &&
-> 1562			   fsmagic == OCFS2_SUPER_MAGIC) {
-  1563			mutex_init(&journal->j_abort_mutex);
-  1564			mutex_init(&journal->j_barrier);
-  1565			mutex_init(&journal->j_checkpoint_mutex);
-  1566			spin_lock_init(&journal->j_revoke_lock);
-  1567			spin_lock_init(&journal->j_list_lock);
-  1568			spin_lock_init(&journal->j_history_lock);
-  1569			rwlock_init(&journal->j_state_lock);
-  1570		} else {
-  1571			mutex_init(&journal->j_abort_mutex);
-  1572			mutex_init(&journal->j_barrier);
-  1573			mutex_init(&journal->j_checkpoint_mutex);
-  1574			spin_lock_init(&journal->j_revoke_lock);
-  1575			spin_lock_init(&journal->j_list_lock);
-  1576			spin_lock_init(&journal->j_history_lock);
-  1577			rwlock_init(&journal->j_state_lock);
-  1578		}
-  1579	
-  1580		journal->j_commit_interval = (HZ * JBD2_DEFAULT_MAX_COMMIT_AGE);
-  1581		journal->j_min_batch_time = 0;
-  1582		journal->j_max_batch_time = 15000; /* 15ms */
-  1583		atomic_set(&journal->j_reserved_credits, 0);
-  1584		if (IS_ENABLED(CONFIG_LOCKDEP) && IS_ENABLED(CONFIG_EXT4_FS) &&
-  1585		    fsmagic == EXT4_SUPER_MAGIC)
-  1586			lockdep_init_map(&journal->j_trans_commit_map, "jbd2_handle_ext4",
-  1587					 &jbd2_trans_commit_key_ext4, 0);
-  1588		else if (IS_ENABLED(CONFIG_LOCKDEP) && IS_ENABLED(CONFIG_OCFS2_FS) &&
-  1589			 fsmagic == OCFS2_SUPER_MAGIC)
-  1590			lockdep_init_map(&journal->j_trans_commit_map, "jbd2_handle_ocfs2",
-  1591					 &jbd2_trans_commit_key_ocfs2, 0);
-  1592		else
-  1593			lockdep_init_map(&journal->j_trans_commit_map, "jbd2_handle_unknown",
-  1594					 &jbd2_trans_commit_key_unknown, 0);
-  1595	
-  1596		/* The journal is marked for error until we succeed with recovery! */
-  1597		journal->j_flags = JBD2_ABORT;
-  1598	
-  1599		/* Set up a default-sized revoke table for the new mount. */
-  1600		err = jbd2_journal_init_revoke(journal, JOURNAL_REVOKE_DEFAULT_HASH);
-  1601		if (err)
-  1602			goto err_cleanup;
-  1603	
-  1604		/*
-  1605		 * journal descriptor can store up to n blocks, we need enough
-  1606		 * buffers to write out full descriptor block.
-  1607		 */
-  1608		err = -ENOMEM;
-  1609		n = journal->j_blocksize / jbd2_min_tag_size();
-  1610		journal->j_wbufsize = n;
-  1611		journal->j_fc_wbuf = NULL;
-  1612		journal->j_wbuf = kmalloc_array(n, sizeof(struct buffer_head *),
-  1613						GFP_KERNEL);
-  1614		if (!journal->j_wbuf)
-  1615			goto err_cleanup;
-  1616	
-  1617		err = percpu_counter_init(&journal->j_checkpoint_jh_count, 0,
-  1618					  GFP_KERNEL);
-  1619		if (err)
-  1620			goto err_cleanup;
-  1621	
-  1622		journal->j_shrink_transaction = NULL;
-  1623	
-  1624		journal->j_shrinker = shrinker_alloc(0, "jbd2-journal:(%u:%u)",
-  1625						     MAJOR(bdev->bd_dev),
-  1626						     MINOR(bdev->bd_dev));
-  1627		if (!journal->j_shrinker) {
-  1628			err = -ENOMEM;
-  1629			goto err_cleanup;
-  1630		}
-  1631	
-  1632		journal->j_shrinker->scan_objects = jbd2_journal_shrink_scan;
-  1633		journal->j_shrinker->count_objects = jbd2_journal_shrink_count;
-  1634		journal->j_shrinker->private_data = journal;
-  1635	
-  1636		shrinker_register(journal->j_shrinker);
-  1637	
-  1638		return journal;
-  1639	
-  1640	err_cleanup:
-  1641		percpu_counter_destroy(&journal->j_checkpoint_jh_count);
-  1642		kfree(journal->j_wbuf);
-  1643		jbd2_journal_destroy_revoke(journal);
-  1644		journal_fail_superblock(journal);
-  1645		kfree(journal);
-  1646		return ERR_PTR(err);
-  1647	}
-  1648	
-
+diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.h b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+index e6e6966a0cca..27c3c65ed074 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_mmu.h
++++ b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+@@ -4,6 +4,7 @@
+ #ifndef __PANFROST_MMU_H__
+ #define __PANFROST_MMU_H__
+ 
++struct panfrost_device;
+ struct panfrost_gem_mapping;
+ struct panfrost_file_priv;
+ struct panfrost_mmu;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
