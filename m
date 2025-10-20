@@ -1,188 +1,112 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D15A26F28D
-	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 15:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760974857; cv=pass; b=NsJKmXjzcLrEejGyiX7Smbgamp7P/UP7YdTqk72QTbBRiW+bdqEUY5V0iTu7TaYkAohr6v54yPH77+NnXgMVh1ak5CLDjBUPGK1V+cNUk1tx8msRhVsbXFhXxiJ6m9Mra3r55HnTzkEgMlTzj1xzo7PCXB7kFFsijQGIpxp4+VQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760974857; c=relaxed/simple;
-	bh=+zCfMEaimnIQeBDYATDZG9tN7TJnlorbW9UQo+gSdbo=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=hjI9AvpHhPioo575AMIIyDqVzSj+kKQ3hCbQVYDI76U+FTMugKoklPMZUa+Y9pCen+KOqJvFRPIwWdfjxGq+R/9BoshJeG1ikCYl6fJDDGWJjmJB6a4ApPAmA9lxZecqCuMkHk4nC0eXxeSbgctuNvruvCWNxmkHY5115VWEyRc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=KBL/eZfM; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C427331A53
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 17:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760980403; cv=none; b=u9foT+XB/QmEh+C93MEvy98sskx/lBtbtBmKpBelWx+5vbNI20eG5VKdDDEwceaAruqcX3YD9JVCy6N64OpLMfLTlkym14LSadJuoV6UukPndjUtlJUkS0yJgQXb71nSu7TE/Mcol5tHrZO68KxwZBIlP6pgbYdxIh+q89l+lng=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760980403; c=relaxed/simple;
+	bh=qdhd4fAQohIjlG3EgHDubuZx3bxc7SthTqZLWrGkZjQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=upyycFURd4ITeUJ35ljU5rbZvBX4+ozILLSVhzBgXdWguusIG00vJ5ZCvh1Jp6nM9gkt6dKFNED7wcGvJRfU/tzoox9R5gdXCo/3X5R0ds0LuwNsC8FVkpj/N6Ybj2o/K8eCwARez7cuRkiDYoQFGVPAFnbt1ksPzVRxWuXL5eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LF9T4pRm; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="KBL/eZfM"
-ARC-Seal: i=1; a=rsa-sha256; t=1760974820; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Ai6yEfvevnlicRnC6hUZILro9Xj58jvdixOTEejaTJAezMeYe2ReXvP5lgDe/WINSHWappBOFgEKq2//QLzV3b+ybSJd1N53dm9QBOeZUyqBWjfDkjkemswx40u7RhWcRhpjoxq72o2qvG8MdqeHNz7E7o1wMCgC4ipN2l4sh+s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760974820; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=md/pBzoYcFzUHz80KevulIkZ5BiZWUg/YH97ioL+0fI=; 
-	b=HdM+49AnxQEKmoKUYQiZRIpVoAcA/DC0xlvRuxm8uf3W/fbDEia6nOs7GWoOtzoYE/UGda73iO9UBeIe/TCmPXDp0tkYKHbb1X3UKJZ0s7dPQMKxEWoXpALSm1wZ6mM2D4paCoug77yh/yogs5AUlLFDy+Dezq7mT6gkz4+RGiQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760974820;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=md/pBzoYcFzUHz80KevulIkZ5BiZWUg/YH97ioL+0fI=;
-	b=KBL/eZfMEc9QO++XN/8UsD5kyy7gAS7vSEROcPEP17Q3eWx1vZVA4+k0asFa5R0J
-	sTiiTblJtBEBMOtWvm98i8Kz/P/1W/M+5ncofRvrtjwyn46hZcH0B0AclLDJgq63STK
-	5Y/3Su2IZ1it6kk4ifqtXzfZAmYnm6mnjyTd48zQ=
-Received: by mx.zohomail.com with SMTPS id 1760974819040413.8982192024972;
-	Mon, 20 Oct 2025 08:40:19 -0700 (PDT)
-Content-Type: text/plain;
-	charset=us-ascii
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LF9T4pRm"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-421851bca51so3743896f8f.1
+        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 10:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760980398; x=1761585198; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RGI6Q7BTAs/HMJAhH5ug/+5JV+NNvoV5bQjyt72+yc0=;
+        b=LF9T4pRmdP7F8QjeQzqIn0WCllrfzb+DIPNyrvkFvvuvI3kVLC03C1wyZ/kmfKgpUZ
+         7Lu8bzzpRxTcW5cbWC4vtnIuo8zB/hIe0gQQSZfyrE8HLKA97ejOmx3foMKvvNac4rH0
+         +4gsyeQRm7frZx3Pb9ZWGDBmD2LkFtev5MWR2CHPxX21LEybzuMRaWiywuN8upR6CRRm
+         6WdZAqY4zDRGeDgADnGfu2f5pZzheo13fq/lx3L0jBFm3xMJ3Sgnv1Iuje9eiGRGBx5x
+         5i4pcEBBH/k68eXsmIe9zhsojoE2kYjq88zsbakMGd1TCp4QxIxU+qVkZAms0WWCEh1k
+         jfpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760980398; x=1761585198;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RGI6Q7BTAs/HMJAhH5ug/+5JV+NNvoV5bQjyt72+yc0=;
+        b=Ge9yHvZgQmUqkJ1OpJ3Z/tjb0VZJ7qMU4B/TOc2Qj8CIymGRiW/VNODO0ZUMTEscuG
+         IgEfRscGUKe4GnMK6MgcgBpsjzQcoo+sF/njQCLseDjX+Vko97AcnbNSC+jISRjr4zxM
+         ZB6Onm0Wk7lRPsh9MwylNVA6hAbJxiDdBZTZBGzmvP357Aa3ctOgBWDp+s7jf8uppcvo
+         3dUtNJJK2MtrOUSw79A+OHaWoW2pKKI2J45yvLhnPHAYl1G+rW2Q3O1r2J2BBzkPQ2Rp
+         bt6v0nx59coeqsP09RPXwZQsUVnH8aq2FUnXBOwEbkC1LWlrKNcaNP28mLWTyfOUATIX
+         4K5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVW2GFxbeu3NtKA6Azgmez5Si0J/lH8YmlRpdB+a0KhVWqDvOCboPTVZN/OUbzPEihnCU6X@lists.linux.dev
+X-Gm-Message-State: AOJu0YxTS28enVVIlBwQ//PfGUZU5G8ZWnPzxoQMiiGr338vaCOhjxBm
+	TE/IiJNvHwCE2cvoSbwmcxsfUtg4lJs9gOY8DSlalg1bhPk2VAeeiCourtcX0KXEVpazkVSfI6D
+	TeUdzRffjAZvOA37w0Hp2gwwVI+C1rGU=
+X-Gm-Gg: ASbGnctYjYLNGSvwklNrfZt2caPDfYUNgg2He+7rFhiV2YmPmp+BxxNh75q7fTu2sa1
+	Nvp/xpooaVXuBsS9miTNqgZ5JV/hdz6ouVOzIxxeOLPEsNVGKIBodtZ8ZU3IXe/1XXT0u3Qtj5F
+	l/r6Ggyyo3dZWR/TcbPTR8dXfeWKzcSIGT7K7coLZo2IaoN2lDCIV3MfWDfCroHa7eJursKJ2ZR
+	48uGW3H+pf91YfcGHJkIMiln6iThQe4YA+ezRuPvMaZ/HRDWR097uVN/Q==
+X-Google-Smtp-Source: AGHT+IEodoyCQ4s3ezeiwvbSuedTGQrnQgPdmuDQggu8D72dLZWaeRuVepbyTu1eDOJWleQ/3mxUOhbhAORfmNTXRPQ=
+X-Received: by 2002:a05:6000:2f84:b0:425:7179:16eb with SMTP id
+ ffacd0b85a97d-42704d87ee4mr8625832f8f.17.1760980398375; Mon, 20 Oct 2025
+ 10:13:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [RESEND PATCH v18 13/16] rust: regulator: use `CStr::as_char_ptr`
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20251018-cstr-core-v18-13-9378a54385f8@gmail.com>
-Date: Mon, 20 Oct 2025 12:39:52 -0300
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>,
- =?utf-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
- Todd Kjos <tkjos@android.com>,
- Martijn Coenen <maco@android.com>,
- Joel Fernandes <joelagnelf@nvidia.com>,
- Christian Brauner <brauner@kernel.org>,
- Carlos Llamas <cmllamas@google.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Jens Axboe <axboe@kernel.dk>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Uladzislau Rezki <urezki@gmail.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- =?utf-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>,
- Stephen Boyd <sboyd@kernel.org>,
- Breno Leitao <leitao@debian.org>,
- Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Russ Weight <russ.weight@linux.dev>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>,
- Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>,
- Will Deacon <will@kernel.org>,
- Waiman Long <longman@redhat.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-block@vger.kernel.org,
- linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linux-fsdevel@vger.kernel.org,
- llvm@lists.linux.dev,
- Tamir Duberstein <tamird@gmail.com>
+MIME-Version: 1.0
+References: <20250929172724.75108-1-sj@kernel.org> <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
+In-Reply-To: <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Mon, 20 Oct 2025 10:13:07 -0700
+X-Gm-Features: AS18NWD-XcABY9AYH26aivrP7s7U2VJn_xaY3Jej0bnRhuMSCHP69gzanE8702w
+Message-ID: <CAKEwX=PBrcPnEkEhWQn_CTtT04qaKY2WsWXjDSSyPUGX4yY-sw@mail.gmail.com>
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under label
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: hannes@cmpxchg.org, nathan@kernel.org, shuah@kernel.org, morbo@google.com, 
+	justinstitt@google.com, nick.desaulniers+lkml@gmail.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, david.hunter.linux@gmail.com, 
+	Sidharth Seela <sidharthseela@gmail.com>, SeongJae Park <sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <C487CA8E-E8B6-4294-8081-D629DDD80253@collabora.com>
-References: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com>
- <20251018-cstr-core-v18-13-9378a54385f8@gmail.com>
-To: Tamir Duberstein <tamird@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
 
+On Fri, Oct 10, 2025 at 1:07=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
+rg> wrote:
+>
+> On 9/29/25 11:27, SeongJae Park wrote:
+> > On Mon, 29 Sep 2025 17:24:06 +0530 Sidharth Seela <sidharthseela@gmail.=
+com> wrote:
+> >
+> >> Fix warning caused from declaration under a case label. The proper way
+> >> is to declare variable at the beginning of the function. The warning
+> >> came from running clang using LLVM=3D1; and is as follows:
+> >> --
+> >> -test_cachestat.c:260:3: warning: label followed by a declaration is a=
+ C23 extension [-Wc23-extensions]
+> >>    260 |                 char *map =3D mmap(NULL, filesize, PROT_READ =
+| PROT_WRITE,
+> >>        |
+> >>
+> >> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+> >
+> > Reviewed-by: SeongJae Park <sj@kernel.org>
+> >
+> >
+>
+> Johannes and Nhat,
+>
+> Assuming this will go through cachestat tree
+>
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>
 
+Hi Shuah.
 
-> On 18 Oct 2025, at 16:16, Tamir Duberstein <tamird@kernel.org> wrote:
->=20
-> From: Tamir Duberstein <tamird@gmail.com>
->=20
-> Replace the use of `as_ptr` which works through `<CStr as
-> Deref<Target=3D&[u8]>::deref()` in preparation for replacing
-> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
-> implement `Deref<Target=3D&[u8]>`.
->=20
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
-> rust/kernel/regulator.rs | 9 ++++++---
-> 1 file changed, 6 insertions(+), 3 deletions(-)
->=20
-> diff --git a/rust/kernel/regulator.rs b/rust/kernel/regulator.rs
-> index b55a201e5029..65a4eb096cae 100644
-> --- a/rust/kernel/regulator.rs
-> +++ b/rust/kernel/regulator.rs
-> @@ -84,7 +84,7 @@ pub struct Error<State: RegulatorState> {
-> pub fn devm_enable(dev: &Device<Bound>, name: &CStr) -> Result {
->     // SAFETY: `dev` is a valid and bound device, while `name` is a =
-valid C
->     // string.
-> -    to_result(unsafe { =
-bindings::devm_regulator_get_enable(dev.as_raw(), name.as_ptr()) })
-> +    to_result(unsafe { =
-bindings::devm_regulator_get_enable(dev.as_raw(), name.as_char_ptr()) })
-> }
->=20
-> /// Same as [`devm_enable`], but calls =
-`devm_regulator_get_enable_optional`
-> @@ -102,7 +102,9 @@ pub fn devm_enable(dev: &Device<Bound>, name: =
-&CStr) -> Result {
-> pub fn devm_enable_optional(dev: &Device<Bound>, name: &CStr) -> =
-Result {
->     // SAFETY: `dev` is a valid and bound device, while `name` is a =
-valid C
->     // string.
-> -    to_result(unsafe { =
-bindings::devm_regulator_get_enable_optional(dev.as_raw(), =
-name.as_ptr()) })
-> +    to_result(unsafe {
-> +        bindings::devm_regulator_get_enable_optional(dev.as_raw(), =
-name.as_char_ptr())
-> +    })
-> }
->=20
-> /// A `struct regulator` abstraction.
-> @@ -268,7 +270,8 @@ pub fn get_voltage(&self) -> Result<Voltage> {
->     fn get_internal(dev: &Device, name: &CStr) -> Result<Regulator<T>> =
-{
->         // SAFETY: It is safe to call `regulator_get()`, on a device =
-pointer
->         // received from the C code.
-> -        let inner =3D from_err_ptr(unsafe { =
-bindings::regulator_get(dev.as_raw(), name.as_ptr()) })?;
-> +        let inner =3D
-> +            from_err_ptr(unsafe { =
-bindings::regulator_get(dev.as_raw(), name.as_char_ptr()) })?;
->=20
->         // SAFETY: We can safely trust `inner` to be a pointer to a =
-valid
->         // regulator if `ERR_PTR` was not returned.
->=20
-> --=20
-> 2.51.1
->=20
->=20
-
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-
+LGTM:
+Acked-by: Nhat Pham <nphamcs@gmail.com>
