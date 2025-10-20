@@ -1,153 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D61926CE25
-	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 17:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F872D5C97;
+	Mon, 20 Oct 2025 20:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760982532; cv=none; b=VP2aZQy7G01ged0S7RQ6G5akzcOYHucL5U6m6fFq13MxR3HgN7+6J5kjsTDiVTo9BGMA62Flu4PoEhY7AjNcCf2CnfK/SOMwDeT92UvDe1KG5UFCencH03/5yv6g5we6UaaDHWMzgzmVInEEq9F5AtZvoviz6A9ih9xvA5j1wiM=
+	t=1760991087; cv=none; b=BTlg7e2xA3etgQvgztoVXa0Ylot1L0k6U8LlPC6vewnKIOBiRwm6vt7vp0ToVsLbYiX3GynjTCKws4BOLzbKn2UQ69mNdL+QUh1gUjVVQ1jEBWrhKP9Hu71hT42/4EZwuPlevRw6YNp89xlWnQJlJR759hrSByoEgYRcADZejxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760982532; c=relaxed/simple;
-	bh=vvj9rbshDG/mJYIvIFilBgDtfu0m0YbNFbdyps7CYhE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fHV+RCOV4OGyjqEf2FRuUddOcWgFUHplqI7VKLFF3onFLXhyvbBmqwuk7vZb03iScd0r7/OthDCFwkN3Io9c7Rr1J0zPav7ayDuWy5aizTdNv1/whKkCxF6ZisxsBjX8OKjosbYnIHWznONVlI624kKNfRAOhBtjRQphV6QqvDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tURujRNg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760991087; c=relaxed/simple;
+	bh=rAof/wFe8d1Lg9fIBWp0u8gzJC3DIyE6skiRcnkaQ44=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IvR/ECiJ7xJlFLHzIFf0KM4B1cv5GFGl+EYkQA2WbRYegSWM5SOJqa3WLi1OW7l33OUGejinjCSn+kXAYJPJwMXXZUkxEYpCoFc6v9apvbxC28A9PTVaMAnqwQbIOTv+niOKBGxSbda6AhMp1pbjFDDnF7qY+oaEYx6i5EXlBxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWDjfbSp; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tURujRNg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F55C4AF09
-	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 17:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760982531;
-	bh=vvj9rbshDG/mJYIvIFilBgDtfu0m0YbNFbdyps7CYhE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tURujRNgi7AmohBDrv49upr1mAHzmK/nisfEDCULMQHbiuhZr9IPuTh7dcMmxKIwy
-	 B4upXXVtNLhOGjfUGN6MUT3pJSn/++/sHWiO7FGyu6VfltiwMKAfyylX8oCpt2YX9G
-	 CeOuCbbhOitkW/1mn4Vb4LvUMxvOVfzAglqwhYzC0izMa21jlPyEbx6HYta9BHGRiM
-	 IaIUkfy9cxpdAakYF2/3R7NXdrqmIR8tnL2t4aVT6Byc3RlwdRuRKj3/dkk+apA6xz
-	 nOvTIEhx6DkKEaxeKSpzNp2glfhw9okZrUKmJHgKimRreIJ+NG2Ege4Y12B5cxR+3T
-	 RxzQwXn+E0JrA==
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-443afb2334bso1542070b6e.3
-        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 10:48:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVn7Yuzc5MgwCdjMftx2p3qzjy/d6vZcAcohbu/JeQ35YLQDnFcBAcPcIATOIdtpjJ/fkPM@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx65T7brUsIEA/86VwsPTWry8d9+rOtsuV8R/6LuV6dHotinlm5
-	5XQJEa/PhEEEnFvsP2tE16twxx0LrkdBMHNWuG/7ClOTyzXBzNSmXY99BwpPBqvgTPj0+TsrcOx
-	mHAV40u88P5etkobPwtiIpTQxw8F1IIc=
-X-Google-Smtp-Source: AGHT+IEBTcqbNW4WztbsFHgjbUpb2lUwnFWN4p7InrdR0RgRIFe00LDkdSaeIzpzw4iNCju0IktvgqGnApVX0bNPXDo=
-X-Received: by 2002:a05:6808:5086:b0:441:8f74:f10 with SMTP id
- 5614622812f47-443a30e6210mr6069613b6e.58.1760982531178; Mon, 20 Oct 2025
- 10:48:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWDjfbSp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760991087; x=1792527087;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rAof/wFe8d1Lg9fIBWp0u8gzJC3DIyE6skiRcnkaQ44=;
+  b=dWDjfbSpgaxg15FRQOLmibt18wUxAr2hz08OWbqv8Q9YcWnoQV210GgP
+   Y/5Yh8v1qs27A/C/huVWQY87PGVHFq7moImUrbleFWe93U9RYZOVMEDgq
+   KmlJEPtJCRe/+69MHFHIfnU2lB+ov72XquZ4D02r0kJx5of/HwKjEzDrT
+   GTdMsZWlFrEEfjLq1EEFRhbvqT5eIJrYzg0Bynehd5GNs0KQDyeo8IloS
+   2b8NH9Uun57Fh/cnZwFeApSYerZqofd0gVGgvRZSpoFgdnz8uCs8yjK6X
+   YvDa9uw3z4dL97rKZ7klX+5go2SBPwft3GmeqQeB804/VAZXsl1jr9gZA
+   g==;
+X-CSE-ConnectionGUID: +QCI2LU0SIKbwt1lSUCQew==
+X-CSE-MsgGUID: tYI+0x8zSqG3LaFDTrizXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63210017"
+X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
+   d="scan'208";a="63210017"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 13:11:26 -0700
+X-CSE-ConnectionGUID: VR2G52cgTqiP7k/2sbn2jA==
+X-CSE-MsgGUID: RRxsUXTiTnuOhT8doq9jLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
+   d="scan'208";a="183116151"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 20 Oct 2025 13:11:25 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vAwDy-000A85-2O;
+	Mon, 20 Oct 2025 20:11:22 +0000
+Date: Tue, 21 Oct 2025 04:10:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gregory Price <gourry@gourry.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Gregory Price <gourry@gourry.net>
+Subject: [gourryinverse:movable_gigantic 4/4] mm/page_alloc.c:6998:9: error:
+ use of undeclared identifier 'CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION'
+Message-ID: <202510210449.M2pCsgzB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251014001055.772422-9-changwoo@igalia.com> <202510151223.THlBK6QR-lkp@intel.com>
-In-Reply-To: <202510151223.THlBK6QR-lkp@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Oct 2025 19:48:40 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0h-gzxQQAu272z30R8+sDNHA6L=J1w+P2qfLOYF8LRdLQ@mail.gmail.com>
-X-Gm-Features: AS18NWDDJNGF4sne2vfcDVyis3SAYtdDq88ce2v-uhPN9EnOmccJ14D_6NBaZtk
-Message-ID: <CAJZ5v0h-gzxQQAu272z30R8+sDNHA6L=J1w+P2qfLOYF8LRdLQ@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
-To: kernel test robot <lkp@intel.com>, Changwoo Min <changwoo@igalia.com>
-Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
-	pavel@kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	christian.loehle@arm.com, tj@kernel.org, kernel-dev@igalia.com, 
-	linux-pm@vger.kernel.org, sched-ext@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Oct 15, 2025 at 6:17=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Changwoo,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on amd-pstate/linux-next]
-> [also build test WARNING on amd-pstate/bleeding-edge linus/master v6.18-r=
-c1 next-20251014]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM=
--Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git=
- linux-next
-> patch link:    https://lore.kernel.org/r/20251014001055.772422-9-changwoo=
-%40igalia.com
-> patch subject: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
-> config: i386-buildonly-randconfig-004-20251015 (https://download.01.org/0=
-day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
-227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251015/202510151223.THlBK6QR-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202510151223.THlBK6QR-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> kernel/power/em_netlink.c:228:6: warning: variable 'ret' set but not u=
-sed [-Wunused-but-set-variable]
->      228 |         int ret =3D -EMSGSIZE;
->          |             ^
->    1 warning generated.
->
+tree:   https://github.com/gourryinverse/linux movable_gigantic
+head:   cf3e52163565dce5fff0f9f15a92cbbd452fc470
+commit: cf3e52163565dce5fff0f9f15a92cbbd452fc470 [4/4] page_alloc: allow migration of smaller hugepages during contig alloc.
+config: hexagon-randconfig-001-20251021 (https://download.01.org/0day-ci/archive/20251021/202510210449.M2pCsgzB-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 754ebc6ebb9fb9fbee7aef33478c74ea74949853)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251021/202510210449.M2pCsgzB-lkp@intel.com/reproduce)
 
-Please update the patch to address this report and resend it, thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510210449.M2pCsgzB-lkp@intel.com/
 
-> vim +/ret +228 kernel/power/em_netlink.c
->
->    224
->    225  void em_notify_pd_deleted(const struct em_perf_domain *pd)
->    226  {
->    227          struct sk_buff *msg;
->  > 228          int ret =3D -EMSGSIZE;
->    229          void *hdr;
->    230          int msg_sz;
->    231
->    232          if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGR=
-P_EVENT))
->    233                  return;
->    234
->    235          msg_sz =3D __em_notify_pd_deleted_size(pd);
->    236
->    237          msg =3D genlmsg_new(msg_sz, GFP_KERNEL);
->    238          if (!msg)
->    239                  return;
->    240
->    241          hdr =3D genlmsg_put(msg, 0, 0, &em_nl_family, 0, EM_CMD_P=
-D_DELETED);
->    242          if (!hdr)
->    243                  goto out_free_msg;
->    244
->    245          if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
->    246                  ret =3D -EMSGSIZE;
->    247                  goto out_free_msg;
->    248          }
->    249
->    250          genlmsg_end(msg, hdr);
->    251
->    252          genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, =
-GFP_KERNEL);
->    253
->    254          return;
->    255
->    256  out_free_msg:
->    257          nlmsg_free(msg);
->    258          return;
->    259  }
->    260
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+All errors (new ones prefixed by >>):
+
+>> mm/page_alloc.c:6998:9: error: use of undeclared identifier 'CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION'
+    6998 |                         if (!CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION ||
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +/CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION +6998 mm/page_alloc.c
+
+  6978	
+  6979	static bool pfn_range_valid_contig(struct zone *z, unsigned long start_pfn,
+  6980					   unsigned long nr_pages)
+  6981	{
+  6982		unsigned long i, end_pfn = start_pfn + nr_pages;
+  6983		struct page *page;
+  6984	
+  6985		for (i = start_pfn; i < end_pfn; i++) {
+  6986			page = pfn_to_online_page(i);
+  6987			if (!page)
+  6988				return false;
+  6989	
+  6990			if (page_zone(page) != z)
+  6991				return false;
+  6992	
+  6993			if (PageReserved(page))
+  6994				return false;
+  6995	
+  6996			if (PageHuge(page)) {
+  6997				/* Don't consider moving same size/larger pages */
+> 6998				if (!CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION ||
+  6999				    ((1 << compound_order(page)) >= nr_pages))
+  7000					return false;
+  7001			}
+  7002		}
+  7003		return true;
+  7004	}
+  7005	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
