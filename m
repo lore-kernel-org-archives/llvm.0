@@ -1,117 +1,226 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137242EC55D;
-	Mon, 20 Oct 2025 12:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C97E30FC3D
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 12:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760963301; cv=none; b=f4+Bw9EuDcpGYS5QxHunMaZTdpu9ysF6POAKv3L78ECLWMKmjvHCvg8Euo/81wOY2HHSMM2CNWQLmL1g92A9Dbk2nA0KlF8gT8sc7YDnWQBicWFgj+IOcgeECKivG2JsJ4XuCAiNv8LwGrT/N7bv5g4PNN9deh/7LKIS6u600Ug=
+	t=1760963533; cv=none; b=trI3rC+x8wmqopylp3DTZOVqvE62zEQjBZhtvuKkLCU9pZV3sq9AuLvtEV1YgJ8X6G9ztmk+KhbVRF5F3qfFy968mC7BxBMMzxWK5LmLwWfszNxP5372u3dWfp8VGj4VH88B621MvSTY8aI8gBcQSXnizAqCeWXvcarZ4HwSkwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760963301; c=relaxed/simple;
-	bh=a2Bw7tcfrdZdUhoJuqfjgYw3asav4XDAi4BcHpQfOnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qZEMBtnPYFoxNfIwTZez6p+DcmWSbnqA62y4gTJAmTDDzXk7JbUw0RAWt77G6vBSSPOx2aAkuZ3IuqoF/g12gjFGy2YdMQ2nXe7UYcyl895tozOvT/XL6nBFHrDTgGQIfJN9gJL+N2k195YS/nMsW6EmuOIB/oUE2MkxPE3tH8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048CAC4CEF9;
-	Mon, 20 Oct 2025 12:28:09 +0000 (UTC)
-Date: Mon, 20 Oct 2025 13:28:07 +0100
-From: Mark Brown <broonie@debian.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Tamir Duberstein <tamird@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Carlos Llamas <cmllamas@google.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>, Breno Leitao <leitao@debian.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
-	llvm@lists.linux.dev, Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [RESEND PATCH v18 13/16] rust: regulator: use `CStr::as_char_ptr`
-Message-ID: <3c31c76c-0df5-4630-b18e-c6eab419a8a6@sirena.org.uk>
-References: <20251018-cstr-core-v18-0-9378a54385f8@gmail.com>
- <20251018-cstr-core-v18-13-9378a54385f8@gmail.com>
- <CANiq72mpmO2fyfHmkipYZmirRg-x90Hi3Ly+2mriuGX96bOuew@mail.gmail.com>
+	s=arc-20240116; t=1760963533; c=relaxed/simple;
+	bh=yEU8OlJ4rnmeVIIFVpJYprNmuPl3V5iccAvk0qJgLRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZHBUfUNN8kOcoZ88HAR2nXNbkXYKX579R/q2IuWDWxYJQUI6hGGLr72rth9dpXifW2junWLnvihUUAB+/88BiPSRW8iLWIZ+1w5e1wTdWqiy6xcsTv6d9pA0PWWj949zuRyWeRshq8raOc4kgz0fqKLB9zlG/b5tzC3YdiGKTQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HlKiN7P0; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HlKiN7P0"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b3df81b1486so82611566b.2
+        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 05:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760963529; x=1761568329; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrHAmJjxM6ewOAgZH2FCw4tTUkBr/4mUYIaDeASxNLM=;
+        b=HlKiN7P0Hi8mlTeqz8I0AxIBt/XrUAqwrfQ7KLljdYL52pIVeBoD6q2T9tkf2tJghx
+         Gv08yw6jDIGo+SkrQmBQjccpfST/VzhQO9uqeRp5sIDgHGeFRa6L4QgHhLCcZYzW3FPY
+         0kEVM8/ccuWMKBhFyMzPHLlYVA5ICm1Yob7GqVAoov+qLwmqQN1vXa23+vwnTnqHDnxX
+         h9qkNdA7GJzncEKwkGA7W9uapG5b2d2M49EE4OxIxnzViPEQk4BCkB6sVym+E5z7NjGn
+         QgJ3SQElMBEKmYpTyJ9nl+EfdrlDr4Q18wPtWlc1jXWqNcDjunAcVis/mzZkPbOcBs6v
+         OfjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760963529; x=1761568329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZrHAmJjxM6ewOAgZH2FCw4tTUkBr/4mUYIaDeASxNLM=;
+        b=Vocv2ds+bZGMWdB/SD31JgomlfgsjzMJD9BQ7QGK5ZlPWkpFv8ItDwAAl9qdo/NpAt
+         JdeAw5zDheCzSJoPzcK03kvOnL/ZWlKJlQ02EltEuLfyPZlzG60aBQJqGRloSE93xdTR
+         mj5vLNkwiKSNeGsO015+2LRsrULkU1pig1Mwdp5CaZlcX1o2apbmrbXdRlXXcO4id3PM
+         neyTh5lzXJQjq3/dq/OAJFfokGNHr1CZT57+Qc2ZutON3OaWfICFDSqQowwMho+xiAXa
+         POdz8mKagplZBS1YgyaV3J7r03Z5pcIv5t8G9hnL6VEJpZ/tbFyGJ3rYoAUQdWlr7NiV
+         6XVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWKLAxrUKieVhY8HTMXzbE3UZ0b5y9WxMnGMgoKZrnIjyC5jXFfvWInUUqJS1IOvk6ewd4y@lists.linux.dev
+X-Gm-Message-State: AOJu0YxFFpLS0m8TtxSqenFaNlXaFuyTSaIGN2fVBQSDFUl+Earxkq/1
+	s72mDKtm9C++RR0NbrqxXmMTUbusRCbvLUHgLH7t1/Ga+lgV/RWpcgqU
+X-Gm-Gg: ASbGnctoSDahYybcepDtCXHn8K5oJtQxl7o+P406jR1RAJWRlL6E9TwLp9CRN3gsgnh
+	Fqj2kjW4QIIgZYoPcd6h1ZZjie6Zl2qhdIbHzNaXNl4crR46kxZ1zjHl6037XrnaRVNMSCMr5kE
+	j+lbjqDeWIwCiH7XVt50txOASlgD74peOdFFZBi0reLofQapzADFVUkhhqIKQvY2zkw66LVdcge
+	K5Lp1j0FYhXrqrTqwW+di8UA0/jlwbFSFPAFTqwtB5tM3XjfaSz+TnpI4TguP1z2zRTS+WrLt7k
+	Cx3j57bLk4PAyCt0acYRnHVNSuyodaF30yNQ0Eijg8mdD6oVQANT1K5aOm7b59GcNau8Fgx5ZhT
+	dM2SJZPvrH713XBPzMqsoelGoKoKemJK1oI3o45VjfkjrBgbFs8x0wPfW0Kjz1P2dsiJXaixtwR
+	4oC8E=
+X-Google-Smtp-Source: AGHT+IHeviqrSd93w8iK4mCEl/S4LfRu1LVX2pbSgOi06QmgOak3XwTymoUDcoiO7hQie9VFAZ5kLw==
+X-Received: by 2002:a17:906:641:b0:b65:c8b8:144f with SMTP id a640c23a62f3a-b65c8b81515mr400301266b.6.1760963528918;
+        Mon, 20 Oct 2025 05:32:08 -0700 (PDT)
+Received: from bhk ([165.50.81.231])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b65ebb499dasm787095166b.73.2025.10.20.05.32.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Oct 2025 05:32:08 -0700 (PDT)
+From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	ameryhung@gmail.com,
+	toke@redhat.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	khalid@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+Subject: [PATCH v4] selftests/bpf: Change variable types for -Wsign-compare
+Date: Mon, 20 Oct 2025 14:31:33 +0100
+Message-ID: <20251020133156.215326-1-mehdi.benhadjkhelifa@gmail.com>
+X-Mailer: git-send-email 2.51.1.dirty
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0uN06CPCQnMKQjYF"
-Content-Disposition: inline
-In-Reply-To: <CANiq72mpmO2fyfHmkipYZmirRg-x90Hi3Ly+2mriuGX96bOuew@mail.gmail.com>
-X-Cookie: I doubt, therefore I might be.
+Content-Transfer-Encoding: 8bit
 
+This is a follow up patch for commit 495d2d8133fd("selftests/bpf: Attempt
+to build BPF programs with -Wsign-compare") from Alexei Starovoitov[1]
+to be able to enable -Wsign-compare C compilation flag for clang since
+-Wall doesn't add it and BPF programs are built with clang.This has the
+benefit to catch problematic comparisons in future tests as quoted from
+the commit message:"
+  int i = -1;
+  unsigned int j = 1;
+  if (i < j) // this is false.
 
---0uN06CPCQnMKQjYF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  long i = -1;
+  unsigned int j = 1;
+  if (i < j) // this is true.
 
-On Sun, Oct 19, 2025 at 11:25:16PM +0200, Miguel Ojeda wrote:
-> On Sat, Oct 18, 2025 at 9:17=E2=80=AFPM Tamir Duberstein <tamird@kernel.o=
-rg> wrote:
-> > From: Tamir Duberstein <tamird@gmail.com>
+C standard for reference:
 
-> > Replace the use of `as_ptr` which works through `<CStr as
-> > Deref<Target=3D&[u8]>::deref()` in preparation for replacing
-> > `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
-> > implement `Deref<Target=3D&[u8]>`.
+- If either operand is unsigned long the other shall be converted to 
+unsigned long.
 
-> Liam, Mark: I will apply this since it would be nice to try to get the
-> flag day patch in this series finally done -- please shout if you have
-> a problem with this.
+- Otherwise, if one operand is a long int and the other unsigned int,
+then if a long int can represent all the values of an unsigned int,
+the unsigned int shall be converted to a long int;
+otherwise both operands shall be converted to unsigned long int.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+- Otherwise, if either operand is long, the other shall be 
+converted to long.
 
---0uN06CPCQnMKQjYF
-Content-Type: application/pgp-signature; name="signature.asc"
+- Otherwise, if either operand is unsigned, the other shall be
+converted to unsigned.
 
------BEGIN PGP SIGNATURE-----
+Unfortunately clang's -Wsign-compare is very noisy.
+It complains about (s32)a == (u32)b which is safe and doen't
+have surprising behavior."
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj2KtYACgkQJNaLcl1U
-h9D41Qf+Ltkk2+JN4tBSzvUarUp6eE2D4QOWAyqVy87q+zcocSKDaFrrEgX0C0yp
-52vEvZtJflTt7XIxB9TkWesjbQO7dzdeFWW+18b2BU6A1nXcDMEBn66QRWbEOXru
-XOwNAbeIQDR63w0Wec+AXgNFt5vg2wly5e1Ht7UGAufGvqdiKfxE06yCToKWzh3n
-475HYOCkvV3CIc1QgSFNsiX1DjCKwiB5bSH3kktTU9Z7xLUYTaizUeOU/b2aiaYJ
-HMcw8OJrCDaG/UqqK+PX3VACQEAWrwmpljXr+OpqgztP9tRIQ7zTNMMt6HSAdXRm
-GV0zx2kVMXs4pom/lsT8Nf+N2E6prA==
-=Yihi
------END PGP SIGNATURE-----
+This specific patch supresses the following warnings when
+-Wsign-compare is enabled:
 
---0uN06CPCQnMKQjYF--
+1 warning generated.
+
+progs/bpf_iter_bpf_percpu_array_map.c:35:16: warning: comparison of 
+integers of different signs: 'int' and 'const volatile __u32' 
+(aka 'const volatile unsigned int') [-Wsign-compare]
+   35 |         for (i = 0; i < num_cpus; i++) {
+      |                     ~ ^ ~~~~~~~~
+
+1 warning generated.
+
+progs/bpf_qdisc_fifo.c:93:2: warning: comparison of integers of 
+different signs: 'int' and '__u32' 
+(aka 'unsigned int') [-Wsign-compare]
+   93 |         bpf_for(i, 0, sch->q.qlen) {
+      |         ^       ~     ~~~~~~~~~~~
+
+Should be noted that many more similar changes are still needed in order
+to be able to enable the -Wsign-compare flag since -Werror is enabled and
+would cause compilation of bpf selftests to fail.
+
+[1].
+Link:https://github.com/torvalds/linux/commit/495d2d8133fd1407519170a5238f455abbd9ec9b
+
+Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+---
+Changelog:
+
+Changes from v3:
+
+-Downsized the patch as suggested by vivek yadav[2].
+
+-Changed the commit message as suggested by Daniel Borkmann[3].
+
+Link:https://lore.kernel.org/all/20250925103559.14876-1-mehdi.benhadjkhelifa@gmail.com/#r
+
+Changes from v2:
+
+-Split up the patch into a patch series as suggested by vivek
+
+-Include only changes to variable types with no casting by my mentor
+david
+
+-Removed the -Wsign-compare in Makefile to avoid compilation errors
+until adding casting for rest of comparisons.
+
+Link:https://lore.kernel.org/bpf/20250924195731.6374-1-mehdi.benhadjkhelifa@gmail.com/T/#u
+
+Changes from v1:
+
+- Fix CI failed builds where it failed due to do missing .c and
+.h files in my patch for working in mainline.
+
+Link:https://lore.kernel.org/bpf/20250924162408.815137-1-mehdi.benhadjkhelifa@gmail.com/T/#u
+
+[2]:https://lore.kernel.org/all/CABPSWR7_w3mxr74wCDEF=MYYuG2F_vMJeD-dqotc8MDmaS_FpQ@mail.gmail.com/
+[3]:https://lore.kernel.org/all/5ad26663-a3cc-4bf4-9d6f-8213ac8e8ce6@iogearbox.net/
+ .../testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c | 2 +-
+ tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c
+index 9fdea8cd4c6f..0baf00463f35 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_percpu_array_map.c
+@@ -24,7 +24,7 @@ int dump_bpf_percpu_array_map(struct bpf_iter__bpf_map_elem *ctx)
+ 	__u32 *key = ctx->key;
+ 	void *pptr = ctx->value;
+ 	__u32 step;
+-	int i;
++	__u32 i;
+ 
+ 	if (key == (void *)0 || pptr == (void *)0)
+ 		return 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
+index 1de2be3e370b..7a639dcb23a9 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
+@@ -88,7 +88,7 @@ void BPF_PROG(bpf_fifo_reset, struct Qdisc *sch)
+ {
+ 	struct bpf_list_node *node;
+ 	struct skb_node *skbn;
+-	int i;
++	__u32 i;
+ 
+ 	bpf_for(i, 0, sch->q.qlen) {
+ 		struct sk_buff *skb = NULL;
+-- 
+2.51.1.dirty
+
