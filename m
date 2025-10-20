@@ -1,83 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBF1354AF2;
-	Mon, 20 Oct 2025 12:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED632246768
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 13:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760964331; cv=none; b=jotWm0LZIsEaWTpZri014HoAQQsj0j2BWrrQJXSe5T1TyN8j5c4xvG2f2UoeOGOKlrhUS2FTC0daR/UjTcNO0PgjnBM9rNmDR/GF93NzNCYrORoQndFN3BOwPcuB9CqVbXgjlPeNFaw+uVIHGBMk8a075EMB5N88QlYsrT1Y/vw=
+	t=1760966545; cv=none; b=dyR/AexMmQ4AXgLaNzXfhiMpdQA6Pa74v0xOcdi+QRcPEh+oM78CdD4T9Jm+obMUhMwKjfz6s7HY129Lloz7ApdNRFU/lGnrhuhLIzhXQzSc+wamLr4eq+lNQLDslF+6G18UtBvZ64++D0cGuExwehWSQes6b1X7AcBv8ZOJE/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760964331; c=relaxed/simple;
-	bh=E8/qid2gLwe8oEsR/E/h8omGhNsTE6MoxWDuMvOCa7o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=N9WGSdGJZfTsldgoANGBk5BHPyg8dvkCPzRPkh8Va3JOS9Mr8SCbDI6zKAm02O98uRiquIwfKP5upDrBXVw1S0OC8g4OA63Jb8KuYzviO2PE1LTBcjS/SCLw816YgD9LtHSdxDMhMToXTqlvuUVaKp0Rh3zpWgdW8U0H031iITg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vu6ZG5gM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760966545; c=relaxed/simple;
+	bh=zTlS5E+yKYFvFec8fixf/vH+JCnj8dSZAwrtNjgybN0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Rwi2P6evhX9OboiDZkUGzhKoz6Kit8PStExefjIXTZKrgBspp3mKi1yUHFyCGNMPONvmCnBAkaiO9oRzi2Egh5Yjqvy7/EQ+TexHXEygKO3A2KrOGBqi00xrN3FPn/U8SZ7glEPUxLQtgW7Iev+AFYQr0Jzulb9SifTVAYoXb7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I/30U/NI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vu6ZG5gM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E68FBC4CEF9;
-	Mon, 20 Oct 2025 12:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760964331;
-	bh=E8/qid2gLwe8oEsR/E/h8omGhNsTE6MoxWDuMvOCa7o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Vu6ZG5gMwnWnP18yIjq2Coml/n0/etetWYWhQZndfqasBjVzf2+h5BcpQunp2EHn+
-	 wGk7ekgx863EYYacdpB1OViSJRoC/l+XSwl1uxM7EYG1sY2UggNWDXRgP0RB32Cmgj
-	 DYpE2VPAWFKtWebkc5BpwpHugLyOqiCYSQGnaLoYNivILMG7GpOKZwfRXenNfGijBK
-	 kdVZ6fLrKUefCxsbWH2QDLTtYHCOxzHkiFAe3sxmEx6ysXqBlcDPo+72hmNat+tBlr
-	 HjH1ho9WQs3EnNIXnmRbNVoOQu9DpFY8DL27jefzvOZemLusSCC7in5APibiIwOgZf
-	 ji8HRf0c9RL3Q==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>, tamird@gmail.com
-Cc: Liam.Howlett@oracle.com, airlied@gmail.com, alex.gaynor@gmail.com,
- aliceryhl@google.com, arve@android.com, axboe@kernel.dk,
- bhelgaas@google.com, bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
- brauner@kernel.org, broonie@kernel.org, cmllamas@google.com,
- dakr@kernel.org, dri-devel@lists.freedesktop.org, gary@garyguo.net,
- gregkh@linuxfoundation.org, jack@suse.cz, joelagnelf@nvidia.com,
- justinstitt@google.com, kwilczynski@kernel.org, leitao@debian.org,
- lgirdwood@gmail.com, linux-block@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-pm@vger.kernel.org, llvm@lists.linux.dev, longman@redhat.com,
- lorenzo.stoakes@oracle.com, lossin@kernel.org, maco@android.com,
- mcgrof@kernel.org, mingo@redhat.com, mmaurer@google.com, morbo@google.com,
- mturquette@baylibre.com, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, nm@ti.com, ojeda@kernel.org,
- peterz@infradead.org, rafael@kernel.org, russ.weight@linux.dev,
- rust-for-linux@vger.kernel.org, sboyd@kernel.org, simona@ffwll.ch,
- surenb@google.com, tkjos@android.com, tmgross@umich.edu, urezki@gmail.com,
- vbabka@suse.cz, vireshk@kernel.org, viro@zeniv.linux.org.uk,
- will@kernel.org
-Subject: Re: [PATCH v18 12/16] rust: configfs: use `CStr::as_char_ptr`
-In-Reply-To: <20251018180303.3615403-1-aliceryhl@google.com>
-References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
- <20251018180303.3615403-1-aliceryhl@google.com>
-Date: Mon, 20 Oct 2025 14:44:56 +0200
-Message-ID: <87ms5lspx3.fsf@t14s.mail-host-address-is-not-set>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I/30U/NI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760966542;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BFfSQOYFEDVkEC4Kvdk6SIYR0Y7CAuYj5hnkP0HksHw=;
+	b=I/30U/NI2B5RI0rktdJWSdKpiHznRMLcjzBqDicsYfq0kzlYEnVpN89lPKqDFCYxUrvTk3
+	u7SHI44QjxofkeJXeJ2Q0dJKK1AM8KDKJW4BwZ+f1G9ACCar4VDYYnBqBbhYMYRrxYSdfA
+	JBvDmlYrslyypJdsWYkBuWc9UYGuQhY=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-517-Gdas6PTUOXix2f4UPOVzFA-1; Mon,
+ 20 Oct 2025 09:22:21 -0400
+X-MC-Unique: Gdas6PTUOXix2f4UPOVzFA-1
+X-Mimecast-MFC-AGG-ID: Gdas6PTUOXix2f4UPOVzFA_1760966540
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 22189183069E
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 13:22:15 +0000 (UTC)
+Received: from [172.20.84.201] (unknown [10.30.45.119])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 70AE819560B5;
+	Mon, 20 Oct 2025 13:22:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.18.0-rc2,
+ upstream-mainline, 211ddde0)
+Date: Mon, 20 Oct 2025 13:22:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <72113.125102009222101862@us-mta-517.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 4spy3UD2NHX7THdoRx4A7Opxafh1_IVopw4dQ_fAwSE_1760966540
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Alice Ryhl <aliceryhl@google.com> writes:
+Hi, we tested your kernel and here are the results:
 
-> From: Tamir Duberstein <tamird@gmail.com>
->
-> Replace the use of `as_ptr` which works through `<CStr as
-> Deref<Target=&[u8]>::deref()` in preparation for replacing
-> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
-> implement `Deref<Target=&[u8]>`.
->
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Acked-by: Andreas Hindborg <a.hindborg@kernel.org>
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Linux 6.18-rc2
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2108352874
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-Best regards,
-Andreas Hindborg
 
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
