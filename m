@@ -1,255 +1,111 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCA8286430
-	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 22:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C6F2F069E
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 23:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761000856; cv=none; b=hayPAlsqc/dtJYjBbV2PASB4qDJiZ82gJ30gmvqC7RyGcWNNedJ2DLGFWpzoj6yp19qduvT7u5WsaUzv/Qpbgz7lEYE9TkYiseFvXKBcywz0ecVSmWmPplHbpJUtTJCkZcl4VFVvn+oZpzhAHWYFwlSbnda3NMRlg5YbFBRnl70=
+	t=1761001261; cv=none; b=YXgizKx76PbAKKUiP2liw8PbZ54r++dXtIl982tQkHNIrT4RwuaiZNAKLS8hion2HUF19q39T0B7iSF3GTe4gs8q+buo/s9bsAngGu2esMF3dt8zKJZ42x6pqtpxzfZg1ax21KDtvv2OwGJI+/qYAB8fLtr9pNP23k3yGBYi+y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761000856; c=relaxed/simple;
-	bh=8RWPc/J+gIMcQEFxOG6dFR+ohNHjmy+3waEaDz3hd8k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cYmAvqu1OGhxDoDhZV6pi7RUyokHN90u0xGHqaFlsRuYjDZgMzIjcx1AjnbT706xRRPK5aIGJjiGm7bqQKLRo+KDwip0hDI6LMFmDO8fCiWotKpEg8o1JsaDuInuGts2zGxg8cn0zP4yI0w5GJd6sNiTUsfPEAYyeeNuxMufIMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EtXMqkWt; arc=none smtp.client-ip=209.85.218.44
+	s=arc-20240116; t=1761001261; c=relaxed/simple;
+	bh=MMIhDjeFZTVW06BO4C5sNb1AQjnc/2P+QYmht/b71sI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=PlR6MOF7cPt2hdPBl6Bqe8lMnaPPyCdxM2zDa9gj7GWMQRvegzM5CcmnKGe467B9Rk66rS1BUgGZkyhIEwzlq3gZNVMyxRuILVSMZDY1NsWc/StqVqT5robR7L+Y45qdvSHaOUpmYkTh7+v8jlhmODY+nYMfIAVzS8L8QasUSfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pagIcNCO; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EtXMqkWt"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b3d196b7eeeso869534466b.0
-        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 15:54:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pagIcNCO"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47111dc7c35so33325185e9.2
+        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 16:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761000853; x=1761605653; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gXVpf+jOLhkP3YQQfTg59JZdjchGBwXlDGaLekMrenI=;
-        b=EtXMqkWt2H5a2by5R7ENF/FXW+OD4Q3h8GBl3EOF1bM/c62/xZM2LTOJJzSsuiCZf0
-         fih7ZWxGQ8UhbU8PgwITLlSsxbKaxLgtMS9vxJFpKcH/g9WfscBx+gc0PrHcd0RscI0W
-         wNzISXEka2k3B+WzitALQFZt2Waw26hLqn4FYzx7QkgPtI3HqJuQ2YDev+3sgOHV3U4r
-         WoU8behSTuWrvI49EGvTd0KHO2RXM4h24X4dtlePSy//iDtl7vGLDzTI3fg4wLNdbXGA
-         X5hVTL8EEBMog9xUjywmmQ/X6X9A4OmIeRhf8lMOm52uOnGkof+3eDOEelg0xtq5QI4C
-         6xbg==
+        d=google.com; s=20230601; t=1761001257; x=1761606057; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+YTl5MaFNDPh2LQODMBbgsO+rt0d2j5pgrcEowQ9SQ=;
+        b=pagIcNCOj1lb2BJj3X+4VsySsJUIuUp21aAitpLN8c/DjcDuUSUMDM5FnxTrwU2B87
+         XuVgEEsSxgh7sty1xW2elrXVBV2xPYYe2sukax6ezgLHW9YeATX2m/B/79ww0xEx4E2H
+         wVu+jnvPKH9r7bZCXuYpPtIKl51/1jLj/A9xKlnO4/Z61OKMd7NGXQyKRXa8gvwm6XOQ
+         Ne5PghgyO3SC65HXa3ivAbwbfC2Hi/dgZWmRFu/SbeUtXQZL3RDwKsfwjmiJK+Pd6sVE
+         tgzwJDIVkv4N6L2nIUa+0rLjxrMWPf5DjA2/zKFlwni9KnWuDAbZlMtVuoOFX+36uvvH
+         PbLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761000853; x=1761605653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gXVpf+jOLhkP3YQQfTg59JZdjchGBwXlDGaLekMrenI=;
-        b=OMDYb31SbbCF5QxT5sBNwVNhTMNugDLF546QBXtsLxyPrDhwYQxes+WnXjCK0BdCYD
-         ktuHbrxrBp6mwvltuI0akA50iZ0XSBIYrS59IGck6uwSWZyTKREeScKHTAYKTzOiKobi
-         nCqmePYd+mIhFgZvXOnsL/G9xZyja2G8DjYgBlW9pX0kFQqNiQcMJQxhoXJjezOEFlOP
-         jFixX4oSdg9VxikeZaoHnvbFnt6BPhjthyRzTcd6yprQhSyUcTl18cNBkyJ6eZq5KLkb
-         Ul5qh74lrngDmNLWG0tT+6Vn3I6DnwHoJlvQfKi3hyrHFHrjtJlD0q35w7z41wmND0TO
-         nXfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXVYb9PaPABQfY6ypY0Be1HfPNOG3rHKaAGczKlawGA7+xWdKk75xfq7SG/5yp9UYjMC5I@lists.linux.dev
-X-Gm-Message-State: AOJu0YyFgaBWfG4gj8gyG2iE0Y+HER1OTCH1PNqKjghuVBl6Egi5xIMc
-	+RbyfdXBo7ZSAf/nhwhxu24rEv7mwvYw7LLehlrfuhNSf6t5mF+FgfDg0FzouJArSZ0wRRAhPAI
-	nH/tTLHzDB7S7CScbmeX+5iOxps8XaPAWzx2gMQc=
-X-Gm-Gg: ASbGncuGhXo10/2B2KlPQZ/iXXA3xVRIKGE62jg1Jx3wtgY3YF5Kpwih29X0SMOkYGf
-	DOSs4LGGR3sHFPO3aTVCL+NTIJHkPprbA8PyNC8Z/tSl/WH+9uf97SbQY9Vqus/hINnh2ZApqS9
-	xzfXjUMnX7FRDEFAAsAIVPS3O6U1fRHTro+VFf9L2QBI0VpD8DJxT6H+LkmX2SiFKMDOxeNXhwl
-	N36R74ryw4pBwzEwT8iPgiv6iS0D/OBWJsep8Mp7g5W6pAPnWedLwngIRslAQUv6g36
-X-Google-Smtp-Source: AGHT+IGxESvOLWCY5N66S/ojP/nYOYl3Tj24HBpCyNwp/S7zxilqgZUafQa2wCmwT4NmlDi/C89pR/VoaK4wOYRrO28=
-X-Received: by 2002:a17:907:1c82:b0:b4e:a47f:715d with SMTP id
- a640c23a62f3a-b6472a6a145mr1759951766b.17.1761000852713; Mon, 20 Oct 2025
- 15:54:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761001257; x=1761606057;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+YTl5MaFNDPh2LQODMBbgsO+rt0d2j5pgrcEowQ9SQ=;
+        b=M3Z0z3h32G8ov6Lg1wkJBQ317PNURbMKY8gnweZgyKKQ74YWdBf86CpqwQVu61vp8y
+         KbfxGbbi4pBmOcNFNbKexJ8ZdVk8DMOwjTx0+wU6F49hq3DBy2WpGSxfadF66u9gWCya
+         /8X6yJjugjU8aOcLpUnmKCkZOCCer1n2EybXBBr2X/xU7GEQihMn+DZU64/OmzjGhUjs
+         YOzC/vFFV1Khxf+DHBGDyb4sDaBG2jPe9iEPljfyWESc/p7fnj+isgKHCp5KSsB3LglC
+         E+naN19HdMItoVHmXmK7gzjmfZQ/VwzcHFiYSSzR2Ohqdz4yWbzvh3n6rTWyuzJOnD4r
+         20NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXDw5H9Okf6aYvclu7XyOFAr+z3CnMg0HA49nj7MTDv3I57Q+hOhaJLpYGEiwRT2SLJmXUv@lists.linux.dev
+X-Gm-Message-State: AOJu0YwqUO/eFoQ7zEqydy9AzaRowbH93rbBdHpEzvMBv5IxFNJNkmnb
+	/svcwjHvmFOfT4gGiP6xSwsE1vNi3mNv4Usz9Pc8+NvS7HSJ5YgJ6aAbyABEDc+OY0uqraaFnU8
+	AATlyf/NaMDMRWiI0Hg==
+X-Google-Smtp-Source: AGHT+IFXOZk4fKNLEcQ194UEEQFUbHuH0Kfa7GML2Cmd8kN3Tsh2FLTTo5Kx6voF7xttPbOLL27F2j29/4j8wOo=
+X-Received: from wmbjx13.prod.google.com ([2002:a05:600c:578d:b0:46e:5611:ee71])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6000:1884:b0:3ec:ce37:3a6d with SMTP id ffacd0b85a97d-42704dc9a96mr11386255f8f.47.1761001257442;
+ Mon, 20 Oct 2025 16:00:57 -0700 (PDT)
+Date: Mon, 20 Oct 2025 23:00:56 +0000
+In-Reply-To: <202510141538.VZqnRzHh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20251020220005.work.095-kees@kernel.org> <20251020220118.1226740-1-kees@kernel.org>
-In-Reply-To: <20251020220118.1226740-1-kees@kernel.org>
-From: Bill Wendling <morbo@google.com>
-Date: Mon, 20 Oct 2025 15:53:55 -0700
-X-Gm-Features: AS18NWAFS0u2q23JU9GZh3nxGXIAaxKW62Opi8L5p1adGFlg6Vwpq6L8QQr0HRw
-Message-ID: <CAGG=3QV7-W5vEPNtABghg=ktn6kKs45_e-PWBT9oCUzURod1bg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] compiler_types: Introduce __counted_by_ptr()
-To: Kees Cook <kees@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Marco Elver <elver@google.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev, 
-	Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Tamir Duberstein <tamird@gmail.com>, Michael Kelley <mhklinux@outlook.com>, 
-	kernel test robot <lkp@intel.com>, Heiko Carstens <hca@linux.ibm.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Jan Hendrik Farr <kernel@jfarr.cc>, Yafang Shao <laoar.shao@gmail.com>, 
-	Marc Herbert <Marc.Herbert@linux.intel.com>, Christopher Ferris <cferris@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Randy Dunlap <rdunlap@infradead.org>, 
-	Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Mime-Version: 1.0
+References: <202510141538.VZqnRzHh-lkp@intel.com>
+X-Mailer: git-send-email 2.51.0.869.ge66316f041-goog
+Message-ID: <20251020230056.726931-1-sidnayyar@google.com>
+Subject: [PATCH v2 10/10] module loader: enforce symbol import protection
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: lkp@intel.com
+Cc: arnd@arndb.de, gprocida@google.com, linux-arch@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev, maennich@google.com, 
+	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev, 
+	oe-kbuild-all@lists.linux.dev, petr.pavlu@suse.com, samitolvanen@google.com, 
+	sidnayyar@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 20, 2025 at 3:01=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+On Tue, Oct 14, 2025 at 8:36AM kernel test robot <lkp@intel.com> wrote:
 >
-> Introduce __counted_by_ptr(), which works like __counted_by(), but for
-> pointer struct members:
+> Hi Siddharth,
 >
-> struct foo {
->         int a, b, c;
->         char *buffer __counted_by_ptr(bytes);
->         short nr_bars;
->         struct bar *bars __counted_by_ptr(nr_bars);
->         size_t bytes;
-> };
+> kernel test robot noticed the following build errors:
 >
-> Since "counted_by" can only be applied to pointer members in very recent
-> compiler versions, its application ends up needing to be distinct from
-> flexible array "counted_by" annotations, hence a separate macro.
+> [auto build test ERROR on arnd-asm-generic/master]
+> [also build test ERROR on soc/for-next linus/master v6.18-rc1 next-20251013]
+> [cannot apply to mcgrof/modules-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
-> Unfortunately, this annotation cannot be used for "void *" members
-> (since such a member is considered a pointer to an incomplete type,
-> and neither Clang nor GCC developers could be convinced otherwise[1],
-> even in the face of the GNU extension that "void *" has size "1 byte"
-> for pointer arithmetic). For "void *" members, we must use the coming
-> "sized_by" attribute.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Siddharth-Nayyar/define-kernel-symbol-flags/20251014-005305
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+> patch link:    https://lore.kernel.org/r/20251013153918.2206045-11-sidnayyar%40google.com
+> patch subject: [PATCH v2 10/10] module loader: enforce symbol import protection
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/reproduce)
 >
-I'm pretty sure that "sized_by" is available in Clang right now.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510141538.VZqnRzHh-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> kernel/module/main.c:1271:32: error: no member named 'sig_ok' in 'struct module'
+>     1271 |         if (fsa.is_protected && !mod->sig_ok) {
+>          |                                  ~~~  ^
+>    1 error generated.
 
--bw
+'sig_ok' is only defined when CONFIG_MODULE_SIG is set. I will wrap this
+statement in '#ifdef CONFIG_MODULE_SIG' in a follow-up patch.
 
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2025-May/683136.html [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> Cc: Bill Wendling <morbo@google.com>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: <llvm@lists.linux.dev>
-> ---
->  init/Kconfig                   | 11 +++++++++++
->  Makefile                       |  4 ++++
->  include/linux/compiler_types.h | 21 ++++++++++++++++++++-
->  include/uapi/linux/stddef.h    |  4 ++++
->  4 files changed, 39 insertions(+), 1 deletion(-)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index cab3ad28ca49..54691b086bc6 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -139,6 +139,17 @@ config CC_HAS_COUNTED_BY
->         # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
->         default y if CC_IS_GCC && GCC_VERSION >=3D 150100
->
-> +config CC_HAS_COUNTED_BY_PTR_BARE
-> +       def_bool $(success,echo 'struct foo { int *ptr __attribute__((__c=
-ounted_by__(count))); int count; };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /d=
-ev/null -Werror)
-> +
-> +config CC_HAS_COUNTED_BY_PTR_EXP
-> +       def_bool $(success,echo 'struct foo { int *ptr __attribute__((__c=
-ounted_by__(count))); int count; };' | $(CC) $(CLANG_FLAGS) -fexperimental-=
-late-parse-attributes -x c - -c -o /dev/null -Werror)
-> +       depends on !CC_HAS_COUNTED_BY_PTR_BARE
-> +
-> +config CC_HAS_COUNTED_BY_PTR
-> +       def_bool y
-> +       depends on CC_HAS_COUNTED_BY_PTR_BARE || CC_HAS_COUNTED_BY_PTR_EX=
-P
-> +
->  config CC_HAS_MULTIDIMENSIONAL_NONSTRING
->         def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring=
-__)) =3D { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
->
-> diff --git a/Makefile b/Makefile
-> index d14824792227..1b297dcbb0df 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -933,6 +933,10 @@ KBUILD_CFLAGS      +=3D $(CC_AUTO_VAR_INIT_ZERO_ENAB=
-LER)
->  endif
->  endif
->
-> +ifdef CONFIG_CC_HAS_COUNTED_BY_PTR_EXP
-> +KBUILD_CFLAGS  +=3D -fexperimental-late-parse-attributes
-> +endif
-> +
->  # Explicitly clear padding bits during variable initialization
->  KBUILD_CFLAGS +=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
->
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
-s.h
-> index 59288a2c1ad2..f197ea03b593 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -353,11 +353,14 @@ struct ftrace_likely_data {
->  #endif
->
->  /*
-> + * Runtime track number of flexible array member elements for use by
-> + * CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS.
-> + *
->   * Optional: only supported since gcc >=3D 15
->   * Optional: only supported since clang >=3D 18
->   *
->   *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D108896
-> - * clang: https://github.com/llvm/llvm-project/pull/76348
-> + * clang: https://clang.llvm.org/docs/AttributeReference.html#counted-by=
--counted-by-or-null-sized-by-sized-by-or-null
->   *
->   * __bdos on clang < 19.1.2 can erroneously return 0:
->   * https://github.com/llvm/llvm-project/pull/110497
-> @@ -371,6 +374,22 @@ struct ftrace_likely_data {
->  # define __counted_by(member)
->  #endif
->
-> +/*
-> + * Runtime track number of objects pointed to by a pointer member for
-> + * use by CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS.
-> + *
-> + * Optional: only supported since gcc >=3D 16
-> + * Optional: only supported since clang >=3D 20
-> + *
-> + *   gcc: https://gcc.gnu.org/pipermail/gcc-patches/2025-April/681727.ht=
-ml
-> + * clang: ...
-> + */
-> +#ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
-> +# define __counted_by_ptr(member)      __attribute__((__counted_by__(mem=
-ber)))
-> +#else
-> +# define __counted_by_ptr(member)
-> +#endif
-> +
->  /*
->   * Optional: only supported since gcc >=3D 15
->   * Optional: not supported by Clang
-> diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-> index 9a28f7d9a334..111b097ec00b 100644
-> --- a/include/uapi/linux/stddef.h
-> +++ b/include/uapi/linux/stddef.h
-> @@ -72,6 +72,10 @@
->  #define __counted_by_be(m)
->  #endif
->
-> +#ifndef __counted_by_ptr
-> +#define __counted_by_ptr(m)
-> +#endif
-> +
->  #ifdef __KERNEL__
->  #define __kernel_nonstring     __nonstring
->  #else
-> --
-> 2.34.1
->
+Regards,
+Siddharth Nayyar
