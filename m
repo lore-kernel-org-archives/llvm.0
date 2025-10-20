@@ -1,119 +1,234 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F872D5C97;
-	Mon, 20 Oct 2025 20:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362CA20966B;
+	Mon, 20 Oct 2025 22:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760991087; cv=none; b=BTlg7e2xA3etgQvgztoVXa0Ylot1L0k6U8LlPC6vewnKIOBiRwm6vt7vp0ToVsLbYiX3GynjTCKws4BOLzbKn2UQ69mNdL+QUh1gUjVVQ1jEBWrhKP9Hu71hT42/4EZwuPlevRw6YNp89xlWnQJlJR759hrSByoEgYRcADZejxU=
+	t=1760997679; cv=none; b=mu/SWYuimaMzUh/1keCRJ9edZ0c0SWNqVauSfkf+ohQ1mNav2kHudYedcscpHN72GNLa4NeRSNnJKFqQX7FgIoKADQfEmF28UFjmEccg6yRD+ddI2sBA+eTepeZ861ksa6yeypXPjSnINJWrCNX9VcSarAnOZCv65wsIQJAtbHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760991087; c=relaxed/simple;
-	bh=rAof/wFe8d1Lg9fIBWp0u8gzJC3DIyE6skiRcnkaQ44=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IvR/ECiJ7xJlFLHzIFf0KM4B1cv5GFGl+EYkQA2WbRYegSWM5SOJqa3WLi1OW7l33OUGejinjCSn+kXAYJPJwMXXZUkxEYpCoFc6v9apvbxC28A9PTVaMAnqwQbIOTv+niOKBGxSbda6AhMp1pbjFDDnF7qY+oaEYx6i5EXlBxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWDjfbSp; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760997679; c=relaxed/simple;
+	bh=/jk04nuQCuJInz/KNpaoxJIfVcgkemJOGj6M7ncv4Qs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZQfJ+dUIjxZzDJQ0jV5M/4oOSqZRVOnTUet7hWQGk9JUKKGxab883UNVo/xw29KF0LEpowrt0LS3SWHtLbLyxtlvOwrQWILvrHcWKcxwNGb9m2G7tXDjAUcWkug3MI4UQZLGSDm0sFDxBT5r7siajb6OFKkytvdc79QSdiUSKKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dVxw38Ss; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWDjfbSp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760991087; x=1792527087;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rAof/wFe8d1Lg9fIBWp0u8gzJC3DIyE6skiRcnkaQ44=;
-  b=dWDjfbSpgaxg15FRQOLmibt18wUxAr2hz08OWbqv8Q9YcWnoQV210GgP
-   Y/5Yh8v1qs27A/C/huVWQY87PGVHFq7moImUrbleFWe93U9RYZOVMEDgq
-   KmlJEPtJCRe/+69MHFHIfnU2lB+ov72XquZ4D02r0kJx5of/HwKjEzDrT
-   GTdMsZWlFrEEfjLq1EEFRhbvqT5eIJrYzg0Bynehd5GNs0KQDyeo8IloS
-   2b8NH9Uun57Fh/cnZwFeApSYerZqofd0gVGgvRZSpoFgdnz8uCs8yjK6X
-   YvDa9uw3z4dL97rKZ7klX+5go2SBPwft3GmeqQeB804/VAZXsl1jr9gZA
-   g==;
-X-CSE-ConnectionGUID: +QCI2LU0SIKbwt1lSUCQew==
-X-CSE-MsgGUID: tYI+0x8zSqG3LaFDTrizXA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63210017"
-X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
-   d="scan'208";a="63210017"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 13:11:26 -0700
-X-CSE-ConnectionGUID: VR2G52cgTqiP7k/2sbn2jA==
-X-CSE-MsgGUID: RRxsUXTiTnuOhT8doq9jLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
-   d="scan'208";a="183116151"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 20 Oct 2025 13:11:25 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vAwDy-000A85-2O;
-	Mon, 20 Oct 2025 20:11:22 +0000
-Date: Tue, 21 Oct 2025 04:10:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gregory Price <gourry@gourry.net>
-Subject: [gourryinverse:movable_gigantic 4/4] mm/page_alloc.c:6998:9: error:
- use of undeclared identifier 'CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION'
-Message-ID: <202510210449.M2pCsgzB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dVxw38Ss"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B51C113D0;
+	Mon, 20 Oct 2025 22:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760997678;
+	bh=/jk04nuQCuJInz/KNpaoxJIfVcgkemJOGj6M7ncv4Qs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=dVxw38SsaEBpGnRxtU9fHqd60UIUWUzTHw2ty+G4BbTMWORiV4MyiTJpF4KvhA6HZ
+	 rK9O1qOcWPaMXfeuHLiq0Bg8hKfdQXw9y8RkDHhh1iGeRwrutb187DsBvlrr90Q0Yq
+	 UBCTl/Nhx7ZnlWdgXKJei3iaZ4IrEpPJnszNExWSnU6rT64deH90moN6HekTC4upNz
+	 ZE93XY/NHce1wV/p7KSNacI805banw6BNKIzg6mRncZBrnhhXoeEl7uIHg5hp7y7ZY
+	 ddd3VWurUVb14fYcAjR71HOJH+00gBMsy5hJa9Zq6tBdO0P9XtEZQLSKlyuP9lrhdq
+	 GrNIDqrpXG13g==
+From: Kees Cook <kees@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Marco Elver <elver@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	llvm@lists.linux.dev,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Michael Kelley <mhklinux@outlook.com>,
+	kernel test robot <lkp@intel.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Marc Herbert <Marc.Herbert@linux.intel.com>,
+	Christopher Ferris <cferris@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 1/3] compiler_types: Introduce __counted_by_ptr()
+Date: Mon, 20 Oct 2025 15:01:15 -0700
+Message-Id: <20251020220118.1226740-1-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251020220005.work.095-kees@kernel.org>
+References: <20251020220005.work.095-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5213; i=kees@kernel.org; h=from:subject; bh=/jk04nuQCuJInz/KNpaoxJIfVcgkemJOGj6M7ncv4Qs=; b=owGbwMvMwCVmps19z/KJym7G02pJDBnfNuq8mHjJ6c3aRUtcjppaq+Zv9Uh+dn63Am9N/aT/H Bkcr3e/6ShlYRDjYpAVU2QJsnOPc/F42x7uPlcRZg4rE8gQBi5OAZiI+1lGhruzI19PnOUiJKb2 9kFKjBXH8+zPFi2rGKLSSzfFTHrxPpKR4ckJ1sSFxw6u68oRYcwszNzRt6CJ5b1t9ZuKQ3PZu+c eZQMA
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/gourryinverse/linux movable_gigantic
-head:   cf3e52163565dce5fff0f9f15a92cbbd452fc470
-commit: cf3e52163565dce5fff0f9f15a92cbbd452fc470 [4/4] page_alloc: allow migration of smaller hugepages during contig alloc.
-config: hexagon-randconfig-001-20251021 (https://download.01.org/0day-ci/archive/20251021/202510210449.M2pCsgzB-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 754ebc6ebb9fb9fbee7aef33478c74ea74949853)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251021/202510210449.M2pCsgzB-lkp@intel.com/reproduce)
+Introduce __counted_by_ptr(), which works like __counted_by(), but for
+pointer struct members:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510210449.M2pCsgzB-lkp@intel.com/
+struct foo {
+	int a, b, c;
+	char *buffer __counted_by_ptr(bytes);
+	short nr_bars;
+	struct bar *bars __counted_by_ptr(nr_bars);
+	size_t bytes;
+};
 
-All errors (new ones prefixed by >>):
+Since "counted_by" can only be applied to pointer members in very recent
+compiler versions, its application ends up needing to be distinct from
+flexible array "counted_by" annotations, hence a separate macro.
 
->> mm/page_alloc.c:6998:9: error: use of undeclared identifier 'CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION'
-    6998 |                         if (!CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION ||
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Unfortunately, this annotation cannot be used for "void *" members
+(since such a member is considered a pointer to an incomplete type,
+and neither Clang nor GCC developers could be convinced otherwise[1],
+even in the face of the GNU extension that "void *" has size "1 byte"
+for pointer arithmetic). For "void *" members, we must use the coming
+"sized_by" attribute.
 
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2025-May/683136.html [1]
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: <llvm@lists.linux.dev>
+---
+ init/Kconfig                   | 11 +++++++++++
+ Makefile                       |  4 ++++
+ include/linux/compiler_types.h | 21 ++++++++++++++++++++-
+ include/uapi/linux/stddef.h    |  4 ++++
+ 4 files changed, 39 insertions(+), 1 deletion(-)
 
-vim +/CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION +6998 mm/page_alloc.c
-
-  6978	
-  6979	static bool pfn_range_valid_contig(struct zone *z, unsigned long start_pfn,
-  6980					   unsigned long nr_pages)
-  6981	{
-  6982		unsigned long i, end_pfn = start_pfn + nr_pages;
-  6983		struct page *page;
-  6984	
-  6985		for (i = start_pfn; i < end_pfn; i++) {
-  6986			page = pfn_to_online_page(i);
-  6987			if (!page)
-  6988				return false;
-  6989	
-  6990			if (page_zone(page) != z)
-  6991				return false;
-  6992	
-  6993			if (PageReserved(page))
-  6994				return false;
-  6995	
-  6996			if (PageHuge(page)) {
-  6997				/* Don't consider moving same size/larger pages */
-> 6998				if (!CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION ||
-  6999				    ((1 << compound_order(page)) >= nr_pages))
-  7000					return false;
-  7001			}
-  7002		}
-  7003		return true;
-  7004	}
-  7005	
-
+diff --git a/init/Kconfig b/init/Kconfig
+index cab3ad28ca49..54691b086bc6 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -139,6 +139,17 @@ config CC_HAS_COUNTED_BY
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+ 	default y if CC_IS_GCC && GCC_VERSION >= 150100
+ 
++config CC_HAS_COUNTED_BY_PTR_BARE
++	def_bool $(success,echo 'struct foo { int *ptr __attribute__((__counted_by__(count))); int count; };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
++
++config CC_HAS_COUNTED_BY_PTR_EXP
++	def_bool $(success,echo 'struct foo { int *ptr __attribute__((__counted_by__(count))); int count; };' | $(CC) $(CLANG_FLAGS) -fexperimental-late-parse-attributes -x c - -c -o /dev/null -Werror)
++	depends on !CC_HAS_COUNTED_BY_PTR_BARE
++
++config CC_HAS_COUNTED_BY_PTR
++	def_bool y
++	depends on CC_HAS_COUNTED_BY_PTR_BARE || CC_HAS_COUNTED_BY_PTR_EXP
++
+ config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+ 	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
+ 
+diff --git a/Makefile b/Makefile
+index d14824792227..1b297dcbb0df 100644
+--- a/Makefile
++++ b/Makefile
+@@ -933,6 +933,10 @@ KBUILD_CFLAGS	+= $(CC_AUTO_VAR_INIT_ZERO_ENABLER)
+ endif
+ endif
+ 
++ifdef CONFIG_CC_HAS_COUNTED_BY_PTR_EXP
++KBUILD_CFLAGS	+= -fexperimental-late-parse-attributes
++endif
++
+ # Explicitly clear padding bits during variable initialization
+ KBUILD_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
+ 
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 59288a2c1ad2..f197ea03b593 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -353,11 +353,14 @@ struct ftrace_likely_data {
+ #endif
+ 
+ /*
++ * Runtime track number of flexible array member elements for use by
++ * CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS.
++ *
+  * Optional: only supported since gcc >= 15
+  * Optional: only supported since clang >= 18
+  *
+  *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+- * clang: https://github.com/llvm/llvm-project/pull/76348
++ * clang: https://clang.llvm.org/docs/AttributeReference.html#counted-by-counted-by-or-null-sized-by-sized-by-or-null
+  *
+  * __bdos on clang < 19.1.2 can erroneously return 0:
+  * https://github.com/llvm/llvm-project/pull/110497
+@@ -371,6 +374,22 @@ struct ftrace_likely_data {
+ # define __counted_by(member)
+ #endif
+ 
++/*
++ * Runtime track number of objects pointed to by a pointer member for
++ * use by CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS.
++ *
++ * Optional: only supported since gcc >= 16
++ * Optional: only supported since clang >= 20
++ *
++ *   gcc: https://gcc.gnu.org/pipermail/gcc-patches/2025-April/681727.html
++ * clang: ...
++ */
++#ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
++# define __counted_by_ptr(member)	__attribute__((__counted_by__(member)))
++#else
++# define __counted_by_ptr(member)
++#endif
++
+ /*
+  * Optional: only supported since gcc >= 15
+  * Optional: not supported by Clang
+diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
+index 9a28f7d9a334..111b097ec00b 100644
+--- a/include/uapi/linux/stddef.h
++++ b/include/uapi/linux/stddef.h
+@@ -72,6 +72,10 @@
+ #define __counted_by_be(m)
+ #endif
+ 
++#ifndef __counted_by_ptr
++#define __counted_by_ptr(m)
++#endif
++
+ #ifdef __KERNEL__
+ #define __kernel_nonstring	__nonstring
+ #else
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
