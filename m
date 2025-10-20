@@ -1,112 +1,153 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C427331A53
-	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 17:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D61926CE25
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 17:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760980403; cv=none; b=u9foT+XB/QmEh+C93MEvy98sskx/lBtbtBmKpBelWx+5vbNI20eG5VKdDDEwceaAruqcX3YD9JVCy6N64OpLMfLTlkym14LSadJuoV6UukPndjUtlJUkS0yJgQXb71nSu7TE/Mcol5tHrZO68KxwZBIlP6pgbYdxIh+q89l+lng=
+	t=1760982532; cv=none; b=VP2aZQy7G01ged0S7RQ6G5akzcOYHucL5U6m6fFq13MxR3HgN7+6J5kjsTDiVTo9BGMA62Flu4PoEhY7AjNcCf2CnfK/SOMwDeT92UvDe1KG5UFCencH03/5yv6g5we6UaaDHWMzgzmVInEEq9F5AtZvoviz6A9ih9xvA5j1wiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760980403; c=relaxed/simple;
-	bh=qdhd4fAQohIjlG3EgHDubuZx3bxc7SthTqZLWrGkZjQ=;
+	s=arc-20240116; t=1760982532; c=relaxed/simple;
+	bh=vvj9rbshDG/mJYIvIFilBgDtfu0m0YbNFbdyps7CYhE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=upyycFURd4ITeUJ35ljU5rbZvBX4+ozILLSVhzBgXdWguusIG00vJ5ZCvh1Jp6nM9gkt6dKFNED7wcGvJRfU/tzoox9R5gdXCo/3X5R0ds0LuwNsC8FVkpj/N6Ybj2o/K8eCwARez7cuRkiDYoQFGVPAFnbt1ksPzVRxWuXL5eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LF9T4pRm; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=fHV+RCOV4OGyjqEf2FRuUddOcWgFUHplqI7VKLFF3onFLXhyvbBmqwuk7vZb03iScd0r7/OthDCFwkN3Io9c7Rr1J0zPav7ayDuWy5aizTdNv1/whKkCxF6ZisxsBjX8OKjosbYnIHWznONVlI624kKNfRAOhBtjRQphV6QqvDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tURujRNg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LF9T4pRm"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-421851bca51so3743896f8f.1
-        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 10:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760980398; x=1761585198; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RGI6Q7BTAs/HMJAhH5ug/+5JV+NNvoV5bQjyt72+yc0=;
-        b=LF9T4pRmdP7F8QjeQzqIn0WCllrfzb+DIPNyrvkFvvuvI3kVLC03C1wyZ/kmfKgpUZ
-         7Lu8bzzpRxTcW5cbWC4vtnIuo8zB/hIe0gQQSZfyrE8HLKA97ejOmx3foMKvvNac4rH0
-         +4gsyeQRm7frZx3Pb9ZWGDBmD2LkFtev5MWR2CHPxX21LEybzuMRaWiywuN8upR6CRRm
-         6WdZAqY4zDRGeDgADnGfu2f5pZzheo13fq/lx3L0jBFm3xMJ3Sgnv1Iuje9eiGRGBx5x
-         5i4pcEBBH/k68eXsmIe9zhsojoE2kYjq88zsbakMGd1TCp4QxIxU+qVkZAms0WWCEh1k
-         jfpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760980398; x=1761585198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RGI6Q7BTAs/HMJAhH5ug/+5JV+NNvoV5bQjyt72+yc0=;
-        b=Ge9yHvZgQmUqkJ1OpJ3Z/tjb0VZJ7qMU4B/TOc2Qj8CIymGRiW/VNODO0ZUMTEscuG
-         IgEfRscGUKe4GnMK6MgcgBpsjzQcoo+sF/njQCLseDjX+Vko97AcnbNSC+jISRjr4zxM
-         ZB6Onm0Wk7lRPsh9MwylNVA6hAbJxiDdBZTZBGzmvP357Aa3ctOgBWDp+s7jf8uppcvo
-         3dUtNJJK2MtrOUSw79A+OHaWoW2pKKI2J45yvLhnPHAYl1G+rW2Q3O1r2J2BBzkPQ2Rp
-         bt6v0nx59coeqsP09RPXwZQsUVnH8aq2FUnXBOwEbkC1LWlrKNcaNP28mLWTyfOUATIX
-         4K5w==
-X-Forwarded-Encrypted: i=1; AJvYcCVW2GFxbeu3NtKA6Azgmez5Si0J/lH8YmlRpdB+a0KhVWqDvOCboPTVZN/OUbzPEihnCU6X@lists.linux.dev
-X-Gm-Message-State: AOJu0YxTS28enVVIlBwQ//PfGUZU5G8ZWnPzxoQMiiGr338vaCOhjxBm
-	TE/IiJNvHwCE2cvoSbwmcxsfUtg4lJs9gOY8DSlalg1bhPk2VAeeiCourtcX0KXEVpazkVSfI6D
-	TeUdzRffjAZvOA37w0Hp2gwwVI+C1rGU=
-X-Gm-Gg: ASbGnctYjYLNGSvwklNrfZt2caPDfYUNgg2He+7rFhiV2YmPmp+BxxNh75q7fTu2sa1
-	Nvp/xpooaVXuBsS9miTNqgZ5JV/hdz6ouVOzIxxeOLPEsNVGKIBodtZ8ZU3IXe/1XXT0u3Qtj5F
-	l/r6Ggyyo3dZWR/TcbPTR8dXfeWKzcSIGT7K7coLZo2IaoN2lDCIV3MfWDfCroHa7eJursKJ2ZR
-	48uGW3H+pf91YfcGHJkIMiln6iThQe4YA+ezRuPvMaZ/HRDWR097uVN/Q==
-X-Google-Smtp-Source: AGHT+IEodoyCQ4s3ezeiwvbSuedTGQrnQgPdmuDQggu8D72dLZWaeRuVepbyTu1eDOJWleQ/3mxUOhbhAORfmNTXRPQ=
-X-Received: by 2002:a05:6000:2f84:b0:425:7179:16eb with SMTP id
- ffacd0b85a97d-42704d87ee4mr8625832f8f.17.1760980398375; Mon, 20 Oct 2025
- 10:13:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tURujRNg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F55C4AF09
+	for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 17:48:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760982531;
+	bh=vvj9rbshDG/mJYIvIFilBgDtfu0m0YbNFbdyps7CYhE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tURujRNgi7AmohBDrv49upr1mAHzmK/nisfEDCULMQHbiuhZr9IPuTh7dcMmxKIwy
+	 B4upXXVtNLhOGjfUGN6MUT3pJSn/++/sHWiO7FGyu6VfltiwMKAfyylX8oCpt2YX9G
+	 CeOuCbbhOitkW/1mn4Vb4LvUMxvOVfzAglqwhYzC0izMa21jlPyEbx6HYta9BHGRiM
+	 IaIUkfy9cxpdAakYF2/3R7NXdrqmIR8tnL2t4aVT6Byc3RlwdRuRKj3/dkk+apA6xz
+	 nOvTIEhx6DkKEaxeKSpzNp2glfhw9okZrUKmJHgKimRreIJ+NG2Ege4Y12B5cxR+3T
+	 RxzQwXn+E0JrA==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-443afb2334bso1542070b6e.3
+        for <llvm@lists.linux.dev>; Mon, 20 Oct 2025 10:48:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVn7Yuzc5MgwCdjMftx2p3qzjy/d6vZcAcohbu/JeQ35YLQDnFcBAcPcIATOIdtpjJ/fkPM@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx65T7brUsIEA/86VwsPTWry8d9+rOtsuV8R/6LuV6dHotinlm5
+	5XQJEa/PhEEEnFvsP2tE16twxx0LrkdBMHNWuG/7ClOTyzXBzNSmXY99BwpPBqvgTPj0+TsrcOx
+	mHAV40u88P5etkobPwtiIpTQxw8F1IIc=
+X-Google-Smtp-Source: AGHT+IEBTcqbNW4WztbsFHgjbUpb2lUwnFWN4p7InrdR0RgRIFe00LDkdSaeIzpzw4iNCju0IktvgqGnApVX0bNPXDo=
+X-Received: by 2002:a05:6808:5086:b0:441:8f74:f10 with SMTP id
+ 5614622812f47-443a30e6210mr6069613b6e.58.1760982531178; Mon, 20 Oct 2025
+ 10:48:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250929172724.75108-1-sj@kernel.org> <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
-In-Reply-To: <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Mon, 20 Oct 2025 10:13:07 -0700
-X-Gm-Features: AS18NWD-XcABY9AYH26aivrP7s7U2VJn_xaY3Jej0bnRhuMSCHP69gzanE8702w
-Message-ID: <CAKEwX=PBrcPnEkEhWQn_CTtT04qaKY2WsWXjDSSyPUGX4yY-sw@mail.gmail.com>
-Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under label
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: hannes@cmpxchg.org, nathan@kernel.org, shuah@kernel.org, morbo@google.com, 
-	justinstitt@google.com, nick.desaulniers+lkml@gmail.com, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, david.hunter.linux@gmail.com, 
-	Sidharth Seela <sidharthseela@gmail.com>, SeongJae Park <sj@kernel.org>
+References: <20251014001055.772422-9-changwoo@igalia.com> <202510151223.THlBK6QR-lkp@intel.com>
+In-Reply-To: <202510151223.THlBK6QR-lkp@intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 20 Oct 2025 19:48:40 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0h-gzxQQAu272z30R8+sDNHA6L=J1w+P2qfLOYF8LRdLQ@mail.gmail.com>
+X-Gm-Features: AS18NWDDJNGF4sne2vfcDVyis3SAYtdDq88ce2v-uhPN9EnOmccJ14D_6NBaZtk
+Message-ID: <CAJZ5v0h-gzxQQAu272z30R8+sDNHA6L=J1w+P2qfLOYF8LRdLQ@mail.gmail.com>
+Subject: Re: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
+To: kernel test robot <lkp@intel.com>, Changwoo Min <changwoo@igalia.com>
+Cc: lukasz.luba@arm.com, rafael@kernel.org, len.brown@intel.com, 
+	pavel@kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	christian.loehle@arm.com, tj@kernel.org, kernel-dev@igalia.com, 
+	linux-pm@vger.kernel.org, sched-ext@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 10, 2025 at 1:07=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
+On Wed, Oct 15, 2025 at 6:17=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
 >
-> On 9/29/25 11:27, SeongJae Park wrote:
-> > On Mon, 29 Sep 2025 17:24:06 +0530 Sidharth Seela <sidharthseela@gmail.=
-com> wrote:
-> >
-> >> Fix warning caused from declaration under a case label. The proper way
-> >> is to declare variable at the beginning of the function. The warning
-> >> came from running clang using LLVM=3D1; and is as follows:
-> >> --
-> >> -test_cachestat.c:260:3: warning: label followed by a declaration is a=
- C23 extension [-Wc23-extensions]
-> >>    260 |                 char *map =3D mmap(NULL, filesize, PROT_READ =
-| PROT_WRITE,
-> >>        |
-> >>
-> >> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
-> >
-> > Reviewed-by: SeongJae Park <sj@kernel.org>
-> >
-> >
+> Hi Changwoo,
 >
-> Johannes and Nhat,
+> kernel test robot noticed the following build warnings:
 >
-> Assuming this will go through cachestat tree
+> [auto build test WARNING on amd-pstate/linux-next]
+> [also build test WARNING on amd-pstate/bleeding-edge linus/master v6.18-r=
+c1 next-20251014]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Changwoo-Min/PM-EM=
+-Assign-a-unique-ID-when-creating-a-performance-domain/20251014-082420
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git=
+ linux-next
+> patch link:    https://lore.kernel.org/r/20251014001055.772422-9-changwoo=
+%40igalia.com
+> patch subject: [PATCH v5 08/10] PM: EM: Implement em_notify_pd_deleted()
+> config: i386-buildonly-randconfig-004-20251015 (https://download.01.org/0=
+day-ci/archive/20251015/202510151223.THlBK6QR-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251015/202510151223.THlBK6QR-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510151223.THlBK6QR-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> kernel/power/em_netlink.c:228:6: warning: variable 'ret' set but not u=
+sed [-Wunused-but-set-variable]
+>      228 |         int ret =3D -EMSGSIZE;
+>          |             ^
+>    1 warning generated.
 >
 
-Hi Shuah.
+Please update the patch to address this report and resend it, thanks!
 
-LGTM:
-Acked-by: Nhat Pham <nphamcs@gmail.com>
+> vim +/ret +228 kernel/power/em_netlink.c
+>
+>    224
+>    225  void em_notify_pd_deleted(const struct em_perf_domain *pd)
+>    226  {
+>    227          struct sk_buff *msg;
+>  > 228          int ret =3D -EMSGSIZE;
+>    229          void *hdr;
+>    230          int msg_sz;
+>    231
+>    232          if (!genl_has_listeners(&em_nl_family, &init_net, EM_NLGR=
+P_EVENT))
+>    233                  return;
+>    234
+>    235          msg_sz =3D __em_notify_pd_deleted_size(pd);
+>    236
+>    237          msg =3D genlmsg_new(msg_sz, GFP_KERNEL);
+>    238          if (!msg)
+>    239                  return;
+>    240
+>    241          hdr =3D genlmsg_put(msg, 0, 0, &em_nl_family, 0, EM_CMD_P=
+D_DELETED);
+>    242          if (!hdr)
+>    243                  goto out_free_msg;
+>    244
+>    245          if (nla_put_u32(msg, EM_A_PD_TABLE_PD_ID, pd->id)) {
+>    246                  ret =3D -EMSGSIZE;
+>    247                  goto out_free_msg;
+>    248          }
+>    249
+>    250          genlmsg_end(msg, hdr);
+>    251
+>    252          genlmsg_multicast(&em_nl_family, msg, 0, EM_NLGRP_EVENT, =
+GFP_KERNEL);
+>    253
+>    254          return;
+>    255
+>    256  out_free_msg:
+>    257          nlmsg_free(msg);
+>    258          return;
+>    259  }
+>    260
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
