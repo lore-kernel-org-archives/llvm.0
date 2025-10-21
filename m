@@ -1,120 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE7F2580FF;
-	Tue, 21 Oct 2025 09:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627D8314D02
+	for <llvm@lists.linux.dev>; Tue, 21 Oct 2025 09:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761039255; cv=none; b=mCgPRT6FznxcPk+F5NSspRfpOYzDEM5Abyn1nLZgO10abfZTGhrLKPHmbI6XyNmxS9ytPRsBakIl0HqVNvgOy96LpoPwbt3IJU2stFXnkx6gEFeoEpplt9Vm7Y5JNZnUrsBqf7lzQwsYWlsBxRySIQmTYzuli14GNAsLENa7j2I=
+	t=1761039740; cv=none; b=qeZqS5oJiyhr6pMz+Ssda4Z3rpeFjWctT/3cza+LTiei/jf1t/v2yPVQlgrbUT/H/tMgnOWGhBICEiiItn82iryZhI+ewSn0zQj55FX/OaQGtOycI/0ZwRJHEUnm7l2BXWjVm4U0Cu6OGRwbDqpQoN9F3WMeDgkOS2cYCeOaFSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761039255; c=relaxed/simple;
-	bh=NuNaGs/aTEkE7RGJzLyuoXHuGc7MDkZXmN/08+xvIOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b2lMKL6dHhPqwg6fz224CxcW8hgM84k+afB6EKAHjETeMFdsSbAkWFFbAiFUtE6Q/Jbar/mBf5H2YqsKW0PBOGxoRDodhJvaYamECA27lnb7kCDQtzTZls7vMTKGQUGXbSpnuENIcs1mwPv72Zgzx2Rlc5OWLrne/g7JxiVN48M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFX/nQQ7; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761039740; c=relaxed/simple;
+	bh=gCsqsOdMePINSvW6m5oH6wdmAPkmx3Fr2JSPDW3z/xM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=l/+Vx6Lx0akiWO4Jq2cMYGvQE9f447D58sXA/KRW09rU8SZo3t03OQ2ObaKBUlLj0wZEMTWSBwSjvWuT3xtEpI7SprOGjXRozbmsnm8UNF8OzdIdMJYHw7PsfHLWRZ9H71HgEp2BNIC7GocWDH7a12O6NIwW2pzLLOVoy509qpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZHpYaIQH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFX/nQQ7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761039252; x=1792575252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NuNaGs/aTEkE7RGJzLyuoXHuGc7MDkZXmN/08+xvIOc=;
-  b=lFX/nQQ7uhNa+ONRAR1zv2WAC4W9bYMBRmlHhy8Eon2RO46cDXN4ukPM
-   paQW/SHXCBxqFRVES/Q+M3CCy70nq0EiEfLXB0YhjrVb0bKz/N3NA02LS
-   jTXjIpWTzsRVxoyRoOS/5+nn4oToXRIFdAsOLOeSMZtL4AWrj+j8twsIu
-   j7mXSDWiLI0OkUMF+5fmwytywVzcTNvF4Gwr++0PhKP5MT8KtTbhsTB9b
-   qeaDHZxDj1NF5iuwOWLqk/vo3Ueok0GkaxcnvN2L70k9tWxIn8wvgf2/g
-   VB3nF77RpkRvmPlwhQW+O4L1WLI0Jr5URf4lX7r7HSdhxg7hFgcOSWQRl
-   g==;
-X-CSE-ConnectionGUID: y3FVxyGYQ/y27rHw6M7l/Q==
-X-CSE-MsgGUID: Jxz0DOahQJWHRq0caPqZgw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="88628873"
-X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="88628873"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 02:34:11 -0700
-X-CSE-ConnectionGUID: vD6z0ZsJRle3uMTT2KkwVg==
-X-CSE-MsgGUID: xor/ioRCQdqRm1zZIOR81A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="183254367"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 21 Oct 2025 02:34:09 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vB8ih-000AhN-37;
-	Tue, 21 Oct 2025 09:33:39 +0000
-Date: Tue, 21 Oct 2025 17:29:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haotian Zhang <vulab@iscas.ac.cn>,
-	Yiting Deng <yiting.deng@amlogic.com>,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Haotian Zhang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH] rtc: amlogic-a4: fix double free caused by devm
-Message-ID: <202510211756.vnQ8ZIWo-lkp@intel.com>
-References: <20251020150956.491-1-vulab@iscas.ac.cn>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZHpYaIQH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761039737;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FpuBzJSh2qx4TIV0e/3OPt27XkmE2FmQNspAahqTk3Y=;
+	b=ZHpYaIQHsmBpLUfXGSAUPpXiJfddN6SkbogHdLlB4nL3iNj9C2CvZuQpUL0x0hl9xFoIxT
+	d370swYpGTiVtwGK9nGuXc9EcKuouRm33UR2sfgj6Mnr7Qekd9gAeMWZacRHJyGKXyY4IV
+	LqIqxN2S51VProlc9octW8Ic3uBcjnI=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-321-hTVQteEmMlCxmaSgh2szlQ-1; Tue,
+ 21 Oct 2025 05:42:15 -0400
+X-MC-Unique: hTVQteEmMlCxmaSgh2szlQ-1
+X-Mimecast-MFC-AGG-ID: hTVQteEmMlCxmaSgh2szlQ_1761039735
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E2467195608E
+	for <llvm@lists.linux.dev>; Tue, 21 Oct 2025 09:42:14 +0000 (UTC)
+Received: from [172.20.84.201] (unknown [10.30.45.119])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 874D219560A2;
+	Tue, 21 Oct 2025 09:42:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.18.0-rc2,
+ upstream-mainline, 6548d364)
+Date: Tue, 21 Oct 2025 09:42:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251020150956.491-1-vulab@iscas.ac.cn>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <80826.125102105421600139@us-mta-321.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: W_R7tuU_xL6OwBx6D84d3bEmI70pho4JKBphKnyGFfM_1761039735
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Haotian,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on linus/master v6.18-rc2 next-20251021]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haotian-Zhang/rtc-amlogic-a4-fix-double-free-caused-by-devm/20251020-231345
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20251020150956.491-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] rtc: amlogic-a4: fix double free caused by devm
-config: i386-buildonly-randconfig-002-20251021 (https://download.01.org/0day-ci/archive/20251021/202510211756.vnQ8ZIWo-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251021/202510211756.vnQ8ZIWo-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.18-rc2-fixes' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/tj/cgroup
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510211756.vnQ8ZIWo-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2110052034
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
 
->> drivers/rtc/rtc-amlogic-a4.c:425:23: warning: unused variable 'rtc' [-Wunused-variable]
-     425 |         struct aml_rtc_data *rtc = dev_get_drvdata(&pdev->dev);
-         |                              ^~~
-   1 warning generated.
 
 
-vim +/rtc +425 drivers/rtc/rtc-amlogic-a4.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-c89ac9182ee297 Yiting Deng  2024-11-12  419  
-c89ac9182ee297 Yiting Deng  2024-11-12  420  static SIMPLE_DEV_PM_OPS(aml_rtc_pm_ops,
-c89ac9182ee297 Yiting Deng  2024-11-12  421  			 aml_rtc_suspend, aml_rtc_resume);
-c89ac9182ee297 Yiting Deng  2024-11-12  422  
-c89ac9182ee297 Yiting Deng  2024-11-12  423  static void aml_rtc_remove(struct platform_device *pdev)
-c89ac9182ee297 Yiting Deng  2024-11-12  424  {
-c89ac9182ee297 Yiting Deng  2024-11-12 @425  	struct aml_rtc_data *rtc = dev_get_drvdata(&pdev->dev);
-c89ac9182ee297 Yiting Deng  2024-11-12  426  
-8c28c4993f117e Wolfram Sang 2024-12-17  427  	device_init_wakeup(&pdev->dev, false);
-c89ac9182ee297 Yiting Deng  2024-11-12  428  }
-c89ac9182ee297 Yiting Deng  2024-11-12  429  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
