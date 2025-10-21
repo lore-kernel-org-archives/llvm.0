@@ -1,360 +1,489 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012069.outbound.protection.outlook.com [52.101.53.69])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368AB353ADF;
-	Tue, 21 Oct 2025 17:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.69
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761067159; cv=fail; b=aoQ6sWlC6P5sEQ283I1/nOR6oV1ZJ7FPj2DFn6YX5IYQFGn78X4krcLN+7ln7rqx758+ugoXTEsXwohe4jtLZjSD6dRRdYf6pyvbeUjhKoMCwB5Etf/fK7xB9ztm396Pc3EfcAl7ie0O1Hc1vdcFKjhZJqThi4VjhkUeBWawql8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761067159; c=relaxed/simple;
-	bh=boRjueFfVm5BcH40R0qPsSpmiiqE/qMvUAyb+ku5vvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qsWkINCA0bQAWUlDfBSWUsxXtRNABWDdmCBvSVnBOFrb2MoryVW6owvCpMK4B0P1fcQQsT20fA0JRyexKUqrIOefxBkin0LXpaKW5N5x2q/UN//JpM3TfPjIq6UY6GZyHAAv++OArv52eDKweqiMi93B9fNxTbXXxQj6aO9uknI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pX9pcdQX; arc=fail smtp.client-ip=52.101.53.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B5234D93F;
+	Tue, 21 Oct 2025 19:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761074252; cv=none; b=Dl1kpF4+4nhiMdzL0AAwFHnkTFyT6B/HBWlaB2cXSRKH0SIG5G/pTSTU+pkCkeo12IPv++2zA/gw+qk1KtSJ88bBEPJ63PPwlWrlppWAaOvC4wTwL1A6FMS2xX9+prvDumVOx3fSIKeXN6m7uWTVKN34prHfR5bzRBA1UzkPVR4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761074252; c=relaxed/simple;
+	bh=6J0Rp6zDs9R4wdRi4HXSth2whWbq//t42zo4hL+y6oM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hZ0c5vLh57Lc0LaC3dCd1/Dbt7V66ZF8j2Dqdb1uF+qK6UN/+yUMKSbVP/ioz/DEK7oNnNokITT8yhE8/nHmMD7mAKzcDIH1A3EHT3fhPSIm9kGi7Q4W8wNCDf1GsAe9q8jHNg+DFF/AUiHcySkhWOWCXumIweJXee8IHRiqDcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OdtYY2nY; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pX9pcdQX"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pGkEcOcFNnS2XLuvly0YaKe9c9ubFdXiHv8imZnvGVfR9xO2wZDZpOSkB28jqe1kiSi87DwvE060JRrIN7ojuLvhVx9l1bhp3yMo2jDSYHtzwNGU5gvBdqbPO5t/2GSM0ED4Psr5p7s/jFDAbGggTR9U2gLnyINfcE1vAJzoCEcIE9WmmCXWi+On0lotYtornzrgfuODpIV+ZT7kOoD9qrTnK+rUJ77zjHVbrIgkxWfdVaOelSdq9hcr5DQFs7IsKX14BJb1Hr1qe5ICYSSld6LnRHzufIeGTqwGhd21CcxBf/Mzqp0jJQ01ms426KbymwC708HInxBrGEk7/5rUvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pfIKvKbhlf5nDV/5OBreet7fe0jiPdOlAySlXWfdjII=;
- b=dFmjOVlJNQcYJYbFQ1WRZilA5rBYGdk5e2FchcZImFQKCDyf1F3uNCKJ1YDOfC+aQWubxhvqbrQL1bm7/pReSDwBE8SYA0DdVA+kf+4PJ5cvNTawkvFAGFcpmpDiYIPXBQB/0EZ9zIB93vNQmjXgOX7aR7jBXZF2KCwEhz5bV1JSoODzJN6PhrktF9xpbr6OuR1tRY6zvHKdaYgRw0LWV3Jbvf2/DrpolxC/n10trlugsTRvwaIb1cCKhvz5370ccHz+fC4lqopaFN5MMtbDfcfUAaHrXtkQBYfjzJJN9R+WmqfViuPRnJsDpA42uvorY0ar1spDqSfhz33YWR2XfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pfIKvKbhlf5nDV/5OBreet7fe0jiPdOlAySlXWfdjII=;
- b=pX9pcdQX7tOoJEvzP0wMI/Mp58cAB+xRckDXH4c72zS3mtYZsviTxwZEFnXAWKim/g2drHcL651h62RyA1VbWnnNs1tJMKWUARsXZbZ47qRDERIy3YsCTsyD5RDBl3++SZETVk3F2JtGtbwOTKfJUXBbRc/zEh3TSfbmgzM6+Jdw8A9q7A8tCNuC6y2arPV6EQGrctjHt3y2+n6VPa3wERbkcAgtfdopXCYd7BJO7I4xvw91+ThgZRPVteZs76JT0aFpYBa0/SfV4LibXPBYw2i2TAGvg89mprzZWqgGeCggXOmVoUb5Y0PhJ8iNhF/B7PQhCvpAhObxJnnFfNzoGw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BN8PR12MB3604.namprd12.prod.outlook.com (2603:10b6:408:45::31)
- by CY8PR12MB8066.namprd12.prod.outlook.com (2603:10b6:930:70::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.17; Tue, 21 Oct
- 2025 17:19:12 +0000
-Received: from BN8PR12MB3604.namprd12.prod.outlook.com
- ([fe80::9629:2c9f:f386:841f]) by BN8PR12MB3604.namprd12.prod.outlook.com
- ([fe80::9629:2c9f:f386:841f%5]) with mapi id 15.20.9228.015; Tue, 21 Oct 2025
- 17:19:12 +0000
-Date: Tue, 21 Oct 2025 14:19:10 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v6 07/15] iommupt: Add map_pages op
-Message-ID: <20251021171910.GH712833@nvidia.com>
-References: <0-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
- <7-v6-0fb54a1d9850+36b-iommu_pt_jgg@nvidia.com>
- <BN9PR11MB5276271302BF0AAAE2C7085A8CE9A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276271302BF0AAAE2C7085A8CE9A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: DM6PR08CA0026.namprd08.prod.outlook.com
- (2603:10b6:5:80::39) To BN8PR12MB3604.namprd12.prod.outlook.com
- (2603:10b6:408:45::31)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OdtYY2nY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761074249; x=1792610249;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6J0Rp6zDs9R4wdRi4HXSth2whWbq//t42zo4hL+y6oM=;
+  b=OdtYY2nY8fdZxqukSIS42PLA9k59xSm0w6ULfhRXue9ngjV/qLm0VVR/
+   sD1nflO807SsMTw4gNWRK6RR7nxBGG905rHAG2EQrzotI4S/zj99G/o2G
+   0pdqk6royK5lvKLapgVw9RvfG4gNeNmRENHIDqO6fXO7JkZmsX7e3NdnR
+   B70IKJOzRSONQVW3L0v7ritlgForOAFbSYtqbAIypK3LuCeBYI9YjdYP/
+   QznRtAm3TxlrUx3QEAtlLhLn+R7DgObn3+nV3SkmimBBo09+pM5qlxS8k
+   JU9QF6M9C5DNbWpS/Uk4gXZOZYyl1NzsPETl3QdRWVkcAT+mSxPfs4WU9
+   g==;
+X-CSE-ConnectionGUID: bwodfacsR6qcW0BxZGdh1w==
+X-CSE-MsgGUID: D+pkCvuMQCiQFkSYFtEU2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63309009"
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="63309009"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 12:17:29 -0700
+X-CSE-ConnectionGUID: nHlFY9ebTv+pDk/IGSWgtg==
+X-CSE-MsgGUID: UdgPopg8SCm8LBMOXLoSDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="188955099"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 21 Oct 2025 12:17:26 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBHrE-000BFd-2r;
+	Tue, 21 Oct 2025 19:17:21 +0000
+Date: Wed, 22 Oct 2025 03:16:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
+	maarten.lankhorst@linux.intel.com,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@redhat.com>, simona.vetter@ffwll.ch
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jani.nikula@intel.com, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org
+Subject: Re: [PATCH 1/3] drm/mm: replace drm_print.h include with a forward
+ declaration
+Message-ID: <202510220227.QAJxjxfr-lkp@intel.com>
+References: <05a996d685afb1facfdd5aef1eab1680fa5eb0a0.1761063757.git.jani.nikula@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3604:EE_|CY8PR12MB8066:EE_
-X-MS-Office365-Filtering-Correlation-Id: 530355b8-ae8a-465a-5a4c-08de10c5f3b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?8dG68tBnWUQ2FjH7OlabvaABt8OQek9Z/FWYSpte3T+uWZpO8qiCxuNw+A0v?=
- =?us-ascii?Q?36XWSnqyt1hNNG5OjLXgpy+k6msCU+4BsoWF69CRMkJ4KZHn4Nuv63s50Tby?=
- =?us-ascii?Q?JhQBXff5UkN2sOGoxavHWQk+kZ9wjwd+OS8x/H8rg6Ean02CrvPOlrYIGQnk?=
- =?us-ascii?Q?luMmEc4kAuTKIORFNKJfo5jFFV5J0E4Hp/3mage05A/TjlL07QVf3hrqfOw5?=
- =?us-ascii?Q?ioIClO3CyWH/bj0TxVPv+ddPVX4K2xwgKWccAx/Fna3hMK4/Pw55DfniltWh?=
- =?us-ascii?Q?NvcdQJqCvai5ZjtrcEU5QtVVkZzNP7Ri4gjPdja7ILAcBOHc+TpypeNwwXCt?=
- =?us-ascii?Q?nXwxKj5c9kaT/cn0CvApVTHhIpEO5zUQdDgKq9IJ1baT34PQXsz0gqP80FFT?=
- =?us-ascii?Q?HprymI9vUUUlgBWPSuiLVkyt3GhpTP39c5qhSXd306+yZySIVfpJJakuy7mM?=
- =?us-ascii?Q?bZI4FI6HjwG9plCAj140oOZWcBZyZ/hk2R3TayISo0SMvygZzYWXcpjg/wOv?=
- =?us-ascii?Q?wWzFgsJsRuXe6tpn+l1eCAZM+Pvab6aSH1tO1QqWpayYsavPyyPahKXw/Iln?=
- =?us-ascii?Q?DBuMezqbNVkLYkZnJlepE3wvuGX3vabd06CJngWDe5y3by/NXFCA/btTl0L4?=
- =?us-ascii?Q?o1p+g1f6ZlYK2kSg7Ulul0YeSsJDxzZI/Z+HJhkNlmo41QNpxmkvRw7vRSHd?=
- =?us-ascii?Q?b852nbmGiverNLL+GWLwSRxcJSdEWV/pf3YNfyOIWeSyLZgmJKc8oVKRzT6/?=
- =?us-ascii?Q?IUBusSXLJDNNGbPD5qK4R4B16FyA7iTyMvPvX2TbJEhnE8abXwi/ND4dSsyP?=
- =?us-ascii?Q?9awo8jYHHkJEaurdX6H8F0xFQjDnoRnvekNC9qxkmSvsHzFF20a7bK7bj60A?=
- =?us-ascii?Q?Mj7zaYk6GDC6Wq6MjzG7Gu7KdqXZjA+BVbxGTNnTFEuqr5JXw0pfvBhJKMOI?=
- =?us-ascii?Q?QJVZvVkI40TBoUM7z+TXRWqbuzAAYIPMmLWa0kRGdtJ+L0g2PPHdSwPpbi+F?=
- =?us-ascii?Q?eycY+8G+80NqpEvbVqDFMTkuJMxFTN+iOyboUixMihTLuu4+DSxGbw9LlQ83?=
- =?us-ascii?Q?cKJMw4MeQcIffJAalsDwwipeblTAfu0zUJFHorUh0joAzJqJt4Unw/Xa9f3D?=
- =?us-ascii?Q?BRnfz1/UT6TSeii3l2y4rx6LlC6OJQP8iki0NmtzKIZK5C/emmBR/4vV39IR?=
- =?us-ascii?Q?hp0XsGtqIrcElJPBdlcyaaynV21awaqugQg3vapDy8g4lok1Uq7wh5kndjqF?=
- =?us-ascii?Q?qV+AR0YHR1gW3ZvEp7+/GrtsTjTQHj8E6Tq7tVUWbAFKUTbUG3ka9lpc6XpR?=
- =?us-ascii?Q?YtwBBNJozxhRfV/jeqj964C+ge9kFa4VFAmwYZ8rwRsx2cBBMd2qpppgelBs?=
- =?us-ascii?Q?OvffeSS2hhLnzCAx39yGAHiLy3Il3JnC8WjBGM/k0Er1ASnZcdngSBUtdpIP?=
- =?us-ascii?Q?+vGahPAH/T83/K7839TH4gNwspTY7gcl?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?w0wiwYuSx8ITDfxktoTYYCIB3JPyIOoVfM1RMNkqEZtBm66eF0MOFL6+Q0l9?=
- =?us-ascii?Q?tyeLlyimrlMswMDVsOGo0Ey41JiJW8cJBCe2sTnYH9hle8jdiu7kzjnDzxwi?=
- =?us-ascii?Q?RTiNhI+LaFUMYdpo0joxxbwcmX2FjLgRGHYRRRAf9NI7mcPubiEnNTn9MjGg?=
- =?us-ascii?Q?B6Ir4bjq+yIL9IMa6ocavYwhsqhv+FzQ2R5Z5OVNBtVCwbVdFO1DAaEG55eD?=
- =?us-ascii?Q?PFkX/bLlYd4+K9IH12HrM5JHNACIQY7BgcrIs5UaC4DpgigSq3z4PZjIP0MP?=
- =?us-ascii?Q?33rq0HjfA+2P7C+95RHlUGeJDAfo6ycV/ivdKlqdfWQ31bwoWam10DV5Isd8?=
- =?us-ascii?Q?OjW3aHLUG7TfCwku5BbNvF1wxIM3q/UksiM5CK4AcqQClBYyRWJw6KdKwWdK?=
- =?us-ascii?Q?pyMqTr6z6RektOquJey9TMgASVVmYNpKXhCWbZ1J3FigZZFgUYOpVEqVx/qW?=
- =?us-ascii?Q?RLi3tnF+ncOjgDQwqR7BywuzbBvhAmCBFPglrcz5QlZbRJu0gjHAPGK6iiwi?=
- =?us-ascii?Q?9msy8zz+A8IX9yVdbIWRTFvQgtziyWoAYELHOPx95IfBrnatcRBpp9nnu8/F?=
- =?us-ascii?Q?BhIfU8gDq3V3L63WylyqwJLMBO9+katDFcW30MJDb0MSXyGD1MXcHyKgsuiV?=
- =?us-ascii?Q?ukQOsNJERvXFVeIEHrQFQD2lHYgCoiVtDoaWw63DLLKMqzgQPDOP8V+wg1f6?=
- =?us-ascii?Q?Yo6lwfhnAjVaXt3nUm/rQxnSwsf+gZBxtKYFkl3PtUC/knnPiUeM6OqAbBNB?=
- =?us-ascii?Q?wQ1AJK45xxDKu3nWTvdlAl7oauLM6OzG0QadGEotEtKjOQ2jutMOxFAgqfty?=
- =?us-ascii?Q?gLQPPkoxh4IILEYikw3BrvG3KhhjoVLNn6VP7p41BRnMAmOK0goPfhz5EJJQ?=
- =?us-ascii?Q?61as0ztzkl4IHUgrBBoDBPGYFp0noVHgXCog3076SLBhZ2+4/vWE3G+pvjap?=
- =?us-ascii?Q?9rqKIMCFh9a9p5mb53geBK9Ydku5RlfnT2W92VOa9yGB2LrXZg7SYxjpStvC?=
- =?us-ascii?Q?JN1zAzFMqS2XMVyUCxw5ZG2+FdQd0BLgLHBanubW0z8o+00gdMp7PZxQM5fb?=
- =?us-ascii?Q?VPhzNeFyoIF80fgOiCwFj4+x0YTJstA8qrr5UT1jBMpOaK1t5BuSuEZUBGRc?=
- =?us-ascii?Q?C6BfLO11I59BCFKExvDcDQ4/MnieShSyDmHogHRPmiDp+hRg23mCv/vN1D2B?=
- =?us-ascii?Q?sRiOpjGOooFosWPfqPpexdarM5XM+RIgn6Amb0mNiiA3EAYPhT7rdkjPIkX7?=
- =?us-ascii?Q?ROkdmC3IsLEKK7TxPOwzbj9lXeMu/h/nZ27GiNHAb3Z3QPcJmLFn8g77CLyT?=
- =?us-ascii?Q?B/FM8BJ++jWjCD4VNzjR+SFS/xHWh/uRwAMdXnjhqQdFcX0DIIu7mgkPJYWB?=
- =?us-ascii?Q?EV9e08md6DrVZewZiUdl4ao5s5Ga35VmHqF5P40+oPCQxMM0vSI1d8w2TTby?=
- =?us-ascii?Q?52J0yuyth+WzvWaZlEzsZHqo1fLrvvHAGu41O49IzN1/hRjzJvQAGYYkBX/7?=
- =?us-ascii?Q?Ml9zr0K7WBO9F2WBsxUwnT5B0iRS8HNqVs1VeKm+Sjmpy4nWLpv3/GLEbveQ?=
- =?us-ascii?Q?wnrq0Ok3+uo0AyRCOw9s1Gb2SkAV5zJEaGnvMKuD?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 530355b8-ae8a-465a-5a4c-08de10c5f3b8
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2025 17:19:12.5702
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NlAqYFmKnLyZYPgGhhCXDb9us2epLyEivFdS4TDVkn5Eii8h1ddxel3jKivNMtNe
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8066
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05a996d685afb1facfdd5aef1eab1680fa5eb0a0.1761063757.git.jani.nikula@intel.com>
 
-On Thu, Oct 16, 2025 at 06:52:09AM +0000, Tian, Kevin wrote:
-> > +static __always_inline int __do_map_single_page(struct pt_range *range,
-> > +						void *arg, unsigned int level,
-> > +						struct pt_table_p *table,
-> > +						pt_level_fn_t descend_fn)
-> > +{
-> > +	struct pt_state pts = pt_init(range, level, table);
-> > +	struct pt_iommu_map_args *map = arg;
-> > +
-> > +	pts.type = pt_load_single_entry(&pts);
-> > +	if (level == 0) {
-> > +		if (pts.type != PT_ENTRY_EMPTY)
-> > +			return -EADDRINUSE;
-> > +		pt_install_leaf_entry(&pts, map->oa, PAGE_SHIFT,
-> > +				      &map->attrs);
-> > +		map->oa += PAGE_SIZE;
-> > +		return 0;
-> > +	}
-> > +	if (pts.type != PT_ENTRY_TABLE)
-> > +		return -EAGAIN;
-> 
-> return -EADDRINUSE if PT_ENTRY_OA. No need to retry if no empty.
+Hi Jani,
 
-I wanted to keep it small this catches if the table needs to be
-allocated too. This is a bit clearer:
+kernel test robot noticed the following build errors:
 
-	if (pts.type == PT_ENTRY_TABLE)
-		return pt_descend(&pts, arg, descend_fn);
-	/* Something else, use the slow path */
-	return -EAGAIN;
+[auto build test ERROR on next-20251021]
+[also build test ERROR on v6.18-rc2]
+[cannot apply to drm-exynos/exynos-drm-next rockchip/for-next linus/master v6.18-rc2 v6.18-rc1 v6.17]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > +/**
-> > + * map_pages() - Install translation for an IOVA range
-> > + * @domain: Domain to manipulate
-> > + * @iova: IO virtual address to start
-> > + * @paddr: Physical/Output address to start
-> > + * @pgsize: Length of each page
-> > + * @pgcount: Length of the range in pgsize units starting from @iova
-> > + * @prot: A bitmap of IOMMU_READ/WRITE/CACHE/NOEXEC/MMIO
-> > + * @gfp: GFP flags for any memory allocations
-> > + * @mapped: Total bytes successfully mapped
-> > + *
-> > + * The range starting at IOVA will have paddr installed into it. The caller
-> > + * must specify a valid pgsize and pgcount to segment the range into
-> > compatible
-> > + * blocks.
-> > + *
-> > + * On error the caller will probably want to invoke unmap on the range from
-> > iova
-> > + * up to the amount indicated by @mapped to return the table back to an
-> > + * unchanged state.
-> > + *
-> > + * Context: The caller must hold a write range lock that includes the whole
-> > + * range.
-> > + *
-> > + * Returns: -ERRNO on failure, 0 on success. The number of bytes of VA that
-> > were
-> > + * mapped are added to @mapped, @mapped is not zerod first.
-> 
-> hmm seems drivers are not consistent on this, e.g. Intel and several
-> others (virtio, rockchip. etc.) don't use addition. and there is no such
-> guidance from iommu.h.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-mm-replace-drm_print-h-include-with-a-forward-declaration/20251022-003212
+base:   next-20251021
+patch link:    https://lore.kernel.org/r/05a996d685afb1facfdd5aef1eab1680fa5eb0a0.1761063757.git.jani.nikula%40intel.com
+patch subject: [PATCH 1/3] drm/mm: replace drm_print.h include with a forward declaration
+config: x86_64-buildonly-randconfig-004-20251022 (https://download.01.org/0day-ci/archive/20251022/202510220227.QAJxjxfr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510220227.QAJxjxfr-lkp@intel.com/reproduce)
 
-Yes. At least ARM64 does addition though.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510220227.QAJxjxfr-lkp@intel.com/
 
-> Existing callers e.g. iommu_map_nosync() initializes mmaped to 0,
-> so this difference doesn't lead to observable problem so far. 
+All errors (new ones prefixed by >>):
 
-Yep
+>> drivers/gpu/drm/gma500/oaktrail_hdmi.c:174:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     174 |         DRM_DEBUG_KMS("new crtc htotal 0x%4x\n", new_crtc_htotal);
+         |         ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi.c:201:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     201 |         DRM_DEBUG_KMS("np, nr, nf %d %d %d\n", np, nr, nf);
+         |         ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi.c:224:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     224 |                         DRM_DEBUG_KMS("SCU IPC timed out");
+         |                         ^
+>> drivers/gpu/drm/gma500/oaktrail_hdmi.c:244:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     244 |                 DRM_ERROR("failed to map scu mmio\n");
+         |                 ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi.c:388:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     388 |         DRM_DEBUG_KMS("%s %d\n", __func__, mode);
+         |         ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi.c:540:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     540 |         DRM_DEBUG_KMS("HDMI_HSR %x\n", temp);
+         |         ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi.c:577:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     577 |                 DRM_ERROR("No ddc adapter available!\n");
+         |                 ^
+   7 errors generated.
+--
+>> drivers/gpu/drm/gma500/intel_gmbus.c:349:2: error: call to undeclared function 'DRM_INFO'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     349 |         DRM_INFO("GMBUS timed out, falling back to bit banging on pin %d [%s]\n",
+         |         ^
+   1 error generated.
+--
+>> drivers/gpu/drm/gma500/intel_bios.c:58:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      58 |                         DRM_DEBUG_KMS("No eDP BDB found but eDP panel supported, assume %dbpp panel color depth.\n",
+         |                         ^
+   drivers/gpu/drm/gma500/intel_bios.c:83:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      83 |         DRM_DEBUG_KMS("EDP timing in vbt t1_t3 %d t8 %d t9 %d t10 %d t11_t12 %d\n",
+         |         ^
+   drivers/gpu/drm/gma500/intel_bios.c:335:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     335 |                 DRM_DEBUG_KMS("No general definition block is found, unable to construct sdvo mapping.\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:345:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     345 |                 DRM_DEBUG_KMS("different child size is found. Invalid.\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:371:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     371 |                         DRM_DEBUG_KMS("Incorrect SDVO port. Skip it\n");
+         |                         ^
+   drivers/gpu/drm/gma500/intel_bios.c:374:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     374 |                 DRM_DEBUG_KMS("the SDVO device with target addr %2x is found on"
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:408:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     408 |                 DRM_DEBUG_KMS("No SDVO device info is found in VBT\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:428:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     428 |         DRM_DEBUG_KMS("LVDS VBT config bits: 0x%x\n", driver->lvds_config);
+         |         ^
+   drivers/gpu/drm/gma500/intel_bios.c:448:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     448 |                 DRM_DEBUG_KMS("No general definition block is found, no devices defined.\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:458:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     458 |                 DRM_DEBUG_KMS("different child size is found. Invalid.\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:477:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     477 |                 DRM_DEBUG_KMS("no child dev is parsed from VBT\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:482:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     482 |                 DRM_DEBUG_KMS("No memory space for child devices\n");
+         |                 ^
+   drivers/gpu/drm/gma500/intel_bios.c:534:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     534 |                         DRM_DEBUG_KMS("Using VBT from OpRegion: %20s\n",
+         |                         ^
+   13 errors generated.
+--
+>> drivers/gpu/drm/gma500/cdv_device.c:79:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      79 |                 DRM_DEBUG_KMS("LVDS Panel PWM value is 0!\n");
+         |                 ^
+   1 error generated.
+--
+>> drivers/gpu/drm/gma500/cdv_intel_lvds.c:499:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     499 |                 DRM_DEBUG_KMS("LVDS is not present in VBT\n");
+         |                 ^
+>> drivers/gpu/drm/gma500/cdv_intel_lvds.c:630:3: error: call to undeclared function 'DRM_DEBUG'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     630 |                 DRM_DEBUG
+         |                 ^
+   2 errors generated.
+--
+>> drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c:259:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     259 |                 DRM_ERROR("gpio ioremap fail\n");
+         |                 ^
+>> drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c:264:2: error: call to undeclared function 'DRM_DEBUG_DRIVER'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     264 |         DRM_DEBUG_DRIVER("old gpio val %x\n", temp);
+         |         ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c:298:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     298 |                 DRM_ERROR("Failed to request IRQ for I2C controller\n");
+         |                 ^
+   drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c:305:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     305 |                 DRM_ERROR("Failed to add I2C adapter\n");
+         |                 ^
+   4 errors generated.
+--
+>> drivers/gpu/drm/gma500/psb_intel_display.c:151:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     151 |                 DRM_ERROR("Couldn't find PLL settings for mode! target: %d, actual: %d",
+         |                 ^
+   1 error generated.
+--
+>> drivers/gpu/drm/gma500/psb_intel_sdvo.c:279:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     279 |         DRM_DEBUG_KMS("i2c transfer returned %d\n", ret);
+         |         ^
+>> drivers/gpu/drm/gma500/psb_intel_sdvo.c:433:2: error: call to undeclared function 'drm_WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     433 |         drm_WARN_ON(dev, pos >= sizeof(buffer) - 1);
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:436:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     436 |         DRM_DEBUG_KMS("%s: W: %02X %s\n", SDVO_NAME(psb_intel_sdvo), cmd, buffer);
+         |         ^
+>> drivers/gpu/drm/gma500/psb_intel_sdvo.c:459:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     459 |                 DRM_ERROR("Need to increase arg length\n");
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:494:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     494 |                 DRM_DEBUG_KMS("I2c transfer returned %d\n", ret);
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:499:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     499 |                 DRM_DEBUG_KMS("I2c transfer returned %d/%d\n", ret, i+3);
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:557:2: error: call to undeclared function 'drm_WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     557 |         drm_WARN_ON(dev, pos >= sizeof(buffer) - 1);
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:560:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     560 |         DRM_DEBUG_KMS("%s: R: %s\n", SDVO_NAME(psb_intel_sdvo), buffer);
+         |         ^
+>> drivers/gpu/drm/gma500/psb_intel_sdvo.c:888:2: error: call to undeclared function 'DRM_INFO'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     888 |         DRM_INFO("HDMI is not supported yet");
+         |         ^
+>> drivers/gpu/drm/gma500/psb_intel_sdvo.c:1105:3: error: call to undeclared function 'DRM_DEBUG'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1105 |                 DRM_DEBUG("DPMS_ON");
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:1150:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1150 |                         DRM_DEBUG_KMS("First %s output reported failure to "
+         |                         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:1194:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1194 |         DRM_DEBUG_KMS("SDVO capabilities:\n"
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:1328:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1328 |         DRM_DEBUG_KMS("SDVO response %d %d [%x]\n",
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2170:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2170 |                 DRM_DEBUG_KMS("%s: Unknown SDVO output type (0x%02x%02x)\n",
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2285:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2285 |                 DRM_DEBUG_KMS("h_overscan: max %d, "
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2321:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2321 |                 DRM_DEBUG_KMS("v_overscan: max %d, "
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2326:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2326 |         ENHANCEMENT(hpos, HPOS);
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2239:3: note: expanded from macro 'ENHANCEMENT'
+    2239 |                 DRM_DEBUG_KMS(#name ": max %d, default %d, current %d\n", \
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2327:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2327 |         ENHANCEMENT(vpos, VPOS);
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2239:3: note: expanded from macro 'ENHANCEMENT'
+    2239 |                 DRM_DEBUG_KMS(#name ": max %d, default %d, current %d\n", \
+         |                 ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2328:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2328 |         ENHANCEMENT(saturation, SATURATION);
+         |         ^
+   drivers/gpu/drm/gma500/psb_intel_sdvo.c:2239:3: note: expanded from macro 'ENHANCEMENT'
+    2239 |                 DRM_DEBUG_KMS(#name ": max %d, default %d, current %d\n", \
+         |                 ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+--
+>> drivers/gpu/drm/gma500/cdv_intel_display.c:136:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     136 |                 DRM_ERROR("timeout waiting for SB to idle before read\n");
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:148:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     148 |                 DRM_ERROR("timeout waiting for SB to idle after read\n");
+         |                 ^
+>> drivers/gpu/drm/gma500/cdv_intel_display.c:165:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     165 |                         DRM_DEBUG_KMS("0x%08x: 0x%08x (before)\n", reg, temp);
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:171:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     171 |                 DRM_ERROR("timeout waiting for SB to idle before write\n");
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:184:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     184 |                 DRM_ERROR("timeout waiting for SB to idle after write\n");
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:190:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     190 |                         DRM_DEBUG_KMS("0x%08x: 0x%08x (after)\n", reg, temp);
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:258:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     258 |                 DRM_DEBUG_KMS("use DPLLA for pipe B\n");
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:261:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     261 |                 DRM_DEBUG_KMS("use their DPLL for pipe A/B\n");
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:327:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     327 |                 DRM_ERROR("Bad P2 clock: %d\n", clock->p2);
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:619:4: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     619 |                         DRM_ERROR("invalid output type.\n");
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:650:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     650 |                 DRM_DEBUG_KMS("Use SSC reference clock %d Mhz\n", dev_priv->lvds_ssc_freq);
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:660:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     660 |                 DRM_ERROR("Couldn't find PLL settings for mode! target: %d, actual: %d",
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_display.c:764:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     764 |         DRM_DEBUG_KMS("Mode for pipe %c:\n", pipe == 0 ? 'A' : 'B');
+         |         ^
+   13 errors generated.
+--
+>> drivers/gpu/drm/gma500/cdv_intel_dp.c:183:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     183 |         DRM_DEBUG_KMS("dp_aux_xfer return %d\n", ret);
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:383:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     383 |                 DRM_DEBUG_KMS("Skip VDD on because of panel on\n");
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:386:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     386 |         DRM_DEBUG_KMS("\n");
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:401:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     401 |         DRM_DEBUG_KMS("\n");
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:420:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     420 |         DRM_DEBUG_KMS("\n");
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:444:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     444 |         DRM_DEBUG_KMS("\n");
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:475:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     475 |         DRM_DEBUG_KMS("\n");
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:496:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     496 |         DRM_DEBUG_KMS("\n");
+         |         ^
+>> drivers/gpu/drm/gma500/cdv_intel_dp.c:594:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     594 |                 DRM_ERROR("dp_aux_ch not started status 0x%08x\n",
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:634:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     634 |                 DRM_ERROR("dp_aux_ch not done status 0x%08x\n", status);
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:642:3: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     642 |                 DRM_ERROR("dp_aux_ch receive error status 0x%08x\n", status);
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:649:3: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     649 |                 DRM_DEBUG_KMS("dp_aux_ch timeout status 0x%08x\n", status);
+         |                 ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:798:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     798 |                         DRM_DEBUG_KMS("aux_ch failed %d\n", ret);
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:809:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     809 |                         DRM_DEBUG_KMS("aux_ch native nack\n");
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:815:4: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     815 |                         DRM_ERROR("aux_ch invalid native reply 0x%02x\n",
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:827:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     827 |                         DRM_DEBUG_KMS("aux_i2c nack\n");
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:834:4: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     834 |                         DRM_ERROR("aux_i2c invalid reply 0x%02x\n", reply[0]);
+         |                         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:839:2: error: call to undeclared function 'DRM_ERROR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     839 |         DRM_ERROR("too many retries, giving up\n");
+         |         ^
+   drivers/gpu/drm/gma500/cdv_intel_dp.c:850:2: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     850 |         DRM_DEBUG_KMS("i2c_init %s\n", name);
+         |         ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+--
+>> drivers/gpu/drm/gma500/psb_drv.c:283:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     283 |                         DRM_DEBUG_KMS("Found aux vdc");
+         |                         ^
+   drivers/gpu/drm/gma500/psb_drv.c:287:4: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     287 |                         DRM_DEBUG_KMS("Couldn't find aux pci device");
+         |                         ^
+   drivers/gpu/drm/gma500/psb_drv.c:303:5: error: call to undeclared function 'DRM_DEBUG_KMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     303 |                                 DRM_DEBUG_KMS("Found LPC GPIO at 0x%04x\n",
+         |                                 ^
+   3 errors generated.
+..
 
-> But it may be good to unify drivers while at it.
 
-As it doesn't cause any issue, I'm just going to leave it.. The new
-implementation will consistently use the addition mode like ARM did
-and that is convenient for the kunit as well.
+vim +/DRM_DEBUG_KMS +174 drivers/gpu/drm/gma500/oaktrail_hdmi.c
 
-> > +	/* Calculate target page size and level for the leaves */
-> > +	if (pt_has_system_page_size(common) && pgsize == PAGE_SIZE &&
-> > +	    pgcount == 1) {
-> > +		PT_WARN_ON(!(pgsize_bitmap & PAGE_SIZE));
-> > +		if (log2_mod(iova | paddr, PAGE_SHIFT))
-> > +			return -ENXIO;
-> > +		map.leaf_pgsize_lg2 = PAGE_SHIFT;
-> > +		map.leaf_level = 0;
-> > +		single_page = true;
-> > +	} else {
-> > +		map.leaf_pgsize_lg2 = pt_compute_best_pgsize(
-> > +			pgsize_bitmap, range.va, range.last_va, paddr);
-> > +		if (!map.leaf_pgsize_lg2)
-> > +			return -ENXIO;
-> > +		map.leaf_level =
-> > +			pt_pgsz_lg2_to_level(common, map.leaf_pgsize_lg2);
-> > +	}
-> > +
-> > +	ret = check_map_range(iommu_table, &range, &map);
-> > +	if (ret)
-> > +		return ret;
-> 
-> single_page should aways pass the check then could skip it.
+1b082ccf5901108 Alan Cox 2011-11-03  163  
+39ec748f7174602 Alan Cox 2012-11-06  164  static unsigned int htotal_calculate(struct drm_display_mode *mode)
+39ec748f7174602 Alan Cox 2012-11-06  165  {
+dfa703b6f91818f zhengbin 2019-11-15  166  	u32 new_crtc_htotal;
+39ec748f7174602 Alan Cox 2012-11-06  167  
+39ec748f7174602 Alan Cox 2012-11-06  168  	/*
+39ec748f7174602 Alan Cox 2012-11-06  169  	 * 1024 x 768  new_crtc_htotal = 0x1024;
+39ec748f7174602 Alan Cox 2012-11-06  170  	 * 1280 x 1024 new_crtc_htotal = 0x0c34;
+39ec748f7174602 Alan Cox 2012-11-06  171  	 */
+39ec748f7174602 Alan Cox 2012-11-06  172  	new_crtc_htotal = (mode->crtc_htotal - 1) * 200 * 1000 / mode->clock;
+39ec748f7174602 Alan Cox 2012-11-06  173  
+39ec748f7174602 Alan Cox 2012-11-06 @174  	DRM_DEBUG_KMS("new crtc htotal 0x%4x\n", new_crtc_htotal);
+39ec748f7174602 Alan Cox 2012-11-06  175  	return (mode->crtc_hdisplay - 1) | (new_crtc_htotal << 16);
+39ec748f7174602 Alan Cox 2012-11-06  176  }
+39ec748f7174602 Alan Cox 2012-11-06  177  
+39ec748f7174602 Alan Cox 2012-11-06  178  static void oaktrail_hdmi_find_dpll(struct drm_crtc *crtc, int target,
+39ec748f7174602 Alan Cox 2012-11-06  179  				int refclk, struct oaktrail_hdmi_clock *best_clock)
+39ec748f7174602 Alan Cox 2012-11-06  180  {
+39ec748f7174602 Alan Cox 2012-11-06  181  	int np_min, np_max, nr_min, nr_max;
+39ec748f7174602 Alan Cox 2012-11-06  182  	int np, nr, nf;
+39ec748f7174602 Alan Cox 2012-11-06  183  
+39ec748f7174602 Alan Cox 2012-11-06  184  	np_min = DIV_ROUND_UP(oaktrail_hdmi_limit.vco.min, target * 10);
+39ec748f7174602 Alan Cox 2012-11-06  185  	np_max = oaktrail_hdmi_limit.vco.max / (target * 10);
+39ec748f7174602 Alan Cox 2012-11-06  186  	if (np_min < oaktrail_hdmi_limit.np.min)
+39ec748f7174602 Alan Cox 2012-11-06  187  		np_min = oaktrail_hdmi_limit.np.min;
+39ec748f7174602 Alan Cox 2012-11-06  188  	if (np_max > oaktrail_hdmi_limit.np.max)
+39ec748f7174602 Alan Cox 2012-11-06  189  		np_max = oaktrail_hdmi_limit.np.max;
+39ec748f7174602 Alan Cox 2012-11-06  190  
+39ec748f7174602 Alan Cox 2012-11-06  191  	nr_min = DIV_ROUND_UP((refclk * 1000), (target * 10 * np_max));
+39ec748f7174602 Alan Cox 2012-11-06  192  	nr_max = DIV_ROUND_UP((refclk * 1000), (target * 10 * np_min));
+39ec748f7174602 Alan Cox 2012-11-06  193  	if (nr_min < oaktrail_hdmi_limit.nr.min)
+39ec748f7174602 Alan Cox 2012-11-06  194  		nr_min = oaktrail_hdmi_limit.nr.min;
+39ec748f7174602 Alan Cox 2012-11-06  195  	if (nr_max > oaktrail_hdmi_limit.nr.max)
+39ec748f7174602 Alan Cox 2012-11-06  196  		nr_max = oaktrail_hdmi_limit.nr.max;
+39ec748f7174602 Alan Cox 2012-11-06  197  
+39ec748f7174602 Alan Cox 2012-11-06  198  	np = DIV_ROUND_UP((refclk * 1000), (target * 10 * nr_max));
+39ec748f7174602 Alan Cox 2012-11-06  199  	nr = DIV_ROUND_UP((refclk * 1000), (target * 10 * np));
+39ec748f7174602 Alan Cox 2012-11-06  200  	nf = DIV_ROUND_CLOSEST((target * 10 * np * nr), refclk);
+39ec748f7174602 Alan Cox 2012-11-06  201  	DRM_DEBUG_KMS("np, nr, nf %d %d %d\n", np, nr, nf);
+39ec748f7174602 Alan Cox 2012-11-06  202  
+39ec748f7174602 Alan Cox 2012-11-06  203  	/*
+39ec748f7174602 Alan Cox 2012-11-06  204  	 * 1024 x 768  np = 1; nr = 0x26; nf = 0x0fd8000;
+39ec748f7174602 Alan Cox 2012-11-06  205  	 * 1280 x 1024 np = 1; nr = 0x17; nf = 0x1034000;
+39ec748f7174602 Alan Cox 2012-11-06  206  	 */
+39ec748f7174602 Alan Cox 2012-11-06  207  	best_clock->np = np;
+39ec748f7174602 Alan Cox 2012-11-06  208  	best_clock->nr = nr - 1;
+39ec748f7174602 Alan Cox 2012-11-06  209  	best_clock->nf = (nf << 14);
+39ec748f7174602 Alan Cox 2012-11-06  210  }
+39ec748f7174602 Alan Cox 2012-11-06  211  
+39ec748f7174602 Alan Cox 2012-11-06  212  static void scu_busy_loop(void __iomem *scu_base)
+39ec748f7174602 Alan Cox 2012-11-06  213  {
+39ec748f7174602 Alan Cox 2012-11-06  214  	u32 status = 0;
+39ec748f7174602 Alan Cox 2012-11-06  215  	u32 loop_count = 0;
+39ec748f7174602 Alan Cox 2012-11-06  216  
+39ec748f7174602 Alan Cox 2012-11-06  217  	status = readl(scu_base + 0x04);
+39ec748f7174602 Alan Cox 2012-11-06  218  	while (status & 1) {
+39ec748f7174602 Alan Cox 2012-11-06  219  		udelay(1); /* scu processing time is in few u secods */
+39ec748f7174602 Alan Cox 2012-11-06  220  		status = readl(scu_base + 0x04);
+39ec748f7174602 Alan Cox 2012-11-06  221  		loop_count++;
+39ec748f7174602 Alan Cox 2012-11-06  222  		/* break if scu doesn't reset busy bit after huge retry */
+39ec748f7174602 Alan Cox 2012-11-06  223  		if (loop_count > 1000) {
+39ec748f7174602 Alan Cox 2012-11-06  224  			DRM_DEBUG_KMS("SCU IPC timed out");
+39ec748f7174602 Alan Cox 2012-11-06  225  			return;
+39ec748f7174602 Alan Cox 2012-11-06  226  		}
+39ec748f7174602 Alan Cox 2012-11-06  227  	}
+39ec748f7174602 Alan Cox 2012-11-06  228  }
+39ec748f7174602 Alan Cox 2012-11-06  229  
+39ec748f7174602 Alan Cox 2012-11-06  230  /*
+39ec748f7174602 Alan Cox 2012-11-06  231   *	You don't want to know, you really really don't want to know....
+39ec748f7174602 Alan Cox 2012-11-06  232   *
+39ec748f7174602 Alan Cox 2012-11-06  233   *	This is magic. However it's safe magic because of the way the platform
+39ec748f7174602 Alan Cox 2012-11-06  234   *	works and it is necessary magic.
+39ec748f7174602 Alan Cox 2012-11-06  235   */
+39ec748f7174602 Alan Cox 2012-11-06  236  static void oaktrail_hdmi_reset(struct drm_device *dev)
+39ec748f7174602 Alan Cox 2012-11-06  237  {
+39ec748f7174602 Alan Cox 2012-11-06  238  	void __iomem *base;
+39ec748f7174602 Alan Cox 2012-11-06  239  	unsigned long scu_ipc_mmio = 0xff11c000UL;
+39ec748f7174602 Alan Cox 2012-11-06  240  	int scu_len = 1024;
+39ec748f7174602 Alan Cox 2012-11-06  241  
+39ec748f7174602 Alan Cox 2012-11-06  242  	base = ioremap((resource_size_t)scu_ipc_mmio, scu_len);
+39ec748f7174602 Alan Cox 2012-11-06  243  	if (base == NULL) {
+39ec748f7174602 Alan Cox 2012-11-06 @244  		DRM_ERROR("failed to map scu mmio\n");
+39ec748f7174602 Alan Cox 2012-11-06  245  		return;
+39ec748f7174602 Alan Cox 2012-11-06  246  	}
+39ec748f7174602 Alan Cox 2012-11-06  247  
+39ec748f7174602 Alan Cox 2012-11-06  248  	/* scu ipc: assert hdmi controller reset */
+39ec748f7174602 Alan Cox 2012-11-06  249  	writel(0xff11d118, base + 0x0c);
+39ec748f7174602 Alan Cox 2012-11-06  250  	writel(0x7fffffdf, base + 0x80);
+39ec748f7174602 Alan Cox 2012-11-06  251  	writel(0x42005, base + 0x0);
+39ec748f7174602 Alan Cox 2012-11-06  252  	scu_busy_loop(base);
+39ec748f7174602 Alan Cox 2012-11-06  253  
+39ec748f7174602 Alan Cox 2012-11-06  254  	/* scu ipc: de-assert hdmi controller reset */
+39ec748f7174602 Alan Cox 2012-11-06  255  	writel(0xff11d118, base + 0x0c);
+39ec748f7174602 Alan Cox 2012-11-06  256  	writel(0x7fffffff, base + 0x80);
+39ec748f7174602 Alan Cox 2012-11-06  257  	writel(0x42005, base + 0x0);
+39ec748f7174602 Alan Cox 2012-11-06  258  	scu_busy_loop(base);
+39ec748f7174602 Alan Cox 2012-11-06  259  
+39ec748f7174602 Alan Cox 2012-11-06  260  	iounmap(base);
+39ec748f7174602 Alan Cox 2012-11-06  261  }
+39ec748f7174602 Alan Cox 2012-11-06  262  
 
-Even single_page needs this check, it checks if iova is with in range.
-
-> > +	PT_WARN_ON(map.leaf_level > range.top_level);
-> > +
-> > +	do {
-> > +		if (single_page) {
-> > +			ret = pt_walk_range(&range, __map_single_page,
-> > &map);
-> > +			if (ret != -EAGAIN)
-> > +				break;
-> > +		}
-> > +
-> > +		if (map.leaf_level == range.top_level)
-> > +			ret = pt_walk_range(&range, __map_range_leaf,
-> > &map);
-> > +		else
-> > +			ret = pt_walk_range(&range, __map_range, &map);
-> > +	} while (false);
-> 
-> what is the point of do...while(false) compared to 'goto'?
-
-Didn't want to use goto for something other than an error exit
-
-Let's put it in a function:
-
-static int do_map(struct pt_range *range, bool single_page,
-		  struct pt_iommu_map_args *map)
-{
-	if (single_page) {
-		int ret;
-
-		ret = pt_walk_range(range, __map_single_page, map);
-		if (ret != -EAGAIN)
-			return ret;
-		/* EAGAIN falls through to the full path */
-	}
-
-	if (map->leaf_level == range->top_level)
-		return pt_walk_range(range, __map_range_leaf, map);
-	return pt_walk_range(range, __map_range, map);
-}
-
-> > +/**
-> > + * struct pt_iommu_flush_ops - HW IOTLB cache flushing operations
-> > + *
-> > + * The IOMMU driver should implement these using
-> > container_of(iommu_table) to
-> > + * get to it's iommu_domain derived structure. All ops can be called in
-> > atomic
-> > + * contexts as they are buried under DMA API calls.
-> > + */
-> > +struct pt_iommu_flush_ops {
-> 
-> not sure it's appropriate to call it flush_ops. It's not purely about flush,
-> e.g. @change_top requires the driver to actually change the top.
-
-Hmm, at one point it did have flush related calls but now it is just
-about change top..
-
-I'll change it to pt_iommu_driver_ops
-
-> > +	 * HW references to this domain with a new top address and
-> > +	 * configuration. On return mappings placed in the new top must be
-> > +	 * reachable by the HW.
-> > +	 *
-> > +	 * top_level encodes the level in IOMMU PT format, level 0 is the
-> > +	 * smallest page size increasing from there. This has to be translated
-> > +	 * to any HW specific format. During this call the new top will not be
-> > +	 * visible to any other API.
-> > +	 *
-> > +	 * This op is only used by PT_FEAT_DYNAMIC_TOP, and is required if
-> > +	 * enabled.
-> > +	 */
-> > +	void (*change_top)(struct pt_iommu *iommu_table, phys_addr_t
-> > top_paddr,
-> > +			   unsigned int top_level);
-> > +
-> > +	/**
-> > +	 * @get_top_lock: Return a lock to hold when changing the table top
-> > +	 * @iommu_table: Table to operate on
-> > +	 *
-> 
-> blank line
-
-
-	/**
-	 * @get_top_lock: lock to hold when changing the table top
-	 * @iommu_table: Table to operate on
-	 *
-	 * Return a lock to hold when changing the table top page table from
-	 * being stored in HW. The lock will be held prior to calling
-	 * change_top() and released once the top is fully visible.
-	 *
-	 * Typically this would be a lock that protects the iommu_domain's
-	 * attachment list.
-	 *
-	 * This op is only used by PT_FEAT_DYNAMIC_TOP, and is required if
-	 * enabled.
-	 */
-
-Thanks,
-Jason
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
