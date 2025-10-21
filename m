@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D085D257431;
-	Tue, 21 Oct 2025 01:36:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B38323371B;
+	Tue, 21 Oct 2025 02:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761010567; cv=none; b=r+KtVdP87MJRhIaChZyIBCVPxO7co46p/RoD1hWlmCsAc6aroxTfVw58oJG90GGqBb2bfkZv9uAZsoQ5VcCD+ya9YxmcAGp5TZFPYr2vxXMdjP3tci/kSYeb3oohF/owCBpNvlyU4UKYzPJASjFpgYnXZGOXlWk2ATrqEV9Bhto=
+	t=1761014345; cv=none; b=opiMHUdVW96HSrNwPMLy3u1jEIYZwJt2bBDjoT+GPsFXIaj6K4Ko9mMR8EQ+/1tXbN8yfJ2ZQJRM3QVUBWupyHoznK9JkfOqM63GpbbWlso+6k2cpJd2TCBvrWonrPkG2d0/KOzrh68vDRAa51l2OOYW0N1t/UmQsAoFmGBC2WE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761010567; c=relaxed/simple;
-	bh=21nqHSeS51b9qxQayy14YmY+cu/HzerVvQyaJ2o8iAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ru1y/3ksspyqtdJ5OHG/KgxSW0JW1TTeuf0eFrAUVRkRGpJvg/x7K32JwbgeJzJ/pdYuBRHes77WV/4+NoDm0PAXRHnsf82FxkJCHWqeHhbTRXips1RWChYmFpY1AyMZEtWSaWp8fka7XTjXu9wIbsJ5GasVi1+JvFhl0iyh1yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gys1Tw0q; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1761014345; c=relaxed/simple;
+	bh=YelTUj/Itdkam8XSpN2bVMX//XFvL4Up4guJiyWU22A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lAB3G7zF976Ys0dktaeFK0LECpdnNrIW5T7d8L94mzRLi+8NCfAnSQ1uwG5+gDo7JaBeZfboWpQGe7h+CT6l2D1yvfUchxqj0Bl2fzA51sNjlKNWPun7VcuA9e7Xm3/A/EvnoD8jaC+UoOjLg9IgmNKNEQBvD54Ee7YBJLSzym8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UHf9dzNP; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gys1Tw0q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UHf9dzNP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761010562; x=1792546562;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=21nqHSeS51b9qxQayy14YmY+cu/HzerVvQyaJ2o8iAs=;
-  b=Gys1Tw0qPgusE2s0AJSI5LmCtxhs36kQhU/pPm6tHVO/UEZ80ISdCNrI
-   F7DeCUFWNU/GGxBmyB984ujKq1flGVPsGyw+MHhhZT4hdnA12/RouMBRD
-   pP3yS36yh0lXJ5onaXRPwjueeudy49oq1c/xTL4a6bIq3/jYapHAOoaNP
-   3U1A0jBwVDU2wYoZZS22eM1WPpQeB59vsg4SSRkJGjkjEm0cmvszkXeQS
-   d9JY6zx9a2k3znH3LoRKHQCvLjGcTC3pCF1ZvbME3bdrXy/j36vuzzSAb
-   BDLSGn8hTllo82+UbJYsTHgpZslMSogOfxWWiRzq6mF/+cpD6k+XOax0Y
-   g==;
-X-CSE-ConnectionGUID: kERmXKEBTw6dZQDR944VEg==
-X-CSE-MsgGUID: AM3++DF8RBCK44F9FxqFxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62342264"
+  t=1761014343; x=1792550343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YelTUj/Itdkam8XSpN2bVMX//XFvL4Up4guJiyWU22A=;
+  b=UHf9dzNPnWxWvaIdywKUypDTOmcpxmIn95J5SJtwMEjK1ThQl5kNniC8
+   yMh37iDC2jGDEtH5EtXdt5QMRP432ywocvo+7tRnpRFKnvwfiE6bp3/K0
+   Q+Mf1GJ9ABoJJoEnxoYWxLCR6//KFFcYqrQa1gmRPhwsnQKNhtY28i4FK
+   r/H+d/ya3mSGFZoaEwfOoG9o4rVVJia1anCf4ZYvlNcLaX7XkK/GsYVZp
+   cizRuSAgDUx3XhhjNKrrsWe7IFula10fhWFoAiN8erDW2xdo3XvEN1G/1
+   9CDyyBIhLr6dt+4D5ZUqa5frzFjN4Mvux0rO/CpTSkVL5gQjOuwE4vM2g
+   Q==;
+X-CSE-ConnectionGUID: jABcN5/kTE2jbuT5CkP1pQ==
+X-CSE-MsgGUID: xLEKTcQASvKA25AwmDQgjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67000170"
 X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
-   d="scan'208";a="62342264"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 18:36:00 -0700
-X-CSE-ConnectionGUID: AJZ9KInoRBK3dJY3Pa1T0w==
-X-CSE-MsgGUID: EyGCvV98TAu75juBA/b5vA==
+   d="scan'208";a="67000170"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 19:39:01 -0700
+X-CSE-ConnectionGUID: WRGaFpn+QCyegQjI8CmtOQ==
+X-CSE-MsgGUID: klALRghhR2mbbGPA9iCDaA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,243,1754982000"; 
-   d="scan'208";a="182616348"
+   d="scan'208";a="187743891"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 20 Oct 2025 18:35:59 -0700
+  by orviesa004.jf.intel.com with ESMTP; 20 Oct 2025 19:38:58 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vB1I4-000ALp-2R;
-	Tue, 21 Oct 2025 01:35:56 +0000
-Date: Tue, 21 Oct 2025 09:35:22 +0800
+	id 1vB2H1-000AOP-1d;
+	Tue, 21 Oct 2025 02:38:55 +0000
+Date: Tue, 21 Oct 2025 10:38:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:kdevops 19/19] fs/fcntl.c:555:9: error: call to undeclared
- function 'fcntl_getdeleg'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202510210932.IJ54HObd-lkp@intel.com>
+To: fangyu.yu@linux.alibaba.com, anup@brainfault.org, atish.patra@linux.dev,
+	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, pbonzini@redhat.com, jiangyifei@huawei.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, guoren@kernel.org,
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Fangyu Yu <fangyu.yu@linux.alibaba.com>
+Subject: Re: [PATCH] RISC-V: KVM: Remove automatic I/O mapping for VM_PFNMAP
+Message-ID: <202510211010.XRaEeuBa-lkp@intel.com>
+References: <20251020130801.68356-1-fangyu.yu@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,157 +67,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251020130801.68356-1-fangyu.yu@linux.alibaba.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
-head:   1fe66e11bc8440fdda126ec2e814e899eeb18554
-commit: 1fe66e11bc8440fdda126ec2e814e899eeb18554 [19/19] vfs: add F_SET/GETDELEG fcntl() commands
-config: x86_64-buildonly-randconfig-003-20251021 (https://download.01.org/0day-ci/archive/20251021/202510210932.IJ54HObd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251021/202510210932.IJ54HObd-lkp@intel.com/reproduce)
+Hi,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next linus/master v6.18-rc2 next-20251020]
+[cannot apply to kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/fangyu-yu-linux-alibaba-com/RISC-V-KVM-Remove-automatic-I-O-mapping-for-VM_PFNMAP/20251020-210957
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20251020130801.68356-1-fangyu.yu%40linux.alibaba.com
+patch subject: [PATCH] RISC-V: KVM: Remove automatic I/O mapping for VM_PFNMAP
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251021/202510211010.XRaEeuBa-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 754ebc6ebb9fb9fbee7aef33478c74ea74949853)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251021/202510211010.XRaEeuBa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510210932.IJ54HObd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510211010.XRaEeuBa-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/fcntl.c:555:9: error: call to undeclared function 'fcntl_getdeleg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     555 |                 err = fcntl_getdeleg(filp);
+>> arch/riscv/kvm/mmu.c:211:9: warning: variable 'vm_start' set but not used [-Wunused-but-set-variable]
+     211 |                 hva_t vm_start, vm_end;
          |                       ^
->> fs/fcntl.c:560:9: error: call to undeclared function 'fcntl_setdeleg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     560 |                 err = fcntl_setdeleg(fd, filp, &deleg);
-         |                       ^
-   2 errors generated.
+>> arch/riscv/kvm/mmu.c:174:8: warning: variable 'base_gpa' set but not used [-Wunused-but-set-variable]
+     174 |         gpa_t base_gpa;
+         |               ^
+   2 warnings generated.
 
 
-vim +/fcntl_getdeleg +555 fs/fcntl.c
+vim +/vm_start +211 arch/riscv/kvm/mmu.c
 
-   443	
-   444	static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
-   445			struct file *filp)
-   446	{
-   447		void __user *argp = (void __user *)arg;
-   448		struct delegation deleg;
-   449		int argi = (int)arg;
-   450		struct flock flock;
-   451		long err = -EINVAL;
-   452	
-   453		switch (cmd) {
-   454		case F_CREATED_QUERY:
-   455			err = f_created_query(filp);
-   456			break;
-   457		case F_DUPFD:
-   458			err = f_dupfd(argi, filp, 0);
-   459			break;
-   460		case F_DUPFD_CLOEXEC:
-   461			err = f_dupfd(argi, filp, O_CLOEXEC);
-   462			break;
-   463		case F_DUPFD_QUERY:
-   464			err = f_dupfd_query(argi, filp);
-   465			break;
-   466		case F_GETFD:
-   467			err = get_close_on_exec(fd) ? FD_CLOEXEC : 0;
-   468			break;
-   469		case F_SETFD:
-   470			err = 0;
-   471			set_close_on_exec(fd, argi & FD_CLOEXEC);
-   472			break;
-   473		case F_GETFL:
-   474			err = filp->f_flags;
-   475			break;
-   476		case F_SETFL:
-   477			err = setfl(fd, filp, argi);
-   478			break;
-   479	#if BITS_PER_LONG != 32
-   480		/* 32-bit arches must use fcntl64() */
-   481		case F_OFD_GETLK:
-   482	#endif
-   483		case F_GETLK:
-   484			if (copy_from_user(&flock, argp, sizeof(flock)))
-   485				return -EFAULT;
-   486			err = fcntl_getlk(filp, cmd, &flock);
-   487			if (!err && copy_to_user(argp, &flock, sizeof(flock)))
-   488				return -EFAULT;
-   489			break;
-   490	#if BITS_PER_LONG != 32
-   491		/* 32-bit arches must use fcntl64() */
-   492		case F_OFD_SETLK:
-   493		case F_OFD_SETLKW:
-   494			fallthrough;
-   495	#endif
-   496		case F_SETLK:
-   497		case F_SETLKW:
-   498			if (copy_from_user(&flock, argp, sizeof(flock)))
-   499				return -EFAULT;
-   500			err = fcntl_setlk(fd, filp, cmd, &flock);
-   501			break;
-   502		case F_GETOWN:
-   503			/*
-   504			 * XXX If f_owner is a process group, the
-   505			 * negative return value will get converted
-   506			 * into an error.  Oops.  If we keep the
-   507			 * current syscall conventions, the only way
-   508			 * to fix this will be in libc.
-   509			 */
-   510			err = f_getown(filp);
-   511			force_successful_syscall_return();
-   512			break;
-   513		case F_SETOWN:
-   514			err = f_setown(filp, argi, 1);
-   515			break;
-   516		case F_GETOWN_EX:
-   517			err = f_getown_ex(filp, arg);
-   518			break;
-   519		case F_SETOWN_EX:
-   520			err = f_setown_ex(filp, arg);
-   521			break;
-   522		case F_GETOWNER_UIDS:
-   523			err = f_getowner_uids(filp, arg);
-   524			break;
-   525		case F_GETSIG:
-   526			err = f_owner_sig(filp, 0, false);
-   527			break;
-   528		case F_SETSIG:
-   529			err = f_owner_sig(filp, argi, true);
-   530			break;
-   531		case F_GETLEASE:
-   532			err = fcntl_getlease(filp);
-   533			break;
-   534		case F_SETLEASE:
-   535			err = fcntl_setlease(fd, filp, argi);
-   536			break;
-   537		case F_NOTIFY:
-   538			err = fcntl_dirnotify(fd, filp, argi);
-   539			break;
-   540		case F_SETPIPE_SZ:
-   541		case F_GETPIPE_SZ:
-   542			err = pipe_fcntl(filp, cmd, argi);
-   543			break;
-   544		case F_ADD_SEALS:
-   545		case F_GET_SEALS:
-   546			err = memfd_fcntl(filp, cmd, argi);
-   547			break;
-   548		case F_GET_RW_HINT:
-   549			err = fcntl_get_rw_hint(filp, arg);
-   550			break;
-   551		case F_SET_RW_HINT:
-   552			err = fcntl_set_rw_hint(filp, arg);
-   553			break;
-   554		case F_GETDELEG:
- > 555			err = fcntl_getdeleg(filp);
-   556			break;
-   557		case F_SETDELEG:
-   558			if (copy_from_user(&deleg, argp, sizeof(deleg)))
-   559				return -EFAULT;
- > 560			err = fcntl_setdeleg(fd, filp, &deleg);
-   561			break;
-   562		default:
-   563			break;
-   564		}
-   565		return err;
-   566	}
-   567	
+99cdc6c18c2d815 Anup Patel          2021-09-27  167  
+99cdc6c18c2d815 Anup Patel          2021-09-27  168  int kvm_arch_prepare_memory_region(struct kvm *kvm,
+537a17b31493009 Sean Christopherson 2021-12-06  169  				const struct kvm_memory_slot *old,
+537a17b31493009 Sean Christopherson 2021-12-06  170  				struct kvm_memory_slot *new,
+99cdc6c18c2d815 Anup Patel          2021-09-27  171  				enum kvm_mr_change change)
+99cdc6c18c2d815 Anup Patel          2021-09-27  172  {
+d01495d4cffb327 Sean Christopherson 2021-12-06  173  	hva_t hva, reg_end, size;
+d01495d4cffb327 Sean Christopherson 2021-12-06 @174  	gpa_t base_gpa;
+d01495d4cffb327 Sean Christopherson 2021-12-06  175  	bool writable;
+9d05c1fee837572 Anup Patel          2021-09-27  176  	int ret = 0;
+9d05c1fee837572 Anup Patel          2021-09-27  177  
+9d05c1fee837572 Anup Patel          2021-09-27  178  	if (change != KVM_MR_CREATE && change != KVM_MR_MOVE &&
+9d05c1fee837572 Anup Patel          2021-09-27  179  			change != KVM_MR_FLAGS_ONLY)
+99cdc6c18c2d815 Anup Patel          2021-09-27  180  		return 0;
+9d05c1fee837572 Anup Patel          2021-09-27  181  
+9d05c1fee837572 Anup Patel          2021-09-27  182  	/*
+9d05c1fee837572 Anup Patel          2021-09-27  183  	 * Prevent userspace from creating a memory region outside of the GPA
+9d05c1fee837572 Anup Patel          2021-09-27  184  	 * space addressable by the KVM guest GPA space.
+9d05c1fee837572 Anup Patel          2021-09-27  185  	 */
+537a17b31493009 Sean Christopherson 2021-12-06  186  	if ((new->base_gfn + new->npages) >=
+dd82e35638d67f4 Anup Patel          2025-06-18  187  	    (kvm_riscv_gstage_gpa_size >> PAGE_SHIFT))
+9d05c1fee837572 Anup Patel          2021-09-27  188  		return -EFAULT;
+9d05c1fee837572 Anup Patel          2021-09-27  189  
+d01495d4cffb327 Sean Christopherson 2021-12-06  190  	hva = new->userspace_addr;
+d01495d4cffb327 Sean Christopherson 2021-12-06  191  	size = new->npages << PAGE_SHIFT;
+d01495d4cffb327 Sean Christopherson 2021-12-06  192  	reg_end = hva + size;
+d01495d4cffb327 Sean Christopherson 2021-12-06  193  	base_gpa = new->base_gfn << PAGE_SHIFT;
+d01495d4cffb327 Sean Christopherson 2021-12-06  194  	writable = !(new->flags & KVM_MEM_READONLY);
+d01495d4cffb327 Sean Christopherson 2021-12-06  195  
+9d05c1fee837572 Anup Patel          2021-09-27  196  	mmap_read_lock(current->mm);
+9d05c1fee837572 Anup Patel          2021-09-27  197  
+9d05c1fee837572 Anup Patel          2021-09-27  198  	/*
+9d05c1fee837572 Anup Patel          2021-09-27  199  	 * A memory region could potentially cover multiple VMAs, and
+b35152e0fb35983 Fangyu Yu           2025-10-20  200  	 * any holes between them, so iterate over all of them.
+9d05c1fee837572 Anup Patel          2021-09-27  201  	 *
+9d05c1fee837572 Anup Patel          2021-09-27  202  	 *     +--------------------------------------------+
+9d05c1fee837572 Anup Patel          2021-09-27  203  	 * +---------------+----------------+   +----------------+
+9d05c1fee837572 Anup Patel          2021-09-27  204  	 * |   : VMA 1     |      VMA 2     |   |    VMA 3  :    |
+9d05c1fee837572 Anup Patel          2021-09-27  205  	 * +---------------+----------------+   +----------------+
+9d05c1fee837572 Anup Patel          2021-09-27  206  	 *     |               memory region                |
+9d05c1fee837572 Anup Patel          2021-09-27  207  	 *     +--------------------------------------------+
+9d05c1fee837572 Anup Patel          2021-09-27  208  	 */
+9d05c1fee837572 Anup Patel          2021-09-27  209  	do {
+fce11b667022766 Quan Zhou           2025-06-17  210  		struct vm_area_struct *vma;
+9d05c1fee837572 Anup Patel          2021-09-27 @211  		hva_t vm_start, vm_end;
+9d05c1fee837572 Anup Patel          2021-09-27  212  
+fce11b667022766 Quan Zhou           2025-06-17  213  		vma = find_vma_intersection(current->mm, hva, reg_end);
+fce11b667022766 Quan Zhou           2025-06-17  214  		if (!vma)
+9d05c1fee837572 Anup Patel          2021-09-27  215  			break;
+9d05c1fee837572 Anup Patel          2021-09-27  216  
+9d05c1fee837572 Anup Patel          2021-09-27  217  		/*
+9d05c1fee837572 Anup Patel          2021-09-27  218  		 * Mapping a read-only VMA is only allowed if the
+9d05c1fee837572 Anup Patel          2021-09-27  219  		 * memory region is configured as read-only.
+9d05c1fee837572 Anup Patel          2021-09-27  220  		 */
+9d05c1fee837572 Anup Patel          2021-09-27  221  		if (writable && !(vma->vm_flags & VM_WRITE)) {
+9d05c1fee837572 Anup Patel          2021-09-27  222  			ret = -EPERM;
+9d05c1fee837572 Anup Patel          2021-09-27  223  			break;
+9d05c1fee837572 Anup Patel          2021-09-27  224  		}
+9d05c1fee837572 Anup Patel          2021-09-27  225  
+9d05c1fee837572 Anup Patel          2021-09-27  226  		/* Take the intersection of this VMA with the memory region */
+9d05c1fee837572 Anup Patel          2021-09-27  227  		vm_start = max(hva, vma->vm_start);
+9d05c1fee837572 Anup Patel          2021-09-27  228  		vm_end = min(reg_end, vma->vm_end);
+9d05c1fee837572 Anup Patel          2021-09-27  229  
+9d05c1fee837572 Anup Patel          2021-09-27  230  		if (vma->vm_flags & VM_PFNMAP) {
+9d05c1fee837572 Anup Patel          2021-09-27  231  			/* IO region dirty page logging not allowed */
+537a17b31493009 Sean Christopherson 2021-12-06  232  			if (new->flags & KVM_MEM_LOG_DIRTY_PAGES) {
+9d05c1fee837572 Anup Patel          2021-09-27  233  				ret = -EINVAL;
+9d05c1fee837572 Anup Patel          2021-09-27  234  				goto out;
+9d05c1fee837572 Anup Patel          2021-09-27  235  			}
+9d05c1fee837572 Anup Patel          2021-09-27  236  		}
+9d05c1fee837572 Anup Patel          2021-09-27  237  		hva = vm_end;
+9d05c1fee837572 Anup Patel          2021-09-27  238  	} while (hva < reg_end);
+9d05c1fee837572 Anup Patel          2021-09-27  239  
+9d05c1fee837572 Anup Patel          2021-09-27  240  out:
+9d05c1fee837572 Anup Patel          2021-09-27  241  	mmap_read_unlock(current->mm);
+9d05c1fee837572 Anup Patel          2021-09-27  242  	return ret;
+99cdc6c18c2d815 Anup Patel          2021-09-27  243  }
+99cdc6c18c2d815 Anup Patel          2021-09-27  244  
 
 -- 
 0-DAY CI Kernel Test Service
