@@ -1,132 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from localhost.localdomain (unknown [147.136.157.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3729D2ED84A;
-	Wed, 22 Oct 2025 07:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B732F693E
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 07:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761117564; cv=none; b=NUeJrIGBz6lz0GjMR22wHwK1yoZwrvoEUwXA99HuHZGyBZeXP4p8uyd2+/1KQt4zDDtAAe7h/BtemdV+tZbvzuAFH8YMGWuhezLD/P0xyT+ljGHqoN+1IUbmaPh6nc1W5lKSLA+Z2wbMV35/e9fa0kbNQJ1VJHWDhvk/GQRGbs4=
+	t=1761118119; cv=none; b=kYoKnSplM7ItzMsR+E2hqRwZiq0TDB9OY5JdqGAg8DTgi8kgq0oMFpgTLhB/GbYos6DGRIVwYC2HfR4kqmUmUl6rx9nm4jC4AYmPCrbIgpbCrxuRYJnzNT9Cu/f5q9h94DsPb6z0xhdDHNmmF7/Z4ID/Akw1YJTW2iXH1Wlz/nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761117564; c=relaxed/simple;
-	bh=UiGPap5OuCArfvp0Rq7pyLVsVmVZWUW9e6oIXM/7mSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TzvO8XOGlrhSZZutKW+SWIa7f1eC9BbO/ptsIWbSyc5poPYwH/oXhWtlH/lj2/nZZqRGOIZF7sFAR93Pm2umlAVrQ240V37HJ4EPLqySoeq8PXNBn2cQjd5AnYrqPlMPvziYc4nXQxzkDuwY7HW+QflMkakp4PdTfPanM9a7c3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Int9qboz; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Int9qboz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761117563; x=1792653563;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UiGPap5OuCArfvp0Rq7pyLVsVmVZWUW9e6oIXM/7mSs=;
-  b=Int9qboz1llnZRqMp/pV75Cg8P0cG1+DUNThJVxb1seHfRHFt1+2xbJg
-   +W/l2IachMMcnG25KaKCAuWXc5gjwJ1eLVtirmNbmU4cp8NqkqFIQyTFX
-   PobPv4miOJ1D53Ztkgnok++n2eG4jxTUI1+Khp+GHPohaM+19729fUW/Y
-   iIXOLqFSysT/zqwxBpZaXd7wjDRg0mw/oOTwFxLi/m3ZNBrqkJYgYTaMh
-   PnCnYDLgKBSIqKI5ojydENI2WAAa0n20m6w58J4xfS0SlVjJnKi7weXOW
-   iKqAlAPJM17K6MYIWQxPMe8TrcQSAkCK9N23PM4T35qDEB07iDg7KFHWM
-   g==;
-X-CSE-ConnectionGUID: ElkXxrgFTpWGbTRQoI8eTg==
-X-CSE-MsgGUID: gH0NM0vLTQ2DpwHtk8W4iw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="65872999"
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="65872999"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 00:19:23 -0700
-X-CSE-ConnectionGUID: 7M7TzhqdR9KlUZ387HsP5Q==
-X-CSE-MsgGUID: 1tHd2Us/SE61EU8ZcZSO7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="188074733"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 22 Oct 2025 00:19:18 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBT7s-000C5h-1T;
-	Wed, 22 Oct 2025 07:19:16 +0000
-Date: Wed, 22 Oct 2025 15:18:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: muhammed.efecetin.67@gmail.com, linux-rockchip@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-	neil.armstrong@linaro.org, lee@kernel.org, rafael@kernel.org,
-	efectn@protonmail.com, daniel.lezcano@linaro.org
-Subject: Re: [PATCH v3 3/5] mfd: add Khadas Edge 2 registers to khadas-mcu.
-Message-ID: <202510221512.9Ji8w2KZ-lkp@intel.com>
-References: <adbd6dd5e9ed938bab7927597b7f21eca3274b78.1761059314.git.efectn@protonmail.com>
+	s=arc-20240116; t=1761118119; c=relaxed/simple;
+	bh=QK8wO2LnZXdBOBPcu0Yz+H6JeLiJpO6vJbSSQ7bD/SE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XWZitundobqQMbh3MV8hUCgZcUhjnrYtyXA1w90KlW1u2vWZX6rj1lHiGfNR6B4MPWfV9lnd/DT+IQ8Yx3ReKJxu0wQSoQxR8X7fJWWymQwdLg35g4lLJ1JTkZoQXfm6NJGAXfmQqhy1iUujUgeygt+Qepaxq4LQk/glTXkoRXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
+Received: by localhost.localdomain (Postfix, from userid 1007)
+	id 6C84D8B2A0C; Wed, 22 Oct 2025 15:18:42 +0800 (+08)
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code with __BPF_FEATURE_ADDR_SPACE_CAST
+Date: Wed, 22 Oct 2025 15:18:20 +0800
+Message-ID: <20251022071825.238909-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adbd6dd5e9ed938bab7927597b7f21eca3274b78.1761059314.git.efectn@protonmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+When compiling the BPF selftests with Clang versions that do not support
+the addr_space_cast builtin, the build fails with assembly errors in
+"verifier_ldsx.c" [1].
 
-kernel test robot noticed the following build warnings:
+The root cause is that the inline assembly using addr_space_cast is
+being processed by a compiler that lacks this feature. To resolve this,
+wrap the affected code sections (specifically the arena_ldsx_* test
+functions) with #if defined(__BPF_FEATURE_ADDR_SPACE_CAST). This
+ensures the code is only compiled when the Clang supports the necessary
+feature, preventing build failures on older or incompatible compiler
+versions.
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on lee-mfd/for-mfd-fixes rockchip/for-next rafael-pm/thermal linus/master v6.18-rc2 next-20251022]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This change maintains test coverage for systems with support while
+allowing the tests to build successfully in all environments.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/muhammed-efecetin-67-gmail-com/dt-bindings-mfd-khadas-mcu-add-new-compatible-for-Khadas-Edge-2/20251021-232554
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/adbd6dd5e9ed938bab7927597b7f21eca3274b78.1761059314.git.efectn%40protonmail.com
-patch subject: [PATCH v3 3/5] mfd: add Khadas Edge 2 registers to khadas-mcu.
-config: i386-buildonly-randconfig-002-20251022 (https://download.01.org/0day-ci/archive/20251022/202510221512.9Ji8w2KZ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221512.9Ji8w2KZ-lkp@intel.com/reproduce)
+[1]:
+root:tools/testing/selftests/bpf$ make
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510221512.9Ji8w2KZ-lkp@intel.com/
+  CLNG-BPF [test_progs] verifier_ldsx.bpf.o
+progs/verifier_ldsx.c:322:2: error: invalid operand for instruction
+  322 |         "r1 = %[arena] ll;"
+      |         ^
+<inline asm>:1:52: note: instantiated into assembly here
+    1 |         r1 = arena ll;r0 = 0xdeadbeef;r0 = addr_space_cast(r0,...
+      |                                                           ^
 
-All warnings (new ones prefixed by >>):
+Fixes: f61654912404 ("selftests: bpf: Add tests for signed loads from arena")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ tools/testing/selftests/bpf/progs/verifier_ldsx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> drivers/mfd/khadas-mcu.c:93:35: warning: unused variable 'khadas_mcu_regmap_config' [-Wunused-const-variable]
-      93 | static const struct regmap_config khadas_mcu_regmap_config = {
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mfd/khadas-mcu.c:103:35: warning: unused variable 'khadas_mcu_regmap_config_edge2' [-Wunused-const-variable]
-     103 | static const struct regmap_config khadas_mcu_regmap_config_edge2 = {
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +/khadas_mcu_regmap_config +93 drivers/mfd/khadas-mcu.c
-
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21   92  
-6c27219e349116 Neil Armstrong     2020-06-08  @93  static const struct regmap_config khadas_mcu_regmap_config = {
-6c27219e349116 Neil Armstrong     2020-06-08   94  	.reg_bits	= 8,
-6c27219e349116 Neil Armstrong     2020-06-08   95  	.reg_stride	= 1,
-6c27219e349116 Neil Armstrong     2020-06-08   96  	.val_bits	= 8,
-6c27219e349116 Neil Armstrong     2020-06-08   97  	.max_register	= KHADAS_MCU_CMD_FAN_STATUS_CTRL_REG,
-6c27219e349116 Neil Armstrong     2020-06-08   98  	.volatile_reg	= khadas_mcu_reg_volatile,
-6c27219e349116 Neil Armstrong     2020-06-08   99  	.writeable_reg	= khadas_mcu_reg_writeable,
-14100f8e58564d Bo Liu             2024-02-06  100  	.cache_type	= REGCACHE_MAPLE,
-6c27219e349116 Neil Armstrong     2020-06-08  101  };
-6c27219e349116 Neil Armstrong     2020-06-08  102  
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21 @103  static const struct regmap_config khadas_mcu_regmap_config_edge2 = {
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  104  	.reg_bits	= 8,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  105  	.reg_stride	= 1,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  106  	.val_bits	= 8,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  107  	.max_register	= KHADAS_MCU_EDGE2_SYS_RST_REG,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  108  	.volatile_reg	= khadas_mcu_reg_volatile_edge2,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  109  	.writeable_reg	= khadas_mcu_reg_writeable_edge2,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  110  	.cache_type	= REGCACHE_MAPLE,
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  111  };
-54c97b83897fb1 Muhammed Efe Cetin 2025-10-21  112  
-
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+index c8494b682c31..cefa02e417d3 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -263,6 +263,7 @@ __naked void ldsx_ctx_8(void)
+ 	: __clobber_all);
+ }
+ 
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ SEC("syscall")
+ __description("Arena LDSX Disasm")
+ __success
+@@ -425,6 +426,7 @@ __naked void arena_ldsx_s32(void *ctx)
+ 	:  __clobber_all
+ 	);
+ }
++#endif
+ 
+ /* to retain debug info for BTF generation */
+ void kfunc_root(void)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
