@@ -1,58 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D2B2F5A12;
-	Wed, 22 Oct 2025 07:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517C12FB968;
+	Wed, 22 Oct 2025 07:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761118388; cv=none; b=pHmnvCtA9BBGUpWf1HlKSkMLNL3kK7etrndNllFG/Tm1yWUDB9vIK/uNiUHn7qdJzOKl5LgRNQSvz9GwCYlzYL/a9wZTjSKQFY4uAocK89QMZsCNdAHMAOA2dpTpc8qvnfAxagwoCVWElH8rvYCuw2zljQZcVXQqKONdtMwveXE=
+	t=1761118929; cv=none; b=GraTQibbtDZQ0dHfgXht0egVYxvTi0KUEcIqNClDNbHtAj4ioMfi+mKt+iBQYfXrcIF3Xq963wPH1Rzxry+GddBhNjuMRwiPftbLb9mhfxaiF7+HXPLJiVw6ZN8eUjAlz3ScaJbtrdx2WRZrp/WnqE3vFldLsVy+7rmVoQwZTnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761118388; c=relaxed/simple;
-	bh=SEQdl/DDnTQ9VJ8ZCedM9vanjwM4a2PsYlLgC2nn7So=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UBd9rAJYs3QlBw+N+tHULUMIwoGMJo2Vwl8oIzw0Iky+Dz7UfNhLez59Do7hj7L1KYm0fJJhOVunPdjrtEErhq1IVa8TWlxYpaNzj92zHy5m4J5bgLIujZtNPtzSx/tH0qsvFsDOfQxmgfTcTrh9COApgSLOFQT6msYX/f9A6Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kSg00j0x; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1761118929; c=relaxed/simple;
+	bh=4yTC+36exgdGZ8D10H669LXRniU7gmAH/RHHNfluhAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H07w7iaXwnKmVqw/2sjgFDMfF+R35ZsaRX4RBS1NxyJr2AQIOFBeAZMcylyR57TicJMRrQAm5IDBMjBtFllObN5isiNwOXFQFlwnSZkXjfhl9vevp8Ia5jhrNrZQ4P7WqTrK+Pd/MkZrKwWPdaxMhA0ZQNqEj6/yGLRy88aho6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gLke6GCr; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kSg00j0x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gLke6GCr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761118385; x=1792654385;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SEQdl/DDnTQ9VJ8ZCedM9vanjwM4a2PsYlLgC2nn7So=;
-  b=kSg00j0xSAu289w80USiajPdLYAAZB2uLPJG+hFxBea6X54vuEoXFWe8
-   9sTOB4AwpfaqivqENEpjuy7ExAoAKmbEIYmNp5vUtgL5DclYUO2vjomXS
-   H3d4pgPn+YWwizJh+Fh4Jfz9ZsAwmPOaDYfQK3zPmL2P9KvAuoaG4Z5EN
-   AfwntyuwfXYCf7uIGYuJXcGgQihGbZ98budCCUQbtAlxgKBupG9Ah+YbL
-   pnF/XYzHm+ROOVEytMvvrebeh401Y3b+luluZgljB+fK6IFm8Mt69mBCi
-   TZZmHFWoRivrkIm2dOMFH3pttsx8YyZNvqEEHw9y4OsUC0MeIySXFwcTT
-   g==;
-X-CSE-ConnectionGUID: w7vBQEs3RhSxwYvvoKKASQ==
-X-CSE-MsgGUID: +oSFBrt7Sd2sGdYsD3tSvw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="67094658"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="67094658"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 00:33:05 -0700
-X-CSE-ConnectionGUID: MEzP5nnDRnGPXvjWWDrxiA==
-X-CSE-MsgGUID: sENikpAJQz6z0cX1m998Cg==
+  t=1761118927; x=1792654927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4yTC+36exgdGZ8D10H669LXRniU7gmAH/RHHNfluhAE=;
+  b=gLke6GCrcGGIdgWg1UPvpoMLJADX3hNhjXOGoQGqJCJzFNLo5xRGP/zD
+   na+XW3qc6fnHcWQvukU+MCrLYc4kOlDK1F/DeEuX5BWZxeM9rPuhFy6cb
+   jRqdckh9oEHcY3VHdTJniwMfh7ftRcwZKDsXaYu+NNzZbjOoIO+VBRS7x
+   hJq+49zI4lcXqYvqAuLUHCYNtjDGbDP+aCfwW3k6OtCPAJtz4lDdLYbPw
+   meOuXgYRaIshs3Yhc9D5QkMePqUIFcDoHsv+hNOiq6M2VsNuDzJa5Jged
+   ToNBwSdYVh4NxbnEK3xlpPFUaW367vCYthC4vR/dQjqFNz+yhBOfof/06
+   A==;
+X-CSE-ConnectionGUID: eB5vnxMeQpSL0hhpwSK5/Q==
+X-CSE-MsgGUID: G7eoKbXfR4qCE2AYbORRkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67123222"
+X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
+   d="scan'208";a="67123222"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 00:42:07 -0700
+X-CSE-ConnectionGUID: t5l9xfT1RYuO2cn/qNwqFg==
+X-CSE-MsgGUID: UwCivyQtSte3Yzbfbg/fxQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="214441853"
+   d="scan'208";a="183690997"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 22 Oct 2025 00:33:05 -0700
+  by orviesa007.jf.intel.com with ESMTP; 22 Oct 2025 00:42:05 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vBTLC-000C6F-0J;
-	Wed, 22 Oct 2025 07:33:02 +0000
-Date: Wed, 22 Oct 2025 15:30:52 +0800
+	id 1vBTTu-000C6v-2m;
+	Wed, 22 Oct 2025 07:42:02 +0000
+Date: Wed, 22 Oct 2025 15:41:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [alobakin:libeth 7/7] ld.lld: error: duplicate symbol:
- ice_queue_mgmt_ops
-Message-ID: <202510221555.oaXJsANt-lkp@intel.com>
+To: Biancaa Ramesh <biancaa2210329@ssn.edu.in>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Biancaa Ramesh <biancaa2210329@ssn.edu.in>
+Subject: Re: [PATCH] Kconfig:Uses glibc so strscpy has to be manually- added
+Message-ID: <202510221515.tlpfL3lX-lkp@intel.com>
+References: <20251021171446.46942-1-biancaa2210329@ssn.edu.in>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,87 +64,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251021171446.46942-1-biancaa2210329@ssn.edu.in>
 
-tree:   https://github.com/alobakin/linux libeth
-head:   cb251653bf74723c653ae96a5b5a97e57dcc7b18
-commit: cb251653bf74723c653ae96a5b5a97e57dcc7b18 [7/7] ice: implement Rx queue management ops
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251022/202510221555.oaXJsANt-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221555.oaXJsANt-lkp@intel.com/reproduce)
+Hi Biancaa,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.18-rc2 next-20251022]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Biancaa-Ramesh/Kconfig-Uses-glibc-so-strscpy-has-to-be-manually-added/20251022-011608
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20251021171446.46942-1-biancaa2210329%40ssn.edu.in
+patch subject: [PATCH] Kconfig:Uses glibc so strscpy has to be manually- added
+config: x86_64-randconfig-002-20251022 (attached as .config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221515.tlpfL3lX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510221555.oaXJsANt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510221515.tlpfL3lX-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_gnss.c
-   >>>            drivers/net/ethernet/intel/ice/ice_gnss.o:(.rodata+0x160)
+>> scripts/kconfig/confdata.c:157:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     157 |         strscpy(depfile_path + depfile_prefix_len, name);
+         |         ^
+>> scripts/kconfig/util.c:70:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      70 |         strscpy(gs.s, "\0");
+         |         ^
+   scripts/kconfig/symbol.c1 error generated.
+   :812:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     812 |         strscpy(val, newval);
+         |         ^
+   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/util.o] Error 1 shuffle=3058352405
+   1 error generated.
+   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/confdata.o] Error 1 shuffle=3058352405
+   1 error generated.
+   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/symbol.o] Error 1 shuffle=3058352405
+   make[3]: Target 'oldconfig' not remade because of errors.
+   make[2]: *** [Makefile:742: oldconfig] Error 2 shuffle=3058352405
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
+   make[1]: Target 'oldconfig' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
+   make: Target 'oldconfig' not remade because of errors.
 --
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_tspll.c
-   >>>            drivers/net/ethernet/intel/ice/ice_tspll.o:(.rodata+0x1E0)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at queues.c
-   >>>            drivers/net/ethernet/intel/ice/virt/queues.o:(.rodata+0xBA0)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at fdir.c
-   >>>            drivers/net/ethernet/intel/ice/virt/fdir.o:(.rodata+0xAC0)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_sriov.c
-   >>>            drivers/net/ethernet/intel/ice/ice_sriov.o:(.rodata+0xD60)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_tc_lib.c
-   >>>            drivers/net/ethernet/intel/ice/ice_tc_lib.o:(.rodata+0x3A0)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_repr.c
-   >>>            drivers/net/ethernet/intel/ice/ice_repr.o:(.rodata+0x80)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_ethtool.c
-   >>>            drivers/net/ethernet/intel/ice/ice_ethtool.o:(.rodata+0x200)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_lag.c
-   >>>            drivers/net/ethernet/intel/ice/ice_lag.o:(.rodata+0x3C0)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_fw_update.c
-   >>>            drivers/net/ethernet/intel/ice/ice_fw_update.o:(.rodata+0xC60)
---
->> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
-   >>> defined at ice_main.c
-   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
-   >>> defined at ice_sf_eth.c
-   >>>            drivers/net/ethernet/intel/ice/ice_sf_eth.o:(.rodata+0x1E0)
-..
+>> scripts/kconfig/symbol.c:812:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     812 |         strscpy(val, newval);
+         |         ^
+>> scripts/kconfig/confdata.c:157:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     157 |         strscpy(depfile_path + depfile_prefix_len, name);
+         |         ^
+>> scripts/kconfig/util.c:70:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      70 |         strscpy(gs.s, "\0");
+         |         ^
+   1 error generated.
+   1 error generated.
+   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/confdata.o] Error 1 shuffle=3058352405
+   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/util.o] Error 1 shuffle=3058352405
+   1 error generated.
+   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/symbol.o] Error 1 shuffle=3058352405
+   make[3]: Target 'olddefconfig' not remade because of errors.
+   make[2]: *** [Makefile:742: olddefconfig] Error 2 shuffle=3058352405
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
+   make[1]: Target 'olddefconfig' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
+   make: Target 'olddefconfig' not remade because of errors.
+
+
+vim +/strscpy +157 scripts/kconfig/confdata.c
+
+   147	
+   148	/* touch depfile for symbol 'name' */
+   149	static int conf_touch_dep(const char *name)
+   150	{
+   151		int fd;
+   152	
+   153		/* check overflow: prefix + name + '\0' must fit in buffer. */
+   154		if (depfile_prefix_len + strlen(name) + 1 > sizeof(depfile_path))
+   155			return -1;
+   156	
+ > 157		strscpy(depfile_path + depfile_prefix_len, name);
+   158	
+   159		fd = open(depfile_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+   160		if (fd == -1)
+   161			return -1;
+   162		close(fd);
+   163	
+   164		return 0;
+   165	}
+   166	
 
 -- 
 0-DAY CI Kernel Test Service
