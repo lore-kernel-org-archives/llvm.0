@@ -1,61 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517C12FB968;
-	Wed, 22 Oct 2025 07:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936AF3054C8;
+	Wed, 22 Oct 2025 08:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761118929; cv=none; b=GraTQibbtDZQ0dHfgXht0egVYxvTi0KUEcIqNClDNbHtAj4ioMfi+mKt+iBQYfXrcIF3Xq963wPH1Rzxry+GddBhNjuMRwiPftbLb9mhfxaiF7+HXPLJiVw6ZN8eUjAlz3ScaJbtrdx2WRZrp/WnqE3vFldLsVy+7rmVoQwZTnQ=
+	t=1761121245; cv=none; b=bSenC+eabTh2vmAxgaPCTazznFrNemZE2l5W2MtvOTYeKeEI/x/55uhZUGtgFk0eG2fdlKilNABoufisAIenwD+hGTSifzdMxHnrRGTCHunD9OHirk9nAaX2syQyIt/2brCs7NuoTUi1kyS2ARlfkSvAe3tWc9DsVr5j9PuaBPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761118929; c=relaxed/simple;
-	bh=4yTC+36exgdGZ8D10H669LXRniU7gmAH/RHHNfluhAE=;
+	s=arc-20240116; t=1761121245; c=relaxed/simple;
+	bh=NaBVnYfiCGBUleVgENfqy+6MTH7byS2p6Wtyv6/P8ok=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H07w7iaXwnKmVqw/2sjgFDMfF+R35ZsaRX4RBS1NxyJr2AQIOFBeAZMcylyR57TicJMRrQAm5IDBMjBtFllObN5isiNwOXFQFlwnSZkXjfhl9vevp8Ia5jhrNrZQ4P7WqTrK+Pd/MkZrKwWPdaxMhA0ZQNqEj6/yGLRy88aho6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gLke6GCr; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rn9b/U80OjPVXYvloS+DNUPsw7gJQaXnmSIZ1yzk0BchPfQQEp6v5MoYAWd6BB0H7WxnvN+Idy1odDCH2RGKc06l2HoJ7Zi+m2nTqgxflrrAgvhojLJiBu0rwZ+TnnIK/Uhls6QgWo+rHzeJ9WXqvPMfEKqGSTEg+OCNOfazk9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dJvJ5L6k; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gLke6GCr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761118927; x=1792654927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4yTC+36exgdGZ8D10H669LXRniU7gmAH/RHHNfluhAE=;
-  b=gLke6GCrcGGIdgWg1UPvpoMLJADX3hNhjXOGoQGqJCJzFNLo5xRGP/zD
-   na+XW3qc6fnHcWQvukU+MCrLYc4kOlDK1F/DeEuX5BWZxeM9rPuhFy6cb
-   jRqdckh9oEHcY3VHdTJniwMfh7ftRcwZKDsXaYu+NNzZbjOoIO+VBRS7x
-   hJq+49zI4lcXqYvqAuLUHCYNtjDGbDP+aCfwW3k6OtCPAJtz4lDdLYbPw
-   meOuXgYRaIshs3Yhc9D5QkMePqUIFcDoHsv+hNOiq6M2VsNuDzJa5Jged
-   ToNBwSdYVh4NxbnEK3xlpPFUaW367vCYthC4vR/dQjqFNz+yhBOfof/06
-   A==;
-X-CSE-ConnectionGUID: eB5vnxMeQpSL0hhpwSK5/Q==
-X-CSE-MsgGUID: G7eoKbXfR4qCE2AYbORRkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67123222"
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="67123222"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 00:42:07 -0700
-X-CSE-ConnectionGUID: t5l9xfT1RYuO2cn/qNwqFg==
-X-CSE-MsgGUID: UwCivyQtSte3Yzbfbg/fxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="183690997"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 22 Oct 2025 00:42:05 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBTTu-000C6v-2m;
-	Wed, 22 Oct 2025 07:42:02 +0000
-Date: Wed, 22 Oct 2025 15:41:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Biancaa Ramesh <biancaa2210329@ssn.edu.in>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Biancaa Ramesh <biancaa2210329@ssn.edu.in>
-Subject: Re: [PATCH] Kconfig:Uses glibc so strscpy has to be manually- added
-Message-ID: <202510221515.tlpfL3lX-lkp@intel.com>
-References: <20251021171446.46942-1-biancaa2210329@ssn.edu.in>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dJvJ5L6k"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=GBiS77jacBsAV5FtDUoak5VLXkPdQf0nis8KTJqTfW4=; b=dJvJ5L6kzK0cWDQUXS+9Sv/+VK
+	d0CkMXZ8LBVpyOFapysJs3nZUl8zg9jTWIWcs7hMsJWUEWdw593rfTsyMVuBrGOxp7kergFX2kDAu
+	kRHlMRJjX66XPkxAzIXHxKzcAfWzVZxuKDsExmSD0CeQS3y2h8LVClTy6lALGeurbtbN08tcGCYsL
+	/vQ0qw1qBCzpwe3TRNnSukrnJKItuh8uQv7oB/ibvZYDRFJnxGZgGj3hljyUiY5aaxa8T1u6tEUgt
+	R30bNScOmi92rDSwQ+MJbXLrbKxu56TMtKAKqiNxmdw3XTNl50zs1smUC/tD8rqphtpHS7p2v2heZ
+	Evo5QUhw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vBTDO-00000000P2b-0jqI;
+	Wed, 22 Oct 2025 07:24:59 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7E1C730039F; Wed, 22 Oct 2025 10:20:25 +0200 (CEST)
+Date: Wed, 22 Oct 2025 10:20:25 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev,
+	Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Michael Kelley <mhklinux@outlook.com>,
+	kernel test robot <lkp@intel.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Uros Bizjak <ubizjak@gmail.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Marc Herbert <Marc.Herbert@linux.intel.com>,
+	Christopher Ferris <cferris@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/3] compiler_types: Introduce __counted_by_ptr()
+Message-ID: <20251022082025.GK4067720@noisy.programming.kicks-ass.net>
+References: <20251020220005.work.095-kees@kernel.org>
+ <20251020220118.1226740-1-kees@kernel.org>
+ <20251021095447.GL3245006@noisy.programming.kicks-ass.net>
+ <202510211210.84D670D1C@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,101 +84,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251021171446.46942-1-biancaa2210329@ssn.edu.in>
+In-Reply-To: <202510211210.84D670D1C@keescook>
 
-Hi Biancaa,
+On Tue, Oct 21, 2025 at 12:24:05PM -0700, Kees Cook wrote:
+> On Tue, Oct 21, 2025 at 11:54:47AM +0200, Peter Zijlstra wrote:
 
-kernel test robot noticed the following build errors:
+> > So why do we need both __counted_by_ptr() and this __sized_by(), won't
+> > one be good enough?
+> 
+> I remain extraordinarily frustrated that counted_by can't be used with
+> "void *". I hit a brick wall on this, though, and don't know how to
+> convince either GCC or Clang devs to fix it. It's so obviously correct
+> to me: "void *" uses a 1 byte iterator for arithmetic... so asking how
+> big a given allocation is should be byte sized!
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.18-rc2 next-20251022]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Right, at least for gnu11 language variants this really should work. I
+mean, disallow the usage for c11 if you're pedantic but for crying out
+loud, have the GNU extensions be consistent and all that.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Biancaa-Ramesh/Kconfig-Uses-glibc-so-strscpy-has-to-be-manually-added/20251022-011608
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251021171446.46942-1-biancaa2210329%40ssn.edu.in
-patch subject: [PATCH] Kconfig:Uses glibc so strscpy has to be manually- added
-config: x86_64-randconfig-002-20251022 (attached as .config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221515.tlpfL3lX-lkp@intel.com/reproduce)
+Feel free to use my feedback if it would help.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510221515.tlpfL3lX-lkp@intel.com/
+> Let me take another stab at it...
 
-All errors (new ones prefixed by >>):
+Thanks!
 
->> scripts/kconfig/confdata.c:157:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     157 |         strscpy(depfile_path + depfile_prefix_len, name);
-         |         ^
->> scripts/kconfig/util.c:70:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      70 |         strscpy(gs.s, "\0");
-         |         ^
-   scripts/kconfig/symbol.c1 error generated.
-   :812:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     812 |         strscpy(val, newval);
-         |         ^
-   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/util.o] Error 1 shuffle=3058352405
-   1 error generated.
-   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/confdata.o] Error 1 shuffle=3058352405
-   1 error generated.
-   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/symbol.o] Error 1 shuffle=3058352405
-   make[3]: Target 'oldconfig' not remade because of errors.
-   make[2]: *** [Makefile:742: oldconfig] Error 2 shuffle=3058352405
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
-   make[1]: Target 'oldconfig' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
-   make: Target 'oldconfig' not remade because of errors.
---
->> scripts/kconfig/symbol.c:812:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     812 |         strscpy(val, newval);
-         |         ^
->> scripts/kconfig/confdata.c:157:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     157 |         strscpy(depfile_path + depfile_prefix_len, name);
-         |         ^
->> scripts/kconfig/util.c:70:2: error: call to undeclared function 'strscpy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      70 |         strscpy(gs.s, "\0");
-         |         ^
-   1 error generated.
-   1 error generated.
-   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/confdata.o] Error 1 shuffle=3058352405
-   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/util.o] Error 1 shuffle=3058352405
-   1 error generated.
-   make[3]: *** [scripts/Makefile.host:131: scripts/kconfig/symbol.o] Error 1 shuffle=3058352405
-   make[3]: Target 'olddefconfig' not remade because of errors.
-   make[2]: *** [Makefile:742: olddefconfig] Error 2 shuffle=3058352405
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
-   make[1]: Target 'olddefconfig' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3058352405
-   make: Target 'olddefconfig' not remade because of errors.
+> As for avoiding __counted_by_ptr(), we could just raise the minimum
+> Clang and GCC versions to require this, but that means dropping existing
+> coverage (e.g GCC 15 supports only flexible array counted_by).
+> 
+> Maybe we could do a global __counted_by_ptr -> __counted_by replacement
+> once GCC 16 is released?
 
-
-vim +/strscpy +157 scripts/kconfig/confdata.c
-
-   147	
-   148	/* touch depfile for symbol 'name' */
-   149	static int conf_touch_dep(const char *name)
-   150	{
-   151		int fd;
-   152	
-   153		/* check overflow: prefix + name + '\0' must fit in buffer. */
-   154		if (depfile_prefix_len + strlen(name) + 1 > sizeof(depfile_path))
-   155			return -1;
-   156	
- > 157		strscpy(depfile_path + depfile_prefix_len, name);
-   158	
-   159		fd = open(depfile_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-   160		if (fd == -1)
-   161			return -1;
-   162		close(fd);
-   163	
-   164		return 0;
-   165	}
-   166	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That sounds like a plan! :-)
