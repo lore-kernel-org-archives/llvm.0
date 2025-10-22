@@ -1,37 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FB932D0FC;
-	Wed, 22 Oct 2025 11:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A6A2765ED;
+	Wed, 22 Oct 2025 12:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761131628; cv=none; b=cw0+aoj1ZuM94QQYJwy+ZoKrbPoe8b2OMG/TjcSkS4DI98W0yf8HT3OLklDble1WQ9dEfs+z70bbN4+nMTxLmZCdoHBHE9ed2p6GUWmQwjLgcvJhMiTGZLbDWNR5Tc9sR44WQ+rxBXfg6K0tOtmIYtbp7lOShfqaWCD0NuUQf44=
+	t=1761134435; cv=none; b=bfqijTuiOgQqKkk5N/TuoX8Qn5NJ03OOnJy23ZtAKuWCBh/CgMP3sAJ+ZKG6ZaBQeoyBPJQ21Nqh3i1mzIE6Ucj8TkXmiIiaEFVMa9PQFLJUKXsTE1K+QvDgYZr3TdvXSBSmwFSpaqsNSHSNGPTJE7Ltf+DuScoBLdDS4iIzYA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761131628; c=relaxed/simple;
-	bh=9JkqHbXtWKEBzKWtvut+xcrPkmaGyAQi2qgKw3sS3OE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HDqcCO/g8tqQaO44uAuzZRRpkmUp+NxKskXAhb36gXAtS4XPFM9zJX71LZBk5fyIez0gBNwfZrlHSAkHCcd+MWBRQ7lAW6mRCBd6gbyKTriJ961us2CSrfw5VCklzWDL1ctP0d88H4Pa0WlkCa7PqKmEyxN3gCX/9vzmXQtnRDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YTW1M6oU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761134435; c=relaxed/simple;
+	bh=VWiPIF2qwBAu4+cJXPOpztscrdm+U4nreWPsXfm5m4I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HkV150pSqcBl3ehaIo9kPUMuoBjMUmISmnqS8KjAQGkpYgrKDGlR6fUWV70Hs2dJEwzqcSq36IEHMtPCpq2r7+a5zQ2+UKN/Bmk6ejWpUWg8gSM8L4JhvoIVIpun9d+sedGSoUO9orFXJIFELA4clG2gHBUK+Iu3rpb8oYc7xfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUQTGQHN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YTW1M6oU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682EDC4CEE7;
-	Wed, 22 Oct 2025 11:13:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUQTGQHN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9198C4CEE7;
+	Wed, 22 Oct 2025 12:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761131627;
-	bh=9JkqHbXtWKEBzKWtvut+xcrPkmaGyAQi2qgKw3sS3OE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=YTW1M6oUVzOB6nL61BQsQqax0tIXI0AdorzkPGjuq2Hp4EJge8m+zyDGDAxddLOgY
-	 /c+UtrEb7fk/Pv8vlO4bdHTUves9hJbVby5v0tMul/34qqPTktvJm9lwGbLo1vbdET
-	 iky5LBIRFd+NZfd+MD3sOtnKKSVb9LcAFOqSpj65zJFbesSgpIskj6Nea1F6GGergm
-	 x7E++iFftDbqv5wWlV4OivlYGcf+B9GeMBeY8V6E+pQlQZDs7dB5BA2rKeJLAvxNPI
-	 MKxVzx4cLcMlZ5L5LLk1/OmpD38/FqX/ZsHpvzzPmNRipvoDPPJtfQLImr8DzgsCjJ
-	 P/YYD4nr0+e4Q==
-Date: Wed, 22 Oct 2025 13:13:43 +0200
+	s=k20201202; t=1761134434;
+	bh=VWiPIF2qwBAu4+cJXPOpztscrdm+U4nreWPsXfm5m4I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aUQTGQHN8iIJSNTK0COz+A5qQ13te/r6TwlUvBxuwB+zELinhlbe9yJT+WhRQqzLJ
+	 LIC/1sFeY4bQ8ZC8a8FN1vCyZuPOODTjyTgFo4+EeNJKlmly0ccFf0oE8sXg6jeJhw
+	 xwyUmBlCjB5TaTDPe0qHfDpUBrrHkPkkmFr/IbqZDJ3BBvEal36LgvKzSkMHJw7ynC
+	 E0mDOb/JRYtizuBokxBKgmgzKP1l2OoX6m77N7FybtRCnO7IGWqhcdH17An+vbvA57
+	 PYlrcewNz2eyFUrMkxhelsrH12bQc5pgMIwYEcm2DZBo8XmVfOIX/LskfUtvKD7A00
+	 wHgjt/HH+bBCw==
+Date: Wed, 22 Oct 2025 14:00:30 +0200
 From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: ojeda@kernel.org
-Subject: Prebuilt LLVM 21.1.4 uploaded
-Message-ID: <20251022111343.GA3803433@ax162>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, csander@purestorage.com,
+	Keith Busch <kbusch@meta.com>, Keith Busch <kbusch@kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCHv6] io_uring: add support for IORING_SETUP_SQE_MIXED
+Message-ID: <20251022120030.GA148714@ax162>
+References: <20251016180938.164566-1-kbusch@meta.com>
+ <176108414866.224720.11841089098235254459.b4-ty@kernel.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,16 +44,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <176108414866.224720.11841089098235254459.b4-ty@kernel.dk>
 
-Hi all,
+On Tue, Oct 21, 2025 at 04:02:28PM -0600, Jens Axboe wrote:
+> 
+> On Thu, 16 Oct 2025 11:09:38 -0700, Keith Busch wrote:
+> > Normal rings support 64b SQEs for posting submissions, while certain
+> > features require the ring to be configured with IORING_SETUP_SQE128, as
+> > they need to convey more information per submission. This, in turn,
+> > makes ALL the SQEs be 128b in size. This is somewhat wasteful and
+> > inefficient, particularly when only certain SQEs need to be of the
+> > bigger variant.
+> > 
+> > [...]
+> 
+> Applied, thanks!
+> 
+> [1/1] io_uring: add support for IORING_SETUP_SQE_MIXED
+>       commit: 31dc41afdef21f264364288a30013b538c46152e
 
-I have built and uploaded LLVM 21.1.4 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+This needs a pretty obvious fix up as clang points out:
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-opportunity to get them fixed in main and backported before the 21.x
-series is no longer supported.
+  io_uring/fdinfo.c:103:22: error: variable 'sqe' is uninitialized when used here [-Werror,-Wuninitialized]
+    103 |                 opcode = READ_ONCE(sqe->opcode);
+        |                                    ^~~
+
+I would have sent a formal patch but since it is at the top, I figured
+it would get squashed anyways.
 
 Cheers,
 Nathan
+
+diff --git a/io_uring/fdinfo.c b/io_uring/fdinfo.c
+index d5aa64203de5..5b26b2a97e1b 100644
+--- a/io_uring/fdinfo.c
++++ b/io_uring/fdinfo.c
+@@ -100,8 +100,8 @@ static void __io_uring_show_fdinfo(struct io_ring_ctx *ctx, struct seq_file *m)
+ 		if (sq_idx > sq_mask)
+ 			continue;
+ 
+-		opcode = READ_ONCE(sqe->opcode);
+ 		sqe = &ctx->sq_sqes[sq_idx << sq_shift];
++		opcode = READ_ONCE(sqe->opcode);
+ 		if (sq_shift) {
+ 			sqe128 = true;
+ 		} else if (io_issue_defs[opcode].is_128) {
