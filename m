@@ -1,142 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D5C30F54C;
-	Wed, 22 Oct 2025 09:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF322777FC
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 11:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761124127; cv=none; b=D4sessFUCcTM0Hez2wsqvd+PfRgUhRCQbgDElRzhlN4rid7f1fH7AXxa9qRXb41ArdSvBQa/X3I12Lj4tESQ1DiC2A3JAS706ddeHr0jSDSLVJaq8X1x7utmg4IKBSwJiDSSzlwZPcUI9Qh2Mjgl3cqwjZPa6/F4aP+LAfx6fCs=
+	t=1761130999; cv=none; b=bip/tUiyBITyPXudvb6I9YktZKbzghjDwvSUt+VBOgIu9+gbNm4HssIhfLiNpT3ZOIUjaROy6oAyHXI+RNJzUd60VyGjYNIeMVyuyOAO3WCJ4JbC/G7L8Tz9XoBBLbTYu66lx5VcaGKpXmzs+bB4j0MKlaM8ZxhiX2t7wAjqBpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761124127; c=relaxed/simple;
-	bh=LCO0C96luvGKrKtvHFdcvTHWZXFH2iocHPWf7TaeFWM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o3ZBM0eDqIfqTpn57kULhesyR4ASU/3Y3ou3iS3jZyY6+J3c6zKKMn0ClRAaFK+Vou75QbwKIHY6gruEo0wrVAI9Th7aitzCxQ2Mgqo7QWQPrxf/3io2i/MohjJaDr4ltEDocmuZo2/M9JRnjCAmhPF1LzLqQkdlZoLEEFnF0VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g4vnpRHJ; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761130999; c=relaxed/simple;
+	bh=4JavVz8FkRkGctrnUlx06KbkSyRHDh5aZttv1CaU6Kc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SbfXkutjRACYkwuDFXyp3vGYgedr9h/diNdhU0vpM5XYmUR6jvLJYKIAaJm/kkWYl+wAlezTWC8UkOe644h3FqW5LNgukxyfRt1DB7+KAgt4lvXmmUh/NTnmLh0Fg20ZxmVSneTZeF4RwhaWuQ9CN4PXWJ0jGD6T9CCR7c3wZBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UbgqKZ7p; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g4vnpRHJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761124126; x=1792660126;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LCO0C96luvGKrKtvHFdcvTHWZXFH2iocHPWf7TaeFWM=;
-  b=g4vnpRHJhHPxelCEkbgsleril56BkITDBQf9LKx+94aaJV9G0yEfRlRO
-   rBN0uXOmyA6zHol3QUNQ3sojyQbngO8lUtY0HWgTSMgzMqJ4Xjpdt+FKR
-   WQSE55a0tq4f+gp8RnT4Ru31ioTVjlQhEzbCbbrEntNOuZfs/04T/PSmz
-   6LRFrFyZUsCgAKe9zjtX+o9jKrSscmj5vZBkMtSUE+VTP1BTuUjN4oV6b
-   DSXS0kpCn8jvLTVT+M1auhhvsoRPBdwIzq/ZGFglTi2nJsHsKv4rPc0+n
-   aib8c8ZxCQ3qWZf9yGhBk7jM2GgyCG3ZFWs24vdAfXe0+NorRQuqM84lM
-   w==;
-X-CSE-ConnectionGUID: eJxGj5eiRjORy8FOVfq1tA==
-X-CSE-MsgGUID: tVghfwiUQqmqPVltmpLGAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63361338"
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="63361338"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 02:08:45 -0700
-X-CSE-ConnectionGUID: bcjkD15CTvqVqodpLHMdXA==
-X-CSE-MsgGUID: /lJIO8KIQ8Goy0vOXfXsgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="183031605"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 22 Oct 2025 02:08:43 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBUpk-000CAz-2a;
-	Wed, 22 Oct 2025 09:08:40 +0000
-Date: Wed, 22 Oct 2025 17:08:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: [sean-jc:vmx/tdx_populate_cleanups 5/26]
- arch/x86/kvm/mmu/mmu.c:5021:26: error: no member named 'gmem' in 'struct
- kvm_memory_slot'
-Message-ID: <202510221928.ikBXHGCf-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UbgqKZ7p"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-47118259fd8so42084305e9.3
+        for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 04:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761130996; x=1761735796; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PPx6FKp7wmsKPVdZUwCuuivNwZpWI/suVikvoWWTCC4=;
+        b=UbgqKZ7ppNumdJ3dnvAfctYgvCJb7mCkS16vbI2GaVP+7BPHOOryp7N0IdqcprNN6k
+         jo3K7bmBR5Yke7pactVuFtitLueMDo1u8GOIbuJcDWSx486yqpsYa25SZFkIRR98GvbR
+         BR1YqyNUczpwRslMP2RUpz6vAEM4NthBn/h8UIRVEpOkOprvOr0UQ7Gdq7JGK1zZHiPH
+         x4VlxoIvS8Sos5d3mWURlV1NXtbOu7FvEt2MlLR6PixFYro/OyClkcAt+a5BwDB5qrd3
+         bWdEra/gpD02/cLrkjMiYx8AaDamS5EywjoRxCcb4KE4B1lfkYE/Zbv1TMLeC6wvG5wO
+         y5DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761130996; x=1761735796;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PPx6FKp7wmsKPVdZUwCuuivNwZpWI/suVikvoWWTCC4=;
+        b=hFmTcBfhZMZBWNgQr6elnINvvvC22Q+JyH234yUudbrCNWMZXfyS6q/iukrZjkKReg
+         OV/99opTBaVUD4OIvsN/mkE65HCDP9NVvZ/8wiZiIJlwQpvXe1l6/IuKI2SWTHdYiQKG
+         5/XUxWMBcoa87JriqEwQ7ItHpNg9XTw3/TWItddCCuApYUr0EcxxtmD4ZSLl4ZrBJeK0
+         ckhT2T18fBg6Nt6b+eq7WbzVbcTPr0trs7wSjUrN8d5iQbgvcsmyNabPBpKxqw41jp15
+         chV7lFw5u1CQ9Kq+XNHtsvrzhrWRpp6OHi6Xdc8nskx3hANuvbMz2P1tCfSLrTGGh14z
+         ndSA==
+X-Forwarded-Encrypted: i=1; AJvYcCXZCGk5Etk1Z/MS8AiLw3F/bTKjdoEx/znWZyG+WbjBXyRkuVYtldVPTXscSviF3DAkzNGu@lists.linux.dev
+X-Gm-Message-State: AOJu0YxtsD39X/fGp0BoOx08nExRZy1nw9b83S6iEaP+y1Zbf1qIw1in
+	6cGTeFGfKXQfENzcPrX+5mf29vm1IK+7P/dbgFbupjQCz4/4goQpne8farXWgfh99a4=
+X-Gm-Gg: ASbGncvvyfdrpSUrXgq56aG7v1lnJrFQ2+2lrlcYz2gcT1KiOPaSRn/u+/MbYZ3EcKh
+	j0dTruCzAl/dPHK0fIEeAviFmSaaZTt8dAtL7tPdX8O2OUkhwcOXdS+9gM3BPy3MABWFwwFrCHy
+	xy3VFUa72sR+FgcxISx2+wbzQXHIUeYmcA1tUKpC4CIbsen3XOdEFI2jp5ONdQiQIbNUWdhffVH
+	GLWkOMcf99n1NwVa2GaYJBWuCYqEbeEIp78kJpvcRInYhGTaYHUl73DLyPESyLxHv80P2e+d57t
+	hOhgk07p1yHzEb51deJCfN9qYYYPxZqdFjD1YUMa0mFn6PPOM1Uad6Em63tbd+T4Z+pJfyYE/9w
+	88Ik8IClbJJFA6osCXnv0xLz3wI9ZU3Tj1uFb+DLSJw7+qGIuZ00hQWxjZT+RZwUJmxzyO6y7Hq
+	CVhRoZkzI52S0ob+rWSWCsukumGvbvoQXHs5Lhsg==
+X-Google-Smtp-Source: AGHT+IF8LilulXH5At0tgqLHRXCGDcvcWLjbyZ+//qsb5pM2DM6kkE8yghXjTsH7iBfpaK0P/8VeBQ==
+X-Received: by 2002:a05:600c:870b:b0:46f:b42e:e366 with SMTP id 5b1f17b1804b1-4711791fa34mr146867135e9.40.1761130995897;
+        Wed, 22 Oct 2025 04:03:15 -0700 (PDT)
+Received: from localhost.localdomain ([185.48.76.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c4369b33sm37756895e9.14.2025.10.22.04.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Oct 2025 04:03:15 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+To: linux-perf-users@vger.kernel.org,
+	namhyung@kernel.org,
+	acme@kernel.org
+Cc: irogers@google.com,
+	James Clark <james.clark@linaro.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Tianyou Li <tianyou.li@intel.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Zhiguo Zhou <zhiguo.zhou@intel.com>,
+	Wangyang Guo <wangyang.guo@intel.com>,
+	Pan Deng <pan.deng@intel.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] perf annotate: Fix Clang build by adding block in switch case
+Date: Wed, 22 Oct 2025 12:02:40 +0100
+Message-Id: <20251022110241.1283519-1-james.clark@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/sean-jc/linux vmx/tdx_populate_cleanups
-head:   7298dd9bb6d2003af41f75bf1839c8e298a32b13
-commit: d9d7775e7dd7525e235db52a3ea99f1e41cdc72e [5/26] KVM: x86/mmu: Add dedicated API to map guest_memfd pfn into TDP MMU
-config: i386-buildonly-randconfig-002-20251022 (https://download.01.org/0day-ci/archive/20251022/202510221928.ikBXHGCf-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221928.ikBXHGCf-lkp@intel.com/reproduce)
+Clang and GCC disagree with what constitutes a "declaration after
+statement". GCC allows declarations in switch cases without an extra
+block, as long as it's immediately after the label. Clang does not.
+Unfortunately this is the case even in the latest versions of both
+compilers. The only option that makes them behave in the same way is
+-Wpedantic, which can't be enabled in Perf because of the number of
+warnings it generates.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510221928.ikBXHGCf-lkp@intel.com/
+Add a block to fix the Clang build, which is the only thing we can do.
 
-All errors (new ones prefixed by >>):
+Fixes the build error:
 
->> arch/x86/kvm/mmu/mmu.c:5021:26: error: no member named 'gmem' in 'struct kvm_memory_slot'
-    5021 |             WARN_ON_ONCE(!slot->gmem.file) ||
-         |                           ~~~~  ^
-   include/asm-generic/bug.h:184:41: note: expanded from macro 'WARN_ON_ONCE'
-     184 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^~~~~~~~~
-   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
-     171 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   arch/x86/kvm/mmu/mmu.c:5022:37: error: no member named 'gmem' in 'struct kvm_memory_slot'
-    5022 |             WARN_ON_ONCE(!file_count(slot->gmem.file)))
-         |                                      ~~~~  ^
-   include/linux/fs.h:1270:39: note: expanded from macro 'file_count'
-    1270 | #define file_count(f)   file_ref_read(&(f)->f_ref)
-         |                                         ^
-   include/asm-generic/bug.h:184:41: note: expanded from macro 'WARN_ON_ONCE'
-     184 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
-         |                                         ^~~~~~~~~
-   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
-     171 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   arch/x86/kvm/mmu/mmu.c:5025:40: error: no member named 'gmem' in 'struct kvm_memory_slot'
-    5025 |         lockdep_assert_held(file_inode(&slot->gmem.file)->i_mapping->invalidate_lock));
-         |                                         ~~~~  ^
-   include/linux/lockdep.h:285:33: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                                        ^
-   include/linux/lockdep.h:252:47: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                        ^~~~
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |                                       ^~~~
-   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
-     171 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
->> arch/x86/kvm/mmu/mmu.c:5025:79: error: expected ';' after do/while statement
-    5025 |         lockdep_assert_held(file_inode(&slot->gmem.file)->i_mapping->invalidate_lock));
-         |                                                                                      ^
-         |                                                                                      ;
-   4 errors generated.
+  ui/browsers/annotate.c:999:4: error: expected expression
+  struct annotation_line *al = NULL;
 
+  ui/browsers/annotate.c:1008:4: error: use of undeclared identifier 'al'
+  al = annotated_source__get_line(notes->src, offset);
 
-vim +5021 arch/x86/kvm/mmu/mmu.c
+  ui/browsers/annotate.c:1009:24: error: use of undeclared identifier 'al'
+  browser->curr_hot = al ? &al->rb_node : NULL;
 
-  5016	
-  5017	static void kvm_assert_gmem_invalidate_lock_held(struct kvm_memory_slot *slot)
-  5018	{
-  5019	#ifdef CONFIG_PROVE_LOCKING
-  5020		if (WARN_ON_ONCE(!kvm_slot_has_gmem(slot)) ||
-> 5021		    WARN_ON_ONCE(!slot->gmem.file) ||
-  5022		    WARN_ON_ONCE(!file_count(slot->gmem.file)))
-  5023			return;
-  5024	
-> 5025		lockdep_assert_held(file_inode(&slot->gmem.file)->i_mapping->invalidate_lock));
-  5026	#endif
-  5027	}
-  5028	
+  ui/browsers/annotate.c:1009:30: error: use of undeclared identifier 'al'
+  browser->curr_hot = al ? &al->rb_node : NULL;
 
+  ui/browsers/annotate.c:1000:8: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+  s64 offset = annotate_browser__curr_hot_offset(browser);
+
+Fixes: ad83f3b7155d ("perf c2c annotate: Start from the contention line")
+Signed-off-by: James Clark <james.clark@linaro.org>
+---
+ tools/perf/ui/browsers/annotate.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+index 3a81912279ad..36aca8d6d003 100644
+--- a/tools/perf/ui/browsers/annotate.c
++++ b/tools/perf/ui/browsers/annotate.c
+@@ -995,7 +995,7 @@ static int annotate_browser__run(struct annotate_browser *browser,
+ 		case 'H':
+ 			nd = browser->curr_hot;
+ 			break;
+-		case 's':
++		case 's': {
+ 			struct annotation_line *al = NULL;
+ 			s64 offset = annotate_browser__curr_hot_offset(browser);
+ 
+@@ -1012,6 +1012,7 @@ static int annotate_browser__run(struct annotate_browser *browser,
+ 			annotate__scnprintf_title(hists, title, sizeof(title));
+ 			annotate_browser__show(browser, title, help);
+ 			continue;
++		}
+ 		case 'o':
+ 			annotate_opts.use_offset = !annotate_opts.use_offset;
+ 			annotation__update_column_widths(notes);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
