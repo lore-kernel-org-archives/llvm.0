@@ -1,108 +1,148 @@
-Received: from localhost.localdomain (unknown [147.136.157.3])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B732F693E
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 07:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D2B2F5A12;
+	Wed, 22 Oct 2025 07:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761118119; cv=none; b=kYoKnSplM7ItzMsR+E2hqRwZiq0TDB9OY5JdqGAg8DTgi8kgq0oMFpgTLhB/GbYos6DGRIVwYC2HfR4kqmUmUl6rx9nm4jC4AYmPCrbIgpbCrxuRYJnzNT9Cu/f5q9h94DsPb6z0xhdDHNmmF7/Z4ID/Akw1YJTW2iXH1Wlz/nA=
+	t=1761118388; cv=none; b=pHmnvCtA9BBGUpWf1HlKSkMLNL3kK7etrndNllFG/Tm1yWUDB9vIK/uNiUHn7qdJzOKl5LgRNQSvz9GwCYlzYL/a9wZTjSKQFY4uAocK89QMZsCNdAHMAOA2dpTpc8qvnfAxagwoCVWElH8rvYCuw2zljQZcVXQqKONdtMwveXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761118119; c=relaxed/simple;
-	bh=QK8wO2LnZXdBOBPcu0Yz+H6JeLiJpO6vJbSSQ7bD/SE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XWZitundobqQMbh3MV8hUCgZcUhjnrYtyXA1w90KlW1u2vWZX6rj1lHiGfNR6B4MPWfV9lnd/DT+IQ8Yx3ReKJxu0wQSoQxR8X7fJWWymQwdLg35g4lLJ1JTkZoQXfm6NJGAXfmQqhy1iUujUgeygt+Qepaxq4LQk/glTXkoRXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
-Received: by localhost.localdomain (Postfix, from userid 1007)
-	id 6C84D8B2A0C; Wed, 22 Oct 2025 15:18:42 +0800 (+08)
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code with __BPF_FEATURE_ADDR_SPACE_CAST
-Date: Wed, 22 Oct 2025 15:18:20 +0800
-Message-ID: <20251022071825.238909-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1761118388; c=relaxed/simple;
+	bh=SEQdl/DDnTQ9VJ8ZCedM9vanjwM4a2PsYlLgC2nn7So=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UBd9rAJYs3QlBw+N+tHULUMIwoGMJo2Vwl8oIzw0Iky+Dz7UfNhLez59Do7hj7L1KYm0fJJhOVunPdjrtEErhq1IVa8TWlxYpaNzj92zHy5m4J5bgLIujZtNPtzSx/tH0qsvFsDOfQxmgfTcTrh9COApgSLOFQT6msYX/f9A6Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kSg00j0x; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kSg00j0x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761118385; x=1792654385;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SEQdl/DDnTQ9VJ8ZCedM9vanjwM4a2PsYlLgC2nn7So=;
+  b=kSg00j0xSAu289w80USiajPdLYAAZB2uLPJG+hFxBea6X54vuEoXFWe8
+   9sTOB4AwpfaqivqENEpjuy7ExAoAKmbEIYmNp5vUtgL5DclYUO2vjomXS
+   H3d4pgPn+YWwizJh+Fh4Jfz9ZsAwmPOaDYfQK3zPmL2P9KvAuoaG4Z5EN
+   AfwntyuwfXYCf7uIGYuJXcGgQihGbZ98budCCUQbtAlxgKBupG9Ah+YbL
+   pnF/XYzHm+ROOVEytMvvrebeh401Y3b+luluZgljB+fK6IFm8Mt69mBCi
+   TZZmHFWoRivrkIm2dOMFH3pttsx8YyZNvqEEHw9y4OsUC0MeIySXFwcTT
+   g==;
+X-CSE-ConnectionGUID: w7vBQEs3RhSxwYvvoKKASQ==
+X-CSE-MsgGUID: +oSFBrt7Sd2sGdYsD3tSvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="67094658"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="67094658"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 00:33:05 -0700
+X-CSE-ConnectionGUID: MEzP5nnDRnGPXvjWWDrxiA==
+X-CSE-MsgGUID: sENikpAJQz6z0cX1m998Cg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
+   d="scan'208";a="214441853"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 22 Oct 2025 00:33:05 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBTLC-000C6F-0J;
+	Wed, 22 Oct 2025 07:33:02 +0000
+Date: Wed, 22 Oct 2025 15:30:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [alobakin:libeth 7/7] ld.lld: error: duplicate symbol:
+ ice_queue_mgmt_ops
+Message-ID: <202510221555.oaXJsANt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When compiling the BPF selftests with Clang versions that do not support
-the addr_space_cast builtin, the build fails with assembly errors in
-"verifier_ldsx.c" [1].
+tree:   https://github.com/alobakin/linux libeth
+head:   cb251653bf74723c653ae96a5b5a97e57dcc7b18
+commit: cb251653bf74723c653ae96a5b5a97e57dcc7b18 [7/7] ice: implement Rx queue management ops
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251022/202510221555.oaXJsANt-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221555.oaXJsANt-lkp@intel.com/reproduce)
 
-The root cause is that the inline assembly using addr_space_cast is
-being processed by a compiler that lacks this feature. To resolve this,
-wrap the affected code sections (specifically the arena_ldsx_* test
-functions) with #if defined(__BPF_FEATURE_ADDR_SPACE_CAST). This
-ensures the code is only compiled when the Clang supports the necessary
-feature, preventing build failures on older or incompatible compiler
-versions.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510221555.oaXJsANt-lkp@intel.com/
 
-This change maintains test coverage for systems with support while
-allowing the tests to build successfully in all environments.
+All errors (new ones prefixed by >>):
 
-[1]:
-root:tools/testing/selftests/bpf$ make
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_gnss.c
+   >>>            drivers/net/ethernet/intel/ice/ice_gnss.o:(.rodata+0x160)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_tspll.c
+   >>>            drivers/net/ethernet/intel/ice/ice_tspll.o:(.rodata+0x1E0)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at queues.c
+   >>>            drivers/net/ethernet/intel/ice/virt/queues.o:(.rodata+0xBA0)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at fdir.c
+   >>>            drivers/net/ethernet/intel/ice/virt/fdir.o:(.rodata+0xAC0)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_sriov.c
+   >>>            drivers/net/ethernet/intel/ice/ice_sriov.o:(.rodata+0xD60)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_tc_lib.c
+   >>>            drivers/net/ethernet/intel/ice/ice_tc_lib.o:(.rodata+0x3A0)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_repr.c
+   >>>            drivers/net/ethernet/intel/ice/ice_repr.o:(.rodata+0x80)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_ethtool.c
+   >>>            drivers/net/ethernet/intel/ice/ice_ethtool.o:(.rodata+0x200)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_lag.c
+   >>>            drivers/net/ethernet/intel/ice/ice_lag.o:(.rodata+0x3C0)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_fw_update.c
+   >>>            drivers/net/ethernet/intel/ice/ice_fw_update.o:(.rodata+0xC60)
+--
+>> ld.lld: error: duplicate symbol: ice_queue_mgmt_ops
+   >>> defined at ice_main.c
+   >>>            drivers/net/ethernet/intel/ice/ice_main.o:(ice_queue_mgmt_ops)
+   >>> defined at ice_sf_eth.c
+   >>>            drivers/net/ethernet/intel/ice/ice_sf_eth.o:(.rodata+0x1E0)
+..
 
-  CLNG-BPF [test_progs] verifier_ldsx.bpf.o
-progs/verifier_ldsx.c:322:2: error: invalid operand for instruction
-  322 |         "r1 = %[arena] ll;"
-      |         ^
-<inline asm>:1:52: note: instantiated into assembly here
-    1 |         r1 = arena ll;r0 = 0xdeadbeef;r0 = addr_space_cast(r0,...
-      |                                                           ^
-
-Fixes: f61654912404 ("selftests: bpf: Add tests for signed loads from arena")
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- tools/testing/selftests/bpf/progs/verifier_ldsx.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index c8494b682c31..cefa02e417d3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -263,6 +263,7 @@ __naked void ldsx_ctx_8(void)
- 	: __clobber_all);
- }
- 
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- SEC("syscall")
- __description("Arena LDSX Disasm")
- __success
-@@ -425,6 +426,7 @@ __naked void arena_ldsx_s32(void *ctx)
- 	:  __clobber_all
- 	);
- }
-+#endif
- 
- /* to retain debug info for BTF generation */
- void kfunc_root(void)
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
