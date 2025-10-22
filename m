@@ -1,110 +1,152 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0528E34B434
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 15:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4E92737E8
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 15:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761146848; cv=none; b=d16L1CG1dkKbSne5QJ19TtEsy2f4wRQ8HFVhZhvIywBqpC+AlH0qmj/HmsCr8OIh64csMgmzz5kDxTYdkwudSx5HHkfahlSuhPjvqQThVcaOewfJ/RaUWRR7RScaMY8CBkdsYYap1XV1tArzQM/v2uq7dOTZRPtq1luI2a2RU7M=
+	t=1761147205; cv=none; b=fJcE96k0rzfBayCoT5bq0//BLnOOx2Dj+vyXyjj3ApVhFhZqsjhzM/kUaEdLBQnbVYzZprtD4YDa3f7xADHhGcn5RBkoNEU23iVhQRcfOu3d+KERF/SxH5t7Qq8pFQdbACw6AMFAdHUUpVFCre2ZrB2Xd+ELycDoD9aUsCJAQN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761146848; c=relaxed/simple;
-	bh=kNgL40BudYWuJuAsmdNvcDtZ0OwcI9RxNTByNbcVNcw=;
+	s=arc-20240116; t=1761147205; c=relaxed/simple;
+	bh=azd4xDmevme8F23fM40Ty5P4T9DB/os76+mdY/FZrRY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lw94q/DMSzFncx2J9G+lbx0EAW43+qcQj5/RbGN8YtxEsbk0sMfFn3Hb6oAZVMLCtwHcd93PwIUBXZgfUvgNVcjjE3NR7h1rgsoTA9hsS9DdaH4H70sVC/GpzodX9o9z0oBLLOk7wkDrDc485TYvyKT/6F0LpVc1AkoQuS2h6IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fjSQRwvM; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 In-Reply-To:Content-Type; b=QUdOSPusRi/4YtxUpJxkBDUbwpavWFRN2s7ZofBqFIKoTQsFMdPP1cdDFBWJ1CKWPsg2UlItdw0JZFRYvSALoxxaKl/28Prz0mOdAaYaR7Eus3bsZ3BC+/uuAPDicyt8Wy5dJD1ZrhR5931rpC0gBlgFo4SY69FKUkm8Y55uE5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eFGKa3n0; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fjSQRwvM"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-430c97cbe0eso45347775ab.2
-        for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 08:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1761146845; x=1761751645; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zoALVDG9RnT7BAOdsnJMe54/Tt3GRwf2SgNb0DV4KSQ=;
-        b=fjSQRwvMrk18k90FRWxOCUwiD9uU3nEiRSt91kGzwdB412yb7JZV35PbglcahDHEUe
-         U3l71/50/zVBDDmYj6rng7I4GDtdzSjf4FMyC6XWSnxUDOV0iNMhcjpNRaRU+yPlICpD
-         gU7Cx84ur2UWS0Tc3boxkj+XPYietckB/JKXM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761146845; x=1761751645;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zoALVDG9RnT7BAOdsnJMe54/Tt3GRwf2SgNb0DV4KSQ=;
-        b=C1GBqAdhS+Q4/PE9mOkr1/VW5BCZvQYaA3UtreHIlYZP4eE8L0UEByrIIPUPofJ92h
-         0u5PrTx6YW6H0RuuODh+HRnQRhVwrZOIXGiSyXYXGRP+hilyiAOgzmNPKnUgb16R0UrA
-         USRK0s8fbeWchK4IfO2AFBALVAp2AlcpM/d4o4SQ7HBvQe4iHQ1uNFmhSbX8FXEuBQ/6
-         lmc1fITTmrLSl77XWIbWmlmGP0lVHo/59W1sebXeI0t1snE7QGwVxw9Wi3OdMPGHpB+4
-         04DNKsudMO1Y9f9vWpPDVMd8mBvl3VS1Ewr1ZBhG/W3jtSwtuEo5oTVB8jmhgKEYRk0+
-         zn+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXMjvU37qATnb3vS1PIkQD32BSmSdpxmJAsXOCeUAUN9nlIP2FWjHMRuAopDGlFzeDWf1yq@lists.linux.dev
-X-Gm-Message-State: AOJu0YwvFgxMFAosYwPuah8OLWc41E32PTyVQXC/juDBSyXBoCNQYWpU
-	4PBj7Mr09fL5LGH5SAgDWOlRCJs+MJZsd+MKWDERCM8peD98gHjHQIEKu+xWGK4VT0k=
-X-Gm-Gg: ASbGncvPB+zPqGNt6Ao6ILXD80DbcaafB/xIAlpNX2U0mwbjuW0C9pcXtChe9K8+SXN
-	WMwvj1KXo22qUSz0vNGFtZvkfW+XrkA56dPgm/aqn3QQXMg34qRlnlev3ceGFy6bVnbt9H0cM0b
-	eHUsnLqzTzO4t7n2evTRIp2Dnce2FkaObp41UBWPZFKAPo55BhBsStiG73xjGzO2Csp8Fg1pEnu
-	wSvswNsPWVMRq6lz4G/naWi2GeQCsTghfYRMHDpv+mP2t2PNFV1hKAwaomGNnH4qoeL011h5qNF
-	UVv9+z8A9QNJVcbqfilejxbGEd02NmGlcokbTIVGAg0VB8dp8BW5xcoX3OSFzjTxjR7v0MRBl4v
-	qZ2Cpa33KzElpoqpQPc3jOb7hWysVEFTxaosIAaJc1MtroGyR3pEJJWfel1Dz34qE7lCM5wU5mG
-	PoT5CMqOZH/lOz
-X-Google-Smtp-Source: AGHT+IFHrNAgETUq7iHXWj4LaXPG7j1qD4lSrv4wnohCO6eo9eW67OevdQz1fzSz9sygsvW/JqehtA==
-X-Received: by 2002:a05:6e02:3101:b0:431:d76b:d133 with SMTP id e9e14a558f8ab-431d76bd17cmr27048295ab.12.1761146845007;
-        Wed, 22 Oct 2025 08:27:25 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a964a8a8sm5288976173.29.2025.10.22.08.27.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Oct 2025 08:27:24 -0700 (PDT)
-Message-ID: <cb30af9e-c22b-485a-a83c-f395880cd799@linuxfoundation.org>
-Date: Wed, 22 Oct 2025 09:27:23 -0600
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eFGKa3n0"
+Message-ID: <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761147200;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1a9OuwdCiOtRZfIJ9ZURVIn9cH6TPq5+gdX1ROh5QmQ=;
+	b=eFGKa3n0v+gHauHTxLKueQLAry7KlTReLpg9h+9XqhNtPRk8LF+u+R6oVmn9YtpGzNCiHr
+	0LR4qy9YAe5qyC2O1TlqqARqKSZdMMw9HwU2uuoq+j/3hO5drJ7GYoRHfshorDkep/F8Z+
+	LozxD+2XkIn2iXlKfyXRyQUHadfDEDo=
+Date: Wed, 22 Oct 2025 08:33:12 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under
- label
-To: Dev Jain <dev.jain@arm.com>, Sidharth Seela <sidharthseela@gmail.com>,
- nphamcs@gmail.com, hannes@cmpxchg.org, nathan@kernel.org, shuah@kernel.org,
- morbo@google.com, justinstitt@google.com, nick.desaulniers+lkml@gmail.com
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- david.hunter.linux@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250929115405.25695-2-sidharthseela@gmail.com>
- <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com>
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code
+ with __BPF_FEATURE_ADDR_SPACE_CAST
+Content-Language: en-GB
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Puranjay Mohan <puranjay@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20251022071825.238909-1-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 9/29/25 22:52, Dev Jain wrote:
-> 
-> On 29/09/25 5:24 pm, Sidharth Seela wrote:
->> Fix warning caused from declaration under a case label. The proper way
->> is to declare variable at the beginning of the function. The warning
->> came from running clang using LLVM=1; and is as follows:
->> -- 
 
-Sidharth,
 
-Make sure to not use "---" in your commit logs. Everything after
-this line gets thrown away. I had to go fix it manually.
+On 10/22/25 12:18 AM, Jiayuan Chen wrote:
+> When compiling the BPF selftests with Clang versions that do not support
+> the addr_space_cast builtin, the build fails with assembly errors in
+> "verifier_ldsx.c" [1].
+>
+> The root cause is that the inline assembly using addr_space_cast is
+> being processed by a compiler that lacks this feature. To resolve this,
+> wrap the affected code sections (specifically the arena_ldsx_* test
+> functions) with #if defined(__BPF_FEATURE_ADDR_SPACE_CAST). This
+> ensures the code is only compiled when the Clang supports the necessary
+> feature, preventing build failures on older or incompatible compiler
+> versions.
+>
+> This change maintains test coverage for systems with support while
+> allowing the tests to build successfully in all environments.
+>
+> [1]:
+> root:tools/testing/selftests/bpf$ make
+>
+>    CLNG-BPF [test_progs] verifier_ldsx.bpf.o
+> progs/verifier_ldsx.c:322:2: error: invalid operand for instruction
+>    322 |         "r1 = %[arena] ll;"
+>        |         ^
+> <inline asm>:1:52: note: instantiated into assembly here
+>      1 |         r1 = arena ll;r0 = 0xdeadbeef;r0 = addr_space_cast(r0,...
+>        |                                                           ^
 
->> -test_cachestat.c:260:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
->>    260 |                 char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
->>        |
->>
->> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
->> ---
->>
-> 
-> Reviewed-by: Dev Jain <dev.jain@arm.com>
-> 
-Applied to linux-kselftest fixes branch for next rc.
+I think you are using llvm18 and earlier. Why can you upgrade to llvm19 and later
+which should solve the problem?
 
-thanks,
--- Shuah
+> Fixes: f61654912404 ("selftests: bpf: Add tests for signed loads from arena")
+
+We do not need to have Fixes. compiler is also moving forward, we cannot support
+really old compiler and it is no point to have __BPF_FEATURE_ADDR_SPACE_CAST
+for really old compilers. So at some point, __BPF_FEATURE_ADDR_SPACE_CAST will
+become default.
+
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>   tools/testing/selftests/bpf/progs/verifier_ldsx.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> index c8494b682c31..cefa02e417d3 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> @@ -263,6 +263,7 @@ __naked void ldsx_ctx_8(void)
+>   	: __clobber_all);
+>   }
+>   
+> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+>   SEC("syscall")
+>   __description("Arena LDSX Disasm")
+>   __success
+> @@ -425,6 +426,7 @@ __naked void arena_ldsx_s32(void *ctx)
+>   	:  __clobber_all
+>   	);
+>   }
+> +#endif
+
+If you are really using llvm18, then I found there are some other
+build failures as well, e.g.,
+
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
+    47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
+       |               ^
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160636:48: note: previous declaration is here
+  160636 | extern void __attribute__((address_space(1))) *bpf_arena_alloc_pages(void *p__map, void __attribute__((address_space(1))) *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
+         |                                                ^
+In file included from progs/stream.c:8:
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:49:5: error: conflicting types for 'bpf_arena_reserve_pages'
+    49 | int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 page_cnt) __ksym __weak;
+       |     ^
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160638:12: note: previous declaration is here
+  160638 | extern int bpf_arena_reserve_pages(void *p__map, void __attribute__((address_space(1))) *ptr__ign, u32 page_cnt) __weak __ksym;
+         |            ^
+In file included from progs/stream.c:8:
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:50:6: error: conflicting types for 'bpf_arena_free_pages'
+    50 | void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cnt) __ksym __weak;
+       |      ^
+/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160637:13: note: previous declaration is here
+  160637 | extern void bpf_arena_free_pages(void *p__map, void __attribute__((address_space(1))) *ptr__ign, u32 page_cnt) __weak __ksym;
+         |             ^
+
+Please cover all build failures at once.
+
+>   
+>   /* to retain debug info for BTF generation */
+>   void kfunc_root(void)
+
