@@ -1,141 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1E335BDAC
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 14:33:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D082B33EB09;
+	Wed, 22 Oct 2025 14:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761143599; cv=none; b=ZHZLYttOw5HgLxglOzNQjhNiTtJmqmjDQr/3ndXna75gYCk5yPuH0zD/1BSivcBFeUvwrU4SmQJnrq9MglaiJrcZL4f142J/1DWsrZqnclsdTr2BL9kCeqJ3SF+BNgCDnsWbSCIQ/hpv4yvWc6l2ZWpwW+Y1NOEl6UF7N5r5dCk=
+	t=1761144964; cv=none; b=C4Ynl25o0agc5zJPfIxnh7iTd3Z6hQjunTGUGE/PAjspg/F4ac3s8eUJrQLY3Y1ZRB/8s6gVSEZbQstKiKSEqQYaSI/SGhXvn9qS2xTAM7sZoJ5l74fzEFX5nVa4t8uoxU3I4Zegmfc4VHMTK+qAFjIJ07klNKFdvMcyoCOsXL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761143599; c=relaxed/simple;
-	bh=g6GKo4VtIKHXYOdNrQW+Tvyvv4a4ha+KmnchRj1T+TU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ajopIvAboZ7hQqcH09HC41HOX+TeD9YvFTdu0OB+yK91upzRJdQJjoLIQdPGOPAReJUTMQx0QR3Pnafo9cf9ieLWqXG2WEhypmhfX1VBUUzqLTPDQ8rYDKjmghs8GuAgGxgt7YZxo9Iyk8IqQHjS142r5Czk1Cb7d9qJQq1FJFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HZ3XaWXv; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761144964; c=relaxed/simple;
+	bh=1k0h9ke+imuVkcbrlEJhbQrnGGwnjcDdE+eGUs82J5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KeCgytLzMqRxHLLDFezx9hIGsClpRkO0eNRcBQHjtxz7O/Z5yoTpijCX6M0ahVBPzW+eFAdO/LZG1ZVIWBqzhUfK/AGN16OP9LJTogFZPvSBHqpQGiL3fa5qJVh48Nomjh4k5jXsfj+LCuBTebr4FfhuPJ214Bg4dq4s8jg+jUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k0SQedCi; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HZ3XaWXv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761143596;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G1ULQtDuIbRNutL3a59iNrYyczStvfVQgkMWa6gA1AM=;
-	b=HZ3XaWXviQd0fGpXqP2gGLD5dh1+60SsRjNtCDAAPMsuli+eKEMC+btzqnipX9jIdfWdPz
-	6CSoEWR2RirnBn3IVRCVaMvMhiJfJ5/gCTK3CIxV7pHilK+crJuZtTETwTH+IusEU7oSeX
-	xf5Dus3SIt2kn2Btc/KkDK3kjONdBko=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-226-XJEb43RxP7qQeqvTIVGkeQ-1; Wed,
- 22 Oct 2025 10:33:11 -0400
-X-MC-Unique: XJEb43RxP7qQeqvTIVGkeQ-1
-X-Mimecast-MFC-AGG-ID: XJEb43RxP7qQeqvTIVGkeQ_1761143590
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E88E2195606B
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 14:33:09 +0000 (UTC)
-Received: from [172.20.84.201] (unknown [10.30.45.119])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AF9A31800452;
-	Wed, 22 Oct 2025 14:33:09 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 4 of 137): Test report for master
- (6.18.0-rc2, upstream-mainline, 552c5071)
-Date: Wed, 22 Oct 2025 14:33:09 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k0SQedCi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761144963; x=1792680963;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1k0h9ke+imuVkcbrlEJhbQrnGGwnjcDdE+eGUs82J5Y=;
+  b=k0SQedCi1w9pnBSNGrjLUZyi/bb925rHL9VbEEGWaikhuskfU35jLMKy
+   g1g3n2c9TH8g3Gv6sEUiBWu2tBJ/h4DxQdYkjCIFgh/mwP+AGAx4Gyp9A
+   S3Kr7vIODdwgFy3+NFmccdZqC2sXZ6OGSOH8SAVDcd2RVFmgB1SF7qLwL
+   RyMYWrIOnvpQN8RCbMLW7o3C6HhgQEagRiZwyI8o1krRJz49Wu5gnMx+i
+   duNwfdRBS1/AtI95e/KC/Kuq0Xs90F2GA3IlUbiaP5VuKceBqQTmgvnUk
+   s0Oj+D/5iQua3yM0Ax+BUqFcFR2IBs1cKZ4rIB2NZyXUI4TeOde/gouys
+   w==;
+X-CSE-ConnectionGUID: Z0OgfnPKSn2THM+690QTLg==
+X-CSE-MsgGUID: 90+qIP7QRzGsLDoNZrbHwA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="80923769"
+X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
+   d="scan'208";a="80923769"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 07:56:02 -0700
+X-CSE-ConnectionGUID: KnTCe76uSE2LBBnJ07TObg==
+X-CSE-MsgGUID: uekKQdbfTbCUGBULnMqAFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
+   d="scan'208";a="214836268"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 22 Oct 2025 07:55:58 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBaEu-000CRU-3C;
+	Wed, 22 Oct 2025 14:55:26 +0000
+Date: Wed, 22 Oct 2025 22:53:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, bpf@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, magnus.karlsson@intel.com,
+	aleksander.lobakin@intel.com, ilias.apalodimas@linaro.org,
+	toke@redhat.com, lorenzo@kernel.org, kuba@kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Octavian Purdila <tavip@google.com>
+Subject: Re: [PATCH v3 bpf 1/2] xdp: introduce xdp_convert_skb_to_buff()
+Message-ID: <202510222209.D4RDn4DI-lkp@intel.com>
+References: <20251022125209.2649287-2-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <53411.125102210331101385@us-mta-226.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: hOdWaN6EwdIIMvP4OU-VegEJHyw-fO0qUV_i_Y9R_Bo_1761143590
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251022125209.2649287-2-maciej.fijalkowski@intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Maciej,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on bpf/master]
 
-Kernel information:
-    Commit message: Merge tag 'vfio-v6.18-rc3' of https://github.com/awilli=
-am/linux-vfio
+url:    https://github.com/intel-lab-lkp/linux/commits/Maciej-Fijalkowski/xdp-introduce-xdp_convert_skb_to_buff/20251022-210958
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20251022125209.2649287-2-maciej.fijalkowski%40intel.com
+patch subject: [PATCH v3 bpf 1/2] xdp: introduce xdp_convert_skb_to_buff()
+config: i386-buildonly-randconfig-002-20251022 (https://download.01.org/0day-ci/archive/20251022/202510222209.D4RDn4DI-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510222209.D4RDn4DI-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2112779097
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510222209.D4RDn4DI-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64]
-                kselftests upstream - bpf_test_progs [x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
-            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
-r750-06-vm-07.rhts.eng.pek2.redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All errors (new ones prefixed by >>):
+
+   In file included from fs/select.c:33:
+   In file included from include/net/busy_poll.h:19:
+>> include/net/xdp.h:398:10: error: incompatible pointer to integer conversion assigning to 'u32' (aka 'unsigned int') from 'sk_buff_data_t' (aka 'unsigned char *') [-Wint-conversion]
+     398 |         pkt_len =  skb->tail - skb->mac_header;
+         |                 ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-Tests that were not ran because of internal issues:
-    /distribution/command [x86_64]
-    kselftests upstream - bpf [x86_64]
-    kselftests upstream - bpf_test_progs [x86_64]
-    Reboot test [x86_64]
+vim +398 include/net/xdp.h
 
+   386	
+   387	static inline
+   388	void xdp_convert_skb_to_buff(struct sk_buff *skb, struct xdp_buff *xdp,
+   389				     struct xdp_rxq_info *xdp_rxq)
+   390	{
+   391		u32 frame_sz, pkt_len;
+   392	
+   393		/* SKB "head" area always have tailroom for skb_shared_info */
+   394		frame_sz = skb_end_pointer(skb) - skb->head;
+   395		frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+   396	
+   397		DEBUG_NET_WARN_ON_ONCE(!skb_mac_header_was_set(skb));
+ > 398		pkt_len =  skb->tail - skb->mac_header;
+   399	
+   400		xdp_init_buff(xdp, frame_sz, xdp_rxq);
+   401		xdp_prepare_buff(xdp, skb->head, skb->mac_header, pkt_len, true);
+   402	
+   403		if (skb_is_nonlinear(skb)) {
+   404			skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+   405			xdp_buff_set_frags_flag(xdp);
+   406		} else {
+   407			xdp_buff_clear_frags_flag(xdp);
+   408		}
+   409	
+   410		xdp->rxq->mem.type = page_pool_page_is_pp(virt_to_head_page(xdp->data)) ?
+   411					MEM_TYPE_PAGE_POOL : MEM_TYPE_PAGE_SHARED;
+   412	}
+   413	
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
