@@ -1,96 +1,59 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8509427815E
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 04:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AC31F099C;
+	Wed, 22 Oct 2025 04:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761105708; cv=none; b=ch8Xi2cUERoeJNnV9Q7fjAtODSY/pA1KEBk2mTR5k9H3O8YO7S5S3rEKBjGxyuR5pGjhsfDPm1L3biVrZxd8bsxbsW7w4U0CTHbYhzhjcxnjYvDmjm20C8J2JTAPJ5X4RvBFgdsClkDDeoEU4EaciMS1fuP/mZIJdHaOqyUsDBA=
+	t=1761108677; cv=none; b=kGtV20QOJPQl9+r/0ej3zKUCoZ/uLrD1BNvdfDfQyS9VuvBXknvgZ3SZ1W84OuGifgF6FD0196x16von7dcLPK4tDAcIeZAdd8qnO7//UUl80TRtprevjn3oI2l3Ch8G9syO+Xk6Ju6aFHhzPPJJAWjZp27WbJ8ByXezeQJasHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761105708; c=relaxed/simple;
-	bh=9jY3EA5gEkdui7bFU/atDea6tp+oL2Xa05/E1ZXf344=;
+	s=arc-20240116; t=1761108677; c=relaxed/simple;
+	bh=oNcnI1xOKbehjw6oqRs3btyp6ZarBY5/CW8o6MKFEMs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y8MFG2r8U+cf7ZzkyPJbI9oJHcKqX12ihjtjl1oh9/XOTVuwDHVQ7WfSl5V2NWJX6YpEMGq83CCMudWzxRv85ALws+M7qNazd3lNDaCQOk+E7SCge/dxTceY+nrJR7nBLnP5D0BlFTklQG+XKdNYU+f0soLQfRm2ycsHxizhHuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zs0pzlHE; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=TfMqCsx+FDBxhugNnaF4exZRjQ7zc2aHd84VduB9bcEQCtB7ATJIRe0sk1XZEkZdMskzjcWM+LiPThzbttHzo39k40WE4VFS3yISCY5CIWZLRf9oOQ8MXz9TK5UhkJZWkhy3cpUjBHxGdkvVnLU5FwPB5ropAaoYv/utA8htDkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AqTtxRD3; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zs0pzlHE"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-28e7cd6dbc0so80264445ad.0
-        for <llvm@lists.linux.dev>; Tue, 21 Oct 2025 21:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761105705; x=1761710505; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5XEGeI2U2r41+s29akUYCWbcwFKMTqkQOw+6CMAYMfM=;
-        b=zs0pzlHE+jRH0ZyQK/f0D5vGmOmUrujSJfkDLrB5F+C/dG7oTwbjj65zKvC/CHqB7C
-         aUdCZY+0JF7022aeSs9sVwXgMBYdAc9XvW2IhR+UsHlz2U3o7nd9468yHiuWqmFH6t/5
-         ClVM/sV6DbsblTF6gOSfb+OfTeC2KUN1m/6D9/ygYie43QeopGcYQbOGwzJqy6k+lKc+
-         KFEe9b79eAbCgoJ7i//RwBdHjB7pj2bdiwr4ZYMlu+uBP+LG2OdsLsLSi00LktCPaQpY
-         qhWv2v4lW14usz0K+qyYbeLRcbWDnrJpCw+RTjVUyN6Suxqbet4XDM7CjQE58aW7dPxz
-         qNWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761105705; x=1761710505;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5XEGeI2U2r41+s29akUYCWbcwFKMTqkQOw+6CMAYMfM=;
-        b=orVLo6IsP7EzQKHaRROuedxWQvmKvqhH/RyicCnDqg3roxW+FdlivELS0rJY+2LVkm
-         clq6PTNSVQQ7dhpGFq/plCoD3Wtofwgj16028avso0e8X3akNBpK0u+vhW+hHPmQ8X0L
-         p+b8bsQpD/rFBhY8lQ7o5xrvpoNskIbtDAt9Tee/bGGnipu9pfm7lH1AMZs7sVO2sNjG
-         eeVyOn9g8JnUqa/A53Z56K7vswCqml4JtoeP9wLYy1aGV809FjkUx5d4rZjRXbNKYW0I
-         wO+RJzs2wWV0Uo58sib9SD4UJXF+uCbEihiONKl6aTCrzZpo0y/dAYCjqTOqGP5vTkEc
-         GOPA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1l6SYNdo7eIqcuYy8WuJbTQGd7euyM/w6Fu+zNgoOP5zb9S1iFYEsWsSgGE8oHOHxeoG4@lists.linux.dev
-X-Gm-Message-State: AOJu0YxERwHousX/+F2A4SAN1uv3X4S0qvKB78gCHwe86BNisRlvNxvX
-	DcXWW60g3vtqexdbD4MYUAB1y8/ahavC183FHy27ZHtDQ0EwJUgTpfD1QO6+YgYOScQ=
-X-Gm-Gg: ASbGncslS8BuTqC4JD25TfR1QF+pxpXDh9YNEoJmvJf1aSe35rhlsDDyvbfbYULy+4+
-	IXCs8rm/GpHWDaLpL4HWXR7eW0yGG/T0zMexjvBVSiNGHnkN6Hq4fb9Tx2JMxKqN1LmZhU+bOeg
-	BK7z+5kGnDxaUkfLE1nPLT51LR04rWUs6PSq4W8MZCUt5GvBmZYehvA/M5F9z98pXdSEcCsULAP
-	xfAhuhoU8Mnp5++dOfJx4b029kPkYq6j4BX1xS1XGA+64GiZo5KPgH6VJPkQzPcHIiUoWQ26v8T
-	5JpSuh8dGppuS/w+CMdw3hE6QfifJmxfu9O6cDqAhLcILqIZMJ/ugNXzDfB0MFGgMXAla5A/Ez3
-	kYrjMB3cmO827R/vXZBH8b7dmZfZtjZFDYkAcR/KVbjrQzffEXIXw9yHZP+U/JcaDChHeIpng70
-	txrARonUDYuhUU
-X-Google-Smtp-Source: AGHT+IEYWTGPLkVLKAMGZYnPNOk1bG7CyHUMxRahoDXL1MDVvSzLtlyzXLVhQRT4L6q1WhaGPTRqNA==
-X-Received: by 2002:a17:902:f70f:b0:290:2a14:2eab with SMTP id d9443c01a7336-290c9cf8f2fmr233326615ad.11.1761105704778;
-        Tue, 21 Oct 2025 21:01:44 -0700 (PDT)
-Received: from localhost ([122.172.87.183])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-292472193acsm125225365ad.108.2025.10.21.21.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 21:01:44 -0700 (PDT)
-Date: Wed, 22 Oct 2025 09:31:41 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Waiman Long <longman@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Carlos Llamas <cmllamas@google.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v18 11/16] rust: opp: fix broken rustdoc link
-Message-ID: <bjoulx2acrfpnqmwmnamunihzuaakyk3i6m3gvtcxklssmznt2@azfbrjhiedi3>
-References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
- <20251018-cstr-core-v18-11-ef3d02760804@gmail.com>
- <gcdcwpotzidrksmsnyvesnojcylbb2fqpiue4fijhj2cmayli5@7lpyessslxka>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AqTtxRD3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761108675; x=1792644675;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oNcnI1xOKbehjw6oqRs3btyp6ZarBY5/CW8o6MKFEMs=;
+  b=AqTtxRD3uGK7c4QjITBgBobCm5YHZiqVovGIe2hi1CPG3fzS34Rtec/u
+   taiYIhIF/SKIPoPWwDjGgPalFqnavZUchiooewfY9UUxLdW2MEg4Kx4Uy
+   ayxHUmjqWjEMu7fHuF94mCVdmTOG2DDoOobRyQ4iH8kfFg05Uda/Uey2C
+   0dTsWspbzyAYUdBy5qtjhjpQz5DZON9UldkLzX5o+WZH+LQ4Fcw/6gyZl
+   GzDxaM5kcLNf/DQkfhd84k2xtzedG9GfDvTHFH+UeuFlGxD9AL/SN0E+W
+   KtlLQBrAAYnA6fDCRMBJC5g5M6KjoDGrm07KE7b9DxOl9iRLOk203OC2u
+   g==;
+X-CSE-ConnectionGUID: xsgSzeDSSh60PScku2hmRQ==
+X-CSE-MsgGUID: SddxJFEfRgCu4eHxmk2U1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="73536305"
+X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
+   d="scan'208";a="73536305"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 21:51:15 -0700
+X-CSE-ConnectionGUID: eiVSz0V9RPu47NYvzxP4zQ==
+X-CSE-MsgGUID: CukPv+sWS+a4GhT9StNlwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
+   d="scan'208";a="182938867"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 21 Oct 2025 21:51:14 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBQoZ-000C0T-2q;
+	Wed, 22 Oct 2025 04:51:11 +0000
+Date: Wed, 22 Oct 2025 12:50:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC DRAFT 15/50] nstree: add listns()
+Message-ID: <202510221241.1ROUwVQu-lkp@intel.com>
+References: <20251021-work-namespace-nstree-listns-v1-15-ad44261a8a5b@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -99,20 +62,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <gcdcwpotzidrksmsnyvesnojcylbb2fqpiue4fijhj2cmayli5@7lpyessslxka>
+In-Reply-To: <20251021-work-namespace-nstree-listns-v1-15-ad44261a8a5b@kernel.org>
 
-On 22-10-25, 07:57, Viresh Kumar wrote:
-> On 18-10-25, 13:45, Tamir Duberstein wrote:
-> > Correct the spelling of "CString" to make the link work.
-> > 
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > ---
-> >  rust/kernel/opp.rs | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Hi Christian,
 
-I have instead applied this one now. Thanks.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 3a8660878839faadb4f1a6dd72c3179c1df56787]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Brauner/libfs-allow-to-specify-s_d_flags/20251021-200829
+base:   3a8660878839faadb4f1a6dd72c3179c1df56787
+patch link:    https://lore.kernel.org/r/20251021-work-namespace-nstree-listns-v1-15-ad44261a8a5b%40kernel.org
+patch subject: [PATCH RFC DRAFT 15/50] nstree: add listns()
+config: x86_64-buildonly-randconfig-004-20251022 (https://download.01.org/0day-ci/archive/20251022/202510221241.1ROUwVQu-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221241.1ROUwVQu-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510221241.1ROUwVQu-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/nstree.c:499:11: warning: variable 'ns' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     499 |         else if (kls->user_ns_id)
+         |                  ^~~~~~~~~~~~~~~
+   kernel/nstree.c:501:7: note: uninitialized use occurs here
+     501 |         if (!ns)
+         |              ^~
+   kernel/nstree.c:499:7: note: remove the 'if' if its condition is always true
+     499 |         else if (kls->user_ns_id)
+         |              ^~~~~~~~~~~~~~~~~~~~
+     500 |                 ns = lookup_ns_id(kls->user_ns_id, CLONE_NEWUSER);
+   kernel/nstree.c:490:22: note: initialize the variable 'ns' to silence this warning
+     490 |         struct ns_common *ns, *first_ns = NULL;
+         |                             ^
+         |                              = NULL
+   1 warning generated.
+
+
+vim +499 kernel/nstree.c
+
+   485	
+   486	static ssize_t do_listns_userns(struct klistns *kls)
+   487	{
+   488		u64 *ns_ids = kls->kns_ids;
+   489		size_t nr_ns_ids = kls->nr_ns_ids;
+   490		struct ns_common *ns, *first_ns = NULL;
+   491		const struct list_head *head;
+   492		bool userns_capable;
+   493		ssize_t ret;
+   494	
+   495		VFS_WARN_ON_ONCE(!kls->user_ns_id);
+   496	
+   497		if (kls->user_ns_id == LISTNS_CURRENT_USER)
+   498			ns = to_ns_common(current_user_ns());
+ > 499		else if (kls->user_ns_id)
+   500			ns = lookup_ns_id(kls->user_ns_id, CLONE_NEWUSER);
+   501		if (!ns)
+   502			return -EINVAL;
+   503		kls->user_ns = to_user_ns(ns);
+   504	
+   505		/*
+   506		 * Use the rbtree to find the first namespace we care about and
+   507		 * then use it's list entry to iterate from there.
+   508		 */
+   509		if (kls->last_ns_id) {
+   510			kls->first_ns = lookup_ns_owner_at(kls->last_ns_id + 1, ns);
+   511			if (!kls->first_ns)
+   512				return -ENOENT;
+   513			first_ns = kls->first_ns;
+   514		}
+   515	
+   516		ret = 0;
+   517		head = &to_ns_common(kls->user_ns)->ns_owner;
+   518		userns_capable = ns_capable_noaudit(kls->user_ns, CAP_SYS_ADMIN);
+   519		guard(rcu)();
+   520		if (!first_ns)
+   521			first_ns = list_entry_rcu(head->next, typeof(*ns), ns_owner_entry);
+   522		for (ns = first_ns; &ns->ns_owner_entry != head && nr_ns_ids;
+   523		     ns = list_entry_rcu(ns->ns_owner_entry.next, typeof(*ns), ns_owner_entry)) {
+   524			if (kls->ns_type && !(kls->ns_type & ns->ns_type))
+   525				continue;
+   526			if (!__ns_ref_active_read(ns))
+   527				continue;
+   528			if (!userns_capable && !is_current_namespace(ns) &&
+   529			    ((ns->ns_type != CLONE_NEWUSER) ||
+   530			     !ns_capable_noaudit(to_user_ns(ns), CAP_SYS_ADMIN)))
+   531				continue;
+   532			*ns_ids = ns->ns_id;
+   533			ns_ids++;
+   534			nr_ns_ids--;
+   535			ret++;
+   536		}
+   537	
+   538		return ret;
+   539	}
+   540	
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
