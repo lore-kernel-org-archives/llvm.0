@@ -1,152 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE572BE053;
-	Tue, 21 Oct 2025 23:35:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3550F156C6A;
+	Wed, 22 Oct 2025 00:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761089724; cv=none; b=Tfq+orbAYqcVS3O7lohYA6iNowpcd85aCbdUjTAziIshd/bKAxW9QGbqUUVO6jS0NTp9346hi+hbVZnMD7mB3d0zHRxU2AyAzo65DZjz9L21OOyTRr490Lo7UcjlaIUfggC4u1kxhRrAtT2/uRNXcnuCpMLQMEQTxjmIyo9hGbI=
+	t=1761092419; cv=none; b=Nq28fVPzU0xcwqjipCPCCp5vzC6X6Wn40iFx6VZG9tkZyfQtyv6JOVuWon55fL3VALGx3Em1rnc4W3HgtXPgbN1ZMmvjMf4nAGHO6J6lGT6CB1NRMBXCSY8AlqeapJ7x2O2BYa0g0jnqoOv12oEcFxF7KdqALrIXrja3nE/Khlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761089724; c=relaxed/simple;
-	bh=tMJQqR5HgB+fqJpxC0KpZuhcQamoWx70k5uS+QxRvRc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XkgBgCt1XTsHU0gQO6shLLxCJrjQG3BH0b41VRTGnqmkp6B5CgFSjtL/HEK1lp3JZx9WOVXmwHvbq+5QDIcxaKzaG5IGuI37239D37eTfEyTp8nGd+kcv4y1dVn0/vhhEsXHbnh8sK2OHu6Buo3xg5gNORJeLDHbuw+rnJSOcCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fRa/HhFF; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1761092419; c=relaxed/simple;
+	bh=QpNUnH1+y2MUz/2TQ/VNyCQxrrkSu52xR3jmkwJWaak=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ydq8Vd1uC19e158FlBrj9neL/b2vwfM1Pl5uN+fGCvgfogWqeyxji0pDm20wCl1DzQfsGdkf97grzr5fUXDVP1RHLIdXM+zLnpc9kF6UNud3Ed7mFNK1hntrlLBCpzsMPyeJZ9B92gcY5SQBaT+Yqyo7ftP+ERuol/2YBsdmDNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eke+WBPc; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fRa/HhFF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eke+WBPc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761089722; x=1792625722;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=tMJQqR5HgB+fqJpxC0KpZuhcQamoWx70k5uS+QxRvRc=;
-  b=fRa/HhFFg4qmfQ5KFDP0ThvcsKFD9z8FNH3gDxhyN4SiU0YmgUIes2wD
-   sT5exItUPxYOCinWsGsGxRVIrv/i2dgu2Gh8t0JDlpnX131ntJwsWcCsc
-   zhScpwV3ECJzv8tkLgInYajzzgugePIXxU+xhLtY9BIrNoWmvrfeMyfzI
-   PdNFi6kZA2fOf4SVd+dFF5p8+9Mi3HciuqT4E38HtmsOO+PZay2yvEGzg
-   QEaHy0X2lReAmSTGWONBY6jmxRGl5PjUz0rbg0nrP8S2ynK9qOMXIMY6C
-   0qbCKaN6G8SLtmOkkWXKcTfwGMIo12YKR1RHuydgLjcQKIaB8esm45xCu
+  t=1761092418; x=1792628418;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QpNUnH1+y2MUz/2TQ/VNyCQxrrkSu52xR3jmkwJWaak=;
+  b=Eke+WBPcDgo9XdR2x0Se6CTlGerfFGmRtncGM5JtmvGrj1fn2sinwyWJ
+   dVt8NFsLLxcyRpCBHfFcLpcJe8baxPMSZUe7Z4TOOjONDQWxpebUf9hpn
+   BoSgJphQnKtWfzfKc8BqgmvHmIcy409/9yoYhCaLjBUVM+B1/Vc313OxB
+   p95FUwgxPGR3z2bl3oQEpv7YFpsK7gXero/9FM6goFgS0kP5gK3gzPsrW
+   CM8hGBeHMZlVU7bqyErhJ4pNNgKwYXUWJFSZVxypB/oBf/OatZaZbQl3n
+   T0kQt4qS5aPWq6EbnWbWvv8rTpCtmGR8LlQGnYYnqPQm06HMhNwHqWUZv
    Q==;
-X-CSE-ConnectionGUID: R6GY52LFRmi7Rr3YtiNPLQ==
-X-CSE-MsgGUID: NnA5g6JuRRiAdHE7gd4WZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="66869361"
+X-CSE-ConnectionGUID: 2/9UvqHiSUi0zcpT9issUQ==
+X-CSE-MsgGUID: TPLDaXFTTNmDwf5/hsEvcA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="80668856"
 X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="66869361"
+   d="scan'208";a="80668856"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 16:35:22 -0700
-X-CSE-ConnectionGUID: sc6S852oSfa2761F4y1y6g==
-X-CSE-MsgGUID: +wFJ1APOT9mq1WGb+Nns9w==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 17:20:17 -0700
+X-CSE-ConnectionGUID: YOe56Kb9ThSiJAQYW5KhAg==
+X-CSE-MsgGUID: tF3wYFwTRQGrvFsPaShS1A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="187991412"
-Received: from uaeoff-desk2.amr.corp.intel.com ([10.125.108.176])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 16:35:21 -0700
-Message-ID: <939f507b8e8d6768d42ed1d380500f3cd22aee88.camel@linux.intel.com>
-Subject: Re: [PATCH] HID: intel-ish-hid: Fix -Wcast-function-type-strict in
- devm_ishtp_alloc_workqueue()
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Nathan Chancellor <nathan@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires
-	 <bentiss@kernel.org>, Zhang Lixu <lixu.zhang@intel.com>
-Cc: Kees Cook <kees@kernel.org>, linux-input@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Date: Tue, 21 Oct 2025 16:35:20 -0700
-In-Reply-To: <20251022-ishtp-fix-function-cast-warn-v1-1-bfb06464f8ca@kernel.org>
-References: 
-	<20251022-ishtp-fix-function-cast-warn-v1-1-bfb06464f8ca@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+   d="scan'208";a="187999986"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 21 Oct 2025 17:20:15 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBMaK-000Br0-2H;
+	Wed, 22 Oct 2025 00:20:12 +0000
+Date: Wed, 22 Oct 2025 08:19:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
+	Simon Trimmer <simont@opensource.cirrus.com>
+Subject: [linux-next:master 1024/3056] ERROR: modpost:
+ "asoc_sdw_get_codec_info_list_count"
+ [sound/soc/sof/intel/snd-sof-intel-hda-generic.ko] undefined!
+Message-ID: <202510220819.KrN5gjKL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 2025-10-22 at 00:49 +0200, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=3Dy / W=3De):
->=20
-> =C2=A0 drivers/hid/intel-ish-hid/ipc/ipc.c:935:36: error: cast from 'void
-> (*)(struct workqueue_struct *)' to 'void (*)(void *)' converts to
-> incompatible function type [-Werror,-Wcast-function-type-strict]
-> =C2=A0=C2=A0=C2=A0 935 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-if (devm_add_action_or_reset(dev, (void (*)(void
-> *))destroy_workqueue,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> =C2=A0 include/linux/device/devres.h:168:34: note: expanded from macro
-> 'devm_add_action_or_reset'
-> =C2=A0=C2=A0=C2=A0 168 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-__devm_add_action_or_ireset(dev, action, data,
-> #action)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~
->=20
-> This warning is pointing out a kernel control flow integrity (kCFI /
-> CONFIG_CFI=3Dy) violation will occur due to this function cast when the
-> destroy_workqueue() is indirectly called via devm_action_release()
-> because the prototype of destroy_workqueue() does not match the
-> prototype of (*action)().
->=20
-> Use a local function with the correct prototype to wrap
-> destroy_workqueue() to resolve the warning and CFI violation.
->=20
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2139
-> Fixes: 0d30dae38fe0 ("HID: intel-ish-hid: Use dedicated unbound
-> workqueues to prevent resume blocking")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   fe45352cd106ae41b5ad3f0066c2e54dbb2dfd70
+commit: 5226d19d4cae5398caeb93a6052bfb614e0099c7 [1024/3056] ASoC: SOF: Intel: use sof_sdw as default SDW machine driver
+config: i386-randconfig-011-20251021 (https://download.01.org/0day-ci/archive/20251022/202510220819.KrN5gjKL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510220819.KrN5gjKL-lkp@intel.com/reproduce)
 
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510220819.KrN5gjKL-lkp@intel.com/
 
-> ---
-> =C2=A0drivers/hid/intel-ish-hid/ipc/ipc.c | 8 ++++++--
-> =C2=A01 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/hid/intel-ish-hid/ipc/ipc.c b/drivers/hid/intel-
-> ish-hid/ipc/ipc.c
-> index 59355e4a61f8..abf9c9a31c39 100644
-> --- a/drivers/hid/intel-ish-hid/ipc/ipc.c
-> +++ b/drivers/hid/intel-ish-hid/ipc/ipc.c
-> @@ -924,6 +924,11 @@ static const struct ishtp_hw_ops ish_hw_ops =3D {
-> =C2=A0	.dma_no_cache_snooping =3D _dma_no_cache_snooping
-> =C2=A0};
-> =C2=A0
-> +static void ishtp_free_workqueue(void *wq)
-> +{
-> +	destroy_workqueue(wq);
-> +}
-> +
-> =C2=A0static struct workqueue_struct *devm_ishtp_alloc_workqueue(struct
-> device *dev)
-> =C2=A0{
-> =C2=A0	struct workqueue_struct *wq;
-> @@ -932,8 +937,7 @@ static struct workqueue_struct
-> *devm_ishtp_alloc_workqueue(struct device *dev)
-> =C2=A0	if (!wq)
-> =C2=A0		return NULL;
-> =C2=A0
-> -	if (devm_add_action_or_reset(dev, (void (*)(void
-> *))destroy_workqueue,
-> -				=C2=A0=C2=A0=C2=A0=C2=A0 wq))
-> +	if (devm_add_action_or_reset(dev, ishtp_free_workqueue, wq))
-> =C2=A0		return NULL;
-> =C2=A0
-> =C2=A0	return wq;
->=20
-> ---
-> base-commit: 828aeac92901c1f31b51ae0b9d792b9af5bd3e27
-> change-id: 20251021-ishtp-fix-function-cast-warn-660d3dae8af4
->=20
-> Best regards,
-> --=C2=A0=20
-> Nathan Chancellor <nathan@kernel.org>
->=20
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+>> ERROR: modpost: "asoc_sdw_get_codec_info_list_count" [sound/soc/sof/intel/snd-sof-intel-hda-generic.ko] undefined!
+>> ERROR: modpost: "codec_info_list" [sound/soc/sof/intel/snd-sof-intel-hda-generic.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
