@@ -1,173 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6374221A436;
-	Wed, 22 Oct 2025 01:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DAA21A459
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 02:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761097668; cv=none; b=G3A+rBRMlu4ll4djPuAhkL0DKaBIXc/zPW0ZzsDsqhPk69CKcF9/AYfIJRgV68k1WieRzZitWmmp5JhfAMtNRCgdGptnV8PJxOI5Wm3zkkHbWP4MaSc10hk3DX96FsbUc1A6J1GB405AlzS8bC5VN8zoY52Kz9IWE4ic5OvHsSs=
+	t=1761100023; cv=none; b=qmTf/MMKQiC9TjQ1W17kP1YVD1Xg3bSz6bkZEcJXVds8B662DDXO9AzaVxotcSdZ84lpnlKhOH0STpm02jeqcXr90HSy0RBsikUdWdyfWlLv1EqYCMXo8yUkzjcWqjqveIzdDKcvz7KE6YrorPIJ3adRDtkNci3O5hdy1uOxshA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761097668; c=relaxed/simple;
-	bh=SYrjklv5yaqTa9b2Mz801w7XycbmljMb3/5NvgufkhA=;
+	s=arc-20240116; t=1761100023; c=relaxed/simple;
+	bh=GHDQMCS5dEWxKn+0Txm/veOfLoI8l83ajhIWcN5rWOw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/4uxJh90SymXXPxRgS07JpGwR7A1klKSsABpW59gohbpiuZFvcTdzVaPgDriozwWtb5cpc9kJRx8J+51rlklbgwKB09fAUl8Qh+PkLkKvNQa5MAUmrNNq5VGG+MNOfvauK9Kf0ErOqZ2jTbS+AgjaP7xmdZoEUma5jesg0XGWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TQJlxvDO; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KJYy+H4/oAtxKjiS3jiuWqGAhX6FG012RPstmMS/UhS0cNVbFgdsHQ3fsMZJ768Z/ERiOJJgXWbAFj6Hz3kSnCMzVuQY054Ro9RO2jSlXFDOZ/zxmqNUNHj1QAGJGSrXs/Q+JyAQPttN7tvN8pJRj6sB7TPt7G7a5UcS+x7LVxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FYnaYQTs; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TQJlxvDO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761097666; x=1792633666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SYrjklv5yaqTa9b2Mz801w7XycbmljMb3/5NvgufkhA=;
-  b=TQJlxvDOW+8QpYR8K3qxNe35LQ7CjyL7IJXB5Saei1OyeXqhy6b/2YFV
-   3z8xxcukInXOSLzSn8RKS/QWM6WK6fj7PQ7vRSnGjWoBren6+QBWMrCCg
-   X0VGesMLJ8wmpivGjsArXlOFyP1c2gXG5NBJHPmv1e6VY02fnrKEz4XNp
-   O+Ps9i+hOwLw6aP+YAIOAJN2Gy5dNO7qOmnVCZCVNmRY43RBuimfftJJz
-   dD+VKDJSORfRBQYRZZv1xXGAbxcOIoz5JAdWaYA5r36m066bzem8xzPpe
-   xI3NstSSRWB76yak6VtULdL423fRTHOrvMUn2cWFP/700IQh+lOY9KDJm
-   w==;
-X-CSE-ConnectionGUID: eu7GdefuS3mVrQ5YedqUcQ==
-X-CSE-MsgGUID: VWbtWz/TRHyDO2LUeHFL5Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74578523"
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="74578523"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 18:47:44 -0700
-X-CSE-ConnectionGUID: 64Y6jRp/QL6Aq2MJZAFxRg==
-X-CSE-MsgGUID: fNuSc6gfQGOh7smNgfyucQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
-   d="scan'208";a="182947416"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 21 Oct 2025 18:47:37 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBNws-000BuR-28;
-	Wed, 22 Oct 2025 01:47:34 +0000
-Date: Wed, 22 Oct 2025 09:47:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Lo=EFc?= Molinari <loic.molinari@collabora.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>, Melissa Wen <mwen@igalia.com>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Nitin Gote <nitin.r.gote@intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Christopher Healy <healych@amazon.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 06/12] drm/i915: Use huge tmpfs mountpoint helpers
-Message-ID: <202510220918.LOLA5KIF-lkp@intel.com>
-References: <20251021113049.17242-7-loic.molinari@collabora.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FYnaYQTs"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-793021f348fso5642684b3a.1
+        for <llvm@lists.linux.dev>; Tue, 21 Oct 2025 19:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761100021; x=1761704821; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WqQzNiLchpkg3pgwyuDiy5UGt+eUDtmLfbzoo0ne91s=;
+        b=FYnaYQTspLtYtjwfXjpevsVENoqbYGnzmisVHEPwW8bBJV31GETIqNv8AdQVf+oVkE
+         xL7vZoGqFANcgbakQ/7QB9YcMMv3F01cW5bgARhl5zazcfNnYYx6JaRrP6m0FoyUuku5
+         jtIcjmZr3tXlv7irdvAFrkRP0TC19D4bmqRbCmtu+RW8BbeVUqvN6/ZWAhRLVE5DqsfZ
+         TYqh32BRxGP1HtkKCe1Nj0/JSiHb98lrPSSjLW4CSpEp8kA/GPlNQkx0urjdiMW4Dn+Z
+         8ND1V6JWStJPiM1NhhOqoYrApcKXw9WP0XuHq1ZKS+v9cwhI/olfOs+JzbHtUcb529Oc
+         NYzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761100021; x=1761704821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WqQzNiLchpkg3pgwyuDiy5UGt+eUDtmLfbzoo0ne91s=;
+        b=akl6ltMq/Mf2vo8PLSHlGQY+IbsK3joE8ONXd8jPIiR25oQzyb4iL7H/b4mIbg6Xgw
+         HYxAEpBaIeWLHHJXS5XDP4VoKZ+v6meNkrAr96kJn9pTlP6ET+mBzpi2WBQk0VdJRhwo
+         fbHwFMdy0p7kc/Xv45XPbJ0ei/xGVy7a/7x69lycb611rHMQWj/QV1JWe7Q+ujWlpv3f
+         E1ODoQCvkWXqwpXSQtVwbyfY64OAVFrnjHSIiMwoLKSkTmziO2Jaj8NfadNyqy28SBwD
+         GBlEQmOL1kvG7VlP8F8vYwXrXDqr/5RcBmssG1evxST7SeY8eJg/fGGBguLqhrgf4eZy
+         VqCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuZluaKyuWJsNxdizHYfKS7ospjbhsYvYnMDZYrHWabJQskWumDAElAE/2odThs6VYstUm@lists.linux.dev
+X-Gm-Message-State: AOJu0YxskXh8nDJKS/X1J3RdTlEF7sghsQgYco3KmpfcZ950S8bHnhFZ
+	7UBLdZV3O76W8Z//gkdOD5vJL8gKVOghhimL6qWg3BqPGkcHIPXEVAlfwhq0JQqvLJo=
+X-Gm-Gg: ASbGncurvbsRu/VP2YeVtA0gbZetqMuUS5rFdo5485ZoLtg3xdSJ4/mkqFw3i3gMJ6W
+	leSgDGBw095RmDwaIsxS5ZcEmBxbvpR/DNaaPdiWjg72ji68on54ZG1L4H6PdkrIhryAb3unilp
+	k4hG9oyKRNrbKFodKOeY+EXZd23awa7CP2Gps+mSAJAthrlP97n76RYRWKH4qux+37bRYNw3yQv
+	gbfWAmnE4Va89aGwjy5FdAtTjWdMt7vtu5wKysvvxJEDc9ChXcU8eSf/sxd/n3dp3sZ4br/Ghfm
+	f/vozhnnf1YJUi/+BV16PVnfwSP2qu8kLXrvN9yg42O/GfzI3VOJf83KbMIU0b538Z77ZF1Edfq
+	tIyyV/XWkIkUSUefBcGimnjShDvy0mInTB1uTlTdYyyULDrUoqUOnQxwg2jWnZXdxbdqWExI+Ko
+	SY6g==
+X-Google-Smtp-Source: AGHT+IEiODVZTmpBKH4GJGfRgQpdF+p0v4t2QcX4SapXa+98D5HxqE/HG1opMUzT/b2Bq6W9RKZPmQ==
+X-Received: by 2002:a05:6a00:2e1f:b0:781:171f:df6f with SMTP id d2e1a72fcca58-7a220b14d80mr26349244b3a.18.1761100020948;
+        Tue, 21 Oct 2025 19:27:00 -0700 (PDT)
+Received: from localhost ([122.172.87.183])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23011088fsm12778187b3a.65.2025.10.21.19.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 19:27:00 -0700 (PDT)
+Date: Wed, 22 Oct 2025 07:56:57 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Christian Brauner <brauner@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Carlos Llamas <cmllamas@google.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v18 10/16] rust: opp: use `CStr::as_char_ptr`
+Message-ID: <75keuxnrpd2p2lumgmoxpwt42ovsx4xyltq3dimarvlspjq3gn@cmadekc427tk>
+References: <20251018-cstr-core-v18-0-ef3d02760804@gmail.com>
+ <20251018-cstr-core-v18-10-ef3d02760804@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251021113049.17242-7-loic.molinari@collabora.com>
+In-Reply-To: <20251018-cstr-core-v18-10-ef3d02760804@gmail.com>
 
-Hi Loïc,
+On 18-10-25, 13:45, Tamir Duberstein wrote:
+> Replace the use of `as_ptr` which works through `<CStr as
+> Deref<Target=&[u8]>::deref()` in preparation for replacing
+> `kernel::str::CStr` with `core::ffi::CStr` as the latter does not
+> implement `Deref<Target=&[u8]>`.
+> 
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+>  rust/kernel/opp.rs | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20251021]
-[also build test ERROR on v6.18-rc2]
-[cannot apply to akpm-mm/mm-everything drm-misc/drm-misc-next linus/master v6.18-rc2 v6.18-rc1 v6.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lo-c-Molinari/drm-shmem-helper-Simplify-page-offset-calculation-in-fault-handler/20251021-193355
-base:   next-20251021
-patch link:    https://lore.kernel.org/r/20251021113049.17242-7-loic.molinari%40collabora.com
-patch subject: [PATCH v5 06/12] drm/i915: Use huge tmpfs mountpoint helpers
-config: x86_64-buildonly-randconfig-001-20251022 (https://download.01.org/0day-ci/archive/20251022/202510220918.LOLA5KIF-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510220918.LOLA5KIF-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510220918.LOLA5KIF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gem/i915_gem_shmem.c:511:46: error: no member named 'huge_mnt' in 'struct drm_device'
-     511 |                 filp = shmem_file_setup_with_mnt(i915->drm.huge_mnt, "i915",
-         |                                                  ~~~~~~~~~ ^
-   1 error generated.
-
-
-vim +511 drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-
-   486	
-   487	static int __create_shmem(struct drm_i915_private *i915,
-   488				  struct drm_gem_object *obj,
-   489				  resource_size_t size)
-   490	{
-   491		unsigned long flags = VM_NORESERVE;
-   492		struct file *filp;
-   493	
-   494		drm_gem_private_object_init(&i915->drm, obj, size);
-   495	
-   496		/* XXX: The __shmem_file_setup() function returns -EINVAL if size is
-   497		 * greater than MAX_LFS_FILESIZE.
-   498		 * To handle the same error as other code that returns -E2BIG when
-   499		 * the size is too large, we add a code that returns -E2BIG when the
-   500		 * size is larger than the size that can be handled.
-   501		 * If BITS_PER_LONG is 32, size > MAX_LFS_FILESIZE is always false,
-   502		 * so we only needs to check when BITS_PER_LONG is 64.
-   503		 * If BITS_PER_LONG is 32, E2BIG checks are processed when
-   504		 * i915_gem_object_size_2big() is called before init_object() callback
-   505		 * is called.
-   506		 */
-   507		if (BITS_PER_LONG == 64 && size > MAX_LFS_FILESIZE)
-   508			return -E2BIG;
-   509	
-   510		if (drm_gem_has_huge_mnt(&i915->drm))
- > 511			filp = shmem_file_setup_with_mnt(i915->drm.huge_mnt, "i915",
-   512							 size, flags);
-   513		else
-   514			filp = shmem_file_setup("i915", size, flags);
-   515		if (IS_ERR(filp))
-   516			return PTR_ERR(filp);
-   517	
-   518		/*
-   519		 * Prevent -EFBIG by allowing large writes beyond MAX_NON_LFS on shmem
-   520		 * objects by setting O_LARGEFILE.
-   521		 */
-   522		if (force_o_largefile())
-   523			filp->f_flags |= O_LARGEFILE;
-   524	
-   525		obj->filp = filp;
-   526		return 0;
-   527	}
-   528	
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
