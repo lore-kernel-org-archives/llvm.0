@@ -1,100 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA701F2BA4;
-	Wed, 22 Oct 2025 12:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE086347FC7
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 13:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761136617; cv=none; b=U7Pygd9X3TMsVGRPk0utolUCQReXDT3pXoNDOtj5sj9IkOvBOeXHxHwukd6TsP9LzNGqOGfxIdtU0Klqi+NaUYvwMdiKSB2cfhJNL9HqXDs1ibOJhudifJ0g0wDQeLFFd5Gb7yakhaqKRojI8wyygBPOXTRxph5THK/APXPysKE=
+	t=1761140074; cv=none; b=Nvqtfsn1L440yHAms+SyI1w3Lvke0bxLdCXJ2DSXLM1PCem5tOEANn1TP3qPSZjn54/TuQ8+Xr/C1iNUVAGxRgFimd2s7xdr+pNsEKv0fCy3JZSV2IlACFkNTVfjDni7BR+LkduCblf+90pZMKfTI9qfokLYaQBS4HR8ARm8AJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761136617; c=relaxed/simple;
-	bh=519d0VeYen3U872nHK3UtETEouG+0WfQUT+bzdECclI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eqJPr//LdKHiEBluXwcO0ksqIrGzYxmLQsfj9L+EgdehJKyr2Bo9umBc80hXPz7a7u5qvFBeyxbKVtxYKXHD/RbnwkQHOO6hv9XW6NFD8pC4D27PLl2LmSVI3riiL21c55Vh9juvpQxqn2OxpN6bFsLRQsVFS+Zaem2UUTBjeU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mS1KI9z7; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761140074; c=relaxed/simple;
+	bh=4PnkTP9Pu4f71u/WXu4R9YBsEe9bBIoQkb/JNrrqhD0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r4MzwilNsA8HlghxTMA/auZfIyZs6xvJ5OC4MLdUo0KwI1N8uprKgKfBhzJWnmlSKg3X9hQMOEOOC6daxJWs6Cdbs/trcCM/coBqcyXAYhHZuQoKS5cG7F5tQ7gFju9HhBpfNz2YnUawfRQcFvwOHvDQPcJlYAUgEyK5fjwYaJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=rhOHNm9/; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mS1KI9z7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761136616; x=1792672616;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=519d0VeYen3U872nHK3UtETEouG+0WfQUT+bzdECclI=;
-  b=mS1KI9z7iWIwZMrLmJMBp3fTe9H95fmtf7uluYiTjsQ3Fa2JSB3RFrgP
-   0f1tC8mVpW8PUiNLgZqwQPdljEz2COIE1+4riEwc4k/VVpHIT5SmRq5eh
-   D/p619DFik4S3RYZoKja1J5TYwnB8ERgijn9IFZwbxqFGcPH9Lt1ri1Au
-   FL1lJJNKAlXYnWSj8q7b/9BJsoLV4n3ZPxhQ0Fu7zArJYAmwW6QUd9SQJ
-   POlSFlGYXhpFdhGCht0FB3Q1tkyzvkNbwuk2HAjARYumB5ZTN9eQcTTnb
-   Vl2B5GBspgkMDQUehau/Ky73jiEeAkOnnoG0OMewscola5tSalkdR4OeF
-   g==;
-X-CSE-ConnectionGUID: O9uKWjxEQV+tLws9/HnDHA==
-X-CSE-MsgGUID: ITzI6J38QX+pHsool6H2ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63189296"
-X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
-   d="scan'208";a="63189296"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 05:36:55 -0700
-X-CSE-ConnectionGUID: O2hLd3INQPOD774tkoyccg==
-X-CSE-MsgGUID: MLP6/TwuRmqmdl5S69L/3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
-   d="scan'208";a="189138728"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 22 Oct 2025 05:36:53 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBY58-000CMN-0Z;
-	Wed, 22 Oct 2025 12:36:47 +0000
-Date: Wed, 22 Oct 2025 20:35:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>,
-	David Collins <david.collins@oss.qualcomm.com>
-Subject: Re: [PATCH v2 3/4] regulator: qcom-rpmh: Add support to read
- regulator settings
-Message-ID: <202510222018.4wv8ONuO-lkp@intel.com>
-References: <20251022-add-rpmh-read-support-v2-3-5c7a8e4df601@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="rhOHNm9/"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-93e2d42d9b4so299146439f.2
+        for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 06:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1761140071; x=1761744871; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XV5vEDb+PLsuEAr5Dc791OLpoWf+84eLdNZr6HQ4S34=;
+        b=rhOHNm9/WS4TEKPZYL4k6JjDzDczPgGEoYWXLApV7swGPqT+inADR2fEUyB9t0/5v4
+         wHtOPySUuUC8tv4XwCxooR8UzS7LRy1IEh+JztTL0BlvSJ4DcqztUCNA8V8mLEF/iIAG
+         QrZMCS1WYHbpCPEGby/uUzkb5oocAcA1ykzK+lB23WZ+fpLrwBNRgj+9UPKRun7375rZ
+         VH9Kx18O8omBtryq4MLiwD0YALrL8/OUr7hFaRVdOgsh5Ns1euqsJvQucYMEaNzqnaZi
+         +q2cBua8HMNSLh4n4NTG6pHK+3PZaqLYeiX/Y6zH6bMPT/Mhv4h6kYAaAAavoC1iqVF+
+         wRQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761140071; x=1761744871;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XV5vEDb+PLsuEAr5Dc791OLpoWf+84eLdNZr6HQ4S34=;
+        b=fpwJwCQ+pnvd1b7X5oWw1bQMk0uFtiFd59jm3hi7xL60UJ4JEEIIj3B1IIJprCK5/X
+         slmNQULL1LM9f6PMUJQ6s1cgubahF1gmCXQ8VZD9rC34vcf7sBp5/kLpLGfPFTzphxN8
+         Wx68AKHWxRpw6XWUAmdeo9LqWUWPgM/jlsl5THTlLGNXLuBRNyaoCmiqtSjardGb895N
+         S0s8aaM3Bjp+n1gI+wn6RnF4GO19UM+FfU6Ve/WZ3HApw7Fpy/Slaf2hvlCx33/fbFRA
+         rkWH7mxW2S53QOzssCBMduNu9y+MeSfDwk3LSMZWJ54TRlsnbTrv3HGx3ZvoSa2hwWns
+         8MRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVVLSxlHUOsgtbYiIABij4ya63P5EzqI/X9ptluWUeCb+vbngvlxuwRki3OZembQjEXuf56@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzv9Eh+K1i9zxwixrxWPnh9vg19GryuHXb0EmhJtCmgj6tIKl7X
+	kLcUMlSbqiKJ8b8m0mAuR4pyE9G+Arv9utQipEArZvyz32vaIuy1oJsEREjTPaddIAk=
+X-Gm-Gg: ASbGnctsxd0HmszehgmOdBxsvlNim3U19Oxd6eekaW19EKsVBvIwzsDAGKDtdE3mXxd
+	5h8G2erAcvzoij8vB2sZjr2T/pJz2I732QS7mmGxPoe09ip4uN7DVRNk0tCvIr0fuBS3gY3nMn8
+	v/QarNIfQ8KePCIarhYEhsrO/Ln2GWDKNr1tJbur4fY/Uqg3JNFaU1sfUcJazD45GPJEzDJCpc+
+	sWP+aVgyMN9L5jjdwnMCM80Y6RsScWPz1f8R/PtiViSw8puLNrJRikLMzedIy7BTeNPtk2jcvDL
+	3rk74Qq/FFpG4FsPw55bECyZg2BfdId/Tv7120SpX6/9JOUShobu84Yc6G3fs1xOFchN+dnhPA+
+	CqG10ZY3pVG0Nf0zUKHclGzss1b9k3V7nlzusa6X5CqeSSYWc59GNgAZmtdmDv8CrPfkNxIOM2W
+	cyZhebC06KjZE5KAcQLQ==
+X-Google-Smtp-Source: AGHT+IFc8uoj4Do5t5zb539hS6BCkySzVR8p6zymdCVAWTi1lnzPFJD9IswWcUa1DASlGW2uIwU4ug==
+X-Received: by 2002:a05:6e02:1d9d:b0:42f:95a1:2e8 with SMTP id e9e14a558f8ab-430c52d5786mr269032565ab.24.1761140063517;
+        Wed, 22 Oct 2025 06:34:23 -0700 (PDT)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a9630bf1sm5181320173.17.2025.10.22.06.34.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Oct 2025 06:34:22 -0700 (PDT)
+Message-ID: <4ea25979-4fc2-4db7-8656-6c262af2cbee@kernel.dk>
+Date: Wed, 22 Oct 2025 07:34:22 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022-add-rpmh-read-support-v2-3-5c7a8e4df601@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv6] io_uring: add support for IORING_SETUP_SQE_MIXED
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: io-uring@vger.kernel.org, csander@purestorage.com,
+ Keith Busch <kbusch@meta.com>, Keith Busch <kbusch@kernel.org>,
+ llvm@lists.linux.dev
+References: <20251016180938.164566-1-kbusch@meta.com>
+ <176108414866.224720.11841089098235254459.b4-ty@kernel.dk>
+ <20251022120030.GA148714@ax162>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20251022120030.GA148714@ax162>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Kamal,
+On 10/22/25 6:00 AM, Nathan Chancellor wrote:
+> On Tue, Oct 21, 2025 at 04:02:28PM -0600, Jens Axboe wrote:
+>>
+>> On Thu, 16 Oct 2025 11:09:38 -0700, Keith Busch wrote:
+>>> Normal rings support 64b SQEs for posting submissions, while certain
+>>> features require the ring to be configured with IORING_SETUP_SQE128, as
+>>> they need to convey more information per submission. This, in turn,
+>>> makes ALL the SQEs be 128b in size. This is somewhat wasteful and
+>>> inefficient, particularly when only certain SQEs need to be of the
+>>> bigger variant.
+>>>
+>>> [...]
+>>
+>> Applied, thanks!
+>>
+>> [1/1] io_uring: add support for IORING_SETUP_SQE_MIXED
+>>       commit: 31dc41afdef21f264364288a30013b538c46152e
+> 
+> This needs a pretty obvious fix up as clang points out:
+> 
+>   io_uring/fdinfo.c:103:22: error: variable 'sqe' is uninitialized when used here [-Werror,-Wuninitialized]
+>     103 |                 opcode = READ_ONCE(sqe->opcode);
+>         |                                    ^~~
+> 
+> I would have sent a formal patch but since it is at the top, I figured
+> it would get squashed anyways.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on fe45352cd106ae41b5ad3f0066c2e54dbb2dfd70]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kamal-Wadhwa/regulator-rpmh-regulator-Fix-PMIC5-BOB-bypass-mode-handling/20251022-051042
-base:   fe45352cd106ae41b5ad3f0066c2e54dbb2dfd70
-patch link:    https://lore.kernel.org/r/20251022-add-rpmh-read-support-v2-3-5c7a8e4df601%40oss.qualcomm.com
-patch subject: [PATCH v2 3/4] regulator: qcom-rpmh: Add support to read regulator settings
-config: i386-buildonly-randconfig-002-20251022 (https://download.01.org/0day-ci/archive/20251022/202510222018.4wv8ONuO-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510222018.4wv8ONuO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510222018.4wv8ONuO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/regulator/qcom-rpmh-regulator.c:177 struct member 'status' not described in 'rpmh_vreg'
+Indeed - I'll fold this in. Keith, can you add an fdinfo test case for
+mixed as well?
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jens Axboe
+
