@@ -1,137 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D082B33EB09;
-	Wed, 22 Oct 2025 14:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0528E34B434
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 15:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761144964; cv=none; b=C4Ynl25o0agc5zJPfIxnh7iTd3Z6hQjunTGUGE/PAjspg/F4ac3s8eUJrQLY3Y1ZRB/8s6gVSEZbQstKiKSEqQYaSI/SGhXvn9qS2xTAM7sZoJ5l74fzEFX5nVa4t8uoxU3I4Zegmfc4VHMTK+qAFjIJ07klNKFdvMcyoCOsXL0=
+	t=1761146848; cv=none; b=d16L1CG1dkKbSne5QJ19TtEsy2f4wRQ8HFVhZhvIywBqpC+AlH0qmj/HmsCr8OIh64csMgmzz5kDxTYdkwudSx5HHkfahlSuhPjvqQThVcaOewfJ/RaUWRR7RScaMY8CBkdsYYap1XV1tArzQM/v2uq7dOTZRPtq1luI2a2RU7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761144964; c=relaxed/simple;
-	bh=1k0h9ke+imuVkcbrlEJhbQrnGGwnjcDdE+eGUs82J5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KeCgytLzMqRxHLLDFezx9hIGsClpRkO0eNRcBQHjtxz7O/Z5yoTpijCX6M0ahVBPzW+eFAdO/LZG1ZVIWBqzhUfK/AGN16OP9LJTogFZPvSBHqpQGiL3fa5qJVh48Nomjh4k5jXsfj+LCuBTebr4FfhuPJ214Bg4dq4s8jg+jUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k0SQedCi; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761146848; c=relaxed/simple;
+	bh=kNgL40BudYWuJuAsmdNvcDtZ0OwcI9RxNTByNbcVNcw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lw94q/DMSzFncx2J9G+lbx0EAW43+qcQj5/RbGN8YtxEsbk0sMfFn3Hb6oAZVMLCtwHcd93PwIUBXZgfUvgNVcjjE3NR7h1rgsoTA9hsS9DdaH4H70sVC/GpzodX9o9z0oBLLOk7wkDrDc485TYvyKT/6F0LpVc1AkoQuS2h6IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fjSQRwvM; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k0SQedCi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761144963; x=1792680963;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1k0h9ke+imuVkcbrlEJhbQrnGGwnjcDdE+eGUs82J5Y=;
-  b=k0SQedCi1w9pnBSNGrjLUZyi/bb925rHL9VbEEGWaikhuskfU35jLMKy
-   g1g3n2c9TH8g3Gv6sEUiBWu2tBJ/h4DxQdYkjCIFgh/mwP+AGAx4Gyp9A
-   S3Kr7vIODdwgFy3+NFmccdZqC2sXZ6OGSOH8SAVDcd2RVFmgB1SF7qLwL
-   RyMYWrIOnvpQN8RCbMLW7o3C6HhgQEagRiZwyI8o1krRJz49Wu5gnMx+i
-   duNwfdRBS1/AtI95e/KC/Kuq0Xs90F2GA3IlUbiaP5VuKceBqQTmgvnUk
-   s0Oj+D/5iQua3yM0Ax+BUqFcFR2IBs1cKZ4rIB2NZyXUI4TeOde/gouys
-   w==;
-X-CSE-ConnectionGUID: Z0OgfnPKSn2THM+690QTLg==
-X-CSE-MsgGUID: 90+qIP7QRzGsLDoNZrbHwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="80923769"
-X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
-   d="scan'208";a="80923769"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 07:56:02 -0700
-X-CSE-ConnectionGUID: KnTCe76uSE2LBBnJ07TObg==
-X-CSE-MsgGUID: uekKQdbfTbCUGBULnMqAFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
-   d="scan'208";a="214836268"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Oct 2025 07:55:58 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBaEu-000CRU-3C;
-	Wed, 22 Oct 2025 14:55:26 +0000
-Date: Wed, 22 Oct 2025 22:53:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, bpf@vger.kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, magnus.karlsson@intel.com,
-	aleksander.lobakin@intel.com, ilias.apalodimas@linaro.org,
-	toke@redhat.com, lorenzo@kernel.org, kuba@kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Octavian Purdila <tavip@google.com>
-Subject: Re: [PATCH v3 bpf 1/2] xdp: introduce xdp_convert_skb_to_buff()
-Message-ID: <202510222209.D4RDn4DI-lkp@intel.com>
-References: <20251022125209.2649287-2-maciej.fijalkowski@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fjSQRwvM"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-430c97cbe0eso45347775ab.2
+        for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 08:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1761146845; x=1761751645; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zoALVDG9RnT7BAOdsnJMe54/Tt3GRwf2SgNb0DV4KSQ=;
+        b=fjSQRwvMrk18k90FRWxOCUwiD9uU3nEiRSt91kGzwdB412yb7JZV35PbglcahDHEUe
+         U3l71/50/zVBDDmYj6rng7I4GDtdzSjf4FMyC6XWSnxUDOV0iNMhcjpNRaRU+yPlICpD
+         gU7Cx84ur2UWS0Tc3boxkj+XPYietckB/JKXM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761146845; x=1761751645;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zoALVDG9RnT7BAOdsnJMe54/Tt3GRwf2SgNb0DV4KSQ=;
+        b=C1GBqAdhS+Q4/PE9mOkr1/VW5BCZvQYaA3UtreHIlYZP4eE8L0UEByrIIPUPofJ92h
+         0u5PrTx6YW6H0RuuODh+HRnQRhVwrZOIXGiSyXYXGRP+hilyiAOgzmNPKnUgb16R0UrA
+         USRK0s8fbeWchK4IfO2AFBALVAp2AlcpM/d4o4SQ7HBvQe4iHQ1uNFmhSbX8FXEuBQ/6
+         lmc1fITTmrLSl77XWIbWmlmGP0lVHo/59W1sebXeI0t1snE7QGwVxw9Wi3OdMPGHpB+4
+         04DNKsudMO1Y9f9vWpPDVMd8mBvl3VS1Ewr1ZBhG/W3jtSwtuEo5oTVB8jmhgKEYRk0+
+         zn+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXMjvU37qATnb3vS1PIkQD32BSmSdpxmJAsXOCeUAUN9nlIP2FWjHMRuAopDGlFzeDWf1yq@lists.linux.dev
+X-Gm-Message-State: AOJu0YwvFgxMFAosYwPuah8OLWc41E32PTyVQXC/juDBSyXBoCNQYWpU
+	4PBj7Mr09fL5LGH5SAgDWOlRCJs+MJZsd+MKWDERCM8peD98gHjHQIEKu+xWGK4VT0k=
+X-Gm-Gg: ASbGncvPB+zPqGNt6Ao6ILXD80DbcaafB/xIAlpNX2U0mwbjuW0C9pcXtChe9K8+SXN
+	WMwvj1KXo22qUSz0vNGFtZvkfW+XrkA56dPgm/aqn3QQXMg34qRlnlev3ceGFy6bVnbt9H0cM0b
+	eHUsnLqzTzO4t7n2evTRIp2Dnce2FkaObp41UBWPZFKAPo55BhBsStiG73xjGzO2Csp8Fg1pEnu
+	wSvswNsPWVMRq6lz4G/naWi2GeQCsTghfYRMHDpv+mP2t2PNFV1hKAwaomGNnH4qoeL011h5qNF
+	UVv9+z8A9QNJVcbqfilejxbGEd02NmGlcokbTIVGAg0VB8dp8BW5xcoX3OSFzjTxjR7v0MRBl4v
+	qZ2Cpa33KzElpoqpQPc3jOb7hWysVEFTxaosIAaJc1MtroGyR3pEJJWfel1Dz34qE7lCM5wU5mG
+	PoT5CMqOZH/lOz
+X-Google-Smtp-Source: AGHT+IFHrNAgETUq7iHXWj4LaXPG7j1qD4lSrv4wnohCO6eo9eW67OevdQz1fzSz9sygsvW/JqehtA==
+X-Received: by 2002:a05:6e02:3101:b0:431:d76b:d133 with SMTP id e9e14a558f8ab-431d76bd17cmr27048295ab.12.1761146845007;
+        Wed, 22 Oct 2025 08:27:25 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a964a8a8sm5288976173.29.2025.10.22.08.27.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Oct 2025 08:27:24 -0700 (PDT)
+Message-ID: <cb30af9e-c22b-485a-a83c-f395880cd799@linuxfoundation.org>
+Date: Wed, 22 Oct 2025 09:27:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022125209.2649287-2-maciej.fijalkowski@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under
+ label
+To: Dev Jain <dev.jain@arm.com>, Sidharth Seela <sidharthseela@gmail.com>,
+ nphamcs@gmail.com, hannes@cmpxchg.org, nathan@kernel.org, shuah@kernel.org,
+ morbo@google.com, justinstitt@google.com, nick.desaulniers+lkml@gmail.com
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ david.hunter.linux@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250929115405.25695-2-sidharthseela@gmail.com>
+ <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Maciej,
+On 9/29/25 22:52, Dev Jain wrote:
+> 
+> On 29/09/25 5:24 pm, Sidharth Seela wrote:
+>> Fix warning caused from declaration under a case label. The proper way
+>> is to declare variable at the beginning of the function. The warning
+>> came from running clang using LLVM=1; and is as follows:
+>> -- 
 
-kernel test robot noticed the following build errors:
+Sidharth,
 
-[auto build test ERROR on bpf/master]
+Make sure to not use "---" in your commit logs. Everything after
+this line gets thrown away. I had to go fix it manually.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maciej-Fijalkowski/xdp-introduce-xdp_convert_skb_to_buff/20251022-210958
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20251022125209.2649287-2-maciej.fijalkowski%40intel.com
-patch subject: [PATCH v3 bpf 1/2] xdp: introduce xdp_convert_skb_to_buff()
-config: i386-buildonly-randconfig-002-20251022 (https://download.01.org/0day-ci/archive/20251022/202510222209.D4RDn4DI-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510222209.D4RDn4DI-lkp@intel.com/reproduce)
+>> -test_cachestat.c:260:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+>>    260 |                 char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
+>>        |
+>>
+>> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+>> ---
+>>
+> 
+> Reviewed-by: Dev Jain <dev.jain@arm.com>
+> 
+Applied to linux-kselftest fixes branch for next rc.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510222209.D4RDn4DI-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/select.c:33:
-   In file included from include/net/busy_poll.h:19:
->> include/net/xdp.h:398:10: error: incompatible pointer to integer conversion assigning to 'u32' (aka 'unsigned int') from 'sk_buff_data_t' (aka 'unsigned char *') [-Wint-conversion]
-     398 |         pkt_len =  skb->tail - skb->mac_header;
-         |                 ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +398 include/net/xdp.h
-
-   386	
-   387	static inline
-   388	void xdp_convert_skb_to_buff(struct sk_buff *skb, struct xdp_buff *xdp,
-   389				     struct xdp_rxq_info *xdp_rxq)
-   390	{
-   391		u32 frame_sz, pkt_len;
-   392	
-   393		/* SKB "head" area always have tailroom for skb_shared_info */
-   394		frame_sz = skb_end_pointer(skb) - skb->head;
-   395		frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-   396	
-   397		DEBUG_NET_WARN_ON_ONCE(!skb_mac_header_was_set(skb));
- > 398		pkt_len =  skb->tail - skb->mac_header;
-   399	
-   400		xdp_init_buff(xdp, frame_sz, xdp_rxq);
-   401		xdp_prepare_buff(xdp, skb->head, skb->mac_header, pkt_len, true);
-   402	
-   403		if (skb_is_nonlinear(skb)) {
-   404			skb_shinfo(skb)->xdp_frags_size = skb->data_len;
-   405			xdp_buff_set_frags_flag(xdp);
-   406		} else {
-   407			xdp_buff_clear_frags_flag(xdp);
-   408		}
-   409	
-   410		xdp->rxq->mem.type = page_pool_page_is_pp(virt_to_head_page(xdp->data)) ?
-   411					MEM_TYPE_PAGE_POOL : MEM_TYPE_PAGE_SHARED;
-   412	}
-   413	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+thanks,
+-- Shuah
