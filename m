@@ -1,152 +1,87 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4E92737E8
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 15:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2A1279789;
+	Wed, 22 Oct 2025 16:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761147205; cv=none; b=fJcE96k0rzfBayCoT5bq0//BLnOOx2Dj+vyXyjj3ApVhFhZqsjhzM/kUaEdLBQnbVYzZprtD4YDa3f7xADHhGcn5RBkoNEU23iVhQRcfOu3d+KERF/SxH5t7Qq8pFQdbACw6AMFAdHUUpVFCre2ZrB2Xd+ELycDoD9aUsCJAQN4=
+	t=1761150003; cv=none; b=sB66qEs/O2xa7LXHnbKjDlMIGYssWmTbVA9DbjO+YDWnmFNauI5RlksqddBsSF9g5kJaaFi5feKXxnIlz4UzNDkmgNJ64l4lNM387pn1cKIT2z7f1lpYLWei8HSJNGdh370F+/AZ1hXWUG5Okci8A3J2V78Jn/4o6TymyXAS5OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761147205; c=relaxed/simple;
-	bh=azd4xDmevme8F23fM40Ty5P4T9DB/os76+mdY/FZrRY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QUdOSPusRi/4YtxUpJxkBDUbwpavWFRN2s7ZofBqFIKoTQsFMdPP1cdDFBWJ1CKWPsg2UlItdw0JZFRYvSALoxxaKl/28Prz0mOdAaYaR7Eus3bsZ3BC+/uuAPDicyt8Wy5dJD1ZrhR5931rpC0gBlgFo4SY69FKUkm8Y55uE5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eFGKa3n0; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761150003; c=relaxed/simple;
+	bh=2rpBH3Z2TDWwm6DGdmwsKxKTQftRqWP2IU7YUsOpuoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fp/AJ9IZe6kTVf0hYStJA90PDVhCiHZZTteWj11dAi0N2KQe/bB2pW/XXzYTPTKZZSB2ki6RGkSOB01sInuPTMxND/lO7Sz0rcT4rRRl2QAmDQpn/g5MttfXTIQZKSnVpftdwI4YPzvpk/vBmboFdW5PuNCdBgnbKkZkXmqohV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+kfXMFK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eFGKa3n0"
-Message-ID: <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761147200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1a9OuwdCiOtRZfIJ9ZURVIn9cH6TPq5+gdX1ROh5QmQ=;
-	b=eFGKa3n0v+gHauHTxLKueQLAry7KlTReLpg9h+9XqhNtPRk8LF+u+R6oVmn9YtpGzNCiHr
-	0LR4qy9YAe5qyC2O1TlqqARqKSZdMMw9HwU2uuoq+j/3hO5drJ7GYoRHfshorDkep/F8Z+
-	LozxD+2XkIn2iXlKfyXRyQUHadfDEDo=
-Date: Wed, 22 Oct 2025 08:33:12 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+kfXMFK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 418B3C4CEE7;
+	Wed, 22 Oct 2025 16:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761150003;
+	bh=2rpBH3Z2TDWwm6DGdmwsKxKTQftRqWP2IU7YUsOpuoc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U+kfXMFKK8LZZ+YN/R1gwlZwEoTsimkZLuPcLj4lk+116L1M8dQbubpiKfg9RYVq7
+	 ujZ3x6ZP648GC9NC41PgoFTuVqXf930e25kwAOOCEdtoipkFGYTIJzEXTIrGIMpK0d
+	 uwWdw/dGcpsQqZTLMvdbADYO73zKWECPWPQjseIIRLf0diiFPFuZI066BABR7wjzjZ
+	 4HhAYLDnXLcSH0dKv6yJgF5e9NYHU+3F//gQ5aAWUo2p49XOgvaiZReIkZBa1CkB/E
+	 5fqmsFJk7n5J0a1DoylBoXJonOBONJCvYGzlBLcaXfFpjwb1o8EmiZJioBmvKAUWWZ
+	 470oeIsJMVGaA==
+Date: Wed, 22 Oct 2025 18:19:57 +0200
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Jonathan Brophy <professorjonny98@gmail.com>,
+	lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Jonathan Brophy <professor_jonny@hotmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radoslav Tsvetkov <rtsvetkov@gradotech.eu>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] leds: Add virtualcolor LED group driver
+Message-ID: <20251022161957.GA1228040@ax162>
+References: <20251019092331.49531-5-professorjonny98@gmail.com>
+ <202510201144.TwTDnjSJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code
- with __BPF_FEATURE_ADDR_SPACE_CAST
-Content-Language: en-GB
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Puranjay Mohan <puranjay@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20251022071825.238909-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202510201144.TwTDnjSJ-lkp@intel.com>
 
+On Mon, Oct 20, 2025 at 11:29:28AM +0800, kernel test robot wrote:
+...
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Brophy/dt-bindings-Add-virtualcolor-class-dt-bindings-documentation/20251019-172647
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+> patch link:    https://lore.kernel.org/r/20251019092331.49531-5-professorjonny98%40gmail.com
+> patch subject: [PATCH v3 4/4] leds: Add virtualcolor LED group driver
+> config: i386-randconfig-001-20251020 (https://download.01.org/0day-ci/archive/20251020/202510201144.TwTDnjSJ-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251020/202510201144.TwTDnjSJ-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510201144.TwTDnjSJ-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/leds/rgb/leds-group-virtualcolor.c:463:38: warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+>      463 |         ret = devm_add_action_or_reset(dev, (void (*)(void *))mutex_destroy,
+>          |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/device/devres.h:166:34: note: expanded from macro 'devm_add_action_or_reset'
+>      166 |         __devm_add_action_or_reset(dev, action, data, #action)
+>          |                                         ^~~~~~
+>    1 warning generated.
 
+This should use a dedicated wrapper function like a patch that I just
+sent for the same issue in another driver [1] to avoid a kernel control
+flow integrity violation at run time with CONFIG_CFI=y.
 
-On 10/22/25 12:18 AM, Jiayuan Chen wrote:
-> When compiling the BPF selftests with Clang versions that do not support
-> the addr_space_cast builtin, the build fails with assembly errors in
-> "verifier_ldsx.c" [1].
->
-> The root cause is that the inline assembly using addr_space_cast is
-> being processed by a compiler that lacks this feature. To resolve this,
-> wrap the affected code sections (specifically the arena_ldsx_* test
-> functions) with #if defined(__BPF_FEATURE_ADDR_SPACE_CAST). This
-> ensures the code is only compiled when the Clang supports the necessary
-> feature, preventing build failures on older or incompatible compiler
-> versions.
->
-> This change maintains test coverage for systems with support while
-> allowing the tests to build successfully in all environments.
->
-> [1]:
-> root:tools/testing/selftests/bpf$ make
->
->    CLNG-BPF [test_progs] verifier_ldsx.bpf.o
-> progs/verifier_ldsx.c:322:2: error: invalid operand for instruction
->    322 |         "r1 = %[arena] ll;"
->        |         ^
-> <inline asm>:1:52: note: instantiated into assembly here
->      1 |         r1 = arena ll;r0 = 0xdeadbeef;r0 = addr_space_cast(r0,...
->        |                                                           ^
+[1]: https://lore.kernel.org/20251022-ishtp-fix-function-cast-warn-v1-1-bfb06464f8ca@kernel.org/
 
-I think you are using llvm18 and earlier. Why can you upgrade to llvm19 and later
-which should solve the problem?
-
-> Fixes: f61654912404 ("selftests: bpf: Add tests for signed loads from arena")
-
-We do not need to have Fixes. compiler is also moving forward, we cannot support
-really old compiler and it is no point to have __BPF_FEATURE_ADDR_SPACE_CAST
-for really old compilers. So at some point, __BPF_FEATURE_ADDR_SPACE_CAST will
-become default.
-
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->   tools/testing/selftests/bpf/progs/verifier_ldsx.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> index c8494b682c31..cefa02e417d3 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> @@ -263,6 +263,7 @@ __naked void ldsx_ctx_8(void)
->   	: __clobber_all);
->   }
->   
-> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
->   SEC("syscall")
->   __description("Arena LDSX Disasm")
->   __success
-> @@ -425,6 +426,7 @@ __naked void arena_ldsx_s32(void *ctx)
->   	:  __clobber_all
->   	);
->   }
-> +#endif
-
-If you are really using llvm18, then I found there are some other
-build failures as well, e.g.,
-
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
-    47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
-       |               ^
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160636:48: note: previous declaration is here
-  160636 | extern void __attribute__((address_space(1))) *bpf_arena_alloc_pages(void *p__map, void __attribute__((address_space(1))) *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
-         |                                                ^
-In file included from progs/stream.c:8:
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:49:5: error: conflicting types for 'bpf_arena_reserve_pages'
-    49 | int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 page_cnt) __ksym __weak;
-       |     ^
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160638:12: note: previous declaration is here
-  160638 | extern int bpf_arena_reserve_pages(void *p__map, void __attribute__((address_space(1))) *ptr__ign, u32 page_cnt) __weak __ksym;
-         |            ^
-In file included from progs/stream.c:8:
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:50:6: error: conflicting types for 'bpf_arena_free_pages'
-    50 | void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cnt) __ksym __weak;
-       |      ^
-/home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160637:13: note: previous declaration is here
-  160637 | extern void bpf_arena_free_pages(void *p__map, void __attribute__((address_space(1))) *ptr__ign, u32 page_cnt) __weak __ksym;
-         |             ^
-
-Please cover all build failures at once.
-
->   
->   /* to retain debug info for BTF generation */
->   void kfunc_root(void)
-
+Cheers,
+Nathan
