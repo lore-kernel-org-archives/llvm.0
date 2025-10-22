@@ -1,81 +1,60 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936AF3054C8;
-	Wed, 22 Oct 2025 08:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D5C30F54C;
+	Wed, 22 Oct 2025 09:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761121245; cv=none; b=bSenC+eabTh2vmAxgaPCTazznFrNemZE2l5W2MtvOTYeKeEI/x/55uhZUGtgFk0eG2fdlKilNABoufisAIenwD+hGTSifzdMxHnrRGTCHunD9OHirk9nAaX2syQyIt/2brCs7NuoTUi1kyS2ARlfkSvAe3tWc9DsVr5j9PuaBPE=
+	t=1761124127; cv=none; b=D4sessFUCcTM0Hez2wsqvd+PfRgUhRCQbgDElRzhlN4rid7f1fH7AXxa9qRXb41ArdSvBQa/X3I12Lj4tESQ1DiC2A3JAS706ddeHr0jSDSLVJaq8X1x7utmg4IKBSwJiDSSzlwZPcUI9Qh2Mjgl3cqwjZPa6/F4aP+LAfx6fCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761121245; c=relaxed/simple;
-	bh=NaBVnYfiCGBUleVgENfqy+6MTH7byS2p6Wtyv6/P8ok=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rn9b/U80OjPVXYvloS+DNUPsw7gJQaXnmSIZ1yzk0BchPfQQEp6v5MoYAWd6BB0H7WxnvN+Idy1odDCH2RGKc06l2HoJ7Zi+m2nTqgxflrrAgvhojLJiBu0rwZ+TnnIK/Uhls6QgWo+rHzeJ9WXqvPMfEKqGSTEg+OCNOfazk9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dJvJ5L6k; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1761124127; c=relaxed/simple;
+	bh=LCO0C96luvGKrKtvHFdcvTHWZXFH2iocHPWf7TaeFWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=o3ZBM0eDqIfqTpn57kULhesyR4ASU/3Y3ou3iS3jZyY6+J3c6zKKMn0ClRAaFK+Vou75QbwKIHY6gruEo0wrVAI9Th7aitzCxQ2Mgqo7QWQPrxf/3io2i/MohjJaDr4ltEDocmuZo2/M9JRnjCAmhPF1LzLqQkdlZoLEEFnF0VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g4vnpRHJ; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dJvJ5L6k"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=GBiS77jacBsAV5FtDUoak5VLXkPdQf0nis8KTJqTfW4=; b=dJvJ5L6kzK0cWDQUXS+9Sv/+VK
-	d0CkMXZ8LBVpyOFapysJs3nZUl8zg9jTWIWcs7hMsJWUEWdw593rfTsyMVuBrGOxp7kergFX2kDAu
-	kRHlMRJjX66XPkxAzIXHxKzcAfWzVZxuKDsExmSD0CeQS3y2h8LVClTy6lALGeurbtbN08tcGCYsL
-	/vQ0qw1qBCzpwe3TRNnSukrnJKItuh8uQv7oB/ibvZYDRFJnxGZgGj3hljyUiY5aaxa8T1u6tEUgt
-	R30bNScOmi92rDSwQ+MJbXLrbKxu56TMtKAKqiNxmdw3XTNl50zs1smUC/tD8rqphtpHS7p2v2heZ
-	Evo5QUhw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vBTDO-00000000P2b-0jqI;
-	Wed, 22 Oct 2025 07:24:59 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7E1C730039F; Wed, 22 Oct 2025 10:20:25 +0200 (CEST)
-Date: Wed, 22 Oct 2025 10:20:25 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Marco Elver <elver@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev,
-	Al Viro <viro@zeniv.linux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Michael Kelley <mhklinux@outlook.com>,
-	kernel test robot <lkp@intel.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Marc Herbert <Marc.Herbert@linux.intel.com>,
-	Christopher Ferris <cferris@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Paolo Abeni <pabeni@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/3] compiler_types: Introduce __counted_by_ptr()
-Message-ID: <20251022082025.GK4067720@noisy.programming.kicks-ass.net>
-References: <20251020220005.work.095-kees@kernel.org>
- <20251020220118.1226740-1-kees@kernel.org>
- <20251021095447.GL3245006@noisy.programming.kicks-ass.net>
- <202510211210.84D670D1C@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g4vnpRHJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761124126; x=1792660126;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LCO0C96luvGKrKtvHFdcvTHWZXFH2iocHPWf7TaeFWM=;
+  b=g4vnpRHJhHPxelCEkbgsleril56BkITDBQf9LKx+94aaJV9G0yEfRlRO
+   rBN0uXOmyA6zHol3QUNQ3sojyQbngO8lUtY0HWgTSMgzMqJ4Xjpdt+FKR
+   WQSE55a0tq4f+gp8RnT4Ru31ioTVjlQhEzbCbbrEntNOuZfs/04T/PSmz
+   6LRFrFyZUsCgAKe9zjtX+o9jKrSscmj5vZBkMtSUE+VTP1BTuUjN4oV6b
+   DSXS0kpCn8jvLTVT+M1auhhvsoRPBdwIzq/ZGFglTi2nJsHsKv4rPc0+n
+   aib8c8ZxCQ3qWZf9yGhBk7jM2GgyCG3ZFWs24vdAfXe0+NorRQuqM84lM
+   w==;
+X-CSE-ConnectionGUID: eJxGj5eiRjORy8FOVfq1tA==
+X-CSE-MsgGUID: tVghfwiUQqmqPVltmpLGAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63361338"
+X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
+   d="scan'208";a="63361338"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 02:08:45 -0700
+X-CSE-ConnectionGUID: bcjkD15CTvqVqodpLHMdXA==
+X-CSE-MsgGUID: /lJIO8KIQ8Goy0vOXfXsgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,246,1754982000"; 
+   d="scan'208";a="183031605"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 22 Oct 2025 02:08:43 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBUpk-000CAz-2a;
+	Wed, 22 Oct 2025 09:08:40 +0000
+Date: Wed, 22 Oct 2025 17:08:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>
+Subject: [sean-jc:vmx/tdx_populate_cleanups 5/26]
+ arch/x86/kvm/mmu/mmu.c:5021:26: error: no member named 'gmem' in 'struct
+ kvm_memory_slot'
+Message-ID: <202510221928.ikBXHGCf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,35 +63,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202510211210.84D670D1C@keescook>
 
-On Tue, Oct 21, 2025 at 12:24:05PM -0700, Kees Cook wrote:
-> On Tue, Oct 21, 2025 at 11:54:47AM +0200, Peter Zijlstra wrote:
+tree:   https://github.com/sean-jc/linux vmx/tdx_populate_cleanups
+head:   7298dd9bb6d2003af41f75bf1839c8e298a32b13
+commit: d9d7775e7dd7525e235db52a3ea99f1e41cdc72e [5/26] KVM: x86/mmu: Add dedicated API to map guest_memfd pfn into TDP MMU
+config: i386-buildonly-randconfig-002-20251022 (https://download.01.org/0day-ci/archive/20251022/202510221928.ikBXHGCf-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510221928.ikBXHGCf-lkp@intel.com/reproduce)
 
-> > So why do we need both __counted_by_ptr() and this __sized_by(), won't
-> > one be good enough?
-> 
-> I remain extraordinarily frustrated that counted_by can't be used with
-> "void *". I hit a brick wall on this, though, and don't know how to
-> convince either GCC or Clang devs to fix it. It's so obviously correct
-> to me: "void *" uses a 1 byte iterator for arithmetic... so asking how
-> big a given allocation is should be byte sized!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510221928.ikBXHGCf-lkp@intel.com/
 
-Right, at least for gnu11 language variants this really should work. I
-mean, disallow the usage for c11 if you're pedantic but for crying out
-loud, have the GNU extensions be consistent and all that.
+All errors (new ones prefixed by >>):
 
-Feel free to use my feedback if it would help.
+>> arch/x86/kvm/mmu/mmu.c:5021:26: error: no member named 'gmem' in 'struct kvm_memory_slot'
+    5021 |             WARN_ON_ONCE(!slot->gmem.file) ||
+         |                           ~~~~  ^
+   include/asm-generic/bug.h:184:41: note: expanded from macro 'WARN_ON_ONCE'
+     184 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
+         |                                         ^~~~~~~~~
+   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
+     171 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   arch/x86/kvm/mmu/mmu.c:5022:37: error: no member named 'gmem' in 'struct kvm_memory_slot'
+    5022 |             WARN_ON_ONCE(!file_count(slot->gmem.file)))
+         |                                      ~~~~  ^
+   include/linux/fs.h:1270:39: note: expanded from macro 'file_count'
+    1270 | #define file_count(f)   file_ref_read(&(f)->f_ref)
+         |                                         ^
+   include/asm-generic/bug.h:184:41: note: expanded from macro 'WARN_ON_ONCE'
+     184 | #define WARN_ON_ONCE(condition) WARN_ON(condition)
+         |                                         ^~~~~~~~~
+   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
+     171 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   arch/x86/kvm/mmu/mmu.c:5025:40: error: no member named 'gmem' in 'struct kvm_memory_slot'
+    5025 |         lockdep_assert_held(file_inode(&slot->gmem.file)->i_mapping->invalidate_lock));
+         |                                         ~~~~  ^
+   include/linux/lockdep.h:285:33: note: expanded from macro 'lockdep_assert_held'
+     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+         |                                        ^
+   include/linux/lockdep.h:252:47: note: expanded from macro 'lockdep_is_held'
+     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+         |                                                        ^~~~
+   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
+     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
+         |                                       ^~~~
+   include/asm-generic/bug.h:171:25: note: expanded from macro 'WARN_ON'
+     171 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+>> arch/x86/kvm/mmu/mmu.c:5025:79: error: expected ';' after do/while statement
+    5025 |         lockdep_assert_held(file_inode(&slot->gmem.file)->i_mapping->invalidate_lock));
+         |                                                                                      ^
+         |                                                                                      ;
+   4 errors generated.
 
-> Let me take another stab at it...
 
-Thanks!
+vim +5021 arch/x86/kvm/mmu/mmu.c
 
-> As for avoiding __counted_by_ptr(), we could just raise the minimum
-> Clang and GCC versions to require this, but that means dropping existing
-> coverage (e.g GCC 15 supports only flexible array counted_by).
-> 
-> Maybe we could do a global __counted_by_ptr -> __counted_by replacement
-> once GCC 16 is released?
+  5016	
+  5017	static void kvm_assert_gmem_invalidate_lock_held(struct kvm_memory_slot *slot)
+  5018	{
+  5019	#ifdef CONFIG_PROVE_LOCKING
+  5020		if (WARN_ON_ONCE(!kvm_slot_has_gmem(slot)) ||
+> 5021		    WARN_ON_ONCE(!slot->gmem.file) ||
+  5022		    WARN_ON_ONCE(!file_count(slot->gmem.file)))
+  5023			return;
+  5024	
+> 5025		lockdep_assert_held(file_inode(&slot->gmem.file)->i_mapping->invalidate_lock));
+  5026	#endif
+  5027	}
+  5028	
 
-That sounds like a plan! :-)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
