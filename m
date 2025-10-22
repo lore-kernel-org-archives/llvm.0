@@ -1,132 +1,141 @@
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B440313E00
-	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 13:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1E335BDAC
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 14:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761141370; cv=none; b=ATpJNe32nDg27ifwqtmntM6J19TL/gYFx2IRHgGPLUNRqdTELEhVgUBs/LT+PUsU1UJQpU1zvVDWzAjgEhxlaWtKaZKA5JnM0wiYCL+1SThdrxZOQiyrmwyII0nWTzZFUS1lBmRS46i07qARD8Nu+WpzzO7h3nfij/UD4x6gYuw=
+	t=1761143599; cv=none; b=ZHZLYttOw5HgLxglOzNQjhNiTtJmqmjDQr/3ndXna75gYCk5yPuH0zD/1BSivcBFeUvwrU4SmQJnrq9MglaiJrcZL4f142J/1DWsrZqnclsdTr2BL9kCeqJ3SF+BNgCDnsWbSCIQ/hpv4yvWc6l2ZWpwW+Y1NOEl6UF7N5r5dCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761141370; c=relaxed/simple;
-	bh=q1ki8CD4ekrzwYx4pxL9oVk7SvLipatLHZsgTCrTRA4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pgzfQL7TDvm8qN5/nQiQMO9eCjroRovceNQIYD7LxBBGhrlJnBfl0YezqsgYu0/7gCa9GTJGrzkZz99h9/F4zDmZ/MS5WTteXyFbE1E4XNxOUZy7gIBwE249GWIiEkXaMp/tBHbAWJivWpbkUMfx6wEb7SGG4QQ4gw6QNMtU8pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=irQRt5Dk; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1761143599; c=relaxed/simple;
+	bh=g6GKo4VtIKHXYOdNrQW+Tvyvv4a4ha+KmnchRj1T+TU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ajopIvAboZ7hQqcH09HC41HOX+TeD9YvFTdu0OB+yK91upzRJdQJjoLIQdPGOPAReJUTMQx0QR3Pnafo9cf9ieLWqXG2WEhypmhfX1VBUUzqLTPDQ8rYDKjmghs8GuAgGxgt7YZxo9Iyk8IqQHjS142r5Czk1Cb7d9qJQq1FJFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HZ3XaWXv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="irQRt5Dk"
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-93bd394fab0so28376139f.0
-        for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 06:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1761141366; x=1761746166; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4j8OyvK6t30KOQVtEJkqYDEQ/5UHSwAhZ/4iCsZyPjY=;
-        b=irQRt5Dk6YHcUepsvGUICstQqNNWbZfZ96SnRPIcm0okiZqxL4Gzm7/jNHEmALroHt
-         u7u6KNYmqACtg6Ws1cKSB86cx5Y0g36k/3dS04BsfeATF+49RRFz/T11Qrp5CjsHFMHY
-         FRpBW5IouW/WqdEOv+A/fOzBqtDgzoQOGqrl/mnByZCDFwYPxmw9DRi3O7MZz8kXmhcF
-         KT+M0jSb2hYTJM8vc6BiK49SGtUU9r02bJw+AnzENuVjA2rMgYjRapiPzyy4oc6gGPR1
-         cxSKPsoScKxvtt4z5oX/MMr9x0ESnk2bBmL+kKq3KKgPNuvdyHE9SG0wwConyRTf+W4o
-         raDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761141366; x=1761746166;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4j8OyvK6t30KOQVtEJkqYDEQ/5UHSwAhZ/4iCsZyPjY=;
-        b=sBzBrYsm/5DuKC2M/IpAFHMzXpNXm6ApxZux5xMjNIe4/j4JJJ/FBJkel907ByLgz/
-         y3/NA0uV/vIgdv44/33PGXBn52bOEwiKZi+yuW/ReWMaXSOoq+uctTj8gA9bcnpuM1PL
-         zzpKM9r8LTmNZTuxRKcMZF7UgvEbrv1KjcG0Mk9zlB0i5jDEEhhaqIBiVgg29pyq0kGT
-         teugTwFVGpQSB1fgWR4XClGLPOWqZgamx7X+jRdYvvDUP1vpYvPt7kzrKnC+nKgCaZH+
-         cVr+ogiZ65e5kDy/4NTcyW/bDUKDQw7Ts3BxbrSmbJ1GpA3CstpZhsNq7jUlOPGZqDYd
-         l1NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUI+mm/pfV6tpzuZk94Rma2p8lGwSnJKc5JD7pidogAmyNEMkLawp1Geh+dZIi11q2nlJO9@lists.linux.dev
-X-Gm-Message-State: AOJu0YxzXbY1I0l5qvexHmPTcxtk6vl7TkAKa/ZCcLb7zrDoUNmfjsac
-	XGoe+CO61MDwXvHqTsdo1xSTv2gIMRODcbopsk6vnx+nds0wbQ4ukehOqdqSMSFArybYfYT7dzc
-	antLUJ34=
-X-Gm-Gg: ASbGncsd3c+E2+qaJzBXGZD7PCPTlN1EDaDRjJzSmFDCQIjNjzKsUDBYTM9jb04pioi
-	OW0HaFkPT5Y22BWb8C9ZMQH23CDg4iKSXPY4T2ky/pUYwtYnL5Ufh26xGMzAzfVhzMbHpbqWKc6
-	dUPI5+JZtfufpLoeKkR8/1CUz/fywjotslA+teuyahEFNoX/o2dvNw/c3mSpRxt6H3zV/VYvyFA
-	gcHoLYRUSMf0eLhtLvCO1Jh8WgY2CyuLdMe7aOa0tTfZjvw1C9p8ON9u6svsEWR5X7fLMKjO7nG
-	aZCoNvcod+jrOoe3OxeGb/k18U0EIDwbpJ4rw7Vw2+YoAYBJ8TAzCHBPefvOXiq1gZlZbJynKXR
-	sosCHTWo+DWFgQegfe0baY89tRJ5PGkiXWQ6OmLtchnBaBxOwpj0ahtyLfu7IscdGjNyl94BN
-X-Google-Smtp-Source: AGHT+IGqifK929VZxtAIG4ZTGbov9xEtXX9LbfMYUADx3IoiuG6LKNs/gy7l9IYfTZVTiCEg3F0B7A==
-X-Received: by 2002:a05:6602:3058:b0:93e:8b7f:5af5 with SMTP id ca18e2360f4ac-940f9a7ae60mr143932139f.7.1761141366423;
-        Wed, 22 Oct 2025 06:56:06 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-93e866df2eesm528069539f.19.2025.10.22.06.56.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Oct 2025 06:56:05 -0700 (PDT)
-Message-ID: <6a3f7489-5003-4fe4-839f-f06019ba2f6c@kernel.dk>
-Date: Wed, 22 Oct 2025 07:56:04 -0600
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HZ3XaWXv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761143596;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G1ULQtDuIbRNutL3a59iNrYyczStvfVQgkMWa6gA1AM=;
+	b=HZ3XaWXviQd0fGpXqP2gGLD5dh1+60SsRjNtCDAAPMsuli+eKEMC+btzqnipX9jIdfWdPz
+	6CSoEWR2RirnBn3IVRCVaMvMhiJfJ5/gCTK3CIxV7pHilK+crJuZtTETwTH+IusEU7oSeX
+	xf5Dus3SIt2kn2Btc/KkDK3kjONdBko=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-226-XJEb43RxP7qQeqvTIVGkeQ-1; Wed,
+ 22 Oct 2025 10:33:11 -0400
+X-MC-Unique: XJEb43RxP7qQeqvTIVGkeQ-1
+X-Mimecast-MFC-AGG-ID: XJEb43RxP7qQeqvTIVGkeQ_1761143590
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E88E2195606B
+	for <llvm@lists.linux.dev>; Wed, 22 Oct 2025 14:33:09 +0000 (UTC)
+Received: from [172.20.84.201] (unknown [10.30.45.119])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AF9A31800452;
+	Wed, 22 Oct 2025 14:33:09 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 4 of 137): Test report for master
+ (6.18.0-rc2, upstream-mainline, 552c5071)
+Date: Wed, 22 Oct 2025 14:33:09 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv6] io_uring: add support for IORING_SETUP_SQE_MIXED
-To: Keith Busch <kbusch@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, io-uring@vger.kernel.org,
- csander@purestorage.com, Keith Busch <kbusch@meta.com>, llvm@lists.linux.dev
-References: <20251016180938.164566-1-kbusch@meta.com>
- <176108414866.224720.11841089098235254459.b4-ty@kernel.dk>
- <20251022120030.GA148714@ax162>
- <4ea25979-4fc2-4db7-8656-6c262af2cbee@kernel.dk>
- <aPjhwxTf0wAw_eaW@kbusch-mbp>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <aPjhwxTf0wAw_eaW@kbusch-mbp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <53411.125102210331101385@us-mta-226.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: hOdWaN6EwdIIMvP4OU-VegEJHyw-fO0qUV_i_Y9R_Bo_1761143590
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/22/25 7:53 AM, Keith Busch wrote:
-> On Wed, Oct 22, 2025 at 07:34:22AM -0600, Jens Axboe wrote:
->> On 10/22/25 6:00 AM, Nathan Chancellor wrote:
->>> On Tue, Oct 21, 2025 at 04:02:28PM -0600, Jens Axboe wrote:
->>>>
->>>> On Thu, 16 Oct 2025 11:09:38 -0700, Keith Busch wrote:
->>>>> Normal rings support 64b SQEs for posting submissions, while certain
->>>>> features require the ring to be configured with IORING_SETUP_SQE128, as
->>>>> they need to convey more information per submission. This, in turn,
->>>>> makes ALL the SQEs be 128b in size. This is somewhat wasteful and
->>>>> inefficient, particularly when only certain SQEs need to be of the
->>>>> bigger variant.
->>>>>
->>>>> [...]
->>>>
->>>> Applied, thanks!
->>>>
->>>> [1/1] io_uring: add support for IORING_SETUP_SQE_MIXED
->>>>       commit: 31dc41afdef21f264364288a30013b538c46152e
->>>
->>> This needs a pretty obvious fix up as clang points out:
->>>
->>>   io_uring/fdinfo.c:103:22: error: variable 'sqe' is uninitialized when used here [-Werror,-Wuninitialized]
->>>     103 |                 opcode = READ_ONCE(sqe->opcode);
->>>         |                                    ^~~
->>>
->>> I would have sent a formal patch but since it is at the top, I figured
->>> it would get squashed anyways.
->>
->> Indeed - I'll fold this in. Keith, can you add an fdinfo test case for
->> mixed as well?
-> 
-> Thanks, and will do. Any quick hints on how to ensure fdinfo finds some
-> entries to report? I assume I can just put some entries on the queue,
-> but don't call io_uring_enter.
+Hi, we tested your kernel and here are the results:
 
-Yep that should do it. You probably want to do something similar to
-__io_uring_flush_sq() since it needs to be visible on the kernel side,
-by having the SQ tail written too. io_uring_submit() does this, but
-you'd want to do it without calling io_uring_enter() to submit the
-entries.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-And then probably do that with various states of mixed sized SQEs in the
-SQ ring and verify it looks correct, too.
+Tested-by: CKI Project <cki-project@redhat.com>
 
--- 
-Jens Axboe
+Kernel information:
+    Commit message: Merge tag 'vfio-v6.18-rc3' of https://github.com/awilli=
+am/linux-vfio
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2112779097
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+Tests that were not ran because of internal issues:
+    /distribution/command [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    Reboot test [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
