@@ -1,71 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFF6C2E0;
-	Thu, 23 Oct 2025 22:54:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8262372633;
+	Thu, 23 Oct 2025 23:01:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761260078; cv=none; b=huDK8vDx+xIFK5+F9L8xc9v8XBgG/lvcSMbadkGntLbcjW0DYVAqsa5g9X1jGvDfqI7Onevexi4rRbyEhPEjaxKjsRwz3DW+dszBLhGrUhcnLOdH/K8atwCc95p2AeBv5qSCMI5nQeVPhsuXxfrsmA3+85li2B21H6HrviGJaYw=
+	t=1761260495; cv=none; b=EQ3vGoF+HLIliehLowkQ9br8/8esviwtrA+YzgE8bOJJQ4SbTv3A4nvQylRI5sRtqipitpFEr5iCI2mrvOI4EpiewRsojdbt/goaCYqnnOXThIPSLDsxXI8wwkgquzy8iYDbBp+Y+tLaigD6BJ1MisNtww30QA90KPJ8aMHPrcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761260078; c=relaxed/simple;
-	bh=74kCrMQ1VlyHYL4uF27ylILtQO9Fepi5F2e2P6zeNLA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=L6qwZ0kIIaqIrzd8giiXyHsk2dkzIAZLSZ6VkjfowgbMmP6auuxitD3VlXjV8pBnbc6TDjAvV+8edNJyKLWGT2DKiCcMC8S6Zb2WsIqrgaD0dm85hdWh5GStQ1xVu41WZJcR+tewdPDhap2PQAuxBohLGFViYppvsPw68rFhoCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzRz0FBH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761260495; c=relaxed/simple;
+	bh=IyFkWO+w0klAeH0jZ6fETuRI5b4tLipGY81idAm0dmc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iyPG18C+DpZemCr0oEH8OT6NpMZrKdeTyBHS/4J4A7Bw49kxX6b7qFejioYYSLeuYDeyEiA15R6VpOLDk5Af6fAj9kEiK9MiyMlXFi8vHfwm/Iv2f3j5NM0rptYvbUqk675BfVIe4l7KI2RCzN9IiDx/zUChp8QZxg2HOKSL5kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjmvcGOS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzRz0FBH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A12C4CEE7;
-	Thu, 23 Oct 2025 22:54:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjmvcGOS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C5BC4CEE7;
+	Thu, 23 Oct 2025 23:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761260077;
-	bh=74kCrMQ1VlyHYL4uF27ylILtQO9Fepi5F2e2P6zeNLA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=OzRz0FBH/3+1K6uFggczn5ZDznA1FBZJrIDPlpOIMyM5A2R93wqdhpnQYWzQuNKyn
-	 hL8sGCBJUVOv5hyK7Gcl5wE3JA9Spb4dhj1izLpXFj/XLvrldEvxPevevXxP65cDjC
-	 FD5eAGd4GDPWX+g9WsAUF+r30GzhCMWFHcpvtYdIyKOaRAGpD59uloNOz8ZnVWeHAJ
-	 KZY7QP+wJ91ipic47MuTSdun7ggxZd0k68e/mXt+mg/GKfe3R78PPTYeso8XHUcWTH
-	 cyDTG67TAbqXnTlvAybZ0t3s0bfyrTbk7WnWff7kFfdmkGPuD/wfpMi6+KFIaXlmN+
-	 RaQynf2YGphVQ==
+	s=k20201202; t=1761260494;
+	bh=IyFkWO+w0klAeH0jZ6fETuRI5b4tLipGY81idAm0dmc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gjmvcGOST41E5xN43loL8USOhOYtqZJOA7WYJffK9HI8+aYD7ID5pkbu+OQIlH8Zr
+	 0yT6b1CBSP+pXNJG87U5Qb4mNByfsUYsAxjMijBb+MCJFFoOHqxNZfYuPuaddWOxL8
+	 4C6HYsqPm/jFNSWiiwc6qWqnJvajwjWWXPqAUqeufWQAlqtK4pA7fc0+3kJLNDW3Q+
+	 O6BQYoJb8RrTpghKIR23rn8aJlMzGAVXa0Cbsv2HzWOmBCEskAosEBh1t8AIW22SRa
+	 RiCpsQniSEPsWlwZkqxKZP/iUjrxpTLR3j9xX8PF0TZdM+W252tHXDe7FYHg26R7St
+	 /ZQu2hNq4MD9g==
+Date: Fri, 24 Oct 2025 00:01:30 +0100
 From: Nathan Chancellor <nathan@kernel.org>
-To: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, 
- Dmitry Vyukov <dvyukov@google.com>, Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>, Kees Cook <kees@kernel.org>, 
- kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-In-Reply-To: <20251023-fix-kmsan-check-s390-clang-v1-1-4e6df477a4cc@kernel.org>
-References: <20251023-fix-kmsan-check-s390-clang-v1-1-4e6df477a4cc@kernel.org>
+To: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>
+Cc: Nicolas Schier <nsc@kernel.org>, Kees Cook <kees@kernel.org>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
 Subject: Re: [PATCH] KMSAN: Restore dynamic check for
  '-fsanitize=kernel-memory'
-Message-Id: <176126007537.2563454.16050415911756189258.b4-ty@kernel.org>
-Date: Thu, 23 Oct 2025 23:54:35 +0100
+Message-ID: <20251023230130.GA3006010@ax162>
+References: <20251023-fix-kmsan-check-s390-clang-v1-1-4e6df477a4cc@kernel.org>
+ <176126007537.2563454.16050415911756189258.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <176126007537.2563454.16050415911756189258.b4-ty@kernel.org>
 
-
-On Thu, 23 Oct 2025 21:01:29 +0200, Nathan Chancellor wrote:
-> Commit 5ff8c11775c7 ("KMSAN: Remove tautological checks") changed
-> CONFIG_HAVE_KMSAN_COMPILER from a dynamic check for
-> '-fsanitize=kernel-memory' to just being true for CONFIG_CC_IS_CLANG.
-> This missed the fact that not all architectures supported
-> '-fsanitize=kernel-memory' at the same time. For example, SystemZ / s390
-> gained support for KMSAN in clang-18 [1], so builds with clang-15
-> through clang-17 can select KMSAN but they error with:
+On Thu, Oct 23, 2025 at 11:54:35PM +0100, Nathan Chancellor wrote:
+> On Thu, 23 Oct 2025 21:01:29 +0200, Nathan Chancellor wrote:
+> > Commit 5ff8c11775c7 ("KMSAN: Remove tautological checks") changed
+> > CONFIG_HAVE_KMSAN_COMPILER from a dynamic check for
+> > '-fsanitize=kernel-memory' to just being true for CONFIG_CC_IS_CLANG.
+> > This missed the fact that not all architectures supported
+> > '-fsanitize=kernel-memory' at the same time. For example, SystemZ / s390
+> > gained support for KMSAN in clang-18 [1], so builds with clang-15
+> > through clang-17 can select KMSAN but they error with:
+> > 
+> > [...]
 > 
-> [...]
+> Applied, thanks!
+> 
+> [1/1] KMSAN: Restore dynamic check for '-fsanitize=kernel-memory'
+>       https://git.kernel.org/kbuild/c/a16758f0142ab
 
-Applied, thanks!
+Whoops, sent the applied message for the wrong change... This is going
+to be in kbuild-fixes as https://git.kernel.org/kbuild/c/3423b2866797c
+for -next testing but I will adjust it for any tags I receive in the
+next few days.
 
-[1/1] KMSAN: Restore dynamic check for '-fsanitize=kernel-memory'
-      https://git.kernel.org/kbuild/c/a16758f0142ab
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Nathan
