@@ -1,198 +1,337 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010007.outbound.protection.outlook.com [52.101.61.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEAC34A3DA;
-	Thu, 23 Oct 2025 17:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761241499; cv=none; b=hVYFyJ4SUIXG0GaJqZV+OGGgyQWZjArGDqMYRtuJfhDcqIc85hAF/ZknV/neu90S6+vrZ97EfVfFeJCuI2k/Bwn9Et4nGIVL7d1XJQypbvZKgVRSegAWPwxQFtqLzajWKaYt07e0Zzu7mlUAm1ZwEyVPIQQsQ/7ekMqWDBweaeQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761241499; c=relaxed/simple;
-	bh=ibZdP/tYK9tLt0c+JyUCR9jnwCzMbR/JfkEbi9WqQjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LTPX6mQrejHxXtNho0Gii5ZnQ94Nse7c6615uLMpfYlwusiZXIYk9FUe9pLYS/cC1qb23kJmR7gIACvsfHymjonXPj5IP5S1UzZTMQeZ0HTje5yUj7Dr/RMH3V8ToVDK0CL5R2E2nwNEDfFAXyT2QYV8CbygL0utojDeBrkzbMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A88bSslO; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0766C260578;
+	Thu, 23 Oct 2025 18:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761243658; cv=fail; b=OjuDwzuE0J/1HvEsI0+6oaNZjazwmMb6ZbMeNQkDXwJXbrIn4auCZvmptAN+JstLVXcAetmywMtTN+MJOS5ajLCVKLI6H8FYKc1fZKueHD3gGlu2gne67KHGkBtds5Al+ijgJP4gukRMcf5rSj7ujoUBiARRyjJhk040xQI5Po8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761243658; c=relaxed/simple;
+	bh=4aLgSaRpgFf95KPiXVJSyeWdGkMPI7SeG8M3GIgRo1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Milu88IEWvrLKbzNy3/LMrzEuEPA3/Yx0fn2rnyHFjFIFTyL4lEsPEmx4SDwcYWzaLzWgxaoV77UolHdWZiucCfKf+Z08bNKj6tYeZqdx8kdxnQOXsYFGIz1wTr9B+duUsjUPk2vukwIY0XCwtrXzYiKbLm6ptm0nmEZYf4E72Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=udsd9N4M; arc=fail smtp.client-ip=52.101.61.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A88bSslO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761241497; x=1792777497;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ibZdP/tYK9tLt0c+JyUCR9jnwCzMbR/JfkEbi9WqQjQ=;
-  b=A88bSslOSQBP2kKdHsJ0zbKUQUZ1I5qB2t9NMzx6hwz+YH65twwFgMXZ
-   n/h+Jq7U/yumN7x8YnDvq3QZLkAvedVQamcbavcQgW49RJ1b0UZD4ifpd
-   G4Z03rhvRbH6Vno+jM5HK47/au1X8ekcDutLf/ExLtHP97z1PA7k8o/mN
-   GsPrCissLM7X6N36PU1Whmbo9052tafwW9oFUrDKPRBBYqXogGb3XxIug
-   CtlSeOYf/9qC1yV7RUsMWY9sXHnwyIvJYI89+4VGX+e2mG5IuniFjtUPq
-   LBxeGLXr6fmn6uOC2rjMLKa725l1hejraP4jvwDam9dx6mXc+PEmq1b2P
-   Q==;
-X-CSE-ConnectionGUID: ap+XLkeQQ8q/wklzwLnLIw==
-X-CSE-MsgGUID: b2wUEJp/S+SAmWgH0T9a5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86049038"
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="86049038"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 10:44:57 -0700
-X-CSE-ConnectionGUID: fAhfSvYOSUS1G2javmI1yA==
-X-CSE-MsgGUID: tRnT6RATRYaYQwaZtS60iA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="184605067"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 23 Oct 2025 10:44:52 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBzMo-000DkX-1N;
-	Thu, 23 Oct 2025 17:44:50 +0000
-Date: Fri, 24 Oct 2025 01:43:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Usama Arif <usamaarif642@gmail.com>, dwmw@amazon.co.uk,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, ardb@kernel.org, hpa@zytor.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
-	apopple@nvidia.com, thuth@redhat.com, nik.borisov@suse.com,
-	kas@kernel.org, linux-kernel@vger.kernel.org,
-	linux-efi@vger.kernel.org, kernel-team@meta.com,
-	Usama Arif <usamaarif642@gmail.com>,
-	Michael van der Westhuizen <rmikey@meta.com>,
-	Tobias Fleig <tfleig@meta.com>
-Subject: Re: [PATCH 1/3] x86/boot: Fix page table access in 5-level to
- 4-level paging transition
-Message-ID: <202510240106.1aff6SIM-lkp@intel.com>
-References: <20251022220755.1026144-2-usamaarif642@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="udsd9N4M"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gzPGwDSZk+y/aeKekSUfPOUQbpN6stah7fCMj9X2eJkfdwwe58CZRxX0O7lN4TF2HUPpxIhbGJfh5ybkYDNA2T40gzZSqBWLSVcMs6Z9TZrmj68OtZL7ubOdzehSdjGcuyEGYYNfRQvb/T5/ITRBhjPNMwfDJZCkWY6exLXUXeZzZ9rfBlsT/eUN1CJJ6W2ghncxpK1Wbo6ssxniFhUihd3F8nyIXwDT/gs4fDFfvsXxt5t9yOIbjgT5C4ajWAnpqS+R6uzeUYOVr0TXCul5u07NcF/7PAhJBEnancLR61uZy9G8jbdg9q9l6Qx40loVurwBIi95DBqZ7fsKi9Yd1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g8ifrfoQL5AbwMqMdRwJwMdA1nr7miRmXJHuqu5G0uA=;
+ b=jZjCludiwfffMGNQF6zGSIsxON/4bvbAT9X3+OcnpFEDt5cZH/tmHdOvJvxiD8LBqY0LWcPz0H2SqygH5Rvxpr65xbVezwL5YtyZTU4IPVoqbZdd8BFCz4YIRZJTOAucn2zIVpkpGMiTFxswEpeP8UVXBJQMReUtC4yDC/N7VYHUCu1CaXnbHHEWmVMLp4H8hGIytlJraX8HpTc+uAyaumDb4fzUiRy+rVWrAO67zST9VDBDWlJE51rvwxwNMUhnPU5FtvqgTv8jRxz8OjVn7hbU3SVU0nwMbZnrHZKzxtvNRAzk0xU2eLaURpxD9qLJETrHkMNDO0WIMP8pN0enWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g8ifrfoQL5AbwMqMdRwJwMdA1nr7miRmXJHuqu5G0uA=;
+ b=udsd9N4M9j3UVWPgfPOQu4XJV7aS8z6q+fwGE7tklZOrbF2JAdTEyJNBUKlyq+rbYbS7SmR8RQN3dXjaVhVGTje/9SiLgoo/NuD64WBaVOd9NOUPyZiQWmOZOSFPuRaKtC85xuTBUNmxkUbsX0SFzazX8un+usPX98jJ3niObbaZ5ZVFVCUXJFDBZ8N+uogG3YH7rYG/GJ+FG9FMATiRQcfUWQph6p3X2MFsvuA0gAY61b4KxoOYKc+YVBGuABWprSoFB0kUIEoyO7HnYDZMHd1loGNWX+0ClvvmXvaUgTdoysi6g0hCnW2xpZpqhgFm7QKUpI9g82RS51IzXQ60qg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
+ by CY5PR12MB6106.namprd12.prod.outlook.com (2603:10b6:930:29::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.13; Thu, 23 Oct
+ 2025 18:20:50 +0000
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9253.011; Thu, 23 Oct 2025
+ 18:20:49 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alexandre Ghiti <alex@ghiti.fr>,
+	Anup Patel <anup@brainfault.org>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	patches@lists.linux.dev
+Subject: [PATCH v7 08/15] iommupt: Add read_and_clear_dirty op
+Date: Thu, 23 Oct 2025 15:20:38 -0300
+Message-ID: <8-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY1P220CA0008.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:59d::16) To MN2PR12MB3613.namprd12.prod.outlook.com
+ (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022220755.1026144-2-usamaarif642@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|CY5PR12MB6106:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7632c1ce-1f1f-44b7-e82f-08de1260e3b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?c+lIiBtqdFhNOZjASbu2vfvcvxXyLph3q89vz6+T1LgT5YCf3lWsGdOYjr9G?=
+ =?us-ascii?Q?cQr2NBvFXQJKs24AOtPbU7Ehgj47uKreXODeNFn6OzJilJNE+XtfO8S2M8e6?=
+ =?us-ascii?Q?jmFTLFFss6TfnUgKj4RhH2v4QErT0LepkNFn0oIKlH5RTpoLHNdAbzgV+JoN?=
+ =?us-ascii?Q?z3B7A4Xd1vOHV7KGFQxg/Imu1wQ2MhAD9Hp2jlzmH46nherX4+1PmTTXt4K0?=
+ =?us-ascii?Q?6m6NFUR0JGOwGeo/ePWNypTy7QKXlNWyhnJSq6qLS7c/noi3E7w8HkNeIyTC?=
+ =?us-ascii?Q?G8O7OSsGW15sds7UsZhAuPP9p6euWk/rV6fPut9VUE+jvjXzVtxBMFH4u750?=
+ =?us-ascii?Q?gJBbM94y97ozTKZ8kW6fMMEZsYqBPlp55QyQq7FK8nib8HGxo6z9JfIBJf21?=
+ =?us-ascii?Q?MZk2rlAZjZ8PqCraWH9gVSR0gHegdDAR/pzpxhZp5ixCVSpuRGa+wgV5iCl2?=
+ =?us-ascii?Q?f8DyfKXIJTem83OQmVJA+20fedzCGj1SS5XxViG8fcUigCxGAAWrpK8khaHL?=
+ =?us-ascii?Q?ixLQSkhjOmokCndCAo1wOk3ihaw68Qb+iId3Wk6BcBa3ncgk2DuAU3dBpleC?=
+ =?us-ascii?Q?pHSPL3Z1eyzixyFI+GUiEGQJz79yoJh70LcSMswuyIHdIKImhQi3LuRkoxuZ?=
+ =?us-ascii?Q?/ViiABmq7y1e+hEcGsplgqzAxbB9W5AL4s1nhW5JLjRrprvdOsHbkgZnLJXy?=
+ =?us-ascii?Q?HF9HLXpG55uwMBGB8sWQ5VD3pw/J5R/DFH+ei0YG95e/X+Q76KG9mQc6133h?=
+ =?us-ascii?Q?KfQXcsFww+io/BQl3VGnNEzfx5NkyQ54+F13L2faHzjGqIrKFbbbre4hkK72?=
+ =?us-ascii?Q?nZI+U4P0Sst+cfm81qDudDSch5YrKd/CexD7DrADHbmLTI7YzXh7sDnnqw74?=
+ =?us-ascii?Q?XArmYAwSbJcj2CQUK9Q8iQKinsQaohvuQ7oMbj+DJ0yZ4jHD79xwZ1qJRH4s?=
+ =?us-ascii?Q?/b0+rXXdc9NAAM74sPt1XEmuNtAj0DFtskpaAsso29TEEcYFagFSHjs0CJwa?=
+ =?us-ascii?Q?xXKwTlFh87+Ur4n2oyKZg9dUCvfzMxk3zB0JYba9QoZzBkK/yVexxxUYCQ7o?=
+ =?us-ascii?Q?9I2iOuJYvp30a+2kLo2VBXyn9ftCmEVXB0Vsgw3bmW+PkG6erGDpJcTNKyXS?=
+ =?us-ascii?Q?yfwPHEqroCknfgSlrwJ9sy3YBO6H/++JEH7s8P7oRmB9uwctwf4eaPQCzcoM?=
+ =?us-ascii?Q?Mw304Q/j/i+flNKzFGSjz8+900AB8RNCVSdkKk3Od/fRjh8u0PO5YXjNX8xp?=
+ =?us-ascii?Q?I/K2ACdC1oOuaBajOfcAYniCD8/TK6kfcZt/mPRjSjChGfNblgMghIzIzGuZ?=
+ =?us-ascii?Q?KLhuWkbEOK3/ih1YSoHCsCir/t1WB7JjagmMx7gSWE2a1A+p5hkdWYkA0EZP?=
+ =?us-ascii?Q?ybuTWfj7v0FDwIfwg4IqeZA2WC82CKGOv7VARgeWd8EwweEjArwBNsrHyZh3?=
+ =?us-ascii?Q?fqOX8JwUloTsyiD86J8obgtUi62DNvS3jSDwWuSRet3qmHayp/nhNqa95ZHS?=
+ =?us-ascii?Q?YBOBPzwqU9gUcys=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?a2SqyA5msRMHpJn9xzB4i8yVy2Ivfk2srJ5ZxRIsK0zbEAj/uuIR+qlHxMPu?=
+ =?us-ascii?Q?Etx1JisMj9DeQofCe0jAmmjFKb/en0y/gudKSwDp3Fboo973tVQxKRlTRQqD?=
+ =?us-ascii?Q?iGIdGl9urLJqW5QKSVXnq2bzSOFkLnslYoJ9l3uwonl/UxZ11WHjV8eO6xMG?=
+ =?us-ascii?Q?k8nU1GuYAoIBCxyFOrFCn8/X+ojYzRijhaaKU26wpDqeAe4TwAUh4/S8UcUK?=
+ =?us-ascii?Q?vZxvz146TQYo4m6SR6kh4JPpt12hj+eoWTCxnYIjUaDRMlBwAUWFaN+p32kH?=
+ =?us-ascii?Q?Jjr7GygI2Bv6jeD/wbQgC8mn6w3hqI1tG/K6DHXYhPLsOJeOvD7R9xnwm3JA?=
+ =?us-ascii?Q?V9T4VTo88Ndu7/6JrA/IyZbWWmF74YzBk3DjkxPU54pwWsgYbhSaVhzkaMs0?=
+ =?us-ascii?Q?QCd8LPSwwhT1VJvGpROTgMEvX+KxssFQ3XHTd1fWgjESe/YoMdmIvMOSzZBy?=
+ =?us-ascii?Q?qr62IjZXgfuBHr7mcYUjbP1nbfKDBvMD/f54YdCATw5oOK57UIu7XJc5yCal?=
+ =?us-ascii?Q?0EahDCDKSbN9+ApmP6BcX0R9GKRWsvyaStzS4KxmMlwE/SNTlbQ4NeXkolbD?=
+ =?us-ascii?Q?cptqAS1zsJXINcvf9JSjL5Cgj6tCmkDaDf+Uki8xmzC8qQ7IDyiggWR7W4Bn?=
+ =?us-ascii?Q?QzZX/1Xy9yogwNSZVSQJ1D1KfoBrvEZYiKRLx0jSQbIQOJdp7Nbujvz1VCdS?=
+ =?us-ascii?Q?JRteIanB7jZNMVvJskSo+xhormjl4IiTs+zOOFXo6HQ/v+8YM4cKgwaFhWq/?=
+ =?us-ascii?Q?wC1mcSsqoQGiNuTQcpxAquaY1WZs0PB7zhyO/Mv5tKHJo+WuytWuYHtlqZ5r?=
+ =?us-ascii?Q?Au8ZPHcFJsbRKE9cZDikx5NhVxhQcISdv8TkJZuM2Ae1iqfBWsIxWgQ5zYma?=
+ =?us-ascii?Q?TgGZ9xFt4UYJL9hstLWaJ7JN0cnPxgDkCIZSu3WDt4LuOdboFDRGY+Lbos7j?=
+ =?us-ascii?Q?ckrnG6SgeowOJ3FloUja9GmrXT4+Lh2BvGu7OJf+kO22GjDwHpwxT833pyCG?=
+ =?us-ascii?Q?HkdT4jTRi3mMKFIitfdsGQO0staYeqbyBnZMrmO7R/JIYxdS1jIhqspT+3fl?=
+ =?us-ascii?Q?EuWN5GPMtRN+Zw/EGexAWXbMx+eUYVggzw1fsg4y5hLbD3CZBhU++/hnp+qL?=
+ =?us-ascii?Q?IUr0aKxnRkTIeCXOIkO3wlJD3+MrUFDof8dSkNXnyXpbNefG/gxNmccF0mXx?=
+ =?us-ascii?Q?hcjdFCsJAfaIm4G0tBbB1mG2HVimDB/0s3KHKn6Re/xYa3z4n87hy6S8SFzC?=
+ =?us-ascii?Q?fDdP6F7ChCNMkBHE3S1pQB4ur0ie8s7UIEcCthkAjJjZk6l6smstfB07c2gC?=
+ =?us-ascii?Q?CmjmsVPPxkdndMRVzejFyeDweWY3bEa3Asv0FnjgXirEVV7W6lO8q9FqpmCb?=
+ =?us-ascii?Q?BfS6r3PTrp3WoQ4w+7FMBvD6t8W2bOoJ0YlNU3Cgj60cxcQ3+HscDeWmna6F?=
+ =?us-ascii?Q?SKVje819G0q4RowmfokZFC/kNUb2OrPXeexculDeldTMkL8/N31IORRs45w0?=
+ =?us-ascii?Q?7ijZNZj7nGHy00jV+B9jsO00z29HeY85TXR0hKR4WOyfnFCSTQPzVHyVF/2y?=
+ =?us-ascii?Q?OoM+xfuyOeJZJ+gtLRhycpGWsemB7i8XdG4+DFq6?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7632c1ce-1f1f-44b7-e82f-08de1260e3b7
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2025 18:20:49.4128
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XCTUyRkwK+t8tyMm4x7HR4Y1PeL1N4Rk8y/a2te5II8Atq8St7H0yX5Jgu7QeVT2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6106
 
-Hi Usama,
+IOMMU HW now supports updating a dirty bit in an entry when a DMA writes
+to the entry's VA range. iommufd has a uAPI to read and clear the dirty
+bits from the tables.
 
-kernel test robot noticed the following build errors:
+This is a trivial recursive descent algorithm to read and optionally clear
+the dirty bits. The format needs a function to tell if a contiguous entry
+is dirty, and a function to clear a contiguous entry back to clean.
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/master efi/next linus/master v6.18-rc2 next-20251023]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/iommu/generic_pt/iommu_pt.h | 104 ++++++++++++++++++++++++++++
+ include/linux/generic_pt/iommu.h    |   6 ++
+ 2 files changed, 110 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/x86-boot-Fix-page-table-access-in-5-level-to-4-level-paging-transition/20251023-061048
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20251022220755.1026144-2-usamaarif642%40gmail.com
-patch subject: [PATCH 1/3] x86/boot: Fix page table access in 5-level to 4-level paging transition
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251024/202510240106.1aff6SIM-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251024/202510240106.1aff6SIM-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510240106.1aff6SIM-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/boot/compressed/pgtable_64.c:185:21: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     185 |                 new_cr3 = (u64 *)(pgd_val(pgdp[0]) & PTE_PFN_MASK);
-         |                                   ^
-   1 error generated.
-
-
-vim +/pgd_val +185 arch/x86/boot/compressed/pgtable_64.c
-
-   101	
-   102	asmlinkage void configure_5level_paging(struct boot_params *bp, void *pgtable)
-   103	{
-   104		void (*toggle_la57)(void *cr3);
-   105		bool l5_required = false;
-   106	
-   107		/* Initialize boot_params. Required for cmdline_find_option_bool(). */
-   108		sanitize_boot_params(bp);
-   109		boot_params_ptr = bp;
-   110	
-   111		/*
-   112		 * Check if LA57 is desired and supported.
-   113		 *
-   114		 * There are several parts to the check:
-   115		 *   - if user asked to disable 5-level paging: no5lvl in cmdline
-   116		 *   - if the machine supports 5-level paging:
-   117		 *     + CPUID leaf 7 is supported
-   118		 *     + the leaf has the feature bit set
-   119		 */
-   120		if (!cmdline_find_option_bool("no5lvl") &&
-   121		    native_cpuid_eax(0) >= 7 && (native_cpuid_ecx(7) & BIT(16))) {
-   122			l5_required = true;
-   123	
-   124			/* Initialize variables for 5-level paging */
-   125			__pgtable_l5_enabled = 1;
-   126			pgdir_shift = 48;
-   127			ptrs_per_p4d = 512;
-   128		}
-   129	
-   130		/*
-   131		 * The trampoline will not be used if the paging mode is already set to
-   132		 * the desired one.
-   133		 */
-   134		if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
-   135			return;
-   136	
-   137		trampoline_32bit = (unsigned long *)find_trampoline_placement();
-   138	
-   139		/* Preserve trampoline memory */
-   140		memcpy(trampoline_save, trampoline_32bit, TRAMPOLINE_32BIT_SIZE);
-   141	
-   142		/* Clear trampoline memory first */
-   143		memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
-   144	
-   145		/* Copy trampoline code in place */
-   146		toggle_la57 = memcpy(trampoline_32bit +
-   147				TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
-   148				&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
-   149	
-   150		/*
-   151		 * Avoid the need for a stack in the 32-bit trampoline code, by using
-   152		 * LJMP rather than LRET to return back to long mode. LJMP takes an
-   153		 * immediate absolute address, which needs to be adjusted based on the
-   154		 * placement of the trampoline.
-   155		 */
-   156		*(u32 *)((u8 *)toggle_la57 + trampoline_ljmp_imm_offset) +=
-   157							(unsigned long)toggle_la57;
-   158	
-   159		/*
-   160		 * The code below prepares page table in trampoline memory.
-   161		 *
-   162		 * The new page table will be used by trampoline code for switching
-   163		 * from 4- to 5-level paging or vice versa.
-   164		 */
-   165	
-   166		if (l5_required) {
-   167			/*
-   168			 * For 4- to 5-level paging transition, set up current CR3 as
-   169			 * the first and the only entry in a new top-level page table.
-   170			 */
-   171			*trampoline_32bit = __native_read_cr3() | _PAGE_TABLE_NOENC;
-   172		} else {
-   173			u64 *new_cr3;
-   174			pgd_t *pgdp;
-   175	
-   176			/*
-   177			 * For 5- to 4-level paging transition, copy page table pointed
-   178			 * by first entry in the current top-level page table as our
-   179			 * new top-level page table.
-   180			 *
-   181			 * We cannot just point to the page table from trampoline as it
-   182			 * may be above 4G.
-   183			 */
-   184			pgdp = (pgd_t *)read_cr3_pa();
- > 185			new_cr3 = (u64 *)(pgd_val(pgdp[0]) & PTE_PFN_MASK);
-
+diff --git a/drivers/iommu/generic_pt/iommu_pt.h b/drivers/iommu/generic_pt/iommu_pt.h
+index f32e81509f4f09..448c5796d4a861 100644
+--- a/drivers/iommu/generic_pt/iommu_pt.h
++++ b/drivers/iommu/generic_pt/iommu_pt.h
+@@ -162,6 +162,108 @@ phys_addr_t DOMAIN_NS(iova_to_phys)(struct iommu_domain *domain,
+ }
+ EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(iova_to_phys), "GENERIC_PT_IOMMU");
+ 
++struct pt_iommu_dirty_args {
++	struct iommu_dirty_bitmap *dirty;
++	unsigned int flags;
++};
++
++static void record_dirty(struct pt_state *pts,
++			 struct pt_iommu_dirty_args *dirty,
++			 unsigned int num_contig_lg2)
++{
++	pt_vaddr_t dirty_len;
++
++	if (num_contig_lg2 != ilog2(1)) {
++		unsigned int index = pts->index;
++		unsigned int end_index = log2_set_mod_max_t(
++			unsigned int, pts->index, num_contig_lg2);
++
++		/* Adjust for being contained inside a contiguous page */
++		end_index = min(end_index, pts->end_index);
++		dirty_len = (end_index - index) *
++				log2_to_int(pt_table_item_lg2sz(pts));
++	} else {
++		dirty_len = log2_to_int(pt_table_item_lg2sz(pts));
++	}
++
++	if (dirty->dirty->bitmap)
++		iova_bitmap_set(dirty->dirty->bitmap, pts->range->va,
++				dirty_len);
++
++	if (!(dirty->flags & IOMMU_DIRTY_NO_CLEAR)) {
++		pt_entry_make_write_clean(pts);
++		iommu_iotlb_gather_add_range(dirty->dirty->gather,
++					     pts->range->va, dirty_len);
++	}
++}
++
++static inline int __read_and_clear_dirty(struct pt_range *range, void *arg,
++					 unsigned int level,
++					 struct pt_table_p *table)
++{
++	struct pt_state pts = pt_init(range, level, table);
++	struct pt_iommu_dirty_args *dirty = arg;
++	int ret;
++
++	for_each_pt_level_entry(&pts) {
++		if (pts.type == PT_ENTRY_TABLE) {
++			ret = pt_descend(&pts, arg, __read_and_clear_dirty);
++			if (ret)
++				return ret;
++			continue;
++		}
++		if (pts.type == PT_ENTRY_OA && pt_entry_is_write_dirty(&pts))
++			record_dirty(&pts, dirty,
++				     pt_entry_num_contig_lg2(&pts));
++	}
++	return 0;
++}
++
++/**
++ * read_and_clear_dirty() - Manipulate the HW set write dirty state
++ * @domain: Domain to manipulate
++ * @iova: IO virtual address to start
++ * @size: Length of the IOVA
++ * @flags: A bitmap of IOMMU_DIRTY_NO_CLEAR
++ * @dirty: Place to store the dirty bits
++ *
++ * Iterate over all the entries in the mapped range and record their write dirty
++ * status in iommu_dirty_bitmap. If IOMMU_DIRTY_NO_CLEAR is not specified then
++ * the entries will be left dirty, otherwise they are returned to being not
++ * write dirty.
++ *
++ * Context: The caller must hold a read range lock that includes @iova.
++ *
++ * Returns: -ERRNO on failure, 0 on success.
++ */
++int DOMAIN_NS(read_and_clear_dirty)(struct iommu_domain *domain,
++				    unsigned long iova, size_t size,
++				    unsigned long flags,
++				    struct iommu_dirty_bitmap *dirty)
++{
++	struct pt_iommu *iommu_table =
++		container_of(domain, struct pt_iommu, domain);
++	struct pt_iommu_dirty_args dirty_args = {
++		.dirty = dirty,
++		.flags = flags,
++	};
++	struct pt_range range;
++	int ret;
++
++#if !IS_ENABLED(CONFIG_IOMMUFD_DRIVER) || !defined(pt_entry_is_write_dirty)
++	return -EOPNOTSUPP;
++#endif
++
++	ret = make_range(common_from_iommu(iommu_table), &range, iova, size);
++	if (ret)
++		return ret;
++
++	ret = pt_walk_range(&range, __read_and_clear_dirty, &dirty_args);
++	PT_WARN_ON(ret);
++	return ret;
++}
++EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(read_and_clear_dirty), "GENERIC_PT_IOMMU");
++
+ struct pt_iommu_collect_args {
+ 	struct iommu_pages_list free_list;
+ 	/* Fail if any OAs are within the range */
+@@ -1015,5 +1117,7 @@ EXPORT_SYMBOL_NS_GPL(pt_iommu_hw_info, "GENERIC_PT_IOMMU");
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("IOMMU Page table implementation for " __stringify(PTPFX_RAW));
+ MODULE_IMPORT_NS("GENERIC_PT");
++/* For iommu_dirty_bitmap_record() */
++MODULE_IMPORT_NS("IOMMUFD");
+ 
+ #endif  /* __GENERIC_PT_IOMMU_PT_H */
+diff --git a/include/linux/generic_pt/iommu.h b/include/linux/generic_pt/iommu.h
+index 0d59423024d57f..03a906fbe12a83 100644
+--- a/include/linux/generic_pt/iommu.h
++++ b/include/linux/generic_pt/iommu.h
+@@ -12,6 +12,7 @@
+ struct iommu_iotlb_gather;
+ struct pt_iommu_ops;
+ struct pt_iommu_driver_ops;
++struct iommu_dirty_bitmap;
+ 
+ /**
+  * DOC: IOMMU Radix Page Table
+@@ -182,6 +183,9 @@ struct pt_iommu_cfg {
+ 		struct iommu_domain *domain, unsigned long iova,               \
+ 		size_t pgsize, size_t pgcount,                                 \
+ 		struct iommu_iotlb_gather *iotlb_gather);                      \
++	int pt_iommu_##fmt##_read_and_clear_dirty(                             \
++		struct iommu_domain *domain, unsigned long iova, size_t size,  \
++		unsigned long flags, struct iommu_dirty_bitmap *dirty);        \
+ 	int pt_iommu_##fmt##_init(struct pt_iommu_##fmt *table,                \
+ 				  const struct pt_iommu_##fmt##_cfg *cfg,      \
+ 				  gfp_t gfp);                                  \
+@@ -202,6 +206,8 @@ struct pt_iommu_cfg {
+ 	.iova_to_phys = &pt_iommu_##fmt##_iova_to_phys, \
+ 	.map_pages = &pt_iommu_##fmt##_map_pages,       \
+ 	.unmap_pages = &pt_iommu_##fmt##_unmap_pages
++#define IOMMU_PT_DIRTY_OPS(fmt) \
++	.read_and_clear_dirty = &pt_iommu_##fmt##_read_and_clear_dirty
+ 
+ /*
+  * The driver should setup its domain struct like
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
