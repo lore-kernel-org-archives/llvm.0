@@ -1,118 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432D230B539;
-	Thu, 23 Oct 2025 12:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA391D555
+	for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 12:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761222462; cv=none; b=WJq+tgM7ivvyBRXjOEHedENLUqpyLvlBwUJ0TV8jTm0Cwsm+sqqGS3oULFRcCyZB4JTEtxq+OA9IRuZ4T1UHYfDBYTcYSUvaWQtKeGQnZ0cNO/qB6GcdBOEkcMpx9evOdvlEacyAiiGMCGoPLr4y3kE+LhA2djEgPCc952672oE=
+	t=1761222700; cv=none; b=SjDBmTw/cSUPfGFmS4aGFLiE00X23t/NwU+TEpFQpRQsgzKVqr8aHUGFjlhnO+w2OKyBchJE4Vsl5Ul/rM3LwexJHi/h1ae93ZEC2kMQIPwm+tcswlKadro75jfpreeju7gvPjB6IBh1ZRAF9GBaFSr4pzUa/ehzwzc7V71FRS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761222462; c=relaxed/simple;
-	bh=ObNHrIX28wo1bGKUr3dtuwFtHur4dA6nLToeSsDfBA8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=inp1CwVCzbLx26+hSpgVHS0wezLNRfiNPQ6+at3BIHps8h/n+W0mAOIhQzToPPI5qCv2EyiYyfn8HuGzBG8fbPGkK5kUTmJv6jf/b+MdO5/8knJg0e/M0dSQKUn5+YIsBpthLvT7LDrMT/JzYosAli0QwlUS3umGy/N50ACXpH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XwyNGdj1; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761222700; c=relaxed/simple;
+	bh=6eO+tiqu5gxWLPASRGodixCE3YW3+pELSH6ilut+fa0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F7cXKbinpoyHZ5AP7hZT4RrVK1ol81fXPcptCXWUorDQ6NwCpCJuHpgBFoVXNnEH+xmtu9quZP35sqqW5g5X3cYnaK1PIroUmaRh80Px9fYLQOdOt5oF64O+AgPyfpbUGuu5iba77n1TuMOggky0tLxuy1BJtI9i0SF0UqXlRfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=k/s9593G; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XwyNGdj1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761222460; x=1792758460;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ObNHrIX28wo1bGKUr3dtuwFtHur4dA6nLToeSsDfBA8=;
-  b=XwyNGdj1VoqzTav77ubE1d0jMI/9lsYA31mvPaLqAMBUjZlHZFOpV4xP
-   Dw7MhCHFIX1EaSlfIEME/DxbUbKjYCDQx9GfYGesYDuAvK+4AZrUnAHLT
-   7EnSWgLnlujkF/1rxq/RTSrWUor2ALoFsnDw859gGMPdCXMhTxMTe4FTW
-   auEMs0Aon5TqA1JoaztB/5DVpQ/K9qt40vfgn8KXrk6qdD+bZf9MzE6oh
-   g1LgxFCp65JM2AMKvK6fvK6ErIQ7TXjF07BRjk0unJH+K4O/TDwNLHHHE
-   eVvY08yEgmg/fQBanO3eM5j0zqlclrvTnE5CRX7Ve5fe1LqotxG8+FZWl
-   w==;
-X-CSE-ConnectionGUID: 0D9jPCNjTsCxZ3pzN7SZrA==
-X-CSE-MsgGUID: sK6H2IbaRtejuwOmQg2Omg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67034926"
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="67034926"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 05:27:40 -0700
-X-CSE-ConnectionGUID: AM/KTNvrTlWCaQXqNUTSzQ==
-X-CSE-MsgGUID: S81wb57FSeW6vgFaPgIsQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="214802729"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 23 Oct 2025 05:27:39 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBuPo-000DUH-01;
-	Thu, 23 Oct 2025 12:27:36 +0000
-Date: Thu, 23 Oct 2025 20:27:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haotian Zhang <vulab@iscas.ac.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [brgl:gpio/for-current 6/6] drivers/gpio/gpio-ljca.c:289:9: warning:
- unused variable 'irq'
-Message-ID: <202510232205.La2t2fR7-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="k/s9593G"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-591ebf841ddso932689e87.0
+        for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 05:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1761222697; x=1761827497; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PcxV7jlDfnvszGpLFODRk5JOPkRKywoQCJY/El6WesU=;
+        b=k/s9593GHOeeDRg/kL8IXpBwGiqbC27mzHOyWlEqIYRqax4YJaHaW3z/RDyKlj2VE1
+         nbwOEZVcS7Dprq9AbsBKdrG0gPeKVQuhigwYqiXT1rVZOLM+FOer+Adh8ZJrd72Yg/yF
+         NeeYOcSdHebwQyVoY7eMppQ9GW0x9IHSyyCvmpU9L9Sxa93ivQpi6pXsZwAXUi1bPV7+
+         0xW0xPnWNfh0LIe2wtSII6PLnf0Wpc3zF9b1ZoLwYzpR4HlIn5Bsusi89DTkMxS4m3cG
+         XolVLio5ErHKEUjNdA/Kxez5EjR6Z/NpXz58eg+rvAkcqga7LW+6lLTjaWTnYK1lvYd/
+         47gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761222697; x=1761827497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PcxV7jlDfnvszGpLFODRk5JOPkRKywoQCJY/El6WesU=;
+        b=FnCYKP4/RbKB5UXeTk9TYWW2udNP2FxdnzKjBIwKUQ236RtTHY9bFvMeoiVSQyQvJA
+         FER/VoUdGyQJ1+S50NvlvsVpaHH8c4zhPP4BtexSLV6QZhJ1fP4Je0gzsP2/abb+LyAO
+         ZKEcclEFanHIcGgq9cxhxuDxg/kduvy9urUjBJWR6coRUgtbwa9mEhz18jH+tNf/RjeD
+         /+7cxFNDaaRam9hR+Ong+F0MkIyXY3DxuCYAKjQo9uZeSBtRgVCzhZdLr/c3hhI9he3i
+         5hPN1lwCrlD+/Mzcu4KXoLq2mq/pOfVtQ1PU4N+6+TMrrstrs7g9QlKd9QOL42vWtumm
+         Ah9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWZsiHqyKMgcxdnCjvePb3GyGIq8ChgAPOqEXxQ3F8qTq94/nerJbDrFoPkyMPCcDoGFJEg@lists.linux.dev
+X-Gm-Message-State: AOJu0YxmyHPbApIPFEhjKvmfNcPxFjRrbg9hT5sz09okB6MzBvpY4LIA
+	zkaMQq85Ki3+9Zn+s4ejrXEk5NL1obMRiZ8wHupzN/+4ARC96wNqo1ZA4TRvYTCTM7jjZE5NewC
+	PlnI3dzClt6DiGyK+S+r97oivL3eGvWOaslAjpx3Vug==
+X-Gm-Gg: ASbGncuJBG07xgBkce5i5hIc4F/oCdcMofZWUAGlYQxxe5nRMfn4b8Yut92hBABG+T7
+	EFhhaIw8NnSVjRTRvZYdVg/PgaM03B1dMKZapswpetcb19CSZNNnuJUS9h5DIxcAow7pDSIa1O+
+	7nuiMuMS6UuHIHWYFFp6+AXe5KVsZqOu3Fvsv5zRbv7hJ2TsG4lr6xHF+EvVT/3zwJj685CdY1P
+	18PCfQ9aScb/7LucIXWFRMvWjJsu9bQlnNCA4sMwFnRIaefguPWWK9rLgteip1YnEpSA8C8apg/
+	gYv639FrG+D9epE=
+X-Google-Smtp-Source: AGHT+IHlWEw7YoXjgjgAjGD2T5nBasowO6S4qW+ucC1G5ZeTx1do26wR7Fl8YJLp91+jQww6oqOpu2KmSMLEueA8ups=
+X-Received: by 2002:a05:6512:33d5:b0:58b:151:bc12 with SMTP id
+ 2adb3069b0e04-591d85a4b54mr9384401e87.51.1761222696489; Thu, 23 Oct 2025
+ 05:31:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202510232205.La2t2fR7-lkp@intel.com>
+In-Reply-To: <202510232205.La2t2fR7-lkp@intel.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 23 Oct 2025 14:31:22 +0200
+X-Gm-Features: AS18NWC2DkPx8ZMhOw19k_GaWcX_KfEcv0khQYZBwNR09LWlWaCHjnBqkpnywIY
+Message-ID: <CAMRc=MfhjG1RPS=Khv9us_n09Dzk1NAAHOt5jjWmR3dpB61gcg@mail.gmail.com>
+Subject: Re: [brgl:gpio/for-current 6/6] drivers/gpio/gpio-ljca.c:289:9:
+ warning: unused variable 'irq'
+To: kernel test robot <lkp@intel.com>
+Cc: Haotian Zhang <vulab@iscas.ac.cn>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-gpio@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-current
-head:   7d168362aedeca451ac22724f90040296dccca14
-commit: 7d168362aedeca451ac22724f90040296dccca14 [6/6] gpio: ljca: Fix duplicated IRQ mapping
-config: x86_64-buildonly-randconfig-005-20251023 (https://download.01.org/0day-ci/archive/20251023/202510232205.La2t2fR7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251023/202510232205.La2t2fR7-lkp@intel.com/reproduce)
+On Thu, Oct 23, 2025 at 2:29=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gp=
+io/for-current
+> head:   7d168362aedeca451ac22724f90040296dccca14
+> commit: 7d168362aedeca451ac22724f90040296dccca14 [6/6] gpio: ljca: Fix du=
+plicated IRQ mapping
+> config: x86_64-buildonly-randconfig-005-20251023 (https://download.01.org=
+/0day-ci/archive/20251023/202510232205.La2t2fR7-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251023/202510232205.La2t2fR7-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510232205.La2t2fR7-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/gpio/gpio-ljca.c:289:9: warning: unused variable 'irq' [-Wunus=
+ed-variable]
+>      289 |         int i, irq;
+>          |                ^~~
+>    1 warning generated.
+>
+>
+> vim +/irq +289 drivers/gpio/gpio-ljca.c
+>
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  283
+> 1034cc423f1b4a Wentong Wu    2023-10-09  284  static void ljca_gpio_event=
+_cb(void *context, u8 cmd, const void *evt_data,
+> 1034cc423f1b4a Wentong Wu    2023-10-09  285                           in=
+t len)
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  286  {
+> 1034cc423f1b4a Wentong Wu    2023-10-09  287    const struct ljca_gpio_pa=
+cket *packet =3D evt_data;
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  288    struct ljca_gpio_dev *ljc=
+a_gpio =3D context;
+> 1034cc423f1b4a Wentong Wu    2023-10-09 @289    int i, irq;
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  290
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  291    if (cmd !=3D LJCA_GPIO_IN=
+T_EVENT)
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  292            return;
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  293
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  294    for (i =3D 0; i < packet-=
+>num; i++) {
+> 7d168362aedeca Haotian Zhang 2025-10-23  295            generic_handle_do=
+main_irq(ljca_gpio->gc.irq.domain,
+> 1034cc423f1b4a Wentong Wu    2023-10-09  296                             =
+       packet->item[i].index);
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  297            set_bit(packet->i=
+tem[i].index, ljca_gpio->reenable_irqs);
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  298    }
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  299
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  300    schedule_work(&ljca_gpio-=
+>work);
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  301  }
+> c5a4b6fd31e8cb Ye Xiang      2023-02-25  302
+>
+> :::::: The code at line 289 was first introduced by commit
+> :::::: 1034cc423f1b4a7a9a56d310ca980fcd2753e11d gpio: update Intel LJCA U=
+SB GPIO driver
+>
+> :::::: TO: Wentong Wu <wentong.wu@intel.com>
+> :::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510232205.La2t2fR7-lkp@intel.com/
+I fixed this in tree.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpio/gpio-ljca.c:289:9: warning: unused variable 'irq' [-Wunused-variable]
-     289 |         int i, irq;
-         |                ^~~
-   1 warning generated.
-
-
-vim +/irq +289 drivers/gpio/gpio-ljca.c
-
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  283  
-1034cc423f1b4a Wentong Wu    2023-10-09  284  static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_data,
-1034cc423f1b4a Wentong Wu    2023-10-09  285  			       int len)
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  286  {
-1034cc423f1b4a Wentong Wu    2023-10-09  287  	const struct ljca_gpio_packet *packet = evt_data;
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  288  	struct ljca_gpio_dev *ljca_gpio = context;
-1034cc423f1b4a Wentong Wu    2023-10-09 @289  	int i, irq;
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  290  
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  291  	if (cmd != LJCA_GPIO_INT_EVENT)
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  292  		return;
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  293  
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  294  	for (i = 0; i < packet->num; i++) {
-7d168362aedeca Haotian Zhang 2025-10-23  295  		generic_handle_domain_irq(ljca_gpio->gc.irq.domain,
-1034cc423f1b4a Wentong Wu    2023-10-09  296  					packet->item[i].index);
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  297  		set_bit(packet->item[i].index, ljca_gpio->reenable_irqs);
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  298  	}
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  299  
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  300  	schedule_work(&ljca_gpio->work);
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  301  }
-c5a4b6fd31e8cb Ye Xiang      2023-02-25  302  
-
-:::::: The code at line 289 was first introduced by commit
-:::::: 1034cc423f1b4a7a9a56d310ca980fcd2753e11d gpio: update Intel LJCA USB GPIO driver
-
-:::::: TO: Wentong Wu <wentong.wu@intel.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bartosz
