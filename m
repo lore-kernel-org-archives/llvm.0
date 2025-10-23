@@ -1,167 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C6B23F40D;
-	Thu, 23 Oct 2025 19:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B360F17C21C;
+	Thu, 23 Oct 2025 20:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761249018; cv=none; b=Quk8cGEQ7SKXp6Jrc8TN/oXreBRudVKClvYWi8O5rJz594KaGi3TkdIbXGFdxodY5DoQoDSiwYboUbp9qWRDJ22ulxCva7z9/+rmFP+i55ByHWfjZyvMA+OIOKrTfJlYvdZt9DpvP0QjNWRV6Tct69sDRm0j7VxfH66+1v7kcgI=
+	t=1761251494; cv=none; b=PC+berozs2YB7UTv3wP+h9lv+I4le8e+y7kv0j60lD3Dj33khpCRKLB0H/TkruOVNNXNGTlGSdpK3J2GqvGb0NpDBBXkyG3yAIHpmSbtvJ2MitAjJsRK2cHbCEVAY2KZNMLOcmKs51vPXms7w83MYR+ewue4HCDij2VK0rVqn50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761249018; c=relaxed/simple;
-	bh=4GgD8rXzGcd0V4eTBPz9wgSl28VHshWZ5xyM0DTjwes=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Agj28hBn8ZFu7KxSAxtrIFyddWe9ITutUCv+f5Nuy+Fyv1vPxe4y7uqxeI8W1DaRP8s1T2SDf3fVgtmuijebcZgD39yUZiyoAEv23pA3ylRvL65CqtXxgmTkq6V6JVmphM40v9fklRcgI9n8u+YZ1qXXb2YM0a8InxMoK0bvlMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dqvf1TOZ; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761251494; c=relaxed/simple;
+	bh=rOyXGCg7UmEtNTCZZuBA9r74JK6zGQ/KTZPLM6OVdSc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JUbKZK/tE3NUbEQkd66F53ytqLxnxDQl1OAR2xHjDUHScYgBSBZoDW9G/UZ6SUU2hZtq1KeraxwS0EOP21nab/kJHTdW/sNPdQplZ44XT2z0uwGiLiVmFUGWjS9TPjCKZ3kIWb3sn7jL27X041HC8KK0rudeKNeSIvdP9O4gyg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2eAcJZi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dqvf1TOZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761249017; x=1792785017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4GgD8rXzGcd0V4eTBPz9wgSl28VHshWZ5xyM0DTjwes=;
-  b=Dqvf1TOZXuvhywp3vMBeW/fX729maANcLxsgPz0E31Z6/m8lXaOpvMYK
-   rgMCLC/3tG8pAYG3C7MO2ndgKIbMT+lVhVQC9NIzUEVO6C4c1fT03zpPF
-   FwL9nCzMUYae0pQ4c0IUQopizQgAu+Tup/zGflTuCc5rMPlE352J/rpia
-   w0nCDg2olVzKwrVACr8XzDcQsaQuNbPOE1Yi+OmJ7E+6YPLuf7eh0+OtJ
-   M4MWf76BPcvATuvbH1i7YYh5LHe7/yh9geBAsg/Rc04r9PIj9UgjC+UIS
-   xS5jTJYjYxsr+I/iMTf0cbU+ckvql7B4WE5c7KH0G5JCKx0k1KHE7IPEE
-   g==;
-X-CSE-ConnectionGUID: I+GZQ+kfTLOGhutlhf1yiA==
-X-CSE-MsgGUID: sC7vUYMrT++LfZMxUBX5sA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63470570"
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="63470570"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 12:50:17 -0700
-X-CSE-ConnectionGUID: QqnZZascSZOxoU53Pwz9pA==
-X-CSE-MsgGUID: utWaX7cHQSidqSJVHTZSqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="183950468"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 23 Oct 2025 12:50:10 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vC1Jt-000Dp9-2V;
-	Thu, 23 Oct 2025 19:50:00 +0000
-Date: Fri, 24 Oct 2025 03:49:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Jian Shen <shenjian15@huawei.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jijie Shao <shaojijie@huawei.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sunil Goutham <sgoutham@marvell.com>,
-	Geetha sowjanya <gakula@marvell.com>,
-	Subbaraya Sundeep <sbhatta@marvell.com>,
-	Bharat Bhushan <bbhushan2@marvell.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Brett Creeley <brett.creeley@amd.com>,
-	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	Paul Barker <paul@pbarker.dev>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Simon Horman <horms@kernel.org>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Subject: Re: [PATCH net-next v4 3/6] ionic: convert to ndo_hwtstamp API
-Message-ID: <202510240344.2MuPn70o-lkp@intel.com>
-References: <20251022104900.901973-4-vadim.fedorenko@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2eAcJZi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D861C4CEE7;
+	Thu, 23 Oct 2025 20:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761251494;
+	bh=rOyXGCg7UmEtNTCZZuBA9r74JK6zGQ/KTZPLM6OVdSc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=M2eAcJZirgUzEEqTJ29znDpDb4AeGkkhWIPfg5rEX4S32msTTVevJUiDTgLrq2WGn
+	 JmrpX0itb6ExW9r9Bz9kTneV9ydqxNRFqMESHaCAb12bJ2ocWVNoG6yIZfm1QjChKi
+	 Ki1HUfZIYb7Myjg+cNaROTUk9N8GQpO4ow8yqI+XJ3U2pkH6vZ1qd6e12d2/rRQFww
+	 loJCXSqX7LFV8AKysOxCAYMessZud1ZoHvwe4TYgglL6blTUpej/dFmOkD0V3oGLFl
+	 In+tHu25GR5GRC5wcgiQoJoRHmU46UoIOgCL/g+ODqvr2QaXMIzy9RlZk6XfjcqdjG
+	 zWVRRZYx24Saw==
+From: Nicolas Schier <nsc@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	jfs-discussion@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH] jfs: Rename _inline to avoid conflict with clang's '-fms-extensions'
+Date: Thu, 23 Oct 2025 22:31:18 +0200
+Message-ID: <176125134618.2701009.7020323237839096671.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251023-jfs-fix-conflict-with-clang-ms-ext-v1-1-e219d59a1e68@kernel.org>
+References: <20251023-jfs-fix-conflict-with-clang-ms-ext-v1-1-e219d59a1e68@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022104900.901973-4-vadim.fedorenko@linux.dev>
-
-Hi Vadim,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/octeontx2-convert-to-ndo_hwtstamp-API/20251022-185103
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20251022104900.901973-4-vadim.fedorenko%40linux.dev
-patch subject: [PATCH net-next v4 3/6] ionic: convert to ndo_hwtstamp API
-config: x86_64-randconfig-001-20251024 (https://download.01.org/0day-ci/archive/20251024/202510240344.2MuPn70o-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251024/202510240344.2MuPn70o-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510240344.2MuPn70o-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/pensando/ionic/ionic_lif.c:2821:22: error: use of undeclared identifier 'ionic_hwstamp_get'; did you mean 'ionic_lif_hwstamp_get'?
-    2821 |         .ndo_hwtstamp_get       = ionic_hwstamp_get,
-         |                                   ^~~~~~~~~~~~~~~~~
-         |                                   ionic_lif_hwstamp_get
-   drivers/net/ethernet/pensando/ionic/ionic_lif.h:384:19: note: 'ionic_lif_hwstamp_get' declared here
-     384 | static inline int ionic_lif_hwstamp_get(struct ionic_lif *lif, struct ifreq *ifr)
-         |                   ^
->> drivers/net/ethernet/pensando/ionic/ionic_lif.c:2822:22: error: use of undeclared identifier 'ionic_hwstamp_set'; did you mean 'ionic_lif_hwstamp_set'?
-    2822 |         .ndo_hwtstamp_set       = ionic_hwstamp_set,
-         |                                   ^~~~~~~~~~~~~~~~~
-         |                                   ionic_lif_hwstamp_set
-   drivers/net/ethernet/pensando/ionic/ionic_lif.h:379:19: note: 'ionic_lif_hwstamp_set' declared here
-     379 | static inline int ionic_lif_hwstamp_set(struct ionic_lif *lif, struct ifreq *ifr)
-         |                   ^
->> drivers/net/ethernet/pensando/ionic/ionic_lif.c:2821:22: error: incompatible function pointer types initializing 'int (*)(struct net_device *, struct kernel_hwtstamp_config *)' with an expression of type 'int (struct ionic_lif *, struct ifreq *)' [-Wincompatible-function-pointer-types]
-    2821 |         .ndo_hwtstamp_get       = ionic_hwstamp_get,
-         |                                   ^~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/pensando/ionic/ionic_lif.c:2822:22: error: incompatible function pointer types initializing 'int (*)(struct net_device *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' with an expression of type 'int (struct ionic_lif *, struct ifreq *)' [-Wincompatible-function-pointer-types]
-    2822 |         .ndo_hwtstamp_set       = ionic_hwstamp_set,
-         |                                   ^~~~~~~~~~~~~~~~~
-   4 errors generated.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 
-vim +2821 drivers/net/ethernet/pensando/ionic/ionic_lif.c
+On Thu, 23 Oct 2025 10:38:50 -0700, Nathan Chancellor wrote:
+> After commit 778740ee2d00 ("Kbuild: enable -fms-extensions"), building
+> fs/jfs fails with clang:
+> 
+>   In file included from fs/jfs/jfs_unicode.c:8:
+>   fs/jfs/jfs_incore.h:86:13: error: type name does not allow function specifier to be specified
+>      86 |                                         unchar _inline[128];
+>         |                                                ^
+>   fs/jfs/jfs_incore.h:86:20: error: expected member name or ';' after declaration specifiers
+>      86 |                                         unchar _inline[128];
+>         |                                         ~~~~~~~~~~~~~~^
+> 
+> [...]
 
-  2797	
-  2798	static const struct net_device_ops ionic_netdev_ops = {
-  2799		.ndo_open               = ionic_open,
-  2800		.ndo_stop               = ionic_stop,
-  2801		.ndo_start_xmit		= ionic_start_xmit,
-  2802		.ndo_bpf		= ionic_xdp,
-  2803		.ndo_xdp_xmit		= ionic_xdp_xmit,
-  2804		.ndo_get_stats64	= ionic_get_stats64,
-  2805		.ndo_set_rx_mode	= ionic_ndo_set_rx_mode,
-  2806		.ndo_set_features	= ionic_set_features,
-  2807		.ndo_set_mac_address	= ionic_set_mac_address,
-  2808		.ndo_validate_addr	= eth_validate_addr,
-  2809		.ndo_tx_timeout         = ionic_tx_timeout,
-  2810		.ndo_change_mtu         = ionic_change_mtu,
-  2811		.ndo_vlan_rx_add_vid    = ionic_vlan_rx_add_vid,
-  2812		.ndo_vlan_rx_kill_vid   = ionic_vlan_rx_kill_vid,
-  2813		.ndo_set_vf_vlan	= ionic_set_vf_vlan,
-  2814		.ndo_set_vf_trust	= ionic_set_vf_trust,
-  2815		.ndo_set_vf_mac		= ionic_set_vf_mac,
-  2816		.ndo_set_vf_rate	= ionic_set_vf_rate,
-  2817		.ndo_set_vf_spoofchk	= ionic_set_vf_spoofchk,
-  2818		.ndo_get_vf_config	= ionic_get_vf_config,
-  2819		.ndo_set_vf_link_state	= ionic_set_vf_link_state,
-  2820		.ndo_get_vf_stats       = ionic_get_vf_stats,
-> 2821		.ndo_hwtstamp_get	= ionic_hwstamp_get,
-> 2822		.ndo_hwtstamp_set	= ionic_hwstamp_set,
-  2823	};
-  2824	
+Applie to kbuild-next, thanks!
 
+[1/1] jfs: Rename _inline to avoid conflict with clang's '-fms-extensions'
+      commit: 9b38933a351d4f4e95a192adfe21ec235632bf4c
+
+Please note that commit hashes might change in case of issues with
+kbuild-next branch.
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nicolas
+
