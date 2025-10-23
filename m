@@ -1,132 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43113148B9;
-	Thu, 23 Oct 2025 14:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8822FCBF5
+	for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 15:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761231414; cv=none; b=bwnuA2iJsVK+eRoE00vxHjdqHu1c7wRAgmFQtiMuyRuJS5//sPwcd09r8s7eZ7hBgCqi2hUlQxSoJfhL7xINUbijQ38C4HK04bodmB87oQP+4hEONDv1bE/uoFUTDzydcv6WkPncggMY6is7lbQOCqkMHsC6RQFf/csYEkGz+V8=
+	t=1761231911; cv=none; b=NFS7MfCzxBYAXFTyOGvRxiSbrnsJ5FcPnsHH8xDZD1FaUArv+66Prx+Jbc6slJcMEGoCrN3uk2DNssY4SgzQFw25D6WCnM5zotjluYpG32geb8J1YZWThNuu+5cuQn7sIH3BF9oI/SGt8NKlSOzhTQtKQMuLgdqYq4wMoeoEi/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761231414; c=relaxed/simple;
-	bh=zl4EQVxMwdi+82iMAbep7c4uBdcXNrgCGiikKHak4aw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rvPLZamWfxR7J+FagHhQVZKsxvsT3til5LMnRzY1Qiz1mEbJIkiQ2kO4JTFf080NZEtyP4uKnQRsoHUl61ZRxXcZhJ1wPpH3EyPweDJezYrcqNgDpXeIpz/4MVIIynePRl4Vn5Ku4dS653jDJ8OGdW4Hq47ki2KBfsgWCLhbeAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jpc0f1Vc; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761231911; c=relaxed/simple;
+	bh=GHxA3c0yV6CEoBK6kR7057V7T1cFgVLHP2eCafXealQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JHXIDwutPi2TdXUBPRYIDEx6WXk2bUR87qZDF9yQbm0JPZI4tVc1AmoBTKtscJskW+rbWIdacMa75gEjwjLhuzx1YEWx5BvOwH9p2HwaZ06nfuKOMl37MkyUbX6dIHuGK8GPICH6/fg/kERr26/lUPI4fWITtH8tqhxOHWkf2T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGGOd1hx; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jpc0f1Vc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761231413; x=1792767413;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zl4EQVxMwdi+82iMAbep7c4uBdcXNrgCGiikKHak4aw=;
-  b=Jpc0f1VcEkb2sKsC2eaDFVa7PaujfYpMIX7qRJnLaIfJGyLeWouZOCI0
-   8japSk2kbrEGp2JD6jrB6e2UoyZSArVhDGZNR+l6ijgWoSphEhLrQYaEk
-   e9Lr1pNzhrGus7STPbKq10udWRJEBBc/ArlAcQZsXL1v36aS9aDU9AbRa
-   SCrNkyA0rjhpTnTv1r47auPz5hYbF60D9AKvDT61ChO5s/yUdERCGymIY
-   ofHv9Yn9/VTPaqRMUYBvvIxigrdeEKSew4VKhbkVNz7yK9tJEGpG281LC
-   t3vdwSpRYoWIHGgYEBf9Cf922NE//kdFy3rW9N+eOVIyu5I4M+D5Gdax9
-   w==;
-X-CSE-ConnectionGUID: 3g0AmY6cTTOuAcpT2TFpAA==
-X-CSE-MsgGUID: LC9BL6V8Tke8KlR47LbDow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63440940"
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="63440940"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 07:56:53 -0700
-X-CSE-ConnectionGUID: 2E8E/w0eTHehMuPPPocNfw==
-X-CSE-MsgGUID: 3DMf3RxjSzeaj3/3U3f73A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
-   d="scan'208";a="188571864"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Oct 2025 07:56:45 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBwk7-000DbB-1r;
-	Thu, 23 Oct 2025 14:56:43 +0000
-Date: Thu, 23 Oct 2025 22:56:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>,
-	linux-cxl@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>, Hanjun Guo <guohanjun@huawei.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, Shuai Xue <xueshuai@linux.alibaba.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Sunil V L <sunilvl@ventanamicro.com>,
-	Xiaofei Tan <tanxiaofei@huawei.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"Fabio M . De Francesco" <fabio.m.de.francesco@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Guo Weikang <guoweikang.kernel@gmail.com>, Xin Li <xin@zytor.com>
-Subject: Re: [PATCH 3/6 v6] acpi/ghes: Make GHES select ACPI_APEI_PCIEAER
-Message-ID: <202510232204.7aYBpl7h-lkp@intel.com>
-References: <20251023122612.1326748-4-fabio.m.de.francesco@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGGOd1hx"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-63e076e24f2so1973013a12.3
+        for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 08:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761231908; x=1761836708; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0g9O1UAQmliCyOFgls7R54UMarfOxqkSzanB1NMWGZc=;
+        b=MGGOd1hxVYtyhx/O1i8+layHzLpRoXv4VAu0oHNJ0QV3l//Bk5My7z+qKxy/YqF2I6
+         o3/nDttwUViDuSZwzvnLz0By+7vk/s0eda+MZYbbTl68+orY8leYXzufNQrceQr3qKDR
+         bX0Lhsef85tCDYy+2lbCBnD3rgMZFM6I7y3FqcACo5KYcX1sBIzRFsU6FIdksLAGhO7T
+         TOHL4NtJ6BXKedEdmd6LBB1H2Du7xs7XP9npXPN06SmFNTdAJaIn35iYj7oSiQmBoRo3
+         ltRmeNcAwFNCLFdTHWzQ3kGVx4WFnV37nxtCZH6t4IkQhWFrlCsV2oeZiKe6uvH07z/I
+         LmAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761231908; x=1761836708;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0g9O1UAQmliCyOFgls7R54UMarfOxqkSzanB1NMWGZc=;
+        b=wHzAsbLJigUqzGOGYF96jtHL14xp7sC2vYL1lN/cOoUTchPs5YdYgwgUJV/3JtP7wH
+         eJebW2KHYtkWt+m9o9NWEvpmE3gGK+xfnHzatPegB1ogqO391xv66lBlRfjm6ylB0QMf
+         Z3adl0Gmybvk6TsRY+OZ+bu0VHNHSW8EgdIQLGwxKL7rmJc/zRROHfSNAfmvNZuPwk3V
+         0ugzl8q9jLKSXi/eOX0NJTl2L1MAYCxitwz9gp60lkt+iYEmRYl8O/VunSfevlWCa3pU
+         4viw+M8MaNTFDmfGXKI8MNXyObz4YnXTaiXDKw02foBpAKK53awPhsg2w6SkL6aBCEn6
+         JJYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVlCUVwy+ztIOCmhHDQzgbiiSxgJSQD6329Etc6X7NRUYLEQpafZ8IY0xXaqH6cXN3EIm4M@lists.linux.dev
+X-Gm-Message-State: AOJu0YxMM4c355+Iu867CqvAHohQV6ZmgaqhKz2aniCFqS6N1BaRzhGl
+	QCZt9sXiQclhYHT5X1Gs1XFhg6d2kRkfkqcSZ70J3gU/vg8I7Sk2OtyDVPAPuIcMPJMxVolJ1zh
+	pU6Y9OsaruLiYawPpYdKoqjwtnMRGoqg=
+X-Gm-Gg: ASbGnctcKvL8eLC6iguIMM/KAaP8MHvhkw7updsm6AMgCBWRIiWVxNHTa/7p3pcbA76
+	Y3V6FeXbKkUp9uRZ3qhrjVj5IlUGhJfiCJ6pb4hD1kYEUR0LzwzTbdIQRLdkFL5pXqvUDJ+aGfO
+	sTSDABa8LsLYVN/TLZwSFKAzEgOT9qU6veSGEQqw+HkzaJtFjf3KW4UMWY4tmJnKBPulKEdlm07
+	594NdmgHsYQh+fsy0OOEKVB5QhHuwS/XuvWBd/Eu/ze+K+JTx9brryf70k8esGrvzPS0Van+/dh
+	ryRndo3X8ibaSF5fp5p3pBqcL5eXBg==
+X-Google-Smtp-Source: AGHT+IHB8B5L3u8WbMDNbmjmms33DeNsuKSJCMufZx22juNs/gndSdpSi8DIUT2dxhoELBY0BdEhQ4H+/Q41jUC1tb8=
+X-Received: by 2002:a05:6402:1810:b0:634:4d7a:4d94 with SMTP id
+ 4fb4d7f45d1cf-63c1f6d9335mr18957800a12.34.1761231907807; Thu, 23 Oct 2025
+ 08:05:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251023122612.1326748-4-fabio.m.de.francesco@linux.intel.com>
+References: <20250929115405.25695-2-sidharthseela@gmail.com>
+ <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com> <cb30af9e-c22b-485a-a83c-f395880cd799@linuxfoundation.org>
+In-Reply-To: <cb30af9e-c22b-485a-a83c-f395880cd799@linuxfoundation.org>
+From: Sidharth Seela <sidharthseela@gmail.com>
+Date: Thu, 23 Oct 2025 20:34:55 +0530
+X-Gm-Features: AS18NWA765vw_3LiOpRHjjahBitbX6N7WFYKyQWJzAW1GbNsAm0JUy1d7Tv4rWQ
+Message-ID: <CAJE-K+D6ODXnMtS+pbQ-GpyTy8PLyycqK19P_EgnZzKbKwoOog@mail.gmail.com>
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under label
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Dev Jain <dev.jain@arm.com>, nphamcs@gmail.com, hannes@cmpxchg.org, 
+	nathan@kernel.org, shuah@kernel.org, morbo@google.com, justinstitt@google.com, 
+	nick.desaulniers+lkml@gmail.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, david.hunter.linux@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Fabio,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 552c50713f273b494ac6c77052032a49bc9255e2]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/ACPI-extlog-Trace-CPER-Non-standard-Section-Body/20251023-202846
-base:   552c50713f273b494ac6c77052032a49bc9255e2
-patch link:    https://lore.kernel.org/r/20251023122612.1326748-4-fabio.m.de.francesco%40linux.intel.com
-patch subject: [PATCH 3/6 v6] acpi/ghes: Make GHES select ACPI_APEI_PCIEAER
-config: x86_64-buildonly-randconfig-001-20251023 (https://download.01.org/0day-ci/archive/20251023/202510232204.7aYBpl7h-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251023/202510232204.7aYBpl7h-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510232204.7aYBpl7h-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: cper_severity_to_aer
-   >>> referenced by ghes.c:626 (drivers/acpi/apei/ghes.c:626)
-   >>>               drivers/acpi/apei/ghes.o:(ghes_do_proc) in archive vmlinux.a
-   >>> referenced by ghes.c:753 (drivers/acpi/apei/ghes.c:753)
-   >>>               drivers/acpi/apei/ghes.o:(ghes_do_proc) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: aer_recover_queue
-   >>> referenced by ghes.c:642 (drivers/acpi/apei/ghes.c:642)
-   >>>               drivers/acpi/apei/ghes.o:(ghes_do_proc) in archive vmlinux.a
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ACPI_APEI_PCIEAER
-   Depends on [n]: ACPI [=y] && ACPI_APEI [=y] && PCIEAER [=n]
-   Selected by [y]:
-   - ACPI_APEI_GHES [=y] && ACPI [=y] && ACPI_APEI [=y]
+> Make sure to not use "---" in your commit logs. Everything after
+> this line gets thrown away. I had to go fix it manually.
+Sorry, I will make sure that doesn't happen again.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Sidharth Seela
