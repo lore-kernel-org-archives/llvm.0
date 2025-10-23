@@ -1,154 +1,207 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E932D94A7;
-	Thu, 23 Oct 2025 07:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E702DC332
+	for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 07:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761204617; cv=none; b=VCVwIyLPqYTjvboZxm7uPiTwljO7mgLORW2t2HlXSE2eldQbTBGhPIduLLyFcihBnbCBwlEMHK+wpdAQVIaSRziW2UahrzAxsIs9Za59pup/y6gtT4z64EnApjHJGdefZuBZHZtNSuQwKi9/xl+00vgENhi62wLnyEArLDSTsPk=
+	t=1761205800; cv=none; b=Yz9c1qfOCg3UD/Qy7lD9UT4QjluruIzT+5sA3oPL27WtAQ4VKmUHWGtwJ9Dfpnq6/3Q56A+m6qQas1ExB0GjGsXnEDLNXPMkqZKYbMUXZEpOec1NVPSVnXp1yE03qIRbimvfsCP5Oa2oMsnrHwfzEYPhPS6MV462dhs4HuaoNxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761204617; c=relaxed/simple;
-	bh=jf3nAbYYx1dqiRdZtJZ73fVZgh9zX6dPwz1k7DoEuP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PKsTMbAxTr24b1EU14+i7B8lK2YLedKg7JzN3tGFvyeNMMvc5XrkSO2ju9fV9qwGFPD8eZeB9K2MU4qK0/V/qn6chzx70FXAHALcKzJ33CWo9UzfA/E9avFlW5DaaRVNcTT6Istk4m2wOpqTEUj1GKyblgsjxAfZpReouZ18zBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kJM0RKsm; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761205800; c=relaxed/simple;
+	bh=bE9DUULRUYQBlQg9VZE7ioXLtTLw+Uog0xQNXv5k1sM=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=Uva9EmUKVRnw80A0na6KJJhAvN9gls9M5tUTfE3+xiHtQk5eqOzZddhBULh3zYKYpPvboMp50BUdc3lxVLhKEWSga2Ha77MlNpCDZiX6SSPbrkurrDltC9Vvfv+/dQHRff8XhoyPWrDcUfY7zU1nn31x6GjQZzb/lGQs3aTR8M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L+YyG4hO; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kJM0RKsm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761204616; x=1792740616;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jf3nAbYYx1dqiRdZtJZ73fVZgh9zX6dPwz1k7DoEuP0=;
-  b=kJM0RKsmVvFkq/BBmlLtbdW72PDPnJENoJ8IDT04RzKJdJv5z81PvA85
-   56eZW+jdIUFWZPaOCZpczRrIPz0C5/Xy0cjnKy+P3S/8jyMn5mcwLTcC+
-   cyXpxsPVYEPAdLm1RmxO8MoO9V03Ld2uZ0XqOKIXCBi+4QAWgKIjuC8OU
-   JT/YAOYngQOXiRrJ38yDjmHLjCR9JdSzZMGlG93gExkwkM1PiCA5Qlty1
-   bnD9iub609+qXkbK/rLos0oSP/CBE1fM3dCJJ7AkVUpSohAeno8O6pcvP
-   Cq6FAOAq6O04B9iWAlfe4sQ8PiL8YaSroqDJpXJA2BeDygAGigqDiJUnV
-   w==;
-X-CSE-ConnectionGUID: gUlQP7lCRtaX1i+zrR3SRQ==
-X-CSE-MsgGUID: rIEhe75cQhKJ25PDoQ/5Ow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63070029"
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="63070029"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 00:30:15 -0700
-X-CSE-ConnectionGUID: ky6hJtNrSoCbM5jHmaC+9g==
-X-CSE-MsgGUID: R+0e4RhuQSujbjtIKQMTZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,249,1754982000"; 
-   d="scan'208";a="184148743"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 23 Oct 2025 00:30:09 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBplv-000D9i-1h;
-	Thu, 23 Oct 2025 07:30:07 +0000
-Date: Thu, 23 Oct 2025 15:29:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
-	Josef Bacik <josef@toxicpanda.com>,
-	Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jann Horn <jannh@google.com>, Mike Yuan <me@yhndnzj.com>,
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-	Lennart Poettering <mzxreary@0pointer.de>,
-	Daan De Meyer <daan.j.demeyer@gmail.com>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Amir Goldstein <amir73il@gmail.com>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	bpf@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2 10/63] ns: add active reference count
-Message-ID: <202510231548.kt6wvifE-lkp@intel.com>
-References: <20251022-work-namespace-nstree-listns-v2-10-71a588572371@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L+YyG4hO"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022-work-namespace-nstree-listns-v2-10-71a588572371@kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761205790;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vd+5huyqIQSpq/F65arGSoTaP04RVAJffOfxOov/K3k=;
+	b=L+YyG4hOJhDKQtn8sYeccPOpwpkB2Ngem/oETqNQvZhUnLhxYBVxvE6JwqACJjZlqGkP3u
+	1+DJxQwOvfTYJyT5x5qPL4uOguRdzm+zygddYMhAiTVCEACK2Xm/C+XZi7xzltwRh9E0ZJ
+	VXl2f304JdRx7QmIdZm/BqvBQXEV2WI=
+Date: Thu, 23 Oct 2025 07:49:48 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <8a94c764c5fa4ff04fa7dd69ed47fcdf782b814e@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code
+ with __BPF_FEATURE_ADDR_SPACE_CAST
+To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Nathan Chancellor"
+ <nathan@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, "Puranjay Mohan"
+ <puranjay@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <84906f32-955d-4fda-b87d-56c052ddfd87@linux.dev>
+References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
+ <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
+ <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
+ <84906f32-955d-4fda-b87d-56c052ddfd87@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Christian,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 3a8660878839faadb4f1a6dd72c3179c1df56787]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Brauner/libfs-allow-to-specify-s_d_flags/20251023-004014
-base:   3a8660878839faadb4f1a6dd72c3179c1df56787
-patch link:    https://lore.kernel.org/r/20251022-work-namespace-nstree-listns-v2-10-71a588572371%40kernel.org
-patch subject: [PATCH v2 10/63] ns: add active reference count
-config: i386-buildonly-randconfig-001-20251023 (https://download.01.org/0day-ci/archive/20251023/202510231548.kt6wvifE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251023/202510231548.kt6wvifE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510231548.kt6wvifE-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/cred.c:313:21: warning: variable 'new' is uninitialized when used here [-Wuninitialized]
-     313 |                 ns_ref_active_get(new->user_ns);
-         |                                   ^~~
-   include/linux/ns_common.h:258:11: note: expanded from macro 'ns_ref_active_get'
-     258 |         do { if (__ns) __ns_ref_active_get(to_ns_common(__ns)); } while (0)
-         |                  ^~~~
-   kernel/cred.c:292:18: note: initialize the variable 'new' to silence this warning
-     292 |         struct cred *new;
-         |                         ^
-         |                          = NULL
-   1 warning generated.
+October 23, 2025 at 11:42, "Yonghong Song" <yonghong.song@linux.dev mailt=
+o:yonghong.song@linux.dev?to=3D%22Yonghong%20Song%22%20%3Cyonghong.song%4=
+0linux.dev%3E > wrote:
 
 
-vim +/new +313 kernel/cred.c
+>=20
+>=20On 10/22/25 8:33 PM, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> October 22, 2025 at 23:33, "Yonghong Song" <yonghong.song@linux.dev=
+ mailto:yonghong.song@linux.dev?to=3D%22Yonghong%20Song%22%20%3Cyonghong.=
+song%40linux.dev%3E > wrote:
+> >=20
+>=20> >=20
+>=20> > On 10/22/25 12:18 AM, Jiayuan Chen wrote:
+> > >=20
+>=20>  When compiling the BPF selftests with Clang versions that do not s=
+upport
+> >=20
+>=20> >=20
+>=20> > If=C2=A0you are really using llvm18, then I found there are some =
+other
+> > >  build failures as well, e.g.,
+> > >=20
+>=20>  Yes i'm using llvm18
+> >=20
+>=20> >=20
+>=20> > /home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_com=
+mon.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
+> > >  47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *=
+addr, __u32 page_cnt,
+> > >  | ^
+> > >  /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/=
+vmlinux.h:160636:48: note: previous declaration is here
+> > >  160636 | extern void __attribute__((address_space(1))) *bpf_arena_=
+alloc_pages(void *p__map, void __attribute__((address_space(1))) *addr__i=
+gn, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
+> > >  | ^
+> > >=20
+>=20>  I hadn't encountered this error before, but it started appearing a=
+fter I upgraded LLVM to version 20.
+> >=20
+>=20>  $ make V=3D1
+> >=20
+>=20>  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/b=
+pf/tools/sbin/bpftool btf dump file /home/chenjiayuan/code/upstream/bpf-n=
+ext/vmlinux format c > /home/chenjiayuan/code/upstream/bpf-next/tools/tes=
+ting/selftests/bpf/tools/include/.vmlinux.h.tmp
+> >  cmp -s /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selfte=
+sts/bpf/tools/include/.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-=
+next/tools/testing/selftests/bpf/tools/include/vmlinux.h || mv /home/chen=
+jiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/=
+.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/tools/testing/sel=
+ftests/bpf/tools/include/vmlinux.h
+> >  clang -g -Wall -Werror -D__TARGET_ARCH_x86 -mlittle-endian -I/home/c=
+henjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/inclu=
+de -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+ -I/home/chenjiayuan/code/upstream/bpf-next/tools/include/uapi -I/home/ch=
+enjiayuan/code/upstream/bpf-next/tools/testing/selftests/usr/include -std=
+=3Dgnu11 -fno-strict-aliasing -Wno-compare-distinct-pointer-types -idiraf=
+ter /usr/lib/llvm-20/lib/clang/20/include -idirafter /usr/local/include -=
+idirafter /usr/include/x86_64-linux-gnu -idirafter /usr/include -DENABLE_=
+ATOMICS_TESTS -O2 --target=3Dbpfel -c progs/stream.c -mcpu=3Dv3 -o /home/=
+chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/stream.bpf=
+.o
+> >  In file included from progs/stream.c:8:
+> >  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_=
+pages'
+> >  47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *ad=
+dr, __u32 page_cnt,
+> >  | ^
+> >  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+/tools/include/vmlinux.h:152158:14: note: previous declaration is here
+> >  152158 | extern void *bpf_arena_alloc_pages(void *p__map, void *addr=
+__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
+> >  | ^
+> >  In file included from progs/stream.c:8:
+> >  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+/bpf_arena_common.h:49:5: error: conflicting types for 'bpf_arena_reserve=
+_pages'
+> >  49 | int bpf_arena_reserve_pages(void *map, void __arena *addr, __u3=
+2 page_cnt) __ksym __weak;
+> >  | ^
+> >  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+/tools/include/vmlinux.h:152160:12: note: previous declaration is here
+> >  152160 | extern int bpf_arena_reserve_pages(void *p__map, void *ptr_=
+_ign, u32 page_cnt) __weak __ksym;
+> >  | ^
+> >  In file included from progs/stream.c:8:
+> >  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+/bpf_arena_common.h:50:6: error: conflicting types for 'bpf_arena_free_pa=
+ges'
+> >  50 | void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 p=
+age_cnt) __ksym __weak;
+> >  | ^
+> >  /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf=
+/tools/include/vmlinux.h:152159:13: note: previous declaration is here
+> >  152159 | extern void bpf_arena_free_pages(void *p__map, void *ptr__i=
+gn, u32 page_cnt) __weak __ksym;
+> >  | ^
+> >  3 errors generated.
+> >  make: *** [Makefile:761: /home/chenjiayuan/code/upstream/bpf-next/to=
+ols/testing/selftests/bpf/stream.bpf.o] Error 1
+> >=20
+>=20>  $ clang --version
+> >  Ubuntu clang version 20.1.8 (++20250804090239+87f0227cb601-1~exp1~20=
+250804210352.139)
+> >  Target: x86_64-pc-linux-gnu
+> >  Thread model: posix
+> >  InstalledDir: /usr/lib/llvm-20/bin
+> >=20
+>=20>  $ pahole --version
+> >  v1.29
+> >=20
+>=20Please try pahole version 1.30.
+>=20
+>=20>=20
+>=20> I updated LLVM via https://apt.llvm.org/. Could this be caused by s=
+ome binaries or libraries still using LLVM 18?
+> >
+>
 
-   298	
-   299		if (
-   300	#ifdef CONFIG_KEYS
-   301			!p->cred->thread_keyring &&
-   302	#endif
-   303			clone_flags & CLONE_THREAD
-   304		    ) {
-   305			p->real_cred = get_cred_many(p->cred, 2);
-   306			kdebug("share_creds(%p{%ld})",
-   307			       p->cred, atomic_long_read(&p->cred->usage));
-   308			inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
-   309			/*
-   310			 * Each task gets its own active reference, even if
-   311			 * CLONE_THREAD shares the cred structure.
-   312			 */
- > 313			ns_ref_active_get(new->user_ns);
-   314			return 0;
-   315		}
-   316	
-   317		new = prepare_creds();
-   318		if (!new)
-   319			return -ENOMEM;
-   320	
-   321		if (clone_flags & CLONE_NEWUSER) {
-   322			ret = create_user_ns(new);
-   323			if (ret < 0)
-   324				goto error_put;
-   325			ret = set_cred_ucounts(new);
-   326			if (ret < 0)
-   327				goto error_put;
-   328		}
-   329	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+thanks, but version 1.30 didn't work in my tests - even pahole's master b=
+ranch fails, only the next branch works...
+
+
+It seems that the 'old' pahole parses some kfuncs incorrectly, for exampl=
+e bpf_dynptr_slice().
+
+
+./tools/sbin/bpftool btf dump file ../../../../vmlinux | grep bpf_dynptr_=
+slice -A 2
+	'KF_bpf_dynptr_slice' val=3D23
+	'KF_bpf_dynptr_slice_rdwr' val=3D24
+	'KF_bpf_dynptr_clone' val=3D25
+	'KF_bpf_percpu_obj_new_impl' val=3D26
+--
+[68242] FUNC 'bpf_dynptr_slice' type_id=3D68241 linkage=3Dstatic         =
+     <- missing corresponding DECL_TAG ?
+[68243] FUNC 'bpf_dynptr_slice_rdwr' type_id=3D68241 linkage=3Dstatic
+[68244] DECL_TAG 'bpf_kfunc' type_id=3D68243 component_idx=3D-1
+[68245] FUNC_PROTO '(anon)' ret_type_id=3D38 vlen=3D5
