@@ -1,82 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B360F17C21C;
-	Thu, 23 Oct 2025 20:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4196218AD4;
+	Thu, 23 Oct 2025 20:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761251494; cv=none; b=PC+berozs2YB7UTv3wP+h9lv+I4le8e+y7kv0j60lD3Dj33khpCRKLB0H/TkruOVNNXNGTlGSdpK3J2GqvGb0NpDBBXkyG3yAIHpmSbtvJ2MitAjJsRK2cHbCEVAY2KZNMLOcmKs51vPXms7w83MYR+ewue4HCDij2VK0rVqn50=
+	t=1761251503; cv=none; b=F4hpP6rMzid9L+ENbGSgmoXl/qOQeL9dybqfDDC7KxPTZvwwABP9vWMxW5byybkAmJMXHjECibSq2+3RAJssEJwc5zFWQoY3RuOtPeXsdcyscki6ZEwF5QVNFhD/2L/p0a8PEWecfNlbUiTi1yfBdT7oUi2AoxM4hC8L6+spwt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761251494; c=relaxed/simple;
-	bh=rOyXGCg7UmEtNTCZZuBA9r74JK6zGQ/KTZPLM6OVdSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JUbKZK/tE3NUbEQkd66F53ytqLxnxDQl1OAR2xHjDUHScYgBSBZoDW9G/UZ6SUU2hZtq1KeraxwS0EOP21nab/kJHTdW/sNPdQplZ44XT2z0uwGiLiVmFUGWjS9TPjCKZ3kIWb3sn7jL27X041HC8KK0rudeKNeSIvdP9O4gyg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2eAcJZi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761251503; c=relaxed/simple;
+	bh=obi+9q/lEBxOXwCnktkr7trvGNzVMJhHXXAGuAHJGbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=abIr9lyUDqypydKbkqTvEDghhS2CruunaYuUXo6uW+b1kiloaJ8w7kPswNEyLhw1td18s6kH9/lHRH4lqUYLS5tfPAq1kAQKGi3ngcwdTnXNsrTx8sXi45EzI0WZqphzVuD38krn/NYjkkgY993cadMy/RZGsy3nqGNteUPNqkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N7akVhzN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2eAcJZi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D861C4CEE7;
-	Thu, 23 Oct 2025 20:31:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N7akVhzN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11136C4CEFB;
+	Thu, 23 Oct 2025 20:31:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761251494;
-	bh=rOyXGCg7UmEtNTCZZuBA9r74JK6zGQ/KTZPLM6OVdSc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=M2eAcJZirgUzEEqTJ29znDpDb4AeGkkhWIPfg5rEX4S32msTTVevJUiDTgLrq2WGn
-	 JmrpX0itb6ExW9r9Bz9kTneV9ydqxNRFqMESHaCAb12bJ2ocWVNoG6yIZfm1QjChKi
-	 Ki1HUfZIYb7Myjg+cNaROTUk9N8GQpO4ow8yqI+XJ3U2pkH6vZ1qd6e12d2/rRQFww
-	 loJCXSqX7LFV8AKysOxCAYMessZud1ZoHvwe4TYgglL6blTUpej/dFmOkD0V3oGLFl
-	 In+tHu25GR5GRC5wcgiQoJoRHmU46UoIOgCL/g+ODqvr2QaXMIzy9RlZk6XfjcqdjG
-	 zWVRRZYx24Saw==
+	s=k20201202; t=1761251503;
+	bh=obi+9q/lEBxOXwCnktkr7trvGNzVMJhHXXAGuAHJGbg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N7akVhzNCzMKgcGktAsxWTNgCUFOrGrcwCPTPoDb2Rf4RGM8hdNQAQMuPYD40A5bc
+	 gBtu/kQ0VzV0l8/DbfavWDrcyL4c3WRl/Fu5wcmNqFlCQjsB7hu2jo4oZuymd4QFmy
+	 8TdpPN2ewoB9iwAmAr2tbXyPfaQRBu7iVRx38PYO4itM8BHC5AXAFSPsqF1iaLSE38
+	 Td/vqnQzLX3NlcYcvzkyzAijdRLr6A0MsVNvs9zGl/13+Dwk6NvvHEmfPwLIJTrw0Z
+	 lgI3aOChOmnNXvvu/mjsXlc9ZcajTF+lY6pmX4Q764PwdCOKsaN12Wwvf0uWMe0H09
+	 91dMVYO+bdysw==
+Date: Thu, 23 Oct 2025 21:50:34 +0200
 From: Nicolas Schier <nsc@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	jfs-discussion@lists.sourceforge.net,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH] jfs: Rename _inline to avoid conflict with clang's '-fms-extensions'
-Date: Thu, 23 Oct 2025 22:31:18 +0200
-Message-ID: <176125134618.2701009.7020323237839096671.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251023-jfs-fix-conflict-with-clang-ms-ext-v1-1-e219d59a1e68@kernel.org>
-References: <20251023-jfs-fix-conflict-with-clang-ms-ext-v1-1-e219d59a1e68@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Kees Cook <kees@kernel.org>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] KMSAN: Restore dynamic check for
+ '-fsanitize=kernel-memory'
+Message-ID: <aPqHCrC0JPwQynWd@levanger>
+References: <20251023-fix-kmsan-check-s390-clang-v1-1-4e6df477a4cc@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023-fix-kmsan-check-s390-clang-v1-1-4e6df477a4cc@kernel.org>
 
-
-On Thu, 23 Oct 2025 10:38:50 -0700, Nathan Chancellor wrote:
-> After commit 778740ee2d00 ("Kbuild: enable -fms-extensions"), building
-> fs/jfs fails with clang:
+On Thu, Oct 23, 2025 at 09:01:29PM +0200, Nathan Chancellor wrote:
+> Commit 5ff8c11775c7 ("KMSAN: Remove tautological checks") changed
+> CONFIG_HAVE_KMSAN_COMPILER from a dynamic check for
+> '-fsanitize=kernel-memory' to just being true for CONFIG_CC_IS_CLANG.
+> This missed the fact that not all architectures supported
+> '-fsanitize=kernel-memory' at the same time. For example, SystemZ / s390
+> gained support for KMSAN in clang-18 [1], so builds with clang-15
+> through clang-17 can select KMSAN but they error with:
 > 
->   In file included from fs/jfs/jfs_unicode.c:8:
->   fs/jfs/jfs_incore.h:86:13: error: type name does not allow function specifier to be specified
->      86 |                                         unchar _inline[128];
->         |                                                ^
->   fs/jfs/jfs_incore.h:86:20: error: expected member name or ';' after declaration specifiers
->      86 |                                         unchar _inline[128];
->         |                                         ~~~~~~~~~~~~~~^
+>   clang-16: error: unsupported option '-fsanitize=kernel-memory' for target 's390x-unknown-linux-gnu'
 > 
-> [...]
+> Restore the cc-option check for '-fsanitize=kernel-memory' to make sure
+> the compiler target properly supports '-fsanitize=kernel-memory'. The
+> check for '-msan-disable-checks=1' does not need to be restored because
+> all supported clang versions for building the kernel support it.
+> 
+> Fixes: 5ff8c11775c7 ("KMSAN: Remove tautological checks")
+> Link: https://github.com/llvm/llvm-project/commit/a3e56a8792ffaf3a3d3538736e1042b8db45ab89 [1]
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/r/202510220236.AVuXXCYy-lkp@intel.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> I plan to take this via kbuild-fixes for 6.18-rc3 or -rc4.
+> ---
+>  lib/Kconfig.kmsan | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+> index 7251b6b59e69..cae1ddcc18e1 100644
+> --- a/lib/Kconfig.kmsan
+> +++ b/lib/Kconfig.kmsan
+> @@ -3,7 +3,7 @@ config HAVE_ARCH_KMSAN
+>  	bool
+>  
+>  config HAVE_KMSAN_COMPILER
+> -	def_bool CC_IS_CLANG
+> +	def_bool $(cc-option,-fsanitize=kernel-memory)
+>  
+>  config KMSAN
+>  	bool "KMSAN: detector of uninitialized values use"
+> 
+> ---
+> base-commit: 211ddde0823f1442e4ad052a2f30f050145ccada
+> change-id: 20251023-fix-kmsan-check-s390-clang-190d37bbcff3
+> 
+> Best regards,
+> --  
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-Applie to kbuild-next, thanks!
+Thanks!
 
-[1/1] jfs: Rename _inline to avoid conflict with clang's '-fms-extensions'
-      commit: 9b38933a351d4f4e95a192adfe21ec235632bf4c
+Acked-by: Nicolas Schier <nsc@kernel.org>
 
-Please note that commit hashes might change in case of issues with
-kbuild-next branch.
 
-Best regards,
 -- 
 Nicolas
-
