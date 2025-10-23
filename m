@@ -1,136 +1,198 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6743112D5
-	for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 17:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEAC34A3DA;
+	Thu, 23 Oct 2025 17:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761241334; cv=none; b=OF8IMrpSjtEVioWckxuLXYxfJhKiz9rmqm5d5R+kH5gp6o1SnCQNsdSYTgijqNlQoVljaPwGlPRw+wYnfjgAEnvij+gjqF9mN25VnH2Qw9l8GBGmU5wH47Ds9xwDuvqsV30YB03iYwToUETWot/Ixir8j00meQhnXc0kzjU9CN4=
+	t=1761241499; cv=none; b=hVYFyJ4SUIXG0GaJqZV+OGGgyQWZjArGDqMYRtuJfhDcqIc85hAF/ZknV/neu90S6+vrZ97EfVfFeJCuI2k/Bwn9Et4nGIVL7d1XJQypbvZKgVRSegAWPwxQFtqLzajWKaYt07e0Zzu7mlUAm1ZwEyVPIQQsQ/7ekMqWDBweaeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761241334; c=relaxed/simple;
-	bh=PYcQKEYaNNgr4v4S9nNndeYvxlEoxFnd8ONcOz503ao=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V1wQoqgZqdm1DdugD4LE8/QzR91Rwof+60gB7HWSw7SztJSFomRezOULRGsBtkxnL0y9xfswbs2Rx9UjYfj6Mp4q2UqR3Iw8ncom64UXD9p8ZOmgQ445dK2CTUtwQt8ovJC7z9jk3EigP+FrpNpeKwX5Yk1OD5JrA8pMoFT55EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bv+j79bh; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761241499; c=relaxed/simple;
+	bh=ibZdP/tYK9tLt0c+JyUCR9jnwCzMbR/JfkEbi9WqQjQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LTPX6mQrejHxXtNho0Gii5ZnQ94Nse7c6615uLMpfYlwusiZXIYk9FUe9pLYS/cC1qb23kJmR7gIACvsfHymjonXPj5IP5S1UzZTMQeZ0HTje5yUj7Dr/RMH3V8ToVDK0CL5R2E2nwNEDfFAXyT2QYV8CbygL0utojDeBrkzbMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A88bSslO; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bv+j79bh"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4e887152679so9777751cf.1
-        for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 10:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761241331; x=1761846131; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4seA+HI4M9DYT+ZaTto7qe0lK31pOsptA4eC1KcJc3Y=;
-        b=bv+j79bhaiZEjfbLJpkUxXXkKBJKnVGf8bb3wXJYqEDgOV3weW0vdDyG0fCRbBoVf2
-         Ith8l5h8Po1NeVQNq8fGzj1ILiUiSJcLxxwQk0sxZu7Me6+gMLo9b8NJOrTYMoGKQHyL
-         sC1QMKQe/HR3TScqynSdGdjEEfsyIiEOtwHedS2WX/aHMvV34q3/VxNHBQJyTZwPD8p4
-         xX/TYDKnofS+aNC+Vb/tgGfPku5h1GgIH7gvSp7bYpx4ZQKzkMjdaTDZnjMUBR7UaZ2V
-         oE20NKLMZit4SIiUvqgEnbWjSvXT5okHTDq1zVBXSdWa3K59ngK2089CZ+G7Dg5tH8p0
-         2CnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761241331; x=1761846131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4seA+HI4M9DYT+ZaTto7qe0lK31pOsptA4eC1KcJc3Y=;
-        b=txDl3ZT0kwKqJDe9ZtKQOSwMY+oY4k8mJbglhn55adoFx9++CqpIXZaUn2wuf3kPNh
-         ZhkXPOEv7LzfbtlcTdzW7ZwogmVNTvkc2KM7z+wyQXMm+K536Q+0iyr7bfKNQvmxnB0Q
-         +MwLnvhah6HMcU2iidim555i5w3kxsweE0Vq5Zu1z8cfSdxFDT7FhcmzXgXieAuF2hNs
-         52WaqKALLKlFD2IudpG9/BVYTSyAoT0rUcIsJ4plnELTzn+s642EkSAWygLz2Gdnf9vm
-         /AxrQ1V8iJ3AViaN+P8cpV4NQcJE+orGxLR8aKUpTdT2i4zzQbeQO+yEFBeAYrVy7Mr/
-         Abrw==
-X-Forwarded-Encrypted: i=1; AJvYcCUw77tvPdxAg8+rD+Pj7SoLaMlTDJeZCqLDtkXeWsZa/pI0ER58YAD9RWA8YFklpYh58GFc@lists.linux.dev
-X-Gm-Message-State: AOJu0YwfzMQJMv5wIS0Gi1oXsXa0tCRxpG4zUiqb45lEYEYGFfBXK2M7
-	yxm5jWC6n6AV5YeweA+lnEKsFqWcMBPHjBkENaeRf3QNU88kzA+5K2kjE26jD5/YR+OqyjazNRB
-	IsOPKGXHxwxbULlGkQrbR6v3hz+XaOLI=
-X-Gm-Gg: ASbGnctG+2SbIpodrbPCddy/sQlVVvKNYHAPYX0rWyOJdsdnAeIuXCxVWSD0I3D5zdY
-	6ifrTF4dI13IpdCJF+DIyA0ipbEgoyAgcvaPgzPigHPAyuWJmHneUaA6DN88oxQzZ2bRIZiKna7
-	GW+dVhJ60q55gXIgDV8B6XdVfp5VCHFXa5FTMHcVLNnabO7wVIPfu8eYHXEcqEk+DfCCuXBw/UV
-	IRZYO1hKk0T5292Ff5HR1nQ+vh5fRhM3ComP1XGqnFzYwnV7r7J2sWyoRaFpK9Mrcrw8NogQx1x
-	B23BnNbJF8wb33E=
-X-Google-Smtp-Source: AGHT+IGYUuso1wFbBlLzlxrBDhKNZB5fvUBjAyfkvZne5zRw/oAvLVqArsWiIODnGqRp88IRvA204zsjZ+T3SghE1I4=
-X-Received: by 2002:a05:622a:1392:b0:4d6:c73f:de88 with SMTP id
- d75a77b69052e-4eb732d317emr110436861cf.3.1761241331136; Thu, 23 Oct 2025
- 10:42:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A88bSslO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761241497; x=1792777497;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ibZdP/tYK9tLt0c+JyUCR9jnwCzMbR/JfkEbi9WqQjQ=;
+  b=A88bSslOSQBP2kKdHsJ0zbKUQUZ1I5qB2t9NMzx6hwz+YH65twwFgMXZ
+   n/h+Jq7U/yumN7x8YnDvq3QZLkAvedVQamcbavcQgW49RJ1b0UZD4ifpd
+   G4Z03rhvRbH6Vno+jM5HK47/au1X8ekcDutLf/ExLtHP97z1PA7k8o/mN
+   GsPrCissLM7X6N36PU1Whmbo9052tafwW9oFUrDKPRBBYqXogGb3XxIug
+   CtlSeOYf/9qC1yV7RUsMWY9sXHnwyIvJYI89+4VGX+e2mG5IuniFjtUPq
+   LBxeGLXr6fmn6uOC2rjMLKa725l1hejraP4jvwDam9dx6mXc+PEmq1b2P
+   Q==;
+X-CSE-ConnectionGUID: ap+XLkeQQ8q/wklzwLnLIw==
+X-CSE-MsgGUID: b2wUEJp/S+SAmWgH0T9a5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86049038"
+X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
+   d="scan'208";a="86049038"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2025 10:44:57 -0700
+X-CSE-ConnectionGUID: fAhfSvYOSUS1G2javmI1yA==
+X-CSE-MsgGUID: tRnT6RATRYaYQwaZtS60iA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,250,1754982000"; 
+   d="scan'208";a="184605067"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 23 Oct 2025 10:44:52 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBzMo-000DkX-1N;
+	Thu, 23 Oct 2025 17:44:50 +0000
+Date: Fri, 24 Oct 2025 01:43:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Usama Arif <usamaarif642@gmail.com>, dwmw@amazon.co.uk,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, ardb@kernel.org, hpa@zytor.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
+	apopple@nvidia.com, thuth@redhat.com, nik.borisov@suse.com,
+	kas@kernel.org, linux-kernel@vger.kernel.org,
+	linux-efi@vger.kernel.org, kernel-team@meta.com,
+	Usama Arif <usamaarif642@gmail.com>,
+	Michael van der Westhuizen <rmikey@meta.com>,
+	Tobias Fleig <tfleig@meta.com>
+Subject: Re: [PATCH 1/3] x86/boot: Fix page table access in 5-level to
+ 4-level paging transition
+Message-ID: <202510240106.1aff6SIM-lkp@intel.com>
+References: <20251022220755.1026144-2-usamaarif642@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251022202021.3649586-3-joannelkoong@gmail.com> <202510232038.LOpSOOQa-lkp@intel.com>
-In-Reply-To: <202510232038.LOpSOOQa-lkp@intel.com>
-From: Joanne Koong <joannelkoong@gmail.com>
-Date: Thu, 23 Oct 2025 10:42:00 -0700
-X-Gm-Features: AS18NWA9peuK7QugY6JLjKXBNkxaqO8WfrQsHaG3gveX1ZXIjyuXAfTMF8nltv0
-Message-ID: <CAJnrk1Z-FzeXhse762dV7NpSexCcP-xcUSQ+2uviG81HWFdjZQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] fuse: support io-uring registered buffers
-To: kernel test robot <lkp@intel.com>
-Cc: miklos@szeredi.hu, axboe@kernel.dk, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	bschubert@ddn.com, asml.silence@gmail.com, io-uring@vger.kernel.org, 
-	xiaobing.li@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251022220755.1026144-2-usamaarif642@gmail.com>
 
-On Thu, Oct 23, 2025 at 6:23=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Joanne,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on mszeredi-fuse/for-next]
-> [also build test ERROR on linus/master v6.18-rc2 next-20251023]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/io-ur=
-ing-add-io_uring_cmd_get_buffer_info/20251023-042601
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git=
- for-next
-> patch link:    https://lore.kernel.org/r/20251022202021.3649586-3-joannel=
-koong%40gmail.com
-> patch subject: [PATCH v1 2/2] fuse: support io-uring registered buffers
-> config: i386-buildonly-randconfig-002-20251023 (https://download.01.org/0=
-day-ci/archive/20251023/202510232038.LOpSOOQa-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
-227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251023/202510232038.LOpSOOQa-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202510232038.LOpSOOQa-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    In file included from fs/fuse/dev.c:9:
-> >> fs/fuse/dev_uring_i.h:51:20: error: field has incomplete type 'struct =
-iov_iter'
->       51 |                         struct iov_iter payload_iter;
->          |                                         ^
->    include/linux/fs.h:74:8: note: forward declaration of 'struct iov_iter=
-'
->       74 | struct iov_iter;
->          |        ^
->    In file included from fs/fuse/dev.c:9:
->    fs/fuse/dev_uring_i.h:52:20: error: field has incomplete type 'struct =
-iov_iter'
->       52 |                         struct iov_iter headers_iter;
+Hi Usama,
 
-Ahh okay, I tried building with the linked config
-(i386-buildonly-randconfig-002-20251023) and it indeed fails :(
+kernel test robot noticed the following build errors:
 
-It needs a "#include <linux/uio.h>" added to the dev_uring_i.h file.
-I'll add that in for v2.
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on tip/master efi/next linus/master v6.18-rc2 next-20251023]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Joanne
+url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/x86-boot-Fix-page-table-access-in-5-level-to-4-level-paging-transition/20251023-061048
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20251022220755.1026144-2-usamaarif642%40gmail.com
+patch subject: [PATCH 1/3] x86/boot: Fix page table access in 5-level to 4-level paging transition
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251024/202510240106.1aff6SIM-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251024/202510240106.1aff6SIM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510240106.1aff6SIM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/boot/compressed/pgtable_64.c:185:21: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     185 |                 new_cr3 = (u64 *)(pgd_val(pgdp[0]) & PTE_PFN_MASK);
+         |                                   ^
+   1 error generated.
+
+
+vim +/pgd_val +185 arch/x86/boot/compressed/pgtable_64.c
+
+   101	
+   102	asmlinkage void configure_5level_paging(struct boot_params *bp, void *pgtable)
+   103	{
+   104		void (*toggle_la57)(void *cr3);
+   105		bool l5_required = false;
+   106	
+   107		/* Initialize boot_params. Required for cmdline_find_option_bool(). */
+   108		sanitize_boot_params(bp);
+   109		boot_params_ptr = bp;
+   110	
+   111		/*
+   112		 * Check if LA57 is desired and supported.
+   113		 *
+   114		 * There are several parts to the check:
+   115		 *   - if user asked to disable 5-level paging: no5lvl in cmdline
+   116		 *   - if the machine supports 5-level paging:
+   117		 *     + CPUID leaf 7 is supported
+   118		 *     + the leaf has the feature bit set
+   119		 */
+   120		if (!cmdline_find_option_bool("no5lvl") &&
+   121		    native_cpuid_eax(0) >= 7 && (native_cpuid_ecx(7) & BIT(16))) {
+   122			l5_required = true;
+   123	
+   124			/* Initialize variables for 5-level paging */
+   125			__pgtable_l5_enabled = 1;
+   126			pgdir_shift = 48;
+   127			ptrs_per_p4d = 512;
+   128		}
+   129	
+   130		/*
+   131		 * The trampoline will not be used if the paging mode is already set to
+   132		 * the desired one.
+   133		 */
+   134		if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
+   135			return;
+   136	
+   137		trampoline_32bit = (unsigned long *)find_trampoline_placement();
+   138	
+   139		/* Preserve trampoline memory */
+   140		memcpy(trampoline_save, trampoline_32bit, TRAMPOLINE_32BIT_SIZE);
+   141	
+   142		/* Clear trampoline memory first */
+   143		memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
+   144	
+   145		/* Copy trampoline code in place */
+   146		toggle_la57 = memcpy(trampoline_32bit +
+   147				TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
+   148				&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
+   149	
+   150		/*
+   151		 * Avoid the need for a stack in the 32-bit trampoline code, by using
+   152		 * LJMP rather than LRET to return back to long mode. LJMP takes an
+   153		 * immediate absolute address, which needs to be adjusted based on the
+   154		 * placement of the trampoline.
+   155		 */
+   156		*(u32 *)((u8 *)toggle_la57 + trampoline_ljmp_imm_offset) +=
+   157							(unsigned long)toggle_la57;
+   158	
+   159		/*
+   160		 * The code below prepares page table in trampoline memory.
+   161		 *
+   162		 * The new page table will be used by trampoline code for switching
+   163		 * from 4- to 5-level paging or vice versa.
+   164		 */
+   165	
+   166		if (l5_required) {
+   167			/*
+   168			 * For 4- to 5-level paging transition, set up current CR3 as
+   169			 * the first and the only entry in a new top-level page table.
+   170			 */
+   171			*trampoline_32bit = __native_read_cr3() | _PAGE_TABLE_NOENC;
+   172		} else {
+   173			u64 *new_cr3;
+   174			pgd_t *pgdp;
+   175	
+   176			/*
+   177			 * For 5- to 4-level paging transition, copy page table pointed
+   178			 * by first entry in the current top-level page table as our
+   179			 * new top-level page table.
+   180			 *
+   181			 * We cannot just point to the page table from trampoline as it
+   182			 * may be above 4G.
+   183			 */
+   184			pgdp = (pgd_t *)read_cr3_pa();
+ > 185			new_cr3 = (u64 *)(pgd_val(pgdp[0]) & PTE_PFN_MASK);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
