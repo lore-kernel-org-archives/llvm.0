@@ -1,141 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E163C17332C;
-	Thu, 23 Oct 2025 02:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6365F2C11E5
+	for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 03:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761185008; cv=none; b=JwmPWXeuYU5h8z9+TddVVjFKCp08efeATzLPXaZo6y9tAaOE6qn9wtwIF1BEWo2RxZzxMcLZNf7/voDfpa72m55k8s+VQkdiyJ/41SN5gFTM8AyWOeEbVE9SgmftGzmfeEBLktizwIu8uQcX9XcqbeJCZ/abb2phT2cKHj1m9dc=
+	t=1761190393; cv=none; b=FV+wIMARJoreai6Yy66lgDCjHU89ZItQ0TcL8b45lh0kgh5j7D1XY/vzxHeEdwKQ3DctlA5VvX+ToaiVdbpBskQcjcnvXUd6DEv9i63y+cvUmla3lEo+WT/w1GFeN7k022xjyZwovDLVMUGsFkYiXXWcUrb2nOQyl4cDxgoYvb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761185008; c=relaxed/simple;
-	bh=xee3scmYv12wYg/dwuM/tRD9Eo6wJ8vKhtPSrFUPVV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qK8DtADzbinjyh78LmRg8W4I/hBL37Fq7aGckZuD55oqHL4vQz94z8TGUE2l8rC4vthcG2H/AZtIjex/DxjDqz1IEJWIhHT9Aq2a02nAbIbAwLAuNWM7DbymKmERqGe9/U9G80R07fRx2MGOWuGSqjRpCkalFEb/IRKXHDItNLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQksfZJu; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761190393; c=relaxed/simple;
+	bh=rjXOwxRtxkk2oHYZHUep1sjCXyXRMdvcsnOVmsOF83w=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=R0miULQFoALvq+koRxReNyotD9lHCPRMr5roKqr0JYiRfYGTOsS4XG46YmgJ1oa8VM+soJ3IBZLeXsGWCTnqgyCTvmET92bhmynaV2hltIxYl6rBfzn8VKo2LgdwdEojlY+kWXkW7zEWV/Vzeh4GrP46sYvj5c1AKf3nyR7GQkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W5vDLq+m; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQksfZJu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761185008; x=1792721008;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xee3scmYv12wYg/dwuM/tRD9Eo6wJ8vKhtPSrFUPVV0=;
-  b=GQksfZJuJN8fmHLx4rQlPtLrbEAseMtUqb+9pfaETLUXXii/XUPzPrCx
-   dawt/j6VxpK55qb3aVYjT0GFWhAdLIrHk99n/BzAB5FcmsldR5ozx8oDu
-   gTLGXPNzxK0xNQqOl/wDLZ6stNbo0b0mENiQ9dTuyeJwcoIFsq6e8xp+k
-   Xr5Vj5u0h0IroD484v/qJ7yDoa1FI39aBjXZ3b+akZkrCtiVn2a5bv1Bq
-   +8JZirnOuS8ta4/yoYc0p1TFzxeScALij1AMI1uXlgDMLZXUX21s9NDou
-   53774Mn7R9yEUm9TbcCghwYNqRamiDbbZ31sBfaBvVoPXzFres3Ezs63c
-   g==;
-X-CSE-ConnectionGUID: VlHAbLZkSIOYtcg1VMwVkA==
-X-CSE-MsgGUID: M7M5lmLeRmGZVx4i52IKFA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="80783048"
-X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
-   d="scan'208";a="80783048"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 19:03:27 -0700
-X-CSE-ConnectionGUID: a9Uj5Y2eSR+mqMKSOu3iMA==
-X-CSE-MsgGUID: T1JY8sHqSxut4eDcSJS7tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
-   d="scan'208";a="188426371"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 22 Oct 2025 19:03:25 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vBkfj-000Cv7-0e;
-	Thu, 23 Oct 2025 02:03:23 +0000
-Date: Thu, 23 Oct 2025 10:03:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/single_direct_ops 3/9] ld.lld: error: duplicate
- symbol: update_ftrace_direct_del
-Message-ID: <202510230943.BgZkTX4q-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W5vDLq+m"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761190389;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fcpWG26LCI1Q1SU/KTO/Q6ZIE4Wpos0XpZBa+VH9Mfw=;
+	b=W5vDLq+mvn4Cf2BjUpu6YoWmJ0uPnK8nqz1hDwbfbvp6+lHECubTqRR5SYPhlpj6FSSD1I
+	xGaM0UhswEocZ7u9epOuUTZiA5YBB8GsRwEqsUGzNrlWUWQruVLYzwXab4ZDTdLz1M7koO
+	lUTcGBtO1j7k97Y2xL3V6trBqDNoqS4=
+Date: Thu, 23 Oct 2025 03:33:03 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code
+ with __BPF_FEATURE_ADDR_SPACE_CAST
+To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Nathan Chancellor"
+ <nathan@kernel.org>, "Nick Desaulniers"
+ <nick.desaulniers+lkml@gmail.com>, "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, "Puranjay Mohan"
+ <puranjay@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
+References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
+ <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/single_direct_ops
-head:   3d31a310468694e4395d61e15c65edaa618fbb5c
-commit: 6fc33ce4c35edf7fb4fd8c760ad1bb2e472d82cb [3/9] ftrace: Add update_ftrace_direct_del function
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251023/202510230943.BgZkTX4q-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251023/202510230943.BgZkTX4q-lkp@intel.com/reproduce)
+October 22, 2025 at 23:33, "Yonghong Song" <yonghong.song@linux.dev mailt=
+o:yonghong.song@linux.dev?to=3D%22Yonghong%20Song%22%20%3Cyonghong.song%4=
+0linux.dev%3E > wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510230943.BgZkTX4q-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+>=20
+>=20On 10/22/25 12:18 AM, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> When compiling the BPF selftests with Clang versions that do not su=
+pport
 
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at do_mounts.c
-   >>>            init/do_mounts.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at vsyscall_64.c
-   >>>            arch/x86/entry/vsyscall/vsyscall_64.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at core.c
-   >>>            arch/x86/events/core.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at utils.c
-   >>>            arch/x86/events/utils.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at core.c
-   >>>            arch/x86/events/amd/core.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at lbr.c
-   >>>            arch/x86/events/amd/lbr.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at noinitramfs.c
-   >>>            init/noinitramfs.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at init_task.c
-   >>>            init/init_task.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at syscall_64.c
-   >>>            arch/x86/entry/syscall_64.o:(.text+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: update_ftrace_direct_del
-   >>> defined at main.c
-   >>>            init/main.o:(update_ftrace_direct_del) in archive vmlinux.a
-   >>> defined at extable.c
-   >>>            arch/x86/entry/vdso/extable.o:(.text+0x10) in archive vmlinux.a
+> If=C2=A0you are really using llvm18, then I found there are some other
+> build failures as well, e.g.,
+>=20
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes=20i'm using llvm18
+
+> /home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:=
+47:15: error: conflicting types for 'bpf_arena_alloc_pages'
+>  47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr=
+, __u32 page_cnt,
+>  | ^
+> /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlin=
+ux.h:160636:48: note: previous declaration is here
+>  160636 | extern void __attribute__((address_space(1))) *bpf_arena_allo=
+c_pages(void *p__map, void __attribute__((address_space(1))) *addr__ign, =
+u32 page_cnt, int node_id, u64 flags) __weak __ksym;
+>  | ^
+
+
+I hadn't encountered this error before, but it started appearing after I =
+upgraded LLVM to version 20.
+
+
+$ make V=3D1
+
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tool=
+s/sbin/bpftool btf dump file /home/chenjiayuan/code/upstream/bpf-next/vml=
+inux format c > /home/chenjiayuan/code/upstream/bpf-next/tools/testing/se=
+lftests/bpf/tools/include/.vmlinux.h.tmp
+cmp -s /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/b=
+pf/tools/include/.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/=
+tools/testing/selftests/bpf/tools/include/vmlinux.h || mv /home/chenjiayu=
+an/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmli=
+nux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftest=
+s/bpf/tools/include/vmlinux.h
+clang  -g -Wall -Werror -D__TARGET_ARCH_x86 -mlittle-endian -I/home/chenj=
+iayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include -=
+I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf -I/=
+home/chenjiayuan/code/upstream/bpf-next/tools/include/uapi -I/home/chenji=
+ayuan/code/upstream/bpf-next/tools/testing/selftests/usr/include -std=3Dg=
+nu11 -fno-strict-aliasing -Wno-compare-distinct-pointer-types -idirafter =
+/usr/lib/llvm-20/lib/clang/20/include -idirafter /usr/local/include -idir=
+after /usr/include/x86_64-linux-gnu -idirafter /usr/include    -DENABLE_A=
+TOMICS_TESTS   -O2 --target=3Dbpfel -c progs/stream.c -mcpu=3Dv3 -o /home=
+/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/stream.bp=
+f.o
+In file included from progs/stream.c:8:
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_=
+arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages=
+'
+   47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr=
+, __u32 page_cnt,
+      |               ^
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tool=
+s/include/vmlinux.h:152158:14: note: previous declaration is here
+ 152158 | extern void *bpf_arena_alloc_pages(void *p__map, void *addr__ig=
+n, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
+        |              ^
+In file included from progs/stream.c:8:
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_=
+arena_common.h:49:5: error: conflicting types for 'bpf_arena_reserve_page=
+s'
+   49 | int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 =
+page_cnt) __ksym __weak;
+      |     ^
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tool=
+s/include/vmlinux.h:152160:12: note: previous declaration is here
+ 152160 | extern int bpf_arena_reserve_pages(void *p__map, void *ptr__ign=
+, u32 page_cnt) __weak __ksym;
+        |            ^
+In file included from progs/stream.c:8:
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_=
+arena_common.h:50:6: error: conflicting types for 'bpf_arena_free_pages'
+   50 | void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 pag=
+e_cnt) __ksym __weak;
+      |      ^
+/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tool=
+s/include/vmlinux.h:152159:13: note: previous declaration is here
+ 152159 | extern void bpf_arena_free_pages(void *p__map, void *ptr__ign, =
+u32 page_cnt) __weak __ksym;
+        |             ^
+3 errors generated.
+make: *** [Makefile:761: /home/chenjiayuan/code/upstream/bpf-next/tools/t=
+esting/selftests/bpf/stream.bpf.o] Error 1
+
+$ clang --version
+Ubuntu clang version 20.1.8 (++20250804090239+87f0227cb601-1~exp1~2025080=
+4210352.139)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/lib/llvm-20/bin
+
+$ pahole --version
+v1.29
+
+
+I updated LLVM via https://apt.llvm.org/. Could this be caused by some bi=
+naries or libraries still using LLVM 18?
