@@ -1,130 +1,106 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C7AE1459FA
-	for <llvm@lists.linux.dev>; Thu, 23 Oct 2025 03:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BDF35B129;
+	Thu, 23 Oct 2025 05:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761190989; cv=none; b=qLdIO2S+aKjiCsVzU6vCObAThJ4CUfygsPc0BZyipdWlofjq2K3PKFNXDlbHdU9lIKDraMetwqy6ghLecLq4+Xgngp0j7XVk4PXJBH/4IR99tJkl3atVVlI6/06a4/Fv1aukvXq2J5KemrDIA4kvCHpBlNPKd8v/0yT1kHr5uAE=
+	t=1761196725; cv=none; b=qiL7tdgEkyq3TZ4vU9MvmwJ50wzuvT54Z83Obis0KzqZJdMf3iR4fQz9NHVxUJiYtp+kxsZpkI0w7e7o6wIRJ4jDgODdnUc9HfGO/2Hf8IROqQQ6WTN8d6S0fdLazXfsZ7pxZVNbAmk+60Gpmb8efT5yZ0lumUHdjTLMNDLLX+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761190989; c=relaxed/simple;
-	bh=056uXdqgwqieEClGZzofKTBO+ZAItkTj1Y/IlynwVNw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C9yp5J+V6ZJzZVSa8bAOay8L9dJaH9iM3xU4tmB1eu1+flSpsBW4Qb0jyVUeYaPs7iqLWJIhVhk+bnjFkDi8T3nomnpyBnajyYtG7hCIXzCvQ59pwtMsp67HpnlHZ5UhtYZGg/qVrP722C+U8fYuqbbUnLrAbkYZDWFO4wokrXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dOCpIJxB; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761196725; c=relaxed/simple;
+	bh=ycLcfc53Od8c6OIZRWHYoMyLlRW0gtUyvGQKFBH3scY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VU2MboUxJPh7wCQasK9e6Ancc1fXFz/b5Y1FH4C5fzAlOtvNbk7mnGITmUWfhc4n0kwTc7DXkukqIHcxQfP6z5TXT29pHymoeGE7P0rVI4QauPfQn+0EnJeHqlviVa/xc/y2zshCVLBgtr8xml5zdijmAJXbn4h9X9vjjbuNJ1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OK8P9NQ4; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dOCpIJxB"
-Message-ID: <84906f32-955d-4fda-b87d-56c052ddfd87@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761190983;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BEEdoiySbKRfhgdihnabhC19qOOy3rtiDBHXYSkJ3YI=;
-	b=dOCpIJxBMdnvIUuz8sWluoZcX+X3diKDhqv/8ORjgvDO6I+RdnZA0p4aufksxSdOYOJj5M
-	XXKNQSk0Bq1TIeRPOmw1mv8g4/+rM/UG2gvJUItceqfhV6Ah0x4O8nIwO10NUHfmN2cBOP
-	SS8kGyC2BCAAAGrHx3Lfr2ttul2Vkt8=
-Date: Wed, 22 Oct 2025 20:42:54 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OK8P9NQ4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761196724; x=1792732724;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ycLcfc53Od8c6OIZRWHYoMyLlRW0gtUyvGQKFBH3scY=;
+  b=OK8P9NQ4d34hDN8gr+fObcbqsRKQXokxrN0b6pjg+m3BRrDwTACAUuuR
+   tdQHTRJOhoE49+onbWNVadmgGh1twUHoACEbdb14MOrlMzNYWk2Z5skG6
+   uGMNRkyfrZus84eWE8MkGfSxgVGndAoCs2U1O6HXxvMj5nq5R7C2upfMW
+   o7UvOAf/MBO9wIosGDpEw2p2di9G0/J6TO03JGT3HTPxxApdDf34W4SyD
+   1MY4ByG4l+gD8XN4qRufghoRJsGXiWCguriK1535WYNJuOFYNHB5mNO6Z
+   RiKFjLRlEWb49FtrKKML4evMruWcEv9k/5d2LnlQjirb8bYOvF0KiNANg
+   g==;
+X-CSE-ConnectionGUID: s3Apnyl+TAGcl/UqOHiHXg==
+X-CSE-MsgGUID: CFPVgPK+Q0KIRfw7XKUqzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63278485"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63278485"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 22:18:43 -0700
+X-CSE-ConnectionGUID: nEK6u7IfSnmDpMw6pxpaYA==
+X-CSE-MsgGUID: N35ASIjOQsC0HCy3ujZu7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,248,1754982000"; 
+   d="scan'208";a="188350438"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 22 Oct 2025 22:18:42 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vBnih-000D3b-3A;
+	Thu, 23 Oct 2025 05:18:39 +0000
+Date: Thu, 23 Oct 2025 13:18:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [tglx-devel:rseq/slice 16/75]
+ include/linux/resume_user_mode.h:62:32: error: too few arguments to function
+ call, expected 2, have 1
+Message-ID: <202510231335.9NOepLpY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code
- with __BPF_FEATURE_ADDR_SPACE_CAST
-Content-Language: en-GB
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Puranjay Mohan <puranjay@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
- <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
- <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice
+head:   f801ad51668e156d2b2ffd81ef990c62f1121998
+commit: 7f7115f3f559a41efd58f34150fd6652e39fd4a8 [16/75] rseq: Remove the ksig argument from rseq_handle_notify_resume()
+config: i386-randconfig-141-20251023 (https://download.01.org/0day-ci/archive/20251023/202510231335.9NOepLpY-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251023/202510231335.9NOepLpY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510231335.9NOepLpY-lkp@intel.com/
+
+Note: the tglx-devel/rseq/slice HEAD f801ad51668e156d2b2ffd81ef990c62f1121998 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/task_work.c:5:
+>> include/linux/resume_user_mode.h:62:32: error: too few arguments to function call, expected 2, have 1
+      62 |         rseq_handle_notify_resume(regs);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~     ^
+   include/linux/rseq.h:107:20: note: 'rseq_handle_notify_resume' declared here
+     107 | static inline void rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs) { }
+         |                    ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +62 include/linux/resume_user_mode.h
 
-On 10/22/25 8:33 PM, Jiayuan Chen wrote:
-> October 22, 2025 at 23:33, "Yonghong Song" <yonghong.song@linux.dev mailto:yonghong.song@linux.dev?to=%22Yonghong%20Song%22%20%3Cyonghong.song%40linux.dev%3E > wrote:
->
->
->> On 10/22/25 12:18 AM, Jiayuan Chen wrote:
->>
->>> When compiling the BPF selftests with Clang versions that do not support
->> If you are really using llvm18, then I found there are some other
->> build failures as well, e.g.,
->>
-> Yes i'm using llvm18
->
->> /home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
->>   47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
->>   | ^
->> /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160636:48: note: previous declaration is here
->>   160636 | extern void __attribute__((address_space(1))) *bpf_arena_alloc_pages(void *p__map, void __attribute__((address_space(1))) *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
->>   | ^
->
-> I hadn't encountered this error before, but it started appearing after I upgraded LLVM to version 20.
->
->
-> $ make V=1
->
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/sbin/bpftool btf dump file /home/chenjiayuan/code/upstream/bpf-next/vmlinux format c > /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmlinux.h.tmp
-> cmp -s /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h || mv /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h
-> clang  -g -Wall -Werror -D__TARGET_ARCH_x86 -mlittle-endian -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf -I/home/chenjiayuan/code/upstream/bpf-next/tools/include/uapi -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/usr/include -std=gnu11 -fno-strict-aliasing -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-20/lib/clang/20/include -idirafter /usr/local/include -idirafter /usr/include/x86_64-linux-gnu -idirafter /usr/include    -DENABLE_ATOMICS_TESTS   -O2 --target=bpfel -c progs/stream.c -mcpu=v3 -o /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/stream.bpf.o
-> In file included from progs/stream.c:8:
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
->     47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
->        |               ^
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:152158:14: note: previous declaration is here
->   152158 | extern void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
->          |              ^
-> In file included from progs/stream.c:8:
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:49:5: error: conflicting types for 'bpf_arena_reserve_pages'
->     49 | int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 page_cnt) __ksym __weak;
->        |     ^
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:152160:12: note: previous declaration is here
->   152160 | extern int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_cnt) __weak __ksym;
->          |            ^
-> In file included from progs/stream.c:8:
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:50:6: error: conflicting types for 'bpf_arena_free_pages'
->     50 | void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cnt) __ksym __weak;
->        |      ^
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:152159:13: note: previous declaration is here
->   152159 | extern void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt) __weak __ksym;
->          |             ^
-> 3 errors generated.
-> make: *** [Makefile:761: /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/stream.bpf.o] Error 1
->
-> $ clang --version
-> Ubuntu clang version 20.1.8 (++20250804090239+87f0227cb601-1~exp1~20250804210352.139)
-> Target: x86_64-pc-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/lib/llvm-20/bin
->
-> $ pahole --version
-> v1.29
+    58	
+    59		mem_cgroup_handle_over_high(GFP_KERNEL);
+    60		blkcg_maybe_throttle_current();
+    61	
+  > 62		rseq_handle_notify_resume(regs);
+    63	}
+    64	
 
-Please try pahole version 1.30.
-
->
->
-> I updated LLVM via https://apt.llvm.org/. Could this be caused by some binaries or libraries still using LLVM 18?
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
