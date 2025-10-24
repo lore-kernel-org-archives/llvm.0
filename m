@@ -1,119 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C166D31A803
-	for <llvm@lists.linux.dev>; Fri, 24 Oct 2025 13:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04AC2D3A75
+	for <llvm@lists.linux.dev>; Fri, 24 Oct 2025 13:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761310991; cv=none; b=S6CvyLM2kpaXwguOLUL0Dzs2c1HNkSAHoItpB4OZqLTJYfTR0ne6IiWe93qeUgYXnpFw9Oh+ozkGzJAIYjJg6InLJajTvZ4PGaajZsMM9uA+rXeVNJjTGOFud3qUap0nUm1hozpRViL6ooxgb4n32d1eQABhd0cez8RUTuQucRE=
+	t=1761312222; cv=none; b=aW/V2Cv2+YDXbnqyqSyQpjz5hTzO3C2hsxABEt2DKcufedMyzJubOzxihYWAXR9D5Gxm/VxuwSepc6+oQ9jQkF9ejBEZK529ipmGgFmHI0n9UW/HQsBDD4UdfwMHkDS26uucPPw0+Q7lzXyhwQCw9ZCSbSPLv3DQxdB2kr7hQF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761310991; c=relaxed/simple;
-	bh=lpokBpTve9nKXGXDGJUc9rhB1uIH9BOEiKuUQcu2aKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NExM43SrS4yrKbqGRGajiTNFvZzzFfrrAQt6EwhEeiqzmG/rx2Pib/eqGogsh+j5q+QN6bv/BPuF0f1f1Si3dN1WTL746TSdEdKiU5tTeXSKvKzYtBbqKtqaKv4yAViv64aReD+jJduVwic7VxjyQZ2yGLo6w9a+jlsUQEnMnMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YYkam/QU; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1761312222; c=relaxed/simple;
+	bh=q1BS65qcRVA/+7DPksCa2hf/J5Z6Pw3KXpiVyNVsP9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HxkhxjcIRSVbtarqTgimswnowowMVrPJzJV9fVnC4WH1/yAzR3bgqE2tn8XagfO0T3Qd0ciqSVSiChudQf+uZfTK1uJjnIukVyaHE/diZMYxCn0ND+rQTLUKpj9cWSyhUhKcrCQ0WttIs8ZJlUnbd2waYlKv6gpBRWTwLnxdQzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WuVCBusI; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YYkam/QU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WuVCBusI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761310989; x=1792846989;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lpokBpTve9nKXGXDGJUc9rhB1uIH9BOEiKuUQcu2aKg=;
-  b=YYkam/QUmA8pJPMSGzWJe6ZMM83Gqbjezqml3qeeLRLWHLuOCERwNxHu
-   tva8nJgn+/OJ1X2HCoAd97g0mAfy6FniSxhC4Eb2UR0fZMQOrNOvMPnlD
-   5fwhPYF92dQJ2A3LxQMXcfhqot+G55nEUC9xrRMuAh4rfNxavdNI1ameB
-   o+VP1Jnf5nV/w4LqeKexb48pdG3neGwpTD2ncCZeW18U2xi0eLkvV0exs
-   rJ8sm9ZEPXR/wvxvpucsCGpBvgrHk5WAclk2YtR0zq6QjGUVJqckvIodh
-   rIE55YvHxA4p72g0wwJf8LfAvEDZzR1qpYHVAvww4yGqu0hlkbdNPYdGb
+  t=1761312221; x=1792848221;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=q1BS65qcRVA/+7DPksCa2hf/J5Z6Pw3KXpiVyNVsP9U=;
+  b=WuVCBusIwEnKWcSBJ5VpBOsz8lif0I/5KiRHvEXz/gSFJn4kVPMqSpmK
+   zpCMTzshzv6389/qmRMdiw4vToiePHBxwr1QDAfxD6loKzE1jllQn545c
+   392fgxbSDzprE8fbaXh6jGTqvrOgiaJKwuQy8cGp35qUKDwKVmIduG1nV
+   lvTyF/GA8dpE05cG5B99/JdOi9v4wURWBG3aE9Yc+pU7Q1eMgBhrZ/P6B
+   fwVjAVmoR0DHf53omg6FsF/ZnhI5iJYozLfiMVkRvf1P+LLI+TW2fAZsG
+   it84AGgyWz0VTX9xf/x/wjAQtk8IQBo4cgOzqSN9kbL0MIe/VgveG3xHQ
    A==;
-X-CSE-ConnectionGUID: B5NSqUBCQVGxDovpxm71Dw==
-X-CSE-MsgGUID: i4RNU2msQnC9AwIxp4Pgeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="51069107"
+X-CSE-ConnectionGUID: qWBvi+EVRi2m7OmvzedWzg==
+X-CSE-MsgGUID: tr9TVvbNTfmZRCKeRjtG7Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="81120435"
 X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
-   d="scan'208";a="51069107"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 06:03:08 -0700
-X-CSE-ConnectionGUID: QUAK2y9xSO+DNF5Ut+WrKA==
-X-CSE-MsgGUID: 7SxJscIBTjyYzwQSSwUSJw==
+   d="scan'208";a="81120435"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 06:23:40 -0700
+X-CSE-ConnectionGUID: RfOQ0gepScC3uIpDOWSEgA==
+X-CSE-MsgGUID: BpfyroqUREKNSFOuvjXtsQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
-   d="scan'208";a="184137908"
+   d="scan'208";a="221634196"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa007.fm.intel.com with ESMTP; 24 Oct 2025 06:03:06 -0700
+  by orviesa001.jf.intel.com with ESMTP; 24 Oct 2025 06:23:38 -0700
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 73BE796; Fri, 24 Oct 2025 15:03:05 +0200 (CEST)
-Date: Fri, 24 Oct 2025 15:03:05 +0200
+	id 20E5696; Fri, 24 Oct 2025 15:23:37 +0200 (CEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Justinien Bouron <jbouron@amazon.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+To: Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Jan Kara <jack@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [resend, PATCH v2 1/1] kexec: Remove unused code in
- kimage_load_cma_segment()
-Message-ID: <aPt5CYz5Cc-7St6L@black.igk.intel.com>
-References: <20250916125124.3094021-2-andriy.shevchenko@linux.intel.com>
- <aNLd_6CO6YMvm2MN@80a9970eed1e>
- <aO1lmNyLCVUhL_kO@smile.fi.intel.com>
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] mnt: Remove dead code which might prevent from building
+Date: Fri, 24 Oct 2025 15:23:36 +0200
+Message-ID: <20251024132336.1666382-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aO1lmNyLCVUhL_kO@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 13, 2025 at 11:48:24PM +0300, Andy Shevchenko wrote:
-> On Tue, Sep 23, 2025 at 10:50:55AM -0700, Justinien Bouron wrote:
-> > On Tue, Sep 16, 2025 at 02:51:09PM +0200, Andy Shevchenko wrote:
-> > > clang is not happy about set but unused variable:
-> > > 
-> > > kernel/kexec_core.c:745:16: error: variable 'maddr' set but not used [-Werror,-Wunused-but-set-variable]
-> > >   745 |         unsigned long maddr;
-> > >       |                       ^
-> > > 1 error generated.
-> > > 
-> > > Fix the compilation breakage (`make W=1` build) by removing unused variable.
-> > > 
-> > > As Nathan noted, GCC 16 produces the similar warning;
-> > > 
-> > > Fixes: f4fecb50d6e1 ("kexec_core: remove superfluous page offset handling in segment loading")
-> > FYI the commit this patch is fixing (i.e. f4fecb50d6e1) is going to need a
-> > second revision as well (I haven't submitted it yet, still working on it), this
-> > means that your "Fixes:" tag will need to be changed again, requiring a 3rd
-> > revision.
-> > 
-> > I am not sure what is the proper way forward here. Should I:
-> >     - Send my v2, without fixing the unused variable and then you send your v3
-> >       with the updated "Fixes:" tag pointing to my v2.
-> >     - OR fixing the unused variable in my v2 (i.e. "absorb" this patch in my
-> >       v2).
-> 
-> Second is the best (integrate this fix into yours v2).
-> 
-> > In the latter case, I am not sure how I am supposed to credit the work in this
-> > case? Do I need to add another "Signed-off-by: Andy Shevchenko" besides mine?
-> 
-> Just in the comment block (after the cutter '---' line and before the diff) in
-> a free words. No need for any special tags for this in such a case.
-> 
-> > I'm still learning the ropes on how to contribute through the mailing list so I
-> > would be grateful if you could share your input on what's the proper way forward
-> > here.
+Clang, in particular, is not happy about dead code:
 
-Any news, folks, please? The bug is still in Linux Next and prevents me from
-building my stuff cleanly.
+fs/namespace.c:135:37: error: unused function 'node_to_mnt_ns' [-Werror,-Wunused-function]
+  135 | static inline struct mnt_namespace *node_to_mnt_ns(const struct rb_node *node)
+      |                                     ^~~~~~~~~~~~~~
+1 error generated.
 
+Remove a leftover from the previous cleanup.
+
+Fixes: 7d7d16498958 ("mnt: support ns lookup")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ fs/namespace.c | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/fs/namespace.c b/fs/namespace.c
+index d82910f33dc4..9145bb02e9b7 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -132,16 +132,6 @@ EXPORT_SYMBOL_GPL(fs_kobj);
+  */
+ __cacheline_aligned_in_smp DEFINE_SEQLOCK(mount_lock);
+ 
+-static inline struct mnt_namespace *node_to_mnt_ns(const struct rb_node *node)
+-{
+-	struct ns_common *ns;
+-
+-	if (!node)
+-		return NULL;
+-	ns = rb_entry(node, struct ns_common, ns_tree_node);
+-	return container_of(ns, struct mnt_namespace, ns);
+-}
+-
+ static void mnt_ns_release(struct mnt_namespace *ns)
+ {
+ 	/* keep alive for {list,stat}mount() */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.50.1
 
