@@ -1,73 +1,73 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C27302171
-	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 15:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9DE302CA7
+	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 15:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761405904; cv=none; b=TlN6BCdfEuLliDFryHyB0PsWxIphF9qnSPCcIqY1mBsxD/COPeuHT9/AgBBrFZprE4qANU3uXP5eLIlE1lITcX8uonIra1kvYvc3j7z27e8Hv0i4VhjFqIx4qP/VxMN+bs7mGz5FD88D6y4suPG84PiNCOZGVTbLknf/wnN9kzU=
+	t=1761406231; cv=none; b=rR7reQcRtaW5Lr+wbDzL2pCyPgMk5IqRajcopYPGVhwkeVZfZUcr4MgillM/ZZV+reCLH6lptgeuqcZAaw5U+UXBWWQmQkUJY3v8PPZiWt8Jg423zAAECzJFwLo7B8Z/wl4DOcZqqIjIppazhSYbiP/ju3p/Lj0C/qsy0zvFY3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761405904; c=relaxed/simple;
-	bh=xDRkpAn0D2lhlrXt3t3UOPRfnSga85kN6uhnRJl1ndk=;
+	s=arc-20240116; t=1761406231; c=relaxed/simple;
+	bh=YQe91ROlP9epeFIBAVeb7AxK2YjKLaeOQX5QP76voII=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U+wAyYey5tnWp4PNE5ZaCpCtYTvCxrdl3UPmsJN+L88rQKqHE9igPVsOu6jakvrRXzLnPzqZKjk7c70+z9yVhd+0DOZOGdhsdumWIXjFPg8gU0Y9kQIc+79Y6xke/G+Hl1ZFG1xAsxR8koVBPRXdFQG00SkUyXVqZerEkPY1AMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=PRUeNaeK; arc=none smtp.client-ip=209.85.218.54
+	 To:Cc:Content-Type; b=ApX5DOqNoTd+mBSOp91JLpAjIKW2x3moQMe9gDEowujy7/47cVjzsHJI95f4kN8aV16CyZnsZn8yXGbSqKXC+VWIAJyHS1ILdDULB6E3LEacJG2ULCGxHu3XWf+UqkkFMRESkoEHEde4RkPZwN3rthpk4hwhRXwBqe1sro8+/T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=LjG7MzXA; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="PRUeNaeK"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b3b3a6f4dd4so596233866b.0
-        for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 08:25:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="LjG7MzXA"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6399328ff1fso5611811a12.0
+        for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 08:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761405901; x=1762010701; darn=lists.linux.dev;
+        d=soleen.com; s=google; t=1761406228; x=1762011028; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hEsLv/ORWjWt4JjusiVyw1pkRSWkY2jVnldvJ/kYxAc=;
-        b=PRUeNaeKOtTTmdRrJjB6ndz2/T4vYC4Wrl54Nt6fCen2IPIbA2yKywDhzeqW6npX8d
-         1iOB1Jxgl5OBvLiBEfHhb6z5c4DJz43daK4kcITK2B1GwGFtH2K2JqDziM3x4XQ8GecQ
-         LiijprQGdGTauCUJQMC8uS7Z6a+eRwTmAwsWB1whChMdJHwp+DeyYjOC4e8D0TTVsw7r
-         C3iMibl9ujbiPpOtXyh/OBuWtDc/mOznzs6mKqR8uc91r25ifIj5D9rMAfssO0blg7SD
-         qeQcdYuaeHM5evSKuXT9tJUDJHJ+tRTtJU2ivkNCP3zeTsg0a8gndbCKsrejAk/64gTl
-         3vyQ==
+        bh=YQe91ROlP9epeFIBAVeb7AxK2YjKLaeOQX5QP76voII=;
+        b=LjG7MzXAPjqtnvCn3OJO0gaiIS0BXh6jeqWpG+fmNWStQa7Yeu3OBIxuiUmpMTB4XK
+         m2WXtzYIWlAgOXmF62Ap4+PYDzA5B5zr7VQOAP5ZRrPtQvhvkQYvkWi/ssgYtxO7iH0x
+         GBxl2YAZ4FiBvTsOCdG3HzGUys1lU/tbq50euwGL25k4A0rZS8irYiOcbQi6u56i28sx
+         YusWZeXlO+IoJ9949Pc615oIYVnEPLu2LLV0aRzNG5YJi5DY/bYxDzliSKHW4JozxW7i
+         lhv60b4F/wlJYeLrZPN8GDBlGZGJGfr4SJ+6u7TVOrzJ0qaBrhyHG1dp7XLYBQzccjFz
+         U3TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761405901; x=1762010701;
+        d=1e100.net; s=20230601; t=1761406228; x=1762011028;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hEsLv/ORWjWt4JjusiVyw1pkRSWkY2jVnldvJ/kYxAc=;
-        b=ArzCt+xAtDW+rUM/oJ52CyD4BId7xA7f3iI01FCijdxr6tYodK8VIj0WcZgByk5YVn
-         vWw43wUK9VwBDJ/SfBRUepwx8ItonSP7fVxIiFlKPPE5oaNearqYcVHJQ/1VdxkFnZP+
-         UCnuwGAXb842UjEYLC4DvOZ478CRPQcxaDf0DTd4C+EUlnIXNWkxCkgv1JrO5Td7P16K
-         MsnUt/Kske9aqKrD8mQJV0GyCkAVkPB5VtvP7kACupeFDWbBZHu/gNj0dW+VFoQ7jeX9
-         m8MVK0vHk2hZcRQGMi/H4a6AdIxSUk1BD8qeLuY3B4iS5MAyTh3hgWCasjtH8ai2i4HS
-         /dUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUs3vrO1ggd6nAgz9HdaxkNbl5TYGvF+fQ0Jnz3ZUzcI4xEE4E9YfnNS/lWPIGn+cFWUPR9@lists.linux.dev
-X-Gm-Message-State: AOJu0YzSBDg462KqV+1+bhuPuDj79mK9zvcDHexOXgtelpd7CCjTczvL
-	uhIDWezrOifzd+h6GrkY5OfSl5Wdy3X1T36WPSsgXGieXcZ94OyUM8rxtbZL9JT31MMKQPCRUPR
-	Rij1nD0r6Z/35c6Uz3a4JRVzpexWnfUyW18HAxHDFwg==
-X-Gm-Gg: ASbGncsl0C80rkuIxaiPq6PRITZL5x2KTzIQvcifkatW5Burze+KCkBVXZMjKvYqFqE
-	FsIASsfVSYbRul+daezsK8gGlvVVbrOxPcgxXxnTuSondNW1eTXpph411f+LrAud7uyIQFBNGqn
-	kGqhDp37ZwcE4xEd+rv7fXq0YZ8tBwgOVSMqLis1TFUS4OqM8VBlBWDZDbnq1bKINti26ZC5RwH
-	2S3/v1vVSY/7tYRtC2OFjlxQQc3k+YB+D288egV6bxaRCscLCyjUOdAg0nxgkHQnrQDV+jyYh1m
-	tEzmXzPXPI5xT5kXV0/UYgulmL5v
-X-Google-Smtp-Source: AGHT+IEkKuyMVmFsWXRY0bxtHWTNzex75v+WBGMxRJwOZQScs1xFZAgq+kDpvorbdJ+d0KcQ27kL7+tqDAzCdvkawvY=
-X-Received: by 2002:a17:907:da1:b0:b6d:5e64:c36b with SMTP id
- a640c23a62f3a-b6d6fe9fac7mr565664566b.29.1761405901273; Sat, 25 Oct 2025
- 08:25:01 -0700 (PDT)
+        bh=YQe91ROlP9epeFIBAVeb7AxK2YjKLaeOQX5QP76voII=;
+        b=B5gfPPdo+54Ed1u8nODGjK9sbdNWUncAWyqiU+CXiAc/lBiteVNmNePeVu9wIVczYa
+         GfxLM5LoZLYVdSykyWLsMeMBxdMFFZxQZp/9myJ3sVmnSLUlXgj1gtl9VTyd9uWyQJ2D
+         UHfiRlkGWBSWUDbhykYOmTuPU6toVW2sg4679KlkPEuLwe2a36LtwCbG4WkoaCc0fBT5
+         iKbX4Dq9hHY/FXeue+5v5NDgjnZm34lwFmlzqJmVaLPgm/gRoyWv8g/4zjqUYg2dBnc2
+         nN51w+DfDHJUQh254I/c6+tyqLt1OaqUXgDNlbpqLLEOhPpP2DrfpoXUAShD218XEDHO
+         2wPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWTPnUjc8EtnRVAXU7IniIR52L4LTUQLiF0rC9frM4IUnu6ZGsPcNNivmGzvT2UVdDNxp1a@lists.linux.dev
+X-Gm-Message-State: AOJu0Yws6Y3pWmiPbK0UGewgedFmBBqC7pmsuvk9kQSpo2KKJhVRVSR3
+	eQYlJYi7+lji4WLzKHTgvHtjKvPqxDt96y5EaBPqgaVMaMZcgNa+6KaUUWvb8+cCRdlqGv4rj8v
+	PrDNVh+/C6qDyTRGAjoOeGI/LJqiJxNyGkTfKp0O02A==
+X-Gm-Gg: ASbGnctgHJKr8MhTSEZ3p2oaX8ipXqqSd+UL39HjBZRzVbdzW8QYiHPF1MCZQBgYF4A
+	NGaVD0ytvLfbfYvo/iozsbD1jeI9eYphF26t4m5iS7fqJ1+2ZmGbyLM0FrjjITnpBm5PEvK58z4
+	HLhx5BGZH/5b5wS8ZjHo1n5iXV6YpwQ+ShO/P4lQVAMMCZqhl4T9B37oRVNb1Vdnwmh0i3BwfLE
+	s7b3D034oHsRisZJm8xBmVUafr+rAD9T50X4EjB7nSvBKA8nz62zZAaoDCBBzV1ZKP29ZF+2GGQ
+	ldkyZBUs0jd0M36z9CEV0b1Ab9xr
+X-Google-Smtp-Source: AGHT+IHyii/MACqqA1gMbxyh8CZfZM/MVeB0dSh2M8XUI9vv6+1k3VQ9IQ7FPNSu6S0HuT0ITqx9emJSEDbCLG+Yc0Y=
+X-Received: by 2002:a05:6402:350c:b0:61c:cf8d:e51d with SMTP id
+ 4fb4d7f45d1cf-63e6007d198mr5362602a12.22.1761406228044; Sat, 25 Oct 2025
+ 08:30:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-In-Reply-To: <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <5-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <5-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 25 Oct 2025 11:24:25 -0400
-X-Gm-Features: AWmQ_bkMrpRaMfcHcpe107aX1k_bm11BfLXJjxsMDuts5-Fo-hDichMUKRxipls
-Message-ID: <CA+CK2bC5=rb1C6i5yMad_tG9JpbYYgSRxAX-vhYctuoLvcQbWg@mail.gmail.com>
-Subject: Re: [PATCH v7 03/15] iommupt: Add the basic structure of the iommu implementation
+Date: Sat, 25 Oct 2025 11:29:51 -0400
+X-Gm-Features: AWmQ_bmUOgV3_0ASbOM3QoMzXfGDVzgu3GeEUS2HtNMs-zqEXMaBdqidVXde5tM
+Message-ID: <CA+CK2bBHzGi-4dqXeQn+OvahYfm5miKEhSuVmYCpo=Z4cUdONw@mail.gmail.com>
+Subject: Re: [PATCH v7 05/15] iommupt: Add iova_to_phys op
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
@@ -84,69 +84,13 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 2:21=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+On Thu, Oct 23, 2025 at 2:20=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
 ote:
 >
-> The existing IOMMU page table implementations duplicate all of the workin=
-g
-> algorithms for each format. By using the generic page table API a single =
-C
-> version of the IOMMU algorithms can be created and re-used for all of the
-> different formats used in the drivers. The implementation will provide a
-> single C version of the iommu domain operations: iova_to_phys, map, unmap=
-,
-> and read_and_clear_dirty.
+> iova_to_phys is a performance path for the DMA API and iommufd, implement
+> it using an unrolled get_user_pages() like function waterfall scheme.
 >
-> Further, adding new algorithms and techniques becomes easy to do across
-> the entire fleet of drivers and formats.
-
-It is an enabler for cross-arch page_table_check for IOMMU. There is
-also a long-standing issue where PT pages are not freed on unmap,
-leading to substantial overhead on some configurations, especially
-where IOVA is cycled through for security purposes (as it was done in
-our environment). Having a single, solid fix for this issue that
-affects all arches is very much desirable.
-
->
-> The C functions are drop in compatible with the existing iommu_domain_ops
-> using the IOMMU_PT_DOMAIN_OPS() macro. Each per-format implementation
-> compilation unit will produce exported symbols following the pattern
-> pt_iommu_FMT_map_pages() which the macro directly maps to the
-> iommu_domain_ops members. This avoids the additional function pointer
-> indirection like io-pgtable has.
->
-> The top level struct used by the drivers is pt_iommu_table_FMT. It
-> contains the other structs to allow container_of() to move between the
-> driver, iommu page table, generic page table, and generic format layers.
->
->    struct pt_iommu_table_amdv1 {
->        struct pt_iommu {
->               struct iommu_domain domain;
->        } iommu;
->        struct pt_amdv1 {
->               struct pt_common common;
->        } amdpt;
->    };
->
-> The driver is expected to union the pt_iommu_table_FMT with its own
-> existing domain struct:
->
->    struct driver_domain {
->        union {
->                struct iommu_domain domain;
->                struct pt_iommu_table_amdv1 amdv1;
->        };
->    };
->    PT_IOMMU_CHECK_DOMAIN(struct driver_domain, amdv1, domain);
->
-> To create an alias to avoid renaming 'domain' in a lot of driver code.
->
-> This allows all the layers to access all the necessary functions to
-> implement their different roles with no change to any of the existing
-> iommu core code.
->
-> Implement the basic starting point: pt_iommu_init(), get_info() and
-> deinit().
+> The implementation itself is fairly trivial.
 >
 > Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
