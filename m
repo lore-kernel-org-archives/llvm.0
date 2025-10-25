@@ -1,73 +1,73 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D13F145B3F
-	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 15:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C27302171
+	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 15:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761405359; cv=none; b=L4sbzQNph9UNyvp+M2XVg35m1/1OhfFkfY1xcU7mqLF23Vvm5TQR3HpJYEJSt8o8fpU7xBQEpuYvsKgk8l8jR5820i+3aKJQt7XYDn9k/gVbjqriWcTeKJkUxfDddGrJ/TjfoidZ8zQr9AZd0iT0VSkeaCydnukxoDGGzBEve64=
+	t=1761405904; cv=none; b=TlN6BCdfEuLliDFryHyB0PsWxIphF9qnSPCcIqY1mBsxD/COPeuHT9/AgBBrFZprE4qANU3uXP5eLIlE1lITcX8uonIra1kvYvc3j7z27e8Hv0i4VhjFqIx4qP/VxMN+bs7mGz5FD88D6y4suPG84PiNCOZGVTbLknf/wnN9kzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761405359; c=relaxed/simple;
-	bh=bi4GMT2iyyBr9MQrD3T6o1udwx+0fc5659kLbgfo8vg=;
+	s=arc-20240116; t=1761405904; c=relaxed/simple;
+	bh=xDRkpAn0D2lhlrXt3t3UOPRfnSga85kN6uhnRJl1ndk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZmYYOIeEllT9o9JQYXDa156eh2RMQlg+dAFPG9TAhKEABTCHjYtO0LQEkvBrzwOjQWODPaRLG974HlfXA4nat6viWQkJSxsEUDqXWKaop/abapC6a80WTbJGMlfVwC8elzstYr1W1zw80Ty/PIpZ7IHeHzn/43dvaw1nEzCfr2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=DcIBqhO3; arc=none smtp.client-ip=209.85.218.42
+	 To:Cc:Content-Type; b=U+wAyYey5tnWp4PNE5ZaCpCtYTvCxrdl3UPmsJN+L88rQKqHE9igPVsOu6jakvrRXzLnPzqZKjk7c70+z9yVhd+0DOZOGdhsdumWIXjFPg8gU0Y9kQIc+79Y6xke/G+Hl1ZFG1xAsxR8koVBPRXdFQG00SkUyXVqZerEkPY1AMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=PRUeNaeK; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="DcIBqhO3"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b6d83bf1077so175227066b.3
-        for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 08:15:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="PRUeNaeK"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b3b3a6f4dd4so596233866b.0
+        for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 08:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761405356; x=1762010156; darn=lists.linux.dev;
+        d=soleen.com; s=google; t=1761405901; x=1762010701; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bi4GMT2iyyBr9MQrD3T6o1udwx+0fc5659kLbgfo8vg=;
-        b=DcIBqhO3Sy811vmLYuKx6Gb3nsRFo/fk7RBB9zKPQZCY85FvDubFhACHXOxT+89AnE
-         bSWe2l5fphjCoQF03PYZga5hIFDBwaX5M2MaGxNUF8kpRpy7ya2oxzP5EpG0SBSuejbN
-         wxg6+CgpNFq3z9CmSTKXH0u5VZYtRyrw7WlAQpKfavUEQHpF5Wub09D+b6W8one6/IEN
-         U/VUSOpiyyKk+nIgSZq0LIApyI3Xm9hDYjxU0SqmzO4Nr8geKbLGmVOCFpuE1s1lj8n5
-         CS2QrFrLFlc+ELuAscRmheq6gCTAWQNRn1GDpjDJm/pF4eEdExIx2BXRGwYiTHvvbOsx
-         yBKw==
+        bh=hEsLv/ORWjWt4JjusiVyw1pkRSWkY2jVnldvJ/kYxAc=;
+        b=PRUeNaeKOtTTmdRrJjB6ndz2/T4vYC4Wrl54Nt6fCen2IPIbA2yKywDhzeqW6npX8d
+         1iOB1Jxgl5OBvLiBEfHhb6z5c4DJz43daK4kcITK2B1GwGFtH2K2JqDziM3x4XQ8GecQ
+         LiijprQGdGTauCUJQMC8uS7Z6a+eRwTmAwsWB1whChMdJHwp+DeyYjOC4e8D0TTVsw7r
+         C3iMibl9ujbiPpOtXyh/OBuWtDc/mOznzs6mKqR8uc91r25ifIj5D9rMAfssO0blg7SD
+         qeQcdYuaeHM5evSKuXT9tJUDJHJ+tRTtJU2ivkNCP3zeTsg0a8gndbCKsrejAk/64gTl
+         3vyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761405356; x=1762010156;
+        d=1e100.net; s=20230601; t=1761405901; x=1762010701;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bi4GMT2iyyBr9MQrD3T6o1udwx+0fc5659kLbgfo8vg=;
-        b=AEBRWSAPy2RSy9mgYX0RU0Eyvb0GCXcoBBnD2QMnOxC5E8n+g9D0cpx0IUBgFXhFtR
-         KCA6a09WXZxL2zPX2E7vzhRV+mLUoQ6TqPTUbaU/SM62+Djls6HP0h5mY4SS38OP0QoD
-         TIwYU65hfqBh2lIXisiE+14wZG+2F0y4InHhnoBNbmohvyVIqGzRAKqkz9Nby/tsEwy8
-         3Axi2E7edtb4oMKtDNLkYKKW0enp2rvW3AOe+mBUctfO7pfU+4JBPVyTuejoiocDdSoZ
-         ce0ObKznEsed0e73QnjN764Qlx8qdrM4LEBItops/uT25c+eYeW46euqFHKU2u7ln/8o
-         Kj8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW/vq6llqMumq/ZwksSPIvZj/Mt1siPwscdch7vyRwri4/kUR0bB53y4m1vrx5YfeyrxHfq@lists.linux.dev
-X-Gm-Message-State: AOJu0YzJikhYgR4ToPkD/uGQTz6JYkiPjuCqb8H4EJ9lc7upNcqAdleX
-	ro6BJKsP3GVaBB8jRLMssd0WfWTwqmYMcztraFR8crZlsqRqTtNVUgfd5dAq1SQp+PABNqS7+6w
-	csQQOl16kngDz+l+Xu6juExvBPAyKf9Bn1Lm30vCh/Q==
-X-Gm-Gg: ASbGncvUNuqh27g6MdIse6FPkTXSPL30C752JaRWpxpbhT4iIKHaAbD7ZygiEURnwrc
-	yii5dp5mIAVt76TtmDEO3Rg5cJ34Ibpw+sDIpsaNoFGZ0A9IyjHhdoIWGsm/j8nRH2PgoB63YGB
-	2MZrBg6s/weBAboMgiMAS9/1U7aIVk5DoN5e69O8Q7XYRmAg3RQmAd4wRAMiW4zSB+7/ZTtZMoK
-	YRdqBNW3JL7sOq+IdbLaBgXxDU2RjI5PsLCbsUiWWhthEGLF8IuNSeTu4I4RR2hA8EhXVHfqXNY
-	gcReBIqSc/K78b7R1g==
-X-Google-Smtp-Source: AGHT+IFCiIAROvFB2yMO0UCR+4ZQEZ0s8jgRn6oQbNbO878Y9zbld799sNxrnedeLYq8Qy2EigSbEXq7Bo6P6npPVMM=
-X-Received: by 2002:a17:907:5cb:b0:b3f:294c:2467 with SMTP id
- a640c23a62f3a-b647195b32emr3912611266b.10.1761405356545; Sat, 25 Oct 2025
- 08:15:56 -0700 (PDT)
+        bh=hEsLv/ORWjWt4JjusiVyw1pkRSWkY2jVnldvJ/kYxAc=;
+        b=ArzCt+xAtDW+rUM/oJ52CyD4BId7xA7f3iI01FCijdxr6tYodK8VIj0WcZgByk5YVn
+         vWw43wUK9VwBDJ/SfBRUepwx8ItonSP7fVxIiFlKPPE5oaNearqYcVHJQ/1VdxkFnZP+
+         UCnuwGAXb842UjEYLC4DvOZ478CRPQcxaDf0DTd4C+EUlnIXNWkxCkgv1JrO5Td7P16K
+         MsnUt/Kske9aqKrD8mQJV0GyCkAVkPB5VtvP7kACupeFDWbBZHu/gNj0dW+VFoQ7jeX9
+         m8MVK0vHk2hZcRQGMi/H4a6AdIxSUk1BD8qeLuY3B4iS5MAyTh3hgWCasjtH8ai2i4HS
+         /dUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUs3vrO1ggd6nAgz9HdaxkNbl5TYGvF+fQ0Jnz3ZUzcI4xEE4E9YfnNS/lWPIGn+cFWUPR9@lists.linux.dev
+X-Gm-Message-State: AOJu0YzSBDg462KqV+1+bhuPuDj79mK9zvcDHexOXgtelpd7CCjTczvL
+	uhIDWezrOifzd+h6GrkY5OfSl5Wdy3X1T36WPSsgXGieXcZ94OyUM8rxtbZL9JT31MMKQPCRUPR
+	Rij1nD0r6Z/35c6Uz3a4JRVzpexWnfUyW18HAxHDFwg==
+X-Gm-Gg: ASbGncsl0C80rkuIxaiPq6PRITZL5x2KTzIQvcifkatW5Burze+KCkBVXZMjKvYqFqE
+	FsIASsfVSYbRul+daezsK8gGlvVVbrOxPcgxXxnTuSondNW1eTXpph411f+LrAud7uyIQFBNGqn
+	kGqhDp37ZwcE4xEd+rv7fXq0YZ8tBwgOVSMqLis1TFUS4OqM8VBlBWDZDbnq1bKINti26ZC5RwH
+	2S3/v1vVSY/7tYRtC2OFjlxQQc3k+YB+D288egV6bxaRCscLCyjUOdAg0nxgkHQnrQDV+jyYh1m
+	tEzmXzPXPI5xT5kXV0/UYgulmL5v
+X-Google-Smtp-Source: AGHT+IEkKuyMVmFsWXRY0bxtHWTNzex75v+WBGMxRJwOZQScs1xFZAgq+kDpvorbdJ+d0KcQ27kL7+tqDAzCdvkawvY=
+X-Received: by 2002:a17:907:da1:b0:b6d:5e64:c36b with SMTP id
+ a640c23a62f3a-b6d6fe9fac7mr565664566b.29.1761405901273; Sat, 25 Oct 2025
+ 08:25:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <2-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-In-Reply-To: <2-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 25 Oct 2025 11:15:20 -0400
-X-Gm-Features: AWmQ_bmbZ8u5CogyggVXgDbcACzApTnoI3lXdk_DKTEGWhLBxFj0guiH9QhsMTM
-Message-ID: <CA+CK2bBpunzb9yaQE91NYfp64xSSuRaHW71MC=3bLVfWsHBDzA@mail.gmail.com>
-Subject: Re: [PATCH v7 02/15] genpt: Add Documentation/ files
+Date: Sat, 25 Oct 2025 11:24:25 -0400
+X-Gm-Features: AWmQ_bkMrpRaMfcHcpe107aX1k_bm11BfLXJjxsMDuts5-Fo-hDichMUKRxipls
+Message-ID: <CA+CK2bC5=rb1C6i5yMad_tG9JpbYYgSRxAX-vhYctuoLvcQbWg@mail.gmail.com>
+Subject: Re: [PATCH v7 03/15] iommupt: Add the basic structure of the iommu implementation
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
@@ -87,9 +87,66 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 23, 2025 at 2:21=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
 ote:
 >
-> Add some general description and pull in the kdoc comments from the sourc=
-e
-> file to index most of the useful functions.
+> The existing IOMMU page table implementations duplicate all of the workin=
+g
+> algorithms for each format. By using the generic page table API a single =
+C
+> version of the IOMMU algorithms can be created and re-used for all of the
+> different formats used in the drivers. The implementation will provide a
+> single C version of the iommu domain operations: iova_to_phys, map, unmap=
+,
+> and read_and_clear_dirty.
+>
+> Further, adding new algorithms and techniques becomes easy to do across
+> the entire fleet of drivers and formats.
+
+It is an enabler for cross-arch page_table_check for IOMMU. There is
+also a long-standing issue where PT pages are not freed on unmap,
+leading to substantial overhead on some configurations, especially
+where IOVA is cycled through for security purposes (as it was done in
+our environment). Having a single, solid fix for this issue that
+affects all arches is very much desirable.
+
+>
+> The C functions are drop in compatible with the existing iommu_domain_ops
+> using the IOMMU_PT_DOMAIN_OPS() macro. Each per-format implementation
+> compilation unit will produce exported symbols following the pattern
+> pt_iommu_FMT_map_pages() which the macro directly maps to the
+> iommu_domain_ops members. This avoids the additional function pointer
+> indirection like io-pgtable has.
+>
+> The top level struct used by the drivers is pt_iommu_table_FMT. It
+> contains the other structs to allow container_of() to move between the
+> driver, iommu page table, generic page table, and generic format layers.
+>
+>    struct pt_iommu_table_amdv1 {
+>        struct pt_iommu {
+>               struct iommu_domain domain;
+>        } iommu;
+>        struct pt_amdv1 {
+>               struct pt_common common;
+>        } amdpt;
+>    };
+>
+> The driver is expected to union the pt_iommu_table_FMT with its own
+> existing domain struct:
+>
+>    struct driver_domain {
+>        union {
+>                struct iommu_domain domain;
+>                struct pt_iommu_table_amdv1 amdv1;
+>        };
+>    };
+>    PT_IOMMU_CHECK_DOMAIN(struct driver_domain, amdv1, domain);
+>
+> To create an alias to avoid renaming 'domain' in a lot of driver code.
+>
+> This allows all the layers to access all the necessary functions to
+> implement their different roles with no change to any of the existing
+> iommu core code.
+>
+> Implement the basic starting point: pt_iommu_init(), get_info() and
+> deinit().
 >
 > Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
