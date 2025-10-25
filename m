@@ -1,363 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081CA21D3CC;
-	Sat, 25 Oct 2025 05:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761371034; cv=fail; b=Zna2qoliQAuj2aBE7TbKzv/0xWMFYDLrnTD2sYWhe9aagoJHLUh+lm2Mx1W6RpYtzxfAuNEyQnxKc2p7QbRe/Itk2gL5dwQ9F0qGN7vnPPkoUB2ew6PJ1F0leR6Xl8wV55oOwxMFVOz3dxIK6zvwlf1k6Xec2IvH0cHeBIQHkts=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761371034; c=relaxed/simple;
-	bh=zisaosni7C++w4G/XtkjDScs4JvKVi9xPtk+7yjHNgk=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TObDsEdbV0dZkec0CkzPEXfARV1nrF7r4DlB7M0a2CABXJXd4yS9mpajTYuKe9uXY3OaV/e8hvSCg0HPIYMeJIaR/aOX+ozrtnIrkTG7YQEV1Yw7aslO45dOrFBQ4ySIL2d4lY66q/KLXm7ZF05PRALjiO6EWtTqd6H1maf42U8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XecOMnrL; arc=fail smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19722231C91
+	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 05:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761371538; cv=none; b=X0y+jyERzZuFFkvp0uPD2le94kF8yPS24eanFTrhP+SNuP74zkM18hq3F6edPf213E9DDx6oj10uuVf3zKLVMSgJT2iV23ErCycnTO56YMdj4xY2ogury5liSNoXgvS8MA9DWPs77ZNg8vbvJ8fy/hnt08xI9o7B2UbJ4mjpmyw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761371538; c=relaxed/simple;
+	bh=FaeOsGuzRZMeBvC6DOI9cz4sRp5s7DZZP9l72hegTMg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=oo1crPLGApNgGQd5RB8Ve3YumEcWwxRzhNc8RW8FAjpWHN56PM+RPmVV6Ty5fEENalpjOZFuRMmJBnVWB/9aHvQFl6u+CL63e+swbd6v8SS5MdQd9ciVBABXyJor4/2tNOoBxso5jjSsP2ewnwvZOAoFC5Wgu9tfFQcsUudqHIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U4LasKxv; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XecOMnrL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761371031; x=1792907031;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   mime-version;
-  bh=zisaosni7C++w4G/XtkjDScs4JvKVi9xPtk+7yjHNgk=;
-  b=XecOMnrLgq2fU7P/NUc63+YLFHmSKzI2JE+KQlLgrFB/q/MGE1n5W0NU
-   rVouovDmYyvcKe5wMDeRYYBNjPanleWdxfAUUaPmk3oWbR8/UniIW3+2Q
-   OhENh+XNGk8bGip+rfS88XDaeZ14hrTKsc8OYLtwiqdGp+fgW15p84SbX
-   nMv3zKEnA39i9FdSPPBEo/hnSjVnf4h7YNGAcf+srA5skFzSWa1vDw3yq
-   OzYgmhYOfhVdh23afwCDeOwOdSAyovA0866YcYgR+CUM8/8oRnhGu5Ljc
-   ypXAWA1Hyy/euJPISHAnnrDzAqrqt9lknG7eBppB+HNYvjvSW3MADgTCp
-   A==;
-X-CSE-ConnectionGUID: vmsFnHERR+ast5PBjVJNhA==
-X-CSE-MsgGUID: /yPk6/b/SJK2QCs/P9WauQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63467904"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="63467904"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 22:43:50 -0700
-X-CSE-ConnectionGUID: fa2TfYsaS6W0Em9+Zwf37A==
-X-CSE-MsgGUID: FbmV2lRoSDiHh82RVqZ+Hg==
-X-ExtLoop1: 1
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 22:43:50 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Fri, 24 Oct 2025 22:43:49 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Fri, 24 Oct 2025 22:43:49 -0700
-Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.13) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Fri, 24 Oct 2025 22:43:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r1n2k+PsrlxcKliylj5jEVMScShqSPe9E8ZhWgfuA7NDgPizavJZouyk5g2AyBY+AvDYrSa03HssF4s5nGBsRrGPTelo1HK0zKp6/9XQFGI3PsIgdm2HxiWFFmGsqn0gXFlS49kq9+KhYmUGU21Ehr6j+tSrJuqmTV2lRjJB4i4bPerfXdyd3xPyAGn3FEp+NmgHtu5cbpV6MIdhWzRXQyUsBw76uiz64q+NvAq5dp2hK9734IJM6NexFCxCVtUtDBa2/CpbsszG9VWSYx4PzKNKw7TeRXrX5gPtTJDKtRlKGUyZyYhMC4s1kPDWxYQaxgvNb76/XYCgdjHjpYxnuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZdX3QNmr4PgPmr5U1mMyO8DYLKC0zKoBhgLXI3wjlGM=;
- b=HRd/3CPv6MWWogqunk32NKTqz//12gzoLbgfDUA8p7rEkO2kbaunjznK+bJRZIspk1huczWYroQBqsuR6jxCFRMPnNxCIL7NGUAJcRZBAsjcmJx2WYIFhHvnv+vs0S/b5kb4QRwi37wd7QKH6vcCc0WyEnMCnae/hYU9GP49iLzZxkVWOxaHxU3g9xY5NN+QfBRZiZG8fxIAk+SReD+z85IKb81qmqnSmdFdp6yHXG2EFG2EzTYEfdBNyjgeS0GJxjxI3mVA9KU8L2fpB/xt0TCrgFbWoas7u9OugVlcZrMP3qpC9FFxtBay23nfPyOr8v7cXjr5gyqKCioq8dlqNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26)
- by MW4PR11MB7029.namprd11.prod.outlook.com (2603:10b6:303:22e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Sat, 25 Oct
- 2025 05:43:40 +0000
-Received: from BY5PR11MB4165.namprd11.prod.outlook.com
- ([fe80::d9f7:7a66:b261:8891]) by BY5PR11MB4165.namprd11.prod.outlook.com
- ([fe80::d9f7:7a66:b261:8891%7]) with mapi id 15.20.9253.011; Sat, 25 Oct 2025
- 05:43:40 +0000
-Date: Sat, 25 Oct 2025 13:43:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Yang <mmyangfl@gmail.com>, <netdev@vger.kernel.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, David Yang
-	<mmyangfl@gmail.com>, Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean
-	<olteanv@gmail.com>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
-	<horms@kernel.org>, Russell King <linux@armlinux.org.uk>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 1/3] net: dsa: yt921x: Add STP/MST support
-Message-ID: <aPxjgsRc9E4pGoJm@rli9-mobl>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20251024033237.1336249-2-mmyangfl@gmail.com>
-X-ClientProxiedBy: SG2PR04CA0158.apcprd04.prod.outlook.com (2603:1096:4::20)
- To BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U4LasKxv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761371534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6sQou1b6ILTxRf0O3KrVuRjEoqEqfW2HQLPfXKbj4+4=;
+	b=U4LasKxv7RLOMfJAu0BBl5eRoRxmiFuIDwQO3wnH0ny6jTA76DvXXW4/W6YxxK8pn1zxRX
+	Kcz/Gq0U6KPiG5ZQ+MPTVP9HovaXoM+/vOOv7Fupz5KOXDopryIQD5oxUezUJ7jwKG6klq
+	gHWc2rFWzKmIbyFMvZNc99obDvnwTNM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-345-xfaIu2k9Pqa3uh0NLM6zug-1; Sat,
+ 25 Oct 2025 01:52:12 -0400
+X-MC-Unique: xfaIu2k9Pqa3uh0NLM6zug-1
+X-Mimecast-MFC-AGG-ID: xfaIu2k9Pqa3uh0NLM6zug_1761371532
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DBE01180060D
+	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 05:52:11 +0000 (UTC)
+Received: from [172.20.84.201] (unknown [10.30.45.119])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6B3B41800576;
+	Sat, 25 Oct 2025 05:52:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.18.0-rc2,
+ upstream-mainline, d2818517)
+Date: Sat, 25 Oct 2025 05:52:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR11MB4165:EE_|MW4PR11MB7029:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b5a6e88-b455-4b40-a51e-08de13897377
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?NbAB3JIaRR75o1yPHBIcZ12dvrxgWoMbxor2T54LdqNxJnWnGLNo95X1aJrg?=
- =?us-ascii?Q?DH2hc5908+lIRnji5CYmfuqBEonVzvd7PaVysCB5+ncF1LxP/gY+mjLvLLEY?=
- =?us-ascii?Q?10ys2SFujmIk+ngbNoesdxs5pyfwDVJDFXVr/oVpsx8fmeM8+p+VDCBd7ev+?=
- =?us-ascii?Q?CR0g9Fvd25wIM3uApTclt8Xi2Q0/DP4AFbkn7+nE0x9IIdxQCg3XGj5ngSsD?=
- =?us-ascii?Q?Ck9qV5M6CRFqZ9zRGtjRdpKO0wikza/BzSs4F+m9pXEzFhhyqdU0gTpU3le0?=
- =?us-ascii?Q?QEecTtGcf+nFFBS1sKTqlKQtLTiFrmiM2k2SOv7kgNkTsr3fQ/jKb96fRjv7?=
- =?us-ascii?Q?xnwn1/VjPC8DbH2B8n6bk9dKv1breeMs55HdofoAgHimKL+90J+0upwm5o5c?=
- =?us-ascii?Q?4bAqdviHLtdOah6WHU+dTZkDOZamO7T7GUcewEE2Mg9IdP7uncrITgoYNR4W?=
- =?us-ascii?Q?t66xo4FYk9ToLv+OT3/Nr8dLvcG0eOIySUf1xHRn8LHtT8G5fBDH/hGsNR1u?=
- =?us-ascii?Q?RJye7k/g3AZBYi6wViVC3SQoTjFCe9aUIgNbcni7sM58Jm18gF+N8XZCediG?=
- =?us-ascii?Q?/+IfcpGMIa6b6V0oARBKUgg8uk3cEK1N2lbR0gB7wxz2l6U3ZVon/mYRojS1?=
- =?us-ascii?Q?9edP2U83m0dGUELVOZ/yd71oSYijMQoEfO5eo6421WKbRNo1gIX/EF7Z1mqc?=
- =?us-ascii?Q?rD9W3M02qDe2gDD1bnMKFnQMiizp2PzBp17Ibuf8FNsWD0js8UqSc5E3RHkj?=
- =?us-ascii?Q?O+MmMXeK0ASN/dfd+1VK4YjpP8gryKPSakTmgUkmdWgblD59/LECllCmcq7R?=
- =?us-ascii?Q?CBPjqa0uFlgFMoDY8cgQoVlGTxWR1u1nC9FCF1YtGQIJlQpu2aFP0Xpwsl7h?=
- =?us-ascii?Q?Nvk2HPi+wljBl1NTO3iRsXbLgeLMIyMCqwqm6bSnCB9iI4pro0TFC+MToRQ8?=
- =?us-ascii?Q?qAcfhzViMcykfPP+OSmONIqSjFLvA9/H7Y0Fkdj3NM+gdrhYuzLy3b1QbEe7?=
- =?us-ascii?Q?cMR48sdpUucyIMMP0NMp1EWVJ4c2V3I7DiQUAGXyzBZVcdpvKkL29gRpj6bI?=
- =?us-ascii?Q?NetZWzf9ow1IEJ0tECBM4qhLFRhjeyG/It79DI8b/NYK1uvz3JJzvLyak30K?=
- =?us-ascii?Q?12tJWYoAMJfXx7Vy8WZ1F2RyNLwtvBpT4ANKiHV3tefArgo7v8wCqWPRi7/s?=
- =?us-ascii?Q?smXOQRTRa0fBuUDpBeX3r8Q+DDP/+h8o3cXHDYvo/yY42ynF4S+WvFQ5enKu?=
- =?us-ascii?Q?+xSFifGZFQH02iooMWPF541UwH2h9uFtgDJ9ozMrRmhykMeS0vbll9MpPFZx?=
- =?us-ascii?Q?ZxG1nBArJ/FlYviGVKq/W9JLRvO/7RGxijfQlgIrxSsvwaimwmzdcEy4gT7f?=
- =?us-ascii?Q?VMs1IQJkjLXejc5919mVCrTUYR25ZCaPS3aPSGuShNioypkodpVw22KV8740?=
- =?us-ascii?Q?A/TLiTLE+6M=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4165.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FThjDn5X6SKecvrPvBc+7qbeNmh5Lo4FGpjNSgQvAsaGRomIjMu6Qoc5jICD?=
- =?us-ascii?Q?oPz7e+a5oUW47VWKjBVvkMPyM8bqlt7kH+EVf48I8EQkSpiYGFtfqQfsD99j?=
- =?us-ascii?Q?+16PvE3JMDNTqkUXJbC8+Vu0imfNQ8LLgOm7vdLsu7OMWn608FjlBJ/kQGA6?=
- =?us-ascii?Q?FYGq+LFF5HC91uj0bLmm7A74GG6mt2UbfqJMf+rKKKmWs7tsyBn+Y7a8l7Z/?=
- =?us-ascii?Q?m/wf1UXJ3mglIfZ+j0KMg4bNTt1+iN6jHfcOmecW7D2XcOBjSHCXZ0VLMUPt?=
- =?us-ascii?Q?pOQ+kIKc8/C8RjxpFmKgnSyGXTvz6UbQt7AHZWGD1+4vbwDOobMkIWM0CVel?=
- =?us-ascii?Q?zAg0c4r9rwIzJMCFpmuEVYidV/kuozNrM4ecYapDYc/mmyfMRKLPsy8RacgJ?=
- =?us-ascii?Q?BG4RIaiawVWT1hh5U92hbIycKvYDAkit0slh7f2FMofaJmi3z+RLvIaYeuF1?=
- =?us-ascii?Q?ldsVuJwd+4KoVqCbE0mTPvejaGO3uIFPjEd6IPuY9HFueuvnlMPFauFrCHca?=
- =?us-ascii?Q?8wrCGjYUwjyXf1xcPWs39/G0STHQqsX09qXxnDO/4NqOZXHC+Rl4SBGeJEf/?=
- =?us-ascii?Q?GB4Nazo6CgGEGs4Uxq3JzEgmEUYH5IxDF0YhDT2367UOjq2Sx1lmqC/RGCPV?=
- =?us-ascii?Q?V/JhSUPHFQy81ECqYJ/XDeL0HvHMoJF5X2cmw3GWXuGKeGy15X+ljlLkWCK8?=
- =?us-ascii?Q?n724ch6vmydhnjXQheH4J/lCc56lsauGa6j0EYg4F/0E1qHKSsh3AsRveJEc?=
- =?us-ascii?Q?abJgJ9BKehTt9N9/cbpVcMbUA2UiTFwI9i2fdozjH+5VOkg0kQj48Ez+DPdE?=
- =?us-ascii?Q?/UKJTCqLf8fpcPzl1WG2T9skFVaSlOuhRGWtelsmZfbkFD89lpb4r9lFfo7m?=
- =?us-ascii?Q?3e75p/vbhFZdEUdl2ATmhVaZrG8yTmbCYLCt4bahWZeCRhfBIygV8UXya+Rm?=
- =?us-ascii?Q?mgHYVI4VZ7Gm/ylnmpsFhxy2eov3XXegicTc4Bzrp8CDr2lwfbpbIAc0xygi?=
- =?us-ascii?Q?LQ4C6sGSLfhE+stdcFEQ1IdNqKQVBVglLheuKoFS99fhE8Wch31unEkcBwSW?=
- =?us-ascii?Q?nuIIut6WAgVNYS6RNsbn5dmj9sQCm99lln74i8/GFCR6O7wk1XuwvcRdUY+P?=
- =?us-ascii?Q?m0vdrW/ylRVWDedreLwLcR4lhyQSuz2jYB6u9K7Kch0zXUQCHUySGsPDTZYZ?=
- =?us-ascii?Q?d8U73MAQPpceqRphg2DRe2t9Gzxro0bwcdP7CqKnMBQCps6q8Jl24bvzOrrV?=
- =?us-ascii?Q?Jf5I34avPN5fBV2+yqUTAGvIF//r5Ajo57l1QDwLn1oRboZdmf0+E3DYWBjk?=
- =?us-ascii?Q?0wbyh0u37CKbyE8yc4/2YpTaoQHJMj+aB7WmU8g+rU6Gw5kipG7Rn4ENbZ++?=
- =?us-ascii?Q?+UPQ1QMPsYjauhZ0yb6ksCCjxECQscEcTiC3nzzWnmT8rp8wBbK4wj//hKkQ?=
- =?us-ascii?Q?ZM4bvWa/Blrx0+5g/Re4OLcgzM/lDVMrvy94M/NRRi0jZir9x/4MF7h3bY1/?=
- =?us-ascii?Q?tHg/FtEa4G5tyTpoGE93VNnJIRIS/+arMTZh+fwY1kedx+YcJEgkDDxsXFFs?=
- =?us-ascii?Q?Rq9JUVU1l3bEb1lcdMpyPUQjHzLuzdyB+DIz7CF/6FuJk07PmLwBScHs8s1H?=
- =?us-ascii?Q?8g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b5a6e88-b455-4b40-a51e-08de13897377
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4165.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2025 05:43:40.6988
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LFsHLFbcY3o4E3NE4r9IkTdNpV40iLxLTl7Qa6oYR8o5TKSwFuNiKHFUhc0plIyyQKET4S6CsDQ4UGxr82+RbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7029
-X-OriginatorOrg: intel.com
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <23096.125102501521200183@us-mta-345.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: NZY4r9gk8owPQu4bmkbvAx5rb9r8jkA2S_PewAaL0fI_1761371532
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on net-next/main]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/net-dsa-yt921x-Add-STP-MST-support/20251024-113613
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20251024033237.1336249-2-mmyangfl%40gmail.com
-patch subject: [PATCH net-next 1/3] net: dsa: yt921x: Add STP/MST support
-:::::: branch date: 22 hours ago
-:::::: commit date: 22 hours ago
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251025/202510250954.SHhCZUaW-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251025/202510250954.SHhCZUaW-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'block-6.18-20251023' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/axboe/linux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/r/202510250954.SHhCZUaW-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2119493329
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/net/dsa/yt921x.c:2154:11: warning: shift count >= width of type [-Wshift-count-overflow]
-    2154 |         mask64 = YT921X_VLAN_CTRL_STP_ID_M;
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:341:37: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID_M'
-     341 | #define  YT921X_VLAN_CTRL_STP_ID_M              GENMASK(39, 36)
-         |                                                 ^~~~~~~~~~~~~~~
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
-      48 |              (type_max(t) << (l) &                              \
-         |                           ^  ~~~
->> drivers/net/dsa/yt921x.c:2154:11: warning: shift count >= width of type [-Wshift-count-overflow]
-    2154 |         mask64 = YT921X_VLAN_CTRL_STP_ID_M;
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:341:37: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID_M'
-     341 | #define  YT921X_VLAN_CTRL_STP_ID_M              GENMASK(39, 36)
-         |                                                 ^~~~~~~~~~~~~~~
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
-      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
-         |                           ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.c:2155:11: warning: shift count >= width of type [-Wshift-count-overflow]
-    2155 |         ctrl64 = YT921X_VLAN_CTRL_STP_ID(msti->msti);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:342:51: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID'
-     342 | #define   YT921X_VLAN_CTRL_STP_ID(x)                    FIELD_PREP(YT921X_VLAN_CTRL_STP_ID_M, (x))
-         |                                                         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:341:37: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID_M'
-     341 | #define  YT921X_VLAN_CTRL_STP_ID_M              GENMASK(39, 36)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:597:22: note: expanded from macro 'compiletime_assert'
-     597 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:585:23: note: expanded from macro '_compiletime_assert'
-     585 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:577:9: note: expanded from macro '__compiletime_assert'
-     577 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   drivers/net/dsa/yt921x.c:2155:11: warning: shift count >= width of type [-Wshift-count-overflow]
-    2155 |         ctrl64 = YT921X_VLAN_CTRL_STP_ID(msti->msti);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:342:51: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID'
-     342 | #define   YT921X_VLAN_CTRL_STP_ID(x)                    FIELD_PREP(YT921X_VLAN_CTRL_STP_ID_M, (x))
-         |                                                         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:341:37: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID_M'
-     341 | #define  YT921X_VLAN_CTRL_STP_ID_M              GENMASK(39, 36)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:597:22: note: expanded from macro 'compiletime_assert'
-     597 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:585:23: note: expanded from macro '_compiletime_assert'
-     585 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:577:9: note: expanded from macro '__compiletime_assert'
-     577 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   drivers/net/dsa/yt921x.c:2155:11: warning: shift count >= width of type [-Wshift-count-overflow]
-    2155 |         ctrl64 = YT921X_VLAN_CTRL_STP_ID(msti->msti);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:342:51: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID'
-     342 | #define   YT921X_VLAN_CTRL_STP_ID(x)                    FIELD_PREP(YT921X_VLAN_CTRL_STP_ID_M, (x))
-         |                                                         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:341:37: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID_M'
-     341 | #define  YT921X_VLAN_CTRL_STP_ID_M              GENMASK(39, 36)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:597:22: note: expanded from macro 'compiletime_assert'
-     597 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:585:23: note: expanded from macro '_compiletime_assert'
-     585 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:577:9: note: expanded from macro '__compiletime_assert'
-     577 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   drivers/net/dsa/yt921x.c:2155:11: warning: shift count >= width of type [-Wshift-count-overflow]
-    2155 |         ctrl64 = YT921X_VLAN_CTRL_STP_ID(msti->msti);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:342:51: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID'
-     342 | #define   YT921X_VLAN_CTRL_STP_ID(x)                    FIELD_PREP(YT921X_VLAN_CTRL_STP_ID_M, (x))
-         |                                                         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/yt921x.h:341:37: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID_M'
-     341 | #define  YT921X_VLAN_CTRL_STP_ID_M              GENMASK(39, 36)
-         |                                                 ^
-   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
-      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
-         |                                 ^
-   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:597:22: note: expanded from macro 'compiletime_assert'
-     597 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:585:23: note: expanded from macro '_compiletime_assert'
-     585 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:577:9: note: expanded from macro '__compiletime_assert'
-     577 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
->> drivers/net/dsa/yt921x.c:2155:11: error: call to '__compiletime_assert_989' declared with 'error' attribute: FIELD_PREP: mask is zero
-   drivers/net/dsa/yt921x.h:342:40: note: expanded from macro 'YT921X_VLAN_CTRL_STP_ID'
-     342 | #define   YT921X_VLAN_CTRL_STP_ID(x)                    FIELD_PREP(YT921X_VLAN_CTRL_STP_ID_M, (x))
-         |                                                         ^
-   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
-     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^
-   include/linux/bitfield.h:67:3: note: expanded from macro '__BF_FIELD_CHECK'
-      67 |                 BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");    \
-         |                 ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:585:2: note: expanded from macro '_compiletime_assert'
-     585 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:578:4: note: expanded from macro '__compiletime_assert'
-     578 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:47:1: note: expanded from here
-      47 | __compiletime_assert_989
-         | ^
-   6 warnings and 1 error generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-vim +2155 drivers/net/dsa/yt921x.c
 
-5c1f0fbc2c12ae David Yang 2025-10-24  2139  
-5c1f0fbc2c12ae David Yang 2025-10-24  2140  static int
-5c1f0fbc2c12ae David Yang 2025-10-24  2141  yt921x_dsa_vlan_msti_set(struct dsa_switch *ds, struct dsa_bridge bridge,
-5c1f0fbc2c12ae David Yang 2025-10-24  2142  			 const struct switchdev_vlan_msti *msti)
-5c1f0fbc2c12ae David Yang 2025-10-24  2143  {
-5c1f0fbc2c12ae David Yang 2025-10-24  2144  	struct yt921x_priv *priv = to_yt921x_priv(ds);
-5c1f0fbc2c12ae David Yang 2025-10-24  2145  	u64 mask64;
-5c1f0fbc2c12ae David Yang 2025-10-24  2146  	u64 ctrl64;
-5c1f0fbc2c12ae David Yang 2025-10-24  2147  	int res;
-5c1f0fbc2c12ae David Yang 2025-10-24  2148  
-5c1f0fbc2c12ae David Yang 2025-10-24  2149  	if (!msti->vid)
-5c1f0fbc2c12ae David Yang 2025-10-24  2150  		return -EINVAL;
-5c1f0fbc2c12ae David Yang 2025-10-24  2151  	if (msti->msti <= 0 || msti->msti >= YT921X_MSTI_NUM)
-5c1f0fbc2c12ae David Yang 2025-10-24  2152  		return -EINVAL;
-5c1f0fbc2c12ae David Yang 2025-10-24  2153  
-5c1f0fbc2c12ae David Yang 2025-10-24 @2154  	mask64 = YT921X_VLAN_CTRL_STP_ID_M;
-5c1f0fbc2c12ae David Yang 2025-10-24 @2155  	ctrl64 = YT921X_VLAN_CTRL_STP_ID(msti->msti);
-5c1f0fbc2c12ae David Yang 2025-10-24  2156  
-5c1f0fbc2c12ae David Yang 2025-10-24  2157  	mutex_lock(&priv->reg_lock);
-5c1f0fbc2c12ae David Yang 2025-10-24  2158  	res = yt921x_reg64_update_bits(priv, YT921X_VLANn_CTRL(msti->vid),
-5c1f0fbc2c12ae David Yang 2025-10-24  2159  				       mask64, ctrl64);
-5c1f0fbc2c12ae David Yang 2025-10-24  2160  	mutex_unlock(&priv->reg_lock);
-5c1f0fbc2c12ae David Yang 2025-10-24  2161  
-5c1f0fbc2c12ae David Yang 2025-10-24  2162  	return res;
-5c1f0fbc2c12ae David Yang 2025-10-24  2163  }
-5c1f0fbc2c12ae David Yang 2025-10-24  2164  
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
