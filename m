@@ -1,139 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EE22F49E4;
-	Sat, 25 Oct 2025 11:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52C93002D3
+	for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 14:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761392341; cv=none; b=TKVYiZq8bWfAx1CEofAy0phKSaUgON6D9b8bLEHm8G12bWREdDSjq2HNsZSZkx/aA3YMIctsEfrvphgXCT7jFgnEU2iUkL2xIpSuEAuo+Clt57Vqsk/D3eCfz9QLr19adlxnKpgS2qu1cW90NlDYEFnNn4C6Sd8i6C4qxQB1AlE=
+	t=1761403966; cv=none; b=rV40X6zFA1JJRNtoLIyf2/drXnyKY24oumgLNAF5y2j/pC23aaiYXmeUJcb4+Zry09J5PkgRSxNB8IA8/iszqPXE47Skvakah8k9PxXNmc/ASm62gDDtNBbwBIhuQaF+nJFHvrxUlguFPoWuhIwsz0jzXvK1p7oaMMIClEMtnxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761392341; c=relaxed/simple;
-	bh=51cgBOlVttvu8BBasQzxGX6S4hZd7Wp/4lDeD+RggkQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n1Xoa5A36E2aaR4u2Y7QVn0Ju2SSNmfhWNlUtmtK2rJFQmeqDGm0lQ8+xULsiW6OWh5tmut3kl+KFNsxyxxJSUzL1mSmxXxt14q81kcdRw67B1hi9KRwkdsihgeqlbK+zs1+epird3esiJk36nY7vITUkPwxcq7cDI2EPk5KWPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NF/0k8VD; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761403966; c=relaxed/simple;
+	bh=rxkH9HqQp8MJpuSr9SUPPrL1eIBYUI8t2HD6mPry1gY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SMmw42nATheQSRnwRV6nkq2DXgSNZEqtsHTRvP+ZJEadKm7wbxrwXSHz+GsjD2OrY/SSGEyyjux2IgI7zCPSOwxjXlqPp4FLp3dPOtl36gv0AyH6v0oEnSsbbKxl2VPNejA/b6IQ40YPwGn5rblvwDOrvCwoa+5cfJzthBjmO9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=gyTuKpDl; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NF/0k8VD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761392339; x=1792928339;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=51cgBOlVttvu8BBasQzxGX6S4hZd7Wp/4lDeD+RggkQ=;
-  b=NF/0k8VDzHlEBb/Thnq775DaFVtS8G8cV8atdJS7Bu6LzN84sNMLaZTw
-   fN/vjLkLOmhGg6FN0pQd/Dq59k0P+8RcUVrJVTv6GAOlIOdJGdQKGzGuu
-   D3uzdkN72KJc5asghrdOLZ1bozEGrBcthoyb/r8yQrS9sjTWsp/lN3Wpj
-   aKYkAeEQEfpc/kWogB0pW8ictP1g7QhGXZ7KVGVXL2/LSutnyihSVnVeW
-   qKXYF9N95VUeRgxfr4v7fiDA3NQCy/Fo+usOrObQn183NNy/RPU0xTtLD
-   fnoyXZQG+rCG8HMs3e+KXVd0/B/FVJOL7C0cH9r0N29kHFS8im7F8PbYC
-   g==;
-X-CSE-ConnectionGUID: 00FLxFhJTOKcr4K6MXSabQ==
-X-CSE-MsgGUID: Ha/NekPIQ1OWoWExqeJVvA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67414630"
-X-IronPort-AV: E=Sophos;i="6.19,254,1754982000"; 
-   d="scan'208";a="67414630"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2025 04:38:58 -0700
-X-CSE-ConnectionGUID: cDkymQBgR+6hiAQ8hU8pUA==
-X-CSE-MsgGUID: R8zJzG5QTHq+vv5D3rejkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,254,1754982000"; 
-   d="scan'208";a="188944479"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 25 Oct 2025 04:38:56 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vCcbm-000FHx-0X;
-	Sat, 25 Oct 2025 11:38:54 +0000
-Date: Sat, 25 Oct 2025 19:38:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Masashi Ozaki <masashi.ozaki.te@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Vinh Nguyen <vinh.nguyen.xz@renesas.com>
-Subject: [morimoto:renesas-lts/v6.18-rc2-2025-10-24-x5h-ironhide 7/21]
- drivers/mailbox/rcar-mfis-mailbox.c:96:45: warning: variable 'i' is
- uninitialized when used here
-Message-ID: <202510251914.LDVp1dub-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="gyTuKpDl"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-63e12a55270so4429596a12.1
+        for <llvm@lists.linux.dev>; Sat, 25 Oct 2025 07:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1761403963; x=1762008763; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rxkH9HqQp8MJpuSr9SUPPrL1eIBYUI8t2HD6mPry1gY=;
+        b=gyTuKpDlC7h/8d+8pgTfoWAWqWRXJJL1Xk6JRhnU8eshfqr0Qeo88YQDvi/rTLj6pY
+         GrXTpS4yRFEEg8Z/fHItlCIReTO+Des8WRUxXPCrkvafw6gYztKgqc8961xlrnMveETu
+         8J/UwcCF3W4pgMoYAxN/Yg6MJ01jk7B92mwPhTXjONi+EKs6X2gnE4WM0njSnvUsAz2d
+         DddpD4TNsC44taEes7hs9qgLrEpBrNkKTsjsuNqQoruqP2iu5NcF5evWYYJr74QKUGaQ
+         s13R4X0qIpVywmXO4KAhAcrZsAsO4EOB/TUCefKINIiapbojkqLD3TIqa5OiD+S8yHBy
+         bbjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761403963; x=1762008763;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rxkH9HqQp8MJpuSr9SUPPrL1eIBYUI8t2HD6mPry1gY=;
+        b=uA0kQLGtSzl3BUF/2XQQ+np6Q3wYiwxCv+pLmPPPyp3AeoxMpRlfj8dvfjkGIs22cc
+         a+36hc5dSpiUaTiwwk8zynK1ssOXPUYuNpGksWkiXduVTDFnzmicfSPQjhZpvSTg0CtD
+         GJfw6eDSn8f0o/LRyIMGG1yLkNUGq0Qqvy4JfmsZ1QEoqmwasR91Ibm1rChQuH/eltRD
+         Glhc6xVcvop0etaoemWi8NyQaE0ppCEHO+fHR3ilgOn4mlAEGKPgVfl04uPVSMSjzc1v
+         i/5lNZvYTtqi7t5wm8UBj8CGVlOFznpAazrYlIPUkfJJG3f8pBYUy9d41uZwWsZfXxbh
+         8xGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkmGjT60ZjPgMu+tQ+lD2W9dzQvJf7BXVnisL6UgZi8uo/IsNh6y+7rcXKZPqAnsEIJ5aF@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw3UJe58ka3v5fQqJwcE+8Q27TmvPKoRSdkFYjfXZ1VAVolFKAB
+	4tN+ED4KKxDapFOQvbpAWsSotdQoH5KLkl+6nA8P3ubDblsaa867HSEUYOKTI1rxJNxlcNlxMsj
+	OytcpMuS0hMohVbyYyOQAhBiA4kyv08FvvbjNJ1mEjg==
+X-Gm-Gg: ASbGnctqZL9T0OusWIFxPVgFwM8/ryTSu5YxHeMdyDxyCgsmb6LeBOSZwCaaYfKhJqe
+	FSacq4EFhn9W6277eOyF0PIx5Y4pNx/QJPsqURQ3B15SEH40zvM1tla3v26V6zLHC4mN9zuu/l0
+	OBj4Sxv5ElgBx+WUYxH7ayIaL2+0wacskkLIX2PpOe9Ky3m1A+tTtdHheWe4mgQe+6moAZ+uJ/S
+	v6T1v7bu+wyKsTqkDV2Pd3rKIetPyi4eKLWpyGmXeQWDe9jd82rDx2Nqwm2AL3tNk9Y2GNaw/je
+	7vGejQXKk2cfBAyBhx8cUA0Mso+y
+X-Google-Smtp-Source: AGHT+IEEmtC5AP/1Gyl7o28TLb62A6fjQmpgJI/nFlghPy3b8TZfgzFAjEpwZUdPvlcd5pyK5S+BLKOml0q59+GzhB4=
+X-Received: by 2002:a05:6402:13ca:b0:637:f07d:e80f with SMTP id
+ 4fb4d7f45d1cf-63c1f58c0d3mr30957969a12.0.1761403962844; Sat, 25 Oct 2025
+ 07:52:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Sat, 25 Oct 2025 10:52:07 -0400
+X-Gm-Features: AWmQ_bllNz8YycDjixpyqg8hZuOQcw77RRZ1nqOvRZhBjS1lHQKHtPcetSr4uhE
+Message-ID: <CA+CK2bBvCytQhJ-DbgBDUo-MT0xtuXNW=yzX3StwaNUj=JfnoQ@mail.gmail.com>
+Subject: Re: [PATCH v7 00/15] Consolidate iommu page table implementations (AMD)
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
+	Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>, 
+	Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez <alejandro.j.jimenez@oracle.com>, 
+	James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>, 
+	Michael Roth <michael.roth@amd.com>, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/morimoto/linux renesas-lts/v6.18-rc2-2025-10-24-x5h-ironhide
-head:   fe21d488fba0b6bcb0416fab7cf246e35592ce10
-commit: 2a60dfb617c1f4f3055ffca329bbb1185e95cd5b [7/21] mailbox: renesas: Support MFIS mailbox driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251025/202510251914.LDVp1dub-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251025/202510251914.LDVp1dub-lkp@intel.com/reproduce)
+>
+> Cc: Michael Roth <michael.roth@amd.com>
+> Cc: Alexey Kardashevskiy <aik@amd.com>
+> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Cc: James Gowans <jgowans@amazon.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510251914.LDVp1dub-lkp@intel.com/
+I tested this series via iova_stress [1], on Intel, AMD, and ARM
+machines, no regressions were detected.
+Tested-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/mailbox/rcar-mfis-mailbox.c:96:45: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-      96 |         reg = devm_platform_ioremap_resource(pdev, i);
-         |                                                    ^
-   drivers/mailbox/rcar-mfis-mailbox.c:86:23: note: initialize the variable 'i' to silence this warning
-      86 |         int ret, count = 2, i;
-         |                              ^
-         |                               = 0
-   1 warning generated.
-
-
-vim +/i +96 drivers/mailbox/rcar-mfis-mailbox.c
-
-    80	
-    81	static int mfis_mbox_probe(struct platform_device *pdev)
-    82	{
-    83		struct device *dev = &pdev->dev;
-    84		struct mbox_controller *mbox;
-    85		void __iomem *reg;
-    86		int ret, count = 2, i;
-    87	
-    88		mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
-    89		if (!mbox)
-    90			return -ENOMEM;
-    91	
-    92		mbox->chans = devm_kcalloc(dev, count, sizeof(*mbox->chans), GFP_KERNEL);
-    93		if (!mbox->chans)
-    94			return -ENOMEM;
-    95	
-  > 96		reg = devm_platform_ioremap_resource(pdev, i);
-    97		if (IS_ERR(reg))
-    98			return PTR_ERR(reg);
-    99	
-   100		for (i = 0; i < count; i++) {
-   101			mbox->chans[i].mbox	= mbox;
-   102			mbox->chans[i].con_priv	= reg + ((1 - i) * 4);
-   103		}
-   104	
-   105		mbox->txdone_poll	= true;
-   106		mbox->txdone_irq	= false;
-   107		mbox->txpoll_period	= 1;
-   108		mbox->num_chans		= count;
-   109		mbox->ops		= &mfis_chan_ops;
-   110		mbox->dev		= dev;
-   111	
-   112		ret = mbox_controller_register(mbox);
-   113		if (ret)
-   114			return ret;
-   115	
-   116		platform_set_drvdata(pdev, mbox);
-   117		dev_info(dev, "MFIS mailbox is probed\n");
-   118	
-   119		return 0;
-   120	}
-   121	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://github.com/soleen/iova_stress
