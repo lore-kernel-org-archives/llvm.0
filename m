@@ -1,149 +1,123 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F7424E4C4
-	for <llvm@lists.linux.dev>; Sun, 26 Oct 2025 17:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240C345C0B;
+	Sun, 26 Oct 2025 22:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761498085; cv=none; b=RiMLzUA7/XVBMqIFRModsjAS+3PCCRyT35lAk3P3ufkrj52nWqgZMEM7c/Wrg8HHL4eIV+jRHEpPrOv/05T5Q381L7UolNJ64t+4k8nrpvXmXV9Z/1ZwQdYW+0xuY7gFk1wKRxwwacy6tEdoO5ERU0eZ88tpgJddwxzbfNV3hxc=
+	t=1761516193; cv=none; b=ghNcT4CAalRt57+UKKrdedMLcsrchVcx0afjIKY5fHfLPh5w8hU0nTkTZoCUT0Br8+dcCZ7+eKZuCeiUrltUNs40XRYWMJ9LHxMfh9nDE4HWnpz9qgPEYgNsi23as2ZmoQxYBX6t9qjuJdAu5iJb0Nxyt/8U1LEg3r4hxfosbwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761498085; c=relaxed/simple;
-	bh=3uBbliirVc3jww5q5Y2adj9XHH1YIm2yJyF8Be72/3E=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=q8rZ8Dj8W8ADIp5UIEi73MXVyvKWAp+P0WiCJZSuB40WYNBnzEuz9hA2rUW+mJaQxNMjRcT4UA6nF8NpAznu5EojB9o+NhMw2nsTJNg77Ofccs0QwfK3cuzKk3GRC5orf5jnqegATRxBd+y40hV5FmMeG/hy6Kfk52G6R5kg9yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EXMnc7JD; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1761516193; c=relaxed/simple;
+	bh=h67yTNf38kMIXX7w3vfQFFDc72JfJPyGmsqEuWrQb58=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WdguvrbmooP1CH+jHFIxmzGtVOCbPxxGkly5/dhmO2a0ZZ3oaqBu0FfJMlhymAXNJMwLVKg+brJ7AZgZRrpF6nG5cMOA7RRJd9K7nGJ02cs6iUQxYziiZD5RRx2HjjAxRX6DIQDLqdCciakIZVT1w2iTlzqoxTfzNFreG94L2Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oECiaYJL; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EXMnc7JD"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-47112a73785so23472395e9.3
-        for <llvm@lists.linux.dev>; Sun, 26 Oct 2025 10:01:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761498081; x=1762102881; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NhJNOPdN2CYb23xAVGLTmgNPNqLAx0EC8t93YAryYiY=;
-        b=EXMnc7JDGVIF13iUi54lLNlOTVqipDSmDUNRw986kdDbJ9hC0ixJDQCmc7ZLAFRSAq
-         hB0nAi/7mx1yAj9i1le+wrJWyrHPYVWkzFcaIaaDjZ3coNoz8TygNGojFEaVpzg4BMCd
-         3NR0UNc2vkLTmDCCsjmRSwLB42RSf0X/rt69GBzmeRc8pqerjba+mixNJgGZkVuNvANb
-         E9EcalITJtQnrRw0Rc7OBjfZV4Abz06bUqufowHd6pyiMbygX/RQDoccD+PVnJzIwhK0
-         qXleaY8DinwBCLPCxlSNVlkF+lykDWBTCaTMfpHx11WQ7Q/pgKYFI5v+PR1TPK1IBsKq
-         Gm8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761498081; x=1762102881;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NhJNOPdN2CYb23xAVGLTmgNPNqLAx0EC8t93YAryYiY=;
-        b=d4uFnMdlOfIBtF+9wj7KmFxnoiUDdCN4THmzy65i0TwjY/4NRCmntWXvtr1LUT6Wko
-         pMMtF5d2v8VGP84o1ePyLQRK8J+/USrogwwINP5CjunxNtCCYxtoUKgz2z3mGNT4szhO
-         b+g9R621P+bxu1zt1FcbmrCfCyjUTUAmBnaCUN7qP+FVCGAd+ZAH201fiRMLHvVxGGF8
-         ZUo9L5keKJufbz727uvu9Qpj1fA45hTDNBVao8CfcGWaJvDCwTIjbWRjLa0Ghmj+EupR
-         170AprE1XH9n0SG6zoRVgB2sBFBYnnRxNa34cLl9CQY+oEm54XYibHWd+moEVE86CQH2
-         ziIQ==
-X-Gm-Message-State: AOJu0YxddfdaX5HAe2bx5ws6XBg7vAN2Ah8DZatxeemgfkF9fQOJjqA/
-	9lC9FiaG1w9aB/638H0VoV5UsNRj/92fcPt3dPy8xfJH7t1Cet7ruaoah0DN+mdtApUJXUBUiQ4
-	rN/x9
-X-Gm-Gg: ASbGnctogHMf7YLSQDUqfv/Ivc/45DBmiozM76ibf5mn6PJOj1+hlOhTTCYMr2PH+p8
-	7+AafRBMdIQ92gERTmrzXvuedBAX5cnuRXqTR/zbYEQ6gwzMI+HLds0Fd3Aaz6N4wqTWesz9BEN
-	2DXsyu0OPfrZaAyDWDQ8bAmmpjmnbriBbEiZf7q1f5z+MpViOWU3vuz2UKfCMDiIwh/S4FifG5h
-	HQmw6SG3Hcu8lX5o3CbJHOQEF0V2J9RifOTxIsFU8flo3bVO02A0KlayvUW99SE/jXzhKk+X9t/
-	g+YMzTS1pJfIn+Z8rMJ3lm9RpK86CFwcrC1pZ/BEOy8QQk53XNanO/aPyHtqavsBOtyH0vS+2II
-	J2vIYy/H+tqbWPAmV5nE0RyiqD040Xy/69zmvXZaE5SIjhLb5dksXi5AxF4SZa6y30F7kGQDcmA
-	8F6zweLRs53zTyvAyqYbLPHvOGFK2ssq3THxuEHSTrMNs9D5k=
-X-Google-Smtp-Source: AGHT+IHQNSa8w2tKLfocv42lR/lVkPv8jCKPOl/P2mlp7a1kjXIKYMs2PUrc08l0JawmYYHiMlQK4A==
-X-Received: by 2002:a05:600c:5298:b0:471:9da:5232 with SMTP id 5b1f17b1804b1-471178a748bmr233880465e9.15.1761498077817;
-        Sun, 26 Oct 2025 10:01:17 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952cbb2bsm9420039f8f.13.2025.10.26.10.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Oct 2025 10:01:17 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sun, 26 Oct 2025 17:01:16 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <481166937.2108.1761498077256@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.17.3-130-g86f364ee5842: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oECiaYJL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761516192; x=1793052192;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h67yTNf38kMIXX7w3vfQFFDc72JfJPyGmsqEuWrQb58=;
+  b=oECiaYJLF8kdYnn1nZ9MIXqHpyoXbZWlC0I2pmxhAoe9f9mjrN6TF11D
+   g5rmWmJCH+hNfvgQAQwsLR/+/4ZfOJCEo/9wXSjFOEUbXtqdIz8+LM0e+
+   oCw3rf0ejU9YwGcZVIfBzvwmW1MYaT4+bv+MobcH9Nl7KeMuAm5zLWgsy
+   jdUw6w0WJfBUglCIFLC3jNyXIIF2JUX6/8odvVB+erGt2lLj/VGs1PT9m
+   l7dQfiW1h1SssWmyeu9MehUOmQ4QfMwUpll48mAN+GZwG4gPwJ4QjS5WM
+   y/9xiwGnOd6/inXMRib7LWY9GLCRF6ODU6jwsq0OesP5PX7MhR/MQBlpm
+   g==;
+X-CSE-ConnectionGUID: xUj0yso0Sr2WdvW2VzC0pA==
+X-CSE-MsgGUID: uTTBEaUxRIGFMOgEqvGVkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74203127"
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="74203127"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 15:03:11 -0700
+X-CSE-ConnectionGUID: MuGU6tBUSNyOslJojnBOrw==
+X-CSE-MsgGUID: psnqr00PSMCEcf5dNR+PMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="185247592"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 26 Oct 2025 15:03:09 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vD8pP-000GMT-0J;
+	Sun, 26 Oct 2025 22:03:07 +0000
+Date: Mon, 27 Oct 2025 06:02:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel-dev@igalia.com, Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Philipp Stanner <phasta@kernel.org>,
+	Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+Subject: Re: [PATCH v3 03/27] drm/sched: Add some scheduling quality unit
+ tests
+Message-ID: <202510270517.T5yR8FOv-lkp@intel.com>
+References: <20251024160800.79836-4-tvrtko.ursulin@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_2107_1210027701.1761498076417"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-stable-allnoconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251024160800.79836-4-tvrtko.ursulin@igalia.com>
 
-------=_Part_2107_1210027701.1761498076417
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi Tvrtko,
 
-Dear contributor,
+kernel test robot noticed the following build errors:
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+[auto build test ERROR on next-20251024]
+[also build test ERROR on v6.18-rc2]
+[cannot apply to drm-xe/drm-xe-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.18-rc2 v6.18-rc1 v6.17]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In tcwg_kernel/llvm-master-aarch64-stable-allnoconfig, after:
-  | commit v6.17.3-130-g86f364ee5842
-  | Author: Masahiro Yamada <masahiroy@kernel.org>
-  | Date:   Thu Sep 18 10:05:46 2025 +0200
-  | 
-  |     kbuild: always create intermediate vmlinux.unstripped
-  |     
-  |     [ Upstream commit 0ce5139fd96e9d415d3faaef1c575e238f9bbd67 ]
-  |     
-  |     Generate the intermediate vmlinux.unstripped regardless of
-  | ... 14 lines of the commit log omitted.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tvrtko-Ursulin/drm-sched-Consolidate-entity-run-queue-management/20251025-001017
+base:   next-20251024
+patch link:    https://lore.kernel.org/r/20251024160800.79836-4-tvrtko.ursulin%40igalia.com
+patch subject: [PATCH v3 03/27] drm/sched: Add some scheduling quality unit tests
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251027/202510270517.T5yR8FOv-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251027/202510270517.T5yR8FOv-lkp@intel.com/reproduce)
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 693
-  | # First few build errors in logs:
-  | # 00:05:55 make[2]: *** [arch/arm64/boot/Makefile:23: arch/arm64/boot/Image] Error 1
-  | # 00:05:55 make[1]: *** [arch/arm64/Makefile:180: Image] Error 2
-  | # 00:05:55 make: *** [Makefile:248: __sub-make] Error 2
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 693
-  | # linux build successful:
-  | all
-  | # linux boot successful:
-  | boot
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510270517.T5yR8FOv-lkp@intel.com/
 
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-stable-allnoconfig
+All errors (new ones prefixed by >>):
 
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-2107. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+>> drivers/gpu/drm/scheduler/tests/tests_scheduler.c:676:10: error: initializer element is not a compile-time constant
+                                 drm_sched_scheduler_two_clients_attr),
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/kunit/test.h:224:13: note: expanded from macro 'KUNIT_CASE_PARAM_ATTR'
+                     .attr = attributes, .module_name = KBUILD_MODNAME}
+                             ^~~~~~~~~~
+   1 error generated.
 
 
+vim +676 drivers/gpu/drm/scheduler/tests/tests_scheduler.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allnoconfig-build/258/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allnoconfig-build/257/artifact/artifacts
+   672	
+   673	static struct kunit_case drm_sched_scheduler_two_clients_tests[] = {
+   674		KUNIT_CASE_PARAM_ATTR(drm_sched_scheduler_two_clients_test,
+   675				      drm_sched_scheduler_two_clients_gen_params,
+ > 676				      drm_sched_scheduler_two_clients_attr),
+   677		{}
+   678	};
+   679	
 
-Instruction to reproduce the build : https://gitlab.com/LinaroLtd/tcwg/ci/interesting-commits/-/raw/master/linux/sha1/86f364ee58420e4e0709a1134e0d0d01bcc1758b/tcwg_kernel/llvm-master-aarch64-stable-allnoconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable/commit/86f364ee58420e4e0709a1134e0d0d01bcc1758b
-------=_Part_2107_1210027701.1761498076417--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
