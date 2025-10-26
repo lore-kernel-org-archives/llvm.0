@@ -1,67 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240C345C0B;
-	Sun, 26 Oct 2025 22:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9CB2FFDF1;
+	Sun, 26 Oct 2025 23:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761516193; cv=none; b=ghNcT4CAalRt57+UKKrdedMLcsrchVcx0afjIKY5fHfLPh5w8hU0nTkTZoCUT0Br8+dcCZ7+eKZuCeiUrltUNs40XRYWMJ9LHxMfh9nDE4HWnpz9qgPEYgNsi23as2ZmoQxYBX6t9qjuJdAu5iJb0Nxyt/8U1LEg3r4hxfosbwA=
+	t=1761519610; cv=none; b=ej8lHgQTK00P7pjCu7BVxY8Jc+Fp5TDSjhvTR17QAPub9ouPsiUOWTtIR76c1plEOqHcDM8T35yZl4lQWthddN5DKSYFvlbKGXcDcMEzyf2E6wVsd3n86MaGZzVZcQpgW3AqNVVSlq3MfQxhE3G3sZwn52KhiAXmGINism2xA/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761516193; c=relaxed/simple;
-	bh=h67yTNf38kMIXX7w3vfQFFDc72JfJPyGmsqEuWrQb58=;
+	s=arc-20240116; t=1761519610; c=relaxed/simple;
+	bh=GG2gG2Zm5sdOiN2dn/HSEsofdKUhfYLNrH9FfHdlQSw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WdguvrbmooP1CH+jHFIxmzGtVOCbPxxGkly5/dhmO2a0ZZ3oaqBu0FfJMlhymAXNJMwLVKg+brJ7AZgZRrpF6nG5cMOA7RRJd9K7nGJ02cs6iUQxYziiZD5RRx2HjjAxRX6DIQDLqdCciakIZVT1w2iTlzqoxTfzNFreG94L2Ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oECiaYJL; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5qy/Iu/5vaUz5Xv2rLshUFEfJe6/iwBntDAz3gzuoAgNZh6ufGDG/dAhW9lWhMp7FEp8UbIei9M088pdpXtCnD9+ycLwV/zU0jtwVkbDvco2xUUqr/zEX7LGFpV8yzh/lNDW20VpCun2RFQLIwbHwEpDIVmfNbzLGHEegcu9jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A2YWgJPW; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oECiaYJL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A2YWgJPW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761516192; x=1793052192;
+  t=1761519608; x=1793055608;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=h67yTNf38kMIXX7w3vfQFFDc72JfJPyGmsqEuWrQb58=;
-  b=oECiaYJLF8kdYnn1nZ9MIXqHpyoXbZWlC0I2pmxhAoe9f9mjrN6TF11D
-   g5rmWmJCH+hNfvgQAQwsLR/+/4ZfOJCEo/9wXSjFOEUbXtqdIz8+LM0e+
-   oCw3rf0ejU9YwGcZVIfBzvwmW1MYaT4+bv+MobcH9Nl7KeMuAm5zLWgsy
-   jdUw6w0WJfBUglCIFLC3jNyXIIF2JUX6/8odvVB+erGt2lLj/VGs1PT9m
-   l7dQfiW1h1SssWmyeu9MehUOmQ4QfMwUpll48mAN+GZwG4gPwJ4QjS5WM
-   y/9xiwGnOd6/inXMRib7LWY9GLCRF6ODU6jwsq0OesP5PX7MhR/MQBlpm
-   g==;
-X-CSE-ConnectionGUID: xUj0yso0Sr2WdvW2VzC0pA==
-X-CSE-MsgGUID: uTTBEaUxRIGFMOgEqvGVkw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74203127"
+  bh=GG2gG2Zm5sdOiN2dn/HSEsofdKUhfYLNrH9FfHdlQSw=;
+  b=A2YWgJPW0iruhIPhNtkECsjSSiyHcMkgF+W57X8eL3pCxwEsNK1WcJsv
+   6Eitym0WF+rd3HIp6io5QmFlXOlbMP2vCuhtJhWM6FS6MBfPB2UJR9Lzs
+   VxeZdvQvtLFyCQB7i1gfXNgJa56viIUKLhfK+9jHm3hSnUmzODE3j7gPc
+   /TzoxaM2ssYRRO5DpzupWQ4fedbZtXYDu9aJAC+k0VM+qUn1nAaNTIt02
+   igF4Jt2MRc/GQd/oXGYHlzMJ9pw0Ylf+7u5OuyjvAcb97cmEg434HCkTO
+   ciZCRcUPZnWODgbF4rjce6ca/RO/gZCuwGv2LIByMbmDfYhi+Xm5meD2o
+   w==;
+X-CSE-ConnectionGUID: rTD0b2mlQcukW/b4DQzQJA==
+X-CSE-MsgGUID: AOz6Yd9UQv2nvjISZrPjWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67467277"
 X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="74203127"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 15:03:11 -0700
-X-CSE-ConnectionGUID: MuGU6tBUSNyOslJojnBOrw==
-X-CSE-MsgGUID: psnqr00PSMCEcf5dNR+PMw==
+   d="scan'208";a="67467277"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 16:00:08 -0700
+X-CSE-ConnectionGUID: XC5IWdxUT3CWsELSkY4vIw==
+X-CSE-MsgGUID: G1L2gNZJQ3ySXDIHZASnzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="185247592"
+   d="scan'208";a="184594560"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 26 Oct 2025 15:03:09 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 26 Oct 2025 16:00:04 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vD8pP-000GMT-0J;
-	Sun, 26 Oct 2025 22:03:07 +0000
-Date: Mon, 27 Oct 2025 06:02:51 +0800
+	id 1vD9iT-000GNZ-1H;
+	Sun, 26 Oct 2025 23:00:01 +0000
+Date: Mon, 27 Oct 2025 06:59:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel-dev@igalia.com, Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-Subject: Re: [PATCH v3 03/27] drm/sched: Add some scheduling quality unit
- tests
-Message-ID: <202510270517.T5yR8FOv-lkp@intel.com>
-References: <20251024160800.79836-4-tvrtko.ursulin@igalia.com>
+To: Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Anton Protopopov <aspsk@isovalent.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v7 bpf-next 01/12] bpf, x86: add new map type:
+ instructions array
+Message-ID: <202510270614.av6f72iy-lkp@intel.com>
+References: <20251026192709.1964787-2-a.s.protopopov@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,53 +70,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251024160800.79836-4-tvrtko.ursulin@igalia.com>
+In-Reply-To: <20251026192709.1964787-2-a.s.protopopov@gmail.com>
 
-Hi Tvrtko,
+Hi Anton,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on next-20251024]
-[also build test ERROR on v6.18-rc2]
-[cannot apply to drm-xe/drm-xe-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.18-rc2 v6.18-rc1 v6.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tvrtko-Ursulin/drm-sched-Consolidate-entity-run-queue-management/20251025-001017
-base:   next-20251024
-patch link:    https://lore.kernel.org/r/20251024160800.79836-4-tvrtko.ursulin%40igalia.com
-patch subject: [PATCH v3 03/27] drm/sched: Add some scheduling quality unit tests
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251027/202510270517.T5yR8FOv-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251027/202510270517.T5yR8FOv-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Anton-Protopopov/bpf-x86-add-new-map-type-instructions-array/20251027-032442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251026192709.1964787-2-a.s.protopopov%40gmail.com
+patch subject: [PATCH v7 bpf-next 01/12] bpf, x86: add new map type: instructions array
+config: i386-buildonly-randconfig-005-20251027 (https://download.01.org/0day-ci/archive/20251027/202510270614.av6f72iy-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251027/202510270614.av6f72iy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510270517.T5yR8FOv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510270614.av6f72iy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/scheduler/tests/tests_scheduler.c:676:10: error: initializer element is not a compile-time constant
-                                 drm_sched_scheduler_two_clients_attr),
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:224:13: note: expanded from macro 'KUNIT_CASE_PARAM_ATTR'
-                     .attr = attributes, .module_name = KBUILD_MODNAME}
-                             ^~~~~~~~~~
-   1 error generated.
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:61:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:53:
+   In file included from include/linux/security.h:35:
+>> include/linux/bpf.h:3807:1: error: expected identifier or '('
+    3807 | {
+         | ^
+   In file included from kernel/sched/rq-offsets.c:5:
+   kernel/sched/sched.h:3743:18: warning: variable 'cpumask' set but not used [-Wunused-but-set-variable]
+    3743 |         struct cpumask *cpumask;
+         |                         ^
+   1 warning and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: kernel/sched/rq-offsets.s] Error 1 shuffle=3282044347
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1280: prepare0] Error 2 shuffle=3282044347
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3282044347
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3282044347
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +676 drivers/gpu/drm/scheduler/tests/tests_scheduler.c
+vim +3807 include/linux/bpf.h
 
-   672	
-   673	static struct kunit_case drm_sched_scheduler_two_clients_tests[] = {
-   674		KUNIT_CASE_PARAM_ATTR(drm_sched_scheduler_two_clients_test,
-   675				      drm_sched_scheduler_two_clients_gen_params,
- > 676				      drm_sched_scheduler_two_clients_attr),
-   677		{}
-   678	};
-   679	
+  3799	
+  3800	#ifdef CONFIG_BPF_SYSCALL
+  3801	void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, void *jit_priv,
+  3802				       update_insn_ptr_func_t update_insn_ptr);
+  3803	#else
+  3804	static inline void
+  3805	bpf_prog_update_insn_ptrs(struct bpf_prog *prog, void *jit_priv,
+  3806				  update_insn_ptr_func_t update_insn_ptr);
+> 3807	{
+  3808	}
+  3809	#endif
+  3810	
 
 -- 
 0-DAY CI Kernel Test Service
