@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE0249659;
-	Sun, 26 Oct 2025 01:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333CB221F15;
+	Sun, 26 Oct 2025 02:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761441418; cv=none; b=X/LR8toanLTnUmJnC5LAsrCYkyP3+yLh+2kMQN9bpD/nxtQKE2gPLYLaE7ODqonD014euHA2JQQ8ANmpWDq0hWfYHeDt76G/0+6qOwpoMF1yQHh3EvxIXBuar0DBoCA4vMVbvGG5kzaGz0h5iMHejYl+GCxpHquKySTfBVxLDKM=
+	t=1761446003; cv=none; b=LdiO7MPloAdOZhFGkti2vbO/j6DQyu+KqDZUwxpkF5jIlyJyzgOBZFo3BDhN15thjc7ZzsDlZYiFmNuVvqDVfaKEExxI86f0Tw52ngM5wVZVqHr2jNnVgfqQqODxUic4hfLYC0wKs2HOS7fSE/StrMJKkQNcYgmjBPlXDth7qow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761441418; c=relaxed/simple;
-	bh=MLYlLWyr6dO+miN2J53bF3I67phuG7akpaw2lXgD/ao=;
+	s=arc-20240116; t=1761446003; c=relaxed/simple;
+	bh=fC1spCueI/1r0IiSbW1ZLyWt4ygH9ax+maonPvZY2Ek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pU7LcOCnpYLO25WVLFA3Pio8btLipDnKSoDyyYFvdWcnNyf52+D02INGdRpZ4vMA6pzlcCffMDnkh3PAzUkwMeo59QI9Aay30gziwhfq9OHhcAtuHuZofq0y9M9rAC14JhP5LfWyn+MrvO2zOyiFhMPv/gYKhj8441Kq3Qfbd4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3PXW2X8; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=C8x4ZG68zFFY301Q8B/KRZqjIFPzU8CFMwSc2TjKJ03RVwmUG+FP56AXXSUlD0qDUC8m+C2J5uWoV8JhbrkmRzDezzROm40wHZqBD8+tmv9uv3bA6fzUg60lCktrNdfa0c5MhKrVARoeE3nH5swuo4ehyWFyBRHLZMxjB7B52jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H6Hb+YhV; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3PXW2X8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H6Hb+YhV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761441417; x=1792977417;
+  t=1761446002; x=1792982002;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MLYlLWyr6dO+miN2J53bF3I67phuG7akpaw2lXgD/ao=;
-  b=V3PXW2X8YEvsAi9R3P37QYtV58nxqHB3R/5kOdt+Oq9O2wqqWpvY7MPc
-   519ssHKwzGlVttw7wqnxhvG38FAou8hL1jGVHlGP11zY4gLqrUjAXAX2y
-   xy2vNolZuYW+7/q293T+QnW1YBoSInFvCV/vNjxY3Kr3ZhOixczDYeaFN
-   zz9QsPkVLdZu4Nh2W9eLl0whc4CRXncnn+Ry6O4421JunrZ45YkIIynym
-   AoPMIHiCUkLpqFil4f1v3tVceHa7Xn9nTWBuB8XIqhdQ0WgFlYDv5iRqa
-   cNdL674FIkNU+n74pxieWwsUt4rMHtstFl8nndKgSGf8rB+OtaqQlCfR4
-   A==;
-X-CSE-ConnectionGUID: Ivykeu1TTpmRuJSVYbrNmg==
-X-CSE-MsgGUID: xrnbJ4F5QQWHgasAOABO7Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63605947"
+  bh=fC1spCueI/1r0IiSbW1ZLyWt4ygH9ax+maonPvZY2Ek=;
+  b=H6Hb+YhV/QCHruDf83aW364yo/7mm8xMngzQQ3aYAFGnwgPaNC7OLjuD
+   yzW0cZ1LFVFPI37KftougH+DCW3a6T2nNXfazeZQgoFXRn7UCsLeOKngG
+   HNrCVhFs8LTfivYhGEfIUca8wxqVLIAdJvocKYGfPWLmBGovwIiBFalpT
+   pFT2DxZH4aoqpHkCSWp7WzHRAPRgmbXSBghUHfR7TSI5CaD4t3AfnhF8s
+   6OiWNs8k5j2mftphN1cutiapZMZKQv/jOogTlSXxYmiI/b99wWC4HUVHt
+   0XryMyQp7k3/LcH0kxvPzaKWBzijvZzXUhhpEnt9t2pjJHx+f38VBEgj4
+   g==;
+X-CSE-ConnectionGUID: Y6WaFI5oRvKtw+ooh1FBkA==
+X-CSE-MsgGUID: 4yxqsqZVTG2X1ak85nSZNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63463063"
 X-IronPort-AV: E=Sophos;i="6.19,255,1754982000"; 
-   d="scan'208";a="63605947"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2025 18:16:56 -0700
-X-CSE-ConnectionGUID: GsrWzCXzR5yj1gyER6wjcw==
-X-CSE-MsgGUID: YF2Mk4O/SYe67WkSxR6Quw==
+   d="scan'208";a="63463063"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2025 19:33:20 -0700
+X-CSE-ConnectionGUID: ZtCiQpUJTfWSS+IAbW9Fpw==
+X-CSE-MsgGUID: BrqiEr+bS4+3HHtqqCOAiw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,255,1754982000"; 
-   d="scan'208";a="185093899"
+   d="scan'208";a="189122670"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Oct 2025 18:16:55 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 25 Oct 2025 19:33:18 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vCpNN-000Flt-0f;
-	Sun, 26 Oct 2025 01:16:53 +0000
-Date: Sun, 26 Oct 2025 09:16:45 +0800
+	id 1vCqZI-000Fp7-1d;
+	Sun, 26 Oct 2025 02:33:16 +0000
+Date: Sun, 26 Oct 2025 10:32:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <cel@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7 04/14] NFSD: Implement NFSD_IO_DIRECT for NFS WRITE
-Message-ID: <202510260920.HUFBtu3X-lkp@intel.com>
-References: <20251024144306.35652-5-cel@kernel.org>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, migo.oravec@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [RFT PATCH] usb: early: xhci-dbc: Try smaller early_ioremap size
+ if original size fails
+Message-ID: <202510261010.UvV0M6f5-lkp@intel.com>
+References: <20251024154157.40800-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,167 +65,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251024144306.35652-5-cel@kernel.org>
+In-Reply-To: <20251024154157.40800-1-mathias.nyman@linux.intel.com>
 
-Hi Chuck,
+Hi Mathias,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on v6.18-rc2]
-[also build test ERROR on linus/master next-20251024]
-[cannot apply to brauner-vfs/vfs.all]
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.18-rc2 next-20251024]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chuck-Lever/NFSD-Make-FILE_SYNC-WRITEs-comply-with-spec/20251024-224529
-base:   v6.18-rc2
-patch link:    https://lore.kernel.org/r/20251024144306.35652-5-cel%40kernel.org
-patch subject: [PATCH v7 04/14] NFSD: Implement NFSD_IO_DIRECT for NFS WRITE
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251026/202510260920.HUFBtu3X-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mathias-Nyman/usb-early-xhci-dbc-Try-smaller-early_ioremap-size-if-original-size-fails/20251024-234429
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20251024154157.40800-1-mathias.nyman%40linux.intel.com
+patch subject: [RFT PATCH] usb: early: xhci-dbc: Try smaller early_ioremap size if original size fails
+config: i386-randconfig-004-20251026 (https://download.01.org/0day-ci/archive/20251026/202510261010.UvV0M6f5-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251026/202510260920.HUFBtu3X-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251026/202510261010.UvV0M6f5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510260920.HUFBtu3X-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510261010.UvV0M6f5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/nfsd/vfs.c:1455:7: error: use of undeclared identifier 'NFSD_IO_DIRECT'
-    1455 |         case NFSD_IO_DIRECT:
-         |              ^
-   1 error generated.
---
->> fs/nfsd/debugfs.c:109:7: error: use of undeclared identifier 'NFSD_IO_DIRECT'
-     109 |         case NFSD_IO_DIRECT:
-         |              ^
-   1 error generated.
+>> drivers/usb/early/xhci-dbc.c:665:55: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     665 |                                 pr_warn("Bad DbC offset 0x%x, max 0x%lx", offset, xdbc.xhci_length);
+         |                                                                     ~~~           ^~~~~~~~~~~~~~~~
+         |                                                                     %zx
+   include/linux/printk.h:565:37: note: expanded from macro 'pr_warn'
+     565 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |                                    ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:512:60: note: expanded from macro 'printk'
+     512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
+     484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/NFSD_IO_DIRECT +1455 fs/nfsd/vfs.c
+vim +665 drivers/usb/early/xhci-dbc.c
 
-  1378	
-  1379	/**
-  1380	 * nfsd_vfs_write - write data to an already-open file
-  1381	 * @rqstp: RPC execution context
-  1382	 * @fhp: File handle of file to write into
-  1383	 * @nf: An open file matching @fhp
-  1384	 * @offset: Byte offset of start
-  1385	 * @payload: xdr_buf containing the write payload
-  1386	 * @cnt: IN: number of bytes to write, OUT: number of bytes actually written
-  1387	 * @stable_how: IN: Client's requested stable_how, OUT: Actual stable_how
-  1388	 * @verf: NFS WRITE verifier
-  1389	 *
-  1390	 * Upon return, caller must invoke fh_put on @fhp.
-  1391	 *
-  1392	 * Return values:
-  1393	 *   An nfsstat value in network byte order.
-  1394	 */
-  1395	__be32
-  1396	nfsd_vfs_write(struct svc_rqst *rqstp, struct svc_fh *fhp,
-  1397		       struct nfsd_file *nf, loff_t offset,
-  1398		       const struct xdr_buf *payload, unsigned long *cnt,
-  1399		       u32 *stable_how, __be32 *verf)
-  1400	{
-  1401		struct nfsd_net		*nn = net_generic(SVC_NET(rqstp), nfsd_net_id);
-  1402		struct file		*file = nf->nf_file;
-  1403		struct super_block	*sb = file_inode(file)->i_sb;
-  1404		u32			stable = *stable_how;
-  1405		struct kiocb		kiocb;
-  1406		struct svc_export	*exp;
-  1407		errseq_t		since;
-  1408		__be32			nfserr;
-  1409		int			host_err;
-  1410		unsigned long		exp_op_flags = 0;
-  1411		unsigned int		pflags = current->flags;
-  1412		bool			restore_flags = false;
-  1413		unsigned int		nvecs;
-  1414	
-  1415		trace_nfsd_write_opened(rqstp, fhp, offset, *cnt);
-  1416	
-  1417		if (sb->s_export_op)
-  1418			exp_op_flags = sb->s_export_op->flags;
-  1419	
-  1420		if (test_bit(RQ_LOCAL, &rqstp->rq_flags) &&
-  1421		    !(exp_op_flags & EXPORT_OP_REMOTE_FS)) {
-  1422			/*
-  1423			 * We want throttling in balance_dirty_pages()
-  1424			 * and shrink_inactive_list() to only consider
-  1425			 * the backingdev we are writing to, so that nfs to
-  1426			 * localhost doesn't cause nfsd to lock up due to all
-  1427			 * the client's dirty pages or its congested queue.
-  1428			 */
-  1429			current->flags |= PF_LOCAL_THROTTLE;
-  1430			restore_flags = true;
-  1431		}
-  1432	
-  1433		exp = fhp->fh_export;
-  1434	
-  1435		if (!EX_ISSYNC(exp))
-  1436			stable = NFS_UNSTABLE;
-  1437		init_sync_kiocb(&kiocb, file);
-  1438		kiocb.ki_pos = offset;
-  1439		if (stable && !fhp->fh_use_wgather) {
-  1440			if (stable == NFS_FILE_SYNC)
-  1441				/* persist data and timestamps */
-  1442				kiocb.ki_flags |= IOCB_DSYNC | IOCB_SYNC;
-  1443			else
-  1444				/* persist data only */
-  1445				kiocb.ki_flags |= IOCB_DSYNC;
-  1446		}
-  1447	
-  1448		nvecs = xdr_buf_to_bvec(rqstp->rq_bvec, rqstp->rq_maxpages, payload);
-  1449	
-  1450		since = READ_ONCE(file->f_wb_err);
-  1451		if (verf)
-  1452			nfsd_copy_write_verifier(verf, nn);
-  1453	
-  1454		switch (nfsd_io_cache_write) {
-> 1455		case NFSD_IO_DIRECT:
-  1456			host_err = nfsd_direct_write(rqstp, fhp, nf, stable_how,
-  1457						     nvecs, cnt, &kiocb);
-  1458			stable = *stable_how;
-  1459			break;
-  1460		case NFSD_IO_DONTCACHE:
-  1461			if (file->f_op->fop_flags & FOP_DONTCACHE)
-  1462				kiocb.ki_flags |= IOCB_DONTCACHE;
-  1463			fallthrough;
-  1464		case NFSD_IO_BUFFERED:
-  1465			host_err = nfsd_iocb_write(file, rqstp->rq_bvec, nvecs, cnt,
-  1466						   &kiocb);
-  1467			break;
-  1468		}
-  1469		if (host_err < 0) {
-  1470			commit_reset_write_verifier(nn, rqstp, host_err);
-  1471			goto out_nfserr;
-  1472		}
-  1473		nfsd_stats_io_write_add(nn, exp, *cnt);
-  1474		fsnotify_modify(file);
-  1475		host_err = filemap_check_wb_err(file->f_mapping, since);
-  1476		if (host_err < 0)
-  1477			goto out_nfserr;
-  1478	
-  1479		if (stable && fhp->fh_use_wgather) {
-  1480			host_err = wait_for_concurrent_writes(file);
-  1481			if (host_err < 0)
-  1482				commit_reset_write_verifier(nn, rqstp, host_err);
-  1483		}
-  1484	
-  1485	out_nfserr:
-  1486		if (host_err >= 0) {
-  1487			trace_nfsd_write_io_done(rqstp, fhp, offset, *cnt);
-  1488			nfserr = nfs_ok;
-  1489		} else {
-  1490			trace_nfsd_write_err(rqstp, fhp, offset, host_err);
-  1491			nfserr = nfserrno(host_err);
-  1492		}
-  1493		if (restore_flags)
-  1494			current_restore_flags(pflags, PF_LOCAL_THROTTLE);
-  1495		return nfserr;
-  1496	}
-  1497	
+   610	
+   611	int __init early_xdbc_parse_parameter(char *s, int keep_early)
+   612	{
+   613		unsigned long dbgp_num = 0;
+   614		u32 bus, dev, func, offset = 0;
+   615		u32 val;
+   616		char *e;
+   617		int ret;
+   618	
+   619		if (!early_pci_allowed())
+   620			return -EPERM;
+   621	
+   622		early_console_keep = keep_early;
+   623	
+   624		if (xdbc.xdbc_reg)
+   625			return 0;
+   626	
+   627		if (*s) {
+   628		       dbgp_num = simple_strtoul(s, &e, 10);
+   629		       if (s == e)
+   630			       dbgp_num = 0;
+   631		}
+   632	
+   633		pr_notice("dbgp_num: %lu\n", dbgp_num);
+   634	
+   635		/* Locate the host controller: */
+   636		ret = xdbc_find_dbgp(dbgp_num, &bus, &dev, &func);
+   637		if (ret) {
+   638			pr_notice("failed to locate xhci host\n");
+   639			return -ENODEV;
+   640		}
+   641	
+   642		xdbc.vendor	= read_pci_config_16(bus, dev, func, PCI_VENDOR_ID);
+   643		xdbc.device	= read_pci_config_16(bus, dev, func, PCI_DEVICE_ID);
+   644		xdbc.bus	= bus;
+   645		xdbc.dev	= dev;
+   646		xdbc.func	= func;
+   647	
+   648		/* Map the IO memory: */
+   649		xdbc.xhci_base = xdbc_map_pci_mmio(bus, dev, func);
+   650		if (!xdbc.xhci_base)
+   651			return -EINVAL;
+   652	
+   653		/* Locate DbC registers: */
+   654		if (xdbc.xhci_length == xdbc.xhci_orig_length) {
+   655			offset = xhci_find_next_ext_cap(xdbc.xhci_base, 0, XHCI_EXT_CAPS_DEBUG);
+   656		} else {
+   657			/*
+   658			 * Mapped mmio size cut short from what xhci needs.
+   659			 * Check if this dBc capability is withing the new cut size.
+   660			 * DbC capability needs 64 bytes from its capabilty offset.
+   661			 */
+   662			do {
+   663				offset = xhci_find_next_ext_cap(xdbc.xhci_base, offset, 0);
+   664				if (!offset || (offset + 64 >= xdbc.xhci_length)) {
+ > 665					pr_warn("Bad DbC offset 0x%x, max 0x%lx", offset, xdbc.xhci_length);
+   666					offset = 0;
+   667					break;
+   668				}
+   669				pr_warn("Looking for DbC capability at offset 0x%x", offset);
+   670				val = readl(xdbc.xhci_base + offset);
+   671			} while (XHCI_EXT_CAPS_ID(val) != XHCI_EXT_CAPS_DEBUG);
+   672		}
+   673	
+   674		if (!offset) {
+   675			pr_warn("xhci host doesn't support debug capability\n");
+   676			early_iounmap(xdbc.xhci_base, xdbc.xhci_length);
+   677			xdbc.xhci_base = NULL;
+   678			xdbc.xhci_length = 0;
+   679	
+   680			return -ENODEV;
+   681		}
+   682		pr_warn("DbC capability found at offset 0x%x", offset);
+   683	
+   684		xdbc.xdbc_reg = (struct xdbc_regs __iomem *)(xdbc.xhci_base + offset);
+   685	
+   686		return 0;
+   687	}
+   688	
 
 -- 
 0-DAY CI Kernel Test Service
