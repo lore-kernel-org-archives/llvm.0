@@ -1,165 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21A013AD26;
-	Mon, 27 Oct 2025 15:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA8D2D2499
+	for <llvm@lists.linux.dev>; Mon, 27 Oct 2025 15:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761577752; cv=none; b=AMuXlS5uz2i1a515EbVPmRyoEsEQPm9r2fHQbRCR2lTgBix+C4dxfegojdIwxC2joAiqlcwukCgMbLiPNJ3T+NQ6MqGeagY4P99fCdU464j8rEM2A6thK9pcxDTyePq7yDcSWRXVFOU5dabWW+9donyo6BzztUSM61MDtw2DoF8=
+	t=1761577937; cv=none; b=tkoGSWLh8fYev4E6rfOXoa5IRqBMNvY8/vDwM21npjgNEcEriEAHjgphhqTFFjBcB4ro6lpxyDq3gpujRW91YRyL3YGWLWn3ITvIqIVZ6/nFMxjcI2hPSFpndMxZYmXBX0J3vJ7DIv6waXjQnVIxydV3EGrP4rr8inSepPweLdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761577752; c=relaxed/simple;
-	bh=r/sfwrGirfIxpbp9Gat6aGb+IK4Rnj9iHAHnwh9wiD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RGcCtOx7NTX4ytyxe8enxNeSX+Udd3D6MWMZvLXnXmH/yAvRYhLRXKCBSXFTTaK05sKl6dLQQb9DVyYlCI2EXVyaU0BEmXnsD3rErBcbTVw6TpOA64y8EPl9xgD1MIveJBE61ZnZSDb6xSmje/nbgPBRm3Qag+PowZ3LVe/LETg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FR43UlQ8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761577937; c=relaxed/simple;
+	bh=6IAuFZ+L2ogzPhYPk9P1MlAfeRTqJRlyTpA6+ot+JLI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=K5uhIw6ZL8qrNgs1m5iQhdBDJcyi3Bjtz75rHrwx3GkmbvyZInc4+9F52SDhzq5kCjAaxtGn6giv/LiLOEjQW/EBeZJn6uohUq8kSPtMo7wAPtn0H3d39Eo/hYbir3/uq0t0feC+AN+2psN700VblzkdNvBZ00EnvxoXI0K+dv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hgiAKLH8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FR43UlQ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC0DC4CEF1;
-	Mon, 27 Oct 2025 15:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761577751;
-	bh=r/sfwrGirfIxpbp9Gat6aGb+IK4Rnj9iHAHnwh9wiD8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FR43UlQ8MwKZyJyyW/T2FDWKhfO5p7J1eT/6yw/sGCmcWuRDyKvKvMO6kxhCh+pBo
-	 sCAR6uiORIpCQxEszW9RjTcIJgyIMWwy6CY+4ravx1fojOSCQnBuISLYk9QTmCp84a
-	 d7Y6ZtODQkFj1PCkNG7ppIInx67aDnxJed9cxmbpYqEvOQfFM7pouDmc5VhLbnBClD
-	 zeuDPIJBVGPKgmFGespC4iukLup+VMf6qih7meWTThY7vqL+J2+46h9J3GBWjdbqqr
-	 BwGnmto+IITrlxDOXB3Uz99KIinBq6/3RVp3c4wxN3HZGMx3I7jdZ4VxcQOaxsQONM
-	 mAiq+QxHhdnbA==
-Date: Mon, 27 Oct 2025 12:09:07 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: pahole next->master. Was: [PATCH bpf-next v1] selftests/bpf:
- Guard addr_space_cast code with __BPF_FEATURE_ADDR_SPACE_CAST
-Message-ID: <aP-LE7ssid10iKw-@x1>
-References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
- <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
- <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
- <84906f32-955d-4fda-b87d-56c052ddfd87@linux.dev>
- <8a94c764c5fa4ff04fa7dd69ed47fcdf782b814e@linux.dev>
- <CAADnVQKNpd8SCawQbW69ALWNZMoOvxwRbBQELqzh0P52iXG=kw@mail.gmail.com>
- <aP-InycOjSO8EqcO@x1>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hgiAKLH8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761577934;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FLfo71vOlPT0FdYcrG++QtoZWoi9DM+OdBLr7YanrBA=;
+	b=hgiAKLH8AeUtUJltZq4hQoX/ewbVf+XOlHcmba/RFU4sVfIJ8L1/kOojRcBMSNxuP2jM0u
+	za2gI2TMEVQq+tK2paUsUwqrczNc1ilAiZI+NB0WWkups+ABhmMuVrypKPe1TyMOMlDXJZ
+	YgCbX8i59wAtPRew6iGD9/oTsbVjUO4=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-341-YGYBkuUnNO-n-5UICnPqEw-1; Mon,
+ 27 Oct 2025 11:12:13 -0400
+X-MC-Unique: YGYBkuUnNO-n-5UICnPqEw-1
+X-Mimecast-MFC-AGG-ID: YGYBkuUnNO-n-5UICnPqEw_1761577932
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 629A919560AE
+	for <llvm@lists.linux.dev>; Mon, 27 Oct 2025 15:12:12 +0000 (UTC)
+Received: from [172.20.84.201] (unknown [10.30.45.119])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0BB7F180035A;
+	Mon, 27 Oct 2025 15:12:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.18.0-rc2,
+ upstream-mainline, 4bb1f7e1)
+Date: Mon, 27 Oct 2025 15:12:11 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aP-InycOjSO8EqcO@x1>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <75371.125102711121300689@us-mta-341.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: N7bqcpRXRPkToEPKVZ7RxDrB482yiGmglZGpUdYuHMg_1761577932
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 27, 2025 at 11:58:43AM -0300, Arnaldo Carvalho de Melo wrote:
-> On Thu, Oct 23, 2025 at 08:42:34AM -0700, Alexei Starovoitov wrote:
-> > On Thu, Oct 23, 2025 at 12:50 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
-> > > thanks, but version 1.30 didn't work in my tests - even pahole's master branch fails, only the next branch works...
-> > >
-> 
-> > > It seems that the 'old' pahole parses some kfuncs incorrectly, for example bpf_dynptr_slice().
-> l
-> > Alan,
->  
-> > the introduction of the 'next' branch screwed up the workflow for many people.
-> > Let's remove it and merge everything into master.
-> > People expect master branch to be the one where active development
-> > is happening and the source of truth for the latest features.
-> 
-> My bad, I've been away for too long, next is supposed to be with things
-> for a short while, testing for a few days, for CI consumption, then move
-> to master, rinse repeat.
-> 
-> I think we should go back to that model.
+Hi, we tested your kernel and here are the results:
 
-The difference is small but can explain as has changes to the btf
-loader, and the reporter, as I now checked the whole thread, says that
-'next' works for him, so I'll move what is in 'next' to 'master' now.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Just for reference since I had done it, my investigation is below.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-- Arnaldo
+Kernel information:
+    Commit message: Merge tag 'char-misc-6.18-rc3' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/gregkh/char-misc
 
-⬢ [acme@toolbx pahole]$ git remote update korg
-Fetching korg
-⬢ [acme@toolbx pahole]$ 
-⬢ [acme@toolbx pahole]$ git remote -v | grep korg
-korg	https://git.kernel.org/pub/scm/devel/pahole/pahole.git (fetch)
-korg	https://git.kernel.org/pub/scm/devel/pahole/pahole.git (push)
-⬢ [acme@toolbx pahole]$ git diff --stat korg/master korg/next 
-warning: refname 'korg/next' is ambiguous.
- .github/scripts/build-pahole.sh      | 23 +++++++++++++++++++++++
- .github/scripts/compare-functions.sh | 30 ++++++++++++++++++++++++++++++
- .github/workflows/test.yml           |  4 ++--
- .github/workflows/vmtest.yml         |  4 ++++
- CMakeLists.txt                       |  5 -----
- README                               |  4 ++++
- btf_loader.c                         | 23 ++++++++++++++++++++---
- dwarves_fprintf.c                    |  2 +-
- 8 files changed, 84 insertions(+), 11 deletions(-)
-⬢ [acme@toolbx pahole]$
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2121419996
 
-Related to btf bitfields:
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: selinux-policy: serge-testsuite: fatal: unable to access 'ht=
+tps://src.fedoraproject.org/tests/selinux.git/': The requested URL returned=
+ error: 503
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/3565986
+            Affected tests:
+                selinux-policy: serge-testsuite [aarch64]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-diff --git a/btf_loader.c b/btf_loader.c
-index f4f9f65289b5acac..64ea68022ab04e60 100644
---- a/btf_loader.c
-+++ b/btf_loader.c
-@@ -645,9 +645,15 @@ static int class__fixup_btf_bitfields(const struct conf_load *conf, struct tag *
-                pos->byte_size = tag__size(type, cu);
-                pos->bit_size = pos->byte_size * 8;
- 
--               /* if BTF data is incorrect and has size == 0, skip field,
--                * instead of crashing */
-+               /* If the BTF data is incorrect and has size == 0, skip field
-+                * instead of crashing. However the field can be a zero or
-+                * variable-length array and we still need to infer alignment.
-+                */
-                if (pos->byte_size == 0) {
-+                       pos->alignment = class__infer_alignment(conf,
-+                                                               pos->byte_offset,
-+                                                               tag__natural_alignment(type, cu),
-+                                                               smallest_offset);
-                        continue;
-                }
- 
-@@ -672,7 +678,18 @@ static int class__fixup_btf_bitfields(const struct conf_load *conf, struct tag *
-                                                        pos->byte_offset,
-                                                        tag__natural_alignment(type, cu),
-                                                        smallest_offset);
--               smallest_offset = pos->byte_offset + pos->byte_size;
-+
-+               /* Compute the smallest offset between this field and the next
-+                * one.
-+                *
-+                * In case of bitfields we need to take into account the
-+                * actual size being used instead of the underlying type one as
-+                * it could be larger, otherwise we could miss a hole.
-+                */
-+               smallest_offset = pos->byte_offset;
-+               smallest_offset += pos->bitfield_size ?
-+                       (pos->bitfield_offset + pos->bitfield_size + 7) / 8 :
-+                       pos->byte_size;
-        }
- 
-        tag_type->alignment = class__infer_alignment(conf,
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
