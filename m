@@ -1,136 +1,94 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166EE2E716A
-	for <llvm@lists.linux.dev>; Mon, 27 Oct 2025 08:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADD7221271;
+	Mon, 27 Oct 2025 08:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761552856; cv=none; b=CfQQNMj93BuR8hrPo5GLUdzHt6+vkvGFr8HUyi5nz1poOZopFhk1QTIAl0arugUGPKMK0DVQ0sAoidEVzn5UwjDR+B5ITkvgYVNFgkm03hWNfzok/35OhkcQe6oXglDnucO+wpEaC9gRKPvKtVebKhu16trXUZoKfwaVYN4vnwE=
+	t=1761552920; cv=none; b=aYA7DdlCdcONb9AxFAlybU609yo8v8+RE/AiyuN1gqnC3N1nxfyyq20dXEXU9MWC2b5L5mjQmLMMKemr3z4RkVwIGNd3pm8WNVVeHOE1kjE37Ar4vedFiJH51oVhEOmJaBDkHWePXMAW42LJ1biX3lA13hR/Hm7FgOGO/K7g/UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761552856; c=relaxed/simple;
-	bh=etqLAq7gFst0cSiu6SvH9Ue38STXBB7ceWx2V9z48vY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TTswjQxgL5czvdqhus7KXKy7QMG6wlZ2OLZh/URe6/HJHfPhzwc2YYKhvNyYhErsRV+Q9OjECVt5nwJZ+NFqRPxAQfLnqoPJ4095zxTtszWECo7/XLO0cNZf2ezmuto6Lpvb/ic1d+pkHIR5QQrc6OtRYiOXRsAmhZQrkcg27hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CjiTo6sp; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761552920; c=relaxed/simple;
+	bh=CzMWNYBpkVxjntctMxpyDnNqn3kObLOGDmZpfh4lBHc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MIrzKTYhPqpN3POCJg/wff4fqp/vYKOC5LLlzmne/+BH4OkGwZ4WiQoNjaB2eTGoWt74V010BaKe3oFlV1YVsSQyzXqrH3+cDa60TJWFr7u8nQlFVfqvyZ8E3+AVcY2pn6IIPg9XByCRs1754Eji09gFjadlHfdHhdNT/g3lhrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=U7oPHaKg reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CjiTo6sp"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-427091cd4fdso2472140f8f.1
-        for <llvm@lists.linux.dev>; Mon, 27 Oct 2025 01:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761552852; x=1762157652; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LSHu/ivuk7OTgOMQRpfxc8sNj6kHssvRHTUG1SNhELU=;
-        b=CjiTo6spf0/qyhoSWI0CjBjDn5FXZozcS6/fEP5SNVTEUS6okXZjHDUhYMVtzqG8PK
-         ijoYUOb6D4FVrSu5HG2PnD2y9C4mfZQq/2bAFWHRhMpKGVJiV/PR8Qh7YyJ3PMABPx4F
-         hrY1c0p0pPC0haw3HJFpq4kYiRZBJauK0TOOBiyXg6rFR3/KS/4qE7087Te5KEMC2BZU
-         /M0MhFACYa0PLa50oVw1oYGudYji6MC38z9EzRXPODu+8lgkUp6l69hdDXVEPxWU2a0J
-         PSbIXEi1p15HBio185SwF1owW7LHgboGVo/A07OSUQpoX70bBRk+OtRiwVWx2aZ1aYQ0
-         lMSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761552852; x=1762157652;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LSHu/ivuk7OTgOMQRpfxc8sNj6kHssvRHTUG1SNhELU=;
-        b=ZC2rYB5SonwVMUM0Hww+7TKooOkDQVHQs8vCR6fRuAz5JIR7CEq+N+OJcPLbPAOnXf
-         Qtf8O3Wapln/maYrCqi+VcpTQ+1FezwV0BJC7gM1pm05C3HscjLvjQWO7TTWNa52alvh
-         AjiZw2ZdzVJTA7Rum3nhRDQHhw+t9dWISChyhT3Bjf6Ph2QcN1RiJU2TKPAa3g/pr4wi
-         T73o0xBbqkXSZNJDqHiGw3B6/G9QrrbaUmSpPRXhasF3QEuZm0U1H2/nnabR776ancwE
-         06XROIqrC6gtcKUIG2B0Q9KEY6L1/xKNLtzGlxr4xlCaIaF9UADMcD2XSJj0tHD50QvC
-         QN7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUvMatlXrPnNODxRnWl+c7oER6ajgtDh5PtaHzXgmnehVgd0o6RtONvdihwPE17yC0HMu7l@lists.linux.dev
-X-Gm-Message-State: AOJu0YwkFQOjer19Vzp8JQv+nDrAh/J+fQHd5NLJ6OrdBncMm9VZ3oOo
-	BwZh2WRMWVSBtl6MNfi/rtJiwKL+RDQXmfgQyDZKcOx6FoY4DWAAFJgF
-X-Gm-Gg: ASbGncvGLtbNwALaUCePHcGU7c33oBgQY2pVanvQH+/DZcv6ZJnOfVdGQ2yloxC6v8R
-	R43J/hgfwUEJ1kuE6N+S3poh2xAbNmnftMCqLfrse1rNzIRUJbCI3qgQH70LFYvG6u2I39yA4Gn
-	qOixEUvdz4eckDb6k4h3zwM1mh/pJzRygooTiM0pmHGKPq1KQAUWLHiFzkPHyvWYQEHGv5W8KQd
-	Mr4zsQwUfyntN2cpmtmmivNzzBrEx1Xl4Tv1jw9O403Ag5AKq7JGsSAPws2otVmfaygxCk+qsJx
-	t/PgdtmVjLJadkRidDaO+MbMeta5bdAXvwN9FGWiEdJUqp+U5PCN5CzylICloij2DfcWeMgiEnp
-	3d2qUN9J+xQ0zV6C0ssj9ylS3JIK178UdHvZhpWQUntmT35/w5P8tidJFDwqZFKlqWE1Rss0=
-X-Google-Smtp-Source: AGHT+IFFKQfLGx2QdYO29wjJqWg+dPw9x5/f0UKf4PSXFO3HYbVj3gV1HeTpZudQpFAVTpuMJ53ygg==
-X-Received: by 2002:a05:6000:4a09:b0:427:62b:7f3 with SMTP id ffacd0b85a97d-427062b07f9mr28406369f8f.33.1761552852032;
-        Mon, 27 Oct 2025 01:14:12 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952d5768sm13058047f8f.24.2025.10.27.01.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Oct 2025 01:14:11 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 27 Oct 2025 09:14:09 +0100
-To: Nirbhay Sharma <nirbhay.lkd@gmail.com>
-Cc: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev, khalid@kernel.org,
-	david.hunter.linux@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Jiri Olsa <olsajiri@gmail.com>, sam@gentoo.org
-Subject: Re: [PATCH v2] selftests/seccomp: fix pointer type mismatch in
- UPROBE test
-Message-ID: <aP8p0Td0LLa6Odit@krava>
-References: <aP0-k3vlEEWNUtF8@krava>
- <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="U7oPHaKg"
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4cw5kk1q7vz1DDSX;
+	Mon, 27 Oct 2025 09:09:18 +0100 (CET)
+Received: from [10.10.15.20] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp.simply.com (Simply.com) with ESMTPSA id 4cw5kj4mWhz1DDSD;
+	Mon, 27 Oct 2025 09:09:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1761552558;
+	bh=ZLV2TZQ8o0UIo4kQoy81VsD/d+q0Y3BumdWGaXuUWFs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=U7oPHaKgL8ya1ryi1sQnGMtxdWqzLdImAv2+viSOEJzM9A6NZo5rYPOs3wkx8MITz
+	 VdI2cbRdHtPmbp8gd3Sp5i0ncY5AiNcCFhpq5hC6WoaGCPK+niW2y//67xXSzIobOB
+	 38t2HiXUfA4px479zvBd5RxN5gdPIqRc5rZ/bnKedw4p+y1ok8c7eA/ZFpE0AjnSVO
+	 75CWmLYcHCsJzCOY7RvpvQlAFRNuZl0X7SBpWRPTt4mhIt4uqstrwDLt+pRZYE70fS
+	 MVxuQZ3F9CaSnvhpYDbxUvnXYYJZviZ8PL7bo9M0p3Dc5PLgLDArCbqYW8RIs7eSoJ
+	 H9HnEuMPxDzxw==
+Message-ID: <62e049c9-cb92-4eaa-b069-e96ddafaad03@gaisler.com>
+Date: Mon, 27 Oct 2025 09:09:17 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH AUTOSEL 6.17-5.4] sparc: Replace __ASSEMBLY__ with
+ __ASSEMBLER__ in uapi headers
+To: Sasha Levin <sashal@kernel.org>, patches@lists.linux.dev,
+ stable@vger.kernel.org
+Cc: Thomas Huth <thuth@redhat.com>, "David S. Miller" <davem@davemloft.net>,
+ sparclinux@vger.kernel.org, nathan@kernel.org, alexandre.f.demers@gmail.com,
+ alexander.deucher@amd.com, llvm@lists.linux.dev
+References: <20251025160905.3857885-1-sashal@kernel.org>
+ <20251025160905.3857885-242-sashal@kernel.org>
+Content-Language: en-US
+From: Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20251025160905.3857885-242-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Oct 26, 2025 at 02:42:33PM +0530, Nirbhay Sharma wrote:
-> Fix compilation error in UPROBE_setup caused by pointer type mismatch
-> in the ternary expression when compiled with -fcf-protection. The
-> probed_uprobe function pointer has the __attribute__((nocf_check))
-> attribute, which causes the conditional operator to fail when combined
-> with the regular probed_uretprobe function pointer:
+On 2025-10-25 17:57, Sasha Levin wrote:
+> From: Thomas Huth <thuth@redhat.com>
 > 
->   seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional
->   expression [-Wincompatible-pointer-types]
+> [ Upstream commit d6fb6511de74bd0d4cb4cabddae9b31d533af1c1 ]
 > 
-> Cast both function pointers to 'const void *' to match the expected
-> parameter type of get_uprobe_offset(), resolving the type mismatch
-> while preserving the function selection logic.
+> __ASSEMBLY__ is only defined by the Makefile of the kernel, so
+> this is not really useful for uapi headers (unless the userspace
+> Makefile defines it, too). Let's switch to __ASSEMBLER__ which
+> gets set automatically by the compiler when compiling assembly
+> code.
 > 
-> This error appears with compilers that enable Control Flow Integrity
-> (CFI) protection via -fcf-protection, such as Clang 19.1.2 (default
-> on Fedora).
+> This is a completely mechanical patch (done with a simple "sed -i"
+> statement).
 > 
-> Signed-off-by: Nirbhay Sharma <nirbhay.lkd@gmail.com>
-
-Reviwed-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: Andreas Larsson <andreas@gaisler.com>
+> Cc: sparclinux@vger.kernel.org
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> Reviewed-by: Andreas Larsson <andreas@gaisler.com>
+> Signed-off-by: Andreas Larsson <andreas@gaisler.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 874f17763536..e13ffe18ef95 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
->  		ASSERT_GE(bit, 0);
->  	}
->  
-> -	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-> +	offset = get_uprobe_offset(variant->uretprobe ?
-> +		(const void *)probed_uretprobe : (const void *)probed_uprobe);
->  	ASSERT_GE(offset, 0);
->  
->  	if (variant->uretprobe)
-> -- 
-> 2.48.1
-> 
+
+The upstream commit dc356bf3c173 ("sparc: Drop the "-ansi" from the asflags") is
+a prerequisite to d6fb6511de74 ("sparc: Replace __ASSEMBLY__ with __ASSEMBLER__
+in uapi headers") that here is planned to be picked up to stable branches. If
+this prerequisite is not picked up first the kernel will not compile [1].
+
+[1] https://lore.kernel.org/all/810a8ec4-e416-42b6-97bf-8a56f41deea1@redhat.com/
+
+Cheers,
+Andreas
+
