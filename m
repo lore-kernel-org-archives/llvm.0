@@ -1,94 +1,124 @@
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADD7221271;
-	Mon, 27 Oct 2025 08:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBAE1E1DFC
+	for <llvm@lists.linux.dev>; Mon, 27 Oct 2025 10:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761552920; cv=none; b=aYA7DdlCdcONb9AxFAlybU609yo8v8+RE/AiyuN1gqnC3N1nxfyyq20dXEXU9MWC2b5L5mjQmLMMKemr3z4RkVwIGNd3pm8WNVVeHOE1kjE37Ar4vedFiJH51oVhEOmJaBDkHWePXMAW42LJ1biX3lA13hR/Hm7FgOGO/K7g/UM=
+	t=1761559539; cv=none; b=Hpdh5DL/93o/+6MGoydu/rvr1MgeSd5ZUuG1yvHR6L2dYituG5DnZx9glxW69fyQ6R91kdFkWFbUkTlOr+13eOXc1mNcaUrmGQsMyhsvWhTFpCkj18BUyU+u8j9cqi6JlIZYnH8JUOacpefUrKVlMLVz3g9s0SqckQiUGw+vHHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761552920; c=relaxed/simple;
-	bh=CzMWNYBpkVxjntctMxpyDnNqn3kObLOGDmZpfh4lBHc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MIrzKTYhPqpN3POCJg/wff4fqp/vYKOC5LLlzmne/+BH4OkGwZ4WiQoNjaB2eTGoWt74V010BaKe3oFlV1YVsSQyzXqrH3+cDa60TJWFr7u8nQlFVfqvyZ8E3+AVcY2pn6IIPg9XByCRs1754Eji09gFjadlHfdHhdNT/g3lhrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=U7oPHaKg reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+	s=arc-20240116; t=1761559539; c=relaxed/simple;
+	bh=eHA0hlYfdYZE/4LDQg1sbznUefERn3QEhxPIRLem2e4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E9WpV8bve8XtA2IuFxJcp9Ht8tXQ43nZURnFtg/w02kXYszjH2wl/gx1diQFUTV5Tlqp5QMv/EckwWN6tGeKhy7YbS0zExOz+sTZ/DGEeNUQiNdTVLxAtv2upnmDL0brg3JMQbj9zCgQWc479aIcDVnkKJiEoYsvSAYaVTL568o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PhxPZcnv; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="U7oPHaKg"
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4cw5kk1q7vz1DDSX;
-	Mon, 27 Oct 2025 09:09:18 +0100 (CET)
-Received: from [10.10.15.20] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4cw5kj4mWhz1DDSD;
-	Mon, 27 Oct 2025 09:09:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1761552558;
-	bh=ZLV2TZQ8o0UIo4kQoy81VsD/d+q0Y3BumdWGaXuUWFs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=U7oPHaKgL8ya1ryi1sQnGMtxdWqzLdImAv2+viSOEJzM9A6NZo5rYPOs3wkx8MITz
-	 VdI2cbRdHtPmbp8gd3Sp5i0ncY5AiNcCFhpq5hC6WoaGCPK+niW2y//67xXSzIobOB
-	 38t2HiXUfA4px479zvBd5RxN5gdPIqRc5rZ/bnKedw4p+y1ok8c7eA/ZFpE0AjnSVO
-	 75CWmLYcHCsJzCOY7RvpvQlAFRNuZl0X7SBpWRPTt4mhIt4uqstrwDLt+pRZYE70fS
-	 MVxuQZ3F9CaSnvhpYDbxUvnXYYJZviZ8PL7bo9M0p3Dc5PLgLDArCbqYW8RIs7eSoJ
-	 H9HnEuMPxDzxw==
-Message-ID: <62e049c9-cb92-4eaa-b069-e96ddafaad03@gaisler.com>
-Date: Mon, 27 Oct 2025 09:09:17 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PhxPZcnv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761559538; x=1793095538;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eHA0hlYfdYZE/4LDQg1sbznUefERn3QEhxPIRLem2e4=;
+  b=PhxPZcnv5VC6xbpngnNb+Wr+CA/7ud7+i4R9Sv8iTL7FmXOiglieilKI
+   O/osoOhk3ohnKJI0Rca+iPtAkQGPPWYhmF+XmhfG36K5ZPLrGZYau++5B
+   VRiOlfnLXb55ZLPuasjmGcAX3MCfFbWdR5g7WJCdg8XK1zM/4mRkq93/v
+   a5P2GcETlX4b4hUSR9j6XxXzXO9WOwNV2FCJLN5jPaK43sAlsSKAtfCAL
+   cD6ietBLGDIIOb0ko8hSmIrIcW0jpzJuU1RWJ0xxdxuhBiqFWgJjIdbqz
+   7DZ9VVhA9o0ejKLtY+S1kGI48MEa/BzrxUUPJQvsiW9hsZiRCnRTr/RNH
+   A==;
+X-CSE-ConnectionGUID: cnVY49G/SFiBZaXMoJV57A==
+X-CSE-MsgGUID: t1pXnSuhRnWHjLGa1Xmpyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="67470424"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="67470424"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 03:05:38 -0700
+X-CSE-ConnectionGUID: GYJkGqFpS4yIICYnpwQgsw==
+X-CSE-MsgGUID: Az4NuaHTTFO6h6LxJ3vaVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
+   d="scan'208";a="215656140"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa002.jf.intel.com with ESMTP; 27 Oct 2025 03:05:33 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 5DCC195; Mon, 27 Oct 2025 11:05:32 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Aaron Lu <ziqianlu@bytedance.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] sched/fair: Remove dead code which might prevent from building
+Date: Mon, 27 Oct 2025 11:05:29 +0100
+Message-ID: <20251027100529.1806944-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH AUTOSEL 6.17-5.4] sparc: Replace __ASSEMBLY__ with
- __ASSEMBLER__ in uapi headers
-To: Sasha Levin <sashal@kernel.org>, patches@lists.linux.dev,
- stable@vger.kernel.org
-Cc: Thomas Huth <thuth@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- sparclinux@vger.kernel.org, nathan@kernel.org, alexandre.f.demers@gmail.com,
- alexander.deucher@amd.com, llvm@lists.linux.dev
-References: <20251025160905.3857885-1-sashal@kernel.org>
- <20251025160905.3857885-242-sashal@kernel.org>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <20251025160905.3857885-242-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2025-10-25 17:57, Sasha Levin wrote:
-> From: Thomas Huth <thuth@redhat.com>
-> 
-> [ Upstream commit d6fb6511de74bd0d4cb4cabddae9b31d533af1c1 ]
-> 
-> __ASSEMBLY__ is only defined by the Makefile of the kernel, so
-> this is not really useful for uapi headers (unless the userspace
-> Makefile defines it, too). Let's switch to __ASSEMBLER__ which
-> gets set automatically by the compiler when compiling assembly
-> code.
-> 
-> This is a completely mechanical patch (done with a simple "sed -i"
-> statement).
-> 
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: Andreas Larsson <andreas@gaisler.com>
-> Cc: sparclinux@vger.kernel.org
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-> Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
+Clang, in particular, is not happy about dead code:
 
-The upstream commit dc356bf3c173 ("sparc: Drop the "-ansi" from the asflags") is
-a prerequisite to d6fb6511de74 ("sparc: Replace __ASSEMBLY__ with __ASSEMBLER__
-in uapi headers") that here is planned to be picked up to stable branches. If
-this prerequisite is not picked up first the kernel will not compile [1].
+kernel/sched/fair.c:5233:19: error: unused function 'cfs_rq_throttled' [-Werror,-Wunused-function]
+ 5233 | static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq);
+      |                   ^~~~~~~~~~~~~~~~
+1 error generated.
 
-[1] https://lore.kernel.org/all/810a8ec4-e416-42b6-97bf-8a56f41deea1@redhat.com/
+kernel/sched/fair.c:6736:19: error: unused function 'cfs_rq_throttled' [-Werror,-Wunused-function]
+ 6736 | static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq)
+      |                   ^~~~~~~~~~~~~~~~
+1 error generated.
 
-Cheers,
-Andreas
+Remove a leftover from the previous cleanup.
+
+Fixes: fe8d238e646e ("sched/fair: Propagate load for throttled cfs_rq")
+Fixes: eb962f251fbb ("sched/fair: Task based throttle time accounting")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ kernel/sched/fair.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 273e2871b59e..0370f11e5c25 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5230,7 +5230,6 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ }
+ 
+ static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+-static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq);
+ 
+ static void
+ requeue_delayed_entity(struct sched_entity *se);
+@@ -6733,11 +6732,6 @@ static void dequeue_throttled_task(struct task_struct *p, int flags) {}
+ static bool enqueue_throttled_task(struct task_struct *p) { return false; }
+ static void record_throttle_clock(struct cfs_rq *cfs_rq) {}
+ 
+-static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq)
+-{
+-	return 0;
+-}
+-
+ static inline bool cfs_rq_pelt_clock_throttled(struct cfs_rq *cfs_rq)
+ {
+ 	return false;
+-- 
+2.50.1
 
