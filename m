@@ -1,172 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2462D8DB9;
-	Mon, 27 Oct 2025 00:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5539924E4B4
+	for <llvm@lists.linux.dev>; Mon, 27 Oct 2025 07:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761526026; cv=none; b=JzBR76Su4+A8haxQM2s1mnCGlbWk4yDWfK7gWFbS25ryJ5csnjQpwdcaiBEUjFKCsgpNYGCZh+xqaCN1zj34zYXNYh8oRgPvERtiDEewxTsefsrTjGu74m69TL+RMP7YOCrGjZ3/KEUDocogvr86e3tJWpvjQuyncHkFPa3AtYk=
+	t=1761551207; cv=none; b=GgF6CXh6w/2rC5YyFQroWmACx4Dyn2wkPUiEuFrtyhiFlkYXRrFbXoBWovD3VEoxDg1WSmE3K4wa+hnHbYIy0xsepq4QYvjCvIaT32boDRFEiAssc9fcZdvMXAbpVdQbrC/bge/5pbvQsCix5pnyLXNR8JqHDJqCE87HAff4Beo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761526026; c=relaxed/simple;
-	bh=BKuHZdiShtlLZykFF20DStnoeO6azXfPEP/FBMGF618=;
+	s=arc-20240116; t=1761551207; c=relaxed/simple;
+	bh=m+/OpNmk9RjLKoKA8PTUeAPj9b8IhzIlOjvj/YC7iGM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jGBQKqlyiABq3Q1lP2ZcWuqJwXgMDf1upMj8iKZKBbPW/ChIXV4acasFYNTA/i7QDsdceQYpVX1fERz5TESInZcYrBnVGziYa1K0S185cgksYPUq/dCwnTX/ZLxlE4gZsI4ZX1c/WBTi0CMxHwQEv0LCMADBJfpiyCX1ZT423eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jvSwOKO5; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=E57BNzD/YpDyu1uMuTuyxNKvzBW3bxaauFjnbHjZYtKdHZWa7CZtBvM537yiTU0+Bvx4rKdMkQRRGLvz5gH6dkK0X9ooxHbDGD2ovonxfioWUiKWZmLujziDvuqyzQTYNcEn8oP61fS2foAYsBkrvaW//0lgwVniZ+XsLk0vQDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=In2uTG/Q; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jvSwOKO5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761526026; x=1793062026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BKuHZdiShtlLZykFF20DStnoeO6azXfPEP/FBMGF618=;
-  b=jvSwOKO5eOb71hC76sfQmn4GgvyVAQ0EDiIq3fa3QJ15gHlZ4WoZpSV0
-   Z9NNL48a95nKH2WAuV+eTCTJ5o+z58n/Og03aNZmWJrQ/6LH7NlaUDhfq
-   J8eqcRYVEus6tg2xndMs82kSfs1r6PzYuWAqlL0a2NDe8WK3MixqFreqL
-   IEvTcqNYYSIrNSbd1Be0ePHFEBOh0po362ht12pIOzYaez/B1v7Gudf/Y
-   f9BAr4KzoqPQXe9HFlQraKuFr8BxFPdW3dQV0MbhD1sA1dH8esbhhaFBS
-   /qenVxoVWr6YoT0/APdw9f2mW7oBjQbKccxIHP/o2ZMde0vVmXd+f41z8
-   g==;
-X-CSE-ConnectionGUID: uzI48RHOQgydgPhzQFQfRQ==
-X-CSE-MsgGUID: Rw3aizTvR4ascGZWp2y9aQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63644561"
-X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="63644561"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 17:47:05 -0700
-X-CSE-ConnectionGUID: QXGTwE9ITj+wqgMQm5xR5A==
-X-CSE-MsgGUID: 7dUtEu9cQBeKCn61xts60w==
-X-ExtLoop1: 1
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Oct 2025 17:46:58 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vDBNt-000GQL-2h;
-	Mon, 27 Oct 2025 00:46:53 +0000
-Date: Mon, 27 Oct 2025 08:46:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
-	airlied@gmail.com, simona@ffwll.ch, linux@armlinux.org.uk,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	inki.dae@samsung.com, sw0312.kim@samsung.com,
-	kyungmin.park@samsung.com, patrik.r.jakobsson@gmail.com,
-	jani.nikula@linux.intel.com, rodrigo.vivi@intel.com,
-	robin.clark@oss.qualcomm.com, lumag@kernel.org,
-	abhinav.kumar@linux.dev, sean@poorly.run,
-	marijn.suijten@somainline.org, tomi.valkeinen@ideasonboard.com,
-	alexander.deucher@amd.com, christian.koenig@amd.com,
-	thierry.reding@gmail.com, mperttunen@nvidia.com,
-	jonathanh@nvidia.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	freedreno@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-	linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] drm/fb-helper: Allocate and release fb_info in single
- place
-Message-ID: <202510270856.L1iU6js4-lkp@intel.com>
-References: <20251026173944.219373-1-tzimmermann@suse.de>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="In2uTG/Q"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59QKrBJq009936;
+	Mon, 27 Oct 2025 07:46:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=0Y6BSf
+	aXtj7eGt7emfZsnVlTLYftCSxA9NJ9tCnZ7Po=; b=In2uTG/QqQZw6G3At9CEW1
+	o5ceaYJD3iPLGGHMz3C4F66zaSCcquNvfvqtVFG3oFtLLxEmA8ag8/maj0wBGW5m
+	Sp3MoSpr/pR9Zs8acm6kZxjngjgLMHcWP3xxEvklW7K1v574FqYHKAb7HGXyLDwq
+	eLWepCA/aRdlF2fvCmTsImCMjSoVtHlNSFaMsNAgfJTywkgoBa4sPi2n9sqiWRKq
+	Wwp/zYWm2NFLIq1ToHS51zqq/ulUAU3o8nQ1QqQ4SCU8PTUI6SZPl4WuxLGb1gn2
+	Ojb7Uy94v+d4bVFYSGRm4q9FqpZqPWovOeDGhANiuhuTIBU3O5qu3jhfyF7rwxTg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a0myrwn13-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Oct 2025 07:46:32 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 59R7k8sl024040;
+	Mon, 27 Oct 2025 07:46:32 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a0myrwn10-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Oct 2025 07:46:31 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59R4ILBv009477;
+	Mon, 27 Oct 2025 07:46:31 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4a1b3hv7na-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Oct 2025 07:46:30 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59R7kTI829557190
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 27 Oct 2025 07:46:29 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4EBC72004B;
+	Mon, 27 Oct 2025 07:46:29 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9695F20040;
+	Mon, 27 Oct 2025 07:46:26 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.39.25.223])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 27 Oct 2025 07:46:26 +0000 (GMT)
+Date: Mon, 27 Oct 2025 13:16:23 +0530
+From: Vishal Chourasia <vishalc@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] powerpc/vmlinux.lds: Drop .interp description
+Message-ID: <aP8jT3XY3kQUCwFQ@linux.ibm.com>
+References: <20251018-ppc-fix-lld-interp-v1-1-a083de6dccc9@kernel.org>
+ <aPdBpqhm3JHvKIWJ@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251026173944.219373-1-tzimmermann@suse.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aPdBpqhm3JHvKIWJ@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: e3amaIqOg-r1xy8SBw8NhMwTtJVzHPB9
+X-Authority-Analysis: v=2.4 cv=ct2WUl4i c=1 sm=1 tr=0 ts=68ff2358 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=CCpqsmhAAAAA:8 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=oRvyBlM1FexuHqL2RKMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=ul9cdbp4aOFLsgKbc677:22 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI1MDAxMCBTYWx0ZWRfX6r4Z30l7F8Ic
+ IWvJWfnaL7SNrgqgZOVWGD3V19dcWtzpr4zSgECiRKSCnm9XZnXzIXv2TN7CeoLYKR3M/KWC4RF
+ QPMx3hoMR9hZOrqs21/9Q/8tRg8BKLrAjgY8eYB0BUoZFGfiixqRQv4S+FfaXcuqk3Pw7yHqoiD
+ 4xEir7NihCXSIZ/I0ihi8D7hH1SBidXsnMgWhZY1gWSJNZ/sCJ5c2jsRRSXdT17qEzD7qUogffI
+ KGLPLQCrhoUERQqhEhJMCPshGUrwTnD9niBZw7xzo3Y7qvvNsqSirSO8Qm7BhQ2wcFHy4d+RW2a
+ 2J5e3NfejNarpBmvKNP7S7lTEcdExym9RvtOEM9ts7Aj02cT+tcduu5HqsKUXre8qdaIObS/Bxb
+ Jf9K59fwH1PLOhxZ/lAuZ2v3jjLYog==
+X-Proofpoint-GUID: EmA_x7nIdtsKpHamxbrwTQrjfcKv5Wq6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-27_03,2025-10-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 adultscore=0 priorityscore=1501 clxscore=1011 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510250010
 
-Hi Thomas,
+ping.
 
-kernel test robot noticed the following build warnings:
+what's the status for this patch?
 
-[auto build test WARNING on drm-exynos/exynos-drm-next]
-[also build test WARNING on drm-i915/for-linux-next drm-i915/for-linux-next-fixes tegra/for-next linus/master v6.18-rc2 next-20251024]
-[cannot apply to rmk-arm/drm-armada-devel rmk-arm/drm-armada-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-fb-helper-Allocate-and-release-fb_info-in-single-place/20251027-014054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20251026173944.219373-1-tzimmermann%40suse.de
-patch subject: [PATCH] drm/fb-helper: Allocate and release fb_info in single place
-config: arm-randconfig-002-20251027 (https://download.01.org/0day-ci/archive/20251027/202510270856.L1iU6js4-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project e1ae12640102fd2b05bc567243580f90acb1135f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251027/202510270856.L1iU6js4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510270856.L1iU6js4-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_fbdev_ttm.c:208:26: warning: variable 'info' is uninitialized when used here [-Wuninitialized]
-     208 |         drm_fb_helper_fill_info(info, fb_helper, sizes);
-         |                                 ^~~~
-   drivers/gpu/drm/drm_fbdev_ttm.c:180:22: note: initialize the variable 'info' to silence this warning
-     180 |         struct fb_info *info;
-         |                             ^
-         |                              = NULL
-   1 warning generated.
---
->> drivers/gpu/drm/armada/armada_fbdev.c:111:2: warning: unused label 'err_fballoc' [-Wunused-label]
-     111 |  err_fballoc:
-         |  ^~~~~~~~~~~~
-   1 warning generated.
---
->> drivers/gpu/drm/radeon/radeon_fbdev.c:275:1: warning: unused label 'err_drm_framebuffer_unregister_private' [-Wunused-label]
-     275 | err_drm_framebuffer_unregister_private:
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+vishalc
 
 
-vim +/info +208 drivers/gpu/drm/drm_fbdev_ttm.c
-
-8ab59da26bc0ae drivers/gpu/drm/drm_fbdev_generic.c Thomas Zimmermann 2022-11-03  169  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  170  /*
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  171   * struct drm_driver
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  172   */
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  173  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  174  int drm_fbdev_ttm_driver_fbdev_probe(struct drm_fb_helper *fb_helper,
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  175  				     struct drm_fb_helper_surface_size *sizes)
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  176  {
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  177  	struct drm_client_dev *client = &fb_helper->client;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  178  	struct drm_device *dev = fb_helper->dev;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  179  	struct drm_client_buffer *buffer;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  180  	struct fb_info *info;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  181  	size_t screen_size;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  182  	void *screen_buffer;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  183  	u32 format;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  184  	int ret;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  185  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  186  	drm_dbg_kms(dev, "surface width(%d), height(%d) and bpp(%d)\n",
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  187  		    sizes->surface_width, sizes->surface_height,
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  188  		    sizes->surface_bpp);
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  189  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  190  	format = drm_driver_legacy_fb_format(dev, sizes->surface_bpp,
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  191  					     sizes->surface_depth);
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  192  	buffer = drm_client_framebuffer_create(client, sizes->surface_width,
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  193  					       sizes->surface_height, format);
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  194  	if (IS_ERR(buffer))
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  195  		return PTR_ERR(buffer);
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  196  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  197  	fb_helper->funcs = &drm_fbdev_ttm_helper_funcs;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  198  	fb_helper->buffer = buffer;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  199  	fb_helper->fb = buffer->fb;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  200  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  201  	screen_size = buffer->gem->size;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  202  	screen_buffer = vzalloc(screen_size);
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  203  	if (!screen_buffer) {
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  204  		ret = -ENOMEM;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  205  		goto err_drm_client_framebuffer_delete;
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  206  	}
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  207  
-c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24 @208  	drm_fb_helper_fill_info(info, fb_helper, sizes);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Tue, Oct 21, 2025 at 01:48:31PM +0530, Vishal Chourasia wrote:
+> On Sat, Oct 18, 2025 at 06:52:40PM +0100, Nathan Chancellor wrote:
+> > Commit da30705c4621 ("arch/powerpc: Remove .interp section in vmlinux")
+> > intended to drop the .interp section from vmlinux but even with this
+> > change, relocatable kernels linked with ld.lld contain an empty .interp
+> > section, which ends up causing crashes in GDB [1].
+> > 
+> >   $ make -skj"$(nproc)" ARCH=powerpc LLVM=1 clean pseries_le_defconfig vmlinux
+> > 
+> >   $ llvm-readelf -S vmlinux | grep interp
+> >     [44] .interp           PROGBITS        c0000000021ddb34 21edb34 000000 00   A  0   0  1
+> > 
+> > There appears to be a subtle difference between GNU ld and ld.lld when
+> > it comes to discarding sections that specify load addresses [2].
+> > 
+> > Since '--no-dynamic-linker' prevents emission of the .interp section,
+> > there is no need to describe it in the output sections of the vmlinux
+> > linker script. Drop the .interp section description from vmlinux.lds.S
+> > to avoid this issue altogether.
+> > 
+> > Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33481 [1]
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/2137 [2]
+> > Reported-by: Vishal Chourasia <vishalc@linux.ibm.com>
+> > Closes: https://lore.kernel.org/20251013040148.560439-1-vishalc@linux.ibm.com/
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  arch/powerpc/kernel/vmlinux.lds.S | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
+> > index de6ee7d35cff..15850296c0a9 100644
+> > --- a/arch/powerpc/kernel/vmlinux.lds.S
+> > +++ b/arch/powerpc/kernel/vmlinux.lds.S
+> > @@ -330,7 +330,6 @@ SECTIONS
+> >  	}
+> >  	.hash : AT(ADDR(.hash) - LOAD_OFFSET) { *(.hash) }
+> >  	.gnu.hash : AT(ADDR(.gnu.hash) - LOAD_OFFSET) { *(.gnu.hash) }
+> > -	.interp : AT(ADDR(.interp) - LOAD_OFFSET) { *(.interp) }
+> >  	.rela.dyn : AT(ADDR(.rela.dyn) - LOAD_OFFSET)
+> >  	{
+> >  		__rela_dyn_start = .;
+> > 
+> > ---
+> > base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+> > change-id: 20251018-ppc-fix-lld-interp-1a78c361cd42
+> > 
+> 
+> With this patch, I don't see .interp section being emitted the final
+> vmlinux binary.
+> 
+> ```
+> (i) ❯ make LLVM=1 vmlinux
+> (i) ❯ llvm-readelf -p .comment vmlinux
+> 
+> String dump of section '.comment':
+> [     1] clang version 22.0.0git (https://github.com/llvm/llvm-project.git 7314565281ec28b745502c3f429fd431e16673eb)
+> [    6d] Linker: LLD 22.0.0 (https://github.com/llvm/llvm-project.git 7314565281ec28b745502c3f429fd431e16673eb)
+> 
+> (i) ❯ llvm-readelf -p .interp vmlinux
+> llvm-readelf: warning: 'vmlinux': could not find section '.interp'
+> ```
+> 
+> Tested-by: Vishal Chourasia <vishalc@linux.ibm.com>
