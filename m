@@ -1,66 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3812857CD;
-	Mon, 27 Oct 2025 22:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE391F5838;
+	Mon, 27 Oct 2025 22:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761603471; cv=none; b=SxFo50Ng9naRFVGRZ2RAGaE1OLzJ1ugJ3MK2TFrjizv9quqpwa9XH7I9xFvNUopxiY+ZEh3r/1fdv0Dvu1Ugrl4Hbng1eNPhsGdb6V3TfB14fqZPfRLkJLNBL4my1Exjx6BTmQM3WvQdFAJxEeHJ8RcVdt1hk0+C9FHUaP7s5/U=
+	t=1761605442; cv=none; b=qIDK9IIhgLjmsZ5t1ZdbqG1NWesouhRiGeOH2ZmPSUIJZ3ZMPZK92+rPu5R19JUOXTV1UhG5a5VVXCG/11K+N1csakrLKEagd6wFYw59zt6VWCqwUC+zEZB6btXNW28/1llkF6q25iRKh0UKrpORNUrD+Yi/2ZjZVCTd3qNgcOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761603471; c=relaxed/simple;
-	bh=WXRa7oaBVwVTwfRflgF/27ocV7EMk7uNv6iVjH6SfvY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qjhXtK55cczy3uJgMjMOPmqecQI/82Fm9Bw1XsBD1aKX01bA9XRYuYYUiULdq92Ntq3jcIurxXMtQa3dtRwuVaYENs0pUv6Xs7CPxlaQ3/Ans5dUXvtANz6HqSqqQ+rghCpHyHhZHnbOQLxfEYRv55k4/CwdgMuaUduhsA8YuFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOC0hcHQ; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1761605442; c=relaxed/simple;
+	bh=4+YKRAK5ri69xzHl8EVT2JVTn9fyPAMLCyIbVKg4CSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SudPnOQYgAipNHmrvsusp6/TICNelrmoJERSsCRB3i/CPqyuWfu6Ip/IZeF1NBCPva72wWJc+z+bwxOPNdPKuvF3IsfsTs5jQ+VbwL8KIHgyTFEFpGUOVanU7V9QkHqo9MVu3ukCiIYk2+1rfYGiZjrAi55DuMmnM/+BVlzzOfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IG3PItNL; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOC0hcHQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IG3PItNL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761603470; x=1793139470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WXRa7oaBVwVTwfRflgF/27ocV7EMk7uNv6iVjH6SfvY=;
-  b=jOC0hcHQq+V2oXoSrZbrNeDC9JaOKBNvlemJoO7ffyC0XCAU+nHEsbR0
-   oLy1khTB2F7OtklzRQysRXWQ7nUulZOKI3e76xAI0ypabBAbWxkM/YpnR
-   oLgHIVtN9bdgAyD8lzx67Cv0IhL4vXpH76Ct9D51ZUQ0ZiyCdHbHUtyn+
-   Nx50pD8wFMcVnTbkpl8+OQtndHpbn0bb5U7BOVDFWsKq+fqTQgB58+beP
-   5HwTq7QPcEgigeeFSMjSg+MgQZb6AyK4CAV4XVr4FmUOtq3MkNBibpNj7
-   q5Oqz1Wg8fm8wi2jq8WjA+rWpJUewwOZVhRkXBfN0VTC9xOz8WckZyCV6
-   Q==;
-X-CSE-ConnectionGUID: 3j6y5DatQdeS00YdlMvsBw==
-X-CSE-MsgGUID: fYtZnTUYQJylCL8F+T5P5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="86323728"
+  t=1761605440; x=1793141440;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4+YKRAK5ri69xzHl8EVT2JVTn9fyPAMLCyIbVKg4CSk=;
+  b=IG3PItNLEzjF6wB0jO+v2to3l1DpCi33rCEvX/2AlVpnPzDR09yCF5aE
+   1ON52fzjvknfigHvx5lL8uB4S5NJwJkVq1s12zQVY1XWk0gMpz2T2bak4
+   TveDuw2XgqbyizK3VttRGFeT4ph7DWEwLmA/UaFmzg2FdKkfvm9vTJyhS
+   ehTsPSU3dtbE38JJfRB0j8ZE1OsN7RZSSUcVd2oBNavfADSE9EhJLy5ti
+   KhYBSDP6W3lMIm9iY+QShCHgyK4bjha0wTZ+cUJU6BQeNyWbE0JbiAvxJ
+   +NsqpG/Brz+zS5iOllNoR7tM+GTHtyuDlO+RyW+ZWHIY0jp0fMkhTkMIY
+   g==;
+X-CSE-ConnectionGUID: 4xRAx5V5Q/+QHDfXDLHVBw==
+X-CSE-MsgGUID: 31GlCdf1RAeh1ysBJTBJsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="66313263"
 X-IronPort-AV: E=Sophos;i="6.19,259,1754982000"; 
-   d="scan'208";a="86323728"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 15:17:49 -0700
-X-CSE-ConnectionGUID: 8AoYJFCoQ9u3PMJjGdZLmg==
-X-CSE-MsgGUID: n4B144lMSV+/ROi/cws+uQ==
+   d="scan'208";a="66313263"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 15:50:39 -0700
+X-CSE-ConnectionGUID: ppsrVJUoQMWCQYeDAI3dlQ==
+X-CSE-MsgGUID: FpaWcr+cSX6LcnVSfxjpcA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,259,1754982000"; 
-   d="scan'208";a="189205240"
+   d="scan'208";a="190302136"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 27 Oct 2025 15:17:45 -0700
+  by orviesa005.jf.intel.com with ESMTP; 27 Oct 2025 15:50:38 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vDVWz-000IW7-1M;
-	Mon, 27 Oct 2025 22:17:39 +0000
-Date: Tue, 28 Oct 2025 06:17:06 +0800
+	id 1vDW2n-000IYJ-2h;
+	Mon, 27 Oct 2025 22:50:31 +0000
+Date: Tue, 28 Oct 2025 06:48:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Hudson <nhudson@akamai.com>, "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+To: Thomas Gleixner <tglx@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nick Hudson <nhudson@akamai.com>,
-	Max Tottenham <mtottenh@akamai.com>, kvm@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost: add a new ioctl VHOST_GET_VRING_WORKER_INFO and
- use in net.c
-Message-ID: <202510280515.pRBqbq4I-lkp@intel.com>
-References: <20251027102644.622305-1-nhudson@akamai.com>
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [tglx-devel:rseq/slice 41/75]
+ arch/arm64/kernel/entry-common.c:103:2: error: call to undeclared function
+ 'exit_to_user_mode_prepare'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202510280614.DnTvmun1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,195 +64,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251027102644.622305-1-nhudson@akamai.com>
 
-Hi Nick,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on mst-vhost/linux-next]
-[also build test ERROR on linus/master v6.18-rc3 next-20251027]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Hudson/vhost-add-a-new-ioctl-VHOST_GET_VRING_WORKER_INFO-and-use-in-net-c/20251027-182919
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-patch link:    https://lore.kernel.org/r/20251027102644.622305-1-nhudson%40akamai.com
-patch subject: [PATCH] vhost: add a new ioctl VHOST_GET_VRING_WORKER_INFO and use in net.c
-config: arm-randconfig-001-20251028 (https://download.01.org/0day-ci/archive/20251028/202510280515.pRBqbq4I-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice
+head:   7b95ad81f6a1e0d08a1e481f74e83a8a49c3ec30
+commit: 3eb85fe2798ad0f79547b94137bbeba7e2de0980 [41/75] entry: Split up exit_to_user_mode_prepare()
+config: arm64-randconfig-001-20251027 (https://download.01.org/0day-ci/archive/20251028/202510280614.DnTvmun1-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project e1ae12640102fd2b05bc567243580f90acb1135f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251028/202510280515.pRBqbq4I-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251028/202510280614.DnTvmun1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510280515.pRBqbq4I-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510280614.DnTvmun1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/vhost/vhost.c:2403:3: error: use of undeclared identifier 'worker'
-    2403 |                 worker = rcu_dereference_check(vq->worker,
-         |                 ^~~~~~
-   drivers/vhost/vhost.c:2403:34: error: use of undeclared identifier 'vq'
-    2403 |                 worker = rcu_dereference_check(vq->worker,
-         |                                                ^~
-   drivers/vhost/vhost.c:2403:34: error: use of undeclared identifier 'vq'
-    2403 |                 worker = rcu_dereference_check(vq->worker,
-         |                                                ^~
-   drivers/vhost/vhost.c:2404:30: error: use of undeclared identifier 'dev'
-    2404 |                                                lockdep_is_held(&dev->mutex));
-         |                                                                 ^~~
-   drivers/vhost/vhost.c:2403:34: error: use of undeclared identifier 'vq'
-    2403 |                 worker = rcu_dereference_check(vq->worker,
-         |                                                ^~
-   drivers/vhost/vhost.c:2405:8: error: use of undeclared identifier 'worker'
-    2405 |                 if (!worker) {
-         |                      ^~~~~~
-   drivers/vhost/vhost.c:2406:4: error: use of undeclared identifier 'ret'
-    2406 |                         ret = -EINVAL;
-         |                         ^~~
-   drivers/vhost/vhost.c:2410:11: error: use of undeclared identifier 'ring_worker_info'; did you mean 'print_worker_info'?
-    2410 |                 memset(&ring_worker_info, 0, sizeof(ring_worker_info));
-         |                         ^~~~~~~~~~~~~~~~
-         |                         print_worker_info
-   include/linux/workqueue.h:637:13: note: 'print_worker_info' declared here
-     637 | extern void print_worker_info(const char *log_lvl, struct task_struct *task);
-         |             ^
-   drivers/vhost/vhost.c:2410:39: error: use of undeclared identifier 'ring_worker_info'; did you mean 'print_worker_info'?
-    2410 |                 memset(&ring_worker_info, 0, sizeof(ring_worker_info));
-         |                                                     ^~~~~~~~~~~~~~~~
-         |                                                     print_worker_info
-   include/linux/workqueue.h:637:13: note: 'print_worker_info' declared here
-     637 | extern void print_worker_info(const char *log_lvl, struct task_struct *task);
-         |             ^
-   drivers/vhost/vhost.c:2411:3: error: use of undeclared identifier 'ring_worker_info'; did you mean 'print_worker_info'?
-    2411 |                 ring_worker_info.index = idx;
-         |                 ^~~~~~~~~~~~~~~~
-         |                 print_worker_info
-   include/linux/workqueue.h:637:13: note: 'print_worker_info' declared here
-     637 | extern void print_worker_info(const char *log_lvl, struct task_struct *task);
-         |             ^
-   drivers/vhost/vhost.c:2411:19: error: member reference base type 'void (const char *, struct task_struct *)' is not a structure or union
-    2411 |                 ring_worker_info.index = idx;
-         |                 ~~~~~~~~~~~~~~~~^~~~~~
-   drivers/vhost/vhost.c:2411:28: error: use of undeclared identifier 'idx'
-    2411 |                 ring_worker_info.index = idx;
-         |                                          ^~~
-   drivers/vhost/vhost.c:2412:3: error: use of undeclared identifier 'ring_worker_info'; did you mean 'print_worker_info'?
-    2412 |                 ring_worker_info.worker_id = worker->id;
-         |                 ^~~~~~~~~~~~~~~~
-         |                 print_worker_info
-   include/linux/workqueue.h:637:13: note: 'print_worker_info' declared here
-     637 | extern void print_worker_info(const char *log_lvl, struct task_struct *task);
-         |             ^
-   drivers/vhost/vhost.c:2412:19: error: member reference base type 'void (const char *, struct task_struct *)' is not a structure or union
-    2412 |                 ring_worker_info.worker_id = worker->id;
-         |                 ~~~~~~~~~~~~~~~~^~~~~~~~~~
-   drivers/vhost/vhost.c:2412:32: error: use of undeclared identifier 'worker'
-    2412 |                 ring_worker_info.worker_id = worker->id;
-         |                                              ^~~~~~
-   drivers/vhost/vhost.c:2413:3: error: use of undeclared identifier 'ring_worker_info'; did you mean 'print_worker_info'?
-    2413 |                 ring_worker_info.worker_pid = task_pid_vnr(vhost_get_task(worker->vtsk));
-         |                 ^~~~~~~~~~~~~~~~
-         |                 print_worker_info
-   include/linux/workqueue.h:637:13: note: 'print_worker_info' declared here
-     637 | extern void print_worker_info(const char *log_lvl, struct task_struct *task);
-         |             ^
-   drivers/vhost/vhost.c:2413:19: error: member reference base type 'void (const char *, struct task_struct *)' is not a structure or union
-    2413 |                 ring_worker_info.worker_pid = task_pid_vnr(vhost_get_task(worker->vtsk));
-         |                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~
->> drivers/vhost/vhost.c:2413:46: error: call to undeclared function 'vhost_get_task'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2413 |                 ring_worker_info.worker_pid = task_pid_vnr(vhost_get_task(worker->vtsk));
-         |                                                            ^
-   drivers/vhost/vhost.c:2413:46: note: did you mean 'vhost_get_desc'?
-   drivers/vhost/vhost.c:1581:19: note: 'vhost_get_desc' declared here
-    1581 | static inline int vhost_get_desc(struct vhost_virtqueue *vq,
-         |                   ^
-   drivers/vhost/vhost.c:2413:61: error: use of undeclared identifier 'worker'
-    2413 |                 ring_worker_info.worker_pid = task_pid_vnr(vhost_get_task(worker->vtsk));
-         |                                                                           ^~~~~~
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+>> arch/arm64/kernel/entry-common.c:103:2: error: call to undeclared function 'exit_to_user_mode_prepare'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     103 |         exit_to_user_mode_prepare(regs);
+         |         ^
+   arch/arm64/kernel/entry-common.c:103:2: note: did you mean '__exit_to_user_mode_prepare'?
+   include/linux/irq-entry-common.h:215:29: note: '__exit_to_user_mode_prepare' declared here
+     215 | static __always_inline void __exit_to_user_mode_prepare(struct pt_regs *regs)
+         |                             ^
+   1 error generated.
 
 
-vim +/vhost_get_task +2413 drivers/vhost/vhost.c
+vim +/exit_to_user_mode_prepare +103 arch/arm64/kernel/entry-common.c
 
-  2352	
-  2353		/* You must be the owner to do anything else */
-  2354		r = vhost_dev_check_owner(d);
-  2355		if (r)
-  2356			goto done;
-  2357	
-  2358		switch (ioctl) {
-  2359		case VHOST_SET_MEM_TABLE:
-  2360			r = vhost_set_memory(d, argp);
-  2361			break;
-  2362		case VHOST_SET_LOG_BASE:
-  2363			if (copy_from_user(&p, argp, sizeof p)) {
-  2364				r = -EFAULT;
-  2365				break;
-  2366			}
-  2367			if ((u64)(unsigned long)p != p) {
-  2368				r = -EFAULT;
-  2369				break;
-  2370			}
-  2371			for (i = 0; i < d->nvqs; ++i) {
-  2372				struct vhost_virtqueue *vq;
-  2373				void __user *base = (void __user *)(unsigned long)p;
-  2374				vq = d->vqs[i];
-  2375				mutex_lock(&vq->mutex);
-  2376				/* If ring is inactive, will check when it's enabled. */
-  2377				if (vq->private_data && !vq_log_access_ok(vq, base))
-  2378					r = -EFAULT;
-  2379				else
-  2380					vq->log_base = base;
-  2381				mutex_unlock(&vq->mutex);
-  2382			}
-  2383			break;
-  2384		case VHOST_SET_LOG_FD:
-  2385			r = get_user(fd, (int __user *)argp);
-  2386			if (r < 0)
-  2387				break;
-  2388			ctx = fd == VHOST_FILE_UNBIND ? NULL : eventfd_ctx_fdget(fd);
-  2389			if (IS_ERR(ctx)) {
-  2390				r = PTR_ERR(ctx);
-  2391				break;
-  2392			}
-  2393			swap(ctx, d->log_ctx);
-  2394			for (i = 0; i < d->nvqs; ++i) {
-  2395				mutex_lock(&d->vqs[i]->mutex);
-  2396				d->vqs[i]->log_ctx = d->log_ctx;
-  2397				mutex_unlock(&d->vqs[i]->mutex);
-  2398			}
-  2399			if (ctx)
-  2400				eventfd_ctx_put(ctx);
-  2401			break;
-  2402		case VHOST_GET_VRING_WORKER_INFO:
-  2403			worker = rcu_dereference_check(vq->worker,
-  2404						       lockdep_is_held(&dev->mutex));
-  2405			if (!worker) {
-  2406				ret = -EINVAL;
-  2407				break;
-  2408			}
-  2409	
-  2410			memset(&ring_worker_info, 0, sizeof(ring_worker_info));
-  2411			ring_worker_info.index = idx;
-  2412			ring_worker_info.worker_id = worker->id;
-> 2413			ring_worker_info.worker_pid = task_pid_vnr(vhost_get_task(worker->vtsk));
-  2414	
-  2415			if (copy_to_user(argp, &ring_worker_info, sizeof(ring_worker_info)))
-  2416				ret = -EFAULT;
-  2417			break;
-  2418		default:
-  2419			r = -ENOIOCTLCMD;
-  2420			break;
-  2421		}
-  2422	done:
-  2423		return r;
-  2424	}
-  2425	EXPORT_SYMBOL_GPL(vhost_dev_ioctl);
-  2426	
+bc29b71f53b13c Mark Rutland 2021-08-02   93  
+bc29b71f53b13c Mark Rutland 2021-08-02   94  /*
+bc29b71f53b13c Mark Rutland 2021-08-02   95   * Handle IRQ/context state management when exiting to user mode.
+bc29b71f53b13c Mark Rutland 2021-08-02   96   * After this function returns it is not safe to call regular kernel code,
+59598b42eb52c7 Mukesh Ojha  2022-10-29   97   * instrumentable code, or any code which may trigger an exception.
+bc29b71f53b13c Mark Rutland 2021-08-02   98   */
+997d79eb938e98 Mark Rutland 2024-02-06   99  
+b3cf07851b6c4a Jinjie Ruan  2025-08-15  100  static __always_inline void arm64_exit_to_user_mode(struct pt_regs *regs)
+4d1c2ee2709fd6 Mark Rutland 2021-08-02  101  {
+97d935faacde47 Mark Rutland 2024-02-06  102  	local_irq_disable();
+ab1e29acdb33c9 Eric Chan    2023-05-31 @103  	exit_to_user_mode_prepare(regs);
+b3cf07851b6c4a Jinjie Ruan  2025-08-15  104  	local_daif_mask();
+e130338eed5de0 Mark Rutland 2021-08-02  105  	mte_check_tfsr_exit();
+b3cf07851b6c4a Jinjie Ruan  2025-08-15  106  	exit_to_user_mode();
+e130338eed5de0 Mark Rutland 2021-08-02  107  }
+e130338eed5de0 Mark Rutland 2021-08-02  108  
+
+:::::: The code at line 103 was first introduced by commit
+:::::: ab1e29acdb33c971e1af8ed8ec427bd1deff5f32 arm64: lockdep: enable checks for held locks when returning to userspace
+
+:::::: TO: Eric Chan <ericchancf@google.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
 -- 
 0-DAY CI Kernel Test Service
