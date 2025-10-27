@@ -1,67 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9CB2FFDF1;
-	Sun, 26 Oct 2025 23:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2462D8DB9;
+	Mon, 27 Oct 2025 00:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761519610; cv=none; b=ej8lHgQTK00P7pjCu7BVxY8Jc+Fp5TDSjhvTR17QAPub9ouPsiUOWTtIR76c1plEOqHcDM8T35yZl4lQWthddN5DKSYFvlbKGXcDcMEzyf2E6wVsd3n86MaGZzVZcQpgW3AqNVVSlq3MfQxhE3G3sZwn52KhiAXmGINism2xA/Y=
+	t=1761526026; cv=none; b=JzBR76Su4+A8haxQM2s1mnCGlbWk4yDWfK7gWFbS25ryJ5csnjQpwdcaiBEUjFKCsgpNYGCZh+xqaCN1zj34zYXNYh8oRgPvERtiDEewxTsefsrTjGu74m69TL+RMP7YOCrGjZ3/KEUDocogvr86e3tJWpvjQuyncHkFPa3AtYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761519610; c=relaxed/simple;
-	bh=GG2gG2Zm5sdOiN2dn/HSEsofdKUhfYLNrH9FfHdlQSw=;
+	s=arc-20240116; t=1761526026; c=relaxed/simple;
+	bh=BKuHZdiShtlLZykFF20DStnoeO6azXfPEP/FBMGF618=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N5qy/Iu/5vaUz5Xv2rLshUFEfJe6/iwBntDAz3gzuoAgNZh6ufGDG/dAhW9lWhMp7FEp8UbIei9M088pdpXtCnD9+ycLwV/zU0jtwVkbDvco2xUUqr/zEX7LGFpV8yzh/lNDW20VpCun2RFQLIwbHwEpDIVmfNbzLGHEegcu9jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A2YWgJPW; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=jGBQKqlyiABq3Q1lP2ZcWuqJwXgMDf1upMj8iKZKBbPW/ChIXV4acasFYNTA/i7QDsdceQYpVX1fERz5TESInZcYrBnVGziYa1K0S185cgksYPUq/dCwnTX/ZLxlE4gZsI4ZX1c/WBTi0CMxHwQEv0LCMADBJfpiyCX1ZT423eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jvSwOKO5; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A2YWgJPW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jvSwOKO5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761519608; x=1793055608;
+  t=1761526026; x=1793062026;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GG2gG2Zm5sdOiN2dn/HSEsofdKUhfYLNrH9FfHdlQSw=;
-  b=A2YWgJPW0iruhIPhNtkECsjSSiyHcMkgF+W57X8eL3pCxwEsNK1WcJsv
-   6Eitym0WF+rd3HIp6io5QmFlXOlbMP2vCuhtJhWM6FS6MBfPB2UJR9Lzs
-   VxeZdvQvtLFyCQB7i1gfXNgJa56viIUKLhfK+9jHm3hSnUmzODE3j7gPc
-   /TzoxaM2ssYRRO5DpzupWQ4fedbZtXYDu9aJAC+k0VM+qUn1nAaNTIt02
-   igF4Jt2MRc/GQd/oXGYHlzMJ9pw0Ylf+7u5OuyjvAcb97cmEg434HCkTO
-   ciZCRcUPZnWODgbF4rjce6ca/RO/gZCuwGv2LIByMbmDfYhi+Xm5meD2o
-   w==;
-X-CSE-ConnectionGUID: rTD0b2mlQcukW/b4DQzQJA==
-X-CSE-MsgGUID: AOz6Yd9UQv2nvjISZrPjWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67467277"
+  bh=BKuHZdiShtlLZykFF20DStnoeO6azXfPEP/FBMGF618=;
+  b=jvSwOKO5eOb71hC76sfQmn4GgvyVAQ0EDiIq3fa3QJ15gHlZ4WoZpSV0
+   Z9NNL48a95nKH2WAuV+eTCTJ5o+z58n/Og03aNZmWJrQ/6LH7NlaUDhfq
+   J8eqcRYVEus6tg2xndMs82kSfs1r6PzYuWAqlL0a2NDe8WK3MixqFreqL
+   IEvTcqNYYSIrNSbd1Be0ePHFEBOh0po362ht12pIOzYaez/B1v7Gudf/Y
+   f9BAr4KzoqPQXe9HFlQraKuFr8BxFPdW3dQV0MbhD1sA1dH8esbhhaFBS
+   /qenVxoVWr6YoT0/APdw9f2mW7oBjQbKccxIHP/o2ZMde0vVmXd+f41z8
+   g==;
+X-CSE-ConnectionGUID: uzI48RHOQgydgPhzQFQfRQ==
+X-CSE-MsgGUID: Rw3aizTvR4ascGZWp2y9aQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63644561"
 X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="67467277"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 16:00:08 -0700
-X-CSE-ConnectionGUID: XC5IWdxUT3CWsELSkY4vIw==
-X-CSE-MsgGUID: G1L2gNZJQ3ySXDIHZASnzg==
+   d="scan'208";a="63644561"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 17:47:05 -0700
+X-CSE-ConnectionGUID: QXGTwE9ITj+wqgMQm5xR5A==
+X-CSE-MsgGUID: 7dUtEu9cQBeKCn61xts60w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
-   d="scan'208";a="184594560"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Oct 2025 16:00:04 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 26 Oct 2025 17:46:58 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vD9iT-000GNZ-1H;
-	Sun, 26 Oct 2025 23:00:01 +0000
-Date: Mon, 27 Oct 2025 06:59:45 +0800
+	id 1vDBNt-000GQL-2h;
+	Mon, 27 Oct 2025 00:46:53 +0000
+Date: Mon, 27 Oct 2025 08:46:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Anton Protopopov <aspsk@isovalent.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7 bpf-next 01/12] bpf, x86: add new map type:
- instructions array
-Message-ID: <202510270614.av6f72iy-lkp@intel.com>
-References: <20251026192709.1964787-2-a.s.protopopov@gmail.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, javierm@redhat.com,
+	airlied@gmail.com, simona@ffwll.ch, linux@armlinux.org.uk,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	inki.dae@samsung.com, sw0312.kim@samsung.com,
+	kyungmin.park@samsung.com, patrik.r.jakobsson@gmail.com,
+	jani.nikula@linux.intel.com, rodrigo.vivi@intel.com,
+	robin.clark@oss.qualcomm.com, lumag@kernel.org,
+	abhinav.kumar@linux.dev, sean@poorly.run,
+	marijn.suijten@somainline.org, tomi.valkeinen@ideasonboard.com,
+	alexander.deucher@amd.com, christian.koenig@amd.com,
+	thierry.reding@gmail.com, mperttunen@nvidia.com,
+	jonathanh@nvidia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+	linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] drm/fb-helper: Allocate and release fb_info in single
+ place
+Message-ID: <202510270856.L1iU6js4-lkp@intel.com>
+References: <20251026173944.219373-1-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,69 +76,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251026192709.1964787-2-a.s.protopopov@gmail.com>
+In-Reply-To: <20251026173944.219373-1-tzimmermann@suse.de>
 
-Hi Anton,
+Hi Thomas,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on drm-exynos/exynos-drm-next]
+[also build test WARNING on drm-i915/for-linux-next drm-i915/for-linux-next-fixes tegra/for-next linus/master v6.18-rc2 next-20251024]
+[cannot apply to rmk-arm/drm-armada-devel rmk-arm/drm-armada-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anton-Protopopov/bpf-x86-add-new-map-type-instructions-array/20251027-032442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20251026192709.1964787-2-a.s.protopopov%40gmail.com
-patch subject: [PATCH v7 bpf-next 01/12] bpf, x86: add new map type: instructions array
-config: i386-buildonly-randconfig-005-20251027 (https://download.01.org/0day-ci/archive/20251027/202510270614.av6f72iy-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251027/202510270614.av6f72iy-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-fb-helper-Allocate-and-release-fb_info-in-single-place/20251027-014054
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+patch link:    https://lore.kernel.org/r/20251026173944.219373-1-tzimmermann%40suse.de
+patch subject: [PATCH] drm/fb-helper: Allocate and release fb_info in single place
+config: arm-randconfig-002-20251027 (https://download.01.org/0day-ci/archive/20251027/202510270856.L1iU6js4-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project e1ae12640102fd2b05bc567243580f90acb1135f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251027/202510270856.L1iU6js4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510270614.av6f72iy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510270856.L1iU6js4-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:61:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:95:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:53:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:3807:1: error: expected identifier or '('
-    3807 | {
-         | ^
-   In file included from kernel/sched/rq-offsets.c:5:
-   kernel/sched/sched.h:3743:18: warning: variable 'cpumask' set but not used [-Wunused-but-set-variable]
-    3743 |         struct cpumask *cpumask;
-         |                         ^
-   1 warning and 1 error generated.
-   make[3]: *** [scripts/Makefile.build:182: kernel/sched/rq-offsets.s] Error 1 shuffle=3282044347
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1280: prepare0] Error 2 shuffle=3282044347
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=3282044347
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=3282044347
-   make: Target 'prepare' not remade because of errors.
+>> drivers/gpu/drm/drm_fbdev_ttm.c:208:26: warning: variable 'info' is uninitialized when used here [-Wuninitialized]
+     208 |         drm_fb_helper_fill_info(info, fb_helper, sizes);
+         |                                 ^~~~
+   drivers/gpu/drm/drm_fbdev_ttm.c:180:22: note: initialize the variable 'info' to silence this warning
+     180 |         struct fb_info *info;
+         |                             ^
+         |                              = NULL
+   1 warning generated.
+--
+>> drivers/gpu/drm/armada/armada_fbdev.c:111:2: warning: unused label 'err_fballoc' [-Wunused-label]
+     111 |  err_fballoc:
+         |  ^~~~~~~~~~~~
+   1 warning generated.
+--
+>> drivers/gpu/drm/radeon/radeon_fbdev.c:275:1: warning: unused label 'err_drm_framebuffer_unregister_private' [-Wunused-label]
+     275 | err_drm_framebuffer_unregister_private:
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +3807 include/linux/bpf.h
+vim +/info +208 drivers/gpu/drm/drm_fbdev_ttm.c
 
-  3799	
-  3800	#ifdef CONFIG_BPF_SYSCALL
-  3801	void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, void *jit_priv,
-  3802				       update_insn_ptr_func_t update_insn_ptr);
-  3803	#else
-  3804	static inline void
-  3805	bpf_prog_update_insn_ptrs(struct bpf_prog *prog, void *jit_priv,
-  3806				  update_insn_ptr_func_t update_insn_ptr);
-> 3807	{
-  3808	}
-  3809	#endif
-  3810	
+8ab59da26bc0ae drivers/gpu/drm/drm_fbdev_generic.c Thomas Zimmermann 2022-11-03  169  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  170  /*
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  171   * struct drm_driver
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  172   */
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  173  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  174  int drm_fbdev_ttm_driver_fbdev_probe(struct drm_fb_helper *fb_helper,
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  175  				     struct drm_fb_helper_surface_size *sizes)
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  176  {
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  177  	struct drm_client_dev *client = &fb_helper->client;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  178  	struct drm_device *dev = fb_helper->dev;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  179  	struct drm_client_buffer *buffer;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  180  	struct fb_info *info;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  181  	size_t screen_size;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  182  	void *screen_buffer;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  183  	u32 format;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  184  	int ret;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  185  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  186  	drm_dbg_kms(dev, "surface width(%d), height(%d) and bpp(%d)\n",
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  187  		    sizes->surface_width, sizes->surface_height,
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  188  		    sizes->surface_bpp);
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  189  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  190  	format = drm_driver_legacy_fb_format(dev, sizes->surface_bpp,
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  191  					     sizes->surface_depth);
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  192  	buffer = drm_client_framebuffer_create(client, sizes->surface_width,
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  193  					       sizes->surface_height, format);
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  194  	if (IS_ERR(buffer))
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  195  		return PTR_ERR(buffer);
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  196  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  197  	fb_helper->funcs = &drm_fbdev_ttm_helper_funcs;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  198  	fb_helper->buffer = buffer;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  199  	fb_helper->fb = buffer->fb;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  200  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  201  	screen_size = buffer->gem->size;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  202  	screen_buffer = vzalloc(screen_size);
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  203  	if (!screen_buffer) {
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  204  		ret = -ENOMEM;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  205  		goto err_drm_client_framebuffer_delete;
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  206  	}
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24  207  
+c7c1b9e1d52b0a drivers/gpu/drm/drm_fbdev_ttm.c     Thomas Zimmermann 2024-09-24 @208  	drm_fb_helper_fill_info(info, fb_helper, sizes);
 
 -- 
 0-DAY CI Kernel Test Service
