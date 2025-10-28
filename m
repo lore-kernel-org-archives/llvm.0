@@ -1,133 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B2C354ADD;
-	Tue, 28 Oct 2025 22:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5943F3557EB;
+	Tue, 28 Oct 2025 22:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761688872; cv=none; b=OpG/qO347d31g5/jcAjls1qMPXRSGpJMVpUqY/74W3o/RpzybZLeL6L6IUq8ey3slSpr7Rt158YxQNN+b3gkiBi9on72RVgxMlwhDUq164TU7iYRzDbPvfpVXdBL4qARA74McXMPDYpDQPVorNilwf/jag9awaz9Pfn0GC6cPFA=
+	t=1761689338; cv=none; b=VMRNmQ3O1HL8s5HMpA+wmCa3CnL7/P0Vq6f+DoQEHzbNGwa+pYsjlo6c5ELLPMKJHTXek++D5llU9SMu6UO2EEw81HP/8k3hzHbzlq0UkE8tClFZEcaPgre90lMwTdc8MrHxPHlSWuzzAuzjTUJDgPBjT36BK/6Lovd4d8CMHi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761688872; c=relaxed/simple;
-	bh=axkFG9sBBk92SZMcb2CWNRulpTDXD1Y8N5Mk/ScHrDk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=udku8fTep8S78FvXH6P1G0ZE5uFRGVdMll0Z6dxM20hVDlUhRZJgBPYrV0wu5OgzEt3TNmfrp95S7lKP5Va4DtAD+TAYGqtmlEpcH5JcGZQ8NJI88OZlKSci5U4mxT9GLTsMk01mcgidie9rA+lwA1OHXGMdI/abgwAfszGLKak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QM0AKc5D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761689338; c=relaxed/simple;
+	bh=Zvvf8LDCF0p52fuFWt0OkqSUWt6jV/apJd00ZKVtzfk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qTzqlyuwO7BFXN80Jsw63kAqtYtsS2y0agMtxe07MX/+56QwgH3h6XN/Ud+72kiqWejtvk1a9g0qCGCFEyIH6MLYL/DW9DM4q3k+m+jx7IrxXQa1bWX9BRX2RmWAkCua0DNvfe/j8gfYnJTEZj562Fy7V8dh3PLOAWHvC9rH8WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ng2+Pxjf; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QM0AKc5D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A86C4CEE7;
-	Tue, 28 Oct 2025 22:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761688871;
-	bh=axkFG9sBBk92SZMcb2CWNRulpTDXD1Y8N5Mk/ScHrDk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QM0AKc5DCU3iBAaMAaoULokkQsILBOAEqZhala/2ILEwKDeRFwKfN9E2ZmXf+ClUt
-	 qWcVJfO6x6GOsDKqVD23u1SIhKoHzgputa6M4WzjV7S2YnOy3w7Hqpm8agAnf2zrxE
-	 PkcxM0zFoHY1EC4SD2JFlQdf+g8TlGXAdoWkv/H4AOiVt6MTmz+BGoOS4NSifJpcQW
-	 a2wcNWebFB+7QJJe/sZ5znEkG17uL8Rk3q7kCUs6WJ4VSaX27iCQbqKox/IToLeP+w
-	 T0gTgUj/FYKWhneLLpKO8ZHwhBA0ZBTBd/UxpvT2SnX727l2ky+QE0R0NecZyiUGez
-	 PEXDI4rQ41Heg==
-Date: Tue, 28 Oct 2025 15:01:05 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Kees Cook <kees@kernel.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Michal Kubiak <michal.kubiak@intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH 3/3] libeth: xdp: Disable generic kCFI pass for
- libeth_xdp_tx_xmit_bulk()
-Message-ID: <20251028220105.GC1548965@ax162>
-References: <20251025-idpf-fix-arm-kcfi-build-error-v1-0-ec57221153ae@kernel.org>
- <20251025-idpf-fix-arm-kcfi-build-error-v1-3-ec57221153ae@kernel.org>
- <dfc94b21-0baa-4b1f-9261-725d8d5c66f0@intel.com>
- <20251027205409.GB3183341@ax162>
- <5eb7ba26-8ecb-4a39-b9ed-961fffe4aa97@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ng2+Pxjf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761689337; x=1793225337;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Zvvf8LDCF0p52fuFWt0OkqSUWt6jV/apJd00ZKVtzfk=;
+  b=ng2+Pxjfxn6gA9BmBXpPJssxhfm8I/px/bAOYmWMQ7Q4pMOu1RiNTyTq
+   fVTP10ykDEnq8359iEoswTL49S2MbAQ8pCd9W3H2R050u6OrFTr4Bseob
+   0FmZEuPPGyA1YVz8CVtySCjPSEdYc5+iI9tw/qJGoXJCOsLuVYUbWzHa5
+   3o7Z9E++L1v6jsKeC9fwjmTjtgXEzB8qIArjK2SwsF6o7qL2XW0Hzm61G
+   +e6Y3BZ0pUFIgkdW4OwD21DKho8JDoLuAwHVts4sXeK1HwOVlQqJradqv
+   ovD4Z6yiQXbXwbfJPK0mGrCMPejl4OZVBDyr3Sg1H5lPQ1Qs6xfjTP7GK
+   w==;
+X-CSE-ConnectionGUID: cW3YU4//SfmczOL+7ZQYvw==
+X-CSE-MsgGUID: +LLGELsHQr+m0oUk64Ef0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="81433542"
+X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
+   d="scan'208";a="81433542"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 15:08:56 -0700
+X-CSE-ConnectionGUID: ZH4KIsc3RJi6Ikfni6z/9A==
+X-CSE-MsgGUID: 0IyYs0EUQpCVHB2dR25qUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
+   d="scan'208";a="185396434"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 28 Oct 2025 15:08:54 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vDrs3-000JoH-1U;
+	Tue, 28 Oct 2025 22:08:51 +0000
+Date: Wed, 29 Oct 2025 06:08:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Himanshu Chauhan <hchauhan@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_trace_support_v1 41/57]
+ include/linux/riscv_sbi_sse.h:44:9: error: call to undeclared function
+ 'ERR_PTR'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202510290653.xI93nXdj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <5eb7ba26-8ecb-4a39-b9ed-961fffe4aa97@intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 28, 2025 at 05:29:30PM +0100, Alexander Lobakin wrote:
-> From: Nathan Chancellor <nathan@kernel.org>
-> Date: Mon, 27 Oct 2025 13:54:09 -0700
-> 
-> > On Mon, Oct 27, 2025 at 03:59:51PM +0100, Alexander Lobakin wrote:
-> >> Hmmm,
-> >>
-> >> For this patch:
-> >>
-> >> Acked-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> > 
-> > Thanks a lot for taking a look, even if it seems like we might not
-> > actually go the route of working around this.
-> > 
-> >> However,
-> >>
-> >> The XSk metadata infra in the kernel relies on that when we call
-> >> xsk_tx_metadata_request(), we pass a static const struct with our
-> >> callbacks and then the compiler makes all these calls direct.
-> >> This is not limited to libeth (although I realize that it triggered
-> >> this build failure due to the way how I pass these callbacks), every
-> >> driver which implements XSk Tx metadata and calls
-> >> xsk_tx_metadata_request() relies on that these calls will be direct,
-> >> otherwise there'll be such performance penalty that is unacceptable
-> >> for XSk speeds.
-> > 
-> > Hmmmm, I am not really sure how you could guarantee that these calls are
-> > turned direct from indirect aside from placing compile time assertions
-> > around like this... when you say "there'll be such performance penalty
-> 
-> You mean in case of CFI or in general? Because currently on both GCC and
-> Clang with both OPTIMIZE_FOR_{SIZE,SPEED} they get inlined in every driver.
+tree:   https://github.com/avpatel/linux.git riscv_trace_support_v1
+head:   3f71314c58520f6fada72d7f0364429fc3e8bf50
+commit: 9b88b132cc8aab2bb34e7e8dad4187c526e60d1e [41/57] riscv: Introduce HEST SSE notification handlers
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251029/202510290653.xI93nXdj-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251029/202510290653.xI93nXdj-lkp@intel.com/reproduce)
 
-I mean in general but obviously that sort of optimization is high value
-for the compiler to perform so I would only expect it not to occur in
-extreme cases like sanitizers being enabled; I would expect no issues
-when using a backend CFI implementation
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510290653.xI93nXdj-lkp@intel.com/
 
-> > that is unacceptable for XSk speeds", does that mean that everything
-> > will function correctly but slower than expected or does the lack of
-> > proper speed result in functionality degredation?
-> 
-> Nothing would break, just work way slower than expected.
-> xsk_tx_metadata_request() is called for each Tx packet (when Tx metadata
-> is enabled). Average XSK Tx perf is ~35-40 Mpps (millions of packets per
-> second), often [much] higher. Having an indirect call there would divide
-> it by n.
+All errors (new ones prefixed by >>):
 
-Ah okay.
+   In file included from drivers/acpi/apei/ghes.c:20:
+>> include/linux/riscv_sbi_sse.h:44:9: error: call to undeclared function 'ERR_PTR'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      44 |         return ERR_PTR(-EOPNOTSUPP);
+         |                ^
+>> include/linux/riscv_sbi_sse.h:44:18: error: use of undeclared identifier 'EOPNOTSUPP'
+      44 |         return ERR_PTR(-EOPNOTSUPP);
+         |                         ^
+   include/linux/riscv_sbi_sse.h:52:10: error: use of undeclared identifier 'EOPNOTSUPP'
+      52 |         return -EOPNOTSUPP;
+         |                 ^
+   include/linux/riscv_sbi_sse.h:58:10: error: use of undeclared identifier 'EOPNOTSUPP'
+      58 |         return -EOPNOTSUPP;
+         |                 ^
+   include/linux/riscv_sbi_sse.h:63:10: error: use of undeclared identifier 'EOPNOTSUPP'
+      63 |         return -EOPNOTSUPP;
+         |                 ^
+   include/linux/riscv_sbi_sse.h:68:10: error: use of undeclared identifier 'EOPNOTSUPP'
+      68 |         return -EOPNOTSUPP;
+         |                 ^
+   In file included from drivers/acpi/apei/ghes.c:21:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:11:
+   In file included from include/linux/cleanup.h:6:
+   include/linux/err.h:39:35: error: static declaration of 'ERR_PTR' follows non-static declaration
+      39 | static inline void * __must_check ERR_PTR(long error)
+         |                                   ^
+   include/linux/riscv_sbi_sse.h:44:9: note: previous implicit declaration is here
+      44 |         return ERR_PTR(-EOPNOTSUPP);
+         |                ^
+   In file included from drivers/acpi/apei/ghes.c:21:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:10:
+   In file included from include/linux/cper.h:13:
+   In file included from include/linux/trace_seq.h:5:
+   In file included from include/linux/seq_buf.h:7:
+   In file included from include/linux/seq_file.h:11:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/acpi/apei/ghes.c:21:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:10:
+   In file included from include/linux/cper.h:13:
+   In file included from include/linux/trace_seq.h:5:
+   In file included from include/linux/seq_buf.h:7:
+   In file included from include/linux/seq_file.h:11:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/acpi/apei/ghes.c:21:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:10:
+   In file included from include/linux/cper.h:13:
+   In file included from include/linux/trace_seq.h:5:
+   In file included from include/linux/seq_buf.h:7:
+   In file included from include/linux/seq_file.h:11:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/acpi/apei/ghes.c:21:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:10:
+   In file included from include/linux/cper.h:13:
+   In file included from include/linux/trace_seq.h:5:
+   In file included from include/linux/seq_buf.h:7:
+   In file included from include/linux/seq_file.h:11:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
 
-> >> Maybe xsk_tx_metadata_request() should be __nocfi as well? Or all
-> >> the callers of it?
-> > 
-> > I would only expect __nocfi_generic to be useful for avoiding a problem
-> > such as this. __nocfi would be too big of a hammer because it would
-> 
-> Yep, sorry, I actually meant __nocfi_generic...
 
-I figured, just wanted to make sure! This series needs to go to mainline
-sooner rather than later, so maybe xsk_tx_metadata_request() could pick
-up __nocfi_generic as a future change to net-next since there is no
-obvious breakage? 32-bit ARM is the only architecture affected by this
-change since all other architectures that support kCFI have a backend
-specific lowering and I am guessing very few people would actually
-notice this problem in practice.
+vim +/ERR_PTR +44 include/linux/riscv_sbi_sse.h
 
-Thanks again for chiming in and taking a look!
+3e89594245fa2c Clément Léger 2025-09-08  38  
+3e89594245fa2c Clément Léger 2025-09-08  39  #else
+3e89594245fa2c Clément Léger 2025-09-08  40  static inline struct sse_event *sse_event_register(u32 event_num, u32 priority,
+3e89594245fa2c Clément Léger 2025-09-08  41  						   sse_event_handler_fn *handler,
+3e89594245fa2c Clément Léger 2025-09-08  42  						   void *arg)
+3e89594245fa2c Clément Léger 2025-09-08  43  {
+3e89594245fa2c Clément Léger 2025-09-08 @44  	return ERR_PTR(-EOPNOTSUPP);
+3e89594245fa2c Clément Léger 2025-09-08  45  }
+3e89594245fa2c Clément Léger 2025-09-08  46  
 
-Cheers,
-Nathan
+:::::: The code at line 44 was first introduced by commit
+:::::: 3e89594245fa2cf4bd298955d807fcd625294f22 drivers: firmware: add riscv SSE support
+
+:::::: TO: Clément Léger <cleger@rivosinc.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
