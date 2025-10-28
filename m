@@ -1,62 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD8F2264A3;
-	Tue, 28 Oct 2025 14:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A847F25BEE8;
+	Tue, 28 Oct 2025 15:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761663309; cv=none; b=cT6U2lVPKCE8k1YG9SpnbOR7cCFbZJmMZ6im/JEgkQ2E8goe4Cy5In8Tuozdz4o1MYHICvRsLMOFMWdZt+ZFKRxYGRJg73Rh0PL82MMeDaVWP2oRkOKROY8v1kMGBkVc73vaal50e++isJEfvuSQ2PViH7Y6fB4Cyttxkylx8J0=
+	t=1761663909; cv=none; b=p3+bZO7skTV+ZIjLTjoEgfGISc25cSVbn4GVobKqQCPoBMDtWnbQfGpC+h1C4PxaLJKoys3Yn7qgPzvxDEVtYNa1nw2+Ti3KwNQIINiz4X9wAFakUpPRI/B8Fe2ynDRWOR1tEVIbDhFnOf2hierE7Kw4MDdthy/dJnpqwVGi3d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761663309; c=relaxed/simple;
-	bh=5MILIsSeWx1iW4Q4sO8gat7oSovZjYkBv0ZRjF7N+3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dxWjax2naVcR0YdsZ0CUCtoqeDoSN+YgTrA0u9gteUpRJFDLaK0Ffe8LCHJUq7Ai8Pfy9VltLKUJMdHBMN3lsmoNQhjMCnb0lt3yhhkxi6sB32qdX/Qj6XRFDxIkG/0DPTPgT9Sx/cKzyGce30jJwNqcX86YkZ8KuSx3QxqdJeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kkYf46eY; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1761663909; c=relaxed/simple;
+	bh=OHfYSDu0Rzck6fAtpoUhjpHneN2suUToeD1/fVtFVAk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F3HHR0glXqAoEO2UfJs7g+cUqKhFYTlYpmSILHWJKT06lQR1qHxcizBLbUVVP8yFXGn2JohtYfSilj/vbxzyZ6/DdlkW4RGS0dmYhv5zlkSEYjNOqtSDuTczOQetSv1QzVqNnGARjX5UBpBt/Fcz52sXFLcpALtudQIhXoC+CQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bu7ETTJ/; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kkYf46eY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bu7ETTJ/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761663308; x=1793199308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5MILIsSeWx1iW4Q4sO8gat7oSovZjYkBv0ZRjF7N+3o=;
-  b=kkYf46eYU0ViF6HaQ1as4vS/09K8Qtm/CmUQpIa8rH21qmgqafAVNjqH
-   3qf8nJr6AsB8v8a8yusnMtzSbMTzMtcAUiyx8nP6JEl97VH+d0NNJbVyX
-   Mut0t1DIHK1oXudDI/MlUYtA08cmYCmyDuyh5e6POU3GSucDAjlsRfbMe
-   JKWF3jzl/DnU4ag5vuNGJhLIFar21Tr8aB5BdkoiktB7+y1Mx0BvJ2KZb
-   8KYDzQctsRZ1L5dU/KDbfutPmogjZa/1CE0bxWNwrcNxzX58AFea+UlgX
-   tRD3HEU+PeLWgwWZhRizvh2c+6F9DuaAQjvvQJp4xzYPjyEKHUfQky4ro
-   g==;
-X-CSE-ConnectionGUID: Ho8sWeplRbaGpRcVA8NPrg==
-X-CSE-MsgGUID: Ub++ca15SrWvUORx0lmElQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74364615"
+  t=1761663908; x=1793199908;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OHfYSDu0Rzck6fAtpoUhjpHneN2suUToeD1/fVtFVAk=;
+  b=Bu7ETTJ/pSdBWzVMevfKt2teBrCebo8HGjFBWjT9rubG02Al606RWo5E
+   hfBKlTgn80NRZrMq1A0EFN0J7Ll7Z63huCG3YNkeQaxK5sbmdfd43840P
+   u+xFUQEQ/Ugrx8Enm7cw7kEH5m0tsIOYQINtHqajThcE6XZgqP6WivR9Y
+   nb8zOdezO0TR4FYCGjDMK5NzZccYLrUyx/TnfaiIgeQEB0irns2+Ut804
+   0tWIVgVFDwiQxZTEKM53/sysKrT2VdClZJrbVOSdi18WGm63teMI063XK
+   yo+x2nq1gTrwEzmPraIe+pHPsfeC9ArBl2C+7CegsxHjiv6Dp1gMJdj46
+   A==;
+X-CSE-ConnectionGUID: FjXvR1LKTLeAt/V2aXhYqw==
+X-CSE-MsgGUID: ok67EPjZSEaC6hV4GIRw2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62795386"
 X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
-   d="scan'208";a="74364615"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 07:55:07 -0700
-X-CSE-ConnectionGUID: /YM3SU32QrunU3hNVMZL3Q==
-X-CSE-MsgGUID: SBalOQaqRumEUttp9XVX3g==
+   d="scan'208";a="62795386"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 08:05:07 -0700
+X-CSE-ConnectionGUID: ciu9NH6hR5y4h7OD17NMww==
+X-CSE-MsgGUID: gj+uVHleT/ScWNS7AENkSQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,261,1754982000"; 
-   d="scan'208";a="190487827"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 28 Oct 2025 07:55:04 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 28 Oct 2025 08:05:05 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vDl6E-000JGb-22;
-	Tue, 28 Oct 2025 14:55:02 +0000
-Date: Tue, 28 Oct 2025 22:54:03 +0800
+	id 1vDlFv-000JHH-1N;
+	Tue, 28 Oct 2025 15:05:03 +0000
+Date: Tue, 28 Oct 2025 23:04:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, fw@strlen.de,
-	ffmancera@suse.de, brady.1345@gmail.com
-Subject: Re: [PATCH nf 1/2] netfilter: nf_tables: limit maximum number of
- jumps/gotos per netns
-Message-ID: <202510282243.y0oDegX0-lkp@intel.com>
-References: <20251027221722.183398-2-pablo@netfilter.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit
+ (1024) in 'hmac_setkey_ahash'
+Message-ID: <202510282205.ELXg3cL3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,138 +60,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251027221722.183398-2-pablo@netfilter.org>
 
-Hi Pablo,
+Hi Herbert,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on netfilter-nf/main]
-[also build test ERROR on linus/master v6.18-rc3 next-20251028]
-[cannot apply to nf-next/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/netfilter-nf_tables-limit-maximum-number-of-jumps-gotos-per-netns/20251028-062221
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git main
-patch link:    https://lore.kernel.org/r/20251027221722.183398-2-pablo%40netfilter.org
-patch subject: [PATCH nf 1/2] netfilter: nf_tables: limit maximum number of jumps/gotos per netns
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20251028/202510282243.y0oDegX0-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251028/202510282243.y0oDegX0-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fd57572253bc356330dbe5b233c2e1d8426c66fd
+commit: c3103416d5217655d707d9417aaf66f184e3d72f crypto: hmac - Add ahash support
+date:   5 months ago
+config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20251028/202510282205.ELXg3cL3-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251028/202510282205.ELXg3cL3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510282243.y0oDegX0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510282205.ELXg3cL3-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/netfilter/nf_tables_sysctl.c:15:34: error: no member named 'nf_tables_jumps_max_netns' in 'struct netns_nf'
-      15 |                 .data           = &init_net.nf.nf_tables_jumps_max_netns,
-         |                                    ~~~~~~~~~~~ ^
-   net/netfilter/nf_tables_sysctl.c:16:40: error: no member named 'nf_tables_jumps_max_netns' in 'struct netns_nf'
-      16 |                 .maxlen         = sizeof(init_net.nf.nf_tables_jumps_max_netns),
-         |                                          ~~~~~~~~~~~ ^
-   net/netfilter/nf_tables_sysctl.c:33:11: error: no member named 'nf_tables_jumps_max_netns' in 'struct netns_nf'
-      33 |                 net->nf.nf_tables_jumps_max_netns = NFT_TABLE_DEFAULT_JUMPS_MAX;
-         |                 ~~~~~~~ ^
-   net/netfilter/nf_tables_sysctl.c:40:11: error: no member named 'nf_tables_jumps_max_netns' in 'struct netns_nf'
-      40 |                 net->nf.nf_tables_jumps_max_netns =
-         |                 ~~~~~~~ ^
-   net/netfilter/nf_tables_sysctl.c:41:16: error: no member named 'nf_tables_jumps_max_netns' in 'struct netns_nf'
-      41 |                         init_net.nf.nf_tables_jumps_max_netns;
-         |                         ~~~~~~~~~~~ ^
-   net/netfilter/nf_tables_sysctl.c:43:13: error: no member named 'nf_tables_jumps_max_netns' in 'struct netns_nf'
-      43 |                         &net->nf.nf_tables_jumps_max_netns;
-         |                          ~~~~~~~ ^
->> net/netfilter/nf_tables_sysctl.c:49:10: error: no member named 'nf_tables_dir_header' in 'struct netns_nf'; did you mean 'nf_log_dir_header'?
-      49 |         net->nf.nf_tables_dir_header =
-         |                 ^~~~~~~~~~~~~~~~~~~~
-         |                 nf_log_dir_header
-   include/net/netns/netfilter.h:17:27: note: 'nf_log_dir_header' declared here
-      17 |         struct ctl_table_header *nf_log_dir_header;
-         |                                  ^
-   net/netfilter/nf_tables_sysctl.c:52:15: error: no member named 'nf_tables_dir_header' in 'struct netns_nf'; did you mean 'nf_log_dir_header'?
-      52 |         if (!net->nf.nf_tables_dir_header)
-         |                      ^~~~~~~~~~~~~~~~~~~~
-         |                      nf_log_dir_header
-   include/net/netns/netfilter.h:17:27: note: 'nf_log_dir_header' declared here
-      17 |         struct ctl_table_header *nf_log_dir_header;
-         |                                  ^
-   net/netfilter/nf_tables_sysctl.c:68:38: error: no member named 'nf_tables_dir_header' in 'struct netns_nf'; did you mean 'nf_log_dir_header'?
-      68 |         unregister_net_sysctl_table(net->nf.nf_tables_dir_header);
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-         |                                             nf_log_dir_header
-   include/net/netns/netfilter.h:17:27: note: 'nf_log_dir_header' declared here
-      17 |         struct ctl_table_header *nf_log_dir_header;
-         |                                  ^
-   net/netfilter/nf_tables_sysctl.c:69:18: error: no member named 'nf_tables_dir_header' in 'struct netns_nf'; did you mean 'nf_log_dir_header'?
-      69 |         table = net->nf.nf_tables_dir_header->ctl_table_arg;
-         |                         ^~~~~~~~~~~~~~~~~~~~
-         |                         nf_log_dir_header
-   include/net/netns/netfilter.h:17:27: note: 'nf_log_dir_header' declared here
-      17 |         struct ctl_table_header *nf_log_dir_header;
-         |                                  ^
-   10 errors generated.
+>> crypto/hmac.c:251:12: warning: stack frame size (1152) exceeds limit (1024) in 'hmac_setkey_ahash' [-Wframe-larger-than]
+     251 | static int hmac_setkey_ahash(struct crypto_ahash *parent,
+         |            ^
+   1 warning generated.
 
 
-vim +15 net/netfilter/nf_tables_sysctl.c
+vim +/hmac_setkey_ahash +251 crypto/hmac.c
 
-    11	
-    12	static struct ctl_table nf_tables_sysctl_table[] = {
-    13		[NF_SYSCTL_NFT_JUMPS_MAX] = {
-    14			.procname       = "nf_tables_jumps_max_netns",
-  > 15			.data           = &init_net.nf.nf_tables_jumps_max_netns,
-    16			.maxlen         = sizeof(init_net.nf.nf_tables_jumps_max_netns),
-    17			.mode           = 0644,
-    18			.proc_handler   = proc_dointvec,
-    19			.extra1		= SYSCTL_ONE,
-    20			.extra2		= SYSCTL_INT_MAX,
-    21		},
-    22	};
-    23	
-    24	#define NFT_TABLE_DEFAULT_JUMPS_MAX 65535
-    25	
-    26	static int __net_init nf_tables_sysctl_init(struct net *net)
-    27	{
-    28		struct ctl_table *table = nf_tables_sysctl_table;
-    29	
-    30		BUILD_BUG_ON(ARRAY_SIZE(nf_tables_sysctl_table) != NF_SYSCTL_NFT_LAST_SYSCTL);
-    31	
-    32		if (net_eq(net, &init_net)) {
-    33			net->nf.nf_tables_jumps_max_netns = NFT_TABLE_DEFAULT_JUMPS_MAX;
-    34		} else {
-    35			table = kmemdup(nf_tables_sysctl_table,
-    36					sizeof(nf_tables_sysctl_table), GFP_KERNEL);
-    37			if (!table)
-    38				return -ENOMEM;
-    39	
-    40			net->nf.nf_tables_jumps_max_netns =
-    41				init_net.nf.nf_tables_jumps_max_netns;
-    42			table[NF_SYSCTL_NFT_JUMPS_MAX].data =
-    43				&net->nf.nf_tables_jumps_max_netns;
-    44	
-    45			if (net->user_ns != &init_user_ns)
-    46				table[NF_SYSCTL_NFT_JUMPS_MAX].mode &= ~0222;
-    47		}
-    48	
-  > 49		net->nf.nf_tables_dir_header =
-    50			register_net_sysctl_sz(net, "net/netfilter", table,
-    51					       ARRAY_SIZE(nf_tables_sysctl_table));
-    52		if (!net->nf.nf_tables_dir_header)
-    53			goto err_tbl_free;
-    54	
-    55		return 0;
-    56	
-    57	err_tbl_free:
-    58		if (table != nf_tables_sysctl_table)
-    59			kfree(table);
-    60	
-    61		return -ENOMEM;
-    62	}
-    63	
+   250	
+ > 251	static int hmac_setkey_ahash(struct crypto_ahash *parent,
+   252				     const u8 *inkey, unsigned int keylen)
+   253	{
+   254		struct ahash_hmac_ctx *tctx = crypto_ahash_ctx(parent);
+   255		struct crypto_ahash *fb = crypto_ahash_fb(tctx->hash);
+   256		int ds = crypto_ahash_digestsize(parent);
+   257		int bs = crypto_ahash_blocksize(parent);
+   258		int ss = crypto_ahash_statesize(parent);
+   259		HASH_REQUEST_ON_STACK(req, fb);
+   260		u8 *opad = &tctx->pads[ss];
+   261		u8 *ipad = &tctx->pads[0];
+   262		int err, i;
+   263	
+   264		if (fips_enabled && (keylen < 112 / 8))
+   265			return -EINVAL;
+   266	
+   267		ahash_request_set_callback(req, 0, NULL, NULL);
+   268	
+   269		if (keylen > bs) {
+   270			ahash_request_set_virt(req, inkey, ipad, keylen);
+   271			err = crypto_ahash_digest(req);
+   272			if (err)
+   273				goto out_zero_req;
+   274	
+   275			keylen = ds;
+   276		} else
+   277			memcpy(ipad, inkey, keylen);
+   278	
+   279		memset(ipad + keylen, 0, bs - keylen);
+   280		memcpy(opad, ipad, bs);
+   281	
+   282		for (i = 0; i < bs; i++) {
+   283			ipad[i] ^= HMAC_IPAD_VALUE;
+   284			opad[i] ^= HMAC_OPAD_VALUE;
+   285		}
+   286	
+   287		ahash_request_set_virt(req, ipad, NULL, bs);
+   288		err = crypto_ahash_init(req) ?:
+   289		      crypto_ahash_update(req) ?:
+   290		      crypto_ahash_export(req, ipad);
+   291	
+   292		ahash_request_set_virt(req, opad, NULL, bs);
+   293		err = err ?:
+   294		      crypto_ahash_init(req) ?:
+   295		      crypto_ahash_update(req) ?:
+   296		      crypto_ahash_export(req, opad);
+   297	
+   298	out_zero_req:
+   299		HASH_REQUEST_ZERO(req);
+   300		return err;
+   301	}
+   302	
 
 -- 
 0-DAY CI Kernel Test Service
