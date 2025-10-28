@@ -1,59 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A7727145F;
-	Tue, 28 Oct 2025 21:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B2C354ADD;
+	Tue, 28 Oct 2025 22:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761685500; cv=none; b=ik+58MbkGksy2YEhe2MCw0NSEGE7fzJQp+nioaOazFZ1y/vAf+tG8GIL6HeYoWGd/FHHDdMv6Vjb45gH39F+dHgaIiQ5KMR3eUA+AXeY9+kvwtJGsxdBNokPqVd5tEdagi6rB/PhA1XQYL0YAXH/xKWzW9NPHD2W1wNeVJP+eEs=
+	t=1761688872; cv=none; b=OpG/qO347d31g5/jcAjls1qMPXRSGpJMVpUqY/74W3o/RpzybZLeL6L6IUq8ey3slSpr7Rt158YxQNN+b3gkiBi9on72RVgxMlwhDUq164TU7iYRzDbPvfpVXdBL4qARA74McXMPDYpDQPVorNilwf/jag9awaz9Pfn0GC6cPFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761685500; c=relaxed/simple;
-	bh=rmqLftlsBNdXnnkAR7lZ+tywGGLzWBpRNcfVK/0meg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BmeoxZ9E0a/NMi7YCXZyYKFTXbyMtc6wx6HREDFAyUxu3KGl8BW6iyMq5d4vsafHkmCNHFTkHiAycQ9Z7Esz6Y7LeLQR2gobi/hbSB9yhBlardd4h1bA41KAs4iUpPCBD6Kp22EOQ9GnN3usG3qmd8DDZbwHUfW9bs9riqsoZU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZxxXPekw; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761688872; c=relaxed/simple;
+	bh=axkFG9sBBk92SZMcb2CWNRulpTDXD1Y8N5Mk/ScHrDk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=udku8fTep8S78FvXH6P1G0ZE5uFRGVdMll0Z6dxM20hVDlUhRZJgBPYrV0wu5OgzEt3TNmfrp95S7lKP5Va4DtAD+TAYGqtmlEpcH5JcGZQ8NJI88OZlKSci5U4mxT9GLTsMk01mcgidie9rA+lwA1OHXGMdI/abgwAfszGLKak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QM0AKc5D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZxxXPekw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761685499; x=1793221499;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rmqLftlsBNdXnnkAR7lZ+tywGGLzWBpRNcfVK/0meg8=;
-  b=ZxxXPekwn67vUdjdQYJR3I4qXITdaXp4puC7xajwD+k6m0OZU+j9Y91f
-   b1L/j9QBj1E7MWn8J9p9PHN256KOs6KeUkwerTcwg1vyqB29+BI0rvN/Y
-   xWD8E9F74mjSky4mQbHE2oAVliXmk6DRyoTlLXUxeeuJR1XIKpzcp1ch/
-   RKv25ZwwqkSw0rMBp5P2CTTTgV6fYXcoTJ5klDBzplFmS6X3E/RPPX1YN
-   aRj3mMvA35Gc9ieiEN7UjgqlI9ScNucqmvevPhTjaMVTXzR0n0rHC+ZP0
-   rjXEQsIdHuIh6KTrULa3hJKIkxPPyAf+bRKXAXEVPNWBdvSGy2Z2g4Ula
-   w==;
-X-CSE-ConnectionGUID: 85p3LmERReCcxGorQzCMUg==
-X-CSE-MsgGUID: MD9eGCJ6SPidLm7a1SG1xA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63893711"
-X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
-   d="scan'208";a="63893711"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 14:04:58 -0700
-X-CSE-ConnectionGUID: 4/x5vsZZQgisOVj1fEzR/w==
-X-CSE-MsgGUID: DXiEzOBYR028r8ZOuP6XhQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
-   d="scan'208";a="186213386"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 28 Oct 2025 14:04:57 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vDqrz-000Jkh-2m;
-	Tue, 28 Oct 2025 21:04:47 +0000
-Date: Wed, 29 Oct 2025 05:03:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thierry Reding <treding@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thierryreding:pmc 24/27] WARNING: modpost: vmlinux: section
- mismatch in reference: tegra_pmc_init_common+0x18 (section: .text.unlikely.)
- -> tegra_pmc_detect_tz_only (section: .init.text)
-Message-ID: <202510290554.zg2t46AN-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QM0AKc5D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A86C4CEE7;
+	Tue, 28 Oct 2025 22:01:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761688871;
+	bh=axkFG9sBBk92SZMcb2CWNRulpTDXD1Y8N5Mk/ScHrDk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QM0AKc5DCU3iBAaMAaoULokkQsILBOAEqZhala/2ILEwKDeRFwKfN9E2ZmXf+ClUt
+	 qWcVJfO6x6GOsDKqVD23u1SIhKoHzgputa6M4WzjV7S2YnOy3w7Hqpm8agAnf2zrxE
+	 PkcxM0zFoHY1EC4SD2JFlQdf+g8TlGXAdoWkv/H4AOiVt6MTmz+BGoOS4NSifJpcQW
+	 a2wcNWebFB+7QJJe/sZ5znEkG17uL8Rk3q7kCUs6WJ4VSaX27iCQbqKox/IToLeP+w
+	 T0gTgUj/FYKWhneLLpKO8ZHwhBA0ZBTBd/UxpvT2SnX727l2ky+QE0R0NecZyiUGez
+	 PEXDI4rQ41Heg==
+Date: Tue, 28 Oct 2025 15:01:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: Kees Cook <kees@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Michal Kubiak <michal.kubiak@intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH 3/3] libeth: xdp: Disable generic kCFI pass for
+ libeth_xdp_tx_xmit_bulk()
+Message-ID: <20251028220105.GC1548965@ax162>
+References: <20251025-idpf-fix-arm-kcfi-build-error-v1-0-ec57221153ae@kernel.org>
+ <20251025-idpf-fix-arm-kcfi-build-error-v1-3-ec57221153ae@kernel.org>
+ <dfc94b21-0baa-4b1f-9261-725d8d5c66f0@intel.com>
+ <20251027205409.GB3183341@ax162>
+ <5eb7ba26-8ecb-4a39-b9ed-961fffe4aa97@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,23 +59,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <5eb7ba26-8ecb-4a39-b9ed-961fffe4aa97@intel.com>
 
-tree:   https://github.com/thierryreding/linux pmc
-head:   595a9703442efc488422dd3bf1209e3f1e5d49d2
-commit: f8c811e8798b33a01acd81ce26d1b99e36747e10 [24/27] soc/tegra: pmc: Create PMC context dynamically
-config: arm-randconfig-003-20251028 (https://download.01.org/0day-ci/archive/20251029/202510290554.zg2t46AN-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251029/202510290554.zg2t46AN-lkp@intel.com/reproduce)
+On Tue, Oct 28, 2025 at 05:29:30PM +0100, Alexander Lobakin wrote:
+> From: Nathan Chancellor <nathan@kernel.org>
+> Date: Mon, 27 Oct 2025 13:54:09 -0700
+> 
+> > On Mon, Oct 27, 2025 at 03:59:51PM +0100, Alexander Lobakin wrote:
+> >> Hmmm,
+> >>
+> >> For this patch:
+> >>
+> >> Acked-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> > 
+> > Thanks a lot for taking a look, even if it seems like we might not
+> > actually go the route of working around this.
+> > 
+> >> However,
+> >>
+> >> The XSk metadata infra in the kernel relies on that when we call
+> >> xsk_tx_metadata_request(), we pass a static const struct with our
+> >> callbacks and then the compiler makes all these calls direct.
+> >> This is not limited to libeth (although I realize that it triggered
+> >> this build failure due to the way how I pass these callbacks), every
+> >> driver which implements XSk Tx metadata and calls
+> >> xsk_tx_metadata_request() relies on that these calls will be direct,
+> >> otherwise there'll be such performance penalty that is unacceptable
+> >> for XSk speeds.
+> > 
+> > Hmmmm, I am not really sure how you could guarantee that these calls are
+> > turned direct from indirect aside from placing compile time assertions
+> > around like this... when you say "there'll be such performance penalty
+> 
+> You mean in case of CFI or in general? Because currently on both GCC and
+> Clang with both OPTIMIZE_FOR_{SIZE,SPEED} they get inlined in every driver.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510290554.zg2t46AN-lkp@intel.com/
+I mean in general but obviously that sort of optimization is high value
+for the compiler to perform so I would only expect it not to occur in
+extreme cases like sanitizers being enabled; I would expect no issues
+when using a backend CFI implementation
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> > that is unacceptable for XSk speeds", does that mean that everything
+> > will function correctly but slower than expected or does the lack of
+> > proper speed result in functionality degredation?
+> 
+> Nothing would break, just work way slower than expected.
+> xsk_tx_metadata_request() is called for each Tx packet (when Tx metadata
+> is enabled). Average XSK Tx perf is ~35-40 Mpps (millions of packets per
+> second), often [much] higher. Having an indirect call there would divide
+> it by n.
 
->> WARNING: modpost: vmlinux: section mismatch in reference: tegra_pmc_init_common+0x18 (section: .text.unlikely.) -> tegra_pmc_detect_tz_only (section: .init.text)
+Ah okay.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >> Maybe xsk_tx_metadata_request() should be __nocfi as well? Or all
+> >> the callers of it?
+> > 
+> > I would only expect __nocfi_generic to be useful for avoiding a problem
+> > such as this. __nocfi would be too big of a hammer because it would
+> 
+> Yep, sorry, I actually meant __nocfi_generic...
+
+I figured, just wanted to make sure! This series needs to go to mainline
+sooner rather than later, so maybe xsk_tx_metadata_request() could pick
+up __nocfi_generic as a future change to net-next since there is no
+obvious breakage? 32-bit ARM is the only architecture affected by this
+change since all other architectures that support kCFI have a backend
+specific lowering and I am guessing very few people would actually
+notice this problem in practice.
+
+Thanks again for chiming in and taking a look!
+
+Cheers,
+Nathan
