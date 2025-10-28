@@ -1,110 +1,106 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-yx1-f74.google.com (mail-yx1-f74.google.com [74.125.224.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715D02727FD
-	for <llvm@lists.linux.dev>; Tue, 28 Oct 2025 18:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B347C2E543B
+	for <llvm@lists.linux.dev>; Tue, 28 Oct 2025 18:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761675314; cv=none; b=etCjsJwVLIKBGZfuYU0vkpXx8e+RtS+RVRALVOBALV0pTwy+YOt+RmOzdmavxtbTsuPZiv9EQ2o4hqZnatIcHrZIIONtupZ0AuGt3GJK+3Cr+B+OdG1G40+rTvWKngk1iV74Tt9eRO82G3A85iVtYs1ee0v9Ti/5N57pakvIwYM=
+	t=1761676110; cv=none; b=GcXpiSxQ+jEIF8hzqHlQsV6r8vM4m5DXOoJpPhClmdaUtpYql7tNkM6Y6bkr9xUoYlz29OVseSdeDlax/0EEWELKfPpKPgNtE0SY3z6rqqrI6eTENk2fcMpAF4XafF5JmPf5sdZ+EMzOjVceE0+E16FL9bMU0GE1NTJ+Ob8AERM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761675314; c=relaxed/simple;
-	bh=IdoA2Hsz3DXflOJ/uWb+OTuJMtFaS4jo6XzpS3PQUeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sf857JnFfyfgXrMoUaV6i8pl3caPgF2V0yJYjrLG53Kco6zlA2NNsXraBtw7ByqQxm0dYXZ+PXrlrzc36th8Gkc6SRXwbsqRXBLiYOcAWeYpu/pmKK9eCB0VzphMP/IlcMwTbazvqGcZ5gzId+E5Z2uTSDaL8N6UdeqsbsYnmuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jfc4HqPC; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1761676110; c=relaxed/simple;
+	bh=fX7XbLSp971rMTg0UpwRdyUHxI4708ybuHhCpWAllo8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bFBhsUrl0y55VYYU3fEdAhPAUi8ouTUiJ8Nxp1EKLibz9xwldm/VGQG+k/kSDJVQP8jo4TidguA5rqAcxKWDEuRxveVIpH5wPahct+LK2vjMRPQ4xRhRfumF9ZhzlqmiVyMlDoxHIEuOOl71GlaHAj4KIJEoFa0Sb7REiT8sOaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YhFyLF2J; arc=none smtp.client-ip=74.125.224.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jfc4HqPC"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-290d48e9f1fso22735ad.1
-        for <llvm@lists.linux.dev>; Tue, 28 Oct 2025 11:15:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YhFyLF2J"
+Received: by mail-yx1-f74.google.com with SMTP id 956f58d0204a3-63e1d6438e0so8010508d50.3
+        for <llvm@lists.linux.dev>; Tue, 28 Oct 2025 11:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761675313; x=1762280113; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IdoA2Hsz3DXflOJ/uWb+OTuJMtFaS4jo6XzpS3PQUeQ=;
-        b=jfc4HqPCMF0fe70B4alaEIPadX5ZuCi8h6D3qOOpLBrUujwj8J9yYQUrTMYYqTYm8f
-         tgGt5UhDA9dM6UjO9LRGUhmgtA6mM52Ad/gMvZ1QS4KlyB5GF9xdjTLtOZQ5xJi1EGGg
-         ohzooASDAddSPTBJ0sPKBOd2u6oSVmBgF/RZXC45ZG3f057d+GzAHs/oS8ndqPQKUNpf
-         yhXWRLCrigwAp8nrkEp0HnCcDBMcAk9AYBnx1D624cmdfU+Fa5u+2/sdEWUXIcilg2oZ
-         ZqjcOjVzEh6xx7GOJo+Z0AIHdNqQRMab5uoO99EZjdVgOvSlEje7Wihp4RbTQNS9XsBu
-         p1OQ==
+        d=google.com; s=20230601; t=1761676108; x=1762280908; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=J/B5eNcHD/N3E3+kFhoRC2kLmuGEBa6rnxq3ZrWjw6Q=;
+        b=YhFyLF2JGVTiqNQEM55VbtT7nN9QQOxEe04bXFc7FLF1UjarTW+0vA1ofBRUzXgsub
+         WXCQdTMAQoVNwfgJHZ2KsgNGVVeJHT8tgyA5K2+skLSXRCs4fTjJteJ57RBvfoiJm7l9
+         G+wL9kyHMkDnL9MGZR8O9crYmynfcFChN7vhjj5l0SNhFu8BJbXcz+gnSG/8MfyuaT7F
+         lAxZR72R8aa68RSq651FIhB5wx78LGzD+pOK8gcwgiuTxLsqIbLII2ZDeHUmv5jwiZQY
+         LSELhZ1CWr1iMMv7oehYBlD1KM8Kt4MABtFlen/GqpYCfEExMMgvbCLNYBq6ucMdBrkM
+         jc+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761675313; x=1762280113;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IdoA2Hsz3DXflOJ/uWb+OTuJMtFaS4jo6XzpS3PQUeQ=;
-        b=rxbXeC+xAJhLPLQ+O5LcxF1nIxiMCVUE9puE+x9uCY5dF3NKOw9gFMStEg3K5lHmbG
-         i7agY3icC77hZkBrYgI47KhPFyYIwlIzvi4x0FqJcECO8BW5f8YPTRANdaAx5df2b1PC
-         ByNeMhdyjoPOB7K9AWddaG5SDAKZ1Vnk1YtGyeMukTeAAU2+FlIYXwiV/ujOe5B8rxCl
-         SqRO1qlGBEkp10AkwpcrrhBBHxyh06nJTAqsP5ouF5UF/HxrdkNmfTgxJABFwE5uEE+2
-         5olaVqE4+AfzDx7bTTNxJUc8TtCKei65/HG9bLmRVMuqGxUZ1zmLgtAZu3yjGo2MzBVp
-         TPWA==
-X-Forwarded-Encrypted: i=1; AJvYcCWtRo2ygYjerpqxqQIGf55qfNxx1vW2a+bSEbXEUlbOQ8UxtfjGzvKXokPsn8pe+IzSHTH8@lists.linux.dev
-X-Gm-Message-State: AOJu0YwELIC83+P0NMn+cjudjfl0nRswmRqHfW55l5Hye2/rV9EWCvoP
-	/K6OSw6J6LdPlm+Wltfk1+rj6Qfhz8lDQ5S/jh0QbmLCC6cYmnr8sahx49HR2fZDjFQNkAmRvbK
-	QcYkIpwzIukvY0mYUU3630j7FYwWxj/pOs6HgkzrE
-X-Gm-Gg: ASbGncsJ8uBqpmADTldxGN8OuJ/sOaFL7xghnvG/QnhLb2YAy1rrxoP96agSwVQ/tBL
-	3g+odyNKq/IiweQ8QVelJj//QJUuvmoVmh04hnMY5wWlmJPobOqUlE2VkHb6JXaaMzg+m2TfMyu
-	ptorz+nPNcq7eDh1Mg//tNTESnYkKnQEvPq3Fl2x5O2JcHn92P8FZ138ILmvtCTap8ikZWDglD2
-	ewHcWv4SjWiBDoaxHAbPi7gtGthdg+poxv1s1WXepQV+gO2nE1NZl48lw==
-X-Google-Smtp-Source: AGHT+IERGgSXUSFxn2JeNfQ2C86EuHjvzEyZOaIycK2W0jkA78IAxEYdTtDG+mA9d+7pqLJIChA0NWObPqGrobS4WTk=
-X-Received: by 2002:a17:903:22c3:b0:291:6858:ee60 with SMTP id
- d9443c01a7336-294de36e83fmr559985ad.4.1761675312071; Tue, 28 Oct 2025
- 11:15:12 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761676108; x=1762280908;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J/B5eNcHD/N3E3+kFhoRC2kLmuGEBa6rnxq3ZrWjw6Q=;
+        b=EUdiBuy0H9BTXDh3Mh7E9uERo+r4GnceCemWDjsqlAyufw42Ul7a7nVYT3bsE6nP9I
+         PJ8sQImxLQ31oVP5W4l4L5E4d8peBT4YYXy/g3oJYhXlX8k08k6oHgU7bwTp2PVvjs9I
+         TxN1zwW8XyTd30WITLfx9VyAlx7Aw4OsO0U89X2h7+LM5Bm9/K5RaFJxQGyGBZl7yyS6
+         tzcShtsQvVoJYGvVlRgVLdvpc0ldr9HBNd/SiVlxv4N8MCi6TN14znitsBCB6507gHML
+         mSus0bLbmB+27kB8UnGWew3UFEGnYDQkqfwB20RvzFxwmvrP62Z5hq4Yt2+Vjfv38C5c
+         j+eA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOYXGYDvxyZ4ESD0iW0D35kBtunSSPCbXzC4o3yClrSkim/jbkOmk8g9MWl77Cn4GI9yYh@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0sflvBWIfeAw2uo6PucoZ94/kgpkzXgd1OkZvps8cNB68K1/b
+	LhrlqdndmYPAnv3s7etx04qn9bnMAPhRmljI2p/KGEkFhRLE4f6faY9hzzd2DE3dmOhfMg==
+X-Google-Smtp-Source: AGHT+IHKgweEeaLJqEq+LQTEeKUy21GxhN+HXb+lwE/+WPniFQggWEwGckSmcOi3srPPaBPmXdnrZsY=
+X-Received: from ybsa8.prod.google.com ([2002:a5b:ec8:0:b0:eb6:c177:51d8])
+ (user=xur job=prod-delivery.src-stubby-dispatcher) by 2002:a05:690c:9985:b0:784:a119:e71b
+ with SMTP id 00721157ae682-78628f87d9cmr2297817b3.42.1761676107702; Tue, 28
+ Oct 2025 11:28:27 -0700 (PDT)
+Date: Tue, 28 Oct 2025 18:28:20 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20251025-idpf-fix-arm-kcfi-build-error-v1-0-ec57221153ae@kernel.org>
- <20251025-idpf-fix-arm-kcfi-build-error-v1-2-ec57221153ae@kernel.org>
- <CABCJKuesdSH2xhm_NZOjxHWpt5M866EL_RUBdQNZ54ov7ObH-Q@mail.gmail.com>
- <CACRpkdaeOYEcK9w1oy59WBqjNrK7q5zT2rzg8pHgDdZdKWVKZg@mail.gmail.com> <20251028175243.GB1548965@ax162>
-In-Reply-To: <20251028175243.GB1548965@ax162>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 28 Oct 2025 11:14:35 -0700
-X-Gm-Features: AWmQ_bnDLfsfNIG5--yjR8bWyBut4gyt9iExhd25ip84kUhmdr4d3xv1vPYI1-Q
-Message-ID: <CABCJKudsbd6=8B+fkzbw6TkL-dVvSoT3Co=fW+jWOnuBtxsLKg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] ARM: Select ARCH_USES_CFI_GENERIC_LLVM_PASS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Kees Cook <kees@kernel.org>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Russell King <linux@armlinux.org.uk>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Michal Kubiak <michal.kubiak@intel.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.851.g4ebd6896fd-goog
+Message-ID: <20251028182822.3210436-1-xur@google.com>
+Subject: [PATCH v5 0/2] kbuild: distributed build support for Clang ThinLTO
+From: xur@google.com
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Alice Ryhl <aliceryhl@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Rafael Aquini <aquini@redhat.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Stafford Horne <shorne@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Piotr Gorski <piotrgorski@cachyos.org>, Rong Xu <xur@google.com>, 
+	Teresa Johnson <tejohnson@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 28, 2025 at 10:52=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> On Mon, Oct 27, 2025 at 11:56:21PM +0100, Linus Walleij wrote:
-> > On Mon, Oct 27, 2025 at 4:54=E2=80=AFPM Sami Tolvanen <samitolvanen@goo=
-gle.com> wrote:
-> > > Instead of working around issues with the generic pass, would it make
-> > > more sense to just disable arm32 CFI with older Clang versions
-> > > entirely? Linus, any thoughts?
-> >
-> > We have people using this with the default compilers that come with
-> > Debiand and Fedora. I would say as soon as the latest release of
-> > the major distributions supports this, we can drop support for older
-> > compilers.
->
-> Okay, I think that is reasonable enough. This is not a very large
-> workaround and I do not expect these type of workarounds to be necessary
-> frequently so I think it is worth keeping this working if people are
-> actually using it. That means we could mandate the backend version of
-> kCFI for ARM with Debian Forky in 2027.
+From: Rong Xu <xur@google.com>
 
-Yeah, it's a bit unfortunate, but I agree that we shouldn't break
-existing users until newer Clang is actually available in distros.
+ChangeLog:
 
-Sami
+V5: Handle single quote escaping in echo _c_flags to fix
+    Piotr Gorski's reported error.
+
+V4: This is based on the reimplementation provided by Masahiro Yamada
+on May 26. The difference is that this version now saves the compiler
+flags (_c_flags) from the Front-End (FE) compilation and re-uses them
+for the subsequent Back-End (BE) compilation.
+ 
+Rong Xu (2):
+  kbuild: move vmlinux.a build rule to scripts/Makefile.vmlinux_a
+  kbuild: distributed build support for Clang ThinLTO
+
+ .gitignore                 |  2 +
+ Makefile                   | 25 +++++-------
+ arch/Kconfig               | 19 +++++++++
+ scripts/Makefile.lib       |  7 ++++
+ scripts/Makefile.thinlto   | 40 ++++++++++++++++++
+ scripts/Makefile.vmlinux_a | 83 ++++++++++++++++++++++++++++++++++++++
+ scripts/mod/modpost.c      | 15 +++++--
+ 7 files changed, 174 insertions(+), 17 deletions(-)
+ create mode 100644 scripts/Makefile.thinlto
+ create mode 100644 scripts/Makefile.vmlinux_a
+
+
+base-commit: dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+-- 
+2.51.1.851.g4ebd6896fd-goog
+
