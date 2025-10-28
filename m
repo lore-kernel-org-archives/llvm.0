@@ -1,61 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BC021767A;
-	Tue, 28 Oct 2025 06:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DD62BE024;
+	Tue, 28 Oct 2025 06:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761631554; cv=none; b=O3KIaZiV80hiAeNpo16OecsXopo7Zzo56raPxTbI22HzhSC+aXE/ybtSM3MIzy1+rMp/EMYuWGYJunZenwgb2Jg2X8E8dDAasZoNa9RN01sx1odDgDycDj5CoRZ6b1/1cToox6PQo4/iPwj43dKsZKXM5AqvshOxwQcyhENqFgo=
+	t=1761633642; cv=none; b=q4QSw7CLK7pHcsdv3MKyEnPEUef2HAXhCIerahUM9XSP/m9UQAGaWZyA6UhwdOQbbTf7TD/g9M+MY2oujfBWmulOxijctL5yc9Eycca6F1KsrbJ7GPZCOF3xGwLAanhO5kNmvQX2yfVIENh6aRR/6u6Bdk1ilyAwrC/TrCYEJpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761631554; c=relaxed/simple;
-	bh=B4n8JR8IYD6Oi8BOaYEqdlH4uMpklnkYlXCjt9o+iYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ejlho8SznCckyn0rZnCphurIrh+JjkidifMqF4FnT5s83nWN4pBvhlSM4dABO4KDNm1pHF9HC56qYtNvsskS6+zppciYDIpyy5e/u2SI9hvyucU4YJv8v46k8bBx+odptQY76Pv66iWyYBi+bEeFuUanliwATDGQ7BjYQarYyhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xx1CMRAp; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1761633642; c=relaxed/simple;
+	bh=Sgqs0YMyTEOcNyaZDyzD2vJw5rl5OjZcujPtI3AnvtM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=psRBIunBNYndT9HXqoYxfkxk+QqwwMEtDwpuWM+Uh512bP4SHE2miJKvZ66ReisEZOr1snzAVPQBfzpWD14fqVAWcK+EybVZJH5NsEN0hfK8nZM8px6sL8bBWydY4z2+pbuVxREYMMsFNUgiDqbls7cBogsnOEHKbGq6rGrxSIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZqH9cCS1; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xx1CMRAp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZqH9cCS1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761631553; x=1793167553;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B4n8JR8IYD6Oi8BOaYEqdlH4uMpklnkYlXCjt9o+iYo=;
-  b=Xx1CMRApQdwfr4EKiZwdT42uChH8k1BIvjxu2R+jm1fgsOJCYnvcz08i
-   QpmHoyWlxsTSaFF12aSjHr7Njaik3jfSA/xReaCu1IhurTBijE+zx+glq
-   TSlK1LcEs5cmEWECyh1Jq2qyXrtkrlr4npw72prg3HvKJ6W/12+klfm7B
-   jK0tKSU2WUe8wcb+J1PmlYhHDyKPSbGpgyg9mrXJ7KsFI2xwRRMxdcrbY
-   SJbQwJHheexxfm1hoxhN/yKvWQbaMdykEhy/ZOPVlUCeyWlCi5z1mG+Cz
-   6G9KmhcZ+BXtjQ2xjQ1RZxgkwX9AVm9Viy2Wz2UUkHsDGaItVJ/p5t9U/
-   g==;
-X-CSE-ConnectionGUID: jODuXiWbQgmge7kKgs/H6A==
-X-CSE-MsgGUID: TsM8jJopQm2QmLmva1KF9Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="51297625"
+  t=1761633641; x=1793169641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sgqs0YMyTEOcNyaZDyzD2vJw5rl5OjZcujPtI3AnvtM=;
+  b=ZqH9cCS123iaz5mdSdks2IWYLY0aPq4XZfRr9e4G7HqvguUbYXwrKwuz
+   nd94KcRWbXIraTLTGWHWIavSoIGqMNAzWt+x3I7VnIVC0/mro3OJpZgBm
+   PelYjPmdmERpYUiKuZF8/uSNpFExU65sRv3sDno2C/3AtKu1ZA10btwfb
+   t61331hKj6cvSJBTBMTrx4qKUlzmhACAjdlPUfZwFUj1QZq8TDdO6SgVG
+   FRTvX9t4CIkfSX3gSOYEb5dzE/O7BqyuJ5kktVRMIPHzYkg4x5vKR7MwD
+   dt3thXeBMMm2iAAD/lz3uUyptkwVPwzA1HZ4SiNCXHFfBj3Woc4JEAVYR
+   A==;
+X-CSE-ConnectionGUID: xU7Qch7VT+m6K6NezkGuPw==
+X-CSE-MsgGUID: HDygYc4PTYynnSnjADevAg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67368482"
 X-IronPort-AV: E=Sophos;i="6.19,260,1754982000"; 
-   d="scan'208";a="51297625"
+   d="scan'208";a="67368482"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 23:05:53 -0700
-X-CSE-ConnectionGUID: uHwqA17fQQSKUbyJVkC2EA==
-X-CSE-MsgGUID: f09tCpg6Ru6fGacNhlQMag==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 23:40:41 -0700
+X-CSE-ConnectionGUID: /NT+Aj9oQ8urbmzFV07u4Q==
+X-CSE-MsgGUID: GQKqL3eOR1KNT1jBKY1etg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,260,1754982000"; 
-   d="scan'208";a="185341782"
+   d="scan'208";a="185347797"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 27 Oct 2025 23:05:50 -0700
+  by orviesa008.jf.intel.com with ESMTP; 27 Oct 2025 23:40:34 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vDcq2-000IoP-28;
-	Tue, 28 Oct 2025 06:05:46 +0000
-Date: Tue, 28 Oct 2025 14:02:27 +0800
+	id 1vDdML-000Iqx-0d;
+	Tue, 28 Oct 2025 06:39:28 +0000
+Date: Tue, 28 Oct 2025 14:37:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Conor Dooley <conor.dooley@microchip.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Miller <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@ieee.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Jason Baron <jbaron@akamai.com>, Borislav Petkov <bp@alien8.de>,
+	Tony Luck <tony.luck@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [linusw-pinctrl:devel 28/44]
- drivers/pinctrl/pinctrl-mpfs-iomux0.c:89:2: error: initializer element is
- not a compile-time constant
-Message-ID: <202510281347.vx7j6b7v-lkp@intel.com>
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v5 15/23] gpio: aspeed: Convert to common
+ field_{get,prep}() helpers
+Message-ID: <202510281414.DnejZh4n-lkp@intel.com>
+References: <fbefa056d1e2cd13c52a0489b955c2b9442f0c9a.1761588465.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,53 +88,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <fbefa056d1e2cd13c52a0489b955c2b9442f0c9a.1761588465.git.geert+renesas@glider.be>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-head:   505cc0dcdd551b03390d6b8aab9739f0ba1d939a
-commit: 46397274da2284f46e550dc795de5ceeef8f89bf [28/44] pinctrl: add polarfire soc iomux0 pinmux driver
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251028/202510281347.vx7j6b7v-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251028/202510281347.vx7j6b7v-lkp@intel.com/reproduce)
+Hi Geert,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on next-20251027]
+[cannot apply to clk/clk-next geert-renesas-devel/next geert-renesas-drivers/renesas-clk linus/master v6.18-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Geert-Uytterhoeven/clk-at91-pmc-undef-field_-get-prep-before-definition/20251028-025423
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/fbefa056d1e2cd13c52a0489b955c2b9442f0c9a.1761588465.git.geert%2Brenesas%40glider.be
+patch subject: [PATCH v5 15/23] gpio: aspeed: Convert to common field_{get,prep}() helpers
+config: x86_64-buildonly-randconfig-003-20251028 (https://download.01.org/0day-ci/archive/20251028/202510281414.DnejZh4n-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251028/202510281414.DnejZh4n-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510281347.vx7j6b7v-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510281414.DnejZh4n-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/pinctrl/pinctrl-mpfs-iomux0.c:89:2: error: initializer element is not a compile-time constant
-           MPFS_IOMUX0_GROUP(spi0),
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/pinctrl-mpfs-iomux0.c:79:10: note: expanded from macro 'MPFS_IOMUX0_GROUP'
-           .mask = BIT(mpfs_iomux0_##_name##_pins[0]),     \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                   ^~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/gpio/gpio-aspeed.c:1161:44: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+    1161 |                 write_val = (ioread32(addr) & ~(mask)) | field_prep(mask, val);
+         |                                                          ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:256:32: note: expanded from macro 'field_prep'
+     256 |         (__builtin_constant_p(mask) ? FIELD_PREP(mask, val)             \
+         |                                       ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:597:22: note: expanded from macro 'compiletime_assert'
+     597 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:585:23: note: expanded from macro '_compiletime_assert'
+     585 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:577:9: note: expanded from macro '__compiletime_assert'
+     577 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   1 warning generated.
 
 
-vim +89 drivers/pinctrl/pinctrl-mpfs-iomux0.c
+vim +1161 drivers/gpio/gpio-aspeed.c
 
-    87	
-    88	static const struct mpfs_iomux0_pin_group mpfs_iomux0_pin_groups[] = {
-  > 89		MPFS_IOMUX0_GROUP(spi0),
-    90		MPFS_IOMUX0_GROUP(spi1),
-    91		MPFS_IOMUX0_GROUP(i2c0),
-    92		MPFS_IOMUX0_GROUP(i2c1),
-    93		MPFS_IOMUX0_GROUP(can0),
-    94		MPFS_IOMUX0_GROUP(can1),
-    95		MPFS_IOMUX0_GROUP(qspi),
-    96		MPFS_IOMUX0_GROUP(uart0),
-    97		MPFS_IOMUX0_GROUP(uart1),
-    98		MPFS_IOMUX0_GROUP(uart2),
-    99		MPFS_IOMUX0_GROUP(uart3),
-   100		MPFS_IOMUX0_GROUP(uart4),
-   101		MPFS_IOMUX0_GROUP(mdio0),
-   102		MPFS_IOMUX0_GROUP(mdio1),
-   103	};
-   104	
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1152  
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1153  static void aspeed_g7_reg_bit_set(struct aspeed_gpio *gpio, unsigned int offset,
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1154  				  const enum aspeed_gpio_reg reg, bool val)
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1155  {
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1156  	u32 mask = aspeed_gpio_g7_reg_mask(reg);
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1157  	void __iomem *addr = gpio->base + GPIO_G7_CTRL_REG_OFFSET(offset);
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1158  	u32 write_val;
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1159  
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1160  	if (mask) {
+b2e861bd1eaf4c Billy Tsai 2024-10-08 @1161  		write_val = (ioread32(addr) & ~(mask)) | field_prep(mask, val);
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1162  		iowrite32(write_val, addr);
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1163  	}
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1164  }
+b2e861bd1eaf4c Billy Tsai 2024-10-08  1165  
 
 -- 
 0-DAY CI Kernel Test Service
