@@ -1,78 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A9219DF62;
-	Tue, 28 Oct 2025 23:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8401D2F42;
+	Wed, 29 Oct 2025 04:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761692925; cv=none; b=fiz9qZwO+5Z6rTyLNIN/RkcUzkfJMh2IYrBcyEZS6HbGpkL53NMl+9cVU+Bz99h+DjNbAx5pb2RWr1mhk0V9TUmdYmr2WsqOBe6x46c9Oql8BLyNc0jB1ZOprJVJi2qprxGd1JmoLZInhokFpHrI4h85xEWGApBEq+ff+vlHR7g=
+	t=1761713449; cv=none; b=r5elyCCBR4MVXhwiTVUSVdcwpkRNexfqAH3tSkLqOlMOCYT6hquni787NtdIUP3OGvKBwTaCCRA9c0uEB7uZ9XBdhXHUS94eRHS3gb9AL4nxwGoXS6I8dZf7F0B9XTcsjBppYy1AHa+SJ6jb9C/Aktl27UXZO+t7Ng5bhkWsjXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761692925; c=relaxed/simple;
-	bh=evMq5rDzC51KQXrcy3CfPKW63LeNpech/td6v+Hhg5Y=;
+	s=arc-20240116; t=1761713449; c=relaxed/simple;
+	bh=m+xtCQlsQ2W/RTc69IEMvaWvvLYl73pqZWkjRlTO/jY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uBahSryDfCJDt0e0aazro87bedzAOMCOSs65+dUOe1EPHoGAlQUxf67/H4h/m+uP9tdtYs5+ER/++oO1FIpmVMRnzIZUOEgaRPoSI7qPdYKDD60ks9sT3J+Y2AAdLHWXBU8qzAJTFZxYg03n6c79ycmmv51LtCXA9C91hp9Tmik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m/saXsgB; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=oWj0eGEANy2445KHU0iMYa2w1u70M2BVoqESibVI34MOyfMLHjDrbsfUcIu9XNkNKqNznYvAJO8rJuQos+sGYL6bzI7OqM15i3hV7bdDMb+n5UfL8nCBtGDw1DytNlocnxpvASI7PjF7Jlluh73nbRK0W6dzx/x8EK3vctqMcLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DkBs+fCh; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m/saXsgB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DkBs+fCh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761692924; x=1793228924;
+  t=1761713447; x=1793249447;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=evMq5rDzC51KQXrcy3CfPKW63LeNpech/td6v+Hhg5Y=;
-  b=m/saXsgBJ+Bx4V1xjI07WJBt/7pk6j03nvKFcYEPsj/FyRIVDxQKGyDr
-   ufVxApfZtrkT4X5Qw+Py1X8B0jiK+PyNC74Hp7Jzq37I8s8ASZj+pyokL
-   K0QVR8MUXUEBKdoZ1O27ijUs6E5EHcfcF8yGvwBJKO/d1IjFPkF7Luvie
-   5FdPml60UzTLU10/HyBaL5hkkvPVNfaKXZgnbGIhIOV3SUSwrVUHPsULK
-   lj9RR51Qt9KMsN1Vi11k5oISgpW/wEsgUE9OqncI6lmfeCb6Ajf7vFwTW
-   fLLOMRxPmRSK8kr4RVc8ABQU5+NGPMaIKTUkwbaGLOtSyccPrGlvo709d
-   A==;
-X-CSE-ConnectionGUID: L0tL4jUfSjy+DvKp103Rng==
-X-CSE-MsgGUID: OucHcGZDRz+jKgeuNeli8A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74096744"
-X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
-   d="scan'208";a="74096744"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 16:08:44 -0700
-X-CSE-ConnectionGUID: 0SpLiVV9QryXPnwo4JNZKQ==
-X-CSE-MsgGUID: YzpAcEb1SK6loevFv1yVBA==
+  bh=m+xtCQlsQ2W/RTc69IEMvaWvvLYl73pqZWkjRlTO/jY=;
+  b=DkBs+fChhr1Qr0A62jxyxR/+V1s16qNWvzVmweEGHFza3T67Yf4eM3sV
+   SxobzLehCaJtoAdLW1RR7uKg3aoREocNuqf2HngAxRMPdx5MSEmoLICUb
+   LqOoKuj4hEh7RIkg7KqNl4qUxyv4YuutpKsHE55GLVVSyL70ROagXCuoU
+   x1gWll+gJ6R54/XLFUujwNu0/I6pG8Dxkh31AMaJcz54H3uF6Xyf5jAo6
+   /IlYjaL9bpnSg+PDnuN6zCt9Z/fliYVRt0UbiOB/bZkwHMgrDKzDOeBOU
+   mSx4rqtadJyoVXuFcnGXaD2Olo94+DJozBu/tjul0/fhuHMtY71qOZXpA
+   w==;
+X-CSE-ConnectionGUID: uCcLlUOxSY+7ipPs6lE1Yg==
+X-CSE-MsgGUID: ztOFTWfJTfSPOQp73ctyHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63727260"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63727260"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 21:50:46 -0700
+X-CSE-ConnectionGUID: 7z1IadphTougDt3CqOkDFw==
+X-CSE-MsgGUID: pKbUsDDKTZ63BTHknyyYSg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,262,1754982000"; 
-   d="scan'208";a="190624753"
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="216199959"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 28 Oct 2025 16:08:37 -0700
+  by orviesa002.jf.intel.com with ESMTP; 28 Oct 2025 21:50:44 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vDsnp-000Jrd-2u;
-	Tue, 28 Oct 2025 23:08:33 +0000
-Date: Wed, 29 Oct 2025 07:08:13 +0800
+	id 1vDy8p-000K9B-11;
+	Wed, 29 Oct 2025 04:50:36 +0000
+Date: Wed, 29 Oct 2025 12:49:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org,
-	minchan@kernel.org, lorenzo.stoakes@oracle.com, david@redhat.com,
-	Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rostedt@goodmis.org, hughd@google.com, kernel-team@android.com,
-	android-mm@google.com, Kalesh Singh <kaleshsingh@google.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCH v4 3/5] mm: Introduce max_vma_count() to abstract the max
- map count sysctl
-Message-ID: <202510290650.ZOY96pTc-lkp@intel.com>
-References: <20251028212528.681081-4-kaleshsingh@google.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, fw@strlen.de,
+	ffmancera@suse.de, brady.1345@gmail.com
+Subject: Re: [PATCH nf 1/2] netfilter: nf_tables: limit maximum number of
+ jumps/gotos per netns
+Message-ID: <202510291201.P7nkKt1R-lkp@intel.com>
+References: <20251027221722.183398-2-pablo@netfilter.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,32 +65,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251028212528.681081-4-kaleshsingh@google.com>
+In-Reply-To: <20251027221722.183398-2-pablo@netfilter.org>
 
-Hi Kalesh,
+Hi Pablo,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on b227c04932039bccc21a0a89cd6df50fa57e4716]
+[auto build test WARNING on netfilter-nf/main]
+[also build test WARNING on linus/master v6.18-rc3 next-20251029]
+[cannot apply to nf-next/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kalesh-Singh/mm-Document-lenient-map_count-checks/20251029-052713
-base:   b227c04932039bccc21a0a89cd6df50fa57e4716
-patch link:    https://lore.kernel.org/r/20251028212528.681081-4-kaleshsingh%40google.com
-patch subject: [PATCH v4 3/5] mm: Introduce max_vma_count() to abstract the max map count sysctl
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251029/202510290650.ZOY96pTc-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/netfilter-nf_tables-limit-maximum-number-of-jumps-gotos-per-netns/20251028-062221
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git main
+patch link:    https://lore.kernel.org/r/20251027221722.183398-2-pablo%40netfilter.org
+patch subject: [PATCH nf 1/2] netfilter: nf_tables: limit maximum number of jumps/gotos per netns
+config: arm-randconfig-003-20251028 (https://download.01.org/0day-ci/archive/20251029/202510291201.P7nkKt1R-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251029/202510290650.ZOY96pTc-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251029/202510291201.P7nkKt1R-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510290650.ZOY96pTc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510291201.P7nkKt1R-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: max_vma_count
-   >>> referenced by nommu.c
-   >>>               mm/nommu.o:(split_vma) in archive vmlinux.a
+   In file included from net/netfilter/core.c:27:
+   In file included from include/net/netfilter/nf_tables.h:13:
+   In file included from include/net/netfilter/nf_flow_table.h:13:
+   In file included from include/linux/if_pppox.h:17:
+   include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'struct sockaddr_pppox' is less aligned than 'union (unnamed union at include/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+      71 |         } sa_addr;
+         |           ^
+>> net/netfilter/core.c:832:1: warning: unused label 'err_nft_pernet' [-Wunused-label]
+     832 | err_nft_pernet:
+         | ^~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/err_nft_pernet +832 net/netfilter/core.c
+
+   805	
+   806	int __init netfilter_init(void)
+   807	{
+   808		int ret;
+   809	
+   810		ret = register_pernet_subsys(&netfilter_net_ops);
+   811		if (ret < 0)
+   812			goto err;
+   813	
+   814	#ifdef CONFIG_LWTUNNEL
+   815		ret = netfilter_lwtunnel_init();
+   816		if (ret < 0)
+   817			goto err_lwtunnel_pernet;
+   818	#endif
+   819	#if IS_ENABLED(CONFIG_NF_TABLES)
+   820		ret = netfilter_nf_tables_sysctl_init();
+   821		if (ret < 0)
+   822			goto err_nft_pernet;
+   823	#endif
+   824		ret = netfilter_log_init();
+   825		if (ret < 0)
+   826			goto err_log_pernet;
+   827	
+   828		return 0;
+   829	
+   830	err_log_pernet:
+   831		netfilter_nf_tables_sysctl_fini();
+ > 832	err_nft_pernet:
 
 -- 
 0-DAY CI Kernel Test Service
