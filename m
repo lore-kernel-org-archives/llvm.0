@@ -1,269 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FB129CE9;
-	Wed, 29 Oct 2025 19:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9181B31A55B
+	for <llvm@lists.linux.dev>; Wed, 29 Oct 2025 20:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761765999; cv=none; b=OGaJsAflSrlqxwSWjCJuc1tTV/FtJQGYcWh7UJDvLAL1GywnYFrEO2jKCu2a72lDkIBq02p+qkQfJZjo8ny8RUOltNwYVtOftDeUxFbt28AnvgzrOy6/67O3sWmEYQQbGYc7CES+7UarCulO18X9g53l0C5qq75SVBDYuzF/ELk=
+	t=1761768435; cv=none; b=ZgRfA7xAAYt/HShkTmhrCEDwa/oK8BsO0Ba7Fw3DmlgiVgJ05lBIZlM9sptfBeYWQ+Qifr4zP2WJIM1BM8Ah/GZ82EV2Vtpmg7ohR61k4ALRSxp1l9EYajOwzJtl46K5Bmb2cp8zlBXP/cwg1hFaHTMNz3iH/IOvS34o0HOinig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761765999; c=relaxed/simple;
-	bh=EpU1pZ/ZyCZmWSEaOUHbj1u5kyy/IwYQpYaXIFYmGVA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aP1d6nZByDAbZ1iM2VwGeL8+ZflU/51y7zHcBO3MVbdxkaf2/FYdcRbOWyF+YmOKYucNJeETld6s97/wpVAHSmjp9ajnnDYLtSnrIxO3YRqUBivja+nO9yMvaRp0wkSp7guNawaFt+ZVQgpuk2cnN9IiIPSZczdT+qAwOUdEJWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kt/sRpmp; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761768435; c=relaxed/simple;
+	bh=+cA2njdiqaGsLKzMeaYLJnV2PWefw9DHpnKbgEVAOp8=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ttKHM82N3Do8VRNI+8rRx5ifJN6zhPmU8txt2xxnNJvw4kPg1dRByK1C7YCwVD+SXWlm48E1qIjzC6USoE9gVlnx9L9hjNl5HQxu3Ln7DHJ2zkF2seMZtYw5uM/MKWE7Hr7gRLA4Au02qvxJsxc4fqYmBMm1XGF7x2TrbfQU0tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Q8fbvGeL; arc=none smtp.client-ip=185.70.43.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kt/sRpmp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761765997; x=1793301997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=EpU1pZ/ZyCZmWSEaOUHbj1u5kyy/IwYQpYaXIFYmGVA=;
-  b=kt/sRpmpK9Amb45cKy6doj4P5F6+5CE9za/S3y+Fkh0vGHo9coDsHkJr
-   iVJD5brW7axLbnPcpgtKPA+Lll2Mb2UN+vL5ImTRLdcyk/myrYvi0SBFE
-   1R6N0l6vJRKisMrNCHmMMvoXmKVJO6vrtdBGG7+oJdpAtNN9qbGaX2oiK
-   eL6Xu9BXytmLgtYu1zB7wCxHzyD/Qi14btXnj3hWfpexBGcpZ7ncbWSRz
-   MG8i8rVm2s0CTbG73dfVD9+2oATDwoMWcDIKW5UIwXT/MydOG6PkiXpGV
-   X/H/++UBgqHyLHReiguqJnVGxM8UgE9Ds0bc117d2YPN9nHTWriJw9Ljk
-   A==;
-X-CSE-ConnectionGUID: EU+qnVMfT1GIkLjxOL/0Nw==
-X-CSE-MsgGUID: VxqwLtoQTk2mEjDXcLfg6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="75346968"
-X-IronPort-AV: E=Sophos;i="6.19,264,1754982000"; 
-   d="scan'208";a="75346968"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 12:26:37 -0700
-X-CSE-ConnectionGUID: H/EVTNAfQxeA64z6D6c6rw==
-X-CSE-MsgGUID: 8iWq2G2NRaiK5M3gXls/7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,264,1754982000"; 
-   d="scan'208";a="190884229"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 29 Oct 2025 12:26:32 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEBoT-000L60-2w;
-	Wed, 29 Oct 2025 19:26:29 +0000
-Date: Thu, 30 Oct 2025 03:25:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>,
-	Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Yosry Ahmed <yosry.ahmed@linux.dev>,
-	David Hildenbrand <david@redhat.com>,
-	Youngjun Park <youngjun.park@lge.com>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Huang, Ying" <ying.huang@linux.alibaba.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>
-Subject: Re: [PATCH 14/19] mm, swap: sanitize swap entry management workflow
-Message-ID: <202510300341.cOYqY4ki-lkp@intel.com>
-References: <20251029-swap-table-p2-v1-14-3d43f3b6ec32@tencent.com>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Q8fbvGeL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1761768428; x=1762027628;
+	bh=ORgS5h+xBvFClF5iXcyTXC092gY8CGZFTCYy/D6hFpU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=Q8fbvGeL2ExKLfg1F1thHnRQ92jM0SfvidRW/4ypa4lolos8RCX0lLu+i2H6kTK6S
+	 MaA1nBDNDQPyyfdcKvl+1OcEfLMV2Viqk9a+x2KT3lXIr9hXFR4fmSs0XylD1sTGie
+	 tsO96krT1yWQpKu1JBZ1xoqT/Am1AJerQd1O8H4fUA92e+JgBxhZqZgpSkBFj0QbBY
+	 kK5jeFm7SA2QiUwxKEOqXSEioeBK0pAcc9z8/Bx7JbdabNmBwQBKWD9VAd4AMK2nqH
+	 tn//iBIEYCz7O+2enlz2b7WX/VCaIyvT/kkUpw3q6WdAghPk/Ks4hSNUdaZmzn+OT9
+	 2SUvjbSgsrkKQ==
+Date: Wed, 29 Oct 2025 20:07:02 +0000
+To: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, glider@google.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com,
+	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org
+From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, m.wieczorretman@pm.me
+Subject: [PATCH v6 10/18] x86/mm: Physical address comparisons in fill_p*d/pte
+Message-ID: <da6cee1f1e596da12ef6e57202c26ec802f7528a.1761763681.git.m.wieczorretman@pm.me>
+In-Reply-To: <cover.1761763681.git.m.wieczorretman@pm.me>
+References: <cover.1761763681.git.m.wieczorretman@pm.me>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: 931b8bb7920f3633ea9d19d797d43379e99d4838
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251029-swap-table-p2-v1-14-3d43f3b6ec32@tencent.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kairui,
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 
-kernel test robot noticed the following build errors:
+Calculating page offset returns a pointer without a tag. When comparing
+the calculated offset to a tagged page pointer an error is raised
+because they are not equal.
 
-[auto build test ERROR on f30d294530d939fa4b77d61bc60f25c4284841fa]
+Change pointer comparisons to physical address comparisons as to avoid
+issues with tagged pointers that pointer arithmetic would create. Open
+code pte_offset_kernel(), pmd_offset(), pud_offset() and p4d_offset().
+Because one parameter is always zero and the rest of the function
+insides are enclosed inside __va(), removing that layer lowers the
+complexity of final assembly.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swap-rename-__read_swap_cache_async-to-swap_cache_alloc_folio/20251030-000506
-base:   f30d294530d939fa4b77d61bc60f25c4284841fa
-patch link:    https://lore.kernel.org/r/20251029-swap-table-p2-v1-14-3d43f3b6ec32%40tencent.com
-patch subject: [PATCH 14/19] mm, swap: sanitize swap entry management workflow
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251030/202510300341.cOYqY4ki-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510300341.cOYqY4ki-lkp@intel.com/reproduce)
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+---
+Changelog v2:
+- Open code *_offset() to avoid it's internal __va().
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510300341.cOYqY4ki-lkp@intel.com/
+ arch/x86/mm/init_64.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-All errors (new ones prefixed by >>):
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 0e4270e20fad..2d79fc0cf391 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -269,7 +269,10 @@ static p4d_t *fill_p4d(pgd_t *pgd, unsigned long vaddr=
+)
+ =09if (pgd_none(*pgd)) {
+ =09=09p4d_t *p4d =3D (p4d_t *)spp_getpage();
+ =09=09pgd_populate(&init_mm, pgd, p4d);
+-=09=09if (p4d !=3D p4d_offset(pgd, 0))
++
++=09=09if (__pa(p4d) !=3D (pgtable_l5_enabled() ?
++=09=09=09=09  __pa(pgd) :
++=09=09=09=09  (unsigned long)pgd_val(*pgd) & PTE_PFN_MASK))
+ =09=09=09printk(KERN_ERR "PAGETABLE BUG #00! %p <-> %p\n",
+ =09=09=09       p4d, p4d_offset(pgd, 0));
+ =09}
+@@ -281,7 +284,7 @@ static pud_t *fill_pud(p4d_t *p4d, unsigned long vaddr)
+ =09if (p4d_none(*p4d)) {
+ =09=09pud_t *pud =3D (pud_t *)spp_getpage();
+ =09=09p4d_populate(&init_mm, p4d, pud);
+-=09=09if (pud !=3D pud_offset(p4d, 0))
++=09=09if (__pa(pud) !=3D (p4d_val(*p4d) & p4d_pfn_mask(*p4d)))
+ =09=09=09printk(KERN_ERR "PAGETABLE BUG #01! %p <-> %p\n",
+ =09=09=09       pud, pud_offset(p4d, 0));
+ =09}
+@@ -293,7 +296,7 @@ static pmd_t *fill_pmd(pud_t *pud, unsigned long vaddr)
+ =09if (pud_none(*pud)) {
+ =09=09pmd_t *pmd =3D (pmd_t *) spp_getpage();
+ =09=09pud_populate(&init_mm, pud, pmd);
+-=09=09if (pmd !=3D pmd_offset(pud, 0))
++=09=09if (__pa(pmd) !=3D (pud_val(*pud) & pud_pfn_mask(*pud)))
+ =09=09=09printk(KERN_ERR "PAGETABLE BUG #02! %p <-> %p\n",
+ =09=09=09       pmd, pmd_offset(pud, 0));
+ =09}
+@@ -305,7 +308,7 @@ static pte_t *fill_pte(pmd_t *pmd, unsigned long vaddr)
+ =09if (pmd_none(*pmd)) {
+ =09=09pte_t *pte =3D (pte_t *) spp_getpage();
+ =09=09pmd_populate_kernel(&init_mm, pmd, pte);
+-=09=09if (pte !=3D pte_offset_kernel(pmd, 0))
++=09=09if (__pa(pte) !=3D (pmd_val(*pmd) & pmd_pfn_mask(*pmd)))
+ =09=09=09printk(KERN_ERR "PAGETABLE BUG #03!\n");
+ =09}
+ =09return pte_offset_kernel(pmd, vaddr);
+--=20
+2.51.0
 
-   In file included from mm/shmem.c:44:
-   mm/swap.h:465:1: warning: non-void function does not return a value [-Wreturn-type]
-     465 | }
-         | ^
->> mm/shmem.c:1649:29: error: too few arguments to function call, expected 2, have 1
-    1649 |         if (!folio_alloc_swap(folio)) {
-         |              ~~~~~~~~~~~~~~~~      ^
-   mm/swap.h:388:19: note: 'folio_alloc_swap' declared here
-     388 | static inline int folio_alloc_swap(struct folio *folio, gfp_t gfp)
-         |                   ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
 
-
-vim +1649 mm/shmem.c
-
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1563  
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1564) /**
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1565)  * shmem_writeout - Write the folio to swap
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1566)  * @folio: The folio to write
-44b1b073eb3614 Christoph Hellwig       2025-06-10  1567   * @plug: swap plug
-44b1b073eb3614 Christoph Hellwig       2025-06-10  1568   * @folio_list: list to put back folios on split
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1569)  *
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1570)  * Move the folio from the page cache to the swap cache.
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1571)  */
-44b1b073eb3614 Christoph Hellwig       2025-06-10  1572  int shmem_writeout(struct folio *folio, struct swap_iocb **plug,
-44b1b073eb3614 Christoph Hellwig       2025-06-10  1573  		struct list_head *folio_list)
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1574) {
-8ccee8c19c605a Luis Chamberlain        2023-03-09  1575  	struct address_space *mapping = folio->mapping;
-8ccee8c19c605a Luis Chamberlain        2023-03-09  1576  	struct inode *inode = mapping->host;
-8ccee8c19c605a Luis Chamberlain        2023-03-09  1577  	struct shmem_inode_info *info = SHMEM_I(inode);
-2c6efe9cf2d784 Luis Chamberlain        2023-03-09  1578  	struct shmem_sb_info *sbinfo = SHMEM_SB(inode->i_sb);
-6922c0c7abd387 Hugh Dickins            2011-08-03  1579  	pgoff_t index;
-650180760be6bb Baolin Wang             2024-08-12  1580  	int nr_pages;
-809bc86517cc40 Baolin Wang             2024-08-12  1581  	bool split = false;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1582  
-adae46ac1e38a2 Ricardo Cañuelo Navarro 2025-02-26  1583  	if ((info->flags & VM_LOCKED) || sbinfo->noswap)
-9a976f0c847b67 Luis Chamberlain        2023-03-09  1584  		goto redirty;
-9a976f0c847b67 Luis Chamberlain        2023-03-09  1585  
-9a976f0c847b67 Luis Chamberlain        2023-03-09  1586  	if (!total_swap_pages)
-9a976f0c847b67 Luis Chamberlain        2023-03-09  1587  		goto redirty;
-9a976f0c847b67 Luis Chamberlain        2023-03-09  1588  
-1e6decf30af5c5 Hugh Dickins            2021-09-02  1589  	/*
-809bc86517cc40 Baolin Wang             2024-08-12  1590  	 * If CONFIG_THP_SWAP is not enabled, the large folio should be
-809bc86517cc40 Baolin Wang             2024-08-12  1591  	 * split when swapping.
-809bc86517cc40 Baolin Wang             2024-08-12  1592  	 *
-809bc86517cc40 Baolin Wang             2024-08-12  1593  	 * And shrinkage of pages beyond i_size does not split swap, so
-809bc86517cc40 Baolin Wang             2024-08-12  1594  	 * swapout of a large folio crossing i_size needs to split too
-809bc86517cc40 Baolin Wang             2024-08-12  1595  	 * (unless fallocate has been used to preallocate beyond EOF).
-1e6decf30af5c5 Hugh Dickins            2021-09-02  1596  	 */
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1597) 	if (folio_test_large(folio)) {
-809bc86517cc40 Baolin Wang             2024-08-12  1598  		index = shmem_fallocend(inode,
-809bc86517cc40 Baolin Wang             2024-08-12  1599  			DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE));
-809bc86517cc40 Baolin Wang             2024-08-12  1600  		if ((index > folio->index && index < folio_next_index(folio)) ||
-809bc86517cc40 Baolin Wang             2024-08-12  1601  		    !IS_ENABLED(CONFIG_THP_SWAP))
-809bc86517cc40 Baolin Wang             2024-08-12  1602  			split = true;
-809bc86517cc40 Baolin Wang             2024-08-12  1603  	}
-809bc86517cc40 Baolin Wang             2024-08-12  1604  
-809bc86517cc40 Baolin Wang             2024-08-12  1605  	if (split) {
-809bc86517cc40 Baolin Wang             2024-08-12  1606  try_split:
-1e6decf30af5c5 Hugh Dickins            2021-09-02  1607  		/* Ensure the subpages are still dirty */
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1608) 		folio_test_set_dirty(folio);
-44b1b073eb3614 Christoph Hellwig       2025-06-10  1609  		if (split_folio_to_list(folio, folio_list))
-1e6decf30af5c5 Hugh Dickins            2021-09-02  1610  			goto redirty;
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1611) 		folio_clear_dirty(folio);
-1e6decf30af5c5 Hugh Dickins            2021-09-02  1612  	}
-1e6decf30af5c5 Hugh Dickins            2021-09-02  1613  
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1614) 	index = folio->index;
-650180760be6bb Baolin Wang             2024-08-12  1615  	nr_pages = folio_nr_pages(folio);
-1635f6a74152f1 Hugh Dickins            2012-05-29  1616  
-1635f6a74152f1 Hugh Dickins            2012-05-29  1617  	/*
-1635f6a74152f1 Hugh Dickins            2012-05-29  1618  	 * This is somewhat ridiculous, but without plumbing a SWAP_MAP_FALLOC
-1635f6a74152f1 Hugh Dickins            2012-05-29  1619  	 * value into swapfile.c, the only way we can correctly account for a
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1620) 	 * fallocated folio arriving here is now to initialize it and write it.
-1aac1400319d30 Hugh Dickins            2012-05-29  1621  	 *
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1622) 	 * That's okay for a folio already fallocated earlier, but if we have
-1aac1400319d30 Hugh Dickins            2012-05-29  1623  	 * not yet completed the fallocation, then (a) we want to keep track
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1624) 	 * of this folio in case we have to undo it, and (b) it may not be a
-1aac1400319d30 Hugh Dickins            2012-05-29  1625  	 * good idea to continue anyway, once we're pushing into swap.  So
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1626) 	 * reactivate the folio, and let shmem_fallocate() quit when too many.
-1635f6a74152f1 Hugh Dickins            2012-05-29  1627  	 */
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1628) 	if (!folio_test_uptodate(folio)) {
-1aac1400319d30 Hugh Dickins            2012-05-29  1629  		if (inode->i_private) {
-1aac1400319d30 Hugh Dickins            2012-05-29  1630  			struct shmem_falloc *shmem_falloc;
-1aac1400319d30 Hugh Dickins            2012-05-29  1631  			spin_lock(&inode->i_lock);
-1aac1400319d30 Hugh Dickins            2012-05-29  1632  			shmem_falloc = inode->i_private;
-1aac1400319d30 Hugh Dickins            2012-05-29  1633  			if (shmem_falloc &&
-8e205f779d1443 Hugh Dickins            2014-07-23  1634  			    !shmem_falloc->waitq &&
-1aac1400319d30 Hugh Dickins            2012-05-29  1635  			    index >= shmem_falloc->start &&
-1aac1400319d30 Hugh Dickins            2012-05-29  1636  			    index < shmem_falloc->next)
-d77b90d2b26426 Baolin Wang             2024-12-19  1637  				shmem_falloc->nr_unswapped += nr_pages;
-1aac1400319d30 Hugh Dickins            2012-05-29  1638  			else
-1aac1400319d30 Hugh Dickins            2012-05-29  1639  				shmem_falloc = NULL;
-1aac1400319d30 Hugh Dickins            2012-05-29  1640  			spin_unlock(&inode->i_lock);
-1aac1400319d30 Hugh Dickins            2012-05-29  1641  			if (shmem_falloc)
-1aac1400319d30 Hugh Dickins            2012-05-29  1642  				goto redirty;
-1aac1400319d30 Hugh Dickins            2012-05-29  1643  		}
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1644) 		folio_zero_range(folio, 0, folio_size(folio));
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1645) 		flush_dcache_folio(folio);
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1646) 		folio_mark_uptodate(folio);
-1635f6a74152f1 Hugh Dickins            2012-05-29  1647  	}
-1635f6a74152f1 Hugh Dickins            2012-05-29  1648  
-7d14492199f93c Kairui Song             2025-10-24 @1649  	if (!folio_alloc_swap(folio)) {
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1650  		bool first_swapped = shmem_recalc_inode(inode, 0, nr_pages);
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1651  		int error;
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1652  
-b1dea800ac3959 Hugh Dickins            2011-05-11  1653  		/*
-b1dea800ac3959 Hugh Dickins            2011-05-11  1654  		 * Add inode to shmem_unuse()'s list of swapped-out inodes,
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1655) 		 * if it's not already there.  Do it now before the folio is
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1656  		 * removed from page cache, when its pagelock no longer
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1657  		 * protects the inode from eviction.  And do it now, after
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1658  		 * we've incremented swapped, because shmem_unuse() will
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1659  		 * prune a !swapped inode from the swaplist.
-b1dea800ac3959 Hugh Dickins            2011-05-11  1660  		 */
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1661  		if (first_swapped) {
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1662  			spin_lock(&shmem_swaplist_lock);
-05bf86b4ccfd0f Hugh Dickins            2011-05-14  1663  			if (list_empty(&info->swaplist))
-b56a2d8af9147a Vineeth Remanan Pillai  2019-03-05  1664  				list_add(&info->swaplist, &shmem_swaplist);
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1665  			spin_unlock(&shmem_swaplist_lock);
-ea693aaa5ce5ad Hugh Dickins            2025-07-16  1666  		}
-b1dea800ac3959 Hugh Dickins            2011-05-11  1667  
-80d6ed40156385 Kairui Song             2025-10-29  1668  		folio_dup_swap(folio, NULL);
-b487a2da3575b6 Kairui Song             2025-03-14  1669  		shmem_delete_from_page_cache(folio, swp_to_radix_entry(folio->swap));
-267a4c76bbdb95 Hugh Dickins            2015-12-11  1670  
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1671) 		BUG_ON(folio_mapped(folio));
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1672  		error = swap_writeout(folio, plug);
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1673  		if (error != AOP_WRITEPAGE_ACTIVATE) {
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1674  			/* folio has been unlocked */
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1675  			return error;
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1676  		}
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1677  
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1678  		/*
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1679  		 * The intention here is to avoid holding on to the swap when
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1680  		 * zswap was unable to compress and unable to writeback; but
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1681  		 * it will be appropriate if other reactivate cases are added.
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1682  		 */
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1683  		error = shmem_add_to_page_cache(folio, mapping, index,
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1684  				swp_to_radix_entry(folio->swap),
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1685  				__GFP_HIGH | __GFP_NOMEMALLOC | __GFP_NOWARN);
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1686  		/* Swap entry might be erased by racing shmem_free_swap() */
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1687  		if (!error) {
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1688  			shmem_recalc_inode(inode, 0, -nr_pages);
-80d6ed40156385 Kairui Song             2025-10-29  1689  			folio_put_swap(folio, NULL);
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1690  		}
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1691  
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1692  		/*
-fd8d4f862f8c27 Kairui Song             2025-09-17  1693  		 * The swap_cache_del_folio() below could be left for
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1694  		 * shrink_folio_list()'s folio_free_swap() to dispose of;
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1695  		 * but I'm a little nervous about letting this folio out of
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1696  		 * shmem_writeout() in a hybrid half-tmpfs-half-swap state
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1697  		 * e.g. folio_mapping(folio) might give an unexpected answer.
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1698  		 */
-fd8d4f862f8c27 Kairui Song             2025-09-17  1699  		swap_cache_del_folio(folio);
-6344a6d9ce13ae Hugh Dickins            2025-07-16  1700  		goto redirty;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1701  	}
-b487a2da3575b6 Kairui Song             2025-03-14  1702  	if (nr_pages > 1)
-b487a2da3575b6 Kairui Song             2025-03-14  1703  		goto try_split;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1704  redirty:
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1705) 	folio_mark_dirty(folio);
-f530ed0e2d01aa Matthew Wilcox (Oracle  2022-09-02  1706) 	return AOP_WRITEPAGE_ACTIVATE;	/* Return with folio locked */
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1707  }
-7b73c12c6ebf00 Matthew Wilcox (Oracle  2025-04-02  1708) EXPORT_SYMBOL_GPL(shmem_writeout);
-^1da177e4c3f41 Linus Torvalds          2005-04-16  1709  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
