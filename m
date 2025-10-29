@@ -1,389 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC9330506D
-	for <llvm@lists.linux.dev>; Wed, 29 Oct 2025 06:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9288730498D;
+	Wed, 29 Oct 2025 08:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761718939; cv=none; b=O7tJhcVkD4u5Ero+NabYCN0cJYye9p9Hd1n5q+5qeueTXx1zTHVj5bvCIAvxA9TCzMFJB6elYvOFFgX1MeXGXp+Ek7gszy8XuuUcRvQxacplgta0c88p1QOcwzMFcQ8ODwfA8gqhpRSjK1V77dR4BeOtW12O4zml7LOu4+d2M4s=
+	t=1761725363; cv=none; b=GKSYMHpIOjSneWYT0vhxnhyK8llql4mzAxzLKPPcjBqx650hAKBJY1BBE78pam0phew6TNkUuxTdvXI2sChQrWEklDw4C/zGudhwkUw+V62xaOoFhQLmYsOyeK7DNAOug4xox/b5IJMaitvqa6TaQXjVzVqFmvW87cZJDd+htAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761718939; c=relaxed/simple;
-	bh=FQkf6m8JPKLW+4oT2uX8WiAI2YSEoU2T24L6nlSD2+E=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ho9xK4DGq5FLfA3WQ2aRQI9wwFjxj/5ScMaekJDQn/czhdYNKiE6gYRbHcw31QuDFOXzK8oOGT/CfA0MsOWF/PvYNO0f+Ru3Y3/tJBCtR9ZDBU9/2lnKM0DfPkXl7sZqUD4cIFyw9z+1XjTRXacdcK3uq+QYxdUb/+v/0M/oo1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BgJN6/IL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761725363; c=relaxed/simple;
+	bh=LWeaWTedpEeWTWZV2g54XuQjNbnNUeTvGYco+dln7Vw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SRF74tHMbxv8VsaanpcuT+FXshyx5eQC1nrH240x9wKHIxl4+V8ALqL0uk10/K0wx2+DqNPW4RgOh/m5wYL3bVL7ZwoKxjMObriPl2sApkGOJoJLm4Xx9/ShvtyPfHATAOd2agJ5+DJkGzjk4g1i5RwQFCD33DhMc1PNcwv88Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RttfSgrt; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BgJN6/IL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761718936;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lbXjbPNsRUkvzfc4GZ4wozL2rjDJvTxVGKbH755fbFA=;
-	b=BgJN6/ILLteq9WU8Kex+3JA5YH0jhPiRs2LTvZyDlmD/iwmY+zRAdFuMswxcI/cgtt4d3Z
-	MTOm7iN7X9dEbQzxcyELIesfV5BI2poljWeHxsrjWHbdgsur6KAwSncl5HQzmlA1yUastV
-	uPkJxl8QOVEo2JIo3O0XF5489rhHiNg=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-407-Zu5kZD1LOjyb3711emsXew-1; Wed,
- 29 Oct 2025 02:22:12 -0400
-X-MC-Unique: Zu5kZD1LOjyb3711emsXew-1
-X-Mimecast-MFC-AGG-ID: Zu5kZD1LOjyb3711emsXew_1761718931
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F420D196E0B1
-	for <llvm@lists.linux.dev>; Wed, 29 Oct 2025 06:22:10 +0000 (UTC)
-Received: from [172.20.119.238] (unknown [10.30.45.48])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 50E111955F1B;
-	Wed, 29 Oct 2025 06:22:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc3,
- upstream-mainline, 8eefed8f)
-Date: Wed, 29 Oct 2025 06:22:09 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com, ftjahjad@redhat.com,
- yoyang@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RttfSgrt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761725361; x=1793261361;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LWeaWTedpEeWTWZV2g54XuQjNbnNUeTvGYco+dln7Vw=;
+  b=RttfSgrt4ArOYTSz4BnobN5qQlTwYa8yvoZvWFDNUY9RuDkUBVrG/3j7
+   sXs2sRQrDNA79w+hJacx/w8TG3r/dL5bpVSG9t2qLfWPYjJfB4q2IIgHH
+   gwBCXbEE9pi2YXK9r2B9bwHplYaauwhNm7ZNowfTWVC+02i4qHGpoMn6x
+   fyGiOz4KbYpocGv0g8igIBVNrflD8fH0Fzy8mF/g6z9+qucqMqMBL2/4r
+   s3da7Utl1xQA/5Q3t6nVPlJ3w1SRs3NNBcVvLZcLKWU8VP74SE8a1Hy/e
+   wA8wIZIx1OiLbtT0N22qRrZofjAFHz9A3YCeQqKSTIAuJxvv/aMJzPKHL
+   A==;
+X-CSE-ConnectionGUID: wOKpZXUIQ4OMbFE3V/n4/w==
+X-CSE-MsgGUID: y9LAcO7SRJ2UoxLaflCY9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67702247"
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="67702247"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 01:09:21 -0700
+X-CSE-ConnectionGUID: 69GIjsKURtmZR+eNCan9yw==
+X-CSE-MsgGUID: wWJkDYIhSVWIaTXpX+5zXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="185222492"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 29 Oct 2025 01:09:20 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vE1F6-000KNh-30;
+	Wed, 29 Oct 2025 08:09:16 +0000
+Date: Wed, 29 Oct 2025 16:09:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [linux-next:master 3298/4731]
+ include/linux/pinctrl/pinconf-generic.h:235:undefined reference to
+ `pinconf_generic_dt_node_to_map'
+Message-ID: <202510291650.TFCWQxkj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <86083.125102902221200297@us-mta-407.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: aGXYGlmbvpx7NrvbTc5I4lA6JHoZkUed4k_fl6B8Gck_1761718931
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f9ba12abc5282bf992f9a9ae87ad814fd03a0270
+commit: 38cf9d6413142290316776c80f19eb92a4e19a9f [3298/4731] pinctrl: add pic64gx "gpio2" pinmux driver
+config: um-randconfig-001-20251029 (https://download.01.org/0day-ci/archive/20251029/202510291650.TFCWQxkj-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251029/202510291650.TFCWQxkj-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510291650.TFCWQxkj-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.18-2' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/cel/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2126345853
-
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         aarch64 - xfstests - ext4
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_7
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_7
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_7
-         aarch64 - xfstests - xfs
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_8
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_8
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_8
-         aarch64 - xfstests - btrfs
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_9
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_9
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_aarch64_kernel_kcidb_tool_19873855_9
-          x86_64 - xfstests - ext4
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_7
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_7
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_7
-          x86_64 - xfstests - xfs
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_8
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_8
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_8
-          x86_64 - xfstests - btrfs
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_9
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_9
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_9
-          x86_64 - xfstests - nfsv4.2
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_10
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_10
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_10
-          x86_64 - xfstests - cifsv3.11
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_11
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_11
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel_kcidb_tool_19873870_11
-          x86_64 - xfstests - ext4
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_7
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_7
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_7
-          x86_64 - xfstests - xfs
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_8
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_8
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_8
-          x86_64 - xfstests - btrfs
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_9
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_9
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_9
-          x86_64 - xfstests - nfsv4.2
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_10
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_10
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_10
-          x86_64 - xfstests - cifsv3.11
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_11
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_11
-                   Issue: xfstests code is not compatible with gcc-15 -std=
-=3Dgnu23
-                          https://lore.kernel.org/fstests/20250117043709.29=
-41857-1-zlang@kernel.org/T/#u
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_11
-
-    Note: Any of these might not be a regression and/or we might have mista=
-kenly thought this issue to be fixed.
-          If it is not a regression, please ask the test maintainer to reop=
-en the issue and untag the regression from this execution.
-
-    Unrecognized or new issues:
-        Boot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_6
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2126345853_x86_64_kernel-debug_kcidb_tool_19874002_12
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
+   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: drivers/pinctrl/pinctrl-pic64gx-gpio2.o: in function `pinconf_generic_dt_node_to_map_all':
+>> include/linux/pinctrl/pinconf-generic.h:235:(.ltext+0x4dd): undefined reference to `pinconf_generic_dt_node_to_map'
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 
+vim +235 include/linux/pinctrl/pinconf-generic.h
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+0d74d4a161c9f9 Linus Walleij   2013-08-15  226  
+e5530adc17a79f Andy Shevchenko 2022-10-07  227  static inline int pinconf_generic_dt_node_to_map_all(struct pinctrl_dev *pctldev,
+e5530adc17a79f Andy Shevchenko 2022-10-07  228  		struct device_node *np_config, struct pinctrl_map **map,
+e5530adc17a79f Andy Shevchenko 2022-10-07  229  		unsigned *num_maps)
+31c89c95966719 Soren Brinkmann 2015-01-09  230  {
+31c89c95966719 Soren Brinkmann 2015-01-09  231  	/*
+31c89c95966719 Soren Brinkmann 2015-01-09  232  	 * passing the type as PIN_MAP_TYPE_INVALID causes the underlying parser
+31c89c95966719 Soren Brinkmann 2015-01-09  233  	 * to infer the map type from the DT properties used.
+31c89c95966719 Soren Brinkmann 2015-01-09  234  	 */
+31c89c95966719 Soren Brinkmann 2015-01-09 @235  	return pinconf_generic_dt_node_to_map(pctldev, np_config, map, num_maps,
+31c89c95966719 Soren Brinkmann 2015-01-09  236  			PIN_MAP_TYPE_INVALID);
+31c89c95966719 Soren Brinkmann 2015-01-09  237  }
+394349f7789fdf Linus Walleij   2011-11-24  238  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 235 was first introduced by commit
+:::::: 31c89c959667194350f496947b576c149503ce98 pinctrl: pinconf-generic: Infer map type from DT property
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Soren Brinkmann <soren.brinkmann@xilinx.com>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
