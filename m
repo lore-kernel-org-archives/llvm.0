@@ -1,131 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EDF3128BA;
-	Wed, 29 Oct 2025 22:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9E3314D2F;
+	Wed, 29 Oct 2025 22:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761775498; cv=none; b=L+KY5IFiOe15an3P43TlAR21dzdtK1M4V7CyiaXE3fMv1i1RgnQtW9XlaEItJIrWX7801EHz7f7F2yzXMrKWCYom4CLwjvy2f4xseGkN8GUhr3GFFLdE8T+jNt+WBay0IQSKeZPIHv8MwISpdkX0cfkp7pN1Zjp2UjQwgZvrOyQ=
+	t=1761775690; cv=none; b=nOJuZWevX3nyaFrkds2IsaJ3+zt2bTAeoR6jdpc568Z9jyEl4iYRKkhbXta+p556kOmc3SBMEO5+0r2zCXGk3Je/QIKjvvFhuWm64hH16tBXEdITAN0DN5XUVWf4ZEwfha7tr6R+USWyrmr4bCC4tdWzKWL4pQs4KSVc3eYuaZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761775498; c=relaxed/simple;
-	bh=Xa2nCvLmmPqcmZLV3BGsxHcwIp2YYJNnacnCRoxYSnI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DkOi6WAKTMtfqknpL2fMixb8LYMIIGWPmS5UGarZmHBa1wT6A0g+S8RDRAC2ln2Fuo4yDUig7pA8AxqrSW6lKQq4mxG9DikcfQXPXTlGVSoFjL3yBIqUE6G/vC4SJCct4iSgLuS0o5ret4bczmf9DVtW6A9zsAi7ElwkXVpmDdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anZ0Kn4a; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761775690; c=relaxed/simple;
+	bh=PCMUQE0BW2QoEo1rc9q0qVRgJ7LwUgidps/XqX0NgMs=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=o20ETxqvzB7K4wc4//MRwYZ0iCDAr520AEZOcSWrEpY5+EMLfNDSvVoInEsh1cBmXGoC6ezOG+mKHl4r4hcnl7OBxLIuMPVRsmJYJ+TddENo2qdNe3nmr1B2tTOGzjgIfJ4hk9Isv1N8ren/gwOrG+wwo2oVmO8LWbFA/v5jXrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lhbf5xPG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anZ0Kn4a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761775496; x=1793311496;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xa2nCvLmmPqcmZLV3BGsxHcwIp2YYJNnacnCRoxYSnI=;
-  b=anZ0Kn4aDxSLY6F7BKcHqqV7nTpKaLnDTAfl85DrJ2OuKtL0V522zAf/
-   biR1ZKkcQKFg7Lzn2FDjnKyFNtNZ8E/dCBt9coRIgfMPqYntI9xRlDn7W
-   3dRhPK2AJiA8x5TQZnm2UtDwBoZxqesdhNmnAnoBxemmJ0FpDGHGxG1Mn
-   Pisp8tBBhnfx+bN8KG9NwZ1PWMIE/xEq3geW1ezWxROsvvIbAbrPPxWPl
-   s1Gt4ciJieVdWISiVQzQ/4SEQC1LrTpmIQi/W3XntjRtDA51ChvPx7X6Q
-   Rs3YjiuWFTKiCZiWrERBv0l/pt476w1d36aNQmc2j1TQifsMhUJVjth7X
-   g==;
-X-CSE-ConnectionGUID: Ml4tAtycT8+rfAzau2jC2A==
-X-CSE-MsgGUID: IAm5NvdFS3CREQo7RdMdZw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="63115613"
-X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="63115613"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 15:04:54 -0700
-X-CSE-ConnectionGUID: M0wkzMSYTTqXyzbCKB344w==
-X-CSE-MsgGUID: DFr0l+b7TH2rhJMhMGeg4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="186525001"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 29 Oct 2025 15:04:52 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEEHi-000LDe-0N;
-	Wed, 29 Oct 2025 22:04:50 +0000
-Date: Thu, 30 Oct 2025 06:04:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>
-Subject: drivers/gpu/drm/xe/xe_svm.h:217:44: error: too many arguments to
- function call, expected 10, have 11
-Message-ID: <202510300519.RG1ckAUY-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lhbf5xPG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3B9C4CEF7;
+	Wed, 29 Oct 2025 22:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1761775690;
+	bh=PCMUQE0BW2QoEo1rc9q0qVRgJ7LwUgidps/XqX0NgMs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lhbf5xPG+TbHCIl7DykXGj8gTac6GbCqNpXa1cRwVKEwgahz2Xm/rL9q7pwxoGeN2
+	 1+wl3Z2jRhboHibxncTbneKp8ycFKVUwsFckuGoRJXy20OgJHVd2/6hhEFlSIa5KAz
+	 7Pt61sgYPDT+ud4PyWxwBjwCBaxoEAqXXSB8nXj0=
+Date: Wed, 29 Oct 2025 15:08:06 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com,
+ kbingham@kernel.org, nathan@kernel.org, ryabinin.a.a@gmail.com,
+ dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com,
+ jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org,
+ baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com,
+ wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com,
+ fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com,
+ ubizjak@gmail.com, ada.coupriediaz@arm.com,
+ nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com,
+ elver@google.com, pankaj.gupta@amd.com, glider@google.com,
+ mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org,
+ thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com,
+ jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com,
+ mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com,
+ vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com,
+ ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev,
+ ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+ broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com,
+ maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org,
+ rppt@kernel.org, will@kernel.org, luto@kernel.org,
+ kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+ linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 00/18] kasan: x86: arm64: KASAN tag-based mode for
+ x86
+Message-Id: <20251029150806.e001a669d9dad6ff9167c1f0@linux-foundation.org>
+In-Reply-To: <cover.1761763681.git.m.wieczorretman@pm.me>
+References: <cover.1761763681.git.m.wieczorretman@pm.me>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
-commit: 10aa5c80603088d10c2cd5e7e27d561a8fb59c7e drm/gpusvm, drm/xe: Fix userptr to not allow device private pages
-date:   4 weeks ago
-config: x86_64-randconfig-076-20251030 (https://download.01.org/0day-ci/archive/20251030/202510300519.RG1ckAUY-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510300519.RG1ckAUY-lkp@intel.com/reproduce)
+On Wed, 29 Oct 2025 19:05:27 +0000 Maciej Wieczor-Retman <m.wieczorretman@pm.me> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510300519.RG1ckAUY-lkp@intel.com/
+> The patchset aims to add a KASAN tag-based mode for the x86 architecture
+> with the help of the new CPU feature called Linear Address Masking
+> (LAM). Main improvement introduced by the series is 2x lower memory
+> usage compared to KASAN's generic mode, the only currently available
+> mode on x86. The tag based mode may also find errors that the generic
+> mode couldn't because of differences in how these modes operate.
 
-All errors (new ones prefixed by >>):
+Thanks.  Quite a lot of these patches aren't showing signs of review at
+this time, so I'll skip v6 for now.
 
-   In file included from drivers/gpu/drm/xe/xe_gt_pagefault.c:22:
->> drivers/gpu/drm/xe/xe_svm.h:217:44: error: too many arguments to function call, expected 10, have 11
-     216 |         return drm_gpusvm_init(&vm->svm.gpusvm, "Xe SVM (simple)", &vm->xe->drm,
-         |                ~~~~~~~~~~~~~~~
-     217 |                                NULL, NULL, 0, 0, 0, NULL, NULL, 0);
-         |                                                                 ^
-   include/drm/drm_gpusvm.h:251:5: note: 'drm_gpusvm_init' declared here
-     251 | int drm_gpusvm_init(struct drm_gpusvm *gpusvm,
-         |     ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     252 |                     const char *name, struct drm_device *drm,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     253 |                     struct mm_struct *mm,
-         |                     ~~~~~~~~~~~~~~~~~~~~~
-     254 |                     unsigned long mm_start, unsigned long mm_range,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     255 |                     unsigned long notifier_size,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     256 |                     const struct drm_gpusvm_ops *ops,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     257 |                     const unsigned long *chunk_sizes, int num_chunks);
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+However patches 1&2 are fixes that have cc:stable.  It's best to
+separate these out from the overall add-a-feature series please - their
+path-to-mainline will be quite different.
 
+I grabbed just those two patches for some testing, however their
+changelogging isn't fully appropriate.  Can I ask that you resend these
+as a two-patch series after updating the changelogs to clearly describe
+the userspace-visible effects of the flaws which the patches fix?
 
-vim +217 drivers/gpu/drm/xe/xe_svm.h
-
-0c30c65473ff37 Matthew Brost 2025-03-05  211  
-6fd979c2f33150 Matthew Brost 2025-03-05  212  static inline
-6fd979c2f33150 Matthew Brost 2025-03-05  213  int xe_svm_init(struct xe_vm *vm)
-6fd979c2f33150 Matthew Brost 2025-03-05  214  {
-9e978741488261 Matthew Auld  2025-08-28  215  #if IS_ENABLED(CONFIG_DRM_GPUSVM)
-9e978741488261 Matthew Auld  2025-08-28  216  	return drm_gpusvm_init(&vm->svm.gpusvm, "Xe SVM (simple)", &vm->xe->drm,
-9e978741488261 Matthew Auld  2025-08-28 @217  			       NULL, NULL, 0, 0, 0, NULL, NULL, 0);
-9e978741488261 Matthew Auld  2025-08-28  218  #else
-6fd979c2f33150 Matthew Brost 2025-03-05  219  	return 0;
-9e978741488261 Matthew Auld  2025-08-28  220  #endif
-6fd979c2f33150 Matthew Brost 2025-03-05  221  }
-6fd979c2f33150 Matthew Brost 2025-03-05  222  
-
-:::::: The code at line 217 was first introduced by commit
-:::::: 9e978741488261e117bb50e5dfcf8e4080990958 drm/xe/userptr: replace xe_hmm with gpusvm
-
-:::::: TO: Matthew Auld <matthew.auld@intel.com>
-:::::: CC: Matthew Auld <matthew.auld@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This is to help -stable maintainers understand why we're proposing the
+backports and it is to help people to predict whether these fixes might
+address an issue which they or their customers are experiencing.
