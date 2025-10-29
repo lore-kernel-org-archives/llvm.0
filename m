@@ -1,244 +1,290 @@
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F11035A930
-	for <llvm@lists.linux.dev>; Wed, 29 Oct 2025 20:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834C73161AA;
+	Wed, 29 Oct 2025 21:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761768694; cv=none; b=R6SgqZLSZ/FfteBWnKAHtERiNaqOh9V9EGo09JhnOGyFDBM98T589M+CcC1cHqEhWxdce4Om/3vxMjt7AXuaBV40yU3oEBHS36ck6lJZ7l/xEN9elFBTzlG4VWsNPRMUpgkvnqzDwf6Bw/u6MGAescrKotC8Lu1pbJXUduEhhow=
+	t=1761772462; cv=none; b=mVn1jqWpA2y4caU4gvVDR/RWWetz0OfGuJOWBXToJ7que6kbL9TU1fEU65HDilzUqKJt+hdX7x+DmY+rjeTazupE7NEIInlWt+jWwpCfK6yWjlxR4c4QMyQ7wsyrQSaWY9IoyugLxRqAOZPdq4jd+GtEy+/QQ5oRh5U3At7UOK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761768694; c=relaxed/simple;
-	bh=i2x6FuRzHHu3DqZfnTFMfT434IIQFJZMu963TwDZRwE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MLeQSBh8AnxvoVaqtLP+gEdz2ntnK6PrY5VxiZN/Q9fWe4Dld+CYXXYl72iEo+E+ZhTNfaDVTYhB9+SK469MjIj709rXhkASeXwYsGVvq0ikG8v4doRXrQuCJG79B5/2zGT1ZL0s9MubiOhDgFoWJANDfyGrZSG09P1fd/OroAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=cXdMGkjY; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1761772462; c=relaxed/simple;
+	bh=yvg1e31Wd77OLurvqeDoHZZbeHUOM/E1aRxjrY+VyKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tbB+t5jnSZg3ly53Gc/UMAk0bybr0iU7NasiJeYb/HGuH2Da7rNadOGyN1LBjcuu8lz+ccGE7+YhaRvDx4DZxJo2jyWxAFD2gImO38I+hNbcQ7mSf1X1DwCZWDhy76FHG9/tCUUbF0UixI8bccGT152Tg6gaA6hxZ6qKRSofROI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PqEUdFjt; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="cXdMGkjY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1761768688; x=1762027888;
-	bh=801m/BDnq+4IDZrRjH01sT6fZRZq5h0m340QBaMU7xk=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=cXdMGkjYQPcz0Nv21dBbiab8WuIQ4hr8ZJRQqwUepbPD1rbiz/vhDeUFcNs+IGjar
-	 od6iv3/pch7jNVp38Q2cmI4VQR0pGdQZyx7xwgvOjcMGXYKinHJUeISc801+Y8WgrO
-	 SCNfKcZPXZtF2+rk0dIn06Lyyoiy42cPczWw1N9Ui8kQDW0LXKyASTAfV23YHt8/QB
-	 FHk6Lay8dA8JodN9I7Vt57QyS2WDP7aNMHr/4vq1HuuEYHnPPI3dMERBgdU9EwiM+L
-	 Mj22z+1Gh8UFKiZFiqV8G56jWG5bH3ehdlP3bMiXUuyMKOD3PJOh+zXTgfnU3nZFJH
-	 7Bb570r+dWC+Q==
-Date: Wed, 29 Oct 2025 20:11:22 +0000
-To: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, glider@google.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com,
-	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org
-From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, m.wieczorretman@pm.me
-Subject: [PATCH v6 18/18] x86/kasan: Make software tag-based kasan available
-Message-ID: <d98f04754c3f37f153493c13966c1e02852f551d.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <cover.1761763681.git.m.wieczorretman@pm.me>
-References: <cover.1761763681.git.m.wieczorretman@pm.me>
-Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: f951758d099748a231d1551fe212ba144d88e29b
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PqEUdFjt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761772460; x=1793308460;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yvg1e31Wd77OLurvqeDoHZZbeHUOM/E1aRxjrY+VyKE=;
+  b=PqEUdFjtfvuDD3Do97egBNCo1VMW10v36FmO1Cmw0GanOduZdk0qj1QM
+   pp5caBUrH8c8EaSNPNHjmGDS5xJZD0bVLwqv0+1i9kg2if5WzfbIMQTOg
+   lbRMjCZmRWj94uxniCJsMu8IVH3sF7fvjI5PJP5kJa1hWZxDxf2ZE+vT1
+   gPvWf2nHb5xAHCvuxKAan8BUO0aD7kvBCbVSM9JXjjbBcie3MY2iE07Py
+   7nOmbXcJ97iifeYRoWQsKYOw8blJ6FOzyeajpRVscE1jhDSaeKl0n1zCR
+   Z2pJy0guB7uiccd+xAu/ji0mjaZZCCzD1ZyElX9n0fSITVlu/Y3/FBR2x
+   Q==;
+X-CSE-ConnectionGUID: AhzO9rWvS7+h5jHkJRmKIw==
+X-CSE-MsgGUID: NRWvT/8WSICchKChykHCgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="64003290"
+X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
+   d="scan'208";a="64003290"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 14:14:20 -0700
+X-CSE-ConnectionGUID: +cL+zbJfSXKRBfRTv5YGAQ==
+X-CSE-MsgGUID: b+McfbZsT9etzHWuFdZ5Tg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
+   d="scan'208";a="190942138"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 29 Oct 2025 14:14:18 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEDUV-000LAQ-2r;
+	Wed, 29 Oct 2025 21:14:08 +0000
+Date: Thu, 30 Oct 2025 05:12:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>,
+	Christian Brauner <brauner@kernel.org>
+Subject: [brauner-github:vfs-6.19.misc 5/5] include/linux/pipe_fs_i.h:204:25:
+ error: no member named 'head' in 'struct pipe_inode_info'
+Message-ID: <202510300538.PdxovfOd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+tree:   https://github.com/brauner/linux.git vfs-6.19.misc
+head:   ade24f8214fe3fdfe20233584bca932ab00b752d
+commit: ade24f8214fe3fdfe20233584bca932ab00b752d [5/5] fs/pipe: stop duplicating union pipe_index declaration
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251030/202510300538.PdxovfOd-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510300538.PdxovfOd-lkp@intel.com/reproduce)
 
-Make CONFIG_KASAN_SW_TAGS available for x86 machines if they have
-ADDRESS_MASKING enabled (LAM) as that works similarly to Top-Byte Ignore
-(TBI) that allows the software tag-based mode on arm64 platform.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510300538.PdxovfOd-lkp@intel.com/
 
-Set scale macro based on KASAN mode: in software tag-based mode 16 bytes
-of memory map to one shadow byte and 8 in generic mode.
+All errors (new ones prefixed by >>):
 
-Disable CONFIG_KASAN_INLINE and CONFIG_KASAN_STACK when
-CONFIG_KASAN_SW_TAGS is enabled on x86 until the appropriate compiler
-support is available.
+   In file included from fs/read_write.c:19:
+   In file included from include/linux/splice.h:12:
+   include/linux/pipe_fs_i.h:84:2: warning: declaration does not declare anything [-Wmissing-declarations]
+      84 |         union pipe_index;
+         |         ^~~~~~~~~~~~~~~~
+>> include/linux/pipe_fs_i.h:204:25: error: no member named 'head' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                          ~~~~  ^
+>> include/linux/pipe_fs_i.h:204:37: error: no member named 'tail' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                                      ~~~~  ^
+   include/linux/pipe_fs_i.h:213:26: error: no member named 'head' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                           ~~~~  ^
+   include/linux/pipe_fs_i.h:213:38: error: no member named 'tail' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                                       ~~~~  ^
+   include/linux/pipe_fs_i.h:222:30: error: no member named 'head' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                               ~~~~  ^
+   include/linux/pipe_fs_i.h:222:42: error: no member named 'tail' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                                           ~~~~  ^
+   include/linux/pipe_fs_i.h:242:30: error: no member named 'head' in 'struct pipe_inode_info'
+     242 |         return pipe_buf(pipe, pipe->head);
+         |                               ~~~~  ^
+   1 warning and 7 errors generated.
+--
+   In file included from fs/pipe.c:19:
+   include/linux/pipe_fs_i.h:84:2: warning: declaration does not declare anything [-Wmissing-declarations]
+      84 |         union pipe_index;
+         |         ^~~~~~~~~~~~~~~~
+>> include/linux/pipe_fs_i.h:204:25: error: no member named 'head' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                          ~~~~  ^
+>> include/linux/pipe_fs_i.h:204:37: error: no member named 'tail' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                                      ~~~~  ^
+   include/linux/pipe_fs_i.h:213:26: error: no member named 'head' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                           ~~~~  ^
+   include/linux/pipe_fs_i.h:213:38: error: no member named 'tail' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                                       ~~~~  ^
+   include/linux/pipe_fs_i.h:222:30: error: no member named 'head' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                               ~~~~  ^
+   include/linux/pipe_fs_i.h:222:42: error: no member named 'tail' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                                           ~~~~  ^
+   include/linux/pipe_fs_i.h:242:30: error: no member named 'head' in 'struct pipe_inode_info'
+     242 |         return pipe_buf(pipe, pipe->head);
+         |                               ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:232:56: error: no member named 'head_tail' in 'struct pipe_inode_info'
+     232 |         union pipe_index idx = { .head_tail = READ_ONCE(pipe->head_tail) };
+         |                                                         ~~~~  ^
+>> fs/pipe.c:255:9: error: no member named 'tail' in 'struct pipe_inode_info'
+     255 |                 pipe->tail = ++tail;
+         |                 ~~~~  ^
+   fs/pipe.c:264:8: error: no member named 'tail' in 'struct pipe_inode_info'
+     264 |         pipe->tail = ++tail;
+         |         ~~~~  ^
+>> fs/pipe.c:294:47: error: no member named 'head' in 'struct pipe_inode_info'
+     294 |                 unsigned int head = smp_load_acquire(&pipe->head);
+         |                                                       ~~~~  ^
+>> fs/pipe.c:294:47: error: no member named 'head' in 'struct pipe_inode_info'
+     294 |                 unsigned int head = smp_load_acquire(&pipe->head);
+         |                                                       ~~~~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
+--
+   In file included from fs/splice.c:25:
+   In file included from include/linux/splice.h:12:
+   include/linux/pipe_fs_i.h:84:2: warning: declaration does not declare anything [-Wmissing-declarations]
+      84 |         union pipe_index;
+         |         ^~~~~~~~~~~~~~~~
+>> include/linux/pipe_fs_i.h:204:25: error: no member named 'head' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                          ~~~~  ^
+>> include/linux/pipe_fs_i.h:204:37: error: no member named 'tail' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                                      ~~~~  ^
+   include/linux/pipe_fs_i.h:213:26: error: no member named 'head' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                           ~~~~  ^
+   include/linux/pipe_fs_i.h:213:38: error: no member named 'tail' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                                       ~~~~  ^
+   include/linux/pipe_fs_i.h:222:30: error: no member named 'head' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                               ~~~~  ^
+   include/linux/pipe_fs_i.h:222:42: error: no member named 'tail' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                                           ~~~~  ^
+   include/linux/pipe_fs_i.h:242:30: error: no member named 'head' in 'struct pipe_inode_info'
+     242 |         return pipe_buf(pipe, pipe->head);
+         |                               ~~~~  ^
+>> fs/splice.c:201:28: error: no member named 'tail' in 'struct pipe_inode_info'
+     201 |         unsigned int tail = pipe->tail;
+         |                             ~~~~  ^
+>> fs/splice.c:202:28: error: no member named 'head' in 'struct pipe_inode_info'
+     202 |         unsigned int head = pipe->head;
+         |                             ~~~~  ^
+   fs/splice.c:226:9: error: no member named 'head' in 'struct pipe_inode_info'
+     226 |                 pipe->head = head;
+         |                 ~~~~  ^
+   fs/splice.c:247:28: error: no member named 'head' in 'struct pipe_inode_info'
+     247 |         unsigned int head = pipe->head;
+         |                             ~~~~  ^
+   fs/splice.c:248:28: error: no member named 'tail' in 'struct pipe_inode_info'
+     248 |         unsigned int tail = pipe->tail;
+         |                             ~~~~  ^
+   fs/splice.c:258:9: error: no member named 'head' in 'struct pipe_inode_info'
+     258 |                 pipe->head = head + 1;
+         |                 ~~~~  ^
+   fs/splice.c:393:9: error: no member named 'head' in 'struct pipe_inode_info'
+     393 |                 pipe->head++;
+         |                 ~~~~  ^
+   fs/splice.c:446:28: error: no member named 'head' in 'struct pipe_inode_info'
+     446 |         unsigned int head = pipe->head;
+         |                             ~~~~  ^
+   fs/splice.c:447:28: error: no member named 'tail' in 'struct pipe_inode_info'
+     447 |         unsigned int tail = pipe->tail;
+         |                             ~~~~  ^
+   fs/splice.c:479:10: error: no member named 'tail' in 'struct pipe_inode_info'
+     479 |                         pipe->tail = tail;
+         |                         ~~~~  ^
+   fs/splice.c:494:28: error: no member named 'tail' in 'struct pipe_inode_info'
+     494 |         unsigned int tail = pipe->tail;
+         |                             ~~~~  ^
+   fs/splice.c:499:9: error: no member named 'tail' in 'struct pipe_inode_info'
+     499 |                 pipe->tail = tail+1;
+         |                 ~~~~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
+--
+   In file included from mm/filemap.c:46:
+   include/linux/pipe_fs_i.h:84:2: warning: declaration does not declare anything [-Wmissing-declarations]
+      84 |         union pipe_index;
+         |         ^~~~~~~~~~~~~~~~
+>> include/linux/pipe_fs_i.h:204:25: error: no member named 'head' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                          ~~~~  ^
+>> include/linux/pipe_fs_i.h:204:37: error: no member named 'tail' in 'struct pipe_inode_info'
+     204 |         return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+         |                                      ~~~~  ^
+   include/linux/pipe_fs_i.h:213:26: error: no member named 'head' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                           ~~~~  ^
+   include/linux/pipe_fs_i.h:213:38: error: no member named 'tail' in 'struct pipe_inode_info'
+     213 |         return pipe_empty(pipe->head, pipe->tail);
+         |                                       ~~~~  ^
+   include/linux/pipe_fs_i.h:222:30: error: no member named 'head' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                               ~~~~  ^
+   include/linux/pipe_fs_i.h:222:42: error: no member named 'tail' in 'struct pipe_inode_info'
+     222 |         return pipe_occupancy(pipe->head, pipe->tail);
+         |                                           ~~~~  ^
+   include/linux/pipe_fs_i.h:242:30: error: no member named 'head' in 'struct pipe_inode_info'
+     242 |         return pipe_buf(pipe, pipe->head);
+         |                               ~~~~  ^
+>> mm/filemap.c:2968:9: error: no member named 'head' in 'struct pipe_inode_info'
+    2968 |                 pipe->head++;
+         |                 ~~~~  ^
+   1 warning and 8 errors generated.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v6:
-- Don't enable KASAN if LAM is not supported.
-- Move kasan_init_tags() to kasan_init_64.c to not clutter the setup.c
-  file.
-- Move the #ifdef for the KASAN scale shift here.
-- Move the gdb code to patch "Use arithmetic shift for shadow
-  computation".
-- Return "depends on KASAN" line to Kconfig.
-- Add the defer kasan config option so KASAN can be disabled on hardware
-  that doesn't have LAM.
 
-Changelog v4:
-- Add x86 specific kasan_mem_to_shadow().
-- Revert x86 to the older unsigned KASAN_SHADOW_OFFSET. Do the same to
-  KASAN_SHADOW_START/END.
-- Modify scripts/gdb/linux/kasan.py to keep x86 using unsigned offset.
-- Disable inline and stack support when software tags are enabled on
-  x86.
+vim +204 include/linux/pipe_fs_i.h
 
-Changelog v3:
-- Remove runtime_const from previous patch and merge the rest here.
-- Move scale shift definition back to header file.
-- Add new kasan offset for software tag based mode.
-- Fix patch message typo 32 -> 16, and 16 -> 8.
-- Update lib/Kconfig.kasan with x86 now having software tag-based
-  support.
+8cefc107ca54c8 David Howells  2019-11-15  197  
+00a7d39898c801 Linus Torvalds 2025-03-06  198  /**
+00a7d39898c801 Linus Torvalds 2025-03-06  199   * pipe_is_full - Return true if the pipe is full
+00a7d39898c801 Linus Torvalds 2025-03-06  200   * @pipe: the pipe
+00a7d39898c801 Linus Torvalds 2025-03-06  201   */
+00a7d39898c801 Linus Torvalds 2025-03-06  202  static inline bool pipe_is_full(const struct pipe_inode_info *pipe)
+00a7d39898c801 Linus Torvalds 2025-03-06  203  {
+00a7d39898c801 Linus Torvalds 2025-03-06 @204  	return pipe_full(pipe->head, pipe->tail, pipe->max_usage);
+00a7d39898c801 Linus Torvalds 2025-03-06  205  }
+00a7d39898c801 Linus Torvalds 2025-03-06  206  
 
-Changelog v2:
-- Remove KASAN dense code.
+:::::: The code at line 204 was first introduced by commit
+:::::: 00a7d39898c8010bfd5ff62af31ca5db34421b38 fs/pipe: add simpler helpers for common cases
 
- Documentation/arch/x86/x86_64/mm.rst | 6 ++++--
- arch/x86/Kconfig                     | 4 ++++
- arch/x86/boot/compressed/misc.h      | 1 +
- arch/x86/include/asm/kasan.h         | 4 ++++
- arch/x86/mm/kasan_init_64.c          | 5 +++++
- lib/Kconfig.kasan                    | 3 ++-
- 6 files changed, 20 insertions(+), 3 deletions(-)
+:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-diff --git a/Documentation/arch/x86/x86_64/mm.rst b/Documentation/arch/x86/=
-x86_64/mm.rst
-index a6cf05d51bd8..ccbdbb4cda36 100644
---- a/Documentation/arch/x86/x86_64/mm.rst
-+++ b/Documentation/arch/x86/x86_64/mm.rst
-@@ -60,7 +60,8 @@ Complete virtual memory map with 4-level page tables
-    ffffe90000000000 |  -23    TB | ffffe9ffffffffff |    1 TB | ... unused=
- hole
-    ffffea0000000000 |  -22    TB | ffffeaffffffffff |    1 TB | virtual me=
-mory map (vmemmap_base)
-    ffffeb0000000000 |  -21    TB | ffffebffffffffff |    1 TB | ... unused=
- hole
--   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN shad=
-ow memory
-+   ffffec0000000000 |  -20    TB | fffffbffffffffff |   16 TB | KASAN shad=
-ow memory (generic mode)
-+   fffff40000000000 |   -8    TB | fffffbffffffffff |    8 TB | KASAN shad=
-ow memory (software tag-based mode)
-   __________________|____________|__________________|_________|___________=
-_________________________________________________
-                                                               |
-                                                               | Identical =
-layout to the 56-bit one from here on:
-@@ -130,7 +131,8 @@ Complete virtual memory map with 5-level page tables
-    ffd2000000000000 |  -11.5  PB | ffd3ffffffffffff |  0.5 PB | ... unused=
- hole
-    ffd4000000000000 |  -11    PB | ffd5ffffffffffff |  0.5 PB | virtual me=
-mory map (vmemmap_base)
-    ffd6000000000000 |  -10.5  PB | ffdeffffffffffff | 2.25 PB | ... unused=
- hole
--   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN shad=
-ow memory
-+   ffdf000000000000 |   -8.25 PB | fffffbffffffffff |   ~8 PB | KASAN shad=
-ow memory (generic mode)
-+   ffeffc0000000000 |   -6    PB | fffffbffffffffff |    4 PB | KASAN shad=
-ow memory (software tag-based mode)
-   __________________|____________|__________________|_________|___________=
-_________________________________________________
-                                                               |
-                                                               | Identical =
-layout to the 47-bit one from here on:
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index fa3b616af03a..7c73a2688172 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -67,6 +67,7 @@ config X86
- =09select ARCH_CLOCKSOURCE_INIT
- =09select ARCH_CONFIGURES_CPU_MITIGATIONS
- =09select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-+=09select ARCH_DISABLE_KASAN_INLINE=09if X86_64 && KASAN_SW_TAGS
- =09select ARCH_ENABLE_HUGEPAGE_MIGRATION if X86_64 && HUGETLB_PAGE && MIGR=
-ATION
- =09select ARCH_ENABLE_MEMORY_HOTPLUG if X86_64
- =09select ARCH_ENABLE_MEMORY_HOTREMOVE if MEMORY_HOTPLUG
-@@ -196,6 +197,8 @@ config X86
- =09select HAVE_ARCH_JUMP_LABEL_RELATIVE
- =09select HAVE_ARCH_KASAN=09=09=09if X86_64
- =09select HAVE_ARCH_KASAN_VMALLOC=09=09if X86_64
-+=09select HAVE_ARCH_KASAN_SW_TAGS=09=09if ADDRESS_MASKING
-+=09select ARCH_NEEDS_DEFER_KASAN=09=09if ADDRESS_MASKING
- =09select HAVE_ARCH_KFENCE
- =09select HAVE_ARCH_KMSAN=09=09=09if X86_64
- =09select HAVE_ARCH_KGDB
-@@ -406,6 +409,7 @@ config AUDIT_ARCH
- config KASAN_SHADOW_OFFSET
- =09hex
- =09depends on KASAN
-+=09default 0xeffffc0000000000 if KASAN_SW_TAGS
- =09default 0xdffffc0000000000
-=20
- config HAVE_INTEL_TXT
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/mis=
-c.h
-index db1048621ea2..ded92b439ada 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -13,6 +13,7 @@
- #undef CONFIG_PARAVIRT_SPINLOCKS
- #undef CONFIG_KASAN
- #undef CONFIG_KASAN_GENERIC
-+#undef CONFIG_KASAN_SW_TAGS
-=20
- #define __NO_FORTIFY
-=20
-diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-index 2372397bc3e5..8320fffc71a1 100644
---- a/arch/x86/include/asm/kasan.h
-+++ b/arch/x86/include/asm/kasan.h
-@@ -7,6 +7,7 @@
- #include <linux/types.h>
- #define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
-=20
-+#ifdef CONFIG_KASAN_SW_TAGS
- /*
-  * LLVM ABI for reporting tag mismatches in inline KASAN mode.
-  * On x86 the UD1 instruction is used to carry metadata in the ECX registe=
-r
-@@ -24,7 +25,10 @@
- #define KASAN_ECX_WRITE=09=090x10
- #define KASAN_ECX_SIZE_MASK=090x0f
- #define KASAN_ECX_SIZE(ecx)=09(1 << ((ecx) & KASAN_ECX_SIZE_MASK))
-+#define KASAN_SHADOW_SCALE_SHIFT 4
-+#else
- #define KASAN_SHADOW_SCALE_SHIFT 3
-+#endif
-=20
- /*
-  * Compiler uses shadow offset assuming that addresses start
-diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
-index e69b7210aaae..4a5a4a4d43db 100644
---- a/arch/x86/mm/kasan_init_64.c
-+++ b/arch/x86/mm/kasan_init_64.c
-@@ -465,4 +465,9 @@ void __init kasan_init(void)
-=20
- =09init_task.kasan_depth =3D 0;
- =09kasan_init_generic();
-+
-+=09if (boot_cpu_has(X86_FEATURE_LAM))
-+=09=09kasan_init_sw_tags();
-+=09else
-+=09=09pr_info("KernelAddressSanitizer not initialized (sw-tags): hardware =
-doesn't support LAM\n");
- }
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index a4bb610a7a6f..d13ea8da7bfd 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -112,7 +112,8 @@ config KASAN_SW_TAGS
-=20
- =09  Requires GCC 11+ or Clang.
-=20
--=09  Supported only on arm64 CPUs and relies on Top Byte Ignore.
-+=09  Supported on arm64 CPUs that support Top Byte Ignore and on x86 CPUs
-+=09  that support Linear Address Masking.
-=20
- =09  Consumes about 1/16th of available memory at kernel start and
- =09  add an overhead of ~20% for dynamic allocations.
---=20
-2.51.0
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
