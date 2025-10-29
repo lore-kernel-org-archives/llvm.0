@@ -1,44 +1,44 @@
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from mail-24418.protonmail.ch (mail-24418.protonmail.ch [109.224.244.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9181B31A55B
-	for <llvm@lists.linux.dev>; Wed, 29 Oct 2025 20:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27576347BB4
+	for <llvm@lists.linux.dev>; Wed, 29 Oct 2025 20:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761768435; cv=none; b=ZgRfA7xAAYt/HShkTmhrCEDwa/oK8BsO0Ba7Fw3DmlgiVgJ05lBIZlM9sptfBeYWQ+Qifr4zP2WJIM1BM8Ah/GZ82EV2Vtpmg7ohR61k4ALRSxp1l9EYajOwzJtl46K5Bmb2cp8zlBXP/cwg1hFaHTMNz3iH/IOvS34o0HOinig=
+	t=1761768470; cv=none; b=rul7ArsQF8k4V+Ub8jawzs6P/LzF4buo3ddTMH0K+yQMPkXMeuEa60erCegMLylnK3brKsEuGf0PDCQDXesJIdHyJXs/lU8kugvwsTyT7FjhsZ1Fea7Zi/SUJAAxVhIeXRfYM+lkSNT/DtSBXm9XA2sJESMzRx0ebFQmcNWl5Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761768435; c=relaxed/simple;
-	bh=+cA2njdiqaGsLKzMeaYLJnV2PWefw9DHpnKbgEVAOp8=;
+	s=arc-20240116; t=1761768470; c=relaxed/simple;
+	bh=pG6PmCayk69IIjMpN+E9J4X5ppcFU9gBb5y0rPTdVEE=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ttKHM82N3Do8VRNI+8rRx5ifJN6zhPmU8txt2xxnNJvw4kPg1dRByK1C7YCwVD+SXWlm48E1qIjzC6USoE9gVlnx9L9hjNl5HQxu3Ln7DHJ2zkF2seMZtYw5uM/MKWE7Hr7gRLA4Au02qvxJsxc4fqYmBMm1XGF7x2TrbfQU0tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=Q8fbvGeL; arc=none smtp.client-ip=185.70.43.16
+	 MIME-Version:Content-Type; b=WCeOLXtUveypGp+U+RK3PoKigwLTRyW7oazbA5SKaRqVlpsnRyqh4LycjlGUBt+4j1BlFUnuimtvhbAQa3BPHdkqIypsfsOXAAwdsXq22+fKTUxMjE1fpPRcQMtwUXZlnZbdh73Ig4up4kZe4PdvtistQVpF9cY0MHADrEGVTEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=bjmx3g8O; arc=none smtp.client-ip=109.224.244.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="Q8fbvGeL"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="bjmx3g8O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1761768428; x=1762027628;
-	bh=ORgS5h+xBvFClF5iXcyTXC092gY8CGZFTCYy/D6hFpU=;
+	s=protonmail3; t=1761768465; x=1762027665;
+	bh=h7bOmcRxuqO6z3MZPe9zBvs6V2vz8fOGqA1RpHhG/FE=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=Q8fbvGeL2ExKLfg1F1thHnRQ92jM0SfvidRW/4ypa4lolos8RCX0lLu+i2H6kTK6S
-	 MaA1nBDNDQPyyfdcKvl+1OcEfLMV2Viqk9a+x2KT3lXIr9hXFR4fmSs0XylD1sTGie
-	 tsO96krT1yWQpKu1JBZ1xoqT/Am1AJerQd1O8H4fUA92e+JgBxhZqZgpSkBFj0QbBY
-	 kK5jeFm7SA2QiUwxKEOqXSEioeBK0pAcc9z8/Bx7JbdabNmBwQBKWD9VAd4AMK2nqH
-	 tn//iBIEYCz7O+2enlz2b7WX/VCaIyvT/kkUpw3q6WdAghPk/Ks4hSNUdaZmzn+OT9
-	 2SUvjbSgsrkKQ==
-Date: Wed, 29 Oct 2025 20:07:02 +0000
+	b=bjmx3g8OlacQX7FEB7CB4gFpPcUTD0I5Kc1p43/y9uXqIMVnKJWIWOuru2SF/QQfu
+	 6AiAPDukFzXStuxWTR5WDI0wUwQ3jAjKxjVKN/rW5W4cFnmYpLhh/SnXC+CNzfiPNN
+	 yCU0Y0WKKnfImz6JKMr3Dj0qQjo+Mp/U3OEVrV6kaX0VUG3dIxPsjjzPd48CTfn+MD
+	 HpUu7+z+rhYq8apG5mFFr/w3+YtjPLc59AwJlIe7QmemdTNU+aT/cA3JtTnT2ge0If
+	 nWKsUZ1l87vhw5I/ZZHp5y2xOcPYMO6CexFWC9kS9HmKpnu1vWPf8OvbB4AV2iSubm
+	 Hlcw1buJNqcCg==
+Date: Wed, 29 Oct 2025 20:07:38 +0000
 To: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, glider@google.com, mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com,
 	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, rppt@kernel.org, will@kernel.org, luto@kernel.org
 From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
 Cc: kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, m.wieczorretman@pm.me
-Subject: [PATCH v6 10/18] x86/mm: Physical address comparisons in fill_p*d/pte
-Message-ID: <da6cee1f1e596da12ef6e57202c26ec802f7528a.1761763681.git.m.wieczorretman@pm.me>
+Subject: [PATCH v6 11/18] x86/kasan: KASAN raw shadow memory PTE init
+Message-ID: <f533bb094a566242ec196afbde222796c6d6c084.1761763681.git.m.wieczorretman@pm.me>
 In-Reply-To: <cover.1761763681.git.m.wieczorretman@pm.me>
 References: <cover.1761763681.git.m.wieczorretman@pm.me>
 Feedback-ID: 164464600:user:proton
-X-Pm-Message-ID: 931b8bb7920f3633ea9d19d797d43379e99d4838
+X-Pm-Message-ID: 388931058df330f6e092950b7ef3ba7585e70752
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,69 +50,75 @@ Content-Transfer-Encoding: quoted-printable
 
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 
-Calculating page offset returns a pointer without a tag. When comparing
-the calculated offset to a tagged page pointer an error is raised
-because they are not equal.
+In KASAN's generic mode the default value in shadow memory is zero.
+During initialization of shadow memory pages they are allocated and
+zeroed.
 
-Change pointer comparisons to physical address comparisons as to avoid
-issues with tagged pointers that pointer arithmetic would create. Open
-code pte_offset_kernel(), pmd_offset(), pud_offset() and p4d_offset().
-Because one parameter is always zero and the rest of the function
-insides are enclosed inside __va(), removing that layer lowers the
-complexity of final assembly.
+In KASAN's tag-based mode the default tag for the arm64 architecture is
+0xFE which corresponds to any memory that should not be accessed. On x86
+(where tags are 4-bit wide instead of 8-bit wide) that tag is 0xE so
+during the initializations all the bytes in shadow memory pages should
+be filled with it.
+
+Use memblock_alloc_try_nid_raw() instead of memblock_alloc_try_nid() to
+avoid zeroing out the memory so it can be set with the KASAN invalid
+tag.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
 Changelog v2:
-- Open code *_offset() to avoid it's internal __va().
+- Remove dense mode references, use memset() instead of kasan_poison().
 
- arch/x86/mm/init_64.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ arch/x86/mm/kasan_init_64.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 0e4270e20fad..2d79fc0cf391 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -269,7 +269,10 @@ static p4d_t *fill_p4d(pgd_t *pgd, unsigned long vaddr=
-)
- =09if (pgd_none(*pgd)) {
- =09=09p4d_t *p4d =3D (p4d_t *)spp_getpage();
- =09=09pgd_populate(&init_mm, pgd, p4d);
--=09=09if (p4d !=3D p4d_offset(pgd, 0))
+diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
+index 998b6010d6d3..e69b7210aaae 100644
+--- a/arch/x86/mm/kasan_init_64.c
++++ b/arch/x86/mm/kasan_init_64.c
+@@ -34,6 +34,18 @@ static __init void *early_alloc(size_t size, int nid, bo=
+ol should_panic)
+ =09return ptr;
+ }
+=20
++static __init void *early_raw_alloc(size_t size, int nid, bool should_pani=
+c)
++{
++=09void *ptr =3D memblock_alloc_try_nid_raw(size, size,
++=09=09=09__pa(MAX_DMA_ADDRESS), MEMBLOCK_ALLOC_ACCESSIBLE, nid);
 +
-+=09=09if (__pa(p4d) !=3D (pgtable_l5_enabled() ?
-+=09=09=09=09  __pa(pgd) :
-+=09=09=09=09  (unsigned long)pgd_val(*pgd) & PTE_PFN_MASK))
- =09=09=09printk(KERN_ERR "PAGETABLE BUG #00! %p <-> %p\n",
- =09=09=09       p4d, p4d_offset(pgd, 0));
- =09}
-@@ -281,7 +284,7 @@ static pud_t *fill_pud(p4d_t *p4d, unsigned long vaddr)
- =09if (p4d_none(*p4d)) {
- =09=09pud_t *pud =3D (pud_t *)spp_getpage();
- =09=09p4d_populate(&init_mm, p4d, pud);
--=09=09if (pud !=3D pud_offset(p4d, 0))
-+=09=09if (__pa(pud) !=3D (p4d_val(*p4d) & p4d_pfn_mask(*p4d)))
- =09=09=09printk(KERN_ERR "PAGETABLE BUG #01! %p <-> %p\n",
- =09=09=09       pud, pud_offset(p4d, 0));
- =09}
-@@ -293,7 +296,7 @@ static pmd_t *fill_pmd(pud_t *pud, unsigned long vaddr)
- =09if (pud_none(*pud)) {
- =09=09pmd_t *pmd =3D (pmd_t *) spp_getpage();
- =09=09pud_populate(&init_mm, pud, pmd);
--=09=09if (pmd !=3D pmd_offset(pud, 0))
-+=09=09if (__pa(pmd) !=3D (pud_val(*pud) & pud_pfn_mask(*pud)))
- =09=09=09printk(KERN_ERR "PAGETABLE BUG #02! %p <-> %p\n",
- =09=09=09       pmd, pmd_offset(pud, 0));
- =09}
-@@ -305,7 +308,7 @@ static pte_t *fill_pte(pmd_t *pmd, unsigned long vaddr)
- =09if (pmd_none(*pmd)) {
- =09=09pte_t *pte =3D (pte_t *) spp_getpage();
- =09=09pmd_populate_kernel(&init_mm, pmd, pte);
--=09=09if (pte !=3D pte_offset_kernel(pmd, 0))
-+=09=09if (__pa(pte) !=3D (pmd_val(*pmd) & pmd_pfn_mask(*pmd)))
- =09=09=09printk(KERN_ERR "PAGETABLE BUG #03!\n");
- =09}
- =09return pte_offset_kernel(pmd, vaddr);
++=09if (!ptr && should_panic)
++=09=09panic("%pS: Failed to allocate page, nid=3D%d from=3D%lx\n",
++=09=09      (void *)_RET_IP_, nid, __pa(MAX_DMA_ADDRESS));
++
++=09return ptr;
++}
++
+ static void __init kasan_populate_pmd(pmd_t *pmd, unsigned long addr,
+ =09=09=09=09      unsigned long end, int nid)
+ {
+@@ -63,8 +75,9 @@ static void __init kasan_populate_pmd(pmd_t *pmd, unsigne=
+d long addr,
+ =09=09if (!pte_none(*pte))
+ =09=09=09continue;
+=20
+-=09=09p =3D early_alloc(PAGE_SIZE, nid, true);
+-=09=09entry =3D pfn_pte(PFN_DOWN(__pa(p)), PAGE_KERNEL);
++=09=09p =3D early_raw_alloc(PAGE_SIZE, nid, true);
++=09=09memset(p, PAGE_SIZE, KASAN_SHADOW_INIT);
++=09=09entry =3D pfn_pte(PFN_DOWN(__pa_nodebug(p)), PAGE_KERNEL);
+ =09=09set_pte_at(&init_mm, addr, pte, entry);
+ =09} while (pte++, addr +=3D PAGE_SIZE, addr !=3D end);
+ }
+@@ -436,7 +449,7 @@ void __init kasan_init(void)
+ =09 * it may contain some garbage. Now we can clear and write protect it,
+ =09 * since after the TLB flush no one should write to it.
+ =09 */
+-=09memset(kasan_early_shadow_page, 0, PAGE_SIZE);
++=09memset(kasan_early_shadow_page, KASAN_SHADOW_INIT, PAGE_SIZE);
+ =09for (i =3D 0; i < PTRS_PER_PTE; i++) {
+ =09=09pte_t pte;
+ =09=09pgprot_t prot;
 --=20
 2.51.0
 
