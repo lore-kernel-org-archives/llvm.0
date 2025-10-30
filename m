@@ -1,86 +1,102 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D66322B5AD
-	for <llvm@lists.linux.dev>; Thu, 30 Oct 2025 19:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB2830BF68;
+	Thu, 30 Oct 2025 21:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761852516; cv=none; b=E8EQZlvRfsuXSTW4Cnb/XdFJ74fdrb3XnppVL6X3HHLOEYdfX1ikn7puixnOy5M10sK58cbjjfQmN4WoU65BQNXnymDvq+0qUisJZMY7kqsDmxsvQwdBJdUe+RBRWAcdXG54OyjLSIOCLax2xYop9QAfzmFYa2gr4jfFUISMVWk=
+	t=1761861017; cv=none; b=PefH/plA0Wq+xddzeIy3cedHy8k7UhiWK/Rh+nqdYg3YV2lPaoqv77eWMyCIV/Rj8fhpQimreiHBXJhGyoDgHs2mTKptbt3tUiXntNNyO1HzN7BZlEy4hI9dAm9PH/1XESQEvEAdtUjJ276Pa+yedpTHZO6TvQTgxRbHCVZLjS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761852516; c=relaxed/simple;
-	bh=EugKZBRZmqDm87UMEsBSl1ZfHa1HA2UKRQ/MlTEqK7A=;
+	s=arc-20240116; t=1761861017; c=relaxed/simple;
+	bh=uhsBi6jPYk4r7zoS0KFwjGrcAihOvbPQ1OZl8wiwXVg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PqBwrnoeptekN5pdnszhqJDOd+St0ZYCH3ehQ+255RR8+F0zx02icvg3KE/66iyBuTWh77EXwmAAWOBchDrqQ5NatdvYJx9utwsbliRWxc0BJlLncjOpz3a8a+Ww1g5hzrEGrGLFSrCabYfPsvzo2X5tfesC4ZEo2wlktwWOOV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cWmfeMjE; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=DCEYYh+Qp/EP0wxeVUwVu+VU5OAHJy7tyvTivvMZDefTBEXQWlNKsbviyxT0FE5C9UgCBKj2p/i1T6y7yiQ2jGmqvC4bCebp6sT9BsXF3kCZfZwqCg1O0DD8l+RMn/UvY/xphKd291oORADzFtCyk7YiWoIHh7q3OJ4xPMOhJzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZzbE7McX; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cWmfeMjE"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AB36F40E016E;
-	Thu, 30 Oct 2025 19:28:32 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ZylZSXPEqsrQ; Thu, 30 Oct 2025 19:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1761852509; bh=HY+y5MNi+DmPei2C3nPxYxGfjUl6qF3z8jEU4oPVhk8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cWmfeMjECTbiIaSNuxbhJWfvS3xSXHjKxinbGE5TZSGaSoeefuQ2IRjHs+SvrfrSi
-	 T2WbtP+TOs7PLi/VuLhyR2A3EBxo68CGb4sCR71tbLMqW5KrevhdqlsDiJiqKJt1eI
-	 EkTL9xy+OGlYz3UBmU5R8QpCb9+1pcgUH8i5Cp6f0KcIUSwVGLjFUI568J6uBFrems
-	 I8ce0sMGFUnZaAWj5mXIOEseFSzEqQI+MpAQ1S7kvR89kc1gBVw3n01rPcj+mcyiyS
-	 muE+iKB9y5jQwGlkeyh2NnMe0d9q9yqX2k0qQ9ukFKL1CA9YgxrgJP4yqxZEWo/up8
-	 8iuiORtBeFaRlUkb8RPeSDiTw403Vi/MFo1Kx9qXfgNbeMKKL6xJObvH4GptDE3XGi
-	 7+SX20zjtK3MlHjIKWOD321PZjuyCviUIHJ9QbGl31D4J+AXjB3QaJKW53xUtHKFNM
-	 egejqT2VeZbpgkdCyrgbbPznLeZ3dbdClpF5fvzO0979pclARhCYKxYFB7FrtfLa7r
-	 1E3dmurUetvaRRQ8S4j+Hmkibg/LDbhia8pnS02MS2zD0SZYjzDwZ2sjVp2wNYaGdB
-	 B3yc8Mc3pUUFWLep+EnZy+PpZc7JlYX2a0UwzR7m+lBTIbUL71AlZI3h8YP/W63zFb
-	 Ou+GybpEtzNMtvGNu/ieBR9o=
-Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 3A55F40E021A;
-	Thu, 30 Oct 2025 19:28:20 +0000 (UTC)
-Date: Thu, 30 Oct 2025 20:28:19 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/mm: Ensure clear_page() variants always have
- __kcfi_typeid_ symbols
-Message-ID: <20251030192819.GFaQO8U29xvWcPT_s2@fat_crate.local>
-References: <20251013-x86-fix-clear_page-cfi-full-lto-errors-v1-1-d69534c0be61@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZzbE7McX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761861016; x=1793397016;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uhsBi6jPYk4r7zoS0KFwjGrcAihOvbPQ1OZl8wiwXVg=;
+  b=ZzbE7McXuckRTmtONo9jvxI7uyGY4m4KhBJ9CfWUz3/d3TLRGhro8AuD
+   WOZrFzoSEQO/uwxRt02YvhkVKBnRB6Yx62l4efBJK7QANYRYrJSHrPtcW
+   /60BP0y032vj/Iv+J14rLQR+UTfUipqaHLszvvkQqKEhZN+niDxT2w2ko
+   m21MC5BKAzBDguK/Csw+o1gGop8csouOHbYyaUA1COXLMpqG9KN3/YXpm
+   M/fuXI7YX+xJzlNDyoKBwBmnc0jR52FP+3ntIvsTWCWa9d29bsgMz1IfN
+   bw3LgxrdNEnjrQzCs+KeuROE/c+sZQYmjUB+Fc9nJ4Et1wOZlTgLHXcEW
+   w==;
+X-CSE-ConnectionGUID: EpHEbKI9Scqm4q60AZ7q1A==
+X-CSE-MsgGUID: 25wnT4A7QmWj5L0gp4WdZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="89483147"
+X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
+   d="scan'208";a="89483147"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 14:50:15 -0700
+X-CSE-ConnectionGUID: mqKL0/XMRAu6LM36rYEPAQ==
+X-CSE-MsgGUID: UsRHOMzSR5SIqQrleSv+Ww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
+   d="scan'208";a="186404807"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 30 Oct 2025 14:50:12 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEaX4-000MYi-28;
+	Thu, 30 Oct 2025 21:50:10 +0000
+Date: Fri, 31 Oct 2025 05:49:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Elder <elder@riscstar.com>, broonie@kernel.org, dlan@gentoo.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
+	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/3] spi: spacemit: introduce SpacemiT K1 SPI
+ controller driver
+Message-ID: <202510310505.d7e7kzCk-lkp@intel.com>
+References: <20251027125504.297033-3-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251013-x86-fix-clear_page-cfi-full-lto-errors-v1-1-d69534c0be61@kernel.org>
+In-Reply-To: <20251027125504.297033-3-elder@riscstar.com>
 
-Hey Nathan,
+Hi Alex,
 
-On Mon, Oct 13, 2025 at 02:27:36PM -0700, Nathan Chancellor wrote:
-> When building with CONFIG_CFI=y and CONFIG_LTO_CLANG_FULL=y, there is a
-> series of errors from the various versions of clear_page() not having
-> __kcfi_typeid_ symbols.
+kernel test robot noticed the following build errors:
 
-might wanna wait with this one - those are going away except one:
+[auto build test ERROR on 8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87]
 
-https://lore.kernel.org/r/20251027202109.678022-5-ankur.a.arora@oracle.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Elder/dt-bindings-spi-add-SpacemiT-K1-SPI-support/20251027-211246
+base:   8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87
+patch link:    https://lore.kernel.org/r/20251027125504.297033-3-elder%40riscstar.com
+patch subject: [PATCH v6 2/3] spi: spacemit: introduce SpacemiT K1 SPI controller driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251031/202510310505.d7e7kzCk-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310505.d7e7kzCk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510310505.d7e7kzCk-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__hexagon_udivdi3" [drivers/spi/spi-spacemit-k1.ko] undefined!
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DMA_CMA
+   Depends on [n]: HAVE_DMA_CONTIGUOUS [=n] && CMA [=y]
+   Selected by [m]:
+   - SND_SOC_K1_I2S [=m] && SOUND [=m] && SND [=m] && SND_SOC [=m] && (COMPILE_TEST [=y] || ARCH_SPACEMIT) && HAVE_CLK [=y]
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
