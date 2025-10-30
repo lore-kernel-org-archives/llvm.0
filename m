@@ -1,60 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F70C33C50C;
-	Thu, 30 Oct 2025 11:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A082EA473;
+	Thu, 30 Oct 2025 12:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761824319; cv=none; b=CCPPyuTwQEoxX+5YLcvG0opSmeVcSHbw41J0Sa2tf2/FEHfud3+jWTe4cEYsiGo3vtptHT89zSZ7BNsrGz46I1xG4ULxtw+NHcyFpyweF8KERC1hQHj3XPyJVT5Q0mHtRGiTI7GOe8yFltVWJ6ZqjBYKC2mjVofvhroi8Xow/2w=
+	t=1761825614; cv=none; b=FrQz3jFdkFlIiwr+TfxT2KfQEEJeHq5QIvmS2l2LczTfKMtc6Kwdd0s9xXW0eADl+p7VN33vBObB0Hlw/UviJCGzr5REKrbtsDboB6FG25Qdlud1ESRStxs/VveOKen/qzMrY5S0YyD/WaMANKNzH88c2yUTV1YrvWk7f1vPK6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761824319; c=relaxed/simple;
-	bh=1BFjASO6lWeplG7fU2l90+LJhwTZ4xkyoNGVfZ0WcFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DBWcGf0NKFvOumn859+/PLX/ZgFEsHS3hP+cuW2bYAg79Ot4bIH42fdkt/4iZcPH19PlUndXc1KJlNWTzy6+2LcvW6YTQxiLs/GueAVPjx0HKkBMFjDbkaxKg0oq/ODN0KaZyOt5L6dMmJwJG36jmMgQLvW8+Lcr38nXV5y+cr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gle82EjA; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1761825614; c=relaxed/simple;
+	bh=FgV4wFL7RIyVMuHd2krRmw1+dcEWv50XBDao6pnaQgA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nwyXsyd6OGxbq1Fh5LFrsWlAz4wCr/h1nZA0iWLpGa1t77MFHyPrG3aVkvU+Rk4OUmVuQYC3mZhJRYGWMPCpqbqKfzxiq1HTAKBbvZCZDJGw6dZfDjzt4H4GQ+IKIQHQZDO1hOLX6v1F2kp8ozAdxmrizvIlW3x20CM4THVyD04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9qC/FFu; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gle82EjA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9qC/FFu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761824318; x=1793360318;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1BFjASO6lWeplG7fU2l90+LJhwTZ4xkyoNGVfZ0WcFc=;
-  b=gle82EjAnRxvJni5LMrKCAmocyBH/g9xn5n+JdDfaa+BqRX/mhO9mqEN
-   JbjmFSvf2rZQwjThNeXuzqYhrFcrdqXvT4ChJGLtlXLcZDoFe+hm8pDuc
-   As+RuaGOtUhgnnzCt5G5viACeiIzT7qgyaXXp31ywoPr0MmgBxVIWtZqc
-   cr7dmR4Bmm+5w4cn6pWzs0+635Rxs7wcNbQQWVULK8CAFeIaQ3gXSvvQf
-   uapzg+rtfTr1cH9O2U+9bHNChI+ogDzbx/H8m7aFtllVPxfZXwSVXwoHs
-   zek8nUPU8lQasDA0JHT9EMQyOQfJZVnh93ReMPKDu71r7E5T4Urhxo9i9
-   Q==;
-X-CSE-ConnectionGUID: AAD8y+UQS22zS3FssJKGPg==
-X-CSE-MsgGUID: XJ8h2XdXQkCaS+EjjK1vNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="64002286"
-X-IronPort-AV: E=Sophos;i="6.19,266,1754982000"; 
-   d="scan'208";a="64002286"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 04:38:05 -0700
-X-CSE-ConnectionGUID: xk10YTX3TOKkvwSdM+ygSg==
-X-CSE-MsgGUID: SvcyHLxkQQOsdDdZX9HV4Q==
+  t=1761825612; x=1793361612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FgV4wFL7RIyVMuHd2krRmw1+dcEWv50XBDao6pnaQgA=;
+  b=X9qC/FFuAPyBOwLvofpmiag3hIScsHj8ZjS1w8rHk+oc6FCpZp3St+Ey
+   0rWdgmxy64eW8G6nZP9Rwcgvrz7XyIC+S6rXpw0X0O++BjiNcpkI50VaU
+   m1tOuV1c/74QRDGsApB7C78VKMDG08V2IxGGmg/ry5HlEVxGwZRszC/Tt
+   iOuXy9vRi7y7HXNijSGUF4/gGVOI0qEzxiokwvYpmuIh0LJAS19Pp2qJn
+   TygFl2zGj3FE+NII6OIM3q45WtCRLZ0/fxAlYZsb82bJdhBseFSS0PY1c
+   fA7DkFYJejObBSH4mIViaGipBnhUQ2beyA+I3BdGxfZIHxrGGB9SjAfWn
+   g==;
+X-CSE-ConnectionGUID: KydPCLadRey5U5AwrapsfA==
+X-CSE-MsgGUID: ngE/SiuhRfaws4SWCRqKUA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63867791"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63867791"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 05:00:11 -0700
+X-CSE-ConnectionGUID: uEUM9zFyTg2e4P71HynKWQ==
+X-CSE-MsgGUID: g1iRUpYJRGGzPycGYo1zyQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,266,1754982000"; 
-   d="scan'208";a="191070099"
+   d="scan'208";a="185817927"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 30 Oct 2025 04:38:03 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 30 Oct 2025 05:00:08 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vEQyB-000LtE-1h;
-	Thu, 30 Oct 2025 11:37:42 +0000
-Date: Thu, 30 Oct 2025 19:37:27 +0800
+	id 1vERJ1-000Lwm-0I;
+	Thu, 30 Oct 2025 11:59:26 +0000
+Date: Thu, 30 Oct 2025 19:58:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
+	andrii@kernel.org, ast@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anup Patel <anup@brainfault.org>,
-	Himanshu Chauhan <hchauhan@ventanamicro.com>
-Subject: [avpatel:riscv_sbi_sse_v5 30/33]
- ./include/generated/asm-offsets.h:334:9: warning: 'NR_CPUS' macro redefined
-Message-ID: <202510301931.p8D3cQIf-lkp@intel.com>
+	dwarves@vger.kernel.org, alan.maguire@oracle.com, acme@kernel.org,
+	eddyz87@gmail.com, tj@kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v1 3/8] bpf: Support for kfuncs with
+ KF_MAGIC_ARGS
+Message-ID: <202510301923.XmrKra1o-lkp@intel.com>
+References: <20251029190113.3323406-4-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,30 +66,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251029190113.3323406-4-ihor.solodrai@linux.dev>
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_sse_v5
-head:   4645b24f1a147b84c4eedf9179d20d1ddd00de2d
-commit: ec9c229227152cd8c512ea718df1506b19d660cf [30/33] drivers: firmware: add riscv SSE support
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20251030/202510301931.p8D3cQIf-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301931.p8D3cQIf-lkp@intel.com/reproduce)
+Hi Ihor,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/bpf-Add-BTF_ID_LIST_END-and-BTF_ID_LIST_SIZE-macros/20251030-030608
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251029190113.3323406-4-ihor.solodrai%40linux.dev
+patch subject: [PATCH bpf-next v1 3/8] bpf: Support for kfuncs with KF_MAGIC_ARGS
+config: s390-randconfig-001-20251030 (https://download.01.org/0day-ci/archive/20251030/202510301923.XmrKra1o-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301923.XmrKra1o-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510301931.p8D3cQIf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510301923.XmrKra1o-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from samples/ftrace/ftrace-direct.c:7:
-   In file included from arch/riscv/include/asm/asm-offsets.h:1:
->> ./include/generated/asm-offsets.h:334:9: warning: 'NR_CPUS' macro redefined [-Wmacro-redefined]
-   #define NR_CPUS 64 /* NR_CPUS */
-           ^
-   include/linux/threads.h:21:9: note: previous definition is here
-   #define NR_CPUS         CONFIG_NR_CPUS
-           ^
-   1 warning generated.
+   kernel/bpf/verifier.c:3273:1: error: invalid storage class specifier in function declarator
+    3273 | static s32 magic_kfunc_by_impl(s32 impl_func_id)
+         | ^
+   kernel/bpf/verifier.c:3273:12: error: parameter named 'magic_kfunc_by_impl' is missing
+    3273 | static s32 magic_kfunc_by_impl(s32 impl_func_id)
+         |            ^
+   kernel/bpf/verifier.c:3273:49: error: expected ';' at end of declaration
+    3273 | static s32 magic_kfunc_by_impl(s32 impl_func_id)
+         |                                                 ^
+         |                                                 ;
+   kernel/bpf/verifier.c:3271:17: error: parameter 'magic_kfuncs' was not declared, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    3271 | BTF_ID_LIST_END(magic_kfuncs)
+         |                 ^
+    3272 | 
+    3273 | static s32 magic_kfunc_by_impl(s32 impl_func_id)
+    3274 | {
+   kernel/bpf/verifier.c:3271:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+    3271 | BTF_ID_LIST_END(magic_kfuncs)
+         | ^
+         | int
+   kernel/bpf/verifier.c:3277:18: error: call to undeclared function 'BTF_ID_LIST_SIZE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3277 |         for (i = 1; i < BTF_ID_LIST_SIZE(magic_kfuncs); i += 2) {
+         |                         ^
+   kernel/bpf/verifier.c:3277:18: note: did you mean 'BTF_ID_LIST_END'?
+   kernel/bpf/verifier.c:3271:1: note: 'BTF_ID_LIST_END' declared here
+    3271 | BTF_ID_LIST_END(magic_kfuncs)
+         | ^
+    3272 | 
+    3273 | static s32 magic_kfunc_by_impl(s32 impl_func_id)
+    3274 | {
+    3275 |         int i;
+    3276 | 
+    3277 |         for (i = 1; i < BTF_ID_LIST_SIZE(magic_kfuncs); i += 2) {
+         |                         ~~~~~~~~~~~~~~~~
+         |                         BTF_ID_LIST_END
+   kernel/bpf/verifier.c:3278:19: error: subscripted value is not an array, pointer, or vector
+    3278 |                 if (magic_kfuncs[i] == impl_func_id)
+         |                     ~~~~~~~~~~~~^~
+   kernel/bpf/verifier.c:3278:26: error: use of undeclared identifier 'impl_func_id'
+    3278 |                 if (magic_kfuncs[i] == impl_func_id)
+         |                                        ^
+   kernel/bpf/verifier.c:3279:23: error: subscripted value is not an array, pointer, or vector
+    3279 |                         return magic_kfuncs[i - 1];
+         |                                ~~~~~~~~~~~~^~~~~~
+>> kernel/bpf/verifier.c:3271:1: warning: no previous prototype for function 'BTF_ID_LIST_END' [-Wmissing-prototypes]
+    3271 | BTF_ID_LIST_END(magic_kfuncs)
+         | ^
+   kernel/bpf/verifier.c:3271:16: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    3271 | BTF_ID_LIST_END(magic_kfuncs)
+         |                ^
+         |                static 
+   kernel/bpf/verifier.c:3271:1: error: a function definition without a prototype is deprecated in all versions of C and is not supported in C2x [-Werror,-Wdeprecated-non-prototype]
+    3271 | BTF_ID_LIST_END(magic_kfuncs)
+         | ^
+   kernel/bpf/verifier.c:3288:18: error: call to undeclared function 'BTF_ID_LIST_SIZE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3288 |         for (i = 0; i < BTF_ID_LIST_SIZE(magic_kfuncs); i += 2) {
+         |                         ^
+   kernel/bpf/verifier.c:3409:17: error: call to undeclared function 'magic_kfunc_by_impl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3409 |                 tmp_func_id = magic_kfunc_by_impl(func_id);
+         |                               ^
+   kernel/bpf/verifier.c:13726:17: error: call to undeclared function 'magic_kfunc_by_impl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    13726 |                 tmp_func_id = magic_kfunc_by_impl(func_id);
+          |                               ^
+   1 warning and 13 errors generated.
+
+
+vim +/BTF_ID_LIST_END +3271 kernel/bpf/verifier.c
+
+  3265	
+  3266	/*
+  3267	 * magic_kfuncs is used as a list of (foo, foo_impl) pairs
+  3268	 */
+  3269	BTF_ID_LIST(magic_kfuncs)
+  3270	BTF_ID_UNUSED
+> 3271	BTF_ID_LIST_END(magic_kfuncs)
+  3272	
 
 -- 
 0-DAY CI Kernel Test Service
