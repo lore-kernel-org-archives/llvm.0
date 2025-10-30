@@ -1,72 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C64286419;
-	Thu, 30 Oct 2025 05:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED5D246333;
+	Thu, 30 Oct 2025 05:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761802915; cv=none; b=LiHjXRR9juWWxIFYLXMxClZMeIeuialnjUQdT0aJl1QZsfyy2ZfSONdCepasyJVxPSGovUnSqxNWx+cMcUjhhJi896fhGzY1+T6AXZJ+KhgxvKFQJKwYGS8jzNQG7X8VU4aLEOGqq34K8bXJVK6jPlPf/Zg9Q3mcf5zdsqMGJoA=
+	t=1761803633; cv=none; b=B/pwqGn+DXejTrNwenpxVN0/NAvg4TUmaaEqXty3cT2h0tGqZf/S7s3CNjX7V+XzuzDTOMy4/yBTQcBZzWMfmw1V1QJFl5+8wowWO2TI9A3pK5CBz4RyCyad0ETO/3aTrNN0UCxG2ZkEQZq+dM1Th3TID9W99kI7ESVuhtCZwds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761802915; c=relaxed/simple;
-	bh=nU18lsAq/OyPRT69o4sqp39RtOZX0AOAyhYhm0ktUQg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pq5plqB9h0jAxGcPvtasbjnqxAfu3+eT0aCfFDLlEhcF97RTp98B5bSnKgKFKxxhuiP42ekYHSSEY57UF7mS+F9yqlldBUFfY8XhWtVyGwWNd0FagwSbjl9YCyf4GYasve/fLd+MTTtgK/UdRkGM+yJOasL5/0s1XfSFOsedKUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S75W2zJi; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1761803633; c=relaxed/simple;
+	bh=lS63mQ0sVekhVPxnz1X6xyqkuiY7F8witW7thbkJIWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=U+ERjm5yXWtT0RjFs0ZzRqCIo4PgwMX2MVMKD9YxFeiZmXqK5S0BPHCs4Tix8UUC3JedHAi63VUSwHhn5doKpmNeN1LrIoir1kKwpIp9RL8NN/3FcsCtrOqJk5zQsjDcFd+AEwqsElDuGXlz1t4lWwiDEPB/HFnh1Clhk0Zqyzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VHonp3tP; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S75W2zJi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VHonp3tP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761802914; x=1793338914;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nU18lsAq/OyPRT69o4sqp39RtOZX0AOAyhYhm0ktUQg=;
-  b=S75W2zJiOujoBwXD5cM0RuLkFzYbyv1n4302XeukHAEgB7gvPnxCF8oe
-   XDpu6XHiM/gGcucozJucY4qT8PolneZJXeCP0pjLq8N/mAFdoNy0sO7Ij
-   gliVB/UDf31h3WiPQ/vyOVqkWetaxBDgNIHk2ClCnoojPb0fGb0Wwp66i
-   XPfcoSnnX/xTEzVDOkclF9C5f7T8Re13t/pcnc/3/W86kw7Nq7DPVY+6c
-   Jyvz0kA4rMb6v9HWo7JhWdNQZZkcXeY4VOwOrtx7NJ0/cGTNznBHbOG4y
-   GfH9ks4GROlUZGzX5OLYV9nW6YRjV7LXwP8/TTRUqUU9MKzp2/u0uIbsC
+  t=1761803632; x=1793339632;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lS63mQ0sVekhVPxnz1X6xyqkuiY7F8witW7thbkJIWY=;
+  b=VHonp3tPa9iwlNUZHy7JwzgPcyz3/CZU/HzV0379mukSkVCwCzQHjrEm
+   kuREp5q7lkCuT95o16qN8dgdl5hwMdkNHGpBKe5XWN07u1smFk1LkrZKb
+   KYxe4JQ7TyXkjf8/R2rAZqCOakeER6bRFaSAeKHSPLur5HAJPMIg+yI74
+   M31rPMUTTbq95+kVWmbGmJHZICS8Op7QnP2fUfe+u+CORwgsWgiPk3T5H
+   u7bChNtmGQi3zyBMsgzabrSQIww8TOMow/faB5hWRPwSqsMk4PuvB53rz
+   qv0Q5N7mZKyFxIvQOPfsH4JQHP4AkAYGkflDbvFjf3xF1fDVICOueF+vT
    Q==;
-X-CSE-ConnectionGUID: /ocPRXY3Qgeu2lvCd6W02g==
-X-CSE-MsgGUID: QJApL5sNRTSwkneoFcD2lw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="81354817"
+X-CSE-ConnectionGUID: VHq0mJe+RNiZFwf9/A1N6g==
+X-CSE-MsgGUID: gvLObsJNRQ6g9UOT9lYmZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="67588093"
 X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="81354817"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 22:41:53 -0700
-X-CSE-ConnectionGUID: gBwJdAhDSdSXnuXl5d1Qjg==
-X-CSE-MsgGUID: C4N+2GgQRb6xQS3KdzVsmA==
+   d="scan'208";a="67588093"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 22:53:51 -0700
+X-CSE-ConnectionGUID: C1uv67hgQemyfespKnsR7w==
+X-CSE-MsgGUID: I0XhVr+bQ9G0HGJRutvALg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="189934326"
+   d="scan'208";a="186210257"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 29 Oct 2025 22:41:49 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 29 Oct 2025 22:53:49 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vELPu-000LVA-0J;
-	Thu, 30 Oct 2025 05:41:46 +0000
-Date: Thu, 30 Oct 2025 13:40:07 +0800
+	id 1vELbX-000LWC-1k;
+	Thu, 30 Oct 2025 05:53:47 +0000
+Date: Thu, 30 Oct 2025 13:52:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rohan G Thomas via B4 Relay <devnull+rohan.g.thomas.altera.com@kernel.org>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Steffen Trumtrar <s.trumtrar@pengutronix.de>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Rohan G Thomas <rohan.g.thomas@altera.com>
-Subject: Re: [PATCH net-next 4/4] net: stmmac: socfpga: Add hardware
- supported cross-timestamp
-Message-ID: <202510301322.f0J41mwI-lkp@intel.com>
-References: <20251029-agilex5_ext-v1-4-1931132d77d6@altera.com>
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: [linux-next:master 3400/4731] ld.lld: error: undefined symbol:
+ mbox_free_channel
+Message-ID: <202510301311.TcOCnZ1s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,133 +63,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251029-agilex5_ext-v1-4-1931132d77d6@altera.com>
 
-Hi Rohan,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on a8abe8e210c175b1d5a7e53df069e107b65c13cb]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rohan-G-Thomas-via-B4-Relay/net-stmmac-socfpga-Agilex5-EMAC-platform-configuration/20251029-162502
-base:   a8abe8e210c175b1d5a7e53df069e107b65c13cb
-patch link:    https://lore.kernel.org/r/20251029-agilex5_ext-v1-4-1931132d77d6%40altera.com
-patch subject: [PATCH net-next 4/4] net: stmmac: socfpga: Add hardware supported cross-timestamp
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251030/202510301322.f0J41mwI-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301322.f0J41mwI-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f9ba12abc5282bf992f9a9ae87ad814fd03a0270
+commit: 1ff1f0db6aec80eae1639eff31b5875632d539c0 [3400/4731] pmdomain: mediatek: Add support for MFlexGraphics
+config: arm64-randconfig-003-20251030 (https://download.01.org/0day-ci/archive/20251030/202510301311.TcOCnZ1s-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301311.TcOCnZ1s-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510301322.f0J41mwI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510301311.TcOCnZ1s-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:390:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     390 |         return ret;
-         |                ^~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:312:12: note: initialize the variable 'ret' to silence this warning
-     312 |         int i, ret;
-         |                   ^
-         |                    = 0
-   1 warning generated.
-
-
-vim +/ret +390 drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-
-   301	
-   302	static int smtg_crosststamp(ktime_t *device, struct system_counterval_t *system,
-   303				    void *ctx)
-   304	{
-   305		struct stmmac_priv *priv = (struct stmmac_priv *)ctx;
-   306		u32 num_snapshot, gpio_value, acr_value;
-   307		void __iomem *ptpaddr = priv->ptpaddr;
-   308		void __iomem *ioaddr = priv->hw->pcsr;
-   309		unsigned long flags;
-   310		u64 smtg_time = 0;
-   311		u64 ptp_time = 0;
-   312		int i, ret;
-   313	
-   314		/* Both internal crosstimestamping and external triggered event
-   315		 * timestamping cannot be run concurrently.
-   316		 */
-   317		if (priv->plat->flags & STMMAC_FLAG_EXT_SNAPSHOT_EN)
-   318			return -EBUSY;
-   319	
-   320		mutex_lock(&priv->aux_ts_lock);
-   321		/* Enable Internal snapshot trigger */
-   322		acr_value = readl(ptpaddr + PTP_ACR);
-   323		acr_value &= ~PTP_ACR_MASK;
-   324		switch (priv->plat->int_snapshot_num) {
-   325		case AUX_SNAPSHOT0:
-   326			acr_value |= PTP_ACR_ATSEN0;
-   327			break;
-   328		case AUX_SNAPSHOT1:
-   329			acr_value |= PTP_ACR_ATSEN1;
-   330			break;
-   331		case AUX_SNAPSHOT2:
-   332			acr_value |= PTP_ACR_ATSEN2;
-   333			break;
-   334		case AUX_SNAPSHOT3:
-   335			acr_value |= PTP_ACR_ATSEN3;
-   336			break;
-   337		default:
-   338			mutex_unlock(&priv->aux_ts_lock);
-   339			return -EINVAL;
-   340		}
-   341		writel(acr_value, ptpaddr + PTP_ACR);
-   342	
-   343		/* Clear FIFO */
-   344		acr_value = readl(ptpaddr + PTP_ACR);
-   345		acr_value |= PTP_ACR_ATSFC;
-   346		writel(acr_value, ptpaddr + PTP_ACR);
-   347		/* Release the mutex */
-   348		mutex_unlock(&priv->aux_ts_lock);
-   349	
-   350		/* Trigger Internal snapshot signal. Create a rising edge by just toggle
-   351		 * the GPO0 to low and back to high.
-   352		 */
-   353		gpio_value = readl(ioaddr + XGMAC_GPIO_STATUS);
-   354		gpio_value &= ~XGMAC_GPIO_GPO0;
-   355		writel(gpio_value, ioaddr + XGMAC_GPIO_STATUS);
-   356		gpio_value |= XGMAC_GPIO_GPO0;
-   357		writel(gpio_value, ioaddr + XGMAC_GPIO_STATUS);
-   358	
-   359		/* Time sync done Indication - Interrupt method */
-   360		if (!wait_event_interruptible_timeout(priv->tstamp_busy_wait,
-   361						      dwxgmac_cross_ts_isr(priv),
-   362						      HZ / 100)) {
-   363			priv->plat->flags &= ~STMMAC_FLAG_INT_SNAPSHOT_EN;
-   364			return -ETIMEDOUT;
-   365		}
-   366	
-   367		*system = (struct system_counterval_t) {
-   368			.cycles = 0,
-   369			.cs_id = CSID_ARM_ARCH_COUNTER,
-   370			.use_nsecs = true,
-   371		};
-   372	
-   373		num_snapshot = (readl(ioaddr + XGMAC_TIMESTAMP_STATUS) &
-   374				XGMAC_TIMESTAMP_ATSNS_MASK) >>
-   375				XGMAC_TIMESTAMP_ATSNS_SHIFT;
-   376	
-   377		/* Repeat until the timestamps are from the FIFO last segment */
-   378		for (i = 0; i < num_snapshot; i++) {
-   379			read_lock_irqsave(&priv->ptp_lock, flags);
-   380			stmmac_get_ptptime(priv, ptpaddr, &ptp_time);
-   381			*device = ns_to_ktime(ptp_time);
-   382			read_unlock_irqrestore(&priv->ptp_lock, flags);
-   383		}
-   384	
-   385		get_smtgtime(priv->mii, SMTG_MDIO_ADDR, &smtg_time);
-   386		system->cycles = smtg_time;
-   387	
-   388		priv->plat->flags &= ~STMMAC_FLAG_INT_SNAPSHOT_EN;
-   389	
- > 390		return ret;
-   391	}
-   392	
+>> ld.lld: error: undefined symbol: mbox_free_channel
+   >>> referenced by mtk-mfg-pmdomain.c:998 (drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:998)
+   >>>               vmlinux.o:(mtk_mfg_probe)
+   >>> referenced by mtk-mfg-pmdomain.c:1000 (drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:1000)
+   >>>               vmlinux.o:(mtk_mfg_probe)
+   >>> referenced by mtk-mfg-pmdomain.c:1024 (drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:1024)
+   >>>               vmlinux.o:(mtk_mfg_remove)
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: mbox_request_channel_byname
+   >>> referenced by mtk-mfg-pmdomain.c:816 (drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:816)
+   >>>               vmlinux.o:(mtk_mfg_init_mbox)
+   >>> referenced by mtk-mfg-pmdomain.c:831 (drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c:831)
+   >>>               vmlinux.o:(mtk_mfg_init_mbox)
 
 -- 
 0-DAY CI Kernel Test Service
