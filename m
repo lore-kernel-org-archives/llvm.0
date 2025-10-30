@@ -1,81 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901F536CE06;
-	Thu, 30 Oct 2025 17:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237EA36CE18;
+	Thu, 30 Oct 2025 18:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761846996; cv=none; b=QQq+IORM3vXtbrKECaMERYdFRPOrtt/9sh3dBhoDFKgabIUfSP3C6Ip4cLLW1Xu13nnvvbAyAwG+HVUvZ9JU0iIG6ENttH8dFKP48qbPd/HMUH9YYbOhm++S6rHk7CQSXHUBeAUNefomGuZ2HZXgCXUC3e95uLypjyHtVUKBmXI=
+	t=1761847678; cv=none; b=OFwmEsDohsxQOQi63GGsVERuuEEMy+2zJBXj4oTXxpvBDKWr3LD0vcCTuEXZE3UT9vAMavRmFCfuFLNKLmAyWXPfJbni/3YewtjOF4G2plVAqmf8pldVCrC3qxo6faj/eNlYHA3j0YLNcSnOnquxO5TzDXRBQzikSsYhUpIgn9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761846996; c=relaxed/simple;
-	bh=mwm5eTSkEuWGrdyR9+atXifBE3uTQt90HxWeDV+iaAY=;
+	s=arc-20240116; t=1761847678; c=relaxed/simple;
+	bh=iP/s4UAA9B2nPL0oz7dCcsbvxDo5KsExttoOXbiI4jw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gKXEAQ0K9FIOZGGk1hcPPTbo+pIvwucMohPxGMt3IWz8iLIi+I8v2ftt4lD8kLaLzGXLmI5xWbRkKICt4AdTITCAiymP7zGjWj/eDbFbpnDNbel3iRbAp7iRAZutNJgVSLMpS730M8nr+hUhTVxvagVOxf4eTyWhBr6xeCV9MXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxx1MJ1Q; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=RPfqLVaZVpzi4Nkmxy3N0e8OntPPFg8F7GVN/7DNEzQfrxGhCU/B9XDmY2sUJD4maMrl1ajk7MUqZrjNiT3dvm9rcLWrsAyx+CDi7+WqEORAa7y/W5FU1//3VNNuDpOnmXI7bo0HK4VrKR9VJo7KqNn/X/j3DDOfjMAiKzbrFyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OzR1+CTa; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxx1MJ1Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBC4C4CEFB;
-	Thu, 30 Oct 2025 17:56:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761846996;
-	bh=mwm5eTSkEuWGrdyR9+atXifBE3uTQt90HxWeDV+iaAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jxx1MJ1Q8q1gc0kqTfMR64liwkhDa+LJepcgefKlU8Q5/UUZvGWlVRupsSObx+/qF
-	 d9oqPIA/FSl+ljENqFIWjb9xExEM/2E1Xh8KCUjPcjcYRKQ1QQoUR3nULI5B86kj4r
-	 wVTmNiMZrUVpaw/UwjDYuSet3EQZyfRp6oP3NHoh19EoQphq9KzwbAwzCib1Pu6ZfW
-	 J/FxyIVeACkN5m+gfSNB7/ABRC4+X/nqcSqqlr3Unl0hLwg/pGwoXZILma9lGHQPAG
-	 2Z2n12HMwyUM2SEkAFxNCqEyj4m7HWBzOePt7e6G/cCcBiSVbW2lImAr4gYufXTxI0
-	 1CNBfT4f7JwrQ==
-Date: Thu, 30 Oct 2025 10:56:31 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: kernel test robot <lkp@intel.com>, Ming Lei <ming.lei@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Uday Shankar <ushankar@purestorage.com>,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH V3 2/5] ublk: implement NUMA-aware memory allocation
-Message-ID: <20251030175631.GB417112@ax162>
-References: <20251029031035.258766-3-ming.lei@redhat.com>
- <202510301522.i47z9R95-lkp@intel.com>
- <CADUfDZonryeHe1MGTfnUa16VbvEt5C+yu11yh3ZRDbwFqJ_L9w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OzR1+CTa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761847677; x=1793383677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iP/s4UAA9B2nPL0oz7dCcsbvxDo5KsExttoOXbiI4jw=;
+  b=OzR1+CTaqF1mLQwL5NeOqUBtdVdcbuSiMYT6605CO7d83+mMLUkNTKvQ
+   +cJqPyFZ19QJxpHL7w3PjaHHQzRAmTIToUkJVT/MNEpmAptjfmIpHGZ4k
+   KWU3islokpTYpwOXFkhYnWimF6NATPzs2OnPV5XU7yTA4AahT3luYkBuj
+   JuBqXsIv9QXf77/vi2/riwXDFq0FSD+72z7Y6kf58TQQRsoTFibnWHgru
+   i33tP5Xa7SAfdrkFpoWi43mDunehjd4decOI1t2ZyfaM8A6d8VcIi9Aix
+   3qltfaArs08eRYTVQ+mKt6PZ2KhHLvTfzj9FzU2DiC4oNsOGL2doIMniq
+   w==;
+X-CSE-ConnectionGUID: D8ETlMFzQlKl05Vw8wlqBw==
+X-CSE-MsgGUID: UkOv2SVTTCWCzR0lFSAwTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="67652090"
+X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
+   d="scan'208";a="67652090"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 11:07:57 -0700
+X-CSE-ConnectionGUID: 9p/tDAhTRCCj2jfvrIEJuA==
+X-CSE-MsgGUID: lUJf09szRfOicaHLR05gkQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
+   d="scan'208";a="185232151"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 30 Oct 2025 11:07:52 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEX3p-000MNw-1s;
+	Thu, 30 Oct 2025 18:07:46 +0000
+Date: Fri, 31 Oct 2025 02:06:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lyude Paul <lyude@redhat.com>, dri-devel@lists.freedesktop.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Danilo Krummrich <dakr@kernel.org>,
+	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>
+Subject: Re: [PATCH] rust/dma: Take &mut self in
+ CoherentAllocation::field_write()
+Message-ID: <202510310102.NdHj0ur8-lkp@intel.com>
+References: <20251028211801.85215-1-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADUfDZonryeHe1MGTfnUa16VbvEt5C+yu11yh3ZRDbwFqJ_L9w@mail.gmail.com>
+In-Reply-To: <20251028211801.85215-1-lyude@redhat.com>
 
-On Thu, Oct 30, 2025 at 07:07:25AM -0700, Caleb Sander Mateos wrote:
-> On Thu, Oct 30, 2025 at 1:01 AM kernel test robot <lkp@intel.com> wrote:
-...
-> > patch link:    https://lore.kernel.org/r/20251029031035.258766-3-ming.lei%40redhat.com
-> > patch subject: [PATCH V3 2/5] ublk: implement NUMA-aware memory allocation
-> > config: x86_64-randconfig-074-20251030 (https://download.01.org/0day-ci/archive/20251030/202510301522.i47z9R95-lkp@intel.com/config)
-> > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301522.i47z9R95-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202510301522.i47z9R95-lkp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> drivers/block/ublk_drv.c:240:49: error: 'counted_by' argument must be a simple declaration reference
-> >      240 |         struct ublk_queue       *queues[] __counted_by(dev_info.nr_hw_queues);
-> >          |                                                        ^~~~~~~~~~~~~~~~~~~~~
-> 
-> Hmm, guess it doesn't support nested fields?
+Hi Lyude,
 
-Correct. I think this is something that we want to support at some point
-if I remember correctly but I think there was a lot of discussion
-between GCC and clang on how to actually do it but Kees is free to
-correct me if that is wrong.
+kernel test robot noticed the following build errors:
 
-Cheers,
-Nathan
+[auto build test ERROR on 3b83f5d5e78ac5cddd811a5e431af73959864390]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lyude-Paul/rust-dma-Take-mut-self-in-CoherentAllocation-field_write/20251029-052034
+base:   3b83f5d5e78ac5cddd811a5e431af73959864390
+patch link:    https://lore.kernel.org/r/20251028211801.85215-1-lyude%40redhat.com
+patch subject: [PATCH] rust/dma: Take &mut self in CoherentAllocation::field_write()
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251031/202510310102.NdHj0ur8-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310102.NdHj0ur8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510310102.NdHj0ur8-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0596]: cannot borrow value as mutable, as it is not declared as mutable
+   --> samples/rust/rust_dma.rs:70:13
+   |
+   70 |             kernel::dma_write!(ca[i] = MyStruct::new(value.0, value.1))?;
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ cannot borrow as mutable
+   |
+   = note: this error originates in the macro `$crate::dma_write` which comes from the expansion of the macro `kernel::dma_write` (in Nightly builds, run with -Z macro-backtrace for more info)
+   help: consider changing this to be mutable
+   |
+   66 |         let mut ca: CoherentAllocation<MyStruct> =
+   |             +++
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
