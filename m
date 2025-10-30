@@ -1,178 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012028.outbound.protection.outlook.com [52.101.43.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D7026E6F4;
-	Thu, 30 Oct 2025 16:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761840685; cv=none; b=iVzgoEANKQ15rh5B1eMDS3TqbuhLWEJrDsk09zhkzLwOtzGC6ha1zr1a2LKJyH6a+wRe0jk4h4iPElfQCTow45bQ3VUZCw4Jx+Z+WPFRNgGWLsVo9De2qSMOS7y0gBDEajjK3+H8chSKHWWiO+g5cArcU9bxnIE/Y5OV9drrp5M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761840685; c=relaxed/simple;
-	bh=PT7u8KWqn5FQdsLdcceeQOYD4kpNQUuZxjU7zmJ1lDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=e3RGOxMJegpZkmjr/PUHiX5RLaEjwEgnRrPLfJvu2JtVm+gyR4VRIlrXU8I1ItWAtWM5C7/VYPS/DclTPpG/VtkKULGamEqPssYlnzxzaIYGKTUnr07+Xp2xyK6sJIczbIMnrEI2tGWAWdR9V11Ob0qlwTsyrKcXEaMxK/I6Lao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V7Zvc8tf; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C4D3655EC;
+	Thu, 30 Oct 2025 17:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761844014; cv=fail; b=Xw/fkmJ8TpiCGcomkOGKxrMyuRzXIwKA/0V3Zbb981DXRI+tulhaJwf752rMTZLjM87hZ2/q2T98GtBH5xtkhGIjo93ik5e6v2e8E4ZY/79X3jsR0QYoDjNcN9OLBT+jVv+m99H8wRGyG/ald6mFjswXu0UfmFCUvnd225QkqqQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761844014; c=relaxed/simple;
+	bh=txewqRTKmkge/Dya9wBqYSZXd6RD8sdQC4zqyh1cXy0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=jqgiBNhsCB3hloRGMjo1TZbnTBIJmi/6APPohGbDf5xV4vlW9Af10UG7iQIQuXE6XaulG9UGLBcdYhcD9jT45inRlgqX8MYs7AmpDNlkWIPxONpVHhRSKV9l4XGHroK3S4YH58KHLXizawxSZr90vJuRlMahcBuvrNjeeow7910=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xEoa1cLL; arc=fail smtp.client-ip=52.101.43.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V7Zvc8tf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761840683; x=1793376683;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PT7u8KWqn5FQdsLdcceeQOYD4kpNQUuZxjU7zmJ1lDU=;
-  b=V7Zvc8tfLFSLlGxgnW3DwlXhku2uJtR0UbXp5e3Gj4DEM5hgeN/0KV3R
-   ZaXc218vLJkiLG0LOQIXA54ueBL76WXz2lEtYS0iI3/a6w3KuKIaDwK3d
-   vi9AZA3kt6gBo2x3QRVxcTirCG1TGtDrlFA+jaxv1lYf4bLVulAF/ZtCA
-   ANHC3ORjQCSkPpJwYc1GKDOGzmSK5fPKoFOQOV17D0fbRbyzWDOnv0psn
-   Kri7lsutCcJ/2b/sQFiLSlmJqOIjs/jKHIRyynbZzw96UZLlEdDxI7ztY
-   azoF3Jj9wir/J8QaODDnEpebuWf3BPniH1F/5o976zcfpVFrJxrP9CRxJ
-   Q==;
-X-CSE-ConnectionGUID: hLK1crQfQJG5XrQ3Bt66Gg==
-X-CSE-MsgGUID: v+asEf5UTtqePLlX1CLAhg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="63193017"
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="63193017"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 09:11:22 -0700
-X-CSE-ConnectionGUID: IJZZXrqnQH248qUuoBDHLg==
-X-CSE-MsgGUID: IQVIzYgiSRCwlnp6Pg12xA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="185654906"
-Received: from igk-lkp-server01.igk.intel.com (HELO c2fcd27ee2f4) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 30 Oct 2025 09:11:21 -0700
-Received: from kbuild by c2fcd27ee2f4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vEVF8-0000000013Q-2iAn;
-	Thu, 30 Oct 2025 16:11:18 +0000
-Date: Thu, 30 Oct 2025 17:10:57 +0100
-From: kernel test robot <lkp@intel.com>
-To: Martin KaFai Lau <martin.lau@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Subject: [martin-lau-bpf-next:ls.rqspin.v2.2 3/3]
- kernel/bpf/bpf_local_storage.c:497:29: warning: variable 'owner_storage_ptr'
- set but not used
-Message-ID: <202510301735.G36o9EqL-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xEoa1cLL"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BlrLXwcONeBqp4+CIkOSKTRwosWWdQDSymTMOzj0PkuXPWd2+vCapYCurVmJMF2s7EykZdvX0G/bO8qB/iqb4imMoNB1N+j8EgXKqt0GATr3zsfkews163VCon7S3tIH6mwCP8WCkMRNclbZy7Kxgq7pO7Fzcer/edx/NNDVlp8EqEveIHkT6+HtkaEP6lr/zQVRUmxkicNs66XocDC8gaQnbUZTEB/MgnCzJpKHqb0h4Tav5boPy/OOaGYANG2iT+MkQ5idjOdA5SGW9W7F0Q/+m9Le8gQSYc1DMqgSYGnsX6ytEHDQJawuuZdp0sxpLLXcxljanzbKHBguQh3HFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rNyZ2OzOR0B594BA3xi5XzLIvr7QzoPNVkBJu0Lss88=;
+ b=oYnE3hp9vhAMrMBAeGeiUnK+SLGfoD/E+4E6cR/SOyOKpiORFIQGcxta6dwzCN7vAsv5QUDNV/fixH/4dURvoEeDzWF8EqRZbnWclKrq69clDlw+5w2rmpNPl3ZVCcNd6FZf2Dlot2u5eSYz4Rxn+yNoDk/7wOZxCwolLDg5z6wkPykLKADmhCcfrAhkqptborqkHdQEFlV/02iXIdsi0peAgzF8UcFwegHNX0MtsmRm9/u7tq3YW5Dh1u/ZmI2buPeRaQzrH3wxpm3g3fGLr0RqRhLRHhUUa4x6FtQjqpPDI5o3Wtmnw24MbQiWSUxzBj7bJDjF2uIAofMnXVJMdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rNyZ2OzOR0B594BA3xi5XzLIvr7QzoPNVkBJu0Lss88=;
+ b=xEoa1cLLUQ73OXkLiTrFQKiJvcOWU6SWpaj4iTxhkATpc6dFImrk5o5ezXUKfPb80cRpVG7cbeZg1t6qUHQ9GtaJFB+Yrz+e4VH6leyfjM3SwB2XkTs51kk/VVbOhpp0n86PudEQ64wCeAXSPYChqhpxgZiYNz6j/x7kudsmmIs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
+ IA1PR12MB6386.namprd12.prod.outlook.com (2603:10b6:208:38a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Thu, 30 Oct
+ 2025 17:06:47 +0000
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::6318:26e5:357a:74a5]) by DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::6318:26e5:357a:74a5%7]) with mapi id 15.20.9275.013; Thu, 30 Oct 2025
+ 17:06:47 +0000
+Message-ID: <12586053-2ea4-4666-9cbd-dec6ff1d6bda@amd.com>
+Date: Thu, 30 Oct 2025 22:36:33 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 14/15] iommu/amd: Remove AMD io_pgtable support
+To: Jason Gunthorpe <jgg@nvidia.com>, Alexandre Ghiti <alex@ghiti.fr>,
+ Anup Patel <anup@brainfault.org>, Albert Ou <aou@eecs.berkeley.edu>,
+ Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+ Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
+ Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev
+References: <14-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+Content-Language: en-US
+From: Vasant Hegde <vasant.hegde@amd.com>
+In-Reply-To: <14-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0072.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1b3::12) To DS7PR12MB6048.namprd12.prod.outlook.com
+ (2603:10b6:8:9f::5)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|IA1PR12MB6386:EE_
+X-MS-Office365-Filtering-Correlation-Id: f70035ff-ac19-4a89-db86-08de17d6b537
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|7053199007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MmNjZVY0WVZMYkx4UUdPYmg0TkR4OVhHUDNsM2R5MHh3YnZCYWVqWlNYMU9X?=
+ =?utf-8?B?T2xOdVBxczNFVXVJb2N5RE1kL2hZOStocm1kdDNPWExodDgyZTloUEVoYXFI?=
+ =?utf-8?B?VFMxSXd4bVVoMGRsMVdQWHNoMUpUMkk1Vm03em9INzU1aDZtUmZybERRN3NK?=
+ =?utf-8?B?ZEplcTMrNlJHQ1VETGNESGRDVjYyL2JpeFJjN2U2c2Y1NGFmRHZtVnRqV1Rn?=
+ =?utf-8?B?SU8vMFlOY0dEbXFXbS8xQ1VkN3lTVUtXVmF4SFVvZHpuTlFTSWFhZGF0NWsr?=
+ =?utf-8?B?N3VpMCtVVytVVmNsSnpPa0szbnF3NS91RmFLbmFvRXpCYS8xanZiSnpkemgx?=
+ =?utf-8?B?eDkyR3FYVzlUcDlYL01KS0xJTENmU1BTODZaRGN5MUVkdzVpWlF4emRXUTVB?=
+ =?utf-8?B?eHk0dlhpRmdZam1MSVFUNFZIRnhkQnVkdm01MHA2ZGtjU3RiQm11dHFQS1FZ?=
+ =?utf-8?B?cVdqb1k2SHdLMGtNSGNwRGxTYnVncjZuRzVjSThzOVRTTHhGbTlSaHlNVGRp?=
+ =?utf-8?B?d00wZHpXWFdidGVGMWl3K0hwVWk1ZlduZ045eCs0UXc0andvMDJDY3VkQkEy?=
+ =?utf-8?B?WnlXWGVUdXRxdThqU1ZEM0J0aytPZHJMSFBpeWFwWko0Z0Z4RnNoUjRRNVZ1?=
+ =?utf-8?B?OTM2ZHRtU1FRY3g2TW9yK00rYnVxZk0xS3Y2YWpvMFJNTkdObENqWXJiYm5j?=
+ =?utf-8?B?M1NGa3V5RWtUeGwxUHBRYlBmeWpIVkJvR1ZyZXpSbFdaclB1MmZsRGtIMzdB?=
+ =?utf-8?B?K0ZNYmp0V2hlTkZ0UitmbU4xNkVBbHM5NUQyeUpWTVJ4WE9rYzFtQTNzdk14?=
+ =?utf-8?B?akpBaUVDLzIxdDdocHpTK1RISFFsYWg4amNJN3A0dFUvbllhMWVtWEpITGdN?=
+ =?utf-8?B?MG1mbVZuSHZwWkovQ2JHNmw3dXJGV0g3ZDhCb1kvV0tMODJEZGlYMjUya3gx?=
+ =?utf-8?B?M1EwdU1BWUU1NHExdVVnWWxqSDhwS01RbmJJaUc0L2I5ckd0eFF4MENudjZo?=
+ =?utf-8?B?TC9zM1N3UnNma3NXUlRXZkJrLzMvTnQrWHlTTXQyVm1HK2l4cGhpY0R5bXZp?=
+ =?utf-8?B?UXpsRHFZbUVwVXZaQ0RTS0xyejNNRWJIRXFqVUw3T0VwOU4wZHM4M2JtVW9k?=
+ =?utf-8?B?MEk2RlZObWpGbWVQSzl6TFVUdGd2MW12YzBwS1V6N0xXaVJWTTAvQzNBbm52?=
+ =?utf-8?B?eXFPSVppZEs2UTFhWlFFTTZCNVNydjJySGFtR242Rlo1cnRIaWxEL1Rsem1B?=
+ =?utf-8?B?TWZxMEl3ZmlXT1hXVjVyTUU4TTdLc3U5d1Z5b0huaHp6WnU2ZUNkdlNpR0VF?=
+ =?utf-8?B?alZSSFBHOTVpd3Qrd1JXWmdWTVUvQktuUTRLZGRwTGd0cm9BV21MZ1Q5NXR4?=
+ =?utf-8?B?bkhmQm1UREI4UWFPMVRjWUt6bUU0UkF6cXVxT2svWmxFMGZSK1BmbU5kUWZI?=
+ =?utf-8?B?VjFYY29nTGdtZ21lY3FJaTdGV1VlRTNDdS9ZYi9RUmp1aUhtTVpibnhvNnBp?=
+ =?utf-8?B?VU1KaHhwWU9JUGU1L2NsWWMzWE95ZlRaMkFwNFRsRVAxTXczeW9HTUVLeklM?=
+ =?utf-8?B?TlNUSDI5cmUzYWtTS0NaQjR5MWlEZTUzb0RKZzVMZW04U2NHeGFJemU0RFdT?=
+ =?utf-8?B?c2hXWmhldW9WMitXNTlnNUl4bFVGbU9Td1N4WmJkdTNleERjbDlHZ25kUnRG?=
+ =?utf-8?B?MHlkb2xZMk9ncUw2c3ZvUy96bURqVlhEUEg4L1ExR0s3WEdnZUF6RnkyMXhy?=
+ =?utf-8?B?eEtOaTl6TU9ZMjg5VzF3NVI4eC9QYjZxZkZjbzBEN2wvK0FuY3hOZm5aS2l0?=
+ =?utf-8?B?N3ZTSnVJbGpiU0U1Q001UmpJZ2ZxMjlLV0pvczlRd0hvYS9ZdmhuMUVmNWE5?=
+ =?utf-8?B?VnIxejRjckVRRk4wdE1FS3ZDbHlBQ0xpTktSOHFTRUkzZ0M0RFlrc1JrUWZm?=
+ =?utf-8?B?RmxKT3ZnbDVlRFFEcnByN29KWUJTWU9zeDZMNjFPNjZPalcyNDFybVFpcTdC?=
+ =?utf-8?Q?KyIVmfD5oMoqfJspB4EgUpcmFIgFzU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(7053199007)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MFFhVnRnajRzVkJ1MkxWMEFmUVFNWEx1WSttanoxZmdiYURWTjdkbFZrdFhL?=
+ =?utf-8?B?anpqRG12YUJucS9ISTFVWDZoSytHejFhcnZQbml6M0pIQnZmZkYyVWZBUWs3?=
+ =?utf-8?B?d0c2NU1KM2YzeS9IYlNmRk1IMWs1Q0hEaWk4akNqOTVmV3d3QTV1Y3piVWFY?=
+ =?utf-8?B?VHFqaDNSb2pwZkRpdGFQYnJaem9RSzlPVFRBSUFvdkJ0ZkF5U2I3Tmp2MW1S?=
+ =?utf-8?B?MmFjUzRFRzBWSFJDUzJBbVQxVUhqN0RVUFNxbHRBaUExL3NnNlkwcmJCVlhJ?=
+ =?utf-8?B?N21aQURrNEhnZ01XZUJKcWUyUloxeGFXcld2bW1sKzI0czVxaTJtSkx6ODBJ?=
+ =?utf-8?B?aXoxM25DSGtTWC80YjNFd25BS2lSaG5pakxZQVRIV2lYS3NheWNJaEdyMHlw?=
+ =?utf-8?B?RDR0ODJSVllxWXN3MmxBK0YzeFpZT3FPVU1RcnlzU21IeWl3eHRlZGJneDZC?=
+ =?utf-8?B?YlUwdFJuQXJDYmp1RUpycGo1NUtBNWdIaEd5R1UyZzByclJEMmxXYmpFV2VV?=
+ =?utf-8?B?dEFTa2FUdXNITVVVOG1DQWc2aXRvMjV5MmZIUVlqMTNHemFzUlBwNjVNWHJY?=
+ =?utf-8?B?WnUwT3pkSEgzK0Z1SnhGOGUyRkxVaU9IUGJYeUFSZ3FpSFZKUHZXRVVEUk9R?=
+ =?utf-8?B?cDRsclJHeUYvUC80OVFTY1cwNjM5SVpHOW1yM0FrYnZEanpsZlRXb3AwZUVH?=
+ =?utf-8?B?OU5sRitnSnVqd3V6QStSR200UjF4ZG1KTEFRLyswbWJ1bENrUyt4NGFRUGRB?=
+ =?utf-8?B?aEZrdjlBendSN0ltbTN1ZjVDVjFPTVVJaXp0WVVBajNhL2VYeS9NUnFTZ0sv?=
+ =?utf-8?B?eElQT1c2VExaRGNYV3hhODZuc0Uxb2liY1ZaOWhFU1hsL05NQkJvaTh3c3Z4?=
+ =?utf-8?B?Ukd2RW1UQldMempQblMvZmIvRFlvcFpkeVNnZkxpeDBSRlRCME0wdGw0WEIr?=
+ =?utf-8?B?dVdRTHhRRTRmc2JLRTdCV09DSUI5cUUxT0MwQXZPRnlRWjBNb2xDd2F5OUlE?=
+ =?utf-8?B?cU9Pc1FLZGF3UlJ2OGdTVGtWZEcvaGE2R1M3OFlVNm9CN3BnbTdHVldkellk?=
+ =?utf-8?B?ME1zUFJLRGN6bkJLbnVYaFo1bDVablM4c1VpTFYrUWg2T2g5QkRsbm1PNldO?=
+ =?utf-8?B?QTgwZEVmUEtOK0QvSDZoRjZrd1dpTUJJZlVPdlpCdC9rMU1YbDBJTlRMcmZY?=
+ =?utf-8?B?TXE5SjdTbFRWSE9xYUk2WTlCNWNxZ2EzcXhZalh4a1dIYUFtL1JlaEJmclpC?=
+ =?utf-8?B?NitoWXBXUERobTNQTnhBZWVXZDdqMUdFMFUvWjBIRVh4WC9YNzI5UEJDaUNS?=
+ =?utf-8?B?ZEFUKzRIYVhTL3BrNUpsRlQ5MlFoZVZxMWpzbGR4Zyt1eHBJVlNqZldDbUZu?=
+ =?utf-8?B?NVAwcW56dGNXNGR0M0hEZ0hNVVVOQUtNclovMmtNY2VXZTJpUHZUTTlyZ3hu?=
+ =?utf-8?B?WkN6SHhOcnVFM1k2UlFyVXBnQ0tlK0RLUDhDYVdYWTdKNjhKUlVVRm41dFI3?=
+ =?utf-8?B?ZDM0N0tqK1FTZVVaa3BkdkZDdUdNVmN5UU9NRDl4cjFPU0ExOExibkNLQjVH?=
+ =?utf-8?B?WnFsVlJscXFxMEVaQjBTclkvTlMyQjh2bnFpZUxKc1gwVzFOQWozZ2F2Wko4?=
+ =?utf-8?B?MWpNY0R1NXdHc2pFUkh6MmV3RW9pbzlVU2Q4NjVxYmF5blhCa1JRUWgxbVQz?=
+ =?utf-8?B?dGZLeHdoSis3dHQxcmpVMGlYZXR6Sk40U3VTZmdPN0lHeWhjS0hSSFB5RmpV?=
+ =?utf-8?B?RHJSZmRqTHNZZXp0U1hRejNQU3UwZGMxT2dtNjU0RTloVVpWL2ZTbDhDMWdS?=
+ =?utf-8?B?YVNBcG0yZGtvTWZGMTFwSXhKZStmcGJoUzNRcEtpU0RBYkUyOGduSThxV1Ir?=
+ =?utf-8?B?alFJOEJLb25xVXMyWitWQTdYVi9jMVVyd0VYUlpnRVhPelZwTDlFdnB4a3l2?=
+ =?utf-8?B?bEpOU3NKbVhWOGhpZG1vbmdjQ0JrcmRBTDNUemtxODhRNU5MdTZrdVV3Zjd4?=
+ =?utf-8?B?UXhEK011ZW1WSFNCVTBvK1gvdGxPWDNPcGxzZW9kWnNIRUVqbWVkTnpnTWFX?=
+ =?utf-8?B?eUpuenh0ekVxejRIa2R1UVZ0Tk00Z2ZWSVVCZjNMRXBwYjlIZDVYMUhKcjRQ?=
+ =?utf-8?Q?arbjoRpocKeffczl43VTZFLb8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f70035ff-ac19-4a89-db86-08de17d6b537
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2025 17:06:47.1383
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RYAk57eoH/FScgRl2oMBNSQvXRWP4jDmtNqvMMgnuhMHIZiwOIwuBUehFOUaBUg/saAugjGc56Hp9Qw7yDXwzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6386
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/martin.lau/bpf-next.git ls.rqspin.v2.2
-head:   b735af227349c9ef167cae8acf8bc8864e13f636
-commit: b735af227349c9ef167cae8acf8bc8864e13f636 [3/3] [DONT PUSH]
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251030/202510301735.G36o9EqL-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301735.G36o9EqL-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510301735.G36o9EqL-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/bpf_local_storage.c:497:29: warning: variable 'owner_storage_ptr' set but not used [-Wunused-but-set-variable]
-     497 |         struct bpf_local_storage **owner_storage_ptr;
-         |                                    ^
-   1 warning generated.
+On 10/23/2025 11:50 PM, Jason Gunthorpe wrote:
+> None of this is used anymore, delete it.
+> 
+> Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> Reviewed-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
 
-vim +/owner_storage_ptr +497 kernel/bpf/bpf_local_storage.c
+Reviewed-by: Vasant Hegde <vasant.hegde@amd.com>
 
-450af8d0f6be2e7 KP Singh         2020-08-25  490  
-450af8d0f6be2e7 KP Singh         2020-08-25  491  int bpf_local_storage_alloc(void *owner,
-450af8d0f6be2e7 KP Singh         2020-08-25  492  			    struct bpf_local_storage_map *smap,
-b00fa38a9c1cba0 Joanne Koong     2022-03-17  493  			    struct bpf_local_storage_elem *first_selem,
-b00fa38a9c1cba0 Joanne Koong     2022-03-17  494  			    gfp_t gfp_flags)
-450af8d0f6be2e7 KP Singh         2020-08-25  495  {
-450af8d0f6be2e7 KP Singh         2020-08-25  496  	struct bpf_local_storage *prev_storage, *storage;
-450af8d0f6be2e7 KP Singh         2020-08-25 @497  	struct bpf_local_storage **owner_storage_ptr;
-16b59442646c808 Amery Hung       2025-10-02  498  	struct bpf_local_storage_map_bucket *b;
-16b59442646c808 Amery Hung       2025-10-02  499  	unsigned long flags;
-450af8d0f6be2e7 KP Singh         2020-08-25  500  	int err;
-450af8d0f6be2e7 KP Singh         2020-08-25  501  
-450af8d0f6be2e7 KP Singh         2020-08-25  502  	err = mem_charge(smap, owner, sizeof(*storage));
-450af8d0f6be2e7 KP Singh         2020-08-25  503  	if (err)
-450af8d0f6be2e7 KP Singh         2020-08-25  504  		return err;
-450af8d0f6be2e7 KP Singh         2020-08-25  505  
-4855a75ebf485f7 Hou Tao          2025-01-08  506  	if (smap->bpf_ma)
-6ae9d5e99e1dd26 Martin KaFai Lau 2023-03-22  507  		storage = bpf_mem_cache_alloc_flags(&smap->storage_ma, gfp_flags);
-4855a75ebf485f7 Hou Tao          2025-01-08  508  	else
-e9aae8beba825e4 Roman Gushchin   2020-12-01  509  		storage = bpf_map_kzalloc(&smap->map, sizeof(*storage),
-b00fa38a9c1cba0 Joanne Koong     2022-03-17  510  					  gfp_flags | __GFP_NOWARN);
-450af8d0f6be2e7 KP Singh         2020-08-25  511  	if (!storage) {
-450af8d0f6be2e7 KP Singh         2020-08-25  512  		err = -ENOMEM;
-450af8d0f6be2e7 KP Singh         2020-08-25  513  		goto uncharge;
-450af8d0f6be2e7 KP Singh         2020-08-25  514  	}
-450af8d0f6be2e7 KP Singh         2020-08-25  515  
-fc6652aab6ad545 Martin KaFai Lau 2023-03-07  516  	RCU_INIT_POINTER(storage->smap, smap);
-450af8d0f6be2e7 KP Singh         2020-08-25  517  	INIT_HLIST_HEAD(&storage->list);
-fe3c7ea310ef417 Amery Hung       2025-10-02  518  	raw_res_spin_lock_init(&storage->lock);
-450af8d0f6be2e7 KP Singh         2020-08-25  519  	storage->owner = owner;
-b735af227349c9e Martin KaFai Lau 2025-10-22  520  	storage->bpf_ma = smap->bpf_ma;
-b735af227349c9e Martin KaFai Lau 2025-10-22  521  	storage->owner_storage_ptr = owner_storage(smap, owner);
-450af8d0f6be2e7 KP Singh         2020-08-25  522  	bpf_selem_link_storage_nolock(storage, first_selem);
-16b59442646c808 Amery Hung       2025-10-02  523  
-16b59442646c808 Amery Hung       2025-10-02  524  	b = select_bucket(smap, storage);
-fe3c7ea310ef417 Amery Hung       2025-10-02  525  	err = raw_res_spin_lock_irqsave(&b->lock, flags);
-fe3c7ea310ef417 Amery Hung       2025-10-02  526  	if (err)
-fe3c7ea310ef417 Amery Hung       2025-10-02  527  		goto uncharge;
-fe3c7ea310ef417 Amery Hung       2025-10-02  528  
-16b59442646c808 Amery Hung       2025-10-02  529  	bpf_selem_link_map_nolock(smap, first_selem, b);
-450af8d0f6be2e7 KP Singh         2020-08-25  530  
-b735af227349c9e Martin KaFai Lau 2025-10-22  531  	owner_storage_ptr = storage->owner_storage_ptr;
-b735af227349c9e Martin KaFai Lau 2025-10-22  532  
-450af8d0f6be2e7 KP Singh         2020-08-25  533  	/* Publish storage to the owner.
-450af8d0f6be2e7 KP Singh         2020-08-25  534  	 * Instead of using any lock of the kernel object (i.e. owner),
-450af8d0f6be2e7 KP Singh         2020-08-25  535  	 * cmpxchg will work with any kernel object regardless what
-450af8d0f6be2e7 KP Singh         2020-08-25  536  	 * the running context is, bh, irq...etc.
-450af8d0f6be2e7 KP Singh         2020-08-25  537  	 *
-450af8d0f6be2e7 KP Singh         2020-08-25  538  	 * From now on, the owner->storage pointer (e.g. sk->sk_bpf_storage)
-450af8d0f6be2e7 KP Singh         2020-08-25  539  	 * is protected by the storage->lock.  Hence, when freeing
-450af8d0f6be2e7 KP Singh         2020-08-25  540  	 * the owner->storage, the storage->lock must be held before
-450af8d0f6be2e7 KP Singh         2020-08-25  541  	 * setting owner->storage ptr to NULL.
-450af8d0f6be2e7 KP Singh         2020-08-25  542  	 */
-b735af227349c9e Martin KaFai Lau 2025-10-22  543  	prev_storage = cmpxchg(unrcu_pointer(storage->owner_storage_ptr), NULL, storage);
-450af8d0f6be2e7 KP Singh         2020-08-25  544  	if (unlikely(prev_storage)) {
-16b59442646c808 Amery Hung       2025-10-02  545  		bpf_selem_unlink_map_nolock(first_selem);
-fe3c7ea310ef417 Amery Hung       2025-10-02  546  		raw_res_spin_unlock_irqrestore(&b->lock, flags);
-450af8d0f6be2e7 KP Singh         2020-08-25  547  		err = -EAGAIN;
-450af8d0f6be2e7 KP Singh         2020-08-25  548  		goto uncharge;
-450af8d0f6be2e7 KP Singh         2020-08-25  549  
-450af8d0f6be2e7 KP Singh         2020-08-25  550  		/* Note that even first_selem was linked to smap's
-450af8d0f6be2e7 KP Singh         2020-08-25  551  		 * bucket->list, first_selem can be freed immediately
-450af8d0f6be2e7 KP Singh         2020-08-25  552  		 * (instead of kfree_rcu) because
-450af8d0f6be2e7 KP Singh         2020-08-25  553  		 * bpf_local_storage_map_free() does a
-0fe4b381a59ebc5 KP Singh         2021-12-24  554  		 * synchronize_rcu_mult (waiting for both sleepable and
-0fe4b381a59ebc5 KP Singh         2021-12-24  555  		 * normal programs) before walking the bucket->list.
-450af8d0f6be2e7 KP Singh         2020-08-25  556  		 * Hence, no one is accessing selem from the
-450af8d0f6be2e7 KP Singh         2020-08-25  557  		 * bucket->list under rcu_read_lock().
-450af8d0f6be2e7 KP Singh         2020-08-25  558  		 */
-450af8d0f6be2e7 KP Singh         2020-08-25  559  	}
-fe3c7ea310ef417 Amery Hung       2025-10-02  560  	raw_res_spin_unlock_irqrestore(&b->lock, flags);
-450af8d0f6be2e7 KP Singh         2020-08-25  561  
-450af8d0f6be2e7 KP Singh         2020-08-25  562  	return 0;
-450af8d0f6be2e7 KP Singh         2020-08-25  563  
-450af8d0f6be2e7 KP Singh         2020-08-25  564  uncharge:
-b735af227349c9e Martin KaFai Lau 2025-10-22  565  	bpf_local_storage_free(storage, smap, true);
-450af8d0f6be2e7 KP Singh         2020-08-25  566  	mem_uncharge(smap, owner, sizeof(*storage));
-450af8d0f6be2e7 KP Singh         2020-08-25  567  	return err;
-450af8d0f6be2e7 KP Singh         2020-08-25  568  }
-450af8d0f6be2e7 KP Singh         2020-08-25  569  
+-Vasant
 
-:::::: The code at line 497 was first introduced by commit
-:::::: 450af8d0f6be2e7dd2a528a3fb054bb726bf1747 bpf: Split bpf_local_storage to bpf_sk_storage
-
-:::::: TO: KP Singh <kpsingh@google.com>
-:::::: CC: Alexei Starovoitov <ast@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
