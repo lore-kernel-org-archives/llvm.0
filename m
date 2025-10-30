@@ -1,72 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237EA36CE18;
-	Thu, 30 Oct 2025 18:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EF32BE057;
+	Thu, 30 Oct 2025 18:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761847678; cv=none; b=OFwmEsDohsxQOQi63GGsVERuuEEMy+2zJBXj4oTXxpvBDKWr3LD0vcCTuEXZE3UT9vAMavRmFCfuFLNKLmAyWXPfJbni/3YewtjOF4G2plVAqmf8pldVCrC3qxo6faj/eNlYHA3j0YLNcSnOnquxO5TzDXRBQzikSsYhUpIgn9k=
+	t=1761850055; cv=none; b=Jeh/r3TjxDFZ0TeVYZDwyvNIq7YwcMp2iytfp7zHwc3cVQYrmVEUZlLD8ncAVk88EdD/LAvYuxcEY71vCaJQsRIu9MOdz8Z9c38AXWbHEUDb2Jq75OZrzRp3J+5TWVaxUS3AyrjzcvrmW1GlSfDVVOXwLyQHvD1eton7LKh3p6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761847678; c=relaxed/simple;
-	bh=iP/s4UAA9B2nPL0oz7dCcsbvxDo5KsExttoOXbiI4jw=;
+	s=arc-20240116; t=1761850055; c=relaxed/simple;
+	bh=+lPIhU9oLRT2DNBRbSaWQZLvInycZwA/F5Yg+RVlfek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RPfqLVaZVpzi4Nkmxy3N0e8OntPPFg8F7GVN/7DNEzQfrxGhCU/B9XDmY2sUJD4maMrl1ajk7MUqZrjNiT3dvm9rcLWrsAyx+CDi7+WqEORAa7y/W5FU1//3VNNuDpOnmXI7bo0HK4VrKR9VJo7KqNn/X/j3DDOfjMAiKzbrFyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OzR1+CTa; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=idrA1XjWBjcLl9irmxsNtBGK0wII4bgHFEmsxSISSG6OLsAKTgroY3c6RrFvTJ556rUBnhXkPx7VHFaQa92KDF+y1YXh77nSd0v8a+ppUd0FDTKysLA/DRNADkG06DoxiS1WL753H5rFgHPcvbCUmLiTiY3RJ7bPbzLyMJkwegs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKRx00lu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OzR1+CTa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761847677; x=1793383677;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iP/s4UAA9B2nPL0oz7dCcsbvxDo5KsExttoOXbiI4jw=;
-  b=OzR1+CTaqF1mLQwL5NeOqUBtdVdcbuSiMYT6605CO7d83+mMLUkNTKvQ
-   +cJqPyFZ19QJxpHL7w3PjaHHQzRAmTIToUkJVT/MNEpmAptjfmIpHGZ4k
-   KWU3islokpTYpwOXFkhYnWimF6NATPzs2OnPV5XU7yTA4AahT3luYkBuj
-   JuBqXsIv9QXf77/vi2/riwXDFq0FSD+72z7Y6kf58TQQRsoTFibnWHgru
-   i33tP5Xa7SAfdrkFpoWi43mDunehjd4decOI1t2ZyfaM8A6d8VcIi9Aix
-   3qltfaArs08eRYTVQ+mKt6PZ2KhHLvTfzj9FzU2DiC4oNsOGL2doIMniq
-   w==;
-X-CSE-ConnectionGUID: D8ETlMFzQlKl05Vw8wlqBw==
-X-CSE-MsgGUID: UkOv2SVTTCWCzR0lFSAwTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="67652090"
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="67652090"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 11:07:57 -0700
-X-CSE-ConnectionGUID: 9p/tDAhTRCCj2jfvrIEJuA==
-X-CSE-MsgGUID: lUJf09szRfOicaHLR05gkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="185232151"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 30 Oct 2025 11:07:52 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEX3p-000MNw-1s;
-	Thu, 30 Oct 2025 18:07:46 +0000
-Date: Fri, 31 Oct 2025 02:06:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lyude Paul <lyude@redhat.com>, dri-devel@lists.freedesktop.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Danilo Krummrich <dakr@kernel.org>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKRx00lu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88641C4CEF8;
+	Thu, 30 Oct 2025 18:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761850054;
+	bh=+lPIhU9oLRT2DNBRbSaWQZLvInycZwA/F5Yg+RVlfek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fKRx00luoUuis2jNcgqMkgqu4iUMUK4H+lbqxh8k6PwxOYKkrl7PmaS/Duks/uzB0
+	 1bYMPRHr0icbs3OssV0FeI/IbDXAsVhMqPIjeNGRGxdey4LGCtmKI9h7hb44nXwEFr
+	 GXY8KuZdpWN81Gf3lB7TD76+plyYNR4Ly5xHs80l/fJR4j5XljNVD1S5LE/PN/LQFU
+	 Vt6QnlMGZypWkR+/8NLlFVVnIjMTE4tZJj28vQF2H1973TxxLdAXwkj4DGDTFa2m5+
+	 tM+fv5cw+maM9WF16DEgghvNjGkZRiH5w/8+Y39KtARusISggaqHH92LrNS7BBjjtm
+	 +bvOkycw45IFw==
+Date: Thu, 30 Oct 2025 11:47:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: James Clark <james.clark@linaro.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
 	Robin Murphy <robin.murphy@arm.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>
-Subject: Re: [PATCH] rust/dma: Take &mut self in
- CoherentAllocation::field_write()
-Message-ID: <202510310102.NdHj0ur8-lkp@intel.com>
-References: <20251028211801.85215-1-lyude@redhat.com>
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Guodong Xu <guodong@riscstar.com>,
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] dma-mapping: Allow use of DMA_BIT_MASK(64) in global
+ scope
+Message-ID: <20251030184728.GA694763@ax162>
+References: <20251030-james-fix-dma_bit_mask-v1-1-ad1ce7cfab6e@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,42 +51,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251028211801.85215-1-lyude@redhat.com>
+In-Reply-To: <20251030-james-fix-dma_bit_mask-v1-1-ad1ce7cfab6e@linaro.org>
 
-Hi Lyude,
+On Thu, Oct 30, 2025 at 02:05:27PM +0000, James Clark wrote:
+> Clang doesn't like that (1ULL<<(64)) overflows when initializing a
+> global scope variable, even if that part of the ternary isn't used when
+> n = 64. The same initialization can be done without warnings in function
+> scopes, and GCC doesn't mind either way.
+> 
+> The build failure that highlighted this was already fixed in a different
+> way [1], which also has detailed links to the Clang issues. However it's
+> not going to be long before the same thing happens again, so it's better
+> to fix the root cause.
 
-kernel test robot noticed the following build errors:
+Yeah, it already has since the instance you bring up below:
 
-[auto build test ERROR on 3b83f5d5e78ac5cddd811a5e431af73959864390]
+https://git.kernel.org/gregkh/usb/c/93741bd104ce07a790519ecee3a331ee7cf61ae3
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lyude-Paul/rust-dma-Take-mut-self-in-CoherentAllocation-field_write/20251029-052034
-base:   3b83f5d5e78ac5cddd811a5e431af73959864390
-patch link:    https://lore.kernel.org/r/20251028211801.85215-1-lyude%40redhat.com
-patch subject: [PATCH] rust/dma: Take &mut self in CoherentAllocation::field_write()
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251031/202510310102.NdHj0ur8-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310102.NdHj0ur8-lkp@intel.com/reproduce)
+> Fix it by using GENMASK_ULL() which does exactly the same thing, is much
+> more readable anyway, and doesn't have a shift that overflows.
+> 
+> [1]: https://lore.kernel.org/all/20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com/
+> 
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510310102.NdHj0ur8-lkp@intel.com/
+Thanks, this should hopefully be fixed in clang relatively soon [1] but
+you are right that there is nothing to stop this from occuring again,
+especially since older clang versions will still be impacted by this
+behavior. My basic testing shows that this should be equivalent so:
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
->> error[E0596]: cannot borrow value as mutable, as it is not declared as mutable
-   --> samples/rust/rust_dma.rs:70:13
-   |
-   70 |             kernel::dma_write!(ca[i] = MyStruct::new(value.0, value.1))?;
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ cannot borrow as mutable
-   |
-   = note: this error originates in the macro `$crate::dma_write` which comes from the expansion of the macro `kernel::dma_write` (in Nightly builds, run with -Z macro-backtrace for more info)
-   help: consider changing this to be mutable
-   |
-   66 |         let mut ca: CoherentAllocation<MyStruct> =
-   |             +++
+[1]: https://github.com/llvm/llvm-project/pull/163885
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  include/linux/dma-mapping.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+> index 8248ff9363ee..2ceda49c609f 100644
+> --- a/include/linux/dma-mapping.h
+> +++ b/include/linux/dma-mapping.h
+> @@ -90,7 +90,7 @@
+>   */
+>  #define DMA_MAPPING_ERROR		(~(dma_addr_t)0)
+>  
+> -#define DMA_BIT_MASK(n)	(((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> +#define DMA_BIT_MASK(n)	GENMASK_ULL(n - 1, 0)
+>  
+>  struct dma_iova_state {
+>  	dma_addr_t addr;
+> 
+> ---
+> base-commit: e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
+> change-id: 20251030-james-fix-dma_bit_mask-624dbeb89afa
+> 
+> Best regards,
+> -- 
+> James Clark <james.clark@linaro.org>
+> 
