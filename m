@@ -1,128 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707722F39D4;
-	Fri, 31 Oct 2025 02:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46D226FDAC
+	for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 03:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761878193; cv=none; b=mp5h25Zqwj9sYOzyVlpcs3HT92gWJHmqtTXmHI6dTucCiVYrED20Hv134GPlM8493YWbkzM2m0Hm/mlqpvsnJ+7IvGqtwj/BbZ7tHxKsqiJ0us3806EM3Gwqx8rVgVLNiddR4ObiJVBfoPOYGaBAHmyoYHhgFC/AGwUZh8aTIas=
+	t=1761881357; cv=none; b=ZV2o+DZr58nGUIuoeEtel6cdf6k2503SjT+JsDSdP3BUA63FzsrjjfGcWq+Xj3IxuyqZ0OKgGH/bzUsfPj0WtLMX5PrG+HnBuoL3y4Z65/qbuWsT8oooGGcdbuDouOkSpRDG5f6z9kuFEk8+QNZV/j3utXGDxT0N51kH/2iZXWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761878193; c=relaxed/simple;
-	bh=Q8Iuy7jom1qrVMcMIdkOiE/4mAQVRGxUv0/PCSeVcIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PUueoEO6rnyMeHXzM0l1cD6kyV2saaAkqNBpIObM1eWpSTmWy4uJe0INIur3frcGzf9cqBU4wsWOc5WCYL4YcnUuGf0G1GZYAUPWDBnSYJAVHOgepEej1pxVTynFBpFJ5plhmSJo5/H3TGmKRK5NcS3r/XEsK9Ca3okSIdiBm8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nn3NAWeA; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761881357; c=relaxed/simple;
+	bh=EovJZ3H2L4Q0SNA6DoOp6SOEnC85TeRHfl6iYZQRCfo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A7hvVoAxQNYrAaedTQbkNVAVqvKMd6Or2svzbOg41lM5h1y5hYDaIjvl6GqV98btBXSR2YbxaHxKeno1ggAIZy9jh22HTK8wbYBX57oAEHgEtt3K0BXnF/wABcnlHOM2TDJaCi6azRNMfiBOZy3m53Xp3RQWrJqTbc7m5rVDd5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NYaBt+li; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nn3NAWeA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761878190; x=1793414190;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q8Iuy7jom1qrVMcMIdkOiE/4mAQVRGxUv0/PCSeVcIk=;
-  b=Nn3NAWeAlP6haeyXSIJYJoYOdHXYzPJmHSzAuYTiK7vHja++Wyz2oB2V
-   Xx7bLBEH3Dzo2FsS0ziZZIgnPxx4Xhhm93ffj7wym5A95HcjvtNps76r/
-   RE997/3aTTH418juNLK4GpP4E7ZcqDD8PJFkrEJVpxDu3rk5+r1w4+omF
-   NpWt2H8KtFO/9yZWmnJ8YwutZWuvGzj1T0m7yaee8d6nPcSxWtSJTKjp4
-   2+LhK8wFN7Lwhorm919d2gMADeQLsp2qv97rxiDNMQOqNbtZHIWrEMo8X
-   DoVLtC8VssNCfVxEWx+BKZ0hU/BbYs2pBv8E5iRHsm0KF5Z8Y9CU/Tvbs
-   g==;
-X-CSE-ConnectionGUID: JGy2Dyl2Q62TEbYfIdB2cg==
-X-CSE-MsgGUID: H2nPrtFJQxeMKwCR3hbhsg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="64072918"
-X-IronPort-AV: E=Sophos;i="6.19,268,1754982000"; 
-   d="scan'208";a="64072918"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 19:36:27 -0700
-X-CSE-ConnectionGUID: DJCcj5AZTH2udAfd45v8Tg==
-X-CSE-MsgGUID: t51r4Gw/SMas4FpbAiyp/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,268,1754982000"; 
-   d="scan'208";a="186217746"
-Received: from igk-lkp-server01.igk.intel.com (HELO c2fcd27ee2f4) ([10.211.93.152])
-  by orviesa008.jf.intel.com with ESMTP; 30 Oct 2025 19:36:24 -0700
-Received: from kbuild by c2fcd27ee2f4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vEf02-0000000017o-1a2F;
-	Fri, 31 Oct 2025 02:36:22 +0000
-Date: Fri, 31 Oct 2025 03:35:59 +0100
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-github:namespace-6.19 13/73] kernel/nstree.c:170:43: error:
- no member named 'type' in 'struct ns_tree'
-Message-ID: <202510310339.Sv9wut8b-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NYaBt+li"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761881354;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N0SmVh2QuJ5jwDo9MjpHJGaXOOC7TR51f3FQJy7JAfY=;
+	b=NYaBt+li5cWirTNFuAx9sZLgdF1TASzd1YoVjGcIHXvV/UjG/Y5p1NBPgxViQfLzgnTWUy
+	6GsrayFnEsxxn0lVyf72c82GJaphnxsxgmlYSdjACim0vm7VFUE9Ntua9A1pir53/rFXVY
+	vsE9dTAyncDy2zZpDA+tobcKRzFizW0=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-bJhFpt_XOkqs4uMplUCEfQ-1; Thu,
+ 30 Oct 2025 23:29:11 -0400
+X-MC-Unique: bJhFpt_XOkqs4uMplUCEfQ-1
+X-Mimecast-MFC-AGG-ID: bJhFpt_XOkqs4uMplUCEfQ_1761881350
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9836E19539BB;
+	Fri, 31 Oct 2025 03:29:09 +0000 (UTC)
+Received: from fedora (unknown [10.72.120.28])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 92C031800598;
+	Fri, 31 Oct 2025 03:29:03 +0000 (UTC)
+Date: Fri, 31 Oct 2025 11:28:57 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Caleb Sander Mateos <csander@purestorage.com>,
+	kernel test robot <lkp@intel.com>, Jens Axboe <axboe@kernel.dk>,
+	linux-block@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Uday Shankar <ushankar@purestorage.com>,
+	Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH V3 2/5] ublk: implement NUMA-aware memory allocation
+Message-ID: <aQQs-S0rYTzwsg-y@fedora>
+References: <20251029031035.258766-3-ming.lei@redhat.com>
+ <202510301522.i47z9R95-lkp@intel.com>
+ <CADUfDZonryeHe1MGTfnUa16VbvEt5C+yu11yh3ZRDbwFqJ_L9w@mail.gmail.com>
+ <20251030175631.GB417112@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251030175631.GB417112@ax162>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-tree:   https://github.com/brauner/linux.git namespace-6.19
-head:   232affb34bfb5be4df33a3e7bc92154e38f74535
-commit: 6696d17cfe2b00c43717aecab6f461e1a68c7b28 [13/73] nstree: introduce a unified tree
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251031/202510310339.Sv9wut8b-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310339.Sv9wut8b-lkp@intel.com/reproduce)
+On Thu, Oct 30, 2025 at 10:56:31AM -0700, Nathan Chancellor wrote:
+> On Thu, Oct 30, 2025 at 07:07:25AM -0700, Caleb Sander Mateos wrote:
+> > On Thu, Oct 30, 2025 at 1:01 AM kernel test robot <lkp@intel.com> wrote:
+> ...
+> > > patch link:    https://lore.kernel.org/r/20251029031035.258766-3-ming.lei%40redhat.com
+> > > patch subject: [PATCH V3 2/5] ublk: implement NUMA-aware memory allocation
+> > > config: x86_64-randconfig-074-20251030 (https://download.01.org/0day-ci/archive/20251030/202510301522.i47z9R95-lkp@intel.com/config)
+> > > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301522.i47z9R95-lkp@intel.com/reproduce)
+> > >
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202510301522.i47z9R95-lkp@intel.com/
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > > >> drivers/block/ublk_drv.c:240:49: error: 'counted_by' argument must be a simple declaration reference
+> > >      240 |         struct ublk_queue       *queues[] __counted_by(dev_info.nr_hw_queues);
+> > >          |                                                        ^~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Hmm, guess it doesn't support nested fields?
+> 
+> Correct. I think this is something that we want to support at some point
+> if I remember correctly but I think there was a lot of discussion
+> between GCC and clang on how to actually do it but Kees is free to
+> correct me if that is wrong.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510310339.Sv9wut8b-lkp@intel.com/
+Thanks for the confirmation.
 
-All errors (new ones prefixed by >>):
+Will remove this __counted_by() in next version.
 
->> kernel/nstree.c:170:43: error: no member named 'type' in 'struct ns_tree'
-     170 |         VFS_WARN_ON_ONCE(ns->ns_type != ns_tree->type);
-         |                                         ~~~~~~~  ^
-   include/linux/vfsdebug.h:37:53: note: expanded from macro 'VFS_WARN_ON_ONCE'
-      37 | #define VFS_WARN_ON_ONCE(cond) BUILD_BUG_ON_INVALID(cond)
-         |                                                     ^~~~
-   include/linux/build_bug.h:30:63: note: expanded from macro 'BUILD_BUG_ON_INVALID'
-      30 | #define BUILD_BUG_ON_INVALID(e) ((void)(sizeof((__force long)(e))))
-         |                                                               ^
-   kernel/nstree.c:297:93: error: no member named 'type' in 'struct ns_tree'
-     297 |         VFS_WARN_ON_ONCE(list_entry_rcu(list, struct ns_common, ns_list_node)->ns_type != ns_tree->type);
-         |                                                                                           ~~~~~~~  ^
-   include/linux/vfsdebug.h:37:53: note: expanded from macro 'VFS_WARN_ON_ONCE'
-      37 | #define VFS_WARN_ON_ONCE(cond) BUILD_BUG_ON_INVALID(cond)
-         |                                                     ^~~~
-   include/linux/build_bug.h:30:63: note: expanded from macro 'BUILD_BUG_ON_INVALID'
-      30 | #define BUILD_BUG_ON_INVALID(e) ((void)(sizeof((__force long)(e))))
-         |                                                               ^
-   2 errors generated.
+Thanks,
+Ming
 
-
-vim +170 kernel/nstree.c
-
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  165  
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  166  void __ns_tree_remove(struct ns_common *ns, struct ns_tree *ns_tree)
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  167  {
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  168  	VFS_WARN_ON_ONCE(RB_EMPTY_NODE(&ns->ns_tree_node));
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  169  	VFS_WARN_ON_ONCE(list_empty(&ns->ns_list_node));
-4055526d35746ce Christian Brauner 2025-09-24 @170  	VFS_WARN_ON_ONCE(ns->ns_type != ns_tree->type);
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  171  
-6696d17cfe2b00c Christian Brauner 2025-10-29  172  	write_seqlock(&ns_tree_lock);
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  173  	rb_erase(&ns->ns_tree_node, &ns_tree->ns_tree);
-6696d17cfe2b00c Christian Brauner 2025-10-29  174  	rb_erase(&ns->ns_unified_tree_node, &ns_unified_tree);
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  175  	list_bidir_del_rcu(&ns->ns_list_node);
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  176  	RB_CLEAR_NODE(&ns->ns_tree_node);
-6696d17cfe2b00c Christian Brauner 2025-10-29  177  	write_sequnlock(&ns_tree_lock);
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  178  }
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  179  EXPORT_SYMBOL_GPL(__ns_tree_remove);
-885fc8ac0a4dc70 Christian Brauner 2025-09-12  180  
-
-:::::: The code at line 170 was first introduced by commit
-:::::: 4055526d35746ce8b04bfa5e14e14f28bb163186 ns: move ns type into struct ns_common
-
-:::::: TO: Christian Brauner <brauner@kernel.org>
-:::::: CC: Christian Brauner <brauner@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
