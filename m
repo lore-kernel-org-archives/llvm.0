@@ -1,89 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57BD329385;
-	Fri, 31 Oct 2025 07:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053E32F12B5
+	for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 08:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761895476; cv=none; b=UM7rXn8pr48CfuJNYu6RJjKx9hgYc/Bs7cGG0GEpw0rAR+Usbj2SzQYOszv0do9bUJjWO2xF3U9mDz2gJKs21R59qTmYOcLtxhDTSOigrDB9XO6YTshVsO8AP5dlYUprDQnTviVvFU5dXHCvOJzVKE/ClF98wb1nhJR8VKowxKs=
+	t=1761897996; cv=none; b=XF76D7S/foXynGaNY1WMuN1JR4PwInNATW5z1PzA8E9RY7hLwWnl0mHRid2bCs/5b3Lkrwkh4AjUlF8SFyjewwTkhwbQazYB1JP0YkvoHx6Fwj2ywb5YMvLWbzVHTfNszSIDy5xn7+uDFUY/ZyJ45smmgWu32KvTdB9QqHRGPIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761895476; c=relaxed/simple;
-	bh=etsA7DMDGlHa2EKAk8aJtFmR84OwwPDSpcbJxRX3u8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jfsJbVv6M9+jrV+BIuJjSb0J7+LkYnAQP/y+utu1zJpRN7E89UWRc0Wsa1IKrfS7jTDzBx1U8h3vaENaYC4UIsGIggvA583HdwhHpfwr+95Cc/oMpgO0/wiojg/rBF8fPUmFxm1xEv39QIftghFYoAYO1Pxaqc4TeGj7FjpcXT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N/fOGu6a; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761897996; c=relaxed/simple;
+	bh=UuG3+VCNBbYpzeZ0dxVY03iZi2WsaJI6aqGWnRdi9IE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oGqlMPzGCYDp8ERpp4VYaMd30sKkE1UAymWz0sdBkv3kQuql6h6WVCP/iVo6UkUpaAnUqjVxCjq8IcXK1wldavLX0IozEeHkKEq393ooYoL8UROMWIey1Bz0gQnGfrTVuVvRCc3VRvq0HY/9/9YPAFkuMn8JYtcIMFNIdPVv2/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCuWqJE2; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N/fOGu6a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761895473; x=1793431473;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=etsA7DMDGlHa2EKAk8aJtFmR84OwwPDSpcbJxRX3u8A=;
-  b=N/fOGu6ah6h6VrvXcwzpRBFCd943ZEaoFsbSpn1NV2EdojpwSrHXOWe1
-   kyFi8/Bttd64S/D18I41oWJwoTqoousib7ER9791hkD3RCnml0wuhi3rB
-   V5ZgKEs2katj+ZT7j7+Vvnxf3fuGKLw2rdSbB4dJ8PBqBlIqnBSR8iroI
-   0fSiDiX8jfk/kLp1MUHHpgrB+ey8Q2EmBYUZkmZTansuIKNKCQoVgGKUZ
-   HdGFpRKwGBpw2+CYAHqauC7bRtd0ijQ5nVz2y54j5P1/APX6TtEYhyzYc
-   dTniMGDacavmOYKgjq7fvpkvf24IMd+s6rWRldHsvfW2xg90dmwVbqv62
-   A==;
-X-CSE-ConnectionGUID: l+kwuaRpT2mwxZiDUBI+BA==
-X-CSE-MsgGUID: +6a5PkN2R3+JMq9A/X8SvA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="75399720"
-X-IronPort-AV: E=Sophos;i="6.19,268,1754982000"; 
-   d="scan'208";a="75399720"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 00:24:33 -0700
-X-CSE-ConnectionGUID: GV4fVGtOQCuFVsCBwLJ7wg==
-X-CSE-MsgGUID: 467kVVMGREmynpL71I7SAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,268,1754982000"; 
-   d="scan'208";a="186281757"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 31 Oct 2025 00:24:32 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEjUr-000MrI-05;
-	Fri, 31 Oct 2025 07:24:29 +0000
-Date: Fri, 31 Oct 2025 15:23:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [tip:core/rseq 39/42] vmlinux.o: error: objtool:
- irqentry_exit+0x323: call to class_user_rw_access_destructor() with UACCESS
- enabled
-Message-ID: <202510311508.2nnmAG7r-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCuWqJE2"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-294fb21b068so20751525ad.1
+        for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 01:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761897994; x=1762502794; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IeLVIXwO7uVSd7Eb1bLuSghidWP97pKx/canepqCQWw=;
+        b=TCuWqJE2QPjU+uiG2gM26xDcwT35QuzB4hcerxFjLk3E/yaSDpb54jAhwgDvIrCD/I
+         TNr0i4Rm+OUg/ZEx9r0tOukLVjH49Q1rGONmPaWhJ50l68Z0lAt+F4D1iqI2TzB4Je0+
+         pc1PZJhEgN4tIifShZ7SLm7TdGVg/6yaeshGALLfT5qSCwEEK35QiKe3oY8uFSZAdmcK
+         bG41PscgbbsfrgduS4hdsovEC+gIJG42wrvtAxVDMQmIsXbFW8Mi/8gBMv/UXwryBGzE
+         7vknIH3a2+l+WCfzg5qzWVOd3xcXGcfiAPub8YcWvgEX/kARltF8fvpwjTDhV735gxCI
+         sXCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761897994; x=1762502794;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IeLVIXwO7uVSd7Eb1bLuSghidWP97pKx/canepqCQWw=;
+        b=cVGkmNbB5PAxaOkiexrsaf23KGDEWYveFRgICgCYOA6AuuyNKy/AQoUgQFEoQ0h1Ny
+         I82n7vbXErEhzjEQjSFpaa+/XtUXGsmdcF+LPKhe01s4Hfla5V44+HYpG6yKb3nXByj2
+         kOPS3ttRe0HwOw6EOCBLM9XnP/WbOt41O39Vxl/difNFpE3JLqz6X3AI7IAeZMFQiW9n
+         VO4Q7hynPaAvIIXRCzUF8PaQp/62BFcmi6zY83CxY43hP2hn9XIhms7ZE/1k6Yf2G8py
+         jb5OyAhUFJolmHyY7SVTop4+s97s9vyzm+MHaOlxwQL+5wlsr3D/bCiTwpOBNV8KyKAJ
+         GVDw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhjvZPD6JGYfN4wKaxQ+BsPiO8RkipmeNkxsC3WmGAdW/gkCU7B7akrvoIocLrCVUlO5vE@lists.linux.dev
+X-Gm-Message-State: AOJu0YwrwPhWlhZSbhx+vCHQwLIyfElERz/mLE/X6m36D2++2vX0yMSA
+	IWWTA1AFSkAGQCZh2YoiZ+NSVKJgkVbrtaicbqR7aJOJwqlqX59uzArPRptAbiZe
+X-Gm-Gg: ASbGnctD7VndCFxs2+0J5ToYNeEo03LLDdjTpEDGedYjt0xHGIdQJn5P1Mo0wm47imd
+	YpVA9tdns9IvOoCoeIZCE1+zoYuYzQQRqDq27ly05yXfD+pR5cnUrj2847BHzl1Z+bfHnYtG+hx
+	0D2YO91yz7QjogA8qTl3//+RsMrXXXphS1Rbva9yn6W06KR+Zk4/ggyLwhhCdGQgx7AedHwOC5z
+	rFeVy3hMUtRCmAp2xe/TFEyGdsdSz1gTgjLyyoFSDmX1/8v9jzpK806DQOI5gAbvROLqLeqZoTh
+	q3xLXTtmCR93epHIw1eySpwcX/1GlrNJgL8dxZYEnTCLaDFuKeMbonmHeG4qhJRb0g72eyMkzT/
+	/GLZXHSLglrkli1pXCx91t271ndLpIFTXQuqXgNiz9pSR9WezCyOwNHZJ+viHZLUTJZWYmz1WEb
+	vNn6ORCkjUOoPwibY9DwY9uEODkoWDTkoq4Z3IMIr7KL+mElstcBbWlUiupdyCgRk=
+X-Google-Smtp-Source: AGHT+IGhFLRMuVYsJyg0Hk0qGxv9T+7d4+7cAQ0FGbKkkh0amDTMd2Acnw8xiF99bDeg05kFkWf4ow==
+X-Received: by 2002:a17:902:b70f:b0:294:e8a0:382b with SMTP id d9443c01a7336-2951a4f767dmr25011125ad.54.1761897993644;
+        Fri, 31 Oct 2025 01:06:33 -0700 (PDT)
+Received: from DESKTOP-RD0GVCL.localdomain (124-218-195-161.cm.dynamic.apol.com.tw. [124.218.195.161])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2952699c9fbsm14113245ad.82.2025.10.31.01.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 01:06:33 -0700 (PDT)
+From: LiangCheng Wang <zaq14760@gmail.com>
+Date: Fri, 31 Oct 2025 16:06:30 +0800
+Subject: [PATCH] drm/tiny: pixpaper: Prevent inlining of send helpers to
+ reduce stack usage
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251031-fix_202510270858-v1-1-6b111d475ce2@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAVuBGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDA2ND3bTMingIx8jcwMLUQtco1cTMxDjJwMDUxFQJqK2gKBWoBmxkdGx
+ tLQBOGmBZYgAAAA==
+X-Change-ID: 20251031-fix_202510270858-2e4643b00545
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+ LiangCheng Wang <zaq14760@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761897992; l=2818;
+ i=zaq14760@gmail.com; h=from:subject:message-id;
+ bh=UuG3+VCNBbYpzeZ0dxVY03iZi2WsaJI6aqGWnRdi9IE=;
+ b=mK5+SYBvGWn62MR/m+GdIu/nNPFIfMwQ2E2Ch9x0cFaUiEx+6Qf7V8YKLzV6lC9dvp44QfwL4
+ MS+Nsbaq2KSA97KntzVW89WCREuwcThUpa6N6adNPMod4GcASuBpKkk
+X-Developer-Key: i=zaq14760@gmail.com; a=ed25519;
+ pk=/x4391DbJ19fFQI7t33HWt3lsHfYPl2I2ax8C+Vxr+M=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/rseq
-head:   69c8e3d1610588d677faaa6035e1bd5de9431d6e
-commit: 84eeeb00203526c29135d5352833d01e53fc1e16 [39/42] rseq: Switch to fast path processing on exit to user
-config: x86_64-randconfig-016-20251031 (https://download.01.org/0day-ci/archive/20251031/202510311508.2nnmAG7r-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510311508.2nnmAG7r-lkp@intel.com/reproduce)
+Clang reports that pixpaper_panel_hw_init() exceeds the 8 KB stack
+frame limit:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510311508.2nnmAG7r-lkp@intel.com/
+    drivers/gpu/drm/tiny/pixpaper.c:579:12: warning:
+      stack frame size (20024) exceeds limit (8192)
+      in 'pixpaper_panel_hw_init'
 
-All errors (new ones prefixed by >>):
+This warning occurs because the compiler aggressively inlines
+pixpaper_send_cmd() and pixpaper_send_data() into
+pixpaper_panel_hw_init(), which inflates the estimated stack usage.
 
->> vmlinux.o: error: objtool: irqentry_exit+0x323: call to class_user_rw_access_destructor() with UACCESS enabled
-   vmlinux.o: error: objtool: .altinstr_replacement+0x12cc: redundant UACCESS disable
-   vmlinux.o: error: objtool: .altinstr_replacement+0x12cf: redundant UACCESS disable
+Mark these two helper functions as 'noinline' to prevent inlining.
+This significantly reduces the reported stack usage without changing
+runtime behavior.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202510270858.1GzE6iQg-lkp@intel.com/
+Fixes: c9e70639f591 ("drm: tiny: Add support for Mayqueen Pixpaper e-ink panel")
+Signed-off-by: LiangCheng Wang <zaq14760@gmail.com>
+---
+When building with Clang and frame size warnings enabled
+(-Wframe-larger-than=8192), the compiler reports that
+pixpaper_panel_hw_init() consumes over 20 KB of stack space:
+
+    drivers/gpu/drm/tiny/pixpaper.c:579:12: warning:
+      stack frame size (20024) exceeds limit (8192)
+      in 'pixpaper_panel_hw_init'
+
+This happens because Clang aggressively inlines
+pixpaper_send_cmd() and pixpaper_send_data() into
+pixpaper_panel_hw_init(), causing the calculated stack usage
+to balloon far beyond the warning threshold.
+
+The fix is straightforward: mark these two helper functions as
+'noinline' to prevent inlining. This reduces the reported stack
+usage to within normal limits without changing runtime behavior.
+---
+ drivers/gpu/drm/tiny/pixpaper.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/tiny/pixpaper.c b/drivers/gpu/drm/tiny/pixpaper.c
+index 32598fb2fee7fcdea3ea0696c2bf54404fcffa2e..70e3239adfd0f86f92551991872486380489fb9b 100644
+--- a/drivers/gpu/drm/tiny/pixpaper.c
++++ b/drivers/gpu/drm/tiny/pixpaper.c
+@@ -536,7 +536,7 @@ static void pixpaper_spi_sync(struct spi_device *spi, struct spi_message *msg,
+ 		err->errno_code = ret;
+ }
+ 
+-static void pixpaper_send_cmd(struct pixpaper_panel *panel, u8 cmd,
++static noinline void pixpaper_send_cmd(struct pixpaper_panel *panel, u8 cmd,
+ 			      struct pixpaper_error_ctx *err)
+ {
+ 	if (err->errno_code)
+@@ -556,7 +556,7 @@ static void pixpaper_send_cmd(struct pixpaper_panel *panel, u8 cmd,
+ 	pixpaper_spi_sync(panel->spi, &msg, err);
+ }
+ 
+-static void pixpaper_send_data(struct pixpaper_panel *panel, u8 data,
++static noinline void pixpaper_send_data(struct pixpaper_panel *panel, u8 data,
+ 			       struct pixpaper_error_ctx *err)
+ {
+ 	if (err->errno_code)
+
+---
+base-commit: d127176862a93c4b3216bda533d2bee170af5e71
+change-id: 20251031-fix_202510270858-2e4643b00545
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+LiangCheng Wang <zaq14760@gmail.com>
+
