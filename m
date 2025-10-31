@@ -1,59 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92923A1CD;
-	Fri, 31 Oct 2025 19:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A5230B50D;
+	Fri, 31 Oct 2025 20:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761938206; cv=none; b=cebxrdmuPCR8FzSuGsRO7APED4KnBDHbfQDYsRMzWc6Cdt/IBue8e4geaclqbTgpVZGhUhSDTi0pLrHnOkgpDquan+YZfYoVU3SPfIyJYBs9QUW8+AMzz6xyPHg4BT9sz9/YNLhm1zNyLO1O3Hg6Ql2FZJBaNxP3L2L+TknADYQ=
+	t=1761942152; cv=none; b=p3sjLfkmYrNLi+gnnIdaINnFxxiVpGAAf4POu0+LJcAc/FaZg2tINxdeOc/wkajxEwAc/ktzpzvWv9Dm8LiqX2LhzRZeB6/0cXQ95crrgi84MX9MGNIzv+X6ibn+SHEZ3wUX9TmoI0XAFhXchdLf8iZlU7Lb9pyltZ1L6xZukjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761938206; c=relaxed/simple;
-	bh=+9/UpViqJdn5LB/o1uEYW5FCLD3oDji5OcxpxzRAU+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Go03g278Cm5418hGoYMd/bIAUGepDC/ySN9US5UU+ahoJPIsW6Soq1uQMaSJh8zo7ueJXciGEKPZ+qZPAgbwXTFstHyLKhneQD6VA0jXGjBwXJut+OPS45YSnSZArpZEgUdY1GbIdTeCnb2uD3gGrWzZrAEBj3hRx5y9fCcpDAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T079x+KH; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761942152; c=relaxed/simple;
+	bh=y1D8hn9Sl4ZYB7RrFaRiMdoHrKffc/670nzt3jGiV/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RmMZLoNYtELkNid9tCWaRTPVpHpoZvstXMV1dMeCI9BnRQy6A+NXUk3YvTNhnHF5cLTyiFP0pKFF5IucLZsFHQ5C19yWEV9+SlkEhMrZtStFLPamtjkFckJJQVIRO6YGQY4kLq9GfvX+5Wfl+jhMH9gn/vuyYCiprg8SB/C7SxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZdEJ9tJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T079x+KH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761938205; x=1793474205;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+9/UpViqJdn5LB/o1uEYW5FCLD3oDji5OcxpxzRAU+0=;
-  b=T079x+KHjvGG8ePA7iWd8RLD58SDJzyEGqefpUzyQbmYOFScjrfGYn4m
-   A/McBSBA2BklHvnRBlFwNBiANuLBZnPZERYuodwnA7p9TIfQWWhS3x+eK
-   WjOtEaTIDMBcTcL77GmCLgt1SZLtsT2m4rf+mo+CzQrSqq24fhmT62yor
-   sLjeWr1VvteW6IDTUaTBaEanQEq4GQMY2xvVXpPQre41H7nYlBaIkINE0
-   zyWwpAob7qoFym6tKX7DB5CArnnLioIK6uix5GkPev9/CB9MCpTaIrYTb
-   ZOlM+gItF0jGtRWRz/bbzed1MxPZQge66Ynt+77QHbRZrPiIbFvxBkMLl
-   A==;
-X-CSE-ConnectionGUID: znwFK568R/+xtrvvtPDIiA==
-X-CSE-MsgGUID: 4yHXv7BOT2GGofmmrJdsTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64011142"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64011142"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 12:16:44 -0700
-X-CSE-ConnectionGUID: Gp27Z5oaT06mygqL4SSVsA==
-X-CSE-MsgGUID: syiqhr9ASsWESjVreTgwcA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,270,1754982000"; 
-   d="scan'208";a="217148119"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 31 Oct 2025 12:16:42 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEuc4-000NaO-2P;
-	Fri, 31 Oct 2025 19:16:40 +0000
-Date: Sat, 1 Nov 2025 03:16:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Xiang Gao <xiang@kernel.org>, linux-erofs@lists.ozlabs.org
-Subject: [xiang-erofs:dev-test 2/2] ld.lld: error: relocation R_PPC_ADDR16_HI
- cannot be used against local symbol; recompile with -fPIC
-Message-ID: <202511010331.SSF687V8-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZdEJ9tJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9720C4CEE7;
+	Fri, 31 Oct 2025 20:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761942151;
+	bh=y1D8hn9Sl4ZYB7RrFaRiMdoHrKffc/670nzt3jGiV/s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sZdEJ9tJ/RZI6iBBX32t5YukhuFRlY6K1hb1ZW9BypwQiZBjMSo8ORRWRCiLbzNIU
+	 zZqMb/XyzE19rFbTLbzkv03CkX1MO4zxEtj4Xd1FpsQDG++vh687wRd807J9P1lAQ8
+	 LOYvEZ4IcZWaAGYVnVmGRqy4aBs35SaxqIBkVq8Ek7HYeW7w4s7YRZYHLe83hg7akN
+	 90VO2WBhaaxyBbRxAcpHC78ykJ1ZXH/ZIbIeLzrA5Egb5NOhD4KP0IWbc4D7Hs1Zuu
+	 ONYAPJfoyX8jRTQ1oQ9VlZUl9IoxOvg2dvBwatxkKpRAXA/iSpWxO40lZkNKbs0/5h
+	 LHVJWjocHIKtA==
+Date: Fri, 31 Oct 2025 16:22:26 -0400
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/mm: Ensure clear_page() variants always have
+ __kcfi_typeid_ symbols
+Message-ID: <20251031202226.GA2486902@ax162>
+References: <20251013-x86-fix-clear_page-cfi-full-lto-errors-v1-1-d69534c0be61@kernel.org>
+ <20251030192819.GFaQO8U29xvWcPT_s2@fat_crate.local>
+ <20251031142044.GB3022331@ax162>
+ <20251031144624.GHaQTLwONX3j6aDkkP@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,26 +50,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251031144624.GHaQTLwONX3j6aDkkP@fat_crate.local>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-head:   3bf692888f2707392872a69cd125c800778e72e2
-commit: 3bf692888f2707392872a69cd125c800778e72e2 [2/2] erofs: avoid infinite loop due to incomplete zstd-compressed data
-config: powerpc-randconfig-002-20251101 (https://download.01.org/0day-ci/archive/20251101/202511010331.SSF687V8-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511010331.SSF687V8-lkp@intel.com/reproduce)
+On Fri, Oct 31, 2025 at 03:46:24PM +0100, Borislav Petkov wrote:
+> On Fri, Oct 31, 2025 at 10:20:44AM -0400, Nathan Chancellor wrote:
+> > These errors occur in Linus's tree so could this go before that one then
+> > it could just update the instances of KCFI_ADDRESSABLE? I don't have a
+> > strong opinion, I found these series of errors tangentially but this
+> > feels like something that could go via x86/urgent and that series could
+> > just rebase on it.
+> 
+> Sure, that works too.
+> 
+> I guess we want that in stable too, considering where the Fixes: tag commit
+> landed...?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511010331.SSF687V8-lkp@intel.com/
+Yeah, I should have explicitly tagged this change for stable but I have
+been a little lazy since AUTOSEL often picks up the slack :) If you want
+a resend with that adjusted, let me know.
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against local symbol; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/powerpc/kernel/head_85xx.o)
-   >>> referenced by head_85xx.S:186 (arch/powerpc/kernel/head_85xx.S:186)
-   >>>               arch/powerpc/kernel/head_85xx.o:(.head.text+0x3ea) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
