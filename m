@@ -1,47 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A5230B50D;
-	Fri, 31 Oct 2025 20:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684BF328B72;
+	Fri, 31 Oct 2025 20:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761942152; cv=none; b=p3sjLfkmYrNLi+gnnIdaINnFxxiVpGAAf4POu0+LJcAc/FaZg2tINxdeOc/wkajxEwAc/ktzpzvWv9Dm8LiqX2LhzRZeB6/0cXQ95crrgi84MX9MGNIzv+X6ibn+SHEZ3wUX9TmoI0XAFhXchdLf8iZlU7Lb9pyltZ1L6xZukjg=
+	t=1761942892; cv=none; b=ub+3lx40WEjJGkOELGK+XKL31IfT7ODBt+SwZB4ut5vcjRpHSZmONkNnk3xPCFj5cxUstddAibnTwDXDC8z5hC32+8eRCDGVzCXBDR2+NJT+XdCm0r3KY+y3WukZD3PRejkbudZf8bsEtvr+fIkJEmSThuFtfkc/UwScYeEHV/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761942152; c=relaxed/simple;
-	bh=y1D8hn9Sl4ZYB7RrFaRiMdoHrKffc/670nzt3jGiV/s=;
+	s=arc-20240116; t=1761942892; c=relaxed/simple;
+	bh=eaC3FfZxJWWchwEb1p6d5lCoWti7psSYXuw5oCrNqpM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RmMZLoNYtELkNid9tCWaRTPVpHpoZvstXMV1dMeCI9BnRQy6A+NXUk3YvTNhnHF5cLTyiFP0pKFF5IucLZsFHQ5C19yWEV9+SlkEhMrZtStFLPamtjkFckJJQVIRO6YGQY4kLq9GfvX+5Wfl+jhMH9gn/vuyYCiprg8SB/C7SxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZdEJ9tJ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Et6o6r66CbuOZIWj46IsquyFiDasgC4ybVfh4sNwOXv/jotczsv1dPKRfp7EZaprgvJXdXGA/qm1z1U14bncR+xHkQp1PcCkdV+5CL27514G3qiEtOVb/hmZyvZj7hNPuFdL4Pw0RWQ02N6GWlE220j1681JuqxqUJv+CEWgRMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKCn1nrE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZdEJ9tJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9720C4CEE7;
-	Fri, 31 Oct 2025 20:22:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKCn1nrE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00468C116B1;
+	Fri, 31 Oct 2025 20:34:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761942151;
-	bh=y1D8hn9Sl4ZYB7RrFaRiMdoHrKffc/670nzt3jGiV/s=;
+	s=k20201202; t=1761942891;
+	bh=eaC3FfZxJWWchwEb1p6d5lCoWti7psSYXuw5oCrNqpM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sZdEJ9tJ/RZI6iBBX32t5YukhuFRlY6K1hb1ZW9BypwQiZBjMSo8ORRWRCiLbzNIU
-	 zZqMb/XyzE19rFbTLbzkv03CkX1MO4zxEtj4Xd1FpsQDG++vh687wRd807J9P1lAQ8
-	 LOYvEZ4IcZWaAGYVnVmGRqy4aBs35SaxqIBkVq8Ek7HYeW7w4s7YRZYHLe83hg7akN
-	 90VO2WBhaaxyBbRxAcpHC78ykJ1ZXH/ZIbIeLzrA5Egb5NOhD4KP0IWbc4D7Hs1Zuu
-	 ONYAPJfoyX8jRTQ1oQ9VlZUl9IoxOvg2dvBwatxkKpRAXA/iSpWxO40lZkNKbs0/5h
-	 LHVJWjocHIKtA==
-Date: Fri, 31 Oct 2025 16:22:26 -0400
+	b=mKCn1nrEXYR+sGYuQPxZG5neXvAlbt0EngVb/GV5zXs8b+1Wc2rkekZzILixCS0Ij
+	 2Im4Xkx0kgrfB/SFaa38w5VOmwasbtHrZYFdzD1gn/v4ySgnWf/SSLEtnMwOWJJ/SE
+	 MBFD4Z+W9JkdpSaDRItQW/4l7mEUDyq/pgEElBITM4yWKJ0mz89SJbHKjpL9/wvBUO
+	 HyXqFLBaZox8WOOMon7PYozUn/DDONnnAqyD/oquhp/jo0VFrrxLf/fyxT753hGEEo
+	 eWmFpWl4QJwwRpiyiq7FAe1IUi8OA0UJi0VIFwTrHKvWCArxEIr2aWGePv/okng6+g
+	 NUgFx5hG2KfRQ==
+Date: Fri, 31 Oct 2025 16:34:46 -0400
 From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/mm: Ensure clear_page() variants always have
- __kcfi_typeid_ symbols
-Message-ID: <20251031202226.GA2486902@ax162>
-References: <20251013-x86-fix-clear_page-cfi-full-lto-errors-v1-1-d69534c0be61@kernel.org>
- <20251030192819.GFaQO8U29xvWcPT_s2@fat_crate.local>
- <20251031142044.GB3022331@ax162>
- <20251031144624.GHaQTLwONX3j6aDkkP@fat_crate.local>
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: LiangCheng Wang <zaq14760@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] drm/tiny: pixpaper: Prevent inlining of send helpers to
+ reduce stack usage
+Message-ID: <20251031203446.GD2486902@ax162>
+References: <20251031-fix_202510270858-v1-1-6b111d475ce2@gmail.com>
+ <0d9e5bf4036dc0706fac603764276d2327d0bc69@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,24 +52,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251031144624.GHaQTLwONX3j6aDkkP@fat_crate.local>
+In-Reply-To: <0d9e5bf4036dc0706fac603764276d2327d0bc69@intel.com>
 
-On Fri, Oct 31, 2025 at 03:46:24PM +0100, Borislav Petkov wrote:
-> On Fri, Oct 31, 2025 at 10:20:44AM -0400, Nathan Chancellor wrote:
-> > These errors occur in Linus's tree so could this go before that one then
-> > it could just update the instances of KCFI_ADDRESSABLE? I don't have a
-> > strong opinion, I found these series of errors tangentially but this
-> > feels like something that could go via x86/urgent and that series could
-> > just rebase on it.
+On Fri, Oct 31, 2025 at 10:40:13AM +0200, Jani Nikula wrote:
+> On Fri, 31 Oct 2025, LiangCheng Wang <zaq14760@gmail.com> wrote:
+> > Clang reports that pixpaper_panel_hw_init() exceeds the 8 KB stack
+> > frame limit:
+> >
+> >     drivers/gpu/drm/tiny/pixpaper.c:579:12: warning:
+> >       stack frame size (20024) exceeds limit (8192)
+> >       in 'pixpaper_panel_hw_init'
+> >
+> > This warning occurs because the compiler aggressively inlines
+> > pixpaper_send_cmd() and pixpaper_send_data() into
+> > pixpaper_panel_hw_init(), which inflates the estimated stack usage.
+> >
+> > Mark these two helper functions as 'noinline' to prevent inlining.
+> > This significantly reduces the reported stack usage without changing
+> > runtime behavior.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202510270858.1GzE6iQg-lkp@intel.com/
+> > Fixes: c9e70639f591 ("drm: tiny: Add support for Mayqueen Pixpaper e-ink panel")
+> > Signed-off-by: LiangCheng Wang <zaq14760@gmail.com>
+> > ---
+> > When building with Clang and frame size warnings enabled
+> > (-Wframe-larger-than=8192), the compiler reports that
+> > pixpaper_panel_hw_init() consumes over 20 KB of stack space:
+> >
+> >     drivers/gpu/drm/tiny/pixpaper.c:579:12: warning:
+> >       stack frame size (20024) exceeds limit (8192)
+> >       in 'pixpaper_panel_hw_init'
+> >
+> > This happens because Clang aggressively inlines
+> > pixpaper_send_cmd() and pixpaper_send_data() into
+> > pixpaper_panel_hw_init(), causing the calculated stack usage
+> > to balloon far beyond the warning threshold.
+> >
+> > The fix is straightforward: mark these two helper functions as
+> > 'noinline' to prevent inlining. This reduces the reported stack
+> > usage to within normal limits without changing runtime behavior.
 > 
-> Sure, that works too.
+> I really *really* wish we wouldn't have to go this route at all.
 > 
-> I guess we want that in stable too, considering where the Fixes: tag commit
-> landed...?
+> But if we have to, I think noinline_for_stack is the keyword to use.
 
-Yeah, I should have explicitly tagged this change for stable but I have
-been a little lazy since AUTOSEL often picks up the slack :) If you want
-a resend with that adjusted, let me know.
+For what it's worth, the configuration in the report linked above has
+CONFIG_KASAN_STACK=y, which is known to be broken with clang and
+requires !COMPILE_TEST to even select it (which the robot should be
+using to avoid pathological cases such as this). If I disable
+CONFIG_KASAN_STACK, there is no warning even with a 1024 byte limit, so
+realistically, I think we can just leave this be.
 
 Cheers,
 Nathan
+
+> > ---
+> >  drivers/gpu/drm/tiny/pixpaper.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/tiny/pixpaper.c b/drivers/gpu/drm/tiny/pixpaper.c
+> > index 32598fb2fee7fcdea3ea0696c2bf54404fcffa2e..70e3239adfd0f86f92551991872486380489fb9b 100644
+> > --- a/drivers/gpu/drm/tiny/pixpaper.c
+> > +++ b/drivers/gpu/drm/tiny/pixpaper.c
+> > @@ -536,7 +536,7 @@ static void pixpaper_spi_sync(struct spi_device *spi, struct spi_message *msg,
+> >  		err->errno_code = ret;
+> >  }
+> >  
+> > -static void pixpaper_send_cmd(struct pixpaper_panel *panel, u8 cmd,
+> > +static noinline void pixpaper_send_cmd(struct pixpaper_panel *panel, u8 cmd,
+> >  			      struct pixpaper_error_ctx *err)
+> >  {
+> >  	if (err->errno_code)
+> > @@ -556,7 +556,7 @@ static void pixpaper_send_cmd(struct pixpaper_panel *panel, u8 cmd,
+> >  	pixpaper_spi_sync(panel->spi, &msg, err);
+> >  }
+> >  
+> > -static void pixpaper_send_data(struct pixpaper_panel *panel, u8 data,
+> > +static noinline void pixpaper_send_data(struct pixpaper_panel *panel, u8 data,
+> >  			       struct pixpaper_error_ctx *err)
+> >  {
+> >  	if (err->errno_code)
+> >
+> > ---
+> > base-commit: d127176862a93c4b3216bda533d2bee170af5e71
+> > change-id: 20251031-fix_202510270858-2e4643b00545
+> >
+> > Best regards,
+> 
+> -- 
+> Jani Nikula, Intel
