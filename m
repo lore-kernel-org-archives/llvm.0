@@ -1,208 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1690269AEE;
-	Thu, 30 Oct 2025 22:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715DE243374;
+	Fri, 31 Oct 2025 01:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761863431; cv=none; b=kAZ5pwoWvII06PsHR6eVIyq2Vm231GKXfWzV2hIUXhVuYyvpvJKlQN4/flp8l3V6JyH0umSKZR2AgA+zR5i9ZVjceOD1XdIy5BJYuskYDWKS9qp6lgzfDxJxtfZXN851FoAFbcZDZp3kxUQEBkZzrQlLc1XgkfVw4dbTO4diZec=
+	t=1761874597; cv=none; b=D/+UrIN/feUy7IUORC2rLR9LqY+PLmlNryyU9Db4P87rNdrRTFwDsbhngiEdWQR+GcVWZMl5XKsikDN9gsom19E9uyJvPxNh1bUupRfiCg2u9/2NhK6bUFdWXRCYwVF5FVDSk5/ExBd+PbWXbYtsmNg44qjbIyY9NkBpUSQ/oWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761863431; c=relaxed/simple;
-	bh=HQgTtvdyf5mlcYfQ6PTEH/1obbJOAS6+b0916Esegpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mqRAlMQFC96ubw8BtiQbvwzlQA6gGv4/wNYhQrOGDEbzCWTSHkgTx0Qt0VB4ZtcT754SwAI0PF4V5aD615sj5IvGOXtGGGFBtmHZ90F8/ZLnu1fP+j96TohMbJk5017PkQq+hSTH9ltuUOl9IN1HlUvEQl6nX69Js4n6Z1DFmDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bhgn7Baa; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761874597; c=relaxed/simple;
+	bh=ra98l5vCAiUM9cl/H+7FvfxyjPMgS5+DTDOWdzFcLp0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OeXkJcTeWayWFNcot4nMo8wvFeXZb6AAwQwdAZ+6D7cXwBFLsbiQLRSzNZSM4qiz/i8Fcy3WDNvzsODztZGS3xyB31GGl6B8DPtqIRZfv0B3O5/dMExiitYh6wrjwJA7FU0cCpILFktHVY8eFTUAfKUXmhpp8M11wPkqT+PMos0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=TPtWy7U8; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bhgn7Baa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761863430; x=1793399430;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HQgTtvdyf5mlcYfQ6PTEH/1obbJOAS6+b0916Esegpo=;
-  b=bhgn7BaadKBJ1UiFuM3wXq9ofLhLQY8UsWxyv/bhdklm6MFIY+WQvDMY
-   7RBjycrY8jjF35Br7GNiewC2UPeWVOI8YWMEUGaJ3IsMb0m4Obps6VteB
-   CUUMmUzI+9+1wIut//WnCzFZHIeQOC2XIZ47/P4ptxg4u1rjsN9d4jrK0
-   Zn1JtrdHDNhgp4+2kalA9eA55nMZYpt8XEC+BOc2TkZHid4OihIzfyXfq
-   JKPz2zJSa2F+1nhj6AFd+7B2y5vi97NJfMkZq5/5uFdrNvC5jqA0mEHoN
-   oz72iapsAr+8fNxAg6Rpxqsp3x8nITTbAuW8lfSZeToW0qlyeWb76zfg9
-   w==;
-X-CSE-ConnectionGUID: QlCGBwGZRHOUnTsT3MjXxg==
-X-CSE-MsgGUID: LgrTE4rBSr2z3IjngoQAaw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="51591680"
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="51591680"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 15:30:29 -0700
-X-CSE-ConnectionGUID: 8s9V1NV/TBqxk4UyNpn1gw==
-X-CSE-MsgGUID: OOmffJCdQvmCM4JsgWTEJw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="191223632"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 30 Oct 2025 15:30:27 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEbA0-000MaC-2w;
-	Thu, 30 Oct 2025 22:30:24 +0000
-Date: Fri, 31 Oct 2025 06:29:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haotian Zhang <vulab@iscas.ac.cn>, Lee Jones <lee@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Markus.Elfring@web.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Haotian Zhang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH v2] leds: netxbig: fix GPIO descriptor leak in error paths
-Message-ID: <202510310640.VxJ2qrj2-lkp@intel.com>
-References: <20251030025312.1623-1-vulab@iscas.ac.cn>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="TPtWy7U8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1761874540;
+	bh=6R5YTEFGe8zvvUBTqpI3LLKAzOQSDt5qh5MXI7g06MU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=TPtWy7U85yY956n93JNjZnxwTouJEc5Kcx0XpcLJbOrGkY6dOM5FXJxF8+s3aI9bh
+	 mpwlIMbWR4zFBsl5VQikKO0vcdvCh/f1Nn1J8VlwNE8yzX1c3FgTOGGwkF7Y9e5f5P
+	 mAb2p47vGQno73RI3N21siZoIlvboAgy5kHJWqSI=
+X-QQ-mid: zesmtpsz2t1761874536t3284b2d5
+X-QQ-Originating-IP: UIrVPTkPFuqoK3aussdKWGuZnaeDIiMcqZr0RQVS6iM=
+Received: from [10.10.74.117] ( [123.114.60.34])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 31 Oct 2025 09:35:35 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 17088829782577716598
+Message-ID: <2E76E38A52ABE495+b9e1827e-5180-47a3-86fd-35a8bdcc65c1@uniontech.com>
+Date: Fri, 31 Oct 2025 09:35:34 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251030025312.1623-1-vulab@iscas.ac.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kexec: print out debugging message if required for
+ kexec_load
+To: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
+ bhe@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20251030073316.529106-1-maqianga@uniontech.com>
+ <202510310332.6XrLe70K-lkp@intel.com>
+Content-Language: en-US
+From: Qiang Ma <maqianga@uniontech.com>
+In-Reply-To: <202510310332.6XrLe70K-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-1
+X-QQ-XMAILINFO: MQPu5pFEJFN4wrKCH2h0XbtN7bO0XcPgUjg3fLfFvuX/BN9y/aRyaOfa
+	XkDTJEUFduweHcLzqm2hpEzyn0ZFR2DVS5TVFj5hGvXqly8LacDwyxPJgeFIvgEDGSqBf7U
+	dPYFiD+BpQtpLXK6bHGVBI+2alH+fQRCmerIXHToQ7BHBlryBSKX+IrnmqEeF3guL6roLw3
+	HmSG5G6rMK4YNE1okIV/DHr+o//Hwg/4VwQ/FyUQKzL9DgCA8c0S5aQrE3rZkUtW99+s2BW
+	gux3NNzzI1UvVWJovl9nHSF9ZiomKUo3OK64WcsDft6qjU9vqqxlVASEkUwwlZxX7mcjb5y
+	VK9o4gl4kMDJmt4EVlQl+PPfkQDdXZ0uO8ETmYwaaAJXEYecSXbuj2yuOQn75TNaMvZ4nF/
+	iR6mHAZ+NY5YySIWLBwc3sFnDoL9G2q3zPo6kJjtzJPI2stTb0C3RRB4Az829Gd0IWGe2Ar
+	OFOOD04O+BTivV7IawKGQlLERhwcYlNYi8+jZ/xYYfhaeiVCi9ZGMwcm2sk0q806VOUQJvb
+	HuPwh3fwjlpIHXb/wsDzk6jaRVcNo+adQpkoQFVw3MElG0Jlujf3mXGnV/D/iKwl/MpmcOI
+	61ES85Up1fXSUhGIDycNCv0dE5JWeJ/TOn3jlV9xqbbVhz4STAowZsfdtgyv/OZx9jzfMmx
+	kiznbMnDhhC4jaMCWm3P6+gDzENQosQti+KveKIaK1fBZeci53m723mhzxTCwp9uIHBWg3j
+	VZai3oOCxgEzfVRJHoNnNW7lTMqa5IIeKIyNRv0eNjRjdGkRo62FRxoeK3dm5jrsBNJAjV9
+	dYxFGFPhxFUpvGfMQWOueqsJuc8QA9TfbnOcZw4Kkfprga/U3xTEU8uhuUcbnooYpJfyUwP
+	3PXFfhLhRYX4ts0CKTRFvt6Qn6NG2TPlYMwtyTAIp0MGduhpkeoUT1xUgGQsR+D7Upuc3Rn
+	shvyJrERXqHeAFqiNKIMrCbrIhVxqZSEBt3owIcRe8SkZCXbWrIU0Qpgf7o1Y4LeyPsM0fJ
+	plZPPEZjGZOpjRWfTmilXNcamn4t0=
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 
-Hi Haotian,
 
-kernel test robot noticed the following build warnings:
+在 2025/10/31 03:20, kernel test robot 写道:
+> Hi Qiang,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on linus/master v6.18-rc3 next-20251030]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Qiang-Ma/kexec-print-out-debugging-message-if-required-for-kexec_load/20251030-153807
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20251030073316.529106-1-maqianga%40uniontech.com
+> patch subject: [PATCH] kexec: print out debugging message if required for kexec_load
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251031/202510310332.6XrLe70K-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310332.6XrLe70K-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510310332.6XrLe70K-lkp@intel.com/
+ok.
+> All warnings (new ones prefixed by >>):
+>
+>>> kernel/kexec.c:160:10: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
+>       159 |                 kexec_dprintk("segment[%d]: buf=0x%p bufsz=0x%zx mem=0x%lx memsz=0x%zx\n",
+>           |                                        ~~
+>           |                                        %lu
+>       160 |                               i, ksegment->buf, ksegment->bufsz, ksegment->mem,
+>           |                               ^
+>     include/linux/kexec.h:531:55: note: expanded from macro 'kexec_dprintk'
+>       531 |         do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
+>           |                                                ~~~    ^~~
+>     include/linux/printk.h:585:34: note: expanded from macro 'pr_info'
+>       585 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+>           |                                 ~~~     ^~~~~~~~~~~
+>     include/linux/printk.h:512:60: note: expanded from macro 'printk'
+>       512 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>           |                                                     ~~~    ^~~~~~~~~~~
+>     include/linux/printk.h:484:19: note: expanded from macro 'printk_index_wrap'
+>       484 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>           |                         ~~~~    ^~~~~~~~~~~
+>     1 warning generated.
+Yes, this is an type mismatch, will fix and update in new post, thanks.
+>
+> vim +160 kernel/kexec.c
+>
+>     141	
+>     142		ret = machine_kexec_prepare(image);
+>     143		if (ret)
+>     144			goto out;
+>     145	
+>     146		/*
+>     147		 * Some architecture(like S390) may touch the crash memory before
+>     148		 * machine_kexec_prepare(), we must copy vmcoreinfo data after it.
+>     149		 */
+>     150		ret = kimage_crash_copy_vmcoreinfo(image);
+>     151		if (ret)
+>     152			goto out;
+>     153	
+>     154		kexec_dprintk("nr_segments = %lu\n", image->nr_segments);
+>     155		for (i = 0; i < nr_segments; i++) {
+>     156			struct kexec_segment *ksegment;
+>     157	
+>     158			ksegment = &image->segment[i];
+>     159			kexec_dprintk("segment[%d]: buf=0x%p bufsz=0x%zx mem=0x%lx memsz=0x%zx\n",
+>   > 160				      i, ksegment->buf, ksegment->bufsz, ksegment->mem,
+>     161				      ksegment->memsz);
+>     162	
+>     163			ret = kimage_load_segment(image, i);
+>     164			if (ret)
+>     165				goto out;
+>     166		}
+>     167	
+>     168		kimage_terminate(image);
+>     169	
+>     170		ret = machine_kexec_post_load(image);
+>     171		if (ret)
+>     172			goto out;
+>     173	
+>     174		kexec_dprintk("kexec_file_load: type:%u, start:0x%lx head:0x%lx flags:0x%lx\n",
+>     175			      image->type, image->start, image->head, flags);
+>     176	
+>     177		/* Install the new kernel and uninstall the old */
+>     178		image = xchg(dest_image, image);
+>     179	
+>     180	out:
+>     181	#ifdef CONFIG_CRASH_DUMP
+>     182		if ((flags & KEXEC_ON_CRASH) && kexec_crash_image)
+>     183			arch_kexec_protect_crashkres();
+>     184	#endif
+>     185	
+>     186		kimage_free(image);
+>     187	out_unlock:
+>     188		kexec_unlock();
+>     189		return ret;
+>     190	}
+>     191	
+>
 
-[auto build test WARNING on lee-leds/for-leds-next]
-[also build test WARNING on linus/master v6.18-rc3 next-20251030]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haotian-Zhang/leds-netxbig-fix-GPIO-descriptor-leak-in-error-paths/20251030-105705
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20251030025312.1623-1-vulab%40iscas.ac.cn
-patch subject: [PATCH v2] leds: netxbig: fix GPIO descriptor leak in error paths
-config: sparc64-randconfig-002-20251031 (https://download.01.org/0day-ci/archive/20251031/202510310640.VxJ2qrj2-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310640.VxJ2qrj2-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510310640.VxJ2qrj2-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/leds/leds-netxbig.c:428:1: warning: unused label 'err_free_data' [-Wunused-label]
-     428 | err_free_data:
-         | ^~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/err_free_data +428 drivers/leds/leds-netxbig.c
-
-   335	
-   336	/**
-   337	 * netxbig_gpio_ext_get() - Obtain GPIO extension device data
-   338	 * @dev: main LED device
-   339	 * @gpio_ext_dev: the GPIO extension device
-   340	 * @gpio_ext: the data structure holding the GPIO extension data
-   341	 *
-   342	 * This function walks the subdevice that only contain GPIO line
-   343	 * handles in the device tree and obtains the GPIO descriptors from that
-   344	 * device.
-   345	 */
-   346	static int netxbig_gpio_ext_get(struct device *dev,
-   347					struct device *gpio_ext_dev,
-   348					struct netxbig_gpio_ext *gpio_ext)
-   349	{
-   350		struct gpio_desc **addr, **data;
-   351		int num_addr, num_data;
-   352		struct gpio_desc *gpiod;
-   353		int ret;
-   354		int i;
-   355	
-   356		ret = gpiod_count(gpio_ext_dev, "addr");
-   357		if (ret < 0) {
-   358			dev_err(dev,
-   359				"Failed to count GPIOs in DT property addr-gpios\n");
-   360			return ret;
-   361		}
-   362		num_addr = ret;
-   363		addr = devm_kcalloc(dev, num_addr, sizeof(*addr), GFP_KERNEL);
-   364		if (!addr)
-   365			return -ENOMEM;
-   366	
-   367		gpio_ext->addr = addr;
-   368		gpio_ext->num_addr = 0;
-   369	
-   370		/*
-   371		 * We cannot use devm_ managed resources with these GPIO descriptors
-   372		 * since they are associated with the "GPIO extension device" which
-   373		 * does not probe any driver. The device tree parser will however
-   374		 * populate a platform device for it so we can anyway obtain the
-   375		 * GPIO descriptors from the device.
-   376		 */
-   377		for (i = 0; i < num_addr; i++) {
-   378			gpiod = gpiod_get_index(gpio_ext_dev, "addr", i,
-   379						GPIOD_OUT_LOW);
-   380			if (IS_ERR(gpiod)) {
-   381				ret = PTR_ERR(gpiod);
-   382				goto err_free_addr;
-   383			}
-   384			gpiod_set_consumer_name(gpiod, "GPIO extension addr");
-   385			addr[i] = gpiod;
-   386			gpio_ext->num_addr++;
-   387		}
-   388	
-   389		ret = gpiod_count(gpio_ext_dev, "data");
-   390		if (ret < 0) {
-   391			dev_err(dev,
-   392				"Failed to count GPIOs in DT property data-gpios\n");
-   393			goto err_free_addr;
-   394		}
-   395		num_data = ret;
-   396		data = devm_kcalloc(dev, num_data, sizeof(*data), GFP_KERNEL);
-   397		if (!data) {
-   398			ret = -ENOMEM;
-   399			goto err_free_addr;
-   400		}
-   401	
-   402		gpio_ext->data = data;
-   403		gpio_ext->num_data = 0;
-   404	
-   405		for (i = 0; i < num_data; i++) {
-   406			gpiod = gpiod_get_index(gpio_ext_dev, "data", i,
-   407						GPIOD_OUT_LOW);
-   408			if (IS_ERR(gpiod))
-   409				goto err_gpiod_put;
-   410			gpiod_set_consumer_name(gpiod, "GPIO extension data");
-   411			data[i] = gpiod;
-   412			gpio_ext->num_data++;
-   413		}
-   414	
-   415		gpiod = gpiod_get(gpio_ext_dev, "enable", GPIOD_OUT_LOW);
-   416		if (IS_ERR(gpiod)) {
-   417			dev_err(dev,
-   418				"Failed to get GPIO from DT property enable-gpio\n");
-   419			goto err_gpiod_put;
-   420		}
-   421		gpiod_set_consumer_name(gpiod, "GPIO extension enable");
-   422		gpio_ext->enable = gpiod;
-   423	
-   424		return devm_add_action_or_reset(dev, netxbig_gpio_ext_remove, gpio_ext);
-   425	
-   426	err_gpiod_put:
-   427		ret = PTR_ERR(gpiod);
- > 428	err_free_data:
-   429		for (i = 0; i < gpio_ext->num_data; i++)
-   430			gpiod_put(gpio_ext->data[i]);
-   431	err_free_addr:
-   432		for (i = 0; i < gpio_ext->num_addr; i++)
-   433			gpiod_put(gpio_ext->addr[i]);
-   434		return ret;
-   435	}
-   436	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
