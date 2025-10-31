@@ -1,62 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0520714A4CC;
-	Fri, 31 Oct 2025 12:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7455522655B;
+	Fri, 31 Oct 2025 12:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761913185; cv=none; b=VaOKSLRJdPy1CqwEIiwy7WZnhfQyH8lbrHgCGL4ocz3hw6tGLJlKSqNWv34/vh7G26FdbGWL863kdNWNYv+//TIUd05TMS3dL/AYHbaRJ8O6yTWeI/IOyCnG/lmVRTGIQNaiTPoa6FOwZJEE5tDIMGgXqOk4pVm1hc/BWso6jy8=
+	t=1761913855; cv=none; b=NgG4bpzo2aJ2e+TWU2XdfcLa15bQqK0cimF2kE/jQYI1FDQ4S/OaCAeekLbjv0DTkDIKTm49PX2Ei8LicHIHhuGOfCfsSNKuNc5O3VDCW7utd+Sukvge3Mst6IPmxtFvjyFX9eNUV2NvtMddcDtX0ketb62+Ui/iHcP12DZZ/q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761913185; c=relaxed/simple;
-	bh=dT6kDyIp8MnyYNrNozXVkRFEY5aT2X5uIUkMcsMzINM=;
+	s=arc-20240116; t=1761913855; c=relaxed/simple;
+	bh=EKUBekgrM5YHzOr1CYFWpexPh2n9tyOsa3c5XVlztVs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SeKBLoM0Q+nZrlpPy5YdxcE0ocGCyA8m1m2ZfmL8CZis4fIvx1zKzdlAiL5sboPET+KzjooNvTJtA/gpYGrJGcCLzN4Ds7KqqnoJlmReNUtihD+7DcfBm1oZccYwNsmsSZm+iDxjUMSSoa3nxD1zCyuRmOghZY2aVCRr5sOeKqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dtLRiFGt; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=C54pnqJpOK4E3c6qxj6z80J2q+WGoDc4XvsRgqDpbtW6tfwj/pU/loXmtZuojgmNISNigUXw9sLCDweIhq4KF2/0k/UQdXwXYB94cqWRwaG8iffpEXxAPYw18Y4DuNft1UPmjl/J4e8yM/QH1nhbnU00e4PGCktDh62ZwAXVh/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gl0jKVVb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dtLRiFGt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gl0jKVVb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761913182; x=1793449182;
+  t=1761913853; x=1793449853;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dT6kDyIp8MnyYNrNozXVkRFEY5aT2X5uIUkMcsMzINM=;
-  b=dtLRiFGteG16aguDFHWJTSd+5p/x62uwOt47tffhSxY4AddN3JslHu1E
-   6UkuG1FypmJe3mAPO8IIGqwIzFY6o2Wqqs37g+Tt+OCz/dw/9wrHeGJYC
-   DajW8ZkDWeuKJteAlpJ9U9FebtCcBNHN8rSYAGYwDuimA3okpCYPyo/4U
-   wJPvxWaiCAA7W23nAMZiXt65yh1yHaqd1tMjEx1wdz7Dd6F5RYP6F4txR
-   9h2nhop2XyAwuhwFwglOMnUhEv3adHPIvIOwoCd3ySUNs00sayzUT7sNJ
-   V0VMEvKXtRCzI/+6wOo2uMuQEZF0d9ppFIBr3YXbP/fDjdG6VFaBkypHb
-   Q==;
-X-CSE-ConnectionGUID: CyYt2a5XR4+t6zYFxfrbGA==
-X-CSE-MsgGUID: 0VNc6AEmSS+dNJ9CWoMvEQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="63278284"
+  bh=EKUBekgrM5YHzOr1CYFWpexPh2n9tyOsa3c5XVlztVs=;
+  b=Gl0jKVVblX7TItUCdswlZhMyit9RIwFSm6VFtdX2Hygq1iAMox4GwBTF
+   kvMh42kEuF4l56CQS6kCTskb2FMjTGqF4HlAISa6N+05p5YITteT7KW6x
+   MWBV8ftQRrQE/A3KjJpBi9hjCE1eG8w80u58RHrld6EhY5/qzv8l2A2ON
+   8HcP9Ojrhoxy4MsUpMKWwaG6IxJLMKcgKxhKWqfQhy5bnmbbNOq8oB+R4
+   B8BXPn2RYIQzI1ypEPetChDrs9xg3ML6JY+8cQVqKuiEHjoyXnB2i5j/g
+   Qeoxl/7FtLmmh8vUn7NIC8+YoAuX+pbtcP2bim1gcGpRANETDtU7tdFtw
+   w==;
+X-CSE-ConnectionGUID: 8W8P3cMzQIeEt32O2GYpeQ==
+X-CSE-MsgGUID: PjfP9VdAT5uiT01wK1VKUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="89538227"
 X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="63278284"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 05:19:41 -0700
-X-CSE-ConnectionGUID: fTTR/R0NRDy/611ccDKfQw==
-X-CSE-MsgGUID: 0TL+EGaZRWWRg0ayPfR35Q==
+   d="scan'208";a="89538227"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 05:30:52 -0700
+X-CSE-ConnectionGUID: XmVY6QafQyWfspjt3dEkwQ==
+X-CSE-MsgGUID: YLrRAJLMSxe/Mv9d4uWDQg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="186965714"
+   d="scan'208";a="185498784"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 31 Oct 2025 05:19:39 -0700
+  by orviesa010.jf.intel.com with ESMTP; 31 Oct 2025 05:30:49 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vEo5z-000N5U-2z;
-	Fri, 31 Oct 2025 12:19:19 +0000
-Date: Fri, 31 Oct 2025 20:18:50 +0800
+	id 1vEoHH-000N64-0O;
+	Fri, 31 Oct 2025 12:30:47 +0000
+Date: Fri, 31 Oct 2025 20:29:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gladyshev Ilya <foxido@foxido.dev>
+To: Samuel Wu <wusamuel@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chris Mason <chris.mason@fusionio.com>,
-	David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: make ASSERT no-op in release builds
-Message-ID: <202510311956.w2iYoQcn-lkp@intel.com>
-References: <20251030182322.4085697-1-foxido@foxido.dev>
+	tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>,
+	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
+Message-ID: <202510312012.eHtS316T-lkp@intel.com>
+References: <20251030210110.298612-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,56 +69,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251030182322.4085697-1-foxido@foxido.dev>
+In-Reply-To: <20251030210110.298612-1-wusamuel@google.com>
 
-Hi Gladyshev,
+Hi Samuel,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6]
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.18-rc3 next-20251031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gladyshev-Ilya/btrfs-make-ASSERT-no-op-in-release-builds/20251031-024059
-base:   e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
-patch link:    https://lore.kernel.org/r/20251030182322.4085697-1-foxido%40foxido.dev
-patch subject: [PATCH] btrfs: make ASSERT no-op in release builds
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251031/202510311956.w2iYoQcn-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510311956.w2iYoQcn-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/PM-Support-aborting-sleep-during-filesystem-sync/20251031-050330
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20251030210110.298612-1-wusamuel%40google.com
+patch subject: [PATCH v6] PM: Support aborting sleep during filesystem sync
+config: sparc64-randconfig-002-20251031 (https://download.01.org/0day-ci/archive/20251031/202510312012.eHtS316T-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510312012.eHtS316T-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510311956.w2iYoQcn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510312012.eHtS316T-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/btrfs/raid56.c:302:13: warning: function 'full_page_sectors_uptodate' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-     302 | static bool full_page_sectors_uptodate(struct btrfs_raid_bio *rbio,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> kernel/power/main.c:1159:10: error: call to undeclared function 'pm_start_fs_sync_workqueue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1159 |         error = pm_start_fs_sync_workqueue();
+         |                 ^
+   kernel/power/main.c:1159:10: note: did you mean 'pm_start_workqueue'?
+   kernel/power/main.c:1147:19: note: 'pm_start_workqueue' declared here
+    1147 | static int __init pm_start_workqueue(void)
+         |                   ^
+    1148 | {
+    1149 |         pm_wq = alloc_workqueue("pm", WQ_FREEZABLE | WQ_UNBOUND, 0);
+    1150 | 
+    1151 |         return pm_wq ? 0 : -ENOMEM;
+    1152 | }
+    1153 | 
+    1154 | static int __init pm_init(void)
+    1155 | {
+    1156 |         int error = pm_start_workqueue();
+    1157 |         if (error)
+    1158 |                 return error;
+    1159 |         error = pm_start_fs_sync_workqueue();
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 pm_start_workqueue
+   1 error generated.
 
 
-vim +/full_page_sectors_uptodate +302 fs/btrfs/raid56.c
+vim +/pm_start_fs_sync_workqueue +1159 kernel/power/main.c
 
-53b381b3abeb86 David Woodhouse 2013-01-29  301  
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01 @302  static bool full_page_sectors_uptodate(struct btrfs_raid_bio *rbio,
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  303  				       unsigned int page_nr)
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  304  {
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  305  	const u32 sectorsize = rbio->bioc->fs_info->sectorsize;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  306  	const u32 sectors_per_page = PAGE_SIZE / sectorsize;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  307  	int i;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  308  
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  309  	ASSERT(page_nr < rbio->nr_pages);
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  310  
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  311  	for (i = sectors_per_page * page_nr;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  312  	     i < sectors_per_page * page_nr + sectors_per_page;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  313  	     i++) {
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  314  		if (!rbio->stripe_sectors[i].uptodate)
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  315  			return false;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  316  	}
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  317  	return true;
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  318  }
-d4e28d9b5f04d8 Qu Wenruo       2022-04-01  319  
+  1153	
+  1154	static int __init pm_init(void)
+  1155	{
+  1156		int error = pm_start_workqueue();
+  1157		if (error)
+  1158			return error;
+> 1159		error = pm_start_fs_sync_workqueue();
+  1160		if (error)
+  1161			return error;
+  1162		hibernate_image_size_init();
+  1163		hibernate_reserved_size_init();
+  1164		pm_states_init();
+  1165		power_kobj = kobject_create_and_add("power", NULL);
+  1166		if (!power_kobj)
+  1167			return -ENOMEM;
+  1168		error = sysfs_create_groups(power_kobj, attr_groups);
+  1169		if (error)
+  1170			return error;
+  1171		pm_print_times_init();
+  1172		return pm_autosleep_init();
+  1173	}
+  1174	
 
 -- 
 0-DAY CI Kernel Test Service
