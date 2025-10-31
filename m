@@ -1,161 +1,196 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8872B1CA84;
-	Fri, 31 Oct 2025 13:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A39C34D38C
+	for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 13:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761918113; cv=none; b=LBchrlzqmpeOa0kzs9/sYrajSPdpUDk2rN7Xmr3PQaGX3gB4RNW/N387EQs9uhVHb3r/IwshcsniiFEfZK/wq2lltTSsBJaoyEPU/wAMAxRdZ7Th+7ZY/pwfaedzd93g9yBN5VlsTbLX46VOildEP8HOBJIBPo6fsU1V5QXVZQE=
+	t=1761918201; cv=none; b=jGnBJYavWJYxWGGf8HXnZA4XYek/DQUNh4iLPqPhNRbniRNVX4sPA2/eeZ1D5kBXO8+65D+4W87irljobxhPwmf2s5pJMObAVM1Ccd52KhkjnlerJcTxoHAoy/5NunW6hy2tlXKP5mBKtbOVFVesmnrp+5ZvEzBamups3S8M0yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761918113; c=relaxed/simple;
-	bh=+7JeA8EZr9HLPcHjEwbm5n0PUPh3LAFAtmmlSTL8SOs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MGDRQVz7GchpOClyFQDhvvwMxNvsf+VLf/oxZ9XAz038I3ceLJhvzJocNLgCLr1RxeloJ5lcT3hnislZqkoXj2GCCQ9n8znUzbShhB//V2mzaxY9UmDHvF+h0EmHr0V08tdqwo4psQjO815lQnac2LXOITBxv82S5q4c90iQg+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i460M6Ew; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1761918201; c=relaxed/simple;
+	bh=KAwiFhP+SC2BHTHF5lGUyFbwXrrtaYWm0Aro+MAlzUY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=rcnvw05ssX5gEXo3+M682D3de302faNXoYF/gz3NAAyz2ceCuDoKJXmzfmatXRJL1DwBdLmwk5M17m+nIggd/A4EH1YgDfJ5dNLTabl0ZdLOg3TE18KpBKN7Meu1bKwFgbDiUqLBHcS8up/haDZdxjdlQXkC/o7kGphkK4/sq0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HffA3iAU; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i460M6Ew"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761918112; x=1793454112;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+7JeA8EZr9HLPcHjEwbm5n0PUPh3LAFAtmmlSTL8SOs=;
-  b=i460M6Ew8i30gT4Q3OxLFHaAS1zdXcQHSWayto1AByxi8E8B7OG4QYJu
-   LwYEUJNl3uHQAfAKNqkRQ/3pEeHHcaMjowq+nwnpxWV+6ZL7yUvsNJqZK
-   wO3T7JCe79NT2iyOZo7ruRCV1NxaRzuhPP/j3u9URtPG6MJlP4/ht4TPG
-   h+NOZ3L1lcsu0Jbg3nclNvFsshbO0f3i39koBnCgOpJtUApCiYzd6VS78
-   8MQvMNaWt5EMH2y4Z/ubTuD9x+b9h7M/CI649NPWGIjRBaERLwopNDVhc
-   4WlIwJ8z709cZvjopTlGdIC8md50yFdyA89QZfcodqU5aXUH1HMc44G6j
-   Q==;
-X-CSE-ConnectionGUID: gm7KdnVmTxi7i5mHtbLZNQ==
-X-CSE-MsgGUID: rt5l9SOETLOeBLkivIvNAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="64109837"
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="64109837"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 06:41:51 -0700
-X-CSE-ConnectionGUID: qyH/wK3MTgOitXoVX+1LZw==
-X-CSE-MsgGUID: bZuYGIG0TdWFYRB4T80rHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="185925369"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 31 Oct 2025 06:41:47 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEpNK-000N9A-1r;
-	Fri, 31 Oct 2025 13:41:27 +0000
-Date: Fri, 31 Oct 2025 21:30:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mateusz Guzik <mjguzik@gmail.com>, brauner@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	viro@zeniv.linux.org.uk, jack@suse.cz, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-	pfalcato@suse.de, Mateusz Guzik <mjguzik@gmail.com>
-Subject: Re: [PATCH v4] fs: hide names_cachep behind runtime access machinery
-Message-ID: <202510312143.SvwwhqVp-lkp@intel.com>
-References: <20251030105242.801528-1-mjguzik@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HffA3iAU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761918198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fch5XlhRp3VQY6VvfG8W43TIsOBztElwBblf8xKAumk=;
+	b=HffA3iAUu6oRyuxG4dunlI9EsTSPL2HZsYXMrk7ql2p8rlzfZmI9+AiOFtfbeCBDcAFcpW
+	R8I2hfOZVvO3DDFqP1dYqLchk2biy5ZSvE4r6b4+t7veJXeMYCdmiFAauGwjDpa5ibf0Iw
+	mbL3K46CslsclpDsRSjNFISBAZfGAsU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-278-eJ7ziJ6jPMm9JyOEWtLIYw-1; Fri,
+ 31 Oct 2025 09:43:16 -0400
+X-MC-Unique: eJ7ziJ6jPMm9JyOEWtLIYw-1
+X-Mimecast-MFC-AGG-ID: eJ7ziJ6jPMm9JyOEWtLIYw_1761918196
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0B66F18002F7
+	for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 13:43:16 +0000 (UTC)
+Received: from [172.20.90.15] (unknown [10.30.45.71])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 95A79180057E;
+	Fri, 31 Oct 2025 13:43:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc3,
+ upstream-mainline, d1271768)
+Date: Fri, 31 Oct 2025 13:43:15 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251030105242.801528-1-mjguzik@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <07594.125103109431700129@us-mta-278.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: L6s0OQh9yZ6aR95Kdq0AXZD-kU8tupeaL-cYHtil_xs_1761918196
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mateusz,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on arnd-asm-generic/master]
-[also build test ERROR on linus/master brauner-vfs/vfs.all linux/master v6.18-rc3 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mateusz-Guzik/fs-hide-names_cachep-behind-runtime-access-machinery/20251030-185523
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-patch link:    https://lore.kernel.org/r/20251030105242.801528-1-mjguzik%40gmail.com
-patch subject: [PATCH v4] fs: hide names_cachep behind runtime access machinery
-config: riscv-randconfig-002-20251031 (https://download.01.org/0day-ci/archive/20251031/202510312143.SvwwhqVp-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510312143.SvwwhqVp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510312143.SvwwhqVp-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/riscv/kernel/asm-offsets.c:8:
-   In file included from include/linux/mm.h:1016:
-   In file included from include/linux/huge_mm.h:7:
-   In file included from include/linux/fs.h:53:
-   In file included from arch/riscv/include/asm/runtime-const.h:7:
->> arch/riscv/include/asm/cacheflush.h:49:6: error: call to undeclared function 'is_vmalloc_or_module_addr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      49 |         if (is_vmalloc_or_module_addr((void *)start)) {
-         |             ^
-   In file included from arch/riscv/kernel/asm-offsets.c:8:
-   In file included from include/linux/mm.h:1016:
-   In file included from include/linux/huge_mm.h:7:
-   In file included from include/linux/fs.h:53:
-   In file included from arch/riscv/include/asm/runtime-const.h:9:
-   In file included from include/linux/memory.h:19:
-   In file included from include/linux/node.h:18:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:18:
-   include/uapi/linux/aio_abi.h:79:2: error: unknown type name '__kernel_rwf_t'; did you mean '__kernel_off_t'?
-      79 |         __kernel_rwf_t aio_rw_flags;    /* RWF_* flags */
-         |         ^~~~~~~~~~~~~~
-         |         __kernel_off_t
-   include/uapi/asm-generic/posix_types.h:87:25: note: '__kernel_off_t' declared here
-      87 | typedef __kernel_long_t __kernel_off_t;
-         |                         ^
-   2 errors generated.
-   make[3]: *** [scripts/Makefile.build:182: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=1341192968
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1282: prepare0] Error 2 shuffle=1341192968
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1341192968
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1341192968
-   make: Target 'prepare' not remade because of errors.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/is_vmalloc_or_module_addr +49 arch/riscv/include/asm/cacheflush.h
+Kernel information:
+    Commit message: Merge tag 'linux_kselftest-fixes-6.18-rc4' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
-08f051eda33b51e Andrew Waterman 2017-10-25  42  
-7e3811521dc3934 Alexandre Ghiti 2023-07-25  43  #ifdef CONFIG_64BIT
-503638e0babf364 Alexandre Ghiti 2024-07-17  44  extern u64 new_vmalloc[NR_CPUS / sizeof(u64) + 1];
-503638e0babf364 Alexandre Ghiti 2024-07-17  45  extern char _end[];
-503638e0babf364 Alexandre Ghiti 2024-07-17  46  #define flush_cache_vmap flush_cache_vmap
-503638e0babf364 Alexandre Ghiti 2024-07-17  47  static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-503638e0babf364 Alexandre Ghiti 2024-07-17  48  {
-503638e0babf364 Alexandre Ghiti 2024-07-17 @49  	if (is_vmalloc_or_module_addr((void *)start)) {
-503638e0babf364 Alexandre Ghiti 2024-07-17  50  		int i;
-503638e0babf364 Alexandre Ghiti 2024-07-17  51  
-503638e0babf364 Alexandre Ghiti 2024-07-17  52  		/*
-503638e0babf364 Alexandre Ghiti 2024-07-17  53  		 * We don't care if concurrently a cpu resets this value since
-503638e0babf364 Alexandre Ghiti 2024-07-17  54  		 * the only place this can happen is in handle_exception() where
-503638e0babf364 Alexandre Ghiti 2024-07-17  55  		 * an sfence.vma is emitted.
-503638e0babf364 Alexandre Ghiti 2024-07-17  56  		 */
-503638e0babf364 Alexandre Ghiti 2024-07-17  57  		for (i = 0; i < ARRAY_SIZE(new_vmalloc); ++i)
-503638e0babf364 Alexandre Ghiti 2024-07-17  58  			new_vmalloc[i] = -1ULL;
-503638e0babf364 Alexandre Ghiti 2024-07-17  59  	}
-503638e0babf364 Alexandre Ghiti 2024-07-17  60  }
-7a92fc8b4d20680 Alexandre Ghiti 2023-12-12  61  #define flush_cache_vmap_early(start, end)	local_flush_tlb_kernel_range(start, end)
-7e3811521dc3934 Alexandre Ghiti 2023-07-25  62  #endif
-7e3811521dc3934 Alexandre Ghiti 2023-07-25  63  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2131070919
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_aarch64_kernel_kcidb_tool_19893550_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL btrfs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel_kcidb_tool_19893544_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL btrfs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel-debug_kcidb_tool_19894122_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL btrfs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+        xfstests - cifsv3.11
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel_kcidb_tool_19893544_11
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL cifs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel-debug_kcidb_tool_19894122_11
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL cifs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+        xfstests - ext4
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_aarch64_kernel_kcidb_tool_19893550_7
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL ext4:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel_kcidb_tool_19893544_7
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL ext4:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel-debug_kcidb_tool_19894122_7
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL ext4:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+        xfstests - nfsv4.2
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel_kcidb_tool_19893544_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL nfs4:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel-debug_kcidb_tool_19894122_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL nfs4:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+        xfstests - xfs
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_aarch64_kernel_kcidb_tool_19893550_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL xfs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel_kcidb_tool_19893544_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL xfs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2131070919_x86_64_kernel-debug_kcidb_tool_19894122_8
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL xfs:install_xfstests
+                       =E2=9D=8C FAIL exit_code
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
