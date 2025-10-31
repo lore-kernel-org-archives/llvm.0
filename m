@@ -1,85 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1566E30497A;
-	Fri, 31 Oct 2025 20:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8408309DBD
+	for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 21:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761943072; cv=none; b=GXvZlyzTc5WIC32DobphOsl6UIac6SPC8I+n4oUClSJPC63CeoSPvR/JOHUOuCk8wJlRfAb5tizdZIA1KSPjKA8VpPrn7lbBFe+RT6MsUQ5c9bOSTM/+VTUtsMA1w9lPZKDSJkVLOfisQXLLR7aUJQ8LDi+1QSuYzS3XwyPGl+U=
+	t=1761946735; cv=none; b=Yvxafx3tro69IPcRZuiSKfBFS0frdSKMnwy16lBb0k9slA4lYCeDd3AcsSIKQHAjWDiuifjZxeaavD3dzzfsJMOoInNwU/Ce5/3JfxUBNjku6VHatYT235EhWjcDr7qE9m2ncBA2cdR/p2o/Z4GnNDMIdyqATbr9jZQrPyz84E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761943072; c=relaxed/simple;
-	bh=06p3NygxEpzTyI9vzctkNxGfa/fJn/Y5U5F4DP7lLu4=;
+	s=arc-20240116; t=1761946735; c=relaxed/simple;
+	bh=TPlNsDOB7+xC1rP2NRdQURfwtV/edU8Mt1F+x7pBCXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FN3VZnH2f/N+3hrDsl38FyjgKBR4eNyDZ6/8ZKArIDncJ+RKZmiPwEBZxeLa94aP8VT48Mm78Rqh7/Se/RoA0QgQAwoT54n1an5JMLK5kJhWC6IYepmCJDyPj41Fp+IQQh4U5a1M0+Wk72rkZRpFA1ez2G7VcIbyTX5HK4masDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTVNVGmd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZGEb+02DR/0Evn9esA41+XQd17Wj2QjL6+rztdO+zQvcynH0VPSerMORQBx5DHUUGW3EhZyootJEwsztwkeIxOIClgWnV727kmGMiMRIX5ns+nEX22sqts5rhKcYiLcmy6FE0ol2by9a//9sqSiG2xP9/eI3IjrjacjR/Cz4bQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fHBakwCY; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTVNVGmd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9ABCC4CEE7;
-	Fri, 31 Oct 2025 20:37:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761943071;
-	bh=06p3NygxEpzTyI9vzctkNxGfa/fJn/Y5U5F4DP7lLu4=;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fHBakwCY"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id DF28740E0200;
+	Fri, 31 Oct 2025 21:38:43 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id EQZhjGuVSxoA; Fri, 31 Oct 2025 21:38:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1761946720; bh=1q5upS3f0bzQp9+k/9ubCPycN4qxugW9/lCNLd+NxXE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oTVNVGmd+tbuj/k9c5IhGeEZh6E2dxZN+wP3B0vnwUaDnQbmwUoDQ/KdCZjRYTwRm
-	 7ohmIPyqtROUs9kfyD9L20WXyWq+KfXGtHmi/tih9LiZccsxWnwxNNaMyKi2ZNvDTk
-	 fVAxuzVSPflmTsSsEow0r6JBSrEGeklMRx2punr+Chk59Ka7Fpkm3OeTltcuXyb8Wu
-	 VBlnh0dIixICrv7topusConPHLKSBt5r9+Hy8KzaFwUYs4zzYxSX7wZNIqIWqZhonH
-	 3Nw2RH2/W9M11+y5+0XHDpiK+LjG4zLCpnzp48v9liZ0qsqW2GNoTdsKM/4cFYiUDv
-	 O7fO36/2kLttA==
-Date: Fri, 31 Oct 2025 16:37:46 -0400
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Gladyshev Ilya <foxido@foxido.dev>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Chris Mason <chris.mason@fusionio.com>,
-	David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: make ASSERT no-op in release builds
-Message-ID: <20251031203746.GE2486902@ax162>
-References: <20251030182322.4085697-1-foxido@foxido.dev>
- <202510311956.w2iYoQcn-lkp@intel.com>
+	b=fHBakwCYD1UE56zh2UVtrsdpNTCA+P3A63QZ/WoZwLrISg3iUtX3X8tYM4pgtFLV9
+	 IWG05ggFZ3oxtzHftTEyxPVHlPcdCy5hY27mV19bpubfmuzLb0RJGCFpgc7qT5eMlB
+	 b65VH5vEsGYsmC7xjxOPdzbiKwUOWexGkmn0ceSqK40DoQ4ERDThZ8cu4zaYi17sXC
+	 J9jVGRrmMeDpnjZVTP8HQNqnXN0KK5+BQgF081KEP2/KMb14HwOY+eHOzfOSA+YkTa
+	 MlJC/QLZLwqtddHep9Qq2VSN2rRDCOhszXhWse/dnAVIGcS7UMjgQx/htL0hr+8sGu
+	 2t5Oxj0xl8sWVzYZsJ/OEb9YpasDy+nFrezK1JRyFl/7Mkj3dI6r7t0VyPXOAo1TwW
+	 iQcyilQbUbI7e+wUp6r887cCglqtfe6WZJaysNjBsYkZvcBEv4D3cGKO14TrQ3l7Oi
+	 +v0okfeOLADFg+Lf8i6xNzGbX0HYMg7vZBdcQLZ5jBZMNcG3766z/o2u/HJYIOA8RT
+	 xhk9k13jP4D/Qz3GTjORsMyqsI2EMehQCU3i76egs+2qjhaiRcv2/6qQVlk+EhmMXZ
+	 bh8epxoFn6B5PBuAvrzBF2Gm7NEcWBAdPwm2vFrSLl44Lvhc4j1lrzCWg5UBkEPQ30
+	 UnMNsxfs1VEPLkLVqLriBWcA=
+Received: from zn.tnic (pd9530da1.dip0.t-ipconnect.de [217.83.13.161])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 201DE40E016E;
+	Fri, 31 Oct 2025 21:38:31 +0000 (UTC)
+Date: Fri, 31 Oct 2025 22:38:22 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/mm: Ensure clear_page() variants always have
+ __kcfi_typeid_ symbols
+Message-ID: <20251031213822.GKaQUsTs_FhPgB6H9k@fat_crate.local>
+References: <20251013-x86-fix-clear_page-cfi-full-lto-errors-v1-1-d69534c0be61@kernel.org>
+ <20251030192819.GFaQO8U29xvWcPT_s2@fat_crate.local>
+ <20251031142044.GB3022331@ax162>
+ <20251031144624.GHaQTLwONX3j6aDkkP@fat_crate.local>
+ <20251031202226.GA2486902@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202510311956.w2iYoQcn-lkp@intel.com>
+In-Reply-To: <20251031202226.GA2486902@ax162>
 
-On Fri, Oct 31, 2025 at 08:18:50PM +0800, kernel test robot wrote:
-> Hi Gladyshev,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Gladyshev-Ilya/btrfs-make-ASSERT-no-op-in-release-builds/20251031-024059
-> base:   e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
-> patch link:    https://lore.kernel.org/r/20251030182322.4085697-1-foxido%40foxido.dev
-> patch subject: [PATCH] btrfs: make ASSERT no-op in release builds
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251031/202510311956.w2iYoQcn-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510311956.w2iYoQcn-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202510311956.w2iYoQcn-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> fs/btrfs/raid56.c:302:13: warning: function 'full_page_sectors_uptodate' is not needed and will not be emitted [-Wunneeded-internal-declaration]
->      302 | static bool full_page_sectors_uptodate(struct btrfs_raid_bio *rbio,
->          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
+On Fri, Oct 31, 2025 at 04:22:26PM -0400, Nathan Chancellor wrote:
+> Yeah, I should have explicitly tagged this change for stable but I have
+> been a little lazy since AUTOSEL often picks up the slack :) If you want
+> a resend with that adjusted, let me know.
 
-Just in case it is not obvious: full_page_sectors_uptodate() is only
-called within an ASSERT() macro, so after this change, it is only
-referenced within sizeof(), so it won't be emitted in .text (which may
-be a bug). Presumably that is expected in this case, so I would
-recommend marking this as __maybe_unused to avoid the warning.
+Nah, that's fine.
 
-Cheers,
-Nathan
+I'm asking explicitly because we have this basic rule:
+
+stable material => urgent branch and goes to Linus now
+
+So it basically determines where I route it to.
+
+Lemme take care of it.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
