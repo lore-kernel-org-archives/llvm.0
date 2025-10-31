@@ -1,106 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46D226FDAC
-	for <llvm@lists.linux.dev>; Fri, 31 Oct 2025 03:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB58F611E;
+	Fri, 31 Oct 2025 04:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761881357; cv=none; b=ZV2o+DZr58nGUIuoeEtel6cdf6k2503SjT+JsDSdP3BUA63FzsrjjfGcWq+Xj3IxuyqZ0OKgGH/bzUsfPj0WtLMX5PrG+HnBuoL3y4Z65/qbuWsT8oooGGcdbuDouOkSpRDG5f6z9kuFEk8+QNZV/j3utXGDxT0N51kH/2iZXWc=
+	t=1761886048; cv=none; b=RryTYZk6zJreeeAXvWFiF0yZoV7bBu3bsXdARBWk5A3qQuTTS8XTo16W0/2JwZWudzTfi/boT7OyreRabtR100etltcs1VvcWwk9DiICPmaE+yl5JLkUdDAfV3LBIDyq0ox+eWMn8ewlPyAEKSY+DRXQLOW9KBcfRjKCmvDdAyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761881357; c=relaxed/simple;
-	bh=EovJZ3H2L4Q0SNA6DoOp6SOEnC85TeRHfl6iYZQRCfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A7hvVoAxQNYrAaedTQbkNVAVqvKMd6Or2svzbOg41lM5h1y5hYDaIjvl6GqV98btBXSR2YbxaHxKeno1ggAIZy9jh22HTK8wbYBX57oAEHgEtt3K0BXnF/wABcnlHOM2TDJaCi6azRNMfiBOZy3m53Xp3RQWrJqTbc7m5rVDd5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NYaBt+li; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761886048; c=relaxed/simple;
+	bh=PzE7KeAqgfKugyYxm/djtYvuFFyf7E5abLaQIMmVHDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZAxEVD+p+yitwezptHZKIwjulRHqO33EviIx9lBj1LOlKoqAP3AFGFjh0IWTxK65DnQiFfWhvjYZ4sH0WsMqvaUJ6S0X1uABqRC4lWRplO5tVtk84B4gHDYhgPt8hpG4f+jpCkA+TpqY6kbCQQ29kJakaABSYCKjRyRpS3OYM14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bBWD4htJ; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NYaBt+li"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761881354;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N0SmVh2QuJ5jwDo9MjpHJGaXOOC7TR51f3FQJy7JAfY=;
-	b=NYaBt+li5cWirTNFuAx9sZLgdF1TASzd1YoVjGcIHXvV/UjG/Y5p1NBPgxViQfLzgnTWUy
-	6GsrayFnEsxxn0lVyf72c82GJaphnxsxgmlYSdjACim0vm7VFUE9Ntua9A1pir53/rFXVY
-	vsE9dTAyncDy2zZpDA+tobcKRzFizW0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-bJhFpt_XOkqs4uMplUCEfQ-1; Thu,
- 30 Oct 2025 23:29:11 -0400
-X-MC-Unique: bJhFpt_XOkqs4uMplUCEfQ-1
-X-Mimecast-MFC-AGG-ID: bJhFpt_XOkqs4uMplUCEfQ_1761881350
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9836E19539BB;
-	Fri, 31 Oct 2025 03:29:09 +0000 (UTC)
-Received: from fedora (unknown [10.72.120.28])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 92C031800598;
-	Fri, 31 Oct 2025 03:29:03 +0000 (UTC)
-Date: Fri, 31 Oct 2025 11:28:57 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Caleb Sander Mateos <csander@purestorage.com>,
-	kernel test robot <lkp@intel.com>, Jens Axboe <axboe@kernel.dk>,
-	linux-block@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Uday Shankar <ushankar@purestorage.com>,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH V3 2/5] ublk: implement NUMA-aware memory allocation
-Message-ID: <aQQs-S0rYTzwsg-y@fedora>
-References: <20251029031035.258766-3-ming.lei@redhat.com>
- <202510301522.i47z9R95-lkp@intel.com>
- <CADUfDZonryeHe1MGTfnUa16VbvEt5C+yu11yh3ZRDbwFqJ_L9w@mail.gmail.com>
- <20251030175631.GB417112@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bBWD4htJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761886046; x=1793422046;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PzE7KeAqgfKugyYxm/djtYvuFFyf7E5abLaQIMmVHDA=;
+  b=bBWD4htJM+mYzp549mL523dk2uQyTl/WXcAa6dfvGrSm/SRZPxNeJzRO
+   FMUcsvENrRZxRIq84X++/fxN5ZZEmvEVZ6jHDAZbnfdMMgA0l5oOPa5jc
+   deLaw0ixTQFxTH5A5lpVGDTLOURHeUglR1Ur7FHeVXhdcdzYQA5EOrLP7
+   U+YV+gWeLAOAaNOSg0DD19JgXYbZZWMTEGY+f6idr+pIzKXu5zWqAf0Lp
+   lTmFysLwloR9jew35EeZbFrr62Bb/L9Dbt2h7j+YcqqFz4zeGg1Z4qKjC
+   XFSyWD5wf3tNQfG3XzoT7BsKZdQZNVY+iKIkIEE8OBfxTqOhKkP62+MVh
+   Q==;
+X-CSE-ConnectionGUID: e+SOquMtRtGqOg02N53E6w==
+X-CSE-MsgGUID: C1KSFcz1QyehdLEdDFZIMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="75389638"
+X-IronPort-AV: E=Sophos;i="6.19,268,1754982000"; 
+   d="scan'208";a="75389638"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 21:47:26 -0700
+X-CSE-ConnectionGUID: BKM6gTJGTeGUhoi8XHJKjQ==
+X-CSE-MsgGUID: xeZjyYKmRAORTRTjKrkI0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,268,1754982000"; 
+   d="scan'208";a="190214659"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 30 Oct 2025 21:47:25 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEh2m-000MmU-1E;
+	Fri, 31 Oct 2025 04:47:21 +0000
+Date: Fri, 31 Oct 2025 12:46:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [paulmckrcu:next.2025.10.30c 17/43] kernel/rcu/rcutorture.c:1139:17:
+ error: use of undeclared identifier 'rcu_tasks_trace_expedite_current'; did
+ you mean 'srcu_torture_expedite_current'?
+Message-ID: <202510311200.9qgdI1m8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251030175631.GB417112@ax162>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu, Oct 30, 2025 at 10:56:31AM -0700, Nathan Chancellor wrote:
-> On Thu, Oct 30, 2025 at 07:07:25AM -0700, Caleb Sander Mateos wrote:
-> > On Thu, Oct 30, 2025 at 1:01 AM kernel test robot <lkp@intel.com> wrote:
-> ...
-> > > patch link:    https://lore.kernel.org/r/20251029031035.258766-3-ming.lei%40redhat.com
-> > > patch subject: [PATCH V3 2/5] ublk: implement NUMA-aware memory allocation
-> > > config: x86_64-randconfig-074-20251030 (https://download.01.org/0day-ci/archive/20251030/202510301522.i47z9R95-lkp@intel.com/config)
-> > > compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251030/202510301522.i47z9R95-lkp@intel.com/reproduce)
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202510301522.i47z9R95-lkp@intel.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > > >> drivers/block/ublk_drv.c:240:49: error: 'counted_by' argument must be a simple declaration reference
-> > >      240 |         struct ublk_queue       *queues[] __counted_by(dev_info.nr_hw_queues);
-> > >          |                                                        ^~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Hmm, guess it doesn't support nested fields?
-> 
-> Correct. I think this is something that we want to support at some point
-> if I remember correctly but I think there was a lot of discussion
-> between GCC and clang on how to actually do it but Kees is free to
-> correct me if that is wrong.
+tree:   https://github.com/paulmckrcu/linux next.2025.10.30c
+head:   1eee41590d30805ec4f5b4e96c615603b0d058d9
+commit: f7cd407d56a0baf6fc9fe3e093253f6e30d61a95 [17/43] rcutorture: Test rcu_tasks_trace_expedite_current()
+config: s390-randconfig-001-20251031 (https://download.01.org/0day-ci/archive/20251031/202510311200.9qgdI1m8-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510311200.9qgdI1m8-lkp@intel.com/reproduce)
 
-Thanks for the confirmation.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510311200.9qgdI1m8-lkp@intel.com/
 
-Will remove this __counted_by() in next version.
+Note: the paulmckrcu/next.2025.10.30c HEAD 1eee41590d30805ec4f5b4e96c615603b0d058d9 builds fine.
+      It only hurts bisectability.
 
-Thanks,
-Ming
+All errors (new ones prefixed by >>):
 
+>> kernel/rcu/rcutorture.c:1139:17: error: use of undeclared identifier 'rcu_tasks_trace_expedite_current'; did you mean 'srcu_torture_expedite_current'?
+           .exp_current    = rcu_tasks_trace_expedite_current,
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             srcu_torture_expedite_current
+   kernel/rcu/rcutorture.c:861:13: note: 'srcu_torture_expedite_current' declared here
+   static void srcu_torture_expedite_current(void)
+               ^
+   1 error generated.
+
+
+vim +1139 kernel/rcu/rcutorture.c
+
+  1127	
+  1128	static struct rcu_torture_ops tasks_tracing_ops = {
+  1129		.ttype		= RCU_TASKS_TRACING_FLAVOR,
+  1130		.init		= rcu_sync_torture_init,
+  1131		.readlock	= tasks_tracing_torture_read_lock,
+  1132		.read_delay	= srcu_read_delay,  /* just reuse srcu's version. */
+  1133		.readunlock	= tasks_tracing_torture_read_unlock,
+  1134		.readlock_held	= rcu_read_lock_trace_held,
+  1135		.get_gp_seq	= rcu_no_completed,
+  1136		.deferred_free	= rcu_tasks_tracing_torture_deferred_free,
+  1137		.sync		= synchronize_rcu_tasks_trace,
+  1138		.exp_sync	= synchronize_rcu_tasks_trace,
+> 1139		.exp_current	= rcu_tasks_trace_expedite_current,
+  1140		.call		= call_rcu_tasks_trace,
+  1141		.cb_barrier	= rcu_barrier_tasks_trace,
+  1142		.gp_kthread_dbg	= show_rcu_tasks_trace_gp_kthread,
+  1143		.get_gp_data    = rcu_tasks_trace_get_gp_data,
+  1144		.cbflood_max	= 50000,
+  1145		.irq_capable	= 1,
+  1146		.slow_gps	= 1,
+  1147		.name		= "tasks-tracing"
+  1148	};
+  1149	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
