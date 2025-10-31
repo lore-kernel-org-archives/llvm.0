@@ -1,66 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7455522655B;
-	Fri, 31 Oct 2025 12:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8872B1CA84;
+	Fri, 31 Oct 2025 13:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761913855; cv=none; b=NgG4bpzo2aJ2e+TWU2XdfcLa15bQqK0cimF2kE/jQYI1FDQ4S/OaCAeekLbjv0DTkDIKTm49PX2Ei8LicHIHhuGOfCfsSNKuNc5O3VDCW7utd+Sukvge3Mst6IPmxtFvjyFX9eNUV2NvtMddcDtX0ketb62+Ui/iHcP12DZZ/q4=
+	t=1761918113; cv=none; b=LBchrlzqmpeOa0kzs9/sYrajSPdpUDk2rN7Xmr3PQaGX3gB4RNW/N387EQs9uhVHb3r/IwshcsniiFEfZK/wq2lltTSsBJaoyEPU/wAMAxRdZ7Th+7ZY/pwfaedzd93g9yBN5VlsTbLX46VOildEP8HOBJIBPo6fsU1V5QXVZQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761913855; c=relaxed/simple;
-	bh=EKUBekgrM5YHzOr1CYFWpexPh2n9tyOsa3c5XVlztVs=;
+	s=arc-20240116; t=1761918113; c=relaxed/simple;
+	bh=+7JeA8EZr9HLPcHjEwbm5n0PUPh3LAFAtmmlSTL8SOs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C54pnqJpOK4E3c6qxj6z80J2q+WGoDc4XvsRgqDpbtW6tfwj/pU/loXmtZuojgmNISNigUXw9sLCDweIhq4KF2/0k/UQdXwXYB94cqWRwaG8iffpEXxAPYw18Y4DuNft1UPmjl/J4e8yM/QH1nhbnU00e4PGCktDh62ZwAXVh/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gl0jKVVb; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=MGDRQVz7GchpOClyFQDhvvwMxNvsf+VLf/oxZ9XAz038I3ceLJhvzJocNLgCLr1RxeloJ5lcT3hnislZqkoXj2GCCQ9n8znUzbShhB//V2mzaxY9UmDHvF+h0EmHr0V08tdqwo4psQjO815lQnac2LXOITBxv82S5q4c90iQg+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i460M6Ew; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gl0jKVVb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i460M6Ew"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761913853; x=1793449853;
+  t=1761918112; x=1793454112;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=EKUBekgrM5YHzOr1CYFWpexPh2n9tyOsa3c5XVlztVs=;
-  b=Gl0jKVVblX7TItUCdswlZhMyit9RIwFSm6VFtdX2Hygq1iAMox4GwBTF
-   kvMh42kEuF4l56CQS6kCTskb2FMjTGqF4HlAISa6N+05p5YITteT7KW6x
-   MWBV8ftQRrQE/A3KjJpBi9hjCE1eG8w80u58RHrld6EhY5/qzv8l2A2ON
-   8HcP9Ojrhoxy4MsUpMKWwaG6IxJLMKcgKxhKWqfQhy5bnmbbNOq8oB+R4
-   B8BXPn2RYIQzI1ypEPetChDrs9xg3ML6JY+8cQVqKuiEHjoyXnB2i5j/g
-   Qeoxl/7FtLmmh8vUn7NIC8+YoAuX+pbtcP2bim1gcGpRANETDtU7tdFtw
-   w==;
-X-CSE-ConnectionGUID: 8W8P3cMzQIeEt32O2GYpeQ==
-X-CSE-MsgGUID: PjfP9VdAT5uiT01wK1VKUQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="89538227"
+  bh=+7JeA8EZr9HLPcHjEwbm5n0PUPh3LAFAtmmlSTL8SOs=;
+  b=i460M6Ew8i30gT4Q3OxLFHaAS1zdXcQHSWayto1AByxi8E8B7OG4QYJu
+   LwYEUJNl3uHQAfAKNqkRQ/3pEeHHcaMjowq+nwnpxWV+6ZL7yUvsNJqZK
+   wO3T7JCe79NT2iyOZo7ruRCV1NxaRzuhPP/j3u9URtPG6MJlP4/ht4TPG
+   h+NOZ3L1lcsu0Jbg3nclNvFsshbO0f3i39koBnCgOpJtUApCiYzd6VS78
+   8MQvMNaWt5EMH2y4Z/ubTuD9x+b9h7M/CI649NPWGIjRBaERLwopNDVhc
+   4WlIwJ8z709cZvjopTlGdIC8md50yFdyA89QZfcodqU5aXUH1HMc44G6j
+   Q==;
+X-CSE-ConnectionGUID: gm7KdnVmTxi7i5mHtbLZNQ==
+X-CSE-MsgGUID: rt5l9SOETLOeBLkivIvNAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="64109837"
 X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="89538227"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 05:30:52 -0700
-X-CSE-ConnectionGUID: XmVY6QafQyWfspjt3dEkwQ==
-X-CSE-MsgGUID: YLrRAJLMSxe/Mv9d4uWDQg==
+   d="scan'208";a="64109837"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 06:41:51 -0700
+X-CSE-ConnectionGUID: qyH/wK3MTgOitXoVX+1LZw==
+X-CSE-MsgGUID: bZuYGIG0TdWFYRB4T80rHQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,269,1754982000"; 
-   d="scan'208";a="185498784"
+   d="scan'208";a="185925369"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 31 Oct 2025 05:30:49 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 31 Oct 2025 06:41:47 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vEoHH-000N64-0O;
-	Fri, 31 Oct 2025 12:30:47 +0000
-Date: Fri, 31 Oct 2025 20:29:46 +0800
+	id 1vEpNK-000N9A-1r;
+	Fri, 31 Oct 2025 13:41:27 +0000
+Date: Fri, 31 Oct 2025 21:30:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Samuel Wu <wusamuel@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>
+To: Mateusz Guzik <mjguzik@gmail.com>, brauner@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>,
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
-Message-ID: <202510312012.eHtS316T-lkp@intel.com>
-References: <20251030210110.298612-1-wusamuel@google.com>
+	viro@zeniv.linux.org.uk, jack@suse.cz, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
+	pfalcato@suse.de, Mateusz Guzik <mjguzik@gmail.com>
+Subject: Re: [PATCH v4] fs: hide names_cachep behind runtime access machinery
+Message-ID: <202510312143.SvwwhqVp-lkp@intel.com>
+References: <20251030105242.801528-1-mjguzik@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,81 +65,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251030210110.298612-1-wusamuel@google.com>
+In-Reply-To: <20251030105242.801528-1-mjguzik@gmail.com>
 
-Hi Samuel,
+Hi Mateusz,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.18-rc3 next-20251031]
+[auto build test ERROR on arnd-asm-generic/master]
+[also build test ERROR on linus/master brauner-vfs/vfs.all linux/master v6.18-rc3 next-20251031]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/PM-Support-aborting-sleep-during-filesystem-sync/20251031-050330
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20251030210110.298612-1-wusamuel%40google.com
-patch subject: [PATCH v6] PM: Support aborting sleep during filesystem sync
-config: sparc64-randconfig-002-20251031 (https://download.01.org/0day-ci/archive/20251031/202510312012.eHtS316T-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510312012.eHtS316T-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mateusz-Guzik/fs-hide-names_cachep-behind-runtime-access-machinery/20251030-185523
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20251030105242.801528-1-mjguzik%40gmail.com
+patch subject: [PATCH v4] fs: hide names_cachep behind runtime access machinery
+config: riscv-randconfig-002-20251031 (https://download.01.org/0day-ci/archive/20251031/202510312143.SvwwhqVp-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510312143.SvwwhqVp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510312012.eHtS316T-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510312143.SvwwhqVp-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/power/main.c:1159:10: error: call to undeclared function 'pm_start_fs_sync_workqueue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1159 |         error = pm_start_fs_sync_workqueue();
-         |                 ^
-   kernel/power/main.c:1159:10: note: did you mean 'pm_start_workqueue'?
-   kernel/power/main.c:1147:19: note: 'pm_start_workqueue' declared here
-    1147 | static int __init pm_start_workqueue(void)
-         |                   ^
-    1148 | {
-    1149 |         pm_wq = alloc_workqueue("pm", WQ_FREEZABLE | WQ_UNBOUND, 0);
-    1150 | 
-    1151 |         return pm_wq ? 0 : -ENOMEM;
-    1152 | }
-    1153 | 
-    1154 | static int __init pm_init(void)
-    1155 | {
-    1156 |         int error = pm_start_workqueue();
-    1157 |         if (error)
-    1158 |                 return error;
-    1159 |         error = pm_start_fs_sync_workqueue();
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 pm_start_workqueue
-   1 error generated.
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:1016:
+   In file included from include/linux/huge_mm.h:7:
+   In file included from include/linux/fs.h:53:
+   In file included from arch/riscv/include/asm/runtime-const.h:7:
+>> arch/riscv/include/asm/cacheflush.h:49:6: error: call to undeclared function 'is_vmalloc_or_module_addr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      49 |         if (is_vmalloc_or_module_addr((void *)start)) {
+         |             ^
+   In file included from arch/riscv/kernel/asm-offsets.c:8:
+   In file included from include/linux/mm.h:1016:
+   In file included from include/linux/huge_mm.h:7:
+   In file included from include/linux/fs.h:53:
+   In file included from arch/riscv/include/asm/runtime-const.h:9:
+   In file included from include/linux/memory.h:19:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/riscv/include/asm/elf.h:12:
+   In file included from include/linux/compat.h:18:
+   include/uapi/linux/aio_abi.h:79:2: error: unknown type name '__kernel_rwf_t'; did you mean '__kernel_off_t'?
+      79 |         __kernel_rwf_t aio_rw_flags;    /* RWF_* flags */
+         |         ^~~~~~~~~~~~~~
+         |         __kernel_off_t
+   include/uapi/asm-generic/posix_types.h:87:25: note: '__kernel_off_t' declared here
+      87 | typedef __kernel_long_t __kernel_off_t;
+         |                         ^
+   2 errors generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=1341192968
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1282: prepare0] Error 2 shuffle=1341192968
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1341192968
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1341192968
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/pm_start_fs_sync_workqueue +1159 kernel/power/main.c
+vim +/is_vmalloc_or_module_addr +49 arch/riscv/include/asm/cacheflush.h
 
-  1153	
-  1154	static int __init pm_init(void)
-  1155	{
-  1156		int error = pm_start_workqueue();
-  1157		if (error)
-  1158			return error;
-> 1159		error = pm_start_fs_sync_workqueue();
-  1160		if (error)
-  1161			return error;
-  1162		hibernate_image_size_init();
-  1163		hibernate_reserved_size_init();
-  1164		pm_states_init();
-  1165		power_kobj = kobject_create_and_add("power", NULL);
-  1166		if (!power_kobj)
-  1167			return -ENOMEM;
-  1168		error = sysfs_create_groups(power_kobj, attr_groups);
-  1169		if (error)
-  1170			return error;
-  1171		pm_print_times_init();
-  1172		return pm_autosleep_init();
-  1173	}
-  1174	
+08f051eda33b51e Andrew Waterman 2017-10-25  42  
+7e3811521dc3934 Alexandre Ghiti 2023-07-25  43  #ifdef CONFIG_64BIT
+503638e0babf364 Alexandre Ghiti 2024-07-17  44  extern u64 new_vmalloc[NR_CPUS / sizeof(u64) + 1];
+503638e0babf364 Alexandre Ghiti 2024-07-17  45  extern char _end[];
+503638e0babf364 Alexandre Ghiti 2024-07-17  46  #define flush_cache_vmap flush_cache_vmap
+503638e0babf364 Alexandre Ghiti 2024-07-17  47  static inline void flush_cache_vmap(unsigned long start, unsigned long end)
+503638e0babf364 Alexandre Ghiti 2024-07-17  48  {
+503638e0babf364 Alexandre Ghiti 2024-07-17 @49  	if (is_vmalloc_or_module_addr((void *)start)) {
+503638e0babf364 Alexandre Ghiti 2024-07-17  50  		int i;
+503638e0babf364 Alexandre Ghiti 2024-07-17  51  
+503638e0babf364 Alexandre Ghiti 2024-07-17  52  		/*
+503638e0babf364 Alexandre Ghiti 2024-07-17  53  		 * We don't care if concurrently a cpu resets this value since
+503638e0babf364 Alexandre Ghiti 2024-07-17  54  		 * the only place this can happen is in handle_exception() where
+503638e0babf364 Alexandre Ghiti 2024-07-17  55  		 * an sfence.vma is emitted.
+503638e0babf364 Alexandre Ghiti 2024-07-17  56  		 */
+503638e0babf364 Alexandre Ghiti 2024-07-17  57  		for (i = 0; i < ARRAY_SIZE(new_vmalloc); ++i)
+503638e0babf364 Alexandre Ghiti 2024-07-17  58  			new_vmalloc[i] = -1ULL;
+503638e0babf364 Alexandre Ghiti 2024-07-17  59  	}
+503638e0babf364 Alexandre Ghiti 2024-07-17  60  }
+7a92fc8b4d20680 Alexandre Ghiti 2023-12-12  61  #define flush_cache_vmap_early(start, end)	local_flush_tlb_kernel_range(start, end)
+7e3811521dc3934 Alexandre Ghiti 2023-07-25  62  #endif
+7e3811521dc3934 Alexandre Ghiti 2023-07-25  63  
 
 -- 
 0-DAY CI Kernel Test Service
