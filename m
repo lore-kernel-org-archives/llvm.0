@@ -1,53 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95302D94A2;
-	Fri, 31 Oct 2025 23:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED8D26F445;
+	Fri, 31 Oct 2025 23:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761953531; cv=none; b=FsDLxrTf1YE4vqAqSUo38+YMcz88MZ1BUvtvPPxPcRM+JyeixXvS2sOdIiZzhYqQ5/2mO+wH9zTjKJ1chIFC+LpQPp+HtwTXpftCVqpkGmDnOLjeHPF8xLoKdgnnZyRZRGQxncw0qLTx09ediJOX55N1Xy/j/QUmaYfkVCKyA6Q=
+	t=1761954271; cv=none; b=JbAOj9Ax/XSidFS/KvFcX62iVuWcnDX21ICYlTZsdPeppgXm1GWWDxFdnqQ4czV8qRqa4xSkJx+pwnpeMRMoNWtgujv82u50l8xI/LoJ0OAWvR4rHDL6AEhRyzGlZdkLObRfdjiJSZl4RzpMqyp2KVg1sej4hYUNNO6s4Z2kCwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761953531; c=relaxed/simple;
-	bh=h+r0tqFwhhtjNk7d58FTTkux3ySidbSHA65iwckG4zY=;
+	s=arc-20240116; t=1761954271; c=relaxed/simple;
+	bh=4F4GE8moObfkI4AD5BFSPo4dzBLRFbZyvMAsHUdnGVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GqI0R0dqWhxRJmTs6DEOp5Bi0SsxAH4eP+SPUvYenW5ap0/Pg8bswVB77QD5VvI1ZE1/HNbYTsrxjrYYfew2MNiAeMwMHnO1NbXgYcYspyTw/HQUkgFNDwszVgbCQXnFgzWLEo2GwNjKs1fWGVZ+e3Kv5Nhm1MphH02rD3AE/5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OZmjR12q; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=DeStt3/ADoV0gAtzPGo2zQLy1tiEDztqv4wwtpETjxHCC2Kkf4O48RkPwFByYcOZBWYfwmyXQixkKOtwcF0J8uaGXSTHPU/TCivyrSQs3TRBXyiqver18EkGDuxIliJgAaAwhakEGmg+f5qk5w2cDtiZJa9qTsoPzThQLOIov/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a7ifDlUY; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OZmjR12q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a7ifDlUY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761953530; x=1793489530;
+  t=1761954270; x=1793490270;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=h+r0tqFwhhtjNk7d58FTTkux3ySidbSHA65iwckG4zY=;
-  b=OZmjR12q/3j4bWzWVTzMSXKEdCVgF9lHX8t3LUtTpCNTGX7l+HCbbmwM
-   ++M5FVL53LNOv61iPqJ3kFUMbfz684TCUEY0mxWKGSdFLRPUcZ76lmADu
-   MacQSr/LNw/9N6mXsGtpp8+n94Giltnq8PeLxzykVsahxmh1Ow80/ATYy
-   VAK47shw/5in5t6zYsP4wimRLcOa0Xw+FgrDzZ8+P0358+CTTIVS5Dg7A
-   UGZp1vyqcm5Nq9PEQB/5rfqBCFLU+iDNqn6v8+2SSahljKW+SvRQESVQq
-   lE4Dncc5P9nLkz22lWEWgvDc5Sm/vKG9SOStIL+4+/kz2f4MMvj9J68hU
-   A==;
-X-CSE-ConnectionGUID: ztcpnCJtRbeDFrwcLlVNvA==
-X-CSE-MsgGUID: +rvIiGViSJaTDat+nzLH/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64150712"
+  bh=4F4GE8moObfkI4AD5BFSPo4dzBLRFbZyvMAsHUdnGVM=;
+  b=a7ifDlUYBf1OHYXZSFgS+qObNDBfYJc1Y3GXTqB+DktcZBFfKyY0YN2s
+   5iFhf5YMXtANTIBeEIxklHmm4RAb+gxpa3aTQHA1wdtm0nBqvm0pJzy8P
+   b8WyoGPQyeRAgt7wKWmSIZpy9TMPtlJ3fGbhX9KW95dttTW//1X144Ton
+   IZT5D1cGOO5Jw1fRPzNvdZQbCyzP+5KuSQQ/ucg6rjHasmsh5ebjiQr5+
+   fd5ctw4stGg6CpfG94v2ePBMffqn8mbXboa8+GeP7a+X3MJkT+TlNdGPB
+   URy0+5aT7EpJ6YNl229Y7J+Y+KxbKtAIv2UsatvHlWGJDYuIf9jamG6WD
+   g==;
+X-CSE-ConnectionGUID: /n3cnLN9SVWT/rHBB5tw/g==
+X-CSE-MsgGUID: nJFYLUZQRSGg67zInsdzFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64161105"
 X-IronPort-AV: E=Sophos;i="6.19,270,1754982000"; 
-   d="scan'208";a="64150712"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 16:32:09 -0700
-X-CSE-ConnectionGUID: 2PAsw1AfSUqU0iBpZvJi8Q==
-X-CSE-MsgGUID: zUGAZRtjTl2DJjLHGudMnw==
+   d="scan'208";a="64161105"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 16:44:29 -0700
+X-CSE-ConnectionGUID: zIh8qu8fTYmFkn99fGJt/w==
+X-CSE-MsgGUID: 7kYQG7CdSXOxd/XxiC+U9w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,270,1754982000"; 
-   d="scan'208";a="186686652"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 31 Oct 2025 16:32:07 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 31 Oct 2025 16:44:27 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vEyaU-000Nii-0P;
-	Fri, 31 Oct 2025 23:31:58 +0000
-Date: Sat, 1 Nov 2025 07:30:11 +0800
+	id 1vEym2-000NjM-2B;
+	Fri, 31 Oct 2025 23:43:33 +0000
+Date: Sat, 1 Nov 2025 07:41:49 +0800
 From: kernel test robot <lkp@intel.com>
 To: Mateusz Guzik <mjguzik@gmail.com>, torvalds@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, brauner@kernel.org,
@@ -55,7 +53,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, brauner@kernel.org,
 	linux-fsdevel@vger.kernel.org, tglx@linutronix.de, pfalcato@suse.de,
 	Mateusz Guzik <mjguzik@gmail.com>
 Subject: Re: [PATCH 3/3] fs: hide names_cachep behind runtime access machinery
-Message-ID: <202511010731.B5nbGjbm-lkp@intel.com>
+Message-ID: <202511010704.D6l8wp63-lkp@intel.com>
 References: <20251031174220.43458-4-mjguzik@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,10 +67,10 @@ In-Reply-To: <20251031174220.43458-4-mjguzik@gmail.com>
 
 Hi Mateusz,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on arnd-asm-generic/master]
-[also build test WARNING on linus/master brauner-vfs/vfs.all v6.18-rc3 next-20251031]
+[auto build test ERROR on arnd-asm-generic/master]
+[also build test ERROR on linus/master brauner-vfs/vfs.all v6.18-rc3 next-20251031]
 [cannot apply to linux/master]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
@@ -82,49 +80,42 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Mateusz-Guzik/x86-fix-acc
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
 patch link:    https://lore.kernel.org/r/20251031174220.43458-4-mjguzik%40gmail.com
 patch subject: [PATCH 3/3] fs: hide names_cachep behind runtime access machinery
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20251101/202511010731.B5nbGjbm-lkp@intel.com/config)
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251101/202511010704.D6l8wp63-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511010731.B5nbGjbm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511010704.D6l8wp63-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511010731.B5nbGjbm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511010704.D6l8wp63-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/dcache.c:38:
-   In file included from ./arch/um/include/generated/asm/runtime-const.h:1:
->> include/asm-generic/runtime-const.h:11:9: warning: 'runtime_const_ptr' macro redefined [-Wmacro-redefined]
-      11 | #define runtime_const_ptr(sym) (sym)
-         |         ^
-   arch/x86/include/asm/runtime-const-accessors.h:21:9: note: previous definition is here
-      21 | #define runtime_const_ptr(sym) ({                               \
-         |         ^
-   In file included from fs/dcache.c:38:
-   In file included from ./arch/um/include/generated/asm/runtime-const.h:1:
->> include/asm-generic/runtime-const.h:12:9: warning: 'runtime_const_shift_right_32' macro redefined [-Wmacro-redefined]
-      12 | #define runtime_const_shift_right_32(val, sym) ((u32)(val)>>(sym))
-         |         ^
-   arch/x86/include/asm/runtime-const-accessors.h:35:9: note: previous definition is here
-      35 | #define runtime_const_shift_right_32(val, sym) ({               \
-         |         ^
-   2 warnings generated.
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1016:
+   In file included from include/linux/huge_mm.h:7:
+>> include/linux/fs.h:54:10: fatal error: 'asm/runtime-const-accessors.h' file not found
+      54 | #include <asm/runtime-const-accessors.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/arm/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1282: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/runtime_const_ptr +11 include/asm-generic/runtime-const.h
+vim +54 include/linux/fs.h
 
-e78298556ee5d8 Linus Torvalds 2024-06-04   4  
-e78298556ee5d8 Linus Torvalds 2024-06-04   5  /*
-e78298556ee5d8 Linus Torvalds 2024-06-04   6   * This is the fallback for when the architecture doesn't
-e78298556ee5d8 Linus Torvalds 2024-06-04   7   * support the runtime const operations.
-e78298556ee5d8 Linus Torvalds 2024-06-04   8   *
-e78298556ee5d8 Linus Torvalds 2024-06-04   9   * We just use the actual symbols as-is.
-e78298556ee5d8 Linus Torvalds 2024-06-04  10   */
-e78298556ee5d8 Linus Torvalds 2024-06-04 @11  #define runtime_const_ptr(sym) (sym)
-e78298556ee5d8 Linus Torvalds 2024-06-04 @12  #define runtime_const_shift_right_32(val, sym) ((u32)(val)>>(sym))
-e78298556ee5d8 Linus Torvalds 2024-06-04  13  #define runtime_const_init(type,sym) do { } while (0)
-e78298556ee5d8 Linus Torvalds 2024-06-04  14  
+    51	
+    52	#include <asm/byteorder.h>
+    53	#ifndef MODULE
+  > 54	#include <asm/runtime-const-accessors.h>
+    55	#endif
+    56	
 
 -- 
 0-DAY CI Kernel Test Service
