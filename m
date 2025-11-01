@@ -1,65 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BE32F3614;
-	Sat,  1 Nov 2025 11:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A1027B4F5;
+	Sat,  1 Nov 2025 11:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761995270; cv=none; b=tEMKlr32RfmSZ63bZVxc0Mrt8ZK1tHLYoSHRYOnNuywgabas1aiHVTFOhTy3iAutF+yWDWXvnzCjyXOuj6wRxKYFKUYCgEn86rwR4E5cc9RmRBXf6mNuqA+ic0+E3KnlPoaCVbDvlHTRHwxKTeo0wLyYmd5XssmNa1wDXG+Rwm8=
+	t=1761996540; cv=none; b=bLoVa+NaPv8VO9A5VA8qUU/kV6vG6axAH4wRSiakoGBSviEiTNxUuJWr4PtUI7iNOf1Dpm2xHG20LSZswNefj3gfwMnJv0OvanPVS/4yF0Doj9q2blJY7SOOUOHY3wYlQy4rgy0CqhMuWnuzZos2Iz9EmBGrrw4Bra05xT9p/7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761995270; c=relaxed/simple;
-	bh=KiBsSbViKMDxxR1+aLrfoJnj3kQ563rOF1uBzwFrkzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PADyIJ9ZuYm5qyXqU/nAxKNmIeBMIJ4rKBA8Cbkk/yp/NXKIRP+7pQ+Q13uMf+Nb8ucaq1onFgRpogUIoBWeV62vz2AiRXMb9fRpX7AvqBlY2VKdWN1yRHRzC9b3G+bvOLpEwgYBa+UVfFFUl4Rbgh4qfDdeEsaTxHF2kG5XPvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XKMq41h+; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1761996540; c=relaxed/simple;
+	bh=bZyZctrlyARlI0CVXxQFWpD9m3c0JwiWscLiyClKf3M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BYGLKAPn+VVfojYWmHHQoT5zkDD0nziKHcBvtSfeh171vnQc1XW0qA46dvUjIb49kxAk/ZDO8KhmLG/6UHQeAjrPtgfMIPAvTyHq/KahVi1Pt5RJ8A9GY61lgoCY4Z3H1kHeYKH2BQ5IQ5JcEZfBbdc1+rNwzGKYSq60imQK4Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EVfboh2c; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKMq41h+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EVfboh2c"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761995269; x=1793531269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KiBsSbViKMDxxR1+aLrfoJnj3kQ563rOF1uBzwFrkzk=;
-  b=XKMq41h+J11j00KFGu1bEfjVFnvwvHPd006Tm76GKYtKImv5PRvYtpQL
-   UVPQ7PaK+kgngu+0hXF+OVnWOnGwNonNV3QhwMhIPLa9UIoHbynjoZ3lu
-   on6qOn0zW0z06Q4iNx01b7CgshMzWXMpHVgmYJ6U+7ezOUkamR43oItFD
-   HTLyIMuIPL/Mo4Stj4mJI+muY7pJ+OaDYJL24crbWpxg7VpgY6qtAQCSR
-   mB8pt4BSD3ulS8k5hLPqbXUVbyzveproRpd7fIg/pW3k4UVj1Bss/T0pq
-   7PXDLFHsY+FNW61dV+WOtUvdS01g6/dnzZoaO4NOe9v9dO2idoVekqBKa
-   g==;
-X-CSE-ConnectionGUID: yrWV4+8OTruufeJxi1CMBw==
-X-CSE-MsgGUID: kJ3zAvaaSDmYaOGBm552fA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="75592506"
-X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
-   d="scan'208";a="75592506"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 04:07:48 -0700
-X-CSE-ConnectionGUID: 7NZDx6euQNyyDNaldPJczg==
-X-CSE-MsgGUID: 2+Wci7r0R0ir1K52qe1bzw==
+  t=1761996539; x=1793532539;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bZyZctrlyARlI0CVXxQFWpD9m3c0JwiWscLiyClKf3M=;
+  b=EVfboh2cIauhANaR1YuDTS4ixCB1Ms8dEAguJVYZWL+ILRKTak5aTjlM
+   ScmVuglIeV/+HKPs9I3ntOFPzARbvB7p55TpBtntcGJKbaioj89838gyw
+   FSsMM+HMNVzQvpJv5HR5k8lTAjX0HDcXrWSTO/IqMtFWLJbkGwgQFzF8b
+   DIIlxwOlaUO6Odp/ENwWcI5pg3lifFxprbZwVZ9lTP6HmkYbZfy7MuULi
+   KUp+OzKeO7lumviTTuJNj228OFhhwlmZuLyqoU/0qBfZgwKTvmBGXlnR4
+   ZYobkre1PF+pudtwAZfCJ7HURjEfg0UifW3YVqg4N9Mw64KH92RiA6nwp
+   A==;
+X-CSE-ConnectionGUID: YsG7/RtFSPq8qHJFQHEcoA==
+X-CSE-MsgGUID: HcAOE0VPRhaM6wtz+3ly3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64292773"
+X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
+   d="scan'208";a="64292773"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 04:28:59 -0700
+X-CSE-ConnectionGUID: 2xP0ti45Qn+pGcLFzm2g4Q==
+X-CSE-MsgGUID: x6qkI3VISo63GN/7T2mKnA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
-   d="scan'208";a="185665250"
+X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
+   d="scan'208";a="217095312"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 01 Nov 2025 04:07:45 -0700
+  by orviesa002.jf.intel.com with ESMTP; 01 Nov 2025 04:28:57 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vF9SL-000OAU-1R;
-	Sat, 01 Nov 2025 11:07:39 +0000
-Date: Sat, 1 Nov 2025 19:06:36 +0800
+	id 1vF9mx-000OBs-05;
+	Sat, 01 Nov 2025 11:28:55 +0000
+Date: Sat, 1 Nov 2025 19:28:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
-	Dinh Nguyen <dinguyen@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mahesh Rao <mahesh.rao@altera.com>, devicetree@vger.kernel.org,
-	open list <linux-kernel@vger.kernel.org>
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] arm64: dts: intel: Add Agilex5 SVC node with memory
- region
-Message-ID: <202511011821.wW4mmrec-lkp@intel.com>
-References: <a3182556c07839dcd9227fa6a4a9d295507f3e8e.1761643239.git.khairul.anuar.romli@altera.com>
+Subject: [jlayton:dir-deleg-ro 10/18] fs/overlayfs/overlayfs.h:242:17: error:
+ use of undeclared identifier 'excl'
+Message-ID: <202511011954.WIkEz4HB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,34 +61,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a3182556c07839dcd9227fa6a4a9d295507f3e8e.1761643239.git.khairul.anuar.romli@altera.com>
 
-Hi Khairul,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.18-rc3 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Khairul-Anuar-Romli/arm64-dts-intel-Add-Agilex5-SVC-node-with-memory-region/20251028-183009
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/a3182556c07839dcd9227fa6a4a9d295507f3e8e.1761643239.git.khairul.anuar.romli%40altera.com
-patch subject: [PATCH 2/2] arm64: dts: intel: Add Agilex5 SVC node with memory region
-config: arm64-randconfig-002-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011821.wW4mmrec-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cc271437553452ede002d871d32abc02084341a8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011821.wW4mmrec-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg-ro
+head:   11745d0a0c6d135c474313a710719825fbe81aed
+commit: bc283d81b7ed9334c956382e7d234954aac17c03 [10/18] vfs: add struct createdata for passing arguments to vfs_create()
+config: s390-randconfig-001-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011954.WIkEz4HB-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011954.WIkEz4HB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511011821.wW4mmrec-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511011954.WIkEz4HB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ERROR: Input tree has errors, aborting (use -f to force output)
+   In file included from fs/overlayfs/namei.c:15:
+>> fs/overlayfs/overlayfs.h:242:17: error: use of undeclared identifier 'excl'
+     242 |                                     .excl = excl };
+         |                                             ^
+   1 error generated.
+
+
+vim +/excl +242 fs/overlayfs/overlayfs.h
+
+   233	
+   234	static inline int ovl_do_create(struct ovl_fs *ofs,
+   235					struct inode *dir, struct dentry *dentry,
+   236					umode_t mode)
+   237	{
+   238		struct createdata cargs = { .idmap = ovl_upper_mnt_idmap(ofs),
+   239					    .dir = dir,
+   240					    .dentry = dentry,
+   241					    .mode = mode,
+ > 242					    .excl = excl };
+   243		int err = vfs_create(&cargs);
+   244	
+   245		pr_debug("create(%pd2, 0%o) = %i\n", dentry, mode, err);
+   246		return err;
+   247	}
+   248	
 
 -- 
 0-DAY CI Kernel Test Service
