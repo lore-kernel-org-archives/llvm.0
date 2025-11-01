@@ -1,81 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3A42F39A3;
-	Sat,  1 Nov 2025 11:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECD82C3262;
+	Sat,  1 Nov 2025 12:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761996544; cv=none; b=q+Ka8MIJ4qIix6u8LB+gUPhGdiI+rG6gu+Im+U4V8EsGlnUvKMF1AmhFKnH14SBWFb4ufZoZtTyHgrbT9kUEH8IcsjZACr64I/GyzYnMWikzWDIlKyW/tVf6Xx6nSvzCNavtr0jSyiVbl1c4MEpDGQkcZExkOC2VlOy3/5Ycb8o=
+	t=1761999090; cv=none; b=Tnt9wHyXwLzrALGSIBdDWWZxdGfeRY4CAGnOxl02/ai65H8ZCU/liKfJP9fHetUDmyQlPanL4XuBx+ut1xim0jdPFG4yaphHvPRpAQre8oMssgTVTYaBUZUpO2vMiN+TDH53t6wHAzl53moWBX4ZSecv3BdooQdOrdHfBuB5xNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761996544; c=relaxed/simple;
-	bh=Reok4oEuIAaxqAgmj0W2bIeJU4APzPDb2Uj5NGGYoJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WBnhZV67tStKjKtgnozDjpPpTSdRQnj95dzNArW8gJJDluG4iBZxNzcHEQgnDvtpv92bCdgA6Dhlgn3brCSJL6bFB3KjIHAfddH4+8fGzhBzr8aw9NbKxnC3XtCT7vzDJ9qfoAaUlsshCfky9i8hU4Xf3jE55Tyk7H3KfxNcogo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nmX8mo4L; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1761999090; c=relaxed/simple;
+	bh=kjGyd4VscDV2Dv3gKgD0rLng6eflEnYN0ogOTbcfBlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hxndye02IC1TCoSJQuX7w3D+STflVvCqRvgZ0Mm9vqpsge6CE2VEV1Z5ECZAOMZFr6IoEn9xrIyv1LhmOVfilBCIKIADFiQNSSwQvxyReH7XV2wpop6EILMjqAFTyc0W/TN2vSC5uz6TgwmroEV7h9JUh8pAW/ztnHdNHDf18Lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QG2Lcmxa; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nmX8mo4L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QG2Lcmxa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761996544; x=1793532544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Reok4oEuIAaxqAgmj0W2bIeJU4APzPDb2Uj5NGGYoJI=;
-  b=nmX8mo4LJkyB50ieOeQgap36QCwtjW7RYmOMwrqwqkYMmJ0QKNCQzXzT
-   mBCWk9Zdr5i51OH0UNu/9K1+/ga8dXTbA9Z4Hul9zufgkLnBaDS3V5tC8
-   BQdttcaxQh63V7+ecrY9R3rgsK1J6lYmXZPu+BzvqUcQwoIr+yLjdi2Hi
-   sSmM5D2C0CA+cX9+E9Xo9zC3jNxRDi8Bg2yVa0jJdbO9A471CkqxjQPod
-   68ftFK8CbpLzk+jJBaT3cgHbZ4TgMEZkTMxfomaUk3X1IYYMcfPs6ydQv
-   eATMrjsW4dKLjfK2Ao2Tzky7+ToZQ1bKt0sjDqgVfZjPAcqsrbfYDSw7Q
-   g==;
-X-CSE-ConnectionGUID: Szca7lmZQBSvYOeXILau/g==
-X-CSE-MsgGUID: N6vnslN9TwWH/lzd35VP4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64292780"
+  t=1761999088; x=1793535088;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kjGyd4VscDV2Dv3gKgD0rLng6eflEnYN0ogOTbcfBlk=;
+  b=QG2Lcmxag4VqFnFDiwWC+FKdOMlpuKBU/xEHCMQkKgYPN/GX/KIWQceu
+   rSj4ii7yP8B7dE6G0lHuv81BPUTC625HhFPb0BXaY98o1qjcffoa8feWf
+   5+NBWlaRJmfGOiTpfayAzm6EQ/qfTwUrfJNy6LmdW0DJcoj/Z8ajCKxZv
+   Awazk0K1T1Xoe2U0Blm9JdNqEGOeM7VsqIv/tqO21N4SHEfg8LD4CukKr
+   ElEWw1ww0RSqMlHk+xKCnb6X3FuoYFni5+LCU0ipY+AZ3V65SUU4BkPkL
+   NbYGrJmdM5pQdwgHbgNYFtx8QrCKpMebGDyURiBRDVwUS7j16Y1wDGXNU
+   w==;
+X-CSE-ConnectionGUID: 16TTsFG1QDmyoog5wIXVxw==
+X-CSE-MsgGUID: yTbi53ZsRk67WEW3AlatMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="81556220"
 X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
-   d="scan'208";a="64292780"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 04:29:03 -0700
-X-CSE-ConnectionGUID: cKgZ26MZRE2lzqT36WXJvQ==
-X-CSE-MsgGUID: rpFU1DQ1RS6UsQlYYlZchw==
+   d="scan'208";a="81556220"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 05:11:27 -0700
+X-CSE-ConnectionGUID: JhoM2WJxQ22qxMqNTG3sAw==
+X-CSE-MsgGUID: /2z8HkJlQ1GdVMAFRBD7aw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
-   d="scan'208";a="187183168"
+   d="scan'208";a="186118907"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 01 Nov 2025 04:28:57 -0700
+  by orviesa009.jf.intel.com with ESMTP; 01 Nov 2025 05:11:26 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vF9mx-000OBq-01;
-	Sat, 01 Nov 2025 11:28:55 +0000
-Date: Sat, 1 Nov 2025 19:28:27 +0800
+	id 1vFAS3-000OEe-2g;
+	Sat, 01 Nov 2025 12:11:23 +0000
+Date: Sat, 1 Nov 2025 20:10:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason-JH Lin <jason-jh.lin@mediatek.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Tiwei Bie <tiwei.btw@antgroup.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Nicolas Dufresne <nicolas@ndufresne.ca>,
-	Jason-JH Lin <jason-jh.lin@mediatek.com>,
-	Nancy Lin <nancy.lin@mediatek.com>,
-	Singo Chang <singo.chang@mediatek.com>,
-	Paul-PL Chen <paul-pl.chen@mediatek.com>,
-	Moudy Ho <moudy.ho@mediatek.com>,
-	Xiandong Wang <xiandong.wang@mediatek.com>,
-	Sirius Wang <sirius.wang@mediatek.com>,
-	Fei Shao <fshao@chromium.org>, Chen-yu Tsai <wenst@chromium.org>,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/5] soc: mediatek: mtk-cmdq: Add
- cmdq_pkt_jump_rel_temp() for removing shift_pa
-Message-ID: <202511011919.0lkK3DY8-lkp@intel.com>
-References: <20251031160309.1654761-3-jason-jh.lin@mediatek.com>
+	Johannes Berg <johannes.berg@intel.com>
+Subject: [linux-next:master 3741/5383]
+ arch/um/include/shared/as-layout.h:9:10: fatal error:
+ 'generated/asm-offsets.h' file not found
+Message-ID: <202511011903.dAA0SEHo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,103 +63,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251031160309.1654761-3-jason-jh.lin@mediatek.com>
 
-Hi Jason-JH,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linuxtv-media-pending/master]
-[also build test ERROR on media-tree/master linus/master v6.18-rc3 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-JH-Lin/soc-mediatek-Use-pkt_write-function-pointer-for-subsys-ID-compatibility/20251101-000555
-base:   https://git.linuxtv.org/media-ci/media-pending.git master
-patch link:    https://lore.kernel.org/r/20251031160309.1654761-3-jason-jh.lin%40mediatek.com
-patch subject: [PATCH 2/5] soc: mediatek: mtk-cmdq: Add cmdq_pkt_jump_rel_temp() for removing shift_pa
-config: x86_64-buildonly-randconfig-001-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011919.0lkK3DY8-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011919.0lkK3DY8-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   98bd8b16ae57e8f25c95d496fcde3dfdd8223d41
+commit: a7f7dbae94a5ae5cfbf2375e0d952c54b069fd7f [3741/5383] um: Remove file-based iomem emulation support
+config: um-randconfig-001-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011903.dAA0SEHo-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011903.dAA0SEHo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511011919.0lkK3DY8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511011903.dAA0SEHo-lkp@intel.com/
+
+Note: the linux-next/master HEAD 98bd8b16ae57e8f25c95d496fcde3dfdd8223d41 builds fine.
+      It may have been fixed somewhere.
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/soc/mediatek/mtk-mmsys.c:14:
-   In file included from include/linux/soc/mediatek/mtk-mmsys.h:11:
->> include/linux/soc/mediatek/mtk-cmdq.h:530:10: error: use of undeclared identifier 'EIMVAL'
-     530 |         return -EIMVAL;
-         |                 ^
-   drivers/soc/mediatek/mtk-mmsys.c:170:26: error: no member named 'pkt_write_mask' in 'struct cmdq_client_reg'
-     170 |                 ret = mmsys->cmdq_base.pkt_write_mask(cmdq_pkt,
-         |                       ~~~~~~~~~~~~~~~~ ^
-   drivers/soc/mediatek/mtk-mmsys.c:172:30: error: no member named 'pa_base' in 'struct cmdq_client_reg'
-     172 |                                                       mmsys->cmdq_base.pa_base,
-         |                                                       ~~~~~~~~~~~~~~~~ ^
-   3 errors generated.
---
-   In file included from drivers/soc/mediatek/mtk-mutex.c:12:
-   In file included from include/linux/soc/mediatek/mtk-mmsys.h:11:
->> include/linux/soc/mediatek/mtk-cmdq.h:530:10: error: use of undeclared identifier 'EIMVAL'
-     530 |         return -EIMVAL;
-         |                 ^
-   drivers/soc/mediatek/mtk-mutex.c:1002:16: error: no member named 'pkt_write' in 'struct cmdq_client_reg'
-    1002 |         mtx->cmdq_reg.pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys, en_addr, en_addr, 1);
-         |         ~~~~~~~~~~~~~ ^
-   2 errors generated.
---
-   In file included from mtk-mmsys.c:14:
-   In file included from include/linux/soc/mediatek/mtk-mmsys.h:11:
->> include/linux/soc/mediatek/mtk-cmdq.h:530:10: error: use of undeclared identifier 'EIMVAL'
-     530 |         return -EIMVAL;
-         |                 ^
-   mtk-mmsys.c:170:26: error: no member named 'pkt_write_mask' in 'struct cmdq_client_reg'
-     170 |                 ret = mmsys->cmdq_base.pkt_write_mask(cmdq_pkt,
-         |                       ~~~~~~~~~~~~~~~~ ^
-   mtk-mmsys.c:172:30: error: no member named 'pa_base' in 'struct cmdq_client_reg'
-     172 |                                                       mmsys->cmdq_base.pa_base,
-         |                                                       ~~~~~~~~~~~~~~~~ ^
-   3 errors generated.
---
-   In file included from mtk-mutex.c:12:
-   In file included from include/linux/soc/mediatek/mtk-mmsys.h:11:
->> include/linux/soc/mediatek/mtk-cmdq.h:530:10: error: use of undeclared identifier 'EIMVAL'
-     530 |         return -EIMVAL;
-         |                 ^
-   mtk-mutex.c:1002:16: error: no member named 'pkt_write' in 'struct cmdq_client_reg'
-    1002 |         mtx->cmdq_reg.pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys, en_addr, en_addr, 1);
-         |         ~~~~~~~~~~~~~ ^
-   2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OF_GPIO
-   Depends on [n]: GPIOLIB [=y] && OF [=n] && HAS_IOMEM [=y]
-   Selected by [y]:
-   - GPIO_TB10X [=y] && GPIOLIB [=y] && HAS_IOMEM [=y] && (ARC_PLAT_TB10X || COMPILE_TEST [=y])
-   WARNING: unmet direct dependencies detected for GPIO_SYSCON
-   Depends on [n]: GPIOLIB [=y] && HAS_IOMEM [=y] && MFD_SYSCON [=y] && OF [=n]
-   Selected by [y]:
-   - GPIO_SAMA5D2_PIOBU [=y] && GPIOLIB [=y] && HAS_IOMEM [=y] && MFD_SYSCON [=y] && OF_GPIO [=y] && (ARCH_AT91 || COMPILE_TEST [=y])
-   WARNING: unmet direct dependencies detected for I2C_K1
-   Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && OF [=n]
-   Selected by [y]:
-   - MFD_SPACEMIT_P1 [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && I2C [=y]
+   In file included from arch/um/kernel/asm-offsets.c:8:
+   In file included from include/linux/audit.h:13:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:31:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/um/include/asm/pgtable.h:48:
+>> arch/um/include/shared/as-layout.h:9:10: fatal error: 'generated/asm-offsets.h' file not found
+   #include <generated/asm-offsets.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:182: arch/um/kernel/asm-offsets.s] Error 1 shuffle=2651225257
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1280: prepare0] Error 2 shuffle=2651225257
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=2651225257
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=2651225257
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/EIMVAL +530 include/linux/soc/mediatek/mtk-cmdq.h
+vim +9 arch/um/include/shared/as-layout.h
 
-   526	
-   527	/* This wrapper has to be removed after all users migrated to jump_rel */
-   528	static inline int cmdq_pkt_jump_rel_temp(struct cmdq_pkt *pkt, s32 offset, u8 shift_pa)
-   529	{
- > 530		return -EIMVAL;
-   531	}
-   532	
+4ff83ce1114827 arch/um/include/as-layout.h        Jeff Dike 2007-05-06   8  
+9e636452d0714b arch/um/include/shared/as-layout.h Al Viro   2011-08-18  @9  #include <generated/asm-offsets.h>
+54ae36f24b103e arch/um/include/as-layout.h        Jeff Dike 2007-10-16  10  
+
+:::::: The code at line 9 was first introduced by commit
+:::::: 9e636452d0714b08e4f8f4c58b76c4b7d15ffffa um: get rid of kern_constants.h
+
+:::::: TO: Al Viro <viro@ftp.linux.org.uk>
+:::::: CC: Richard Weinberger <richard@nod.at>
 
 -- 
 0-DAY CI Kernel Test Service
