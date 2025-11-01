@@ -1,59 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9879523AE9A;
-	Sat,  1 Nov 2025 08:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FA329D260;
+	Sat,  1 Nov 2025 08:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761986285; cv=none; b=PwtxlAkCnmujs715oB6j3CHSO52eaGZieoWdvk1f/f39SHZxT6eRA5fXMy9yDjwQ0+gBmAIUc8YBrEkcm6VyTxBxXyJH2YKoSw8LpYknFZT9sf0pOZ/nMgtM+j8qZ7YOUJKgsZs5l6YDzOCVtkzGIlKYs/l5Od77A6waTZsnPfM=
+	t=1761986999; cv=none; b=ckvtAXWIWPQTWMLSM0qsEuof9JBA5jLuInzDUzk2AWKmAudLX0OQub/0Nfecb2POMW4ct/Uze8uUrIzz99FpGoci+wCSnCXX5csH8egt0ntcI1mGMHwOIRfH6Xk8OGaE391BR7YIGD7e6+xAyg2I3vvxpEpuBI8SOBEKGpgGxKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761986285; c=relaxed/simple;
-	bh=z2fEPE9j9n4db2IKRJXhQG3PNmsCCmZeLxpe8ViJFOE=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JmmUSBIWbWNIFz1vvvVLyDUrEQcGCfGlDvdxgIyVxj3G4/sQ8aOMEG1x/HnpmYQKBpbHEebfXHsJnFpWZNllPTrNl9PGY6SA9mpXL4i+U489ssE8LkvcOCBzfVORYg2iO4+i8GX1IASR2uyWPdTBWkiHwSwraBQWkXIVFHNIRPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RVy2J4xT; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1761986999; c=relaxed/simple;
+	bh=9s/STQTxcc3k88CIQt95xpXMPCs3JdFq9Lp93ypc8O8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K2xP0tToPf/F+D3vDQjNExKMXMjzC9eyh799BnFYce64rjqOvcNUw684iPgZkHXQMWkWtHqUXPcqI07a2pwThdpOtt6oxNXg69uFqDV2LyFh/MQKRZaMJTCffR39CK/Jr0TDThSIX6h1+s/ItmlGwAVBqR3pbrrH+JxRuy8aV9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UYjCU7pG; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RVy2J4xT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UYjCU7pG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761986283; x=1793522283;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=z2fEPE9j9n4db2IKRJXhQG3PNmsCCmZeLxpe8ViJFOE=;
-  b=RVy2J4xTpMLZdLgwalSHULj+DTW+m/w5gq8i9x7SJ5d4qNQ3tsZDbmrC
-   mKcT+YPk/BlOLSDnQtzRdlHN+ybcdW/dKMubHgYm9261XGlMN29oTqYCd
-   PjnagKw5+zHu4v+b319TIIFfX4XnfEXmYl5GfAinOe4rPndcpT+kRbZZi
-   p8yThl6U1Z39+KFu+FyfXD3BumJlliUbEE05fOzyL2KVPe+0LCLImKTeU
-   cv2b7AmFAP7lJ8KRLOyfTdgzl6R9tqaOBmoLGzwg+V6S/oUORGKSNy4Sl
-   08mvsczd01kTmdGz20TfWN94TeHLNxF000JF8M6AlvUO65GwkbBqpJs83
+  t=1761986998; x=1793522998;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9s/STQTxcc3k88CIQt95xpXMPCs3JdFq9Lp93ypc8O8=;
+  b=UYjCU7pGpJP1l3jU4HLldrQnN84mI91fV0O0FwkYc81XsEI0lBvy2mNz
+   D77lXisguHQjxGF0XPxCOJTDGy7Z5HD44AqgRUJPYdF+ta8RIlTFj/zbW
+   GGYBqaygEpFMPDh+YH89iYUH1Ab9risdX9s17D2A1jZYS+MAHYU78ACDl
+   DNBEYtRWH1Y4byquxXsq90R5q7IM/MfqQUD19i02FT7NryegAKfeO/gD2
+   0kuuPqS74T1Kg/mI2OLenZQ9PZatdZIK2AQc9L0Vaz10CV8TVghqmgijd
+   cciv+v0yeqf1hP/XIsMBjHKCwraMy+iCYxiGqzEgvowWp+oOy0th1Z1Sz
    w==;
-X-CSE-ConnectionGUID: 2hD7o+ApSmKhV5R9x3L6cw==
-X-CSE-MsgGUID: TSvPUyOrRVWX+05CrAbGww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64288720"
+X-CSE-ConnectionGUID: h+6lsOgOSfKIHuR5vWCNcA==
+X-CSE-MsgGUID: rMiAXsIESf6irtC4L+CBXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64237892"
 X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
-   d="scan'208";a="64288720"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 01:38:03 -0700
-X-CSE-ConnectionGUID: 7rI/VinVRiCBXkt6gS4I8Q==
-X-CSE-MsgGUID: Vb9LlHVYQ2yOOXc8VwJIMA==
+   d="scan'208";a="64237892"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 01:49:57 -0700
+X-CSE-ConnectionGUID: I0St/XsbSMKzNTm82JZ0YA==
+X-CSE-MsgGUID: Z0R3c7DDRjq0Nctd+arFGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
-   d="scan'208";a="191572727"
+   d="scan'208";a="190771097"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 01 Nov 2025 01:38:01 -0700
+  by orviesa004.jf.intel.com with ESMTP; 01 Nov 2025 01:49:55 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vF77X-000O31-0t;
-	Sat, 01 Nov 2025 08:37:59 +0000
-Date: Sat, 1 Nov 2025 16:37:25 +0800
+	id 1vF7Im-000O3M-31;
+	Sat, 01 Nov 2025 08:49:42 +0000
+Date: Sat, 1 Nov 2025 16:49:04 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [xiang-erofs:dev-test 2/2] ld.lld: error:
- vmlinux.a(mm/vma.o):(function remove_vma: .text+0x34): relocation
- R_LARCH_B26 out of range: 246669740 is not in [-134217728, 134217727];
- references 'dynamic_might_resched'
-Message-ID: <202511011651.U3915LM4-lkp@intel.com>
+To: Lukas Bulwahn <lbulwahn@redhat.com>,
+	Samuel Kayode <samuel.kayode@savoirfairelinux.com>,
+	Lee Jones <lee@kernel.org>, imx@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Frank Li <Frank.Li@nxp.com>, Krzysztof Kozlowski <krzk@kernel.org>,
+	Sean Nyekjaer <sean@geanix.com>, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH] MAINTAINERS: adjust file entry in NXP PF1550 PMIC MFD
+ DRIVER
+Message-ID: <202511011641.mVLMVN8V-lkp@intel.com>
+References: <20251029104228.95498-1-lukas.bulwahn@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,32 +69,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251029104228.95498-1-lukas.bulwahn@redhat.com>
 
-CC: Xiang Gao <xiang@kernel.org>
-CC: linux-erofs@lists.ozlabs.org
-TO: Gao Xiang <hsiangkao@linux.alibaba.com>
+Hi Lukas,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-head:   3bf692888f2707392872a69cd125c800778e72e2
-commit: 3bf692888f2707392872a69cd125c800778e72e2 [2/2] erofs: avoid infinite loop due to incomplete zstd-compressed data
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20251101/202511011651.U3915LM4-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cc271437553452ede002d871d32abc02084341a8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011651.U3915LM4-lkp@intel.com/reproduce)
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20251029]
+[cannot apply to lee-leds/for-leds-next linus/master v6.18-rc3 v6.18-rc2 v6.18-rc1 v6.18-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Bulwahn/MAINTAINERS-adjust-file-entry-in-NXP-PF1550-PMIC-MFD-DRIVER/20251029-184717
+base:   next-20251029
+patch link:    https://lore.kernel.org/r/20251029104228.95498-1-lukas.bulwahn%40redhat.com
+patch subject: [PATCH] MAINTAINERS: adjust file entry in NXP PF1550 PMIC MFD DRIVER
+config: powerpc-randconfig-002-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011641.mVLMVN8V-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d1c086e82af239b245fe8d7832f2753436634990)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011641.mVLMVN8V-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511011651.U3915LM4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511011641.mVLMVN8V-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: vmlinux.a(mm/vma.o):(function remove_vma: .text+0x34): relocation R_LARCH_B26 out of range: 246669740 is not in [-134217728, 134217727]; references 'dynamic_might_resched'
-   >>> referenced by vma.c
-   >>> defined in vmlinux.a(kernel/sched/core.o)
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_task'; recompile with -fPIC
+   >>> defined in vmlinux.a(init/init_task.o)
+   >>> referenced by head_85xx.S:222 (arch/powerpc/kernel/head_85xx.S:222)
+   >>>               arch/powerpc/kernel/head_85xx.o:(.head.text+0x41a) in archive vmlinux.a
 --
->> ld.lld: error: vmlinux.a(mm/vma.o):(function unmap_region: .text+0x14c): relocation R_LARCH_B26 out of range: 246626804 is not in [-134217728, 134217727]; references '__sanitizer_cov_stack_depth'
-   >>> referenced by vma.c
-   >>> defined in vmlinux.a(kernel/kstack_erase.o)
+>> ld.lld: error: relocation R_PPC_ADDR16_LO cannot be used against symbol 'init_task'; recompile with -fPIC
+   >>> defined in vmlinux.a(init/init_task.o)
+   >>> referenced by head_85xx.S:223 (arch/powerpc/kernel/head_85xx.S:223)
+   >>>               arch/powerpc/kernel/head_85xx.o:(.head.text+0x41e) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_thread_union'; recompile with -fPIC
+   >>> defined in ./arch/powerpc/kernel/vmlinux.lds:146
+   >>> referenced by head_85xx.S:230 (arch/powerpc/kernel/head_85xx.S:230)
+   >>>               arch/powerpc/kernel/head_85xx.o:(.head.text+0x42a) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
