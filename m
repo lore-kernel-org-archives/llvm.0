@@ -1,65 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654A826ED5E;
-	Sat,  1 Nov 2025 06:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657BF299AAC;
+	Sat,  1 Nov 2025 07:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761977386; cv=none; b=lBy4bQwktyFcPE7dB4CkoRzt4ICywe2i82bt4mYNVCNH3b7iMzlHLbCwE4g5KK7oxpxsE9YqgO0ul62ZYnPJmPaLbagzDBDipwLUfWBNnIGtg3AHKlS29wCrmkBmZjHu4KBXMilfYBMetw/q1N1T8OTDDEN8fRcwKoGsq7u6mFc=
+	t=1761982577; cv=none; b=a8gI3BMw1KbrM/Te83lZidBLLOqSDRaaxvbxjYLrooXIEx7F9BLEkrQSiv4UiENxBeL/eFzuEXO9xQ2ubRF8VS1RiRpb+RteE3NkweuXqzsIn0iHEBi7S5APf+rHf3nTtW81/Y0gaNBUbewBjKTXFEl01L4eJMyOo2x0M2N/W9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761977386; c=relaxed/simple;
-	bh=bqaEm8qkzluJFcj5K3U/O86yPhUXk6DJ/URd+gKLwj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=St4+FrmqpwxTavQvkM56nxSc9dtB4jCj1yP6EKfAVEoZoaz44Ann8ThVglpA91HHcoiggOvhHr5NvprBuae85y11oWAW0rXwsnmHq+Q3GVGhH8fE7drpZ/HiHrWd/0OBPwiiwbrtvefTO3bINaUKzFfSeZfDu2Wxs9+RXTcRzKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JUcyfbV7; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1761982577; c=relaxed/simple;
+	bh=2VdscPC7pHDwv0/PiRnBKewiLHLlkoj22vBUnc0cpXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IaQIcuZPIGmsiJ0kh/VDKlYwU7lJDocM54+Y7A2Avxo9LRH4Av9RtBfkgGqxJijNARLKkFq618aDkv3ZLgKekw5m4qUGgotlXFRaauZ3phJrM/vTTldKXy/ghQVHPwwXCQYbEykq4F98+/VLkwvLb7XmWKb27KqVbP84eB0zjMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m3n8Qvqk; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JUcyfbV7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m3n8Qvqk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761977385; x=1793513385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bqaEm8qkzluJFcj5K3U/O86yPhUXk6DJ/URd+gKLwj4=;
-  b=JUcyfbV79jYfMKspc7xJUlkCJStYXLJCKIIip7fXkdHvzFT50FLjE4js
-   5Ex5eXG6Xq/Y34Bxbu+hDvV5lOJXBM03ko4/CVlReH6DprL2Zk8QHFDXk
-   /R3EQnpsICJm9pizAfE+rgZ1Xcf/YTtUJ5beETIuYcP58WE/3av404iV9
-   E3lPO11OVStXk2vXe+7swNtuhmPk5NDxOapYHHggkQuFT6aoUZ6pZx4tA
-   8KnOTnhdayLcQx0P+68l2Q/jI2lMFP6ZmO+2j3jh2bj/svS6nd5hQxCvP
-   vXvUdEUnWLGy/KAEPZWcSvMAZ1OOcsPkexyQtND55cxFMpC0jVGW3sgtQ
-   w==;
-X-CSE-ConnectionGUID: X+r9rqOPSuGmijk/wQ9wpQ==
-X-CSE-MsgGUID: m3PyW9N6SWutUVdBlL0E9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="74428880"
+  t=1761982575; x=1793518575;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2VdscPC7pHDwv0/PiRnBKewiLHLlkoj22vBUnc0cpXs=;
+  b=m3n8QvqkUiWfuMmWLboG8kBxO7OHnlVE2V0BOsHNrXgS+WDqUCA/Y+R/
+   Sx5YCCxvNX0CzVa71bGPi4Y3ykuhrwp6kXUT1rl/bZmxKDOJ/57Acj3tr
+   AJvP/AtClGYFQl4DKZsKKMQD5Ddf2Ef2a5dEBIljQOHHUGcmrf/9xt0FP
+   EjlYGHh0vtjyj9/kDH97htynJ0M/zW0qSFstwc4X3Jr3bk7rdwQr3qOTG
+   rAwGVYAxtiCM88i7lpnZO6EsGlJkqQllUG2rXIhfjBxa61kkQlSwuxSbY
+   19oyBlYLhQCcNvrZvbiO2KVtQ7iO0fpCs8zzGPd+D1DNqbQm0EgPmnq0f
+   g==;
+X-CSE-ConnectionGUID: AHzB+nAYSe6LUGGNmP25qw==
+X-CSE-MsgGUID: 4+lZzUgtSOyjXyX4OnDcbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11599"; a="64176295"
 X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
-   d="scan'208";a="74428880"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2025 23:09:28 -0700
-X-CSE-ConnectionGUID: +Sz5wqAaQ+Gea1s6q3fWlQ==
-X-CSE-MsgGUID: YBxcoucjQX6pgDdGU9bSrw==
+   d="scan'208";a="64176295"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 00:36:09 -0700
+X-CSE-ConnectionGUID: 2wZYMgcDTG6ACTMrPwVJ8A==
+X-CSE-MsgGUID: b5y0npAAQJmutDCAcYhFlw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
-   d="scan'208";a="186282191"
+   d="scan'208";a="190761705"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 31 Oct 2025 23:09:24 -0700
+  by orviesa004.jf.intel.com with ESMTP; 01 Nov 2025 00:36:08 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vF4ni-000NxA-0W;
-	Sat, 01 Nov 2025 06:09:22 +0000
-Date: Sat, 1 Nov 2025 14:08:35 +0800
+	id 1vF69d-000O00-27;
+	Sat, 01 Nov 2025 07:36:05 +0000
+Date: Sat, 1 Nov 2025 15:35:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ricardo Robaina <rrobaina@redhat.com>, audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org
+To: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	paul@paul-moore.com, eparis@redhat.com, fw@strlen.de,
-	pablo@netfilter.org, kadlec@netfilter.org,
-	Ricardo Robaina <rrobaina@redhat.com>
-Subject: Re: [PATCH v4 1/2] audit: add audit_log_packet_ip4 and
- audit_log_packet_ip6 helper functions
-Message-ID: <202511011350.ye4VgG6l-lkp@intel.com>
-References: <cfafc5247fbfcd2561de16bcff67c1afd5676c9e.1761918165.git.rrobaina@redhat.com>
+	linux-kernel@vger.kernel.org,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Simon Horman <horms@kernel.org>
+Subject: drivers/net/ethernet/intel/ixgbe/ixgbe_e610.c:3938:28: error: no
+ member named 'ixgbe_dbg_adapter' in 'struct ixgbe_adapter'
+Message-ID: <202511011546.mIG3y3Pt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,91 +65,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cfafc5247fbfcd2561de16bcff67c1afd5676c9e.1761918165.git.rrobaina@redhat.com>
 
-Hi Ricardo,
+Hi Michal,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on pcmoore-audit/next]
-[also build test ERROR on netfilter-nf/main linus/master v6.18-rc3 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Robaina/audit-add-audit_log_packet_ip4-and-audit_log_packet_ip6-helper-functions/20251031-220605
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-patch link:    https://lore.kernel.org/r/cfafc5247fbfcd2561de16bcff67c1afd5676c9e.1761918165.git.rrobaina%40redhat.com
-patch subject: [PATCH v4 1/2] audit: add audit_log_packet_ip4 and audit_log_packet_ip6 helper functions
-config: s390-randconfig-002-20251101 (https://download.01.org/0day-ci/archive/20251101/202511011350.ye4VgG6l-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project be2081d9457ed095c4a6ebe2a920f0f7b76369c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011350.ye4VgG6l-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ba36dd5ee6fd4643ebbf6ee6eefcecf0b07e35c7
+commit: 641585bc978e0a1170ca8f12fbb1468b3874a2db ixgbe: fwlog support for e610
+date:   7 weeks ago
+config: powerpc-skiroot_defconfig (https://download.01.org/0day-ci/archive/20251101/202511011546.mIG3y3Pt-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cc271437553452ede002d871d32abc02084341a8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011546.mIG3y3Pt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511011350.ye4VgG6l-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511011546.mIG3y3Pt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/netfilter/nft_log.c:48:10: error: call to undeclared function 'audit_log_packet_ip4'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      48 |                         fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-         |                               ^
->> net/netfilter/nft_log.c:51:10: error: call to undeclared function 'audit_log_packet_ip6'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      51 |                         fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-         |                               ^
-   net/netfilter/nft_log.c:56:9: error: call to undeclared function 'audit_log_packet_ip4'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      56 |                 fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-         |                       ^
-   net/netfilter/nft_log.c:59:9: error: call to undeclared function 'audit_log_packet_ip6'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      59 |                 fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-         |                       ^
-   4 errors generated.
+>> drivers/net/ethernet/intel/ixgbe/ixgbe_e610.c:3938:28: error: no member named 'ixgbe_dbg_adapter' in 'struct ixgbe_adapter'
+    3938 |                 .debugfs_root = adapter->ixgbe_dbg_adapter,
+         |                                 ~~~~~~~  ^
+   1 error generated.
 
 
-vim +/audit_log_packet_ip4 +48 net/netfilter/nft_log.c
+vim +3938 drivers/net/ethernet/intel/ixgbe/ixgbe_e610.c
 
-    28	
-    29	static void nft_log_eval_audit(const struct nft_pktinfo *pkt)
-    30	{
-    31		struct sk_buff *skb = pkt->skb;
-    32		struct audit_buffer *ab;
-    33		int fam = -1;
-    34	
-    35		if (!audit_enabled)
-    36			return;
-    37	
-    38		ab = audit_log_start(NULL, GFP_ATOMIC, AUDIT_NETFILTER_PKT);
-    39		if (!ab)
-    40			return;
-    41	
-    42		audit_log_format(ab, "mark=%#x", skb->mark);
-    43	
-    44		switch (nft_pf(pkt)) {
-    45		case NFPROTO_BRIDGE:
-    46			switch (eth_hdr(skb)->h_proto) {
-    47			case htons(ETH_P_IP):
-  > 48				fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-    49				break;
-    50			case htons(ETH_P_IPV6):
-  > 51				fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-    52				break;
-    53			}
-    54			break;
-    55		case NFPROTO_IPV4:
-    56			fam = audit_log_packet_ip4(ab, skb) ? NFPROTO_IPV4 : -1;
-    57			break;
-    58		case NFPROTO_IPV6:
-    59			fam = audit_log_packet_ip6(ab, skb) ? NFPROTO_IPV6 : -1;
-    60			break;
-    61		}
-    62	
-    63		if (fam == -1)
-    64			audit_log_format(ab, " saddr=? daddr=? proto=-1");
-    65	
-    66		audit_log_end(ab);
-    67	}
-    68	
+  3931	
+  3932	int ixgbe_fwlog_init(struct ixgbe_hw *hw)
+  3933	{
+  3934		struct ixgbe_adapter *adapter = hw->back;
+  3935		struct libie_fwlog_api api = {
+  3936			.pdev = adapter->pdev,
+  3937			.send_cmd = __fwlog_send_cmd,
+> 3938			.debugfs_root = adapter->ixgbe_dbg_adapter,
+  3939			.priv = hw,
+  3940		};
+  3941	
+  3942		if (hw->mac.type != ixgbe_mac_e610)
+  3943			return -EOPNOTSUPP;
+  3944	
+  3945		return libie_fwlog_init(&hw->fwlog, &api);
+  3946	}
+  3947	
 
 -- 
 0-DAY CI Kernel Test Service
