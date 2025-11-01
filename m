@@ -1,112 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B438420459A
-	for <llvm@lists.linux.dev>; Sat,  1 Nov 2025 16:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D370272E5A;
+	Sat,  1 Nov 2025 17:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762016150; cv=none; b=N9vVghLUdhA56C89EGtnaAkPacCRmVyW/s7GzsWyOT1PaDGeuIC+55yc5UNynf8BkFb9WAFcRs/4jd02wGsAFJbY8DrS1QG7j+U42i6hOeXviQBMpYtg/EllB7txyDP9hKSIA7/42oHo+AI/medBitJEF9uReTAufJzx7B0Kq6A=
+	t=1762019381; cv=none; b=JCg6e84mysB4c3Ff32B4iaLvD8+F5Z/EO9ITGxvdZwtMGyywygEVwPXkpQR1MYPfsZeRh9JGeaTWpcx4XCdG2Ht45JuDK4GKKYkwvqRf6FBj7q789ctokM16Uwyd9nxLNiMcpX2KlXbOxAPHlVDtJMZ9yk4bRrmu7udJFx+kgnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762016150; c=relaxed/simple;
-	bh=sP80vbxc0GNP/r5uXwFDomQ23UoJ4yroWxjXP3XmNMU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u2sEXKL3p5z+cTAHe9GxC2YQDtxDBGuCdu+3P4NJM9C4IIPLwTYr6iKYIuie0Ce7SsG0GJnkHEka+c/jO20+7Q329jA/BAF2ZxcZcgD63MuJltt2qcVQg4EC4QxRhYT49UPSDsCp0HbR+pJOSutzrsspAY+9irwSs9QK/xF5cOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RF0EYwGk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762019381; c=relaxed/simple;
+	bh=STJfZC4xcxEFfqOX9MMvUBGdnPrvSDkpD7JN9k8B7+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fEuV0FrrAVvzsLqGlzCHGzZmgdg/Ki7ICxNZJo/Hy+ngYmhBqIzpp4ljH5WWHx8KVx5dKpgM1FEaLnGP872mAe4M0gVHJzURJ2QKl5Y4niKGF4ummILHI6SKt7a7BlNxWg+6LJUprLd6jUlXr8l8epeigzmmzPq9n0QUitXu6f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ANeYj3Wh; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RF0EYwGk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474F3C116D0
-	for <llvm@lists.linux.dev>; Sat,  1 Nov 2025 16:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762016150;
-	bh=sP80vbxc0GNP/r5uXwFDomQ23UoJ4yroWxjXP3XmNMU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RF0EYwGkYWAviePjW7xN/OJRvwNhbqV1hMMNIs20gYmgWjrUhX3VTiMTlz9ZOCZ5B
-	 NXQkgiqk8kYiwPDsvTA0VFMALLKyf5rQdgj/CBG1sTE15ccibfrhS1g63ZlKX1lHKM
-	 7UL3/hfHnLT5czan5cp/tcrvWDt4uWQ6UuGsdc+QEdMaz7s1qTGKGYYXQJYBe6vVca
-	 z1o0oo3gMr4PFJwzcE+qRl/dEms8SbUHTB8ZwVA2Uf/IDxdQO9JDrNb7/WRWaVtzGH
-	 71Lh5gelYwPa5qTi/Hg3BmeOn0k8gVwdT2WJ5JcjHGb8oMfT8U2c1Ut/j9b0mZ+sFJ
-	 GEsrrsx0XoT7g==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-378d50e1c77so28290391fa.0
-        for <llvm@lists.linux.dev>; Sat, 01 Nov 2025 09:55:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWOzIGMYrOMnySoSf6aQqDcL9IiVRm07PiEUbYxcYGfdKhF+XesHDfmymhNMjvfviKzGKJv@lists.linux.dev
-X-Gm-Message-State: AOJu0YzCwNxoWjawQPXx87vSLCKla4R50ac06HuDpHEqiAdassIHMDyQ
-	XAyws8w6xX3scUXLsHKEn5pPU0Lk2D9V7YXicpC+4FuyfzMAqk5lg04Nz0SS9sHur5rHM57tAB4
-	Yqa1BbZPmBCWvoSbAaE8WwyNtpvhf6AM=
-X-Google-Smtp-Source: AGHT+IFzm6byOVEcoCYQ/cLxtsweQADoRZYzXMb1uWfsMHcHS2qxBFBPxKTICmebgyez5+m6RGoVxWrnW9Pxli+8r4A=
-X-Received: by 2002:a2e:b8cb:0:b0:37a:2c7d:2d69 with SMTP id
- 38308e7fff4ca-37a2c7d3241mr5473091fa.40.1762016148544; Sat, 01 Nov 2025
- 09:55:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ANeYj3Wh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762019379; x=1793555379;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=STJfZC4xcxEFfqOX9MMvUBGdnPrvSDkpD7JN9k8B7+4=;
+  b=ANeYj3Wh8WYn6tNcpeghd8wEdyEtkaxku5bsCz40D+1HPLaWMFJnhAWu
+   CfHEWIMiPmSKPHecqWvJuDXWxspsoHPnGZ1R+YQ9w0OW5609W+WqIYAsM
+   +H6WEnMrD/ZEzwzWLkzSIyiOZNEF5oIokTH9an+uarR4D8jrxODFLl2s7
+   NH3Fdf6tMUKfWlvdLbJcIKhvbE+ILRU+Hy6+UbYcjWL+RKDzLiGLhyHms
+   3F6738Nj4DfcSftfn5oID0DO/VdfdxN32yA3J0sNxyk4cK3EphMS7mJ11
+   OqeJrY+3QDgzgd7M3uUHZuVYl58WgW5gR/j5d0KRedV3jIsJENHbsxFRr
+   g==;
+X-CSE-ConnectionGUID: SJLxCFC+Q5m1Wy725teWCQ==
+X-CSE-MsgGUID: SwYuz86SS5yq6VJepAGfgA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64061782"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="64061782"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 10:49:39 -0700
+X-CSE-ConnectionGUID: kNPxTVj4RsiI+ZJ1UFFCTw==
+X-CSE-MsgGUID: bsHgchHtRf2RBC5/w+vnQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
+   d="scan'208";a="186165479"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 01 Nov 2025 10:49:35 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vFFjI-000OXW-17;
+	Sat, 01 Nov 2025 17:49:32 +0000
+Date: Sun, 2 Nov 2025 01:49:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+	trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
+	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+	Gokul krishna Krishnakumar <Gokul.krishnakumar@oss.qualcomm>
+Subject: Re: [PATCH v2 4/7] remoteproc: qcom: pas: Add late attach support
+ for subsystems
+Message-ID: <202511020129.b8wpSSt0-lkp@intel.com>
+References: <20251029-knp-remoteproc-v2-4-6c81993b52ea@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251101-kbuild-ms-extensions-dedicated-cflags-v1-1-38004aba524b@kernel.org>
-In-Reply-To: <20251101-kbuild-ms-extensions-dedicated-cflags-v1-1-38004aba524b@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sat, 1 Nov 2025 17:55:37 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGy8s7Cc=aycKymv2d5wEZFL5J5_HxWyMb-QYDXkUrU9Q@mail.gmail.com>
-X-Gm-Features: AWmQ_bnURnp_FaiKs8-FENuEErFxDHIc7i6dKr7lAYFTzEG_ElUiaSBCxPBJiyA
-Message-ID: <CAMj1kXGy8s7Cc=aycKymv2d5wEZFL5J5_HxWyMb-QYDXkUrU9Q@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Add '-fms-extensions' to areas with dedicated CFLAGS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-efi@vger.kernel.org, llvm@lists.linux.dev, 
-	Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251029-knp-remoteproc-v2-4-6c81993b52ea@oss.qualcomm.com>
 
-On Sat, 1 Nov 2025 at 17:36, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> This is a follow up to commit c4781dc3d1cf ("Kbuild: enable
-> -fms-extensions") but in a separate change due to being substantially
-> different from the initial submission.
->
-> There are many places within the kernel that use their own CFLAGS
-> instead of the main KBUILD_CFLAGS, meaning code written with the main
-> kernel's use of '-fms-extensions' in mind that may be tangentially
-> included in these areas will result in "error: declaration does not
-> declare anything" messages from the compiler.
->
-> Add '-fms-extensions' to all these areas to ensure consistency, along
-> with -Wno-microsoft-anon-tag to silence clang's warning about use of the
-> extension that the kernel cares about using. parisc does not build with
-> clang so it does not need this warning flag. LoongArch does not need it
-> either because -W flags from KBUILD_FLAGS are pulled into cflags-vdso.
->
-> Reported-by: Christian Brauner <brauner@kernel.org>
-> Closes: https://lore.kernel.org/20251030-meerjungfrau-getrocknet-7b46eacc215d@brauner/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> I am taking the original '-fms-extensions' change [1] via a shared
-> branch in kbuild [2] so I would appreciate acks. I plan to finalize that
-> branch so that other maintainers can safely pull it on Thursday.
->
-> [1]: https://git.kernel.org/kbuild/c/c4781dc3d1cf0e017e1f290607ddc56cfe187afc
-> [2]: https://git.kernel.org/kbuild/l/kbuild-ms-extensions
-> ---
->  arch/arm64/kernel/vdso32/Makefile     | 3 ++-
->  arch/loongarch/vdso/Makefile          | 2 +-
->  arch/parisc/boot/compressed/Makefile  | 2 +-
->  arch/powerpc/boot/Makefile            | 3 ++-
->  arch/s390/Makefile                    | 3 ++-
->  arch/s390/purgatory/Makefile          | 3 ++-
->  arch/x86/Makefile                     | 4 +++-
->  arch/x86/boot/compressed/Makefile     | 7 +++++--
->  drivers/firmware/efi/libstub/Makefile | 4 ++--
->  9 files changed, 20 insertions(+), 11 deletions(-)
->
+Hi Jingyi,
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on aaa9c3550b60d6259d6ea8b1175ade8d1242444e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jingyi-Wang/dt-bindings-remoteproc-qcom-sm8550-pas-Add-Kaanapali-ADSP/20251029-163330
+base:   aaa9c3550b60d6259d6ea8b1175ade8d1242444e
+patch link:    https://lore.kernel.org/r/20251029-knp-remoteproc-v2-4-6c81993b52ea%40oss.qualcomm.com
+patch subject: [PATCH v2 4/7] remoteproc: qcom: pas: Add late attach support for subsystems
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20251102/202511020129.b8wpSSt0-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project cc271437553452ede002d871d32abc02084341a8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251102/202511020129.b8wpSSt0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511020129.b8wpSSt0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/remoteproc/qcom_q6v5_wcss.c:1018:84: error: too few arguments to function call, expected 7, have 6
+    1018 |         ret = qcom_q6v5_init(&wcss->q6v5, pdev, rproc, desc->crash_reason_smem, NULL, NULL);
+         |               ~~~~~~~~~~~~~~                                                              ^
+   drivers/remoteproc/qcom_q6v5.h:55:5: note: 'qcom_q6v5_init' declared here
+      55 | int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+         |     ^              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      56 |                    struct rproc *rproc, int crash_reason, const char *load_state,
+         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      57 |                    bool early_boot, void (*handover)(struct qcom_q6v5 *q6v5));
+         |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +1018 drivers/remoteproc/qcom_q6v5_wcss.c
+
+0af65b9b915e52 Govind Singh          2021-01-29   971  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   972  static int q6v5_wcss_probe(struct platform_device *pdev)
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   973  {
+6549f42c3d1795 Govind Singh          2021-01-29   974  	const struct wcss_data *desc;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   975  	struct q6v5_wcss *wcss;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   976  	struct rproc *rproc;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   977  	int ret;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   978  
+6549f42c3d1795 Govind Singh          2021-01-29   979  	desc = device_get_match_data(&pdev->dev);
+6549f42c3d1795 Govind Singh          2021-01-29   980  	if (!desc)
+6549f42c3d1795 Govind Singh          2021-01-29   981  		return -EINVAL;
+6549f42c3d1795 Govind Singh          2021-01-29   982  
+41854ea92baad3 Andrew Davis          2024-01-23   983  	rproc = devm_rproc_alloc(&pdev->dev, pdev->name, desc->ops,
+6549f42c3d1795 Govind Singh          2021-01-29   984  				 desc->firmware_name, sizeof(*wcss));
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   985  	if (!rproc) {
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   986  		dev_err(&pdev->dev, "failed to allocate rproc\n");
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   987  		return -ENOMEM;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   988  	}
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   989  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   990  	wcss = rproc->priv;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   991  	wcss->dev = &pdev->dev;
+0af65b9b915e52 Govind Singh          2021-01-29   992  
+0af65b9b915e52 Govind Singh          2021-01-29   993  	wcss->version = desc->version;
+0af65b9b915e52 Govind Singh          2021-01-29   994  	wcss->requires_force_stop = desc->requires_force_stop;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   995  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   996  	ret = q6v5_wcss_init_mmio(wcss, pdev);
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   997  	if (ret)
+41854ea92baad3 Andrew Davis          2024-01-23   998  		return ret;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07   999  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1000  	ret = q6v5_alloc_memory_region(wcss);
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1001  	if (ret)
+41854ea92baad3 Andrew Davis          2024-01-23  1002  		return ret;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1003  
+0af65b9b915e52 Govind Singh          2021-01-29  1004  	if (wcss->version == WCSS_QCS404) {
+0af65b9b915e52 Govind Singh          2021-01-29  1005  		ret = q6v5_wcss_init_clock(wcss);
+0af65b9b915e52 Govind Singh          2021-01-29  1006  		if (ret)
+41854ea92baad3 Andrew Davis          2024-01-23  1007  			return ret;
+0af65b9b915e52 Govind Singh          2021-01-29  1008  
+0af65b9b915e52 Govind Singh          2021-01-29  1009  		ret = q6v5_wcss_init_regulator(wcss);
+0af65b9b915e52 Govind Singh          2021-01-29  1010  		if (ret)
+41854ea92baad3 Andrew Davis          2024-01-23  1011  			return ret;
+0af65b9b915e52 Govind Singh          2021-01-29  1012  	}
+0af65b9b915e52 Govind Singh          2021-01-29  1013  
+0af65b9b915e52 Govind Singh          2021-01-29  1014  	ret = q6v5_wcss_init_reset(wcss, desc);
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1015  	if (ret)
+41854ea92baad3 Andrew Davis          2024-01-23  1016  		return ret;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1017  
+c1fe10d238c025 Sibi Sankar           2021-09-16 @1018  	ret = qcom_q6v5_init(&wcss->q6v5, pdev, rproc, desc->crash_reason_smem, NULL, NULL);
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1019  	if (ret)
+41854ea92baad3 Andrew Davis          2024-01-23  1020  		return ret;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1021  
+25f9f5a2107fdc Bjorn Andersson       2020-05-14  1022  	qcom_add_glink_subdev(rproc, &wcss->glink_subdev, "q6wcss");
+5b9f51b200dcb2 Dmitry Baryshkov      2024-06-22  1023  	qcom_add_pdm_subdev(rproc, &wcss->pdm_subdev);
+8a226e2c71bb37 Sivaprakash Murugesan 2020-05-01  1024  	qcom_add_ssr_subdev(rproc, &wcss->ssr_subdev, "q6wcss");
+8a226e2c71bb37 Sivaprakash Murugesan 2020-05-01  1025  
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1026  	if (desc->ssctl_id) {
+0af65b9b915e52 Govind Singh          2021-01-29  1027  		wcss->sysmon = qcom_add_sysmon_subdev(rproc,
+0af65b9b915e52 Govind Singh          2021-01-29  1028  						      desc->sysmon_name,
+0af65b9b915e52 Govind Singh          2021-01-29  1029  						      desc->ssctl_id);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1030  		if (IS_ERR(wcss->sysmon)) {
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1031  			ret = PTR_ERR(wcss->sysmon);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1032  			goto deinit_remove_subdevs;
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1033  		}
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1034  	}
+0af65b9b915e52 Govind Singh          2021-01-29  1035  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1036  	ret = rproc_add(rproc);
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1037  	if (ret)
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1038  		goto remove_sysmon_subdev;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1039  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1040  	platform_set_drvdata(pdev, rproc);
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1041  
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1042  	return 0;
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1043  
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1044  remove_sysmon_subdev:
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1045  	if (desc->ssctl_id)
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1046  		qcom_remove_sysmon_subdev(wcss->sysmon);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1047  deinit_remove_subdevs:
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1048  	qcom_q6v5_deinit(&wcss->q6v5);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1049  	qcom_remove_glink_subdev(rproc, &wcss->glink_subdev);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1050  	qcom_remove_pdm_subdev(rproc, &wcss->pdm_subdev);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1051  	qcom_remove_ssr_subdev(rproc, &wcss->ssr_subdev);
+60e7c43e61c9a6 Joe Hattori           2024-11-08  1052  	return ret;
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1053  }
+3a3d4163e0bfde Sricharan Ramabadhran 2018-06-07  1054  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
