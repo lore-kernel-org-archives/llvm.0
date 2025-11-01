@@ -1,140 +1,167 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48506147C9B
-	for <llvm@lists.linux.dev>; Sat,  1 Nov 2025 07:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C393B242925;
+	Sat,  1 Nov 2025 07:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761983538; cv=none; b=hHeeHMlktFW3Rspk+mpIofMUKRKzCmoXb8Ko0l4jAnwOZGxbS4cudQ09EsJ0WYROB1JlmHaxEuMIs2Olwr9jIbmkTDMv9roeI/kV38MZcraEMndeugAk+UsijkPa2zJ2y4l618/LZ6eL0xT+mXDTDUy1FWhJ6VGmqSQQVvPemtw=
+	t=1761983837; cv=none; b=KCWeQTFefOUxLTBiFutq2t44bHuM8+BtakebmjpdYDiSU4zr7G7UiyVaiULSVDHwCf59B08QDYyihJmZEzUvmGEVoOPIj2vSf1cXTvBfFyafw9vNfmmpy2kcJHWK3fwNFtn5STILX8WYUAsknygSVErLzyMeX5UC7o5lCZQl0hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761983538; c=relaxed/simple;
-	bh=KRhlg6ILug+s7pe91i+hQ6A2xOvj1XJJ02PZ0o57hW8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=plJW+xpdtl3V5vLaDEm/syTlUhH8QJzL3P/rnn7BtK/1oRABar3rhvWNy1F3E/ryCsMUMucNAYpuov2rRvWojerc3FmK06oM8V8acJ/LorOexTALZwDOI76pbFkLbNHlc2pjMsRfZmJC69+FtKZZwxpun7jJD9nuUpX9GTvYNwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O55HL0Pj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761983837; c=relaxed/simple;
+	bh=5l6XRwzZKsnytv0pszvZHGNvjbLNPdZfFglWR7zjF60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rhB27ypzta4wlI1UdP0Rt7rFftirQLRVcfMpPy7CvK3oRt8E2gh2SLdSWb0Vn9zcLu9LO31j2plg3nFUwo5wBj3zUuvssNoalClZhDe8CZnIInPw2GP5q51VsGlupbGyPul76ePdHuSmry5nfyQ9yiJYKa4qA8iCfRqqvNNmdLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NpJIIPGj; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O55HL0Pj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761983535;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=i4qto1luWRoWQ/DqIQJwgcGMWNy7STaJLnCxdt6u0s0=;
-	b=O55HL0PjNdX3ltIOyUl2ejq1Boe1wQijVLlaX/bNufXT/aEraQnTmteszhFpLqKy33opI1
-	y185JNmqffRaMj1w8X5kCLtuXXNlp8T3nOsHP5eWD2v1NA+Jxp3lTy7NYcupBPDPluYAfl
-	D0Nqsjng8IOAeXQHqQABAx4C3N6s5CY=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-209-HO7gHUT6NCiGsTUIegMclw-1; Sat,
- 01 Nov 2025 03:52:13 -0400
-X-MC-Unique: HO7gHUT6NCiGsTUIegMclw-1
-X-Mimecast-MFC-AGG-ID: HO7gHUT6NCiGsTUIegMclw_1761983533
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C9D72180035A
-	for <llvm@lists.linux.dev>; Sat,  1 Nov 2025 07:52:12 +0000 (UTC)
-Received: from [172.20.90.15] (unknown [10.30.45.71])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7AD3218004D8;
-	Sat,  1 Nov 2025 07:52:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.18.0-rc3,
- upstream-mainline, ec0b62cc)
-Date: Sat, 01 Nov 2025 07:52:12 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NpJIIPGj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761983835; x=1793519835;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5l6XRwzZKsnytv0pszvZHGNvjbLNPdZfFglWR7zjF60=;
+  b=NpJIIPGj4Ihdjgb0bu1Dnm/wxAWAIutCn2jINQQdy9LXckdQUwVVNWJ2
+   D+JJDwR1RnkJE379GN/+wXZ8/X3QwUzkt5x/gZViVGyA90CKEb48tnBf3
+   bhLxCOHESaqluJ9Z6v9VBnYIqtDTts8bxxBXqJh6ssBc3knReu4y8RcgB
+   kLEcobtGsTPpO6iF2mCtRINSg5kfDHVD6Bfp1abAP5Av+loe3J/YYeeFw
+   m+8QlxObDQ8ssYNjaCGOSVnSfL0q5MldBRKeArGMi+F/NM8aSSKi8KeGX
+   46qg+zp3hhNkBuEglXrBXOMl9Ekv4TPMyhIsU3QO3SQCjlqvOZbr6QnGI
+   Q==;
+X-CSE-ConnectionGUID: V70SbVU+T8Cb74u52TGjGw==
+X-CSE-MsgGUID: EHEuIG+OQvi1d/1eKJN/WQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="67974469"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="67974469"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 00:57:15 -0700
+X-CSE-ConnectionGUID: R1dMWY33SMC/exy6kVUwnw==
+X-CSE-MsgGUID: a8gUVw5kSwqTYqY+tMzaWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,271,1754982000"; 
+   d="scan'208";a="223659476"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 01 Nov 2025 00:57:10 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vF6Tz-000O1Q-2M;
+	Sat, 01 Nov 2025 07:57:07 +0000
+Date: Sat, 1 Nov 2025 15:56:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	sboyd@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mturquette@baylibre.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, laura.nao@collabora.com,
+	nfraprado@collabora.com, wenst@chromium.org,
+	y.oudjana@protonmail.com, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 7/7] clk: mediatek: Add support for MT6685 PM/Clock IC
+ Clock Controller
+Message-ID: <202511011537.ccyYOMhK-lkp@intel.com>
+References: <20251027111343.21723-8-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <83895.125110103521400159@us-mta-209.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: XGG2WbLBYeq4qCPzxc756E0VAdXfwDPkVwn7xER-uNw_1761983533
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251027111343.21723-8-angelogioacchino.delregno@collabora.com>
 
-Hi, we tested your kernel and here are the results:
+Hi AngeloGioacchino,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.18-rc3 next-20251031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2025-10-31' of https://gitlab.free=
-desktop.org/drm/kernel
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/clk-mediatek-Split-out-registration-from-mtk_clk_register_gates/20251027-191633
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20251027111343.21723-8-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v2 7/7] clk: mediatek: Add support for MT6685 PM/Clock IC Clock Controller
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20251101/202511011537.ccyYOMhK-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251101/202511011537.ccyYOMhK-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2133307771
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511011537.ccyYOMhK-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [net] [kselftests upstream] catch all failures
-            URL: https://issues.redhat.com/browse/RHELTEST-1362
-            Affected tests:
-                kselftests upstream - bpf [x86_64, x86_64]
-                kselftests upstream - bpf_test_progs [x86_64, x86_64]
-                kselftests upstream - net [x86_64, x86_64]
-        Issue: selinux-policy: serge-testsuite: FAIL: git clone https://src=
-.fedoraproject.org/tests/selinux.git
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7555723
-            Affected tests:
-                selinux-policy: serge-testsuite [x86_64]
-        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
-            URL: https://issues.redhat.com/browse/RHELTEST-1805
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64, x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://issues.redhat.com/browse/RHELTEST-39
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
-m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
-scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
-ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
-            Affected tests:
-                Boot test [s390x]
-                Reboot test [s390x]
-        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
-            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
-r750-06-vm-07.rhts.eng.pek2.redhat.com/
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/mediatek/clk-mtk-spmi.c:48:13: error: call to undeclared function 'devm_spmi_subdevice_alloc_and_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      48 |         sub_sdev = devm_spmi_subdevice_alloc_and_add(&pdev->dev, sparent);
+         |                    ^
+>> drivers/clk/mediatek/clk-mtk-spmi.c:48:11: error: incompatible integer to pointer conversion assigning to 'struct spmi_subdevice *' from 'int' [-Wint-conversion]
+      48 |         sub_sdev = devm_spmi_subdevice_alloc_and_add(&pdev->dev, sparent);
+         |                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/mediatek/clk-mtk-spmi.c:52:46: error: incomplete definition of type 'struct spmi_subdevice'
+      52 |         regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &mtk_spmi_clk_regmap_config);
+         |                                             ~~~~~~~~^
+   include/linux/regmap.h:1116:5: note: expanded from macro 'devm_regmap_init_spmi_ext'
+    1116 |                                 dev, config)
+         |                                 ^~~
+   include/linux/regmap.h:775:6: note: expanded from macro '__regmap_lockdep_wrapper'
+     775 |                 fn(__VA_ARGS__, &_key,                                  \
+         |                    ^~~~~~~~~~~
+   drivers/clk/mediatek/clk-mtk-spmi.c:31:9: note: forward declaration of 'struct spmi_subdevice'
+      31 |         struct spmi_subdevice *sub_sdev;
+         |                ^
+   3 errors generated.
 
 
+vim +/devm_spmi_subdevice_alloc_and_add +48 drivers/clk/mediatek/clk-mtk-spmi.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  21  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  22  int mtk_spmi_clk_simple_probe(struct platform_device *pdev)
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  23  {
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  24  	struct regmap_config mtk_spmi_clk_regmap_config = {
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  25  		.reg_bits = 16,
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  26  		.val_bits = 8,
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  27  		.fast_io = true
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  28  	};
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  29  	struct device_node *node = pdev->dev.of_node;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  30  	const struct mtk_spmi_clk_desc *mscd;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  31  	struct spmi_subdevice *sub_sdev;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  32  	struct spmi_device *sparent;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  33  	struct regmap *regmap;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  34  	int ret;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  35  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  36  	ret = of_property_read_u32(node, "reg", &mtk_spmi_clk_regmap_config.reg_base);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  37  	if (ret)
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  38  		return ret;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  39  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  40  	/* If the max_register was not declared the pdata is not valid */
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  41  	mscd = device_get_match_data(&pdev->dev);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  42  	if (mscd->max_register == 0)
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  43  		return -EINVAL;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  44  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  45  	mtk_spmi_clk_regmap_config.max_register = mscd->max_register;
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  46  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  47  	sparent = to_spmi_device(pdev->dev.parent);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27 @48  	sub_sdev = devm_spmi_subdevice_alloc_and_add(&pdev->dev, sparent);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  49  	if (IS_ERR(sub_sdev))
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  50  		return PTR_ERR(sub_sdev);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  51  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27 @52  	regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &mtk_spmi_clk_regmap_config);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  53  	if (IS_ERR(regmap))
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  54  		return PTR_ERR(regmap);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  55  
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  56  	return mtk_clk_simple_probe_internal(pdev, node, mscd->desc, regmap);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  57  }
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  58  EXPORT_SYMBOL_GPL(mtk_spmi_clk_simple_probe);
+80a000281742dc AngeloGioacchino Del Regno 2025-10-27  59  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
