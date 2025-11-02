@@ -1,63 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3792DFF33;
-	Sun,  2 Nov 2025 17:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41171219A71;
+	Sun,  2 Nov 2025 20:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762105472; cv=none; b=geEJnAdeseDrzCNh/KG5pGzWqsnOBuUFfgl9jyHGtsLgdKqeqIMO2iCIv2M7Tf0MZVu7NRHQq/hg7aRLrjL109npgNd4rVlAWIV6ZlIr40s+fnpLvnj+H+VygvZLJqS+nnWhdVZ/9eQpj08WYtKtjXQZ780moIjBV3M6ivVSfHw=
+	t=1762115474; cv=none; b=kcj+B78WGk/egQr6/WjT5cl+s/oocZsoO77bt24ZlpSEK2Sh43hT6quc/KS7HFiNvmgPlBLYtDGFCtqNtAISOMYc+THdNLo7Mt2Ug2E9CCAcFpl3qBKiI5K7jXJJo2fj9UYuSnCDkoDCgEal6NYTEJA0jYQyavHZ3OHErLWdD+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762105472; c=relaxed/simple;
-	bh=ekob6ZS3c0e8P7kQ1YGKc4ijXiV83ifEYMvyqKxpj+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HkwwZ37LFJGMphT1Tz4H68SSYdfqotHl842Jq6IaFW85sFqLQnL7ToIPgJu55QSdI3qNTQckUS4KMNz7QwtXWei0wOcmh5DtZZ36xtZHjm6w6U9mHWPZWdTIhmM0vl2lL2tygyROeHaT5JTTIpT1csQk+vcQkyGcoo35tsTtLyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EPRxinzq; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1762115474; c=relaxed/simple;
+	bh=JW/4MbaqyJ4zuMwgRet+mesRRV/zhA7Xz0T6T6tbzPY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=u4ggD838dLZe/m5ug40YK3JjJZZB19BScLMZMZfk4F1rhxw5BShkIJ5YMzKVZe0xk/2q9F/teT8RvO9sWWIzKmS/lbyog2F9cMBrMNruj/2OUiTDPTAEDlJ1muO+IwSja0eKDWMude8XHiUgoYc3M+RF6opouC38Pf8tvqbwNXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MgxJ8wqb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EPRxinzq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MgxJ8wqb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762105469; x=1793641469;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ekob6ZS3c0e8P7kQ1YGKc4ijXiV83ifEYMvyqKxpj+o=;
-  b=EPRxinzq8nJq/lFlhMYpo63CRNGzW1UXdsUzeg3lQweAztyu1YjHhzzO
-   9n3jwhBo+dZD7DBAQ4Ih9MhNTa11OdP4mDxYKk+8szSKurLVfrSHTu5LI
-   BuGLAzVFeUcAsT1e58x6Z8coLgZrSmUpqoS0a9sjkZJ69G7bkcPEmOIQp
-   z5WbrLRrMD3o5cyPuGURFAI5Oo2pKahOT5Bjwqa07nd039tejpc5W2hPl
-   mxbkvLOlCOCJlRw8itSXfPRsDWLrM6oC8vR3sWgVHHhy4JkTv+qsXL3NP
-   m+UD7Pg65PL19lFE16CeTE2VrkeOMga2Du13HCwIlhqjTZi5p0U57LlgX
-   Q==;
-X-CSE-ConnectionGUID: bfdp1/gsQOeP+YN4rDVnoQ==
-X-CSE-MsgGUID: NuZOzJz6RFOoXPAqcdMXnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="66808746"
+  t=1762115472; x=1793651472;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JW/4MbaqyJ4zuMwgRet+mesRRV/zhA7Xz0T6T6tbzPY=;
+  b=MgxJ8wqbfRFw7dVQkSXbGcJcJFy02RbcqJ9pL8xtu9zZXXQXrWKyolb1
+   SK1wzFd6D20idBQ1T0pnlHcPKpKAOuWgLa97rGkjiM9ZaZF1mpnxQVaE9
+   UzvnEOIx//b1BJijScouT4LUbYZ39R0L3kuVCt9MWIZzmLGZ3ncZr7UL7
+   BlgyNg3SRgf8FsZ+h4BmIUxuGvijdqbNDwJNqmQNmEzWWFEQGU+206AOR
+   XbVakE2M7k4sBhpQHMkVnbnYwOWCwh0Q+B/zdoz8OrqTrrz14/getElxt
+   dFt1YnMiHnPoCESfYSywBHNjK4znBa6qzd9pujTy9ASMOTd4dFsQDYWTl
+   w==;
+X-CSE-ConnectionGUID: ogENDpIRS9eHGcw0+nQR2g==
+X-CSE-MsgGUID: 1w7Hyyu0QsKvyxolgYA4fg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="89660959"
 X-IronPort-AV: E=Sophos;i="6.19,274,1754982000"; 
-   d="scan'208";a="66808746"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2025 09:44:29 -0800
-X-CSE-ConnectionGUID: /BtsB9YDTt+7xQWCkAho/g==
-X-CSE-MsgGUID: FxqV+4HOT/ChUNNigG8zzA==
+   d="scan'208";a="89660959"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2025 12:31:11 -0800
+X-CSE-ConnectionGUID: r/V4yTuNQNGDki0cheljLg==
+X-CSE-MsgGUID: 1+EH5Ek4SP6BJaSCtIoF1w==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,274,1754982000"; 
+   d="scan'208";a="185940461"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Nov 2025 09:44:26 -0800
+  by orviesa006.jf.intel.com with ESMTP; 02 Nov 2025 12:31:10 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vFc7s-000PTQ-04;
-	Sun, 02 Nov 2025 17:44:24 +0000
-Date: Mon, 3 Nov 2025 01:44:16 +0800
+	id 1vFejE-000PY8-0b;
+	Sun, 02 Nov 2025 20:31:08 +0000
+Date: Mon, 3 Nov 2025 04:30:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Jonathan Hunter <jonathanh@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Aaron Kling <webgeek1234@gmail.com>
-Subject: Re: [PATCH] drm/tegra: Enable cmu for Tegra186 and Tegra194
-Message-ID: <202511030131.AADiEKfQ-lkp@intel.com>
-References: <20251101-tegra-drm-cmu-v1-1-211799755ab8@gmail.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [devsec-tsm:staging 22/27] include/linux/pci-tsm.h:170:13: error: no
+ member named 'ide_cap' in 'struct pci_dev'
+Message-ID: <202511030412.Me2CaUE1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,300 +61,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251101-tegra-drm-cmu-v1-1-211799755ab8@gmail.com>
 
-Hi Aaron,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Kling-via-B4-Relay/drm-tegra-Enable-cmu-for-Tegra186-and-Tegra194/20251102-071726
-base:   dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
-patch link:    https://lore.kernel.org/r/20251101-tegra-drm-cmu-v1-1-211799755ab8%40gmail.com
-patch subject: [PATCH] drm/tegra: Enable cmu for Tegra186 and Tegra194
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20251103/202511030131.AADiEKfQ-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/devsec/tsm staging
+head:   eba5ca799114a6493e64a31dc8724a51d0bd6cf2
+commit: 0e16ce0b9c64ed7ac06c9434853595ae98cb6499 [22/27] samples/devsec: Introduce a PCI device-security bus + endpoint sample
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20251103/202511030412.Me2CaUE1-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511030131.AADiEKfQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511030412.Me2CaUE1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511030131.AADiEKfQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511030412.Me2CaUE1-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/tegra/sor.c:2757:50: warning: shift count >= width of type [-Wshift-count-overflow]
-    2757 |                 tegra_dc_writel(dc, (u32)(sor->cmu_output_phys >> 32),
-         |                                                                ^  ~~
-   1 warning generated.
+   In file included from samples/devsec/link_tsm.c:6:
+>> include/linux/pci-tsm.h:170:13: error: no member named 'ide_cap' in 'struct pci_dev'
+     170 |                 if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
+         |                     ~~~~  ^
+   1 error generated.
+--
+   In file included from drivers/pci/tsm.c:15:
+>> include/linux/pci-tsm.h:170:13: error: no member named 'ide_cap' in 'struct pci_dev'
+     170 |                 if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
+         |                     ~~~~  ^
+>> drivers/pci/tsm.c:187:9: error: no member named 'ide_cap' in 'struct pci_dev'
+     187 |                 pdev->ide_cap ? "IDE" : "", pdev->ide_cap && tee ? " " : "",
+         |                 ~~~~  ^
+   drivers/pci/tsm.c:187:37: error: no member named 'ide_cap' in 'struct pci_dev'
+     187 |                 pdev->ide_cap ? "IDE" : "", pdev->ide_cap && tee ? " " : "",
+         |                                             ~~~~  ^
+   3 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PCI_TSM
+   Depends on [n]: PCI [=y] && ARCH_HAS_CC_PLATFORM [=n]
+   Selected by [m]:
+   - SAMPLE_DEVSEC [=m] && SAMPLES [=y] && m [=m] && MODULES [=y] && PCI [=y] && VIRT_DRIVERS [=y] && (PCI_DOMAINS_GENERIC [=y] || X86)
 
 
-vim +2757 drivers/gpu/drm/tegra/sor.c
+vim +170 include/linux/pci-tsm.h
 
-  2590	
-  2591		/* switch the SOR clock to the pad clock */
-  2592		err = tegra_sor_set_parent_clock(sor, sor->clk_pad);
-  2593		if (err < 0) {
-  2594			dev_err(sor->dev, "failed to select SOR parent clock: %d\n",
-  2595				err);
-  2596			return;
-  2597		}
-  2598	
-  2599		/* switch the output clock to the parent pixel clock */
-  2600		err = clk_set_parent(sor->clk, sor->clk_parent);
-  2601		if (err < 0) {
-  2602			dev_err(sor->dev, "failed to select output parent clock: %d\n",
-  2603				err);
-  2604			return;
-  2605		}
-  2606	
-  2607		/* adjust clock rate for HDMI 2.0 modes */
-  2608		rate = clk_get_rate(sor->clk_parent);
-  2609	
-  2610		if (mode->clock >= 340000)
-  2611			rate /= 2;
-  2612	
-  2613		DRM_DEBUG_KMS("setting clock to %lu Hz, mode: %lu Hz\n", rate, pclk);
-  2614	
-  2615		clk_set_rate(sor->clk, rate);
-  2616	
-  2617		if (!sor->soc->has_nvdisplay) {
-  2618			value = SOR_INPUT_CONTROL_HDMI_SRC_SELECT(dc->pipe);
-  2619	
-  2620			/* XXX is this the proper check? */
-  2621			if (mode->clock < 75000)
-  2622				value |= SOR_INPUT_CONTROL_ARM_VIDEO_RANGE_LIMITED;
-  2623	
-  2624			tegra_sor_writel(sor, value, SOR_INPUT_CONTROL);
-  2625		}
-  2626	
-  2627		max_ac = ((mode->htotal - mode->hdisplay) - SOR_REKEY - 18) / 32;
-  2628	
-  2629		value = SOR_HDMI_CTRL_ENABLE | SOR_HDMI_CTRL_MAX_AC_PACKET(max_ac) |
-  2630			SOR_HDMI_CTRL_AUDIO_LAYOUT | SOR_HDMI_CTRL_REKEY(SOR_REKEY);
-  2631		tegra_sor_writel(sor, value, SOR_HDMI_CTRL);
-  2632	
-  2633		if (!dc->soc->has_nvdisplay) {
-  2634			/* H_PULSE2 setup */
-  2635			pulse_start = h_ref_to_sync +
-  2636				      (mode->hsync_end - mode->hsync_start) +
-  2637				      (mode->htotal - mode->hsync_end) - 10;
-  2638	
-  2639			value = PULSE_LAST_END_A | PULSE_QUAL_VACTIVE |
-  2640				PULSE_POLARITY_HIGH | PULSE_MODE_NORMAL;
-  2641			tegra_dc_writel(dc, value, DC_DISP_H_PULSE2_CONTROL);
-  2642	
-  2643			value = PULSE_END(pulse_start + 8) | PULSE_START(pulse_start);
-  2644			tegra_dc_writel(dc, value, DC_DISP_H_PULSE2_POSITION_A);
-  2645	
-  2646			value = tegra_dc_readl(dc, DC_DISP_DISP_SIGNAL_OPTIONS0);
-  2647			value |= H_PULSE2_ENABLE;
-  2648			tegra_dc_writel(dc, value, DC_DISP_DISP_SIGNAL_OPTIONS0);
-  2649		}
-  2650	
-  2651		/* infoframe setup */
-  2652		err = tegra_sor_hdmi_setup_avi_infoframe(sor, mode);
-  2653		if (err < 0)
-  2654			dev_err(sor->dev, "failed to setup AVI infoframe: %d\n", err);
-  2655	
-  2656		/* XXX HDMI audio support not implemented yet */
-  2657		tegra_sor_hdmi_disable_audio_infoframe(sor);
-  2658	
-  2659		/* use single TMDS protocol */
-  2660		value = tegra_sor_readl(sor, SOR_STATE1);
-  2661		value &= ~SOR_STATE_ASY_PROTOCOL_MASK;
-  2662		value |= SOR_STATE_ASY_PROTOCOL_SINGLE_TMDS_A;
-  2663		tegra_sor_writel(sor, value, SOR_STATE1);
-  2664	
-  2665		/* power up pad calibration */
-  2666		value = tegra_sor_readl(sor, sor->soc->regs->dp_padctl0);
-  2667		value &= ~SOR_DP_PADCTL_PAD_CAL_PD;
-  2668		tegra_sor_writel(sor, value, sor->soc->regs->dp_padctl0);
-  2669	
-  2670		/* production settings */
-  2671		settings = tegra_sor_hdmi_find_settings(sor, mode->clock * 1000);
-  2672		if (!settings) {
-  2673			dev_err(sor->dev, "no settings for pixel clock %d Hz\n",
-  2674				mode->clock * 1000);
-  2675			return;
-  2676		}
-  2677	
-  2678		value = tegra_sor_readl(sor, sor->soc->regs->pll0);
-  2679		value &= ~SOR_PLL0_ICHPMP_MASK;
-  2680		value &= ~SOR_PLL0_FILTER_MASK;
-  2681		value &= ~SOR_PLL0_VCOCAP_MASK;
-  2682		value |= SOR_PLL0_ICHPMP(settings->ichpmp);
-  2683		value |= SOR_PLL0_FILTER(settings->filter);
-  2684		value |= SOR_PLL0_VCOCAP(settings->vcocap);
-  2685		tegra_sor_writel(sor, value, sor->soc->regs->pll0);
-  2686	
-  2687		/* XXX not in TRM */
-  2688		value = tegra_sor_readl(sor, sor->soc->regs->pll1);
-  2689		value &= ~SOR_PLL1_LOADADJ_MASK;
-  2690		value &= ~SOR_PLL1_TMDS_TERMADJ_MASK;
-  2691		value |= SOR_PLL1_LOADADJ(settings->loadadj);
-  2692		value |= SOR_PLL1_TMDS_TERMADJ(settings->tmds_termadj);
-  2693		value |= SOR_PLL1_TMDS_TERM;
-  2694		tegra_sor_writel(sor, value, sor->soc->regs->pll1);
-  2695	
-  2696		value = tegra_sor_readl(sor, sor->soc->regs->pll3);
-  2697		value &= ~SOR_PLL3_BG_TEMP_COEF_MASK;
-  2698		value &= ~SOR_PLL3_BG_VREF_LEVEL_MASK;
-  2699		value &= ~SOR_PLL3_AVDD10_LEVEL_MASK;
-  2700		value &= ~SOR_PLL3_AVDD14_LEVEL_MASK;
-  2701		value |= SOR_PLL3_BG_TEMP_COEF(settings->bg_temp_coef);
-  2702		value |= SOR_PLL3_BG_VREF_LEVEL(settings->bg_vref_level);
-  2703		value |= SOR_PLL3_AVDD10_LEVEL(settings->avdd10_level);
-  2704		value |= SOR_PLL3_AVDD14_LEVEL(settings->avdd14_level);
-  2705		tegra_sor_writel(sor, value, sor->soc->regs->pll3);
-  2706	
-  2707		value = settings->drive_current[3] << 24 |
-  2708			settings->drive_current[2] << 16 |
-  2709			settings->drive_current[1] <<  8 |
-  2710			settings->drive_current[0] <<  0;
-  2711		tegra_sor_writel(sor, value, SOR_LANE_DRIVE_CURRENT0);
-  2712	
-  2713		value = settings->preemphasis[3] << 24 |
-  2714			settings->preemphasis[2] << 16 |
-  2715			settings->preemphasis[1] <<  8 |
-  2716			settings->preemphasis[0] <<  0;
-  2717		tegra_sor_writel(sor, value, SOR_LANE_PREEMPHASIS0);
-  2718	
-  2719		value = tegra_sor_readl(sor, sor->soc->regs->dp_padctl0);
-  2720		value &= ~SOR_DP_PADCTL_TX_PU_MASK;
-  2721		value |= SOR_DP_PADCTL_TX_PU_ENABLE;
-  2722		value |= SOR_DP_PADCTL_TX_PU(settings->tx_pu_value);
-  2723		tegra_sor_writel(sor, value, sor->soc->regs->dp_padctl0);
-  2724	
-  2725		value = tegra_sor_readl(sor, sor->soc->regs->dp_padctl2);
-  2726		value &= ~SOR_DP_PADCTL_SPAREPLL_MASK;
-  2727		value |= SOR_DP_PADCTL_SPAREPLL(settings->sparepll);
-  2728		tegra_sor_writel(sor, value, sor->soc->regs->dp_padctl2);
-  2729	
-  2730		/* power down pad calibration */
-  2731		value = tegra_sor_readl(sor, sor->soc->regs->dp_padctl0);
-  2732		value |= SOR_DP_PADCTL_PAD_CAL_PD;
-  2733		tegra_sor_writel(sor, value, sor->soc->regs->dp_padctl0);
-  2734	
-  2735		if (!dc->soc->has_nvdisplay) {
-  2736			/* miscellaneous display controller settings */
-  2737			value = VSYNC_H_POSITION(1);
-  2738			tegra_dc_writel(dc, value, DC_DISP_DISP_TIMING_OPTIONS);
-  2739		}
-  2740	
-  2741		value = tegra_dc_readl(dc, DC_DISP_DISP_COLOR_CONTROL);
-  2742		value &= ~DITHER_CONTROL_MASK;
-  2743		value &= ~BASE_COLOR_SIZE_MASK;
-  2744	
-  2745		if (dc->soc->has_nvdisplay) {
-  2746			sor->cmu_output_lut =
-  2747				dma_alloc_coherent(dc->dev, ARRAY_SIZE(default_srgb_lut) * sizeof(u64),
-  2748						   &sor->cmu_output_phys, GFP_KERNEL);
-  2749	
-  2750			for (i = 0; i < ARRAY_SIZE(default_srgb_lut); i++) {
-  2751				r = default_srgb_lut[i];
-  2752				sor->cmu_output_lut[i] = (r << 32) | (r << 16) | r;
-  2753			}
-  2754	
-  2755			tegra_dc_writel(dc, (u32)(sor->cmu_output_phys & 0xffffffff),
-  2756					DC_DISP_COREPVT_HEAD_SET_OUTPUT_LUT_BASE);
-> 2757			tegra_dc_writel(dc, (u32)(sor->cmu_output_phys >> 32),
-  2758					DC_DISP_COREPVT_HEAD_SET_OUTPUT_LUT_BASE_HI);
-  2759	
-  2760			tegra_dc_writel(dc, OUTPUT_LUT_MODE_INTERPOLATE | OUTPUT_LUT_SIZE_SIZE_1025,
-  2761					DC_DISP_CORE_HEAD_SET_CONTROL_OUTPUT_LUT);
-  2762	
-  2763			value |= CMU_ENABLE_ENABLE;
-  2764		}
-  2765	
-  2766		switch (state->bpc) {
-  2767		case 6:
-  2768			value |= BASE_COLOR_SIZE_666;
-  2769			break;
-  2770	
-  2771		case 8:
-  2772			value |= BASE_COLOR_SIZE_888;
-  2773			break;
-  2774	
-  2775		case 10:
-  2776			value |= BASE_COLOR_SIZE_101010;
-  2777			break;
-  2778	
-  2779		case 12:
-  2780			value |= BASE_COLOR_SIZE_121212;
-  2781			break;
-  2782	
-  2783		default:
-  2784			WARN(1, "%u bits-per-color not supported\n", state->bpc);
-  2785			value |= BASE_COLOR_SIZE_888;
-  2786			break;
-  2787		}
-  2788	
-  2789		tegra_dc_writel(dc, value, DC_DISP_DISP_COLOR_CONTROL);
-  2790	
-  2791		/* XXX set display head owner */
-  2792		value = tegra_sor_readl(sor, SOR_STATE1);
-  2793		value &= ~SOR_STATE_ASY_OWNER_MASK;
-  2794		value |= SOR_STATE_ASY_OWNER(1 + dc->pipe);
-  2795		tegra_sor_writel(sor, value, SOR_STATE1);
-  2796	
-  2797		err = tegra_sor_power_up(sor, 250);
-  2798		if (err < 0)
-  2799			dev_err(sor->dev, "failed to power up SOR: %d\n", err);
-  2800	
-  2801		/* configure dynamic range of output */
-  2802		value = tegra_sor_readl(sor, sor->soc->regs->head_state0 + dc->pipe);
-  2803		value &= ~SOR_HEAD_STATE_RANGECOMPRESS_MASK;
-  2804		value &= ~SOR_HEAD_STATE_DYNRANGE_MASK;
-  2805		tegra_sor_writel(sor, value, sor->soc->regs->head_state0 + dc->pipe);
-  2806	
-  2807		/* configure colorspace */
-  2808		value = tegra_sor_readl(sor, sor->soc->regs->head_state0 + dc->pipe);
-  2809		value &= ~SOR_HEAD_STATE_COLORSPACE_MASK;
-  2810		value |= SOR_HEAD_STATE_COLORSPACE_RGB;
-  2811		tegra_sor_writel(sor, value, sor->soc->regs->head_state0 + dc->pipe);
-  2812	
-  2813		tegra_sor_mode_set(sor, mode, state);
-  2814	
-  2815		tegra_sor_update(sor);
-  2816	
-  2817		/* program preamble timing in SOR (XXX) */
-  2818		value = tegra_sor_readl(sor, SOR_DP_SPARE0);
-  2819		value &= ~SOR_DP_SPARE_DISP_VIDEO_PREAMBLE;
-  2820		tegra_sor_writel(sor, value, SOR_DP_SPARE0);
-  2821	
-  2822		err = tegra_sor_attach(sor);
-  2823		if (err < 0)
-  2824			dev_err(sor->dev, "failed to attach SOR: %d\n", err);
-  2825	
-  2826		/* enable display to SOR clock and generate HDMI preamble */
-  2827		value = tegra_dc_readl(dc, DC_DISP_DISP_WIN_OPTIONS);
-  2828	
-  2829		if (!sor->soc->has_nvdisplay)
-  2830			value |= SOR1_TIMING_CYA;
-  2831	
-  2832		value |= SOR_ENABLE(sor->index);
-  2833	
-  2834		tegra_dc_writel(dc, value, DC_DISP_DISP_WIN_OPTIONS);
-  2835	
-  2836		if (dc->soc->has_nvdisplay) {
-  2837			value = tegra_dc_readl(dc, DC_DISP_CORE_SOR_SET_CONTROL(sor->index));
-  2838			value &= ~PROTOCOL_MASK;
-  2839			value |= PROTOCOL_SINGLE_TMDS_A;
-  2840			tegra_dc_writel(dc, value, DC_DISP_CORE_SOR_SET_CONTROL(sor->index));
-  2841		}
-  2842	
-  2843		tegra_dc_commit(dc);
-  2844	
-  2845		err = tegra_sor_wakeup(sor);
-  2846		if (err < 0)
-  2847			dev_err(sor->dev, "failed to wakeup SOR: %d\n", err);
-  2848	
-  2849		tegra_sor_hdmi_scdc_start(sor);
-  2850		tegra_sor_audio_prepare(sor);
-  2851	}
-  2852	
+888b936770188b Dan Williams 2025-10-09  146  
+722f1b0155cfba Dan Williams 2025-10-15  147  /* physical function0 and capable of 'connect' */
+722f1b0155cfba Dan Williams 2025-10-15  148  static inline bool is_pci_tsm_pf0(struct pci_dev *pdev)
+722f1b0155cfba Dan Williams 2025-10-15  149  {
+722f1b0155cfba Dan Williams 2025-10-15  150  	if (!pdev)
+722f1b0155cfba Dan Williams 2025-10-15  151  		return false;
+722f1b0155cfba Dan Williams 2025-10-15  152  
+722f1b0155cfba Dan Williams 2025-10-15  153  	if (!pci_is_pcie(pdev))
+722f1b0155cfba Dan Williams 2025-10-15  154  		return false;
+722f1b0155cfba Dan Williams 2025-10-15  155  
+722f1b0155cfba Dan Williams 2025-10-15  156  	if (pdev->is_virtfn)
+722f1b0155cfba Dan Williams 2025-10-15  157  		return false;
+722f1b0155cfba Dan Williams 2025-10-15  158  
+722f1b0155cfba Dan Williams 2025-10-15  159  	/*
+722f1b0155cfba Dan Williams 2025-10-15  160  	 * Allow for a Device Security Manager (DSM) associated with function0
+722f1b0155cfba Dan Williams 2025-10-15  161  	 * of an Endpoint to coordinate TDISP requests for other functions
+722f1b0155cfba Dan Williams 2025-10-15  162  	 * (physical or virtual) of the device, or allow for an Upstream Port
+722f1b0155cfba Dan Williams 2025-10-15  163  	 * DSM to accept TDISP requests for the Endpoints downstream of the
+722f1b0155cfba Dan Williams 2025-10-15  164  	 * switch.
+722f1b0155cfba Dan Williams 2025-10-15  165  	 */
+722f1b0155cfba Dan Williams 2025-10-15  166  	switch (pci_pcie_type(pdev)) {
+722f1b0155cfba Dan Williams 2025-10-15  167  	case PCI_EXP_TYPE_ENDPOINT:
+722f1b0155cfba Dan Williams 2025-10-15  168  	case PCI_EXP_TYPE_UPSTREAM:
+722f1b0155cfba Dan Williams 2025-10-15  169  	case PCI_EXP_TYPE_RC_END:
+722f1b0155cfba Dan Williams 2025-10-15 @170  		if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
+722f1b0155cfba Dan Williams 2025-10-15  171  			break;
+722f1b0155cfba Dan Williams 2025-10-15  172  		fallthrough;
+722f1b0155cfba Dan Williams 2025-10-15  173  	default:
+722f1b0155cfba Dan Williams 2025-10-15  174  		return false;
+722f1b0155cfba Dan Williams 2025-10-15  175  	}
+722f1b0155cfba Dan Williams 2025-10-15  176  
+722f1b0155cfba Dan Williams 2025-10-15  177  	return PCI_FUNC(pdev->devfn) == 0;
+722f1b0155cfba Dan Williams 2025-10-15  178  }
+722f1b0155cfba Dan Williams 2025-10-15  179  
+
+:::::: The code at line 170 was first introduced by commit
+:::::: 722f1b0155cfba90fd41d0bf884b0b5752c55fec PCI/TSM: Establish Secure Sessions and Link Encryption
+
+:::::: TO: Dan Williams <dan.j.williams@intel.com>
+:::::: CC: Dan Williams <dan.j.williams@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
