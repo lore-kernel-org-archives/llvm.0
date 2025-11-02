@@ -1,127 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0080E25DCE0;
-	Sat,  1 Nov 2025 21:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E532C1E7C27
+	for <llvm@lists.linux.dev>; Sun,  2 Nov 2025 01:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762030804; cv=none; b=dMtwJczfT7hdQQzfdtzK4xYv96+KfWZgggJLZzRR4el+GJUWdKIcO5w+OH+gyH7Jw4T4qF1DvVoIUX6BWYJeMy6eeanWyKvQMTg7Xpvovq/8zUinvvpi4uKNLMXr0HdoB4U5huVRk+z42dtjGAfjvzw0+dX+6wINcQS+2/HalJI=
+	t=1762046607; cv=none; b=Ogmm3h9XehPw4lXd4aG3g1+4RGCCff9eoOn9Ih/40UE58FFqcpvGorsFeA0GRhcaW9hctQwhWG9O7IrS2GX/hDhAANJXZlDMiTadqBmaLmd6w9FGuGCtk81w+xKksIgXu40GyQJdqoLX0yXDVTzBSq8Mfefk24nYo9Cci3R8T2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762030804; c=relaxed/simple;
-	bh=klydvr2ZO3VGv0Pbzb4nCBXbxiw1zZRUG3hwrz4CKLY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G2g4OjkDtHXajcqFZdHBsxvyVlrHdHXs4YKsoM7xeMNGAqVrCeFn/Hj2G0x4bpVXLi5U5iXJncWNeTjnZD1uUUyFdKQ6I/kWJTIpZJA9rmLeD1UIsGUEbKZpG3iCsXm6u8Noq4/KS6IvJuKFnUyTLYxx8DDlFrfkD6T75fDxIZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lGA6ALvf; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762046607; c=relaxed/simple;
+	bh=szg6fdgln+iFyZzPzFCc2kw/zN7waXyX80ri6OOUNe0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Sw7uHfhikOCESstrn5/vz8rbeqq0nwxoq/MUtD0iux8T82Y0AYWPiB7g1FdhzSLsxSoQp7Q+JoyRiwF40cJqnotgQ1kUkER8s7xOTaHgbLheiSBn6xz9rgC7wapJdf8yR+j6L7yDd35fnP+FMfvQt7xceRtAiHIBH3sW5woHZJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cZA757zQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lGA6ALvf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762030803; x=1793566803;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=klydvr2ZO3VGv0Pbzb4nCBXbxiw1zZRUG3hwrz4CKLY=;
-  b=lGA6ALvfmxOl8PIecSGH8cWxHo/2Wx4ZhJfVpOiUf/tA/ky3QMXyB01J
-   HqQmJoFm5vYeniDlSjLne48BMPYmbckTFMMeky6Cp7PR6XSKgbd5MD6gk
-   lw9og+xP+bu0yB5vcTSMzhlR1mm04aC9POA/kiKSl4WctkgIyIQSaVo/p
-   olcDhOek443QmFL2sx4OLXtXNh1W9Gxvj2oNzTGHheIJamHGENl2XVr9P
-   2LdCYdVm6mntZzVg6AT0xXjOrxe8fU+HBMGePu/+NFCZZSWbVoIEsRBnQ
-   Wh9c1mlWOtsaYwbRdQn5ONUScWkCLcBx46gplhWyNMCP9jbuE0qI01/XD
-   w==;
-X-CSE-ConnectionGUID: qK4j2Ko2T7yX7gxu405+zg==
-X-CSE-MsgGUID: 7FB6S5WpSRy6N279y+YgGg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11600"; a="66776509"
-X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
-   d="scan'208";a="66776509"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2025 14:00:02 -0700
-X-CSE-ConnectionGUID: 3Iy0IfYfTzCEs3Rp/ozSPw==
-X-CSE-MsgGUID: LIwjV3HZST6fJryHpY/N2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,272,1754982000"; 
-   d="scan'208";a="185799930"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 01 Nov 2025 13:59:57 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vFIhX-000OgW-1X;
-	Sat, 01 Nov 2025 20:59:55 +0000
-Date: Sun, 2 Nov 2025 04:59:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Laight <david.laight.linux@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	u.kleine-koenig@baylibre.com, Nicolas Pitre <npitre@baylibre.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Li RongQing <lirongqing@baidu.com>, Yu Kuai <yukuai3@huawei.com>,
-	Khazhismel Kumykov <khazhy@chromium.org>,
-	Jens Axboe <axboe@kernel.dk>, x86@kernel.org
-Subject: Re: [PATCH v4 next 6/9] lib: test_mul_u64_u64_div_u64: Test both
- generic and arch versions
-Message-ID: <202511020421.ZZPBAIIw-lkp@intel.com>
-References: <20251029173828.3682-7-david.laight.linux@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cZA757zQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762046603;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UAN3p3ea6KCgz8y7ZoZ1WfFGSpZgCJAMdYjEBDF/tqc=;
+	b=cZA757zQzSDMPfQVZuMmrgl7QPYXD698roDLL92bxHig1COxkt1PbCQr5UFib5Z/gLSL/4
+	XqWjhYVFKZtySM6Mx73udzfC0nCfUJUePOJtrVYv2fRZn5jMTJnlsvoY1KPP4zl9LR1Fny
+	w2klzPnRTGwZtaMvZolk/87pKeijQEk=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-1Pci9KufPNGmWHKtz25JwA-1; Sat,
+ 01 Nov 2025 21:22:47 -0400
+X-MC-Unique: 1Pci9KufPNGmWHKtz25JwA-1
+X-Mimecast-MFC-AGG-ID: 1Pci9KufPNGmWHKtz25JwA_1762046562
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D462519560B0
+	for <llvm@lists.linux.dev>; Sun,  2 Nov 2025 01:22:41 +0000 (UTC)
+Received: from [172.20.90.15] (unknown [10.30.45.71])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3B622180045B;
+	Sun,  2 Nov 2025 01:22:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc3,
+ upstream-mainline, 691d401c)
+Date: Sun, 02 Nov 2025 01:22:40 -0000
+To: llvm@lists.linux.dev, ftjahjad@redhat.com, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251029173828.3682-7-david.laight.linux@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <83052.125110121224700171@us-mta-584.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: m6kodNSx0Aub8M18Aokk-rCwSw2ipHiX6T_HnAxCh_U_1762046562
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20251029]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/lib-mul_u64_u64_div_u64-rename-parameter-c-to-d/20251030-025633
-base:   next-20251029
-patch link:    https://lore.kernel.org/r/20251029173828.3682-7-david.laight.linux%40gmail.com
-patch subject: [PATCH v4 next 6/9] lib: test_mul_u64_u64_div_u64: Test both generic and arch versions
-config: i386-buildonly-randconfig-004-20251102 (https://download.01.org/0day-ci/archive/20251102/202511020421.ZZPBAIIw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251102/202511020421.ZZPBAIIw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511020421.ZZPBAIIw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/math/test_mul_u64_u64_div_u64.c:142:9: warning: '__div64_32' macro redefined [-Wmacro-redefined]
-     142 | #define __div64_32 __div64_32
-         |         ^
-   arch/x86/include/asm/div64.h:78:9: note: previous definition is here
-      78 | #define __div64_32
-         |         ^
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/__div64_32 +142 lib/math/test_mul_u64_u64_div_u64.c
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.18-rc3' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/broonie/spi
 
-   140	
-   141	/* Compile the generic mul_u64_add_u64_div_u64() code */
- > 142	#define __div64_32 __div64_32
-   143	#define div_s64_rem div_s64_rem
-   144	#define div64_u64_rem div64_u64_rem
-   145	#define div64_u64 div64_u64
-   146	#define div64_s64 div64_s64
-   147	#define iter_div_u64_rem iter_div_u64_rem
-   148	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2134664493
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2134664493_x86_64_kernel-debug_kcidb_tool_19905580_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2134664493_x86_64_kernel-debug_kcidb_tool_19905580_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
