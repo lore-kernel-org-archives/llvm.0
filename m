@@ -1,149 +1,215 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAFF1B423B
-	for <llvm@lists.linux.dev>; Sun,  2 Nov 2025 10:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921F717B418;
+	Sun,  2 Nov 2025 10:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762079766; cv=none; b=KzaHRhjdXmG15VyMtMd77OlQXr/aSBW+V+Gg2AhAjTp2+nMUERJlaAfeDXDQZtR+X3SmV4xRYlhcfLYFyEcc+PVYJnnwwtnU/2oWem6tjLV9OTcfxv0yZedr8tmiUR/jB1ErkXUnHyOdJpul1awAAmSepvvDoH6cYwmJc/G5YcQ=
+	t=1762079841; cv=none; b=AL4Mc6h0TD2j4arvXDgSJVZtoEInyLz4ogYIi8LsqfwuJqFXJSG4Q+1sZBLSwnbeWJXNDuPzpFt1bgBX3dqAmzLQpcKRTPy9kc85Po3WuLbrMZ1UfFjAvs/063sD0ORgiizid3ZVwkRgpY1Jt70beCG/FrqoO/OVv9LYPZiZgio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762079766; c=relaxed/simple;
-	bh=QDjFHAnNGxJtqq3B2eRN6crskPhgy/pT5GpK0XQSS00=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d+o8xrhcqyaHLM2DEujqZ4xOChQRO+fBAsTM+Jfwywnpc4WkSGfxFlBX4dNUSTLi7NFsl0/JzakJj0ITdGPi8LZ+/Ae2nTaagGlABiiJqTs44OsHQLawPryeqbVOgbWMrMxrI6eUEKOYC6LyM4cgf7vJSd+4ZsxYu6KFY7lSSzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/NIZ/3e; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762079841; c=relaxed/simple;
+	bh=OONHgKJ4NeEDqfemiJyFDxw8pjwtenRsxohKJPpHGEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ex9IPsg2WOE7AvklE+TbJChdQKK1LBtXbbqp6aj1nzJ4DCdYIYxvySP8O/OvjhjUQLg4b1dWrw4bkRC/bN0ma0giFJl7UvR2do7Ijr4/aGHidpOPYVVx87FGGKeK+kkdke9Ugtflw57a6EDZD/lsi8IjTpy+1rxlpbFiyE5ulwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuUrrmMU; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/NIZ/3e"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-475d9de970eso23773305e9.1
-        for <llvm@lists.linux.dev>; Sun, 02 Nov 2025 02:36:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762079763; x=1762684563; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ovu4hk1QeQJCG4bKMFk7VDTxcv3q5N8PBdUxZwYYOd8=;
-        b=N/NIZ/3e/bUXvEQTmnOmdOnYOaNy4XSQUf0nFalPmevZViwX4vb9SCiG8eb3hVnIsa
-         PVIflGLteP1WzTmnPmJ/1CFxeqs/u+5WLfsJlYv968nTAszfAIxybtaBnbVWgTZlTaBj
-         5bkfSiT+TCvsqnJ0kupjE2MwFKZF4vbnP8A1sRnLhul91XFgHaKwTlUlcggvUy+d456D
-         M4GSJzs0szKdX7B17V7NJWnePy/IXrEdFIJuvVWnerivifr9Wq5bka4kKY6/sJXppb1f
-         7UsjLtKxWlUbVlCqlKWn+KNgaquuXrQdhtIWwG+ETi+amCFMpNfoEklwHVDkLklFAwrt
-         n4xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762079763; x=1762684563;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ovu4hk1QeQJCG4bKMFk7VDTxcv3q5N8PBdUxZwYYOd8=;
-        b=EBM99zeHhxN+YXIkrPr2xxImyhWwFCXjXv0bcTJH0CQ8xsNmznuV+6Ec5zf8TIZaJk
-         CokxofRV7+eKdG+5nwVSynb6BPL/6ggGL2EzE/wuGq33xNHFd9EbN/xNPDUziJNdUpvS
-         uaBpuqn9lAc9vsi9iee680SJ+onroiII8iRooTfwSD+Aga26OS1DSZnOhCux2Z6Yftvt
-         f2h+J4GFTUdxf7PLA4ZWZ86Rqa45iOp+QvFvMRzLnXBUXUvZRX1GO49TaGYxTXz+2tR/
-         0KN2P1YSSBWViMo7okiUO1IBHD3wd7gHarsruJfRRjtRJXGcgFRsWBz+iDR+5b1C4hvn
-         y9iw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2ej/Ej+NDJ9QyM7qvMgNkILeWuoz2pt37SY82yLz4lYw6INyImWoLjp6SGS/5nj60L1Hi@lists.linux.dev
-X-Gm-Message-State: AOJu0YzuXre4aKTi5SPQW2h4nf2A4A9UqX6Gu5gWcItJARM5DoylWAi+
-	59cbQUXdPvc6VWaXPK/2fVKRWsNOWRDHgrm/9WwrHnmoMmko1mPwmGmk
-X-Gm-Gg: ASbGncstlXFXdUQaJ5FSlLTGhuMxxu/f31GBFQjELh0xnD7VdNjoBDginTfOhHI9u1f
-	Ggcz+q4IGwv7ElsUgQYBMJk5JI+LYJQv40pOothIe4STXez7izrhGvd99fjw6GFup8UMekwztn4
-	/0LIaWJmwx7Xm/MDY/b+5R8tCxo5lIcVGzu56MoyUm6OGv5hzodCAYnxnxhMs+HdBa3wZxl9eMy
-	f79+cZK0EufQP4r+WvccwTRjuHpH1csBV8vuBCJXqLogRANlmdJ1GOEXqI+yTCH8qIIc6+QYFtD
-	GNZtP+PeCacg9N15auplEho/9qBLG5B42LuVBCf4jKXfAXkeL6YbF3cevt2+pb/vmGvK8Ot4PRf
-	mNqRT9CaIzBe7MtQlb/DBaekLhl08a/j24MYuj04EiyJuGu5PsNynytj9c9rIeXHZU8aVFJBwzg
-	phzdivBabJLNOrZQ88rgBnm6QDTot4Ci+ujhrJr+NVx3EeKuSAQkYt
-X-Google-Smtp-Source: AGHT+IHL30gVPu+1tpP35sbbUpZLKsl40U91AdkYUoDD4qFiMCXwuao1AO3rSfpQub8UcTTdTBgniA==
-X-Received: by 2002:a05:600c:1c1d:b0:46d:cfc9:1d0f with SMTP id 5b1f17b1804b1-4773086e04fmr100701075e9.19.1762079762968;
-        Sun, 02 Nov 2025 02:36:02 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4772fbeef62sm64496655e9.1.2025.11.02.02.36.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Nov 2025 02:36:02 -0800 (PST)
-Date: Sun, 2 Nov 2025 10:36:00 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Linux Memory
- Management List <linux-mm@kvack.org>, u.kleine-koenig@baylibre.com, Nicolas
- Pitre <npitre@baylibre.com>, Oleg Nesterov <oleg@redhat.com>, Peter
- Zijlstra <peterz@infradead.org>, Biju Das <biju.das.jz@bp.renesas.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, Thomas
- Gleixner <tglx@linutronix.de>, Li RongQing <lirongqing@baidu.com>, Yu Kuai
- <yukuai3@huawei.com>, Khazhismel Kumykov <khazhy@chromium.org>, Jens Axboe
- <axboe@kernel.dk>, x86@kernel.org
-Subject: Re: [PATCH v4 next 6/9] lib: test_mul_u64_u64_div_u64: Test both
- generic and arch versions
-Message-ID: <20251102103600.65754bf2@pumpkin>
-In-Reply-To: <202511020421.ZZPBAIIw-lkp@intel.com>
-References: <20251029173828.3682-7-david.laight.linux@gmail.com>
-	<202511020421.ZZPBAIIw-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuUrrmMU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762079840; x=1793615840;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OONHgKJ4NeEDqfemiJyFDxw8pjwtenRsxohKJPpHGEY=;
+  b=BuUrrmMUKxZNOpy8as55jv7EXnqE2wVeDZsXKDKLdLLevTNcmmkL9+Hg
+   PhV0M1jzzRyJLdZ5eqVzlydwvIN96ECJtF892hNv04ubtFKFRnhYdSL9d
+   vytCp/4Gypgmnbv2Ckooe2qH+BWhOmGCbEVJOnO2L+BZLanll5kV9U5Vk
+   fU6/CgSuxh8GryDo4R16mU/aMhIhJjkkFv6v9fXeMN790kixWy8Lwd12t
+   gQxNk0XFDngI+35k2lPCqfk+YtCqaOnMJcg8Uo1AGDrx9udzcyevCsAfT
+   daM7fJhPnnbf1W6LN53Wdonzfi4OxdSa7GE9W7IPXMSkX384NvoISMZz4
+   Q==;
+X-CSE-ConnectionGUID: MvuIK/DrSfevVbDsO/RovQ==
+X-CSE-MsgGUID: TqQkNy3BRSyJ1c6Wi5oiRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11600"; a="51751431"
+X-IronPort-AV: E=Sophos;i="6.19,273,1754982000"; 
+   d="scan'208";a="51751431"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2025 02:37:19 -0800
+X-CSE-ConnectionGUID: zG1/rE/dS5m6Hjq6rQmgpw==
+X-CSE-MsgGUID: Ox8UX0Z1ROSE61Dkm731FA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,273,1754982000"; 
+   d="scan'208";a="191774993"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 02 Nov 2025 02:37:17 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vFVSV-000P9q-0d;
+	Sun, 02 Nov 2025 10:37:15 +0000
+Date: Sun, 2 Nov 2025 18:37:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <chao@kernel.org>
+Subject: [chao:locking 5/5] kernel/locking/rwsem.c:1008:3: error: expected ')'
+Message-ID: <202511021818.bmQwPjWh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, 2 Nov 2025 04:59:10 +0800
-kernel test robot <lkp@intel.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git locking
+head:   cbce0966b2c1f7cc06b410bac3d96ae003a7bc8a
+commit: cbce0966b2c1f7cc06b410bac3d96ae003a7bc8a [5/5] rwsem: clean up code
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251102/202511021818.bmQwPjWh-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251102/202511021818.bmQwPjWh-lkp@intel.com/reproduce)
 
-> Hi David,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on next-20251029]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/lib-mul_u64_u64_div_u64-rename-parameter-c-to-d/20251030-025633
-> base:   next-20251029
-> patch link:    https://lore.kernel.org/r/20251029173828.3682-7-david.laight.linux%40gmail.com
-> patch subject: [PATCH v4 next 6/9] lib: test_mul_u64_u64_div_u64: Test both generic and arch versions
-> config: i386-buildonly-randconfig-004-20251102 (https://download.01.org/0day-ci/archive/20251102/202511020421.ZZPBAIIw-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251102/202511020421.ZZPBAIIw-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511020421.ZZPBAIIw-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> lib/math/test_mul_u64_u64_div_u64.c:142:9: warning: '__div64_32' macro redefined [-Wmacro-redefined]  
->      142 | #define __div64_32 __div64_32
->          |         ^
->    arch/x86/include/asm/div64.h:78:9: note: previous definition is here
->       78 | #define __div64_32
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511021818.bmQwPjWh-lkp@intel.com/
 
-That is preceded by a comment that says it can't happen for x86-64.
-I think it would be better as '#define __div64_32 @@@' so that you get a compile
-error.
-But that isn't part of this change,
->          |         ^
->    1 warning generated.
-> 
-> 
-> vim +/__div64_32 +142 lib/math/test_mul_u64_u64_div_u64.c
-> 
->    140	
->    141	/* Compile the generic mul_u64_add_u64_div_u64() code */
->  > 142	#define __div64_32 __div64_32  
+All errors (new ones prefixed by >>):
 
-It needs a preceding #undef
-Although I'm not sure why a normal build doesn't show it.
+>> kernel/locking/rwsem.c:1008:3: error: expected ')'
+    1008 |                 goto queue;
+         |                 ^
+   kernel/locking/rwsem.c:1005:5: note: to match this '('
+    1005 |         if ((count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF)) ||
+         |            ^
+   1 error generated.
 
-Looks like I'll need to do a v5 :-(
 
-	David
+vim +1008 kernel/locking/rwsem.c
 
->    143	#define div_s64_rem div_s64_rem
->    144	#define div64_u64_rem div64_u64_rem
->    145	#define div64_u64 div64_u64
->    146	#define div64_s64 div64_s64
->    147	#define iter_div_u64_rem iter_div_u64_rem
->    148	
-> 
+54c1ee4d614d52 Waiman Long    2022-03-22   988  
+5dec94d4923683 Waiman Long    2019-05-20   989  /*
+5dec94d4923683 Waiman Long    2019-05-20   990   * Wait for the read lock to be granted
+5dec94d4923683 Waiman Long    2019-05-20   991   */
+6cef7ff6e43cbd Waiman Long    2019-05-20   992  static struct rw_semaphore __sched *
+2f064a59a11ff9 Peter Zijlstra 2021-06-11   993  rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int state)
+5dec94d4923683 Waiman Long    2019-05-20   994  {
+617f3ef9517784 Waiman Long    2020-11-20   995  	long adjustment = -RWSEM_READER_BIAS;
+2f06f702925b51 Waiman Long    2020-11-20   996  	long rcnt = (count >> RWSEM_READER_SHIFT);
+5dec94d4923683 Waiman Long    2019-05-20   997  	struct rwsem_waiter waiter;
+5dec94d4923683 Waiman Long    2019-05-20   998  	DEFINE_WAKE_Q(wake_q);
+5dec94d4923683 Waiman Long    2019-05-20   999  
+2f06f702925b51 Waiman Long    2020-11-20  1000  	/*
+2f06f702925b51 Waiman Long    2020-11-20  1001  	 * To prevent a constant stream of readers from starving a sleeping
+d566c78659eccf Waiman Long    2024-02-22  1002  	 * writer, don't attempt optimistic lock stealing if the lock is
+d566c78659eccf Waiman Long    2024-02-22  1003  	 * very likely owned by readers.
+2f06f702925b51 Waiman Long    2020-11-20  1004  	 */
+cbce0966b2c1f7 Chao Yu        2025-10-31  1005  	if ((count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF)) ||
+cbce0966b2c1f7 Chao Yu        2025-10-31  1006  	    ((atomic_long_read(&sem->owner) & RWSEM_READER_OWNED) &&
+cbce0966b2c1f7 Chao Yu        2025-10-31  1007  	    (rcnt > 1))
+2f06f702925b51 Waiman Long    2020-11-20 @1008  		goto queue;
+2f06f702925b51 Waiman Long    2020-11-20  1009  
+1a728dff855a31 Waiman Long    2020-11-20  1010  	/*
+617f3ef9517784 Waiman Long    2020-11-20  1011  	 * Reader optimistic lock stealing.
+1a728dff855a31 Waiman Long    2020-11-20  1012  	 */
+1a728dff855a31 Waiman Long    2020-11-20  1013  	rwsem_set_reader_owned(sem);
+1a728dff855a31 Waiman Long    2020-11-20  1014  	lockevent_inc(rwsem_rlock_steal);
+5cfd92e12e1343 Waiman Long    2019-05-20  1015  
+cf69482d62d996 Waiman Long    2019-05-20  1016  	/*
+cbce0966b2c1f7 Chao Yu        2025-10-31  1017  	 * Wake up other readers in the wait queue if it is the first reader.
+cf69482d62d996 Waiman Long    2019-05-20  1018  	 */
+617f3ef9517784 Waiman Long    2020-11-20  1019  	if ((rcnt == 1) && (count & RWSEM_FLAG_WAITERS)) {
+cf69482d62d996 Waiman Long    2019-05-20  1020  		raw_spin_lock_irq(&sem->wait_lock);
+cf69482d62d996 Waiman Long    2019-05-20  1021  		if (!list_empty(&sem->wait_list))
+cbce0966b2c1f7 Chao Yu        2025-10-31  1022  			rwsem_mark_wake(sem, RWSEM_WAKE_READ_OWNED, &wake_q);
+cf69482d62d996 Waiman Long    2019-05-20  1023  		raw_spin_unlock_irq(&sem->wait_lock);
+cf69482d62d996 Waiman Long    2019-05-20  1024  		wake_up_q(&wake_q);
+cf69482d62d996 Waiman Long    2019-05-20  1025  	}
+cf69482d62d996 Waiman Long    2019-05-20  1026  	return sem;
+cf69482d62d996 Waiman Long    2019-05-20  1027  
+cf69482d62d996 Waiman Long    2019-05-20  1028  queue:
+5dec94d4923683 Waiman Long    2019-05-20  1029  	waiter.task = current;
+5dec94d4923683 Waiman Long    2019-05-20  1030  	waiter.type = RWSEM_WAITING_FOR_READ;
+4f23dbc1e65795 Waiman Long    2019-05-20  1031  	waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
+6eebd5fb20838f Waiman Long    2022-06-22  1032  	waiter.handoff_set = false;
+5dec94d4923683 Waiman Long    2019-05-20  1033  
+5dec94d4923683 Waiman Long    2019-05-20  1034  	raw_spin_lock_irq(&sem->wait_lock);
+5dec94d4923683 Waiman Long    2019-05-20  1035  	if (list_empty(&sem->wait_list)) {
+5dec94d4923683 Waiman Long    2019-05-20  1036  		/*
+5dec94d4923683 Waiman Long    2019-05-20  1037  		 * In case the wait queue is empty and the lock isn't owned
+f9e21aa9e6fb11 Waiman Long    2022-03-22  1038  		 * by a writer, this reader can exit the slowpath and return
+f9e21aa9e6fb11 Waiman Long    2022-03-22  1039  		 * immediately as its RWSEM_READER_BIAS has already been set
+f9e21aa9e6fb11 Waiman Long    2022-03-22  1040  		 * in the count.
+5dec94d4923683 Waiman Long    2019-05-20  1041  		 */
+f9e21aa9e6fb11 Waiman Long    2022-03-22  1042  		if (!(atomic_long_read(&sem->count) & RWSEM_WRITER_MASK)) {
+e1b98fa3166484 Jan Stancek    2019-07-18  1043  			/* Provide lock ACQUIRE */
+e1b98fa3166484 Jan Stancek    2019-07-18  1044  			smp_acquire__after_ctrl_dep();
+5dec94d4923683 Waiman Long    2019-05-20  1045  			raw_spin_unlock_irq(&sem->wait_lock);
+5dec94d4923683 Waiman Long    2019-05-20  1046  			rwsem_set_reader_owned(sem);
+5dec94d4923683 Waiman Long    2019-05-20  1047  			lockevent_inc(rwsem_rlock_fast);
+5dec94d4923683 Waiman Long    2019-05-20  1048  			return sem;
+5dec94d4923683 Waiman Long    2019-05-20  1049  		}
+5dec94d4923683 Waiman Long    2019-05-20  1050  		adjustment += RWSEM_FLAG_WAITERS;
+5dec94d4923683 Waiman Long    2019-05-20  1051  	}
+d257cc8cb8d535 Waiman Long    2021-11-15  1052  	rwsem_add_waiter(sem, &waiter);
+5dec94d4923683 Waiman Long    2019-05-20  1053  
+5dec94d4923683 Waiman Long    2019-05-20  1054  	/* we're now waiting on the lock, but no longer actively locking */
+5dec94d4923683 Waiman Long    2019-05-20  1055  	count = atomic_long_add_return(adjustment, &sem->count);
+5dec94d4923683 Waiman Long    2019-05-20  1056  
+54c1ee4d614d52 Waiman Long    2022-03-22  1057  	rwsem_cond_wake_waiter(sem, count, &wake_q);
+5dec94d4923683 Waiman Long    2019-05-20  1058  	raw_spin_unlock_irq(&sem->wait_lock);
+54c1ee4d614d52 Waiman Long    2022-03-22  1059  
+54c1ee4d614d52 Waiman Long    2022-03-22  1060  	if (!wake_q_empty(&wake_q))
+5dec94d4923683 Waiman Long    2019-05-20  1061  		wake_up_q(&wake_q);
+5dec94d4923683 Waiman Long    2019-05-20  1062  
+ee042be16cb455 Namhyung Kim   2022-03-22  1063  	trace_contention_begin(sem, LCB_F_READ);
+77da18de55ac64 Lance Yang     2025-06-27  1064  	set_current_state(state);
+77da18de55ac64 Lance Yang     2025-06-27  1065  
+77da18de55ac64 Lance Yang     2025-06-27  1066  	if (state == TASK_UNINTERRUPTIBLE)
+77da18de55ac64 Lance Yang     2025-06-27  1067  		hung_task_set_blocker(sem, BLOCKER_TYPE_RWSEM_READER);
+ee042be16cb455 Namhyung Kim   2022-03-22  1068  
+5dec94d4923683 Waiman Long    2019-05-20  1069  	/* wait to be given the lock */
+6ffddfb9e1de21 Peter Zijlstra 2019-07-18  1070  	for (;;) {
+99143f82a255e7 Peter Zijlstra 2019-07-18  1071  		if (!smp_load_acquire(&waiter.task)) {
+6ffddfb9e1de21 Peter Zijlstra 2019-07-18  1072  			/* Matches rwsem_mark_wake()'s smp_store_release(). */
+5dec94d4923683 Waiman Long    2019-05-20  1073  			break;
+99143f82a255e7 Peter Zijlstra 2019-07-18  1074  		}
+5dec94d4923683 Waiman Long    2019-05-20  1075  		if (signal_pending_state(state, current)) {
+5dec94d4923683 Waiman Long    2019-05-20  1076  			raw_spin_lock_irq(&sem->wait_lock);
+5dec94d4923683 Waiman Long    2019-05-20  1077  			if (waiter.task)
+5dec94d4923683 Waiman Long    2019-05-20  1078  				goto out_nolock;
+5dec94d4923683 Waiman Long    2019-05-20  1079  			raw_spin_unlock_irq(&sem->wait_lock);
+6ffddfb9e1de21 Peter Zijlstra 2019-07-18  1080  			/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
+5dec94d4923683 Waiman Long    2019-05-20  1081  			break;
+5dec94d4923683 Waiman Long    2019-05-20  1082  		}
+3f5245538a1964 Waiman Long    2023-01-25  1083  		schedule_preempt_disabled();
+5dec94d4923683 Waiman Long    2019-05-20  1084  		lockevent_inc(rwsem_sleep_reader);
+77da18de55ac64 Lance Yang     2025-06-27  1085  		set_current_state(state);
+5dec94d4923683 Waiman Long    2019-05-20  1086  	}
+5dec94d4923683 Waiman Long    2019-05-20  1087  
+77da18de55ac64 Lance Yang     2025-06-27  1088  	if (state == TASK_UNINTERRUPTIBLE)
+77da18de55ac64 Lance Yang     2025-06-27  1089  		hung_task_clear_blocker();
+77da18de55ac64 Lance Yang     2025-06-27  1090  
+5dec94d4923683 Waiman Long    2019-05-20  1091  	__set_current_state(TASK_RUNNING);
+5dec94d4923683 Waiman Long    2019-05-20  1092  	lockevent_inc(rwsem_rlock);
+ee042be16cb455 Namhyung Kim   2022-03-22  1093  	trace_contention_end(sem, 0);
+5dec94d4923683 Waiman Long    2019-05-20  1094  	return sem;
+6ffddfb9e1de21 Peter Zijlstra 2019-07-18  1095  
+5dec94d4923683 Waiman Long    2019-05-20  1096  out_nolock:
+1ee326196c6658 Waiman Long    2022-03-22  1097  	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+5dec94d4923683 Waiman Long    2019-05-20  1098  	__set_current_state(TASK_RUNNING);
+5dec94d4923683 Waiman Long    2019-05-20  1099  	lockevent_inc(rwsem_rlock_fail);
+ee042be16cb455 Namhyung Kim   2022-03-22  1100  	trace_contention_end(sem, -EINTR);
+5dec94d4923683 Waiman Long    2019-05-20  1101  	return ERR_PTR(-EINTR);
+5dec94d4923683 Waiman Long    2019-05-20  1102  }
+5dec94d4923683 Waiman Long    2019-05-20  1103  
 
+:::::: The code at line 1008 was first introduced by commit
+:::::: 2f06f702925b512a95b95dca3855549c047eef58 locking/rwsem: Prevent potential lock starvation
+
+:::::: TO: Waiman Long <longman@redhat.com>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
