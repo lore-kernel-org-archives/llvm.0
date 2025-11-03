@@ -1,215 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCB63002CB;
-	Mon,  3 Nov 2025 10:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCF630BB97
+	for <llvm@lists.linux.dev>; Mon,  3 Nov 2025 12:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762167291; cv=none; b=cqRCM4C71ZkCUOEBkrB85nfLzXnyiK51H6ZfhlUAXHM7bGTJcEv2e22lyCY7PXpBKMmTfqokpKDWuryo95MLTPJu6ch6N1otsNTefKPQGngxagCPwsNB6a6WK4o/Tz/yWYSQymWrzH4VrTuzpvuXiUO2cR7kqa9QkAN5xPLAoy4=
+	t=1762172654; cv=none; b=MZ0aJH7lyZznWbOI9RupR1VFjwfvGyfdLBRi33A3WHv9FUsxlhTZt2E0w3TlPCjWOr3MjChZXrK7liOI0CyDklvT+2fGYc1JTYQfL/M7ATz23AgZ6gDIwRfESQMb7Tis5mJh+PPW7t3jOKDljpqitM9rLm3yLoVxoWK6tmrRyEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762167291; c=relaxed/simple;
-	bh=mHztXZKea3eYbuXZUozH4OPWQfr33olPYctifT4kIq0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gaL5h2zDUb28beHJo1yy7GEMBLHNB/jVOjH/KVX0cgTH1799g5rzxN0SqSv8V/V1IybpvFF0o7p21dFWJGpRBlM5kprb4SvCo7AORCtA2bYVu3fgPdYhxyljN312qsxi7j6k2NmJj+To0RwK8AlQx98Xn9b3hKYalzRn2m5pB1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j4mnJTeD; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762172654; c=relaxed/simple;
+	bh=ORdNUFW2zEJlWs19F6Wve3Y3tfAR17V4MJgrWtqk7Qo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GW1/AMskPNcajSF+UrHj+9gpqZEEvCjppZFfVtSa6I1Lb3DFTSuoup79KFS+V647TKo3x+gop5bq1uw9ykALy7arqCGjfxIoHQTsR1cilQ0aE8CfPAthkSl2+bLv50xe1GGijhfo8U9DTsUgxKI3Fm9/B1n8w/WaXeDSln5Iixs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aOekaELz; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j4mnJTeD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762167290; x=1793703290;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mHztXZKea3eYbuXZUozH4OPWQfr33olPYctifT4kIq0=;
-  b=j4mnJTeDra7JfG5hGnnoMMYjzS4WiUcB4+ZTus4zkH8XyUGRk/tmDZUE
-   /i+YVCxcBh98wQB/ushiBrzWg1HGzqB+7TirrO+XSyEqZM1qlPITwiy+S
-   ZoBiAdbKXEtoWX5f11F4FqTlSfSTn/aT7mk1Ljvf3FhIj4l1YA4v+0mpk
-   3nJeDN9sisnnylp3yFI5Eebtv+5xuCIX4xcO/hAzwv1rcoxX3NhXbrd5F
-   7bZc1TrY8sVZx2GX+aOeO3+mb0YSlCqPQuSQqqUnolF/Ehm2ohY2ZJ05K
-   nXrzoJ8LhFgsrJV9htzKVkSfXcMhn9m7IGWriss3Y0lXpU6gm60Zi9Bom
-   Q==;
-X-CSE-ConnectionGUID: lYLXQMSsRfqqGM1fTvgdSw==
-X-CSE-MsgGUID: xvXKXThoQtaGQpZe97Hbcg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="64127002"
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="64127002"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 02:54:49 -0800
-X-CSE-ConnectionGUID: NJHO0wfOSJWZQnayZLOwAw==
-X-CSE-MsgGUID: 9XEsEJ3bSRGD6N5jaiLKCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="224077379"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 03 Nov 2025 02:54:40 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vFsCn-000Q2y-2D;
-	Mon, 03 Nov 2025 10:54:33 +0000
-Date: Mon, 3 Nov 2025 18:54:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wangao Wang <wangao.wang@oss.qualcomm.com>,
-	Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-	Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bryan O'Donoghue <bod@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aOekaELz"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3408dd56b15so2257703a91.1
+        for <llvm@lists.linux.dev>; Mon, 03 Nov 2025 04:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762172651; x=1762777451; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ORdNUFW2zEJlWs19F6Wve3Y3tfAR17V4MJgrWtqk7Qo=;
+        b=aOekaELzVE5+2Lk6JHYlGi0KxfXQnOlXjIb8B3bOACClNs4q68PjA0bKg1zpkQ2+hV
+         56N1Oofo1lTsS0OYxE8qmKlnn0lLhUY0HKV3utW6k7d3d99RMuNvDaF1H4hlSaW2hky3
+         n2hBDwCextS6HUCcG2hMTWufvPoVECKOOjSq2Pg7lTMoFC2tFknimgP9ZhvG+nzgSiWn
+         6gwZeDpCYZ4SYopPLqIO5fcv2lOY4LcpYeKUUexL4HFKC4tQ5U1AAsKw1gykGOE8a1lb
+         fBFpcDhrI1cm3sQhFigI6ZZBaJSuUWpg13Je6jFAZ1eBEXti7rrRFwW4QQt6RHYej8oj
+         xa1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762172651; x=1762777451;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ORdNUFW2zEJlWs19F6Wve3Y3tfAR17V4MJgrWtqk7Qo=;
+        b=gZ8PSWMgJvApAXhy96WidoGJZSOxNULDOJlpW1nHEkVd1BoV48jOXRM5qbVCgZRlgZ
+         uqIufD6Wua/5zJEQHyrln6lnulnUbntpq4ZOUliOtNlt/9X9xk/B5TjVnL8U7jWCJEZI
+         73QdzpHakSyXW2AF0MKowo0Wr7crymA4k0r8gEjtmI5Jttc64o1EWBQqrLP7QKrWq/jI
+         At4bL92U8dqEQyWZwbDTier8PMcwdlXr46uoQs8pReIgAryWJ2DI8HNmT4hlkfKrTJpe
+         Dbz4SAU4PF+E3hHykpveWpquvEmYqDO22i+rTPCFgsey3sHjWewV7snfAp5wyGo56qu/
+         n8vw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuE10UX6nxWrkjpJboUCa6cUKimpwCU3SGhipfg4ktWYkRC3SSlwwMLa28Pob+onq1tryB@lists.linux.dev
+X-Gm-Message-State: AOJu0YzCVaFi5uF/WZ/i7Hg7zVoK7sGzwAxtgKaFPsW22QsgSOQ6Fcpq
+	7Z+R9mWIgx4XpiZ476hTaugnSJPYSV/zS4HdLB8eRrOUuTeAse7tmQGX
+X-Gm-Gg: ASbGncsDFuBvA2HJJAH0u8i8HW5sU526L7Q1cL59/hLIS5+Ry5dxr3XxpKvSnf8kVsL
+	uwtZlVVYdFP7skEZ8t/snX75GflNvlQHEoDeCpI3P5FcR6p1k0M9VGL1HA/bnVS/fdfVKvLtSkH
+	/rc3HasKKAO5nV7VP0vFTp4u30bdeHkO16FecF54LVPmglhYi7DnFSpQVDMvWcrpvrxKYaIJ2Lw
+	cxrl7qDhfJRVWZ7Uq2UGckh+MtpZcmQ3rsKlhue8HlyljkBE/b8yJ8Wwo5Z32DwfJNh19x1EqSp
+	TUCaeHk+5GIn2iTse9CvT8xKDnAjC/ZBw1mf+o/zPTNd+9P/itJSwbOymhVe4ra77HxxinWmuCs
+	byMa4n8VrXTZo2V5VoCgIrIIM3QoZo826zRmLA1xeIa+1NK2HUL7um2fhbR/52hKMik/8uFRp9D
+	z0ESwldWHXBch+B2aaQK5ZokZN9I/hKcEOt1BZv3e07+1RWhIwELsEHPWEsgx626I=
+X-Google-Smtp-Source: AGHT+IESpNdOSIFJ0AvELFe2mn5VOX5nqvF9BWuKg9gD11/Sqoj1Pk/e1iUdylQepkg9PBFjDt6oNg==
+X-Received: by 2002:a17:90b:2b48:b0:340:b572:3b7d with SMTP id 98e67ed59e1d1-340b5723c4fmr10683210a91.19.1762172651160;
+        Mon, 03 Nov 2025 04:24:11 -0800 (PST)
+Received: from DESKTOP-RD0GVCL.localdomain (124-218-195-161.cm.dynamic.apol.com.tw. [124.218.195.161])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3415c8b78f8sm842554a91.20.2025.11.03.04.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Nov 2025 04:24:10 -0800 (PST)
+From: LiangCheng Wang <zaq14760@gmail.com>
+To: nathan@kernel.org
+Cc: jani.nikula@linux.intel.com,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
-	Wangao Wang <wangao.wang@oss.qualcomm.com>, quic_qiweil@quicinc.com,
-	quic_renjiang@quicinc.com
-Subject: Re: [PATCH v2 1/5] media: qcom: iris: Improve format alignment for
- encoder
-Message-ID: <202511031813.c8c7mkXF-lkp@intel.com>
-References: <20251031-iris_encoder_enhancements-v2-1-319cd75cbb45@oss.qualcomm.com>
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/tiny: pixpaper: Prevent inlining of send helpers to reduce stack usage
+Date: Mon,  3 Nov 2025 20:24:04 +0800
+Message-ID: <20251103122406.741-1-zaq14760@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251031203446.GD2486902@ax162>
+References: <20251031203446.GD2486902@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251031-iris_encoder_enhancements-v2-1-319cd75cbb45@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Wangao,
+Hi Nathan, Jani,
 
-kernel test robot noticed the following build warnings:
+Thanks for the detailed explanation.
 
-[auto build test WARNING on 13863a59e410cab46d26751941980dc8f088b9b3]
+Understood — if this only happens when CONFIG_KASAN_STACK is enabled
+with clang, it doesn’t look like something that needs to be addressed in
+the driver itself.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wangao-Wang/media-qcom-iris-Improve-format-alignment-for-encoder/20251031-175803
-base:   13863a59e410cab46d26751941980dc8f088b9b3
-patch link:    https://lore.kernel.org/r/20251031-iris_encoder_enhancements-v2-1-319cd75cbb45%40oss.qualcomm.com
-patch subject: [PATCH v2 1/5] media: qcom: iris: Improve format alignment for encoder
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20251103/202511031813.c8c7mkXF-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511031813.c8c7mkXF-lkp@intel.com/reproduce)
+Thanks everyone for helping clarify this!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511031813.c8c7mkXF-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:236:7: warning: variable 'left_offset' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     236 |                 if (V4L2_TYPE_IS_CAPTURE(plane)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/videodev2.h:182:2: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
-     182 |         (V4L2_TYPE_IS_VALID(type) && !V4L2_TYPE_IS_OUTPUT(type))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:246:43: note: uninitialized use occurs here
-     246 |         payload[0] = FIELD_PREP(GENMASK(31, 16), left_offset) | top_offset;
-         |                                                  ^~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:236:3: note: remove the 'if' if its condition is always true
-     236 |                 if (V4L2_TYPE_IS_CAPTURE(plane)) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:236:7: warning: variable 'left_offset' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-     236 |                 if (V4L2_TYPE_IS_CAPTURE(plane)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/videodev2.h:182:3: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
-     182 |         (V4L2_TYPE_IS_VALID(type) && !V4L2_TYPE_IS_OUTPUT(type))
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/videodev2.h:165:2: note: expanded from macro 'V4L2_TYPE_IS_VALID'
-     165 |         ((type) >= V4L2_BUF_TYPE_VIDEO_CAPTURE &&\
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     166 |          (type) <= V4L2_BUF_TYPE_META_OUTPUT)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:246:43: note: uninitialized use occurs here
-     246 |         payload[0] = FIELD_PREP(GENMASK(31, 16), left_offset) | top_offset;
-         |                                                  ^~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:236:7: note: remove the '&&' if its condition is always true
-     236 |                 if (V4L2_TYPE_IS_CAPTURE(plane)) {
-         |                     ^
-   include/uapi/linux/videodev2.h:182:3: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
-     182 |         (V4L2_TYPE_IS_VALID(type) && !V4L2_TYPE_IS_OUTPUT(type))
-         |          ^
-   include/uapi/linux/videodev2.h:165:2: note: expanded from macro 'V4L2_TYPE_IS_VALID'
-     165 |         ((type) >= V4L2_BUF_TYPE_VIDEO_CAPTURE &&\
-         |         ^
->> drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:236:7: warning: variable 'left_offset' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-     236 |                 if (V4L2_TYPE_IS_CAPTURE(plane)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/videodev2.h:182:3: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
-     182 |         (V4L2_TYPE_IS_VALID(type) && !V4L2_TYPE_IS_OUTPUT(type))
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/videodev2.h:165:3: note: expanded from macro 'V4L2_TYPE_IS_VALID'
-     165 |         ((type) >= V4L2_BUF_TYPE_VIDEO_CAPTURE &&\
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:246:43: note: uninitialized use occurs here
-     246 |         payload[0] = FIELD_PREP(GENMASK(31, 16), left_offset) | top_offset;
-         |                                                  ^~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:236:7: note: remove the '&&' if its condition is always true
-     236 |                 if (V4L2_TYPE_IS_CAPTURE(plane)) {
-         |                     ^
-   include/uapi/linux/videodev2.h:182:3: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
-     182 |         (V4L2_TYPE_IS_VALID(type) && !V4L2_TYPE_IS_OUTPUT(type))
-         |          ^
-   include/uapi/linux/videodev2.h:165:3: note: expanded from macro 'V4L2_TYPE_IS_VALID'
-     165 |         ((type) >= V4L2_BUF_TYPE_VIDEO_CAPTURE &&\
-         |          ^
-   drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c:217:17: note: initialize the variable 'left_offset' to silence this warning
-     217 |         u32 left_offset, top_offset;
-         |                        ^
-         |                         = 0
-   3 warnings generated.
-
-
-vim +236 drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-
-   211	
-   212	static int iris_hfi_gen2_set_crop_offsets(struct iris_inst *inst, u32 plane)
-   213	{
-   214		struct iris_inst_hfi_gen2 *inst_hfi_gen2 = to_iris_inst_hfi_gen2(inst);
-   215		u32 port = iris_hfi_gen2_get_port(inst, plane);
-   216		u32 bottom_offset, right_offset;
-   217		u32 left_offset, top_offset;
-   218		u32 codec_align;
-   219		u32 payload[2];
-   220	
-   221		codec_align = inst->codec == V4L2_PIX_FMT_HEVC ? 32 : 16;
-   222	
-   223		if (inst->domain == DECODER) {
-   224			if (V4L2_TYPE_IS_OUTPUT(plane)) {
-   225				bottom_offset = (inst->fmt_src->fmt.pix_mp.height - inst->crop.height);
-   226				right_offset = (inst->fmt_src->fmt.pix_mp.width - inst->crop.width);
-   227				left_offset = inst->crop.left;
-   228				top_offset = inst->crop.top;
-   229			} else {
-   230				bottom_offset = (inst->fmt_dst->fmt.pix_mp.height - inst->compose.height);
-   231				right_offset = (inst->fmt_dst->fmt.pix_mp.width - inst->compose.width);
-   232				left_offset = inst->compose.left;
-   233				top_offset = inst->compose.top;
-   234			}
-   235		} else {
- > 236			if (V4L2_TYPE_IS_CAPTURE(plane)) {
-   237				bottom_offset = (ALIGN(inst->enc_raw_height, codec_align) -
-   238						inst->enc_raw_height);
-   239				right_offset = (ALIGN(inst->enc_raw_width, codec_align) -
-   240						inst->enc_raw_width);
-   241				left_offset = inst->crop.left;
-   242				top_offset = inst->crop.top;
-   243			}
-   244		}
-   245	
-   246		payload[0] = FIELD_PREP(GENMASK(31, 16), left_offset) | top_offset;
-   247		payload[1] = FIELD_PREP(GENMASK(31, 16), right_offset) | bottom_offset;
-   248		inst_hfi_gen2->src_subcr_params.crop_offsets[0] = payload[0];
-   249		inst_hfi_gen2->src_subcr_params.crop_offsets[1] = payload[1];
-   250	
-   251		return iris_hfi_gen2_session_set_property(inst,
-   252							  HFI_PROP_CROP_OFFSETS,
-   253							  HFI_HOST_FLAGS_NONE,
-   254							  port,
-   255							  HFI_PAYLOAD_64_PACKED,
-   256							  &payload,
-   257							  sizeof(u64));
-   258	}
-   259	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+LiangCheng
