@@ -1,196 +1,218 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892283168E0;
-	Mon,  3 Nov 2025 16:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DFF31DD82;
+	Mon,  3 Nov 2025 18:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762187117; cv=none; b=YhGp03HHix1G7avaHwFOJvKj4ZdBRJUYsw7GpOQD6tQKXn4TUpvt2KFz6jZ9nAFkhL4Q8OEYO7nAdyxkYl3AFL6VsjSbt2n8VEKeoq8SFIZAhwqVoMxG1YoJbIA98sJ+OZAYbhHKDknmjcUgCiCmGiOais/BaYZ0hc6nohxPcPk=
+	t=1762193008; cv=none; b=pLgRkpMa+6IJPabLNdBEJndrduA363IVighpBSaRNshudSWuCOkEB3IuaqDxMrl9oKrJhRTMTjXbk4hvyS7ZS5W6zMuMD8dJFc/LAVThqS82YrfWkiQy4pZBoSfvj0R5pHCeSttx7WSkrFsqEEued1bvMns8nqdTIlxoKSW9B/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762187117; c=relaxed/simple;
-	bh=t926oHxXyeoHO/tZR4YDfvuIUGOhvh1nCNJiG044Dv4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t/JiN7Nvzgjl6pOY4gZ4g0Kp3nc3rTGG5gUxVYWDM/y590blHYDurzVnq3Cgf38rMETfMpFchioqAIWQBWPkap162Jl6sE6DVsDSQjHXQp9P6wGEPlkutD1JZcM83TeomKoSKv//+0k14trKZNLoJYLOBMecXISBjLNwPjF7uk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AquaoUMh; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762193008; c=relaxed/simple;
+	bh=YOjQBkrOvTLYl9O3qPNqMbiCs0u056QzurwCIfKrTaY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=defltxglzNvUPv+7ZITqB94jWwi7tfj+O7TtqKxKwqdmtxia9BIiK/f3wDkSxGf8akc8N9MXjb/yFeBDlAS8xI+ChmaMNOuq1uekVhX3uifhmUgT8s3pDqeNl+c4afqdASY6vs8PPBCR6MGjOO0rA8H9PXJTHTOHkk5vk4N/r0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F736mNZ4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AquaoUMh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762187115; x=1793723115;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t926oHxXyeoHO/tZR4YDfvuIUGOhvh1nCNJiG044Dv4=;
-  b=AquaoUMhpcOsUmN+pbyzfsWUQpOGNzrjGKKsbjmr/0Vv6COpIYETUt01
-   dszHgKvrUTco80SZVeKJG0CLvpqBi0yYO5ppLGTeHoZeBlNNqTHACQz41
-   WhJIwu+QYIWbgWNPV+UO+3aYI05vxEaA8WGmEwtdwKovJIZP5q15uMDhH
-   80TqN2bU9mIKINWugEYQVOFTeMPz7aTaZfWpNadxqFP3Q+/UdLekoo9rT
-   Cla+3pNc2dyFToG+xwajbXEssH6nAjB9PlkSKN0LUybZ9rq+G/+dt2yRM
-   75hiAWMt5kCPrYrzqk0Q1axdXk+LU/XkkO6o7Y8Uxj9wWTtIC+ELZS8UY
-   g==;
-X-CSE-ConnectionGUID: xBNZG6zeR/mBI1Ki+pJ01Q==
-X-CSE-MsgGUID: 3HklEMlmRMa0+IYes3rOhw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="63962873"
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="63962873"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 08:25:15 -0800
-X-CSE-ConnectionGUID: PnTRSjgDTD+C/2KQbGtg6A==
-X-CSE-MsgGUID: kJFZyWkqRdKS4C+GNCdU+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="191251179"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 03 Nov 2025 08:25:07 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vFxMe-000QKi-0o;
-	Mon, 03 Nov 2025 16:25:04 +0000
-Date: Tue, 4 Nov 2025 00:24:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH 10/16] mm: replace pmd_to_swp_entry() with
- leafent_from_pmd()
-Message-ID: <202511032303.n4dF1k87-lkp@intel.com>
-References: <38c26e75ed00263e9ecbebb0c045dd6d8183ec67.1762171281.git.lorenzo.stoakes@oracle.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F736mNZ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55759C4CEE7;
+	Mon,  3 Nov 2025 18:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762193008;
+	bh=YOjQBkrOvTLYl9O3qPNqMbiCs0u056QzurwCIfKrTaY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=F736mNZ4enqmL1CdoNBgCseU/Rb6cT+mn8V/+4DdA2zn6krYSoi32FImyJgsY5Mmq
+	 eS2xkqfvGanND5uHf/4K0l6HgNDFKrt4Sbq9QDK/9qsyASgGQw2/8EueQUJO3CX4Ct
+	 O17hWlY4l5npThOxsCldovbc/heH0Hyk4cI+99epdadY7F9qiIfbjZaO8G20UxmoUm
+	 q17JewytWt5tlGPBlWk7Lb1m6NwqICEprcRCI+iX8K4JL9jIyTysjFiYpTfDK+3x0H
+	 7Ot70mZ4DBIZUgtcZs7HmW79Rv5vJw8SwQSHsr/WCaOnt7/j7tk9LvenVG+2pGDdtu
+	 kznpX5MOOcY3A==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Sidharth Seela <sidharthseela@gmail.com>,
+	SeongJae Park <sj@kernel.org>,
+	wang lian <lianux.mm@gmail.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Sasha Levin <sashal@kernel.org>,
+	hannes@cmpxchg.org,
+	nathan@kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.17] selftests: cachestat: Fix warning on declaration under label
+Date: Mon,  3 Nov 2025 13:02:33 -0500
+Message-ID: <20251103180246.4097432-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251103180246.4097432-1-sashal@kernel.org>
+References: <20251103180246.4097432-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38c26e75ed00263e9ecbebb0c045dd6d8183ec67.1762171281.git.lorenzo.stoakes@oracle.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.7
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Lorenzo,
+From: Sidharth Seela <sidharthseela@gmail.com>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit 920aa3a7705a061cb3004572d8b7932b54463dbf ]
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Fix warning caused from declaration under a case label. The proper way
+is to declare variable at the beginning of the function. The warning
+came from running clang using LLVM=1; and is as follows:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-correctly-handle-UFFD-PTE-markers/20251103-204118
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/38c26e75ed00263e9ecbebb0c045dd6d8183ec67.1762171281.git.lorenzo.stoakes%40oracle.com
-patch subject: [PATCH 10/16] mm: replace pmd_to_swp_entry() with leafent_from_pmd()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251103/202511032303.n4dF1k87-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511032303.n4dF1k87-lkp@intel.com/reproduce)
+-test_cachestat.c:260:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+  260 |                 char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
+      |
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511032303.n4dF1k87-lkp@intel.com/
+Link: https://lore.kernel.org/r/20250929115405.25695-2-sidharthseela@gmail.com
+Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+Reviewed-by: SeongJae Park <sj@kernel.org>
+Reviewed-by: wang lian <lianux.mm@gmail.com>
+Reviewed-by: Dev Jain <dev.jain@arm.com>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Acked-by: Nhat Pham <nphamcs@gmail.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-All errors (new ones prefixed by >>):
+LLM Generated explanations, may be completely bogus:
 
-   In file included from mm/folio-compat.c:7:
-   In file included from include/linux/migrate.h:9:
-   In file included from include/linux/leafops.h:6:
->> include/linux/swapops.h:90:21: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
-      90 |         ret.val = (type << SWP_TYPE_SHIFT) | (offset & SWP_OFFSET_MASK);
-         |                            ^
-   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
-      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
-         |                                              ^
-   include/linux/swapops.h:90:49: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
-      90 |         ret.val = (type << SWP_TYPE_SHIFT) | (offset & SWP_OFFSET_MASK);
-         |                                                        ^
-   include/linux/swapops.h:28:34: note: expanded from macro 'SWP_OFFSET_MASK'
-      28 | #define SWP_OFFSET_MASK ((1UL << SWP_TYPE_SHIFT) - 1)
-         |                                  ^
-   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
-      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
-         |                                              ^
-   include/linux/swapops.h:100:23: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
-     100 |         return (entry.val >> SWP_TYPE_SHIFT);
-         |                              ^
-   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
-      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
-         |                                              ^
-   include/linux/swapops.h:109:21: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
-     109 |         return entry.val & SWP_OFFSET_MASK;
-         |                            ^
-   include/linux/swapops.h:28:34: note: expanded from macro 'SWP_OFFSET_MASK'
-      28 | #define SWP_OFFSET_MASK ((1UL << SWP_TYPE_SHIFT) - 1)
-         |                                  ^
-   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
-      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
-         |                                              ^
->> include/linux/swapops.h:395:19: error: use of undeclared identifier 'SWP_PTE_MARKER'
-     395 |         return swp_entry(SWP_PTE_MARKER, marker);
-         |                          ^
-   include/linux/swapops.h:448:15: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
-     448 |         BUILD_BUG_ON(SWP_TYPE_SHIFT < SWP_PFN_BITS);
-         |                      ^
-   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
-      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
-         |                                              ^
-   include/linux/swapops.h:491:28: error: use of undeclared identifier 'MAX_SWAPFILES'
-     491 |         return swp_type(entry) >= MAX_SWAPFILES;
-         |                                   ^
-   7 errors generated.
+Now let me compile my comprehensive analysis based on all the data
+gathered:
 
+## Analysis Summary
 
-vim +/MAX_SWAPFILES_SHIFT +90 include/linux/swapops.h
+**ANSWER: YES**
 
-099dd6878b9b12 Peter Xu       2021-06-15   82  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   83  /*
-^1da177e4c3f41 Linus Torvalds 2005-04-16   84   * Store a type+offset into a swp_entry_t in an arch-independent format
-^1da177e4c3f41 Linus Torvalds 2005-04-16   85   */
-^1da177e4c3f41 Linus Torvalds 2005-04-16   86  static inline swp_entry_t swp_entry(unsigned long type, pgoff_t offset)
-^1da177e4c3f41 Linus Torvalds 2005-04-16   87  {
-^1da177e4c3f41 Linus Torvalds 2005-04-16   88  	swp_entry_t ret;
-^1da177e4c3f41 Linus Torvalds 2005-04-16   89  
-3159f943aafdba Matthew Wilcox 2017-11-03  @90  	ret.val = (type << SWP_TYPE_SHIFT) | (offset & SWP_OFFSET_MASK);
-^1da177e4c3f41 Linus Torvalds 2005-04-16   91  	return ret;
-^1da177e4c3f41 Linus Torvalds 2005-04-16   92  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16   93  
-^1da177e4c3f41 Linus Torvalds 2005-04-16   94  /*
-^1da177e4c3f41 Linus Torvalds 2005-04-16   95   * Extract the `type' field from a swp_entry_t.  The swp_entry_t is in
-^1da177e4c3f41 Linus Torvalds 2005-04-16   96   * arch-independent format
-^1da177e4c3f41 Linus Torvalds 2005-04-16   97   */
-^1da177e4c3f41 Linus Torvalds 2005-04-16   98  static inline unsigned swp_type(swp_entry_t entry)
-^1da177e4c3f41 Linus Torvalds 2005-04-16   99  {
-3159f943aafdba Matthew Wilcox 2017-11-03  100  	return (entry.val >> SWP_TYPE_SHIFT);
-^1da177e4c3f41 Linus Torvalds 2005-04-16  101  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  102  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  103  /*
-^1da177e4c3f41 Linus Torvalds 2005-04-16  104   * Extract the `offset' field from a swp_entry_t.  The swp_entry_t is in
-^1da177e4c3f41 Linus Torvalds 2005-04-16  105   * arch-independent format
-^1da177e4c3f41 Linus Torvalds 2005-04-16  106   */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  107  static inline pgoff_t swp_offset(swp_entry_t entry)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  108  {
-3159f943aafdba Matthew Wilcox 2017-11-03 @109  	return entry.val & SWP_OFFSET_MASK;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  110  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  111  
+This commit should be backported to stable kernel trees (specifically
+6.17.y and any newer stable branches that contain the buggy code).
 
+### Detailed Analysis
+
+#### 1. **Code Context and Bug Identification**
+
+Using semantic code analysis tools and git history examination, I
+identified:
+
+- **Function analyzed**: `run_cachestat_test()` in
+  tools/testing/selftests/cachestat/test_cachestat.c (lines 222-295)
+- **Bug introduced**: Commit d6a511dea45ce (July 2025) - "selftests:
+  cachestat: add tests for mmap"
+- **Affected versions**: v6.17 and later (confirmed via `git tag
+  --contains d6a511dea45ce`)
+- **Bug confirmed in v6.17.7**: Using `git show
+  v6.17.7:tools/testing/selftests/cachestat/test_cachestat.c`, I
+  verified the problematic code exists:
+  ```c
+  case FILE_MMAP:
+  char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,  //
+  VIOLATION: declaration after label
+  ```
+
+#### 2. **Semantic Analysis Used**
+
+- **mcp__semcode__find_function**: Located `run_cachestat_test()`
+  function and confirmed the bug exists at line 260
+- **mcp__semcode__find_callers**: Identified that this is a test
+  function called from main
+- **Git history analysis**: Traced bug introduction and verified no
+  prior fix exists
+
+#### 3. **Nature of the Fix**
+
+The fix is **minimal and safe**:
+- **Changed**: Variable `char *map` declaration moved from line 260
+  (under case label) to line 229 (with other variable declarations)
+- **Lines modified**: Only 2 lines changed (declaration location)
+- **Risk level**: Zero - pure code style fix with no behavioral changes
+- **Compiler warning**: `-Wc23-extensions` when building with clang
+  LLVM=1
+
+#### 4. **Backporting Precedent**
+
+I found strong precedent for backporting selftest build fixes:
+- **Commit 90c1ffd1347f3** (bc4d5f5d2debf upstream): "selftests:
+  cachestat: Fix build warnings on ppc64"
+  - Similar warning fix for the same test file
+  - **WAS backported to stable** (shows "Signed-off-by: Sasha Levin"
+    indicating automated stable backport)
+  - Establishes that cachestat selftest build fixes ARE appropriate for
+    stable trees
+
+#### 5. **Impact Assessment**
+
+- **Scope**: Affects only userspace selftest code, not kernel runtime
+- **User Impact**: Developers building selftests with clang will get
+  warnings without this fix
+- **Build Impact**: Does NOT break builds (warning, not error), but
+  reduces noise and follows best practices
+- **Testing Impact**: Enables cleaner CI/CD pipelines that treat
+  warnings as errors
+
+#### 6. **Stable Tree Compliance**
+
+✅ **Fixes a real issue**: Violates C language standards (pre-C23)
+✅ **Small and contained**: 2-line change, single file
+✅ **No architectural changes**: Pure variable declaration movement
+✅ **No new features**: Maintains existing functionality
+✅ **Well-reviewed**: Multiple Reviewed-by, Acked-by tags from
+maintainers
+✅ **Precedent exists**: Similar fixes were backported before
+
+#### 7. **Commit Quality**
+
+The commit has proper maintainer approval:
+- Signed-off-by: Shuah Khan (selftest maintainer)
+- Reviewed-by: SeongJae Park
+- Reviewed-by: wang lian
+- Reviewed-by: Dev Jain
+- Acked-by: Shuah Khan
+- Acked-by: Nhat Pham
+
+### Conclusion
+
+This is a **low-risk, high-value** backport candidate that:
+1. Fixes legitimate C standards compliance issue
+2. Improves developer experience when building with clang
+3. Has precedent for similar backports in the same file
+4. Contains zero functional changes
+5. Has strong maintainer approval
+
+The commit follows all stable kernel rules and should be backported to
+6.17.y and any other stable trees containing the buggy code introduced
+in d6a511dea45ce.
+
+ tools/testing/selftests/cachestat/test_cachestat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
+index c952640f163b5..ab838bcb9ec55 100644
+--- a/tools/testing/selftests/cachestat/test_cachestat.c
++++ b/tools/testing/selftests/cachestat/test_cachestat.c
+@@ -226,7 +226,7 @@ bool run_cachestat_test(enum file_type type)
+ 	int syscall_ret;
+ 	size_t compute_len = PS * 512;
+ 	struct cachestat_range cs_range = { PS, compute_len };
+-	char *filename = "tmpshmcstat";
++	char *filename = "tmpshmcstat", *map;
+ 	struct cachestat cs;
+ 	bool ret = true;
+ 	int fd;
+@@ -257,7 +257,7 @@ bool run_cachestat_test(enum file_type type)
+ 		}
+ 		break;
+ 	case FILE_MMAP:
+-		char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
++		map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
+ 				 MAP_SHARED, fd, 0);
+ 
+ 		if (map == MAP_FAILED) {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
