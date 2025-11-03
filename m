@@ -1,149 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDDE1C831A;
-	Sun,  2 Nov 2025 22:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75089460
+	for <llvm@lists.linux.dev>; Mon,  3 Nov 2025 03:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762122995; cv=none; b=f8fomDbWq9SaiVsNAcay4ILWkHXca0NSE9DD6zLGLIXMQAeGdwgDoxrBR2MTjzadc7SzXb5+ID9fC0TV4yajDK6GvRTJ/W+JTcF5b+yzwJxSVDcF7tCUtU9/z+Pp4FEvREG07Qw7MO7sMt7h8TnnUA1TeyT2bZP92fiXxiep3gM=
+	t=1762140919; cv=none; b=sFH62GrR89dLaWJ+Eqeyk+3ZKR42HManR2Jrr2VpOBJdT/h0+ab1aQuKHDa82cs9bIwO1jGApFAoa1UDwbwBHo7eeJ23Vyuv+dZjOOdSZbB6Ez7xXnXWwxMPL9GHVESx3FpuA3bHEV4aJ5Y158NZszDcvD/fOQ6kTcuFEV0m1Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762122995; c=relaxed/simple;
-	bh=iq1XjN1uIbCOZ40g5V9sS6uD1iDH7HWDpQxEZoG8uD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SNod/lo9tJiXDTaNVcMa0PuoL5bbExvMcHkYjX4hgxAhZTKJ9ZORba58W2hTJ4suzxJLfgxlaX1v2tyqySegz/ssVUVlcoWmGIx+c6vmlYN/ELepYnAL3I8Uu3qFgOZgAVA0koJvmso1F6WuZ6RDHJGuMkRTrGcvvITvTkrbsno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LaUNwA+e; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762140919; c=relaxed/simple;
+	bh=Mka+78p441ab0bYpmGM6ZRLiVPT/iizD4Hu6VXMV8Kg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=N9//78MYRxheUJ1/ffYn42YVWWQm+oBk7ozwUEinAtNG/f8+YOVGasl67NtuhMEN0j0sgrMgFSGuumjDT2eBzUJ/s1q7jqjcmTOTgvUTICOlOEEmhumxCRZrOA8FtCnhtXsXV47kxuKoGSd+jHQTXwSAX0konepLAZK9gQZxyy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RYWYkBe+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LaUNwA+e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762122993; x=1793658993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iq1XjN1uIbCOZ40g5V9sS6uD1iDH7HWDpQxEZoG8uD8=;
-  b=LaUNwA+ew8GikvLw/oyFA9stsjtJIItDKE2Pnn26aFX4ik1nV/VUmPxq
-   zFamNL3FaVY0PiA82eFlOEU8wwWUXw03RFz0jXWQHwLK/kE974k3OAvHW
-   0e8ifAv8zIqnPOt0VXitt7IqWHE4Awja1LKr1nfMevXiO2llqcmAelCmd
-   P958P2EEQRF74Y52GRGw/vSZrhUr4V8Zq3Z42nnduHioPKU7aGbIf6+ld
-   57sGBQi2UG1m/bb6NTdT5w1G3zcxfdLbYSPYkEqtcYUjWC4l/lDmE/poB
-   a/xxXSMtFESvgDze57xC1jxnLkX+sGAoarqCdYdrsPNNFni8rs1v9zuFl
-   g==;
-X-CSE-ConnectionGUID: Pan2drLcTnOgtCnwneroHg==
-X-CSE-MsgGUID: eU1YQjL0RNC11mf0NNWO2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="63406295"
-X-IronPort-AV: E=Sophos;i="6.19,274,1754982000"; 
-   d="scan'208";a="63406295"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2025 14:36:32 -0800
-X-CSE-ConnectionGUID: /dCbar9yStSnUxO7aVokZw==
-X-CSE-MsgGUID: Tl1sQCR2Rai6Szb1MJT+qw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,274,1754982000"; 
-   d="scan'208";a="191873979"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 02 Nov 2025 14:36:30 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vFggW-000Pci-0n;
-	Sun, 02 Nov 2025 22:36:28 +0000
-Date: Mon, 3 Nov 2025 06:35:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jisheng Zhang <jszhang@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] gpio: fxl6408: Add optional reset gpio control
-Message-ID: <202511030655.OCHXbHnE-lkp@intel.com>
-References: <20251102100515.9506-2-jszhang@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RYWYkBe+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762140916;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3WZaSaXMuG9ph5EPqHWKVjPyBiGJsVk3yswIL7gFcCM=;
+	b=RYWYkBe+ro8yr4Onaynsg4xMxUxKPE5/BC94/oeHL6wv5kGzRTfZuHovUHd7TQNQDSuEeP
+	zI74VLQjMhfBUAWVtjbduJ6AzAycJkShtWgv9G2w7AFc1qA7zJYDFsC3c3JA0O5cPzVGvA
+	+ddMn8Ym+ti5lgqqFYNCB0DYkF+flgo=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-672-os4Nj01OMl6wUcpvt_VOrw-1; Sun,
+ 02 Nov 2025 22:35:14 -0500
+X-MC-Unique: os4Nj01OMl6wUcpvt_VOrw-1
+X-Mimecast-MFC-AGG-ID: os4Nj01OMl6wUcpvt_VOrw_1762140914
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EDD481956075
+	for <llvm@lists.linux.dev>; Mon,  3 Nov 2025 03:35:13 +0000 (UTC)
+Received: from [172.20.90.15] (unknown [10.30.45.71])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DD9519560A2;
+	Mon,  3 Nov 2025 03:35:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc4,
+ upstream-mainline, 6146a0f1)
+Date: Mon, 03 Nov 2025 03:35:12 -0000
+To: llvm@lists.linux.dev, ftjahjad@redhat.com, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251102100515.9506-2-jszhang@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <01989.125110222351400574@us-mta-672.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: JIDe3tunU99zaEy4y1AoLxILIkjmK-LAnKvdpTZKIfg_1762140914
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jisheng,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.18-rc4 next-20251031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jisheng-Zhang/gpio-fxl6408-Add-optional-reset-gpio-control/20251102-182544
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20251102100515.9506-2-jszhang%40kernel.org
-patch subject: [PATCH 1/2] gpio: fxl6408: Add optional reset gpio control
-config: arm-randconfig-001-20251103 (https://download.01.org/0day-ci/archive/20251103/202511030655.OCHXbHnE-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511030655.OCHXbHnE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511030655.OCHXbHnE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpio/gpio-fxl6408.c:118:15: error: call to undeclared function 'devm_gpiod_get_optional'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     118 |         reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-         |                      ^
-   drivers/gpio/gpio-fxl6408.c:118:15: note: did you mean 'devm_regulator_get_optional'?
-   include/linux/regulator/consumer.h:163:32: note: 'devm_regulator_get_optional' declared here
-     163 | struct regulator *__must_check devm_regulator_get_optional(struct device *dev,
-         |                                ^
->> drivers/gpio/gpio-fxl6408.c:118:53: error: use of undeclared identifier 'GPIOD_OUT_LOW'
-     118 |         reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-         |                                                            ^~~~~~~~~~~~~
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/devm_gpiod_get_optional +118 drivers/gpio/gpio-fxl6408.c
+Kernel information:
+    Commit message: Linux 6.18-rc4
 
-   103	
-   104	static int fxl6408_probe(struct i2c_client *client)
-   105	{
-   106		struct device *dev = &client->dev;
-   107		struct gpio_desc *reset_gpio;
-   108		int ret;
-   109		struct gpio_regmap_config gpio_config = {
-   110			.parent = dev,
-   111			.ngpio = FXL6408_NGPIO,
-   112			.reg_dat_base = GPIO_REGMAP_ADDR(FXL6408_REG_INPUT_STATUS),
-   113			.reg_set_base = GPIO_REGMAP_ADDR(FXL6408_REG_OUTPUT),
-   114			.reg_dir_out_base = GPIO_REGMAP_ADDR(FXL6408_REG_IO_DIR),
-   115			.ngpio_per_reg = FXL6408_NGPIO,
-   116		};
-   117	
- > 118		reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-   119		if (IS_ERR(reset_gpio))
-   120			return dev_err_probe(dev, PTR_ERR(reset_gpio), "Failed to get reset gpio\n");
-   121	
-   122		gpio_config.regmap = devm_regmap_init_i2c(client, &regmap);
-   123		if (IS_ERR(gpio_config.regmap))
-   124			return dev_err_probe(dev, PTR_ERR(gpio_config.regmap),
-   125					     "failed to allocate register map\n");
-   126	
-   127		ret = fxl6408_identify(dev, gpio_config.regmap);
-   128		if (ret)
-   129			return ret;
-   130	
-   131		/* Disable High-Z of outputs, so that our OUTPUT updates actually take effect. */
-   132		ret = regmap_write(gpio_config.regmap, FXL6408_REG_OUTPUT_HIGH_Z, 0);
-   133		if (ret)
-   134			return dev_err_probe(dev, ret, "failed to write 'output high Z' register\n");
-   135	
-   136		return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
-   137	}
-   138	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2135554331
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2135554331_x86_64_kernel-debug_kcidb_tool_19908009_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2135554331_x86_64_kernel-debug_kcidb_tool_19908009_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
