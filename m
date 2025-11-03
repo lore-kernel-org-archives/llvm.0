@@ -1,66 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890BD2D2499;
-	Mon,  3 Nov 2025 07:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE3A2FFFB3;
+	Mon,  3 Nov 2025 10:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762156722; cv=none; b=FN1CFeOFJqBYWCqYnMuQzyLufbr6yPLvxjK3O9l+/k01QuEy+DiTwbWIymEI6U1suOo5o4yh5AOfyauG9Pkwx0B3bOvLfhqwUaaWB8FUOOvFwQCAANQTs0pIX5NWQkgWUtJ7wLXn2A9pJH/viV5bmzUN/3gsHXSY+/2rFoCdKXA=
+	t=1762167282; cv=none; b=W+8Gk50zCweS4DBIYL3gkoA6ZnbaevRtpjVgsL1zmwT+Idd6gm8nrHRh+00qY/kiAmBKwF1c5hrhkbVJYLgAi3z473BOfpAT0Q9Bsh62426LuKx2hwR/w8XCQlorQ+G7d9omDcOWSrySY9A5tzAEbY+FUDYXJVMaE0wKbIx2Ey8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762156722; c=relaxed/simple;
-	bh=1FNm0IkM1sY0ABEEDPCU3w2p5wh4CFQ4+1Miq44uQxU=;
+	s=arc-20240116; t=1762167282; c=relaxed/simple;
+	bh=eAO6uuVvRpX5kBZXZELX/CH9fZ5qwDFj2NrOEEcA+3Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W+vrv6mfg465+OdLbL591I52yljmjw45RXX5VCS7KubAC0PWt0npY/9x8VWXm/Hey0/uvpAznEcjabu11sinI9q5U4OVzizaWKWsI4rTrc48VoP0yQ2MepfT0ncFbF+xOKEvBv8DoAu9o+pnXzaUECXrsj99RpLyw+sUqS3BNjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WOtD0K+V; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=f8/hkhAA1cfYIfpVnNwGUg4N8D/jh2xoL0AGAvqwcmcwGOhwZsjDvCZY6U78CHL78k4h2cTjCz5KFaCo4mQ/XZIWiLe/QDU7MacmnkLhPxTnFNkLzmMM4ToQs1VqyIWP2HFtJ2l8GbXBEQrtp51LUWRRl5vi1kl7BkdvGkZiEE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V66ueO/+; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WOtD0K+V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V66ueO/+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762156721; x=1793692721;
+  t=1762167281; x=1793703281;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1FNm0IkM1sY0ABEEDPCU3w2p5wh4CFQ4+1Miq44uQxU=;
-  b=WOtD0K+VhGg/4X/R5dU9hWtY+hFs1PvecjSSWB56Oux6NAFaVDhh5YBz
-   X5bbk0YY8cVGnJUnlXExTTnfKYEj8xVeq/sZ7HJUsAjFTJ6J/xUcaBfjo
-   SLURAtdS04kopIcSEabpfa8vI+WdLDeO04R7ScHs/014OLulcidFQ/nt5
-   JWFwScti3mYIqRsixnH5SN6AxoZ2buxqG/AqtgBT65zFcOutciD0VHnRr
-   2iUanPIn+AhjWeOmenoQbLvOk+OfT3Cn/tAUr+RaYu0qjJOSDQ440CxFK
-   O7hSt4J8NKKYwy/cY6CEq3DEB4xVSFdTUeWrG8RTS03+bt1prx2SMwaEg
-   A==;
-X-CSE-ConnectionGUID: TVrEPqhtQKKuq4JQCwGGKg==
-X-CSE-MsgGUID: KWcYotN0R4Gc9vCtPzf2Ig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="64323445"
-X-IronPort-AV: E=Sophos;i="6.19,275,1754982000"; 
-   d="scan'208";a="64323445"
+  bh=eAO6uuVvRpX5kBZXZELX/CH9fZ5qwDFj2NrOEEcA+3Q=;
+  b=V66ueO/+M/kt1xjAWKtItZstuJhT+0PmRAAsEnsMyaXVxub7Ip3vaKBS
+   2kiKALpEd/RZj3liPRrUqVFiu1Uug1bRxKtg1bRQ3dkmkP+t3U6kzXbZF
+   jnhJiC/c2YD36ywGqZTeslqcAxIcv7v8gJ0zPO9yqfJerw+6loUyjRynd
+   ucFsUJu6MkrBDpHqmj81CDW7ANqn2+W6o7ubq95jRDVCrxSMJSyQxIEHo
+   zbclRoDYa8jHXCFPfOXuuS9OQnrh1cUaHogNkR1tKwdAnW8HSPIjmiJcI
+   V8YO8ZBghkVK6WzQ/E4P0esUAARgdH4+SkiTORzN/BHlG7WY0sHyVPQwl
+   g==;
+X-CSE-ConnectionGUID: tpQUCE/4ROmpaRAPOchikw==
+X-CSE-MsgGUID: pxYpC6hlQDCpr/ZBuqUkJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64164739"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="64164739"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2025 23:58:40 -0800
-X-CSE-ConnectionGUID: /JX1QDGhT/qZ5qvkq8W++Q==
-X-CSE-MsgGUID: ElpOeLaWQEOEFXRdrwRkMw==
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 02:54:40 -0800
+X-CSE-ConnectionGUID: UQnYsNNPS/uLYv5iauyKBg==
+X-CSE-MsgGUID: Sv09t+vDRviq/kcdagPr7g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,275,1754982000"; 
-   d="scan'208";a="186675874"
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="186710667"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 02 Nov 2025 23:58:37 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 03 Nov 2025 02:54:35 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vFpSJ-000Pw4-2S;
-	Mon, 03 Nov 2025 07:58:28 +0000
-Date: Mon, 3 Nov 2025 15:58:20 +0800
+	id 1vFsCn-000Q30-2G;
+	Mon, 03 Nov 2025 10:54:33 +0000
+Date: Mon, 3 Nov 2025 18:54:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jori Koolstra <jkoolstra@xs4all.nl>,
-	Christian Brauner <brauner@kernel.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Taotao Chen <chentaotao@didiglobal.com>,
-	Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>,
-	NeilBrown <neil@brown.name>
+To: Laurentiu Mihalcea <laurentiumihalcea111@gmail.com>,
+	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	Shengjiu Wang <shengjiu.wang@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jkoolstra@xs4all.nl, linux-kernel@vger.kernel.org,
-	syzbot+a65e824272c5f741247d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] Fix a drop_nlink warning in minix_rename
-Message-ID: <202511031556.5N9lmsZB-lkp@intel.com>
-References: <20251102182532.2442670-1-jkoolstra@xs4all.nl>
+	linux-clk@vger.kernel.org, imx@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v3 3/8] clk: imx: add driver for imx8ulp's sim lpav
+Message-ID: <202511031829.Ju1yYI9x-lkp@intel.com>
+References: <20251029135229.890-4-laurentiumihalcea111@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,71 +75,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251102182532.2442670-1-jkoolstra@xs4all.nl>
+In-Reply-To: <20251029135229.890-4-laurentiumihalcea111@gmail.com>
 
-Hi Jori,
+Hi Laurentiu,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v6.18-rc4 next-20251103]
+[auto build test ERROR on abelvesa/clk/imx]
+[also build test ERROR on abelvesa/for-next linus/master pza/reset/next v6.18-rc4 next-20251103]
+[cannot apply to pza/imx-drm/next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jori-Koolstra/Fix-a-drop_nlink-warning-in-minix_rename/20251103-022646
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20251102182532.2442670-1-jkoolstra%40xs4all.nl
-patch subject: [PATCH] Fix a drop_nlink warning in minix_rename
-config: arm-randconfig-004-20251103 (https://download.01.org/0day-ci/archive/20251103/202511031556.5N9lmsZB-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Laurentiu-Mihalcea/reset-imx8mp-audiomix-Fix-bad-mask-values/20251029-225054
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
+patch link:    https://lore.kernel.org/r/20251029135229.890-4-laurentiumihalcea111%40gmail.com
+patch subject: [PATCH v3 3/8] clk: imx: add driver for imx8ulp's sim lpav
+config: arm-randconfig-001-20251103 (https://download.01.org/0day-ci/archive/20251103/202511031829.Ju1yYI9x-lkp@intel.com/config)
 compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511031556.5N9lmsZB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251103/202511031829.Ju1yYI9x-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511031556.5N9lmsZB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511031829.Ju1yYI9x-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> fs/minix/namei.c:151:11: error: use of undeclared identifier 'EFSCORRUPTED'
-     151 |                 return -EFSCORRUPTED;
-         |                         ^~~~~~~~~~~~
-   fs/minix/namei.c:217:10: error: use of undeclared identifier 'EFSCORRUPTED'
-     217 |                 err = -EFSCORRUPTED;
-         |                        ^~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/EFSCORRUPTED +151 fs/minix/namei.c
-
-   140	
-   141	static int minix_unlink(struct inode * dir, struct dentry *dentry)
-   142	{
-   143		struct inode * inode = d_inode(dentry);
-   144		struct folio *folio;
-   145		struct minix_dir_entry * de;
-   146		int err;
-   147	
-   148		if (inode->i_nlink < 1) {
-   149			printk(KERN_CRIT "minix-fs error: inode (ino: %ld) "
-   150			       "has corrupted nlink", inode->i_ino);
- > 151			return -EFSCORRUPTED;
-   152		}
-   153	
-   154		de = minix_find_entry(dentry, &folio);
-   155		if (!de)
-   156			return -ENOENT;
-   157		err = minix_delete_entry(de, folio);
-   158		folio_release_kmap(folio, de);
-   159	
-   160		if (err)
-   161			return err;
-   162		inode_set_ctime_to_ts(inode, inode_get_ctime(dir));
-   163		inode_dec_link_count(inode);
-   164		return 0;
-   165	}
-   166	
+>> ERROR: modpost: "__devm_auxiliary_device_create" [drivers/clk/imx/clk-imx8ulp-sim-lpav.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
