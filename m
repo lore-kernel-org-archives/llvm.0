@@ -1,60 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A833E305E01;
-	Tue,  4 Nov 2025 09:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A2F4400;
+	Tue,  4 Nov 2025 10:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762249450; cv=none; b=P76DXC+d6a1RbuGe1souEJnVVHN6mO94gLxTkgLpvWMRHsAN1NSS7w0lNCAARznMSzYwWn32SSKAxCDyA8n08dsN9TSg0JUldbOfMtnH+sgOjuqFTneiXxHLKgy/B3ssHI8FaPDzmcxoNjuDaeWMLkApebKil8bf/q/apie0YAw=
+	t=1762253228; cv=none; b=ngyVCJME7fqDpmUPZ1u8/yOEb7qqCJlHOop3KtGh9cSReok5WLo8saIxswv7Rnd3qDCRS0nUy7XmcwvXnYKbqBvCUoXuMxsDSB24+V/oe3D2EJDeKHZm5yu0Fh5oj2s+FRQ+39/7imhjEx/Unn/X3hnJXSPsoof8WtcR253vKwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762249450; c=relaxed/simple;
-	bh=oJLH3QxltSjXqw9VFcrwEOsDkMdy/+3c5tR6NFv/jx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=T7eKxI3booa5KDri6nSrpb5kb2SjzJW1axh/uqp4lGA6Dl0ZDliyUBGIIsY+9zuuBHxEk11QN8931RsRi7qiXQtbzXA93ZQsLwbW4FfYWe2yrNb9/35U7c/PmjXBdPHbWusO/siiai2mYnzNsZvhq7vK9JrJz1BKDm5upYiBspU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XmuTQzkN; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1762253228; c=relaxed/simple;
+	bh=Kharzk8Yq5v+lRMrbK1AuFwTe0p9vJlwG/MZ3zvjizc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AdPAJEc7MubK+HXRvhvKJCzgnaczW0+v1QWJknVNMrJmyZ2dlRfHUTBJu3ZZzakmuFYJxzXn1sOvwtZUx1H5FmQmOROTzOotpAJWaet7NBcKXZetQnSt/QoH5K8C/ukfOcQxHo4TdWd6PpMtPAFUHOe/tl4cic5eYm/Lews4k5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P7i+qixJ; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XmuTQzkN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P7i+qixJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762249448; x=1793785448;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oJLH3QxltSjXqw9VFcrwEOsDkMdy/+3c5tR6NFv/jx0=;
-  b=XmuTQzkNsto5xT2SMZZvj87J4Qrk8/1XMWeYnf0l5WOCwQ1zZX0Y7eGk
-   MIdR0D8CqBPRQfKRacEbmF5RCil8+k/h2xs/PbnDRHzYgrUZgLVs4DweD
-   b3soXSzBIldsbxokGZLzKJUaS08+5tFKEquvehlLu5wuqPXklp72Nxzje
-   F3wdmgcbK2pWi0AzBhoEhFv0YCQ6xghVjykxRu6ETaKHpbElPd+ZpOMKr
-   nc80vE/JEoWN3acMxmAy30rNqG87DWSvUk1m5CohsPVkwl5X1px9DhcEQ
-   tDt4Sh1zrgmfrz47tncQjlo9pnm9fxNoSo78aW+wOXkHG28ISRQlpl2x1
-   w==;
-X-CSE-ConnectionGUID: ddkXzJk+Q1+GYtXrwhNgzQ==
-X-CSE-MsgGUID: 6TbFzXKoRlGGmYv03qsbBw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="64436971"
+  t=1762253227; x=1793789227;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kharzk8Yq5v+lRMrbK1AuFwTe0p9vJlwG/MZ3zvjizc=;
+  b=P7i+qixJFFbgTTC7/AnQXckqKX92frMFaGHFdtNFaHvogp1FNcIo9Pi3
+   AKPFTlP04Qc/LRf0vExrDyBnnqA0eWT4STt20iIbjQHcA1yt4fT3G9dRY
+   X/aJchZQM1+qdOmJhaEP8xWwomHEDheUeXf4mez4mIzaLca5agqvHFBAJ
+   ymZtIoGEQleLA5vx4uZU5FbQkXom3wPDXEQYcAhhHuX4Ra+kB445GE6Ii
+   S4HXyAdcQRpHPYA+IsCrgxDnSrkE4vEAiGr7dJkQFg+xQddX9NylxO26F
+   SFfJgv4UoptqellgCBL9hoITVJc8AUhx3NDo3nmPdV+xD0lF3HkqY7oAR
+   g==;
+X-CSE-ConnectionGUID: coLEPG+zSdSxUwYys/TVhg==
+X-CSE-MsgGUID: Pd9gC8WCQHK6ySh/dBc7Dg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="68203408"
 X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
-   d="scan'208";a="64436971"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 01:44:06 -0800
-X-CSE-ConnectionGUID: XIslrqBITE27+526Qkt9AQ==
-X-CSE-MsgGUID: Ip8r9d9PRXylvFxA9lgghQ==
+   d="scan'208";a="68203408"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 02:47:07 -0800
+X-CSE-ConnectionGUID: AjkO+0FaTHOXLZw+Eu21rw==
+X-CSE-MsgGUID: ugC9TNPSSpe7wM/pKh3CmA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
-   d="scan'208";a="192202968"
+   d="scan'208";a="191434864"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 04 Nov 2025 01:44:05 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 04 Nov 2025 02:47:02 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vGDa7-000RDy-0N;
-	Tue, 04 Nov 2025 09:44:03 +0000
-Date: Tue, 4 Nov 2025 17:43:41 +0800
+	id 1vGEZ2-000RI8-1r;
+	Tue, 04 Nov 2025 10:47:00 +0000
+Date: Tue, 4 Nov 2025 18:46:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: Charan Teja Kalla <charan.kalla@oss.qualcomm.com>, robin.murphy@arm.com,
+	will@kernel.org, joro@8bytes.org, robh@kernel.org,
+	dmitry.baryshkov@oss.qualcomm.com, konrad.dybcio@oss.qualcomm.com,
+	bjorn.andersson@oss.qualcomm.com, bod@kernel.org,
+	conor+dt@kernel.org, krzk+dt@kernel.org, saravanak@google.com,
+	prakash.gupta@oss.qualcomm.com, vikash.garodia@oss.qualcomm.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>,
-	Amir Goldstein <amir73il@gmail.com>
-Subject: [brauner-github:kernel-6.19.cred 12/39] fs/backing-file.c:209:9:
- warning: variable 'ret' is uninitialized when used here
-Message-ID: <202511041731.OPKyrqmX-lkp@intel.com>
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Charan Teja Kalla <charan.kalla@oss.qualcomm.com>
+Subject: Re: [PATCH 5/6] of: add infra to parse iommu-map per IOMMU cell count
+Message-ID: <202511041853.IxYgvWlc-lkp@intel.com>
+References: <74d4ddf90c0fb485fda1feec5116dc38e5fd23cf.1762235099.git.charan.kalla@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,66 +70,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <74d4ddf90c0fb485fda1feec5116dc38e5fd23cf.1762235099.git.charan.kalla@oss.qualcomm.com>
 
-tree:   https://github.com/brauner/linux.git kernel-6.19.cred
-head:   59e578cf86c391d6595e005247ebefd4f371242c
-commit: b9455f57e32048146ad5b98fb477b96eba6e8ffd [12/39] backing-file: use credential guards for reads
-config: hexagon-randconfig-002-20251104 (https://download.01.org/0day-ci/archive/20251104/202511041731.OPKyrqmX-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511041731.OPKyrqmX-lkp@intel.com/reproduce)
+Hi Charan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.18-rc4 next-20251103]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Charan-Teja-Kalla/of-create-a-wrapper-for-of_map_id/20251104-170223
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/74d4ddf90c0fb485fda1feec5116dc38e5fd23cf.1762235099.git.charan.kalla%40oss.qualcomm.com
+patch subject: [PATCH 5/6] of: add infra to parse iommu-map per IOMMU cell count
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20251104/202511041853.IxYgvWlc-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511041853.IxYgvWlc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511041731.OPKyrqmX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511041853.IxYgvWlc-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/backing-file.c:209:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           return ret;
-                  ^~~
-   fs/backing-file.c:191:13: note: initialize the variable 'ret' to silence this warning
-           ssize_t ret;
-                      ^
-                       = 0
+>> drivers/of/base.c:2127:6: warning: variable 'legacy_iommu_cells' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2127 |         if (map_len % 4 != 0)
+         |             ^~~~~~~~~~~~~~~~
+   drivers/of/base.c:2130:9: note: uninitialized use occurs here
+    2130 |         return legacy_iommu_cells ? : of_iommu_map_id_actual_cell_count(map, map_len, cells);
+         |                ^~~~~~~~~~~~~~~~~~
+   drivers/of/base.c:2127:2: note: remove the 'if' if its condition is always true
+    2127 |         if (map_len % 4 != 0)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+    2128 |                 legacy_iommu_cells = of_iommu_map_id_legacy_cell_count(map, map_len);
+   drivers/of/base.c:2125:24: note: initialize the variable 'legacy_iommu_cells' to silence this warning
+    2125 |         u32 legacy_iommu_cells;
+         |                               ^
+         |                                = 0
    1 warning generated.
 
 
-vim +/ret +209 fs/backing-file.c
+vim +2127 drivers/of/base.c
 
-b9455f57e320481 Christian Brauner 2025-11-03  186  
-b9455f57e320481 Christian Brauner 2025-11-03  187  ssize_t backing_file_read_iter(struct file *file, struct iov_iter *iter,
-b9455f57e320481 Christian Brauner 2025-11-03  188  			       struct kiocb *iocb, int flags,
-b9455f57e320481 Christian Brauner 2025-11-03  189  			       struct backing_file_ctx *ctx)
-b9455f57e320481 Christian Brauner 2025-11-03  190  {
-b9455f57e320481 Christian Brauner 2025-11-03  191  	ssize_t ret;
-b9455f57e320481 Christian Brauner 2025-11-03  192  
-b9455f57e320481 Christian Brauner 2025-11-03  193  	if (WARN_ON_ONCE(!(file->f_mode & FMODE_BACKING)))
-b9455f57e320481 Christian Brauner 2025-11-03  194  		return -EIO;
-b9455f57e320481 Christian Brauner 2025-11-03  195  
-b9455f57e320481 Christian Brauner 2025-11-03  196  	if (!iov_iter_count(iter))
-b9455f57e320481 Christian Brauner 2025-11-03  197  		return 0;
-b9455f57e320481 Christian Brauner 2025-11-03  198  
-b9455f57e320481 Christian Brauner 2025-11-03  199  	if (iocb->ki_flags & IOCB_DIRECT &&
-b9455f57e320481 Christian Brauner 2025-11-03  200  	    !(file->f_mode & FMODE_CAN_ODIRECT))
-b9455f57e320481 Christian Brauner 2025-11-03  201  		return -EINVAL;
-b9455f57e320481 Christian Brauner 2025-11-03  202  
-b9455f57e320481 Christian Brauner 2025-11-03  203  	scoped_with_creds(ctx->cred)
-b9455f57e320481 Christian Brauner 2025-11-03  204  		do_backing_file_read_iter(file, iter, iocb, flags);
-a6293b3e285cd0d Amir Goldstein    2023-11-22  205  
-a6293b3e285cd0d Amir Goldstein    2023-11-22  206  	if (ctx->accessed)
-48b50624aec454c Miklos Szeredi    2024-10-21  207  		ctx->accessed(iocb->ki_filp);
-a6293b3e285cd0d Amir Goldstein    2023-11-22  208  
-a6293b3e285cd0d Amir Goldstein    2023-11-22 @209  	return ret;
-a6293b3e285cd0d Amir Goldstein    2023-11-22  210  }
-a6293b3e285cd0d Amir Goldstein    2023-11-22  211  EXPORT_SYMBOL_GPL(backing_file_read_iter);
-a6293b3e285cd0d Amir Goldstein    2023-11-22  212  
-
-:::::: The code at line 209 was first introduced by commit
-:::::: a6293b3e285cd0d7692141d7981a5f144f0e2f0b fs: factor out backing_file_{read,write}_iter() helpers
-
-:::::: TO: Amir Goldstein <amir73il@gmail.com>
-:::::: CC: Amir Goldstein <amir73il@gmail.com>
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2110  
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2111  /**
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2112   * of_iommu_map_id_cell_count - Determine the cell count for iommu-map parsing.
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2113   *
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2114   * @map: pointer to the iommu-map property that needs to be translated.
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2115   * @map_len: length of @map in bytes.
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2116   *
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2117   * Use #iommu-cells property while parsing iommu-map. Detect and use legacy
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2118   * case where iommu-map is parsed as if cells = 1.
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2119   *
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2120   * Return: number of cells that the caller should be considered while parsing
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2121   * the @map. It is > 0 for success, 0 for failure.
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2122   */
+5288ad2aeeeb41 Charan Teja Kalla 2025-11-04  2123  static int of_iommu_map_id_cell_count(const __be32 *map, int map_len, u32 cells)
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2124  {
+5288ad2aeeeb41 Charan Teja Kalla 2025-11-04  2125  	u32 legacy_iommu_cells;
+5288ad2aeeeb41 Charan Teja Kalla 2025-11-04  2126  
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04 @2127  	if (map_len % 4 != 0)
+5288ad2aeeeb41 Charan Teja Kalla 2025-11-04  2128  		legacy_iommu_cells = of_iommu_map_id_legacy_cell_count(map, map_len);
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2129  
+5288ad2aeeeb41 Charan Teja Kalla 2025-11-04  2130  	return legacy_iommu_cells ? : of_iommu_map_id_actual_cell_count(map, map_len, cells);
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2131  }
+c74d6f4acf99ef Charan Teja Kalla 2025-11-04  2132  
 
 -- 
 0-DAY CI Kernel Test Service
