@@ -1,25 +1,37 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A5C32AAD3;
-	Tue,  4 Nov 2025 18:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D097E2CCC5;
+	Tue,  4 Nov 2025 18:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762281378; cv=none; b=VENv3Wl2Iz491oQJmLuvZzy5Z8LYbZ+3yPQrWS8BRutV77V6VDFIjUt9Vo5C3+a/L7NibvJQU4+2Uh/5PrbKoQL2OZX4YwNL0PjjDzPahHCSh6D5Pgj59XseRpubq7RsA0NngHlh6/R2CTBBi6BWOvTs+xFz3cnK2hp6xoPptQ4=
+	t=1762282323; cv=none; b=Rx9BdgJYJIgLWSmwiks8XGoH77XwsJtbY3GVtIot2tj+0hqwzeM+jaK45FysQHSt+MkhqXuu/y5vAsZZHEbgI75XF69jJB305QZCHVfluherNdJiuiNuG5Zcgu5AMFVwv3b2WIw2OekMcGu/IoiMGxuQ0Nw5CPEwUXKGo9WD7ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762281378; c=relaxed/simple;
-	bh=SsPvEHwG7+8/hfYHq054WgBikVniVDmj7mpMjYb6Bm4=;
+	s=arc-20240116; t=1762282323; c=relaxed/simple;
+	bh=1xsDy3CZq77wu986Dc+b1hJamxaey3FGk7jDXCOigiM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YnsciO3BomAx5zpXxWmLN2Q/V5cw5flkgeYhYwJtiEiuRTi9q9QBq8tS/DgTTsgU7CESdjNaZszl+KUPF0yRadfL/5SqR5Tog6QRdwOhkwNwMSYm3aebKoV8SGD7CWyktg3PXPpsC1QPinhI/LwDhK5pjWx4rw0ALeC4O+mVxO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F3511CE0;
-	Tue,  4 Nov 2025 10:36:07 -0800 (PST)
-Received: from [10.1.33.58] (010265703453.cambridge.arm.com [10.1.33.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 757A33F694;
-	Tue,  4 Nov 2025 10:36:14 -0800 (PST)
-Message-ID: <8feac1c4-3bc8-4fa8-b2a7-6bbe0f790d73@arm.com>
-Date: Tue, 4 Nov 2025 18:36:12 +0000
+	 In-Reply-To:Content-Type; b=SoaEKx8HuOlx5yohANG2dpRKNO9k6WlJEMEnIjeDj2Msnf1onTfLAyeUIkJIJA5srufjc6RyhbweiZGuBGEShyvicxuVTrxgk2ZF/Hnc1WnhyXKKZ0w66gjW8peYgSmP2YG8ybHKgVdWe2enusQHz80FVMEAkvKK8f67KOdUO2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ko6RLb8y; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ko6RLb8y"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=oanjx6/hmAejRWiag/zsJfndQQOFRDEkA/Am+kiuH5U=; b=ko6RLb8yuC0crboN+f0heVHvjU
+	1Ox/MQF9cdRt+gEPF2fox/XF1iFhZSEGfCqVH2aHqSMQ6p92Jyp0vQhF0BjPXnYFWVb2ahKW/jNDA
+	RIK739Re0WfIFDwEXwoZ9/lZJZTF57B2klVasJp9Pn4N+w/9niDJH3/BuP102k/9g4qjSSF7DvRm6
+	ADLue6FvfeSL0JR/3XfeB2vGu4XjvMuJzSIb0dbuqpK9GVQVgOxK6xuTsOSQ4u6G+eDw4GK17LP5O
+	zcn6hIfH5owYbOC8TrhFcuuQnDbhnpxDD3yXJofiqvGNAq7wRfI5rXfxG8G/180r3C+J9pPEwT1xt
+	FNHfUqsg==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vGM8L-0000000CRWY-1kO9;
+	Tue, 04 Nov 2025 18:51:57 +0000
+Message-ID: <7112b077-d19d-4b85-b2e0-8700dd2951e9@infradead.org>
+Date: Tue, 4 Nov 2025 10:51:56 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -27,83 +39,64 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [arm-perf:for-next/perf 6/8] drivers/perf/arm-ni.c:433:13:
- warning: operator '?:' has lower precedence than '+'; '+' will be evaluated
- first
-To: Will Deacon <will@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev
-References: <202511041749.ok8zDP6u-lkp@intel.com>
- <aQnzF7BNIgp37kcd@willie-the-truck>
- <5bba40c3-bfab-481d-8252-4f5a62e2b79e@arm.com>
- <aQoAUPtvbBrlymuA@willie-the-truck>
- <3e9e655f-eccd-425f-a243-161e84d801a8@arm.com>
- <aQpEyPNVSH1piLXh@willie-the-truck>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <aQpEyPNVSH1piLXh@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v8 04/15] iommupt: Add the AMD IOMMU v1 page table format
+To: Jason Gunthorpe <jgg@nvidia.com>, Alexandre Ghiti <alex@ghiti.fr>,
+ Anup Patel <anup@brainfault.org>, Albert Ou <aou@eecs.berkeley.edu>,
+ Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+ Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
+ Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+ Samiullah Khawaja <skhawaja@google.com>, Vasant Hegde <vasant.hegde@amd.com>
+References: <4-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <4-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2025-11-04 6:24 pm, Will Deacon wrote:
-> On Tue, Nov 04, 2025 at 02:04:57PM +0000, Robin Murphy wrote:
->> On 2025-11-04 1:32 pm, Will Deacon wrote:
->>> On Tue, Nov 04, 2025 at 01:26:11PM +0000, Robin Murphy wrote:
->>>> On 2025-11-04 12:35 pm, Will Deacon wrote:
->>>>> On Tue, Nov 04, 2025 at 05:43:40PM +0800, kernel test robot wrote:
->>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
->>>>>> head:   989b40b7578a2be7b0388522d33d751b257d59d9
->>>>>> commit: 8fa08f8835e57e1fd5e2994c9cf76c84dadc1235 [6/8] perf/arm-ni: Add NoC S3 support
->>>>>> config: sparc64-randconfig-002-20251104 (https://download.01.org/0day-ci/archive/20251104/202511041749.ok8zDP6u-lkp@intel.com/config)
->>>>>> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
->>>>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511041749.ok8zDP6u-lkp@intel.com/reproduce)
->>>>>>
->>>>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->>>>>> the same patch/commit), kindly add following tags
->>>>>> | Reported-by: kernel test robot <lkp@intel.com>
->>>>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202511041749.ok8zDP6u-lkp@intel.com/
->>>>>>
->>>>>> All warnings (new ones prefixed by >>):
->>>>>>
->>>>>>>> drivers/perf/arm-ni.c:433:13: warning: operator '?:' has lower precedence than '+'; '+' will be evaluated first [-Wparentheses]
->>>>>>         432 |                 hw->event_base = (unsigned long)cd->pmu_base +
->>>>>>             |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>>>         433 |                                  is_7xx ? NI700_PMCCNTR_L : NI_PMCCNTR_L;
->>>>>>             |                                  ~~~~~~ ^
->>>>>>       drivers/perf/arm-ni.c:433:13: note: place parentheses around the '+' expression to silence this warning
->>>>>>         432 |                 hw->event_base = (unsigned long)cd->pmu_base +
->>>>>>             |                                  (
->>>>>>         433 |                                  is_7xx ? NI700_PMCCNTR_L : NI_PMCCNTR_L;
->>>>>>             |                                         ^
->>>>>>             |                                        )
->>>>>
->>>>> Hrm. Doesn't that mean this is completely broken or am I misreading the
->>>>> report?
->>>>
->>>> Bah, my arm64 W=1 build (which I did do in the hope of catching any such
->>>> sillies...) fails to flag that :(
->>>>
->>>> Truth is this is a fresh refactoring of the mess I originally wrote that got
->>>> tested by someone else 18 months ago, and I don't have any hardware to
->>>> functionally test it myself. Feel free to drop it and I'll send a complete
->>>> v2, or I can do an incremental fix if you prefer (I already realised I could
->>>> have streamlined the version check to a one-off in event_init as well.)
->>>
->>> Damn, it's not ideal that we don't have any test coverage for this.
->>>
->>> The patch is buried under some others now, so I can either revert it or
->>> take fixes on top. Up to you.
->>
->> I've managed to break my git-send-email setup at the moment, so I hope
->> an inline patch is OK!
-> 
-> Sadly, this appears to be whitespace corrupted in a very strange way. The
-> version I see in mutt is different to the version on lore, which itself
-> renders differently when viewed as "raw". None of them apply :(
 
-Hooray for Office 365 and its liberal approximation of IMAP... Anyway, I 
-have now managed to sort out the machine that was keeping me out of my 
-other account, so you should have a properly-sent version now.
 
-Cheers,
-Robin.
+On 11/4/25 10:30 AM, Jason Gunthorpe wrote:
+> diff --git a/drivers/iommu/generic_pt/Kconfig b/drivers/iommu/generic_pt/Kconfig
+> index a81dfdd72ca016..cbdad222923b26 100644
+> --- a/drivers/iommu/generic_pt/Kconfig
+> +++ b/drivers/iommu/generic_pt/Kconfig
+> @@ -30,4 +30,16 @@ config IOMMU_PT
+>  	  related to struct iommu_domain using GENERIC_PT. It provides a single
+>  	  implementation of the page table operations that can be shared by
+>  	  multiple drivers.
+> +
+> +if IOMMU_PT
+> +config IOMMU_PT_AMDV1
+> +	tristate "IOMMU page table for 64-bit AMD IOMMU v1"
+> +	depends on !GENERIC_ATOMIC64 # for cmpxchg64
+> +	help
+> +	  iommu_domain implementation for the AMD v1 page table. AMDv1 is the
+> +	  "host" page table. It supports granular page sizes of almost every
+> +	  power of 2 and decodes an full 64-bit IOVA space.
+
+	                         a full
+or
+
+	                         the full
+
+> +
+> +	  Selected automatically by an IOMMU driver that uses this format.
+> +endif
+
+
+-- 
+~Randy
+
