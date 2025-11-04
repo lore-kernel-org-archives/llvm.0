@@ -1,62 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D821DF256;
-	Tue,  4 Nov 2025 03:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D2D306B0D;
+	Tue,  4 Nov 2025 08:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762228009; cv=none; b=ZIhiJqZnjNnkr3j4ESOGoDZFqOS1/yPrEL1+/vtot9nk3biFReS8S6MfYuqEW8rLtq9hFy4HHyP5d4gPv6d2umJYi5Jwzv8PVLz7BB1MvQkichJTNZWME7AVScfYyYzJp1cB2rQ5kSscZ4pMxaKL0pYKE4WIDdUHsiHsBmYJPhk=
+	t=1762244410; cv=none; b=F73YGPk9UD4wbdRtxe3Rr2uTQeg1SILF13LXH0fBGOODaTPqQ/IAiNYJPW+OQWIG9sLjXQoQQ/GFbukc1vv/B+UDVb3rQqlEhM5Z4g2DGMMX06tGX6aLmVK4ZSF+2p+9xR0NPZ6TZJyzEQlusPDlGvORFiHQ63dAu9qhSfWdj/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762228009; c=relaxed/simple;
-	bh=xi/hW3NfngeZ5NWuTMWiUQ8P+RCzK4LcoZLxVlOP4oM=;
+	s=arc-20240116; t=1762244410; c=relaxed/simple;
+	bh=DYM83bBbxx1y5vplV3YBcZ8Mx+qy4hDpBNYYrYsw0cM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwhDvR7bA2sof7RZ63H23EQuFei5NYAjFIP9YlNUZM7aWyFoR4fNBlkKIw1YBLklhkJqoUJD72m7pGjkpJJZrni2UK9tdBwfhMIlUshB/QKR4JG+8z2t7wiRyXPqfVg37m/J/6TIEUmGgB4FiuuBBQsH+drS5mgO9GYxE9jLcew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aME0xI5/; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=CpwpEf842jJgkioFrBtpjefbD5c8VH2NWSGfRQvvdbhTcHt05bzFRm4BoZ4GzS2LCleks9AlelsRkatWrXbvOrThznLsl96Vnr+afL+cPH4C8maY7iVQ1ctumu7Ngyj1MjRBHDD7uGS48QZLT2p17si0CZJmwscDeoCSQlrB/+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MuTyOQx7; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aME0xI5/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MuTyOQx7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762228008; x=1793764008;
+  t=1762244409; x=1793780409;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xi/hW3NfngeZ5NWuTMWiUQ8P+RCzK4LcoZLxVlOP4oM=;
-  b=aME0xI5/steHvArgox/sVKHF076JhFU+FT3acC8Mvoa8ay9Ev/w3v7ZT
-   SvjOCSZ+ihFjonsWX0tnsTuFqjwVAuoRWgy1n7/ryttHpoWfiUDi+FqpG
-   LcA5TXN7j4ACdWUVyBxeJB98LDrGFVSbg7WXAmzIZAchmNY9iFj3i1PaC
-   XEyC8nP8nVFcoqGXSoTZl+OxqAgKTwA7ScrgvTDPT/GscH4g8GII9l+Ri
-   yaNCt4BPur+/zfCKss7lZaryAEOhvAz6B2/qE+uWOpSzVW4ZPTSsRyxB0
-   ot9hnWK0KBqEFoqbfpK/igpJNT4sTntzkGK6+miICyrCs8FYOpFzKT6/k
-   g==;
-X-CSE-ConnectionGUID: 4MIuudokRNKmE8zLxWYS2Q==
-X-CSE-MsgGUID: GugmyE3WT4GRYJBriatgbQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="66927460"
+  bh=DYM83bBbxx1y5vplV3YBcZ8Mx+qy4hDpBNYYrYsw0cM=;
+  b=MuTyOQx7RcJ9oYqYYmBOEKJl166zO+pbU5HmR7azCwPyh3WqojJWkiNx
+   5hy+BoIDbahDqQ36VeTT/EigCBWtFu5u2e3Rjv71z8LgsBlOYuHh62Ps9
+   gvHJLpk0nzLe/KWYQq6l35gUry3Yhs3NWb96bFJzVf4cNXaLy3wErSJV5
+   /UDQBFZ9yIDkoDtbMs5+MoYDoo/XTV6i+A0YAsKqlRNNZhdYiATyKaW/z
+   Z+vWuCBp63FpwHQsxfha2F1WCIjTYA53epKv872quXVWvIEIt8Gk9aI+x
+   emzq9yaq1R8Ne0Xd6mA3EmPRx8zJYaxGXycrWzjBf/6NB2VM0hKiPvoaR
+   w==;
+X-CSE-ConnectionGUID: 9VdHJ19YScCSGwU8iUe4lQ==
+X-CSE-MsgGUID: 3XFGjCBEQdK5pSZych50Lw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="64029270"
 X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
-   d="scan'208";a="66927460"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 19:46:47 -0800
-X-CSE-ConnectionGUID: pELMU9h3T7CrEYFApCaCcg==
-X-CSE-MsgGUID: uWuyGm8FSLWm6cVAlOTpYA==
+   d="scan'208";a="64029270"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 00:20:07 -0800
+X-CSE-ConnectionGUID: 4TYUN/wIR3WHvf4xaU/oPw==
+X-CSE-MsgGUID: y1bocoSQTwWw2NQg6pBoqQ==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
+   d="scan'208";a="191445462"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 03 Nov 2025 19:46:45 -0800
+  by orviesa004.jf.intel.com with ESMTP; 04 Nov 2025 00:20:04 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vG809-000QpW-2p;
-	Tue, 04 Nov 2025 03:46:36 +0000
-Date: Tue, 4 Nov 2025 11:45:56 +0800
+	id 1vGCGn-000R7c-2T;
+	Tue, 04 Nov 2025 08:20:01 +0000
+Date: Tue, 4 Nov 2025 16:19:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
-	leon@kernel.org, jgg@ziepe.ca
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
+	Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rdma@vger.kernel.org, andrew.gospodarek@broadcom.com,
-	selvin.xavier@broadcom.com, kalesh-anakkur.purayil@broadcom.com,
-	Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>
-Subject: Re: [PATCH rdma-next 4/4] RDMA/bnxt_re: Direct Verbs: Support CQ and
- QP verbs
-Message-ID: <202511041131.c3AuE5DZ-lkp@intel.com>
-References: <20251103105033.205586-5-sriharsha.basavapatna@broadcom.com>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Valentina Fernandez Alanis <valentina.fernandezalanis@microchip.com>,
+	Cyril Jean <cyril.jean@microchip.com>,
+	Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Subject: Re: [PATCH v1 3/3] spi: add support for microchip "soft" spi
+ controller
+Message-ID: <202511041624.BMMvzi6h-lkp@intel.com>
+References: <20251103160515.412706-4-prajna.rajendrakumar@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,161 +73,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251103105033.205586-5-sriharsha.basavapatna@broadcom.com>
+In-Reply-To: <20251103160515.412706-4-prajna.rajendrakumar@microchip.com>
 
-Hi Sriharsha,
+Hi Prajna,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on rdma/for-next]
-[also build test WARNING on linus/master v6.18-rc4 next-20251103]
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on linus/master v6.18-rc4 next-20251103]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sriharsha-Basavapatna/RDMA-bnxt_re-Move-the-UAPI-methods-to-a-dedicated-file/20251103-190151
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
-patch link:    https://lore.kernel.org/r/20251103105033.205586-5-sriharsha.basavapatna%40broadcom.com
-patch subject: [PATCH rdma-next 4/4] RDMA/bnxt_re: Direct Verbs: Support CQ and QP verbs
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20251104/202511041131.c3AuE5DZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511041131.c3AuE5DZ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Prajna-Rajendra-Kumar/spi-microchip-rename-driver-file-and-internal-identifiers/20251104-001544
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20251103160515.412706-4-prajna.rajendrakumar%40microchip.com
+patch subject: [PATCH v1 3/3] spi: add support for microchip "soft" spi controller
+config: sparc64-randconfig-002-20251104 (https://download.01.org/0day-ci/archive/20251104/202511041624.BMMvzi6h-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511041624.BMMvzi6h-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511041131.c3AuE5DZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511041624.BMMvzi6h-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/infiniband/hw/bnxt_re/dv.c:635:22: warning: variable 'rdev' set but not used [-Wunused-but-set-variable]
-     635 |         struct bnxt_re_dev *rdev;
-         |                             ^
->> drivers/infiniband/hw/bnxt_re/dv.c:891:30: warning: variable 'ib_cq' is uninitialized when used here [-Wuninitialized]
-     891 |         bnxt_re_dv_init_ib_cq(rdev, ib_cq, re_cq);
-         |                                     ^~~~~
-   drivers/infiniband/hw/bnxt_re/dv.c:835:21: note: initialize the variable 'ib_cq' to silence this warning
-     835 |         struct ib_cq *ib_cq;
-         |                            ^
-         |                             = NULL
-   drivers/infiniband/hw/bnxt_re/dv.c:1105:27: warning: variable 'cntx' set but not used [-Wunused-but-set-variable]
-    1105 |         struct bnxt_re_ucontext *cntx;
-         |                                  ^
->> drivers/infiniband/hw/bnxt_re/dv.c:1131:18: warning: variable 'umem' is uninitialized when used here [-Wuninitialized]
-    1131 |                 __func__, (u64)umem, sginfo->npages, sginfo->pgsize, sginfo->pgshft);
-         |                                ^~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/infiniband/hw/bnxt_re/dv.c:1106:22: note: initialize the variable 'umem' to silence this warning
-    1106 |         struct ib_umem *umem;
-         |                             ^
-         |                              = NULL
-   4 warnings generated.
+   drivers/spi/spi-microchip-core.c:163:23: warning: unused variable 'corespi' [-Wunused-variable]
+     163 |         struct mchp_corespi *corespi = spi_controller_get_devdata(spi->controller);
+         |                              ^~~~~~~
+>> drivers/spi/spi-microchip-core.c:438:3: error: field designator 'remove_new' does not refer to any field in type 'struct platform_driver'
+     438 |         .remove_new = mchp_corespi_remove,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/ib_cq +891 drivers/infiniband/hw/bnxt_re/dv.c
+vim +438 drivers/spi/spi-microchip-core.c
 
-   823	
-   824	static int UVERBS_HANDLER(BNXT_RE_METHOD_DV_CREATE_CQ)(struct uverbs_attr_bundle *attrs)
-   825	{
-   826		struct ib_uobject *uobj =
-   827			uverbs_attr_get_uobject(attrs, BNXT_RE_DV_CREATE_CQ_HANDLE);
-   828		struct bnxt_re_dv_umem *umem_handle = NULL;
-   829		struct bnxt_re_dv_cq_resp resp = {};
-   830		struct bnxt_re_dv_cq_req req = {};
-   831		struct bnxt_re_ucontext *re_uctx;
-   832		struct ib_ucontext *ib_uctx;
-   833		struct bnxt_re_dev *rdev;
-   834		struct bnxt_re_cq *re_cq;
-   835		struct ib_cq *ib_cq;
-   836		u64 offset;
-   837		int ret;
-   838	
-   839		ib_uctx = ib_uverbs_get_ucontext(attrs);
-   840		if (IS_ERR(ib_uctx))
-   841			return PTR_ERR(ib_uctx);
-   842	
-   843		re_uctx = container_of(ib_uctx, struct bnxt_re_ucontext, ib_uctx);
-   844		rdev = re_uctx->rdev;
-   845	
-   846		ret = uverbs_copy_from_or_zero(&req, attrs, BNXT_RE_DV_CREATE_CQ_REQ);
-   847		if (ret) {
-   848			dev_err(rdev_to_dev(rdev), "%s: Failed to copy request: %d\n",
-   849				__func__, ret);
-   850			return ret;
-   851		}
-   852	
-   853		umem_handle = uverbs_attr_get_obj(attrs, BNXT_RE_DV_CREATE_CQ_UMEM_HANDLE);
-   854		if (IS_ERR(umem_handle)) {
-   855			dev_err(rdev_to_dev(rdev),
-   856				"%s: BNXT_RE_DV_CREATE_CQ_UMEM_HANDLE is not valid\n",
-   857				__func__);
-   858			return PTR_ERR(umem_handle);
-   859		}
-   860	
-   861		ret = uverbs_copy_from(&offset, attrs, BNXT_RE_DV_CREATE_CQ_UMEM_OFFSET);
-   862		if (ret) {
-   863			dev_err(rdev_to_dev(rdev), "%s: Failed to copy umem offset: %d\n",
-   864				__func__, ret);
-   865			return ret;
-   866		}
-   867	
-   868		re_cq = bnxt_re_dv_create_qplib_cq(rdev, re_uctx, &req, umem_handle, offset);
-   869		if (!re_cq) {
-   870			dev_err(rdev_to_dev(rdev), "%s: Failed to create qplib cq\n",
-   871				__func__);
-   872			return -EIO;
-   873		}
-   874	
-   875		ret = bnxt_re_dv_create_cq_resp(rdev, re_cq, &resp);
-   876		if (ret) {
-   877			dev_err(rdev_to_dev(rdev),
-   878				"%s: Failed to create cq response\n", __func__);
-   879			goto fail_resp;
-   880		}
-   881	
-   882		ret = bnxt_re_dv_uverbs_copy_to(rdev, attrs, BNXT_RE_DV_CREATE_CQ_RESP,
-   883						&resp, sizeof(resp));
-   884		if (ret) {
-   885			dev_err(rdev_to_dev(rdev),
-   886				"%s: Failed to copy cq response: %d\n", __func__, ret);
-   887			goto fail_resp;
-   888		}
-   889	
-   890		bnxt_re_dv_finalize_uobj(uobj, re_cq, attrs, BNXT_RE_DV_CREATE_CQ_HANDLE);
- > 891		bnxt_re_dv_init_ib_cq(rdev, ib_cq, re_cq);
-   892		re_cq->is_dv_cq = true;
-   893		atomic_inc(&rdev->dv_cq_count);
-   894	
-   895		dev_dbg(rdev_to_dev(rdev), "%s: Created CQ: 0x%llx, handle: 0x%x\n",
-   896			__func__, (u64)re_cq, uobj->id);
-   897	
-   898		return 0;
-   899	
-   900	fail_resp:
-   901		bnxt_qplib_destroy_cq(&rdev->qplib_res, &re_cq->qplib_cq);
-   902		bnxt_re_put_nq(rdev, re_cq->qplib_cq.nq);
-   903		if (re_cq->umem_handle) {
-   904			ib_umem_release(re_cq->umem);
-   905			kfree(re_cq->umem_handle);
-   906		}
-   907		kfree(re_cq);
-   908		return ret;
-   909	};
-   910	
+   430	
+   431	static struct platform_driver mchp_corespi_driver = {
+   432		.probe = mchp_corespi_probe,
+   433		.driver = {
+   434			.name = "microchip-corespi",
+   435			.pm = MICROCHIP_SPI_PM_OPS,
+   436			.of_match_table = of_match_ptr(mchp_corespi_dt_ids),
+   437		},
+ > 438		.remove_new = mchp_corespi_remove,
 
 -- 
 0-DAY CI Kernel Test Service
