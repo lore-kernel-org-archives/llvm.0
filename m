@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527792F692D;
-	Mon,  3 Nov 2025 23:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CDC1F4168;
+	Tue,  4 Nov 2025 01:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762210957; cv=none; b=h3MdLxOMJaw7PEZO9UDrLvd/Cvi4ASen6qpvYXudujC1lQGw8S4cJQ9Q26Ysh61uP12JLg2La7QL9iCHQ3HUChAXI5fShXWESbLAhsike2hXRLif36XCN0dyr3IhReyPrdVWGuE1C6vVOwMHVMuQNL993O3A3ZsNV1iFdeGW4iQ=
+	t=1762219413; cv=none; b=lUS1ZAV/01qjQcrxvK2HREsG+Y1XprI1mCKt53f01g1zAgND6wRnuORicLt5dezbOnaQGlwQjp1hywor4ElYiv+a0akGlUDWEW8+KtdCogHUcenO4+Z1tqRoAQup72kvz2BsA1Xxc8VeXNMVGeDEQ26XGg5eq3zdWOWP00LSH/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762210957; c=relaxed/simple;
-	bh=ol0xGUVXjreC2pqQIbNikjtDqRI23mUHgPA4ks/7abQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SrH8l/Rf/hFlr09B6yvLaDVSELZDUiIseH8x2vbhFX90oiL1BWwAIePkU7t6bxOu8U9x24a5m54QIVX/MY9xlRgyG34m8d+5lfwlV6UElnKIi97EWcsA1VF3wF8wh4/sXkWQRW/rfo0x8gfwv2YtpC9TGAPyg+7G+K+yXQWhjBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=icGdeO6b; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1762219413; c=relaxed/simple;
+	bh=Oe2z97V4X/+fdXWxcIP/sHuLgqvLi/VcKJUIaW3A9p8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MYfYAJBEYRHPsoVMsQjVs91BD1LpNdgHRAeUX2LGtqTiYS/S09igNbKUEvc3C7xMX+Pz+diOmW0n07dxwpvUw5qtE2TzAkPD4ajKeiA4SxNiKjzYWCvpv24Iv+BySxoy/BxDF8/lCNOLaLpEFLo92TKg3wRk6FuPBTqh4zdUtBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZAJwZVvT; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="icGdeO6b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZAJwZVvT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762210956; x=1793746956;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ol0xGUVXjreC2pqQIbNikjtDqRI23mUHgPA4ks/7abQ=;
-  b=icGdeO6bsQKf2OdDASWifHH1K4JIQyQdu6m7Tk23MjzGMXCXgF0kBrBu
-   NfImTkfx5YlyKF2z4mf2vrxJsCQN0z9dLhJvF9/yPZkRYhiDbLJZexfMQ
-   vqNZ2k6vsbcQGzoI3XPhPacMxIxaZtDMeQsL8v8BksnzrnjrkyPKvr7WA
-   /LOuQ2+IEtKlWAld/yBsxpQ/9FKc3RG8WCWwbGte9FIjRy7wdlDm8iHgT
-   J6RfqgKH27/BmE84AeOjohGpg3JvX0mp2x9n7mC5GlhEqTRHL8JrL03rr
-   8U6QS3mfl5o1wB5TduT3PWe0qSmDKqNglMNKiRvyRvEZy9ldnBrtLwpDn
+  t=1762219411; x=1793755411;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Oe2z97V4X/+fdXWxcIP/sHuLgqvLi/VcKJUIaW3A9p8=;
+  b=ZAJwZVvTra8KLTDx24k+67ZwYN3/UqAhjpdPB3/ZoaBt8lMPWet3z4zs
+   6Je8czwLHZ6IqvSOnEtbABKQ/GFQhcQfzD7X2iHeP4rpYKXZEundEQV3P
+   brYXcgDLrIfE1PWFHJpqy45CB/MolScHs1+BnQvt4mF4Xfp/eZppjbHw+
+   gpelfGJzG5DHyblazsjMQId5v8SqUTHBFJEBJM0yPDfdhk4WBT6ytllJ8
+   +sbUv72idT1+53ykDWYgsc03EkbmYnIVpfeCosMg5tkBieMPzNmPGEbCI
+   O341UY/k34tUMPfsXrI8cNE5CytpHLEiZ6e1M+aBub32Lfeej42bCCrTO
    g==;
-X-CSE-ConnectionGUID: vfnxBrREQs2dolTmae7+QA==
-X-CSE-MsgGUID: RFAI8PpfQU+DJtqPwYZwbA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="66910581"
+X-CSE-ConnectionGUID: ypSluznRQ/y97Dx/CpfNrw==
+X-CSE-MsgGUID: WCT19lXDTumBMt9U+WsLxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="68166945"
 X-IronPort-AV: E=Sophos;i="6.19,277,1754982000"; 
-   d="scan'208";a="66910581"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 15:02:35 -0800
-X-CSE-ConnectionGUID: 7+tr4xMtR7SwdtQst+rOYw==
-X-CSE-MsgGUID: 5wjyYfJsRf6oCa3jYu2VNw==
+   d="scan'208";a="68166945"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 17:23:30 -0800
+X-CSE-ConnectionGUID: zWcqEi5CRAi39mIRwMnCIQ==
+X-CSE-MsgGUID: AV8XafP0RgmYAPNBEqjxLw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,277,1754982000"; 
-   d="scan'208";a="187144068"
+   d="scan'208";a="217657287"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 03 Nov 2025 15:02:34 -0800
+  by orviesa002.jf.intel.com with ESMTP; 03 Nov 2025 17:23:28 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vG3Yg-000QbE-0n;
-	Mon, 03 Nov 2025 23:02:05 +0000
-Date: Tue, 4 Nov 2025 07:00:38 +0800
+	id 1vG5lK-000Qim-2R;
+	Tue, 04 Nov 2025 01:23:09 +0000
+Date: Tue, 4 Nov 2025 09:22:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org, srini@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, heiko@sntech.de,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] nvmem: Add driver for the eeprom in qnap-mcu
- controllers
-Message-ID: <202511040659.c2R6OqbJ-lkp@intel.com>
-References: <20251102163955.294427-2-heiko@sntech.de>
+To: Jonas Gorski <jonas.gorski@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kanjimonster:b53/wip 10/12]
+ drivers/net/dsa/b53/b53_common.c:2590:28: warning: variable 'i' is
+ uninitialized when used here
+Message-ID: <202511040948.TxkC68cF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,76 +62,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251102163955.294427-2-heiko@sntech.de>
 
-Hi Heiko,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on lee-leds/for-leds-next]
-[also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes linus/master v6.18-rc4 next-20251103]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/nvmem-Add-driver-for-the-eeprom-in-qnap-mcu-controllers/20251103-004523
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20251102163955.294427-2-heiko%40sntech.de
-patch subject: [PATCH v3 1/2] nvmem: Add driver for the eeprom in qnap-mcu controllers
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251104/202511040659.c2R6OqbJ-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511040659.c2R6OqbJ-lkp@intel.com/reproduce)
+tree:   https://github.com/KanjiMonster/linux b53/wip
+head:   4bd0d15e25ab64f157bf00b4c39bd1ef94da1ff5
+commit: 70fb214830ff40f92fbfbacf66223b3cd3e803b9 [10/12] net: dsa: b53: add MSTI support
+config: i386-buildonly-randconfig-002-20251104 (https://download.01.org/0day-ci/archive/20251104/202511040948.TxkC68cF-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251104/202511040948.TxkC68cF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511040659.c2R6OqbJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511040948.TxkC68cF-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/nvmem/qnap-mcu-eeprom.c:28:10: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      28 |         reply = kzalloc(bytes + sizeof(cmd), GFP_KERNEL);
-         |                 ^
->> drivers/nvmem/qnap-mcu-eeprom.c:28:8: error: incompatible integer to pointer conversion assigning to 'u8 *' (aka 'unsigned char *') from 'int' [-Wint-conversion]
-      28 |         reply = kzalloc(bytes + sizeof(cmd), GFP_KERNEL);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/nvmem/qnap-mcu-eeprom.c:45:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      45 |         kfree(reply);
-         |         ^
-   3 errors generated.
+>> drivers/net/dsa/b53/b53_common.c:2590:28: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+    2590 |                 if (dsa_to_port(dev->ds, i)->bridge)
+         |                                          ^
+   drivers/net/dsa/b53/b53_common.c:2582:8: note: initialize the variable 'i' to silence this warning
+    2582 |                 int i;
+         |                      ^
+         |                       = 0
+   1 warning generated.
 
 
-vim +/kzalloc +28 drivers/nvmem/qnap-mcu-eeprom.c
+vim +/i +2590 drivers/net/dsa/b53/b53_common.c
 
-    20	
-    21	static int qnap_mcu_eeprom_read_block(struct qnap_mcu *mcu, unsigned int offset,
-    22					      void *val, size_t bytes)
-    23	{
-    24		const u8 cmd[] = { 0xf7, 0xa1, offset, bytes };
-    25		u8 *reply;
-    26		int ret = 0;
-    27	
-  > 28		reply = kzalloc(bytes + sizeof(cmd), GFP_KERNEL);
-    29		if (!reply)
-    30			return -ENOMEM;
-    31	
-    32		ret = qnap_mcu_exec(mcu, cmd, sizeof(cmd), reply, bytes + sizeof(cmd));
-    33		if (ret)
-    34			goto out;
-    35	
-    36		/* First bytes must mirror the sent command */
-    37		if (memcmp(cmd, reply, sizeof(cmd))) {
-    38			ret = -EIO;
-    39			goto out;
-    40		}
-    41	
-    42		memcpy(val, reply + sizeof(cmd), bytes);
-    43	
-    44	out:
-  > 45		kfree(reply);
-    46		return ret;
-    47	}
-    48	
+  2574	
+  2575	void b53_br_set_stp_state(struct dsa_switch *ds, int port, u8 state)
+  2576	{
+  2577		struct b53_device *dev = ds->priv;
+  2578		u8 hw_state;
+  2579		u8 reg;
+  2580	
+  2581		if (dev->num_msts) {
+  2582			int i;
+  2583	
+  2584			if (port == B53_CPU_PORT)
+  2585				return;
+  2586	
+  2587			/* Update CIST entry */
+  2588			b53_set_mst_state(dev, port, 0, state);
+  2589	
+> 2590			if (dsa_to_port(dev->ds, i)->bridge)
+  2591				return;
+  2592	
+  2593			for (i = 1; i < dev->num_msts; i++)
+  2594				b53_set_mst_state(dev, port, i, state);
+  2595		} else {
+  2596			switch (state) {
+  2597				case BR_STATE_DISABLED:
+  2598					hw_state = PORT_CTRL_DIS_STATE;
+  2599					break;
+  2600				case BR_STATE_LISTENING:
+  2601					hw_state = PORT_CTRL_LISTEN_STATE;
+  2602					break;
+  2603				case BR_STATE_LEARNING:
+  2604					hw_state = PORT_CTRL_LEARN_STATE;
+  2605					break;
+  2606				case BR_STATE_FORWARDING:
+  2607					hw_state = PORT_CTRL_FWD_STATE;
+  2608					break;
+  2609				case BR_STATE_BLOCKING:
+  2610					hw_state = PORT_CTRL_BLOCK_STATE;
+  2611					break;
+  2612				default:
+  2613					dev_err(ds->dev, "invalid STP state: %d\n", state);
+  2614					return;
+  2615	
+  2616				b53_read8(dev, B53_CTRL_PAGE, B53_PORT_CTRL(port), &reg);
+  2617				reg &= ~PORT_CTRL_STP_STATE_MASK;
+  2618				reg |= hw_state;
+  2619				b53_write8(dev, B53_CTRL_PAGE, B53_PORT_CTRL(port), reg);
+  2620			}
+  2621		}
+  2622	}
+  2623	EXPORT_SYMBOL(b53_br_set_stp_state);
+  2624	
 
 -- 
 0-DAY CI Kernel Test Service
