@@ -1,119 +1,95 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778233126CD
-	for <llvm@lists.linux.dev>; Wed,  5 Nov 2025 12:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38AF2316187;
+	Wed,  5 Nov 2025 12:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762346734; cv=none; b=R6b1JkIciOYt5C/VutJ3QW01DwQg6zZi7cNqScYrizHvAh6vskphtqtztgeb37zpgUhW3jQbL70G94uZdBwjmzlMvIO6qjDAbFpoe7BPPVi6Y7SISu0eiDSt99zJmThgATgZ6/tZuxYEl1yWfYCcgfumR5LvC11sb6hdjgbBZXY=
+	t=1762347372; cv=none; b=ijN87GqA/SEDUWBt7AWfD4pjXuN+/2xL8R2bNJukGYkbXKv7nEsmUg6iwgET+muxqA566Wly+WlpEITKOqWO/LuVzit6ce0B/5S+Ft9K+fdtcuxvNTKvEMFP8FU0RqtatwQC2J9fYiCRJ9bLdbU0whaftZRxkaSwcWVw3fgs7lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762346734; c=relaxed/simple;
-	bh=vr58Rxv58WIV+Na4NCCrbGSjfMLysQWOnLWdBpGAA30=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=F8AGblSxxxeNVpnYmCpTmg1ds1sqgzM+qgbrgmXEjqr74acNOkkkgoYGHqJv/1lbHTP+yq308J4ws77cP/1m9n+nuYH7oxzyTWhWbWuOZCMAub1KdsCKqsBPtnN9N7NOwcSw5oGB/yg9Wj7S28/uiz4VDpMt/f3ynphVQMwZgnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Pxs0hYXh; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1762347372; c=relaxed/simple;
+	bh=/8YIJ/IkaELHTBMMbQStDRua58EN3fZrFED65ddxxfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoX+L41R5LzvEIBXC1ONTNSw8AACq0nM/9aKFLwa1hYMiop5BGTJY334NCmQ+NoNi7+lMADoydao+9WY3FfLIBEOF28L0By9aeWV2HKNAuLHtRNzNwlHYxNpO4nXF+Z534y2ip6ZkXUKh1Uc4D2ebSnFgF4yRXOpchNfhUpbBJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvflcplc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Pxs0hYXh"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20251105124525euoutp0101045505971b2fbb7f1c31e84e84d849~1HQJsDPAR2117621176euoutp01x
-	for <llvm@lists.linux.dev>; Wed,  5 Nov 2025 12:45:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20251105124525euoutp0101045505971b2fbb7f1c31e84e84d849~1HQJsDPAR2117621176euoutp01x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1762346725;
-	bh=CG8DxT5IJUW0aZvaLpIKID3K5WMSr0E4K4/UlToBMNQ=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=Pxs0hYXhhWVS3JIqECUp53TObJGZ3LK3HZZ5K2o4JtVkCn/F7S6HMzRlpu/EmHIBb
-	 jKq49ty2FlJVhNgfWrTscjqoMMnIHCoiTn+tJ92dthmsfjczQB9qoNkeeFl/GtwgXZ
-	 yywilQQp+dUrhYQa1moaxDuVWE9wRrekFu/8eHzo=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20251105124525eucas1p1cb8af8e425097de995b73445aac08729~1HQJUFBPp1324313243eucas1p1Z;
-	Wed,  5 Nov 2025 12:45:25 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20251105124524eusmtip1430c65842a4994e78ca9a6ccfd56dfa9~1HQIbSPoN1476314763eusmtip17;
-	Wed,  5 Nov 2025 12:45:24 +0000 (GMT)
-Message-ID: <ae76317f-6ea2-4413-adf9-2260db49b658@samsung.com>
-Date: Wed, 5 Nov 2025 13:45:23 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvflcplc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E408C4CEFB;
+	Wed,  5 Nov 2025 12:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762347371;
+	bh=/8YIJ/IkaELHTBMMbQStDRua58EN3fZrFED65ddxxfY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dvflcplcUhWkJ2R5yUdEfOV14GOSJI1qYLRskRrXY6+YlGQtU6WAL9dBEJQSIOCgS
+	 SBA0Geu4mEjZ3pzr3SUXhUWkAZkJqYZeEJunjGOel6gLcX1D93hLyZVB+oL/5Mpgg+
+	 4StU+OVzJpR3qdc0Igqi0KZCrTOhcErDOPCdPO58yadioNazHWvPuR8oeDBMe2EwQi
+	 cfdIuD4LR5NZ9Rj5U1BRa2r1H/CPvA3H5Y3JgiS8VXyzleSNHWS0An+h80XOTz9i0i
+	 +yjVbmYtY9B8+ntPBhb6kdfqZ96VHiMDCh+1okcWT0YHUnoS5evcpNcpWG3oSbFKCs
+	 rL6FTo2ATZ5LA==
+Date: Wed, 5 Nov 2025 13:56:02 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-efi@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: Add '-fms-extensions' to areas with dedicated
+ CFLAGS
+Message-ID: <20251105-amnesie-eisig-277559b69bae@brauner>
+References: <20251101-kbuild-ms-extensions-dedicated-cflags-v1-1-38004aba524b@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH] dma-mapping: Allow use of DMA_BIT_MASK(64) in global
- scope
-To: James Clark <james.clark@linaro.org>, Robin Murphy
-	<robin.murphy@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick
-	Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
-	<morbo@google.com>, Justin Stitt <justinstitt@google.com>, Stephen Rothwell
-	<sfr@canb.auug.org.au>, Mark Brown <broonie@kernel.org>, Vinod Koul
-	<vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Guodong Xu
-	<guodong@riscstar.com>
-Cc: iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20251030-james-fix-dma_bit_mask-v1-1-ad1ce7cfab6e@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20251105124525eucas1p1cb8af8e425097de995b73445aac08729
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20251030140656eucas1p1db40ecf9e84bcabee73b9cfb0b777c4a
-X-EPHeader: CA
-X-CMS-RootMailID: 20251030140656eucas1p1db40ecf9e84bcabee73b9cfb0b777c4a
-References: <CGME20251030140656eucas1p1db40ecf9e84bcabee73b9cfb0b777c4a@eucas1p1.samsung.com>
-	<20251030-james-fix-dma_bit_mask-v1-1-ad1ce7cfab6e@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251101-kbuild-ms-extensions-dedicated-cflags-v1-1-38004aba524b@kernel.org>
 
-On 30.10.2025 15:05, James Clark wrote:
-> Clang doesn't like that (1ULL<<(64)) overflows when initializing a
-> global scope variable, even if that part of the ternary isn't used when
-> n = 64. The same initialization can be done without warnings in function
-> scopes, and GCC doesn't mind either way.
->
-> The build failure that highlighted this was already fixed in a different
-> way [1], which also has detailed links to the Clang issues. However it's
-> not going to be long before the same thing happens again, so it's better
-> to fix the root cause.
->
-> Fix it by using GENMASK_ULL() which does exactly the same thing, is much
-> more readable anyway, and doesn't have a shift that overflows.
->
-> [1]: https://lore.kernel.org/all/20250918-mmp-pdma-simplify-dma-addressing-v1-1-5c2be2b85696@riscstar.com/
->
-> Signed-off-by: James Clark <james.clark@linaro.org>
-
-Thanks, applied to dma-mapping-fixes branch.
-
+On Sat, Nov 01, 2025 at 12:35:47PM -0400, Nathan Chancellor wrote:
+> This is a follow up to commit c4781dc3d1cf ("Kbuild: enable
+> -fms-extensions") but in a separate change due to being substantially
+> different from the initial submission.
+> 
+> There are many places within the kernel that use their own CFLAGS
+> instead of the main KBUILD_CFLAGS, meaning code written with the main
+> kernel's use of '-fms-extensions' in mind that may be tangentially
+> included in these areas will result in "error: declaration does not
+> declare anything" messages from the compiler.
+> 
+> Add '-fms-extensions' to all these areas to ensure consistency, along
+> with -Wno-microsoft-anon-tag to silence clang's warning about use of the
+> extension that the kernel cares about using. parisc does not build with
+> clang so it does not need this warning flag. LoongArch does not need it
+> either because -W flags from KBUILD_FLAGS are pulled into cflags-vdso.
+> 
+> Reported-by: Christian Brauner <brauner@kernel.org>
+> Closes: https://lore.kernel.org/20251030-meerjungfrau-getrocknet-7b46eacc215d@brauner/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->   include/linux/dma-mapping.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-> index 8248ff9363ee..2ceda49c609f 100644
-> --- a/include/linux/dma-mapping.h
-> +++ b/include/linux/dma-mapping.h
-> @@ -90,7 +90,7 @@
->    */
->   #define DMA_MAPPING_ERROR		(~(dma_addr_t)0)
->   
-> -#define DMA_BIT_MASK(n)	(((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-> +#define DMA_BIT_MASK(n)	GENMASK_ULL(n - 1, 0)
->   
->   struct dma_iova_state {
->   	dma_addr_t addr;
->
+> I am taking the original '-fms-extensions' change [1] via a shared
+> branch in kbuild [2] so I would appreciate acks. I plan to finalize that
+> branch so that other maintainers can safely pull it on Thursday.
+> 
+> [1]: https://git.kernel.org/kbuild/c/c4781dc3d1cf0e017e1f290607ddc56cfe187afc
+> [2]: https://git.kernel.org/kbuild/l/kbuild-ms-extensions
 > ---
-> base-commit: e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
-> change-id: 20251030-james-fix-dma_bit_mask-624dbeb89afa
->
-> Best regards,
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+I'll give my ack:
 
+Reviewed-by: Christian Brauner <brauner@kernel.org>
+
+but don't invalidate the branch just to add my RvB if you've already had
+it stable.
