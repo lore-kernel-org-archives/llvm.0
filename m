@@ -1,58 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CDB2BE7D9;
-	Wed,  5 Nov 2025 19:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB6230F81F;
+	Wed,  5 Nov 2025 19:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762370568; cv=none; b=igvdarjyhW9ouuRFneVC5TVE3MVz/7emKvavTTMP4KUYDeslmMci3pBqR9vBIrcN92pY0TcIaUDft5mDtxBxM+CoAcOoPhdX9X+QzMcJSo+9quFhEcPsf2avM6YKHOW0jvxvhQzbSA04mCQz6nXIbgAuJwrEGrq5yFPKSnmNhfc=
+	t=1762371580; cv=none; b=f9kY/wG4g7dFUnunIP/tWtSM/qk+JooLmKubyXVzJv22ENSHY4sRSSxpXbQPgyvQfTrq6H3RB048lRP7Aq+oZoEqmZ5JfWEhVBXGwhW2QE4Yu8WSH2riH14KBgm+nr7hUGY6t+inZrh/jsO4n5DDcSwi/qPDlkLa45N152avtJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762370568; c=relaxed/simple;
-	bh=6RqTAdgehvYEoLtYTtRrpQSW5ejh6oZ7OBOkBDWMLzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hTyAMugWp5iz/l1l10aRIxG8kkFd3RxZVL9z7b1DogFPftc5DbIdhht+AI0pa5Br9ydPU5sw/ZGPI6jzeXfzABG/cucenPA/BHtycxSzi92UwP3TS+gP+uR8HGXkJkKrKkziuIb9mkkmQE/q0y49mr31z/0ZUQsbgy2kAvzVIB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hZa7TGXr; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762371580; c=relaxed/simple;
+	bh=msHJOFVV1OB3Fpzsq8IVbuj9UIdZOpLQ1nNFvVBvM9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aebIiUNqRPOy5gO5W6oS2XNf8X3Ef65H+jYBFnbFWgcIFJZZSYlCl9c35y/ar9n/wPcfwsBqE5DY1STTE4iPpM95A+Prx1YooQJKhT6NYcagBVM/UzRya6B7ziD/TEJ7Fcz/Q/XpTcTnZmJXb7/hP9gsRwZJEkkTnlOUUNiTnBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCo8aa7t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hZa7TGXr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762370566; x=1793906566;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6RqTAdgehvYEoLtYTtRrpQSW5ejh6oZ7OBOkBDWMLzM=;
-  b=hZa7TGXruqQVYYxYZJkYNPwxFhMa9NyUBXaQoOLRYrO0p/QGCGo7lAFR
-   DfbbCjJF9Kr+EP0MgehNO/MwRdl/GyH6Lxl1PibAKZC5Djp8JuBAWNmWm
-   D9nEJVoB/C0W3bh+idDl79Ay5X036fp8aV4R8hYfwJMX4OTPXiH+G/JWK
-   2ZeKjRAU4PvR8jX8smhvMY/NcKmItZBOdy1BHcpilH5aK95CFZJdkQE0B
-   oNed1hDTTE7RZwMeYqsfWSCGCLLigNtS4Rdk6jHh5VodM05yDtvzZ0jcU
-   03KQDzN75TlTNsZozsLKiTufM51UE7CA0GXP2LajQCTuMQYXPKfs8EsG3
-   Q==;
-X-CSE-ConnectionGUID: ua9nWN9uRwikXWtXcuBexw==
-X-CSE-MsgGUID: KG61nTvJQoK19eIjP1O+Nw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="75611935"
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="75611935"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 11:22:46 -0800
-X-CSE-ConnectionGUID: J/HvwXkCRwucjNbdLP/Tvg==
-X-CSE-MsgGUID: AcG6GEm/RFGboq2QN67xOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="191646999"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 05 Nov 2025 11:22:45 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGj5X-000T2O-1O;
-	Wed, 05 Nov 2025 19:22:38 +0000
-Date: Thu, 6 Nov 2025 03:22:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-pie-v3 11/14] block/blk-core.o: warning: objtool:
- errno_to_blk_status+0x8: ignoring unreachables due to jump table quirk
-Message-ID: <202511060304.6kkIL3iU-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCo8aa7t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F408C4CEF5;
+	Wed,  5 Nov 2025 19:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762371580;
+	bh=msHJOFVV1OB3Fpzsq8IVbuj9UIdZOpLQ1nNFvVBvM9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DCo8aa7tr6qCXCAwbmbfBQHe6+J1XQ92v/dEdS0D1RmsTXvTBe2y4QWq3i4ntmkp4
+	 hCwptFye8pcPGdiXeKcVMxkeZBrhHluCYl/vU6sn2vu9+WiYI0AQa71hlYpPJp+uwk
+	 nLmGphbfV4NSrG1Ku28gkrTDNfaJG1ZzoKebd314vXufpylTRn3P6E0nSQVUMFx+/G
+	 nEygicNERiduVcddaetu2bZdLTIFFi4RDC/xSKeOjPk8imNyFUelcn9MA6scQFhpbq
+	 naUiHjcZXZDebrmf1ZMmCKbSsI1gDu42pHY/3/s/yeqOxXjPKqA78jz/c32pbgcTEw
+	 rVKRvBK26YgJQ==
+Date: Wed, 5 Nov 2025 12:39:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-efi@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: Add '-fms-extensions' to areas with dedicated
+ CFLAGS
+Message-ID: <20251105193931.GA2480016@ax162>
+References: <20251101-kbuild-ms-extensions-dedicated-cflags-v1-1-38004aba524b@kernel.org>
+ <20251105-amnesie-eisig-277559b69bae@brauner>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,54 +67,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251105-amnesie-eisig-277559b69bae@brauner>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v3
-head:   c7fed5786f010f873165451834e59467ebc3c0c0
-commit: 594278489cfe2a8bce563ee869010b65132eb246 [11/14] x86: Use PIE codegen for the core kernel
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251106/202511060304.6kkIL3iU-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511060304.6kkIL3iU-lkp@intel.com/reproduce)
+On Wed, Nov 05, 2025 at 01:56:02PM +0100, Christian Brauner wrote:
+> On Sat, Nov 01, 2025 at 12:35:47PM -0400, Nathan Chancellor wrote:
+> > This is a follow up to commit c4781dc3d1cf ("Kbuild: enable
+> > -fms-extensions") but in a separate change due to being substantially
+> > different from the initial submission.
+> > 
+> > There are many places within the kernel that use their own CFLAGS
+> > instead of the main KBUILD_CFLAGS, meaning code written with the main
+> > kernel's use of '-fms-extensions' in mind that may be tangentially
+> > included in these areas will result in "error: declaration does not
+> > declare anything" messages from the compiler.
+> > 
+> > Add '-fms-extensions' to all these areas to ensure consistency, along
+> > with -Wno-microsoft-anon-tag to silence clang's warning about use of the
+> > extension that the kernel cares about using. parisc does not build with
+> > clang so it does not need this warning flag. LoongArch does not need it
+> > either because -W flags from KBUILD_FLAGS are pulled into cflags-vdso.
+> > 
+> > Reported-by: Christian Brauner <brauner@kernel.org>
+> > Closes: https://lore.kernel.org/20251030-meerjungfrau-getrocknet-7b46eacc215d@brauner/
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> > I am taking the original '-fms-extensions' change [1] via a shared
+> > branch in kbuild [2] so I would appreciate acks. I plan to finalize that
+> > branch so that other maintainers can safely pull it on Thursday.
+> > 
+> > [1]: https://git.kernel.org/kbuild/c/c4781dc3d1cf0e017e1f290607ddc56cfe187afc
+> > [2]: https://git.kernel.org/kbuild/l/kbuild-ms-extensions
+> > ---
+> 
+> I'll give my ack:
+> 
+> Reviewed-by: Christian Brauner <brauner@kernel.org>
+> 
+> but don't invalidate the branch just to add my RvB if you've already had
+> it stable.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511060304.6kkIL3iU-lkp@intel.com/
+I was planning to make it stable tomorrow to give folks time to chime in
+at the beginning of the week. I have your tag and Ard's to add. After
+that, we will just have to rely on the link to this submission for
+follow ups.
 
-All warnings (new ones prefixed by >>):
-
->> block/blk-core.o: warning: objtool: errno_to_blk_status+0x8: ignoring unreachables due to jump table quirk
->> block/blk-core.o: warning: objtool: errno_to_blk_status+0x16: can't find switch jump table
---
->> block/blk-flush.o: warning: objtool: blk_flush_complete_seq+0x4c: ignoring unreachables due to jump table quirk
---
->> block/blk-merge.o: warning: objtool: bio_split_to_limits+0x1f: ignoring unreachables due to jump table quirk
->> block/blk-merge.o: warning: objtool: bio_split_to_limits+0x2d: can't find switch jump table
---
->> block/blk-mq.o: warning: objtool: blk_mq_submit_bio+0x105: ignoring unreachables due to jump table quirk
->> block/blk-mq.o: warning: objtool: blk_mq_submit_bio+0x113: can't find switch jump table
---
->> block/ioctl.o: warning: objtool: blkdev_ioctl+0x72: ignoring unreachables due to jump table quirk
->> block/ioctl.o: warning: objtool: blkdev_ioctl+0x80: can't find switch jump table
---
->> fs/open.o: warning: objtool: vfs_fallocate+0x4e: ignoring unreachables due to jump table quirk
->> fs/open.o: warning: objtool: vfs_fallocate+0x5c: can't find switch jump table
---
->> fs/read_write.o: warning: objtool: generic_file_llseek_size+0xc: ignoring unreachables due to jump table quirk
->> fs/read_write.o: warning: objtool: generic_file_llseek_size+0x1a: can't find switch jump table
---
->> fs/pipe.o: warning: objtool: fifo_open+0x7c: ignoring unreachables due to jump table quirk
->> fs/pipe.o: warning: objtool: fifo_open+0x8a: can't find switch jump table
---
->> fs/namei.o: warning: objtool: may_open+0x27: ignoring unreachables due to jump table quirk
->> fs/namei.o: warning: objtool: may_open+0x35: can't find switch jump table
---
->> fs/fcntl.o: warning: objtool: __x64_sys_fcntl+0x70: ignoring unreachables due to jump table quirk
->> fs/fcntl.o: warning: objtool: __x64_sys_fcntl+0x7e: can't find switch jump table
---
->> fs/ioctl.o: warning: objtool: __x64_sys_ioctl+0x10b: ignoring unreachables due to jump table quirk
->> fs/ioctl.o: warning: objtool: __x64_sys_ioctl+0x119: can't find switch jump table
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
