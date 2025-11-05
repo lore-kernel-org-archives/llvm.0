@@ -1,202 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013067.outbound.protection.outlook.com [40.93.196.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7C62FFDCA;
-	Wed,  5 Nov 2025 10:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762339677; cv=none; b=I1txDFs0qSY5Paad1RDvRsTn0+U0a9eRnr/0aohqV/T1dvMbj0EbCbQe0SSGmTK5x03DEIoh4QDezOasLJStRYw+w+aJalSsXb1+LoZju20O9jZhuIr0H/Ta6BTPjT7qlTgKsmXP0oyi62dharvuXtROGJN5+Pn8Z28MBRys9jA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762339677; c=relaxed/simple;
-	bh=WyATbUgEbs5xcdkjlTCRvokh+NJKSchpk0yo2pp95s4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fClQcXY5Fvx66dBmEHxBD/gULfXYdVsEyIhvga1YdNqkJ0Gxheh/u/w/XFKHxRtxMZIzA7L0jY1qCH7UMTysZJjj+eT5eZjSm35gUbGc2YU2evIkzLVMrGWe/ExVmrJsBbQ9sb+clOyWYCVpp46acuPodCBR9CA1ap458IGLdkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A+1yfLTW; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4662E92DA;
+	Wed,  5 Nov 2025 12:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762346604; cv=fail; b=XkdFpmojWkkKtPvlnW2Cc+EP4RJxGPEkP6ssqBgCY2t6D9tBl2JwBBJs2YNMpJdnqhrpGXYFgE1VbP0rLl7URzoeglHYlDjURRSHREgHsySkRp2epGD018WLEj6VFyg9Hono90OQis9fteGttm/YBBH+Z+lW0D42CsutVilp9no=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762346604; c=relaxed/simple;
+	bh=M6qfK0XiPIooT5v1KKM/sCZy+vI57yuMJj4TSolNO/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=aCUQ+vdmDA3afv6wFXIEYS34zdFzTGN+XvB3UwkuXx5p71+IcrJayCf4t0yHkky8J5LBeN1TxpyXEUm8VC9dpuDnGW7qqVcIVn0TDXsKY+9nWsWVaEti1RVCprjkXB8nf+6LOb4OW0iAxnEfSLyPoPedulU1Vc7BlxzDbNXwjuw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aF3OhD/F; arc=fail smtp.client-ip=40.93.196.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A+1yfLTW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762339675; x=1793875675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WyATbUgEbs5xcdkjlTCRvokh+NJKSchpk0yo2pp95s4=;
-  b=A+1yfLTWSiWNQisCDz7HlhgbfjG2bj7+ayJwQs0/dcOHOPOK+FRAcdWm
-   5bcyTIK9Y4Xla8ylS6/guVebth588/AT4KMYFo4QJXqgJ3dj97/bPCyxA
-   i9MalTVGHRhxBRkgBdytf9oN2TZsMvjbpu2/Q0IvlJd3kenhzjkEYG2VJ
-   o1N6fcJliWG7b9u3IkTENMdt3uV0nIeBkrti3rz7Euqj1X90tdwI1XZVl
-   e6JOp2UW7w5Zqmq5jkZ/JRI7gXapW0aNFQtBBiSoH5vFH11Z01Ok9n+Tq
-   I4YKWPju/+ZKpCpilkBkYk14BPDOq3tBhVHgiVFZs2nfnNxcvv5xOljK4
-   Q==;
-X-CSE-ConnectionGUID: UfKmZJeCSey5oOEa+Tx98A==
-X-CSE-MsgGUID: Xb5gPS4lQtiwJK2kBI2z0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="81852950"
-X-IronPort-AV: E=Sophos;i="6.19,281,1754982000"; 
-   d="scan'208";a="81852950"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 02:47:55 -0800
-X-CSE-ConnectionGUID: WTt62aMlSiOk6K4WCj64tg==
-X-CSE-MsgGUID: RLUu+ANLRwePluF4+CcGlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,281,1754982000"; 
-   d="scan'208";a="187874407"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 05 Nov 2025 02:47:53 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGb3P-000SRY-1B;
-	Wed, 05 Nov 2025 10:47:51 +0000
-Date: Wed, 5 Nov 2025 18:47:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-github:vfs.all 10/11] fs/super.c:392:5: error: no member
- named 's_min_writeback_pages' in 'struct super_block'
-Message-ID: <202511051853.jM0A4ftr-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aF3OhD/F"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=zUHvcjMJpMGQMAbPbh8ZALI5G/owmEULAdc/ykIn9GTLjtGJjhcTkvYAzm1wOcFlk9fJv/g8A9zHr5Rd2hcqgrW91iJQh0Om0Bhx9nABNSxyDL71MtgQ5TiOgaZp54VHpMvC58dOdKjGph1afG/rw31TEjnZEx+sM7J9RA5kr31wNCRv6h4BvhTNsrBO80zRqUXKhoX2D0N//oCUEmn0JBTvfRxFM9XDYGYtDRSbfe7FY1+i9BueRUdyIHbkxB/3D2Q5/N3sLovJAnbd9oprN4mhFoCKsxmkkj/V3AGPTqlaT3FTYTedYHp8Q5sMihCFliG8OX+Yq1N2SpO3n8HuPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h5HFSFUQhfWDx1HUyLnS1/MGOTc9ltmCc0b2AFZf8uc=;
+ b=NKeh90VIQvq9Gyq9LID5NI3K2z6/4zcrCr42+I2Yt1v9zNDskHo1WGvQ4o/6zhhE6ujyy0/uSLA2TjisBRNsZDoM6RgdDBJzLUYk3oX9Tr/dRVYeTY1MLP5vR0wIgarJuqi6MWwJMD8QLy4NnX99wEvufC8E4TKHp6e6eIb/s21bqgYPQqUA0QK4a30koiyWuAebAoAN7H13eSCUmvJcmhCs5o/F+AIzxBeSA3qeyJH+Q20oAAlAbXVtNgoivVvkPvn5uYbEA13yZ+neJaOgqpREWRRFKfHUJFswzAhX6G4iYPiWhnXp8Y5kvQt5JnHA3HA2HetJZ55At/3E7EzVYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h5HFSFUQhfWDx1HUyLnS1/MGOTc9ltmCc0b2AFZf8uc=;
+ b=aF3OhD/FXzVL0AyfgWEUGdFkmuOdc/qzY4Xz++6JN/PX5tCqaLEjSFd4QzdcvmFNbbi3Gk2c4SCsRJ4pAGcjCbV0H78fijN6Gnc3t2pJP1HsCzkjiTQCrHUmEJm8DPfGMYU0mucCn1zx1zweKk69T2FfsbCHL35M4ZKP+889VzfD84zP+0/ZA0MJI3Nkxmt+j4dn2ne8RnK3SpRdXVOx9mrZk8yF92nxm/MV/pJV0+FBMu2c33PNBjE0edGXY6uvdWiAJL2lNmRkp+L3OJORvwmbgLLyK1gNcrk3jUyzZrvxoNuOHN7MiX8DxAX8P5o5Mz7VLOfv2zpDYHimvMtqLQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
+ by MN6PR12MB8567.namprd12.prod.outlook.com (2603:10b6:208:478::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.8; Wed, 5 Nov
+ 2025 12:43:20 +0000
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9298.006; Wed, 5 Nov 2025
+ 12:43:20 +0000
+Date: Wed, 5 Nov 2025 08:43:18 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Joerg Roedel <joro@8bytes.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev, Justin Stitt <justinstitt@google.com>,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v8 00/15] Consolidate iommu page table implementations
+ (AMD)
+Message-ID: <20251105124318.GO1537560@nvidia.com>
+References: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <3wwyr2kqhaj5icznsizcu372uzhygubkytko3vueamwnf6vzr2@hlas3nx53tps>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3wwyr2kqhaj5icznsizcu372uzhygubkytko3vueamwnf6vzr2@hlas3nx53tps>
+X-ClientProxiedBy: MN0PR03CA0006.namprd03.prod.outlook.com
+ (2603:10b6:208:52f::26) To MN2PR12MB3613.namprd12.prod.outlook.com
+ (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|MN6PR12MB8567:EE_
+X-MS-Office365-Filtering-Correlation-Id: e8ede946-52c5-40dd-6ef7-08de1c68e63b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7/exktVM18gLlDhXZ/+RuqtaAPIHmsaCdTa7gzYmZ8t5D0ZChWKoLPBTdD6Z?=
+ =?us-ascii?Q?fblQdzsVF+FL90YDFcklnicHBo3L9mPduDrUEzox0wdYzNdUbJ7k22/G66RQ?=
+ =?us-ascii?Q?0cqHbTp7G+/2YtXbOuBwPBBey2LHemWkRVD/e8OFBBcKOVIdPBCuHxwIJ7Mo?=
+ =?us-ascii?Q?jhAxfC5D9j5pn6BtUfXXz1tXVhLdfx7wWFLbFSGFBxxjHMif6w5v1BhW4iK5?=
+ =?us-ascii?Q?barqkpXGwzAL9USrfRY50ynJBhTuL7W1202+k6lST24zj3jvZbgiDzF0ZJWi?=
+ =?us-ascii?Q?pBij/hXr68qfyza61OikfpYyG38532EG7gck3obBc0VkmUrvNpwlVkgJqVIz?=
+ =?us-ascii?Q?bzcJ3hKm1a1wG3oI6fMMco7SCiGmXLAPAcQ+3W5kgQtUasC0mSr2Ec7AWQWy?=
+ =?us-ascii?Q?wGZ8mmBvIdYfBn4uRNftODdzMRt9RtLCFDmenONL+4FtZLE4iPuX9lrirNab?=
+ =?us-ascii?Q?u8+DR0PEb7b9gZc87nTJhFSVYOIM6Cgvv5iWcrs2b4EG031bpJJ5veBnxxVY?=
+ =?us-ascii?Q?6oVLTYa59V4THuqsTOHeL8oZEFRqgCke7QiE8iRLxJJhR0HwuqOIY905xNzg?=
+ =?us-ascii?Q?kI3XFrWL3mR05Wyx/lHjTHgZLnEUTsUOqI+/i0VVmwDOaXFrUbofv6ROp8pH?=
+ =?us-ascii?Q?/tAWcks8vz8OcUj6islEwVc6c7A9qMjliv4ycIEqV8M4NkC1r2c/VbPvmXhX?=
+ =?us-ascii?Q?EZCYE29T3ewWWIIUghgZQggTVng8CqAUqGnjqPGpo4dKOWgdnlSZV7LDgH31?=
+ =?us-ascii?Q?6XyUbm3/muT9Dz5cx3WfLRgJWdAWfC3C3Plm+NVZGGsJ1SAD03EuFxb6It7s?=
+ =?us-ascii?Q?00cAnEq+wFoCMZhrmDvYsQ+x1xajft2GXC8mk7xb65TqFNev9LvwOT6XY674?=
+ =?us-ascii?Q?JJcVxLaVgicgzrnsHzrUzIAK9JCUIch6q/HuDt+cwMxI747gcDeiiWJmWTPp?=
+ =?us-ascii?Q?3ZzMuapYe/QFvetf/auug9Azezr1DnCOg93icHkzzWPSxYnHFSmgxiAQ1Ia0?=
+ =?us-ascii?Q?zuT5TWygqSes2MK4Kq4KPUIsblPzH6OQeLVQT08+hZKX77/ZK2kYcjtEh4pC?=
+ =?us-ascii?Q?mv21HfwraA/NdmR8GRbAgAF6isNp6mDPmiI3/TmsYt02WFzNQpYnxyG9kf8j?=
+ =?us-ascii?Q?gAp3VsSWKStbL5afs6ffDWLW0wNgfidaS8rnj5Ee9WMNWYy89owAWBJfo725?=
+ =?us-ascii?Q?25CgkgwOZijA/73yAppKQrKg5NP00CY8P9oqo/ZHR/2TyDf4aoENzlYtmljd?=
+ =?us-ascii?Q?oq2GhA/Kb0FAMGxqpxVc4AGgGdY92R2seMtF2IfCPrXBDnYdXZmVcup1040w?=
+ =?us-ascii?Q?7IBPkVB2kGX7jl/E8afkAj13FZDCnlneSjAtw2CdnvI14Wq8u4SmLwfQXWpJ?=
+ =?us-ascii?Q?mp3/NBfQfCOOf5CBFYdPGewQdE/j422KZE+HjtoXgFCgxJlCDFlUW+a4+bCX?=
+ =?us-ascii?Q?wvIwT6aBmEBmq0hRO+lnE/6l+E5egzrU?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?e+V23VLZJI8zapsv/NJfHLlMugByNvhlPHMOiYa4+BtHOEtDx/trgU+eEXCZ?=
+ =?us-ascii?Q?vQ36QqpSdcGROEIno6WObqCrEm6Af1rCyMR1xFd3r6GqmgtV5ENSBtsSclTj?=
+ =?us-ascii?Q?FDxPwUd18krj67DKn1K5StSsg9I9zzOOxX3OsXTGkoA5nDsVcjS/zIdKpbca?=
+ =?us-ascii?Q?lKNR6OFfvtPpMjN0Mx1/SvKmalzUOUq1ZihWdylgjtSgJegu8ijhxOuqpE6g?=
+ =?us-ascii?Q?rr/p0Lbi0qFAJp0Eo6w0DbypTFx/02UMLLOCCVI2zfL8CpNawvUbq2Kh1FYr?=
+ =?us-ascii?Q?oSCofOtSuOPvMvtvcDnoVKyLMIFFTDiYlBiCJOw9R0JvA1i2ZAM9hJd9NWKP?=
+ =?us-ascii?Q?985DWZMUBJkT+VvhthZ/wvn8KILkVvjHkpok7sGvX1mFJUkXjies8wiQ2PR+?=
+ =?us-ascii?Q?0FDHR/f/LINIpJpjNx0Ro+hUph8R9pqd6SVSzrg69b8JfiyOz2z/3YB9Uugb?=
+ =?us-ascii?Q?j7XfRjLzQ1qrYR6MMe4kstRDqd70KM8UHw4Ija8ZdkorMHnuqhnfIUs0lR+S?=
+ =?us-ascii?Q?jn4gR0k9uAmefO8PFWCYSe5y/SdPV0TON+HeJqF6V4wygruOvNzYyjXRXH1/?=
+ =?us-ascii?Q?u7pFoiS49dlNExbMkRprtkeiBvluovxDwe1w7qbXBGP0D5xabswj974bHZwV?=
+ =?us-ascii?Q?wwB7mqpqfsWgtyzSKTjrNfIyL+mw1shri1f0y9ihI//ZFJTPweLdVRaU9JYI?=
+ =?us-ascii?Q?JfH/T2Q4yRi3NbWzH1Xxsw4S8LDR3qYjVqp8ZniyP76JWnSf99ywcpmv2IKY?=
+ =?us-ascii?Q?ZiYjTKE0tEDSeSQ9eeBU48og9jwsk1tgEUHW40hrekRRs3OrEvPtNpVtWo51?=
+ =?us-ascii?Q?oWEbGca1zzP5EHFEea2LE1vXGeGSyCiKFgReDBDaTkxg/rmTzsfrVw1tVhF0?=
+ =?us-ascii?Q?xClfahBRptk17fSogZK2yxAvEuop5z0fal3lInhSxDzxFeBs7KDcSPnTBtvT?=
+ =?us-ascii?Q?mYa5PX85IL91ZvlttaEOjEBFZ/uAlefOCNYbNbqFKIeoGluyLi4bp3PTRI8i?=
+ =?us-ascii?Q?IyDbPUCWvDnnfNh1Oh7qfM3WI/1nPJv3z8pUP/kuDtHFPPTamQ5FXcc4LcPu?=
+ =?us-ascii?Q?VngFIv0Z1yNgTzXIakCTH0n8l+WNg3PJsqatCTy69jsoTiVkH9gkD25R2bzj?=
+ =?us-ascii?Q?mvzYBUme7ACiOZqmmI1B44HHnKxwM1ZLnDg3F46tI0VIercwe8XK5Swj3HZX?=
+ =?us-ascii?Q?znhkzCrYyMUGpFUCWGVOe3oSnS0dhqJatxTNYzM2pG+HiKif0Dy4+P02r75C?=
+ =?us-ascii?Q?giHgG3ykazWUvn0VAeklfhSr/a2K4TlUoxbm03x12SZefTkuLVTTm2jJAyBK?=
+ =?us-ascii?Q?nzhURJhS/f+5tvoaqHlPmXXtsHX9ObZFr0j5xh6pzoC4k/BAlJwHVZfx8wfs?=
+ =?us-ascii?Q?CapnU8mYupdrRH8edv2I1dMDnVzC+DqgYXwRm2klGWZnIu2EVeRR+cjU2jAK?=
+ =?us-ascii?Q?InGAk6+11jXNEhdxZh38pMoHgzxS6ZtZB/3TsoCvK38MPDOqiCijp0GC7zif?=
+ =?us-ascii?Q?R+aaj+0GyuYXHIdknhSjwVly2bmucd/tKfxp5Hb0LixLwR/7pT0KUnjwr9/X?=
+ =?us-ascii?Q?ekuGbvDXvamY4nw9JiU=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8ede946-52c5-40dd-6ef7-08de1c68e63b
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 12:43:20.0933
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: msIoZuP/859XL72lGZw2QXn6aaa20H/p7Ka5A9gE/aqZ00YvQrQ0z1+kYGK2PybQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8567
 
-tree:   https://github.com/brauner/linux.git vfs.all
-head:   0b843ef6ec4fae983bb106b2bfaae0481831d4be
-commit: 3a8d78a1d066e50eadac1ac7ca8284a9867b8d8e [10/11] Merge branch 'vfs-6.19.fs_header' into vfs.all
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251105/202511051853.jM0A4ftr-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511051853.jM0A4ftr-lkp@intel.com/reproduce)
+On Wed, Nov 05, 2025 at 09:45:07AM +0100, Joerg Roedel wrote:
+> On Tue, Nov 04, 2025 at 02:29:58PM -0400, Jason Gunthorpe wrote:
+> > [Joerg, can you put this and vtd in linux-next please. The vtd series is still
+> > good at v3 thanks]
+> 
+> Applied, thanks Jason. Please send the kdoc fixes which address Randys review
+> on-top.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511051853.jM0A4ftr-lkp@intel.com/
+Will do. Please take the VTD series this cycle also, though maybe it
+is easier to let this one sit in -next for a bit first.
 
-All errors (new ones prefixed by >>):
-
->> fs/super.c:392:5: error: no member named 's_min_writeback_pages' in 'struct super_block'
-     392 |         s->s_min_writeback_pages = MIN_WRITEBACK_PAGES;
-         |         ~  ^
-   1 error generated.
---
->> fs/fs-writeback.c:1915:32: error: no member named 's_min_writeback_pages' in 'struct super_block'
-    1915 |         return round_down(pages + sb->s_min_writeback_pages,
-         |                                   ~~  ^
->> fs/fs-writeback.c:1915:32: error: no member named 's_min_writeback_pages' in 'struct super_block'
-    1915 |         return round_down(pages + sb->s_min_writeback_pages,
-         |                                   ~~  ^
-   fs/fs-writeback.c:1916:8: error: no member named 's_min_writeback_pages' in 'struct super_block'
-    1916 |                         sb->s_min_writeback_pages);
-         |                         ~~  ^
-   3 errors generated.
-
-
-vim +392 fs/super.c
-
-5accdf82ba25ca Jan Kara              2012-06-12  306  
-^1da177e4c3f41 Linus Torvalds        2005-04-16  307  /**
-^1da177e4c3f41 Linus Torvalds        2005-04-16  308   *	alloc_super	-	create new superblock
-fe2bbc4832659b Henrik Kretzschmar    2006-09-06  309   *	@type:	filesystem type superblock should belong to
-9249e17fe094d8 David Howells         2012-06-25  310   *	@flags: the mount flags
-6e4eab577a0cae Eric W. Biederman     2016-05-24  311   *	@user_ns: User namespace for the super_block
-^1da177e4c3f41 Linus Torvalds        2005-04-16  312   *
-^1da177e4c3f41 Linus Torvalds        2005-04-16  313   *	Allocates and initializes a new &struct super_block.  alloc_super()
-^1da177e4c3f41 Linus Torvalds        2005-04-16  314   *	returns a pointer new superblock or %NULL if allocation had failed.
-^1da177e4c3f41 Linus Torvalds        2005-04-16  315   */
-6e4eab577a0cae Eric W. Biederman     2016-05-24  316  static struct super_block *alloc_super(struct file_system_type *type, int flags,
-6e4eab577a0cae Eric W. Biederman     2016-05-24  317  				       struct user_namespace *user_ns)
-^1da177e4c3f41 Linus Torvalds        2005-04-16  318  {
-2b46a19db0a176 Alexander Mikhalitsyn 2023-12-08  319  	struct super_block *s = kzalloc(sizeof(struct super_block), GFP_KERNEL);
-b87221de6a4934 Alexey Dobriyan       2009-09-21  320  	static const struct super_operations default_op;
-7eb5e8826911f2 Al Viro               2013-10-01  321  	int i;
-7eb5e8826911f2 Al Viro               2013-10-01  322  
-7eb5e8826911f2 Al Viro               2013-10-01  323  	if (!s)
-7eb5e8826911f2 Al Viro               2013-10-01  324  		return NULL;
-^1da177e4c3f41 Linus Torvalds        2005-04-16  325  
-6e4eab577a0cae Eric W. Biederman     2016-05-24  326  	s->s_user_ns = get_user_ns(user_ns);
-ca0168e8a77cf8 Al Viro               2017-12-05  327  	init_rwsem(&s->s_umount);
-ca0168e8a77cf8 Al Viro               2017-12-05  328  	lockdep_set_class(&s->s_umount, &type->s_umount_key);
-ca0168e8a77cf8 Al Viro               2017-12-05  329  	/*
-ca0168e8a77cf8 Al Viro               2017-12-05  330  	 * sget() can have s_umount recursion.
-ca0168e8a77cf8 Al Viro               2017-12-05  331  	 *
-ca0168e8a77cf8 Al Viro               2017-12-05  332  	 * When it cannot find a suitable sb, it allocates a new
-ca0168e8a77cf8 Al Viro               2017-12-05  333  	 * one (this one), and tries again to find a suitable old
-ca0168e8a77cf8 Al Viro               2017-12-05  334  	 * one.
-ca0168e8a77cf8 Al Viro               2017-12-05  335  	 *
-ca0168e8a77cf8 Al Viro               2017-12-05  336  	 * In case that succeeds, it will acquire the s_umount
-ca0168e8a77cf8 Al Viro               2017-12-05  337  	 * lock of the old one. Since these are clearly distrinct
-ca0168e8a77cf8 Al Viro               2017-12-05  338  	 * locks, and this object isn't exposed yet, there's no
-ca0168e8a77cf8 Al Viro               2017-12-05  339  	 * risk of deadlocks.
-ca0168e8a77cf8 Al Viro               2017-12-05  340  	 *
-ca0168e8a77cf8 Al Viro               2017-12-05  341  	 * Annotate this by putting this lock in a different
-ca0168e8a77cf8 Al Viro               2017-12-05  342  	 * subclass.
-ca0168e8a77cf8 Al Viro               2017-12-05  343  	 */
-ca0168e8a77cf8 Al Viro               2017-12-05  344  	down_write_nested(&s->s_umount, SINGLE_DEPTH_NESTING);
-b5bd856a0c2a63 Vladimir Davydov      2014-01-21  345  
-7b7a8665edd8db Christoph Hellwig     2013-09-04  346  	if (security_sb_alloc(s))
-7eb5e8826911f2 Al Viro               2013-10-01  347  		goto fail;
-7b7a8665edd8db Christoph Hellwig     2013-09-04  348  
-7eb5e8826911f2 Al Viro               2013-10-01  349  	for (i = 0; i < SB_FREEZE_LEVELS; i++) {
-8129ed29644bf5 Oleg Nesterov         2015-08-11  350  		if (__percpu_init_rwsem(&s->s_writers.rw_sem[i],
-8129ed29644bf5 Oleg Nesterov         2015-08-11  351  					sb_writers_name[i],
-8129ed29644bf5 Oleg Nesterov         2015-08-11  352  					&type->s_writers_key[i]))
-7eb5e8826911f2 Al Viro               2013-10-01  353  			goto fail;
-7eb5e8826911f2 Al Viro               2013-10-01  354  	}
-df0ce26cb4ee8b Christoph Hellwig     2015-01-14  355  	s->s_bdi = &noop_backing_dev_info;
-9249e17fe094d8 David Howells         2012-06-25  356  	s->s_flags = flags;
-cc50a07a247e17 Eric W. Biederman     2016-06-09  357  	if (s->s_user_ns != &init_user_ns)
-67690f937c38bb Eric W. Biederman     2016-05-18  358  		s->s_iflags |= SB_I_NODEV;
-a5166169f9b920 Al Viro               2011-12-12  359  	INIT_HLIST_NODE(&s->s_instances);
-f1ee616214cb22 NeilBrown             2017-12-21  360  	INIT_HLIST_BL_HEAD(&s->s_roots);
-e97fedb9ef9868 Dave Chinner          2015-03-04  361  	mutex_init(&s->s_sync_lock);
-^1da177e4c3f41 Linus Torvalds        2005-04-16  362  	INIT_LIST_HEAD(&s->s_inodes);
-74278da9f70d84 Dave Chinner          2015-03-04  363  	spin_lock_init(&s->s_inode_list_lock);
-6c60d2b5746cf2 Dave Chinner          2016-07-26  364  	INIT_LIST_HEAD(&s->s_inodes_wb);
-6c60d2b5746cf2 Dave Chinner          2016-07-26  365  	spin_lock_init(&s->s_inode_wblist_lock);
-5ca302c8e502ca Glauber Costa         2013-08-28  366  
-b20bd1a5e78af2 Al Viro               2010-03-22  367  	s->s_count = 1;
-^1da177e4c3f41 Linus Torvalds        2005-04-16  368  	atomic_set(&s->s_active, 1);
-a11f3a0574a573 Arjan van de Ven      2006-03-23  369  	mutex_init(&s->s_vfs_rename_mutex);
-51ee049e771c14 Roland Dreier         2010-04-27  370  	lockdep_set_class(&s->s_vfs_rename_mutex, &type->s_vfs_rename_key);
-bc8230ee8e2ba9 Jan Kara              2017-06-08  371  	init_rwsem(&s->s_dquot.dqio_sem);
-^1da177e4c3f41 Linus Torvalds        2005-04-16  372  	s->s_maxbytes = MAX_NON_LFS;
-^1da177e4c3f41 Linus Torvalds        2005-04-16  373  	s->s_op = &default_op;
-^1da177e4c3f41 Linus Torvalds        2005-04-16  374  	s->s_time_gran = 1000000000;
-188d20bcd1ebd8 Deepa Dinamani        2018-01-21  375  	s->s_time_min = TIME64_MIN;
-188d20bcd1ebd8 Deepa Dinamani        2018-01-21  376  	s->s_time_max = TIME64_MAX;
-b0d40c92adafde Dave Chinner          2011-07-08  377  
-1720f5dd8d3af3 Qi Zheng              2023-09-11  378  	s->s_shrink = shrinker_alloc(SHRINKER_NUMA_AWARE | SHRINKER_MEMCG_AWARE,
-1720f5dd8d3af3 Qi Zheng              2023-09-11  379  				     "sb-%s", type->name);
-1720f5dd8d3af3 Qi Zheng              2023-09-11  380  	if (!s->s_shrink)
-8e04944f0ea8b8 Tetsuo Handa          2018-04-04  381  		goto fail;
-1720f5dd8d3af3 Qi Zheng              2023-09-11  382  
-1720f5dd8d3af3 Qi Zheng              2023-09-11  383  	s->s_shrink->scan_objects = super_cache_scan;
-1720f5dd8d3af3 Qi Zheng              2023-09-11  384  	s->s_shrink->count_objects = super_cache_count;
-1720f5dd8d3af3 Qi Zheng              2023-09-11  385  	s->s_shrink->batch = 1024;
-1720f5dd8d3af3 Qi Zheng              2023-09-11  386  	s->s_shrink->private_data = s;
-1720f5dd8d3af3 Qi Zheng              2023-09-11  387  
-1720f5dd8d3af3 Qi Zheng              2023-09-11  388  	if (list_lru_init_memcg(&s->s_dentry_lru, s->s_shrink))
-2b3648a6ff83bd Kirill Tkhai          2018-08-17  389  		goto fail;
-1720f5dd8d3af3 Qi Zheng              2023-09-11  390  	if (list_lru_init_memcg(&s->s_inode_lru, s->s_shrink))
-2b3648a6ff83bd Kirill Tkhai          2018-08-17  391  		goto fail;
-90db4d4441f58d Christoph Hellwig     2025-10-17 @392  	s->s_min_writeback_pages = MIN_WRITEBACK_PAGES;
-^1da177e4c3f41 Linus Torvalds        2005-04-16  393  	return s;
-5ca302c8e502ca Glauber Costa         2013-08-28  394  
-7eb5e8826911f2 Al Viro               2013-10-01  395  fail:
-0200894d11551a Al Viro               2017-10-11  396  	destroy_unused_super(s);
-7eb5e8826911f2 Al Viro               2013-10-01  397  	return NULL;
-^1da177e4c3f41 Linus Torvalds        2005-04-16  398  }
-^1da177e4c3f41 Linus Torvalds        2005-04-16  399  
-
-:::::: The code at line 392 was first introduced by commit
-:::::: 90db4d4441f58d433ecf74f7e3bd17e0a553c20c writeback: allow the file system to override MIN_WRITEBACK_PAGES
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Christian Brauner <brauner@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Jason
