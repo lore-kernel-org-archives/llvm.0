@@ -1,68 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2932E11D7;
-	Wed,  5 Nov 2025 21:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B214C1E4AB;
+	Wed,  5 Nov 2025 21:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762378269; cv=none; b=Mj/AVq7bFwYTirU4vmBv3zQ5tCZQNWEuKD3dnKFSkO0H8fm+PylkcnG81yB8ERcFED2ktiS7u2jnTrv1Rkl83ceehgwOY7IoZEByaSwitEsenGbl0V0OER5uFqg0IkiXuRLzvuF5UsMxNCaIYXNZLciF3HXAJ1AIP7lcvuNw65Y=
+	t=1762379267; cv=none; b=UKsfR06bH2NPktOSycPLzgwtMkQS/xwpC0ojEy1wnKixJezhHKXji6wnmTfdxvDYbjo5TpqOp/SVylz6JsYmcT6Z0Ml+UTVk4W8Wb27PIiM51LzdUE9J7xCsdo+XW2DLoxneEYeog4DtCGHmDI3/JpzNegtAGvzNSaTGfjPkS0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762378269; c=relaxed/simple;
-	bh=643Bnw2lwFQjsIC6VqTKx4koy2RKtRCvkIpOI+vv8CE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Cv2vAtSw4XcAJ/xOGRtERyEwlQ16Ms83P39X9WfEez2IrGlgX6waDFR2wh8OrV1X0lFO0qf4rHoEPnhh930d/WHfuvYMwp4mcu/E0uUVoqNtJn2KZoW9a/EAd+6w97gv4QkE0IzezcV3rrGDmQ0bhEp8r+VYU0jZIFkl/LRl3RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2imYSjl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762379267; c=relaxed/simple;
+	bh=5xzsc/7T1gL0sCj7nOJv8DaIl+OnW9UaT5raFEotIik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lWRnCvrvwAKrZC+z4IU5T4B/OtgqlRQHTJaiNev0JWLXfp11PXWhxUMASNtPbGcI9J8YMoQYKmLKEq5q3B0IKLSH+P/E44iQYbRa+Y7Pjp52eHtUmybkchXvWdloWNLRlwheKHTFX9iILTqbxub1GhT9zShlIXRvgN9aX20iXCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JhcXv6+U; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2imYSjl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB14C4CEF5;
-	Wed,  5 Nov 2025 21:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762378268;
-	bh=643Bnw2lwFQjsIC6VqTKx4koy2RKtRCvkIpOI+vv8CE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=M2imYSjlMob7HcRKeBFemJiqZOJjCuJAwIHPGEH83GuJmxabv1GRu/b1f2OKcQlQj
-	 CACCSuj81qm8yppoThSjbDDUwoFogSojwCcmrg0NFRinQRR6bc775xoEn+2Q3kXacT
-	 A9lDj61TldVbUDUDe3IgjDm26Sn4iorC0Tw70DMfpAxPXZXTuhlPCZlk5BcaJjJCFQ
-	 kPyl7lzLIUtKtPjCqiLLTwp7XVUg7m7Fe5LZJD3//be/4Vx+HTcv2jDn9k7fqQI+OH
-	 jN4zhdgUKgj2eXAWIH9KL7P5Vf93n1AkzKvQgehMUahRKMOkq+Zr1ZW8hKmYgaKLDF
-	 BZ8U+Rp4/U99g==
-From: Nicolas Schier <nsc@kernel.org>
-To: Pat Somaru <patso@likewhatevs.io>
-Cc: justinstitt@google.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com
-In-Reply-To: <20251008004615.2690081-1-patso@likewhatevs.io>
-References: <20251008003739.2659141-1-patso@likewhatevs.io> <20251008004615.2690081-1-patso@likewhatevs.io>
-Subject: Re: [PATCH v2] scripts/clang-tools: Handle included .c files in gen_compile_commands
-Message-Id: <176237822421.134706.15967814896659435327.b4-ty@kernel.org>
-Date: Wed, 05 Nov 2025 22:30:24 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JhcXv6+U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762379266; x=1793915266;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5xzsc/7T1gL0sCj7nOJv8DaIl+OnW9UaT5raFEotIik=;
+  b=JhcXv6+UssnO/P8ehWbJ3Xmof2zpuyaxXJOHMs2NVRWjT2ocCtKAErp+
+   8Lk5rx6GnPSFhLu5sFhOoRC27fZcvkOi3R7y94vJEsnhAhd/PjhkRjl+x
+   dWDc7CV0LCIED+ENdBb96mvUbm4hb+BGb6nFkFIeb+VHKXIt3UMWOrrsb
+   XfPUIli5FJlWejvsREptMCYNg/V7FrGDcABjHahG1CYMDqu1IOTpAqnDm
+   Qi3rRwFT8rmE2ViYTlv1X4jyab33LsZjegj0e8iex4jfjNBViUfqHCFPP
+   +WXwifhZp2ajnJAS8qi47ycRGUqpeL/Inubr2Wd4bHI/W8YkqsJSDBIvE
+   g==;
+X-CSE-ConnectionGUID: ExS3BBDuRPqa67KN6mn7RQ==
+X-CSE-MsgGUID: 712FJ9ioQWyG431J/GqFCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64605790"
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="64605790"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 13:47:45 -0800
+X-CSE-ConnectionGUID: 7giLDUKZQjShi4WYLTI2Tw==
+X-CSE-MsgGUID: lJP7Z8i6Qzydv1uaesmqjw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="191859112"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Nov 2025 13:47:38 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vGlLX-000TA8-1m;
+	Wed, 05 Nov 2025 21:47:20 +0000
+Date: Thu, 6 Nov 2025 05:47:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexandre Courbot <acourbot@nvidia.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	rust-for-linux@vger.kernel.org,
+	Alexandre Courbot <acourbot@nvidia.com>
+Subject: Re: [PATCH v2 1/3] firmware_loader: make RUST_FW_LOADER_ABSTRACTIONS
+ select FW_LOADER
+Message-ID: <202511060527.knZk5HZP-lkp@intel.com>
+References: <20251105-b4-select-rust-fw-v2-1-156d9014ed3b@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251105-b4-select-rust-fw-v2-1-156d9014ed3b@nvidia.com>
 
-On Tue, 07 Oct 2025 20:45:28 -0400, Pat Somaru wrote:
-> The gen_compile_commands.py script currently only creates entries for the
-> primary source files found in .cmd files, but some kernel source files
-> text-include others (i.e. kernel/sched/build_policy.c).
-> 
-> This prevents tools like clangd from working properly on text-includedd c
-> files, such as kernel/sched/ext.c because the generated compile_commands.json
-> does not have entries for them.
-> 
-> [...]
+Hi Alexandre,
 
-Applied to kbuild-next, thanks!
+kernel test robot noticed the following build errors:
 
-[1/1] scripts/clang-tools: Handle included .c files in gen_compile_commands
-      https://git.kernel.org/kbuild/c/4e455b73
+[auto build test ERROR on 6553a8f168fb7941ae73d39eccac64f3a2b9b399]
 
-Please note that commit hashes might change in case of issues with
-kbuild-next.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Courbot/firmware_loader-make-RUST_FW_LOADER_ABSTRACTIONS-select-FW_LOADER/20251105-160437
+base:   6553a8f168fb7941ae73d39eccac64f3a2b9b399
+patch link:    https://lore.kernel.org/r/20251105-b4-select-rust-fw-v2-1-156d9014ed3b%40nvidia.com
+patch subject: [PATCH v2 1/3] firmware_loader: make RUST_FW_LOADER_ABSTRACTIONS select FW_LOADER
+config: x86_64-kexec (attached as .config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511060527.knZk5HZP-lkp@intel.com/reproduce)
 
-Best regards,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511060527.knZk5HZP-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/base/firmware_loader/Kconfig:41: syntax error
+   drivers/base/firmware_loader/Kconfig:41: invalid statement
+   drivers/base/firmware_loader/Kconfig:42: invalid statement
+   drivers/base/firmware_loader/Kconfig:43:warning: ignoring unsupported character '.'
+   drivers/base/firmware_loader/Kconfig:43: unknown statement "This"
+   make[3]: *** [scripts/kconfig/Makefile:85: oldconfig] Error 1
+   make[2]: *** [Makefile:742: oldconfig] Error 2
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'oldconfig' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'oldconfig' not remade because of errors.
+--
+>> drivers/base/firmware_loader/Kconfig:41: syntax error
+   drivers/base/firmware_loader/Kconfig:41: invalid statement
+   drivers/base/firmware_loader/Kconfig:42: invalid statement
+   drivers/base/firmware_loader/Kconfig:43:warning: ignoring unsupported character '.'
+   drivers/base/firmware_loader/Kconfig:43: unknown statement "This"
+   make[3]: *** [scripts/kconfig/Makefile:85: olddefconfig] Error 1
+   make[2]: *** [Makefile:742: olddefconfig] Error 2
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'olddefconfig' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'olddefconfig' not remade because of errors.
+
+
+vim +41 drivers/base/firmware_loader/Kconfig
+
+     3	
+     4	config FW_LOADER
+     5		tristate "Firmware loading facility" if EXPERT
+     6		select CRYPTO_LIB_SHA256 if FW_LOADER_DEBUG
+     7		default y
+     8		help
+     9		  This enables the firmware loading facility in the kernel. The kernel
+    10		  will first look for built-in firmware, if it has any. Next, it will
+    11		  look for the requested firmware in a series of filesystem paths:
+    12	
+    13			o firmware_class path module parameter or kernel boot param
+    14			o /lib/firmware/updates/UTS_RELEASE
+    15			o /lib/firmware/updates
+    16			o /lib/firmware/UTS_RELEASE
+    17			o /lib/firmware
+    18	
+    19		  Enabling this feature only increases your kernel image by about
+    20		  828 bytes, enable this option unless you are certain you don't
+    21		  need firmware.
+    22	
+    23		  You typically want this built-in (=y) but you can also enable this
+    24		  as a module, in which case the firmware_class module will be built.
+    25		  You also want to be sure to enable this built-in if you are going to
+    26		  enable built-in firmware (CONFIG_EXTRA_FIRMWARE).
+    27	
+    28	config FW_LOADER_DEBUG
+    29		bool "Log filenames and checksums for loaded firmware"
+    30		depends on DYNAMIC_DEBUG
+    31		depends on FW_LOADER
+    32		default FW_LOADER
+    33		help
+    34		  Select this option to use dynamic debug to log firmware filenames and
+    35		  SHA256 checksums to the kernel log for each firmware file that is
+    36		  loaded.
+    37	
+    38	config RUST_FW_LOADER_ABSTRACTIONS
+    39		bool "Rust Firmware Loader abstractions"
+    40		depends on RUST
+  > 41		select FW_LOADER=y
+    42		help
+    43		  This enables the Rust abstractions for the firmware loader API.
+    44	
+
 -- 
-Nicolas
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
