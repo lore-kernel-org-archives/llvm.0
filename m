@@ -1,93 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECC7257AD1;
-	Wed,  5 Nov 2025 20:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCE1334C0C;
+	Wed,  5 Nov 2025 20:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762373732; cv=none; b=QTpmSOUMp8likNFzDMoiZ+5WbNTjQOCphgmRi0C5RNe4r/uPlNiaU1IMOE14cDIkOM4K1J0lbmjcEbQ5EN2ssYGh4XxdcitLOlQQOW4ZAK8+mGYFJGrzBCH/rSWI6s2rXpqmEozUgvNOgseXo2p0qZcJRCmW10pvXEd49zFbOQ4=
+	t=1762375174; cv=none; b=fYoeFrMZggZzpDpdhgDA5DP42RJ1OxmuvXJvndQV4vOxrn/8bKZZr7esynXHu6BEBL35xcDKQMUK+cBEC1U/zD3wiaKQG7B+h4XFTY2Ui+ABgpnikjcWkPpNnl6QvaDV/VIal2U4PRU0ObyWZm7Duj0vYzh5uwgHvgPJSNIKD0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762373732; c=relaxed/simple;
-	bh=Lw++o2HELy2ZtWzBIbekYFJktkL5pR/Om2RKn74v1rQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bwa9dJBs/dZIfKLSShxxH4njezKg7jC/hwlP49ycynaVW5nusOQyk7HZI8VZdIWE5Q4V4ZDKUV1m9wPT/YHgir+fOjomf6h2A89tqGm/hQRk2EoBm39QPfoPn/I0QshSE/HmfKKFFsiZ187wEnIhEu0tuo46Wapckp3oQpb1Sjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVjlLypv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762375174; c=relaxed/simple;
+	bh=VeD7/sIL9vvxRSIrjqnecFiFKg8r8Rlrga1oknXgzZo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RRnCBOEkn9VDtdRUclihvFV8kj4JAIaqDQ6K0xuj+bOWysTQxFMIsQO7Dy3sMvzCc7/wOUzMa90y63mK/OSRjx3l+EfNmR9UMdzHFienNuSDZp6FgJ2NbComu2zvm7pqBqhtOOJmat4KnTDSwv/Q/DqMMpAFnBgFRdrwC0kxhFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRx1kpfu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVjlLypv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A94C4CEF5;
-	Wed,  5 Nov 2025 20:15:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRx1kpfu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B6B1C4CEF5;
+	Wed,  5 Nov 2025 20:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762373731;
-	bh=Lw++o2HELy2ZtWzBIbekYFJktkL5pR/Om2RKn74v1rQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tVjlLypvxp3tK6h3M4G7McwvdI6gA8sxm/UocCXG0mBUTsqUSzgrjT87E1jK3B7rE
-	 ibU2ywmazXPh8J10A3IxweVZ8xaZofARrlwX0OlWkDzUJKqErx5FjL0EPddsf91/NQ
-	 3oPru8Psy5xRWnEgEShymCYgSetPXqw72puMPnE6ccAIz+Fu5j6x1iwibexdQ9zoiS
-	 fe18mkKCL625LUctrbKaESMKZ7GPUJftYZvZ2rxKR4a+sJN2uJfeLNcoyICvtUikQi
-	 PLh4WhrsOD8YLyih3t766j/ZSJe7NBsghwm5c25JoUzABBadcnwyLdEVVQJ7W553rD
-	 0eOxjwkaepv7Q==
-Date: Wed, 5 Nov 2025 13:15:22 -0700
+	s=k20201202; t=1762375172;
+	bh=VeD7/sIL9vvxRSIrjqnecFiFKg8r8Rlrga1oknXgzZo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=CRx1kpfuRLvTb92OJtPdNRBlofIP6YrRUXZTXe0QWZ4WRMtfFpyrY2SHRzKkjPRaJ
+	 LuOvgP/slx8L2U9ioqKWFFod99YODiDt9bUMJvNyi3v63aaO9pSF6LQZJWEFu6EfgR
+	 fUg92mjJb8TcGbof3lMlaEG3XDqz7IN4CThPRtQe71jqTvxtWAVlaHDtvmucp32OCD
+	 y4owBuCESjiVa0w6M6SUf+yu0/xTfKrCtYKfS3RKqBGJHD7tmBz7aPv1vM5vsuMUDN
+	 YKeJwfxuWlh0A2bsCJjfwEv77fD6EP/M2VERhIFFTMTRFwoGiTkhMtIgteyi5lsEI/
+	 MJnTnPcG+kpEQ==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org, llvm@lists.linux.dev,
-	Christian Brauner <brauner@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] kbuild: Add '-fms-extensions' to areas with dedicated
- CFLAGS
-Message-ID: <20251105201522.GB3787308@ax162>
-References: <20251101-kbuild-ms-extensions-dedicated-cflags-v1-1-38004aba524b@kernel.org>
- <aQtUujos2ADVs-_O@gate>
+Date: Wed, 05 Nov 2025 13:39:22 -0700
+Subject: [PATCH] ARM: dts: omap: : Fix stray '/*' in comment
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aQtUujos2ADVs-_O@gate>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251105-omap-mba335x-fix-clang-comment-warning-v1-1-9b671ee2cb93@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPm1C2kC/x3NQQqDMBCF4avIrDuQmAalVyldjMlUB0wiibSCe
+ PcOXX7w894Jjatwg0d3QuWPNClZYW8dhIXyzChRDb3pvbXGY0m0YZrIOX/gWw4Mq2YYSkqcd/x
+ SzaKmyNN4H8i4OICObZU1/h89X9f1A09xXCl4AAAA
+X-Change-ID: 20251105-omap-mba335x-fix-clang-comment-warning-adeb847a03d7
+To: Kevin Hilman <khilman@baylibre.com>, Tony Lindgren <tony@atomide.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Schiffer <matthias.schiffer@tq-group.com>, 
+ Alexander Stein <alexander.stein@ew.tq-group.com>, linux@ew.tq-group.com, 
+ linux-omap@vger.kernel.org, devicetree@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1886; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=VeD7/sIL9vvxRSIrjqnecFiFKg8r8Rlrga1oknXgzZo=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJnc2xjbe60PLfgWlhiyr+N5z4UJ1w8HNwRFMM/VtskOb
+ ji4L2RlRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIw06Gv2J3xEy3Tb/bLXEw
+ /eG+bRN6tmjeXS13db78ztvuBxoniFswMvz/Ynyh7LzEoa9XitVLWuy2Vh4+FTarw6Y03Ydhs3Z
+ SIjcA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, Nov 05, 2025 at 07:44:26AM -0600, Segher Boessenkool wrote:
-> On Sat, Nov 01, 2025 at 12:35:47PM -0400, Nathan Chancellor wrote:
-> > There are many places within the kernel that use their own CFLAGS
-> > instead of the main KBUILD_CFLAGS, meaning code written with the main
-> > kernel's use of '-fms-extensions' in mind that may be tangentially
-> > included in these areas will result in "error: declaration does not
-> > declare anything" messages from the compiler.
-> 
-> Please fix such non-standard code then, instead?  The only (documented)
-> thing -fms-extensions does for C code is give meaning to something that
-> otherwise is a syntax error (and it is for a good reason!)
+When preprocessing arch/arm/boot/dts/ti/omap/am335x-mba335x.dts with
+clang, there are a couple of warnings about '/*' within a block comment.
 
-Right, the kernel would like to start taking advantage of one of those
-extensions. See these other threads for more information.
+  arch/arm/boot/dts/ti/omap/am335x-mba335x.dts:260:7: warning: '/*' within block comment [-Wcomment]
+    260 |                         /* /* gpmc_csn3.gpio2_0 - interrupt */
+        |                            ^
+  arch/arm/boot/dts/ti/omap/am335x-mba335x.dts:267:7: warning: '/*' within block comment [-Wcomment]
+    267 |                         /* /* gpmc_ben1.gpio1_28 - interrupt */
+        |                            ^
 
-https://lore.kernel.org/20251020142228.1819871-1-linux@rasmusvillemoes.dk/
-https://lore.kernel.org/20251023082142.2104456-1-linux@rasmusvillemoes.dk/
+Remove the duplicate '/*' to clear up the warning.
 
-Cheers,
-Nathan
+Fixes: 5267fcd180b1 ("ARM: dts: omap: Add support for TQMa335x/MBa335x")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/arm/boot/dts/ti/omap/am335x-mba335x.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/ti/omap/am335x-mba335x.dts b/arch/arm/boot/dts/ti/omap/am335x-mba335x.dts
+index e51a8a17e74c..f05e5a8c2d61 100644
+--- a/arch/arm/boot/dts/ti/omap/am335x-mba335x.dts
++++ b/arch/arm/boot/dts/ti/omap/am335x-mba335x.dts
+@@ -257,14 +257,14 @@ AM33XX_PADCONF(AM335X_PIN_MCASP0_AHCLKR, PIN_OUTPUT, MUX_MODE4)
+ 
+ 	expander1_pins: expander1-pins {
+ 		pinctrl-single,pins = <
+-			/* /* gpmc_csn3.gpio2_0 - interrupt */
++			/* gpmc_csn3.gpio2_0 - interrupt */
+ 			AM33XX_PADCONF(AM335X_PIN_GPMC_CSN3, PIN_INPUT_PULLUP, MUX_MODE7 )
+ 		>;
+ 	};
+ 
+ 	expander2_pins: expander2-pins {
+ 		pinctrl-single,pins = <
+-			/* /* gpmc_ben1.gpio1_28 - interrupt */
++			/* gpmc_ben1.gpio1_28 - interrupt */
+ 			AM33XX_PADCONF(AM335X_PIN_GPMC_BEN1, PIN_INPUT_PULLUP, MUX_MODE7)
+ 		>;
+ 	};
+
+---
+base-commit: 25e10e2c94da2c7d18d72bd32d60d26d0c29232e
+change-id: 20251105-omap-mba335x-fix-clang-comment-warning-adeb847a03d7
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
