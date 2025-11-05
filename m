@@ -1,146 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2AF3101A3;
-	Wed,  5 Nov 2025 17:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A1B270575;
+	Wed,  5 Nov 2025 18:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762362205; cv=none; b=GNq03X3EVMHdsp+iJhKG7bjSUgYkFr9ZJT3bCE3926vMlMyxyp2BcYWcAN07Nb38pT/wITKsCM4kvSzUXcvFn0ygYXBZYi4/C7Xq1a1a6khuB2aULANxoGDGlLS+3xI7VrUmLOzaeEfvrcLHobkTZaA6zCkBtgJShyKYjacWSi0=
+	t=1762366861; cv=none; b=ACVUgiSzIPcYv4iaz+6LScHyIgrUtj6jn+L0BImYcEbpVX1bHQlEaLnN8xT5H/hOvUtqgH5lWJfy7RpdB+3o1MFwcQo2OcP/sEUsbYiRlKpZzvILrTr1cP9Ikvshrs40yhlC2CfxInhgGAt722KWLdfkEyj5PplSxFPX80z4M08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762362205; c=relaxed/simple;
-	bh=6uz+hHxrqzxaxcnh265LgUfoQ/5ByCeht/rVNdwWt5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DgTxdz+FX/WO2SSHBf6WIyugBNNUnJpxKoBdA3d1xDSL8X1GGEvujUJ41ZcpAJqb7g7meVg2mc0wCcXj4hVX/cyROJqCimmerYtH63qKCR/OBqb4ZzKduxjfFS+/FUPcA+lEYs0txtihUuQFEp1BzewdVebKLplg6JTN0j3K2mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CiGAqwn3; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762366861; c=relaxed/simple;
+	bh=tw2fKAiqIfdPJueUqkVDYMhYsacjnqAqVK0mvR2ogh0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gKkPxElX/f0fzcSsHDtvS4ppY7jkcNCMJ+WG9YOCcPK0CEKdvTv0OsKioIRfQIaRKO/8xL+Kan8arzPwfXkoYXFFTjE7P+RjsRfdgVDPhXTIU5CVGa+b1+RCzIFFFUN9fM7xBE268nSXEwbeuJYQft8l6AGgpeReBr0NvgOeUFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I2hMXJRj; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CiGAqwn3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I2hMXJRj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762362203; x=1793898203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6uz+hHxrqzxaxcnh265LgUfoQ/5ByCeht/rVNdwWt5w=;
-  b=CiGAqwn3RLRZUY8Z7KfPIwEdSjjKrq+ghSI62BtG/1MJ1eOlP8fSAmXO
-   daBx1Ikac9kkOGEuFC5hpacg4MXzZl3+69S9eACfclr2ArGVULpQmRjuF
-   cyxBBklDCQ3U5u9LAPgzldKCTgbynM+slqMOuvagAZgdiaz81Og0HUu7c
-   Ntz3sUsqI8la4yM7RUYXaH4pPcnjsT0dfeq2M6Rqs3BOf4eTRMK/UHfou
-   GwB9WEx47SbxjjySiP2pDDgaracnTdh0dRNe4CRN1MVXID1mhVR9sKVZ1
-   4Qg/6y+dAN7RAXCX9OLBpuUDSTtTKhjwrBlr1u6ECyYHtrMdv6MRc9ukF
+  t=1762366859; x=1793902859;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=tw2fKAiqIfdPJueUqkVDYMhYsacjnqAqVK0mvR2ogh0=;
+  b=I2hMXJRjzzeTlBcUfgZO4gmrPlntRZtUc3zU3SvfVKLoHnbq3Wlpugw/
+   ABZbKBHMjqZgg5rkYyeZ4F3x4eGQV/Cf798aLaenO6SkgfomxOCPbG0tr
+   hnGFlgj+buU/hTNraxRvTmtqxGMRQGHTTJOIbc9aMJbqlJrvMJvNK29aM
+   1NCYROl2t/OZHxsE4Z8co+SkM8vS/ogzn7G6tXLuZ8Kftrqo5rWX4BHHb
+   yasvawcUHwlRHhQn02dHBXb4o4h4R4a3fnooEhVsaGKZCOUGtoHU3rdDs
+   uXlycGTQT/4iU9EZnVQgolu3twmJytFw9t2efWGv9OApjXWuECElZl11C
    Q==;
-X-CSE-ConnectionGUID: BhkZBNIlR8270Fzj4AfMJw==
-X-CSE-MsgGUID: dzuA5bFIRgiUugwbRPIKZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64181606"
+X-CSE-ConnectionGUID: sgd7fSjYS9uRhvMRmvKAjw==
+X-CSE-MsgGUID: 9HJgnwTvRbeZ6rBJKWvHUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64526485"
 X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="64181606"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 09:03:22 -0800
-X-CSE-ConnectionGUID: pSQ9JlCCSJajS5avkj4UVg==
-X-CSE-MsgGUID: ebWbgNUAQHyzGt8CW9eLLQ==
+   d="scan'208";a="64526485"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 10:20:58 -0800
+X-CSE-ConnectionGUID: KaunMcuLQYS9CPHKuzhAsQ==
+X-CSE-MsgGUID: TftjzIXHTdWy20OURx3Ulg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="186760465"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 05 Nov 2025 09:03:20 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGguh-000SuF-1N;
-	Wed, 05 Nov 2025 17:03:15 +0000
-Date: Thu, 6 Nov 2025 00:55:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:sched/core 1/2] kernel/sched/fair.c:8973:3: error:
- call to undeclared function 'update_min_vruntime'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202511060021.VEXgdS4a-lkp@intel.com>
+   d="scan'208";a="191814265"
+Received: from fdefranc-mobl3.ger.corp.intel.com (HELO fdefranc-mobl3.localnet) ([10.245.246.26])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 10:20:53 -0800
+From: "Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
+To: linux-cxl@vger.kernel.org, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Davidlohr Bueso <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+ Dan Williams <dan.j.williams@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Gregory Price <gourry@gourry.net>, Robert Richter <rrichter@amd.com>,
+ Cheatham Benjamin <benjamin.cheatham@amd.com>
+Subject:
+ Re: [PATCH 2/4 v5] cxl/core: Add helpers to detect Low Memory Holes on x86
+Date: Wed, 05 Nov 2025 19:20:50 +0100
+Message-ID: <2093111.UnXabflUDm@fdefranc-mobl3>
+In-Reply-To: <202510102229.iFcGqbMH-lkp@intel.com>
+References:
+ <20251006155836.791418-3-fabio.m.de.francesco@linux.intel.com>
+ <202510102229.iFcGqbMH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-head:   6bcca639d45811ed51ccc5db1a47a7b42dee077c
-commit: 4df5bbe4a3ab35dc2ca8fca5569d49cfda688417 [1/2] sched/eevdf: Fix min_vruntime vs avg_vruntime
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251106/202511060021.VEXgdS4a-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511060021.VEXgdS4a-lkp@intel.com/reproduce)
+On Friday, October 10, 2025 4:49:01=E2=80=AFPM Central European Standard Ti=
+me kernel test robot wrote:
+> Hi Fabio,
+>=20
+> kernel test robot noticed the following build warnings:
+>=20
+> [auto build test WARNING on 46037455cbb748c5e85071c95f2244e81986eb58]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Frances=
+co/cxl-core-Change-match_-_by_range-signatures/20251010-111627
+> base:   46037455cbb748c5e85071c95f2244e81986eb58
+> patch link:    https://lore.kernel.org/r/20251006155836.791418-3-fabio.m.=
+de.francesco%40linux.intel.com
+> patch subject: [PATCH 2/4 v5] cxl/core: Add helpers to detect Low Memory =
+Holes on x86
+> config: i386-randconfig-011-20251010 (https://download.01.org/0day-ci/arc=
+hive/20251010/202510102229.iFcGqbMH-lkp@intel.com/config)
+> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0=
+227cb60147a26a1eeb4fb06e3b505e9c7261)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20251010/202510102229.iFcGqbMH-lkp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202510102229.iFcGqbMH-lkp=
+@intel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> >> drivers/cxl/core/platform_quirks.c:70:36: warning: result of compariso=
+n of constant 4294967296 with expression of type 'const resource_size_t' (a=
+ka 'const unsigned int') is always true [-Wtautological-constant-out-of-ran=
+ge-compare]
+>       70 |             res->end < r->end && res->end < (LMH_CFMWS_RANGE_S=
+TART + SZ_4G) &&
+>          |                                  ~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~
+>    1 warning generated.
+>=20
+Unavoidable warning wherever res->end is an u32 variable:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511060021.VEXgdS4a-lkp@intel.com/
+/* include/linux/types.h */
 
-All errors (new ones prefixed by >>):
+#ifdef CONFIG_PHYS_ADDR_T_64BIT
+typedef u64 phys_addr_t;
+#else
+typedef u32 phys_addr_t;
+#endif
 
->> kernel/sched/fair.c:8973:3: error: call to undeclared function 'update_min_vruntime'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    8973 |                 update_min_vruntime(cfs_rq);
-         |                 ^
-   kernel/sched/fair.c:8973:3: note: did you mean 'update_zero_vruntime'?
-   kernel/sched/fair.c:743:13: note: 'update_zero_vruntime' declared here
-     743 | static void update_zero_vruntime(struct cfs_rq *cfs_rq)
-         |             ^
-   1 error generated.
+typedef phys_addr_t resource_size_t;
+
+/* include/linux/ioport.h */
+
+struct resource {
+	resource_size_t start;
+	resource_size_t end;
+};
+
+I think we should ignore this report.
+
+=46abio
+>=20
+> vim +70 drivers/cxl/core/platform_quirks.c
+>=20
+>     50=09
+>     51	/**
+>     52	 * platform_region_matches_cxld() - Platform quirk to match a CXL =
+Region and a
+>     53	 * Switch or Endpoint Decoder. It allows matching on platforms wit=
+h LMH's.
+>     54	 * @p: Region Params against which @cxled is matched.
+>     55	 * @cxld: Switch or Endpoint Decoder to be tested for matching @p.
+>     56	 *
+>     57	 * Similar to platform_cxlrd_matches_cxled(), it matches regions a=
+nd
+>     58	 * decoders on platforms with LMH's.
+>     59	 *
+>     60	 * Return: true if a Decoder matches a Region, else false.
+>     61	 */
+>     62	bool platform_region_matches_cxld(const struct cxl_region_params *=
+p,
+>     63					  const struct cxl_decoder *cxld)
+>     64	{
+>     65		const struct range *r =3D &cxld->hpa_range;
+>     66		const struct resource *res =3D p->res;
+>     67		int align =3D cxld->interleave_ways * SZ_256M;
+>     68=09
+>     69		if (res->start =3D=3D LMH_CFMWS_RANGE_START && res->start =3D=3D =
+r->start &&
+>   > 70		    res->end < r->end && res->end < (LMH_CFMWS_RANGE_START + SZ_4=
+G) &&
+>     71		    IS_ALIGNED(range_len(r), align))
+>     72			return true;
+>     73=09
+>     74		return false;
+>     75	}
+>     76=09
+>=20
+> --=20
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+>=20
+>=20
 
 
-vim +/update_min_vruntime +8973 kernel/sched/fair.c
 
-bf0f6f24a1ece8 kernel/sched_fair.c Ingo Molnar     2007-07-09  8932  
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8933  /*
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8934   * sched_yield() is very simple
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8935   */
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8936  static void yield_task_fair(struct rq *rq)
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8937  {
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8938  	struct task_struct *curr = rq->curr;
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8939  	struct cfs_rq *cfs_rq = task_cfs_rq(curr);
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8940  	struct sched_entity *se = &curr->se;
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8941  
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8942  	/*
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8943  	 * Are we the only task in the tree?
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8944  	 */
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8945  	if (unlikely(rq->nr_running == 1))
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8946  		return;
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8947  
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8948  	clear_buddies(cfs_rq, se);
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8949  
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8950  	update_rq_clock(rq);
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8951  	/*
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8952  	 * Update run-time statistics of the 'current'.
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8953  	 */
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8954  	update_curr(cfs_rq);
-916671c08b7808 kernel/sched/fair.c Mike Galbraith  2011-11-22  8955  	/*
-916671c08b7808 kernel/sched/fair.c Mike Galbraith  2011-11-22  8956  	 * Tell update_rq_clock() that we've just updated,
-916671c08b7808 kernel/sched/fair.c Mike Galbraith  2011-11-22  8957  	 * so we don't do microscopic update in schedule()
-916671c08b7808 kernel/sched/fair.c Mike Galbraith  2011-11-22  8958  	 * and double the fastpath cost.
-916671c08b7808 kernel/sched/fair.c Mike Galbraith  2011-11-22  8959  	 */
-adcc8da8859bee kernel/sched/fair.c Davidlohr Bueso 2018-04-04  8960  	rq_clock_skip_update(rq);
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8961  
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8962  	/*
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8963  	 * Forfeit the remaining vruntime, only if the entity is eligible. This
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8964  	 * condition is necessary because in core scheduling we prefer to run
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8965  	 * ineligible tasks rather than force idling. If this happens we may
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8966  	 * end up in a loop where the core scheduler picks the yielding task,
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8967  	 * which yields immediately again; without the condition the vruntime
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8968  	 * ends up quickly running away.
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8969  	 */
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8970  	if (entity_eligible(cfs_rq, se)) {
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8971  		se->vruntime = se->deadline;
-5e963f2bd4654a kernel/sched/fair.c Peter Zijlstra  2023-05-31  8972  		se->deadline += calc_delta_fair(se->slice, se);
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18 @8973  		update_min_vruntime(cfs_rq);
-79104becf42bae kernel/sched/fair.c Fernand Sieber  2025-09-18  8974  	}
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8975  }
-ac53db596cc08e kernel/sched_fair.c Rik van Riel    2011-02-01  8976  
 
-:::::: The code at line 8973 was first introduced by commit
-:::::: 79104becf42baeeb4a3f2b106f954b9fc7c10a3c sched/fair: Forfeit vruntime on yield
-
-:::::: TO: Fernand Sieber <sieberf@amazon.com>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
