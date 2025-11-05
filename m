@@ -1,63 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FE12D8362;
-	Wed,  5 Nov 2025 07:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EE32D9EE6;
+	Wed,  5 Nov 2025 08:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.250.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762328384; cv=none; b=I27Jocpo/A6kQP/QiCdO86U9rAnC7XJdPftyVg98JPSczCPXlcTuzn+D+xrIJ21XX8OdW71mikHxmO/f5i/PS43aZPyYJcPNzeFbBTndDuR4rVZln3kRiUOpjauSFDmiRnJ6XYDvKzJK+8SLwZq32v47LFch52ZstTh2PSQ8e0U=
+	t=1762332311; cv=none; b=L2jT9y61sRKZPwgqn+WBZhx6CSPcIpHrmYZMYmqls8+z5z1Tu5BT5ZezK+KHcnut6WHEZspbCpEabX16PpGeky7ylkWmXuCrkISYrPu+sO4cXsGteT9+hy6x9YYE8lRkZZ8QjiJv3FaXhC7DnI8il/MvtMq8fz+4IN2BRza7RjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762328384; c=relaxed/simple;
-	bh=Vg/JTRWu5JYecUoj5fPJ3eUkXVB2fLJNM8hZuKAeDz0=;
+	s=arc-20240116; t=1762332311; c=relaxed/simple;
+	bh=9634LwCOBvkVyltmD3yEImG3GLp+vauzcljqVmCfZXs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jngOV53mPR4KhKQawRyxITUeUjr86mKFON9slNUUvp7zpf1xf+0r4huiw6H/UYz/RX8uux/lJ840hWcHDIujg80ZmQ/pd7bu/rFdEGNTLJPqmHikueNSAMbt8+ZXPl4TgoGXUQ5rSSCrqn+yLtskw2lM7KgOb7KIcOcqHuNV3kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ApA574N8; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=AcV3DqzrODryXzPQdlN08UhRmgKcenE3bUEZZA+CbFqn3GFz/P0ETuofudf10z1evqgiRUp5FN9bZ63063S3ySo702XzzZeudaRjTLHSWFseoTX7CnPzjgW0faPWkLzNbA60Qdh0cd1TZhbd4hx/TJ9mKOj1QQeecL2WetDT6Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b=DdykuXFG; arc=none smtp.client-ip=85.214.250.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ApA574N8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762328382; x=1793864382;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vg/JTRWu5JYecUoj5fPJ3eUkXVB2fLJNM8hZuKAeDz0=;
-  b=ApA574N88QZzaz0F4B1mPQitVS8vRcc0isoMoFrdT18IhbUWM5EuRAYU
-   erhYSrPtHS62cTTL9XOU9GpWQ44NDjCNEkoHLl3nvITn6iBI8XhdMH7zm
-   WNXfIySBK85oUqo+ALA89C2vn/BYdzmCVsHwBqGcOyYWWKrJRwGJUqGzQ
-   E2in2ScK955md1HWmblQHNQX317zlVGN1D0PB14spLPfG4aiIL1qM6EgG
-   CxmI/o2woy9INBmUOk38DkPteuBEtXe13ogxbRBE+faOy+9fSZhLKBglm
-   xHsgaQJw0hli/pLNBtqPuSPYArGwhmsihfxpi4+VLfzqk1UPLFlWKRF8r
-   A==;
-X-CSE-ConnectionGUID: uuTjjNhvT8iuutKu1Wqmgg==
-X-CSE-MsgGUID: 5aEXlCtgRD+TchqdFmo6iA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="81838768"
-X-IronPort-AV: E=Sophos;i="6.19,281,1754982000"; 
-   d="scan'208";a="81838768"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 23:39:42 -0800
-X-CSE-ConnectionGUID: 6fFnlBUySp+min9Gjs8BWA==
-X-CSE-MsgGUID: +9ukS+K2R4G7tGQW97VfLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,281,1754982000"; 
-   d="scan'208";a="187831902"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Nov 2025 23:39:38 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGY7C-000SGq-2X;
-	Wed, 05 Nov 2025 07:39:34 +0000
-Date: Wed, 5 Nov 2025 15:39:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ian Abbott <abbotti@mev.co.uk>, linux-fpga@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	Ian Abbott <abbotti@mev.co.uk>
-Subject: Re: [PATCH 1/4] fpga: altera-pr-ip: Add dummy definitions of API
- functions
-Message-ID: <202511051539.q44jggF0-lkp@intel.com>
-References: <20251104153013.154463-2-abbotti@mev.co.uk>
+	dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b="DdykuXFG"
+Received: from 8bytes.org (p549214ac.dip0.t-ipconnect.de [84.146.20.172])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.8bytes.org (Postfix) with ESMTPSA id 6462F5A90D;
+	Wed,  5 Nov 2025 09:45:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+	s=default; t=1762332308;
+	bh=9634LwCOBvkVyltmD3yEImG3GLp+vauzcljqVmCfZXs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DdykuXFGz4Kyzn2l8GzRhXbOwpemTjiqSY9NnkSJ5kXzDibcDKgk3Crya1dT+N1Ts
+	 UH7FaWWUF2fq6OpnbmFSDJXIvL5PdoqWz0jZZotf4VyXYy5InXO3QMRJdHGa6Rzaeb
+	 MxBIh4MUKJl+OcDL2c70JUQZv/F6/7aKR/7bsxHQuOEkn9h/bIqWxcBXiTQgrOnRku
+	 AipM7oV8uNY+j4VTR+A71+Lm/Bi/LEdJjrz9vYJsMnA4ATN+A/7oIdHQmvkac7W8aF
+	 xTWnLZwWkQ4WulMxLtSJf6QnV4ULuve0Bf0buUIZk7fVlBoEn9/SfE5IqaOkZRXopu
+	 eMENQjBRtCNbg==
+Date: Wed, 5 Nov 2025 09:45:07 +0100
+From: Joerg Roedel <joro@8bytes.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, Bill Wendling <morbo@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Shuah Khan <shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, 
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, 
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, 
+	Kevin Tian <kevin.tian@intel.com>, Michael Roth <michael.roth@amd.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev, Samiullah Khawaja <skhawaja@google.com>, 
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v8 00/15] Consolidate iommu page table implementations
+ (AMD)
+Message-ID: <3wwyr2kqhaj5icznsizcu372uzhygubkytko3vueamwnf6vzr2@hlas3nx53tps>
+References: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,248 +58,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251104153013.154463-2-abbotti@mev.co.uk>
+In-Reply-To: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
 
-Hi Ian,
+On Tue, Nov 04, 2025 at 02:29:58PM -0400, Jason Gunthorpe wrote:
+> [Joerg, can you put this and vtd in linux-next please. The vtd series is still
+> good at v3 thanks]
 
-kernel test robot noticed the following build errors:
+Applied, thanks Jason. Please send the kdoc fixes which address Randys review
+on-top.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.18-rc4 next-20251104]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Regards,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Abbott/fpga-altera-pr-ip-Add-dummy-definitions-of-API-functions/20251105-000956
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251104153013.154463-2-abbotti%40mev.co.uk
-patch subject: [PATCH 1/4] fpga: altera-pr-ip: Add dummy definitions of API functions
-config: arm64-randconfig-001-20251105 (https://download.01.org/0day-ci/archive/20251105/202511051539.q44jggF0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511051539.q44jggF0-lkp@intel.com/reproduce)
+	Joerg
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511051539.q44jggF0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/fpga/altera-pr-ip-core.c:11:
->> include/linux/fpga/altera-pr-ip-core.h:11:2: error: unterminated conditional directive
-      11 | #ifndef _ALT_PR_IP_CORE_H
-         |  ^
-   In file included from drivers/fpga/altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/fpga/altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/fpga/altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/fpga/altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/fpga/altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/fpga/altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
---
-   In file included from altera-pr-ip-core.c:11:
->> include/linux/fpga/altera-pr-ip-core.h:11:2: error: unterminated conditional directive
-      11 | #ifndef _ALT_PR_IP_CORE_H
-         |  ^
-   In file included from altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from altera-pr-ip-core.c:12:
-   In file included from include/linux/fpga/fpga-mgr.h:12:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-
-
-vim +11 include/linux/fpga/altera-pr-ip-core.h
-
-d201cc17a8a31cc Matthew Gerlach 2017-03-23 @11  #ifndef _ALT_PR_IP_CORE_H
-d201cc17a8a31cc Matthew Gerlach 2017-03-23  12  #define _ALT_PR_IP_CORE_H
-d201cc17a8a31cc Matthew Gerlach 2017-03-23  13  #include <linux/io.h>
-961ea9f518b4061 Ian Abbott      2025-11-04  14  #include <asm/errno.h>
-d201cc17a8a31cc Matthew Gerlach 2017-03-23  15  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
