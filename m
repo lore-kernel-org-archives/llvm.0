@@ -1,46 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F7424503C;
-	Thu,  6 Nov 2025 15:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D9926D4F6;
+	Thu,  6 Nov 2025 15:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762442214; cv=none; b=plLR8CeK4LPT9Kj55m3qQ65hBLxHVDCtXLYS77bHxmW5nxDQnTpHzy6DTfYmee/kARvK4C0MpKbNLXPsx7yNu6t9JmXu24EBK17e014ZSLYWgAuXSKJoD3atnbvw5wzC3uHnKh2tNKPoKuzWl+aU8yShIQN73k90zn5f+9/f3vc=
+	t=1762442973; cv=none; b=PADSl5OePLeezlZRHpv66toGT3rH/wXt/H4kscY7vicRfaxMdJKBgdT/boQiyO7pjOv+r5W5MgNChMOrFLuHYC0t5hBwKPeRMem/Cd0x3aqt7kqAwdB+gWQEzizGM8PkRG2ZLadIuXP03KUPnW+d6TldionqUPevgFhis2S+RYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762442214; c=relaxed/simple;
-	bh=sw93HzZvGu9P1i+iQOU+54K5NF/ISfg6R9D40V3YXfc=;
+	s=arc-20240116; t=1762442973; c=relaxed/simple;
+	bh=Fy5kb+xSEe8CuLReHJSiSgwCvjIGVD2dswSaWqR9TqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dT3RHeGS+EQO9RcFphPoys6RUwsu4KIW8oMpv0HGqUN4hqjPGMQZPHbJcT1wMGj/RUupI2qnfJgN6iMnWOjIFKesnHRYTVTRnXlMLdQdnzoKt9IUA5nwClT/ig0HimTkhdhya0iA96GC4KaJkNi24eLpJDQ+F0Reryd2cpYipmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUcwcZL3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=FGDcVLXwuL//95ExhNee8u2StO/EsiYp9wkNOQIs2RWRKY/LxicWkda5WhDT3wq/tqSDPXAbXRWggyNQmA7lIbyAcGoWFEl13PSXRSXbgkf+ybYF+2aMadACmmDM88AZyBFyHJpsfLNDTneTDSqwSc54ZwY1K74l7VpHVPQl/QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PdRR4124; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUcwcZL3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EB9C4CEF7;
-	Thu,  6 Nov 2025 15:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762442214;
-	bh=sw93HzZvGu9P1i+iQOU+54K5NF/ISfg6R9D40V3YXfc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZUcwcZL3xdgNqTG2JKegG2i9bvCC7qx27pVk4iM2U0mOsxRAUb2Te8uKsG16fqjeU
-	 7M5hgdsWscDuM1ETvQUCfUuyACaaFDnHc2WNebaSqF8Yq48iyr/FVSriDwpBfrvoqc
-	 LuEe7KhDiLkJCjdIZ6+zEf/G4dyZsDPuxG0DWAfKgjlOcSYOfemyPBZcaaf4AWFwra
-	 c3rZ0QWJ5h0VywyhwmscOtJtJo2WV7WE8Zy2YYiQQzfTXjK0Vq9tLxpzlTzywwrdez
-	 LwBp/kSXtMvaJtXwUmkanATfH9HT+h/vzC3n/Jk2v3EO8Oi/g+b86ckfDJA7t6qUei
-	 Hmx2yIije53bQ==
-Date: Thu, 6 Nov 2025 08:16:49 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v1 1/1] compiler_types: Warn about unused static inline
- functions on second
-Message-ID: <20251106151649.GA1693433@ax162>
-References: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PdRR4124"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762442971; x=1793978971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fy5kb+xSEe8CuLReHJSiSgwCvjIGVD2dswSaWqR9TqU=;
+  b=PdRR41246utrRXkrCatRVtQ3oP1FkXRIN8jJCTtlcdkW9rhlAKcEvXrj
+   5g7aIRRaEJorf2jxcP0wN3GV0xtAjHPSgobDQaVr+HuI4Qd96uVJn0tlX
+   UvN9ip7IV+3l1xl64HZf2S6POjomokMHoszGobMJuHuEiTs1+Ct39nw0o
+   7IvkO+yusF0qZahLj/As5/LUdaFe6uBSIxLf6Y2+EIbYW9x1bgtDcxSLN
+   kGQJwSkkhldYosaaJIMSoGBz/2+b+HdJKoGOYvzchnurUqzizgVCkmVNY
+   okpZsV31Kl0JKmGAoXEnmngcDcjk6bxfDaQLBWIC1MwJU4S6upZSgA/YA
+   g==;
+X-CSE-ConnectionGUID: SBkaD1GuRvSMOni2mgwT5Q==
+X-CSE-MsgGUID: v2RMAUbqRk2UEswde8DbLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="52150100"
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="52150100"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 07:29:31 -0800
+X-CSE-ConnectionGUID: sZfJMlAgRIG2UQxuqDCZKQ==
+X-CSE-MsgGUID: Sny0jVoXSGuME85WdEfqVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="188502501"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2025 07:29:28 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vH1vS-000U5A-0r;
+	Thu, 06 Nov 2025 15:29:26 +0000
+Date: Thu, 6 Nov 2025 23:29:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH 3/5] tracing: Have tracer option be instance specific
+Message-ID: <202511062257.TSJTBQ2c-lkp@intel.com>
+References: <20251105161935.545400234@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,58 +68,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251105161935.545400234@kernel.org>
 
-On Thu, Nov 06, 2025 at 11:50:00AM +0100, Andy Shevchenko wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
-> 
-> Per Nathan, clang catches unused "static inline" functions in C files since
-> commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
-> functions for W=1 build").
-> 
-> Linus said:
-> 
-> > So I entirely ignore W=1 issues, because I think so many of the extra
-> > warnings are bogus.
-> >
-> > But if this one in particular is causing more problems than most -
-> > some teams do seem to use W=1 as part of their test builds - it's fine
-> > to send me a patch that just moves bad warnings to W=2.
-> >
-> > And if anybody uses W=2 for their test builds, that's THEIR problem..
-> 
-> Here is the change to bump the warning from W=1 to W=2.
-> 
-> Fixes: 6863f5643dd7 ("kbuild: allow Clang to find unused static inline functions for W=1 build")
-> Signed-off-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Steven,
 
-I can take this as a fix via kbuild or Linus can apply it directly
-but...
+kernel test robot noticed the following build errors:
 
-> ---
->  include/linux/compiler_types.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 59288a2c1ad2..575a03643fa1 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -253,7 +253,7 @@ struct ftrace_likely_data {
->   * for W=1 build. This will allow clang to find unused functions. Remove the
->   * __inline_maybe_unused entirely after fixing most of -Wunused-function warnings.
->   */
+[auto build test ERROR on trace/for-next]
+[cannot apply to linus/master v6.18-rc4 next-20251106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The comment should be updated to W=2 instead of W=1 and we should
-probably drop the sentence about removing __inline_maybe_unused entirely
-since people such as Peter will never want this behavior by default. I
-do not mind doing it myself if I take it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Remove-dummy-options-and-flags/20251106-010511
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20251105161935.545400234%40kernel.org
+patch subject: [PATCH 3/5] tracing: Have tracer option be instance specific
+config: i386-buildonly-randconfig-004-20251106 (https://download.01.org/0day-ci/archive/20251106/202511062257.TSJTBQ2c-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511062257.TSJTBQ2c-lkp@intel.com/reproduce)
 
-> -#ifdef KBUILD_EXTRA_WARN1
-> +#ifdef KBUILD_EXTRA_WARN2
->  #define __inline_maybe_unused
->  #else
->  #define __inline_maybe_unused __maybe_unused
-> -- 
-> 2.50.1
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511062257.TSJTBQ2c-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace.c:2174:23: error: redefinition of 'type' with a different type: 'struct trace_tracer *' vs 'struct tracer *'
+    2174 |         struct trace_tracer *type = tracers->trace;
+         |                              ^
+   kernel/trace/trace.c:2171:47: note: previous definition is here
+    2171 | static int run_tracer_selftest(struct tracer *type)
+         |                                               ^
+>> kernel/trace/trace.c:2174:30: error: use of undeclared identifier 'tracers'
+    2174 |         struct trace_tracer *type = tracers->trace;
+         |                                     ^
+   kernel/trace/trace.c:5172:17: warning: variable 'trace' set but not used [-Wunused-but-set-variable]
+    5172 |         struct tracer *trace;
+         |                        ^
+   1 warning and 2 errors generated.
+
+
+vim +2174 kernel/trace/trace.c
+
+  2170	
+  2171	static int run_tracer_selftest(struct tracer *type)
+  2172	{
+  2173		struct trace_array *tr = &global_trace;
+> 2174		struct trace_tracer *type = tracers->trace;
+  2175		struct tracer_flags *saved_flags = tr->current_trace_flags;
+  2176		struct tracer_flags *flags;
+  2177		struct tracer *saved_tracer = tr->current_trace;
+  2178		int ret;
+  2179	
+  2180		if (!type->selftest || tracing_selftest_disabled)
+  2181			return 0;
+  2182	
+  2183		/*
+  2184		 * If a tracer registers early in boot up (before scheduling is
+  2185		 * initialized and such), then do not run its selftests yet.
+  2186		 * Instead, run it a little later in the boot process.
+  2187		 */
+  2188		if (!selftests_can_run)
+  2189			return save_selftest(type);
+  2190	
+  2191		if (!tracing_is_on()) {
+  2192			pr_warn("Selftest for tracer %s skipped due to tracing disabled\n",
+  2193				type->name);
+  2194			return 0;
+  2195		}
+  2196	
+  2197		/*
+  2198		 * Run a selftest on this tracer.
+  2199		 * Here we reset the trace buffer, and set the current
+  2200		 * tracer to be this tracer. The tracer can then run some
+  2201		 * internal tracing to verify that everything is in order.
+  2202		 * If we fail, we do not register this tracer.
+  2203		 */
+  2204		tracing_reset_online_cpus(&tr->array_buffer);
+  2205	
+  2206		tr->current_trace = type;
+  2207		tr->current_trace_flags = type->flags ? : type->default_flags;
+  2208	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
