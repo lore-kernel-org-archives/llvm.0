@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8868A30F92F;
-	Thu,  6 Nov 2025 11:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F6D1E0DD9;
+	Thu,  6 Nov 2025 13:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762429406; cv=none; b=AhM00HfpmFuDbdzqk3m62QAiG0h5ihBAiKIbSPzUslf4mQbMLqttM6mdVkZ68nholPLBFuDJDy4pHGJ5XKshAE4gIgjD0Nln9OJk6WVrsxx78llHS+yXO3xGXGIQiQGlfE7Kd5LSv01PagmGvolp+/MnkPnXyK9NSuTQqk8Lyns=
+	t=1762434973; cv=none; b=SDEhbG03fCAKW+iTexDIwqdRWK81wZX1Z6LAGMPAYfiifRlyHsVQoTC7HEf4hIt1SkEVYMoyUUO+izE1UrNqLEpbBMOChw/2X0hDTyPNfEXzppgoxuQtqH/z53aKrNIWgNK6JgJRva66pQe4ymDL44pZYJEg/V4snDyHfis6/a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762429406; c=relaxed/simple;
-	bh=2fO5UPau4YJyc5zqI1DyRj+HZr37DRwtWiKrbCxKpSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lCjgOk8ko0r8XTwyFsYciLDqd3sRPs+jQ1Q9JGD8SjviL+h05TFacwX4Hlnx64dthz1mA3vmlxAoBSMs1GccIxTc3irATcNIc+37TpuCBURSxTktwRH0D6PMFuhXLp6vSmCIn6z8Z95Z6sIUB5J4cm5ihqjgTXZCW4oVPoQ0fDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LcadO1Y9; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1762434973; c=relaxed/simple;
+	bh=fWIzYkeyLR0zM1nmLNN94zCZ4jX0OH0Y8wuA0ODbkxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iEJj2rRwBXXT0101V9zCZp+iUelP59QUMc3U84zkP+uY9cA5FbIyPe+XM0FDRS8CJInlgpvU/VYm161oahtLnSmOvSyMiVthcdUwmqoEu3uyFOj8p9Rndqt+IiKL829rpbsf/ks6gUYuEC2gn67CuET87WEPM8Aa/aJZP44i8po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKoK1acL; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LcadO1Y9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKoK1acL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762429404; x=1793965404;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2fO5UPau4YJyc5zqI1DyRj+HZr37DRwtWiKrbCxKpSc=;
-  b=LcadO1Y92y+vla+qs83lpOCgGG8CwMl1K307LY87IP5XNdQdtmxVPZ1N
-   uU4asvGYvBKRdzqWV3dmXr+/sS/Mjczc+uVzedwIEXRmaXZryZCXXY7br
-   I/V0goJ8pqIrGpBVdCKX4//iC/6q7xs72VcAs0tt25ZMtXl5aTgcrvCVo
-   5WyFWM97Kyn+SGIPmoS+j7vqkeekMfK0xfYq/6DiME+EVJm8GyRPpWKAT
-   2VxRPzwHNPtOvXlubgieo6GaHUhQYL/KRboYSZyHANLAIArfKVN6qELG+
-   R2bcNudzRtUurNWgTOmhexdCZp3UL9Nkk12SnZjiwiCaq374f3xHzrOm4
-   w==;
-X-CSE-ConnectionGUID: 7ztagMBQSkeZEYSUodcCkw==
-X-CSE-MsgGUID: 8G8dHXf3QrKx6yBPQn36zw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="82192787"
+  t=1762434971; x=1793970971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fWIzYkeyLR0zM1nmLNN94zCZ4jX0OH0Y8wuA0ODbkxw=;
+  b=IKoK1acLZVZpJjTR0ROodTkW5WBmoY389A28uwIOmf6+o+efLlL0XEmk
+   4QnAfimAw8RpDQgW6xjyoTnFZRef6GWR0WE+b8aUN3gzzIBgTfOIBXh/u
+   Nlj+rTE91a6US771Dw8cw/sMar3VC6cX3Y9liNk2OGXOmPXlGUqFynr5E
+   pISgAg+gjQ4G12D8s5clstvOLCk8mYL6ldnki8L7Tvv3dPWul8FMxEOKk
+   JD6dewF4txo4qRe+x/qxflwpvzOEcauFYlNfUo41LhxCrU/wMSTLC6cxB
+   Lm+oIwkde7JigrIR+/J8/oyW+2mFFnyGvw8yePwfOidhCS2m3S0u+OkjC
+   g==;
+X-CSE-ConnectionGUID: KvknNyNjSZGH7yPu0aXNPw==
+X-CSE-MsgGUID: JgfOH8rUSjyHGoboAxUYKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="75684738"
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="82192787"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 03:43:24 -0800
-X-CSE-ConnectionGUID: VdKWBAEgR+if/mttaIjRvw==
-X-CSE-MsgGUID: bmygLwPPSDGdBt+pbSBCJA==
+   d="scan'208";a="75684738"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 05:16:10 -0800
+X-CSE-ConnectionGUID: aeqL+VAlRRWd2b+1r3alkg==
+X-CSE-MsgGUID: PvnjBAKaRSe2LKdR0ffM/A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="191832217"
+   d="scan'208";a="211215979"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 06 Nov 2025 03:43:23 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 06 Nov 2025 05:16:06 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vGyOe-000Ts6-0A;
-	Thu, 06 Nov 2025 11:43:20 +0000
-Date: Thu, 6 Nov 2025 19:42:28 +0800
+	id 1vGzqO-000TxI-01;
+	Thu, 06 Nov 2025 13:16:04 +0000
+Date: Thu, 6 Nov 2025 21:16:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ingo Molnar <mingo@kernel.org>
+To: Uma Shankar <uma.shankar@intel.com>, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:master 11/25] vmlinux.o: warning: objtool:
- user_exc_vmm_communication+0x1ba: call to __kasan_check_read() leaves
- .noinstr.text section
-Message-ID: <202511061929.VZHgI3kd-lkp@intel.com>
+	chaitanya.kumar.borah@intel.com, ville.syrjala@linux.intel.com,
+	pekka.paalanen@collabora.com, contact@emersion.fr,
+	harry.wentland@amd.com, mwen@igalia.com, jadahl@redhat.com,
+	sebastian.wick@redhat.com, shashank.sharma@amd.com,
+	swati2.sharma@intel.com, alex.hung@amd.com, jani.nikula@intel.com,
+	Uma Shankar <uma.shankar@intel.com>
+Subject: Re: [v6 13/16] drm/i915/xelpd: Program Plane Post CSC Registers
+Message-ID: <202511062120.wwoYUHAR-lkp@intel.com>
+References: <20251105123413.2671075-14-uma.shankar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,26 +69,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251105123413.2671075-14-uma.shankar@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-head:   8411fdb92360d0b4d3337492a25ee2de7fb6c425
-commit: f3f05eccd188355ee9ffcf3f120328c604daffb8 [11/25] Merge branch into tip/master: 'perf/core'
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251106/202511061929.VZHgI3kd-lkp@intel.com/config)
+Hi Uma,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20251105]
+[cannot apply to drm-xe/drm-xe-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.18-rc4 v6.18-rc3 v6.18-rc2 v6.18-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Uma-Shankar/drm-AMD-series-squashed/20251105-202623
+base:   next-20251105
+patch link:    https://lore.kernel.org/r/20251105123413.2671075-14-uma.shankar%40intel.com
+patch subject: [v6 13/16] drm/i915/xelpd: Program Plane Post CSC Registers
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20251106/202511062120.wwoYUHAR-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061929.VZHgI3kd-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511062120.wwoYUHAR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511061929.VZHgI3kd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511062120.wwoYUHAR-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: user_exc_vmm_communication+0x1ba: call to __kasan_check_read() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_int3+0x1e4: call to __kasan_check_read() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_debug_user+0x22f: call to __kasan_check_read() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_machine_check+0x1d5: call to __kasan_check_read() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fred_exc_machine_check+0x225: call to __kasan_check_read() leaves .noinstr.text section
+>> drivers/gpu/drm/i915/display/intel_color.c:4018:52: warning: variable 'j' is uninitialized when used here [-Wuninitialized]
+    4018 |                                 lut_val = drm_color_lut32_extract(post_csc_lut[j++].green, 24);
+         |                                                                                ^
+   drivers/gpu/drm/i915/display/intel_color.c:4007:10: note: initialize the variable 'j' to silence this warning
+    4007 |         u32 i, j, lut_size, lut_val;
+         |                 ^
+         |                  = 0
+   1 warning generated.
+
+
+vim +/j +4018 drivers/gpu/drm/i915/display/intel_color.c
+
+  3997	
+  3998	static void
+  3999	xelpd_program_plane_post_csc_lut(struct intel_dsb *dsb,
+  4000					 const struct intel_plane_state *plane_state)
+  4001	{
+  4002		struct intel_display *display = to_intel_display(plane_state);
+  4003		const struct drm_plane_state *state = &plane_state->uapi;
+  4004		enum pipe pipe = to_intel_plane(state->plane)->pipe;
+  4005		enum plane_id plane = to_intel_plane(state->plane)->id;
+  4006		const struct drm_color_lut32 *post_csc_lut = plane_state->hw.gamma_lut->data;
+  4007		u32 i, j, lut_size, lut_val;
+  4008	
+  4009		if (icl_is_hdr_plane(display, plane)) {
+  4010			intel_de_write_dsb(display, dsb, PLANE_POST_CSC_GAMC_INDEX_ENH(pipe, plane, 0),
+  4011					   PLANE_PAL_PREC_AUTO_INCREMENT);
+  4012			/* TODO: Add macro */
+  4013			intel_de_write_dsb(display, dsb, PLANE_POST_CSC_GAMC_SEG0_INDEX_ENH(pipe, plane, 0),
+  4014					   PLANE_PAL_PREC_AUTO_INCREMENT);
+  4015			if (post_csc_lut) {
+  4016				lut_size = 32;
+  4017				for (i = 0; i < lut_size; i++) {
+> 4018					lut_val = drm_color_lut32_extract(post_csc_lut[j++].green, 24);
+  4019	
+  4020					intel_de_write_dsb(display, dsb,
+  4021							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0),
+  4022							   lut_val);
+  4023				}
+  4024	
+  4025				/* Segment 2 */
+  4026				do {
+  4027					intel_de_write_dsb(display, dsb,
+  4028							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0),
+  4029							   (1 << 24));
+  4030				} while (++j < 34);
+  4031			} else {
+  4032				/*TODO: Add for segment 0 */
+  4033				lut_size = 32;
+  4034				for (i = 0; i < lut_size; i++) {
+  4035					u32 v = (i * ((1 << 24) - 1)) / (lut_size - 1);
+  4036	
+  4037					intel_de_write_dsb(display, dsb,
+  4038							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0), v);
+  4039				}
+  4040	
+  4041				do {
+  4042					intel_de_write_dsb(display, dsb,
+  4043							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0),
+  4044							   1 << 24);
+  4045				} while (i++ < 34);
+  4046			}
+  4047	
+  4048			intel_de_write_dsb(display, dsb, PLANE_POST_CSC_GAMC_INDEX_ENH(pipe, plane, 0), 0);
+  4049			intel_de_write_dsb(display, dsb,
+  4050					   PLANE_POST_CSC_GAMC_SEG0_INDEX_ENH(pipe, plane, 0), 0);
+  4051		}
+  4052	}
+  4053	
 
 -- 
 0-DAY CI Kernel Test Service
