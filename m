@@ -1,108 +1,150 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E7D1A9F9F
-	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 00:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE961E0B9C
+	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 01:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762389615; cv=none; b=FeYOvNBzOYnyPr5V1w2YVtlrUDcRX0HzHXFTJ4irdpBwxAtCNl56NMG72+g0f11qB7S5llAmjVWIHkijNMhS5aD5R9DAbr42gsxmr2UAE5FgfHaH0ZdwUypPKl0JdKfwPQ70nQqMVzQNHLhZ3qQvlaxWHWKEmr+z1z7l3m2Qy5Y=
+	t=1762391535; cv=none; b=fS9SfpkJnVn1S5DEhFGtcQJr24cJXhpxO03B9YLG0xBs7YGGpWVcbdjQY83XpwnrjELRRRsN2zSMHESNak6wxxXAHeeZghxG9HUI/+nxXLRgJZ02Pc1SKSct+0qGcpQH1GBLgvSAKuOBAHtVjzG05RIl/9qNbDvvPmlr1Zowcrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762389615; c=relaxed/simple;
-	bh=rue2bCVLqqgDBX61ZwQetRzMYMuU2vRzhd7cN9vguj4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=mKnhF9WEsUQgVwB58Y7BwwIewNKecjGXp7uyjmWqPjYolNnf6eCFkvLDliyZGghtYQs5Zvd2nrfmFHQ6p4shWFTnBsNz+xL+MyKdDjlgsU29T++NCJeUSKPSagYRterSXbL00V1jfSAFR92B33GQ9BRCrMjC/QKwRhVCeFfMJ3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=UeIG2x8M; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1762391535; c=relaxed/simple;
+	bh=bY86xeA8p8EyVQjcjeNihz7+6o/44akVgLKqNvRN4rM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mEu23XEy41vE+jAPs2GOjiBqzoM7M31pew0iRcD7obt06a1mF3asowhLXXCmENC3v/gWfJ1oL9GBMDrCdd80TNT6qBH9sZulCYsiUwbWoBcWLFSHiUsJCC6Lnh/PtNCzzXcRVHgGpL+nfAI3XhCjtUBi74jYamE1fVssaxvWhbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XL8mtW70; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="UeIG2x8M"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3414de5b27eso383061a91.0
-        for <llvm@lists.linux.dev>; Wed, 05 Nov 2025 16:40:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762389613; x=1762994413; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y4Fdh+kQLyNyqbGV17ENMExDWzQqmTQ2Vs89uoeAIDg=;
-        b=UeIG2x8MM79W52ggHlC3QS8bpbwNQMeKpSIYjeQTwvSRflrDGlwJAgI3LmOVH7vumH
-         bRdxuv7ZtslImXAbDznq/M8AMS9adLsSar3wuEuyc8VdLM+r6XgWKqBvs+0QWpeapQ+8
-         94FCokaJC+0zugYmJ2keyJ42Ja3IqYZ6lIkO+EWh5x9DXupSu2ffHTzXno1TMNva2be9
-         Uv9seqVe9TC96zrDNJ+80p8nlX6iY3bFj2mxiXpEq7NdNuYkMsWSxFR4yatiiUGFstJ4
-         gGzInRHyeE0clZc84uhqWRkLrXKPbfuv2BL1wpC9Ow8ojcbmyhYN4GM+SddzL+JoJk0c
-         Chfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762389613; x=1762994413;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y4Fdh+kQLyNyqbGV17ENMExDWzQqmTQ2Vs89uoeAIDg=;
-        b=scFhSxoaBD5haiMCSZTll8MoaW8H+vDAL0VsovyD5teqVMaL7C9sgN5mAvtk1Not3V
-         ZLHzHYtJRqfPfLUOZEQ5+63Ry4jZOxD9V2lrEgJeKCzoQCYnaDgllKGY0AhvwVonK18v
-         1ECMhaMmy2BabUW+XeZ7k/I9Ybxc/RrRNjvUKtchrgsyHkfDm5oIcKp+th//vWCIWU7l
-         RLNtkAq+JH2GsvsB5MgfecPNPX5jYwy3147HpfyaTF+1svvb5RQTZHZN4GeAKm1XkBUU
-         h2kW1sgCfEfdR7ZOHvFvxKySNPNuRJtAWj20T/ags7DCaWrt+2BGQQR5B4l93Kamw1P/
-         KlGw==
-X-Forwarded-Encrypted: i=1; AJvYcCXa11KiEWxxw8xDkc/h9OgtcyyRUC59qLNseSwmC0ZQHvZVwuITmEeZHsDgviv8VskWwRkh@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx7PABNLhWSI7WLmXGlUsrK6lf+kz1f0d31cqBIVlYu41/BFH7F
-	yrvPAhI6fbq61wXCSs82cQDSHo2NkpfAO9mC5IIbZVAsLajYAf5jbpON461H0ZGoTTQ=
-X-Gm-Gg: ASbGncsJ19ROX1TdgJd0EeHco4h1yqe8bZUCjvlFuwkX+9CQYAm7HD5pSVKwk6dXKSD
-	vnWMgMEi1tAdVpNBtSpMJn/tGMjfPbELYkD5SP/+43otTPWHfUvb6LlbZxTi23OXGbAbt+UpdJm
-	BTXMkJyiv2cirCyewhMUnfyWl1+vn37oxKHb+MndwjBpnBa7jMDa8hRnp1eVaNT8ihN69VGXYcq
-	yUfcXntbRVTdWSNyOqNvzgKrhZXDHzoA8qFGWdVlIWrbCpzawqeQEotxGayaMWBSvKWY8pTmIsL
-	ANiq/E8c2tZD7jD3d1M+AbmM76Y0wl8E+YWX5cGSO1uxQYXcV4C2nKN6ZOnrN33eUMgxHHrBk72
-	ARYwO/igvitrU1ZV/D6Cekc3/gX3XQlPLn5mz766YPMuIkRUi7Kj0P4Kxwi4mf3bUlhejo9R5rA
-	==
-X-Google-Smtp-Source: AGHT+IEcLNKZAx7Gs58quiN/BqhCrVzUdA9uzXWTUpsiUUbQ/IIuN6vGZJk0KYstqzmC11nr84QNuQ==
-X-Received: by 2002:a17:90b:4a84:b0:340:be40:fe0c with SMTP id 98e67ed59e1d1-341a7009dd4mr6232479a91.36.1762389613281;
-        Wed, 05 Nov 2025 16:40:13 -0800 (PST)
-Received: from localhost ([71.212.208.158])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba90307193fsm507604a12.38.2025.11.05.16.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 16:40:12 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Tony Lindgren <tony@atomide.com>, Nathan Chancellor <nathan@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Schiffer <matthias.schiffer@tq-group.com>, 
- Alexander Stein <alexander.stein@ew.tq-group.com>, linux@ew.tq-group.com, 
- linux-omap@vger.kernel.org, devicetree@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev
-In-Reply-To: <20251105-omap-mba335x-fix-clang-comment-warning-v2-1-f8a0003e1003@kernel.org>
-References: <20251105-omap-mba335x-fix-clang-comment-warning-v2-1-f8a0003e1003@kernel.org>
-Subject: Re: [PATCH v2] ARM: dts: omap: am335x-mba335x: Fix stray '/*' in
- comment
-Message-Id: <176238961246.3045323.4889142584936333323.b4-ty@baylibre.com>
-Date: Wed, 05 Nov 2025 16:40:12 -0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XL8mtW70"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762391530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AH261aw8Nbki9+CXLF/y6wcPxQb4WFI6ol+xWfQ3dOw=;
+	b=XL8mtW700o6gL0Ht5dQ/c6696ys5+GHOA+IcwJ7p9qpuLd0Nk4T8Bs4xlxqhiwbct2H15K
+	g2nkMBJr2sghl5XbcV5Xnpl0SrjBudNyMnHYa8fCBmBWHuigpSSlnXaZeM83KKE/7NsgqG
+	UDpwQZWl0XoUjzeiYCmPpadrnYJ8vgY=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-189-T9_tLicYMtiTyWBFWwUYyg-1; Wed,
+ 05 Nov 2025 20:12:09 -0500
+X-MC-Unique: T9_tLicYMtiTyWBFWwUYyg-1
+X-Mimecast-MFC-AGG-ID: T9_tLicYMtiTyWBFWwUYyg_1762391528
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 546F4180034D
+	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 01:12:08 +0000 (UTC)
+Received: from [172.20.90.15] (unknown [10.30.45.71])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F156C300018D;
+	Thu,  6 Nov 2025 01:12:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 22 of 137): Test report for master
+ (6.18.0-rc4, upstream-mainline, 1c353dc8)
+Date: Thu, 06 Nov 2025 01:12:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <09566.125110520120900121@us-mta-189.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Ica3-teSMSgMtmNJTqRRQRrQ6jKCklxViEf7e4mnBT4_1762391528
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-56183
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'media/v6.18-2' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/mchehab/linux-media
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2141128279
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
-On Wed, 05 Nov 2025 13:41:09 -0700, Nathan Chancellor wrote:
-> When preprocessing arch/arm/boot/dts/ti/omap/am335x-mba335x.dts with
-> clang, there are a couple of warnings about '/*' within a block comment.
-> 
->   arch/arm/boot/dts/ti/omap/am335x-mba335x.dts:260:7: warning: '/*' within block comment [-Wcomment]
->     260 |                         /* /* gpmc_csn3.gpio2_0 - interrupt */
->         |                            ^
->   arch/arm/boot/dts/ti/omap/am335x-mba335x.dts:267:7: warning: '/*' within block comment [-Wcomment]
->     267 |                         /* /* gpmc_ben1.gpio1_28 - interrupt */
->         |                            ^
-> 
-> [...]
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+    Storage - blktests - throtl [x86_64]
+    Storage - blktests - ublk [x86_64]
+    stress: stress-ng - cpu-cache [x86_64]
+    stress: stress-ng - memory [x86_64]
+    xfstests - btrfs [x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [x86_64]
 
-Applied, thanks!
 
-[1/1] ARM: dts: omap: am335x-mba335x: Fix stray '/*' in comment
-      commit: 35c973187f59328a5a58be132bd83ec2fe076620
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Best regards,
--- 
-Kevin Hilman <khilman@baylibre.com>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
