@@ -1,95 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154C919CCFC;
-	Thu,  6 Nov 2025 18:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128A0332904
+	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 19:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762453032; cv=none; b=QcJp6OCJcWsLcwevphPxF2b14G1Pz1l3L74guCbILyrV6j9b92pw+GBNUKnVrd/46wnd4LtXWvWOm2aevh5rIk+Il7rjbE/q75Dt9IZk0bTfeh7Uh/Rv6zQx3MnKwDS/T3dLRNEjrKnsu0y2Oz1ryjFBa1GLlzQL81k/Pph4hJI=
+	t=1762456413; cv=none; b=JJ1m4JoZZ30V1R9JbOk+VKX4uykEzhEQr8mPT8laoYCbgzyRpW3GkKIZAQVsoU6agfLGtBK/7MGBJf8DP5dzrn5pTTLURVenmuELuPEh7Ks/GZYlhyswpa5OtpwdR+56V1xjKEh82UnZg7MjSLkXhnv9Jt6PzekVs8pX4DhOTk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762453032; c=relaxed/simple;
-	bh=2VzvYyOSlX+aGeXVKAyST+kgdelPqRcD18yE3ECwlmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LcYjtz8CSgBEFaXChSjswhJXrMB9E64uTJzYAHlBaL5GSe7JaSnvq/6n28/A4+9wZ+q3iPxjyyajigaDESlGOYiHT9rGIQ3JkMsDNjFxmx5x6MGEUmw6kwXMHksYADMC/QxWEeQImcGaKqFhFRliue0N9Giqx4E5bydgO8wagxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JIeP+4xy; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762456413; c=relaxed/simple;
+	bh=x4jOvehz/l5AwiSkh8ZHNK5e+NDXmXMi2EeVQIPNblE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RArM/IQEUIb+SBaIj73TG/5KcIrxlDgdh/74YvSnJpHfvUKl4lm+NWgOHKs3bAq6fNS7RZHE+/FjkwtzXm9esa5zer2+pmpH0k04RZH0TYeZgo+gYhnBSVmAoetu36PTnaYwmZXyrGwDoGBm0DQPlUBMuVYHalzDMXiO4wInDLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aPAq5fk5; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JIeP+4xy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762453031; x=1793989031;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2VzvYyOSlX+aGeXVKAyST+kgdelPqRcD18yE3ECwlmI=;
-  b=JIeP+4xytPPD+ocs0Jt8jpOBBMr4JRhVBmalvBMA5OHpYf8ULGG064ip
-   ZBo87g9Ir1fhVjN5EQafB0Z8/9Z0JhGEG8qFxM+e2MTcPkW5gashiyi3S
-   VdsW/8tK6Jsim73p4VkudHC4Ip0b9Me32Ipg71kUuyk8qEwLSouU8oMPS
-   +5sx3gcb6xk8+9otJT3vYC64dOhhNHj8clKYPv2pt7O9wYYzMMPF8v6nP
-   EIgQPffzAi2bMh45W3ucAsDMUbiBkPqZyPDfa9Au0W+VYITpxB5r/Jiyh
-   gpXdIGgIzvrLp/F+qFfDfsKHL0W1EAP2FsoG9PZZOn/3PnBrF9dlIVW+C
-   w==;
-X-CSE-ConnectionGUID: BEandWfoTWKMhsQ4fRXN1w==
-X-CSE-MsgGUID: NYl7FKzrRMWpsHxZ5iRfWg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64516624"
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="64516624"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 10:17:10 -0800
-X-CSE-ConnectionGUID: s7BfGmwoRUCeNcpm1Xxuyg==
-X-CSE-MsgGUID: D4CYdoCURh+8qx5nuThNOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="187772647"
-Received: from igk-lkp-server01.igk.intel.com (HELO c2fcd27ee2f4) ([10.211.93.152])
-  by orviesa007.jf.intel.com with ESMTP; 06 Nov 2025 10:17:10 -0800
-Received: from kbuild by c2fcd27ee2f4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vH4Xj-0000000035c-13Pk;
-	Thu, 06 Nov 2025 18:17:07 +0000
-Date: Thu, 6 Nov 2025 19:17:06 +0100
-From: kernel test robot <lkp@intel.com>
-To: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robertosassu:measure-error-v1-devel-v4 6/6]
- include/linux/ima.h:56:80: warning: non-void function does not return a
- value
-Message-ID: <202511061945.1ZXB31oq-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aPAq5fk5"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b72bf7e703fso32686066b.2
+        for <llvm@lists.linux.dev>; Thu, 06 Nov 2025 11:13:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1762456408; x=1763061208; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BSwDbZjhNyoFvwcPDAsMYknEo4DE1C1kmOdtpNJhXPc=;
+        b=aPAq5fk5qukj/vOorHnsmhgfiSXWnyDp0XsOfa5OLJI9vH4rRQvc06Txhs+XJNU1sU
+         n62EwuhbHnhVD/fxfmGIzKYZ8dPPSo4vbCA9XVZ3LdIPcsZJX+VyIxyt7JxH7zZDke8p
+         UbJVRJdPpIDosE8Q6lIU6IN73eNIuRbYjM0Es=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762456408; x=1763061208;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BSwDbZjhNyoFvwcPDAsMYknEo4DE1C1kmOdtpNJhXPc=;
+        b=PBhoFuXEr7zu1EvtufjJQ0GMmRDkEgrXeHq9+BawlUHBm8IaI8MLiq5Cmd7a/9ijJ8
+         tFhHcj9He7Nc/7CZ/4paFdlDOPvMnEoLVK6ya3VO/z3EcxovOXqdRaPC9kIMuLe7rxRx
+         F7WWsWeKOFqSiUKn0Y8vXW4wd6oRL7jK3SYaGa/zzaPDiCpiASvtP8AXGqCEdLnhcGHz
+         2KEAO8goCLQ1ZKGRiCPW92pFTdkzRSEeN78YVpxsoUMxffSkVLTodCCiZYe+KgR6JKsh
+         adjtW4H/OCgsGiB1YBstN02LhnNlLpseUy4aiyaAFM0owucEZ+nyWMvPMPnGnLQ76djk
+         4p/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUGtTOL9dZAjWEBXFzwNiYz1hQgl9F8gqJQOngKwJIj6/fDWW4NywxIKftm4pvHNJPghSO0@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWCj/SrarBXQ2WCtVAE2uhYK3Y6hkgpZmcka0qPSG6P7Lf9NOV
+	f/cOmwUNFWp8Nv0lKnw93VV0WEsPRPrg1ptqW66kX9kxYuP3GOqKO1hO07ERK4BmdXL8g/1tKvM
+	PUB2aKJw=
+X-Gm-Gg: ASbGnctfRHh+MUjx+ZqYohPVU9KHIhP3z4+HyMF3J8pNsBDyMvvO+JP3/iknV7dozmP
+	27W5EFCkBrjGonUxaAr3GCNJrgu0lG2fKqVTxpfuh3dno0M8eQXGVwCfuREFQfDK5rEO7/9dcEQ
+	KHVqx55AdURNQAoWKcq4c6puGEYAxW3gIA0QGQa1txQL1093WPvbNGamWC1ekZXQ4//zDB32mZ0
+	A2shxWCaJ0Mnpknw/GYJ8MJs9q8/iop/DaH3yY812BxCkod0f/8PzNXKO28oVAg8XPz9MD130N1
+	4lDhaKtDVxQ3vLhTkGATRE2ALZwRYCk2zo06W/fS9yPLBc0/GjWNHWjZJVF3suGipSLcjdPNw9P
+	1nPqJkGm0lUKGS3Q9t9dAJA6rxBhVJvqtUk1OJ3m8DrW48LrlAVDZecfcfgwmL8jHL9LqE39MPJ
+	90JhiP5jPt5OI6fsG0AAjlL5CvfsHNa2NVg5M/EYe8YuFDW1E3wQ==
+X-Google-Smtp-Source: AGHT+IHMDcGBpbnKhv0OTHwoNbLIb8oXtmJPb1JGEZz3uDizV2LBk+uC+WCWgSrJgfZMC1dy5oDUFg==
+X-Received: by 2002:a17:907:1c09:b0:b72:6b3c:1f0d with SMTP id a640c23a62f3a-b72c090e64fmr44354166b.35.1762456408217;
+        Thu, 06 Nov 2025 11:13:28 -0800 (PST)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bfa24d2asm26865966b.70.2025.11.06.11.13.26
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Nov 2025 11:13:26 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b719ca8cb8dso283710066b.0
+        for <llvm@lists.linux.dev>; Thu, 06 Nov 2025 11:13:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWJBfOkcbWYH20/dhy145aPrzkPhr9loRAhWdIxa4XN8OObTw3cSmGiwGBI4C7IfVA1vinV@lists.linux.dev
+X-Received: by 2002:a17:907:1c09:b0:b72:5983:db09 with SMTP id
+ a640c23a62f3a-b72c090e472mr49124766b.32.1762456406121; Thu, 06 Nov 2025
+ 11:13:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com> <20251106151649.GA1693433@ax162>
+In-Reply-To: <20251106151649.GA1693433@ax162>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 6 Nov 2025 11:13:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whr8NCjam2007HoR+FT5W_exO9k_-jyHvhpossGwAW-=Q@mail.gmail.com>
+X-Gm-Features: AWmQ_bkTzWtaU1K-M2qK_nvVYHzghb1UwFKSpdgbkMeiD-l3K-Zk6yGbI_EZmaE
+Message-ID: <CAHk-=whr8NCjam2007HoR+FT5W_exO9k_-jyHvhpossGwAW-=Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] compiler_types: Warn about unused static inline
+ functions on second
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/robertosassu/linux measure-error-v1-devel-v4
-head:   0439a359fb53048916b67ff651057bc5809d8c6c
-commit: 0439a359fb53048916b67ff651057bc5809d8c6c [6/6] ima: Deny file op if a measurement error cannot be recorded in the TPM
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251106/202511061945.1ZXB31oq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061945.1ZXB31oq-lkp@intel.com/reproduce)
+On Thu, 6 Nov 2025 at 07:16, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> I can take this as a fix via kbuild or Linus can apply it directly
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511061945.1ZXB31oq-lkp@intel.com/
+Yes, please just take it through the regular Kbuild tree (with
+whatever modifications this thread then results in).
 
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/kexec_file.c:21:
->> include/linux/ima.h:56:80: warning: non-void function does not return a value [-Wreturn-type]
-      56 | static inline int ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
-         |                                                                                ^
-   1 warning generated.
-
-
-vim +56 include/linux/ima.h
-
-    55	
-  > 56	static inline int ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
-    57	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+       Linus
