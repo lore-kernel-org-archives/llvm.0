@@ -1,66 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F6D1E0DD9;
-	Thu,  6 Nov 2025 13:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F7424503C;
+	Thu,  6 Nov 2025 15:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762434973; cv=none; b=SDEhbG03fCAKW+iTexDIwqdRWK81wZX1Z6LAGMPAYfiifRlyHsVQoTC7HEf4hIt1SkEVYMoyUUO+izE1UrNqLEpbBMOChw/2X0hDTyPNfEXzppgoxuQtqH/z53aKrNIWgNK6JgJRva66pQe4ymDL44pZYJEg/V4snDyHfis6/a4=
+	t=1762442214; cv=none; b=plLR8CeK4LPT9Kj55m3qQ65hBLxHVDCtXLYS77bHxmW5nxDQnTpHzy6DTfYmee/kARvK4C0MpKbNLXPsx7yNu6t9JmXu24EBK17e014ZSLYWgAuXSKJoD3atnbvw5wzC3uHnKh2tNKPoKuzWl+aU8yShIQN73k90zn5f+9/f3vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762434973; c=relaxed/simple;
-	bh=fWIzYkeyLR0zM1nmLNN94zCZ4jX0OH0Y8wuA0ODbkxw=;
+	s=arc-20240116; t=1762442214; c=relaxed/simple;
+	bh=sw93HzZvGu9P1i+iQOU+54K5NF/ISfg6R9D40V3YXfc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iEJj2rRwBXXT0101V9zCZp+iUelP59QUMc3U84zkP+uY9cA5FbIyPe+XM0FDRS8CJInlgpvU/VYm161oahtLnSmOvSyMiVthcdUwmqoEu3uyFOj8p9Rndqt+IiKL829rpbsf/ks6gUYuEC2gn67CuET87WEPM8Aa/aJZP44i8po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKoK1acL; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dT3RHeGS+EQO9RcFphPoys6RUwsu4KIW8oMpv0HGqUN4hqjPGMQZPHbJcT1wMGj/RUupI2qnfJgN6iMnWOjIFKesnHRYTVTRnXlMLdQdnzoKt9IUA5nwClT/ig0HimTkhdhya0iA96GC4KaJkNi24eLpJDQ+F0Reryd2cpYipmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUcwcZL3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKoK1acL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762434971; x=1793970971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fWIzYkeyLR0zM1nmLNN94zCZ4jX0OH0Y8wuA0ODbkxw=;
-  b=IKoK1acLZVZpJjTR0ROodTkW5WBmoY389A28uwIOmf6+o+efLlL0XEmk
-   4QnAfimAw8RpDQgW6xjyoTnFZRef6GWR0WE+b8aUN3gzzIBgTfOIBXh/u
-   Nlj+rTE91a6US771Dw8cw/sMar3VC6cX3Y9liNk2OGXOmPXlGUqFynr5E
-   pISgAg+gjQ4G12D8s5clstvOLCk8mYL6ldnki8L7Tvv3dPWul8FMxEOKk
-   JD6dewF4txo4qRe+x/qxflwpvzOEcauFYlNfUo41LhxCrU/wMSTLC6cxB
-   Lm+oIwkde7JigrIR+/J8/oyW+2mFFnyGvw8yePwfOidhCS2m3S0u+OkjC
-   g==;
-X-CSE-ConnectionGUID: KvknNyNjSZGH7yPu0aXNPw==
-X-CSE-MsgGUID: JgfOH8rUSjyHGoboAxUYKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="75684738"
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="75684738"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 05:16:10 -0800
-X-CSE-ConnectionGUID: aeqL+VAlRRWd2b+1r3alkg==
-X-CSE-MsgGUID: PvnjBAKaRSe2LKdR0ffM/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="211215979"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 06 Nov 2025 05:16:06 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGzqO-000TxI-01;
-	Thu, 06 Nov 2025 13:16:04 +0000
-Date: Thu, 6 Nov 2025 21:16:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uma Shankar <uma.shankar@intel.com>, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	chaitanya.kumar.borah@intel.com, ville.syrjala@linux.intel.com,
-	pekka.paalanen@collabora.com, contact@emersion.fr,
-	harry.wentland@amd.com, mwen@igalia.com, jadahl@redhat.com,
-	sebastian.wick@redhat.com, shashank.sharma@amd.com,
-	swati2.sharma@intel.com, alex.hung@amd.com, jani.nikula@intel.com,
-	Uma Shankar <uma.shankar@intel.com>
-Subject: Re: [v6 13/16] drm/i915/xelpd: Program Plane Post CSC Registers
-Message-ID: <202511062120.wwoYUHAR-lkp@intel.com>
-References: <20251105123413.2671075-14-uma.shankar@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUcwcZL3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EB9C4CEF7;
+	Thu,  6 Nov 2025 15:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762442214;
+	bh=sw93HzZvGu9P1i+iQOU+54K5NF/ISfg6R9D40V3YXfc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZUcwcZL3xdgNqTG2JKegG2i9bvCC7qx27pVk4iM2U0mOsxRAUb2Te8uKsG16fqjeU
+	 7M5hgdsWscDuM1ETvQUCfUuyACaaFDnHc2WNebaSqF8Yq48iyr/FVSriDwpBfrvoqc
+	 LuEe7KhDiLkJCjdIZ6+zEf/G4dyZsDPuxG0DWAfKgjlOcSYOfemyPBZcaaf4AWFwra
+	 c3rZ0QWJ5h0VywyhwmscOtJtJo2WV7WE8Zy2YYiQQzfTXjK0Vq9tLxpzlTzywwrdez
+	 LwBp/kSXtMvaJtXwUmkanATfH9HT+h/vzC3n/Jk2v3EO8Oi/g+b86ckfDJA7t6qUei
+	 Hmx2yIije53bQ==
+Date: Thu, 6 Nov 2025 08:16:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v1 1/1] compiler_types: Warn about unused static inline
+ functions on second
+Message-ID: <20251106151649.GA1693433@ax162>
+References: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,103 +49,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251105123413.2671075-14-uma.shankar@intel.com>
+In-Reply-To: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
 
-Hi Uma,
+On Thu, Nov 06, 2025 at 11:50:00AM +0100, Andy Shevchenko wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
+> 
+> Per Nathan, clang catches unused "static inline" functions in C files since
+> commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
+> functions for W=1 build").
+> 
+> Linus said:
+> 
+> > So I entirely ignore W=1 issues, because I think so many of the extra
+> > warnings are bogus.
+> >
+> > But if this one in particular is causing more problems than most -
+> > some teams do seem to use W=1 as part of their test builds - it's fine
+> > to send me a patch that just moves bad warnings to W=2.
+> >
+> > And if anybody uses W=2 for their test builds, that's THEIR problem..
+> 
+> Here is the change to bump the warning from W=1 to W=2.
+> 
+> Fixes: 6863f5643dd7 ("kbuild: allow Clang to find unused static inline functions for W=1 build")
+> Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-kernel test robot noticed the following build warnings:
+I can take this as a fix via kbuild or Linus can apply it directly
+but...
 
-[auto build test WARNING on next-20251105]
-[cannot apply to drm-xe/drm-xe-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.18-rc4 v6.18-rc3 v6.18-rc2 v6.18-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ---
+>  include/linux/compiler_types.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 59288a2c1ad2..575a03643fa1 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -253,7 +253,7 @@ struct ftrace_likely_data {
+>   * for W=1 build. This will allow clang to find unused functions. Remove the
+>   * __inline_maybe_unused entirely after fixing most of -Wunused-function warnings.
+>   */
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Uma-Shankar/drm-AMD-series-squashed/20251105-202623
-base:   next-20251105
-patch link:    https://lore.kernel.org/r/20251105123413.2671075-14-uma.shankar%40intel.com
-patch subject: [v6 13/16] drm/i915/xelpd: Program Plane Post CSC Registers
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20251106/202511062120.wwoYUHAR-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511062120.wwoYUHAR-lkp@intel.com/reproduce)
+The comment should be updated to W=2 instead of W=1 and we should
+probably drop the sentence about removing __inline_maybe_unused entirely
+since people such as Peter will never want this behavior by default. I
+do not mind doing it myself if I take it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511062120.wwoYUHAR-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_color.c:4018:52: warning: variable 'j' is uninitialized when used here [-Wuninitialized]
-    4018 |                                 lut_val = drm_color_lut32_extract(post_csc_lut[j++].green, 24);
-         |                                                                                ^
-   drivers/gpu/drm/i915/display/intel_color.c:4007:10: note: initialize the variable 'j' to silence this warning
-    4007 |         u32 i, j, lut_size, lut_val;
-         |                 ^
-         |                  = 0
-   1 warning generated.
-
-
-vim +/j +4018 drivers/gpu/drm/i915/display/intel_color.c
-
-  3997	
-  3998	static void
-  3999	xelpd_program_plane_post_csc_lut(struct intel_dsb *dsb,
-  4000					 const struct intel_plane_state *plane_state)
-  4001	{
-  4002		struct intel_display *display = to_intel_display(plane_state);
-  4003		const struct drm_plane_state *state = &plane_state->uapi;
-  4004		enum pipe pipe = to_intel_plane(state->plane)->pipe;
-  4005		enum plane_id plane = to_intel_plane(state->plane)->id;
-  4006		const struct drm_color_lut32 *post_csc_lut = plane_state->hw.gamma_lut->data;
-  4007		u32 i, j, lut_size, lut_val;
-  4008	
-  4009		if (icl_is_hdr_plane(display, plane)) {
-  4010			intel_de_write_dsb(display, dsb, PLANE_POST_CSC_GAMC_INDEX_ENH(pipe, plane, 0),
-  4011					   PLANE_PAL_PREC_AUTO_INCREMENT);
-  4012			/* TODO: Add macro */
-  4013			intel_de_write_dsb(display, dsb, PLANE_POST_CSC_GAMC_SEG0_INDEX_ENH(pipe, plane, 0),
-  4014					   PLANE_PAL_PREC_AUTO_INCREMENT);
-  4015			if (post_csc_lut) {
-  4016				lut_size = 32;
-  4017				for (i = 0; i < lut_size; i++) {
-> 4018					lut_val = drm_color_lut32_extract(post_csc_lut[j++].green, 24);
-  4019	
-  4020					intel_de_write_dsb(display, dsb,
-  4021							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0),
-  4022							   lut_val);
-  4023				}
-  4024	
-  4025				/* Segment 2 */
-  4026				do {
-  4027					intel_de_write_dsb(display, dsb,
-  4028							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0),
-  4029							   (1 << 24));
-  4030				} while (++j < 34);
-  4031			} else {
-  4032				/*TODO: Add for segment 0 */
-  4033				lut_size = 32;
-  4034				for (i = 0; i < lut_size; i++) {
-  4035					u32 v = (i * ((1 << 24) - 1)) / (lut_size - 1);
-  4036	
-  4037					intel_de_write_dsb(display, dsb,
-  4038							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0), v);
-  4039				}
-  4040	
-  4041				do {
-  4042					intel_de_write_dsb(display, dsb,
-  4043							   PLANE_POST_CSC_GAMC_DATA_ENH(pipe, plane, 0),
-  4044							   1 << 24);
-  4045				} while (i++ < 34);
-  4046			}
-  4047	
-  4048			intel_de_write_dsb(display, dsb, PLANE_POST_CSC_GAMC_INDEX_ENH(pipe, plane, 0), 0);
-  4049			intel_de_write_dsb(display, dsb,
-  4050					   PLANE_POST_CSC_GAMC_SEG0_INDEX_ENH(pipe, plane, 0), 0);
-  4051		}
-  4052	}
-  4053	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> -#ifdef KBUILD_EXTRA_WARN1
+> +#ifdef KBUILD_EXTRA_WARN2
+>  #define __inline_maybe_unused
+>  #else
+>  #define __inline_maybe_unused __maybe_unused
+> -- 
+> 2.50.1
+> 
