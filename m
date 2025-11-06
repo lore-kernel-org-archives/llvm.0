@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB915301034;
-	Thu,  6 Nov 2025 08:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC2D305044;
+	Thu,  6 Nov 2025 08:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762417534; cv=none; b=WiXw1RLIQ07R99ciLUPZHmNvXRtv85iSJVujRMEOCh7fI4a0jmPelBC5NxO+WQWFU35c+MVTqSODQiHbqnVhKlONuCGoqxNkUISlk451JK47gkhKQKc8DKlPXDC0eeCpDA7oqN4uDjG2GK79CxYlXRvfNW2G4UKAkaaEquRI28c=
+	t=1762419423; cv=none; b=X8NXq98s6VN2btrNqfjjYEzpu1h8I7Tn4IOk7Zy8XlnIMh6jq0fvBpbU0/1JGrUz6HxEfQT5BBNKT7gJxZiu3DJkBHPvT4fPQuedsQ8F8xq3yyBP08bfxUf3tpFg/ghFlryzos5lAeE5KmFYUlg1/E1BguHFwsziLQP38xpPWGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762417534; c=relaxed/simple;
-	bh=wcMkvRvM2rxBATENH3MUgVd4MLzRYBId91zHJmnMrTg=;
+	s=arc-20240116; t=1762419423; c=relaxed/simple;
+	bh=aQg/C6oXUX/uq+W/35HkP5IokMhK7EBtRMCxsBW5lF4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LweExVDtLBPIhsJ6kZBknHDKAi2cX8WvjHDdyBPO7MmNeH8g0+FUlqknR01ohy7TKXmmkBRZZJy9YUJdpNL/gvUAALgsagvNAWbvJ4SpnZRkASeZfkF5gN7YCD5k+6rvivNK/292fxLg2mxHFRo0f08QUYxNhOHrZrOeS1uJWLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AGHrDh/f; arc=none smtp.client-ip=198.175.65.12
+	 Content-Disposition; b=NjF5VOxWZh64Xd1pCAjYVyduVriHHxf930Oqssmsuh9YGhfsTiixeOqzXydfiaFh8/MLnb2MHe/qTPlz6+49IGGvRSdTBZzYZG4e9v9iG5kjRz0ydZtZ2s9OjUhiq91JyX9c6K6VPagKu1sswfdsQTdXMF2oWdVCCBbiYqo5EPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzLEqe0h; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AGHrDh/f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzLEqe0h"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762417533; x=1793953533;
+  t=1762419423; x=1793955423;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wcMkvRvM2rxBATENH3MUgVd4MLzRYBId91zHJmnMrTg=;
-  b=AGHrDh/foN7KvkoBqKl8/NGZwHc0mEjnX4E6MALutz8cp0lbMegzFd7b
-   B+Z6+kvevIgldx96JjMJLFk3OV7nTDyIbluLxbECsc8kprZF+velJ0Rg5
-   AG83uT5ftJ/nF339VVOVUoXRdW5YCUtkkZ//fdBUC+rPYNv8KAhabXdFf
-   Copu0Co88xPiaXU/RYy0pTxDNAVx5+swUDsnXI0pki7XwnLzf3YUXYx+s
-   f76EnvTlD/zWk+Ll1MoToXVWejP+Wgg5mDkdQp18o+jHUZs2/y+Am2dq2
-   xKmRIp/FsotIatqQzuDJ+w1whCX9sdJIk0ZOp0LSVEdsWU5kl/vS5GS5w
-   g==;
-X-CSE-ConnectionGUID: GkfX5bdHSAWCXe5tehce1A==
-X-CSE-MsgGUID: Oq/74Fm9TZ6BJf9xBRtcUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="75998675"
+  bh=aQg/C6oXUX/uq+W/35HkP5IokMhK7EBtRMCxsBW5lF4=;
+  b=UzLEqe0h8OXQk5TGB/Xl1smlfcNEzPMbABgo0hIyw8Jhb3wWXIOqg7/k
+   U8IgDVzRtehdJli8sUGLsPZuqLzVjmsbzN4P5UBStFs821BkDQ+IyXr1H
+   IvWUD6f33vlyj5MYoru/wMaICARQI92nijRrOSUPvcD0RzJ7l76vq1i6z
+   97jGsQ+NMWOUBMvbEQgJ01WMuoU/oHmdc8VTglyHEH7eFk6HCXyRGdE7Q
+   eSCj3q0k5eDlpqKpv+vhss3iiO6m8pnN7kTyG4WgHPSJeLpx9IBv14rE0
+   dEIc4LzR2AOtXIIvzBj70IxGQlX3z0zZE7O6+38YvxxlcL5EdSsjuzVYR
+   w==;
+X-CSE-ConnectionGUID: b9lGIh/URFaB7FIi+Ws81A==
+X-CSE-MsgGUID: m2sNmsN8QyGNIeL4go77IA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="68201001"
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="75998675"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 00:25:32 -0800
-X-CSE-ConnectionGUID: 7Bo9loeFSCGqTxaDFSQGHQ==
-X-CSE-MsgGUID: 7FpxxH5HSh+15lqizB5UVg==
+   d="scan'208";a="68201001"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 00:57:01 -0800
+X-CSE-ConnectionGUID: +RK5Vu/FQQq2pv4jGCN6KQ==
+X-CSE-MsgGUID: FeFkI5V6TOyfmcVT+3iv0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="192747006"
+   d="scan'208";a="186954637"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 06 Nov 2025 00:25:31 -0800
+  by orviesa006.jf.intel.com with ESMTP; 06 Nov 2025 00:56:57 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vGvJB-000Tek-04;
-	Thu, 06 Nov 2025 08:25:29 +0000
-Date: Thu, 6 Nov 2025 16:24:45 +0800
+	id 1vGvnU-000TgE-0R;
+	Thu, 06 Nov 2025 08:56:49 +0000
+Date: Thu, 6 Nov 2025 16:56:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Weidong Wang <wangweidong.a@awinic.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:v3_20251028_wangweidong_a_rework_the_awinic_driver
- 41/46] sound/soc/codecs/aw88261.c:16:10: fatal error:
- 'aw88395/aw88395_data_type.h' file not found
-Message-ID: <202511061628.AIOG0CfO-lkp@intel.com>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 6703/6818] Warning:
+ arch/arm/mm/dma-mapping.c:1405 expecting prototype for
+ arm_iommu_unmap_page(). Prototype was for arm_iommu_unmap_phys() instead
+Message-ID: <202511061613.whODAEJk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,43 +63,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v3_20251028_wangweidong_a_rework_the_awinic_driver
-head:   6911f5ed5253f3a0deaa3dea2e9e8cfa4324048e
-commit: dc3ed59a386ff3ca76a05e77f29f5c34f9e4b23b [41/46] ASoC: codecs:Rework the awinic driver lib
-config: x86_64-randconfig-012-20251106 (https://download.01.org/0day-ci/archive/20251106/202511061628.AIOG0CfO-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061628.AIOG0CfO-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   df5d79720b152e7ff058f11ed7e88d5b5c8d2a0c
+commit: 0d0f6cd98c646b34bd754e062f3350c14651c91f [6703/6818] Merge branch 'docs-next' of git://git.lwn.net/linux.git
+config: arm-randconfig-002-20251106 (https://download.01.org/0day-ci/archive/20251106/202511061613.whODAEJk-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061613.whODAEJk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511061628.AIOG0CfO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511061613.whODAEJk-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> sound/soc/codecs/aw88261.c:16:10: fatal error: 'aw88395/aw88395_data_type.h' file not found
-      16 | #include "aw88395/aw88395_data_type.h"
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +16 sound/soc/codecs/aw88261.c
-
-028a2ae256916e Weidong Wang 2023-08-04  10  
-028a2ae256916e Weidong Wang 2023-08-04  11  #include <linux/i2c.h>
-028a2ae256916e Weidong Wang 2023-08-04  12  #include <linux/firmware.h>
-028a2ae256916e Weidong Wang 2023-08-04  13  #include <linux/regmap.h>
-028a2ae256916e Weidong Wang 2023-08-04  14  #include <sound/soc.h>
-028a2ae256916e Weidong Wang 2023-08-04  15  #include "aw88261.h"
-028a2ae256916e Weidong Wang 2023-08-04 @16  #include "aw88395/aw88395_data_type.h"
-028a2ae256916e Weidong Wang 2023-08-04  17  #include "aw88395/aw88395_device.h"
-028a2ae256916e Weidong Wang 2023-08-04  18  
-
-:::::: The code at line 16 was first introduced by commit
-:::::: 028a2ae256916eeae1040049d2d0129535ace60e ASoC: codecs: Add aw88261 amplifier driver
-
-:::::: TO: Weidong Wang <wangweidong.a@awinic.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   Warning: arch/arm/mm/dma-mapping.c:1239 function parameter 'attrs' not described in 'arm_iommu_map_sg'
+   Warning: arch/arm/mm/dma-mapping.c:1298 function parameter 'attrs' not described in 'arm_iommu_unmap_sg'
+>> Warning: arch/arm/mm/dma-mapping.c:1405 expecting prototype for arm_iommu_unmap_page(). Prototype was for arm_iommu_unmap_phys() instead
+   Warning: arch/arm/mm/dma-mapping.c:1239 function parameter 'attrs' not described in 'arm_iommu_map_sg'
+   Warning: arch/arm/mm/dma-mapping.c:1298 function parameter 'attrs' not described in 'arm_iommu_unmap_sg'
 
 -- 
 0-DAY CI Kernel Test Service
