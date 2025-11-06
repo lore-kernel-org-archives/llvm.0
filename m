@@ -1,185 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B214C1E4AB;
-	Wed,  5 Nov 2025 21:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E7D1A9F9F
+	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 00:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762379267; cv=none; b=UKsfR06bH2NPktOSycPLzgwtMkQS/xwpC0ojEy1wnKixJezhHKXji6wnmTfdxvDYbjo5TpqOp/SVylz6JsYmcT6Z0Ml+UTVk4W8Wb27PIiM51LzdUE9J7xCsdo+XW2DLoxneEYeog4DtCGHmDI3/JpzNegtAGvzNSaTGfjPkS0I=
+	t=1762389615; cv=none; b=FeYOvNBzOYnyPr5V1w2YVtlrUDcRX0HzHXFTJ4irdpBwxAtCNl56NMG72+g0f11qB7S5llAmjVWIHkijNMhS5aD5R9DAbr42gsxmr2UAE5FgfHaH0ZdwUypPKl0JdKfwPQ70nQqMVzQNHLhZ3qQvlaxWHWKEmr+z1z7l3m2Qy5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762379267; c=relaxed/simple;
-	bh=5xzsc/7T1gL0sCj7nOJv8DaIl+OnW9UaT5raFEotIik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lWRnCvrvwAKrZC+z4IU5T4B/OtgqlRQHTJaiNev0JWLXfp11PXWhxUMASNtPbGcI9J8YMoQYKmLKEq5q3B0IKLSH+P/E44iQYbRa+Y7Pjp52eHtUmybkchXvWdloWNLRlwheKHTFX9iILTqbxub1GhT9zShlIXRvgN9aX20iXCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JhcXv6+U; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762389615; c=relaxed/simple;
+	bh=rue2bCVLqqgDBX61ZwQetRzMYMuU2vRzhd7cN9vguj4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=mKnhF9WEsUQgVwB58Y7BwwIewNKecjGXp7uyjmWqPjYolNnf6eCFkvLDliyZGghtYQs5Zvd2nrfmFHQ6p4shWFTnBsNz+xL+MyKdDjlgsU29T++NCJeUSKPSagYRterSXbL00V1jfSAFR92B33GQ9BRCrMjC/QKwRhVCeFfMJ3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=UeIG2x8M; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JhcXv6+U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762379266; x=1793915266;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5xzsc/7T1gL0sCj7nOJv8DaIl+OnW9UaT5raFEotIik=;
-  b=JhcXv6+UssnO/P8ehWbJ3Xmof2zpuyaxXJOHMs2NVRWjT2ocCtKAErp+
-   8Lk5rx6GnPSFhLu5sFhOoRC27fZcvkOi3R7y94vJEsnhAhd/PjhkRjl+x
-   dWDc7CV0LCIED+ENdBb96mvUbm4hb+BGb6nFkFIeb+VHKXIt3UMWOrrsb
-   XfPUIli5FJlWejvsREptMCYNg/V7FrGDcABjHahG1CYMDqu1IOTpAqnDm
-   Qi3rRwFT8rmE2ViYTlv1X4jyab33LsZjegj0e8iex4jfjNBViUfqHCFPP
-   +WXwifhZp2ajnJAS8qi47ycRGUqpeL/Inubr2Wd4bHI/W8YkqsJSDBIvE
-   g==;
-X-CSE-ConnectionGUID: ExS3BBDuRPqa67KN6mn7RQ==
-X-CSE-MsgGUID: 712FJ9ioQWyG431J/GqFCA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64605790"
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="64605790"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 13:47:45 -0800
-X-CSE-ConnectionGUID: 7giLDUKZQjShi4WYLTI2Tw==
-X-CSE-MsgGUID: lJP7Z8i6Qzydv1uaesmqjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="191859112"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 05 Nov 2025 13:47:38 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGlLX-000TA8-1m;
-	Wed, 05 Nov 2025 21:47:20 +0000
-Date: Thu, 6 Nov 2025 05:47:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Courbot <acourbot@nvidia.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Russ Weight <russ.weight@linux.dev>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	rust-for-linux@vger.kernel.org,
-	Alexandre Courbot <acourbot@nvidia.com>
-Subject: Re: [PATCH v2 1/3] firmware_loader: make RUST_FW_LOADER_ABSTRACTIONS
- select FW_LOADER
-Message-ID: <202511060527.knZk5HZP-lkp@intel.com>
-References: <20251105-b4-select-rust-fw-v2-1-156d9014ed3b@nvidia.com>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="UeIG2x8M"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3414de5b27eso383061a91.0
+        for <llvm@lists.linux.dev>; Wed, 05 Nov 2025 16:40:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762389613; x=1762994413; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y4Fdh+kQLyNyqbGV17ENMExDWzQqmTQ2Vs89uoeAIDg=;
+        b=UeIG2x8MM79W52ggHlC3QS8bpbwNQMeKpSIYjeQTwvSRflrDGlwJAgI3LmOVH7vumH
+         bRdxuv7ZtslImXAbDznq/M8AMS9adLsSar3wuEuyc8VdLM+r6XgWKqBvs+0QWpeapQ+8
+         94FCokaJC+0zugYmJ2keyJ42Ja3IqYZ6lIkO+EWh5x9DXupSu2ffHTzXno1TMNva2be9
+         Uv9seqVe9TC96zrDNJ+80p8nlX6iY3bFj2mxiXpEq7NdNuYkMsWSxFR4yatiiUGFstJ4
+         gGzInRHyeE0clZc84uhqWRkLrXKPbfuv2BL1wpC9Ow8ojcbmyhYN4GM+SddzL+JoJk0c
+         Chfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762389613; x=1762994413;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y4Fdh+kQLyNyqbGV17ENMExDWzQqmTQ2Vs89uoeAIDg=;
+        b=scFhSxoaBD5haiMCSZTll8MoaW8H+vDAL0VsovyD5teqVMaL7C9sgN5mAvtk1Not3V
+         ZLHzHYtJRqfPfLUOZEQ5+63Ry4jZOxD9V2lrEgJeKCzoQCYnaDgllKGY0AhvwVonK18v
+         1ECMhaMmy2BabUW+XeZ7k/I9Ybxc/RrRNjvUKtchrgsyHkfDm5oIcKp+th//vWCIWU7l
+         RLNtkAq+JH2GsvsB5MgfecPNPX5jYwy3147HpfyaTF+1svvb5RQTZHZN4GeAKm1XkBUU
+         h2kW1sgCfEfdR7ZOHvFvxKySNPNuRJtAWj20T/ags7DCaWrt+2BGQQR5B4l93Kamw1P/
+         KlGw==
+X-Forwarded-Encrypted: i=1; AJvYcCXa11KiEWxxw8xDkc/h9OgtcyyRUC59qLNseSwmC0ZQHvZVwuITmEeZHsDgviv8VskWwRkh@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx7PABNLhWSI7WLmXGlUsrK6lf+kz1f0d31cqBIVlYu41/BFH7F
+	yrvPAhI6fbq61wXCSs82cQDSHo2NkpfAO9mC5IIbZVAsLajYAf5jbpON461H0ZGoTTQ=
+X-Gm-Gg: ASbGncsJ19ROX1TdgJd0EeHco4h1yqe8bZUCjvlFuwkX+9CQYAm7HD5pSVKwk6dXKSD
+	vnWMgMEi1tAdVpNBtSpMJn/tGMjfPbELYkD5SP/+43otTPWHfUvb6LlbZxTi23OXGbAbt+UpdJm
+	BTXMkJyiv2cirCyewhMUnfyWl1+vn37oxKHb+MndwjBpnBa7jMDa8hRnp1eVaNT8ihN69VGXYcq
+	yUfcXntbRVTdWSNyOqNvzgKrhZXDHzoA8qFGWdVlIWrbCpzawqeQEotxGayaMWBSvKWY8pTmIsL
+	ANiq/E8c2tZD7jD3d1M+AbmM76Y0wl8E+YWX5cGSO1uxQYXcV4C2nKN6ZOnrN33eUMgxHHrBk72
+	ARYwO/igvitrU1ZV/D6Cekc3/gX3XQlPLn5mz766YPMuIkRUi7Kj0P4Kxwi4mf3bUlhejo9R5rA
+	==
+X-Google-Smtp-Source: AGHT+IEcLNKZAx7Gs58quiN/BqhCrVzUdA9uzXWTUpsiUUbQ/IIuN6vGZJk0KYstqzmC11nr84QNuQ==
+X-Received: by 2002:a17:90b:4a84:b0:340:be40:fe0c with SMTP id 98e67ed59e1d1-341a7009dd4mr6232479a91.36.1762389613281;
+        Wed, 05 Nov 2025 16:40:13 -0800 (PST)
+Received: from localhost ([71.212.208.158])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba90307193fsm507604a12.38.2025.11.05.16.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 16:40:12 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Tony Lindgren <tony@atomide.com>, Nathan Chancellor <nathan@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Schiffer <matthias.schiffer@tq-group.com>, 
+ Alexander Stein <alexander.stein@ew.tq-group.com>, linux@ew.tq-group.com, 
+ linux-omap@vger.kernel.org, devicetree@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev
+In-Reply-To: <20251105-omap-mba335x-fix-clang-comment-warning-v2-1-f8a0003e1003@kernel.org>
+References: <20251105-omap-mba335x-fix-clang-comment-warning-v2-1-f8a0003e1003@kernel.org>
+Subject: Re: [PATCH v2] ARM: dts: omap: am335x-mba335x: Fix stray '/*' in
+ comment
+Message-Id: <176238961246.3045323.4889142584936333323.b4-ty@baylibre.com>
+Date: Wed, 05 Nov 2025 16:40:12 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105-b4-select-rust-fw-v2-1-156d9014ed3b@nvidia.com>
-
-Hi Alexandre,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 6553a8f168fb7941ae73d39eccac64f3a2b9b399]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Courbot/firmware_loader-make-RUST_FW_LOADER_ABSTRACTIONS-select-FW_LOADER/20251105-160437
-base:   6553a8f168fb7941ae73d39eccac64f3a2b9b399
-patch link:    https://lore.kernel.org/r/20251105-b4-select-rust-fw-v2-1-156d9014ed3b%40nvidia.com
-patch subject: [PATCH v2 1/3] firmware_loader: make RUST_FW_LOADER_ABSTRACTIONS select FW_LOADER
-config: x86_64-kexec (attached as .config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511060527.knZk5HZP-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511060527.knZk5HZP-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/base/firmware_loader/Kconfig:41: syntax error
-   drivers/base/firmware_loader/Kconfig:41: invalid statement
-   drivers/base/firmware_loader/Kconfig:42: invalid statement
-   drivers/base/firmware_loader/Kconfig:43:warning: ignoring unsupported character '.'
-   drivers/base/firmware_loader/Kconfig:43: unknown statement "This"
-   make[3]: *** [scripts/kconfig/Makefile:85: oldconfig] Error 1
-   make[2]: *** [Makefile:742: oldconfig] Error 2
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'oldconfig' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'oldconfig' not remade because of errors.
---
->> drivers/base/firmware_loader/Kconfig:41: syntax error
-   drivers/base/firmware_loader/Kconfig:41: invalid statement
-   drivers/base/firmware_loader/Kconfig:42: invalid statement
-   drivers/base/firmware_loader/Kconfig:43:warning: ignoring unsupported character '.'
-   drivers/base/firmware_loader/Kconfig:43: unknown statement "This"
-   make[3]: *** [scripts/kconfig/Makefile:85: olddefconfig] Error 1
-   make[2]: *** [Makefile:742: olddefconfig] Error 2
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'olddefconfig' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'olddefconfig' not remade because of errors.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-56183
 
 
-vim +41 drivers/base/firmware_loader/Kconfig
+On Wed, 05 Nov 2025 13:41:09 -0700, Nathan Chancellor wrote:
+> When preprocessing arch/arm/boot/dts/ti/omap/am335x-mba335x.dts with
+> clang, there are a couple of warnings about '/*' within a block comment.
+> 
+>   arch/arm/boot/dts/ti/omap/am335x-mba335x.dts:260:7: warning: '/*' within block comment [-Wcomment]
+>     260 |                         /* /* gpmc_csn3.gpio2_0 - interrupt */
+>         |                            ^
+>   arch/arm/boot/dts/ti/omap/am335x-mba335x.dts:267:7: warning: '/*' within block comment [-Wcomment]
+>     267 |                         /* /* gpmc_ben1.gpio1_28 - interrupt */
+>         |                            ^
+> 
+> [...]
 
-     3	
-     4	config FW_LOADER
-     5		tristate "Firmware loading facility" if EXPERT
-     6		select CRYPTO_LIB_SHA256 if FW_LOADER_DEBUG
-     7		default y
-     8		help
-     9		  This enables the firmware loading facility in the kernel. The kernel
-    10		  will first look for built-in firmware, if it has any. Next, it will
-    11		  look for the requested firmware in a series of filesystem paths:
-    12	
-    13			o firmware_class path module parameter or kernel boot param
-    14			o /lib/firmware/updates/UTS_RELEASE
-    15			o /lib/firmware/updates
-    16			o /lib/firmware/UTS_RELEASE
-    17			o /lib/firmware
-    18	
-    19		  Enabling this feature only increases your kernel image by about
-    20		  828 bytes, enable this option unless you are certain you don't
-    21		  need firmware.
-    22	
-    23		  You typically want this built-in (=y) but you can also enable this
-    24		  as a module, in which case the firmware_class module will be built.
-    25		  You also want to be sure to enable this built-in if you are going to
-    26		  enable built-in firmware (CONFIG_EXTRA_FIRMWARE).
-    27	
-    28	config FW_LOADER_DEBUG
-    29		bool "Log filenames and checksums for loaded firmware"
-    30		depends on DYNAMIC_DEBUG
-    31		depends on FW_LOADER
-    32		default FW_LOADER
-    33		help
-    34		  Select this option to use dynamic debug to log firmware filenames and
-    35		  SHA256 checksums to the kernel log for each firmware file that is
-    36		  loaded.
-    37	
-    38	config RUST_FW_LOADER_ABSTRACTIONS
-    39		bool "Rust Firmware Loader abstractions"
-    40		depends on RUST
-  > 41		select FW_LOADER=y
-    42		help
-    43		  This enables the Rust abstractions for the firmware loader API.
-    44	
+Applied, thanks!
 
+[1/1] ARM: dts: omap: am335x-mba335x: Fix stray '/*' in comment
+      commit: 35c973187f59328a5a58be132bd83ec2fe076620
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kevin Hilman <khilman@baylibre.com>
+
