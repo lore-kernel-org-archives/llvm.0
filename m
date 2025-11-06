@@ -1,69 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD3830DD1B;
-	Thu,  6 Nov 2025 11:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8868A30F92F;
+	Thu,  6 Nov 2025 11:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762428167; cv=none; b=MceCK5RkZtL9ATJd9NU7S1rnXJi17SNeq3eEvsLntyL8KxGzrw/pbTudFXOHlOqAzvLNSJ7LqVIcpkVWcmOPUEaH6vFA7qAWYC0+evykz6g/JwjJfz/FqYuU+GXA/YHxeG2RnnK/r0Iq0iLa/PXZVeObadfdYXkstkDnRNcQ+yQ=
+	t=1762429406; cv=none; b=AhM00HfpmFuDbdzqk3m62QAiG0h5ihBAiKIbSPzUslf4mQbMLqttM6mdVkZ68nholPLBFuDJDy4pHGJ5XKshAE4gIgjD0Nln9OJk6WVrsxx78llHS+yXO3xGXGIQiQGlfE7Kd5LSv01PagmGvolp+/MnkPnXyK9NSuTQqk8Lyns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762428167; c=relaxed/simple;
-	bh=zkwHK3b5vMwLHOx0l0YkcW7ODlRQaOEWOWExDCsjsas=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ni/+UzOcg96svJ5IufhCuLTMPwKm10/LGY4hd8OzsBWg3sH+qXwd3C+cChtoXYBpqnaCeZCgojHuPdjEkjStibuOgccZEphFUsTVsF2g2BOxSM0BdOgXHi8q7t2anHmU2LLxg2fwpYncaJTTwfKLlJOh1iTkOc4eA0hiSsCE0lM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RybVIJkm; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1762429406; c=relaxed/simple;
+	bh=2fO5UPau4YJyc5zqI1DyRj+HZr37DRwtWiKrbCxKpSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lCjgOk8ko0r8XTwyFsYciLDqd3sRPs+jQ1Q9JGD8SjviL+h05TFacwX4Hlnx64dthz1mA3vmlxAoBSMs1GccIxTc3irATcNIc+37TpuCBURSxTktwRH0D6PMFuhXLp6vSmCIn6z8Z95Z6sIUB5J4cm5ihqjgTXZCW4oVPoQ0fDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LcadO1Y9; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RybVIJkm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LcadO1Y9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762428166; x=1793964166;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zkwHK3b5vMwLHOx0l0YkcW7ODlRQaOEWOWExDCsjsas=;
-  b=RybVIJkm0jQwzkz/n67Ol1rLlVN3rhlkHu9KGFzEw1pgG8znyw7BdHr8
-   1DbQs2fH5lh7utrAnL5e8Gwriz/+6clMgaiB+nt+dXBIc25VtDA+Ae9TK
-   P950Un4JSmSUH4R4jnhkILyRbhM9kXA2m+6x50NSNY5JZ2hOq9dZZmqaG
-   ynkTzzMX2QsdjNtiw3l0R9WoJo1Z9HlWVtYpIlhGX++qz0dgHs0vYekFR
-   qSEJLFdWqRRV0bHJWdGf7+MvKhV5AMWoJvxzkGF4mOHZGhpw+2DIqEbNH
-   RKE0y53qOQUcXxDQN8MnpSr5Mws0xc6nA1phCVOSheuYo6EHRrgmzSxwj
+  t=1762429404; x=1793965404;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2fO5UPau4YJyc5zqI1DyRj+HZr37DRwtWiKrbCxKpSc=;
+  b=LcadO1Y92y+vla+qs83lpOCgGG8CwMl1K307LY87IP5XNdQdtmxVPZ1N
+   uU4asvGYvBKRdzqWV3dmXr+/sS/Mjczc+uVzedwIEXRmaXZryZCXXY7br
+   I/V0goJ8pqIrGpBVdCKX4//iC/6q7xs72VcAs0tt25ZMtXl5aTgcrvCVo
+   5WyFWM97Kyn+SGIPmoS+j7vqkeekMfK0xfYq/6DiME+EVJm8GyRPpWKAT
+   2VxRPzwHNPtOvXlubgieo6GaHUhQYL/KRboYSZyHANLAIArfKVN6qELG+
+   R2bcNudzRtUurNWgTOmhexdCZp3UL9Nkk12SnZjiwiCaq374f3xHzrOm4
    w==;
-X-CSE-ConnectionGUID: ACHPuzdIRPWMSRuSTGDZDw==
-X-CSE-MsgGUID: lQsmWwo2SpqE+5cn4FYm8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64657400"
+X-CSE-ConnectionGUID: 7ztagMBQSkeZEYSUodcCkw==
+X-CSE-MsgGUID: 8G8dHXf3QrKx6yBPQn36zw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="82192787"
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="64657400"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 03:22:45 -0800
-X-CSE-ConnectionGUID: 2jKHIrhtQOKyMIc9ItT3Cw==
-X-CSE-MsgGUID: ZsbU2kt0QZWbIj/4sSZBwg==
+   d="scan'208";a="82192787"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 03:43:24 -0800
+X-CSE-ConnectionGUID: VdKWBAEgR+if/mttaIjRvw==
+X-CSE-MsgGUID: bmygLwPPSDGdBt+pbSBCJA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="187021979"
+   d="scan'208";a="191832217"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 06 Nov 2025 03:22:41 -0800
+  by orviesa003.jf.intel.com with ESMTP; 06 Nov 2025 03:43:23 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vGy4Y-000Tpe-0C;
-	Thu, 06 Nov 2025 11:22:35 +0000
-Date: Thu, 6 Nov 2025 19:21:44 +0800
+	id 1vGyOe-000Ts6-0A;
+	Thu, 06 Nov 2025 11:43:20 +0000
+Date: Thu, 6 Nov 2025 19:42:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Jander <david@protonic.nl>,
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Subject: Re: [PATCH v1 2/2] iio: adc: Add TI ADS131M0x ADC driver
-Message-ID: <202511061850.kYeqflcU-lkp@intel.com>
-References: <20251105143814.1807444-3-o.rempel@pengutronix.de>
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:master 11/25] vmlinux.o: warning: objtool:
+ user_exc_vmm_communication+0x1ba: call to __kasan_check_read() leaves
+ .noinstr.text section
+Message-ID: <202511061929.VZHgI3kd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,153 +63,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251105143814.1807444-3-o.rempel@pengutronix.de>
 
-Hi Oleksij,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.18-rc4 next-20251106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/bindings-iio-adc-Add-bindings-for-TI-ADS131M0x-ADCs/20251105-224149
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20251105143814.1807444-3-o.rempel%40pengutronix.de
-patch subject: [PATCH v1 2/2] iio: adc: Add TI ADS131M0x ADC driver
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251106/202511061850.kYeqflcU-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061850.kYeqflcU-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+head:   8411fdb92360d0b4d3337492a25ee2de7fb6c425
+commit: f3f05eccd188355ee9ffcf3f120328c604daffb8 [11/25] Merge branch into tip/master: 'perf/core'
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20251106/202511061929.VZHgI3kd-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061929.VZHgI3kd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511061850.kYeqflcU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511061929.VZHgI3kd-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/adc/ti-ads131m0x.c:174:2: error: call to undeclared function 'put_unaligned_be24'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     174 |         put_unaligned_be24(command << 8, &priv->tx_buffer[0]);
-         |         ^
-   drivers/iio/adc/ti-ads131m0x.c:163:6: warning: unused variable 'ret' [-Wunused-variable]
-     163 |         int ret;
-         |             ^~~
->> drivers/iio/adc/ti-ads131m0x.c:224:11: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     224 |         status = get_unaligned_be16(&priv->rx_buffer[0]);
-         |                  ^
-   drivers/iio/adc/ti-ads131m0x.c:271:2: error: call to undeclared function 'put_unaligned_be24'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     271 |         put_unaligned_be24(command << 8, &priv->tx_buffer[0]);
-         |         ^
-   drivers/iio/adc/ti-ads131m0x.c:304:13: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     304 |         response = get_unaligned_be16(&priv->rx_buffer[0]);
-         |                    ^
-   drivers/iio/adc/ti-ads131m0x.c:376:9: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     376 |         *val = get_unaligned_be16(&priv->rx_buffer[0]);
-         |                ^
-   drivers/iio/adc/ti-ads131m0x.c:461:17: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     461 |         received_crc = get_unaligned_be16(&priv->rx_buffer[data_len]);
-         |                        ^
-   drivers/iio/adc/ti-ads131m0x.c:505:11: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     505 |         status = get_unaligned_be16(&priv->rx_buffer[0]);
-         |                  ^
->> drivers/iio/adc/ti-ads131m0x.c:523:23: error: call to undeclared function 'get_unaligned_be24'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     523 |         *val = sign_extend32(get_unaligned_be24(buf), 23);
-         |                              ^
-   drivers/iio/adc/ti-ads131m0x.c:706:13: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     706 |         response = get_unaligned_be16(&priv->rx_buffer[0]);
-         |                    ^
-   1 warning and 9 errors generated.
-
-
-vim +/put_unaligned_be24 +174 drivers/iio/adc/ti-ads131m0x.c
-
-   149	
-   150	/**
-   151	 * ads131m_tx_frame_unlocked - Sends a command frame with Input CRC
-   152	 * @priv: Device private data structure.
-   153	 * @command: The 16-bit command to send (e.g., NULL, RREG, RESET).
-   154	 *
-   155	 * Assumes the mutex lock is held.
-   156	 * This function sends a command in Word 0, and its calculated 16-bit
-   157	 * CRC in Word 1, as required when Input CRC is enabled.
-   158	 *
-   159	 * Return: 0 on success, or a negative error code from spi_sync.
-   160	 */
-   161	static int ads131m_tx_frame_unlocked(struct ads131m_priv *priv, u32 command)
-   162	{
-   163		int ret;
-   164		u16 crc;
-   165	
-   166		/*
-   167		 * Zero the entire TX buffer to send a valid frame.
-   168		 */
-   169		memset(priv->tx_buffer, 0, ADS131M_FRAME_BSIZE(priv->num_channels));
-   170	
-   171		/*
-   172		 * Word 0: 16-bit command, MSB-aligned in 24-bit word.
-   173		 */
- > 174		put_unaligned_be24(command << 8, &priv->tx_buffer[0]);
-   175	
-   176		/*
-   177		 * Word 1: Input CRC
-   178		 * Calculated over the 3 bytes of Word 0.
-   179		 */
-   180		crc = ads131m_crc_calculate(priv->tx_buffer, 3);
-   181		put_unaligned_be24(crc << 8, &priv->tx_buffer[3]);
-   182	
-   183		return spi_sync(priv->spi, &priv->msg);
-   184	}
-   185	
-   186	/**
-   187	 * ads131m_rx_frame_unlocked - Receives a full SPI data frame.
-   188	 * @priv: Device private data structure.
-   189	 *
-   190	 * This function sends a NULL command (with its CRC) to clock out a
-   191	 * full SPI frame from the device (e.g., response + channel data + CRC).
-   192	 *
-   193	 * Assumes the mutex lock is held.
-   194	 *
-   195	 * Return: 0 on success, or a negative error code from spi_sync.
-   196	 */
-   197	static int ads131m_rx_frame_unlocked(struct ads131m_priv *priv)
-   198	{
-   199		return ads131m_tx_frame_unlocked(priv, ADS131M_CMD_NULL);
-   200	}
-   201	
-   202	/**
-   203	 * ads131m_check_status_crc_err - Checks for an Input CRC error.
-   204	 * @priv: Device private data structure.
-   205	 *
-   206	 * Sends a NULL command to fetch the STATUS register and checks the
-   207	 * CRC_ERR bit. This is used to verify the integrity of the previous
-   208	 * command (like RREG or WREG).
-   209	 *
-   210	 * Context: This function assumes the mutex 'lock' is held.
-   211	 * Return: 0 on success, -EIO if CRC_ERR bit is set.
-   212	 */
-   213	static int ads131m_check_status_crc_err(struct ads131m_priv *priv)
-   214	{
-   215		int ret;
-   216		u16 status;
-   217	
-   218		ret = ads131m_rx_frame_unlocked(priv);
-   219		if (ret < 0) {
-   220			dev_err(&priv->spi->dev, "SPI error on STATUS read for CRC check\n");
-   221			return ret;
-   222		}
-   223	
- > 224		status = get_unaligned_be16(&priv->rx_buffer[0]);
-   225		if (status & ADS131M_STATUS_CRC_ERR) {
-   226			dev_err(&priv->spi->dev, "Previous input CRC error, STATUS=0x%04x\n",
-   227				status);
-   228			return -EIO;
-   229		}
-   230	
-   231		return 0;
-   232	}
-   233	
+>> vmlinux.o: warning: objtool: user_exc_vmm_communication+0x1ba: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_int3+0x1e4: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_debug_user+0x22f: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_machine_check+0x1d5: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fred_exc_machine_check+0x225: call to __kasan_check_read() leaves .noinstr.text section
 
 -- 
 0-DAY CI Kernel Test Service
