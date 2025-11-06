@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19868315D5E
-	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 16:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BB81FF7D7;
+	Thu,  6 Nov 2025 16:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762444886; cv=none; b=KkC1owNuhMop13vt9mJ9huxEb08LaLK56aL5dVTzUOyvQVoB/RA7FhaPnRqInJ3DBFF7a4SOHkVr2omUTeEa16ffnM1UR4YDrygBno2DaZwv/6h1irDzqtWB4xxddGUdhiTmYYRfElPbW2+VRQby91AOT0RpIX68MoGFZzF69NY=
+	t=1762447273; cv=none; b=kC2+a6wo5HCgbdsPKOwj0siB0iQBUAtVPiPlzo1CJVWd9MgdMJvbK95wdIuc2MFY69Dq+vgkpReL0Yj47tTHw49kbl0Tg8+SyQdth4Rf8t9b7WlkPp+nrJDkaPmEwswWabtErdxNs2B09+MeCVH+pltRjEFlnEh/VdFQ72Aq2+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762444886; c=relaxed/simple;
-	bh=aH1cPDzqPQPdxMq2LyoHulcUQRewRxHiOCE9FrWhmxE=;
+	s=arc-20240116; t=1762447273; c=relaxed/simple;
+	bh=ogZNIzVWkz/k2+RT7HnZNpd3hrdM9VwAbthBK3TGKcI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lbqBHFQmFJpKXM/75rPpP6lYBmNTbQpInLto0GllVNWRRvA7CyOQzPg1rYr95sc6Puo21Ki1UVkf15dbwaRGJWm8bfm2E4ppaTyiL6Upx2gB8G/25/Sgd5g6YUfvs9s6CbNlCTSG/8++zQmPgiLyBPlDpNsjTbC9mJYHhcYuTgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JOPXYDAM; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=toCGE956cykkrnueeStZXlZm1/e/RP8HIB4EznRyWCmLq6asO+3DwJIEvlWhTs9KBpst/U/F3VGjm5tAIHyYqvhJB27lHn1aq4XyZSa1qyzYhJeopjmVtGyQoLRpF1AHtD9hNnTFT79lXBDxM3qXAvCdedd38/wNd78XNUSqCbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X/zTllvx; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JOPXYDAM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X/zTllvx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762444884; x=1793980884;
+  t=1762447272; x=1793983272;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=aH1cPDzqPQPdxMq2LyoHulcUQRewRxHiOCE9FrWhmxE=;
-  b=JOPXYDAMihv/HQPsbhnr1zq5QPSAEhUR3mOvxkn1akf0Cp5tln/1JU7Z
-   AnNWT5lM/zJsG949l8e2gLKUoJqZNgw/kBBh2E38T3lnGO5F9I1TTzrbT
-   Thcd+XKJ1X8ZL3aMgDLPsJ9fwZSYlSK1LJBua4iLtiXpUK8mA1L3ckr0T
-   9vAmuQnRwoQGmquXbz138pISaWIjU6CInCOb2LWG9mMMI3nmGtNfbyLu0
-   jjFJVB8PejjG+pHzhWNvja0xuZzWj3vka+v8NocGbqXfmnn3Q7cKfSx6S
-   HPzcUWiAGAyFUzkBETCyGNY0+uhkL0TdXEkww+vY960DV5jgwRXyzb8MR
+  bh=ogZNIzVWkz/k2+RT7HnZNpd3hrdM9VwAbthBK3TGKcI=;
+  b=X/zTllvx9RQXLGuJoh8cEL4Xa4Fk1YsagAkOfTOGL2tM2od3voeqIHNF
+   g2y696IPm4P8h+kBEO6tf611d7i1VAiL1hRyjnor+xE2HBHs0N2fuNz8w
+   jn3Zf3ENc9N3rzjRWa75L4P+ZMB7hvMWW4VJ0PS66Bq7i+5Yr2zTQZWGf
+   N8N+hyxpucGqHy6FzTmHhIsSwiIOewuW6tXkPxwwOVS9eUN73in9t8ohQ
+   aOzGpzWqeSYM2u51MzrD7KO277pTtbXg0GrLRGMizXPaVbVBwSRH7SZDe
+   CWuOPGEwkDd3iMu/W5uQNWWldXp2vDu5KSGAaGQfR9BH8NrrVxK7pUkw4
    Q==;
-X-CSE-ConnectionGUID: hLjsUGI3T3u0bkj93DyVuA==
-X-CSE-MsgGUID: F4kBz2YgStCoGd4jvGEtHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64283593"
+X-CSE-ConnectionGUID: EdplCsKpSfKnJQqD4flc2A==
+X-CSE-MsgGUID: 7KBWnT9CS/W/J/0Kbd1MPA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="52157537"
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="64283593"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 08:01:09 -0800
-X-CSE-ConnectionGUID: eCncds+MS8KzrkFBpAnuAA==
-X-CSE-MsgGUID: AZyPZWebRy+Ih1rpoWvkYA==
+   d="scan'208";a="52157537"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 08:41:11 -0800
+X-CSE-ConnectionGUID: fXbj9bdTSW+l0i47v7cREw==
+X-CSE-MsgGUID: JNGmufwPTjCfXLnHBaFwhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="188509309"
-Received: from abityuts-desk.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.224])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 08:01:07 -0800
-Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vH2Q4-00000006Bjk-0DMb;
-	Thu, 06 Nov 2025 18:01:04 +0200
-Date: Thu, 6 Nov 2025 18:01:03 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v1 1/1] compiler_types: Warn about unused static inline
- functions on second
-Message-ID: <aQzGP8Z-mvSS9w7C@smile.fi.intel.com>
-References: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
- <20251106151649.GA1693433@ax162>
+   d="scan'208";a="211259045"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 06 Nov 2025 08:41:10 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vH32p-000U9c-2B;
+	Thu, 06 Nov 2025 16:41:07 +0000
+Date: Fri, 7 Nov 2025 00:40:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] tracing: wprobe: Use a new seq_print_ip_sym_offset()
+ wrapper
+Message-ID: <202511070042.0X3oQDrB-lkp@intel.com>
+References: <176226550596.59499.18020648957674458755.stgit@devnote2>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,33 +63,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251106151649.GA1693433@ax162>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <176226550596.59499.18020648957674458755.stgit@devnote2>
 
-On Thu, Nov 06, 2025 at 08:16:49AM -0700, Nathan Chancellor wrote:
-> On Thu, Nov 06, 2025 at 11:50:00AM +0100, Andy Shevchenko wrote:
+Hi Masami,
 
-...
+kernel test robot noticed the following build errors:
 
-> >   * for W=1 build. This will allow clang to find unused functions. Remove the
-> >   * __inline_maybe_unused entirely after fixing most of -Wunused-function warnings.
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on next-20251106]
+[cannot apply to linus/master v6.18-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> The comment should be updated to W=2 instead of W=1
+url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/tracing-wprobe-Use-a-new-seq_print_ip_sym_offset-wrapper/20251104-221949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/176226550596.59499.18020648957674458755.stgit%40devnote2
+patch subject: [PATCH] tracing: wprobe: Use a new seq_print_ip_sym_offset() wrapper
+config: i386-randconfig-063-20251105 (https://download.01.org/0day-ci/archive/20251107/202511070042.0X3oQDrB-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511070042.0X3oQDrB-lkp@intel.com/reproduce)
 
-Granted.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511070042.0X3oQDrB-lkp@intel.com/
 
-> and we should
-> probably drop the sentence about removing __inline_maybe_unused entirely
-> since people such as Peter will never want this behavior by default. I
-> do not mind doing it myself if I take it.
+All errors (new ones prefixed by >>):
 
-But future is uncertain, it might be that GCC also gains this and it won't
-confuse anyway as it might become a truth (no more such warnings in the code)
-at some point.
+>> kernel/trace/trace_wprobe.c:264:7: error: call to undeclared function 'seq_print_ip_sym_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     264 |         if (!seq_print_ip_sym_offset(s, field->ip, flags))
+         |              ^
+   kernel/trace/trace_wprobe.c:264:7: note: did you mean 'seq_print_ip_sym'?
+   kernel/trace/trace_output.h:16:1: note: 'seq_print_ip_sym' declared here
+      16 | seq_print_ip_sym(struct trace_seq *s, unsigned long ip,
+         | ^
+   1 error generated.
+
+
+vim +/seq_print_ip_sym_offset +264 kernel/trace/trace_wprobe.c
+
+   247	
+   248	static enum print_line_t
+   249	print_wprobe_event(struct trace_iterator *iter, int flags,
+   250			   struct trace_event *event)
+   251	{
+   252		struct wprobe_trace_entry_head *field;
+   253		struct trace_seq *s = &iter->seq;
+   254		struct trace_probe *tp;
+   255	
+   256		field = (struct wprobe_trace_entry_head *)iter->ent;
+   257		tp = trace_probe_primary_from_call(
+   258			container_of(event, struct trace_event_call, event));
+   259		if (WARN_ON_ONCE(!tp))
+   260			goto out;
+   261	
+   262		trace_seq_printf(s, "%s: (", trace_probe_name(tp));
+   263	
+ > 264		if (!seq_print_ip_sym_offset(s, field->ip, flags))
+   265			goto out;
+   266	
+   267		trace_seq_putc(s, ')');
+   268	
+   269		if (trace_probe_print_args(s, tp->args, tp->nr_args,
+   270				     (u8 *)&field[1], field) < 0)
+   271			goto out;
+   272	
+   273		trace_seq_putc(s, '\n');
+   274	out:
+   275		return trace_handle_return(s);
+   276	}
+   277	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
