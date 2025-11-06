@@ -1,118 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78FD1553A3;
-	Thu,  6 Nov 2025 10:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0EE2DAFBF
+	for <llvm@lists.linux.dev>; Thu,  6 Nov 2025 10:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762425072; cv=none; b=hSLLvDwUDeorLdAXkLLehKCotpMXf+HQJ4kibeljBbb7UaY3wqrCqWPP4sE/yv/AhZzyWDzFWrD6Ga838pQ1mQuHeCLZ8wIbNSyWNfrtXkD+/EB2r2b9A1XswkTsyznSuAhDJIgJbhCcMwNuJn9O/UFp5UpiOU/dqHJXoRtj+z4=
+	t=1762426215; cv=none; b=JGcNcytlJ3bE39mdnp6RNyaRef6Qk8de1uJT9CubUCjSBTvO51engd0/Y+z9QhqK5ajJfkFcXZ+bdGR76YG2HkRDUSjk3QJCXqJtdc7jt5Zj0R+TZK86gVa2GvFYEWVfLQHjDTJr5ZgKCLxf0FdFmy2I6Q78/AFvaIuryeFVf3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762425072; c=relaxed/simple;
-	bh=JFOdbYffsARPA55o25J5nmd1eh1TGG+Rp7ggcIJ/X3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E2TfHKG+2tG4O+EGr8tgoOBm1nvB7cnG3Gy0t562xy5Lt2YiezRLm2EvgKs0QU2AD8gGPt5k70RlQSYH9wAbud6y9u9LKM8gSFZ+d0x57ItpR1nJX/35pGNSuK/64Q7zSlvCYJ+o4B3qp0gP5tx2bbtEEaGLzGA5igoNQqp7bVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=STVLeWeH; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762426215; c=relaxed/simple;
+	bh=5JetFE+gcVoZwYrmSvCyH+NsvkC4E69mgdSuLH2QOoY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GyExLva95iJEDgpqh5OnTdwdSRE+dst9ZK8uueRDDg8uDKTNe0FACsoZfzpCeIgGtzWC+/ovM2Iq7gc1ClFjh/NbvqO7jedwJQtBsmXVWTC2wObMEOTEckFRqpoWIarjOSEKg7j41wecq8+H+G6BtZERI9LTuyCj4UAv4YedS4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q/81D0L3; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="STVLeWeH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q/81D0L3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762425071; x=1793961071;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JFOdbYffsARPA55o25J5nmd1eh1TGG+Rp7ggcIJ/X3I=;
-  b=STVLeWeHzv6ILv38R2/zQgW/qNBZtJTXA6cqGDCuVjLEXzLwB5pAmRil
-   ROUq5W8wj0jH8XTLBT8lX0G2ogpoodfxBYAPB98DhUuIQVy2TLsbBR0sB
-   RV8s0g61kjt1ty9uJNqxfkzOW/zYzz9gaht7e6Tgi65Bei+jwfp/snfgR
-   DJSlvPscg5d/uXF9LqXVJTUHjuZC2FS5nTvay3pn1Moq2NzwhQeS+53Y5
-   wy5s6+pm+0CbkNgNi8Nr4g7Lof0KKV23eILNq6FyZRAD1GvNk/PMkHHhQ
-   1k2Vyt62LD1GtIkEHFxr2IVz0iB39Xox+DId41h7cPZYpOe7Ut+BS4arn
-   w==;
-X-CSE-ConnectionGUID: ueA5JRuXTruNozQBoslMIQ==
-X-CSE-MsgGUID: 6DXBFRUGTZuKPnC8o+ZemQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="63762601"
+  t=1762426214; x=1793962214;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5JetFE+gcVoZwYrmSvCyH+NsvkC4E69mgdSuLH2QOoY=;
+  b=Q/81D0L3nfv94KbiVnErqmUDC7eKul9HQUa0GqzlGVdhVBPi/fDIGKVs
+   STrSn7bmWI3ZqGLWEIt2bn7QXrmmuq2zsNQxOqLwoU7HDgHvWdYHad0zJ
+   EY/zeEXLO88p4Ki5NHamSNezfrBFqdZq+cZJu99uZike81BtH1WgaorYQ
+   HOvXotPwxxL5Y8AvEFxJekPYncOuxyEVkIDZvxngWnR7gpETAvpcVtsZh
+   pcljQ6IGPw2ihCTYjgHVpqki5tAfu51g7vWjQayjPx+lNDncl5wRak8zv
+   fv4XGA9DbSbI9loAici2LsUxc1IkgwLd3un7S6uh7NLhMQjvsb8gm9f0l
+   g==;
+X-CSE-ConnectionGUID: h11gqMTwRwqrsTw96zJYHQ==
+X-CSE-MsgGUID: 0lcRnH23RDO9SVXH+WduNQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="52125671"
 X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="63762601"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:31:10 -0800
-X-CSE-ConnectionGUID: dnlOyaMCRDCGbU6AZp/ILA==
-X-CSE-MsgGUID: VPaCKE7sRxmOnX0GhoFMRA==
+   d="scan'208";a="52125671"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 02:50:14 -0800
+X-CSE-ConnectionGUID: 58B3z4/CSEWdMksFdrA2xw==
+X-CSE-MsgGUID: 7EYk24eySOGpNbWoyDW6sg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
-   d="scan'208";a="186974815"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 06 Nov 2025 02:31:03 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGxGf-000Tlq-05;
-	Thu, 06 Nov 2025 10:31:01 +0000
-Date: Thu, 6 Nov 2025 18:30:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
-	rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
-	mario.limonciello@amd.com, perry.yuan@amd.com,
-	ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-tegra@vger.kernel.org, treding@nvidia.com,
-	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com,
-	sanjayc@nvidia.com, nhartman@nvidia.com, bbasu@nvidia.com,
-	sumitg@nvidia.com
-Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for
- min/max_perf
-Message-ID: <202511061802.lIq09jwh-lkp@intel.com>
-References: <20251105113844.4086250-5-sumitg@nvidia.com>
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa003.fm.intel.com with ESMTP; 06 Nov 2025 02:50:11 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 7E61995; Thu, 06 Nov 2025 11:50:10 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] compiler_types: Warn about unused static inline functions on second
+Date: Thu,  6 Nov 2025 11:50:00 +0100
+Message-ID: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105113844.4086250-5-sumitg@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Sumit,
+From: Peter Zijlstra <peterz@infradead.org>
 
-kernel test robot noticed the following build warnings:
+Per Nathan, clang catches unused "static inline" functions in C files since
+commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
+functions for W=1 build").
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.18-rc4 next-20251106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Linus said:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpufreq-CPPC-Add-generic-helpers-for-sysfs-show-store/20251105-194715
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20251105113844.4086250-5-sumitg%40nvidia.com
-patch subject: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251106/202511061802.lIq09jwh-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511061802.lIq09jwh-lkp@intel.com/reproduce)
+> So I entirely ignore W=1 issues, because I think so many of the extra
+> warnings are bogus.
+>
+> But if this one in particular is causing more problems than most -
+> some teams do seem to use W=1 as part of their test builds - it's fine
+> to send me a patch that just moves bad warnings to W=2.
+>
+> And if anybody uses W=2 for their test builds, that's THEIR problem..
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511061802.lIq09jwh-lkp@intel.com/
+Here is the change to bump the warning from W=1 to W=2.
 
-All warnings (new ones prefixed by >>):
+Fixes: 6863f5643dd7 ("kbuild: allow Clang to find unused static inline functions for W=1 build")
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/compiler_types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'policy' not described in 'show_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'buf' not described in 'show_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'policy' not described in 'store_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'buf' not described in 'store_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'count' not described in 'store_min_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'policy' not described in 'show_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'buf' not described in 'show_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'policy' not described in 'store_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'buf' not described in 'store_max_perf'
->> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'count' not described in 'store_max_perf'
-
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 59288a2c1ad2..575a03643fa1 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -253,7 +253,7 @@ struct ftrace_likely_data {
+  * for W=1 build. This will allow clang to find unused functions. Remove the
+  * __inline_maybe_unused entirely after fixing most of -Wunused-function warnings.
+  */
+-#ifdef KBUILD_EXTRA_WARN1
++#ifdef KBUILD_EXTRA_WARN2
+ #define __inline_maybe_unused
+ #else
+ #define __inline_maybe_unused __maybe_unused
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
