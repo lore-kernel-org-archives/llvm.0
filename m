@@ -1,124 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC7B2C2369;
-	Fri,  7 Nov 2025 16:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56FC338906
+	for <llvm@lists.linux.dev>; Fri,  7 Nov 2025 17:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762533419; cv=none; b=tCXxMnY0MRjZBZsDpMdntWeYHkPRSvC17Wx4Y6XQxchvNW+eY2a0CU9K2tU/Nfyzhnm83qwrwmFtjLOlD9SYmAVZOv6TL6zz/4ZFerrTf4bboup3ALxJn/J4FDRPAR+RYsjNdM9bM8Ul7eRPpDbGmC6SVrxXIZYKhdofrTi5X+U=
+	t=1762538228; cv=none; b=NhlU07baUsstqCi0/gxAz1kGN07TfVTEBAC3uRwi8KOaibTlhQ4uZ9codfg8RRJVelTONoiuDPeF9RVs+gXsRJv6ID6oHrxb0I1jtXWOHD1mT+696WZ8H3bISiMNlB2FXDF889xduks2IuaveTHLnb6x+W/BxY+rnqlPtdoq2jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762533419; c=relaxed/simple;
-	bh=prfo4qZFaa3dJxqjPdoYibze4nW+F2cYRv299qD88uM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VVftD3dKmJmHnOVfa/I6V59eAtxAojke5aFTWffpUodyHLjWVQmHwlCF8YGjFznRVAYM8aZ5AYw2D3X4FT9fdvtmc74vZuK9qL+ghi6bkEU5+z1/zdQrrh3rkaJnxs/gs68cxsa5RUOYvRJQQYFyFdovoEV7tCXJu/3RNShc4bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=br0FFhCV; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762538228; c=relaxed/simple;
+	bh=RSvet1hGFhNMSbzfn7C2gcX1x5+f+dd1m1faFTAl1dg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NFdhCASWSskqs4ZlmzMl0mYExAAZzdo9TsAVpJXvjzouk4a2xgzPxWfhYuvHRJ5zMD0IV+4fdiqF8Sff5TshjGE7XWFPfwQCsFDOAXBKXJKqQNISYRRgg961ecbfWI4mI5joWrxuQwoxB4trwBJOZgx/3CZTBpdBG8ud/y4z3Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8Q6Ux0a; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="br0FFhCV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762533417; x=1794069417;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=prfo4qZFaa3dJxqjPdoYibze4nW+F2cYRv299qD88uM=;
-  b=br0FFhCVNN30sPU27RcwBtA2d8kAdc0a1aGK5KLnbyL7Jzvn3yXxfiiw
-   z0XeL/6uHUEWCuoDSX4w7YCWzmTlTygMAZmtLK41mJ8uztVBUM4YQwLf6
-   M5fwx9Rv25/BLLdAdBI3DnNA7xlhz8qiSGyFCFi2n/aWcB2+5fzPccmhh
-   EOd7XIkPPAZPYT5WxOwBcDqGyUebcjslwgGYeG/tG7oRaUMwwHITVy7ka
-   wIi+Cb3QtIjHulWW72yRyUmy5stFGna5xF0W/kCn48aXMOVlq/tnFroAf
-   9ZvaQRjN7hFPPkAUHhJRt90sszxtkKTAK870/1MalZ512CuWWfX7/WbQC
-   Q==;
-X-CSE-ConnectionGUID: OjqPTBxMT5Gs5fJVOVTSBg==
-X-CSE-MsgGUID: MCXOgMTqTSWqdz43wF/VXg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64779798"
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="64779798"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 08:36:57 -0800
-X-CSE-ConnectionGUID: PAYCbPbHSK+89+pj8AuGuA==
-X-CSE-MsgGUID: i9WTPpIZTC2SRPTqxVJnxA==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Nov 2025 08:36:55 -0800
-Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vHPSG-00007P-38;
-	Fri, 07 Nov 2025 16:36:52 +0000
-Date: Sat, 8 Nov 2025 00:36:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xi Pardee <xi.pardee@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [pdx86-platform-drivers-x86:review-ilpo-fixes 24/24]
- drivers/platform/x86/intel/pmc/wcl.c:461:3: error: field designator
- 'lpm_req_guid' does not refer to any field in type 'const struct
- pmc_reg_map'
-Message-ID: <202511080018.NOb0mcJW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8Q6Ux0a"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7adc44440c6so50850b3a.3
+        for <llvm@lists.linux.dev>; Fri, 07 Nov 2025 09:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762538226; x=1763143026; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RSvet1hGFhNMSbzfn7C2gcX1x5+f+dd1m1faFTAl1dg=;
+        b=W8Q6Ux0az6fOQM9lQZ+MmSw1oNcsR/+XYklrMiHBEXt6D/7wDU1oKei/YCaQqz2EDU
+         0ndCIzph2Z4u1A7SNl7ect7jAQCSfJNnMYUxZUhzmJX7HaLyrhszPWaA5QM7N9E1a1CZ
+         ZiAs2R7qW0s7/S40QFoEFBTarJi+E1CDQoLCGFXx5kFqRtuSXvEpcKyOoMyj9FCd4BaX
+         ohD+WmWczKeKLtX1qAsSl88KF8zbL9JWNnkQO8iI/+liXZ/h51/bJZ3Yt7/coLJmhx/f
+         Fk40m0gwGNitxzyLGFeyJt2F1fTux/80vjd0SFUw+2pbU07atS/QavprMKWlGsKSn3tD
+         3dAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762538226; x=1763143026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RSvet1hGFhNMSbzfn7C2gcX1x5+f+dd1m1faFTAl1dg=;
+        b=k/FgCojBsTe8e3vCBso00lMzDOdImvLosjMQ3hEnHMfHkNA7V8C1Pij6481IRTB0N9
+         Nbu/pdoRsIjhdZzIYepE8GmUPAGaZu9JMQDwD208gtNRSlLG7XGqs4EPzyEwg4LQuMZQ
+         +k9SCpAgDlcZBfTOpJal8DZluJUfhTGwNotX4YlWP6phlRrD+BBGftCNezKbE1DJt96r
+         z0rcUB7anMEtdcZ6yGIkp6CWEGtw0JqchTY66Yy2ZHA3mvHYMCkUlOqEPWFVrY0FKRPJ
+         lT9YN0hIHA8UILT6z9uX+MqGdY2DOjATdGPQiNYiEOXoeseIIHPGf1018C1C0Vwyv6fy
+         KgEA==
+X-Gm-Message-State: AOJu0Yy1Ne2r323f1zoLY7SkCeRLrN5eoWJZrlHpOcIK97L5Vh1/6VJT
+	Id3q3HuW7oV9GwWGfZRbwadPiw+CBT4WHqU5cWl3G8eqdVh+CUsSRAdANCuwo8btXO+D69MPvaK
+	F4Yv2tEUHPoBXxihhhlEbOnE+v+aeNjM=
+X-Gm-Gg: ASbGncu6DfBevpwDccTfdx9I93KeL10QSlUHxRpb/5eTzjZ8IAIrms1T3TPBPRKGIqr
+	U2Un1CgK3TQCl+iBFOMKUOQB3WYZXfskN6QXw3M9OV6IKsx7mq/hGwrPA5GCDD3LlJ77i4a9AW2
+	fnPX+DvigejEYf0l8Dssw5Qm1d+2YhH5b+j9/iYlp2Bymk/FPzrorXdruI1tJtNSffbkIFc2gCN
+	5pDOw/+zKXzniZNz/bOvJd1pkdcbr3frowPAiWs/wj4cw3mZtt7QIHAe/qUUd/0NHqbSENWrUnn
+	yoimo+EnYRkGp8yvJEc+eqGcMjgrXNOSFQ4wdPyqxWGvX0zlijswRNoE2VaJI4Le58wMB5TfdTm
+	ruMY=
+X-Google-Smtp-Source: AGHT+IEcZTSN4aKwKC5egIoA0UmNDa8Z3AvdE7wthF+TinMhFsnkvRKXfrW3Yysr5BNbtNDdHJ6Gn1gp8qQM4W9Hkyg=
+X-Received: by 2002:a17:903:10b:b0:274:506d:7fe5 with SMTP id
+ d9443c01a7336-297c03b1d55mr20192915ad.4.1762538225889; Fri, 07 Nov 2025
+ 09:57:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251105062723.GA2341496@ax162>
+In-Reply-To: <20251105062723.GA2341496@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 7 Nov 2025 18:56:53 +0100
+X-Gm-Features: AWmQ_bkgBWAnqAXBLtdQ6YJmXoxsa98i3NTbQ_nqWrZ4cr9q1bEnykYt-XXo5rI
+Message-ID: <CANiq72k3WuXTyk-X1ye+7JThf2pNcgdKnqOrFieHqxOMZD2oZQ@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 21.1.5 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-ilpo-fixes
-head:   9c8249cfdf5aa2b843b0cbef81eb0898493694fe
-commit: 9c8249cfdf5aa2b843b0cbef81eb0898493694fe [24/24] platform/x86:intel/pmc: Enable SSRAM support for Wildcat Lake
-config: i386-buildonly-randconfig-005-20251107 (https://download.01.org/0day-ci/archive/20251108/202511080018.NOb0mcJW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080018.NOb0mcJW-lkp@intel.com/reproduce)
+On Wed, Nov 5, 2025 at 7:27=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> I have built and uploaded LLVM 21.1.5 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
+>
+> If there are any issues found, please let us know via email or
+> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+> opportunity to get them fixed in main and backported before the 21.x
+> series is no longer supported.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511080018.NOb0mcJW-lkp@intel.com/
+Rust-enabled x86_64 with upstream `rustc` works well:
 
-All errors (new ones prefixed by >>):
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
->> drivers/platform/x86/intel/pmc/wcl.c:461:3: error: field designator 'lpm_req_guid' does not refer to any field in type 'const struct pmc_reg_map'
-     461 |         .lpm_req_guid = PCDN_LPM_REQ_GUID,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Thanks as usual!
 
+By the way, not sure if there is a reason for it (e.g. a workaround
+for a bug or you don't keep the old LLVM files etc.), but just in
+case: the matching LLVM for Rust 1.91.0 (and likely the upcoming
+1.91.1) is 21.1.2 from what I can see, not 21.1.3 in the table.
 
-vim +461 drivers/platform/x86/intel/pmc/wcl.c
-
-   433	
-   434	static const struct pmc_reg_map wcl_pcdn_reg_map = {
-   435		.pfear_sts = ext_wcl_pcdn_pfear_map,
-   436		.slp_s0_offset = CNP_PMC_SLP_S0_RES_COUNTER_OFFSET,
-   437		.slp_s0_res_counter_step = TGL_PMC_SLP_S0_RES_COUNTER_STEP,
-   438		.ltr_show_sts = wcl_pcdn_ltr_show_map,
-   439		.msr_sts = msr_map,
-   440		.ltr_ignore_offset = CNP_PMC_LTR_IGNORE_OFFSET,
-   441		.regmap_length = WCL_PCD_PMC_MMIO_REG_LEN,
-   442		.ppfear0_offset = CNP_PMC_HOST_PPFEAR0A,
-   443		.ppfear_buckets = LNL_PPFEAR_NUM_ENTRIES,
-   444		.pm_cfg_offset = CNP_PMC_PM_CFG_OFFSET,
-   445		.pm_read_disable_bit = CNP_PMC_READ_DISABLE_BIT,
-   446		.lpm_num_maps = PTL_LPM_NUM_MAPS,
-   447		.ltr_ignore_max = LNL_NUM_IP_IGN_ALLOWED,
-   448		.lpm_res_counter_step_x2 = TGL_PMC_LPM_RES_COUNTER_STEP_X2,
-   449		.etr3_offset = ETR3_OFFSET,
-   450		.lpm_sts_latch_en_offset = MTL_LPM_STATUS_LATCH_EN_OFFSET,
-   451		.lpm_priority_offset = MTL_LPM_PRI_OFFSET,
-   452		.lpm_en_offset = MTL_LPM_EN_OFFSET,
-   453		.lpm_residency_offset = MTL_LPM_RESIDENCY_OFFSET,
-   454		.lpm_sts = wcl_pcdn_lpm_maps,
-   455		.lpm_status_offset = MTL_LPM_STATUS_OFFSET,
-   456		.lpm_live_status_offset = MTL_LPM_LIVE_STATUS_OFFSET,
-   457		.s0ix_blocker_maps = wcl_pcdn_blk_maps,
-   458		.s0ix_blocker_offset = LNL_S0IX_BLOCKER_OFFSET,
-   459		.num_s0ix_blocker = WCL_NUM_S0IX_BLOCKER,
-   460		.blocker_req_offset = WCL_BLK_REQ_OFFSET,
- > 461		.lpm_req_guid = PCDN_LPM_REQ_GUID,
-   462	};
-   463	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
