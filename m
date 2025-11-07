@@ -1,186 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828C830217B
-	for <llvm@lists.linux.dev>; Fri,  7 Nov 2025 20:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B34730F941;
+	Fri,  7 Nov 2025 21:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762546133; cv=none; b=rfU3GqNny/R0oA9RrKRbl4PeqTXDfC7sTF2XPoj9n98I50wxG1K/b2BU3WF/2c89iieyw331MCS5G14EGYL4iLdOaeLi8kw/SQQAsFeulxc1Gx8zzvA/G04g6t7EQ1aszejEjAxmjAaCU6pG+ilaXOhwYedHCc+Y6yVGBgKXhf4=
+	t=1762552630; cv=none; b=bPWrBF+MvYYh/h5F3U1SqpRqj2iNa0FgynoS0Vs2fReHsNBC+kr/t3SIJSXvhfWrVY7PUhqQP48MpQh681j8lnG71YJcBZS+3glYlmxEjDm1d348I4J5r+OHzdSG5JP+DKtA5NCnNLOx8L2IQJoETY5okCxGy/XFMhjJs3eTqxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762546133; c=relaxed/simple;
-	bh=szesQpSM5oo7OsiDU5UKtOwtIL9eGv7CnUXjP7KFeos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tUaoVVpMiDKi4Sj+Hu8y8NNFVYqOdoC4ysudb5rsO7NsqanGRvoL+9igdtgvoSXrZtK15OK1qtiRQ0N40ySpX2fklzAM2k1dD6wObKesiG/eUKXrIiuf1lBDCOFslU/1H4wI8bldVQIFTXOQyQDzJm03Ryy3EyeAB5DV4iFIxaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MK4ExjfM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762552630; c=relaxed/simple;
+	bh=Xkt+of8KxrqMro0Ntcjzu/R8T+v1krSu+SWLso+jtvE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RaJ5/9l9EGb6/bA+073Sam9Kcwygv3uyQxhrUocAMXkhxNw4ZenhNex0vpE1Nnz4OJogKIu6/eZOXxayPOdBXfYAx3s1vVN54CcP8jkj9Da/P7zS1ZHMiqaokwl4KU6KF4vwO5k6gUyKcYcoDPNaaULusk2pycRWCjZWkn41rD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUGErAHX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MK4ExjfM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32607C4CEF8
-	for <llvm@lists.linux.dev>; Fri,  7 Nov 2025 20:08:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUGErAHX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB72BC4CEF7;
+	Fri,  7 Nov 2025 21:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762546133;
-	bh=szesQpSM5oo7OsiDU5UKtOwtIL9eGv7CnUXjP7KFeos=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MK4ExjfMOWhtxaY36/EOJRaYXFbTHV0SGPpxdCQJWplE4xG4HgiJ/ylwJc787Sksa
-	 z4vyAEvMqm8NrQX0OlAizkMW8wjEZuNS5Wp+5v1eINEQeTr/blBsc7Dp74Ss+XFGm8
-	 ZP1vf2pa6AmEiaf541pEAg1rJiD2UJua1uBPdy34Z4A95X4npaz4LhFWjqwfhFnZig
-	 XS16qV7a8Numgked/F2/VWMeyKLyvY5hZhj9WSzJIhZ6vCWdvnFQOjkBEy59h3YFPM
-	 PslUlvQWGzFdNo/n3EMnmg0yoii6ECsU+V8Obkcrp0Zd7XhalC2zIu801ciyFm7KuX
-	 XWI6a6XH/tzRw==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-651c743b2d9so461581eaf.3
-        for <llvm@lists.linux.dev>; Fri, 07 Nov 2025 12:08:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWREUYkoZ/596rtjUBluosYlVrMrugOtD3Xti5Re6VZr/qnsUwOyTdEAFD1VXfFW9e9qlFt@lists.linux.dev
-X-Gm-Message-State: AOJu0YyK98s+z2G66AvaR2U/HCM4jIr+KjpdnRN4CoY6f86Em8yhXwi3
-	zgJ21jtmfrOpc7n7BkrJi5lQQOraKdoSu7O4AKLkiYym3dxkZV3VcNFeLcz6jW0MLhGtwgzcg7k
-	SmlVWs0jzev+dmeYp4ZGl0vV2auJ+RPw=
-X-Google-Smtp-Source: AGHT+IGA04jm71Ij9xeQJEzJY7AxE62iCGgrrBQyNvtjVXE70OmsxBr7+clNSkaS9F9EzCSb46Qp9YHiGNZGj0RJ2fQ=
-X-Received: by 2002:a05:6820:16a6:b0:656:8360:3906 with SMTP id
- 006d021491bc7-656d8ea527dmr426344eaf.8.1762546131960; Fri, 07 Nov 2025
- 12:08:51 -0800 (PST)
+	s=k20201202; t=1762552630;
+	bh=Xkt+of8KxrqMro0Ntcjzu/R8T+v1krSu+SWLso+jtvE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=eUGErAHXK2x/+G8M7EcDFbx+giSXDUAc4NNp9fY2jxETB2kFEo+UAyss0DFFjz6Z0
+	 zRXewVmUxciyGbWFGrVjQvYIfPiSPRqS4Jx6uBfDAg8qbGTmYGAPU6U9iiC+nDZCBT
+	 n9rEN+lfrSXK5KA4z1Pp9QMQRVUPKUVT/aXeV/Sg+QHwgDIwUfReqBAaTLSOsm9mEN
+	 E/caEEHTk/1s4DVR7L9Q1QNgpLHdXI4CRTtVbF/9jvlluoOq/xkEmKo+FfYRgJ2/5B
+	 FCFfeLjnOMGJRc9fHYeJsC6DxToyVCvhBwD/P8BKD7alwER6fGUfysol05GHIrBBOE
+	 6drHIiez785bg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 07 Nov 2025 14:56:59 -0700
+Subject: [PATCH fixes] riscv: Fix CONFIG_AS_HAS_INSN for new .insn usage
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251105113844.4086250-5-sumitg@nvidia.com> <202511061802.lIq09jwh-lkp@intel.com>
- <be696cb5-7d0d-44f6-970b-e417c2f89a8e@nvidia.com>
-In-Reply-To: <be696cb5-7d0d-44f6-970b-e417c2f89a8e@nvidia.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Nov 2025 21:08:40 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j8bQm+00+m75rmpKpm8yVumvYsWzCdYyCPwksnebY__A@mail.gmail.com>
-X-Gm-Features: AWmQ_bnyTo8wfwCEW9lyu_1xYl179djStUEiTR_5ulbMLWD8CjXHhBWwog1DvlU
-Message-ID: <CAJZ5v0j8bQm+00+m75rmpKpm8yVumvYsWzCdYyCPwksnebY__A@mail.gmail.com>
-Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: kernel test robot <lkp@intel.com>, rafael@kernel.org, viresh.kumar@linaro.org, 
-	lenb@kernel.org, robert.moore@intel.com, corbet@lwn.net, 
-	pierre.gondois@arm.com, zhenglifeng1@huawei.com, rdunlap@infradead.org, 
-	ray.huang@amd.com, gautham.shenoy@amd.com, mario.limonciello@amd.com, 
-	perry.yuan@amd.com, ionela.voinescu@arm.com, zhanjie9@hisilicon.com, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com, 
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com, 
-	bbasu@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251107-riscv-fix-new-insn-usage-v1-1-9a186c5928a0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACprDmkC/yWMQQqDQAxFryJZG5iJ2JFepbiQMdZsokyoFWTub
+ mh3/8F7/wLjImzwbC4ofIjJpg6xbSCvk74ZZXYGCtTHGBIWsXzgIicqf1HUFD82uUf0iF1KmeZ
+ uAM/3wm79rl/wX2OtN4W/7sZxAAAA
+X-Change-ID: 20251107-riscv-fix-new-insn-usage-2261377c2d38
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Andrew Jones <ajones@ventanamicro.com>, 
+ Ben Dooks <ben.dooks@codethink.co.uk>, linux-riscv@lists.infradead.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3034; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Xkt+of8KxrqMro0Ntcjzu/R8T+v1krSu+SWLso+jtvE=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDJl82cZmFkwsb82PlhVoueaXBP/W9w2dbr77/GZVFcVJO
+ Xx+BnwdpSwMYlwMsmKKLNWPVY8bGs45y3jj1CSYOaxMIEMYuDgFYCJfdBkZJkczznOM73faWvRV
+ SFVn9+G8y1eF2F89D3W439KYkaW2iZFhP9+kbYp3uLvCKhZliUjnTrb6uGRtnrD14SlOlxhUuix
+ 4AQ==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, Nov 7, 2025 at 11:00=E2=80=AFAM Sumit Gupta <sumitg@nvidia.com> wro=
-te:
->
->
-> On 06/11/25 16:00, kernel test robot wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > Hi Sumit,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on rafael-pm/linux-next]
-> > [also build test WARNING on rafael-pm/bleeding-edge linus/master v6.18-=
-rc4 next-20251106]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpuf=
-req-CPPC-Add-generic-helpers-for-sysfs-show-store/20251105-194715
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git linux-next
-> > patch link:    https://lore.kernel.org/r/20251105113844.4086250-5-sumit=
-g%40nvidia.com
-> > patch subject: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface =
-for min/max_perf
-> > config: riscv-defconfig (https://download.01.org/0day-ci/archive/202511=
-06/202511061802.lIq09jwh-lkp@intel.com/config)
-> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project=
- d2625a438020ad35330cda29c3def102c1687b1b)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20251106/202511061802.lIq09jwh-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202511061802.lIq09jwh-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'polic=
-y' not described in 'show_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:954 function parameter 'buf' =
-not described in 'show_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'polic=
-y' not described in 'store_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'buf' =
-not described in 'store_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:976 function parameter 'count=
-' not described in 'store_min_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'poli=
-cy' not described in 'show_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1003 function parameter 'buf'=
- not described in 'show_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'poli=
-cy' not described in 'store_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'buf'=
- not described in 'store_max_perf'
-> >>> Warning: drivers/cpufreq/cppc_cpufreq.c:1025 function parameter 'coun=
-t' not described in 'store_max_perf'
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
->
->
-> Thank you for the report.
-> Below change to comments seem to be fixing this warning.
+After commit 44aa25c000b4 ("riscv: asm: use .insn for making custom
+instructions"), builds using LLVM older that 19 or binutils older than
+2.38 fail with:
 
-So can you please send a new version of this patch with the changes
-below folded in?
+  arch/riscv/include/asm/vdso/processor.h: Assembler messages:
+  arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
+  arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
+  arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
+  arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
+  make[4]: *** [scripts/Makefile.build:287: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
 
-> -------------------------------------------------------
->    /**
->    * show_min_perf - Show minimum performance as frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
->    *
->    * Reads the MIN_PERF register and converts the performance value to
->    * frequency (kHz) for user-space consumption.
-> @@ -1117,6 +1119,9 @@ static ssize_t show_min_perf(struct cpufreq_policy
-> *policy, char *buf)
->
->   /**
->    * store_min_perf - Set minimum performance from frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
-> + * @count: size of @buf
->    *
->    * Converts the user-provided frequency (kHz) to a performance value
->    * and writes it to the MIN_PERF register.
-> @@ -1144,6 +1149,8 @@ static ssize_t store_min_perf(struct
-> cpufreq_policy *policy, const char *buf, si
->
->   /**
->    * show_max_perf - Show maximum performance as frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
->    *
->    * Reads the MAX_PERF register and converts the performance value to
->    * frequency (kHz) for user-space consumption.
-> @@ -1166,6 +1173,9 @@ static ssize_t show_max_perf(struct cpufreq_policy
-> *policy, char *buf)
->
->   /**
->    * store_max_perf - Set maximum performance from frequency (kHz)
-> + * @policy: cpufreq policy
-> + * @buf: buffer to write the frequency value to
-> + * @count: size of @buf
-> -------------------------------------------------------
+  In file included from <built-in>:4:
+  In file included from lib/vdso/gettimeofday.c:6:
+  In file included from include/vdso/datapage.h:21:
+  In file included from include/vdso/processor.h:10:
+  arch/riscv/include/asm/vdso/processor.h:23:2: error: expected instruction format
+     23 |         ALT_RISCV_PAUSE();
+        |         ^
+  arch/riscv/include/asm/errata_list.h:47:3: note: expanded from macro 'ALT_RISCV_PAUSE'
+     47 |                 RISCV_PAUSE, /* Original RISC‑V pause insn */ \
+        |                 ^
+  arch/riscv/include/asm/insn-def.h:259:21: note: expanded from macro 'RISCV_PAUSE'
+    259 | #define RISCV_PAUSE     ASM_INSN_I("0x100000f")
+        |                         ^
+  arch/riscv/include/asm/asm.h:16:26: note: expanded from macro 'ASM_INSN_I'
+     16 | #define ASM_INSN_I(__x) ".insn " __x
+        |                          ^
+  <inline asm>:5:7: note: instantiated into assembly here
+      5 | .insn 0x100000f
+        |       ^
 
-As for the whole series, I generally need ARM folks to review it and
-tell me that it is fine.
+binutils gained support for '.insn <value>' in 2.38 [1] and LLVM gained
+support in 19 [2]. Adjust the test for CONFIG_AS_HAS_INSN to ensure that
+all versions of .insn are supported before being used.
 
-Thanks!
+Fixes: 44aa25c000b4 ("riscv: asm: use .insn for making custom instructions")
+Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=a262b82fdbf4cda3b0648b1adc32245ca3f78b7a [1]
+Link: https://github.com/llvm/llvm-project/commit/2a086dce691e3cc34a2fc27f4fb255bb2cbbfac9 [2]
+Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/riscv/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 22cda9c452d2..fadec20b87a8 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -367,7 +367,7 @@ config RISCV_NONSTANDARD_CACHE_OPS
+ 	  systems to handle cache management.
+ 
+ config AS_HAS_INSN
+-	def_bool $(as-instr,.insn r 51$(comma) 0$(comma) 0$(comma) t0$(comma) t0$(comma) zero)
++	def_bool $(as-instr,.insn 0x100000f)
+ 
+ config AS_HAS_OPTION_ARCH
+ 	# https://github.com/llvm/llvm-project/commit/9e8ed3403c191ab9c4903e8eeb8f732ff8a43cb4
+
+---
+base-commit: a882126c42fc53275ac91969d460d939191db7b0
+change-id: 20251107-riscv-fix-new-insn-usage-2261377c2d38
+
+Best regards,
+--  
+Nathan Chancellor <nathan@kernel.org>
+
