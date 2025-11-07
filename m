@@ -1,82 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CD132D7E0;
-	Fri,  7 Nov 2025 18:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77104212F89;
+	Fri,  7 Nov 2025 19:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762540145; cv=none; b=J2kNQBKDt3kCJdM4xkM8ZgMGrXPWcxxqlyDabu2rc1IAwJkadSIMdr4Ek/sYz0rNeeUYjkRhnofvLquNHPdQT9rhmmnz+pBg31zMMulMVZNtnTXrUHI/HOfb4v1CnOYrHsn8e7FadgJTwP3He4OLcQJrEsEQ8dKMN7eSEnr5qRU=
+	t=1762543976; cv=none; b=GooYA6F0hBn8k4Id8X6raZCDXZL1Aaax2pxhDTvyi9CkIUNRe4DOx3Q8A2Q+EjrF3kVImzQ2qxAf7LLz3aEz9vvYwg7e8oegCuXoCjE6ySKuurzZqaGA/WKNT/5YhleIIISDGR1oiC5IQPK8DhugbPrAqCdQt8+/6fhMUhJkKUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762540145; c=relaxed/simple;
-	bh=1uk4f/vvzKN01nl74e544DZxNDjhLmkBY4gp+8iXipM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qDxu1HLcNQ1VEg3K1pad18fT8QblVI6I6in80dJUDKw6ZTKAsQTtVAmTGk9TCrixfEYFNINOITz105EmnDX9a9jAbsyO2CbnD9P00CJCJyeaHC5/VTWA45itaN8XsP/qsdqcmDPuO6lPS6iO7PH7J6kJV8nnZXC2u2j36abuloA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpCpYhr/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762543976; c=relaxed/simple;
+	bh=5kJuNYOoK5sgrRRGtV9IpdaMoM6kMmY+7QnoaSK/b8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E7819smodxj2YQRWh4po8B1NhPpdGNth6cG29FXF+R0ivVVldBGu/cUYx60t19CfCvxIy2zdL7HrcpFcj7zzoumFgluvDIcN8NUVZrhqF2ZtspH/6vMRid6R4qTHLBCHxcnxxkBKaUaPBasO9ui3PsVpUHMzUq60tJi5ptPxMEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePhoatHu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpCpYhr/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B563C19422;
-	Fri,  7 Nov 2025 18:29:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePhoatHu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06599C4CEF8;
+	Fri,  7 Nov 2025 19:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762540144;
-	bh=1uk4f/vvzKN01nl74e544DZxNDjhLmkBY4gp+8iXipM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=rpCpYhr/tJSK4Qe+NNdCQG5oDqDbyp+jiNy/wps1xyyULzxLrXvo0fJYQYjyE7WV6
-	 ZZkPjoOU0kWIRH5zuqPBllOx55xu1hZl1l9wmFzvYKS3i4Qcg53TQgAt79C68jlVko
-	 au7XjjFe1/DbGBwHaB5xUxHBhmcpm7VzJe92yOMMszBPPEb8XbmGmGqLkEQMxeKr97
-	 O8puomL2/D8n2CuqFuhs3bGle1W1ab/kGXFKXjdXiVfWp+39VFW45vhB+E5aeCxCT+
-	 R/fmcLjybvZh4WitAvZAwyuPy5uLt8HXIpAzK7qw1TiW22LWoZZFseIQ8Jj0rlOzrO
-	 /45oArUXclawQ==
+	s=k20201202; t=1762543976;
+	bh=5kJuNYOoK5sgrRRGtV9IpdaMoM6kMmY+7QnoaSK/b8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ePhoatHuxrexXObKA0it0rslITJnyKHHyBMzZFYP0ZhTiEIRWwn+IEx61x85Kdt8I
+	 tQuCxQo3kFQYoN57aCUon2E7jllDfyrZ147oIcHJwPEcL119z/AqZEqrRapCRp/tUL
+	 iakixvJaCvvdxXpIjH0DT4ESFeyJVxrf8xoyLRdbn/3f2bbZ+V2pGmsX7mMWq+OL/G
+	 tyS7KyCy1ov1k5xSQsD7h6XsznoKUrT9Dy+qw4GjjAi3Iz9wITc95cYj5DspClogO1
+	 gbA/R9b63J5a7d0UDfQ1H8idqoUDueyXvKrsShOXqsSjw2KNtMtrQFOyo7tSlB9qIv
+	 fpYzKo6Nqmp2A==
+Date: Fri, 7 Nov 2025 12:32:52 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Linus Torvalds <torvalds@linux-foundation.org>, 
- Dan Williams <dan.j.williams@intel.com>, 
- Jonathan Cameron <jonathan.cameron@huawei.com>, 
- Peter Zijlstra <peterz@infradead.org>
-In-Reply-To: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
-References: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] compiler_types: Warn about unused static inline
- functions on second
-Message-Id: <176254014196.4089614.8446049205890806125.b4-ty@kernel.org>
-Date: Fri, 07 Nov 2025 11:29:01 -0700
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Subject: Re: Prebuilt LLVM 21.1.5 uploaded
+Message-ID: <20251107193252.GA3606140@ax162>
+References: <20251105062723.GA2341496@ax162>
+ <CANiq72k3WuXTyk-X1ye+7JThf2pNcgdKnqOrFieHqxOMZD2oZQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiq72k3WuXTyk-X1ye+7JThf2pNcgdKnqOrFieHqxOMZD2oZQ@mail.gmail.com>
 
+On Fri, Nov 07, 2025 at 06:56:53PM +0100, Miguel Ojeda wrote:
+> By the way, not sure if there is a reason for it (e.g. a workaround
+> for a bug or you don't keep the old LLVM files etc.), but just in
+> case: the matching LLVM for Rust 1.91.0 (and likely the upcoming
+> 1.91.1) is 21.1.2 from what I can see, not 21.1.3 in the table.
 
-On Thu, 06 Nov 2025 11:50:00 +0100, Andy Shevchenko wrote:
-> Per Nathan, clang catches unused "static inline" functions in C files since
-> commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
-> functions for W=1 build").
-> 
-> Linus said:
-> 
-> > So I entirely ignore W=1 issues, because I think so many of the extra
-> > warnings are bogus.
-> >
-> > But if this one in particular is causing more problems than most -
-> > some teams do seem to use W=1 as part of their test builds - it's fine
-> > to send me a patch that just moves bad warnings to W=2.
-> >
-> > And if anybody uses W=2 for their test builds, that's THEIR problem..
-> 
-> [...]
+Ah, I think that probably came from me looking at the tip of
+rustc/21.1-2025-08-01 in https://github.com/rust-lang/llvm-project and
+assuming that is what rust 1.91.0 shipped with but I forgot that 'rustc
+--version --verbose' will show me that :)
 
-Applied, thanks!
+If 1.91.1 is coming soon, I will wait to fix this until then.
 
-[1/1] compiler_types: Warn about unused static inline functions on second
-      https://git.kernel.org/kbuild/c/9818af18db4bf
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Nathan
