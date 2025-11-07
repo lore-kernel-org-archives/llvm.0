@@ -1,53 +1,53 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0D526C391;
-	Fri,  7 Nov 2025 03:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0114307487;
+	Fri,  7 Nov 2025 07:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762486814; cv=none; b=L4DjnwhKvP4128ZgBU8xSYxDU/sUgxiJXGKOGxgaIBOeJPh7/oB10PLdvSJ9oxK9hyQWUev6dYl+5nCmwwEfnm984akBN6LajknLFQQhoZOB2oBlzJDqTkm2zfhEdhg3/ynm0+hH6jLf8rWiYBEhhWk7nA8a3GRhpus8OMAScUI=
+	t=1762499331; cv=none; b=UO/H0Pm1YCMNaC+18L/i82bwrJ+wOo5LTXH9hdC8r9ct93NDRTbJS9hOyJVvE/BJXc7kLokn47vghxFQsynIPnYjIoDw5O7KftxCkBzuxB5fdCwbC/0630H1/qeDJ7L5O53tffDl5PpNUJvbDSbXMR/cK7znQQGvRwrGuXBeIYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762486814; c=relaxed/simple;
-	bh=5mryAzNSONsN2Qp9qiKezJx2wYrwlgHNENlTmAdtyPY=;
+	s=arc-20240116; t=1762499331; c=relaxed/simple;
+	bh=6pC1aVA3xA1nxoweNiGPgc8b4jvGQAisOMaVoBdaHcI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ux/vJlcfIKaNiQRjfan4ljIESUqDO6aZoQcE0NGnVFvK4RwWXBT5ASRSC+1fw/VOtPwX+A7DB0nLsK2mpE+JrwvfGGPe164JP2bKzREzW0WpR7lkfr9xRUK68CHOpaU5i+xoLMY57bLur83vvtcODEAhh+6eVRwZ+dVw/GH1q4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2pH2a3F; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=WcCyjsz/OAFO6fUZSAu6VLKVbuF4UV+VRTaXRkDTzixxRdpufdyoleTb9GGx+p57zQIhYGntPTIJ1+jC5A7eXS+X7+3TB8ITClv1MWj+8YqXKVWWD9miT8AIHbKZZxDEAvChhJzSDNmaaruOb0+H0EjObjyFKthcH4eRm0cBMGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZqSqybk5; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2pH2a3F"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZqSqybk5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762486813; x=1794022813;
+  t=1762499329; x=1794035329;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5mryAzNSONsN2Qp9qiKezJx2wYrwlgHNENlTmAdtyPY=;
-  b=X2pH2a3FMjlmvD6xQ6KRjnhT1knlJs/joneAIsTumJfoLPxlm2gQnaGF
-   JdWwy1xKG+Zf68fhqB0gQQBqCo88bnI+MZx33gLrw0+uILeGo/t7HOCL5
-   7okG/9FubtjP+koHck9eRz5HUdDpjb4G/LOswvluKdt7TU2wmPrEZm1Lo
-   0MlbJbOkvvZGn8zXuHh0evESvt3EqvB1L0FwFzo1ZOXTwKSof9bzHd4Xo
-   xwpx8XDMNlo5/Vw3nf1stjUujNk0D805RoAMrVEEI9UfAd8ihnYREvg+E
-   KmKURht66QlJ2skIJtY1ymvQ6RqUVRFVVsu5Q1vJ2jfHGt3jeRTb8WCsH
-   Q==;
-X-CSE-ConnectionGUID: r6/Pxd77RtGmyydeJ1mUdg==
-X-CSE-MsgGUID: ddtIvBJxRFKN60LJ7gjgmw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="68497417"
-X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208";a="68497417"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 19:40:12 -0800
-X-CSE-ConnectionGUID: z63NhgyxQsu6z3LlMrKALg==
-X-CSE-MsgGUID: q8H5WDsQSfm+YNa+YbFMUw==
+  bh=6pC1aVA3xA1nxoweNiGPgc8b4jvGQAisOMaVoBdaHcI=;
+  b=ZqSqybk56TLLu8gHm0o7hdCkkrojAPo3+3QC5jza5sBK5E3jSlB3KmW3
+   8g/AP7OhNAIyvmPljW680J2Vocwl3Y4K4fc9943Oy6tPSJQ3D7qQLx5e0
+   XZcBoBH+eyouEyHNd52ngSPC6G4wYW1CfYas/3iB9bIOydmmXRjIdU1HN
+   CkTCnJn9lrsPF5o2OdNg/smqvrftpPLAuHNpsUfeoxnNKaCorbp/Mt0sx
+   ZljyXGXaT+aqcRjdLesbrgiI5aoM7Ioi6uS6IG6iNewjJ1pXTZ9p2pOwo
+   2bvIk/O2IoMfR/4eGL75E6lamOU2VwC/q/StL++cAQq7MhY9+TrQpfIpD
+   A==;
+X-CSE-ConnectionGUID: D01TQQocQeuq4LfxiGesBw==
+X-CSE-MsgGUID: HmOs3g6oRWStGnqE/mZNyg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="68508132"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="68508132"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 23:08:49 -0800
+X-CSE-ConnectionGUID: VBfncNcWSPuus2De3BboJw==
+X-CSE-MsgGUID: xwDWvYGISIeyoSEGOD0mCg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208";a="225185237"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="187810922"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 06 Nov 2025 19:40:08 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 06 Nov 2025 23:08:44 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vHDKX-000UfY-2q;
-	Fri, 07 Nov 2025 03:40:05 +0000
-Date: Fri, 7 Nov 2025 11:39:10 +0800
+	id 1vHGaQ-000UpE-2R;
+	Fri, 07 Nov 2025 07:08:42 +0000
+Date: Fri, 7 Nov 2025 15:07:52 +0800
 From: kernel test robot <lkp@intel.com>
 To: Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -64,9 +64,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Simona Vetter <simona.vetter@ffwll.ch>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v6 1/3] revocable: Add fops replacement
-Message-ID: <202511070909.JnNsfyvx-lkp@intel.com>
-References: <20251106152712.11850-2-tzungbi@kernel.org>
+Subject: Re: [PATCH v6 1/2] platform/chrome: Protect cros_ec_device lifecycle
+ with revocable
+Message-ID: <202511071425.qwhK2D9r-lkp@intel.com>
+References: <20251106152602.11814-2-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,47 +76,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251106152712.11850-2-tzungbi@kernel.org>
+In-Reply-To: <20251106152602.11814-2-tzungbi@kernel.org>
 
 Hi Tzung-Bi,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on v6.18-rc4 next-20251106]
-[cannot apply to char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus chrome-platform/for-next chrome-platform/for-firmware-next linus/master]
+[auto build test ERROR on chrome-platform/for-next]
+[also build test ERROR on chrome-platform/for-firmware-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.18-rc4 next-20251107]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tzung-Bi-Shih/revocable-Add-fops-replacement/20251106-233108
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20251106152712.11850-2-tzungbi%40kernel.org
-patch subject: [PATCH v6 1/3] revocable: Add fops replacement
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251107/202511070909.JnNsfyvx-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511070909.JnNsfyvx-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tzung-Bi-Shih/platform-chrome-Protect-cros_ec_device-lifecycle-with-revocable/20251106-233349
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+patch link:    https://lore.kernel.org/r/20251106152602.11814-2-tzungbi%40kernel.org
+patch subject: [PATCH v6 1/2] platform/chrome: Protect cros_ec_device lifecycle with revocable
+config: hexagon-randconfig-002-20251107 (https://download.01.org/0day-ci/archive/20251107/202511071425.qwhK2D9r-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d2625a438020ad35330cda29c3def102c1687b1b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511071425.qwhK2D9r-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511070909.JnNsfyvx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511071425.qwhK2D9r-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/fs_revocable.c:9:
->> include/linux/fs_revocable.h:10:10: fatal error: 'linux/revocable.h' file not found
-      10 | #include <linux/revocable.h>
+   In file included from drivers/i2c/busses/i2c-cros-ec-tunnel.c:10:
+>> include/linux/platform_data/cros_ec_proto.h:15:10: fatal error: 'linux/revocable.h' file not found
+      15 | #include <linux/revocable.h>
          |          ^~~~~~~~~~~~~~~~~~~
    1 error generated.
 
 
-vim +10 include/linux/fs_revocable.h
+vim +15 include/linux/platform_data/cros_ec_proto.h
 
-     8	
-     9	#include <linux/fs.h>
-  > 10	#include <linux/revocable.h>
-    11	
+    10	
+    11	#include <linux/device.h>
+    12	#include <linux/lockdep_types.h>
+    13	#include <linux/mutex.h>
+    14	#include <linux/notifier.h>
+  > 15	#include <linux/revocable.h>
+    16	
 
 -- 
 0-DAY CI Kernel Test Service
