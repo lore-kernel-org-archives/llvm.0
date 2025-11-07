@@ -1,99 +1,82 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56FC338906
-	for <llvm@lists.linux.dev>; Fri,  7 Nov 2025 17:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CD132D7E0;
+	Fri,  7 Nov 2025 18:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762538228; cv=none; b=NhlU07baUsstqCi0/gxAz1kGN07TfVTEBAC3uRwi8KOaibTlhQ4uZ9codfg8RRJVelTONoiuDPeF9RVs+gXsRJv6ID6oHrxb0I1jtXWOHD1mT+696WZ8H3bISiMNlB2FXDF889xduks2IuaveTHLnb6x+W/BxY+rnqlPtdoq2jk=
+	t=1762540145; cv=none; b=J2kNQBKDt3kCJdM4xkM8ZgMGrXPWcxxqlyDabu2rc1IAwJkadSIMdr4Ek/sYz0rNeeUYjkRhnofvLquNHPdQT9rhmmnz+pBg31zMMulMVZNtnTXrUHI/HOfb4v1CnOYrHsn8e7FadgJTwP3He4OLcQJrEsEQ8dKMN7eSEnr5qRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762538228; c=relaxed/simple;
-	bh=RSvet1hGFhNMSbzfn7C2gcX1x5+f+dd1m1faFTAl1dg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NFdhCASWSskqs4ZlmzMl0mYExAAZzdo9TsAVpJXvjzouk4a2xgzPxWfhYuvHRJ5zMD0IV+4fdiqF8Sff5TshjGE7XWFPfwQCsFDOAXBKXJKqQNISYRRgg961ecbfWI4mI5joWrxuQwoxB4trwBJOZgx/3CZTBpdBG8ud/y4z3Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8Q6Ux0a; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762540145; c=relaxed/simple;
+	bh=1uk4f/vvzKN01nl74e544DZxNDjhLmkBY4gp+8iXipM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=qDxu1HLcNQ1VEg3K1pad18fT8QblVI6I6in80dJUDKw6ZTKAsQTtVAmTGk9TCrixfEYFNINOITz105EmnDX9a9jAbsyO2CbnD9P00CJCJyeaHC5/VTWA45itaN8XsP/qsdqcmDPuO6lPS6iO7PH7J6kJV8nnZXC2u2j36abuloA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpCpYhr/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8Q6Ux0a"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7adc44440c6so50850b3a.3
-        for <llvm@lists.linux.dev>; Fri, 07 Nov 2025 09:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762538226; x=1763143026; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RSvet1hGFhNMSbzfn7C2gcX1x5+f+dd1m1faFTAl1dg=;
-        b=W8Q6Ux0az6fOQM9lQZ+MmSw1oNcsR/+XYklrMiHBEXt6D/7wDU1oKei/YCaQqz2EDU
-         0ndCIzph2Z4u1A7SNl7ect7jAQCSfJNnMYUxZUhzmJX7HaLyrhszPWaA5QM7N9E1a1CZ
-         ZiAs2R7qW0s7/S40QFoEFBTarJi+E1CDQoLCGFXx5kFqRtuSXvEpcKyOoMyj9FCd4BaX
-         ohD+WmWczKeKLtX1qAsSl88KF8zbL9JWNnkQO8iI/+liXZ/h51/bJZ3Yt7/coLJmhx/f
-         Fk40m0gwGNitxzyLGFeyJt2F1fTux/80vjd0SFUw+2pbU07atS/QavprMKWlGsKSn3tD
-         3dAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762538226; x=1763143026;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RSvet1hGFhNMSbzfn7C2gcX1x5+f+dd1m1faFTAl1dg=;
-        b=k/FgCojBsTe8e3vCBso00lMzDOdImvLosjMQ3hEnHMfHkNA7V8C1Pij6481IRTB0N9
-         Nbu/pdoRsIjhdZzIYepE8GmUPAGaZu9JMQDwD208gtNRSlLG7XGqs4EPzyEwg4LQuMZQ
-         +k9SCpAgDlcZBfTOpJal8DZluJUfhTGwNotX4YlWP6phlRrD+BBGftCNezKbE1DJt96r
-         z0rcUB7anMEtdcZ6yGIkp6CWEGtw0JqchTY66Yy2ZHA3mvHYMCkUlOqEPWFVrY0FKRPJ
-         lT9YN0hIHA8UILT6z9uX+MqGdY2DOjATdGPQiNYiEOXoeseIIHPGf1018C1C0Vwyv6fy
-         KgEA==
-X-Gm-Message-State: AOJu0Yy1Ne2r323f1zoLY7SkCeRLrN5eoWJZrlHpOcIK97L5Vh1/6VJT
-	Id3q3HuW7oV9GwWGfZRbwadPiw+CBT4WHqU5cWl3G8eqdVh+CUsSRAdANCuwo8btXO+D69MPvaK
-	F4Yv2tEUHPoBXxihhhlEbOnE+v+aeNjM=
-X-Gm-Gg: ASbGncu6DfBevpwDccTfdx9I93KeL10QSlUHxRpb/5eTzjZ8IAIrms1T3TPBPRKGIqr
-	U2Un1CgK3TQCl+iBFOMKUOQB3WYZXfskN6QXw3M9OV6IKsx7mq/hGwrPA5GCDD3LlJ77i4a9AW2
-	fnPX+DvigejEYf0l8Dssw5Qm1d+2YhH5b+j9/iYlp2Bymk/FPzrorXdruI1tJtNSffbkIFc2gCN
-	5pDOw/+zKXzniZNz/bOvJd1pkdcbr3frowPAiWs/wj4cw3mZtt7QIHAe/qUUd/0NHqbSENWrUnn
-	yoimo+EnYRkGp8yvJEc+eqGcMjgrXNOSFQ4wdPyqxWGvX0zlijswRNoE2VaJI4Le58wMB5TfdTm
-	ruMY=
-X-Google-Smtp-Source: AGHT+IEcZTSN4aKwKC5egIoA0UmNDa8Z3AvdE7wthF+TinMhFsnkvRKXfrW3Yysr5BNbtNDdHJ6Gn1gp8qQM4W9Hkyg=
-X-Received: by 2002:a17:903:10b:b0:274:506d:7fe5 with SMTP id
- d9443c01a7336-297c03b1d55mr20192915ad.4.1762538225889; Fri, 07 Nov 2025
- 09:57:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpCpYhr/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B563C19422;
+	Fri,  7 Nov 2025 18:29:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762540144;
+	bh=1uk4f/vvzKN01nl74e544DZxNDjhLmkBY4gp+8iXipM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=rpCpYhr/tJSK4Qe+NNdCQG5oDqDbyp+jiNy/wps1xyyULzxLrXvo0fJYQYjyE7WV6
+	 ZZkPjoOU0kWIRH5zuqPBllOx55xu1hZl1l9wmFzvYKS3i4Qcg53TQgAt79C68jlVko
+	 au7XjjFe1/DbGBwHaB5xUxHBhmcpm7VzJe92yOMMszBPPEb8XbmGmGqLkEQMxeKr97
+	 O8puomL2/D8n2CuqFuhs3bGle1W1ab/kGXFKXjdXiVfWp+39VFW45vhB+E5aeCxCT+
+	 R/fmcLjybvZh4WitAvZAwyuPy5uLt8HXIpAzK7qw1TiW22LWoZZFseIQ8Jj0rlOzrO
+	 /45oArUXclawQ==
+From: Nathan Chancellor <nathan@kernel.org>
+To: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ Dan Williams <dan.j.williams@intel.com>, 
+ Jonathan Cameron <jonathan.cameron@huawei.com>, 
+ Peter Zijlstra <peterz@infradead.org>
+In-Reply-To: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
+References: <20251106105000.2103276-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] compiler_types: Warn about unused static inline
+ functions on second
+Message-Id: <176254014196.4089614.8446049205890806125.b4-ty@kernel.org>
+Date: Fri, 07 Nov 2025 11:29:01 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20251105062723.GA2341496@ax162>
-In-Reply-To: <20251105062723.GA2341496@ax162>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 7 Nov 2025 18:56:53 +0100
-X-Gm-Features: AWmQ_bkgBWAnqAXBLtdQ6YJmXoxsa98i3NTbQ_nqWrZ4cr9q1bEnykYt-XXo5rI
-Message-ID: <CANiq72k3WuXTyk-X1ye+7JThf2pNcgdKnqOrFieHqxOMZD2oZQ@mail.gmail.com>
-Subject: Re: Prebuilt LLVM 21.1.5 uploaded
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev
 
-On Wed, Nov 5, 2025 at 7:27=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> I have built and uploaded LLVM 21.1.5 to
-> https://mirrors.edge.kernel.org/pub/tools/llvm/.
->
-> If there are any issues found, please let us know via email or
-> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-> opportunity to get them fixed in main and backported before the 21.x
-> series is no longer supported.
 
-Rust-enabled x86_64 with upstream `rustc` works well:
+On Thu, 06 Nov 2025 11:50:00 +0100, Andy Shevchenko wrote:
+> Per Nathan, clang catches unused "static inline" functions in C files since
+> commit 6863f5643dd7 ("kbuild: allow Clang to find unused static inline
+> functions for W=1 build").
+> 
+> Linus said:
+> 
+> > So I entirely ignore W=1 issues, because I think so many of the extra
+> > warnings are bogus.
+> >
+> > But if this one in particular is causing more problems than most -
+> > some teams do seem to use W=1 as part of their test builds - it's fine
+> > to send me a patch that just moves bad warnings to W=2.
+> >
+> > And if anybody uses W=2 for their test builds, that's THEIR problem..
+> 
+> [...]
 
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
+Applied, thanks!
 
-Thanks as usual!
+[1/1] compiler_types: Warn about unused static inline functions on second
+      https://git.kernel.org/kbuild/c/9818af18db4bf
 
-By the way, not sure if there is a reason for it (e.g. a workaround
-for a bug or you don't keep the old LLVM files etc.), but just in
-case: the matching LLVM for Rust 1.91.0 (and likely the upcoming
-1.91.1) is 21.1.2 from what I can see, not 21.1.3 in the table.
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
-Cheers,
-Miguel
