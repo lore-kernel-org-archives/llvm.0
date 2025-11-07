@@ -1,66 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43A8184540;
-	Fri,  7 Nov 2025 03:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0D526C391;
+	Fri,  7 Nov 2025 03:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762486153; cv=none; b=pD8KMA+T4cK9e9WOWk80AcCPeqqv7C8DWTuPlBz7nRl4mE1avLrJ/brMLAX3Zel9n08Y2IdoPlLJsY+m4xWeze+XO+TbA7Uwc6SsmUBd5MAuqQv2sM2/JInJMqDvpFCZPbgSaV92h2QzWJuZRknwGjrtVtI/uNRUc9oCEAeldIQ=
+	t=1762486814; cv=none; b=L4DjnwhKvP4128ZgBU8xSYxDU/sUgxiJXGKOGxgaIBOeJPh7/oB10PLdvSJ9oxK9hyQWUev6dYl+5nCmwwEfnm984akBN6LajknLFQQhoZOB2oBlzJDqTkm2zfhEdhg3/ynm0+hH6jLf8rWiYBEhhWk7nA8a3GRhpus8OMAScUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762486153; c=relaxed/simple;
-	bh=IImINCHPo8SydfXgzNxPKnocMV0I2PHbN0YbvkHwWSE=;
+	s=arc-20240116; t=1762486814; c=relaxed/simple;
+	bh=5mryAzNSONsN2Qp9qiKezJx2wYrwlgHNENlTmAdtyPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gUr90+XUVLF9i6YaDd0+HXdhchU1UYJsqLLUbPeivOfoNgygzrefVx1Ry/XnmKdvZhhMQ93OFmVjwa0QQ2SFggvkCMCN4rGzZquawf9OiFBQe2Z6DkS/fk86r39VdNNOP3yE3fuiIJ+MROl26B3RtVUILmgjcwnEczhYkK0qOqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JdMebRk8; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=ux/vJlcfIKaNiQRjfan4ljIESUqDO6aZoQcE0NGnVFvK4RwWXBT5ASRSC+1fw/VOtPwX+A7DB0nLsK2mpE+JrwvfGGPe164JP2bKzREzW0WpR7lkfr9xRUK68CHOpaU5i+xoLMY57bLur83vvtcODEAhh+6eVRwZ+dVw/GH1q4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2pH2a3F; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JdMebRk8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2pH2a3F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762486150; x=1794022150;
+  t=1762486813; x=1794022813;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=IImINCHPo8SydfXgzNxPKnocMV0I2PHbN0YbvkHwWSE=;
-  b=JdMebRk8Xj33YjbNGVzPqXhj9xaqt2xFnHX4kF1uzam9FVCVUA/F/tlc
-   kH3Yq9jJjUUw/MaRn9hHJGSMqwRsvGQb86oFomCdJKgiNLf/siODYq9a5
-   ATYo8z7cdG1C6k41SydMFsMdzBY4VRdAfyOLs3cphWskqeVsu1K0ObdGn
-   nF2f1A61ZGj+zdnx9jtQPkiJ/vUJ5q7WXcqpFfddqsuC1cwzp61PRE0jy
-   CdfG2OweSCZQ4pgrvIULPwFOsu3buIm/5WbxpXfXolOCGcpI/QNCMCA3h
-   8mrXCqTjZtizrsDqHDljZuHQ/Bi6QHgUxIXRQxWi8Rks+hhM37ddC91c5
-   w==;
-X-CSE-ConnectionGUID: dHYX/rGuRViACDwkwNP8LQ==
-X-CSE-MsgGUID: FUVms+UjTnetjKoRLliwPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64562086"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64562086"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 19:29:10 -0800
-X-CSE-ConnectionGUID: Z6/WTQBjRRq8v4/Nzqz/1g==
-X-CSE-MsgGUID: phJBU6CNQ6OYLjJ23GpONA==
+  bh=5mryAzNSONsN2Qp9qiKezJx2wYrwlgHNENlTmAdtyPY=;
+  b=X2pH2a3FMjlmvD6xQ6KRjnhT1knlJs/joneAIsTumJfoLPxlm2gQnaGF
+   JdWwy1xKG+Zf68fhqB0gQQBqCo88bnI+MZx33gLrw0+uILeGo/t7HOCL5
+   7okG/9FubtjP+koHck9eRz5HUdDpjb4G/LOswvluKdt7TU2wmPrEZm1Lo
+   0MlbJbOkvvZGn8zXuHh0evESvt3EqvB1L0FwFzo1ZOXTwKSof9bzHd4Xo
+   xwpx8XDMNlo5/Vw3nf1stjUujNk0D805RoAMrVEEI9UfAd8ihnYREvg+E
+   KmKURht66QlJ2skIJtY1ymvQ6RqUVRFVVsu5Q1vJ2jfHGt3jeRTb8WCsH
+   Q==;
+X-CSE-ConnectionGUID: r6/Pxd77RtGmyydeJ1mUdg==
+X-CSE-MsgGUID: ddtIvBJxRFKN60LJ7gjgmw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="68497417"
+X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
+   d="scan'208";a="68497417"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 19:40:12 -0800
+X-CSE-ConnectionGUID: z63NhgyxQsu6z3LlMrKALg==
+X-CSE-MsgGUID: q8H5WDsQSfm+YNa+YbFMUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208";a="193102109"
+   d="scan'208";a="225185237"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 06 Nov 2025 19:29:06 -0800
+  by orviesa001.jf.intel.com with ESMTP; 06 Nov 2025 19:40:08 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vHD9q-000Uem-1y;
-	Fri, 07 Nov 2025 03:29:03 +0000
-Date: Fri, 7 Nov 2025 11:28:26 +0800
+	id 1vHDKX-000UfY-2q;
+	Fri, 07 Nov 2025 03:40:05 +0000
+Date: Fri, 7 Nov 2025 11:39:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
-	lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org,
-	bhelgaas@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, will@kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	robh@kernel.org, linux-arm-msm@vger.kernel.org,
-	zhangsenchuan@eswincomputing.com,
-	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Subject: Re: [PATCH 3/3] PCI: dwc: Skip PME_Turn_Off and L2/L3 transition if
- no device is available
-Message-ID: <202511071025.JM5nTGnO-lkp@intel.com>
-References: <20251106061326.8241-4-manivannan.sadhasivam@oss.qualcomm.com>
+To: Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, tzungbi@kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v6 1/3] revocable: Add fops replacement
+Message-ID: <202511070909.JnNsfyvx-lkp@intel.com>
+References: <20251106152712.11850-2-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,107 +75,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251106061326.8241-4-manivannan.sadhasivam@oss.qualcomm.com>
+In-Reply-To: <20251106152712.11850-2-tzungbi@kernel.org>
 
-Hi Manivannan,
+Hi Tzung-Bi,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.18-rc4 next-20251106]
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on v6.18-rc4 next-20251106]
+[cannot apply to char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus chrome-platform/for-next chrome-platform/for-firmware-next linus/master]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam/PCI-host-common-Add-an-API-to-check-for-any-device-under-the-Root-Ports/20251106-141822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20251106061326.8241-4-manivannan.sadhasivam%40oss.qualcomm.com
-patch subject: [PATCH 3/3] PCI: dwc: Skip PME_Turn_Off and L2/L3 transition if no device is available
-config: arm-randconfig-001-20251107 (https://download.01.org/0day-ci/archive/20251107/202511071025.JM5nTGnO-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511071025.JM5nTGnO-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tzung-Bi-Shih/revocable-Add-fops-replacement/20251106-233108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20251106152712.11850-2-tzungbi%40kernel.org
+patch subject: [PATCH v6 1/3] revocable: Add fops replacement
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251107/202511070909.JnNsfyvx-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511070909.JnNsfyvx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511071025.JM5nTGnO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511070909.JnNsfyvx-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pcie-designware-host.c:1133:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1133 |         if (!pci_root_ports_have_device(pci->pp.bridge->bus))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:1176:9: note: uninitialized use occurs here
-    1176 |         return ret;
-         |                ^~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:1133:2: note: remove the 'if' if its condition is always false
-    1133 |         if (!pci_root_ports_have_device(pci->pp.bridge->bus))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1134 |                 goto stop_link;
-         |                 ~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware-host.c:1131:9: note: initialize the variable 'ret' to silence this warning
-    1131 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+   In file included from fs/fs_revocable.c:9:
+>> include/linux/fs_revocable.h:10:10: fatal error: 'linux/revocable.h' file not found
+      10 | #include <linux/revocable.h>
+         |          ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +1133 drivers/pci/controller/dwc/pcie-designware-host.c
+vim +10 include/linux/fs_revocable.h
 
-  1126	
-  1127	int dw_pcie_suspend_noirq(struct dw_pcie *pci)
-  1128	{
-  1129		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-  1130		u32 val;
-  1131		int ret;
-  1132	
-> 1133		if (!pci_root_ports_have_device(pci->pp.bridge->bus))
-  1134			goto stop_link;
-  1135	
-  1136		/*
-  1137		 * If L1SS is supported, then do not put the link into L2 as some
-  1138		 * devices such as NVMe expect low resume latency.
-  1139		 */
-  1140		if (dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKCTL) & PCI_EXP_LNKCTL_ASPM_L1)
-  1141			return 0;
-  1142	
-  1143		if (pci->pp.ops->pme_turn_off) {
-  1144			pci->pp.ops->pme_turn_off(&pci->pp);
-  1145		} else {
-  1146			ret = dw_pcie_pme_turn_off(pci);
-  1147			if (ret)
-  1148				return ret;
-  1149		}
-  1150	
-  1151		ret = read_poll_timeout(dw_pcie_get_ltssm, val,
-  1152					val == DW_PCIE_LTSSM_L2_IDLE ||
-  1153					val <= DW_PCIE_LTSSM_DETECT_WAIT,
-  1154					PCIE_PME_TO_L2_TIMEOUT_US/10,
-  1155					PCIE_PME_TO_L2_TIMEOUT_US, false, pci);
-  1156		if (ret) {
-  1157			/* Only log message when LTSSM isn't in DETECT or POLL */
-  1158			dev_err(pci->dev, "Timeout waiting for L2 entry! LTSSM: 0x%x\n", val);
-  1159			return ret;
-  1160		}
-  1161	
-  1162		/*
-  1163		 * Per PCIe r6.0, sec 5.3.3.2.1, software should wait at least
-  1164		 * 100ns after L2/L3 Ready before turning off refclock and
-  1165		 * main power. This is harmless when no endpoint is connected.
-  1166		 */
-  1167		udelay(1);
-  1168	
-  1169	stop_link:
-  1170		dw_pcie_stop_link(pci);
-  1171		if (pci->pp.ops->deinit)
-  1172			pci->pp.ops->deinit(&pci->pp);
-  1173	
-  1174		pci->suspended = true;
-  1175	
-  1176		return ret;
-  1177	}
-  1178	EXPORT_SYMBOL_GPL(dw_pcie_suspend_noirq);
-  1179	
+     8	
+     9	#include <linux/fs.h>
+  > 10	#include <linux/revocable.h>
+    11	
 
 -- 
 0-DAY CI Kernel Test Service
