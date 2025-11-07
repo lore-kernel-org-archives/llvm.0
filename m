@@ -1,61 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06602E3365;
-	Fri,  7 Nov 2025 01:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43A8184540;
+	Fri,  7 Nov 2025 03:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762477514; cv=none; b=G3uVe5qV34FeIWtM+Y9+75m/B0NVoyDjlZcPDmci6m0sSmHkZdBqz6vTrDNDDdYkn8lAJyvcivKzcUt7nmiUaNqkm7yEfUa7oHMjGz9E2cQ7NjL57tF+f0JAJY191UrUPsXixTr35mVPQJe6rTpnTBRgW3XfusaR6nOtrjOFZN0=
+	t=1762486153; cv=none; b=pD8KMA+T4cK9e9WOWk80AcCPeqqv7C8DWTuPlBz7nRl4mE1avLrJ/brMLAX3Zel9n08Y2IdoPlLJsY+m4xWeze+XO+TbA7Uwc6SsmUBd5MAuqQv2sM2/JInJMqDvpFCZPbgSaV92h2QzWJuZRknwGjrtVtI/uNRUc9oCEAeldIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762477514; c=relaxed/simple;
-	bh=jGYT6u7rfNJrUnzzJ6XMzJTPuT4pQluLa+Krtx32sbI=;
+	s=arc-20240116; t=1762486153; c=relaxed/simple;
+	bh=IImINCHPo8SydfXgzNxPKnocMV0I2PHbN0YbvkHwWSE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PdAEgXAkrHIfyFHAzIE+hipG3k41icHogwLz3lxdq6HdxZI49OXnY1SXDXDXqSsF8PJVkPq9mbSQhvKZNrOb1vFmmwS++wtS1hROmTYV+HSwbW8z3Yw55Y0OJaOHx/h5EouZ9aEX9AfEPOHcS2FqJo1SsyPRq0wFVBtaP06+Pr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kUFsFA0K; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=gUr90+XUVLF9i6YaDd0+HXdhchU1UYJsqLLUbPeivOfoNgygzrefVx1Ry/XnmKdvZhhMQ93OFmVjwa0QQ2SFggvkCMCN4rGzZquawf9OiFBQe2Z6DkS/fk86r39VdNNOP3yE3fuiIJ+MROl26B3RtVUILmgjcwnEczhYkK0qOqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JdMebRk8; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kUFsFA0K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JdMebRk8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762477511; x=1794013511;
+  t=1762486150; x=1794022150;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jGYT6u7rfNJrUnzzJ6XMzJTPuT4pQluLa+Krtx32sbI=;
-  b=kUFsFA0K4PviE8zSLDmQN1gdJUtCah6Woa9VugQ3Asw4A8k+YXLka5n9
-   j2RTBxDBBQbLn7fVEjWQx5QHWFB1NkKnVXxt0DBqPvTKl8/v4vxj4UYA8
-   Hp44alVtUhfilJ8ruzXWRVT1vD7fISwLlmvzRI0Vo0+msr4O8Mhqt86Ve
-   UspF9lEJKVMbWIoW+yN9EGlpcipCSRSmDECqq1c57M9Tvd7ByA3RW6pGt
-   IXLmG9VqGn0uGPflPWqCI8AhA10zBouTMsXn2PoK4gnSsMKfXIaKmj24F
-   OEtYOsEbhNXSYksNov5Cbv/o0iJCTeveHdxYfV2qqO++M7I78HG24zQdO
-   A==;
-X-CSE-ConnectionGUID: pHmpFR94Q+mOCA3XKfv99Q==
-X-CSE-MsgGUID: nmmrj8E6RmS33L41t7yIvA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="52194555"
-X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208";a="52194555"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 17:05:10 -0800
-X-CSE-ConnectionGUID: +BQZI5nvRSGzq7eiHB+yzg==
-X-CSE-MsgGUID: ABS6YGc5SY+Ij3+y1QopLA==
+  bh=IImINCHPo8SydfXgzNxPKnocMV0I2PHbN0YbvkHwWSE=;
+  b=JdMebRk8Xj33YjbNGVzPqXhj9xaqt2xFnHX4kF1uzam9FVCVUA/F/tlc
+   kH3Yq9jJjUUw/MaRn9hHJGSMqwRsvGQb86oFomCdJKgiNLf/siODYq9a5
+   ATYo8z7cdG1C6k41SydMFsMdzBY4VRdAfyOLs3cphWskqeVsu1K0ObdGn
+   nF2f1A61ZGj+zdnx9jtQPkiJ/vUJ5q7WXcqpFfddqsuC1cwzp61PRE0jy
+   CdfG2OweSCZQ4pgrvIULPwFOsu3buIm/5WbxpXfXolOCGcpI/QNCMCA3h
+   8mrXCqTjZtizrsDqHDljZuHQ/Bi6QHgUxIXRQxWi8Rks+hhM37ddC91c5
+   w==;
+X-CSE-ConnectionGUID: dHYX/rGuRViACDwkwNP8LQ==
+X-CSE-MsgGUID: FUVms+UjTnetjKoRLliwPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64562086"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="64562086"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 19:29:10 -0800
+X-CSE-ConnectionGUID: Z6/WTQBjRRq8v4/Nzqz/1g==
+X-CSE-MsgGUID: phJBU6CNQ6OYLjJ23GpONA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
-   d="scan'208";a="188344432"
+   d="scan'208";a="193102109"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 06 Nov 2025 17:05:09 -0800
+  by orviesa005.jf.intel.com with ESMTP; 06 Nov 2025 19:29:06 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vHAuY-000UXQ-1x;
-	Fri, 07 Nov 2025 01:05:06 +0000
-Date: Fri, 7 Nov 2025 09:04:12 +0800
+	id 1vHD9q-000Uem-1y;
+	Fri, 07 Nov 2025 03:29:03 +0000
+Date: Fri, 7 Nov 2025 11:28:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 2/2] Bluetooth: btusb: Add support for Bulk
- Serialization Mode
-Message-ID: <202511070808.Qvyqjzoc-lkp@intel.com>
-References: <20251105170445.518320-2-luiz.dentz@gmail.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
+	lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org,
+	bhelgaas@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, will@kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	robh@kernel.org, linux-arm-msm@vger.kernel.org,
+	zhangsenchuan@eswincomputing.com,
+	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Subject: Re: [PATCH 3/3] PCI: dwc: Skip PME_Turn_Off and L2/L3 transition if
+ no device is available
+Message-ID: <202511071025.JM5nTGnO-lkp@intel.com>
+References: <20251106061326.8241-4-manivannan.sadhasivam@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,250 +69,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251105170445.518320-2-luiz.dentz@gmail.com>
+In-Reply-To: <20251106061326.8241-4-manivannan.sadhasivam@oss.qualcomm.com>
 
-Hi Luiz,
+Hi Manivannan,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on bluetooth-next/master]
-[also build test WARNING on bluetooth/master linus/master v6.18-rc4 next-20251106]
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus linus/master v6.18-rc4 next-20251106]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-btusb-Add-support-for-Bulk-Serialization-Mode/20251106-024830
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20251105170445.518320-2-luiz.dentz%40gmail.com
-patch subject: [PATCH v1 2/2] Bluetooth: btusb: Add support for Bulk Serialization Mode
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251107/202511070808.Qvyqjzoc-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511070808.Qvyqjzoc-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam/PCI-host-common-Add-an-API-to-check-for-any-device-under-the-Root-Ports/20251106-141822
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20251106061326.8241-4-manivannan.sadhasivam%40oss.qualcomm.com
+patch subject: [PATCH 3/3] PCI: dwc: Skip PME_Turn_Off and L2/L3 transition if no device is available
+config: arm-randconfig-001-20251107 (https://download.01.org/0day-ci/archive/20251107/202511071025.JM5nTGnO-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511071025.JM5nTGnO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511070808.Qvyqjzoc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511071025.JM5nTGnO-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/bluetooth/btusb.c:4101:6: warning: variable 'hdev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    4101 |         if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    4102 |             !data->bulk_tx_ep || !data->bulk_rx_ep) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/btusb.c:4436:15: note: uninitialized use occurs here
-    4436 |         hci_free_dev(hdev);
-         |                      ^~~~
-   drivers/bluetooth/btusb.c:4101:2: note: remove the 'if' if its condition is always false
-    4101 |         if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    4102 |             !data->bulk_tx_ep || !data->bulk_rx_ep) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    4103 |                 BT_ERR("failed to enumerate endpoints");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    4104 |                 err = -ENODEV;
+>> drivers/pci/controller/dwc/pcie-designware-host.c:1133:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1133 |         if (!pci_root_ports_have_device(pci->pp.bridge->bus))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware-host.c:1176:9: note: uninitialized use occurs here
+    1176 |         return ret;
+         |                ^~~
+   drivers/pci/controller/dwc/pcie-designware-host.c:1133:2: note: remove the 'if' if its condition is always false
+    1133 |         if (!pci_root_ports_have_device(pci->pp.bridge->bus))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1134 |                 goto stop_link;
          |                 ~~~~~~~~~~~~~~
-    4105 |                 goto out_free_dev;
-         |                 ~~~~~~~~~~~~~~~~~~
-    4106 |         }
-         |         ~
->> drivers/bluetooth/btusb.c:4101:6: warning: variable 'hdev' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-    4101 |         if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    4102 |             !data->bulk_tx_ep || !data->bulk_rx_ep) {
-         |             ~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/btusb.c:4436:15: note: uninitialized use occurs here
-    4436 |         hci_free_dev(hdev);
-         |                      ^~~~
-   drivers/bluetooth/btusb.c:4101:6: note: remove the '||' if its condition is always false
-    4101 |         if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    4102 |             !data->bulk_tx_ep || !data->bulk_rx_ep) {
-         |             ~~~~~~~~~~~~~~~~~~~~
->> drivers/bluetooth/btusb.c:4101:6: warning: variable 'hdev' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-    4101 |         if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/btusb.c:4436:15: note: uninitialized use occurs here
-    4436 |         hci_free_dev(hdev);
-         |                      ^~~~
-   drivers/bluetooth/btusb.c:4101:6: note: remove the '||' if its condition is always false
-    4101 |         if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bluetooth/btusb.c:4030:22: note: initialize the variable 'hdev' to silence this warning
-    4030 |         struct hci_dev *hdev;
-         |                             ^
-         |                              = NULL
-   3 warnings generated.
+   drivers/pci/controller/dwc/pcie-designware-host.c:1131:9: note: initialize the variable 'ret' to silence this warning
+    1131 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +4101 drivers/bluetooth/btusb.c
+vim +1133 drivers/pci/controller/dwc/pcie-designware-host.c
 
-  4023	
-  4024	static int btusb_probe(struct usb_interface *intf,
-  4025			       const struct usb_device_id *id)
-  4026	{
-  4027		struct usb_endpoint_descriptor *ep_desc;
-  4028		struct gpio_desc *reset_gpio;
-  4029		struct btusb_data *data;
-  4030		struct hci_dev *hdev;
-  4031		unsigned ifnum_base;
-  4032		int i, err, priv_size;
-  4033	
-  4034		BT_DBG("intf %p id %p", intf, id);
-  4035	
-  4036		if ((id->driver_info & BTUSB_IFNUM_2) &&
-  4037		    (intf->cur_altsetting->desc.bInterfaceNumber != 0) &&
-  4038		    (intf->cur_altsetting->desc.bInterfaceNumber != 2))
-  4039			return -ENODEV;
-  4040	
-  4041		ifnum_base = intf->cur_altsetting->desc.bInterfaceNumber;
-  4042	
-  4043		if (!id->driver_info) {
-  4044			const struct usb_device_id *match;
-  4045	
-  4046			match = usb_match_id(intf, quirks_table);
-  4047			if (match)
-  4048				id = match;
-  4049		}
-  4050	
-  4051		if (id->driver_info == BTUSB_IGNORE)
-  4052			return -ENODEV;
-  4053	
-  4054		if (id->driver_info & BTUSB_ATH3012) {
-  4055			struct usb_device *udev = interface_to_usbdev(intf);
-  4056	
-  4057			/* Old firmware would otherwise let ath3k driver load
-  4058			 * patch and sysconfig files
-  4059			 */
-  4060			if (le16_to_cpu(udev->descriptor.bcdDevice) <= 0x0001 &&
-  4061			    !btusb_qca_need_patch(udev))
-  4062				return -ENODEV;
-  4063		}
-  4064	
-  4065		data = devm_kzalloc(&intf->dev, sizeof(*data), GFP_KERNEL);
-  4066		if (!data)
-  4067			return -ENOMEM;
-  4068	
-  4069		/* If alternate setting 1 is found, it means H4 mode is supported */
-  4070		if (btusb_find_altsetting(intf, 1)) {
-  4071			struct usb_device *udev = interface_to_usbdev(intf);
-  4072	
-  4073			err = usb_set_interface(udev, ifnum_base, 1);
-  4074			if (!err)
-  4075				data->proto = BTUSB_PROTO_H4;
-  4076		}
-  4077	
-  4078		for (i = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
-  4079			ep_desc = &intf->cur_altsetting->endpoint[i].desc;
-  4080	
-  4081			if (!data->intr_ep && usb_endpoint_is_int_in(ep_desc)) {
-  4082				data->intr_ep = ep_desc;
-  4083				continue;
-  4084			}
-  4085	
-  4086			if (!data->bulk_tx_ep && usb_endpoint_is_bulk_out(ep_desc)) {
-  4087				data->bulk_tx_ep = ep_desc;
-  4088				continue;
-  4089			}
-  4090	
-  4091			if (!data->bulk_rx_ep && usb_endpoint_is_bulk_in(ep_desc)) {
-  4092				data->bulk_rx_ep = ep_desc;
-  4093				continue;
-  4094			}
-  4095		}
-  4096	
-  4097		/* Check if all endpoints could be enumerated, legacy mode requires
-  4098		 * interrupt and bulk endpoint while H4 mode only requires bulk
-  4099		 * endpoints.
-  4100		 */
-> 4101		if ((data->proto == BTUSB_PROTO_LEGACY && !data->intr_ep) ||
-  4102		    !data->bulk_tx_ep || !data->bulk_rx_ep) {
-  4103			BT_ERR("failed to enumerate endpoints");
-  4104			err = -ENODEV;
-  4105			goto out_free_dev;
-  4106		}
-  4107	
-  4108		if (id->driver_info & BTUSB_AMP) {
-  4109			data->cmdreq_type = USB_TYPE_CLASS | 0x01;
-  4110			data->cmdreq = 0x2b;
-  4111		} else {
-  4112			data->cmdreq_type = USB_TYPE_CLASS;
-  4113			data->cmdreq = 0x00;
-  4114		}
-  4115	
-  4116		data->udev = interface_to_usbdev(intf);
-  4117		data->intf = intf;
-  4118	
-  4119		INIT_WORK(&data->work, btusb_work);
-  4120		INIT_WORK(&data->waker, btusb_waker);
-  4121		INIT_DELAYED_WORK(&data->rx_work, btusb_rx_work);
-  4122	
-  4123		skb_queue_head_init(&data->acl_q);
-  4124	
-  4125		init_usb_anchor(&data->deferred);
-  4126		init_usb_anchor(&data->tx_anchor);
-  4127		spin_lock_init(&data->txlock);
-  4128	
-  4129		init_usb_anchor(&data->intr_anchor);
-  4130		init_usb_anchor(&data->bulk_anchor);
-  4131		init_usb_anchor(&data->isoc_anchor);
-  4132		init_usb_anchor(&data->diag_anchor);
-  4133		init_usb_anchor(&data->ctrl_anchor);
-  4134		spin_lock_init(&data->rxlock);
-  4135	
-  4136		priv_size = 0;
-  4137	
-  4138		data->recv_event = hci_recv_frame;
-  4139		data->recv_bulk = btusb_recv_bulk;
-  4140	
-  4141		if (id->driver_info & BTUSB_INTEL_COMBINED) {
-  4142			/* Allocate extra space for Intel device */
-  4143			priv_size += sizeof(struct btintel_data);
-  4144	
-  4145			/* Override the rx handlers */
-  4146			data->recv_event = btintel_recv_event;
-  4147			data->recv_bulk = btusb_recv_bulk_intel;
-  4148		} else if (id->driver_info & BTUSB_REALTEK) {
-  4149			/* Allocate extra space for Realtek device */
-  4150			priv_size += sizeof(struct btrealtek_data);
-  4151	
-  4152			data->recv_event = btusb_recv_event_realtek;
-  4153		} else if (id->driver_info & BTUSB_MEDIATEK) {
-  4154			/* Allocate extra space for Mediatek device */
-  4155			priv_size += sizeof(struct btmtk_data);
-  4156		}
-  4157	
-  4158		data->recv_acl = hci_recv_frame;
-  4159	
-  4160		hdev = hci_alloc_dev_priv(priv_size);
-  4161		if (!hdev)
-  4162			return -ENOMEM;
-  4163	
-  4164		hdev->bus = HCI_USB;
-  4165		hci_set_drvdata(hdev, data);
-  4166	
-  4167		data->hdev = hdev;
-  4168	
-  4169		SET_HCIDEV_DEV(hdev, &intf->dev);
-  4170	
-  4171		reset_gpio = gpiod_get_optional(&data->udev->dev, "reset",
-  4172						GPIOD_OUT_LOW);
-  4173		if (IS_ERR(reset_gpio)) {
-  4174			err = PTR_ERR(reset_gpio);
-  4175			goto out_free_dev;
-  4176		} else if (reset_gpio) {
-  4177			data->reset_gpio = reset_gpio;
-  4178		}
-  4179	
-  4180		hdev->open    = btusb_open;
-  4181		hdev->close   = btusb_close;
-  4182		hdev->flush   = btusb_flush;
-  4183		hdev->send    = btusb_send_frame;
-  4184		hdev->notify  = btusb_notify;
-  4185		hdev->wakeup  = btusb_wakeup;
-  4186		hdev->hci_drv = &btusb_hci_drv;
-  4187	
+  1126	
+  1127	int dw_pcie_suspend_noirq(struct dw_pcie *pci)
+  1128	{
+  1129		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+  1130		u32 val;
+  1131		int ret;
+  1132	
+> 1133		if (!pci_root_ports_have_device(pci->pp.bridge->bus))
+  1134			goto stop_link;
+  1135	
+  1136		/*
+  1137		 * If L1SS is supported, then do not put the link into L2 as some
+  1138		 * devices such as NVMe expect low resume latency.
+  1139		 */
+  1140		if (dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKCTL) & PCI_EXP_LNKCTL_ASPM_L1)
+  1141			return 0;
+  1142	
+  1143		if (pci->pp.ops->pme_turn_off) {
+  1144			pci->pp.ops->pme_turn_off(&pci->pp);
+  1145		} else {
+  1146			ret = dw_pcie_pme_turn_off(pci);
+  1147			if (ret)
+  1148				return ret;
+  1149		}
+  1150	
+  1151		ret = read_poll_timeout(dw_pcie_get_ltssm, val,
+  1152					val == DW_PCIE_LTSSM_L2_IDLE ||
+  1153					val <= DW_PCIE_LTSSM_DETECT_WAIT,
+  1154					PCIE_PME_TO_L2_TIMEOUT_US/10,
+  1155					PCIE_PME_TO_L2_TIMEOUT_US, false, pci);
+  1156		if (ret) {
+  1157			/* Only log message when LTSSM isn't in DETECT or POLL */
+  1158			dev_err(pci->dev, "Timeout waiting for L2 entry! LTSSM: 0x%x\n", val);
+  1159			return ret;
+  1160		}
+  1161	
+  1162		/*
+  1163		 * Per PCIe r6.0, sec 5.3.3.2.1, software should wait at least
+  1164		 * 100ns after L2/L3 Ready before turning off refclock and
+  1165		 * main power. This is harmless when no endpoint is connected.
+  1166		 */
+  1167		udelay(1);
+  1168	
+  1169	stop_link:
+  1170		dw_pcie_stop_link(pci);
+  1171		if (pci->pp.ops->deinit)
+  1172			pci->pp.ops->deinit(&pci->pp);
+  1173	
+  1174		pci->suspended = true;
+  1175	
+  1176		return ret;
+  1177	}
+  1178	EXPORT_SYMBOL_GPL(dw_pcie_suspend_noirq);
+  1179	
 
 -- 
 0-DAY CI Kernel Test Service
