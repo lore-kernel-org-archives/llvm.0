@@ -1,59 +1,61 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C377C275AE3
-	for <llvm@lists.linux.dev>; Fri,  7 Nov 2025 16:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC7B2C2369;
+	Fri,  7 Nov 2025 16:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762532336; cv=none; b=cD/yzAksGu40XGuqhlLPl89s4PZZ9rRN8HwtRdAy0E8LetxAS0NNCsBo4+n2F5poxTGIiL7q3Eko1ogrdd/dYj1L09ru55iyT1J5OITpvL60LbM8B9fXTQ9ZunNiCedUSJ24M6FUoiOHED5aHhsG0cnSAgPF6JsyvAVMHCGXDzM=
+	t=1762533419; cv=none; b=tCXxMnY0MRjZBZsDpMdntWeYHkPRSvC17Wx4Y6XQxchvNW+eY2a0CU9K2tU/Nfyzhnm83qwrwmFtjLOlD9SYmAVZOv6TL6zz/4ZFerrTf4bboup3ALxJn/J4FDRPAR+RYsjNdM9bM8Ul7eRPpDbGmC6SVrxXIZYKhdofrTi5X+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762532336; c=relaxed/simple;
-	bh=/MVuEHa/23Qv0C/9OdlGj8X2onOeVc2HZ/vE5ohBEY4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ljXLARw645v9ZbGYi3Sw9YJlwubTLRZ8dBqrkAuCPKAqUT7ZaCDvbP86n/jaRcSs86U/PGyNBwf6sMMhCild7GTfRfgxHTfZi1q2Bw0mSTAdWSbuETcWkA8qqHjg3ou/85s3B9xNKj7BK4Dk9VUcusCm6KjPbC5jrKf3YGGlw1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-641458f71ffso1339586a12.3
-        for <llvm@lists.linux.dev>; Fri, 07 Nov 2025 08:18:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762532333; x=1763137133;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QYdiXEjVampZ2jSiqSx9tYyz7jq/QUvexI5w408e0Dk=;
-        b=A2weS+t7TckeiFfX2BTSRV+hgHagiACGeENhd0k/RRIr/1gVXIHWeQBUGjKg3g5Tod
-         IHTgYn+Z8H02IArtpEQMyTXfPry5aq6rznhUv3hIEaahLM+SDi6V5VVtSZjLxzX9I3Cy
-         AVvqjDy7C9CDqWSekYQ4hw1wPUt3uH4zhH68NxZLi01/qb8/Rp+9qhB3+gvbh22o4W/v
-         2C3cUQdHxhemW5WcsLARp8e3/oLFI9li076AkuUu8QLQ2aO/ILq/VwmHYHt9FqXUJAZz
-         edMpQ65YcRjHKbU47TskL1cUh4gOIPegYH69dvv9I/3S7i31+NMfEMFSzRHDYXjP6WqT
-         30vg==
-X-Forwarded-Encrypted: i=1; AJvYcCWckwl4t+UUsupXz9QG+VkvjusjUUgg6katGX6Y1wSAyeM8VtVzgin331sW+NIn6nac+VSj@lists.linux.dev
-X-Gm-Message-State: AOJu0YyQkrH8qQXdRHBWfII9iytyD2MUr/NBQeICw+RbcwlbzO6DX0CR
-	RT1EMs1OpH5eV6RpOV35giYbhUwq2eBxJiP+B+eTXSyQpAJStgikzj4S
-X-Gm-Gg: ASbGncudOFK9KIucIq92wkXjIS4zUcfFxA/kp6TKwCmTi7rWhpxpcUYqvxb3oAFqP59
-	k34NqJ0fa5dHMf6dqkHAXicT13JVVMYj+fcqMhg6ybkFWTyc0JToFiqq8rwGaHdDo+31eq01A+H
-	HkfvEfmc+NS8tanZgYfQn4yXnyB3Yhl8DEoOVkCtPZoMQEyrm119MjonOPLf6R5pm4vPrO9bU5j
-	FIxSnw/3sotGlrI+eB1fzIPfJZYba256MTUWNYUFrKIgdKPDt/n16jHcPAYc75LpWaZAnI/NGWd
-	vmlpIX65z2owf7UPi7BGfGSnED62lc7vHE0SRjWtlRLUpuQbzYoqTFTNl3RQbPvNFhyDKMniVI4
-	6ciFgUzreXbR2oxyB2yxS8hyCbyS/ep3DXya9tnxoZZFIp1eHnhE9BjygZoXycViua0E=
-X-Google-Smtp-Source: AGHT+IHPJ69JUqZgdpNF0p+3fZhOjmHXGs9AcN7Hi5uAvwr6NOYxLUozjN0/kKt6el2+3CrQcxSHkA==
-X-Received: by 2002:a05:6402:51cb:b0:640:b643:f3c5 with SMTP id 4fb4d7f45d1cf-6413ef04f4emr3649289a12.16.1762532332712;
-        Fri, 07 Nov 2025 08:18:52 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:72::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6411f8141e6sm4596289a12.15.2025.11.07.08.18.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 08:18:52 -0800 (PST)
-Date: Fri, 7 Nov 2025 08:18:50 -0800
-From: Breno Leitao <leitao@debian.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Ma Ke <make24@iscas.ac.cn>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2] EDAC/ie31200: Fix error handling in
- ie31200_register_mci
-Message-ID: <k67mlei5ja52oq3txm77poyhwtq7rakfhvcbvxi2guhyzappji@a726bvtwcmkb>
-References: <20251105022146.22105-1-make24@iscas.ac.cn>
- <202511060427.k5gEuYdp-lkp@intel.com>
+	s=arc-20240116; t=1762533419; c=relaxed/simple;
+	bh=prfo4qZFaa3dJxqjPdoYibze4nW+F2cYRv299qD88uM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VVftD3dKmJmHnOVfa/I6V59eAtxAojke5aFTWffpUodyHLjWVQmHwlCF8YGjFznRVAYM8aZ5AYw2D3X4FT9fdvtmc74vZuK9qL+ghi6bkEU5+z1/zdQrrh3rkaJnxs/gs68cxsa5RUOYvRJQQYFyFdovoEV7tCXJu/3RNShc4bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=br0FFhCV; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="br0FFhCV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762533417; x=1794069417;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=prfo4qZFaa3dJxqjPdoYibze4nW+F2cYRv299qD88uM=;
+  b=br0FFhCVNN30sPU27RcwBtA2d8kAdc0a1aGK5KLnbyL7Jzvn3yXxfiiw
+   z0XeL/6uHUEWCuoDSX4w7YCWzmTlTygMAZmtLK41mJ8uztVBUM4YQwLf6
+   M5fwx9Rv25/BLLdAdBI3DnNA7xlhz8qiSGyFCFi2n/aWcB2+5fzPccmhh
+   EOd7XIkPPAZPYT5WxOwBcDqGyUebcjslwgGYeG/tG7oRaUMwwHITVy7ka
+   wIi+Cb3QtIjHulWW72yRyUmy5stFGna5xF0W/kCn48aXMOVlq/tnFroAf
+   9ZvaQRjN7hFPPkAUHhJRt90sszxtkKTAK870/1MalZ512CuWWfX7/WbQC
+   Q==;
+X-CSE-ConnectionGUID: OjqPTBxMT5Gs5fJVOVTSBg==
+X-CSE-MsgGUID: MCXOgMTqTSWqdz43wF/VXg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64779798"
+X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
+   d="scan'208";a="64779798"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 08:36:57 -0800
+X-CSE-ConnectionGUID: PAYCbPbHSK+89+pj8AuGuA==
+X-CSE-MsgGUID: i9WTPpIZTC2SRPTqxVJnxA==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 07 Nov 2025 08:36:55 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vHPSG-00007P-38;
+	Fri, 07 Nov 2025 16:36:52 +0000
+Date: Sat, 8 Nov 2025 00:36:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xi Pardee <xi.pardee@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [pdx86-platform-drivers-x86:review-ilpo-fixes 24/24]
+ drivers/platform/x86/intel/pmc/wcl.c:461:3: error: field designator
+ 'lpm_req_guid' does not refer to any field in type 'const struct
+ pmc_reg_map'
+Message-ID: <202511080018.NOb0mcJW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,53 +64,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202511060427.k5gEuYdp-lkp@intel.com>
 
-On Thu, Nov 06, 2025 at 04:55:26AM +0800, kernel test robot wrote:
-> Hi Ma,
-> 
-> kernel test robot noticed the following build warnings:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-ilpo-fixes
+head:   9c8249cfdf5aa2b843b0cbef81eb0898493694fe
+commit: 9c8249cfdf5aa2b843b0cbef81eb0898493694fe [24/24] platform/x86:intel/pmc: Enable SSRAM support for Wildcat Lake
+config: i386-buildonly-randconfig-005-20251107 (https://download.01.org/0day-ci/archive/20251108/202511080018.NOb0mcJW-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080018.NOb0mcJW-lkp@intel.com/reproduce)
 
-This should fix it:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511080018.NOb0mcJW-lkp@intel.com/
 
-commit b265162b5f9ae2a5f0f2cf8c312b3bbd1137f34d
-Author: Breno Leitao <leitao@debian.org>
-Date:   Fri Nov 7 08:11:29 2025 -0800
+All errors (new ones prefixed by >>):
 
-    EDAC/ie31200: Fix uninitialized variable 'priv' in error path
-    
-    The variable 'priv' is initialized from mci->pvt_info after the window
-    mapping succeeds. If ie31200_map_mchbar() returns NULL, the code jumps
-    to fail_free, but in the original code, this would execute
-    put_device(&priv->dev) before reaching edac_mc_free(mci), using the
-    uninitialized 'priv' variable.
-    
-    Fix this by moving put_device(&priv->dev) to be part of only the
-    fail_unmap path, where priv is guaranteed to be initialized. The
-    fail_free path now only frees the mci structure, which is safe to do
-    regardless of whether priv was initialized.
-    
-    Fixes the Clang warning:
-      error: variable 'priv' is used uninitialized whenever 'if' condition
-      is true [-Werror,-Wsometimes-uninitialized]
-    
-    Signed-off-by: Breno Leitao <leitao@debian.org>
-    Fixes: d766967335 ("EDAC/ie31200: Fix error handling in ie31200_register_mci")
-    Reported-by: kernel test robot <lkp@intel.com>
-    Closes: https://lore.kernel.org/oe-kbuild-all/202511060427.k5gEuYdp-lkp@intel.com/
+>> drivers/platform/x86/intel/pmc/wcl.c:461:3: error: field designator 'lpm_req_guid' does not refer to any field in type 'const struct pmc_reg_map'
+     461 |         .lpm_req_guid = PCDN_LPM_REQ_GUID,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-diff --git a/drivers/edac/ie31200_edac.c b/drivers/edac/ie31200_edac.c
-index ea8fc0d5f347d..4c6396da3603a 100644
---- a/drivers/edac/ie31200_edac.c
-+++ b/drivers/edac/ie31200_edac.c
-@@ -527,8 +527,8 @@ static int ie31200_register_mci(struct pci_dev *pdev, struct res_config *cfg, in
-     return 0;
- fail_unmap:
-     iounmap(window);
--fail_free:
-     put_device(&priv->dev);
-+fail_free:
-     edac_mc_free(mci);
-     return ret;
- }
 
+vim +461 drivers/platform/x86/intel/pmc/wcl.c
+
+   433	
+   434	static const struct pmc_reg_map wcl_pcdn_reg_map = {
+   435		.pfear_sts = ext_wcl_pcdn_pfear_map,
+   436		.slp_s0_offset = CNP_PMC_SLP_S0_RES_COUNTER_OFFSET,
+   437		.slp_s0_res_counter_step = TGL_PMC_SLP_S0_RES_COUNTER_STEP,
+   438		.ltr_show_sts = wcl_pcdn_ltr_show_map,
+   439		.msr_sts = msr_map,
+   440		.ltr_ignore_offset = CNP_PMC_LTR_IGNORE_OFFSET,
+   441		.regmap_length = WCL_PCD_PMC_MMIO_REG_LEN,
+   442		.ppfear0_offset = CNP_PMC_HOST_PPFEAR0A,
+   443		.ppfear_buckets = LNL_PPFEAR_NUM_ENTRIES,
+   444		.pm_cfg_offset = CNP_PMC_PM_CFG_OFFSET,
+   445		.pm_read_disable_bit = CNP_PMC_READ_DISABLE_BIT,
+   446		.lpm_num_maps = PTL_LPM_NUM_MAPS,
+   447		.ltr_ignore_max = LNL_NUM_IP_IGN_ALLOWED,
+   448		.lpm_res_counter_step_x2 = TGL_PMC_LPM_RES_COUNTER_STEP_X2,
+   449		.etr3_offset = ETR3_OFFSET,
+   450		.lpm_sts_latch_en_offset = MTL_LPM_STATUS_LATCH_EN_OFFSET,
+   451		.lpm_priority_offset = MTL_LPM_PRI_OFFSET,
+   452		.lpm_en_offset = MTL_LPM_EN_OFFSET,
+   453		.lpm_residency_offset = MTL_LPM_RESIDENCY_OFFSET,
+   454		.lpm_sts = wcl_pcdn_lpm_maps,
+   455		.lpm_status_offset = MTL_LPM_STATUS_OFFSET,
+   456		.lpm_live_status_offset = MTL_LPM_LIVE_STATUS_OFFSET,
+   457		.s0ix_blocker_maps = wcl_pcdn_blk_maps,
+   458		.s0ix_blocker_offset = LNL_S0IX_BLOCKER_OFFSET,
+   459		.num_s0ix_blocker = WCL_NUM_S0IX_BLOCKER,
+   460		.blocker_req_offset = WCL_BLK_REQ_OFFSET,
+ > 461		.lpm_req_guid = PCDN_LPM_REQ_GUID,
+   462	};
+   463	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
