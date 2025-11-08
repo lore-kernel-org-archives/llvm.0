@@ -1,62 +1,64 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E25170A11
-	for <llvm@lists.linux.dev>; Sat,  8 Nov 2025 17:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7444C24678E
+	for <llvm@lists.linux.dev>; Sat,  8 Nov 2025 17:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762622679; cv=none; b=UsaqtwNjithGlzeiB/VV4ilXtJUpHAP2BVRTMuhPoVHUGoMxAZ03yN8KQdflp+1myef2Tt2y/TrOPjRinSwUg0qbx3igu4Y/Ecj98pylFe+tSFUmjOl/TguUJhIU3vc8KRaramSX0+N8PyPTRLhWClsqV6L++X0Sz9cwU75Huzo=
+	t=1762622719; cv=none; b=lFXkyBBxUqHXXqxuv+4KLGkWL9SYfa+gukG9vTSTW+VZUTgKWzBDxGPyP/DBlINQ1TZ9hKcvbwXxIf+bXc/fKUDccaZhiY4JxUDhL2mTfisQ3211Mh/oDJWQqIhj7moD4nRXaNfu6cDCqe/X0inl5vbjwrV+XNOYzm8XGPXL2Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762622679; c=relaxed/simple;
-	bh=ratVujNHnY0uiWgH1XNCYM2TmhO9QvnyD+uYZf8oJPE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PaaZVi4IRJBqB+PzA3Eo4/tBM8jbU1VJTxkIFXyrbvsMwP84IFnmlJPTZ3Dm1X48BN75vYOa8YEsIaI+bRT0aw/mptU1bjU2MJXSYjCv5qPDuqwWY+vTOECcpn0U9XK69tfCGeRKow2hWP6DAZQA9XUxMxj0GBusBr2IYlUbpO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yfzm1F/t; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1762622719; c=relaxed/simple;
+	bh=tAQlIEkwJ2sCMsvaNedkWALZ2aqqsCV85XAAJBYBRUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sd1DbvO1heW0sq9NRAjc5C3DU43Y3PRFz/pj17qpIs5cAOGoR3/A6kL3bgYBKZe/uPp1AsDlCHRjgdZ3e7qffqH2RIOLTWTVRPfmHFIPJLzMQiU2d1egZEUzR45f5lHQzNcwwXcOBjn0A2f6HjL+BOKWSVbO4hCnBDMqprMUbqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXMW3oWD; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yfzm1F/t"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3436a328bbbso1172715a91.2
-        for <llvm@lists.linux.dev>; Sat, 08 Nov 2025 09:24:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXMW3oWD"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-29555415c5fso22029695ad.1
+        for <llvm@lists.linux.dev>; Sat, 08 Nov 2025 09:25:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762622677; x=1763227477; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lmolD9piAeZb92H38GnbUIPJQwG0OencO484hl6w0mE=;
-        b=Yfzm1F/tLuSkfNKa/X+8Vv7gAv7b4/eOI82zPiQozgFK+RJjyzQW6qScrRtSROQH+u
-         oAHxVHa0R9Iz+c1JW7R28atrlrHhUCCggnV5tJIlDMXiFePHkfMnlg1kzCldJ41Im40X
-         8kgpSxIHMxTAeOkNzYjkJ0sPKuXxHf0Zbfc1F9VamxbjArvIsnM2QnBNdbnQBM3hJWVS
-         dTLYDzPq1y4RhYVbiSy3iS6p9gJwZ0glcI5RrKkpz6py7Xhu5gxqzjmPxxVDhb3lzmU1
-         3WzP84w7WQIEXMb/3BC6nKJwPepeZUxS/osFvOY8QLMbKM3Kd8clIu1OXSgDKU19cp+e
-         kTMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762622677; x=1763227477;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1762622717; x=1763227517; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lmolD9piAeZb92H38GnbUIPJQwG0OencO484hl6w0mE=;
-        b=ApA1xfP+dMpgdSgaaW91Qzur0jCArgYDSOic1116bnnCjmr95AK9G+lAbgk8tacrzE
-         KtB2XD8loFqsBKcM9mmYLwVF2VUz73+9fm+3C94DARVT/h1Dv4DBwA3PaLzi8Z4hz1Lv
-         QjOeMbuLHD/6lJvUzaaRh5+0xOzNm3aqMGL5WM8wazjcYpKHrZBTxepHvzn+y55KETTJ
-         1LvM1TD3coBBvNIWasm9Xj8FDJ4SzKtWZqXD1EASL0UmKlL1maJe1rgznxd9s3u51XmR
-         95cQmiXYspl1jUzHTsEocb0AB3zb57YUaNAKsMT6lXud97kCMqd5KGcy3S7Ac564ekbK
-         qDew==
-X-Forwarded-Encrypted: i=1; AJvYcCXsWfUiFanS/nC8gLeUwYpKSSVVGmQPbx3IJi0ZMhTOsq14zrdQwC3wU5O/FPL0vs2KF5vt@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxbyx0ZASnieioPpt6Enr2bobB4AncXNYlWpWTbStdhbNVkGYYk
-	YCbPjkiIrM/UT9sAjay724Z1b23Eb9GffEvzNugQBny4MU7/HOC7Jfl/
-X-Gm-Gg: ASbGncvFDtjQVEZ8bs3eHr4mgCenDj1gfSn3skZO6aL66OHks8QfOwKBSJ4YOPFgMMV
-	X7FkdkeEwqp2MlJDquhKcjghfJJsnirCuO4xSVhy/9d5/0Xvrtvviyj3G68uIO309XF3NZ+6Mt8
-	oBTPjXQ6wN4xifK1JMxRjOfTzyA6kHf8Gu5GK1wEVnnhGxMR/3n08r+j3XW47106zJ1VIkSbX49
-	vLnpReZRJMBNdly0SWikj5+DEMouNrI8FfhTXKIPSGrWpMUsc3r2CUhTVG0xliR0D4/3grWi1Ag
-	us6kQHp4JC+rX/r5xOcZU6F1sZQa1zTA4DOELe3TsvDontavZOi7OqZ5EWjI1heyNDc8MjO6l6H
-	v2OkQjpgijaP7hQHjidoPBbE9o26PMiaRHe52ikjg++MvtYnNBPJ6DSC4yi89315/qCoaARnIjh
-	esyiwI1dfDD1SW5Tf7H4TnvI54RA3idnhBZxI=
-X-Google-Smtp-Source: AGHT+IFLi+Th00uaXxhUNhYA85eC+pE3UEEtS8jC3XrBy4L0uanqOsP0a9RvY6lEJJy0G5KQOs05ew==
-X-Received: by 2002:a17:90b:3bcb:b0:341:8ae5:fde5 with SMTP id 98e67ed59e1d1-3436ccfae1emr3590376a91.18.1762622677245;
-        Sat, 08 Nov 2025 09:24:37 -0800 (PST)
+        bh=2TYL/KcboSr09KpEpWrRMXlQpJhItw5S/fTw0hxpRX4=;
+        b=DXMW3oWDWVwFQJIYbKEcGiKHib1OUW9dFfGgu2XuPSGV2D4V9x0wPTPeJo2v0vigNR
+         a3rQ239DSft7efTKFJWsQSMciNF43fJExoXHV1pRdnO2LWNfImCBKVGxYBOlS0LdZacZ
+         6Cnq0aZQuMSO/L2Q2RAylIxIP6U6KkUniYnw8fGxrmQVcRn2dWG1ilqF5eEKP5235HSc
+         m8lsS8lVEnOtr5YqAT955nyfK+/O/IT0U8k7zueYFkrs09GBqqBf+CBZ6SRQsSVGe1BS
+         m8awhrKjke9TBiBcoXU67BjydyTB/dVIukx2fM5KdU+vBAoIEvTru7KDaq+O65KnAls4
+         einw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762622717; x=1763227517;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2TYL/KcboSr09KpEpWrRMXlQpJhItw5S/fTw0hxpRX4=;
+        b=GDSkODz2Ct0yNfldLuuL6A6+lfc/mFig9yTOQkfyrGWMma8zu0Ppnw6c4e8/mO4Ojt
+         gw40aNU/UMFspg1/Xn7/zJLF+uIxWW+uFjLQZHRJyq2pJnBuTx04VUkeWu66h6Qcj/Nm
+         gFaN1LU9/cwJltFdnaDplDPPE+R1Fq0g2kPw+Pn7nIEK+W8kLbGCZFvzoFo/9Z2mDCux
+         5QWX3MVes8LqO13rPke3RGoKQE1o0IntmTLmJoaDvSMY9iFOej05A3788Zez0wxlEoRP
+         IcFaBYZ1UDQzbfWrmRspYo9p+YK1Se28/P2FlBg4dNNDMhXuo1nG5HkfJEDYWdVtaCqG
+         +RGA==
+X-Forwarded-Encrypted: i=1; AJvYcCW3GW+hg/12J4Vn06hLyH9hb14I0zMxKGPVXb8TDh8gN7G3D8UYsddZX/p7xcFGnyZ3Cp9B@lists.linux.dev
+X-Gm-Message-State: AOJu0YwuOpRVx5bGkKGbXTqOxA5Wpms9t3bPbxfJJdjs85WJYf7MFplo
+	RBRX5HRYTYwwmLlProX02cKa/YXE3Ei2m+fXE5eDFCHus4RGBQcJkkc8
+X-Gm-Gg: ASbGnctZhdBBzTMO0VAWXKcrZU4RuB7DSUMCKOqq/qyy6W6eFhwhMQdb949ONsL5g1l
+	3UAnjcxLv2XQFgc0sz/l9q/soQLlnu4dB6PFZPuD1+J4W2e6LZ4I7D+vwKKBpHf6kW2DRUCVt5F
+	sFbLfklam6kE/PAnOjd7tXvn0RqWjQiqkWKVnKgQZUweOwBAwCjmikB+9caUfUuaU7EdRycEvYl
+	T6lSJ17LkVt5OUo/9m7R/U5ueAA9y48DVUwfpHCfuZxWZa4q364Ur1EFJC4uZzlSIh4SALh3qZa
+	GxA6DgpbfIXITB7M5I9Yg4I7uQRsFk2VoUdDZBeQqv8ofZs9ZG3Ub5ZtpLwz8LLzQTaRsilWm8G
+	KJq+wnjMumST3bZhEShM1XFZm5+USQRj8Whbz6fgmSmZSC4bxgPcgDkgfYpqNJvRy/JVs3FJRp4
+	jytBqvi97t9dsVbVaeoIfhmcqh
+X-Google-Smtp-Source: AGHT+IGemHZA9SPXtNLFNdfrNqoZlItf/gue2FL3ckVQhHVRtlGuWtaylquJOH87biMGuXkZN384xA==
+X-Received: by 2002:a17:90b:1b12:b0:338:3d07:5174 with SMTP id 98e67ed59e1d1-3436cb7cfbdmr4095192a91.5.1762622716706;
+        Sat, 08 Nov 2025 09:25:16 -0800 (PST)
 Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3436c3d7dddsm2769122a91.7.2025.11.08.09.24.04
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3436c3d7dddsm2769122a91.7.2025.11.08.09.24.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Nov 2025 09:24:36 -0800 (PST)
+        Sat, 08 Nov 2025 09:25:16 -0800 (PST)
 From: Xie Yuanbin <qq570070308@gmail.com>
 To: david@redhat.com,
 	tglx@linutronix.de,
@@ -125,10 +127,12 @@ Cc: x86@kernel.org,
 	linux-perf-users@vger.kernel.org,
 	llvm@lists.linux.dev,
 	will@kernel.org
-Subject: [PATCH v2 0/4] Optimize code generation during context switching
-Date: Sun,  9 Nov 2025 01:23:42 +0800
-Message-ID: <20251108172346.263590-1-qq570070308@gmail.com>
+Subject: [PATCH v2 1/4] Make enter_lazy_tlb inline on x86
+Date: Sun,  9 Nov 2025 01:23:43 +0800
+Message-ID: <20251108172346.263590-2-qq570070308@gmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251108172346.263590-1-qq570070308@gmail.com>
+References: <20251108172346.263590-1-qq570070308@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -137,240 +141,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The purpose of this series of patches is to optimize the performance of
-context switching. It does not change the code logic, but only modifies
-the inline attributes of some functions.
+This function is very short, and is called in the context switching,
+which is the hot code path.
 
-It is found that `finish_task_switch` is not inlined even in the O2 level
-optimization. This may affect performance for the following reasons:
-1. It is in the context switching code, which is a hot code path.
-2. Because of the modern CPU mitigations for vulnerabilities, inside
-switch_mm, the instruction pipeline and cache may be cleared.
-finish_task_switch is right after that, so the performance is greatly
-affected by function calls and branch jumps.
-3. The __schedule function has __sched attribute, which makes it be
-placed in the ".sched.text" section, while finish_task_switch does not,
-which causes their distance to be very far in binary, aggravating the
-above performance degradation.
+Change it to inline function on x86 to optimize performance, just like
+its code on other architectures.
 
-This series of patches mainly does the following things:
-1. Make enter_lazy_tlb inline on x86.
-2. Make raw_spin_rq_unlock inline.
-3. Let the finish_task_switch function be called inline during context
-switching.
-4. Set the subfunctions called by finish_task_switch to be inline:
-After finish_task_switch is changed to an inline function, the number of
-calls to the subfunctions (called by finish_task_switch) increases in
-this translation unit due to the inline expansion of finish_task_switch.
-For example, the finish_lock_switch function originally had only one
-calling point in core.o (in finish_task_switch func), but because the
-finish_task_switch was inlined, the calling points become two.
-Due to compiler optimization strategies, these functions may transition
-from inline functions to non inline functions, which can actually lead to
-performance degradation.
-Make the subfunctions of finish_task_stwitch inline to prevent
-degradation.
+Signed-off-by: Xie Yuanbin <qq570070308@gmail.com>
+Reviewed-by: Rik van Riel <riel@surriel.com>
+---
+ arch/x86/include/asm/mmu_context.h | 21 ++++++++++++++++++++-
+ arch/x86/mm/tlb.c                  | 21 ---------------------
+ 2 files changed, 20 insertions(+), 22 deletions(-)
 
-Performance test data for these patches:
-Time spent on calling finish_task_switch (unit: rdtsc):
- | compiler && appended cmdline | without patches | with patches  |
- | gcc + NA                     | 13.93 - 13.94   | 12.39 - 12.44 |
- | gcc + "spectre_v2_user=on"   | 24.69 - 24.85   | 13.68 - 13.73 |
- | clang + NA                   | 13.89 - 13.90   | 12.70 - 12.73 |
- | clang + "spectre_v2_user=on" | 29.00 - 29.02   | 18.88 - 18.97 |
-
-Note: I use x86 for testing here. Different architectures have different
-cmdlines for configuring mitigations. For example, on arm64, spectre v2
-mitigation is enabled by default, and it should be disabled by adding
-"nospectre_v2" to the cmdline.
-
-Test info:
-1. kernel source:
-linux-next
-commit 9c0826a5d9aa4d52206d ("Add linux-next specific files for 20251107")
-2. test machine:
-cpu: intel i5-8300h@4Ghz
-mem: DDR4 2666MHz
-Bare-metal boot, non-virtualized environment
-3. compiler:
-gcc: gcc version 15.2.0 (Debian 15.2.0-7) with
-GNU ld (GNU Binutils for Debian) 2.45
-clang: Debian clang version 21.1.4 (8) with
-Debian LLD 21.1.4 (compatible with GNU linkers)
-4. config:
-base on default x86_64_defconfig, and setting:
-CONFIG_HZ=100
-CONFIG_DEBUG_ENTRY=n
-CONFIG_X86_DEBUG_FPU=n
-CONFIG_EXPERT=y
-CONFIG_MODIFY_LDT_SYSCALL=n
-CONFIG_CGROUPS=n
-CONFIG_BLK_DEV_NVME=y
-5. test method:
-Use rdtsc (cntvct_el0 can be use on arm64/arm) to obtain timestamps
-before and after finish_task_switch calling point, and created multiple
-processes to trigger context switches, then calculated the average
-duration of the finish_task_switch call.
-Note that using multiple processes rather than threads is recommended for
-testing, because this will trigger switch_mm (where spectre v2 mitigations
-may be performed) during context switching.
-The test code is attached at the end of the email.
-
-
-I also tested the impact on bzImage size, which may affect
-embedded devices:
-1. kernel source && compiler: same as above
-2. config:
-base on default x86_64_defconfig, and setting:
-CONFIG_SCHED_CORE=y
-CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-CONFIG_NO_HZ_FULL=y
-
-bzImage size:
- | compiler | without patches | with patches  |
- | clang    | 13722624        | 13722624      |
- | gcc      | 12596224        | 12596224      |
-
-No size changes were found on bzImage.
-
-testing code:
-kernel(just for testing, not a commit):
-```c
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 8a4ac4841be6..5a42ec008620 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -395,6 +395,7 @@
- 468	common	file_getattr		sys_file_getattr
- 469	common	file_setattr		sys_file_setattr
- 470	common	listns			sys_listns
-+471	common	sched_test		sys_sched_test
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 81cf8452449a..d7e2095aeb7d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5195,6 +5195,36 @@ asmlinkage __visible void schedule_tail(struct task_struct *prev)
- 	calculate_sigpending();
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 73bf3b1b44e8..263e18bc5b3d 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -136,8 +136,27 @@ static inline void mm_reset_untag_mask(struct mm_struct *mm)
  }
+ #endif
  
-+static DEFINE_PER_CPU(uint64_t, start_time);
-+static DEFINE_PER_CPU(uint64_t, total_time);
-+static DEFINE_PER_CPU(uint64_t, total_count);
-+
-+static __always_inline uint64_t test_rdtsc(void)
++/*
++ * Please ignore the name of this function.  It should be called
++ * switch_to_kernel_thread().
++ *
++ * enter_lazy_tlb() is a hint from the scheduler that we are entering a
++ * kernel thread or other context without an mm.  Acceptable implementations
++ * include doing nothing whatsoever, switching to init_mm, or various clever
++ * lazy tricks to try to minimize TLB flushes.
++ *
++ * The scheduler reserves the right to call enter_lazy_tlb() several times
++ * in a row.  It will notify us that we're going back to a real mm by
++ * calling switch_mm_irqs_off().
++ */
+ #define enter_lazy_tlb enter_lazy_tlb
+-extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
++static __always_inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
 +{
-+    register uint64_t rax __asm__("rax");
-+    register uint64_t rdx __asm__("rdx");
++	if (this_cpu_read(cpu_tlbstate.loaded_mm) == &init_mm)
++		return;
 +
-+    __asm__ __volatile__ ("rdtsc" : "=a"(rax), "=d"(rdx));
-+    return rax | (rdx << 32);
++	this_cpu_write(cpu_tlbstate_shared.is_lazy, true);
 +}
-+
-+static __always_inline void test_start(void)
-+{
-+	raw_cpu_write(start_time, test_rdtsc());
-+}
-+
-+static __always_inline void test_end(void)
-+{
-+	const uint64_t end_time = test_rdtsc();
-+	const uint64_t cost_time = end_time - raw_cpu_read(start_time);
-+
-+	raw_cpu_add(total_time, cost_time);
-+	if (unlikely(raw_cpu_inc_return(total_count) % (1 << 20) == 0)) {
-+		pr_emerg("cpu %d total_time %llu\n", raw_smp_processor_id(), raw_cpu_read(total_time));
-+		raw_cpu_write(total_time, 0);
-+	}
-+}
-+
- /*
-  * context_switch - switch to the new MM and the new thread's register state.
-  */
-@@ -5264,7 +5294,10 @@ context_switch(struct rq *rq, struct task_struct *prev,
- 	switch_to(prev, next, prev);
- 	barrier();
  
--	return finish_task_switch(prev);
-+	test_start();
-+	rq = finish_task_switch(prev);
-+	test_end();
-+	return rq;
- }
- 
- /*
-@@ -10861,3 +10894,18 @@ void sched_change_end(struct sched_change_ctx *ctx)
- 		p->sched_class->prio_changed(rq, p, ctx->prio);
+ #define mm_init_global_asid mm_init_global_asid
+ extern void mm_init_global_asid(struct mm_struct *mm);
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 5d221709353e..cb715e8e75e4 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -970,27 +970,6 @@ void switch_mm_irqs_off(struct mm_struct *unused, struct mm_struct *next,
  	}
  }
-+
-+static struct task_struct *wait_task;
-+
-+SYSCALL_DEFINE0(sched_test)
-+{
-+	preempt_disable();
-+	while (1) {
-+		if (likely(wait_task))
-+			wake_up_process(wait_task);
-+		wait_task = current;
-+		set_current_state(TASK_UNINTERRUPTIBLE);
-+		__schedule(SM_NONE);
-+	}
-+	return 0;
-+}
-```
-
-User program:
-```c
-int main()
-{
-	cpu_set_t mask;
-	if (fork())
-		sleep(1);
-
-	CPU_ZERO(&mask);
-	CPU_SET(5, &mask); // Assume that cpu5 exists
-	assert(sched_setaffinity(0, sizeof(mask), &mask) == 0);
-	syscall(471);
-	// unreachable
-	return 0;
-}
-```
-
-Usage:
-1. set core5 as isolated cpu: add "isolcpus=5" to cmdline
-2. run user programe
-3. wait for kernel print
-
-v1->v2: https://lore.kernel.org/20251024182628.68921-1-qq570070308@gmail.com
-  - Make raw_spin_rq_unlock inline
-  - Make __balance_callbacks inline
-  - Add comments for always inline functions
-  - Add Performance Test Data
-
-Xie Yuanbin (4):
-  Make enter_lazy_tlb inline on x86
-  Make raw_spin_rq_unlock inline
-  Provide the always inline version of some functions
-  Make finish_task_switch and its subfuncs inline in context switching
-
- arch/arm/include/asm/mmu_context.h      | 12 +++++-
- arch/riscv/include/asm/sync_core.h      |  2 +-
- arch/s390/include/asm/mmu_context.h     | 12 +++++-
- arch/sparc/include/asm/mmu_context_64.h | 12 +++++-
- arch/x86/include/asm/mmu_context.h      | 21 +++++++++-
- arch/x86/include/asm/sync_core.h        |  2 +-
- arch/x86/mm/tlb.c                       | 21 ----------
- include/linux/perf_event.h              |  2 +-
- include/linux/sched/mm.h                | 10 ++---
- include/linux/tick.h                    |  4 +-
- include/linux/vtime.h                   |  8 ++--
- kernel/sched/core.c                     | 55 ++++++++++++++++++-------
- kernel/sched/sched.h                    | 24 ++++++-----
- 13 files changed, 121 insertions(+), 64 deletions(-)
-
+ 
+-/*
+- * Please ignore the name of this function.  It should be called
+- * switch_to_kernel_thread().
+- *
+- * enter_lazy_tlb() is a hint from the scheduler that we are entering a
+- * kernel thread or other context without an mm.  Acceptable implementations
+- * include doing nothing whatsoever, switching to init_mm, or various clever
+- * lazy tricks to try to minimize TLB flushes.
+- *
+- * The scheduler reserves the right to call enter_lazy_tlb() several times
+- * in a row.  It will notify us that we're going back to a real mm by
+- * calling switch_mm_irqs_off().
+- */
+-void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
+-{
+-	if (this_cpu_read(cpu_tlbstate.loaded_mm) == &init_mm)
+-		return;
+-
+-	this_cpu_write(cpu_tlbstate_shared.is_lazy, true);
+-}
+-
+ /*
+  * Using a temporary mm allows to set temporary mappings that are not accessible
+  * by other CPUs. Such mappings are needed to perform sensitive memory writes
 -- 
 2.51.0
 
