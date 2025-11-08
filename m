@@ -1,81 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D79288513;
-	Sat,  8 Nov 2025 00:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C3B4C98;
+	Sat,  8 Nov 2025 00:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762563099; cv=none; b=cZBdF5HwC330vEwW8rQnR3iDEZRe4xF/mPc3+wQaUWbd28x4B3IPwlozzVQHyK3PzvLBvpjnBCeCzDjSQBocNy3khDUgxyPN+xpuINOEwV1uej9vAlr8UlBXY2zh5W6iEIZm2lE5uRPjvzZXg6WZ+UyU3qYYMx0Ru7lpvXjYhhg=
+	t=1762563351; cv=none; b=um+xfViCd9UqwjXpUkMHHrcop4xo6hrmuvOJQ5nXT0VvEUQQhtTXKRVe9zDUT3LEUqEd2m4klfRbqE5AS5w2f2Xij7e9CptpJKfBQ63wsSbAcXVKCZW6JcmAW6UjAmvj+o+5vRCYIAta5Blt0r0zV8zL4rfBMjP75Dn4zIDhQNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762563099; c=relaxed/simple;
-	bh=X65BSM7S8OpvSv2313E9aYYD5lZwDf8OKqldRYlKw7M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GU/QwWVPSo3d3SU6eia2a/NJVx4Cw2Rc+SwJiHYdlwMWjlw0yzmWJQvnUZaiU95e6Lxs2vZXwT7X2Npbj9BQYBq8VSDdv8TBCHvTmX5fssynVVPY4YcZ/S6kLah9+OKVSw8ue5lHPEMycBHKDoJ8ReFI91uZ6kMchVpnPwYYr7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fqyfe4fm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762563351; c=relaxed/simple;
+	bh=idVQy+7g/knnElMiisnbqGbKnJRrTqt0LGwoCX4+K9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BGeA+rbd7x0rL8MC4HH7rYhYOTgf1yIKyLBFhpOj2+rcKm/CsHwFiKORRSVnMs4wXRxknKlvWGuTPXJtz7DgsylIUIhD7xBftt9m5+BvX8Omr1iSXnGIOs44fGq5QK44X4oNroYADzTr5KOAzxbUbeylezHtyYZca55eOVvu+i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BrRm+4dt; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fqyfe4fm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F39C116B1;
-	Sat,  8 Nov 2025 00:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762563099;
-	bh=X65BSM7S8OpvSv2313E9aYYD5lZwDf8OKqldRYlKw7M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Fqyfe4fmm7PeEVnVCbpwIwdsaGziIAnYGuaQrD2B0AhEIL0L45oiJbi1IE1t/V1I0
-	 G1C1a5Ky4KmUQB+3PK6v9IHuM/yppWU4nUmg4/14gVlt84FBATGLfQqZgXoI2eGO5A
-	 wMyIULLnPK4ow0J9IbAzg4dTcw/QECb51VgYvycrRUijVNie0fNpmQ9VKtnOUYHqRz
-	 wMYFbpUrRmWz8oaosZqbDCMvgR8szfDV9rG3lXL6AWsaQHt9hUTAUv5LAUgHuRXwS1
-	 oJPgT2+xFUssTrbvTRnEx7JxFcxpl8dYR3dv8oCyfkaqQOXIieKmQJWHklYtHP9qeu
-	 rRijJ+IpVUwZA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD5E3A40FC8;
-	Sat,  8 Nov 2025 00:51:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BrRm+4dt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762563349; x=1794099349;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=idVQy+7g/knnElMiisnbqGbKnJRrTqt0LGwoCX4+K9E=;
+  b=BrRm+4dtWZgsRz+Vrdg0owsEBny7My4u4+4MiXLkNaJmCftL6cCBgPNR
+   Bu2Z/RMH24IsUb7h7FoNbYyBdFxnnaAhS2rcHs+2b2GsNngdnspaJCMek
+   WEIB9utNkq4xXezNzLL3Bn94wSiHjJk6xs86kfG6gxNKCebPvx1EWKLWt
+   sT4tSKLrdk3yAmoTBLz9lNLz18/2lg8+2sg9WXeguHqs8e0Hyu2S17BiR
+   SKJCgGPe0zlIdaSAiQH0OLbsM3mESsN0ODwLuOXEPWrU1/F8cN0IHfHr1
+   oQupi5vqEI6jIxEDXy78BBtElVTT/fpLSpyKbVsPd9ZfSI3ttHl/V3uyy
+   Q==;
+X-CSE-ConnectionGUID: /dk52jUURVeUBPP+/leQyA==
+X-CSE-MsgGUID: /SzVYLKPR8Cl4PmWCdopJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64756110"
+X-IronPort-AV: E=Sophos;i="6.19,288,1754982000"; 
+   d="scan'208";a="64756110"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 16:55:49 -0800
+X-CSE-ConnectionGUID: gBIEgg9NQG2bXnQiKFMnyQ==
+X-CSE-MsgGUID: NuJ6AZnfRMaVBasVyr5wBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,288,1754982000"; 
+   d="scan'208";a="187485582"
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Nov 2025 16:55:49 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vHXF3-0000Xz-2x;
+	Sat, 08 Nov 2025 00:55:45 +0000
+Date: Sat, 8 Nov 2025 08:54:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gregory Price <gourry@gourry.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Gregory Price <gourry@gourry.net>
+Subject: [gourryinverse:scratch/gourry/isolation/linus 5/11]
+ mm/oom_kill.c:1123:18: error: use of undeclared identifier
+ 'default_sysram_nodes'
+Message-ID: <202511080812.LhooV61h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH fixes] riscv: Fix CONFIG_AS_HAS_INSN for new .insn usage
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <176256307124.1206494.4272115513323337188.git-patchwork-notify@kernel.org>
-Date: Sat, 08 Nov 2025 00:51:11 +0000
-References: <20251107-riscv-fix-new-insn-usage-v1-1-9a186c5928a0@kernel.org>
-In-Reply-To: <20251107-riscv-fix-new-insn-usage-v1-1-9a186c5928a0@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-riscv@lists.infradead.org, pjw@kernel.org, palmer@dabbelt.com,
- alex@ghiti.fr, nick.desaulniers+lkml@gmail.com, morbo@google.com,
- justinstitt@google.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk,
- llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+tree:   https://github.com/gourryinverse/linux scratch/gourry/isolation/linus
+head:   67062e895b94cd27af5fa58d8a567086a53d0914
+commit: b5fcc368ba4cbe6b7a89e1220e01dee600b9e4c5 [5/11] mm: default slub, oom_kill, compaction, and page_alloc to sysram
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251108/202511080812.LhooV61h-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d78e0ded5215824a63ac04fb87effd9eacf875eb)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080812.LhooV61h-lkp@intel.com/reproduce)
 
-This patch was applied to riscv/linux.git (fixes)
-by Paul Walmsley <pjw@kernel.org>:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511080812.LhooV61h-lkp@intel.com/
 
-On Fri, 07 Nov 2025 14:56:59 -0700 you wrote:
-> After commit 44aa25c000b4 ("riscv: asm: use .insn for making custom
-> instructions"), builds using LLVM older that 19 or binutils older than
-> 2.38 fail with:
-> 
->   arch/riscv/include/asm/vdso/processor.h: Assembler messages:
->   arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
->   arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
->   arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
->   arch/riscv/include/asm/vdso/processor.h:27: Error: unrecognized opcode `0x100000f'
->   make[4]: *** [scripts/Makefile.build:287: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-> 
-> [...]
+All errors (new ones prefixed by >>):
 
-Here is the summary with links:
-  - [fixes] riscv: Fix CONFIG_AS_HAS_INSN for new .insn usage
-    https://git.kernel.org/riscv/c/dc20452e6caf
+>> mm/oom_kill.c:1123:18: error: use of undeclared identifier 'default_sysram_nodes'
+    1123 |                 oc->nodemask = default_sysram_nodes;
+         |                                ^~~~~~~~~~~~~~~~~~~~
+   mm/oom_kill.c:1160:18: error: use of undeclared identifier 'default_sysram_nodes'
+    1160 |                 oc->nodemask = default_sysram_nodes;
+         |                                ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> mm/page_alloc.c:4614:18: error: use of undeclared identifier 'default_sysram_nodes'
+    4614 |                 ac->nodemask = default_sysram_nodes;
+         |                                ^~~~~~~~~~~~~~~~~~~~
+   mm/page_alloc.c:4798:18: error: use of undeclared identifier 'default_sysram_nodes'
+    4798 |                 ac->nodemask = default_sysram_nodes;
+         |                                ^~~~~~~~~~~~~~~~~~~~
+   mm/page_alloc.c:4951:18: error: use of undeclared identifier 'default_sysram_nodes'
+    4951 |                 ac->nodemask = default_sysram_nodes;
+         |                                ^~~~~~~~~~~~~~~~~~~~
+   mm/page_alloc.c:5198:38: error: use of undeclared identifier 'default_sysram_nodes'
+    5198 |         ac.nodemask = nodemask ? nodemask : default_sysram_nodes;
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
 
-You are awesome, thank you!
+
+vim +/default_sysram_nodes +1123 mm/oom_kill.c
+
+  1109	
+  1110	/**
+  1111	 * out_of_memory - kill the "best" process when we run out of memory
+  1112	 * @oc: pointer to struct oom_control
+  1113	 *
+  1114	 * If we run out of memory, we have the choice between either
+  1115	 * killing a random task (bad), letting the system crash (worse)
+  1116	 * OR try to be smart about which process to kill. Note that we
+  1117	 * don't have to be perfect here, we just have to be good.
+  1118	 */
+  1119	bool out_of_memory(struct oom_control *oc)
+  1120	{
+  1121		unsigned long freed = 0;
+  1122		if (!oc->nodemask)
+> 1123			oc->nodemask = default_sysram_nodes;
+  1124	
+  1125		if (oom_killer_disabled)
+  1126			return false;
+  1127	
+  1128		if (!is_memcg_oom(oc)) {
+  1129			blocking_notifier_call_chain(&oom_notify_list, 0, &freed);
+  1130			if (freed > 0 && !is_sysrq_oom(oc))
+  1131				/* Got some memory back in the last second. */
+  1132				return true;
+  1133		}
+  1134	
+  1135		/*
+  1136		 * If current has a pending SIGKILL or is exiting, then automatically
+  1137		 * select it.  The goal is to allow it to allocate so that it may
+  1138		 * quickly exit and free its memory.
+  1139		 */
+  1140		if (task_will_free_mem(current)) {
+  1141			mark_oom_victim(current);
+  1142			queue_oom_reaper(current);
+  1143			return true;
+  1144		}
+  1145	
+  1146		/*
+  1147		 * The OOM killer does not compensate for IO-less reclaim.
+  1148		 * But mem_cgroup_oom() has to invoke the OOM killer even
+  1149		 * if it is a GFP_NOFS allocation.
+  1150		 */
+  1151		if (!(oc->gfp_mask & __GFP_FS) && !is_memcg_oom(oc))
+  1152			return true;
+  1153	
+  1154		/*
+  1155		 * Check if there were limitations on the allocation (only relevant for
+  1156		 * NUMA and memcg) that may require different handling.
+  1157		 */
+  1158		oc->constraint = constrained_alloc(oc);
+  1159		if (oc->constraint != CONSTRAINT_MEMORY_POLICY)
+  1160			oc->nodemask = default_sysram_nodes;
+  1161		check_panic_on_oom(oc);
+  1162	
+  1163		if (!is_memcg_oom(oc) && sysctl_oom_kill_allocating_task &&
+  1164		    current->mm && !oom_unkillable_task(current) &&
+  1165		    oom_cpuset_eligible(current, oc) &&
+  1166		    current->signal->oom_score_adj != OOM_SCORE_ADJ_MIN) {
+  1167			get_task_struct(current);
+  1168			oc->chosen = current;
+  1169			oom_kill_process(oc, "Out of memory (oom_kill_allocating_task)");
+  1170			return true;
+  1171		}
+  1172	
+  1173		select_bad_process(oc);
+  1174		/* Found nothing?!?! */
+  1175		if (!oc->chosen) {
+  1176			dump_header(oc);
+  1177			pr_warn("Out of memory and no killable processes...\n");
+  1178			/*
+  1179			 * If we got here due to an actual allocation at the
+  1180			 * system level, we cannot survive this and will enter
+  1181			 * an endless loop in the allocator. Bail out now.
+  1182			 */
+  1183			if (!is_sysrq_oom(oc) && !is_memcg_oom(oc))
+  1184				panic("System is deadlocked on memory\n");
+  1185		}
+  1186		if (oc->chosen && oc->chosen != (void *)-1UL)
+  1187			oom_kill_process(oc, !is_memcg_oom(oc) ? "Out of memory" :
+  1188					 "Memory cgroup out of memory");
+  1189		return !!oc->chosen;
+  1190	}
+  1191	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
