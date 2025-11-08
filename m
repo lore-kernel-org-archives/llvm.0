@@ -1,206 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7AE21CC56;
-	Sat,  8 Nov 2025 18:46:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C8C270542
+	for <llvm@lists.linux.dev>; Sat,  8 Nov 2025 21:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762627597; cv=none; b=Dne1xxdXO+bAkFJGAxBgq+H6dHerEoEMGN6iKm716G0wvUkHUu4lhrTNXsbRHpbo6iz8IDKjBUFmo98iF5COnu4r+Kp7pHbqEMa5lGjGAjcHFHAZy1B0OfNuYOJLf5IrPqLSkpcGCWQSmRtYUSplI/NIWIjLS8o2iQ3alYhH91k=
+	t=1762635873; cv=none; b=FEdtADXcJR4S9JJC1cufkidAlCMLz8zNtu4tzQRZzNQd89kJ9Hj/oqZLitQQLjfxwzkJUnnzv6reYZBHxjTxh/vzyY4qUScKv+VAbDxpObw4VRu3JhXJzTK51VHdmB9fd7qZ8UHbRxyFd2Laykr7722OoVt+DS4xhjHj5I0nrbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762627597; c=relaxed/simple;
-	bh=6Dana25+opIaIeaI3CPAKv5gElWCCFDGww5LtNljsCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mypA+inez1P50mFBnrsx/DDkttwlD6K5DQH31Igu6/AoiK6xEY9iUS5jwKvnX2u3+o9S4Qd3yh3O3pIC/MnrqJRw7xTxBtvYBjtfTIFiHsD+Sk6QbZXQkRBDVt0GfqEgaeReEp+7baJgyX1hvisHG2g6lqoieGJGeQoQY2PWi/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h4INGUt3; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762635873; c=relaxed/simple;
+	bh=6x43yjS02aypwGuqbdmoq7YWGLThPTGKiQei+aVXqtY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TOJfBtk8XOqdMMNdoszM3fJS2CotCi7SCqPDaW7tGuT1URKiwdphVk23xqCh1/eRlTEol6YGlqJ5V/IMQHWWnIpfVGzBs29yKkI7Lt0cYsJMTz0nazkoF2DLvKm3VZuVMcBQmS2k0mco2sudgWP4x7Fv1mVZw1bm7ToAa81gycs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GeudyQRz; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h4INGUt3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762627595; x=1794163595;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6Dana25+opIaIeaI3CPAKv5gElWCCFDGww5LtNljsCo=;
-  b=h4INGUt3REWj+u0XaYS+RtOrPi4msddYOWMOZaAU0HoL9GDzgtWkhmCM
-   mxAmbWugQd+x7UgJ6d5z8rCI2cRLADxzQO/2Tf3SwDF6s/yvVlxTFDkat
-   iF1/VQCtsfP350XgnRKbv4afp0zllrqfj6W4Y8cuV1TVq9e0jbEZM6II2
-   FldA5AkZ4E9jA091FL4OFcNBSQA4SZTPL/SK9r9eVfsDRVzpoSZJNZuJ5
-   gu/4cV6E9HkpFRtvlsYBVEoRfY/W+um7lh+lSFP45we+XSPcxSRedXPRW
-   ay4HFZToOPAeE92Ltb6Npyf2bDgDcYTfbBQafb4TI/3TJIG+o6DSzUJ4t
-   Q==;
-X-CSE-ConnectionGUID: agqR1od7ST+z6mYUHX1I+w==
-X-CSE-MsgGUID: +VHPeKQwQVOxslfVAxc5WQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64650797"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64650797"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 10:46:35 -0800
-X-CSE-ConnectionGUID: Vfoh66b1QfaoxRkbDf8mFQ==
-X-CSE-MsgGUID: /Z5XJTliTf2/2nMSAOatSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,290,1754982000"; 
-   d="scan'208";a="211744178"
-Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Nov 2025 10:46:32 -0800
-Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vHnxG-0001LB-31;
-	Sat, 08 Nov 2025 18:46:30 +0000
-Date: Sun, 9 Nov 2025 02:46:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gregory Price <gourry@gourry.net>
-Subject: [gourryinverse:scratch/gourry/isolation/linus 7/11]
- kernel/cgroup/cpuset.c:2812:20: error: use of undeclared identifier
- 'default_sysram_nodelist'
-Message-ID: <202511090218.1AkRYdc8-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GeudyQRz"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A8IjeaU031047;
+	Sat, 8 Nov 2025 21:04:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=r/C1clVn2kNhUfme3gLJloJ7m1Sg4mdeJO/aSpmZh
+	l4=; b=GeudyQRzkAOWPjbmni0KBK8PEE7jCOxJce9u88J/at0sbGrJCiqwJcjqe
+	u9H+G7dFcOYMR0lYueOefDjaXnUoMYZ1XxHI5L5YxVlW4JR6ANipLik5o1Jxtz1S
+	HUy+j8DP1zEDaB7A11F3QAeTChBKOsVl2BlQCHauAWw1tTSY0t8TrUlpobl0DBoR
+	EQPeZ1et1YSY1aMtyEIadv03csrg9uLaZ1g9SbyDBMkRGhQtsSmQ1p1bSlsGX0fe
+	dbXyW49XrEWnYyaD45hT+TTUNIBPcCXxgQoeQ7QwGU0n5YJ2tVsGjnae/iojoK74
+	wpc8n3EZUP/lNgCDq9x1ouG+0JU4Q==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a9wgwj2fn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 08 Nov 2025 21:04:14 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A8I0qWu012875;
+	Sat, 8 Nov 2025 21:04:13 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4a5y82g4ur-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 08 Nov 2025 21:04:13 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A8L49qR28377348
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 8 Nov 2025 21:04:09 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 49B042004D;
+	Sat,  8 Nov 2025 21:04:09 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B2C4620040;
+	Sat,  8 Nov 2025 21:04:06 +0000 (GMT)
+Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.99.186])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sat,  8 Nov 2025 21:04:06 +0000 (GMT)
+From: Hari Bathini <hbathini@linux.ibm.com>
+To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-trace-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, llvm@lists.linux.dev,
+        Maryam Moghadas <maryammo@ca.ibm.com>
+Subject: [PATCH 0/3] powerpc64/ftrace: fixes clang build issues
+Date: Sun,  9 Nov 2025 02:34:02 +0530
+Message-ID: <20251108210405.2375472-1-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wc92Ckzux93t2Jw3GDjJdetmD-I3piLP
+X-Proofpoint-ORIG-GUID: wc92Ckzux93t2Jw3GDjJdetmD-I3piLP
+X-Authority-Analysis: v=2.4 cv=VMPQXtPX c=1 sm=1 tr=0 ts=690fb04e cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
+ a=Ew1Gq7sKqn5lxjvi_p4A:9 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA4MDAyMiBTYWx0ZWRfXxpLUAX8Wgi9p
+ JYub1skAWOGD2Vy/vMP2Hr4aZc3Z3V79cFe7+wrPEgOJGnyd0GIgdCO8XjHvoHHkD8XcC65MyWI
+ HKHvw6bNtFVD4ySEDJkJjK1RPo2z13iFxdv7YCK3tdLn5+e7KR523yDW4ADqg7AnoWIsJbTdU0G
+ J7tH6CBMaga+wSsxNcjs4cSZwxlIoVny8r3TDRlOAJgGHJ8PgpXe7jUR+e5Pp4H3PpGUOT4ZD+F
+ 6HWXPTyYR5aJ8mus2E4dUlI/nR72HxUTZqiJ/keNmtu/Xl1isAtofZYGfjl9WM7qmss6QypaR/e
+ gIPEYCiX+9PmxM+h/rbFLo6Athi1gEY1cgyrE4YWFF8/G5ZDR25qZufdniafmpz6fJJPpn+XNVY
+ NjWsUqrczYoCPYUk4+IzLrk7P6Z23A==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-08_06,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ clxscore=1011 phishscore=0 spamscore=0 malwarescore=0 adultscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
+ definitions=main-2511080022
 
-tree:   https://github.com/gourryinverse/linux scratch/gourry/isolation/linus
-head:   67062e895b94cd27af5fa58d8a567086a53d0914
-commit: 2c5eedd6cd1524843e21a0e1ec1d1c8d9fd78e14 [7/11] cpuset: introduce cpuset.mems.default
-config: arm-randconfig-003-20251108 (https://download.01.org/0day-ci/archive/20251109/202511090218.1AkRYdc8-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d78e0ded5215824a63ac04fb87effd9eacf875eb)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511090218.1AkRYdc8-lkp@intel.com/reproduce)
+Support for -fpatchable-function-entry on ppc64le was added in Clang
+with [1]. Faced a couple of issues while building the linux kernel
+with Clang though. Patches 1 & 2 address those issues. The last patch
+provides workaround to ensure, an open issue [2] in Clang with
+-fpatchable-function-entry support, does not impact the linux
+ftrace subsystem.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511090218.1AkRYdc8-lkp@intel.com/
+[1] https://github.com/llvm/llvm-project/pull/151569
+[2] https://github.com/llvm/llvm-project/issues/163706
 
-All errors (new ones prefixed by >>):
+Hari Bathini (3):
+  powerpc64: make clang cross-build friendly
+  powerpc64/ftrace: fix OOL stub count with clang
+  powerpc64/ftrace: workaround clang recording GEP in
+    __patchable_function_entries
 
->> kernel/cgroup/cpuset.c:2812:20: error: use of undeclared identifier 'default_sysram_nodelist'
-    2812 |                 if (!nodes_empty(default_sysram_nodelist))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:2814:7: error: use of undeclared identifier 'default_sysram_nodelist'
-    2814 |                                   default_sysram_nodelist);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3601:20: error: use of undeclared identifier 'default_sysram_nodelist'
-    3601 |                 if (!nodes_empty(default_sysram_nodelist))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3603:7: error: use of undeclared identifier 'default_sysram_nodelist'
-    3603 |                                   default_sysram_nodelist);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3635:19: error: use of undeclared identifier 'default_sysram_nodelist'
-    3635 |         if (!nodes_empty(default_sysram_nodelist))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3637:6: error: use of undeclared identifier 'default_sysram_nodelist'
-    3637 |                           default_sysram_nodelist);
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3840:19: error: use of undeclared identifier 'default_sysram_nodelist'
-    3840 |         if (!nodes_empty(default_sysram_nodelist))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3842:6: error: use of undeclared identifier 'default_sysram_nodelist'
-    3842 |                           default_sysram_nodelist);
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3873:19: error: use of undeclared identifier 'default_sysram_nodelist'
-    3873 |         if (!nodes_empty(default_sysram_nodelist))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:3875:6: error: use of undeclared identifier 'default_sysram_nodelist'
-    3875 |                           default_sysram_nodelist);
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4067:20: error: use of undeclared identifier 'default_sysram_nodelist'
-    4067 |                 if (!nodes_empty(default_sysram_nodelist))
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4070:7: error: use of undeclared identifier 'default_sysram_nodelist'
-    4070 |                                   default_sysram_nodelist);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4141:19: error: use of undeclared identifier 'default_sysram_nodelist'
-    4141 |         if (!nodes_empty(default_sysram_nodelist))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4143:6: error: use of undeclared identifier 'default_sysram_nodelist'
-    4143 |                           default_sysram_nodelist);
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4375:38: error: use of undeclared identifier 'default_sysram_nodelist'
-    4375 |         if (!protected_node && !nodes_empty(default_sysram_nodelist))
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4376:31: error: use of undeclared identifier 'default_sysram_nodelist'
-    4376 |                 allowed &= node_isset(node, default_sysram_nodelist);
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4376:31: error: use of undeclared identifier 'default_sysram_nodelist'
-    4376 |                 allowed &= node_isset(node, default_sysram_nodelist);
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4376:31: error: use of undeclared identifier 'default_sysram_nodelist'
-    4376 |                 allowed &= node_isset(node, default_sysram_nodelist);
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cpuset.c:4376:31: error: use of undeclared identifier 'default_sysram_nodelist'
-    4376 |                 allowed &= node_isset(node, default_sysram_nodelist);
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-
-
-vim +/default_sysram_nodelist +2812 kernel/cgroup/cpuset.c
-
-  2769	
-  2770	/*
-  2771	 * update_nodemasks_hier - Update effective nodemasks and tasks in the subtree
-  2772	 * @cs: the cpuset to consider
-  2773	 * @new_mems: a temp variable for calculating new effective_mems
-  2774	 *
-  2775	 * When configured nodemask is changed, the effective nodemasks of this cpuset
-  2776	 * and all its descendants need to be updated.
-  2777	 *
-  2778	 * On legacy hierarchy, effective_mems will be the same with mems_allowed.
-  2779	 *
-  2780	 * Called with cpuset_mutex held
-  2781	 */
-  2782	static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
-  2783	{
-  2784		struct cpuset *cp;
-  2785		struct cgroup_subsys_state *pos_css;
-  2786	
-  2787		rcu_read_lock();
-  2788		cpuset_for_each_descendant_pre(cp, pos_css, cs) {
-  2789			struct cpuset *parent = parent_cs(cp);
-  2790	
-  2791			nodes_and(*new_mems, cp->mems_allowed, parent->effective_mems);
-  2792	
-  2793			/*
-  2794			 * If it becomes empty, inherit the effective mask of the
-  2795			 * parent, which is guaranteed to have some MEMs.
-  2796			 */
-  2797			if (is_in_v2_mode() && nodes_empty(*new_mems))
-  2798				*new_mems = parent->effective_mems;
-  2799	
-  2800			/* Skip the whole subtree if the nodemask remains the same. */
-  2801			if (nodes_equal(*new_mems, cp->effective_mems)) {
-  2802				pos_css = css_rightmost_descendant(pos_css);
-  2803				continue;
-  2804			}
-  2805	
-  2806			if (!css_tryget_online(&cp->css))
-  2807				continue;
-  2808			rcu_read_unlock();
-  2809	
-  2810			spin_lock_irq(&callback_lock);
-  2811			cp->effective_mems = *new_mems;
-> 2812			if (!nodes_empty(default_sysram_nodelist))
-  2813				nodes_and(cp->mems_default, cp->effective_mems,
-  2814					  default_sysram_nodelist);
-  2815			spin_unlock_irq(&callback_lock);
-  2816	
-  2817			WARN_ON(!is_in_v2_mode() &&
-  2818				!nodes_equal(cp->mems_allowed, cp->effective_mems));
-  2819	
-  2820			cpuset_update_tasks_nodemask(cp);
-  2821	
-  2822			rcu_read_lock();
-  2823			css_put(&cp->css);
-  2824		}
-  2825		rcu_read_unlock();
-  2826	}
-  2827	
+ arch/powerpc/Kconfig                          |  5 ++--
+ arch/powerpc/kernel/trace/ftrace.c            | 26 ++++++++++++++++---
+ ....sh => check-fpatchable-function-entry.sh} |  0
+ arch/powerpc/tools/ftrace-gen-ool-stubs.sh    |  4 +--
+ 4 files changed, 27 insertions(+), 8 deletions(-)
+ rename arch/powerpc/tools/{gcc-check-fpatchable-function-entry.sh => check-fpatchable-function-entry.sh} (100%)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.1
+
