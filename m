@@ -1,60 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C3B4C98;
-	Sat,  8 Nov 2025 00:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A41502BE;
+	Sat,  8 Nov 2025 01:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762563351; cv=none; b=um+xfViCd9UqwjXpUkMHHrcop4xo6hrmuvOJQ5nXT0VvEUQQhtTXKRVe9zDUT3LEUqEd2m4klfRbqE5AS5w2f2Xij7e9CptpJKfBQ63wsSbAcXVKCZW6JcmAW6UjAmvj+o+5vRCYIAta5Blt0r0zV8zL4rfBMjP75Dn4zIDhQNY=
+	t=1762564616; cv=none; b=Lz0w6ZC10QxGAWLmf8E1bj3XD3CnHu8p5vGuBXXTZXQH1CEG0+/cR/hcQ+GPFb2aoheMCO2AfMUWSLYxYTjR6JOJf4V4veg7Y7nVjtB8y5NPSiXBp4mTQT4xJ5v+sRm3BQKKPGLs1KQ6u1A83tVqA77mGsmL39pfb0H/cNPuBag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762563351; c=relaxed/simple;
-	bh=idVQy+7g/knnElMiisnbqGbKnJRrTqt0LGwoCX4+K9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BGeA+rbd7x0rL8MC4HH7rYhYOTgf1yIKyLBFhpOj2+rcKm/CsHwFiKORRSVnMs4wXRxknKlvWGuTPXJtz7DgsylIUIhD7xBftt9m5+BvX8Omr1iSXnGIOs44fGq5QK44X4oNroYADzTr5KOAzxbUbeylezHtyYZca55eOVvu+i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BrRm+4dt; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1762564616; c=relaxed/simple;
+	bh=Z2R2Y+Y7iYLIBfc+xrkSR2Yr7K6yCTnIgBnYqJBs2Pw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BEkHEH/u/TwxhzamnBqzCzuEM38UAPFboxQ0pYqx+K/zohDkwLxNMU3h5Ly/ZdUFqQx3amhV1HWQ6Qu6fFLyynW1LzzEAhHw9eIRPT1TnmHP7VHK0F1A8H4vykKXibJg2jJmRIfIag50sNVgSo8BanmbGSTwHYAYh1Oe8MI04xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DTI2R3Ca; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BrRm+4dt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DTI2R3Ca"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762563349; x=1794099349;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=idVQy+7g/knnElMiisnbqGbKnJRrTqt0LGwoCX4+K9E=;
-  b=BrRm+4dtWZgsRz+Vrdg0owsEBny7My4u4+4MiXLkNaJmCftL6cCBgPNR
-   Bu2Z/RMH24IsUb7h7FoNbYyBdFxnnaAhS2rcHs+2b2GsNngdnspaJCMek
-   WEIB9utNkq4xXezNzLL3Bn94wSiHjJk6xs86kfG6gxNKCebPvx1EWKLWt
-   sT4tSKLrdk3yAmoTBLz9lNLz18/2lg8+2sg9WXeguHqs8e0Hyu2S17BiR
-   SKJCgGPe0zlIdaSAiQH0OLbsM3mESsN0ODwLuOXEPWrU1/F8cN0IHfHr1
-   oQupi5vqEI6jIxEDXy78BBtElVTT/fpLSpyKbVsPd9ZfSI3ttHl/V3uyy
-   Q==;
-X-CSE-ConnectionGUID: /dk52jUURVeUBPP+/leQyA==
-X-CSE-MsgGUID: /SzVYLKPR8Cl4PmWCdopJw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64756110"
+  t=1762564616; x=1794100616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z2R2Y+Y7iYLIBfc+xrkSR2Yr7K6yCTnIgBnYqJBs2Pw=;
+  b=DTI2R3CaRMtym0vVJSp6BGd9wM2kG5pKjr9X3XXo/IANeI7qMiWgpKaN
+   QANaKpVsCmTw+NNpyXtJ/ZsliHkzA7oo/NLwznAHZxgAKxeDgNRekbqVU
+   1i5jQiJSR0AKVVf01SbTJNUXyjYgfpKitJkjPkKSrjpMkH0W/5Aglkv6w
+   82JcsdS4+Guj8ewhXuWenm2HdbbgvAYE1NNuiqAWBB7QoZtDjzny/HgZF
+   JpFXTLwdiHE/VQnCebH0GlWBjamB6piApOecXXDyN0Jzrf3UT4r2gWvvQ
+   k+qB6TKPvMwJBDH9ovKOxqgbigxV+2IVDjlknawhugYD6FHlnwgz0NYcv
+   g==;
+X-CSE-ConnectionGUID: EOg9+91UT0Gf6XWytTMM0g==
+X-CSE-MsgGUID: ioBP1KZ5S/iohBfx3CZSWA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="75010193"
 X-IronPort-AV: E=Sophos;i="6.19,288,1754982000"; 
-   d="scan'208";a="64756110"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 16:55:49 -0800
-X-CSE-ConnectionGUID: gBIEgg9NQG2bXnQiKFMnyQ==
-X-CSE-MsgGUID: NuJ6AZnfRMaVBasVyr5wBg==
+   d="scan'208";a="75010193"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 17:16:55 -0800
+X-CSE-ConnectionGUID: JxjCYdpvSpqW/a7GIPacDA==
+X-CSE-MsgGUID: 8XFmiRmJTaC5TUgp0Bwudg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,288,1754982000"; 
-   d="scan'208";a="187485582"
+   d="scan'208";a="193209633"
 Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 07 Nov 2025 16:55:49 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 07 Nov 2025 17:16:50 -0800
 Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vHXF3-0000Xz-2x;
-	Sat, 08 Nov 2025 00:55:45 +0000
-Date: Sat, 8 Nov 2025 08:54:56 +0800
+	id 1vHXZQ-0000ZL-1W;
+	Sat, 08 Nov 2025 01:16:48 +0000
+Date: Sat, 8 Nov 2025 09:15:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
+To: Fengnan Chang <changfengnan@bytedance.com>, axboe@kernel.dk,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+	asml.silence@gmail.com, willy@infradead.org, djwong@kernel.org,
+	hch@infradead.org, ritesh.list@gmail.com,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+	linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+	linux-block@vger.kernel.org, ming.lei@redhat.com,
+	linux-nvme@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gregory Price <gourry@gourry.net>
-Subject: [gourryinverse:scratch/gourry/isolation/linus 5/11]
- mm/oom_kill.c:1123:18: error: use of undeclared identifier
- 'default_sysram_nodes'
-Message-ID: <202511080812.LhooV61h-lkp@intel.com>
+	Fengnan Chang <changfengnan@bytedance.com>
+Subject: Re: [PATCH v2 1/2] block: use bio_alloc_bioset for passthru IO by
+ default
+Message-ID: <202511080837.qd2MmgFS-lkp@intel.com>
+References: <20251107020557.10097-2-changfengnan@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,129 +71,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251107020557.10097-2-changfengnan@bytedance.com>
 
-tree:   https://github.com/gourryinverse/linux scratch/gourry/isolation/linus
-head:   67062e895b94cd27af5fa58d8a567086a53d0914
-commit: b5fcc368ba4cbe6b7a89e1220e01dee600b9e4c5 [5/11] mm: default slub, oom_kill, compaction, and page_alloc to sysram
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20251108/202511080812.LhooV61h-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project d78e0ded5215824a63ac04fb87effd9eacf875eb)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080812.LhooV61h-lkp@intel.com/reproduce)
+Hi Fengnan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 4a0c9b3391999818e2c5b93719699b255be1f682]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Fengnan-Chang/block-use-bio_alloc_bioset-for-passthru-IO-by-default/20251107-100851
+base:   4a0c9b3391999818e2c5b93719699b255be1f682
+patch link:    https://lore.kernel.org/r/20251107020557.10097-2-changfengnan%40bytedance.com
+patch subject: [PATCH v2 1/2] block: use bio_alloc_bioset for passthru IO by default
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251108/202511080837.qd2MmgFS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080837.qd2MmgFS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511080812.LhooV61h-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511080837.qd2MmgFS-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/oom_kill.c:1123:18: error: use of undeclared identifier 'default_sysram_nodes'
-    1123 |                 oc->nodemask = default_sysram_nodes;
-         |                                ^~~~~~~~~~~~~~~~~~~~
-   mm/oom_kill.c:1160:18: error: use of undeclared identifier 'default_sysram_nodes'
-    1160 |                 oc->nodemask = default_sysram_nodes;
-         |                                ^~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
---
->> mm/page_alloc.c:4614:18: error: use of undeclared identifier 'default_sysram_nodes'
-    4614 |                 ac->nodemask = default_sysram_nodes;
-         |                                ^~~~~~~~~~~~~~~~~~~~
-   mm/page_alloc.c:4798:18: error: use of undeclared identifier 'default_sysram_nodes'
-    4798 |                 ac->nodemask = default_sysram_nodes;
-         |                                ^~~~~~~~~~~~~~~~~~~~
-   mm/page_alloc.c:4951:18: error: use of undeclared identifier 'default_sysram_nodes'
-    4951 |                 ac->nodemask = default_sysram_nodes;
-         |                                ^~~~~~~~~~~~~~~~~~~~
-   mm/page_alloc.c:5198:38: error: use of undeclared identifier 'default_sysram_nodes'
-    5198 |         ac.nodemask = nodemask ? nodemask : default_sysram_nodes;
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+>> drivers/nvme/host/ioctl.c:500:3: warning: variable 'rq_flags' is uninitialized when used here [-Wuninitialized]
+     500 |                 rq_flags |= REQ_NOWAIT;
+         |                 ^~~~~~~~
+   drivers/nvme/host/ioctl.c:449:20: note: initialize the variable 'rq_flags' to silence this warning
+     449 |         blk_opf_t rq_flags;
+         |                           ^
+         |                            = 0
+   1 warning generated.
 
 
-vim +/default_sysram_nodes +1123 mm/oom_kill.c
+vim +/rq_flags +500 drivers/nvme/host/ioctl.c
 
-  1109	
-  1110	/**
-  1111	 * out_of_memory - kill the "best" process when we run out of memory
-  1112	 * @oc: pointer to struct oom_control
-  1113	 *
-  1114	 * If we run out of memory, we have the choice between either
-  1115	 * killing a random task (bad), letting the system crash (worse)
-  1116	 * OR try to be smart about which process to kill. Note that we
-  1117	 * don't have to be perfect here, we just have to be good.
-  1118	 */
-  1119	bool out_of_memory(struct oom_control *oc)
-  1120	{
-  1121		unsigned long freed = 0;
-  1122		if (!oc->nodemask)
-> 1123			oc->nodemask = default_sysram_nodes;
-  1124	
-  1125		if (oom_killer_disabled)
-  1126			return false;
-  1127	
-  1128		if (!is_memcg_oom(oc)) {
-  1129			blocking_notifier_call_chain(&oom_notify_list, 0, &freed);
-  1130			if (freed > 0 && !is_sysrq_oom(oc))
-  1131				/* Got some memory back in the last second. */
-  1132				return true;
-  1133		}
-  1134	
-  1135		/*
-  1136		 * If current has a pending SIGKILL or is exiting, then automatically
-  1137		 * select it.  The goal is to allow it to allocate so that it may
-  1138		 * quickly exit and free its memory.
-  1139		 */
-  1140		if (task_will_free_mem(current)) {
-  1141			mark_oom_victim(current);
-  1142			queue_oom_reaper(current);
-  1143			return true;
-  1144		}
-  1145	
-  1146		/*
-  1147		 * The OOM killer does not compensate for IO-less reclaim.
-  1148		 * But mem_cgroup_oom() has to invoke the OOM killer even
-  1149		 * if it is a GFP_NOFS allocation.
-  1150		 */
-  1151		if (!(oc->gfp_mask & __GFP_FS) && !is_memcg_oom(oc))
-  1152			return true;
-  1153	
-  1154		/*
-  1155		 * Check if there were limitations on the allocation (only relevant for
-  1156		 * NUMA and memcg) that may require different handling.
-  1157		 */
-  1158		oc->constraint = constrained_alloc(oc);
-  1159		if (oc->constraint != CONSTRAINT_MEMORY_POLICY)
-  1160			oc->nodemask = default_sysram_nodes;
-  1161		check_panic_on_oom(oc);
-  1162	
-  1163		if (!is_memcg_oom(oc) && sysctl_oom_kill_allocating_task &&
-  1164		    current->mm && !oom_unkillable_task(current) &&
-  1165		    oom_cpuset_eligible(current, oc) &&
-  1166		    current->signal->oom_score_adj != OOM_SCORE_ADJ_MIN) {
-  1167			get_task_struct(current);
-  1168			oc->chosen = current;
-  1169			oom_kill_process(oc, "Out of memory (oom_kill_allocating_task)");
-  1170			return true;
-  1171		}
-  1172	
-  1173		select_bad_process(oc);
-  1174		/* Found nothing?!?! */
-  1175		if (!oc->chosen) {
-  1176			dump_header(oc);
-  1177			pr_warn("Out of memory and no killable processes...\n");
-  1178			/*
-  1179			 * If we got here due to an actual allocation at the
-  1180			 * system level, we cannot survive this and will enter
-  1181			 * an endless loop in the allocator. Bail out now.
-  1182			 */
-  1183			if (!is_sysrq_oom(oc) && !is_memcg_oom(oc))
-  1184				panic("System is deadlocked on memory\n");
-  1185		}
-  1186		if (oc->chosen && oc->chosen != (void *)-1UL)
-  1187			oom_kill_process(oc, !is_memcg_oom(oc) ? "Out of memory" :
-  1188					 "Memory cgroup out of memory");
-  1189		return !!oc->chosen;
-  1190	}
-  1191	
+c0a7ba77e81b84 Jens Axboe          2022-09-21  437  
+456cba386e94f2 Kanchan Joshi       2022-05-11  438  static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+f569add47119fa Anuj Gupta          2022-05-11  439  		struct io_uring_cmd *ioucmd, unsigned int issue_flags, bool vec)
+456cba386e94f2 Kanchan Joshi       2022-05-11  440  {
+456cba386e94f2 Kanchan Joshi       2022-05-11  441  	struct nvme_uring_cmd_pdu *pdu = nvme_uring_cmd_pdu(ioucmd);
+fd9b8547bc5c34 Breno Leitao        2023-05-04  442  	const struct nvme_uring_cmd *cmd = io_uring_sqe_cmd(ioucmd->sqe);
+456cba386e94f2 Kanchan Joshi       2022-05-11  443  	struct request_queue *q = ns ? ns->queue : ctrl->admin_q;
+456cba386e94f2 Kanchan Joshi       2022-05-11  444  	struct nvme_uring_data d;
+456cba386e94f2 Kanchan Joshi       2022-05-11  445  	struct nvme_command c;
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  446  	struct iov_iter iter;
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  447  	struct iov_iter *map_iter = NULL;
+456cba386e94f2 Kanchan Joshi       2022-05-11  448  	struct request *req;
+070157fe67aee9 Fengnan Chang       2025-11-07  449  	blk_opf_t rq_flags;
+456cba386e94f2 Kanchan Joshi       2022-05-11  450  	blk_mq_req_flags_t blk_flags = 0;
+470e900c8036ff Kanchan Joshi       2022-09-30  451  	int ret;
+456cba386e94f2 Kanchan Joshi       2022-05-11  452  
+456cba386e94f2 Kanchan Joshi       2022-05-11  453  	c.common.opcode = READ_ONCE(cmd->opcode);
+456cba386e94f2 Kanchan Joshi       2022-05-11  454  	c.common.flags = READ_ONCE(cmd->flags);
+456cba386e94f2 Kanchan Joshi       2022-05-11  455  	if (c.common.flags)
+456cba386e94f2 Kanchan Joshi       2022-05-11  456  		return -EINVAL;
+456cba386e94f2 Kanchan Joshi       2022-05-11  457  
+456cba386e94f2 Kanchan Joshi       2022-05-11  458  	c.common.command_id = 0;
+456cba386e94f2 Kanchan Joshi       2022-05-11  459  	c.common.nsid = cpu_to_le32(cmd->nsid);
+456cba386e94f2 Kanchan Joshi       2022-05-11  460  	if (!nvme_validate_passthru_nsid(ctrl, ns, le32_to_cpu(c.common.nsid)))
+456cba386e94f2 Kanchan Joshi       2022-05-11  461  		return -EINVAL;
+456cba386e94f2 Kanchan Joshi       2022-05-11  462  
+456cba386e94f2 Kanchan Joshi       2022-05-11  463  	c.common.cdw2[0] = cpu_to_le32(READ_ONCE(cmd->cdw2));
+456cba386e94f2 Kanchan Joshi       2022-05-11  464  	c.common.cdw2[1] = cpu_to_le32(READ_ONCE(cmd->cdw3));
+456cba386e94f2 Kanchan Joshi       2022-05-11  465  	c.common.metadata = 0;
+456cba386e94f2 Kanchan Joshi       2022-05-11  466  	c.common.dptr.prp1 = c.common.dptr.prp2 = 0;
+456cba386e94f2 Kanchan Joshi       2022-05-11  467  	c.common.cdw10 = cpu_to_le32(READ_ONCE(cmd->cdw10));
+456cba386e94f2 Kanchan Joshi       2022-05-11  468  	c.common.cdw11 = cpu_to_le32(READ_ONCE(cmd->cdw11));
+456cba386e94f2 Kanchan Joshi       2022-05-11  469  	c.common.cdw12 = cpu_to_le32(READ_ONCE(cmd->cdw12));
+456cba386e94f2 Kanchan Joshi       2022-05-11  470  	c.common.cdw13 = cpu_to_le32(READ_ONCE(cmd->cdw13));
+456cba386e94f2 Kanchan Joshi       2022-05-11  471  	c.common.cdw14 = cpu_to_le32(READ_ONCE(cmd->cdw14));
+456cba386e94f2 Kanchan Joshi       2022-05-11  472  	c.common.cdw15 = cpu_to_le32(READ_ONCE(cmd->cdw15));
+456cba386e94f2 Kanchan Joshi       2022-05-11  473  
+7d9d7d59d44b7e Christoph Hellwig   2023-06-08  474  	if (!nvme_cmd_allowed(ns, &c, 0, ioucmd->file->f_mode & FMODE_WRITE))
+855b7717f44b13 Kanchan Joshi       2022-10-31  475  		return -EACCES;
+855b7717f44b13 Kanchan Joshi       2022-10-31  476  
+456cba386e94f2 Kanchan Joshi       2022-05-11  477  	d.metadata = READ_ONCE(cmd->metadata);
+456cba386e94f2 Kanchan Joshi       2022-05-11  478  	d.addr = READ_ONCE(cmd->addr);
+456cba386e94f2 Kanchan Joshi       2022-05-11  479  	d.data_len = READ_ONCE(cmd->data_len);
+456cba386e94f2 Kanchan Joshi       2022-05-11  480  	d.metadata_len = READ_ONCE(cmd->metadata_len);
+456cba386e94f2 Kanchan Joshi       2022-05-11  481  	d.timeout_ms = READ_ONCE(cmd->timeout_ms);
+456cba386e94f2 Kanchan Joshi       2022-05-11  482  
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  483  	if (d.data_len && (ioucmd->flags & IORING_URING_CMD_FIXED)) {
+3c12a8939e0474 Pavel Begunkov      2025-05-20  484  		int ddir = nvme_is_write(&c) ? WRITE : READ;
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  485  
+3c12a8939e0474 Pavel Begunkov      2025-05-20  486  		if (vec)
+3c12a8939e0474 Pavel Begunkov      2025-05-20  487  			ret = io_uring_cmd_import_fixed_vec(ioucmd,
+3c12a8939e0474 Pavel Begunkov      2025-05-20  488  					u64_to_user_ptr(d.addr), d.data_len,
+3c12a8939e0474 Pavel Begunkov      2025-05-20  489  					ddir, &iter, issue_flags);
+3c12a8939e0474 Pavel Begunkov      2025-05-20  490  		else
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  491  			ret = io_uring_cmd_import_fixed(d.addr, d.data_len,
+3c12a8939e0474 Pavel Begunkov      2025-05-20  492  					ddir, &iter, ioucmd, issue_flags);
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  493  		if (ret < 0)
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  494  			return ret;
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  495  
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  496  		map_iter = &iter;
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  497  	}
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  498  
+456cba386e94f2 Kanchan Joshi       2022-05-11  499  	if (issue_flags & IO_URING_F_NONBLOCK) {
+888545cb43d763 Anuj Gupta          2023-01-17 @500  		rq_flags |= REQ_NOWAIT;
+456cba386e94f2 Kanchan Joshi       2022-05-11  501  		blk_flags = BLK_MQ_REQ_NOWAIT;
+456cba386e94f2 Kanchan Joshi       2022-05-11  502  	}
+585079b6e42538 Kanchan Joshi       2022-08-23  503  	if (issue_flags & IO_URING_F_IOPOLL)
+585079b6e42538 Kanchan Joshi       2022-08-23  504  		rq_flags |= REQ_POLLED;
+456cba386e94f2 Kanchan Joshi       2022-05-11  505  
+470e900c8036ff Kanchan Joshi       2022-09-30  506  	req = nvme_alloc_user_request(q, &c, rq_flags, blk_flags);
+456cba386e94f2 Kanchan Joshi       2022-05-11  507  	if (IS_ERR(req))
+456cba386e94f2 Kanchan Joshi       2022-05-11  508  		return PTR_ERR(req);
+470e900c8036ff Kanchan Joshi       2022-09-30  509  	req->timeout = d.timeout_ms ? msecs_to_jiffies(d.timeout_ms) : 0;
+470e900c8036ff Kanchan Joshi       2022-09-30  510  
+99fde895ff56ac Xinyu Zhang         2025-02-27  511  	if (d.data_len) {
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  512  		ret = nvme_map_user_request(req, d.addr, d.data_len,
+38808af53c6e72 Caleb Sander Mateos 2025-03-28  513  			nvme_to_user_ptr(d.metadata), d.metadata_len,
+c4b680ac286382 Pavel Begunkov      2025-05-20  514  			map_iter, vec ? NVME_IOCTL_VEC : 0);
+470e900c8036ff Kanchan Joshi       2022-09-30  515  		if (ret)
+cd683de63e1d7c Caleb Sander Mateos 2025-03-28  516  			goto out_free_req;
+470e900c8036ff Kanchan Joshi       2022-09-30  517  	}
+456cba386e94f2 Kanchan Joshi       2022-05-11  518  
+456cba386e94f2 Kanchan Joshi       2022-05-11  519  	/* to free bio on completion, as req->bio will be null at that time */
+456cba386e94f2 Kanchan Joshi       2022-05-11  520  	pdu->bio = req->bio;
+d6aacee9255e7f Keith Busch         2023-11-30  521  	pdu->req = req;
+c0a7ba77e81b84 Jens Axboe          2022-09-21  522  	req->end_io_data = ioucmd;
+c0a7ba77e81b84 Jens Axboe          2022-09-21  523  	req->end_io = nvme_uring_cmd_end_io;
+e2e530867245d0 Christoph Hellwig   2022-05-24  524  	blk_execute_rq_nowait(req, false);
+456cba386e94f2 Kanchan Joshi       2022-05-11  525  	return -EIOCBQUEUED;
+cd683de63e1d7c Caleb Sander Mateos 2025-03-28  526  
+cd683de63e1d7c Caleb Sander Mateos 2025-03-28  527  out_free_req:
+cd683de63e1d7c Caleb Sander Mateos 2025-03-28  528  	blk_mq_free_request(req);
+cd683de63e1d7c Caleb Sander Mateos 2025-03-28  529  	return ret;
+456cba386e94f2 Kanchan Joshi       2022-05-11  530  }
+456cba386e94f2 Kanchan Joshi       2022-05-11  531  
 
 -- 
 0-DAY CI Kernel Test Service
