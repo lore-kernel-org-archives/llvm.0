@@ -1,103 +1,307 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149241D88B4
-	for <llvm@lists.linux.dev>; Sat,  8 Nov 2025 22:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94F134D38B
+	for <llvm@lists.linux.dev>; Sat,  8 Nov 2025 22:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762639605; cv=none; b=RAdcxgIVWAonWhwAMARy4BrbdRTjz7YsrwtQ99ozGB0A6dWv3BUL25Xt4+Y3jhTiLl8tLGtSJTevWC+dDH6UM75LxrQ4b6nP1tMZjZrY+8SbhpNs3J8/ccGg8gs3ZjswZKwVIc1UJbV31o09uAU54NtuU3ls2sxiwIx0P9QcIKI=
+	t=1762640166; cv=none; b=Yni+t9OlJOEVi2e3efrgqnpHMBFhGoTUqpfuOKddZyawiA1qI/HQ+KYl1iNoiOcoOsJaR+IwcnQKhXluGSVEsEBI57i4wzMQ0ujcZwcHcfiZDIPDNFpgBc9BTBn9gwgAZOgw1Bj7BYIwQulJZ3mQOXx1gEgcWstVn5zQ2zzy78I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762639605; c=relaxed/simple;
-	bh=/ofQbxb+amF8hA0q0+/tC5F4n8m2nCJBW2xuireyQ5o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Rr4IKK+7ummcvoPx+5sfA2m3zL3VY8WKt/GRQffZqMiTJaq58kXvsYeNG7Vl5zIe80sC6koK8twryiPkJwPWTf93zGEW//rs2TcG+Wkuv2oHJOY/u1XwEx20O+XDlSAUDEpxGqbGmqZRiWxDQXQNKQuH/e+sZudyt7rj/p+tRz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Z8IP5v0O; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=7tTrNyAO; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1762640166; c=relaxed/simple;
+	bh=pBhyieeDjchlJ+mOjFaTeT3Y/QitnXECs185al56b+I=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=lElpldxs7InYjDN/tVGmMASJI8kXPsqK53PqyG/h8HjshtEeOMoHSwRrdR4w2UQ1+uQd1ZAkTIhezhgGI8Nd5uE6FFaDHrFZYr5YBoFX1HJc3hv9VNYYxgbASQ3KxnAK6GaJPkDDmxn+xBa0oZ8N2VLvx7LGh8kfqhLXWCOBFnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=fWeMhNeb; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Z8IP5v0O";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="7tTrNyAO"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1762639583; bh=9eeMje1PTx/sNTR1MiULRj5
-	s3httCogbc90TIndk8XI=; b=Z8IP5v0OLbDIO5qSHFWnFuhw06Pk5gMpKfF97x6BYbNbhhpmIw
-	AVo4KeuM0GwNXemmtFxOlL+GN5yK3F15piVRkPC1TQwG9+L0UCaiwyCQseGob0dWp7NGgPo+9cP
-	mwbzbvPdIWlIRyQiPs/AhMDdk/UxzkG3XwL035xcGOUEH0oswtWFPxkKqYYhWnw1aRhpD68/iHT
-	wLTJ7KJkuBHeppp9FtXjJDRTRXqaliFbg+JFbFXdC3LIh8pTO7dfGxqwFvACIfqylhv6bB0iyz8
-	3GdD0of7NJRtpMaIC/CNpYVZ2dM/adWz3dEDRz0cEJQbPz2smgpdv74fh+fitxMwKOw==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1762639583; bh=9eeMje1PTx/sNTR1MiULRj5
-	s3httCogbc90TIndk8XI=; b=7tTrNyAO9IPXExS0+0gqCXsdBWJpr2bAzHOrJp6fEUv68KABDP
-	b5A/6XRcdayOEJrA6WhgvqszbxheoJf9F+AQ==;
-From: Jens Reidel <adrian@mainlining.org>
-Date: Sat, 08 Nov 2025 23:05:55 +0100
-Subject: [PATCH] mips: Use generic endianness macros instead of
- MIPS-specific ones
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="fWeMhNeb"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5A8MEjxP2478531
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Sat, 8 Nov 2025 14:14:46 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5A8MEjxP2478531
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025102301; t=1762640093;
+	bh=B/Cs56oiwOfYFf5C+E+O3dVcT+FEPLCVGwSgjVsb61Y=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=fWeMhNebCueBIgpwwJ9HzqbFTchAPIdo17J2WvEY7kkjBFr98Hd14BZVU/elSj4e9
+	 sYvaiqrxvUl4BY8IpX0uQCmYyYRGpwEYM4AMpxmeO6jowam81zKx+Iou/8ibo+BM+1
+	 ywYMqpzqqzlsIya940Jmlzx8lzG2S8DMVB5+RfgE7pFBtdtphXJ6gZJo7OenPNVKFJ
+	 UQgPH5eVKjpuy1XcgvLHNRCiWtDhbQz2AI+JZNS/Lv07T437bJJ0VfM8ndXOQVc3ZX
+	 UAUehct6G47TvwmWI2P9q6uIb6MiC/veNOSx+dHqmpfeKU8Yq/RQ/QTtFSTKBOHhQF
+	 vb74cw9jAoTUA==
+Date: Sat, 08 Nov 2025 14:14:44 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Xie Yuanbin <qq570070308@gmail.com>, david@redhat.com, tglx@linutronix.de,
+        segher@kernel.crashing.org, riel@surriel.com, peterz@infradead.org,
+        linux@armlinux.org.uk, mathieu.desnoyers@efficios.com,
+        paulmck@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, davem@davemloft.net, andreas@gaisler.com,
+        luto@kernel.org, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, acme@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        james.clark@linaro.org, anna-maria@linutronix.de, frederic@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, vschneid@redhat.com, nathan@kernel.org,
+        nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        justinstitt@google.com, qq570070308@gmail.com, thuth@redhat.com,
+        brauner@kernel.org, arnd@arndb.de, jlayton@kernel.org,
+        aalbersh@redhat.com, akpm@linux-foundation.org, david@kernel.org,
+        lorenzo.stoakes@oracle.com, max.kellermann@ionos.com,
+        ryan.roberts@arm.com, nysal@linux.ibm.com, urezki@gmail.com
+CC: x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
+        will@kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_3/4=5D_Provide_the_alwa?=
+ =?US-ASCII?Q?ys_inline_version_of_some_functions?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20251108172346.263590-4-qq570070308@gmail.com>
+References: <20251108172346.263590-1-qq570070308@gmail.com> <20251108172346.263590-4-qq570070308@gmail.com>
+Message-ID: <04CA2D22-4DE2-4DE1-A2BC-AACE666F5F93@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7bsG1Ausr0SFtrT1kohCB9Pek4
- wzMFMichDNMTYHEt2S5QgVqG3DHGnZG2SqDVnogUgZPiRlt9OjlQbORp966flQd1CQmrvrfzcv
- 7fo4GTT1eAAAA
-X-Change-ID: 20251108-mips-bpf-fix-8d1f14bc4903
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, llvm@lists.linux.dev, 
- Jens Reidel <adrian@mainlining.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1392; i=adrian@mainlining.org;
- h=from:subject:message-id; bh=/ofQbxb+amF8hA0q0+/tC5F4n8m2nCJBW2xuireyQ5o=;
- b=owGbwMvMwCWmfPDpV6GDysyMp9WSGDL5993f/exSibjCZo4pS7N+3lRyP7iXI5Fhs6fWoaUPt
- pntjuZ16ihlYRDjYpAVU2Spv5FgctX626H5+TarYeawMoEMYeDiFICJhAUz/FO+nXA7smPlhn17
- 5FynufSU/X8iNc2xff3RderBGZe2P5Fm+Kft3dvxSGf1g66L8gxltb4+RVknrB8dDrx+P8T6yCI
- xBW4A
-X-Developer-Key: i=adrian@mainlining.org; a=openpgp;
- fpr=7FD86034D53BF6C29F6F3CAB23C1E5F512C12303
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Compiling bpf_skel for mips currently fails because clang --target=bpf
-is invoked and the source files include byteorder.h, which uses the
-MIPS-specific macros to determine the endianness, rather than the generic
-__LITTLE_ENDIAN__ / __BIG_ENDIAN__. Fix this by using the generic
-macros, which are also defined when targeting bpf. This is already done
-similarly for powerpc.
+On November 8, 2025 9:23:45 AM PST, Xie Yuanbin <qq570070308@gmail=2Ecom> w=
+rote:
+>On critical hot code paths, inline functions can optimize performance=2E
+>However, for current compilers, there is no way to request them to inline
+>at a specific calling point of a function=2E
+>
+>Add a always inline version to some functions, so that they can be chosen
+>when called in hot paths=2E
+>
+>Signed-off-by: Xie Yuanbin <qq570070308@gmail=2Ecom>
+>Cc: Thomas Gleixner <tglx@linutronix=2Ede>
+>Cc: Rik van Riel <riel@surriel=2Ecom>
+>Cc: Segher Boessenkool <segher@kernel=2Ecrashing=2Eorg>
+>Cc: David Hildenbrand <david@redhat=2Ecom>
+>Cc: Peter Zijlstra <peterz@infradead=2Eorg>
+>---
+> arch/arm/include/asm/mmu_context=2Eh      | 12 +++++++-
+> arch/s390/include/asm/mmu_context=2Eh     | 12 +++++++-
+> arch/sparc/include/asm/mmu_context_64=2Eh | 12 +++++++-
+> kernel/sched/core=2Ec                     | 38 ++++++++++++++++++++++---
+> 4 files changed, 67 insertions(+), 7 deletions(-)
+>
+>diff --git a/arch/arm/include/asm/mmu_context=2Eh b/arch/arm/include/asm/=
+mmu_context=2Eh
+>index db2cb06aa8cf=2E=2Ee77b271570c1 100644
+>--- a/arch/arm/include/asm/mmu_context=2Eh
+>+++ b/arch/arm/include/asm/mmu_context=2Eh
+>@@ -80,7 +80,12 @@ static inline void check_and_switch_context(struct mm_=
+struct *mm,
+> #ifndef MODULE
+> #define finish_arch_post_lock_switch \
+> 	finish_arch_post_lock_switch
+>-static inline void finish_arch_post_lock_switch(void)
+>+/*
+>+ * finish_arch_post_lock_switch_ainline - the always inline version of
+>+ * finish_arch_post_lock_switch, used for performance sensitive paths=2E
+>+ * If unsure, use finish_arch_post_lock_switch instead=2E
+>+ */
+>+static __always_inline void finish_arch_post_lock_switch_ainline(void)
+> {
+> 	struct mm_struct *mm =3D current->mm;
+>=20
+>@@ -99,6 +104,11 @@ static inline void finish_arch_post_lock_switch(void)
+> 		preempt_enable_no_resched();
+> 	}
+> }
+>+
+>+static inline void finish_arch_post_lock_switch(void)
+>+{
+>+	finish_arch_post_lock_switch_ainline();
+>+}
+> #endif /* !MODULE */
+>=20
+> #endif	/* CONFIG_MMU */
+>diff --git a/arch/s390/include/asm/mmu_context=2Eh b/arch/s390/include/as=
+m/mmu_context=2Eh
+>index d9b8501bc93d=2E=2E577062834906 100644
+>--- a/arch/s390/include/asm/mmu_context=2Eh
+>+++ b/arch/s390/include/asm/mmu_context=2Eh
+>@@ -97,7 +97,12 @@ static inline void switch_mm(struct mm_struct *prev, s=
+truct mm_struct *next,
+> }
+>=20
+> #define finish_arch_post_lock_switch finish_arch_post_lock_switch
+>-static inline void finish_arch_post_lock_switch(void)
+>+/*
+>+ * finish_arch_post_lock_switch_ainline - the always inline version of
+>+ * finish_arch_post_lock_switch, used for performance sensitive paths=2E
+>+ * If unsure, use finish_arch_post_lock_switch instead=2E
+>+ */
+>+static __always_inline void finish_arch_post_lock_switch_ainline(void)
+> {
+> 	struct task_struct *tsk =3D current;
+> 	struct mm_struct *mm =3D tsk->mm;
+>@@ -120,6 +125,11 @@ static inline void finish_arch_post_lock_switch(void=
+)
+> 	local_irq_restore(flags);
+> }
+>=20
+>+static inline void finish_arch_post_lock_switch(void)
+>+{
+>+	finish_arch_post_lock_switch_ainline();
+>+}
+>+
+> #define activate_mm activate_mm
+> static inline void activate_mm(struct mm_struct *prev,
+>                                struct mm_struct *next)
+>diff --git a/arch/sparc/include/asm/mmu_context_64=2Eh b/arch/sparc/inclu=
+de/asm/mmu_context_64=2Eh
+>index 78bbacc14d2d=2E=2Eca7019080574 100644
+>--- a/arch/sparc/include/asm/mmu_context_64=2Eh
+>+++ b/arch/sparc/include/asm/mmu_context_64=2Eh
+>@@ -160,7 +160,12 @@ static inline void arch_start_context_switch(struct =
+task_struct *prev)
+> }
+>=20
+> #define finish_arch_post_lock_switch	finish_arch_post_lock_switch
+>-static inline void finish_arch_post_lock_switch(void)
+>+/*
+>+ * finish_arch_post_lock_switch_ainline - the always inline version of
+>+ * finish_arch_post_lock_switch, used for performance sensitive paths=2E
+>+ * If unsure, use finish_arch_post_lock_switch instead=2E
+>+ */
+>+static __always_inline void finish_arch_post_lock_switch_ainline(void)
+> {
+> 	/* Restore the state of MCDPER register for the new process
+> 	 * just switched to=2E
+>@@ -185,6 +190,11 @@ static inline void finish_arch_post_lock_switch(void=
+)
+> 	}
+> }
+>=20
+>+static inline void finish_arch_post_lock_switch(void)
+>+{
+>+	finish_arch_post_lock_switch_ainline();
+>+}
+>+
+> #define mm_untag_mask mm_untag_mask
+> static inline unsigned long mm_untag_mask(struct mm_struct *mm)
+> {
+>diff --git a/kernel/sched/core=2Ec b/kernel/sched/core=2Ec
+>index 0e50ef3d819a=2E=2Ec50e672e22c4 100644
+>--- a/kernel/sched/core=2Ec
+>+++ b/kernel/sched/core=2Ec
+>@@ -4884,7 +4884,13 @@ static inline void finish_task(struct task_struct =
+*prev)
+> 	smp_store_release(&prev->on_cpu, 0);
+> }
+>=20
+>-static void do_balance_callbacks(struct rq *rq, struct balance_callback =
+*head)
+>+/*
+>+ * do_balance_callbacks_ainline - the always inline version of
+>+ * do_balance_callbacks, used for performance sensitive paths=2E
+>+ * If unsure, use do_balance_callbacks instead=2E
+>+ */
+>+static __always_inline void do_balance_callbacks_ainline(struct rq *rq,
+>+		struct balance_callback *head)
+> {
+> 	void (*func)(struct rq *rq);
+> 	struct balance_callback *next;
+>@@ -4901,6 +4907,11 @@ static void do_balance_callbacks(struct rq *rq, st=
+ruct balance_callback *head)
+> 	}
+> }
+>=20
+>+static void do_balance_callbacks(struct rq *rq, struct balance_callback =
+*head)
+>+{
+>+	do_balance_callbacks_ainline(rq, head);
+>+}
+>+
+> static void balance_push(struct rq *rq);
+>=20
+> /*
+>@@ -4949,11 +4960,21 @@ struct balance_callback *splice_balance_callbacks=
+(struct rq *rq)
+> 	return __splice_balance_callbacks(rq, true);
+> }
+>=20
+>-static void __balance_callbacks(struct rq *rq)
+>+/*
+>+ * __balance_callbacks_ainline - the always inline version of
+>+ * __balance_callbacks, used for performance sensitive paths=2E
+>+ * If unsure, use __balance_callbacks instead=2E
+>+ */
+>+static __always_inline void __balance_callbacks_ainline(struct rq *rq)
+> {
+> 	do_balance_callbacks(rq, __splice_balance_callbacks(rq, false));
+> }
+>=20
+>+static void __balance_callbacks(struct rq *rq)
+>+{
+>+	__balance_callbacks_ainline(rq);
+>+}
+>+
+> void balance_callbacks(struct rq *rq, struct balance_callback *head)
+> {
+> 	unsigned long flags;
+>@@ -5003,7 +5024,8 @@ static inline void finish_lock_switch(struct rq *rq=
+)
+> #endif
+>=20
+> #ifndef finish_arch_post_lock_switch
+>-# define finish_arch_post_lock_switch()	do { } while (0)
+>+# define finish_arch_post_lock_switch()		do { } while (0)
+>+# define finish_arch_post_lock_switch_ainline()	do { } while (0)
+> #endif
+>=20
+> static inline void kmap_local_sched_out(void)
+>@@ -5050,6 +5072,9 @@ prepare_task_switch(struct rq *rq, struct task_stru=
+ct *prev,
+>=20
+> /**
+>  * finish_task_switch - clean up after a task-switch
+>+ * finish_task_switch_ainline - the always inline version of this func
+>+ * used for performance sensitive paths
+>+ *
+>  * @prev: the thread we just switched away from=2E
+>  *
+>  * finish_task_switch must be called after the context switch, paired
+>@@ -5067,7 +5092,7 @@ prepare_task_switch(struct rq *rq, struct task_stru=
+ct *prev,
+>  * past=2E 'prev =3D=3D current' is still correct but we need to recalcu=
+late this_rq
+>  * because prev may have moved to another CPU=2E
+>  */
+>-static struct rq *finish_task_switch(struct task_struct *prev)
+>+static __always_inline struct rq *finish_task_switch_ainline(struct task=
+_struct *prev)
+> 	__releases(rq->lock)
+> {
+> 	struct rq *rq =3D this_rq();
+>@@ -5159,6 +5184,11 @@ static struct rq *finish_task_switch(struct task_s=
+truct *prev)
+> 	return rq;
+> }
+>=20
+>+static struct rq *finish_task_switch(struct task_struct *prev)
+>+{
+>+	return finish_task_switch_ainline(prev);
+>+}
+>+
+> /**
+>  * schedule_tail - first thing a freshly forked thread must call=2E
+>  * @prev: the thread we just switched away from=2E
 
-Signed-off-by: Jens Reidel <adrian@mainlining.org>
----
- arch/mips/include/uapi/asm/byteorder.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/arch/mips/include/uapi/asm/byteorder.h b/arch/mips/include/uapi/asm/byteorder.h
-index b4edc85f9c30c09aafbc189ec820e6e2f7cbe0d8..5e3c3baa24994a9f3637bf2b63ea7c3577cae541 100644
---- a/arch/mips/include/uapi/asm/byteorder.h
-+++ b/arch/mips/include/uapi/asm/byteorder.h
-@@ -9,12 +9,10 @@
- #ifndef _ASM_BYTEORDER_H
- #define _ASM_BYTEORDER_H
- 
--#if defined(__MIPSEB__)
--#include <linux/byteorder/big_endian.h>
--#elif defined(__MIPSEL__)
-+#ifdef __LITTLE_ENDIAN__
- #include <linux/byteorder/little_endian.h>
- #else
--# error "MIPS, but neither __MIPSEB__, nor __MIPSEL__???"
-+#include <linux/byteorder/big_endian.h>
- #endif
- 
- #endif /* _ASM_BYTEORDER_H */
-
----
-base-commit: 9c0826a5d9aa4d52206dd89976858457a2a8a7ed
-change-id: 20251108-mips-bpf-fix-8d1f14bc4903
-
-Best regards,
--- 
-Jens Reidel <adrian@mainlining.org>
-
+There is, in fact: you have to have an always_inline version, and wrap it =
+in a noinline version=2E
