@@ -1,125 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9AF1FC7C5;
-	Sat,  8 Nov 2025 03:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC242D73B4;
+	Sat,  8 Nov 2025 04:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762571987; cv=none; b=X+g/apHNZX3B/1dHS6pknAKOkLz7+SH+76z8QEooPTdIY6OhDVgaFOBny9uuzQN8Zi1xOr0WaakNWobFze9tHsZj2I1Tjt6uIMRSd35JKzLjJrXGSnQP0GtdgZ0aLKPAcuiJmajmWOzeD7C6IZf8RGmdkwI9NnNqvfLe9o/GDE8=
+	t=1762575195; cv=none; b=kopz23BzkiWPSDs2ClJYHfM3EsyO2pZlkffvvYoD7VVZIUfTvxS+qLtiHRpRJzjbjtyixE2r6NijMqlF9rYxTEJabbdSObaZ8LW33dJaPxaehT0KSamGEX7KzYVp0EXJ/zqNdkDX5843lrz4wibt/mhd9dS/PvYDvghItvpvNr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762571987; c=relaxed/simple;
-	bh=J+39KRxdHMJXiKENT50y17IkveIzch0K1Z4oKkpXH5A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fNOC5AslSuPr4FZd8+xkCRYg/TD7PV5N1nMGRFXfzjAH0cw6mvCW8sBZXx5WP7kKK/3CMoIxgNqbmdczmR7cMwVJcUNnKoZEn831vZDf2sMkpnrhOpzuww8Bg0i+2kx686BO2Yx0wxhWP2SEowI1/AQklPxKeS7m8Aq0640W3Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDrVNcuq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762575195; c=relaxed/simple;
+	bh=Chbc1OyTI8Ct9a3uY+DcWiIf+X6KyQ9qPPr/UEG1dxo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MGB8gj4uFmVCNLFVdkQGoVZ6/8yarrTiOLsoqN5KfzB2Nege7vnnVBJjlXh5ZbHoWEcI+pW2BZ+o0NSPZy7kQdbu5aAKdzc5f2jGx4JSQgpvuue10wLq/qgomW/sVoXBlb0HMwgnLil3C+j55ZOT4W4YmMSfLVKpdH5+pCTc9W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P/0mtTEn; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDrVNcuq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBAFC19421;
-	Sat,  8 Nov 2025 03:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762571986;
-	bh=J+39KRxdHMJXiKENT50y17IkveIzch0K1Z4oKkpXH5A=;
-	h=From:Date:Subject:To:Cc:From;
-	b=mDrVNcuqsTYohvmlFBSZB5HdIj0bmjjexaKeZ04SwIDerEPqgb80aKBcp2pkybPFy
-	 q1TQxk5lHmD/aoJgRciOOWeyDGf1+4xcU0o5Y76za+RTP1IBVHPb/1AN7XKnxYctLQ
-	 byoqOAYVCq+JvTpaQkxvJXXoIlb1CUPPb9hahWZK4W7owjAs0sxmHHPTedCpkz4XVw
-	 hP88kPo0TaFBg5/l99FXCwgNH8io2tRv0Aq64ME9HiRzP3Wl5nK/BuJ6rXR711e86U
-	 pFMx2YzF7M20HXNynDugRlBKPV/mxkwrU6oB5CfcLHxAPe12d0o0E0yZ3oXYIgxPdU
-	 5YShb66MqcSgw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 07 Nov 2025 20:19:37 -0700
-Subject: [PATCH net-next] net: netcp: ethss: Fix type of first parameter in
- hwtstamp stubs
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/0mtTEn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762575193; x=1794111193;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Chbc1OyTI8Ct9a3uY+DcWiIf+X6KyQ9qPPr/UEG1dxo=;
+  b=P/0mtTEn13TXQ4DUdKydDqY9jriUDwHuAX1NDjpr4jJFkr8eotTS4A0y
+   Zqiiss7PSRChbX4VOSduwqNXC3/Vu9rWgpDOr51MC2Np9WeuhI721o/yu
+   TkF8CQ0IehAU8nwll3y7bxCbu52KhoY4KWnE3W5exgRHpDSDmei+CbGIp
+   Gm6+/GlZyydcOR/WglOFujYeyvnt5uG2KmGsd8fhSILQzI/9gr7MKNQ84
+   5SpFDaPRsf2/zC9hCCwPvtgsLCRFqpnTlV54FbWYsvsX3LTzTzh9lyA6X
+   uKZJ/tV4qxJbB8OjdGkNjhE/AqcZYYUOYWU7W9jzEejZ8TldMEq36aB0r
+   Q==;
+X-CSE-ConnectionGUID: PBvHH7gkS7+lJHkKUDU4qQ==
+X-CSE-MsgGUID: JxhFaciRRkSuNL5XfA8CKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="68582243"
+X-IronPort-AV: E=Sophos;i="6.19,288,1754982000"; 
+   d="scan'208";a="68582243"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 20:13:13 -0800
+X-CSE-ConnectionGUID: a/SCoH5pTGazUgKz1IUMmQ==
+X-CSE-MsgGUID: yvD98d3LTP+rGCENt+8esw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,288,1754982000"; 
+   d="scan'208";a="187454883"
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 07 Nov 2025 20:13:07 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vHaK1-0000id-0U;
+	Sat, 08 Nov 2025 04:13:05 +0000
+Date: Sat, 8 Nov 2025 12:12:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nilesh Laad <nilesh.laad@oss.qualcomm.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Marek Vasut <marex@denx.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nilesh Laad <nilesh.laad@oss.qualcomm.com>,
+	venkata.valluru@oss.qualcomm.com, jessica.zhang@oss.qualcomm.com,
+	Yi Zhang <zhanyi@qti.qualcomm.com>,
+	Gopi Botlagunta <venkata.botlagunta@oss.qualcomm.com>
+Subject: Re: [PATCH v2 2/2] drm/bridge: add support for lontium lt9211c bridge
+Message-ID: <202511081122.TMw7Wy9r-lkp@intel.com>
+References: <20251107-add-lt9211c-bridge-v2-2-b0616e23407c@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251107-netcp_ethss-fix-cpts-stubs-clang-wifpts-v1-1-a80a30c429a8@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMi2DmkC/x2NUQrCQAxEr1LybaBblBWvIiLtbmIDsi6bVAuld
- zf6+YaZNxsoNSGFS7dBo7eovIpDOHSQ5rE8CCU7w9APpxD6iIUs1TvZrIosK6ZqimrLpJiePsC
- P8C/KHM/MIR/HOIHbaiOv/5+u4BIXrQa3ff8CfCOBWoMAAAA=
-X-Change-ID: 20251107-netcp_ethss-fix-cpts-stubs-clang-wifpts-df78ff1d4a7b
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
- Kory Maincent <kory.maincent@bootlin.com>, netdev@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3551; i=nathan@kernel.org;
- h=from:subject:message-id; bh=J+39KRxdHMJXiKENT50y17IkveIzch0K1Z4oKkpXH5A=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDJl8284XVK1IsXtwSX3bhMkfzEX7zUocVod+OyTnceTpU
- udAx71tHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAim5cz/GYRWflt46xtd+f4
- lR/fuPPcP4/zDe1XlX9rvj1+ZlFIas5VRoZuz/+3PrPXMLzf1xrHNalpTjJ30vWt578rtEXtDi1
- 8coYBAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251107-add-lt9211c-bridge-v2-2-b0616e23407c@oss.qualcomm.com>
 
-When building with -Wincompatible-function-pointer-types-strict, a
-warning designed to catch control flow integrity violations at compile
-time, there are several instances in netcp_ethss.c when CONFIG_TI_CPTS
-is not set:
+Hi Nilesh,
 
-  drivers/net/ethernet/ti/netcp_ethss.c:3831:18: warning: incompatible function pointer types initializing 'int (*)(void *, struct kernel_hwtstamp_config *)' with an expression of type 'int (struct gbe_intf *, struct kernel_hwtstamp_config *)' [-Wincompatible-function-pointer-types-strict]
-   3831 |         .hwtstamp_get   = gbe_hwtstamp_get,
-        |                           ^~~~~~~~~~~~~~~~
-  drivers/net/ethernet/ti/netcp_ethss.c:3832:18: warning: incompatible function pointer types initializing 'int (*)(void *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' with an expression of type 'int (struct gbe_intf *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' [-Wincompatible-function-pointer-types-strict]
-   3832 |         .hwtstamp_set   = gbe_hwtstamp_set,
-        |                           ^~~~~~~~~~~~~~~~
-  drivers/net/ethernet/ti/netcp_ethss.c:3850:18: warning: incompatible function pointer types initializing 'int (*)(void *, struct kernel_hwtstamp_config *)' with an expression of type 'int (struct gbe_intf *, struct kernel_hwtstamp_config *)' [-Wincompatible-function-pointer-types-strict]
-   3850 |         .hwtstamp_get   = gbe_hwtstamp_get,
-        |                           ^~~~~~~~~~~~~~~~
-  drivers/net/ethernet/ti/netcp_ethss.c:3851:18: warning: incompatible function pointer types initializing 'int (*)(void *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' with an expression of type 'int (struct gbe_intf *, struct kernel_hwtstamp_config *, struct netlink_ext_ack *)' [-Wincompatible-function-pointer-types-strict]
-   3851 |         .hwtstamp_set   = gbe_hwtstamp_set,
-        |                           ^~~~~~~~~~~~~~~~
+kernel test robot noticed the following build errors:
 
-While 'void *' and 'struct gbe_intf *' are ABI compatible, hence no
-regular warning from -Wincompatible-function-pointer-types, the mismatch
-will trigger a kCFI violation when gbe_hwtstamp_get() or
-gbe_hwtstamp_set() are called indirectly. The types were updated for the
-CONFIG_TI_CPTS=y implementations but not the CONFIG_TI_CPTS=n ones.
+[auto build test ERROR on f50b969bafafb2810a07f376387350c4c0d72a21]
 
-Update the type of the first parameter in the CONFIG_TI_CPTS=n stubs to
-resolve the warning/CFI violation.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nilesh-Laad/dt-bindings-bridge-lt9211c-Add-bindings/20251107-210546
+base:   f50b969bafafb2810a07f376387350c4c0d72a21
+patch link:    https://lore.kernel.org/r/20251107-add-lt9211c-bridge-v2-2-b0616e23407c%40oss.qualcomm.com
+patch subject: [PATCH v2 2/2] drm/bridge: add support for lontium lt9211c bridge
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251108/202511081122.TMw7Wy9r-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511081122.TMw7Wy9r-lkp@intel.com/reproduce)
 
-Fixes: 3f02b8272557 ("ti: netcp: convert to ndo_hwtstamp callbacks")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/ethernet/ti/netcp_ethss.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511081122.TMw7Wy9r-lkp@intel.com/
 
-diff --git a/drivers/net/ethernet/ti/netcp_ethss.c b/drivers/net/ethernet/ti/netcp_ethss.c
-index 0ae44112812c..4f6cc6cd1f03 100644
---- a/drivers/net/ethernet/ti/netcp_ethss.c
-+++ b/drivers/net/ethernet/ti/netcp_ethss.c
-@@ -2755,13 +2755,13 @@ static inline void gbe_unregister_cpts(struct gbe_priv *gbe_dev)
- {
- }
- 
--static inline int gbe_hwtstamp_get(struct gbe_intf *gbe_intf,
-+static inline int gbe_hwtstamp_get(void *intf_priv,
- 				   struct kernel_hwtstamp_config *cfg)
- {
- 	return -EOPNOTSUPP;
- }
- 
--static inline int gbe_hwtstamp_set(struct gbe_intf *gbe_intf,
-+static inline int gbe_hwtstamp_set(void *intf_priv,
- 				   struct kernel_hwtstamp_config *cfg,
- 				   struct netlink_ext_ack *extack)
- {
+All error/warnings (new ones prefixed by >>):
 
----
-base-commit: 01c87d7f48b4f9b8be0950ed4de5d345632bd564
-change-id: 20251107-netcp_ethss-fix-cpts-stubs-clang-wifpts-df78ff1d4a7b
+>> drivers/gpu/drm/bridge/lontium-lt9211c.c:207:48: warning: '&' within '|' [-Wbitwise-op-parentheses]
+     207 |         ret = regmap_write(ctx->regmap, 0x8180, (pval & 0xfc | 0x03));
+         |                                                  ~~~~~^~~~~~ ~
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:207:48: note: place parentheses around the '&' expression to silence this warning
+     207 |         ret = regmap_write(ctx->regmap, 0x8180, (pval & 0xfc | 0x03));
+         |                                                       ^
+         |                                                  (          )
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:227:48: warning: '&' within '|' [-Wbitwise-op-parentheses]
+     227 |         ret = regmap_write(ctx->regmap, 0x8530, (pval & 0xf8 | 0x11));
+         |                                                  ~~~~~^~~~~~ ~
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:227:48: note: place parentheses around the '&' expression to silence this warning
+     227 |         ret = regmap_write(ctx->regmap, 0x8530, (pval & 0xf8 | 0x11));
+         |                                                       ^
+         |                                                  (          )
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:253:5: warning: unused variable 'bc' [-Wunused-variable]
+     253 |         u8 bc[3];
+         |            ^~
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:619:48: warning: '&' within '|' [-Wbitwise-op-parentheses]
+     619 |         ret = regmap_write(ctx->regmap, 0x8530, (pval & 0x3f | 0x40));
+         |                                                  ~~~~~^~~~~~ ~
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:619:48: note: place parentheses around the '&' expression to silence this warning
+     619 |         ret = regmap_write(ctx->regmap, 0x8530, (pval & 0x3f | 0x40));
+         |                                                       ^
+         |                                                  (          )
+>> drivers/gpu/drm/bridge/lontium-lt9211c.c:918:14: error: incompatible function pointer types initializing 'int (*)(struct drm_bridge *, struct drm_encoder *, enum drm_bridge_attach_flags)' with an expression of type 'int (struct drm_bridge *, enum drm_bridge_attach_flags)' [-Wincompatible-function-pointer-types]
+     918 |         .attach                 = lt9211c_attach,
+         |                                   ^~~~~~~~~~~~~~
+>> drivers/gpu/drm/bridge/lontium-lt9211c.c:920:20: error: incompatible function pointer types initializing 'void (*)(struct drm_bridge *, struct drm_atomic_state *)' with an expression of type 'void (struct drm_bridge *, struct drm_bridge_state *)' [-Wincompatible-function-pointer-types]
+     920 |         .atomic_enable          = lt9211c_atomic_enable,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/bridge/lontium-lt9211c.c:921:21: error: incompatible function pointer types initializing 'void (*)(struct drm_bridge *, struct drm_atomic_state *)' with an expression of type 'void (struct drm_bridge *, struct drm_bridge_state *)' [-Wincompatible-function-pointer-types]
+     921 |         .atomic_disable         = lt9211c_atomic_disable,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 3 errors generated.
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
 
+vim +918 drivers/gpu/drm/bridge/lontium-lt9211c.c
+
+   916	
+   917	static const struct drm_bridge_funcs lt9211c_funcs = {
+ > 918		.attach			= lt9211c_attach,
+   919		.mode_valid		= lt9211c_mode_valid,
+ > 920		.atomic_enable		= lt9211c_atomic_enable,
+   921		.atomic_disable		= lt9211c_atomic_disable,
+   922		.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+   923		.atomic_destroy_state	= drm_atomic_helper_bridge_destroy_state,
+   924		.atomic_get_input_bus_fmts = lt9211c_atomic_get_input_bus_fmts,
+   925		.atomic_reset		= drm_atomic_helper_bridge_reset,
+   926	};
+   927	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
