@@ -1,162 +1,97 @@
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613451E5B63
-	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 17:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4156261573;
+	Sun,  9 Nov 2025 21:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762709748; cv=none; b=AjxrVU+seaWcWu12UQ+et0rLOSk3Pashw0ybLUTNxpItq2P0tb5kNfg3i7lsXZYhhUKrfPKYusdR8QfWkt/cCYRzAEFOU9YhHWM45GWCU5+Er8XGmse7qVKXY370xK8B4fLxTxdGNiGRGrjxR8AEr1jJDr9da8+9DsuzVzDU3Dg=
+	t=1762723004; cv=none; b=V7jXYqlIdg4OZLMnTyJ/5RclhvdFbSsFvjraZTZM7jpa9jbL4z1wlpQyRvTnsr5JHqRDP0vfVkNXfIckWlB6nCrBYSIKB74m+fe84xOYBUG9U/ShM4rCFYmcqbpW12q7nTwsPHZYhdOw1o4V6CZq0BHWKTydPekS768+VHljrLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762709748; c=relaxed/simple;
-	bh=SX5qwi6eNiE8f8w3vxCMss5uGddaU6pL2Sh1O+bLbjg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Ujk1D40+iH1jxYXhVfi+BrEWyz8ELbnAkPSEvYIctAayp0CDd6KFjCInkgjqLcqQSSplNvzsXBKG1iGXClTU/bET4cC/7mV6/PUAjks0kMFiC+Us63YBzGwHMwCokeXD50/imdd3YZ2DeIMwbE4xRHu4GcgvBHZni05rmZjblN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gKnpuhGp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Uq4E6ndl; arc=none smtp.client-ip=202.12.124.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1762723004; c=relaxed/simple;
+	bh=S8Bkb92OJMyXMKvZUFAyvThT4GeleZiL0HbmUi5vJog=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i4ajv34+Mrl3wIlwQb1Beox4NDfOsixTC0Y3DaDTS9U3aIE3CYtvPAJ5sQYX0W1Tcyw8ogCrB8wZEGFSjUdcA1Vu5jtCSaluHrF+KXJvi0b/X5g7BX8DLS82UuiF88jtduBDTmyt6sANURHDmK/k3ht3fLItpYRelVG69wUAhI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+BEksNo; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gKnpuhGp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Uq4E6ndl"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 23FE37A00B0;
-	Sun,  9 Nov 2025 12:35:45 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Sun, 09 Nov 2025 12:35:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762709745;
-	 x=1762796145; bh=zkWdqhs5qH8DQ5ZU8oXdGGm7z8JLhJ4sUco0+8wMPGI=; b=
-	gKnpuhGp2ATsb733vArbYloqQv3B7wkoOXcOG8R0466GWKLNpKoIBFztbEuthP0z
-	/C2OKbiRNIIO4rAgf3lDV76FvNBnqL0B92TiQf1Nvb5kvY95tKdEKCsxvoFTV4Lr
-	NfyMk7ghZOoCBjAcZdxm1FYFeDMEyv1fwRlWsbd0jPUpSNjmsSuqY7IFsMRuw76K
-	O0x33vwxAIclfLwtRriBpqcLswG4+FUvulZSk1kwCjjOiOMfL2RD71XvNkxESLT3
-	6DtTQPHcC2ikfwjlD1gH1DqEXOxTrle5D6ewoU6hKt3xxkagqP3Qc6kmFHbmOWsk
-	LmGg1YtOi+FOCT7XQ9fMCA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762709745; x=
-	1762796145; bh=zkWdqhs5qH8DQ5ZU8oXdGGm7z8JLhJ4sUco0+8wMPGI=; b=U
-	q4E6ndlRwyc6WM9yDJcTjxjc2euuF6IQDBJK73X4ZMPCTulkxrHGhvurVMB5rwJ5
-	iedSIPqIxBrvr3VhBG4ksxLL+REgOkxE0iN+hJqVGaxkMpu9uADFCp9d7lc2J4Qo
-	JqSbfUSaYgyrp9mE98suHlUy0TxXEYf4V2OhRv1v1/4GQ9yv2JAw2+52t0SdB9IU
-	COeQW+a99Ctxr+hVBOCOHV7dNvJC5btQlRc6/t/b5rC4MXd4gAkh3V+PYQTPJl3p
-	x1/xNSccmgn/ia32xWSRDRzmRiwZ20fXCVnoiGQpJ+jCTwyjZ51jMfQbP4Z2nvpr
-	VpG75lfqP1cTT31x3yLsg==
-X-ME-Sender: <xms:79AQaZ2wy6V5TXmnLwhkimIMWJLDxM0K5DHiX8H8cqNkkd_X6IXSeg>
-    <xme:79AQaa4UsmpW76Yo9_SS-ybD-W_6Na1uIdlmLGGK9qrZre74BTvjSUGIUxgqhthq7
-    nfDglIw5fT6x7C5IEVYzg1x6ayYAqZSgh3ppHrXOGRPMgb_y62f3hep>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduleeitdegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepuefgiedtueetkeegkefgteegvefhtefhvdfhfeeuffekvddtfefhfeejueekkeet
-    necuffhomhgrihhnpehsthgrtghkohhvvghrfhhlohifrdgtohhmnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdgu
-    vgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
-    hlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghp
-    thhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhorh
-    gvnhiiohdrshhtohgrkhgvshesohhrrggtlhgvrdgtohhmpdhrtghpthhtoheprggrlhgs
-    vghrshhhsehrvgguhhgrthdrtghomhdprhgtphhtthhopegurghvihgusehrvgguhhgrth
-    drtghomhdprhgtphhtthhopehjuhhrihdrlhgvlhhlihesrhgvughhrghtrdgtohhmpdhr
-    tghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtohepthhhuhhthh
-    esrhgvughhrghtrdgtohhmpdhrtghpthhtohepvhhstghhnhgvihgusehrvgguhhgrthdr
-    tghomh
-X-ME-Proxy: <xmx:79AQaUX-mRTHMaM8KXxIdPB723EQLQbLF3CToa1sSuZFpQU0giZskQ>
-    <xmx:79AQaU4LIQtHJ_igqGA1sGDOhr30DVAUcyPPDHCqoebdCRBAM5vIQA>
-    <xmx:79AQaaCGFzfr0euNv1R_ImVIE-bDa3Zgxx5fLpuProtCZQuXH3oLfA>
-    <xmx:79AQaQfRvLyJP0kEFoWE3XMqSqUqYHxHzrgLR1edv7irXAlH2kaVDA>
-    <xmx:8NAQafBae_4ppLQQE0o9JLUmdbyk9ps1jColVmL90Iyhbg-_r-ja8GrV>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D39AC700065; Sun,  9 Nov 2025 12:35:43 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+BEksNo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762723003; x=1794259003;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S8Bkb92OJMyXMKvZUFAyvThT4GeleZiL0HbmUi5vJog=;
+  b=Y+BEksNoYPsRGear93m92HKLk3ES+bmQZsEdJmNMFAH9K4/wwfaKDWcv
+   tx1ss/5uZ4cNw3nFocaK799KmhAy0bQO/6U6cwXhRFzEM4ueGOm2WgAp4
+   RtQEvIuPzxdjPA/SrKbbZDIT3hO0NZY2d6M9gC2Js7oSLb7bYiw1mVop6
+   qpB7CumzGZkKC/IS7Ooi1Mja91g1JmH/tCwupnFoNX2Po6K+IeHXrLGKv
+   V+y1p5avpv2h7dsJ2NC3SmRYkA76TOPSQT/86H9L/XzvqsjGF6N6qbka4
+   6SqwKe/YHyqhJItl2MjkolL5yGB+KE0AebyFlP19OXLyO65sDUqbKMWXm
+   A==;
+X-CSE-ConnectionGUID: RYMJz7DfS2SWMoem8TBBsA==
+X-CSE-MsgGUID: uot34t4iQN6L5pnUoaNgjQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="82407924"
+X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
+   d="scan'208";a="82407924"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 13:16:43 -0800
+X-CSE-ConnectionGUID: 7ngbqzglT9iXUheDNKmajA==
+X-CSE-MsgGUID: bRiH9hRkRH+/7ZEwROmCdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
+   d="scan'208";a="211925996"
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 09 Nov 2025 13:16:41 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vICm7-0002PP-0D;
+	Sun, 09 Nov 2025 21:16:39 +0000
+Date: Mon, 10 Nov 2025 05:16:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raju Rangoju <Raju.Rangoju@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>
+Subject: [linux-next:master 6788/7207] ld.lld: error: undefined symbol:
+ ip_send_check
+Message-ID: <202511100558.L879JqRE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: APT2ySTFY01B
-Date: Sun, 09 Nov 2025 18:35:23 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Xie Yuanbin" <qq570070308@gmail.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "David Hildenbrand" <david@redhat.com>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Segher Boessenkool" <segher@kernel.crashing.org>, riel@surriel.com,
- "Russell King" <linux@armlinux.org.uk>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, pjw@kernel.org,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
- "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Andy Lutomirski" <luto@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Ian Rogers" <irogers@google.com>,
- "Adrian Hunter" <adrian.hunter@intel.com>,
- "James Clark" <james.clark@linaro.org>,
- "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
- "Frederic Weisbecker" <frederic@kernel.org>,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
- "Valentin Schneider" <vschneid@redhat.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>,
- "Thomas Huth" <thuth@redhat.com>,
- "Christian Brauner" <brauner@kernel.org>,
- "Jeff Layton" <jlayton@kernel.org>,
- "Andrey Albershteyn" <aalbersh@redhat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, david@kernel.org,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, max.kellermann@ionos.com,
- "Ryan Roberts" <ryan.roberts@arm.com>, nysal@linux.ibm.com,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc: x86@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
- "Will Deacon" <will@kernel.org>
-Message-Id: <a034a57e-d9f1-4c56-87f0-e9126246849d@app.fastmail.com>
-In-Reply-To: <20251109170402.145012-1-qq570070308@gmail.com>
-References: <20251109113152.GA2545891@noisy.programming.kicks-ass.net>
- <20251109170402.145012-1-qq570070308@gmail.com>
-Subject: Re: [PATCH v2 3/4] Provide the always inline version of some functions
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Nov 9, 2025, at 18:04, Xie Yuanbin wrote:
-> On Sun, 9 Nov 2025 12:31:52 +0100, Peter Zijlstra wrote:
-> Adding the always-inline version of these functions can provide better
-> guidance for compiler optimization, but it does indeed lead to more
-> complex code.
-> The best solution may be to prompt the compiler to always inline at a
-> specific calling point through some keyword.
-> I noticed that there are also people discussing this issue on stackerflow
-> , but it seems that the current compiler does not have such a feature.
-> Link: https://stackoverflow.com/questions/14571593
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   9c0826a5d9aa4d52206dd89976858457a2a8a7ed
+commit: 862a64c83faf7708e7e79498193ff5270543a68d [6788/7207] amd-xgbe: introduce support ethtool selftest
+config: i386-buildonly-randconfig-005-20251109 (https://download.01.org/0day-ci/archive/20251110/202511100558.L879JqRE-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511100558.L879JqRE-lkp@intel.com/reproduce)
 
-You can mark the caller as __attribute__((flatten)) to force all
-functions to be inlined into that one if possible. I don't know
-if that would be helpful or desired here though.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511100558.L879JqRE-lkp@intel.com/
 
-     Arnd
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: ip_send_check
+   >>> referenced by selftests.c:104 (net/core/selftests.c:104)
+   >>>               net/core/selftests.o:(net_test_get_skb) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: udp4_hwcsum
+   >>> referenced by selftests.c:148 (net/core/selftests.c:148)
+   >>>               net/core/selftests.o:(net_test_get_skb) in archive vmlinux.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for NET_SELFTESTS
+   Depends on [n]: NET [=y] && PHYLIB [=y] && INET [=n]
+   Selected by [y]:
+   - AMD_XGBE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_AMD [=y] && (OF_ADDRESS [=y] || ACPI [=n] || PCI [=n]) && HAS_IOMEM [=y] && (X86 [=y] || ARM64 || COMPILE_TEST [=y]) && PTP_1588_CLOCK_OPTIONAL [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
