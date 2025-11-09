@@ -1,64 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4848B149C41;
-	Sun,  9 Nov 2025 05:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDEA2144C7;
+	Sun,  9 Nov 2025 05:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762664744; cv=none; b=SDrJOemD8MlQZS7ssuqHWRZBYkXr8JoXa/qauuMZtGyT4Qr/O/egcGGt7t5rY8ZEUB7AQQW5Rce8NYhPlFhUKJ80fbnixE+t/3HhNsN2+6PKQmwRv2WYlDBvHbK/sybmbBdumU+YpSzto1WDya0GxaSCpx1I6Vkwj7JGudd1CBc=
+	t=1762667929; cv=none; b=cJrfbqCYOpFwdetyo1mFZWw78RXIXPS8g+bB8v0tdGD8iJ57XwpgHX3Rm29HhCXGa2gBxaCfREENkLHbJ9lL/ovxPUvYfmvsrlSd5K3RGxfu538ciOdUgtDksSChWkDAAntZQwg8yw+QpKbBh3EtXGNejOCRa38TVvL9bAnQ/fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762664744; c=relaxed/simple;
-	bh=ZV9BoH74mReBv49JBFNCwYi5BkQK+mmMZsBxMTs1p+g=;
+	s=arc-20240116; t=1762667929; c=relaxed/simple;
+	bh=dJDKBI9C/t3oC8rzuP3IFu6rPxvZkeXCeHJ+1VHh/oI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aNWVcY0zyHtL+rPZF2bb8rj3tT3h2bP9O4iuRLB3yNOOP5PNQkBAsk9IrjCC7L44Y6J7lAEr7y2l7DZkO6uWX2WXhzH1EQc6I+ZqNNMlbOeCFuRhKZJStIwwdHkK2ePpssL7LB9docDusSxI/YW/w8UxTc0kHT/006x5z9qGlP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CjKFxYr8; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fmp8MJO8QMY42qRLmyhozGnNjf/2x+W4yoJwpM9Sjti8Cej7D/ndBEgoyAuR8gxxx/DUaiJosqBExFnmXpMkBZhJTiUNRSyDGkMNr8UMZThKRufEnQGfylk26qOoUUYOPWqkz7Gbu2mqZ2rO8ygKsvSSQsVdG2cv7GOo97r4w8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RvCt0oIC; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CjKFxYr8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RvCt0oIC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762664742; x=1794200742;
+  t=1762667927; x=1794203927;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZV9BoH74mReBv49JBFNCwYi5BkQK+mmMZsBxMTs1p+g=;
-  b=CjKFxYr8CB9g7/qr/4FmWGeLYJf3CSRgpkSkViytriuIBEM6iJpkc3Fh
-   6TnXZMMMzpdwnIH6YDHm9wgY1iN234jJbXNGD3R+KgYS9l0tEL+0zx7UV
-   TwiyLRJ0tnYGCL6sfg49Ugt0Re03julelS2np7I9+PHCsrvPwv3cnzLb+
-   3T0fTVSn2/5VCueVH/DB/geKNdYtFl0MehEEdlhHXgy49HimRW/HAejwn
-   8Kw0h9/qSMRV/r6NGH0VgspImyleklvXNwkeEh2lDvKfu67mg0Cftw2U1
-   kbvTPSbB5WULQm0NZM4KEoe1S0xMSzzo9umqbh4dzs9RsJ5wBu/gSNowx
+  bh=dJDKBI9C/t3oC8rzuP3IFu6rPxvZkeXCeHJ+1VHh/oI=;
+  b=RvCt0oICgu0eCezi7zWxWp9gYvdFgzncmp+u2RjzugQlgGD7IaWVlazD
+   wVNW3wUdksOkUkaHGkdRffa+9+J91L/SW7IbsRAbEq5+jQet6m1gW7Xqt
+   yZsUNOVTrJCBLZNPYRgQBENXIZ93XhdKzEMwT+LYKCysvmMrqDvdACV50
+   96oSAOBGI1Los3HSWpk1RjnbiQtwj5+pZgVYmQmKU69eR1JpDL7G+mMwq
+   T6FE5fXLf5SVpk7I+QQQyNCVfDvUP2M7GahPysavWgmRTwt/1W8M3FRym
+   YU68Qv2eqGQAiIgRqV9kkqcsKf869fO7e2RQH869NVLoaAlLJwvNbuRCt
    w==;
-X-CSE-ConnectionGUID: ruh9VlFuRgCerAxWb/K8rA==
-X-CSE-MsgGUID: R0tKQbMvS9y6iN+Kr9TrhQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64684561"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64684561"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 21:05:42 -0800
-X-CSE-ConnectionGUID: tfmRiFbtTsmEFp5uVbgV2Q==
-X-CSE-MsgGUID: 5e89+h57RXiGDU9wxyxXYQ==
+X-CSE-ConnectionGUID: Quv8nRa4RXKbJ/LumaZVdg==
+X-CSE-MsgGUID: WoMyq18qQRWs6wcLdtOzTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11607"; a="75448383"
+X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
+   d="scan'208";a="75448383"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 21:58:47 -0800
+X-CSE-ConnectionGUID: yoGoFhiLQZ6PRUbwZTIMSw==
+X-CSE-MsgGUID: xnAORxazRya8mgr2lz4Zzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="193572600"
+   d="scan'208";a="192784861"
 Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Nov 2025 21:05:40 -0800
+  by orviesa004.jf.intel.com with ESMTP; 08 Nov 2025 21:58:44 -0800
 Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vHxcP-0001mp-1I;
-	Sun, 09 Nov 2025 05:05:37 +0000
-Date: Sun, 9 Nov 2025 13:05:25 +0800
+	id 1vHyRl-0001oF-1f;
+	Sun, 09 Nov 2025 05:58:41 +0000
+Date: Sun, 9 Nov 2025 13:57:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: ccc194101@163.com, stern@rowland.harvard.edu,
-	gregkh@linuxfoundation.org
+To: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+	Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Bryan O'Donoghue <bod@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-	linux-kernel@vger.kernel.org,
-	Chen Changcheng <chenchangcheng@kylinos.cn>
-Subject: Re: [PATCH] usb: usb-storage: No additional quirks need to be added
- to the ECD819-SU3 optical drive.
-Message-ID: <202511091255.ohMJwQcj-lkp@intel.com>
-References: <20251107061046.32339-1-ccc194101@163.com>
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>,
+	Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
+Subject: Re: [PATCH v5 3/5] media: iris: Add support for AV1 format in iris
+ decoder
+Message-ID: <202511091302.TuplwHhw-lkp@intel.com>
+References: <20251107-av1d_stateful_v3-v5-3-351652ba49cd@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,55 +71,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107061046.32339-1-ccc194101@163.com>
+In-Reply-To: <20251107-av1d_stateful_v3-v5-3-351652ba49cd@oss.qualcomm.com>
 
-Hi,
+Hi Deepa,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 284922f4c563aa3a8558a00f2a05722133237fe8]
+[auto build test ERROR on 163917839c0eea3bdfe3620f27f617a55fd76302]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ccc194101-163-com/usb-usb-storage-No-additional-quirks-need-to-be-added-to-the-ECD819-SU3-optical-drive/20251107-141330
-base:   284922f4c563aa3a8558a00f2a05722133237fe8
-patch link:    https://lore.kernel.org/r/20251107061046.32339-1-ccc194101%40163.com
-patch subject: [PATCH] usb: usb-storage: No additional quirks need to be added to the ECD819-SU3 optical drive.
-config: loongarch-randconfig-001-20251109 (https://download.01.org/0day-ci/archive/20251109/202511091255.ohMJwQcj-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project b9ea93cd5c37fb6d606502fd01208dd48330549d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511091255.ohMJwQcj-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepa-Guthyappa-Madivalara/media-uapi-videodev2-Add-support-for-AV1-stateful-decoder/20251108-122511
+base:   163917839c0eea3bdfe3620f27f617a55fd76302
+patch link:    https://lore.kernel.org/r/20251107-av1d_stateful_v3-v5-3-351652ba49cd%40oss.qualcomm.com
+patch subject: [PATCH v5 3/5] media: iris: Add support for AV1 format in iris decoder
+config: x86_64-buildonly-randconfig-005-20251109 (https://download.01.org/0day-ci/archive/20251109/202511091302.TuplwHhw-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511091302.TuplwHhw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511091255.ohMJwQcj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511091302.TuplwHhw-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/usb/storage/uas.c:931:
->> drivers/usb/storage/unusual_uas.h:100:1: error: incompatible pointer to integer conversion initializing 'kernel_ulong_t' (aka 'unsigned long') with an expression of type 'void *' [-Wint-conversion]
-     100 | UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     101 |                 "Initio Corporation",
-         |                 ~~~~~~~~~~~~~~~~~~~~~
-     102 |                 "external DVD burner ECD819-SU3",
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     103 |                 USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     104 |                 NULL),
-         |                 ~~~~~
-   drivers/usb/storage/uas.c:928:17: note: expanded from macro 'UNUSUAL_DEV'
-     928 |         .driver_info = (flags) }
-         |                        ^~~~~~~
-   1 error generated.
+   drivers/media/platform/qcom/iris/iris_platform_sm8250.c:20:48: error: array has incomplete element type 'struct iris_fmt'
+      20 | static struct iris_fmt platform_fmts_sm8250_dec[] = {
+         |                                                ^
+   drivers/media/platform/qcom/iris/iris_platform_common.h:217:9: note: forward declaration of 'struct iris_fmt'
+     217 |         struct iris_fmt *inst_iris_fmts;
+         |                ^
+   drivers/media/platform/qcom/iris/iris_platform_sm8250.c:21:3: error: use of undeclared identifier 'IRIS_FMT_H264'
+      21 |         [IRIS_FMT_H264] = {
+         |          ^
+>> drivers/media/platform/qcom/iris/iris_platform_sm8250.c:25:3: error: use of undeclared identifier 'IRIS_FMT_HEVC'
+      25 |         [IRIS_FMT_HEVC] = {
+         |          ^
+>> drivers/media/platform/qcom/iris/iris_platform_sm8250.c:29:3: error: use of undeclared identifier 'IRIS_FMT_VP9'
+      29 |         [IRIS_FMT_VP9] = {
+         |          ^
+   4 errors generated.
 
 
-vim +100 drivers/usb/storage/unusual_uas.h
+vim +/IRIS_FMT_HEVC +25 drivers/media/platform/qcom/iris/iris_platform_sm8250.c
 
- > 100	UNUSUAL_DEV(0x13fd, 0x3940, 0x0310, 0x0310,
-   101			"Initio Corporation",
-   102			"external DVD burner ECD819-SU3",
-   103			USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-   104			NULL),
-   105	
+    19	
+    20	static struct iris_fmt platform_fmts_sm8250_dec[] = {
+    21		[IRIS_FMT_H264] = {
+    22			.pixfmt = V4L2_PIX_FMT_H264,
+    23			.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+    24		},
+  > 25		[IRIS_FMT_HEVC] = {
+    26			.pixfmt = V4L2_PIX_FMT_HEVC,
+    27			.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+    28		},
+  > 29		[IRIS_FMT_VP9] = {
+    30			.pixfmt = V4L2_PIX_FMT_VP9,
+    31			.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+    32		},
+    33	};
+    34	
 
 -- 
 0-DAY CI Kernel Test Service
