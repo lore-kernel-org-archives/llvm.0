@@ -1,60 +1,68 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4156261573;
-	Sun,  9 Nov 2025 21:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C7B1A58D;
+	Sun,  9 Nov 2025 21:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762723004; cv=none; b=V7jXYqlIdg4OZLMnTyJ/5RclhvdFbSsFvjraZTZM7jpa9jbL4z1wlpQyRvTnsr5JHqRDP0vfVkNXfIckWlB6nCrBYSIKB74m+fe84xOYBUG9U/ShM4rCFYmcqbpW12q7nTwsPHZYhdOw1o4V6CZq0BHWKTydPekS768+VHljrLI=
+	t=1762724932; cv=none; b=TywQlqDcV7wjAoTj5bzOoM31ejOjH0yUbU2mCRXw7PdjsVvgM3fddskHcrNi2xu3bbzLo1FkhUb0TeD2uhEQCZJSYuMYgiTdeIGrhFbHnSUyIoUF/dcmZMV2S/xok2CIv6guRCQYjA7vzIwvO130BbAi1cHK6IRRu9Hbc+ZBagI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762723004; c=relaxed/simple;
-	bh=S8Bkb92OJMyXMKvZUFAyvThT4GeleZiL0HbmUi5vJog=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=i4ajv34+Mrl3wIlwQb1Beox4NDfOsixTC0Y3DaDTS9U3aIE3CYtvPAJ5sQYX0W1Tcyw8ogCrB8wZEGFSjUdcA1Vu5jtCSaluHrF+KXJvi0b/X5g7BX8DLS82UuiF88jtduBDTmyt6sANURHDmK/k3ht3fLItpYRelVG69wUAhI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+BEksNo; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1762724932; c=relaxed/simple;
+	bh=Q2KbBtdvFBz63OxXv1wztUo9rT/L1z8KKdXs98sTjzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TgbMKLKouuJ3FBry8ehwnB3SV6hpezvUn2ZS1f/YzTtnJHmRPNlLq+SiSnxn5dFit/StsLy7sYXFX14cOm1CkA0vJd/BFuJD39gfjZnubZ6nrJoVEFxvtnayykIn+SZtPGEb8q0HfU75L2N/5h0UvkMidkzdVcM3O04T7lDA1sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ag2QPTyW; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+BEksNo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ag2QPTyW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762723003; x=1794259003;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S8Bkb92OJMyXMKvZUFAyvThT4GeleZiL0HbmUi5vJog=;
-  b=Y+BEksNoYPsRGear93m92HKLk3ES+bmQZsEdJmNMFAH9K4/wwfaKDWcv
-   tx1ss/5uZ4cNw3nFocaK799KmhAy0bQO/6U6cwXhRFzEM4ueGOm2WgAp4
-   RtQEvIuPzxdjPA/SrKbbZDIT3hO0NZY2d6M9gC2Js7oSLb7bYiw1mVop6
-   qpB7CumzGZkKC/IS7Ooi1Mja91g1JmH/tCwupnFoNX2Po6K+IeHXrLGKv
-   V+y1p5avpv2h7dsJ2NC3SmRYkA76TOPSQT/86H9L/XzvqsjGF6N6qbka4
-   6SqwKe/YHyqhJItl2MjkolL5yGB+KE0AebyFlP19OXLyO65sDUqbKMWXm
-   A==;
-X-CSE-ConnectionGUID: RYMJz7DfS2SWMoem8TBBsA==
-X-CSE-MsgGUID: uot34t4iQN6L5pnUoaNgjQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="82407924"
+  t=1762724931; x=1794260931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q2KbBtdvFBz63OxXv1wztUo9rT/L1z8KKdXs98sTjzo=;
+  b=Ag2QPTyWEUdn56jVr9gCO43OYvPN9nD1wEm7d+Ism6Wi8bpg8gvnakos
+   BbcI8Bek7QgSRpH85LLZASJVPWsRkwPLYaviRCASRnDEa58/GVUEASn0k
+   ZAtZq0e+bV5ovJFW0ldJ08ATtd0Yr1wGy67AL6NruARajUCKK/YOGb0Lo
+   /dTFe3JJavIkyauqW7fZY5eNc+DBEGyCRUnhQO5kLtw/1xccwyvnHBJid
+   ymW/1ygyY9yDvyRwiWAfRidN6GEUgAWGGVQyPw4iYG8nZNcbm5ssiYzug
+   GoBjPlq9HiUx7MqmiLKvRISskv2Efr389JmgTFThY8PlPDSamhzT+uSjq
+   w==;
+X-CSE-ConnectionGUID: Q9Vqfa+3Q7euCErnF/cbKw==
+X-CSE-MsgGUID: N1lDt/vfRIe8zuHIny3qHg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="82408603"
 X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
-   d="scan'208";a="82407924"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 13:16:43 -0800
-X-CSE-ConnectionGUID: 7ngbqzglT9iXUheDNKmajA==
-X-CSE-MsgGUID: bRiH9hRkRH+/7ZEwROmCdw==
+   d="scan'208";a="82408603"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 13:48:50 -0800
+X-CSE-ConnectionGUID: yZi8cpxlTAmH/01aimhL0A==
+X-CSE-MsgGUID: 016R6T/9TRG4taXsPRCqpQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
-   d="scan'208";a="211925996"
+   d="scan'208";a="188775217"
 Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 09 Nov 2025 13:16:41 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 09 Nov 2025 13:48:47 -0800
 Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vICm7-0002PP-0D;
-	Sun, 09 Nov 2025 21:16:39 +0000
-Date: Mon, 10 Nov 2025 05:16:29 +0800
+	id 1vIDHB-0002Qd-2b;
+	Sun, 09 Nov 2025 21:48:45 +0000
+Date: Mon, 10 Nov 2025 05:48:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Raju Rangoju <Raju.Rangoju@amd.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-media@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paolo Abeni <pabeni@redhat.com>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>
-Subject: [linux-next:master 6788/7207] ld.lld: error: undefined symbol:
- ip_send_check
-Message-ID: <202511100558.L879JqRE-lkp@intel.com>
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v1 3/6] media: imx-mipi-csis: Implement the
+ .set_routing() operation
+Message-ID: <202511100531.4skNcchV-lkp@intel.com>
+References: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,34 +71,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   9c0826a5d9aa4d52206dd89976858457a2a8a7ed
-commit: 862a64c83faf7708e7e79498193ff5270543a68d [6788/7207] amd-xgbe: introduce support ethtool selftest
-config: i386-buildonly-randconfig-005-20251109 (https://download.01.org/0day-ci/archive/20251110/202511100558.L879JqRE-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511100558.L879JqRE-lkp@intel.com/reproduce)
+Hi Laurent,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Laurent-Pinchart/media-imx-mipi-csis-Add-VC-related-register-fields/20251107-100134
+base:   dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+patch link:    https://lore.kernel.org/r/20251107015813.5834-4-laurent.pinchart%40ideasonboard.com
+patch subject: [PATCH v1 3/6] media: imx-mipi-csis: Implement the .set_routing() operation
+config: arm-randconfig-003-20251110 (https://download.01.org/0day-ci/archive/20251110/202511100531.4skNcchV-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511100531.4skNcchV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511100558.L879JqRE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511100531.4skNcchV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: ip_send_check
-   >>> referenced by selftests.c:104 (net/core/selftests.c:104)
-   >>>               net/core/selftests.o:(net_test_get_skb) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: udp4_hwcsum
-   >>> referenced by selftests.c:148 (net/core/selftests.c:148)
-   >>>               net/core/selftests.o:(net_test_get_skb) in archive vmlinux.a
+>> drivers/media/platform/nxp/imx-mipi-csis.c:1164:32: error: initializer element is not a compile-time constant
+                   .code = mipi_csis_formats[0].code,
+                           ~~~~~~~~~~~~~~~~~~~~~^~~~
+   1 error generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for NET_SELFTESTS
-   Depends on [n]: NET [=y] && PHYLIB [=y] && INET [=n]
-   Selected by [y]:
-   - AMD_XGBE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_AMD [=y] && (OF_ADDRESS [=y] || ACPI [=n] || PCI [=n]) && HAS_IOMEM [=y] && (X86 [=y] || ARM64 || COMPILE_TEST [=y]) && PTP_1588_CLOCK_OPTIONAL [=y]
+
+vim +1164 drivers/media/platform/nxp/imx-mipi-csis.c
+
+  1156	
+  1157	static int __mipi_csis_set_routing(struct v4l2_subdev *sd,
+  1158					   struct v4l2_subdev_state *state,
+  1159					   struct v4l2_subdev_krouting *routing)
+  1160	{
+  1161		static const struct v4l2_mbus_framefmt format = {
+  1162			.width = MIPI_CSIS_DEF_PIX_WIDTH,
+  1163			.height = MIPI_CSIS_DEF_PIX_HEIGHT,
+> 1164			.code = mipi_csis_formats[0].code,
+  1165			.field = V4L2_FIELD_NONE,
+  1166			.colorspace = V4L2_XFER_FUNC_709,
+  1167			.ycbcr_enc = V4L2_YCBCR_ENC_601,
+  1168			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
+  1169			.xfer_func = V4L2_XFER_FUNC_SRGB,
+  1170		};
+  1171		int ret;
+  1172	
+  1173		ret = v4l2_subdev_routing_validate(sd, routing,
+  1174						   V4L2_SUBDEV_ROUTING_NO_1_TO_N);
+  1175		if (ret)
+  1176			return ret;
+  1177	
+  1178		/* Only a single route is supported for now. */
+  1179		if (routing->num_routes != 1 ||
+  1180		    !(routing->routes[0].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
+  1181			return -EINVAL;
+  1182	
+  1183		ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
+  1184		if (ret)
+  1185			return ret;
+  1186	
+  1187		return 0;
+  1188	}
+  1189	
 
 -- 
 0-DAY CI Kernel Test Service
