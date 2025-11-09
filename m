@@ -1,95 +1,130 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C185234D3B3;
-	Sun,  9 Nov 2025 11:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C146911CA9
+	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 11:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762688139; cv=none; b=skZrgrg96jokfmbFcw7GGCVVEv/RfQovEIeTHGfcjBzIb4+oUq0soXMsorVWQTIcCQIzt3d8B+TorQQ+YeyiVyhxTVj8PXXBszH3fIEpd2MCTuDLuJACaIzg41TOPRneWofJxT5Uv27vGW7wtVTPsxUsTsO2Qrxps9n+bbEwPqY=
+	t=1762688598; cv=none; b=GLTm3sPlOuzjz/79Fq4RJy39Hg15Vrx3SYfK+pJ6vOBe2VZDcIQznTjAse8v2f5GE14whTwlhDwkhRHh8lUbBM9ogtApDTooDP6w0tv2VkllAR0Vx9+eX5ACcp82/8CLr+u8eFJVscX0W0ByChc2JkuDWOniMxoMSh7WZSEXfS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762688139; c=relaxed/simple;
-	bh=v6SzpFNAHsw8vP25xbzhZPPkNDHfQko1gve7yuVtA08=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p5RckmVqXoiBZFIxD5yxTy0lSWrNcbpHUdijsQ3uAN1Griv7jS1Yeatqi3P05CjaINJIQ174PO8mlzMDOrG0/jU9iCilnNSroH+9WlLcczT/mcH6cGfXfqwHdxHUfXs6QQffZqJHGpBdCWpy2fkqUT5/xe8qQWbnSav3n4DPyTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=v//DKtfC; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1762688598; c=relaxed/simple;
+	bh=cZfvrOyvEeOkgWumCZqYwVTdAKtpQvMOEF0J8aBq1GY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=unGZEtIvxL7gChcP5Enry6xoWBduvtEnG2FrK3CAH6t1BkcKA6KpDUsj+qAwmrApC8rSvz6lS8djP4mzy7O/pKBLEYYk0bl3oR5xKJY6ccUhysRpHy3I7K6XHlVJkISNn62+VSBZNm6RbIQR1KJhKHPbFrmNOmeP0AzWaBaPZQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i3k/PcyI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="v//DKtfC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=E7of+KRv5wtg04L0riOBm6jlSGoN8qeuSNDj0ONKyk8=; b=v//DKtfCaZRI9e4pBqXwSbKMej
-	oWCDzCjkUmFRPg8JSGmmfuK3xTyilDXMwVK0ar294XzQFipwkQXHrh4hNjL/si8UBknNzXMBVFTOv
-	/WtQyPfSMqTrtm0iisaAwvfug7nMfu/j/rAzQmmwJcC2HeXeYcsOl9DLOKyvZHQ3YFlo/Vku4om13
-	GAf4Ud2TUeikWDwOOv36oKpt0CVL8CgDg1KKsG0q2B5xyqVXUBbWP5yyStdVMfCqEp0B9LtigB3gR
-	VG+SgnhIaEEsLOWHJnrFmwc87Zo5zMu+/W+z59SxJppKAgU7LvUlrtHdOvXu0BzZ6GFr4PNi7TJE4
-	bb8Idpow==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vI3hm-00000006Sil-0zub;
-	Sun, 09 Nov 2025 11:35:34 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id BB27B300230; Sun, 09 Nov 2025 12:35:33 +0100 (CET)
-Date: Sun, 9 Nov 2025 12:35:33 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Xie Yuanbin <qq570070308@gmail.com>
-Cc: david@redhat.com, tglx@linutronix.de, segher@kernel.crashing.org,
-	riel@surriel.com, linux@armlinux.org.uk,
-	mathieu.desnoyers@efficios.com, paulmck@kernel.org, pjw@kernel.org,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-	borntraeger@linux.ibm.com, svens@linux.ibm.com, davem@davemloft.net,
-	andreas@gaisler.com, luto@kernel.org, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
-	anna-maria@linutronix.de, frederic@kernel.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	justinstitt@google.com, thuth@redhat.com, brauner@kernel.org,
-	arnd@arndb.de, jlayton@kernel.org, aalbersh@redhat.com,
-	akpm@linux-foundation.org, david@kernel.org,
-	lorenzo.stoakes@oracle.com, max.kellermann@ionos.com,
-	ryan.roberts@arm.com, nysal@linux.ibm.com, urezki@gmail.com,
-	x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
-	will@kernel.org
-Subject: Re: [PATCH v2 4/4] Make finish_task_switch and its subfuncs inline
- in context switching
-Message-ID: <20251109113533.GB2545891@noisy.programming.kicks-ass.net>
-References: <20251108172346.263590-1-qq570070308@gmail.com>
- <20251108172346.263590-5-qq570070308@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i3k/PcyI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762688595;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PYyKXUdR8GpW44s/kMuR5NPOL1OxhvIdbgMfgPgI8Pc=;
+	b=i3k/PcyIon867c9ujN/KjOecp1sKirH+B+xA6tKeqDI0TqL4rv32PnHiUJ7jk+5qGkOelB
+	u1fOAMJWHomyKtOup2KJVju1LvhbPVqOSSRN1KFf/8BnTdKTzRfbGjX963QbyqCGl2VtL4
+	uESTK3ZcJJwnz93qTsgLaVwlgUPMmUI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-460-1KfPxt2hOCKy3VhL9-_XYw-1; Sun,
+ 09 Nov 2025 06:43:13 -0500
+X-MC-Unique: 1KfPxt2hOCKy3VhL9-_XYw-1
+X-Mimecast-MFC-AGG-ID: 1KfPxt2hOCKy3VhL9-_XYw_1762688593
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 190B8180049F
+	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 11:43:13 +0000 (UTC)
+Received: from [172.20.1.36] (unknown [10.30.45.70])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A510F19560A7;
+	Sun,  9 Nov 2025 11:43:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (6.18.0-rc4,
+ upstream-mainline, 439fc29d)
+Date: Sun, 09 Nov 2025 11:43:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251108172346.263590-5-qq570070308@gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <82340.125110906431300685@us-mta-460.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: X3pB2IEXOrvcHoWFmFUTsVf8iaLTFc9xGnJJOxM7gK4_1762688593
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 09, 2025 at 01:23:46AM +0800, Xie Yuanbin wrote:
-> `finish_task_switch` is a hot path in context switching, and due to
-> possible mitigations inside switch_mm, performance here is greatly
-> affected by function calls and branch jumps. Make it inline to optimize
-> the performance.
-> 
-> After `finish_task_switch` is changed to an inline function, the number of
-> calls to the subfunctions (called by `finish_task_switch`) increases in
-> this translation unit due to the inline expansion of `finish_task_switch`.
-> Due to compiler optimization strategies, these functions may transition
-> from inline functions to non inline functions, which can actually lead to
-> performance degradation.
-> 
-> Make the subfunctions of finish_task_stwitch inline to prevent
-> degradation.
+Hi, we tested your kernel and here are the results:
 
-Yeah, try again without that _ainline garbage.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2025-11-09' of https://gitlab.free=
+desktop.org/drm/kernel
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2148009453
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
