@@ -1,136 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDEA2144C7;
-	Sun,  9 Nov 2025 05:58:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5A27B3E1
+	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 07:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762667929; cv=none; b=cJrfbqCYOpFwdetyo1mFZWw78RXIXPS8g+bB8v0tdGD8iJ57XwpgHX3Rm29HhCXGa2gBxaCfREENkLHbJ9lL/ovxPUvYfmvsrlSd5K3RGxfu538ciOdUgtDksSChWkDAAntZQwg8yw+QpKbBh3EtXGNejOCRa38TVvL9bAnQ/fE=
+	t=1762673000; cv=none; b=SrtfA0Dnv1S/bv/HyX0m+V8j/S8aX6VuxMeGGXxXfjNtLyN6gbC/krKkDuPfD2Th6n1p9NhSNH6qu8z2mhmm7AS1ySGkLTQt/hozj6l7trmw9yhctZXpYXS/UxDNjqComgPBSGcjzn5btCknWxFkUuFR56Fc0eihx8CRJ0Y9E4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762667929; c=relaxed/simple;
-	bh=dJDKBI9C/t3oC8rzuP3IFu6rPxvZkeXCeHJ+1VHh/oI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fmp8MJO8QMY42qRLmyhozGnNjf/2x+W4yoJwpM9Sjti8Cej7D/ndBEgoyAuR8gxxx/DUaiJosqBExFnmXpMkBZhJTiUNRSyDGkMNr8UMZThKRufEnQGfylk26qOoUUYOPWqkz7Gbu2mqZ2rO8ygKsvSSQsVdG2cv7GOo97r4w8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RvCt0oIC; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762673000; c=relaxed/simple;
+	bh=lhBEw4PS7Il7gBQmxG0wQnSizrfOnsPPiVkyQYzQibc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eLTz24EBr5KPYv9sZD249soUijFjSQdl4uAuUWqZuEovWg72uLgiHKcsPY+oB/6Jh7GkIX+w0K/vHVlKW5xfWjwpT16lacSp3x6z/CR+fNMhe+A5E86MnCODNLs/j4xDCgNfWrUwlORJv+YHqPWZ/J/znH9xbUdSv55tq14CKig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J9J8dJxn; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RvCt0oIC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762667927; x=1794203927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dJDKBI9C/t3oC8rzuP3IFu6rPxvZkeXCeHJ+1VHh/oI=;
-  b=RvCt0oICgu0eCezi7zWxWp9gYvdFgzncmp+u2RjzugQlgGD7IaWVlazD
-   wVNW3wUdksOkUkaHGkdRffa+9+J91L/SW7IbsRAbEq5+jQet6m1gW7Xqt
-   yZsUNOVTrJCBLZNPYRgQBENXIZ93XhdKzEMwT+LYKCysvmMrqDvdACV50
-   96oSAOBGI1Los3HSWpk1RjnbiQtwj5+pZgVYmQmKU69eR1JpDL7G+mMwq
-   T6FE5fXLf5SVpk7I+QQQyNCVfDvUP2M7GahPysavWgmRTwt/1W8M3FRym
-   YU68Qv2eqGQAiIgRqV9kkqcsKf869fO7e2RQH869NVLoaAlLJwvNbuRCt
-   w==;
-X-CSE-ConnectionGUID: Quv8nRa4RXKbJ/LumaZVdg==
-X-CSE-MsgGUID: WoMyq18qQRWs6wcLdtOzTQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11607"; a="75448383"
-X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="75448383"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 21:58:47 -0800
-X-CSE-ConnectionGUID: yoGoFhiLQZ6PRUbwZTIMSw==
-X-CSE-MsgGUID: xnAORxazRya8mgr2lz4Zzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="192784861"
-Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 08 Nov 2025 21:58:44 -0800
-Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vHyRl-0001oF-1f;
-	Sun, 09 Nov 2025 05:58:41 +0000
-Date: Sun, 9 Nov 2025 13:57:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-	Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bryan O'Donoghue <bod@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
-Subject: Re: [PATCH v5 3/5] media: iris: Add support for AV1 format in iris
- decoder
-Message-ID: <202511091302.TuplwHhw-lkp@intel.com>
-References: <20251107-av1d_stateful_v3-v5-3-351652ba49cd@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J9J8dJxn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762672997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KaIcHFzyK2/uQMq+3FF3Or5gdK2CWtVi9eMuDfXz91Q=;
+	b=J9J8dJxnn1uwX2xSsqO+f6jjRpeBE6V/6OUp96yo6mnO4hDaYtvNoCm/ZZLVLEY/9F5AFX
+	LRiveuMNu2s5in1VrOUHEYPyMR+5cmFq2d8caFBQqPPSQLkK+p3lVXp1zdR37erV5s0Amv
+	KPIWnB/fwR96ab9jB0rLhQkmqUxA40Q=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-93-65F1NmDXNn6lHBQ91Q0jAA-1; Sun,
+ 09 Nov 2025 02:23:16 -0500
+X-MC-Unique: 65F1NmDXNn6lHBQ91Q0jAA-1
+X-Mimecast-MFC-AGG-ID: 65F1NmDXNn6lHBQ91Q0jAA_1762672995
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6380C1956080
+	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 07:23:15 +0000 (UTC)
+Received: from [172.20.1.36] (unknown [10.30.45.70])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 79DC519560A7;
+	Sun,  9 Nov 2025 07:23:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc4,
+ upstream-mainline, 7bb4d651)
+Date: Sun, 09 Nov 2025 07:23:14 -0000
+To: ftjahjad@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251107-av1d_stateful_v3-v5-3-351652ba49cd@oss.qualcomm.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <29415.125110902231600269@us-mta-93.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 4_LV-geyPZn71UNIJhSAgZUayDvPdENAQVjuhsMvCMY_1762672995
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Deepa,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 163917839c0eea3bdfe3620f27f617a55fd76302]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Deepa-Guthyappa-Madivalara/media-uapi-videodev2-Add-support-for-AV1-stateful-decoder/20251108-122511
-base:   163917839c0eea3bdfe3620f27f617a55fd76302
-patch link:    https://lore.kernel.org/r/20251107-av1d_stateful_v3-v5-3-351652ba49cd%40oss.qualcomm.com
-patch subject: [PATCH v5 3/5] media: iris: Add support for AV1 format in iris decoder
-config: x86_64-buildonly-randconfig-005-20251109 (https://download.01.org/0day-ci/archive/20251109/202511091302.TuplwHhw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251109/202511091302.TuplwHhw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511091302.TuplwHhw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/media/platform/qcom/iris/iris_platform_sm8250.c:20:48: error: array has incomplete element type 'struct iris_fmt'
-      20 | static struct iris_fmt platform_fmts_sm8250_dec[] = {
-         |                                                ^
-   drivers/media/platform/qcom/iris/iris_platform_common.h:217:9: note: forward declaration of 'struct iris_fmt'
-     217 |         struct iris_fmt *inst_iris_fmts;
-         |                ^
-   drivers/media/platform/qcom/iris/iris_platform_sm8250.c:21:3: error: use of undeclared identifier 'IRIS_FMT_H264'
-      21 |         [IRIS_FMT_H264] = {
-         |          ^
->> drivers/media/platform/qcom/iris/iris_platform_sm8250.c:25:3: error: use of undeclared identifier 'IRIS_FMT_HEVC'
-      25 |         [IRIS_FMT_HEVC] = {
-         |          ^
->> drivers/media/platform/qcom/iris/iris_platform_sm8250.c:29:3: error: use of undeclared identifier 'IRIS_FMT_VP9'
-      29 |         [IRIS_FMT_VP9] = {
-         |          ^
-   4 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/IRIS_FMT_HEVC +25 drivers/media/platform/qcom/iris/iris_platform_sm8250.c
+Kernel information:
+    Commit message: Merge tag 'v6.18rc4-SMB-client-fixes' of git://git.samb=
+a.org/sfrench/cifs-2.6
 
-    19	
-    20	static struct iris_fmt platform_fmts_sm8250_dec[] = {
-    21		[IRIS_FMT_H264] = {
-    22			.pixfmt = V4L2_PIX_FMT_H264,
-    23			.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-    24		},
-  > 25		[IRIS_FMT_HEVC] = {
-    26			.pixfmt = V4L2_PIX_FMT_HEVC,
-    27			.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-    28		},
-  > 29		[IRIS_FMT_VP9] = {
-    30			.pixfmt = V4L2_PIX_FMT_VP9,
-    31			.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-    32		},
-    33	};
-    34	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2147801071
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2147801071_x86_64_kernel-debug_kcidb_tool_19957431_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2147801071_x86_64_kernel-debug_kcidb_tool_19957431_12
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
