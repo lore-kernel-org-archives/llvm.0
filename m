@@ -1,307 +1,149 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94F134D38B
-	for <llvm@lists.linux.dev>; Sat,  8 Nov 2025 22:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FF21FA15E
+	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 03:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762640166; cv=none; b=Yni+t9OlJOEVi2e3efrgqnpHMBFhGoTUqpfuOKddZyawiA1qI/HQ+KYl1iNoiOcoOsJaR+IwcnQKhXluGSVEsEBI57i4wzMQ0ujcZwcHcfiZDIPDNFpgBc9BTBn9gwgAZOgw1Bj7BYIwQulJZ3mQOXx1gEgcWstVn5zQ2zzy78I=
+	t=1762658606; cv=none; b=FSdzlIfHZloN0qLJcST1bvMKNjISJbqJJcpUPNyC2DWwZct+MWYS5VKkZZEwCtouGaYiJs5+9wp4rwEd3M+VVOhNF9mWVV9P3S0PM+k9JPtPKDKpqGXGvoldG9LuWR6djRNB3uXAPdBOhLVbT1SFJLO98OXTV3rR83dhf4wPJ5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762640166; c=relaxed/simple;
-	bh=pBhyieeDjchlJ+mOjFaTeT3Y/QitnXECs185al56b+I=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=lElpldxs7InYjDN/tVGmMASJI8kXPsqK53PqyG/h8HjshtEeOMoHSwRrdR4w2UQ1+uQd1ZAkTIhezhgGI8Nd5uE6FFaDHrFZYr5YBoFX1HJc3hv9VNYYxgbASQ3KxnAK6GaJPkDDmxn+xBa0oZ8N2VLvx7LGh8kfqhLXWCOBFnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=fWeMhNeb; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1762658606; c=relaxed/simple;
+	bh=mhK/xsbXPPGbRxFlDb6laSr0Aof+F57Tcw8ULTRs9ps=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=uxDmqw+3CdTyFVngboK0iAyPB+dHCWTw7KmtrfuEQZOhdy6mR/cXfA+ymIYnJw+uG52M4h64ctjVp2ZDbHUmWauXVzubmGUUNkKaRWPMqsN0b+ggFjMlIfE4+lwTr8qLubkXaLgNBR8rxANQGpwdUAmIxtwi+wvuS+VFEEZeYvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NroYkWFt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="fWeMhNeb"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5A8MEjxP2478531
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sat, 8 Nov 2025 14:14:46 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5A8MEjxP2478531
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025102301; t=1762640093;
-	bh=B/Cs56oiwOfYFf5C+E+O3dVcT+FEPLCVGwSgjVsb61Y=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=fWeMhNebCueBIgpwwJ9HzqbFTchAPIdo17J2WvEY7kkjBFr98Hd14BZVU/elSj4e9
-	 sYvaiqrxvUl4BY8IpX0uQCmYyYRGpwEYM4AMpxmeO6jowam81zKx+Iou/8ibo+BM+1
-	 ywYMqpzqqzlsIya940Jmlzx8lzG2S8DMVB5+RfgE7pFBtdtphXJ6gZJo7OenPNVKFJ
-	 UQgPH5eVKjpuy1XcgvLHNRCiWtDhbQz2AI+JZNS/Lv07T437bJJ0VfM8ndXOQVc3ZX
-	 UAUehct6G47TvwmWI2P9q6uIb6MiC/veNOSx+dHqmpfeKU8Yq/RQ/QTtFSTKBOHhQF
-	 vb74cw9jAoTUA==
-Date: Sat, 08 Nov 2025 14:14:44 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Xie Yuanbin <qq570070308@gmail.com>, david@redhat.com, tglx@linutronix.de,
-        segher@kernel.crashing.org, riel@surriel.com, peterz@infradead.org,
-        linux@armlinux.org.uk, mathieu.desnoyers@efficios.com,
-        paulmck@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, andreas@gaisler.com,
-        luto@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, acme@kernel.org, namhyung@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        james.clark@linaro.org, anna-maria@linutronix.de, frederic@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, vschneid@redhat.com, nathan@kernel.org,
-        nick.desaulniers+lkml@gmail.com, morbo@google.com,
-        justinstitt@google.com, qq570070308@gmail.com, thuth@redhat.com,
-        brauner@kernel.org, arnd@arndb.de, jlayton@kernel.org,
-        aalbersh@redhat.com, akpm@linux-foundation.org, david@kernel.org,
-        lorenzo.stoakes@oracle.com, max.kellermann@ionos.com,
-        ryan.roberts@arm.com, nysal@linux.ibm.com, urezki@gmail.com
-CC: x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
-        will@kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_3/4=5D_Provide_the_alwa?=
- =?US-ASCII?Q?ys_inline_version_of_some_functions?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20251108172346.263590-4-qq570070308@gmail.com>
-References: <20251108172346.263590-1-qq570070308@gmail.com> <20251108172346.263590-4-qq570070308@gmail.com>
-Message-ID: <04CA2D22-4DE2-4DE1-A2BC-AACE666F5F93@zytor.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NroYkWFt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762658602;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jKnMy4d8JG98FUonfHHtnf7x9Rr+4EbxKmvzyw4NvXo=;
+	b=NroYkWFtmcjscxkCz7PLe90xcZTBB6qg1NiCJ9iNXzLxczgndVHfzohBssFgofqzh8RkNh
+	m/mE0dxqK3Zxp0qs+OravAQi1Ubm2Sz22CPciGosUxqnAKa+kv+oB3a/pGXWP7V4xbs0yg
+	LErsYrZ/gwwUAFfov0EBiZCoItfvMvE=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-464-awDyD-jwPt6I1yAxqmduVA-1; Sat,
+ 08 Nov 2025 22:23:21 -0500
+X-MC-Unique: awDyD-jwPt6I1yAxqmduVA-1
+X-Mimecast-MFC-AGG-ID: awDyD-jwPt6I1yAxqmduVA_1762658600
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 90C1E195609E
+	for <llvm@lists.linux.dev>; Sun,  9 Nov 2025 03:23:20 +0000 (UTC)
+Received: from [172.20.1.36] (unknown [10.30.45.70])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CDD851955BE3;
+	Sun,  9 Nov 2025 03:23:19 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.18.0-rc4,
+ upstream-mainline, 0d7bee10)
+Date: Sun, 09 Nov 2025 03:23:19 -0000
+To: ftjahjad@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <67279.125110822232100337@us-mta-464.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: TjR9lhaxOa-STdbOtqKoCo3s6aUj9o6rHFPDWzLgeBo_1762658600
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On November 8, 2025 9:23:45 AM PST, Xie Yuanbin <qq570070308@gmail=2Ecom> w=
-rote:
->On critical hot code paths, inline functions can optimize performance=2E
->However, for current compilers, there is no way to request them to inline
->at a specific calling point of a function=2E
->
->Add a always inline version to some functions, so that they can be chosen
->when called in hot paths=2E
->
->Signed-off-by: Xie Yuanbin <qq570070308@gmail=2Ecom>
->Cc: Thomas Gleixner <tglx@linutronix=2Ede>
->Cc: Rik van Riel <riel@surriel=2Ecom>
->Cc: Segher Boessenkool <segher@kernel=2Ecrashing=2Eorg>
->Cc: David Hildenbrand <david@redhat=2Ecom>
->Cc: Peter Zijlstra <peterz@infradead=2Eorg>
->---
-> arch/arm/include/asm/mmu_context=2Eh      | 12 +++++++-
-> arch/s390/include/asm/mmu_context=2Eh     | 12 +++++++-
-> arch/sparc/include/asm/mmu_context_64=2Eh | 12 +++++++-
-> kernel/sched/core=2Ec                     | 38 ++++++++++++++++++++++---
-> 4 files changed, 67 insertions(+), 7 deletions(-)
->
->diff --git a/arch/arm/include/asm/mmu_context=2Eh b/arch/arm/include/asm/=
-mmu_context=2Eh
->index db2cb06aa8cf=2E=2Ee77b271570c1 100644
->--- a/arch/arm/include/asm/mmu_context=2Eh
->+++ b/arch/arm/include/asm/mmu_context=2Eh
->@@ -80,7 +80,12 @@ static inline void check_and_switch_context(struct mm_=
-struct *mm,
-> #ifndef MODULE
-> #define finish_arch_post_lock_switch \
-> 	finish_arch_post_lock_switch
->-static inline void finish_arch_post_lock_switch(void)
->+/*
->+ * finish_arch_post_lock_switch_ainline - the always inline version of
->+ * finish_arch_post_lock_switch, used for performance sensitive paths=2E
->+ * If unsure, use finish_arch_post_lock_switch instead=2E
->+ */
->+static __always_inline void finish_arch_post_lock_switch_ainline(void)
-> {
-> 	struct mm_struct *mm =3D current->mm;
->=20
->@@ -99,6 +104,11 @@ static inline void finish_arch_post_lock_switch(void)
-> 		preempt_enable_no_resched();
-> 	}
-> }
->+
->+static inline void finish_arch_post_lock_switch(void)
->+{
->+	finish_arch_post_lock_switch_ainline();
->+}
-> #endif /* !MODULE */
->=20
-> #endif	/* CONFIG_MMU */
->diff --git a/arch/s390/include/asm/mmu_context=2Eh b/arch/s390/include/as=
-m/mmu_context=2Eh
->index d9b8501bc93d=2E=2E577062834906 100644
->--- a/arch/s390/include/asm/mmu_context=2Eh
->+++ b/arch/s390/include/asm/mmu_context=2Eh
->@@ -97,7 +97,12 @@ static inline void switch_mm(struct mm_struct *prev, s=
-truct mm_struct *next,
-> }
->=20
-> #define finish_arch_post_lock_switch finish_arch_post_lock_switch
->-static inline void finish_arch_post_lock_switch(void)
->+/*
->+ * finish_arch_post_lock_switch_ainline - the always inline version of
->+ * finish_arch_post_lock_switch, used for performance sensitive paths=2E
->+ * If unsure, use finish_arch_post_lock_switch instead=2E
->+ */
->+static __always_inline void finish_arch_post_lock_switch_ainline(void)
-> {
-> 	struct task_struct *tsk =3D current;
-> 	struct mm_struct *mm =3D tsk->mm;
->@@ -120,6 +125,11 @@ static inline void finish_arch_post_lock_switch(void=
-)
-> 	local_irq_restore(flags);
-> }
->=20
->+static inline void finish_arch_post_lock_switch(void)
->+{
->+	finish_arch_post_lock_switch_ainline();
->+}
->+
-> #define activate_mm activate_mm
-> static inline void activate_mm(struct mm_struct *prev,
->                                struct mm_struct *next)
->diff --git a/arch/sparc/include/asm/mmu_context_64=2Eh b/arch/sparc/inclu=
-de/asm/mmu_context_64=2Eh
->index 78bbacc14d2d=2E=2Eca7019080574 100644
->--- a/arch/sparc/include/asm/mmu_context_64=2Eh
->+++ b/arch/sparc/include/asm/mmu_context_64=2Eh
->@@ -160,7 +160,12 @@ static inline void arch_start_context_switch(struct =
-task_struct *prev)
-> }
->=20
-> #define finish_arch_post_lock_switch	finish_arch_post_lock_switch
->-static inline void finish_arch_post_lock_switch(void)
->+/*
->+ * finish_arch_post_lock_switch_ainline - the always inline version of
->+ * finish_arch_post_lock_switch, used for performance sensitive paths=2E
->+ * If unsure, use finish_arch_post_lock_switch instead=2E
->+ */
->+static __always_inline void finish_arch_post_lock_switch_ainline(void)
-> {
-> 	/* Restore the state of MCDPER register for the new process
-> 	 * just switched to=2E
->@@ -185,6 +190,11 @@ static inline void finish_arch_post_lock_switch(void=
-)
-> 	}
-> }
->=20
->+static inline void finish_arch_post_lock_switch(void)
->+{
->+	finish_arch_post_lock_switch_ainline();
->+}
->+
-> #define mm_untag_mask mm_untag_mask
-> static inline unsigned long mm_untag_mask(struct mm_struct *mm)
-> {
->diff --git a/kernel/sched/core=2Ec b/kernel/sched/core=2Ec
->index 0e50ef3d819a=2E=2Ec50e672e22c4 100644
->--- a/kernel/sched/core=2Ec
->+++ b/kernel/sched/core=2Ec
->@@ -4884,7 +4884,13 @@ static inline void finish_task(struct task_struct =
-*prev)
-> 	smp_store_release(&prev->on_cpu, 0);
-> }
->=20
->-static void do_balance_callbacks(struct rq *rq, struct balance_callback =
-*head)
->+/*
->+ * do_balance_callbacks_ainline - the always inline version of
->+ * do_balance_callbacks, used for performance sensitive paths=2E
->+ * If unsure, use do_balance_callbacks instead=2E
->+ */
->+static __always_inline void do_balance_callbacks_ainline(struct rq *rq,
->+		struct balance_callback *head)
-> {
-> 	void (*func)(struct rq *rq);
-> 	struct balance_callback *next;
->@@ -4901,6 +4907,11 @@ static void do_balance_callbacks(struct rq *rq, st=
-ruct balance_callback *head)
-> 	}
-> }
->=20
->+static void do_balance_callbacks(struct rq *rq, struct balance_callback =
-*head)
->+{
->+	do_balance_callbacks_ainline(rq, head);
->+}
->+
-> static void balance_push(struct rq *rq);
->=20
-> /*
->@@ -4949,11 +4960,21 @@ struct balance_callback *splice_balance_callbacks=
-(struct rq *rq)
-> 	return __splice_balance_callbacks(rq, true);
-> }
->=20
->-static void __balance_callbacks(struct rq *rq)
->+/*
->+ * __balance_callbacks_ainline - the always inline version of
->+ * __balance_callbacks, used for performance sensitive paths=2E
->+ * If unsure, use __balance_callbacks instead=2E
->+ */
->+static __always_inline void __balance_callbacks_ainline(struct rq *rq)
-> {
-> 	do_balance_callbacks(rq, __splice_balance_callbacks(rq, false));
-> }
->=20
->+static void __balance_callbacks(struct rq *rq)
->+{
->+	__balance_callbacks_ainline(rq);
->+}
->+
-> void balance_callbacks(struct rq *rq, struct balance_callback *head)
-> {
-> 	unsigned long flags;
->@@ -5003,7 +5024,8 @@ static inline void finish_lock_switch(struct rq *rq=
-)
-> #endif
->=20
-> #ifndef finish_arch_post_lock_switch
->-# define finish_arch_post_lock_switch()	do { } while (0)
->+# define finish_arch_post_lock_switch()		do { } while (0)
->+# define finish_arch_post_lock_switch_ainline()	do { } while (0)
-> #endif
->=20
-> static inline void kmap_local_sched_out(void)
->@@ -5050,6 +5072,9 @@ prepare_task_switch(struct rq *rq, struct task_stru=
-ct *prev,
->=20
-> /**
->  * finish_task_switch - clean up after a task-switch
->+ * finish_task_switch_ainline - the always inline version of this func
->+ * used for performance sensitive paths
->+ *
->  * @prev: the thread we just switched away from=2E
->  *
->  * finish_task_switch must be called after the context switch, paired
->@@ -5067,7 +5092,7 @@ prepare_task_switch(struct rq *rq, struct task_stru=
-ct *prev,
->  * past=2E 'prev =3D=3D current' is still correct but we need to recalcu=
-late this_rq
->  * because prev may have moved to another CPU=2E
->  */
->-static struct rq *finish_task_switch(struct task_struct *prev)
->+static __always_inline struct rq *finish_task_switch_ainline(struct task=
-_struct *prev)
-> 	__releases(rq->lock)
-> {
-> 	struct rq *rq =3D this_rq();
->@@ -5159,6 +5184,11 @@ static struct rq *finish_task_switch(struct task_s=
-truct *prev)
-> 	return rq;
-> }
->=20
->+static struct rq *finish_task_switch(struct task_struct *prev)
->+{
->+	return finish_task_switch_ainline(prev);
->+}
->+
-> /**
->  * schedule_tail - first thing a freshly forked thread must call=2E
->  * @prev: the thread we just switched away from=2E
+Hi, we tested your kernel and here are the results:
 
-There is, in fact: you have to have an always_inline version, and wrap it =
-in a noinline version=2E
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'x86-urgent-2025-11-08' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2147767053
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2147767053_x86_64_kernel-debug_kcidb_tool_19957312_6
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2147767053_x86_64_kernel-debug_kcidb_tool_19957312_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64, x86_64]
+                kselftests upstream - bpf_test_progs [x86_64, x86_64]
+                kselftests upstream - net [x86_64, x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
