@@ -1,68 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C7B1A58D;
-	Sun,  9 Nov 2025 21:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08D9243376;
+	Sun,  9 Nov 2025 23:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762724932; cv=none; b=TywQlqDcV7wjAoTj5bzOoM31ejOjH0yUbU2mCRXw7PdjsVvgM3fddskHcrNi2xu3bbzLo1FkhUb0TeD2uhEQCZJSYuMYgiTdeIGrhFbHnSUyIoUF/dcmZMV2S/xok2CIv6guRCQYjA7vzIwvO130BbAi1cHK6IRRu9Hbc+ZBagI=
+	t=1762731445; cv=none; b=sG7hWsoEm/J8b8BHpKdFcGvH1yo5K8Yp8XIpf54IjJ9ywbkVCpg54YVJCQFK6AniJyydheSv/ToYJG4od0ENMgJlDaA9xPrPu/6zace7NUY/J1BJI2HAYRuKSwvn7qyQdZkiFGeR3ZweaOXTDQLxfjAuugbEDsy7SSN3cULV+q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762724932; c=relaxed/simple;
-	bh=Q2KbBtdvFBz63OxXv1wztUo9rT/L1z8KKdXs98sTjzo=;
+	s=arc-20240116; t=1762731445; c=relaxed/simple;
+	bh=5YEOu82QTmZW2HELOApkW8zOPzE/QRgh57UZFjoQzaY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TgbMKLKouuJ3FBry8ehwnB3SV6hpezvUn2ZS1f/YzTtnJHmRPNlLq+SiSnxn5dFit/StsLy7sYXFX14cOm1CkA0vJd/BFuJD39gfjZnubZ6nrJoVEFxvtnayykIn+SZtPGEb8q0HfU75L2N/5h0UvkMidkzdVcM3O04T7lDA1sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ag2QPTyW; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=B5ZY42R3WG039uFg08pV3lkZ+DCS0N93+jp5XsztEq8nZAYHhJnC/5WS+CVVgAbOE3KE4TgsVtlXLtkDrsqe3hqHHm1JmqQ75rPN8xuw8VSrMM1V7Crr71byV9Gy5qLffScuCDzuUozIHIHXy4hBeYWEdlgUuDS6WZw4lgRhqKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwnOpyVs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ag2QPTyW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762724931; x=1794260931;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q2KbBtdvFBz63OxXv1wztUo9rT/L1z8KKdXs98sTjzo=;
-  b=Ag2QPTyWEUdn56jVr9gCO43OYvPN9nD1wEm7d+Ism6Wi8bpg8gvnakos
-   BbcI8Bek7QgSRpH85LLZASJVPWsRkwPLYaviRCASRnDEa58/GVUEASn0k
-   ZAtZq0e+bV5ovJFW0ldJ08ATtd0Yr1wGy67AL6NruARajUCKK/YOGb0Lo
-   /dTFe3JJavIkyauqW7fZY5eNc+DBEGyCRUnhQO5kLtw/1xccwyvnHBJid
-   ymW/1ygyY9yDvyRwiWAfRidN6GEUgAWGGVQyPw4iYG8nZNcbm5ssiYzug
-   GoBjPlq9HiUx7MqmiLKvRISskv2Efr389JmgTFThY8PlPDSamhzT+uSjq
-   w==;
-X-CSE-ConnectionGUID: Q9Vqfa+3Q7euCErnF/cbKw==
-X-CSE-MsgGUID: N1lDt/vfRIe8zuHIny3qHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="82408603"
-X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
-   d="scan'208";a="82408603"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 13:48:50 -0800
-X-CSE-ConnectionGUID: yZi8cpxlTAmH/01aimhL0A==
-X-CSE-MsgGUID: 016R6T/9TRG4taXsPRCqpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
-   d="scan'208";a="188775217"
-Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Nov 2025 13:48:47 -0800
-Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vIDHB-0002Qd-2b;
-	Sun, 09 Nov 2025 21:48:45 +0000
-Date: Mon, 10 Nov 2025 05:48:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
-	Stefan Klug <stefan.klug@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v1 3/6] media: imx-mipi-csis: Implement the
- .set_routing() operation
-Message-ID: <202511100531.4skNcchV-lkp@intel.com>
-References: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwnOpyVs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD19C4CEF7;
+	Sun,  9 Nov 2025 23:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762731445;
+	bh=5YEOu82QTmZW2HELOApkW8zOPzE/QRgh57UZFjoQzaY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MwnOpyVsRJk5v3uibYeRVnOCS2mEpIYu7UA25lknHfLbVYn5c0tnxogXclky73IXw
+	 yrDTeYj/kkD2tUuLkZnRbrOlrGIlx+gRHuxUgLbIkuRPZEdTMoENUZvLxPWrjXWcXY
+	 TvhOV1UDfUV7n/9tkkg7FkgtHb5nj9cTYTQ0AwmIUpkIC/VkV6yD5XHuPqVF8vK3tU
+	 G7llEsKGssu6wbw7AkmKT+YCjI9Rrl5WWmVGQtqcwALYW6yiBRJqsmDdI0FpEfs6KA
+	 uobnRFDZyqTFZ4mmXZj0E6Mp0YkMnzFCTFeLhtfQBYDeMCopY1sLKNrj/i35WfiMn3
+	 NjCIcAeWhh0LA==
+Date: Sun, 9 Nov 2025 16:37:20 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jens Reidel <adrian@mainlining.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] mips: Use generic endianness macros instead of
+ MIPS-specific ones
+Message-ID: <20251109233720.GB2977577@ax162>
+References: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,72 +47,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org>
 
-Hi Laurent,
+On Sat, Nov 08, 2025 at 11:05:55PM +0100, Jens Reidel wrote:
+> Compiling bpf_skel for mips currently fails because clang --target=bpf
+> is invoked and the source files include byteorder.h, which uses the
+> MIPS-specific macros to determine the endianness, rather than the generic
+> __LITTLE_ENDIAN__ / __BIG_ENDIAN__. Fix this by using the generic
+> macros, which are also defined when targeting bpf. This is already done
+> similarly for powerpc.
+> 
+> Signed-off-by: Jens Reidel <adrian@mainlining.org>
 
-kernel test robot noticed the following build errors:
+As far as I can tell, this should be fine since clang defines these
+macros in the generic case since [1] and I assume GCC does as well but
+if there is a risk of this being a problem for userspace, these could be
+added in addition to __MIPSEB__ / __MIPSEL__.
 
-[auto build test ERROR on dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa]
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Laurent-Pinchart/media-imx-mipi-csis-Add-VC-related-register-fields/20251107-100134
-base:   dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
-patch link:    https://lore.kernel.org/r/20251107015813.5834-4-laurent.pinchart%40ideasonboard.com
-patch subject: [PATCH v1 3/6] media: imx-mipi-csis: Implement the .set_routing() operation
-config: arm-randconfig-003-20251110 (https://download.01.org/0day-ci/archive/20251110/202511100531.4skNcchV-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511100531.4skNcchV-lkp@intel.com/reproduce)
+[1]: https://github.com/llvm/llvm-project/commit/2c942c64fb521357ed98c380823e79833a121d18
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511100531.4skNcchV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/platform/nxp/imx-mipi-csis.c:1164:32: error: initializer element is not a compile-time constant
-                   .code = mipi_csis_formats[0].code,
-                           ~~~~~~~~~~~~~~~~~~~~~^~~~
-   1 error generated.
-
-
-vim +1164 drivers/media/platform/nxp/imx-mipi-csis.c
-
-  1156	
-  1157	static int __mipi_csis_set_routing(struct v4l2_subdev *sd,
-  1158					   struct v4l2_subdev_state *state,
-  1159					   struct v4l2_subdev_krouting *routing)
-  1160	{
-  1161		static const struct v4l2_mbus_framefmt format = {
-  1162			.width = MIPI_CSIS_DEF_PIX_WIDTH,
-  1163			.height = MIPI_CSIS_DEF_PIX_HEIGHT,
-> 1164			.code = mipi_csis_formats[0].code,
-  1165			.field = V4L2_FIELD_NONE,
-  1166			.colorspace = V4L2_XFER_FUNC_709,
-  1167			.ycbcr_enc = V4L2_YCBCR_ENC_601,
-  1168			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
-  1169			.xfer_func = V4L2_XFER_FUNC_SRGB,
-  1170		};
-  1171		int ret;
-  1172	
-  1173		ret = v4l2_subdev_routing_validate(sd, routing,
-  1174						   V4L2_SUBDEV_ROUTING_NO_1_TO_N);
-  1175		if (ret)
-  1176			return ret;
-  1177	
-  1178		/* Only a single route is supported for now. */
-  1179		if (routing->num_routes != 1 ||
-  1180		    !(routing->routes[0].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-  1181			return -EINVAL;
-  1182	
-  1183		ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
-  1184		if (ret)
-  1185			return ret;
-  1186	
-  1187		return 0;
-  1188	}
-  1189	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  arch/mips/include/uapi/asm/byteorder.h | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/mips/include/uapi/asm/byteorder.h b/arch/mips/include/uapi/asm/byteorder.h
+> index b4edc85f9c30c09aafbc189ec820e6e2f7cbe0d8..5e3c3baa24994a9f3637bf2b63ea7c3577cae541 100644
+> --- a/arch/mips/include/uapi/asm/byteorder.h
+> +++ b/arch/mips/include/uapi/asm/byteorder.h
+> @@ -9,12 +9,10 @@
+>  #ifndef _ASM_BYTEORDER_H
+>  #define _ASM_BYTEORDER_H
+>  
+> -#if defined(__MIPSEB__)
+> -#include <linux/byteorder/big_endian.h>
+> -#elif defined(__MIPSEL__)
+> +#ifdef __LITTLE_ENDIAN__
+>  #include <linux/byteorder/little_endian.h>
+>  #else
+> -# error "MIPS, but neither __MIPSEB__, nor __MIPSEL__???"
+> +#include <linux/byteorder/big_endian.h>
+>  #endif
+>  
+>  #endif /* _ASM_BYTEORDER_H */
+> 
+> ---
+> base-commit: 9c0826a5d9aa4d52206dd89976858457a2a8a7ed
+> change-id: 20251108-mips-bpf-fix-8d1f14bc4903
+> 
+> Best regards,
+> -- 
+> Jens Reidel <adrian@mainlining.org>
