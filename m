@@ -1,79 +1,135 @@
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985BB34D389
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 01:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D87D19D07A;
+	Mon, 10 Nov 2025 05:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762738464; cv=none; b=bjWRhlw9JJIMfwN3Nkh2FENCa5iv2aTgeqSci9OD/ZbURHspP25RVG7YgwzApmTlnawpZvKuCDxwRcIPHENqkm+Akyv1SfhSOXw2NR/u22gqPnoAMDeXxT1OsxKtM+jlbp5ENSkrQWwdYGLJ5jpvJqZ+D2GhbHcWQeMTxzzkwAo=
+	t=1762753486; cv=none; b=RiL+2hHpFDoiGWVOgFHMyhuEGk8UHlafQGdxAfPEE6gOyY/6pEpcsZ3fySwnro9ePoO2DACy054+TouyhN/RKNYaWDSJ9uKD4JasOZHCNhIJilp8qfxajzmVRTgeJFI+wQzX1cJ9rbGmwBp3ab2OoWjkbrBCnv6blFpi9cS/DFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762738464; c=relaxed/simple;
-	bh=3JYWIvaj1c5j9XP/3QI8YGNqt2UATECg1x7BPJty3WM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Rx+lkNGg6LCgxbndeM5X9af8/aRmVk1NIhUR8E0oJF+tE/X3Yx1toZQEaBdJricvNw2oBqHRqFad+Sgil1Ca6GPX4Ll92gLOX6dmcBSJEyb1nEt4KIvaPl+dGKazhIOdSOKk+MfHpFbwKZNuXjOuhP7DxSOUTOgWcbwRh60r5pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 11B3092009C; Mon, 10 Nov 2025 02:34:20 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 0D81392009B;
-	Mon, 10 Nov 2025 01:34:20 +0000 (GMT)
-Date: Mon, 10 Nov 2025 01:34:19 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Nathan Chancellor <nathan@kernel.org>
-cc: Jens Reidel <adrian@mainlining.org>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] mips: Use generic endianness macros instead of MIPS-specific
- ones
-In-Reply-To: <20251109233720.GB2977577@ax162>
-Message-ID: <alpine.DEB.2.21.2511100050330.25436@angie.orcam.me.uk>
-References: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org> <20251109233720.GB2977577@ax162>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1762753486; c=relaxed/simple;
+	bh=yi+NjG7JULWwtcWsZnl6sS+KZMtXOuI3pCMMXkagBr4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=d294/imB7RiC6iVuluuqN/A3bNJ8QykwExDT6+6CNLLACqAKypah/4mpGummcZPOjAq+Sx7FoXKKJpEhIUwdLyuehXBZDAOhJdgEmPOZ/Xr6mOZ9mA57aIvRBOsjEvk8SpQD2OX5LJ092iM5pHa38pDH2JgTyv/D7vrWPhmVHBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h0uL3LB1; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h0uL3LB1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762753484; x=1794289484;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yi+NjG7JULWwtcWsZnl6sS+KZMtXOuI3pCMMXkagBr4=;
+  b=h0uL3LB1AYpRDE7hi0ETP/TF+QCLPfA4rck0SI26ab2ckqzJ+G1V4vCz
+   GYwnDHtXsc9gU8nMOI65w5kAGA9qIPAwghQXhakggcquDbnupOk2PFcaC
+   OPh6pDqNPDjPsfKY2ocPwxc24awrsusM/MI1vSaOOsJkFs+wdBqsvKX4J
+   OhqNpVuSQvho2kLrJSND5XgOMT8er6Od8efSR28h2AAGe8l2/Z632FD63
+   0b8VZaaR+JXHFklTGE/4r05RlMyC//Rucwn7JD9nWEmFqy9enrfTAK/hM
+   MXk5H8dS4kbDtUVX6znd44mBjbZhQwypKpRkY5XcLhe6lw+smVwhgNQPe
+   A==;
+X-CSE-ConnectionGUID: ZqwWyKGlTIW3s9cb4ZBdTw==
+X-CSE-MsgGUID: CfvuEOwnTU6WKbShoFZ2ug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="68647176"
+X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
+   d="scan'208";a="68647176"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 21:44:43 -0800
+X-CSE-ConnectionGUID: MwTZ2oLhTS65a7AQK6H/Og==
+X-CSE-MsgGUID: VSM/jK75SH2ATI/fyJTQ+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
+   d="scan'208";a="211988213"
+Received: from lkp-server01.sh.intel.com (HELO a4b9b04596e0) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 09 Nov 2025 21:44:41 -0800
+Received: from kbuild by a4b9b04596e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIKhj-00002d-2I;
+	Mon, 10 Nov 2025 05:44:39 +0000
+Date: Mon, 10 Nov 2025 13:43:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dapeng Mi <dapeng1.mi@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Christopherson <seanjc@google.com>,
+	Mingwei Zhang <mizhang@google.com>,
+	Sandipan Das <sandipan.das@amd.com>
+Subject: [sean-jc:x86/mediated_pmu 37/44] arch/x86/kvm/pmu.c:1308:50: error:
+ too few arguments provided to function-like macro invocation
+Message-ID: <202511101315.v7OCEv9b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, 9 Nov 2025, Nathan Chancellor wrote:
+tree:   https://github.com/sean-jc/linux x86/mediated_pmu
+head:   9b6b574f2d82517dd2018444e07f4b2ae84c2a49
+commit: a0a470fa63f1bc6440fd4b0e3babcc847262b8ed [37/44] KVM: x86/pmu: Load/put mediated PMU context when entering/exiting guest
+config: x86_64-buildonly-randconfig-004-20251110 (https://download.01.org/0day-ci/archive/20251110/202511101315.v7OCEv9b-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511101315.v7OCEv9b-lkp@intel.com/reproduce)
 
-> > Compiling bpf_skel for mips currently fails because clang --target=bpf
-> > is invoked and the source files include byteorder.h, which uses the
-> > MIPS-specific macros to determine the endianness, rather than the generic
-> > __LITTLE_ENDIAN__ / __BIG_ENDIAN__. Fix this by using the generic
-> > macros, which are also defined when targeting bpf. This is already done
-> > similarly for powerpc.
-> > 
-> > Signed-off-by: Jens Reidel <adrian@mainlining.org>
-> 
-> As far as I can tell, this should be fine since clang defines these
-> macros in the generic case since [1] and I assume GCC does as well but
-> if there is a risk of this being a problem for userspace, these could be
-> added in addition to __MIPSEB__ / __MIPSEL__.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511101315.v7OCEv9b-lkp@intel.com/
 
- How was the change verified?
+All errors (new ones prefixed by >>):
 
- Certainly GCC defines neither __BIG_ENDIAN__ nor __LITTLE_ENDIAN__, not 
-at least for the MIPS target.  Either the current macros need to stay as 
-they are, or the generic __BYTE_ORDER__ macro can be used instead if so 
-desired, which is target-agnostic and well-documented.  Preferably with 
-the #else clause retained.
+>> arch/x86/kvm/pmu.c:1308:50: error: too few arguments provided to function-like macro invocation
+    1308 |         WARN_ON_ONCE(rdmsrq(kvm_pmu_ops.PERF_GLOBAL_CTRL));
+         |                                                         ^
+   arch/x86/include/asm/msr.h:194:9: note: macro 'rdmsrq' defined here
+     194 | #define rdmsrq(msr, val)                        \
+         |         ^
+>> arch/x86/kvm/pmu.c:1308:15: error: use of undeclared identifier 'rdmsrq'; did you mean 'wrmsrq'?
+    1308 |         WARN_ON_ONCE(rdmsrq(kvm_pmu_ops.PERF_GLOBAL_CTRL));
+         |                      ^~~~~~
+         |                      wrmsrq
+   include/asm-generic/bug.h:111:25: note: expanded from macro 'WARN_ON_ONCE'
+     111 |         int __ret_warn_on = !!(condition);                      \
+         |                                ^
+   arch/x86/include/asm/msr.h:197:20: note: 'wrmsrq' declared here
+     197 | static inline void wrmsrq(u32 msr, u64 val)
+         |                    ^
+   2 errors generated.
 
- Why is a MIPS header used with another target anyway?  It seems like a 
-bug elsewhere.  If it's not a bug indeed, for whatever odd reason, then a 
-proper rationale needs to be given in the change description.
 
- Also please don't review changes based on assumptions, "I assume GCC 
-does[...]" means that you just don't know (and it's trivial to check).
+vim +1308 arch/x86/kvm/pmu.c
 
- NB the __BYTE_ORDER__ macro has only been there as from GCC 4.6 back in 
-2010, while this header dates back to 1995 when it was necessary to use 
-target macros.  Since our current GCC requirement is 5.1 it will be fine 
-to use this macro instead.  But as I say a proper rationale is required.
+  1288	
+  1289	void kvm_mediated_pmu_load(struct kvm_vcpu *vcpu)
+  1290	{
+  1291		if (!kvm_vcpu_has_mediated_pmu(vcpu) ||
+  1292		    KVM_BUG_ON(!lapic_in_kernel(vcpu), vcpu->kvm))
+  1293			return;
+  1294	
+  1295		lockdep_assert_irqs_disabled();
+  1296	
+  1297		perf_load_guest_context();
+  1298	
+  1299		/*
+  1300		 * Sanity check that "loading" guest context disabled all counters, as
+  1301		 * modifying the LVTPC while host perf is active will cause explosions,
+  1302		 * as will loading event selectors and PMCs with guest values.
+  1303		 *
+  1304		 * VMX will enable/disable counters at VM-Enter/VM-Exit by atomically
+  1305		 * loading PERF_GLOBAL_CONTROL.  SVM effectively performs the switch by
+  1306		 * configuring all events to be GUEST_ONLY.
+  1307		 */
+> 1308		WARN_ON_ONCE(rdmsrq(kvm_pmu_ops.PERF_GLOBAL_CTRL));
+  1309	
+  1310		perf_load_guest_lvtpc(kvm_lapic_get_reg(vcpu->arch.apic, APIC_LVTPC));
+  1311	
+  1312		kvm_pmu_load_guest_pmcs(vcpu);
+  1313	
+  1314		kvm_pmu_call(mediated_load)(vcpu);
+  1315	}
+  1316	
 
-  Maciej
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
