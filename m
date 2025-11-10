@@ -1,64 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8E73148B4
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 14:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8EA31353D
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 14:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762786022; cv=none; b=RIRhFuFf3pCGnt3ioT/cPsJY/5WKrTnf3PFQOvRMa4erqqurpkYMz1CfHbl+2lrvMTscRLPa8kCchQ/oRlGi7MnzkHdH9zGTmATd6BQ8REV9a0VCjwXW5QZiyF6YBNVnJJFX+2eL8VX6el/vQzVzQoHblbDDhGe0mA+9KqIyryw=
+	t=1762786137; cv=none; b=u1VaQozCzIeRRumb4HZx0ixZ3ayBckxT8jtvpfAZMplkbOpCV+HEHEbc+CYHtCETw8bCmVqY/UMj02SoIjp+9QheyLUO9KW4wyugWq4rizwWIB9HhZf1Epg4cuxFXu/YEBYAJ5lsj3gk8Y9T6QVgeV5gfrVylCwu8+R8W9TCzMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762786022; c=relaxed/simple;
-	bh=S182r2lsewPICyaylRQbPz+g5CauLqJBFEwdDL6xZfA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r5pI+QlHuA09QitACdyW+JQe1P4sqhTsE8qHsfarU0TmsZ7kHKThx39iTVbGFKiMnk/oTomlWLY7i43+edy6cB4xur/zf4QWYWt40RV9IFLQPR/sVZIBDntrXKVmovSRk0jbeNzXpMzZ3ayfGDJCLhcmNQM84T/LrMU7r6WU2rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apWArB6v; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762786137; c=relaxed/simple;
+	bh=QvLvyRTtOe3YpANvSN2TJE7jXUgDr0aVixqk0y131fg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PA0I0tWWKgC7ScWaoUenLfNIgq8JHALFGBtbeCa4VLiYeMxOwEZwQlJPjB2GFiCBXayYKCYSfRpQ9WJOCbctIk/ifwQbWGiDrycPn6cf15u51j2NJqPZ3ziVYnyNjHuEQxNcae4PhYjYZwmdmVrst+PP16cUGrzT2Qjnl7PUbD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLMNxUwp; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apWArB6v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762786020; x=1794322020;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=S182r2lsewPICyaylRQbPz+g5CauLqJBFEwdDL6xZfA=;
-  b=apWArB6vJGENXNLXF2BeqDA3U6dcSvB53IpRyS206X4KRhtC9/khuBfF
-   MRtSXBhBod2W6vaSB4G11leuVSogjTJyDHSDs2YIyr9hVs4W8yv/w97Wh
-   CfB2O8NUzkwuKvrqQpfFwtmUXaKsh4ybKROTm0d/AuBOBxah2nfl6INy/
-   ryL0STuEf0cgq5fgTbCGpHZGJFjAro4buSsWAvhVLpeSCofX82kzmEEZc
-   A3l7EXk3to0sqX8F+gH85fti7D4k1f5WQIOtRZR7LoF5cHb3AyRUcCAfu
-   jHrpCqmfB9sTJiWQP6JLAIJynnByEtTYMrvRqSMzcvP5c59lQA7+0ztSS
-   A==;
-X-CSE-ConnectionGUID: fpM71a/ZQjCBUSKJ7HP54Q==
-X-CSE-MsgGUID: UWVpd172SAOBsLCaRBLTvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="64870546"
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="64870546"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 06:47:00 -0800
-X-CSE-ConnectionGUID: GD0RI4PqTtiCCVKHcfrW1A==
-X-CSE-MsgGUID: pd/YdXoIQby7U7ZEgcSQhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="192947687"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa005.fm.intel.com with ESMTP; 10 Nov 2025 06:46:56 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 3A05895; Mon, 10 Nov 2025 15:46:56 +0100 (CET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	ceph-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Ilya Dryomov <idryomov@gmail.com>,
-	Xiubo Li <xiubli@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH v1 1/1] libceph: Amend checking to fix `make W=1` build breakage
-Date: Mon, 10 Nov 2025 15:46:53 +0100
-Message-ID: <20251110144653.375367-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLMNxUwp"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-340e525487eso2070938a91.3
+        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 06:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762786135; x=1763390935; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FrgskyzgQxtRPQXe+YA6yojSKzP/1EuspyiSaUY67z8=;
+        b=dLMNxUwp6p6CEpn6PZCxlq11jfVACSyT8jUMYrYGmMuhhenbKoGefBe7jWcwusgov/
+         VVa5nNYmsxUyHgT4S1L57wTW2FAi455JPU9NfIqbvMRsL9MdfdxYqtgUEn2QFgqEzazF
+         DdI+LnNxnxF0Fqn8qoLADbKhewQYWGJYhaX+EmpN4YTbH3R2dmc7Fd4xkhkvh28VE/p9
+         6T6LFzUbry+9rJMkNPvpqM57Aicj1eU03OYSl8nJD3Opw60q7m9gRTkqgab2BoAYwPZY
+         tfO1KN38Bb//JrvGRBBbqaB6wc04glPQKZXDbyRPpr3kO5mVzd8sWPnmUBX/q+spFF5/
+         oZoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762786135; x=1763390935;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FrgskyzgQxtRPQXe+YA6yojSKzP/1EuspyiSaUY67z8=;
+        b=Na5a4P0//FjYrcFm+Xs7IJjRnrqvXtDa8gIJ6cna/L5ptdiHThQM/GnGJxOP+DgC1g
+         dadwV/haAFNsrK5tWetGbqFW/nRx29uorLS2NRwzU0/ENmtXyMSXJwoz7wR7fy/kosg3
+         /6kOPf8RxcPNPd1x7KeTPvDmgPcodUWci0NWx2lXFB65bekrwVATDHDMgOPNTl/p/mfO
+         jtEV6FUZT40Cad8VS2iNoWyZY5Klpch17L1oGm0zyFE6SUIssGOH0exYRe4IlyKqBQIb
+         oScxltJsXu1OiSqeBkQJoSKSlveNEf8s5CzwnnM4rSqAKMf/D1Jj+6Q4ARVsmkQTbKn7
+         7p4A==
+X-Forwarded-Encrypted: i=1; AJvYcCW8jPIZtVpZzB0TiABhuHU84WRi8XN3Z5JGzNhlgKxB9Z5q9fMgaMJKNnahfFXMckKXc/tu@lists.linux.dev
+X-Gm-Message-State: AOJu0YwRgm00CzfkT3qSIBM3TzP2ngF2yqY9y95syIKZIHYAQwFS1ZJU
+	Rzcc1luBtPKqQrCVyNrO4csbBQTazMZ8VE6ln1c0OlNrDMiEx1se04es
+X-Gm-Gg: ASbGncur12IguyswbVYh56xeahEpJeJqiao9KfEcc2jZe9IEuX8V4UYEyW4TbpLgeRR
+	dIY9C7icDmkdSDjESpweGGytSO3M2w7cLaw0IgVpuwldH/izpoSZBU0YPB/PtrKpu0w1f4zQ4mg
+	yDnoEEloEm2AxXBE9G8+vT/nh0P6PSIX8wIi+NIgAsqrGLKpxIU9aDs8qACHn4PLKOqNUpQewXE
+	QsrVirdg8D99xbPV17xhsA5DkNCMDEi7VSQYH0Xw6hl5MHl2YqfuiY0im2L36Cy+drIxuhhBdVF
+	Ren3xtDhBuOxgoVD3bur7ZcLdXWAjvqVd+3MJeM/75bvuNwILrJehx2THfHsNZL85r/Ren8+9Hd
+	Z2rebIREjwJtVKkbAwhz4a6pb/Tl/Vd7CTIr+WGJ9bvtrsrapKL8jI5dRjJwmX90HjrQh5JPLQq
+	K568WRDFTdiXTIAf7w0dywgyP5
+X-Google-Smtp-Source: AGHT+IFO7qcki/gcHxPVszkVoI6yIC1USYq4fWfL3CjPS2tpRrsdQwNQQWhcDI05RjMTZ5o9QWvvag==
+X-Received: by 2002:a17:90b:3bc6:b0:336:b563:993a with SMTP id 98e67ed59e1d1-3436cbf7f73mr10435722a91.23.1762786134867;
+        Mon, 10 Nov 2025 06:48:54 -0800 (PST)
+Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3437221b329sm7579364a91.16.2025.11.10.06.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 06:48:54 -0800 (PST)
+From: Xie Yuanbin <qq570070308@gmail.com>
+To: nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qq570070308@gmail.com,
+	masahiroy@kernel.org,
+	jack@suse.cz,
+	akpm@linux-foundation.org,
+	maninder1.s@samsung.com
+Cc: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	will@kernel.org
+Subject: [PATCH v2] Fix redundant judgment in WARN_ONCE with clang
+Date: Mon, 10 Nov 2025 22:48:44 +0800
+Message-ID: <20251110144844.1376-1-qq570070308@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,51 +82,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In a few cases the code compares 32-bit value to a SIZE_MAX derived
-constant which is much higher than that value on 64-bit platforms,
-Clang, in particular, is not happy about this
+For c code:
+```c
+extern int xx;
+void test(void)
+{
+	if (WARN_ONCE(xx, "x"))
+		__asm__ volatile ("nop":::);
+}
+```
 
-net/ceph/osdmap.c:1441:10: error: result of comparison of constant 4611686018427387891 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
- 1441 |         if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
-      |             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-net/ceph/osdmap.c:1624:10: error: result of comparison of constant 2305843009213693945 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
- 1624 |         if (len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
-      |             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Clang will generate the following assembly code:
+```assemble
+test:
+	movl	xx(%rip), %eax // Assume xx == 0 (likely case)
+	testl	%eax, %eax // judge once
+	je	.LBB0_3    // jump to .LBB0_3
+	testb	$1, test.__already_done(%rip)
+	je	.LBB0_2
+.LBB0_3:
+	testl	%eax, %eax // judge again
+	je	.LBB0_5    // jump to .LBB0_5
+.LBB0_4:
+	nop
+.LBB0_5:
+	retq
+	// omit
+```
 
-fs/ceph/snap.c:377:10: error: result of comparison of constant 2305843009213693948 with expression of type 'u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-  377 |         if (num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
-      |             ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In the above code, `xx == 0` should be a likely case, but in this case,
+xx has been judged twice.
 
-Fix this by casting to size_t. Note, that possible replacement of SIZE_MAX
-by U32_MAX may lead to the behaviour changes on the corner cases.
+Test info:
+1. kernel source:
+linux-next
+commit 9c0826a5d9aa4d52206d ("Add linux-next specific files for 20251107")
+2. compiler:
+clang: Debian clang version 21.1.4 (8) with
+Debian LLD 21.1.4 (compatible with GNU linkers)
+3. config:
+base on default x86_64_defconfig, and setting:
+CONFIG_MITIGATION_RETHUNK=n
+CONFIG_STACKPROTECTOR=n
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+v1->v2: https://lore.kernel.org/20251109083715.24495-1-qq570070308@gmail.com
+  - Code format adjustment
+
+Signed-off-by: Xie Yuanbin <qq570070308@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
- net/ceph/osdmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/once_lite.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ceph/osdmap.c b/net/ceph/osdmap.c
-index 295098873861..8e7cb2fde6f1 100644
---- a/net/ceph/osdmap.c
-+++ b/net/ceph/osdmap.c
-@@ -1438,7 +1438,7 @@ static struct ceph_pg_mapping *__decode_pg_temp(void **p, void *end,
- 	ceph_decode_32_safe(p, end, len, e_inval);
- 	if (len == 0 && incremental)
- 		return NULL;	/* new_pg_temp: [] to remove */
--	if (len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
-+	if ((size_t)len > (SIZE_MAX - sizeof(*pg)) / sizeof(u32))
- 		return ERR_PTR(-EINVAL);
- 
- 	ceph_decode_need(p, end, len * sizeof(u32), e_inval);
-@@ -1621,7 +1621,7 @@ static struct ceph_pg_mapping *__decode_pg_upmap_items(void **p, void *end,
- 	u32 len, i;
- 
- 	ceph_decode_32_safe(p, end, len, e_inval);
--	if (len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
-+	if ((size_t)len > (SIZE_MAX - sizeof(*pg)) / (2 * sizeof(u32)))
- 		return ERR_PTR(-EINVAL);
- 
- 	ceph_decode_need(p, end, 2 * len * sizeof(u32), e_inval);
+diff --git a/include/linux/once_lite.h b/include/linux/once_lite.h
+index 27de7bc32a06..236592c4eeb1 100644
+--- a/include/linux/once_lite.h
++++ b/include/linux/once_lite.h
+@@ -16,7 +16,7 @@
+ 		bool __ret_cond = !!(condition);			\
+ 		bool __ret_once = false;				\
+ 									\
+-		if (unlikely(__ret_cond && !__already_done)) {		\
++		if (unlikely(__ret_cond) && unlikely(!__already_done)) {\
+ 			__already_done = true;				\
+ 			__ret_once = true;				\
+ 		}							\
 -- 
-2.50.1
+2.51.0
 
