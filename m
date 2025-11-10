@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0807928000B;
-	Mon, 10 Nov 2025 20:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CF62EDD52;
+	Mon, 10 Nov 2025 20:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762806278; cv=none; b=hpbZXVDGgkmz+sy6Jk/epc40ddstzfdyg2oLudZhUEYDtgvgIoCTEeAIyBXS6uYv8+vBNABKXjZbs9LmIxGqXACimHmwuHj8epERm8wiKZMlpUza1nm9IZb/k4crvn+yiQQu6qPRAFUOGiMy+wItmUpXb92EKbmTQ1wH7kWz0ak=
+	t=1762806879; cv=none; b=QlplJeCNFvnYd5/da2HYSKlU4SGIkyH3ucOZbMHrNhFRFKUopZms5YkTpfLaeBoCsmk6Vk1JVcAHDt/rcFg7cOKSOlANRIH5tLXxOZDtwmqIZ60Hjdu6t2e4/Z5sDS8kKnWagUKcnrUKZFdpkDaaZxL+nivUglokp7iLLa7JnVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762806278; c=relaxed/simple;
-	bh=HG4xZHzhnhKw1LK8sML0aZS5JEtaF7jrHFlxgcmZ93E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qBeYhLow/s45T0v8tqPhOm6LD22wxF+JpwOhK8Xzq1BIWVxxwc85GhEsDW8hjq3OhYjsuvQcdKpGGPNZiOtVjcYSs1O9hN4sU980rcjyfviQe39u38R86pXVsjmcab30DzvTcwdKy9JYzpM4BI6nOEBcejEEKlBb9jGDPvrJm8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nMNek7hH; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1762806879; c=relaxed/simple;
+	bh=hZOvKyj6XBdvi5A6WGdxy5AfVmNCi1exI6P9i2I1ox8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=C6q7DGYpWhjyhkZpC03y28E6UWeovJgJmENujGQUUuk71N7ozFOXRadAbrRllAnatNaWCyIfCQP6vTG9Q/ittXypQWtQVQEJHMRQfPEKGlS9wtY588gKl8tyOFo13ILpjwkzONs/zyTQ9lH2zJu8bv8b5ks0oewsYolHe/2qaec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=erp3QnG3; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nMNek7hH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="erp3QnG3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762806276; x=1794342276;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HG4xZHzhnhKw1LK8sML0aZS5JEtaF7jrHFlxgcmZ93E=;
-  b=nMNek7hHV0QPR2QZbOaRAq2N/InekFdL+09M1oytRbAIlsoPC9kcADpb
-   rBDbu5v2UTXkKKBQmrMl637EKdRKOBAiCpEoSgJscXzdINrftihS0P6Jk
-   GwROjOCu6qIyaRscn+2XqqY2ySI5M+OeEMUvlCZstYYYoG1cSnyqG2M7r
-   ysRhbmQMX6CGH1vuQVEBpokVyuT7ww06Gb5ep0I/wi81CB9nmVJjRmZKY
-   X8+h756wslkr/j8aI6DRuiiRUR+OkJQZsuNT9GRQ/mvWckJbjnayAbLPe
-   /tbMeQGgbMUGC1fMZur61TJ6vTz/wiOo7fIbtGUgmu8gMiqWau8bn/mcx
-   g==;
-X-CSE-ConnectionGUID: nyas9mLsRKOqyVhlLA+Ggg==
-X-CSE-MsgGUID: /ijc2WPKQo+Ao/y98ztpHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="87494127"
+  t=1762806877; x=1794342877;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hZOvKyj6XBdvi5A6WGdxy5AfVmNCi1exI6P9i2I1ox8=;
+  b=erp3QnG3jp0VbgrIFnaI3kdGh8yrR/E6O7NUn8k9S66/8ZxxjRpiQmk8
+   zCBRjpZuB1sAMWuLp5tzM4DbIWpJjC4pb12Tfn++5BZ8tf4dIE0gOqX9a
+   3yh1ZHwem7CIMzWD1YI1mO2yyX51C4beakXjPuxGa04ud7sAW8teOXa8Y
+   K1lZrF56kIqVehQJsCkQ+Rz5wGhlHZyS9JHyrAF1ICnXRnYHrm088FhPq
+   5DYdSl+HGFAN4MweG8NsVGo3J5UD/YR4vjvRvr6DB5Vpi1y+vxVupyJ7n
+   UsT6udHMiPsqua1fi/6RlnoWGdjPhhTWVdWMemGwqEYoEd5mJfnhe32QC
+   A==;
+X-CSE-ConnectionGUID: OvkrB6SaQCimKc/yNL2AoQ==
+X-CSE-MsgGUID: kJJnPYtOT6Or6l/c8EOOxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="64904241"
 X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="87494127"
+   d="scan'208";a="64904241"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 12:24:36 -0800
-X-CSE-ConnectionGUID: tByTOAwpTr29dqYhLveYQQ==
-X-CSE-MsgGUID: HX9JjsLHQqO/9gChp8R1Lw==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 12:34:36 -0800
+X-CSE-ConnectionGUID: Ko2JSn9SRzSRRI32RsqMDQ==
+X-CSE-MsgGUID: QnGl+YzEQaa5mZIitFi7uw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="219421682"
+   d="scan'208";a="219423406"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Nov 2025 12:24:35 -0800
+  by orviesa002.jf.intel.com with ESMTP; 10 Nov 2025 12:34:36 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vIYRE-0000xz-0o;
-	Mon, 10 Nov 2025 20:24:32 +0000
-Date: Tue, 11 Nov 2025 04:23:34 +0800
+	id 1vIYau-0000yH-2t;
+	Mon, 10 Nov 2025 20:34:32 +0000
+Date: Tue, 11 Nov 2025 04:33:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 1/4] dmaengine: Use dma_request_channel() instead of
- __dma_request_channel()
-Message-ID: <202511110425.MwuWYv97-lkp@intel.com>
-References: <20251109222944.3222436-2-andriy.shevchenko@linux.intel.com>
+To: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Subject: [morimoto:renesas-lts/v6.18-rc5-2025-11-10-sparrow-hawk 16/29]
+ drivers/media/platform/dreamchip/rppx1/rpp_stats.c:16:8: error: use of
+ undeclared identifier 'ENODEV'
+Message-ID: <202511110405.VNyKrJUp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,75 +63,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251109222944.3222436-2-andriy.shevchenko@linux.intel.com>
 
-Hi Andy,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on linus/master v6.18-rc5 next-20251110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/dmaengine-Use-dma_request_channel-instead-of-__dma_request_channel/20251110-063117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-patch link:    https://lore.kernel.org/r/20251109222944.3222436-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/4] dmaengine: Use dma_request_channel() instead of __dma_request_channel()
-config: powerpc-randconfig-002-20251111 (https://download.01.org/0day-ci/archive/20251111/202511110425.MwuWYv97-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110425.MwuWYv97-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux renesas-lts/v6.18-rc5-2025-11-10-sparrow-hawk
+head:   14a3f460905b5d9be43ad2bab030625085a52423
+commit: 97361c66c826ea94c2924afa0b31d41886d844b9 [16/29] media: rppx1: Add support for AWB measurement parameters and statistics
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251111/202511110405.VNyKrJUp-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110405.VNyKrJUp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511110425.MwuWYv97-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511110405.VNyKrJUp-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/dma/dmaengine.c:889:9: error: incompatible pointer types passing 'const dma_cap_mask_t **' to parameter of type 'const dma_cap_mask_t *'; remove & [-Wincompatible-pointer-types]
-     889 |         chan = dma_request_channel(mask, NULL, NULL);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dmaengine.h:1627:24: note: expanded from macro 'dma_request_channel'
-    1627 |         __dma_request_channel(&(mask), x, y, NULL)
-         |                               ^~~~~~~
-   drivers/dma/dmaengine.c:786:19: note: passing argument to parameter here
-     786 | EXPORT_SYMBOL_GPL(__dma_request_channel);
-         |                   ^
+>> drivers/media/platform/dreamchip/rppx1/rpp_stats.c:16:8: error: use of undeclared identifier 'ENODEV'
+      16 |                 if (!rpp_module_call(&rpp->post.wbmeas, stats_rkisp1, &stats->params))
+         |                      ^
+   drivers/media/platform/dreamchip/rppx1/rpp_module.h:149:16: note: expanded from macro 'rpp_module_call'
+     149 |                         __result = -ENODEV;                             \
+         |                                     ^
    1 error generated.
 
 
-vim +889 drivers/dma/dmaengine.c
+vim +/ENODEV +16 drivers/media/platform/dreamchip/rppx1/rpp_stats.c
 
-   875	
-   876	/**
-   877	 * dma_request_chan_by_mask - allocate a channel satisfying certain capabilities
-   878	 * @mask:	capabilities that the channel must satisfy
-   879	 *
-   880	 * Returns pointer to appropriate DMA channel on success or an error pointer.
-   881	 */
-   882	struct dma_chan *dma_request_chan_by_mask(const dma_cap_mask_t *mask)
-   883	{
-   884		struct dma_chan *chan;
-   885	
-   886		if (!mask)
-   887			return ERR_PTR(-ENODEV);
-   888	
- > 889		chan = dma_request_channel(mask, NULL, NULL);
-   890		if (!chan) {
-   891			mutex_lock(&dma_list_mutex);
-   892			if (list_empty(&dma_device_list))
-   893				chan = ERR_PTR(-EPROBE_DEFER);
-   894			else
-   895				chan = ERR_PTR(-ENODEV);
-   896			mutex_unlock(&dma_list_mutex);
-   897		}
-   898	
-   899		return chan;
-   900	}
-   901	EXPORT_SYMBOL_GPL(dma_request_chan_by_mask);
-   902	
+     8	
+     9	void rppx1_stats_fill_isr(struct rppx1 *rpp, u32 isc, void *buf)
+    10	{
+    11		struct rkisp1_stat_buffer *stats = buf;
+    12	
+    13		stats->meas_type = 0;
+    14	
+    15		if (isc & RPPX1_IRQ_ID_POST_AWB_MEAS)
+  > 16			if (!rpp_module_call(&rpp->post.wbmeas, stats_rkisp1, &stats->params))
 
 -- 
 0-DAY CI Kernel Test Service
