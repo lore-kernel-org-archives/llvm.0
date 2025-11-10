@@ -1,66 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2275C3009FF;
-	Mon, 10 Nov 2025 12:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC46303A22;
+	Mon, 10 Nov 2025 13:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762779288; cv=none; b=orxS1r0x5N+BeJ9iE9mOWWc+TYxs69TIK2TEgy9lr9J6TNQJ+3CU9l60ELOJvGxwaB8A9c5XDUPXEd6HEXrqFUjkNrHPQYVvD+SV3e8etGa/0+wHjBvGszLA8TnM5dxOAdfCB796TZVZaRxfe6qzMx+wi4JWJdOtV4PeEguhAtw=
+	t=1762781213; cv=none; b=qNjJhorX+QkfDe3f7Q1p0ctI/c0tksq1AcBhUR33LVh+ULslctyR2h72rTIXgxnwGhleCBiNKY+uIC952N5BNNzC4VsNGUQlrQCA50W55nFDARaXp+i5yhKBOdVGt06ripXU9sCrj7jdxttX7+RnVgar32aSqrjX7DdKtjFrPvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762779288; c=relaxed/simple;
-	bh=LceTUXC28nXD3e8rEzN7LaIgUS9MezvhavZ1gZPgnJ0=;
+	s=arc-20240116; t=1762781213; c=relaxed/simple;
+	bh=gqluEsxLQlbV3vngbeO8V//CEUVe0NkM4sEqKyJqBVc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y/KU8BY8FuuHfUtTJZuv9VYf7pdNLfT95tUWI+8S1QpjIVKiYhbhi7CQDTKekdTWskiqAt6QYOmllJraF8+esfhpjRTwDaCfx88zp/d1ifGYI6UG0rVac3slalzJp7wVbOdvn+gN4hmYQiAE95P0FPsEuN/b22hj20jPMYCwdZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GZZ4Kj8L; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=U2Uehh2rXRuOqC3SlwuM2b1y6Fu53EDudxeaoB44bPkvs1cTCn3IB1+0QPQV64ttyi5iS3I1WForPfnncxbXGjOYFBEb0Kc2zLqBmtVYl45Xy48uoRjHkaDh2aJ996ARFxeHh6/BZA3nK+TGrCffOlhUv1ZBBRHVCuYpO6Ik6E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMOehkiy; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GZZ4Kj8L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMOehkiy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762779287; x=1794315287;
+  t=1762781211; x=1794317211;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LceTUXC28nXD3e8rEzN7LaIgUS9MezvhavZ1gZPgnJ0=;
-  b=GZZ4Kj8LpVlCq4QpxdAtzQEr4rW62dznmEfm51EPowXusAFO7o18/iBs
-   sAWzXaK95NdLfSAoEmuQVCb2tIZrxlKuOfaUJSZXUCxAdbDLQ9SpAyYkf
-   0kksmzJmAk27KinUd/D2J5yjlgM4IA49jTsyj+lBBxpUQRXKbBg2R8Wlv
-   jQ71ZeIcYdPUtxFV3KnNmZftBlP3XTvHtufPIGhJxdmvHhQ7iaD6f0U11
-   cWkDWUVzaqgcKvgtdBIVF/EqfoCb2Y3Kl6RKYeMmoaEu3x992MzzGaxVC
-   YSLvNLzMGO9Q0zuIrXeyjx9LxSXRMHGrlJ4eu11ce3y3ZlUMdoFV7dFMP
-   Q==;
-X-CSE-ConnectionGUID: cAUMt3P5S52JGsqneZtCXA==
-X-CSE-MsgGUID: qatn9dcbTD2zlHwEJA05Dg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="87458658"
+  bh=gqluEsxLQlbV3vngbeO8V//CEUVe0NkM4sEqKyJqBVc=;
+  b=ZMOehkiyNZMJdT6wlKz1eQlP7EdIaGli/KwkhbSmCQ3BMgsy3w+agHIk
+   C0EZgiSvmDOO66ptfkAa+3s3SbbAIRcDwtw5KNV/wR2O3W7c4WWiesCS0
+   JKbnCNdSZFtdLMHaN2/9y152apuH/tmLU02/1D765dVUw8O21QPCZTOz8
+   GB3H/K33ESwD/Wh7x2kSbzwEmnP17TJ0ZPKsYfJBKWjSDPnn7Lxd9xgB/
+   YPE7hWfU5FG2g2uWqDOgQCyAUjmUUms3T8do0PlMcQ3LwdOeeqhEZNtXg
+   R8OzmVF+okqZPXqZKqT/5Ii97dihSPcBX6y2rj/aG4vQldLNFuEUTwr83
+   w==;
+X-CSE-ConnectionGUID: 5xV9sQstTuCXVQLy5NPbrA==
+X-CSE-MsgGUID: 4zUBO0ljT026gVy1rP+jjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75122598"
 X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="87458658"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 04:54:46 -0800
-X-CSE-ConnectionGUID: kijYiySdT2+h9WcO4OFcjA==
-X-CSE-MsgGUID: fgKP6SGoTC2ERuKHImaqSA==
+   d="scan'208";a="75122598"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 05:26:51 -0800
+X-CSE-ConnectionGUID: t+LJONLVQHSZACIPcylDHg==
+X-CSE-MsgGUID: TMq45V+1QXibCa/0AnAzug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="219393118"
+   d="scan'208";a="192932412"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 10 Nov 2025 04:54:44 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 10 Nov 2025 05:26:45 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vIRPt-0000RH-2l;
-	Mon, 10 Nov 2025 12:54:41 +0000
-Date: Mon, 10 Nov 2025 20:54:19 +0800
+	id 1vIRuu-0000Sp-2q;
+	Mon, 10 Nov 2025 13:26:44 +0000
+Date: Mon, 10 Nov 2025 21:26:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: oushixiong1025@163.com,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Youngjun Park <youngjun.park@lge.com>, akpm@linux-foundation.org,
+	linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Shixiong Ou <oushixiong@kylinos.cn>, Tiger Liu <liuyihu@kylinos.cn>
-Subject: Re: [PATCH] drm/fb-helper: add fbdev screen expended mode display
- support
-Message-ID: <202511102026.2kvJOVYL-lkp@intel.com>
-References: <20251107092641.111431-1-oushixiong1025@163.com>
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chrisl@kernel.org, kasong@tencent.com, hannes@cmpxchg.org,
+	mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
+	muchun.song@linux.dev, shikemeng@huaweicloud.com, nphamcs@gmail.com,
+	bhe@redhat.com, baohua@kernel.org, youngjun.park@lge.com,
+	gunho.lee@lge.com, taejoon.song@lge.com
+Subject: Re: [PATCH 3/3] mm/swap: integrate swap tier infrastructure into
+ swap subsystem
+Message-ID: <202511102100.y6n1mtle-lkp@intel.com>
+References: <20251109124947.1101520-4-youngjun.park@lge.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,134 +70,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107092641.111431-1-oushixiong1025@163.com>
+In-Reply-To: <20251109124947.1101520-4-youngjun.park@lge.com>
 
-Hi,
+Hi Youngjun,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.18-rc5 next-20251110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/oushixiong1025-163-com/drm-fb-helper-add-fbdev-screen-expended-mode-display-support/20251107-172927
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20251107092641.111431-1-oushixiong1025%40163.com
-patch subject: [PATCH] drm/fb-helper: add fbdev screen expended mode display support
-config: arm-randconfig-003-20251110 (https://download.01.org/0day-ci/archive/20251110/202511102026.2kvJOVYL-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511102026.2kvJOVYL-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Youngjun-Park/mm-swap-introduce-swap-tier-infrastructure/20251109-215033
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20251109124947.1101520-4-youngjun.park%40lge.com
+patch subject: [PATCH 3/3] mm/swap: integrate swap tier infrastructure into swap subsystem
+config: riscv-randconfig-001-20251110 (https://download.01.org/0day-ci/archive/20251110/202511102100.y6n1mtle-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511102100.y6n1mtle-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511102026.2kvJOVYL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511102100.y6n1mtle-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/drm_fb_helper.c:1509:3: warning: variable 'crtc_count' is uninitialized when used here [-Wuninitialized]
-                   crtc_count++;
-                   ^~~~~~~~~~
-   drivers/gpu/drm/drm_fb_helper.c:1506:16: note: initialize the variable 'crtc_count' to silence this warning
-           u32 crtc_count;
-                         ^
-                          = 0
-   1 warning generated.
+   In file included from mm/page_io.c:29:
+>> mm/swap_tier.h:71:1: error: expected identifier or '('
+      71 | {
+         | ^
+   1 error generated.
+--
+   In file included from mm/swapfile.c:52:
+>> mm/swap_tier.h:71:1: error: expected identifier or '('
+      71 | {
+         | ^
+>> mm/swapfile.c:1309:31: error: no member named 'tier_idx' in 'struct swap_info_struct'
+    1309 |                 if (swap_tiers_test_off(si->tier_idx, mask))
+         |                                         ~~  ^
+   2 errors generated.
 
 
-vim +/crtc_count +1509 drivers/gpu/drm/drm_fb_helper.c
+vim +71 mm/swap_tier.h
 
-  1492	
-  1493	/*
-  1494	 * Check if the device supports extended mode
-  1495	 *
-  1496	 * return true if the device supports extended mode,
-  1497	 * otherwise return false.
-  1498	 */
-  1499	static bool drm_fb_helper_validate_extended_mode(struct drm_fb_helper *fb_helper,
-  1500							 struct drm_fb_helper_surface_size *sizes)
-  1501	{
-  1502		struct drm_client_dev *client = &fb_helper->client;
-  1503		struct drm_device *dev = fb_helper->dev;
-  1504		struct drm_mode_config *config = &dev->mode_config;
-  1505		struct drm_mode_set *mode_set;
-  1506		u32 crtc_count;
-  1507	
-  1508		drm_client_for_each_modeset(mode_set, client) {
-> 1509			crtc_count++;
-  1510	
-  1511			for (int j = 0; j < mode_set->num_connectors; j++) {
-  1512				struct drm_connector *connector = mode_set->connectors[j];
-  1513	
-  1514				if (connector->has_tile) {
-  1515					drm_dbg_kms(client->dev,
-  1516						    "Don't support extended with tile mode connector yet\n");
-  1517					return false;
-  1518				}
-  1519			}
-  1520		}
-  1521	
-  1522		if (crtc_count < 2) {
-  1523			drm_dbg_kms(client->dev,
-  1524				    "Only support extended mode when device have mult-crtcs\n");
-  1525			return false;
-  1526		}
-  1527	
-  1528		if (drm_fbdev_screen_mode == SCREEN_EXPAND_HORIZONTAL) {
-  1529			u32 x = 0;
-  1530	
-  1531			drm_client_for_each_modeset(mode_set, client) {
-  1532				struct drm_display_mode *desired_mode;
-  1533	
-  1534				desired_mode = mode_set->mode;
-  1535				x = mode_set->x;
-  1536				sizes->fb_width = sizes->surface_width  += desired_mode->hdisplay;
-  1537				sizes->surface_height =
-  1538					min_t(u32, desired_mode->vdisplay + mode_set->y,
-  1539					      sizes->surface_height);
-  1540				sizes->fb_height = min_t(u32, desired_mode->vdisplay + mode_set->y,
-  1541							 sizes->fb_height);
-  1542			}
-  1543			sizes->fb_width = sizes->surface_width += x;
-  1544	
-  1545			if (sizes->fb_width > config->max_width) {
-  1546				drm_dbg_kms(client->dev,
-  1547					    "screen_buffer total width %d > config width %d\n",
-  1548					    sizes->fb_width, config->max_width);
-  1549				return false;
-  1550			}
-  1551		} else if (drm_fbdev_screen_mode == SCREEN_EXPAND_VERTICAL) {
-  1552			u32 y = 0;
-  1553	
-  1554			drm_client_for_each_modeset(mode_set, client) {
-  1555				struct drm_display_mode *desired_mode;
-  1556	
-  1557				desired_mode = mode_set->mode;
-  1558				y = mode_set->y;
-  1559				sizes->fb_height = sizes->surface_height += desired_mode->vdisplay;
-  1560				sizes->surface_width =
-  1561					min_t(u32, desired_mode->hdisplay + mode_set->x,
-  1562					      sizes->surface_width);
-  1563				sizes->fb_width = min_t(u32, desired_mode->hdisplay + mode_set->x,
-  1564							sizes->fb_width);
-  1565			}
-  1566			sizes->fb_height = sizes->surface_height += y;
-  1567	
-  1568			if (sizes->fb_height > config->max_height) {
-  1569				drm_dbg_kms(client->dev,
-  1570					    "screen_buffer_total_height %d > config height %d\n",
-  1571					    sizes->fb_height, config->max_height);
-  1572				return false;
-  1573			}
-  1574		} else {
-  1575			return false;
-  1576		}
-  1577	
-  1578		return true;
-  1579	}
-  1580	
+c17fe68325c921 Youngjun Park 2025-11-09  41  
+c17fe68325c921 Youngjun Park 2025-11-09  42  void swap_tiers_init(void);
+c17fe68325c921 Youngjun Park 2025-11-09  43  int swap_tiers_add(struct tiers_desc desc[], int nr);
+c17fe68325c921 Youngjun Park 2025-11-09  44  int swap_tiers_remove(struct tiers_desc desc[], int nr);
+c17fe68325c921 Youngjun Park 2025-11-09  45  ssize_t swap_tiers_show_sysfs(char *buf);
+c17fe68325c921 Youngjun Park 2025-11-09  46  void swap_tiers_show_memcg(struct seq_file *m, struct mem_cgroup *memcg);
+c17fe68325c921 Youngjun Park 2025-11-09  47  void swap_tiers_assign(struct swap_info_struct *swp);
+c17fe68325c921 Youngjun Park 2025-11-09  48  void swap_tiers_release(struct swap_info_struct *swp);
+c17fe68325c921 Youngjun Park 2025-11-09  49  int swap_tiers_get_mask(struct tiers_desc *desc, int nr, struct mem_cgroup *memcg);
+c17fe68325c921 Youngjun Park 2025-11-09  50  void swap_tiers_put_mask(struct mem_cgroup *memcg);
+c17fe68325c921 Youngjun Park 2025-11-09  51  static inline bool swap_tiers_test_off(int tier_idx, int mask)
+c17fe68325c921 Youngjun Park 2025-11-09  52  {
+c17fe68325c921 Youngjun Park 2025-11-09  53  	return TIER_MASK(tier_idx, TIER_OFF_MASK) & mask;
+c17fe68325c921 Youngjun Park 2025-11-09  54  }
+c17fe68325c921 Youngjun Park 2025-11-09  55  int swap_tiers_collect_compare_mask(struct mem_cgroup *memcg);
+c17fe68325c921 Youngjun Park 2025-11-09  56  #else
+c17fe68325c921 Youngjun Park 2025-11-09  57  static inline void swap_tiers_init(void)
+c17fe68325c921 Youngjun Park 2025-11-09  58  {
+c17fe68325c921 Youngjun Park 2025-11-09  59  }
+c17fe68325c921 Youngjun Park 2025-11-09  60  static inline void swap_tiers_assign(struct swap_info_struct *swp)
+c17fe68325c921 Youngjun Park 2025-11-09  61  {
+c17fe68325c921 Youngjun Park 2025-11-09  62  }
+c17fe68325c921 Youngjun Park 2025-11-09  63  static inline void swap_tiers_release(struct swap_info_struct *swp)
+c17fe68325c921 Youngjun Park 2025-11-09  64  {
+c17fe68325c921 Youngjun Park 2025-11-09  65  }
+c17fe68325c921 Youngjun Park 2025-11-09  66  static inline bool swap_tiers_test_off(int tier_off_mask, int mask)
+c17fe68325c921 Youngjun Park 2025-11-09  67  {
+c17fe68325c921 Youngjun Park 2025-11-09  68  	return false;
+c17fe68325c921 Youngjun Park 2025-11-09  69  }
+c17fe68325c921 Youngjun Park 2025-11-09  70  static inline int swap_tiers_collect_compare_mask(struct mem_cgroup *memcg);
+c17fe68325c921 Youngjun Park 2025-11-09 @71  {
 
 -- 
 0-DAY CI Kernel Test Service
