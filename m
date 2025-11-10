@@ -1,72 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415F12F5A02;
-	Mon, 10 Nov 2025 21:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B812BFC73;
+	Mon, 10 Nov 2025 21:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762810607; cv=none; b=gGyCRvtPJGdU63/B+8ciW50Wl/Pk12Yhtvh18oN5kRcfSOsA+0FiZ2cqGKL6cGv8MTSrqlD0R7zO0bUAPpCH6717w6Pjurp+XXQP1N9hUe4/yOfF5IbOdlqNdAf33HUsmn1fcGk9AVljWkRhoJVhpUSRmProBkGwECR3qoqNq7k=
+	t=1762810609; cv=none; b=AISG/2FQEY0r7dqtdw3ymKONG1iM8h50Rxck0igcpRS1wr9kjat1IS9FkgaGQWe9ExEy1ybiQrAFuNdkuSHnEqeKz55LYEE6RWpQ/06O5FDD3ynA82Hd2QCiL7lDZN+N8doU5pr4W1DOhIFvRbmeY2DBmZmvxM9nUhxa98Vm4JA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762810607; c=relaxed/simple;
-	bh=CTJVkjrbUSqe+A8bpFZm82gYv0MPWLBXaF3q0pTBnqk=;
+	s=arc-20240116; t=1762810609; c=relaxed/simple;
+	bh=j3UaS4z5achFCd1TKFwVa5PjZGFIfLaLy4y+1hRDMbk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kIrmWQoKjeMhgl1hiHiQTMRW/w7gKoTsVHJwhgLE+taezvHbUyuBh30GerFoPksw9QOahLektNFUFSb3G8he04yvmOx+3ZykARet0El6qSLaRGqw1tFnF0iBrZp2133O71gBe56t3qSpf4Q7dsrQonAgi6k8k5ob9loUil5vYyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b5oFjC3b; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=iT4KHfDNbVGs6qzOrtYxp7yLeVx36ldmnZibX+g/+KHlPDmqP7HR/xo7/+EDxXAFgSkz4iA8D4v/vA76U1IJsm40O033lzNzO/9knvfBUPYm1RHQr/tEp1RO/MzJH0SBwLhOn2uEXIaOnRlNe4nTjKP67QrdyI2cM1auB4OtfvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SaPmB7U9; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b5oFjC3b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SaPmB7U9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1762810606; x=1794346606;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CTJVkjrbUSqe+A8bpFZm82gYv0MPWLBXaF3q0pTBnqk=;
-  b=b5oFjC3bpyevWYXAAO5cWNKPGmWJf6HCbD78MimDXW4zkxIOxx5Q2I49
-   j+uVNawi+elyBSXmvVmO1uiqp7cwQLONABoNdWkvuYq9H2LRrOlOYT+/0
-   eFyqwtWESsVWe4nckXLirvVrZPHQgLKv/cszDKPmTwy8X2Jm0VsLQJDQe
-   g2XwFi2j7VrdTyMJLtdrJDk3U520sUIpsNutmKk+eURYgeGb9ePMbAF6V
-   PJDxO1kzOwtx2j2UoPgPJ4bfYKmNE+y4SQLzPQSDwyGPrwdmAOwo9QBXn
-   ND8CjE6TOiML78HxUYkOm4wRzNj8EzLf85THQ0zF8I+lBnkLeFoEcNB6x
+  bh=j3UaS4z5achFCd1TKFwVa5PjZGFIfLaLy4y+1hRDMbk=;
+  b=SaPmB7U9Sx0zdnb6+jW4K2lshru4uZvBbSas1Z7fYDiVBpBVdnCzSgHa
+   d+iJu0ju7g0waYsT2QbmktxnuFO3ZOjqGronyW9iDIU91oj0qaLaJAdqX
+   wntqbK4tQmRyOZe8NfHPbDl4IsWIijzj8iex8J0NNOTZ9zSUQAoWsf47C
+   3j5u36zg70LW1TEzu2CEZjpByicJJ65TWnZkftJF2UYFz7rwAIxkKJ4a/
+   aGfvWJEjzrIQZz9axSq6ZjdXDjSJ5XSpE7rZlMwSatnOVcmHkqR69EckF
+   iEaWr1nQRkLSFAT6Tdt3crsq1b9QWbiQOcVZP5L5gdlXlB6hqpz5p4mhd
    Q==;
-X-CSE-ConnectionGUID: e+cwHIM9Tuq7TyBNDlkfzg==
-X-CSE-MsgGUID: dqZOVhjVQZiwYxZZqJonxg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="65023371"
+X-CSE-ConnectionGUID: YQwGM8hvSHi5ff8SyX6TPQ==
+X-CSE-MsgGUID: LA8rhMRoSPqYxUYKRqk+ug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="64907377"
 X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="65023371"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 13:36:45 -0800
-X-CSE-ConnectionGUID: k7Cn/WjMRjOTV1b0bZTqYA==
-X-CSE-MsgGUID: HHkLK9uSSd+EfkQeZrcUFA==
+   d="scan'208";a="64907377"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 13:36:45 -0800
+X-CSE-ConnectionGUID: 6ibS5wYqRdCWoUEPO25vwQ==
+X-CSE-MsgGUID: QLfywHYeQhKPTRbzgEs1pw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208";a="193780548"
+   d="scan'208";a="219494766"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 10 Nov 2025 13:36:41 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 10 Nov 2025 13:36:42 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vIZZ1-000139-25;
+	id 1vIZZ1-00013B-29;
 	Mon, 10 Nov 2025 21:36:39 +0000
-Date: Tue, 11 Nov 2025 05:36:00 +0800
+Date: Tue, 11 Nov 2025 05:35:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alice Ryhl <aliceryhl@google.com>, Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>
+To: caohang@eswincomputing.com, gregkh@linuxfoundation.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, Thinh.Nguyen@synopsys.com,
+	p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alice Ryhl <aliceryhl@google.com>
-Subject: Re: [PATCH 4/4] rust: io: add typedef for phys_addr_t
-Message-ID: <202511110532.BF1f9LTs-lkp@intel.com>
-References: <20251106-resource-phys-typedefs-v1-4-0c0edc7301ce@google.com>
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	Hang Cao <caohang@eswincomputing.com>,
+	Senchuan Zhang <zhangsenchuan@eswincomputing.com>
+Subject: Re: [PATCH v7 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
+Message-ID: <202511110504.qfGuRVHY-lkp@intel.com>
+References: <20251110024500.104-1-caohang@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,41 +69,365 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251106-resource-phys-typedefs-v1-4-0c0edc7301ce@google.com>
+In-Reply-To: <20251110024500.104-1-caohang@eswincomputing.com>
 
-Hi Alice,
+Hi,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 211ddde0823f1442e4ad052a2f30f050145ccada]
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next next-20251110]
+[cannot apply to usb/usb-linus robh/for-next pza/reset/next pza/imx-drm/next linus/master v6.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alice-Ryhl/rust-io-define-ResourceSize-as-resource_size_t/20251106-201954
-base:   211ddde0823f1442e4ad052a2f30f050145ccada
-patch link:    https://lore.kernel.org/r/20251106-resource-phys-typedefs-v1-4-0c0edc7301ce%40google.com
-patch subject: [PATCH 4/4] rust: io: add typedef for phys_addr_t
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20251111/202511110532.BF1f9LTs-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110532.BF1f9LTs-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/caohang-eswincomputing-com/dt-bindings-usb-Add-ESWIN-EIC7700-USB-controller/20251110-104957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20251110024500.104-1-caohang%40eswincomputing.com
+patch subject: [PATCH v7 2/2] usb: dwc3: eic7700: Add EIC7700 USB driver
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20251111/202511110504.qfGuRVHY-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110504.qfGuRVHY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511110532.BF1f9LTs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511110504.qfGuRVHY-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/rq-offsets.c:5:
-   kernel/sched/sched.h:3743:18: warning: variable 'cpumask' set but not used [-Wunused-but-set-variable]
-   3743 |         struct cpumask *cpumask;
-   |                         ^
-   1 warning generated.
->> error: unknown start of token:   --> rust/kernel/io/resource.rs:17:19
-   |
-   17 |     ResourceSize, \
-   |                   ^^
-   |
-   = note: character appears once more
+   drivers/usb/dwc3/dwc3-generic-plat.c:132:35: warning: missing terminating '"' character [-Winvalid-pp-token]
+     132 |                         return dev_err_probe(dev, ret, "failed to init
+         |                                                        ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:132:35: error: expected expression
+   drivers/usb/dwc3/dwc3-generic-plat.c:133:21: warning: missing terminating '"' character [-Winvalid-pp-token]
+     133 |                                              platform\n");
+         |                                                        ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:145:1: error: function definition is not allowed here
+     145 | {
+         | ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:152:1: error: function definition is not allowed here
+     152 | {
+         | ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:167:1: error: function definition is not allowed here
+     167 | {
+         | ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:184:1: error: function definition is not allowed here
+     184 | {
+         | ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:189:1: error: function definition is not allowed here
+     189 | {
+         | ^
+   drivers/usb/dwc3/dwc3-generic-plat.c:194:1: error: function definition is not allowed here
+     194 | {
+         | ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:199:22: error: use of undeclared identifier 'dwc3_generic_suspend'; did you mean 'pm_generic_suspend'?
+     199 |         SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+         |                             ^~~~~~~~~~~~~~~~~~~~
+         |                             pm_generic_suspend
+   include/linux/pm.h:314:26: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     314 |         .suspend = pm_sleep_ptr(suspend_fn), \
+         |                                 ^~~~~~~~~~
+   include/linux/pm.h:473:65: note: expanded from macro 'pm_sleep_ptr'
+     473 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:840:12: note: 'pm_generic_suspend' declared here
+     840 | extern int pm_generic_suspend(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:199:44: error: use of undeclared identifier 'dwc3_generic_resume'; did you mean 'pm_generic_resume'?
+     199 |         SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+         |                                                   ^~~~~~~~~~~~~~~~~~~
+         |                                                   pm_generic_resume
+   include/linux/pm.h:315:25: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     315 |         .resume = pm_sleep_ptr(resume_fn), \
+         |                                ^~~~~~~~~
+   include/linux/pm.h:473:65: note: expanded from macro 'pm_sleep_ptr'
+     473 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:843:12: note: 'pm_generic_resume' declared here
+     843 | extern int pm_generic_resume(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:199:22: error: use of undeclared identifier 'dwc3_generic_suspend'; did you mean 'pm_generic_suspend'?
+     199 |         SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+         |                             ^~~~~~~~~~~~~~~~~~~~
+         |                             pm_generic_suspend
+   include/linux/pm.h:316:25: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     316 |         .freeze = pm_sleep_ptr(suspend_fn), \
+         |                                ^~~~~~~~~~
+   include/linux/pm.h:473:65: note: expanded from macro 'pm_sleep_ptr'
+     473 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:840:12: note: 'pm_generic_suspend' declared here
+     840 | extern int pm_generic_suspend(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:199:44: error: use of undeclared identifier 'dwc3_generic_resume'; did you mean 'pm_generic_resume'?
+     199 |         SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+         |                                                   ^~~~~~~~~~~~~~~~~~~
+         |                                                   pm_generic_resume
+   include/linux/pm.h:317:23: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     317 |         .thaw = pm_sleep_ptr(resume_fn), \
+         |                              ^~~~~~~~~
+   include/linux/pm.h:473:65: note: expanded from macro 'pm_sleep_ptr'
+     473 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:843:12: note: 'pm_generic_resume' declared here
+     843 | extern int pm_generic_resume(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:199:22: error: use of undeclared identifier 'dwc3_generic_suspend'; did you mean 'pm_generic_suspend'?
+     199 |         SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+         |                             ^~~~~~~~~~~~~~~~~~~~
+         |                             pm_generic_suspend
+   include/linux/pm.h:318:27: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     318 |         .poweroff = pm_sleep_ptr(suspend_fn), \
+         |                                  ^~~~~~~~~~
+   include/linux/pm.h:473:65: note: expanded from macro 'pm_sleep_ptr'
+     473 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:840:12: note: 'pm_generic_suspend' declared here
+     840 | extern int pm_generic_suspend(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:199:44: error: use of undeclared identifier 'dwc3_generic_resume'; did you mean 'pm_generic_resume'?
+     199 |         SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+         |                                                   ^~~~~~~~~~~~~~~~~~~
+         |                                                   pm_generic_resume
+   include/linux/pm.h:319:26: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     319 |         .restore = pm_sleep_ptr(resume_fn),
+         |                                 ^~~~~~~~~
+   include/linux/pm.h:473:65: note: expanded from macro 'pm_sleep_ptr'
+     473 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^~~~
+   include/linux/util_macros.h:136:38: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:843:12: note: 'pm_generic_resume' declared here
+     843 | extern int pm_generic_resume(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:200:17: error: use of undeclared identifier 'dwc3_generic_runtime_suspend'; did you mean 'pm_generic_runtime_suspend'?
+     200 |         RUNTIME_PM_OPS(dwc3_generic_runtime_suspend, dwc3_generic_runtime_resume,
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                        pm_generic_runtime_suspend
+   include/linux/pm.h:338:21: note: expanded from macro 'RUNTIME_PM_OPS'
+     338 |         .runtime_suspend = suspend_fn, \
+         |                            ^~~~~~~~~~
+   include/linux/pm_runtime.h:68:12: note: 'pm_generic_runtime_suspend' declared here
+      68 | extern int pm_generic_runtime_suspend(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:200:47: error: use of undeclared identifier 'dwc3_generic_runtime_resume'; did you mean 'pm_generic_runtime_resume'?
+     200 |         RUNTIME_PM_OPS(dwc3_generic_runtime_suspend, dwc3_generic_runtime_resume,
+         |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                      pm_generic_runtime_resume
+   include/linux/pm.h:339:20: note: expanded from macro 'RUNTIME_PM_OPS'
+     339 |         .runtime_resume = resume_fn, \
+         |                           ^~~~~~~~~
+   include/linux/pm_runtime.h:69:12: note: 'pm_generic_runtime_resume' declared here
+      69 | extern int pm_generic_runtime_resume(struct device *dev);
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:201:10: error: use of undeclared identifier 'dwc3_generic_runtime_idle'; did you mean 'dwc3_runtime_idle'?
+     201 |                        dwc3_generic_runtime_idle)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                        dwc3_runtime_idle
+   include/linux/pm.h:340:18: note: expanded from macro 'RUNTIME_PM_OPS'
+     340 |         .runtime_idle = idle_fn,
+         |                         ^~~~~~~
+   drivers/usb/dwc3/glue.h:74:5: note: 'dwc3_runtime_idle' declared here
+      74 | int dwc3_runtime_idle(struct dwc3 *dwc);
+         |     ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:201:10: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'int (struct dwc3 *)' [-Wincompatible-function-pointer-types]
+     201 |                        dwc3_generic_runtime_idle)
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/usb/dwc3/dwc3-generic-plat.c:223:13: error: use of undeclared identifier 'dwc3_generic_remove'; did you mean 'dwc3_generic_probe'?
+     223 |         .remove         = dwc3_generic_remove,
+         |                           ^~~~~~~~~~~~~~~~~~~
+         |                           dwc3_generic_probe
+   drivers/usb/dwc3/dwc3-generic-plat.c:72:12: note: 'dwc3_generic_probe' declared here
+      72 | static int dwc3_generic_probe(struct platform_device *pdev)
+         |            ^
+>> drivers/usb/dwc3/dwc3-generic-plat.c:223:13: error: incompatible function pointer types initializing 'void (*)(struct platform_device *)' with an expression of type 'int (struct platform_device *)' [-Wincompatible-function-pointer-types]
+     223 |         .remove         = dwc3_generic_remove,
+         |                           ^~~~~~~~~~~~~~~~~~~
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   2 warnings and 20 errors generated.
+
+
+vim +132 drivers/usb/dwc3/dwc3-generic-plat.c
+
+    71	
+    72	static int dwc3_generic_probe(struct platform_device *pdev)
+    73	{
+    74		const struct dwc3_generic_config *plat_config;
+    75		struct dwc3_probe_data probe_data = {};
+    76		struct device *dev = &pdev->dev;
+    77		struct dwc3_generic *dwc3g;
+    78		struct resource *res;
+    79		int ret;
+    80	
+    81		dwc3g = devm_kzalloc(dev, sizeof(*dwc3g), GFP_KERNEL);
+    82		if (!dwc3g)
+    83			return -ENOMEM;
+    84	
+    85		dwc3g->dev = dev;
+    86	
+    87		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+    88		if (!res) {
+    89			dev_err(&pdev->dev, "missing memory resource\n");
+    90			return -ENODEV;
+    91		}
+    92	
+    93		dwc3g->resets = devm_reset_control_array_get_optional_exclusive(dev);
+    94		if (IS_ERR(dwc3g->resets))
+    95			return dev_err_probe(dev, PTR_ERR(dwc3g->resets), "failed to get resets\n");
+    96	
+    97		ret = reset_control_assert(dwc3g->resets);
+    98		if (ret)
+    99			return dev_err_probe(dev, ret, "failed to assert resets\n");
+   100	
+   101		/* Not strict timing, just for safety */
+   102		udelay(2);
+   103	
+   104		ret = reset_control_deassert(dwc3g->resets);
+   105		if (ret)
+   106			return dev_err_probe(dev, ret, "failed to deassert resets\n");
+   107	
+   108		ret = devm_add_action_or_reset(dev, dwc3_generic_reset_control_assert, dwc3g->resets);
+   109		if (ret)
+   110			return ret;
+   111	
+   112		ret = devm_clk_bulk_get_all_enabled(dwc3g->dev, &dwc3g->clks);
+   113		if (ret < 0)
+   114			return dev_err_probe(dev, ret, "failed to get clocks\n");
+   115	
+   116		dwc3g->num_clocks = ret;
+   117		dwc3g->dwc.dev = dev;
+   118		probe_data.dwc = &dwc3g->dwc;
+   119		probe_data.res = res;
+   120		probe_data.ignore_clocks_and_resets = true;
+   121	
+   122		plat_config = of_device_get_match_data(dev);
+   123		if (!plat_config) {
+   124			probe_data.properties = DWC3_DEFAULT_PROPERTIES;
+   125			goto core_probe;
+   126		}
+   127	
+   128		probe_data.properties = plat_config->properties;
+   129		if (plat_config->init) {
+   130			ret = plat_config->init(dwc3g);
+   131			if (ret)
+ > 132				return dev_err_probe(dev, ret, "failed to init
+   133						     platform\n");
+   134		}
+   135	
+   136	core_probe:
+   137		ret = dwc3_core_probe(&probe_data);
+   138		if (ret)
+   139			return dev_err_probe(dev, ret, "failed to register DWC3 Core\n");
+   140	
+   141		return 0;
+   142	}
+   143	
+   144	static void dwc3_generic_remove(struct platform_device *pdev)
+ > 145	{
+   146		struct dwc3 *dwc = platform_get_drvdata(pdev);
+   147	
+   148		dwc3_core_remove(dwc);
+   149	}
+   150	
+   151	static int dwc3_generic_suspend(struct device *dev)
+   152	{
+   153		struct dwc3 *dwc = dev_get_drvdata(dev);
+   154		struct dwc3_generic *dwc3g = to_dwc3_generic(dwc);
+   155		int ret;
+   156	
+   157		ret = dwc3_pm_suspend(dwc);
+   158		if (ret)
+   159			return ret;
+   160	
+   161		clk_bulk_disable_unprepare(dwc3g->num_clocks, dwc3g->clks);
+   162	
+   163		return 0;
+   164	}
+   165	
+   166	static int dwc3_generic_resume(struct device *dev)
+   167	{
+   168		struct dwc3 *dwc = dev_get_drvdata(dev);
+   169		struct dwc3_generic *dwc3g = to_dwc3_generic(dwc);
+   170		int ret;
+   171	
+   172		ret = clk_bulk_prepare_enable(dwc3g->num_clocks, dwc3g->clks);
+   173		if (ret)
+   174			return ret;
+   175	
+   176		ret = dwc3_pm_resume(dwc);
+   177		if (ret)
+   178			return ret;
+   179	
+   180		return 0;
+   181	}
+   182	
+   183	static int dwc3_generic_runtime_suspend(struct device *dev)
+   184	{
+   185		return dwc3_runtime_suspend(dev_get_drvdata(dev));
+   186	}
+   187	
+   188	static int dwc3_generic_runtime_resume(struct device *dev)
+   189	{
+   190		return dwc3_runtime_resume(dev_get_drvdata(dev));
+   191	}
+   192	
+   193	static int dwc3_generic_runtime_idle(struct device *dev)
+   194	{
+   195		return dwc3_runtime_idle(dev_get_drvdata(dev));
+   196	}
+   197	
+   198	static const struct dev_pm_ops dwc3_generic_dev_pm_ops = {
+ > 199		SYSTEM_SLEEP_PM_OPS(dwc3_generic_suspend, dwc3_generic_resume)
+ > 200		RUNTIME_PM_OPS(dwc3_generic_runtime_suspend, dwc3_generic_runtime_resume,
+ > 201			       dwc3_generic_runtime_idle)
+   202	};
+   203	
+   204	static const struct dwc3_generic_config fsl_ls1028_dwc3 = {
+   205		.properties.gsbuscfg0_reqinfo = 0x2222,
+   206	};
+   207	
+   208	static const struct dwc3_generic_config eic7700_dwc3 =  {
+   209		.init = dwc3_eic7700_init,
+   210		.properties = DWC3_DEFAULT_PROPERTIES,
+   211	};
+   212	
+   213	static const struct of_device_id dwc3_generic_of_match[] = {
+   214		{ .compatible = "spacemit,k1-dwc3", },
+   215		{ .compatible = "fsl,ls1028a-dwc3", &fsl_ls1028_dwc3},
+   216		{ .compatible = "eswin,eic7700-dwc3", &eic7700_dwc3},
+   217		{ /* sentinel */ }
+   218	};
+   219	MODULE_DEVICE_TABLE(of, dwc3_generic_of_match);
+   220	
+   221	static struct platform_driver dwc3_generic_driver = {
+   222		.probe		= dwc3_generic_probe,
+ > 223		.remove		= dwc3_generic_remove,
+   224		.driver		= {
+   225			.name	= "dwc3-generic-plat",
+   226			.of_match_table = dwc3_generic_of_match,
+   227			.pm	= pm_ptr(&dwc3_generic_dev_pm_ops),
+   228		},
+   229	};
+   230	module_platform_driver(dwc3_generic_driver);
+   231	
 
 -- 
 0-DAY CI Kernel Test Service
