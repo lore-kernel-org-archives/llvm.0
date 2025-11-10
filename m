@@ -1,142 +1,130 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5792D7DFB
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 17:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEF02D949C;
+	Mon, 10 Nov 2025 17:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762795981; cv=none; b=rhFtK5vDvmmYcsxdQhs6izCEms65T37Bg6Du7vlxQ2kHSPeiA34lSEAkqawOXi2E/JcNf5kSsHptiF6+jGbx9NEAQJsoG3lYTxZoPF73wSRYnOVnKMEPzotht/+GJSGWJpzb/BHUZGUlTRnts8Mt+xAThsHxJFxy2m/uFOkImzE=
+	t=1762796030; cv=none; b=RvFGxNMP0mYG5mfnwrx3s01YvzitCDJCDoxp4O/SJ8pcuFQDvEVv6f510c5VkgUU5Yk/TNYb+p+ZZb9dFLpPr2gmMaws5amZ9yDTkC5uff+94/DO7iDDkrovDQkx3zkjPi2ajlLqFvLMM23uQFwesCzD3VOLpRb1oIxTnu7dkJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762795981; c=relaxed/simple;
-	bh=lavqjS8uyddXCf50slP6/gj/LovmQ9D/FO5ATpZAsEM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bvsMOay80eVUkEpNlKAeBmp1PVU5j0QV1zw5oG4+T3EZ7QPAiZCJ3lRr1rlprGKdYr6phPhbI3OfaRH6YyuS/RjMqlF+TIxksmf+YLe6FmxFd276I+diJKFSCWm2dmpqkmfAkxS8vJfCckUwWzZdPFTGExlR+fN6Io1ZZJBdpEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kksu71tr; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1762796030; c=relaxed/simple;
+	bh=Z65kV1Uw8YhvpmxyXTmJd7OOEOvEvS3Dp6tVF1Yvh40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B3xLci0Fjt7dsIWrwiUi6WCqftEccWbR/+72XOBahwF6Hl5BpwTwSbKb35kLRosK5i+CizI54yoeqv9nUXkTeweasZLxtXDecMHTXzVf0H0C+mcjORktS85ZVUkGU61S3Ejel/AS3H9iE3KPmZ/eGP5Xlvatm4l4Ov8m250jesc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hDu5eaBS; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kksu71tr"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-88249766055so20047626d6.1
-        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 09:32:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762795979; x=1763400779; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=auNNYNeszcnW8UxlPsUXlu6HqCk9VFPDDrt3cDy7QDk=;
-        b=kksu71trA8pg8C9i8QZ2jW9IqCMZ2+alIfja1ZfsWBIlTwu2e6gvyPML5RRGngckxb
-         TYJ1PcILezWTooGNXCxVX2YGmEWUzy6GURQx0h/WUvMs4V7vkbYsdh+g0KuTDktmUEj9
-         E0VXIJxVFnetZN466ftApbv9ph6CD8Xe66/LfZPMooamHCpgWPybmwpJXjJGykuvDOZh
-         092Z743cqZlYWmoS/hYeLET6U52xJbHLIWBH8WVCGAtKHTHlQeKbKmlFwyL2WYEA15MO
-         +Mv9RSLBY3Qq7F7zuOc0FxN4Qck445U0cqt5Ndpmgyq8GE9qVV6riIrOye4/fxZrVCzq
-         x7HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762795979; x=1763400779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=auNNYNeszcnW8UxlPsUXlu6HqCk9VFPDDrt3cDy7QDk=;
-        b=ui3ny8xjOIU+ldHeOWm1OSfv00FIfA6P60/kz27lWU5lcdVJsW62ndPjivafUCVutm
-         5kP+BmMfXV7xmwGrsjX95r8+xbRsccYs/iCpTjmmqHCifa+gVhu41EIXWU3OrjHMHgCw
-         /0Fanh4D/xTg5qMBR4Cg+Be8FHHfzGq00kTBqrbGx0L/yr5LmQ2Yjl71JG0RqyDJ48Wl
-         1C1Op4QAuTOet/knkt26Y29tcINree9juzQjl4eNZpYLNons3gRMS0rh4sbBga4XaXVd
-         E760/TFY47KJFMbxEULMPpxomR/R9XvlOSwexrMZ16BmfLl73LKKDm9Ov3CgmmaZqZ0u
-         PrKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtx2maTLC4CrxKEgA+CuGThZNP2FlE6lp5GTQcRyAg5dayb1sZGVtRQJA4ZErNAfOguLXd@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywb7PCJKCqlyzpR1j/uNZMvUm8rQRjYtnZIhI0gJVM+m7iRp5ni
-	e+U6iJb1pGV0RFvN81vregreFMYxRZYXbhNq01Vri08Ck3vNX1KMBCAjskdahqRXnb1JAneYrY3
-	YJtPLJwxyc70pe+MQvhrCpvX3ME86PZn+FJE6DdWv
-X-Gm-Gg: ASbGncvR/2f3ti+gryThpLL/NoeLpQbIqG2ac28qCMTddJWAIK7eWoQH7irZnN1cZxz
-	OVYjTs14HByGGqVET+DmFjm+ZM0ycvzX8V9H8drtLr9pEc1zjbx03ueuijeYUgQ3YuMG3lWcphw
-	glW6FbnAVELqM3oa3JLUW39TGlWmZedwXBkeCU+DJY3H5/y4FXYHSK5gQnjcMcbnYvLCn30GiVs
-	U40O1Ee1CMKrEnaSked+SZ670zr0vIKI+qlYHgwq4TShlW4TiFvICJKMHX7mKIXfuhNZ0xJRzYN
-	ixp+oaDmD4v+SQc=
-X-Google-Smtp-Source: AGHT+IHeuRC7ChrdFjjxvcWC3ajdMKHJ+Azj7LDyTH5BCluSFj1o6p4ZSWP6EGrRrokOPiEV3z2rvlDUhI4wexrXKNM=
-X-Received: by 2002:a0c:e00a:0:b0:882:4660:3724 with SMTP id
- 6a1803df08f44-88246605291mr69808466d6.63.1762795978283; Mon, 10 Nov 2025
- 09:32:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hDu5eaBS"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=ag6LW6hemevws8YrksBMYRPO4jlV1oMVj+5QJ4bp/14=; b=hDu5eaBS1pVnzx5mZNWnb8VpqO
+	VFIdXUQKfLY8jwIzevEr+VfCN/w6HRq94VSeLELvL0tCdMRmTaKp+OoyCquDJ1YKftqgTXnGuXivN
+	e7G1fRZ4akwXOIQlabKzKhURAD4V49v5AvJZjhK7oI11kCGjD6M+HDEdDojgdSauv5/UUlrCYfnMm
+	VAEBeFyDxGQHEYv+LH8xct0W4ckP/Ijd7RaaLXzyI8yN0V8JTcE+DuFgiFbC9Kj8GA4O/wX2rCojR
+	GDrtV0Zx8uqP60OizixU9gPweGirxQv8fXvN0WQKr4ad6yRB5QhoGbajemapDE6BEyY/3ih/ECIDt
+	Ia90NZoA==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vIVla-00000002xxn-1bOm;
+	Mon, 10 Nov 2025 17:33:22 +0000
+Date: Mon, 10 Nov 2025 17:33:22 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Jinchao Wang <wangjinchao600@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Marco Elver <elver@google.com>, Mike Rapoport <rppt@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ben Segall <bsegall@google.com>, Bill Wendling <morbo@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	David Kaplan <david.kaplan@amd.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Ian Rogers <irogers@google.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	James Clark <james.clark@linaro.org>,
+	Jinjie Ruan <ruanjinjie@huawei.com>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com,
+	Kees Cook <kees@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Liang Kan <kan.liang@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-perf-users@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Nam Cao <namcao@linutronix.de>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Rong Xu <xur@google.com>, Sami Tolvanen <samitolvanen@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>,
+	workflows@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v8 00/27] mm/ksw: Introduce KStackWatch debugging tool
+Message-ID: <aRIh4pBs7KCDhQOp@casper.infradead.org>
+References: <20251110163634.3686676-1-wangjinchao600@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <fbce40a59b0a22a5735cb6e9b95c5a45a34b23cb.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <fbce40a59b0a22a5735cb6e9b95c5a45a34b23cb.1761763681.git.m.wieczorretman@pm.me>
-From: Alexander Potapenko <glider@google.com>
-Date: Mon, 10 Nov 2025 18:32:21 +0100
-X-Gm-Features: AWmQ_bmUvxxbg_c-XB1Dy80QL57feg4coPRIZHNTl9ervff8Rzi8S1pGrWY59Fo
-Message-ID: <CAG_fn=Wj9rB0jHKT3QKjZsPYce1JFcb1e72QBOBP52Ybs3_qgQ@mail.gmail.com>
-Subject: Re: [PATCH v6 01/18] kasan: Unpoison pcpu chunks with base address tag
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
-	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
-	ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, 
-	morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, 
-	baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, 
-	wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, 
-	fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, 
-	ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
-	brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, 
-	mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, 
-	thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, 
-	jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, 
-	mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, 
-	vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, 
-	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, 
-	ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, 
-	broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, 
-	maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, 
-	rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org, stable@vger.kernel.org, 
-	Baoquan He <bhe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251110163634.3686676-1-wangjinchao600@gmail.com>
 
-On Wed, Oct 29, 2025 at 8:05=E2=80=AFPM Maciej Wieczor-Retman
-<m.wieczorretman@pm.me> wrote:
->
-> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
->
-> The problem presented here is related to NUMA systems and tag-based
-> KASAN modes - software and hardware ones. It can be explained in the
-> following points:
->
->         1. There can be more than one virtual memory chunk.
->         2. Chunk's base address has a tag.
->         3. The base address points at the first chunk and thus inherits
->            the tag of the first chunk.
->         4. The subsequent chunks will be accessed with the tag from the
->            first chunk.
->         5. Thus, the subsequent chunks need to have their tag set to
->            match that of the first chunk.
->
-> Refactor code by moving it into a helper in preparation for the actual
-> fix.
+On Tue, Nov 11, 2025 at 12:35:55AM +0800, Jinchao Wang wrote:
+> Earlier this year, I debugged a stack corruption panic that revealed the
+> limitations of existing debugging tools. The bug persisted for 739 days
+> before being fixed (CVE-2025-22036), and my reproduction scenario
+> differed from the CVE report—highlighting how unpredictably these bugs
+> manifest.
 
-The code in the helper function:
+Well, this demonstrates the dangers of keeping this problem siloed
+within your own exfat group.  The fix made in 1bb7ff4204b6 is wrong!
+It was fixed properly in 7375f22495e7 which lists its Fixes: as
+Linux-2.6.12-rc2, but that's simply the beginning of git history.
+It's actually been there since v2.4.6.4 where it's documented as simply:
 
-> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
-> +{
-> +       int area;
-> +
-> +       for (area =3D 0 ; area < nr_vms ; area++) {
-> +               kasan_poison(vms[area]->addr, vms[area]->size,
-> +                            arch_kasan_get_tag(vms[area]->addr), false);
-> +       }
-> +}
+      - some subtle fs/buffer.c race conditions (Andrew Morton, me)
 
-is different from what was originally called:
+As far as I can tell the changes made in 1bb7ff4204b6 should be
+reverted.
 
-> -       for (area =3D 0; area < nr_vms; area++)
-> -               vms[area]->addr =3D kasan_unpoison_vmalloc(vms[area]->add=
-r,
-> -                               vms[area]->size, KASAN_VMALLOC_PROT_NORMA=
-L);
-> +       kasan_unpoison_vmap_areas(vms, nr_vms);
+> Initially, I enabled KASAN, but the bug did not reproduce. Reviewing the
+> code in __blk_flush_plug(), I found it difficult to trace all logic
+> paths due to indirect function calls through function pointers.
 
-, so the patch description is a bit misleading.
-
-Please also ensure you fix the errors reported by kbuild test robot.
+So why is the solution here not simply to fix KASAN instead of this
+giant patch series?
