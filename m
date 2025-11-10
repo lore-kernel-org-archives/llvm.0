@@ -1,107 +1,188 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6C62E5437
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 17:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154DA320A10;
+	Mon, 10 Nov 2025 18:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762796957; cv=none; b=jZJ9FyEnsIl0weyIfKFjBRWZDuPs2d+q1u5/CiZWw9qI0FEoytJz7hfkPJjn4OM7veva9G9wK8ngqJGO8VXvSYXR2O+uETJwgHgsXoFGPEsqLEDES0qtsGZWVfUV+OZToN3hmLcD9879yNPfTJOKavctErpAiwwosuHPwqPTxDo=
+	t=1762800693; cv=none; b=ntLBlAiKtBNRElHJY5I/AicEhgxEjg7b0q8XT5ACIerycf8MoVXh+YqCRnFlmuSuC6GdKn/nd5/T2bbBd3dvx1TigLaYPiNBnIGBYTk0EbyK1gh+H7wNKhfp6Cz6MhBFUHQ+paGdpdA2g/yBXpTm1Y9mE/ulDWg3vXM/F8nhNXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762796957; c=relaxed/simple;
-	bh=O98arH5WjcI5ZayKxsmOANfoxY47t5wDmB6i5QtbFzo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZETzqSYdUYRpKIQYDPodSdS0L2+VNQP3zfZRyQXNgxTuVGOkTSzockUg8YtwFIph4XdwUkJv7mZmCUIVdUPd4i8/oNFDD25KMn1jHJc36a19DdTe1GCREh9vpBRjzkIQ5XbKxRiyDG0TMTRo9ME0yEugsmP+4GE1XUIHJYZywdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hs9HQeVN; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1762800693; c=relaxed/simple;
+	bh=8SCZ/pQk6TR+/SVdD97DEDcivTL5QFfnPmC3z0UBR4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bHkKLE44XnF+Em3VZft/8n7K1pRVFrEdUVKGjIN8nqk1g0zqx7+YWvxRg1Uy7xMG2kkwXSiUTpJKZ+U8MV5xaVf/KId2kXLmo5TyJaRiZ7wwhSAFe9UgOgtZEGO9cZjJ/VwKt5ZoAkfunsbRCLJ4SbiJcfwfPfYi2lX8QvGW/XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dLMef5iU; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hs9HQeVN"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-88245cc8c92so12433406d6.0
-        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 09:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762796954; x=1763401754; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPbi2NPPrBKl69IkN7kcBKOxfNw5kLfKkjmbVe2fGbs=;
-        b=hs9HQeVNEYzId4DP0DFGK8VquNoeV7uVRZ7AHmlsztBihVhFueLo+MvyStqWXpM0np
-         t7e9o4cAuDiKfm0RepM+XagyfoiJstoe9rcoUpzrxeqNpxl2yQQpSezvjA/peeR7t1+H
-         Z90X2Ob9pHan0cuML0ZE6RBsKM3OndE7pFqELN3MfieVzJZyo+lBeO2saaXpOhmWIPel
-         OqdYJ62c3RqGcBPQ+GKAJweRGkt/tOcwJabmqfHhK/UvZx7YOmwWqopJjAG5C7XGzX53
-         /ZpVOVDblnkWO0wAxRqWRrdqg/MIvphk8Ndf7ItkLHcj461nKp1XgCifnm6excFJzWWn
-         E15Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762796954; x=1763401754;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BPbi2NPPrBKl69IkN7kcBKOxfNw5kLfKkjmbVe2fGbs=;
-        b=mXr5n2+TVU/EKijbDKxRXRruHwLQP9fGPH+9YGaaRMM9phk4wID56DHcQoF/lU13wi
-         TfU6dFStXO6p79fqWVMLbwHjgPBZottmizHALek0KY0ERerGKV70RDrh7LgBdMVkTCS/
-         4mmX5BDArM3dP5n6l+khytVSoK3a389VE/G4EuD3LmkLig+q2CRzxaS68zkhuxqXcAxU
-         a2DkhFehsmGAYGwQPGjGpA+EHMecdFOVscgnoxU7GfO9DFCVndXv+c70nG8zenIXor80
-         P9CZDKZ0vXQI2z9I4utYlTCRpW3FOmF2lxGh4aIJpLh+9Q/mazpeyYJkJnnA5Qx9KKhF
-         O22w==
-X-Forwarded-Encrypted: i=1; AJvYcCXaS7eX6youGWP4/fK4Tt9cmQKJ/NR1OjlXLo7xY11t3LS5hrofzhuz4PgFfKMaWvlS7CIj@lists.linux.dev
-X-Gm-Message-State: AOJu0YxG6KvrCVoNS5nMoyTgsmzkaoC3x57ldiEonUSXeXhAKg+eqTNl
-	bcllF/eWYuJalcA+pUKyD+HIgrk0pFHxRdsqOZo4RHrVF2bURpl+7WFtLau0vp/mAehrjqLu8du
-	FDWB8VkiMrwZ0SDpTKyNFI+LIv7YYPEUkFUz6Ns7g
-X-Gm-Gg: ASbGncsjPVG2HyidobiIdI1mSYTJVbjxNCHQ5RysPwcXcpOv77s/QFv6UmiwMpwUZxR
-	F/rYXTlF/x2g0I3ikDFaN/yfPOef7uxC1wwy7/MUe0CHy3a2mnamwJWvTB61jvqT5a9fY3SGMea
-	r8fERpARQwnWIRBVHHWiq2r+DsdjRDTa6TRW0kYF8I8Nnurh3zQf1fmPFa8vEuW0wsoifAx/+Yc
-	NWGMbiyq8omoalEPR7jNAzxPF6UuB6HH6esWw07HLoNjs6ny8xVHjTG5fYWtbHM0/BCrfsXgHcr
-	/TwXDRys7+0Tlxqi/spLoKNNpQ==
-X-Google-Smtp-Source: AGHT+IHaNRtCNWgUYc5RPhLYoD+nULNJ4nH9LNtSZkCbb+Nk0d7DtvBVzdaKV0/uL+kFEgmffI/ryLd+1MDzyV+BJT4=
-X-Received: by 2002:a05:6214:1cc2:b0:880:4bde:e0cb with SMTP id
- 6a1803df08f44-882385de9demr131074376d6.29.1762796952867; Mon, 10 Nov 2025
- 09:49:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dLMef5iU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762800693; x=1794336693;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8SCZ/pQk6TR+/SVdD97DEDcivTL5QFfnPmC3z0UBR4Y=;
+  b=dLMef5iU02YobhWZwVZHuOiaUT9PcUMvFh810eyzFZu+DVaTFOaT5SYd
+   mn6oYEMnFf+mGl9/RRMFOnPLryoRRHrgf76ghZ8UQ+i1kUFLLstMTZK5V
+   M7vrCBZA2r8ReWz6FCo880JOGQrrIVerGlvXSJNh0xP1SGEW9B27CSRYH
+   bGRpVJOZazeIFtJHd1FGAZNd0v/sf4P70PqUxBswBBD1a9vxVT40HnRbk
+   rGfjWHkqx2W+P0ox0WrTs1/NDJc+Pv/0d0oQOCFLzWyL0kpjK6ZarU+Vn
+   AFjc5C1unIlx0llQy0WJagxkObQtNGKhpAECXLoWoYjpsqy0RIsGMp9+a
+   Q==;
+X-CSE-ConnectionGUID: xRjKQcmZTi6Jvz5l7mGZeg==
+X-CSE-MsgGUID: corZFcclSOmEAslO6c3Jlw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="76308415"
+X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
+   d="scan'208";a="76308415"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 10:51:27 -0800
+X-CSE-ConnectionGUID: uS9vd7eiTiSFd07znPjO+w==
+X-CSE-MsgGUID: wA1TKYyMTKKH48CVjwI4EA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
+   d="scan'208";a="188585037"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 10 Nov 2025 10:51:24 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIWz4-0000sp-2s;
+	Mon, 10 Nov 2025 18:51:22 +0000
+Date: Tue, 11 Nov 2025 02:50:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Subject: [morimoto:renesas-lts/v6.18-rc5-2025-11-10-sparrow-hawk 15/29]
+ drivers/media/platform/dreamchip/rppx1/rpp_params.c:14:6: error: call to
+ undeclared function 'WARN_ON'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202511110247.EjE0Mx21-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <0ca5d46e292e5074c119c7c58e6ec9901fb0ed73.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <0ca5d46e292e5074c119c7c58e6ec9901fb0ed73.1761763681.git.m.wieczorretman@pm.me>
-From: Alexander Potapenko <glider@google.com>
-Date: Mon, 10 Nov 2025 18:48:35 +0100
-X-Gm-Features: AWmQ_bkJUSMUoO8onDW_Kv00mrjnva_voIrMRMQdowErjlplIdY_Q4t-6BqV8ig
-Message-ID: <CAG_fn=W033hGM7_jnj0irwW0gc6McLw2nbhfZROWfieqKTxVdQ@mail.gmail.com>
-Subject: Re: [PATCH v6 14/18] x86: Minimal SLAB alignment
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
-	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
-	ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, 
-	morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, 
-	baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, 
-	wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, 
-	fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, 
-	ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
-	brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, 
-	mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, 
-	thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, 
-	jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, 
-	mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, 
-	vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, 
-	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, 
-	ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, 
-	broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, 
-	maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, 
-	rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> diff --git a/arch/x86/include/asm/cache.h b/arch/x86/include/asm/cache.h
-> index 69404eae9983..3232583b5487 100644
-> --- a/arch/x86/include/asm/cache.h
-> +++ b/arch/x86/include/asm/cache.h
-> @@ -21,4 +21,8 @@
->  #endif
->  #endif
->
-> +#ifdef CONFIG_KASAN_SW_TAGS
-> +#define ARCH_SLAB_MINALIGN (1ULL << KASAN_SHADOW_SCALE_SHIFT)
+tree:   https://github.com/morimoto/linux renesas-lts/v6.18-rc5-2025-11-10-sparrow-hawk
+head:   14a3f460905b5d9be43ad2bab030625085a52423
+commit: deb53902b8777a75d24152d85dbfdec4f0e5cbab [15/29] media: rppx1: Add framework to support Dreamchip RPPX1 ISP
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251111/202511110247.EjE0Mx21-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110247.EjE0Mx21-lkp@intel.com/reproduce)
 
-I don't think linux/linkage.h (the only header included here) defines
-KASAN_SHADOW_SCALE_SHIFT, does it?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511110247.EjE0Mx21-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/platform/dreamchip/rppx1/rpp_params.c:14:6: error: call to undeclared function 'WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      14 |         if (WARN_ON(!cfg))
+         |             ^
+>> drivers/media/platform/dreamchip/rppx1/rpp_params.c:15:11: error: use of undeclared identifier 'EINVAL'
+      15 |                 return -EINVAL;
+         |                         ^
+>> drivers/media/platform/dreamchip/rppx1/rpp_params.c:36:3: error: use of undeclared identifier 'ENODEV'
+      36 |                 rpp_module_call(module, param_rkisp1, block, write, priv);
+         |                 ^
+   drivers/media/platform/dreamchip/rppx1/rpp_module.h:149:16: note: expanded from macro 'rpp_module_call'
+     149 |                         __result = -ENODEV;                             \
+         |                                     ^
+   3 errors generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_acq.c:61:11: error: use of undeclared identifier 'EINVAL'
+      61 |                 return -EINVAL;
+         |                         ^
+   drivers/media/platform/dreamchip/rppx1/rppx1_acq.c:109:11: error: use of undeclared identifier 'EINVAL'
+     109 |                 return -EINVAL;
+         |                         ^
+   drivers/media/platform/dreamchip/rppx1/rppx1_acq.c:132:11: error: use of undeclared identifier 'EINVAL'
+     132 |                 return -EINVAL;
+         |                         ^
+   3 errors generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_awbg.c:23:11: error: use of undeclared identifier 'EINVAL'
+      23 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_bd.c:45:11: error: use of undeclared identifier 'EINVAL'
+      45 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_bdrgb.c:72:11: error: use of undeclared identifier 'EINVAL'
+      72 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_bls.c:51:11: error: use of undeclared identifier 'EINVAL'
+      51 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_cac.c:22:11: error: use of undeclared identifier 'EINVAL'
+      22 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_ccor.c:40:11: error: use of undeclared identifier 'EINVAL'
+      40 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_db.c:37:11: error: use of undeclared identifier 'EINVAL'
+      37 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_dpcc.c:58:11: error: use of undeclared identifier 'EINVAL'
+      58 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+--
+>> drivers/media/platform/dreamchip/rppx1/rppx1_exm.c:43:11: error: use of undeclared identifier 'EINVAL'
+      43 |                 return -EINVAL;
+         |                         ^
+   1 error generated.
+..
+
+
+vim +/WARN_ON +14 drivers/media/platform/dreamchip/rppx1/rpp_params.c
+
+     8	
+     9	int rppx1_params_rkisp1(struct rppx1 *rpp, struct rkisp1_ext_params_cfg *cfg,
+    10				rppx1_reg_write write, void *priv)
+    11	{
+    12		size_t block_offset = 0;
+    13	
+  > 14		if (WARN_ON(!cfg))
+  > 15			return -EINVAL;
+    16	
+    17		/* Walk the list of parameter blocks and process them. */
+    18		while (block_offset < cfg->data_size) {
+    19			const union rppx1_params_rkisp1_config *block =
+    20				(const union rppx1_params_rkisp1_config *)&cfg->data[block_offset];
+    21			struct rpp_module *module;
+    22	
+    23			block_offset += block->header.size;
+    24	
+    25			switch (block->header.type) {
+    26			default:
+    27				module = NULL;
+    28				break;
+    29			}
+    30	
+    31			if (!module) {
+    32				pr_warn("Not handled RPPX1 block type: 0x%04x\n", block->header.type);
+    33				continue;
+    34			}
+    35	
+  > 36			rpp_module_call(module, param_rkisp1, block, write, priv);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
