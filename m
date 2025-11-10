@@ -1,127 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22572D6605;
-	Mon, 10 Nov 2025 22:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AE430216D
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 23:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762812374; cv=none; b=QYnrlUtFfozoTA31Pr6VWDijJmQaULyEIo9jvFuMSd16Uu7JEH6SdnAmREk2rI8BR/BSmOGZ2pOELPC0dAFqSTxWDnoRc+aYnhqQciLcE+w03r7Nwcds7TvAoRLBl7USYO8HjCh2gWH8KhkUN7cBM8do6NKF7/DXty9D0KpiEAo=
+	t=1762816993; cv=none; b=hETcdxGz38qJ52yDtovJdV98Ys9k+N8UBQ1/FarceP8Q/2iBA5z0mt5TaN9/6qCKLXe26WLYzRvkQaHyARbAw3RIOjWhs00HbccqpEIvf2m9jYKRdkO+IxYqG1cOjBTFoK+9GZ1PN9uYE6XUqKhcKeNIjl9bqPz3DMwj8VzHP7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762812374; c=relaxed/simple;
-	bh=ANbHoAoxXFqFOwqzSzLfvjdSSMJWajzcDa95+kDS2s4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNBX0xIhXx7l+iFhQ5F+os49oB309U77NjcmHj8B6TAmc8xum0U3voSGAxLR7jkWxkNqAoS/2yh1XcQE64HxYFGvco1pK2oT7pL5vIS74GEW3uI71kSvsFhmGC6FIMXU7CCTZl2QdvtlNkkbot1wQo+J3P/8NHnwK4kHCukMMlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YHwNLLb9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762816993; c=relaxed/simple;
+	bh=lgcoh9p9TCLcPD8PGPy9BtJzRmki9rWnfrJ00klkhMQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BA6O0FcfwebpOeq4sUG0q5EDuE/htnIHJ4e/y/ktqJ/UeM3/MKlI8N31oGjmWSppG6EhzFLffhZ2XkKmWl7relKeVpuvOWM3U3Q+tDMfwE8QVnYBmJ2UCmMQkGCgr1rti10QGFumEzaQu4WSlitrfuaxa6MaDl+ilmJJ/FeOtXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=rjYuoLzl; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YHwNLLb9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B1DC19424;
-	Mon, 10 Nov 2025 22:06:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762812373;
-	bh=ANbHoAoxXFqFOwqzSzLfvjdSSMJWajzcDa95+kDS2s4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YHwNLLb9zWuTURbZGIRD48rB/Di+bP62dlO9Tg4mblA7Cbrptfo5W832oIEwE2aqV
-	 BQp2jZtEpMKH+cOnCAZRPKnI4PG9Rg9H1KQ4U0xpMVUtja3fRru5m+VQAHUbTSVvOj
-	 qt45nJ0KxrsNpFIPUSJ1J/vERRVZ5INczOA7vaMMWEWARr1lHrpd+mPldP3U95b+Ql
-	 vojHRk0K9uFFeli/VQ/KOkQsmkeD+mbdbpYdQPB+/h/LrAIbxB/I8jfbbX4st4lQ50
-	 8clcY5KfY1AxZOfPXuHbp/B6UYSspc941HtKxg5p2uxIE3PO3cc5JjC+Jy4lBQQjuq
-	 Vawpzf2lSDAcA==
-Date: Mon, 10 Nov 2025 23:06:08 +0100
-From: Alejandro Colomar <alx@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Marco Elver <elver@google.com>, Kees Cook <kees@kernel.org>, 
-	Christopher Bazley <chris.bazley.wg14@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Linux Memory Management List <linux-mm@kvack.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Michal Hocko <mhocko@suse.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v1 2/3] mm: Fix benign off-by-one bugs
-Message-ID: <6vzrgu2gei2g2445cuwod37gmxz3zejnhegrqseymb6gofydum@agw3bgic3v52>
-References: <87445e701574058b142e036c3b8a0f505086ab64.1758806023.git.alx@kernel.org>
- <202511110100.9uPtQqN1-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="rjYuoLzl"
+Received: from [IPV6:2601:646:8081:9484:a4ce:2dbc:ef8e:acc2] ([IPv6:2601:646:8081:9484:a4ce:2dbc:ef8e:acc2])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5AANLvc93880957
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 10 Nov 2025 15:21:58 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5AANLvc93880957
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025102301; t=1762816923;
+	bh=BsN8VBFD5PAgYi4bwE42pnqSTmd+qcr29mOqQybepiA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rjYuoLzlgViwlHxmQg2QGfpz9LPJDhOQAbw4/6aIGNHbpNN57PZ51RsVPdOwQA6yB
+	 2eNjlZzKfZya7G4KhhWgguyHM00AgCEGTcGmu22T0V87nzs1CGXLylHaQ1B7bKomCf
+	 4yz/0LhiJbU3IVmkAeDaty+clqMjGVgwRilI7qypUsrfnmUZvKS2i/+F35IPLAcw7f
+	 BuHueJostF0V0GWeV+jp1PoPSmefFxcdjXd9xrdrNwYM/y51ZIXY3w9UdXd+X2Dg8x
+	 SQzYlmvO8N1yVdVU38QI6EboQsWVZ7uNLIiYngGzemAcHknbmnXkOfw56rFOGv28uz
+	 uQr7m3HHG+8FA==
+Message-ID: <128b82ff-d304-41d6-b914-a44706d8781f@zytor.com>
+Date: Mon, 10 Nov 2025 15:21:52 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="spgz4wpgupnke5j7"
-Content-Disposition: inline
-In-Reply-To: <202511110100.9uPtQqN1-lkp@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] Provide the always inline version of some
+ functions
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Xie Yuanbin <qq570070308@gmail.com>, david@redhat.com, tglx@linutronix.de,
+        segher@kernel.crashing.org, riel@surriel.com, linux@armlinux.org.uk,
+        mathieu.desnoyers@efficios.com, paulmck@kernel.org, pjw@kernel.org,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, davem@davemloft.net,
+        andreas@gaisler.com, luto@kernel.org, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, acme@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        james.clark@linaro.org, anna-maria@linutronix.de, frederic@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, vschneid@redhat.com, nathan@kernel.org,
+        nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        justinstitt@google.com, thuth@redhat.com, brauner@kernel.org,
+        arnd@arndb.de, jlayton@kernel.org, aalbersh@redhat.com,
+        akpm@linux-foundation.org, david@kernel.org,
+        lorenzo.stoakes@oracle.com, max.kellermann@ionos.com,
+        ryan.roberts@arm.com, nysal@linux.ibm.com, urezki@gmail.com,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, llvm@lists.linux.dev,
+        will@kernel.org
+References: <20251108172346.263590-1-qq570070308@gmail.com>
+ <20251108172346.263590-4-qq570070308@gmail.com>
+ <04CA2D22-4DE2-4DE1-A2BC-AACE666F5F93@zytor.com>
+ <20251109115152.GD2545891@noisy.programming.kicks-ass.net>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20251109115152.GD2545891@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 2025-11-09 03:51, Peter Zijlstra wrote:
+> On Sat, Nov 08, 2025 at 02:14:44PM -0800, H. Peter Anvin wrote:
+> 
+>>> +static struct rq *finish_task_switch(struct task_struct *prev)
+>>> +{
+>>> +	return finish_task_switch_ainline(prev);
+>>> +}
+>>> +
+>>> /**
+>>>  * schedule_tail - first thing a freshly forked thread must call.
+>>>  * @prev: the thread we just switched away from.
+>>
+>> There is, in fact: you have to have an always_inline version, and wrap it in a noinline version.
+> 
+> Yes, but all of this is particularly retarded, there are exactly _2_
+> callers of this function. Keeping an out-of-line copy for one while
+> inlineing the other makes 0 sense.
+> 
+> Also, the amount of crap he needs to mark __always_inline doesn't make
+> much sense to me, is he building with -Os or something?
 
---spgz4wpgupnke5j7
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Marco Elver <elver@google.com>, Kees Cook <kees@kernel.org>, 
-	Christopher Bazley <chris.bazley.wg14@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Linux Memory Management List <linux-mm@kvack.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Michal Hocko <mhocko@suse.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v1 2/3] mm: Fix benign off-by-one bugs
-Message-ID: <6vzrgu2gei2g2445cuwod37gmxz3zejnhegrqseymb6gofydum@agw3bgic3v52>
-References: <87445e701574058b142e036c3b8a0f505086ab64.1758806023.git.alx@kernel.org>
- <202511110100.9uPtQqN1-lkp@intel.com>
-MIME-Version: 1.0
-In-Reply-To: <202511110100.9uPtQqN1-lkp@intel.com>
+That's another issue -- unless the second instance of the function is on a
+slow path which wants to be isolated from the rest of its function (unlikely.)
 
-Hi,
+I was merely commenting on the claim that there is no way to control inlining
+on a call site basis - there is.
 
-On Tue, Nov 11, 2025 at 01:47:19AM +0800, kernel test robot wrote:
-> kernel test robot noticed the following build errors:
+	-hpa
 
-[...]
-
-> >> mm/kfence/kfence_test.c:113:8: error: call to undeclared function 'END=
-OF'; ISO C99 and later do not support implicit function declarations [-Wimp=
-licit-function-declaration]
->      113 |         end =3D ENDOF(expect[0]);
->          |               ^
-> >> mm/kfence/kfence_test.c:113:6: error: incompatible integer to pointer =
-conversion assigning to 'const char *' from 'int' [-Wint-conversion]
->      113 |         end =3D ENDOF(expect[0]);
->          |             ^ ~~~~~~~~~~~~~~~~
->    mm/kfence/kfence_test.c:143:6: error: incompatible integer to pointer =
-conversion assigning to 'const char *' from 'int' [-Wint-conversion]
->      143 |         end =3D ENDOF(expect[1]);
->          |             ^ ~~~~~~~~~~~~~~~~
->    3 errors generated.
-
-I'm pretty sure I tested this some months ago.  I'll test again...
-
-
-Have a lovely night!
-Alex
-
---=20
-<https://www.alejandro-colomar.es>
-Use port 80 (that is, <...:80/>).
-
---spgz4wpgupnke5j7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmkSYckACgkQ64mZXMKQ
-wqmJCQ/+JJ2uBd3GqMbPFAmeC+dhFJE0AjE6nWO7TvCPfIJRmNhY6MfqRWqVH4Lv
-fM5+eLBctHCg42qsiN4tbMPfnQzL3KmXomqza7VW79aUDtTrHPTSd16HH43jlOiX
-5PzfxVGkVEO3bK9ABpHu6LQpcNJY9C7hsAcX5QSA8evg2YCRO51XgoG5Y8OpYBAX
-s7hm2VSassXxPTpcPcJ1SXeXfq6oC0CkF+ZCr/a+PfpyWTHtJEBkcxDiqCSB9Aur
-1HIBIzggzAS1OgeDY3L5iNIPYW3js+2P3ROSL3OffA/cgZ/cqR8iWmRs/VBqVyXn
-knPLFrT6qrznvPQdbSm0IO5njxAJAkO6C2KwnvIlZd4KX0qbhlb1vR8OgGhJXdVH
-r7C5+1OWGAvb/62+Bl3Tea7kFxr1jzN2MKW2Jwt/ao1e2rvCnnanHhvtsfE2x7Mu
-JTb048s4EmnqenWqK8l+KfQdmw+SMQBIGMpBI0e0AnZ+yGeceWZ7nZdIvI2neDKa
-bM30oIXekTNxuMRxGqoQSb7E0PCpK+/ozxuOkM7xnU2RYsv9+v5dXetWmKaXMxAd
-Av35yX6RRaSca2tKpWj4DkaLqvrOCtDuyscryk9fY/qxwP/ELG0Yw6ebctmDPPFT
-kXrvRSuvWv6AvE9JlWSG+MH490uxGWkqBYHrrIJKSKVHZy68HJk=
-=5BWZ
------END PGP SIGNATURE-----
-
---spgz4wpgupnke5j7--
