@@ -1,161 +1,139 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253A11487F6
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 15:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50F427CCF0
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 16:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762789421; cv=none; b=tcRNIFq9eptbudnAxpHkNRZpor+GmM8wZrCYiqO+5bJlcc7jpf+wr2PQXTjAghjikFEQvgW0CByypjGtoXdpAOxWrRSBFe1M2Jt3VQg1ebf6QJyzjaUbLvYBdOXgSWeXvEVzxySFD1RUEW0aHrxUa3wQIbsOHuG0aflLNqRx0Kw=
+	t=1762791918; cv=none; b=mJ3lVC5iN2G0cYdxvYWo/e/LK1kjIkWUHTmFkS4Vv4szueQ80BxnK8VtpQV7ij0QaQfM4JIvWXFrHhfnd2aTn3SzWwcHJo9eN+1tNQRZLs4A0DVZyaegTbEnGX46aMqhYxINepskMXbvKx1iiGdkc9/3Frdi7Vls4CjyI9OZdQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762789421; c=relaxed/simple;
-	bh=lJGQMZvZZc4KMFQn1KPcnjNaqLnQgvkqHDsdmDw6EPk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mgjKKThP5qxbDB1kOiU8j6F7GrV3Vj145vwx1xAnNDY25KdltT7RdwYssD8orsb378DsMiaxtvsgOkCvSEYjFK5C8RgakhL9XxCgixh76KKl+yiawrwLXCONO4sUW6G5E3ZEoeHK4UjRmf9HX/Kc2ntOJ3Z9mLieA9/f/kB0Ohc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SigXPevX; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762791918; c=relaxed/simple;
+	bh=+XdVuzl+5OjnvaE1DbT7/b/RmZhiYffoxNycigHS5xM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=omlHVQ2mAeKCvNh2qZcAEppPOcaIQOtPAL77xarBiWRaiHLE62fxjsiKhi9OU/I+5IzcgBSpLz9rzcuyCQ3XzDK0WboHnVAj/5q7i8oJXgRBSvWBbQynhI/fh9GwuhUnKd5Lc8oaC6chJWSuE/uvriTFi20WGbLc9i0Dt4fxb2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4rs/SG5y; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SigXPevX"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2980d9b7df5so12097125ad.3
-        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 07:43:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4rs/SG5y"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8823d5127daso25022306d6.0
+        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 08:25:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762789419; x=1763394219; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1762791916; x=1763396716; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gLAK+1utwDQJnW79jqnXsBU1gEdDxofO6NOCNqDBYAA=;
-        b=SigXPevXQpajThoxurp4vIuSn8sA4G+muP4JIzNDjt+MkRhGpZm8m/YrH0FZuLNOoD
-         5A5tHbBpQCBM3EVTG2A1D6vDugMVSr6fUm4vCR9xLSkpkGPA/o1Vu4qIWKtvZceEZ53Q
-         McNH0AthASIZPLqAavrOJoreoVSPuQmY2kySBCPTlkzytDAo27b1NUouQ7e1wZ6JdtHV
-         oUNdW+WVeYWw8c5ZmQ14XY9hcEKfeWWr3WfBiUN/pVkdqOpqcyb63JWGlmWWarO+Lfyg
-         XLxMPi3VfA2q2bTpmIP8DLD2yVBQWm1OD3XTFcnllb0yZJPFWb7dgp+qcFORzDkyfzrj
-         u5CA==
+        bh=c9SA+Oyt3urlxF8erNwoXRcqQ1B+Xtx2kUos6VgD610=;
+        b=4rs/SG5y0dFola0nMeCFKLQIPfK0p/XjDMjVrXGtmz2FHGJq0nYpJ7ufQ39dBFH6WO
+         BEgG/IAS9+bkKUtQcGSlcqlHfJp776JyO2/PndL/RQv/Ul3u4eaOnGIGqqUlgSZqqrCS
+         QQdoAeq2whcSOyFtnQV7IQoaSr0YMCLez1jtIHEt9PtiVdKgW4GGMbrrsSNviyPbVCce
+         seqzwOWuAFc1WlGIDs7kQByzEDdHbRUGnBvwysUF0MAT+fJPsMKn65OOlbiFQSsW/o2j
+         4E4L1AXa7HsGAdAYVSzAatI65hrR2bxi03tIyvG9qbMYshLjxdEbsIgKFXUpz5WV6Smn
+         fNHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762789419; x=1763394219;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1762791916; x=1763396716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=gLAK+1utwDQJnW79jqnXsBU1gEdDxofO6NOCNqDBYAA=;
-        b=SDg9lmNnhr/XdzfarW1Xi8yAmoar9UinYsJMYAZqbe7Bac9aaye04a+sFrPPMEwIlG
-         6xSc45d1r+Km7xYxU2wIkr6Tuz/GnLzFFVlVz5uKyu26Kx9W+V7wEN24xc6IUs66BtC5
-         y338pkV2mvH4GLGZSbbmt7C8tgqnqSnR/p4Nj8gRZNKMr1TGu4/3B22crHM+WUYsZQDR
-         h4F96rvtTeQlExN24y8h0spElp8gUttwsRVk4Fk9B6sAjO7hf/lozgUjIaiTviMWAefP
-         An/rGpBs5yGy6GKITmwVmSEtIB1q8mkuy84DlcyiebT2Gl9CDZBMMxWMEMcb+JcyXwNW
-         sKCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfU5FD/IiFcuAxQMRK6nUYU3FjD+iXgB+e8QcWjraN+uWm5kmzub0+6f7UF/lbvytmRITU@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx+IDDPYu3qY8Sms5rlnDokVbxQo7asLoRhdB9pf5sCnYfrrr5Q
-	TRubawRdq/GnZk2ImsGIYCK/ty/JvRxH3jqaRMbuRcH/tXyIDBrGmNok
-X-Gm-Gg: ASbGncujbPK5j/YIH0tb9xp7ncOrviMxNhsiw1eUmoBkZUb3+nOr2F4rulj6adDUD/f
-	4qx6cSF0ogoRLLXTDD3GCk+RD4/E8Zf4z1Pp3NsKOrxY0hHRjZpQMc9ZNJ3Yi9Ex5DKoat3cwLx
-	IOo9sfcdNa+jZUv4UD5LWd92Uhh2FKl/pj9wFSWKEbA87lKj4E/4uKkQ9ofzSzuI4HfwOJWTskr
-	S/RiwtL9S+/Y83VPlEGVNe0qTZb99A9GT9cyWKofuvKeabEHSyYkQHTq+PJ3BmhXt1JA6Jr2feU
-	VxG2Vgc8EJ/yQNasA3njA1Y3I8/UJIXtchgOI6lAI/kF7tFcEwtKISUNnCDa8/3PJNHqi0NRXnl
-	zb8sJ/mXxmlWpx4GdQ6mhk3T1/RAVG6PeGc5PGFoaatggdlEDMwXYWi3A5V/FDe8dtGxu7ZNmeD
-	m9kbeAYvvicaVHMS5PeMzmV0o2oPDo0Y90yFo=
-X-Google-Smtp-Source: AGHT+IFhicyH9W7Mg5DiwE8MVpN4/er0oaakdgICmjAbGBgQnJD5pAHwQ51RtSmFFQvyQKJ0R4B9cg==
-X-Received: by 2002:a17:902:ea09:b0:269:ed31:6c50 with SMTP id d9443c01a7336-297e5408bbdmr106752805ad.10.1762789419238;
-        Mon, 10 Nov 2025 07:43:39 -0800 (PST)
-Received: from DESKTOP-8TIG9K0.localdomain ([119.28.20.50])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-297d6859a92sm101566725ad.88.2025.11.10.07.43.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 07:43:38 -0800 (PST)
-From: Xie Yuanbin <qq570070308@gmail.com>
-To: arnd@arndb.de,
-	david@redhat.com,
-	tglx@linutronix.de,
-	segher@kernel.crashing.org,
-	riel@surriel.com,
-	peterz@infradead.org,
-	linux@armlinux.org.uk,
-	mathieu.desnoyers@efficios.com,
-	paulmck@kernel.org,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	hca@linux.ibm.com,
-	gor@linux.ibm.com,
-	agordeev@linux.ibm.com,
-	borntraeger@linux.ibm.com,
-	svens@linux.ibm.com,
-	davem@davemloft.net,
-	andreas@gaisler.com,
-	luto@kernel.org,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	james.clark@linaro.org,
-	anna-maria@linutronix.de,
-	frederic@kernel.org,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	qq570070308@gmail.com,
-	thuth@redhat.com,
-	brauner@kernel.org,
-	jlayton@kernel.org,
-	aalbersh@redhat.com,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	lorenzo.stoakes@oracle.com,
-	max.kellermann@ionos.com,
-	ryan.roberts@arm.com,
-	nysal@linux.ibm.com,
-	urezki@gmail.com
-Cc: x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev,
-	will@kernel.org
-Subject: Re: [PATCH v2 3/4] Provide the always inline version of some functions
-Date: Mon, 10 Nov 2025 23:43:01 +0800
-Message-ID: <20251110154301.1930-1-qq570070308@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <a034a57e-d9f1-4c56-87f0-e9126246849d@app.fastmail.com>
-References: <a034a57e-d9f1-4c56-87f0-e9126246849d@app.fastmail.com>
+        bh=c9SA+Oyt3urlxF8erNwoXRcqQ1B+Xtx2kUos6VgD610=;
+        b=Az+ZKuX+OnQKmizIuwPzJZkYRb94tbXFoR/TDzqbvIo07Mav3viZdi4dvCFwowM+kF
+         jFITM2TCDQCNkViSVo+hJ94GC89RVd2/9uQYc92jeZAbk4kfSg2fZt1OcIcUVBXqKlZj
+         C5JmxtCHDIijaN2KctVuvoYvLqMuaAwYayyNxDq9/0EkqbZgdC0GqBSe5RLm6zT2mnoG
+         mI+I7GOLs0wiXd7qKYWpAasGLM6jBaL5zA6YPjcIXdhDRKbPIxGPHoQ5R11RZApMuGP/
+         IOQIj1zNziokvUXOD7YMkl8TwBLYOyL6XE6PCt/mvG0LTZQQZ1Q5y0aiXoDNUa41NUpu
+         jOfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUg0BPj+Tb6RXCQsASaJGC9+cg4XoiQ1aXRtDi/V6In7844EOFV9CTw+ftdsk8KeLSqB4Pu@lists.linux.dev
+X-Gm-Message-State: AOJu0YwxsZmN5P66KY11EssSM58LT5r5/zMR+WuWvzvf8DRGQJsWVJV1
+	tL7RWhmHS3jL1/A25rdC2UcOdqXQnMr65nzwZUEzH6E2dbhgmB7JXWYMMmZ51slWbTaluYSK6pU
+	BBkWfi5fPIX0F9mOIQsFBHxdV8lmIW7YsFpPXiJrz
+X-Gm-Gg: ASbGnctrwpwGqclyPJ5ZLWZQsYOwRA/LyU6XsEHZzlfqos9g7g24kw1w0Vl2b98CqxV
+	w1vk3o/pjFQS0oOwnOkYL/YW2Z4XikDf1Zt9zjNU1m/DB+7j+jFfnGdBxeHlyZqp2bUgBySRy0O
+	KudeGT/WUriT3G9eBr9rhHlCHoCmo19M3YM75XuJ66bezG+zAdXggN1fZZSwNv7Q2kh0JFVTj0Q
+	sMw6jRRaIgLrb6ZO6hXCQApyMtsGur+WmN1xugfIAXv4BXJiilxKHAuBdAKLsYWuX3WK0pwowa+
+	wZO/x+MzELvSq3w=
+X-Google-Smtp-Source: AGHT+IHpxAHAI0f9Cr24tNS6jOzBKv+3mGRu+Z9H6Txpc480qOR0dPNsaiR/3XasB7O8AH8S5J5ulzFL0knik9fmYsk=
+X-Received: by 2002:a05:6214:600f:b0:882:4987:360 with SMTP id
+ 6a1803df08f44-882498705a3mr75490586d6.62.1762791915502; Mon, 10 Nov 2025
+ 08:25:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <da6cee1f1e596da12ef6e57202c26ec802f7528a.1761763681.git.m.wieczorretman@pm.me>
+In-Reply-To: <da6cee1f1e596da12ef6e57202c26ec802f7528a.1761763681.git.m.wieczorretman@pm.me>
+From: Alexander Potapenko <glider@google.com>
+Date: Mon, 10 Nov 2025 17:24:38 +0100
+X-Gm-Features: AWmQ_blSpUzzxuUgQTtcq9gjImncZd1NpVlVJACeWgHgjGc0p5BSkakhSm40GYM
+Message-ID: <CAG_fn=Ut9JUpStLiO+GsoBpn3d_EyyttcuBby=EKzuxkKdcKcw@mail.gmail.com>
+Subject: Re: [PATCH v6 10/18] x86/mm: Physical address comparisons in fill_p*d/pte
+To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
+	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
+	ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, 
+	morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, 
+	baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, 
+	wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, 
+	fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, 
+	ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
+	brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, 
+	mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, 
+	thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, 
+	jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, 
+	mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, 
+	vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, 
+	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, 
+	ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, 
+	broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, 
+	maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, 
+	rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
+	llvm@lists.linux.dev, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 09 Nov 2025 18:35:23 +0100, Arnd Bergmann wrote:
-> You can mark the caller as __attribute__((flatten)) to force all
-> functions to be inlined into that one if possible. I don't know
-> if that would be helpful or desired here though.
-Thanks, you made me aware of this attribute for the first time, it is
-really a great attribute, and it has been already added to the kernel
-public header. However, it's rarely used in the kernel, which I really
-think is a pity.
+On Wed, Oct 29, 2025 at 9:07=E2=80=AFPM Maciej Wieczor-Retman
+<m.wieczorretman@pm.me> wrote:
+>
+> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>
+> Calculating page offset returns a pointer without a tag. When comparing
+> the calculated offset to a tagged page pointer an error is raised
+> because they are not equal.
+>
+> Change pointer comparisons to physical address comparisons as to avoid
+> issues with tagged pointers that pointer arithmetic would create. Open
+> code pte_offset_kernel(), pmd_offset(), pud_offset() and p4d_offset().
+> Because one parameter is always zero and the rest of the function
+> insides are enclosed inside __va(), removing that layer lowers the
+> complexity of final assembly.
+>
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+> Changelog v2:
+> - Open code *_offset() to avoid it's internal __va().
+>
+>  arch/x86/mm/init_64.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+> index 0e4270e20fad..2d79fc0cf391 100644
+> --- a/arch/x86/mm/init_64.c
+> +++ b/arch/x86/mm/init_64.c
+> @@ -269,7 +269,10 @@ static p4d_t *fill_p4d(pgd_t *pgd, unsigned long vad=
+dr)
+>         if (pgd_none(*pgd)) {
+>                 p4d_t *p4d =3D (p4d_t *)spp_getpage();
+>                 pgd_populate(&init_mm, pgd, p4d);
+> -               if (p4d !=3D p4d_offset(pgd, 0))
+> +
+> +               if (__pa(p4d) !=3D (pgtable_l5_enabled() ?
+> +                                 __pa(pgd) :
+> +                                 (unsigned long)pgd_val(*pgd) & PTE_PFN_=
+MASK))
 
-Perhaps, I can try adding this attribute to some hot functions in
-another patch. For this patch, I think this is sufficient. There are some
-cold if branches inside `__schedule`, __flatten will inline the function
-calls in this part of the code, which may cause some unexpected
-performance degradation.
-
->     Arnd
-
-Xie Yuanbin
+Did you test with both 4- and 5-level paging?
+If I understand correctly, p4d and pgd are supposed to be the same
+under !pgtable_l5_enabled().
