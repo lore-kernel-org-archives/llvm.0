@@ -1,168 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BE226CE2B;
-	Mon, 10 Nov 2025 13:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CFC1E25F9
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 14:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762782535; cv=none; b=X5k9PA9lj126Mles/lAcDRU2rWs+OyR6XRd0OleA3w8QRUqzGAICLltyJZfbFry3YBYOGkIEW5NjyKoXJuuL31LhrKj9Dfyu0mHiuluBCJUyG9PNOUNTQlvMnDz1yga+z95rljQDij7I2qmFT+B3si6VqUw/xVMmnOY2mfS2Jf4=
+	t=1762783396; cv=none; b=SHNhAbiSMFLZRV1FXWA372butlo/XUEuziQ8PcnH+VLiFT43+LhHTZBXqFPS91SRAW8rhMCPKEYJpl9khRSq6ElXOSEwBOlHCjAoX5wdzWQS7OBYfCngqRbzwDeP3mFI7CnnGBnJQfGwXY7DbbnaURMeKr2D1+wxkGtv8OdW23Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762782535; c=relaxed/simple;
-	bh=LOyAN0iO2EMSmgKDPwrtHMT6er9B+4VjQSQPgBTISus=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QhLwMvTZ3PdDZIx0Z9bCnps//wuPXJvVpYiZksOf3gcEBKXNebSnS6bhV3DhWJ2jEva+qhIO8sxtyxJzEbXFAp2KETXs9lB87KPLO3P7pwlqyzQY1wz7MfOTSWTek6za6kaWsaEGMztWNJQhMxwB0ej5A/2/KTyIka0rwitBC3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EcOi4P3T; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762783396; c=relaxed/simple;
+	bh=Db3ZVEQdeFRXzRDJQYQ/IMyfnxX7ycY6hQ1E5UKfsqc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VMvFahAL3o9Ug0YdEovS94FW651Tu52qNuZqPpm2EgdUEn/LcrwC3qY1xw8eVIuHGti6I/bV2x+uD/aXiW8lFn2+I8S4XRdNrlGO+MnmC7/rEAZ4OsjXNX7r3O/dHWezbmk+cyRqugQ3AUQhhF8y78iO1KYAOLOcbozpl7kGx80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ElxLpKcD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EcOi4P3T"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762782534; x=1794318534;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LOyAN0iO2EMSmgKDPwrtHMT6er9B+4VjQSQPgBTISus=;
-  b=EcOi4P3Tm/NpSLAyyis1vLisU+9lvFHEK1bw0rs/zXU/p0kKIasFmi0q
-   5C+WES27rECaQhf6Y/qs4UPMjAomyS+s7gVacnsQoK9OU3wV7dYdeAQx/
-   jEIIXyoQNFofdMO/amuIMUS+YFFZazX1VKZ8Kr1AQHv2voNTNfcA2nXgb
-   ZcUGi9DHZv25irqTBrWNswJ3PWVCPvBtYtbdSxkJ/Vs6brqGYoIEax/LI
-   dZ3sfspiHVQptv7v+FSe6pxF/7nfGLpAlTB4EsgMOpkVMKEl2gKNGMxKm
-   ejgDZxQA7AR//CikU/5QzrEZe8ivgux+wp4jNRIz12DUxOZEG91plyTJ9
-   g==;
-X-CSE-ConnectionGUID: CtV+6M01SpicRgytMavh2Q==
-X-CSE-MsgGUID: 355s4cqBRqSukOgjX+oImg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="64037929"
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="64037929"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 05:48:53 -0800
-X-CSE-ConnectionGUID: ksHDq/jlT0CyTbiAG0Kh1A==
-X-CSE-MsgGUID: fTYm8Jd0R7+bZjc6v7kurQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="193060165"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 10 Nov 2025 05:48:50 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vISGF-0000UV-1e;
-	Mon, 10 Nov 2025 13:48:47 +0000
-Date: Mon, 10 Nov 2025 21:47:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, jfalempe@redhat.com,
-	javierm@redhat.com, simona@ffwll.ch, airlied@gmail.com,
-	mripard@kernel.org, maarten.lankhorst@linux.intel.com,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 2/3] drm/client: Support emergency restore via sysrq for
- all clients
-Message-ID: <202511102156.RRA8JQGz-lkp@intel.com>
-References: <20251107142612.467817-3-tzimmermann@suse.de>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ElxLpKcD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762783393;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Wk/DmMIHql5KKLMIxmu7BUWZsWGs05XHV0GMubqY4aw=;
+	b=ElxLpKcDeIWk5pIQMDOVodtJ95Vy8TRTZUTCc8w3hVq50wyrv3LSHetVya33HoBniJezLr
+	OCKQ7c9ktZrRNNlafkI+H+i1zT1IC0m/XOxpVIh0xNAwyA1wAZ9KEv9bof55e1CN2/0TS3
+	heA+AlFx5CTfdPp3T2Gz16KYC1I8fG0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-425-Zr3ZWqvNNEa8haQgntNp-Q-1; Mon,
+ 10 Nov 2025 09:03:12 -0500
+X-MC-Unique: Zr3ZWqvNNEa8haQgntNp-Q-1
+X-Mimecast-MFC-AGG-ID: Zr3ZWqvNNEa8haQgntNp-Q_1762783390
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3F952180057A
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 14:03:10 +0000 (UTC)
+Received: from [172.20.97.48] (unknown [10.30.44.37])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C83021800900;
+	Mon, 10 Nov 2025 14:03:09 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 10 of 137): Test report for master
+ (6.18.0-rc5, upstream-mainline, e9a6fb0b)
+Date: Mon, 10 Nov 2025 14:03:09 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251107142612.467817-3-tzimmermann@suse.de>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <30662.125111009031200820@us-mta-425.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: f2HW8rTxq8M0ED47Pc1OZaZ1u5Ipu3f_cN868OPo1uU_1762783390
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on next-20251107]
-[cannot apply to drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.18-rc4 v6.18-rc3 v6.18-rc2 v6.18-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-client-Pass-force-parameter-to-client-restore/20251107-223026
-base:   next-20251107
-patch link:    https://lore.kernel.org/r/20251107142612.467817-3-tzimmermann%40suse.de
-patch subject: [PATCH 2/3] drm/client: Support emergency restore via sysrq for all clients
-config: powerpc64-randconfig-001-20251110 (https://download.01.org/0day-ci/archive/20251110/202511102156.RRA8JQGz-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0d786b9a207aa0e6d88dde7fd9ffe0b364db69a4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511102156.RRA8JQGz-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Linux 6.18-rc5
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511102156.RRA8JQGz-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2148829846
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { remove_name } for  pid=3D11534 com=
+m=3D"systemd-ssh-iss" name=3D"50-ssh-vsock.issue" dev=3D"tmpfs" ino=3D2323 =
+scontext=3Dsystem_u:system_r:systemd_ssh_issue_t:s0 tcontext=3Dsystem_u:obj=
+ect_r:var_run_t:s0 tclass=3Ddir permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2391966
+            Affected tests:
+                Boot test [s390x]
+                Reboot test [s390x]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://issues.redhat.com/browse/RHELTEST-39
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [net] [kselftests upstream] catch all failures
+            URL: https://issues.redhat.com/browse/RHELTEST-1362
+            Affected tests:
+                kselftests upstream - bpf [x86_64]
+                kselftests upstream - bpf_test_progs [x86_64]
+                kselftests upstream - net [x86_64]
+        Issue: selinux-policy: serge-testsuite: FAIL: git clone https://src=
+.fedoraproject.org/tests/selinux.git
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7555723
+            Affected tests:
+                selinux-policy: serge-testsuite [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64, x86_64]
+        Issue: BUG: KASAN: slab-use-after-free in nfs_local_call_read
+            URL: https://lore.kernel.org/linux-nfs/aPSvi5Yr2lGOh5Jh@dell-pe=
+r750-06-vm-07.rhts.eng.pek2.redhat.com/
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: xfstests nfsv4.2 generic/221 failed to update ctime
+            URL: https://issues.redhat.com/browse/RHELTEST-1805
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
->> ld.lld: error: duplicate symbol: drm_client_sysrq_register
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_register) in archive vmlinux.a
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_auth.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_unregister
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_unregister) in archive vmlinux.a
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_auth.o:(.text+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_register
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_register) in archive vmlinux.a
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_edid.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_unregister
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_unregister) in archive vmlinux.a
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_edid.o:(.text+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_register
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_register) in archive vmlinux.a
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_encoder.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_unregister
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_unregister) in archive vmlinux.a
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_encoder.o:(.text+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_register
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_register) in archive vmlinux.a
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_file.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_unregister
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_unregister) in archive vmlinux.a
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_file.o:(.text+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_register
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_register) in archive vmlinux.a
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_framebuffer.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_unregister
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_unregister) in archive vmlinux.a
-   >>> defined at drm_internal.h:67 (drivers/gpu/drm/drm_internal.h:67)
-   >>>            drivers/gpu/drm/drm_framebuffer.o:(.text+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: drm_client_sysrq_register
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_atomic.o:(drm_client_sysrq_register) in archive vmlinux.a
-   >>> defined at drm_internal.h:65 (drivers/gpu/drm/drm_internal.h:65)
-   >>>            drivers/gpu/drm/drm_gem.o:(.text+0x0) in archive vmlinux.a
-..
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tests that were not ran because of internal issues:
+    /distribution/check-install [x86_64]
+    /distribution/command [x86_64]
+    /test/misc/machineinfo [x86_64]
+    Boot test [x86_64]
+    CKI/restraint [x86_64]
+    kselftests upstream - bpf [x86_64]
+    kselftests upstream - bpf_test_progs [x86_64]
+    kselftests upstream - net [x86_64]
+    Reboot test [x86_64]
+    SELinux Custom Module Setup [x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
