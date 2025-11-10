@@ -1,64 +1,64 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE3B2874F1
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 16:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D732877E8
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 16:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762792613; cv=none; b=p9fzQqT3xlqjz/DeX11iSuZ7mhV3bsvBwFHQ12un3byp6SfKKh/6hnUjmNVK1VmyGalG6s4gdXTlX7VKU0nu3W5tVJyJzjKpExDatDas2N8sr9FymHJmxEyJMbpj5nCPxpeTGxPp6fyl5DtUSbV1Y4T/jVB+MbnsAoV0G3PS9Qg=
+	t=1762792618; cv=none; b=lCvIxodmKNs1oGxFzVgy+uqOShUAMFBrUjzg2PNg+BbG8tyboAYwD+gypcYvAXdbLcbsQJVAhjJwnuJN+lqJZ3hYeP7Qp214aLM3LPx0pAhwyK9sZgmZtnoa9Dsq+f7knECmjc1lbwBUvVsw+dhTcNIAWW+lCnLbxOEQXGxocQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762792613; c=relaxed/simple;
-	bh=ZEq5LCeeZxdZtY+a+kvZMIoWs2Mzj+sOmq7f1LtT1gE=;
+	s=arc-20240116; t=1762792618; c=relaxed/simple;
+	bh=IHekeM/5ALv1Tfapztub9UTNCtQ4Mse7xBlGJh7bRJo=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CVzzZt3rw2Q1wpqjiumsrY3o4ndiBJXWNcj2mZNopyxNnBpPZ/23rYLQ/S0D+1wSUPRDoWnI8ggCljQ3/Jt4D7O5t1N+u3iGx2ZWnvJAZgMzkN3r34wljnu1bCU4Scm7smqvcNxBedtXKWWXI3wISFCP+Co4tmmDzkAveerEUWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZShkdYxo; arc=none smtp.client-ip=209.85.215.175
+	 MIME-Version; b=OGmHeG8douNiakqiQfjEiCGlsRfBoTMUJryxjstiaP5z+aftC0ZlkVtXGsqQzGqwJwp2cokKhCA4AagpFhGzesUcGmPypATcYBOCqbj9Xzt61NpO8fbUCRREkVp2XcLkro6V7lY8ClNP6Kv5FZRB3bOBgkQfkNNu723Bi95TEbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JaCqKiOF; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZShkdYxo"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b996c8db896so2646499a12.3
-        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 08:36:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JaCqKiOF"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3436d6bdce8so2601339a91.3
+        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 08:36:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762792610; x=1763397410; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1762792614; x=1763397414; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bd/jIJYyk1G6SYf0mNQVLBMDX4oiGoErfqkyMXn4+LQ=;
-        b=ZShkdYxoE9B0pmEwBQ5excCw6W70XgJFOi1uwmTxhcR4sksr8ktcYhKDSh5DLlBXxA
-         oZnLVDnfb5lwUK/WSgH0usRGrSLae4dAXnkG8jJrIyyhWHDk5H6hOjO1XQiEM/oMC7/T
-         hlD25qNa5fAFXHUBvuBkEACM5fsrpTV1ljR5oIqqjLMVRMaZGnnecmJ4wQEBTEfGNu3u
-         U11lQRWt4kN1edVlX2x1yMNLyO2B44T+Zr+hiTgXv0B4Bc3EuX9TR4T/GSfBKfb2HzPp
-         X7aAcg1IAddvl38oFeNao5QeeFOuMU98Zxh8DpFw5Yu+KHq+cJsfaWyV0//x3NinD50m
-         L3UQ==
+        bh=Rf1O2IW8PmKXDZ3O4r/3b4myYk+kPZmKXtIohIyK/BM=;
+        b=JaCqKiOFrWy+xOepjfLS114Dvaz8VstN+xd+a3q+IQMMk9W1p0eyuCxnQ5Tw3eQ2gJ
+         8Q1B6ur+VQqm6nvdUne+Orl+Q1GKA1FnNboC1eTpYCWoZuw0NGrqPCynrkMd82wDiSct
+         QHagPTM619M6xS/VgEfAcwm7QQQsmJtEPfelJUq4PQgI1i+DfLWGfnb1HSn5JD94qvg+
+         KOCJWUuZ1/MB6W4FBtAwjF64pLGdNdTGcjP3fOa/uHiIgO5ak9AZCYyPILhgud/msuWg
+         QTQFNsEJEZPVnpm0Z4+e2PM940x5gcGH7n2QG6muwxNSHtREAcuEBtu4ceoGmQ8ytOCJ
+         zrmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762792610; x=1763397410;
+        d=1e100.net; s=20230601; t=1762792614; x=1763397414;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=bd/jIJYyk1G6SYf0mNQVLBMDX4oiGoErfqkyMXn4+LQ=;
-        b=Le6Wr6xrtBEydQ6222Yxoi/3CCTw94a1Y260mj23wXzdcKKqyAioWCYXcQxbmFe8ie
-         IZKQC/U2MSnsPOgXDzmwScE/c+miAMMqUKA3rLHtb4kwKufZtuvzwwMCah8AL46KAI/r
-         x5XaSlhK7O0h+Pt2SVJFi8pAG5yW7oBMvzoKeU+SrcgRrhqERcKfcjMBd9PPfQvbCEIP
-         3XgU04NBK8fuSDgH4eAwZFbw+Vm6QuX9R+UPvBfQHVqcMbJWl4nKJ6lpKZlYJ2/W4XQZ
-         ZSGQ5ccNl+FUO1Tm6cfVgHPxl+ukLLWLKfHx5W3pBUWqoFm/VkzIH5B8yjxoOmNe3Wq8
-         0RAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVzYDbdaSoNihKYjG5G2GwHipxaZF6lm59k4ikgnVF7ody06kJfAjTV5u4qWEc8C4DJbTsm@lists.linux.dev
-X-Gm-Message-State: AOJu0YzLNa4CunhdBlOG1PE9Z1Et6SGYamcfAHYW7iIu1wpukxm1zLcJ
-	/gOKPQnRBGrE0s5HqhMjYlhHnsdz+xQdNStcaX1bfUlVtK8kW1guXK48
-X-Gm-Gg: ASbGncupNvDJBNcGxY8FKq3RsK2oJ6JIwno9vfdMJ0/k6mUuu+02BmszjipoUlG91HK
-	5ivYvOJARtkrODhuS4OD6oQIBuvI/kYtiLwjt3GvcN1mvLp/LrdGP16JhxNNNvuBCTz6auW0623
-	sE/mV1VV073o4sN4wH3NXwghB/ZMgyv3xYEvquivPayrOImSJ6s3t4CPJXTz59TqWeK7zl7Zr4U
-	9zAp25mVh+aYUP/G/K1AN1W/T244DrHUcn9znkJBqq6LACfBpR2WjMATd3vZUfdTKSFhR/lh9BW
-	1Z57eICv6PqTk7aQr5NgggKUlpH9naZjeIloCWbmci9uI97fswqLkeaj8pjeWbB4txWSTCvBSAM
-	aVCKol+Jnhpr76HXmyY1xF4HyD/1DI4NgI35xhHEPtxMQJvvDB/9zXlwUUIrQUhk8ybqIMSqeGJ
-	Mx/XLw+zDNbdHcBPV08l7/eQ==
-X-Google-Smtp-Source: AGHT+IHC7aPoZ6nrAIOpkNf/Po8HO2SSr/NWVgq/h5VzJS+qKaFGcmt1davBTXDotW4c33fFW6QGWA==
-X-Received: by 2002:a17:903:2f86:b0:295:1626:6be5 with SMTP id d9443c01a7336-297e57090dcmr104835365ad.44.1762792609610;
-        Mon, 10 Nov 2025 08:36:49 -0800 (PST)
+        bh=Rf1O2IW8PmKXDZ3O4r/3b4myYk+kPZmKXtIohIyK/BM=;
+        b=Y9wKDj7CE8VFQOIyGiQKG7VI5+KnEIpMwwORAK7ld8t0ztDmjB9ExNA+AZQWqrtxxG
+         kq9cuY4weRn72L/ubzJK/KK6A/ZztS/T7oTaXhjF7qGqHw1XQo/6droTw0AOE/1OaBNZ
+         VffdlFvfoC7sBoKTN2lWVa5oG88+Wl1+Tqlsdte3JIgwMiScj/2OP34+7wSTGO5za4zg
+         LajxiLpGCeIq/jIHWZ+pSKTVS3qHwn9gs2QYAKI9XnXo7ExAzkPo8beTHR4qEMFuqcI3
+         XY99hKGzjkeWRCUoP8Jf2W12AWlvIEEOgwQJVrB0jxvu9CpoRL+xDbkHI3Wq7+TQEqZZ
+         V5bg==
+X-Forwarded-Encrypted: i=1; AJvYcCU52WhoXYKZVuduBebmrCwXqjTFADN4zYYnS0Vq+F1itcn4OaYa8yj5EYodlr2UYl+64poT@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyy/dWTiOpWIx7vm0yDj+VbF7w8dU07/7NWRRmVm8sYNCIhyUor
+	H2mNsoq3pHZAYG6DHM8g7/JDRtFIFRGYi3YCEDnHrcvzpGmwsk+6YdZv
+X-Gm-Gg: ASbGncsfS+Re0VOBv8qTMocX/IQL4HOhceB+2Mzj1QK8EJTis3JTNItxHv1uX7bTo5A
+	loXOlmY4RNjtLLHA5VtMU94EeNHOeMnOKLGLtbMBPpiTeosrrDYhNAcJQ+JR4F3/cswtqsjMy9+
+	4q2FJEAw5kvw90xQSeZT6md4kWg1LoZlVSXMUnu5aWAKfbiOm2H2ykuKQxbqz1jLWL18/qsrQwC
+	SPV8drkHu3Zxoddg9CaJJMvgZhQNZyRydcRB51tRmhbGPn0SFF8jmKng+DaZ3WQu5nI1UZWtn6z
+	qn5MbrVqki/HSXcBFWHTzEypzq0aP4cgRTeKAn2v1SDOb5pXLMRQan3s66Rgqrwj615WI9KmAYW
+	gunL02fLg3fhDWe9zEe8VLm5ndS/0bQDLfKeyd/0D9DMCNl+6KbIH9qHq+Zt3e5hBhenvRhtiWA
+	DH8mmYXdjbMkQ=
+X-Google-Smtp-Source: AGHT+IF/jQs1f7B6cG5SH+bBA2T5zaJBaOf+IxgFwWIZkh8f5KWpsuxpiPdi/QInw6w6XvvtLJa9gQ==
+X-Received: by 2002:a17:90a:bf06:b0:343:a631:28b1 with SMTP id 98e67ed59e1d1-343a6312b7emr3517293a91.16.1762792613858;
+        Mon, 10 Nov 2025 08:36:53 -0800 (PST)
 Received: from localhost ([103.88.46.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29650c5d0c1sm150508695ad.27.2025.11.10.08.36.48
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-341d0adc41dsm5956374a91.1.2025.11.10.08.36.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 08:36:49 -0800 (PST)
+        Mon, 10 Nov 2025 08:36:53 -0800 (PST)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
@@ -132,9 +132,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	Will Deacon <will@kernel.org>,
 	workflows@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v8 02/27] x86/hw_breakpoint: Add arch_reinstall_hw_breakpoint
-Date: Tue, 11 Nov 2025 00:35:57 +0800
-Message-ID: <20251110163634.3686676-3-wangjinchao600@gmail.com>
+Subject: [PATCH v8 03/27] HWBP: Add modify_wide_hw_breakpoint_local() API
+Date: Tue, 11 Nov 2025 00:35:58 +0800
+Message-ID: <20251110163634.3686676-4-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251110163634.3686676-1-wangjinchao600@gmail.com>
 References: <20251110163634.3686676-1-wangjinchao600@gmail.com>
@@ -146,64 +146,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The new arch_reinstall_hw_breakpoint() function can be used in an
-atomic context, unlike the more expensive free and re-allocation path.
-This allows callers to efficiently re-establish an existing breakpoint.
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 
-Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Add modify_wide_hw_breakpoint_local() arch-wide interface which allows
+hwbp users to update watch address on-line. This is available if the
+arch supports CONFIG_HAVE_REINSTALL_HW_BREAKPOINT.
+Note that this allows to change the type only for compatible types,
+because it does not release and reserve the hwbp slot based on type.
+For instance, you can not change HW_BREAKPOINT_W to HW_BREAKPOINT_X.
+
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- arch/x86/include/asm/hw_breakpoint.h | 2 ++
- arch/x86/kernel/hw_breakpoint.c      | 9 +++++++++
- 2 files changed, 11 insertions(+)
+ arch/Kconfig                  | 10 ++++++++++
+ arch/x86/Kconfig              |  1 +
+ include/linux/hw_breakpoint.h |  6 ++++++
+ kernel/events/hw_breakpoint.c | 37 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 54 insertions(+)
 
-diff --git a/arch/x86/include/asm/hw_breakpoint.h b/arch/x86/include/asm/hw_breakpoint.h
-index aa6adac6c3a2..c22cc4e87fc5 100644
---- a/arch/x86/include/asm/hw_breakpoint.h
-+++ b/arch/x86/include/asm/hw_breakpoint.h
-@@ -21,6 +21,7 @@ struct arch_hw_breakpoint {
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 61130b88964b..c45fe5366125 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -456,6 +456,16 @@ config HAVE_MIXED_BREAKPOINTS_REGS
+ 	  Select this option if your arch implements breakpoints under the
+ 	  latter fashion.
  
- enum bp_slot_action {
- 	BP_SLOT_ACTION_INSTALL,
-+	BP_SLOT_ACTION_REINSTALL,
- 	BP_SLOT_ACTION_UNINSTALL,
- };
- 
-@@ -65,6 +66,7 @@ extern int hw_breakpoint_exceptions_notify(struct notifier_block *unused,
- 
- 
- int arch_install_hw_breakpoint(struct perf_event *bp);
-+int arch_reinstall_hw_breakpoint(struct perf_event *bp);
- void arch_uninstall_hw_breakpoint(struct perf_event *bp);
- void hw_breakpoint_pmu_read(struct perf_event *bp);
- void hw_breakpoint_pmu_unthrottle(struct perf_event *bp);
-diff --git a/arch/x86/kernel/hw_breakpoint.c b/arch/x86/kernel/hw_breakpoint.c
-index 3658ace4bd8d..29c9369264d4 100644
---- a/arch/x86/kernel/hw_breakpoint.c
-+++ b/arch/x86/kernel/hw_breakpoint.c
-@@ -99,6 +99,10 @@ static int manage_bp_slot(struct perf_event *bp, enum bp_slot_action action)
- 		old_bp = NULL;
- 		new_bp = bp;
- 		break;
-+	case BP_SLOT_ACTION_REINSTALL:
-+		old_bp = bp;
-+		new_bp = bp;
-+		break;
- 	case BP_SLOT_ACTION_UNINSTALL:
- 		old_bp = bp;
- 		new_bp = NULL;
-@@ -187,6 +191,11 @@ int arch_install_hw_breakpoint(struct perf_event *bp)
- 	return arch_manage_bp(bp, BP_SLOT_ACTION_INSTALL);
- }
- 
-+int arch_reinstall_hw_breakpoint(struct perf_event *bp)
-+{
-+	return arch_manage_bp(bp, BP_SLOT_ACTION_REINSTALL);
-+}
++config HAVE_REINSTALL_HW_BREAKPOINT
++	bool
++	depends on HAVE_HW_BREAKPOINT
++	help
++	  Depending on the arch implementation of hardware breakpoints,
++	  some of them are able to update the breakpoint configuration
++	  without release and reserve the hardware breakpoint register.
++	  What configuration is able to update depends on hardware and
++	  software implementation.
 +
- void arch_uninstall_hw_breakpoint(struct perf_event *bp)
- {
- 	arch_manage_bp(bp, BP_SLOT_ACTION_UNINSTALL);
+ config HAVE_USER_RETURN_NOTIFIER
+ 	bool
+ 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index fa3b616af03a..4d2ef8a45681 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -245,6 +245,7 @@ config X86
+ 	select HAVE_FUNCTION_TRACER
+ 	select HAVE_GCC_PLUGINS
+ 	select HAVE_HW_BREAKPOINT
++	select HAVE_REINSTALL_HW_BREAKPOINT
+ 	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_EXIT_ON_IRQ_STACK	if X86_64
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+diff --git a/include/linux/hw_breakpoint.h b/include/linux/hw_breakpoint.h
+index db199d653dd1..ea373f2587f8 100644
+--- a/include/linux/hw_breakpoint.h
++++ b/include/linux/hw_breakpoint.h
+@@ -81,6 +81,9 @@ register_wide_hw_breakpoint(struct perf_event_attr *attr,
+ 			    perf_overflow_handler_t triggered,
+ 			    void *context);
+ 
++extern int modify_wide_hw_breakpoint_local(struct perf_event *bp,
++					   struct perf_event_attr *attr);
++
+ extern int register_perf_hw_breakpoint(struct perf_event *bp);
+ extern void unregister_hw_breakpoint(struct perf_event *bp);
+ extern void unregister_wide_hw_breakpoint(struct perf_event * __percpu *cpu_events);
+@@ -124,6 +127,9 @@ register_wide_hw_breakpoint(struct perf_event_attr *attr,
+ 			    perf_overflow_handler_t triggered,
+ 			    void *context)		{ return NULL; }
+ static inline int
++modify_wide_hw_breakpoint_local(struct perf_event *bp,
++				struct perf_event_attr *attr) { return -ENOSYS; }
++static inline int
+ register_perf_hw_breakpoint(struct perf_event *bp)	{ return -ENOSYS; }
+ static inline void unregister_hw_breakpoint(struct perf_event *bp)	{ }
+ static inline void
+diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+index 8ec2cb688903..5ee1522a99c9 100644
+--- a/kernel/events/hw_breakpoint.c
++++ b/kernel/events/hw_breakpoint.c
+@@ -887,6 +887,43 @@ void unregister_wide_hw_breakpoint(struct perf_event * __percpu *cpu_events)
+ }
+ EXPORT_SYMBOL_GPL(unregister_wide_hw_breakpoint);
+ 
++/**
++ * modify_wide_hw_breakpoint_local - update breakpoint config for local CPU
++ * @bp: the hwbp perf event for this CPU
++ * @attr: the new attribute for @bp
++ *
++ * This does not release and reserve the slot of a HWBP; it just reuses the
++ * current slot on local CPU. So the users must update the other CPUs by
++ * themselves.
++ * Also, since this does not release/reserve the slot, this can not change the
++ * type to incompatible type of the HWBP.
++ * Return err if attr is invalid or the CPU fails to update debug register
++ * for new @attr.
++ */
++#ifdef CONFIG_HAVE_REINSTALL_HW_BREAKPOINT
++int modify_wide_hw_breakpoint_local(struct perf_event *bp,
++				    struct perf_event_attr *attr)
++{
++	int ret;
++
++	if (find_slot_idx(bp->attr.bp_type) != find_slot_idx(attr->bp_type))
++		return -EINVAL;
++
++	ret = hw_breakpoint_arch_parse(bp, attr, counter_arch_bp(bp));
++	if (ret)
++		return ret;
++
++	return arch_reinstall_hw_breakpoint(bp);
++}
++#else
++int modify_wide_hw_breakpoint_local(struct perf_event *bp,
++				    struct perf_event_attr *attr)
++{
++	return -EOPNOTSUPP;
++}
++#endif
++EXPORT_SYMBOL_GPL(modify_wide_hw_breakpoint_local);
++
+ /**
+  * hw_breakpoint_is_used - check if breakpoints are currently used
+  *
 -- 
 2.43.0
 
