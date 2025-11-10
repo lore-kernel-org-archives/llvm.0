@@ -1,73 +1,73 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A5E330322
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 16:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5792D7DFB
+	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 17:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762792859; cv=none; b=Y8pCEta9sheS26FlOUb9uw1EzUxDekFrYqZ8I5nah2Xc/3S0rhSO15dBXRGgK7naLSUbxXMdFVihjnoCKeDbizIHsDUSEifRknJ/DDvfG+01km942rKcAxQLAG44WYlUKGmyyXLEEBCjk7Cu08pqr10psp5RaLzFiSF5lrT+KrY=
+	t=1762795981; cv=none; b=rhFtK5vDvmmYcsxdQhs6izCEms65T37Bg6Du7vlxQ2kHSPeiA34lSEAkqawOXi2E/JcNf5kSsHptiF6+jGbx9NEAQJsoG3lYTxZoPF73wSRYnOVnKMEPzotht/+GJSGWJpzb/BHUZGUlTRnts8Mt+xAThsHxJFxy2m/uFOkImzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762792859; c=relaxed/simple;
-	bh=Nn93pG9GTk907Z5oYvQqtvL4mNR0sTn6esBD4Jp2XFM=;
+	s=arc-20240116; t=1762795981; c=relaxed/simple;
+	bh=lavqjS8uyddXCf50slP6/gj/LovmQ9D/FO5ATpZAsEM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rCRJEPM8j8RUmupZgw9bGw/gGINAoM3z+fFIvL3RmiVEdZULMPXbvMQGj0O1mTAEvIbz+GbylGGKWE+wl9YjcYoWeyDV/O6xTKjCm28JTczoUynDA+RJvip1w0Cbm5p1pnnXivo6M2m/fJiTu8HlV/UaZBlakxxrjRjXt5YL+no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uvaA+U06; arc=none smtp.client-ip=209.85.160.176
+	 To:Cc:Content-Type; b=bvsMOay80eVUkEpNlKAeBmp1PVU5j0QV1zw5oG4+T3EZ7QPAiZCJ3lRr1rlprGKdYr6phPhbI3OfaRH6YyuS/RjMqlF+TIxksmf+YLe6FmxFd276I+diJKFSCWm2dmpqkmfAkxS8vJfCckUwWzZdPFTGExlR+fN6Io1ZZJBdpEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kksu71tr; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uvaA+U06"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4b109c6b9fcso25508231cf.3
-        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 08:40:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kksu71tr"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-88249766055so20047626d6.1
+        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 09:32:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762792857; x=1763397657; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ARP0s0P8t6lHLXGPK7oqG4hn2hPk4JBv7/AQ4HrLq7Y=;
-        b=uvaA+U06WG/qgJo4hkuF4JDkGmXB2qcV8Cyab/iYtxphyEIiRjQpHaJ4IFJSB2GKY0
-         tEfTCbYLQI1dgfSvGKohXMKcRJ+IDbUWWh0VmOrDQe6rOZqeHkkz9q4JqTR43wjorMWS
-         Qt4Bn37gAut1WmgYPQEM51Y0Ta5pKWtUMuD0AxoU049F4gavt7Jtg6Hlb90EtLrKUceO
-         Fyx5lZ5Jx7hFI0AEzGZRlEHQubDa9ANWjEwJONpqPgYGvX7fUpcTiVcFW+p4GLDMcsJu
-         ImaUmNaBeuyX9e/6AaUS8JEVzsrbh6ajHHeJCKabSzDj+gJGxWaPcVMR50RaqIVxPjzy
-         ysMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762792857; x=1763397657;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1762795979; x=1763400779; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ARP0s0P8t6lHLXGPK7oqG4hn2hPk4JBv7/AQ4HrLq7Y=;
-        b=RB1u905iDjCA+zo9F3eZKFacFgvFUpz9WJrwAK+5AsEHxgje1+II5GNK1ANpBLLT3H
-         YCukbVB0MMVE/lXcKm0PG52mMYjqbgE/p0Pr1omR6y8dWpGdKCrJ/DdjpR4VPMHWuTwt
-         8hMbVHWWxdXW/70c4OGLuTOYX34nHpqxC8mU0qle3XfDp2FmJiIPdKHThjpoVTrrCdCw
-         yBISCKzSR+yG1OwcMYH894zn/PGUBdalMIbrKc2P/LeF2oR3zKxUzdVTcezJMG1T/Ow/
-         BUR0C+lednqE2XNNB20wLz+ef81zWxUe6q/+pBDsPMcIb11P+G5nV9bGE4/5618hatW7
-         cv/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWh87OKAtFm2blOHd3bziaYzyjEWbiAkidpYsEhh45NwNsbK8QuRp+43FeOK0O9+JtQXKZS@lists.linux.dev
-X-Gm-Message-State: AOJu0YwW8YmxbXdG5e1FWtQBe/jqXapTRSzjd7aNVC2tQWFWDVFvXWSx
-	v10ovP8XGFefjm14H7PqDwjkIFzGG07gbAuTv58yRmgqICDjf9HKCFkF2bQKPKeOmJ7fllpAiMX
-	N/KVQaxp64JDe5FOFELonbvFwm0j0xfMmfzGkdU+f
-X-Gm-Gg: ASbGnctL5An5Eu1rTlPyHeITlTiFUbH+Koae/Rlm7oKmjiM3t2HcL6ySi7ipI0iUAq7
-	V5g7vQknjziAlsqAa8gsehIO3CtTalUR4GLBE4uEpojq5asPaVDq6Hyjq2JtjwqpbcN5yo1AghL
-	Nv73CmcP8yYsI/NRLJ6f9/cp3HVivcLTtkwZqJwChBwI9qGWpVr0Ok/LbwjOOd3kqM/Paqh9Cns
-	RmVNyzW3HpHStITrcjRgz5lH2T/2XgpvG4SHAp2Ai5m2JECTTdYYvye4DG3FQ6d4gr58EOcGcjk
-	NikQN1Y5jI6DxGzVa/PVzeEFBg==
-X-Google-Smtp-Source: AGHT+IFXtIVYv/1akorIwGTU2TyeYWKo/ZKjasuLxC+KldJLVH++s5nwoozhcb1g1AswN8A4ZgMNuJJXiz33fQE7EOA=
-X-Received: by 2002:ac8:5d05:0:b0:4e8:aa15:c96d with SMTP id
- d75a77b69052e-4eda4fec971mr97364671cf.55.1762792856275; Mon, 10 Nov 2025
- 08:40:56 -0800 (PST)
+        bh=auNNYNeszcnW8UxlPsUXlu6HqCk9VFPDDrt3cDy7QDk=;
+        b=kksu71trA8pg8C9i8QZ2jW9IqCMZ2+alIfja1ZfsWBIlTwu2e6gvyPML5RRGngckxb
+         TYJ1PcILezWTooGNXCxVX2YGmEWUzy6GURQx0h/WUvMs4V7vkbYsdh+g0KuTDktmUEj9
+         E0VXIJxVFnetZN466ftApbv9ph6CD8Xe66/LfZPMooamHCpgWPybmwpJXjJGykuvDOZh
+         092Z743cqZlYWmoS/hYeLET6U52xJbHLIWBH8WVCGAtKHTHlQeKbKmlFwyL2WYEA15MO
+         +Mv9RSLBY3Qq7F7zuOc0FxN4Qck445U0cqt5Ndpmgyq8GE9qVV6riIrOye4/fxZrVCzq
+         x7HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762795979; x=1763400779;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=auNNYNeszcnW8UxlPsUXlu6HqCk9VFPDDrt3cDy7QDk=;
+        b=ui3ny8xjOIU+ldHeOWm1OSfv00FIfA6P60/kz27lWU5lcdVJsW62ndPjivafUCVutm
+         5kP+BmMfXV7xmwGrsjX95r8+xbRsccYs/iCpTjmmqHCifa+gVhu41EIXWU3OrjHMHgCw
+         /0Fanh4D/xTg5qMBR4Cg+Be8FHHfzGq00kTBqrbGx0L/yr5LmQ2Yjl71JG0RqyDJ48Wl
+         1C1Op4QAuTOet/knkt26Y29tcINree9juzQjl4eNZpYLNons3gRMS0rh4sbBga4XaXVd
+         E760/TFY47KJFMbxEULMPpxomR/R9XvlOSwexrMZ16BmfLl73LKKDm9Ov3CgmmaZqZ0u
+         PrKg==
+X-Forwarded-Encrypted: i=1; AJvYcCWtx2maTLC4CrxKEgA+CuGThZNP2FlE6lp5GTQcRyAg5dayb1sZGVtRQJA4ZErNAfOguLXd@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywb7PCJKCqlyzpR1j/uNZMvUm8rQRjYtnZIhI0gJVM+m7iRp5ni
+	e+U6iJb1pGV0RFvN81vregreFMYxRZYXbhNq01Vri08Ck3vNX1KMBCAjskdahqRXnb1JAneYrY3
+	YJtPLJwxyc70pe+MQvhrCpvX3ME86PZn+FJE6DdWv
+X-Gm-Gg: ASbGncvR/2f3ti+gryThpLL/NoeLpQbIqG2ac28qCMTddJWAIK7eWoQH7irZnN1cZxz
+	OVYjTs14HByGGqVET+DmFjm+ZM0ycvzX8V9H8drtLr9pEc1zjbx03ueuijeYUgQ3YuMG3lWcphw
+	glW6FbnAVELqM3oa3JLUW39TGlWmZedwXBkeCU+DJY3H5/y4FXYHSK5gQnjcMcbnYvLCn30GiVs
+	U40O1Ee1CMKrEnaSked+SZ670zr0vIKI+qlYHgwq4TShlW4TiFvICJKMHX7mKIXfuhNZ0xJRzYN
+	ixp+oaDmD4v+SQc=
+X-Google-Smtp-Source: AGHT+IHeuRC7ChrdFjjxvcWC3ajdMKHJ+Azj7LDyTH5BCluSFj1o6p4ZSWP6EGrRrokOPiEV3z2rvlDUhI4wexrXKNM=
+X-Received: by 2002:a0c:e00a:0:b0:882:4660:3724 with SMTP id
+ 6a1803df08f44-88246605291mr69808466d6.63.1762795978283; Mon, 10 Nov 2025
+ 09:32:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <932121edc75be8e2038d64ecb4853df2e2b258df.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <932121edc75be8e2038d64ecb4853df2e2b258df.1761763681.git.m.wieczorretman@pm.me>
+References: <cover.1761763681.git.m.wieczorretman@pm.me> <fbce40a59b0a22a5735cb6e9b95c5a45a34b23cb.1761763681.git.m.wieczorretman@pm.me>
+In-Reply-To: <fbce40a59b0a22a5735cb6e9b95c5a45a34b23cb.1761763681.git.m.wieczorretman@pm.me>
 From: Alexander Potapenko <glider@google.com>
-Date: Mon, 10 Nov 2025 17:40:19 +0100
-X-Gm-Features: AWmQ_bmi0ifqdxD1pRga8rXt1izLseEvw-FOTscdlGLXMffgSbt_R_kuG7tm2tc
-Message-ID: <CAG_fn=V6pbNdN3w0Jr5rCL=M27-bOBt4AK8rB7UvvwT=3g4m7g@mail.gmail.com>
-Subject: Re: [PATCH v6 02/18] kasan: Unpoison vms[area] addresses with a
- common tag
+Date: Mon, 10 Nov 2025 18:32:21 +0100
+X-Gm-Features: AWmQ_bmUvxxbg_c-XB1Dy80QL57feg4coPRIZHNTl9ervff8Rzi8S1pGrWY59Fo
+Message-ID: <CAG_fn=Wj9rB0jHKT3QKjZsPYce1JFcb1e72QBOBP52Ybs3_qgQ@mail.gmail.com>
+Subject: Re: [PATCH v6 01/18] kasan: Unpoison pcpu chunks with base address tag
 To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
 Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
 	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
@@ -93,16 +93,50 @@ Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com,
 	llvm@lists.linux.dev, linux-doc@vger.kernel.org, stable@vger.kernel.org, 
 	Baoquan He <bhe@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
->  void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
->  {
->         int area;
+On Wed, Oct 29, 2025 at 8:05=E2=80=AFPM Maciej Wieczor-Retman
+<m.wieczorretman@pm.me> wrote:
 >
->         for (area = 0 ; area < nr_vms ; area++) {
->                 kasan_poison(vms[area]->addr, vms[area]->size,
-> -                            arch_kasan_get_tag(vms[area]->addr), false);
-> +                            arch_kasan_get_tag(vms[0]->addr), false);
-> +               arch_kasan_set_tag(vms[area]->addr, arch_kasan_get_tag(vms[0]->addr));
+> From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>
+> The problem presented here is related to NUMA systems and tag-based
+> KASAN modes - software and hardware ones. It can be explained in the
+> following points:
+>
+>         1. There can be more than one virtual memory chunk.
+>         2. Chunk's base address has a tag.
+>         3. The base address points at the first chunk and thus inherits
+>            the tag of the first chunk.
+>         4. The subsequent chunks will be accessed with the tag from the
+>            first chunk.
+>         5. Thus, the subsequent chunks need to have their tag set to
+>            match that of the first chunk.
+>
+> Refactor code by moving it into a helper in preparation for the actual
+> fix.
 
-Like set_tag(), arch_kasan_set_tag() does not set the tag value in
-place, so this line is a no-op.
+The code in the helper function:
+
+> +void __kasan_unpoison_vmap_areas(struct vm_struct **vms, int nr_vms)
+> +{
+> +       int area;
+> +
+> +       for (area =3D 0 ; area < nr_vms ; area++) {
+> +               kasan_poison(vms[area]->addr, vms[area]->size,
+> +                            arch_kasan_get_tag(vms[area]->addr), false);
+> +       }
+> +}
+
+is different from what was originally called:
+
+> -       for (area =3D 0; area < nr_vms; area++)
+> -               vms[area]->addr =3D kasan_unpoison_vmalloc(vms[area]->add=
+r,
+> -                               vms[area]->size, KASAN_VMALLOC_PROT_NORMA=
+L);
+> +       kasan_unpoison_vmap_areas(vms, nr_vms);
+
+, so the patch description is a bit misleading.
+
+Please also ensure you fix the errors reported by kbuild test robot.
