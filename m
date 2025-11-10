@@ -1,105 +1,203 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CF62D9EDD
-	for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 17:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D402E5407;
+	Mon, 10 Nov 2025 17:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762796322; cv=none; b=Os0KccIw51uFhgSylGF3FvGh5ZzBypxc4Qno29kh/wcur2aa763ne2avXCVm0R5EiFREYqaz5fRw0EwfRamVRO7VwYu6VNOFmhhnYZCvturYhSkVD+7zQYL5xwb6a0qnb9A1ycIwKB0PiCTwf0B3nrKodgfetAT8PYjCe04nnZw=
+	t=1762796903; cv=none; b=QCDcIYLcAhYcmcCxFHO6avNGP8TSfcgJkdaQbHYyiyNvWCUil5sVCl+HIC42epCEju3uBnPiUzHxWy7kG8Ydg6gYsCkGJ4mbGH/UrTZ20ENplJVxRLTUe24O1E8X5+4UG2A5JBbVxbsnbdAsSZ9kaQQphyS/5PnoHva6nN7w9T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762796322; c=relaxed/simple;
-	bh=M1o1kOh6VqP4CN6/zqp8bynioGZKC94OCphZddFeq6E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kqh9jQschguKY1JmFa1Bu8y+IgRAY0GmeuE2lIQS+m12+iRObT62UcHhKAcNoPxIcJJFaoUejXziC8EDvJiDhzYUH/4rQgA75OiC/eOmPU5qTQX/tdwPuUTGvhAhFky0kcjEG3j3d6aePVeK+KBWcaP4GAO3+K1GASN6KKy4VDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E3VocqBC; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1762796903; c=relaxed/simple;
+	bh=PBhGYG1Welq8HIr6/Eg4O9bQLBhw9HZVRcUiW+PyXlo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cNvqtbL1NYacxdmbp/af3sJfxAgfJ69ADw1RYNJyQVdpWVfhOwolYrVGpItmK2oIbEpyJqVw+/mizLtlSfaxZPAa3fy75uccDLfos5z6Lw6u5A70XAzpc3fOhbNc32Qt8rIjhVc+3Beke4yyWrbFQoXuLUc3gBPar3iJmLCHXZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mROsNckL; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E3VocqBC"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4edacc41dc5so14290151cf.0
-        for <llvm@lists.linux.dev>; Mon, 10 Nov 2025 09:38:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762796317; x=1763401117; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSOpGWJwXMs0s/g4qCwlIsfD5sl3RCmHWkcwp+GKrsA=;
-        b=E3VocqBCZuHo5V/OmG4N0iQBO8+SLIVDZEOcT/0YZc4dcVT96PPnAXG+JOwk8G2Xky
-         FQ9CVI1BtIHTu2LCs+is4dkMlrRgMI6RclwVJAv64BdsIRj53AOdY7DycbxJrOBms0xI
-         j5D2TPHvxlYVNzcbczeFASLnRnoIm6kYrMT/HLtTNrH76iBTB1TxOCYY6wAF72THORTl
-         OtDfKrpcTm3sJnGVDEucuS1g8IaROn5yKIdotQbwYCS6TFEBIZtqYa+02TAGR0uS0ff1
-         4ahx7OFsRaX8V9Yfq3js1cWplOJsz4HfYJrGY/sqnObh8bOTU9SRTRAOniPznL9FAv5f
-         4Kng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762796317; x=1763401117;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YSOpGWJwXMs0s/g4qCwlIsfD5sl3RCmHWkcwp+GKrsA=;
-        b=ekhEJxYhjjGfdLCNOR9bwwfj6lDUh9fFUQW/tng7QZ/BMlZG9/4zohJprcnAZiMmUv
-         PVz0JzXjkC0XFO7WBtCx6aIUcfX9d/mA2BWHYfOiClhh0NCjLtcE6ofaNLV+sVpUpj5I
-         NktBuZHgk6IswffD0RtpAav13o7vYM0yLjj/e7UWHjcHDzE58knGKlnHHqkPnPl04j8N
-         BvkzwkOdaXYiFt8N6HDOCnUDYE2zTb/cwIYFKH9qZ5E6VS3NCoZO7MBp6KMPdLlrZqGN
-         R4Mj33+BtOX+6b4ULDtuNFsr1meYAZHqb73XX7K8sEVOhi62uRq5GroO6Lzh2AKbrl3c
-         ZPng==
-X-Forwarded-Encrypted: i=1; AJvYcCUhya8JE6zNqgFpERkB9CeFc5Y4Gl9m7GJsEF2PjmaK6v5DG/9ofY0kwY/9qilC4rA0N+hK@lists.linux.dev
-X-Gm-Message-State: AOJu0YxtsBGKDf/sU9wEE/wpH5AA4VLsV6yQ8Fg38HGg5HfUXBzM6GVT
-	rRTCzFydCaEYggCBtBwv23NNcQJsIyQWZajah2brh4fJHrdrT62pQlaal2OAATNZjP1a6xbdimA
-	hxzQJtb+3cGxM367qJVstzETAAPNCu/uIR1Zrvhwb
-X-Gm-Gg: ASbGncs4H0mH5+cVnZBua1m9RjsXY8sqb0Z1mfrsO5fmk+6JNyO1TIcOi1Z2baTAtDJ
-	aRrcmV2hku9+kRDEwQHvfxfgCXq+o8A8C3zg6q+2NkCfBx2z53+MgcNKSEvtgflCyb1hPghgie8
-	gtDdZhsH4hqFQEAQQ857v4gt4dPimTz2lomhYCYQ3PtSUBvG9WoOVQzgP2eeM8J4gP+/eKZuMXm
-	cBPQh2CJhL+dyuPOICuUFxVM80MZGrTUBM/BVE6Etn2JlzAIyBN30rJddCiTYn2663BD8TaoG3i
-	73+uRxxXrxYQcuHOWWrN3gZ7/A==
-X-Google-Smtp-Source: AGHT+IFr1gTkxV/2KbejHCAfn9cmRrtPm5R67TTLAIre2TRAH5dAXb9YnE16dsLdFYHK6GdY4jiLnljrS99RBkOdtpA=
-X-Received: by 2002:ac8:5856:0:b0:4e8:baad:9875 with SMTP id
- d75a77b69052e-4eda4e70d87mr109099991cf.4.1762796316364; Mon, 10 Nov 2025
- 09:38:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mROsNckL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762796901; x=1794332901;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PBhGYG1Welq8HIr6/Eg4O9bQLBhw9HZVRcUiW+PyXlo=;
+  b=mROsNckLsusFawOvmC6bfo2yLqzmQEMc+VjCoRApeIpGLxWrP8r7F3iW
+   MKPfWjLtG8iUmcYtLP5o1gwFZD1YRv15G4w2paWf8gQtGupI0HGMqlRtK
+   48X23PB/dLGlrMzVrBiphS2QQJmw2+yU+LPgKk4vTBdsZeqJZTXxPH2qT
+   SeNgWNp0yar0jqeo3KzM0QVEUyjTdeAOcIUxexhkmBjB8Hmn/eeCg6C1w
+   tGKfsCONWq6fb7dxjj2fnJyD0Gv6JZyMR+tNKpjZCBsch3dB9SCiCiHVZ
+   WPxhwQkXKUCOiV6j9CdRaCitmSUhlkHN+7DlF3+W+ooiG3AYOgdlS54vr
+   A==;
+X-CSE-ConnectionGUID: vMh0vEOlTsCDR26cKRKv2A==
+X-CSE-MsgGUID: /d93APFgSVmhc73Ui729FA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75462921"
+X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
+   d="scan'208";a="75462921"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 09:48:21 -0800
+X-CSE-ConnectionGUID: j6X54M9WSKCVMnW4BeP3NA==
+X-CSE-MsgGUID: 7Fg9QX7KRO2x1QPQxx978g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
+   d="scan'208";a="193113288"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 10 Nov 2025 09:48:18 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIVzz-0000mZ-0L;
+	Mon, 10 Nov 2025 17:48:15 +0000
+Date: Tue, 11 Nov 2025 01:47:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alejandro Colomar <alx@kernel.org>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alejandro Colomar <alx@kernel.org>, Marco Elver <elver@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Christopher Bazley <chris.bazley.wg14@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Michal Hocko <mhocko@suse.com>, Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v1 2/3] mm: Fix benign off-by-one bugs
+Message-ID: <202511110100.9uPtQqN1-lkp@intel.com>
+References: <87445e701574058b142e036c3b8a0f505086ab64.1758806023.git.alx@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1761763681.git.m.wieczorretman@pm.me> <8319582016f3e433bf7cd1c88ce7858c4a3c60fa.1761763681.git.m.wieczorretman@pm.me>
-In-Reply-To: <8319582016f3e433bf7cd1c88ce7858c4a3c60fa.1761763681.git.m.wieczorretman@pm.me>
-From: Alexander Potapenko <glider@google.com>
-Date: Mon, 10 Nov 2025 18:37:59 +0100
-X-Gm-Features: AWmQ_bnlgBiH0JekOxzwX-3tPMF5D_wHyW4PzCjMfs9TphH4P9izG_-i06SXddA
-Message-ID: <CAG_fn=VUx7GkcjuYO3oRH7ptgKVtzQNChW1xKL+1SPfJ=XvWwQ@mail.gmail.com>
-Subject: Re: [PATCH v6 04/18] kasan: sw_tags: Support tag widths less than 8 bits
-To: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
-Cc: xin@zytor.com, peterz@infradead.org, kaleshsingh@google.com, 
-	kbingham@kernel.org, akpm@linux-foundation.org, nathan@kernel.org, 
-	ryabinin.a.a@gmail.com, dave.hansen@linux.intel.com, bp@alien8.de, 
-	morbo@google.com, jeremy.linton@arm.com, smostafa@google.com, kees@kernel.org, 
-	baohua@kernel.org, vbabka@suse.cz, justinstitt@google.com, 
-	wangkefeng.wang@huawei.com, leitao@debian.org, jan.kiszka@siemens.com, 
-	fujita.tomonori@gmail.com, hpa@zytor.com, urezki@gmail.com, ubizjak@gmail.com, 
-	ada.coupriediaz@arm.com, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
-	brgerst@gmail.com, elver@google.com, pankaj.gupta@amd.com, 
-	mark.rutland@arm.com, trintaeoitogc@gmail.com, jpoimboe@kernel.org, 
-	thuth@redhat.com, pasha.tatashin@soleen.com, dvyukov@google.com, 
-	jhubbard@nvidia.com, catalin.marinas@arm.com, yeoreum.yun@arm.com, 
-	mhocko@suse.com, lorenzo.stoakes@oracle.com, samuel.holland@sifive.com, 
-	vincenzo.frascino@arm.com, bigeasy@linutronix.de, surenb@google.com, 
-	ardb@kernel.org, Liam.Howlett@oracle.com, nicolas.schier@linux.dev, 
-	ziy@nvidia.com, kas@kernel.org, tglx@linutronix.de, mingo@redhat.com, 
-	broonie@kernel.org, corbet@lwn.net, andreyknvl@gmail.com, 
-	maciej.wieczor-retman@intel.com, david@redhat.com, maz@kernel.org, 
-	rppt@kernel.org, will@kernel.org, luto@kernel.org, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	x86@kernel.org, linux-kbuild@vger.kernel.org, linux-mm@kvack.org, 
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87445e701574058b142e036c3b8a0f505086ab64.1758806023.git.alx@kernel.org>
 
-> +++ b/include/linux/kasan-tags.h
-> @@ -2,13 +2,16 @@
->  #ifndef _LINUX_KASAN_TAGS_H
->  #define _LINUX_KASAN_TAGS_H
->
-> +#include <asm/kasan.h>
+Hi Alejandro,
 
-In Patch 07, this is changed to `#include <asm/kasan-tags.h>` what is
-the point of doing that?
-Wouldn't it be better to move the addition of kasan-tags.h for
-different arches to this patch from Patch 07?
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on kees/for-next/pstore kees/for-next/kspp linus/master linux/master v6.18-rc5 next-20251110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alejandro-Colomar/array_size-h-Add-ARRAY_END/20251110-075203
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/87445e701574058b142e036c3b8a0f505086ab64.1758806023.git.alx%40kernel.org
+patch subject: [PATCH v1 2/3] mm: Fix benign off-by-one bugs
+config: loongarch-randconfig-001-20251110 (https://download.01.org/0day-ci/archive/20251111/202511110100.9uPtQqN1-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 996639d6ebb86ff15a8c99b67f1c2e2117636ae7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251111/202511110100.9uPtQqN1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511110100.9uPtQqN1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/kfence/kfence_test.c:113:8: error: call to undeclared function 'ENDOF'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     113 |         end = ENDOF(expect[0]);
+         |               ^
+>> mm/kfence/kfence_test.c:113:6: error: incompatible integer to pointer conversion assigning to 'const char *' from 'int' [-Wint-conversion]
+     113 |         end = ENDOF(expect[0]);
+         |             ^ ~~~~~~~~~~~~~~~~
+   mm/kfence/kfence_test.c:143:6: error: incompatible integer to pointer conversion assigning to 'const char *' from 'int' [-Wint-conversion]
+     143 |         end = ENDOF(expect[1]);
+         |             ^ ~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +/ENDOF +113 mm/kfence/kfence_test.c
+
+    94	
+    95	/* Check observed report matches information in @r. */
+    96	static bool report_matches(const struct expect_report *r)
+    97	{
+    98		unsigned long addr = (unsigned long)r->addr;
+    99		bool ret = false;
+   100		unsigned long flags;
+   101		typeof(observed.lines) expect;
+   102		const char *end;
+   103		char *cur;
+   104	
+   105		/* Doubled-checked locking. */
+   106		if (!report_available())
+   107			return false;
+   108	
+   109		/* Generate expected report contents. */
+   110	
+   111		/* Title */
+   112		cur = expect[0];
+ > 113		end = ENDOF(expect[0]);
+   114		switch (r->type) {
+   115		case KFENCE_ERROR_OOB:
+   116			cur += scnprintf(cur, end - cur, "BUG: KFENCE: out-of-bounds %s",
+   117					 get_access_type(r));
+   118			break;
+   119		case KFENCE_ERROR_UAF:
+   120			cur += scnprintf(cur, end - cur, "BUG: KFENCE: use-after-free %s",
+   121					 get_access_type(r));
+   122			break;
+   123		case KFENCE_ERROR_CORRUPTION:
+   124			cur += scnprintf(cur, end - cur, "BUG: KFENCE: memory corruption");
+   125			break;
+   126		case KFENCE_ERROR_INVALID:
+   127			cur += scnprintf(cur, end - cur, "BUG: KFENCE: invalid %s",
+   128					 get_access_type(r));
+   129			break;
+   130		case KFENCE_ERROR_INVALID_FREE:
+   131			cur += scnprintf(cur, end - cur, "BUG: KFENCE: invalid free");
+   132			break;
+   133		}
+   134	
+   135		scnprintf(cur, end - cur, " in %pS", r->fn);
+   136		/* The exact offset won't match, remove it; also strip module name. */
+   137		cur = strchr(expect[0], '+');
+   138		if (cur)
+   139			*cur = '\0';
+   140	
+   141		/* Access information */
+   142		cur = expect[1];
+   143		end = ENDOF(expect[1]);
+   144	
+   145		switch (r->type) {
+   146		case KFENCE_ERROR_OOB:
+   147			cur += scnprintf(cur, end - cur, "Out-of-bounds %s at", get_access_type(r));
+   148			addr = arch_kfence_test_address(addr);
+   149			break;
+   150		case KFENCE_ERROR_UAF:
+   151			cur += scnprintf(cur, end - cur, "Use-after-free %s at", get_access_type(r));
+   152			addr = arch_kfence_test_address(addr);
+   153			break;
+   154		case KFENCE_ERROR_CORRUPTION:
+   155			cur += scnprintf(cur, end - cur, "Corrupted memory at");
+   156			break;
+   157		case KFENCE_ERROR_INVALID:
+   158			cur += scnprintf(cur, end - cur, "Invalid %s at", get_access_type(r));
+   159			addr = arch_kfence_test_address(addr);
+   160			break;
+   161		case KFENCE_ERROR_INVALID_FREE:
+   162			cur += scnprintf(cur, end - cur, "Invalid free of");
+   163			break;
+   164		}
+   165	
+   166		cur += scnprintf(cur, end - cur, " 0x%p", (void *)addr);
+   167	
+   168		spin_lock_irqsave(&observed.lock, flags);
+   169		if (!report_available())
+   170			goto out; /* A new report is being captured. */
+   171	
+   172		/* Finally match expected output to what we actually observed. */
+   173		ret = strstr(observed.lines[0], expect[0]) && strstr(observed.lines[1], expect[1]);
+   174	out:
+   175		spin_unlock_irqrestore(&observed.lock, flags);
+   176		return ret;
+   177	}
+   178	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
