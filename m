@@ -1,68 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14A3377E9D;
-	Tue, 11 Nov 2025 16:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AC0824BD;
+	Tue, 11 Nov 2025 18:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762880104; cv=none; b=UAZjPTu7B0ypLLRozGrwVKqo0o1mxoX6H3zEzMGU76Ajf6omicpIID9BXEwb5zXvYhoAOAgbfmkNfOOTmmyRgc8LFH2Pr2wOkpSGNhAE2i0pHCmt8KFlWYc9FN6mrCF9pA28oUOxXwp1v040FnSpKx/MoeQe4uBCST3mZQoGUSw=
+	t=1762885211; cv=none; b=Y2zjyl/1x4RoZMdJb7XDJ2FF9a5YJRh2p8KXG19zjgxeTg54iqmAqI/PTbcSsvtp/3cNfjFBrlJkUOW78VdaA+ULjukqKPUZrTSluTuQEYIrVj9YfUes4HMsJsQU3A0nR3wxiWWPa6sFesvqzUb5/CNnj29FikXDPudpbA8PUUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762880104; c=relaxed/simple;
-	bh=prdjIqfhZ5Q0oGHb9kMj2RXqTMX3Z4oj+cyb9XYhN0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dcHzl34KNxED6P1kJRSrCagvpyDSIStsJ0vp4TP/V442zYYfGbtPCk71+SXnOygwPAApSQmJ03mZNmJq/eUiI5aZ6w3pyukMCVlies6uNbexzrvpeB0lbMS/AyiNvgeQZ6VAo6wlkSIkjVhEMSKBshEFlvYH3SyV0TUZ9hbmURA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kCIRjXUS; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1762885211; c=relaxed/simple;
+	bh=L9y6l1JcRYytTYbCKWR9O8mq3E3LjZ2Y2tvMD19pTqo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MbKCmJ/6FGY1nhWaZo081Tv4K2FEu2unCiGIfc/45D79RM+4JWpHCjEZxgqQPHaFg/h6b0e3+dy9Nv8EN8oPFP6s8rJtOwTW/0V+EPHRzNavkk5q8vpqN/r2IpAZHjb+we8SQC6JWUAsAiE2S9eJAGXiOR3CEDn1PnTh4tx8di4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GV52TY6j; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kCIRjXUS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GV52TY6j"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762880102; x=1794416102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=prdjIqfhZ5Q0oGHb9kMj2RXqTMX3Z4oj+cyb9XYhN0c=;
-  b=kCIRjXUSie5mtzwzJA8zfmRA3b/fDhVbGqqK9M3SERqSBTifiZ+wsWdG
-   qvxCA+Oz7LPVZegQYEtOprKI/CywsFHkCKoKYfduIhCL18W0pWs+GG1r3
-   T3TEM4MEa9LeXNdhaVvK63IOkHyRXZx5EBr/T7Tnaz7Qgq0xVeEWG7Rx+
-   Gy4YUEFGRHY/DY7pAPpe6cixUbcmvdeXdYwOmHg7DQxR0os0nO3aJ3ag+
-   IP7q1rBAYiaC55amLkwdlF3upSukyNryETcTw0d0RZ7XD8ttTHrlLQ+oY
-   heaYve2zV1ycJ4rh1LlmlUjHheG/+WESJPjjEmULNtOWxoXIXPdvbwxpq
-   Q==;
-X-CSE-ConnectionGUID: pbjwjsr7S0S8rTRTAVSAmA==
-X-CSE-MsgGUID: DEOHr9xjQ0eweiBax4IOGw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="64150236"
+  t=1762885208; x=1794421208;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=L9y6l1JcRYytTYbCKWR9O8mq3E3LjZ2Y2tvMD19pTqo=;
+  b=GV52TY6jQm6cXCvbDM8xVh4zIyZpy9UvMxYK6RDRleR9kfidPvFYX8js
+   mrRsxJGqcbdRDYObVgU84CSIX3UH4v+MWomD/cbXR5Hk9hSd8GpCacF6z
+   az8Qh8pOlzUWUUtcd7KfgWanH3mE+rx4CDEElOV4COzBWmjNtUUER/K/a
+   GYhbpok8XvqdME3iaD+dPt6q5jpqBf2vVGWGRWLmxd02Vk6ApklcLoNu9
+   psZvBHJPeRXmY0qcLCJeIEn8NvAYOop7qyTjHdrVBZPgH83dZjin3pFqy
+   G5mzaDKoxHNRtRoNwBVx07icJaiI89RABbLERLHRLQIbRMxzNe66/O0l3
+   A==;
+X-CSE-ConnectionGUID: k+rvqdB9TGWmVfHpCCIMQQ==
+X-CSE-MsgGUID: ZYo7k3ZJT4qaqwPfdhv40A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="64655390"
 X-IronPort-AV: E=Sophos;i="6.19,297,1754982000"; 
-   d="scan'208";a="64150236"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 08:55:01 -0800
-X-CSE-ConnectionGUID: qj9ZEu2IS3q/G3o69uv9+w==
-X-CSE-MsgGUID: LiZ1YefBQLm1L/1gKRqSZw==
+   d="scan'208";a="64655390"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 10:20:08 -0800
+X-CSE-ConnectionGUID: 6v7OhOXeQvGxYh2pdXXIsQ==
+X-CSE-MsgGUID: kleDu1luSTud/hLpp0gURw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,297,1754982000"; 
-   d="scan'208";a="212405116"
+   d="scan'208";a="188286071"
 Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Nov 2025 08:54:58 -0800
+  by orviesa006.jf.intel.com with ESMTP; 11 Nov 2025 10:20:07 -0800
 Received: from kbuild by 7b01c990427b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vIrdv-0003Oh-3C;
-	Tue, 11 Nov 2025 16:54:55 +0000
-Date: Wed, 12 Nov 2025 00:54:40 +0800
+	id 1vIsyK-0003TP-1g;
+	Tue, 11 Nov 2025 18:20:04 +0000
+Date: Wed, 12 Nov 2025 02:19:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Fedor Pchelkin <boddah8794@gmail.com>,
-	Andrei Kuchynski <akuchynski@chromium.org>,
-	Venkat Jayaraman <venkat.jayaraman@intel.com>,
-	Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] usb: typec: ucsi: Add duplicate detection to
- nvidia registration path
-Message-ID: <202511120044.i2blPN85-lkp@intel.com>
-References: <20251111010541.145421-2-acelan.kao@canonical.com>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 7210/7661] kernel/liveupdate/luo_file.c:571:3:
+ error: call to undeclared function 'get_file'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202511120222.vMZm9rD4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,129 +64,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251111010541.145421-2-acelan.kao@canonical.com>
 
-Hi Chia-Lin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.18-rc5 next-20251111]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chia-Lin-Kao-AceLan/usb-typec-ucsi-Add-duplicate-detection-to-nvidia-registration-path/20251111-092153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20251111010541.145421-2-acelan.kao%40canonical.com
-patch subject: [PATCH v2 2/3] usb: typec: ucsi: Add duplicate detection to nvidia registration path
-config: x86_64-randconfig-072-20251111 (https://download.01.org/0day-ci/archive/20251112/202511120044.i2blPN85-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   2666975a8905776d306bee01c5d98a0395bda1c9
+commit: 74602408d6248999ca8a567c46ce0f78204d6e89 [7210/7661] liveupdate: luo_file: implement file systems callbacks
+config: x86_64-buildonly-randconfig-001-20251112 (https://download.01.org/0day-ci/archive/20251112/202511120222.vMZm9rD4-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511120044.i2blPN85-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511120222.vMZm9rD4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511120044.i2blPN85-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511120222.vMZm9rD4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/usb/typec/ucsi/ucsi.c:547:7: error: call to undeclared function 'ucsi_altmode_is_duplicate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     547 |                 if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
-         |                     ^
-   drivers/usb/typec/ucsi/ucsi.c:570:13: error: static declaration of 'ucsi_altmode_is_duplicate' follows non-static declaration
-     570 | static bool ucsi_altmode_is_duplicate(struct ucsi_connector *con, u8 recipient,
-         |             ^
-   drivers/usb/typec/ucsi/ucsi.c:547:7: note: previous implicit declaration is here
-     547 |                 if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
-         |                     ^
+>> kernel/liveupdate/luo_file.c:571:3: error: call to undeclared function 'get_file'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     571 |                 get_file(luo_file->file);
+         |                 ^
+   kernel/liveupdate/luo_file.c:584:3: error: call to undeclared function 'get_file'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     584 |                 get_file(luo_file->file);
+         |                 ^
    2 errors generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OF_GPIO
+   Depends on [n]: GPIOLIB [=y] && OF [=n] && HAS_IOMEM [=y]
+   Selected by [y]:
+   - GPIO_TB10X [=y] && GPIOLIB [=y] && HAS_IOMEM [=y] && (ARC_PLAT_TB10X || COMPILE_TEST [=y])
+   WARNING: unmet direct dependencies detected for MFD_STMFX
+   Depends on [n]: HAS_IOMEM [=y] && I2C [=y] && OF [=n]
+   Selected by [y]:
+   - PINCTRL_STMFX [=y] && PINCTRL [=y] && I2C [=y] && OF_GPIO [=y] && HAS_IOMEM [=y]
+   WARNING: unmet direct dependencies detected for GPIO_SYSCON
+   Depends on [n]: GPIOLIB [=y] && HAS_IOMEM [=y] && MFD_SYSCON [=y] && OF [=n]
+   Selected by [y]:
+   - GPIO_SAMA5D2_PIOBU [=y] && GPIOLIB [=y] && HAS_IOMEM [=y] && MFD_SYSCON [=y] && OF_GPIO [=y] && (ARCH_AT91 || COMPILE_TEST [=y])
+   WARNING: unmet direct dependencies detected for I2C_K1
+   Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && OF [=n]
+   Selected by [y]:
+   - MFD_SPACEMIT_P1 [=y] && HAS_IOMEM [=y] && (ARCH_SPACEMIT || COMPILE_TEST [=y]) && I2C [=y]
 
-vim +/ucsi_altmode_is_duplicate +547 drivers/usb/typec/ucsi/ucsi.c
 
-   483	
-   484	static int
-   485	ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
-   486	{
-   487		int max_altmodes = UCSI_MAX_ALTMODES;
-   488		struct typec_altmode_desc desc;
-   489		struct ucsi_altmode alt;
-   490		struct ucsi_altmode orig[UCSI_MAX_ALTMODES];
-   491		struct ucsi_altmode updated[UCSI_MAX_ALTMODES];
-   492		struct ucsi *ucsi = con->ucsi;
-   493		bool multi_dp = false;
-   494		u64 command;
-   495		int ret;
-   496		int len;
-   497		int i;
-   498		int k = 0;
-   499	
-   500		if (recipient == UCSI_RECIPIENT_CON)
-   501			max_altmodes = con->ucsi->cap.num_alt_modes;
-   502	
-   503		memset(orig, 0, sizeof(orig));
-   504		memset(updated, 0, sizeof(updated));
-   505	
-   506		/* First get all the alternate modes */
-   507		for (i = 0; i < max_altmodes; i++) {
-   508			memset(&alt, 0, sizeof(alt));
-   509			command = UCSI_GET_ALTERNATE_MODES;
-   510			command |= UCSI_GET_ALTMODE_RECIPIENT(recipient);
-   511			command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
-   512			command |= UCSI_GET_ALTMODE_OFFSET(i);
-   513			len = ucsi_send_command(con->ucsi, command, &alt, sizeof(alt));
-   514			/*
-   515			 * We are collecting all altmodes first and then registering.
-   516			 * Some type-C device will return zero length data beyond last
-   517			 * alternate modes. We should not return if length is zero.
-   518			 */
-   519			if (len < 0)
-   520				return len;
-   521	
-   522			/* We got all altmodes, now break out and register them */
-   523			if (!len || !alt.svid)
-   524				break;
-   525	
-   526			orig[k].mid = alt.mid;
-   527			orig[k].svid = alt.svid;
-   528			k++;
-   529		}
-   530		/*
-   531		 * Update the original altmode table as some ppms may report
-   532		 * multiple DP altmodes.
-   533		 */
-   534		multi_dp = ucsi->ops->update_altmodes(ucsi, recipient, orig, updated);
-   535	
-   536		/* now register altmodes */
-   537		for (i = 0; i < max_altmodes; i++) {
-   538			struct ucsi_altmode *altmode_array = multi_dp ? updated : orig;
-   539	
-   540			if (!altmode_array[i].svid)
-   541				return 0;
-   542	
-   543			/*
-   544			 * Check for duplicates in current array and already
-   545			 * registered altmodes. Skip if duplicate found.
-   546			 */
- > 547			if (ucsi_altmode_is_duplicate(con, recipient, altmode_array, i,
-   548						      altmode_array[i].svid,
-   549						      altmode_array[i].mid, i))
-   550				continue;
+vim +/get_file +571 kernel/liveupdate/luo_file.c
+
+   519	
+   520	/**
+   521	 * luo_retrieve_file - Restores a preserved file from a session by its token.
+   522	 * @session: The session from which to retrieve the file.
+   523	 * @token:   The unique token identifying the file to be restored.
+   524	 * @filep:   Output parameter; on success, this is populated with a pointer
+   525	 *           to the newly retrieved 'struct file'.
+   526	 *
+   527	 * This function is the primary mechanism for recreating a file in the new
+   528	 * kernel after a live update. It searches the session's list of deserialized
+   529	 * files for an entry matching the provided @token.
+   530	 *
+   531	 * The operation is idempotent: if a file has already been successfully
+   532	 * retrieved, this function will simply return a pointer to the existing
+   533	 * 'struct file' and report success without re-executing the retrieve
+   534	 * operation. This is handled by checking the 'retrieved' flag under a lock.
+   535	 *
+   536	 * File retrieval can happen in any order; it is not bound by the order of
+   537	 * preservation.
+   538	 *
+   539	 * Context: Can be called from an ioctl or other in-kernel code in the new
+   540	 *          kernel.
+   541	 * Return: 0 on success. Returns a negative errno on failure:
+   542	 *         -ENOENT if no file with the matching token is found.
+   543	 *         Any error code returned by the handler's .retrieve() op.
+   544	 */
+   545	int luo_retrieve_file(struct luo_session *session, u64 token,
+   546			      struct file **filep)
+   547	{
+   548		struct liveupdate_file_op_args args = {0};
+   549		struct luo_file *luo_file;
+   550		int err;
    551	
-   552			memset(&desc, 0, sizeof(desc));
-   553			desc.svid = altmode_array[i].svid;
-   554			desc.vdo = altmode_array[i].mid;
-   555			desc.roles = TYPEC_PORT_DRD;
+   552		lockdep_assert_held(&session->mutex);
+   553	
+   554		if (list_empty(&session->files_list))
+   555			return -ENOENT;
    556	
-   557			ret = ucsi_register_altmode(con, &desc, recipient);
-   558			if (ret)
-   559				return ret;
+   557		list_for_each_entry(luo_file, &session->files_list, list) {
+   558			if (luo_file->token == token)
+   559				break;
    560		}
    561	
-   562		return 0;
-   563	}
+   562		if (luo_file->token != token)
+   563			return -ENOENT;
    564	
+   565		guard(mutex)(&luo_file->mutex);
+   566		if (luo_file->retrieved) {
+   567			/*
+   568			 * Someone is asking for this file again, so get a reference
+   569			 * for them.
+   570			 */
+ > 571			get_file(luo_file->file);
+   572			*filep = luo_file->file;
+   573			return 0;
+   574		}
+   575	
+   576		args.handler = luo_file->fh;
+   577		args.session = (struct liveupdate_session *)session;
+   578		args.serialized_data = luo_file->serialized_data;
+   579		err = luo_file->fh->ops->retrieve(&args);
+   580		if (!err) {
+   581			luo_file->file = args.file;
+   582	
+   583			/* Get reference so we can keep this file in LUO until finish */
+   584			get_file(luo_file->file);
+   585			*filep = luo_file->file;
+   586			luo_file->retrieved = true;
+   587		}
+   588	
+   589		return err;
+   590	}
+   591	
 
 -- 
 0-DAY CI Kernel Test Service
